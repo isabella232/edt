@@ -16,6 +16,11 @@ import egl.lang.reflect.mof.Operation;
 
 externalType ESmallint extends ENumber type ClassType
 	/**
+	 * Constructs a smallint with a default value of 0.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value ESmallint in) returns (EInt) {@Operation{"+"}};

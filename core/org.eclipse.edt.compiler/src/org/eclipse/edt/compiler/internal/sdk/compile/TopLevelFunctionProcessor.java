@@ -55,8 +55,8 @@ public class TopLevelFunctionProcessor {
         private String createContextSpecificFunctionName() {
             StringBuffer contextSpecificFunctionNameBuffer = new StringBuffer();
             contextSpecificFunctionNameBuffer.append(containerContext.getName() + "$"); //$NON-NLS-1$
-            for (int i = 0; i < function.getPackageName().length; i++) {
-                contextSpecificFunctionNameBuffer.append(function.getPackageName()[i] + "."); //$NON-NLS-1$
+            if (function.getPackageName().length() > 0) {
+            	contextSpecificFunctionNameBuffer.append(function.getPackageName()+ ".");
             }
             contextSpecificFunctionNameBuffer.append(function.getName());
 
@@ -94,7 +94,7 @@ public class TopLevelFunctionProcessor {
 	
     private FunctionContainerScope functionContainerScope;
     private DependencyInfo dependencyInfo;
-    private IPartBinding containerContext;
+    private org.eclipse.edt.mof.egl.Part containerContext;
     private IEnvironment environment;
 	private ICompilerOptions compilerOptions;
 	private ISDKProblemRequestorFactory problemRequestorFactory;
@@ -106,7 +106,7 @@ public class TopLevelFunctionProcessor {
         this.compilerOptions = compilerOptions;
         this.problemRequestorFactory = problemRequestorFactory;
         
-        this.containerContext = functionContainerScope.getPartBinding();      
+        this.containerContext = functionContainerScope.getPart();      
     }
     
     /**
@@ -141,9 +141,9 @@ public class TopLevelFunctionProcessor {
 	 
 	 private Part compile(TopLevelFunctionProcessingUnit functionUnit) {
 		
-			String[] functionPackageName = functionUnit.function.getPackageName();
+			String functionPackageName = functionUnit.function.getPackageName();
 			String functionPartName = functionUnit.function.getName();
-			String[] contextPackageName = containerContext.getPackageName();
+			String contextPackageName = containerContext.getPackageName();
 			String contextPartName = containerContext.getName();
 			String contextSpecificCaseSensitiveInternedFunctionName = functionUnit.contextSpecificCaseSensitiveInternedFunctionName;
 				

@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -26,7 +27,7 @@ public class FieldAccess extends Expression {
 	private Expression primary;
 	private String ID;
 	
-	private IDataBinding dataBinding;
+	private Object element;
 
 	public FieldAccess(Expression primary, String ID, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -55,13 +56,14 @@ public class FieldAccess extends Expression {
 		}
 		visitor.endVisit(this);
 	}
-	
-	public IDataBinding resolveDataBinding() {
-		return dataBinding;
+		
+	public void setElement(Object elem) {
+		this.element = elem;
+		super.setElement(elem);
 	}
 	
-	public void setDataBinding(IDataBinding dataBinding) {
-		this.dataBinding = dataBinding;
+	public Object resolveElement() {
+		return element;
 	}
 	
 	public String getCanonicalString() {

@@ -26,7 +26,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FlexibleRecordScope;
+import org.eclipse.edt.compiler.internal.core.lookup.RecordScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -58,7 +58,7 @@ public class FlexibleRecordBindingCompletor extends DefaultBinder {
         flexibleRecordBindingFieldsCompletor = new FlexibleRecordBindingFieldsCompletor(currentScope, recordBinding, record.getName().getCanonicalName(), dependencyRequestor, problemRequestor, compilerOptions);
 		//Next, we need to complete the fields in the record
         record.accept(flexibleRecordBindingFieldsCompletor);
-
+        
         //now we will need to process the SettingsBlock for the
         // record...the collector has already gathered those for us.
 
@@ -78,7 +78,7 @@ public class FlexibleRecordBindingCompletor extends DefaultBinder {
 	public void endVisit(Record record) {
     	recordBinding.setValid(true);
 
-        currentScope = new FlexibleRecordScope(currentScope, recordBinding);
+        currentScope = new RecordScope(currentScope, recordBinding);
 
         record.accept(new DefaultASTVisitor() {
             public boolean visit(Record record) {
@@ -144,7 +144,7 @@ public class FlexibleRecordBindingCompletor extends DefaultBinder {
     private void processSettingsBlocksFromCollector(PartSubTypeAndAnnotationCollector collector) {
 
         if (collector.getSettingsBlocks().size() > 0) {
-            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(new FlexibleRecordScope(currentScope, recordBinding),
+            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(new RecordScope(currentScope, recordBinding),
                     recordBinding, recordBinding, recordBinding, -1, recordBinding);
             if (!collector.isFoundSubTypeInSettingsBlock() && partSubTypeAnnotationBinding != null) {
                 scope = new AnnotationLeftHandScope(scope, partSubTypeAnnotationBinding, partSubTypeAnnotationBinding.getType(), partSubTypeAnnotationBinding, -1, recordBinding);
@@ -208,7 +208,7 @@ public class FlexibleRecordBindingCompletor extends DefaultBinder {
                 || annotationIs(annotationType, new String[] {"egl", "core"}, "Redefines")
 				|| annotationIs(annotationType, new String[] {"egl", "ui", "console"}, "Binding");
     }
-    
+        
     private void convertItemsToNullableIfNeccesary() {
 		IAnnotationBinding aBinding = recordBinding.getAnnotation(new String[] {"egl", "core"}, "I4GLItemsNullable");
 		if(aBinding != null && Boolean.YES == aBinding.getValue()) {

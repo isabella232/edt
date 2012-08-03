@@ -11,52 +11,290 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
-import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Constructor;
+import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.ParameterizedType;
+import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.StructPart;
 
 
 public class FieldValidator extends DefaultASTVisitor{
 	
 	private IProblemRequestor problemRequestor;
     private ICompilerOptions compilerOptions;
+    private IPartBinding declaringPart;
 	
-	public FieldValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public FieldValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, IPartBinding declaringPart) {
 		this.problemRequestor = problemRequestor;
 		this.compilerOptions = compilerOptions;
+		this.declaringPart = declaringPart;
 	}
 	
 	public boolean visit(final ClassDataDeclaration classDataDeclaration) {
+		Type type = classDataDeclaration.getType();
 		validateNoEmptySettingsBlockForServiceOrInterface(classDataDeclaration.getType(), classDataDeclaration.getSettingsBlockOpt());
+		TypeValidator.validate(classDataDeclaration.getType(), problemRequestor, compilerOptions, declaringPart.getEnvironment().getCompiler());
+		
+		if (classDataDeclaration.hasInitializer()) {
+			if (classDataDeclaration.hasSettingsBlock()) {
+				issueErrorForInitialization(classDataDeclaration.getSettingsBlockOpt(), ((Name)classDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
+			}
+		}
+		else {
+			//TODO records have no constructor - look into this once records are being bound (might need to add 'constructor()' to EGLRecord and StructuredRecord)
+			org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
+			//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
+			if (typeBinding != null && !classDataDeclaration.isNullable() && !(typeBinding instanceof ParameterizedType) && !hasPublicDefaultConstructor(typeBinding)) {
+				//Don't need to throw error if the field is in an ExternalType
+				if (declaringPart == null || declaringPart.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
+					problemRequestor.acceptProblem(type,
+							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
+						new String[] {type.getCanonicalName()});
+				}
+			}
+			
+			//nullable types cannot specify a settings block that contains settings for data in the field
+			if (classDataDeclaration.hasSettingsBlock() && classDataDeclaration.isNullable()) {
+				issueErrorForInitialization(classDataDeclaration.getSettingsBlockOpt(), ((Name)classDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED_NULL);
+			}
+		}
+		
+		//TODO - currently the bindings don't contain property overrides
+//		if (classDataDeclaration.hasSettingsBlock()) {
+//			IDataBinding dbinding = ((Expression)classDataDeclaration.getNames().get(0)).resolveDataBinding();
+//			if (Binding.isValidBinding(dbinding)) {
+//				issueErrorForPropertyOverrides(dbinding, classDataDeclaration.getSettingsBlockOpt());
+//			}
+//		}
 		return false;
 	}
 	
 	public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
+		Type type = functionDataDeclaration.getType();
+		if (type != null) {
+			validateNoEmptySettingsBlockForServiceOrInterface(type, functionDataDeclaration.getSettingsBlockOpt());
+			TypeValidator.validate(type, problemRequestor, compilerOptions, declaringPart.getEnvironment().getCompiler());
+			
+			if (functionDataDeclaration.hasInitializer()) {
+				if (functionDataDeclaration.hasSettingsBlock()) {
+					issueErrorForInitialization(functionDataDeclaration.getSettingsBlockOpt(), ((Name)functionDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
+				}
+			}
+			else {
+				org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
+				//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
+				if (typeBinding != null && !functionDataDeclaration.isNullable() && !(typeBinding instanceof ParameterizedType) && !hasPublicDefaultConstructor(typeBinding)) {
+					problemRequestor.acceptProblem(type,
+							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
+						new String[] {type.getCanonicalName()});
+				}
+				//nullable types cannot specify a settings block that contains settings for data in the field
+				if (functionDataDeclaration.hasSettingsBlock() && functionDataDeclaration.isNullable()) {
+					issueErrorForInitialization(functionDataDeclaration.getSettingsBlockOpt(), ((Name)functionDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED_NULL);
+				}
+			}
+		}
 		
-		validateNoEmptySettingsBlockForServiceOrInterface(functionDataDeclaration.getType(), functionDataDeclaration.getSettingsBlockOpt());
-
+		//TODO - currently the bindings don't contain property overrides
+//		if (functionDataDeclaration.hasSettingsBlock()) {
+//			IDataBinding dbinding = ((Expression)functionDataDeclaration.getNames().get(0)).resolveDataBinding();
+//			if (Binding.isValidBinding(dbinding)) {
+//				issueErrorForPropertyOverrides(dbinding, functionDataDeclaration.getSettingsBlockOpt());
+//			}
+//		}
+		
 		return false;
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.StructureItem structureItem) {
-		if (structureItem.hasType()) {
-			validateNoEmptySettingsBlockForServiceOrInterface(structureItem.getType(), structureItem.getSettingsBlock());
+		Type type = structureItem.getType();
+		if (type != null) {
+			validateNoEmptySettingsBlockForServiceOrInterface(type, structureItem.getSettingsBlock());
+			TypeValidator.validate(type, problemRequestor, compilerOptions, declaringPart.getEnvironment().getCompiler());
+			
+			if (structureItem.hasInitializer()) {
+				if (structureItem.hasSettingsBlock()) {
+					if (structureItem.getName() != null) {
+						issueErrorForInitialization(structureItem.getSettingsBlock(), structureItem.getName().getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
+					}
+				}
+			}
+			if (!structureItem.hasInitializer()) {
+				org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
+				//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
+				if (typeBinding != null && !structureItem.isNullable() && !(typeBinding instanceof ParameterizedType) && !hasPublicDefaultConstructor(typeBinding)) {
+					problemRequestor.acceptProblem(type,
+							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
+						new String[] {type.getCanonicalName()});
+				}
+				
+				//nullable types cannot specify a settings block that contains settings for data in the field
+				if (structureItem.hasSettingsBlock() && structureItem.isNullable() && structureItem.getName() != null) {
+					issueErrorForInitialization(structureItem.getSettingsBlock(), structureItem.getName().getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED_NULL);
+				}
+			}
+		}
+		
+		//TODO - currently the bindings don't contain property overrides
+//		if (structureItem.hasSettingsBlock() && structureItem.getName() != null) {
+//			IDataBinding dbinding = structureItem.getName().resolveDataBinding();
+//			if (Binding.isValidBinding(dbinding)) {
+//				issueErrorForPropertyOverrides(dbinding, structureItem.getSettingsBlock());
+//			}
+//		}
+		
+		return false;
+	}
+	
+	//TODO this same check is needed for NewExpressions
+	private boolean hasPublicDefaultConstructor(org.eclipse.edt.mof.egl.Type typeBinding) {
+		if (typeBinding instanceof StructPart) {
+			for (Constructor con : ((StructPart)typeBinding).getConstructors()) {
+				if (con.getParameters().size() == 0 && !BindingUtil.isPrivate(con)) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
 	
+	private void issueErrorForInitialization(SettingsBlock settings, final String fieldName, int errorNo) {
+		//TODO
+//		final Node[] errorNode = new Node[1];
+//    	settings.accept(new AbstractASTExpressionVisitor() {
+//    		public boolean visit(Assignment assignment) {
+//    			if (errorNode[0] != null) {
+//    				return false;
+//    			}
+//    			
+//    			//check if it was an annotation type assignment
+//    			if (assignment.resolveBinding() == null) {
+//    				IDataBinding dBinding = assignment.getLeftHandSide().resolveDataBinding();
+//    				if (Binding.isValidBinding(dBinding) && (dBinding.getKind() != IDataBinding.ANNOTATION_BINDING)) {
+//    	        		errorNode[0] = assignment;
+//    				}
+//    			}
+//    			return false;
+//    		}
+//    		
+//    		public boolean visit(AnnotationExpression annotationExpression) {
+//    			return false;
+//    		}
+//    		
+//    		public boolean visit(SetValuesExpression setValuesExpression) {
+//    			if (errorNode[0] != null) {
+//    				return false;
+//    			}
+//    			IDataBinding dBinding = setValuesExpression.getExpression().resolveDataBinding();
+//				if (Binding.isValidBinding(dBinding) && (dBinding.getKind() != IDataBinding.ANNOTATION_BINDING)) {
+//					setValuesExpression.getSettingsBlock().accept(this);
+//				}
+//				return false; 			
+//    		}
+//    		
+//    		public boolean visitExpression(Expression expression) {
+//    			if (errorNode[0] != null) {
+//    				return false;
+//    			}
+//    			errorNode[0] = expression;
+//    			return false;
+//    		}
+//    		
+//    	});
+//    	if (errorNode[0] != null) {
+//    		problemRequestor.acceptProblem(errorNode[0], errorNo, IMarker.SEVERITY_ERROR, new String[] {fieldName});
+//    	}
+    }
+	
+	//TODO
+//	private void issueErrorForPropertyOverrides(IDataBinding fieldBinding, SettingsBlock settings) {
+//    	if (!(fieldBinding instanceof DataBinding) || ((DataBinding)fieldBinding).getPropertyOverrides().isEmpty()) {
+//    		return;
+//    	}
+//    	
+//    	final Stack<IDataBinding> stack = new Stack();
+//    	stack.push(fieldBinding);
+//		final Node[] errorNode = new Node[1];
+//   	
+//    	settings.accept(new AbstractASTExpressionVisitor() {
+//    		public boolean visit(Assignment assignment) {
+//    			if (errorNode[0] != null) {
+//    				return false;
+//    			}
+//    			
+//    			//if this is an annotation assignment
+//    			if (Binding.isValidBinding(assignment.resolveBinding())) {
+//    				if (stack.size() > 1) {
+//    					errorNode[0] = assignment;
+//    				}
+//    			}
+//    			return false;
+//    		}
+//    		
+//    		public boolean visit(AnnotationExpression annotationExpression) {
+//    			if (errorNode[0] != null) {
+//    				return false;
+//    			}
+//    			
+//				if (stack.size() > 1) {
+//					errorNode[0] = annotationExpression;
+//				}
+//				return false;
+//    		}
+//    		
+//    		public boolean visit(SetValuesExpression setValuesExpression) {
+//    			if (errorNode[0] != null) {
+//    				return false;
+//    			}
+//    			
+//    			IDataBinding dBinding = setValuesExpression.getExpression().resolveDataBinding();
+//				if (Binding.isValidBinding(dBinding)) {					
+//					if (dBinding.getKind() == IDataBinding.ANNOTATION_BINDING) {
+//						if (stack.size() > 1) {
+//							errorNode[0] = setValuesExpression.getExpression();
+//						}
+//					}
+//					else {
+//						stack.push(dBinding);
+//						setValuesExpression.getSettingsBlock().accept(this);
+//					}
+//				}
+//				return false; 			
+//    		}
+//    		
+//    		public void endVisit(SetValuesExpression setValuesExpression) {
+//    			IDataBinding dBinding = setValuesExpression.getExpression().resolveDataBinding();
+//				if (Binding.isValidBinding(dBinding)) {					
+//					if (dBinding.getKind() == IDataBinding.ANNOTATION_BINDING) {}
+//					else {
+//						stack.pop();
+//					}
+//				}
+//    		}
+//    		
+//    		public boolean visitExpression(Expression expression) {
+//    			return false;
+//    		}
+//    		
+//    	});
+//		problemRequestor.acceptProblem(errorNode[0], IProblemRequestor.PROPERTY_OVERRIDES_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {fieldBinding.getCaseSensitiveName()});
+//    }
+	
 	private boolean isServiceOrInterfaceType(Type type) {
-		ITypeBinding typeBinding = type.resolveTypeBinding();
-		if (Binding.isValidBinding(typeBinding) && (Binding.isValidBinding(typeBinding.getBaseType()))) {
-			return (typeBinding.getBaseType().getKind() == ITypeBinding.SERVICE_BINDING) || (typeBinding.getBaseType().getKind() == ITypeBinding.INTERFACE_BINDING);
-		}
-		return false;
+		org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
+		return typeBinding instanceof Service || typeBinding instanceof Interface;
 	}
 	
 	private void validateNoEmptySettingsBlockForServiceOrInterface (Type type, SettingsBlock block) {
@@ -67,10 +305,7 @@ public class FieldValidator extends DefaultASTVisitor{
 		if (block.getSettings().size() == 0) {
 			problemRequestor.acceptProblem(type,
 					IProblemRequestor.SERVICE_AND_INTERFACE_EMPTY_BLOCK,
-					new String[]{type.resolveTypeBinding().getName()});
+					new String[]{type.resolveType().getTypeSignature()});
 		}
 	}
-
-
-
 }

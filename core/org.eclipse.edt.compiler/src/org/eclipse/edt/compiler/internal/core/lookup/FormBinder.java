@@ -77,7 +77,7 @@ public class FormBinder extends DefaultBinder {
     
     public boolean visit(Assignment assignment) {
 		Scope currentScopeParent = currentScope.getParentScope();		
-		currentScope.setParentScope(new DefaultScope());
+		currentScope.setParentScope(NullScope.INSTANCE);
 		assignment.getLeftHandSide().accept(this);
 		currentScope.setParentScope(currentScopeParent);
 		assignment.getRightHandSide().accept(this);

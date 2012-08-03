@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 /**
  * ParenthesizedExpression AST node type.
@@ -50,7 +51,11 @@ public class ParenthesizedExpression extends Expression {
 		return new ParenthesizedExpression((Expression)expr.clone(), getOffset(), getOffset() + getLength());
 	}
 	
-	public IDataBinding resolveDataBinding() {
-		return expr.resolveDataBinding();
+	public Member resolveMember() {
+		return expr.resolveMember();
+	}
+	
+	public Type resolveType() {
+		return expr.resolveType();
 	}
 }

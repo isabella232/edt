@@ -211,7 +211,7 @@ public class XMLSerializer implements Serializer {
 	}
 
 	void writeAttributeValue(EField field, Object value) {
-		if (value == null || ("".equals(value) && !field.isNullable()) || field.isTransient()) return;
+		if (value == null || "".equals(value) || field.isTransient()) return;
 		writer.print(field.getName());
 		writer.print('=');
 		writer.print('"');

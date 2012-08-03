@@ -43,7 +43,7 @@ public class OnEventBlock extends Node {
 	 * Returns a List of Expression objects representing the list of things
 	 * that can optionally follow an event kind and a colon.
 	 */
-	public List getStringList() {
+	public List<Node> getStringList() {
 		return fieldsOpt;
 	}
 	
@@ -51,7 +51,7 @@ public class OnEventBlock extends Node {
 		return !stmts.isEmpty();
 	}
 	
-	public List getStatements() {
+	public List<Node> getStatements() {
 		return stmts;
 	}
 	

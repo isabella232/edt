@@ -13,8 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.ConstructorBinding;
-
 /**
  * Constructor AST node type.
  *
@@ -26,13 +24,13 @@ public class Constructor extends Node {
 	private SettingsBlock settingsBlockOpt;
 	private boolean isPrivate;
 	private List stmts;	
-	private ConstructorBinding binding;
+	private org.eclipse.edt.mof.egl.Constructor binding;
 
-	public ConstructorBinding getBinding() {
+	public org.eclipse.edt.mof.egl.Constructor getBinding() {
 		return binding;
 	}
 
-	public void setBinding(ConstructorBinding binding) {
+	public void setBinding(org.eclipse.edt.mof.egl.Constructor binding) {
 		this.binding = binding;
 	}
 

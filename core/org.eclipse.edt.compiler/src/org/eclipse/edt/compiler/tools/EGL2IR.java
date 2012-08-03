@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,7 +16,6 @@ import org.eclipse.edt.compiler.EGL2IRArgumentProcessor;
 import org.eclipse.edt.compiler.EGL2IREnvironment;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.internal.sdk.IPartRequestor;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
@@ -51,19 +50,7 @@ public class EGL2IR {
 		EGL2IRArgumentProcessor.EGL2IRArguments processedArguments = new EGL2IRArgumentProcessor().processArguments(args);
 
 		if(processedArguments != null){
-		    compile(processedArguments, null,null,compiler);
-		}
-	}
-
-	public static void main(String[] args, IPartRequestor partRequestor, ISDKProblemRequestorFactory problemRequestorFactory) {
-		main(args, partRequestor, problemRequestorFactory, null);
-	}
-	
-	public static void main(String[] args, IPartRequestor partRequestor, ISDKProblemRequestorFactory problemRequestorFactory, ICompiler compiler) {
-		EGL2IRArgumentProcessor.EGL2IRArguments processedArguments = new EGL2IRArgumentProcessor().processArguments(args);
-
-		if(processedArguments != null){
-		    compile(processedArguments, problemRequestorFactory, partRequestor,compiler);
+		    compile(processedArguments, null,compiler);
 		}
 	}
 
@@ -78,15 +65,15 @@ public class EGL2IR {
 		SourcePathEntry.getInstance().reset();
 
 		if(processedArguments != null){
-		    compile(processedArguments,problemRequestorFactory,null,compiler);
+		    compile(processedArguments,problemRequestorFactory, compiler);
 		}
 	}
 	
-	public static void compile(final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs,ISDKProblemRequestorFactory problemRequestorFactory,IPartRequestor partRequestor, ICompiler compiler){
+	public static void compile(final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs,ISDKProblemRequestorFactory problemRequestorFactory, ICompiler compiler){
 		if (compiler == null){
 			compiler = new EDTCompiler();
 		}
-		EGLC.compile(processedArgs, compiler, problemRequestorFactory, partRequestor);
+		EGLC.compile(processedArgs, compiler, problemRequestorFactory);
 	}
 
 }

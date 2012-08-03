@@ -17,17 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.BindingUtilities;
-import org.eclipse.edt.compiler.binding.FixedRecordBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
@@ -60,11 +51,9 @@ import org.eclipse.edt.compiler.core.ast.MoveStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.OnEventBlock;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.PrintStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.ReturnStatement;
@@ -73,6 +62,7 @@ import org.eclipse.edt.compiler.core.ast.SetValuesStatement;
 import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.SuperExpression;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.ThrowStatement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.TransferStatement;
@@ -82,10 +72,7 @@ import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ContinueStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ConverseStatementValidator;
@@ -109,12 +96,18 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.ThrowStatemen
 import org.eclipse.edt.compiler.internal.core.validation.statement.TransferStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.TryStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
-/**
- * @author Dave Murray
- */
+//TODO need to check the type is valid for param & returns. used to be in FunctionBindingCompletor.
 public class FunctionValidator extends AbstractASTVisitor {
 	
 	IProblemRequestor problemRequestor;
@@ -131,6 +124,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public FunctionValidator(IProblemRequestor problemRequestor, IPartBinding enclosingPart, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
 		this.enclosingPart = enclosingPart;
+		
 		if(enclosingPart != null) {
 			this.statementValidInContainerInfo = StatementValidInContainerInfoFactory.INSTANCE.create(enclosingPart);
 		}
@@ -163,8 +157,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		checkFunctionName(nestedFunction.getName(), true);
 		checkNumberOfParms(nestedFunction.getFunctionParameters(), nestedFunction.getName(), functionName);
 		checkForConstructorCalls(nestedFunction);
-		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction);
-
+//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction); TODO
 		
 		return true;
 	}
@@ -174,18 +167,25 @@ public class FunctionValidator extends AbstractASTVisitor {
 		
 		checkNumberOfParms(constructor.getParameters(), constructor, functionName);
 		checkForConstructorCalls(constructor);
-		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(constructor);
+//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(constructor); TODO
 		
 		return true;
 	}
+	
+	public boolean visit(org.eclipse.edt.compiler.core.ast.ReturnsDeclaration returnsDeclaration) {
+		Type type = returnsDeclaration.getType();
+		if (type != null) {
+			TypeValidator.validate(type, problemRequestor, compilerOptions, enclosingPart.getEnvironment().getCompiler());
+		}
+		return true;
+	};
 	
 	private void checkForConstructorCalls(Node node) {
 		node.accept(new AbstractASTVisitor() {
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionInvocation functionInvocation) {
 				
 				//ensure that constructor invocations are the first statement in a constructor
-				if (functionInvocation.getTarget() instanceof SuperExpression ||
-						(Binding.isValidBinding(functionInvocation.getTarget().resolveDataBinding()) && functionInvocation.getTarget().resolveDataBinding().getKind() == IDataBinding.CONSTRUCTOR_BINDING)) {
+				if (functionInvocation.getTarget() instanceof SuperExpression || functionInvocation.getTarget() instanceof ThisExpression) {
 					if (functionInvocation.getParent() instanceof FunctionInvocationStatement) {
 						if (functionInvocation.getParent().getParent() instanceof Constructor) {
 							Constructor constructor = (Constructor)functionInvocation.getParent().getParent();
@@ -217,56 +217,37 @@ public class FunctionValidator extends AbstractASTVisitor {
 	
 	public boolean visit(FunctionParameter functionParameter) {
 	
-       	checkConstParmNotField(functionParameter);
-	
         Type parmType = functionParameter.getType();
-        FunctionParameterBinding fParameterBinding = (FunctionParameterBinding) functionParameter.getName().resolveBinding();
         
-        if(fParameterBinding != null) {			
+        Member member = functionParameter.getName().resolveMember();
+        if(member instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
+        	TypeValidator.validate(parmType, problemRequestor, compilerOptions, enclosingPart.getEnvironment().getCompiler());
+        	
+        	org.eclipse.edt.mof.egl.FunctionParameter memberParam = (org.eclipse.edt.mof.egl.FunctionParameter)member;
+        	
 	        checkParmTypeNotStaticArray(functionParameter, parmType);
 	        
-	        ITypeBinding typeBinding = parmType.resolveTypeBinding();
-	        if(typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING) {
-	        	checkParmNotEmptyRecord(functionParameter, typeBinding);
-	        	checkRecordParmNotFieldOrNullable(functionParameter, typeBinding);
-	        	checkParmNotPSBRecord(functionParameter, typeBinding);
-	        	checkTypeNotServiceOrInterfaceArray(functionParameter, typeBinding);
+	        org.eclipse.edt.mof.egl.Type type = member.getType();
+	        if(type != null) {
+	        	checkParmNotEmptyRecord(functionParameter, type);
+	        	checkTypeNotServiceOrInterfaceArray(functionParameter, type);
 	        	
-	        	if(fParameterBinding.isInput()) {
-	        		checkInputParm(functionParameter, typeBinding);         		
-	            }
-	        	else if(fParameterBinding.isOutput()) {
-	        		checkOutputParm(functionParameter, typeBinding);
-	        	}
-	        	else if(functionParameter.getUseType() != null) {
-	        		checkExplicitInputOutputParm(functionParameter, typeBinding);
-	        	}
-	        	else {
-	        		checkImplicitInputOutputParm(functionParameter, typeBinding);
+	        	switch (memberParam.getParameterKind()) {
+	        		case PARM_IN:
+	        			checkInputParm(functionParameter);
+	        			break;
+	        		case PARM_OUT:
+	        			checkOutputParm(functionParameter);
+	        			break;
+	        		case PARM_INOUT:
+	        			checkInputOutputParm(functionParameter);
+	        			break;
 	        	}
 	        	
-	        	if(enclosingPart != null) {
-	        		checkPartSpecificConditions(functionParameter, fParameterBinding, enclosingPart);
-	        	}
-	        	
-	        	if(enclosingPart == null ||
-	        	   (ITypeBinding.SERVICE_BINDING != enclosingPart.getKind() &&
-	 			    ITypeBinding.INTERFACE_BINDING != enclosingPart.getKind())) {
-	 				if(fParameterBinding.isSQLNullable()) {
-	 					checkNullableParm(functionParameter, typeBinding);
-	 				}
-	 			}
-	        	
-	        	StatementValidator.validateDeclarationForStereotypeContext(fParameterBinding, problemRequestor, functionParameter.getType().getBaseType());
+	        	//TODO not sure if this is still relevant
+//	        	StatementValidator.validateDeclarationForStereotypeContext(fParameterBinding, problemRequestor, functionParameter.getType().getBaseType());
 	        }
 	        
-	        if(fParameterBinding.isInput()) {
-	    		checkInputParm(functionParameter);
-	        }
-	    	else if(fParameterBinding.isOutput()) {
-	    		checkOutputParm(functionParameter);
-	    	}
-	    	
 	    	EGLNameValidator.validate(functionParameter.getName(), EGLNameValidator.PART, problemRequestor, compilerOptions);
         }
         return true;
@@ -283,10 +264,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 	
 	private void checkParmTypeNotStaticArray(FunctionParameter functionParameter, Type parmType) {
 
-		if (parmType.isNullableType()) {
-			checkParmTypeNotStaticArray(functionParameter, parmType.getBaseType());
-		}
-		
 		if(parmType.isArrayType()) {
 			if (((ArrayType) parmType).hasInitialSize()) {
         	problemRequestor.acceptProblem(
@@ -301,152 +278,49 @@ public class FunctionValidator extends AbstractASTVisitor {
 			
 	}
 	
-	private void checkParmNotEmptyRecord(FunctionParameter functionParameter, ITypeBinding parmType) {
-		boolean isEmptyRecord = false;
-    	if(ITypeBinding.FIXED_RECORD_BINDING == parmType.getKind()) {
-    		FixedRecordBinding rec = (FixedRecordBinding) parmType;
-    		isEmptyRecord = rec.getStructureItems().isEmpty() && rec.getDefaultSuperType() == null;
-    	}
-    	else if(ITypeBinding.FLEXIBLE_RECORD_BINDING == parmType.getKind()) {
-    		FlexibleRecordBinding rec = (FlexibleRecordBinding) parmType;
-    		isEmptyRecord = rec.getDeclaredFields().isEmpty() && rec.getDefaultSuperType() == null;
-    	}
-    	
-    	
-    	
-    	if(isEmptyRecord) {
-    		problemRequestor.acceptProblem(
-    			functionParameter.getType(),
-				IProblemRequestor.RECORD_PARAMETER_WITH_NO_CONTENTS,
-				new String[] {functionParameter.getName().getCanonicalName(), functionParameter.getType().getCanonicalName()});
-    	}
-	}
-	
-	private void checkConstParmNotField(FunctionParameter functionParameter) {
-		if (FunctionParameter.AttrType.FIELD == functionParameter.getAttrType()
-				&& functionParameter.isParmConst()) {
-			
-			problemRequestor.acceptProblem(
-					functionParameter,
-					IProblemRequestor.FUNCTION_PARM_CONST_AND_FIELD_MUTEX,
-					new String[] {
-						functionParameter.getName().getCanonicalName(),
-						functionName});
-		}
-	}
+	private void checkParmNotEmptyRecord(FunctionParameter functionParameter, org.eclipse.edt.mof.egl.Type parmType) {
+		//TODO remove when record fields are being bound. until then they're always "empty"
+		if (true) return;
 		
-	private void checkRecordParmNotFieldOrNullable(FunctionParameter functionParameter, ITypeBinding parmType) {
-		if(FunctionParameter.AttrType.FIELD == functionParameter.getAttrType() ||
-		   FunctionParameter.AttrType.SQLNULLABLE == functionParameter.getAttrType()) {
-			if(ITypeBinding.FIXED_RECORD_BINDING == parmType.getKind() ||
-			   ITypeBinding.FLEXIBLE_RECORD_BINDING == parmType.getKind()) {
-				problemRequestor.acceptProblem(
-					functionParameter,
-					functionParameter.getAttrType() == FunctionParameter.AttrType.FIELD ?
-						IProblemRequestor.FUNCTION_PARAMETER_TYPE_CANNOT_BE_FIELD :
-						IProblemRequestor.FUNCTION_PARAMETER_TYPE_CANNOT_BE_NULLABLE,
-					new String[] {
-						functionParameter.getName().getCanonicalName(),
-						IEGLConstants.KEYWORD_RECORD,
-						functionName});
-			}
-    	}
-	}
-	
-	private void checkParmNotPSBRecord(FunctionParameter functionParameter, ITypeBinding parmType) {
-		if(parmType.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null) {
-			problemRequestor.acceptProblem(
-				functionParameter.getType(),
-				IProblemRequestor.DLI_PSBRECORD_NOT_VALID_AS_PARAMETER);
-		}
-	}
-	
-	private void checkTypeNotServiceOrInterfaceArray(FunctionParameter functionParameter, ITypeBinding parmType) {
-		if(ITypeBinding.ARRAY_TYPE_BINDING == parmType.getKind()) {
-			ITypeBinding elementType = ((ArrayTypeBinding) parmType).getBaseType();
-			if(ITypeBinding.SERVICE_BINDING == elementType.getKind() ||
-			   (ITypeBinding.INTERFACE_BINDING == elementType.getKind() &&
-			   	SystemPartManager.findType(elementType.getName()) != elementType)) {
-				problemRequestor.acceptProblem(
-					functionParameter.getType(),
-					IProblemRequestor.SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED);
-			}
-		}
-	}
-	
-	private void checkNullableParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-		if(ITypeBinding.PRIMITIVE_TYPE_BINDING == parmType.getKind()) {
-			PrimitiveTypeBinding primTypeBinding = (PrimitiveTypeBinding) parmType;
-			Primitive prim = primTypeBinding.getPrimitive();
+		if (parmType instanceof Part) {
+			boolean isEmptyRecord = false;
 			
-			if(Primitive.BIGINT == prim	|| Primitive.MBCHAR == prim	||
-			   Primitive.NUM == prim	|| Primitive.NUMC == prim	||
-			   Primitive.PACF == prim) {
+			int partType = BindingUtil.getPartTypeConstant((Part)parmType);
+			if (partType == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
+				isEmptyRecord = ((Record)parmType).getFields().isEmpty();
+			}
+			else if (partType == ITypeBinding.FIXED_RECORD_BINDING) {
+				isEmptyRecord = ((StructuredRecord)parmType).getStructuredFields().isEmpty();
+			}
+			
+			if(isEmptyRecord) {
+	    		problemRequestor.acceptProblem(
+	    			functionParameter.getType(),
+					IProblemRequestor.RECORD_PARAMETER_WITH_NO_CONTENTS,
+					new String[] {functionParameter.getName().getCanonicalName(), functionParameter.getType().getCanonicalName()});
+	    	}
+		}
+	}
+	
+	private void checkTypeNotServiceOrInterfaceArray(FunctionParameter functionParameter, org.eclipse.edt.mof.egl.Type paramType) {
+		if (paramType instanceof org.eclipse.edt.mof.egl.ArrayType) {
+			org.eclipse.edt.mof.egl.ArrayType type = (org.eclipse.edt.mof.egl.ArrayType)paramType;
+			org.eclipse.edt.mof.egl.Type elementType = type.getElementType();
+			if (elementType instanceof Service || elementType instanceof Interface) {
 				problemRequestor.acceptProblem(
-					functionParameter,
-					IProblemRequestor.FUNCTION_PARAMETER_TYPE_CANNOT_BE_NULLABLE,
-					new String[] {
-						functionParameter.getName().getCanonicalName(),
-						prim.getName(),
-						functionName
-					});
-			}
-			else if(Primitive.BIN == prim) {
-				if(primTypeBinding.getLength() == 18 || primTypeBinding.getDecimals() != 0) {
-					problemRequestor.acceptProblem(
-						functionParameter,
-						IProblemRequestor.FUNCTION_PARAMETER_BIN_CANNOT_BE_NULLABLE,
-						new String[] {
-							functionParameter.getName().getCanonicalName(),
-							prim.getName(),
-							functionName
-						});
-				}
+						functionParameter.getType(),
+						IProblemRequestor.SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED);
 			}
 		}
 	}
 	
-	private void checkInputOrOutputOrInputOutputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-
-	}
-	
-	private void checkInputOrOutputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-		checkInputOrOutputOrInputOutputParm(functionParameter, parmType);		
-	}
-	
-	private void checkInputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-		checkInputOrOutputParm(functionParameter, parmType);
-		if(BindingUtilities.isLooseType(parmType)) {
-        	problemRequestor.acceptProblem(
-        		functionParameter,
-				IProblemRequestor.IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_ANY_TYPE,
-				new String[] {IEGLConstants.KEYWORD_IN.toUpperCase()});
-		}
+	private void checkInputParm(FunctionParameter functionParameter) {
 		if (functionParameter.isParmConst()) {
 			validatePrimitiveConst(functionParameter.getType());
 		}
 	}
 	
-	private void checkOutputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-		checkInputOrOutputParm(functionParameter, parmType);
-		if(ITypeBinding.PRIMITIVE_TYPE_BINDING == parmType.getKind()) {
-			switch(((PrimitiveTypeBinding) parmType).getPrimitive().getType()) {
-//			case Primitive.NUMBER_PRIMITIVE:
-//				problemRequestor.acceptProblem(
-//            		functionParameter,
-//					IProblemRequestor.FUNCTION_PARAMETER_MODIFIER_NOT_ALLOWED_WITH_LOOSE_TYPE,
-//					new String[] {IEGLConstants.KEYWORD_OUT.toUpperCase(), IEGLConstants.KEYWORD_NUMBER.toUpperCase()});
-//				break;
-			case Primitive.INTERVAL_PRIMITIVE:
-				if(((PrimitiveTypeBinding) parmType).getTimeStampOrIntervalPattern() == null) {
-					problemRequestor.acceptProblem(
-	            		functionParameter,
-						IProblemRequestor.FUNCTION_PARAMETER_MODIFIER_NOT_ALLOWED_WITH_LOOSE_TYPE,
-						new String[] {IEGLConstants.KEYWORD_OUT.toUpperCase(), IEGLConstants.KEYWORD_INTERVAL.toUpperCase()});
-				}
-				break;
-			}
-		}
+	private void checkOutputParm(FunctionParameter functionParameter) {
 		if (functionParameter.isParmConst()) {
 			problemRequestor.acceptProblem(
             		functionParameter,
@@ -455,51 +329,9 @@ public class FunctionValidator extends AbstractASTVisitor {
 		}
 	}
 	
-	private void checkExplicitInputOutputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-		checkInputOrOutputOrInputOutputParm(functionParameter, parmType);
-		
+	private void checkInputOutputParm(FunctionParameter functionParameter) {
 		if (functionParameter.isParmConst()) {
 			validatePrimitiveConst(functionParameter.getType());
-		}
-
-	}
-	
-	private void checkImplicitInputOutputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-		
-		if (functionParameter.isParmConst()) {
-			validatePrimitiveConst(functionParameter.getType());
-		}
-
-	}
-
-
-	private void checkInputOrOutputParm(FunctionParameter functionParameter) {
-		if(functionParameter.getAttrType() == FunctionParameter.AttrType.FIELD) {
-			problemRequestor.acceptProblem(
-				functionParameter,
-				IProblemRequestor.FUNCTION_PARAMETER_OUT_NOT_ALLOWED_WITH_FIELD,
-				new String[] {functionParameter.getUseType().toString().toUpperCase()});
-		}
-	}
-	
-	private void checkInputParm(FunctionParameter functionParameter) {
-		checkInputOrOutputParm(functionParameter);
-	}
-	
-	private void checkOutputParm(FunctionParameter functionParameter) {
-		checkInputOrOutputParm(functionParameter);
-	}
-	
-	private void checkPartSpecificConditions(FunctionParameter functionParameter, FunctionParameterBinding parmBinding, IPartBinding enclosingPart) {
-		ITypeBinding parmType = parmBinding.getType();
-		if(parmType != null && parmType != IBinding.NOT_FOUND_BINDING) {
-			if(enclosingPart.getAnnotation(new String[] {"egl", "ui", "jasper"}, "JasperReport") != null) {
-				if(ITypeBinding.PRIMITIVE_TYPE_BINDING != parmType.getKind()) {
-					problemRequestor.acceptProblem(
-						functionParameter.getType(),
-						IProblemRequestor.ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER);
-				}
-			}
 		}
 	}
 	
@@ -555,7 +387,8 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(AssignmentStatement assignmentStatement) {
 		preVisitStatement(assignmentStatement);
 		if (checkStatementAllowedInContainer(assignmentStatement)) {
-			assignmentStatement.accept(new AssignmentStatementValidator(problemRequestor, compilerOptions, enclosingPart));
+			//TODO AssignmentStatementValidator blows up right now
+//			assignmentStatement.accept(new AssignmentStatementValidator(problemRequestor, compilerOptions, enclosingPart));
 		}
 		postVisitStatement(assignmentStatement);
 		return false;
@@ -999,16 +832,17 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return false;
 	}
 
-	private Node getEnclosingOnEventBlock(Node node) {
-		Node parent = node.getParent();
-		while(parent != null && !(parent instanceof OnEventBlock)) {
-			parent = parent.getParent();
-		}
-		return parent instanceof OnEventBlock ? parent : null;
-	}
+//	private Node getEnclosingOnEventBlock(Node node) {
+//		Node parent = node.getParent();
+//		while(parent != null && !(parent instanceof OnEventBlock)) {
+//			parent = parent.getParent();
+//		}
+//		return parent instanceof OnEventBlock ? parent : null;
+//	}
 	
 	private void validatePrimitiveConst(Type type){
-		StatementValidator.validatePrimitiveConstant(type, problemRequestor);
+		//TODO primitives are being removed, and this check will no longer be valid. see bug 377632
+//		StatementValidator.validatePrimitiveConstant(type, problemRequestor);
 	}
 	
 }

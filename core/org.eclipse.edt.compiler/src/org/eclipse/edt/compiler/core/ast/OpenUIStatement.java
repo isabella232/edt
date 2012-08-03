@@ -16,8 +16,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.OpenUIStatementBinding;
-
 
 /**
  * OpenUIStatement AST node type.
@@ -33,8 +31,6 @@ public class OpenUIStatement extends Statement {
 	private boolean hasBindClause;
 	private List eventBlocks;	// List of OnEventBlocks
 	
-	private OpenUIStatementBinding statementBinding;
-
 	public OpenUIStatement(SettingsBlock settingsBlockOpt, List expr_plus, List bindOpt, List eventBlocks, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
@@ -65,7 +61,7 @@ public class OpenUIStatement extends Statement {
 	/**
 	 * @return A list of Expression objects.
 	 */
-	public List getOpenableElements() {
+	public List<Node> getOpenableElements() {
 		return expr_plus;
 	}
 	
@@ -76,11 +72,11 @@ public class OpenUIStatement extends Statement {
 	/**
 	 * @return A list of Expression objects.
 	 */
-	public List getBindClauseVariables() {
+	public List<Node> getBindClauseVariables() {
 		return bindOpt;
 	}
 	
-	public List getEventBlocks() {
+	public List<OnEventBlock> getEventBlocks() {
 		return eventBlocks;
 	}
 	
@@ -113,10 +109,4 @@ public class OpenUIStatement extends Statement {
 		
 		return new OpenUIStatement(newSettingsBlockOpt, cloneList(expr_plus), newBindOpt, cloneList(eventBlocks), getOffset(), getOffset() + getLength());
 	}
-    public OpenUIStatementBinding getStatementBinding() {
-        return statementBinding;
-    }
-    public void setStatementBinding(OpenUIStatementBinding statementBinding) {
-        this.statementBinding = statementBinding;
-    }
 }

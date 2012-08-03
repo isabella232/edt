@@ -351,6 +351,9 @@ public interface IProblemRequestor {
 	public static final int BIGINT_LITERAL_OUT_OF_RANGE = 3278;
 	public static final int SMALLINT_LITERAL_OUT_OF_RANGE = 3279;
 	public static final int SMALLFLOAT_LITERAL_OUT_OF_RANGE = 3280;
+	public static final int TYPE_IS_NOT_PARAMETERIZABLE = 3281;
+	public static final int TYPE_ARG_NOT_VALID = 3282;
+	public static final int TYPE_ARGS_INVALID_SIZE = 3283;
 	
 	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
 	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	
@@ -443,8 +446,7 @@ public interface IProblemRequestor {
 	public static final int TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE = 3410;
 
 	public static final int XXXREST_NO_RESOURCE_PARM = 3411;
-	public static final int XXXREST_NO_METHOD = 3412;
-
+	
 	public static final int SERVICE_CALL_USING_WRONG_TYPE = 3415;
 
 	public static final int SYSTEM_FUNCTION_CANNOT_BE_DELEGATED = 3416;
@@ -500,12 +502,13 @@ public interface IProblemRequestor {
 	public static final int DECIMALS_OF_VALUE_FOR_CONSTANT_TOO_LONG = 3466;
 	public static final int SEGMENTS_OR_POSITION_REQUIRED_FOR_CONSOLE_FIELDS = 3467;
 	public static final int MULTIPLE_OVERLOADED_FUNCTIONS_MATCH_ARGUMENTS = 3468;
+	public static final int NO_FUNCTIONS_MATCH_ARGUMENTS = 3469;
 
 	public static final int ENUMERATION_CONSTANT_INVALID = 3470;
 	public static final int ENUMERATION_CONSTANT_DUPLICATE= 3471;
 	public static final int MULTI_INDICES_NOT_SUPPORTED= 3472;
 	public static final int ENUMERATION_NO_FIELDS= 3473;
-
+	
 	public static final int THROWS_NOT_VALID_HERE= 3480;
 
 
@@ -732,11 +735,11 @@ public interface IProblemRequestor {
 	public static final int MISSING_LENGTH_FOR_PRIMITIVE_TYPE = 4350;
 	
 	public static final int LENGTH_NOT_ALLOWED = 4400;
-	public static final int INVALID_LENGTH_FOR_PRIMITIVE_TYPE = 4401;
+	public static final int INVALID_LENGTH_FOR_PARAMETERIZED_TYPE = 4401;
 	public static final int INVALID_DECIMALS = 4402;
 	public static final int DECIMALS_GREATER_THAN_LENGTH = 4403;
 	public static final int INVALID_CALCULATED_LENGTH_FOR_PRIMITIVE_TYPE_WITH_LOGICAL_CHILDREN = 4404;
-	public static final int PRIMITIVE_TYPE_REQUIRES_DATETIME_PATTERN = 4405;
+	public static final int PARAMETERIZED_TYPE_REQUIRES_DATETIME_PATTERN = 4405;
 //	public static final int TYPEDEF_ITEM_CAUSES_CIRCULAR_TYPEDEFS = 4405;
 //	public static final int NAMELESS_TYPEDEF_ITEM_CAUSES_CIRCULAR_TYPEDEFS = 4406;
 	public static final int DUPLICATE_ITEM_NAME = 4407;
@@ -744,6 +747,7 @@ public interface IProblemRequestor {
 	public static final int INVALID_LENGTH_FOR_PRIMITIVE_TYPE_WITH_FIXED_LENGTH = 4409;
 	public static final int INVALID_CALCULATED_LENGTH_FOR_PRIMITIVE_TYPE_WITH_FIXED_LENGTH_WITH_LOGICAL_CHILDREN = 4410;
 	public static final int DUPLICATE_ITEM_NAME_DUE_TO_EMBED = 4411;
+	public static final int NEGATIVE_LENGTH_INVALID = 4412;
 
 //
 //	//4500-4599: Used for SQL validation messages (may change)!
@@ -1303,9 +1307,6 @@ public interface IProblemRequestor {
     public static final int IBMIPROGRAM_CALLBACK_NOT_SUPPORTED = 5729;
     
     
-    
-    
-    
 //6000-6050 ARE IN EGLMESSAGES
 
 	public static final int EMPTY_SQL_STRING = 6500;
@@ -1405,7 +1406,6 @@ public interface IProblemRequestor {
 	// messages for call statement 
 	public static final int DUPE_CALL_OPTION = 6603;
 	public static final int TOO_MANY_ARGS_ON_CALL = 6604;
-	public static final int INVALID_STATMENT = 6605;
 //	public static final int CANT_HAVE_FUNC_INVOC_ARG_ON_CALL = 6605;	
 //	public static final int CANT_HAVE_EXPR_ARG_ON_CALL = 6606;		
 //	public static final int CANT_HAVE_NUMERIC_ARG_ON_CALL = 6607;

@@ -20,6 +20,11 @@ externalType EString extends AnyText type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	/**
+	 * Constructs an empty string.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} Concatenates two strings.
 	 */
 	static function $Plus(lvalue EString? in, rvalue EString? in) returns(EString) {@Operation{"+"}};

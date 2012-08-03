@@ -71,4 +71,14 @@ public class ParameterizedTypeImpl extends TypeImpl implements ParameterizedType
 		return true;
 	}
 
+	@Override
+	public int getMaxNumberOfParms() {
+		return 1;
+	}
+
+	@Override
+	public int getMinNumberOfParms() {
+		return 1;
+	}
+
 }

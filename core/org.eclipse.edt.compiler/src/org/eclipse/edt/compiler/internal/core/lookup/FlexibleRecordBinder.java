@@ -40,7 +40,7 @@ public class FlexibleRecordBinder extends DefaultBinder {
         record.accept(new FlexibleRecordBindingCompletor(scope, recordBinding, dependencyRequestor, problemRequestor, compilerOptions));
 
         // The current scope only changes once the initial record binding is complete
-        currentScope = new FlexibleRecordScope(currentScope, recordBinding);
+        currentScope = new RecordScope(currentScope, recordBinding);
 
         // We will bind the rest of the record now
         return true;
@@ -56,7 +56,7 @@ public class FlexibleRecordBinder extends DefaultBinder {
     
 	public boolean visit(Assignment assignment) {
 		Scope currentScopeParent = currentScope.getParentScope();		
-		currentScope.setParentScope(new DefaultScope());
+		currentScope.setParentScope(NullScope.INSTANCE);
 		assignment.getLeftHandSide().accept(this);
 		currentScope.setParentScope(currentScopeParent);
 		assignment.getRightHandSide().accept(this);

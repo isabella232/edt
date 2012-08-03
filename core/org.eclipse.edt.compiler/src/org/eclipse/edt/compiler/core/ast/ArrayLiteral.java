@@ -30,7 +30,7 @@ public class ArrayLiteral extends LiteralExpression {
 		this.exprs = setParent(exprs);
 	}
 	
-	public List getExpressions() {
+	public List<Expression> getExpressions() {
 		return exprs;
 	}
 	

@@ -1915,7 +1915,6 @@ public interface IEGLConstants {
 	public static String INTERVAL_STRING = "INTERVAL"; //v6.0
 	public static String CLOB_STRING = "CLOB"; //v6.0
 	public static String BLOB_STRING = "BLOB"; //v6.0
-	public static String BYTES_STRING = "BYTES"; //v6.0
 	public static String NUMBER_STRING = "NUMBER"; //$NON-NLS-1$	
 	public static String DECIMAL_STRING = "DECIMAL"; //$NON-NLS-1$
 	public static String STRING_STRING = "STRING"; //$NON-NLS-1$

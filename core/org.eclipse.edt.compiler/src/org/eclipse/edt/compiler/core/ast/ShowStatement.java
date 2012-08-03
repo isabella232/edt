@@ -14,8 +14,6 @@ package org.eclipse.edt.compiler.core.ast;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.ShowStatementBinding;
-
 
 /**
  * ShowStatement AST node type.
@@ -36,8 +34,6 @@ public class ShowStatement extends Statement {
 	private List showOptions;	// List of Nodes
 	private SettingsBlock settingsBlockOpt;
 	
-	private ShowStatementBinding statementBinding;
-
 	public ShowStatement(Expression expr, List showOptions, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
@@ -54,7 +50,7 @@ public class ShowStatement extends Statement {
 		return expr;
 	}
 	
-	public List getShowOptions() {
+	public List<Node> getShowOptions() {
 		return showOptions;
 	}
 	
@@ -87,11 +83,4 @@ public class ShowStatement extends Statement {
 		return new ShowStatement((Expression)expr.clone(), cloneList(showOptions), newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
 	
-	public ShowStatementBinding getStatementBinding() {
-        return statementBinding;
-    }
-	
-    public void setStatementBinding(ShowStatementBinding statementBinding) {
-        this.statementBinding = statementBinding;
-    }
 }

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.TransferStatementBinding;
 
 
 /**
@@ -38,8 +37,6 @@ public class TransferStatement extends Statement {
 	private Expression passingRecordOpt;
 	private SettingsBlock settingsBlockOpt;
 	
-	private TransferStatementBinding statementBinding;
-
 	public TransferStatement(TransferTarget transferTargetOpt, Expression expr, Expression passingRecordOpt, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
@@ -114,12 +111,4 @@ public class TransferStatement extends Statement {
 		
 		return new TransferStatement(transferTargetOpt, (Expression)expr.clone(), newPassingRecordOpt, newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
-	
-	public TransferStatementBinding getStatementBinding() {
-        return statementBinding;
-    }
-	
-    public void setStatementBinding(TransferStatementBinding statementBinding) {
-        this.statementBinding = statementBinding;
-    }
 }

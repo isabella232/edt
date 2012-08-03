@@ -336,11 +336,7 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public boolean visit(NullLiteral nullLiteral) {
 		return false;
 	}
-	
-	public boolean visit(NullableType nullableType) {
-		return false;
-	}
-	
+		
 	public boolean visit(NoCursorClause noCursorClause) {
 		return false;
 	}
@@ -389,10 +385,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(PrimitiveType primitiveType) {
-		return false;
-	}
-	
 	public boolean visit(PrintStatement printStatement) {
 		return false;
 	}
@@ -430,10 +422,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	}
 	
 	public boolean visit(Service service) {
-		return false;
-	}
-	
-	public boolean visit(ServiceReference serviceReference) {
 		return false;
 	}
 	
@@ -726,9 +714,7 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(NewExpression newExpression) {}
 	
 	public void endVisit(NullLiteral nullLiteral) {}
-	
-	public void endVisit(NullableType nullableType) {}
-	
+		
 	public void endVisit(NoCursorClause noCursorClause) {}
 	
 	public void endVisit(ObjectExpression objExpr) {}
@@ -752,9 +738,7 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(PassingClause passingClause) {}
 	
 	public void endVisit(PrepareStatement prepareStatement) {}
-	
-	public void endVisit(PrimitiveType primitiveType) {}
-	
+		
 	public void endVisit(PrintStatement printStatement) {}
 	
 	public void endVisit(Program program) {}
@@ -774,9 +758,7 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(ReturnStatement returnStatement) {}
 	
 	public void endVisit(Service service) {}
-	
-	public void endVisit(ServiceReference serviceReference) {}
-	
+		
 	public void endVisit(SetStatement setStatement) {}
 	
 	public void endVisit(SetValuesExpression setValuesExpression) {}

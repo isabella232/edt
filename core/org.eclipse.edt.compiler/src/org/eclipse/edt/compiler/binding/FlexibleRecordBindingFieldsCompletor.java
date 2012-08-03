@@ -17,10 +17,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.IASTVisitor;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
@@ -35,7 +33,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DataBindingScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FlexibleRecordScope;
+import org.eclipse.edt.compiler.internal.core.lookup.RecordScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -91,7 +89,7 @@ public class FlexibleRecordBindingFieldsCompletor extends AbstractBinder {
     public boolean visit(Record record) {
         return true;
     }
-    
+
     @Override
     public void endVisit(Record record) {
     	IASTVisitor visitor = new AbstractASTVisitor() {
@@ -170,7 +168,7 @@ public class FlexibleRecordBindingFieldsCompletor extends AbstractBinder {
         } catch (ResolutionException e) {
             problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
             if(structureItem.hasSettingsBlock()) {
-            	bindNamesToNotFound(structureItem.getSettingsBlock());
+            	setBindAttemptedForNames(structureItem.getSettingsBlock());
             }
             return false; // Do not create the field binding if its type cannot be resolved
         }

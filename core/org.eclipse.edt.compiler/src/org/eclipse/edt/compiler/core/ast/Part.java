@@ -219,7 +219,7 @@ public abstract class Part extends Node {
 
     protected boolean isPrivate;
 	protected SimpleName name;
-    protected List contents;
+    protected List<Node> contents;
     private String identifier;
 
     public Part(Boolean isPrivate, SimpleName name, List contents, int startOffset, int endOffset) {
@@ -236,7 +236,7 @@ public abstract class Part extends Node {
         return name;
     }
 
-    public List getContents() {
+    public List<Node> getContents() {
         return contents;
     }
     

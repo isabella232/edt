@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.dependency;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
+import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.Type;
 
 
 /**
@@ -35,13 +34,12 @@ public interface IDependencyRequestor {
 	public void recordSimpleName(String simpleName);
 	public void recordName(Name name);
 	
-	public void recordBinding(IBinding binding);
 	public void recordPackageBinding(IPackageBinding binding);
-	public void recordTypeBinding(ITypeBinding binding);
-	public void recordTopLevelFunctionBinding(IFunctionBinding binding);
+	public void recordType(Type type);
+	public void recordTopLevelFunction(FunctionPart function);
 	
-	public void stopRecordingTopLevelFunctionBindings();
-	public void startRecordingTopLevelFunctionBindings();
+	public void stopRecordingTopLevelFunctions();
+	public void startRecordingTopLevelFunctions();
 	
 	public void recordFunctionContainerScope(FunctionContainerScope scope);
 }

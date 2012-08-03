@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EDataType;
 import org.eclipse.edt.mof.EEnum;
@@ -61,7 +65,6 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 	EType listDatatype;
 	boolean newList = true;
 	boolean isPopEntry = false;
-	StringBuilder charBuf;
 	
 	public XMLDeserializer(InputStream input, IEnvironment env) throws UnsupportedEncodingException {
 		this.input = new InputSource(input);
@@ -94,7 +97,6 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 
 	@Override
 	public void startElement(String nsURI, String localName, String qName, Attributes attrs) throws SAXException {
-		checkCharacters();
 		EObject result = null;
 		
 		if (localName == null || localName.length() == 0) {
@@ -216,8 +218,7 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void endElement(String nsURI, String localName, String qName) throws SAXException {
-		checkCharacters();
-		
+
 		if (localName == null || localName.length() == 0) {
 			localName = qName;
 		}
@@ -283,28 +284,18 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 	
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		if (charBuf == null) {
-			charBuf = new StringBuilder(length);
-		}
-		charBuf.append(ch, start, length);
-	}
-	
-	private void checkCharacters() throws SAXException {
-		if (charBuf != null) {
-			if (datatype != null && (datatype instanceof EDataType || datatype instanceof DynamicEClass) ) {
-				String string = charBuf.toString();
-				Object value;
-				stack.pop();   //pop off the dummy entry that was added, because an value of "" will not come here
-				if (datatype instanceof DynamicEClass) {
-					value = ((DynamicEClass)datatype).getEncodedValue(string);
-				}
-				else {
-					value = valueFromString(datatype, string);
-				}
-				stack.push(value);
-				datatype = null;
+		if (datatype != null && (datatype instanceof EDataType || datatype instanceof DynamicEClass) ) {
+			String string = new String(ch, start, length);
+			Object value;
+			stack.pop();   //pop off the dummy entry that was added, because an value of "" will not come here
+			if (datatype instanceof DynamicEClass) {
+				value = ((DynamicEClass)datatype).getEncodedValue(string);
 			}
-			charBuf = null;
+			else {
+				value = valueFromString(datatype, string);
+			}
+			stack.push(value);
+			datatype = null;
 		}
 	}
 

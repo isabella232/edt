@@ -11,12 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import org.eclipse.edt.compiler.binding.annotationType.FieldDeclarationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.FunctionDeclarationAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ElementKind;
-import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.TypeKind;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -33,7 +30,7 @@ public class AnnotationAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
     public AnnotationAnnotationTypeBinding() {
         super(caseSensitiveName, new Object[] {
         	IEGLConstants.PROPERTY_TARGETS, 		ArrayTypeBinding.getInstance(ElementKind.TYPE),
-        	IEGLConstants.PROPERTY_TARGETTYPES, 	ArrayTypeBinding.getInstance(TypeKind.TYPE),
+//        	IEGLConstants.PROPERTY_TARGETTYPES, 	ArrayTypeBinding.getInstance(TypeKind.TYPE),
         	IEGLConstants.PROPERTY_VALIDATIONCLASS,	PrimitiveTypeBinding.getInstance(Primitive.STRING),
         	
         	"ValidationProxy",						PrimitiveTypeBinding.getInstance(Primitive.STRING),

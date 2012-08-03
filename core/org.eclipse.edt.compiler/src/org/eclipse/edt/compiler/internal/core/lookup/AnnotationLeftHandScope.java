@@ -16,22 +16,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.AnnotationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.AnnotationBinding;
-import org.eclipse.edt.compiler.binding.AnnotationBindingForElement;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PartFoundButNotAnnotationRecordAnnotationBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
-import org.eclipse.edt.compiler.binding.annotationType.EGLSystemConstantAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Type;
 
 
 /**
@@ -81,8 +73,8 @@ public class AnnotationLeftHandScope extends Scope {
     /**
      * @param parentScope
      */
-    public AnnotationLeftHandScope(Scope parentScope, IBinding bindingBeingAnnotated, ITypeBinding typeOfBindingBeingAnnotated,
-            IBinding bindingToHoldAnnotation, int index, IPartBinding partBinding) {
+    public AnnotationLeftHandScope(Scope parentScope, Element bindingBeingAnnotated, Type typeOfBindingBeingAnnotated,
+            Element bindingToHoldAnnotation) {
         super(parentScope);
         this.scopeToUseWhenResolving = parentScope;
         this.bindingBeingAnnotated = bindingBeingAnnotated;
@@ -111,29 +103,6 @@ public class AnnotationLeftHandScope extends Scope {
         annotationFoundUsingThisScope = false;
         notApplicableBinding = null;
         
-        if(resolveToAnnotations) {
-	        IAnnotationTypeBinding typeBinding = AnnotationTypeManager.getAnnotationType(simpleName);
-	        if (typeBinding != null) {
-	            if (isApplicableFor(typeBinding, bindingBeingAnnotated, index)) {
-	                annotationFoundUsingThisScope = true;
-	                AnnotationBinding annotationBinding;
-	                if (index < 0) {
-	                    annotationBinding = new AnnotationBinding(typeBinding.getCaseSensitiveName(), partBinding, typeBinding);
-	                } else {
-	                    annotationBinding = new AnnotationBindingForElement(typeBinding.getCaseSensitiveName(), partBinding, typeBinding, index);
-	                }
-	                return annotationBinding;
-	            } else {
-	                IDataBinding result = getScopeToUseWhenResolving().findData(simpleName);
-	
-	                if (result == IBinding.NOT_FOUND_BINDING || result == IAnnotationBinding.NOT_APPLICABLE_ANNOTATION_BINDING) {
-	                    notApplicableBinding = new AnnotationBindingForElement(typeBinding.getCaseSensitiveName(), null, typeBinding, index);
-	                    return IAnnotationBinding.NOT_APPLICABLE_ANNOTATION_BINDING;
-	                }
-	                return result;
-	            }
-	        }
-        }
         
         boolean foundPartButNotAnnotationRecord = false;
         ITypeBinding type = null;
@@ -270,10 +239,6 @@ public class AnnotationLeftHandScope extends Scope {
             return result;
         }
         return result && annotationType.supportsElementOverride();
-    }
-
-    public IFunctionBinding findFunction(String simpleName) {
-        return getScopeToUseWhenResolving().findFunction(simpleName);
     }
 
     public IPackageBinding findPackage(String simpleName) {

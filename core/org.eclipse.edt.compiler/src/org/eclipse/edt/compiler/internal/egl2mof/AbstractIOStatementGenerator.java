@@ -14,7 +14,6 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.Context;
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
@@ -50,7 +49,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 
 	@Override
 	public CallStatement genCallStatement(org.eclipse.edt.compiler.core.ast.CallStatement stmt, 
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (CallStatement)stack.pop();
@@ -58,7 +57,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	
 	@Override
 	public AddStatement genAddStatement(org.eclipse.edt.compiler.core.ast.AddStatement stmt, 
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (AddStatement)stack.pop();
@@ -67,7 +66,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public CloseStatement genCloseStatement(
 			org.eclipse.edt.compiler.core.ast.CloseStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (CloseStatement)stack.pop();
@@ -76,7 +75,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 
 	@Override
 	public ConverseStatement genConverseStatement(org.eclipse.edt.compiler.core.ast.ConverseStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (ConverseStatement)stack.pop();
@@ -86,7 +85,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public DeleteStatement genDeleteStatement(
 			org.eclipse.edt.compiler.core.ast.DeleteStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (DeleteStatement)stack.pop();
@@ -95,7 +94,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public ExecuteStatement genExecuteStatement(
 			org.eclipse.edt.compiler.core.ast.ExecuteStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (ExecuteStatement)stack.pop();
@@ -104,7 +103,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public ForEachStatement genForEachStatement(
 			org.eclipse.edt.compiler.core.ast.ForEachStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (ForEachStatement)stack.pop();
@@ -113,7 +112,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public GetByKeyStatement genGetByKeyStatement(
 			org.eclipse.edt.compiler.core.ast.GetByKeyStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (GetByKeyStatement)stack.pop();
@@ -122,7 +121,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public GetByPositionStatement genGetByPositionStatement(
 			org.eclipse.edt.compiler.core.ast.GetByPositionStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (GetByPositionStatement)stack.pop();
@@ -131,7 +130,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public OpenStatement genOpenStatement(
 			org.eclipse.edt.compiler.core.ast.OpenStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (OpenStatement)stack.pop();
@@ -140,7 +139,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public PrepareStatement genPrepareStatement(
 			org.eclipse.edt.compiler.core.ast.PrepareStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (PrepareStatement)stack.pop();
@@ -149,7 +148,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public ReplaceStatement genReplaceStatement(
 			org.eclipse.edt.compiler.core.ast.ReplaceStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (ReplaceStatement)stack.pop();
@@ -157,7 +156,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 
 	@Override
 	public OpenUIStatement genOpenUIStatement(org.eclipse.edt.compiler.core.ast.OpenUIStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (OpenUIStatement)stack.pop();
@@ -166,7 +165,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 
 	@Override
 	public ShowStatement genShowStatement(org.eclipse.edt.compiler.core.ast.ShowStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (ShowStatement)stack.pop();
@@ -175,7 +174,7 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public DisplayStatement genDisplayStatement(
 			org.eclipse.edt.compiler.core.ast.DisplayStatement stmt,
-			Map<IBinding, EObject> bindingToElementMap) {
+			Map<Object, EObject> bindingToElementMap) {
 		eObjects = bindingToElementMap;
 		stmt.accept(this);
 		return (DisplayStatement)stack.pop();

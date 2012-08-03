@@ -18,8 +18,6 @@ import java.util.Map;
  */
 public interface ITypeBinding extends IBinding {
     
-    IPartBinding AMBIGUOUS_TYPE = new AmbiguousTypeBinding();
-    
     int NULL_BINDING = 0;
     int NOT_FOUND_BINDING = 1;
     int ARRAY_TYPE_BINDING = 2;
@@ -54,54 +52,11 @@ public interface ITypeBinding extends IBinding {
 
     boolean isValid();
     
-    String[] getPackageName();
+    String getPackageName();
+    String getCaseSenstivePackageName();
     
-    IDataBinding findData(String simpleName);
-    IDataBinding findPublicData(String simpleName);
-    
-    /**
-     * Returns a Map whose keys are Strings (all of which are unqualified names)
-     * mapped to IDataBinding objects within this type. The data bindings come
-     * from any level of the structure within this type that can be accessed in
-     * statements when the "allowUnqualifiedItemReferences" flag is set.
-     */
-    Map getSimpleNamesToDataBindingsMap();
-    IFunctionBinding findFunction(String simpleName);
-    IFunctionBinding findPublicFunction(String simpleName);
-    
-    boolean isReference();
-    
-    /**
-     * Returns true if the type of this type binding cannot be determined until
-     * runtime. True for types of fields from dictionaries and the primitive
-     * type 'any'
-     */
-    boolean isDynamic();
-    /**
-     * Returns true if an item of this type can be accessed with the dot notation
-     * to obtain a dynamic type. True for all dynamic types, as well as dictionaries
-     * and arrayDictionaries.
-     */
-    boolean isDynamicallyAccessible();
-    
-    boolean isReferentiallyEqual(ITypeBinding anotherTypeBinding);
-    
-    boolean isPartBinding();   
-   
-    ITypeBinding copyTypeBinding();  
-    
-    /**
-     * Returns the base type of this typeBinding
-     * For most typeBindings, it will just return "this", but for arrays
-     * and reference types, it will return the element type binding
-     */
-    ITypeBinding getBaseType();
-    
-    boolean isNullable();
-    ITypeBinding getNullableInstance();
-    ITypeBinding getNonNullableInstance();
+    boolean isPartBinding();       
     
     String getPackageQualifiedName();
     
-    boolean isInstantiable();
 }

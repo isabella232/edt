@@ -13,8 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.UsedTypeBinding;
-
 
 /**
  * UseStatement AST node type.
@@ -24,11 +22,10 @@ import org.eclipse.edt.compiler.binding.UsedTypeBinding;
  */
 public class UseStatement extends Node {
 
-	private List name_plus;	// List of Names
+	private List<Name> name_plus;	// List of Names
 	private SettingsBlock settingsBlockOpt;
-	private UsedTypeBinding usedTypeBinding;
 
-	public UseStatement(List name_plus, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
+	public UseStatement(List<Name> name_plus, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.name_plus = setParent(name_plus);
@@ -38,7 +35,7 @@ public class UseStatement extends Node {
 		}
 	}
 	
-	public List getNames() {
+	public List<Name> getNames() {
 		return name_plus;
 	}
 	
@@ -58,12 +55,6 @@ public class UseStatement extends Node {
 		}
 		visitor.endVisit(this);
 	}
-    public UsedTypeBinding getUsedTypeBinding() {
-        return usedTypeBinding;
-    }
-    public void setUsedTypeBinding(UsedTypeBinding usedTypeBinding) {
-        this.usedTypeBinding = usedTypeBinding;
-    }
     
    protected Object clone() throws CloneNotSupportedException {
    		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;

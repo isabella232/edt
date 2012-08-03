@@ -20,6 +20,11 @@ externalType EBytes extends AnyValue type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	/**
+	 * Constructs an empty bytes.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} Concatenates two bytes.
 	 */
 	static function $Plus(lvalue EBytes? in, rvalue EBytes? in) returns(EBytes) {@Operation{"+"}};

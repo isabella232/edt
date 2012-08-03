@@ -20,22 +20,22 @@ package org.eclipse.edt.compiler.core.ast;
 public class ReturnsDeclaration extends Node {
 
 	private Type type;
-	private boolean isSqlNullable;
+	private boolean isNullable;
 
-	public ReturnsDeclaration(Type type, Boolean sqlNullableOpt, int startOffset, int endOffset) {
+	public ReturnsDeclaration(Type type, Boolean isNullable, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.type = type;
 		type.setParent(this);
-		isSqlNullable = sqlNullableOpt.booleanValue();
+		this.isNullable = isNullable.booleanValue();
 	}
 	
 	public Type getType() {
 		return type;
 	}
 	
-	public boolean isSqlNullable() {
-		return isSqlNullable;
+	public boolean isNullable() {
+		return isNullable;
 	}
 	
 	public void accept(IASTVisitor visitor) {
@@ -47,6 +47,6 @@ public class ReturnsDeclaration extends Node {
     }  
 	   
 	protected Object clone() throws CloneNotSupportedException {
-		return new ReturnsDeclaration((Type)type.clone(), new Boolean(isSqlNullable), getOffset(), getOffset() + getLength());
+		return new ReturnsDeclaration((Type)type.clone(), new Boolean(isNullable), getOffset(), getOffset() + getLength());
 	}
 }

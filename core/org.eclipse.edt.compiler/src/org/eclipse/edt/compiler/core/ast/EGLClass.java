@@ -85,7 +85,7 @@ public class EGLClass extends Part {
 	/**
 	 * @return A List of Name objects
 	 */
-	public List getImplementedInterfaces() {
+	public List<Name> getImplementedInterfaces() {
 		return implementsOpt;
 	}
 }

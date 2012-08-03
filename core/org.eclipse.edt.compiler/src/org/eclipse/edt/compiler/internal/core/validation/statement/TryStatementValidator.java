@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.EGLClassBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -116,11 +115,6 @@ public class TryStatementValidator extends DefaultASTVisitor {
 		
 		if (!Binding.isValidBinding(type)) {
 			return false;
-		}
-		
-		if (type.getName() == InternUtil.intern("anyException") &&
-			type.getPackageName() == InternUtil.intern(new String[] {"eglx", "lang"})) {
-			return true;
 		}
 		
 		if (type.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {

@@ -21,10 +21,10 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
  */
 public interface IEnvironment {
 
-    IPartBinding getPartBinding(String[] packageName, String partName);
-    IPartBinding getNewPartBinding(String[] packageName, String partName, int kind);
+    IPartBinding getPartBinding(String packageName, String partName);
+    IPartBinding getNewPartBinding(String packageName, String partName, int kind);
     
-    boolean hasPackage(String[] packageName);
+    boolean hasPackage(String packageName);
     IPackageBinding getRootPackage();
     ISystemEnvironment getSystemEnvironment();
     ICompiler getCompiler();

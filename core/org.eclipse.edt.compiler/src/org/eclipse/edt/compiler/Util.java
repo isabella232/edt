@@ -41,6 +41,7 @@ import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -52,11 +53,11 @@ public class Util {
 	public final static char[] SUFFIX_EGL = ".EGL".toCharArray(); //$NON-NLS-1$
 	
 	public static String getFilePartName(File file){
-		return InternUtil.intern(file.getAbsolutePath().toString());
+		return NameUtile.getAsName(file.getAbsolutePath().toString());
 	}
 	
 	public static String getCaseSensitiveFilePartName(File file){
-		return InternUtil.internCaseSensitive(file.getAbsolutePath().toString());
+		return NameUtile.getAsCaseSensitiveName(file.getAbsolutePath().toString());
 	}
 	
 	/**

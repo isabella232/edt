@@ -16,6 +16,11 @@ import egl.lang.reflect.mof.Operation;
 
 externalType ENumber extends AnyValue type ClassType
 	/**
+	 * Constructs a number with a default value of 0.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value ENumber in) returns (ENumber) {@Operation{"+"}};

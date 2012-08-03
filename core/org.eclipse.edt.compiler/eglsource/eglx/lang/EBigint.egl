@@ -19,6 +19,11 @@ import egl.lang.reflect.mof.Operation;
  */
 externalType EBigint extends ENumber type ClassType
 	/**
+	 * Constructs a bigint with a default value of 0.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value EBigint in) returns (EBigint) {@Operation{"+"}};

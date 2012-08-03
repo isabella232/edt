@@ -164,9 +164,9 @@ public class Egl2Mof extends Egl2MofExpression {
 			// the result at the original typeSignature as well
 			if (mofPart instanceof EClassifier) {
 				EClassifier ePart = (EClassifier)mofPart;
-				IPartBinding binding = (IPartBinding)part.getName().resolveBinding();
-				if (!binding.getName().equalsIgnoreCase(ePart.getName())) {
-					env.save(mofSerializationKeyFor(binding), ePart, false);
+				Type binding = part.getName().resolveType();
+				if (!ePart.getName().equalsIgnoreCase(binding.eGet("name").toString())) {
+					env.save(binding.getMofSerializationKey(), ePart, false);
 				}
 			}
 			

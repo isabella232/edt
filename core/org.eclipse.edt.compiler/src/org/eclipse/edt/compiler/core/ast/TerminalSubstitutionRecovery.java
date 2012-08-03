@@ -80,11 +80,7 @@ public class TerminalSubstitutionRecovery extends AbstractRecovery {
         
         //Report error        
         if((NodeTypes.ID == terminal.symbolType || NodeTypes.TIMES == terminal.symbolType) &&
-           (EGLKeywordHandler.getKeywordHashSet().contains(NodeNameUtility.getTerminalName(errorNodeType).toLowerCase())
-           	|| NodeTypes.PRIMITIVE == errorNodeType
-           	|| NodeTypes.NUMERICPRIMITIVE == errorNodeType
-           	|| NodeTypes.TIMESTAMPINTERVALPRIMITIVE == errorNodeType
-           	|| NodeTypes.CHARPRIMITIVE == errorNodeType) &&
+           EGLKeywordHandler.getKeywordHashSet().contains(NodeNameUtility.getTerminalName(errorNodeType).toLowerCase()) &&
            errorNodeType != NodeTypes.STRING) {
         	problemRequestor.keywordAsName(errorNodeType, errorStart, errorEnd);
         }

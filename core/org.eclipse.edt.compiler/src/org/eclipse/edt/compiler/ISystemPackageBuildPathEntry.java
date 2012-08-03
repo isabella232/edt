@@ -11,19 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler;
 
-import java.util.HashMap;
-
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
 public interface ISystemPackageBuildPathEntry {
 
 	public IPartBinding getPartBinding(String entry);
-	public IPartBinding getPartBinding(String[] packageName,String partName);
-	public boolean hasPackage(String[] packageName);
-	public void clearParts();
-	public HashMap getPartBindingsWithoutPackage();
-	public HashMap getPartNamesByPackage();
+	public IPartBinding getPartBinding(String packageName,String partName);
+	public boolean hasPackage(String packageName);
 	public ObjectStore getObjectStore();
 	public void readPartBindings();
 	public String getID();

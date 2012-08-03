@@ -21,14 +21,16 @@ public class Parameter extends Node {
 
 	protected SimpleName name;
 	protected Type type;
+	protected boolean isNullable;
 
-	public Parameter(SimpleName name, Type type, int startOffset, int endOffset) {
+	public Parameter(SimpleName name, Type type, Boolean isNullable, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.name = name;
 		name.setParent(this);
 		this.type = type;
 		type.setParent(this);
+		this.isNullable = isNullable.booleanValue();
 	}
 	
 	public Name getName() {
@@ -41,5 +43,9 @@ public class Parameter extends Node {
 	
 	protected Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
+	}
+	
+	public boolean isNullable() {
+		return isNullable;
 	}
 }

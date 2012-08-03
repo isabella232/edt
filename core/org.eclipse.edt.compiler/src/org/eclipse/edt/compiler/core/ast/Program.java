@@ -28,11 +28,11 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 public class Program extends Part{
 
 	private Name partSubTypeOpt;
-	private List programParametersOpt;
+	private List<ProgramParameter> programParametersOpt;
 	private boolean isCallable;
 	
 
-	public Program(Boolean privateAccessModifierOpt, SimpleName name, Name partSubTypeOpt, List programParametersOpt, List classContents, int startOffset, int endOffset) {
+	public Program(Boolean privateAccessModifierOpt, SimpleName name, Name partSubTypeOpt, List<ProgramParameter> programParametersOpt, List classContents, int startOffset, int endOffset) {
 		super(privateAccessModifierOpt, name, classContents, startOffset, endOffset);
 		
 		if(partSubTypeOpt != null) {
@@ -61,7 +61,7 @@ public class Program extends Part{
 	    return isCallable;
 	}
 	
-	public List getParameters() {
+	public List<ProgramParameter> getParameters() {
 		return programParametersOpt;
 	}
 	

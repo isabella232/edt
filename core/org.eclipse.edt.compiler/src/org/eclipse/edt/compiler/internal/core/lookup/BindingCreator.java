@@ -104,7 +104,12 @@ public class BindingCreator extends DefaultASTVisitor {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.HANDLER_BINDING);
 		return false;
 	}
-	
+
+	public boolean visit(EGLClass eglClass) {
+		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.CLASS_BINDING);
+		return false;
+	}
+
 	public boolean visit(Library library) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.LIBRARY_BINDING);
 		return false;
@@ -114,12 +119,7 @@ public class BindingCreator extends DefaultASTVisitor {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.PROGRAM_BINDING);
 		return false;
 	}
-
-	public boolean visit(EGLClass eglClass) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.CLASS_BINDING);
-		return false;
-	}
-
+	
 	public boolean visit(Service service) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.SERVICE_BINDING);
 		return false;

@@ -17,14 +17,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Constructor;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -33,12 +33,26 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ParameterModifierKind;
-import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.ConstantField;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
+import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -46,92 +60,103 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  */
 public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
 
-    private FunctionContainerBinding functionContainerBinding;
+    private org.eclipse.edt.mof.egl.Part functionContainerBinding;
 
     protected IProblemRequestor problemRequestor;
 
-    protected Set definedDataNames = new HashSet();
+    protected Set<String> definedDataNames = new HashSet<String>();
 
-    protected Set definedFunctionNames = new HashSet();
+    protected Set<String> definedFunctionNames = new HashSet<String>();
 
     protected PartSubTypeAndAnnotationCollector partSubTypeAndAnnotationCollector;
 
-    protected FormGroupBinding mainFormGroup = null;
-    protected Set usedForms = new HashSet();
+    private Set<Type> usedTypes = new HashSet<Type>();
 
-    private FormGroupBinding helpFormGroup = null;
-
-    private Set usedTypes = new HashSet();
-
-    private Name helpFormGroupName;
-
-    private List dataDeclarations = new ArrayList();
+    private List<ClassDataDeclaration> dataDeclarations = new ArrayList<ClassDataDeclaration>();
 
 	private FunctionContainerScope functionContainerScope;
+	
+	private IRPartBinding irBinding;
 
-    public FunctionContainerBindingCompletor(FunctionContainerBinding functionContainerBinding, Scope currentScope,
+    public FunctionContainerBindingCompletor(IRPartBinding irBinding, Scope currentScope,
             IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(currentScope, functionContainerBinding, dependencyRequestor, compilerOptions);
+        super(currentScope, irBinding.getIrPart(), dependencyRequestor, compilerOptions);
         this.problemRequestor = problemRequestor;
-        this.functionContainerBinding = functionContainerBinding;
+        this.irBinding = irBinding;
+        this.functionContainerBinding = irBinding.getIrPart();
     }
 
     public PartSubTypeAndAnnotationCollector getPartSubTypeAndAnnotationCollector() {
         if (partSubTypeAndAnnotationCollector == null) {
-            partSubTypeAndAnnotationCollector = new PartSubTypeAndAnnotationCollector(functionContainerBinding, this, currentScope, problemRequestor);
+            partSubTypeAndAnnotationCollector = new PartSubTypeAndAnnotationCollector(functionContainerBinding, this, problemRequestor);
         }
         return partSubTypeAndAnnotationCollector;
     }
 
     void endVisitFunctionContainer(Part part) {
-    	functionContainerBinding.setValid(true);
-        if (helpFormGroup != null && mainFormGroup == null) {
-            problemRequestor.acceptProblem(helpFormGroupName, IProblemRequestor.PROGRAM_USE_STATEMENT_HELP_GROUP_WITH_NO_MAIN_GROUP);
-        }
-        convertItemsToNullableIfNeccesary();
+    	irBinding.setValid(true);
     }
 
     public boolean visit(ClassDataDeclaration classDataDeclaration) {
-    	boolean varIsReadOnly = false;
-        ITypeBinding typeBinding = null;
+        Type type = null;
         try {
-            typeBinding = bindType(classDataDeclaration.getType());
+            type = bindType(classDataDeclaration.getType());
         } catch (ResolutionException e) {
             problemRequestor
                     .acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
             if(classDataDeclaration.hasSettingsBlock()) {
-            	bindNamesToNotFound(classDataDeclaration.getSettingsBlockOpt());
+            	setBindAttemptedForNames(classDataDeclaration.getSettingsBlockOpt());
             }
+            for (Name name : classDataDeclaration.getNames()) {
+            	name.setBindAttempted(true);
+            }
+
             return false; // Do not create the class field bindings if the type
             // cannot be resolved
         }
 
         dataDeclarations.add(classDataDeclaration);
         boolean isConstantDeclaration = classDataDeclaration.isConstant();
-        Object constantValue = null;
+        PrimitiveTypeLiteral constantValue = null;
         if (isConstantDeclaration) {
-            constantValue = getConstantValue(classDataDeclaration.getInitializer(), typeBinding, ((Name) classDataDeclaration.getNames().get(0)).getCanonicalName(), problemRequestor);
+            constantValue = getConstantValue(classDataDeclaration.getInitializer()); 
         }
-        Iterator i = classDataDeclaration.getNames().iterator();
-        while (i.hasNext()) {
-            Name name = (Name) i.next();
+        
+        for (Name name : classDataDeclaration.getNames()) {
             String dataName = name.getIdentifier();
-
-            ClassFieldBinding fieldBinding = isConstantDeclaration ? new ClassConstantBinding(name.getCaseSensitiveIdentifier(), functionContainerBinding,
-                    typeBinding, constantValue) : new ClassFieldBinding(name.getCaseSensitiveIdentifier(), functionContainerBinding, typeBinding);
             
-            fieldBinding.setIsPrivate(classDataDeclaration.isPrivate());
-            fieldBinding.setIsReadOnly(varIsReadOnly);
-            fieldBinding.setIsStatic(classDataDeclaration.isStatic());
+            Field field;
+            if (isConstantDeclaration) {
+            	ConstantField cons = IrFactory.INSTANCE.createConstantField();
+            	cons.setValue(constantValue);
+            	field = cons;
+            }
+            else {
+            	field = IrFactory.INSTANCE.createField();
+            }
 
+            if (classDataDeclaration.isPrivate()) {
+            	field.setAccessKind(AccessKind.ACC_PRIVATE);
+            }
+                        
+            field.setContainer((Container)functionContainerBinding);
+            field.setType(type);
+            field.setIsNullable(classDataDeclaration.isNullable());
+            field.setName(name.getCaseSensitiveIdentifier());
+            field.setIsStatic(classDataDeclaration.isStatic() || membersStaticByDefault());
+            if (!BindingUtil.isPrivate(field) && membersPrivateByDefault()) {
+            	field.setAccessKind(AccessKind.ACC_PRIVATE);
+            }
+            
             if (definedDataNames.contains(dataName) || definedFunctionNames.contains(dataName)) {
                 problemRequestor.acceptProblem(name, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { name.getCanonicalName(),
                         functionContainerBinding.getName() });
             } else {
-                functionContainerBinding.addClassField(fieldBinding);
+            	((LogicAndDataPart)functionContainerBinding).getFields().add(field);
                 definedDataNames.add(dataName);
             }
-            name.setBinding(fieldBinding);
+            name.setMember(field);
+            name.setType(type);
         }
 
         return false;
@@ -139,102 +164,76 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
 
     
     private void processDataDeclarationsSettingsBlocks() {
-        Iterator i = dataDeclarations.iterator();
-        while (i.hasNext()) {
-            processSettingsBlock((ClassDataDeclaration)i.next(), functionContainerBinding, getFunctionContainerScope(), problemRequestor);
-        }
+    	for (ClassDataDeclaration decl : dataDeclarations) {
+            processSettingsBlock(decl, functionContainerBinding, getFunctionContainerScope(), problemRequestor);
+    	}
     }
         
     public boolean visit(NestedFunction nestedFunction) {
         String name = nestedFunction.getName().getIdentifier();
         
-        FunctionBinding functionBinding = new FunctionBinding(nestedFunction.getName().getCaseSensitiveIdentifier(), functionContainerBinding);
-        FunctionBindingCompletor functionBindingCompletor = new FunctionBindingCompletor(functionContainerBinding, getFunctionContainerScope(),
-                functionBinding, dependencyRequestor, problemRequestor, compilerOptions);
-        nestedFunction.accept(functionBindingCompletor);
-        NestedFunctionBinding nestedFunctionBinding = new NestedFunctionBinding(functionBinding.getCaseSensitiveName(), functionContainerBinding, functionBinding);
-        nestedFunction.getName().setBinding(nestedFunctionBinding);
-        List removeThese = new ArrayList();
+        Function function = IrFactory.INSTANCE.createFunction();
+        function.setName(nestedFunction.getName().getCaseSensitiveIdentifier());
+        function.setContainer((Container)functionContainerBinding);
         
+        FunctionBindingCompletor functionBindingCompletor = new FunctionBindingCompletor(functionContainerBinding, getFunctionContainerScope(),
+                function, dependencyRequestor, problemRequestor, compilerOptions);
+        nestedFunction.accept(functionBindingCompletor);
+        
+        nestedFunction.getName().setMember(function);
+        function.setIsStatic(function.isStatic() || membersStaticByDefault());
+        if (!BindingUtil.isPrivate(function) && membersPrivateByDefault()) {
+        	function.setAccessKind(AccessKind.ACC_PRIVATE);
+        }
+                
         if (definedDataNames.contains(name)) {
         	problemRequestor.acceptProblem(nestedFunction.getName(), IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { nestedFunction.getName().getCanonicalName(), functionContainerBinding.getCaseSensitiveName() });
         } else if(definedFunctionNames.contains(name)) {
-        	for(Iterator iter = functionContainerBinding.getDeclaredFunctions().iterator(); iter.hasNext();) {
-        		IDataBinding fDataBinding = (IDataBinding) iter.next();
-        		IFunctionBinding fBinding = (IFunctionBinding) fDataBinding.getType();
-        		if(TypeCompatibilityUtil.functionSignituresAreIdentical(fBinding, functionBinding, compilerOptions, false, false)) {
-        			problemRequestor.acceptProblem(
-        				nestedFunction.getName(),
-        				IProblemRequestor.DUPLICATE_NAME_IN_FILE,
-        				new String[] {
-        					IEGLConstants.KEYWORD_FUNCTION,
-        					nestedFunction.getName().getCanonicalName()
-        				});
-        			return false;
+        	
+        	for (Function func : ((StructPart)functionContainerBinding).getFunctions()) {
+        		if(BindingUtil.functionSignituresAreIdentical(func, function, false, false)) {
+	        			problemRequestor.acceptProblem(
+	        				nestedFunction.getName(),
+	        				IProblemRequestor.DUPLICATE_NAME_IN_FILE,
+	        				new String[] {
+	        					IEGLConstants.KEYWORD_FUNCTION,
+	        					nestedFunction.getName().getCanonicalName()
+	        				});
+	        			return false;
         		}
         	}
         } else {
             definedFunctionNames.add(name);
         }        
         
-        functionContainerBinding.addDeclaredFunction(nestedFunctionBinding);
-        functionContainerBinding.getDeclaredFunctions().removeAll(removeThese);
+        ((StructPart)functionContainerBinding).getFunctions().add(function);
         
         return false;
     }
     
-    boolean isOverride(NestedFunction node) {
-    	final boolean[] override = new boolean[1];
-    	DefaultASTVisitor visitor =  new DefaultASTVisitor() {
-    		public boolean visit(NestedFunction nestedFunction) {
-    			return true;
-    		}
-    		public boolean visit(SettingsBlock settingsBlock) {
-    			return true;
-    		}
-    		
-    		public boolean visit(org.eclipse.edt.compiler.core.ast.SetValuesExpression setValuesExpression) {
-    			setValuesExpression.getExpression().accept(this);
-    			return false;
-    		}
-    		
-    		public boolean visit(org.eclipse.edt.compiler.core.ast.AnnotationExpression annotationExpression) {
-    			String name = annotationExpression.getCanonicalString();
-    			if (InternUtil.intern(name) == InternUtil.intern("override")) {
-    				override[0] = true;
-    			}
-    			return false;
-    		}
-    	};
-    	node.accept(visitor);
-    	
-    	return override[0];
-    }
-
     protected void processSettingsBlocks() {
         processDataDeclarationsSettingsBlocks();
         if (getPartSubTypeAndAnnotationCollector().getSettingsBlocks().size() > 0) {
             AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, functionContainerBinding,
-                    functionContainerBinding, functionContainerBinding, -1, functionContainerBinding);
+                    functionContainerBinding, functionContainerBinding);
             //If the part type is specified on the part (as opposed to with an
             // annotation),
             //then create an annotation scope to handle resolution of subtype
             // dependent properties
             if (!getPartSubTypeAndAnnotationCollector().isFoundSubTypeInSettingsBlock()) {
-                if (getPartSubTypeAndAnnotationCollector().getSubTypeAnnotationBinding() == null) {
-                    if (getDefaultSubType() != null) {
-                        AnnotationBinding annotation = new AnnotationBinding(getDefaultSubType().getCaseSensitiveName(), functionContainerBinding,
-                                getDefaultSubType());
-                        functionContainerBinding.addAnnotation(annotation);
-                        scope = new AnnotationLeftHandScope(scope, annotation, annotation.getType(), annotation, -1, functionContainerBinding);
+                if (getPartSubTypeAndAnnotationCollector().getStereotype() == null) {
+                	StereotypeType stereoTypeType = getDefaultStereotypeType();
+                    if (stereoTypeType != null) {                   	
+                    	Stereotype stereotype = (Stereotype) stereoTypeType.newInstance();
+                        functionContainerBinding.addAnnotation(stereotype);
+                        scope = new AnnotationLeftHandScope(scope, stereotype, stereoTypeType, stereotype);
                     }
                 } else {
-                    scope = new AnnotationLeftHandScope(scope, getPartSubTypeAndAnnotationCollector().getSubTypeAnnotationBinding(), getPartSubTypeAndAnnotationCollector().getSubTypeAnnotationBinding().getType(),
-                            getPartSubTypeAndAnnotationCollector().getSubTypeAnnotationBinding(), -1, functionContainerBinding);
+                    scope = new AnnotationLeftHandScope(scope, getPartSubTypeAndAnnotationCollector().getStereotype(), (StereotypeType)getPartSubTypeAndAnnotationCollector().getStereotype().getEClass(),
+                            getPartSubTypeAndAnnotationCollector().getStereotype());
                 }
             }
             Scope fcScope = getFunctionContainerScope();
-            fcScope.startReturningTopLevelFunctions();
             SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(fcScope, functionContainerBinding, scope,
                     dependencyRequestor, problemRequestor, compilerOptions);
             Iterator i = getPartSubTypeAndAnnotationCollector().getSettingsBlocks().iterator();
@@ -243,31 +242,30 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
                 block.accept(blockCompletor);
             }
         } else {
-            if (getPartSubTypeAndAnnotationCollector().getSubTypeAnnotationBinding() == null) {
-                if (getDefaultSubType() != null) {
-                    AnnotationBinding annotation = new AnnotationBinding(getDefaultSubType().getCaseSensitiveName(), functionContainerBinding,
-                            getDefaultSubType());
-                    functionContainerBinding.addAnnotation(annotation);
+            if (getPartSubTypeAndAnnotationCollector().getStereotype() == null) {
+            	StereotypeType stereoTypeType = getDefaultStereotypeType();
+                if (stereoTypeType != null) {
+                	Stereotype stereoType = (Stereotype) stereoTypeType.newInstance();
+                    functionContainerBinding.addAnnotation(stereoType);
                 }
             }
         }
     }
 
-    protected abstract IPartSubTypeAnnotationTypeBinding getDefaultSubType();
+    protected abstract StereotypeType getDefaultStereotypeType();
 
     public boolean visit(UseStatement useStatement) {
         for (Iterator iter = useStatement.getNames().iterator(); iter.hasNext();) {
             Name nextName = (Name) iter.next();
 
-            ITypeBinding typeBinding = null;
+            Type typeBinding = null;
             try {
-                typeBinding = bindTypeName(nextName, true);
+                typeBinding = bindTypeName(nextName); 
             } catch (ResolutionException e) {
                 problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e
                         .getInserts());
-                useStatement.setUsedTypeBinding(new UsedTypeBinding(IBinding.NOT_FOUND_BINDING));
                 if (useStatement.hasSettingsBlock()) {
-                	bindNamesToNotFound(useStatement.getSettingsBlock());
+                	setBindAttemptedForNames(useStatement.getSettingsBlock());
                 }
                 continue;
             }
@@ -280,62 +278,8 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
                 usedTypes.add(typeBinding);
             }
             
-            if(ITypeBinding.LIBRARY_BINDING == typeBinding.getKind()) {
-            	getFunctionContainerScope().addUsedLibrary(typeBinding);
-            }
-            else if (typeBinding.getKind() == ITypeBinding.FORMGROUP_BINDING || typeBinding.getKind() == ITypeBinding.FORM_BINDING) {
-                FormGroupBinding formGroupBinding = null;
-                if(ITypeBinding.FORMGROUP_BINDING == typeBinding.getKind()) {
-                	formGroupBinding = (FormGroupBinding) typeBinding;                	
-                }
-                else {
-                	if (nextName instanceof QualifiedName) {
-                		IBinding qnBinding = ((QualifiedName) nextName).getQualifier().resolveBinding();
-                		if (Binding.isValidBinding(qnBinding) && qnBinding.isTypeBinding() && ((ITypeBinding)qnBinding).getKind() == ITypeBinding.FORMGROUP_BINDING) {
-                        	formGroupBinding = (FormGroupBinding) ((QualifiedName) nextName).getQualifier().resolveBinding();
-                        	usedForms.add(typeBinding);
-                        	getFunctionContainerScope().setMainFormGroup(usedForms);
-                		}
-                	}
-                }
-                if (formGroupBinding == null) {
-                    problemRequestor.acceptProblem(nextName, IProblemRequestor.FORM_MUST_BE_QUALIFIED_BY_FORMGROUP, new String[] {
-                            nextName.getCanonicalString()});
-                    return false;
-                }
-                
-                if (!formGroupBinding.isValid()) {
-                    formGroupBinding = (FormGroupBinding) formGroupBinding.realize();
-                }
-                UsedTypeBinding usedType = new UsedTypeBinding(formGroupBinding);
-                useStatement.setUsedTypeBinding(usedType);
-                if (useStatement.hasSettingsBlock()) {
-                    AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, usedType, formGroupBinding, usedType, -1, functionContainerBinding);
-                    SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, functionContainerBinding, 
-                            scope, dependencyRequestor, problemRequestor, compilerOptions);
-                    useStatement.getSettingsBlock().accept(blockCompletor);
-                }
-                if (usedType.isHelpGroup()) {
-                    if (helpFormGroup == null) {
-                        helpFormGroup = formGroupBinding;
-                        helpFormGroupName = nextName;
-                    } else {
-                        problemRequestor.acceptProblem(nextName, IProblemRequestor.PROGRAM_USE_STATEMENT_TOO_MANY_HELP_GROUP_PROPERTIES,
-                                new String[] { nextName.getCanonicalString(), functionContainerBinding.getCaseSensitiveName() });
-                    }
-                } else {
-                	if(ITypeBinding.FORMGROUP_BINDING == typeBinding.getKind()) {
-                		usedForms.addAll(formGroupBinding.getForms());
-                		getFunctionContainerScope().setMainFormGroup(usedForms);
-                	}
-                    if (mainFormGroup == null) {
-                        mainFormGroup = formGroupBinding;
-                    } else if(mainFormGroup != formGroupBinding) {                    	
-                        problemRequestor.acceptProblem(nextName, IProblemRequestor.PROGRAM_USE_STATEMENT_TOO_MANY_FORMGROUPS, new String[] {
-                                nextName.getCanonicalString(), functionContainerBinding.getCaseSensitiveName() });
-                    }
-                }
-
+            if(typeBinding instanceof org.eclipse.edt.mof.egl.Part) {
+            	getFunctionContainerScope().addUsedPart((org.eclipse.edt.mof.egl.Part)typeBinding);
             }
         }
         return false;
@@ -347,32 +291,83 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     	}
     	return functionContainerScope;
     }
-        
-    private void convertItemsToNullableIfNeccesary() {
-		IAnnotationBinding aBinding = functionContainerBinding.getAnnotation(new String[] {"egl", "core"}, "I4GLItemsNullable");
-		if(aBinding != null && Boolean.YES == aBinding.getValue()) {
-			for(Iterator iter = functionContainerBinding.getClassFields().iterator(); iter.hasNext();) {
-				DataBinding next = (DataBinding) iter.next();
-				ITypeBinding type = next.getType();
-				if(type != null && ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getBaseType().getKind()) {
-					next.setType(type.getNullableInstance());
-				}
-			}
-			for(Iterator iter = functionContainerBinding.getDeclaredFunctions().iterator(); iter.hasNext();) {
-				NestedFunctionBinding next = (NestedFunctionBinding) iter.next();
-				FunctionBinding nextFunc = (FunctionBinding) next.getType();
-				ITypeBinding returnType = nextFunc.getReturnType();
-				if(returnType != null && ITypeBinding.PRIMITIVE_TYPE_BINDING == returnType.getBaseType().getKind()) {
-					nextFunc.setReturnType(returnType.getNullableInstance());
-				}
-				for(Iterator pIter = nextFunc.getParameters().iterator(); pIter.hasNext();) {
-					DataBinding dBinding = (DataBinding) pIter.next();
-					ITypeBinding type = dBinding.getType();
-					if(type != null && ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getBaseType().getKind()) {
-						dBinding.setType(type.getNullableInstance());
-					}
-				}
-			}
-		}
-	}
+    
+    protected boolean membersStaticByDefault() {
+    	return false;
+    }
+
+    protected boolean membersPrivateByDefault() {
+    	return false;
+    }
+    
+    public boolean visit(Constructor constructor) {
+    	final org.eclipse.edt.mof.egl.Constructor constructorBinding = IrFactory.INSTANCE.createConstructor();
+    	constructorBinding.setName(NameUtile.getAsCaseSensitiveName(IEGLConstants.KEYWORD_CONSTRUCTOR));
+    	constructorBinding.setType(functionContainerBinding);
+    	final Set<String> definedParameters = new HashSet<String>();
+    	
+    	constructor.setBinding(constructorBinding);
+    	
+    	if (constructor.isPrivate()) {
+    		constructorBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+    	}
+    	
+    	constructor.accept(new AbstractASTVisitor() {
+    		public boolean visit(FunctionParameter functionParameter) {
+    			String parmName = functionParameter.getName().getIdentifier();
+    	        org.eclipse.edt.compiler.core.ast.Type parmType = functionParameter.getType();        
+    	        org.eclipse.edt.mof.egl.Type typeBinding = null;
+    	        try {
+    	            typeBinding = bindType(parmType);
+    	        } catch (ResolutionException e) {
+    	            problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+    	            return false;
+    	        }
+    	        
+    	        org.eclipse.edt.mof.egl.FunctionParameter funcParmBinding = IrFactory.INSTANCE.createFunctionParameter();
+    	        funcParmBinding.setName(functionParameter.getName().getCaseSensitiveIdentifier());
+    	        functionParameter.getName().setMember(funcParmBinding);
+    	        funcParmBinding.setType(typeBinding);
+    	        funcParmBinding.setIsNullable(functionParameter.isNullable());   	        
+    	        
+    	        funcParmBinding.setIsConst(functionParameter.isParmConst());
+    	        
+    	        FunctionParameter.UseType useType = functionParameter.getUseType();
+    	        if (useType == FunctionParameter.UseType.IN) {
+    	            funcParmBinding.setParameterKind(ParameterKind.PARM_IN);
+    	        } else if (useType == FunctionParameter.UseType.OUT) {
+    	            funcParmBinding.setParameterKind(ParameterKind.PARM_OUT);
+    	        } else if (useType == null && typeBinding != null && TypeUtils.isReferenceType(typeBinding)) {
+    	        	funcParmBinding.setParameterKind(ParameterKind.PARM_IN);
+    	        }
+    	        else {
+    	        	funcParmBinding.setParameterKind(ParameterKind.PARM_INOUT);
+    	        }
+ 
+    	        if (definedParameters.contains(parmName)) {
+    	            problemRequestor.acceptProblem(functionParameter, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { functionParameter.getName().getCanonicalName(), IEGLConstants.KEYWORD_CONSTRUCTOR });
+    	        } else {
+    	            constructorBinding.addParameter(funcParmBinding);
+    	            definedParameters.add(parmName);
+    	        }
+    	        
+    	        return false;
+    		}
+    	});
+    	
+    	((StructPart)functionContainerBinding).getConstructors().add(constructorBinding);
+    	
+    	if (constructor.hasSettingsBlock()) {
+            FunctionScope functionScope = new FunctionScope(currentScope, constructorBinding);
+            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding);
+            SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, functionContainerBinding, scope,
+                    dependencyRequestor, problemRequestor, compilerOptions);
+            constructor.getSettingsBlock().accept(blockCompletor);
+    		
+    	}
+    	
+    	return false;
+    }
+
+    
 }

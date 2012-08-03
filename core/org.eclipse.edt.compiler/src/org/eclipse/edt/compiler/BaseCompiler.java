@@ -14,9 +14,9 @@ package org.eclipse.edt.compiler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.impl.ProgramImpl;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
@@ -121,7 +121,7 @@ public class BaseCompiler implements ICompiler {
 	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
 		SystemEnvironment sysEnv = new SystemEnvironment(Environment.getCurrentEnv(), null, getAllImplicitlyUsedEnumerations(), this);
     	Environment.getCurrentEnv().registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
-		sysEnv.initializeSystemPackages(getSystemEnvironmentPath(), new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)), notifier);
+		sysEnv.initializeSystemPackages(getSystemEnvironmentPath(), new SystemPackageBuildPathEntryFactory(), notifier);
 		return sysEnv;
 	}
 	
@@ -137,6 +137,16 @@ public class BaseCompiler implements ICompiler {
 
 	@Override
 	public StatementValidator getValidatorFor(Statement stmt) {
+		return null;
+	}
+	
+	@Override
+	public PartValidator getValidatorFor(Part part) {
+		return null;
+	}
+	
+	@Override
+	public TypeValidator getValidatorFor(Type type) {
 		return null;
 	}
 }

@@ -37,11 +37,14 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeKind;
 import org.eclipse.edt.mof.egl.TypeParameter;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class ProxyPart extends ProxyEObject implements Part, DataType, ParameterizableType {
 	private static String KeyScheme = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
 	
 	private String typeSignature;
+	private String name;
+	private String packageName;
 	
 	public ProxyPart(String typeSignature) {
 		int i = typeSignature.indexOf(KeyScheme);
@@ -196,17 +199,34 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 	public Classifier getClassifier() {
 		throw new UnsupportedOperationException();
 	}
+	
 	@Override
 	public String getPackageName() {
+		if (packageName == null) {
+			packageName = NameUtile.getAsName(getCaseSensitivePackageName());
+		}
+		return packageName;
+	}
+	
+	@Override
+	public String getCaseSensitivePackageName() {
 		int index = getFullyQualifiedName().lastIndexOf(".");
 		if (index < 0) {
 			return "";
 		}
 		return getFullyQualifiedName().substring(0, index);
 	}
-	
+
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = NameUtile.getAsName(getCaseSensitiveName());
+		}
+		return name;
+	}
+	
+	@Override
+	public String getCaseSensitiveName() {
 		int index = getFullyQualifiedName().lastIndexOf(".");
 		if (index < 0) {
 			return getFullyQualifiedName();

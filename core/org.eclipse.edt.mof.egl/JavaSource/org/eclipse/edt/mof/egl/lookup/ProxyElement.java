@@ -133,4 +133,9 @@ public class ProxyElement extends ProxyEObject implements Element, Member {
 		
 	}
 
+	@Override
+	public String getCaseSensitiveName() {
+		return getName();
+	}
+
 }

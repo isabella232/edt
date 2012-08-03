@@ -11,13 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -25,27 +27,26 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  */
 public class LibraryBindingCompletor extends FunctionContainerBindingCompletor {
 
-    private LibraryBinding libraryBinding;
+    private org.eclipse.edt.mof.egl.Library libraryBinding;
 
-    public LibraryBindingCompletor(Scope currentScope, LibraryBinding libraryBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(libraryBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
-        this.libraryBinding = libraryBinding;
+    public LibraryBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(irBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
+        this.libraryBinding = (org.eclipse.edt.mof.egl.Library)irBinding.getIrPart();
     }
     
     public boolean visit(Library library) {
-    	library.getName().setBinding(libraryBinding);
+    	library.getName().setType(libraryBinding);
         library.accept(getPartSubTypeAndAnnotationCollector());
         
-        libraryBinding.setPrivate(library.isPrivate());
-        
+        if (library.isPrivate()) {
+        	libraryBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+        }        
         return true;
     }
-    protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {
+ 
+    protected StereotypeType getDefaultStereotypeType() {
     	try {
-    		return null;
-    	}
-    	catch(UnsupportedOperationException e) {
-    		return null;
+    		return (StereotypeType)BindingUtil.getAnnotationType(NameUtile.getAsName("eglx.lang"), NameUtile.getAsName("BasicLibrary"));
     	}
     	catch(ClassCastException e) {
     		return null;
@@ -55,5 +56,9 @@ public class LibraryBindingCompletor extends FunctionContainerBindingCompletor {
     public void endVisit(Library library) {
         processSettingsBlocks();        
         endVisitFunctionContainer(library);        
+    }
+    
+    protected boolean membersStaticByDefault() {
+    	return true;
     }
 }

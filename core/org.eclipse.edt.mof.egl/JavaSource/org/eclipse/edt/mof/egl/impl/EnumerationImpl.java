@@ -30,6 +30,7 @@ import org.eclipse.edt.mof.egl.TypeParameter;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EEnumImpl;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class EnumerationImpl extends EEnumImpl implements Enumeration {
@@ -43,6 +44,8 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	private static int totalSlots = 7;
 	
 	private List<StructPart> superTypes;
+	private String name;
+	private String packageName;
 
 	
 	public static int totalSlots() {
@@ -68,6 +71,14 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = NameUtile.getAsName(getCaseSensitiveName());
+		}
+		return name;
+	}
+	
+	@Override
+	public String getCaseSensitiveName() {
 		return (String)slotGet(Slot_name);
 	}
 	
@@ -104,6 +115,14 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	
 	@Override
 	public String getPackageName() {
+		if (packageName == null) {
+			packageName = NameUtile.getAsName(getCaseSensitivePackageName());
+		}
+		return packageName;
+	}
+
+	@Override
+	public String getCaseSensitivePackageName() {
 		return (String)slotGet(Slot_packageName);
 	}
 	

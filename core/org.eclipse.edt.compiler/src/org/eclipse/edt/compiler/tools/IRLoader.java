@@ -13,20 +13,13 @@ package org.eclipse.edt.compiler.tools;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import org.eclipse.edt.compiler.EDTCompiler;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.compiler.SystemEnvironment;
-import org.eclipse.edt.compiler.SystemEnvironmentUtil;
-import org.eclipse.edt.compiler.SystemPackageBuildPathEntryFactory;
-import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 import org.eclipse.edt.mof.impl.Bootstrap;

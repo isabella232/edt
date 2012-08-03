@@ -261,17 +261,17 @@ public class AnnotationValidator {
 				visitFunctionContainer(library, library.getSubType());
 				return false;
 			}
+			
+			public boolean visit(Handler handler) {
+				visitFunctionContainer(handler, handler.getSubType());
+				return false;
+			}
 
 			public boolean visit(EGLClass eglClass) {
 				visitFunctionContainer(eglClass, eglClass.getSubType());
 				return false;
 			}
 
-			public boolean visit(Handler handler) {
-				visitFunctionContainer(handler, handler.getSubType());
-				return false;
-			}
-			
 			public boolean visit(Interface interfaceNode) {
 				visitFunctionContainer(interfaceNode, interfaceNode.getSubType());
 				return false;
@@ -696,7 +696,11 @@ public class AnnotationValidator {
 			public boolean visit(Handler handler) {
 				return true;
 			}
-			
+
+			public boolean visit(EGLClass eglClass) {
+				return true;
+			}
+
 			public boolean visit(DataItem dataItem) {
 				return true;
 			}

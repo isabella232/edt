@@ -15,9 +15,9 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.egl2mof.AbstractIOStatementGenerator;
-import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 import org.eclipse.edt.mof.eglx.services.ServicesFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
@@ -37,7 +37,7 @@ public class ServicesActionStatementGenerator extends AbstractIOStatementGenerat
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
-		CallStatement stmt = factory.createServicesCallStatement();
+		ServicesCallStatement stmt = factory.createServicesCallStatement();
 		callStatement.getInvocationTarget().accept(this);
 		stmt.setInvocationTarget((Expression)stack.pop());
 		if (callStatement.hasArguments()) {

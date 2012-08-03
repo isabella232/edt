@@ -14,17 +14,19 @@ package org.eclipse.edt.compiler.binding;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.mof.egl.Part;
+
 /**
  * @author winghong
  */
 public class FileBinding extends PartBinding {
 
     private IPackageBinding declaringPackage;
-    private List packageBindings;
-    private List partBindings;
+    private List<IPackageBinding> packageBindings;
+    private List<Part> partBindings;
     
-    public FileBinding(String[] packageName, String caseSensitiveInternedName) {
-        super(packageName, caseSensitiveInternedName);
+    public FileBinding(String caseSensitivePackageName, String caseSensitiveInternedName) {
+        super(caseSensitivePackageName, caseSensitiveInternedName);
     }
     
     public IPackageBinding getDeclaringPackage() {
@@ -35,16 +37,16 @@ public class FileBinding extends PartBinding {
         this.declaringPackage = declaringPackage;
     }
 
-    public List getPackageBindings() {
+    public List<IPackageBinding> getPackageBindings() {
         if(packageBindings == null) {
-            packageBindings = new ArrayList();
+            packageBindings = new ArrayList<IPackageBinding>();
         }
         return packageBindings;
     }
 
-    public List getPartBindings() {
+    public List<Part> getPartBindings() {
         if(partBindings == null) {
-            partBindings = new ArrayList();
+            partBindings = new ArrayList<Part>();
         }
         return partBindings;
     }
@@ -53,18 +55,10 @@ public class FileBinding extends PartBinding {
      * @see org.eclipse.edt.compiler.binding.IPartBinding#clear()
      */
     public void clear() {
-    	super.clear();
         packageBindings = null;
         partBindings = null;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.binding.IPartBinding#isStructurallyEqual(org.eclipse.edt.compiler.binding.IPartBinding)
-     */
-    public boolean isStructurallyEqual(IPartBinding anotherPartBinding) {
-        // TODO Auto-generated method stub
-        return false;
-    }
 
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.binding.ITypeBinding#getKind()
@@ -73,12 +67,4 @@ public class FileBinding extends PartBinding {
         return ITypeBinding.FILE_BINDING;
     }
     
-    public boolean isDeclarablePart() {
-		return false;
-	}
-
-	@Override
-	public ITypeBinding primGetNullableInstance() {
-		return this;
-	}
 }

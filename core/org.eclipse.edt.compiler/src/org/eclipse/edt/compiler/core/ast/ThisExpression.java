@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 
 
@@ -23,8 +22,6 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  */
 public class ThisExpression extends Expression {
     
-	private IDataBinding dataBinding;
-
 	public ThisExpression(int startOffset, int endOffset) {
 		super(startOffset, endOffset);		
 	}
@@ -42,13 +39,4 @@ public class ThisExpression extends Expression {
 		return new ThisExpression(getOffset(), getOffset() + getLength());
 	}
 	
-	public IDataBinding resolveDataBinding() {
-		return dataBinding;
-	}
-	
-	public void setDataBinding(IDataBinding dataBinding) {
-		this.dataBinding = dataBinding;
-	}
-	
-
 }

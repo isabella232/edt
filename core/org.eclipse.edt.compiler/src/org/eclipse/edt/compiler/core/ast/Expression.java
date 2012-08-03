@@ -13,10 +13,8 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.DataItemBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Member;
 
 
 /**
@@ -24,33 +22,40 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
  */
 public abstract class Expression extends Node {
     
-    private ITypeBinding typeBinding;
+    private org.eclipse.edt.mof.egl.Type type;
+    private boolean bindAttempted;
     protected Map attributes;
     
     public Expression(int startOffset, int endOffset) {
         super(startOffset, endOffset);
     }
 
-    public ITypeBinding resolveTypeBinding() {
-        return typeBinding;
+    public org.eclipse.edt.mof.egl.Type resolveType() {
+        return type;
     }
     
-    public IDataBinding resolveDataBinding() {
+    public Object resolveElement() {
     	return null;
     }
     
-    public void setDataBinding(IDataBinding binding) {
-        //default is to do nothing
+    public Member resolveMember() {
+    	if (resolveElement() instanceof Member) {
+    		return (Member) resolveElement();
+    	}
+    	return null;
+    }
+    
+    public void setElement(Object elem) {
+        setBindAttempted(true);
     }
 
-    public void setTypeBinding(ITypeBinding typeBinding) {
-    	if(typeBinding != null && IBinding.NOT_FOUND_BINDING != typeBinding) {
-    		if(ITypeBinding.DATAITEM_BINDING == typeBinding.getKind()) {
-    			this.typeBinding = ((DataItemBinding) typeBinding).getPrimitiveTypeBinding();
-    			return;
-    		}
-    	}
-        this.typeBinding = typeBinding;
+    public void setMember(Member member) {
+       setElement(member);
+    }
+
+    public void setType(org.eclipse.edt.mof.egl.Type type) {
+        this.type = type;
+        setBindAttempted(true);
     }
     
     public abstract String getCanonicalString();
@@ -69,4 +74,12 @@ public abstract class Expression extends Node {
    protected Object clone() throws CloneNotSupportedException {
 		return new CloneNotSupportedException();
 	}
+   
+   public boolean isBindAttempted() {
+	   return bindAttempted;
+   }
+   
+   public void setBindAttempted(boolean bool) {
+	   bindAttempted = bool;
+   }
 }

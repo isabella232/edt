@@ -14,9 +14,6 @@ package org.eclipse.edt.compiler.core.ast;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.CallStatementBinding;
-
-
 /**
  * CallStatement AST node type.
  * 
@@ -38,8 +35,6 @@ public class CallStatement extends Statement {
 	private Expression usingOpt;
 	private CallSynchronizationValues callSyncOpt;
 	
-	private CallStatementBinding statementBinding;
-
 	public CallStatement(Expression expr, List exprs, Expression usingOpt, CallSynchronizationValues callSyncOpt, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
@@ -92,7 +87,7 @@ public class CallStatement extends Statement {
 		return exprs != null && !exprs.isEmpty();
 	}
 	
-	public List getArguments() {
+	public List<Node> getArguments() {
 		return exprs;
 	}
 	
@@ -145,13 +140,5 @@ public class CallStatement extends Statement {
 		Expression newUsingOpt = usingOpt != null ? (Expression)usingOpt.clone() : null;
 		CallSynchronizationValues newCallSyncOpt = callSyncOpt != null ? (CallSynchronizationValues)callSyncOpt.clone() : null;
 		return new CallStatement((Expression)expr.clone(), newArguments, newUsingOpt, newCallSyncOpt, newSettingsBlockOpt, getOffset(), getOffset() + getLength());
-	}
-	
-	public CallStatementBinding getStatementBinding() {
-        return statementBinding;
-    }
-	
-    public void setStatementBinding(CallStatementBinding statementBinding) {
-        this.statementBinding = statementBinding;
-    }
+	}	
 }

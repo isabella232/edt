@@ -19,6 +19,11 @@ import egl.lang.reflect.mof.Operation;
  */
 externalType ETime extends AnyValue type ClassType
 	/**
+	 * Constructs a time with a default value of the current time.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation <} Compares two times.
 	 */
 	static function $LT(lvalue ETime in, rvalue ETime in) returns (EBoolean) {@Operation{"<"}};

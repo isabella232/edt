@@ -226,7 +226,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"byposition"		{ return symbol(NodeTypes.BYPOSITION); }
 	"call"				{ return symbol(NodeTypes.CALL); }
 	"case"				{ return symbol(NodeTypes.CASE); }
-	"eglclass"			{ return symbol(NodeTypes.EGLCLASS); }
+	"class"			 	{ return symbol(NodeTypes.CLASS); }
 	"close"			 	{ return symbol(NodeTypes.CLOSE); }
 	"const"			 	{ return symbol(NodeTypes.CONST); }
 	"constructor"		{ return symbol(NodeTypes.CONSTRUCTOR); }
@@ -248,7 +248,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"exit"				{ return symbol(NodeTypes.EXIT); }
 	"extends"			{ return symbol(NodeTypes.EXTENDS); }
 	"externalType"		{ return symbol(NodeTypes.EXTERNALTYPE); }
-	"field"			 	{ return symbol(NodeTypes.FIELD); }
 	"first"				{ return symbol(NodeTypes.FIRST); }
 	"for"			 	{ return symbol(NodeTypes.FOR); }
 	"foreach"			{ return symbol(NodeTypes.FOREACH); }
@@ -277,8 +276,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"label"			 	{ return symbol(NodeTypes.LABEL); }
 	"last"				{ return symbol(NodeTypes.LAST); }
 	"library"			{ return symbol(NodeTypes.LIBRARY); }
-//	"like"				{ return symbol(NodeTypes.LIKE); }
-//	"matches"			{ return symbol(NodeTypes.MATCHES); }
 	"move"				{ return symbol(NodeTypes.MOVE); }
 	"next"				{ return symbol(NodeTypes.NEXT); }
 	"new"			 	{ return symbol(NodeTypes.NEW); }	
@@ -310,7 +307,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"set"				{ return symbol(NodeTypes.SET); }
 	"show"				{ return symbol(NodeTypes.SHOW); }
 	"singlerow"			{ return symbol(NodeTypes.SINGLEROW); }
-	"sqlnullable"	    { return symbol(NodeTypes.SQLNULLABLE); }
 	"stack"			 	{ return symbol(NodeTypes.STACK); }
 	"static"			{ return symbol(NodeTypes.STATIC); }
 	"super"				{ return symbol(NodeTypes.SUPER); }
@@ -387,40 +383,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"?"					{ return symbol(NodeTypes.QUESTION); }
 	"~"					{ return symbol(NodeTypes.NEGATE); }
 	
-
-	// Primitive Types
-	"any"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.ANY); }
-	"bigint"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BIGINT); }
-//	"bin"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.BIN); }
-	"boolean"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BOOLEAN); }
-	"bytes"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.BYTES); }
-//	"char"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.CHAR); }
-//	"dbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.DBCHAR); }
-	"decimal"			{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.DECIMAL); }
-	"float"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.FLOAT); }
-//	"hex"			 	{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.HEX); }
-	"int"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.INT); }
-//	"mbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.MBCHAR); }
-//	"money"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.MONEY); }
-//	"num"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUM); }
-	"number"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.NUMBER); }
-//	"numc"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUMC); }
-//	"pacf"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.PACF); }
-	"smallfloat"		{ return symbol(NodeTypes.PRIMITIVE, Primitive.SMALLFLOAT); }
-	"smallint"		    { return symbol(NodeTypes.PRIMITIVE, Primitive.SMALLINT); }
-	"string"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.STRING); }
-//	"unicode"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.UNICODE); }
-
-	// Large Object Type Keywords
-//	"blob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.BLOB); }
-//	"clob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.CLOB); }
-	
-	// Date/Time Type Keywords
-	"date"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.DATE); }
-//	"interval"		    { return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, null); }
-	"time"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.TIME); }
-	"timestamp"			{ return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, Primitive.TIMESTAMP); }
-
 	// Keywords reserved for future
 	"as"				{ return symbol(NodeTypes.AS); }
 	"dlicall"			{ return symbol(NodeTypes.DLICALL); }       //future

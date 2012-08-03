@@ -24,6 +24,11 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	parameterizedType = FixedPrecisionType
 }
 	/**
+	 * Constructs a decimal with a default value of 0.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value EDecimal in) returns (EDecimal) {@Operation{"+"}};

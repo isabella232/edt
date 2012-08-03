@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import java.util.Collections;
+import java.util.List;
+
 
 /**
  * NameType AST node type.
@@ -23,12 +24,18 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 public class NameType extends Type {
 
 	private Name name;
+	private List<Expression> arguments;
 
-	public NameType(Name name, int startOffset, int endOffset) {
+	public NameType(Name name, List<Expression> arguments, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.name = name;
 		name.setParent(this);
+		if (arguments == null) {
+			arguments = Collections.emptyList();
+		}
+		this.arguments = setParent(arguments);
+
 	}
 	
 	public Name getName() {
@@ -43,18 +50,15 @@ public class NameType extends Type {
 		return true;
 	}
 	
-	public ITypeBinding resolveTypeBinding() {
-		IBinding binding = name.resolveBinding();
-		if(binding == IBinding.NOT_FOUND_BINDING || binding == null) {
-			return null;
-		}
-		return binding.isTypeBinding() ? (ITypeBinding) binding : null;
+	public org.eclipse.edt.mof.egl.Type resolveType() {
+		return name.resolveType();
 	}
 	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
 			name.accept(visitor);
+			acceptChildren(visitor, arguments);			
 		}
 		visitor.endVisit(this);
 	}
@@ -63,8 +67,17 @@ public class NameType extends Type {
 		return name.getCanonicalName();
 	}
 	
+	public boolean hasArguments() {
+		return arguments != null && arguments.size() > 0;
+	}
+	
+	
+	public List<Expression> getArguments() {
+		return arguments;
+	}
+	
 	protected Object clone() throws CloneNotSupportedException {
-		return new NameType((Name)name.clone(), getOffset(), getOffset() + getLength());
+		return new NameType((Name)name.clone(), cloneList(arguments), getOffset(), getOffset() + getLength());
 	}
 	
 	public Type getBaseType() {

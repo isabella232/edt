@@ -2,5 +2,4 @@
 <eglpath>
 	<eglpathentry kind="src" path="EGLSource"/>
 	<eglpathentry kind="output" path="eglbin"/>
-	<eglpathentry kind="con" path="org.eclipse.edt.compiler.EDT_RUNTIME"/>
 </eglpath>

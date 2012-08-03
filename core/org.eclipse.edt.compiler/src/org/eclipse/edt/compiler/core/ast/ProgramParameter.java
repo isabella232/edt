@@ -19,8 +19,8 @@ package org.eclipse.edt.compiler.core.ast;
  */
 public class ProgramParameter extends Parameter {
 
-	public ProgramParameter(SimpleName name, Type type, int startOffset, int endOffset) {
-		super(name, type, startOffset, endOffset);
+	public ProgramParameter(SimpleName name, Type type, Boolean isNullable, int startOffset, int endOffset) {
+		super(name, type, isNullable, startOffset, endOffset);
 	}
 	
 	public void accept(IASTVisitor visitor) {
@@ -33,6 +33,6 @@ public class ProgramParameter extends Parameter {
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new ProgramParameter((SimpleName)name.clone(), (Type)type.clone(), getOffset(), getOffset() + getLength());
+		return new ProgramParameter((SimpleName)name.clone(), (Type)type.clone(), Boolean.valueOf(isNullable), getOffset(), getOffset() + getLength());
 	}
 }

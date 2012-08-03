@@ -31,11 +31,11 @@ public class WhenClause extends Node {
 		this.stmts = setParent(stmts);
 	}
 	
-	public List getExpr_plus() {
+	public List<Expression> getExpr_plus() {
 		return expr_plus;
 	}
 	
-	public List getStmts() {
+	public List<Node> getStmts() {
 		return stmts;
 	}
 	

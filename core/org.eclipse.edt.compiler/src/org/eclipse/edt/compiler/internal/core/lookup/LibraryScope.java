@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.LibraryBinding;
+import org.eclipse.edt.mof.egl.Library;
 
 /**
  * @author winghong
  */
 public class LibraryScope extends FunctionContainerScope {
     
-    public LibraryScope(Scope parentScope, LibraryBinding libraryBinding) {
+    public LibraryScope(Scope parentScope, Library libraryBinding) {
         super(parentScope, libraryBinding);
     }
 }

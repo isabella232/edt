@@ -19,6 +19,11 @@ import org.eclipse.edt.mof.egl.TimestampType;
 externalType ETimestamp extends AnyValue type ParameterizableType {
 	parameterizedType = TimestampType
 }
+	/**
+	 * A timestamp without a pattern has no default value.
+	 */
+	private constructor();
+	
 	/**  
 	 * {@Operation <} Compares two timestamps.
 	 */

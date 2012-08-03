@@ -50,7 +50,7 @@ public class UsingClause extends Node {
 		this.expr_plus = setParent(expr_plus);
 	}
 	
-	public List getExpressions() {
+	public List<Node> getExpressions() {
 		return expr_plus;
 	}
 	

@@ -19,6 +19,11 @@ import egl.lang.reflect.mof.Operation;
  */
 externalType EDate extends AnyValue type ClassType
 	/**
+	 * Constructs a date with a default value of the current date.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation <} Compares two dates.
 	 */
 	static function $LT(lvalue EDate in, rvalue EDate in) returns (EBoolean) {@Operation{"<"}};

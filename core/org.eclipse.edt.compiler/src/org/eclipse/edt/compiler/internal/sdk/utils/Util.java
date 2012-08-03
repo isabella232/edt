@@ -13,11 +13,6 @@ package org.eclipse.edt.compiler.internal.sdk.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +35,7 @@ import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -52,11 +47,11 @@ public class Util {
 	public final static char[] SUFFIX_EGL = ".EGL".toCharArray(); //$NON-NLS-1$
 	
 	public static String getFilePartName(File file){
-		return InternUtil.intern(file.getAbsolutePath().toString());
+		return NameUtile.getAsName(file.getAbsolutePath().toString());
 	}
 	
 	public static String getCaseSensitiveFilePartName(File file){
-		return InternUtil.internCaseSensitive(file.getAbsolutePath().toString());
+		return file.getAbsolutePath().toString();
 	}
 	
 	/**
@@ -82,6 +77,11 @@ public class Util {
     	part.accept(new DefaultASTVisitor(){
 	    	public boolean visit(Handler handler){
 	    		value[0] = new Integer(ITypeBinding.HANDLER_BINDING);
+	    		return false;
+			}
+
+	    	public boolean visit(EGLClass eglClass){
+	    		value[0] = new Integer(ITypeBinding.CLASS_BINDING);
 	    		return false;
 			}
 
@@ -121,11 +121,6 @@ public class Util {
 	
 			public boolean visit(Program program) {
 				value[0] = new Integer(ITypeBinding.PROGRAM_BINDING);
-				return false;
-			}
-
-			public boolean visit(EGLClass eglClass) {
-				value[0] = new Integer(ITypeBinding.CLASS_BINDING);
 				return false;
 			}
 

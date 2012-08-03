@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler;
 
-import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 
 public interface ISystemPartBindingLoadedRequestor {
-	void partBindingLoaded(IPartBinding part);
+	void partBindingLoaded(IRPartBinding part);
 }

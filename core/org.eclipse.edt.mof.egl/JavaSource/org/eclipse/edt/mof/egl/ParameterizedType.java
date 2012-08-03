@@ -28,4 +28,7 @@ public interface ParameterizedType extends Type {
 	
 	public int getSizeInBytes();
 	
+	public int getMaxNumberOfParms();
+	public int getMinNumberOfParms();
+	
 }

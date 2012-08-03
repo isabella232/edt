@@ -11,12 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.mof.egl.Type;
 
 /**
  * @author Harmon
@@ -39,15 +42,11 @@ public class AnnotationRightHandScope extends Scope{
         return parentScope.findData(simpleName);
     }
 
-    public IFunctionBinding findFunction(String simpleName) {
-        return parentScope.findFunction(simpleName);
-    }
-
     public IPackageBinding findPackage(String simpleName) {
         return parentScope.findPackage(simpleName);
     }
 
-    public ITypeBinding findType(String simpleName) {
+    public List<Type> findType(String simpleName) {
         return parentScope.findType(simpleName);
     }
 }

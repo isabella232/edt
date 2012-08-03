@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 
 
@@ -20,8 +19,6 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  */
 public class SuperExpression extends Expression {
     
-	private IDataBinding dataBinding;
-
 	public SuperExpression(int startOffset, int endOffset) {
 		super(startOffset, endOffset);		
 	}
@@ -38,14 +35,4 @@ public class SuperExpression extends Expression {
 	protected Object clone() throws CloneNotSupportedException {
 		return new SuperExpression(getOffset(), getOffset() + getLength());
 	}
-	
-	public IDataBinding resolveDataBinding() {
-		return dataBinding;
-	}
-	
-	public void setDataBinding(IDataBinding dataBinding) {
-		this.dataBinding = dataBinding;
-	}
-	
-
 }

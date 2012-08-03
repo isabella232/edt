@@ -107,10 +107,4 @@ public class DynamicAccessImpl extends ExpressionImpl implements DynamicAccess {
 		}
 		return newDA;
 	}
-	
-	@Override
-	public boolean isNullable() {
-		// there is no way of knowing whether the dynamically accessed member is nullable or not, so set to true
-		return true;
-	}
 }

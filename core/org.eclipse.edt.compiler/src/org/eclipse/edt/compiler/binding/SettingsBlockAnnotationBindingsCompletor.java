@@ -13,11 +13,11 @@ package org.eclipse.edt.compiler.binding;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -26,7 +26,6 @@ import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
-import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.DBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
@@ -50,7 +49,6 @@ import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
-import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.TypeLiteralExpression;
@@ -61,7 +59,6 @@ import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
-import org.eclipse.edt.compiler.internal.core.lookup.DataBindingScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
@@ -70,10 +67,13 @@ import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
-import org.eclipse.edt.compiler.internal.core.lookup.TypeBindingScope;
+import org.eclipse.edt.compiler.internal.core.lookup.TypeScope;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.core.utils.TypeParser;
+import org.eclipse.edt.mof.egl.BytesLiteral;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.SuperExpression;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -251,7 +251,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		public void setAnnotation(IAnnotationBinding annotation) {
 			this.annotation = annotation;
 		}
-		
+
 		public boolean visit(SuperExpression superExpression) {
 			AnnotationLeftHandScope myScope = getAnnotationLeftHandScope().getTopLevelAnnotationLeftHandScope();
 			if (myScope.getBindingBeingAnnotated().isDataBinding()) {
@@ -524,7 +524,6 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 					value = null;
 				}
 			}
-			
 			return false;
 		}
 
@@ -673,7 +672,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			value = booleanLiteral.booleanValue();
 			return false;
 		}
-		
+
 		public boolean visit(BytesLiteral bytesLiteral) {
 			value = bytesLiteral.getValue();
 			return false;
@@ -1121,7 +1120,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		return getSystemScope(scope.getParentScope());
 	}
 
-	public SettingsBlockAnnotationBindingsCompletor(Scope currentScope, IPartBinding partBinding,
+	public SettingsBlockAnnotationBindingsCompletor(Scope currentScope, Part partBinding,
 			AnnotationLeftHandScope annotationLeftHandScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor,
 			ICompilerOptions compilerOptions) {
 		super(currentScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions);
@@ -1838,7 +1837,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		Scope saveScope = currentScope;
 		if (binding.isTypeBinding()) {
 			typeBinding = (ITypeBinding) binding;
-			currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+			currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		} else if(binding.isDataBinding()) {
 			targetDataBinding = (IDataBinding) binding;
 			currentScope = new DataBindingScope(NullScope.INSTANCE, targetDataBinding, true);
@@ -1846,7 +1845,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		} else {
 			UsedTypeBinding usedBinding = (UsedTypeBinding) binding;
 			typeBinding = usedBinding.getType();
-			currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null, true);
+			currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null, true);
 		}
 		
 		final ITypeBinding fTypeBinding = typeBinding;
@@ -2031,7 +2030,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
 		Name name = (Name) expr;
 		Scope saveScope = currentScope;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, (ITypeBinding) binding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, (ITypeBinding) binding, null);
 
 		Object result = itemName;
 		try {
@@ -2057,7 +2056,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		ITypeBinding typeBinding;
 		Scope saveScope = currentScope;
 		typeBinding = (ITypeBinding) binding;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		Object result = keyName;
 		try {
 			bindExpressionName(name);
@@ -2098,7 +2097,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		ITypeBinding typeBinding;
 		Scope saveScope = currentScope;
 		typeBinding = (ITypeBinding) binding;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		Object result = keyName;
 		try {
 			bindExpressionName(name);
@@ -2123,7 +2122,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		Scope saveScope = currentScope;
 		if (binding.isTypeBinding()) {
 			typeBinding = (ITypeBinding) binding;
-			currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+			currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		} else {
 			IDataBinding dataBinding = (IDataBinding) binding;
 			currentScope = new DataBindingScope(NullScope.INSTANCE, dataBinding, true);
@@ -2183,7 +2182,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		Name name = (Name) expr;
 
 		Scope saveScope = currentScope;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 
 		Object result = numElementsName;
 		try {
@@ -2361,7 +2360,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		ITypeBinding typeBinding;
 		Scope saveScope = currentScope;
 		typeBinding = (ITypeBinding) binding;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 
 		Name name = (Name) expr;
 
@@ -2516,7 +2515,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		Scope saveScope = currentScope;
 		if (binding.isTypeBinding()) {
 			typeBinding = (ITypeBinding) binding;
-			currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+			currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		} else {
 			IDataBinding dataBinding = (IDataBinding) binding;
 			currentScope = new DataBindingScope(NullScope.INSTANCE, dataBinding, true);

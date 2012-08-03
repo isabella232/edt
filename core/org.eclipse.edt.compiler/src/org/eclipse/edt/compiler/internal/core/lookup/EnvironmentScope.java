@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 
 /**
@@ -34,15 +34,11 @@ public class EnvironmentScope extends Scope {
 		this.dependencyRequestor = dependencyRequestor;
 	}
 
-	public ITypeBinding findType(String simpleName) {
-		return IBinding.NOT_FOUND_BINDING; // Can't import parts in the default package
+	public List<Type> findType(String simpleName) {
+		return null; // Can't import parts in the default package
 	}
 
-	public IFunctionBinding findFunction(String simpleName) {
-		return null;
-	}
-
-	public IDataBinding findData(String simpleName) {
+	public List<Member> findMember(String simpleName) {
 		return null;
 	}
 

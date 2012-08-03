@@ -18,7 +18,6 @@ import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.DataItemBinding;
 import org.eclipse.edt.compiler.binding.DataTableBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
-import org.eclipse.edt.compiler.binding.EGLClassBinding;
 import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
@@ -54,7 +53,6 @@ import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EFunction;
 import org.eclipse.edt.mof.EMetadataType;
-import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.DataItem;
@@ -139,44 +137,20 @@ public class Mof2BindingPart extends Mof2BindingBase {
 		ITypeBinding binding = checkForPrimiveType(ir);
 
 		if (binding == null) {
-
-			EGLClassBinding classBinding = (EGLClassBinding)getBinding(ir);
-			if (classBinding == null) {
-				String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
-				String name = InternUtil.internCaseSensitive(ir.getName());
-				classBinding = new EGLClassBinding(packageName, name);
-				classBinding.setValid(true);
-				partStack.push(classBinding);
-				handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)classBinding);
-				for (Interface iface : ir.getInterfaces()) {
-					iface.accept(this);
-					classBinding.addExtenedInterface((InterfaceBinding)stack.pop());
-				}
+			binding = (IPartBinding)getBinding(ir);
 	
-				for (StructPart supertype: ir.getSuperTypes()) {
-					
-					supertype.accept(this);
-					IBinding superBinding = stack.pop();
-					
-					if (superBinding instanceof EGLClassBinding) {
-						classBinding.setExtends((EGLClassBinding)superBinding);
-					}
-					else {
-						if (superBinding instanceof InterfaceBinding) {
-							classBinding.addExtenedInterface((InterfaceBinding)superBinding);
-						}
-					}					
-				}			
+			if (binding == null) {
 				
-				for (Constructor constructor : ir.getConstructors()) {
-					constructor.accept(this);
-					classBinding.addConstructor((ConstructorBinding)stack.pop());
+				if (binding == null) {
+					String[] packageName = InternUtil.intern(ir.getPackageName().split("[.]"));
+					String name = InternUtil.internCaseSensitive(ir.getName());
+					binding = new ClassBinding(packageName, name);
+					((ClassBinding)binding).setValid(true);
+					partStack.push((IPartBinding)binding);
+					handleVisitLogicAndDataPart(ir, (ClassBinding)binding);
+					partStack.pop();				
 				}
-	
-				classBinding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
-				partStack.pop();
 			}
-			binding = classBinding;
 		}
 		stack.push(binding);
 		return false;
@@ -220,7 +194,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				binding.addParameter((ProgramParameterBinding)stack.pop());
 			}
 			binding.setCallable(ir.isCallable());
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -253,7 +226,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				binding.addConstructor((ConstructorBinding)stack.pop());
 			}
 
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -269,7 +241,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			binding.setValid(true);
 			partStack.push(binding);
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -296,7 +267,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				}
 			}
 
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -326,7 +296,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				}
 			}
 
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -357,7 +326,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				
 				binding.addExtendedType((ITypeBinding)aBinding);
 			}		
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -374,7 +342,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			binding.setValid(true);
 			partStack.push(binding);
 			handleDataPart(ir, (FlexibleRecordBinding)binding);
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -403,7 +370,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			for (StructuredField field : ir.getStructuredFields()) {
 				reParentFieldBindings(field);
 			}
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 		}
 		stack.push(binding);
 		return false;
@@ -422,7 +388,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				form.accept(this);
 				binding.addNestedForm(binding);
 			}
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -439,9 +404,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			((FormBinding)binding).setValid(true);
 			partStack.push((FormBinding)binding);
 			handleDataPart(ir, (FormBinding)binding);
-			if (binding instanceof IPartBinding) {
-				((IPartBinding)binding).setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
-			}
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -471,7 +433,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				binding.setReturnType(typeBinding);
 				// TODO: handle isSqlNullable on return type
 			}
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 		}
 		stack.push(binding);
 		return false;
@@ -494,7 +455,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 				binding.setReturnType((ITypeBinding)stack.pop());
 				// TODO: handle isSqlNullable on return type
 			}
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 		}
 		stack.push(binding);
 		return false;
@@ -509,7 +469,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			binding.setValid(true);
 			partStack.push(binding);
 			handleDataPart(ir, (DataTableBinding)binding);
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -527,7 +486,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			handleVisitPart(ir, binding);
 			ir.getBaseType().accept(this);
 			binding.setPrimitiveTypeBinding((PrimitiveTypeBinding)stack.pop());
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -551,7 +509,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			}
 			IAnnotationBinding subtype = createStereotypeSubtypeFor(ir);
 			binding.addAnnotation(subtype);
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -575,7 +532,6 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			}
 			IAnnotationBinding subtype = createAnnotationSubtypeFor(ir);
 			binding.addAnnotation(subtype);
-			binding.setPrivate(ir.getAccessKind() == AccessKind.ACC_PRIVATE);
 			partStack.pop();
 		}
 		stack.push(binding);

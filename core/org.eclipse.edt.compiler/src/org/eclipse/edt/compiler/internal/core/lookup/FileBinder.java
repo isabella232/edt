@@ -28,7 +28,7 @@ public class FileBinder extends AbstractBinder {
     private Scope scope;
 	
     public FileBinder(FileBinding fileBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(scope, fileBinding, dependencyRequestor, compilerOptions);
+        super(scope, fileBinding.getPackageName(), dependencyRequestor, compilerOptions);
         this.fileBinding = fileBinding;
         this.problemRequestor = problemRequestor;
         this.scope = scope;

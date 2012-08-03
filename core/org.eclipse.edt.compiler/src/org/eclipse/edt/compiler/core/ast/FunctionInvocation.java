@@ -37,7 +37,7 @@ public class FunctionInvocation extends Expression {
 		return target;
 	}
 	
-	public List getArguments() {
+	public List<Expression> getArguments() {
 		return funcArgs;
 	}
 	

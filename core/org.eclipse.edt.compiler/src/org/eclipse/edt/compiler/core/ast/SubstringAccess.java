@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 /**
  * SubstringAccess AST node type.
@@ -73,7 +74,12 @@ public class SubstringAccess extends Expression {
 		return new SubstringAccess((Expression)primary.clone(), (Expression)expr.clone(), (Expression)expr2.clone(), getOffset(), getOffset() + getLength());
 	}
 	
-	public IDataBinding resolveDataBinding() {
-		return getPrimary().resolveDataBinding();
+	public Member resolveMember() {
+		return getPrimary().resolveMember();
+	}
+	
+	@Override
+	public Type resolveType() {
+		return getPrimary().resolveType();
 	}
 }

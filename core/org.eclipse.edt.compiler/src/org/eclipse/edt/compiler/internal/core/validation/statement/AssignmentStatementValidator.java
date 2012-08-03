@@ -106,32 +106,14 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 			}
 		}
 
-		if(Assignment.Operator.OR == assignmentOperator ||
+		if(Assignment.Operator.XOR == assignmentOperator ||
+				Assignment.Operator.OR == assignmentOperator ||
 				Assignment.Operator.AND == assignmentOperator ||
 				Assignment.Operator.LEFT_SHIFT == assignmentOperator ||
 				Assignment.Operator.RIGHT_SHIFT_ARITHMETIC == assignmentOperator ||
 				Assignment.Operator.RIGHT_SHIFT_LOGICAL == assignmentOperator) {
 					rhsBinding = PrimitiveTypeBinding.getInstance(Primitive.INT);
-		}
-		else if(Assignment.Operator.XOR == assignmentOperator) {
-			// Xor either has two boolean operands and returns boolean, or it's
-			// a bitwise operator.
-			boolean bitwise = true;
-			if (StatementValidator.isValidBinding(lhsBinding) && StatementValidator.isValidBinding(rhsBinding)
-					&& lhsBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING
-					&& rhsBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
-				PrimitiveTypeBinding lhsPrimType = (PrimitiveTypeBinding) lhsBinding;
-				PrimitiveTypeBinding rhsPrimType = (PrimitiveTypeBinding) rhsBinding;
-				if(Primitive.BOOLEAN == lhsPrimType.getPrimitive()
-					&& Primitive.BOOLEAN == rhsPrimType.getPrimitive()) {
-					bitwise = false;
-				}
 			}
-			if(bitwise) {	
-				rhsBinding = PrimitiveTypeBinding.getInstance(Primitive.INT);
-			}
-		}
-
 
 		if (StatementValidator.isValidBinding(lhsBinding) && lhsBinding.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null &&
 			StatementValidator.isValidBinding(rhsBinding) && rhsBinding.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null	){

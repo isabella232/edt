@@ -13,10 +13,6 @@ package org.eclipse.edt.mof.egl;
 
 
 public interface UnaryExpression extends Expression {
-	String Op_NOT = "!";
-	String Op_BITWISENOT = "~";
-	String Op_NEGATE = "-";
-
 	Expression getExpression();
 	
 	void setExpression(Expression value);

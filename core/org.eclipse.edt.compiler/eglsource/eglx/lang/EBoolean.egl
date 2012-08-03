@@ -18,6 +18,10 @@ import egl.lang.reflect.mof.Operation;
  * This is the class for booleans: true/false values.
  */
 externalType EBoolean extends AnyValue type ClassType
+	/**
+	 * Constructs a boolean with a default value of false.
+	 */
+	constructor();
 
 	/**
 	 * {@Operation ==} Compares two booleans.

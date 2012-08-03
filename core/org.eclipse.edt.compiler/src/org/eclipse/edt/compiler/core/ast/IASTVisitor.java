@@ -57,7 +57,7 @@ public interface IASTVisitor {
 	
 	boolean visit(CallbackTarget callbackTarget);
 	void endVisit(CallbackTarget callbackTarget);
-
+	
 	boolean visit(CallReturns callReturns);
 	void endVisit(CallReturns callReturns);
 
@@ -109,9 +109,9 @@ public interface IASTVisitor {
 	boolean visit(DisplayStatement displayStatement);
 	void endVisit(DisplayStatement displayStatement);
 	
-	boolean visit(EGLClass EGLClass);
-	void endVisit(EGLClass EGLClass);
-
+	boolean visit(EGLClass eglClass);
+	void endVisit(EGLClass eglClass);
+	
 	boolean visit(ElseBlock elseBlock);
 	void endVisit(ElseBlock elseBlock);
 	
@@ -256,9 +256,6 @@ public interface IASTVisitor {
 	boolean visit(NullLiteral nullLiteral);
 	void endVisit(NullLiteral nullLiteral);
 	
-	boolean visit(NullableType nullableType);
-	void endVisit(NullableType nullableType);
-	
 	boolean visit(NoCursorClause noCursorClause);
 	void endVisit(NoCursorClause noCursorClause);
 	
@@ -295,9 +292,6 @@ public interface IASTVisitor {
 	boolean visit(PrepareStatement prepareStatement);
 	void endVisit(PrepareStatement prepareStatement);
 	
-	boolean visit(PrimitiveType primitiveType);
-	void endVisit(PrimitiveType primitiveType);
-	
 	boolean visit(PrintStatement printStatement);
 	void endVisit(PrintStatement printStatement);
 	
@@ -327,9 +321,6 @@ public interface IASTVisitor {
 	
 	boolean visit(Service service);
 	void endVisit(Service service);
-	
-	boolean visit(ServiceReference serviceReference);
-	void endVisit(ServiceReference serviceReference);
 	
 	boolean visit(SetStatement setStatement);
 	void endVisit(SetStatement setStatement);

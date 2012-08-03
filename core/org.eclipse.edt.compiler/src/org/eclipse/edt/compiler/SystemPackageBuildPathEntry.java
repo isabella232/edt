@@ -11,19 +11,18 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler;
 
-import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 
 
 public class SystemPackageBuildPathEntry extends ZipFileBindingBuildPathEntry implements ISystemPackageBuildPathEntry{
-
+  
 	private ISystemPartBindingLoadedRequestor requestor = null;
 	private IEnvironment ienvironment = null;
 	
 	
-	public SystemPackageBuildPathEntry(IEnvironment env, String path, ISystemPartBindingLoadedRequestor req, String fileExtension, Mof2Binding converter) {
-		super(path, fileExtension, converter);
+	public SystemPackageBuildPathEntry(IEnvironment env, String path, ISystemPartBindingLoadedRequestor req, String fileExtension) {
+		super(path, fileExtension);
 
 		this.ienvironment = env;
 		requestor = req;
@@ -39,7 +38,7 @@ public class SystemPackageBuildPathEntry extends ZipFileBindingBuildPathEntry im
 		}
 	}
 	
-	protected void bindingLoaded(IPartBinding partBinding) {
+	protected void bindingLoaded(IRPartBinding partBinding) {
 		if (requestor != null && partBinding != null){
 			requestor.partBindingLoaded(partBinding);
 		}
