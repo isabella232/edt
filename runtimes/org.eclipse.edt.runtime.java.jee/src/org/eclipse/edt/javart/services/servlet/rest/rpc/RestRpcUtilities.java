@@ -13,6 +13,7 @@ package org.eclipse.edt.javart.services.servlet.rest.rpc;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
@@ -43,13 +44,6 @@ class RestRpcUtilities
 	private static final String IN_ENCODING_ATTR = "in-encoding";
 	private static final String OUT_ENCODING_ATTR = "out-encoding";
 	private static final String TRUE_VALUE = "true";
-	private static final String SERVICE_SERVLET = "EGL REST Service servlet";
-	private static final String URI_MAPPING_FILE_SUFFIX = "-uri.xml";
-	private static String CUSTOM_EGLSOAP_RESPONSE_HEADER = "CUSTOMEGLSOAPRESPONSEHEADER";
-	private static final int FORMAT_NONE = 0;
-	private static final int FORMAT_XML = 1;
-	private static final int FORMAT_JSON = 2;
-	private static final int FORMAT_FORM = 3;
 
 	private RestRpcUtilities() 
 	{
@@ -59,10 +53,10 @@ class RestRpcUtilities
 	{
 		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 		RestServiceProjectInfo projectInfo = null;
+		InputStream is = null;
 		try
 		{
 			DocumentBuilder dom = domFactory.newDocumentBuilder();
-			InputStream is;
 			File file = new File( resource );
 			if( file.exists() && file.isAbsolute() )
 			{
@@ -78,6 +72,13 @@ class RestRpcUtilities
 		catch( Exception e )
 		{
 			projectInfo = new RestServiceProjectInfo( "RestServiceProjectInfo", new URL[0] );
+		}
+		finally{
+			if(is != null){
+				try {
+					is.close();
+				} catch (IOException e) {}
+			}
 		}
 		return projectInfo;
 	}
@@ -121,7 +122,7 @@ class RestRpcUtilities
 		{
 			StringTokenizer parser = new StringTokenizer( classpath, ";" );
 			File file;
-			for( int idx = 0; parser.hasMoreElements(); idx++ )
+			while( parser.hasMoreElements() )
 			{
 				file = new File( parser.nextToken() );
 				if( file.exists() )
