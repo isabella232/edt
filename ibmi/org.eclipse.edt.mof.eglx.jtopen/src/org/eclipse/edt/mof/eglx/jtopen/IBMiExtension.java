@@ -17,12 +17,20 @@ import org.eclipse.edt.compiler.StatementValidator;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.TypeValidator;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
+import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFactory;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramCallStatementValidator;
@@ -78,12 +86,28 @@ public class IBMiExtension implements ICompilerExtension {
 	}
 	
 	private boolean shouldExtend(CallStatement stmt) {
-		//TODO
-		return false;
+		if(stmt.getUsing() != null){
+			Member binding = stmt.getUsing().resolveMember();
+			Part ibmiConnection = (Part)IRUtils.getEGLType("eglx.jtopen.IBMiConnection");
+			return binding != null && 
+					binding.getType() instanceof ExternalType && ((ExternalType)binding.getType()).isSubtypeOf((ExternalType)ibmiConnection);
+		}
+		else{
+			Expression exp = stmt.getInvocationTarget();
+			Member binding = exp.resolveMember();
+			//only service can have a Service type qualifier with no using clause
+			return binding instanceof Function && 
+					!isFunctionServiceQualified(exp, (Function)binding) &&
+					binding.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+		}
 	}
 	
+	private static boolean isFunctionServiceQualified(	Expression exp, Function function){
+		return !(exp instanceof FieldAccess && ((FieldAccess)exp).getPrimary() instanceof ThisExpression) &&
+				function.getContainer() instanceof Service;
+	}
+
 	private boolean shouldExtend(NestedFunction func) {
-		//TODO
-		return false;
+		return func.getName().resolveMember() instanceof Function && func.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 	}
 }
