@@ -71,6 +71,11 @@ public class ThrowStatementValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
+		if (type.getName() == InternUtil.intern("anyException") &&
+				type.getPackageName() == InternUtil.intern(new String[] {"eglx", "lang"})) {
+				return true;
+		}
+		
 		if (type.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
 			return false;
 		}

@@ -18,8 +18,8 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.IZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.internal.io.ZipFileBuildPathEntry;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EObject;
@@ -30,7 +30,7 @@ import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
-public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry implements IBuildPathEntry, IZipFileEntryManager{
+public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry implements IZipFileBindingBuildPathEntry, IZipFileEntryManager{
 
 	private ObjectStore store;
 	private String fileExtension;
