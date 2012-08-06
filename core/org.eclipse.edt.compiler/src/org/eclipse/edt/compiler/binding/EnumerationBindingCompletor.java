@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.IrFactory;
@@ -58,6 +59,7 @@ public class EnumerationBindingCompletor extends AbstractBinder {
     }
     
 	public void endVisit(Enumeration enumeration) {
+    	BindingUtil.setValid(enumerationBinding, true);
 	}
     
 	public boolean visit(EnumerationField enumerationField) {
