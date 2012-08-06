@@ -26,6 +26,7 @@ import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Container;
@@ -270,7 +271,7 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 		Container part = funcBinding.getContainer();
 		
 		if (part != null) {
-			if (part instanceof Program) {
+			if (part instanceof Program ) {
 				return;
 			}
 			if (part instanceof Library) {
@@ -281,7 +282,7 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 			}
 			if (part instanceof Handler) {
 				//must be basic handler!
-				if (part.getSubType() == null) {
+				if (((Handler) part).isSubtypeOf(part)() == null) {
 					return;
 				}
 			}
