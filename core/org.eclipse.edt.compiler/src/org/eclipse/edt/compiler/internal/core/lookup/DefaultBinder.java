@@ -714,7 +714,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	public void endVisit(org.eclipse.edt.compiler.core.ast.BytesLiteral bytesLiteral) {
 		if(!bytesLiteral.isBindAttempted()){
-			bytesLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_String, bytesLiteral.getValue().length() / 2));
+			bytesLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Bytes, bytesLiteral.getValue().length() / 2));
 		}
 	}
 	
