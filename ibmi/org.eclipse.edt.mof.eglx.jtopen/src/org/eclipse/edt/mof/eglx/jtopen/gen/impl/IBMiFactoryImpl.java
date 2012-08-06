@@ -9,11 +9,11 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.jtopen.impl;
+package org.eclipse.edt.mof.eglx.jtopen.gen.impl;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.CallStatement;
-import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
+import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFactory;
 import org.eclipse.edt.mof.impl.EFactoryImpl;
 
 

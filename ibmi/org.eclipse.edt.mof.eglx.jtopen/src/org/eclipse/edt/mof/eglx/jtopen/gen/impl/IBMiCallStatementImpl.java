@@ -9,12 +9,12 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.jtopen.impl;
+package org.eclipse.edt.mof.eglx.jtopen.gen.impl;
 
-import org.eclipse.edt.mof.egl.impl.FunctionImpl;
-import org.eclipse.edt.mof.eglx.jtopen.IBMiFunction;
+import org.eclipse.edt.mof.egl.impl.CallStatementImpl;
+import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 
-public class IBMiFunctionImpl extends FunctionImpl implements IBMiFunction {
+public class IBMiCallStatementImpl extends CallStatementImpl implements IBMiCallStatement {
 
 
 }

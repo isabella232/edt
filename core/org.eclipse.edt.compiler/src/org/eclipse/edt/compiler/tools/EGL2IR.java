@@ -15,6 +15,7 @@ import org.eclipse.edt.compiler.EDTCompiler;
 import org.eclipse.edt.compiler.EGL2IRArgumentProcessor;
 import org.eclipse.edt.compiler.EGL2IREnvironment;
 import org.eclipse.edt.compiler.ICompiler;
+import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
@@ -73,6 +74,30 @@ public class EGL2IR {
 		if (compiler == null){
 			compiler = new EDTCompiler();
 		}
+		
+		// Process any extensions.
+		String[] extensions = processedArgs.getExtensions();
+		if (extensions != null && extensions.length > 0) {
+			for (int i = 0; i < extensions.length; i++) {
+				if (extensions[i].trim().length() > 0) {
+					try {
+						Class<?> clazz = Class.forName(extensions[i].trim(), true, EGL2IR.class.getClassLoader());
+						Object o = clazz.newInstance();
+						if (o instanceof ICompilerExtension) {
+							compiler.addExtension((ICompilerExtension)o);
+						}
+						else {
+							throw new RuntimeException("Extension " + extensions[i].trim() + " is not an instance of " + ICompilerExtension.class.getCanonicalName() + " - aborting");
+						}
+					}
+					catch (Exception e) {
+						System.err.println("Unable to load extension: " + extensions[i].trim() + ". Compilation aborted.");
+						throw new RuntimeException(e);
+					}
+				}
+			}
+		}
+		
 		EGLC.compile(processedArgs, compiler, problemRequestorFactory);
 	}
 

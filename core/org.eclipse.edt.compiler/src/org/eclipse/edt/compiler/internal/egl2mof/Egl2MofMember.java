@@ -81,7 +81,6 @@ import org.eclipse.edt.mof.egl.VariableFormField;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
 
@@ -264,13 +263,13 @@ class Egl2MofMember extends Egl2MofPart {
 		else {
 			Function func; 
 //FIXME JV this need to be extensible 		
-			Annotation ibmiProgram = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram");
-			if(ibmiProgram == null){
+//			Annotation ibmiProgram = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram");
+//			if(ibmiProgram == null){
 				func = (Function)function.getEClass().newInstance();
-			}
-			else{
-				func = IBMiFactory.INSTANCE.createIBMiFunction();
-			}
+//			}
+//			else{
+//				func = IBMiFactory.INSTANCE.createIBMiFunction();
+//			}
 			if (func instanceof Operation) {
 				Annotation ann = function.getType().getAnnotation("egl.lang.reflect.mof.Operation");
 				((Operation)func).setOpSymbol((String)ann.getValue("opSymbol"));

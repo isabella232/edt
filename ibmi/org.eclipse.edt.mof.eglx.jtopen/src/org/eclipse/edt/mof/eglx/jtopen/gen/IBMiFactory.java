@@ -9,11 +9,11 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.jtopen;
+package org.eclipse.edt.mof.eglx.jtopen.gen;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EFactory;
-import org.eclipse.edt.mof.eglx.jtopen.impl.IBMiFactoryImpl;
+import org.eclipse.edt.mof.eglx.jtopen.gen.impl.IBMiFactoryImpl;
 
 public interface IBMiFactory extends EFactory  {
 	public static final IBMiFactory INSTANCE = new IBMiFactoryImpl();

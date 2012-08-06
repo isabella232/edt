@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
@@ -29,6 +32,13 @@ public class BaseCompiler implements ICompiler {
 	
 	protected String systemEnvironmentRootPath;
 	private ISystemEnvironment systemEnvironment;
+	
+	/**
+	 * Extensions to the compiler.
+	 */
+	protected List<ICompilerExtension> extensions;
+	
+	protected Map<Class, List<ICompilerExtension>> astTypeToExtensions;
 	
 	/**
 	 * The id.
@@ -55,6 +65,31 @@ public class BaseCompiler implements ICompiler {
 	 */
 	public BaseCompiler() {
 		this.generators = new ArrayList<IGenerator>();
+		this.extensions = new ArrayList<ICompilerExtension>();
+		this.astTypeToExtensions = new HashMap<Class, List<ICompilerExtension>>();
+	}
+	
+	public List<ICompilerExtension> getExtensions() {
+		return extensions;
+	}
+	
+	public void addExtension(ICompilerExtension extension) {
+		if (!extensions.contains(extension)) {
+			extensions.add(extension);
+			
+			// Register the AST statement types that can be extended.
+			Class[] types = extension.getExtendedTypes();
+			if (types != null && types.length > 0) {
+				for (int i = 0; i < types.length; i++) {
+					List<ICompilerExtension> list = astTypeToExtensions.get(types[i]);
+					if (list == null) {
+						list = new ArrayList<ICompilerExtension>();
+						astTypeToExtensions.put(types[i], list);
+					}
+					list.add(extension);
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -85,7 +120,24 @@ public class BaseCompiler implements ICompiler {
 	@Override
 	public String getSystemEnvironmentPath() {
 		if (systemEnvironmentRootPath == null) {
-			systemEnvironmentRootPath = SystemEnvironmentUtil.getSystemLibraryPath(ProgramImpl.class, "lib");
+			//TODO should contributed paths go at the beginning or end?
+			StringBuilder buf = new StringBuilder(100);
+			
+			buf.append(SystemEnvironmentUtil.getSystemLibraryPath(ProgramImpl.class, "lib"));
+			
+			for (ICompilerExtension ext : extensions) {
+				String[] paths = ext.getSystemEnvironmentPaths();
+				if (paths != null && paths.length > 0) {
+					for (int i = 0; i < paths.length; i++) {
+						if (paths[i] != null && paths[i].trim().length() > 0) {
+							buf.append(File.pathSeparatorChar);
+							buf.append(paths[i].trim());
+						}
+					}
+				}
+			}
+			
+			systemEnvironmentRootPath = buf.toString();
 		}
 		return systemEnvironmentRootPath;
 	}
@@ -137,16 +189,39 @@ public class BaseCompiler implements ICompiler {
 
 	@Override
 	public StatementValidator getValidatorFor(Statement stmt) {
+		List<ICompilerExtension> stmtExtensions = astTypeToExtensions.get(stmt.getClass());
+		if (stmtExtensions != null && stmtExtensions.size() > 0) {
+			for (ICompilerExtension ext : stmtExtensions) {
+				StatementValidator validator = ext.getValidatorFor(stmt);
+				if (validator != null) {
+					return validator;
+				}
+			}
+		}
+		
 		return null;
 	}
 	
 	@Override
 	public PartValidator getValidatorFor(Part part) {
+		for (ICompilerExtension ext : extensions) {
+			PartValidator validator = ext.getValidatorFor(part);
+			if (validator != null) {
+				return validator;
+			}
+		}
+		
 		return null;
 	}
 	
-	@Override
 	public TypeValidator getValidatorFor(Type type) {
+		for (ICompilerExtension ext : extensions) {
+			TypeValidator validator = ext.getValidatorFor(type);
+			if (validator != null) {
+				return validator;
+			}
+		}
+		
 		return null;
 	}
 }

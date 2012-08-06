@@ -57,6 +57,8 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
     private ISDKProblemRequestorFactory problemRequestorFactory;
     private ISystemEnvironment sysEnv;
     private ICompiler compiler;
+    
+    public static boolean skipSerialization;
 
     public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory, ISystemEnvironment sysEnv, ICompiler compiler) {
         super(notifier, compilerOptions);
@@ -106,7 +108,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 			functions = processTopLevelFunctions(dependencyInfo.getTopLevelFunctions(), dependencyInfo.getFunctionContainerScope(), dependencyInfo);
 		}
         
-        if(binding.getKind() != ITypeBinding.FILE_BINDING){
+        if(!skipSerialization && binding.getKind() != ITypeBinding.FILE_BINDING){
         	
             org.eclipse.edt.compiler.core.ast.File fileAST = ASTManager.getInstance().getFileAST(declaringFile);
             

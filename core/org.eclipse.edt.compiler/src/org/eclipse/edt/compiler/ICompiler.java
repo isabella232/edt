@@ -76,6 +76,8 @@ public interface ICompiler {
 	 */
 	public ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier);
 	
+	public List<ICompilerExtension> getExtensions();
+	public void addExtension(ICompilerExtension extension);
 
 	/**
 	 * Returns a string representing the path (path segments separated by java.io.File.pathSeparator) to the directories containing

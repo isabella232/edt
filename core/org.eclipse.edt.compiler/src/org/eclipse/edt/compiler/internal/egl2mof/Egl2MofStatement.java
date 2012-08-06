@@ -57,18 +57,18 @@ import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.WhileStatement;
-import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 @SuppressWarnings("unchecked")
 abstract class Egl2MofStatement extends Egl2MofMember {
-	static {
-		IOStatementGenerator.Registry.put(Type_SqlRecord, SQLIOStatementGenerator.class);
-		IOStatementGenerator.Registry.put(EGL_lang_package, DefaultIOStatementGenerator.class);
-		IOStatementGenerator.Registry.put("eglx.persistence.sql", SQLActionStatementGenerator.class);
-		IOStatementGenerator.Registry.put("eglx.services", ServicesActionStatementGenerator.class);
-	}
+	//TODO make extensible
+//	static {
+//		IOStatementGenerator.Registry.put(Type_SqlRecord, SQLIOStatementGenerator.class);
+//		IOStatementGenerator.Registry.put(EGL_lang_package, DefaultIOStatementGenerator.class);
+//		IOStatementGenerator.Registry.put("eglx.persistence.sql", SQLActionStatementGenerator.class);
+//		IOStatementGenerator.Registry.put("eglx.services", ServicesActionStatementGenerator.class);
+//	}
 	
 	Stack<LabelStatement> caseLabelStack = new Stack<LabelStatement>();
 	int caseLabelCounter = 0;

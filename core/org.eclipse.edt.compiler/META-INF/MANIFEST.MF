@@ -26,7 +26,7 @@ Export-Package: .,
  org.eclipse.edt.compiler.internal.core.lookup.Enumerations,
  org.eclipse.edt.compiler.internal.core.lookup.System,
  org.eclipse.edt.compiler.internal.core.utils,
- org.eclipse.edt.compiler.internal.core.validation;x-internal:=true,
+ org.eclipse.edt.compiler.internal.core.validation,
  org.eclipse.edt.compiler.internal.core.validation.annotation,
  org.eclipse.edt.compiler.internal.core.validation.name,
  org.eclipse.edt.compiler.internal.core.validation.part,
@@ -58,10 +58,7 @@ Require-Bundle: org.junit;bundle-version="[3.8.1,4.0.0)",
  com.ibm.icu;bundle-version="[3.8.0,5.0.0)";visibility:=reexport,
  org.eclipse.ui;bundle-version="[3.4.2,4.0.0)",
  org.eclipse.edt.mof.egl;bundle-version="0.8.0",
- org.eclipse.edt.mof;bundle-version="0.8.0",
- org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.8.0",
- org.eclipse.edt.mof.eglx.services;bundle-version="0.8.0",
- org.eclipse.edt.mof.eglx.jtopen;bundle-version="0.8.0"
+ org.eclipse.edt.mof;bundle-version="0.8.0"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: src.jar
 
