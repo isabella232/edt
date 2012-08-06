@@ -14,21 +14,11 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordFieldBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.HandlerBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBMiProgramAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -36,6 +26,17 @@ import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.Type;
 
 
 
@@ -47,14 +48,13 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 
 	@Override
 	public void validate(Node errorNode, Node target,
-			ITypeBinding targetTypeBinding, Map allAnnotations,
+			Member targetTypeBinding, Map allAnnotations,
 			IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		
-		if (!Binding.isValidBinding(targetTypeBinding) || !targetTypeBinding.isFunctionBinding() || !(target instanceof NestedFunction)) {
+		if (!(targetTypeBinding instanceof Function)) {
 			return;
 		}
 		
-		IFunctionBinding funcBinding = (IFunctionBinding) targetTypeBinding;
 		validateContainerIsCorrect(funcBinding, errorNode, problemRequestor);		
 		validateFunctionBodyIsEmpty((NestedFunction)target, problemRequestor);
 		validateReturns((NestedFunction)target, funcBinding, problemRequestor);
@@ -64,7 +64,7 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 			return;
 		}
 		
-		Object obj = getValue(annotation, "parameterAnnotations");
+		Object obj = getValue(annotation, "parameterAnnotations")annotation.getV;
 		if (obj == null) {
 			//If a paramterAnnotations was specified, the paramters are validated in
 			//IBMiProgramParameterAnnotationsValidator
@@ -265,21 +265,21 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 		}
 	}
 	
-	private void validateContainerIsCorrect(IFunctionBinding funcBinding, Node errorNode, IProblemRequestor problemRequestor) {
+	private void validateContainerIsCorrect(Function funcBinding, Node errorNode, IProblemRequestor problemRequestor) {
 		// Only allowed on function of Programs, Libraries, Services, and Basic Handlers
-		IPartBinding part = funcBinding.getDeclarer();
+		Container part = funcBinding.getContainer();
 		
-		if (Binding.isValidBinding(part)) {
-			if (ITypeBinding.PROGRAM_BINDING == part.getKind()) {
+		if (part != null) {
+			if (part instanceof Program) {
 				return;
 			}
-			if (ITypeBinding.LIBRARY_BINDING == part.getKind()) {
+			if (part instanceof Library) {
 				return;
 			}
-			if (ITypeBinding.SERVICE_BINDING == part.getKind()) {
+			if (part instanceof Service) {
 				return;
 			}
-			if (ITypeBinding.HANDLER_BINDING == part.getKind()) {
+			if (part instanceof Handler) {
 				//must be basic handler!
 				if (part.getSubType() == null) {
 					return;
@@ -293,8 +293,8 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 
 	}
 	
-	public static boolean isValidAS400Type(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
+	public static boolean isValidAS400Type(Type type) {
+		if (type == null) {
 			return true; //avoid excess error messages
 		}
 		
@@ -313,30 +313,29 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 				prim == Primitive.STRING;
 		}
 		
-		if (type.getKind() == ITypeBinding.HANDLER_BINDING) {
+		if (type instanceof Handler) {
 			return true;
 		}
 		
-		if (type.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
+		if (type instanceof Record) {
 			return true;
 		}
 		
-		if(type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
-			ArrayTypeBinding arr = (ArrayTypeBinding) type;
-			if (!Binding.isValidBinding(arr.getElementType())) {
+		if(type instanceof ArrayType) {
+			if (((ArrayType)type).getElementType() == null) {
 				return true; //avoid excess error messages
 			}
-			if (arr.getElementType().getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+			if (((ArrayType)type).getElementType() instanceof ArrayType) {
 				return false;
 			}
-			return isValidAS400Type(arr.getElementType());
+			return isValidAS400Type(((ArrayType)type).getElementType());
 			
 		}
 		return false;
 	}
 
-	public static boolean requiresAS400TypeAnnotation(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
+	public static boolean requiresAS400TypeAnnotation(Type type) {
+		if (type == null) {
 			return false; //avoid excess error messages
 		}
 		
@@ -358,21 +357,20 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 			return false;
 		}
 		
-		if(type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
-			ArrayTypeBinding arr = (ArrayTypeBinding) type;
-			if (!Binding.isValidBinding(arr.getElementType())) {
+		if(type instanceof ArrayType) {
+			if (((ArrayType)type).getElementType() == null) {
 				return false; //avoid excess error messages
 			}
-			if (arr.getElementType().getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+			if (((ArrayType)type).getElementType() instanceof ArrayType) {
 				return false;
 			}
-			return requiresAS400TypeAnnotation(arr.getElementType());
+			return requiresAS400TypeAnnotation(((ArrayType)type).getElementType());
 			
 		}
 		return false;
 	}
 
-	protected Object getValue(IAnnotationBinding ann, String fieldName) {
+	protected Object getValue(Annotation ann, String fieldName) {
 		if (!Binding.isValidBinding(ann)) {
 			return null;
 		}
