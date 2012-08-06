@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.AS400ParmeterAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.StructParmeterAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FunctionBinding;
