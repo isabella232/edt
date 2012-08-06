@@ -11,20 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 	
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
-import org.eclipse.edt.compiler.binding.ProgramBinding;
-import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
-import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
-import org.eclipse.edt.compiler.core.ast.BinaryExpression;
-import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
