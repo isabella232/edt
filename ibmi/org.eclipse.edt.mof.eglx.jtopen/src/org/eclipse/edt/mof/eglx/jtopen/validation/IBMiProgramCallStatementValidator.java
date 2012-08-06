@@ -11,15 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.Expression;
+
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Function;
@@ -33,7 +29,7 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
     public IBMiProgramCallStatementValidator() {
     }
     
-	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
+	public boolean visit(CallStatement callStatement) {
 		validateIBMiProgramCall(callStatement);
 		return false;
 	}
@@ -41,7 +37,7 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 	
 	private void validateIBMiProgramCall(CallStatement callStatement) {
 				
-		Element targType = (Element)callStatement.getInvocationTarget().resolveElement();
+		Element targType = (Element)callStatement.getInvocationTarget();
 		if (targType == null || !(targType instanceof Function)) {
 			return;
 		}
