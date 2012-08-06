@@ -125,6 +125,10 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			field.setName(node.getVariableDeclarationName().getCanonicalName());
 			Type type = node.getVariableDeclarationType().resolveType();
 			field.setType((Type)mofTypeFor(type));
+			//TODO port this change to new framework. original commit id: 81850c6 (bug 384855)
+//			if (Binding.isValidBinding(type)) {
+//				field.setIsNullable(node.getVariableDeclarationName().re);
+//			}
 			decl.getFields().add(field);
 			eObjects.put(node.getVariableDeclarationName().resolveMember(), field);
 			stmt.setDeclarationExpression(decl);
