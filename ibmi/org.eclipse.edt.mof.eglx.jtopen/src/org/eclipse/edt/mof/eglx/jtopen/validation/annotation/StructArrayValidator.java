@@ -27,7 +27,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramParameterAnnotationsValidator;
 
 
-public class StructArrayValidator extends AbstractStructParameterAnnotaionValidator {
+public class StructArrayValidator extends AbstractStructParameterAnnotationValidator {
 
 	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
 		super.validate(annotation, errorNode, targetBinding, problemRequestor);
@@ -121,7 +121,7 @@ public class StructArrayValidator extends AbstractStructParameterAnnotaionValida
 
 	protected void validateElementType(Annotation ann, ArrayType targetBinding, Node errorNode, IProblemRequestor problemRequestor) {
 		Object obj =  ann.getValue("elementTypeAnnotation");
-		AbstractStructParameterAnnotaionValidator validator = IBMiProgramParameterAnnotationsValidator.getValidator(obj);
+		AbstractStructParameterAnnotationValidator validator = IBMiProgramParameterAnnotationsValidator.getValidator(obj);
 		if (validator == null) {
 			problemRequestor.acceptProblem(errorNode, 
 									IProblemRequestor.ELEMENTTYPE_ANNOTATION_INVALID, 

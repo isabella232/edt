@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationV
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Member;
 
-public class StructUnsignedBin8Validator extends AbstractStructParameterAnnotaionValidator implements IAnnotationValidationRule {
+public class StructUnsignedBin8Validator extends AbstractStructParameterAnnotationValidator implements IAnnotationValidationRule {
 	
 	@Override
 	protected String getName() {

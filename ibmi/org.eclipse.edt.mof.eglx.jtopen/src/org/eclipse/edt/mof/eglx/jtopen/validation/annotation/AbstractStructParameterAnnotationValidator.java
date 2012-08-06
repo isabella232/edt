@@ -23,7 +23,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
-public abstract class AbstractStructParameterAnnotaionValidator implements IAnnotationValidationRule {
+public abstract class AbstractStructParameterAnnotationValidator implements IAnnotationValidationRule {
 	
 	protected abstract List<String> getSupportedTypes();
 	

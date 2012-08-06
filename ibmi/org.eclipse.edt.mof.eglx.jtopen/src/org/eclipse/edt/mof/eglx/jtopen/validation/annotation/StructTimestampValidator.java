@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.egl.TimestampType;
 
 
 public class StructTimestampValidator extends
-		AbstractStructParameterAnnotaionValidator {
+		AbstractStructParameterAnnotationValidator {
 
 	
 	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
