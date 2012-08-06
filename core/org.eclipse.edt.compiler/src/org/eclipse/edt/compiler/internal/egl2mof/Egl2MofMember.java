@@ -38,6 +38,7 @@ import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EFunction;
 import org.eclipse.edt.mof.EMember;
 import org.eclipse.edt.mof.EMetadataObject;
+import org.eclipse.edt.mof.EModelElement;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EParameter;
 import org.eclipse.edt.mof.EType;
@@ -416,9 +417,9 @@ class Egl2MofMember extends Egl2MofPart {
 	
 	@Override
 	public boolean visit(EnumerationField enumField) {
-		if (enumField.getName().resolveMember() != null) {
-			Member binding = enumField.getName().resolveMember();
-			Integer value = binding.getConstantValue();
+		if (enumField.getName().resolveElement() != null) {
+			EnumerationEntry binding = (EnumerationEntry) enumField.getName().resolveElement();
+			Integer value = binding.getValue();
 			if (inMofContext) {
 				EEnumLiteral literal = (EEnumLiteral)mof.getEEnumLiteralClass().newInstance();
 				literal.setName(binding.getCaseSensitiveName());
@@ -431,7 +432,7 @@ class Egl2MofMember extends Egl2MofPart {
 				entry.setName(binding.getCaseSensitiveName());
 				entry.setValue(value);
 				eObjects.put(binding, entry);
-				createAnnotations(binding, (Element)entry);
+				createAnnotations(binding, (EModelElement)entry);
 				setElementInformation(enumField, entry);
 				stack.push(entry);
 			}

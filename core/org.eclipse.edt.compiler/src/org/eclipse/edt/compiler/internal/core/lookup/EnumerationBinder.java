@@ -12,7 +12,7 @@
 package org.eclipse.edt.compiler.internal.core.lookup;
 
 import org.eclipse.edt.compiler.binding.EnumerationBindingCompletor;
-import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
@@ -24,17 +24,19 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
 public class EnumerationBinder extends DefaultBinder {
 
-    private EnumerationTypeBinding enumerationBinding;
+    private org.eclipse.edt.mof.egl.Enumeration enumerationBinding;
+    private IRPartBinding irBinding;
     private Scope scope;
 
-    public EnumerationBinder(EnumerationTypeBinding enumerationBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(scope, enumerationBinding, dependencyRequestor, problemRequestor, compilerOptions);
-        this.enumerationBinding = enumerationBinding;
+    public EnumerationBinder(IRPartBinding enumerationBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(scope, enumerationBinding.getIrPart(), dependencyRequestor, problemRequestor, compilerOptions);
+        this.enumerationBinding = (org.eclipse.edt.mof.egl.Enumeration) enumerationBinding.getIrPart();
         this.scope = scope;
+        irBinding = enumerationBinding;
     }
 
     public boolean visit(Enumeration enumeration) {
-    	enumeration.accept(new EnumerationBindingCompletor(scope, enumerationBinding, dependencyRequestor, problemRequestor, compilerOptions));
+    	enumeration.accept(new EnumerationBindingCompletor(scope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
         return true;
     }
 }
