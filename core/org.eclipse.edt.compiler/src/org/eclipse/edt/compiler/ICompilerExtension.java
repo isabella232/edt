@@ -16,8 +16,8 @@ import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Type;
 
-//TODO need to be able to contribute error message resource bundles & IDs
 public interface ICompilerExtension {
+	
 	/**
 	 * @return the paths of eglars & mofars containing system parts
 	 */

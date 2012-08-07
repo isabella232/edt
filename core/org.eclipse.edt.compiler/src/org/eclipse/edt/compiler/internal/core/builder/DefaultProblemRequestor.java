@@ -27,49 +27,78 @@ import org.eclipse.edt.compiler.core.ast.Node;
 public abstract class DefaultProblemRequestor implements IProblemRequestor {
 	
 	public static final String EGL_VALIDATION_RESOURCE_BUNDLE_NAME = "org.eclipse.edt.compiler.internal.core.builder.EGLValidationResources"; //$NON-NLS-1$
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(EGL_VALIDATION_RESOURCE_BUNDLE_NAME, Locale.getDefault());
+	public static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(EGL_VALIDATION_RESOURCE_BUNDLE_NAME, Locale.getDefault());
 	boolean hasError;
-
-	public abstract void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts);
 	
-	public void acceptProblem(Node astNode, int problemKind) {
-		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), IMarker.SEVERITY_ERROR, problemKind, new String[0]);
+	@Override
+	public abstract void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle);
+	
+	@Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+		acceptProblem(startOffset, endOffset, severity, problemKind, inserts, RESOURCE_BUNDLE);
 	}
+	
+	@Override
+	public void acceptProblem(Node astNode, int problemKind) {
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), IMarker.SEVERITY_ERROR, problemKind, new String[0], RESOURCE_BUNDLE);
+	}
+	
+	@Override
 	public boolean shouldReportProblem(int problemKind) {
 		return true;
 	}
-
+	
+	@Override
 	public void acceptProblem(Node astNode, int problemKind, int severity) {
-		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, new String[0]);
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, new String[0], RESOURCE_BUNDLE);
 	}
-
+	
+	@Override
 	public void acceptProblem(Node astNode, int problemKind, String[] inserts) {
-		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), IMarker.SEVERITY_ERROR, problemKind, inserts);
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), IMarker.SEVERITY_ERROR, problemKind, inserts, RESOURCE_BUNDLE);
 	}
-
+	
+	@Override
 	public void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts) {
-		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, inserts);
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, inserts, RESOURCE_BUNDLE);
 	}
-
+	
+	@Override
+	public void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts, ResourceBundle bundle) {
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, inserts, bundle);
+	}
+	
+	@Override
 	public void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts) {
+		acceptProblem(startOffset, endOffset, problemKind, isError, inserts, RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts, ResourceBundle bundle) {
 		if (isError) {
-			acceptProblem(startOffset, endOffset, IMarker.SEVERITY_ERROR, problemKind, inserts);
+			acceptProblem(startOffset, endOffset, IMarker.SEVERITY_ERROR, problemKind, inserts, bundle);
 		}
 		else {
-			acceptProblem(startOffset, endOffset, IMarker.SEVERITY_WARNING, problemKind, inserts);
+			acceptProblem(startOffset, endOffset, IMarker.SEVERITY_WARNING, problemKind, inserts, bundle);
 		}
 	}
 	
+	@Override
 	public void acceptProblem(int startOffset, int endOffset, int problemKind, String[] inserts) {
 		acceptProblem(startOffset, endOffset, problemKind, true, inserts);		
 	}
-
+	
+	@Override
 	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind) {
-		acceptProblem(startOffset, endOffset, severity, problemKind, new String[0]);
+		acceptProblem(startOffset, endOffset, severity, problemKind, new String[0], RESOURCE_BUNDLE);
 	}
 	
 	public static String getMessageFromBundle(int problemKind, String[] inserts) {
-		String message = RESOURCE_BUNDLE.getString(Integer.toString(problemKind));
+		return getMessageFromBundle(problemKind, inserts, RESOURCE_BUNDLE);
+	}
+	
+	public static String getMessageFromBundle(int problemKind, String[] inserts, ResourceBundle bundle) {
+		String message = bundle.getString(Integer.toString(problemKind));
 		if (message == null || inserts == null || inserts.length == 0) {
 			return message;
 		}

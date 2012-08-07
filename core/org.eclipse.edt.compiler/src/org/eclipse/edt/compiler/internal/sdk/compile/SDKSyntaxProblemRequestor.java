@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.text.NumberFormat;
+import java.util.ResourceBundle;
 
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -29,7 +30,7 @@ public class SDKSyntaxProblemRequestor extends DefaultProblemRequestor {
     private String source;
     private SDKLineTracker lineTracker;
     private File file;
-    private boolean processedError = false; 
+    private boolean processedError;
       
     public SDKSyntaxProblemRequestor(File file,String errorMsgCode) {
         super();
@@ -52,29 +53,30 @@ public class SDKSyntaxProblemRequestor extends DefaultProblemRequestor {
     	}
     	return source;
     }
-
-	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+    
+    @Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
  		if (severity == IMarker.SEVERITY_ERROR) {
  			setHasError(true);
  		}
- 		String message = createMessage(startOffset, endOffset, severity, problemKind, inserts);
+ 		String message = createMessage(startOffset, endOffset, severity, problemKind, inserts, bundle);
  		if (severity == IMarker.SEVERITY_ERROR) {
  			setHasError(true);
  		}
  		this.displayProblem(startOffset,endOffset,message);
     }
     
-    protected String createMessage(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
-    	return createMessage(startOffset, endOffset, getLineNumberOfOffset(startOffset), severity, problemKind, inserts);
+    protected String createMessage(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
+    	return createMessage(startOffset, endOffset, getLineNumberOfOffset(startOffset), severity, problemKind, inserts, bundle);
     }
 
-	protected String createMessage(int startOffset, int endOffset, int lineNumber, int severity, int problemKind, String[] inserts){
+	protected String createMessage(int startOffset, int endOffset, int lineNumber, int severity, int problemKind, String[] inserts, ResourceBundle bundle){
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setMaximumFractionDigits(0);
 		numberFormat.setMinimumIntegerDigits(3);
 		String message = ""; 
 		if(problemKind != -1) {
-            message = getErrorMessageText(problemKind, startOffset, lineNumber, severity, getMessageFromBundle(problemKind, inserts));
+            message = getErrorMessageText(problemKind, startOffset, lineNumber, severity, getMessageFromBundle(problemKind, inserts, bundle));
         }
         else {
             message = getErrorMessageText(problemKind, startOffset, lineNumber, severity, inserts[0]);

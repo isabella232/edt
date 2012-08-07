@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.core.EGLKeywordHandler;
@@ -216,11 +217,12 @@ public class EGLNameValidator {
 			this.problemRequestor = problemRequestor;
 		}
 		
-		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+		@Override
+		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 	 		if (severity == IMarker.SEVERITY_ERROR) {
 	 			setHasError(true);
 	 		}
-			problemRequestor.acceptProblem(startOffset+offset, endOffset+offset, severity, problemKind, inserts);
+			problemRequestor.acceptProblem(startOffset+offset, endOffset+offset, severity, problemKind, inserts, bundle);
 		}
 		public boolean shouldReportProblem(int problemKind) {
 			return problemRequestor.shouldReportProblem(problemKind);
@@ -236,11 +238,12 @@ public class EGLNameValidator {
 			this.problemRequestor = problemRequestor;
 		}
 		
-		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+		@Override
+		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 	 		if (severity == IMarker.SEVERITY_ERROR) {
 	 			setHasError(true);
 	 		}
-			problemRequestor.acceptProblem(node, problemKind, severity, inserts);
+			problemRequestor.acceptProblem(node, problemKind, severity, inserts, bundle);
 		}
 		
 		public boolean shouldReportProblem(int problemKind) {
@@ -275,7 +278,7 @@ public class EGLNameValidator {
 	 */
 	public static void validate(String input, int nameType, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		String type = null; //hold the String version of the nameType, if needed
-		EGLNameParser nameParser = nameParser = new EGLNameParser(input, true, nameType == RECORD_FILE_NAME, problemRequestor, compilerOptions); // the name parser
+		EGLNameParser nameParser = new EGLNameParser(input, true, nameType == RECORD_FILE_NAME, problemRequestor, compilerOptions); // the name parser
 		
 		// for testing!
 //		nameParser.getNamesAndSubscripts().outputTrees();		
