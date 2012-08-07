@@ -482,6 +482,9 @@ public class IRUtils {
 				&& exprType instanceof SubType 
 				&& type instanceof StructPart 
 				&& ((SubType)exprType).isSubtypeOf((StructPart)type)) 
+			
+			//For now, must make special case for Any and Number to support JS
+			if (isAny(type.getClassifier()) || type.equals(IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
 			return createAsExpression(expr, type);
 		
 		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
@@ -701,11 +704,50 @@ public class IRUtils {
 		if (ops.size() > 0) {
 			for (Operation operation : ops) {
 				if (!(operation.getParameters().get(0).getType().equals(operation.getParameters().get(1).getType()))) {
-					return operation;
+					if(argTypeCompatibleWithParms(operation, lhs, rhs))
+						return operation;
 				}
 			}
 		}
 		
+		return null;
+	}
+
+	private static StructPart getCommonSuperType(NamedElement lhs, NamedElement rhs) {
+		
+		if (!(rhs instanceof SubType)) {
+			return null;
+		}
+		if (!(lhs instanceof SubType)) {
+			return null;
+		}
+		
+		SubType lhsSub = (SubType)lhs;
+		SubType rhsSub = (SubType)rhs;
+
+		
+		if (lhs instanceof StructPart) {
+			if (rhsSub.isSubtypeOf((StructPart)lhs)) {
+				return (StructPart) lhs;
+			}
+		}
+		if (rhs instanceof StructPart) {
+			if (lhsSub.isSubtypeOf((StructPart)rhs)) {
+				return (StructPart) rhs;
+			}
+		}
+		
+		for (StructPart superType : lhsSub.getSuperTypes()) {
+			if (rhsSub.isSubtypeOf(superType)) {
+				return superType;
+			}
+		}
+
+		for (StructPart superType : rhsSub.getSuperTypes()) {
+			if (lhsSub.isSubtypeOf(superType)) {
+				return superType;
+			}
+		}
 		return null;
 	}
 
@@ -726,20 +768,12 @@ public class IRUtils {
 			return result;
 		}
 		
-		//Special case for reference types..if lhs is subType of rhs or rhs, is subtype of lhs, use the default operation
-		//defined in ANY
-		if (lhs instanceof StructPart && rhs instanceof StructPart && TypeUtils.isReferenceType((StructPart)lhs) && TypeUtils.isReferenceType((StructPart)rhs)) {
-			StructPart lStruct = (StructPart)lhs;
-			StructPart rStruct = (StructPart)rhs;
-			
-			if (lStruct.isSubtypeOf(rStruct) || rStruct.isSubtypeOf(lStruct)) {
-				StructPart any = (StructPart)IRUtils.getEGLType(MofConversion.Type_EGLAny);
-				if (lStruct.isSubtypeOf(any)) {
-					result = primGetBinaryOperation(any, any, opSymbol);
-				}
-			}
+		//Check for an operation in common supertype
+		StructPart commonSuper = getCommonSuperType(lhs, rhs);
+		if (commonSuper != null) {
+			return getBinaryOperation(commonSuper, commonSuper, opSymbol);
 		}
-
+		
 		return result;		
 	}
 	
@@ -812,6 +846,12 @@ public class IRUtils {
 		}
 		
 		result = TypeUtils.getBinaryOperation(clazz, opSymbol, (direction != null && direction == 0) );
+		if (argTypeCompatibleWithParms(result, lhs, rhs)) {
+			return result;
+		}
+		else {
+			result = null;
+		}
 		if (result == null && direction != null) {
 			// If there was no operation then reverse the lookup
 			if (direction == -1) {
@@ -826,9 +866,24 @@ public class IRUtils {
 			}		
 			result = TypeUtils.getBinaryOperation(clazz, opSymbol, false);
 		}
-		return result;	
+		
+		if(argTypeCompatibleWithParms(result, lhs, rhs)) {
+			return result;	
+		}
+		
+		return null;
 	}
 	
+	private static boolean argTypeCompatibleWithParms(Operation operation, NamedElement lhs, NamedElement rhs) {
+		if (operation == null) {
+			return false;
+		}
+		
+		return (TypeUtils.areCompatible(operation.getParameters().get(0).getType().getClassifier(), lhs) &&
+				TypeUtils.areCompatible(operation.getParameters().get(1).getType().getClassifier(), rhs));
+
+	}
+
 	public static Operation getUnaryOperation(Classifier src, String opSymbol) {
 		if (!(src instanceof StructPart)) return null;
 		for (Operation op : ((StructPart)src).getOperations()) {
