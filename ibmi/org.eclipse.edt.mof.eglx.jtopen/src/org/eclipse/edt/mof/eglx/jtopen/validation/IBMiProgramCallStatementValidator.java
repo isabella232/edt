@@ -12,20 +12,15 @@
 package org.eclipse.edt.mof.eglx.jtopen.validation;
 
 
+import org.eclipse.edt.compiler.core.ast.CallStatement;
+import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
-import org.eclipse.edt.mof.egl.CallStatement;
-import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.Utils;
-import org.eclipse.edt.mof.utils.NameUtile;
 
 public class IBMiProgramCallStatementValidator extends DefaultStatementValidator {
 
@@ -41,59 +36,59 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 	
 	private void validateIBMiProgramCall(CallStatement callStatement) {
 				
-		Element targType = (Element)callStatement.getInvocationTarget();
-		if (targType == null || !(targType instanceof Function)) {
+		Member targFunction = callStatement.getInvocationTarget().resolveMember();
+		if (!(targFunction instanceof Function)) {
 			return;
 		}
 				
 		//TODO for now, do not allow a local function call to a function that is not an IBMiProgram function.		
-		if (targType.getAnnotation("eglx.jtopen.annotations.IBMiProgram") == null) {
-			problemRequestor.acceptProblem(callStatement, IProblemRequestor.IBMIPROGRAM_MUST_BE_SPECIFIED, IMarker.SEVERITY_ERROR, new String[] {((Function)targType).getCaseSensitiveName()});
+		if (targFunction.getAnnotation("eglx.jtopen.annotations.IBMiProgram") == null) {
+			problemRequestor.acceptProblem(callStatement, IProblemRequestor.IBMIPROGRAM_MUST_BE_SPECIFIED, IMarker.SEVERITY_ERROR, new String[] {((Function)targFunction).getCaseSensitiveName()});
 			return;
 		}
 
 		
 		//validate the arguments against the parms
-		callStatement.accept(new FunctionArgumentValidator(functionBinding, functionBinding.getDeclarer(), problemRequestor, compilerOptions));
+//FIXME		callStatement.accept(new FunctionArgumentValidator(functionBinding, functionBinding.getDeclarer(), problemRequestor, compilerOptions));
 		
 		//if the function returns a value, a returns is required
-		if (((Function)targType).getReturnType() != null &&
-						(callStatement.getReturns() == null)) {
+		if (((Function)targFunction).getReturnType() != null &&
+						(callStatement.getCallSynchronizationValues().getReturns() == null)) {
 			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {});
 		}
 		
 		if (callStatement.getUsing() != null) {
-			if (!Utils.isIBMiConnection(callStatement.getUsing().getType())) {
+			if (!Utils.isIBMiConnection(callStatement.getUsing().resolveType())) {
 				problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.IBMIPROGRAM_USING_HAS_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
 			}
 		}
 		
 		
-			if (callStatement.getReturns() != null) {
+		if (callStatement.getCallSynchronizationValues() != null) {
+			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
 				//If a returns is specified, the function must return a value
-				if (((Function)targType).getReturnType() == null) {
-					problemRequestor.acceptProblem(callStatement.getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {functionBinding.getCaseSensitiveName()});
+				if (((Function)targFunction).getReturnType() == null) {
+					problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {targFunction.getCaseSensitiveName()});
 				}
 				else {
 				//Ensure that the returns type of the call is compatible with the function's return type
-					Expression callReturnsExpr = callStatement.getReturns();
-					Type callReturnsType = callReturnsExpr.getType();
-					TypeUtils.areCompatible(((Function)targType).getReturnType().getClassifier(), callReturnsExpr.getType());
-					if (!TypeCompatibilityUtil.isMoveCompatible(callReturnsType, ((Function)targType).getReturnType(), null, compilerOptions)) {
-						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(((Function)targType).getReturnType()), ((Function)targType).getCaseSensitiveName(), StatementValidator.getShortTypeString(callReturnsType), callReturnsExpr.getCanonicalString()});
-					}
+					Expression callReturnsExpr = callStatement.getCallSynchronizationValues().getReturns().getExpression();
+					Type callReturnsType = callReturnsExpr.resolveType();
+//FIXME					TypeUtils.areCompatible(((Function)targFunction).getReturnType().getClassifier(), callReturnsType);
+//					if (!TypeCompatibilityUtil.isMoveCompatible(callReturnsType, ((Function)targFunction).getReturnType(), null, compilerOptions)) {
+//						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {((Function)targFunction).getReturnType().getTypeSignature(), ((Function)targFunction).getCaseSensitiveName(), callReturnsType.getTypeSignature(), callReturnsExpr.getCanonicalString()});
+//					}
 				}
 			}
 			//validate callback/error routine 
 			//TODO for now, callback/exception functions are not supported
-			if (callStatement.getCallback() != null) {
-				problemRequestor.acceptProblem(callStatement.getCallback(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
+			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+				problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
 			}
-			if (callStatement.getErrorCallback() != null) {
-				problemRequestor.acceptProblem(callStatement.getErrorCallback(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
+			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+				problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getOnException(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
 			}		
-		}
-			
+		}			
 	}
 	
 }
