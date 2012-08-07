@@ -135,7 +135,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
             	field = IrFactory.INSTANCE.createField();
             }
 
-            if (classDataDeclaration.isPrivate()) {
+            if (classDataDeclaration.isPrivate() || membersPrivateByDefault()) {
             	field.setAccessKind(AccessKind.ACC_PRIVATE);
             }
                         
@@ -144,9 +144,6 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
             field.setIsNullable(classDataDeclaration.isNullable());
             field.setName(name.getCaseSensitiveIdentifier());
             field.setIsStatic(classDataDeclaration.isStatic() || membersStaticByDefault());
-            if (!BindingUtil.isPrivate(field) && membersPrivateByDefault()) {
-            	field.setAccessKind(AccessKind.ACC_PRIVATE);
-            }
             
             if (definedDataNames.contains(dataName) || definedFunctionNames.contains(dataName)) {
                 problemRequestor.acceptProblem(name, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { name.getCanonicalName(),
@@ -182,7 +179,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
         
         nestedFunction.getName().setMember(function);
         function.setIsStatic(function.isStatic() || membersStaticByDefault());
-        if (!BindingUtil.isPrivate(function) && membersPrivateByDefault()) {
+        if (membersPrivateByDefault()) {
         	function.setAccessKind(AccessKind.ACC_PRIVATE);
         }
                 

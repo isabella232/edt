@@ -41,10 +41,10 @@ public class BindingCreator extends DefaultASTVisitor {
 
 	private IEnvironment environment;
 	private IPartBinding partBinding;
-	private String[] packageName;
+	private String packageName;
 	private String caseSensitiveInternedPartName;
 
-	public BindingCreator(IEnvironment environment, String[] packageName, String caseSensitiveInternedPartName, Node astNode){
+	public BindingCreator(IEnvironment environment, String packageName, String caseSensitiveInternedPartName, Node astNode){
 		this.environment = environment;
 		this.packageName = packageName;
 		this.caseSensitiveInternedPartName = caseSensitiveInternedPartName;
@@ -62,29 +62,10 @@ public class BindingCreator extends DefaultASTVisitor {
 	}
 	
 	public boolean visit(Record record) {
-		if (record.isFlexible()){
-		    partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FLEXIBLE_RECORD_BINDING);
-		}else{
-			partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FIXED_RECORD_BINDING);
-		}
+	    partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FLEXIBLE_RECORD_BINDING);
 		return false;
 	}
 	
-	public boolean visit(DataItem dataItem) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.DATAITEM_BINDING);
-		return false;
-	}
-	
-	public boolean visit(DataTable dataTable) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.DATATABLE_BINDING);
-		return false;
-	}
-	
-	public boolean visit(TopLevelForm topLevelForm) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FORM_BINDING);
-		return false;
-	}
-
 	public boolean visit(Delegate delegate) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.DELEGATE_BINDING);
 		return false;
@@ -124,17 +105,7 @@ public class BindingCreator extends DefaultASTVisitor {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.SERVICE_BINDING);
 		return false;
 	}
-	
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FUNCTION_BINDING);
-		return false;
-	}
-	
-	public boolean visit(FormGroup formGroup) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FORMGROUP_BINDING);
-		return false;
-	}
-	
+		
 	public boolean visit(Interface interfaceNode) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.INTERFACE_BINDING);
 		return false;
