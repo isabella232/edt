@@ -18,7 +18,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
 
 
 /**
@@ -91,6 +94,41 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 	@Override
 	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind) {
 		acceptProblem(startOffset, endOffset, severity, problemKind, new String[0], RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(Element element, int problemKind) {
+		acceptProblem(element, problemKind, IMarker.SEVERITY_ERROR, null, RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity) {
+		acceptProblem(element, problemKind, severity, null, RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity, String[] inserts) {
+		acceptProblem(element, problemKind, severity, inserts, RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity, String[] inserts, ResourceBundle bundle) {
+		int startOffset = 0;
+		int endOffset = 0;
+		Annotation annot = element.getAnnotation(IEGLConstants.EGL_LOCATION);
+		if (annot != null) {
+			Object val = annot.getValue(IEGLConstants.EGL_PARTOFFSET);
+			if (val instanceof Integer) {
+				startOffset = ((Integer)val).intValue();
+				endOffset = startOffset;
+				
+				val = annot.getValue(IEGLConstants.EGL_PARTLENGTH);
+				if (val instanceof Integer) {
+					endOffset += ((Integer)val).intValue();
+				}
+			}
+		}
+		acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 	}
 	
 	public static String getMessageFromBundle(int problemKind, String[] inserts) {

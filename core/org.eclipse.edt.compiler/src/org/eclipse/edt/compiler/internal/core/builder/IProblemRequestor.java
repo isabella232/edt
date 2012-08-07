@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.core.builder;
 import java.util.ResourceBundle;
 
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.mof.egl.Element;
 
 
 /**
@@ -21,17 +22,21 @@ import org.eclipse.edt.compiler.core.ast.Node;
  */
 public interface IProblemRequestor {
 
-	// The following methods should be overriden by all non-abstract subtypes
-	void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts);
+	// The following method should be overriden by all non-abstract subtypes
     void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle);    
     
     // The following methods exist for convenience and are overriden in
     // DefaultProblemRequestor. Subtypes need not override them
+    void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts);
     void acceptProblem(Node astNode, int problemKind);
     void acceptProblem(Node astNode, int problemKind, int severity);		
 	void acceptProblem(Node astNode, int problemKind, String[] inserts);	
 	void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts);
 	void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts, ResourceBundle bundle);
+	void acceptProblem(Element element, int problemKind);
+	void acceptProblem(Element element, int problemKind, int severity);
+	void acceptProblem(Element element, int problemKind, int severity, String[] inserts);
+	void acceptProblem(Element element, int problemKind, int severity, String[] inserts, ResourceBundle bundle);
 	void acceptProblem(int startOffset, int endOffset, int severity, int problemKind);
 	void acceptProblem(int startOffset, int endOffset, int problemKind, String[] inserts);
 	void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts);
