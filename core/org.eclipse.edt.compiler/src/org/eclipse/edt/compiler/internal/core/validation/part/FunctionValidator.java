@@ -29,15 +29,12 @@ import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.ContinueStatement;
-import org.eclipse.edt.compiler.core.ast.ConverseStatement;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
-import org.eclipse.edt.compiler.core.ast.DisplayStatement;
 import org.eclipse.edt.compiler.core.ast.EmptyStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.ExitStatement;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
-import org.eclipse.edt.compiler.core.ast.ForwardStatement;
 import org.eclipse.edt.compiler.core.ast.FreeSQLStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
@@ -52,20 +49,16 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
-import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
-import org.eclipse.edt.compiler.core.ast.PrintStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.ReturnStatement;
 import org.eclipse.edt.compiler.core.ast.SetStatement;
 import org.eclipse.edt.compiler.core.ast.SetValuesStatement;
-import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.ThrowStatement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.WhileStatement;
@@ -75,25 +68,18 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ContinueStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.ConverseStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.DisplayStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ExitStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ForStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.ForwardStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FreeSQLStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FunctionDataDeclarationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.GotoStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.IfStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LabelStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.MoveStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.OpenUIStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.PrintStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ReturnStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.SetStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.ShowStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ThrowStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.TransferStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.TryStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
@@ -279,9 +265,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkParmNotEmptyRecord(FunctionParameter functionParameter, org.eclipse.edt.mof.egl.Type parmType) {
-		//TODO remove when record fields are being bound. until then they're always "empty"
-		if (true) return;
-		
 		if (parmType instanceof Part) {
 			boolean isEmptyRecord = false;
 			
@@ -444,15 +427,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return false;
 	}
 
-	public boolean visit(ConverseStatement converseStatement) {
-		preVisitStatement(converseStatement);
-		if (checkStatementAllowedInContainer(converseStatement)) {
-			converseStatement.accept(new ConverseStatementValidator(problemRequestor, enclosingPart));
-		}
-		postVisitStatement(converseStatement);
-		return false;
-	}
-
 	public boolean visit(DeleteStatement deleteStatement) {
 		preVisitStatement(deleteStatement);
 		if (checkStatementAllowedInContainer(deleteStatement)) {
@@ -464,15 +438,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 			}
 		}
 		postVisitStatement(deleteStatement);
-		return false;
-	}
-
-	public boolean visit(DisplayStatement displayStatement) {
-		preVisitStatement(displayStatement);
-		if (checkStatementAllowedInContainer(displayStatement)) {
-			displayStatement.accept(new DisplayStatementValidator(problemRequestor, enclosingPart, compilerOptions));
-		}
-		postVisitStatement(displayStatement);
 		return false;
 	}
 
@@ -534,15 +499,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 			forStatement.accept(new ForStatementValidator(problemRequestor, compilerOptions));
 		}		
 		postVisitStatement(forStatement);
-		return false;
-	}
-
-	public boolean visit(ForwardStatement forwardStatement) {
-		preVisitStatement(forwardStatement);
-		if (checkStatementAllowedInContainer(forwardStatement)) {
-			forwardStatement.accept(new ForwardStatementValidator(problemRequestor, compilerOptions));
-		}
-		postVisitStatement(forwardStatement);
 		return false;
 	}
 
@@ -662,15 +618,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return false;
 	}
 
-	public boolean visit(OpenUIStatement openUIStatement) {
-		preVisitStatement(openUIStatement);
-		if (checkStatementAllowedInContainer(openUIStatement)) {
-			openUIStatement.accept(new OpenUIStatementValidator(problemRequestor, compilerOptions));
-		}
-		postVisitStatement(openUIStatement);
-		return false;
-	}
-
 	public boolean visit(PrepareStatement prepareStatement) {
 		preVisitStatement(prepareStatement);
 		if (checkStatementAllowedInContainer(prepareStatement)) {
@@ -682,15 +629,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 			}
 		}
 		postVisitStatement(prepareStatement);
-		return false;
-	}
-
-	public boolean visit(PrintStatement printStatement) {
-		preVisitStatement(printStatement);
-		if (checkStatementAllowedInContainer(printStatement)) {
-			printStatement.accept(new PrintStatementValidator(problemRequestor, enclosingPart));
-		}
-		postVisitStatement(printStatement);
 		return false;
 	}
 
@@ -734,30 +672,12 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return false;
 	}
 
-	public boolean visit(ShowStatement showStatement) {
-		preVisitStatement(showStatement);
-		if (checkStatementAllowedInContainer(showStatement)) {
-			showStatement.accept(new ShowStatementValidator(problemRequestor, enclosingPart, compilerOptions));
-		}
-		postVisitStatement(showStatement);
-		return false;
-	}
-
 	public boolean visit(ThrowStatement throwStatement) {
 		preVisitStatement(throwStatement);
 		if (checkStatementAllowedInContainer(throwStatement)) {
 			throwStatement.accept(new ThrowStatementValidator(problemRequestor, enclosingPart));
 		}
 		postVisitStatement(throwStatement);
-		return false;
-	}
-
-	public boolean visit(TransferStatement transferStatement) {
-		preVisitStatement(transferStatement);
-		if (checkStatementAllowedInContainer(transferStatement)) {
-			transferStatement.accept(new TransferStatementValidator(problemRequestor, enclosingPart, compilerOptions));
-		}
-		postVisitStatement(transferStatement);
 		return false;
 	}
 
