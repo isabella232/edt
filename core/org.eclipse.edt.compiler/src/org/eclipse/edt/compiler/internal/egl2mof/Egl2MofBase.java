@@ -25,7 +25,6 @@ import javax.lang.model.type.PrimitiveType;
 
 import org.eclipse.edt.compiler.Context;
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordFieldBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;

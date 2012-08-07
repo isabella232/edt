@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.EGLClassBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.EnumerationBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.RecordBinder;
@@ -67,7 +68,7 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    try{
 				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
 				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+//FIXME				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -113,7 +114,7 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    try{
 				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
 				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+//FIXME				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -130,27 +131,27 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
 				}
 				break;
-//			case ITypeBinding.ENUMERATION_BINDING:
-//				try{
-//				    astNode.accept(new EnumerationBinder((EnumerationTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-//				    
-//				    try{
-//					    astNode.accept(new EnumerationValidator(problemRequestor, compilerOptions));
-//					}catch(CancelledException e){
-//					    throw e;
-//					}catch(RuntimeException e){
-//					    handleValidationException((Part)astNode, problemRequestor, e);
-//					}
-//				}catch(CancelledException  e){
-//				    throw e;
-//				}catch(CircularBuildRequestException e){
-//				    throw e;
-//				}catch(BuildException e){
-//				    throw e;
-//				}catch(RuntimeException e){
-//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-//				}
-//				break;
+			case ITypeBinding.ENUMERATION_BINDING:
+				try{
+				    astNode.accept(new EnumerationBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    
+				    try{
+//FIXME validation					    astNode.accept(new EnumerationValidator(problemRequestor, compilerOptions));
+					}catch(CancelledException e){
+					    throw e;
+					}catch(RuntimeException e){
+					    handleValidationException((Part)astNode, problemRequestor, e);
+					}
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
 			case ITypeBinding.HANDLER_BINDING:
 				try{
 				    astNode.accept(new HandlerBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
@@ -159,7 +160,7 @@ public abstract class Compiler extends DefaultASTVisitor{
 					try{
 						PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
 				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+//FIXME				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -234,7 +235,7 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    try{
 				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
 				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+//FIXME				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -284,7 +285,7 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    try{
 				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
 				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+//FIXME				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
 				    	}
 					}catch(CancelledException e){
 					    throw e;
