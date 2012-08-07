@@ -12,7 +12,6 @@
 package org.eclipse.edt.compiler;
 
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Type;
@@ -48,14 +47,6 @@ public interface ICompilerExtension {
 	 * @return a validator for the given statement, or null if it's not a type being extended.
 	 */
 	StatementValidator getValidatorFor(Statement stmt);
-	
-	/**
-	 * Returns a validator for the given part, or null if it's not a part being extended.
-	 * 
-	 * @param part The part to validate.
-	 * @return a validator for the given part, or null if it's not a part being extended.
-	 */
-	PartValidator getValidatorFor(Part part);
 	
 	/**
 	 * Returns a validator for the given type, or null if it's not a type being extended.
