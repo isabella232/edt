@@ -14,7 +14,7 @@ package eglx.jtopen.annotations;
 Record StructByetArray type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.StructByteArrayAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.StructByteArrayValidator"
 }
 	length int?;
 end

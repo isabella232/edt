@@ -22,13 +22,13 @@ import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.SequenceType;
 
 public class StructTextValidator extends
-		AbstractStructParameterAnnotaionValidator {
+		AbstractStructParameterAnnotationValidator {
 
 	
 	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
 		super.validate(annotation, errorNode, targetBinding, problemRequestor);
 		
-		if (targetBinding != null && isValidType(targetBinding)) {
+		if (targetBinding != null && isValidType(targetBinding.getType())) {
 			if (targetBinding.getType() instanceof SequenceType) {
 				validateLengthNotSpecified(annotation, errorNode, problemRequestor);
 			}

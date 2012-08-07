@@ -80,10 +80,7 @@ public class IBMiExtension implements ICompilerExtension {
 	
 	private boolean shouldExtend(CallStatement stmt) {
 		if(stmt.getUsing() != null){
-			Member binding = stmt.getUsing().resolveMember();
-			Part ibmiConnection = (Part)IRUtils.getEGLType("eglx.jtopen.IBMiConnection");
-			return binding != null && 
-					binding.getType() instanceof ExternalType && ((ExternalType)binding.getType()).isSubtypeOf((ExternalType)ibmiConnection);
+			return Utils.isIBMiConnection(stmt.getUsing().resolveType());
 		}
 		else{
 			Expression exp = stmt.getInvocationTarget();

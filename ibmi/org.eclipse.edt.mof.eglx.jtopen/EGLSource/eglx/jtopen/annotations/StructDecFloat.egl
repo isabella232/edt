@@ -14,7 +14,7 @@ package eglx.jtopen.annotations;
 Record StructDecFloat type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.StructDecFloatAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.StructDecFloatValidator"
 }
 	length int?;
 end

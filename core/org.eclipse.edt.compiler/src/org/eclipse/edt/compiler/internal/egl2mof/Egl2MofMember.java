@@ -262,14 +262,7 @@ class Egl2MofMember extends Egl2MofPart {
 		}
 		else {
 			Function func; 
-//FIXME JV this need to be extensible 		
-//			Annotation ibmiProgram = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram");
-//			if(ibmiProgram == null){
-				func = (Function)function.getEClass().newInstance();
-//			}
-//			else{
-//				func = IBMiFactory.INSTANCE.createIBMiFunction();
-//			}
+			func = (Function)function.getEClass().newInstance();
 			if (func instanceof Operation) {
 				Annotation ann = function.getType().getAnnotation("egl.lang.reflect.mof.Operation");
 				((Operation)func).setOpSymbol((String)ann.getValue("opSymbol"));
