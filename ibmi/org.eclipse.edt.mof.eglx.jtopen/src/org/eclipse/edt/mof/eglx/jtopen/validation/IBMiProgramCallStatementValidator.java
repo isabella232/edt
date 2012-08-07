@@ -24,6 +24,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.jtopen.Utils;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 public class IBMiProgramCallStatementValidator extends DefaultStatementValidator {
@@ -62,11 +63,8 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 		}
 		
 		if (callStatement.getUsing() != null) {
-			Type usingType = callStatement.getUsing().getType();
-			if (usingType != null) {
-				if (TypeUtils.isSubtypeOf(TypeUtils.getEGLType("eglx.jtopen."), superType)) {
-					problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.IBMIPROGRAM_USING_HAS_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
-				}
+			if (!Utils.isIBMiConnection(callStatement.getUsing().getType())) {
+				problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.IBMIPROGRAM_USING_HAS_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
 			}
 		}
 		
@@ -80,6 +78,7 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 				//Ensure that the returns type of the call is compatible with the function's return type
 					Expression callReturnsExpr = callStatement.getReturns();
 					Type callReturnsType = callReturnsExpr.getType();
+					TypeUtils.areCompatible(((Function)targType).getReturnType().getClassifier(), callReturnsExpr.getType());
 					if (!TypeCompatibilityUtil.isMoveCompatible(callReturnsType, ((Function)targType).getReturnType(), null, compilerOptions)) {
 						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(((Function)targType).getReturnType()), ((Function)targType).getCaseSensitiveName(), StatementValidator.getShortTypeString(callReturnsType), callReturnsExpr.getCanonicalString()});
 					}
@@ -88,18 +87,13 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 			//validate callback/error routine 
 			//TODO for now, callback/exception functions are not supported
 			if (callStatement.getCallback() != null) {
-				problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturnTo(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
+				problemRequestor.acceptProblem(callStatement.getCallback(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
 			}
 			if (callStatement.getErrorCallback() != null) {
-				problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getOnException(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
+				problemRequestor.acceptProblem(callStatement.getErrorCallback(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
 			}		
 		}
 			
-	}
-	
-//FIXME also look at supertypes 
-	private boolean isIBMiConnection(Type type) {
-		return NameUtile.equals("eglx.jtopen.IBMiConnection", type.getTypeSignature());
 	}
 	
 }
