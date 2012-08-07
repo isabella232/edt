@@ -41,6 +41,7 @@ import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.eglx.jtopen.validation.annotation.AbstractStructParameterAnnotationValidator;
 
 
 public class IBMiProgramParameterAnnotationsValidator implements IValueValidationRule {
@@ -86,7 +87,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 		}
 	}
 	
-	public static AbstractStructParameterAnnotaionValidator getValidator(Object obj) {
+	public static AbstractStructParameterAnnotationValidator getValidator(Object obj) {
 		if (! (obj instanceof IAnnotationBinding)) {
 			return null;
 		}

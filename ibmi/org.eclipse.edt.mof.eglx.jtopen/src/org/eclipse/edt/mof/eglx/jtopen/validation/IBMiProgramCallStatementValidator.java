@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.eglx.jtopen.validation;
 
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.Element;

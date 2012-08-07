@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
-import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 public class StructUnsignedBin8Validator extends AbstractStructParameterAnnotationValidator implements IAnnotationValidationRule {
 	
@@ -30,11 +30,11 @@ public class StructUnsignedBin8Validator extends AbstractStructParameterAnnotati
 		return new ArrayList<String>();
 	}
 	
-	protected boolean isValidType(Member targetBinding) {
-		if (targetBinding != null && targetBinding.getType() != null) {						
-			return targetBinding.getType() instanceof FixedPrecisionType &&
-					((FixedPrecisionType)targetBinding.getType()).getLength() == 20 &&
-					((FixedPrecisionType)targetBinding.getType()).getDecimals() == 0;
+	protected boolean isValidType(Type typeBinding) {
+		if (typeBinding != null) {						
+			return typeBinding instanceof FixedPrecisionType &&
+					((FixedPrecisionType)typeBinding).getLength() == 20 &&
+					((FixedPrecisionType)typeBinding).getDecimals() == 0;
 		}
 		else {
 			return true;  //return true to avoid excess error messages

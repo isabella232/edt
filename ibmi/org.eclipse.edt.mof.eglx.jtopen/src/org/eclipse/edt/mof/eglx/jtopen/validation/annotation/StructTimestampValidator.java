@@ -30,7 +30,7 @@ public class StructTimestampValidator extends
 	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
 		super.validate(annotation, errorNode, targetBinding, problemRequestor);
 		
-		if (targetBinding != null && isValidType(targetBinding)) {
+		if (targetBinding != null && isValidType(targetBinding.getType())) {
 			if (targetBinding.getType() instanceof TimestampType &&
 					!"null".equalsIgnoreCase(((TimestampType)targetBinding.getType()).getPattern())) {
 				validatePatternNotSpecified(annotation, errorNode, problemRequestor);

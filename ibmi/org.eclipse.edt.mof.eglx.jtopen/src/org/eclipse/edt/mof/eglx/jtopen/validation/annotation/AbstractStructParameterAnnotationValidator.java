@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -43,7 +44,7 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, new String[] {getName(), targetBinding.getCaseSensitiveName() + "?"});
 		}
 		
-		if (!isValidType(targetBinding)) {
+		if (!isValidType(targetBinding.getType())) {
 			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_ANNOTATION_TYPE_MISMATCH, new String[] {getName(), targetBinding.getCaseSensitiveName()});
 		}
 	}
@@ -54,10 +55,10 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 		return NameUtile.getAsName(getName());
 	}
 	
-	protected boolean isValidType(Member typeBinding) {
+	protected boolean isValidType(Type typeBinding) {
 				
 		if (typeBinding != null) {
-			return getSupportedTypes().contains(typeBinding.getType().getMofSerializationKey());
+			return getSupportedTypes().contains(typeBinding.getMofSerializationKey());
 		}
 		else {
 			return true;  //return true to avoid excess error messages
