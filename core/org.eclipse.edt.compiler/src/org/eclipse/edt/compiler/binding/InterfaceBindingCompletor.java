@@ -53,30 +53,12 @@ public class InterfaceBindingCompletor extends FunctionContainerBindingCompletor
     
     private void processExtends(Interface interfaceAST) {
         if(interfaceAST.hasExtendedType()) {
-    		for(Iterator iter = interfaceAST.getExtendedTypes().iterator(); iter.hasNext();) {
-            	try {
-            		
-            		Name name = (Name) iter.next();
+    		for(Name name : interfaceAST.getExtendedTypes()) {
+            	try {          		
         			Type typeBinding = bindTypeName(name);
         			if (typeBinding instanceof org.eclipse.edt.mof.egl.Interface) {
         				interfaceBinding.getSuperTypes().add((org.eclipse.edt.mof.egl.Interface)typeBinding);
-        			}
-        			
-        			//TODO move this to InterfaceValidator
-//        			if (Binding.isValidBinding(typeBinding) && typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING) {
-//        				
-//        				InterfaceBinding extendedInterface = (InterfaceBinding) typeBinding;
-//        				if (extendedInterface.containsExtendsFor(interfaceBinding)) {
-//                			problemRequestor.acceptProblem(
-//                    				name,
-//                    				IProblemRequestor.RECURSIVE_LOOP_IN_EXTENDS,
-//                    				new String[] {interfaceBinding.getCaseSensitiveName(), name.toString()});
-//        					name.setBinding(Binding.NOT_FOUND_BINDING);
-//        				}
-//        				else {
-//        					interfaceBinding.addExtendedType(typeBinding);
-//        				}
-//        			}
+        			}      			
             	}
         		catch (ResolutionException e) {
         			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());

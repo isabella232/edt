@@ -24,7 +24,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  */
 public class Interface extends Part {
 
-	private List extendsOpt;
+	private List<Name> extendsOpt;
 
 	public Interface(Boolean privateAccessModifierOpt, SimpleName name, List extendsOpt, List interfaceContents, int startOffset, int endOffset) {
 		super(privateAccessModifierOpt, name, interfaceContents, startOffset, endOffset);
@@ -43,7 +43,7 @@ public class Interface extends Part {
 	/**
 	 * @return A List of Name objects
 	 */
-	public List getExtendedTypes() {
+	public List<Name> getExtendedTypes() {
 		return extendsOpt;
 	}
 

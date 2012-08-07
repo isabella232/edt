@@ -11,19 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.compiler;
 
-import org.eclipse.edt.compiler.binding.DataItemBindingCompletor;
-import org.eclipse.edt.compiler.binding.DataTableBindingCompletor;
 import org.eclipse.edt.compiler.binding.DelegateBindingCompletor;
 import org.eclipse.edt.compiler.binding.EGLClassBindingCompletor;
 import org.eclipse.edt.compiler.binding.EnumerationBindingCompletor;
 import org.eclipse.edt.compiler.binding.ExternalTypeBindingCompletor;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.FileBindingCompletor;
-import org.eclipse.edt.compiler.binding.FixedRecordBindingCompletor;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBindingCompletor;
-import org.eclipse.edt.compiler.binding.FormBindingCompletor;
-import org.eclipse.edt.compiler.binding.FormGroupBindingCompletor;
-import org.eclipse.edt.compiler.binding.FunctionBindingCompletor;
+import org.eclipse.edt.compiler.binding.RecordBindingCompletor;
 import org.eclipse.edt.compiler.binding.HandlerBindingCompletor;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
@@ -62,18 +56,6 @@ public class BindingCompletor {
 			case ITypeBinding.PROGRAM_BINDING:
 				astNode.accept(new ProgramBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
-			case ITypeBinding.FUNCTION_BINDING:
-				astNode.accept(new FunctionBindingCompletor((TopLevelFunctionBinding)binding, parentScope, (TopLevelFunctionBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
-				break;
-			case ITypeBinding.DATAITEM_BINDING:
-				astNode.accept(new DataItemBindingCompletor(parentScope, (DataItemBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
-				break;
-			case ITypeBinding.DATATABLE_BINDING:
-				astNode.accept(new DataTableBindingCompletor(parentScope, (DataTableBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
-				break;
-			case ITypeBinding.FORMGROUP_BINDING:
-				astNode.accept(new FormGroupBindingCompletor(parentScope, (FormGroupBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
-				break;
 			case ITypeBinding.HANDLER_BINDING:
 				astNode.accept(new HandlerBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
@@ -87,22 +69,16 @@ public class BindingCompletor {
 				astNode.accept(new LibraryBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
 			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-				astNode.accept(new FlexibleRecordBindingCompletor(parentScope, (FlexibleRecordBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
-				break;
-			case ITypeBinding.FIXED_RECORD_BINDING:
-				astNode.accept(new FixedRecordBindingCompletor(parentScope, (FixedRecordBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				astNode.accept(new RecordBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
 			case ITypeBinding.SERVICE_BINDING:
 				astNode.accept(new ServiceBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
-			case ITypeBinding.FORM_BINDING:
-				astNode.accept(new FormBindingCompletor(parentScope, (FormBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
-				break;			
 			case ITypeBinding.DELEGATE_BINDING:
 				astNode.accept(new DelegateBindingCompletor(parentScope, (DelegateBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;			
 			case ITypeBinding.ENUMERATION_BINDING:
-				astNode.accept(new EnumerationBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				astNode.accept(new EnumerationBindingCompletor(parentScope, (EnumerationTypeBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;			
 			case ITypeBinding.EXTERNALTYPE_BINDING:
 				astNode.accept(new ExternalTypeBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
