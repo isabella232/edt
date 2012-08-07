@@ -17,7 +17,7 @@ import java.util.List;
 import org.eclipse.edt.mof.egl.MofConversion;
 
 public class StructTimeValidator extends
-		AbstractStructParameterAnnotaionValidator {
+		AbstractStructParameterAnnotationValidator {
 
 
 	protected List<String> getSupportedTypes() {

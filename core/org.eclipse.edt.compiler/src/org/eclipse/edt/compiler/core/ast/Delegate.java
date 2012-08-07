@@ -56,10 +56,6 @@ public class Delegate extends Part {
 		return returnsOpt;
 	}
 	
-	public boolean returnTypeIsSqlNullable() {
-		return returnsOpt.isSqlNullable();
-	}
-	
 	public List getSettingsBlocks() {
 		return settingsBlocks;
 	}

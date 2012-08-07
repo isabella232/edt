@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
+import java.util.ResourceBundle;
+
 /**
  * Prints problems to console. Probably only useful for debugging scenarios.
  * 
@@ -30,13 +32,14 @@ public class ConsoleOutProblemRequestor extends DefaultProblemRequestor {
         return INSTANCE;
     }
     
-	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+    @Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
  		if (severity == IMarker.SEVERITY_ERROR) {
  			setHasError(true);
  		}
 		String[] newInserts = shiftInsertsIfNeccesary(problemKind, inserts);
 		if(!SILENCE_ERRORS) {
-			System.out.println( "Problem reported: (" + problemKind + ") " + getMessageFromBundle(problemKind, newInserts) + ", startOffset = " + startOffset + ", endOffset = " + endOffset + ", severity = " + severity );
+			System.out.println( "Problem reported: (" + problemKind + ") " + getMessageFromBundle(problemKind, newInserts, bundle) + ", startOffset = " + startOffset + ", endOffset = " + endOffset + ", severity = " + severity );
 		}
     }
 

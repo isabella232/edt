@@ -204,13 +204,6 @@ public class BaseCompiler implements ICompiler {
 	
 	@Override
 	public PartValidator getValidatorFor(Part part) {
-		for (ICompilerExtension ext : extensions) {
-			PartValidator validator = ext.getValidatorFor(part);
-			if (validator != null) {
-				return validator;
-			}
-		}
-		
 		return null;
 	}
 	

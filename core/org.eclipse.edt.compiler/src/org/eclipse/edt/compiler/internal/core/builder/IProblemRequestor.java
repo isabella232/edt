@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.edt.compiler.core.ast.Node;
 
 
@@ -19,8 +21,9 @@ import org.eclipse.edt.compiler.core.ast.Node;
  */
 public interface IProblemRequestor {
 
-	// The following method should be overriden by all non-abstract subtypes
-    void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts);    
+	// The following methods should be overriden by all non-abstract subtypes
+	void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts);
+    void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle);    
     
     // The following methods exist for convenience and are overriden in
     // DefaultProblemRequestor. Subtypes need not override them
@@ -28,9 +31,11 @@ public interface IProblemRequestor {
     void acceptProblem(Node astNode, int problemKind, int severity);		
 	void acceptProblem(Node astNode, int problemKind, String[] inserts);	
 	void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts);
+	void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts, ResourceBundle bundle);
 	void acceptProblem(int startOffset, int endOffset, int severity, int problemKind);
 	void acceptProblem(int startOffset, int endOffset, int problemKind, String[] inserts);
 	void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts);
+	void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts, ResourceBundle bundle);
 	boolean shouldReportProblem(int problemKind);
 	
 	boolean hasError();

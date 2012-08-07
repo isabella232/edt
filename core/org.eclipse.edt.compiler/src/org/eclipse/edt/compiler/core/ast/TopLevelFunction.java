@@ -61,10 +61,6 @@ public class TopLevelFunction extends Part {
 		return returnsOpt.getType();
 	}
 	
-	public boolean returnTypeIsSqlNullable() {
-		return returnsOpt.isSqlNullable();
-	}
-	
 	public List getStmts() {
 		return contents;
 	}

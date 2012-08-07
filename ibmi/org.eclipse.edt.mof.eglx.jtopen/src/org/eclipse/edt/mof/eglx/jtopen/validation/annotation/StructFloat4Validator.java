@@ -17,7 +17,7 @@ import java.util.List;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.MofConversion;
 
-public class StructFloat4Validator extends AbstractStructParameterAnnotaionValidator implements IAnnotationValidationRule {
+public class StructFloat4Validator extends AbstractStructParameterAnnotationValidator implements IAnnotationValidationRule {
 	
 	@Override
 	protected List<String> getSupportedTypes() {

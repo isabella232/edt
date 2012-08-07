@@ -14,6 +14,6 @@ package eglx.jtopen.annotations;
 Record StructBin4 type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.StructBin4AnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.StructBin4Validator"
 }
 end

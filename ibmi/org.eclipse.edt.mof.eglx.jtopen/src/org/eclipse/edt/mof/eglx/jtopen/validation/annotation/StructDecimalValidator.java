@@ -22,12 +22,12 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
 
 public abstract class StructDecimalValidator extends
-		AbstractStructParameterAnnotaionValidator {
+		AbstractStructParameterAnnotationValidator {
 
 	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
 		super.validate(annotation, errorNode, targetBinding, problemRequestor);
 		
-		if (targetBinding != null && isValidType(targetBinding)) {
+		if (targetBinding != null && isValidType(targetBinding.getType())) {
 			if(targetBinding.getType() instanceof FixedPrecisionType ) {
 				validateLengthAndDecimalsNotSpecified(annotation, errorNode, problemRequestor);
 			}

@@ -19,9 +19,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
-import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementGenerator;
-import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementGenerator;
-import org.eclipse.edt.compiler.internal.egl2mof.sql.SQLIOStatementGenerator;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -167,16 +164,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
-		//FIXME JV this need to be extensible 
 		CallStatement stmt;
 		if (CallStatementValidator.isFunctionCallStatement(callStatement)) {
-			if (CallStatementValidator.isLocalFunctionCallStatement(callStatement)) {
-				stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
-			}
-			else {
-				IOStatementGenerator generator = getGeneratorFor(callStatement);
-				stmt = generator.genCallStatement(callStatement, eObjects);
-			}
+			IOStatementGenerator generator = getGeneratorFor(callStatement);
+			stmt = generator.genCallStatement(callStatement, eObjects);
 		}
 		else {
 			//TODO this should create a "plain" CallStatement

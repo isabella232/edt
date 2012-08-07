@@ -17,7 +17,7 @@ import eglx.lang.resource;
 Record IBMiProgram type Annotation
 {
 	targets = [ElementKind.FunctionMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.IBMiProgramAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramValidator"
 } 
 	programName string;
 	libraryName string;
