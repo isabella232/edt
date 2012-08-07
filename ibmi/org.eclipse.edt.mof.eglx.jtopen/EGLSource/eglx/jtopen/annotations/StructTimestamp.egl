@@ -14,7 +14,7 @@ package eglx.jtopen.annotations;
 Record StructTimestamp type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.StructTimestampAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.StructTimestampValidator"
 }
 	ibmiFormat any?;
 	eglPattern string?;
