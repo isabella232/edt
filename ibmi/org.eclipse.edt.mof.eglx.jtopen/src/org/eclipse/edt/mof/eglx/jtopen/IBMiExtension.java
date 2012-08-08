@@ -12,6 +12,7 @@
 package org.eclipse.edt.mof.eglx.jtopen;
 
 import org.eclipse.edt.compiler.ICompilerExtension;
+import org.eclipse.edt.compiler.PartValidator;
 import org.eclipse.edt.compiler.StatementValidator;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.TypeValidator;
@@ -24,12 +25,10 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFactory;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramCallStatementValidator;
@@ -58,6 +57,12 @@ public class IBMiExtension implements ICompilerExtension {
 				return IBMiFactory.INSTANCE.createIBMiFunction();
 			}
 		}
+		return null;
+	}
+	
+	@Override
+	public PartValidator getValidatorFor(Part part) {
+		// No special validators.
 		return null;
 	}
 	

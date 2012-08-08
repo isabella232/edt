@@ -61,8 +61,15 @@ public class EDTCompiler extends BaseCompiler {
 	}
 	
 	@Override
-	public PartValidator getValidatorFor(org.eclipse.edt.compiler.core.ast.Part part) {
-		return new DefaultPartValidator();
+	public List<PartValidator> getValidatorsFor(org.eclipse.edt.compiler.core.ast.Part part) {
+		List<PartValidator> validators = super.getValidatorsFor(part);
+		if (validators == null) {
+			validators = new ArrayList<PartValidator>(1);
+		}
+		
+		// default gets run first.
+		validators.add(0, new DefaultPartValidator());
+		return validators;
 	}
 	
 	@Override

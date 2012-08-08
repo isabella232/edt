@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
+import java.util.List;
+
 import org.eclipse.edt.compiler.PartValidator;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -66,9 +68,11 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    
 				    //TODO add code to handle circular buildexception
 				    try{
-				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -111,10 +115,12 @@ public abstract class Compiler extends DefaultASTVisitor{
 					astNode.accept(new ExternalTypeBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				    
 				    //TODO add code to handle circular buildexception
-				    try{
-				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+					try{
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -137,9 +143,11 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    
 				    //TODO add code to handle circular buildexception
 				    try{
-				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -161,10 +169,12 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    astNode.accept(new HandlerBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 								
 				    //TODO add code to handle circular buildexception
-					try{
-						PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    try{
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -186,10 +196,12 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    astNode.accept(new EGLClassBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 								
 				    //TODO add code to handle circular buildexception
-					try{
-						PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    try{
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -211,10 +223,12 @@ public abstract class Compiler extends DefaultASTVisitor{
 					astNode.accept(new InterfaceBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				    
 				    //TODO add code to handle circular buildexception
-				    try{
-				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+					try{
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -236,10 +250,12 @@ public abstract class Compiler extends DefaultASTVisitor{
 					astNode.accept(new LibraryBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				    
 				    //TODO add code to handle circular buildexception
-				    try{
-				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+					try{
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
 				    	}
 					}catch(CancelledException e){
 					    throw e;
@@ -261,11 +277,13 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    astNode.accept(new RecordBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 					
 				    //TODO add code to handle circular buildexception
-					try{
-				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
-				    	}						
+				    try{
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
+				    	}
 					}catch(CancelledException e){
 					    throw e;
 					}catch(RuntimeException e){
@@ -286,10 +304,12 @@ public abstract class Compiler extends DefaultASTVisitor{
 					astNode.accept(new ServiceBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				    
 				    //TODO add code to handle circular buildexception
-				    try{
-				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
-				    	if (validator != null) {
-				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+					try{
+				    	List<PartValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor((Part)astNode);
+				    	if (validators != null) {
+				    		for (PartValidator validator : validators) {
+				    			validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    		}
 				    	}
 					}catch(CancelledException e){
 					    throw e;

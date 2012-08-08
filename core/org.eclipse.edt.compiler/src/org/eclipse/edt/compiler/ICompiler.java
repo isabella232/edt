@@ -92,7 +92,7 @@ public interface ICompiler {
 	public List<String> getAllImplicitlyUsedEnumerations();
 	
 	public StatementValidator getValidatorFor(Statement stmt);
-	public PartValidator getValidatorFor(Part part);
+	public List<PartValidator> getValidatorsFor(Part part);
 	public TypeValidator getValidatorFor(Type type);
 	
 }

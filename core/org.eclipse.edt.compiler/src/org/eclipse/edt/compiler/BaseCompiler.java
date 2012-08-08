@@ -203,7 +203,18 @@ public class BaseCompiler implements ICompiler {
 	}
 	
 	@Override
-	public PartValidator getValidatorFor(Part part) {
+	public List<PartValidator> getValidatorsFor(Part part) {
+		List<ICompilerExtension> partExtensions = astTypeToExtensions.get(part.getClass());
+		if (partExtensions != null && partExtensions.size() > 0) {
+			List<PartValidator> validators = new ArrayList<PartValidator>(partExtensions.size() + 1);
+			for (ICompilerExtension ext : partExtensions) {
+				PartValidator validator = ext.getValidatorFor(part);
+				if (validator != null) {
+					validators.add(validator);
+				}
+			}
+			return validators;
+		}
 		return null;
 	}
 	

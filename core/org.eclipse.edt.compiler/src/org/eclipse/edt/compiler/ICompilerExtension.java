@@ -12,6 +12,7 @@
 package org.eclipse.edt.compiler;
 
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Type;
@@ -38,6 +39,16 @@ public interface ICompilerExtension {
 	 * @return a new MOF element, or null.
 	 */
 	Element createMofFor(Node node);
+	
+	/**
+	 * Returns a validator for the given part, or null if doesn't require extra validation. Only AST types included
+	 * in {@link #getExtendedTypes()} will be passed into this method. It is up to the compiler whether this validator
+	 * is run before or after its own validation.
+	 * 
+	 * @param part The part to validate.
+	 * @return a validator for the given part, or null if no extra validation is required.
+	 */
+	PartValidator getValidatorFor(Part part);
 	
 	/**
 	 * Returns a validator for the given statement, or null if it's not a type being extended. Only AST
