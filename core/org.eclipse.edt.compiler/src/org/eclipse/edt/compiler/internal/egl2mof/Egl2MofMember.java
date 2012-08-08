@@ -203,46 +203,6 @@ class Egl2MofMember extends Egl2MofPart {
 		return false;
 	}
 	
-	
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ConstantFormField node) {
-		ConstantFormField binding = (ConstantFormField)node.resolveBinding();
-		// Do not create members that have invalid types!
-		if (binding == null) {
-			stack.push(null);
-			return false;
-		}
-		ConstantFormField field = factory.createConstantFormField();		
-		field.setOccurs(binding.getOccurs() == 0 ? 1 : binding.getOccurs());
-		createAnnotations(binding, field);
-		createElementAnnotations(binding, field);
-		setElementInformation(node, field);
-		stack.push(field);
-		return false;
-	}
-
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.VariableFormField node) {
-		Member binding = node.getName().resolveMember();
-		// Do not create members that have invalid types!
-		if (binding == null) {
-			stack.push(null);
-			return false;
-		}
-		VariableFormField field = factory.createVariableFormField();
-		field.setOccurs(binding.getOccurs() == 0 ? 1 : binding.getOccurs());
-		setUpEglTypedElement(field, binding);
-		createAnnotations(binding, field);
-		createElementAnnotations(binding, field);
-		eObjects.put(binding, field);
-		stack.push(field);
-		setElementInformation(node, field);
-		return false;
-	}
-
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NestedFunction node) {
