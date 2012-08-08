@@ -519,6 +519,9 @@ public interface IProblemRequestor {
 	public static final int MULTI_INDICES_NOT_SUPPORTED= 3472;
 	public static final int ENUMERATION_NO_FIELDS= 3473;
 	
+	public static final int CLASS_MUST_EXTEND_CLASS = 3474;
+	public static final int PART_CANNOT_EXTEND_ITSELF = 3475;
+	
 	public static final int THROWS_NOT_VALID_HERE= 3480;
 
 
@@ -1792,7 +1795,7 @@ public interface IProblemRequestor {
 	public static final int VALUEREF_NOT_RESOLVED = 7799;
 	
 	public static final int INTERFACE_IS_AMBIGUOUS = 7800;
-	public static final int SERVICE_OR_HANDLER_MUST_IMPLEMENT_AN_INTERFACE = 7801;
+	public static final int PART_MUST_IMPLEMENT_AN_INTERFACE = 7801;
 	public static final int SERVICE_CANNOT_BE_USED_BY_SERVICE = 7802;
 	public static final int LOOSE_TYPES_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = 7803;
 	public static final int TYPE_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = 7804;
@@ -1800,7 +1803,6 @@ public interface IProblemRequestor {
 	public static final int FIELD_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = 7806;
 	public static final int STATIC_FUNCTIONS_ONLY_ALLOWED_IN_JAVAOBJECT_INTERFACE = 7807;
 	public static final int EXTENDS_CLAUSE_ONLY_ALLOWED_IN_JAVAOBJECT_INTERFACE = 7808;
-	public static final int INTERFACE_MUST_EXTEND_AN_INTERFACE = 7809;
 	public static final int INTERFACE_FUNCTION_CANNOT_BE_PRIVATE = 7810;		
 	public static final int SERVICE_CANNOT_USE_FORM_GROUP = 7811;
 	public static final int OVERRIDEN_FUNCTION_PARAMETERS_DONT_MATCH = 7812;

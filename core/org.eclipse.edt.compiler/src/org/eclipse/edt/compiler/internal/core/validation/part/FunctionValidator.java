@@ -249,7 +249,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkParmTypeNotStaticArray(FunctionParameter functionParameter, Type parmType) {
-
 		if(parmType.isArrayType()) {
 			if (((ArrayType) parmType).hasInitialSize()) {
         	problemRequestor.acceptProblem(
@@ -261,7 +260,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 				checkParmTypeNotStaticArray(functionParameter, ((ArrayType) parmType).getElementType());
 			}
         }
-			
 	}
 	
 	private void checkParmNotEmptyRecord(FunctionParameter functionParameter, org.eclipse.edt.mof.egl.Type parmType) {
@@ -725,18 +723,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 						IProblemRequestor.GOTO_LABEL_NOT_ACCESSIBLE,
 						new String[]{gotoStatement.getLabel(),functionName});
 				}
-//				Node gotoOnEventBlock = getEnclosingOnEventBlock(gotoStatement);
-//				Node labelOnEventBlock = getEnclosingOnEventBlock((Node) labelMap.get(gotoStatement.getLabel()));
-//				if(gotoOnEventBlock == null) {
-//					if(labelOnEventBlock != null) {
-//						problemRequestor.acceptProblem(gotoStatement, IProblemRequestor.GOTO_LABEL_INSIDE_ONEVENT_BLOCK);
-//					}
-//				}
-//				else {					
-//					if(labelOnEventBlock != gotoOnEventBlock) {
-//						problemRequestor.acceptProblem(gotoStatement, IProblemRequestor.GOTO_LABEL_OUTSIDE_ONEVENT_BLOCK);
-//					}
-//				}
 			}
 		}
 	}
@@ -752,14 +738,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return false;
 	}
 
-//	private Node getEnclosingOnEventBlock(Node node) {
-//		Node parent = node.getParent();
-//		while(parent != null && !(parent instanceof OnEventBlock)) {
-//			parent = parent.getParent();
-//		}
-//		return parent instanceof OnEventBlock ? parent : null;
-//	}
-	
 	private void validatePrimitiveConst(Type type){
 		//TODO primitives are being removed, and this check will no longer be valid. see bug 377632
 //		StatementValidator.validatePrimitiveConstant(type, problemRequestor);

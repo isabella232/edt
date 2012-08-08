@@ -298,5 +298,9 @@ public abstract class Part extends Node {
     	}
     	return identifier;
     }
-
+    
+    @Override
+	public String toString() {
+		return getPartTypeName() + " " + getName();
+	}
 }

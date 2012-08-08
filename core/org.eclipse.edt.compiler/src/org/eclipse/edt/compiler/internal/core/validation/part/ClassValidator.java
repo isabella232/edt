@@ -13,9 +13,11 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.mof.egl.Type;
 
 public class ClassValidator extends FunctionContainerValidator {
 	
@@ -29,14 +31,40 @@ public class ClassValidator extends FunctionContainerValidator {
 		this.classBinding = (org.eclipse.edt.mof.egl.EGLClass)irBinding.getIrPart();
 	}
 	
+	@Override
 	public boolean visit(EGLClass clazz) {
 		this.clazz = clazz;
 		partNode = clazz;
 		EGLNameValidator.validate(clazz.getName(), EGLNameValidator.CLASS, problemRequestor, compilerOptions);
 //		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(program); TODO
 		
-		//TODO no main, implements has no cycles and are interfaces, extends is a class, interface functions are implemented
+		checkImplements(clazz.getImplementedInterfaces());
+		checkInterfaceFunctionsOverriden(classBinding);
+		checkExtends();
 		
 		return true;
+	}
+	
+	private void checkExtends() {
+		Name extended = clazz.getExtends();
+		if (extended != null) {
+			Type type = extended.resolveType();
+			if (type != null && !(type instanceof org.eclipse.edt.mof.egl.EGLClass)) {
+				problemRequestor.acceptProblem(
+						extended,
+						IProblemRequestor.CLASS_MUST_EXTEND_CLASS,
+						new String[] {
+								type.getTypeSignature()
+						});
+			}
+			else if (type != null && classBinding.equals(type)) {
+				problemRequestor.acceptProblem(
+						extended,
+						IProblemRequestor.PART_CANNOT_EXTEND_ITSELF,
+						new String[] {
+								type.getTypeSignature()
+						});
+			}
+		}
 	}
 }

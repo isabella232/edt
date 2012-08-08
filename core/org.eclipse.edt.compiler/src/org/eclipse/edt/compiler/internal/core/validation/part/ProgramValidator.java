@@ -33,6 +33,7 @@ public class ProgramValidator extends FunctionContainerValidator {
 		this.programBinding = (org.eclipse.edt.mof.egl.Program)irBinding.getIrPart();
 	}
 	
+	@Override
 	public boolean visit(Program aprogram) {
 		program = aprogram;
 		partNode = aprogram;
@@ -49,10 +50,11 @@ public class ProgramValidator extends FunctionContainerValidator {
 		return true;
 	}
 	
-	protected void validateProgramFunctions(){
-		program.accept(new AbstractASTVisitor(){
+	protected void validateProgramFunctions() {
+		program.accept(new AbstractASTVisitor() {
 			boolean main = false;
-			public boolean visit (NestedFunction nestedFunction){
+			@Override
+			public boolean visit (NestedFunction nestedFunction) {
 				if (NameUtile.equals(nestedFunction.getName().getCanonicalName(), IEGLConstants.MNEMONIC_MAIN)){
 					main = true;
 					if (nestedFunction.getFunctionParameters().size() > 0){
@@ -64,7 +66,8 @@ public class ProgramValidator extends FunctionContainerValidator {
 				return false;
 			}
 			
-			public void endVisit(Program aprogram){
+			@Override
+			public void endVisit(Program aprogram) {
 				if (!main){
 					problemRequestor.acceptProblem(aprogram.getName(),
 							IProblemRequestor.PROGRAM_MAIN_FUNCTION_REQUIRED,

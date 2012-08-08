@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -34,17 +33,13 @@ public class LibraryValidator extends FunctionContainerValidator {
 		this.libraryBinding = (org.eclipse.edt.mof.egl.Library)irBinding.getIrPart();
 	}
 	
+	@Override
 	public boolean visit(Library alibrary) {
 		this.library = alibrary;
 		partNode = alibrary;
 		EGLNameValidator.validate(library.getName(), EGLNameValidator.LIBRARY, problemRequestor, compilerOptions);
 //		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(alibrary); TODO
 		return true;
-	}
-	
-	public boolean visit(ClassDataDeclaration classDataDeclaration) {
-		super.visit(classDataDeclaration);
-		return false;
 	}
 	
 	public boolean visit(NestedFunction nestedFunction) {
