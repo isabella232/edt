@@ -22,7 +22,6 @@ import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ClassDataDeclarationValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.UseStatementValidator;
 
 
 /**
@@ -61,7 +60,8 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 	}
 	
 	public boolean visit(UseStatement useStatement) {
-		useStatement.accept(new UseStatementValidator(partBinding,partNode.getName().getCanonicalName(),problemRequestor, compilerOptions));
+		//TODO Validator blows up right now
+//		useStatement.accept(new UseStatementValidator(partBinding,partNode.getName().getCanonicalName(),problemRequestor, compilerOptions));
 		return false;
 	}
 }
