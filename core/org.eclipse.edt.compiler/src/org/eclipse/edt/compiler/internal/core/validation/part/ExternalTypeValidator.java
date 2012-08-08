@@ -126,6 +126,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 	}
 	
 	private void checkExtendedTypes(ExternalType externalType) {
+		//TODO validate no cycles
 		for(Iterator iter = externalType.getExtendedTypes().iterator(); iter.hasNext();) {
 			Name nameAST = (Name) iter.next();
 			Type extendedType = nameAST.resolveType();

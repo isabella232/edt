@@ -54,6 +54,7 @@ public class FieldValidator extends DefaultASTVisitor{
 		}
 		else {
 			//TODO records have no constructor - look into this once records are being bound (might need to add 'constructor()' to EGLRecord and StructuredRecord)
+			//TODO are arrays always instantiatable? need to handle them.
 			org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
 			//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
 			if (typeBinding != null && !classDataDeclaration.isNullable() && !(typeBinding instanceof ParameterizedType) && !hasPublicDefaultConstructor(typeBinding)) {

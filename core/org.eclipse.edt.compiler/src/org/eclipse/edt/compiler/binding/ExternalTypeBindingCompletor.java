@@ -61,22 +61,6 @@ public class ExternalTypeBindingCompletor extends FunctionContainerBindingComple
             		if (typeBinding instanceof StructPart) {
         				externalTypeBinding.getSuperTypes().add((StructPart)typeBinding);
         			}
-        			
-            		//TODO move to ExternalTypeValidator
-//        			if (Binding.isValidBinding(typeBinding) && typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
-//        				
-//        				ExternalTypeBinding extendedET = (ExternalTypeBinding) typeBinding;
-//        				if (extendedET.containsExtendsFor(externalTypeBinding)) {
-//                			problemRequestor.acceptProblem(
-//                    				name,
-//                    				IProblemRequestor.RECURSIVE_LOOP_IN_EXTENDS,
-//                    				new String[] {externalTypeBinding.getCaseSensitiveName(), name.toString()});
-//        					name.setBinding(Binding.NOT_FOUND_BINDING);
-//        				}
-//        				else {
-//        					externalTypeBinding.addExtendedType(typeBinding);
-//        				}
-//        			}
             	}
         		catch (ResolutionException e) {
         			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());

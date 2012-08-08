@@ -11,12 +11,18 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation;
 
+import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Enumeration;
+import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
+import org.eclipse.edt.compiler.internal.core.validation.part.ClassValidator;
+import org.eclipse.edt.compiler.internal.core.validation.part.DelegateValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.ExternalTypeValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.FunctionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.HandlerValidator;
@@ -46,7 +52,7 @@ public class DefaultPartValidator extends AbstractPartValidator {
 		return false;
 	}
 	
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ExternalType externalType) {
+	public boolean visit(ExternalType externalType) {
 		externalType.accept(new ExternalTypeValidator(problemRequestor, irBinding, compilerOptions));
 		return false;
 	};
@@ -56,8 +62,18 @@ public class DefaultPartValidator extends AbstractPartValidator {
 		return false;
 	}
 	
-	public boolean visit(org.eclipse.edt.compiler.core.ast.EGLClass eglClass) {
-//		eglClass.accept(new ClassValidator(problemRequestor, irBinding, compilerOptions));
+	public boolean visit(EGLClass eglClass) {
+		eglClass.accept(new ClassValidator(problemRequestor, irBinding, compilerOptions));
+		return false;
+	};
+	
+	public boolean visit(Enumeration enumeration) {
+//		enumeration.accept(new EnumerationValidator(problemRequestor, irBinding, compilerOptions));
+		return false;
+	};
+	
+	public boolean visit(Delegate delegate) {
+		delegate.accept(new DelegateValidator(problemRequestor, irBinding, compilerOptions));
 		return false;
 	};
 	

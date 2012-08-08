@@ -15,7 +15,6 @@ import java.util.Iterator;
 
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Constructor;
@@ -79,8 +78,8 @@ public class InterfaceValidator extends AbstractASTVisitor {
 		return false;
 	}
 
-	
 	private void checkExtendedTypes(Interface iface) {
+		//TODO check for cycles
 		for(Iterator iter = iface.getExtendedTypes().iterator(); iter.hasNext();) {
 			Name nameAST = (Name) iter.next();
 			ITypeBinding extendedType = (ITypeBinding) (nameAST).resolveBinding();

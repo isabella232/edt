@@ -20,19 +20,13 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 
 public class DelegateValidator extends FunctionValidator {
 
-	public DelegateValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		super(problemRequestor, compilerOptions);
-	}
-
 	public DelegateValidator(IProblemRequestor problemRequestor, IPartBinding enclosingPart, ICompilerOptions compilerOptions) {
 		super(problemRequestor, enclosingPart, compilerOptions);
 	}
 	
 	public boolean visit(Delegate delegate) {
-		
 		EGLNameValidator.validate(delegate.getName(), EGLNameValidator.DELEGATE, problemRequestor, compilerOptions);
 		checkNumberOfParms(delegate.getParameters(), delegate.getName(), delegate.getName().getCanonicalName());		
 		return true;
 	}
-
 }

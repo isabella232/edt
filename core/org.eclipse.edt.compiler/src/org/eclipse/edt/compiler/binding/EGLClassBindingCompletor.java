@@ -11,22 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
-import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
-import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;

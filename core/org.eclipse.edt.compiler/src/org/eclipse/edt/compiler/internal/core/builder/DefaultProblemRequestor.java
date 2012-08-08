@@ -591,14 +591,6 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(SQL_WITH_STMT_REQUIRED_FOR_DELETE),
 		new Integer(SQL_NO_WITH_FOR_USING),
 		new Integer(SQL_NO_WITH_USING),
-
-		new Integer(IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED),
-		new Integer(IBMIPROGRAM_RETURNS_NOT_ALLOWED),
-		new Integer(IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION),
-		new Integer(IBMIPROGRAM_USING_HAS_WRONG_TYPE), 
-		new Integer(IBMIPROGRAM_MUST_BE_SPECIFIED),
-		new Integer(IBMIPROGRAM_CALLBACK_NOT_SUPPORTED),
-	
 	}));
 	
 	/**

@@ -13,12 +13,10 @@ package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.PatternType;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TimeStampAndIntervalPatternFixer;
 
 public class PatternTypeImpl extends ParameterizedTypeImpl implements PatternType {
 	private static int Slot_pattern=0;
 	private static int totalSlots = 1;
-	private String denormalizedPattern;
 	
 	public static int totalSlots() {
 		return totalSlots + ParameterizedTypeImpl.totalSlots();
@@ -30,11 +28,7 @@ public class PatternTypeImpl extends ParameterizedTypeImpl implements PatternTyp
 	}
 	@Override
 	public String getPattern() {
-		if (denormalizedPattern == null) {
-			String value = (String)slotGet(Slot_pattern);
-			denormalizedPattern = new TimeStampAndIntervalPatternFixer(value).toString();
-		}
-		return denormalizedPattern;
+		return (String)slotGet(Slot_pattern);
 	}
 	
 	@Override

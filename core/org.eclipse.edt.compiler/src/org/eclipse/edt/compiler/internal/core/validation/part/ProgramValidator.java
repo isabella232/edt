@@ -37,9 +37,8 @@ public class ProgramValidator extends FunctionContainerValidator {
 		program = aprogram;
 		partNode = aprogram;
 		EGLNameValidator.validate(program.getName(), EGLNameValidator.PROGRAM, problemRequestor, compilerOptions);
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(program); TODO JZS
+//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(program); TODO
 		validateProgramFunctions();
-		validateProgramParameters();
 		
 		if (program.isCallable()) {
 			problemRequestor.acceptProblem(program.getName(),
@@ -49,76 +48,6 @@ public class ProgramValidator extends FunctionContainerValidator {
 
 		return true;
 	}
-	
-	protected void validateProgramParameters(){
-		//TODO port this to the new framework when called programs are supported. Also check each parm type with NameTypeValidator (used to be done in binder)
-//		program.accept(new AbstractASTVisitor(){
-//			int parmcount = 0;
-//			public boolean visit (ProgramParameter programParameter){
-//				programParameter.getName().resolveElement();
-//				IDataBinding binding = (IDataBinding)programParameter.getName().resolveBinding();
-//				if (StatementValidator.isValidBinding(binding)){
-//					ITypeBinding typeBinding = binding.getType();
-//					if (StatementValidator.isValidBinding(typeBinding)){
-//						if (typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING ||
-//							typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING){
-//							boolean error = false;
-//							if (typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING &&
-//								((FlexibleRecordBinding)typeBinding).getDeclaredFields().size() == 0 &&
-//								((FlexibleRecordBinding)typeBinding).getDefaultSuperType() == null){
-//								error = true;
-//							}
-//							
-//							if (typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING &&
-//									((FixedRecordBinding)typeBinding).getStructureItems().size() == 0 &&
-//									((FixedRecordBinding)typeBinding).getDefaultSuperType() == null ){
-//									error = true;
-//							}
-//							
-//							if (error){
-//								problemRequestor.acceptProblem(programParameter,
-//										IProblemRequestor.RECORD_PARAMETER_WITH_NO_CONTENTS,
-//										new String[] {programParameter.getName().getCanonicalName(),programParameter.getName().getCanonicalName()});
-//							}
-//						}
-//						else if (typeBinding.getKind() == ITypeBinding.FORM_BINDING){
-//							if (InternUtil.intern(typeBinding.getName()) != InternUtil.intern(programParameter.getName().getCanonicalName())){
-//								problemRequestor.acceptProblem(programParameter,
-//										IProblemRequestor.INVALID_FORM_TYPEDEF,
-//										new String[] {programParameter.getName().getCanonicalName(),typeBinding.getCaseSensitiveName()});
-//							}
-//						}
-//						new ProgramParameterValidator(problemRequestor).validate(typeBinding, programParameter.getType());
-//						
-//						checkParmTypeNotStaticArray(programParameter, programParameter.getType());
-//					}
-//					
-//				}
-//				return false;
-//			}
-//		});
-	}
-	
-	
-//	private void checkParmTypeNotStaticArray(ProgramParameter parm, Type parmType) {
-//
-//		if (parmType.isNullableType()) {
-//			checkParmTypeNotStaticArray(parm, parmType.getBaseType());
-//		}
-//		
-//		if(parmType.isArrayType()) {
-//			if (((ArrayType) parmType).hasInitialSize()) {
-//        	problemRequestor.acceptProblem(
-//        		parmType,
-//				IProblemRequestor.STATIC_ARRAY_PGM_PARAMETER_DEFINITION,
-//				new String[] {parm.getName().getCanonicalName()});   
-//			}
-//			else {
-//				checkParmTypeNotStaticArray(parm, ((ArrayType) parmType).getElementType());
-//			}
-//        }
-//	}
-
 	
 	protected void validateProgramFunctions(){
 		program.accept(new AbstractASTVisitor(){

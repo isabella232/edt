@@ -110,6 +110,7 @@ public class EGLNameValidator {
 	final public static int INTO_CLAUSE_DATAITEM_REFERENCE = 39;
 	final public static int DELEGATE = 40;
 	final public static int INTERNALFIELD = 41;
+	final public static int CLASS = 42;
 	
 	final public static int substring = 0;
 	final public static int subscript = 1;	
@@ -160,6 +161,7 @@ public class EGLNameValidator {
 	final public static int HANDLER_LENGTH = PART_LENGTH;
 	final public static int INTO_CLAUSE_ITEM_LENGTH = PART_LENGTH;
 	final public static int INTERNALFIELD_LENGTH = PART_LENGTH;
+	final public static int CLASS_LENGTH = PART_LENGTH;
 
 	private static Hashtable partNameLengths = new Hashtable();
 
@@ -206,6 +208,7 @@ public class EGLNameValidator {
 		partNameLengths.put(new Integer(HANDLER), new Integer(HANDLER_LENGTH));
 		partNameLengths.put(new Integer(INTO_CLAUSE_DATAITEM_REFERENCE), new Integer(INTO_CLAUSE_ITEM_LENGTH));
 		partNameLengths.put(new Integer(INTERNALFIELD), new Integer(INTERNALFIELD_LENGTH));
+		partNameLengths.put(new Integer(CLASS), new Integer(CLASS_LENGTH));
 	}
 	
 	private static class OffsetProblemRequestor extends DefaultProblemRequestor {
@@ -794,6 +797,7 @@ public class EGLNameValidator {
 			case LIBRARY:
 			case HANDLER:
 			case DELEGATE:
+			case CLASS:
 				//a Part cannot be qualified or subscripted, just a simple name
 				// These have the additional restriction of never allowing a dash
 				// in the name whether VG compatibility is on or not.

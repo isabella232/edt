@@ -83,4 +83,23 @@ public class NameType extends Type {
 	public Type getBaseType() {
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		if (arguments == null || arguments.size() == 0) {
+			return getCanonicalName();
+		}
+		
+		StringBuilder buf = new StringBuilder();
+		buf.append(getCanonicalName());
+		buf.append('(');
+		for (int i = 0; i < arguments.size(); i++) {
+			if (i > 0) {
+				buf.append(',');
+			}
+			buf.append(arguments.get(i));
+		}
+		buf.append(')');
+		return buf.toString();
+	}
 }
