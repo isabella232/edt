@@ -17,26 +17,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.AnnotationTypeBinding.IsStringLiteralChecker;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.ForeignLanguageTypeBinding;
-import org.eclipse.edt.compiler.binding.FormFieldBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.NilBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.ProgramBinding;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.SystemFunctionParameterSpecialTypeBinding;
-import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
@@ -68,7 +52,6 @@ import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
@@ -302,10 +285,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
-		if(!checkPSBRecordNotUsedAsArgument(argType, argExpr)) {
-			return false;
-		}
-
 		if(!checkSubstringNotUsedAsArgument(parameterBinding, argExpr)) {
 			return false;
 		}
@@ -428,17 +407,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		return true;
 	}
 	
-	private boolean checkPSBRecordNotUsedAsArgument(ITypeBinding argType, Expression argExpr) {
-		if(argType.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null) {
-			problemRequestor.acceptProblem(
-				argExpr,
-				IProblemRequestor.DLI_PSBRECORD_NOT_VALID_AS_ARGUMENT,
-				new String[] {argExpr.getCanonicalString()});
-			return false;
-		}
-		return true;
-	}
-
 	private boolean checkSubstringNotUsedAsArgument(FunctionParameterBinding parm, Expression argExpr) {
 		
 		if (Binding.isValidBinding(parm) && !parm.isInput() && argExpr instanceof SubstringAccess) {
@@ -1718,61 +1686,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 						"VGTDLI"
 					});
 			}
-		}
-	}
-	
-	private static class EGLTDLIArgumentChecker extends CompleteCheckArgChecker {
-		public void checkArg(int argNum, Expression argExpr, ITypeBinding argType, IInvocationNode fInvocationNode, IPartBinding functionContainerBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, IFunctionBinding functionBinding) {
-			if(functionContainerBinding != null && functionContainerBinding.getAnnotation(new String[] {"egl", "io", "dli"}, "DLI") != null) {
-				IDataBinding argDBinding = argExpr.resolveDataBinding();
-				boolean argIsValid = false;
-				if(argDBinding != null) {
-					if(argDBinding == IBinding.NOT_FOUND_BINDING) {
-						argIsValid = true;
-					}
-					else if(getPCBs(functionContainerBinding).contains(argDBinding)) {
-						argIsValid = true;
-					}
-					else if(getProgramParameterBindings(functionContainerBinding).contains(argDBinding)) {
-						argIsValid = true;
-					}
-				}
-				if(!argIsValid) {
-					problemRequestor.acceptProblem(
-						argExpr,
-						IProblemRequestor.DLI_ITEM_MUST_RESOLVE_TO_PCB_IN_PROGRAM_PSB_OR_PARM_LIST,
-						new String[] {
-							argExpr.getCanonicalString()
-						}
-					);
-				}
-			}
-		}
-		
-		private static List getPCBs(ITypeBinding type) {
-			List result = new ArrayList();
-			IAnnotationBinding dliABinding = type.getAnnotation(new String[] {"egl", "io", "dli"}, "DLI");
-			if(dliABinding != null) {
-				IAnnotationBinding psbABinding = (IAnnotationBinding) dliABinding.findData(InternUtil.intern(IEGLConstants.PROPERTY_PSB));
-				if(psbABinding != IBinding.NOT_FOUND_BINDING) {
-					IDataBinding psbRec = (IDataBinding) psbABinding.getValue();
-					if(psbRec != IBinding.NOT_FOUND_BINDING) {
-						ITypeBinding psbTBinding = psbRec.getType();
-						if(ITypeBinding.FLEXIBLE_RECORD_BINDING == psbTBinding.getKind()) {
-							result.addAll(((FlexibleRecordBinding) psbTBinding).getDeclaredFields());
-						}
-					}
-				}
-			}
-			return result;
-		}
-		
-		private static List getProgramParameterBindings(ITypeBinding type) {
-			List result = new ArrayList();
-			if(ITypeBinding.PROGRAM_BINDING == type.getKind()) {
-				result.addAll(((ProgramBinding) type).getParameters());
-			}
-			return result;
 		}
 	}
 	

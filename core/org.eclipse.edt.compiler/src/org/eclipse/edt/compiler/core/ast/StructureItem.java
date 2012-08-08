@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.mof.egl.Member;
 
 

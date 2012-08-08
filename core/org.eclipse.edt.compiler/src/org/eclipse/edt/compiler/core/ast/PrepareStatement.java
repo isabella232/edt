@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

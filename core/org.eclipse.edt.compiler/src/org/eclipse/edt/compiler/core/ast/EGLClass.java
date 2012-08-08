@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -49,10 +48,6 @@ public class EGLClass extends Part {
 	
 	public Name getExtends() {
 		return extendsOpt;
-	}
-	
-	public boolean isGeneratable(){
-		return true;
 	}
 	
 	public void accept(IASTVisitor visitor) {

@@ -409,37 +409,30 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 						if (typeBinding.isDynamic()){
 							
 						}else if ( StatementValidator.isRecordOrRecordArray(typeBinding) ) {
-							if( typeBinding.getAnnotation(EGLIODLI, "PSBRecord") != null) {
-								problemRequestor.acceptProblem(expression,
-										IProblemRequestor.DLI_PSBRECORD_NOT_VALID_AS_STATEMENT_OPERAND,
-										new String[] { IEGLConstants.KEYWORD_SET });
+							List validStates = new ArrayList();
+							validStates.add( EMPTY_INTERN );
+							validStates.add( INITIAL_INTERN );
+							validStates.add( POSITION_INTERN );
+							
+							int  iErr = -1;
+							final boolean[] isIndexedOrDLI = new boolean[] {false};
+							if( typeBinding.getAnnotation(EGLIOFILE, "IndexedRecord") != null ||
+								typeBinding.getAnnotation(EGLIODLI, "DLISegment") != null) {									
+								iErr = IProblemRequestor.INVALID_SET_STATE_FOR_INDEXED_RECORD;
+								isIndexedOrDLI[0] = true;
 							}
 							else {
-								List validStates = new ArrayList();
-								validStates.add( EMPTY_INTERN );
-								validStates.add( INITIAL_INTERN );
-								validStates.add( POSITION_INTERN );
-								
-								int  iErr = -1;
-								final boolean[] isIndexedOrDLI = new boolean[] {false};
-								if( typeBinding.getAnnotation(EGLIOFILE, "IndexedRecord") != null ||
-									typeBinding.getAnnotation(EGLIODLI, "DLISegment") != null) {									
-									iErr = IProblemRequestor.INVALID_SET_STATE_FOR_INDEXED_RECORD;
-									isIndexedOrDLI[0] = true;
-								}
-								else {
-									iErr = IProblemRequestor.INVALID_SET_STATE_FOR_RECORD;
-								}
-								
-								String[] toArray = (String[]) validStates.toArray( new String[0] );
-								validateStates( setStmt,expression, toArray, iErr, POSITION_INTERN, new IOnStateDoThis() {
-									public void doIt() {
-										if(!isIndexedOrDLI[0]) {
-											problemRequestor.acceptProblem(expression, IProblemRequestor.SET_POSITION_STATEMENT_WITH_INVALID_DATAREF, new String[] {expression.getCanonicalString()});
-										}
-									}
-								});
+								iErr = IProblemRequestor.INVALID_SET_STATE_FOR_RECORD;
 							}
+							
+							String[] toArray = (String[]) validStates.toArray( new String[0] );
+							validateStates( setStmt,expression, toArray, iErr, POSITION_INTERN, new IOnStateDoThis() {
+								public void doIt() {
+									if(!isIndexedOrDLI[0]) {
+										problemRequestor.acceptProblem(expression, IProblemRequestor.SET_POSITION_STATEMENT_WITH_INVALID_DATAREF, new String[] {expression.getCanonicalString()});
+									}
+								}
+							});
 						}else if (typeBinding.getKind() ==  ITypeBinding.FORM_BINDING) {
 							if (typeBinding.getAnnotation(EGLUITEXT, "PrintForm") != null) {
 								// print form - initial, initialAttributes, empty

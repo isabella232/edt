@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Member;

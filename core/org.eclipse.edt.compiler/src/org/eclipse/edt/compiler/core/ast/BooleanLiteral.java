@@ -14,8 +14,6 @@ package org.eclipse.edt.compiler.core.ast;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 
-import sun.security.action.GetBooleanAction;
-
 
 /**
  * BooleanLiteral AST node type.

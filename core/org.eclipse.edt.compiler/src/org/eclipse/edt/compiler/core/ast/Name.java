@@ -14,9 +14,6 @@ package org.eclipse.edt.compiler.core.ast;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 

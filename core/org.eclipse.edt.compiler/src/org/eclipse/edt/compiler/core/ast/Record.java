@@ -11,12 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -52,25 +50,6 @@ public class Record extends Part{
 	
 	public boolean isFlexible() {
 		
-		if(partSubTypeOpt != null && partSubTypeOpt.isSimpleName()) {
-			String subTypeName = partSubTypeOpt.getIdentifier();
-
-			if(subTypeName == InternUtil.intern("IndexedRecord") ||
-			   subTypeName == InternUtil.intern("SerialRecord") ||
-			   subTypeName == InternUtil.intern("RelativeRecord") ||
-			   subTypeName == InternUtil.intern("MQRecord") ||
-			   subTypeName == InternUtil.intern("VGUIRecord") ||
-			   subTypeName == InternUtil.intern("DLISegment")) {
-				return false;
-			}
-			
-			if(subTypeName == InternUtil.intern("PSBRecord") ||
-			   subTypeName == InternUtil.intern("CSVRecord") ||
-			   subTypeName == InternUtil.intern("Annotation")) {
-				return true;
-			}
-		}
-		
 		for(Iterator iter = getContents().iterator(); iter.hasNext();) {
 			Object nextContent = iter.next();
 			if(nextContent instanceof StructureItem) {
@@ -97,15 +76,6 @@ public class Record extends Part{
 		return new Record(new Boolean(isPrivate), (SimpleName)name.clone(), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 	
-	public boolean isGeneratable(){
-		if(hasSubType()){
-			String subTypeName = partSubTypeOpt.getIdentifier();
-			if(subTypeName == InternUtil.intern("VGUIRecord") || subTypeName == InternUtil.intern("consoleForm"))
-	            return true;
-		}
-		return false;
-	}
-
 	public String getPartTypeName() {
 		return IEGLConstants.KEYWORD_RECORD;
 	}

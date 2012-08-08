@@ -570,18 +570,9 @@ public interface ISystemLibrary {
 	public static final int HandleHardDLIErrors_var = 867;
 	public static final int dlivar_variables_upper_bounds = 867;
 
-	public static final int EGLTDLI_func = 868;
-	public static final int AIBTDLI_func = 869;
-	public static final int PSBData_var = 870;
-	public static final int PSBName_var = 871;
-	public static final int PSBRef_var = 872;
-
 	public static final int CopyBytes_func = 873;
 	public static final int CompareBytes_func = 874;
 	public static final int ConcatenateBytes_func = 875;
-
-	public static final int PSBData_PSBName_var = 876;
-	public static final int PSBData_PSBRef_var = 877;
 
 	public static final int KeyAreaHex_var = 878;
 

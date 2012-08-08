@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
@@ -50,8 +49,6 @@ public class FileASTScope extends FileScope {
     }
 
     public List<Type> findType(String simpleName) {
-        IPartBinding result = null;
-         
         // First check the single part imports from the AST
         if(importedTypeNames != null){
         	for (Iterator iter = importedTypeNames.iterator(); iter.hasNext();) {

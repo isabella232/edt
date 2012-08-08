@@ -13,15 +13,12 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
@@ -29,8 +26,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 
 
 /**

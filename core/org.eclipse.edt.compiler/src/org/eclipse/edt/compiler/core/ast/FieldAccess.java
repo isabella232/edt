@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 

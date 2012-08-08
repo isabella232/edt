@@ -250,16 +250,6 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 					targetType.getCaseSensitiveName(),
 					IEGLConstants.KEYWORD_MOVE.toUpperCase()});
 		}
-		else if(sourceType.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null &&
-				targetType.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null) {
-			problemRequestor.acceptProblem(
-				targetExpr,
-				IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-				new String[] {
-					"PSBRecord",
-					"PSBRecord",
-					IEGLConstants.KEYWORD_MOVE.toUpperCase()});
-		}
 		
 		IDataBinding targetDBinding = targetExpr.resolveDataBinding();
 		if(targetDBinding != null) {
@@ -342,19 +332,6 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 	
 	private void checkExpressionsForByName(Expression sourceExpr, Expression targetExpr, ITypeBinding sourceType, ITypeBinding targetType) {
 		if(!checkExpressionsForByNameOrByPosition(sourceExpr, targetExpr, sourceType, targetType)) {
-			return;
-		}
-		
-		if(sourceType.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null &&
-		   targetType.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null) {
-			problemRequestor.acceptProblem(
-				sourceExpr,
-				IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-				new String[] {
-					"PSBRecord",
-					"PSBRecord",
-					IEGLConstants.KEYWORD_MOVE.toUpperCase()
-				});
 			return;
 		}
 		

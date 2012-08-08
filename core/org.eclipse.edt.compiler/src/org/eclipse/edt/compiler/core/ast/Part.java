@@ -273,10 +273,6 @@ public abstract class Part extends Node {
 		return null;
 	}
 	
-	public boolean isGeneratable(){
-		return false;
-	}
-	
 	public abstract String getPartTypeName();
 	public abstract int getPartType();
 	
