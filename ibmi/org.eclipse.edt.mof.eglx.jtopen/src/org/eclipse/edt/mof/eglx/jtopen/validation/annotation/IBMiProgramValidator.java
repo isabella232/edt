@@ -250,7 +250,7 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 				function.getStatementBlock().getStatements().size() > 0) {
 			
 			for(Statement stmt : function.getStatementBlock().getStatements()) {
-				problemRequestor.acceptProblem((Element)stmt, IBMiResourceKeys.IBMIPROGRAM_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+				problemRequestor.acceptProblem(stmt, IBMiResourceKeys.IBMIPROGRAM_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 		}
 	}
