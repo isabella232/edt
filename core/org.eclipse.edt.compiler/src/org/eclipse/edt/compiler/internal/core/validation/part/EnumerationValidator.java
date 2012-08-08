@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -31,13 +32,11 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 public class EnumerationValidator extends AbstractASTVisitor {
 	
 	protected IProblemRequestor problemRequestor;
-	private ICompilerOptions compilerOptions;
 	private List<Integer> alreadySeenValues;
 	private boolean[] foundField = new boolean[1];
 	
-	public EnumerationValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public EnumerationValidator(IProblemRequestor problemRequestor, IRPartBinding irBinding, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
-		this.compilerOptions = compilerOptions;
 	}
 	
 	public boolean visit(Enumeration enumeration) {

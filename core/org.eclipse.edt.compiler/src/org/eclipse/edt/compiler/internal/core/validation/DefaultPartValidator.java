@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.validation.part.ClassValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.DelegateValidator;
+import org.eclipse.edt.compiler.internal.core.validation.part.EnumerationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.ExternalTypeValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.FunctionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.HandlerValidator;
@@ -74,7 +75,7 @@ public class DefaultPartValidator extends AbstractPartValidator {
 	};
 	
 	public boolean visit(Enumeration enumeration) {
-//		enumeration.accept(new EnumerationValidator(problemRequestor, irBinding, compilerOptions));
+		enumeration.accept(new EnumerationValidator(problemRequestor, irBinding, compilerOptions));
 		return false;
 	};
 	
