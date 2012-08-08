@@ -161,7 +161,7 @@ class Egl2MofMember extends Egl2MofPart {
 			EField f = mof.createEField(true);
 			setUpMofTypedElement(f, field);
 			setInitialValue(node, f);
-			setMetadata(field, f);
+//FIXME			setMetadata(field, f);
 			obj = f;
 		}
 		else {
@@ -188,7 +188,7 @@ class Egl2MofMember extends Egl2MofPart {
 				else {
 					s.setOccurs(Integer.decode(node.getOccurs()));
 				}
-				StructureItem parentBinding = ((StructureItem)field).getParentItem();
+				StructureItem parentBinding = null;//FIXME((StructureItem)field).getParent();
 				if (parentBinding != null) {
 					StructuredField parent = (StructuredField)getEObjectFor(parentBinding);
 					parent.addChild(s);
