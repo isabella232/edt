@@ -19,7 +19,6 @@ import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
@@ -38,15 +37,12 @@ import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.Container;
-import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Form;
-import org.eclipse.edt.mof.egl.FormField;
-import org.eclipse.edt.mof.egl.FormGroup;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -222,28 +218,6 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	}
 	
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.DataItem dataItem) {
-		DataItem part = factory.createDataItem();
-		part.setName(dataItem.getName().getCaseSensitiveIdentifier());
-		DataItem type = (DataItem)dataItem.getName().resolveType();
-		part.setBaseType((Type)mofTypeFor(type));
-		part.setPackageName(type.getCaseSensitivePackageName());
-		createAnnotations(type, part);
-		if (dataItem.isPrivate()) {
-			part.setAccessKind(AccessKind.ACC_PRIVATE);
-		}
-		stack.push(part);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.DataTable node) {
-		MofSerializable part = defaultHandleVisitPart(node);
-		stack.push(part);
-		return false;
-	}
-
-	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Delegate delegate) {
 		Delegate part = factory.createDelegate();
 		Delegate binding = (Delegate)delegate.getName().resolveType();
@@ -270,59 +244,6 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		if (delegate.isPrivate()) {
 			part.setAccessKind(AccessKind.ACC_PRIVATE);
 		}
-		stack.push(part);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.FormGroup formGroup) {
-		FormGroup group = factory.createFormGroup();
-		group.setName(formGroup.getName().getCaseSensitiveIdentifier());
-		FormGroup groupBinding = (FormGroup)formGroup.getName().resolveType();
-		group.setPackageName(groupBinding.getCaseSensitivePackageName());
-		if (formGroup.isPrivate()) {
-			group.setAccessKind(AccessKind.ACC_PRIVATE);
-		}
-		stack.push(group);
-		for (Node node : (List<Node>)formGroup.getContents()) {
-			//TODO handle USE statment for top level forms
-			if (node instanceof NestedForm) {
-				NestedForm form = (NestedForm) node;
-				form.accept(this);
-				Form eForm = (Form)stack.pop();
-				eForm.setContainer(group);
-				group.getForms().add(eForm);
-			}
-		}
-		createAnnotations(groupBinding, group);
-		setElementInformation(formGroup, group);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.NestedForm nestedForm) {
-		Form part = factory.createForm();
-		part.setName(nestedForm.getName().getCaseSensitiveIdentifier());
-		Form binding = (Form)nestedForm.getName().resolveType();
-		
-		if (nestedForm.isPrivate()) {
-			part.setAccessKind(AccessKind.ACC_PRIVATE);
-		}
-		stack.push(part);
-		for (Node field : (List<Node>)nestedForm.getContents()) {
-			field.accept(this);
-			FormField f = (FormField)stack.pop();
-			if (f != null)
-				part.addMember(f);
-		}
-		createAnnotations(binding, part);
-		setElementInformation(nestedForm, part);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.TopLevelForm topLevelForm) {
-		MofSerializable part = defaultHandleVisitPart(topLevelForm);
 		stack.push(part);
 		return false;
 	}
