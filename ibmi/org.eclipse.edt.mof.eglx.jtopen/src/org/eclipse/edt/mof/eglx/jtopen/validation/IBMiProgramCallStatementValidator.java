@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
@@ -73,15 +73,17 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 				else {
 				//Ensure that the returns type of the call is compatible with the function's return type
 					Expression callReturnsExpr = callStatement.getCallSynchronizationValues().getReturns().getExpression();
-					Type callReturnsType = callReturnsExpr.resolveType();
-//FIXME					TypeUtils.areCompatible(((Function)targFunction).getReturnType().getClassifier(), callReturnsType);
-//					if (!TypeCompatibilityUtil.isMoveCompatible(callReturnsType, ((Function)targFunction).getReturnType(), null, compilerOptions)) {
-//						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IIbmiProblemRequestor.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {((Function)targFunction).getReturnType().getTypeSignature(), ((Function)targFunction).getCaseSensitiveName(), callReturnsType.getTypeSignature(), callReturnsExpr.getCanonicalString()});
-//					}
+					Member callReturnsMember = callReturnsExpr.resolveMember();
+					if (!TypeUtils.areCompatible(((Function)targFunction).getReturnType().getClassifier(), callReturnsMember)){
+						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), 
+														IBMiResourceKeys.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, 
+														IMarker.SEVERITY_ERROR, 
+														new String[] {((Function)targFunction).getReturnType().getTypeSignature(), ((Function)targFunction).getCaseSensitiveName(), callReturnsMember.getType().getTypeSignature(), callReturnsExpr.getCanonicalString()},
+														IBMiResourceKeys.getResourceBundleForKeys());
+					}
 				}
 			}
 			//validate callback/error routine 
-			//TODO for now, callback/exception functions are not supported
 			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
 				problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IBMiResourceKeys.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
