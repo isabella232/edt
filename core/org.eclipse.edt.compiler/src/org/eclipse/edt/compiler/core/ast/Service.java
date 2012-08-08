@@ -76,8 +76,4 @@ public class Service extends Part {
 	public List getServiceReferences() {
 		return Collections.EMPTY_LIST;
 	}
-	
-	public boolean isGeneratable() {
-		return true;
-	}
 }

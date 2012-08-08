@@ -41,7 +41,6 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MoveStatement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
-import org.eclipse.edt.mof.egl.PrintStatement;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.SetStatement;
 import org.eclipse.edt.mof.egl.SetValuesStatement;
@@ -605,17 +604,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		Statement stmt = generator.genPrepareStatement(prepareStatement, eObjects);
 		setElementInformation(prepareStatement, stmt);
 		stack.push(stmt);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.PrintStatement printStatement) {
-		// TODO just creating a stmt stub for now
-
-		PrintStatement stmt = factory.createPrintStatement();
-		stack.push(stmt);
-		setElementInformation(printStatement, stmt);
-		
 		return false;
 	}
 

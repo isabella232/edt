@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.dli.DLIInfo;
 import org.eclipse.edt.compiler.internal.sql.SQLInfo;
 
 
@@ -23,11 +22,10 @@ import org.eclipse.edt.compiler.internal.sql.SQLInfo;
  * @author Albert Ho
  * @author David Murray
  */
-public class AddStatement extends Statement implements IDliIOStatement{
+public class AddStatement extends Statement {
 
 	private List expr_plus;	// List of Expressions
 	private List addOptions;	// List of Nodes
-	private DLIInfo dliInfo;
 	private SQLInfo sqlInfo;
 
 	public AddStatement(List expr_plus, List addOptions, int startOffset, int endOffset) {
@@ -65,12 +63,6 @@ public class AddStatement extends Statement implements IDliIOStatement{
 	protected Object clone() throws CloneNotSupportedException {
 		return new AddStatement(cloneList(expr_plus), cloneList(addOptions), getOffset(), getOffset() + getLength());
 	}
-    public DLIInfo getDliInfo() {
-        return dliInfo;
-    }
-    public void setDliInfo(DLIInfo dliInfo) {
-        this.dliInfo = dliInfo;
-    }
     public SQLInfo getSqlInfo() {
         return sqlInfo;
     }

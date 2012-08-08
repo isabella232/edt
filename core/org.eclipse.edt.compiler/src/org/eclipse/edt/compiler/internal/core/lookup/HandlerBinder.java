@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 
 import org.eclipse.edt.compiler.binding.HandlerBindingCompletor;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
-import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;

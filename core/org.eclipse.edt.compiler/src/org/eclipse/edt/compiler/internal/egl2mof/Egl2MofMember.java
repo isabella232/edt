@@ -196,8 +196,6 @@ class Egl2MofMember extends Egl2MofPart {
 		return false;
 	}
 	
-	
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NestedFunction node) {

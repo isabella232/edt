@@ -42,10 +42,8 @@ public abstract class EGLEnumeration {
     public static final String SELECTTYPEKIND_STRING = "SelectTypeKind";
     public static final String SIGNKIND_STRING = "SignKind";
     public static final String LINEWRAPKIND_STRING = "LineWrapKind";
-    public static final String DLICALLINTERFACEKIND_STRING = "DLICallInterfaceKind";
     public static final String UITypeKind_STRING = "UITypeKind";
     public static final String COMMTYPEKIND_STRING = "CommTypeKind";
-    public static final String PCBKIND_STRING = "PCBKind";
     public static final String WINDOWATTRIBUTEKIND_STRING = "WindowAttributeKind";
 
     private static EGLEnumeration[] enumerations = null;
@@ -71,10 +69,8 @@ public abstract class EGLEnumeration {
     	enumerations[16] = EGLSelectTypeKindEnumeration.getInstance();
     	enumerations[17] = EGLSignKindEnumeration.getInstance();
     	enumerations[18] = EGLLineWrapKindEnumeration.getInstance();
-    	enumerations[19] = EGLDLICallInterfaceKindEnumeration.getInstance();
     	enumerations[20] = EGLUITypeKindEnumeration.getInstance();
     	enumerations[21] = EGLCommTypeKindEnumeration.getInstance();
-    	enumerations[22] = EGLPCBKindEnumeration.getInstance();    	
     	enumerations[23] = EGLWindowAttributeKindEnumeration.getInstance();
     	enumerations[24] = EGLEncodingKindEnumeration.getInstance();
     }

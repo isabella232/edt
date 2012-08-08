@@ -115,15 +115,6 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 					rhsBinding = PrimitiveTypeBinding.getInstance(Primitive.INT);
 			}
 
-		if (StatementValidator.isValidBinding(lhsBinding) && lhsBinding.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null &&
-			StatementValidator.isValidBinding(rhsBinding) && rhsBinding.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null	){
-			problemRequestor.acceptProblem(lhs,
-					IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-					new String[] {IEGLConstants.RECORD_SUBTYPE_PSB_RECORD,IEGLConstants.RECORD_SUBTYPE_PSB_RECORD,
-					lhs.getCanonicalString() + " = " + rhs.getCanonicalString()});
-			return false;
-		}
-		
 		if (StatementValidator.isValidBinding(rhsBinding) && 
 			(rhsBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING || rhsBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING)){
 			boolean isError = !StatementValidator.isValidBinding(lhsBinding) ;

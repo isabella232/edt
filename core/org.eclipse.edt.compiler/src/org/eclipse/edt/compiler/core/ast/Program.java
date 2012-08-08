@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -86,10 +85,6 @@ public class Program extends Part{
 		return new Program(new Boolean(isPrivate), (SimpleName)name.clone(), newPartSubTypeOpt, parmsOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 	
-	public boolean isGeneratable(){
-		return true;
-	}
-
 	public String getPartTypeName() {
 		return  IEGLConstants.KEYWORD_PROGRAM;
 	}

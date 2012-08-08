@@ -12,7 +12,6 @@
 package org.eclipse.edt.compiler.core.ast;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -61,10 +60,6 @@ public class Library extends Part {
 		return new Library(new Boolean(isPrivate), (SimpleName)name.clone(), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 	
-	public boolean isGeneratable(){
-		return true;
-	}
-
 	public String getPartTypeName() {
 		return  IEGLConstants.KEYWORD_LIBRARY;
 	}

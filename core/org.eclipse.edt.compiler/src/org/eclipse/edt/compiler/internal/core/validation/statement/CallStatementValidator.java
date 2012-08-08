@@ -75,28 +75,6 @@ import org.eclipse.edt.compiler.internal.core.validation.ProgramParameterValidat
 				}
 			}
 			
-			callStatement.accept(new AbstractASTExpressionVisitor(){
-			    public boolean visit(ParenthesizedExpression parenthesizedExpression) {
-			        return true;
-			    }
-			    
-			    public boolean visit(QualifiedName qualifiedName) {
-			        return false;
-			    }
-			    
-				public boolean visitExpression(Expression expression) {
-					ITypeBinding type = expression.resolveTypeBinding();
-					if (StatementValidator.isValidBinding(type) && (type.getKind() == ITypeBinding.FIXED_RECORD_BINDING || type.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING)){
-						if (type.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null){
-							problemRequestor.acceptProblem(expression,
-									IProblemRequestor.DLI_PSBRECORD_NOT_VALID_AS_ARGUMENT,
-									new String[]{expression.getCanonicalString()});						
-						}
-					}
-				    return true;
-				}
-			});
-						
 //			//check num of arguments
 //			if (callStatement.hasArguments() && callStatement.getArguments().size() > 30){
 //				problemRequestor.acceptProblem((Node)callStatement.getArguments().get(30),

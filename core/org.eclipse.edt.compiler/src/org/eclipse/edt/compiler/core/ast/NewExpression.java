@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.egl.Constructor;
 

@@ -12,8 +12,6 @@
 package org.eclipse.edt.compiler.core.ast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * MoveStatement AST node type.

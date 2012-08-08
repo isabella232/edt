@@ -86,7 +86,7 @@ public class DefaultTypeValidator implements TypeValidator {
 		}
 	}
 	
-	private static class DateTimePattern {
+	public static class DateTimePattern {
 		private String[] components;
 		private boolean isValidPattern;
 		private Set<Integer> errorMessageNumbers;

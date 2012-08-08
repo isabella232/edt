@@ -52,18 +52,6 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 				boolean visitingWhenClause = false;
 				
 				public boolean visit(CaseStatement caseStatement) {
-					if(caseStatement.hasCriterion()) {
-						ITypeBinding criterionType = caseStatement.getCriterion().resolveTypeBinding();
-						if(StatementValidator.isValidBinding(criterionType)) {
-							if(criterionType.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null) {
-								problemRequestor.acceptProblem(
-									caseStatement.getCriterion(),
-									IProblemRequestor.DLI_PSBRECORD_NOT_VALID_AS_STATEMENT_OPERAND,
-									new String[] {IEGLConstants.KEYWORD_CASE});
-							}
-						}
-					}
-					
 					return true;
 				}
 				public boolean visit(WhenClause whenClause) {
@@ -115,12 +103,6 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 										StatementValidator.isValidBinding(caseStatement.getCriterion().resolveTypeBinding()) &&
 										StatementValidator.isValidBinding(expr.resolveTypeBinding())){
 										boolean compatible = TypeCompatibilityUtil.isMoveCompatible(caseStatement.getCriterion().resolveTypeBinding(), binding, expr, compilerOptions);
-										if(compatible) {
-											if(caseStatement.getCriterion().resolveTypeBinding().getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null &&
-											   binding.getAnnotation(new String[] {"egl", "io", "dli"}, "PSBRecord") != null) {
-												compatible = false;
-											}
-										}
 										
 										if(!compatible) {
 											problemRequestor.acceptProblem(

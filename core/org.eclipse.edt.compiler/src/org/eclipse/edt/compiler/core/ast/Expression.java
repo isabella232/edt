@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.Map;
 
-import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Member;
 
 
