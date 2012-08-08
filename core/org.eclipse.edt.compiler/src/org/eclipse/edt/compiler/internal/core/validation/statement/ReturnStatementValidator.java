@@ -12,10 +12,7 @@
 	package org.eclipse.edt.compiler.internal.core.validation.statement;
 	
 	import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
-import org.eclipse.edt.compiler.binding.NilBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -28,7 +25,8 @@ import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Type;
 
 	
 	/**
@@ -46,10 +44,10 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 		
 		public boolean visit(final ReturnStatement returnStatement) {
 			Node current = returnStatement.getParent();
-			final IFunctionBinding[] fBinding = new IFunctionBinding[1];
+			final Function[] fBinding = new Function[1];
 			ParentASTVisitor visitor = new ParentASTVisitor(){
 				public boolean visit(NestedFunction nFunction) {
-					fBinding[0] = (IFunctionBinding) ((NestedFunctionBinding) nFunction.getName().resolveBinding()).getType();
+					fBinding[0] = (Function)nFunction.getName().resolveMember();
 					if(fBinding[0] != null) {
 						binding = fBinding[0].getReturnType();
 					}
@@ -60,7 +58,7 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 				
 				public boolean visit(TopLevelFunction tlFunction) {
 					bcontinue = false;
-					fBinding[0] = (IFunctionBinding) tlFunction.getName().resolveBinding();
+					fBinding[0] = (Function) tlFunction.getName().resolveMember();
 					if(fBinding[0] != null) {
 						binding = fBinding[0].getReturnType();
 					}
@@ -134,7 +132,7 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 		
 		
 		private class ParentASTVisitor extends AbstractASTVisitor{
-			ITypeBinding binding = null;
+			Type binding = null;
 			boolean bcontinue = true;
 			public ParentASTVisitor (){
 			}
@@ -143,7 +141,7 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 				return binding != null;
 			}
 
-			public ITypeBinding getBinding(){
+			public Type getBinding(){
 				return binding;
 			}
 			public boolean canContinue(){

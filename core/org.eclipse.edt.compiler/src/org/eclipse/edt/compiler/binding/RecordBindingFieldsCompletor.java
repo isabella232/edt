@@ -158,6 +158,7 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
         field.setName(fieldName);
         field.setContainer(recordBinding);
         field.setType(type);
+        field.setIsNullable(structureItem.isNullable());
         
         if (!structureItem.isFiller()) {
             structureItem.getName().setMember(field);

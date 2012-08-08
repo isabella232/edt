@@ -230,10 +230,10 @@ public class BindingUtil {
         	part = createExternalType(pkgName, name);
         	return createPartBinding(part);
         case ITypeBinding.FIXED_RECORD_BINDING:
-        	part = createRecord(pkgName, name);
+        	part = createStructuredRecord(pkgName, name);
         	return createPartBinding(part);
         case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-        	part = createStructuredRecord(pkgName, name);
+        	part = createRecord(pkgName, name);
         	return createPartBinding(part);
         case ITypeBinding.FORM_BINDING:
         	part = createForm(pkgName, name);

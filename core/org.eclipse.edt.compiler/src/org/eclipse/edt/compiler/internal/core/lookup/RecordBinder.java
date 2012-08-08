@@ -28,6 +28,7 @@ public class RecordBinder extends DefaultBinder {
 
     public RecordBinder(IRPartBinding irBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(scope, irBinding.getIrPart(), dependencyRequestor, problemRequestor, compilerOptions);
+    	this.irBinding = irBinding;
         this.recordBinding = (org.eclipse.edt.mof.egl.Record)irBinding.getIrPart();
         this.scope = scope;
     }

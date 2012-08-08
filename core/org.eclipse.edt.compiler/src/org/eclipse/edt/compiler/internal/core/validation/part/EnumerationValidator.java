@@ -14,8 +14,6 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -24,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
 
 
 /**
@@ -66,10 +65,10 @@ public class EnumerationValidator extends AbstractASTVisitor {
 		if (!validateValue(enumerationField)) {
 			return false;
 		}
-		if (Binding.isValidBinding(enumerationField.getName().resolveDataBinding())) {
-			EnumerationDataBinding enumBinding = (EnumerationDataBinding) enumerationField.getName().resolveDataBinding();
-			Integer value = new Integer(enumBinding.geConstantValue());
-			if (alreadySeenValues.contains(new Integer(enumBinding.geConstantValue()))) {
+		if (enumerationField.getName().resolveMember() != null) {
+			EnumerationEntry enumBinding = (EnumerationEntry)enumerationField.getName().resolveMember();
+			Integer value = new Integer(enumBinding.getValue());
+			if (alreadySeenValues.contains(new Integer(enumBinding.getValue()))) {
 				Node node = enumerationField.getName();
 				if (enumerationField.hasConstantValue()) {
 					node = enumerationField.getConstantValue();
@@ -79,7 +78,7 @@ public class EnumerationValidator extends AbstractASTVisitor {
 						IProblemRequestor.ENUMERATION_CONSTANT_DUPLICATE,
 						new String[] {
 							value.toString(),
-							enumBinding.getDeclaringPart().getCaseSensitiveName()
+							((org.eclipse.edt.mof.egl.Enumeration)enumBinding.getContainer()).getCaseSensitiveName()
 						}
 				);
 			}

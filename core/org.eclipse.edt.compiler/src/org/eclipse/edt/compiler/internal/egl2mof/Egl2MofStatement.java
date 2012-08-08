@@ -848,26 +848,4 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			return generator[0];
 		}
 	}
-	
-	private boolean isDliStatement(org.eclipse.edt.compiler.core.ast.Statement stmt) {
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.AddStatement) return ((org.eclipse.edt.compiler.core.ast.AddStatement)stmt).getDliInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.DeleteStatement) return ((org.eclipse.edt.compiler.core.ast.DeleteStatement)stmt).getDliInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.GetByKeyStatement) return ((org.eclipse.edt.compiler.core.ast.GetByKeyStatement)stmt).getDliInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.GetByPositionStatement) return ((org.eclipse.edt.compiler.core.ast.GetByPositionStatement)stmt).getDliInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.ReplaceStatement) return ((org.eclipse.edt.compiler.core.ast.ReplaceStatement)stmt).getDliInfo() != null;
-		return false;
-	}
-
-	private boolean isSqlStatement(org.eclipse.edt.compiler.core.ast.Statement stmt) {
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.AddStatement) return ((org.eclipse.edt.compiler.core.ast.AddStatement)stmt).getSqlInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.DeleteStatement) return ((org.eclipse.edt.compiler.core.ast.DeleteStatement)stmt).getSqlInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.ExecuteStatement) return true;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.ForEachStatement) return true;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.GetByKeyStatement) return ((org.eclipse.edt.compiler.core.ast.GetByKeyStatement)stmt).getSqlInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.GetByPositionStatement) return !isDliStatement(stmt);
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.OpenStatement) return ((org.eclipse.edt.compiler.core.ast.OpenStatement)stmt).getSqlInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.ReplaceStatement) return ((org.eclipse.edt.compiler.core.ast.ReplaceStatement)stmt).getSqlInfo() != null;
-		return false;
-	}
-
 }
