@@ -30,7 +30,6 @@ import org.eclipse.edt.mof.egl.ExitStatement;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ForStatement;
-import org.eclipse.edt.mof.egl.ForwardStatement;
 import org.eclipse.edt.mof.egl.FreeSqlStatement;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.GoToStatement;
@@ -40,7 +39,6 @@ import org.eclipse.edt.mof.egl.LabelStatement;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MoveStatement;
-import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
 import org.eclipse.edt.mof.egl.PrintStatement;
@@ -50,7 +48,6 @@ import org.eclipse.edt.mof.egl.SetValuesStatement;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.ThrowStatement;
-import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.WhileStatement;
@@ -341,29 +338,11 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ConverseStatement converseStatement) {
-		IOStatementGenerator generator = getGeneratorFor(converseStatement);
-		Statement stmt = generator.genConverseStatement(converseStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(converseStatement, stmt);
-		return false;
-	}
-
-	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.DeleteStatement deleteStatement) {
 		IOStatementGenerator generator = getGeneratorFor(deleteStatement);
 		Statement stmt = generator.genDeleteStatement(deleteStatement, eObjects);
 		stack.push(stmt);
 		setElementInformation(deleteStatement, stmt);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.DisplayStatement displayStatement) {
-		IOStatementGenerator generator = getGeneratorFor(displayStatement);
-		Statement stmt = generator.genDisplayStatement(displayStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(displayStatement, stmt);
 		return false;
 	}
 
@@ -482,25 +461,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		setElementInformation(forStatement, block);
 		return false;
 
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ForwardStatement forwardStatement) {
-		ForwardStatement stmt = factory.createForwardStatement();
-		if (forwardStatement.hasForwardTarget()) {
-			forwardStatement.getForwardTarget().accept(this);
-			stmt.setForwardToTarget((Expression)stack.pop());
-		}
-		for (Node node : (List<Node>)forwardStatement.getForwardOptions()) {
-			// TODO: Handle forward options
-		}
-		for (Node node : (List<Node>)forwardStatement.getArguments()) {
-			node.accept(this);
-			stmt.getArguments().add((Expression)stack.pop());
-		}
-		stack.push(stmt);
-		setElementInformation(forwardStatement, stmt);
-		return false;
 	}
 
 	@Override
@@ -640,17 +600,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.OpenUIStatement openUIStatement) {
-		// TODO just creating a stmt stub for now
-		
-		OpenUIStatement stmt = factory.createOpenUIStatement();		
-		
-		stack.push(stmt);
-		setElementInformation(openUIStatement, stmt);
-		return false;
-	}
-
-	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.PrepareStatement prepareStatement) {
 		IOStatementGenerator generator = getGeneratorFor(prepareStatement);
 		Statement stmt = generator.genPrepareStatement(prepareStatement, eObjects);
@@ -695,40 +644,12 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ShowStatement showStatement) {
-		IOStatementGenerator generator = getGeneratorFor(showStatement);
-		Statement stmt = generator.genShowStatement(showStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(showStatement, stmt);
-		return false;
-	}
-
-	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ThrowStatement throwStatement) {
 		ThrowStatement stmt = factory.createThrowStatement();
 		throwStatement.getExpression().accept(this);
 		stmt.setException((Expression)stack.pop());
 		stack.push(stmt);
 		setElementInformation(throwStatement, stmt);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.TransferStatement transferStatement) {
-		TransferStatement stmt = factory.createTransferStatement();
-		stack.push(stmt);
-		setElementInformation(transferStatement, stmt);
-		transferStatement.getInvocationTarget().accept(this);
-		stmt.setInvocationTarget((Expression)stack.pop());
-		if (transferStatement.getPassingRecord() != null) {
-			transferStatement.getPassingRecord().accept(this);
-			stmt.setPassingRecord((Expression)stack.pop());
-		}
-		int targetType = transferStatement.isToProgram() ? TransferStatement.TARGET_TYPE_PROGRAM : TransferStatement.TARGET_TYPE_TRANSACTION;
-		stmt.setTargetType(targetType);
-		stack.push(stmt);
-		if (transferStatement.hasSettingsBlock())
-			processSettings(stmt, transferStatement.getSettingsBlock());
 		return false;
 	}
 

@@ -34,9 +34,7 @@ import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.BytesLiteral;
-import org.eclipse.edt.mof.egl.CharLiteral;
 import org.eclipse.edt.mof.egl.ConstructorInvocation;
-import org.eclipse.edt.mof.egl.DBCharLiteral;
 import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
@@ -58,7 +56,6 @@ import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
 import org.eclipse.edt.mof.egl.FunctionStatement;
-import org.eclipse.edt.mof.egl.HexLiteral;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.InvocationExpression;
@@ -67,7 +64,6 @@ import org.eclipse.edt.mof.egl.IsNotExpression;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
-import org.eclipse.edt.mof.egl.MBCharLiteral;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -256,36 +252,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.BytesLiteral literal) {
 		BytesLiteral lit = factory.createBytesLiteral();
 		lit.setValue(literal.getValue());
-		setElementInformation(literal, lit);
-		stack.push(lit);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.CharLiteral literal) {
-		CharLiteral lit = factory.createCharLiteral();
-		lit.setValue(literal.getValue());
-		lit.setIsHex(literal.isHex());
-		setElementInformation(literal, lit);
-		stack.push(lit);
-		return false;
-	}
-	
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.DBCharLiteral literal) {
-		DBCharLiteral lit = factory.createDBCharLiteral();
-		lit.setValue(literal.getValue());
-		lit.setIsHex(literal.isHex());
-		setElementInformation(literal, lit);
-		stack.push(lit);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.MBCharLiteral literal) {
-		MBCharLiteral lit = factory.createMBCharLiteral();
-		lit.setValue(literal.getValue());
-		lit.setIsHex(literal.isHex());
 		setElementInformation(literal, lit);
 		stack.push(lit);
 		return false;
@@ -558,15 +524,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return false;
 	}
 	
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.HexLiteral hexLiteral) {
-		HexLiteral lit = factory.createHexLiteral();
-		lit.setValue(hexLiteral.getValue());
-		setElementInformation(hexLiteral, lit);
-		stack.push(lit);
-		return false;
-	}
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.InExpression inExpression) {

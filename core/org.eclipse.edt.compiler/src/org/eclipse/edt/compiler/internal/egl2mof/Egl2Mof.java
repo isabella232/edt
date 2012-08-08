@@ -12,7 +12,6 @@
 package org.eclipse.edt.compiler.internal.egl2mof;
 
 import org.eclipse.edt.compiler.Context;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;

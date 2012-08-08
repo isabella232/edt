@@ -14,15 +14,12 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.Context;
-import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AddStatement;
 import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
-import org.eclipse.edt.mof.egl.ConverseStatement;
 import org.eclipse.edt.mof.egl.DeleteStatement;
-import org.eclipse.edt.mof.egl.DisplayStatement;
 import org.eclipse.edt.mof.egl.ExecuteStatement;
 import org.eclipse.edt.mof.egl.ForEachStatement;
 import org.eclipse.edt.mof.egl.FunctionMember;
@@ -34,7 +31,6 @@ import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.OpenStatement;
 import org.eclipse.edt.mof.egl.PrepareStatement;
 import org.eclipse.edt.mof.egl.ReplaceStatement;
-import org.eclipse.edt.mof.egl.ShowStatement;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
@@ -73,15 +69,6 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	}
 
 
-	@Override
-	public ConverseStatement genConverseStatement(org.eclipse.edt.compiler.core.ast.ConverseStatement stmt,
-			Map<Object, EObject> bindingToElementMap) {
-		eObjects = bindingToElementMap;
-		stmt.accept(this);
-		return (ConverseStatement)stack.pop();
-
-	}
-	
 	@Override
 	public DeleteStatement genDeleteStatement(
 			org.eclipse.edt.compiler.core.ast.DeleteStatement stmt,
@@ -153,33 +140,6 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 		stmt.accept(this);
 		return (ReplaceStatement)stack.pop();
 	}
-
-	@Override
-	public OpenUIStatement genOpenUIStatement(org.eclipse.edt.compiler.core.ast.OpenUIStatement stmt,
-			Map<Object, EObject> bindingToElementMap) {
-		eObjects = bindingToElementMap;
-		stmt.accept(this);
-		return (OpenUIStatement)stack.pop();
-
-	}
-
-	@Override
-	public ShowStatement genShowStatement(org.eclipse.edt.compiler.core.ast.ShowStatement stmt,
-			Map<Object, EObject> bindingToElementMap) {
-		eObjects = bindingToElementMap;
-		stmt.accept(this);
-		return (ShowStatement)stack.pop();
-	}
-
-	@Override
-	public DisplayStatement genDisplayStatement(
-			org.eclipse.edt.compiler.core.ast.DisplayStatement stmt,
-			Map<Object, EObject> bindingToElementMap) {
-		eObjects = bindingToElementMap;
-		stmt.accept(this);
-		return (DisplayStatement)stack.pop();
-	}
-	
 
 	public boolean visit(IOStatement stmt) {
 		System.out.println("Unhandled IOStatement type: " + stmt.getClass().getName());

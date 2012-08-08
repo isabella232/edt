@@ -15,15 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.Context;
-import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AddStatement;
 import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
-import org.eclipse.edt.mof.egl.ConverseStatement;
 import org.eclipse.edt.mof.egl.DeleteStatement;
-import org.eclipse.edt.mof.egl.DisplayStatement;
 import org.eclipse.edt.mof.egl.ExecuteStatement;
 import org.eclipse.edt.mof.egl.ForEachStatement;
 import org.eclipse.edt.mof.egl.FunctionMember;
@@ -32,7 +29,6 @@ import org.eclipse.edt.mof.egl.GetByPositionStatement;
 import org.eclipse.edt.mof.egl.OpenStatement;
 import org.eclipse.edt.mof.egl.PrepareStatement;
 import org.eclipse.edt.mof.egl.ReplaceStatement;
-import org.eclipse.edt.mof.egl.ShowStatement;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
@@ -45,18 +41,14 @@ public interface IOStatementGenerator {
 	CallStatement genCallStatement(org.eclipse.edt.compiler.core.ast.CallStatement stmt, Map<Object, EObject> bindingToElementMap );
 	AddStatement genAddStatement(org.eclipse.edt.compiler.core.ast.AddStatement stmt, Map<Object, EObject> bindingToElementMap );
 	CloseStatement genCloseStatement(org.eclipse.edt.compiler.core.ast.CloseStatement stmt, Map<Object, EObject> bindingToElementMap );
-	ConverseStatement genConverseStatement(org.eclipse.edt.compiler.core.ast.ConverseStatement stmt, Map<Object, EObject> bindingToElementMap );
 	DeleteStatement genDeleteStatement(org.eclipse.edt.compiler.core.ast.DeleteStatement stmt, Map<Object, EObject> bindingToElementMap );
-	DisplayStatement genDisplayStatement(org.eclipse.edt.compiler.core.ast.DisplayStatement stmt, Map<Object, EObject> bindingToElementMap );
 	ExecuteStatement genExecuteStatement(org.eclipse.edt.compiler.core.ast.ExecuteStatement stmt, Map<Object, EObject> bindingToElementMap );
 	ForEachStatement genForEachStatement(org.eclipse.edt.compiler.core.ast.ForEachStatement stmt, Map<Object, EObject> bindingToElementMap );
 	GetByKeyStatement genGetByKeyStatement(org.eclipse.edt.compiler.core.ast.GetByKeyStatement stmt, Map<Object, EObject> bindingToElementMap );
 	GetByPositionStatement genGetByPositionStatement(org.eclipse.edt.compiler.core.ast.GetByPositionStatement stmt, Map<Object, EObject> bindingToElementMap );
 	OpenStatement genOpenStatement(org.eclipse.edt.compiler.core.ast.OpenStatement stmt, Map<Object, EObject> bindingToElementMap );
-	OpenUIStatement genOpenUIStatement(org.eclipse.edt.compiler.core.ast.OpenUIStatement stmt, Map<Object, EObject> bindingToElementMap );
 	PrepareStatement genPrepareStatement(org.eclipse.edt.compiler.core.ast.PrepareStatement stmt, Map<Object, EObject> bindingToElementMap );
 	ReplaceStatement genReplaceStatement(org.eclipse.edt.compiler.core.ast.ReplaceStatement stmt, Map<Object, EObject> bindingToElementMap );
-	ShowStatement genShowStatement(org.eclipse.edt.compiler.core.ast.ShowStatement stmt, Map<Object, EObject> bindingToElementMap );
 	void setCurrentPart(MofSerializable currentPart);
 	void setCurrentFunction(FunctionMember currentFunc);
 }

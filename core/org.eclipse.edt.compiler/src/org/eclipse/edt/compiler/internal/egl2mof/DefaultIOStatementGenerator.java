@@ -19,10 +19,8 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.AddStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
-import org.eclipse.edt.mof.egl.ConverseStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.DeleteStatement;
-import org.eclipse.edt.mof.egl.DisplayStatement;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ForEachStatement;
@@ -30,7 +28,6 @@ import org.eclipse.edt.mof.egl.GetByKeyStatement;
 import org.eclipse.edt.mof.egl.GetByPositionStatement;
 import org.eclipse.edt.mof.egl.OpenStatement;
 import org.eclipse.edt.mof.egl.ReplaceStatement;
-import org.eclipse.edt.mof.egl.ShowStatement;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
@@ -72,26 +69,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 	}
 
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ConverseStatement node) {
-		ConverseStatement stmt = (ConverseStatement)getStatementEClass(node).newInstance();;
-		node.getTarget().accept(this);
-		stmt.getTargets().add((Expression)stack.pop());
-		stack.push(stmt);
-		return false;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public boolean visit(org.eclipse.edt.compiler.core.ast.DisplayStatement node) {
-		DisplayStatement stmt = (DisplayStatement)getStatementEClass(node).newInstance();;
-		node.getExpr().accept(this);
-		stmt.getTargets().add((Expression)stack.pop());
-		stack.push(stmt);
-		return false;
-	}
-	
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean visit(org.eclipse.edt.compiler.core.ast.DeleteStatement node) {
@@ -266,34 +243,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		return false;
 	}
 	
-	@Override
-	@SuppressWarnings("unchecked")
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ShowStatement node) {
-		final ShowStatement stmt = (ShowStatement)getStatementEClass(node).newInstance();
-		for (Node ioObj : (List<Node>)node.getIOObjects()) {
-			ioObj.accept(this);
-			stmt.getTargets().add((Expression)stack.pop());
-		}
-		node.accept(new AbstractASTExpressionVisitor() {
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ReturningToInvocationTargetClause clause) {
-				clause.getExpression().accept(generator);
-				stmt.setReturnTo((Expression)stack.pop());
-				return false;
-			}
-			
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ReturningToNameClause clause) {
-				clause.getName().accept(generator);
-				stmt.setReturnTo((Expression)stack.pop());
-				return false;
-			}
-
-		});
-
-		stack.push(stmt);
-		return false;
-	}
-
-
 	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.AddStatement stmt) {
 		return factory.getAddStatementEClass();
 	}
@@ -302,16 +251,8 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		return factory.getCloseStatementEClass();
 	}
 
-	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.ConverseStatement stmt) {
-		return factory.getConverseStatementEClass();
-	}
-
 	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.DeleteStatement stmt) {
 		return factory.getDeleteStatementEClass();
-	}
-
-	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.DisplayStatement stmt) {
-		return factory.getDisplayStatementEClass();
 	}
 
 	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.ExecuteStatement stmt) {
@@ -334,24 +275,12 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		return factory.getOpenStatementEClass();
 	}
 
-	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.OpenUIStatement stmt) {
-		return factory.getOpenUIStatementEClass();
-	}
-
 	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.PrepareStatement stmt) {
 		return factory.getPrepareStatementEClass();
 	}
 
-	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.PrintStatement stmt) {
-		return factory.getPrintStatementEClass();
-	}
-
 	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.ReplaceStatement stmt) {
 		return factory.getReplaceStatementEClass();
-	}
-
-	public EClass getStatementEClass(org.eclipse.edt.compiler.core.ast.ShowStatement stmt) {
-		return factory.getShowStatementEClass();
 	}
 
 

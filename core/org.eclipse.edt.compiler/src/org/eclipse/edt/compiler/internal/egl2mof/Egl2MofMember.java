@@ -14,9 +14,6 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
@@ -49,7 +46,6 @@ import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstantField;
-import org.eclipse.edt.mof.egl.ConstantFormField;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.DynamicAccess;
 import org.eclipse.edt.mof.egl.Element;
@@ -67,7 +63,6 @@ import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
-import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
@@ -77,9 +72,7 @@ import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.TypedElement;
-import org.eclipse.edt.mof.egl.VariableFormField;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
@@ -204,44 +197,6 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 	
 	
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ConstantFormField node) {
-		ConstantFormField binding = (ConstantFormField)node.resolveBinding();
-		// Do not create members that have invalid types!
-		if (binding == null) {
-			stack.push(null);
-			return false;
-		}
-		ConstantFormField field = factory.createConstantFormField();		
-		field.setOccurs(binding.getOccurs() == 0 ? 1 : binding.getOccurs());
-		createAnnotations(binding, field);
-		createElementAnnotations(binding, field);
-		setElementInformation(node, field);
-		stack.push(field);
-		return false;
-	}
-
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.VariableFormField node) {
-		Member binding = node.getName().resolveMember();
-		// Do not create members that have invalid types!
-		if (binding == null) {
-			stack.push(null);
-			return false;
-		}
-		VariableFormField field = factory.createVariableFormField();
-		field.setOccurs(binding.getOccurs() == 0 ? 1 : binding.getOccurs());
-		setUpEglTypedElement(field, binding);
-		createAnnotations(binding, field);
-		createElementAnnotations(binding, field);
-		eObjects.put(binding, field);
-		stack.push(field);
-		setElementInformation(node, field);
-		return false;
-	}
-
 
 	@Override
 	@SuppressWarnings("unchecked")
