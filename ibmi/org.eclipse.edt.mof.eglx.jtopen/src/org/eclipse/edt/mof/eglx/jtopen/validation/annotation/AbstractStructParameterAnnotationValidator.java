@@ -15,12 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -41,11 +43,11 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 	
 	protected void validateTypeIsSupported(Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
 		if (targetBinding != null && targetBinding.isNullable()) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, new String[] {getName(), targetBinding.getCaseSensitiveName() + "?"});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), targetBinding.getCaseSensitiveName() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 		
 		if (!isValidType(targetBinding.getType())) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_ANNOTATION_TYPE_MISMATCH, new String[] {getName(), targetBinding.getCaseSensitiveName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_TYPE_MISMATCH, IMarker.SEVERITY_ERROR, new String[] {getName(), targetBinding.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	

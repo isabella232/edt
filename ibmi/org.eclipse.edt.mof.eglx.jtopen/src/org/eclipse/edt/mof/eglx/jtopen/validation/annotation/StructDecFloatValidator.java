@@ -12,8 +12,10 @@
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 public class StructDecFloatValidator extends StructDecimalValidator {
 	
@@ -24,17 +26,17 @@ public class StructDecFloatValidator extends StructDecimalValidator {
 	
 	protected void validateLengthAndDecimalsSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
 		if ((Integer)ann.getValue("length") == null) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_REQUIRED, new String[] {"length", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
 	protected void validateLengthAndDecimalsNotSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
 		if ((Integer)ann.getValue("length") != null) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_NOT_ALLOWED, new String[] {"length", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
-	protected void validateDecimals(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	protected void validateDecimals(Annotation ann, Node errorNode, IBMiResourceKeys problemRequestor) {
 		//do nothing
 	}
 

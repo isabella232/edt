@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
@@ -23,6 +24,7 @@ import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 
 public class StructArrayValidator extends AbstractStructParameterAnnotationValidator {
@@ -58,8 +60,9 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 		//Variable must be move compatible with int
 		if (!isCompatibleWithINT(((Member)obj).getType())) {
 			problemRequestor.acceptProblem(errorNode, 
-					IProblemRequestor.RETURN_COUNT_VAR_MUST_BE_INT_COMPAT, 
-					new String[] {((Member)obj).getCaseSensitiveName()});
+					IBMiResourceKeys.RETURN_COUNT_VAR_MUST_BE_INT_COMPAT, 
+					IMarker.SEVERITY_ERROR, 
+					new String[] {((Member)obj).getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 		
 		//Make sure the ReturnCount is defined in the same place as the field that is holding the annoation
@@ -75,8 +78,9 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 		}
 		
 		problemRequestor.acceptProblem(errorNode, 
-				IProblemRequestor.RETURN_COUNT_VAR_DEFINED_IN_WRONG_PLACE, 
-				new String[] {((Member)obj).getCaseSensitiveName()});
+				IBMiResourceKeys.RETURN_COUNT_VAR_DEFINED_IN_WRONG_PLACE, 
+				IMarker.SEVERITY_ERROR, 
+				new String[] {((Member)obj).getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		
 	}
 	
@@ -93,14 +97,14 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 	
 	protected void validateElementTypeNotNullable(Member targetBinding, Node errorNode, IProblemRequestor problemRequestor) {
 		if (targetBinding.getType() instanceof ArrayType && ((ArrayType)targetBinding.getType()).elementsNullable()) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, new String[] {getName(), targetBinding.getCaseSensitiveName() + "?"});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), targetBinding.getCaseSensitiveName() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
 	protected void validateElementTypeNotRequired(Member targetBinding, Node errorNode, IProblemRequestor problemRequestor) {
 		if (targetBinding.getType() instanceof ArrayType && 
 				IBMiProgramValidator.requiresAS400TypeAnnotation(((ArrayType)targetBinding.getType()).getElementType())) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_REQUIRED, new String[] {"elementTypeAnnotation", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"elementTypeAnnotation", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
@@ -109,8 +113,8 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 		AbstractStructParameterAnnotationValidator validator = IBMiProgramParameterAnnotationsValidator.getValidator(obj);
 		if (validator == null) {
 			problemRequestor.acceptProblem(errorNode, 
-									IProblemRequestor.ELEMENTTYPE_ANNOTATION_INVALID, 
-									new String[] {});
+									IBMiResourceKeys.ELEMENTTYPE_ANNOTATION_INVALID, IMarker.SEVERITY_ERROR, 
+									new String[] {}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 		else {
 			Member elementMember = (Member)targetBinding.clone();
