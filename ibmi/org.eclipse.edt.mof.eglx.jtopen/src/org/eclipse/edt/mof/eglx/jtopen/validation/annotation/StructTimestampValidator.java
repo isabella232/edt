@@ -15,12 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.type.PrimitiveTypeValidator.DateTimePattern;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.TimestampType;
+import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 
 public class StructTimestampValidator extends
@@ -52,8 +54,9 @@ public class StructTimestampValidator extends
 	  			Integer[] errors = dtPat.getErrorMessageNumbers();
 	  			for( int i = 0; i < errors.length; i++ ) {
 	  				problemRequestor.acceptProblem(errorNode,
-	  						errors[i].intValue(),
-							new String[] { pattern});
+	  						errors[i].intValue(), 
+	  						IMarker.SEVERITY_ERROR,
+							new String[] { pattern}, IBMiResourceKeys.getResourceBundleForKeys());
 	  						
 	  			}
 	  		}
@@ -62,13 +65,13 @@ public class StructTimestampValidator extends
 
 	protected void validatePatternNotSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
 		if (ann.getValue("eglPattern") != null) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_NOT_ALLOWED, new String[] {"eglPattern", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"eglPattern", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
 	protected void validatePatternSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
 		if (ann.getValue("eglPattern") == null) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_REQUIRED, new String[] {"eglPattern", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"eglPattern", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 

@@ -16,6 +16,7 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
@@ -23,6 +24,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 
 public class IBMiProgramParameterAnnotationsValidator implements IValueValidationRule {
@@ -38,7 +40,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 		}
 		
 		if (values.length != functionBinding.getParameters().size()) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS, new String[] {functionBinding.getCaseSensitiveName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS, IMarker.SEVERITY_ERROR, new String[] {functionBinding.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 		
@@ -48,8 +50,9 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 				//If null was specified, make sure that we dont need a parameter annotation for the parm type
 				if (IBMiProgramValidator.requiresAS400TypeAnnotation(functionBinding.getParameters().get(i).getType())) {
 					problemRequestor.acceptProblem(getNodeForArrayEntry(errorNode, i), 
-							IProblemRequestor.PROGRAM_PARAMETER_ANNOTATION_REQUIRED, 
-							new String[] {functionBinding.getParameters().get(i).getCaseSensitiveName()});
+							IBMiResourceKeys.PROGRAM_PARAMETER_ANNOTATION_REQUIRED, 
+							IMarker.SEVERITY_ERROR, 
+							new String[] {functionBinding.getParameters().get(i).getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 				}
 				
 			}
@@ -58,8 +61,9 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 				
 				if (validator == null) {
 					problemRequestor.acceptProblem(getNodeForArrayEntry(errorNode, i), 
-											IProblemRequestor.PARAMETER_ANNOTATION_INVALID, 
-											new String[] {Integer.toString(i)});
+											IBMiResourceKeys.PARAMETER_ANNOTATION_INVALID, 
+											IMarker.SEVERITY_ERROR, 
+											new String[] {Integer.toString(i)}, IBMiResourceKeys.getResourceBundleForKeys());
 				}
 				else {
 					validator.validate((Annotation)values[i], getNodeForArrayEntry(errorNode, i), functionBinding.getParameters().get(i), problemRequestor);
@@ -119,5 +123,4 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 		}
 		return getFunctionBinding(node.getParent());
 	}
-	
 }

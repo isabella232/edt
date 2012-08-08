@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 public abstract class StructDecimalValidator extends
 		AbstractStructParameterAnnotationValidator {
@@ -44,7 +46,7 @@ public abstract class StructDecimalValidator extends
 		Integer length = (Integer)ann.getValue("length");
 		if (length != null) {
 			if (length.intValue() < 1 || length.intValue() > 32) {
-				problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_BAD_LENGTH, new String[] {length.toString(), getName(), "32"});
+				problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_BAD_LENGTH, IMarker.SEVERITY_ERROR, new String[] {length.toString(), getName(), "32"}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 		}
 	}
@@ -53,30 +55,30 @@ public abstract class StructDecimalValidator extends
 		Integer decimals = (Integer)ann.getValue("decimals");
 		if (decimals != null) {
 			if (decimals.intValue() < 0) {
-				problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_NEGATIVE_DECIMAL, new String[] {decimals.toString(), getName()});
+				problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_NEGATIVE_DECIMAL, IMarker.SEVERITY_ERROR, new String[] {decimals.toString(), getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 			Integer length = (Integer)ann.getValue("length");
 			if (length != null && decimals.intValue() > length.intValue()) {
-				problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_BAD_DECIMAL, new String[] {decimals.toString(), getName(), length.toString()});
+				problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_BAD_DECIMAL, IMarker.SEVERITY_ERROR, new String[] {decimals.toString(), getName(), length.toString()}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 		}
 	}
 
 	protected void validateLengthAndDecimalsNotSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
 		if (ann.getValue("length") != null) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_NOT_ALLOWED, new String[] {"length", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 		if (ann.getValue("decimals") != null) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_NOT_ALLOWED, new String[] {"decimals", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"decimals", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
 	protected void validateLengthAndDecimalsSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
 		if (ann.getValue("length") == null) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_REQUIRED, new String[] {"length", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 		if (ann.getValue("decimals") == null) {
-			problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_PROPERTY_REQUIRED, new String[] {"decimals", getName()});
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"decimals", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
