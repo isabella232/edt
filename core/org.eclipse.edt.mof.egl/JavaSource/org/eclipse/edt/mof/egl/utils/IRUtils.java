@@ -481,11 +481,13 @@ public class IRUtils {
 		if (TypeUtils.isReferenceType(exprType) 
 				&& exprType instanceof SubType 
 				&& type instanceof StructPart 
-				&& ((SubType)exprType).isSubtypeOf((StructPart)type)) 
+				&& ((SubType)exprType).isSubtypeOf((StructPart)type)) {
 			
 			//For now, must make special case for Any and Number to support JS
 			if (isAny(type.getClassifier()) || type.equals(IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
-			return createAsExpression(expr, type);
+				return createAsExpression(expr, type);
+			}
+		}
 		
 		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
 			 //Conversions from value types to Number, Decimal, TimeStamp, String do not need to be boxed
