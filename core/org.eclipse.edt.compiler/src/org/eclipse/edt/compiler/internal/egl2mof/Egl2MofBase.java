@@ -22,19 +22,13 @@ import java.util.Stack;
 import org.eclipse.edt.compiler.Context;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
-import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
 import org.eclipse.edt.mof.EClass;
@@ -60,8 +54,6 @@ import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Form;
-import org.eclipse.edt.mof.egl.FormField;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvalidName;
@@ -78,7 +70,6 @@ import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -221,31 +212,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			}
 		}
 	}
-	
-	protected void createElementAnnotations(StructureItem binding, StructuredField field) {
-		if (field.getOccurs() > 1) {
-			for (Annotation annBinding : binding.getAnnotations()) {
-				if (annBinding instanceof AnnotationBindingForElement) {
-					int index = ((AnnotationBindingForElement)annBinding).getIndex();
-					Annotation eAnn = createAnnotation(binding, annBinding);
-					field.getElementAnnotations(index).add(eAnn);
-				}
-			}
-		}
-	}
-			
-	protected void createElementAnnotations(FormField binding, FormField field) {
-		if (field.getOccurs() > 1) {
-			for (Annotation annBinding : binding.getAnnotations()) {
-				if (annBinding instanceof AnnotationBindingForElement) {
-					int index = ((AnnotationBindingForElement)annBinding).getIndex();
-					Annotation eAnn = createAnnotation(binding, annBinding);
-					field.getElementAnnotations(index).add(eAnn);
-				}
-			}
-		}
-	}
-			
 	
 	protected void createAnnotations(Part binding, Part part) {
 		Annotation subtype = binding.getSubType();
@@ -404,14 +370,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				return access;
 			}
 			
-			//If the value is a formDataBinding, create a simple expression and route through the expression generator
-			if (valueBinding instanceof Form) {
-				Expression expr = createExpression(binding, (Form) annotationValue, false);
-				expr.accept(this);
-				return (Expression)stack.pop();
-
-			}
-
 			// if annotation is on a data binding, must create a simpleName
 			// expression here and set the binding...then route through
 			// expressionGenerator
@@ -460,30 +418,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			typeName.setId(key);
 			return typeName;
 		}
-	}
-
-	private Expression createExpression(IBinding binding, Form valueBinding, boolean addImplicitQualifier) {
-		SimpleName name = new ExpressionParser(getCompilerOptions()).parseAsSimpleName(valueBinding.getCaseSensitiveName());
-		name.setDataBinding(valueBinding);
-		name.setTypeBinding(valueBinding.getType());
-		name.setBinding(valueBinding);
-		if (addImplicitQualifier) {
-			name.setAttribute(org.eclipse.edt.compiler.core.ast.Name.IMPLICIT_QUALIFIER_DATA_BINDING, binding);
-		}
-
-		return name;
-	}
-	
-	private ICompilerOptions getCompilerOptions() {
-		ICompilerOptions compilerOptions = DefaultCompilerOptions.getInstance();
-		return compilerOptions;
-	}
-
-	private ITypeBinding getContainer(IDataBinding db) {
-		if (db.getKind() == IDataBinding.STRUCTURE_ITEM_BINDING) {
-			return ((StructureItemBinding) db).getEnclosingStructureBinding();
-		}
-		return db.getDeclaringPart();
 	}
 
 	private Library getLibraryContainer(IBinding binding) {
@@ -790,9 +724,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 		else if (binding instanceof Field) {
 			mbrType = (EClass)getMofSerializable(Type_Field);
-		}
-		else if (binding instanceof StructuredField) {
-			mbrType = (EClass)getMofSerializable(Type_StructuredField);
 		}
 		else {
 			mbrType = (EClass)getMofSerializable(Type_Field);

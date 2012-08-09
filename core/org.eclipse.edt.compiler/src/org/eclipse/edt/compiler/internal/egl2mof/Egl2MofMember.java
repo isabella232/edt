@@ -167,27 +167,6 @@ class Egl2MofMember extends Egl2MofPart {
 			Field f = (Field)fieldClass.newInstance();
 			setUpEglTypedElement(f, field);
 			addInitializers(node, f, node.getType());
-			if (f instanceof StructuredField) {
-				StructuredField s = (StructuredField)f;
-				
-				if (node.getOccurs() == null) {
-					if (field instanceof StructureItem) {
-						s.setOccurs(Integer.getInteger(((StructureItem)field).getOccurs()));
-					}
-					else {
-						s.setOccurs(1);
-					}
-				}
-				else {
-					s.setOccurs(Integer.decode(node.getOccurs()));
-				}
-				StructureItem parentBinding = null;//FIXME((StructureItem)field).getParent();
-				if (parentBinding != null) {
-					StructuredField parent = (StructuredField)getEObjectFor(parentBinding);
-					parent.addChild(s);
-				}
-				createElementAnnotations((StructureItem)field, (StructuredField)f);
-			}
 			obj = f;
 		}
 		eObjects.put(field, obj);
