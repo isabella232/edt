@@ -22,12 +22,17 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class SQL {
 	
 	private SQL() {}
+	
+	private static final String SQLResultSetKey = MofConversion.EGL_KeyScheme + "eglx.persistence.sql.SQLResultSet";
+	private static final String SQLDataSourceKey = MofConversion.EGL_KeyScheme + "eglx.persistence.sql.SQLDataSource";
+	private static final String SQLStatementKey = MofConversion.EGL_KeyScheme + "eglx.persistence.sql.SQLStatement";
 
 	public static String getTableName(EGLClass entity) {
 		Annotation table = entity.getAnnotation("eglx.persistence.sql.Table");
@@ -110,8 +115,28 @@ public class SQL {
 			&& !isTransient(field);
 	}
 
-	public static boolean isSQLResultSet(Type datasource) {
-		return datasource.getTypeSignature().equals("eglx.persistence.sql.SQLResultSet");
+	public static boolean isSQLDataSource(Type type) {
+		if (type != null && type.getClassifier() instanceof EGLClass) {
+			EGLClass ds = (EGLClass)TypeUtils.getType(SQLDataSourceKey);
+			return type.getClassifier().equals(ds) || ((EGLClass)type.getClassifier()).isSubtypeOf(ds);
+		}
+		return false;
+	}
+	
+	public static boolean isSQLResultSet(Type type) {
+		if (type != null && type.getClassifier() instanceof EGLClass) {
+			EGLClass rs = (EGLClass)TypeUtils.getType(SQLResultSetKey);
+			return type.getClassifier().equals(rs) || ((EGLClass)type.getClassifier()).isSubtypeOf(rs);
+		}
+		return false;
+	}
+	
+	public static boolean isSQLStatement(Type type) {
+		if (type != null && type.getClassifier() instanceof EGLClass) {
+			EGLClass stmt = (EGLClass)TypeUtils.getType(SQLStatementKey);
+			return type.getClassifier().equals(stmt) || ((EGLClass)type.getClassifier()).isSubtypeOf(stmt);
+		}
+		return false;
 	}
 	
 	public static boolean isTextType(Classifier type) {

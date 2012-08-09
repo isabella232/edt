@@ -5,10 +5,12 @@ import org.eclipse.edt.compiler.PartValidator;
 import org.eclipse.edt.compiler.StatementValidator;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.TypeValidator;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
+import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.GetByPositionStatement;
@@ -22,6 +24,7 @@ import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.persistence.sql.gen.SQLActionStatementGenerator;
 import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 import org.eclipse.edt.mof.eglx.persistence.sql.validation.SQLActionStatementValidator;
 
 public class SQLExtension implements ICompilerExtension {
@@ -66,7 +69,45 @@ public class SQLExtension implements ICompilerExtension {
 	}
 	
 	private boolean shouldExtend(Node node) {
-		//TODO should be based on the data source type
-		return false;
+		// The types of various nodes dictate whether this is an SQL statement. Most common is the FromOrToExpressionClause.
+		final boolean[] result = new boolean[1];
+		node.accept(new AbstractASTVisitor() {
+			@Override
+			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
+				if (!result[0]) {
+					result[0] = SQL.isSQLDataSource(exprToType(clause.getExpression())) || SQL.isSQLResultSet(exprToType(clause.getExpression()));
+				}
+				return false;
+			};
+			@Override
+			public boolean visit(org.eclipse.edt.compiler.core.ast.WithExpressionClause clause) {
+				if (!result[0]) {
+					result[0] = SQL.isSQLStatement(exprToType(clause.getExpression()));
+				}
+				return false;
+			};
+			@Override
+			public boolean visit(CloseStatement stmt) {
+				if (!result[0]) {
+					result[0] = SQL.isSQLDataSource(exprToType(stmt.getExpr())) || SQL.isSQLResultSet(exprToType(stmt.getExpr()));
+				}
+				return false;
+			};
+			@Override
+			public void endVisit(OpenStatement stmt) {
+				if (!result[0]) {
+					result[0] = SQL.isSQLResultSet(exprToType(stmt.getResultSet()));
+				}
+			};
+		});
+		
+		return result[0];
+	}
+	
+	private Type exprToType(Expression expr) {
+		if (expr != null) {
+			return expr.resolveType();
+		}
+		return null;
 	}
 }
