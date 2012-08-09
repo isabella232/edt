@@ -17,12 +17,21 @@
     <echo message="processing ${pluginName}." />
 	<property name="eglBin" value="EGLBin"/>
 	<property name="eglSrc" value="EGLSource"/>
+	<property name="eglar" value="./egllib/sql.eglar"/>
+	<property name="mofar" value="./egllib/sql.mofar"/>
 </target>
 	
-<target name="Jarem" depends="init">	
-	<jar destfile="./egllib/sql.mofar">
-		<fileset dir="./${eglBin}"/>
-		<fileset dir="./${eglSrc}"/>
+<target name="Jarem" depends="init">
+	<delete file="${mofar}"/>
+	<delete file="${eglar}"/>
+	
+	<jar destfile="${mofar}">
+		<fileset dir="./${eglBin}" includes="**/*.mofxml"/>
+		<fileset dir="./${eglSrc}" includes="org/**"/>
+	</jar>
+	<jar destfile="${eglar}">
+		<fileset dir="./${eglBin}" includes="**/*.eglxml"/>
+		<fileset dir="./${eglSrc}" includes="eglx/**"/>
 	</jar>
 </target>
 </project>

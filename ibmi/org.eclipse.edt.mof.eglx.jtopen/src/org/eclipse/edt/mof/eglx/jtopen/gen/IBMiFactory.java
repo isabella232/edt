@@ -24,6 +24,6 @@ public interface IBMiFactory extends EFactory  {
 	
 	EClass getIBMiFunctionEClass();
 	EClass getIBMiCallStatementEClass();
-	public org.eclipse.edt.mof.egl.Function createIBMiFunction();
-	public org.eclipse.edt.mof.egl.CallStatement createIBMiCallStatement();
+	public IBMiFunction createIBMiFunction();
+	public IBMiCallStatement createIBMiCallStatement();
 }

@@ -77,13 +77,12 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
 
-
+//TODO any other types of members we want to make extensible?
 class Egl2MofMember extends Egl2MofPart {
 
 	Egl2MofMember(IEnvironment env) {
 		super(env);
 	}
-
  	
 	@Override
 	public boolean visit(ClassDataDeclaration node) {
@@ -214,8 +213,16 @@ class Egl2MofMember extends Egl2MofPart {
 			obj = func;
 		}
 		else {
-			Function func; 
-			func = (Function)function.getEClass().newInstance();
+			Function func = null;
+			ElementGenerator gen = getElementGenerator(node);
+			if (gen != null) {
+				func = (Function)gen.generate(node, eObjects);
+			}
+			
+			if (func == null) {
+				func = (Function)function.getEClass().newInstance();
+			}
+			
 			if (func instanceof Operation) {
 				Annotation ann = function.getType().getAnnotation("egl.lang.reflect.mof.Operation");
 				((Operation)func).setOpSymbol((String)ann.getValue("opSymbol"));
@@ -888,4 +895,15 @@ class Egl2MofMember extends Egl2MofPart {
 		return nameExpr.addQualifier(qualifier);
 	}
 	
+	private ElementGenerator getElementGenerator(Node node) {
+		ElementGenerator generator = context.getCompiler().getElementGeneratorFor(node);
+		if (generator != null) {
+			generator.setCurrentPart(currentPart);
+			generator.setCurrentFunction(currentFunction);
+			generator.setContext(context);
+			generator.setEnvironment(env);
+			return generator;
+		}
+		return null;
+	}
 }

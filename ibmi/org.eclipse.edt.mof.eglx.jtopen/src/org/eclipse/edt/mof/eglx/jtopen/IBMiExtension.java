@@ -24,13 +24,13 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
-import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
-import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFactory;
+import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiElementGenerator;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramCallStatementValidator;
 
 public class IBMiExtension implements ICompilerExtension {
@@ -46,16 +46,9 @@ public class IBMiExtension implements ICompilerExtension {
 	}
 	
 	@Override
-	public Element createMofFor(Node node) {
-		if (node instanceof CallStatement) {
-			if (shouldExtend((CallStatement)node)) {
-				return IBMiFactory.INSTANCE.createIBMiCallStatement();
-			}
-		}
-		else if (node instanceof NestedFunction) {
-			if (shouldExtend((NestedFunction)node)) {
-				return IBMiFactory.INSTANCE.createIBMiFunction();
-			}
+	public ElementGenerator getElementGeneratorFor(Node node) {
+		if (shouldExtend(node)) {
+			return new IBMiElementGenerator();
 		}
 		return null;
 	}
@@ -69,10 +62,8 @@ public class IBMiExtension implements ICompilerExtension {
 	@Override
 	public StatementValidator getValidatorFor(Statement stmt) {
 		// Call statement can be extended.
-		if (stmt instanceof CallStatement) {
-			if (shouldExtend((CallStatement)stmt)) {
-				return new IBMiProgramCallStatementValidator();
-			}
+		if (shouldExtend(stmt)) {
+			return new IBMiProgramCallStatementValidator();
 		}
 		return null;
 	}
@@ -83,26 +74,31 @@ public class IBMiExtension implements ICompilerExtension {
 		return null;
 	}
 	
-	private boolean shouldExtend(CallStatement stmt) {
-		if(stmt.getUsing() != null){
-			return Utils.isIBMiConnection(stmt.getUsing().resolveType());
+	private boolean shouldExtend(Node node) {
+		if (node instanceof CallStatement) {
+			CallStatement stmt = (CallStatement)node;
+			if (stmt.getUsing() != null) {
+				return Utils.isIBMiConnection(stmt.getUsing().resolveType());
+			}
+			else {
+				Expression exp = stmt.getInvocationTarget();
+				Member binding = exp.resolveMember();
+				//only service can have a Service type qualifier with no using clause
+				return binding instanceof Function && 
+						!isFunctionServiceQualified(exp, (Function)binding) &&
+						binding.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+			}
 		}
-		else{
-			Expression exp = stmt.getInvocationTarget();
-			Member binding = exp.resolveMember();
-			//only service can have a Service type qualifier with no using clause
-			return binding instanceof Function && 
-					!isFunctionServiceQualified(exp, (Function)binding) &&
-					binding.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+		else if (node instanceof NestedFunction) {
+			NestedFunction func = (NestedFunction)node;
+			return func.getName().resolveMember() instanceof Function && func.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 		}
+		
+		return false;
 	}
 	
 	private static boolean isFunctionServiceQualified(	Expression exp, Function function){
 		return !(exp instanceof FieldAccess && ((FieldAccess)exp).getPrimary() instanceof ThisExpression) &&
 				function.getContainer() instanceof Service;
-	}
-
-	private boolean shouldExtend(NestedFunction func) {
-		return func.getName().resolveMember() instanceof Function && func.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 	}
 }

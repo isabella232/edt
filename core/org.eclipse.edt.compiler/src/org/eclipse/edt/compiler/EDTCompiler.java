@@ -15,11 +15,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultPartValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultTypeValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.DefaultElementGenerator;
+import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
 
 public class EDTCompiler extends BaseCompiler {
@@ -80,5 +83,15 @@ public class EDTCompiler extends BaseCompiler {
 		}
 		
 		return new DefaultTypeValidator();
+	}
+	
+	@Override
+	public ElementGenerator getElementGeneratorFor(Node node) {
+		ElementGenerator generator = super.getElementGeneratorFor( node );
+		if (generator != null) {
+			return generator;
+		}
+		
+		return new DefaultElementGenerator();
 	}
 }

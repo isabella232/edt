@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -170,7 +169,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
     private TopLevelFunctionInfo[] processTopLevelFunctions(Set topLevelFunctions, FunctionContainerScope contextScope, DependencyInfo dependencyInfo) {
     	TopLevelFunctionProcessor queue = new TopLevelFunctionProcessor(environment, contextScope, dependencyInfo, compilerOptions, problemRequestorFactory);
 		for (Iterator iter = topLevelFunctions.iterator(); iter.hasNext();) {
-			IPartBinding function = (IPartBinding) iter.next();
+//			IPartBinding function = (IPartBinding) iter.next();
 //			queue.addPart(function);
 		}
 		

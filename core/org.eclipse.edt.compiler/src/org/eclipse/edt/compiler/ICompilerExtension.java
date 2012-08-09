@@ -14,7 +14,7 @@ package org.eclipse.edt.compiler;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
 
 public interface ICompilerExtension {
@@ -30,15 +30,16 @@ public interface ICompilerExtension {
 	Class[] getExtendedTypes();
 	
 	/**
-	 * Returns a new MOF element if the given AST node should be extended. For example a particular annotation
-	 * on a NestedFunction might mean we want to return a new subclass of Function. The type returned must be a
-	 * subclass of the default IR type. Only AST types included in {@link #getExtendedTypes()} will be passed into
-	 * this method.
+	 * Returns an ElementGenerator capable of creating alternate elements if the given AST node should be extended.
+	 * For example a particular annotation on a NestedFunction might mean we want to create a new subclass of Function.
+	 * The type created by the generator must be a subclass of the default IR type. Only AST types included in
+	 * {@link #getExtendedTypes()} will be passed into this method.
 	 * 
 	 * @param node The original bound element.
-	 * @return a new MOF element, or null.
+	 * @see ElementGenerator
+	 * @return an ElementGenerator, or null.
 	 */
-	Element createMofFor(Node node);
+	ElementGenerator getElementGeneratorFor(Node node);
 	
 	/**
 	 * Returns a validator for the given part, or null if doesn't require extra validation. Only AST types included
@@ -46,6 +47,7 @@ public interface ICompilerExtension {
 	 * is run before or after its own validation.
 	 * 
 	 * @param part The part to validate.
+	 * @see PartValidator
 	 * @return a validator for the given part, or null if no extra validation is required.
 	 */
 	PartValidator getValidatorFor(Part part);
@@ -55,6 +57,7 @@ public interface ICompilerExtension {
 	 * types included in {@link #getExtendedTypes()} will be passed into this method.
 	 * 
 	 * @param stmt The statement to validate.
+	 * @see StatementValidator
 	 * @return a validator for the given statement, or null if it's not a type being extended.
 	 */
 	StatementValidator getValidatorFor(Statement stmt);
@@ -63,6 +66,7 @@ public interface ICompilerExtension {
 	 * Returns a validator for the given type, or null if it's not a type being extended.
 	 * 
 	 * @param type The type to validate.
+	 * @see TypeValidator
 	 * @return a validator for the given type, or null if it's not a type being extended.
 	 */
 	TypeValidator getValidatorFor(Type type);

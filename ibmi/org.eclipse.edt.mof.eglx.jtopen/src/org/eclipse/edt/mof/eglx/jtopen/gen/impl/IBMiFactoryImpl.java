@@ -12,8 +12,9 @@
 package org.eclipse.edt.mof.eglx.jtopen.gen.impl;
 
 import org.eclipse.edt.mof.EClass;
-import org.eclipse.edt.mof.egl.CallStatement;
+import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFactory;
+import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFunction;
 import org.eclipse.edt.mof.impl.EFactoryImpl;
 
 
@@ -25,8 +26,8 @@ public class IBMiFactoryImpl extends EFactoryImpl implements IBMiFactory {
 	}
 
 	@Override
-	public org.eclipse.edt.mof.egl.Function createIBMiFunction() {
-		return (org.eclipse.edt.mof.egl.Function)getIBMiFunctionEClass().newInstance();
+	public IBMiFunction createIBMiFunction() {
+		return (IBMiFunction)getIBMiFunctionEClass().newInstance();
 	}
 
 	@Override
@@ -35,8 +36,8 @@ public class IBMiFactoryImpl extends EFactoryImpl implements IBMiFactory {
 	}
 
 	@Override
-	public CallStatement createIBMiCallStatement() {
-		return (org.eclipse.edt.mof.egl.CallStatement)getIBMiCallStatementEClass().newInstance();
+	public IBMiCallStatement createIBMiCallStatement() {
+		return (IBMiCallStatement)getIBMiCallStatementEClass().newInstance();
 	}
 
 }

@@ -17,9 +17,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.impl.ProgramImpl;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
@@ -226,6 +228,20 @@ public class BaseCompiler implements ICompiler {
 			}
 		}
 		
+		return null;
+	}
+	
+	@Override
+	public ElementGenerator getElementGeneratorFor(Node node) {
+		List<ICompilerExtension> nodeExtensions = astTypeToExtensions.get(node.getClass());
+		if (nodeExtensions != null && nodeExtensions.size() > 0) {
+			for (ICompilerExtension ext : nodeExtensions) {
+				ElementGenerator generator = ext.getElementGeneratorFor(node);
+				if (generator != null) {
+					return generator;
+				}
+			}
+		}
 		return null;
 	}
 }
