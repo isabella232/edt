@@ -24,19 +24,20 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
 public class EnumerationBinder extends DefaultBinder {
 
-    private org.eclipse.edt.mof.egl.Enumeration enumerationBinding;
     private IRPartBinding irBinding;
     private Scope scope;
 
-    public EnumerationBinder(IRPartBinding enumerationBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(scope, enumerationBinding.getIrPart(), dependencyRequestor, problemRequestor, compilerOptions);
-        this.enumerationBinding = (org.eclipse.edt.mof.egl.Enumeration) enumerationBinding.getIrPart();
+    public EnumerationBinder(IRPartBinding irBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(scope, irBinding.getIrPart(), dependencyRequestor, problemRequestor, compilerOptions);
         this.scope = scope;
-        irBinding = enumerationBinding;
+        this.irBinding = irBinding;
     }
 
     public boolean visit(Enumeration enumeration) {
     	enumeration.accept(new EnumerationBindingCompletor(scope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
+        // The current scope only changes once the initial enumeration binding is complete
+        currentScope = new EnumerationScope(currentScope, (org.eclipse.edt.mof.egl.Enumeration)irBinding.getIrPart());
         return true;
     }
+    
 }
