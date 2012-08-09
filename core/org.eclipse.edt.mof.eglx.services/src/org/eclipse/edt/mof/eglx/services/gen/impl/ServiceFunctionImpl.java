@@ -9,12 +9,12 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.services.impl;
+package org.eclipse.edt.mof.eglx.services.gen.impl;
 
-import org.eclipse.edt.mof.egl.impl.CallStatementImpl;
-import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
+import org.eclipse.edt.mof.egl.impl.FunctionImpl;
+import org.eclipse.edt.mof.eglx.services.gen.ServiceFunction;
 
-public class ServicesCallStatementImpl extends CallStatementImpl implements ServicesCallStatement {
+public class ServiceFunctionImpl extends FunctionImpl implements ServiceFunction {
 
 
 }

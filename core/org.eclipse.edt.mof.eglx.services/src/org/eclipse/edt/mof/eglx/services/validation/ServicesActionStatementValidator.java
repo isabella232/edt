@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.compiler.internal.egl2mof.eglx.services;
+package org.eclipse.edt.mof.eglx.services.validation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,6 +40,10 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public class ServicesActionStatementValidator extends DefaultStatementValidator {
@@ -60,27 +64,19 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		if (callStatement.getCallSynchronizationValues() != null && 
 				(callStatement.getCallSynchronizationValues().getOnException() != null || 
 				 callStatement.getCallSynchronizationValues().getReturnTo() != null)) {
-			ITypeBinding type = callStatement.getInvocationTarget().resolveTypeBinding();
-			if (!Binding.isValidBinding(type) || type.getKind() != ITypeBinding.FUNCTION_BINDING) {
+			Member function = callStatement.getInvocationTarget().resolveMember();
+			if (function == null || !(function instanceof Function)) {
 				//error...target must be a function if callback or error routine specified
 	            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_CALL_TARGET_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {});
 				return;
 			}
 		}
 		
-		IDataBinding dataBinding = callStatement.getInvocationTarget().resolveDataBinding();
-		if (!Binding.isValidBinding(dataBinding)) {
-			return;
-		}
-		
-		if (dataBinding.getKind() == IDataBinding.TOP_LEVEL_FUNCTION_BINDING) {
-            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_MUST_BE_SERVICE_OR_INTERFACE, IMarker.SEVERITY_ERROR, new String[] {dataBinding.getCaseSensitiveName()});
-			return;
-		}
+
 		
 		if (callStatement.getUsing() != null) {
-			ITypeBinding usingType = callStatement.getUsing().resolveTypeBinding();
-			if (Binding.isValidBinding(usingType)) {
+			Type usingType = callStatement.getUsing().resolveType();
+			if (usingType != null) {
 				if (!isIHTTP(usingType, new ArrayList())) {
 					problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
 				}
@@ -314,12 +310,10 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		return null;
 	}
 	
-	private boolean isIHTTP(ITypeBinding type, List seenTypes) {
+	private boolean isIHTTP(Type type) {
 		
-		if (seenTypes.contains(type)) {
-			return false;
-		}
-		seenTypes.add(type);
+		return type instanceof ExternalType &&
+				
 		
 		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
 			if (type.getName() == InternUtil.intern("IHTTP") && type.getPackageName() == InternUtil.intern(new String[] {"eglx", "http"})) {
