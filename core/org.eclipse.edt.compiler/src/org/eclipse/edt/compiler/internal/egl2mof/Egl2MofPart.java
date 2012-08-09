@@ -42,7 +42,6 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -274,20 +273,13 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				Part part = (Part)mofTypeFor(partBinding);
 				// Assume current part is a LogicAndDataPart as only they have UseStatements
 				((LogicAndDataPart)currentPart).getUsedParts().add(part);
-				if (partBinding instanceof Form) {
-					Field formField = factory.createField();
-					formField.setName(((Form) partBinding).getCaseSensitiveName());
-					formField.setType(part);
-					((LogicAndDataPart)currentPart).addMember(formField);
-					eObjects.put(partBinding, formField);
-				}
 			}
 		}
 		stack.push(null);
 		return false;
 	}
 	
-	protected MofSerializable defaultHandleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
+	private MofSerializable defaultHandleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
 		MofSerializable part = handleVisitPart(node);
 		handleContents(node, part);
 		handleParms(node, part);
@@ -308,7 +300,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		}
 	}
 
-	protected MofSerializable handleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
+	private MofSerializable handleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
 		Part partBinding = (Part)node.getName().resolveType();
 		
 		// EGL Enumerations are treated as straight Mof EEnum types
@@ -380,7 +372,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void handleEndVisitPart(org.eclipse.edt.compiler.core.ast.Part astPart, MofSerializable mofPart) {
+	private void handleEndVisitPart(org.eclipse.edt.compiler.core.ast.Part astPart, MofSerializable mofPart) {
 		MofSerializable part = partProcessingStack.pop();
 		
 		// Set the stereotype value if necessary
@@ -637,7 +629,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		}
 	}
 		
-	protected void setCurrentFunctionMember(FunctionMember function) {
+	private void setCurrentFunctionMember(FunctionMember function) {
 		currentFunction = function;
 	}
 	

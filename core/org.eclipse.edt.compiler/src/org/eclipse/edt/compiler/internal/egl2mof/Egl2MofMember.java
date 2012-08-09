@@ -166,27 +166,6 @@ class Egl2MofMember extends Egl2MofPart {
 			Field f = (Field)fieldClass.newInstance();
 			setUpEglTypedElement(f, field);
 			addInitializers(node, f, node.getType());
-			if (f instanceof StructuredField) {
-				StructuredField s = (StructuredField)f;
-				
-				if (node.getOccurs() == null) {
-					if (field instanceof StructureItem) {
-						s.setOccurs(Integer.getInteger(((StructureItem)field).getOccurs()));
-					}
-					else {
-						s.setOccurs(1);
-					}
-				}
-				else {
-					s.setOccurs(Integer.decode(node.getOccurs()));
-				}
-				StructureItem parentBinding = null;//FIXME((StructureItem)field).getParent();
-				if (parentBinding != null) {
-					StructuredField parent = (StructuredField)getEObjectFor(parentBinding);
-					parent.addChild(s);
-				}
-				createElementAnnotations((StructureItem)field, (StructuredField)f);
-			}
 			obj = f;
 		}
 		eObjects.put(field, obj);
@@ -228,9 +207,9 @@ class Egl2MofMember extends Egl2MofPart {
 				((Operation)func).setOpSymbol((String)ann.getValue("opSymbol"));
 			}
 			setUpEglTypedElement(func, function);
-			func.setIsStatic(node.isStatic());
+			func.setIsStatic(function.isStatic());
 					
-			if (!node.isAbstract()) {
+			if (!function.isAbstract()) {
 				StatementBlock stmts = factory.createStatementBlock();
 				stmts.setContainer(func);
 				func.setStatementBlock(stmts);
@@ -239,7 +218,7 @@ class Egl2MofMember extends Egl2MofPart {
 			if (!node.getStmts().isEmpty() && node.getStmts().get(0) instanceof SettingsBlock) {
 				processSettings(func, (SettingsBlock)node.getStmts().get(0));
 			}
-			if (node.isPrivate()) {
+			if (function.getAccessKind() == AccessKind.ACC_PRIVATE) {
 				func.setAccessKind(AccessKind.ACC_PRIVATE);
 			}
 			obj = func;

@@ -47,8 +47,6 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FloatingPointLiteral;
-import org.eclipse.edt.mof.egl.Form;
-import org.eclipse.edt.mof.egl.FormGroup;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionMember;
@@ -588,7 +586,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				|| binding instanceof DataTable 
 				|| binding instanceof ExternalType
 				|| binding instanceof Enumeration
-				|| binding instanceof Form
 				|| binding instanceof Program
 				|| binding instanceof Interface
 				|| binding instanceof Service) {
@@ -599,18 +596,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			// that is being compiled independently
 			PartName name = factory.createPartName();
 			String packageName;
-			if (binding instanceof Form) {
-				FormGroup fg = ((Form)binding).getContainer();
-				packageName = fg == null ? binding.getCaseSensitivePackageName() : fg.getCaseSensitivePackageName();
-			}
-			else {
-				packageName = binding.getCaseSensitivePackageName();
-				//TODO - remove this temporary hardcoded remapping of "egl.core" system parts when the front
-				// end references to system parts are handled through a proper System Scope configuration
-				// that will bind to the configured part
-				if (packageName.equals("egl.core")) {
-					packageName = "egl.lang";
-				}
+			packageName = binding.getCaseSensitivePackageName();
+			//TODO - remove this temporary hardcoded remapping of "egl.core" system parts when the front
+			// end references to system parts are handled through a proper System Scope configuration
+			// that will bind to the configured part
+			if (packageName.equals("egl.core")) {
+				packageName = "egl.lang";
 			}
 
 			name.setPackageName(packageName);
@@ -654,20 +645,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			name = factory.createMemberName();
 		}
 			
-		if (part instanceof Form) {
-			FormGroup fg = ((Form) part).getContainer();
-			String id;
-			if (fg == null) {
-				id = ((Form) part).getCaseSensitiveName();
-			}
-			else {
-				id = fg.getCaseSensitiveName() + Type.NestedPartDelimiter + ((Form)part).getCaseSensitiveName();
-			}
-			name.setId(id);
-		}
-		else {
-			name.setId(binding.getCaseSensitiveName());
-		}
+		name.setId(binding.getCaseSensitiveName());
 		
 		if (name instanceof MemberName) {
 			if (isSuperTypeMember(binding)) {
@@ -775,7 +753,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NewExpression newExpression) {
 		NewExpression expr = factory.createNewExpression();
 		Type type = newExpression.resolveType();

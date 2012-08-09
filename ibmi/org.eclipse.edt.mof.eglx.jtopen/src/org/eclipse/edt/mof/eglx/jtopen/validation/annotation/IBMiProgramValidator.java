@@ -284,16 +284,7 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 			return true; //avoid excess error messages
 		}
 		
-		if( type.equals(TypeUtils.Type_SMALLINT) ||
-				type.equals(TypeUtils.Type_INT) ||
-				type.equals(TypeUtils.Type_BIGINT) ||
-				type.equals(TypeUtils.Type_DECIMAL) ||
-				type.equals(TypeUtils.Type_SMALLFLOAT) ||
-				type.equals(TypeUtils.Type_FLOAT) ||
-				type.equals(TypeUtils.Type_DATE) ||
-				type.equals(TypeUtils.Type_TIME) ||
-				type.equals(TypeUtils.Type_TIMESTAMP) ||
-				type.equals(TypeUtils.Type_STRING)){
+		if( type.equals(TypeUtils.isPrimitive(type))){
 			return true;
 		}
 		if (type instanceof Handler) {
@@ -322,16 +313,7 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 			return false; //avoid excess error messages
 		}
 		
-		if( type.equals(TypeUtils.Type_SMALLINT) ||
-				type.equals(TypeUtils.Type_INT) ||
-				type.equals(TypeUtils.Type_BIGINT) ||
-				type.equals(TypeUtils.Type_DECIMAL) ||
-				type.equals(TypeUtils.Type_SMALLFLOAT) ||
-				type.equals(TypeUtils.Type_FLOAT) ||
-				type.equals(TypeUtils.Type_DATE) ||
-				type.equals(TypeUtils.Type_TIME) ||
-				type.equals(TypeUtils.Type_TIMESTAMP) ||
-				type.equals(TypeUtils.Type_STRING)){
+		if( TypeUtils.isPrimitive(type)){
 			return TypeUtils.isReferenceType(type);
 		}
 		

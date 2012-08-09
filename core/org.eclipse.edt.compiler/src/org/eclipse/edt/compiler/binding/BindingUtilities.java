@@ -18,9 +18,13 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
-import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 /**
@@ -192,21 +196,18 @@ public class BindingUtilities {
     	return false;
     }
     
-    public static boolean isValidDeclarationType(ITypeBinding typeBinding) {
-    	if(ITypeBinding.ARRAY_TYPE_BINDING == typeBinding.getKind()) {
-    		return isValidDeclarationType(((ArrayTypeBinding) typeBinding).getElementType());
+    public static boolean isValidDeclarationType(Type typeBinding) {
+    	if(typeBinding instanceof ArrayType) {
+    		return isValidDeclarationType(((ArrayType)typeBinding).getElementType());
     	}
-    	if (StatementValidator.isAnnotationRecord(typeBinding)) {
-    		return false;
-    	}
+//FIXME    	if (StatementValidator.isAnnotationRecord(typeBinding)) {
+//    		return false;
+//   	}
     	
-    	if(ITypeBinding.PRIMITIVE_TYPE_BINDING == typeBinding.getKind() ||
-    	   ITypeBinding.FIXED_RECORD_BINDING == typeBinding.getKind() ||
-		   ITypeBinding.FLEXIBLE_RECORD_BINDING == typeBinding.getKind() ||
-		   ITypeBinding.DATAITEM_BINDING == typeBinding.getKind() ||
-		   ITypeBinding.ENUMERATION_BINDING == typeBinding.getKind() ||
-		   SystemPartManager.findType(typeBinding.getName()) == typeBinding ||
-		   typeBinding.isReference()) {
+    	if(TypeUtils.isPrimitive(typeBinding) ||
+		   typeBinding instanceof Record ||
+		   typeBinding instanceof Enumeration ||
+		   TypeUtils.isReferenceType(typeBinding)) {
     		return true;
     	}
     	return false;
