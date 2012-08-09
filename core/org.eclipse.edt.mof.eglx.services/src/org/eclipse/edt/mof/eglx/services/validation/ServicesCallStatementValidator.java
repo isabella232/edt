@@ -40,11 +40,12 @@ import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.services.Utils;
 
-public class ServicesActionStatementValidator extends DefaultStatementValidator {
+public class ServicesCallStatementValidator extends DefaultStatementValidator {
 
     
-    public ServicesActionStatementValidator() {
+    public ServicesCallStatementValidator() {
     }
     
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
@@ -68,7 +69,7 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		if (callStatement.getUsing() != null) {
 			Type usingType = callStatement.getUsing().resolveType();
 			if (usingType != null) {
-				if (!isIHTTP(usingType)) {
+				if (!Utils.isIHTTP(usingType)) {
 					problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
 				}
 			}
@@ -247,12 +248,4 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 	private String getQualAnyExceptionString() {
 		return InternUtil.intern("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
 	}
-	
-	private boolean isIHTTP(Type type) {
-		ExternalType http = (ExternalType)TypeUtils.getEGLType("eglx.http.IHttp");
-		return type instanceof ExternalType && 
-				type.equals(http) || ((ExternalType)type).isSubtypeOf(http);
-	}
-	
-	
 }
