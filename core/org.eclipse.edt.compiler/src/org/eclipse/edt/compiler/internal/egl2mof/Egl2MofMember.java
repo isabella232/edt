@@ -200,9 +200,9 @@ class Egl2MofMember extends Egl2MofPart {
 				((Operation)func).setOpSymbol((String)ann.getValue("opSymbol"));
 			}
 			setUpEglTypedElement(func, function);
-			func.setIsStatic(node.isStatic());
+			func.setIsStatic(function.isStatic());
 					
-			if (!node.isAbstract()) {
+			if (!function.isAbstract()) {
 				StatementBlock stmts = factory.createStatementBlock();
 				stmts.setContainer(func);
 				func.setStatementBlock(stmts);
@@ -211,7 +211,7 @@ class Egl2MofMember extends Egl2MofPart {
 			if (!node.getStmts().isEmpty() && node.getStmts().get(0) instanceof SettingsBlock) {
 				processSettings(func, (SettingsBlock)node.getStmts().get(0));
 			}
-			if (node.isPrivate()) {
+			if (function.getAccessKind() == AccessKind.ACC_PRIVATE) {
 				func.setAccessKind(AccessKind.ACC_PRIVATE);
 			}
 			obj = func;
