@@ -269,7 +269,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.UseStatement stmt) {
 		for ( org.eclipse.edt.compiler.core.ast.Name name : (List<org.eclipse.edt.compiler.core.ast.Name>)stmt.getNames()) {
 			Type partBinding = name.resolveType();
-			if (partBinding == null) {
+			if (partBinding != null) {
 				Part part = (Part)mofTypeFor(partBinding);
 				// Assume current part is a LogicAndDataPart as only they have UseStatements
 				((LogicAndDataPart)currentPart).getUsedParts().add(part);
