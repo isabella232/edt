@@ -1143,4 +1143,16 @@ public class TypeUtils implements MofConversion {
 		return result;
 	}
 	
+	public static boolean isPrimitive(Type type){
+		return type.equals(TypeUtils.Type_SMALLINT) ||
+						type.equals(TypeUtils.Type_INT) ||
+						type.equals(TypeUtils.Type_BIGINT) ||
+						type.equals(TypeUtils.Type_DECIMAL) ||
+						type.equals(TypeUtils.Type_SMALLFLOAT) ||
+						type.equals(TypeUtils.Type_FLOAT) ||
+						type.equals(TypeUtils.Type_DATE) ||
+						type.equals(TypeUtils.Type_TIME) ||
+						type.equals(TypeUtils.Type_TIMESTAMP) ||
+						type.equals(TypeUtils.Type_STRING);
+	}
 }
