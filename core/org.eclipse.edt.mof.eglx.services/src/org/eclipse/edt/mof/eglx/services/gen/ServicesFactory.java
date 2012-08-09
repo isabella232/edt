@@ -9,12 +9,12 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.services;
+package org.eclipse.edt.mof.eglx.services.gen;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EFactory;
 import org.eclipse.edt.mof.egl.CallStatement;
-import org.eclipse.edt.mof.eglx.services.impl.ServicesFactoryImpl;
+import org.eclipse.edt.mof.eglx.services.gen.impl.ServicesFactoryImpl;
 
 public interface ServicesFactory extends EFactory  {
 	public static final ServicesFactory INSTANCE = new ServicesFactoryImpl();
