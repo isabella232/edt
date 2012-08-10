@@ -49,7 +49,7 @@ public class ServiceValidator extends FunctionContainerValidator {
 	@Override
 	public boolean visit(NestedFunction nestedFunction) {
 		super.visit(nestedFunction);
-//		ServiceInterfaceValidatorUtil.validateParametersAndReturn(nestedFunction,true,problemRequestor); TODO
+		ServiceInterfaceValidatorUtil.validateParametersAndReturn(nestedFunction,problemRequestor); 
 		
 		if (NameUtile.equals(nestedFunction.getName().getCanonicalName(), IEGLConstants.MNEMONIC_MAIN)){
 			problemRequestor.acceptProblem(service.getName(),
