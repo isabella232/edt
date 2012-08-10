@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.CallStatementBinding;
-import org.eclipse.edt.compiler.binding.ExitStatementBinding;
 
 
 
@@ -185,7 +183,6 @@ public class ExitStatement extends Statement {
 
 	private ExitModifier exitModifierOpt;
 	private SettingsBlock settingsBlockOpt;
-	private ExitStatementBinding statementBinding;
 
 
 	public ExitStatement(ExitModifier exitModifierOpt, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
@@ -271,14 +268,6 @@ public class ExitStatement extends Statement {
 		return new ExitStatement(newExitModifierOpt, newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
 	
-	public ExitStatementBinding getStatementBinding() {
-        return statementBinding;
-    }
-	
-    public void setStatementBinding(ExitStatementBinding statementBinding) {
-        this.statementBinding = statementBinding;
-    }
-    
 	public boolean hasSettingsBlock() {
 		return settingsBlockOpt != null;
 	}
