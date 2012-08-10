@@ -1260,6 +1260,7 @@ public interface IProblemRequestor {
     public static final int CANNOT_PASS_NULL = 5619;
     public static final int CANNOT_RETURN_NULL = 5620;
     
+    public static final int PROXY_FUNCTIONS_CANNOT_HAVE_STMTS = 5704;
 //6000-6050 ARE IN EGLMESSAGES
 
 	public static final int EMPTY_SQL_STRING = 6500;

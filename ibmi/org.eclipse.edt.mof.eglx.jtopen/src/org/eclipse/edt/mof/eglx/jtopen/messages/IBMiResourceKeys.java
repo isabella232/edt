@@ -32,7 +32,6 @@ public class IBMiResourceKeys{
     public static final int WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS = 5701;
     public static final int PARAMETER_ANNOTATION_INVALID = 5702;
     public static final int IBMIPROGRAM_CONTAINER_INVALID = 5703;
-    public static final int IBMIPROGRAM_CANNOT_HAVE_STMTS = 5704;
     public static final int IBMIPROGRAM_ONLY_SERVICE_CAN_RETURN = 5705;
     public static final int IBMIPROGRAM_CAN_ONLY_RETURN_INT = 5706;
     public static final int AS400_BAD_LENGTH = 5707;

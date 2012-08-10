@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Statement;
 
 
 /**
@@ -40,14 +41,24 @@ public abstract class ServiceProxyFunctionValidator implements FunctionValidator
 				((IRPartBinding)declaringPart).getIrPart() instanceof Handler)) {
 			problemRequestor.acceptProblem(nestedFunction, IProblemRequestor.ANNOTATION_NOT_APPLICABLE, IMarker.SEVERITY_ERROR, new String[] {getName()});
 		}
+		
+		validateFunctionBodyIsEmpty((Function)nestedFunction.getName().resolveMember(), nestedFunction, problemRequestor);
 		validate(nestedFunction, problemRequestor, compilerOptions);
 		
 	}
 
+	private void validateFunctionBodyIsEmpty(Function function, Node node, IProblemRequestor problemRequestor) {
+		if (function.getStatementBlock() != null && function.getStatementBlock().getStatements() != null && 
+				function.getStatementBlock().getStatements().size() > 0) {
+			
+			for(Statement stmt : function.getStatementBlock().getStatements()) {
+				problemRequestor.acceptProblem(stmt, IProblemRequestor.PROXY_FUNCTIONS_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()});
+			}
+		}
+	}
+	
 	@Override
-	public void validateFunction(Constructor constructor,
-			IPartBinding declaringPart, IProblemRequestor problemRequestor,
-			ICompilerOptions compilerOptions) {
+	public void validateFunction(Constructor constructor, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		//not used
 	}
 	protected abstract void validate(NestedFunction nestedFunction, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
