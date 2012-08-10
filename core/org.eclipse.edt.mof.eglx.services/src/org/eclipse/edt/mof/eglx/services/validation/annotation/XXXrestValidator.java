@@ -203,8 +203,8 @@ public abstract class XXXrestValidator implements IAnnotationValidationRule {
 			} else {
 				// non resource parm must be compatible with String
 				if (parm.getType().resolveType() != null) {
-					if (false){//FIXME!TypeCompatibilityUtil.isMoveCompatible(TypeUtils.Type_STRING,
-							//parm.getType().resolveType(), null, compilerOptions)*/) {
+					if (!TypeCompatibilityUtil.isMoveCompatible(TypeUtils.Type_STRING,
+							parm.getType().resolveType(), null, compilerOptions)) {
 						problemRequestor.acceptProblem(
 										parm.getType(),
 										ResourceKeys.XXXREST_NON_RESOUCE_MUST_BE_STRING_COMPAT,
