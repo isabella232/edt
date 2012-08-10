@@ -29,7 +29,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
-import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.MemberScope;
 import org.eclipse.edt.compiler.internal.core.lookup.RecordScope;
@@ -37,7 +36,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.IrFactory;
-import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 
 

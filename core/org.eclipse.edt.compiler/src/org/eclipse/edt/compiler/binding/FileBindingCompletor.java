@@ -27,7 +27,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.utils.NameUtile;
 

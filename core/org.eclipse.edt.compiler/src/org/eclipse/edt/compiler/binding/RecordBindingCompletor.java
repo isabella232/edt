@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.Iterator;
-
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StructureItem;

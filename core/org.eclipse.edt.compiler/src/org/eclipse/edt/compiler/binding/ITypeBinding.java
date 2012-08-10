@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.Map;
 
 /**
  * @author winghong
