@@ -25,7 +25,9 @@ import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
+import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.binding.ProgramParameterBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.binding.VariableFormFieldBinding;
@@ -133,9 +135,9 @@ class Egl2MofMember extends Egl2MofPart {
 				Field f = (Field)fieldClass.newInstance();
 				setUpEglTypedElement(f, field);
 				if (field instanceof ClassFieldBinding) {
-					f.setIsStatic(((ClassFieldBinding)field).isStatic());
+					f.setIsStatic(((ClassFieldBinding)field).isStatic() || field.getDeclaringPart() instanceof LibraryBinding);
 				}
-				if (node.isPrivate()) {
+				if (node.isPrivate() || field.getDeclaringPart() instanceof ProgramBinding) {
 					f.setAccessKind(AccessKind.ACC_PRIVATE);
 				}
 				addInitializers(node, f, node.getType());
@@ -295,7 +297,7 @@ class Egl2MofMember extends Egl2MofPart {
 				((Operation)func).setOpSymbol((String)getFieldValue(ann, "opSymbol"));
 			}
 			setUpEglTypedElement(func, function);
-			func.setIsStatic(node.isStatic());
+			func.setIsStatic(node.isStatic() || function.getDeclaringPart() instanceof LibraryBinding);
 					
 			if (!node.isAbstract() && !isEglSystemFunction(function)) {
 				StatementBlock stmts = factory.createStatementBlock();
@@ -306,7 +308,7 @@ class Egl2MofMember extends Egl2MofPart {
 			if (!node.getStmts().isEmpty() && node.getStmts().get(0) instanceof SettingsBlock) {
 				processSettings(func, (SettingsBlock)node.getStmts().get(0));
 			}
-			if (node.isPrivate()) {
+			if (node.isPrivate() || function.getDeclaringPart() instanceof ProgramBinding) {
 				func.setAccessKind(AccessKind.ACC_PRIVATE);
 			}
 			obj = func;
