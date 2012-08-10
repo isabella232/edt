@@ -16,9 +16,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.sql.SQLInfo;
-
-
 /**
  * DeleteStatement AST node type.
  *
@@ -30,7 +27,6 @@ public class DeleteStatement extends Statement {
 	private Expression expr;
 	private FromOrToExpressionClause dataSource;
 	private List deleteOptions;
-	private SQLInfo sqlInfo;
 
 	public DeleteStatement(Expression expr, FromOrToExpressionClause dataSource, List deleteOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -85,13 +81,6 @@ public class DeleteStatement extends Statement {
 		}
 		return new DeleteStatement(exprClone, (FromOrToExpressionClause)dataSource.clone(), cloneList(deleteOptions), getOffset(), getOffset() + getLength());
 	}
-
-    public SQLInfo getSqlInfo() {
-        return sqlInfo;
-    }
-    public void setSqlInfo(SQLInfo sqlInfo) {
-        this.sqlInfo = sqlInfo;
-    }
 
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.core.ast.IDliIoStatement#getTargets()

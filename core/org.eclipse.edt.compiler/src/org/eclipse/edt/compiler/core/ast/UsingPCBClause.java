@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
-
 /**
  * UsingPCBClause AST node type.
  *
@@ -23,7 +21,7 @@ public class UsingPCBClause extends Node {
 	
 	public static IOStatementClauseInfo INFO = new IOStatementClauseInfo() {
 		public String getClauseKeyword() {
-			return IEGLConstants.KEYWORD_USINGPCB;
+			return "";
 		}
 
 		public String getContentPrefix() {

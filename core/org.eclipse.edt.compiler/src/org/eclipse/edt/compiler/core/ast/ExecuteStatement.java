@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.sql.SQLInfo;
-
-
 /**
  * ExecuteStatement AST node type.
  *
@@ -30,7 +27,6 @@ public class ExecuteStatement extends Statement {
 	private List executeOptions;	// List of Symbols
 	
 	private List ioObjects;
-	private SQLInfo sqlInfo;
 
 	public ExecuteStatement(List executeOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -71,11 +67,4 @@ public class ExecuteStatement extends Statement {
 	protected Object clone() throws CloneNotSupportedException {
 		return new ExecuteStatement(cloneList(executeOptions), getOffset(), getOffset() + getLength());
 	}
-    public SQLInfo getSqlInfo() {
-        return sqlInfo;
-    }
-    public void setSqlInfo(SQLInfo sqlInfo) {
-        this.sqlInfo = sqlInfo;
-    }
-    
 }

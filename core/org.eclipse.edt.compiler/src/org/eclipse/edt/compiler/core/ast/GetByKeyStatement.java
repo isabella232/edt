@@ -13,9 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.sql.SQLInfo;
-
-
 /**
  * GetByKeyStatement AST node type.
  * 
@@ -41,7 +38,6 @@ public class GetByKeyStatement extends Statement {
 
 	private List exprs;	// List of Expressions
 	private List getByKeyOptions;	// List of Nodes
-	private SQLInfo sqlInfo;
 
 	public GetByKeyStatement(List exprs, List getByKeyOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -74,10 +70,4 @@ public class GetByKeyStatement extends Statement {
 	protected Object clone() throws CloneNotSupportedException {
 		return new GetByKeyStatement(cloneList(exprs), cloneList(getByKeyOptions), getOffset(), getOffset() + getLength());
 	}
-    public SQLInfo getSqlInfo() {
-        return sqlInfo;
-    }
-    public void setSqlInfo(SQLInfo sqlInfo) {
-        this.sqlInfo = sqlInfo;
-    }
 }
