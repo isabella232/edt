@@ -15,6 +15,7 @@ package org.eclipse.edt.mof.eglx.jtopen.validation;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
@@ -49,7 +50,7 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 
 		
 		//validate the arguments against the parms
-//FIXME		callStatement.accept(new FunctionArgumentValidator(functionBinding, functionBinding.getDeclarer(), problemRequestor, compilerOptions));
+		callStatement.accept(new FunctionArgumentValidator((Function)targFunction, (org.eclipse.edt.mof.egl.Part)targFunction.getContainer(), problemRequestor, compilerOptions));
 		
 		//if the function returns a value, a returns is required
 		if (((Function)targFunction).getReturnType() != null &&

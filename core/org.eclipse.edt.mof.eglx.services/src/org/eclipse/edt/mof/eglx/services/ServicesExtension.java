@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.eglx.services.gen.ServiceElementGenerator;
@@ -70,6 +71,11 @@ public class ServicesExtension implements ICompilerExtension {
 						(!(exp instanceof FieldAccess && ((FieldAccess)exp).getPrimary() instanceof ThisExpression) &&
 								binding.getContainer() instanceof Service));
 			}
+		}
+		else if (node instanceof NestedFunction) {
+			return ((NestedFunction)node).getName().resolveMember() instanceof Function && 
+					(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.EglService") != null ||
+							((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.Rest") != null );
 		}
 		return false;
 	}

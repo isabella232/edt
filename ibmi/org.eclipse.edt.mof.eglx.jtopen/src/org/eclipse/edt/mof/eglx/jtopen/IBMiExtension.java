@@ -70,8 +70,7 @@ public class IBMiExtension implements ICompilerExtension {
 			}
 		}
 		else if (node instanceof NestedFunction) {
-			NestedFunction func = (NestedFunction)node;
-			return func.getName().resolveMember() instanceof Function && func.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+			return ((NestedFunction)node).getName().resolveMember() instanceof Function && ((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 		}
 		
 		return false;

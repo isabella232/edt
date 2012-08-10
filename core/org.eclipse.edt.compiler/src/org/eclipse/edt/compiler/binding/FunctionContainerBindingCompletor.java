@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.binding;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -95,6 +94,11 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
 
     void endVisitFunctionContainer(Part part) {
     	irBinding.setValid(true);
+		BindingUtil.setDefaultSupertype((StructPart)functionContainerBinding, getDefaultSuperType());
+    }
+    
+    StructPart getDefaultSuperType() {
+    	return (StructPart)BindingUtil.getEAny();
     }
 
     public boolean visit(ClassDataDeclaration classDataDeclaration) {
@@ -233,9 +237,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
             Scope fcScope = getFunctionContainerScope();
             SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(fcScope, functionContainerBinding, scope,
                     dependencyRequestor, problemRequestor, compilerOptions);
-            Iterator i = getPartSubTypeAndAnnotationCollector().getSettingsBlocks().iterator();
-            while (i.hasNext()) {
-                SettingsBlock block = (SettingsBlock) i.next();
+            for(SettingsBlock block : getPartSubTypeAndAnnotationCollector().getSettingsBlocks()) {
                 block.accept(blockCompletor);
             }
         } else {
@@ -252,9 +254,8 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     protected abstract StereotypeType getDefaultStereotypeType();
 
     public boolean visit(UseStatement useStatement) {
-        for (Iterator iter = useStatement.getNames().iterator(); iter.hasNext();) {
-            Name nextName = (Name) iter.next();
-
+        for (Name nextName : useStatement.getNames()) {
+ 
             Type typeBinding = null;
             try {
                 typeBinding = bindTypeName(nextName); 
