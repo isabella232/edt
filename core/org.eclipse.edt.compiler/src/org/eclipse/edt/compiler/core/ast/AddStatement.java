@@ -13,9 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.sql.SQLInfo;
-
-
 /**
  * AddStatement AST node type.
  *
@@ -26,7 +23,6 @@ public class AddStatement extends Statement {
 
 	private List expr_plus;	// List of Expressions
 	private List addOptions;	// List of Nodes
-	private SQLInfo sqlInfo;
 
 	public AddStatement(List expr_plus, List addOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -63,10 +59,4 @@ public class AddStatement extends Statement {
 	protected Object clone() throws CloneNotSupportedException {
 		return new AddStatement(cloneList(expr_plus), cloneList(addOptions), getOffset(), getOffset() + getLength());
 	}
-    public SQLInfo getSqlInfo() {
-        return sqlInfo;
-    }
-    public void setSqlInfo(SQLInfo sqlInfo) {
-        this.sqlInfo = sqlInfo;
-    }
 }

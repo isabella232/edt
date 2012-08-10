@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.sql.SQLInfo;
-
-
 /**
  * ReplaceStatement AST node type.
  * 
@@ -36,7 +33,6 @@ public class ReplaceStatement extends Statement {
 
 	private Expression expr;
 	private List replaceOptions;	// List of Nodes
-	private SQLInfo sqlInfo;
 
 	public ReplaceStatement(Expression expr, List replaceOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -79,11 +75,5 @@ public class ReplaceStatement extends Statement {
         List list = new ArrayList();
         list.add(getRecord());
         return list;
-    }
-    public SQLInfo getSqlInfo() {
-        return sqlInfo;
-    }
-    public void setSqlInfo(SQLInfo sqlInfo) {
-        this.sqlInfo = sqlInfo;
     }
 }

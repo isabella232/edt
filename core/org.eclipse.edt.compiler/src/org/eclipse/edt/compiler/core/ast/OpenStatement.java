@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.sql.SQLInfo;
-
-
 /**
  * OpenStatement AST node type.
  * 
@@ -47,7 +44,6 @@ public class OpenStatement extends Statement {
 	private boolean isHold;
 	private boolean isScroll;
 	private List openTargets;	// List of Nodes
-	private SQLInfo sqlInfo;
 	
 	private List ioObjects;
 
@@ -109,10 +105,4 @@ public class OpenStatement extends Statement {
 	protected Object clone() throws CloneNotSupportedException {
 		return new OpenStatement((Expression)resultSet.clone(), new Boolean[]{new Boolean(isHold), new Boolean(isScroll)}, cloneList(openTargets), getOffset(), getOffset() + getLength());
 	}
-    public SQLInfo getSqlInfo() {
-        return sqlInfo;
-    }
-    public void setSqlInfo(SQLInfo sqlInfo) {
-        this.sqlInfo = sqlInfo;
-    }
 }

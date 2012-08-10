@@ -14,7 +14,7 @@ package org.eclipse.edt.compiler.internal.core.validation;
 
 public class DefaultStatementValidator extends AbstractStatementValidator {
 	
-	//TODO uncomment as validators are ported to the new binding framework
+	//TODO foreachstatement needs to be ported, and all the others should simply display an error as there is no 'default' behavior for them.
 	public boolean visit(org.eclipse.edt.compiler.core.ast.AddStatement addStatement) {
 //		addStatement.accept(new AddStatementValidator(problemRequestor));
 		return false;
