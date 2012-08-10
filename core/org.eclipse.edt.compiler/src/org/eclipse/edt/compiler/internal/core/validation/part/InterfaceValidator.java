@@ -71,8 +71,6 @@ public class InterfaceValidator extends FunctionContainerValidator {
 					IProblemRequestor.INTERFACE_FUNCTION_CANNOT_BE_PRIVATE);
 		}
 		
-//		ServiceInterfaceValidatorUtil.validateParametersAndReturn(nestedFunction,false,problemRequestor); TODO
-		
 		if (InternUtil.intern(nestedFunction.getName().getCanonicalName()) == InternUtil.intern(IEGLConstants.MNEMONIC_MAIN)){
 			problemRequestor.acceptProblem(iFaceNode.getName(),
 					IProblemRequestor.LIBRARY_NO_MAIN_FUNCTION_ALLOWED,

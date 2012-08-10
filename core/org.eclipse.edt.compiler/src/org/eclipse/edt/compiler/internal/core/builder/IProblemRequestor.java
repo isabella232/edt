@@ -868,7 +868,6 @@ public interface IProblemRequestor {
     public static final int EXTERNALTYPE_PARM_CANNOT_BE_CONST = 4961;
     public static final int SERVICE_PARM_CANNOT_BE_CONST = 4962;
     public static final int ONEWAY_FUNCTION_PARM_MUST_BE_IN = 4963;
-    public static final int RETURN_NOT_ALLOWED_FOR_ONEWAY = 4964;
     public static final int FORM_MUST_BE_QUALIFIED_BY_FORMGROUP = 4965;
     public static final int CONSTANT_VALUE_MIXED_TYPE_ARRAY = 4966;
 
