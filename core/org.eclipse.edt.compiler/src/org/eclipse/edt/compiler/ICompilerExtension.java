@@ -12,10 +12,7 @@
 package org.eclipse.edt.compiler;
 
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
-import org.eclipse.edt.mof.egl.Type;
 
 public interface ICompilerExtension {
 	
@@ -42,32 +39,13 @@ public interface ICompilerExtension {
 	ElementGenerator getElementGeneratorFor(Node node);
 	
 	/**
-	 * Returns a validator for the given part, or null if doesn't require extra validation. Only AST types included
+	 * Returns a validator for the given node, or null if doesn't require extra validation. Only AST types included
 	 * in {@link #getExtendedTypes()} will be passed into this method. It is up to the compiler whether this validator
 	 * is run before or after its own validation.
 	 * 
-	 * @param part The part to validate.
-	 * @see PartValidator
-	 * @return a validator for the given part, or null if no extra validation is required.
+	 * @param node The node to validate.
+	 * @see ASTValidator
+	 * @return a validator for the given node, or null if no extra validation is required.
 	 */
-	PartValidator getValidatorFor(Part part);
-	
-	/**
-	 * Returns a validator for the given statement, or null if it's not a type being extended. Only AST
-	 * types included in {@link #getExtendedTypes()} will be passed into this method.
-	 * 
-	 * @param stmt The statement to validate.
-	 * @see StatementValidator
-	 * @return a validator for the given statement, or null if it's not a type being extended.
-	 */
-	StatementValidator getValidatorFor(Statement stmt);
-	
-	/**
-	 * Returns a validator for the given type, or null if it's not a type being extended.
-	 * 
-	 * @param type The type to validate.
-	 * @see TypeValidator
-	 * @return a validator for the given type, or null if it's not a type being extended.
-	 */
-	TypeValidator getValidatorFor(Type type);
+	ASTValidator getValidatorFor(Node node);	
 }

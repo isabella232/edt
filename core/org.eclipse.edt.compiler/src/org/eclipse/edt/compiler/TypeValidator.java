@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler;
 
+import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.Type;
 
-public interface TypeValidator {
-	void validateType(org.eclipse.edt.compiler.core.ast.Type type, Type typeBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+public interface TypeValidator extends ASTValidator {
+	void validateType(Type type, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

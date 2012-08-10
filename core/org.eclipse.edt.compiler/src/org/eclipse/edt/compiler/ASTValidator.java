@@ -12,10 +12,10 @@
 package org.eclipse.edt.compiler;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
-public interface StatementValidator extends ASTValidator {
-	void validateStatement(Statement stmt, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+public interface ASTValidator {
+	void validate(Node node, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

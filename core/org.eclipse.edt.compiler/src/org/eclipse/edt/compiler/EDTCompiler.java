@@ -15,15 +15,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.Constructor;
+import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
+import org.eclipse.edt.compiler.internal.core.validation.DefaultFunctionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultPartValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultTypeValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.DefaultElementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
-import org.eclipse.edt.mof.egl.Type;
 
 public class EDTCompiler extends BaseCompiler {
 	
@@ -55,34 +59,30 @@ public class EDTCompiler extends BaseCompiler {
 	}
 	
 	@Override
-	public StatementValidator getValidatorFor(Statement stmt) {
-		StatementValidator validator = super.getValidatorFor(stmt);
-		if (validator != null) {
-			return validator;
-		}
-		return new DefaultStatementValidator();
-	}
-	
-	@Override
-	public List<PartValidator> getValidatorsFor(org.eclipse.edt.compiler.core.ast.Part part) {
-		List<PartValidator> validators = super.getValidatorsFor(part);
+	public List<ASTValidator> getValidatorsFor(Node node) {
+		List<ASTValidator> validators = super.getValidatorsFor(node);
 		if (validators == null) {
-			validators = new ArrayList<PartValidator>(1);
+			validators = new ArrayList<ASTValidator>(1);
 		}
 		
-		// default gets run first.
-		validators.add(0, new DefaultPartValidator());
+		// Extensions can contribute to, but not replace, part, type and function validation. Statement
+		// validation, however, CAN be replaced completely. Default validators will always be run first.
+		if (node instanceof Part) {
+			validators.add(0, new DefaultPartValidator());
+		}
+		else if (node instanceof Type) {
+			if (DefaultTypeValidator.isApplicableFor((Type)node)) {
+				validators.add(0, new DefaultTypeValidator());
+			}
+		}
+		else if (node instanceof NestedFunction || node instanceof Constructor) {
+			validators.add(0, new DefaultFunctionValidator());
+		}
+		else if (validators.size() == 0 && node instanceof Statement) {
+			validators.add(new DefaultStatementValidator());
+		}
+		
 		return validators;
-	}
-	
-	@Override
-	public TypeValidator getValidatorFor(Type type) {
-		TypeValidator validator = super.getValidatorFor( type );
-		if (validator != null) {
-			return validator;
-		}
-		
-		return new DefaultTypeValidator();
 	}
 	
 	@Override

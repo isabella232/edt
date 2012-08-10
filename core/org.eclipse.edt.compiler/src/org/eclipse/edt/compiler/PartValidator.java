@@ -16,6 +16,6 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
-public interface PartValidator {
+public interface PartValidator extends ASTValidator {
 	void validatePart(Part part, IRPartBinding irBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

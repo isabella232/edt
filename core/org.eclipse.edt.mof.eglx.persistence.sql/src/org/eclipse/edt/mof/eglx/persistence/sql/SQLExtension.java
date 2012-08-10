@@ -1,10 +1,8 @@
 package org.eclipse.edt.mof.eglx.persistence.sql;
 
+import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.ICompilerExtension;
-import org.eclipse.edt.compiler.PartValidator;
-import org.eclipse.edt.compiler.StatementValidator;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
-import org.eclipse.edt.compiler.TypeValidator;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
@@ -16,10 +14,8 @@ import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.GetByPositionStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
-import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.persistence.sql.gen.SQLActionStatementGenerator;
@@ -49,22 +45,10 @@ public class SQLExtension implements ICompilerExtension {
 	}
 	
 	@Override
-	public PartValidator getValidatorFor(Part part) {
-		// No special validators.
-		return null;
-	}
-	
-	@Override
-	public StatementValidator getValidatorFor(Statement stmt) {
-		if (shouldExtend(stmt)) {
+	public ASTValidator getValidatorFor(Node node) {
+		if (shouldExtend(node)) {
 			return new SQLActionStatementValidator();
 		}
-		return null;
-	}
-	
-	@Override
-	public TypeValidator getValidatorFor(Type type) {
-		// No special validators.
 		return null;
 	}
 	

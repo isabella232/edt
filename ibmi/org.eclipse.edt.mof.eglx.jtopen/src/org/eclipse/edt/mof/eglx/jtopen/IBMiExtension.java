@@ -11,21 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen;
 
+import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.ICompilerExtension;
-import org.eclipse.edt.compiler.PartValidator;
-import org.eclipse.edt.compiler.StatementValidator;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
-import org.eclipse.edt.compiler.TypeValidator;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiElementGenerator;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramCallStatementValidator;
@@ -51,23 +46,11 @@ public class IBMiExtension implements ICompilerExtension {
 	}
 	
 	@Override
-	public PartValidator getValidatorFor(Part part) {
-		// No special validators.
-		return null;
-	}
-	
-	@Override
-	public StatementValidator getValidatorFor(Statement stmt) {
+	public ASTValidator getValidatorFor(Node node) {
 		// Call statement can be extended.
-		if (shouldExtend(stmt)) {
+		if (shouldExtend(node)) {
 			return new IBMiProgramCallStatementValidator();
 		}
-		return null;
-	}
-	
-	@Override
-	public TypeValidator getValidatorFor(Type type) {
-		// No special validators.
 		return null;
 	}
 	

@@ -17,7 +17,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
@@ -62,13 +64,23 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 	
 	@Override
 	public boolean visit(NestedFunction nestedFunction) {
-		nestedFunction.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
+		List<ASTValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor(nestedFunction);
+    	if (validators != null && validators.size() > 0) {
+    		for (ASTValidator validator : validators) {
+    			validator.validate(nestedFunction, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+    		}
+    	}
 		return false;
 	}
 	
 	@Override
 	public boolean visit(Constructor constructor) {
-		constructor.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
+		List<ASTValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor(constructor);
+    	if (validators != null && validators.size() > 0) {
+    		for (ASTValidator validator : validators) {
+    			validator.validate(constructor, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+    		}
+    	}
 		return false;
 	}
 	

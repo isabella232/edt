@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.type;
 
-import org.eclipse.edt.compiler.ICompiler;
+import java.util.List;
+
+import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -27,18 +29,17 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class TypeValidator {
 	
-	public static void validate(Type type, final IProblemRequestor problemRequestor, final ICompilerOptions compilerOptions, final ICompiler compiler) {
+	public static void validate(Type type, final IPartBinding declaringPart, final IProblemRequestor problemRequestor, final ICompilerOptions compilerOptions) {
 		if (type == null) {
 			return;
 		}
 		
 		type.accept(new AbstractASTVisitor() {
 			public boolean visit(org.eclipse.edt.compiler.core.ast.NameType nameType) {
-				org.eclipse.edt.mof.egl.Type typeBinding = nameType.resolveType();
-				if (typeBinding != null) {
-					org.eclipse.edt.compiler.TypeValidator validator = compiler.getValidatorFor(typeBinding);
-					if (validator != null) {
-						validator.validateType(nameType, typeBinding, problemRequestor, compilerOptions);
+				List<ASTValidator> validators = declaringPart.getEnvironment().getCompiler().getValidatorsFor(nameType);
+				if (validators != null && validators.size() > 0) {
+					for (ASTValidator validator : validators) {
+						validator.validate(nameType, declaringPart, problemRequestor, compilerOptions);
 					}
 				}
 				return false;
@@ -51,7 +52,6 @@ public class TypeValidator {
 		// Non-nullable reference types must have a public default constructor in order to be instantiatable.
 		if (!isNullable) {
 			org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
-			//TODO allowed without constructor if it's a type being used within itself.
 			if (typeBinding != null && !(typeBinding instanceof ParameterizedType)
 					&& TypeUtils.isReferenceType(typeBinding) && !hasPublicDefaultConstructor(typeBinding)) {
 				// Don't need to throw error if the field is in an ExternalType, or if the field's type is the same as the declaring part's type.

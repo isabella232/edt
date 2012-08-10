@@ -19,19 +19,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.eclipse.edt.compiler.TypeValidator;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.IntervalType;
+import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.Type;
 
-public class DefaultTypeValidator implements TypeValidator {
+public class DefaultTypeValidator extends AbstractTypeValidator {
 	
 	@Override
-	public void validateType(org.eclipse.edt.compiler.core.ast.Type type, Type typeBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public boolean visit(org.eclipse.edt.compiler.core.ast.NameType nameType) {
+		validateType(nameType);
+		return false;
+	};
+	
+	protected void validateType(org.eclipse.edt.compiler.core.ast.Type type) {
+		Type typeBinding = type.resolveType();
 		if (typeBinding instanceof FixedPrecisionType) {
 			// Length and decimals must be non-negative, 0-32, and decimals must be <= length.
 			int len = ((FixedPrecisionType)typeBinding).getLength();
@@ -248,5 +253,13 @@ public class DefaultTypeValidator implements TypeValidator {
 		public Integer[] getErrorMessageNumbers() {
 			return (Integer[]) errorMessageNumbers.toArray(new Integer[errorMessageNumbers.size()]);
 		}
+	}
+	
+	public static boolean isApplicableFor(org.eclipse.edt.compiler.core.ast.Type type) {
+		Type typeBinding = type.resolveType();
+		if (typeBinding instanceof ParameterizedType) {
+			return typeBinding instanceof FixedPrecisionType || typeBinding instanceof SequenceType || typeBinding instanceof TimestampType || typeBinding instanceof IntervalType;
+		}
+		return false;
 	}
 }

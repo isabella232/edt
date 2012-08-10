@@ -13,8 +13,10 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Interface;
@@ -57,7 +59,13 @@ public class InterfaceValidator extends FunctionContainerValidator {
 	
 	@Override
 	public boolean visit(NestedFunction nestedFunction) {
-		nestedFunction.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
+		List<ASTValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor(nestedFunction);
+    	if (validators != null && validators.size() > 0) {
+    		for (ASTValidator validator : validators) {
+    			validator.validate(nestedFunction, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+    		}
+    	}
+		
 		if (nestedFunction.isPrivate()){
 			problemRequestor.acceptProblem(nestedFunction.getName(),
 					IProblemRequestor.INTERFACE_FUNCTION_CANNOT_BE_PRIVATE);

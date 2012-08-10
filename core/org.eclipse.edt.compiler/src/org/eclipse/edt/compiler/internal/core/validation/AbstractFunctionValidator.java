@@ -11,34 +11,45 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation;
 
-import org.eclipse.edt.compiler.PartValidator;
+import org.eclipse.edt.compiler.FunctionValidator;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Constructor;
+import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
-public abstract class AbstractPartValidator extends AbstractASTVisitor implements PartValidator {
-
+public class AbstractFunctionValidator extends AbstractASTVisitor implements FunctionValidator {
+	
 	protected IProblemRequestor problemRequestor;
 	protected ICompilerOptions compilerOptions;
-	protected IRPartBinding irBinding;
+	protected IPartBinding declaringPart;
 	
 	@Override
 	public void validate(Node node, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (node instanceof Part && declaringPart instanceof IRPartBinding) {
-			validatePart((Part)node, (IRPartBinding)declaringPart, problemRequestor, compilerOptions);
+		if (node instanceof NestedFunction) {
+			validateFunction((NestedFunction)node, declaringPart, problemRequestor, compilerOptions);
+		}
+		else if (node instanceof Constructor) {
+			validateFunction((Constructor)node, declaringPart, problemRequestor, compilerOptions);
 		}
 	}
 	
 	@Override
-	public void validatePart(Part part, IRPartBinding irBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public void validateFunction(NestedFunction function, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
 		this.compilerOptions = compilerOptions;
-		this.irBinding = irBinding;
-		part.accept(this);
+		this.declaringPart = declaringPart;
+		function.accept(this);
 	}
-
+	
+	@Override
+	public void validateFunction(Constructor constructor, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		this.problemRequestor = problemRequestor;
+		this.compilerOptions = compilerOptions;
+		this.declaringPart = declaringPart;
+		constructor.accept(this);
+	}
+	
 }

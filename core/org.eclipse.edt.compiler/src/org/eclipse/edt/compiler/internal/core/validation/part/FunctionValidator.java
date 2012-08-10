@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -158,10 +159,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ReturnsDeclaration returnsDeclaration) {
-		Type type = returnsDeclaration.getType();
-		if (type != null) {
-			TypeValidator.validate(type, problemRequestor, compilerOptions, enclosingPart.getEnvironment().getCompiler());
-		}
+		TypeValidator.validate(returnsDeclaration.getType(), enclosingPart, problemRequestor, compilerOptions);
 		return true;
 	};
 	
@@ -201,12 +199,12 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	public boolean visit(FunctionParameter functionParameter) {
-	
-        Type parmType = functionParameter.getType();
         
+		Type parmType = functionParameter.getType();
+		
         Member member = functionParameter.getName().resolveMember();
         if(member instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
-        	TypeValidator.validate(parmType, problemRequestor, compilerOptions, enclosingPart.getEnvironment().getCompiler());
+        	TypeValidator.validate(parmType, enclosingPart, problemRequestor, compilerOptions);
         	
         	org.eclipse.edt.mof.egl.FunctionParameter memberParam = (org.eclipse.edt.mof.egl.FunctionParameter)member;
         	
@@ -353,12 +351,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(AddStatement addStatement) {
 		preVisitStatement(addStatement);
 		if (checkStatementAllowedInContainer(addStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(addStatement);
-				if (val != null) {
-					val.validateStatement(addStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(addStatement);
 		}
 		postVisitStatement(addStatement);
 		return false;
@@ -377,12 +370,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(CallStatement callStatement) {
 		preVisitStatement(callStatement);
 		if (checkStatementAllowedInContainer(callStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(callStatement);
-				if (val != null) {
-					val.validateStatement(callStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(callStatement);
 		}
 		postVisitStatement(callStatement);
 		return false;
@@ -403,12 +391,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(CloseStatement closeStatement) {
 		preVisitStatement(closeStatement);
 		if (checkStatementAllowedInContainer(closeStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(closeStatement);
-				if (val != null) {
-					val.validateStatement(closeStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(closeStatement);
 		}
 		postVisitStatement(closeStatement);
 		return false;
@@ -427,12 +410,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(DeleteStatement deleteStatement) {
 		preVisitStatement(deleteStatement);
 		if (checkStatementAllowedInContainer(deleteStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(deleteStatement);
-				if (val != null) {
-					val.validateStatement(deleteStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(deleteStatement);
 		}
 		postVisitStatement(deleteStatement);
 		return false;
@@ -441,12 +419,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(ExecuteStatement executeStatement) {
 		preVisitStatement(executeStatement);
 		if (checkStatementAllowedInContainer(executeStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(executeStatement);
-				if (val != null) {
-					val.validateStatement(executeStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(executeStatement);
 		}
 		postVisitStatement(executeStatement);
 		return false;
@@ -476,12 +449,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		}
 		preVisitStatement(forEachStatement);
 		if (checkStatementAllowedInContainer(forEachStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(forEachStatement);
-				if (val != null) {
-					val.validateStatement(forEachStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(forEachStatement);
 		}		
 		postVisitStatement(forEachStatement);
 		return false;
@@ -528,12 +496,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(GetByKeyStatement getByKeyStatement) {
 		preVisitStatement(getByKeyStatement);
 		if (checkStatementAllowedInContainer(getByKeyStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(getByKeyStatement);
-				if (val != null) {
-					val.validateStatement(getByKeyStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(getByKeyStatement);
 		}
 		postVisitStatement(getByKeyStatement);
 		return false;
@@ -542,12 +505,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(GetByPositionStatement getByPositionStatement) {
 		preVisitStatement(getByPositionStatement);
 		if (checkStatementAllowedInContainer(getByPositionStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(getByPositionStatement);
-				if (val != null) {
-					val.validateStatement(getByPositionStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(getByPositionStatement);
 		}
 		postVisitStatement(getByPositionStatement);
 		return false;
@@ -604,12 +562,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(OpenStatement openStatement) {
 		preVisitStatement(openStatement);
 		if (checkStatementAllowedInContainer(openStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(openStatement);
-				if (val != null) {
-					val.validateStatement(openStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(openStatement);
 		}
 		postVisitStatement(openStatement);
 		return false;
@@ -618,12 +571,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(PrepareStatement prepareStatement) {
 		preVisitStatement(prepareStatement);
 		if (checkStatementAllowedInContainer(prepareStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(prepareStatement);
-				if (val != null) {
-					val.validateStatement(prepareStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(prepareStatement);
 		}
 		postVisitStatement(prepareStatement);
 		return false;
@@ -632,12 +580,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(ReplaceStatement replaceStatement) {
 		preVisitStatement(replaceStatement);
 		if (checkStatementAllowedInContainer(replaceStatement)) {
-			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
-				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(replaceStatement);
-				if (val != null) {
-					val.validateStatement(replaceStatement, problemRequestor, compilerOptions);
-				}
-			}
+			validateStatement(replaceStatement);
 		}
 		postVisitStatement(replaceStatement);
 		return false;
@@ -706,6 +649,15 @@ public class FunctionValidator extends AbstractASTVisitor {
 	
 	public void endVisit(NestedFunction nestedFunction) {
 		validateGotoLabels();
+	}
+	
+	private void validateStatement(Statement stmt) {
+		List<ASTValidator> validators = enclosingPart.getEnvironment().getCompiler().getValidatorsFor(stmt);
+		if (validators != null && validators.size() > 0) {
+			for (ASTValidator validator : validators) {
+				validator.validate(stmt, enclosingPart, problemRequestor, compilerOptions);
+			}
+		}
 	}
 	
 	private void validateGotoLabels(){

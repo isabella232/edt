@@ -91,4 +91,9 @@ public class UnaryExpression extends Expression {
 	protected Object clone() throws CloneNotSupportedException {
 		return new UnaryExpression(operator, (Expression)expr.clone(), getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		return operator.toString() + expr.toString();
+	}
 }

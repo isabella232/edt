@@ -40,7 +40,7 @@ public class FieldValidator extends DefaultASTVisitor{
 	public boolean visit(final ClassDataDeclaration classDataDeclaration) {
 		Type type = classDataDeclaration.getType();
 		validateNoEmptySettingsBlockForServiceOrInterface(classDataDeclaration.getType(), classDataDeclaration.getSettingsBlockOpt());
-		TypeValidator.validate(classDataDeclaration.getType(), problemRequestor, compilerOptions, declaringPart.getEnvironment().getCompiler());
+		TypeValidator.validate(classDataDeclaration.getType(), declaringPart, problemRequestor, compilerOptions);
 		
 		if (classDataDeclaration.hasInitializer()) {
 			if (classDataDeclaration.hasSettingsBlock()) {
@@ -70,7 +70,7 @@ public class FieldValidator extends DefaultASTVisitor{
 		Type type = functionDataDeclaration.getType();
 		if (type != null) {
 			validateNoEmptySettingsBlockForServiceOrInterface(type, functionDataDeclaration.getSettingsBlockOpt());
-			TypeValidator.validate(type, problemRequestor, compilerOptions, declaringPart.getEnvironment().getCompiler());
+			TypeValidator.validate(type, declaringPart, problemRequestor, compilerOptions);
 			
 			if (functionDataDeclaration.hasInitializer()) {
 				if (functionDataDeclaration.hasSettingsBlock()) {
@@ -102,7 +102,7 @@ public class FieldValidator extends DefaultASTVisitor{
 		Type type = structureItem.getType();
 		if (type != null) {
 			validateNoEmptySettingsBlockForServiceOrInterface(type, structureItem.getSettingsBlock());
-			TypeValidator.validate(type, problemRequestor, compilerOptions, declaringPart.getEnvironment().getCompiler());
+			TypeValidator.validate(type, declaringPart, problemRequestor, compilerOptions);
 			
 			if (structureItem.hasInitializer()) {
 				if (structureItem.hasSettingsBlock()) {

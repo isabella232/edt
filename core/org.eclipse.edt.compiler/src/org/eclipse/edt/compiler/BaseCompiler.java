@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
@@ -189,42 +187,18 @@ public class BaseCompiler implements ICompiler {
 		return getImplicitlyUsedEnumerations();
 	}
 
-	@Override
-	public StatementValidator getValidatorFor(Statement stmt) {
-		List<ICompilerExtension> stmtExtensions = astTypeToExtensions.get(stmt.getClass());
-		if (stmtExtensions != null && stmtExtensions.size() > 0) {
-			for (ICompilerExtension ext : stmtExtensions) {
-				StatementValidator validator = ext.getValidatorFor(stmt);
-				if (validator != null) {
-					return validator;
-				}
-			}
-		}
-		
-		return null;
-	}
 	
 	@Override
-	public List<PartValidator> getValidatorsFor(Part part) {
-		List<ICompilerExtension> partExtensions = astTypeToExtensions.get(part.getClass());
-		if (partExtensions != null && partExtensions.size() > 0) {
-			List<PartValidator> validators = new ArrayList<PartValidator>(partExtensions.size() + 1);
-			for (ICompilerExtension ext : partExtensions) {
-				PartValidator validator = ext.getValidatorFor(part);
+	public List<ASTValidator> getValidatorsFor(Node node) {
+		List<ICompilerExtension> nodeExtensions = astTypeToExtensions.get(node.getClass());
+		if (nodeExtensions != null && nodeExtensions.size() > 0) {
+			for (ICompilerExtension ext : nodeExtensions) {
+				List<ASTValidator> validators = new ArrayList<ASTValidator>(nodeExtensions.size() + 1);
+				ASTValidator validator = ext.getValidatorFor(node);
 				if (validator != null) {
 					validators.add(validator);
 				}
-			}
-			return validators;
-		}
-		return null;
-	}
-	
-	public TypeValidator getValidatorFor(Type type) {
-		for (ICompilerExtension ext : extensions) {
-			TypeValidator validator = ext.getValidatorFor(type);
-			if (validator != null) {
-				return validator;
+				return validators;
 			}
 		}
 		
