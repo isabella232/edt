@@ -75,7 +75,7 @@ public class BindingCompletor {
 				astNode.accept(new ServiceBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
 			case ITypeBinding.DELEGATE_BINDING:
-//TODO				astNode.accept(new DelegateBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				astNode.accept(new DelegateBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;			
 			case ITypeBinding.ENUMERATION_BINDING:
 				astNode.accept(new EnumerationBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
