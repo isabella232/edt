@@ -507,6 +507,7 @@ public interface IProblemRequestor {
 	public static final int PROPERTY_NOT_VALID_FOR_TYPES = 3462;
 
 	public static final int STATEMENT_NOT_SUPPORTED = 3463;
+	public static final int STATEMENT_NOT_EXTENDED = 3464;
 	
 	public static final int LENGTH_OF_NONDECIMAL_DIGITS_FOR_CONSTANT_TOO_LONG = 3465;
 	public static final int DECIMALS_OF_VALUE_FOR_CONSTANT_TOO_LONG = 3466;
