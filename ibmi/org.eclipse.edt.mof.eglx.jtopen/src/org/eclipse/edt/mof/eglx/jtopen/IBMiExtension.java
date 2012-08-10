@@ -18,16 +18,13 @@ import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.TypeValidator;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiElementGenerator;
@@ -85,7 +82,7 @@ public class IBMiExtension implements ICompilerExtension {
 				Member binding = exp.resolveMember();
 				//only service can have a Service type qualifier with no using clause
 				return binding instanceof Function && 
-						!isFunctionServiceQualified(exp, (Function)binding) &&
+						!Utils.isFunctionServiceQualified(exp, (Function)binding) &&
 						binding.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 			}
 		}
@@ -95,10 +92,5 @@ public class IBMiExtension implements ICompilerExtension {
 		}
 		
 		return false;
-	}
-	
-	private static boolean isFunctionServiceQualified(	Expression exp, Function function){
-		return !(exp instanceof FieldAccess && ((FieldAccess)exp).getPrimary() instanceof ThisExpression) &&
-				function.getContainer() instanceof Service;
 	}
 }

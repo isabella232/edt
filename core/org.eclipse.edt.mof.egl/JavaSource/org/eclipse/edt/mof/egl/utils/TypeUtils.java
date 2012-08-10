@@ -266,6 +266,18 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	/**
+	 * Returns true if the passed in type is either the type matching the target mof key, or is a subtype
+	 * of that type. Essentially this is like doing "type instanceof target" in Java.
+	 */
+	public static boolean isTypeOrSubtypeOf(Type type, String targetTypeMofKey) {
+		if (type != null && type.getClassifier() instanceof EGLClass) {
+			EGLClass ds = (EGLClass)getType(targetTypeMofKey);
+			return ds != null && type.getClassifier().equals(ds) || ((EGLClass)type.getClassifier()).isSubtypeOf(ds);
+		}
+		return false;
+	}
+	
+	/**
 	 * Compatibility is defined between StructPart classifiers as either having
 	 * explicit conversion operations defined between them or the rhsType being
 	 * a subtype of the lhsType or the lhsType being a subtype of the rhsType

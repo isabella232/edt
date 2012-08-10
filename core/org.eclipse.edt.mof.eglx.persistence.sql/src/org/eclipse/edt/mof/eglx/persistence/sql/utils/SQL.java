@@ -22,12 +22,17 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class SQL {
 	
 	private SQL() {}
+	
+	private static final String SQLResultSetMofKey = MofConversion.EGL_KeyScheme + "eglx.persistence.sql.SQLResultSet";
+	private static final String SQLDataSourceMofKey = MofConversion.EGL_KeyScheme + "eglx.persistence.sql.SQLDataSource";
+	private static final String SQLStatementMofKey = MofConversion.EGL_KeyScheme + "eglx.persistence.sql.SQLStatement";
 
 	public static String getTableName(EGLClass entity) {
 		Annotation table = entity.getAnnotation("eglx.persistence.sql.Table");
@@ -110,8 +115,16 @@ public class SQL {
 			&& !isTransient(field);
 	}
 
-	public static boolean isSQLResultSet(Type datasource) {
-		return datasource.getTypeSignature().equals("eglx.persistence.sql.SQLResultSet");
+	public static boolean isSQLDataSource(Type type) {
+		return TypeUtils.isTypeOrSubtypeOf(type, SQLDataSourceMofKey);
+	}
+	
+	public static boolean isSQLResultSet(Type type) {
+		return TypeUtils.isTypeOrSubtypeOf(type, SQLResultSetMofKey);
+	}
+	
+	public static boolean isSQLStatement(Type type) {
+		return TypeUtils.isTypeOrSubtypeOf(type, SQLStatementMofKey);
 	}
 	
 	public static boolean isTextType(Classifier type) {
