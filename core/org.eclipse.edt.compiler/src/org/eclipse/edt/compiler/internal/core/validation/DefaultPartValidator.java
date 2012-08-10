@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.internal.core.validation.part.ClassValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.DelegateValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.EnumerationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.ExternalTypeValidator;
+import org.eclipse.edt.compiler.internal.core.validation.part.FlexibleRecordValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.FunctionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.HandlerValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.InterfaceValidator;
@@ -70,7 +71,7 @@ public class DefaultPartValidator extends AbstractPartValidator {
 	};
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Record record) {
-//		record.accept(new RecordValidator(problemRequestor, irBinding, compilerOptions));
+		record.accept(new FlexibleRecordValidator(problemRequestor, irBinding, compilerOptions));
 		return false;
 	};
 	
