@@ -78,8 +78,7 @@ public class RestServiceProxyFunctionValidator extends
 	private Node responseFormatNode;
 	private Node requestFormatNode;
 
-	protected void validate(NestedFunction nestedFunction,
-			IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	protected void validate(NestedFunction nestedFunction, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 
 		Function function = (Function) nestedFunction.getName().resolveMember();
 		Annotation restAnnotation = function.getAnnotation("eglx.rest.Rest");
