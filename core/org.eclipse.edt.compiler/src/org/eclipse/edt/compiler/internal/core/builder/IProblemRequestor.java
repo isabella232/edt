@@ -428,6 +428,7 @@ public interface IProblemRequestor {
     public static final int FUNCTION_CANT_HAVE_RETURN_TYPE = 3389;
     
 	
+	public static final int INTERFACE_FUNCTION_MISSING = 3400;
 	public static final int TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE = 3410;
 
 	public static final int SYSTEM_FUNCTION_CANNOT_BE_DELEGATED = 3416;
