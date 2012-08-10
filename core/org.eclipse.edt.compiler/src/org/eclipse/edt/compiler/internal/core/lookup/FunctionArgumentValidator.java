@@ -55,6 +55,8 @@ import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 /**
@@ -200,8 +202,8 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	}
 	
 	private IProblemRequestor problemRequestor;
-	private IFunctionBinding functionBinding;
-	private IPartBinding functionContainerBinding;
+	private Function functionBinding;
+	private Part functionContainerBinding;
 	private IInvocationNode fInvocationNode;
 	private String canonicalFunctionName;
 	private Iterator parameterIter;
@@ -209,7 +211,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 
 	private ICompilerOptions compilerOptions;
 		
-	public FunctionArgumentValidator(IFunctionBinding functionBinding, IPartBinding functionContainerBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public FunctionArgumentValidator(Function functionBinding, Part functionContainerBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		this.functionBinding = functionBinding;
 		this.functionContainerBinding = functionContainerBinding;
 		parameterIter = functionBinding.getParameters().iterator();

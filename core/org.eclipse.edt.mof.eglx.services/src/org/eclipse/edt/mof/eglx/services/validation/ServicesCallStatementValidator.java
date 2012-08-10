@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
@@ -66,7 +67,7 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 		}
 
 		//validate the arguments against the parms
-//FIXME		callStatement.accept(new FunctionArgumentValidator((IFunctionBinding)dataBinding.getType(), dataBinding.getDeclaringPart(), problemRequestor, compilerOptions));
+		callStatement.accept(new FunctionArgumentValidator((Function)function, (org.eclipse.edt.mof.egl.Part)function.getContainer(), problemRequestor, compilerOptions));
 		
 		//check to make sure a callback is specified
 		if (callStatement.getCallSynchronizationValues() == null || callStatement.getCallSynchronizationValues().getReturnTo() == null) {
@@ -219,13 +220,13 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 			return true;
 		}
 
-//FIXME    	if (TypeCompatibilityUtil.isMoveCompatible(parm.getType(), argType, null, compilerOptions)) {
-//    		return true;
-//    	}
+    	if (TypeCompatibilityUtil.isMoveCompatible(parm.getType(), argType, null, compilerOptions)) {
+    		return true;
+    	}
 		
-//FIXME 	   if (TypeCompatibilityUtil.areCompatibleExceptions(argType, parm.getType(), compilerOptions)) {
-// 		   return true;
-// 	   }
+ 	   if (TypeCompatibilityUtil.areCompatibleExceptions(argType, parm.getType(), compilerOptions)) {
+ 		   return true;
+ 	   }
  	   return false;
 
 	}
