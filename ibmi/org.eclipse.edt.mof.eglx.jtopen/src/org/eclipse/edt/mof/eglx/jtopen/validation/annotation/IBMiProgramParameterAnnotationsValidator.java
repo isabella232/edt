@@ -22,8 +22,13 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 
@@ -48,7 +53,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 			
 			if (values[i] == null) {
 				//If null was specified, make sure that we dont need a parameter annotation for the parm type
-				if (IBMiProgramValidator.requiresAS400TypeAnnotation(functionBinding.getParameters().get(i).getType())) {
+				if (requiresAS400TypeAnnotation(functionBinding.getParameters().get(i).getType())) {
 					problemRequestor.acceptProblem(getNodeForArrayEntry(errorNode, i), 
 							IBMiResourceKeys.PROGRAM_PARAMETER_ANNOTATION_REQUIRED, 
 							IMarker.SEVERITY_ERROR, 
@@ -122,5 +127,54 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 			}
 		}
 		return getFunctionBinding(node.getParent());
+	}
+	public static boolean requiresAS400TypeAnnotation(Type type) {
+		if (type == null) {
+			return false; //avoid excess error messages
+		}
+		
+		if( TypeUtils.isPrimitive(type)){
+			return TypeUtils.isReferenceType(type);
+		}
+		
+		if(type instanceof ArrayType) {
+			if (((ArrayType)type).getElementType() == null) {
+				return false; //avoid excess error messages
+			}
+			if (((ArrayType)type).getElementType() instanceof ArrayType) {
+				return false;
+			}
+			return requiresAS400TypeAnnotation(((ArrayType)type).getElementType());
+			
+		}
+		return false;
+	}
+	public static boolean isValidAS400Type(Type type) {
+		if (type == null) {
+			return true; //avoid excess error messages
+		}
+		
+		if( type.equals(TypeUtils.isPrimitive(type))){
+			return true;
+		}
+		if (type instanceof Handler) {
+			return true;
+		}
+		
+		if (type instanceof Record) {
+			return true;
+		}
+		
+		if(type instanceof ArrayType) {
+			if (((ArrayType)type).getElementType() ==null) {
+				return true; //avoid excess error messages
+			}
+			if (((ArrayType)type) instanceof ArrayType) {
+				return false;
+			}
+			return isValidAS400Type(((ArrayType)type).getElementType());
+			
+		}
+		return false;
 	}
 }

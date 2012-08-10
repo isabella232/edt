@@ -103,7 +103,7 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 	
 	protected void validateElementTypeNotRequired(Member targetBinding, Node errorNode, IProblemRequestor problemRequestor) {
 		if (targetBinding.getType() instanceof ArrayType && 
-				IBMiProgramValidator.requiresAS400TypeAnnotation(((ArrayType)targetBinding.getType()).getElementType())) {
+				IBMiProgramParameterAnnotationsValidator.requiresAS400TypeAnnotation(((ArrayType)targetBinding.getType()).getElementType())) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"elementTypeAnnotation", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
@@ -137,7 +137,7 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 		if (typeBinding != null) {
 						
 			if (typeBinding instanceof ArrayType) {
-				return IBMiProgramValidator.isValidAS400Type(typeBinding);
+				return IBMiProgramParameterAnnotationsValidator.isValidAS400Type(typeBinding);
 			}
 			else {
 				return false;

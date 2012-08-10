@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiElementGenerator;
+import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiFunctionValidator;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramCallStatementValidator;
 
 public class IBMiExtension implements ICompilerExtension {
@@ -49,7 +50,12 @@ public class IBMiExtension implements ICompilerExtension {
 	public ASTValidator getValidatorFor(Node node) {
 		// Call statement can be extended.
 		if (shouldExtend(node)) {
-			return new IBMiProgramCallStatementValidator();
+			if (node instanceof CallStatement) {
+				return new IBMiProgramCallStatementValidator();
+			}
+			else if (node instanceof NestedFunction) {
+				return new IBMiFunctionValidator();
+			}
 		}
 		return null;
 	}

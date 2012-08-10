@@ -26,6 +26,8 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.eglx.services.gen.ServiceElementGenerator;
 import org.eclipse.edt.mof.eglx.services.gen.ServicesCallStatement;
+import org.eclipse.edt.mof.eglx.services.validation.EglServiceProxyFunctionValidator;
+import org.eclipse.edt.mof.eglx.services.validation.RestServiceProxyFunctionValidator;
 import org.eclipse.edt.mof.eglx.services.validation.ServicesCallStatementValidator;
 
 public class ServicesExtension implements ICompilerExtension {
@@ -52,7 +54,18 @@ public class ServicesExtension implements ICompilerExtension {
 	public ASTValidator getValidatorFor(Node node) {
 		// Call statement can be extended.
 		if (shouldExtend(node)) {
-			return new ServicesCallStatementValidator();
+			if (node instanceof CallStatement) {
+				return new ServicesCallStatementValidator();
+			}
+			else if (node instanceof NestedFunction &&
+					((NestedFunction)node).getName().resolveMember() instanceof Function) {
+				if(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.EglService") != null){
+					return new EglServiceProxyFunctionValidator();
+				}
+				else if(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.Rest") != null){
+					return new RestServiceProxyFunctionValidator();
+				}
+			}
 		}
 		return null;
 	}
