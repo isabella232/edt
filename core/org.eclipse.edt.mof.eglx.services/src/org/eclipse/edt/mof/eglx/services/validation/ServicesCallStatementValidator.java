@@ -14,33 +14,23 @@ package org.eclipse.edt.mof.eglx.services.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.Delegate;
-import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.services.Utils;
+import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
 public class ServicesCallStatementValidator extends DefaultStatementValidator {
 
@@ -60,7 +50,7 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 		Member function = callStatement.getInvocationTarget().resolveMember();
 		if (function == null || !(function instanceof Function)) {
 			//error...target must be a function if callback or error routine specified
-            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_CALL_TARGET_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {});
+            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), ResourceKeys.FUNCTION_CALL_TARGET_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 		
@@ -70,7 +60,7 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 			Type usingType = callStatement.getUsing().resolveType();
 			if (usingType != null) {
 				if (!Utils.isIHTTP(usingType)) {
-					problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
+					problemRequestor.acceptProblem(callStatement.getUsing(), ResourceKeys.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
 				}
 			}
 		}
@@ -80,7 +70,7 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 		
 		//check to make sure a callback is specified
 		if (callStatement.getCallSynchronizationValues() == null || callStatement.getCallSynchronizationValues().getReturnTo() == null) {
-			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_CALLBACK_FUNCTION_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {});
+			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), ResourceKeys.FUNCTION_CALLBACK_FUNCTION_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
 		}
 
 		if (callStatement.getCallSynchronizationValues() != null) {
@@ -101,26 +91,26 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 			return;
 		}
 		if (!(cbMember instanceof Function)) {
-			problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_CALLBACK_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {});
+			problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_CALLBACK_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 		
 		//2) if is it is a nested function it must be defined inside this part 
 		if (stmt.getParent() instanceof Part && !cbMember.getContainer().equals(((Part)stmt.getParent()).getName().resolveType())) {
-			problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_MUST_BE_DEFINED_IN_PART, IMarker.SEVERITY_ERROR, new String[] {cbMember.getId(), ((Part)stmt.getParent()).getName().getCanonicalName()});
+			problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_MUST_BE_DEFINED_IN_PART, IMarker.SEVERITY_ERROR, new String[] {cbMember.getId(), ((Part)stmt.getParent()).getName().getCanonicalName()}, ResourceKeys.getResourceBundleForKeys());
 		}
 		
 				
 		// 3) must not have a return type
 		if (getReturnType(expr) != null) {
-			problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_CANNOT_HAVE_RETURN_TYPE, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString()});
+			problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_CANNOT_HAVE_RETURN_TYPE, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString()}, ResourceKeys.getResourceBundleForKeys());
 		}
 		
 		List<FunctionParameter> parms = getParameters(expr);
 		// 3) all parms must be IN
 		for (FunctionParameter parm : parms) {
 			if (parm.getParameterKind() != ParameterKind.PARM_IN) {
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_MUST_HAVE_ALL_IN_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString()});
+				problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_MUST_HAVE_ALL_IN_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString()}, ResourceKeys.getResourceBundleForKeys());
 				break;
 			}
 		}
@@ -131,11 +121,11 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 					(parms.size() == 2 && lastParmIsIHttp(parms))) {
 				//make sure the parm is AnyException
 				if (!isAnyException(parms.get(0).getType())) {
-					problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_PARM_MUST_HAVE_TYPE, IMarker.SEVERITY_ERROR, new String[] {"1", expr.getCanonicalString(), getQualAnyExceptionString()});
+					problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_PARM_MUST_HAVE_TYPE, IMarker.SEVERITY_ERROR, new String[] {"1", expr.getCanonicalString(), getQualAnyExceptionString()}, ResourceKeys.getResourceBundleForKeys());
 				}
 			}
 			else {
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(), lastParmIsIHttp(parms)? "2" : "1"});
+				problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(), lastParmIsIHttp(parms)? "2" : "1"}, ResourceKeys.getResourceBundleForKeys());
 			}
 		}
 		else {
@@ -148,13 +138,13 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 
 				for (int i = 0; i < argTypes.size(); i++) {
 					if (!argTypeCompatibleWithParm(argTypes.get(i), parms.get(i))) {
-						problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {argTypes.get(i).getTypeSignature(), parms.get(i).getCaseSensitiveName(), expr.getCanonicalString(), parms.get(i).getType().getTypeSignature()});
+						problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {argTypes.get(i).getTypeSignature(), parms.get(i).getCaseSensitiveName(), expr.getCanonicalString(), parms.get(i).getType().getTypeSignature()}, ResourceKeys.getResourceBundleForKeys());
 					}
 				}
 			
 			}
 			else{
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(),  Integer.toString(lastParmIsIHttp(parms) ? argTypes.size() + 1 :argTypes.size())});
+				problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(),  Integer.toString(lastParmIsIHttp(parms) ? argTypes.size() + 1 :argTypes.size())}, ResourceKeys.getResourceBundleForKeys());
 			}
 			
 		}
@@ -229,13 +219,13 @@ public class ServicesCallStatementValidator extends DefaultStatementValidator {
 			return true;
 		}
 
-    	if (TypeCompatibilityUtil.isMoveCompatible(parm.getType(), argType, null, compilerOptions)) {
-    		return true;
-    	}
+//FIXME    	if (TypeCompatibilityUtil.isMoveCompatible(parm.getType(), argType, null, compilerOptions)) {
+//    		return true;
+//    	}
 		
- 	   if (TypeCompatibilityUtil.areCompatibleExceptions(argType, parm.getType(), compilerOptions)) {
- 		   return true;
- 	   }
+//FIXME 	   if (TypeCompatibilityUtil.areCompatibleExceptions(argType, parm.getType(), compilerOptions)) {
+// 		   return true;
+// 	   }
  	   return false;
 
 	}

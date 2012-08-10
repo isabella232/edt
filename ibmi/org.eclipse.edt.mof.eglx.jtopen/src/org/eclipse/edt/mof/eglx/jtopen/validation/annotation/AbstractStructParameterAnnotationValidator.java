@@ -12,7 +12,6 @@
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -20,6 +19,9 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
@@ -30,24 +32,26 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 	
 	protected abstract List<String> getSupportedTypes();
 	
-	public void validate(Node errorNode, Node target, Member targetBinding, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		
-		Annotation annotation = (Annotation)allAnnotations.get(getInternedName());
-		validate(annotation, errorNode, targetBinding, problemRequestor);
+	public void validate(Node errorNode, Node target, Element targetElement, Annotation annotation, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		if (!(targetElement instanceof Field || targetElement instanceof FunctionParameter)) {
+			return;
+		}
+		validate(annotation, errorNode, targetElement, problemRequestor);
 	}
 
 
-	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
-		validateTypeIsSupported(errorNode, targetBinding, problemRequestor);
+	protected void validate(Annotation annotation, Node errorNode, Element targetElement, IProblemRequestor problemRequestor) {
+		validateTypeIsSupported(errorNode, (Member)targetElement, problemRequestor);
 	}
 	
-	protected void validateTypeIsSupported(Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
-		if (targetBinding != null && targetBinding.isNullable()) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), targetBinding.getCaseSensitiveName() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
+	protected void validateTypeIsSupported(Node errorNode, Member targetElement, IProblemRequestor problemRequestor) {
+
+		if (((Member)targetElement).isNullable()) {
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), ((Member)targetElement).getCaseSensitiveName() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 		
-		if (!isValidType(targetBinding.getType())) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_TYPE_MISMATCH, IMarker.SEVERITY_ERROR, new String[] {getName(), targetBinding.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+		if (!isValidType(((Member)targetElement).getType())) {
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_TYPE_MISMATCH, IMarker.SEVERITY_ERROR, new String[] {getName(), ((Member)targetElement).getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	

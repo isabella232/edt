@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.Map;
-
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -24,6 +22,7 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -48,20 +47,20 @@ import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
  */
 public class IBMiProgramValidator implements IAnnotationValidationRule {
 
+
 	@Override
-	public void validate(Node errorNode, Node target,
-			Member targetTypeBinding, Map allAnnotations,
-			IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public void validate(Node errorNode, Node target, Element targetElement,
+			Annotation annotation, IProblemRequestor problemRequestor,
+			ICompilerOptions compilerOptions) {
 		
-		if (!(targetTypeBinding instanceof Function) || !(target instanceof NestedFunction)) {
+		if (!(targetElement instanceof Function)) {
 			return;
 		}
 		
-		validateContainerIsCorrect((Function)targetTypeBinding, errorNode, problemRequestor);		
-		validateFunctionBodyIsEmpty((Function)targetTypeBinding, target, problemRequestor);
-		validateReturns((NestedFunction)target, (Function)targetTypeBinding, problemRequestor);
+		validateContainerIsCorrect((Function)targetElement, errorNode, problemRequestor);		
+		validateFunctionBodyIsEmpty((Function)targetElement, target, problemRequestor);
+		validateReturns((NestedFunction)target, (Function)targetElement, problemRequestor);
 		
-		Annotation annotation = targetTypeBinding.getAnnotation("eglx.jtopen.IBMiProgram");
 		if (annotation == null) { //sanity check, should never happen
 			return;
 		}
@@ -70,10 +69,10 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 		if (obj == null) {
 			//If a paramterAnnotations was specified, the paramters are validated in
 			//IBMiProgramParameterAnnotationsValidator
-			validateParmsDoNotRequireParameterAnnotations((Function)targetTypeBinding, errorNode, problemRequestor);
+			validateParmsDoNotRequireParameterAnnotations((Function)targetElement, errorNode, problemRequestor);
 		}
 		
-		validateParameters((Function)targetTypeBinding, obj, errorNode, problemRequestor);
+		validateParameters((Function)targetElement, obj, errorNode, problemRequestor);
 	}
 	
 	private void validateParameters(Function funcBinding, Object parmAnnValue, Node errorNode, IProblemRequestor problemRequestor) {

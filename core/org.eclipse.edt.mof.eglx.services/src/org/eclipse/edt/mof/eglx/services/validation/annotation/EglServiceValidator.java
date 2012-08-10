@@ -9,14 +9,8 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.compiler.internal.core.validation.annotation;
+package org.eclipse.edt.mof.eglx.services.validation.annotation;
 
-import java.util.Map;
-
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 
 
@@ -26,9 +20,7 @@ public class EglServiceValidator extends XXXrestValidator {
 	}
 	@Override
 	protected boolean methodIsValid() {
-		return true;
-	}
-	public void validate(Node errorNode, Node target, ITypeBinding targetTypeBinding, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-
+		String method = (String)restAnnotation.getValue("method");
+		return !(method != null && "post".equalsIgnoreCase(method.toLowerCase()));
 	}
 }
