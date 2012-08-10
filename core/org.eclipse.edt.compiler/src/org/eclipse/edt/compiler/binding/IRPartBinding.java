@@ -2,7 +2,6 @@ package org.eclipse.edt.compiler.binding;
 
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Part;
 
 public class IRPartBinding implements IPartBinding {

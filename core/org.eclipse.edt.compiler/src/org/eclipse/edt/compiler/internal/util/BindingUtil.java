@@ -40,6 +40,7 @@ import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.ParameterizableType;
@@ -48,6 +49,8 @@ import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.ShowStatement;
+import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.StructuredRecord;
@@ -809,7 +812,7 @@ public class BindingUtil {
 
 	
 	public static Part getEAny() {
-		return findPart(NameUtile.getAsName("eglx.lang"), NameUtile.getAsName("eany"));
+		return findPart(NameUtile.getAsName(MofConversion.EGLX_lang_package), NameUtile.getAsName("eany"));
 	}
 	
 	public static boolean isPrivate(Part part) {
@@ -835,6 +838,31 @@ public class BindingUtil {
 	
 	public static boolean isParameterizableType(Type type) {
 		return type instanceof ParameterizableType;
+	}
+	
+	public static void setDefaultSupertype(StructPart part, StructPart defaultSuperType) {
+		List<StructPart> superTypes = part.getSuperTypes();
+		
+		//check if there is already a supertype that is not just an interface
+		for (StructPart stype : superTypes) {
+			if (!(stype instanceof Interface)) {
+				return;
+			}
+		}
+		
+		//check if there is a default supertype defined on the stereotype
+		Stereotype subType = part.getSubType();
+		if (subType != null && subType.getEClass() instanceof StereotypeType) {
+			StereotypeType clazz = (StereotypeType) subType.getEClass();
+			if (clazz.getDefaultSuperType() instanceof  StructPart) {
+				superTypes.add(0, (StructPart)clazz.getDefaultSuperType());
+				return;
+			}
+		}
+		
+		//add the passed supertype to the supertype list
+		superTypes.add(0, defaultSuperType);
+		
 	}
 
 }

@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.Iterator;
-
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
@@ -24,9 +21,13 @@ import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.RecordScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class RecordBindingCompletor extends DefaultBinder {
@@ -69,12 +70,18 @@ public class RecordBindingCompletor extends DefaultBinder {
 
 	public void endVisit(Record record) {
     	irBinding.setValid(true);
+    	setDefaultSuperType();
 
         currentScope = new RecordScope(currentScope, recordBinding);
 
         currentScope = currentScope.getParentScope();
         super.endVisit(record);
     }
+	
+	private void setDefaultSuperType() {
+		StructPart anyRec = (StructPart)BindingUtil.findPart(NameUtile.getAsName(MofConversion.EGLX_lang_package), NameUtile.getAsName("AnyRecord"));
+		BindingUtil.setDefaultSupertype(recordBinding, anyRec);
+	}
     
 
     protected void processSubType(PartSubTypeAndAnnotationCollector collector) {
