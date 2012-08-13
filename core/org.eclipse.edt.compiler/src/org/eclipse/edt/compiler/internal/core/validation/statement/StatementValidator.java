@@ -869,50 +869,6 @@ public class StatementValidator implements IOStatementValidatorConstants{
 		
 	}
 	
-	public static void validateDeclarationForStereotypeContext(IDataBinding dBinding, IProblemRequestor problemRequestor, Node nodeForErrors) {
-		ITypeBinding type = dBinding.getType();
-		if(Binding.isValidBinding(type)) {
-			type = type.getBaseType();
-			if(Binding.isValidBinding(type) && type.isPartBinding()) {
-				IPartSubTypeAnnotationTypeBinding subType = ((IPartBinding) type).getSubType();
-				if(subType != null && IBinding.NOT_FOUND_BINDING != subType) {
-					IAnnotationBinding aBinding = (IAnnotationBinding) dBinding.getAnnotation(subType).getAnnotation(AnnotationAnnotationTypeBinding.getInstance());
-					if(aBinding != null) {
-						aBinding = aBinding.getAnnotation(StereotypeAnnotationTypeBinding.getInstance());
-						if(aBinding != null) {
-							aBinding = (IAnnotationBinding) aBinding.findData("stereotypeContexts");
-							if(IBinding.NOT_FOUND_BINDING != aBinding) {
-								boolean declaringSubtypeIsValid = false;
-								IPartBinding declaringType = dBinding.getDeclaringPart();
-								if(declaringType != null) {
-									ITypeBinding declaringSubtype = declaringType.getSubType();
-									if(declaringSubtype instanceof AnnotationTypeBindingImpl) {
-										declaringSubtype = ((AnnotationTypeBindingImpl) declaringSubtype).getAnnotationRecord();
-									}
-									Object[] value = (Object[]) aBinding.getValue();
-									for(int i = 0; i < value.length && !declaringSubtypeIsValid; i++) {
-										if(value[i] == declaringSubtype) {
-											declaringSubtypeIsValid = true;
-										}
-									}
-								}
-								if(!declaringSubtypeIsValid) {
-									problemRequestor.acceptProblem(
-										nodeForErrors,
-										IProblemRequestor.TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE,
-										new String[] {
-											getTypeString(type),
-											dBinding.getDeclaringPart().getCaseSensitiveName()	
-										});
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	
 	protected static boolean validateRecordParamDimensions(StructureItemBinding sBinding,IProblemRequestor problemRequestor,Node node,String name,String typename,int level){
 		if(isValidBinding(sBinding) ){
 			if (++level == 7){

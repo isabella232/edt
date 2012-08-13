@@ -84,16 +84,18 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.TryStatementV
 import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
-//TODO need to check the type is valid for param & returns. used to be in FunctionBindingCompletor.
 public class FunctionValidator extends AbstractASTVisitor {
 	
 	IProblemRequestor problemRequestor;
@@ -159,7 +161,17 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ReturnsDeclaration returnsDeclaration) {
-		TypeValidator.validate(returnsDeclaration.getType(), enclosingPart, problemRequestor, compilerOptions);
+		Type type = returnsDeclaration.getType();
+		TypeValidator.validate(type, enclosingPart, problemRequestor, compilerOptions);
+		
+		org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
+		if (typeBinding != null && !isValidParameterType(typeBinding)) {
+			problemRequestor.acceptProblem(
+	        		type,
+					IProblemRequestor.FUNCTION_RETURN_HAS_INCORRECT_TYPE,
+					new String[] {type.getCanonicalName(), functionName});
+		}
+		
 		return true;
 	};
 	
@@ -203,19 +215,27 @@ public class FunctionValidator extends AbstractASTVisitor {
 		Type parmType = functionParameter.getType();
 		
         Member member = functionParameter.getName().resolveMember();
-        if(member instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
-        	TypeValidator.validate(parmType, enclosingPart, problemRequestor, compilerOptions);
+        if (member instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
         	
-        	org.eclipse.edt.mof.egl.FunctionParameter memberParam = (org.eclipse.edt.mof.egl.FunctionParameter)member;
+    		org.eclipse.edt.mof.egl.Type typeBinding = parmType.resolveType();
+    		if (typeBinding != null && !isValidParameterType(typeBinding)) {
+    			problemRequestor.acceptProblem(
+    	        		parmType,
+    	        		IProblemRequestor.FUNCTION_PARAMETER_HAS_INCORRECT_TYPE,
+    					new String[] {functionParameter.getName().getCanonicalName(), functionName});
+    			return false;
+    		}
+        	
+        	TypeValidator.validate(parmType, enclosingPart, problemRequestor, compilerOptions);
         	
 	        checkParmTypeNotStaticArray(functionParameter, parmType);
 	        
 	        org.eclipse.edt.mof.egl.Type type = member.getType();
-	        if(type != null) {
+	        if (type != null) {
 	        	checkParmNotEmptyRecord(functionParameter, type);
 	        	checkTypeNotServiceOrInterfaceArray(functionParameter, type);
 	        	
-	        	switch (memberParam.getParameterKind()) {
+	        	switch (((org.eclipse.edt.mof.egl.FunctionParameter)member).getParameterKind()) {
 	        		case PARM_IN:
 	        			checkInputParm(functionParameter);
 	        			break;
@@ -226,14 +246,23 @@ public class FunctionValidator extends AbstractASTVisitor {
 	        			checkInputOutputParm(functionParameter);
 	        			break;
 	        	}
-	        	
-	        	//TODO not sure if this is still relevant
-//	        	StatementValidator.validateDeclarationForStereotypeContext(fParameterBinding, problemRequestor, functionParameter.getType().getBaseType());
 	        }
 	        
 	    	EGLNameValidator.validate(functionParameter.getName(), EGLNameValidator.PART, problemRequestor, compilerOptions);
         }
         return true;
+	}
+	
+	private boolean isValidParameterType(org.eclipse.edt.mof.egl.Type type) {
+		if (type instanceof org.eclipse.edt.mof.egl.ArrayType) {
+    		return isValidParameterType(((org.eclipse.edt.mof.egl.ArrayType)type).getElementType());
+    	}
+		
+    	if (type instanceof Annotation || type instanceof Program || type instanceof Library) {
+    		return false;
+    	}
+    	
+    	return true;
 	}
 	
 	private void checkFunctionName(Name name, boolean nested) {
