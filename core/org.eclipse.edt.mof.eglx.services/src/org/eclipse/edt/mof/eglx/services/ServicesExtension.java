@@ -16,10 +16,9 @@ import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.ThisExpression;
+import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
@@ -77,12 +76,14 @@ public class ServicesExtension implements ICompilerExtension {
 			}
 			else{
 				Expression exp = ((CallStatement)node).getInvocationTarget();
-				Member binding = exp.resolveMember();
-				return binding != null &&
-						(binding.getAnnotation("eglx.rest.Rest") != null ||
-						binding.getAnnotation("eglx.rest.EGLService") != null ||
-						(!(exp instanceof FieldAccess && ((FieldAccess)exp).getPrimary() instanceof ThisExpression) &&
-								binding.getContainer() instanceof Service));
+				if(exp instanceof QualifiedName){
+					Object element = ((QualifiedName)exp).getQualifier().resolveElement();
+					return (element instanceof Member &&
+							((((Member)element).getAnnotation("eglx.rest.Rest") != null ||
+									((Member)element).getAnnotation("eglx.rest.EGLService") != null)) ||
+							element instanceof Service);
+				}
+				
 			}
 		}
 		else if (node instanceof NestedFunction) {
