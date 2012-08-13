@@ -21,8 +21,8 @@ import java.util.List;
  */
 public class AddStatement extends Statement {
 
-	private List expr_plus;	// List of Expressions
-	private List addOptions;	// List of Nodes
+	private List<Expression> expr_plus;	// List of Expressions
+	private List<Node> addOptions;	// List of Nodes
 
 	public AddStatement(List expr_plus, List addOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -31,11 +31,11 @@ public class AddStatement extends Statement {
 		this.addOptions = setParent(addOptions);
 	}
 	
-	public List getTargets() {
+	public List<Expression> getTargets() {
 		return expr_plus;
 	}
 	
-	public List getOptions() {
+	public List<Node> getOptions() {
 		return addOptions;
 	}
 	

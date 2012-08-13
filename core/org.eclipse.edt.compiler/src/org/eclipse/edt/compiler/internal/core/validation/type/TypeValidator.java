@@ -65,7 +65,7 @@ public class TypeValidator {
 		}
 	}
 	
-	private static boolean hasPublicDefaultConstructor(org.eclipse.edt.mof.egl.Type typeBinding) {
+	public static boolean hasPublicDefaultConstructor(org.eclipse.edt.mof.egl.Type typeBinding) {
 		if (typeBinding.getClassifier() instanceof StructPart) {
 			for (Constructor con : ((StructPart)typeBinding.getClassifier()).getConstructors()) {
 				if (con.getParameters().size() == 0 && !BindingUtil.isPrivate(con)) {

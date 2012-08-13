@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.validation;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
@@ -23,8 +21,14 @@ import org.eclipse.edt.compiler.core.ast.UsingClause;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
 import org.eclipse.edt.compiler.core.ast.WithExpressionClause;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class DeleteStatementValidator extends AbstractSqlStatementValidator {
 	DeleteStatement statement;
@@ -56,46 +60,54 @@ public class DeleteStatementValidator extends AbstractSqlStatementValidator {
 	private void validateTarget() {
 		Expression target = statement.getTarget();
 		if (target != null) {
-			ITypeBinding targetType = target.resolveTypeBinding();
-			if (Binding.isValidBinding(targetType) && targetType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
-				targetType = target.resolveDataBinding().getDeclaringPart();
+			Type targetType = target.resolveType();
+			if (targetType != null && TypeUtils.isPrimitive(targetType)) {
+				targetType = getContainingType(target.resolveMember());
 			}
 			
 			// Target must be a data expression.
 			if (!isDataExpr(target)
 					//TODO arrays for delete not yet supported.
-					|| (Binding.isValidBinding(targetType) && targetType.getKind() == ITypeBinding.ARRAY_TYPE_BINDING)
+					|| (targetType instanceof ArrayType)
 					) {
 				problemRequestor.acceptProblem(target,
-						IProblemRequestor.SQL_TARGET_NOT_DATA_EXPR,
-						new String[] {});
+						SQLResourceKeys.SQL_TARGET_NOT_DATA_EXPR,
+						IMarker.SEVERITY_ERROR,
+						new String[] {},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			
 			//TODO associations not yet supported.
 			if (isAssociationExpression(target)) {
 				problemRequestor.acceptProblem(target,
-						IProblemRequestor.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
-						new String[] {});
+						SQLResourceKeys.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
+						IMarker.SEVERITY_ERROR,
+						new String[] {},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			
 			// Target must map to 1 table.
-			if (Binding.isValidBinding(targetType) && !isSingleTable(targetType)) {
+			if (targetType != null && !isSingleTable(targetType)) {
 				problemRequestor.acceptProblem(target,
-						IProblemRequestor.SQL_SINGLE_TABLE_REQUIRED,
-						new String[]{});
+						SQLResourceKeys.SQL_SINGLE_TABLE_REQUIRED,
+						IMarker.SEVERITY_ERROR,
+						new String[]{},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			
 			if (from != null) {
 				// If data source is SQLDataSource and there's no WITH or USING, target must have @Id on a field.
-				if (Binding.isValidBinding(targetType)
-						&& (withExpression == null && withInline == null && using == null && isDataSource(from.getExpression().resolveTypeBinding()))
+				if (targetType != null
+						&& (withExpression == null && withInline == null && using == null && Utils.isSQLDataSource(from.getExpression().resolveType()))
 						&& !hasID(targetType)) {
 					problemRequestor.acceptProblem(target,
-							IProblemRequestor.SQL_NO_ID_IN_TARGET_TYPE,
-							new String[] {targetType.getPackageQualifiedName()});
+							SQLResourceKeys.SQL_NO_ID_IN_TARGET_TYPE,
+							IMarker.SEVERITY_ERROR,
+							new String[] {targetType.getTypeSignature()},
+							SQLResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}
@@ -105,22 +117,26 @@ public class DeleteStatementValidator extends AbstractSqlStatementValidator {
 	private void validateDataSource() {
 		if (statement.getTarget() == null && from != null) {
 			
-			ITypeBinding type = from.getExpression().resolveTypeBinding();
-			if (isDataSource(type)) {
+			Type type = from.getExpression().resolveType();
+			if (type != null && Utils.isSQLDataSource(type)) {
 				// WITH is required.
 				if (withInline == null && withExpression == null) {
 					problemRequestor.acceptProblem(statement,
-							IProblemRequestor.SQL_WITH_STMT_REQUIRED_FOR_DELETE,
-							new String[]{"eglx.persistence.sql.SQLDataSource"});
+							SQLResourceKeys.SQL_WITH_STMT_REQUIRED_FOR_DELETE,
+							IMarker.SEVERITY_ERROR,
+							new String[]{"eglx.persistence.sql.SQLDataSource"},
+							SQLResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}
-			else if (isResultSet(type)) {
+			else if (type != null && Utils.isSQLResultSet(type)) {
 				// USING, WITH, and FOR not allowed.
 				if (withInline != null || withExpression != null || forExpression != null || using != null) {
 					problemRequestor.acceptProblem(statement,
-							IProblemRequestor.SQL_NO_WITH_FOR_USING,
-							new String[]{"eglx.persistence.sql.SQLResultSet"});
+							SQLResourceKeys.SQL_NO_WITH_FOR_USING,
+							IMarker.SEVERITY_ERROR,
+							new String[]{"eglx.persistence.sql.SQLResultSet"},
+							SQLResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}
@@ -132,37 +148,45 @@ public class DeleteStatementValidator extends AbstractSqlStatementValidator {
 			if (statement.getTarget() == null) {
 				// For not allowed if there's no target.
 				problemRequestor.acceptProblem(forExpression,
-						IProblemRequestor.SQL_FOR_NOT_ALLOWED_WITHOUT_TARGET,
-						new String[] {});
+						SQLResourceKeys.SQL_FOR_NOT_ALLOWED_WITHOUT_TARGET,
+						IMarker.SEVERITY_ERROR,
+						new String[] {},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			else {
 				if (withExpression != null || withInline != null) {
 					problemRequestor.acceptProblem(statement,
-							IProblemRequestor.SQL_DELETE_FOR_OR_WITH,
-							new String[] {});
+							SQLResourceKeys.SQL_DELETE_FOR_OR_WITH,
+							IMarker.SEVERITY_ERROR,
+							new String[] {},
+							SQLResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 				
-				ITypeBinding type = forExpression.getExpression().resolveTypeBinding();
-				if (Binding.isValidBinding(type) && (!isEntityWithID(type)
+				Type type = forExpression.getExpression().resolveType();
+				if (type != null && (!isEntityWithID(type)
 						// TODO associations not supported yet. when they are, change it to the commented out line.
 						|| isAssociationExpression(forExpression.getExpression())
 //							&& !isAssociationExpression(forExpression.getExpression())
 						)) {
 					problemRequestor.acceptProblem(forExpression.getExpression(),
-							IProblemRequestor.SQL_FOR_TYPE_INVALID,
-							new String[] {forExpression.getExpression().getCanonicalString()});
+							SQLResourceKeys.SQL_FOR_TYPE_INVALID,
+							IMarker.SEVERITY_ERROR,
+							new String[] {forExpression.getExpression().getCanonicalString()},
+							SQLResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 				
-				if (Binding.isValidBinding(type)) {
+				if (type != null) {
 					// The type of the expression must match exactly the type of the action target.
-					ITypeBinding targetType = statement.getTarget().resolveTypeBinding();
-					if (Binding.isValidBinding(targetType) && !targetType.equals(type)) {
+					Type targetType = statement.getTarget().resolveType();
+					if (targetType != null && !targetType.equals(type)) {
 						problemRequestor.acceptProblem(forExpression.getExpression(),
-								IProblemRequestor.SQL_FOR_AND_TARGET_TYPES_MUST_MATCH,
-								new String[] {forExpression.getExpression().getCanonicalString(), type.getPackageQualifiedName(), targetType.getPackageQualifiedName()});
+								SQLResourceKeys.SQL_FOR_AND_TARGET_TYPES_MUST_MATCH,
+								IMarker.SEVERITY_ERROR,
+								new String[] {forExpression.getExpression().getCanonicalString(), type.getTypeSignature(), targetType.getTypeSignature()},
+								SQLResourceKeys.getResourceBundleForKeys());
 						return;
 					}
 				}
