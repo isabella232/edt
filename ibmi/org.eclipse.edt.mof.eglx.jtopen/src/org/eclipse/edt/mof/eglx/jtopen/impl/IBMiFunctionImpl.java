@@ -9,9 +9,12 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen.impl;
+package org.eclipse.edt.mof.eglx.jtopen.impl;
 
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlExecuteStatement;
+import org.eclipse.edt.mof.egl.impl.FunctionImpl;
+import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFunction;
 
-public class SqlExecuteStatementImpl extends SqlIOStatementImpl implements SqlExecuteStatement {
+public class IBMiFunctionImpl extends FunctionImpl implements IBMiFunction {
+
+
 }

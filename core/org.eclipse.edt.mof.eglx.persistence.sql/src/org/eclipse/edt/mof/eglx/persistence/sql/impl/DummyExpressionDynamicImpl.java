@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen.impl;
+package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
 import java.util.List;
 

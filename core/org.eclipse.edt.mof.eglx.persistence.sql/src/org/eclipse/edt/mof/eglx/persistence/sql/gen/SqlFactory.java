@@ -14,7 +14,7 @@ package org.eclipse.edt.mof.eglx.persistence.sql.gen;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EFactory;
 import org.eclipse.edt.mof.egl.GetByPositionStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.impl.SqlFactoryImpl;
+import org.eclipse.edt.mof.eglx.persistence.sql.impl.SqlFactoryImpl;
 
 public interface SqlFactory extends EFactory  {
 	public static final SqlFactory INSTANCE = new SqlFactoryImpl();

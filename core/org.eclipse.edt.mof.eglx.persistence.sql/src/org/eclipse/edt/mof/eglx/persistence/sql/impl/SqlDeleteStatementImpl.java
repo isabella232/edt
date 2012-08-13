@@ -9,18 +9,19 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen.impl;
+package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlAddStatement;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlDeleteStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
-public class SqlAddStatementImpl extends SqlIOStatementImpl implements SqlAddStatement {
+public class SqlDeleteStatementImpl extends SqlIOStatementImpl implements SqlDeleteStatement {
 
-	@Override
+ 	@Override
 	public String getSqlString() {
 		String sql = super.getSqlString();
 		if (sql == null || "".equals(sql)) {
@@ -30,11 +31,12 @@ public class SqlAddStatementImpl extends SqlIOStatementImpl implements SqlAddSta
 		return sql;
 	}
 	
-	// TODO This is a simplified mapping of one type to one table only - handle multiple tables
-	private String generateDefaultSqlString() {
+	public String generateDefaultSqlString() {
+		if (SQL.isSQLResultSet(getDataSource().getType())) return null;
+		
 		String sql = null;
 		Expression target = getTargets().get(0);
-		boolean targetIsList = target.getType() instanceof ArrayType;
+		boolean targetIsList = target.getType().getClassifier().equals(TypeUtils.Type_LIST);
 		EGLClass targetType;
 		if (targetIsList) {
 			targetType = (EGLClass)((ArrayType)target.getType()).getElementType().getClassifier();
@@ -42,26 +44,21 @@ public class SqlAddStatementImpl extends SqlIOStatementImpl implements SqlAddSta
 		else {
 			targetType = (EGLClass)target.getType().getClassifier();
 		}
-		sql = "INSERT INTO ";
+		sql = "DELETE FROM ";
 		sql += SQL.getTableName(targetType);
-		sql += "(";
-		boolean doComma = false;
-		int fieldNum = 0;
+		sql += " WHERE ";
+		boolean addAND = false;
 		for (Field f : targetType.getFields()) {
-			// Do not INSERT list fields which represent associations
-			if (SQL.isInsertable(f)) {
-				fieldNum++;
-				if (doComma) sql += ", ";
+			if (SQL.isKeyField(f)) {
+				if(addAND){
+					sql += " AND ";
+				}
+				addAND = true;
 				sql += SQL.getColumnName(f);
-				if (!doComma) doComma = true;
+				sql += " = ?";
 			}
 		}
-		sql += ") VALUES (";
-		for (int i=0; i<fieldNum; i++) {
-			if (i>0) sql += ", ";
-			sql += "?";
-		}
-		sql += ")";
 		return sql;
-	}	
+	}
+	
 }
