@@ -756,6 +756,28 @@ public class BindingUtil {
 		return findPart(ppn.getPackageName(), ppn.getPartName());
 	}
 	
+	public static String getUnaliasedTypeName(Type type) {
+		Classifier classifier = type.getClassifier();
+		if (classifier != null) {
+			String pkg = NameUtile.getAsName(classifier.getPackageName());
+			String name = NameUtile.getAsName(classifier.getName());
+			
+			for (Map.Entry<String, PackageAndPartName> entry : aliasedTypesNames.entrySet()) {
+				PackageAndPartName value = entry.getValue();
+				if (NameUtile.equals(value.getPackageName(), pkg) && NameUtile.equals(value.getPartName(), name)) {
+					return entry.getKey();
+				}
+			}
+		}
+		
+		String sig = type.getTypeSignature();
+		int lastDot = sig.lastIndexOf('.');
+		if (lastDot == -1) {
+			return sig;
+		}
+		return sig.substring(lastDot + 1);
+	}
+	
 	public static Type getType(Member mbr) {
 		if (mbr instanceof Function) {
 			return null;
