@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql;
 
 import org.eclipse.edt.compiler.ASTValidator;
@@ -20,7 +31,6 @@ import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.persistence.sql.gen.SQLActionStatementGenerator;
 import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 import org.eclipse.edt.mof.eglx.persistence.sql.validation.SQLActionStatementValidator;
 
 public class SQLExtension implements ICompilerExtension {
@@ -59,28 +69,37 @@ public class SQLExtension implements ICompilerExtension {
 			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
 				if (!result[0]) {
-					result[0] = SQL.isSQLDataSource(exprToType(clause.getExpression())) || SQL.isSQLResultSet(exprToType(clause.getExpression()));
+					result[0] = Utils.isSQLDataSource(exprToType(clause.getExpression())) || Utils.isSQLResultSet(exprToType(clause.getExpression()));
 				}
 				return false;
 			};
 			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.WithExpressionClause clause) {
 				if (!result[0]) {
-					result[0] = SQL.isSQLStatement(exprToType(clause.getExpression()));
+					result[0] = Utils.isSQLStatement(exprToType(clause.getExpression()));
+				}
+				return false;
+			};
+			@Override
+			public boolean visit(AddStatement stmt) {
+				if (!result[0]) {
+					for (Expression e : stmt.getTargets()) {
+						result[0] = Utils.isSQLDataSource(exprToType(e)) || Utils.isSQLResultSet(exprToType(e));
+					}
 				}
 				return false;
 			};
 			@Override
 			public boolean visit(CloseStatement stmt) {
 				if (!result[0]) {
-					result[0] = SQL.isSQLDataSource(exprToType(stmt.getExpr())) || SQL.isSQLResultSet(exprToType(stmt.getExpr()));
+					result[0] = Utils.isSQLDataSource(exprToType(stmt.getExpr())) || Utils.isSQLResultSet(exprToType(stmt.getExpr()));
 				}
 				return false;
 			};
 			@Override
 			public void endVisit(OpenStatement stmt) {
 				if (!result[0]) {
-					result[0] = SQL.isSQLResultSet(exprToType(stmt.getResultSet()));
+					result[0] = Utils.isSQLResultSet(exprToType(stmt.getResultSet()));
 				}
 			};
 		});

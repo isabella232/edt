@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.validation;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
@@ -21,8 +19,12 @@ import org.eclipse.edt.compiler.core.ast.UsingClause;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
 import org.eclipse.edt.compiler.core.ast.WithExpressionClause;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class ExecuteStatementValidator extends AbstractSqlStatementValidator {
 	ExecuteStatement statement;
@@ -52,18 +54,20 @@ public class ExecuteStatementValidator extends AbstractSqlStatementValidator {
 		if (from != null) {
 			// If the WITH clause references an SQLStatement the FROM is ignored.
 			if (withExpression != null) {
-				ITypeBinding type = withExpression.getExpression().resolveTypeBinding();
-				if (Binding.isValidBinding(type) && isSqlStatement(type)) {
+				Type type = withExpression.getExpression().resolveType();
+				if (type != null && Utils.isSQLStatement(type)) {
 					return;
 				}
 			}
 			
 			// Must be of type SQLDataSource
-			ITypeBinding type = from.getExpression().resolveTypeBinding();
-			if (Binding.isValidBinding(type) && !isDataSource(type)) {
+			Type type = from.getExpression().resolveType();
+			if (type != null && !Utils.isSQLDataSource(type)) {
 				problemRequestor.acceptProblem(from.getExpression(),
-						IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
-						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLDataSource"});
+						SQLResourceKeys.SQL_EXPR_HAS_WRONG_TYPE,
+						IMarker.SEVERITY_ERROR,
+						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLDataSource"},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 		}

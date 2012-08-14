@@ -29,12 +29,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import java_cup.runtime.Scanner;
 import junit.framework.TestCase;
 
+import org.eclipse.edt.compiler.Processor;
 import org.eclipse.edt.compiler.core.ast.AccumulatingSyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.ErrorCorrectingParser;
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
@@ -152,6 +154,8 @@ public class ValidationTestCase extends TestCase {
 				arguments.add(tempDir.getPath());
 				arguments.add("-xmlout");
 				arguments.add(testFile.getPath());
+				arguments.add("-extensions");
+				arguments.add("org.eclipse.edt.mof.eglx.jtopen.IBMiExtension,org.eclipse.edt.mof.eglx.persistence.sql.SQLExtension");
 				
 				System.setOut(new PrintStream(new FileOutputStream(EGLCOut.getPath())));
 				
@@ -167,6 +171,7 @@ public class ValidationTestCase extends TestCase {
 //PROFILE 					}
 //PROFILE 				}
 				
+				Processor.skipSerialization = true; // tons of serialization still needs to be ported. disable otherwise we always get a build error
 				EGL2IR.main((String[]) arguments.toArray(new String[0]), getProblemRequestorFactory(pRequestor));
 				
 //PROFILE 				if(PROFILE) {				
@@ -233,7 +238,8 @@ public class ValidationTestCase extends TestCase {
 		return new ISDKProblemRequestorFactory() {
 			public IProblemRequestor getProblemRequestor(File file, final String partName) {
 				return new DefaultProblemRequestor() {
-					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+					@Override
+					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 						if(messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
 							inserts = shiftInsertsIfNeccesary(problemKind, inserts);
 							inserts[0] = partName;				
@@ -241,14 +247,15 @@ public class ValidationTestCase extends TestCase {
 				 		if (severity == IMarker.SEVERITY_ERROR) {
 				 			setHasError(true);
 				 		}
-						pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts);
+						pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 					}
 				};
 			}
 	
 			public IProblemRequestor getGenericTopLevelFunctionProblemRequestor(File file, String partName, final boolean containerContextDependent) {
 				return new DefaultProblemRequestor() {
-					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+					@Override
+					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 						if(containerContextDependent && problemKind == IProblemRequestor.TYPE_CANNOT_BE_RESOLVED){
 							return;
 						}
@@ -257,7 +264,7 @@ public class ValidationTestCase extends TestCase {
 					 		if (severity == IMarker.SEVERITY_ERROR) {
 					 			setHasError(true);
 					 		}
-							pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts);
+							pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 						}								
 					}							
 				};
@@ -265,7 +272,8 @@ public class ValidationTestCase extends TestCase {
 	
 			public IProblemRequestor getContainerContextTopLevelProblemRequestor(File file, final String containerContextName, final boolean containerContextDependent) {
 				return new DefaultProblemRequestor() {
-					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+					@Override
+					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 				 		if (severity == IMarker.SEVERITY_ERROR) {
 				 			setHasError(true);
 				 		}
@@ -276,7 +284,7 @@ public class ValidationTestCase extends TestCase {
 							if(insertsLength != inserts.length) {
 								inserts[0] = containerContextName;
 							}
-							pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts);
+							pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 						}								
 					}
 				};

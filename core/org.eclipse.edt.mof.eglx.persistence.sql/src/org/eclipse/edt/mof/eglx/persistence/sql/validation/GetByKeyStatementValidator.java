@@ -13,8 +13,6 @@ package org.eclipse.edt.mof.eglx.persistence.sql.validation;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -25,8 +23,16 @@ import org.eclipse.edt.compiler.core.ast.UsingClause;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
 import org.eclipse.edt.compiler.core.ast.WithExpressionClause;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.TypedElement;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 	GetByKeyStatement statement;
@@ -70,16 +76,20 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 					// Associations are not yet supported.
 					if (isAssociationExpression(expr)) {
 						problemRequestor.acceptProblem(expr,
-								IProblemRequestor.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
-								new String[] {});
+								SQLResourceKeys.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
+								IMarker.SEVERITY_ERROR,
+								new String[] {},
+								SQLResourceKeys.getResourceBundleForKeys());
 						return;
 					}
 					
 					// If it's a nullable entity, it must have a public default constructor.
-					if (expr.resolveTypeBinding().isNullable() && isEntity(expr.resolveTypeBinding()) && !hasDefaultConstructor(expr.resolveTypeBinding())) {
+					if ((expr instanceof TypedElement && ((TypedElement)expr).isNullable()) && isEntity(expr.resolveType()) && !TypeValidator.hasPublicDefaultConstructor(expr.resolveType())) {
 						problemRequestor.acceptProblem(expr,
-								IProblemRequestor.SQL_NULLABLE_TARGET_MISSING_DEFAULT_CONSTRUCTOR,
-								new String[] {expr.getCanonicalString(), expr.resolveTypeBinding().getPackageQualifiedName()});
+								SQLResourceKeys.SQL_NULLABLE_TARGET_MISSING_DEFAULT_CONSTRUCTOR,
+								IMarker.SEVERITY_ERROR,
+								new String[] {expr.getCanonicalString(), expr.resolveType().getTypeSignature()},
+								SQLResourceKeys.getResourceBundleForKeys());
 						return;
 					}
 					
@@ -91,75 +101,51 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 		if (!isDataExpr && !mapsToColumns(targets)) {
 			int[] offsets = getOffsets(targets);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
-					IProblemRequestor.SQL_TARGET_MUST_BE_DATA_EXPR_OR_COLUMNS,
-					new String[] {});
+					SQLResourceKeys.SQL_TARGET_MUST_BE_DATA_EXPR_OR_COLUMNS,
+					true,
+					new String[] {},
+					SQLResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 		else if (!isDataExpr && withExpression == null && withInline == null && !(mapsToSingleTable(targets) || isFromResultSet()) ) {
 			// WITH required when the columns do not map to a single table.
 			int[] offsets = getOffsets(targets);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
-					IProblemRequestor.SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE,
-					new String[] {IEGLConstants.KEYWORD_WITH});
+					SQLResourceKeys.SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE,
+					true,
+					new String[] {IEGLConstants.KEYWORD_WITH},
+					SQLResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 		
 		if (using == null && withExpression == null && withInline == null) {
 			// When no USING or WITH, a field in the type of the target must have @Id.
-			ITypeBinding targetType = getTargetType(isDataExpr);
-			if (Binding.isValidBinding(targetType) && !hasID(targetType)) {
+			Type targetType = getTargetType(isDataExpr);
+			if (targetType != null && !hasID(targetType)) {
 				int[] offsets = getOffsets(targets);
 				problemRequestor.acceptProblem(offsets[0], offsets[1],
-						IProblemRequestor.SQL_NO_ID_IN_TARGET_TYPE,
-						new String[] {targetType.getPackageQualifiedName()});
+						SQLResourceKeys.SQL_NO_ID_IN_TARGET_TYPE,
+						true,
+						new String[] {targetType.getTypeSignature()},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 		}
 	}
 	
-	private boolean hasDefaultConstructor(ITypeBinding binding) {
-		List<ConstructorBinding> constructors = null;
-		switch (binding.getKind()) {
-			case ITypeBinding.EXTERNALTYPE_BINDING:
-				constructors = ((ExternalTypeBinding)binding).getConstructors();
-				break;
-			case ITypeBinding.HANDLER_BINDING:
-				constructors = ((HandlerBinding)binding).getConstructors();
-				break;
-			case ITypeBinding.DICTIONARY_BINDING:
-				constructors = ((DictionaryBinding)binding).getConstructors();
-				break;
-			default:
-				return true;
-		}
-		
-		if (constructors != null) {
-			for (ConstructorBinding con : constructors) {
-				if (!con.isPrivate() && con.getParameters().size() == 0) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-	
-	private ITypeBinding getTargetType(boolean isDataExpr) {
-		ITypeBinding type = null;
+	private Type getTargetType(boolean isDataExpr) {
+		Type type = null;
 		List targets = statement.getTargets();
 		if (isDataExpr || mapsToSingleTable(targets)) {
 			Expression e = (Expression)targets.get(0);
-			type = e.resolveTypeBinding();
-			if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
-				IDataBinding data = e.resolveDataBinding();
-				if (Binding.isValidBinding(data)) {
-					type = data.getDeclaringPart();
-				}
+			type = e.resolveType();
+			if (type != null && TypeUtils.isPrimitive(type)) {
+				type = getContainingType(e.resolveMember());
 			}
 		}
 		
-		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
-			type = ((ArrayTypeBinding)type).getElementType();
+		if (type instanceof ArrayType) {
+			type = ((ArrayType)type).getElementType();
 		}
 		
 		return type;
@@ -168,8 +154,7 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 	private boolean isFromResultSet() {
 		if (from != null) {
 			// When WITH is specified, FROM must be SQLDataSource.
-			ITypeBinding type = from.getExpression().resolveTypeBinding();
-			return Binding.isValidBinding(type) && isResultSet(type);
+			return Utils.isSQLResultSet(from.getExpression().resolveType());
 		}
 		return false;
 	}
@@ -177,11 +162,13 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 	private void validateFrom() {
 		if (from != null && (withExpression != null || withInline != null)) {
 			// When WITH is specified, FROM must be SQLDataSource.
-			ITypeBinding type = from.getExpression().resolveTypeBinding();
-			if (Binding.isValidBinding(type) && !isDataSource(type)) {
+			Type type = from.getExpression().resolveType();
+			if (type != null && !Utils.isSQLDataSource(type)) {
 				problemRequestor.acceptProblem(from.getExpression(),
-						IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
-						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLDataSource"});
+						SQLResourceKeys.SQL_EXPR_HAS_WRONG_TYPE,
+						IMarker.SEVERITY_ERROR,
+						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLDataSource"},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 		}
@@ -190,7 +177,7 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 	private void validateInto() {
 		if (into != null) {
 			// INTO not currently part of the spec.
-			problemRequestor.acceptProblem(into, IProblemRequestor.SQL_INTO_NOT_ALLOWED, new String[] {});
+			problemRequestor.acceptProblem(into, SQLResourceKeys.SQL_INTO_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {}, SQLResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	

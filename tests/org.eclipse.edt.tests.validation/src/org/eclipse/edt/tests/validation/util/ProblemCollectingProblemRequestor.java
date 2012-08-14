@@ -13,6 +13,7 @@ package org.eclipse.edt.tests.validation.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
 
@@ -28,25 +29,27 @@ public class ProblemCollectingProblemRequestor extends DefaultProblemRequestor {
 		public int startOffset, endOffset, severity;
 		public int problemKind;
 		public String[] inserts;
+		public ResourceBundle bundle;
 		
-		Problem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+		Problem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 			this.startOffset = startOffset;
 			this.endOffset = endOffset;
 			this.severity = severity;
 			this.problemKind = problemKind;
 			this.inserts = inserts;
+			this.bundle = bundle;
 		}
 		
-		public Problem(int problemKind, String[] inserts) {
-			this(0, 0, 0, problemKind, inserts);
+		public Problem(int problemKind, String[] inserts, ResourceBundle bundle) {
+			this(0, 0, 0, problemKind, inserts, bundle);
 		}
 		
-		public Problem(int problemKind) {
-			this(0, 0, 0, problemKind, null);
+		public Problem(int problemKind, ResourceBundle bundle) {
+			this(0, 0, 0, problemKind, null, bundle);
 		}
 		
 		public String getErrorMessage() {
-			return getMessageFromBundle(problemKind, inserts);
+			return getMessageFromBundle(problemKind, inserts, bundle);
 		}
 		
 		public String toString() {			
@@ -94,16 +97,17 @@ public class ProblemCollectingProblemRequestor extends DefaultProblemRequestor {
 		return problems;
 	}
 	
-    public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+	@Override
+    public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
  		if (severity == IMarker.SEVERITY_ERROR) {
  			setHasError(true);
  		}
  		
- 		Problem problem = new Problem(startOffset, endOffset, severity, problemKind, inserts);
+ 		Problem problem = new Problem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 		problems.add(problem);
     	
     	if(PRINT_ERRORS) {
-    		ConsoleOutProblemRequestor.getInstance().acceptProblem(startOffset, endOffset, severity, problemKind, inserts);
+    		ConsoleOutProblemRequestor.getInstance().acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
     	}
     }
     

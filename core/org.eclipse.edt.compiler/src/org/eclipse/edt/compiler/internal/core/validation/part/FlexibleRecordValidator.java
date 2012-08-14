@@ -74,9 +74,6 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 //						}
 //					}
 //				}
-//				
-//	        	//TODO not sure if this is still relevant
-//				StatementValidator.validateDeclarationForStereotypeContext((IDataBinding) itemBinding, problemRequestor, structureItem.isFiller() ? structureItem : structureItem.getName());
 			}
 		}
 		

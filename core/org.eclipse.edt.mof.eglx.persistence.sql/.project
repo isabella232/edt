@@ -3,6 +3,7 @@
 	<name>org.eclipse.edt.mof.eglx.persistence.sql</name>
 	<comment></comment>
 	<projects>
+		<project>org.eclipse.edt.compiler</project>
 		<project>org.eclipse.edt.mof.egl</project>
 	</projects>
 	<buildSpec>

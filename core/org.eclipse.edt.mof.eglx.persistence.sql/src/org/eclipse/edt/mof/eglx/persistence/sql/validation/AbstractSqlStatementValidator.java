@@ -11,128 +11,80 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.validation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class AbstractSqlStatementValidator {
 
-	protected static final String[] SQL_PKG = InternUtil.intern(new String[] {"eglx", "persistence", "sql"});
-	protected static final String[] PERSISTENCE_PKG = InternUtil.intern(new String[] {"eglx", "persistence"});
+	protected static final String OneToOne = NameUtile.getAsName("eglx.persistence.OneToOne");
+	protected static final String OneToMany = NameUtile.getAsName("eglx.persistence.OneToMany");
+	protected static final String ManyToOne = NameUtile.getAsName("eglx.persistence.ManyToOne");
+	protected static final String ManyToMany = NameUtile.getAsName("eglx.persistence.ManyToMany");
+	protected static final String Id = NameUtile.getAsName("eglx.persistence.Id");
+	protected static final String SecondaryTable = NameUtile.getAsName("eglx.persistence.sql.SecondaryTable");
+	protected static final String SecondaryTables = NameUtile.getAsName("eglx.persistence.sql.SecondaryTables");
 	
 	
-	
-	protected boolean isResultSet(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
-			return false;
-		}
-		if (type.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
-			return false;
-		}
-		
-		if (type.getName() == InternUtil.intern("SQLResultSet") && type.getPackageName() == SQL_PKG) {
-			return true;
-		}
-		
-		return false;
+	protected boolean isEntity(Type type) {
+		return type instanceof Record || type instanceof Handler || type instanceof ExternalType;
 	}
 	
-	protected boolean isDataSource(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
-			return false;
-		}
-		if (type.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
-			return false;
-		}
-		
-		if (type.getName() == InternUtil.intern("SQLDataSource") && type.getPackageName() == SQL_PKG) {
-			return true;
-		}
-		
-		for (ITypeBinding parent : (List<ITypeBinding>)((ExternalTypeBinding)type).getExtendedTypes()) {
-			if (isDataSource(parent)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	protected boolean isSqlStatement(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
-			return false;
-		}
-		if (type.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
-			return false;
-		}
-		
-		if (type.getName() == InternUtil.intern("SQLStatement") && type.getPackageName() == SQL_PKG) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	protected boolean isEntity(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
-			return false;
-		}
-		
-		switch (type.getKind()) {
-			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-			case ITypeBinding.HANDLER_BINDING:
-			case ITypeBinding.EXTERNALTYPE_BINDING:
-				return true;
-			default:
-				return false;
-		}
-	}
-	
-	protected boolean isEntityWithID(ITypeBinding type) {
-		if (!Binding.isValidBinding(type) || !isEntity(type)) {
+	protected boolean isEntityWithID(Type type) {
+		if (type == null || !isEntity(type)) {
 			return false;
 		}
 		
 		return hasID(type);
 	}
 	
-	protected boolean hasID(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
+	protected boolean hasID(Type type) {
+		if (type == null) {
 			return false;
 		}
 		
-		List<IDataBinding> fields = null;
+		List<Field> fields = null;
 		
-		while (type != null && type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
-			type = ((ArrayTypeBinding)type).getElementType();
+		while (type instanceof ArrayType) {
+			type = ((ArrayType)type).getElementType();
 		}
 		
-		switch (type.getKind()) {
-			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-				fields = ((FlexibleRecordBinding)type).getDeclaredFields();
-				break;
-			case ITypeBinding.HANDLER_BINDING:
-				fields = ((HandlerBinding)type).getDeclaredData();
-				break;
-			case ITypeBinding.EXTERNALTYPE_BINDING:
-				fields = ((ExternalTypeBinding)type).getDeclaredAndInheritedData();
-				break;
-			default:
-				break;
+		if (type instanceof Record) {
+			fields = ((Record)type).getFields();
+		}
+		else if (type instanceof Handler) {
+			fields = ((Handler)type).getFields();
+		}
+		else if (type instanceof ExternalType) {
+			List<Member> members = ((ExternalType)type).getAllMembers();
+			fields = new ArrayList<Field>(members.size());
+			for (Member m : members) {
+				if (m instanceof Field) {
+					fields.add((Field)m);
+				}
+			}
 		}
 		
 		if (fields == null) {
 			return false;
 		}
 		
-		for(IDataBinding field: fields) { 
-			if (field.getAnnotation(PERSISTENCE_PKG, "ID") != null) {
+		for (Field field: fields) { 
+			if (field.getAnnotation(Id) != null) {
 				return true;
 			}
 		}
@@ -142,30 +94,24 @@ public class AbstractSqlStatementValidator {
 	
 	protected boolean isAssociationExpression(Expression exp) {
 		//TODO this is probably not complete. might need to validate the type being pointed to has an association back to exp.
-		IDataBinding data = exp.resolveDataBinding();
-		if (!Binding.isValidBinding(data)) {
+		Member data = exp.resolveMember();
+		if (data == null) {
 			return false;
 		}
 		
-		if (!Binding.isValidBinding(data.getDeclaringPart())) {
+		if (!isEntity(getContainingType(data))) {
 			return false;
 		}
 		
-		if (!isEntity(data.getDeclaringPart())) {
-			return false;
-		}
-		
-		IAnnotationBinding annotation = null;
-		
-		annotation = data.getAnnotation(PERSISTENCE_PKG, InternUtil.intern("OneToOne"));
+		Annotation annotation = data.getAnnotation(OneToOne);
 		if (annotation == null) {
-			annotation = data.getAnnotation(PERSISTENCE_PKG, InternUtil.intern("OneToMany"));
+			annotation = data.getAnnotation(OneToMany);
 		}
 		if (annotation == null) {
-			annotation = data.getAnnotation(PERSISTENCE_PKG, InternUtil.intern("ManyToOne"));
+			annotation = data.getAnnotation(ManyToOne);
 		}
 		if (annotation == null) {
-			annotation = data.getAnnotation(PERSISTENCE_PKG, InternUtil.intern("ManyToMany"));
+			annotation = data.getAnnotation(ManyToMany);
 		}
 		
 		if (annotation == null) {
@@ -175,24 +121,41 @@ public class AbstractSqlStatementValidator {
 		return true;
 	}
 	
+	protected Type getContainingType(Member m) {
+		if (m == null) {
+			return null;
+		}
+		
+		Container container = m.getContainer();
+		while (container instanceof Member && ((Member)container).getContainer() != null) {
+			container = ((Member)container).getContainer();
+		}
+		
+		if (container instanceof Type) {
+			return (Type)container;
+		}
+		
+		return null;
+	}
+	
 	protected boolean isDataExpr(Expression expr) {
-		ITypeBinding type = expr.resolveTypeBinding();
-		if (!Binding.isValidBinding(type)) {
+		Type type = expr.resolveType();
+		if (type == null) {
 			return false;
 		}
 		
 		//TODO Once generation supports dictionaries, uncomment the next couple lines.
-		if (type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
-			ITypeBinding elementType = ((ArrayTypeBinding)type).getElementType();
-			return Binding.isValidBinding(elementType) && (/*elementType.getKind() == ITypeBinding.DICTIONARY_BINDING ||*/ isEntity(elementType));
+		if (type instanceof ArrayType) {
+			Type elementType = ((ArrayType)type).getElementType();
+			return elementType != null && (/*elementType instanceof Dictionary ||*/ isEntity(elementType));
 		}
 		
-		return /*type.getKind() == ITypeBinding.DICTIONARY_BINDING ||*/ isScalar(expr) || isEntity(type) || isAssociationExpression(expr);
+		return /*type instanceof Dictionary ||*/ isScalar(expr) || isEntity(type) || isAssociationExpression(expr);
 	}
 	
 	protected boolean isScalar(Expression expr) {
-		ITypeBinding type = expr.resolveTypeBinding();
-		return Binding.isValidBinding(type) && ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getKind();
+		Type type = expr.resolveType();
+		return type != null && TypeUtils.isPrimitive(type);
 	}
 	
 	protected boolean mapsToColumns(List exprs) {
@@ -218,11 +181,11 @@ public class AbstractSqlStatementValidator {
 	 * @return true if every expr maps to the same table.
 	 */
 	protected boolean mapsToSingleTable(List<Expression> exprs) {
-		IPartBinding firstParent = null;
+		Type firstParent = null;
 		for (Expression e : exprs) {
-			IDataBinding binding = e.resolveDataBinding();
-			if (Binding.isValidBinding(binding)) {
-				IPartBinding parent = binding.getDeclaringPart();
+			Member binding = e.resolveMember();
+			if (binding != null) {
+				Type parent = getContainingType(binding);
 				if (parent == null) {
 					// If even 1 column has no table then we return false.
 					return false;
@@ -259,20 +222,20 @@ public class AbstractSqlStatementValidator {
 		return new int[]{startOffset, endOffset};
 	}
 	
-	protected boolean isSingleTable(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
+	protected boolean isSingleTable(Type type) {
+		if (type == null) {
 			return false;
 		}
 		
-		if (type.getAnnotation(SQL_PKG, "SECONDARYTABLE") != null) {
+		if (type.getAnnotation(SecondaryTable) != null) {
 			return false;
 		}
 		
-		IAnnotationBinding annot = type.getAnnotation(SQL_PKG, "SECONDARYTABLES");
+		Annotation annot = type.getAnnotation(SecondaryTables);
 		if (annot != null) {
 			Object value = annot.getValue();
-			if (value instanceof IAnnotationBinding[]) {
-				return ((IAnnotationBinding[])value).length == 0;
+			if (value instanceof Object[]) {
+				return ((Object[])value).length == 0;
 			}
 		}
 		return true;

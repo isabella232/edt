@@ -17,26 +17,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.AnnotationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.DataItemBinding;
-import org.eclipse.edt.compiler.binding.FixedRecordBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordFieldBinding;
-import org.eclipse.edt.compiler.binding.FormFieldBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LocalVariableBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
-import org.eclipse.edt.compiler.binding.annotationType.StereotypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
@@ -81,7 +65,6 @@ import org.eclipse.edt.compiler.core.ast.MoveStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.NullableType;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
@@ -107,17 +90,10 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
-import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
-
-
-/**
- * @author cduval
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class StatementValidator implements IOStatementValidatorConstants{
 
@@ -140,53 +116,44 @@ public class StatementValidator implements IOStatementValidatorConstants{
 		return tb;
 	}
 	
-	public static String getTypeString(ITypeBinding binding){
+	public static String getTypeString(org.eclipse.edt.mof.egl.Type binding) {
 		StringBuffer result = new StringBuffer();
-		switch(binding.getKind()) {
-			case ITypeBinding.ARRAYDICTIONARY_BINDING:
-				result.append(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING);
-				break;
-			
-			case ITypeBinding.DICTIONARY_BINDING:
-				result.append(IEGLConstants.MIXED_DICTIONARY_STRING);
-				break;
-			
-			case ITypeBinding.ARRAY_TYPE_BINDING:
-				result.append(getShortTypeString(((ArrayTypeBinding) binding).getElementType(), true) + "[]");
-				break;
-				
-			case ITypeBinding.ANNOTATION_BINDING:
-				result.append("@");
-				result.append(binding.getCaseSensitiveName());
-				break;
-				
-			default:
-				result.append(binding.getCaseSensitiveName());			
+		if (binding.equals(TypeUtils.Type_ARRAYDICTIONARY)) {
+			result.append(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING);
 		}
-		
-		if(binding.isNullable()) {
-			result.append("?");
+		else if (binding.equals(TypeUtils.Type_DICTIONARY)) {
+			result.append(IEGLConstants.MIXED_DICTIONARY_STRING);
+		}
+		else if (binding instanceof org.eclipse.edt.mof.egl.ArrayType) {
+			result.append(getShortTypeString(((org.eclipse.edt.mof.egl.ArrayType)binding).getElementType(), true));
+			if (((org.eclipse.edt.mof.egl.ArrayType)binding).elementsNullable()) {
+				result.append('?');
+			}
+			result.append("[]");
+		}				
+		else if (binding instanceof Annotation) {
+			result.append('@');
+			result.append(getUnqualifiedSignature(binding.getTypeSignature()));
+		}				
+		else {
+			result.append(getUnqualifiedSignature(binding.getTypeSignature()));
 		}
 		
 		return result.toString();
 	}
 	
-	public static String getShortTypeString(ITypeBinding binding){
+	public static String getShortTypeString(org.eclipse.edt.mof.egl.Type binding) {
 		return getShortTypeString(binding, false);
 	}
 	
-	public static String getShortTypeString(ITypeBinding binding, boolean includeLengthForPrimitives){
+	public static String getShortTypeString(org.eclipse.edt.mof.egl.Type binding, boolean includeLengthForPrimitives) {
 		StringBuffer result = new StringBuffer();
-		if(ITypeBinding.PRIMITIVE_TYPE_BINDING == binding.getKind()) {
-			Primitive prim = ((PrimitiveTypeBinding) binding).getPrimitive();
-			if(includeLengthForPrimitives || Primitive.MONTHSPAN_INTERVAL == prim || Primitive.SECONDSPAN_INTERVAL == prim) {
+		if (TypeUtils.isPrimitive(binding)) {
+			if (includeLengthForPrimitives || binding.equals(TypeUtils.Type_MONTHSPANINTERVAL) || binding.equals(TypeUtils.Type_SECONDSPANINTERAL)) {
 				result = new StringBuffer(getTypeString(binding));
 			}
 			else {
-				result = new StringBuffer(((PrimitiveTypeBinding) binding).getPrimitive().getName());
-				if(binding.isNullable()) {
-					result.append("?");
-				}
+				result = new StringBuffer(BindingUtil.getUnaliasedTypeName(binding));
 			}
 		}
 		else {
@@ -194,6 +161,14 @@ public class StatementValidator implements IOStatementValidatorConstants{
 		}
 		
 		return result.toString();
+	}
+	
+	private static String getUnqualifiedSignature(String sig) {
+		int lastDot = sig.lastIndexOf('.');
+		if (lastDot == -1) {
+			return sig;
+		}
+		return sig.substring(lastDot + 1);
 	}
 	
 	public static boolean isMultiplyOccuring(IDataBinding dataBinding){
@@ -867,50 +842,6 @@ public class StatementValidator implements IOStatementValidatorConstants{
 		
 		return ((FlexibleRecordBinding)binding).isAnnotationRecord();
 		
-	}
-	
-	public static void validateDeclarationForStereotypeContext(IDataBinding dBinding, IProblemRequestor problemRequestor, Node nodeForErrors) {
-		ITypeBinding type = dBinding.getType();
-		if(Binding.isValidBinding(type)) {
-			type = type.getBaseType();
-			if(Binding.isValidBinding(type) && type.isPartBinding()) {
-				IPartSubTypeAnnotationTypeBinding subType = ((IPartBinding) type).getSubType();
-				if(subType != null && IBinding.NOT_FOUND_BINDING != subType) {
-					IAnnotationBinding aBinding = (IAnnotationBinding) dBinding.getAnnotation(subType).getAnnotation(AnnotationAnnotationTypeBinding.getInstance());
-					if(aBinding != null) {
-						aBinding = aBinding.getAnnotation(StereotypeAnnotationTypeBinding.getInstance());
-						if(aBinding != null) {
-							aBinding = (IAnnotationBinding) aBinding.findData("stereotypeContexts");
-							if(IBinding.NOT_FOUND_BINDING != aBinding) {
-								boolean declaringSubtypeIsValid = false;
-								IPartBinding declaringType = dBinding.getDeclaringPart();
-								if(declaringType != null) {
-									ITypeBinding declaringSubtype = declaringType.getSubType();
-									if(declaringSubtype instanceof AnnotationTypeBindingImpl) {
-										declaringSubtype = ((AnnotationTypeBindingImpl) declaringSubtype).getAnnotationRecord();
-									}
-									Object[] value = (Object[]) aBinding.getValue();
-									for(int i = 0; i < value.length && !declaringSubtypeIsValid; i++) {
-										if(value[i] == declaringSubtype) {
-											declaringSubtypeIsValid = true;
-										}
-									}
-								}
-								if(!declaringSubtypeIsValid) {
-									problemRequestor.acceptProblem(
-										nodeForErrors,
-										IProblemRequestor.TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE,
-										new String[] {
-											getTypeString(type),
-											dBinding.getDeclaringPart().getCaseSensitiveName()	
-										});
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 	
 	protected static boolean validateRecordParamDimensions(StructureItemBinding sBinding,IProblemRequestor problemRequestor,Node node,String name,String typename,int level){
