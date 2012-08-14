@@ -13,33 +13,51 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.EType;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 
-/**
- * @author Harmon
- */
-public class AnnotationRightHandScope extends Scope{
-    private IAnnotationTypeBinding binding;
 
-    public AnnotationRightHandScope(Scope parentScope, IAnnotationTypeBinding binding) {
+public class AnnotationRightHandScope extends Scope{
+    private Annotation annotation;
+    private EField field;
+
+    public AnnotationRightHandScope(Scope parentScope, Annotation annotation, EField field) {
         super(parentScope);
-        this.binding = binding;
+        this.annotation = annotation;
+        this.field = field;
     }
 
-    public IDataBinding findData(String simpleName) {
-        if (binding.getEnumerationType() != null) {
-            IDataBinding result = binding.getEnumerationType().findData(simpleName);
-            if (result != IBinding.NOT_FOUND_BINDING) {
+    public List<Member> findMember(String simpleName) {
+    	Enumeration enumeration = getEnumerationType();
+        if (enumeration != null) {
+        	List<Member> result = BindingUtil.findMembers(enumeration, simpleName);
+            if (result != null) {
                 return result;
             }
         }
-        return parentScope.findData(simpleName);
+        return parentScope.findMember(simpleName);
+    }
+    
+    private Enumeration getEnumerationType() {
+    	if (field != null) {
+    		EType type = field.getEType();
+    		return getEnumerationType(type);
+    	}
+    	return null;
+    }
+    
+    private Enumeration getEnumerationType(EType type) {
+    	if (type instanceof Enumeration) {
+    		return (Enumeration)type;
+    	}
+    	//TODO handle when type is an enumeration[]
+    	return null;
     }
 
     public IPackageBinding findPackage(String simpleName) {

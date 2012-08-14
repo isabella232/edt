@@ -12,6 +12,7 @@
 package org.eclipse.edt.compiler.core.ast;
 
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -40,11 +41,11 @@ public class FieldAccess extends Expression {
 	}
 	
 	public String getID() {
-		return InternUtil.intern(ID);
+        return NameUtile.getAsName(ID);
 	}
 	
 	public String getCaseSensitiveID() {
-		return InternUtil.internCaseSensitive(ID);
+		return ID;
 	}
 	
 	public void accept(IASTVisitor visitor) {

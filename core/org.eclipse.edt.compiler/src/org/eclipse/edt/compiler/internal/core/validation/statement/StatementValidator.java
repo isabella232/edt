@@ -95,7 +95,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class StatementValidator implements IOStatementValidatorConstants{
+public class StatementValidator {
 
 	public static interface ITargetsContainerChecker {
 		boolean isLibraryDataAllowed(IDataBinding dataBinding);
