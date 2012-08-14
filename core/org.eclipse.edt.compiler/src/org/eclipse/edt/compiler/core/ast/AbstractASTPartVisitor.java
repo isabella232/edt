@@ -86,6 +86,11 @@ public abstract class AbstractASTPartVisitor extends AbstractASTVisitor {
 		visitPart(enumeration);
 		return false;
 	}
+	
+	public boolean visit(EGLClass clazz) {
+		visitPart(clazz);
+		return false;
+	}
 
 	public abstract void visitPart(Part part);
 }
