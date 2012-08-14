@@ -25,6 +25,7 @@ import org.eclipse.edt.mof.eglx.services.gen.ServiceElementGenerator;
 import org.eclipse.edt.mof.eglx.services.gen.ServicesCallStatement;
 import org.eclipse.edt.mof.eglx.services.validation.EglServiceProxyFunctionValidator;
 import org.eclipse.edt.mof.eglx.services.validation.RestServiceProxyFunctionValidator;
+import org.eclipse.edt.mof.eglx.services.validation.ServicesCallStatementValidator;
 
 public class ServicesExtension implements ICompilerExtension {
 	
@@ -49,23 +50,18 @@ public class ServicesExtension implements ICompilerExtension {
 	@Override
 	public ASTValidator getValidatorFor(Node node) {
 		// Call statement can be extended.
-		Function function = null;
-		if(node instanceof CallStatement && 
-				((CallStatement)node).getInvocationTarget() != null &&
-				((CallStatement)node).getInvocationTarget().resolveElement() instanceof Function){
-			function = (Function)((CallStatement)node).getInvocationTarget().resolveElement();
-		}
-		else if (node instanceof NestedFunction && 
-				((NestedFunction)node).getName().resolveMember() instanceof Function) {
-			function = (Function)((NestedFunction)node).getName().resolveMember();
-		}
-		if(function != null && 
-				(function.getContainer() instanceof Service ||
-						function.getAnnotation("eglx.rest.EglService") != null)){
-			return new EglServiceProxyFunctionValidator();
-		}
-		else if(function != null && function.getAnnotation("eglx.rest.Rest") != null){
-			return new RestServiceProxyFunctionValidator();
+		if(shouldExtend(node)){
+			if(node instanceof CallStatement){
+				return new ServicesCallStatementValidator();
+			}
+			else if (node instanceof NestedFunction) {
+				if(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.EglService") != null){
+					return new EglServiceProxyFunctionValidator();
+				}
+				else if(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.Rest") != null){
+					return new RestServiceProxyFunctionValidator();
+				}
+			}
 		}
 		return null;
 	}
