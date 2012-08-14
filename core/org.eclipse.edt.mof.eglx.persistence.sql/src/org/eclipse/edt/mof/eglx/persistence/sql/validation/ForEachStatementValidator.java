@@ -13,16 +13,18 @@ package org.eclipse.edt.mof.eglx.persistence.sql.validation;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 	ForEachStatement statement;
@@ -54,13 +56,15 @@ public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 			Object o = exprs.get(0);
 			if (o instanceof Expression) {
 				Expression expr = (Expression)o;
-				ITypeBinding type = expr.resolveTypeBinding();
+				Type type = expr.resolveType();
 				if (isEntity(type)) {
 					// Associations are not yet supported.
 					if (isAssociationExpression(expr)) {
 						problemRequestor.acceptProblem(expr,
-								IProblemRequestor.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
-								new String[] {});
+								SQLResourceKeys.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
+								IMarker.SEVERITY_ERROR,
+								new String[] {},
+								SQLResourceKeys.getResourceBundleForKeys());
 						return;
 					}
 					isEntity = true;
@@ -71,8 +75,10 @@ public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 		if (!isEntity && !mapsToColumns(exprs)) {
 			int[] offsets = getOffsets(exprs);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
-					IProblemRequestor.SQL_TARGET_MUST_BE_ENTITY_OR_COLUMNS,
-					new String[] {});
+					SQLResourceKeys.SQL_TARGET_MUST_BE_ENTITY_OR_COLUMNS,
+					true,
+					new String[] {},
+					SQLResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 	}
@@ -80,11 +86,13 @@ public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 	private void validateFrom() {
 		// If FROM wasn't specified, there will be a validation error already from the parser.
 		if (from != null) {
-			ITypeBinding type = from.getExpression().resolveTypeBinding();
-			if (Binding.isValidBinding(type) && !isResultSet(type)) {
+			Type type = from.getExpression().resolveType();
+			if (type != null && !Utils.isSQLResultSet(type)) {
 				problemRequestor.acceptProblem(from.getExpression(),
-						IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
-						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLResultSet"});
+						SQLResourceKeys.SQL_EXPR_HAS_WRONG_TYPE,
+						IMarker.SEVERITY_ERROR,
+						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLResultSet"},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 		}

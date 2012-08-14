@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.validation;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ForExpressionClause;
@@ -24,8 +22,12 @@ import org.eclipse.edt.compiler.core.ast.UsingClause;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
 import org.eclipse.edt.compiler.core.ast.WithExpressionClause;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class OpenStatementValidator extends AbstractSqlStatementValidator{
 	OpenStatement statement;
@@ -59,11 +61,13 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 	}
 	
 	private void validateTarget() {
-		ITypeBinding targetType = statement.getResultSet().resolveTypeBinding();
-		if (Binding.isValidBinding(targetType) && !isResultSet(targetType)) {
+		Type targetType = statement.getResultSet().resolveType();
+		if (targetType != null && !Utils.isSQLResultSet(targetType)) {
 			problemRequestor.acceptProblem(statement.getResultSet(),
-					IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
-					new String[] {statement.getResultSet().getCanonicalString(), "eglx.persistence.sql.SQLResultSet"});
+					SQLResourceKeys.SQL_EXPR_HAS_WRONG_TYPE,
+					IMarker.SEVERITY_ERROR,
+					new String[] {statement.getResultSet().getCanonicalString(), "eglx.persistence.sql.SQLResultSet"},
+					SQLResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 	}
@@ -71,11 +75,13 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 	private void validateFrom() {
 		if (from != null) {
 			// Must be of type SQLDataSource
-			ITypeBinding type = from.getExpression().resolveTypeBinding();
-			if (Binding.isValidBinding(type) && !isDataSource(type)) {
+			Type type = from.getExpression().resolveType();
+			if (type != null && !Utils.isSQLDataSource(type)) {
 				problemRequestor.acceptProblem(from.getExpression(),
-						IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
-						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLDataSource"});
+						SQLResourceKeys.SQL_EXPR_HAS_WRONG_TYPE,
+						IMarker.SEVERITY_ERROR,
+						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLDataSource"},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 		}
@@ -85,11 +91,13 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 		boolean isSqlStatement = false;
 		
 		if (withExpression != null) {
-			ITypeBinding type = withExpression.getExpression().resolveTypeBinding();
-			if (Binding.isValidBinding(type) && !isSqlStatement(type)) {
+			Type type = withExpression.getExpression().resolveType();
+			if (type != null && !Utils.isSQLStatement(type)) {
 				problemRequestor.acceptProblem(withExpression.getExpression(),
-						IProblemRequestor.SQL_EXPR_HAS_WRONG_TYPE,
-						new String[] {withExpression.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLStatement"});
+						SQLResourceKeys.SQL_EXPR_HAS_WRONG_TYPE,
+						IMarker.SEVERITY_ERROR,
+						new String[] {withExpression.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLStatement"},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			else {
@@ -102,8 +110,10 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 		// statement is available there is no need for referencing the explicit datasource
 		if (from == null && !isSqlStatement) {
 			problemRequestor.acceptProblem(statement,
-					IProblemRequestor.SQL_WITH_STMT_REQUIRED,
-					new String[] {"eglx.persistence.sql.SQLStatement"});
+					SQLResourceKeys.SQL_WITH_STMT_REQUIRED,
+					IMarker.SEVERITY_ERROR,
+					new String[] {"eglx.persistence.sql.SQLStatement"},
+					SQLResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
@@ -112,20 +122,24 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 			//If no WITH clause is specified the FOR clause can be specified 
 			if (withExpression != null || withInline != null) {
 				problemRequestor.acceptProblem(forExpression,
-						IProblemRequestor.SQL_FOR_NOT_ALLOWED,
-						new String[] {});
+						SQLResourceKeys.SQL_FOR_NOT_ALLOWED,
+						IMarker.SEVERITY_ERROR,
+						new String[] {},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			
-			ITypeBinding type = forExpression.getExpression().resolveTypeBinding();
-			if (Binding.isValidBinding(type) && (!isEntityWithID(type)
+			Type type = forExpression.getExpression().resolveType();
+			if (type != null && (!isEntityWithID(type)
 					// TODO associations not supported yet. when they are, change it to the commented out line.
 					|| isAssociationExpression(forExpression.getExpression())
 //						&& !isAssociationExpression(forExpression.getExpression())
 					)) {
 				problemRequestor.acceptProblem(forExpression.getExpression(),
-						IProblemRequestor.SQL_FOR_TYPE_INVALID,
-						new String[] {forExpression.getExpression().getCanonicalString()});
+						SQLResourceKeys.SQL_FOR_TYPE_INVALID,
+						IMarker.SEVERITY_ERROR,
+						new String[] {forExpression.getExpression().getCanonicalString()},
+						SQLResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 		}
@@ -134,7 +148,7 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 	private void validateInto() {
 		if (into != null) {
 			// INTO not currently part of the spec.
-			problemRequestor.acceptProblem(into, IProblemRequestor.SQL_INTO_NOT_ALLOWED, new String[] {});
+			problemRequestor.acceptProblem(into, SQLResourceKeys.SQL_INTO_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {}, SQLResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	

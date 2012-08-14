@@ -13,16 +13,19 @@ package org.eclipse.edt.mof.eglx.persistence.sql.validation;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForExpressionClause;
 import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class AddStatementValidator extends AbstractSqlStatementValidator {
 	AddStatement statement;
@@ -55,13 +58,15 @@ public class AddStatementValidator extends AbstractSqlStatementValidator {
 			Object o = exprs.get(0);
 			if (o instanceof Expression) {
 				Expression expr = (Expression)o;
-				ITypeBinding type = expr.resolveTypeBinding();
+				Type type = expr.resolveType();
 				if (isEntity(type)) {
 					// Associations are not yet supported.
 					if (isAssociationExpression(expr)) {
 						problemRequestor.acceptProblem(expr,
-								IProblemRequestor.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
-								new String[] {});
+								SQLResourceKeys.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
+								IMarker.SEVERITY_ERROR,
+								new String[] {},
+								SQLResourceKeys.getResourceBundleForKeys());
 						return;
 					}
 					isEntity = true;
@@ -72,25 +77,31 @@ public class AddStatementValidator extends AbstractSqlStatementValidator {
 		if (!isEntity && !mapsToColumns(exprs)) {
 			int[] offsets = getOffsets(exprs);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
-					IProblemRequestor.SQL_TARGET_MUST_BE_ENTITY_OR_COLUMNS,
-					new String[] {});
+					SQLResourceKeys.SQL_TARGET_MUST_BE_ENTITY_OR_COLUMNS,
+					true,
+					new String[] {},
+					SQLResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 		else if (!isEntity && forExpression == null && !mapsToSingleTable(exprs)) {
 			// FOR required when the columns do not map to a single table.
 			int[] offsets = getOffsets(exprs);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
-					IProblemRequestor.SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE,
-					new String[] {IEGLConstants.KEYWORD_FOR});
+					SQLResourceKeys.SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE,
+					true,
+					new String[] {IEGLConstants.KEYWORD_FOR},
+					SQLResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 		
-		ITypeBinding targetType = getTargetType();
-		if (Binding.isValidBinding(targetType) && !isSingleTable(targetType)) {
+		Type targetType = getTargetType();
+		if (targetType != null && !isSingleTable(targetType)) {
 			int[] offsets = getOffsets(exprs);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
-					IProblemRequestor.SQL_SINGLE_TABLE_REQUIRED,
-					new String[]{});
+					SQLResourceKeys.SQL_SINGLE_TABLE_REQUIRED,
+					true,
+					new String[]{},
+					SQLResourceKeys.getResourceBundleForKeys());
 			return;
 		}
 	}
@@ -99,60 +110,63 @@ public class AddStatementValidator extends AbstractSqlStatementValidator {
 		if (forExpression != null) {
 			if (to != null) {
 				// When the data source is a result set, FOR is not allowed.
-				ITypeBinding type = to.getExpression().resolveTypeBinding();
-				if (Binding.isValidBinding(type) && isResultSet(type)) {
+				Type type = to.getExpression().resolveType();
+				if (type != null && Utils.isSQLResultSet(type)) {
 					problemRequestor.acceptProblem(forExpression,
-							IProblemRequestor.SQL_FOR_NOT_ALLOWED_WITH_DATA_SOURCE_TYPE,
-							new String[] {"eglx.persistence.sql.SQLResultSet"});
+							SQLResourceKeys.SQL_FOR_NOT_ALLOWED_WITH_DATA_SOURCE_TYPE,
+							IMarker.SEVERITY_ERROR,
+							new String[] {"eglx.persistence.sql.SQLResultSet"},
+							SQLResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}
 			
-			ITypeBinding type = forExpression.getExpression().resolveTypeBinding();
-			if (Binding.isValidBinding(type)) {
+			Type type = forExpression.getExpression().resolveType();
+			if (type != null) {
 				if (!isEntityWithID(type)
 						// TODO associations not supported yet. when they are, change it to the commented out line.
 						|| isAssociationExpression(forExpression.getExpression())
 //							&& !isAssociationExpression(forExpression.getExpression())
 						) {
 					problemRequestor.acceptProblem(forExpression.getExpression(),
-							IProblemRequestor.SQL_FOR_TYPE_INVALID,
-							new String[] {forExpression.getExpression().getCanonicalString()});
+							SQLResourceKeys.SQL_FOR_TYPE_INVALID,
+							IMarker.SEVERITY_ERROR,
+							new String[] {forExpression.getExpression().getCanonicalString()},
+							SQLResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 				
 				// The type of the expression must match exactly the type of the action target.
-				ITypeBinding targetType = getTargetType();
-				if (Binding.isValidBinding(targetType) && !targetType.equals(type)) {
+				Type targetType = getTargetType();
+				if (targetType != null && !targetType.equals(type)) {
 					problemRequestor.acceptProblem(forExpression.getExpression(),
-							IProblemRequestor.SQL_FOR_AND_TARGET_TYPES_MUST_MATCH,
-							new String[] {forExpression.getExpression().getCanonicalString(), type.getPackageQualifiedName(), targetType.getPackageQualifiedName()});
+							SQLResourceKeys.SQL_FOR_AND_TARGET_TYPES_MUST_MATCH,
+							IMarker.SEVERITY_ERROR,
+							new String[] {forExpression.getExpression().getCanonicalString(), type.getTypeSignature(), targetType.getTypeSignature()},
+							SQLResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}
 		}
 	}
 	
-	private ITypeBinding getTargetType() {
-		ITypeBinding type = null;
+	private Type getTargetType() {
+		Type type = null;
 		List targets = statement.getTargets();
 		int size = targets.size();
 		if (size > 0) {
 			Expression e = (Expression)targets.get(0);
-			type = e.resolveTypeBinding();
-			if (Binding.isValidBinding(type) && (size != 1 || !isEntity(type))) {
+			type = e.resolveType();
+			if (type != null && (size != 1 || !isEntity(type))) {
 				type = null;
 				if (mapsToSingleTable(targets)) {
-					IDataBinding data = e.resolveDataBinding();
-					if (Binding.isValidBinding(data)) {
-						type = data.getDeclaringPart();
-					}
+					type = getContainingType(e.resolveMember());
 				}
 			}
 		}
 		
-		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
-			type = ((ArrayTypeBinding)type).getElementType();
+		if (type instanceof ArrayType) {
+			type = ((ArrayType)type).getElementType();
 		}
 		
 		return type;

@@ -53,12 +53,6 @@ public class ClassDataDeclarationValidator extends DefaultASTVisitor {
 		//TODO AnnotationValidator has many errors
 //		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(classDataDeclaration);
 		
-		//TODO StatementValidator has many errors
-//		IBinding binding = ((Name) classDataDeclaration.getNames().get(0)).resolveBinding();
-//		if(binding != null && IBinding.NOT_FOUND_BINDING != binding && binding.isDataBinding()) {
-//			StatementValidator.validateDeclarationForStereotypeContext((IDataBinding) binding, problemRequestor, classDataDeclaration.getType().getBaseType());
-//		}
-		
 		classDataDeclaration.accept(new FieldValidator(problemRequestor, compilerOptions, declaringPart));
 		
 		
