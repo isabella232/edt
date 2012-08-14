@@ -55,16 +55,10 @@ public class SystemEnvironment implements ISystemEnvironment {
     
     private ISystemEnvironment parentSystemEnvironment;
         
-    private Collection<String> implicitlyUsedEnumerationNames = new ArrayList<String>();
-   
     private Map<String, Map<String, IRPartBinding>> getSystemPackages() {
         return systemPackages;
     }
     
-    private Collection<String> getImplicitlyUsedEnumerationNames() {
-        return implicitlyUsedEnumerationNames;
-    }
-
     private Map<String, IRPartBinding> getUnqualifiedSystemParts() {
         return unqualifiedSystemParts;
     }
@@ -170,17 +164,8 @@ public class SystemEnvironment implements ISystemEnvironment {
         if (part instanceof Library){
         	getSystemLibraryManager().addSystemLibrary((Library)part);
 		} 
-        else if (part instanceof Enumeration) {
-        	if(enumerationIsImplicitlyUsed(partName)) {
-        		getEnumerationManager().addResolvableDataBindings((Enumeration) part);
-        	}
-        }
     }
     
-    private boolean enumerationIsImplicitlyUsed(String partName) {
-		return getImplicitlyUsedEnumerationNames().contains(partName);
-	}
-
 	private Map<String, IRPartBinding> getPackageParts(String packageName) {
         Map<String, IRPartBinding> map = getSystemPackages().get(packageName);
         if (map == null) {
@@ -193,11 +178,10 @@ public class SystemEnvironment implements ISystemEnvironment {
     /**
      * 
      */
-    public SystemEnvironment(org.eclipse.edt.mof.serialization.IEnvironment irEnv, ISystemEnvironment parentEnv, List<String> implicitlyUsedEnumerations, ICompiler compiler) {
+    public SystemEnvironment(org.eclipse.edt.mof.serialization.IEnvironment irEnv, ISystemEnvironment parentEnv, ICompiler compiler) {
         super();
         this.irEnv = irEnv;
         this.parentSystemEnvironment = parentEnv;
-        this.implicitlyUsedEnumerationNames = implicitlyUsedEnumerations;
         this.compiler = compiler;
         if (parentEnv != null) {
         	enumerationManager = new EnumerationManager(parentEnv.getEnumerationManager());

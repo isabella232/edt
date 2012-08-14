@@ -87,9 +87,6 @@ public interface ICompiler {
 	 */
 	public String getSystemEnvironmentPath();
 	
-	public List<String> getImplicitlyUsedEnumerations();
-	public List<String> getAllImplicitlyUsedEnumerations();
-	
 	public List<ASTValidator> getValidatorsFor(Node node);
 	public ElementGenerator getElementGeneratorFor(Node node);
 	
