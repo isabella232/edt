@@ -221,13 +221,13 @@ public abstract class DefaultBinder extends AbstractBinder {
     		arrayAccess.setBindAttempted(true);
     	}
     	else {
-    		if (BindingUtil.isDynamicallyAccessible(type)) {
-    			arrayAccess.setType(BindingUtil.getEAny());
-    		}
+			if (type instanceof org.eclipse.edt.mof.egl.ArrayType) {
+				arrayAccess.setType(((org.eclipse.edt.mof.egl.ArrayType)type).getElementType());
+			}
     		else {
-    			if (type instanceof org.eclipse.edt.mof.egl.ArrayType) {
-    				arrayAccess.setType(((org.eclipse.edt.mof.egl.ArrayType)type).getElementType());
-    			}
+        		if (BindingUtil.isDynamicallyAccessible(type)) {
+        			arrayAccess.setType(BindingUtil.getEAny());
+        		}
     			else {
     	    		arrayAccess.setBindAttempted(true); 
     			}
@@ -957,8 +957,9 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 			
 			Function function = functions.get(0);
-			functionInvocation.setMember(function);
+			functionInvocation.getTarget().setMember(function);
 			functionInvocation.setType(function.getType());
+			functionInvocation.getTarget().setType(function.getType());
 			dependencyRequestor.recordType(function.getType());
 
 		}
