@@ -14,15 +14,21 @@ package org.eclipse.edt.mof.eglx.services;
 import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
+import org.eclipse.edt.compiler.core.ast.SimpleName;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.eglx.services.gen.ServiceElementGenerator;
 import org.eclipse.edt.mof.eglx.services.gen.ServicesCallStatement;
 import org.eclipse.edt.mof.eglx.services.validation.EglServiceProxyFunctionValidator;
@@ -76,21 +82,92 @@ public class ServicesExtension implements ICompilerExtension {
 			}
 			else{
 				Expression exp = ((CallStatement)node).getInvocationTarget();
-				if(exp instanceof QualifiedName){
-					Object element = ((QualifiedName)exp).getQualifier().resolveElement();
-					return (element instanceof Member &&
-							((((Member)element).getAnnotation("eglx.rest.Rest") != null ||
-									((Member)element).getAnnotation("eglx.rest.EGLService") != null)) ||
-							element instanceof Service);
+				final Object[] part = new Object[1];
+				final String[] functionID = new String[1];
+				final Function[] function = new Function[1];
+				exp.accept(new AbstractASTVisitor() {
+					@Override
+					public boolean visit(org.eclipse.edt.compiler.core.ast.ArrayAccess arrayAccess) {
+						if(part[0] == null){
+							arrayAccess.getArray().accept(this);
+							while( part[0] instanceof ArrayType){
+								part[0] = ((ArrayType)part[0]).getElementType();
+							}
+						}
+						return false;
+					};
+					@Override
+					public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess) {
+						if(functionID[0] == null){
+							functionID[0] = fieldAccess.getID();
+						}
+						if(part[0] == null){
+							fieldAccess.getPrimary().accept(this);
+						}
+						return false;
+					};
+					@Override
+					public boolean visit(ThisExpression thisExpression) {
+						if(thisExpression.resolveElement() instanceof Function){
+							setFunction((Function)thisExpression.resolveElement());
+						}
+						if(part[0] == null){
+							part[0] = thisExpression.resolveType();
+						}
+						return false;
+					}
+					@Override
+					public boolean visit(SimpleName simpleName) {
+						if(part[0] == null){
+							part[0] = simpleName.resolveType();
+						}
+						return false;
+					}
+					@Override
+					public boolean visit(QualifiedName qualifiedName) {
+						if(qualifiedName.resolveElement() instanceof Function){
+							setFunction((Function)qualifiedName.resolveElement());
+						}
+						else{
+							if(functionID[0] == null){
+								functionID[0] = qualifiedName.getIdentifier();
+							}
+							qualifiedName.getQualifier().accept(this);
+						}
+						return false;
+					}
+					@Override
+					public boolean visit(FunctionInvocation functionInvocation) {
+						if(part[0] == null && 
+								functionInvocation.getTarget() != null &&
+								functionInvocation.getTarget().resolveElement() instanceof Function){
+							setFunction((Function)functionInvocation.getTarget().resolveElement());
+						}
+						return false;
+					}
+					private void setFunction(Function func){
+						function[0] = func;
+						part[0] = function[0].getContainer();
+						functionID[0] = function[0].getId();
+					}
+				});
+				if(part[0] instanceof Service){
+					return true;
 				}
-				
+				if(function[0] != null){
+					return isServiceProxy(function[0]);
+				}
+				return part[0] instanceof StructPart && isServiceProxy(((StructPart)part[0]).getFunction(functionID[0]));
 			}
 		}
 		else if (node instanceof NestedFunction) {
-			return ((NestedFunction)node).getName().resolveMember() instanceof Function && 
-					(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.EglService") != null ||
-							((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.Rest") != null );
+			return isServiceProxy(((NestedFunction)node).getName().resolveMember());
 		}
 		return false;
+	}
+	
+	private static boolean isServiceProxy(Member member){
+		return	member.getAnnotation("eglx.rest.Rest") != null ||
+						member.getAnnotation("eglx.rest.EGLService") != null;
 	}
 }
