@@ -15,12 +15,10 @@ import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiElementGenerator;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiFunctionValidator;
@@ -34,7 +32,7 @@ public class IBMiExtension implements ICompilerExtension {
 	}
 	
 	@Override
-	public Class[] getExtendedTypes() {
+	public Class<?>[] getExtendedTypes() {
 		return new Class[]{CallStatement.class, NestedFunction.class};
 	}
 	
@@ -67,12 +65,12 @@ public class IBMiExtension implements ICompilerExtension {
 				return Utils.isIBMiConnection(stmt.getUsing().resolveType());
 			}
 			else {
-				Expression exp = stmt.getInvocationTarget();
-				Member binding = exp.resolveMember();
-				//only service can have a Service type qualifier with no using clause
-				return binding instanceof Function && 
-						!Utils.isFunctionServiceQualified(exp, (Function)binding) &&
-						binding.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+				if(((CallStatement)node).getInvocationTarget() != null &&
+						((CallStatement)node).getInvocationTarget().resolveElement() instanceof Function){
+					Function function = (Function)((CallStatement)node).getInvocationTarget().resolveElement();
+					return !Utils.isFunctionServiceQualified(((CallStatement)node).getInvocationTarget(), function) &&
+							function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+				}
 			}
 		}
 		else if (node instanceof NestedFunction) {
