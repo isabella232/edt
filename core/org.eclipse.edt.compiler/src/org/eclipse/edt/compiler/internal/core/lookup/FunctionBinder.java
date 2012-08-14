@@ -192,11 +192,9 @@ public class FunctionBinder extends DefaultBinder {
             if (settingsBlock != null) {
                 Scope scope = new MemberScope(getSystemScope(currentScope), field);
                 AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(scope, field, typeBinding, field);
-                annotationScope.setAnnotationFoundUsingThisScope(annotationFoundUsingScope);
                 settingsBlock.accept(
                         new SettingsBlockAnnotationBindingsCompletor(currentScope, partBinding, annotationScope,
                                 dependencyRequestor, problemRequestor, compilerOptions));
-                annotationFoundUsingScope = annotationScope.isAnnotationFoundUsingThisScope();
             }
         }
     }
