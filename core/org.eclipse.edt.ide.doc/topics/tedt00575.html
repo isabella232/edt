@@ -137,85 +137,10 @@ you select the <span class="ph uicontrol">Design</span> or <span class="ph uicon
 </li>
 
 <li class="li substep"><span class="ph cmd">In the <span class="ph uicontrol">Render engine for the Rich UI editor</span> section,
-select the technology used to render a web page in the Preview tab:</span>
- <ul class="ul">
-<li class="li">If you select <span class="ph uicontrol">Use default rendering engine</span>,
-the effect varies by operating system:<ul class="ul">
-<li class="li">For a Windows platform:<ul class="ul">
-<li class="li">If you using Eclipse version 3.7 and have installed Safari, the
-Safari installation was accompanied by WebKit, which is the default
-rendering engine. However, the following restrictions apply on a 64-bit
-Windows 7 platform:<ul class="ul">
-<li class="li">The Rich UI editor does not support WebKit if a 64-bit Java Runtime
-Environment (JRE) is in use. </li>
+select the technology used to render a web page in the Preview tab.
+For details on versions and limitations, see the following web-page
+section: <a class="xref" href="http://wiki.eclipse.org/EDT:Supported_Platforms#Rendering_Engines" target="_blank">http://wiki.eclipse.org/EDT:Supported_Platforms#Rendering_Engines</a>.</span>
 
-<li class="li">The editor supports WebKit if a 32-bit JRE is in use, but in this
-case you must include the Safari installation directory in the PATH
-variable. </li>
-
-</ul>
-<p class="p">Incidentally, when Safari is installed in Eclipse version
-3.7, running Mozilla XULRunner is problematic. In that case, install
-Safari or XULRunner 3.6.2.</p>
-</li>
-
-<li class="li">If you are using Eclipse version 3.7 and have not installed Safari,
-or if you are using Eclipse version 3.6, the default is Mozilla XULRunner.
-However, XULRunner is available only if you do as follows:<ol class="ol" type="i">
-<li class="li">Close Eclipse.</li>
-
-<li class="li">Use a text editor to open the <span class="ph filepath">eclipse.ini</span> file,
-which is in the Eclipse installation directory.</li>
-
-<li class="li">Add the following as the last argument in the -vmargs section
-of that file, specifying an installation directory in place of <em class="ph i">PATH_TO_XULRunnner</em>:<pre class="pre codeblock">-Dorg.eclipse.swt.browser.XULRunnerPath=<em class="ph i">PATH_TO_XULRunner</em></pre>
-</li>
-
-<li class="li">Start Eclipse.</li>
-
-</ol>
-<p class="p">Use Mozilla ZULRunner 3.6.2. Also, note that Rich UI requires
-the Mozilla Firefox version to be 3 or greater.</p>
-</li>
-
-<li class="li">If neither WebKit nor XULRunner is available, the default is Internet
-Explorer.</li>
-
-</ul>
-</li>
-
-<li class="li">For Linux:<ul class="ul">
-<li class="li">If you using Eclipse version 3.7 and have installed Safari, the
-Safari installation was accompanied by WebKit, which is the default
-rendering engine in this case. Incidentally, when Safari is installed
-in Eclipse version 3.7, running Mozilla XULRunner is problematic.
-Install Safari or XULRunner 3.6.2.</li>
-
-<li class="li">If you are using Eclipse version 3.7 and have not installed Safari,
-or if you are using Eclipse version 3.6, the default is Mozilla XULRunner.
-Use XULRunner 3.6.2.<p class="p">Note that Rich UI requires the Mozilla Firefox
-version to be 3 or greater.</p>
-</li>
-
-</ul>
-</li>
-
-</ul>
-</li>
-
-<li class="li">If you select <span class="ph uicontrol">Mozilla XULRunner</span> and are
-working on a Windows platform, you must update your <span class="ph filepath">eclipse.ini</span> file
-as described for the first selection. Note that Rich UI requires the
-Mozilla Firefox version to be 3 or greater.<p class="p">Incidentally, when Safari
-is installed in Eclipse version 3.7, some versions of XULRunner cannot
-be loaded.</p>
-</li>
-
-<li class="li">Select <span class="ph uicontrol">Trident (Internet Explorer)</span> if you
-want to use the Microsoft™ Internet
-Explorer rendering engine.</li>
-
-</ul>
 
 </li>
 
