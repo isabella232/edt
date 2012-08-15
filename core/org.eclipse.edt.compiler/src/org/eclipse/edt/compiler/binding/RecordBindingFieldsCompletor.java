@@ -82,11 +82,10 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
     					final Field fld = field;
      					IASTVisitor sbVisitor = new DefaultASTVisitor() {
     				        public boolean visit(SettingsBlock settingsBlock) {
-    				        	//TODO blows up right now
-//    				        	Scope fieldScope = new MemberScope(currentScope, fld);
-//    				            AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(fieldScope, fld, fld.getType(), fld);
-//    				            settingsBlock.accept(new SettingsBlockAnnotationBindingsCompletor(new RecordScope(currentScope, recordBinding), recordBinding, annotationScope, dependencyRequestor,
-//    				                    problemRequestor, compilerOptions));
+    				        	Scope fieldScope = new MemberScope(currentScope, fld);
+    				            AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(fieldScope, fld, fld.getType(), fld);
+    				            settingsBlock.accept(new SettingsBlockAnnotationBindingsCompletor(new RecordScope(currentScope, recordBinding), recordBinding, annotationScope, dependencyRequestor,
+    				                    problemRequestor, compilerOptions));
     				            return false;
     				        }
 						};

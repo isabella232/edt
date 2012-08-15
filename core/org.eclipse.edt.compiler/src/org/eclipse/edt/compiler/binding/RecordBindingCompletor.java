@@ -58,8 +58,7 @@ public class RecordBindingCompletor extends DefaultBinder {
         //now we will need to process the SettingsBlock for the
         // record...the collector has already gathered those for us.
 
-        //TODO blows up right now
-//        processSettingsBlocksFromCollector(collector);
+        processSettingsBlocksFromCollector(collector);
         
         if (record.isPrivate()) {
         	recordBinding.setAccessKind(AccessKind.ACC_PRIVATE);
