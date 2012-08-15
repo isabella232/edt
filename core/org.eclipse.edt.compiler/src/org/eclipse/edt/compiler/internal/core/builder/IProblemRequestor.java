@@ -1258,7 +1258,6 @@ public interface IProblemRequestor {
     public static final int LIBRARY_HAS_INVALID_SUBTYPE = 5617;
     public static final int SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION = 5618;
     public static final int CANNOT_PASS_NULL = 5619;
-    public static final int CANNOT_RETURN_NULL = 5620;
     
     public static final int PROXY_FUNCTIONS_CANNOT_HAVE_STMTS = 5704;
 //6000-6050 ARE IN EGLMESSAGES

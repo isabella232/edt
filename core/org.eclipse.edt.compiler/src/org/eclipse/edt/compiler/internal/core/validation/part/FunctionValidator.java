@@ -77,6 +77,7 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.GotoStatement
 import org.eclipse.edt.compiler.internal.core.validation.statement.IfStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LabelStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.MoveStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.ReturnStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.SetStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ThrowStatementValidator;
@@ -618,8 +619,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(ReturnStatement returnStatement) {
 		preVisitStatement(returnStatement);
 		if (checkStatementAllowedInContainer(returnStatement)) {
-			//TODO Validator blows up right now
-//			returnStatement.accept(new ReturnStatementValidator(problemRequestor, compilerOptions));
+			returnStatement.accept(new ReturnStatementValidator(problemRequestor, compilerOptions));
 		}
 		postVisitStatement(returnStatement);
 		return false;

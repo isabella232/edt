@@ -47,4 +47,12 @@ public class ReturnStatement extends Statement {
 		
 		return new ReturnStatement(newParenthesizedExprOpt, getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		if (parenthesizedExprOpt != null) {
+			return "return " + parenthesizedExprOpt.toString() + ";";
+		}
+		return "return;";
+	}
 }

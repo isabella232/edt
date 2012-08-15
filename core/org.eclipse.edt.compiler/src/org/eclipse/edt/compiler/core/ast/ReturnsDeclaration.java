@@ -49,4 +49,9 @@ public class ReturnsDeclaration extends Node {
 	protected Object clone() throws CloneNotSupportedException {
 		return new ReturnsDeclaration((Type)type.clone(), new Boolean(isNullable), getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		return "returns(" + type.toString() + (isNullable ? "?" : "") + ")";
+	}
 }

@@ -9,10 +9,8 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-	package org.eclipse.edt.compiler.internal.core.validation.statement;
-	
-	import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+package org.eclipse.edt.compiler.internal.core.validation.statement;
+
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -25,133 +23,130 @@ import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
+public class ReturnStatementValidator extends DefaultASTVisitor {
 	
-	/**
-	 * @author Craig Duval
-	 */
-	public class ReturnStatementValidator extends DefaultASTVisitor {
+	private IProblemRequestor problemRequestor;
+	
+	public ReturnStatementValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		this.problemRequestor = problemRequestor;
+	}
+	
+	public boolean visit(final ReturnStatement returnStatement) {
+		Node current = returnStatement.getParent();
+		final FunctionMember[] fBinding = new Function[1];
+		ParentASTVisitor visitor = new ParentASTVisitor() {
+			public boolean visit(NestedFunction nFunction) {
+				bcontinue = false;
+				fBinding[0] = (Function)nFunction.getName().resolveMember();
+				if (fBinding[0] != null) {
+					returnField = ((Function)fBinding[0]).getReturnField();
+				}
+				return false;
+			}
+			
+			public boolean visit(TopLevelFunction tlFunction) {
+				bcontinue = false;
+				fBinding[0] = (FunctionMember) tlFunction.getName().resolveMember();
+				return false;
+			}
+		};
+
+		while ((current != null) && visitor.canContinue() ) {
+			current.accept(visitor);
+			current = current.getParent();
+		}	
 		
-		private IProblemRequestor problemRequestor;
-		private ICompilerOptions compilerOptions;
 		
-		public ReturnStatementValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-			this.problemRequestor = problemRequestor;
-			this.compilerOptions = compilerOptions;
+		if (returnStatement.getParenthesizedExprOpt() != null && !visitor.hasReturnType()){
+			problemRequestor.acceptProblem(returnStatement,
+					IProblemRequestor.RETURN_VALUE_WO_RETURN_DEF);
 		}
 		
-		public boolean visit(final ReturnStatement returnStatement) {
-			Node current = returnStatement.getParent();
-			final Function[] fBinding = new Function[1];
-			ParentASTVisitor visitor = new ParentASTVisitor(){
-				public boolean visit(NestedFunction nFunction) {
-					fBinding[0] = (Function)nFunction.getName().resolveMember();
-					if(fBinding[0] != null) {
-						binding = fBinding[0].getReturnType();
+		validateNoSetValues(returnStatement);
+		
+		if (visitor.hasReturnType() && returnStatement.getParenthesizedExprOpt() != null) {
+			boolean compatible = IRUtils.isMoveCompatible(visitor.getReturnField(), returnStatement.getParenthesizedExprOpt().resolveType(), returnStatement.getParenthesizedExprOpt().resolveMember());
+			
+			if (!compatible){//|| lhsBinding == null ||rhsBinding == null ){
+				String typeString = "";
+				Type returnStmtType = returnStatement.getParenthesizedExprOpt().resolveType();
+				if (returnStmtType == null) {
+					Member m = returnStatement.getParenthesizedExprOpt().resolveMember();
+					if (m != null) {
+						typeString = m.getCaseSensitiveName();
 					}
-					bcontinue = false;
-										
-					return false;
+				}
+				else {
+					typeString = StatementValidator.getTypeString(returnStmtType);
 				}
 				
-				public boolean visit(TopLevelFunction tlFunction) {
-					bcontinue = false;
-					fBinding[0] = (Function) tlFunction.getName().resolveMember();
-					if(fBinding[0] != null) {
-						binding = fBinding[0].getReturnType();
-					}
-					return false;
-				}
-			};
-
-			while ((current != null) && visitor.canContinue() ) {
-				current.accept(visitor);
-				current = current.getParent();
-			}	
-			
-			
-			if (returnStatement.getParenthesizedExprOpt() != null && !visitor.hasReturnType()){
-				problemRequestor.acceptProblem(returnStatement,
-						IProblemRequestor.RETURN_VALUE_WO_RETURN_DEF);
+				problemRequestor.acceptProblem(returnStatement.getParenthesizedExprOpt(),
+						IProblemRequestor.RETURN_STATEMENT_TYPE_INCOMPATIBLE,
+						new String[] {
+								typeString,
+								StatementValidator.getTypeString(visitor.getReturnType())});
 			}
-			
-			validateNoSetValues(returnStatement);
-			
-			if (visitor.hasReturnType() && returnStatement.getParenthesizedExprOpt()!= null){
-				boolean compatible = TypeCompatibilityUtil.isMoveCompatible(visitor.getBinding(), returnStatement.getParenthesizedExprOpt().resolveTypeBinding(), returnStatement.getParenthesizedExprOpt(), compilerOptions);
-				if (!compatible ){//|| lhsBinding == null ||rhsBinding == null ){
-					problemRequestor.acceptProblem(returnStatement.getParenthesizedExprOpt(),
-							IProblemRequestor.RETURN_STATEMENT_TYPE_INCOMPATIBLE,
-							new String[] {getTypeName(returnStatement.getParenthesizedExprOpt().resolveTypeBinding()), getTypeName(visitor.getBinding())});
-				}
-				
-				if (returnStatement.getParenthesizedExprOpt().resolveTypeBinding() == NilBinding.INSTANCE && Binding.isValidBinding(visitor.getBinding()) && !visitor.getBinding().isNullable()) {
-					problemRequestor.acceptProblem(returnStatement.getParenthesizedExprOpt(),
-							IProblemRequestor.CANNOT_RETURN_NULL,
-							new String[] {fBinding[0].getCaseSensitiveName()});
-				}
-			}
-			
-			if(returnStatement.getParenthesizedExprOpt() != null) {
-				returnStatement.getParenthesizedExprOpt().accept(new DefaultASTVisitor() {
-					public boolean visit(AnnotationExpression annotationExpression) {
-						problemRequestor.acceptProblem(
-							annotationExpression.getOffset(),
-							annotationExpression.getOffset()+1,
-							IMarker.SEVERITY_ERROR,
-							IProblemRequestor.UNEXPECTED_TOKEN,
-							new String[] {"@"});
-						return false;
-					}
-					public boolean visit(ParenthesizedExpression parenthesizedExpression) {
-						return true;
-					}
-				});
-			}
-			
-			return false;
-		}
-
-
-		protected String getTypeName(ITypeBinding binding){
-			return StatementValidator.getTypeString(binding);
 		}
 		
-		protected void validateNoSetValues(ReturnStatement returnStatement){
-			returnStatement.accept(new AbstractASTVisitor(){
-				 public boolean visit(SetValuesExpression setValuesExpression) {
-					problemRequestor.acceptProblem(setValuesExpression,
-							IProblemRequestor.SET_VALUES_BLOCK_NOT_VALID_AS_RETURN_ARG);
+		if (returnStatement.getParenthesizedExprOpt() != null) {
+			returnStatement.getParenthesizedExprOpt().accept(new DefaultASTVisitor() {
+				public boolean visit(AnnotationExpression annotationExpression) {
+					problemRequestor.acceptProblem(
+						annotationExpression.getOffset(),
+						annotationExpression.getOffset()+1,
+						IMarker.SEVERITY_ERROR,
+						IProblemRequestor.UNEXPECTED_TOKEN,
+						new String[] {"@"});
 					return false;
-				 }
+				}
+				public boolean visit(ParenthesizedExpression parenthesizedExpression) {
+					return true;
+				}
 			});
-	
 		}
 		
-		
-		private class ParentASTVisitor extends AbstractASTVisitor{
-			Type binding = null;
-			boolean bcontinue = true;
-			public ParentASTVisitor (){
-			}
-			
-			public boolean hasReturnType(){
-				return binding != null;
-			}
+		return false;
+	}
 
-			public Type getBinding(){
-				return binding;
-			}
-			public boolean canContinue(){
-				return bcontinue;
-			}
-		}		
-		
+	protected void validateNoSetValues(ReturnStatement returnStatement){
+		returnStatement.accept(new AbstractASTVisitor(){
+			 public boolean visit(SetValuesExpression setValuesExpression) {
+				problemRequestor.acceptProblem(setValuesExpression,
+						IProblemRequestor.SET_VALUES_BLOCK_NOT_VALID_AS_RETURN_ARG);
+				return false;
+			 }
+		});
 
 	}
 	
-	
-
-
+	private class ParentASTVisitor extends AbstractASTVisitor {
+		Field returnField;
+		boolean bcontinue;
+		public ParentASTVisitor (){
+			bcontinue = true;
+		}
+		
+		public boolean hasReturnType(){
+			return returnField != null && returnField.getType() != null;
+		}
+		
+		public Type getReturnType() {
+			return returnField == null ? null : returnField.getType();
+		}
+		
+		public Field getReturnField() {
+			return returnField;
+		}
+		
+		public boolean canContinue(){
+			return bcontinue;
+		}
+	}
+}
