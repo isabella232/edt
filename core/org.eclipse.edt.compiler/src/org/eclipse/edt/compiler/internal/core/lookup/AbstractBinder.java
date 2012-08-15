@@ -783,20 +783,16 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     
         
     protected void processSettingsBlock(ClassDataDeclaration classDataDeclaration, Part functionContainerBinding, Scope functionContainerScope, IProblemRequestor problemRequestor) {
-        if (true) return; //TODO currently blows up
-        boolean annotationFoundUsingScope = false;
         for (Name name : classDataDeclaration.getNames()) {
              if (classDataDeclaration.hasSettingsBlock()) {
                 if (name.resolveMember() != null) {
                     Member member = name.resolveMember();
                     Scope scope = new MemberScope(currentScope, member);
                     AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(scope, member, member.getType(), member);
-                    annotationScope.setAnnotationFoundUsingThisScope(annotationFoundUsingScope);
                     Scope fcScope = functionContainerScope;
                     classDataDeclaration.getSettingsBlockOpt().accept(
                             new SettingsBlockAnnotationBindingsCompletor(fcScope, functionContainerBinding, annotationScope, dependencyRequestor,
                                     problemRequestor, compilerOptions));
-                    annotationFoundUsingScope = annotationScope.isAnnotationFoundUsingThisScope();
                 }
             }
         }

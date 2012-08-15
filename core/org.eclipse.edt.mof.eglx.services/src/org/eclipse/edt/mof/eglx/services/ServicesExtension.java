@@ -15,10 +15,8 @@ import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
@@ -52,12 +50,11 @@ public class ServicesExtension implements ICompilerExtension {
 	@Override
 	public ASTValidator getValidatorFor(Node node) {
 		// Call statement can be extended.
-		if (shouldExtend(node)) {
-			if (node instanceof CallStatement) {
+		if(shouldExtend(node)){
+			if(node instanceof CallStatement){
 				return new ServicesCallStatementValidator();
 			}
-			else if (node instanceof NestedFunction &&
-					((NestedFunction)node).getName().resolveMember() instanceof Function) {
+			else if (node instanceof NestedFunction) {
 				if(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.EglService") != null){
 					return new EglServiceProxyFunctionValidator();
 				}
@@ -75,22 +72,21 @@ public class ServicesExtension implements ICompilerExtension {
 				return Utils.isIHTTP(((CallStatement)node).getUsing().resolveType());
 			}
 			else{
-				Expression exp = ((CallStatement)node).getInvocationTarget();
-				if(exp instanceof QualifiedName){
-					Object element = ((QualifiedName)exp).getQualifier().resolveElement();
-					return (element instanceof Member &&
-							((((Member)element).getAnnotation("eglx.rest.Rest") != null ||
-									((Member)element).getAnnotation("eglx.rest.EGLService") != null)) ||
-							element instanceof Service);
+				if(((CallStatement)node).getInvocationTarget() != null &&
+						((CallStatement)node).getInvocationTarget().resolveElement() instanceof Function){
+					Function function = (Function)((CallStatement)node).getInvocationTarget().resolveElement();
+					return function.getContainer() instanceof Service || isServiceProxy(function);
 				}
-				
 			}
 		}
 		else if (node instanceof NestedFunction) {
-			return ((NestedFunction)node).getName().resolveMember() instanceof Function && 
-					(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.EglService") != null ||
-							((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.Rest") != null );
+			return isServiceProxy(((NestedFunction)node).getName().resolveMember());
 		}
 		return false;
+	}
+	
+	private static boolean isServiceProxy(Member member){
+		return	member != null && (member.getAnnotation("eglx.rest.Rest") != null ||
+						member.getAnnotation("eglx.rest.EGLService") != null);
 	}
 }

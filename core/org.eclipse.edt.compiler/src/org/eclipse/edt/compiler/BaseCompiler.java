@@ -171,23 +171,12 @@ public class BaseCompiler implements ICompiler {
 	}
 	
 	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
-		SystemEnvironment sysEnv = new SystemEnvironment(Environment.getCurrentEnv(), null, getAllImplicitlyUsedEnumerations(), this);
+		SystemEnvironment sysEnv = new SystemEnvironment(Environment.getCurrentEnv(), null, this);
     	Environment.getCurrentEnv().registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
 		sysEnv.initializeSystemPackages(getSystemEnvironmentPath(), new SystemPackageBuildPathEntryFactory(), notifier);
 		return sysEnv;
 	}
-	
-	@Override
-	public List<String> getImplicitlyUsedEnumerations() {
-		return new ArrayList<String>();
-	}
-	
-	@Override
-	public List<String> getAllImplicitlyUsedEnumerations() {
-		return getImplicitlyUsedEnumerations();
-	}
-
-	
+		
 	@Override
 	public List<ASTValidator> getValidatorsFor(Node node) {
 		List<ICompilerExtension> nodeExtensions = astTypeToExtensions.get(node.getClass());

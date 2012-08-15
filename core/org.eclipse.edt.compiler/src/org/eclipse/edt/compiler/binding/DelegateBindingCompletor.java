@@ -59,10 +59,8 @@ public class DelegateBindingCompletor extends AbstractBinder {
             try {
                 typeBinding = bindType(delegate.getReturnType());
                 
-                if(checkReturnType(delegate.getReturnType(), typeBinding)) {
-    	            delegateBinding.setReturnType(typeBinding);
-    	            delegateBinding.setIsNullable(delegate.getReturnDeclaration().isNullable());//TODO JV is this correct?
-                }
+	            delegateBinding.setReturnType(typeBinding);
+	            delegateBinding.setIsNullable(delegate.getReturnDeclaration().isNullable());//TODO JV is this correct?
             } catch (ResolutionException e) {
                 problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());                
             }
@@ -75,21 +73,6 @@ public class DelegateBindingCompletor extends AbstractBinder {
     	BindingUtil.setValid(delegateBinding, true);
     }
     
-    private boolean checkReturnType(org.eclipse.edt.compiler.core.ast.Type type, Type typeBinding) {
-//FIXME should this be in validation?
-    	if(!TypeUtils.isReferenceType(typeBinding) &&
-    			!TypeUtils.isPrimitive(typeBinding) &&
-    			!(typeBinding instanceof Record) &&
-    			!(typeBinding instanceof Enumeration) &&
-    			!(typeBinding instanceof Dictionary)) {
-        	problemRequestor.acceptProblem(type,
-        			IProblemRequestor.FUNCTION_RETURN_HAS_INCORRECT_TYPE,
-        			new String[] {type.getCanonicalName(), delegateBinding.getCaseSensitiveName()});
-        			return false;
-        }		
-        return true;
-    }
-
     public boolean visit(FunctionParameter functionParameter) {
         
         
@@ -109,15 +92,7 @@ public class DelegateBindingCompletor extends AbstractBinder {
         
         parm.setType(typeBinding);
         parm.setIsNullable(functionParameter.isNullable());
-        
-        if(!BindingUtilities.isValidDeclarationType(typeBinding)) {
-        	problemRequestor.acceptProblem(
-        			functionParameter,
-        		IProblemRequestor.FUNCTION_PARAMETER_HAS_INCORRECT_TYPE,
-				new String[] {functionParameter.getName().getCanonicalName(), delegateBinding.getCaseSensitiveName()});
-        	return false;				
-        }
-        
+                
         
         parm.setIsConst(functionParameter.isParmConst());
         

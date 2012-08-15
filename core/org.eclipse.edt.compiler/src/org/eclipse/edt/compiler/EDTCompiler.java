@@ -42,22 +42,7 @@ public class EDTCompiler extends BaseCompiler {
 		}
 		return systemEnvironmentRootPath;
 	}
-	
-	@Override
-	public List<String> getImplicitlyUsedEnumerations() {
 		
-		List<String> implicitlyUsedEnumerations = new ArrayList<String>();
-		return implicitlyUsedEnumerations;
-	}
-	
-	@Override
-	public List<String> getAllImplicitlyUsedEnumerations() {
-		List<String> all = new ArrayList<String>();
-		all.addAll(super.getAllImplicitlyUsedEnumerations());
-		all.addAll(getImplicitlyUsedEnumerations());
-		return all;
-	}
-	
 	@Override
 	public List<ASTValidator> getValidatorsFor(Node node) {
 		List<ASTValidator> validators = super.getValidatorsFor(node);
