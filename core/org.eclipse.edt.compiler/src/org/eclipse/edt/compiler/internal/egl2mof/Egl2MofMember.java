@@ -429,8 +429,8 @@ class Egl2MofMember extends Egl2MofPart {
 		StatementBlock block = null;
 		int arrayIndex = 0;
 		for (Node expr : (List<Node>)settings.getSettings()) {
-			if (expr instanceof AnnotationExpression && ((AnnotationExpression)expr).getName().resolveType() instanceof Annotation) {
-				Annotation value = (Annotation)mofValueFrom(((AnnotationExpression)expr).getName().resolveType());
+			if (expr instanceof AnnotationExpression && ((AnnotationExpression)expr).getName().resolveElement() instanceof Annotation) {
+				Annotation value = (Annotation)mofValueFrom(((AnnotationExpression)expr).getName().resolveElement());
 				context.getAnnotations().add(value);
 			}
 			else if (expr instanceof org.eclipse.edt.compiler.core.ast.Assignment) {
@@ -471,7 +471,7 @@ class Egl2MofMember extends Egl2MofPart {
 							else {
 								if (context instanceof Member) {
 									MemberName exp = factory.createMemberName();
-									exp.setId(((Member)context).getName());
+									exp.setId(((Member)context).getCaseSensitiveName());
 									exp.setMember((Member)context);	
 									da.setExpression(exp);
 								}
@@ -490,8 +490,8 @@ class Egl2MofMember extends Egl2MofPart {
 				}
 			}
 			else if (expr instanceof SetValuesExpression && ((SetValuesExpression)expr).getExpression() instanceof AnnotationExpression) {
-				if (((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveType() instanceof Annotation) { 
-					Annotation annBinding = (Annotation)((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveType();
+				if (((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveAnnotation() instanceof Annotation) { 
+					Annotation annBinding = (Annotation)((AnnotationExpression)((SetValuesExpression)expr).getExpression()).resolveAnnotation();
 					if (annBinding != null && !isEMetadataObject(annBinding)) {
 						Annotation value = (Annotation)evaluateExpression(expr);
 						context.getAnnotations().add(value);
@@ -539,7 +539,7 @@ class Egl2MofMember extends Egl2MofPart {
 									else {
 										if (context instanceof Member) {
 											MemberName exp = factory.createMemberName();
-											exp.setId(((Member)context).getName());
+											exp.setId(((Member)context).getCaseSensitiveName());
 											exp.setMember((Member)context);	
 											da.setExpression(exp);
 										}
@@ -565,7 +565,7 @@ class Egl2MofMember extends Egl2MofPart {
 						Expression qualifier;
 						if (context instanceof Member) {
 							qualifier = factory.createMemberName();
-							((MemberName)qualifier).setId(((Member)context).getId());
+							((MemberName)qualifier).setId(((Member)context).getCaseSensitiveName());
 							((MemberName)qualifier).setMember((Member)context);
 						}
 						else {
@@ -688,13 +688,13 @@ class Egl2MofMember extends Egl2MofPart {
 						else {
 							source = evaluateExpression(assignment.getRightHandSide());
 						}
-						String[] names = nameExpr.getNameComponents();
-						if (nameExpr.getNameComponents().length > 1) {
-							for (int i=1; i<names.length; i++) {
-								target = (EObject)target.eGet(field);
-								field = target.getEClass().getEField(names[i]);
-							}
-						}
+						String names = nameExpr.getNameComponents();
+//						if (nameExpr.getNameComponents().length > 1) {
+//							for (int i=1; i<names.length; i++) {
+//								target = (EObject)target.eGet(field);
+//								field = target.getEClass().getEField(names[i]);
+//							}
+//						}
 						eSet(target, field, source);
 					}
 				}
@@ -861,14 +861,14 @@ class Egl2MofMember extends Egl2MofPart {
 
 	public MemberName createMemberName(Member context) {
 		MemberName mbrName = factory.createMemberName();
-		mbrName.setId(context.getName());
+		mbrName.setId(context.getCaseSensitiveName());
 		mbrName.setMember(context);
 		return mbrName;
 	}
 	
 	public LHSExpr addQualifier(Part context, Name nameExpr) {
 		PartName qualifier = factory.createPartName();
-		qualifier.setId(context.getName());
+		qualifier.setId(context.getCaseSensitiveName());
 		qualifier.setType(context);
 		qualifier.setPackageName(context.getPackageName());
 		return nameExpr.addQualifier(qualifier);
