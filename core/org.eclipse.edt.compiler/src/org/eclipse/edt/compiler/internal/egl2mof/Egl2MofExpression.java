@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.LikeMatchesExpression;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
+import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
@@ -35,7 +36,6 @@ import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstructorInvocation;
-import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -52,7 +52,6 @@ import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
-import org.eclipse.edt.mof.egl.FunctionPartInvocation;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Interface;
@@ -333,156 +332,149 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				
 			}
 			
-			if (functionBinding instanceof Function && declarer == null) {
-				fi = factory.createFunctionPartInvocation();
-				((FunctionPartInvocation)fi).setPackageName(declarer.getCaseSensitivePackageName());
-				fi.setId(functionBinding.getCaseSensitiveName());			
+			boolean isStatic = functionBinding != null && functionBinding.isStatic() || functionBinding.getContainer() instanceof Library;
+			if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression
+					|| node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
+				// Constructor invocation.
+				fi = factory.createConstructorInvocation();
+				fi.setId("constructor");
+				
+				Expression expr;
+				
+				if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) {
+					expr = factory.createThisExpression();
+					((ThisExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
+				}
+				else {
+					expr = factory.createSuperExpression();
+					((SuperExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
+				}
+				
+				((ConstructorInvocation)fi).setExpression(expr);
+			}
+			else if (node.getTarget() instanceof SimpleName && !isStatic) {
+				if (functionBinding == null || isSuperTypeMember(functionBinding)) {
+					// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
+					fi = factory.createQualifiedFunctionInvocation();
+					fi.setId(node.getTarget().getCanonicalString());
+					if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
+						node.getTarget().accept(this);
+						((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
+					}
+					else {
+						ThisExpression thisExpr = factory.createThisExpression();
+						thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
+						((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
+					}
+				}
+				else {
+					
+					Member mbr = (Member)getEObjectFor(functionBinding);
+					String id=null;
+					if (mbr instanceof FunctionMember) {
+						id =  ((FunctionMember)mbr).getName();
+					}
+					else {
+						if(functionBinding != null) {
+							id = functionBinding.getCaseSensitiveName();
+						}
+					}
+
+					fi = factory.createFunctionInvocation();
+					fi.setId(id);
+					((FunctionInvocation)fi).setTarget(mbr);
+				}
+	
 			}
 			else {
-				boolean isStatic = functionBinding != null && (functionBinding.isStatic() || declarer instanceof Library);
-				if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression
-						|| node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
-					// Constructor invocation.
-					fi = factory.createConstructorInvocation();
-					fi.setId("constructor");
+				if (isStatic && node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.Name) {
 					
-					Expression expr;
-					
-					if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) {
-						expr = factory.createThisExpression();
-						((ThisExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
-					}
-					else {
-						expr = factory.createSuperExpression();
-						((SuperExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
-					}
-					
-					((ConstructorInvocation)fi).setExpression(expr);
-				}
-				else if (node.getTarget() instanceof SimpleName && !isStatic) {
-					if (functionBinding == null || isSuperTypeMember(functionBinding)) {
-						// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
-						fi = factory.createQualifiedFunctionInvocation();
-						fi.setId(node.getTarget().getCanonicalString());
-						if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
-							node.getTarget().accept(this);
-							((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
-						}
-						else {
-							ThisExpression thisExpr = factory.createThisExpression();
-							thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
-							((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
-						}
-					}
-					else {
-						
+					if (mofTypeFor(declarer) == currentPart) {
 						Member mbr = (Member)getEObjectFor(functionBinding);
 						String id=null;
 						if (mbr instanceof FunctionMember) {
-							id =  ((FunctionMember)mbr).getName();
+							id =  ((FunctionMember)mbr).getCaseSensitiveName();
 						}
 						else {
 							if(functionBinding != null) {
 								id = functionBinding.getCaseSensitiveName();
 							}
 						}
-
+						
 						fi = factory.createFunctionInvocation();
 						fi.setId(id);
 						((FunctionInvocation)fi).setTarget(mbr);
 					}
-		
+					else {
+						fi = factory.createQualifiedFunctionInvocation();
+						fi.setId(functionBinding.getCaseSensitiveName());
+						PartName partName = factory.createPartName();
+						partName.setId(declarer.getCaseSensitiveName());
+						partName.setPackageName(declarer.getCaseSensitivePackageName());
+						setElementInformation(node.getTarget(), partName);
+						((QualifiedFunctionInvocation)fi).setQualifier(partName);
+					}
 				}
 				else {
-					if (isStatic && node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.Name) {
-						
-						if (mofTypeFor(declarer) == currentPart) {
-							Member mbr = (Member)getEObjectFor(functionBinding);
-							String id=null;
-							if (mbr instanceof FunctionMember) {
-								id =  ((FunctionMember)mbr).getName();
-							}
-							else {
-								if(functionBinding != null) {
-									id = functionBinding.getCaseSensitiveName();
+					if (node.getTarget() instanceof FieldAccess) {
+						FieldAccess fa = (FieldAccess) node.getTarget();
+						if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression
+								|| fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
+							
+							if (functionBinding == null || isSuperTypeMember(functionBinding)) {
+								// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
+								fi = factory.createQualifiedFunctionInvocation();
+								fi.setId(functionBinding.getCaseSensitiveName());
+								if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
+									SuperExpression superExpr = factory.createSuperExpression();
+									superExpr.setThisObject(getCurrentFunctionMember().getContainer());
+									((QualifiedFunctionInvocation)fi).setQualifier(superExpr);
+								}
+								else {
+									ThisExpression thisExpr = factory.createThisExpression();
+									thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
+									((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
 								}
 							}
-							
-							fi = factory.createFunctionInvocation();
-							fi.setId(id);
-							((FunctionInvocation)fi).setTarget(mbr);
+							else {		
+								
+								Member mbr = (Member)getEObjectFor(functionBinding);
+								String id=null;
+								if (mbr instanceof FunctionMember) {
+									id =  ((FunctionMember)mbr).getName();
+								}
+								else {
+									if(functionBinding != null) {
+										id = functionBinding.getCaseSensitiveName();
+									}
+								}
+
+								fi = factory.createFunctionInvocation();
+								fi.setId(id);
+								((FunctionInvocation)fi).setTarget(mbr);
+							}
 						}
 						else {
 							fi = factory.createQualifiedFunctionInvocation();
 							fi.setId(functionBinding.getCaseSensitiveName());
-							PartName partName = factory.createPartName();
-							partName.setId(declarer.getCaseSensitiveName());
-							partName.setPackageName(declarer.getCaseSensitivePackageName());
-							setElementInformation(node.getTarget(), partName);
-							((QualifiedFunctionInvocation)fi).setQualifier(partName);
-						}
+							fa.getPrimary().accept(this);
+							((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
+						}					
+
 					}
 					else {
-						if (node.getTarget() instanceof FieldAccess) {
-							FieldAccess fa = (FieldAccess) node.getTarget();
-							if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression
-									|| fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
-								
-								if (functionBinding == null || isSuperTypeMember(functionBinding)) {
-									// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
-									fi = factory.createQualifiedFunctionInvocation();
-									fi.setId(fa.getCaseSensitiveID());
-									if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
-										SuperExpression superExpr = factory.createSuperExpression();
-										superExpr.setThisObject(getCurrentFunctionMember().getContainer());
-										((QualifiedFunctionInvocation)fi).setQualifier(superExpr);
-									}
-									else {
-										ThisExpression thisExpr = factory.createThisExpression();
-										thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
-										((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
-									}
-								}
-								else {		
-									
-									Member mbr = (Member)getEObjectFor(functionBinding);
-									String id=null;
-									if (mbr instanceof FunctionMember) {
-										id =  ((FunctionMember)mbr).getName();
-									}
-									else {
-										if(functionBinding != null) {
-											id = functionBinding.getCaseSensitiveName();
-										}
-									}
-
-									fi = factory.createFunctionInvocation();
-									fi.setId(id);
-									((FunctionInvocation)fi).setTarget(mbr);
-								}
-							}
-							else {
-								fi = factory.createQualifiedFunctionInvocation();
-								fi.setId(fa.getID());
-								fa.getPrimary().accept(this);
-								((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
-							}					
-	
+						if (node.getTarget() instanceof QualifiedName) {
+							fi = factory.createQualifiedFunctionInvocation();
+							QualifiedName name = (QualifiedName)node.getTarget();
+							fi.setId(name.getCaseSensitiveIdentifier());
+							name.getQualifier().accept(this);
+							((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
 						}
 						else {
-							if (node.getTarget() instanceof QualifiedName) {
-								fi = factory.createQualifiedFunctionInvocation();
-								QualifiedName name = (QualifiedName)node.getTarget();
-								fi.setId(name.getCaseSensitiveIdentifier());
-								name.getQualifier().accept(this);
-								((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
-							}
-							else {
-								//Catch error cases
-								fi = factory.createFunctionInvocation();
-								fi.setId(node.getTarget().getCanonicalString());
+							//Catch error cases
+							fi = factory.createFunctionInvocation();
+							fi.setId(node.getTarget().getCanonicalString());
 
-							}
 						}
 					}
 				}
@@ -578,12 +570,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return true;
 	}
 	
-	private Name createNameForPart(Part binding) {
-		if (binding instanceof Function) {
-			return factory.createTopLevelFunctionName();
-		}
-		else if (binding instanceof Library 
-				|| binding instanceof DataTable 
+	private Name createNameForPart(Type binding) {
+		if (binding instanceof StructPart 
 				|| binding instanceof ExternalType
 				|| binding instanceof Enumeration
 				|| binding instanceof Program
@@ -596,7 +584,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			// that is being compiled independently
 			PartName name = factory.createPartName();
 			String packageName;
-			packageName = binding.getCaseSensitivePackageName();
+			packageName = ((Part)binding).getCaseSensitivePackageName();
 			//TODO - remove this temporary hardcoded remapping of "egl.core" system parts when the front
 			// end references to system parts are handled through a proper System Scope configuration
 			// that will bind to the configured part
@@ -605,7 +593,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 
 			name.setPackageName(packageName);
-			name.setId(binding.getCaseSensitiveName());
+			name.setId(((Part)binding).getCaseSensitiveName());
 			return name;
 		}
 		else {
@@ -630,20 +618,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			stack.push(invalid);
 			return false;
 		}
-		Name name = null;
-		Type part = null;
-		if (binding.isStatic()) {
-			part = binding.getType();
-		}
-		else if (binding instanceof Part) {
-			part = (Part)binding;
-		}
-		if (part != null) {
-			name = createNameForPart((Part)part);
-		}
-		else {
-			name = factory.createMemberName();
-		}
+		Name name = factory.createMemberName();
 			
 		name.setId(binding.getCaseSensitiveName());
 		
@@ -770,10 +745,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		Type mofType = (Type)obj;
 		expr.setId(mofType.getTypeSignature());
 		setElementInformation(newExpression, expr);
-//FIXME jv		for (Node node : (List<Node>)newExpression.getArguments()) {
-//			node.accept(this);
-//			expr.getArguments().add((Expression)stack.pop());
-//		}
+		if(newExpression.getType() instanceof NameType){
+			for(org.eclipse.edt.compiler.core.ast.Expression argument : ((NameType)newExpression.getType()).getArguments()){
+				argument.accept(this);
+				expr.getArguments().add((Expression)stack.pop());
+			}
+		}
 		
 		if (newExpression.getType().isArrayType()) {
 			processNewArray(newExpression.getType(), expr);
@@ -864,7 +841,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			setElementInformation(targetNode, local);
 			Assignment assignExpr = factory.createAssignment();
 			localRef = factory.createMemberName();
-			localRef.setId(decl.getName());
+			localRef.setId(decl.getCaseSensitiveName());
 			localRef.setMember(decl);
 			// Push new reference to temp onto the stack
 			localStack.push(localRef);
@@ -895,7 +872,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 			else { 
 				ref = factory.createMemberName();
-				((MemberName)ref).setId(decl.getName());
+				((MemberName)ref).setId(decl.getCaseSensitiveName());
 				((MemberName)ref).setMember(decl);
 			}
 			if (setexpr instanceof Assignment) {
