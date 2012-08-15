@@ -31,6 +31,8 @@ import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -74,6 +76,12 @@ public class FunctionBindingCompletor extends AbstractBinder {
                 typeBinding = bindType(function.getReturnType());
     	        functionBinding.setType(typeBinding);
     	        functionBinding.setIsNullable(function.getReturnDeclaration().isNullable());
+    	        
+    	        Field returnField = IrFactory.INSTANCE.createField();
+    	        returnField.setContainer(functionBinding);
+    	        returnField.setType(typeBinding);
+    	        returnField.setIsNullable(function.getReturnDeclaration().isNullable());
+    	        ((Function)functionBinding).setReturnField(returnField);
             } catch (ResolutionException e) {
                 problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());                
             }

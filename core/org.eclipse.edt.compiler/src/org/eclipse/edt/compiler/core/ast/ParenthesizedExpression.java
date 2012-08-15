@@ -58,4 +58,9 @@ public class ParenthesizedExpression extends Expression {
 	public Type resolveType() {
 		return expr.resolveType();
 	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalString();
+	}
 }

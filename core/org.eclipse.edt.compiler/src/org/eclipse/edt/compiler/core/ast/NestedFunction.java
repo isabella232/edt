@@ -97,4 +97,40 @@ public class NestedFunction extends Node {
 		
 		return new NestedFunction(new Boolean(isPrivate), new Boolean(isStatic), (SimpleName)name.clone(), cloneList(functionParameters), newReturnsOpt, cloneList(stmts), isAbstract, getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		if (isStatic) {
+			buf.append("static ");
+		}
+		if (isPrivate) {
+			buf.append("private ");
+		}
+		if (isAbstract) {
+			buf.append("abstract ");
+		}
+		buf.append("function ");
+		buf.append(name.toString());
+		buf.append('(');
+		
+		boolean first = true;
+		for (Expression e : (List<Expression>)functionParameters) {
+			if (!first) {
+				buf.append(", ");
+			}
+			else {
+				first = false;
+			}
+			buf.append(e.toString());
+		}
+		buf.append(')');
+		
+		if (returnsOpt != null) {
+			buf.append(' ');
+			buf.append(returnsOpt.toString());
+		}
+		
+		return buf.toString();
+	}
 }

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 

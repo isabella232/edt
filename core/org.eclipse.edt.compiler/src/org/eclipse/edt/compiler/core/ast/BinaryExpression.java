@@ -130,4 +130,9 @@ public class BinaryExpression extends Expression {
 	public String getCanonicalString() {
 		return expr1.getCanonicalString() + operator.toString() + expr2.getCanonicalString();
 	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalString();
+	}
 }
