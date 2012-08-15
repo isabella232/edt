@@ -25,7 +25,7 @@ public class MemberScope extends Scope {
 	@Override
 	public List<Member> findMember(String simpleName) {
 		List<Member> result = find(simpleName);
-		if (result == null) {
+		if (result != null) {
 			return result;
 		}
 		return parentScope.findMember(simpleName);
