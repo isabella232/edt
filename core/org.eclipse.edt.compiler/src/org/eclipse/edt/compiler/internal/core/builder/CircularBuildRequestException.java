@@ -16,5 +16,5 @@ package org.eclipse.edt.compiler.internal.core.builder;
  *
  */
 public class CircularBuildRequestException extends RuntimeException {
-
+	private static final long serialVersionUID = 1L;
 }

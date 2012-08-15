@@ -192,15 +192,7 @@ public abstract class Compiler extends DefaultASTVisitor{
 			case ITypeBinding.SERVICE_BINDING:
 				try{
 					astNode.accept(new ServiceBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				    
-				    //TODO add code to handle circular buildexception
-					try{
-				    	validatePart(astNode, partBinding, problemRequestor, compilerOptions);
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+			    	validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
