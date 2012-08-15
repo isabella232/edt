@@ -14,15 +14,7 @@ package org.eclipse.edt.compiler.internal.core.validation.statement;
 import java.util.Iterator;
 
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FieldAccessValidationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -39,7 +31,6 @@ public class LValueValidator {
 		boolean canAssignToConstantVariables();
 		boolean canAssignToReadOnlyVariables();
 		boolean canAssignToFunctionReferences();
-		boolean canAssignToPCB();
 		boolean canAssignToFunctionParmConst();
 		boolean shouldRunAccessRules();
 		
@@ -111,16 +102,6 @@ public class LValueValidator {
 		if (validationRules.shouldRunAccessRules()) {
 			//Run field access rules defined by annotations on the field
 			result = invokeFieldAccessValidators();
-		}
-		
-		if (!validationRules.canAssignToPCB()) {
-			// This could probably be another "field access" check for subtype
-			// DLIRecord
-			IAnnotationBinding aBinding = dBinding.getAnnotation(new String[] { "egl", "io", "dli" }, "PCB");
-			if (aBinding != null) {
-				problemRequestor.acceptProblem(lValue, IProblemRequestor.DLI_PCBRECORD_NOT_VALID_AS_LVALUE, new String[] { lValue
-						.getCanonicalString() });
-			}
 		}
 		
 		if (dBinding.getKind() == IDataBinding.FUNCTION_PARAMETER_BINDING) {

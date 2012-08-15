@@ -530,9 +530,6 @@ public interface IProblemRequestor {
 	public static final int GETBYPOSITION_POSITION_BAUE_MUST_BE_INTEGER = 4025;
 	public static final int FIXED_RECORD_EMBEDDED_IN_FLEXIBLE = 4026;		
 	public static final int DYNAMIC_ARRAY_USED_IN_FIXED_RECORD = 4027;
-	public static final int FLEXIBLE_RECORD_EMBEDDED_IN_FIXED = 4028;
-	public static final int FLEXIBLE_RECORD_ASSIGNED_TO_FIXED = 4029;
-	public static final int FIXED_RECORD_ASSIGNED_TO_FLEXIBLE = 4030;
 	public static final int BYPOSITION_USED_WITH_FLEXIBLE_RECORD_AND_FORM = 4031;
 	public static final int REF_ARRAY_POINTS_TO_NONDYNAMIC_ARRAY = 4032;
 	public static final int REF_USED_WITH_PRIMITIVE = 4033;
@@ -1499,7 +1496,6 @@ public interface IProblemRequestor {
 	public static final int INVALID_SET_STATE_FOR_ITEM = 6695;
 	public static final int INVALID_SET_STATE_FOR_SQL_ITEM = 6696;
 	public static final int INVALID_SET_STATE_FOR_RECORD = 6697;
-	public static final int INVALID_SET_STATE_FOR_INDEXED_RECORD = 6698;
 	public static final int INVALID_SET_STATE_FOR_TEXT_FORM = 6699;
 	public static final int INVALID_SET_STATE_FOR_PRINT_FORM = 6700;
 	public static final int INVALID_SET_STATE_FOR_TEXT_FIELD = 6701;
@@ -1516,10 +1512,7 @@ public interface IProblemRequestor {
 	
 	public static final int PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM = 6711;
 	public static final int FORWARD_TARGET_DOESNT_HAVE_ONPAGELOAD_FUNCTION = 6712;
-	public static final int FLEXIBLE_RECORD_PASSED_TO_NON_EGL_PAGEHANDLER = 6713;
 	
-	public static final int ARRAYS_AND_OCCURED_ITEMS_ARE_NOT_COMPATIBLE = 6714;
-	public static final int OCCURED_ITEMS_ONLY_COMPATIBLE_WITH_ANY = 6715;
 	public static final int FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM = 6716;
 	
 	public static final int OCCURED_ITEM_MOVE_OPERAND_NOT_SUBSCRIPTED = 6717;

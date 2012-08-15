@@ -11,13 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
@@ -32,7 +28,6 @@ import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 
 
 /**
@@ -146,40 +141,6 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 			}
 		}
 		
-		if (StatementValidator.isValidBinding(lhsBinding) && lhsBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
-			if (StatementValidator.isValidBinding(rhsBinding) && rhsBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING){
-				problemRequestor.acceptProblem(rhs,
-						IProblemRequestor.FIXED_RECORD_ASSIGNED_TO_FLEXIBLE);
-				return false;
-			}
-		}
-		
-		if (StatementValidator.isValidBinding(lhsBinding) && lhsBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING){
-			if (StatementValidator.isValidBinding(rhsBinding) && rhsBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
-				problemRequestor.acceptProblem(rhs,
-						IProblemRequestor.FLEXIBLE_RECORD_ASSIGNED_TO_FIXED);
-				return false;
-			}
-			
-			if (StatementValidator.isValidBinding(rhsBinding) && rhsBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING){
-				Primitive type = ((PrimitiveTypeBinding)rhsBinding).getPrimitive();
-				if (type != Primitive.CHAR &&
-						type != Primitive.MBCHAR &&
-						type != Primitive.HEX &&
-						type != Primitive.ANY &&
-						type != Primitive.DBCHARLIT &&
-						!(type == Primitive.STRING && ((PrimitiveTypeBinding)rhsBinding).getLength() != 0)
-						){
-					problemRequestor.acceptProblem(rhs,
-							IProblemRequestor.ASSIGNMENT_STATEMENT_RECORD_TARGET_SOURCE_CANNOT_BE,
-							new String[]{lhs.getCanonicalString()} );
-					return false;
-					
-				}
-				
-			}
-		}
-		
 		if (StatementValidator.isValidBinding(lhsBinding) && lhsBinding.getKind() == ITypeBinding.DICTIONARY_BINDING ){
 			final Expression expr = lhs;
 			ErrorASTVisitor astVisitor = new ErrorASTVisitor(){
@@ -199,38 +160,6 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 				return false;
 			}
 
-		}
-		
-		if (StatementValidator.isValidBinding(lhsBinding) && StatementValidator.isValidBinding(rhsBinding)){
-			if (StatementValidator.isArrayOrMultiplyOccuring(lhsDataBinding) && StatementValidator.isArrayOrMultiplyOccuring(rhsDataBinding)){
-				if(ITypeBinding.MULTIPLY_OCCURING_ITEM == lhsBinding.getKind() && ITypeBinding.MULTIPLY_OCCURING_ITEM != rhsBinding.getKind() ||
-				   ITypeBinding.MULTIPLY_OCCURING_ITEM == rhsBinding.getKind() && ITypeBinding.MULTIPLY_OCCURING_ITEM != lhsBinding.getKind()) {
-	    			problemRequestor.acceptProblem(rhs,
-	    					IProblemRequestor.ARRAYS_AND_OCCURED_ITEMS_ARE_NOT_COMPATIBLE,
-	    					new String[]{lhsDataBinding.getCaseSensitiveName(),rhsDataBinding.getCaseSensitiveName()} );	
-	    			return false;
-				}
-			}
-		}
-
-		if(StatementValidator.isValidBinding(lhsBinding) &&
-	       ITypeBinding.MULTIPLY_OCCURING_ITEM == lhsBinding.getKind()) {
-			if(StatementValidator.isValidBinding(rhsBinding) && !rhsBinding.isDynamic()) {
-				problemRequestor.acceptProblem(rhs,
-    				IProblemRequestor.OCCURED_ITEMS_ONLY_COMPATIBLE_WITH_ANY,
-    				new String[]{lhs.getCanonicalString(),rhs.getCanonicalString()} );	
-    			return false;
-			}
-		}
-		
-		if(StatementValidator.isValidBinding(rhsBinding) &&
-	       ITypeBinding.MULTIPLY_OCCURING_ITEM == rhsBinding.getKind()) {
-			if(StatementValidator.isValidBinding(lhsBinding) && !lhsBinding.isDynamic()) {
-				problemRequestor.acceptProblem(rhs,
-    				IProblemRequestor.OCCURED_ITEMS_ONLY_COMPATIBLE_WITH_ANY,
-					new String[]{lhs.getCanonicalString(),rhs.getCanonicalString()} );	
-    			return false;
-			}
 		}
 		
 		//Arithmetic assignments are already validated in DefaultBinder
@@ -280,31 +209,6 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		}
 		
 		return false;
-	}
-	
-	private String getCanonicalStringNoSubscripts(Expression expr) {
-		final String[] result = new String[] {null};
-		expr.accept(new AbstractASTExpressionVisitor() {
-			public boolean visitExpression(Expression expression) {
-				result[0] = expression.getCanonicalString();
-				return false;
-			}
-			
-			public boolean visit(ParenthesizedExpression parenthesizedExpression) {
-				return true;
-			}
-			
-			public boolean visit(ArrayAccess arrayAccess) {
-				arrayAccess.getArray().accept(this);
-				return false;
-			}
-			
-			public boolean visit(SubstringAccess substringAccess) {
-				substringAccess.getPrimary().accept(this);
-				return false;
-			}
-		});
-		return result[0];
 	}
 	
 	private class ErrorASTVisitor extends AbstractASTVisitor{
