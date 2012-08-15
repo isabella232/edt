@@ -1102,12 +1102,21 @@ public class IRUtils {
 			return true;
 		}
 		
+		if (rhsType != null && TypeUtils.Type_NULLTYPE.equals(rhsType)) {
+			// "null" is compatible with any nullable type.
+			return lhsMember.isNullable();
+		}
+		
+		return isMoveCompatible(lhsType, rhsType, rhsMember);
+	}
+	
+	public static boolean isMoveCompatible(Type lhsType, Type rhsType, Member rhsMember) {
+		// If the lhs or rhs can't be resolved, then we assume they're valid. Validation will have a bind error already.
+		if ((rhsMember == null && rhsType == null) || lhsType == null) {
+			return true;
+		}
+		
 		if (rhsType != null) {
-			if (TypeUtils.Type_NULLTYPE.equals(rhsType)) {
-				// "null" is compatible with any nullable type.
-				return lhsMember.isNullable();
-			}
-			
 			if (lhsType instanceof ArrayType && rhsType instanceof ArrayType) {
 				return areArraysCompatible((ArrayType)lhsType, (ArrayType)rhsType);
 			}
