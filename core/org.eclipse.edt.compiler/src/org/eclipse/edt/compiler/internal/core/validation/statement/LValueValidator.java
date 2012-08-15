@@ -14,15 +14,7 @@ package org.eclipse.edt.compiler.internal.core.validation.statement;
 import java.util.Iterator;
 
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FieldAccessValidationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;

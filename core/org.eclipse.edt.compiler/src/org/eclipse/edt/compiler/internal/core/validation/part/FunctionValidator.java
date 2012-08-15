@@ -36,7 +36,6 @@ import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.ExitStatement;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
-import org.eclipse.edt.compiler.core.ast.FreeSQLStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
@@ -71,7 +70,6 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatement
 import org.eclipse.edt.compiler.internal.core.validation.statement.ContinueStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ExitStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ForStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.FreeSQLStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FunctionDataDeclarationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.GotoStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.IfStatementValidator;
@@ -494,15 +492,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 			forStatement.accept(new ForStatementValidator(problemRequestor, compilerOptions));
 		}		
 		postVisitStatement(forStatement);
-		return false;
-	}
-
-	public boolean visit(FreeSQLStatement freeSQLStatement) {
-		preVisitStatement(freeSQLStatement);
-		if (checkStatementAllowedInContainer(freeSQLStatement)) {
-			freeSQLStatement.accept(new FreeSQLStatementValidator(problemRequestor, compilerOptions));
-		}
-		postVisitStatement(freeSQLStatement);
 		return false;
 	}
 

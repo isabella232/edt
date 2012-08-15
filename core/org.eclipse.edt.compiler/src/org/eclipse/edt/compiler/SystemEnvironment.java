@@ -29,7 +29,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
-import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.InternUtil;

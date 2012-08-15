@@ -1165,6 +1165,9 @@ public class TypeUtils implements MofConversion {
 						type.equals(Type_DATE) ||
 						type.equals(Type_TIME) ||
 						type.equals(Type_TIMESTAMP) ||
-						type.equals(Type_STRING);
+						type.equals(Type_STRING) ||
+						type.equals(Type_BOOLEAN) || 
+						type.equals(Type_BYTES) ||
+						type.equals(Type_ANY);
 	}
 }

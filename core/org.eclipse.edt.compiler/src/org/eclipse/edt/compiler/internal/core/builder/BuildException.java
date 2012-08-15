@@ -12,17 +12,9 @@
 package org.eclipse.edt.compiler.internal.core.builder;
 
 
-/**
- * @author cduval
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 public class BuildException extends RuntimeException {
-
-	/**
-	 * 
-	 */
+	private static final long serialVersionUID = 1L;
+	
 	public BuildException() {
 		super();
 	}

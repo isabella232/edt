@@ -97,27 +97,8 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class StatementValidator {
 
-	public static interface ITargetsContainerChecker {
-		boolean isLibraryDataAllowed(IDataBinding dataBinding);
-	}
-	
-	public static class DefaultTargetsContainerChecker implements ITargetsContainerChecker {
-		public boolean isLibraryDataAllowed(IDataBinding dataBinding) {
-			return false;
-		}
-	}
-
-	
-	
-	public static ITypeBinding getBaseType( ITypeBinding tb ) {
-		while( tb.isReference() ) {
-			tb = tb.getBaseType();
-		}
-		return tb;
-	}
-	
 	public static String getTypeString(org.eclipse.edt.mof.egl.Type binding) {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		if (binding.equals(TypeUtils.Type_ARRAYDICTIONARY)) {
 			result.append(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING);
 		}
@@ -136,7 +117,7 @@ public class StatementValidator {
 			result.append(getUnqualifiedSignature(binding.getTypeSignature()));
 		}				
 		else {
-			result.append(getUnqualifiedSignature(binding.getTypeSignature()));
+			result.append(BindingUtil.getUnaliasedTypeName(binding));
 		}
 		
 		return result.toString();
@@ -147,17 +128,17 @@ public class StatementValidator {
 	}
 	
 	public static String getShortTypeString(org.eclipse.edt.mof.egl.Type binding, boolean includeLengthForPrimitives) {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result;
 		if (TypeUtils.isPrimitive(binding)) {
 			if (includeLengthForPrimitives || binding.equals(TypeUtils.Type_MONTHSPANINTERVAL) || binding.equals(TypeUtils.Type_SECONDSPANINTERAL)) {
-				result = new StringBuffer(getTypeString(binding));
+				result = new StringBuilder(getTypeString(binding));
 			}
 			else {
-				result = new StringBuffer(BindingUtil.getUnaliasedTypeName(binding));
+				result = new StringBuilder(BindingUtil.getUnaliasedTypeName(binding));
 			}
 		}
 		else {
-			result = new StringBuffer(getTypeString(binding));
+			result = new StringBuilder(getTypeString(binding));
 		}
 		
 		return result.toString();
@@ -169,94 +150,6 @@ public class StatementValidator {
 			return sig;
 		}
 		return sig.substring(lastDot + 1);
-	}
-	
-	public static boolean isMultiplyOccuring(IDataBinding dataBinding){
-		if (dataBinding == null){
-			return false;
-		}
-		//check for multiple occurs
-		if (dataBinding.getKind() == IDataBinding.FORM_FIELD){
-			return ((FormFieldBinding)dataBinding).isMultiplyOccuring();
-		}
-		
-		if (dataBinding.getKind() == IDataBinding.STRUCTURE_ITEM_BINDING){
-			return ((StructureItemBinding)dataBinding).isMultiplyOccuring();
-		}
-				
-		return false;
-	}
-	
-	public static boolean isArray(IDataBinding dataBinding){
-		if (dataBinding == null)
-			return false;
-		
-		//check if type binding is array
-		if (dataBinding.getType() != null && dataBinding.getType().getKind() == ITypeBinding.ARRAY_TYPE_BINDING){
-			return true;
-		}
-		
-		return false; 
-	}
-
-	public static boolean isArrayOrMultiplyOccuring(IDataBinding dataBinding){
-		return isArray(dataBinding) || 	isMultiplyOccuring(dataBinding); 
-	}
-	
-	public static String getParmListString( ITypeBinding[] types ) {
-		StringBuffer sb = new StringBuffer();
-		for( int i = 0; i < types.length; i++ ) {
-			if( types[i] != null ) {
-				sb.append( getTypeString( types[i] ) );
-				
-				if( i < types.length-1 ) {
-					sb.append( ", " ); // $NON-NLS-1$
-				}
-			}
-		}
-		return sb.toString();
-	}
-
-	public static boolean isValidBinding (IBinding binding){
-		return binding != null && binding != IBinding.NOT_FOUND_BINDING;
-	}
-	
-	public static boolean isStringCompatible(ITypeBinding aTypeBinding) {
-		if (isValidBinding(aTypeBinding) && aTypeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING){
-			  Primitive prim = ((PrimitiveTypeBinding)aTypeBinding).getPrimitive();
-			  if (prim == Primitive.CHAR || prim == Primitive.DBCHAR || prim == Primitive.HEX || 
-			  		prim == Primitive.MBCHAR || prim == Primitive.UNICODE || prim == Primitive.STRING ||
-					prim == Primitive.ANY){
-			  		return true;
-			  }
-		}
-		
-		return false;
-
-    }
-	
-	public static boolean isIntegerCompatible(ITypeBinding aTypeBinding) {
-        
-		if (isValidBinding(aTypeBinding) && aTypeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING){
-		  Primitive prim = ((PrimitiveTypeBinding)aTypeBinding).getPrimitive();
-
-          if (prim == Primitive.BIGINT || prim == Primitive.INT || prim == Primitive.SMALLINT){
-			return true;
-          }else if (prim == Primitive.BIN
-				|| prim == Primitive.DECIMAL
-				|| prim == Primitive.NUM
-				|| prim == Primitive.NUMC 
-				|| prim == Primitive.PACF ){
-          	return (((PrimitiveTypeBinding)aTypeBinding).getDecimals() == 0);
-          }else if (prim == Primitive.ANY)
-          	return true;
-		}
-	return false;
-	}	
-	
-	public static boolean isRecordOrRecordArray(ITypeBinding typeBinding) {
-		return (typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING || typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING ) || 
-		(typeBinding.getKind() == ITypeBinding.ARRAY_TYPE_BINDING && isRecordOrRecordArray(typeBinding.getBaseType()));
 	}
 	
 	protected static boolean isClauseEmpty(String clause){
@@ -287,18 +180,6 @@ public class StatementValidator {
 		}
 
 		return ok;
-	}
-	
-	public static String getQualifiedName (ITypeBinding typeBinding){
-		StringBuffer typeName = new StringBuffer();
-		String[] packageName = typeBinding.getPackageName();
-		for (int i = 0; i < packageName.length;i++){
-			typeName.append(packageName[i]);
-			typeName.append(".");			
-		}
-		typeName.append(typeBinding.getName());
-		
-		return typeName.toString();
 	}
 	
 	public static void validateNodesAsDataItemReferences(List nodes,IProblemRequestor pr){
@@ -340,284 +221,6 @@ public class StatementValidator {
 		return isValid[0];
 	}
 	
-	public static void validateNodesInUsingClause(List nodes,IProblemRequestor pr){
-		Iterator iter = nodes.iterator();
-		while (iter.hasNext()){
-			validateNodeInUsingClause((Expression)iter.next(),pr);
-		}
-	}
-	
-	protected static void validateNodeInUsingClause(Expression node, final IProblemRequestor problemRequestor) {
-		if(validateNodeAsDataItemReferences(node, problemRequestor)) {
-			final boolean[] exprValid = new boolean[] {false};
-			node.accept(new DefaultASTVisitor() {
-				public boolean visit(ParenthesizedExpression parenthesizedExpression) {
-					return true;
-				}
-				
-				public boolean visit(SimpleName simpleName) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(QualifiedName qualifiedName) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(ArrayAccess arrayAccess) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(SubstringAccess substringAccess) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(FieldAccess fieldAccess) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(StringLiteral stringLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(CharLiteral charLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(DBCharLiteral dBCharLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(FloatLiteral floatLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(HexLiteral hexLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(MBCharLiteral mBCharLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(IntegerLiteral integerLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(DecimalLiteral decimalLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(BooleanLiteral booleanLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(BytesLiteral bytesLiteral) {
-					exprValid[0] = true;
-					return false;
-				}
-				
-				public boolean visit(BinaryExpression binaryExpression) {
-					exprValid[0] = isStringLiteral(binaryExpression);
-					return false;
-				}
-				
-				private boolean isStringLiteral(Expression expr) {
-					final boolean[] result = new boolean[] {false};
-					expr.accept(new DefaultASTVisitor() {
-						public boolean visit(StringLiteral stringLiteral) {
-							result[0] = true;
-							return false;
-						}
-						public boolean visit(BinaryExpression binaryExpression) {
-							result[0] = BinaryExpression.Operator.PLUS == binaryExpression.getOperator() &&
-							            isStringLiteral(binaryExpression.getFirstExpression()) &&
-							            isStringLiteral(binaryExpression.getSecondExpression());
-							return false;
-						}
-					});
-					return result[0];
-				}
-			});
-			
-			if(!exprValid[0]) {
-				problemRequestor.acceptProblem(
-					node,
-		    		IProblemRequestor.INVALID_LITERAL_IN_USING_CLAUSE,
-		    		new String[] {node.getCanonicalString()});
-			}
-		}
-	}
-	
-	private static HashSet CONTAINER_TYPEBINDING_KINDS = new HashSet(Arrays.asList(new Integer[] {
-		new Integer(ITypeBinding.FIXED_RECORD_BINDING),
-		new Integer(ITypeBinding.FLEXIBLE_RECORD_BINDING),
-		new Integer(ITypeBinding.DATATABLE_BINDING),
-		new Integer(ITypeBinding.FORM_BINDING),
-		new Integer(ITypeBinding.EXTERNALTYPE_BINDING),
-		new Integer(ITypeBinding.FIXED_RECORD_BINDING),
-	}));
-	
-	public static void validateItemInIntoClause(Node node,final IProblemRequestor problemRequestor){
-		node.accept(new DefaultASTVisitor() {
-			public boolean visit(ParenthesizedExpression parenthesizedExpression) {
-				return true;
-			}
-			
-			public boolean visit(ArrayAccess arrayAccess) {
-				for(Iterator iter = arrayAccess.getIndices().iterator(); iter.hasNext();) {
-					((Node) iter.next()).accept(new AbstractASTVisitor() {
-						public void endVisit(final FunctionInvocation functionInvocation) {
-							problemRequestor.acceptProblem(
-								functionInvocation,
-								IProblemRequestor.FUNCTION_INVOCOATION_NOT_ALLOWED_IN_ARRAY_SUBSCRIPT_IN_INTO_CLAUSE
-							);
-						}
-					});
-				}
-				return false;
-			}
-		});
-		
-		node.accept(new AbstractASTExpressionVisitor(){
-			public boolean visitExpression(Expression expression) {
-				ITypeBinding typeBinding = expression.resolveTypeBinding();
-				IDataBinding dataBinding = expression.resolveDataBinding();
-				if (StatementValidator.isValidBinding(typeBinding)){
-					boolean isValid = true;
-						
-					if(isContainer(typeBinding)) {
-						isValid = true;
-					}
-					else if(dataBinding == null) {
-						isValid = false;
-					}
-					else if(dataBinding.getKind() == IDataBinding.CLASS_FIELD_BINDING) {
-						isValid = !((ClassFieldBinding)dataBinding).isConstant(); 
-					}
-					else if(dataBinding.getKind() == IDataBinding.LOCAL_VARIABLE_BINDING) {
-						isValid = !((LocalVariableBinding)dataBinding).isConstant();
-					}
-					
-					if(!isValid) {
-						problemRequestor.acceptProblem(expression,
-								IProblemRequestor.VARIABLE_NOT_FOUND_AS_ITEM_OR_CONTAINER,
-								new String[] {expression.getCanonicalString()});
-					}
-					else {
-						if(typeBinding.isDynamic()) {
-							problemRequestor.acceptProblem(
-								expression,
-								IProblemRequestor.DYNAMIC_ACCESS_NOT_ALLOWED_IN_INTO_CLAUSE
-							);
-						}
-					}
-				}
-			    return false;
-			}
-			
-		    private boolean isContainer(ITypeBinding typeBinding) {
-				return CONTAINER_TYPEBINDING_KINDS.contains(new Integer(typeBinding.getKind()));
-			}
-
-			public boolean visit(SubstringAccess substringAccess) {
-		    	problemRequestor.acceptProblem(substringAccess,
-		    			IProblemRequestor.SUBSTRING_EXPRESSION_IN_BAD_LOCATION);
-		    	return false;
-				
-		    }
-		    
-			
-			});
-	}
-	
-	
-	public static void validateIOTargetsContainer(List targets,final IProblemRequestor problemRequestor){
-		validateIOTargetsContainer(targets, problemRequestor, new DefaultTargetsContainerChecker());
-	}
-
-	public static void validateIOTargetsContainer(List targets,final IProblemRequestor problemRequestor, final ITargetsContainerChecker checker){
-		Iterator iter = targets.iterator();
-		while (iter.hasNext()){
-			Expression expr = (Expression)iter.next();
-			expr.accept(new AbstractASTExpressionVisitor(){
-			    public boolean visit(SimpleName simpleName) {
-			    	IDataBinding dataBinding = (IDataBinding)simpleName.getAttribute(Name.IMPLICIT_QUALIFIER_DATA_BINDING);
-			    	if (StatementValidator.isValidBinding(dataBinding) && dataBinding.getKind() == IDataBinding.LIBRARY_BINDING ){
-			    		IDataBinding db = simpleName.resolveDataBinding();
-			    		if (!checker.isLibraryDataAllowed(db)) {
-			    			addError(simpleName);
-			    		}
-			    	}
-			    	return false;
-			    }
-			    
-			    public boolean visit(QualifiedName qualifiedName) {
-			    	Name name = qualifiedName;
-			    	IBinding binding = null;
-			    	
-			    	while (name != null){
-			    		binding = name.resolveBinding();
-			    		if (!StatementValidator.isValidBinding(binding)){
-			    			return false;
-			    		}
-			    		
-			    		if ((binding.isDataBinding() && ((IDataBinding)binding).getKind() == IDataBinding.LIBRARY_BINDING)||
-							(binding.isTypeBinding() && ((ITypeBinding)binding).getKind() == ITypeBinding.LIBRARY_BINDING)){
-				    		IDataBinding db = qualifiedName.resolveDataBinding();
-				    		if (!checker.isLibraryDataAllowed(db)) {
-				    			addError(qualifiedName);
-				    		}
-			    			break;
-			    		}
-			    		
-			    		if (name.isQualifiedName()){
-			    			name = ((QualifiedName)name).getQualifier();
-			    		}else{
-			    			break;
-			    		}
-			    	}
-			    	
-			        return false;
-			    }
-			    
-			    public boolean visit(FieldAccess fieldAccess) {
-			        return true;
-			    }
-			    
-			    public boolean visit(ArrayAccess arrayAccess) {
-//			    	if (arrayAccess.getArray().resolveDataBinding() != dataBinding){
-//			    		addError(arrayAccess);
-//			    	}
-			    		
-			        return false;
-			    }
-			    
-			    protected void addError(Expression node){
-			    	problemRequestor.acceptProblem(node,
-           				IProblemRequestor.USED_LIBRARY_RECORD_USED_FOR_IO);
-			    }
-			    
-				public boolean visitExpression(Expression expression) {
-				    return true;
-				}
-				});
-		}
-	}
-
 	public static void validateDataDeclarationInitializer(Node dataDeclaration,final IProblemRequestor problemRequestor, final ICompilerOptions compilerOptions){
 		dataDeclaration.accept(new AbstractASTVisitor(){
 			
@@ -827,192 +430,6 @@ public class StatementValidator {
 		}
 	}
 	
-	public static boolean isAnnotationRecord(IBinding binding) {
-		if (!Binding.isValidBinding(binding)) {
-			return false;
-		}
-		
-		if (!binding.isTypeBinding()) {
-			return false;
-		}
-		
-		if (((ITypeBinding)binding).getKind() != ITypeBinding.FLEXIBLE_RECORD_BINDING) {
-			return false;
-		}
-		
-		return ((FlexibleRecordBinding)binding).isAnnotationRecord();
-		
-	}
-	
-	protected static boolean validateRecordParamDimensions(StructureItemBinding sBinding,IProblemRequestor problemRequestor,Node node,String name,String typename,int level){
-		if(isValidBinding(sBinding) ){
-			if (++level == 7){
-				problemRequestor.acceptProblem(node,
-						IProblemRequestor.TOO_MANY_DIMENTIONS_FOR_RECORD_ARRAY,
-						new String[] {name,typename});
-				return false;
-			
-			}
-			
-			List children = sBinding.getChildren();
-			Iterator iter = children.iterator();
-			while(iter.hasNext()){
-				StructureItemBinding childbinding = (StructureItemBinding)iter.next();
-				if (isValidBinding(childbinding)){
-					boolean bContinue = validateRecordParamDimensions(childbinding,problemRequestor,node,name,typename,level);
-					if (!bContinue){
-						return false;
-					}
-				}
-			}
-		
-		}
-		
-		return true;
-	}
-	
-	
-	protected static boolean validateRecordParamDimensions(ArrayTypeBinding typeBinding,IProblemRequestor problemRequestor,Node node,String name,String typename,int level){
-		if(isValidBinding(typeBinding) && typeBinding.getKind() == ITypeBinding.ARRAY_TYPE_BINDING){
-			if (++level == 7){
-				problemRequestor.acceptProblem(node,
-						IProblemRequestor.TOO_MANY_DIMENTIONS_FOR_RECORD_ARRAY,
-						new String[] {name,typename});
-				return false;
-			
-			}
-			ITypeBinding baseBinding = typeBinding.getBaseType();
-			if (baseBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
-				List list = ((FlexibleRecordBinding) baseBinding).getDeclaredFields();
-				Iterator iter = list.iterator();
-				while(iter.hasNext()){
-					FlexibleRecordFieldBinding fbinding = (FlexibleRecordFieldBinding)iter.next();
-					if (isValidBinding(fbinding.getType()) && fbinding.getType().getKind() == ITypeBinding.ARRAY_TYPE_BINDING){
-						boolean bContinue = validateRecordParamDimensions((ArrayTypeBinding)fbinding.getType(),problemRequestor,node,name,typename,level);
-						if (!bContinue){
-							return false;
-						}
-					}
-				}
-			}
-				
-			if (baseBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING){
-				List list = ((FixedRecordBinding) baseBinding).getStructureItems();
-				Iterator iter = list.iterator();
-				while(iter.hasNext()){
-					StructureItemBinding sbinding = (StructureItemBinding)iter.next();
-					boolean bContinue = validateRecordParamDimensions(sbinding,problemRequestor,node,name,typename,level);
-					if (!bContinue){
-						return false;
-					}
-				}
-			}
-			
-		}
-		
-		return true;
-	}		
-	
-	
-	public static void validateRecordParamDimensions(Type type,IProblemRequestor problemRequestor,Node node,String name){
-		if (type.isArrayType()){
-			ITypeBinding typeBinding = ((ArrayType)type).resolveTypeBinding();
-			if (isValidBinding(typeBinding)){
-				String typename = typeBinding.getBaseType().getName();
-				validateRecordParamDimensions((ArrayTypeBinding)typeBinding,problemRequestor,node,name,typename,0);
-			}
-		}
-	}
-	
-	public static List getSQLRecordIOObjects(Statement statement) {
-		List sqlRecordObjectDataBindings = new ArrayList();
-		List IOObjects = statement.getIOObjects();		
-		for(Iterator iter = IOObjects.iterator(); iter.hasNext();) {
-			IDataBinding nextDBinding = ((Expression) iter.next()).resolveDataBinding();
-			if(nextDBinding != null && IBinding.NOT_FOUND_BINDING != nextDBinding) {
-				ITypeBinding type = nextDBinding.getType();
-				if(type != null) {
-					if(ITypeBinding.ARRAY_TYPE_BINDING == type.getKind() &&
-					   ((ArrayTypeBinding) type).getElementType().getAnnotation(EGLIOSQL, "SQLRecord") != null) {
-						sqlRecordObjectDataBindings.add(nextDBinding);
-					}
-				}
-			}
-		}
-		return sqlRecordObjectDataBindings;
-	}
-	
-	public static void validateRequiredFieldsInCUIDeclaration(Type declType, SettingsBlock settingsBlock, IProblemRequestor problemRequestor) {
-		validateRequiredFieldsInCUIDeclaration(declType, settingsBlock, false, problemRequestor);		
-	}
-	
-	public static void validateRequiredFieldsInCUIDeclaration(Type declType, SettingsBlock settingsBlock, boolean isConstantConsoleFormField, IProblemRequestor problemRequestor) {
-		ITypeBinding declTypeBinding = declType.resolveTypeBinding();
-		if(IBinding.NOT_FOUND_BINDING != declTypeBinding && declTypeBinding != null) {
-			declTypeBinding = declTypeBinding.getBaseType();
-			
-			if(settingsBlock != null) {
-				if(AbstractBinder.typeIs(declTypeBinding, new String[] {"egl", "ui", "console"}, "Menu")) {
-					final boolean[] hasLabelKeyOrLabelText = new boolean[] {false};
-				
-					for(Iterator iter = settingsBlock.getSettings().iterator(); !hasLabelKeyOrLabelText[0] && iter.hasNext();)
-						((Node) iter.next()).accept(new DefaultASTVisitor() {
-						public boolean visit(Assignment assignment) {
-							assignment.getLeftHandSide().accept(new AbstractASTExpressionVisitor() {
-								public boolean visitName(Name name) {
-									String identifier = name.getIdentifier();
-									if(InternUtil.intern("labelKey") == identifier ||
-									   InternUtil.intern("labelText") == identifier) {
-										hasLabelKeyOrLabelText[0] = true;
-									}								
-									return false;
-								}
-							});
-							return false;
-						}
-					});
-					
-					if(!hasLabelKeyOrLabelText[0]) {
-						problemRequestor.acceptProblem(
-							declType,
-							IProblemRequestor.MENU_DECLARATION_REQUIRES_LABELKEY_OR_LABELTEXT,
-							new String[] {"labelText"});
-					}
-				}
-			}
-			
-			if(AbstractBinder.typeIs(declTypeBinding, new String[] {"egl", "ui", "console"}, "ConsoleField") && !isConstantConsoleFormField && !declType.isArrayType()) {
-				final boolean[] hasFieldLenOrSegements = new boolean[] {false};
-				
-				if(settingsBlock != null) {			
-					for(Iterator iter = settingsBlock.getSettings().iterator(); !hasFieldLenOrSegements[0] && iter.hasNext();)
-						((Node) iter.next()).accept(new DefaultASTVisitor() {
-						public boolean visit(Assignment assignment) {
-							assignment.getLeftHandSide().accept(new AbstractASTExpressionVisitor() {
-								public boolean visitName(Name name) {
-									String identifier = name.getIdentifier();
-									if(InternUtil.intern("fieldLen") == identifier ||
-									   InternUtil.intern("segments") == identifier) {
-										hasFieldLenOrSegements[0] = true;
-									}								
-									return false;
-								}
-							});
-							return false;
-						}
-					});
-				}
-				
-				if(!hasFieldLenOrSegements[0]) {
-					problemRequestor.acceptProblem(
-						declType,
-						IProblemRequestor.CONSOLEFIELD_DECLARATION_REQUIRES_FIELDLEN,
-						new String[] {"fieldLen"});
-				}
-			}
-		}
-	}
-
 	public static String getName(Statement statement) {
 		final String[] result = new String[] {null};
 		statement.accept(new DefaultASTVisitor() {
@@ -1146,12 +563,5 @@ public class StatementValidator {
 		}
 		
 		return result[0];
-	}
-	
-	public static boolean isFlexibleBasicOrSQL(ITypeBinding typeBinding) {
-		if (Binding.isValidBinding(typeBinding)) {
-			return (typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING && (typeBinding.getAnnotation(EGLCORE, "BasicRecord") != null || (typeBinding.getAnnotation(EGLIOSQL, "SQLRecord") != null)));
-		}
-		return false;
 	}
 }

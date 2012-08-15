@@ -12,11 +12,8 @@
 package org.eclipse.edt.compiler;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public class RBDCompiler extends BaseCompiler {
 	
