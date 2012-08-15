@@ -16,8 +16,10 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.EGenericType;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
@@ -56,7 +58,9 @@ public class AnnotationRightHandScope extends Scope{
     	if (type instanceof Enumeration) {
     		return (Enumeration)type;
     	}
-    	//TODO handle when type is an enumeration[]
+    	if (type instanceof EGenericType) {
+    		return getEnumerationType(((EGenericType)type).getETypeArguments().get(0));
+    	}
     	return null;
     }
 

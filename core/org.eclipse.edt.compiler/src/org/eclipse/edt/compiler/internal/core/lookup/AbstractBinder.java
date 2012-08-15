@@ -606,15 +606,34 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     
         
 
-	protected List<Member> findData(org.eclipse.edt.mof.egl.Type type, String identifier) {
+	protected List<Member> findData(org.eclipse.edt.mof.egl.Type aType, String identifier) {
 		
-		type = BindingUtil.getBaseType(type);
+		if (aType == null) {
+			return null;
+		}
+		
+		
+		List<Member> result = null;
+		
+		org.eclipse.edt.mof.egl.Type type = aType.getClassifier();
 		if (type != null && type.equals(currentBinding)) {
-			return BindingUtil.findMembers(type, identifier);
+			result = BindingUtil.findMembers(type, identifier);
 		}
 		else {
-			return BindingUtil.findPublicMembers(type, identifier);
+			result = BindingUtil.findPublicMembers(type, identifier);
 		}
+		
+		if (result != null) {
+			return result;
+		}
+		
+		org.eclipse.edt.mof.egl.Type baseType = BindingUtil.getBaseType(aType);
+		if (aType != baseType) {
+			return findData(baseType, identifier);
+		}
+		
+		return null;
+
     }
 	
     protected static PrimitiveTypeLiteral getConstantValue(Expression expr) {

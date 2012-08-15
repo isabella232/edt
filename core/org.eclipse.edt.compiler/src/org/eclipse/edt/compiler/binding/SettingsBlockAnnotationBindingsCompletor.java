@@ -11,10 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+import java.util.List;
+
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
+import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
+import org.eclipse.edt.compiler.core.ast.NewExpression;
+import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
@@ -30,14 +36,30 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Constructor;
+import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.ElementKind;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Service;
 
 
 public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
 	private AnnotationLeftHandScope annotationLeftHandScope;
-	private Binder binder;
+	private Binder lhsBinder;
+	private Binder rhsBinder;
 
 	private Part partBinding;
 	
@@ -58,7 +80,8 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		super(currentScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions);
 		this.partBinding = partBinding;
 		this.annotationLeftHandScope = annotationLeftHandScope;
-		binder = new Binder(currentScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions);
+		rhsBinder = new Binder(currentScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions);
+		lhsBinder = new Binder(annotationLeftHandScope.getScopeToUseWhenResolving(), partBinding, dependencyRequestor, problemRequestor, compilerOptions);
 	}
 
 	public boolean visit(SettingsBlock settingsBlock) {
@@ -81,13 +104,14 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 					}
 
 				}
-				assignment.accept(binder);
+				assignment.getLeftHandSide().accept(lhsBinder);
+				assignment.getRightHandSide().accept(rhsBinder);
 				return false;
 			}
 
 			public boolean visit(AnnotationExpression annotationExpression) {
 				Annotation ann = getAnnotation(annotationExpression);
-				setAnnotationOnElement(annotationLeftHandScope.getTopLevelAnnotationLeftHandScope().getElementBeingAnnotated(), ann);
+				setAnnotationOnElement(annotationLeftHandScope.getTopLevelAnnotationLeftHandScope().getElementBeingAnnotated(), ann, annotationExpression);
 				
 				return false;
 			}
@@ -156,9 +180,40 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 	}
 	
 	private boolean isValidValueForAnnotation(Object value, Expression expr, Annotation ann, EField field) {
-		//TODO
+		if (!isValidExpressionForAnnotationValue(expr)) {
+			return false;
+		}
 		return true;
 	}
+	
+    private boolean isValidExpressionForAnnotationValue(Expression expr) {
+    	
+    	final boolean[] valid = new boolean[] {true};
+    	DefaultASTVisitor visitor = new DefaultASTVisitor() {
+   		
+    		public boolean visit(NewExpression newExpression) {
+    			valid[0] = false;
+    			return false;
+    		};
+    		
+    		public boolean visit(FunctionInvocation functionInvocation) {
+    			valid[0] = false;
+    			return false;
+    		};
+    		
+    		public boolean visit(ParenthesizedExpression parenthesizedExpression) {
+    			return true;
+    		};
+    		
+    	};
+    	
+    	expr.accept(visitor);
+		return valid[0];
+    	
+    }
+
+	
+	
 	 
 	private Annotation getAnnotation(AnnotationExpression annotationExpression) {
 		
@@ -185,7 +240,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		
 	}
 	
-	private void setAnnotationOnElement(Element elem, Annotation ann) {
+	private void setAnnotationOnElement(Element elem, Annotation ann, AnnotationExpression annotationExpression) {
 		if (ann == null) {
 			return;
 		}
@@ -193,12 +248,58 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		if (isApplicableFor(elem, ann)) {
 			elem.addAnnotation(ann);
 		}
+		else {
+			problemRequestor.acceptProblem(annotationExpression, IProblemRequestor.ANNOTATION_NOT_APPLICABLE,
+					new String[] {annotationExpression.getName().getCanonicalString()});
+		}
 	}
 
 	private boolean isApplicableFor(Element elem, Annotation ann) {
-		//TODO
-		return true;
+		AnnotationType annType = (AnnotationType)ann.getEClass();
+		return isApplicableFor(elem, annType.getTargets());
 	}
+	
+	
+	
+	private boolean isApplicableFor(Element targetBinding, List<ElementKind> targets) {
+		for(ElementKind nextTarget : targets) {
+			
+			switch(nextTarget) {
+				case DelegatePart:
+					return targetBinding instanceof Delegate;
+				case ExternalTypePart:
+					return targetBinding instanceof ExternalType;
+				case HandlerPart:
+					return targetBinding instanceof Handler;
+				case ClassPart:
+					return targetBinding instanceof EGLClass;
+				case InterfacePart:
+					return targetBinding instanceof Interface;
+				case Part:
+					return targetBinding instanceof Part;
+				case ProgramPart:
+					return targetBinding instanceof Program;
+				case RecordPart:
+					return targetBinding instanceof Record;
+				case LibraryPart:
+					return targetBinding instanceof Library;
+				case ServicePart:
+					return targetBinding instanceof Service;
+				case FieldMbr:
+					return targetBinding instanceof Field;
+				case FunctionMbr:
+					return targetBinding instanceof Function;
+				case ConstructorMbr:
+					return targetBinding instanceof Constructor;
+				case EnumerationPart:
+					return targetBinding instanceof Enumeration;
+				case EnumerationEntry:
+					return targetBinding instanceof EnumerationEntry;
+			}
+		}
+		return false;
+	}
+
 			
 
 
