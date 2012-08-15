@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.FormFieldBinding;
-
 /**
  * ConstantFormField AST node type.
  *
@@ -21,8 +19,6 @@ import org.eclipse.edt.compiler.binding.FormFieldBinding;
  */
 public class ConstantFormField extends FormField {
 	
-	FormFieldBinding binding;
-
 	public ConstantFormField(SettingsBlock settingsBlockOpt, Expression initializerOpt, int startOffset, int endOffset) {
 		super(settingsBlockOpt, initializerOpt, startOffset, endOffset);
 	}
@@ -36,14 +32,6 @@ public class ConstantFormField extends FormField {
 		visitor.endVisit(this);
 	}
 	
-	public FormFieldBinding resolveBinding() {
-		return binding;
-	}
-	
-	public void setBinding(FormFieldBinding binding) {
-		this.binding = binding;
-	}
-
 	protected Object clone() throws CloneNotSupportedException {
 		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
 		
