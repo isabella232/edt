@@ -60,4 +60,9 @@ public class FunctionInvocation extends Expression {
 	protected Object clone() throws CloneNotSupportedException {
 		return new FunctionInvocation((Expression) target.clone(), cloneList(funcArgs), getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalString();
+	}
 }

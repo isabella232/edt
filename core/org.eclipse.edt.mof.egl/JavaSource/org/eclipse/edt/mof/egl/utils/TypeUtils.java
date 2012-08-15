@@ -308,7 +308,7 @@ public class TypeUtils implements MofConversion {
 		}
 		
 		if (lhsType instanceof Delegate && rhsType instanceof Function) {
-			return TypeUtils.areCompatible((Delegate) lhsType, (Function)rhsType);
+			return areCompatible((Delegate) lhsType, (Function)rhsType);
 		}
 		
 		else {
@@ -329,7 +329,7 @@ public class TypeUtils implements MofConversion {
 			return false;
 		}
 		
-		if (lhsType.getReturnType() != rhsType.getReturnType()) {
+		if (!lhsType.getReturnType().equals(rhsType.getReturnType())) {
 			return false;
 		}
 		
@@ -342,10 +342,6 @@ public class TypeUtils implements MofConversion {
 			FunctionParameter rhsParm = rhsType.getParameters().get(i);
 			
 			if (lhsParm.isNullable() != rhsParm.isNullable()) {
-				return false;
-			}
-			
-			if (lhsParm.getType() != rhsParm.getType()) {
 				return false;
 			}
 			
@@ -362,6 +358,10 @@ public class TypeUtils implements MofConversion {
 			}
 			
 			if (lhsParm.isDefinedSqlNullable().booleanValue() != rhsParm.isDefinedSqlNullable().booleanValue()) {
+				return false;
+			}
+			
+			if (!lhsParm.getType().equals(rhsParm.getType())) {
 				return false;
 			}
 		}
@@ -804,7 +804,7 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	private static boolean requiresNarrow(NamedElement srcType, Classifier type) {
-		if (srcType == type) {
+		if (srcType != null && srcType.equals(type)) {
 			return false;
 		}
 
@@ -1058,7 +1058,7 @@ public class TypeUtils implements MofConversion {
 			for (FunctionParameter parm : op.getParameters()) {
 				 // check for generic type parameter
 				if (!parm.isGenericTypeParameter()) {
-					if (!TypeUtils.areCompatible((Classifier)parm.getType().getClassifier(), argumentTypes[i])) {
+					if (!areCompatible((Classifier)parm.getType().getClassifier(), argumentTypes[i])) {
 						isCandidate = false;
 					}
 					if (!isCandidate) break;
@@ -1156,15 +1156,15 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static boolean isPrimitive(Type type){
-		return type.equals(TypeUtils.Type_SMALLINT) ||
-						type.equals(TypeUtils.Type_INT) ||
-						type.equals(TypeUtils.Type_BIGINT) ||
-						type.equals(TypeUtils.Type_DECIMAL) ||
-						type.equals(TypeUtils.Type_SMALLFLOAT) ||
-						type.equals(TypeUtils.Type_FLOAT) ||
-						type.equals(TypeUtils.Type_DATE) ||
-						type.equals(TypeUtils.Type_TIME) ||
-						type.equals(TypeUtils.Type_TIMESTAMP) ||
-						type.equals(TypeUtils.Type_STRING);
+		return type.equals(Type_SMALLINT) ||
+						type.equals(Type_INT) ||
+						type.equals(Type_BIGINT) ||
+						type.equals(Type_DECIMAL) ||
+						type.equals(Type_SMALLFLOAT) ||
+						type.equals(Type_FLOAT) ||
+						type.equals(Type_DATE) ||
+						type.equals(Type_TIME) ||
+						type.equals(Type_TIMESTAMP) ||
+						type.equals(Type_STRING);
 	}
 }

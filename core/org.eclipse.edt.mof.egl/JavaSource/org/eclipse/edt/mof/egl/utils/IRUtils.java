@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AmbiguousReferenceException;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -1090,8 +1091,73 @@ public class IRUtils {
 		return TypeUtils.areCompatible(type.getClassifier(), opType);	
 	}
 
-
-
+	public static boolean isMoveCompatible(Member lhsMember, Type rhsType, Member rhsMember) {
+		// If the lhs or rhs can't be resolved, then we assume they're valid. Validation will have a bind error already.
+		if ((rhsMember == null && rhsType == null) || lhsMember == null) {
+			return true;
+		}
+		
+		Type lhsType = lhsMember.getType();
+		if (lhsType == null) {
+			return true;
+		}
+		
+		if (rhsType != null) {
+			if (TypeUtils.Type_NULLTYPE.equals(rhsType)) {
+				// "null" is compatible with any nullable type.
+				return lhsMember.isNullable();
+			}
+			
+			if (lhsType instanceof ArrayType && rhsType instanceof ArrayType) {
+				return areArraysCompatible((ArrayType)lhsType, (ArrayType)rhsType);
+			}
+			
+			return TypeUtils.areCompatible(lhsType.getClassifier(), rhsType.getClassifier());
+		}
+		
+		// Not everything being compared has a type. For example, a function can be assigned to a delegate. In this case
+		// we wouldn't want to have passed in the function's type, since the function *signature* would be compared to the delegate's.
+		return TypeUtils.areCompatible(lhsType.getClassifier(), rhsMember);
+	}
+	
+	private static boolean areArraysCompatible(ArrayType type1, ArrayType type2) {
+		if (type1.elementsNullable() != type2.elementsNullable()) {
+			return false;
+		}
+		
+		Type elementType1 = type1.getElementType();
+		Type elementType2 = type2.getElementType();
+		
+		if (elementType1 instanceof ParameterizedType) {
+			elementType1 = ((ParameterizedType)elementType1).getParameterizableType();
+		}
+		if (elementType2 instanceof ParameterizedType) {
+			elementType2 = ((ParameterizedType)elementType2).getParameterizableType();
+		}
+		
+		if (elementType1 == null || elementType2 == null) {
+			return true;
+		}
+		
+		boolean elementType1IsReference = TypeUtils.isReferenceType(elementType1);
+		if (elementType1IsReference != TypeUtils.isReferenceType(elementType2)) {
+			return false;
+		}
+		
+		if (elementType1 instanceof ArrayType && elementType2 instanceof ArrayType) {
+			return areArraysCompatible((ArrayType)elementType1, (ArrayType)elementType2);
+		}
+		
+		if (elementType1IsReference) {
+			// Must be reference-compatible.
+			return TypeUtils.areCompatible(elementType1.getClassifier(), elementType2.getClassifier());
+		}
+		else {
+			// Must be the same value type - conversion is not allowed.
+			return elementType1.equals(elementType2);
+		}
+	}
+	
 	public static String getFileName(EObject obj) {
 		FileNameResolver resolver = new FileNameResolver(obj);
 		return resolver.getFilename();
