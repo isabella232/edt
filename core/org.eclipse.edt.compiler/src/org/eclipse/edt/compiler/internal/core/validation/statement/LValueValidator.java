@@ -31,7 +31,6 @@ public class LValueValidator {
 		boolean canAssignToConstantVariables();
 		boolean canAssignToReadOnlyVariables();
 		boolean canAssignToFunctionReferences();
-		boolean canAssignToPCB();
 		boolean canAssignToFunctionParmConst();
 		boolean shouldRunAccessRules();
 		
@@ -103,16 +102,6 @@ public class LValueValidator {
 		if (validationRules.shouldRunAccessRules()) {
 			//Run field access rules defined by annotations on the field
 			result = invokeFieldAccessValidators();
-		}
-		
-		if (!validationRules.canAssignToPCB()) {
-			// This could probably be another "field access" check for subtype
-			// DLIRecord
-			IAnnotationBinding aBinding = dBinding.getAnnotation(new String[] { "egl", "io", "dli" }, "PCB");
-			if (aBinding != null) {
-				problemRequestor.acceptProblem(lValue, IProblemRequestor.DLI_PCBRECORD_NOT_VALID_AS_LVALUE, new String[] { lValue
-						.getCanonicalString() });
-			}
 		}
 		
 		if (dBinding.getKind() == IDataBinding.FUNCTION_PARAMETER_BINDING) {

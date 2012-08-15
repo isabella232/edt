@@ -26,12 +26,11 @@ import org.eclipse.edt.compiler.core.ast.SetStatement;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 	
-/**
- * @author Craig Duval
- */
 public class SetStatementValidator extends DefaultASTVisitor {
 	
 	private static final String POSITION_INTERN				= InternUtil.intern(IEGLConstants.MNEMONIC_POSITION);
@@ -65,47 +64,6 @@ public class SetStatementValidator extends DefaultASTVisitor {
 	private static final String INITIAL_INTERN				= InternUtil.intern(IEGLConstants.MNEMONIC_INITIAL);
 	private static final String EMPTY_INTERN				= InternUtil.intern(IEGLConstants.MNEMONIC_EMPTY);
 	
-	protected static final String[] VALID_FOR_PRINTFORM = InternUtil.intern(new String[] {
-		INITIAL_INTERN,
-		INITIALATTRIBUTES_INTERN,
-		EMPTY_INTERN });
-	
-	protected static final String[] VALID_FOR_TEXTFORM = InternUtil.intern(new String[] {
-		ALARM_INTERN,
-		INITIAL_INTERN,
-		INITIALATTRIBUTES_INTERN,
-		EMPTY_INTERN });
-	
-	protected static final String[] VALID_FOR_FORMFIELD = InternUtil.intern(new String[] {
-		CURSOR_INTERN,
-		FULL_INTERN,
-		EMPTY_INTERN,
-		NORMAL_INTERN,
-		INITIALATTRIBUTES_INTERN,
-		INITIAL_INTERN,
-		MODIFIED_INTERN,
-		DEFAULTCOLOR_INTERN,
-		BLACK_INTERN,
-		BLUE_INTERN,
-		GREEN_INTERN,
-		MAGENTA_INTERN,
-		RED_INTERN,
-		CYAN_INTERN,
-		YELLOW_INTERN,
-		WHITE_INTERN,
-		BLINK_INTERN,
-		REVERSE_INTERN,
-		UNDERLINE_INTERN,
-		NOHIGHLIGHT_INTERN,
-		BOLD_INTERN,
-		DIM_INTERN,
-		MASKED_INTERN,
-		INVISIBLE_INTERN,
-		NORMALINTENSITY_INTERN,
-		PROTECT_INTERN,
-		SKIP_INTERN,
-		UNPROTECT_INTERN });
-	
 	private String sColor;// defaultColor, black, blue, green, magenta, red, cyan, yellow, white
 	private String sIntensity; // bold, invisible, normalIntensity, dim, masked 
 	private String sProtection; // protect, skip, unprotect
@@ -131,15 +89,11 @@ public class SetStatementValidator extends DefaultASTVisitor {
 	
 	private IProblemRequestor problemRequestor;
 	
-	private boolean enclosingPartIsPageHandler = false;
     private ICompilerOptions compilerOptions;
 	
 	public SetStatementValidator(IProblemRequestor problemRequestor, IPartBinding enclosingPart, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
 		this.compilerOptions = compilerOptions;
-		if(enclosingPart != null) {
-			enclosingPartIsPageHandler = enclosingPart.getAnnotation(EGLUIJSF, "JSFHandler") != null;
-		}
 	}
 	
 	public boolean visit(final SetStatement setStatement) {
@@ -388,110 +342,50 @@ public class SetStatementValidator extends DefaultASTVisitor {
 				if (dataBinding.getKind() != IDataBinding.CLASS_FIELD_BINDING
 						&& dataBinding.getKind() != IDataBinding.FUNCTION_PARAMETER_BINDING
 						&& dataBinding.getKind() != IDataBinding.LOCAL_VARIABLE_BINDING
-						&& dataBinding.getKind() != IDataBinding.PROGRAM_PARAMETER_BINDING
-						&& dataBinding.getKind() != IDataBinding.FORM_BINDING
-						&& dataBinding.getKind() != IDataBinding.STRUCTURE_ITEM_BINDING
-						&& dataBinding.getKind() != IDataBinding.DATATABLE_BINDING// !setTarget.isTableColumn()
-						&& dataBinding.getKind() != IDataBinding.FORM_FIELD) {
+						&& dataBinding.getKind() != IDataBinding.STRUCTURE_ITEM_BINDING) {
 					//TODO complete
 							//FRIEDA why isn't there a message here? saying invalid target for set statement
 					return false;
 				}else {
-					ITypeBinding typeBinding = expression.resolveTypeBinding();
-					if (!StatementValidator.isValidBinding(typeBinding)){
+					Type typeBinding = expression.resolveType();
+					if (typeBinding == null){
 						return false;
 					}
 					
-					if (typeBinding.isDynamic()){
+					if (TypeUtils.isDynamicType(typeBinding)) {
 						
-					}else if ( StatementValidator.isRecordOrRecordArray(typeBinding) ) {
+					}
+					else if ( StatementValidator.isRecordOrRecordArray(typeBinding) ) {
 						List validStates = new ArrayList();
 						validStates.add( EMPTY_INTERN );
 						validStates.add( INITIAL_INTERN );
 						validStates.add( POSITION_INTERN );
 						
-						int  iErr = -1;
-						final boolean[] isIndexedOrDLI = new boolean[] {false};
-						if( typeBinding.getAnnotation(EGLIOFILE, "IndexedRecord") != null ||
-							typeBinding.getAnnotation(EGLIODLI, "DLISegment") != null) {									
-							iErr = IProblemRequestor.INVALID_SET_STATE_FOR_INDEXED_RECORD;
-							isIndexedOrDLI[0] = true;
-						}
-						else {
-							iErr = IProblemRequestor.INVALID_SET_STATE_FOR_RECORD;
-						}
-						
 						String[] toArray = (String[]) validStates.toArray( new String[0] );
-						validateStates( setStmt,expression, toArray, iErr, POSITION_INTERN, new IOnStateDoThis() {
+						validateStates( setStmt,expression, toArray, IProblemRequestor.INVALID_SET_STATE_FOR_RECORD, POSITION_INTERN, new IOnStateDoThis() {
 							public void doIt() {
-								if(!isIndexedOrDLI[0]) {
-									problemRequestor.acceptProblem(expression, IProblemRequestor.SET_POSITION_STATEMENT_WITH_INVALID_DATAREF, new String[] {expression.getCanonicalString()});
-								}
+								problemRequestor.acceptProblem(expression, IProblemRequestor.SET_POSITION_STATEMENT_WITH_INVALID_DATAREF, new String[] {expression.getCanonicalString()});
 							}
 						});
-					}else if (typeBinding.getKind() ==  ITypeBinding.FORM_BINDING) {
-						if (typeBinding.getAnnotation(EGLUITEXT, "PrintForm") != null) {
-							// print form - initial, initialAttributes, empty
+					}
+					else {
+						if( dataBinding.getKind() == IDataBinding.STRUCTURE_ITEM_BINDING ) {
+							// The target is not an SQLRecord item, or we wouldn't be here
+							// Allow empty if item has substructure
+							String[] validStates = ((StructureItemBinding)dataBinding).getChildren().size() == 0 ?
+								new String[] {null} :
+								new String[] {EMPTY_INTERN};
 							validateStates( setStmt,expression,
-								VALID_FOR_PRINTFORM,
-								IProblemRequestor.INVALID_SET_STATE_FOR_PRINT_FORM);
-						} else {
-							// text form - alarm, initial, initialAttributes, empty
-							validateStates( setStmt,expression,
-								VALID_FOR_TEXTFORM,
-								IProblemRequestor.INVALID_SET_STATE_FOR_TEXT_FORM);
+								validStates,
+								IProblemRequestor.INVALID_SET_STATE_FOR_ITEM);
 						}
-					}else {
-						if ( typeBinding.getKind() != ITypeBinding.ARRAY_TYPE_BINDING &&
-								((dataBinding.getKind() == IDataBinding.FORM_FIELD && ((FormFieldBinding)dataBinding).isTextFormField())
-								|| (dataBinding.getKind() == IDataBinding.FUNCTION_PARAMETER_BINDING) && ((FunctionParameterBinding )dataBinding).isField())) {
-								// text form field - cursor, full, empty, normal, initialAtributes, initial,
-								//                   modified, defaultcolor, blue, green, magenta, red, cyan,
-								//                   yellow, white, blink, reverse, underline, nohighlight, bold,
-								//                   invisible, normalIntensity, protect, skip, unprotect.
-								validateStates( setStmt,expression,VALID_FOR_FORMFIELD,IProblemRequestor.INVALID_SET_STATE_FOR_TEXT_FIELD);
-
-							} else if (isSQLItem(dataBinding) ||
-										(dataBinding.getKind() == IDataBinding.FUNCTION_PARAMETER_BINDING && ((FunctionParameterBinding )dataBinding).isSQLNullable())) {
-								// SQL item - null, plus empty and initial
-								List validStates = new ArrayList();
-									if( enclosingPartIsPageHandler ) {
-									validStates.add( EMPTY_INTERN );
-									validStates.add( INITIAL_INTERN );
-								}
-								
-								validateStates(setStmt,expression,
-									validStates.isEmpty() ? new String[] { null } : (String[]) validStates.toArray( new String[0] ),
-									IProblemRequestor.INVALID_SET_STATE_FOR_SQL_ITEM);
-							} else {
-								if ( (dataBinding.getKind() == IDataBinding.LOCAL_VARIABLE_BINDING || dataBinding.getKind() == IDataBinding.CLASS_FIELD_BINDING ) &&
-									 enclosingPartIsPageHandler ) {
-									validateStates(setStmt,expression,
-										new String[] { EMPTY_INTERN,
-										               INITIAL_INTERN},
-										IProblemRequestor.INVALID_SET_STATE_FOR_ITEM);
-								}
-								else 
-								{
-									if( dataBinding.getKind() == IDataBinding.STRUCTURE_ITEM_BINDING ) {
-										// The target is not an SQLRecord item, or we wouldn't be here
-										// Allow empty if item has substructure
-										String[] validStates = ((StructureItemBinding)dataBinding).getChildren().size() == 0 ?
-											new String[] {null} :
-											new String[] {EMPTY_INTERN};
-										validateStates( setStmt,expression,
-											validStates,
-											IProblemRequestor.INVALID_SET_STATE_FOR_ITEM);
-									}
-									else {
-										validateStates( setStmt,expression,
-											new String[0],
-											IProblemRequestor.INVALID_SET_STATE_FOR_ITEM);
-									}
-								}
-							}
+						else {
+							validateStates( setStmt,expression,
+								new String[0],
+								IProblemRequestor.INVALID_SET_STATE_FOR_ITEM);
 						}
 					}
+				}
 				return false;
 				
 			}//end visit
@@ -587,14 +481,4 @@ public class SetStatementValidator extends DefaultASTVisitor {
 			|| state == INITIAL_INTERN
 			|| state == EMPTY_INTERN;
 	}
-	
-	protected  boolean isSQLItem(IDataBinding dBinding) {
-		IPartBinding pBinding = dBinding.getDeclaringPart();
-		if (StatementValidator.isValidBinding(pBinding)) {
-			if (pBinding.getAnnotation(EGLIOSQL, "SQLRecord") != null) {
-				return true;
-			}
-		}
-		return false;
-	}		
 }
