@@ -743,7 +743,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 		
 		Type mofType = (Type)obj;
-		expr.setId(mofType.getTypeSignature());
+		expr.setId(type.getTypeSignature());
 		setElementInformation(newExpression, expr);
 		if(newExpression.getType() instanceof NameType){
 			for(org.eclipse.edt.compiler.core.ast.Expression argument : ((NameType)newExpression.getType()).getArguments()){
