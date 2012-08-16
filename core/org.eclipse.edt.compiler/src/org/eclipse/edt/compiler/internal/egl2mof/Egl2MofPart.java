@@ -377,7 +377,6 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		
 		// Set the stereotype value if necessary
 		Part partBinding = (Part)astPart.getName().resolveType();
-		Annotation subtype = partBinding.getSubType();
 
 		if (mofPart instanceof EClass) {
 			createAnnotations(partBinding, (Element)mofPart);
@@ -435,6 +434,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			IRUtils.markOverloadedFunctions((LogicAndDataPart)part);
 						
 		if (inMofProxyContext) {
+			Annotation subtype = partBinding.getSubType();
 			EMetadataObject metadata = (EMetadataObject)mofValueFrom(subtype);
 			((EClass)mofPart).getMetadataList().add(metadata);
 		}
