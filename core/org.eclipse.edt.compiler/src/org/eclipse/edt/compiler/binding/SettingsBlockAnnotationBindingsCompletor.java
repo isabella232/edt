@@ -30,7 +30,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.EField;
@@ -263,38 +262,56 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 	
 	private boolean isApplicableFor(Element targetBinding, List<ElementKind> targets) {
 		for(ElementKind nextTarget : targets) {
-			
+			boolean result = false;
 			switch(nextTarget) {
 				case DelegatePart:
-					return targetBinding instanceof Delegate;
+					result = targetBinding instanceof Delegate;
+					break;
 				case ExternalTypePart:
-					return targetBinding instanceof ExternalType;
+					result = targetBinding instanceof ExternalType;
+					break;
 				case HandlerPart:
-					return targetBinding instanceof Handler;
+					result = targetBinding instanceof Handler;
+					break;
 				case ClassPart:
-					return targetBinding instanceof EGLClass;
+					result = targetBinding instanceof EGLClass;
+					break;
 				case InterfacePart:
-					return targetBinding instanceof Interface;
+					result = targetBinding instanceof Interface;
+					break;
 				case Part:
-					return targetBinding instanceof Part;
+					result = targetBinding instanceof Part;
+					break;
 				case ProgramPart:
-					return targetBinding instanceof Program;
+					result = targetBinding instanceof Program;
+					break;
 				case RecordPart:
-					return targetBinding instanceof Record;
+					result = targetBinding instanceof Record;
+					break;
 				case LibraryPart:
-					return targetBinding instanceof Library;
+					result = targetBinding instanceof Library;
+					break;
 				case ServicePart:
-					return targetBinding instanceof Service;
+					result = targetBinding instanceof Service;
+					break;
 				case FieldMbr:
-					return targetBinding instanceof Field;
+					result = targetBinding instanceof Field;
+					break;
 				case FunctionMbr:
-					return targetBinding instanceof Function;
+					result = targetBinding instanceof Function;
+					break;
 				case ConstructorMbr:
-					return targetBinding instanceof Constructor;
+					result = targetBinding instanceof Constructor;
+					break;
 				case EnumerationPart:
-					return targetBinding instanceof Enumeration;
+					result = targetBinding instanceof Enumeration;
+					break;
 				case EnumerationEntry:
-					return targetBinding instanceof EnumerationEntry;
+					result = targetBinding instanceof EnumerationEntry;
+					break;
+			}
+			if(result){
+				return result;
 			}
 		}
 		return false;
