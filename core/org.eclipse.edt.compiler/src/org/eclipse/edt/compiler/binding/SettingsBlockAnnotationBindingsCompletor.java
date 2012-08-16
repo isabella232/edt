@@ -109,7 +109,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			}
 
 			public boolean visit(AnnotationExpression annotationExpression) {
-				Annotation ann = getAnnotation(annotationExpression);
+				Annotation ann = getAnnotation(annotationExpression, problemRequestor);
 				setAnnotationOnElement(annotationLeftHandScope.getTopLevelAnnotationLeftHandScope().getElementBeingAnnotated(), ann, annotationExpression);
 				
 				return false;
@@ -209,36 +209,8 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
     	expr.accept(visitor);
 		return valid[0];
     	
-    }
-
-	
-	
-	 
-	private Annotation getAnnotation(AnnotationExpression annotationExpression) {
-		
-		org.eclipse.edt.mof.egl.Type type = null;
-		
-		try {
-			type = bindTypeName(annotationExpression.getName());
-		} catch (ResolutionException e) {
-		}
-		
-		if (type == null || !(type instanceof AnnotationType)) {
-			problemRequestor.acceptProblem(annotationExpression, IProblemRequestor.NOT_AN_ANNOTATION,
-					new String[] { annotationExpression.getCanonicalString() });
-			annotationExpression.getName().setType(null);
-			return null;
-		}
-		
-		Annotation ann = (Annotation)((AnnotationType)type).newInstance();
-		annotationExpression.getName().setElement(ann);
-		annotationExpression.setType(type);
-		annotationExpression.setAnnotation(ann);
-		annotationExpression.setType(type);
-		return ann;
-		
-	}
-	
+    }	
+	 	
 	private void setAnnotationOnElement(Element elem, Annotation ann, AnnotationExpression annotationExpression) {
 		if (ann == null) {
 			return;
