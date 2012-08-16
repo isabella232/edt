@@ -1,6 +1,7 @@
 package org.eclipse.edt.compiler.binding;
 
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
+import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
@@ -18,15 +19,19 @@ import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SQLLiteral;
+import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.TypeLiteralExpression;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.utils.EList;
@@ -46,49 +51,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 	public Object getValue() {
 		return value;
 	}
-	
-	
-	
-//	public boolean visit(SimpleName simpleName) {
-//		IProblemRequestor oldPRequestor = problemRequestor;
-//		if (annotationIsResolvable) {
-//			if (annotationTypeIsTypeRef) {
-//				try {
-//					bindTypeName(simpleName);
-//				} catch (ResolutionException e) {
-//					oldPRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e
-//							.getInserts());
-//				}
-//			} else {
-//				simpleName.setBinding(IBinding.NOT_FOUND_BINDING);
-//			}
-//			return false;
-//		}
-//		boolean result = super.visit(simpleName);
-//		problemRequestor = oldPRequestor;
-//		return result;
-//	}
-//
-//	public boolean visit(QualifiedName qualifiedName) {
-//		IProblemRequestor oldPRequestor = problemRequestor;
-//		if (annotationIsResolvable) {
-//			if (annotationTypeIsTypeRef) {
-//				try {
-//					bindTypeName(qualifiedName);
-//				} catch (ResolutionException e) {
-//					oldPRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e
-//							.getInserts());
-//				}
-//			} else {
-//				qualifiedName.setBinding(IBinding.NOT_FOUND_BINDING);
-//			}
-//			return false;
-//		}
-//		boolean result = super.visit(qualifiedName);
-//		problemRequestor = oldPRequestor;
-//		return result;
-//	}
-//
+		
 	public void endVisit(SimpleName simpleName) {
 		if (simpleName.resolveElement() != null) {
 			value = simpleName.resolveElement();
@@ -308,27 +271,28 @@ public class AnnotationValueGatherer extends DefaultBinder{
 		return false;
 	}
 
-//	public boolean visit(SetValuesExpression setValuesExpression) {
-//		Expression expr = setValuesExpression.getExpression();
-//		expr.accept(new ExpressionVisitor(partBinding));
-//		IDataBinding dataBinding = expr.resolveDataBinding();
-//		if (dataBinding != null && dataBinding != IBinding.NOT_FOUND_BINDING && dataBinding.isAnnotationBinding()) {
-//			value = dataBinding;
-//			
-//			Scope sysScope = SettingsBlockAnnotationBindingsCompletor.getSystemScope(currentScope);
-//			if (sysScope == null) {
-//				sysScope = NullScope.INSTANCE;
-//			}
-//			AnnotationLeftHandScope newScope = new AnnotationLeftHandScope(sysScope, dataBinding, dataBinding.getType(),
-//					dataBinding, -1, partBinding);
-//			SettingsBlockAnnotationBindingsCompletor completor = new SettingsBlockAnnotationBindingsCompletor(currentScope,
-//					partBinding, newScope, dependencyRequestor, problemRequestor, compilerOptions);
-//			setValuesExpression.getSettingsBlock().accept(completor);
-//
-//			expr.setTypeBinding(dataBinding.getType());
-//		}
-//		return false;
-//	}
+	public boolean visit(SetValuesExpression setValuesExpression) {
+		
+		Expression expr = setValuesExpression.getExpression();
+		if (expr instanceof AnnotationExpression) {
+			AnnotationExpression annotationExpression = (AnnotationExpression) expr;
+			Annotation ann = getAnnotation(annotationExpression, problemRequestor);
+			if (ann != null) {
+				AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, ann, (AnnotationType)ann.getEClass(), ann);
+				SettingsBlockAnnotationBindingsCompletor completor = new SettingsBlockAnnotationBindingsCompletor(currentScope, currentBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
+				setValuesExpression.getSettingsBlock().accept(completor);
+				value = ann;
+			}
+		}
+		else {
+			problemRequestor.acceptProblem(setValuesExpression, IProblemRequestor.INVALID_EXPRESSION_DATA_ACCESS_OR_STRING_LITERAL);
+			setValuesExpression.getExpression().setBindAttempted(true);
+			setBindAttemptedForNames(setValuesExpression.getSettingsBlock());
+		}
+		
+		return false;
+		
+	}
 	
 	public boolean visit(ArrayLiteral arrayLiteral) {
 		EList<Object> entries = new EList<Object>();
