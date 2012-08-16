@@ -85,7 +85,17 @@ public class ServiceInterfaceValidatorUtil {
 	}
 
 	public static boolean isTypeValidInServicesAndProxy(Type typeBinding){
-		return (TypeUtils.isPrimitive(typeBinding) && !TypeUtils.isReferenceType(typeBinding)) ||
+		return ((typeBinding.equals(TypeUtils.Type_SMALLINT) ||
+				typeBinding.equals(TypeUtils.Type_INT) ||
+				typeBinding.equals(TypeUtils.Type_BIGINT) ||
+				typeBinding.equals(TypeUtils.Type_DECIMAL) ||
+				typeBinding.equals(TypeUtils.Type_SMALLFLOAT) ||
+				typeBinding.equals(TypeUtils.Type_FLOAT) ||
+				typeBinding.equals(TypeUtils.Type_DATE) ||
+				typeBinding.equals(TypeUtils.Type_TIME) ||
+				typeBinding.equals(TypeUtils.Type_TIMESTAMP) ||
+				typeBinding.equals(TypeUtils.Type_STRING) ||
+				typeBinding.equals(TypeUtils.Type_BOOLEAN)) && !TypeUtils.isReferenceType(typeBinding)) ||
 				typeBinding instanceof Record ||
 				typeBinding instanceof Handler;
 	}
