@@ -12,13 +12,14 @@
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
+import egl.lang.reflect.Dynamic;
 import egl.lang.reflect.mof.Operation;
 
 /**
  * EAny represents EGL's "any" type.  It is the supertype of all other types,
  * and as the name implies it can hold any kind of value.
  */
-externalType EAny type ClassType
+externalType EAny type ClassType {@Dynamic}
 	/**
 	 * EAny has no default value.
 	 */
