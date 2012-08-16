@@ -49,6 +49,7 @@ import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EDataType;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.MofFactory;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstantField;
@@ -520,8 +521,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
                 Part part = BindingUtil.getPart(packageBinding.resolveType(identifier));
                 
                 if(part != null){
-                	//FIXME resull is a list so it can't be an IPartBinding. I added a null check to prevent a NPE jv 
-	                if(result != null && ((IPartBinding)result).isPrivate() && (!NameUtile.equals(((IPartBinding)result).getPackageName(), packageName))){
+	                if((part.getAccessKind() == AccessKind.ACC_PRIVATE) && (!NameUtile.equals(part.getPackageName(), packageName))){
 	                    result = null;
 	                }
 	                else {
