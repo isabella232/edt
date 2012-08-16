@@ -2,7 +2,9 @@ package org.eclipse.edt.compiler.binding;
 
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.impl.InternalEObject;
 
 public class IRPartBinding implements IPartBinding {
 
@@ -80,8 +82,20 @@ public class IRPartBinding implements IPartBinding {
 
 	@Override
 	public void clear() {
-		// TODO clear the slots of the IR part
-
+		
+		if (irPart ==  null) {
+			return;
+		}
+		
+		EClass eclass = irPart.getEClass();
+		String name = irPart.getCaseSensitiveName();
+		String pkg = irPart.getCaseSensitivePackageName();
+		((InternalEObject)irPart).setSlots(null);
+		eclass.initialize(irPart);
+		
+		irPart.setName(name);
+		irPart.setPackageName(pkg);
+		BindingUtil.setValid(irPart, false);
 	}
 
 	@Override
