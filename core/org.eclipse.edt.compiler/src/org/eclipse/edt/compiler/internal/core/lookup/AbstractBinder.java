@@ -520,7 +520,8 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
                 Part part = BindingUtil.getPart(packageBinding.resolveType(identifier));
                 
                 if(part != null){
-	                if(((IPartBinding)result).isPrivate() && (!NameUtile.equals(((IPartBinding)result).getPackageName(), packageName))){
+                	//FIXME resull is a list so it can't be an IPartBinding. I added a null check to prevent a NPE jv 
+	                if(result != null && ((IPartBinding)result).isPrivate() && (!NameUtile.equals(((IPartBinding)result).getPackageName(), packageName))){
 	                    result = null;
 	                }
 	                else {
