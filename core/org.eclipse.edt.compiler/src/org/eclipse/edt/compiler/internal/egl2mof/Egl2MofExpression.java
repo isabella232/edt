@@ -622,6 +622,34 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			
 		name.setId(binding.getCaseSensitiveName());
 		
+		Element qualifier = null;
+		
+		if(binding.getContainer() instanceof Library){
+			Node statementContainer = node.getParent();
+			while(!(statementContainer instanceof org.eclipse.edt.compiler.core.ast.Part) 
+					&& statementContainer != null){
+				statementContainer = statementContainer.getParent(); 
+			}
+			if(statementContainer instanceof org.eclipse.edt.compiler.core.ast.Part && 
+					!mofTypeFor((Library)binding.getContainer()).equals(mofTypeFor(((org.eclipse.edt.compiler.core.ast.Part)statementContainer).getName().resolveType()))){
+				qualifier = binding.getContainer();
+			}
+		}
+		
+		if (qualifier == null && binding instanceof Enumeration) {
+//			name = (Name)addQualifier(createNameForPart(((Enumeration)binding).getcDeclaringPart()), name);
+		}
+		
+		if (qualifier != null) {
+			
+			if (qualifier instanceof Library ) {
+				name = (Name)addQualifier(createNameForPart((Library)qualifier), name);
+			}
+			else {
+				Element context = (Element)getEObjectFor(qualifier);
+				name = (Name)addQualifier(context, name);
+			}
+		}
 		if (name instanceof MemberName) {
 			if (isSuperTypeMember(binding)) {
 				ThisExpression thisExpr = factory.createThisExpression();
