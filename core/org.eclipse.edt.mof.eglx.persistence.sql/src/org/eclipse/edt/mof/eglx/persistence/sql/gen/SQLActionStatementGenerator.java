@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.eglx.persistence.sql.gen;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
+import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.core.ast.InlineSQLStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.WithExpressionClause;
@@ -38,6 +39,11 @@ public class SQLActionStatementGenerator extends AbstractElementGenerator {
 	@SuppressWarnings("unchecked")
 	private void doCommonVisit(org.eclipse.edt.compiler.core.ast.Statement node, final SqlActionStatement stmt) {
 		node.accept(new AbstractASTExpressionVisitor() {
+			public boolean visit(FromOrToExpressionClause clause) {
+				clause.getExpression().accept(SQLActionStatementGenerator.this);
+				stmt.setDataSource((Expression) stack.pop());
+				return false;
+			}
 			public boolean visit(WithInlineSQLClause sqlStmt) {
 				String sql = sqlStmt.getSqlStmt().getValue();
 				stmt.setHasExplicitSql(true);
@@ -60,7 +66,7 @@ public class SQLActionStatementGenerator extends AbstractElementGenerator {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.AddStatement node) {
-		SqlAddStatement stmt = factory.createSqlAddStatement();
+		final SqlAddStatement stmt = factory.createSqlAddStatement();
 		stack.push(stmt);
 		doCommonVisit(node, stmt);
 		return false;
