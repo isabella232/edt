@@ -88,9 +88,14 @@ public class ExternalTypeBinding extends PartBinding {
 				ITypeBinding typeBinding = realizeTypeBinding((ITypeBinding) iter.next(), getEnvironment());
 				
 				if(!typesAlreadyProcessed.contains(typeBinding)) {
-					if(typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {					
+					if(typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING ) {					
 						result.add(typeBinding);
 						result.addAll(((ExternalTypeBinding) typeBinding).getExtendedTypes(typesAlreadyProcessed));
+					}
+					else {
+						if(typeBinding.getKind() == ITypeBinding.CLASS_BINDING) {					
+							result.add(typeBinding);
+						}
 					}
 				}
 			}
@@ -134,9 +139,19 @@ public class ExternalTypeBinding extends PartBinding {
     		List extendedTypes = getExtendedTypes();
     		boolean hasEnvironment = (getEnvironment() != null);
     		for(Iterator iter = extendedTypes.iterator(); iter.hasNext();) {
-    			ExternalTypeBinding et = (ExternalTypeBinding) iter.next();
-    			tempDeclaredAndInheritedFunctions.addAll(et.getDeclaredFunctions());
-    			hasEnvironment = hasEnvironment && (et.getEnvironment() != null);
+    			ITypeBinding typeBinding = (ITypeBinding)iter.next();
+    			if (typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
+	    			ExternalTypeBinding et = (ExternalTypeBinding) typeBinding;
+	    			tempDeclaredAndInheritedFunctions.addAll(et.getDeclaredFunctions());
+	    			hasEnvironment = hasEnvironment && (et.getEnvironment() != null);
+    			}
+    			else {
+        			if (typeBinding.getKind() == ITypeBinding.CLASS_BINDING) {
+    	    			EGLClassBinding eg = (EGLClassBinding) typeBinding;
+    	    			tempDeclaredAndInheritedFunctions.addAll(eg.getDeclaredFunctions());
+    	    			hasEnvironment = hasEnvironment && (eg.getEnvironment() != null);
+        			}
+    			}
     		}
     		
     		if (hasEnvironment) {
@@ -157,9 +172,20 @@ public class ExternalTypeBinding extends PartBinding {
     		List extendedTypes = getExtendedTypes();
     		boolean hasEnvironment = (getEnvironment() != null);
     		for(Iterator iter = extendedTypes.iterator(); iter.hasNext();) {
-    			ExternalTypeBinding et = (ExternalTypeBinding) iter.next();
-    			tempDeclaredAndInheritedData.addAll(et.getDeclaredData());
-    			hasEnvironment = hasEnvironment && (et.getEnvironment() != null);
+    			
+    			ITypeBinding typeBinding = (ITypeBinding) iter.next();
+    			if (typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
+	    			ExternalTypeBinding et = (ExternalTypeBinding) typeBinding;
+	    			tempDeclaredAndInheritedData.addAll(et.getDeclaredData());
+	    			hasEnvironment = hasEnvironment && (et.getEnvironment() != null);
+    			}
+    			else {
+    				if (typeBinding.getKind() == ITypeBinding.CLASS_BINDING) {
+    	    			EGLClassBinding eg = (EGLClassBinding) typeBinding;
+    	    			tempDeclaredAndInheritedData.addAll(eg.getDeclaredData());
+    	    			hasEnvironment = hasEnvironment && (eg.getEnvironment() != null);
+    				}
+    			}
     		}
     		if (hasEnvironment) {
     			declaredAndInheritedData = tempDeclaredAndInheritedData;

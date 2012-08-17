@@ -137,7 +137,7 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 			if(extendedType != null && IBinding.NOT_FOUND_BINDING != extendedType) {
 				boolean typeIsValid = false;
 				
-				if(ITypeBinding.EXTERNALTYPE_BINDING == extendedType.getKind()) {
+				if(ITypeBinding.EXTERNALTYPE_BINDING == extendedType.getKind() || ITypeBinding.CLASS_BINDING == extendedType.getKind()) {
 					typeIsValid = true;
 				}
 				
