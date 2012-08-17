@@ -1004,6 +1004,25 @@ public class TypeCompatibilityUtil {
 			}
 		}
 
+		if(ITypeBinding.EXTERNALTYPE_BINDING == targetType.getKind()) {
+			if(ITypeBinding.CLASS_BINDING == sourceType.getKind()) {
+				if(((EGLClassBinding) sourceType).getExtendedHierarchy().contains(targetType) ||
+				   ((ExternalTypeBinding) targetType).getExtendedTypes().contains(sourceType)) {
+					return true;
+				}
+			}
+		}
+		
+
+		if(ITypeBinding.CLASS_BINDING == targetType.getKind()) {
+			if(ITypeBinding.EXTERNALTYPE_BINDING == sourceType.getKind()) {
+				if(((ExternalTypeBinding) sourceType).getExtendedTypes().contains(targetType) ||
+				   ((EGLClassBinding) targetType).getExtendedHierarchy().contains(sourceType)) {
+					return true;
+				}
+			}
+		}
+		
 		if(ITypeBinding.DELEGATE_BINDING == targetType.getKind()) {
 			if(ITypeBinding.DELEGATE_BINDING == sourceType.getKind()) {
 				return functionSignituresAreIdentical(
@@ -1065,12 +1084,12 @@ public class TypeCompatibilityUtil {
 	}
 	
 	public static boolean areCompatibleExceptions(ITypeBinding sourceType, ITypeBinding targetType, ICompilerOptions compilerOptions) {
-		if( AbstractBinder.typeIs(targetType, new String[] {"egl", "core"}, "AnyException")) {
-			return sourceType.getAnnotation(new String[] {"egl", "core"}, "Exception") != null;
+		if( AbstractBinder.typeIs(targetType, new String[] {"eglx", "lang"}, "AnyException")) {
+			return sourceType.getAnnotation(new String[] {"eglx", "lang"}, "Exception") != null;
 		}
 		
-		if( AbstractBinder.typeIs(sourceType, new String[] {"egl", "core"}, "AnyException")) {
-			return targetType.getAnnotation(new String[] {"egl", "core"}, "Exception") != null;
+		if( AbstractBinder.typeIs(sourceType, new String[] {"eglx", "lang"}, "AnyException")) {
+			return targetType.getAnnotation(new String[] {"eglx", "lang"}, "Exception") != null;
 		}		
 		return false;
 	}
