@@ -81,15 +81,6 @@ public class SQLExtension implements ICompilerExtension {
 				return false;
 			};
 			@Override
-			public boolean visit(AddStatement stmt) {
-				if (!result[0]) {
-					for (Expression e : stmt.getTargets()) {
-						result[0] = Utils.isSQLDataSource(exprToType(e)) || Utils.isSQLResultSet(exprToType(e));
-					}
-				}
-				return false;
-			};
-			@Override
 			public boolean visit(CloseStatement stmt) {
 				if (!result[0]) {
 					result[0] = Utils.isSQLDataSource(exprToType(stmt.getExpr())) || Utils.isSQLResultSet(exprToType(stmt.getExpr()));
