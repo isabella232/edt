@@ -141,8 +141,8 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 					Annotation ann = (Annotation) annotationLeftHandScope.getElementBeingAnnotated();
 					AnnotationType annType = (AnnotationType)ann.getEClass();
 					if (annType.getEFields().size() == 1) {
-						Object obj = getValue(expression, ann, annType.getAllEFields().get(0));
-						setValueIntoAnnotation(obj, expression, ann, annType.getAllEFields().get(0));
+						Object obj = getValue(expression, ann, annType.getEFields().get(0));
+						setValueIntoAnnotation(obj, expression, ann, annType.getEFields().get(0));
 					}
 					else {
 						problemRequestor.acceptProblem(expression, IProblemRequestor.POSITIONAL_PROPERTY_NOT_VALID_FOR,
