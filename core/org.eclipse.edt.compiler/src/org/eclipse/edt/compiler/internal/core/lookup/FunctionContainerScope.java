@@ -87,4 +87,9 @@ public class FunctionContainerScope extends Scope {
     protected List<Member> findMemberInPart(String id) {
     	return BindingUtil.findMembers(functionContainerBinding, id);
     }
+    
+    @Override
+    public Type getType() {
+    	return functionContainerBinding;
+    }
 }

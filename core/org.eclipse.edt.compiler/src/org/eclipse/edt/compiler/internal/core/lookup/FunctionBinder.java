@@ -158,7 +158,6 @@ public class FunctionBinder extends DefaultBinder {
             constantValue = getConstantValue(initializer); 
         }
         
-        boolean annotationFoundUsingScope = false;
         for (Name name : names) {
             String dataName = name.getIdentifier();
             
@@ -190,7 +189,7 @@ public class FunctionBinder extends DefaultBinder {
             name.setType(typeBinding);
             
             if (settingsBlock != null) {
-                Scope scope = new MemberScope(getSystemScope(currentScope), field);
+                Scope scope = new MemberScope(NullScope.INSTANCE, field);
                 AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(scope, field, typeBinding, field);
                 settingsBlock.accept(
                         new SettingsBlockAnnotationBindingsCompletor(currentScope, partBinding, annotationScope,
@@ -199,13 +198,6 @@ public class FunctionBinder extends DefaultBinder {
         }
     }
     
-    private Scope getSystemScope(Scope scope) {
-		while(!(scope instanceof SystemScope)) {
-			scope = scope.getParentScope();
-		}
-		return scope;
-	}
-
 	public void endVisit(TopLevelFunction topLevelFunction) {
 	}
     

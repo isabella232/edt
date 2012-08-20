@@ -50,5 +50,10 @@ public class RecordScope extends Scope {
     public Part getPart() {
     	return record;
     }
+    
+    @Override
+    public Type getType() {
+    	return record;
+    }
 
 }

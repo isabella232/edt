@@ -44,4 +44,9 @@ public class EnumerationScope extends Scope {
     public Enumeration getPart() {
     	return enumeration;
     }
+    
+    @Override
+    public Type getType() {
+    	return enumeration;
+    }
 }

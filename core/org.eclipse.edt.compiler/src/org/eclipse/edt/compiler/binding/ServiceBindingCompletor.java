@@ -57,6 +57,7 @@ public class ServiceBindingCompletor extends FunctionContainerBindingCompletor {
     		}
     	}
         
+        setDefaultSuperType();
         return true;
     }
 

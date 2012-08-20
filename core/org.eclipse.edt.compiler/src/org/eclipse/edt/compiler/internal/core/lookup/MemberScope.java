@@ -52,4 +52,12 @@ public class MemberScope extends Scope {
 		return BindingUtil.findMembers(type, simpleName);		
 	}
 
+	@Override
+	public Type getType() {
+		return member.getType();
+	}
+	
+	public Member getMember() {
+		return member;
+	}
 }

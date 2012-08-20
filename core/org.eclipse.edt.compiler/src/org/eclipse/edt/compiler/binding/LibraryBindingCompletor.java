@@ -41,7 +41,8 @@ public class LibraryBindingCompletor extends FunctionContainerBindingCompletor {
         if (library.isPrivate()) {
         	libraryBinding.setAccessKind(AccessKind.ACC_PRIVATE);
         }        
-        return true;
+       setDefaultSuperType();
+       return true;
     }
  
     protected StereotypeType getDefaultStereotypeType() {

@@ -30,11 +30,11 @@ import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -52,6 +52,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.SubType;
 
 
 public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
@@ -73,6 +74,42 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		}		
 	}
 
+	private static class LHSBinder extends Binder {
+
+		public LHSBinder(Scope currentScope, Part currentBinding,
+				IDependencyRequestor dependencyRequestor,
+				IProblemRequestor problemRequestor,
+				ICompilerOptions compilerOptions) {
+			super(currentScope, currentBinding, dependencyRequestor, problemRequestor,
+					compilerOptions);
+		}	
+		
+		public boolean visit(org.eclipse.edt.compiler.core.ast.ThisExpression thisExpression) {
+			if (currentScope.getType() != null) {
+				thisExpression.setType(currentScope.getType());
+				return false;
+			}
+			return super.visit(thisExpression);
+		}
+
+		public boolean visit(org.eclipse.edt.compiler.core.ast.SuperExpression superExpression) {
+			if (currentScope.getType() != null) {
+				
+				Classifier classifier = currentScope.getType().getClassifier();
+				if (classifier instanceof SubType) {
+					SubType sub = (SubType) classifier;
+					if (sub.getSuperTypes().size() > 0) {
+						superExpression.setType(sub.getSuperTypes().get(0));
+						return false;
+					}
+				}
+			}
+			return super.visit(superExpression);
+		}
+
+		
+	}
+
 	public SettingsBlockAnnotationBindingsCompletor(Scope currentScope, Part partBinding,
 			AnnotationLeftHandScope annotationLeftHandScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor,
 			ICompilerOptions compilerOptions) {
@@ -80,7 +117,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		this.partBinding = partBinding;
 		this.annotationLeftHandScope = annotationLeftHandScope;
 		rhsBinder = new Binder(currentScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions);
-		lhsBinder = new Binder(annotationLeftHandScope.getScopeToUseWhenResolving(), partBinding, dependencyRequestor, problemRequestor, compilerOptions);
+		lhsBinder = new LHSBinder(annotationLeftHandScope.getTopLevelAnnotationLeftHandScope().getScopeToUseWhenResolving(), partBinding, dependencyRequestor, problemRequestor, compilerOptions);
 	}
 
 	public boolean visit(SettingsBlock settingsBlock) {

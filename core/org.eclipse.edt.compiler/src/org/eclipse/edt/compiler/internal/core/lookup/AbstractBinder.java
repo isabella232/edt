@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.SettingsBlockAnnotationBindingsCompletor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
@@ -810,7 +809,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
              if (classDataDeclaration.hasSettingsBlock()) {
                 if (name.resolveMember() != null) {
                     Member member = name.resolveMember();
-                    Scope scope = new MemberScope(currentScope, member);
+                    Scope scope = new MemberScope(NullScope.INSTANCE, member);
                     AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(scope, member, member.getType(), member);
                     Scope fcScope = functionContainerScope;
                     classDataDeclaration.getSettingsBlockOpt().accept(
@@ -850,11 +849,17 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 			return null;
 		}
 		
-		Annotation ann = (Annotation)((AnnotationType)type).newInstance();
-		annotationExpression.getName().setElement(ann);
+		Annotation ann;
+		if (annotationExpression.getName().resolveElement() instanceof Annotation) {
+			ann = (Annotation)annotationExpression.getName().resolveElement();
+		}
+		else {
+			ann = (Annotation)((AnnotationType)type).newInstance();
+			annotationExpression.getName().setElement(ann);
+			annotationExpression.setAnnotation(ann);
+		}
 		annotationExpression.setType(type);
-		annotationExpression.setAnnotation(ann);
-		annotationExpression.setType(type);
+		annotationExpression.getName().setType(type);
 		return ann;
 		
 	}

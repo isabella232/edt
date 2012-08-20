@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.MemberScope;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.RecordScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -82,7 +83,7 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
     					final Field fld = field;
      					IASTVisitor sbVisitor = new DefaultASTVisitor() {
     				        public boolean visit(SettingsBlock settingsBlock) {
-    				        	Scope fieldScope = new MemberScope(currentScope, fld);
+    				        	Scope fieldScope = new MemberScope(NullScope.INSTANCE, fld);
     				            AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(fieldScope, fld, fld.getType(), fld);
     				            settingsBlock.accept(new SettingsBlockAnnotationBindingsCompletor(new RecordScope(currentScope, recordBinding), recordBinding, annotationScope, dependencyRequestor,
     				                    problemRequestor, compilerOptions));
