@@ -69,4 +69,8 @@ public abstract class Scope {
 	public EnvironmentScope getEnvironmentScope() {
 		return parentScope.getEnvironmentScope();
 	}
+	
+	public Type getType() {
+		return null;
+	}
 }

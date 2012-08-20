@@ -69,6 +69,7 @@ public class EGLClassBindingCompletor extends FunctionContainerBindingCompletor 
     		}
     	}		
 		
+        setDefaultSuperType();
         return true;
     }
     

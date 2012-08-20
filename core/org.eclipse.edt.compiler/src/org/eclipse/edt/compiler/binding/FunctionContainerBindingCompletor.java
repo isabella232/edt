@@ -34,6 +34,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
@@ -92,9 +93,13 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
         return partSubTypeAndAnnotationCollector;
     }
 
+    void setDefaultSuperType() {
+    	
+		BindingUtil.setDefaultSupertype((StructPart)functionContainerBinding, getPartSubTypeAndAnnotationCollector().getStereotype(), getDefaultSuperType());
+    }
+    
     void endVisitFunctionContainer(Part part) {
     	irBinding.setValid(true);
-		BindingUtil.setDefaultSupertype((StructPart)functionContainerBinding, getDefaultSuperType());
     }
     
     StructPart getDefaultSuperType() {
@@ -214,9 +219,10 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     
     protected void processSettingsBlocks() {
         processDataDeclarationsSettingsBlocks();
+        
         if (getPartSubTypeAndAnnotationCollector().getSettingsBlocks().size() > 0) {
-            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, functionContainerBinding,
-                    functionContainerBinding, functionContainerBinding);
+        	FunctionContainerScope funcContScope = new FunctionContainerScope(NullScope.INSTANCE, functionContainerBinding);
+            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(funcContScope, functionContainerBinding, functionContainerBinding, functionContainerBinding);
             //If the part type is specified on the part (as opposed to with an
             // annotation),
             //then create an annotation scope to handle resolution of subtype
@@ -356,7 +362,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     	((StructPart)functionContainerBinding).getConstructors().add(constructorBinding);
     	
     	if (constructor.hasSettingsBlock()) {
-            FunctionScope functionScope = new FunctionScope(currentScope, constructorBinding);
+            FunctionScope functionScope = new FunctionScope(NullScope.INSTANCE, constructorBinding);
             AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding);
             SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, functionContainerBinding, scope,
                     dependencyRequestor, problemRequestor, compilerOptions);

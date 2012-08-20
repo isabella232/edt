@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
@@ -97,7 +98,7 @@ public class FunctionBindingCompletor extends AbstractBinder {
             }
 
             public boolean visit(SettingsBlock settingsBlock) {
-                FunctionScope functionScope = new FunctionScope(currentScope, functionBinding);
+                FunctionScope functionScope = new FunctionScope(NullScope.INSTANCE, functionBinding);
                 AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, functionBinding, null, functionBinding);
                 SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, partBinding, scope,
                         dependencyRequestor, problemRequestor, compilerOptions);

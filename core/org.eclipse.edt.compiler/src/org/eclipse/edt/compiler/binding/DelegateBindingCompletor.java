@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,16 +22,15 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
+import org.eclipse.edt.compiler.internal.core.lookup.DelegateScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 /**
@@ -116,7 +114,8 @@ public class DelegateBindingCompletor extends AbstractBinder {
     }
 
     public boolean visit(SettingsBlock settingsBlock) {
-        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, delegateBinding, delegateBinding, delegateBinding);
+    	DelegateScope delScope = new DelegateScope(NullScope.INSTANCE, delegateBinding);
+        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(delScope, delegateBinding, delegateBinding, delegateBinding);
         SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, delegateBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
         settingsBlock.accept(blockCompletor);
         return false;

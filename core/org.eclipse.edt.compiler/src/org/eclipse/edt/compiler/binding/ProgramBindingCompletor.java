@@ -49,6 +49,7 @@ public class ProgramBindingCompletor extends FunctionContainerBindingCompletor {
         }
         programBinding.setIsCallable(program.isCallable());
                 
+        setDefaultSuperType();
         return true;
     }  
     

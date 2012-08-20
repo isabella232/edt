@@ -45,6 +45,7 @@ public class InterfaceBindingCompletor extends FunctionContainerBindingCompletor
     	}
 
         processExtends(interfaceAST);
+        setDefaultSuperType();
         
     	return true;
     }

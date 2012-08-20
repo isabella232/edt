@@ -48,6 +48,7 @@ public class ExternalTypeBindingCompletor extends FunctionContainerBindingComple
         
         processExtends(externalType);
     	
+    	setDefaultSuperType();
         return true;
     }
     
