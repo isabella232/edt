@@ -66,6 +66,7 @@ import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.MultiOperandExpression;
 import org.eclipse.edt.mof.egl.Name;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.NumericLiteral;
@@ -603,7 +604,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.SimpleName node) {
-		Member binding = node.resolveMember();
+		Element binding = (Element)node.resolveElement(); 
 		// Since there was no binding this is an invalid name
 		if (binding == null) {
 			Name invalid;
@@ -618,21 +619,31 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			stack.push(invalid);
 			return false;
 		}
-		Name name = factory.createMemberName();
-			
-		name.setId(binding.getCaseSensitiveName());
 		
+		Name name;
+		if (binding instanceof Part) {
+			name = createNameForPart((Part)binding);
+			name.setId(((Part)binding).getCaseSensitiveName());
+		}
+		else {
+			name = factory.createMemberName();
+			if(binding instanceof NamedElement){
+				name.setId(((NamedElement)binding).getCaseSensitiveName());
+			}
+		}
+			
 		Element qualifier = null;
 		
-		if(binding.getContainer() instanceof Library){
+		if(binding instanceof Member &&
+				((Member)binding).getContainer() instanceof Library){
 			Node statementContainer = node.getParent();
 			while(!(statementContainer instanceof org.eclipse.edt.compiler.core.ast.Part) 
 					&& statementContainer != null){
 				statementContainer = statementContainer.getParent(); 
 			}
 			if(statementContainer instanceof org.eclipse.edt.compiler.core.ast.Part && 
-					!mofTypeFor((Library)binding.getContainer()).equals(mofTypeFor(((org.eclipse.edt.compiler.core.ast.Part)statementContainer).getName().resolveType()))){
-				qualifier = binding.getContainer();
+					!mofTypeFor((Library)((Member)binding).getContainer()).equals(mofTypeFor(((org.eclipse.edt.compiler.core.ast.Part)statementContainer).getName().resolveType()))){
+				qualifier = ((Member)binding).getContainer();
 			}
 		}
 		
@@ -671,11 +682,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName name) {
-		EObject objType = mofTypeFor(name.getQualifier().resolveType());
-		Type type = null;
-		if (objType instanceof Type) {
-			type = (Type)mofTypeFor(name.getQualifier().resolveType());
-		}
+		Type type = name.getQualifier().resolveType();
 		if (TypeUtils.isDynamicType(type)) {
 			DynamicAccess expr = factory.createDynamicAccess();
 			setElementInformation(name, expr);
@@ -693,7 +700,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			nameExpr.setId(name.getCaseSensitiveIdentifier());
 			
 			Element qualBinding = (Element)name.getQualifier().resolveElement();
-			if (qualBinding instanceof Part) {
+			if (qualBinding instanceof Part &&
+					!(qualBinding instanceof Library)) {
 				nameExpr.setQualifier(createNameForPart((Part)qualBinding));
 			}
 			else {
