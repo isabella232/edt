@@ -182,10 +182,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected void createAnnotations(Part binding, Element eClass) {
-		Annotation subtype = binding.getSubType();
-		for (Annotation annotation : binding.getAnnotations()) {
-			if (subtype != null && subtype.equals(annotation)) continue;
-			if (!(eClass instanceof Element)) {
+		if (eClass instanceof Element) {
+			Annotation subtype = binding.getSubType();
+			for (Annotation annotation : binding.getAnnotations()) {
+				if (subtype != null && ((Element)eClass).getAnnotation(subtype.getEClass().getETypeSignature()) != null) continue;
 				((Element)eClass).addAnnotation(annotation);
 			}
 		}
