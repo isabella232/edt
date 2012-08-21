@@ -11,14 +11,10 @@
  *******************************************************************************/
 package eglx.ui.rui;
 
-Record RUIHandler type Annotation
-	{
-		targets = [ElementKind.handlerPart],
-		@Stereotype
-			{defaultSuperType=View},
-		validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIHandlerAnnotationTypeBinding"
-	}
-	
+Record RUIHandler type Annotation {
+	targets = [ElementKind.handlerPart],
+	@Stereotype{defaultSuperType=View}
+}
 	onConstructionFunction FunctionMemberRef;
 	includeFile String;
 	cssFile String;
@@ -28,8 +24,7 @@ end
 
 Record RUIWidget type Annotation {
 	targets = [ElementKind.handlerPart],
-	@Stereotype{defaultSuperType=Widget},
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIWidgetAnnotationTypeBinding"	
+	@Stereotype{defaultSuperType=Widget}
 }
 	tagName String;
 	onConstructionFunction FunctionMemberRef;
@@ -41,7 +36,7 @@ Record RUIPropertiesLibrary type Annotation
 {
 	targets = [ElementKind.libraryPart],
 	@Stereotype{defaultSuperType=NLSLibrary},
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIPropertiesLibraryAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIPropertiesLibraryAnnotationProxy"
 }
 	propertiesFile String;
 end

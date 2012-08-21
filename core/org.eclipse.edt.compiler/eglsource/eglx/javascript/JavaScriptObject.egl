@@ -24,7 +24,7 @@ Record JavaScriptObject type Annotation
 	 	 		// members of an ExternalType definition
 	 	 		memberAnnotations = [ Property ]
 			},
-		validationProxy = "org.eclipse.edt.compiler.binding.annotationType.JavaScriptObjectAnnotationTypeBinding"
+		validationProxy = "org.eclipse.edt.compiler.binding.annotationType.JavaScriptObjectAnnotationProxy"
 	}
 
 	relativePath String;

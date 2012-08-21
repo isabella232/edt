@@ -14,7 +14,7 @@ package eglx.rest;
 Record Rest type Annotation
 { 
 	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RestAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RestAnnotationProxy"
 }
 	method HttpMethod?;
 	uriTemplate string?;

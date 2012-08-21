@@ -16,29 +16,29 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.FieldContentValidationRule;
 import org.eclipse.edt.compiler.binding.PartSubTypeValidationProxy;
+import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaScriptObjectFieldTypeValidator;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author Harmon
  */
-//TODO rename this to JavaScriptObjectAnnotationProxy when the egl source is changed
-public class JavaScriptObjectAnnotationTypeBinding extends PartSubTypeValidationProxy {
+public class JavaScriptObjectAnnotationProxy extends PartSubTypeValidationProxy {
     public static final String name = NameUtile.getAsName("JavaScriptObject");
 
-    private static JavaScriptObjectAnnotationTypeBinding INSTANCE = new JavaScriptObjectAnnotationTypeBinding();
+    private static JavaScriptObjectAnnotationProxy INSTANCE = new JavaScriptObjectAnnotationProxy();
     
     private static final List<FieldContentValidationRule> subPartTypeAnnotations = new ArrayList();
     static {
-    	//TODO
-//    	subPartTypeAnnotations.add(new UserDefinedFieldContentAnnotationValidationRule(JavaScriptObjectFieldContentValidator.class));
+    	subPartTypeAnnotations.add(new UserDefinedFieldContentAnnotationValidationRule(JavaScriptObjectFieldTypeValidator.class));
     }
         
-    public JavaScriptObjectAnnotationTypeBinding() {
+    public JavaScriptObjectAnnotationProxy() {
         super(name);
     }
     
-    public static JavaScriptObjectAnnotationTypeBinding getInstance() {
+    public static JavaScriptObjectAnnotationProxy getInstance() {
         return INSTANCE;
     }
     

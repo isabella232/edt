@@ -14,7 +14,7 @@ package eglx.rest;
 Record EglService type Annotation
 { 
 	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EglServiceAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EglServiceAnnotationProxy"
 	
 }
 	serviceName string?;
