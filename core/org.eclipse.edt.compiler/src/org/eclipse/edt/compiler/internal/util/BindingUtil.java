@@ -865,7 +865,7 @@ public class BindingUtil {
 		return type instanceof ParameterizableType;
 	}
 	
-	public static void setDefaultSupertype(StructPart part, StructPart defaultSuperType) {
+	public static void setDefaultSupertype(StructPart part, Stereotype subType, StructPart defaultSuperType) {
 		List<StructPart> superTypes = part.getSuperTypes();
 		
 		//check if there is already a supertype that is not just an interface
@@ -876,7 +876,6 @@ public class BindingUtil {
 		}
 		
 		//check if there is a default supertype defined on the stereotype
-		Stereotype subType = part.getSubType();
 		if (subType != null && subType.getEClass() instanceof StereotypeType) {
 			StereotypeType clazz = (StereotypeType) subType.getEClass();
 			if (clazz.getDefaultSuperType() instanceof  StructPart) {

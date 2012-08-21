@@ -70,7 +70,6 @@ import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
-import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -134,7 +133,7 @@ class Egl2MofMember extends Egl2MofPart {
 		return false;
 	}
 
-	private void setMetadata(IDataBinding binding, EField field) {
+	private void setMetadata(Element binding, EField field) {
 		for (Annotation annotation : binding.getAnnotations()) {
 			field.getMetadataList().add((EMetadataObject)mofValueFrom(annotation));
 		}
@@ -371,7 +370,7 @@ class Egl2MofMember extends Egl2MofPart {
 		return false;
 	}
 
-	public void setUpMofTypedElement(EMember obj, Member edtObj) {
+	private void setUpMofTypedElement(EMember obj, Member edtObj) {
 		
 		if (edtObj.getType() instanceof EType) {
 			obj.setEType(edtObj.getType().getEClass());
@@ -425,7 +424,7 @@ class Egl2MofMember extends Egl2MofPart {
 
 	}
 	
-	public void processSettings(Element context, SettingsBlock settings) {
+	protected void processSettings(Element context, SettingsBlock settings) {
 		StatementBlock block = null;
 		int arrayIndex = 0;
 		for (Node expr : (List<Node>)settings.getSettings()) {
@@ -601,7 +600,7 @@ class Egl2MofMember extends Egl2MofPart {
 	/**
 	 * Evaluate an AST Expression in the MOF context
 	 */
-	public Object evaluateExpression(Node expr) {
+	private Object evaluateExpression(Node expr) {
 		Object value = null;
 		if (expr instanceof ArrayLiteral) {
 			value = new EList();
@@ -659,7 +658,7 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void executeSettings(Object context, SettingsBlock settings) {
+	private void executeSettings(Object context, SettingsBlock settings) {
 		if (settings == null) return;
 		for (Node setting : (List<Node>)settings.getSettings()) {
 			if (context instanceof List) {
@@ -710,16 +709,16 @@ class Egl2MofMember extends Egl2MofPart {
 		}
 	}
 	
-	public void setInitialValue(StructureItem node, EField field) {
+	protected void setInitialValue(StructureItem node, EField field) {
 		setInitialValue(node.getInitializer(), node.getSettingsBlock(), field);
 	}
 	
-	public void setInitialValue(ClassDataDeclaration node, EField field) {
+	protected void setInitialValue(ClassDataDeclaration node, EField field) {
 		setInitialValue(node.getInitializer(), node.getSettingsBlockOpt(), field);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void setInitialValue(org.eclipse.edt.compiler.core.ast.Expression initializer, SettingsBlock settings, EField field) {
+	private void setInitialValue(org.eclipse.edt.compiler.core.ast.Expression initializer, SettingsBlock settings, EField field) {
 		Object value = null;
 		if (initializer != null) {
 			
@@ -752,7 +751,7 @@ class Egl2MofMember extends Egl2MofPart {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean isInitializer(SettingsBlock settings) {
+	private boolean isInitializer(SettingsBlock settings) {
 		for (Node expr : (List<Node>)settings.getSettings()) {
 			if (expr instanceof org.eclipse.edt.compiler.core.ast.Assignment) {
 				// Check if this is an Annotation value
@@ -769,15 +768,15 @@ class Egl2MofMember extends Egl2MofPart {
 		return false;
 	}
 	
-	public void addInitializers(StructureItem node, Field field, Type type) {
+	private void addInitializers(StructureItem node, Field field, Type type) {
 		addInitializers(node.getInitializer(), node.getSettingsBlock(), field, type);
 	}
 	
-	public void addInitializers(ClassDataDeclaration node, Field field, Type type) {
+	private void addInitializers(ClassDataDeclaration node, Field field, Type type) {
 		addInitializers(node.getInitializer(), node.getSettingsBlockOpt(), field, type);
 	}
 	
-	public void addInitializers(org.eclipse.edt.compiler.core.ast.Expression initializer, SettingsBlock settingsBlock, Field field, Type type) {
+	protected void addInitializers(org.eclipse.edt.compiler.core.ast.Expression initializer, SettingsBlock settingsBlock, Field field, Type type) {
 		if (field.getType() == null) {
 			return;
 		}
@@ -814,13 +813,13 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 
 	
-	public AssignmentStatement createAssignmentStatement(Element context, Expression rhs) {
+	private AssignmentStatement createAssignmentStatement(Element context, Expression rhs) {
 		if (context instanceof Field) return createAssignmentStatement((Field)context, rhs);
 		else if (context instanceof Expression) return createAssignmentStatement((Expression)context, rhs);
 		else throw new IllegalArgumentException("Context " + context.toString() + " must be a Field or Expression");
 	}
 	
-	public AssignmentStatement createAssignmentStatement(Field field, Expression rhs) {
+	private AssignmentStatement createAssignmentStatement(Field field, Expression rhs) {
 		Assignment assign = factory.createAssignment();
 		assign.setRHS(rhs);
 		MemberName nameExpr = factory.createMemberName();
@@ -830,13 +829,13 @@ class Egl2MofMember extends Egl2MofPart {
 		return createAssignmentStatement(assign);
 	}
 		
-	public AssignmentStatement createAssignmentStatement(Assignment assign) {
+	protected AssignmentStatement createAssignmentStatement(Assignment assign) {
 		AssignmentStatement stmt = factory.createAssignmentStatement();
 		stmt.setExpr(assign);
 		return stmt;
 	}
 	
-	public LHSExpr addQualifier(Element context, LHSExpr expr) {
+	protected LHSExpr addQualifier(Element context, LHSExpr expr) {
 				
 		if (context instanceof Member) {
 			
@@ -853,24 +852,24 @@ class Egl2MofMember extends Egl2MofPart {
 		throw new IllegalArgumentException("Qualifier " + context.toString() + " must be a Member or Expression");
 	}
 	
-	public LHSExpr addQualifier(Member context, LHSExpr lhsExpr) {
+	private LHSExpr addQualifier(Member context, LHSExpr lhsExpr) {
 		MemberName qualifier = createMemberName(context);
 		return lhsExpr.addQualifier(qualifier);
 	}
 
 
-	public MemberName createMemberName(Member context) {
+	private MemberName createMemberName(Member context) {
 		MemberName mbrName = factory.createMemberName();
 		mbrName.setId(context.getCaseSensitiveName());
 		mbrName.setMember(context);
 		return mbrName;
 	}
 	
-	public LHSExpr addQualifier(Part context, Name nameExpr) {
+	private LHSExpr addQualifier(Part context, Name nameExpr) {
 		PartName qualifier = factory.createPartName();
 		qualifier.setId(context.getCaseSensitiveName());
 		qualifier.setType(context);
-		qualifier.setPackageName(context.getPackageName());
+		qualifier.setPackageName(context.getCaseSensitivePackageName());
 		return nameExpr.addQualifier(qualifier);
 	}
 	

@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.SettingsBlockAnnotationBindingsCompletor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
@@ -49,6 +49,9 @@ import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EDataType;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.MofFactory;
+import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstantField;
@@ -520,7 +523,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
                 Part part = BindingUtil.getPart(packageBinding.resolveType(identifier));
                 
                 if(part != null){
-	                if(((IPartBinding)result).isPrivate() && (!NameUtile.equals(((IPartBinding)result).getPackageName(), packageName))){
+	                if((part.getAccessKind() == AccessKind.ACC_PRIVATE) && (!NameUtile.equals(part.getPackageName(), packageName))){
 	                    result = null;
 	                }
 	                else {
@@ -806,7 +809,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
              if (classDataDeclaration.hasSettingsBlock()) {
                 if (name.resolveMember() != null) {
                     Member member = name.resolveMember();
-                    Scope scope = new MemberScope(currentScope, member);
+                    Scope scope = new MemberScope(NullScope.INSTANCE, member);
                     AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(scope, member, member.getType(), member);
                     Scope fcScope = functionContainerScope;
                     classDataDeclaration.getSettingsBlockOpt().accept(
@@ -829,5 +832,37 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     	}
     	return true;
     }
+    
+	protected Annotation getAnnotation(AnnotationExpression annotationExpression, IProblemRequestor problemRequestor) {
+		
+		org.eclipse.edt.mof.egl.Type type = null;
+		
+		try {
+			type = bindTypeName(annotationExpression.getName());
+		} catch (ResolutionException e) {
+		}
+		
+		if (type == null || !(type instanceof AnnotationType)) {
+			problemRequestor.acceptProblem(annotationExpression, IProblemRequestor.NOT_AN_ANNOTATION,
+					new String[] { annotationExpression.getCanonicalString() });
+			annotationExpression.getName().setType(null);
+			return null;
+		}
+		
+		Annotation ann;
+		if (annotationExpression.getName().resolveElement() instanceof Annotation) {
+			ann = (Annotation)annotationExpression.getName().resolveElement();
+		}
+		else {
+			ann = (Annotation)((AnnotationType)type).newInstance();
+			annotationExpression.getName().setElement(ann);
+			annotationExpression.setAnnotation(ann);
+		}
+		annotationExpression.setType(type);
+		annotationExpression.getName().setType(type);
+		return ann;
+		
+	}
+
     
 }

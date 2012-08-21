@@ -216,7 +216,6 @@ nonterminal List structureContent_star, structureContent_plus;
 nonterminal List whenClause_star, whenClause_plus;
 
 // Precedences
-precedence left QUESTION;
 precedence left OR;
 precedence left AND;
 precedence left IS, NOT, IN, LIKE, MATCHES;
@@ -238,6 +237,7 @@ precedence left DOT;
 precedence left RPAREN;		// For Casting
 precedence left LBRACKET;	// To prefer "(new type [])" over "(new type) []"
 precedence left LCURLY;		// To prefer "(new type) {}" over "(new type {})"
+precedence left QUESTION;
 
 // The overall structure of the file
 file

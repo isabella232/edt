@@ -86,11 +86,9 @@ import org.eclipse.edt.mof.utils.EList;
 @SuppressWarnings("unchecked")
 abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
-	protected static Map<String, MofSerializable> processed = new HashMap<String, MofSerializable>();
-	protected static Map<String, ProxyPart> proxyParts = new HashMap<String, ProxyPart>();
+	private static Map<String, MofSerializable> processed = new HashMap<String, MofSerializable>();
 	protected Stack<MofSerializable> partProcessingStack = new Stack<MofSerializable>();	
-	protected static String TempEClassMarker = "eze_temp";
-	protected static String[] reflectPackage = {"egl", "lang", "reflect"};
+	private static String TempEClassMarker = "eze_temp";
 
 	MofFactory mof;
 	IrFactory factory;
@@ -114,9 +112,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	boolean visitFunctionBody = false;
 	
-	public Stack<Object> stack;
-	public Map<Object, EObject> eObjects;
-	public Map<Object, ProxyEObject> proxies;
+	protected Stack<Object> stack;
+	protected Map<Object, EObject> eObjects;
+	protected Map<Object, ProxyEObject> proxies;
 	
 	
 	Egl2MofBase(IEnvironment env) {
@@ -139,7 +137,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return (EObject)stack.pop();
 	}
 	
-	protected MofSerializable getPartBeingProcessed() {
+	private MofSerializable getPartBeingProcessed() {
 		return partProcessingStack.isEmpty()
 			? null
 			: partProcessingStack.peek();
@@ -184,16 +182,16 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected void createAnnotations(Part binding, Element eClass) {
-		Annotation subtype = binding.getSubType();
-		for (Annotation annotation : binding.getAnnotations()) {
-			if (subtype != null && subtype.equals(annotation)) continue;
-			if (!(eClass instanceof Element)) {
+		if (eClass instanceof Element) {
+			Annotation subtype = binding.getSubType();
+			for (Annotation annotation : binding.getAnnotations()) {
+				if (subtype != null && ((Element)eClass).getAnnotation(subtype.getEClass().getETypeSignature()) != null) continue;
 				((Element)eClass).addAnnotation(annotation);
 			}
 		}
 	}
 	
-	protected void createAnnotations(Part binding, AnnotationType eClass) {
+	private void createAnnotations(Part binding, AnnotationType eClass) {
 		Annotation subtype = binding.getSubType();
 		for (Annotation annotation : binding.getAnnotations()) {
 			if (subtype == annotation) continue;
@@ -202,7 +200,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			}
 		}
 	}
-	protected void createAnnotations(IBinding binding, Element element) {
+//FIXME is this used
+/*	private void createAnnotations(IBinding binding, Element element) {
 		if (binding == null) {
 			return;
 		}
@@ -212,8 +211,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			}
 		}
 	}
-	
-	protected void createAnnotations(Part binding, Part part) {
+*/	
+	private void createAnnotations(Part binding, Part part) {
 		Annotation subtype = binding.getSubType();
 		boolean bypass = subtype != null && isEGLReflectType(binding);
 		for (Annotation annotation : binding.getAnnotations()) {
@@ -277,7 +276,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 //		return annotation;
 //	}
 	
-	protected MemberName createMemberName(Element binding) {
+	private MemberName createMemberName(Element binding) {
 		MemberName name = factory.createMemberName();
 //FIXME
 		if(binding instanceof NamedElement){
@@ -409,7 +408,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			Part part = (Part) type;
 			PartName partName = factory.createPartName();
 			partName.setId(part.getId());
-			partName.setPackageName(part.getPackageName());
+			partName.setPackageName(part.getCaseSensitivePackageName());
 			return partName;
 		}
 		else {
@@ -436,7 +435,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return null;
 	}
 	
-	protected void eAdd(EObject target, String fieldName, Object value) {
+	private void eAdd(EObject target, String fieldName, Object value) {
 		((List)target.eGet(fieldName)).add(value);
 	}
 	
@@ -518,7 +517,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 	}
 	
-	protected EObject convertStringValueToNamedElementType(String obj, EClass eClass ) {
+	private EObject convertStringValueToNamedElementType(String obj, EClass eClass ) {
 		EObject result = eClass.newInstance();
 		result.eSet("name", obj);
 		return result;
@@ -532,16 +531,16 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	
-	protected List<Object> mofValueFrom(Object[] array) {
-		List<Object> result = new EList();
+	private List<Object> mofValueFrom(Object[] array) {
+		List<Object> result = new EList<Object>();
 		for (Object obj : array) {
 			result.add(mofValueFrom(obj));
 		}
 		return result;
 	}
 	
-	protected List<Object> mofValueFrom(List list) {
-		List<Object> result = new EList();
+	private List<Object> mofValueFrom(List<Object> list) {
+		List<Object> result = new EList<Object>();
 		for (Object obj : list) {
 			result.add(mofValueFrom(obj));
 		}
@@ -569,7 +568,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return value;	
 	}
 	
-	protected EObject mofValueFrom(Part part) {
+	private EObject mofValueFrom(Part part) {
 		if (!(part instanceof ProxyPart) && isMofProxy(part)) {
 			return resolveProxy(part);
 		}
@@ -577,7 +576,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			return part;
 	}
 
-	protected EObject mofValueFrom(Annotation binding) {
+	private EObject mofValueFrom(Annotation binding) {
 		
 		if (binding == null) {
 			return null;
@@ -614,8 +613,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 		return value;
 	}
-	
-	protected Object mofValueFrom(Enumeration dataBinding) {
+
+//FIXME
+/*	
+	private Object mofValueFrom(Enumeration dataBinding) {
 		Object convertedValue;
 		Type typeBinding = dataBinding.getType();
 		String name = dataBinding.getCaseSensitiveName();
@@ -654,8 +655,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 		return convertedValue;
 	}
-
-//	protected Object mofValueFrom(EnumerationDataBinding dataBinding) {
+*/
+//	private Object mofValueFrom(EnumerationDataBinding dataBinding) {
 //		Object convertedValue;
 //		ITypeBinding typeBinding = dataBinding.getType();
 //		String name = dataBinding.getCaseSensitiveName();
@@ -731,7 +732,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return mbrType;
 	}
 	
-	protected EObject mofTypeFromTypedElement(Element element) {
+	private EObject mofTypeFromTypedElement(Element element) {
 		Type type = null;
 		if (element instanceof Function) { 
 			type = ((Function)element).getType();
@@ -750,9 +751,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			return null;
 	}
 	
-	protected EObject mofTypeFromASTFor(IPartBinding binding) {
+	private EObject mofTypeFromASTFor(IPartBinding binding) {
     	String partName = binding.getCaseSensitiveName();
-        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(binding.getPackageName(), partName);
+        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(binding.getCaseSenstivePackageName(), partName);
         Node partAST = ASTManager.getInstance().getAST(declaringFile, partName);
         Egl2Mof converter = new Egl2Mof(env);
         return converter.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, null, null);
@@ -946,12 +947,12 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 
-	protected EObject newEObject(String typeSignature) {
+	private EObject newEObject(String typeSignature) {
 		EClass eClass = (EClass)getMofSerializable(typeSignature);
 		return eClass.newInstance();
 	}
 	
-	protected EClass createAnnotationType(Annotation annotation) {
+	private EClass createAnnotationType(Annotation annotation) {
 		EClass annType = annotation.getEClass();
 		
 		// If there was no real EGL definition for the annotation type then make one up
@@ -972,7 +973,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return annType;
 	}
 	
-	protected EClass createAnnotationType(AnnotationType part) {
+	private EClass createAnnotationType(AnnotationType part) {
 		EClass record = null;
 		
 		if (part != null) {
@@ -1026,7 +1027,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 		
 	
-	protected EClass createTempEClass(org.eclipse.edt.mof.egl.ExternalType part) {
+	private EClass createTempEClass(org.eclipse.edt.mof.egl.ExternalType part) {
 		EClass eClass = mof.createEClass(true);
 		eClass.setName(part.getCaseSensitiveName());
 		eClass.setPackageName(part.getCaseSensitivePackageName());
@@ -1058,13 +1059,13 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return eClass;
 	}
 	
-	protected boolean isTempEClass(EObject eclass) {
+	private boolean isTempEClass(EObject eclass) {
 		return eclass instanceof EClass
 			? ((EClass)eclass).getMetadata(TempEClassMarker) != null
 			: false;
 	}
 	
-	protected EMetadataObject getTempClassMarker() {
+	private EMetadataObject getTempClassMarker() {
 		EMetadataType temp = (EMetadataType)getMofSerializable(TempEClassMarker);
 		if (temp == null) {
 			// Set up metadata type for marking an EClass as temporary
@@ -1081,7 +1082,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return (EMetadataObject)temp.newInstance();
 	}
 
-	protected ProxyEObject createProxyPart(String name) {
+	private ProxyEObject createProxyPart(String name) {
 		ProxyEObject type;
 		String key;
 		if (inMofContext) {
@@ -1096,7 +1097,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return type;
 	}
  	
-	protected String concatWithSeparator(String[] fragments, String separator) {
+	private String concatWithSeparator(String[] fragments, String separator) {
 		StringBuffer result = new StringBuffer();
 		for (int i=0; i<fragments.length; i++) {
 			result.append(fragments[i]);
@@ -1107,7 +1108,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return result.toString();
 	}
 	
-	protected void eSet(EObject target, String fieldName, Object value) {
+	private void eSet(EObject target, String fieldName, Object value) {
 		EField field = target.getEClass().getEField(fieldName);
 		eSet(target, field, value);
 	}
@@ -1146,7 +1147,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		target.eSet(field, convertedValue);
 	}
 	
-	protected void eAdd(List list, Object value) {
+	private void eAdd(List list, Object value) {
 		Object convertedValue = null;
 		if (value instanceof Object[]) {
 			for (Object obj : (Object[])value) {
@@ -1161,7 +1162,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 	}
 	
-	protected boolean isAbstractFunction(Function function) {
+	private boolean isAbstractFunction(Function function) {
 		return function != null && function.getContainer() instanceof ExternalType;
 	}
 	
@@ -1172,7 +1173,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	// represents.  For intstance, Record parts stereotyped by Annotation are then
 	// converted into instances of the reflected type "org.eclipse.edt.mof.egl.AnnotationType"
 	// as the stereotype "egl.lang.Annotation" reflects the underlying model.
-	protected boolean isReflectType(Type typeBinding) {
+	private boolean isReflectType(Type typeBinding) {
 		if (!(typeBinding instanceof Part)) return false;
 		boolean isReflectType = typeBinding instanceof Annotation || typeBinding instanceof StereotypeType || isEMetadataType((Part)typeBinding);
 		if (!isReflectType) {
@@ -1189,7 +1190,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	 * @param typeBinding
 	 * @return
 	 */
-	protected MofSerializable getDefaultSuperType(Type typeBinding) {	
+	private MofSerializable getDefaultSuperType(Type typeBinding) {	
 		if (!(typeBinding instanceof Part)) return null;
 		Annotation subtype = ((Part)typeBinding).getSubType();
 		String superTypeName = null;
@@ -1203,7 +1204,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	 * @param typeBinding
 	 * @return
 	 */
-	protected EClass getReflectedType(Part typeBinding) {	
+	private EClass getReflectedType(Part typeBinding) {	
 		if (typeBinding == null) return null;
 		Annotation subtype = typeBinding.getSubType();
 		String reflectedTypeName = null;
@@ -1237,7 +1238,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	 * @param typeBinding
 	 * @return
 	 */
-	protected boolean isEGLReflectType(Part typeBinding) {
+	private boolean isEGLReflectType(Part typeBinding) {
 		EClass reflectedType = getReflectedType(typeBinding);
 		if (reflectedType != null) {
 			return reflectedType.isSubClassOf(IrFactory.INSTANCE.getElementEClass());
@@ -1250,7 +1251,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 
 	
 	// Assumes the record is a Stereotype defintiion
-	protected String getDefaultSuperTypeSignature(Part type) {
+	private String getDefaultSuperTypeSignature(Part type) {
 		Annotation subtype = type.getSubType();
 		Annotation reflectType = getAnnotation(subtype, "egl.lang.reflect.DefaultSuperType");
 		if (reflectType != null) {
@@ -1269,7 +1270,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 
 	// Assumes the record is a Stereotype defintiion
-	protected String getReflectedTypeSignature(Part type) {
+	private String getReflectedTypeSignature(Part type) {
 		Annotation subtype = type.getSubType();
 		Annotation reflectType = getAnnotation(subtype, "egl.lang.reflect.PartType");
 		if (reflectType != null) {
@@ -1302,17 +1303,17 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 
-	protected boolean isMofClass(Part edtType) {
+	private boolean isMofClass(Part edtType) {
 		Stereotype ann = edtType.getStereotype();
 		return (ann != null && ann.getEClass().getName().equalsIgnoreCase("MofClass"));
 	}
 	
-	protected boolean isMofDataType(Part edtType) {	
+	private boolean isMofDataType(Part edtType) {	
 		Annotation ann = edtType.getSubType();
 		return ann != null && ann.getEClass().getName().equalsIgnoreCase("MofDataType");
 	}
 	
-	protected boolean isMofBaseType(Part edtType) {
+	private boolean isMofBaseType(Part edtType) {
 		Annotation ann = edtType.getSubType();
 		return ann != null && ann.getEClass().getName().equalsIgnoreCase("MofBaseType"); 
 	}
@@ -1322,7 +1323,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return (ann != null && ann.getEClass().getName().equalsIgnoreCase("MofClass") && (java.lang.Boolean)ann.eGet("isProxy") == true);
 	}
 
-	protected EClass resolveProxy(Part part) {
+	private EClass resolveProxy(Part part) {
 		Stereotype ann = part.getStereotype();
 		String packageName = (String)ann.eGet("packageName");
 		String name = (String)ann.eGet("name");
@@ -1342,7 +1343,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			elem.addAnnotation(ann);
 		}
 		if (obj instanceof Classifier) {
-			int packageSegmentCount = ((Classifier)obj).getPackageName().split("\\.").length;
+			int packageSegmentCount = ((Classifier)obj).getCaseSensitivePackageName().split("\\.").length;
 			
 			// Use the context's path info so that we don't lose the source file's case. Use the package name
 			// to determine where the relative path begins.
@@ -1365,14 +1366,14 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 
 	}
 	
-	protected int getLine(Node node) {
+	private int getLine(Node node) {
 		if (context != null) {
 			return context.getLineNumber(node);
 		}
 		return 0;
 	}
 	
-	public void setUpEglTypedElement(TypedElement obj, Member edtObj) {
+	protected void setUpEglTypedElement(TypedElement obj, Member edtObj) {
 		
 		Type type = null;
 		EObject mofType = mofTypeFor(edtObj.getType());

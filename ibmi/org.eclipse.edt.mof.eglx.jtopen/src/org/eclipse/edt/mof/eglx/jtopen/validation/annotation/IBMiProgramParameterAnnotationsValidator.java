@@ -133,7 +133,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 			return false; //avoid excess error messages
 		}
 		
-		if( TypeUtils.isPrimitive(type)){
+		if(isSupportedPrimitiveTypes(type)){
 			return TypeUtils.isReferenceType(type);
 		}
 		
@@ -154,7 +154,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 			return true; //avoid excess error messages
 		}
 		
-		if( type.equals(TypeUtils.isPrimitive(type))){
+		if( type.equals(isSupportedPrimitiveTypes(type))){
 			return true;
 		}
 		if (type instanceof Handler) {
@@ -176,5 +176,20 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 			
 		}
 		return false;
+	}
+	
+	private static boolean isSupportedPrimitiveTypes(Type type){
+		return type.equals(TypeUtils.Type_SMALLINT) ||
+						type.equals(TypeUtils.Type_INT) ||
+						type.equals(TypeUtils.Type_BIGINT) ||
+						type.equals(TypeUtils.Type_DECIMAL) ||
+						type.equals(TypeUtils.Type_SMALLFLOAT) ||
+						type.equals(TypeUtils.Type_FLOAT) ||
+						type.equals(TypeUtils.Type_DATE) ||
+						type.equals(TypeUtils.Type_TIME) ||
+						type.equals(TypeUtils.Type_TIMESTAMP) ||
+						type.equals(TypeUtils.Type_STRING) ||
+						type.equals(TypeUtils.Type_BOOLEAN) || 
+						type.equals(TypeUtils.Type_BYTES);
 	}
 }

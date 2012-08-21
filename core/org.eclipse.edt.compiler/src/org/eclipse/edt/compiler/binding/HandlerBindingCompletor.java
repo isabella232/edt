@@ -59,6 +59,7 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
     		}
     	}		
 		
+        setDefaultSuperType();
         return true;
     }
     

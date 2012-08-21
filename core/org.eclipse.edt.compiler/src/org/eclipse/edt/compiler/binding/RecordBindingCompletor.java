@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.RecordScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
@@ -58,8 +59,7 @@ public class RecordBindingCompletor extends DefaultBinder {
         //now we will need to process the SettingsBlock for the
         // record...the collector has already gathered those for us.
 
-        //TODO blows up right now
-//        processSettingsBlocksFromCollector(collector);
+        processSettingsBlocksFromCollector(collector);
         
         if (record.isPrivate()) {
         	recordBinding.setAccessKind(AccessKind.ACC_PRIVATE);
@@ -71,28 +71,28 @@ public class RecordBindingCompletor extends DefaultBinder {
 
 	public void endVisit(Record record) {
     	irBinding.setValid(true);
-    	setDefaultSuperType();
-
+    	
         currentScope = new RecordScope(currentScope, recordBinding);
 
         currentScope = currentScope.getParentScope();
         super.endVisit(record);
     }
 	
-	private void setDefaultSuperType() {
+	private void setDefaultSuperType(Stereotype subType) {
 		StructPart anyRec = (StructPart)BindingUtil.findPart(NameUtile.getAsName(MofConversion.EGLX_lang_package), NameUtile.getAsName("AnyRecord"));
-		BindingUtil.setDefaultSupertype(recordBinding, anyRec);
+		BindingUtil.setDefaultSupertype(recordBinding, subType, anyRec);
 	}
     
 
     protected void processSubType(PartSubTypeAndAnnotationCollector collector) {
     	partStereotype = collector.getStereotype();
+    	setDefaultSuperType(partStereotype);
     }
 
     private void processSettingsBlocksFromCollector(PartSubTypeAndAnnotationCollector collector) {
 
         if (collector.getSettingsBlocks().size() > 0) {
-            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(new RecordScope(currentScope, recordBinding), recordBinding, recordBinding, recordBinding);
+            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(new RecordScope(NullScope.INSTANCE, recordBinding), recordBinding, recordBinding, recordBinding);
             if (!collector.isFoundSubTypeInSettingsBlock() && partStereotype != null) {
                 scope = new AnnotationLeftHandScope(scope, partStereotype, (StereotypeType)partStereotype.getEClass(), partStereotype);
             }

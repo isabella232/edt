@@ -30,12 +30,11 @@ import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
-import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -53,6 +52,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.SubType;
 
 
 public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
@@ -74,6 +74,42 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		}		
 	}
 
+	private static class LHSBinder extends Binder {
+
+		public LHSBinder(Scope currentScope, Part currentBinding,
+				IDependencyRequestor dependencyRequestor,
+				IProblemRequestor problemRequestor,
+				ICompilerOptions compilerOptions) {
+			super(currentScope, currentBinding, dependencyRequestor, problemRequestor,
+					compilerOptions);
+		}	
+		
+		public boolean visit(org.eclipse.edt.compiler.core.ast.ThisExpression thisExpression) {
+			if (currentScope.getType() != null) {
+				thisExpression.setType(currentScope.getType());
+				return false;
+			}
+			return super.visit(thisExpression);
+		}
+
+		public boolean visit(org.eclipse.edt.compiler.core.ast.SuperExpression superExpression) {
+			if (currentScope.getType() != null) {
+				
+				Classifier classifier = currentScope.getType().getClassifier();
+				if (classifier instanceof SubType) {
+					SubType sub = (SubType) classifier;
+					if (sub.getSuperTypes().size() > 0) {
+						superExpression.setType(sub.getSuperTypes().get(0));
+						return false;
+					}
+				}
+			}
+			return super.visit(superExpression);
+		}
+
+		
+	}
+
 	public SettingsBlockAnnotationBindingsCompletor(Scope currentScope, Part partBinding,
 			AnnotationLeftHandScope annotationLeftHandScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor,
 			ICompilerOptions compilerOptions) {
@@ -81,7 +117,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		this.partBinding = partBinding;
 		this.annotationLeftHandScope = annotationLeftHandScope;
 		rhsBinder = new Binder(currentScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions);
-		lhsBinder = new Binder(annotationLeftHandScope.getScopeToUseWhenResolving(), partBinding, dependencyRequestor, problemRequestor, compilerOptions);
+		lhsBinder = new LHSBinder(annotationLeftHandScope.getTopLevelAnnotationLeftHandScope().getScopeToUseWhenResolving(), partBinding, dependencyRequestor, problemRequestor, compilerOptions);
 	}
 
 	public boolean visit(SettingsBlock settingsBlock) {
@@ -110,7 +146,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			}
 
 			public boolean visit(AnnotationExpression annotationExpression) {
-				Annotation ann = getAnnotation(annotationExpression);
+				Annotation ann = getAnnotation(annotationExpression, problemRequestor);
 				setAnnotationOnElement(annotationLeftHandScope.getTopLevelAnnotationLeftHandScope().getElementBeingAnnotated(), ann, annotationExpression);
 				
 				return false;
@@ -141,9 +177,9 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 				if (annotationLeftHandScope.getElementBeingAnnotated() instanceof Annotation) {
 					Annotation ann = (Annotation) annotationLeftHandScope.getElementBeingAnnotated();
 					AnnotationType annType = (AnnotationType)ann.getEClass();
-					if (annType.getAllEFields().size() == 1) {
-						Object obj = getValue(expression, ann, annType.getAllEFields().get(0));
-						setValueIntoAnnotation(obj, expression, ann, annType.getAllEFields().get(0));
+					if (annType.getEFields().size() == 1) {
+						Object obj = getValue(expression, ann, annType.getEFields().get(0));
+						setValueIntoAnnotation(obj, expression, ann, annType.getEFields().get(0));
 					}
 					else {
 						problemRequestor.acceptProblem(expression, IProblemRequestor.POSITIONAL_PROPERTY_NOT_VALID_FOR,
@@ -210,36 +246,8 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
     	expr.accept(visitor);
 		return valid[0];
     	
-    }
-
-	
-	
-	 
-	private Annotation getAnnotation(AnnotationExpression annotationExpression) {
-		
-		org.eclipse.edt.mof.egl.Type type = null;
-		
-		try {
-			type = bindTypeName(annotationExpression.getName());
-		} catch (ResolutionException e) {
-		}
-		
-		if (type == null || !(type instanceof AnnotationType)) {
-			problemRequestor.acceptProblem(annotationExpression, IProblemRequestor.NOT_AN_ANNOTATION,
-					new String[] { annotationExpression.getCanonicalString() });
-			annotationExpression.getName().setType(null);
-			return null;
-		}
-		
-		Annotation ann = (Annotation)((AnnotationType)type).newInstance();
-		annotationExpression.getName().setElement(ann);
-		annotationExpression.setType(type);
-		annotationExpression.setAnnotation(ann);
-		annotationExpression.setType(type);
-		return ann;
-		
-	}
-	
+    }	
+	 	
 	private void setAnnotationOnElement(Element elem, Annotation ann, AnnotationExpression annotationExpression) {
 		if (ann == null) {
 			return;
@@ -263,38 +271,56 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 	
 	private boolean isApplicableFor(Element targetBinding, List<ElementKind> targets) {
 		for(ElementKind nextTarget : targets) {
-			
+			boolean result = false;
 			switch(nextTarget) {
 				case DelegatePart:
-					return targetBinding instanceof Delegate;
+					result = targetBinding instanceof Delegate;
+					break;
 				case ExternalTypePart:
-					return targetBinding instanceof ExternalType;
+					result = targetBinding instanceof ExternalType;
+					break;
 				case HandlerPart:
-					return targetBinding instanceof Handler;
+					result = targetBinding instanceof Handler;
+					break;
 				case ClassPart:
-					return targetBinding instanceof EGLClass;
+					result = targetBinding instanceof EGLClass;
+					break;
 				case InterfacePart:
-					return targetBinding instanceof Interface;
+					result = targetBinding instanceof Interface;
+					break;
 				case Part:
-					return targetBinding instanceof Part;
+					result = targetBinding instanceof Part;
+					break;
 				case ProgramPart:
-					return targetBinding instanceof Program;
+					result = targetBinding instanceof Program;
+					break;
 				case RecordPart:
-					return targetBinding instanceof Record;
+					result = targetBinding instanceof Record;
+					break;
 				case LibraryPart:
-					return targetBinding instanceof Library;
+					result = targetBinding instanceof Library;
+					break;
 				case ServicePart:
-					return targetBinding instanceof Service;
+					result = targetBinding instanceof Service;
+					break;
 				case FieldMbr:
-					return targetBinding instanceof Field;
+					result = targetBinding instanceof Field;
+					break;
 				case FunctionMbr:
-					return targetBinding instanceof Function;
+					result = targetBinding instanceof Function;
+					break;
 				case ConstructorMbr:
-					return targetBinding instanceof Constructor;
+					result = targetBinding instanceof Constructor;
+					break;
 				case EnumerationPart:
-					return targetBinding instanceof Enumeration;
+					result = targetBinding instanceof Enumeration;
+					break;
 				case EnumerationEntry:
-					return targetBinding instanceof EnumerationEntry;
+					result = targetBinding instanceof EnumerationEntry;
+					break;
+			}
+			if(result){
+				return result;
 			}
 		}
 		return false;

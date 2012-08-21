@@ -25,7 +25,9 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
+import org.eclipse.edt.compiler.internal.core.lookup.EnumerationScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
@@ -117,7 +119,8 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 	}
 	
     public boolean visit(SettingsBlock settingsBlock) {
-        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, enumerationBinding, enumerationBinding, enumerationBinding);
+    	EnumerationScope enumScope = new EnumerationScope(NullScope.INSTANCE, enumerationBinding);
+        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(enumScope, enumerationBinding, enumerationBinding, enumerationBinding);
         SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, enumerationBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
         settingsBlock.accept(blockCompletor);
         return false;
