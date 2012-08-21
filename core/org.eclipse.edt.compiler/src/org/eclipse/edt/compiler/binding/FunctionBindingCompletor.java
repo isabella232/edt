@@ -100,7 +100,8 @@ public class FunctionBindingCompletor extends AbstractBinder {
             public boolean visit(SettingsBlock settingsBlock) {
                 FunctionScope functionScope = new FunctionScope(NullScope.INSTANCE, functionBinding);
                 AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, functionBinding, null, functionBinding);
-                SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, partBinding, scope,
+                functionScope = new FunctionScope(currentScope, functionBinding);
+                SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, partBinding, scope,
                         dependencyRequestor, problemRequestor, compilerOptions);
                 settingsBlock.accept(blockCompletor);
                 return false;

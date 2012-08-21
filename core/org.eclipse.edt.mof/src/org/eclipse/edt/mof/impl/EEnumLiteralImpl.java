@@ -34,5 +34,10 @@ public class EEnumLiteralImpl extends EMemberImpl implements EEnumLiteral {
 	public void setValue(int value) {
 		slotSet(Slot_value, value);
 	}
+
+	@Override
+	public String getCaseSensitiveName() {
+		return getName();
+	}
 	
 }

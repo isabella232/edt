@@ -882,8 +882,8 @@ public class IRUtils {
 			return false;
 		}
 		
-		return (TypeUtils.areCompatible(operation.getParameters().get(0).getType().getClassifier(), lhs) &&
-				TypeUtils.areCompatible(operation.getParameters().get(1).getType().getClassifier(), rhs));
+		return (operation.getParameters().get(0).isGenericTypeParameter() || TypeUtils.areCompatible(operation.getParameters().get(0).getType().getClassifier(), lhs) &&
+				operation.getParameters().get(1).isGenericTypeParameter() || TypeUtils.areCompatible(operation.getParameters().get(1).getType().getClassifier(), rhs));
 
 	}
 
