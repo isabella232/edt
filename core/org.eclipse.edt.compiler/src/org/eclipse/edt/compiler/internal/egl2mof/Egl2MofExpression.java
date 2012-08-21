@@ -649,7 +649,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 		
 		if (qualifier == null && binding instanceof Enumeration) {
-//			name = (Name)addQualifier(createNameForPart(((Enumeration)binding).getcDeclaringPart()), name);
+			name = (Name)addQualifier(createNameForPart((Enumeration)binding), name);
 		}
 		
 		if (qualifier != null) {
@@ -703,7 +703,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			Element qualBinding = (Element)name.getQualifier().resolveElement();
 			if (qualBinding instanceof Library && 
 					currentPart instanceof LogicAndDataPart &&
-					!((LogicAndDataPart)currentPart).getUsedParts().contains(mofTypeFor((Library)qualBinding))) {
+					!((LogicAndDataPart)currentPart).getUsedParts().contains(mofTypeFor((Library)qualBinding)) ||
+					qualBinding instanceof Enumeration) {
 				nameExpr.setQualifier(createNameForPart((Part)qualBinding));
 			}
 			else {
