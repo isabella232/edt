@@ -374,7 +374,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 					Member mbr = (Member)getEObjectFor(functionBinding);
 					String id=null;
 					if (mbr instanceof FunctionMember) {
-						id =  ((FunctionMember)mbr).getName();
+						id =  ((FunctionMember)mbr).getCaseSensitiveName();
 					}
 					else {
 						if(functionBinding != null) {
@@ -443,7 +443,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 								Member mbr = (Member)getEObjectFor(functionBinding);
 								String id=null;
 								if (mbr instanceof FunctionMember) {
-									id =  ((FunctionMember)mbr).getName();
+									id =  ((FunctionMember)mbr).getCaseSensitiveName();
 								}
 								else {
 									if(functionBinding != null) {
