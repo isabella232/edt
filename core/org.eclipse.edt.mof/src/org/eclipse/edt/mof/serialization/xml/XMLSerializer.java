@@ -93,7 +93,7 @@ public class XMLSerializer implements Serializer {
 
 	private void writeObject(Object object) {
 		if (object instanceof EEnumLiteral) {
-			writer.print(((EEnumLiteral)object).getName());
+			writer.print(((EEnumLiteral)object).getCaseSensitiveName());
 			return;
 		}
 		
@@ -232,7 +232,7 @@ public class XMLSerializer implements Serializer {
 				writer.print('<');
 				writer.print(field.getName());
 				writer.print('>');
-				writer.print(((EEnumLiteral)o).getName());
+				writer.print(((EEnumLiteral)o).getCaseSensitiveName());
 				writer.print("</");
 				writer.print(field.getName());
 				writer.print('>');

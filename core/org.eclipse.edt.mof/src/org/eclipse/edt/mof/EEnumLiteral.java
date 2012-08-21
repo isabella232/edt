@@ -14,4 +14,6 @@ package org.eclipse.edt.mof;
 public interface EEnumLiteral extends EMember {
 	int getValue();
 	void setValue(int value);
+	String getCaseSensitiveName();
+
 }
