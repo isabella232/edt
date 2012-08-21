@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,21 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Annotation;
 
+public abstract class PartContentValidationRule extends ContentValidationRule {
 
-/**
- * @author svihovec
- */
-public abstract class InvocationValidationRule extends AbstractValidationRule {
-
-	public InvocationValidationRule(String caseSensitiveInternedName) {
+	public PartContentValidationRule(String caseSensitiveInternedName) {
 		super(caseSensitiveInternedName);
 	}
 	
-	public abstract void validate(Node node, Element element, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	public abstract void validate(Node errorNode, Node target, Map<String, Map<Annotation, Object[]>> allAnnotations, IProblemRequestor problemRequestor);
 }

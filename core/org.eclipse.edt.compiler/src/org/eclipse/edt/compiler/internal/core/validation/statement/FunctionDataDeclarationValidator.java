@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 
 	
@@ -55,8 +56,7 @@ public class FunctionDataDeclarationValidator extends DefaultASTVisitor {
 		
 		validateDataType(functionDataDeclaration);
 		
-		//TODO AnnotationValidator has many errors
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(functionDataDeclaration);
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(functionDataDeclaration);
 		
 		functionDataDeclaration.accept(new FieldValidator(problemRequestor, compilerOptions, enclosingPart));
 

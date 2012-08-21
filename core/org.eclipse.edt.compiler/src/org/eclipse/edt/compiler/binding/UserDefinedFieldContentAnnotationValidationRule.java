@@ -19,24 +19,25 @@ import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IFieldContentAnnotationValidationRule;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author svihovec
- *
  */
-public class UserDefinedFieldContentAnnotationValidationRule extends FieldContentValidationAnnotationTypeBinding {
+public class UserDefinedFieldContentAnnotationValidationRule extends FieldContentValidationRule {
 
 	private Class validatorClass;
 
 	public UserDefinedFieldContentAnnotationValidationRule(Class validatorClass) {
-		super(InternUtil.internCaseSensitive("UserDefinedFieldContentAnnotationValidationRule"));
+		super(NameUtile.getAsName("UserDefinedFieldContentAnnotationValidationRule"));
 		
 		this.validatorClass = validatorClass;
 	}
-
-	public void validate(Node errorNode, Node target, IDataBinding containerBinding, String canonicalContainerName, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	
+	@Override
+	public void validate(Node errorNode, Node target, Member containerBinding, String canonicalContainerName, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
 			((IFieldContentAnnotationValidationRule)validatorClass.newInstance()).validate(errorNode, target, containerBinding, canonicalContainerName, allAnnotations, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
@@ -46,7 +47,8 @@ public class UserDefinedFieldContentAnnotationValidationRule extends FieldConten
 		}
 	}
 	
-	public void validateFunctionParameter(FunctionParameter fParameter, IDataBinding parameterBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	@Override
+	public void validateFunctionParameter(FunctionParameter fParameter, Member parameterBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
 			((IFieldContentAnnotationValidationRule)validatorClass.newInstance()).validateFunctionParameter(fParameter, parameterBinding, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
@@ -56,9 +58,10 @@ public class UserDefinedFieldContentAnnotationValidationRule extends FieldConten
 		}
 	}
 	
-	public void validateFunctionReturnType(Type typeNode, ITypeBinding typeBinding, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	@Override
+	public void validateFunctionReturnType(Type typeNode, org.eclipse.edt.mof.egl.Type typeBinding, Member declaringMember, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
-			((IFieldContentAnnotationValidationRule)validatorClass.newInstance()).validateFunctionReturnType(typeNode, typeBinding, declaringPart, problemRequestor, compilerOptions);
+			((IFieldContentAnnotationValidationRule)validatorClass.newInstance()).validateFunctionReturnType(typeNode, typeBinding, declaringMember, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {

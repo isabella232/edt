@@ -177,7 +177,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 				if (annotationLeftHandScope.getElementBeingAnnotated() instanceof Annotation) {
 					Annotation ann = (Annotation) annotationLeftHandScope.getElementBeingAnnotated();
 					AnnotationType annType = (AnnotationType)ann.getEClass();
-					if (annType.getEFields().size() == 1) {  
+					if (annType.getEFields().size() == 1) {
 						Object obj = getValue(expression, ann, annType.getEFields().get(0));
 						setValueIntoAnnotation(obj, expression, ann, annType.getEFields().get(0));
 					}

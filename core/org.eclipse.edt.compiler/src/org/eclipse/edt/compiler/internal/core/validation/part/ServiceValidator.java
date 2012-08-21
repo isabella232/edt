@@ -17,6 +17,7 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -41,7 +42,7 @@ public class ServiceValidator extends FunctionContainerValidator {
 		checkImplements(service.getImplementedInterfaces());
 		checkInterfaceFunctionsOverriden(serviceBinding);
 		
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(aservice); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(aservice);
 
 		return true;
 	}
@@ -57,7 +58,7 @@ public class ServiceValidator extends FunctionContainerValidator {
 					new String[] {serviceBinding.getCaseSensitiveName()});
 		}
 		
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction);
 		
 		return false;
 	}

@@ -11,17 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Type;
+public abstract class ContentValidationRule extends AbstractValidationRule {
 
-public abstract class InstantiationValidationRule extends AbstractValidationRule {
-
-	public InstantiationValidationRule(String caseSensitiveInternedName) {
+	public ContentValidationRule(String caseSensitiveInternedName) {
 		super(caseSensitiveInternedName);
 	}
-
-	public abstract void validate(Node node, Type type, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

@@ -15,23 +15,22 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IFieldAccessAnnotationValidationRule;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
-/**
- * @author demurray
- */
-public class UserDefinedFieldAccessAnnotationValidationRule extends FieldAccessValidationAnnotationTypeBinding {
+public class UserDefinedFieldAccessAnnotationValidationRule extends FieldAccessValidationRule {
 
 	private Class validatorClass;
 
 	public UserDefinedFieldAccessAnnotationValidationRule(Class validatorClass) {
-		super(InternUtil.internCaseSensitive("UserDefinedFieldAccesstAnnotationValidationRule"));
+		super(NameUtile.getAsName("UserDefinedFieldAccesstAnnotationValidationRule"));
 		
 		this.validatorClass = validatorClass;
 	}
 	
-	public boolean validateLValue(Expression lValue, IDataBinding fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	@Override
+	public boolean validateLValue(Expression lValue, Member fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
 			return ((IFieldAccessAnnotationValidationRule)validatorClass.newInstance()).validateLValue(lValue, fieldBinding, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
@@ -42,7 +41,7 @@ public class UserDefinedFieldAccessAnnotationValidationRule extends FieldAccessV
 		
 	}
 	
-	public boolean validateRValue(Expression rValue, IDataBinding fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public boolean validateRValue(Expression rValue, Member fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
 			return ((IFieldAccessAnnotationValidationRule)validatorClass.newInstance()).validateRValue(rValue, fieldBinding, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {

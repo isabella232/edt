@@ -21,7 +21,7 @@ package eglx.lang;
 Record EGLProperty type Annotation
 {
 	targets = [ElementKind.FieldMbr],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationProxy"
 } 
 	getMethod FunctionMemberRef;
 	setMethod FunctionMemberRef;
@@ -35,7 +35,7 @@ end
 Record Property type Annotation
 {
 	targets = [ElementKind.FieldMbr],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PropertyAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PropertyAnnotationProxy"
 }
 	getMethod String;
 	setMethod String;
@@ -79,6 +79,6 @@ end
 Record Throws type Annotation
 {
 	targets = [ElementKind.FunctionMbr, ElementKind.ConstructorMbr],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.ThrowsAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.ThrowsAnnotationProxy"
 } 
 end

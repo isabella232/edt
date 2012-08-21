@@ -26,6 +26,7 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ClassDataDeclarationValidator;
 import org.eclipse.edt.mof.EClass;
@@ -54,7 +55,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 	public boolean visit(ExternalType externalType) {
 		this.externalType = externalType;
 		EGLNameValidator.validate(externalType.getName(), EGLNameValidator.HANDLER, problemRequestor, compilerOptions);
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(externalType); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(externalType);
 		
 		if (checkHasSubtype()) {
 			checkExtendedTypes();

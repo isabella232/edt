@@ -408,7 +408,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			Part part = (Part) type;
 			PartName partName = factory.createPartName();
 			partName.setId(part.getId());
-			partName.setPackageName(part.getPackageName());
+			partName.setPackageName(part.getCaseSensitivePackageName());
 			return partName;
 		}
 		else {
@@ -753,7 +753,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	private EObject mofTypeFromASTFor(IPartBinding binding) {
     	String partName = binding.getCaseSensitiveName();
-        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(binding.getPackageName(), partName);
+        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(binding.getCaseSenstivePackageName(), partName);
         Node partAST = ASTManager.getInstance().getAST(declaringFile, partName);
         Egl2Mof converter = new Egl2Mof(env);
         return converter.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, null, null);
@@ -1343,7 +1343,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			elem.addAnnotation(ann);
 		}
 		if (obj instanceof Classifier) {
-			int packageSegmentCount = ((Classifier)obj).getPackageName().split("\\.").length;
+			int packageSegmentCount = ((Classifier)obj).getCaseSensitivePackageName().split("\\.").length;
 			
 			// Use the context's path info so that we don't lose the source file's case. Use the package name
 			// to determine where the relative path begins.

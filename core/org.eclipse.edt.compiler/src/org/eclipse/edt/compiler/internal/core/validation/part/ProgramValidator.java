@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -38,7 +39,7 @@ public class ProgramValidator extends FunctionContainerValidator {
 		program = aprogram;
 		partNode = aprogram;
 		EGLNameValidator.validate(program.getName(), EGLNameValidator.PROGRAM, problemRequestor, compilerOptions);
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(program); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(program);
 		validateProgramFunctions();
 		
 		if (program.isCallable()) {

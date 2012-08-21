@@ -64,7 +64,7 @@ public class RValueValidator {
 				IAnnotationTypeBinding validationProxy = annType.getValidationProxy();
 				if(validationProxy != null) {
 					for(Iterator iter = validationProxy.getFieldAccessAnnotations().iterator(); iter.hasNext();) {
-						result = ((FieldAccessValidationAnnotationTypeBinding) iter.next()).validateRValue(nodeForErrors, dBinding, problemRequestor, compilerOptions) && result;
+						result = ((FieldAccessValidationRule) iter.next()).validateRValue(nodeForErrors, dBinding, problemRequestor, compilerOptions) && result;
 					}
 				}
 			}

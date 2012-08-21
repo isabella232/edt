@@ -14,42 +14,33 @@ package org.eclipse.edt.compiler.binding.annotationType;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.compiler.binding.FieldAccessValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldAccessAnnotationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PropertyFieldAccessValidator;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
-public class PropertyAnnotationTypeBinding extends ComplexAnnotationTypeBinding {
-	public static final String name = InternUtil.intern("Property");
+public class PropertyAnnotationProxy extends ComplexAnnotationProxy {
+	public static final String name = NameUtile.getAsName("Property");
 	
-	private static PropertyAnnotationTypeBinding INSTANCE = new PropertyAnnotationTypeBinding();
+	private static PropertyAnnotationProxy INSTANCE = new PropertyAnnotationProxy();
 	
 	
-   private static final List fieldAccessAnnotations = new ArrayList();
+   private static final List<FieldAccessValidationRule> fieldAccessAnnotations = new ArrayList();
    static {
     	fieldAccessAnnotations.add(new UserDefinedFieldAccessAnnotationValidationRule(PropertyFieldAccessValidator.class));
     }    
    	   	
-	private PropertyAnnotationTypeBinding() {
+	private PropertyAnnotationProxy() {
 		super(name, new Object[0]);
 	}
 	
-	public static PropertyAnnotationTypeBinding getInstance() {
+	public static PropertyAnnotationProxy getInstance() {
 		return INSTANCE;
 	}
 	
-	public boolean isApplicableFor(IBinding binding) {
-		return true;
-	}
-	
-	private Object readResolve() {
-		return INSTANCE;
-	}
-
-	public List getFieldAccessAnnotations() {
+	@Override
+	public List<FieldAccessValidationRule> getFieldAccessAnnotations() {
     	return fieldAccessAnnotations;
     }
-
-
 }

@@ -13,7 +13,7 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.AnnotationValidationAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -31,7 +31,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 /**
  * @author Dave Murray
  */
-public class SignAnnotationValidator extends AnnotationValidationAnnotationTypeBinding {
+public class SignAnnotationValidator extends AnnotationValidationRule {
 	
 	public SignAnnotationValidator() {
 		super(InternUtil.internCaseSensitive("sign"));

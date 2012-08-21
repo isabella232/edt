@@ -19,12 +19,10 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 
 	
-/**
- * @author Craig Duval
- */
 public class ClassDataDeclarationValidator extends DefaultASTVisitor {
 	
 	private IProblemRequestor problemRequestor;
@@ -50,8 +48,7 @@ public class ClassDataDeclarationValidator extends DefaultASTVisitor {
 //		
 //		StatementValidator.validateDataDeclarationType(classDataDeclaration.getType(), problemRequestor, declaringPart);
 		
-		//TODO AnnotationValidator has many errors
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(classDataDeclaration);
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(classDataDeclaration);
 		
 		classDataDeclaration.accept(new FieldValidator(problemRequestor, compilerOptions, declaringPart));
 		

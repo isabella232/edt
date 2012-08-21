@@ -15,29 +15,28 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IInvocationValidationRule;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author svihovec
- *
  */
 public class UserDefinedInvocationValidationRule extends InvocationValidationRule {
 
 	private Class validatorClass;
 
 	public UserDefinedInvocationValidationRule(Class validatorClass) {
-		super(InternUtil.internCaseSensitive("UserDefinedInvocationValidationRule"));
+		super(NameUtile.getAsName("UserDefinedInvocationValidationRule"));
 		
 		this.validatorClass = validatorClass;
 	}	
 
 	@Override
-	public void validate(Node node, IBinding binding,
-			IPartBinding declaringPart, IProblemRequestor problemRequestor,
-			ICompilerOptions compilerOptions) {
+	public void validate(Node node, Element element, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
-			((IInvocationValidationRule)validatorClass.newInstance()).validate(node, binding, declaringPart, problemRequestor, compilerOptions);
+			((IInvocationValidationRule)validatorClass.newInstance()).validate(node, element, declaringPart, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {

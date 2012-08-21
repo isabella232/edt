@@ -11,16 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.mof.egl.Annotation;
 
 
 /**
  * @author svihovec
- *
  */
 public interface IAnnotationValidator {
 
-	public void validate(Node errorNode, Node target, IAnnotationBinding annotation, IProblemRequestor problemRequestor);
+	public void validate(Node errorNode, Node target, Annotation annotation, IProblemRequestor problemRequestor);
 }

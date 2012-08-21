@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -33,11 +34,13 @@ public class UseStatementValidator extends DefaultASTVisitor {
 	private IPartBinding parent;
 	private String canonicalParentName;
 	private IProblemRequestor problemRequestor;
+	private ICompilerOptions compilerOptions;
 	
 	public UseStatementValidator(IPartBinding binding, String canonicalParentName, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		parent = binding;
 		this.problemRequestor = problemRequestor;
 		this.canonicalParentName = canonicalParentName;
+		this.compilerOptions = compilerOptions;
 	}
 	
 	public boolean visit(final UseStatement useStatement) {
@@ -45,7 +48,7 @@ public class UseStatementValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(useStatement); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(useStatement);
 		
 		useStatement.getParent().accept(new AbstractASTPartVisitor() {
 			@Override

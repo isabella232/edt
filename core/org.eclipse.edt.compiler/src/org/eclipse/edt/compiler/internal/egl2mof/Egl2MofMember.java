@@ -869,7 +869,7 @@ class Egl2MofMember extends Egl2MofPart {
 		PartName qualifier = factory.createPartName();
 		qualifier.setId(context.getCaseSensitiveName());
 		qualifier.setType(context);
-		qualifier.setPackageName(context.getPackageName());
+		qualifier.setPackageName(context.getCaseSensitivePackageName());
 		return nameExpr.addQualifier(qualifier);
 	}
 	

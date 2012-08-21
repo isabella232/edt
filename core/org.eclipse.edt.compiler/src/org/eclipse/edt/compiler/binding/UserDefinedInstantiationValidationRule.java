@@ -11,45 +11,36 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.Map;
-
-import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.validation.annotation.IFieldContentAnnotationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IInstantiationValidationRule;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author svihovec
- *
  */
 public class UserDefinedInstantiationValidationRule extends InstantiationValidationRule {
 
 	private Class validatorClass;
 
 	public UserDefinedInstantiationValidationRule(Class validatorClass) {
-		super(InternUtil.internCaseSensitive("UserDefinedInstantiationValidationRule"));
+		super(NameUtile.getAsName("UserDefinedInstantiationValidationRule"));
 		
 		this.validatorClass = validatorClass;
 	}
 
-		
-
 	@Override
-	public void validate(Node node, ITypeBinding typeBinding,
-			IPartBinding declaringPart, IProblemRequestor problemRequestor,
-			ICompilerOptions compilerOptions) {
+	public void validate(Node node, Type type, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
-			((IInstantiationValidationRule)validatorClass.newInstance()).validate(node, typeBinding, declaringPart, problemRequestor, compilerOptions);
+			((IInstantiationValidationRule)validatorClass.newInstance()).validate(node, type, declaringPart, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 }
