@@ -61,6 +61,7 @@ import org.eclipse.edt.mof.egl.IsNotExpression;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
+import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -700,8 +701,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			nameExpr.setId(name.getCaseSensitiveIdentifier());
 			
 			Element qualBinding = (Element)name.getQualifier().resolveElement();
-			if (qualBinding instanceof Part &&
-					!(qualBinding instanceof Library)) {
+			if (qualBinding instanceof Library && 
+					currentPart instanceof LogicAndDataPart &&
+					!((LogicAndDataPart)currentPart).getUsedParts().contains(mofTypeFor((Library)qualBinding))) {
 				nameExpr.setQualifier(createNameForPart((Part)qualBinding));
 			}
 			else {
