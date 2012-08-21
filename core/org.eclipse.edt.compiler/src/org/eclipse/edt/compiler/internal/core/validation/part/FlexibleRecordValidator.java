@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FieldValidator;
 import org.eclipse.edt.mof.egl.Field;
@@ -44,7 +45,7 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 		recordNameNode = record.getName();
 		EGLNameValidator.validate(recordNameNode, EGLNameValidator.RECORD, problemRequestor, compilerOptions);
 		
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(record); TODO		
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(record);		
 		
 		return true;
 	}
@@ -77,7 +78,7 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 			}
 		}
 		
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(structureItem); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(structureItem);
 		structureItem.accept(new FieldValidator(problemRequestor, compilerOptions, irBinding));
 		
 		//TODO StatementValidator has many errors

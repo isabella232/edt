@@ -12,6 +12,9 @@ import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -886,5 +889,15 @@ public class BindingUtil {
 		superTypes.add(0, defaultSuperType);
 		
 	}
-
+	
+	public static boolean isZeroLiteral(Expression expr) {
+		final boolean[] isZero = new boolean[1];
+		expr.accept(new DefaultASTVisitor() {
+			public boolean visit(IntegerLiteral integerLiteral) {
+				isZero[0] = Integer.valueOf(integerLiteral.getValue()) == 0;
+				return false;
+			}
+		});
+		return isZero[0];
+	}
 }

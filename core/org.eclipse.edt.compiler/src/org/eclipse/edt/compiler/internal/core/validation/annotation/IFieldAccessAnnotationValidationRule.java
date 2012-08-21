@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Member;
 
 
 /**
@@ -22,6 +22,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
  */
 public interface IFieldAccessAnnotationValidationRule {
 
-	boolean validateLValue(Expression lValue, IDataBinding fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
-	boolean validateRValue(Expression rValue, IDataBinding fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	boolean validateLValue(Expression lValue, Member fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	boolean validateRValue(Expression rValue, Member fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

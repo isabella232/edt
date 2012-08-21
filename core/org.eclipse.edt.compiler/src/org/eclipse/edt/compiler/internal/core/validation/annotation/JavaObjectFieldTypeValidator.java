@@ -13,32 +13,29 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.ParameterKind;
 
 
-/**
- * @author demurray
- */
 public class JavaObjectFieldTypeValidator extends DefaultFieldContentAnnotationValidationRule {
 	
-	public void validate(Node errorNode, Node container, IDataBinding containerBinding, String canonicalContainerName, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	@Override
+	public void validate(Node errorNode, Node container, Member containerBinding, String canonicalContainerName, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 	}
 	
-	public void validateFunctionParameter(FunctionParameter fParameter, IDataBinding dataBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		ITypeBinding parameterTypeBinding = dataBinding.getType();
-		if(Binding.isValidBinding(parameterTypeBinding) && dataBinding.getKind() == IDataBinding.FUNCTION_PARAMETER_BINDING) {
-			FunctionParameterBinding parameterBinding = (FunctionParameterBinding) dataBinding;
+	@Override
+	public void validateFunctionParameter(FunctionParameter fParameter, Member dataBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		org.eclipse.edt.mof.egl.Type parameterTypeBinding = dataBinding.getType();
+		if (parameterTypeBinding != null && dataBinding instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
+			org.eclipse.edt.mof.egl.FunctionParameter parameterBinding = (org.eclipse.edt.mof.egl.FunctionParameter) dataBinding;
 
-			if(!parameterBinding.isInput()) {
+			if (parameterBinding.getParameterKind() != ParameterKind.PARM_IN) {
 				problemRequestor.acceptProblem(
 					fParameter,
 					IProblemRequestor.IN_MODIFIER_REQUIRED_FOR_JAVAOBJECT_FUNCTION_PARAMETERS,
@@ -47,8 +44,7 @@ public class JavaObjectFieldTypeValidator extends DefaultFieldContentAnnotationV
 		}			
 	}
 	
-	public void validateFunctionReturnType(Type typeNode, ITypeBinding typeBinding, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	@Override
+	public void validateFunctionReturnType(Type typeNode, org.eclipse.edt.mof.egl.Type typeBinding, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 	}
-	
-	
 }

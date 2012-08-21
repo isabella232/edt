@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,12 +26,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 /**

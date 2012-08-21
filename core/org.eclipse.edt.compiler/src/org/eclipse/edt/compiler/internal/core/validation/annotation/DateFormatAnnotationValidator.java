@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.eclipse.edt.compiler.binding.AnnotationValidationAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
@@ -31,7 +31,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 /**
  * @author 
  */
-public class DateFormatAnnotationValidator extends AnnotationValidationAnnotationTypeBinding {
+public class DateFormatAnnotationValidator extends AnnotationValidationRule {
 	
 	private static Set invalidDateFormatChars = new TreeSet();
 	static {

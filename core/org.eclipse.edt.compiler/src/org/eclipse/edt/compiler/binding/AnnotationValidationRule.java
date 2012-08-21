@@ -11,21 +11,35 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 
 /**
  * @author svihovec
+ *
+ * validate the fields of an annotation
  */
-public abstract class InvocationValidationRule extends AbstractValidationRule {
+public abstract class AnnotationValidationRule extends AbstractValidationRule {
 
-	public InvocationValidationRule(String caseSensitiveInternedName) {
+	public AnnotationValidationRule(String caseSensitiveInternedName) {
 		super(caseSensitiveInternedName);
 	}
 	
-	public abstract void validate(Node node, Element element, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	/**
+	 * 
+	 * @param errorNode
+	 * @param target
+	 * @param targetTypeBinding
+	 * @param allAnnotationsAndFields Map of annotations and annotation fields. For the fields it contains their resolved values.
+	 * @param problemRequestor
+	 * @param compilerOptions
+	 */
+	public abstract void validate(Node errorNode, Node target, Type targetTypeBinding, Member targetMember, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+
 }

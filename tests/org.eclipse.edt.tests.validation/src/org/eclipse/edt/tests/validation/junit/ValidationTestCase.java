@@ -155,7 +155,7 @@ public class ValidationTestCase extends TestCase {
 				arguments.add("-xmlout");
 				arguments.add(testFile.getPath());
 				arguments.add("-extensions");
-				arguments.add("org.eclipse.edt.mof.eglx.jtopen.IBMiExtension,org.eclipse.edt.mof.eglx.persistence.sql.SQLExtension");
+				arguments.add("org.eclipse.edt.mof.eglx.jtopen.IBMiExtension,org.eclipse.edt.mof.eglx.persistence.sql.SQLExtension,org.eclipse.edt.mof.eglx.services.ServicesExtension");
 				
 				System.setOut(new PrintStream(new FileOutputStream(EGLCOut.getPath())));
 				

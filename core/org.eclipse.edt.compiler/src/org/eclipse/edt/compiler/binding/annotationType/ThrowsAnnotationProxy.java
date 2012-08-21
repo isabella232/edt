@@ -14,53 +14,46 @@ package org.eclipse.edt.compiler.binding.annotationType;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
+import org.eclipse.edt.compiler.binding.InvocationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedInvocationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ThrowsInvocationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.ThrowsValidator;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
-class ThrowsAnnotationTypeBinding extends BooleanValueAnnotationTypeBinding {
-	public static final String caseSensitiveName = InternUtil.internCaseSensitive("throws");
-	public static final String name = InternUtil.intern(caseSensitiveName);
+public class ThrowsAnnotationProxy extends BooleanValueAnnotationProxy {
+	public static final String caseSensitiveName = NameUtile.getAsName("throws");
+	public static final String name = NameUtile.getAsName(caseSensitiveName);
 	
-	private static ThrowsAnnotationTypeBinding INSTANCE = new ThrowsAnnotationTypeBinding();
+	private static ThrowsAnnotationProxy INSTANCE = new ThrowsAnnotationProxy();
 	
-	private ThrowsAnnotationTypeBinding() {
+	private ThrowsAnnotationProxy() {
 		super(caseSensitiveName);
 	}
 	
-	public static ThrowsAnnotationTypeBinding getInstance() {
+	public static ThrowsAnnotationProxy getInstance() {
 		return INSTANCE;
 	}
 	
-    private static final List invocationValidators = new ArrayList();
+    private static final List<InvocationValidationRule> invocationValidators = new ArrayList();
     static {
     	invocationValidators.add(new UserDefinedInvocationValidationRule(ThrowsInvocationValidator.class));
     }
 	
-	private static final List myAnnotations = new ArrayList();
+	private static final List<AnnotationValidationRule> myAnnotations = new ArrayList();
    	static{
    		myAnnotations.add(new UserDefinedAnnotationValidationRule(ThrowsValidator.class));
    	}
 
-	
-	public boolean isApplicableFor(IBinding binding) {
-		return true;
-	}
-	
-	private Object readResolve() {
-		return INSTANCE;
-	}
-	
 	@Override
-	public List getInvocationValidators() {
+	public List<InvocationValidationRule> getInvocationValidators() {
 		return invocationValidators;
 	}
 	
-	public List getAnnotations() {
+	@Override
+	public List<AnnotationValidationRule> getAnnotationValidators() {
 		return myAnnotations;
 	}
 

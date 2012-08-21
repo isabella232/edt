@@ -17,31 +17,31 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author svihovec
- *
  */
-public class UserDefinedAnnotationValidationRule extends AnnotationValidationAnnotationTypeBinding {
+public class UserDefinedAnnotationValidationRule extends AnnotationValidationRule {
 
 	private Class validatorClass;
 
 	public UserDefinedAnnotationValidationRule(Class validatorClass) {
-		super(InternUtil.internCaseSensitive("UserDefinedAnnotationValidationRule"));
+		super(NameUtile.getAsName("UserDefinedAnnotationValidationRule"));
 		
 		this.validatorClass = validatorClass;
 	}
-
-	public void validate(Node errorNode, Node target, ITypeBinding targetTypeBinding, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions){
+	
+	@Override
+	public void validate(Node errorNode, Node target, Type targetTypeBinding, Member targetMember, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
-			((IAnnotationValidationRule)validatorClass.newInstance()).validate(errorNode, target, targetTypeBinding, allAnnotations, problemRequestor, compilerOptions);
+			((IAnnotationValidationRule)validatorClass.newInstance()).validate(errorNode, target, targetTypeBinding, targetMember, allAnnotationsAndFields, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

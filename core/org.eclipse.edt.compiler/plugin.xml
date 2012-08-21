@@ -3,29 +3,6 @@
 <plugin>
 
 
-<!-- =============================================================================== -->
-<!--                                                                                 -->
-<!-- Define the EGL content type								                     -->
-<!--                                                                                 -->
-<!-- =============================================================================== -->
-   <extension
-         point="org.eclipse.core.runtime.contentTypes">
-       <content-type id="egl" name="%eglContentTypeName"
-       		base-type="org.eclipse.core.runtime.text"
-			priority="high"			
-			file-extensions="egl">
-		</content-type>
-   </extension>
-   
-
-<!-- =============================================================================== -->
-<!--                                                                                 -->
-<!-- Define the buldDescriptorLocator extension point	                             -->
-<!--                                                                                 -->
-<!-- =============================================================================== -->
-   <extension-point id="buildDescriptorLocator" name="buildDescriptorLocator"/>
-   
-   
 <!-- =================================================================================== -->
 <!-- Extension: EGL Markers                                                             -->
 <!-- =================================================================================== -->

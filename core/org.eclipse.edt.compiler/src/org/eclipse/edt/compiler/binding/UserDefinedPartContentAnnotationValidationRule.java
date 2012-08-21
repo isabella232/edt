@@ -16,31 +16,30 @@ import java.util.Map;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IPartContentAnnotationValidationRule;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author svihovec
- *
  */
-public class UserDefinedPartContentAnnotationValidationRule extends PartContentValidationAnnotationTypeBinding {
+public class UserDefinedPartContentAnnotationValidationRule extends PartContentValidationRule {
 
 	private Class validatorClass;
 
 	public UserDefinedPartContentAnnotationValidationRule(Class validatorClass) {
-		super(InternUtil.internCaseSensitive("PartDefinedFieldContentAnnotationValidationRule"));
+		super(NameUtile.getAsName("PartDefinedFieldContentAnnotationValidationRule"));
 		
 		this.validatorClass = validatorClass;
 	}
-
-	public void validate(Node errorNode, Node target, Map allAnnotations, IProblemRequestor problemRequestor) {
+	
+	@Override
+	public void validate(Node errorNode, Node target, Map<String, Map<Annotation, Object[]>> allAnnotations, IProblemRequestor problemRequestor) {
 		try {
 			((IPartContentAnnotationValidationRule)validatorClass.newInstance()).validate(errorNode, target, allAnnotations, problemRequestor);
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

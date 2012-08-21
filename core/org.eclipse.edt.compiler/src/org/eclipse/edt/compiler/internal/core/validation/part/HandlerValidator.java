@@ -15,6 +15,7 @@ import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 
 public class HandlerValidator extends FunctionContainerValidator {
@@ -34,7 +35,7 @@ public class HandlerValidator extends FunctionContainerValidator {
 		handler = ahandler;
 		partNode = ahandler;
 		EGLNameValidator.validate(handler.getName(), EGLNameValidator.HANDLER, problemRequestor, compilerOptions);
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(ahandler); //TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(ahandler); //TODO
 		
 		checkImplements(handler.getImplementedInterfaces());
 		checkInterfaceFunctionsOverriden(handlerBinding);

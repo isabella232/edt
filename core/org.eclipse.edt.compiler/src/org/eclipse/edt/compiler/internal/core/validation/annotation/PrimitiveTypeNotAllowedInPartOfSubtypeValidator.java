@@ -13,7 +13,7 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.FieldContentValidationAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.FieldContentValidationRule;
 import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
@@ -29,7 +29,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 /**
  * @author demurray
  */
-public class PrimitiveTypeNotAllowedInPartOfSubtypeValidator extends FieldContentValidationAnnotationTypeBinding {
+public class PrimitiveTypeNotAllowedInPartOfSubtypeValidator extends FieldContentValidationRule {
 	
 	Primitive invalidType;
 	IAnnotationTypeBinding annotationType;

@@ -11,18 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Member;
 
 
 public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValidationRule {
 	
-	public boolean validateLValue(Expression lValue, IDataBinding fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public boolean validateLValue(Expression lValue, Member fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		if(hasGetterButNotSetter(fieldBinding)) {
 			problemRequestor.acceptProblem(
 				lValue,
@@ -35,7 +33,7 @@ public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValid
 		return true;
 	}
 	
-	public boolean validateRValue(Expression rValue, IDataBinding fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public boolean validateRValue(Expression rValue, Member fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		if(hasSetterButNotGetter(fieldBinding)) {
 			problemRequestor.acceptProblem(
 				rValue,
@@ -48,12 +46,12 @@ public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValid
 		return true;
 	}
 	
-	protected IAnnotationBinding getAnnotation(IDataBinding binding) {
-		return binding.getAnnotation(new String[] {"eglx", "lang"}, "Property");
+	protected Annotation getAnnotation(Member binding) {
+		return binding.getAnnotation("eglx.lang.Property");
 	}
 	
-	private boolean hasGetterButNotSetter(IDataBinding binding) {
-		IAnnotationBinding aBinding = getAnnotation(binding);
+	private boolean hasGetterButNotSetter(Member binding) {
+		Annotation aBinding = getAnnotation(binding);
 		if(aBinding != null) {
 			return hasGet(aBinding) &&
 			       !hasSet(aBinding);
@@ -61,20 +59,20 @@ public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValid
 		return false;
 	}
 	
-	private boolean hasGet(IAnnotationBinding aBinding) {
+	private boolean hasGet(Annotation aBinding) {
 		return hasValue(aBinding, "getMethod");
 	}
-	private boolean hasSet(IAnnotationBinding aBinding) {
+	private boolean hasSet(Annotation aBinding) {
 		return hasValue(aBinding, "setMethod");
 	}
 
 	
-	private boolean hasValue(IAnnotationBinding aBinding, String fieldName) {
-		IDataBinding annField = aBinding.findData(fieldName);
-		if (!Binding.isValidBinding(annField)) {
-			return false;
+	private boolean hasValue(Annotation aBinding, String fieldName) {
+		Object annField = aBinding.getValue(fieldName);
+		if (annField instanceof String) {
+			hasValue((String)annField);
 		}
-		return hasValue(((AnnotationFieldBinding)annField).getValue());
+		return false;
 		
 	}
 	
@@ -83,8 +81,8 @@ public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValid
 		return (obj != null) && obj.toString().length() > 0;
 	}
 	
-	private boolean hasSetterButNotGetter(IDataBinding binding) {
-		IAnnotationBinding aBinding = getAnnotation(binding);
+	private boolean hasSetterButNotGetter(Member binding) {
+		Annotation aBinding = getAnnotation(binding);
 		if(aBinding != null) {
 			return hasSet(aBinding) &&
 			       !hasGet(aBinding);

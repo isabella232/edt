@@ -11,13 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Part;
 
 public interface IInvocationValidationRule {
-
-	public void validate(Node node, IBinding binding, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	public void validate(Node node, Element element, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

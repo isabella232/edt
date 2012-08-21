@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -48,7 +49,7 @@ public class InterfaceValidator extends FunctionContainerValidator {
 	public boolean visit(Interface interfaceNode) {
 		iFaceNode = interfaceNode;
 		EGLNameValidator.validate(interfaceNode.getName(), EGLNameValidator.HANDLER, problemRequestor, compilerOptions);
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(interfaceNode); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(interfaceNode);
 		
 		if (iFaceNode.hasExtendedType()) {
 			checkExtendedTypes();

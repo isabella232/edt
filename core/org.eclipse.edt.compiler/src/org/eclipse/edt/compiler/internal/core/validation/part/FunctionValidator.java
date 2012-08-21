@@ -65,6 +65,7 @@ import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ContinueStatementValidator;
@@ -144,7 +145,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		checkFunctionName(nestedFunction.getName(), true);
 		checkNumberOfParms(nestedFunction.getFunctionParameters(), nestedFunction.getName(), functionName);
 		checkForConstructorCalls(nestedFunction);
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction);
 		
 		return true;
 	}
@@ -154,7 +155,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		
 		checkNumberOfParms(constructor.getParameters(), constructor, functionName);
 		checkForConstructorCalls(constructor);
-//		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(constructor); TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(constructor);
 		
 		return true;
 	}

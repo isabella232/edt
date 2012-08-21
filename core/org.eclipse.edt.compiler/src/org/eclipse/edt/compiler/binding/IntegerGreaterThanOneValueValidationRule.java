@@ -14,21 +14,19 @@ package org.eclipse.edt.compiler.binding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
-/**
- * @author Dave Murray
- */
-public class IntegerGreaterThanOneValueValidationRule extends ValueValidationAnnotationTypeBinding {
+public class IntegerGreaterThanOneValueValidationRule extends ValueValidationRule {
 	
 	public static IntegerGreaterThanOneValueValidationRule INSTANCE = new IntegerGreaterThanOneValueValidationRule();
 	
 	private IntegerGreaterThanOneValueValidationRule() {
-		super(InternUtil.internCaseSensitive("IntegerGreaterThanOneValueValidationRule"));
+		super(NameUtile.getAsName("IntegerGreaterThanOneValueValidationRule"));
 	}
 
-	public void validate(Node errorNode, Node target, IAnnotationBinding annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public void validate(Node errorNode, Node target, Annotation annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		boolean valid = false;
 		try {
 			int value = Integer.parseInt(annotationBinding.getValue().toString());
@@ -40,7 +38,7 @@ public class IntegerGreaterThanOneValueValidationRule extends ValueValidationAnn
 		if(!valid) {
 			problemRequestor.acceptProblem(errorNode,
 				IProblemRequestor.PROPERTY_REQUIRES_INTEGER_GREATER_THAN_ZERO,
-				new String[] { annotationBinding.getType().getCaseSensitiveName() });
+				new String[] { annotationBinding.getEClass().getETypeSignature() });
 		}
 	}
 }

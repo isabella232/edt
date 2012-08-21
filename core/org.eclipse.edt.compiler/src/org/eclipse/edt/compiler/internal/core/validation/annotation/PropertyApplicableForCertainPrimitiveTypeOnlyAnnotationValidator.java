@@ -13,7 +13,7 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.AnnotationValidationAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -37,7 +37,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 /**
  * @author Dave Murray
  */
-public abstract class PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator extends AnnotationValidationAnnotationTypeBinding {
+public abstract class PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator extends AnnotationValidationRule {
 	
 	protected IAnnotationTypeBinding annotationType;
 	protected String canonicalAnnotationName;
