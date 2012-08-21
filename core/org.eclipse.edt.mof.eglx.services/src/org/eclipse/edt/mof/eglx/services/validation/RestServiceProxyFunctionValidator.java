@@ -15,12 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.edt.compiler.FunctionValidator;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
-import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -28,15 +24,12 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
@@ -215,10 +208,8 @@ public class RestServiceProxyFunctionValidator extends
 			} else {
 				// non resource parm must be compatible with String
 				if (parm.getType().resolveType() != null) {
-					if (!TypeCompatibilityUtil
-							.isMoveCompatible(TypeUtils.Type_STRING, parm
-									.getType().resolveType(), null,
-									compilerOptions)) {
+					Member member =  parm.getName().resolveMember();
+					if (member != null && !IRUtils.isMoveCompatible(TypeUtils.Type_STRING, member.getType(), member)) {
 						problemRequestor
 								.acceptProblem(
 										parm.getType(),
