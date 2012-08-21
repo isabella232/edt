@@ -212,8 +212,8 @@ library sql
 		execute from rs with a; //1
 		execute from ds with a using b; //0
 		execute from ds using b; //0
-		execute using b; //0
-		execute with #sql{}; //0
+		execute using b; //1 No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement.
+		execute with #sql{}; //1 No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement.
 		execute with #sql{} from jndi; //0
 	end
 	 

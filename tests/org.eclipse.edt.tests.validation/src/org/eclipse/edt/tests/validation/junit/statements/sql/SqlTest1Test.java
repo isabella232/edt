@@ -861,20 +861,28 @@ public class SqlTest1Test extends ValidationTestCase {
 
 	/*
 	 * execute using b;
-	 * 0 validation messages are expected.
+	 * 1 validation message is expected.
+	 * It is expected to contain "No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine215() {
 		List messages = getMessagesAtLine( 215 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
 	 * execute with #sql{};
-	 * 0 validation messages are expected.
+	 * 1 validation message is expected.
+	 * It is expected to contain "No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine216() {
 		List messages = getMessagesAtLine( 216 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*

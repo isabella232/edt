@@ -84,7 +84,7 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 					}
 					
 					// If it's a nullable entity, it must have a public default constructor.
-					if ((expr instanceof TypedElement && ((TypedElement)expr).isNullable()) && isEntity(expr.resolveType()) && !TypeValidator.hasPublicDefaultConstructor(expr.resolveType())) {
+					if ((expr.resolveElement() instanceof TypedElement && ((TypedElement)expr.resolveElement()).isNullable()) && isEntity(expr.resolveType()) && !TypeValidator.hasPublicDefaultConstructor(expr.resolveType())) {
 						problemRequestor.acceptProblem(expr,
 								SQLResourceKeys.SQL_NULLABLE_TARGET_MISSING_DEFAULT_CONSTRUCTOR,
 								IMarker.SEVERITY_ERROR,
