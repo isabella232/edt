@@ -14,8 +14,8 @@ package org.eclipse.edt.compiler.binding.annotationType;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.AbstractValidationProxy;
 import org.eclipse.edt.compiler.binding.FieldContentValidationRule;
-import org.eclipse.edt.compiler.binding.PartSubTypeValidationProxy;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaScriptObjectFieldTypeValidator;
 import org.eclipse.edt.mof.utils.NameUtile;
@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.utils.NameUtile;
 /**
  * @author Harmon
  */
-public class JavaScriptObjectAnnotationProxy extends PartSubTypeValidationProxy {
+public class JavaScriptObjectAnnotationProxy extends AbstractValidationProxy {
     public static final String name = NameUtile.getAsName("JavaScriptObject");
 
     private static JavaScriptObjectAnnotationProxy INSTANCE = new JavaScriptObjectAnnotationProxy();
@@ -34,8 +34,7 @@ public class JavaScriptObjectAnnotationProxy extends PartSubTypeValidationProxy 
     	subPartTypeAnnotations.add(new UserDefinedFieldContentAnnotationValidationRule(JavaScriptObjectFieldTypeValidator.class));
     }
         
-    public JavaScriptObjectAnnotationProxy() {
-        super(name);
+    private JavaScriptObjectAnnotationProxy() {
     }
     
     public static JavaScriptObjectAnnotationProxy getInstance() {

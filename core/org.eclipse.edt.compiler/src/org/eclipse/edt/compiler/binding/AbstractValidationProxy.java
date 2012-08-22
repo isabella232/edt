@@ -45,11 +45,6 @@ public abstract class AbstractValidationProxy implements IValidationProxy {
 	}
 	
 	@Override
-	public List<ValueValidationRule> getValueValidators() {
-		return Collections.EMPTY_LIST;
-	}
-	
-	@Override
 	public AnnotationType getType() {
 		return type;
 	}

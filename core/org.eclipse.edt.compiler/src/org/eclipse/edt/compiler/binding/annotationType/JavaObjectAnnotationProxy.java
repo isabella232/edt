@@ -14,9 +14,9 @@ package org.eclipse.edt.compiler.binding.annotationType;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.AbstractValidationProxy;
 import org.eclipse.edt.compiler.binding.FieldContentValidationRule;
 import org.eclipse.edt.compiler.binding.InstantiationValidationRule;
-import org.eclipse.edt.compiler.binding.PartSubTypeValidationProxy;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedInstantiationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaObjectFieldTypeValidator;
@@ -27,7 +27,7 @@ import org.eclipse.edt.mof.utils.NameUtile;
 /**
  * @author Harmon
  */
-public class JavaObjectAnnotationProxy extends PartSubTypeValidationProxy {
+public class JavaObjectAnnotationProxy extends AbstractValidationProxy {
     public static final String name = NameUtile.getAsName("JavaObject");
 
     private static JavaObjectAnnotationProxy INSTANCE = new JavaObjectAnnotationProxy();
@@ -42,8 +42,7 @@ public class JavaObjectAnnotationProxy extends PartSubTypeValidationProxy {
     	instantiationValidators.add(new UserDefinedInstantiationValidationRule(JavaObjectInstantiationValidator.class));
     }
         
-    public JavaObjectAnnotationProxy() {
-        super(name);
+    private JavaObjectAnnotationProxy() {
     }
     
     public static JavaObjectAnnotationProxy getInstance() {

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.binding.AbstractValidationProxy;
 import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.FieldAccessValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
@@ -30,7 +31,7 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.SetMethodAnn
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
-public class EGLPropertyAnnotationProxy extends ComplexAnnotationProxy {
+public class EGLPropertyAnnotationProxy extends AbstractValidationProxy {
 	public static final String name = NameUtile.getAsName(IEGLConstants.PROPERTY_EGLPROPERTY);
 	
 	private static EGLPropertyAnnotationProxy INSTANCE = new EGLPropertyAnnotationProxy();
@@ -63,7 +64,6 @@ public class EGLPropertyAnnotationProxy extends ComplexAnnotationProxy {
 	}
    	
 	private EGLPropertyAnnotationProxy() {
-		super(name, new Object[0]);
 	}
 	
 	public static EGLPropertyAnnotationProxy getInstance() {

@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.binding.annotationType;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.AbstractValidationProxy;
 import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.InvocationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
@@ -23,14 +24,13 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.ThrowsValida
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
-public class ThrowsAnnotationProxy extends BooleanValueAnnotationProxy {
+public class ThrowsAnnotationProxy extends AbstractValidationProxy {
 	public static final String caseSensitiveName = NameUtile.getAsName("throws");
 	public static final String name = NameUtile.getAsName(caseSensitiveName);
 	
 	private static ThrowsAnnotationProxy INSTANCE = new ThrowsAnnotationProxy();
 	
 	private ThrowsAnnotationProxy() {
-		super(caseSensitiveName);
 	}
 	
 	public static ThrowsAnnotationProxy getInstance() {

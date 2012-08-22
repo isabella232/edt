@@ -745,11 +745,14 @@ public class AnnotationValidator {
 	
 	private void processPartSubTypeSubAnnotations(Node errorNode, Node target, Annotation subTypeBinding, List<AnnotationValidationRule> rules) {
 		if (rules != null && rules.size() > 0) {
-			// Collect all annotations and fields from the subtype. Users can retrieve them by name if they need the values.
+			// Collect all annotations and fields from the subtype, and also add the subtype itself. Users can retrieve them by name if they need the values.
 			Map<String, Object> allAnnotationsAndFieldsMap = new HashMap();
+			allAnnotationsAndFieldsMap.put(NameUtile.getAsName(subTypeBinding.getEClass().getName()), subTypeBinding);
+			
 			for (Annotation annot : subTypeBinding.getAnnotations()) {
 				allAnnotationsAndFieldsMap.put(NameUtile.getAsName(annot.getEClass().getName()), annot);
 			}
+			
 			for (EField efield : subTypeBinding.getEClass().getEFields()) {
 				Object value = subTypeBinding.getValue(efield.getName());
 				if (value != null) {
