@@ -51,11 +51,20 @@ public class AnnotationExpression extends Expression {
     	return annotation;
     }
     
+    public Object resolveElement() {
+		return annotation;
+	}
+    
     public void setAnnotation(Annotation annotation) {
     	this.annotation = annotation;
     }
 
     protected Object clone() throws CloneNotSupportedException {
         return new AnnotationExpression((Name) name.clone(), getOffset(), getOffset() + getLength());
+    }
+    
+    @Override
+    public String toString() {
+    	return "@" + getCanonicalString();
     }
 }

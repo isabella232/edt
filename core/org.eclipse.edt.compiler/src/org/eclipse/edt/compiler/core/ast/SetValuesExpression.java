@@ -55,4 +55,9 @@ public class SetValuesExpression extends Expression {
 	protected Object clone() throws CloneNotSupportedException {
 		return new SetValuesExpression((Expression)primary.clone(), (SettingsBlock)settingsBlock.clone(), getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		return primary.toString() + settingsBlock.toString();
+	}
 }

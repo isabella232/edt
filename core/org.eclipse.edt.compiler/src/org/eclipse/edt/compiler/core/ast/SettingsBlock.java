@@ -46,6 +46,25 @@ public class SettingsBlock extends Node {
 		return new SettingsBlock(cloneList(settings), getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		buf.append('{');
+		
+		boolean first = true;
+		for (Object setting : settings) {
+			if (first) {
+				first = false;
+			}
+			else {
+				buf.append(", ");
+			}
+			buf.append(setting.toString());
+		}
+		buf.append('}');
+		return buf.toString();
+	}
+	
 //	public Assignment getSetting(final String propertyName) {
 //		final Assignment[] result = new Assignment[] {null};
 //		acceptChildren(new DefaultASTVisitor() {

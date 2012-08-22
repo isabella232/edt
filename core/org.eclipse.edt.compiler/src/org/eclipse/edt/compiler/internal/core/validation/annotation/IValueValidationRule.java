@@ -19,9 +19,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 
 /**
  * @author svihovec
- *
  */
 public interface IValueValidationRule {
-
-	public void validate(Node errorNode, Node target, Annotation annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	public void validate(Node errorNode, Node target, Annotation annotation, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

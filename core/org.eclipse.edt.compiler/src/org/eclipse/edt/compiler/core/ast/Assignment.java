@@ -113,6 +113,7 @@ public static class Operator {
 		return operator;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -122,7 +123,13 @@ public static class Operator {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new Assignment(operator, (Expression)lhs.clone(), (Expression)rhs.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return lhs.toString() + " " + operator.toString() + " " + rhs.toString();
 	}
 }
