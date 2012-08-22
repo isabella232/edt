@@ -28,14 +28,16 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
@@ -133,21 +135,21 @@ public class ServicesCallStatementValidator implements StatementValidator{
 		}
 		else {
 			//5) Number of parms in the callback must be correct
-			List<Type> argTypes = getArgTypesForCallback(invocTarget);
+			List<Member> args = getArgTypesForCallback(invocTarget);
 			
-			if(argTypes.size() == parms.size() ||
-					(argTypes.size() == parms.size() - 1 && lastParmIsIHttp(parms))) {
+			if(args.size() == parms.size() ||
+					(args.size() == parms.size() - 1 && lastParmIsIHttp(parms))) {
 				// 6) parms in the callback function should be move compatible with the out/inout args/return type of the service function
 
-				for (int i = 0; i < argTypes.size(); i++) {
-					if (!argTypeCompatibleWithParm(argTypes.get(i), parms.get(i))) {
-						problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {argTypes.get(i).getTypeSignature(), parms.get(i).getCaseSensitiveName(), expr.getCanonicalString(), parms.get(i).getType().getTypeSignature()}, ResourceKeys.getResourceBundleForKeys());
+				for (int i = 0; i < args.size(); i++) {
+					if (!argTypeCompatibleWithParm(args.get(i), parms.get(i))) {
+						problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {args.get(i).getType().getTypeSignature(), parms.get(i).getCaseSensitiveName(), expr.getCanonicalString(), parms.get(i).getType().getTypeSignature()}, ResourceKeys.getResourceBundleForKeys());
 					}
 				}
 			
 			}
 			else{
-				problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(),  Integer.toString(lastParmIsIHttp(parms) ? argTypes.size() + 1 :argTypes.size())}, ResourceKeys.getResourceBundleForKeys());
+				problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(),  Integer.toString(lastParmIsIHttp(parms) ? args.size() + 1 :args.size())}, ResourceKeys.getResourceBundleForKeys());
 			}
 			
 		}
@@ -164,17 +166,17 @@ public class ServicesCallStatementValidator implements StatementValidator{
 		return false;
 	}
 	
-	private List<Type> getArgTypesForCallback(Expression invocTarget) {
-		List<Type> list = new ArrayList<Type>();
+	private List<Member> getArgTypesForCallback(Expression invocTarget) {
+		List<Member> list = new ArrayList<Member>();
 		for (FunctionParameter parameter : getParameters(invocTarget)) {
 			if (parameter.getParameterKind() != ParameterKind.PARM_IN) {
-				list.add(parameter.getType());
+				list.add(parameter);
 			}
 		}
 		
 		Type retType = invocTarget.resolveType();
 		if (retType != null) {
-			list.add(retType);
+			list.add(invocTarget.resolveMember());
 		}
 		
 		return list;
@@ -213,20 +215,17 @@ public class ServicesCallStatementValidator implements StatementValidator{
 	}
 	
 	
-	private boolean argTypeCompatibleWithParm(Type argType, FunctionParameter parm) {
-		if (argType == null) {
+	private boolean argTypeCompatibleWithParm(Member argRHS, FunctionParameter parmLHS) {
+		if (argRHS == null) {
 			return true;
 		}
 		
-		if (parm == null || parm.getType() == null) {
-			return true;
-		}
-
-    	if (TypeCompatibilityUtil.isMoveCompatible(parm.getType(), argType, null, compilerOptions)) {
+    	if (IRUtils.isMoveCompatible(parmLHS.getType(), argRHS.getType(), argRHS)) {
     		return true;
     	}
 		
- 	   if (TypeCompatibilityUtil.areCompatibleExceptions(argType, parm.getType(), compilerOptions)) {
+ 	   if (argRHS.getType() instanceof NamedElement &&
+ 			   TypeUtils.areCompatible(parmLHS.getType().getClassifier(), (NamedElement)argRHS.getType())) {
  		   return true;
  	   }
  	   return false;
