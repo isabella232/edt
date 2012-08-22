@@ -1262,4 +1262,214 @@ public class SqlTest1Test extends ValidationTestCase {
 		List messages = getMessagesAtLine( 289 );
 		assertEquals( 1, messages.size() );
 	}
+
+	/*
+	 * a int{@SQLResultSetControl};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine293() {
+		List messages = getMessagesAtLine( 293 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * b int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine294() {
+		List messages = getMessagesAtLine( 294 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * c int{@SQLResultSetControl{}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine295() {
+		List messages = getMessagesAtLine( 295 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * d sqldatasource?{@SQLResultSetControl};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine296() {
+		List messages = getMessagesAtLine( 296 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * e sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine297() {
+		List messages = getMessagesAtLine( 297 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * f sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine298() {
+		List messages = getMessagesAtLine( 298 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * rsc1 int{@SQLResultSetControl};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine302() {
+		List messages = getMessagesAtLine( 302 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * rsc2 int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine303() {
+		List messages = getMessagesAtLine( 303 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * rsc3 int{@SQLResultSetControl{}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine304() {
+		List messages = getMessagesAtLine( 304 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * rsc4 sqldatasource?{@SQLResultSetControl};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine305() {
+		List messages = getMessagesAtLine( 305 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * rsc5 sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine306() {
+		List messages = getMessagesAtLine( 306 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * rsc6 sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine307() {
+		List messages = getMessagesAtLine( 307 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * rsc1 int{@SQLResultSetControl};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine311() {
+		List messages = getMessagesAtLine( 311 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * rsc2 int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine312() {
+		List messages = getMessagesAtLine( 312 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * rsc3 int{@SQLResultSetControl{}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine313() {
+		List messages = getMessagesAtLine( 313 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * rsc4 sqldatasource?{@SQLResultSetControl};
+	 * 1 validation message is expected.
+	 * It is expected to contain "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.".
+	 */
+	public void testLine314() {
+		List messages = getMessagesAtLine( 314 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"@SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.\" was issued." );
+	}
+
+	/*
+	 * rsc5 sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine315() {
+		List messages = getMessagesAtLine( 315 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * rsc6 sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine316() {
+		List messages = getMessagesAtLine( 316 );
+		assertEquals( 0, messages.size() );
+	}
 }

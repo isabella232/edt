@@ -15,7 +15,7 @@ import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 
 record SQLResultSetControl type Annotation {
 	targets=[elementKind.fieldMbr],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.SQLResultSetControlAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.mof.eglx.persistence.sql.validation.SQLResultSetControlAnnotationProxy"
 }
 	scrollablity SQLResultSetScrollablity? = SQLResultSetScrollablity.TYPE_FORWARD_ONLY;
 	concurrency SQLResultSetConcurrency? = SQLResultSetConcurrency.CONCUR_READ_ONLY;

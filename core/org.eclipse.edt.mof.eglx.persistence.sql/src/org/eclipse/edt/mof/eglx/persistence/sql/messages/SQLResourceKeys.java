@@ -44,4 +44,5 @@ public class SQLResourceKeys {
     public static final int SQL_NO_WITH_USING = 8517;
     public static final int SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE = 8518;
     public static final int SQL_NULLABLE_TARGET_MISSING_DEFAULT_CONSTRUCTOR = 8519;
+    public static final int SQLRESULTSET_ANNOTATION_TYPE_ERROR = 8520;
 }

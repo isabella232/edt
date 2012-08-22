@@ -288,4 +288,30 @@ library sql
 		replace array to ds with a; //1
 		replace invalidArray to ds using a; //1
 	end
+	
+	function validateSQLResultSetControl()
+		a int{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+		b int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+		c int{@SQLResultSetControl{}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+		d sqldatasource?{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+		e sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 0
+		f sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}}; // 0
+	end
+	
+	// also test SQLResultSetControl on global fields
+	rsc1 int{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc2 int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc3 int{@SQLResultSetControl{}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc4 sqldatasource?{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc5 sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 0
+	rsc6 sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}}; // 0
+end
+
+record SQLResultSetControlRec
+	rsc1 int{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc2 int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc3 int{@SQLResultSetControl{}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc4 sqldatasource?{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc5 sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 0
+	rsc6 sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}}; // 0
 end
