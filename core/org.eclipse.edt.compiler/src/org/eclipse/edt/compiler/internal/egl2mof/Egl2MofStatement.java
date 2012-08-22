@@ -29,6 +29,7 @@ import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
+import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.ContinueStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.DeleteStatement;
@@ -140,7 +141,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 				Member binding = name.resolveMember();
 				
 				Field field;
-				if (binding.isStatic()) {
+				if (binding instanceof ConstantField) {
 					field = factory.createConstantField();
 				}
 				else{
