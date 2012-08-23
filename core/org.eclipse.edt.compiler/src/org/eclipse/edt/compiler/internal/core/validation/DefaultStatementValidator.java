@@ -13,6 +13,7 @@ package org.eclipse.edt.compiler.internal.core.validation;
 
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.validation.statement.ForEachStatementValidator;
 
 
 public class DefaultStatementValidator extends AbstractStatementValidator {
@@ -49,8 +50,7 @@ public class DefaultStatementValidator extends AbstractStatementValidator {
 	
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement foreachStatement) {
-		//TODO port to new binding model
-//		foreachStatement.accept(new ForEachStatementValidator(problemRequestor, compilerOptions));
+		foreachStatement.accept(new ForEachStatementValidator(problemRequestor, compilerOptions));
 		return false;
 	}
 	
