@@ -36,6 +36,7 @@ import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstructorInvocation;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -43,6 +44,7 @@ import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.DynamicAccess;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
@@ -67,7 +69,6 @@ import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.MultiOperandExpression;
 import org.eclipse.edt.mof.egl.Name;
-import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.NumericLiteral;
@@ -621,41 +622,35 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			return false;
 		}
 		
-		Name name;
+		Name name = null;
 		if (binding instanceof Part) {
 			name = createNameForPart((Part)binding);
 			name.setId(((Part)binding).getCaseSensitiveName());
 		}
-		else {
+		else if(binding instanceof Member){
 			name = factory.createMemberName();
-			if(binding instanceof NamedElement){
-				name.setId(((NamedElement)binding).getCaseSensitiveName());
+			if(((Member)binding).getContainer() == null && TypeUtils.isDynamicType(((Member) binding).getType())){
+				name.setId(node.getCaseSensitiveIdentifier());
+			}
+			else{
+				name.setId(((Member)binding).getCaseSensitiveName());
 			}
 		}
 			
 		Element qualifier = null;
 		
-		if(binding instanceof Member &&
-				((Member)binding).getContainer() instanceof Library){
-			Node statementContainer = node.getParent();
-			while(!(statementContainer instanceof org.eclipse.edt.compiler.core.ast.Part) 
-					&& statementContainer != null){
-				statementContainer = statementContainer.getParent(); 
-			}
-			if(statementContainer instanceof org.eclipse.edt.compiler.core.ast.Part && 
-					!mofTypeFor((Library)((Member)binding).getContainer()).equals(mofTypeFor(((org.eclipse.edt.compiler.core.ast.Part)statementContainer).getName().resolveType()))){
-				qualifier = ((Member)binding).getContainer();
-			}
+		if(binding instanceof Member && 
+				isInOtherLibrary(((Member)binding).getContainer())){
+			qualifier = ((Member)binding).getContainer();
 		}
-		
-		if (qualifier == null && binding instanceof Enumeration) {
-			name = (Name)addQualifier(createNameForPart((Enumeration)binding), name);
+		else if(binding instanceof EnumerationEntry){
+			qualifier = ((Member)binding).getContainer();
 		}
 		
 		if (qualifier != null) {
 			
-			if (qualifier instanceof Library ) {
-				name = (Name)addQualifier(createNameForPart((Library)qualifier), name);
+			if (qualifier instanceof Part) {
+				name = (Name)addQualifier(createNameForPart((Part)qualifier), name);
 			}
 			else {
 				Element context = (Element)getEObjectFor(qualifier);
@@ -683,8 +678,10 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName name) {
-		Type type = name.getQualifier().resolveType();
-		if (TypeUtils.isDynamicType(type)) {
+		Object element = name.resolveElement();
+		if (element instanceof Member &&
+				((Member)element).getContainer() == null && 
+				TypeUtils.isDynamicType(((Member)element).getType())) {
 			DynamicAccess expr = factory.createDynamicAccess();
 			setElementInformation(name, expr);
 			StringLiteral index = factory.createStringLiteral();
@@ -701,10 +698,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			nameExpr.setId(name.getCaseSensitiveIdentifier());
 			
 			Element qualBinding = (Element)name.getQualifier().resolveElement();
-			if (qualBinding instanceof Library && 
-					currentPart instanceof LogicAndDataPart &&
-					!((LogicAndDataPart)currentPart).getUsedParts().contains(mofTypeFor((Library)qualBinding)) ||
-					qualBinding instanceof Enumeration) {
+			if (qualBinding instanceof Part && 
+				!isInUse((Part)qualBinding) ||
+				qualBinding instanceof Enumeration){
 				nameExpr.setQualifier(createNameForPart((Part)qualBinding));
 			}
 			else {
@@ -715,6 +711,15 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return false;
 	}
 
+	private boolean isInUse(Type binding){
+		return binding instanceof Library && 
+				currentPart instanceof LogicAndDataPart &&
+				((LogicAndDataPart)currentPart).getUsedParts().contains(mofTypeFor((Library)binding));
+	}
+	private boolean isInOtherLibrary(Container binding){
+		return (binding instanceof Library && 
+				!mofTypeFor((Library)binding).equals(currentPart));
+	}
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NullLiteral literal) {
 		NullLiteral lit = factory.createNullLiteral();
