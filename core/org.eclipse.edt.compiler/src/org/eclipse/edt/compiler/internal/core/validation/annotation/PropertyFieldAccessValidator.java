@@ -53,8 +53,7 @@ public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValid
 	private boolean hasGetterButNotSetter(Member binding) {
 		Annotation aBinding = getAnnotation(binding);
 		if(aBinding != null) {
-			return hasGet(aBinding) &&
-			       !hasSet(aBinding);
+			return hasGet(aBinding) && !hasSet(aBinding);
 		}
 		return false;
 	}
@@ -62,22 +61,16 @@ public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValid
 	private boolean hasGet(Annotation aBinding) {
 		return hasValue(aBinding, "getMethod");
 	}
+	
 	private boolean hasSet(Annotation aBinding) {
 		return hasValue(aBinding, "setMethod");
 	}
-
 	
 	private boolean hasValue(Annotation aBinding, String fieldName) {
-		Object annField = aBinding.getValue(fieldName);
-		if (annField instanceof String) {
-			hasValue((String)annField);
-		}
-		return false;
-		
+		return hasValue(aBinding.getValue(fieldName));
 	}
 	
 	protected boolean hasValue(Object obj) {
-		
 		return (obj != null) && obj.toString().length() > 0;
 	}
 	

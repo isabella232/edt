@@ -11,18 +11,18 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Member;
 
-public class EGLPropertyFieldAccessValidator extends
-		PropertyFieldAccessValidator {
+public class EGLPropertyFieldAccessValidator extends PropertyFieldAccessValidator {
 	
-	protected IAnnotationBinding getAnnotation(IDataBinding binding) {
-		return binding.getAnnotation(new String[] {"eglx", "lang"}, "EGLProperty");
+	@Override
+	protected Annotation getAnnotation(Member binding) {
+		return binding.getAnnotation("eglx.lang.EGLProperty");
 	}
-
+	
+	@Override
 	protected boolean hasValue(Object obj) {
-		
 		return (obj != null);
 	}
 

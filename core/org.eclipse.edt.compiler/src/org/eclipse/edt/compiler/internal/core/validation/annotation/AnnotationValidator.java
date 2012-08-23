@@ -65,7 +65,6 @@ import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Member;
@@ -295,8 +294,8 @@ public class AnnotationValidator {
 				}
 				
 				if (structureItem.resolveMember() != null && structureItem.hasType() && !structureItem.hasInitializer() && !structureItem.isNullable()) {					
-					validateInstantiability(structureItem, structureItem.getType().resolveType(), getDeclaringPart(structureItem.resolveMember()));
-					validateInvocation(structureItem, getDefaultConstructor(structureItem.getType().resolveType()), getDeclaringPart(structureItem.resolveMember()));					
+					validateInstantiability(structureItem, structureItem.getType().resolveType(), BindingUtil.getDeclaringPart(structureItem.resolveMember()));
+					validateInvocation(structureItem, getDefaultConstructor(structureItem.getType().resolveType()), BindingUtil.getDeclaringPart(structureItem.resolveMember()));					
 				}
 				return false;
 			}
@@ -311,8 +310,8 @@ public class AnnotationValidator {
 				
 				Member field = classDataDeclaration.getNames().get(0).resolveMember();
 				if (field != null && !classDataDeclaration.hasInitializer() && !classDataDeclaration.isNullable()) {					
-					validateInstantiability(classDataDeclaration, classDataDeclaration.getType().resolveType(), getDeclaringPart(field));
-					validateInvocation(classDataDeclaration, getDefaultConstructor(classDataDeclaration.getType().resolveType()), getDeclaringPart(field));					
+					validateInstantiability(classDataDeclaration, classDataDeclaration.getType().resolveType(), BindingUtil.getDeclaringPart(field));
+					validateInvocation(classDataDeclaration, getDefaultConstructor(classDataDeclaration.getType().resolveType()), BindingUtil.getDeclaringPart(field));					
 				}
 				return false;
 			}
@@ -435,8 +434,8 @@ public class AnnotationValidator {
 				
 				Member field = functionDataDeclaration.getNames().get(0).resolveMember();
 				if (field != null && !functionDataDeclaration.hasInitializer() && !functionDataDeclaration.isNullable()) {				
-					validateInstantiability(functionDataDeclaration, functionDataDeclaration.getType().resolveType(), getDeclaringPart(field));					
-					validateInvocation(functionDataDeclaration, getDefaultConstructor(functionDataDeclaration.getType().resolveType()), getDeclaringPart(field));
+					validateInstantiability(functionDataDeclaration, functionDataDeclaration.getType().resolveType(), BindingUtil.getDeclaringPart(field));					
+					validateInvocation(functionDataDeclaration, getDefaultConstructor(functionDataDeclaration.getType().resolveType()), BindingUtil.getDeclaringPart(field));
 				}
 				
 
@@ -451,7 +450,7 @@ public class AnnotationValidator {
 	
 	/**
 	 * Process annotations that appear on a DataItem or Field target (structure item, page item, form field, program variable)
-	 * @param targetDataBinding TODO
+	 * @param targetDataBinding
 	 */
 	private void processAnnotations(final Node target, final org.eclipse.edt.mof.egl.Type targetTypeBinding, final Member targetDataBinding) {
 		target.accept(new AbstractASTExpressionVisitor() {
@@ -531,30 +530,18 @@ public class AnnotationValidator {
 					if (proxy != null) {					   
 						processSubAnnotations(annotationExpression, target, targetTypeBinding, targetDataBinding, (Annotation)annotationExpressionDBinding, proxy.getAnnotationValidators());
 						processComplexAnnotationFields(target, settingsBlock, proxy);
-						
-//						for(Iterator iter = setValuesExpression.getSettingsBlock().getSettings().iterator(); iter.hasNext();) {
-//							((Node) iter.next()).accept(this);
-//						}
 					}
 				}
 				return false;
 			}
 			
 			@Override
-			public boolean visit(Assignment assignment){
+			public boolean visit(Assignment assignment) {
 				Annotation aBinding = assignment.resolveBinding();
 				if (aBinding != null) {
 					IValidationProxy validationProxy = getValidationProxy(aBinding);
 					processSubAnnotations(assignment, target, targetTypeBinding, targetDataBinding, aBinding, validationProxy.getAnnotationValidators());
-					processSimpleAnnotationFields(target, assignment, validationProxy);	
-					
-					//TODO can't port this until Assignment has the annotation field bound. right now it only works with annotations, and not their fields
-//					if (aBinding.isAnnotationField()) {
-//						AnnotationFieldBinding annField = (AnnotationFieldBinding) aBinding;
-//						if (annField.getEnclosingAnnotationType() != null && annField.getEnclosingAnnotationType().getValidationProxy() != null) {
-//							processComplexAnnotationFields(target, assignment, annField.getEnclosingAnnotationType().getValidationProxy());
-//						}
-//					}
+					processComplexAnnotationFields(target, assignment, validationProxy);
 				}
 				return false;
 			}
@@ -632,6 +619,11 @@ public class AnnotationValidator {
 			}
 			
 			@Override
+			public boolean visit(org.eclipse.edt.compiler.core.ast.EGLClass eglClass) {
+				return true;
+			};
+			
+			@Override
 			public boolean visit(DataItem dataItem) {
 				return true;
 			}
@@ -643,9 +635,9 @@ public class AnnotationValidator {
 			
 			@Override
 			public boolean visit(SetValuesExpression setValuesExpression) {
-				final Expression annotationExpression = setValuesExpression.getExpression();
+				Expression annotationExpression = setValuesExpression.getExpression();
 				
-				final Member annotationExpressionDBinding = annotationExpression.resolveMember(); 
+				Member annotationExpressionDBinding = annotationExpression.resolveMember(); 
 				if (annotationExpressionDBinding != null) {
 					processOverriddenAnnotationsAndSetValues(setValuesExpression.getSettingsBlock());
 				}
@@ -702,16 +694,17 @@ public class AnnotationValidator {
 				processComplexAnnotationFields(target, assignment, proxy);
 				return true;
 			}
-		});	
+		});
 	}
 	
 	private void processComplexAnnotationFields(Node target, Assignment assignment, IValidationProxy proxy) {
 		Annotation aBinding = assignment.resolveBinding();
 		
-		if (aBinding != null && proxy != null) {				
-			Object value = aBinding.getValue();
+		if (aBinding != null && proxy != null) {
+			String name = NameUtile.getAsName(assignment.getLeftHandSide().getCanonicalString());
+			Object value = aBinding.getValue(name);
 			if (value != null) {
-				List<ValueValidationRule> annotations = proxy.getFieldValidators(NameUtile.getAsName(aBinding.getEClass().getName()));
+				List<ValueValidationRule> annotations = proxy.getFieldValidators(name);
 				if (annotations != null) {
 					for (ValueValidationRule nextRule : annotations) {
 						nextRule.validate(assignment.getRightHandSide(), target, aBinding, problemRequestor, compilerOptions);
@@ -721,25 +714,6 @@ public class AnnotationValidator {
 		}
 	}
 
-		
-	/**
-	 * Process annotations found on the value field of this simple annotation.
-	 */
-	private void processSimpleAnnotationFields(Node target, Assignment assignment, IValidationProxy proxy) {
-		// process annotations specifically for this annotations value
-		for (ValueValidationRule nextRule : proxy.getValueValidators()) {
-			Annotation resolveBinding = assignment.resolveBinding();
-			if (resolveBinding != null) {
-				Object value = resolveBinding.getValue();
-				if (value != null) {
-					problemRequestor = specializeProblemRequestor(problemRequestor, target, proxy.getType());
-					nextRule.validate(assignment.getRightHandSide(), target, resolveBinding, problemRequestor, compilerOptions);
-					problemRequestor = restoreProblemRequestor();
-				}
-			}
-		}
-	}
-	
 	/**
 	 * process annotations specified for all fields of this annotation
 	 */
@@ -771,11 +745,14 @@ public class AnnotationValidator {
 	
 	private void processPartSubTypeSubAnnotations(Node errorNode, Node target, Annotation subTypeBinding, List<AnnotationValidationRule> rules) {
 		if (rules != null && rules.size() > 0) {
-			// Collect all annotations and fields from the subtype. Users can retrieve them by name if they need the values.
+			// Collect all annotations and fields from the subtype, and also add the subtype itself. Users can retrieve them by name if they need the values.
 			Map<String, Object> allAnnotationsAndFieldsMap = new HashMap();
+			allAnnotationsAndFieldsMap.put(NameUtile.getAsName(subTypeBinding.getEClass().getName()), subTypeBinding);
+			
 			for (Annotation annot : subTypeBinding.getAnnotations()) {
 				allAnnotationsAndFieldsMap.put(NameUtile.getAsName(annot.getEClass().getName()), annot);
 			}
+			
 			for (EField efield : subTypeBinding.getEClass().getEFields()) {
 				Object value = subTypeBinding.getValue(efield.getName());
 				if (value != null) {
@@ -991,22 +968,6 @@ public class AnnotationValidator {
 					return con;
 				}
 			}
-		}
-		return null;
-	}
-	
-	private org.eclipse.edt.mof.egl.Part getDeclaringPart(Member m) {
-		if (m != null) {
-			Container c = m.getContainer();
-			while (c != null && !(c instanceof org.eclipse.edt.mof.egl.Part)) {
-				if (c instanceof Member) {
-					c = ((Member)c).getContainer();
-				}
-				else {
-					c = null;
-				}
-			}
-			return (org.eclipse.edt.mof.egl.Part)c;
 		}
 		return null;
 	}

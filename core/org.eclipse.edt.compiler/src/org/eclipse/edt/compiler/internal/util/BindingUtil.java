@@ -15,6 +15,7 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -898,5 +899,31 @@ public class BindingUtil {
 			}
 		});
 		return isZero[0];
+	}
+	
+	public static Part getDeclaringPart(Member m) {
+		if (m != null) {
+			Container c = m.getContainer();
+			while (c != null && !(c instanceof Part)) {
+				if (c instanceof Member) {
+					c = ((Member)c).getContainer();
+				}
+				else {
+					c = null;
+				}
+			}
+			return (Part)c;
+		}
+		return null;
+	}
+	
+	public static Part getDeclaringPart(Node n) {
+		while (n != null && !(n instanceof org.eclipse.edt.compiler.core.ast.Part)) {
+			n = n.getParent();
+		}
+		if (n instanceof org.eclipse.edt.compiler.core.ast.Part) {
+			return (Part)((org.eclipse.edt.compiler.core.ast.Part)n).getName().resolveType();
+		}
+		return null;
 	}
 }

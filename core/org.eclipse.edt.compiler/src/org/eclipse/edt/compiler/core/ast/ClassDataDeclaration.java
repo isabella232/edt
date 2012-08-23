@@ -108,4 +108,42 @@ public class ClassDataDeclaration extends Node {
 		
 		return new ClassDataDeclaration(new Boolean(isPrivate), new Boolean(isStatic), cloneList(ID_plus), (Type)type.clone(), Boolean.valueOf(isNullable), newSettingsBlockOpt, newInitializerOpt, isConstant, getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		
+		if (isConstant) {
+			buf.append("const ");
+		}
+		
+		boolean first = true;
+		for (Name name : ID_plus) {
+			if (first) {
+				first = false;
+			}
+			else {
+				buf.append(", ");
+			}
+			buf.append(name.getCaseSensitiveIdentifier());
+		}
+		buf.append(' ');
+		buf.append(type.toString());
+		if (isNullable) {
+			buf.append('?');
+		}
+		
+		if (settingsBlockOpt != null) {
+			buf.append(settingsBlockOpt.toString());
+		}
+		
+		if (initializerOpt != null) {
+			buf.append(" = ");
+			buf.append(initializerOpt.toString());
+		}
+		
+		buf.append(';');
+		
+		return buf.toString();
+	}
 }

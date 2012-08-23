@@ -11,41 +11,43 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class SetMethodAnnotationValueValidator implements IValueValidationRule {
 
-	public void validate(Node errorNode, Node target, IAnnotationBinding annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (annotationBinding.getValue() != null && annotationBinding.getValue() != IBinding.NOT_FOUND_BINDING) {
-			if (annotationBinding.getValue() instanceof IFunctionBinding){
-				validateSetMethod(errorNode, target, (IFunctionBinding)annotationBinding.getValue(), annotationBinding.getDeclaringPart(), problemRequestor, compilerOptions);
-			}	
+	private static final String setMethod = NameUtile.getAsName("setMethod");
+	
+	@Override
+	public void validate(Node errorNode, Node target, Annotation annotation, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		if (annotation.getValue(setMethod) instanceof Function){
+			validateSetMethod(errorNode, target, (Function)annotation.getValue(setMethod), BindingUtil.getDeclaringPart(target), problemRequestor, compilerOptions);
 		}
 	}
 	
-	public void validateSetMethod(Node errorNode, Node target, IFunctionBinding function, IPartBinding declarer, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {		
+	public void validateSetMethod(Node errorNode, Node target, Function function, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {		
 		//function must be declared in the part
-		IPartBinding valueDeclarer = function.getDeclarer();
-		if(valueDeclarer != null && declarer != valueDeclarer) {
+		Part valueDeclarer = BindingUtil.getDeclaringPart(function);
+		if (valueDeclarer != null && !valueDeclarer.equals(declaringPart)) {
 			problemRequestor.acceptProblem(
 				errorNode,
 				IProblemRequestor.LIBRARY_FUNCTION_NOT_ALLOWED_FOR_PROPERTY,
 				new String[] {
 					IEGLConstants.PROPERTY_GETMETHOD,
-					declarer.getCaseSensitiveName()
+					declaringPart.getCaseSensitiveName()
 				});
 		}
 		
@@ -60,9 +62,9 @@ public class SetMethodAnnotationValueValidator implements IValueValidationRule {
 		}
 		
 		//function parm must be IN
-		if (function.getParameters().size() == 1 ) {
-			FunctionParameterBinding binding =  (FunctionParameterBinding)function.getParameters().get(0);
-			if (!binding.isInput()) {
+		if (function.getParameters().size() == 1) {
+			FunctionParameter binding =  function.getParameters().get(0);
+			if (binding.getParameterKind() != ParameterKind.PARM_IN) {
 				problemRequestor.acceptProblem(
 						errorNode,
 						IProblemRequestor.FUNCTION_PARM_MUST_BE_IN,
@@ -74,28 +76,27 @@ public class SetMethodAnnotationValueValidator implements IValueValidationRule {
 		
 		//function must have a single parm defined that matches the type of the field
 		
-		final ITypeBinding[] fieldType = new ITypeBinding[1];
+		final Type[] fieldType = new Type[1];
 		DefaultASTVisitor visitor = new DefaultASTVisitor() {
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.ClassDataDeclaration classDataDeclaration) {
-				fieldType[0] = classDataDeclaration.getType().resolveTypeBinding();
+				fieldType[0] = classDataDeclaration.getType().resolveType();
 				return false;
 			}
 		};
 		target.accept(visitor);
-		if (Binding.isValidBinding(fieldType[0])) {
-			
+		if (fieldType[0] != null) {
 			boolean error = false;
 			if (function.getParameters().size() != 1) {
 				error = true;
 			}
 			else {
-				FunctionParameterBinding binding =  (FunctionParameterBinding)function.getParameters().get(0);
-				if ( fieldType[0] != binding.getType()) {
+				FunctionParameter binding = function.getParameters().get(0);
+				if (!fieldType[0].equals(binding.getType())) {
 					error = true;
 				}
 			}
 			if (error) {
-
 				problemRequestor.acceptProblem(
 						errorNode,
 						IProblemRequestor.FUNCTION_MUST_HAVE_ONE_PARM,
@@ -107,5 +108,4 @@ public class SetMethodAnnotationValueValidator implements IValueValidationRule {
 			}
 		}
 	}
-
 }
