@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -26,8 +25,8 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -72,12 +71,6 @@ public class InterfaceValidator extends FunctionContainerValidator {
 					IProblemRequestor.INTERFACE_FUNCTION_CANNOT_BE_PRIVATE);
 		}
 		
-		if (InternUtil.intern(nestedFunction.getName().getCanonicalName()) == InternUtil.intern(IEGLConstants.MNEMONIC_MAIN)){
-			problemRequestor.acceptProblem(iFaceNode.getName(),
-					IProblemRequestor.LIBRARY_NO_MAIN_FUNCTION_ALLOWED,
-					new String[] {partBinding.getCaseSensitiveName()});
-		}
-		
 		return false;
 	}
 	
@@ -110,6 +103,7 @@ public class InterfaceValidator extends FunctionContainerValidator {
 	}
 	
 	private boolean checkCycles(org.eclipse.edt.mof.egl.Interface iface, Set<org.eclipse.edt.mof.egl.Interface> seen) {
+		iface = (org.eclipse.edt.mof.egl.Interface)BindingUtil.realize(iface);
 		if (seen.contains(iface)) {
 			return false;
 		}
@@ -118,7 +112,6 @@ public class InterfaceValidator extends FunctionContainerValidator {
 			return true;
 		}
 		
-		//TODO sometimes the super interface binding is not completed...why?
 		seen.add(iface);
 		for (org.eclipse.edt.mof.egl.Interface superInterface : iface.getInterfaces()) {
 			if (checkCycles(superInterface, seen)) {

@@ -12,14 +12,12 @@
 package org.eclipse.edt.compiler.internal.core.validation.part;
 
 import org.eclipse.edt.compiler.binding.IRPartBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class ServiceValidator extends FunctionContainerValidator {
@@ -51,12 +49,6 @@ public class ServiceValidator extends FunctionContainerValidator {
 	public boolean visit(NestedFunction nestedFunction) {
 		super.visit(nestedFunction);
 		ServiceInterfaceValidatorUtil.validateParametersAndReturn(nestedFunction,problemRequestor); 
-		
-		if (NameUtile.equals(nestedFunction.getName().getCanonicalName(), IEGLConstants.MNEMONIC_MAIN)){
-			problemRequestor.acceptProblem(service.getName(),
-					IProblemRequestor.LIBRARY_NO_MAIN_FUNCTION_ALLOWED,
-					new String[] {serviceBinding.getCaseSensitiveName()});
-		}
 		
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction);
 		

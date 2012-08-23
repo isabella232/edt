@@ -207,7 +207,6 @@ public abstract class Compiler extends DefaultASTVisitor{
 	}
 	
 	private void validatePart(Node astNode, IPartBinding partBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		//TODO add code to handle circular buildexception
 	    try {
 			List<ASTValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor(astNode);
 	    	if (validators != null && validators.size() > 0) {
@@ -219,6 +218,9 @@ public abstract class Compiler extends DefaultASTVisitor{
 	    catch(CancelledException e) {
 		    throw e;
 		}
+	    catch(CircularBuildRequestException e) {
+	    	throw e;
+	    }
 	    catch(RuntimeException e) {
 		    handleValidationException((Part)astNode, problemRequestor, e);
 		}

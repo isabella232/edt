@@ -25,7 +25,7 @@ public abstract class AbstractValidationProxy implements IValidationProxy {
 	}
 
 	@Override
-	public List<FieldAccessValidationRule> getFieldAccessAnnotations() {
+	public List<FieldAccessValidationRule> getFieldAccessValidators() {
 		return Collections.EMPTY_LIST;
 	}
 
