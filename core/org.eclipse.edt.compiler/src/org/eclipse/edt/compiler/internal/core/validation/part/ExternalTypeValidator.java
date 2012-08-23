@@ -29,6 +29,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ClassDataDeclarationValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
@@ -170,6 +171,9 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 	}
 	
 	private boolean checkCycles(org.eclipse.edt.mof.egl.ExternalType externalType, Set<org.eclipse.edt.mof.egl.ExternalType> seen) {
+		// Sometimes the binding won't be resolved yet.
+		externalType = (org.eclipse.edt.mof.egl.ExternalType)BindingUtil.realize(externalType);
+		
 		if (seen.contains(externalType)) {
 			return false;
 		}
@@ -178,7 +182,6 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 			return true;
 		}
 		
-		//TODO sometimes the super et binding is not completed...why?
 		seen.add(externalType);
 		for (StructPart superType : externalType.getSuperTypes()) {
 			if (superType instanceof org.eclipse.edt.mof.egl.ExternalType) {

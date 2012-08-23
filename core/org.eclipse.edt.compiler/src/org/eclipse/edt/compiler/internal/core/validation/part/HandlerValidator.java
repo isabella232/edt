@@ -35,7 +35,7 @@ public class HandlerValidator extends FunctionContainerValidator {
 		handler = ahandler;
 		partNode = ahandler;
 		EGLNameValidator.validate(handler.getName(), EGLNameValidator.HANDLER, problemRequestor, compilerOptions);
-		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(ahandler); //TODO
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(ahandler);
 		
 		checkImplements(handler.getImplementedInterfaces());
 		checkInterfaceFunctionsOverriden(handlerBinding);

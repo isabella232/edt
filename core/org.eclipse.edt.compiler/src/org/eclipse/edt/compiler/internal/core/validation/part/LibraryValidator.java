@@ -12,14 +12,11 @@
 package org.eclipse.edt.compiler.internal.core.validation.part;
 
 import org.eclipse.edt.compiler.binding.IRPartBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Library;
-import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.mof.utils.NameUtile;
 
 public class LibraryValidator extends FunctionContainerValidator {
 	String libraryName = "";
@@ -41,20 +38,5 @@ public class LibraryValidator extends FunctionContainerValidator {
 		EGLNameValidator.validate(library.getName(), EGLNameValidator.LIBRARY, problemRequestor, compilerOptions);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(alibrary);
 		return true;
-	}
-	
-	public boolean visit(NestedFunction nestedFunction) {
-		super.visit(nestedFunction);
-		validateLibraryFunctions(nestedFunction);
-		return false;
-	}
-	
-	private void validateLibraryFunctions(final NestedFunction nestedFunction) {
-		if (NameUtile.equals(nestedFunction.getName().getCanonicalName(), IEGLConstants.MNEMONIC_MAIN)){
-			problemRequestor.acceptProblem(library.getName(),
-					IProblemRequestor.LIBRARY_NO_MAIN_FUNCTION_ALLOWED,
-					new String[] {libraryName});
-			return;
-		}
 	}
 }

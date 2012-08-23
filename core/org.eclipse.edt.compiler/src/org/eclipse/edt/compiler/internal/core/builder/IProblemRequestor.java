@@ -1235,7 +1235,6 @@ public interface IProblemRequestor {
 		public static final int RECORD_CANT_BE_SYSTEM_FUNCTION_RESULT = 5559;
 	
 	//  5600-5699: (for now) Used for Library errors
-	public static final int LIBRARY_NO_MAIN_FUNCTION_ALLOWED = 5600;
 	public static final int LIBRARY_QUALIFIED_NAME_NOT_ALLOWED_AS_DECLARATION= 5601;
 	public static final int LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH = 5602;
 	public static final int LIBRARY_PARAMETER_TYPES_NUMBER_IS_INVALID = 5603;
