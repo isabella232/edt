@@ -11,16 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
-import java.util.Collection;
-
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
-import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
 /**
@@ -29,7 +27,6 @@ import org.eclipse.edt.mof.egl.Type;
 public class ForEachStatementValidator extends DefaultASTVisitor {
 	
 	private IProblemRequestor problemRequestor;
-	private ICompilerOptions compilerOptions;
 	
 	public ForEachStatementValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
@@ -43,16 +40,16 @@ public class ForEachStatementValidator extends DefaultASTVisitor {
 			if (!forEachStatement.hasVariableDeclaration()) {
 				problemRequestor.acceptProblem(forEachStatement, IProblemRequestor.FOREACH_ARRAY_MUST_DECLARE_VARIABLE, new String[]{});
 			}
-			
-			Type targetType = forEachStatement.getVariableDeclarationType().resolveType();
-			Type elementType = ((ArrayType)sourceType).getElementType();
-			if (targetType != null && !(TypeCompatibilityUtil.isMoveCompatible(targetType, elementType, source, compilerOptions)
-					|| TypeCompatibilityUtil.areCompatibleExceptions(elementType, targetType, compilerOptions))) {
-				problemRequestor.acceptProblem(source, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH, new String[]{
-						StatementValidator.getShortTypeString(targetType),
-						StatementValidator.getShortTypeString(elementType),
-						forEachStatement.toString()
-				});
+			else {
+				Type targetType = forEachStatement.getVariableDeclarationType().resolveType();
+				Type elementType = ((ArrayType)sourceType).getElementType();
+				if (targetType != null && !(IRUtils.isMoveCompatible(targetType, elementType, source.resolveMember()))) {
+					problemRequestor.acceptProblem(source, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH, new String[]{
+							StatementValidator.getShortTypeString(targetType),
+							StatementValidator.getShortTypeString(elementType),
+							forEachStatement.toString()
+					});
+				}
 			}
 		}
 		else if (sourceType != null) {
@@ -62,21 +59,5 @@ public class ForEachStatementValidator extends DefaultASTVisitor {
 		}
 		
 		return false;
-	}
-	
-	protected int[] getOffsets(Collection<Node> nodes) {
-		int startOffset = -1;
-		int endOffset = -1;
-		for (Node n : nodes) {
-			int nextStart = n.getOffset();
-			int nextEnd = nextStart + n.getLength();
-			if (startOffset == -1 || nextStart < startOffset) {
-				startOffset = nextStart;
-			}
-			if (endOffset == -1 || nextEnd > endOffset) {
-				endOffset = nextEnd;
-			}
-		}
-		return new int[]{startOffset, endOffset};
 	}
 }
