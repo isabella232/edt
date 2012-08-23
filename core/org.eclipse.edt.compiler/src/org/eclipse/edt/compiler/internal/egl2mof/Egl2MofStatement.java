@@ -450,10 +450,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 					field.setName(forEachStatement.getVariableDeclarationName().getCanonicalName());
 					Type type = forEachStatement.getVariableDeclarationType().resolveType();
 					field.setType((Type)mofTypeFor(type));
-					//TODO port this change to new framework. original commit id: 81850c6 (bug 384855)
-//					if (Binding.isValidBinding(type)) {
-//						field.setIsNullable(node.getVariableDeclarationName().re);
-//					}
+					field.setIsNullable(forEachStatement.isNullable());
 					decl.getFields().add(field);
 					eObjects.put(forEachStatement.getVariableDeclarationName().resolveMember(), field);
 					stmt.setDeclarationExpression(decl);
