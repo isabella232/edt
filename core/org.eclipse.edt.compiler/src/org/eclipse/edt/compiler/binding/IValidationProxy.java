@@ -36,7 +36,7 @@ public interface IValidationProxy {
     /**
      * @return the validation rules to be run on field accesses.
      */
-    List<FieldAccessValidationRule> getFieldAccessAnnotations();
+    List<FieldAccessValidationRule> getFieldAccessValidators();
     
     /**
      * @return the validation rules to be run when instantiating a type.

@@ -11,19 +11,25 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
-import java.util.Iterator;
-
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.FieldAccessValidationRule;
+import org.eclipse.edt.compiler.binding.IValidationProxy;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.ConstantField;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 
 public class LValueValidator {
 	private IProblemRequestor problemRequestor;
 	private ICompilerOptions compilerOptions;
-	private IDataBinding dBinding;
+	private Member member;
 	private Expression lValue;
 	private ILValueValidationRules validationRules;
 	
@@ -37,9 +43,6 @@ public class LValueValidator {
 	}
 	
 	public static class DefaultLValueValidationRules implements ILValueValidationRules {
-		public boolean canAssignToPCB() {
-			return false;
-		}
 		public boolean canAssignToConstantVariables() {
 			return false;
 		}
@@ -62,13 +65,13 @@ public class LValueValidator {
 
 	}
 	
-	public LValueValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, IDataBinding dBinding, Expression lValue) {
-		this(problemRequestor, compilerOptions, dBinding, lValue, new DefaultLValueValidationRules());
+	public LValueValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, Member member, Expression lValue) {
+		this(problemRequestor, compilerOptions, member, lValue, new DefaultLValueValidationRules());
 	}
 	
-	public LValueValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, IDataBinding dBinding, Expression lValue, ILValueValidationRules validationRules) {
+	public LValueValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, Member member, Expression lValue, ILValueValidationRules validationRules) {
 		this.problemRequestor = problemRequestor;
-		this.dBinding = dBinding;
+		this.member = member;
 		this.lValue = lValue;
 		this.validationRules = validationRules;
 		this.compilerOptions = compilerOptions;
@@ -77,19 +80,14 @@ public class LValueValidator {
 	private boolean invokeFieldAccessValidators() {
 		boolean result = true;
 
-		if (!Binding.isValidBinding(dBinding)) {
+		if (member == null) {
 			return result;
 		}
-		Iterator i = dBinding.getAnnotations().iterator();
-		while (i.hasNext()) {
-			IAnnotationBinding ann = (IAnnotationBinding)i.next();
-			if (Binding.isValidBinding(ann) && Binding.isValidBinding(ann.getType()) && ann.getType() instanceof IAnnotationTypeBinding) {
-				IAnnotationTypeBinding annType = (IAnnotationTypeBinding)ann.getType();
-				IAnnotationTypeBinding validationProxy = annType.getValidationProxy();
-				if(validationProxy != null) {
-					for(Iterator iter = validationProxy.getFieldAccessAnnotations().iterator(); iter.hasNext();) {
-						result = ((FieldAccessValidationRule) iter.next()).validateLValue(lValue, dBinding, problemRequestor, compilerOptions) && result;
-					}
+		for (Annotation annot : member.getAnnotations()) {
+			IValidationProxy proxy = AnnotationValidator.getValidationProxy(annot);
+			if (proxy != null) {
+				for (FieldAccessValidationRule rule : proxy.getFieldAccessValidators()) {
+					result = rule.validateLValue(lValue, member, problemRequestor, compilerOptions) && result;
 				}
 			}
 		}
@@ -104,60 +102,48 @@ public class LValueValidator {
 			result = invokeFieldAccessValidators();
 		}
 		
-		if (dBinding.getKind() == IDataBinding.FUNCTION_PARAMETER_BINDING) {
-			if(!validationRules.canAssignToFunctionParmConst() && ((FunctionParameterBinding)dBinding).isConst()) {
+		if (member instanceof FunctionParameter) {
+			if(!validationRules.canAssignToFunctionParmConst() && ((FunctionParameter)member).isConst()) {
 				boolean settingValueOfConstantArrayElement = false;
-				ITypeBinding dBindingType = dBinding.getType();
-				ITypeBinding exprType = lValue.resolveTypeBinding();
-				if(dBindingType != null && exprType != null) {
-					settingValueOfConstantArrayElement = ITypeBinding.ARRAY_TYPE_BINDING == dBindingType.getKind() && exprType != dBindingType;
+				Type memberType = member.getType();
+				Type exprType = lValue.resolveType();
+				if (memberType != null && exprType != null) {
+					settingValueOfConstantArrayElement = memberType instanceof ArrayType && !memberType.equals(exprType);
 				}
 				
-				if(!settingValueOfConstantArrayElement) {
+				if (!settingValueOfConstantArrayElement) {
 					problemRequestor.acceptProblem(
 						lValue,
 						IProblemRequestor.CANNOT_MODIFY_CONSTANT,
-						new String[] {dBinding.getCaseSensitiveName()});
+						new String[] {member.getCaseSensitiveName()});
 					result = false;
 				}
 			}
 		}
 		
-		if(dBinding.getKind() == IDataBinding.CLASS_FIELD_BINDING ||
-		   dBinding.getKind() == IDataBinding.LOCAL_VARIABLE_BINDING) {
-			if(!validationRules.canAssignToConstantVariables() && ((VariableBinding) dBinding).isConstant()) {
-				boolean settingValueOfConstantArrayElement = false;
-				ITypeBinding dBindingType = dBinding.getType();
-				ITypeBinding exprType = lValue.resolveTypeBinding();
-				if(dBindingType != null && exprType != null) {
-					settingValueOfConstantArrayElement = ITypeBinding.ARRAY_TYPE_BINDING == dBindingType.getKind() && exprType != dBindingType;
-				}
-				
-				if(!settingValueOfConstantArrayElement) {
-					problemRequestor.acceptProblem(
-						lValue,
-						IProblemRequestor.CANNOT_MODIFY_CONSTANT,
-						new String[] {dBinding.getCaseSensitiveName()});
-					result = false;
-				}
+		if (!validationRules.canAssignToConstantVariables() && member instanceof ConstantField) {
+			boolean settingValueOfConstantArrayElement = false;
+			Type memberType = member.getType();
+			Type exprType = lValue.resolveType();
+			if (memberType != null && exprType != null) {
+				settingValueOfConstantArrayElement = memberType instanceof ArrayType && !memberType.equals(exprType);
 			}
 			
-			if(!validationRules.canAssignToReadOnlyVariables() && ((VariableBinding)dBinding).isReadOnly()){
+			if (!settingValueOfConstantArrayElement) {
 				problemRequestor.acceptProblem(
 					lValue,
-					IProblemRequestor.READONLY_FIELD_CANNOT_BE_ASSIGNED_TO,
-					new String[] {dBinding.getCaseSensitiveName()});
+					IProblemRequestor.CANNOT_MODIFY_CONSTANT,
+					new String[] {member.getCaseSensitiveName()});
 				result = false;
 			}
 		}
 		
-		if(dBinding.getKind() == IDataBinding.NESTED_FUNCTION_BINDING ||
-		   dBinding.getKind() == IDataBinding.TOP_LEVEL_FUNCTION_BINDING) {
-			if(!validationRules.canAssignToFunctionReferences()) {
+		if (member instanceof FunctionMember) {
+			if (!validationRules.canAssignToFunctionReferences()) {
 				problemRequestor.acceptProblem(
 					lValue,
 					IProblemRequestor.FUNCTION_NOT_VALID_AS_LVALUE,
-					new String[] {dBinding.getCaseSensitiveName()});
+					new String[] {member.getCaseSensitiveName()});
 				result = false;
 			}
 		}

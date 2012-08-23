@@ -60,6 +60,7 @@ import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EField;
@@ -112,7 +113,7 @@ public class AnnotationValidator {
 		return result;
 	}
 	
-	private IValidationProxy getValidationProxy(Annotation annot) {
+	public static IValidationProxy getValidationProxy(Annotation annot) {
 		if (annot != null) {
 			EClass eclass = annot.getEClass();
 			if (eclass instanceof AnnotationType) {
@@ -121,7 +122,7 @@ public class AnnotationValidator {
 					proxy = proxy.trim();
 					if (proxy.length() > 0) {
 						try {
-							Class c = getClass().getClassLoader().loadClass(proxy);
+							Class c = AnnotationValidator.class.getClassLoader().loadClass(proxy);
 							Object o = c.getMethod("getInstance", (Class[])null).invoke(null, (Object[])null);
 							if (o instanceof IValidationProxy) {
 								return (IValidationProxy)o;
@@ -325,23 +326,20 @@ public class AnnotationValidator {
 					@Override
 					public boolean visit(BinaryExpression binaryExpression) {
 						if (binaryExpression.getFirstExpression() != null) {
-							//TODO RValueValidator needs to be ported first
-//							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getFirstExpression().resolveDataBinding(), binaryExpression.getFirstExpression());
-//							validator.validate();
+							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getFirstExpression().resolveMember(), binaryExpression.getFirstExpression());
+							validator.validate();
 						}
 						if (binaryExpression.getSecondExpression() != null) {
-							//TODO RValueValidator needs to be ported first
-//							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getSecondExpression().resolveDataBinding(), binaryExpression.getSecondExpression());
-//							validator.validate();
+							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getSecondExpression().resolveMember(), binaryExpression.getSecondExpression());
+							validator.validate();
 						}
 						return true;
 					}
 					
 					@Override
 					public boolean visit(UnaryExpression unaryExpression) {
-						//TODO RValueValidator needs to be ported first
-//						RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, unaryExpression.getExpression().resolveDataBinding(), unaryExpression.getExpression());
-//						validator.validate();
+						RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, unaryExpression.getExpression().resolveMember(), unaryExpression.getExpression());
+						validator.validate();
 						return true;
 					}
 					
@@ -349,10 +347,9 @@ public class AnnotationValidator {
 					public boolean visit(ArrayAccess arrayAccess) {
 						Iterator i = arrayAccess.getIndices().iterator();
 						while (i.hasNext()) {
-							//TODO RValueValidator needs to be ported first
-//							Expression expr = (Expression)i.next();
-//							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, expr.resolveDataBinding(), expr);
-//							validator.validate();
+							Expression expr = (Expression)i.next();
+							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, expr.resolveMember(), expr);
+							validator.validate();
 						}
 						return true;
 					}

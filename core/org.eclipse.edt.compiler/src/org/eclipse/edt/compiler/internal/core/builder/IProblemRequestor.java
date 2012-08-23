@@ -1790,7 +1790,9 @@ public interface IProblemRequestor {
 
 	public static final int FORUPDATE_NOT_ALLOWED_WITH_ARRAY_TARGET = 7872;
 	public static final int LEVEL_NUMBERS_NOT_ALLOWED_IN_RECORD = 7875;
-    public static final int DUPLICATE_RELATIONSHIP_IN_HIERARCHY = 7883;  
+    public static final int DUPLICATE_RELATIONSHIP_IN_HIERARCHY = 7883;
+    
+    public static final int FUNCTION_NOT_VALID_AS_LVALUE = 7954;
     
     public static final int VALIDATION_ERROR_COMPILING_BINARY_FUNCTION = 7999;    
 }

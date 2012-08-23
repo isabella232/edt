@@ -40,7 +40,7 @@ public class PropertyAnnotationProxy extends AbstractValidationProxy {
 	}
 	
 	@Override
-	public List<FieldAccessValidationRule> getFieldAccessAnnotations() {
+	public List<FieldAccessValidationRule> getFieldAccessValidators() {
 		return fieldAccessAnnotations;
 	}
 }
