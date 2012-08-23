@@ -1114,7 +1114,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected void eSet(EObject target, EField field, Object value) {
-		Object convertedValue = mofValueFrom(value);
+		Object convertedValue = value;
 		
 		if (field.getEType() instanceof EEnum && convertedValue instanceof Name) {
 			EEnumLiteral lit = ((EEnum)field.getEType()).getEEnumLiteral(((Name)convertedValue).getId());

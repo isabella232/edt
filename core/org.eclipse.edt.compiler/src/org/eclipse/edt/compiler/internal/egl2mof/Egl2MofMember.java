@@ -687,13 +687,6 @@ class Egl2MofMember extends Egl2MofPart {
 						else {
 							source = evaluateExpression(assignment.getRightHandSide());
 						}
-						String names = nameExpr.getNameComponents();
-//						if (nameExpr.getNameComponents().length > 1) {
-//							for (int i=1; i<names.length; i++) {
-//								target = (EObject)target.eGet(field);
-//								field = target.getEClass().getEField(names[i]);
-//							}
-//						}
 						eSet(target, field, source);
 					}
 				}
