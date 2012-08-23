@@ -16,13 +16,16 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class MemberTemplate extends JavaTemplate {
 
 	public void genDeclaration(Member field, Context ctx, TabbedWriter out) {
 		AccessKind access = field.getAccessKind();
-		if (access == AccessKind.ACC_PRIVATE)
+		if (field.getId().equalsIgnoreCase("main") && field.getContainer() instanceof Program)
+			out.print("public ");
+		else if (access == AccessKind.ACC_PRIVATE)
 			out.print("private ");
 		else
 			out.print("public ");
