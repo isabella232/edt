@@ -11,59 +11,49 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
-import org.eclipse.edt.compiler.core.ast.ArrayAccess;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.AssignmentStatement;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
-import org.eclipse.edt.compiler.core.ast.Primitive;
-import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.GenericType;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
-/**
- * @author Dave Murray
- */
 public class AssignmentStatementValidator extends DefaultASTVisitor {
 	
 	private IProblemRequestor problemRequestor;
 	private ICompilerOptions compilerOptions;
-	private IPartBinding enclosingPart;
 	
 	public AssignmentStatementValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, IPartBinding enclosingPart) {
 		this.problemRequestor = problemRequestor;
 		this.compilerOptions = compilerOptions;
-		this.enclosingPart = enclosingPart;
 	}
 	
 	public boolean visit(AssignmentStatement assignmentStatement) {
 		Assignment assignment = assignmentStatement.getAssignment();
 		Expression lhs = assignment.getLeftHandSide();
 		Expression rhs = assignment.getRightHandSide();
-		ITypeBinding lhsBinding = lhs.resolveTypeBinding();
-		ITypeBinding rhsBinding = rhs.resolveTypeBinding();
-		IDataBinding lhsDataBinding = lhs.resolveDataBinding();
-		IDataBinding rhsDataBinding = rhs.resolveDataBinding();
+		Type lhsType = lhs.resolveType();
+		Type rhsType = rhs.resolveType();
+		Member lhsMember = lhs.resolveMember();
+		Member rhsMember = rhs.resolveMember();
 		
-		return validateAssignment(assignmentStatement.getAssignment().getOperator(), lhs,rhs,lhsBinding,rhsBinding,lhsDataBinding,rhsDataBinding,false, DefaultBinder.isArithmeticAssignment(assignment));
+		return validateAssignment(assignmentStatement.getAssignment().getOperator(), lhs, rhs, lhsType, rhsType, lhsMember, rhsMember);
 	}
 	
-	public boolean validateAssignment(final Assignment.Operator assignmentOperator, final Expression lhs,final Expression rhs , ITypeBinding lhsBinding,
-			final ITypeBinding rhsBinding,final IDataBinding lhsDataBinding ,final IDataBinding rhsDataBinding,boolean bDeclaration, boolean isArithmetic){
-		return validateAssignment(assignmentOperator, lhs, rhs, lhsBinding, rhsBinding, lhsDataBinding, rhsDataBinding, bDeclaration, isArithmetic, new LValueValidator.DefaultLValueValidationRules());
+	public boolean validateAssignment(Assignment.Operator assignmentOperator, Expression lhs, Expression rhs, Type lhsType, Type rhsType, Member lhsMember, Member rhsMember) {
+		return validateAssignment(assignmentOperator, lhs, rhs, lhsType, rhsType, lhsMember, rhsMember, new LValueValidator.DefaultLValueValidationRules());
 	}
 	
-	public boolean validateAssignment(final Assignment.Operator assignmentOperator, final Expression lhs,final Expression rhs , ITypeBinding lhsBinding,
-			ITypeBinding rhsBinding,final IDataBinding lhsDataBinding ,final IDataBinding rhsDataBinding,boolean bDeclaration, boolean isArithmetic, LValueValidator.ILValueValidationRules lvalueValidationRules){
+	public boolean validateAssignment(Assignment.Operator assignmentOperator, Expression lhs, Expression rhs, Type lhsType, Type rhsType, Member lhsMember, Member rhsMember, LValueValidator.ILValueValidationRules lvalueValidationRules) {
 		
 		if (lhs instanceof SubstringAccess) {
 			problemRequestor.acceptProblem(lhs,
@@ -71,137 +61,58 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 					new String[] {});
 		}
 		
-		
-		// string += anything   is always compatible
-		if(Assignment.Operator.PLUS == assignmentOperator &&
-				isStringType(lhsBinding)) {
-			
-			
-			if(StatementValidator.isValidBinding(lhsDataBinding)) {
-				new LValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs, lvalueValidationRules).validate();
-
-				//Must validate the LHS as being on the rhs, because x += 2 is the same as x = x + 2;
-				new RValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs).validate();
-			}
-
-			
-			if(StatementValidator.isValidBinding(rhsDataBinding)) {
-				new RValueValidator(problemRequestor, compilerOptions, rhsDataBinding, rhs).validate();
-			}
-			
-			return false;
-		}
-
-		
-		if((Assignment.Operator.CONCAT == assignmentOperator) &&
-		   StatementValidator.isValidBinding(lhsBinding) &&
-		   ITypeBinding.ARRAY_TYPE_BINDING == lhsBinding.getKind()) {
-			if(!StatementValidator.isValidBinding(rhsBinding) || ITypeBinding.ARRAY_TYPE_BINDING != rhsBinding.getKind()) {
-				lhsBinding = ((ArrayTypeBinding) lhsBinding).getElementType();
-			}
-		}
-
-		if(Assignment.Operator.XOR == assignmentOperator ||
-				Assignment.Operator.OR == assignmentOperator ||
-				Assignment.Operator.AND == assignmentOperator ||
-				Assignment.Operator.LEFT_SHIFT == assignmentOperator ||
-				Assignment.Operator.RIGHT_SHIFT_ARITHMETIC == assignmentOperator ||
-				Assignment.Operator.RIGHT_SHIFT_LOGICAL == assignmentOperator) {
-					rhsBinding = PrimitiveTypeBinding.getInstance(Primitive.INT);
-			}
-
-		if (StatementValidator.isValidBinding(rhsBinding) && 
-			(rhsBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING || rhsBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING)){
-			boolean isError = !StatementValidator.isValidBinding(lhsBinding) ;
-			if (!isError){
-				boolean isRecord = lhsBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING || lhsBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING;
-				boolean isChar = false;
-				if (lhsBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING){
-					Primitive type = ((PrimitiveTypeBinding)lhsBinding).getPrimitive();
-					if (type == Primitive.CHAR ||
-							type == Primitive.MBCHAR ||
-							type == Primitive.HEX ||
-							type == Primitive.ANY ||
-							type == Primitive.DBCHARLIT){
-						isChar = true;
+		if (rhsType != null && lhsType != null) {
+			// For complex assignments like "x &= y" we must treat it as if it was coded "x = x & y". To do this, retrieve the operation and use its type.
+			Type resolvedRHSType = null;
+			if (assignmentOperator != Assignment.Operator.ASSIGN) {
+				String symbol = assignmentOperator.toString().substring(0, assignmentOperator.toString().length() - 1);
+				Operation op = IRUtils.getBinaryOperation(lhsType.getClassifier(), rhsType.getClassifier(), symbol);
+				if (op != null) {
+					// If the parameters are generic, we need to validate the arg type vs the generic's expected type.
+					boolean valid = true;
+					if (op.getParameters().get(0).getType() instanceof GenericType) {
+						Type t = ((GenericType)op.getParameters().get(0).getType()).resolveTypeParameter(lhsType);
+						valid = IRUtils.isMoveCompatible(t, lhsType, lhsMember);
+					}
+					if (valid && op.getParameters().get(1).getType() instanceof GenericType) {
+						Type t = ((GenericType)op.getParameters().get(1).getType()).resolveTypeParameter(lhsType);
+						valid = IRUtils.isMoveCompatible(t, rhsType, rhsMember);
+					}
+					
+					if (valid) {
+						resolvedRHSType = op.getType();
 					}
 				}
-				
-				if (!isRecord && !isChar){
-					isError = true;
-				}
-				
+			}
+			else {
+				resolvedRHSType = rhsType;
 			}
 			
-			if (isError){
-				problemRequestor.acceptProblem(rhs,
-						IProblemRequestor.ASSIGNMENT_STATEMENT_RECORD_SOURCE_TARGET_MUST_BE,
-						new String[]{rhs.getCanonicalString(),lhs.getCanonicalString()} );
-				return false;
-			}
-		}
-		
-		if (StatementValidator.isValidBinding(lhsBinding) && lhsBinding.getKind() == ITypeBinding.DICTIONARY_BINDING ){
-			final Expression expr = lhs;
-			ErrorASTVisitor astVisitor = new ErrorASTVisitor(){
-				public boolean visit(SimpleName simpleName) {
-		        	if (StatementValidator.isValidBinding(simpleName.resolveTypeBinding()) && simpleName.resolveTypeBinding().getKind() == ITypeBinding.ARRAYDICTIONARY_BINDING){
-		    			problemRequestor.acceptProblem(expr,
-		    					IProblemRequestor.CANNOT_ASSIGN_TO_ARRAY_DICTIONARY_ELEMENTS);
-		    			error = true;
-		        	}
-		            return false;
-		        }
-		    };
-		    
-			lhs.accept(astVisitor);
-			
-			if (astVisitor.hasError()){
-				return false;
-			}
-
-		}
-		
-		//Arithmetic assignments are already validated in DefaultBinder
-		if (!isArithmetic) {
-		
-			boolean compatible = TypeCompatibilityUtil.isMoveCompatible(lhsBinding, rhsBinding, rhs, compilerOptions) ||
-				StatementValidator.isValidBinding(rhsBinding) && (
-					rhsBinding.isDynamic() ||
-					TypeCompatibilityUtil.areCompatibleExceptions(rhsBinding, lhsBinding, compilerOptions)
-				);
-			if (!compatible ){//|| lhsBinding == null ||rhsBinding == null ){
+			if (resolvedRHSType == null || !IRUtils.isMoveCompatible(lhsType, resolvedRHSType, rhsMember)) {
 				problemRequestor.acceptProblem(rhs,
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-						new String[] {lhsBinding != null ? StatementValidator.getShortTypeString(lhsBinding):lhs.getCanonicalString(),
-						rhsBinding != null ? StatementValidator.getShortTypeString(rhsBinding):rhs.getCanonicalString(),
-						lhs.getCanonicalString() + " = " + rhs.getCanonicalString()});
+						new String[] {lhsType != null ? StatementValidator.getShortTypeString(lhsType) : lhs.getCanonicalString(),
+						rhsType != null ? StatementValidator.getShortTypeString(rhsType):rhs.getCanonicalString(),
+						lhs.getCanonicalString() + " " + assignmentOperator.toString() + " " + rhs.getCanonicalString()});
 			}
 		}
 		
-		if(StatementValidator.isValidBinding(lhsDataBinding)) {
-			//concatenation assignmet is special case. myarr ::= element is really just an append, so we do not have to validate
-			//the LHS of the assignment statement
-			if (Assignment.Operator.CONCAT != assignmentOperator) {
-				new LValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs, lvalueValidationRules).validate();
-			}
+		if (lhsMember != null) {
+			new LValueValidator(problemRequestor, compilerOptions, lhsMember, lhs, lvalueValidationRules).validate();
 			
-			//validate the LHS of all other types of assignments as if the LHS was on ther RHS. This is because expressions
-			//like  x &= y is the same as x = x & y
-			if (Assignment.Operator.ASSIGN != assignmentOperator) {
-				new RValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs).validate();
+			// Validate the LHS of complex assignments as if the LHS was on ther RHS. This is because expressions like x &= y is the same as x = x & y
+			if (assignmentOperator != Assignment.Operator.ASSIGN) {
+				new RValueValidator(problemRequestor, compilerOptions, lhsMember, lhs).validate();
 			}
 		}
 		
-		
-		
-		if(StatementValidator.isValidBinding(rhsDataBinding)) {
-			new RValueValidator(problemRequestor, compilerOptions, rhsDataBinding, rhs).validate();
+		if (rhsMember != null) {
+			new RValueValidator(problemRequestor, compilerOptions, rhsMember, rhs).validate();
 		}
 		
-		if (Binding.isValidBinding(lhsBinding) && Binding.isValidBinding(rhsBinding)) {
-			
-			if (rhsBinding.getKind() == ITypeBinding.NIL_BINDING && !lhsBinding.isNullable()) {
+		
+		if (lhsMember != null && rhsType != null) {
+			if (TypeUtils.Type_NULLTYPE.equals(rhsType) && !lhsMember.isNullable()) {
 				problemRequestor.acceptProblem(lhs,
 						IProblemRequestor.CANNOT_ASSIGN_NULL,
 						new String[] {lhs.getCanonicalString()});
@@ -210,20 +121,4 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		
 		return false;
 	}
-	
-	private class ErrorASTVisitor extends AbstractASTVisitor{
-		boolean error = false;
-		public boolean hasError(){
-			return error;
-		}
-	}
-	
-	private boolean isStringType(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
-			return false;
-		}
-		return type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING &&
-		       Primitive.isStringType(((PrimitiveTypeBinding) type).getPrimitive());
-	}
-
 }

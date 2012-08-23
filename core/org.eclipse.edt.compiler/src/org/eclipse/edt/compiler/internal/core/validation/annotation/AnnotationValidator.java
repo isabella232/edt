@@ -60,6 +60,7 @@ import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
@@ -123,13 +124,7 @@ public class AnnotationValidator {
 					if (proxy.length() > 0) {
 						try {
 							Class c = AnnotationValidator.class.getClassLoader().loadClass(proxy);
-							Object o = c.getMethod("getInstance", (Class[])null).invoke(null, (Object[])null);
-							if (o instanceof IValidationProxy) {
-								return (IValidationProxy)o;
-							}
-							else {
-								//TODO report error about invalid type
-							}
+							return (IValidationProxy)c.getMethod("getInstance", (Class[])null).invoke(null, (Object[])null);
 						}
 						catch(ClassNotFoundException e) {
 							throw new RuntimeException(e);
@@ -648,17 +643,14 @@ public class AnnotationValidator {
 					org.eclipse.edt.mof.egl.Type lhType = assignment.getLeftHandSide().resolveType();
 					org.eclipse.edt.mof.egl.Type rhType = assignment.getRightHandSide().resolveType();
 					if (lhType != null && rhType != null && !(lhType instanceof AnnotationType)) {
-						//TODO AssignmentStatementValidator needs to be ported first
-//						new AssignmentStatementValidator(problemRequestor, 	compilerOptions, null).validateAssignment(
-//											assignment.getOperator(), 
-//											assignment.getLeftHandSide(), 
-//											assignment.getRightHandSide(), 
-//											assignment.getLeftHandSide().resolveType(), 
-//											assignment.getRightHandSide().resolveType(), 
-//											assignment.getLeftHandSide().resolveMember(), 
-//											assignment.getRightHandSide().resolveMember(), 
-//											false, 
-//											DefaultBinder.isArithmeticAssignment(assignment));
+						new AssignmentStatementValidator(problemRequestor, 	compilerOptions, null).validateAssignment(
+											assignment.getOperator(), 
+											assignment.getLeftHandSide(), 
+											assignment.getRightHandSide(), 
+											assignment.getLeftHandSide().resolveType(), 
+											assignment.getRightHandSide().resolveType(), 
+											assignment.getLeftHandSide().resolveMember(), 
+											assignment.getRightHandSide().resolveMember());
 						
 					}
 				}

@@ -67,6 +67,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ContinueStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ExitStatementValidator;
@@ -389,8 +390,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(AssignmentStatement assignmentStatement) {
 		preVisitStatement(assignmentStatement);
 		if (checkStatementAllowedInContainer(assignmentStatement)) {
-			//TODO AssignmentStatementValidator blows up right now
-//			assignmentStatement.accept(new AssignmentStatementValidator(problemRequestor, compilerOptions, enclosingPart));
+			assignmentStatement.accept(new AssignmentStatementValidator(problemRequestor, compilerOptions, enclosingPart));
 		}
 		postVisitStatement(assignmentStatement);
 		return false;
