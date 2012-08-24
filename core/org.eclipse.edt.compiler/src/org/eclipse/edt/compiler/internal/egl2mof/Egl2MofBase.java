@@ -186,7 +186,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			Annotation subtype = binding.getSubType();
 			for (Annotation annotation : binding.getAnnotations()) {
 				if (subtype != null && ((Element)eClass).getAnnotation(subtype.getEClass().getETypeSignature()) != null) continue;
-				((Element)eClass).addAnnotation(annotation);
+				((Element)eClass).addAnnotation((Annotation)mofValueFrom(annotation));
 			}
 		}
 	}
@@ -286,7 +286,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return name;
 	}
 	
-	protected Object getValue(IBinding binding, Object annotationValue, boolean isMetaDataFieldValue) {
+	protected Object getValue(Annotation binding, Object annotationValue, boolean isMetaDataFieldValue) {
 		if (annotationValue == null) {
 			InvalidName name = factory.createInvalidName();
 			name.setId("EZENOTFOUND");
@@ -307,10 +307,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			return java.lang.Boolean.TRUE;
 		}
 
-//FIXME jv		if (annotationValue instanceof SystemEnumerationData || annotationValue instanceof SystemEnumerationDataBinding[]) {
-//			return annotationValue;
-//		}
-
 		if (annotationValue instanceof Enumeration) {
 			return annotationValue;
 		}
@@ -318,7 +314,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (annotationValue instanceof Part) {
 			EObject value = mofTypeFor((Part)annotationValue);
 			
-			if (value instanceof Part && !isMetaDataFieldValue) {
+			if (value instanceof Part && 
+					!annotationValue.equals(value) &&
+					!isMetaDataFieldValue) {
 				value = createTypeName((Part)value);
 			}
 			return value;
@@ -359,12 +357,12 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			// for annotations that resolve to a library function, create a
 			// FieldAccess with
 			// the NameType for the library as the qualifier
-			if (declarer instanceof Library && declarer != getLibraryContainer(binding)) {
+			if (declarer instanceof Library /*&& declarer != getLibraryContainer(binding)*/) {
 				PartName nameType = factory.createPartName();
 				nameType.setId(((Library)declarer).getCaseSensitiveName());
 				nameType.setPackageName(((Library)declarer).getCaseSensitivePackageName());
 				MemberAccess access = factory.createMemberAccess();
-				access.setId(binding.getCaseSensitiveName());
+				access.setId(binding.getEClass().getName());
 				access.setQualifier(nameType);
 				return access;
 			}
@@ -400,6 +398,14 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			return value;
 		}
 
+		if (annotationValue instanceof EList) {
+			EList value = new EList(((EList)annotationValue).size());
+			for(Object obj : (EList)annotationValue) {
+				value.add(getValue(binding, obj, isMetaDataFieldValue));
+			}
+			return value;
+		}
+
 		return annotationValue;
 	}
 	
@@ -419,7 +425,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 	}
 
-	private Library getLibraryContainer(IBinding binding) {
+	private Library getLibraryContainer(Type binding) {
 		if (binding == null) {
 			return null;
 		}
@@ -548,22 +554,14 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected Object mofValueFrom(Object value) {
-		if (value instanceof Annotation)
-			return mofValueFrom((Annotation)value);
 		if (value instanceof Type)
 			return mofTypeFor((Type)value);
-//FIXME jv		if (value instanceof EnumerationDataBinding)
-//			return mofValueFrom((EnumerationDataBinding)value);
-//		if (value instanceof IAnnotationBinding)
-//			return mofValueFrom((IAnnotationBinding)value);
-//		if (value instanceof IDataBinding)
-//			return getEObjectFor((IDataBinding)value);
 		if (value instanceof Part)
 			return mofValueFrom((Part)value);
 		if (value instanceof Object[])
 			return mofValueFrom((Object[])value);
 		if (value instanceof List)
-			return mofValueFrom((List)value);
+			return mofValueFrom((List<Object>)value);
 		
 		return value;	
 	}
@@ -608,8 +606,11 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				}
 			}
 		}
+		boolean isEMetadataObject = isEMetadataObject(binding);
 		for(EField field : binding.getEClass().getAllEFields()) {
-			value.eSet(field.getName(), binding.getValue(field.getName()));
+			Object oldVale = binding.eGet(field);
+			Object fieldValue = mofValueFrom(getValue(binding, oldVale, isEMetadataObject));
+			value.eSet(field, fieldValue);
 		}
 		return value;
 	}
@@ -1114,7 +1115,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected void eSet(EObject target, EField field, Object value) {
-		Object convertedValue = value;
+		Object convertedValue = mofValueFrom(value);
 		
 		if (field.getEType() instanceof EEnum && convertedValue instanceof Name) {
 			EEnumLiteral lit = ((EEnum)field.getEType()).getEEnumLiteral(((Name)convertedValue).getId());
