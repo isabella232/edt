@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
@@ -181,14 +182,19 @@ public class BaseCompiler implements ICompiler {
 	public List<ASTValidator> getValidatorsFor(Node node) {
 		List<ICompilerExtension> nodeExtensions = astTypeToExtensions.get(node.getClass());
 		if (nodeExtensions != null && nodeExtensions.size() > 0) {
+			List<ASTValidator> validators = new ArrayList<ASTValidator>(nodeExtensions.size() + 1);
 			for (ICompilerExtension ext : nodeExtensions) {
-				List<ASTValidator> validators = new ArrayList<ASTValidator>(nodeExtensions.size() + 1);
 				ASTValidator validator = ext.getValidatorFor(node);
 				if (validator != null) {
 					validators.add(validator);
+					
+					// For statement validation, only one validator is allowed.
+					if (node instanceof Statement) {
+						return validators;
+					}
 				}
-				return validators;
 			}
+			return validators;
 		}
 		
 		return null;
