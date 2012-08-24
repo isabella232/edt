@@ -500,7 +500,7 @@ handler DataGrid type RUIWidget{
             h = "height:" +(rowHeight + 2 * cellPadding) + "px;";
         end
         UtilLib.utilNative.appendHTMLString("<div id=" + grid.id + "-cell-" + row + "-" + column +
-                " class='" + class + "' row='" + row + "' column='" + column +
+                " class='" + cssClass + "' row='" + row + "' column='" + column +
                 "' style='");
         if (ui.getWidgetOrientation() == "RTL")
             	UtilLib.utilNative.appendHTMLString("float: right; ");
