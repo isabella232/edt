@@ -98,7 +98,10 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		}
 		
 		if (lhsMember != null) {
-			new LValueValidator(problemRequestor, compilerOptions, lhsMember, lhs, lvalueValidationRules).validate();
+			// Concatenation assignmet is special case. myarr ::= element is really just an append, so we do not have to validate the LHS.
+			if (assignmentOperator != Assignment.Operator.CONCAT) {
+				new LValueValidator(problemRequestor, compilerOptions, lhsMember, lhs, lvalueValidationRules).validate();
+			}
 			
 			// Validate the LHS of complex assignments as if the LHS was on ther RHS. This is because expressions like x &= y is the same as x = x & y
 			if (assignmentOperator != Assignment.Operator.ASSIGN) {
