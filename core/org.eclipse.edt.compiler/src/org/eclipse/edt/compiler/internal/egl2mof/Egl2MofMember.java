@@ -229,7 +229,9 @@ class Egl2MofMember extends Egl2MofPart {
 				((EFunction)obj).addMember((EParameter)stack.pop());
 			}
 			else {
-				((FunctionMember)obj).addMember((Parameter)stack.pop());
+				Parameter parameter = (Parameter)stack.pop();
+				parameter.setContainer((FunctionMember)obj);
+				((FunctionMember)obj).addMember(parameter);
 			}
 		}
 		eObjects.put(function, obj);
@@ -311,6 +313,7 @@ class Egl2MofMember extends Egl2MofPart {
 			FunctionParameter parm = factory.createFunctionParameter();
 			parm.setParameterKind(parameter.getParameterKind());
 			
+			parm.setAccessKind(parameter.getAccessKind());
 			parm.setIsConst(parameter.isConst());
 			parm.setIsField(parameter.isField());
 			parm.setIsNullable(parameter.isNullable());
