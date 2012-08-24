@@ -31,10 +31,14 @@ import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.EGenericType;
+import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -47,16 +51,23 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.SubType;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.TypeNotFoundException;
+import org.eclipse.edt.mof.utils.EList;
 
 
 public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
+	private static EType elistType;
 	private AnnotationLeftHandScope annotationLeftHandScope;
 	private Binder lhsBinder;
 	private Binder rhsBinder;
@@ -167,7 +178,9 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 					
 				}
 				else {
-					super.visit(setValuesExpression);
+					setValuesExpression.getExpression().accept(lhsBinder);
+					setValuesExpression.accept(rhsBinder);
+					
 				}
 				return false;
 			}
@@ -200,28 +213,85 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		return new AnnotationValueGatherer(expr, rhScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions).getValue();
 	}
 	
-	private void setValueIntoAnnotation(Object value, Expression expr, Annotation ann, EField field) {
-		if (isValidValueForAnnotation(value, expr, ann, field)) {
-			ann.eSet(field, value);			
-		}
-		else {
+	private Object validateValue(Object value, Expression expr, Annotation ann, EField field) {		
+	
+		//check for invalid expression type
+		if (!isValidExpressionForAnnotationValue(expr)) {
     		problemRequestor.acceptProblem(
         			expr,
         			IProblemRequestor.EXPRESSION_NOT_VALID_FOR_PROPERTY,
         			new String[] {
         				field.getName()
-        			});    		
+        			});   
+    		return null;
+		}
+		
+		//replace constant values
+		if (value instanceof ConstantField) {
+			value = ((ConstantField)value).getValue().getObjectValue();
+		}
 
+
+		boolean valueIsList = value instanceof EList;
+		boolean typeIsList = isGenericElistType(field.getEType());
+
+		//if value is a list and the type is not, error
+		if (value instanceof EList) {
+			if (!(field.getEType() instanceof EGenericType)) {
+				//array is invalid value for annotation field
+			}
 		}
+		
+		//if the type is a list and the value is not, error
+		if ((field.getEType() instanceof EGenericType)) {
+			
+		}
+		
+		//if the value is nullLiteral, the field must be nullable
+		
+		//if both value and type is a list, recursively check the elements of the array
+		
+		//not dealing with arrays, check the EData types: javaobject, estring, eboolean, eint32, efloat, edecimal, elist
+		
+		//check the resolveable types like typeref and fieldref
+		
+		//finally check if the type of the value is compatible with the etype of the field....if the object is a ETypedElement, just get
+		// the type, otherwise, if it is an EObject, get the eclass
+		
+		return value;
+
 	}
 	
-	private boolean isValidValueForAnnotation(Object value, Expression expr, Annotation ann, EField field) {
-		if (!isValidExpressionForAnnotationValue(expr)) {
-			return false;
+	private static EType getElistType() {
+		if (elistType == null) {
+			try {
+				elistType = (EType)Environment.getCurrentEnv().findType(MofConversion.Type_EList);
+			} catch (Exception e) {
+			} 
 		}
-		return true;
+		return elistType;
 	}
 	
+	private boolean isGenericElistType (EType type) {
+		if (type instanceof EGenericType) {
+			try {
+				EType elistType = getElistType();
+				EClassifier eclassifier = ((EGenericType) type).getEClassifier();
+				return elistType.equals(eclassifier);
+			} catch (Exception e) {
+			} 
+		}
+		return false;
+	}
+	
+	private void setValueIntoAnnotation(Object value, Expression expr, Annotation ann, EField field) {
+		
+		Object result = validateValue(value, expr, ann, field);
+		if (result != null) {
+			ann.eSet(field, value);			
+		}
+	}
+		
     private boolean isValidExpressionForAnnotationValue(Expression expr) {
     	
     	final boolean[] valid = new boolean[] {true};
@@ -326,7 +396,8 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		return false;
 	}
 
-			
+		
+	
 
 
 }
