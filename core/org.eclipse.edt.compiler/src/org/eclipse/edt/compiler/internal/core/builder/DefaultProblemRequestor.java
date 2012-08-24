@@ -476,7 +476,6 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_IO_RECORD_PARM),
 		new Integer(FUNCTION_ARG_CANNOT_BE_THIS),
 		new Integer(FUNCTION_ARG_CANNOT_BE_SUPER),
-		new Integer(UNLOADONEXIT_NOT_VALID_IN_MAIN),
 		new Integer(CANNOT_ASSIGN_NULL),
 		new Integer(MOVE_MUST_BE_REFERENCE),
 		new Integer(MOVE_EXTERNALTYPE),

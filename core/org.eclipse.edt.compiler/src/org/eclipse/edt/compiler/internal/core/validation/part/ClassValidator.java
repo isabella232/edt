@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.part;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -18,6 +21,8 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 
 public class ClassValidator extends FunctionContainerValidator {
@@ -41,12 +46,14 @@ public class ClassValidator extends FunctionContainerValidator {
 		
 		checkImplements(clazz.getImplementedInterfaces());
 		checkInterfaceFunctionsOverriden(classBinding);
-		checkExtends();
+		if (checkExtends()) {
+			checkCycles();
+		}
 		
 		return true;
 	}
 	
-	private void checkExtends() {
+	private boolean checkExtends() {
 		Name extended = clazz.getExtends();
 		if (extended != null) {
 			Type type = extended.resolveType();
@@ -57,6 +64,7 @@ public class ClassValidator extends FunctionContainerValidator {
 						new String[] {
 								type.getTypeSignature()
 						});
+				return false;
 			}
 			else if (type != null && classBinding.equals(type)) {
 				problemRequestor.acceptProblem(
@@ -65,7 +73,46 @@ public class ClassValidator extends FunctionContainerValidator {
 						new String[] {
 								type.getTypeSignature()
 						});
+				return false;
 			}
 		}
+		return true;
+	}
+	
+	private void checkCycles() {
+		Name name = clazz.getExtends();
+		if (name != null) {
+			Type type = name.resolveType();
+			if (type instanceof org.eclipse.edt.mof.egl.EGLClass
+					&& checkCycles((org.eclipse.edt.mof.egl.EGLClass)type, new HashSet<org.eclipse.edt.mof.egl.EGLClass>())) {
+				problemRequestor.acceptProblem(
+	    				name,
+	    				IProblemRequestor.RECURSIVE_LOOP_IN_EXTENDS,
+	    				new String[] {classBinding.getCaseSensitiveName(), name.toString()});
+			}
+		}
+	}
+	
+	private boolean checkCycles(org.eclipse.edt.mof.egl.EGLClass classType, Set<org.eclipse.edt.mof.egl.EGLClass> seen) {
+		// Sometimes the binding won't be resolved yet.
+		classType = (org.eclipse.edt.mof.egl.EGLClass)BindingUtil.realize(classType);
+		
+		if (seen.contains(classType)) {
+			return false;
+		}
+		
+		if (classBinding.equals(classType)) {
+			return true;
+		}
+		
+		seen.add(classType);
+		for (StructPart superType : classType.getSuperTypes()) {
+			if (superType instanceof org.eclipse.edt.mof.egl.EGLClass) {
+				if (checkCycles((org.eclipse.edt.mof.egl.EGLClass)superType, seen)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

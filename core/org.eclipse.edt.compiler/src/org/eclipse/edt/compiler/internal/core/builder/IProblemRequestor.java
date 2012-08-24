@@ -1563,7 +1563,6 @@ public interface IProblemRequestor {
 	public static final int CONVERTBIDI_CONVTABLE_INVALID = 6753;
 	
 	public static final int FUNCTION_ARG_CANNOT_BE_THIS = 6754;
-	public static final int UNLOADONEXIT_NOT_VALID_IN_MAIN = 6755;
 	public static final int CONSTRUCTOR_CALL_WRONG_PLACE = 6756;
 
 	public static final int CANNOT_ASSIGN_NULL = 6757;
