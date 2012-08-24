@@ -96,7 +96,7 @@ handler DataGrid type RUIWidget{
     util DataGridUtil{};
     private pagingLabel string = "{page} / {pageCount}";
 
-    private grid Div{class = "EglRuiDataGrid", position = "relative", onClick ::= clickGrid};
+    private grid Div{cssClass = "EglRuiDataGrid", position = "relative", onClick ::= clickGrid};
 
     private gotoStartButton Button{text = "<<", width = 45, marginRight = 10, onClick ::= gotoStart};
     private gotoPageBackButton Button{text = "<", width = 45, marginRight = 10, onClick ::= gotoPageBack};
@@ -104,7 +104,7 @@ handler DataGrid type RUIWidget{
     private gotoPageForwardButton Button{text = ">", width = 45, marginRight = 10, onClick ::= gotoPageForward};
     private gotoEndButton Button{text = ">>", width = 45, marginRight = 10, onClick ::= gotoEnd};
     private buttonBar Box{
-    	class = "EglRuiDataGridButtonBar", 
+    	cssClass = "EglRuiDataGridButtonBar", 
     	children =[gotoStartButton, gotoPageBackButton, pageTextLabel, gotoPageForwardButton, gotoEndButton]
 	};
 
@@ -156,7 +156,7 @@ handler DataGrid type RUIWidget{
     dataLoader DataLoader = fullyCached;
 
 	private loadingDiv Div {		
-		class = "EglRuiGridLoadingDiv",        		
+		cssClass = "EglRuiGridLoadingDiv",        		
  		innerHTML = "<img src='images/spinner.gif' />",
  		position =   "absolute",
  		opacity = 100,
@@ -347,7 +347,7 @@ handler DataGrid type RUIWidget{
                 c.width = 44 + util.getTextWidth(value);
             end
             totalWidth += cellBorder + c.width + 2 * cellPadding;
-            class string = getAlignmentClass(c.headerAlignment);
+            cssClass string = getAlignmentClass(c.headerAlignment);
           	           
             w int = c.width;
             html += "<span id=" + grid.id + "-header-" +
@@ -484,13 +484,13 @@ handler DataGrid type RUIWidget{
     end
 
     private function renderCell(row int in, column int in, value string in, c DataGridColumn, lastColumn boolean in)        
-        class string = columnClass[column];
+        cssClass string = columnClass[column];
         if(row > 0)	        
 	        formatters CellFormatter[] = c.formatters;	        
 	        if(formatters != null)
 	            formatterCount int = formatters.getSize();	           
 	            for(k int from 1 to formatterCount)
-	          		formatters[k](class, value, data[row]);
+	          		formatters[k](cssClass, value, data[row]);
 	            end
 	        end
 	    end
@@ -627,7 +627,7 @@ handler DataGrid type RUIWidget{
         return(true);
     end
 
-    columnDragger Span{class = "EglRuiDataGridResizeHandle", background = "#CCCCCC", innerHTML = "&nbsp;"};
+    columnDragger Span{cssClass = "EglRuiDataGridResizeHandle", background = "#CCCCCC", innerHTML = "&nbsp;"};
 
     private function dragColumn(w Widget in, dropw Widget in, dragX int in, dragY int in)
         column int = w.getAttribute("column");
@@ -949,10 +949,10 @@ handler DataGrid type RUIWidget{
     private function clickGrid(e Event in)
         lastEvent = e;        
         widget Widget = getCellWidget(e);
-        while(widget.class != "EglRuiDataGrid" &&(widget.getAttribute("column") as int) == 0)
+        while(widget.cssClass != "EglRuiDataGrid" &&(widget.getAttribute("column") as int) == 0)
             widget = widget.parent;
         end
-        if(widget.class != "EglRuiDataGrid")
+        if(widget.cssClass != "EglRuiDataGrid")
             row int = widget.getAttribute("row");
             if(row > 0 && selectionMode != DataGridLib.DISABLE_SELECTION )
                 if(selectionMode == DataGridLib.SINGLE_SELECTION)
@@ -1028,15 +1028,15 @@ handler DataGrid type RUIWidget{
         notifySelectionChangeListeners();
     end
 
-    private function addClass(widget Widget in, class string in)
-        removeClass(widget, class);
-        widget.class += " " + class;
+    private function addClass(widget Widget in, cssClass string in)
+        removeClass(widget, cssClass);
+        widget.cssClass += " " + cssClass;
     end
 
-    private function removeClass(widget Widget in, class string in)
-        s string = widget.class;
-        index int = s.indexOf(class);
-        ml int = class.length();
+    private function removeClass(widget Widget in, cssClass string in)
+        s string = widget.cssClass;
+        index int = s.indexOf(cssClass);
+        ml int = cssClass.length();
         sl int = s.length();
         prefix string = "";
         postfix string = "";
@@ -1047,7 +1047,7 @@ handler DataGrid type RUIWidget{
         	if( index + ml < sl )
         		postfix = s[index + ml : sl ];
         	end
-        	widget.class= prefix + postfix;
+        	widget.cssClass= prefix + postfix;
         end
     end
 
@@ -1101,7 +1101,7 @@ handler DataGrid type RUIWidget{
 
     private function sortColumn(widget Widget in)
         column int = widget.getAttribute("column");
-        while(column == 0 && widget.class != "EglRuiDataGrid")
+        while(column == 0 && widget.cssClass != "EglRuiDataGrid")
             widget = widget.parent;
             column = widget.getAttribute("column");
         end

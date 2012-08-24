@@ -98,11 +98,11 @@ handler TextField type RUIWidget{tagName="input", onConstructionFunction = start
 			setAttribute("readOnly", "true");
 			savedBackgroundColor = backgroundColor;
 			backgroundColor = "";
-			class = "EglRuiTextFieldReadOnly";
+			cssClass = "EglRuiTextFieldReadOnly";
 		else
 			removeAttribute("readOnly");
 			backgroundColor = savedBackgroundColor;
-			class = "EglRuiTextField";
+			cssClass = "EglRuiTextField";
 		end
 	end
 

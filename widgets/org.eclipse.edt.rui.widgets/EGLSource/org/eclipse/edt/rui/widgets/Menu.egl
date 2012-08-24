@@ -23,7 +23,7 @@ handler Menu type RUIWidget{tagName = "div", onConstructionFunction = start, css
 		largeIcon = "icons/ctool24/menu.gif"
 	}}
 	
-	titleBar Span{onClick::= showOptionsEvent, text = "Title", class = "EglRuiMenuTitleBar"};
+	titleBar Span{onClick::= showOptionsEvent, text = "Title", cssClass = "EglRuiMenuTitleBar"};
 	optionsBox Box{onclick::= hideOptionsEvent, columns = 1, position = "absolute", visibility = "hidden"};
 	private settingOptions boolean = false;
 	
@@ -196,11 +196,11 @@ handler Menu type RUIWidget{tagName = "div", onConstructionFunction = start, css
 	function encloseInBiDiMarkers(optBox Box)
 		for (index int from 1 to optBox.children.getSize() by 1)			
 			w Widget = optBox.children[index];			
-			if(w.class == "EglRuiSpan")
+			if(w.cssClass == "EglRuiSpan")
 				w.textLayout = titleBar.textLayout;
 				w.reverseTextDirection = titleBar.reverseTextDirection;				
 			else
-				if(w.class == "EglRuiMenu")
+				if(w.cssClass == "EglRuiMenu")
 					m Menu = w;
 					m.titleBar.textLayout = titleBar.textLayout;
 					m.titleBar.reverseTextDirection = titleBar.reverseTextDirection;

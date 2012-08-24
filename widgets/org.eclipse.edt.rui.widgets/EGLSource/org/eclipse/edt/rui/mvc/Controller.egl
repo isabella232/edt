@@ -207,11 +207,11 @@ handler Controller
 	private function notifyStateChange(valid boolean in)
 		try
 			MVCLib.setCurrentContext(this);
-			initialClass = view.class;
+			initialClass = view.cssClass;
 			if (valid)
-				view.class = initialClass;
+				view.cssClass = initialClass;
 			else
-				view.class = initialClass + " FormErrorEditor";
+				view.cssClass = initialClass + " FormErrorEditor";
 			end
 			if(!valid && null != showErrorState)
 				this.showErrorState(true);

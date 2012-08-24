@@ -13,23 +13,23 @@ package org.eclipse.edt.rui.widgets;
 
 library DataGridFormatters
 
-    function dollarSigns(class string inout, value string inout, rowData any in)
+    function dollarSigns(cssClass string inout, value string inout, rowData any in)
         value = "$" + value;
     end
 
-    function coloredNumbers(class string inout, value string inout, rowData any in)
+    function coloredNumbers(cssClass string inout, value string inout, rowData any in)
         if(value < 0)
-            class += " EglRuiDataGridCellNegative";
+            cssClass += " EglRuiDataGridCellNegative";
         else
             if(value == 0)
-                class += " EglRuiDataGridCellNull";
+                cssClass += " EglRuiDataGridCellNull";
             else
-                class += " EglRuiDataGridCellPositive";
+                cssClass += " EglRuiDataGridCellPositive";
             end
         end
     end
 
-    function addCommas(class string inout, value string inout, rowData any in)
+    function addCommas(cssClass string inout, value string inout, rowData any in)
     	if (value == "")
 			return;
 		end
@@ -69,28 +69,28 @@ library DataGridFormatters
 		value = preDecimal + "." + postDecimal;
     end
 
-    function percentage(class string inout, value string inout, rowData any in)
+    function percentage(cssClass string inout, value string inout, rowData any in)
         value += "%";
     end
 
-    function fontWeightItalic(class string inout, value string inout, rowData any in)
+    function fontWeightItalic(cssClass string inout, value string inout, rowData any in)
         value = "<i>" + value + "</i>";
     end
 
-    function fontWeightBold(class string inout, value string inout, rowData any in)
+    function fontWeightBold(cssClass string inout, value string inout, rowData any in)
         value = "<b>" + value + "</b>";
     end
 
-    function fontWeightUnderlined(class string inout, value string inout, rowData any in)
+    function fontWeightUnderlined(cssClass string inout, value string inout, rowData any in)
         value = "<u>" + value + "</u>";
     end
 
-    function fontWeightBoldItalic(class string inout, value string inout, rowData any in)
+    function fontWeightBoldItalic(cssClass string inout, value string inout, rowData any in)
         value = "<i><b>" + value + "</b></i>";
     end
 
-    function makeLink(class string inout, value string inout, rowData any in)
-        class += " EglRuiDataGridCellLink";
+    function makeLink(cssClass string inout, value string inout, rowData any in)
+        cssClass += " EglRuiDataGridCellLink";
         value = "<span onClick='" +
                 "egl.org.eclipse.edt.rui.infobus.InfoBus.$inst.publish(\"grid.link\",egl.createWidget(this.parentNode.parentNode))'>" +
                 value + "</span>";

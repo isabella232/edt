@@ -22,7 +22,7 @@ handler Tooltip type RUIWidget {onConstructionFunction = start, cssFile = "css/o
 	text String? = null;
 	
 	private container Div { 
-		class = "EglRuiTooltip",
+		cssClass = "EglRuiTooltip",
 		onMouseOver ::= enterTooltip,
 		onMouseOut ::= leaveTooltip 
 	};

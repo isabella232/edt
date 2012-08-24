@@ -32,10 +32,10 @@ handler ValidatingForm type RUIWidget {tagName = "div"}
 		this.entries = entries;
 		for (n int from 1 to entries.getSize() by 1)
 			this.entries[n].nameLabel = new TextLabel { text=entries[n].displayName };
-			this.entries[n].labelClass = entries[n].nameLabel.class;
+			this.entries[n].labelClass = entries[n].nameLabel.cssClass;
 			box.appendChild(this.entries[n].nameLabel);
 			box.appendChild(this.entries[n].controller.view);
-			this.entries[n].errorLabel = new TextLabel { marginLeft=9, class="EglRuiTextLabel FormErrorLabel" };
+			this.entries[n].errorLabel = new TextLabel { marginLeft=9, cssClass="EglRuiTextLabel FormErrorLabel" };
 			box.appendChild(this.entries[n].errorLabel);
 			if (this.entries[n].controller.validStateSetter == null)
 				this.entries[n].controller.validStateSetter = validStateSetter;
@@ -89,9 +89,9 @@ handler ValidatingForm type RUIWidget {tagName = "div"}
 	function setValidState(entry FormField, view Widget in, valid boolean in)
 		if (entry.controller.view == view)
 			if (valid)
-				entry.nameLabel.class = entry.labelClass;
+				entry.nameLabel.cssClass = entry.labelClass;
 			else
-				entry.nameLabel.class = entry.labelClass + " FormErrorLabel";
+				entry.nameLabel.cssClass = entry.labelClass + " FormErrorLabel";
 			end
 		end
 	end

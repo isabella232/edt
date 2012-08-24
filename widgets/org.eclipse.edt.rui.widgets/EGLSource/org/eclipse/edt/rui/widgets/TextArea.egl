@@ -128,11 +128,11 @@ handler TextArea type RUIWidget{tagName="textarea", onConstructionFunction = sta
 			setAttribute("readOnly", "true");
 			savedBackgroundColor = backgroundColor;
 			backgroundColor = "";
-			class = "EglRuiTextAreaReadOnly";
+			cssClass = "EglRuiTextAreaReadOnly";
 		else
 			removeAttribute("readOnly");
 			backgroundColor = savedBackgroundColor;
-			class = "EglRuiTextAreaRead";
+			cssClass = "EglRuiTextAreaRead";
 		end
 	end
 end

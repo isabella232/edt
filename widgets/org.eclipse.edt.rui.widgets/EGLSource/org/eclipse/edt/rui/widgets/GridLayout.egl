@@ -245,11 +245,11 @@ handler GridLayout type RUIWidget{targetWidget = table, cssFile = "css/org.eclip
 			if ( gridData.verticalAlignment > 0 )
 				case (gridData.verticalAlignment)
 					when(VALIGN_TOP)
-						td.class = "EglRuiVAlignTop EglRuiBoxTd";
+						td.cssClass = "EglRuiVAlignTop EglRuiBoxTd";
 					when(VALIGN_MIDDLE)
-						td.class = "EglRuiVAlignMiddle EglRuiBoxTd";
+						td.cssClass = "EglRuiVAlignMiddle EglRuiBoxTd";
 					when(VALIGN_BOTTOM)
-						td.class = "EglRuiVAlignBottom EglRuiBoxTd";
+						td.cssClass = "EglRuiVAlignBottom EglRuiBoxTd";
 				end
 			end			
 			td.removeChildren();					

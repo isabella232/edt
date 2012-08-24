@@ -67,7 +67,7 @@ handler RadioGroup type RUIWidget {tagName ="div",cssFile = "css/org.eclipse.edt
 			newOption.setAttribute("value", options[index]);
 			newOption.onClick ::= setSelectedEvent;
 			newOption.onChange ::= setChangeEvent;
-			optionName TextLabel{text = options[index], class = "EglRuiRadioGroupOptionName"};
+			optionName TextLabel{text = options[index], cssClass = "EglRuiRadioGroupOptionName"};
 			optionName.setAttribute("dir", "ltr");
 			optionName.style = "display: inline-block";
 
@@ -194,7 +194,7 @@ handler RadioGroup type RUIWidget {tagName ="div",cssFile = "css/org.eclipse.edt
 		children Widget[] = optionsBox.getChildren();
 		if(children.getSize() > 0)
 			for(i int from 1 to children.getSize() by 1)
-				if (children[i].class == "EglRuiRadioGroupOptionName")
+				if (children[i].cssClass == "EglRuiRadioGroupOptionName")
 					children[i].textLayout = this.textLayoutThis;
 					children[i].reverseTextDirection = this.reverseTextDirectionThis;
 				end;
