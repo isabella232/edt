@@ -183,9 +183,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	protected void createAnnotations(Part binding, Element eClass) {
 		if (eClass instanceof Element) {
-			Annotation subtype = binding.getSubType();
 			for (Annotation annotation : binding.getAnnotations()) {
-				if (subtype != null && ((Element)eClass).getAnnotation(subtype.getEClass().getETypeSignature()) != null) continue;
 				((Element)eClass).addAnnotation((Annotation)mofValueFrom(annotation));
 			}
 		}
@@ -287,11 +285,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected Object getValue(Annotation binding, Object annotationValue, boolean isMetaDataFieldValue) {
-		if (annotationValue == null) {
-			InvalidName name = factory.createInvalidName();
-			name.setId("EZENOTFOUND");
-			return name;
-		}
 
 		// Some well defined array types:
 		if (annotationValue instanceof Integer[] || annotationValue instanceof Integer[][] || annotationValue instanceof int[]
@@ -1289,6 +1282,20 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return null;
 	}
 
+	private boolean isAnnotationType(Type type) {
+		if (!(type instanceof Part)) return false;
+		EClass cls = type.getEClass();
+		Stereotype stereotype = ((Part)type).getStereotype(); 
+		Stereotype subType = ((Part)type).getSubType();
+		return (subType != null && stereotype == null) && !isEMetadataType(type);
+	}
+	
+	private boolean isStereotypeType(Type type) {
+		if (!(type instanceof Part)) return false;
+		return false//(ann != null && ann.getName().equalsIgnoreCase("Annotation") && getAnnotation(ann, "Stereotype") != null)
+			&& !isEMetadataType(type);
+	}
+	
 	protected boolean isEMetadataType(Type edtType) {
 		if(isEMetadataType(edtType.getEClass())) return true;
 		Annotation ann = getAnnotation(edtType, "egl.lang.reflect.IsEMetadataType");
@@ -1399,5 +1406,4 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		
 		obj.setIsNullable(edtObj.isNullable());
 	}
-
 }
