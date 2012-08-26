@@ -101,4 +101,15 @@ public class NestedFunction extends Node {
 		
 		return new NestedFunction(new Boolean(isPrivate), new Boolean(isStatic), (SimpleName)name.clone(), cloneList(functionParameters), newReturnsOpt, cloneList(stmts), isAbstract, getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public void setParent(Node parent) {
+		super.setParent(parent);
+		if(parent instanceof Library){
+			isStatic = true;
+		}
+		if(parent instanceof Program){
+			isPrivate = true;
+		}
+	}
 }

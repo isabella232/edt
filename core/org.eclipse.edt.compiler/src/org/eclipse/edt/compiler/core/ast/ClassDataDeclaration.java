@@ -102,4 +102,15 @@ public class ClassDataDeclaration extends Node {
 		
 		return new ClassDataDeclaration(new Boolean(isPrivate), new Boolean(isStatic), cloneList(ID_plus), (Type)type.clone(), newSettingsBlockOpt, newInitializerOpt, isConstant, getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public void setParent(Node parent) {
+		super.setParent(parent);
+		if(parent instanceof Library){
+			isStatic = true;
+		}
+		if(parent instanceof Program){
+			isPrivate = true;
+		}
+	}
 }
