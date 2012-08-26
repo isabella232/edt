@@ -30,7 +30,7 @@ public class FieldTemplate extends EGLDocTemplate {
 		}
 
 		out.println("</span></dt>");
-		out.println("<dd class=\"dd pd\">" + "<p></p>" + "This is the purpose!");
+		out.println("<dd class=\"dd pd\">" + "<p></p>" + "This is the FieldTemplate purpose!");
 
 		// get field annotations such as ExternalName
 		List<Annotation> theList = field.getAnnotations();

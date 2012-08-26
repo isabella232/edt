@@ -62,7 +62,7 @@ public class EGLDocGenerator extends Generator {
 		try {
 			context.putAttribute(context.getClass(), "eglFile", ((EGL2Doc)generator).getEGLFile());
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
-			context.invoke(EGLDocTemplate.preGenPart, part, context);
+			context.invoke(EGLDocTemplate.preGenDocContent, part, context);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
 				
@@ -74,7 +74,7 @@ public class EGLDocGenerator extends Generator {
 				}
 				out.setAutoIndent(autoIndent);
 				
-				context.invoke(EGLDocTemplate.genPart, part, context, out);
+				context.invoke(EGLDocTemplate.genDocContent, part, context, out);
 				out.flush();
 			}
 		}

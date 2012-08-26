@@ -1,48 +1,41 @@
 package org.eclipse.edt.gen.egldoc.templates;
 
-import java.util.List;
-
 import org.eclipse.edt.gen.egldoc.Constants;
 import org.eclipse.edt.gen.egldoc.Context;
-import org.eclipse.edt.gen.egldoc.Util;
-import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.ElementKind;
-import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Enumeration;
-import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.egl.Member;
 
-public class AnnotationTypeTemplate extends EGLDocTemplate {
+public class EnumerationTemplate extends EGLDocTemplate {
 
-    public void preGenContent(AnnotationType annotationType, Context ctx) {
+    public void preGenContent(Enumeration enumeration, Context ctx) {
 		
 		String docType = (String)ctx.get(Constants.DOCTYPE);
-		
+		/*
 		if (docType == null) {
-			ctx.put(Constants.DOCTYPE, "stereotype type");
-			ctx.put(Constants.FIELDCONTAINERTYPE, "Stereotype");
+			ctx.put(Constants.DOCTYPE, "");
+			ctx.put(Constants.FIELDCONTAINERTYPE, "");
 		}
-		ctx.invokeSuper(this, preGenContent, (EClass)annotationType, ctx);					
+		*/
+		ctx.invokeSuper(this, preGenContent, enumeration, ctx);					
     }
 	
 	
 
 	
-	public void genContent(AnnotationType annotationType, Context ctx, TabbedWriter out) {
+	public void genContent(Enumeration enumeration, Context ctx, TabbedWriter out) {
 
 		//ctx.invoke(genExampleUse, annotationType, ctx, out);
-		ctx.invoke(genTargets, (EClass)annotationType, ctx, out);
+		//ctx.invoke(genTargets, enumeration, ctx, out);
 		
 		//ctx.invoke(genMemberAnnotations, (Part)stereotypeType, ctx, out);
 		// does an annotation type have a default super type?  method is now in stereotype type 
 		//     ctx.invoke(genDefaultSuperType, (Part)annotationType, ctx, out);
-		ctx.invoke(genFields, (Part)annotationType, ctx, out);
+		ctx.invoke(genFields, (Element)enumeration, ctx, out);
 		//ctx.invoke(genComments, annotationType, ctx, out);
 		//ctx.invoke(genCompatibility, annotationType, ctx, out);
+		//now returns to the same method:  ctx.invokeSuper(this, genContent, enumeration, ctx);
 		
 	}
 	
@@ -60,7 +53,7 @@ public class AnnotationTypeTemplate extends EGLDocTemplate {
 		
 	}
 	*/
-	
+/*	
 	public void genTargets(AnnotationType annotationType, Context ctx, TabbedWriter out){
         int numberOfTargets = annotationType.getTargets().size();
 		
@@ -81,7 +74,8 @@ public class AnnotationTypeTemplate extends EGLDocTemplate {
 			out.println("</p><p class=\"p\"></p></dd></dt>");
 		}		
 	}
-	
+*/ 
+/*	
 	public void genTarget(AnnotationType annotationType, Context ctx, TabbedWriter out, ElementKind arg){
         
 		  
@@ -89,15 +83,16 @@ public class AnnotationTypeTemplate extends EGLDocTemplate {
 		/* String argClassName = arg.getClass().getName();
 		   out.println("<a href=\"" + argClassName + "\">");
 		   out.println(arg + "</a>"); 
-		*/						
+		*/
+/*	
 	}
-	
-	public void genFields(AnnotationType annotationType, Context ctx, TabbedWriter out) {
+*/	
+	public void genFields(Enumeration enumeration, Context ctx, TabbedWriter out) {
 	    String fieldContainerType = (String) ctx.get("fieldContainerType");
 
 		out.println ("<dt class=\"dt dlterm\"><a name=\"annofields\"></a>" + fieldContainerType + " fields</dt>");
 		
-		if(annotationType.getEFields().size() > 0){
+		if(enumeration.getMembers().size() > 0){
 			// out.println(annotationType.getEClass().getName() + " fields");
 			out.println ("<dd class=\"dd\"><dl class=\"dl parml\"><p class=\"p\"></p>");
 		}
@@ -105,18 +100,18 @@ public class AnnotationTypeTemplate extends EGLDocTemplate {
 			out.println ("<dd class=\"dd\"> <p class=\"p\">None.</p><p class=\"p\"></p></dd></dt>");			
 		}
 		
-		for (EField efield : annotationType.getEFields()) {
-			ctx.invoke(genField, (EClass)annotationType, ctx, out, efield);
+		for (Member member : enumeration.getMembers()) {
+			ctx.invoke(genMember, (Element)enumeration, ctx, out, member);
 		}
 	}
 
-	public void genField(AnnotationType annotationType, Context ctx, TabbedWriter out, EField arg) {
+	public void genMember(Enumeration enumeration, Context ctx, TabbedWriter out, Member arg) {
 		ctx.invoke(genDeclaration, arg, ctx, out);
 		out.println("<p class=\"p\"></p>");
 	}
 	
-	public void genDeclaration(AnnotationType annotationType, Context ctx, TabbedWriter out) {
-        out.println(annotationType.getFullyQualifiedName());	
+	public void genDeclaration(Enumeration enumeration, Context ctx, TabbedWriter out) {
+        out.println(enumeration.getFullyQualifiedName());	
     }
 	
 }
