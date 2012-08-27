@@ -59,7 +59,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(externalType);
 		
 		if (checkHasSubtype()) {
-			checkExtendedTypes();
+			checkExtendedTypes(externalTypeBinding.getSubType().getEClass());
 			checkCycles();
 		}
 		return true;
@@ -114,17 +114,31 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 		}
 	}
 	
-	private void checkExtendedTypes() {
+	private void checkExtendedTypes(EClass expectedSubtype) {
 		for (Iterator iter = externalType.getExtendedTypes().iterator(); iter.hasNext();) {
 			Name nameAST = (Name) iter.next();
 			Type extendedType = nameAST.resolveType();
-			if (extendedType != null && !(extendedType instanceof org.eclipse.edt.mof.egl.ExternalType)) {
-				problemRequestor.acceptProblem(
-						nameAST,
-						IProblemRequestor.EXTERNALTYPE_MUST_EXTEND_EXTERNALTYPE,
-						new String[] {
-								extendedType.getTypeSignature()
-						});
+			if (extendedType != null) {
+				if (!(extendedType instanceof org.eclipse.edt.mof.egl.ExternalType)) {
+					problemRequestor.acceptProblem(
+							nameAST,
+							IProblemRequestor.EXTERNALTYPE_MUST_EXTEND_EXTERNALTYPE,
+							new String[] {
+									extendedType.getTypeSignature()
+							});
+				}
+				else {
+					// Super type must have the same subtype.
+					Stereotype superSubtype = ((org.eclipse.edt.mof.egl.ExternalType)extendedType).getSubType();
+					if (superSubtype == null || !expectedSubtype.equals(superSubtype.getEClass())) {
+						problemRequestor.acceptProblem(
+								nameAST,
+								IProblemRequestor.EXTERNAL_TYPE_SUPER_SUBTYPE_MISMATCH,
+								new String[] {
+										extendedType.getTypeSignature()
+								});
+					}
+				}
 			}
 		}
 	}
@@ -133,17 +147,6 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 		boolean subtypeValid;
 		if(externalType.hasSubType()) {
 			subtypeValid = externalTypeBinding.getSubType() != null;
-			//TODO is this check still valid? there's no egl.core.NativeType, and eglx.lang.NativeType is valid
-			if (externalTypeBinding.getSubType() != null && NameUtile.equals(externalTypeBinding.getSubType().getEClass().getName(), IEGLConstants.PROPERTY_NATIVETYPE) &&
-					NameUtile.equals(externalTypeBinding.getSubType().getEClass().getPackageName(), "egl.core")) {
-				problemRequestor.acceptProblem(
-						externalType.getSubType(),
-						IProblemRequestor.PART_OR_STATEMENT_NOT_SUPPORTED,
-						new String[] {
-							IEGLConstants.PROPERTY_NATIVETYPE.toUpperCase()
-						});
-					return false;
-				}
 		}
 		else {
 			problemRequestor.acceptProblem(

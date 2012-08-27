@@ -464,6 +464,8 @@ public interface IProblemRequestor {
 	public static final int THROW_TARGET_MUST_BE_EXCEPTION = 3444;
 	public static final int THROW_NOT_VALID_WITH_V60EXCEPTIONCOMPATIBILITY = 3445;
 	
+	public static final int EXTERNAL_TYPE_SUPER_SUBTYPE_MISMATCH = 3446;
+	
 	public static final int SIZEINBYTES_ARGUMENT_INVALID = 3450;
 	public static final int CONVERT_ARGUMENT_INVALID = 3451;
 	public static final int SIZEOF_ARGUMENT_INVALID = 3452;
