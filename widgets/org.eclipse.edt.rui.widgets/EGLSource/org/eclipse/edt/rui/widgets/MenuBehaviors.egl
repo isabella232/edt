@@ -14,7 +14,7 @@ package org.eclipse.edt.rui.widgets;
 library MenuBehaviors
 	
 	function simpleText(menuItem any in, itemAction MenuItemSelection, parentMenu Menu in) returns (any)
-		text Span { text = menuItem as string, class = "EglRuiMenuSimpleText" };
+		text Span { text = menuItem as string, cssClass = "EglRuiMenuSimpleText" };
 		if (itemAction != null)
 			action MenuItemAction {
 				theItem = menuItem, 
@@ -51,8 +51,8 @@ library MenuBehaviors
 	end
 	
 	function BasicMenu(menu Menu in, titleBar Span, optionsBox Box, options MenuItem[])
-		optionsBox.class = "EglRuiMenuBasicMenuOptionsBox";
-		titlebar.class = "EglRuiMenuBasicMenuTitlebar";
+		optionsBox.cssClass = "EglRuiMenuBasicMenuOptionsBox";
+		titlebar.cssClass = "EglRuiMenuBasicMenuTitlebar";
 		for (index int from 1 to optionsbox.children.getSize() by 1)
 			widget Widget = optionsBox.children[index].parent;
 			widget.onMouseOver ::= highlight;
@@ -61,8 +61,8 @@ library MenuBehaviors
 	end
 	
 	function ContextMenu(menu Menu in, titleBar Span, optionsBox Box, options MenuItem[])
-		optionsBox.class = "EglRuiMenuContextMenuOptionsBox";
-		titleBar.class = "EglRuiMenuContextMenuTitlebar";
+		optionsBox.cssClass = "EglRuiMenuContextMenuOptionsBox";
+		titleBar.cssClass = "EglRuiMenuContextMenuTitlebar";
 		for (index int from 1 to optionsbox.children.getSize() by 1)
 			widget Widget = optionsBox.children[index];
 			widget.onMouseOver ::= highlight;
@@ -72,17 +72,17 @@ library MenuBehaviors
 	
 	function highlight(e Event in)
 		widget widget = e.widget;
-		widget.class = "EglRuiMenuOptionHighlight";
+		widget.cssClass = "EglRuiMenuOptionHighlight";
 	end
 	
 	function removeHighlight(e event in)
 		widget widget = e.widget;
-		widget.class = "EglRuiMenuOptionUnHighlight";
+		widget.cssClass = "EglRuiMenuOptionUnHighlight";
 	end
 	
 	function removeMenuHighlight(e event in)
 		widget widget = e.widget;
-		widget.class = "EglRuiMenuMenuUnHighlight";
+		widget.cssClass = "EglRuiMenuMenuUnHighlight";
 	end
 
 end

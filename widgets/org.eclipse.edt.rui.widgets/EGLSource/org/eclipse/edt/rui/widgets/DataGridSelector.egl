@@ -92,7 +92,7 @@ handler DataGridSelector
 	function highlightRow(tr Widget in)
 		tds Widget[] = tr.getElementsByTagName("div");
 		for (n int from 1 to tds.getSize() by 1)
-			if(tds[n].class.isLike("%EglRuiDataGridCell%"))
+			if(tds[n].cssClass.isLike("%EglRuiDataGridCell%"))
 				tds[n].backgroundColor = color;
 			end
 		end
@@ -102,7 +102,7 @@ handler DataGridSelector
 	function unHighlightRow(tr Widget in)
 		tds Widget[] = tr.getElementsByTagName("div");
 		for (n int from 1 to tds.getSize() by 1)
-			if (tds[n].class.isLike("%EglRuiDataGridCell%"))
+			if (tds[n].cssClass.isLike("%EglRuiDataGridCell%"))
 				tds[n].backgroundColor = tds[n].getAttribute("originalBG");
 			end
 		end

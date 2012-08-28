@@ -256,9 +256,7 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static boolean isDynamicType(Type type) {
-		// TODO Implement DynamicType interface that is referenced by
-		// types that are allowed to be dynamic types
-		return type != null && (type.equals(Type_ANY) || type.equals(Type_DICTIONARY));
+		return (type != null && type.getClassifier() != null && type.getClassifier().getAnnotation("egl.lang.reflect.Dynamic") != null);
 	}
 	
 	public static boolean isStaticType(Type type) {

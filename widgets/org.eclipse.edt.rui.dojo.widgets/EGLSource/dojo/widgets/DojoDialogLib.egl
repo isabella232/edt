@@ -158,7 +158,7 @@ library DojoDialogLib {}
 	function createContents(message String in, imagePath String? in) returns (Widget)
 		cells Widget { tagName = "tr", children = [] };
 		body Widget { tagName = "tbody", children = [ cells ] };
-		table Widget { tagName = "table", class = "EGLDojoDialogLibTable", children = [ body ], style = "max-width: 500px" };
+		table Widget { tagName = "table", cssClass = "EGLDojoDialogLibTable", children = [ body ], style = "max-width: 500px" };
 		table.setAttribute("border", "0");
 						
 		if (imagePath != null) 

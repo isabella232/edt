@@ -33,7 +33,7 @@ handler Box type RUIWidget{targetWidget = div, cssFile = "css/org.eclipse.edt.ru
 	
 	lastRow Widget? = null;  
 	body Widget { tagName = "tbody" };
-	table Widget { tagName = "table", children = [ body ], class = "EglRuiBoxTable" };
+	table Widget { tagName = "table", children = [ body ], cssClass = "EglRuiBoxTable" };
 	div Div { children = [ table ]};
 	alignment int {@EGLProperty{setMethod = setAlignment, getMethod = getAlignment}, @VEProperty{
 		propertyType = "choice",
@@ -85,7 +85,7 @@ handler Box type RUIWidget{targetWidget = div, cssFile = "css/org.eclipse.edt.ru
 		end
 		 
 		td Widget { tagName="td", children = [child] };
-		td.class = "EglRuiVAlignTop EglRuiBoxTd";
+		td.cssClass = "EglRuiVAlignTop EglRuiBoxTd";
 		case (alignment)
 			when(0)
 				div.setAttribute("align", "left");

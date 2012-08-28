@@ -812,8 +812,7 @@ public class BindingUtil {
 	}
 
 	public static boolean isExplicitlyDynamicallyAccessible(Type type) {
-		//Check the type for an annotation
-		return (type != null && type.getClassifier() != null && type.getClassifier().getAnnotation("egl.lang.reflect.Dynamic") != null);
+		return TypeUtils.isDynamicType(type);
 	}
 
 	public static Member createDynamicAccessMember(Type type, String caseSensitiveName) {

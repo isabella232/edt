@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 /**
@@ -99,6 +100,8 @@ public class DelegateBindingCompletor extends AbstractBinder {
         	parm.setParameterKind(ParameterKind.PARM_IN);
         } else if (useType == FunctionParameter.UseType.OUT) {
         	parm.setParameterKind(ParameterKind.PARM_OUT);
+        } else if (useType == null && typeBinding != null && TypeUtils.isReferenceType(typeBinding)) {
+        	parm.setParameterKind(ParameterKind.PARM_IN);
         } else {
         	parm.setParameterKind(ParameterKind.PARM_INOUT);
         }
