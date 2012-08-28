@@ -18,10 +18,12 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.StructPart;
@@ -34,7 +36,25 @@ public class TypeValidator {
 			return;
 		}
 		
+		// First make sure the type can be used by EGL code (e.g. you cannot declare a field whose type is a program).
+		org.eclipse.edt.mof.egl.Type typeBinding = type.getBaseType().resolveType();
+		if (typeBinding != null) {
+			boolean valid = !TypeUtils.isStaticType(typeBinding);
+			if (valid) {
+				// Annotations can be fields only inside other annotations.
+				valid = !(typeBinding instanceof AnnotationType) || (declaringPart instanceof IRPartBinding && ((IRPartBinding)declaringPart).getIrPart() instanceof AnnotationType);
+			}
+			
+			if (!valid) {
+				problemRequestor.acceptProblem(type,
+						IProblemRequestor.DATA_DECLARATION_HAS_INCORRECT_TYPE,
+						new String[] {typeBinding.getTypeSignature()});
+				return;
+			}
+		}
+		
 		type.accept(new AbstractASTVisitor() {
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.NameType nameType) {
 				List<ASTValidator> validators = declaringPart.getEnvironment().getCompiler().getValidatorsFor(nameType);
 				if (validators != null && validators.size() > 0) {
@@ -80,5 +100,18 @@ public class TypeValidator {
 			}
 		}
 		return false;
+	}
+	
+	public static void validateTypeDeclaration(Type type, IPartBinding declaringPart, IProblemRequestor problemRequestor) {
+		if (type.isArrayType()) {
+			while (type.isArrayType()) {
+				if (((ArrayType)type).hasInitialSize()) {
+					problemRequestor.acceptProblem(
+							type,
+							IProblemRequestor.ARRAY_DIMENSION_NOT_ALLOWED);
+				}
+				type = ((ArrayType)type).getElementType();
+			}
+		}
 	}
 }

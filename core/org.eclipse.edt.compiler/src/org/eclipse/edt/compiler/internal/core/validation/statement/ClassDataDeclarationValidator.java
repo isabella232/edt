@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 
 	
 public class ClassDataDeclarationValidator extends DefaultASTVisitor {
@@ -35,6 +36,7 @@ public class ClassDataDeclarationValidator extends DefaultASTVisitor {
 		this.declaringPart = declaringPart;
 	}
 	
+	@Override
 	public boolean visit(final ClassDataDeclaration classDataDeclaration) {
 		for(Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
 			EGLNameValidator.validate((Name) iter.next(), EGLNameValidator.PART, problemRequestor, compilerOptions);
@@ -44,13 +46,10 @@ public class ClassDataDeclarationValidator extends DefaultASTVisitor {
 //		if (classDataDeclaration.isConstant()){
 //			StatementValidator.validatePrimitiveConstant(classDataDeclaration.getType(),problemRequestor);
 //		}
-//		
-//		StatementValidator.validateDataDeclarationType(classDataDeclaration.getType(), problemRequestor, declaringPart);
 		
+		TypeValidator.validateTypeDeclaration(classDataDeclaration.getType(), declaringPart, problemRequestor);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(classDataDeclaration);
-		
 		classDataDeclaration.accept(new FieldValidator(problemRequestor, compilerOptions, declaringPart));
-		
 		
 		return false;
 	}

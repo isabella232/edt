@@ -14,21 +14,16 @@
 	import java.util.Iterator;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedFunction;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 
 	
-/**
- * @author Craig Duval
- */
 public class FunctionDataDeclarationValidator extends DefaultASTVisitor {
 	
 	private IProblemRequestor problemRequestor;
@@ -52,31 +47,10 @@ public class FunctionDataDeclarationValidator extends DefaultASTVisitor {
 //			StatementValidator.validatePrimitiveConstant(functionDataDeclaration.getType(),problemRequestor);
 //		}
 		
-		validateDataType(functionDataDeclaration);
-		
+		TypeValidator.validateTypeDeclaration(functionDataDeclaration.getType(), enclosingPart, problemRequestor);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(functionDataDeclaration);
-		
 		functionDataDeclaration.accept(new FieldValidator(problemRequestor, compilerOptions, enclosingPart));
 
 		return false;
-	}
-
-	protected void validateDataType(final FunctionDataDeclaration functionDataDeclaration){
-		functionDataDeclaration.getParent().accept(new AbstractASTVisitor(){
-			public boolean visit(NestedFunction f){
-				validate(f.getName().getCanonicalName());
-				return false;
-			}
-			
-			public boolean visit(TopLevelFunction f){
-				validate(f.getName().getCanonicalName());
-				return false;
-			}
-			
-			protected void validate(String name){
-				//TODO StatementValidator has many errors
-//				StatementValidator.validateDataDeclarationType(functionDataDeclaration.getType(),problemRequestor, enclosingPart);
-			}
-		});
 	}
 }

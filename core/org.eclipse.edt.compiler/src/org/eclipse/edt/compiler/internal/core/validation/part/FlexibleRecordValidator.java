@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.internal.core.validation.ExpressionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FieldValidator;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 
 
 public class FlexibleRecordValidator extends AbstractASTVisitor {
@@ -57,10 +58,9 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(structureItem);
 		structureItem.accept(new FieldValidator(problemRequestor, compilerOptions, irBinding));
 		
-		//TODO StatementValidator has many errors
-//		if (structureItem.hasType()) {
-//			StatementValidator.validateDataDeclarationType(structureItem.getType(), problemRequestor, recordBinding);
-//		}
+		if (structureItem.hasType()) {
+			TypeValidator.validateTypeDeclaration(structureItem.getType(), irBinding, problemRequestor);
+		}
 		
 		return false;
 	}
