@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.ExpressionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
@@ -43,6 +44,7 @@ public class ClassValidator extends FunctionContainerValidator {
 		partNode = clazz;
 		EGLNameValidator.validate(clazz.getName(), EGLNameValidator.CLASS, problemRequestor, compilerOptions);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(clazz);
+		clazz.accept(new ExpressionValidator(partBinding, problemRequestor, compilerOptions));
 		
 		checkImplements(clazz.getImplementedInterfaces());
 		checkInterfaceFunctionsOverriden(classBinding);

@@ -1102,6 +1102,8 @@ public interface IProblemRequestor {
 	public static final int P_FOUND_EMPTY_BRACKETS = 5211;
 	
 	public static final int DISCOURAGED_ARITHMETIC_COMPARISON = 5213;
+	
+	public static final int MISSING_OPERATION_FOR_EXPRESSION = 5214;
 
 	
 	public static final int ROUTINE_MUST_HAVE_EVEN_NUM_OF_ARGS = 5254;

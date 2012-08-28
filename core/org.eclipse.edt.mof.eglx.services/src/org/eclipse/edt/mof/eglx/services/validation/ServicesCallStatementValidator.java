@@ -71,7 +71,7 @@ public class ServicesCallStatementValidator implements StatementValidator{
 		}
 
 		//validate the arguments against the parms
-		((CallStatement)stmt).accept(new FunctionArgumentValidator((Function)function, (org.eclipse.edt.mof.egl.Part)function.getContainer(), problemRequestor, compilerOptions));
+		((CallStatement)stmt).accept(new FunctionArgumentValidator((Function)function, problemRequestor, compilerOptions));
 		
 		//check to make sure a callback is specified
 		if (((CallStatement)stmt).getCallSynchronizationValues() == null || ((CallStatement)stmt).getCallSynchronizationValues().getReturnTo() == null) {

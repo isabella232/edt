@@ -19,11 +19,10 @@ import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.ExpressionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FieldValidator;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Member;
 
 
 public class FlexibleRecordValidator extends AbstractASTVisitor {
@@ -41,42 +40,19 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 		this.recordBinding = (org.eclipse.edt.mof.egl.Record)irBinding.getIrPart();
 	}
 	
+	@Override
 	public boolean visit(Record record) {
 		recordNameNode = record.getName();
 		EGLNameValidator.validate(recordNameNode, EGLNameValidator.RECORD, problemRequestor, compilerOptions);
 		
-		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(record);		
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(record);
+		record.accept(new ExpressionValidator(irBinding, problemRequestor, compilerOptions));
 		
 		return true;
 	}
 	
+	@Override
 	public boolean visit(StructureItem structureItem) {
-		if (!structureItem.isEmbedded()) {
-			Member binding = structureItem.resolveMember();
-			if (binding instanceof Field) {
-//				Field itemBinding = (Field) binding;
-//				
-//				if (structureItem.hasInitializer()) {
-//					// TODO update to a new type compatibility implementation
-//					Expression expression = structureItem.getInitializer();
-//					ITypeBinding expressionTBinding = expression.resolveTypeBinding();
-//					if (expressionTBinding != null && expressionTBinding != IBinding.NOT_FOUND_BINDING) {
-//						if (!TypeCompatibilityUtil.isMoveCompatible(itemBinding.getType(), expressionTBinding, expression, compilerOptions) &&
-//						   !expressionTBinding.isDynamic() &&
-//						   !TypeCompatibilityUtil.areCompatibleExceptions(expressionTBinding, itemBinding.getType(), compilerOptions)) {
-//							problemRequestor.acceptProblem(
-//								expression,
-//								IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-//								new String[] {
-//									StatementValidator.getShortTypeString(itemBinding.getType()),
-//									StatementValidator.getShortTypeString(expressionTBinding),										
-//									structureItem.isFiller() ? "*" : structureItem.getName().getCanonicalName() + "=" + expression.getCanonicalString()
-//								});
-//						}
-//					}
-//				}
-			}
-		}
 		
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(structureItem);
 		structureItem.accept(new FieldValidator(problemRequestor, compilerOptions, irBinding));
@@ -89,6 +65,7 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 		return false;
 	}
 	
+	@Override
 	public boolean visit(SettingsBlock settingsBlock) {
 		return false;
 	}

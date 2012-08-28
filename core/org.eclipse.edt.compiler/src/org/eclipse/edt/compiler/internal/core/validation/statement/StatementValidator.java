@@ -72,8 +72,6 @@ import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-import com.ibm.xylem.types.NullableType;
-
 public class StatementValidator {
 
 	public static String getTypeString(org.eclipse.edt.mof.egl.Type binding) {
@@ -200,95 +198,6 @@ public class StatementValidator {
 		return isValid[0];
 	}
 	
-	public static void validateDataDeclarationInitializer(Node dataDeclaration,final IProblemRequestor problemRequestor, final ICompilerOptions compilerOptions){
-		dataDeclaration.accept(new AbstractASTVisitor(){
-			
-			Expression lhs = null;
-			Expression rhs = null;
-			ITypeBinding lhsBinding = null;
-			ITypeBinding rhsBinding = null;
-			IDataBinding lhsDataBinding = null;
-			IDataBinding rhsDataBinding = null;
-			
-			public boolean visit (ClassDataDeclaration classDataDeclaration){
-				if (classDataDeclaration.getNames().size() > 0){
-					SimpleName name  = (SimpleName)classDataDeclaration.getNames().get(0);
-					lhs = name;
-					IBinding binding = name.resolveBinding();
-					if (isValidBinding(binding)){
-						if (binding.isTypeBinding()){
-							lhsBinding = (ITypeBinding)binding;						
-						}else if (binding.isDataBinding()){
-							lhsDataBinding = (IDataBinding)binding;
-							lhsBinding = lhsDataBinding.getType();
-						}
-					}
-				}
-				
-				if (classDataDeclaration.hasInitializer()){
-					rhs = classDataDeclaration.getInitializer();
-					rhsBinding = rhs.resolveTypeBinding();
-					rhsDataBinding = rhs.resolveDataBinding();
-				}
-				return false;
-			}
-			
-			public boolean visit (FunctionDataDeclaration functionDataDeclaration){
-				if (functionDataDeclaration.getNames().size() > 0){
-					SimpleName name  = (SimpleName)functionDataDeclaration.getNames().get(0);
-					lhs = name;
-					IBinding binding = name.resolveBinding();
-					if (isValidBinding(binding)){
-						if (binding.isTypeBinding()){
-							lhsBinding = (ITypeBinding)binding;						
-						}else if (binding.isDataBinding()){
-							lhsDataBinding = (IDataBinding)binding;
-							lhsBinding = lhsDataBinding.getType();
-						}
-					}
-				}
-				
-				if (functionDataDeclaration.hasInitializer()){
-					rhs = functionDataDeclaration.getInitializer();
-					rhsBinding = rhs.resolveTypeBinding();
-					rhsDataBinding = rhs.resolveDataBinding();
-				}
-							
-				return false;
-			}
-			
-			public void endVisit (ClassDataDeclaration classDataDeclaration){
-				if (classDataDeclaration.hasInitializer()){
-					validate();
-				}
-			}
-			
-			public void endVisit (FunctionDataDeclaration functionDataDeclaration){
-				validate();
-			}
-			
-			protected void validate(){
-				new AssignmentStatementValidator(problemRequestor, compilerOptions, null).validateAssignment(
-					Assignment.Operator.ASSIGN,
-					lhs,
-					rhs,
-					lhsBinding,
-					rhsBinding,
-					lhsDataBinding,
-					rhsDataBinding,
-					true,
-					false,
-					new LValueValidator.DefaultLValueValidationRules() {
-						public boolean canAssignToConstantVariables() {
-							return true;
-						}
-					});
-			}
-		});
-	
-
-	}
-
 	public static void validatePrimitiveConstant(Type type,final IProblemRequestor problemRequestor){
 		if (type.isArrayType()){
 			type = ((ArrayType)type).getBaseType();

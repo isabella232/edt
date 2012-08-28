@@ -65,6 +65,7 @@ import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.ExpressionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
@@ -136,6 +137,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		checkFunctionName(topLevelFunction.getName(), false);
 		checkNumberOfParms(topLevelFunction.getFunctionParameters(), topLevelFunction.getName(), functionName);
 		checkForConstructorCalls(topLevelFunction);
+		topLevelFunction.accept(new ExpressionValidator(enclosingPart, problemRequestor, compilerOptions));
 		
 		return true;
 	}
