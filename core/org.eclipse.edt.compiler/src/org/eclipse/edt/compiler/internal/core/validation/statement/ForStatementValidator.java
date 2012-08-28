@@ -35,7 +35,7 @@ public class ForStatementValidator extends DefaultASTVisitor {
 			public boolean visitExpression(Expression expr) {
 				Type tBinding = expr.resolveType();
 				if (tBinding != null){
-					if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, expr.resolveMember()) && !TypeUtils.isDynamicType(tBinding)) {
+					if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, expr.resolveMember())) {
 						if (expr == forStatement.getCounterVariable() || expr == forStatement.getVariableDeclarationName()) {
 							problemRequestor.acceptProblem(expr,
 									IProblemRequestor.FOR_STATEMENT_COUNTER_MUST_BE_INT);

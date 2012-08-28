@@ -13,7 +13,6 @@
 	
 	import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;

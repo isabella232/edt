@@ -79,4 +79,23 @@ public class FunctionParameter extends Parameter {
 	protected Object clone() throws CloneNotSupportedException {
 		return new FunctionParameter((SimpleName)name.clone(), (Type)type.clone(), Boolean.valueOf(isNullable), Boolean.valueOf(parmConst), useTypeOpt, getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		buf.append(name.toString());
+		buf.append(' ');
+		buf.append(type.toString());
+		
+		if (parmConst) {
+			buf.append(" const");
+		}
+		
+		if (useTypeOpt != null) {
+			buf.append(' ');
+			buf.append(useTypeOpt);
+		}
+		
+		return buf.toString();
+	}
 }

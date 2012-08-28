@@ -92,4 +92,19 @@ public class ArrayType extends Type {
 	public boolean isNullable() {
 		return isNullable;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		buf.append(elementType.toString());
+		if (isNullable) {
+			buf.append('?');
+		}
+		buf.append('[');
+		if (initialSize != null) {
+			buf.append(initialSize.toString());
+		}
+		buf.append(']');
+		return buf.toString();
+	}
 }

@@ -12,8 +12,10 @@
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
@@ -37,12 +39,15 @@ public class FieldValidator extends DefaultASTVisitor{
 		this.declaringPart = declaringPart;
 	}
 	
+	@Override
 	public boolean visit(final ClassDataDeclaration classDataDeclaration) {
 		Type type = classDataDeclaration.getType();
 		validateNoEmptySettingsBlockForServiceOrInterface(classDataDeclaration.getType(), classDataDeclaration.getSettingsBlockOpt());
 		TypeValidator.validate(classDataDeclaration.getType(), declaringPart, problemRequestor, compilerOptions);
 		
 		if (classDataDeclaration.hasInitializer()) {
+			validateInitializer(classDataDeclaration.getNames().get(0), classDataDeclaration.getInitializer());
+			
 			if (classDataDeclaration.hasSettingsBlock()) {
 				issueErrorForInitialization(classDataDeclaration.getSettingsBlockOpt(), ((Name)classDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
 			}
@@ -66,6 +71,7 @@ public class FieldValidator extends DefaultASTVisitor{
 		return false;
 	}
 	
+	@Override
 	public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
 		Type type = functionDataDeclaration.getType();
 		if (type != null) {
@@ -73,6 +79,8 @@ public class FieldValidator extends DefaultASTVisitor{
 			TypeValidator.validate(type, declaringPart, problemRequestor, compilerOptions);
 			
 			if (functionDataDeclaration.hasInitializer()) {
+				validateInitializer(functionDataDeclaration.getNames().get(0), functionDataDeclaration.getInitializer());
+				
 				if (functionDataDeclaration.hasSettingsBlock()) {
 					issueErrorForInitialization(functionDataDeclaration.getSettingsBlockOpt(), ((Name)functionDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
 				}
@@ -98,6 +106,7 @@ public class FieldValidator extends DefaultASTVisitor{
 		return false;
 	}
 	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.StructureItem structureItem) {
 		Type type = structureItem.getType();
 		if (type != null) {
@@ -105,6 +114,10 @@ public class FieldValidator extends DefaultASTVisitor{
 			TypeValidator.validate(type, declaringPart, problemRequestor, compilerOptions);
 			
 			if (structureItem.hasInitializer()) {
+				if (!structureItem.isEmbedded()) {
+					validateInitializer(structureItem.getName(), structureItem.getInitializer());
+				}
+				
 				if (structureItem.hasSettingsBlock()) {
 					if (structureItem.getName() != null) {
 						issueErrorForInitialization(structureItem.getSettingsBlock(), structureItem.getName().getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
@@ -130,6 +143,24 @@ public class FieldValidator extends DefaultASTVisitor{
 //		}
 		
 		return false;
+	}
+	
+	private void validateInitializer(Name name, Expression initializer) {
+		if (initializer != null && name != null) {
+			org.eclipse.edt.mof.egl.Type rhsType = initializer.resolveType();
+			org.eclipse.edt.mof.egl.Type lhsType = name.resolveType();
+			
+			if (rhsType != null && lhsType != null) {
+				new AssignmentStatementValidator(problemRequestor, compilerOptions, declaringPart).validateAssignment(
+						Assignment.Operator.ASSIGN, name, initializer, lhsType, rhsType, name.resolveMember(), initializer.resolveMember(),
+						new LValueValidator.DefaultLValueValidationRules() {
+							@Override
+							public boolean canAssignToConstantVariables() {
+								return true;
+							}
+						});
+			}
+		}
 	}
 	
 	private void issueErrorForInitialization(SettingsBlock settings, final String fieldName, int errorNo) {

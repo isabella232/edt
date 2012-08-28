@@ -115,14 +115,14 @@ public class NestedFunction extends Node {
 		buf.append('(');
 		
 		boolean first = true;
-		for (Expression e : (List<Expression>)functionParameters) {
+		for (Node n : (List<Node>)functionParameters) {
 			if (!first) {
 				buf.append(", ");
 			}
 			else {
 				first = false;
 			}
-			buf.append(e.toString());
+			buf.append(n.toString());
 		}
 		buf.append(')');
 		

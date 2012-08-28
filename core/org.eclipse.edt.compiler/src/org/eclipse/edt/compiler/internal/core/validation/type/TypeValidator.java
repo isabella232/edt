@@ -47,7 +47,6 @@ public class TypeValidator {
 		});
 	}
 	
-	//TODO this check is also needed for NewExpressions
 	public static void validateInstantiatable(Type type, IPartBinding declaringPart, boolean isNullable, IProblemRequestor problemRequestor) {
 		// Non-nullable reference types must have a public default constructor in order to be instantiatable.
 		if (!isNullable) {
@@ -66,8 +65,15 @@ public class TypeValidator {
 	}
 	
 	public static boolean hasPublicDefaultConstructor(org.eclipse.edt.mof.egl.Type typeBinding) {
-		if (typeBinding.getClassifier() instanceof StructPart) {
-			for (Constructor con : ((StructPart)typeBinding.getClassifier()).getConstructors()) {
+		if (typeBinding != null && typeBinding.getClassifier() instanceof StructPart) {
+			List<Constructor> constructors = ((StructPart)typeBinding.getClassifier()).getConstructors();
+			
+			// Lack of explicit constructors means it has a default.
+			if (constructors.size() == 0) {
+				return true;
+			}
+			
+			for (Constructor con : constructors) {
 				if (con.getParameters().size() == 0 && !BindingUtil.isPrivate(con)) {
 					return true;
 				}

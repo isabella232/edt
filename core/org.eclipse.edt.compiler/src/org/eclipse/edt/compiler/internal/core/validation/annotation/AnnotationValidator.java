@@ -21,7 +21,6 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.FieldContentValidationRule;
 import org.eclipse.edt.compiler.binding.IValidationProxy;
-import org.eclipse.edt.compiler.binding.InstantiationValidationRule;
 import org.eclipse.edt.compiler.binding.InvocationValidationRule;
 import org.eclipse.edt.compiler.binding.PartContentValidationRule;
 import org.eclipse.edt.compiler.binding.ValueValidationRule;
@@ -290,7 +289,6 @@ public class AnnotationValidator {
 				}
 				
 				if (structureItem.resolveMember() != null && structureItem.hasType() && !structureItem.hasInitializer() && !structureItem.isNullable()) {					
-					validateInstantiability(structureItem, structureItem.getType().resolveType(), BindingUtil.getDeclaringPart(structureItem.resolveMember()));
 					validateInvocation(structureItem, getDefaultConstructor(structureItem.getType().resolveType()), BindingUtil.getDeclaringPart(structureItem.resolveMember()));					
 				}
 				return false;
@@ -306,7 +304,6 @@ public class AnnotationValidator {
 				
 				Member field = classDataDeclaration.getNames().get(0).resolveMember();
 				if (field != null && !classDataDeclaration.hasInitializer() && !classDataDeclaration.isNullable()) {					
-					validateInstantiability(classDataDeclaration, classDataDeclaration.getType().resolveType(), BindingUtil.getDeclaringPart(field));
 					validateInvocation(classDataDeclaration, getDefaultConstructor(classDataDeclaration.getType().resolveType()), BindingUtil.getDeclaringPart(field));					
 				}
 				return false;
@@ -351,10 +348,6 @@ public class AnnotationValidator {
 					
 					@Override
 					public boolean visit(NewExpression newExpression) {
-						org.eclipse.edt.mof.egl.Type type = newExpression.resolveType();
-						if (type != null) {
-							validateInstantiability(newExpression, BindingUtil.getBaseType(type), null);
-						}
 						if (newExpression.resolveConstructor() != null) {
 							validateInvocation(newExpression, newExpression.resolveConstructor(), partBinding);
 						}
@@ -374,20 +367,6 @@ public class AnnotationValidator {
 						return true;
 					}
 				});					
-			}
-			
-			private void validateInstantiability(Node node, org.eclipse.edt.mof.egl.Type type, org.eclipse.edt.mof.egl.Part declaringPart) {
-				if (type instanceof org.eclipse.edt.mof.egl.Part) {
-					Stereotype subType = ((org.eclipse.edt.mof.egl.Part)type).getSubType();
-					if (subType != null) {
-						IValidationProxy proxy = getValidationProxy(subType);
-						if (proxy != null) {
-							for (InstantiationValidationRule rule : proxy.getInstantiationValidators()) {
-								rule.validate(node, type, declaringPart, problemRequestor, compilerOptions);
-							}
-						}
-					}
-				}
 			}
 			
 			private void validateInvocation(Node node, Element element, org.eclipse.edt.mof.egl.Part declaringPart) {
@@ -426,7 +405,6 @@ public class AnnotationValidator {
 				
 				Member field = functionDataDeclaration.getNames().get(0).resolveMember();
 				if (field != null && !functionDataDeclaration.hasInitializer() && !functionDataDeclaration.isNullable()) {				
-					validateInstantiability(functionDataDeclaration, functionDataDeclaration.getType().resolveType(), BindingUtil.getDeclaringPart(field));					
 					validateInvocation(functionDataDeclaration, getDefaultConstructor(functionDataDeclaration.getType().resolveType()), BindingUtil.getDeclaringPart(field));
 				}
 				

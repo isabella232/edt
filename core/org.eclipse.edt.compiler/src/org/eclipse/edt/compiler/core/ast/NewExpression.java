@@ -77,4 +77,15 @@ public class NewExpression extends Expression {
 		
 		return new NewExpression((Type)type.clone(), newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		buf.append("new ");
+		buf.append(type.toString());
+		if (settingsBlockOpt != null) {
+			buf.append(settingsBlockOpt.toString());
+		}
+		return buf.toString();
+	}
 }

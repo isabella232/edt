@@ -29,7 +29,7 @@ import org.eclipse.edt.mof.serialization.Environment;
 /**
  * Base implementation of ICompiler intended to be subclassed by clients.
  */
-public class BaseCompiler implements ICompiler {	
+public class BaseCompiler implements ICompiler {
 	
 	protected String systemEnvironmentRootPath;
 	private ISystemEnvironment systemEnvironment;
@@ -177,7 +177,7 @@ public class BaseCompiler implements ICompiler {
 		sysEnv.initializeSystemPackages(getSystemEnvironmentPath(), new SystemPackageBuildPathEntryFactory(), notifier);
 		return sysEnv;
 	}
-		
+	
 	@Override
 	public List<ASTValidator> getValidatorsFor(Node node) {
 		List<ICompilerExtension> nodeExtensions = astTypeToExtensions.get(node.getClass());
@@ -205,6 +205,7 @@ public class BaseCompiler implements ICompiler {
 		List<ICompilerExtension> nodeExtensions = astTypeToExtensions.get(node.getClass());
 		if (nodeExtensions != null && nodeExtensions.size() > 0) {
 			for (ICompilerExtension ext : nodeExtensions) {
+				//TODO should we issue an error if multiple extensions want to replace generation?
 				ElementGenerator generator = ext.getElementGeneratorFor(node);
 				if (generator != null) {
 					return generator;

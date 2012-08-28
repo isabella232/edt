@@ -16,11 +16,8 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.AbstractValidationProxy;
 import org.eclipse.edt.compiler.binding.FieldContentValidationRule;
-import org.eclipse.edt.compiler.binding.InstantiationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
-import org.eclipse.edt.compiler.binding.UserDefinedInstantiationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaObjectFieldTypeValidator;
-import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaObjectInstantiationValidator;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -37,11 +34,6 @@ public class JavaObjectAnnotationProxy extends AbstractValidationProxy {
     	subPartTypeAnnotations.add(new UserDefinedFieldContentAnnotationValidationRule(JavaObjectFieldTypeValidator.class));
     }
     
-    private static final List<InstantiationValidationRule> instantiationValidators = new ArrayList();
-    static {
-    	instantiationValidators.add(new UserDefinedInstantiationValidationRule(JavaObjectInstantiationValidator.class));
-    }
-        
     private JavaObjectAnnotationProxy() {
     }
     
@@ -52,10 +44,5 @@ public class JavaObjectAnnotationProxy extends AbstractValidationProxy {
     @Override
     public List<FieldContentValidationRule> getPartSubTypeValidators() {
     	return subPartTypeAnnotations;
-    }
-    
-    @Override
-    public List<InstantiationValidationRule> getInstantiationValidators() {
-    	return instantiationValidators;
     }
 }

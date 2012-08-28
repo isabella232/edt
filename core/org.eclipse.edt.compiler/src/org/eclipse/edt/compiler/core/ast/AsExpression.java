@@ -64,7 +64,7 @@ public class AsExpression extends Expression {
 	}
 	
     public String getCanonicalString() {
-    	StringBuffer result = new StringBuffer();
+    	StringBuilder result = new StringBuilder();
     	result.append(expr.getCanonicalString());
     	result.append(" ");
     	result.append(IEGLConstants.KEYWORD_AS);
@@ -92,5 +92,10 @@ public class AsExpression extends Expression {
 		return type == null ?
 			new AsExpression((Expression)expr.clone(), (Expression)stringLiteral.clone(), getOffset(), getOffset() + getLength()) :
 			new AsExpression((Expression)expr.clone(), (Type)type.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalString();
 	}
 }

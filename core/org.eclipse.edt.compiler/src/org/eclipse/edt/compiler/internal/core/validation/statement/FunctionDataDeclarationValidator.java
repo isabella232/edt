@@ -48,8 +48,6 @@ public class FunctionDataDeclarationValidator extends DefaultASTVisitor {
 		}
 		
 		//TODO StatementValidator has many errors
-//		StatementValidator.validateDataDeclarationInitializer(functionDataDeclaration,problemRequestor,compilerOptions);
-//		StatementValidator.validateRequiredFieldsInCUIDeclaration(functionDataDeclaration.getType(), functionDataDeclaration.getSettingsBlockOpt(), problemRequestor);
 //		if (functionDataDeclaration.isConstant()){
 //			StatementValidator.validatePrimitiveConstant(functionDataDeclaration.getType(),problemRequestor);
 //		}

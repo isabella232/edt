@@ -41,7 +41,6 @@ public class ClassDataDeclarationValidator extends DefaultASTVisitor {
 		}
 		
 		//TODO StatementValidator has many errors
-//		StatementValidator.validateDataDeclarationInitializer(classDataDeclaration,problemRequestor, compilerOptions);
 //		if (classDataDeclaration.isConstant()){
 //			StatementValidator.validatePrimitiveConstant(classDataDeclaration.getType(),problemRequestor);
 //		}

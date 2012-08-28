@@ -39,11 +39,6 @@ public interface IValidationProxy {
     List<FieldAccessValidationRule> getFieldAccessValidators();
     
     /**
-     * @return the validation rules to be run when instantiating a type.
-     */
-    List<InstantiationValidationRule> getInstantiationValidators();
-    
-    /**
      * @return the validation rules to be run when invoking a function or constructor.
      */
     List<InvocationValidationRule> getInvocationValidators();

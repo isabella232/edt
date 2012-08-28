@@ -30,11 +30,6 @@ public abstract class AbstractValidationProxy implements IValidationProxy {
 	}
 
 	@Override
-	public List<InstantiationValidationRule> getInstantiationValidators() {
-		return Collections.EMPTY_LIST;
-	}
-
-	@Override
 	public List<InvocationValidationRule> getInvocationValidators() {
 		return Collections.EMPTY_LIST;
 	}

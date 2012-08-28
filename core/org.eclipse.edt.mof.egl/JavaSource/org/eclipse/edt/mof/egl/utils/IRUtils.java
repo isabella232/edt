@@ -1117,6 +1117,11 @@ public class IRUtils {
 		}
 		
 		if (rhsType != null) {
+			// Dynamic types aren't known until runtime.
+			if (TypeUtils.isDynamicType(rhsType)) {
+				return true;
+			}
+			
 			if (lhsType instanceof ArrayType && rhsType instanceof ArrayType) {
 				return areArraysCompatible((ArrayType)lhsType, (ArrayType)rhsType);
 			}
@@ -1125,7 +1130,8 @@ public class IRUtils {
 		}
 		
 		// Not everything being compared has a type. For example, a function can be assigned to a delegate. In this case
-		// we wouldn't want to have passed in the function's type, since the function *signature* would be compared to the delegate's.
+		// we wouldn't want to have passed in the function's type (i.e. its return type), since the function *signature*
+		// should be compared to the delegate's *signature*.
 		return TypeUtils.areCompatible(lhsType.getClassifier(), rhsMember);
 	}
 	
@@ -1157,14 +1163,8 @@ public class IRUtils {
 			return areArraysCompatible((ArrayType)elementType1, (ArrayType)elementType2);
 		}
 		
-		if (elementType1IsReference) {
-			// Must be reference-compatible.
-			return TypeUtils.areCompatible(elementType1.getClassifier(), elementType2.getClassifier());
-		}
-		else {
-			// Must be the same value type - conversion is not allowed.
-			return elementType1.equals(elementType2);
-		}
+		// Element types must match exactly.
+		return elementType1.equals(elementType2);
 	}
 	
 	public static String getFileName(EObject obj) {
