@@ -11,23 +11,29 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
+import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
+import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Service;
 
 
-public class FieldValidator extends DefaultASTVisitor{
+public class FieldValidator extends DefaultASTVisitor {
 	
 	private IProblemRequestor problemRequestor;
     private ICompilerOptions compilerOptions;
@@ -164,54 +170,52 @@ public class FieldValidator extends DefaultASTVisitor{
 	}
 	
 	private void issueErrorForInitialization(SettingsBlock settings, final String fieldName, int errorNo) {
-		//TODO
-//		final Node[] errorNode = new Node[1];
-//    	settings.accept(new AbstractASTExpressionVisitor() {
-//    		public boolean visit(Assignment assignment) {
-//    			if (errorNode[0] != null) {
-//    				return false;
-//    			}
-//    			
-//    			//check if it was an annotation type assignment
-//    			if (assignment.resolveBinding() == null) {
-//    				IDataBinding dBinding = assignment.getLeftHandSide().resolveDataBinding();
-//    				if (Binding.isValidBinding(dBinding) && (dBinding.getKind() != IDataBinding.ANNOTATION_BINDING)) {
-//    	        		errorNode[0] = assignment;
-//    				}
-//    			}
-//    			return false;
-//    		}
-//    		
-//    		public boolean visit(AnnotationExpression annotationExpression) {
-//    			return false;
-//    		}
-//    		
-//    		public boolean visit(SetValuesExpression setValuesExpression) {
-//    			if (errorNode[0] != null) {
-//    				return false;
-//    			}
-//    			IDataBinding dBinding = setValuesExpression.getExpression().resolveDataBinding();
-//				if (Binding.isValidBinding(dBinding) && (dBinding.getKind() != IDataBinding.ANNOTATION_BINDING)) {
-//					setValuesExpression.getSettingsBlock().accept(this);
-//				}
-//				return false; 			
-//    		}
-//    		
-//    		public boolean visitExpression(Expression expression) {
-//    			if (errorNode[0] != null) {
-//    				return false;
-//    			}
-//    			errorNode[0] = expression;
-//    			return false;
-//    		}
-//    		
-//    	});
-//    	if (errorNode[0] != null) {
-//    		problemRequestor.acceptProblem(errorNode[0], errorNo, IMarker.SEVERITY_ERROR, new String[] {fieldName});
-//    	}
+		final Node[] errorNode = new Node[1];
+    	settings.accept(new AbstractASTExpressionVisitor() {
+    		public boolean visit(Assignment assignment) {
+    			if (errorNode[0] != null) {
+    				return false;
+    			}
+    			
+    			//check if it was an annotation type assignment
+    			if (assignment.resolveBinding() == null) {
+    				Object dBinding = assignment.getLeftHandSide().resolveElement();
+    				if (dBinding != null && !(dBinding instanceof Annotation)) {
+    	        		errorNode[0] = assignment;
+    				}
+    			}
+    			return false;
+    		}
+    		
+    		public boolean visit(AnnotationExpression annotationExpression) {
+    			return false;
+    		}
+    		
+    		public boolean visit(SetValuesExpression setValuesExpression) {
+    			if (errorNode[0] != null) {
+    				return false;
+    			}
+    			Object dBinding = setValuesExpression.getExpression().resolveElement();
+				if (dBinding != null && !(dBinding instanceof Annotation)) {
+					setValuesExpression.getSettingsBlock().accept(this);
+				}
+				return false; 			
+    		}
+    		
+    		public boolean visitExpression(Expression expression) {
+    			if (errorNode[0] != null) {
+    				return false;
+    			}
+    			errorNode[0] = expression;
+    			return false;
+    		}
+    		
+    	});
+    	if (errorNode[0] != null) {
+    		problemRequestor.acceptProblem(errorNode[0], errorNo, IMarker.SEVERITY_ERROR, new String[] {fieldName});
+    	}
     }
 	
-	//TODO
 //	private void issueErrorForPropertyOverrides(IDataBinding fieldBinding, SettingsBlock settings) {
 //    	if (!(fieldBinding instanceof DataBinding) || ((DataBinding)fieldBinding).getPropertyOverrides().isEmpty()) {
 //    		return;

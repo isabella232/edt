@@ -26,17 +26,24 @@ public class ThisExpression extends Expression {
 		super(startOffset, endOffset);		
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		visitor.visit(this);
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		return IEGLConstants.KEYWORD_THIS;
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new ThisExpression(getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
+	public String toString() {
+		return getCanonicalString();
+	}
 }

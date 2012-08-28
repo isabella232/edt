@@ -23,16 +23,24 @@ public class SuperExpression extends Expression {
 		super(startOffset, endOffset);		
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		visitor.visit(this);
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		return IEGLConstants.KEYWORD_SUPER;
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new SuperExpression(getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalString();
 	}
 }

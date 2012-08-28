@@ -49,6 +49,7 @@ public class SubstringAccess extends Expression {
 		return expr2;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -59,6 +60,7 @@ public class SubstringAccess extends Expression {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(primary.getCanonicalString());
@@ -70,10 +72,12 @@ public class SubstringAccess extends Expression {
 		return sb.toString();
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new SubstringAccess((Expression)primary.clone(), (Expression)expr.clone(), (Expression)expr2.clone(), getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
 	public Member resolveMember() {
 		return getPrimary().resolveMember();
 	}
@@ -81,5 +85,10 @@ public class SubstringAccess extends Expression {
 	@Override
 	public Type resolveType() {
 		return getPrimary().resolveType();
+	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalString();
 	}
 }
