@@ -20,15 +20,20 @@ import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
+import org.eclipse.edt.compiler.core.ast.BytesLiteral;
+import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.IsAExpression;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
@@ -54,10 +59,8 @@ TODO Remaining expressions to port from the old DefaultBinder:
 array access
 substring access
 field access
-is not?
 in
 ternary
-all the literals including arrays
 */
 public class ExpressionValidator extends AbstractASTVisitor {
 	
@@ -392,6 +395,90 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		}
 	}
 	
+	@Override
+	public void endVisit(IntegerLiteral integerLiteral) {
+		String strVal = getSign(integerLiteral.getParent(), false) + integerLiteral.getValue();
+		if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
+			try {
+				Long.parseLong(strVal, 10);
+			}
+			catch (NumberFormatException nfe) {
+				problemRequestor.acceptProblem(
+					integerLiteral,
+					IProblemRequestor.BIGINT_LITERAL_OUT_OF_RANGE,
+					new String[] {strVal});
+			}
+		}
+		else if (integerLiteral.getLiteralKind() == LiteralExpression.SMALLINT_LITERAL) {
+			try {
+				Short.parseShort(strVal, 10);
+			}
+			catch (NumberFormatException nfe) {
+				problemRequestor.acceptProblem(
+					integerLiteral,
+					IProblemRequestor.SMALLINT_LITERAL_OUT_OF_RANGE,
+					new String[] {strVal});
+			}
+		}
+		else {
+			try {
+				Integer.parseInt(strVal, 10);
+			}
+			catch (NumberFormatException nfe) {
+				problemRequestor.acceptProblem(
+					integerLiteral,
+					IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE,
+					new String[] {strVal});
+			}
+		}
+	}
+	
+	@Override
+	public void endVisit(DecimalLiteral decimalLiteral) {
+		String strVal = decimalLiteral.getValue();
+		
+		if (strVal.length() > (strVal.indexOf('.') == -1 ? 32 : 33)) {
+			problemRequestor.acceptProblem(
+				decimalLiteral,
+				IProblemRequestor.DECIMAL_LITERAL_OUT_OF_RANGE,
+				new String[] {strVal});
+		}
+	}
+	
+	@Override
+	public void endVisit(FloatLiteral floatLiteral) {
+		try {
+			if (floatLiteral.getLiteralKind() == LiteralExpression.SMALLFLOAT_LITERAL) {
+				String strVal = floatLiteral.getValue();
+				if (Float.isInfinite(Float.parseFloat(strVal))) {
+					problemRequestor.acceptProblem(
+						floatLiteral,
+						IProblemRequestor.SMALLFLOAT_LITERAL_OUT_OF_RANGE,
+						new String[] { strVal });
+				}
+			}
+			else {
+				String strVal = floatLiteral.getValue();
+				if (Double.isInfinite(Double.parseDouble(strVal))) {
+					problemRequestor.acceptProblem(
+						floatLiteral,
+						IProblemRequestor.FLOATING_POINT_LITERAL_OUT_OF_RANGE,
+						new String[] { strVal });
+				}
+			}
+		}
+		catch( NumberFormatException e ) {
+			// should be syntax error, so ignore			
+		}
+	}
+	
+	@Override
+	public void endVisit(BytesLiteral bytesLiteral) {
+		if (bytesLiteral.getValue().length() % 2 != 0) {
+			problemRequestor.acceptProblem(bytesLiteral, IProblemRequestor.BYTES_LITERAL_LENGTH_MUST_BE_EVEN, new String[] {bytesLiteral.getCanonicalString()});
+		}
+	}
+	
 	protected NamedElement getOperandType(Expression expr) {
 		Object element = expr.resolveElement();
 		if (element instanceof Function) {
@@ -404,4 +491,26 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		}	
 		return null;
 	}
+	
+	private String getSign(Node node, boolean hasNegativeSign) {
+    	if (node instanceof ParenthesizedExpression) {
+    		return getSign(node.getParent(), hasNegativeSign);
+    	}
+    	if (node instanceof UnaryExpression) {
+    		UnaryExpression unary = (UnaryExpression) node;
+    		if (unary.getOperator() == UnaryExpression.Operator.MINUS) {
+    			return getSign(unary.getParent(), !hasNegativeSign);
+    		}
+    		else {
+        		if (unary.getOperator() == UnaryExpression.Operator.PLUS) {
+        			return getSign(unary.getParent(), hasNegativeSign);
+        		}
+    		}
+    	}
+    	
+    	if (hasNegativeSign) {
+    		return "-";
+    	}
+    	return "";
+    }
 }
