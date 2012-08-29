@@ -166,4 +166,49 @@ public class StructureItem extends Node {
 		
 		return new StructureItem(newLevelOpt, newName, newType, Boolean.valueOf(isNullable), newOccursOpt, newSettingsBlockOpt, newInitializerOpt, isFiller, isEmbedded, getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		
+		if (levelOpt != null) {
+			buf.append(levelOpt);
+			buf.append(' ');
+		}
+		
+		if (isEmbedded) {
+			buf.append("embed ");
+		}
+		
+		if (name != null) {
+			buf.append(name);
+			buf.append(' ');
+		}
+		else if (isFiller) {
+			buf.append("* ");
+		}
+		
+		if (type != null) {
+			buf.append(type.toString());
+		}
+		
+		if (occursOpt != null) {
+			buf.append('[');
+			buf.append(occursOpt);
+			buf.append(']');
+		}
+		
+		if (settingsBlockOpt != null) {
+			buf.append(settingsBlockOpt.toString());
+		}
+		
+		if (initializerOpt != null) {
+			buf.append(" = ");
+			buf.append(initializerOpt.toString());
+		}
+		
+		buf.append(';');
+		
+		return buf.toString();
+	}
 }

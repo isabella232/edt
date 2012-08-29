@@ -251,7 +251,7 @@ public class AnnotationValidator {
 			public boolean visit(NestedFunction function) {
 				Member m = function.getName().resolveMember();
 				if (m != null) {
-					processAnnotations(function, m.getType(), m);
+					processAnnotations(function, m);
 				}
 				return false;
 			}
@@ -260,7 +260,7 @@ public class AnnotationValidator {
 			public boolean visit(Constructor constructor) {
 				org.eclipse.edt.mof.egl.Constructor c = constructor.getBinding();
 				if (c != null) {
-					processAnnotations(constructor, c.getType(), c);
+					processAnnotations(constructor, c);
 				}
 				return false;
 			}
@@ -296,7 +296,7 @@ public class AnnotationValidator {
 			
 			@Override
 			public boolean visit(ClassDataDeclaration classDataDeclaration) {			
-				processAnnotations(classDataDeclaration, classDataDeclaration.getType().resolveType(), null);
+				processAnnotations(classDataDeclaration, classDataDeclaration.getNames().get(0).resolveMember());
 				
 				if (classDataDeclaration.hasSettingsBlock()) {
 					processOverriddenAnnotationsAndSetValues(classDataDeclaration.getSettingsBlockOpt());
@@ -318,11 +318,11 @@ public class AnnotationValidator {
 					@Override
 					public boolean visit(BinaryExpression binaryExpression) {
 						if (binaryExpression.getFirstExpression() != null) {
-							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getFirstExpression().resolveMember(), binaryExpression.getFirstExpression());
+							RValueValidator validator = new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getFirstExpression().resolveMember(), binaryExpression.getFirstExpression());
 							validator.validate();
 						}
 						if (binaryExpression.getSecondExpression() != null) {
-							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getSecondExpression().resolveMember(), binaryExpression.getSecondExpression());
+							RValueValidator validator = new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getSecondExpression().resolveMember(), binaryExpression.getSecondExpression());
 							validator.validate();
 						}
 						return true;
@@ -330,7 +330,7 @@ public class AnnotationValidator {
 					
 					@Override
 					public boolean visit(UnaryExpression unaryExpression) {
-						RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, unaryExpression.getExpression().resolveMember(), unaryExpression.getExpression());
+						RValueValidator validator = new RValueValidator(problemRequestor, compilerOptions, unaryExpression.getExpression().resolveMember(), unaryExpression.getExpression());
 						validator.validate();
 						return true;
 					}
@@ -340,7 +340,7 @@ public class AnnotationValidator {
 						Iterator i = arrayAccess.getIndices().iterator();
 						while (i.hasNext()) {
 							Expression expr = (Expression)i.next();
-							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, expr.resolveMember(), expr);
+							RValueValidator validator = new RValueValidator(problemRequestor, compilerOptions, expr.resolveMember(), expr);
 							validator.validate();
 						}
 						return true;
@@ -388,7 +388,7 @@ public class AnnotationValidator {
 				if (names.size() > 0) {
 					org.eclipse.edt.mof.egl.Type type = names.get(0).resolveType();
 					if (type != null) {
-						processAnnotations(useStatement, type, null);
+						processAnnotations(useStatement, type);
 					}
 				}
 				
@@ -397,7 +397,7 @@ public class AnnotationValidator {
 			
 			@Override
 			public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
-				processAnnotations(functionDataDeclaration, functionDataDeclaration.getType().resolveType(), null);
+				processAnnotations(functionDataDeclaration, functionDataDeclaration.getNames().get(0).resolveMember());
 				
 				if (functionDataDeclaration.hasSettingsBlock()) {
 					processOverriddenAnnotationsAndSetValues(functionDataDeclaration.getSettingsBlockOpt());
@@ -407,22 +407,17 @@ public class AnnotationValidator {
 				if (field != null && !functionDataDeclaration.hasInitializer() && !functionDataDeclaration.isNullable()) {				
 					validateInvocation(functionDataDeclaration, getDefaultConstructor(functionDataDeclaration.getType().resolveType()), BindingUtil.getDeclaringPart(field));
 				}
-				
 
 				return false;
 			}
 		});
 	}
 	
-	private void processAnnotations(final Node target, Member targetBinding){
-		processAnnotations(target, targetBinding == null ? null : targetBinding.getType(), null);
-	}
-	
 	/**
-	 * Process annotations that appear on a DataItem or Field target (structure item, page item, form field, program variable)
-	 * @param targetDataBinding
+	 * Process annotations that appear on a DataItem or Field target (structure item, global variable, local variable)
+	 * @param targetElement
 	 */
-	private void processAnnotations(final Node target, final org.eclipse.edt.mof.egl.Type targetTypeBinding, final Member targetDataBinding) {
+	private void processAnnotations(final Node target, final Element targetElement) {
 		target.accept(new AbstractASTExpressionVisitor() {
 			@Override
 			public boolean visit(ClassDataDeclaration classDataDeclaration) {
@@ -482,7 +477,7 @@ public class AnnotationValidator {
 				if (annot != null) {
 					IValidationProxy proxy = getValidationProxy(annot);
 					if (proxy != null) {
-						processSubAnnotations(annotationExpression, target, targetTypeBinding, targetDataBinding, annot, proxy.getAnnotationValidators());
+						processSubAnnotations(annotationExpression, target, targetElement, annot, proxy.getAnnotationValidators());
 					}
 				}
 				return false;
@@ -498,7 +493,7 @@ public class AnnotationValidator {
 					
 					IValidationProxy proxy = getValidationProxy((Annotation)annotationExpressionDBinding);
 					if (proxy != null) {					   
-						processSubAnnotations(annotationExpression, target, targetTypeBinding, targetDataBinding, (Annotation)annotationExpressionDBinding, proxy.getAnnotationValidators());
+						processSubAnnotations(annotationExpression, target, targetElement, (Annotation)annotationExpressionDBinding, proxy.getAnnotationValidators());
 						processComplexAnnotationFields(target, settingsBlock, proxy);
 					}
 				}
@@ -510,7 +505,7 @@ public class AnnotationValidator {
 				Annotation aBinding = assignment.resolveBinding();
 				if (aBinding != null) {
 					IValidationProxy validationProxy = getValidationProxy(aBinding);
-					processSubAnnotations(assignment, target, targetTypeBinding, targetDataBinding, aBinding, validationProxy.getAnnotationValidators());
+					processSubAnnotations(assignment, target, targetElement, aBinding, validationProxy.getAnnotationValidators());
 					processComplexAnnotationFields(target, assignment, validationProxy);
 				}
 				return false;
@@ -534,6 +529,11 @@ public class AnnotationValidator {
 					@Override
 					public boolean visit(ArrayType arrayType) {
 						if (arrayType.hasInitialSize()) {
+							org.eclipse.edt.mof.egl.Type targetTypeBinding = null;
+							if (targetElement instanceof org.eclipse.edt.mof.egl.Type) {
+								targetTypeBinding = (org.eclipse.edt.mof.egl.Type)targetElement;
+							}
+							
 							if (targetTypeBinding instanceof org.eclipse.edt.mof.egl.ArrayType) {
 								org.eclipse.edt.mof.egl.Type exprType = expression.resolveType();
 								if (exprType != null) {
@@ -645,14 +645,14 @@ public class AnnotationValidator {
 			@Override
 			public boolean visit(SetValuesExpression setValuesExpression) {
 				// we have found a nested annotation, start the process over
-				processAnnotations(setValuesExpression, null, null);
+				processAnnotations(setValuesExpression, null);
 				return false;
 			}
 			
 			@Override
 			public boolean visit(AnnotationExpression annotationExpression) {
 				// we have found a nested annotation, start the process over
-				processAnnotations(annotationExpression, null, null);
+				processAnnotations(annotationExpression, null);
 				return false;
 			}
 			
@@ -684,7 +684,7 @@ public class AnnotationValidator {
 	/**
 	 * process annotations specified for all fields of this annotation
 	 */
-	private void processSubAnnotations(Node errorNode, Node target, org.eclipse.edt.mof.egl.Type targetTypeBinding, Member targetMemberBinding, Annotation annotation, List<AnnotationValidationRule> rules) {
+	private void processSubAnnotations(Node errorNode, Node target, Element targetElement, Annotation annotation, List<AnnotationValidationRule> rules) {
 		if (rules != null && rules.size() > 0) {
 			// Collect all annotations and fields from the annotation, and also add the annotation itself. Users can retrieve them by name if they need the values.
 			Map<String, Object> allAnnotationsAndFieldsMap = new HashMap();
@@ -704,7 +704,7 @@ public class AnnotationValidator {
 			// Apply all valid rules to this parts annotations
 			for (AnnotationValidationRule rule : rules) {
 				problemRequestor = specializeProblemRequestor(problemRequestor, target, annotation);
-				rule.validate(errorNode, target, targetTypeBinding, targetMemberBinding, allAnnotationsAndFieldsMap, problemRequestor, compilerOptions);
+				rule.validate(errorNode, target, targetElement, allAnnotationsAndFieldsMap, problemRequestor, compilerOptions);
 				problemRequestor = restoreProblemRequestor();
 			}
 		}
@@ -729,7 +729,7 @@ public class AnnotationValidator {
 			
 			// Apply all valid rules to this parts annotations
 			for (AnnotationValidationRule rule : rules) {
-				rule.validate(errorNode, target, null, null, allAnnotationsAndFieldsMap, problemRequestor, compilerOptions);
+				rule.validate(errorNode, target, null, allAnnotationsAndFieldsMap, problemRequestor, compilerOptions);
 			}
 		}
 	}
