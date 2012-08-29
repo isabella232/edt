@@ -14,7 +14,7 @@ package eglx.jtopen.annotations;
 Record StructPackedDecimal type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.StructPackedDecimalValidator"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.proxy.StructPackedDecimalProxy"
 }
 	decimals int?;
 	length int?;

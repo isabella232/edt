@@ -14,6 +14,6 @@ package eglx.jtopen.annotations;
 Record StructUnsignedBin8 type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.StructUnsignedBin8Validator"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.proxy.StructUnsignedBin8Proxy"
 }
 end
