@@ -17,8 +17,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -36,9 +35,9 @@ public class UserDefinedAnnotationValidationRule extends AnnotationValidationRul
 	}
 	
 	@Override
-	public void validate(Node errorNode, Node target, Type targetTypeBinding, Member targetMember, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public void validate(Node errorNode, Node target, Element targetElement, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
-			((IAnnotationValidationRule)validatorClass.newInstance()).validate(errorNode, target, targetTypeBinding, targetMember, allAnnotationsAndFields, problemRequestor, compilerOptions);
+			((IAnnotationValidationRule)validatorClass.newInstance()).validate(errorNode, target, targetElement, allAnnotationsAndFields, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

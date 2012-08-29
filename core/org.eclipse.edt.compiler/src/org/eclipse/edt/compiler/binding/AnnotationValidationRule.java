@@ -16,8 +16,7 @@ import java.util.Map;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.Element;
 
 
 /**
@@ -35,11 +34,11 @@ public abstract class AnnotationValidationRule extends AbstractValidationRule {
 	 * 
 	 * @param errorNode
 	 * @param target
-	 * @param targetTypeBinding
+	 * @param targetElement
 	 * @param allAnnotationsAndFields Map of annotations and annotation fields. For the fields it contains their resolved values.
 	 * @param problemRequestor
 	 * @param compilerOptions
 	 */
-	public abstract void validate(Node errorNode, Node target, Type targetTypeBinding, Member targetMember, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	public abstract void validate(Node errorNode, Node target, Element targetElement, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 
 }

@@ -22,18 +22,16 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 public class EGLPropertyValidator implements IAnnotationValidationRule {
 	
 	@Override
-	public void validate(Node errorNode, Node target, Type targetTypeBinding, Member targetMember, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		//validate that this is only specified in a RUIWidget or RUIHandler!
+	public void validate(Node errorNode, Node target, Element element, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		Annotation ann = (Annotation)allAnnotationsAndFields.get(NameUtile.getAsName(IEGLConstants.PROPERTY_EGLPROPERTY));
 		
 		//validate the getter and setter methods if they were not explicitly named

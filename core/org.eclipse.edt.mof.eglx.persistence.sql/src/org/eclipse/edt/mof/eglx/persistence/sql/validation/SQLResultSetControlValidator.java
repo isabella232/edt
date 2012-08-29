@@ -18,17 +18,17 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
 import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class SQLResultSetControlValidator  implements IAnnotationValidationRule {
 	
 	@Override
-	public void validate(Node errorNode, Node target, Type targetTypeBinding, Member targetMember, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (targetTypeBinding != null) {
-			if (!Utils.isSQLResultSet(targetTypeBinding) && !Utils.isSQLStatement(targetTypeBinding)) {
+	public void validate(Node errorNode, Node target, Element targetElement, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		if (targetElement instanceof Field) {
+			if (!Utils.isSQLResultSet(((Field)targetElement).getType()) && !Utils.isSQLStatement(((Field)targetElement).getType())) {
 				problemRequestor.acceptProblem(
 						errorNode,
 						SQLResourceKeys.SQLRESULTSET_ANNOTATION_TYPE_ERROR,
