@@ -1103,8 +1103,9 @@ public interface IProblemRequestor {
 	
 	public static final int DISCOURAGED_ARITHMETIC_COMPARISON = 5213;
 	
-	public static final int MISSING_OPERATION_FOR_EXPRESSION = 5214;
-
+	public static final int MISSING_OPERATION_FOR_BINARY_EXPRESSION = 5214;
+	public static final int MISSING_OPERATION_FOR_SUBSTRING = 5215;
+	public static final int MISSING_OPERATION_FOR_UNARY_EXPRESSION = 5216;
 	
 	public static final int ROUTINE_MUST_HAVE_EVEN_NUM_OF_ARGS = 5254;
 	public static final int ARG_MUST_BE_SQL_REC_ITEM_OR_STRING_LITERAL = 5255;

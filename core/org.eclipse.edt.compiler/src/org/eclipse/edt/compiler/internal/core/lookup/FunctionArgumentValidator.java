@@ -12,58 +12,35 @@
 package org.eclipse.edt.compiler.internal.core.lookup;
 
 import java.util.Iterator;
-import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
-import org.eclipse.edt.compiler.core.ast.BinaryExpression;
-import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
-import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.CharLiteral;
-import org.eclipse.edt.compiler.core.ast.DBCharLiteral;
-import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
-import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
-import org.eclipse.edt.compiler.core.ast.HexLiteral;
-import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
-import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
-import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.ConstantField;
-import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Delegate;
-import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author Dave Murray
@@ -277,15 +254,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 			}
 		}
 		
-		if (expressionIsLiteralOrName[0] && parmBinding.getParameterKind() != ParameterKind.PARM_IN && parmBinding.getParameterKind() != ParameterKind.PARM_OUT && !parmBinding.isConst()) {
-			if(ITypeBinding.PRIMITIVE_TYPE_BINDING == parmType.getKind() &&
-			   Primitive.isDateTimeType(((PrimitiveTypeBinding) parmType).getPrimitive())) {
-				if(!checkArgNotConstantOrLiteral(argExpr, IProblemRequestor.FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER)) {
-					return false;
-				}
-			}
-		}
-		
     	return true;
     }
     
@@ -328,12 +296,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     }
     
     private boolean checkArgForInOrOutParameter(Expression argExpr, Type argType, FunctionParameter funcParmBinding, Type parmType, int argNum) {
-    	if(parmType instanceof ArrayType) {
+    	if (parmType instanceof ArrayType) {
     		return checkArgForInOrOutArrayParameter(argExpr, argType, funcParmBinding, parmType);
     	}
-    	if(!TypeCompatibilityUtil.isMoveCompatible(parmType, argType, argExpr, compilerOptions) &&
-	    	   !argType.isDynamic() &&
-	    	   !TypeCompatibilityUtil.areCompatibleExceptions(argType, parmType, compilerOptions)) {
+    	if (!IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember())) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
@@ -401,15 +367,13 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     
     private boolean isRefCompatForOutParm(Type argType, Type parmType) {
     	if (argType != null && parmType != null) {
-    		return TypeCompatibilityUtil.isReference(argType) == TypeCompatibilityUtil.isReference(parmType);
+    		return TypeUtils.isReferenceType(argType) == TypeUtils.isReferenceType(parmType);
     	}
     	return true;
     }
     
     private boolean checkArgForInOrOutArrayParameter(Expression argExpr, Type argType, FunctionParameter funcParmBinding, Type parmType) {
-    	if(argType.isDynamic() ||
-    	   (!TypeCompatibilityUtil.isMoveCompatible(parmType, argType, argExpr, compilerOptions) &&
-    	    !TypeCompatibilityUtil.areCompatibleExceptions(argType, parmType, compilerOptions))) {
+    	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember())) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
@@ -449,14 +413,12 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		}
     	}
     	
-    	boolean argCompatible = TypeCompatibilityUtil.isReferenceCompatible(argType, parmType, compilerOptions) ||
-    		                TypeCompatibilityUtil.areCompatibleExceptions(parmType, argType, compilerOptions);
-    	
+    	boolean argCompatible = TypeUtils.areCompatible(argType.getClassifier(), parmType.getClassifier());
     	if (argCompatible) {
-    		argCompatible = argType.isNullable() == parmType.isNullable();
+    		argCompatible = argExpr.resolveMember() != null && argExpr.resolveMember().isNullable() == funcParmBinding.isNullable();
     	}
     	
-    	if(!argCompatible) {
+    	if (!argCompatible) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM,

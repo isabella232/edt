@@ -37,8 +37,10 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
+import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
@@ -58,7 +60,6 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 /*
 TODO Remaining expressions to port from the old DefaultBinder:
 array access
-substring access
 field access
 in
 ternary
@@ -98,11 +99,11 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			}
 			
 			if (!valid) {
-				problemRequestor.acceptProblem(binaryExpression, IProblemRequestor.MISSING_OPERATION_FOR_EXPRESSION,
+				problemRequestor.acceptProblem(binaryExpression, IProblemRequestor.MISSING_OPERATION_FOR_BINARY_EXPRESSION,
 						new String[]{operand1.getCanonicalString(), operand2.getCanonicalString(), binaryExpression.getOperator().toString()});
 			}
 		}
-	};
+	}
 	
 	@Override
 	public void endVisit(UnaryExpression unaryExpression) {
@@ -111,10 +112,11 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		if (operandType != null) {
 			Operation op = IRUtils.getUnaryOperation(operandType.getClassifier(), unaryExpression.getOperator().toString());
 			if (op == null) {
-				problemRequestor.acceptProblem(operand, IProblemRequestor.ELEMENT_NOT_VALID_IN_EXPRESSION, new String[] {operand.getCanonicalString()});
+				problemRequestor.acceptProblem(operand, IProblemRequestor.MISSING_OPERATION_FOR_UNARY_EXPRESSION,
+						new String[] {operand.getCanonicalString(), unaryExpression.getOperator().toString()});
 			}
 		}
-	};
+	}
 	
 	@Override
 	public void endVisit(NewExpression newExpression) {
@@ -221,7 +223,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				}
 			});
 		}
-	};
+	}
 	
 	@Override
 	public void endVisit(FunctionInvocation functionInvocation) {
@@ -254,14 +256,13 @@ public class ExpressionValidator extends AbstractASTVisitor {
 					new String[] {target.getCanonicalString()});
 		}
 		
-		//TODO finish cleaning up FunctionArgumentValidator to remove compile errors
-//		if (element instanceof Delegate) {
-//			functionInvocation.accept(new FunctionArgumentValidator((Delegate)element, problemRequestor, compilerOptions));
-//		}
-//		else if (element instanceof FunctionMember) {
-//			functionInvocation.accept(new FunctionArgumentValidator((FunctionMember)element, problemRequestor, compilerOptions));
-//		}
-	};
+		if (element instanceof Delegate) {
+			functionInvocation.accept(new FunctionArgumentValidator((Delegate)element, problemRequestor, compilerOptions));
+		}
+		else if (element instanceof FunctionMember) {
+			functionInvocation.accept(new FunctionArgumentValidator((FunctionMember)element, problemRequestor, compilerOptions));
+		}
+	}
 	
 	@Override
 	public void endVisit(SetValuesExpression setValuesExpression) {
@@ -296,7 +297,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			new AssignmentStatementValidator(problemRequestor, compilerOptions, declaringPart).validateAssignment(
 					assignment.getOperator(), leftHandSide, rightHandSide, lhType, rhType, leftHandSide.resolveMember(), rightHandSide.resolveMember());
 		}
-	};
+	}
 	
 	@Override
 	public void endVisit(SettingsBlock settingsBlock) {
@@ -357,7 +358,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	@Override
 	public void endVisit(IsAExpression isAExpression) {
 		checkTypeForIsaOrAs(isAExpression.getType());
-	};
+	}
 	
 	@Override
 	public void endVisit(AsExpression asExpression) {
@@ -379,7 +380,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				}
 			}
 		}
-	};
+	}
 	
 	private void checkTypeForIsaOrAs(org.eclipse.edt.compiler.core.ast.Type type) {
 		TypeValidator.validate(type, declaringPart, problemRequestor, compilerOptions);
@@ -486,7 +487,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				isNotExpression,
 				IProblemRequestor.IS_NOT_UNSUPPORTED,
 				new String[] {});
-	};
+	}
 	
 	protected NamedElement getOperandType(Expression expr) {
 		Object element = expr.resolveElement();
@@ -522,4 +523,16 @@ public class ExpressionValidator extends AbstractASTVisitor {
     	}
     	return "";
     }
+	
+	@Override
+	public void endVisit(SubstringAccess substringAccess) {
+		org.eclipse.edt.mof.egl.Type type = substringAccess.getPrimary().resolveType();
+		if (type != null) {
+			Operation op = IRUtils.getOperation(type.getClassifier(), Operation.SUBSTRING);
+			if (op == null) {
+				problemRequestor.acceptProblem(substringAccess, IProblemRequestor.MISSING_OPERATION_FOR_SUBSTRING,
+						new String[]{substringAccess.getPrimary().getCanonicalString()});
+			}
+		}
+	}
 }
