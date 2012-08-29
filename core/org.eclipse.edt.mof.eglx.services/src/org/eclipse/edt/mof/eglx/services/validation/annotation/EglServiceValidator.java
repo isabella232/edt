@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.services.validation.annotation;
 
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -24,8 +26,10 @@ import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
 
 public class EglServiceValidator implements IAnnotationValidationRule {
+	private String annotationKey = "eglx.rest.EglService";
 	@Override
-	public void validate(Node errorNode, Node target, Element targetElement, Annotation annotation, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public void validate(Node errorNode, Node target, Element targetBinding, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		Annotation annotation = targetBinding.getAnnotation(annotationKey);
 		if(annotation == null){
 			return;
 		}

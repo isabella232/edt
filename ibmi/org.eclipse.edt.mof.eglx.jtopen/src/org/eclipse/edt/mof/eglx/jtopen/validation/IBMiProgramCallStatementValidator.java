@@ -53,7 +53,7 @@ public class IBMiProgramCallStatementValidator implements StatementValidator {
 
 		
 		//validate the arguments against the parms
-		((CallStatement)stmt).accept(new FunctionArgumentValidator((Function)targFunction, (org.eclipse.edt.mof.egl.Part)targFunction.getContainer(), problemRequestor, compilerOptions));
+		((CallStatement)stmt).accept(new FunctionArgumentValidator((Function)targFunction, problemRequestor, compilerOptions));
 		
 		//if the function returns a value, a returns is required
 		if (((Function)targFunction).getReturnType() != null &&

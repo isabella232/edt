@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -26,11 +28,7 @@ import org.eclipse.edt.mof.egl.Element;
  */
 public class IBMiProgramValidator implements IAnnotationValidationRule {
 
-
 	@Override
-	public void validate(Node errorNode, Node target, Element targetElement, Annotation annotation, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		
-		
-		
+	public void validate(Node errorNode, Node target, Element targetBinding, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 	}
 }

@@ -12,6 +12,7 @@
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -32,11 +33,18 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 	
 	protected abstract List<String> getSupportedTypes();
 	
-	public void validate(Node errorNode, Node target, Element targetElement, Annotation annotation, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (!(targetElement instanceof Field || targetElement instanceof FunctionParameter)) {
+	private String annotationPackage = "eglx.jtopen.annotations.";
+	
+	@Override
+	public void validate(Node errorNode, Node target, Element targetBinding, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		if (!(targetBinding instanceof Field || targetBinding instanceof FunctionParameter)) {
 			return;
 		}
-		validate(annotation, errorNode, targetElement, problemRequestor);
+		Annotation annotation = targetBinding.getAnnotation(annotationPackage + getName());
+		if(annotation == null){
+			return;
+		}
+		validate(annotation, errorNode, targetBinding, problemRequestor);
 	}
 
 

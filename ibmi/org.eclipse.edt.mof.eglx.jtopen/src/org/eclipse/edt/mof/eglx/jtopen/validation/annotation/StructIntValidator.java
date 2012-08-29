@@ -16,8 +16,7 @@ import java.util.List;
 
 import org.eclipse.edt.mof.egl.MofConversion;
 
-public abstract class StructIntValidator extends
-		AbstractStructParameterAnnotationValidator {
+public abstract class StructIntValidator extends AbstractStructParameterAnnotationValidator {
 
 	protected List<String> getSupportedTypes() {
 		List<String> list = new ArrayList<String>();
