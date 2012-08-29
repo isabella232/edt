@@ -77,20 +77,11 @@ public class EnumsTest extends ValidationTestCase {
 	}
 
 	/*
-	 * E = +9,
+	 * E = +9
 	 * 0 validation messages are expected.
 	 */
 	public void testLine19() {
 		List messages = getMessagesAtLine( 19 );
 		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * F = "123"
-	 * 1 validation message is expected.
-	 */
-	public void testLine20() {
-		List messages = getMessagesAtLine( 20 );
-		assertEquals( 1, messages.size() );
 	}
 }
