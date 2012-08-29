@@ -29,6 +29,7 @@ import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.IsAExpression;
+import org.eclipse.edt.compiler.core.ast.IsNotExpression;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
@@ -478,6 +479,14 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			problemRequestor.acceptProblem(bytesLiteral, IProblemRequestor.BYTES_LITERAL_LENGTH_MUST_BE_EVEN, new String[] {bytesLiteral.getCanonicalString()});
 		}
 	}
+	
+	@Override
+	public void endVisit(IsNotExpression isNotExpression) {
+		problemRequestor.acceptProblem(
+				isNotExpression,
+				IProblemRequestor.IS_NOT_UNSUPPORTED,
+				new String[] {});
+	};
 	
 	protected NamedElement getOperandType(Expression expr) {
 		Object element = expr.resolveElement();
