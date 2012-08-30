@@ -1164,18 +1164,14 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static boolean isPrimitive(Type type){
-		return type.equals(Type_SMALLINT) ||
-						type.equals(Type_INT) ||
-						type.equals(Type_BIGINT) ||
-						type.equals(Type_DECIMAL) ||
-						type.equals(Type_SMALLFLOAT) ||
-						type.equals(Type_FLOAT) ||
-						type.equals(Type_DATE) ||
-						type.equals(Type_TIME) ||
-						type.equals(Type_TIMESTAMP) ||
-						type.equals(Type_STRING) ||
-						type.equals(Type_BOOLEAN) || 
-						type.equals(Type_BYTES) ||
-						type.equals(Type_ANY);
+		return isNumericType(type) ||
+				isTextType(type) ||
+				(type != null && type.getClassifier() instanceof EGLClass &&
+						(type.getClassifier().equals(Type_DATE) ||
+						type.getClassifier().equals(Type_TIME) ||
+						type.getClassifier().equals(Type_TIMESTAMP) ||
+						type.getClassifier().equals(Type_BOOLEAN) || 
+						type.getClassifier().equals(Type_BYTES) ||
+						type.getClassifier().equals(Type_ANY)));
 	}
 }
