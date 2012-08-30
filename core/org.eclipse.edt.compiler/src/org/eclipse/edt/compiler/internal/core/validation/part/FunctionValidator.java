@@ -86,11 +86,9 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.TryStatementV
 import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
-import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
@@ -215,7 +213,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 	        org.eclipse.edt.mof.egl.Type type = member.getType();
 	        if (type != null) {
 	        	checkParmNotEmptyRecord(functionParameter, type);
-	        	checkTypeNotServiceOrInterfaceArray(functionParameter, type);
 	        	
 	        	switch (((org.eclipse.edt.mof.egl.FunctionParameter)member).getParameterKind()) {
 	        		case PARM_IN:
@@ -245,12 +242,12 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkParmTypeNotStaticArray(FunctionParameter functionParameter, Type parmType) {
-		if(parmType.isArrayType()) {
+		if (parmType.isArrayType()) {
 			if (((ArrayType) parmType).hasInitialSize()) {
-        	problemRequestor.acceptProblem(
-        		parmType,
-				IProblemRequestor.STATIC_ARRAY_PARAMETER_DEFINITION,
-				new String[] {functionParameter.getName().getCanonicalName(), functionName});   
+	        	problemRequestor.acceptProblem(
+	        		parmType,
+					IProblemRequestor.STATIC_ARRAY_PARAMETER_DEFINITION,
+					new String[] {functionParameter.getName().getCanonicalName(), functionName});   
 			}
 			else {
 				checkParmTypeNotStaticArray(functionParameter, ((ArrayType) parmType).getElementType());
@@ -270,24 +267,12 @@ public class FunctionValidator extends AbstractASTVisitor {
 				isEmptyRecord = ((StructuredRecord)parmType).getStructuredFields().isEmpty();
 			}
 			
-			if(isEmptyRecord) {
+			if (isEmptyRecord) {
 	    		problemRequestor.acceptProblem(
 	    			functionParameter.getType(),
 					IProblemRequestor.RECORD_PARAMETER_WITH_NO_CONTENTS,
 					new String[] {functionParameter.getName().getCanonicalName(), functionParameter.getType().getCanonicalName()});
 	    	}
-		}
-	}
-	
-	private void checkTypeNotServiceOrInterfaceArray(FunctionParameter functionParameter, org.eclipse.edt.mof.egl.Type paramType) {
-		if (paramType instanceof org.eclipse.edt.mof.egl.ArrayType) {
-			org.eclipse.edt.mof.egl.ArrayType type = (org.eclipse.edt.mof.egl.ArrayType)paramType;
-			org.eclipse.edt.mof.egl.Type elementType = type.getElementType();
-			if (elementType instanceof Service || elementType instanceof Interface) {
-				problemRequestor.acceptProblem(
-						functionParameter.getType(),
-						IProblemRequestor.SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED);
-			}
 		}
 	}
 	
