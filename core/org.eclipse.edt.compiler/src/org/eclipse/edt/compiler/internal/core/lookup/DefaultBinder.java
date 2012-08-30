@@ -513,13 +513,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 
 	public boolean visit(final IsNotExpression isNotExpression) {
-		
-		problemRequestor.acceptProblem(
-				isNotExpression,
-				IProblemRequestor.IS_NOT_UNSUPPORTED,
-				new String[] {});
-
-		
 		isNotExpression.getFirstExpression().accept(this);
 		return false;
 	}
