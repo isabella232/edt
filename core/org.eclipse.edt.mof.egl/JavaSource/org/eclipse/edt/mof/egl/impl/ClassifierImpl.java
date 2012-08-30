@@ -123,6 +123,14 @@ public abstract class ClassifierImpl extends NamedElementImpl implements Classif
 		return this.getMofSerializationKey().equals(((Classifier)eglType).getMofSerializationKey());
 //		return this == eglType;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Type) {
+			return equals((Type)o);
+		}
+		return super.equals(o);
+	}
 
 	@Override
 	public Classifier getClassifier() {
