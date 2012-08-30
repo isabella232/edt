@@ -16,6 +16,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
 
@@ -29,8 +30,8 @@ public class RestValidator extends ServiceValidatorBase{
 	@Override
 	protected void validateAnnotation(Annotation annotation, Node errorNode, NestedFunction target, Element targetBinding) {
 		super.validateAnnotation(annotation, errorNode, target, targetBinding);
-		String method = (String)annotation.getValue("method");
-		if(method == null || method.isEmpty()){
+		EnumerationEntry method = (EnumerationEntry)annotation.getValue("method");
+		if(method == null){
 			problemRequestor.acceptProblem(errorNode, ResourceKeys.XXXREST_NO_METHOD, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
 		}
 	}
