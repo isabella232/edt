@@ -299,7 +299,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	if (parmType instanceof ArrayType) {
     		return checkArgForInOrOutArrayParameter(argExpr, argType, funcParmBinding, parmType);
     	}
-    	if (!IRUtils.isMoveCompatible(parmType, argType, null)) {
+    	if (!IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember())) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
