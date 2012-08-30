@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Type;
@@ -26,9 +23,10 @@ public class StructUnsignedBin8Validator extends AbstractStructParameterAnnotati
 	}
 	
 	@Override
-	protected List<String> getSupportedTypes() {
-		return new ArrayList<String>();
+	protected Type getSupportedType() {
+		return null;
 	}
+
 	
 	protected boolean isValidType(Type typeBinding) {
 		if (typeBinding != null) {						

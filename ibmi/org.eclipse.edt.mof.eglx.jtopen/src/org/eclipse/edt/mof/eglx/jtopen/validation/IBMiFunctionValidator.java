@@ -1,70 +1,231 @@
 package org.eclipse.edt.mof.eglx.jtopen.validation;
 
-import org.eclipse.edt.compiler.FunctionValidator;
-import org.eclipse.edt.compiler.binding.IPartBinding;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.edt.compiler.binding.IRPartBinding;
+import org.eclipse.edt.compiler.binding.IValidationProxy;
 import org.eclipse.edt.compiler.core.Boolean;
-import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.ReturnsDeclaration;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.compiler.internal.core.validation.AbstractFunctionValidator;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.NamedElement;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Statement;
-import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
-import org.eclipse.edt.mof.eglx.jtopen.validation.annotation.AbstractStructParameterAnnotationValidator;
-import org.eclipse.edt.mof.eglx.jtopen.validation.annotation.IBMiProgramParameterAnnotationsValidator;
+import org.eclipse.edt.mof.impl.AbstractVisitor;
+import org.eclipse.edt.mof.utils.EList;
+import org.eclipse.edt.mof.utils.NameUtile;
 
-public class IBMiFunctionValidator implements FunctionValidator{
-
-	@Override
-	public void validate(Node node, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+public class IBMiFunctionValidator extends AbstractFunctionValidator{
+	
+	private Annotation annotation;
+	private NestedFunction nestedFunction;
+	private Map<Object, Object> parameterAnnotations;
+	
+	public boolean visit(NestedFunction nestedFunction){
+		if (nestedFunction.getName().resolveMember() instanceof Function) {
 		
-	}
+			validateContainerIsCorrect(((IRPartBinding)declaringPart).getIrPart(), nestedFunction, problemRequestor);		
+			validateFunctionBodyIsEmpty((Function)nestedFunction.getName().resolveMember(), nestedFunction, problemRequestor);
 
-	@Override
-	public void validateFunction(NestedFunction nestedFunction, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (!(nestedFunction.getName().resolveMember() instanceof Function)) {
-			return;
+			this.nestedFunction = nestedFunction;
+			annotation = nestedFunction.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram");
+			
+			Object obj = annotation.getValue("parameterAnnotations");
+			if(obj instanceof EList && ((EList<?>)obj).size() > 0){
+				if (((EList<?>)obj).size() != nestedFunction.getFunctionParameters().size()) {
+					problemRequestor.acceptProblem(nestedFunction, IBMiResourceKeys.WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS, IMarker.SEVERITY_ERROR, new String[] {nestedFunction.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());
+				}
+			}
+			else{
+				for(Object o : nestedFunction.getFunctionParameters()){
+					((EList)obj).add(IrFactory.INSTANCE.createNullLiteral());
+				}
+			}
+			parameterAnnotations = new HashMap<Object, Object>(((EList<?>)obj).size());
+			for(int idx = 0; idx < ((EList<?>)obj).size(); idx++){
+				parameterAnnotations.put(nestedFunction.getFunctionParameters().get(idx), ((EList<?>)obj).get(idx));
+			}
+			
 		}
-		
-		validateContainerIsCorrect(((IRPartBinding)declaringPart).getIrPart(), nestedFunction, problemRequestor);		
-		validateFunctionBodyIsEmpty((Function)nestedFunction.getName().resolveMember(), nestedFunction, problemRequestor);
-		validateReturns(nestedFunction, (Function)nestedFunction.getName().resolveMember(), problemRequestor);
-		
-		Annotation annotation = nestedFunction.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram");
-		
-		Object obj = annotation.getValue("parameterAnnotations");
-		if (obj == null) {
-			//If a paramterAnnotations was specified, the paramters are validated in
-			//IBMiProgramParameterAnnotationsValidator
-			validateParmsDoNotRequireParameterAnnotations((Function)nestedFunction.getName().resolveMember(), nestedFunction, problemRequestor);
-		}
-		
-		validateParameters((Function)nestedFunction.getName().resolveMember(), obj, nestedFunction, problemRequestor);
+		return true;
 	}
 
 	@Override
-	public void validateFunction(Constructor constructor, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		
+	public boolean visit(final org.eclipse.edt.compiler.core.ast.FunctionParameter functionParameter) {
+		Member parm = functionParameter.getName().resolveMember();
+		if (parm.getType() != null) {
+			Object parmAnn = parameterAnnotations.get(functionParameter);
+			//if a parameterAnnotationArray entry exists for the parm, the type will have already been validated
+			boolean requiresAS400TypeAnnotationTest = true;
+			if (parmAnn != null && !(parmAnn instanceof NullLiteral)) {
+				if(parmAnn instanceof Annotation){
+					IValidationProxy proxy = AnnotationValidator.getValidationProxy((Annotation)parmAnn);
+					if (proxy != null) {
+						for (org.eclipse.edt.compiler.binding.AnnotationValidationRule rule : proxy.getAnnotationValidators()) {
+							requiresAS400TypeAnnotationTest = false;
+							Map<String, Object> annotations = new HashMap<String, Object>(1);
+							annotations.put(NameUtile.getAsName(((Annotation) parmAnn).getEClass().getETypeSignature()), parmAnn);
+							rule.validate(functionParameter, functionParameter, parm, annotations, problemRequestor, compilerOptions);
+						}
+					}
+				}
+			}
+			
+			if(requiresAS400TypeAnnotationTest && IBMiFunctionParameterValidator.requiresAS400TypeAnnotation(parm.getType())) {
+				problemRequestor.acceptProblem(functionParameter, 
+						IBMiResourceKeys.PROGRAM_PARAMETER_ANNOTATION_REQUIRED, 
+						IMarker.SEVERITY_ERROR, 
+						new String[] {parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+			}
+
+			if (!IBMiFunctionParameterValidator.isValidAS400Type(parm.getType())) {
+				problemRequestor.acceptProblem(functionParameter, 
+						IBMiResourceKeys.IBMIPROGRAM_PARM_TYPE_INVALID, 
+						IMarker.SEVERITY_ERROR, 
+						new String[] {parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+			}
+
+			if (parm.isNullable()) {
+				problemRequestor.acceptProblem(functionParameter, 
+						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_INVALID, 
+						IMarker.SEVERITY_ERROR, 
+						new String[] {parm.getType().getEClass().getName() + "?", parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+			}
+				
+			if (parm.getType() instanceof ArrayType && ((ArrayType)parm.getType()).getElementType() != null){
+				if (((ArrayType)parm.getType()).elementsNullable()) {
+					problemRequestor.acceptProblem(functionParameter, 
+							IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_INVALID, 
+							IMarker.SEVERITY_ERROR, 
+							new String[] {((ArrayType)parm.getType()).getElementType().getEClass().getName() + "?[]", parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+				}
+			}
+			
+			if(parm.getType() instanceof Record || parm.getType() instanceof Handler || parm.getType() instanceof ArrayType){
+				parm.getType().accept(new ComplexTypes((FunctionParameter)parm, functionParameter));
+			}
+		}
+		return false;
 	}
 
+	protected class ComplexTypes extends AbstractVisitor{
+		private FunctionParameter parameter;
+		private org.eclipse.edt.compiler.core.ast.FunctionParameter functionParameter;
+		private List<String> analyzedTypes = new ArrayList<String>();
+		
+		
+		public ComplexTypes(FunctionParameter parameter, org.eclipse.edt.compiler.core.ast.FunctionParameter functionParameter) {
+			this.parameter = parameter;
+			this.functionParameter = functionParameter;
+		}
+		public boolean visit(Type type) {
+			if(!analyzedTypes.contains(type.getTypeSignature()) &&
+					(type instanceof Record || type instanceof Handler)){
+				analyzedTypes.add(type.getTypeSignature());
+			}
+			return false;
+		}
+		public boolean visit(ArrayType arrayType) {
+			arrayType.getElementType().accept(this);
+			return false;
+		}
+		public boolean visit(Field field){
+			validateField(parameter, field, functionParameter);
+			return true;
+		}				
+		private void validateField(FunctionParameter parm, Field field,  Node errorNode) {
+			if (field.getType() == null) {
+				return;
+			}
+			String containerName = "";
+			if(field.getContainer() instanceof NamedElement){
+				containerName = ((NamedElement)field.getContainer()).getCaseSensitiveName();
+			}
+			
+			if (!IBMiFunctionParameterValidator.isValidAS400Type(field.getType())) {
+				problemRequestor.acceptProblem(errorNode, 
+						IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID, 
+						IMarker.SEVERITY_ERROR, 
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), field.getType().getTypeSignature()}, IBMiResourceKeys.getResourceBundleForKeys());
+				return;
+			}
+
+			if (field.isNullable()) {
+				problemRequestor.acceptProblem(errorNode, 
+						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID, 
+						IMarker.SEVERITY_ERROR, 
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), field.getType().getTypeSignature() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
+				return;
+			}
+			
+			if (field.getType() instanceof ArrayType && ((ArrayType)field.getType()).getElementType() != null){
+				if (((ArrayType)field.getType()).elementsNullable()) {
+					problemRequestor.acceptProblem(errorNode, 
+							IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID, 
+							IMarker.SEVERITY_ERROR, 
+							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), ((ArrayType)field.getType()).getElementType() + "?[]"}, IBMiResourceKeys.getResourceBundleForKeys());
+					return;
+				}
+			}
+					
+			if (!hasStructAnnotation(field) && IBMiFunctionParameterValidator.requiresAS400TypeAnnotation(field.getType())) {
+				problemRequestor.acceptProblem(errorNode, 
+						IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_REQUIRES_AS400, 
+						IMarker.SEVERITY_ERROR, 
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+				
+			}
+		}
+		private boolean hasStructAnnotation(Field binding) {
+			for(Annotation annotation : binding.getAnnotations()) {
+				if(NameUtile.equals("eglx.jtopen.annotations", annotation.getEClass().getPackageName())){
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	@Override
+	public boolean visit(ReturnsDeclaration returnsDeclaration) {
+		Type returnType = returnsDeclaration.getType() != null ? returnsDeclaration.getType().resolveType() : null;
+		if (returnType != null) {
+		
+			//Returns is only valid for service programs
+			
+			Boolean srvPgmAnn = (Boolean)annotation.getValue("isServiceProgram");
+			if (srvPgmAnn == null || srvPgmAnn != Boolean.YES) {
+				problemRequestor.acceptProblem(returnsDeclaration, IBMiResourceKeys.IBMIPROGRAM_ONLY_SERVICE_CAN_RETURN, IMarker.SEVERITY_ERROR, new String[] {nestedFunction.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());			
+			}
+			
+			if (!TypeUtils.Type_INT.equals(returnType)) {
+				problemRequestor.acceptProblem(nestedFunction.getReturnDeclaration(), IBMiResourceKeys.IBMIPROGRAM_CAN_ONLY_RETURN_INT, IMarker.SEVERITY_ERROR, new String[] {nestedFunction.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());			
+			}
+		}
+		return false;
+	}
 	private void validateFunctionBodyIsEmpty(Function function, Node node, IProblemRequestor problemRequestor) {
 		if (function.getStatementBlock() != null && function.getStatementBlock().getStatements() != null && 
 				function.getStatementBlock().getStatements().size() > 0) {
@@ -95,173 +256,6 @@ public class IBMiFunctionValidator implements FunctionValidator{
 		
 		//If we got this far, the container is invalid!
 		problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.IBMIPROGRAM_CONTAINER_INVALID, IMarker.SEVERITY_ERROR, new String[] {errorNode.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());
-
-
-	}
-	
-	private void validateParameters(Function funcBinding, Object parmAnnValue, Node errorNode, IProblemRequestor problemRequestor) {
-		int index = -1;
-		
-		Object[] parmAnnArr = null;
-		if (parmAnnValue instanceof Object[] && ((Object[])parmAnnValue).length == funcBinding.getParameters().size()) {
-			parmAnnArr = ((Object[])parmAnnValue);
-		}
-		
-		for(FunctionParameter parm : funcBinding.getParameters()) {
-			index = index + 1;
-			if (parm.getType() != null) {
-				
-				//if a parameterAnnotationArray entry exists for the parm, the type will have already been validated
-				if (parmAnnArr == null || parmAnnArr[index] == null) {
-				
-					if (!IBMiProgramParameterAnnotationsValidator.isValidAS400Type(parm.getType())) {
-						problemRequestor.acceptProblem(errorNode, 
-								IBMiResourceKeys.IBMIPROGRAM_PARM_TYPE_INVALID, 
-								IMarker.SEVERITY_ERROR, 
-								new String[] {parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
-						continue;
-					}
-
-					if (parm.isNullable()) {
-						problemRequestor.acceptProblem(errorNode, 
-								IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_INVALID, 
-								IMarker.SEVERITY_ERROR, 
-								new String[] {parm.getType().getEClass().getName() + "?", parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
-						continue;
-					}
-					
-					if (parm.getType() instanceof ArrayType && ((ArrayType)parm.getType()).getElementType() != null){
-						if (((ArrayType)parm.getType()).elementsNullable()) {
-							problemRequestor.acceptProblem(errorNode, 
-									IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_INVALID, 
-									IMarker.SEVERITY_ERROR, 
-									new String[] {((ArrayType)parm.getType()).getElementType().getEClass().getName() + "?[]", parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
-							continue;
-						}
-					}
-					
-					validateFieldsInStructure(parm, parm.getType(), errorNode, problemRequestor);
-				}
-			}
-		}
-	}
-	
-	private void validateFieldsInStructure(FunctionParameter parm, Type type,  Node errorNode, IProblemRequestor problemRequestor) {
-		if (type != null) {
-			if (type instanceof Handler) {
-				validateStructPartFields(parm, (Handler)type, errorNode, problemRequestor);
-				return;
-			}
-			
-			if (type instanceof Record) {
-				validateStructPartFields(parm, (Record)type, errorNode, problemRequestor);
-				return;
-			}
-			
-			if (type instanceof ArrayType && ((ArrayType)type).getElementType() != null) {
-				validateFieldsInStructure(parm, ((ArrayType)type).getElementType(), errorNode, problemRequestor);
-			}
-		}
-	}
-	
-	private void validateStructPartFields(FunctionParameter parm, StructPart binding,  Node errorNode, IProblemRequestor problemRequestor) {
-		for(Member member : binding.getMembers()) {
-			if (member.getAccessKind() != AccessKind.ACC_PRIVATE && member instanceof Field) {
-				validateField(parm, (Field)member, binding.getCaseSensitiveName(), errorNode, problemRequestor);
-			}
-		}
-	}
-	
-	private void validateField(FunctionParameter parm, Field field, String containerName,  Node errorNode, IProblemRequestor problemRequestor) {
-		if (field.getType() == null) {
-			return;
-		}
-		
-		//if a AS400 annotation exists for the field, the type will have already been validated
-		if (getAS400ParmValidator(field) != null) {
-			return;
-		}
-		
-		if (!IBMiProgramParameterAnnotationsValidator.isValidAS400Type(field.getType())) {
-			problemRequestor.acceptProblem(errorNode, 
-					IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID, 
-					IMarker.SEVERITY_ERROR, 
-					new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), field.getType().getTypeSignature()}, IBMiResourceKeys.getResourceBundleForKeys());
-			return;
-		}
-
-		if (field.isNullable()) {
-			problemRequestor.acceptProblem(errorNode, 
-					IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID, 
-					IMarker.SEVERITY_ERROR, 
-					new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), field.getType().getTypeSignature() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
-			return;
-		}
-		
-		if (field.getType() instanceof ArrayType && ((ArrayType)field.getType()).getElementType() != null){
-			if (((ArrayType)field.getType()).elementsNullable()) {
-				problemRequestor.acceptProblem(errorNode, 
-						IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID, 
-						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), ((ArrayType)field.getType()).getElementType() + "?[]"}, IBMiResourceKeys.getResourceBundleForKeys());
-				return;
-			}
-		}
-				
-		if (IBMiProgramParameterAnnotationsValidator.requiresAS400TypeAnnotation(field.getType())) {
-			problemRequestor.acceptProblem(errorNode, 
-					IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_REQUIRES_AS400, 
-					IMarker.SEVERITY_ERROR, 
-					new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
-			
-		}
-		
-		
-		validateFieldsInStructure(parm, field.getType(), errorNode, problemRequestor);
-	}
-	
-	private void validateReturns(NestedFunction function, Function funcBinding, IProblemRequestor problemRequestor) {
-		if (funcBinding.getReturnType() == null) {
-			return;
-		}
-		
-		//Returns is only valid for service programs
-		
-		Annotation ibmiAnn = funcBinding.getAnnotation("eglx.jtopen.IBMiProgram");
-		if (ibmiAnn == null) {  //sanity check, this should never happen
-			return;
-		}
-		
-		Boolean srvPgmAnn = (Boolean)ibmiAnn.getValue("isServiceProgram");
-		if (srvPgmAnn == null || srvPgmAnn != Boolean.YES) {
-			problemRequestor.acceptProblem(function.getReturnDeclaration(), IBMiResourceKeys.IBMIPROGRAM_ONLY_SERVICE_CAN_RETURN, IMarker.SEVERITY_ERROR, new String[] {function.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());			
-		}
-		
-		if (!MofConversion.Type_Int.equalsIgnoreCase(funcBinding.getReturnType().getTypeSignature())) {
-			problemRequestor.acceptProblem(function.getReturnDeclaration(), IBMiResourceKeys.IBMIPROGRAM_CAN_ONLY_RETURN_INT, IMarker.SEVERITY_ERROR, new String[] {function.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());			
-		}
-	}
-	
-	private void validateParmsDoNotRequireParameterAnnotations(Function funcBinding, Node errorNode, IProblemRequestor problemRequestor) {
-		for(FunctionParameter parm : funcBinding.getParameters()){
-			if (IBMiProgramParameterAnnotationsValidator.requiresAS400TypeAnnotation(parm.getType())) {
-				problemRequestor.acceptProblem(errorNode, 
-						IBMiResourceKeys.PROGRAM_PARAMETER_ANNOTATION_REQUIRED, 
-						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
-				
-			}
-		}
-	}
-	
-	private AbstractStructParameterAnnotationValidator getAS400ParmValidator(Field binding) {
-		for(Annotation annotation : binding.getAnnotations()) {
-			AbstractStructParameterAnnotationValidator val = IBMiProgramParameterAnnotationsValidator.getValidator(annotation);
-			if (val != null) {
-				return val;
-			}
-		}
-		return null;
 	}
 	
 }

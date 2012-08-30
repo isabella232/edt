@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -31,35 +30,47 @@ import org.eclipse.edt.mof.utils.NameUtile;
 
 public abstract class AbstractStructParameterAnnotationValidator implements IAnnotationValidationRule {
 	
-	protected abstract List<String> getSupportedTypes();
+	protected abstract Type getSupportedType();
 	
 	private String annotationPackage = "eglx.jtopen.annotations.";
+	protected IProblemRequestor problemRequestor;
+	protected ICompilerOptions compilerOptions;
+	
 	
 	@Override
 	public void validate(Node errorNode, Node target, Element targetBinding, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (!(targetBinding instanceof Field || targetBinding instanceof FunctionParameter)) {
-			return;
+		if (targetBinding instanceof Field || 
+				targetBinding instanceof FunctionParameter ||
+				targetBinding instanceof Type) {
+			Annotation annotation = targetBinding.getAnnotation(annotationPackage + getName());
+			if(annotation == null){
+				annotation = (Annotation)allAnnotationsAndFields.get(NameUtile.getAsName(annotationPackage + getName()));
+			}
+			if(annotation == null){
+				return;
+			}
+			this.compilerOptions = compilerOptions;
+			this.problemRequestor = problemRequestor;
+			if (targetBinding instanceof Field || targetBinding instanceof FunctionParameter) {
+				validateMember(annotation, errorNode, (Member)targetBinding);
+				validateType(annotation, errorNode, ((Member)targetBinding).getType());
+			}
+			else if(targetBinding instanceof Type){
+				validateType(annotation, errorNode, (Type)targetBinding);
+			}
 		}
-		Annotation annotation = targetBinding.getAnnotation(annotationPackage + getName());
-		if(annotation == null){
-			return;
-		}
-		validate(annotation, errorNode, targetBinding, problemRequestor);
 	}
 
 
-	protected void validate(Annotation annotation, Node errorNode, Element targetElement, IProblemRequestor problemRequestor) {
-		validateTypeIsSupported(errorNode, (Member)targetElement, problemRequestor);
+	protected void validateMember(Annotation annotation, Node errorNode, Member member) {
+		if (member.isNullable()) {
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), member.getCaseSensitiveName() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
+		}
 	}
 	
-	protected void validateTypeIsSupported(Node errorNode, Member targetElement, IProblemRequestor problemRequestor) {
-
-		if (((Member)targetElement).isNullable()) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), ((Member)targetElement).getCaseSensitiveName() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
-		}
-		
-		if (!isValidType(((Member)targetElement).getType())) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_TYPE_MISMATCH, IMarker.SEVERITY_ERROR, new String[] {getName(), ((Member)targetElement).getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+	protected void validateType(Annotation annotation, Node errorNode, Type type) {
+		if (!isValidType(type)) {
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_TYPE_MISMATCH, IMarker.SEVERITY_ERROR, new String[] {getName(), type.getClassifier().getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
@@ -70,9 +81,8 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 	}
 	
 	protected boolean isValidType(Type typeBinding) {
-				
-		if (typeBinding != null) {
-			return getSupportedTypes().contains(typeBinding.getMofSerializationKey());
+		if (typeBinding != null && getSupportedType() != null) {
+			return getSupportedType().equals(typeBinding.getClassifier());
 		}
 		else {
 			return true;  //return true to avoid excess error messages
