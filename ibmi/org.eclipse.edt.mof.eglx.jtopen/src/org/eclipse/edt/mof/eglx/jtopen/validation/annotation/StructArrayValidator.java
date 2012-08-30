@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -98,7 +99,7 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 	
 	protected void validateElementTypeNotNullable(Type type, Node errorNode) {
 		if (type instanceof ArrayType && ((ArrayType)type).elementsNullable()) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), type.getClassifier().getName() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), StatementValidator.getShortTypeString(type, true) + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
@@ -125,7 +126,7 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 			problemRequestor.acceptProblem(errorNode, 
 					IBMiResourceKeys.PROGRAM_PARAMETER_ANNOTATION_REQUIRED, 
 					IMarker.SEVERITY_ERROR, 
-					new String[] {type.getClassifier().getName()}, IBMiResourceKeys.getResourceBundleForKeys());
+					new String[] {StatementValidator.getShortTypeString(type, true)}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
