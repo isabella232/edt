@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -81,7 +82,8 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 	}
 	
 	protected boolean isValidType(Type typeBinding) {
-		if (typeBinding != null && getSupportedType() != null) {
+		if (typeBinding != null && getSupportedType() != null &&
+				typeBinding.getClassifier() instanceof EGLClass) {
 			return getSupportedType().equals(typeBinding.getClassifier());
 		}
 		else {
