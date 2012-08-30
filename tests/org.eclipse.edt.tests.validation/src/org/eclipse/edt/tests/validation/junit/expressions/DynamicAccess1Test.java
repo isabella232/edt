@@ -41,7 +41,7 @@ public class DynamicAccess1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * this.x.y = null;
+	 * this.a.x.y = null;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine13() {
@@ -59,7 +59,7 @@ public class DynamicAccess1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a["x"].["y"] = null;
+	 * a["x"]["y"] = null;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine15() {
@@ -104,7 +104,7 @@ public class DynamicAccess1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * d["x"].["y"] = null;
+	 * d["x"]["y"] = null;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine21() {

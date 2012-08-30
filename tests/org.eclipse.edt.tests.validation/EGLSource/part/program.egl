@@ -1,0 +1,79 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// invalid name
+program ezeProg //1
+	function main()
+	end
+end
+
+// params not supported
+program p0() // 1
+function main()
+end
+end
+
+// no main
+program p1 // 1
+
+const a string = "fff";// 0
+const cat string = "cat"; // 0
+const cat int = 5;// 1 The same name cat also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+
+dog string;// 0
+dog int;// 1 The same name dog also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+
+const mouse string = "mouse";// 0
+
+mouse int;// 1  The same name mouse also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+function zxcv ()
+end
+
+function zxcv ()// 1 A duplicate function
+end
+
+end
+
+program p2
+function main( i int)// 1 Main functions cannot contain parameters {4924, MAIN_FUNCTION_HAS_PARAMETERS}
+end
+
+function main ()// 0
+end
+
+end
+
+program p4
+use mylibx;// 0
+use mylibx;// 1 A duplicate use declaration named mylibx is declared in Function, Program, or Library p4 {3031, DUPLICATE_USE_NAME}
+function main()
+end
+end
+
+program p5 // 0
+type XDRTYHN// 1 XDRTYHN cannot be resolved
+
+use int; //1 The value of use declaration int in program p5 is invalid. You must use an enumeration or a library part.
+use enum1; //0
+
+function main()
+end
+end
+
+
+library mylibX 
+end
+
+library mylibXX
+end
+
+enumeration enum1
+end

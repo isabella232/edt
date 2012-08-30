@@ -342,19 +342,6 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * f9 date {@as400timestamp};
-	 * 1 validation message is expected.
-	 * It is expected to contain "not compatible with the type".
-	 */
-	public void testLine46() {
-		List messages = getMessagesAtLine( 46 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
-	}
-
-	/*
 	 * fa timestamp("yyyy") {@as400date};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".

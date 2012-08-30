@@ -1,0 +1,145 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Library validateParamsAndDeclarationsLibrary // 0
+	function func(
+		p1 notEmptyRec,		//0
+
+		p2 intItem,			//0
+		p3 emptyFlexRec,	//1
+		p4 emptyFixedRec,	//1
+		p5 cantBeResolved	//1
+	)
+	end
+	function main() end
+end
+
+Record notEmptyRec
+	item1 int;
+end
+
+Record emptyFlexRec
+end
+
+Program validatePgm
+	function main() end		//0
+end
+
+program prog0
+function validateParamsAndDeclarations(
+p1 int,						//0
+p1 int,						//1 The same name p1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library validateParamsAndDeclarations.
+recParm1 emptyFlexRec,			//1 Invalid parameter recParm1. There must be at least one structure item in the contents of the record emptyFlexRec. {3118, RECORD_PARAMETER_WITH_NO_CONTENTS}
+
+lastParm any
+)
+end
+end
+
+program prog1
+function validateParms(
+p1 validateParamsAndDeclarationsLibrary,	//1 The type validateParamsAndDeclarationsLibrary is not a valid type for a data declaration.
+p2 validatePgm,								//1 The type validatePgm is not a valid type for a data declaration.
+p3 validateParms,							//1 The type validateParms cannot be resolved.
+p4a validateParms[],						//1 The type validateParms cannot be resolved.
+p5 annot1,									//1 The type annot1 is not a valid type for a data declaration.
+
+p15 sqlRecord[],							//0
+p16 myService in,							//1 The type myService is not a valid type for a data declaration.
+p17 myService out,							//1 The type myService is not a valid type for a data declaration.
+p18 myService inout,						//1 The type myService is not a valid type for a data declaration.
+p22 int in,									//0
+p23 int out,								//0
+p24 int inout,								//0
+p25 myService[],							//1 The type myService is not a valid type for a data declaration.
+p26 myInterface[],							//0
+p28 undeclaredVar,							//1 The type undeclaredVar cannot be resolved
+p29 undeclaredVar[],						//1 The type undeclaredVar cannot be resolved
+
+// currently fails, need to be able to have 'imports' in this junit framework
+//p30 ambigPart,								//1 The type ambigPart is ambiguous
+
+p31 boolean,								//0
+lastParm any
+)
+end
+end
+
+Service myService end
+
+Interface myInterface
+	function func(p1 boolean);			//0
+	function func2() returns(boolean);	//0
+end
+
+Interface myJavaObjectInterface extends javaObject
+	function func(p1 boolean in);		//0
+	function func2() returns(boolean);	//0
+end
+
+externalType myJavaObjectInterface type javaObject
+	function func(p1 boolean in);		//0
+	function func2() returns(boolean);	//0
+end
+
+Record sqlRecord type Entity
+	item1 int;
+end
+
+record annot1 type annotation
+	x int;
+end
+
+DataItem intItem int end
+
+Program validateReturnProgram
+	function main() returns (int) end 		//0
+	function func() returns (boolean) end	//0
+	function func2() returns (int[]) end	//0
+	function func3() returns (intItem) end					//0
+	function func4() returns (dictionary) end				//0
+	function func7() returns (myService) end				//1 The type myService is not a valid type for a data declaration.
+	function func8() returns (myInterface) end				//0
+	function func9() returns (notEmptyRec) end				//0
+
+	function func10() returns (validateReturnProgram) end	//1 The type validateReturnProgram is not a valid type for a data declaration.
+	function func11() returns (annot1) end					//1 The type annot1 is not a valid type for a data declaration.
+	
+	function func12() returns (undeclaredItem) end			//1 The type undeclaredItem cannot be resolved
+	
+	// currently fails, need to be able to have 'imports' in this junit framework
+//	function func13() returns (ambigPart) end				//1 The type ambigPart is ambiguous
+end
+
+handler validateConstructorInvocation type ruihandler
+	constructor()
+		super(); //0
+		super(); //1
+		super("xyz"); //2
+	end
+	constructor(i int)
+		this(); //0
+		this(); //1
+	end
+	constructor(i int, s string)
+		this(s, i, 456, 789, 123, "aaaa"); //1
+	end
+	constructor(i int, s string, b boolean)
+		this(i, s); //0
+	end
+	constructor(i int, s string, b boolean, d date)
+		super(i, s, b, d); //1
+	end
+	function func1()
+		super(); //1
+		this(); //1
+	end
+end

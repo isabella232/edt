@@ -1,0 +1,267 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+handler h
+	function test() returns(string)
+		s string;
+		return s; //0
+	end
+	
+	function test() returns(string)
+		s string(3);
+		return s; //0
+	end
+	
+	function test() returns(int)
+		b bigint;
+		return b; //0
+	end
+	
+	function test() returns(boolean)
+		s string;
+		return s; //1
+	end
+	
+	function test() returns(smallfloat)
+		return getFloat() * 10 + 76.2; //0
+	end
+	
+	private function getFloat() returns(float)
+		return 10; //0
+	end
+	
+	function test() returns(timestamp("HHmmss"))
+		t timestamp?;
+		return t; //0
+	end
+	
+	function test() returns(rec1)
+		r rec1;
+		return r; //0
+	end
+	
+	function test() returns(smallint)
+		r rec1;
+		return r; //1
+	end
+	
+	function test() returns(smallint)
+		r rec1;
+		return r.i; //0
+	end
+	
+	function test() returns(any)
+		r rec1;
+		return r; //0
+	end
+	
+	function test() returns(any)
+		a any?;
+		return a; //0
+	end
+	
+	function test() returns(rec1)
+		a any?;
+		return a; //1
+	end
+	
+	function test() returns(int?)
+		a any?;
+		return a; //1
+	end
+	
+	function test() returns(string)
+		a any?;
+		return a; //0
+	end
+	
+	function test() returns(any?)
+		return 100; //0
+	end
+	
+	function test() returns(ex1)
+		e ex1;
+		return e; //0
+	end
+	
+	function test() returns(ex1)
+		a anyexception;
+		return a; //0
+	end
+	
+	function test() returns(anyexception)
+		e ex1;
+		return e; //0
+	end
+	
+	function test() returns(anyexception)
+		r rec1;
+		return r; //1
+	end
+	
+	function test() returns(any)
+		e ex1;
+		return e; //0
+	end
+	
+	function test() returns(any)
+		a anyexception;
+		return a; //0
+	end
+	
+	function test()
+		return true; //1
+	end
+	
+	function test() returns(rec1)
+		r rec1;
+		return r{i = 2}; //1
+	end
+	
+	function test() returns(int)
+		return null; //1
+	end
+	
+	function test() returns(int?)
+		return null; //0
+	end
+	
+	function test() returns(int)
+		return; //0
+	end
+	
+	function test()
+		return; //0
+	end
+	
+	function test() returns(del1)
+		return funcForDel1; //0
+	end
+	
+	function test() returns(del1)
+		d del1 = funcForDel1;
+		return d; //0
+	end
+	
+	function test() returns(del1)
+		return badFuncForDel1; //1
+	end
+	
+	function test() returns(any)
+		return funcForDel1; //0
+	end
+	
+	function funcForDel1(s string inout) returns(int)
+	end
+	function badFuncForDel1(s string inout) returns(bigint)
+	end
+	
+	function test() returns(string[])
+		s string[];
+		return s; //0
+	end
+	
+	function test() returns(string[])
+		i int[];
+		return i; //1
+	end
+	
+	function test() returns(string[])
+		return ["a", "b"]; //0
+	end
+	
+	function test() returns(string(1)[])
+		return ["a", "b"]; //0
+	end
+	
+	function test() returns(int[])
+		return ["a", "b"]; //1
+	end
+	
+	function test() returns(string[])
+		a any[];
+		return a; //1
+	end
+	
+	function test() returns(string[])
+		a any;
+		return a; //0
+	end
+	
+	function test() returns(string[])
+		return [1,2]; //1
+	end
+	
+	function test() returns(string[][])
+		a any[];
+		return a; //1
+	end
+	
+	function test() returns(string[][])
+		a any?[];
+		return a; //1
+	end
+	
+	function test() returns(bytes[][])
+		s string[][];
+		return s; //1
+	end
+	
+	function test() returns(del1[])
+		d del1[];
+		return d; //0
+	end
+	
+	function test() returns(del1[])
+		a any;
+		return a; //0
+	end
+	
+	function test() returns(del1[])
+		a any[];
+		return a; //1
+	end
+	
+	function test() returns(del1[])
+		d del1?[];
+		return d; //1
+	end
+	
+	function test() returns(del1[])
+		return [funcForDel1]; //0
+	end
+	
+	function test() returns(del1[])
+		d del1?;
+		return [d]; //0
+	end
+	
+	function test() returns(string[])
+		r rec1;
+		return r.s1; //0
+	end
+	
+	function test() returns(string[])
+		r rec1;
+		return r.s2; //1
+	end
+end
+
+record rec1
+	i int;
+	s1 string[];
+	s2 string?[];
+end
+
+record ex1 type exception
+end
+
+delegate del1(s string inOut) returns (int) end
