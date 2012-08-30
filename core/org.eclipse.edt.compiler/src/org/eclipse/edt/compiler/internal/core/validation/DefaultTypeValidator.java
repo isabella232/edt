@@ -101,7 +101,7 @@ public class DefaultTypeValidator extends AbstractTypeValidator {
 			'y',
 			'M',
 			'd',
-			'H',
+			'h',
 			'm',
 			's',
 			'f',
@@ -112,7 +112,7 @@ public class DefaultTypeValidator extends AbstractTypeValidator {
 			maxOccurences.put('y', 4);
 			maxOccurences.put('M', 2);
 			maxOccurences.put('d', 2);
-			maxOccurences.put('H', 2);
+			maxOccurences.put('h', 2);
 			maxOccurences.put('m', 2);
 			maxOccurences.put('s', 2);
 			maxOccurences.put('f', 6);
@@ -136,7 +136,7 @@ public class DefaultTypeValidator extends AbstractTypeValidator {
 			char currentChar = text.charAt( 0 );
 			for (int i = 0; i < text.length() && isValidPattern; i++) {
 				char ch = text.charAt(i);
-				if (!VALID_CHARS.contains(ch)) {
+				if (!VALID_CHARS.contains(new Character( Character.toLowerCase( ch ) ) )) {
 					isValidPattern = false;
 					errorMessageNumbers.add(IProblemRequestor.DATETIME_PATTERN_HAS_INVALID_CHARACTER);
 				}
@@ -192,7 +192,12 @@ public class DefaultTypeValidator extends AbstractTypeValidator {
 					isValid = components[i].length() <= firstFieldAllowedLength;
 				}
 				else {
-					isValid = components[i].length() <= maxOccurences.get(currentChar); 
+					if(Character.toLowerCase(currentChar) == 'f') {
+						isValid = components[i].length() <= ((Integer) maxOccurences.get( new Character( Character.toLowerCase( currentChar ) ) )).intValue(); 
+					}
+					else {
+						isValid = components[i].length() == ((Integer) maxOccurences.get( new Character( currentChar == 'M' ? currentChar : Character.toLowerCase( currentChar )  ) )).intValue();
+					}
 				}
 				
 				if(!isValid) {
