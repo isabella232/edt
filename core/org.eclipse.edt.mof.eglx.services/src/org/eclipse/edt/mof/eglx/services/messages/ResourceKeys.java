@@ -37,6 +37,7 @@ public class ResourceKeys{
     public static final int FUNCTION_MUST_HAVE_ALL_IN_PARMS = 3397;
     public static final int FUNCTION_PARM_MUST_HAVE_TYPE = 3398;
     public static final int FUNCTION_TYPE_NOT_COMPAT_WITH_PARM = 3399;
+    public static final int INVALID_CONTAINER = 3400;
     
 	public static final int XXXREST_ALL_PARMS_MUST_BE_IN = 3401;
 	public static final int XXXREST_ONLY_1_RESOURCE_PARM = 3402;

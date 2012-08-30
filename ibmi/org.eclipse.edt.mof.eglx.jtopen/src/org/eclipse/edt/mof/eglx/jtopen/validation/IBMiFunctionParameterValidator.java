@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Member;
@@ -157,19 +158,13 @@ public class IBMiFunctionParameterValidator implements IValueValidationRule {
 	}
 	
 	private static boolean isSupportedPrimitiveTypes(Type type){
-		type = type.getClassifier();
-		return type.equals(TypeUtils.Type_SMALLINT) ||
-						type.equals(TypeUtils.Type_INT) ||
-						type.equals(TypeUtils.Type_BIGINT) ||
-						type.equals(TypeUtils.Type_DECIMAL) ||
-						type.equals(TypeUtils.Type_SMALLFLOAT) ||
-						type.equals(TypeUtils.Type_FLOAT) ||
-						type.equals(TypeUtils.Type_DATE) ||
-						type.equals(TypeUtils.Type_TIME) ||
-						type.equals(TypeUtils.Type_TIMESTAMP) ||
-						type.equals(TypeUtils.Type_STRING) ||
-						type.equals(TypeUtils.Type_BOOLEAN) || 
-						type.equals(TypeUtils.Type_FixedPrecisionType) ||
-						type.equals(TypeUtils.Type_BYTES);
+			return TypeUtils.isNumericType(type) ||
+					TypeUtils.isTextType(type) ||
+					(type != null && type.getClassifier() instanceof EGLClass &&
+							(type.getClassifier().equals(TypeUtils.Type_DATE) ||
+							type.getClassifier().equals(TypeUtils.Type_TIME) ||
+							type.getClassifier().equals(TypeUtils.Type_TIMESTAMP) ||
+							type.getClassifier().equals(TypeUtils.Type_BOOLEAN) || 
+							type.getClassifier().equals(TypeUtils.Type_BYTES)));
 	}
 }
