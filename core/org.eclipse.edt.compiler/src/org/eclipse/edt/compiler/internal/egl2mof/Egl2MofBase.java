@@ -628,6 +628,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 							if (isSpecialNamedElementCase(o, type)) {
 								o = convertStringValueToNamedElementType((String)o, (EClass)type);
 							}
+							else if (o instanceof PartName) {
+								o = ((PartName)o).getPart();
+							}
 							((List)(target.eGet(field))).add(o);
 						}
 					else {

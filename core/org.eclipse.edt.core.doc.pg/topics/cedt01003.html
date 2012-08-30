@@ -119,8 +119,6 @@ service. The available kinds of services are as follows: <ul class="ul">
 
 <li class="li">An EGL REST-RPC service. </li>
 
-<li class="li"></li>
-
 
 <li class="li">A third-party REST service that largely fulfills the REST style.
 The following variations are supported:<ul class="ul">
@@ -173,7 +171,7 @@ application server invokes the service wrapper, which in turn invokes
 the service and acts as the intermediary between the requester and
 service. The service wrapper and service are local to one another.</p>
 <p class="p"><strong class="ph b">At
-this writing, neither development nor access of SOAP services is available.</strong></p>
+this writing, you can neither develop nor access SOAP services.</strong></p>
 </li>
 
 
@@ -194,11 +192,11 @@ next table gives further details, by service type.</p>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all">
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="33.33333333333333%" id="d1119e265">Characteristic of the requested service</th>
+<th class="entry" valign="bottom" width="33.33333333333333%" id="d1119e263">Characteristic of the requested service</th>
 
-<th class="entry" valign="bottom" width="33.33333333333333%" id="d1119e268">Characteristic of the deployed requester </th>
+<th class="entry" valign="bottom" width="33.33333333333333%" id="d1119e266">Characteristic of the deployed requester </th>
 
-<th class="entry" valign="bottom" width="33.33333333333333%" id="d1119e271">Characteristic of the proxy</th>
+<th class="entry" valign="bottom" width="33.33333333333333%" id="d1119e269">Characteristic of the proxy</th>
 
 </tr>
 
@@ -206,97 +204,97 @@ next table gives further details, by service type.</p>
 
 <tbody class="tbody">
 <tr class="row">
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e265 ">dedicated EGL</td>
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e263 ">dedicated EGL</td>
 
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e268 ">An HTML file that embeds JavaScript™</td>
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e266 ">An HTML file that embeds JavaScript™</td>
 
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e271 ">The proxy is in the EGL runtime code and invokes
-the service locally, without an HTTP request.</td>
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e269 ">The proxy is in the EGL runtime code and
+invokes the service locally, without an HTTP request.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e265 ">local EGL: <strong class="ph b">not
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e263 ">local EGL: <strong class="ph b">not
 yet available</strong>.</td>
 
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e268 ">EGL-generated Java code</td>
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e266 ">EGL-generated Java code</td>
 
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e271 ">No proxy is in use.</td>
-
-</tr>
-
-<tr class="row">
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e265 "> </td>
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e269 ">No proxy is in use.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e265 ">remote EGL: <strong class="ph b">not
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e263 "> </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e263 ">remote EGL: <strong class="ph b">not
 yet available</strong>.</td>
 
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e268 ">EGL-generated Java code </td>
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e266 ">EGL-generated Java code </td>
 
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e271 ">The proxy is in the
-EGL runtime code. </td>
-
-</tr>
-
-<tr class="row">
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e265 "> </td>
-
-</tr>
-
-<tr class="row">
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e265 ">EGL REST-RPC: <strong class="ph b">available only from JavaScript</strong>.</td>
-
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e268 ">EGL-generated Java code
-or an HTML file that embeds JavaScript </td>
-
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e271 ">The proxy is in the EGL runtime code. </td>
-
-</tr>
-
-<tr class="row">
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e265 ">REST <strong class="ph b">available
-only from JavaScript</strong></td>
-
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e268 ">EGL-generated Java code or an HTML file that embeds JavaScript </td>
-
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e271 ">The proxy is in the EGL runtime
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e269 ">The proxy is in the EGL runtime
 code. </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e265 "> </td>
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e263 "> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" rowspan="3" valign="top" width="33.33333333333333%" headers="d1119e265 ">SOAP: <strong class="ph b">not yet
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e263 ">EGL REST-RPC: <strong class="ph b">available only from JavaScript</strong>.</td>
+
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e266 ">EGL-generated Java code
+or an HTML file that embeds JavaScript </td>
+
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e269 ">The proxy is in the EGL runtime code. </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e263 ">REST <strong class="ph b">available
+only from JavaScript</strong></td>
+
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e266 ">EGL-generated Java code or an HTML file that embeds JavaScript </td>
+
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e269 ">The proxy is in the EGL runtime
+code. </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e263 "> </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" rowspan="3" valign="top" width="33.33333333333333%" headers="d1119e263 ">SOAP: <strong class="ph b">not yet
 available</strong>.</td>
 
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e268 ">EGL-generated Java code
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e266 ">EGL-generated Java code
 or an HTML file that embeds JavaScript and
 that is deployed on an application server that is fully compliant
 with Java EE, such as IBM<sup>®</sup> WebSphere<sup>®</sup> Application Server</td>
 
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e271 ">The proxy is a Java class
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e269 ">The proxy is a Java class
 that is generated from the requester-specific deployment descriptor.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e268 ">An EGL-generated Java code or an HTML file that embeds JavaScript and that is deployed
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e266 ">An EGL-generated Java code or an HTML file that embeds JavaScript and that is deployed
 on any other platform </td>
 
-<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e271 ">The proxy is in the EGL runtime
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d1119e269 ">The proxy is in the EGL runtime
 code. </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e265 "> </td>
+<td class="entry" valign="top" width="33.33333333333333%" headers="d1119e263 "> </td>
 
 </tr>
 

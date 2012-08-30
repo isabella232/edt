@@ -6,8 +6,8 @@ import org.eclipse.edt.mof.egl.MemberName;
 
 public class MemberNameTemplate extends EGLDocTemplate {
 	
-	public void genDeclaration(MemberName field, Context ctx, TabbedWriter out) {
-		out.println(field.getNamedElement().getName());
+	public void genDeclaration(MemberName memberName, Context ctx, TabbedWriter out) {
+		out.println(memberName.getNamedElement().getName());
 		
 	}
 	

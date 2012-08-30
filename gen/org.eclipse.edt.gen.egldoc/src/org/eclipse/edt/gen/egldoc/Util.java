@@ -11,14 +11,15 @@ import java_cup.runtime.Symbol;
 //import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DefaultLineTracker;
 
 public class Util {
 
-	public static Integer getLine(Element element) {
-		Annotation location = element.getAnnotation(IEGLConstants.EGL_LOCATION);
+	public static Integer getLine(EObject eObject) {
+		Annotation location = ((Element)eObject).getAnnotation(IEGLConstants.EGL_LOCATION);
 		return (Integer) location.getValue(IEGLConstants.EGL_PARTLINE);
 	}
 
@@ -172,6 +173,10 @@ public class Util {
 	}
 
 	public static String createRelativePath(String packageName) {
+		
+		// SBM 25 August:  consider the default package
+		if (packageName == null) { return packageName; };
+		
 		StringBuffer result = new StringBuffer();
 		String[] split = packageName.split(".");
 		for (int i = 0; i < split.length; i++) {

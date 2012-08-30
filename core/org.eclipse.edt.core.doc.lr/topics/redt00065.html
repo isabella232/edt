@@ -10,7 +10,6 @@
 <meta name="description" content="eglx.services supports service access."></meta>
 <meta name="DC.subject" content="EGL packages, eglx.services, eglx.services EGL package"></meta>
 <meta name="keywords" content="EGL packages, eglx.services, eglx.services EGL package"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/redt00071.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -33,32 +32,58 @@ service access.</p>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00065__types_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
 <tbody class="tbody">
 <tr class="row">
-<td class="entry" valign="top" width="100%"> </td>
+<td class="entry" valign="top" width="50%"><pre class="pre codeblock">Enumeration Encoding
+   NONE = 1,
+   JSON = 2,
+   XML = 3,
+   _FORM = 4,
+   USE_CONTENTTYPE = 5
+end</pre>
+</td>
+
+<td class="entry" valign="top" width="50%"> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="100%"> </td>
+<td class="entry" valign="top" width="50%"><pre class="pre codeblock">Record OneWay type Annotation
+{
+   targets = [
+      ElementKind.functionMbr
+   ]
+}
+   value boolean = yes;
+end</pre>
+</td>
+
+<td class="entry" valign="top" width="50%"> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="100%"> </td>
+<td class="entry" valign="top" width="50%"><pre class="pre codeblock">Record ServiceInvocationException type Exception
+
+   source eglx.services.ServiceKind?;
+  	   detail1 string;
+      detail2 string;
+      detail3 string;
+end</pre>
+</td>
+
+<td class="entry" valign="top" width="50%"> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="100%"> </td>
+<td class="entry" valign="top" width="50%"><pre class="pre codeblock">Enumeration ServiceKind
+   EGL = 1,
+   WEB = 2,
+   NATIVE = 3,
+   REST = 4
+end</pre>
+</td>
 
-</tr>
-
-<tr class="row">
-<td class="entry" valign="top" width="100%"> </td>
-
-</tr>
-
-<tr id="redt00065__compat_java" class="row">
-<td class="entry" valign="top" width="100%"><a class="xref" href="redt00071.html" title="ServiceLib supports service access.">ServiceLib external type</a></td>
+<td class="entry" valign="top" width="50%"> </td>
 
 </tr>
 
@@ -72,9 +97,9 @@ service access.</p>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00065__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="50%" id="d31861e99">Target</th>
+<th class="entry" valign="bottom" width="50%" id="d31861e98">Target</th>
 
-<th class="entry" valign="bottom" width="50%" id="d31861e102">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d31861e101">Issue</th>
 
 </tr>
 
@@ -83,17 +108,17 @@ service access.</p>
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00065__compat_java" class="row">
-<td class="entry" valign="top" width="50%" headers="d31861e99 ">Java</td>
+<td class="entry" valign="top" width="50%" headers="d31861e98 ">Java</td>
 
-<td class="entry" valign="top" width="50%" headers="d31861e102 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d31861e101 ">At this writing, service access is not supported.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00065__compat_javascript" class="row">
-<td class="entry" valign="top" width="50%" headers="d31861e99 ">JavaScript</td>
+<td class="entry" valign="top" width="50%" headers="d31861e98 ">JavaScript</td>
 
-<td class="entry" valign="top" width="50%" headers="d31861e102 ">See type-specific topics.<p class="p compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d31861e101 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

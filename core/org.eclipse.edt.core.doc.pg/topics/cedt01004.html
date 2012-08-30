@@ -102,14 +102,16 @@ access every invoked service, even services that are on the same server. </p>
 
 <div class="section"><h2 class="title sectiontitle">Services that can be accessed from Rich UI</h2><div class="p">Your
 Rich UI application can access the following kinds of services:<ul class="ul">
-<li class="li">A web service, including an EGL REST-RPC service</li>
+<li class="li">A REST service, including an EGL Service type that is deployed
+as an EGL REST-RPC service.</li>
 
-<li class="li">A service (essentially, a Java class) that is deployed as a <dfn class="term">dedicated
-service</dfn>, which is available only to the Rich UI application.
-That service is local to the Rich UI proxy and runs in the application
-server that transmitted the Rich UI application. <p class="p">You can use the
-dedicated service to do tasks that other EGL-generated Java services can do, such as accessing a database. However, the dedicated service is not available to other
-code unless you redeploy it as a web service.</p>
+<li class="li">An EGL Service type that is deployed as a <dfn class="term">dedicated service</dfn>,
+which is available only to the Rich UI application. A dedicated service
+is local to the Rich UI proxy and runs in the application server that
+transmitted the Rich UI application. <p class="p">You can use the dedicated
+service to do tasks that other EGL-generated Java services can do, such as accessing a database.
+However, the dedicated service is not available to other code unless
+you redeploy it as a web service.</p>
 </li>
 
 </ul>
