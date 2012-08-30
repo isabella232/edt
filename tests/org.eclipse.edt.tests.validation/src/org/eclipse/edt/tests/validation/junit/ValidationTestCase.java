@@ -112,7 +112,8 @@ public class ValidationTestCase extends TestCase {
 			file = new File( testEGLFileName );
 			
 			SDKLineTracker lineTracker = new SDKLineTracker();
-			lineTracker.set(getContents(file));
+			String contents = getContents(file);
+			lineTracker.set(contents);
 			
 			File stagingDirForTest = new File(stagingDir, stagingDir.getName() + testEGLFileName.replaceAll("/", "__"));
 			stagingDirForTest.mkdir();
@@ -139,6 +140,13 @@ public class ValidationTestCase extends TestCase {
 					((org.eclipse.edt.compiler.core.ast.File) new ErrorCorrectingParser(lexer).parse().value).accept(syntaxProblemRequestor);
 					for(Iterator iter = syntaxProblemRequestor.getSyntaxErrors().iterator(); iter.hasNext();) {
 						SyntaxError synError = (SyntaxError) iter.next();
+						
+						// useful for debugging
+						@SuppressWarnings("unused")
+						String fromErrorToEnd = contents.substring(synError.startOffset);
+						@SuppressWarnings("unused")
+						String justErrorNode = contents.substring(synError.startOffset, synError.endOffset);
+						
 						pRequestor.acceptProblem(synError.startOffset, synError.endOffset, IMarker.SEVERITY_ERROR, -42, new String[] {"syntax error"});
 					}
 					tempSyntaxErrorsExistInTest = !pRequestor.getProblems().isEmpty();

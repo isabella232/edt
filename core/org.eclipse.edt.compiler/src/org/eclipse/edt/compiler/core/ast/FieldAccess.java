@@ -47,6 +47,7 @@ public class FieldAccess extends Expression {
 		return ID;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -54,25 +55,35 @@ public class FieldAccess extends Expression {
 		}
 		visitor.endVisit(this);
 	}
-		
+	
+	@Override
 	public void setElement(Object elem) {
 		this.element = elem;
 		super.setElement(elem);
 	}
 	
+	@Override
 	public Object resolveElement() {
 		return element;
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		return getPrimary().getCanonicalString() + "." + ID;
 	}
 	
+	@Override
 	public void setAttributeOnName(int attr, Object value) {
     	primary.setAttributeOnName(attr, value);
     }
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new FieldAccess((Expression)primary.clone(), new String(ID), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return getPrimary().toString() + "." + ID;
 	}
 }
