@@ -1117,11 +1117,6 @@ public class IRUtils {
 		}
 		
 		if (rhsType != null) {
-			// Dynamic types aren't known until runtime.
-			if (TypeUtils.isDynamicType(rhsType)) {
-				return true;
-			}
-			
 			if (lhsType instanceof ArrayType && rhsType instanceof ArrayType) {
 				return areArraysCompatible((ArrayType)lhsType, (ArrayType)rhsType);
 			}
@@ -1136,12 +1131,26 @@ public class IRUtils {
 	}
 	
 	private static boolean areArraysCompatible(ArrayType type1, ArrayType type2) {
+		Type elementType1 = type1.getElementType();
+		Type elementType2 = type2.getElementType();
+		
+		// If the element type is null and the element type is not nullable, that means it's an empty array literal, which is compatible with all arrays.
+		if (!type1.elementsNullable() && elementType1.equals(TypeUtils.Type_NULLTYPE)) {
+			return true;
+		}
+		if (!type2.elementsNullable() && elementType2.equals(TypeUtils.Type_NULLTYPE)) {
+			return true;
+		}
+		
+		// If the element type is null and the element type is nullable, then the other array must be nullable.
+		if ((elementType1.equals(TypeUtils.Type_NULLTYPE) && type1.elementsNullable())
+				|| (elementType2.equals(TypeUtils.Type_NULLTYPE) && type2.elementsNullable())) {
+			return type1.elementsNullable() == type2.elementsNullable();
+		}
+		
 		if (type1.elementsNullable() != type2.elementsNullable()) {
 			return false;
 		}
-		
-		Type elementType1 = type1.getElementType();
-		Type elementType2 = type2.getElementType();
 		
 		if (elementType1 instanceof ParameterizedType) {
 			elementType1 = ((ParameterizedType)elementType1).getParameterizableType();

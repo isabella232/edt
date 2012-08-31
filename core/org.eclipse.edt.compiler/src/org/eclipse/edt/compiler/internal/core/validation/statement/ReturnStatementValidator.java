@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
@@ -38,10 +39,12 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 		this.problemRequestor = problemRequestor;
 	}
 	
+	@Override
 	public boolean visit(final ReturnStatement returnStatement) {
 		Node current = returnStatement.getParent();
 		final FunctionMember[] fBinding = new Function[1];
 		ParentASTVisitor visitor = new ParentASTVisitor() {
+			@Override
 			public boolean visit(NestedFunction nFunction) {
 				bcontinue = false;
 				fBinding[0] = (Function)nFunction.getName().resolveMember();
@@ -50,7 +53,7 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 				}
 				return false;
 			}
-			
+			@Override
 			public boolean visit(TopLevelFunction tlFunction) {
 				bcontinue = false;
 				fBinding[0] = (FunctionMember) tlFunction.getName().resolveMember();
@@ -63,7 +66,6 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 			current = current.getParent();
 		}	
 		
-		
 		if (returnStatement.getParenthesizedExprOpt() != null && !visitor.hasReturnType()){
 			problemRequestor.acceptProblem(returnStatement,
 					IProblemRequestor.RETURN_VALUE_WO_RETURN_DEF);
@@ -72,9 +74,11 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 		validateNoSetValues(returnStatement);
 		
 		if (visitor.hasReturnType() && returnStatement.getParenthesizedExprOpt() != null) {
-			boolean compatible = IRUtils.isMoveCompatible(visitor.getReturnField(), returnStatement.getParenthesizedExprOpt().resolveType(), returnStatement.getParenthesizedExprOpt().resolveMember());
+			Type type = returnStatement.getParenthesizedExprOpt().resolveType();
+			type = BindingUtil.resolveGenericType(type, returnStatement.getParenthesizedExprOpt());
 			
-			if (!compatible){//|| lhsBinding == null ||rhsBinding == null ){
+			boolean compatible = IRUtils.isMoveCompatible(visitor.getReturnField(), type, returnStatement.getParenthesizedExprOpt().resolveMember());
+			if (!compatible) {
 				String typeString = "";
 				Type returnStmtType = returnStatement.getParenthesizedExprOpt().resolveType();
 				if (returnStmtType == null) {
@@ -97,6 +101,7 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 		
 		if (returnStatement.getParenthesizedExprOpt() != null) {
 			returnStatement.getParenthesizedExprOpt().accept(new DefaultASTVisitor() {
+				@Override
 				public boolean visit(AnnotationExpression annotationExpression) {
 					problemRequestor.acceptProblem(
 						annotationExpression.getOffset(),
@@ -106,6 +111,7 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 						new String[] {"@"});
 					return false;
 				}
+				@Override
 				public boolean visit(ParenthesizedExpression parenthesizedExpression) {
 					return true;
 				}
@@ -117,6 +123,7 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 
 	protected void validateNoSetValues(ReturnStatement returnStatement){
 		returnStatement.accept(new AbstractASTVisitor(){
+			@Override
 			 public boolean visit(SetValuesExpression setValuesExpression) {
 				problemRequestor.acceptProblem(setValuesExpression,
 						IProblemRequestor.SET_VALUES_BLOCK_NOT_VALID_AS_RETURN_ARG);

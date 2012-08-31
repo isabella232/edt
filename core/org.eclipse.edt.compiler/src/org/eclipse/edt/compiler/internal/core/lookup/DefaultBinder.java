@@ -79,7 +79,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -396,14 +396,23 @@ public abstract class DefaultBinder extends AbstractBinder {
 		return false;
 	}
 	
-	protected NamedElement getOperandType(Expression expr) {
+	public static NamedElement getOperandType(Expression expr) {
+		if (expr instanceof FunctionInvocation) {
+			// Don't return the function, return its type.
+			if (expr.resolveType() != null) {
+				return expr.resolveType().getClassifier();
+			}
+			return null;
+		}
+		
 		Object element = expr.resolveElement();
 		if (element instanceof Function) {
 			return (Function)element;
 		}
-		else {	
-			if (expr.resolveType() != null) {
-				return (Classifier)expr.resolveType().getClassifier();
+		else {
+			org.eclipse.edt.mof.egl.Type type = expr.resolveType();
+			if (type != null) {
+				return type.getClassifier();
 			}
 		}	
 		return null;
@@ -772,7 +781,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		if(!arrayLiteral.isBindAttempted()){
 			org.eclipse.edt.mof.egl.Type elemType = getCommonElementType(arrayLiteral);
 			if (elemType == null) {
-				elemType = TypeUtils.Type_ANY;
+				elemType = TypeUtils.Type_NULLTYPE;
 			}
 			arrayLiteral.setType(BindingUtil.getArrayType(elemType, containsNull(arrayLiteral)));
 		}

@@ -17,6 +17,7 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -30,12 +31,15 @@ public class ForStatementValidator extends DefaultASTVisitor {
 		this.problemRequestor = problemRequestor;
 	}
 	
+	@Override
 	public boolean visit(final ForStatement forStatement) {
-		forStatement.accept(new AbstractASTExpressionVisitor(){
+		forStatement.accept(new AbstractASTExpressionVisitor() {
+			@Override
 			public boolean visitExpression(Expression expr) {
 				Type tBinding = expr.resolveType();
 				if (tBinding != null){
-					if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, expr.resolveMember())) {
+					tBinding = BindingUtil.resolveGenericType(tBinding, expr);
+					if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, expr.resolveMember()) && !TypeUtils.isDynamicType(tBinding)) {
 						if (expr == forStatement.getCounterVariable() || expr == forStatement.getVariableDeclarationName()) {
 							problemRequestor.acceptProblem(expr,
 									IProblemRequestor.FOR_STATEMENT_COUNTER_MUST_BE_INT);

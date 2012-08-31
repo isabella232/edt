@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.GenericType;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
@@ -68,27 +68,31 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 				String symbol = assignmentOperator.toString().substring(0, assignmentOperator.toString().length() - 1);
 				Operation op = IRUtils.getBinaryOperation(lhsType.getClassifier(), rhsType.getClassifier(), symbol);
 				if (op != null) {
-					// If the parameters are generic, we need to validate the arg type vs the generic's expected type.
-					boolean valid = true;
-					if (op.getParameters().get(0).getType() instanceof GenericType) {
-						Type t = ((GenericType)op.getParameters().get(0).getType()).resolveTypeParameter(lhsType);
-						valid = IRUtils.isMoveCompatible(t, lhsType, lhsMember);
+					// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the lhs type).
+					boolean parmsValid = true;
+					if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
+						Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), lhsType);
+						parmsValid = IRUtils.isMoveCompatible(t, lhsType, lhsMember);
 					}
-					if (valid && op.getParameters().get(1).getType() instanceof GenericType) {
-						Type t = ((GenericType)op.getParameters().get(1).getType()).resolveTypeParameter(lhsType);
-						valid = IRUtils.isMoveCompatible(t, rhsType, rhsMember);
+					if (parmsValid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
+						Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), lhsType);
+						parmsValid = IRUtils.isMoveCompatible(t, rhsType, rhsMember);
 					}
 					
-					if (valid) {
-						resolvedRHSType = op.getType();
+					if (parmsValid) {
+						Type opType = op.getType();
+						if (BindingUtil.isUnresolvedGenericType(opType)) {
+							opType = BindingUtil.resolveGenericType(opType, lhsType);
+						}
+						resolvedRHSType = opType;
 					}
 				}
 			}
 			else {
-				resolvedRHSType = rhsType;
+				resolvedRHSType = BindingUtil.resolveGenericType(rhsType, rhs);
 			}
 			
-			if (resolvedRHSType == null || !IRUtils.isMoveCompatible(lhsType, resolvedRHSType, rhsMember)) {
+			if (resolvedRHSType == null || (!IRUtils.isMoveCompatible(lhsType, resolvedRHSType, rhsMember) && !TypeUtils.isDynamicType(resolvedRHSType))) {
 				problemRequestor.acceptProblem(rhs,
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 						new String[] {lhsType != null ? StatementValidator.getShortTypeString(lhsType) : lhs.getCanonicalString(),

@@ -12,10 +12,15 @@ import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.QualifiedName;
+import org.eclipse.edt.compiler.core.ast.TernaryExpression;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -39,6 +44,7 @@ import org.eclipse.edt.mof.egl.FormGroup;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.IrFactory;
@@ -924,5 +930,81 @@ public class BindingUtil {
 			return (Part)((org.eclipse.edt.compiler.core.ast.Part)n).getName().resolveType();
 		}
 		return null;
+	}
+	
+	public static boolean isUnresolvedGenericType(Type type) {
+		if (type instanceof ArrayType) {
+			// Only need to resolve if the root type is generic.
+			Type root = type;
+	    	while (root instanceof ArrayType) {
+	    		root = ((ArrayType)root).getElementType();
+	    	}
+	    	return root instanceof GenericType;
+		}
+		return type instanceof GenericType;
+	}
+	
+	public static Type resolveGenericType(Type type, Expression expr) {
+		return resolveGenericType(type, getTypeForGenericQualifier(expr));
+	}
+	
+	public static Type resolveGenericType(Type type, Type qualifierType) {
+		if (type instanceof ArrayType) {
+			if (isUnresolvedGenericType(type)) {
+	    		return ((ArrayType)type).resolveTypeParameter(qualifierType);
+	    	}
+		}
+		else if (type instanceof GenericType) {
+			return ((GenericType)type).resolveTypeParameter(qualifierType);
+		}
+		
+		return type;
+	}
+	
+	private static Type getTypeForGenericQualifier(Expression expr) {
+		final Type[] type = new Type[1];
+		class ExitVisitor extends RuntimeException{private static final long serialVersionUID = 1L;};
+		try {
+			expr.accept(new AbstractASTVisitor() {
+				@Override
+				public boolean visit(FunctionInvocation functionInvocation) {
+					functionInvocation.getTarget().accept(this);
+					return false;
+				};
+				@Override
+				public boolean visit(QualifiedName qualifiedName) {
+					type[0] = qualifiedName.getQualifier().resolveType();
+					throw new ExitVisitor();
+				};
+				@Override
+				public boolean visit(BinaryExpression binaryExpression) {
+					Type binType = binaryExpression.resolveType();
+					if (binType != null) {
+						//TODO correct to always use first expr?
+						type[0] =  resolveGenericType(binType, binaryExpression.getFirstExpression());
+						throw new ExitVisitor();
+					}
+					return false;
+				};
+				@Override
+				public boolean visit(TernaryExpression ternaryExpression) {
+					Type ternType = ternaryExpression.resolveType();
+					if (ternType != null) {
+						//TODO correct to always use second expr?
+						type[0] =  resolveGenericType(ternType, ternaryExpression.getSecondExpr());
+						throw new ExitVisitor();
+					}
+					return false;
+				};
+			});
+		}
+		catch (ExitVisitor e) {
+		}
+		
+		if (type[0] != null) {
+			return type[0];
+		}
+		
+		return expr.resolveType();
 	}
 }

@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.WhenClause;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -78,6 +79,7 @@ public class CaseStatementValidator extends DefaultASTVisitor {
 					public boolean visitExpression(Expression expr) {
 						Type binding = expr.resolveType();
 						if (binding != null) {
+							binding = BindingUtil.resolveGenericType(binding, expr);
 							boolean criterionExisits = caseStatement.getCriterion() != null && caseStatement.getCriterion().resolveType() != null;
 							if (!criterionExisits) {
 								if (!TypeUtils.Type_BOOLEAN.equals(binding)) {
@@ -86,7 +88,9 @@ public class CaseStatementValidator extends DefaultASTVisitor {
 								}
 							}
 							else {
-								boolean compatible = IRUtils.isMoveCompatible(caseStatement.getCriterion().resolveType(), binding, expr.resolveMember());
+								Type criterionType = caseStatement.getCriterion().resolveType();
+								criterionType = BindingUtil.resolveGenericType(criterionType, caseStatement.getCriterion());
+								boolean compatible = IRUtils.isMoveCompatible(criterionType, binding, expr.resolveMember());
 								
 								if (!compatible) {
 									problemRequestor.acceptProblem(

@@ -30,6 +30,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -51,7 +52,8 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	private NamedElement functionBinding;
 	private String canonicalFunctionName;
 	private Iterator<FunctionParameter> parameterIter;
-	private int numArgs = 0;
+	private int numArgs;
+	private Expression qualifier;
 
 	private ICompilerOptions compilerOptions;
 	
@@ -71,6 +73,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	
 	@Override
 	public boolean visit(FunctionInvocation functionInvocation) {
+		this.qualifier = functionInvocation;
 		functionInvocation.getTarget().accept(new DefaultASTVisitor() {
 			@Override
 			public boolean visit(SimpleName simpleName) {
@@ -95,6 +98,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	
 	@Override
 	public boolean visit(CallStatement callStatement) {
+		this.qualifier = callStatement.getInvocationTarget();
 		canonicalFunctionName = callStatement.getInvocationTarget().getCanonicalString();
 		
 		if (!callStatement.hasArguments()) {
@@ -297,9 +301,13 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     
     private boolean checkArgForInOrOutParameter(Expression argExpr, Type argType, FunctionParameter funcParmBinding, Type parmType, int argNum) {
     	if (parmType instanceof ArrayType) {
-    		return checkArgForInOrOutArrayParameter(argExpr, argType, funcParmBinding, parmType);
+    		return checkArgForInOrOutArrayParameter(argExpr, argType, funcParmBinding, (ArrayType)parmType);
     	}
-    	if (!IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember())) {
+    	
+    	parmType = BindingUtil.resolveGenericType(parmType, qualifier);
+    	argType = BindingUtil.resolveGenericType(argType, argExpr);
+    	
+    	if (!IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember()) && !TypeUtils.isDynamicType(argType)) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
@@ -372,7 +380,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	return true;
     }
     
-    private boolean checkArgForInOrOutArrayParameter(Expression argExpr, Type argType, FunctionParameter funcParmBinding, Type parmType) {
+    private boolean checkArgForInOrOutArrayParameter(Expression argExpr, Type argType, FunctionParameter funcParmBinding, ArrayType parmType) {
+    	parmType = (ArrayType)BindingUtil.resolveGenericType(parmType, qualifier);
+    	argType = BindingUtil.resolveGenericType(argType, argExpr);
+    	
     	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember())) {
     		problemRequestor.acceptProblem(
     			argExpr,

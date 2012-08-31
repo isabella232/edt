@@ -16,6 +16,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
+import org.eclipse.edt.compiler.core.ast.ArrayAccess;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
@@ -24,6 +25,7 @@ import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
@@ -35,11 +37,15 @@ import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
+import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
@@ -47,20 +53,19 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.StatementVali
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
-import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 /*
 TODO Remaining expressions to port from the old DefaultBinder:
 array access
-field access
 in
 ternary
 */
@@ -80,20 +85,20 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	public void endVisit(BinaryExpression binaryExpression) {
 		Expression operand1 = binaryExpression.getFirstExpression();
 		Expression operand2 = binaryExpression.getSecondExpression();
-		NamedElement elem1 = getOperandType(operand1);
-		NamedElement elem2 = getOperandType(operand2);
+		NamedElement elem1 = DefaultBinder.getOperandType(operand1);
+		NamedElement elem2 = DefaultBinder.getOperandType(operand2);
 		if (elem1 != null && elem2 != null) {
 			boolean valid = false;
 			Operation op = IRUtils.getBinaryOperation(elem1, elem2, binaryExpression.getOperator().toString());
 			if (op != null) {
-				// If the parameters are generic, we need to validate the arg type vs the generic's expected type.
+				// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the first operand).
 				valid = true;
-				if (op.getParameters().get(0).getType() instanceof GenericType) {
-					Type t = ((GenericType)op.getParameters().get(0).getType()).resolveTypeParameter(operand1.resolveType());
+				if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
+					Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), operand1.resolveType());
 					valid = IRUtils.isMoveCompatible(t, operand1.resolveType(), operand1.resolveMember());
 				}
-				if (valid && op.getParameters().get(1).getType() instanceof GenericType) {
-					Type t = ((GenericType)op.getParameters().get(1).getType()).resolveTypeParameter(operand1.resolveType());
+				if (valid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
+					Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), operand1.resolveType());
 					valid = IRUtils.isMoveCompatible(t, operand2.resolveType(), operand2.resolveMember());
 				}
 			}
@@ -241,26 +246,37 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			returnType = ((Delegate)element).getReturnType();
 		}
 		
+		if (element == null && (target instanceof ThisExpression || target instanceof SuperExpression)) {
+			// Will be set on the invocation, not the target.
+			element = functionInvocation.resolveElement();
+			if (element instanceof FunctionMember) {
+				returnType = ((FunctionMember)element).getReturnType();
+			}
+		}
+		
 		if (element == null) {
-			problemRequestor.acceptProblem(
-					target,
-					IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
-			return;
+			// Super and this will already have a binder error.
+			if (!(target instanceof ThisExpression || target instanceof SuperExpression)) {
+				problemRequestor.acceptProblem(
+						target,
+						IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
+			}
 		}
-		
-		// returnType is required when the invocation is not part of a FunctionInvocationStatement ("voidFunc();" good, "x int = voidFunc();" bad).
-		if (returnType == null && !(functionInvocation.getParent() instanceof FunctionInvocationStatement)) {
-			problemRequestor.acceptProblem(
-					functionInvocation,
-					IProblemRequestor.FUNCTION_MUST_RETURN_TYPE,
-					new String[] {target.getCanonicalString()});
-		}
-		
-		if (element instanceof Delegate) {
-			functionInvocation.accept(new FunctionArgumentValidator((Delegate)element, problemRequestor, compilerOptions));
-		}
-		else if (element instanceof FunctionMember) {
-			functionInvocation.accept(new FunctionArgumentValidator((FunctionMember)element, problemRequestor, compilerOptions));
+		else {
+			// returnType is required when the invocation is not part of a FunctionInvocationStatement ("voidFunc();" good, "x int = voidFunc();" bad).
+			if (returnType == null && !(functionInvocation.getParent() instanceof FunctionInvocationStatement)) {
+				problemRequestor.acceptProblem(
+						functionInvocation,
+						IProblemRequestor.FUNCTION_MUST_RETURN_TYPE,
+						new String[] {target.getCanonicalString()});
+			}
+			
+			if (element instanceof Delegate) {
+				functionInvocation.accept(new FunctionArgumentValidator((Delegate)element, problemRequestor, compilerOptions));
+			}
+			else if (element instanceof FunctionMember) {
+				functionInvocation.accept(new FunctionArgumentValidator((FunctionMember)element, problemRequestor, compilerOptions));
+			}
 		}
 	}
 	
@@ -365,10 +381,10 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		if (asExpression.hasType()) {
 			checkTypeForIsaOrAs(asExpression.getType());
 			
-			Type fromType = asExpression.getExpression().resolveType();
+			Type fromType = BindingUtil.resolveGenericType(asExpression.getExpression().resolveType(), asExpression.getExpression());
 			Type toType = asExpression.getType().resolveType();
 			if (fromType != null && toType != null) {
-				if (!IRUtils.isMoveCompatible(toType, fromType, asExpression.getExpression().resolveMember())) {
+				if (!TypeUtils.isDynamicType(fromType) && !IRUtils.isMoveCompatible(toType, fromType, asExpression.getExpression().resolveMember())) {
 					problemRequestor.acceptProblem(
 						asExpression,
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
@@ -489,19 +505,6 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				new String[] {});
 	}
 	
-	protected NamedElement getOperandType(Expression expr) {
-		Object element = expr.resolveElement();
-		if (element instanceof Function) {
-			return (Function)element;
-		}
-		else {	
-			if (expr.resolveType() != null) {
-				return (Classifier)expr.resolveType().getClassifier();
-			}
-		}	
-		return null;
-	}
-	
 	private String getSign(Node node, boolean hasNegativeSign) {
     	if (node instanceof ParenthesizedExpression) {
     		return getSign(node.getParent(), hasNegativeSign);
@@ -533,6 +536,64 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				problemRequestor.acceptProblem(substringAccess, IProblemRequestor.MISSING_OPERATION_FOR_SUBSTRING,
 						new String[]{substringAccess.getPrimary().getCanonicalString()});
 			}
+		}
+		checkSubstringIndex(substringAccess.getExpr(), substringAccess);
+    	checkSubstringIndex(substringAccess.getExpr2(), substringAccess);
+	}
+	
+	private void checkSubstringIndex(final Expression index, SubstringAccess parentAccess) {
+		Type tBinding = index.resolveType();
+		if (tBinding != null) {
+			boolean typeIsValid = false;
+			if (BindingUtil.isDynamicallyAccessible(tBinding)) {
+				typeIsValid = true;
+			}
+			else if (TypeUtils.isNumericType(tBinding)) {
+				if (tBinding instanceof FixedPrecisionType) {
+					typeIsValid = ((FixedPrecisionType)tBinding).getDecimals() == 0;
+				}
+				else {
+					typeIsValid = true;
+				}
+			}			
+			if (!typeIsValid) {
+				problemRequestor.acceptProblem(
+					index,
+					IProblemRequestor.SUBSTRING_INDEX_NOT_INTEGER,
+					new String[] {index.getCanonicalString(), parentAccess.getCanonicalString()});
+			}
+		}
+	}
+	
+	@Override
+	public void endVisit(FieldAccess fieldAccess) {
+		final boolean[] dynamicAccessUsed = {false};
+		fieldAccess.getPrimary().accept(new AbstractASTVisitor() {
+			@Override
+			public boolean visit(ArrayAccess arrayAccess) {
+				if (arrayAccess.getIndices().size() == 1) {
+		    		Type indexType = ((Expression) arrayAccess.getIndices().get(0)).resolveType();
+		    		if (indexType != null && TypeUtils.isTextType(indexType)) {
+		    			dynamicAccessUsed[0] = true;
+		    		}
+	    		}
+				return true;
+			};
+		});
+		
+		if (dynamicAccessUsed[0]) {
+			problemRequestor.acceptProblem(fieldAccess, IProblemRequestor.DOT_ACCESS_USED_AFTER_DYNAMIC);
+		}
+	};
+	
+	@Override
+	public void endVisit(QualifiedName qualifiedName) {
+		Type type = qualifiedName.getQualifier().resolveType();
+		if (type instanceof org.eclipse.edt.mof.egl.ArrayType && !(qualifiedName.resolveMember() instanceof Function)) {
+			problemRequestor.acceptProblem(
+					qualifiedName.getQualifier(),
+					IProblemRequestor.ARRAY_ACCESS_NOT_SUBSCRIPTED,
+					new String[] {qualifiedName.getQualifier().getCanonicalName()});
 		}
 	}
 }

@@ -16,6 +16,7 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -36,6 +37,8 @@ public class ForEachStatementValidator extends DefaultASTVisitor {
 		Expression source = forEachStatement.getResultSet().getExpression();
 		Type sourceType = source.resolveType();
 		if (sourceType != null && sourceType instanceof ArrayType) {
+			sourceType = BindingUtil.resolveGenericType(sourceType, source);
+			
 			// Must have a variable declaration.
 			if (!forEachStatement.hasVariableDeclaration()) {
 				problemRequestor.acceptProblem(forEachStatement, IProblemRequestor.FOREACH_ARRAY_MUST_DECLARE_VARIABLE, new String[]{});

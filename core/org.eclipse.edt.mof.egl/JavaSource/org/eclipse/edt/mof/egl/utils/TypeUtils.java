@@ -914,11 +914,13 @@ public class TypeUtils implements MofConversion {
 	
 	public static Operation getBinaryOperation(StructPart clazz, String opSymbol, boolean searchSuperTypes ) {
 		for (Operation op : clazz.getOperations()) {
-			if (op.getOpSymbol().equals(opSymbol) 
-					&& op.getParameters().size() == 2
-					&& op.getParameters().get(0).getType().equals(clazz)
-					&& op.getParameters().get(1).getType().equals(clazz)) {
-				return op;
+			if (op.getOpSymbol().equals(opSymbol) && op.getParameters().size() == 2) {
+				Type op0Type = op.getParameters().get(0).getType();
+				Type op1Type = op.getParameters().get(1).getType();
+				if ((op0Type.equals(clazz) || (op0Type.getClassifier() != null && op0Type.getClassifier().equals(clazz)))
+						&& (op1Type.equals(clazz) || (op1Type.getClassifier() != null && op1Type.getClassifier().equals(clazz)))) {
+					return op;
+				}
 			}
 		}
 		
