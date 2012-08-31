@@ -21,23 +21,24 @@ import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 public abstract class StructDecimalValidator extends AbstractStructParameterAnnotationValidator {
 
-	protected void validateType(Annotation annotation, Node errorNode, Type type) {
-		super.validateType(annotation, errorNode, type);
+	@Override
+	protected void validateType(Annotation annotation, Node errorNode, Node target, Type type) {
+		super.validateType(annotation, errorNode, target, type);
 		
 		if (type != null && isValidType(type)) {
 			if(type instanceof FixedPrecisionType ) {
-				validateLengthAndDecimalsNotSpecified(annotation, errorNode);
+				validateLengthAndDecimalsNotSpecified(annotation, errorNode, target);
 			}
 			else {
 				//Must specify both length and decimals
-				validateLengthAndDecimalsSpecified(annotation, errorNode);
-				validateLength(annotation, errorNode);
-				validateDecimals(annotation, errorNode);
+				validateLengthAndDecimalsSpecified(annotation, errorNode, target);
+				validateLength(annotation, errorNode, target);
+				validateDecimals(annotation, errorNode, target);
 			}
 		}
 	}
 	
-	private void validateLength(Annotation ann, Node errorNode) {
+	private void validateLength(Annotation ann, Node errorNode, Node target) {
 		Integer length = (Integer)ann.getValue("length");
 		if (length != null) {
 			if (length.intValue() < 1 || length.intValue() > 32) {
@@ -46,7 +47,7 @@ public abstract class StructDecimalValidator extends AbstractStructParameterAnno
 		}
 	}
 
-	protected void validateDecimals(Annotation ann, Node errorNode) {
+	protected void validateDecimals(Annotation ann, Node errorNode, Node target) {
 		Integer decimals = (Integer)ann.getValue("decimals");
 		if (decimals != null) {
 			if (decimals.intValue() < 0) {
@@ -59,7 +60,7 @@ public abstract class StructDecimalValidator extends AbstractStructParameterAnno
 		}
 	}
 
-	protected void validateLengthAndDecimalsNotSpecified(Annotation ann, Node errorNode) {
+	protected void validateLengthAndDecimalsNotSpecified(Annotation ann, Node errorNode, Node target) {
 		if (ann.getValue("length") != null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
@@ -68,7 +69,7 @@ public abstract class StructDecimalValidator extends AbstractStructParameterAnno
 		}
 	}
 
-	protected void validateLengthAndDecimalsSpecified(Annotation ann, Node errorNode) {
+	protected void validateLengthAndDecimalsSpecified(Annotation ann, Node errorNode, Node target) {
 		if (ann.getValue("length") == null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}

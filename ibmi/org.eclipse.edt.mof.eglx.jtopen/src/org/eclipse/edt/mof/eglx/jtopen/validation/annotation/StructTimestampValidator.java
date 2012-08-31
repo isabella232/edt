@@ -21,28 +21,27 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 
-public class StructTimestampValidator extends
-		AbstractStructParameterAnnotationValidator {
+public class StructTimestampValidator extends AbstractStructParameterAnnotationValidator {
 
-	
-	protected void validateType(Annotation annotation, Node errorNode, Type type) {
-		super.validateType(annotation, errorNode, type);
+	@Override
+	protected void validateType(Annotation annotation, Node errorNode, Node target, Type type) {
+		super.validateType(annotation, errorNode, target, type);
 		
 		if (type != null && isValidType(type)) {
 			if (type instanceof TimestampType &&
 					!"null".equalsIgnoreCase(((TimestampType)type).getPattern())) {
-				validatePatternNotSpecified(annotation, errorNode);
+				validatePatternNotSpecified(annotation, errorNode, target);
 			}
 			else {
 				//Must specify pattern
-				validatePatternSpecified(annotation, errorNode);
-				validatePattern(annotation, errorNode);
+				validatePatternSpecified(annotation, errorNode, target);
+				validatePattern(annotation, errorNode, target);
 			}
 		}
 	}
 	
 	
-	private void validatePattern(Annotation ann, Node errorNode) {
+	private void validatePattern(Annotation ann, Node errorNode, Node target) {
 		String pattern = (String)ann.getValue("eglPattern");
 		if (pattern != null) {
 	  		DateTimePattern dtPat = new DateTimePattern( pattern );
@@ -52,20 +51,20 @@ public class StructTimestampValidator extends
 	  				problemRequestor.acceptProblem(errorNode,
 	  						errors[i].intValue(), 
 	  						IMarker.SEVERITY_ERROR,
-							new String[] { pattern}, IBMiResourceKeys.getResourceBundleForKeys());
+							new String[] { pattern});
 	  						
 	  			}
 	  		}
 		}
 	}
 
-	protected void validatePatternNotSpecified(Annotation ann, Node errorNode) {
+	protected void validatePatternNotSpecified(Annotation ann, Node errorNode, Node target) {
 		if (ann.getValue("eglPattern") != null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"eglPattern", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
-	protected void validatePatternSpecified(Annotation ann, Node errorNode) {
+	protected void validatePatternSpecified(Annotation ann, Node errorNode, Node target) {
 		if (ann.getValue("eglPattern") == null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"eglPattern", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}

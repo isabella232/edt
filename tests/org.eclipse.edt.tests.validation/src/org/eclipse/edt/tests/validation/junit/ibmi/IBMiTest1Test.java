@@ -30,7 +30,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "container for the IBMiProgram function f1 is invalid".
 	 */
 	public void testLine3() {
-		List messages = getMessagesAtLine( 3 );
+		List messages = getMessagesAtLine( 2 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "container for the IBMiProgram function f1 is invalid" );
@@ -43,7 +43,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "container for the IBMiProgram function f1 is invalid".
 	 */
 	public void testLine8() {
-		List messages = getMessagesAtLine( 8 );
+		List messages = getMessagesAtLine( 7 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "container for the IBMiProgram function f1 is invalid" );
@@ -606,11 +606,11 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "must exactly match the number of parameters".
 	 */
 	public void testLine83() {
-		List messages = getMessagesAtLine( 83 );
+		List messages = getMessagesAtLine( 81 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must exactly match the number of parameters" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must exactly match the number of parameters\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "entry in the array of parameterAnnotations is required" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"entry in the array of parameterAnnotations is required\" was issued." );
 	}
 
 	/*
@@ -619,11 +619,11 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "value specified for the parameterAnnotations".
 	 */
 	public void testLine89() {
-		List messages = getMessagesAtLine( 89 );
+		List messages = getMessagesAtLine( 87 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "value specified for the parameterAnnotations" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"value specified for the parameterAnnotations\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "specified in the parameterAnnotations for parameter" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"specified in the parameterAnnotations for parameter\" was issued." );
 	}
 
 	/*
@@ -632,7 +632,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "cannot contain statements.".
 	 */
 	public void testLine95() {
-		List messages = getMessagesAtLine( 95 );
+		List messages = getMessagesAtLine( 93 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "cannot contain statements." );
@@ -671,7 +671,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "nullable type int? is not supported".
 	 */
 	public void testLine108() {
-		List messages = getMessagesAtLine( 108 );
+		List messages = getMessagesAtLine( 107 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "nullable type int? is not supported" );
@@ -684,11 +684,11 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "array of nullable types int?[] is not supported".
 	 */
 	public void testLine113() {
-		List messages = getMessagesAtLine( 113 );
+		List messages = getMessagesAtLine( 112 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "array of nullable types int?[] is not supported" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"array of nullable types int?[] is not supported\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "array of nullable types int is not supported" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"array of nullable types int is not supported\" was issued." );
 	}
 
 	/*
@@ -697,11 +697,11 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "entry in the array of IBMiProgramParameterAnnotations is required".
 	 */
 	public void testLine118() {
-		List messages = getMessagesAtLine( 118 );
+		List messages = getMessagesAtLine( 117 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "entry in the array of IBMiProgramParameterAnnotations is required" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"entry in the array of IBMiProgramParameterAnnotations is required\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "entry in the array of parameterAnnotations is required" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"entry in the array of parameterAnnotations is required\" was issued." );
 	}
 
 	/*
@@ -710,7 +710,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "type of parameter p1 is not supported".
 	 */
 	public void testLine122() {
-		List messages = getMessagesAtLine( 122 );
+		List messages = getMessagesAtLine( 121 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "type of parameter p1 is not supported" );
@@ -722,7 +722,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 4 validation messages are expected.
 	 */
 	public void testLine126() {
-		List messages = getMessagesAtLine( 126 );
+		List messages = getMessagesAtLine( 125 );
 		assertEquals( 4, messages.size() );
 	}
 }

@@ -14,8 +14,7 @@ package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-public class StructTimeValidator extends
-		AbstractStructParameterAnnotationValidator {
+public class StructTimeValidator extends AbstractStructParameterAnnotationValidator {
 
 	@Override
 	protected Type getSupportedType() {

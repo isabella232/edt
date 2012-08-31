@@ -9,61 +9,61 @@ externaltype et1 type JavaObject
 end
 
 record noerr
-	f1 smallint {@as400bin1}; //0
-	f2 smallint {@as400bin2}; //0
-	f3 smallint {@as400unsignedbin1}; //0
-	f4 int {@as400bin4}; //0
-	f5 int {@as400unsignedbin2}; //0
-	f6 bigint {@as400bin8}; //0
-	f7 bigint {@as400unsignedbin4}; //0
-	f8 decimal(20) {@as400unsignedbin8}; //0
-	f9 date {@as400date}; //0
-	fa timestamp("yyyy") {@as400timestamp}; //0
-	fb timestamp {@as400timestamp{eglPattern = "yyyy"}}  = ""; //0
-	fc smallfloat {@as400float4}; //0
-	fd float {@as400float8{}}; //0
-	fe decimal(10) {@as400decFloat{}}; //0
-	ff decimal(10) {@as400packeddecimal{}}; //0
-	fg decimal(10) {@as400zoneddecimal{}};  //0
-	fh decimal {@as400decFloat{length = 3}} = 0;  //0
-	fi decimal {@as400packeddecimal{length = 3, decimals = 2}} = 0; //0
-	fj decimal {@as400zoneddecimal{length = 3, decimals = 2}} = 0;  //0
-	fk string {@as400text{length = 3}};
-	fl int[] {@as400array};  //0
-	fm int[] {@as400array{returnCountVariable = f1}}; //0
-	fn string[] {@as400array{elementTypeAS400Annotation = @as400text{length = 3}}}; //0
+	f1 smallint {@Structbin1}; //0
+	f2 smallint {@Structbin2}; //0
+	f3 smallint {@Structunsignedbin1}; //0
+	f4 int {@Structbin4}; //0
+	f5 int {@Structunsignedbin2}; //0
+	f6 bigint {@Structbin8}; //0
+	f7 bigint {@Structunsignedbin4}; //0
+	f8 decimal(20) {@Structunsignedbin8}; //0
+	f9 date {@Structdate}; //0
+	fa timestamp("yyyy") {@Structtimestamp}; //0
+	fb timestamp {@Structtimestamp{eglPattern = "yyyy"}}  = ""; //0
+	fc smallfloat {@Structfloat4}; //0
+	fd float {@Structfloat8{}}; //0
+	fe decimal(10) {@StructdecFloat{}}; //0
+	ff decimal(10) {@Structpackeddecimal{}}; //0
+	fg decimal(10) {@Structzoneddecimal{}};  //0
+	fh decimal {@StructdecFloat{length = 3}} = 0;  //0
+	fi decimal {@Structpackeddecimal{length = 3, decimals = 2}} = 0; //0
+	fj decimal {@Structzoneddecimal{length = 3, decimals = 2}} = 0;  //0
+	fk string {@Structtext{length = 3}};
+	fl int[] {@Structarray};  //0
+	fm int[] {@Structarray{returnCountVariable = f1}}; //0
+	fn string[] {@Structarray{elementTypeAnnotation = @Structtext{length = 3}}}; //0
 end
 
 record err
-	f1 smallint {@as400bin4}; //1 not compatible with the type
-	f2 smallint? {@as400bin2}; //1 not valid for use with the nullable type
-	f3 smallint {@as400text}; //1 not compatible with the type
-	f4 int {@as400bin2}; //1 not compatible with the type
-	f5 int {@as400bin8}; //1 not compatible with the type
-	f6 bigint {@as400bin2}; //1 not compatible with the type
-	f7 bigint {@as400date}; //1 not compatible with the type
-	f8 decimal(19) {@as400unsignedbin8}; //1 not compatible with the type
-	f9 date {@as400timestamp}; //not compatible with the type
-	fa timestamp("yyyy") {@as400date}; //1 not compatible with the type
-	fb timestamp {@as400timestamp{eglPattern = "yyddd"}}  = ""; //1 Invalid pattern
-	fba timestamp {@as400timestamp{}}  = ""; //1 eglPattern must be specified
-	fc smallfloat {@as400float8}; //1 not compatible with the type
-	fd float {@as400float4{}}; //1 not compatible with the type
-	fe decimal(10) {@as400decFloat{length = 3}}; //1 length is not allowed
-	ff decimal(10) {@as400packeddecimal{decimals = 2}}; //1 decimals is not allowed
-	fg decimal(10) {@as400zoneddecimal{length = 3, decimals = 2}};  //2
-	fh decimal {@as400decFloat{length = -3}} = 0;  //1 must be an integer
-	fi decimal {@as400packeddecimal{length = 3, decimals = 4}} = 0; //1 must be an integer
-	fj decimal {@as400zoneddecimal{length = 33, decimals = 2}} = 0;  //1 must be an integer
-	fha decimal {@as400decFloat{}} = 0;  //1 length must be specified
-	fib decimal {@as400packeddecimal{}} = 0; //2
-	fjc decimal {@as400zoneddecimal{}} = 0;  //2
-	fk string {@as400text{length = -3}}; //1 must be an integer
-	fka string {@as400text{}}; //1 length must be specified
-	fl boolean[] {@as400array};  //1 is not compatible
-	fla int?[] {@as400array{}};  //1 not valid for use with the nullable type
-	fm int[] {@as400array{returnCountVariable = fa}}; //1 must have a type that is assignment compatible
-	fn string[] {@as400array{elementTypeAS400Annotation = @as400text{}}}; //1 length must be specified
+	f1 smallint {@Structbin4}; //1 not compatible with the type
+	f2 smallint? {@Structbin2}; //1 not valid for use with the nullable type
+	f3 smallint {@Structtext}; //1 not compatible with the type
+	f4 int {@Structbin2}; //1 not compatible with the type
+	f5 int {@Structbin8}; //1 not compatible with the type
+	f6 bigint {@Structbin2}; //1 not compatible with the type
+	f7 bigint {@Structdate}; //1 not compatible with the type
+	f8 decimal(19) {@Structunsignedbin8}; //1 not compatible with the type
+	f9 date {@Structtimestamp}; //not compatible with the type
+	fa timestamp("yyyy") {@Structdate}; //1 not compatible with the type
+	fb timestamp {@Structtimestamp{eglPattern = "yyddd"}}  = ""; //1 Invalid pattern
+	fba timestamp {@Structtimestamp{}}  = ""; //1 eglPattern must be specified
+	fc smallfloat {@Structfloat8}; //1 not compatible with the type
+	fd float {@Structfloat4{}}; //1 not compatible with the type
+	fe decimal(10) {@StructdecFloat{length = 3}}; //1 length is not allowed
+	ff decimal(10) {@Structpackeddecimal{decimals = 2}}; //1 decimals is not allowed
+	fg decimal(10) {@Structzoneddecimal{length = 3, decimals = 2}};  //2
+	fh decimal {@StructdecFloat{length = -3}} = 0;  //1 must be an integer
+	fi decimal {@Structpackeddecimal{length = 3, decimals = 4}} = 0; //1 must be an integer
+	fj decimal {@Structzoneddecimal{length = 33, decimals = 2}} = 0;  //1 must be an integer
+	fha decimal {@StructdecFloat{}} = 0;  //1 length must be specified
+	fib decimal {@Structpackeddecimal{}} = 0; //2
+	fjc decimal {@Structzoneddecimal{}} = 0;  //2
+	fk string {@Structtext{length = -3}}; //1 must be an integer
+	fka string {@Structtext{}}; //1 length must be specified
+	fl boolean[] {@Structarray};  //1 is not compatible
+	fla int?[] {@Structarray{}};  //1 not valid for use with the nullable type
+	fm int[] {@Structarray{returnCountVariable = fa}}; //1 must have a type that is assignment compatible
+	fn string[] {@Structarray{elementTypeAnnotation = @Structtext{}}}; //1 length must be specified
 end
 
 
@@ -78,7 +78,7 @@ program pgm1 {}
 	function main()
 	end
 	
-	function f1(p1 int)
+	function f1(p1 decimal)
 			{@IBMiProgram{
 				parameterAnnotations = []  //1 must exactly match the number of parameters
 			}}

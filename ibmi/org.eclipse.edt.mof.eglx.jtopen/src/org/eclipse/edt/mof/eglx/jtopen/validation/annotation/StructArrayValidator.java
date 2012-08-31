@@ -26,25 +26,27 @@ import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.jtopen.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
-import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiFunctionParameterValidator;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class StructArrayValidator extends AbstractStructParameterAnnotationValidator {
 
-	protected void validateType(Annotation annotation, Node errorNode, Type type) {
-		super.validateType(annotation, errorNode, type);
+	@Override
+	protected void validateType(Annotation annotation, Node errorNode, Node target, Type type) {
+		super.validateType(annotation, errorNode, target, type);
 		
 		if (type != null && isValidType(type)) {
 			
+			validateElementTypeNotNullable(type, errorNode, target);
 			if(annotation.getValue("elementTypeAnnotation") instanceof Annotation) {
-				validateElementType((Annotation)annotation.getValue("elementTypeAnnotation"), type, errorNode);
+				validateElementType((Annotation)annotation.getValue("elementTypeAnnotation"), type, errorNode, target);
 			}
 			else {
-				validateElementTypeNotRequired(type, errorNode);
+				validateElementTypeNotRequired(type, errorNode, target);
 			}
-			validateReturnCount(annotation, errorNode);
+			validateReturnCount(annotation, errorNode, target);
 		}
 	}
 	
@@ -53,7 +55,7 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 		return TypeUtils.areCompatible(_int.getClassifier(), type.getClassifier());
 	}
 	
-	protected void validateReturnCount(Annotation ann, Node errorNode) {
+	private void validateReturnCount(Annotation ann, Node errorNode, Node target) {
 		Object obj = ann.getValue("returnCountVariable");
 		if (obj == null || !(obj instanceof Member)) {
 			return;
@@ -97,20 +99,20 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 		return getContainerBinding(node.getParent());
 	}
 	
-	protected void validateElementTypeNotNullable(Type type, Node errorNode) {
+	private void validateElementTypeNotNullable(Type type, Node errorNode, Node target) {
 		if (type instanceof ArrayType && ((ArrayType)type).elementsNullable()) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), StatementValidator.getShortTypeString(type, true) + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
+			problemRequestor.acceptProblem(target, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), StatementValidator.getShortTypeString(type, true) }, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
-	protected void validateElementTypeNotRequired(Type type, Node errorNode) {
+	private void validateElementTypeNotRequired(Type type, Node errorNode, Node target) {
 		if (type instanceof ArrayType && 
-				IBMiFunctionParameterValidator.requiresAS400TypeAnnotation(((ArrayType)type).getElementType())) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"elementTypeAnnotation", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
+				Utils.requiresAS400TypeAnnotation(((ArrayType)type).getElementType())) {
+			problemRequestor.acceptProblem(target, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"elementTypeAnnotation", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
-	protected void validateElementType(Annotation ann, Type type, Node errorNode) {
+	private void validateElementType(Annotation ann, Type type, Node errorNode, Node target) {
 		boolean hasStructTypeAnnotation = false;
 		IValidationProxy proxy = AnnotationValidator.getValidationProxy((Annotation)ann);
 		if (proxy != null) {
@@ -122,7 +124,7 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 			}
 		}
 		
-		if(!hasStructTypeAnnotation && IBMiFunctionParameterValidator.requiresAS400TypeAnnotation(type)) {
+		if(!hasStructTypeAnnotation && Utils.requiresAS400TypeAnnotation(type)) {
 			problemRequestor.acceptProblem(errorNode, 
 					IBMiResourceKeys.PROGRAM_PARAMETER_ANNOTATION_REQUIRED, 
 					IMarker.SEVERITY_ERROR, 
@@ -139,12 +141,13 @@ public class StructArrayValidator extends AbstractStructParameterAnnotationValid
 	protected String getName() {
 		return "StructArray";
 	}
-
+	
+	@Override
 	protected boolean isValidType(Type typeBinding) {
 		if (typeBinding != null) {
 						
 			if (typeBinding instanceof ArrayType) {
-				return IBMiFunctionParameterValidator.isValidAS400Type(typeBinding);
+				return Utils.isValidAS400Type(typeBinding);
 			}
 			else {
 				return false;

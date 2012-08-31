@@ -27,7 +27,7 @@ public class StructUnsignedBin8Validator extends AbstractStructParameterAnnotati
 		return null;
 	}
 
-	
+	@Override
 	protected boolean isValidType(Type typeBinding) {
 		if (typeBinding != null) {						
 			return typeBinding instanceof FixedPrecisionType &&

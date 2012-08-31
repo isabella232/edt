@@ -21,24 +21,24 @@ import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 public class StructTextValidator extends AbstractStructParameterAnnotationValidator {
 
-	
-	protected void validateType(Annotation annotation, Node errorNode, Type type) {
-		super.validateType(annotation, errorNode, type);
+	@Override
+	protected void validateType(Annotation annotation, Node errorNode, Node target, Type type) {
+		super.validateType(annotation, errorNode, target, type);
 		
 		if (type != null && isValidType(type)) {
 			if (type instanceof SequenceType) {
-				validateLengthNotSpecified(annotation, errorNode);
+				validateLengthNotSpecified(annotation, errorNode, target);
 			}
 			else {
 				//Must specify both length
-				validateLengthSpecified(annotation, errorNode);
-				validateLength(annotation, errorNode);
+				validateLengthSpecified(annotation, errorNode, target);
+				validateLength(annotation, errorNode, target);
 			}
 		}
 	}
 	
 	
-	private void validateLength(Annotation ann, Node errorNode) {
+	private void validateLength(Annotation ann, Node errorNode, Node target) {
 		Integer length = (Integer)ann.getValue("length");
 		if (length != null) {
 			if (length.intValue() < 1 || length.intValue() > Integer.MAX_VALUE) {
@@ -47,13 +47,13 @@ public class StructTextValidator extends AbstractStructParameterAnnotationValida
 		}
 	}
 
-	protected void validateLengthNotSpecified(Annotation ann, Node errorNode) {
+	protected void validateLengthNotSpecified(Annotation ann, Node errorNode, Node target) {
 		if (ann.getValue("length") != null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
-	protected void validateLengthSpecified(Annotation ann, Node errorNode) {
+	protected void validateLengthSpecified(Annotation ann, Node errorNode, Node target) {
 		if (ann.getValue("length") == null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.IValidationProxy;
-import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ReturnsDeclaration;
@@ -15,6 +14,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractFunctionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Field;
@@ -33,6 +33,7 @@ import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.jtopen.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.utils.EList;
@@ -54,7 +55,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 			annotation = nestedFunction.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram");
 			
 			Object obj = annotation.getValue("parameterAnnotations");
-			if(obj instanceof EList && ((EList<?>)obj).size() > 0){
+			if(((EList<?>)obj).size() > 0){
 				if (((EList<?>)obj).size() != nestedFunction.getFunctionParameters().size()) {
 					problemRequestor.acceptProblem(nestedFunction, IBMiResourceKeys.WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS, IMarker.SEVERITY_ERROR, new String[] {nestedFunction.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());
 				}
@@ -92,16 +93,23 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 						}
 					}
 				}
+				else{
+					requiresAS400TypeAnnotationTest = false;
+					problemRequestor.acceptProblem(functionParameter, 
+							IBMiResourceKeys.PARAMETER_ANNOTATION_INVALID, 
+							IMarker.SEVERITY_ERROR, 
+							new String[] {parmAnn.toString(), functionParameter.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());
+				}
 			}
 			
-			if(requiresAS400TypeAnnotationTest && IBMiFunctionParameterValidator.requiresAS400TypeAnnotation(parm.getType())) {
+			if(requiresAS400TypeAnnotationTest && Utils.requiresAS400TypeAnnotation(parm.getType())) {
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.PROGRAM_PARAMETER_ANNOTATION_REQUIRED, 
 						IMarker.SEVERITY_ERROR, 
 						new String[] {parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 
-			if (!IBMiFunctionParameterValidator.isValidAS400Type(parm.getType())) {
+			if (!Utils.isValidAS400Type(parm.getType())) {
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_PARM_TYPE_INVALID, 
 						IMarker.SEVERITY_ERROR, 
@@ -112,7 +120,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getType().getEClass().getName() + "?", parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {Utils.getTypeName(parm), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 				
 			if (parm.getType() instanceof ArrayType && ((ArrayType)parm.getType()).getElementType() != null){
@@ -120,7 +128,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 					problemRequestor.acceptProblem(functionParameter, 
 							IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_INVALID, 
 							IMarker.SEVERITY_ERROR, 
-							new String[] {((ArrayType)parm.getType()).getElementType().getEClass().getName() + "?[]", parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+							new String[] {StatementValidator.getShortTypeString(((ArrayType)parm.getType()).getElementType(), true), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 				}
 			}
 			
@@ -145,6 +153,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 			if(!analyzedTypes.contains(type.getTypeSignature()) &&
 					(type instanceof Record || type instanceof Handler)){
 				analyzedTypes.add(type.getTypeSignature());
+				return true;
 			}
 			return false;
 		}
@@ -153,10 +162,10 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 			return false;
 		}
 		public boolean visit(Field field){
-			validateField(parameter, field, functionParameter);
+			validateField(parameter, field);
 			return true;
 		}				
-		private void validateField(FunctionParameter parm, Field field,  Node errorNode) {
+		private void validateField(FunctionParameter parm, Field field) {
 			if (field.getType() == null) {
 				return;
 			}
@@ -165,34 +174,34 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				containerName = ((NamedElement)field.getContainer()).getCaseSensitiveName();
 			}
 			
-			if (!IBMiFunctionParameterValidator.isValidAS400Type(field.getType())) {
-				problemRequestor.acceptProblem(errorNode, 
+			if (!Utils.isValidAS400Type(field.getType())) {
+				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), field.getType().getTypeSignature()}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 
 			if (field.isNullable()) {
-				problemRequestor.acceptProblem(errorNode, 
+				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), field.getType().getTypeSignature() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			
 			if (field.getType() instanceof ArrayType && ((ArrayType)field.getType()).getElementType() != null){
 				if (((ArrayType)field.getType()).elementsNullable()) {
-					problemRequestor.acceptProblem(errorNode, 
+					problemRequestor.acceptProblem(functionParameter, 
 							IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID, 
 							IMarker.SEVERITY_ERROR, 
-							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), ((ArrayType)field.getType()).getElementType() + "?[]"}, IBMiResourceKeys.getResourceBundleForKeys());
+							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}
 					
-			if (!hasStructAnnotation(field) && IBMiFunctionParameterValidator.requiresAS400TypeAnnotation(field.getType())) {
-				problemRequestor.acceptProblem(errorNode, 
+			if (!hasStructAnnotation(field) && Utils.requiresAS400TypeAnnotation(field.getType())) {
+				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_REQUIRES_AS400, 
 						IMarker.SEVERITY_ERROR, 
 						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
@@ -214,14 +223,15 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 		if (returnType != null) {
 		
 			//Returns is only valid for service programs
-			
-			Boolean srvPgmAnn = (Boolean)annotation.getValue("isServiceProgram");
-			if (srvPgmAnn == null || srvPgmAnn != Boolean.YES) {
+			Object isServiceProgram = annotation.getValue("isServiceProgram");
+			if (isServiceProgram == null || 
+					(isServiceProgram instanceof Boolean && !(Boolean)isServiceProgram) ||
+					(isServiceProgram instanceof org.eclipse.edt.compiler.core.Boolean && !((org.eclipse.edt.compiler.core.Boolean)isServiceProgram).booleanValue())) {
 				problemRequestor.acceptProblem(returnsDeclaration, IBMiResourceKeys.IBMIPROGRAM_ONLY_SERVICE_CAN_RETURN, IMarker.SEVERITY_ERROR, new String[] {nestedFunction.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());			
 			}
 			
 			if (!TypeUtils.Type_INT.equals(returnType)) {
-				problemRequestor.acceptProblem(nestedFunction.getReturnDeclaration(), IBMiResourceKeys.IBMIPROGRAM_CAN_ONLY_RETURN_INT, IMarker.SEVERITY_ERROR, new String[] {nestedFunction.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());			
+				problemRequestor.acceptProblem(returnsDeclaration, IBMiResourceKeys.IBMIPROGRAM_CAN_ONLY_RETURN_INT, IMarker.SEVERITY_ERROR, new String[] {nestedFunction.getName().getCaseSensitiveIdentifier()}, IBMiResourceKeys.getResourceBundleForKeys());			
 			}
 		}
 		return false;

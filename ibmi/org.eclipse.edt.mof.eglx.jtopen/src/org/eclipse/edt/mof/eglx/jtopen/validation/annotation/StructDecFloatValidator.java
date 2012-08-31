@@ -23,22 +23,22 @@ public class StructDecFloatValidator extends StructDecimalValidator {
 		return "StructDecFloat";
 	}
 	
-	protected void validateLengthAndDecimalsSpecified(Annotation ann, Node errorNode) {
+	@Override
+	protected void validateLengthAndDecimalsSpecified(Annotation ann, Node errorNode, Node target) {
 		if ((Integer)ann.getValue("length") == null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
-	protected void validateLengthAndDecimalsNotSpecified(Annotation ann, Node errorNode) {
+	@Override
+	protected void validateLengthAndDecimalsNotSpecified(Annotation ann, Node errorNode, Node target) {
 		if ((Integer)ann.getValue("length") != null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
-	protected void validateDecimals(Annotation ann, Node errorNode, IBMiResourceKeys problemRequestor) {
+	@Override
+	protected void validateDecimals(Annotation ann, Node errorNode, Node target) {
 		//do nothing
 	}
-
-	
-
 }

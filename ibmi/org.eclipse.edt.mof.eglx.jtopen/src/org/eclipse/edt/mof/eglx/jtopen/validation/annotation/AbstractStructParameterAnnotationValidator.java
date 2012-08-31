@@ -54,11 +54,11 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 			this.compilerOptions = compilerOptions;
 			this.problemRequestor = problemRequestor;
 			if (targetBinding instanceof Field || targetBinding instanceof FunctionParameter) {
-				validateMember(annotation, errorNode, (Member)targetBinding);
-				validateType(annotation, errorNode, ((Member)targetBinding).getType());
+				validateMember(annotation, target, (Member)targetBinding);
+				validateType(annotation, errorNode, target, ((Member)targetBinding).getType());
 			}
 			else if(targetBinding instanceof Type){
-				validateType(annotation, errorNode, (Type)targetBinding);
+				validateType(annotation, errorNode, target, (Type)targetBinding);
 			}
 		}
 	}
@@ -66,11 +66,11 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 
 	protected void validateMember(Annotation annotation, Node errorNode, Member member) {
 		if (member.isNullable()) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), member.getCaseSensitiveName() + "?"}, IBMiResourceKeys.getResourceBundleForKeys());
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_NULLABLE_TYPE_INVALID, IMarker.SEVERITY_ERROR, new String[] {getName(), member.getCaseSensitiveName() }, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	
-	protected void validateType(Annotation annotation, Node errorNode, Type type) {
+	protected void validateType(Annotation annotation, Node errorNode, Node target, Type type) {
 		if (!isValidType(type)) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_TYPE_MISMATCH, IMarker.SEVERITY_ERROR, new String[] {getName(), StatementValidator.getShortTypeString(type, true)}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
