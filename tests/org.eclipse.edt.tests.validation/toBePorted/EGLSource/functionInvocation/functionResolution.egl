@@ -1,0 +1,396 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+in an embedded function
+	Search the Program/Library/PageHandler for an embedded function with the given name.
+	if found
+		(1) return the function(s) (we are done!)
+	else
+		if includeReferencedFunctions=YES, 
+			attempt to resolve the function using using the  Program/Library/PageHandler as the scope
+				if found 
+					(2) return the function(s) (we are done!)
+		Search all USED Libraries in the Program/Library/PageHandler
+			if found
+				(3) return the function(s) (we are done!)
+		Search SysLib functions
+			if found
+				(4) return the function (we are done!)
+		PART NOT FOUND!
+*/
+
+Program pgm1
+	function main()
+		func1();		//0
+	end
+	
+	function func1() end
+end
+
+//***********************
+
+Program pgm1a
+	function main()
+		func1a();		//1
+	end
+end
+
+//***********************
+
+Program pgm1b {includeReferencedFunctions = yes}
+	function main()
+		func1b();		//0
+	end
+	
+	function func1b() end
+end
+
+function func1b() end
+
+//***********************
+
+Program pgm1c
+	use lib1c;
+	
+	function main()
+		func1c();		//0
+	end
+	
+	function func1c() end
+end
+
+Library lib1c
+	function func1c() end
+end
+
+//***********************
+
+Program pgm1d
+	function main()
+		abs();			//0
+	end
+	
+	function abs() end
+end
+
+//***********************
+
+Program pgm1e
+	function main()
+		func1e();
+	end
+	
+	function func1e() end
+	function func1e() end	//1
+end
+
+//***********************
+
+Program pgm2 {includeReferencedFunctions = yes}
+	function main()
+		func2();		//0
+	end
+end
+
+function func2() end
+
+//***********************
+
+Program pgm2a {includeReferencedFunctions = yes}
+	function main()
+		func2a();		//1
+	end
+end
+
+//***********************
+
+Program pgm2b {includeReferencedFunctions = no}
+	function main()
+		func2b();		//1
+	end
+end
+
+function func2b() end
+
+//***********************
+
+Program pgm2c {includeReferencedFunctions = yes}
+	use lib2c;
+
+	function main()
+		func2c();		//0
+	end
+end
+
+function func2c() end
+
+Library lib2c
+	function func2c() end
+end
+
+//***********************
+
+Program pgm2d {includeReferencedFunctions = yes}
+	function main()
+		abs();			//0
+	end
+end
+
+function abs() end
+
+//***********************
+
+Program pgm3
+	use lib3;
+	
+	function main()
+		func3();		//0
+	end
+end
+
+Library lib3
+	function func3() end
+end
+
+//***********************
+
+Program pgm3a
+	use lib3a;
+	
+	function main()
+		func3a();		//1
+	end
+end
+
+Library lib3a
+end
+
+//***********************
+
+Program pgm3b
+	use lib3b;
+	
+	function main()
+		abs();			//0
+	end
+end
+
+Library lib3b
+	function abs() end
+end
+
+//***********************
+
+Program pgm3c
+	use lib3c1;
+	use lib3c2;
+	
+	function main()
+		func3c();		//1
+	end
+end
+
+Library lib3c1
+	function func3c() end
+end
+
+Library lib3c2
+	function func3c() end
+end
+
+//***********************
+
+Program pgm4
+	function main()
+		a int;
+		a = abs(a);		//0
+	end
+end
+
+//***********************
+
+Program pgm4a
+	function main()
+		notSystemFunc();	//1
+	end
+end
+
+//***********************
+
+/*
+in a stand-alone function
+	attempt to resolve the function using the part resolution rules, using the function as the scope
+		if found 
+			(1) return the function(s) (we are done!)
+		else
+			if the (container context dependent flag=YES)
+				attempt to resolve the function using using the  Program/Library/PageHandler as the scope
+					if found 
+						(2) return the function(s) (we are done!)
+					else
+						Search all USED Libraries in the Program/Library/PageHandler
+							if found
+								(3) return the function(s) (we are done!)
+							else 
+								Search syslib functions
+									if found 
+										(4) return the function (we are done!)
+					PART NOT FOUND!
+			else
+				search the syslib functions
+					if found
+						(5) return the function (we are done!)
+				PART NOT FOUND!
+*/
+
+//***********************
+
+Program program1 {includeReferencedFunctions = yes}
+	function main()
+		function1();		//0
+	end
+end
+
+function function1()
+	function1zz1();			//0
+end
+
+function function1zz1() end
+
+//***********************
+
+Program program1a {includeReferencedFunctions = yes}
+	use library1a;
+	function main()
+		function1a();		//0
+	end
+	
+	function function1zz2() end
+end
+
+Library library1a
+	function function1zz2() end
+end
+
+function function1zz() end
+
+function function1a() {containerContextDependent = yes}
+	function1zz2();			//0
+end
+
+//***********************
+
+Program program1b {includeReferencedFunctions = yes}
+	function main()
+		function1b();		//0 {*}
+	end
+end
+
+function function1b()
+	notFoundFunc();			//1 {*}
+end
+
+//***********************
+
+Program program2 {includeReferencedFunctions = yes}
+	function main()
+		function2();		//0
+	end
+	
+	function function2zz3() end
+end
+
+function function2() {containerContextDependent = yes}
+	function2zz3();			//0
+end
+
+//***********************
+
+Program program2a {includeReferencedFunctions = yes}
+	use library2a;
+	function main()
+		function2a();		//0
+	end
+	
+	function function2zz4() end
+end
+
+Library library2a
+	function function2zz4() end
+end
+
+function function2a() {containerContextDependent = yes}
+	function2zz4();			//0
+end
+
+//***********************
+
+Program program2b {includeReferencedFunctions = yes}
+	function main()
+		function2b();		//0 {*}
+	end
+end
+
+function function2b() {containerContextDependent = yes}
+	notFoundFunc();			//1 {*}
+end
+
+//***********************
+
+Program program2c {includeReferencedFunctions = yes}
+	function main()
+		function2c();		//0 {*}
+	end
+	
+	function function2zz5() end
+end
+
+function function2c() {containerContextDependent = no}
+	function2zz5();			//1 {*}
+end
+
+//***********************
+
+Program program3 {includeReferencedFunctions = yes}
+	use library3;
+	
+	function main()
+		function3();		//0
+	end
+end
+
+library library3
+	function functionzz6() end
+end
+
+function function3() {containerContextDependent = yes}
+	functionzz6();			//0
+end
+
+//***********************
+
+Program program3a {includeReferencedFunctions = yes}
+	use library3a;
+	
+	function main()
+		function3a();		//0 {*}
+	end
+end
+
+library library3a
+	function functionzz7() end
+end
+
+function function3a() {containerContextDependent = no}
+	functionzz7();			//1 {*}
+end

@@ -1,0 +1,518 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+Record rec
+	10 item1 int;
+end
+
+Program systemWord
+
+	function main()
+	
+// checkAuditArgs:
+// 1 The {1} system function must have either one or two item arguments. {5106, EGLMESSAGE_ROUTINE_MUST_HAVE_ONE_OR_TWO_ITEM_ARGUMENTS}
+// 1 Argument {1} for {2} must be either an item, an integer literal, a string literal, or a string literal concatenation. {5099, EGLMESSAGE_ARG_MUST_BE_ITEM}
+
+	intItem int;
+	recVar rec;
+    stringVar string;
+    dooda any;
+    char8 char(8);
+
+	audit( recVar );					//0
+	audit( recVar, intItem );			//0
+	audit( recVar, intItem, intItem );	//1
+
+// checkConnectArgs:
+// 1 Connect must have exactly 3, 4, 5, 6, or 7 arguments. {5116, EGLMESSAGE_INVALID_NUM_ARGS_FOR_CONNECT}
+// 1 Argument {1} for connect must be either an item or a string literal. {5117, EGLMESSAGE_INVALID_ARG1_3_FOR_CONNECT}
+// 1 Argument {1} for connect must be either an item or a string literal. {5117, EGLMESSAGE_INVALID_ARG1_3_FOR_CONNECT}
+// 1 Argument 4 for connect must be either type1, type2, or twophase. {5118, EGLMESSAGE_INVALID_ARG_4_FOR_CONNECT}
+// 1 Argument 4 for connect must be either type1, type2, or twophase. {5118, EGLMESSAGE_INVALID_ARG_4_FOR_CONNECT}
+// 1 Argument 5 for connect must be explicit when the fourth argument is type1. {5120, EGLMESSAGE_INVALID_ARG_PAIR_4_5_FOR_CONNECT}
+// 1 Argument 5 for connect must be either automatic, conditional, or explicit. {5119, EGLMESSAGE_INVALID_ARG_5_FOR_CONNECT}
+// 1 Argument 5 for connect must be either automatic, conditional, or explicit. {5119, EGLMESSAGE_INVALID_ARG_5_FOR_CONNECT}
+// 1 Argument 6 for connect must be either repeatableRead, serializableTransaction, remoteeadUncommitted, or readCommitted. {5121, EGLMESSAGE_INVALID_ARG_6_FOR_CONNECT}
+// 1 Argument 6 for connect must be either repeatableRead, serializableTransaction, remoteeadUncommitted, or readCommitted. {5121, EGLMESSAGE_INVALID_ARG_6_FOR_CONNECT}
+// 1 Argument 7 for connect must be either autoCommit, noAutoCommit, or noCommit. {5175, EGLMESSAGE_INVALID_ARG_7_FOR_CONNECT}
+// 1 Argument 7 for connect must be either autoCommit, noAutoCommit, or noCommit. {5175, EGLMESSAGE_INVALID_ARG_7_FOR_CONNECT}
+
+	strlib.connect();									//1
+	sqllib.connect();									//1
+	sqllib.connect(5, 6, -5);							//0
+	sqllib.connect(stringVar, "dooda", "doodo");		//0
+	sqllib.connect(stringVar, stringVar, "dooda");	//0
+	sqllib.connect(stringVar, stringVar, stringVar);	//0
+	
+	sqllib.connect(stringVar, stringVar, stringVar);		//0
+	
+	sqllib.connect(stringVar, stringVar, stringVar, "dooda");		//1
+	sqllib.connect(stringVar, stringVar, stringVar, -25);			//1
+	sqllib.connect(stringVar, stringVar, stringVar, automatic);		//0
+	sqllib.connect(stringVar, stringVar, stringVar, conditional);	//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit);		//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit);		//0
+	
+	sqllib.connect(stringVar, stringVar, stringVar, "dooda", "dooda");	//2
+	sqllib.connect(stringVar, stringVar, stringVar, dooda, dooda, dooda);			//0
+	sqllib.connect(stringVar, stringVar, stringVar, automatic, dooda);		//0
+	sqllib.connect(stringVar, stringVar, stringVar, conditional, dooda);	//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, dooda);		//0
+	sqllib.connect(stringVar, stringVar, stringVar, automatic, dooda);		//0
+	sqllib.connect(stringVar, stringVar, stringVar, conditional, dooda);	//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, dooda);		//0
+	sqllib.connect(stringVar, stringVar, stringVar, automatic, dooda);	//0
+	sqllib.connect(stringVar, stringVar, stringVar, conditional, dooda);	//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, dooda);		//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, repeatableRead);	//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, serializableTransaction);	//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, readUncommitted);			//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, repeatableRead);				//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, serializableTransaction);	//0
+	sqllib.connect(stringVar, stringVar, stringVar, explicit, readCommitted);			//0
+
+// checkConnectionServicesArgs:
+// 1 ConnectionServices must have exactly 3, 5, or 6 arguments. {5122, EGLMESSAGE_INVALID_NUM_ARGS_FOR_CONNECTION_SERVICES}
+// 1 {1} is an invalid literal value for the sixth argument of connectionServices. {5125, EGLMESSAGE_ARG6_MUST_CERTAIN_VALUES_FOR_CONNECTION_SERVICES}
+// 1 {1} is an invalid literal value for the sixth argument of connectionServices. {5125, EGLMESSAGE_ARG6_MUST_CERTAIN_VALUES_FOR_CONNECTION_SERVICES}
+
+	vglib.connectionService(char8, char8, char8, char8, char8, 5);	//0
+
+// checkConvertArgs:
+// 1 Convert must have either 1, 2 or 3 arguments. {5126, EGLMESSAGE_INVALID_NUM_ARGS_FOR_CONVERT}
+// 1 Argument 2 for convert is invalid. It must be a string literal of either "L" or "R". {5128, EGLMESSAGE_INVALID_SECOND_ARG_FOR_CONVERT}
+// 1 Argument 2 for convert is invalid. It must be a string literal of either "L" or "R". {5128, EGLMESSAGE_INVALID_SECOND_ARG_FOR_CONVERT}
+// 1 Argument 2 for convert is invalid. It must be a string literal of either "L" or "R". {5128, EGLMESSAGE_INVALID_SECOND_ARG_FOR_CONVERT}
+// 1 Argument 3 for convert is invalid. It cannot be a numeric literal or a string literal longer than 8 characters. {5129, EGLMESSAGE_INVALID_THIRD_ARG_FOR_CONVERT}
+// 1 Argument 3 for convert is invalid. It cannot be a numeric literal or a string literal longer than 8 characters. {5129, EGLMESSAGE_INVALID_THIRD_ARG_FOR_CONVERT}
+// 1 Argument 3 for convert is invalid. It cannot be a numeric literal or a string literal longer than 8 characters. {5129, EGLMESSAGE_INVALID_THIRD_ARG_FOR_CONVERT}
+
+	convert(5);			//1
+	convert(-5);		//1
+	convert(intItem);	//0
+	
+	convert(intItem, local);				//0
+	convert(intItem, local);				//0
+	convert(intItem, local);				//0
+	convert(intItem, remote);				//0
+	convert(intItem, remote);				//0
+	
+	convert(intItem, local, 5.1);				//0
+	convert(intItem, remote, -35.1);				//0
+	convert(intItem, local, "stringVardoodo");	//0
+	convert(intItem, remote, "doooodda");		//0
+	convert(intItem, remote, "");				//0
+	convert(intItem, local, "abc");				//0
+	convert(intItem, local, stringVar);			//0
+
+// checkCopy_CompareStrArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkDateValueArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkDisconnectArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkFindStrArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkFormatDateArgs:
+// 1 Argument 1 for formatDate() must be the system word currentDate, an item of type date or timeStamp, or a numeric or string expression. {7652, EGLMESSAGE_FORMAT_DATE_ARGUMENT1_WRONG_TYPE}
+// 1 Argument 1 for formatDate() must be the system word currentDate, an item of type date or timeStamp, or a numeric or string expression. {7652, EGLMESSAGE_FORMAT_DATE_ARGUMENT1_WRONG_TYPE}
+
+// checkFormatFunctionArgs:
+// 1 The {1} system function requires either {2} or {3} arguments. {5098, EGLMESSAGE_ROUTINE_MUST_HAVE_X_OR_Y_ARGS}
+
+// checkFormatTimeArgs:
+// 1 Argument 1 for formatTime() must be the system word currentTime, an item of type time, or a numeric or string expression. {7653, EGLMESSAGE_FORMAT_TIME_ARGUMENT1_WRONG_TYPE}
+// 1 Argument 1 for formatTime() must be the system word currentTime, an item of type time, or a numeric or string expression. {7653, EGLMESSAGE_FORMAT_TIME_ARGUMENT1_WRONG_TYPE}
+
+// checkFormatTimeStampArgs:
+// 1 Argument 1 for formatTimeStamp() must be the system word currentTimeStamp, an item of type timeStamp, or a string expression. {7654, EGLMESSAGE_FORMAT_TIMESTAMP_ARGUMENT1_WRONG_TYPE}
+// 1 Argument 1 for formatTimeStamp() must be the system word currentTimeStamp, an item of type timeStamp, or a string expression. {7654, EGLMESSAGE_FORMAT_TIMESTAMP_ARGUMENT1_WRONG_TYPE}
+
+// checkGetNextTokenArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkGetRequest_SessionAttrArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkInsertElementArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkIntegerExpressionArg:
+// 1 Argument {1} for {2} must be an integer expression. {7557, EGLMESSAGE_ARG_MUST_BE_INTEGER_EXPRESSION}
+// 1 Argument {1} for {2} must be an integer expression. {7557, EGLMESSAGE_ARG_MUST_BE_INTEGER_EXPRESSION}
+
+// checkIntegerItemLiteralArg:
+// 1 Argument {1} for {2} must be an integer data item, an integer constant or an integer literal. {5110, EGLMESSAGE_ARG_MUST_BE_INTEGER_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be an integer data item, an integer constant or an integer literal. {5110, EGLMESSAGE_ARG_MUST_BE_INTEGER_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be an integer data item, an integer constant or an integer literal. {5110, EGLMESSAGE_ARG_MUST_BE_INTEGER_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be an integer data item, an integer constant or an integer literal. {5110, EGLMESSAGE_ARG_MUST_BE_INTEGER_ITEM_CONSTANT_OR_LITERAL}
+
+// checkItemArg:
+// 1 Argument {1} for {2} must be either an item, an integer literal, a string literal, or a string literal concatenation. {5099, EGLMESSAGE_ARG_MUST_BE_ITEM}
+// 1 Argument {1} for {2} must be a data item or record. {5200, EGLMESSAGE_ARG_MUST_BE_ITEM_OR_RECORD}
+// 1 Argument {1} for {2} must be either an item, an integer literal, a string literal, or a string literal concatenation. {5099, EGLMESSAGE_ARG_MUST_BE_ITEM}
+// 1 Argument {1} for {2} must be a data item or record. {5200, EGLMESSAGE_ARG_MUST_BE_ITEM_OR_RECORD}
+
+// checkItemArg (1):
+// 1 Argument {1} for {2} must be either an item, an integer literal, a string literal, or a string literal concatenation. {5099, EGLMESSAGE_ARG_MUST_BE_ITEM}
+// 1 Argument {1} for {2} must be either an item, an integer literal, a string literal, or a string literal concatenation. {5099, EGLMESSAGE_ARG_MUST_BE_ITEM}
+
+// checkItemLiteralArg:
+// 1 Argument {1} for {2} must be a data item, a literal, or a constant. {5102, EGLMESSAGE_ARG_MUST_BE_ITEM_CONSTANT_OR_LITERAL}
+
+// checkItemStringLiteralArg:
+// 1 Argument {1} for {2} must be an item, string constant or a string literal. {5111, EGLMESSAGE_ARG_MUST_BE_ITEM_STRING_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be an item, string constant or a string literal. {5111, EGLMESSAGE_ARG_MUST_BE_ITEM_STRING_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be an item, string constant or a string literal. {5111, EGLMESSAGE_ARG_MUST_BE_ITEM_STRING_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be an item, string constant or a string literal. {5111, EGLMESSAGE_ARG_MUST_BE_ITEM_STRING_CONSTANT_OR_LITERAL}
+
+// checkJava2OrMoreArgs:
+// 1 The {1} system function requires at least {2} argument(s). {5105, EGLMESSAGE_ROUTINE_MUST_HAVE_ATLEAST_X_ARGS}
+// 1 Invalid argument {1}. Numeric expressions may not be used as arguments to java functions. {4293, EGLMESSAGE_JAVA_FUNCTION_NUMERIC_EXPRESSION_AS_ARG}
+
+// checkJava3OrMoreArgs:
+// 1 The {1} system function requires at least {2} argument(s). {5105, EGLMESSAGE_ROUTINE_MUST_HAVE_ATLEAST_X_ARGS}
+// 1 Invalid argument {1}. Numeric expressions may not be used as arguments to java functions. {4293, EGLMESSAGE_JAVA_FUNCTION_NUMERIC_EXPRESSION_AS_ARG}
+
+// checkJavaSetFieldArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkMathIntegerItemArg:
+// 1 Argument {1} for {2} must be a integer data item other than smallInt or bigInt. {7551, EGLMESSAGE_ARG_MUST_BE_MATH_INTEGER_ITEM}
+// 1 Argument {1} for {2} must be a integer data item other than smallInt or bigInt. {7551, EGLMESSAGE_ARG_MUST_BE_MATH_INTEGER_ITEM}
+// 1 Argument {1} for {2} must be a integer data item other than smallInt or bigInt. {7551, EGLMESSAGE_ARG_MUST_BE_MATH_INTEGER_ITEM}
+
+// checkMathNumericItemArg:
+// 1 Argument {1} for {2} must be a numeric data item. {7550, EGLMESSAGE_ARG_MUST_BE_MATH_NUMERIC_ITEM}
+// 1 Argument {1} for {2} must be a numeric data item. {7550, EGLMESSAGE_ARG_MUST_BE_MATH_NUMERIC_ITEM}
+// 1 Argument {1} for {2} must be a numeric data item. {7550, EGLMESSAGE_ARG_MUST_BE_MATH_NUMERIC_ITEM}
+// 1 Argument {1} for {2} must be a numeric data item. {7550, EGLMESSAGE_ARG_MUST_BE_MATH_NUMERIC_ITEM}
+
+// checkNoArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkNoSubscript:
+// 1 null {0, EGLMESSAGE_INVALID_USE_OF_SYSTEM_WORD_AS_FUNCTION_ARGUMENT}
+// 1 null {0, EGLMESSAGE_INVALID_USE_OF_SYSTEM_WORD_AS_FUNCTION_ARGUMENT}
+// 1 The name {0} has an invalid length of {1}. The maximum length is {2}. {3001, EGLMESSAGE_INVALID_NAME}
+// 1 {1} is not allowed to be subscripted. {5137, EGLMESSAGE_SHOULD_NOT_BE_SUBSCRIPTED}
+
+// checkNumericItemLiteralArg:
+// 1 Argument {1} for {2} must be a numeric data item, numeric constant or a numeric literal. {7552, EGLMESSAGE_ARG_MUST_BE_NUMERIC_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a numeric data item, numeric constant or a numeric literal. {7552, EGLMESSAGE_ARG_MUST_BE_NUMERIC_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a numeric data item, numeric constant or a numeric literal. {7552, EGLMESSAGE_ARG_MUST_BE_NUMERIC_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a numeric data item, numeric constant or a numeric literal. {7552, EGLMESSAGE_ARG_MUST_BE_NUMERIC_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a numeric data item, numeric constant or a numeric literal. {7552, EGLMESSAGE_ARG_MUST_BE_NUMERIC_ITEM_CONSTANT_OR_LITERAL}
+
+// checkNumericVariableAssignmentSource:
+// 1 The source of an assignment to {1} must be either an item, a constant, an integer literal, or a numeric expression. {5141, EGLMESSAGE_INVALID_NUM_SYSTEM_VARIABLE_ASSIGNMENT}
+// 1 The only values valid for {1} are 0, or 1. {5139, EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_OR_1}
+// 1 The only values valid for {1} are 0, or 1. {5139, EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_OR_1}
+// 1 The only values valid for {1} are 0, 1, or 2. {5140, EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_1_OR_2}
+// 1 The only values valid for {1} are 0, 1, or 2. {5140, EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_1_OR_2}
+// 1 The source of an assignment or move to returnCode must be between 0 and 512. {5144, EGLMESSAGE_INVALID_RETURN_CODE_ASSIGN_VALUE}
+// 1 The source of an assignment or move to returnCode must be between 0 and 512. {5144, EGLMESSAGE_INVALID_RETURN_CODE_ASSIGN_VALUE}
+// 1 The assignment operand for an assignment to arrayIndex must be between 0 and 65535. {5148, EGLMESSAGE_INVALID_ARRAY_INDEX_ASSIGN_VALUE}
+// 1 The assignment operand for an assignment to arrayIndex must be between 0 and 65535. {5148, EGLMESSAGE_INVALID_ARRAY_INDEX_ASSIGN_VALUE}
+// 1 The assignment operand for an assignment to validationMsgNum must be between -9999 and 9999. {5149, EGLMESSAGE_INVALID_VALIDATIONMSGNUM_ASSIGN_VALUE}
+// 1 The assignment operand for an assignment to validationMsgNum must be between -9999 and 9999. {5149, EGLMESSAGE_INVALID_VALIDATIONMSGNUM_ASSIGN_VALUE}
+
+	sysvar.returnCode = 0;		//0
+	sysvar.returnCode = 512;	//0
+	sysvar.returnCode = 513;	//0
+	sysvar.returnCode = -1;		//0
+
+// checkNumericVariableMoveSource:
+// 1 The source of a move to the {1} system variable must be either a data item or a numeric literal. {5185, EGLMESSAGE_INVALID_MOVE_TO_NUM_SYSTEM_VARIABLE}
+
+// checkNumericVariables_NewValue:
+// 1 The only values valid for {1} are 0, or 1. {5139, EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_OR_1}
+// 1 The only values valid for {1} are 0, or 1. {5139, EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_OR_1}
+// 1 The only values valid for {1} are 0, 1, or 2. {5140, EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_1_OR_2}
+// 1 The only values valid for {1} are 0, 1, or 2. {5140, EGLMESSAGE_INVALID_SYSTEM_VARIABLE_VALUE_0_1_OR_2}
+// 1 The source of an assignment or move to returnCode must be between 0 and 512. {5144, EGLMESSAGE_INVALID_RETURN_CODE_ASSIGN_VALUE}
+// 1 The source of an assignment or move to returnCode must be between 0 and 512. {5144, EGLMESSAGE_INVALID_RETURN_CODE_ASSIGN_VALUE}
+// 1 The assignment operand for an assignment to arrayIndex must be between 0 and 65535. {5148, EGLMESSAGE_INVALID_ARRAY_INDEX_ASSIGN_VALUE}
+// 1 The assignment operand for an assignment to arrayIndex must be between 0 and 65535. {5148, EGLMESSAGE_INVALID_ARRAY_INDEX_ASSIGN_VALUE}
+// 1 The assignment operand for an assignment to validationMsgNum must be between -9999 and 9999. {5149, EGLMESSAGE_INVALID_VALIDATIONMSGNUM_ASSIGN_VALUE}
+// 1 The assignment operand for an assignment to validationMsgNum must be between -9999 and 9999. {5149, EGLMESSAGE_INVALID_VALIDATIONMSGNUM_ASSIGN_VALUE}
+
+// checkOneIntegerExpressionArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneIntegerItemLiteralArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneItemArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneItemLiteralArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneMathNumericItemAndOneIntegerItemLiteralArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneMathNumericItemArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneNumericExpressionAndOneStringItemLiteralArg:
+// 1 The {1} system function requires either {2} or {3} arguments. {5098, EGLMESSAGE_ROUTINE_MUST_HAVE_X_OR_Y_ARGS}
+// 1 Argument {1} for {2} must be a numeric expression. {7555, EGLMESSAGE_ARG_MUST_BE_NUMERIC_EXPRESSION}
+
+// checkOneNumericItemLiteralArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneStringExpressionArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneStringItemAndOneItemLiteralArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneStringItemArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneStringItemLiteralArg:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkOneTimeStampAndOnePatternArgs:
+// 1 The {1} system function requires either {2} or {3} arguments. {5098, EGLMESSAGE_ROUTINE_MUST_HAVE_X_OR_Y_ARGS}
+
+// checkPurgeArgs:
+// 1 purge must have one and only one argument. {5130, EGLMESSAGE_INVALID_NUM_ARGS_FOR_PURGE}
+// 1 The argument for purge is invalid.  It cannot be a numeric literal or a string literal longer than 8 characters. {5131, EGLMESSAGE_INVALID_ARG_FOR_PURGE}
+// 1 The argument for purge is invalid.  It cannot be a numeric literal or a string literal longer than 8 characters. {5131, EGLMESSAGE_INVALID_ARG_FOR_PURGE}
+// 1 The argument for purge is invalid.  It cannot be a numeric literal or a string literal longer than 8 characters. {5131, EGLMESSAGE_INVALID_ARG_FOR_PURGE}
+
+	syslib.purge();				//1
+	syslib.purge(char8, char8);	//1
+	syslib.purge(char8);		//0
+	syslib.purge(1);			//1
+	syslib.purge("doodadoodo");	//1
+	syslib.purge("");			//0
+	syslib.purge("dooda");		//0
+	syslib.purge("doodaklo");	//0
+
+// checkRoundArgs:
+// 1 The {1} system function requires either {2} or {3} arguments. {5098, EGLMESSAGE_ROUTINE_MUST_HAVE_X_OR_Y_ARGS}
+// 1 Argument 1 for round must be either an item or a numeric expression. {5107, EGLMESSAGE_INVALID_ROUND_ARG_1}
+
+// checkSetErrorArgs:
+// 1 {1} must have at least {2} argument(s). {5133, EGLMESSAGE_INVALID_NUM_ARGS_FOR_SET_ERROR_OR_LOCALE}
+// 1 Argument {1} for {2} must be either an item, an integer literal, a string literal, or a string literal concatenation. {5099, EGLMESSAGE_ARG_MUST_BE_ITEM}
+// 1 Argument {1} for {2} must be either an item, an integer literal, a string literal, or a string literal concatenation. {5099, EGLMESSAGE_ARG_MUST_BE_ITEM_INTEGER_OR_STRING}
+
+// checkSetLocaleArgs:
+// 1 {1} must have at least {2} argument(s). {5133, EGLMESSAGE_INVALID_NUM_ARGS_FOR_SET_ERROR_OR_LOCALE}
+// 1 String literals for Arguments 1 and 2 of setLocale must consist of 2 characters. {5134, EGLMESSAGE_INVALID_LITERAL_ARG1_2_LENGTH_FOR_SETLOCALE}
+// 1 String literals for Arguments 1 and 2 of setLocale must consist of 2 characters. {5134, EGLMESSAGE_INVALID_LITERAL_ARG1_2_LENGTH_FOR_SETLOCALE}
+
+// checkSetSubStrArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkStartTransactionArgs:
+// 1 StartTransaction must have either 1, 2, or 3 item arguments. {5136, EGLMESSAGE_INVALID_NUM_ARGS_FOR_STARTTRANS}
+// 1 Argument {1} for {2} must be either an item, an integer literal, a string literal, or a string literal concatenation. {5099, EGLMESSAGE_ARG_MUST_BE_ITEM}
+
+// checkStringExpressionArg:
+// 1 Argument {1} for {2} must be a string expression. {7556, EGLMESSAGE_ARG_MUST_BE_STRING_EXPRESSION}
+// 1 Argument {1} for {2} must be a string expression. {7556, EGLMESSAGE_ARG_MUST_BE_STRING_EXPRESSION}
+// 1 Argument {1} for {2} must be a string expression. {7556, EGLMESSAGE_ARG_MUST_BE_STRING_EXPRESSION}
+// 1 Argument {1} for {2} must be a string expression. {7556, EGLMESSAGE_ARG_MUST_BE_STRING_EXPRESSION}
+
+// checkStringItemArg:
+// 1 Argument {1} for {2} must be a character item. {5104, EGLMESSAGE_ARG_MUST_BE_CHAR_ITEM}
+// 1 Argument {1} for {2} must be a character item. {5104, EGLMESSAGE_ARG_MUST_BE_CHAR_ITEM}
+// 1 Argument {1} for {2} must be a character item. {5104, EGLMESSAGE_ARG_MUST_BE_CHAR_ITEM}
+// 1 Argument {1} for {2} must be a character item. {5104, EGLMESSAGE_ARG_MUST_BE_CHAR_ITEM}
+
+// checkStringItemLiteralArg:
+// 1 Argument {1} for {2} must be a string item, string constant or a string literal. {7553, EGLMESSAGE_ARG_MUST_BE_STRING_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string item, string constant or a string literal. {7553, EGLMESSAGE_ARG_MUST_BE_STRING_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string item, string constant or a string literal. {7553, EGLMESSAGE_ARG_MUST_BE_STRING_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string item, string constant or a string literal. {7553, EGLMESSAGE_ARG_MUST_BE_STRING_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string item, string constant or a string literal. {7553, EGLMESSAGE_ARG_MUST_BE_STRING_ITEM_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string item, string constant or a string literal. {7553, EGLMESSAGE_ARG_MUST_BE_STRING_ITEM_CONSTANT_OR_LITERAL}
+
+// checkStringLiteralArg:
+// 1 Argument {1} for {2} must be a string constant or a string literal. {7554, EGLMESSAGE_ARG_MUST_BE_STRING_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string constant or a string literal. {7554, EGLMESSAGE_ARG_MUST_BE_STRING_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string constant or a string literal. {7554, EGLMESSAGE_ARG_MUST_BE_STRING_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string constant or a string literal. {7554, EGLMESSAGE_ARG_MUST_BE_STRING_CONSTANT_OR_LITERAL}
+// 1 Argument {1} for {2} must be a string constant or a string literal. {7554, EGLMESSAGE_ARG_MUST_BE_STRING_CONSTANT_OR_LITERAL}
+
+// checkStringVariables_NewValue:
+// 1 The source of an assignment or move to mqConditionCode must be either 0, 1, or 2. {5145, EGLMESSAGE_INVALID_MQCONDITIONCODE_ASSIGN}
+// 1 The source of an assignment or move to mqConditionCode must be either 0, 1, or 2. {5145, EGLMESSAGE_INVALID_MQCONDITIONCODE_ASSIGN}
+// 1 The source of an assignment or move to mqConditionCode must be either 0, 1, or 2. {5145, EGLMESSAGE_INVALID_MQCONDITIONCODE_ASSIGN}
+// 1 The source of an assignment or move to mqConditionCode must be either 0, 1, or 2. {5145, EGLMESSAGE_INVALID_MQCONDITIONCODE_ASSIGN}
+// 1 The source of an assignment or move to mqConditionCode must be either 0, 1, or 2. {5145, EGLMESSAGE_INVALID_MQCONDITIONCODE_ASSIGN}
+
+// checkSubscript:
+// 1 {1} must be subscripted, unless VAGCompatibility mode is set. {5146, EGLMESSAGE_SUBSCRITPT_REQUIRED}
+// 1 The subscript for {1} must be between {2} and {3}. {5147, EGLMESSAGE_INVALID_DATA_WORD_SUBSCRIPT_VALUE}
+// 1 The subscript for {1} must be between {2} and {3}. {5147, EGLMESSAGE_INVALID_DATA_WORD_SUBSCRIPT_VALUE}
+// 1 The subscript for {1} must be between {2} and {3}. {5147, EGLMESSAGE_INVALID_DATA_WORD_SUBSCRIPT_VALUE}
+// 1 Invalid subscript {0}.  All subscripts must be integer data items or integer literals. {3007, EGLMESSAGE_INVALID_SUBSCRIPT}
+
+// checkThreeStringItemArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkTimeValueArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkTwoMathNumericItemArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkTwoOrMoreEvenArg:
+// 1 The {1} system function requires at least {2} argument(s). {5105, EGLMESSAGE_ROUTINE_MUST_HAVE_ATLEAST_X_ARGS}
+// 1 The {1} system function requires even number of argument(s). {5254, EGLMESSAGE_ROUTINE_MUST_HAVE_EVEN_NUM_OF_ARGS}
+
+// checkTwoStringItemArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkTwoStringItemLiteralArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+
+// checkValidationFailedArg:
+// 1 The {1} system function requires either {2} or {3} arguments. {5098, EGLMESSAGE_ROUTINE_MUST_HAVE_X_OR_Y_ARGS}
+
+// checkVerify_CalculateChkDigitArgs:
+// 1 The {1} system function requires exactly {2} argument(s). {5109, EGLMESSAGE_ROUTINE_MUST_HAVE_X_ARGS}
+// 1 Argument {1} for {2} must be a binary data item consisting of less than {3} digits. {5153, EGLMESSAGE_ARG_MUST_BE_BIN_ITEM_LESS_THAN_5_DIGITS}
+
+// validate:
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+
+// validateConverseVarSystemWord:
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 {1} is invalid unless in VAGCompatibility mode. To use this system function/variable, switch to VAGCompatibility mode. {5132, EGLMESSAGE_NOT_VAGCOMP_FOR_SYSTEM_WORD}
+
+// validateDictionarySystemWord:
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+
+// validateSpecialCaseSystemWord:
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+
+// validateSystemName:
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION_NO_FUNCTION}
+// 1 {0} is not a member of the {1} system library. {5100, EGLMESSAGE_WORD_NOT_IN_LIBRARY}
+
+// validateSystemVariable:
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+
+// validateUnqualifiedSystemFunction:
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+
+// validateVGLibSystemWord:
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 {1} is invalid unless in VAGCompatibility mode. Either switch to VAGCompatibility mode or use the connect function instead. {5123, EGLMESSAGE_NOT_VAGCOMP_FOR_CONNECTION_SERVICES}
+// 1 {1} is invalid unless in VAGCompatibility mode. To use this system function/variable, switch to VAGCompatibility mode. {5132, EGLMESSAGE_NOT_VAGCOMP_FOR_SYSTEM_WORD}
+
+// validateVGVarSystemWord:
+// 1 It is invalid to use the {0} system word in this statement location. {5097, EGLMESSAGE_INVALID_USAGE_LOCATION}
+// 1 {1} is invalid unless in VAGCompatibility mode. To use this system function/variable, switch to VAGCompatibility mode. {5132, EGLMESSAGE_NOT_VAGCOMP_FOR_SYSTEM_WORD}
+
+	end
+end
+
+/*
+ * Function WriteStdout( text String in );
+ * Function WriteStderr( text String in );
+ */
+Program writeStdOutInPgm
+	function main()
+		str String;
+		ch char(4);
+		
+		writeStdout( "text" );		//0
+		writeStderr( "text" );		//0
+		writeStdout( str );			//0
+		writeStderr( str );			//0
+		writeStdout( ch );			//0
+		writeStderr( ch );			//0
+		writeStdout( str + ch );	//0	
+		writeStderr( str + "a" );	//0
+		
+		writeStdout( str, ch );		//1	exactly 1
+		writeStderr( str, ch );		//1 exactly 1
+		writeStdout( 5 );			//0
+		writeStderr( 5+1 );			//0
+		
+		sysLib.writeStdout( "text" );		//0
+		sysLib.writeStderr( "text" );		//0
+		sysLib.writeStdout( str );			//0
+		sysLib.writeStderr( str );			//0
+		sysLib.writeStdout( ch );			//0
+		sysLib.writeStderr( ch );			//0
+		sysLib.writeStdout( str + ch );	//0	
+		sysLib.writeStderr( str + "a" );	//0
+		
+		sysLib.writeStdout( str, ch );		//1	exactly 1
+		sysLib.writeStderr( str, ch );		//1 exactly 1
+		sysLib.writeStdout( 5 );			//0
+		sysLib.writeStderr( 5+1 );			//0
+	end
+end

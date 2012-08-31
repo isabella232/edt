@@ -1,0 +1,189 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+Program arrays_valid {allowUnqualifiedItemReferences = yes}
+
+	pgmAry1 int[][];
+	pgmAry2 int[2][4];
+	fixeddimarray int[3];
+	recdarray myrec[];
+	
+	x any;	
+	a1 int[] = [];
+	a2 int[] = [x.sksjs];
+
+	function main()
+	
+		// Don't trip over multiple levels of occurs on a single declaration
+		ary1 int[][];
+		ary2 int[][];
+		ary3 int[3][4];
+		ary5 int[][][];
+		notAnarray int;
+
+		arrayOfRec Rec[5];
+//		refToRec ref Rec = new Rec;
+//		refToArrayOfRec ref Rec[] = new Rec[5];
+		// the variable is not a reference so new is not appropriate:
+//		arrayOfRefsToRec ref[5] Rec; 
+//		arrayOfRefsToArrayOfRec ref[5] Rec[];
+//		refToArrayOfRefsToRec ref ref[] Rec = new ref[5]Rec;
+		// Array of 5 elements each containing 10 references to Rec:
+//		tableOfRefsToRec ref[5][10]Rec; 
+		
+		if (notAnArray in pgmary2[2])
+		end
+		if (notAnArray in pgmary2[2] from 1)
+		end
+		ary1 = ary2;
+		
+		// some more valid declarations
+//		xxx ref ref[] int[];
+//		yyy ref[] int[];
+//		xx ref int[];
+//		b ref[] int[];
+
+		// make sure multiply occurring items can still be subscripted anywhere
+		// these two have to be valid because you used to be able to say
+		//  recdarray.item2[1,1,2] = "ab";
+		recdarray[1].item2[1,2] = "abc";
+		recdarray[1].item2[1][2] = "ab";
+		recdarray[1].item1[1].item2[2] = "ab";
+		
+				
+		// don't trip over resolution to things that have multiple levels of occurs
+		ary1[1][2] = 1;
+		ary2[2][1] = ary5[1][2][3];		
+		
+		// handle new way to declare constants
+		const constAry1 int[] = [1, 2, 3];
+		const constAry2 String[][] = [["one", "fish"], ["two", "fish"]];	
+		
+		// allow dynamic array functions on what used to be a fixed array
+		fixeddimarray.appendelement(1);
+		fixeddimarray.appendall(ary1[1]);
+		fixeddimarray.insertelement(5,0);
+		fixeddimarray.removeelement(5);
+		fixeddimarray.removeall();
+		fixeddimarray.resize(4);
+		fixeddimarray.setmaxsize(6);
+		myint1 int = fixeddimarray.getsize();
+		myint1 = fixeddimarray.getmaxsize();
+		
+		maxSizes int[] = [3, 2, 4];
+		ary5.setmaxsizes(maxSizes);
+
+		// don't trip over literal array as source of move statement.
+		ary6 int[];
+		move [1, 2, 3] to ary6;
+		move ary2 to ary3;
+		
+		// don't trip over literal array initializers or source of assignment/move
+		ary7 int[] = [1, 2, 3];
+		ary7 = [4, 5, 6];
+		ary1 = [[1, 2], [3, 4], [5, 6]];
+		ary2 = ary3;
+		
+		// allow arrays to be passed to arrays				
+		func1( ary7, ary1 );
+		// allow array element to be passed to a simple item
+		func2(ary3[3][2]);
+		
+		// fun from spec:
+		vertices2 int[3][2];
+		vertices2 = [ [1,2], [3,4], [5,6] ];		
+		ints int[];
+		ints = vertices2[3];
+		y int;
+		y = vertices2[3][2];
+		
+		myany any[];
+		myint int = 5;
+		myany[1] = myint;
+		myany.removeAll();
+		
+		intArray int[2] ;
+		anInt int ;
+		intArray.appendElement( anInt ) ;
+		
+//		flexRecArray ref RefFlexRecord[] ;
+//		flexRecArray = new RefFlexRecord[] ;
+//		flexRecArray.removeAll();
+
+		call eglpgm (recdarray);
+		
+		MydecASpec decimal(9,2)[2];	
+		MydecASpec.resize(3);
+		MydecASpec[3] = 1234.56;
+		
+		ints2 int [2][2];
+		i int = ints2[1].GetSize();
+		
+		strings string[][];
+		sizes int[2];
+		strings.resizeAll(sizes);
+	end
+
+	// allow function parms to be defined as arrays	
+	function func1( p1 int[], p2 int[][] ) end
+	
+	// allow function parms  to accept array element	
+	function func2( p1 int ) end
+end
+
+program eglpgm (parmarray myrec[])
+	function main()
+	end
+end
+Record RefFlexRecord
+	someitem int;
+end
+
+record rec1 type basicrecord
+	10 item1 char(4);
+end
+
+record rec type basicrecord
+	item1 char(4);
+end
+record myrec type basicrecord
+	10 item1  [3];
+		15 item2 char(3) [2];
+end
+
+program new_on_fixed_records type basicProgram { 
+	alias = "V61ARRAY_new_on_fixed_records", 
+	includeReferencedFunctions = yes 
+	}
+	function main()
+	end
+	
+	function new_on_fixed_recordsMain ()
+		rec Fixed;
+		rec.points.x[1] = 5;
+		rec.points[1].x = 5;
+		
+		if (rec.points.x[1] == rec.points[1].x)
+		else
+		end
+	end
+end
+
+Record Fixed
+	10 points Point[5];
+end
+
+Record Point
+	10 x int;
+	10 y int;
+end

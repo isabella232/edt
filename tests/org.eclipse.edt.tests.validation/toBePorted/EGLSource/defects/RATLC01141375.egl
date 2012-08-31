@@ -1,0 +1,84 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record testRec type SQLRecord  
+	{tableNames = [["testSQL"]]}
+	
+	col1 int;
+	col2 int;
+	
+end
+
+record testRec2 type SQLRecord  
+	{tableNames = [["testSQL"]], keyItems = [col1]}
+	
+	col1 int;
+	col2 int;
+	
+end
+
+program testDataUpdate type BasicProgram {}
+	
+
+	function main()
+		
+		connect("jdbc:informix-sqli:IBM-NJQPHPW2CQC.lenexa.ibm.com:1526/stores_demo:INFORMIXSERVER=IDSvince;", "informix", "inf0rmix", explicit, readUnCommitted, autoCommit);
+		idx int;
+		
+		try
+			execute #sql{ drop table testSQL };
+		end	
+
+		try
+			execute #sql{
+				CREATE TABLE testSQL (col1 serial, col2 int)
+   			};
+		onException (exception SQLException)
+			SysLib.writeStdout("create error: " + exception.message);
+		end	
+   			
+   		
+   		for (idx from 1 to 5 by 1)
+   			try
+		   		execute #sql{
+		   			insert into testSQL (col2) values (:idx)
+		   		};		
+			onException (exception SQLException)
+				SysLib.writeStdout("insert error: " + exception.message);
+			end	
+	   	end
+	   	
+	   	testRec testRec;
+	   	testRec.col1 = 2;
+	   	get testRec;
+	   	
+	   	testRec.col2 = 3;
+	   	
+	   	UpdateTestRec (testRec);
+	end
+	
+	Function UpdateTestRec(updateRecord testRec)
+		try
+				replace updateRecord noCursor;				//1		
+				delete updateRecord noCursor;				//1		
+				
+				replace updateRecord with #sql{update ITSO.CUSTOMER set fred} noCursor;				//0	
+				delete updateRecord noCursor with #sql{delete ITSO.CUSTOMER};				//0	
+				
+			   	testRec2 testRec2;
+			   	replace testRec2 noCursor;				//0
+				delete testRec2 noCursor;				//0		
+		onException (exception SQLException)
+			SysLib.writeStdout("update error" + exception.message);
+		end	
+	end		
+end

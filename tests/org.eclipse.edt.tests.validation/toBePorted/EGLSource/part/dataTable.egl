@@ -1,0 +1,605 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+// checkContentsForLiterals:
+DataTable checkContentsForLiterals1
+{
+	contents = [[1+2, 1]]		//1 Invalid expression. Must be either an item, a string literal, or a string literal concatenation.
+}
+	a int;
+	b int;
+end
+
+DataTable checkContentsForLiterals2
+{
+	contents = [[abs(1), 1]]	//1 The content abs() in DataTable checkContentsForLiterals2 must be a string or numeric literal. {5026, DATATABLE_CONTENT_MUST_BE_LITERAL}
+}
+	a int;
+	b int;
+end
+
+DataTable checkContentsForLiterals3
+{
+	contents = [[[1], 1]]		//1 The content [1] in DataTable checkContentsForLiterals3 must be a string or numeric literal.
+}
+	a int;
+	b int;
+end
+
+DataTable checkContentsForLiterals5
+{
+	contents = [[1, 1]]			//0
+}
+	a int;
+	b int;
+end
+
+DataTable checkContentsForLiterals6
+{
+	contents = [["a", 1]]		//0
+}
+	a char(1);
+	b int;
+end
+
+DataTable checkContentsForLiterals7
+{
+	contents = [["A"+"B", 1]]	//0
+}
+	a char(2);
+	b int;
+end
+
+// validatebigIntPrimitives:
+DataTable validatebigIntPrimitives
+{
+	contents=[[
+		123456789012345678,		//0
+		"1234567890123456789",	//1 The content 1234567890123456789 specified in DataTable validatebigIntPrimitives and defined as type bigInt has a defined length of 18 but a length of 19 was found.
+		"10",					//0
+		"-123456789012345678",	//0
+		"1.22",					//0
+		"1.2A",					//1 The content 1.2A specified in DataTable validatebigIntPrimitives and defined as type bigInt must contain only digits. "A" found. {5020, DATATABLE_CONTENT_HAS_INVALID_DIGITS}
+		"1.2.1",				//1 The content 1.2.1 in DataTable validatebigIntPrimitives is not a valid integer literal. More than one decimal points were found. {5027, DATATABLE_CONTENT_TOO_MANY_DECIMALS}
+		[1]						//1 The content [1] in DataTable validatebigIntPrimitives must be a string or numeric literal.
+	],
+	[
+		"123456789012345678",	//0
+		"1234567890123456789",	//1 The content 1234567890123456789 specified in DataTable validatebigIntPrimitives and defined as type bigInt has a defined length of 18 but a length of 19 was found.
+		10,						//0
+		"-123456789012345678",	//0
+		1.22,					//0
+		".2",					//0
+		".2.1.",				//1 The content .2.1. in DataTable validatebigIntPrimitives is not a valid integer literal. More than one decimal points were found. {5027, DATATABLE_CONTENT_TOO_MANY_DECIMALS}
+		"[1]"					//1 The content [1] specified in DataTable validatebigIntPrimitives and defined as type bigInt must contain only digits. "[" found. {5020, DATATABLE_CONTENT_HAS_INVALID_DIGITS}	
+	]]
+}
+	a bigInt;
+	b bigInt;
+	c bigInt;
+	d bigInt;
+	e bigInt;
+	f bigInt;
+	g bigInt;
+	h bigInt;
+end
+
+// validateIntPrimitives:
+DataTable validateIntPrimitives
+{
+	contents=[[
+		123456789,				//0
+		1234567890,				//1 The content 1234567890 specified in DataTable validateIntPrimitives and defined as type int has a defined length of 9 but a length of 10 was found.
+		"10",					//0
+		"-123456789",			//0
+		"1.22",					//0
+		"1.2A",					//1 The content 1.2A specified in DataTable validateIntPrimitives and defined as type int must contain only digits. "A" found. {5020, DATATABLE_CONTENT_HAS_INVALID_DIGITS}
+		"1.2.1",				//1 The content 1.2.1 in DataTable validateIntPrimitives is not a valid integer literal. More than one decimal points were found. {5027, DATATABLE_CONTENT_TOO_MANY_DECIMALS}
+		[1]						//1 The content [1] in DataTable validateIntPrimitives must be a string or numeric literal.
+	],
+	[
+		"123456789",			//0
+		"1234567890",			//1 The content 1234567890 specified in DataTable validateIntPrimitives and defined as type int has a defined length of 9 but a length of 10 was found.
+		10,						//0
+		-123456789,				//0
+		1.22,					//0
+		".2",					//0
+		".2.1.",				//1 The content .2.1. in DataTable validateIntPrimitives is not a valid integer literal. More than one decimal points were found. {5027, DATATABLE_CONTENT_TOO_MANY_DECIMALS}
+		"[1]"					//1 The content [1] specified in DataTable validateIntPrimitives and defined as type int must contain only digits. "[" found. {5020, DATATABLE_CONTENT_HAS_INVALID_DIGITS}	
+	]]
+}
+	a int;
+	b int;
+	c int;
+	d int;
+	e int;
+	f int;
+	g int;
+	h int;
+end
+
+// validatesmallIntPrimitives:
+DataTable validatesmallIntPrimitives
+{
+	contents=[[
+		1234,				//0
+		12345,				//1 The content 12345 specified in DataTable validatesmallIntPrimitives and defined as type smallInt has a defined length of 4 but a length of 5 was found.
+		"10",				//0
+		"-1234",			//0
+		"1.22",				//0
+		"1.2A",				//1 The content 1.2A specified in DataTable validatesmallIntPrimitives and defined as type smallInt must contain only digits. "A" found. {5020, DATATABLE_CONTENT_HAS_INVALID_DIGITS}
+		"1.2.",				//1 The content 1.2. in DataTable validatesmallIntPrimitives is not a valid integer literal. More than one decimal points were found. {5027, DATATABLE_CONTENT_TOO_MANY_DECIMALS}
+		[1]					//1 The content [1] in DataTable validatesmallIntPrimitives must be a string or numeric literal.
+	],
+	[
+		"1234",				//0
+		"12345",			//1 The content 12345 specified in DataTable validatesmallIntPrimitives and defined as type smallInt has a defined length of 4 but a length of 5 was found.
+		10,					//0
+		-12345,				//1 The content -12345 specified in DataTable validatesmallIntPrimitives and defined as type smallInt has a defined length of 4 but a length of 5 was found.
+		1.22,				//0
+		".2",				//0
+		".2.1.",			//1 The content .2.1. in DataTable validatesmallIntPrimitives is not a valid integer literal. More than one decimal points were found. {5027, DATATABLE_CONTENT_TOO_MANY_DECIMALS}
+		"[1]"				//1 The content [1] specified in DataTable validatesmallIntPrimitives and defined as type smallInt must contain only digits. "[" found. {5020, DATATABLE_CONTENT_HAS_INVALID_DIGITS}	
+	],
+	[
+		1234.1,				//0
+		1234.0,				//0
+		123.11,				//0
+		12345.1,			//1 The content 12345.1 specified in DataTable validatesmallIntPrimitives and defined as type smallInt has a defined length of 4 but a length of 5 was found.
+		12345.0,			//1 The content 12345.0 specified in DataTable validatesmallIntPrimitives and defined as type smallInt has a defined length of 4 but a length of 5 was found.
+		"",					//0
+		"1234.1",			//0
+		"12345.1"			//1 The content 12345.1 specified in DataTable validatesmallIntPrimitives and defined as type smallInt has a defined length of 4 but a length of 5 was found.
+	]]
+}
+	a smallInt;
+	b smallInt;
+	c smallInt;
+	d smallInt;
+	e smallInt;
+	f smallInt;
+	g smallInt;
+	h smallInt;
+end
+
+// validateBinPrimitives:
+DataTable validateBinPrimitives
+{
+	contents=[[
+		1234,				//0
+		"12345a",			//1 The content 12345a specified in DataTable validateBinPrimitives and defined as type bin must contain only digits. "a" found. 
+		"1234567890.12",	//1 The content 1234567890.12 specified in DataTable validateBinPrimitives and defined as type bin has a defined length of 9 but a length of 12 was found.
+		"123456789.12"		//1 The content 123456789.12 specified in DataTable validateBinPrimitives and defined as type bin has a defined length of 9 but a length of 11 was found.
+	],
+	[
+		123456789,			//0
+		1234567.89,			//0
+		"",					//0
+		12345678.9			//0	
+	]]
+}
+	a bin(9,2);
+	b bin(9,2);
+	c bin(9,2);
+	d bin(9,2);
+end
+
+// validateDecimalLength:
+DataTable validateDecimalLength
+{
+	contents=[[
+		1234.56,				//0
+		"1234.560000000000000",	//0
+		"1234.567",				//1 The content 1234.567 in DataTable validateDecimalLength has an invalid decimal length of 3. {5025, DATATABLE_CONTENT_DECIMALS_TOO_LONG}
+		"-12342.567",			//0
+		-1234.123400000000001	//1 The content -1234.123400000000001 in DataTable validateDecimalLength has an invalid decimal length of 15. {5025, DATATABLE_CONTENT_DECIMALS_TOO_LONG}
+	]]
+}
+	a bin(9,2);
+	b bin(9,2);
+	c bin(9,2);
+	d bin(9,4);
+	e decimal(10,4);
+end
+
+// validateDecimalRange:
+DataTable validateDecimalRange			//0
+{
+	contents=[[
+		.00000000000000000000000000000000000000000,	//0
+		.00000000000000000000000000000000000000000,	//0
+		.00000000000000000000000000000000000000000,	//0
+		.00000000000000000000000000000000000000000	//0
+	],
+	[
+		.00000000000000000000000000000001,			//0
+		.00000000000000000000000000000001,			//0
+		.00000000000000000000000000000001,			//0
+		.00000000000000000000000000000001			//0
+	],
+	[
+		.000000000000000000000000000000001,		//1 The content .000000000000000000000000000000001 in DataTable validateDecimalRange has decimals of length 33 which exceeds the maximum length 32. {5024, DATATABLE_CONTENT_DECIMALS_EXCEED_MAX_LENGTH}
+		.000000000000000000000000000000001,		//1 The content .000000000000000000000000000000001 in DataTable validateDecimalRange has decimals of length 33 which exceeds the maximum length 32. {5024, DATATABLE_CONTENT_DECIMALS_EXCEED_MAX_LENGTH}
+		.000000000000000000000000000000001,		//1 The content .000000000000000000000000000000001 in DataTable validateDecimalRange has decimals of length 33 which exceeds the maximum length 32. {5024, DATATABLE_CONTENT_DECIMALS_EXCEED_MAX_LENGTH}
+		.000000000000000000000000000000001		//1 The content .000000000000000000000000000000001 in DataTable validateDecimalRange has decimals of length 33 which exceeds the maximum length 32. {5024, DATATABLE_CONTENT_DECIMALS_EXCEED_MAX_LENGTH}
+	]]
+}
+	a num(40,40);
+	b numc(40,40);
+	c pacf(40,40);
+	d decimal(40,40);
+end
+
+// validateCharPrimitives:
+// validateUnicodePrimitives:
+DataTable validateCharAndUnicodePrimitives
+{
+	contents = [[
+		"a",	//0
+		"a"		//0
+	],
+	[
+		"aaaa",		//0
+		"aaaabb"	//1 The content aaaabb specified in DataTable validateCharAndUnicodePrimitives and defined as type unicode has a defined length of 5 but a length of 6 was found.
+	],
+	[
+		5,			//0
+		555.55		//1 The content 555.55 specified in DataTable validateCharAndUnicodePrimitives and defined as type unicode has a defined length of 5 but a length of 6 was found.
+	],
+	[
+		"aaaab",	//1 The content aaaab specified in DataTable validateCharAndUnicodePrimitives and defined as type char has a defined length of 4 but a length of 5 was found.
+		"aaaab"		//0
+	],
+	[
+		"aa"+"bbb",	//1 The content aabbb specified in DataTable validateCharAndUnicodePrimitives and defined as type char has a defined length of 4 but a length of 5 was found.
+		"aa"+"bbb"	//0
+	],
+	[
+		"a"+"b"+"c",	//0
+		"a"+"b"+"cccc"	//1 The content abcccc specified in DataTable validateCharAndUnicodePrimitives and defined as type unicode has a defined length of 5 but a length of 6 was found.
+	],
+	[
+		"",""			//0
+	]]
+}
+	a char(4);
+	b unicode(5);
+end
+
+// validatedbCharPrimitives:
+DataTable validatedbCharPrimitives
+{
+	contents = [[
+		"a",	//0
+		"a"		//0
+	],
+	[
+		"aaaa",		//0
+		"aaaabb"	//1 The content aaaabb specified in DataTable validatedbCharPrimitives and defined as type dbChar has a defined length of 5 but a length of 6 was found.
+	],
+	[
+		d"5",		//0
+		55.55		//1
+	],
+	[
+		"aaaab",	//1 The content aaaab specified in DataTable validatedbCharPrimitives and defined as type dbChar has a defined length of 4 but a length of 5 was found.
+		"aaaab"		//0
+	],
+	[
+		"",""		//0
+	]]
+	
+}
+	a dbChar(4);
+	b dbChar(5);
+end
+// 1 The content {0} specified in DataTable {1} could not be verified for the current locale. {5019, DATATABLE_CONTENT_HAS_INVALID_CHARACTERS}
+DataTable validatedbCharPrimitives2
+{
+	contents = [[
+		"a",	//0
+		"a"		//0
+	],
+	[
+		"aaaa",		//0
+		"bbbb"		//0
+	]]
+}
+	5 a dbChar(4);
+		10 a1 dbChar(2);
+		10 a2 dbChar(2);
+	5 b dbChar(5);
+end
+
+DataTable validatedbCharPrimitives3
+{
+	contents = [[
+		"a",	//0
+		"a"		//0
+	],
+	[
+		"aaaa",		//0
+		"bbbb"		//0
+	]]
+}
+	5 embed validatedbCharPrimitives3a;	//0
+end
+
+Record validatedbCharPrimitives3a
+	10 a dbChar(4);
+	10 b dbChar(5);
+end
+
+DataTable validatedbCharPrimitives4
+{
+	contents = [[
+		1,		//0
+		"a",	//0
+		"a"		//0
+	],
+	[
+		"-2",		//0
+		"aaaa",		//0
+		"bbbb"		//0
+	]]
+}
+	5 myItem int;						//0
+	5 embed validatedbCharPrimitives3a;	//0
+end
+
+// validateHexPrimitives:
+DataTable validateHexPrimitives
+{
+	contents = [[
+		"a",	//0
+		"a"		//0
+	],
+	[
+		"aaaa",		//0
+		"aaaabb"	//1 The content aaaabb specified in DataTable validateHexPrimitives and defined as type hex has a defined length of 5 but a length of 6 was found.
+	],
+	[
+		x"55",		//0
+		55.55		//1 The content 55.55 specified in DataTable validateHexPrimitives and defined as type HEX must contain only digits and characters A-F. "." found.
+	],
+	[
+		"5AB0",		//0
+		"5555G"		//1 The content 5555G specified in DataTable validateHexPrimitives and defined as type HEX must contain only digits and characters A-F. "G" found.
+	],
+	[
+		"aaaab",	//1 The content aaaab specified in DataTable validateHexPrimitives and defined as type hex has a defined length of 4 but a length of 5 was found.
+		"aaaab"		//0
+	],
+	[
+		.5,			//1
+		""			//0
+	]]
+}
+	a hex(4);
+	b hex(5);
+end
+
+// validateNumericalPrimitives:
+DataTable validateNumericalPrimitives
+{
+	contents=[[
+		1234,				//0
+		1234,				//0
+		1234,				//0
+		1234				//0
+	],
+	[
+		-1234,				//0
+		"-1234",			//0
+		1234.8,				//0
+		"1234.000000000000000000"	//0
+	],
+	[
+		"12345a",			//1 The content 12345a specified in DataTable validateNumericalPrimitives and defined as type num must contain only digits. "a" found. 
+		"12345a",			//1 The content 12345a specified in DataTable validateNumericalPrimitives and defined as type numc must contain only digits. "a" found. 
+		"12345a",			//1 The content 12345a specified in DataTable validateNumericalPrimitives and defined as type pacf must contain only digits. "a" found. 
+		"12345a"			//1 The content 12345a specified in DataTable validateNumericalPrimitives and defined as type decimal must contain only digits. "a" found. 
+	],
+	[
+		"1234567890.12",	//1 The content 1234567890.12 specified in DataTable validateNumericalPrimitives and defined as type num has a defined length of 9 but a length of 12 was found.
+		"1234567890.12",	//1 The content 1234567890.12 specified in DataTable validateNumericalPrimitives and defined as type numc has a defined length of 9 but a length of 12 was found.
+		"1234567890.12",	//1 The content 1234567890.12 specified in DataTable validateNumericalPrimitives and defined as type pacf has a defined length of 9 but a length of 12 was found.
+		"1234567890.12"		//1 The content 1234567890.12 specified in DataTable validateNumericalPrimitives and defined as type decimal has a defined length of 9 but a length of 12 was found.
+	],
+	[
+		"123456789.12",		//1 The content 123456789.12 specified in DataTable validateNumericalPrimitives and defined as type num has a defined length of 9 but a length of 11 was found.
+		"123456789.12",		//1 The content 123456789.12 specified in DataTable validateNumericalPrimitives and defined as type numc has a defined length of 9 but a length of 11 was found.
+		"123456789.12",		//1 The content 123456789.12 specified in DataTable validateNumericalPrimitives and defined as type pacf has a defined length of 9 but a length of 11 was found.
+		"123456789.12"		//1 The content 123456789.12 specified in DataTable validateNumericalPrimitives and defined as type decimal has a defined length of 9 but a length of 11 was found.
+	],
+	[
+		"1234567.12",		//0
+		"1234567.12",		//0
+		"1234567.12",		//0
+		"1234567.12"		//0
+	
+	],
+	[
+		.1,					//0
+		.123,				//1
+		"",					//0
+		"1"+".22"			//0
+	]]
+}
+	a num(9,2);
+	b numc(9,2);
+	c pacf(9,2);
+	d decimal(9,2);
+end
+
+// validateColumnsAndContents:
+Datatable validateColumnsAndContents1	//1 The DataTable validateColumnsAndContents1 does not have contents defined.  Contents are required. {5003, TABLE_HAS_NO_CONTENTS}
+end
+
+DataTable validateColumnsAndContents2	//0
+{
+	contents = [[1,2]]					//1 The DataTable validateColumnsAndContents2 is defined with 1 column(s), but the contents are defined with 2 column(s). {5004, DATATABLE_NUMBER_COLUMNS_DO_NOT_MATCH}
+}
+	a int;
+end
+
+DataTable validateColumnsAndContents3	//0
+{
+	contents = [[1], [1,2,3]]			//1 The DataTable validateColumnsAndContents3 is defined with 1 column(s), but the contents are defined with 3 column(s). {5004, DATATABLE_NUMBER_COLUMNS_DO_NOT_MATCH}
+}
+	a int;
+end
+
+DataTable validateColumnsAndContents4	//0
+{
+	contents = [[1,2,3], [1,2,3]]		//0
+}
+	5 a int;
+		10 a1 int;
+	5 b int;
+		10 b1 char(2);
+		10 b2 char(4);
+	5 c int;
+end
+
+DataTable validateColumnsAndContents5	//0
+{
+	contents = [[1], [1,2,3]]			//1 The DataTable validateColumnsAndContents5 is defined with 3 column(s), but the contents are defined with 1 column(s). {5004, DATATABLE_NUMBER_COLUMNS_DO_NOT_MATCH}
+}
+	a int;
+	b int;
+	c int;
+end
+
+DataTable validateColumnsAndContents6	//0
+{
+	contents = 5		//1 Each row of the contents of a DataTable must be a comma-separated list of values surrounded by square brackets.  All of the rows must be surrounded by another set of square brackets.
+}
+	a int;
+end
+
+DataTable validateColumnsAndContents7	//0
+{
+	contents = [5]		//1 Each row of the contents of a DataTable must be a comma-separated list of values surrounded by square brackets.  All of the rows must be surrounded by another set of square brackets.
+}
+	a int;
+end
+
+DataTable validateColumnsAndContents8	//0
+{
+	contents = [[[5]]]	//1 The content [5] in DataTable validateColumnsAndContents8 must be a string or numeric literal.
+}
+	a int;
+end
+
+// validateNoOccurs:
+DataTable validateNoOccurs
+{
+	contents = [["", "", "", ""]]
+}
+	5 item1 char(4)[3];		//1 The item item1 in DataTable validateNoOccurs cannot be defined with occurs. {4180, TABLE_ITEM_HAS_OCCURS}
+	5 item2 [3];			//1 The item item2 in DataTable validateNoOccurs cannot be defined with occurs. {4180, TABLE_ITEM_HAS_OCCURS}
+		10 item2a char(4);	//0
+	5 * char(4)[3];			//1 The item * in DataTable validateNoOccurs cannot be defined with occurs. {4180, TABLE_ITEM_HAS_OCCURS}
+	5 * [3];				//1 The item * in DataTable validateNoOccurs cannot be defined with occurs. {4180, TABLE_ITEM_HAS_OCCURS}
+		10 * char(4);		//0
+end
+
+DataTable validateNoOccurs2			//0
+{
+	contents = [["", "", "", ""]]	//0
+}
+	5 item1 char(4);		//0
+	5 item2;				//0
+		10 item2a char(4);	//0
+	5 * char(4);			//0
+	5 * ;					//0
+		10 * char(4);		//0
+end
+
+// validateNumberofColumns:
+DataTable validateNumberofColumns1 type matchValidTable	//1 The matchValid table validateNumberofColumns1 must contain at least one column. {4176, TABLE_MATCHVALID_MUST_CONTAIN_COLUMN}
+{
+	contents = [[]]			//0
+}
+end
+
+DataTable validateNumberofColumns2 type matchValidTable	//0
+{
+	contents = [[5]]		//0
+}
+	col1 int;				//0
+end
+
+DataTable validateNumberofColumns3 type matchInvalidTable	//1 The matchInvalid table validateNumberofColumns3 must contain at least one column. {4175, TABLE_MATCHINVALID_MUST_CONTAIN_COLUMN}
+{
+	contents = [[]]			//0
+}
+end
+
+DataTable validateNumberofColumns4 type matchInvalidTable	//0
+{
+	contents = [[5]]		//0
+}
+	col1 int;				//0
+end
+
+DataTable validateNumberofColumns5 type msgTable	//1 The message table validateNumberofColumns5 must contain at least two columns. {4181, TABLE_MESSAGE_MUST_CONTAIN_TWO_COLUMNS}
+{
+	contents = [[5]]		//0
+}
+	col1 int;				//0
+end
+
+DataTable validateNumberofColumns6 type msgTable	//0
+{
+	contents = [[5,5]]		//0
+}
+	col1 int;				//0
+	col2 int;				//0
+end
+
+DataTable validateNumberofColumns7 type rangeChkTable	//1 The range check table validateNumberofColumns7 must contain at least two columns. {4177, TABLE_RANGECHECK_MUST_CONTAIN_TWO_COLUMNS}
+{
+	contents = [[5]]		//0
+}
+	col1 int;				//0
+end
+
+DataTable validateNumberofColumns8 type rangeChkTable	//0
+{
+	contents = [[5,5]]		//0
+}
+	col1 int;				//0
+	col2 int;				//0
+end
+
+
+// validateSubType:
+DataTable validateSubType type garbage 		//1 garbage cannot be resolved
+{
+	contents=[[]]
+}
+end
+
+DataTable validateSubType2 type textForm 	//1 The type egl.ui.text.TextForm is not a valid subtype for part validateSubType2.
+{
+	contents=[[]]
+}
+end
+
+DataTable validateSubType3 type basicTable 	//0
+{
+	contents=[[]]
+}
+end

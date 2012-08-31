@@ -1,0 +1,33 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program ClientData 
+
+	 companies Company[];
+ 	 company TempCompany;
+
+	Function main()
+		
+		company.compName = "Company1";
+		companies.appendElement(company);	//1 The type of the argument must be compatible with the items contained in the dynamic array qualifier
+			
+	End
+End
+
+Record Company type basicRecord
+	compName string;
+end
+
+Record TempCompany type basicRecord
+	compName string;
+	compDesc string;
+end

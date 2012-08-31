@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Interface interface1
+	function func();
+end
+
+Service service1 implements interface1	//1 The service service1 must implement the inherited function func() defined in interface interface1. {3400, INTERFACE_FUNCTION_MISSING_IN_SERVICE}
+end
+
+Service service2 implements interface1	//1 The service service2 must implement the inherited function func() defined in interface interface1. {3400, INTERFACE_FUNCTION_MISSING_IN_SERVICE}
+	function func(i int)				//0
+	end
+end
+
+Service service3 implements interface1	//0
+	function func()						//0
+	end
+end

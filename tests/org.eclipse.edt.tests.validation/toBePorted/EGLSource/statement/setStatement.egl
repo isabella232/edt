@@ -1,0 +1,131 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program MyProj
+	student Student;
+	
+	function main()		
+		set student position; //0			
+	end
+end
+
+Record Student type DLISegment end
+
+record fixrecord
+10 i int;
+end
+
+record flexrecord
+i int;
+end
+
+record flexrecord2
+i int;
+end
+
+record pscrec type PSBRecord
+i fixrecord {@pcb {pcbName = "myname"}};
+end
+
+program setEmpty type basicProgram { allowUnqualifiedItemReferences = yes }
+ 
+	function main()
+		aRec setEmptyRec ;
+		set aRec empty;	// 0
+		set aRec.ab empty;// 0
+		set aRec.ab alarm;// 1 The state ALARM is not allowed for this item reference { 6695 }
+		
+		set aRec initial; // 0
+		aRec2 fixedsqlrec;
+		set aRec2.field1 alarm;// 1 The state ALARM is not allowed for an SQL item reference  	{6696}
+		set aRec2 position;// 1
+		set aRec2 empty;// 0
+
+		aRec3 indexedRecordKeyItem1;
+		set aRec3 initial;// 0
+		set aRec3 position;// 0
+		set aRec3 position , position;// 1 The POSITION state is specified more than once on the same set statement		{6610}
+		
+		aRec4 pscrec;
+		set aRec4 empty;// 1 A PSBRecord is not a valid operand in the set statement 	{7932,EGLMESSAGE_DLI_PSBRECORD_NOT_VALID_AS_STATEMENT_OPERAND}
+	end	
+end
+
+record setEmptyRec
+	10 ab char(8) ;
+	20 a char(4) ; 
+	20 b int ;
+	10 c char(4) ;
+end
+record fixedsqlrec type sqlrecord
+	10 field1 int {isnullable = yes};
+	10 field2 int {isnullable = no};
+end
+record flexsqlrec type sqlrecord
+	 field1 int {isnullable = yes};
+	 field2 int {isnullable = yes};
+end
+
+Record indexedRecordKeyItem1 type indexedRecord
+	{fileName = "abc",
+	 keyItem = bob} // 0
+
+	10 item1 char(10); 
+	10 bob char(10);
+end
+
+// checkForConflictingStates:
+// 1 NOHIGHLIGHT is not allowed to be specified with REVERSE, BLINK or, UNDERLINE.  Found {0} and {1}. {6616, EGLMESSAGE_MULTIPLE_HIGHLIGHT_STATE_ON_SET}
+// 1 NOHIGHLIGHT is not allowed to be specified with REVERSE, BLINK or, UNDERLINE.  Found {0} and {1}. {6616, EGLMESSAGE_MULTIPLE_HIGHLIGHT_STATE_ON_SET}
+// 1 NOHIGHLIGHT is not allowed to be specified with REVERSE, BLINK or, UNDERLINE.  Found {0} and {1}. {6616, EGLMESSAGE_MULTIPLE_HIGHLIGHT_STATE_ON_SET}
+// 1 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found {0} and {1}. {6618, EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET}
+// 1 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found {0} and {1}. {6618, EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET}
+// 1 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found {0} and {1}. {6618, EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET}
+// 1 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found {0} and {1}. {6618, EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET}
+// 1 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found {0} and {1}. {6618, EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET}
+// 1 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found {0} and {1}. {6618, EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET}
+// 1 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found {0} and {1}. {6618, EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET}
+// 1 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found {0} and {1}. {6618, EGLMESSAGE_TEXT_FIELD_STATES_WITH_OTHERS_ON_SET}
+
+// checkForDuplicateStates:
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 The {0} state is specified more than once on the same set statement.  This is not allowed. {6610, EGLMESSAGE_DUPE_STATE_ON_SET}
+// 1 Only one color is allowed to be specified on a single set statement.  Found {0} and {1}. {6611, EGLMESSAGE_MULTIPLE_COLORS_ON_SET}
+// 1 Only one intensity state is allowed to be specified on a single set statement.  Found {0} and {1}. {6612, EGLMESSAGE_MULTIPLE_INTENSITY_ON_SET}
+// 1 Only one protection state is allowed to be specified on a single set statement.  Found {0} and {1}. {6613, EGLMESSAGE_MULTIPLE_PROTECTION_ON_SET}
+// 1 Only one of NORMAL, INITIAL, or INITIALATTRIBUTES is allowed to be specified on a single set statement.  Found {0} and {1}. {6614, EGLMESSAGE_MULTIPLE_TEXT_FIELD_STATE_ON_SET}
+// 1 Only one of EMPTY or INITIAL is allowed to be specified on a single set statement.  Found {0} and {1}. {6615, EGLMESSAGE_EMPTY_AND_INITIAL_ON_SET}
+// 1 Only one of EMPTY or INITIAL is allowed to be specified on a single set statement.  Found {0} and {1}. {6615, EGLMESSAGE_EMPTY_AND_INITIAL_ON_SET}
+// 1 {0} was found as a state on a set statement.  It is not a supported state. {6617, EGLMESSAGE_UNSUPPORTED_STATE_ON_SET}
+
+// validateReferenceAndStates:
+//// 1 The state {1} is not allowed for an indexed record reference. {6698, EGLMESSAGE_INVALID_SET_STATE_FOR_INDEXED_RECORD}
+//// 1 The state {1} is not allowed for a record reference. {6697, EGLMESSAGE_INVALID_SET_STATE_FOR_RECORD}
+//// 1 The state {1} is not allowed for a print form reference. {6700, EGLMESSAGE_INVALID_SET_STATE_FOR_PRINT_FORM}
+//// 1 The state {1} is not allowed for a text form reference. {6699, EGLMESSAGE_INVALID_SET_STATE_FOR_TEXT_FORM}
+//// 1 The state {1} is not allowed for a text field reference. {6701, EGLMESSAGE_INVALID_SET_STATE_FOR_TEXT_FIELD}
+//// 1 The state {1} is not allowed for an SQL item reference. {6696, EGLMESSAGE_INVALID_SET_STATE_FOR_SQL_ITEM}
+// 1 The state {1} is not allowed for this item reference. {6695, EGLMESSAGE_INVALID_SET_STATE_FOR_ITEM}
+// 1 The state {1} is not allowed for this item reference. {6695, EGLMESSAGE_INVALID_SET_STATE_FOR_ITEM}
+// 1 The state {1} is not allowed for this item reference. {6695, EGLMESSAGE_INVALID_SET_STATE_FOR_ITEM}
+
+// validateStates:
+// 1 Items in fixed non-SQL records, form fields, and SQL items with the isNullable=no cannot be set to null. {6704, EGLMESSAGE_INVALID_TO_SET_ITEM_NULL}
+

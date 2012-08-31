@@ -1,0 +1,72 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program TestDateTimeArray type BasicProgram
+	
+	function main()
+		d date[5][5];
+		t time[5][5];
+		ts timestamp("yyyymmddhhmmss")[5][5];
+		i interval("yymm")[5][5];
+		
+		fixedRec fixedRecItem;
+		flexRec flexRecItem;
+		
+		d[1, 2] = "20051205";
+		d[1][2] = "20051205";
+		t[1, 2] = "110634";
+		ts[1, 2] = "2005-12-05 11:06:34";
+		i[1, 2] = "1-9";
+		
+		fixedRec.d[1] = "20051205";
+		fixedRec.t[1] = "110634";
+		fixedRec.ts[1] = "2005-12-05 11:06:34";
+		fixedRec.i[1] = "1-9";
+		
+		flexRec.d[1] = "20051205";
+		flexRec.t[1] = "110634";
+		flexRec.ts[1] = "2005-12-05 11:06:34";
+		flexRec.i[1] = "1-9";
+
+		ts[2, 2] = timestampFrom(d[1, 2], fixedRec.t[1]);
+		//displayLineMode(ts[2, 2]);
+		ts[3, 1] = extend(flexRec.t[1]);
+		//displayLineMode(ts[3, 1]);
+		
+		d[2, 3] = d[1, 2] + 10;
+		//displayLineMode(d[2, 3]);
+		flexRec.d[5] = fixedRec.d[1] + 20;
+		//displayLineMode(flexRec.d[5]);
+		
+		flexRec.ts[3] = ts[1, 2] + fixedRec.i[1];
+		//displayLineMode(flexRec.ts[3]);
+		ts[3, 4] = flexRec.ts[1] + fixedRec.i[1];
+		ts[3][4] = flexRec.ts[1] + fixedRec.i[1];
+		//displayLineMode(ts[3, 4]);
+	end
+	
+end
+
+Record fixedRecItem type basicRecord
+	10 d date[5];
+	10 t time[5];
+	10 ts timestamp("yyyymmddhhmmss")[5];
+	10 i interval("yymm")[5];
+end
+
+Record flexRecItem type basicRecord
+	d date[5];
+	t time[5];
+	ts timestamp("yyyymmddhhmmss")[5];
+	i interval("yymm")[5];
+end

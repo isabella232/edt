@@ -1,0 +1,40 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program RATLC01419472 type BasicProgram {AllowUnqualifiedItemReferences = yes}   							
+																								
+	rec1 rec1;																									
+	
+	function main()																							
+		open resultSetIdentifier																			
+			with																										
+				#sql{																									
+					select EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, PHONENO, 							
+					        HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM 					
+					  from EMPLOYEE T1 																					
+					  WHERE EMPNO = :b 																		
+					  for update of EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, 							
+					        PHONENO, HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM 			
+					  WITH RS USE AND KEEP UPDATE LOCKS														
+				}																							
+			for rec1;																						
+		
+	end																										
+	
+end																											
+
+record rec1 type sqlrecord
+
+	10 a int;
+	10 b char(10);
+end

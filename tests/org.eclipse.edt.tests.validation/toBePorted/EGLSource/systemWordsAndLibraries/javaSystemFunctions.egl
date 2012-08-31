@@ -1,0 +1,330 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program javaSystemFunctions
+
+	charVar char(12);
+	intVar int;
+	binVar bin(9);
+	const charConst char(2) = "a";
+	const intConst int = 5;
+	dateVar date;
+	timeVar time;
+	timeStampVar timeStamp;
+	intervalVar interval;
+	fixedRec fixedRec;
+
+	function main()
+		invoke( charVar, charVar, dateVar as "java:char" ); // 1
+		invoke( charVar, charVar, timeVar as "java:char" ); // 1
+		invoke( charVar, charVar, timeStampVar as "java:char" ); // 1
+		invoke( charVar, charVar, intervalVar as "java:char" ); // 1
+		invoke( charVar, charVar, dateVar as "java:int" ); // 1
+		invoke( charVar, charVar, timeVar as "java:int" ); // 1
+		invoke( charVar, charVar, timeStampVar as "java:int" ); // 1
+		invoke( charVar, charVar, intervalVar as "java:int" ); // 1
+		invoke( charVar, charVar, dateVar as "objId:java" ); // 1
+		invoke( charVar, charVar, timeVar as "objId:java" ); // 1
+		invoke( charVar, charVar, timeStampVar as "objId:java" ); // 1
+		invoke( charVar, charVar, intervalVar as "objId:java" ); // 1
+		
+		invoke( charVar, charVar, intVar as "java:byte" ); // 0
+		
+		fixedRec = invoke( charVar, charVar, fixedRec );	//0
+
+		//	java:
+		//		1: no cast or cast to objId
+		//		2: no cast
+		//		other: argument cast
+		invoke( charVar, charVar, charVar as "java:char" ); // 0
+		invoke( charVar as "objId:java", charVar, charVar as "java:char" ); // 0
+		invoke( charVar as "objId:java", charVar, 5 as "java:int" ); // 0
+		invoke( charVar as "objId:java", charVar, "a" as "java:char" ); // 0
+		invoke( charVar as "objId:java", charVar, ("a"+"b") as "java:char" ); // 0
+		invoke( charVar as "objId:java", charVar, "a" as "java:int" ); // 1
+		invoke( charVar as "objId:java", charVar, ("a"+"b") as "java:int" ); // 1
+		invoke( charVar as "objId:java", charVar, 5 as "java:char" ); // 1
+		invoke( charVar as "java:int", charVar, charVar as "java:char" ); // 1
+		invoke( charVar, charVar as "java:int", charVar as "java:char" ); // 1
+		invoke( charVar as "java:int", charVar as "java:int", charVar as "java:char" ); // 2
+		invoke( charVar as "objId:java", charVar, charVar as "java:int" ); // 1
+		invoke( charVar, charVar, foo as "java:char" ); // 1
+		invoke( charVar, charVar, (5 + 6) as "java:int"); // 0
+		invoke( charVar, charVar, charVar as "java:char", 5 as "java:int", intVar as "java:int" ); // 0
+		invoke( charVar, charVar, charVar as "java:char", 5 as "java:int", "a" as "java:int" ); // 1
+	
+		//	javaStore:
+		//		1: cast to objId
+		//		2: no cast or cast to objId
+		//		3: no cast
+		//		other: argument cast
+		store( charVar as "objId:java", charVar, charVar, charVar as "java:char" ); // 0
+		store( charVar as "objId:java", charVar, charVar, intVar as "java:int" ); // 0
+		store( charVar as "objId:java", charVar, charVar, intVar as "java:int" ); // 0
+		store( charVar, charVar, charVar, intVar as "java:int" ); // 1
+		store( charVar as "objId:java", charVar, charVar, intVar as "java:foo" ); // 1
+		store( charVar as "objId:java", charVar as "objId:java", charVar, charVar as "java:int" ); // 1
+		store( charVar as "objId:java", charVar as "java:char", charVar as "java:char", intVar as "java:int" ); // 2
+		store( charVar as "objId:java", charVar, charVar, (5 + 6) as "java:int", 7 as "java:int"+8 ); // 1
+			
+		//	storeNew:
+		//		1: cast to objId
+		//		2: no cast
+		//		other: argument cast
+		storeNew( charVar, charVar, charVar as "java:char" ); // 1
+		storeNew( charVar as "objId:java", charVar, charVar as "java:char" ); // 0
+		storeNew( charVar as "objId:java", charVar, 5 as "java:int" ); // 0
+		storeNew( charVar as "objId:java", charVar, "a" as "java:char" ); // 0
+		storeNew( charVar as "objId:java", charVar, ("a" + "b") as "java:char" ); // 0
+		storeNew( charVar as "objId:java", charVar, "a" as "java:int" ); // 1
+		storeNew( charVar as "objId:java", charVar, ("a" + "b") as "java:int" ); // 1
+		storeNew( charVar as "objId:java", charVar, 5 as "java:char" ); // 1
+		storeNew( charVar as "java:int", charVar, charVar as "java:char" ); // 1
+		storeNew( charVar, charVar as "java:int", charVar as "java:char" ); // 2
+		storeNew( charVar as "java:int", charVar as "java:int", charVar as "java:char" ); // 2
+		storeNew( charVar as "objId:java", charVar, charVar as "java:int" ); // 1
+		storeNew( charVar, charVar, foo as "java:char" ); // 2
+		storeNew( charVar, charVar, (5 + 6) as "java:int" ); // 1
+		storeNew( charVar as "objId:java", charVar, charVar as "java:char" ); // 0
+			
+		//	charVar = getField:
+		//		1: no cast or cast to objId
+		//		2: no cast
+		charVar = getField( charVar, charVar ) as char(4); // 0
+		charVar = getField( charVar as "objId:java", charVar ) as char(4); // 0
+		charVar = getField( charVar as "java:int", charVar ) as char(4); // 1
+		charVar = getField( charVar, charVar as "java:char" ) as char(4); // 1
+			
+		//	javaSetField:
+		//		1: no cast or cast to objId
+		//		2: no cast
+		//		3: argument cast
+		setField( charVar, charVar, charVar as "java:char" ); // 0
+		setField( charVar as "objId:java", charVar, charVar as "java:char" ); // 0
+		setField( charVar as "objId:java", charVar, 5 as "java:int" ); // 0
+		setField( charVar as "objId:java", charVar, "a" as "java:char" ); // 0
+		setField( charVar as "objId:java", charVar, ("a" + "b") as "java:char" ); // 0
+		setField( charVar as "objId:java", charVar, "a" as "java:int" ); // 1
+		setField( charVar as "objId:java", charVar, ("a" + "b") as "java:int" ); // 1
+		setField( charVar as "objId:java", charVar, 5 as "java:char" ); // 1
+		setField( charVar as "java:int", charVar, charVar as "java:char" ); // 1
+		setField( charVar, charVar as "java:int", charVar as "java:char" ); // 1
+		setField( charVar as "java:int", charVar as "java:int", charVar as "java:char" ); // 2
+		setField( charVar as "objId:java", charVar, charVar as "java:int" ); // 1
+		setField( charVar, charVar, foo as "java:char" ); // 1
+		setField( charVar, charVar, (5 + 6) as "java:int"); // 0
+			
+		//	storeField:
+		//		1: cast to objId
+		//		2: no cast or cast to objId
+		//		3: no cast
+		storeField( charVar as "objId:java", charVar, charVar ); // 0
+		storeField( charVar as "objId:java", charVar as "objId:java", charVar ); // 0
+		storeField( charVar, charVar, charVar ); // 1
+		storeField( charVar as "objId:java", charVar as "java:char", charVar ); // 1
+		storeField( charVar as "objId:java", charVar, charVar as "java:char" ); // 1
+		
+		//	storeCopy:
+		//		1: cast to objId
+		//		2: cast to objId
+		storeCopy( charVar as "objId:java", charVar as "objId:java" ); // 0
+		storeCopy( charVar, charVar as "objId:java" ); // 1
+		storeCopy( charVar as "objId:java", charVar ); // 1
+			
+		//	remove:
+		//		1: cast to objId
+		remove( charVar as "objId:java" ); // 0
+		remove( charVar as "objId:java" ); // 0
+		remove( charVar ); // 1
+		remove( charVar as "java:char" ); // 1
+			
+		//	isNull:
+		//		1: cast to objId
+		binVar = isNull( charVar as "objId:java" ); // 0
+		binVar = isNull( charVar ); // 1
+		binVar = isNull( charVar as "java:char" ); // 1
+			
+		//	javaIsObjId:
+		//		1: cast to objId
+		binVar = isObjId( charVar as "objId:java" ); // 0
+		binVar = isObjId( charVar ); // 1
+		binVar = isObjId( charVar as "java:char" ); // 1
+		
+		//	qualifiedTypeName:
+		//		1: cast to objId
+		charVar = qualifiedTypeName( charVar as "objId:java" ); // 0
+		charVar = qualifiedTypeName( charVar ); // 1
+		charVar = qualifiedTypeName( charVar as "java:char" ); // 1
+	end
+	
+	function testQualified()
+		javalib.invoke( charVar, charVar, dateVar as "java:char" ); // 1
+		javalib.invoke( charVar, charVar, timeVar as "java:char" ); // 1
+		javalib.invoke( charVar, charVar, timeStampVar as "java:char" ); // 1
+		javalib.invoke( charVar, charVar, intervalVar as "java:char" ); // 1
+		javalib.invoke( charVar, charVar, dateVar as "java:int" ); // 1
+		javalib.invoke( charVar, charVar, timeVar as "java:int" ); // 1
+		javalib.invoke( charVar, charVar, timeStampVar as "java:int" ); // 1
+		javalib.invoke( charVar, charVar, intervalVar as "java:int" ); // 1
+		javalib.invoke( charVar, charVar, dateVar as "objId:java" ); // 1
+		javalib.invoke( charVar, charVar, timeVar as "objId:java" ); // 1
+		javalib.invoke( charVar, charVar, timeStampVar as "objId:java" ); // 1
+		javalib.invoke( charVar, charVar, intervalVar as "objId:java" ); // 1
+		
+		javalib.invoke( charVar, charVar, intVar as "java:byte" ); // 0
+
+		//	java:
+		//		1: no cast or cast to objId
+		//		2: no cast
+		//		other: argument cast
+		javalib.invoke( charVar, charVar, charVar as "java:char" ); // 0
+		javalib.invoke( charVar as "objId:java", charVar, charVar as "java:char" ); // 0
+		javalib.invoke( charVar as "objId:java", charVar, 5 as "java:int" ); // 0
+		javalib.invoke( charVar as "objId:java", charVar, "a" as "java:char" ); // 0
+		javalib.invoke( charVar as "objId:java", charVar, ("a" + "b") as "java:char"); // 0
+		javalib.invoke( charVar as "objId:java", charVar, "a" as "java:int" ); // 1
+		javalib.invoke( charVar as "objId:java", charVar, ("a" + "b") as "java:int" ); // 1
+		javalib.invoke( charVar as "objId:java", charVar, 5 as "java:char" ); // 1
+		javalib.invoke( charVar as "java:int", charVar, charVar as "java:char" ); // 1
+		javalib.invoke( charVar, charVar as "java:int", charVar as "java:char" ); // 1
+		javalib.invoke( charVar as "java:int", charVar as "java:int", charVar as "java:char" ); // 2
+		javalib.invoke( charVar as "objId:java", charVar, charVar as "java:int" ); // 1
+		javalib.invoke( charVar, charVar, foo as "java:char" ); // 1
+		javalib.invoke( charVar, charVar, (5 + 6) as "java:int" ); // 0
+		javalib.invoke( charVar, charVar, charVar as "java:char", 5 as "java:int", intVar as "java:int" ); // 0
+		javalib.invoke( charVar, charVar, charVar as "java:char", 5 as "java:int", "a" as "java:int" ); // 1
+	
+		//	javaStore:
+		//		1: cast to objId
+		//		2: no cast or cast to objId
+		//		3: no cast
+		//		other: argument cast
+		javalib.store( charVar as "objId:java", charVar, charVar, charVar as "java:char" ); // 0
+		javalib.store( charVar as "objId:java", charVar, charVar, intVar as "java:int" ); // 0
+		javalib.store( charVar as "objId:java", charVar, charVar, intVar as "java:int" ); // 0
+		javalib.store( charVar, charVar, charVar, intVar as "java:int" ); // 1
+		javalib.store( charVar as "objId:java", charVar, charVar, intVar as "java:foo" ); // 1
+		javalib.store( charVar as "objId:java", charVar as "objId:java", charVar, charVar as "java:int" ); // 1
+		javalib.store( charVar as "objId:java", charVar as "java:char", charVar as "java:char", intVar as "java:int" ); // 2
+		javalib.store( charVar as "objId:java", charVar, charVar, (5 + 6) as "java:int", 7 as "java:int"+8 ); // 1
+			
+		//	storeNew:
+		//		1: cast to objId
+		//		2: no cast
+		//		other: argument cast
+		javalib.storeNew( charVar, charVar, charVar as "java:char" ); // 1
+		javalib.storeNew( charVar as "objId:java", charVar, charVar as "java:char" ); // 0
+		javalib.storeNew( charVar as "objId:java", charVar, 5 as "java:int" ); // 0
+		javalib.storeNew( charVar as "objId:java", charVar, "a" as "java:char" ); // 0
+		javalib.storeNew( charVar as "objId:java", charVar, ("a" + "b") as "java:char" ); // 0
+		javalib.storeNew( charVar as "objId:java", charVar, "a" as "java:int" ); // 1
+		javalib.storeNew( charVar as "objId:java", charVar, ("a" + "b") as "java:int" ); // 1
+		javalib.storeNew( charVar as "objId:java", charVar, 5 as "java:char" ); // 1
+		javalib.storeNew( charVar as "java:int", charVar, charVar as "java:char" ); // 1
+		javalib.storeNew( charVar, charVar as "java:int", charVar as "java:char" ); // 2
+		javalib.storeNew( charVar as "java:int", charVar as "java:int", charVar as "java:char" ); // 2
+		javalib.storeNew( charVar as "objId:java", charVar, charVar as "java:int" ); // 1
+		javalib.storeNew( charVar, charVar, foo as "java:char" ); // 2
+		javalib.storeNew( charVar, charVar, (5 + 6) as "java:int" ); // 1
+		javalib.storeNew( charVar as "objId:java", charVar, charVar as "java:char" ); // 0
+			
+		//	charVar = getField:
+		//		1: no cast or cast to objId
+		//		2: no cast
+		charVar = javalib.getField( charVar, charVar ) as char(4); // 0
+		charVar = javalib.getField( charVar as "objId:java", charVar ) as char(4); // 0
+		charVar = javalib.getField( charVar as "java:int", charVar ) as char(4); // 1
+		charVar = javalib.getField( charVar, charVar as "java:char" ) as char(4); // 1
+			
+		//	javaSetField:
+		//		1: no cast or cast to objId
+		//		2: no cast
+		//		3: argument cast
+		javalib.setField( charVar, charVar, charVar as "java:char" ); // 0
+		javalib.setField( charVar as "objId:java", charVar, charVar as "java:char" ); // 0
+		javalib.setField( charVar as "objId:java", charVar, 5 as "java:int" ); // 0
+		javalib.setField( charVar as "objId:java", charVar, "a" as "java:char" ); // 0
+		javalib.setField( charVar as "objId:java", charVar, ("a" + "b") as "java:char" ); // 0
+		javalib.setField( charVar as "objId:java", charVar, "a" as "java:int" ); // 1
+		javalib.setField( charVar as "objId:java", charVar, ("a" + "b") as "java:int" ); // 1
+		javalib.setField( charVar as "objId:java", charVar, 5 as "java:char" ); // 1
+		javalib.setField( charVar as "java:int", charVar, charVar as "java:char" ); // 1
+		javalib.setField( charVar, charVar as "java:int", charVar as "java:char" ); // 1
+		javalib.setField( charVar as "java:int", charVar as "java:int", charVar as "java:char" ); // 2
+		javalib.setField( charVar as "objId:java", charVar, charVar as "java:int" ); // 1
+		javalib.setField( charVar, charVar, foo as "java:char" ); // 1
+		javalib.setField( charVar, charVar, (5 + 6) as "java:int" ); // 0
+			
+		//	storeField:
+		//		1: cast to objId
+		//		2: no cast or cast to objId
+		//		3: no cast
+		javalib.storeField( charVar as "objId:java", charVar, charVar ); // 0
+		javalib.storeField( charVar as "objId:java", charVar as "objId:java", charVar ); // 0
+		javalib.storeField( charVar, charVar, charVar ); // 1
+		javalib.storeField( charVar as "objId:java", charVar as "java:char", charVar ); // 1
+		javalib.storeField( charVar as "objId:java", charVar, charVar as "java:char" ); // 1
+		
+		//	storeCopy:
+		//		1: cast to objId
+		//		2: cast to objId
+		javalib.storeCopy( charVar as "objId:java", charVar as "objId:java" ); // 0
+		javalib.storeCopy( charVar, charVar as "objId:java" ); // 1
+		javalib.storeCopy( charVar as "objId:java", charVar ); // 1
+			
+		//	remove:
+		//		1: cast to objId
+		javalib.remove( charVar as "objId:java" ); // 0
+		javalib.remove( charVar as "objId:java" ); // 0
+		javalib.remove( charVar ); // 1
+		javalib.remove( charVar as "java:char" ); // 1
+			
+		//	isNull:
+		//		1: cast to objId
+		binVar = javalib.isNull( charVar as "objId:java" ); // 0
+		binVar = javalib.isNull( charVar ); // 1
+		binVar = javalib.isNull( charVar as "java:char" ); // 1
+			
+		//	isObjId:
+		//		1: cast to objId
+		binVar = javalib.isObjId( charVar as "objId:java" ); // 0
+		binVar = javalib.isObjId( charVar ); // 1
+		binVar = javalib.isObjId( charVar as "java:char" ); // 1
+		
+		//	qualifiedTypeName:
+		//		1: cast to objId
+		charVar = javalib.qualifiedTypeName( charVar as "objId:java" ); // 0
+		charVar = javalib.qualifiedTypeName( charVar ); // 1
+		charVar = javalib.qualifiedTypeName( charVar as "java:char" ); // 1
+	end
+	
+	function testCasts()
+		charVar char(4);
+		intVar int;
+		invoke( charVar, charVar, intVar as "java:java.math.bigDecimal" );	// 0
+		invoke( charVar, charVar, intVar as "java:java.math.bigInteger" );	// 0
+		invoke( charVar, charVar, charVar as "java:java.math.bigDecimal" );	// 1
+		invoke( charVar, charVar, charVar as "java:java.math.bigInteger" );	// 1
+		invoke( charVar, charVar, intVar as "java:garbage" );	// 1
+		invoke( charVar, charVar, intVar as "c#:int" ); 		// 1
+		invoke( charVar, charVar, null as "java.lang.Object" );	// 0
+	end
+	
+	function miscFromJason()
+		y char(3);
+		 JavaLib.setField( "some_class", "some_byte_field", y as "objId:java");	//0
+	end
+end
+
+Record fixedRec
+	10 item1 int;
+end
+

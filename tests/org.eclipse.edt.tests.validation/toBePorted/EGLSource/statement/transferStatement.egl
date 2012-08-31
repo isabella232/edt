@@ -1,0 +1,182 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+
+record myrec end
+Record vgUIRecDef type VGUIRecord end
+Record vgUIRecDef2 type VGUIRecord end
+Record Student type DLISegment end
+record myrec2 end
+Record EducationPSB type PSBRecord {defaultPSBName = "EDUCPSB"}
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};
+ altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};
+	coursePCB DB_PCBRecord { @PCB {
+	  pcbType=DB,
+	  pcbName="CPCB",
+	  hierarchy = [
+	   @Relationship{ segmentRecord="CourseRec" },
+	   @Relationship{
+      segmentRecord="PrerqRec", parentRecord="CourseRec" },   	   @Relationship{
+      segmentRecord="OfferingRec",parentRecord="CourseRec" },  	   @Relationship{
+      segmentRecord="TeacherRec",parentRecord="OfferingRec"},
+	   @Relationship{
+	     segmentRecord="StudentRec", parentRecord="OfferingRec"}
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {
+	  pcbType=DB,
+	  pcbName="OPCB",
+	  secondaryIndex="XLOC",
+	  hierarchy = [
+	   @Relationship{ segmentRecord="OfferingRec" },
+	   @Relationship{
+	     segmentRecord="CourseRec",parentRecord="OfferingRec"},
+	   @Relationship{
+	     segmentRecord="TeacherRec",parentRecord="OfferingRec"},
+	   @Relationship{
+	     segmentRecord="StudentRec",parentRecord="OfferingRec"}
+	  ] }};
+end
+
+Program MyProj type VGWebTransaction
+	
+	function main()
+		rec myrec;
+		rec2 myrec2;
+		uirec vgUIRecDef2;
+		name string;
+		i int;
+		student student;
+		edu EducationPSB;
+		transfer to program prog2;// 1 The target of transfer to program in a VGWebTransaction or UIProgram must be to the same type of program or a main batch program	
+		transfer to transaction name; // 1  he transfer to transaction statement is not supported in a UIProgram or VGWebTransaction program
+		transfer to program VGWebTransferProgram2 passing uirec; //	1  	VGWebTransferProgram2 input UI record () is not applicable for the UI record (vgUIRecDef2)	{6723,EGLMESSAGE_PROGRAM_INPUT_UIRECORD_DOESNT_MATCH_PARAM}
+		transfer to program VGWebTransferProgram22 passing uirec; //	1  	VGWebTransferProgram22 input UI record (vgUIRecDef) is not applicable for the UI record (vgUIRecDef2)	{6723,EGLMESSAGE_PROGRAM_INPUT_UIRECORD_DOESNT_MATCH_PARAM}		
+		transfer to program VGWebTransferProgram3 passing rec2; //	1	VGWebTransferProgram3 input record () is not applicable for the record (myrec2)			{6711, EGLMESSAGE_PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM}	
+		transfer to program VGWebTransferProgram33 passing rec2; //	1	VGWebTransferProgram33 input record (myrec) is not applicable for the record (myrec2)			{6711, EGLMESSAGE_PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM}			
+		transfer to program "tttt" passing rec2 {IsExternal=yes}; // 0
+		transfer to program i passing rec2 ; // 1 The item or constant i must be of type char, unicode, or string		{6540, EGLMESSAGE_ITEM_OR_CONSTANT_NOT_CHARACTER_TYPE}
+		transfer to program "tttt" passing name;// 1 The passing record identifier name must be a record variable		{6541, EGLMESSAGE_PASSING_RECORD_NOT_RECORD}
+		transfer to program "tttt" passing student; // 0
+		transfer to program "tttt" passing edu; // 1 The passing record identifier edu cannot be a PSBRecord		{7933,EGLMESSAGE_DLI_PSBRECORD_NOT_VALID_AS_PASSING_ITEM}
+	
+		
+		// A VGWebTransaction program can transfer control to another VGWebTransaction program or main batch program
+		transfer to program VGWebTransferProgram2 passing rec; // 0	
+		transfer to program VGWebTransferProgram2 ; // 0	
+		transfer to program mainBatchTransferProgram; // 0	
+		transfer to program sysVar.transferName; // 0	
+		transfer to program "VGWebTransferProgram"; // 0	
+		transfer to program sysVar.transferName passing rec2; // 0	
+		transfer to program "tttt" passing rec2; // 0	
+
+		
+	end
+end
+
+Program VGWebTransferProgram1 type VGWebTransaction
+	
+	function main()
+	end
+end
+
+Program VGWebTransferProgram2 type VGWebTransaction
+	{inputRecord = rec}
+	rec myrec;
+	function main()
+	end
+end
+
+Program VGWebTransferProgram22 type VGWebTransaction
+	{inputUIRecord = rec}
+	rec vgUIRecDef;
+	function main()
+	end
+end
+
+Program VGWebTransferProgram3 type VGWebTransaction
+	{inputUIRecord = myrec}
+	myrec vgUIRecDef;
+	function main()
+	end
+end
+
+Program VGWebTransferProgram33 type VGWebTransaction
+	{inputRecord = myrec}
+	myrec myrec;
+	function main()
+	end
+end
+
+
+Program mainBatchTransferProgram type basicProgram
+	
+	function main()
+		name string;
+		i int;
+		transfer to transaction name;// 0
+		transfer to transaction "i";// 0
+		transfer to transaction mainBatchTransferProgram2; // 0	
+		transfer to transaction SysVar.transfername; // 0	
+		transfer to transaction MyProj; // 1  program is not a valid target for transfer to transaction statement		{7775, EGLMESSAGE_VGWEBTRANSACTION_NOT_VALID_TRANSER_TO_TRANSACTION_TARGET}	
+
+	end
+end
+
+Program mainBatchTransferProgram2 type basicProgram
+	
+	function main()
+
+	end
+end
+
+Program prog1 type basicProgram (i int)
+	
+	function main()
+		name string;
+		i int;
+		transfer to transaction name;// 1  The transfer statement may not be used in a called basic or called textUI program		{6556, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_CALLED_BASIC_OR_CALLED_TEXTUI_PROGRAM}
+
+	end
+end
+
+Program prog2 type TextUIProgram (i int)
+	
+	function main()
+		name string;
+		i int;
+		transfer to transaction name;// 1  The transfer statement may not be used in a called basic or called textUI program		{6556, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_CALLED_BASIC_OR_CALLED_TEXTUI_PROGRAM}
+
+	end
+end
+
+handler MyProj2 type JSFHandler 
+
+	function forwardFunction() 
+	name string;
+	transfer to transaction name;// 1   The transfer statement may not be used in a JSFHandler	{6553, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_PAGE_HANDLER}
+	end	
+end
+
+library mylib 
+function xxxx ()
+	name string;
+	transfer to transaction name;// 1   The transfer statement may not be used in a library	 {6552, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_LIBRARY}
+end
+end
+
+Service myService 
+function xxxx ()
+	name string;
+	transfer to transaction name;// 1   The transfer statement may not be used in a service
+end
+end

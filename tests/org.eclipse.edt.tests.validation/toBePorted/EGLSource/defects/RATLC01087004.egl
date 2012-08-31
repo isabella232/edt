@@ -1,0 +1,1382 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+// text UI program
+//
+program showResults type textUIProgram {
+	alias = "SHWRSLTS", 
+	inputRecord = inputParms,
+	segmented = yes,
+	includeReferencedFunctions = yes,
+	V60ExceptionCompatibility=yes
+	}
+		
+	// Use Declarations
+	use forms ;
+	use results ;	
+	
+	
+	report reportLine[] ;
+	size, currentLine, lastLine, mapLine int ;
+	
+	inputParms ResultsLocation ; 
+ 
+	function main()
+		
+		getTotals ( ) ;
+		if ( size == 0 ) 
+			getDetails ( ) ;
+		end
+		currentLine = 1;
+		while (ConverseVar.eventKey not pf3)
+		  mapLine = 1;
+		  lastLine = currentLine ;
+		  while (currentLine <= size 
+		  && mapLine <= 22)
+		    testResults.formLine[mapLine] = report[currentLine].text ;
+		    currentLine = currentLine + 1;
+		    mapLine = mapLine + 1;
+		  end
+		  while (mapLine <= 22)
+		    testResults.formLine[mapLine] = " ";
+		    mapLine = mapLine + 1;
+		  end
+		  converse testResults ;
+		  if (ConverseVar.eventKey is pf1)
+		    getTotals() ;
+		  end
+		  if (ConverseVar.eventKey is pf2)
+		    getDetails() ;
+		   end
+		  if (ConverseVar.eventKey is pf4)
+		    case ( testResults.fileName )				//0
+		    	when ( "Details" ) writeDetails() ;
+		    	when ( "Totals" ) writeTotals() ;
+		    end
+		    currentLine = currentLine - 22 ;
+		  end
+		  if ( ConverseVar.eventKey is pf12 
+		  || ConverseVar.eventKey is pf11 )
+		    exit program;
+		  end
+		  if (ConverseVar.eventKey is pf7)
+		    currentLine = currentLine - 41;
+		  end
+		  if (ConverseVar.eventKey is pf8)
+		  	if (currentLine < size)
+		    	currentLine = currentLine - 1;
+		   	else
+		   		currentLine = lastLine ;
+		   	end
+		  end
+		  if (currentLine <= 0)
+		    currentLine = 1;
+		  end
+		end
+//		returnToTestDriver() ;
+	end 
+	
+	function getTotals()
+		results.getTotals ( report ) ;
+		testResults.fileName = "Totals" ;		//0
+		currentLine = 1 ;
+		size = report.getSize() ;
+	end
+	
+	function getDetails()
+		results.getDetails ( report ) ;
+		testResults.fileName = "Details" ;		//0
+		currentLine = 1 ;
+		size = report.getSize() ;
+	end
+end
+
+formGroup forms
+
+	Form testResults type textForm	 
+		 { screenSizes = [[24,80]], formsize = [24,80], position = [1,1]}
+		
+		// Start of Variable fields
+		  fileName char(20) { position = [1,46], protect = protect } ;
+		  formLine char(79) [22] 
+		  { position = [2,1], fieldLen = 79, cursor = yes, 
+		    color = defaultColor, highlight = noHighlight, 
+		    intensity = normalIntensity, protect = protect, align = left, 
+		    fillCharacter = "",
+		    this [2] { position = [3,1] },
+		    this [3] { position = [4,1] },
+		    this [4] { position = [5,1] },
+		    this [5] { position = [6,1] },
+		    this [6] { position = [7,1] },
+		    this [7] { position = [8,1] },
+		    this [8] { position = [9,1] },
+		    this [9] { position = [10,1] },
+		    this [10] { position = [11,1] },
+		    this [11] { position = [12,1] },
+		    this [12] { position = [13,1] },
+		    this [13] { position = [14,1] },
+		    this [14] { position = [15,1] },
+		    this [15] { position = [16,1] },
+		    this [16] { position = [17,1] },
+		    this [17] { position = [18,1] },
+		    this [18] { position = [19,1] },
+		    this [19] { position = [20,1] },
+		    this [20] { position = [21,1] },
+		    this [21] { position = [22,1] },
+		    this [22] { position = [23,1] }
+		  };
+		
+		// Start of Constant fields
+		  * { position = [24,1], fieldLen = 79, color = defaultColor, 
+		      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+		      value = "F1=Totals F2=Details F3=Return F4=WriteToFile F7=Back F8=Forward F12=Exit"};
+		  * { position = [1,30], color = green, 
+		      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+		      value = "Test Results:"};
+		end
+
+	Form sqlReport type TextForm { 
+		screenSizes = [[ 24, 80 ]], 
+		formsize = [24,80], 
+		position = [1,1],
+	  	validationBypassKeys = [ pf12 ], 
+		msgField = message}
+	  
+		* { position = [1, 20], color = green, value = "Version 6.0.1:  Uir Test Form Group "} ;  
+		
+		* { position = [3, 1], color = green, value = "Test terminated early.  Hard SQL Error."} ;  
+		* { position = [5,1], value = "SqlCode.............." } ;
+		sqlCode num(6) { position = [5,25], protect = skipProtect } ;
+		* { position = [6,1], value = "SqlState............." } ;
+		sqlState char(5) { position = [6,25], protect = skipProtect } ;
+		* { position = [7,1], value = "SQL message inserts.." } ;
+		sqlErrmc char(50) { position = [7,25], protect = skipProtect } ;
+		* { position = [8,1], value = "Description.........." } ;
+		sqlErrorDesc char(50) { position = [8,25], protect = skipProtect } ;
+				
+		message char(78) { position = [23,1], protect = skipProtect, color = red } ;
+  		* { position = [24,1], value = "PF12 = Cancel" } ;
+	end
+	
+	 
+end
+
+library results  { 
+	alias = "TSTRSLTS",
+	allowUnqualifiedItemReferences = yes,
+	handleHardIOErrors = yes,
+	throwNrfEofExceptions = yes,
+	V60ExceptionCompatibility=yes
+	}    
+	
+	private stateTable CobolTestStateTable ;
+	state CobolTestState { initialized = yes } ;
+	private reportLine CobolTestReportTable ;
+	
+	sqlStatus CobolTestSqlStatus ;
+	
+	dbm char(100) = dbmDB2 ;
+//	dbm char(100) = dbmInformix ;
+//	dbm char(100) = dbmOracle ;
+	
+	const baseTestDriver int = 1 ;
+	const dbmDB2 char(15) = "db2" ;
+	const dbmInformix char(15) = "informix" ;
+	const dbmOracle char(15) = "oracle" ;
+	const dbmSQLServer char(15) = "sqlServer" ;
+	const dbmCloudScape char(15) = "dbmCloudScape" ;
+
+	const isTrue smallInt = 1 ;
+	const isFalse smallInt = 0 ;
+	
+	private writeToConsole int = 1 ;
+	private writeToDataBase int = 1 ;
+	private suspendDataBaseRecording int = 0 ;
+	private testReset int = 1 ;
+	private isPageHandler int = 0 ;
+	
+	private reportFile ReportFile ;
+	private totalsFile TotalsFile ;
+	
+	private workItem1, workItem2 char(50) ;
+	
+	private const unknownVariation char(100) = "Variation unknown - variation id not set by test case" ;
+			
+	// constant Declarations
+	const modified char(10)   = "modified" ;
+	const initial char(10)   = "initial" ; 
+	const onEntry char(10)   = "onEntry" ;
+	const onEntryA char(10)   = "on" ;
+	const onEntryB char(10)   = "Entry" ;
+	const empty char(10)   = " "  ;
+		
+	const actualValue char(20)   = "  Actual value:  " ;  
+	const expectedValue char(20)   = "  Expected value:  " ;
+	
+	// Null Data Item Declarations
+//	nullItems NullItemsRecord ;
+	aUnicode10 Unicode10 ;
+	aTImeStamp LongTimeStamp ;
+	 
+//	private aLine ALine ;
+	aLine ALine ; 
+	aTemporaryReport Aline[] ;
+		
+	// Function Declarations
+	 
+	
+	function startTestSet( testSetDesc char(100) in )
+		setTables() ;
+		state.test = testSetDesc ;
+		updateState() ;	
+		aLine = "Test set name:  " + testSetDesc ;
+		addDetailLine( aLine ) ;
+		addDetailLine( " " ) ;	
+	end
+		
+	function startTest ( test char(100) in )
+		if ( state.testCount == 0 )
+			setTables() ;
+		end ;
+		state.testData = " "; 
+		state.testCounts = "00" ;
+		state.test = test ;	
+		updateState() ;
+		aLine = "Test name:  " + test ;
+		addDetailLine( aLine ) ;
+		addDetailLine( " " ) ;
+	end
+	
+	function restoreTestState()
+		if ( writeToDataBase == isTrue )
+			getState() ;
+		end  
+	end
+	
+	function success() 
+		variationCount = variationCount + 1 ;
+		successCount = successCount + 1 ;
+		if ( defect != " " || trace == isTrue ) 
+			aLine = "Successful variation:  " + variation ;
+			addDetailLine( aLine ) ;
+			if ( defect != " "  ) 
+				fixedFailureCount = fixedFailureCount + 1 ;
+				aLine = "  Known defect fixed:  " + defect ;
+				addDetailLine( aLine ) ;
+			end
+			defect = " " ;
+		end
+		variation = unknownVariation ;
+		updateState() ;
+	end
+
+	function failure()
+		variationCount = variationCount + 1 ;
+		failureCount = failureCount + 1 ;
+		aLine =  "Failing variation:  " + variation ;
+		addDetailLine ( aLine ) ;
+		if ( defect == " " )
+			newFailureCount = newFailureCount + 1 ;
+		else
+			aLine = "  Known defect:  " + defect ;
+			addDetailLine( aLine ) ;
+			knownFailureCount = knownFailureCount + 1 ;
+		end		
+		variation = unknownVariation  ;
+		updateState() ;
+	end	
+	
+	/* set functions for test and variation information */
+	
+	function setVariation ( text char(100) in ) 
+		variation = text ;
+		updateState() ;
+    end
+    
+    function getVariation () returns ( char(100) )
+    	return ( variation ) ;
+    end
+    
+    function getTestRunCount () returns ( int )
+    	return ( state.testCount ) ;
+    end
+    
+    function setTestRunCount ( count int in )  
+    	state.testCount = count ;
+    	updateState() ;
+    end
+    
+    function getSelectedTestCount () returns ( int )
+    	return ( state.selectedTestCount ) ;
+    end
+    
+    function setSelectedTestCount ( count int in )  
+    	state.selectedTestCount = count ;
+    	updateState() ;
+    end
+    
+    
+    function setTrace () ;
+    	trace = isTrue ;
+    	updateState() ;
+    end
+    
+    function setWriteToConsole() 
+    	writeToConsole = isTrue ;
+    	updateState() ;
+    end
+    
+    function addDetail( detailText char(100) in)  
+    	addDetailLine ( detailText ) ;
+		updateState() ;
+    end       
+    /* defect annotation functions */
+    
+    function validationDefect ( text char(100) in )
+    	defect = "  Validation Defect:  " + text ;
+    	failure() ;
+    end
+    
+    function generationException ( text char(100) in )
+    	defect = "  Generation Exception:  " + text ;
+    	failure() ;
+    end        
+       
+    function generationDefect ( text char(100) in )
+    	defect = "  Generation Defect:  " + text ;
+    	failure() ;
+    end    
+        
+    function compileError ( text char(100) in )
+    	generationDefect ( text ) ;
+    end
+    
+    function runtimeException ( text char(100) in )
+    	defect = "  Runtime Exception:  " + text ;
+    	failure() ;
+    end
+    
+    function debugDefect ( text char(100) in )
+    	if ( systemType is debug )
+    		defect = "  Debug Defect:  " + text ;
+    	end
+    end
+    
+    function debugException ( text char(100) in )
+    	defect = "  Debug Exception:  " + text ;
+    	failure() ;
+    end
+    
+    function runtimeDefect ( text char(100) in )
+    	defect = "  Runtime Defect:  " + text ;
+    end
+
+	function runtimeError ( text char(100) in )
+    	runtimeException ( text ) ;
+    end    
+  
+	function endTest()
+		countAsChar intAsChar ;
+		addTotalLine ( "Summary for test:   " + test ) ;
+		countAsChar = getIntAsChar( variationCount ) ;
+		addTotalLine ( "  Variations:      " + countAsChar ) ; 
+		countAsChar = getIntAsChar( successCount ) ;
+		addTotalLine ( "  Successes:       " + countAsChar ) ;
+		countAsChar = getIntAsChar( fixedFailureCount ) ;
+		addTotalLine ( "  Fixed Failures:  " + countAsChar ) ;
+		countAsChar = getIntAsChar( knownFailureCount ) ;
+		addTotalLine ( "  Known Failures:  " + countAsChar ) ;
+		countAsChar = getIntAsChar( newFailureCount ) ;
+		addTotalLine ( "  New Failures:    " + countAsChar ) ;
+		addTotalLine ( " " ) ;
+		addDetailLine ( "Test run complete." ) ;	
+		addDetailLine ( " " ) ;	
+		if ( state.testCount == 0 )
+			writeDetails() ;
+		end			
+	end
+	
+	function endTestSet() ;
+	end
+	
+	function suspendDbResultRecording() ;
+		commit() ;
+		disconnect() ;
+		suspendDatabaseRecording = isTrue ;
+		if ( writeToDataBase == isTrue )
+			aTemporaryReport.removeAll() ;		
+		end 
+	end
+	
+	function resumeDbResultRecording() ;
+	    i int ;
+	    commit() ;
+		disconnect() ;
+		suspendDatabaseRecording = isFalse ;
+		if ( writeToDataBase == isTrue )
+			for ( i from 1 to aTemporaryReport.getSize() )
+				addDetailLine ( aTemporaryReport[i] ) ; 
+			end			
+			aTemporaryReport.removeAll() ;	
+		end	
+	end
+	
+	function getTotals( aReport ReportLine[] ) 
+		
+	    if ( writeToDatabase == isTrue )
+			try
+				reportLine.id = 10000 ;
+				stateTable.id = getTesterKey () ;
+				open lines for reportLine with
+					#sql{
+						select
+							id, line
+						from EGLTESTREPORT
+						where
+							testerId = :stateTable.id AND id < :reportLine.id
+						order by
+							id asc
+					} ;
+			onException
+				sqlHardError ( "Read of report totals failed." ) ;
+			end
+		end
+		getReportArray ( aReport ) ;
+	end
+	
+	function getDetails( aReport ReportLine[] )
+		if ( writeToDatabase == isTrue )
+			try
+				reportLine.id = 10000 ;
+				stateTable.id = getTesterKey () ;
+				open lines for reportLine with
+					#sql{
+						select
+							id, line
+						from EGLTESTREPORT
+						where
+							testerId = :stateTable.id AND id >= :reportLine.id
+						order by
+							id asc
+					} ;
+			onException
+				sqlHardError ( "Read of report details failed." ) ;
+			end
+		end
+		getReportArray ( aReport ) ;
+	end
+	
+	private function getReportArray ( reportLines ReportLine[] )
+		i, j int ;
+		reportLines.removeAll() ;
+		aReportLine ReportLine ;
+		if ( writeToDatabase == isTrue )
+			try
+				foreach ( reportLine )
+					aReportLine.text = reportLine.line ;
+					reportLines.appendElement ( aReportLine ) ;
+				end
+			onException
+				sqlHardError ( "Read of report details failed." ) ;
+			end
+		else
+			j = aTemporaryReport.getSize() ;
+			for ( i from 1 to j )
+				aReportLine.text = aTemporaryReport[i] ;
+				ReportLines.appendElement ( aReportLine ) ;
+			end
+		end
+	end
+	
+	function getReportRecord ( reportRec CobolTestRecord )
+		try
+			set reportRec empty ;
+			open lines for reportLine ;
+			foreach ( reportLine )
+				if ( count < 500 ) 
+					count = count + 1 ;
+					reportRec.lines[count] = reportLine.line ;
+				end
+			end
+		onException
+			sqlHardError ( "Read of report details failed." ) ;
+		end
+	end
+	
+	private function writeToConsoleFunc ( line ReportLine ) 
+		if ( writeToConsole == isTrue ) 
+//			if ( systemType not debug )
+				displayOnConsole ( line.text ) ;
+//			end
+		end
+	end
+	
+	function displayOnConsole ( line char(200) in ) 
+		if ( writeToConsole == isTrue ) 
+//			if ( systemType not debug )
+				javaOnlyLib.displayOnConsole ( line ) ;
+//			end
+		end
+	end
+	
+	
+	private function getDate () returns (char(100)) 
+		aDate char(100) ;
+		aDate = currentDate() ;
+		return ( aDate ) ;
+	end
+
+	private function setTables()
+				
+		set sqlStatus empty ;
+		
+		if ( writeToDatabase == isTrue )
+			 				
+//			try
+//				execute #sql{drop table EGLTESTSTATE } ;
+//			onException
+//			end
+//			
+//			try
+//				execute #sql{drop table EGLTESTREPORT } ;
+//			onException
+//			end
+//			 
+//			commit() ;
+					
+			try
+				if ( dbm == dbmInformix )
+					execute #sql{
+						create table EGLTESTSTATE (
+						id char(10) not null,
+						contents char(500),
+						primary key(id))
+						}; 
+				else
+					execute #sql{
+						create table EGLTESTSTATE (
+						id char(10) not null,
+						contents varchar(500) not null,
+						primary key(id))
+						}; 
+				end
+			onException	
+//				sqlHardError( " Creation of EGLTESTSTATE table failed") ;
+			end
+			
+			try 
+				stateTable.id = getTesterKey() ;
+			    execute delete for stateTable ; 
+			onException	
+				if ( sysVar.sqlData.sqlCode != 100 )
+					sqlHardError( " Deletion of EGLTESTSTATE table record failed") ;
+				end
+			end
+			    
+			displayOnConsole ( "Database manager:  " + dbm ) ;
+			displayOnConsole ( "EGLTESTSTATE table initialized" ) ;
+			
+			try
+				execute #sql{
+					create table EGLTESTREPORT (
+					id int not null,
+					testerId char(10) not null,
+					line varchar(200) not null,
+					primary key ( testerId, id ) 
+					) }; 
+			onException	
+//				sqlHardError( " Creation of EGLTESTREPORT table failed" ) ;
+			end	
+	
+			try 
+				reportLine.testerId = stateTable.id ;
+			    execute delete 
+			    	#sql{
+			    		delete from EGLTESTREPORT
+			    		where
+			    			testerId = :stateTable.id
+			    	} for reportLine ; 
+			onException	
+				if ( sysVar.sqlData.sqlCode != 100 )
+					sqlHardError( " Deletion of EGLTESTREPORT table records failed") ;
+				end
+			end
+	
+			displayOnConsole ( "EGLTESTREPORT table initialize" ) ;
+			
+			commit() ;
+			
+		end
+			
+		set state empty ;
+		state.id = getTesterKey() ;		
+		state.detailCount = 10000 ;
+		addState() ;
+		workItem1 = formatTime ( currentTime()) ;
+		aLine = "EGL Self Verifying Test Case:  Report File - date: " + currentDate() + ", time: " + workItem1 ;
+		addDetailLine( aLine ) ;
+		addDetailLine( " " ) ;
+	end
+	
+	private function addState()
+		if ( writeToDatabase == isTrue )
+			try
+				move state to StateTable byName ;
+				stateTable.id = getTesterKey() ;
+				add stateTable ;
+			onException
+				sqlHardError( " Initial add to EGLTESTSTATE table failed" ) ;
+			end		
+		end
+	end
+		
+	private function getState()
+		if ( writeToDatabase == isTrue )
+			try
+				stateTable.id = getTesterKey() ;
+				get stateTable ;
+				move StateTable to state byName ;
+			onException
+				sqlHardError( " Get for EGLTESTSTATE table failed" ) ;
+			end
+		end
+	end
+	
+	private function updateState()
+		if ( writeToDatabase == isTrue )
+			try
+				move state to stateTable byName ;
+				stateTable.id = getTesterKey() ;
+				execute update for stateTable ;
+			onException
+				sqlHardError( " Update to EGLTESTSTATE table failed" ) ;
+			end
+			commit() ;
+		end
+	end
+	
+	private function addDetailLine (text char(200) in )
+		addLine ( text, detailCount ) ;
+	end
+	
+	private function addTotalLine (text char(200) in)
+		addLine ( text, totalCount ) ;
+	end
+	
+	private function addLine( text aLine in , key int )
+		if ( writeToDataBase == isTrue &&
+			suspendDatabaseRecording == isFalse )
+			key = key + 1 ;
+			updateState() ;
+			reportLine.id = key ;
+			reportLine.testerId = stateTable.id ;
+			reportLine.line = text ;			 
+			try
+				add reportLine ;
+			onException
+				sqlHardError( " Add to EGLTESTREPORT table failed" ) ;
+			end
+		else
+			aTemporaryReport.appendElement( text ) ;
+		end
+		displayOnConsole ( text ) ;
+	end	 
+	
+	private function sqlHardError ( text char(100) in ) 
+		sqlStatus.sqlHardError = isTrue ;
+		sqlStatus.sqlCode = sysVar.sqlData.sqlCode ;
+		sqlStatus.sqlState = sysVar.sqlData.sqlState ;
+		sqlStatus.sqlErrmc = sysVar.sqlData.sqlErrmc ;
+		sqlStatus.sqlErrorDesc = text ;
+		displayOnConsole ( "SQL Error: " + text ) ;
+		displayOnConsole ( "SqlState:  " + sqlStatus.sqlState ) ;
+		displayOnConsole ( "SqlCode:  " + formatNumber ( sqlStatus.sqlCode ) ) ;
+		exit rununit ;
+	end
+	
+	function writeDetails()
+		i int ;
+		report ReportLine[] ;
+		getDetails ( report ) ;
+		testResetF( report[1].text ) ;
+		reportFile.newLineControl = lineControl() ;
+		for ( i from 2 to report.getSize() )
+			reportFile.text = report[i].text ;
+			add reportFile ;
+		end
+		close reportFile ;
+	end
+	
+	function writeTotals()
+		i int ;
+		report ReportLine[] ;
+		totalsReset() ;
+		getTotals ( report ) ;
+		totalsFile.newLineControl = lineControl() ;
+		for ( i from 1 to report.getSize() )
+			totalsFile.text = report[i].text ;
+			add totalsFile ;
+		end
+		close totalsFile ;
+	end
+	
+	private function testResetF( text char(200) in )
+
+    	resetFile ResetFile ;
+    	resetFile.text = text ;
+		resetFile.newLineControl = lineControl() ;
+//    	if ( testReset == isTrue && isPageHandler == isFalse ) 
+    	close reportFile ;
+    	add resetFile ; 
+    	close resetFile ;
+//    	end 
+    end
+    
+    private function totalsReset()
+    	resetTotalsFile resetTotalsFile ;  
+//    	today string ;
+		today char(10);
+		today = getDate() ;
+		aTime time ;
+		aTime = currentTime() ;
+		resetTotalsFile.Text = "Totals For a Set of Automated EGL Tests, date = " +
+			today +
+			", time = " +
+			formatTime( aTime ) ;
+		resetTotalsFile.newLineControl = lineControl() ;
+	 	close totalsFile ;
+		add resetTotalsFile ;
+		resetTotalsFile.text = " " ;
+		add resetTotalsFile ;
+		close resetTotalsFile ;
+	end
+	
+	private function lineControl () returns ( char(1) ) ;  
+		if ( isCobolEnv() == isTrue )
+			return ( " " ) ;
+		else
+	 		return ( javaOnlyLib.lineControl() ) ;
+	 	end	
+	end	
+	
+	//DataLib functions
+	
+			
+  	
+	
+	Function compareChar10 (item1 char10 in, item2 char10 in)
+		
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			aLine = actualValue + item1 ;
+			addDetail(aLine) ;
+			aLine = expectedValue + item2 ;
+			addDetail(aLine) ;
+		end
+		
+	end
+	
+	Function compareChar (item1 char(120) in, item2 char(120) in )
+		
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			aLine = actualValue + item1 ;
+			addDetail(aLine) ;
+			aLine = expectedValue + item2 ;
+			addDetail(aLine) ;
+		end
+		
+	end	
+	
+	Function compareDecimal10_2 (item1 Decimal10_2, item2 Decimal10_2)
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+		end
+	end
+
+// ??? COBOL does not support string type. Changed to char(100)	
+//	Function compareString ( item1 string in, item2 string in )
+	Function compareString ( item1 char(100) in, item2 char(100) in )	
+		if ( item1 == item2 )
+			success();
+		else
+			failure();			
+			aLine = actualValue + "\"" + clip(item1) + "\"" ;
+			addDetail(aLine) ;
+			aLine = expectedValue + "\"" + clip(item2) + "\"";
+			addDetail(aLine) ;
+		end
+		
+	end
+	
+	Function compareText ( item1 char(100) in, item2 char(100) in )	
+		if ( item1 == item2 )
+			success();
+		else
+			failure();			
+			aLine = actualValue + "\"" + clip(item1) + "\"" ;
+			addDetail(aLine) ;
+			aLine = expectedValue + "\"" + clip(item2) + "\"";
+			addDetail(aLine) ;
+		end
+		
+	end
+	
+	
+	Function compareNumber (item1 Decimal32_4 in , item2 Decimal32_4 in)
+
+		numberAsText char(35) ;
+
+		formatForNumber char(35) ;
+		formatForNumber = "<----------------------------#.####" ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			numberAsText = formatNumber (item1, formatForNumber) ;
+			aLine = actualValue + numberAsText ;
+			addDetail(aLine) ;
+			numberAsText = formatNumber (item2, formatForNumber) ;
+			aLine = expectedValue + numberAsText ;
+			addDetail(aLine) ;
+		end
+	end
+	
+	Function compareDecimal (item1 Decimal18_6 in , item2 Decimal18_6 in)
+//		numberAsText String ; // ??? COBOL does not support string data type
+		numberAsText char(21) ;
+//		formatForNumber String ; // ??? COBOL does not support string data type
+		formatForNumber char(21) ;
+		formatForNumber = "<------------#.######" ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			numberAsText = formatNumber (item1, formatForNumber) ;
+			aLine = actualValue + numberAsText ;
+			addDetail(aLine) ;
+			numberAsText = formatNumber (item2, formatForNumber) ;
+			aLine = expectedValue + numberAsText ;
+			addDetail(aLine) ;
+		end
+	end
+	 
+	function compareInt (item1 int in, item2 int in)
+		intValue intAsChar ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			intValue = getIntAsChar(item1) ;
+			aLine = actualValue + intValue ;
+			addDetail(aline) ;
+			intValue = getIntAsChar(item2) ;
+			aLine = expectedValue + intValue ;
+			addDetail(aline) ;
+		end
+	end
+	
+	function compareBigInt (item1 bigInt in, item2 bigInt in)
+		bigIntValue BigIntAsChar ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			bigIntValue = getBigIntAsChar(item1) ;
+			aLine = actualValue + bigIntValue ;
+			addDetail(aline) ;
+			bigIntValue = getBigIntAsChar(item2) ;
+			aLine = expectedValue + bigIntValue ;
+			addDetail(aline) ;
+		end
+	end	
+	
+	function compareFloat (item1 float in, item2 float in)
+		floatValue floatAsChar ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			floatValue = getFloatAsChar(item1) ;
+			aLine = actualValue + floatValue ;
+			addDetail(aline) ;
+			floatValue = getFloatAsChar(item2) ;
+			aLine = expectedValue + floatValue ;
+			addDetail(aline) ;
+		end
+	end	
+	
+	Function compareDate (item1 date in, item2 date in)
+		dateAsChar char(10) ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			dateAsChar = formatDate ( item1, "yyyy:MM:dd" ) ;
+			aLine = actualValue + dateAsChar ;
+			addDetail(aline) ;
+			dateAsChar = formatDate ( item2, "yyyy:MM:dd" ) ;
+			aLine = actualValue + dateAsChar ;
+			addDetail(aline) ;
+		end
+	end
+	
+	Function compareTime (item1 time in, item2 time in)
+		timeAsChar char(10) ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			timeAsChar = formatTime ( item1, "hh:mm:ss" ) ;
+			aLine = actualValue + timeAsChar ;
+			addDetail(aline) ;
+			timeAsChar = formatTime ( item2, "hh:mm:ss" ) ;
+			aLine = expectedValue + timeAsChar ;
+			addDetail(aline) ;
+		end
+	end
+	
+	Function compareTimeStamp (item1 timeStamp in, item2 timeStamp in )
+		timeStampAsChar char(16) ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			timeStampAsChar = formatTimeStamp ( item1, "yyyy:mm:dd:hh:mm:ss" ) ;
+			aLine = actualValue + timeStampAsChar ;
+			addDetail(aline) ;
+			timeStampAsChar = formatTimeStamp ( item2, "yyyy:mm:dd:hh:mm:ss" ) ;
+			aLine = expectedValue + timeStampAsChar ;
+			addDetail(aline) ;
+		end
+	end
+	
+	Function compareLongTimeStamp (item1 LongTimeStamp in, item2 LongTimeStamp in )
+		timeStampAsChar char(16) ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			timeStampAsChar = formatTimeStamp ( item1, "yyyy:mm:dd:hh:mm:ss:ffffff" ) ;
+			aLine = actualValue + timeStampAsChar ;
+			addDetail(aline) ;
+			timeStampAsChar = formatTimeStamp ( item2, "yyyy:mm:dd:hh:mm:ss:ffffff" ) ;
+			aLine = expectedValue + timeStampAsChar ;
+			addDetail(aline) ;
+		end
+	end
+	
+	Function compareMonthSpan (item1 MonthSpan in, item2 MonthSpan in)
+		monthSpanAsChar char(6) ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			MonthSpanAsChar = item1 ;
+			aLine = actualValue + monthSpanAsChar ;
+			addDetail(aline) ;
+			monthSpanAsChar = item2 ;
+			aLine = expectedValue + monthSpanAsChar ;
+			addDetail(aline) ;
+		end
+	end
+	
+	Function compareSecondSpan (item1 longInterval in, item2 longInterval in)
+		secondSpanAsChar char(19) ;
+		if ( item1 == item2 )
+			success();
+		else
+			failure();
+			secondSpanAsChar = item1 ;
+			aLine = actualValue + SecondSpanAsChar ;
+			addDetail(aline) ;
+			secondSpanAsChar = item2 ;
+			aLine = expectedValue + SecondSpanAsChar ;
+			addDetail(aline) ;
+		end
+	end
+	
+	function checkText ( variation char(70) in, item1 char(50) in, item2 char(50) in ) 
+		setVariation ( variation ) ;
+		compareText ( item1, item2 ) ;
+	end
+	
+	Function checkNumber ( variation char(70) in, item1 Decimal32_8 in , item2 Decimal32_8 in)
+		setVariation ( variation ) ;
+		compareNumber ( item1, item2 ) ;
+	end
+	
+	Function checkBiggestInt ( variation char(70) in, item1 Decimal32_0 in , item2 Decimal32_0 in)
+		setVariation ( variation ) ;
+		compareBiggestInt ( item1, item2 ) ;
+	end
+	
+	Function checkFraction ( variation char(70) in, item1 Decimal32_32 in , item2 Decimal32_32 in)
+		setVariation ( variation ) ;
+		compareFraction ( item1, item2 ) ;
+	end
+	
+	Function reportFailure ( item1 char(50) in, item2 char(50) in )
+		failure();
+		aLine = actualValue + item1 ;
+		addDetail(aLine) ;
+		aLine = expectedValue + item2 ;
+		addDetail(aLine) ;
+	end
+	
+	Function compareBiggestInt (item1 Decimal32_0 in , item2 Decimal32_0 in)
+		
+		format char(34) = "<--------------------------------#" ;
+		if ( item1 == item2 )
+			success();
+		else
+			workItem1 = formatNumber ( item1, format ) ;
+			workItem2 = formatNumber ( item2, format ) ;
+			reportFailure ( workItem1 ,	workItem2 ) ;
+		end
+	end
+	
+	Function compareFraction (item1 Decimal32_32 in , item2 Decimal32_32 in)
+		format char(34)  = "-.################################" ;
+		if ( item1 == item2 )
+			success();
+		else
+			workItem1 = formatNumber ( item1, format ) ;
+			workItem2 = formatNumber ( item2, format ) ;
+			reportFailure ( workItem1 ,	workItem2 ) ;
+		end
+	end
+	
+	Function getIntAsChar ( anInt int )  returns ( char(10) )  
+		intAsChar char(10) ; 
+		intAsChar = formatNumber( anInt, "--------&") ;
+//		intRec intAsCharRec ;
+//		intRec.intAsChar.intAsNum = anInt ;
+ 		return ( intAsChar ) ;  
+	end
+	
+	Function getBigIntAsChar ( anInt bigInt )  returns ( char(19) )  
+		bigIntAsChar char(19) ; 
+		bigIntAsChar = formatNumber( anInt, "-----------------&") ;
+//		bigIntRec bigIntAsCharRec ;
+//		bigIntRec.bigIntAsChar.bigIntAsNum = anInt ;
+ 		return ( bigIntAsChar ) ;  
+	end	
+	
+	Function getFloatAsChar ( aFloat float )  returns ( char(17) )  
+		floatAsChar char(17) ; 
+		floatAsChar = formatNumber( aFloat, "----------------&") ;
+//		floatRec floatAsCharRec ;
+//		floatRec.floatAsChar.floatAsNum = anInt ;
+ 		return ( floatAsChar ) ;  
+	end	
+	
+	Function returnInt ( anInt int in ) returns ( int )
+		return ( anInt ) ;
+	end
+	
+	Function returnSmallInt ( aSmallInt smallInt in ) returns ( smallInt )
+		return ( aSmallInt ) ;
+	end
+	
+	Function returnFloat ( aFloat float in ) returns ( float )
+		return ( aFloat ) ;
+	end
+	
+	Function returnMoney ( aMoney money in ) returns ( money )
+		return ( aMoney ) ;
+	end
+	
+	Function returnDecimal ( aDecimal decimal(31,8) in ) returns ( decimal(31,8) )
+		return ( aDecimal) ;
+	end
+	
+	Function returnChar30 ( aChar30 char(30) in ) returns ( char(30) ) 
+		return ( aChar30 ) ;
+	end
+	
+	Function returnUnicode30 ( aUnicode30 unicode(30) in ) returns ( unicode(30) ) 
+		return ( aUnicode30 ) ;
+	end
+	
+	Function returnMbchar30 ( aMbchar30 mbchar(30) in ) returns ( mbchar(30) ) 
+		return ( aMbchar30 ) ;
+	end
+	
+	Function returnDbchar30 ( aDbchar30 Dbchar(30) in ) returns ( Dbchar(30) ) 
+		return ( aDbchar30 ) ;
+	end
+
+	Function isCobolEnv () returns ( smallInt )
+		systype char(8) ;
+		systype = systemType ;
+		if ( sysType == "imsbmp" ||
+			sysType == "ims" || 
+			systemType is iseriesc ||
+			systemType is zosbatch ||
+			systemType is zoscics )
+			return ( isTrue ) ;
+		else
+			return ( isFalse ) ;
+		end
+	end
+	
+	Function isOnlineEnv () returns ( smallInt )
+		systype char(8) ;
+		systype = systemType ;
+		if ( sysType == "imsbmp" ||
+			systemType is zosbatch )
+			return ( isFalse ) ;
+		else
+			return ( isTrue ) ;
+		end
+	end
+	
+	Function getTesterKey ( )  returns ( char(10) )
+		key char(10) ;
+		if ( isCobolEnv() != isTrue )
+			key = javaOnlyLib.getTableKey() ;
+		else
+			key = sysVar.userId ;
+		end
+		return ( key ) ;
+	end	
+	
+end
+
+DataItem Unicode10 char(10) { value = "initial" } end
+//DataItem ALine string end 
+DataItem ALine char(150) end 
+//DataItem TextLine string end
+DataItem TextLine char(150) end
+DataItem FixedTextLine char(150) end
+DataItem Char10 char(10) { value = "initial" } end
+DataItem Char30 char(30) end
+DataItem Count int end
+DataItem Decimal10_2 decimal(10,2) end
+DataItem Decimal32_4 decimal(32,4) end
+DataItem Decimal32_8 decimal(32,8) end
+DataItem Decimal18_6 decimal(18,6) end
+DataItem Decimal32_0 decimal(32,0) end
+DataItem Decimal32_32 decimal(32,32) end
+DataItem IntAsChar char(10) end
+DataItem BigIntAsChar char(19) end
+DataItem IntAsNum  num(10) end
+DataItem BigIntAsNum  num(19) end
+DataItem FloatAsChar  char(17) end
+DataItem FloatAsNum  num(17) end
+DataItem Name char(80) { sqlVariableLen = yes } end
+DataItem BooleanValue smallInt end
+
+
+// Common Time Stamp Data Types
+DataItem LongTimeStamp timeStamp ( "yyyyMMddhhmmssffffff" ) end
+DataItem MonthTimeStamp timeStamp ( "yyyyMM" ) end
+DataItem TimeTimeStamp timeStamp ("hhmmss") end
+DataItem DateTimeStamp timeStamp ("yyyyMMdd") end
+
+// Common Interval Data Types
+DataItem LongInterval interval ( "ddddddhhmmssffffff" ) end
+DataItem DaysInterval interval ( "ddddddddd" ) end
+DataItem MonthsInterval interval ("mmmmmm") end
+DataItem HoursInterval interval ("hhhhhhhhh") end
+DataItem SecondsInterval interval ("sssssssss") end
+DataItem YearsInterval interval ("yyyy") end
+DataItem MonthSpan interval ("yyyymm") end
+DataItem SecondSpan interval ("dddddddddhhmmss") end
+
+library javaOnlyLib type basicLibrary {
+	alias = "JAVALIB"
+	}
+	
+	// Function Declarations
+	function displayOnConsole( text char(131) in )
+		displayLineMode ( clip ( text ) ) ;
+	end
+	
+	function lineControl () returns( char(1) )
+		return ( "\n" ) ;
+	end
+
+	function getTableKey () returns ( char(20) )
+		key char(10) ;
+		key = syslib.getProperty ( "egl.fvt.tester.id" ) ; 
+		if ( key == " " )
+			key = "CobolKey" ;
+		end
+		return ( key ) ;
+    end
+	
+end
+
+Record ReportLine type basicRecord
+//	text TextLine ;
+	10 text TextLine ;
+end
+
+Record ReportFile type serialRecord { fileName = "testfile" }
+	10 text FixedTextLine ;
+ 	10 newLineControl char(1) ;
+end
+
+Record TotalsFile type serialRecord { fileName = "totals" }
+	10 embed ReportFile ;
+end
+
+Record ResetFile type serialRecord { fileName = "tstreset" }
+	10 embed ReportFile ;
+end
+  
+Record ResetTotalsFile type serialRecord { fileName = "totreset" }
+	10 embed ReportFile ;
+end
+
+Record ResultsLocation
+	10 resultsInDataBase BooleanValue ;
+end
+
+record shortRecord
+	10 firstItem char(10);
+end
+
+record mediumRecord
+	10 firstItem char(10);
+	10 secondItem char(10);
+end
+
+record longRecord
+	10 firstItem char(10);
+	10 secondItem char(10);
+	10 thirdItem char(10);
+end
+
+record sqlRcd type sqlRecord
+	10 sqlItem1 char(10) { isSqlNullable=yes } ;
+	10 sqlItem2 char(10) { isSqlNullable=yes } ;
+	10 sqlItem3 char(10) { isSqlNullable=yes } ;
+	10 sqlItem4 char(10) { isSqlNullable=yes } ;
+end
+
+Record CobolTestReportTable type SQLRecord {
+	tableNames = [["EGLTESTREPORT"]] , 
+	keyItems = [id] 
+	}
+	id int  ; 
+	testerId char(10) ;  
+	line char(200) ;  
+end
+
+Record CobolTestState 
+	10 * char(4) ;
+	10 id char(10) ; 
+	10 * char(4) ;
+	10 contents char(500) ;
+	 15 setData char(140) ;
+	 	20 testCount int ;
+	 	20 totalCount int ;
+	 	20 detailCount int ;
+	 	20 selectedTestCount int ;
+	 	20 * char(24) ;
+	 	20 selectedTests smallint[50] ;
+	 15 testData char(300) ;
+		20 test char(100) ;
+		20 variation char(100) ;
+		20 defect char(100) ;
+	 15 testCounts hex(120) ;
+		20 variationCount int  ;
+		20 successCount int /* Count */ ;
+		20 failureCount int /* Count */ ; 
+		20 knownFailureCount int ;
+		20 newFailureCount int ;
+		20 fixedFailureCount int ;
+		20 trace int = 1 ;
+		20 writeToConsole int ;
+		20 * char(28) ;
+end
+	 
+Record CobolTestStateTable type SQLRecord {
+	tableNames = [["EGLTESTSTATE"]] , 
+	keyItems = [id] 
+	}
+	10 id char(10)  ; 
+ 	10 contents char(500) ;
+end
+
+Record CobolTestSqlStatus 
+	10 sqlHardError int ;
+	10 sqlCode int ;
+	10 sqlState char(5) ;
+	10 sqlErrmc char(40) ;
+	10 sqlErrorDesc char(100) ;
+end
+
+Record CobolTestRecord
+  	10 count int ;
+  	10 lines char(200) [500] ;
+end
+
+Function tuiRestoreTestState ()
+	results.restoreTestState() ;
+	checkReportStatus() ;
+end
+
+
+
+Function checkReportStatus () 
+	if ( sqlStatus.sqlHardError == results.isTrue )  
+		transfer to program sqlErrorReport ;
+	end		
+end
+
+Function returnToTestDriver()
+	
+	if ( systemType is debug )
+		case ( results.driverName )
+			when ( "egl.test.drivers.VagBatchAutotestDriver" ) transfer to program egl.test.drivers.VagBatchAutotestDriver ;
+	 		when ( "egl.test.drivers.VagTuiAutotestDriver") transfer to program egl.test.drivers.VagTuiAutotestDriver ;
+	 	end
+	else
+		if ( results.isCobolEnv() !=  results.isTrue )
+			case ( results.driverName )
+				when ( "egl.test.drivers.VGBATDR" ) transfer to program egl.test.drivers.VGBATDR ;
+		 		when ( "egl.test.drivers.VGTUIDR") transfer to program egl.test.drivers.VGTUIDR ;
+		 	end
+		else
+			transferName = results.driverName ;
+			transfer to program transferName ;
+		end
+	end
+	
+end
+
+
+
+
+function sqlFailure()
+	description string ;
+	code int ;
+	results.failure() ;
+	code = sqlCode ;
+	description = "Unexpected SQL Exception, SQL code:  " + formatNumber(code, "<+#####") ;
+	results.addDetail( description ) ;
+	description = "Unexpected SQL Exception, SQL state:  " + sqlstate ;
+	results.addDetail( description ) ;
+	description = "SQL error message arguments:  " + sqlErrmc ;
+	results.addDetail( description ) ;
+end

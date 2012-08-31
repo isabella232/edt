@@ -1,0 +1,79 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * The following function will cause a runtime error because nulls are not
+ * supported on dynamic arrays, flexrecords, or records.
+ */
+
+// basic library
+library lib2 type BasicLibrary {I4GLItemsNullable=yes}
+    private Function TestSetNullInService()
+    	fixedCharArray char(10)[3];
+    	dynamicCharArray char(10)[];
+    	flexBasicRec FlexibleBasicRecord01;
+    	fixedSQLRecord FixedSQLRecord01;
+    	str String;
+    	
+		if(fixedCharArray is null)			//1
+			str = "NULL";
+		else
+			if(fixedCharArray not null)		//1
+				str = "NOT NULL";
+			end
+		end
+		
+		if(dynamicCharArray is null)		//1
+			str = "NULL";
+		else
+			if(dynamicCharArray not null)	//1
+				str = "NOT NULL";
+			end
+		end
+		
+		if(flexBasicRec is null)			//1
+			str = "NULL";
+		else
+			if(flexBasicRec not null)		//1
+				str = "NOT NULL";
+			end
+		end
+		
+		if(fixedSQLRecord is null)		//1
+			str = "NULL";
+		else
+			if(fixedSQLRecord not null)	//1
+				str = "NOT NULL";
+			end
+		end
+		
+		if(flexBasicRec.item01 == null)		//0
+			str = "NULL";
+		else
+			if(flexBasicRec.item01 != null)//0
+				str = "NOT NULL";
+			end
+		end
+	end	
+end
+
+Record FixedSQLRecord01 type SQLRecord
+	10 item01 char(10) {isNullable = yes};
+end
+
+Record FlexibleSQLRecord01 type SQLRecord {I4GLItemsNullable=yes}
+	item01 char(10) {isNullable = yes};
+end
+
+Record FlexibleBasicRecord01 {I4GLItemsNullable=yes}
+	item01 char(10) {isNullable = yes};
+end

@@ -1,0 +1,382 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program ConvertUnicode type BasicProgram
+	
+	function main()
+		unicodeSmallInt unicode(6) = "";
+		aSmallInt smallInt;
+		unicodeInt unicode(11) = "";
+		anInt int;
+		unicodeBigInt unicode(20) = "";
+		aBigInt bigInt;
+		unicodeBin4_4 unicode(6) = "";
+		aBin4_4 bin(4,4);		
+		unicodeBin9_2 unicode(11) = "";		
+		aBin9_2 bin(9,2);		
+		unicodeBin18_0 unicode(20) = "";
+		aBin18_0 bin(18,0);
+		unicodeDecimal4_0 unicode(6) = "";
+		aDecimal4_0 decimal(4,0);		
+		unicodeDecimal14_5 unicode(16) = "";
+		aDecimal14_5 decimal(14,5);
+		unicodeDecimal31_5 unicode(32) = "";
+		aDecimal31_5 decimal(31,5);
+		unicodeNum4_0 unicode(6) = "";
+		aNum4_0 num(4,0);		
+		unicodeNum9_2 unicode(10) = "";
+		aNum9_2 num(9,2);								
+		unicodeNum18_5 unicode(20) = "";
+		aNum18_5 num(18,5);	
+		
+		status int;		
+		const success int = 1;
+		const failure int = 0;
+		
+		aSmallInt = 10;
+		sysLib.convertNumberToUnicodeNum( aSmallInt, unicodeSmallInt ); //0 //0
+		writeStdOut("smallInt->unicode: smallInt=" + aSmallInt + " unicode is " + unicodeSmallInt );
+		aSmallInt = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeSmallInt, aSmallInt ); //0
+		writeStdOut("unicode->smallInt: unicode is " + unicodeSmallInt + " smallInt  is " + aSmallInt );		
+		if ( aSmallInt == 10 )
+			status = success;
+			writeStdOut("smallInt->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("smallInt->unicode: failure. smallInt=" + aSmallInt + " unicode is " + unicodeSmallInt );			
+		end
+		
+		aSmallInt = 32767;
+		sysLib.convertNumberToUnicodeNum( aSmallInt, unicodeSmallInt ); //0
+		writeStdOut("smallInt(32767)->unicode: smallInt=" + aSmallInt + " unicode is " + unicodeSmallInt );
+		aSmallInt = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeSmallInt, aSmallInt ); //0
+		writeStdOut("unicode->smallInt: unicode is " + unicodeSmallInt + " smallInt  is " + aSmallInt );		
+		if ( aSmallInt == 32767 )
+			status = success;
+			writeStdOut("smallInt(32767)->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("smallInt(32767)->unicode: failure. smallInt=" + aSmallInt + " unicode is " + unicodeSmallInt );			
+		end
+			
+		anInt = 100000000;
+		sysLib.convertNumberToUnicodeNum( anInt, unicodeInt ); //0
+		writeStdOut("int->unicode: int=" + anInt + " unicode is " + unicodeInt );
+		anInt = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeInt, anInt ); //0
+		writeStdOut("unicode->int: unicode is " + unicodeInt + " int  is " + anInt );		
+		if ( anInt == 100000000 )
+			status = success;
+			writeStdOut("int->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("int->unicode: failure. int=" + anInt + " unicode is " + unicodeInt );			
+		end
+		
+		anInt = 2147483647;
+		sysLib.convertNumberToUnicodeNum( anInt, unicodeInt ); //0
+		writeStdOut("int(max)->unicode: int=" + anInt + " unicode is " + unicodeInt );
+		anInt = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeInt, anInt ); //0
+		writeStdOut("unicode->int(max): unicode is " + unicodeInt + " int  is " + anInt );		
+		if ( anInt == 2147483647 )
+			status = success;
+			writeStdOut("int(max)->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("int(max)->unicode: failure. int=" + anInt + " unicode is " + unicodeInt );			
+		end		
+				
+		aBigInt = 1000000000000000000;
+		sysLib.convertNumberToUnicodeNum( aBigInt, unicodeBigInt ); //0
+		writeStdOut("bigInt->unicode: bigInt=" + aBigInt + " unicode is " + unicodeBigInt );
+		aBigInt = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeBigInt, aBigInt ); //0
+		writeStdOut("unicode->int: unicode is " + unicodeInt + " int  is " + anInt );		
+		if ( aBigInt == 1000000000000000000 )
+			status = success;
+			writeStdOut("bigInt->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("bigInt->unicode: failure. bigInt=" + aBigInt + " unicode is " + unicodeBigInt );			
+		end
+
+		// Test bin type, all decimal digits
+		aBin4_4 = 0.1234;
+		sysLib.convertNumberToUnicodeNum( aBin4_4, unicodeBin4_4 ); //0
+		writeStdOut("bin->unicode(all decimal): Bin4_4=" + aBin4_4 + " unicode is " + unicodeBin4_4 );
+		aBin4_4 = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeBin4_4, aBin4_4 ); //0
+		writeStdOut("unicode->bin(all decimal): unicode is " + unicodeBin4_4 + " Bin4_4  is " + aBin4_4 );		
+		if ( aBin4_4 == 0.1234 )
+			status = success;
+			writeStdOut("bin(all decimal)->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("bin(all decimal)->unicode: failure. aBin4_4=" + aBin4_4 + 
+				" unicode is " + unicodeBin4_4 );			
+		end
+		
+		// Test bin type, padding of integer and decimal parts
+		aBin9_2 = 123456.1;
+		sysLib.convertNumberToUnicodeNum( aBin9_2, unicodeBin9_2 ); //0
+		writeStdOut("bin->unicode: Bin9_2=" + aBin9_2 + " unicode is " + unicodeBin9_2 );
+		aBin9_2 = 0;
+//		unicodeBin9_2 = "+012345610";
+		sysLib.convertUnicodeNumToNumber( unicodeBin9_2, aBin9_2 ); //0
+		writeStdOut("unicode->bin: unicode is " + unicodeBin9_2 + " Bin9_2  is " + aBin9_2 );		
+		if ( aBin9_2 == 123456.1 )
+			status = success;
+			writeStdOut("bin->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("bin->unicode: failure. aBin9_2=" + aBin9_2 + 
+				" unicode is " + unicodeBin9_2 );			
+		end
+		
+		
+		// Test bin type, max digits
+		aBin18_0 = 123456789012345678;
+		sysLib.convertNumberToUnicodeNum( aBin18_0, unicodeBin18_0 ); //0
+		writeStdOut("bin->unicode: Bin18_0=" + aBin18_0 + " unicode is " + unicodeBin18_0 );
+		aBin18_0 = 0;
+//		unicodeBin18_0 = "+0123456789012345678";
+		sysLib.convertUnicodeNumToNumber( unicodeBin18_0, aBin18_0 ); //0
+		writeStdOut("unicode->bin: unicode is " + unicodeBin18_0 + " Bin18_0  is " + aBin18_0 );		
+		if ( aBin18_0 == 123456789012345678 )
+			status = success;
+			writeStdOut("bin->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("bin->unicode: failure. aBin18_0=" + aBin18_0 + 
+				" unicode is " + unicodeBin18_0 );			
+		end			
+
+		// Test decimal type, even length, no decimals
+		aDecimal4_0 = 1234;
+		sysLib.convertNumberToUnicodeNum( aDecimal4_0, unicodeDecimal4_0 ); //0
+		writeStdOut("decimal->unicode: Decimal4_0=" + aDecimal4_0 + " unicode is " + unicodeDecimal4_0 );
+		aDecimal4_0 = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeDecimal4_0, aDecimal4_0 ); //0
+		writeStdOut("unicode->decimal(4,0): unicode is " + unicodeDecimal4_0 + " Decimal4_0  is " + aDecimal4_0 );		
+		if ( aDecimal4_0 == 1234 )
+			status = success;
+			writeStdOut("decimal->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("decimal(4,0)->unicode: failure. aDecimal4_0=" + aDecimal4_0 + 
+				" unicode is " + unicodeDecimal4_0 );			
+		end
+
+		// Test decimal type, padding of integer and decimal parts
+		aDecimal14_5 = 12345678.1234;
+		sysLib.convertNumberToUnicodeNum( aDecimal14_5, unicodeDecimal14_5 ); //0
+		writeStdOut("decimal->unicode: decimal14_5=" + aDecimal14_5 + " unicode is " + unicodeDecimal14_5 );
+		aDecimal14_5 = 0;
+//		unicodeDecimal14_5 = "+01234567812340";
+		sysLib.convertUnicodeNumToNumber( unicodeDecimal14_5, aDecimal14_5 ); //0
+		writeStdOut("unicode->decimal: unicode is " + unicodeDecimal14_5 + " decimal14_5  is " + aDecimal14_5 );		
+		if ( aDecimal14_5 == 12345678.1234 )
+			status = success;
+			writeStdOut("decimal->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("decimal->unicode: failure. aDecimal14_5=" + aDecimal14_5 + 
+				" unicode is " + unicodeDecimal14_5 );			
+		end
+		
+		// Test decimal type, 31 digits, leading and trailing zeros
+		aDecimal31_5 = 1234567890123456789012345.123;
+		sysLib.convertNumberToUnicodeNum( aDecimal31_5, unicodeDecimal31_5 ); //0
+		writeStdOut("decimal(31,5)->unicode: decimal31_5=" + aDecimal31_5 + " unicode is " + unicodeDecimal31_5 );
+		aDecimal14_5 = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeDecimal31_5, aDecimal31_5 ); //0
+		writeStdOut("unicode->decimal(31,5): unicode is " + unicodeDecimal31_5 + " decimal31_5  is " + aDecimal31_5 );		
+		if ( aDecimal31_5 == 1234567890123456789012345.123 )
+			status = success;
+			writeStdOut("decimal(31,5)->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("decimal(31,5)->unicode: failure. aDecimal31_5=" + aDecimal31_5 + 
+				" unicode is " + unicodeDecimal31_5 );			
+		end
+					
+		// Test num type, no decimals, even length (gets promoted to decimal(5,0) )
+		aNum4_0 = -1234;
+		sysLib.convertNumberToUnicodeNum( aNum4_0, unicodeNum4_0 ); //0
+		writeStdOut("num->unicode: Num4_0=" + aNum4_0 + " unicode is " + unicodeNum4_0 );
+		aNum4_0 = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeNum4_0, aNum4_0 ); //0
+		writeStdOut("unicode->num: unicode is " + unicodeNum4_0 + " Num4_0  is " + aNum4_0 );		
+		if ( aNum4_0 == -1234 )
+			status = success;
+			writeStdOut("num(4,0)->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("num(4,0)->unicode: failure. aNum4_0=" + aNum4_0 + 
+				" unicode is " + unicodeNum4_0 );			
+		end			
+
+		// Test num type, even length, decimals, leading and trailing zeros
+		aNum18_5 = -123456789012.1234;
+		sysLib.convertNumberToUnicodeNum( aNum18_5, unicodeNum18_5 ); //0
+		writeStdOut("num->unicode: Num18_5=" + aNum18_5 + " unicode is " + unicodeNum18_5 );
+		aNum18_5 = 0;
+		sysLib.convertUnicodeNumToNumber( unicodeNum18_5, aNum18_5 ); //0
+		writeStdOut("unicode->num: unicode is " + unicodeNum18_5 + " Num18_5  is " + aNum18_5 );		
+		if ( aNum18_5 == -123456789012.1234 )
+			status = success;
+			writeStdOut("num->unicode: success" );
+		else				
+			status = failure;
+			writeStdOut("num->unicode: failure. aNum18_5=" + aNum18_5 + 
+				" unicode is " + unicodeNum18_5 );			
+		end	
+		
+	end
+	
+end
+
+program ConvertUnicodeInvalid type BasicProgram
+	
+	function main()
+		unicodeSmallInt unicode(5) = "";
+		aSmallInt smallInt;
+		unicodeInt unicode(10) = "";
+		anInt int;
+		unicodeBigInt unicode(190) = "";
+		aBigInt bigInt;
+		unicodeBin4_4 unicode(5) = "";
+		aBin4_4 bin(4,4);		
+		unicodeBin9_2 unicode(12) = "";		
+		aBin9_2 bin(9,2);		
+		unicodeBin18_0 unicode(19) = "";
+		aBin18_0 bin(18,0);
+		unicodeDecimal4_0 unicode(5) = "";
+		aDecimal4_0 decimal(4,0);		
+		unicodeDecimal14_5 unicode(15) = "";
+		aDecimal14_5 decimal(14,5);
+		unicodeDecimal31_5 unicode(30) = "";
+		aDecimal31_5 decimal(31,5);
+		unicodeNum4_0 unicode(5) = "";
+		aNum4_0 num(4,0);		
+		unicodeNum9_2 unicode(11) = "";
+		aNum9_2 num(9,2);								
+		unicodeNum18_5 unicode(19) = "";
+		aNum18_5 num(18,5);	
+		
+		aSmallInt = 10;
+		convertNumberToUnicodeNum( aSmallInt, unicodeSmallInt ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeSmallInt, aSmallInt ); //1
+		
+		aSmallInt = 32767;
+		sysLib.convertNumberToUnicodeNum( aSmallInt, unicodeSmallInt ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeSmallInt, aSmallInt ); //1
+			
+		anInt = 100000000;
+		sysLib.convertNumberToUnicodeNum( anInt, unicodeInt ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeInt, anInt ); //1
+		
+		anInt = 2147483647;
+		sysLib.convertNumberToUnicodeNum( anInt, unicodeInt ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeInt, anInt ); //1
+
+		aBigInt = 1000000000000000000;
+		sysLib.convertUnicodeNumToNumber( unicodeBigInt, aBigInt ); //1
+		writeStdOut("unicode->int: unicode is " + unicodeInt + " int  is " + anInt );		
+
+		// Test bin type, all decimal digits
+		aBin4_4 = 0.1234;
+		sysLib.convertNumberToUnicodeNum( aBin4_4, unicodeBin4_4 ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeBin4_4, aBin4_4 ); //1
+		
+		// Test bin type, padding of integer and decimal parts
+		aBin9_2 = 123456.1;
+		sysLib.convertNumberToUnicodeNum( aBin9_2, unicodeBin9_2 ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeBin9_2, aBin9_2 ); //1
+		
+		// Test bin type, max digits
+		aBin18_0 = 123456789012345678;
+		sysLib.convertNumberToUnicodeNum( aBin18_0, unicodeBin18_0 ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeBin18_0, aBin18_0 ); //1
+
+		// Test decimal type, even length, no decimals
+		aDecimal4_0 = 1234;
+		sysLib.convertNumberToUnicodeNum( aDecimal4_0, unicodeDecimal4_0 ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeDecimal4_0, aDecimal4_0 ); //1
+
+		// Test decimal type, padding of integer and decimal parts
+		aDecimal14_5 = 12345678.1234;
+		sysLib.convertNumberToUnicodeNum( aDecimal14_5, unicodeDecimal14_5 ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeDecimal14_5, aDecimal14_5 ); //1
+		
+		// Test decimal type, 31 digits, leading and trailing zeros
+		aDecimal31_5 = 1234567890123456789012345.123;
+		sysLib.convertNumberToUnicodeNum( aDecimal31_5, unicodeDecimal31_5 ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeDecimal31_5, aDecimal31_5 ); //1
+					
+		// Test num type, no decimals, even length (gets promoted to decimal(5,0) )
+		aNum4_0 = -1234;
+		sysLib.convertNumberToUnicodeNum( aNum4_0, unicodeNum4_0 ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeNum4_0, aNum4_0 ); //1
+
+		// Test num type, even length, decimals, leading and trailing zeros
+		aNum18_5 = -123456789012.1234;
+		sysLib.convertNumberToUnicodeNum( aNum18_5, unicodeNum18_5 ); //1
+		sysLib.convertUnicodeNumToNumber( unicodeNum18_5, aNum18_5 ); //1
+		
+		sysLib.convertNumberToUnicodeNum( aNum18_5 ); 		//1
+		sysLib.convertUnicodeNumToNumber( unicodeNum18_5 );	//1
+
+	end
+	
+end
+
+program ConvertUnicodeUnsigned type BasicProgram
+	
+	function main()
+		unicodeSmallInt unicode(6) = "";
+		unicodeUnsignedSmallInt unicode(5) = "";
+		aSmallInt smallInt;
+		
+		sysLib.convertNumberToUnsignedUnicodeNum( aSmallInt, unicodeSmallInt ); //1
+		sysLib.convertUnsignedUnicodeNumToNumber( unicodeSmallInt, aSmallInt ); //1
+		
+		sysLib.convertNumberToUnsignedUnicodeNum( aSmallInt, unicodeUnsignedSmallInt ); //0
+		sysLib.convertUnsignedUnicodeNumToNumber( unicodeUnsignedSmallInt, aSmallInt ); //0
+	end
+end
+
+program FromMatt type BasicProgram
+	
+	function main()
+		aNum32 num(32,4);
+		aDec32 decimal(32,3);
+		unicode32 unicode(32);
+		unicode33 unicode(33);
+		unicode34 unicode(34);
+		
+		sysLib.convertNumberToUnsignedUnicodeNum( aNum32, unicode33 ); //1
+		sysLib.convertUnsignedUnicodeNumToNumber( unicode33, aNum32 ); //1
+		
+		sysLib.convertNumberToUnsignedUnicodeNum( aDec32, unicode32 ); //0
+		sysLib.convertUnsignedUnicodeNumToNumber( unicode32, aDec32 ); //0
+		
+		sysLib.convertNumberToUnicodeNum( aNum32, unicode34 ); //1
+		sysLib.convertUnicodeNumToNumber( unicode34, aNum32 ); //1
+		
+		sysLib.convertNumberToUnicodeNum( aDec32, unicode33 ); //0
+		sysLib.convertUnicodeNumToNumber( unicode33, aDec32 ); //0
+	end
+end

@@ -1,0 +1,64 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Form valid1 type printForm { 
+	addSpaceForSOSI = yes, // 0
+	msgField = dave,       // 0
+	position = [10,20],    // 0
+	formSize = [10,20],    // 0
+	alias = "dave"         // 0
+}
+	dave int;
+end
+
+Form valid2 type printForm { 
+	addSpaceForSOSI = no  // 0
+} end
+
+Form invalid1 type printForm { 
+	addSpaceForSOSI = 5, // 1
+	msgField = 5,        // 1
+	position = 5,        // 1
+	formSize = 5,        // 1
+	alias = ["dave"]     // 1
+} end
+
+Form invalid2 type printForm { 
+	addSpaceForSOSI = "a", // 1
+	position = "a",        // 1
+	formSize = "a"         // 1
+} end
+
+Form invalid3 type printForm { 
+	addSpaceForSOSI = a, // 1
+	msgField = [dave],   // 1
+	position = a,        // 1
+	formSize = a         // 1
+} end
+
+Form invalid4 type printForm { 
+	addSpaceForSOSI = [yes], // 1
+	position = [[10,20]],    // 1
+	formSize = [[10,20]]     // 1
+} end
+
+Form invalid5 type printForm { 
+	formSize = [-1,-2]  // 1
+} end
+
+Form invalid6 type printForm { 
+	formSize = ["a","b"]  // 1
+} end
+
+Form invalid7 type printForm { 
+	formSize = [10]  // 1
+} end
+

@@ -1,0 +1,229 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Library Lib1
+	function libfunc(
+		s string in,
+		sl string(10) inout,
+		c char(20) out,
+		dc dbchar(20),
+		m mbchar(20),
+		u unicode(20),
+		h hex(20),
+		si smallint,
+		i int,
+		bi bigint,
+		f float,
+		sf smallfloat,
+		n num(5),
+		d decimal(19),
+		mo money(4) )
+			returns ( num(5,3) )
+			
+		Lib2.f();
+		
+		if ( s != "He" || sl != "ll" || c != "" || dc != dc || m != "world!" 
+			|| u != "EGLEGL" || h != "deadbeef" || si != 10 || i != 2000000 
+			|| bi != 30000000000000000 || f != 4.12987e-80 || sf != 4.12987e5 
+			|| n != -312 || d != si + si * si / 1.0 - (+si % -si) ** 0.1e1 
+			|| mo != d )
+			c = "bug";
+			return( -1 );
+		else
+			c = "OK";
+			return( 12.345 );
+		end
+	end
+end
+
+Library Lib2 { alias = "XYZLib" }
+
+	use tab;
+	
+	function f()
+		lib2rec lib2rec;
+		
+		lib2rec.x = "1234567890";
+		if ( lib2rec.x >= tab.x[2] )
+			writeStdout( "problem!" );
+		else
+			writeStdout( "no problem!" );
+		end
+	end
+end
+
+record lib2rec
+	x char(10);
+end
+
+Program Program1
+	s string;
+	sl string(10);
+	c char(20);
+	dc dbchar(20);
+	m mbchar(20);
+	u unicode(20);
+	h hex(20);
+	si smallint;
+	i int;
+	bi bigint;
+	f float;
+	sf smallfloat;
+	n num(5);
+	d decimal(19);
+	mo money(4);
+	
+	function main()
+		
+		s = "He";
+		sl = "ll";
+		c = "o";
+		dc = dc;
+		m = "world!";
+		u = "EGLEGL";
+		h = "deadbeef";
+		si = 10;
+		i = 2000000;
+		bi = 30000000000000000;
+		f = 4.12987e-80;
+		sf = 4.12987e5;
+		n = -312.43;
+		d = si + si * si / 1.0 - (+si % -si) ** 0.1e1;
+		mo = d;
+		
+		ret num(5,3);
+		ret = Lib1.libfunc( s, sl, c, dc, m, u, h, si, i, bi, f, sf, n, d, mo );
+		if ( ret == 12.345 && c == "OK" )
+			writeStdout( "OK result from calling libfunc" );
+		else
+			syslib.WRITESTDOUT( "Unexpected result from calling libfunc: " + ret + " and " + c );
+		end
+
+		i = 1;
+		while ( i < 100 )
+			s = "!";
+			s = s + oneMoreThan( i );
+			i = oneMoreThan( i );
+			if ( i >= 1000000 )
+				i = 0;
+			end
+		end
+		
+		if ( u > "ABCEGL" && u <= "ABCEGL" )
+			writeStdout( "what?!?" );
+		end
+
+		if ( u > "ABCEGL" && !(!(!(u <= "ABCEGL"))) )
+		else
+			writeStdout( "what?!?" );
+		end
+				
+		SysVar.arrayIndex = 1;
+		SysVar.callConversionTable = "x";
+		SysVar.errorCode = "x";
+		SysVar.formConversionTable = "x";
+		n = SysVar.overflowIndicator;
+		SysVar.returnCode = i;
+		c = SysVar.sessionID;
+		h = SysVar.sqlData.sqlca;
+		i = SysVar.sqlData.sqlCode;
+		SysVar.sqlData.sqlState = "x";
+		c = SysVar.systemType;
+		c = SysVar.terminalID;
+		c = SysVar.transactionID;
+		c = SysVar.transferName;
+		c = SysVar.userID;
+		c = VGVar.currentFormattedGregorianDate;
+		c = VGVar.currentFormattedJulianDate;
+		c = VGVar.currentFormattedTime;
+		n = VGVar.currentJulianDate;
+		n = VGVar.currentShortGregorianDate;
+		n = VGVar.currentShortJulianDate;
+		n = VGVar.handleHardIOErrors;
+		n = VGVar.handleOverflow;
+		n = VGVar.handleSysLibraryErrors;
+		n = VGVar.mqConditionCode;
+		bi = SysVar.sqlData.sqlerrd[6];
+		c = SysVar.sqlData.sqlerrmc;
+		n = VgVar.sqlIsolationLevel;
+		c = SysVar.sqlData.sqlWarn[4];
+	
+		playWithArrays();
+	end
+	
+	function oneMoreThan( bob int ) returns( int )
+		return( bob + 1 );
+	end
+	
+	function playWithArrays()
+		
+		aint int[] { maxSize = 2 };
+		aint.appendElement( 1 );
+		aint.appendElement( 2 );
+		
+		bi = aint.getSize() + aint.getMaxSize();
+		aint.removeAll();
+		if ( aint.getSize() + aint.getMaxSize() != aint.getMaxSize() )
+			writeStdout( "what?!?" );
+		end
+		
+		astring string[ 4 ];
+		astring2 string[ 4 ];
+		i = astring.getSize();
+		astring.removeElement( 2 );
+		if ( i == astring.getSize() )
+			writeStdout( "what?!?" );
+		end
+		
+		astring.insertElement( "foo", 2 );
+		astring.appendAll( astring2 );
+		writeStdout( "should be 8: " + astring.getSize() );
+		
+		aaint int[][];
+		aint.appendElement( 2 );
+		aint.appendElement( 99 );
+		aaint.setMaxSizes( aint );
+		astring.setMaxSize( aint[ 2 ] );
+		aaint.resizeAll( aint );
+		aint[ 2 ] = 34;
+		astring.resize( aint[ 2 ] );
+	end
+end
+
+Program Program2 { alias = "XYZ", inputRecord = inrec }
+
+	inrec inrec;
+	
+	function main()
+	end
+end
+
+Record inrec
+	10 i int;	
+		20 c char(4);
+end
+
+dataTable tab { shared = no, resident = no, alias = "bago" }
+	3 x char(10);
+		6 y char(5);
+		6 z char(5);
+	
+	{contents = 
+		[
+			[ "1234567896" ], 
+			[ "1234567891" ],
+			[ "1234567895" ], 
+			[ "1234567894" ]
+		]}
+	
+end

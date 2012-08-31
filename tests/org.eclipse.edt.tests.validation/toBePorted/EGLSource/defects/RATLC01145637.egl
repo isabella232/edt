@@ -1,0 +1,204 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG NO_ERROR
+
+Record EMPDATA type sqlRecord  {
+  tableNames = [["EMP", "T1"]], keyItems = [EMPNO],
+  defaultSelectCondition =
+    #sqlCondition{
+      -- **  INSERT DEFAULT SELECT CONDITIONS HERE **
+      SALARY > 10000
+    }
+  }
+  10 EMPNO char(6) { column = "EMPNO", isSQLNullable = yes} ;
+  10 FIRSTNME char(12) { column = "FIRSTNME", isSQLNullable = yes} ;
+  10 MIDINIT char(1) { column = "MIDINIT", isSQLNullable = yes} ;
+  10 LASTNAME char(4) { column = "LASTNAME", isSQLNullable = yes} ;
+  10 WORKDEPT char(3) { column = "WORKDEPT", isSQLNullable = yes} ;
+  10 PHONENO char(4) { column = "PHONENO", isSQLNullable = yes} ;
+  10 HIREDATE char(10) { column = "HIREDATE", isSQLNullable = yes} ;
+  10 JOBCODE char(8) { column = "JOB", isSQLNullable = yes} ;
+  10 SEX char(1) { column = "SEX", isSQLNullable = yes} ;
+  10 BRTHDATE char(10) { column = "BIRTHDATE", isSQLNullable = yes} ;
+  10 SALARY decimal(9,2) { column = "SALARY", isSQLNullable = yes} ;
+  10 EDUCLVL  smallint { column = "EDLEVEL", isSQLNullable = yes} ;
+  10 BONUS decimal(9,2) { column = "BONUS", isSQLNullable = yes} ;
+  10 COMM decimal(9,2) { column = "COMM", isSQLNullable = yes} ;
+end 
+
+Function PARMF2()
+  converse PARMM ;
+end 
+
+Function PARMF1()
+  EMPNO = "000200";
+  get EMPDATA ;
+  if (MIDINIT == null)
+    YES_EGL[6] = "Yes";
+  end
+  move EMPDATA to PARMM byName;
+end 
+
+Function PARMCALLED(
+  EMPNOM char(6) field,
+  MIDINITM char(1) field,
+  EMPNOE char(6) sqlNullable,
+  MIDINITE char(1) sqlNullable,
+  LASTNAME char(4) sqlNullable
+  )
+  if (EMPNOM is cursor)
+    YES_EGL[1] = "Yes";
+  end
+  if (MIDINITM is blanks)
+    YES_EGL[2] = "Yes";
+  end
+  if (EMPNOM is data)
+    YES_EGL[3] = "Yes";
+  end
+  if (EMPNOM is numeric)
+    YES_EGL[4] = "Yes";
+  end
+  if (EMPNOM is modified)
+    YES_EGL[5] = "Yes";
+  end
+  if (MIDINITE is blanks)
+    YES_EGL[6] = "Yes";
+  end
+  if (EMPNOE is numeric)
+    YES_EGL[7] = "Yes";
+  end
+  if (MIDINITE == null)
+    YES_EGL[8] = "Yes";
+  end
+  if (LASTNAME is trunc)     
+    YES_EGL[9] = "Yes";
+  end
+
+
+end
+
+Function PARMCALLING()
+  converse PARMM ;
+  PARMCALLED(PARMM.EMPNO, PARMM.MIDINIT, EMPDATA.EMPNO, EMPDATA.MIDINIT, EMPDATA.LASTNAME);
+end
+
+Program parmp type textUIProgram { handleHardIOErrors = no, throwNrfEofExceptions = yes }
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  segmented = yes
+  }
+
+  // Data Declarations
+  EMPDATA EMPDATA;
+  // VAGen Info - items needed for migration
+  VAGen_EZESYS char(8);
+  VAGen_EZEREPLY num(1);
+  VAGen_EZE_WAIT_TIME bin(9,2);
+  VAGen_EZE_ITEMLEN bin(9,2);
+
+  // Use Declarations
+  use PARMG {
+    pfKeyEquate = yes
+  };
+
+  function main()
+    // VAGen Info - initialization needed for migration
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    PARMF1: PARMF1();
+    PARMCALLING: PARMCALLING();
+    PARMF2: PARMF2();
+  end
+end
+
+
+FormGroup PARMG
+  // STAGE 3 - Edit the formGroup
+  use PARMM;
+end
+
+Form PARMM type textForm
+ { screenSizes = [[24,80]], formSize = [24,80], position = [1,1]}
+
+// Start of Variable fields
+  EMPNO char(6) 
+  { position = [3,4], fieldLen = 6, cursor = yes, validationOrder = 1, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, modified = yes, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = ""}; 
+  FIRSTNME char(12) 
+  { position = [3,14], fieldLen = 12, validationOrder = 2, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = ""}; 
+  MIDINIT char(1) 
+  { position = [3,31], fieldLen = 1, validationOrder = 3, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = ""}; 
+  LASTNAME char(15) 
+  { position = [3,37], fieldLen = 15, validationOrder = 4, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = ""}; 
+  SALARY num(18,02) 
+  { position = [3,56], fieldLen = 19, validationOrder = 5, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, align = right, 
+    fillCharacter = " ", sign=none}; 
+  YES_EGL char(3) [9] 
+  { position = [8,32], fieldLen = 3, validationOrder = 6, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = "",
+    this [2] { position = [9,32] },
+    this [3] { position = [10,32] },
+    this [4] { position = [11,32] },
+    this [5] { position = [12,32] },
+    this [6] { position = [13,32] },
+    this [7] { position = [14,32] },
+    this [8] { position = [15,32] },
+    this [9] { position = [16,32] }
+  };
+
+// Start of Constant fields
+  * { position = [5,4], fieldLen = 239, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Hit enter"};
+  * { position = [8,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Form field tested cursor"};
+  * { position = [9,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Form field tested blanks"};
+  * { position = [10,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Form field tested data"};
+  * { position = [11,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Form field tested numeric"};
+  * { position = [12,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Form field tested modified"};
+  * { position = [13,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "SQL field tested blanks"};
+  * { position = [14,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "SQL Field tested numeric"};
+  * { position = [15,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "SQL field tested null"};
+  * { position = [16,4], fieldLen = 27, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "SQL field tested trunc"};
+end
+

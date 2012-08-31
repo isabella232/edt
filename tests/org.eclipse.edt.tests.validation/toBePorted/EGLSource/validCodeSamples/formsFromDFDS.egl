@@ -1,0 +1,3291 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+FormGroup TR105G {
+  ScreenFloatingAreas=[
+    @ScreenFloatingArea { screenSize=[27,132], topMargin=0,
+      bottomMargin=0, leftMargin=0, rightMargin=0
+    }
+  ]
+  }
+Form TR105M01 type textForm	
+ { screenSizes = [[27,132]], formSize = [27,132], msgField = VAGen_EZEMSG}
+
+
+  MENUID char(8) 
+  { position = [1,1], fieldLen = 8, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DEPT char(5) 
+  { position = [1,64], fieldLen = 5, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_USER char(4) 
+  { position = [1,75], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  TYPE1 char(1) 
+  { position = [3,6], fieldLen = 1, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  TYPE2 char(1) 
+  { position = [3,8], fieldLen = 1, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  TYPE3 char(1) 
+  { position = [3,10], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TYPE4 char(1) 
+  { position = [3,12], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRFFRO char(6) 
+  { position = [3,25], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRFTO char(6) 
+  { position = [3,35], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DEPT1 char(5) 
+  { position = [3,48], fieldLen = 5, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  USE1 char(4) 
+  { position = [3,59], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  Z char(1) 
+  { position = [3,69], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  S char(1) 
+  { position = [3,79], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  Y char(1) 
+  { position = [4,14], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DATE1 num(6) 
+  { position = [4,28], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = "0"}; 
+  DATE2 num(6) 
+  { position = [4,35], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = "0"}; 
+  TIM1 num(4) 
+  { position = [4,51], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = "0"}; 
+  TIM2 num(4) 
+  { position = [4,56], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = "0"}; 
+  U char(1) 
+  { position = [4,69], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  X char(1) 
+  { position = [4,79], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISP char(4) 
+  { position = [5,9], fieldLen = 4, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  TRP0 char(11) 
+  { position = [5,28], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  PROF char(4) 
+  { position = [5,56], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  W char(1) 
+  { position = [5,61], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  RR char(1) 
+  { position = [5,79], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE char(77) 
+  { position = [6,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  A char(1) 
+  { position = [7,1], fieldLen = 1, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  DISPLAYLINE1 char(77) 
+  { position = [7,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  B char(1) 
+  { position = [8,1], fieldLen = 1, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  DISPLAYLINE2 char(77) 
+  { position = [8,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  C char(1) 
+  { position = [9,1], fieldLen = 1, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  DISPLAYLINE3 char(77) 
+  { position = [9,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  D char(1) 
+  { position = [10,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE4 char(77) 
+  { position = [10,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  E char(1) 
+  { position = [11,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE5 char(77) 
+  { position = [11,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  F char(1) 
+  { position = [12,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE6 char(77) 
+  { position = [12,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  G char(1) 
+  { position = [13,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE7 char(77) 
+  { position = [13,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  H char(1) 
+  { position = [14,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE8 char(77) 
+  { position = [14,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  I char(1) 
+  { position = [15,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE9 char(77) 
+  { position = [15,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  J char(1) 
+  { position = [16,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE10 char(77) 
+  { position = [16,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  K char(1) 
+  { position = [17,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE11 char(77) 
+  { position = [17,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  LL char(1) 
+  { position = [18,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE12 char(77) 
+  { position = [18,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  M char(1) 
+  { position = [19,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE13 char(77) 
+  { position = [19,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  N char(1) 
+  { position = [20,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE14 char(77) 
+  { position = [20,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  O char(1) 
+  { position = [21,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DISPLAYLINE15 char(77) 
+  { position = [21,3], fieldLen = 77, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  P num(1) 
+  { position = [22,10], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  CN char(4) 
+  { position = [22,12], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  CLL num(6) 
+  { position = [22,26], fieldLen = 6, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = right, 
+    fillCharacter = "0"}; 
+  GWEIGHT num(8) 
+  { position = [22,37], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = right, 
+    fillCharacter = nullFill}; 
+  CBM char(8) 
+  { position = [22,55], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  LDM char(8) 
+  { position = [22,68], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  Q char(1) 
+  { position = [23,1], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRANSPORT char(11) 
+  { position = [23,12], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRP2 char(11) 
+  { position = [23,31], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRP3 char(11) 
+  { position = [23,50], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRP4 char(11) 
+  { position = [23,69], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = left, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [26,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    value = "TRANSFER",
+    this [2] { position = [27,2], value = " /STRIP" },
+    this [3] { position = [26,12], value = "  CON" },
+    this [4] { position = [27,12], value = " " },
+    this [5] { position = [26,22], value = " UPDATE" },
+    this [6] { position = [27,22], value = " " },
+    this [7] { position = [26,32], value = "PREVIOUS" },
+    this [8] { position = [27,32], value = "  PAGE" },
+    this [9] { position = [26,42], value = "  NEXT" },
+    this [10] { position = [27,42], value = "  PAGE" },
+    this [11] { position = [26,52], value = " PRINT" },
+    this [12] { position = [27,52], value = " " },
+    this [13] { position = [26,62], value = " ASSIGN" },
+    this [14] { position = [27,62], value = " TRP.NO." },
+    this [15] { position = [26,72], value = "  EXIT" },
+    this [16] { position = [27,72], value = " " }
+  };
+
+
+  * { position = [1,11], fieldLen = 52, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "* * * Cargo Awaiting Action * * *          CL  Dept."};
+  * { position = [1,70], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "User"};
+  * { position = [2,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-------------------------------------------------------------------------------"};
+  * { position = [3,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Type"};
+  * { position = [3,14], fieldLen = 10, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Traf: From"};
+  * { position = [3,32], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "To"};
+  * { position = [3,42], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Dept."};
+  * { position = [3,54], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "User"};
+  * { position = [3,64], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Haz"};
+  * { position = [3,72], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Status"};
+  * { position = [4,1], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Allocate all"};
+  * { position = [4,23], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Date"};
+  * { position = [4,45], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Time"};
+  * { position = [4,64], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Subs"};
+  * { position = [4,72], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "P/D/B"};
+  * { position = [5,1], fieldLen = 7, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Display"};
+  * { position = [5,23], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "TRP"};
+  * { position = [5,42], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Pcode profile"};
+  * { position = [5,64], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Calc. totals"};
+  * { position = [6,1], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "X"};
+  * { position = [22,3], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Totals"};
+  * { position = [22,17], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Consign."};
+  * { position = [22,33], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Cll"};
+  * { position = [22,46], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Kg.gross"};
+  * { position = [22,64], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Cbm"};
+  * { position = [22,77], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Ldm"};
+  * { position = [23,3], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "To Trp.1"};
+  * { position = [23,25], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp.2"};
+  * { position = [23,44], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp.3"};
+  * { position = [23,63], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp.4"};
+end 
+
+
+Form TR105M02 type textForm	
+ { screenSizes = [[27,132]], formSize = [7,132], position = [21,1], 
+  msgField = VAGen_EZEMSG}
+
+
+  TODEP char(5) 
+  { position = [1,36], fieldLen = 5, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  BOOKNG char(6) 
+  { position = [1,63], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [4,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = left, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [6,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    value = "TRANSFER",
+    this [2] { position = [7,2], value = " /STRIP" },
+    this [3] { position = [6,12], value = " " },
+    this [4] { position = [7,12], value = " " },
+    this [5] { position = [6,22], value = " " },
+    this [6] { position = [7,22], value = " " },
+    this [7] { position = [6,32], value = " " },
+    this [8] { position = [7,32], value = " " },
+    this [9] { position = [6,42], value = " " },
+    this [10] { position = [7,42], value = " " },
+    this [11] { position = [6,52], value = " " },
+    this [12] { position = [7,52], value = " " },
+    this [13] { position = [6,62], value = " " },
+    this [14] { position = [7,62], value = " " },
+    this [15] { position = [6,72], value = "  EXIT" },
+    this [16] { position = [7,72], value = " " }
+  };
+
+
+  * { position = [1,11], fieldLen = 24, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Transfer to Department.:"};
+  * { position = [1,45], fieldLen = 17, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Booking traffic.:"};
+end 
+
+
+Form TR105M03 type textForm	
+ { screenSizes = [[27,132]], formSize = [7,132], position = [21,1], 
+  msgField = VAGen_EZEMSG}
+
+
+  PR num(4) 
+  { position = [1,9], fieldLen = 4, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  KO num(2) 
+  { position = [1,23], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  PI num(2) 
+  { position = [1,37], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  S num(1) 
+  { position = [1,52], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  LAYOUT char(8) 
+  { position = [1,62], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = left, fillCharacter = nullFill}; 
+  C char(1) 
+  { position = [1,75], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = left, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [4,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = left, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [6,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    this [2] { position = [7,2] },
+    this [3] { position = [6,12] },
+    this [4] { position = [7,12] },
+    this [5] { position = [6,22], value = " CARGO" },
+    this [6] { position = [7,22], value = "CONTROL" },
+    this [7] { position = [6,32] },
+    this [8] { position = [7,32] },
+    this [9] { position = [6,42] },
+    this [10] { position = [7,42] },
+    this [11] { position = [6,52], value = " PRINT" },
+    this [12] { position = [7,52] },
+    this [13] { position = [6,62] },
+    this [14] { position = [7,62] },
+    this [15] { position = [6,72], value = "  EXIT" },
+    this [16] { position = [7,72] }
+  };
+
+
+  * { position = [1,1], fieldLen = 7, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Printer"};
+  * { position = [1,15], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Copies"};
+  * { position = [1,27], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Priority"};
+  * { position = [1,41], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Sortering"};
+  * { position = [1,55], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Layout"};
+  * { position = [1,71], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "C/T"};
+end 
+
+
+end
+
+FormGroup TR101G {
+  ScreenFloatingAreas=[
+    @ScreenFloatingArea { screenSize=[27,132], topMargin=0,
+      bottomMargin=0, leftMargin=0, rightMargin=0
+    }
+  ]
+  }
+Form TR101M01 type textForm	
+ { screenSizes = [[27,132]], formSize = [27,132], msgField = VAGen_EZEMSG}
+
+
+  MENU char(8) 
+  { position = [1,1], fieldLen = 8, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  OVERSKRIFT char(40) 
+  { position = [1,12], fieldLen = 40, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  TDD char(5) 
+  { position = [1,65], fieldLen = 5, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_USER char(4) 
+  { position = [1,76], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CONSIGNO char(11) 
+  { position = [2,6], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  S char(1) 
+  { position = [2,22], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  MULTIKEY_LINK_V char(17) 
+  { position = [2,24], fieldLen = 17, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  MT char(2) 
+  { position = [2,42], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  FROMT char(6) 
+  { position = [2,48], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TOT char(6) 
+  { position = [2,58], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRANSNO char(11) 
+  { position = [2,69], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CUSTNO1 char(8) 
+  { position = [4,6], fieldLen = 8, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR1 char(34) 
+  { position = [4,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR2 char(30) 
+  { position = [4,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KREDLIM1 char(13) 
+  { position = [5,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR3 char(34) 
+  { position = [5,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR4 char(30) 
+  { position = [5,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CUSTNO2 char(8) 
+  { position = [6,6], fieldLen = 8, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR5 char(34) 
+  { position = [6,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR6 char(30) 
+  { position = [6,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KREDLIM2 char(13) 
+  { position = [7,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR7 char(34) 
+  { position = [7,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR8 char(30) 
+  { position = [7,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CUSTNO3 char(8) 
+  { position = [8,6], fieldLen = 8, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR9 char(34) 
+  { position = [8,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR10 char(30) 
+  { position = [8,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KREDLIM3 char(13) 
+  { position = [9,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR11 char(34) 
+  { position = [9,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR12 char(30) 
+  { position = [9,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CUSTNO4 char(8) 
+  { position = [10,6], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR13 char(34) 
+  { position = [10,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR14 char(30) 
+  { position = [10,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KREDLIM4 char(13) 
+  { position = [11,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR15 char(34) 
+  { position = [11,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR16 char(30) 
+  { position = [11,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KK1_KODE char(3) 
+  { position = [13,1], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  A_KODEVAERDI char(1) 
+  { position = [13,5], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK2_KODE char(3) 
+  { position = [13,7], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  B_KODEVAERDI char(1) 
+  { position = [13,11], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK3_KODE char(3) 
+  { position = [13,13], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  C_KODEVAERDI char(1) 
+  { position = [13,17], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK4_KODE char(3) 
+  { position = [13,19], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  D_KODEVAERDI char(1) 
+  { position = [13,23], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK5_KODE char(3) 
+  { position = [13,25], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  G_KODEVAERDI char(1) 
+  { position = [13,29], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK6_KODE char(3) 
+  { position = [13,31], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  W_KODEVAERDI char(1) 
+  { position = [13,35], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK7_KODE char(3) 
+  { position = [13,37], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  I_KODEVAERDI char(1) 
+  { position = [13,41], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK8_KODE char(3) 
+  { position = [13,43], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  J_KODEVAERDI char(1) 
+  { position = [13,47], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK9_KODE char(3) 
+  { position = [13,49], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  K_KODEVAERDI char(1) 
+  { position = [13,53], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK1_KODE char(3) 
+  { position = [13,55], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  L_KODEVAERDI char(1) 
+  { position = [13,59], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK2_KODE char(3) 
+  { position = [13,61], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  M_KODEVAERDI char(1) 
+  { position = [13,65], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK3_KODE char(3) 
+  { position = [13,67], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  N_KODEVAERDI char(1) 
+  { position = [13,71], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK4_KODE char(3) 
+  { position = [13,73], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  O_KODEVAERDI char(1) 
+  { position = [13,77], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK5_KODE char(3) 
+  { position = [13,79], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  P_KODEVAERDI char(1) 
+  { position = [13,83], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK6_KODE char(3) 
+  { position = [13,85], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  Q_KODEVAERDI char(1) 
+  { position = [13,89], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK7_KODE char(3) 
+  { position = [13,91], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  R_KODEVAERDI char(1) 
+  { position = [13,95], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PLS char(3) 
+  { position = [14,10], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  PTP char(3) 
+  { position = [14,16], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  NOOF char(5) 
+  { position = [14,20], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PKG char(4) 
+  { position = [14,26], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  MARKE char(18) 
+  { position = [15,1], fieldLen = 18, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = left, fillCharacter = nullFill}; 
+  VAGen_NO char(5) 
+  { position = [15,20], fieldLen = 5, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CLL char(4) 
+  { position = [15,26], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CONTENTS char(20) 
+  { position = [15,31], fieldLen = 20, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = left, fillCharacter = nullFill}; 
+  GWEIGHT char(8) 
+  { position = [15,52], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  NWEIGHT char(8) 
+  { position = [15,61], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  H char(1) 
+  { position = [15,71], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  T1 char(3) 
+  { position = [15,73], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  T2 char(3) 
+  { position = [15,77], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BTN char(8) 
+  { position = [16,5], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BT char(2) 
+  { position = [16,14], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BTL1 char(4) 
+  { position = [16,17], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  VAL char(3) 
+  { position = [16,28], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAL1 char(12) 
+  { position = [16,32], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CBM char(8) 
+  { position = [16,49], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  LDM char(8) 
+  { position = [16,62], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ORI char(3) 
+  { position = [16,77], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  CUSTOMERREF char(30) 
+  { position = [18,15], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TER char(4) 
+  { position = [18,55], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  TERMSCITY char(12) 
+  { position = [18,65], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DOCUREF char(12) 
+  { position = [19,15], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CDATE char(6) 
+  { position = [19,36], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  CTIM char(4) 
+  { position = [19,43], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CTTO char(4) 
+  { position = [19,48], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CCTRL char(1) 
+  { position = [19,53], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CLUNCH char(1) 
+  { position = [19,55], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  DDATE char(6) 
+  { position = [19,62], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  DTIM char(4) 
+  { position = [19,69], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DTTO char(4) 
+  { position = [19,74], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DCTRL char(1) 
+  { position = [19,79], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  DLUNCH char(1) 
+  { position = [19,81], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  TSST char(4) 
+  { position = [20,15], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  CO char(3) 
+  { position = [20,30], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  CODVALUE char(12) 
+  { position = [20,34], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  RETUR char(6) 
+  { position = [20,60], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  RET char(4) 
+  { position = [20,67], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  RETUR1 char(8) 
+  { position = [20,72], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  PLANREMARKS char(65) 
+  { position = [21,15], fieldLen = 65, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DOCUREMARKS1 char(32) 
+  { position = [22,15], fieldLen = 32, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DOCUREMARKS2 char(32) 
+  { position = [22,48], fieldLen = 32, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  F char(1) 
+  { position = [23,11], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  NEXTTRANS char(11) 
+  { position = [23,25], fieldLen = 11, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ODATA char(6) 
+  { position = [23,48], fieldLen = 6, color = defaultColor, 
+    highlight = underline, intensity = bold, protect = skipProtect, align = right, 
+    fillCharacter = nullFill}; 
+  OTIM char(4) 
+  { position = [23,60], fieldLen = 4, color = defaultColor, 
+    highlight = underline, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  LP char(4) 
+  { position = [23,70], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BJARKE char(1) 
+  { position = [23,80], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [26,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    value = " HJÆLP",
+    this [2] { position = [27,2], value = " " },
+    this [3] { position = [26,12], value = "ANDRE" },
+    this [4] { position = [27,12], value = "F-TASTER" },
+    this [5] { position = [26,22], value = "OPDATER" },
+    this [6] { position = [27,22], value = " " },
+    this [7] { position = [26,32], value = " NÆSTE" },
+    this [8] { position = [27,32], value = " KUNDE" },
+    this [9] { position = [26,42], value = " FAKTU-" },
+    this [10] { position = [27,42], value = " RERING" },
+    this [11] { position = [26,52], value = " TRANSP." },
+    this [12] { position = [27,52], value = "PLANLÆG." },
+    this [13] { position = [26,62], value = "MÆRKE &" },
+    this [14] { position = [27,62], value = "NUMMER" },
+    this [15] { position = [26,72], value = "  EXIT" },
+    this [16] { position = [27,72], value = " " }
+  };
+
+
+  * { position = [1,56], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "TD Dept."};
+  * { position = [1,71], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "User"};
+  * { position = [2,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Con."};
+  * { position = [2,18], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "St."};
+  * { position = [2,45], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Fm"};
+  * { position = [2,55], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "To"};
+  * { position = [2,65], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp"};
+  * { position = [3,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-----Customer no.--------------------------------------------------------------"};
+  * { position = [4,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "SPR"};
+  * { position = [4,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "1"};
+  * { position = [6,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "COLL"};
+  * { position = [6,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "2"};
+  * { position = [8,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CONS"};
+  * { position = [8,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "3"};
+  * { position = [10,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "DEL"};
+  * { position = [10,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "4"};
+  * { position = [12,1], fieldLen = 80, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-------------------- STATUSCODES or MARK & NUMBER LINE -------------------------"};
+  * { position = [14,1], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Mark PLS"};
+  * { position = [14,14], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "T"};
+  * { position = [14,31], fieldLen = 48, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Contents             Gross-WEIGHT-Net  Haz Temp."};
+  * { position = [16,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "BTN"};
+  * { position = [16,22], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Value"};
+  * { position = [16,45], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CBM"};
+  * { position = [16,58], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "LDM"};
+  * { position = [16,71], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Orig."};
+  * { position = [17,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-------------------------------------------------------------------------------"};
+  * { position = [18,1], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Customer ref."};
+  * { position = [18,48], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Terms:"};
+  * { position = [18,60], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "City"};
+  * { position = [19,1], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Document ref."};
+  * { position = [19,28], fieldLen = 7, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Pick-up"};
+  * { position = [19,57], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Del."};
+  * { position = [20,1], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "T-status"};
+  * { position = [20,20], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "COD value"};
+  * { position = [20,47], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Return items"};
+  * { position = [21,1], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Load remarks"};
+  * { position = [22,1], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Doc. remarks"};
+  * { position = [23,1], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Insurance"};
+  * { position = [23,15], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Next trp."};
+  * { position = [23,37], fieldLen = 10, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Order Date"};
+  * { position = [23,55], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Time"};
+  * { position = [23,67], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "LP"};
+end 
+
+
+Form TR101M02 type textForm	
+ { screenSizes = [[27,132]], formSize = [27,132], msgField = VAGen_EZEMSG}
+
+
+  MENU char(8) 
+  { position = [1,1], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  OVERSKRIFT char(40) 
+  { position = [1,13], fieldLen = 40, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  TDD char(5) 
+  { position = [1,65], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_USER char(4) 
+  { position = [1,76], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CONSIGNO char(11) 
+  { position = [2,6], fieldLen = 11, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  S char(1) 
+  { position = [2,22], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  MULTIKEY_LINK_V char(17) 
+  { position = [2,24], fieldLen = 17, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  MT char(2) 
+  { position = [2,42], fieldLen = 2, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  FROMT char(6) 
+  { position = [2,48], fieldLen = 6, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TOT char(6) 
+  { position = [2,58], fieldLen = 6, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRANSNO char(11) 
+  { position = [2,69], fieldLen = 11, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CUSTNO1 char(8) 
+  { position = [4,6], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR1 char(34) 
+  { position = [4,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR2 char(30) 
+  { position = [4,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KREDLIM1 char(13) 
+  { position = [5,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR3 char(34) 
+  { position = [5,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR4 char(30) 
+  { position = [5,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CUSTNO2 char(8) 
+  { position = [6,6], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR5 char(34) 
+  { position = [6,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR6 char(30) 
+  { position = [6,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KREDLIM2 char(13) 
+  { position = [7,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR7 char(34) 
+  { position = [7,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR8 char(30) 
+  { position = [7,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CUSTNO3 char(8) 
+  { position = [8,6], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR9 char(34) 
+  { position = [8,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR10 char(30) 
+  { position = [8,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KREDLIM3 char(13) 
+  { position = [9,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR11 char(34) 
+  { position = [9,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR12 char(30) 
+  { position = [9,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CUSTNO4 char(8) 
+  { position = [10,6], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR13 char(34) 
+  { position = [10,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR14 char(30) 
+  { position = [10,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KREDLIM4 char(13) 
+  { position = [11,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR15 char(34) 
+  { position = [11,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR16 char(30) 
+  { position = [11,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK0_KODE char(3) 
+  { position = [13,1], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  A_KODEVAERDI char(1) 
+  { position = [13,5], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK1_KODE char(3) 
+  { position = [13,7], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  B_KODEVAERDI char(1) 
+  { position = [13,11], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK2_KODE char(3) 
+  { position = [13,13], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  C_KODEVAERDI char(1) 
+  { position = [13,17], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK3_KODE char(3) 
+  { position = [13,19], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  D_KODEVAERDI char(1) 
+  { position = [13,23], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK4_KODE char(3) 
+  { position = [13,25], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  E_KODEVAERDI char(1) 
+  { position = [13,29], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK5_KODE char(3) 
+  { position = [13,31], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  F_KODEVAERDI char(1) 
+  { position = [13,35], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK6_KODE char(3) 
+  { position = [13,37], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  G_KODEVAERDI char(1) 
+  { position = [13,41], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK7_KODE char(3) 
+  { position = [13,43], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  I_KODEVAERDI char(1) 
+  { position = [13,47], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK8_KODE char(3) 
+  { position = [13,49], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  J_KODEVAERDI char(1) 
+  { position = [13,53], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK9_KODE char(3) 
+  { position = [13,55], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  K_KODEVAERDI char(1) 
+  { position = [13,59], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO1_KODE char(3) 
+  { position = [13,61], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  L_KODEVAERDI char(1) 
+  { position = [13,65], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO2_KODE char(3) 
+  { position = [13,67], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  M_KODEVAERDI char(1) 
+  { position = [13,71], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO3_KODE char(3) 
+  { position = [13,73], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  N_KODEVAERDI char(1) 
+  { position = [13,77], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO4_KODE char(3) 
+  { position = [13,79], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  O_KODEVAERDI char(1) 
+  { position = [13,83], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO5_KODE char(3) 
+  { position = [13,85], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  P_KODEVAERDI char(1) 
+  { position = [13,89], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO6_KODE char(3) 
+  { position = [13,91], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  Q_KODEVAERDI char(1) 
+  { position = [13,95], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PLS char(3) 
+  { position = [14,10], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PTP char(3) 
+  { position = [14,16], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  NOOF char(5) 
+  { position = [14,20], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PKG char(4) 
+  { position = [14,26], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  MARKE char(18) 
+  { position = [15,1], fieldLen = 18, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  VAGen_NO char(5) 
+  { position = [15,20], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CLL char(4) 
+  { position = [15,26], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CONTENTS char(20) 
+  { position = [15,31], fieldLen = 20, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  GWEIGHT char(8) 
+  { position = [15,52], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  NWEIGHT char(8) 
+  { position = [15,61], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  H char(1) 
+  { position = [15,71], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  T1 char(3) 
+  { position = [15,73], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  T2 char(3) 
+  { position = [15,77], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  BTN char(8) 
+  { position = [16,5], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  BT char(2) 
+  { position = [16,14], fieldLen = 2, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  BTL1 char(4) 
+  { position = [16,17], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  VAL char(3) 
+  { position = [16,28], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAL1 char(12) 
+  { position = [16,32], fieldLen = 12, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CBM char(8) 
+  { position = [16,49], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  LDM char(8) 
+  { position = [16,62], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ORI char(3) 
+  { position = [16,77], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  UTY char(4) 
+  { position = [18,11], fieldLen = 4, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  UNITTXT char(25) 
+  { position = [18,16], fieldLen = 25, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  UNITNO char(11) 
+  { position = [18,47], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  UNIT char(11) 
+  { position = [18,59], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  LGTH char(4) 
+  { position = [18,76], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TARA char(6) 
+  { position = [19,6], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  T char(1) 
+  { position = [19,23], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  LOADINGINSTR char(12) 
+  { position = [19,42], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  TT char(2) 
+  { position = [19,78], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  CLEARE char(6) 
+  { position = [20,21], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CLEARENCETXT char(23) 
+  { position = [20,28], fieldLen = 23, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  EXTERN_REF char(18) 
+  { position = [20,62], fieldLen = 18, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  REMARK char(50) 
+  { position = [21,21], fieldLen = 50, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BTRAF char(6) 
+  { position = [22,18], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  BDATE char(6) 
+  { position = [22,30], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  X char(1) 
+  { position = [22,37], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DFER char(5) 
+  { position = [22,54], fieldLen = 5, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  TM char(2) 
+  { position = [22,78], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  SETTL char(1) 
+  { position = [23,12], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  NA1 char(3) 
+  { position = [23,24], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  NA2 char(3) 
+  { position = [23,28], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  BORD char(4) 
+  { position = [23,40], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BORDTXT char(16) 
+  { position = [23,45], fieldLen = 16, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  AFS char(3) 
+  { position = [23,77], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [26,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    value = "LINEBOOK",
+    this [2] { position = [27,2], value = "  ELB" },
+    this [3] { position = [26,12], value = " " },
+    this [4] { position = [27,12], value = " " },
+    this [5] { position = [26,22], value = " UPDATE" },
+    this [6] { position = [27,22], value = "& EXIT" },
+    this [7] { position = [26,32], value = " NOTIFI" },
+    this [8] { position = [27,32], value = " CATION" },
+    this [9] { position = [26,42], value = " CANCEL" },
+    this [10] { position = [27,42], value = "NOTIFIC." },
+    this [11] { position = [26,52], value = " " },
+    this [12] { position = [27,52], value = " " },
+    this [13] { position = [26,62], value = "  COPY" },
+    this [14] { position = [27,62], value = "  FULL" },
+    this [15] { position = [26,72], value = " UPDATE" },
+    this [16] { position = [27,72], value = "  EXIT" }
+  };
+
+
+  * { position = [1,57], fieldLen = 7, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Depart."};
+  * { position = [1,71], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "User"};
+  * { position = [2,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Con."};
+  * { position = [2,18], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "St."};
+  * { position = [2,45], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Fm"};
+  * { position = [2,55], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "To"};
+  * { position = [2,65], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp"};
+  * { position = [3,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-----Customer no.--------------------------------------------------------------"};
+  * { position = [4,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "SPR"};
+  * { position = [4,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "1"};
+  * { position = [6,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "COLL"};
+  * { position = [6,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "2"};
+  * { position = [8,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CONS"};
+  * { position = [8,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "3"};
+  * { position = [10,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "DEL"};
+  * { position = [10,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "4"};
+  * { position = [12,1], fieldLen = 80, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "--------------------- STATUSCODES or MARK & NUMBER LINE ------------------------"};
+  * { position = [14,1], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Mark PLS"};
+  * { position = [14,14], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "T"};
+  * { position = [14,31], fieldLen = 48, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Contents             Gross-WEIGHT-Net Haz. Temp."};
+  * { position = [16,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "BTN"};
+  * { position = [16,22], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Value"};
+  * { position = [16,45], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CBM"};
+  * { position = [16,58], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "LDM"};
+  * { position = [16,71], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Orig."};
+  * { position = [17,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-------------------------------------------------------------------------------"};
+  * { position = [18,1], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Unit type"};
+  * { position = [18,42], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Eqpt"};
+  * { position = [18,71], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Len."};
+  * { position = [19,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Tare"};
+  * { position = [19,13], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Load-Type"};
+  * { position = [19,26], fieldLen = 14, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Loading instr."};
+  * { position = [19,62], fieldLen = 11, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp. Method"};
+  * { position = [20,1], fieldLen = 19, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Office of destinat."};
+  * { position = [20,52], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Ext. Ref."};
+  * { position = [21,1], fieldLen = 19, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Transport remarks.."};
+  * { position = [22,1], fieldLen = 16, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Booking: Traffic"};
+  * { position = [22,25], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Date"};
+  * { position = [22,40], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Dept.transfer"};
+  * { position = [22,62], fieldLen = 15, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Mode of Transp."};
+  * { position = [23,1], fieldLen = 10, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Settlement"};
+  * { position = [23,14], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "National."};
+  * { position = [23,33], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Border"};
+  * { position = [23,62], fieldLen = 14, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Dispatch Cntry"};
+end 
+
+
+Form TR101M03 type textForm	
+ { screenSizes = [[27,132]], formSize = [10,132], position = [18,1], 
+  msgField = VAGen_EZEMSG}
+
+
+  NUM1 char(5) 
+  { position = [4,44], fieldLen = 5, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  PDATE char(6) 
+  { position = [5,44], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [7,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [9,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    this [2] { position = [10,2] },
+    this [3] { position = [9,12] },
+    this [4] { position = [10,12] },
+    this [5] { position = [9,22] },
+    this [6] { position = [10,22] },
+    this [7] { position = [9,32] },
+    this [8] { position = [10,32] },
+    this [9] { position = [9,42] },
+    this [10] { position = [10,42] },
+    this [11] { position = [9,52] },
+    this [12] { position = [10,52] },
+    this [13] { position = [9,62] },
+    this [14] { position = [10,62] },
+    this [15] { position = [9,72] },
+    this [16] { position = [10,72] }
+  };
+
+
+  * { position = [1,2], fieldLen = 130, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+             + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"};
+  * { position = [2,2], fieldLen = 16, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxx"};
+  * { position = [2,19], fieldLen = 39, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CREATE MULTIPLE CONSIGNMENTS/TRANSPORTS"};
+  * { position = [2,59], fieldLen = 72, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"};
+  * { position = [3,2], fieldLen = 130, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+             + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"};
+  * { position = [4,2], fieldLen = 16, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxx"};
+  * { position = [4,19], fieldLen = 24, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Enter no. of fulls/trps:"};
+  * { position = [4,50], fieldLen = 81, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+             + "xxxxxxxxxx"};
+  * { position = [5,2], fieldLen = 16, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxx"};
+  * { position = [5,19], fieldLen = 24, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Enter Pickup date......:"};
+  * { position = [5,51], fieldLen = 80, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"};
+  * { position = [6,2], fieldLen = 130, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+             + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"};
+end 
+
+
+Form TR101M04 type textForm	
+ { screenSizes = [[27,132]], formSize = [27,132], msgField = VAGen_EZEMSG}
+
+
+  MENU char(8) 
+  { position = [1,1], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  TDD char(5) 
+  { position = [1,75], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_USER char(4) 
+  { position = [2,75], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CONS char(11) 
+  { position = [3,18], fieldLen = 11, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  DEPARTMENT char(5) 
+  { position = [6,14], fieldLen = 5, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  INST_TYPE char(1) 
+  { position = [6,39], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  INST_DATE char(6) 
+  { position = [6,51], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  GATE_INST_TYPE char(1) 
+  { position = [9,17], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  GATEWAY char(6) 
+  { position = [9,39], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  GATE_INST_DATE char(6) 
+  { position = [9,51], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  GATE_INST_TIME char(4) 
+  { position = [9,63], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  GATEWAY_TEXT char(30) 
+  { position = [10,39], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  UNIT_CATEGORI char(3) 
+  { position = [12,21], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  UNIT_SIZE char(3) 
+  { position = [12,30], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  UNIT_TYPE char(3) 
+  { position = [12,39], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  UNIT_SUB_TYPE char(3) 
+  { position = [12,51], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TRANSPORT char(12) 
+  { position = [14,39], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  MAIN_HAND_STAT char(1) 
+  { position = [14,62], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BOOKING_TRAFFIC char(6) 
+  { position = [16,25], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  BOOKING_DATE char(6) 
+  { position = [16,40], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  TEXT1 char(79) 
+  { position = [19,1], fieldLen = 79, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TEXT2 char(79) 
+  { position = [20,1], fieldLen = 79, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TEXT3 char(79) 
+  { position = [21,1], fieldLen = 79, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TEXT4 char(79) 
+  { position = [22,1], fieldLen = 79, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [26,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    value = "  HELP",
+    this [2] { position = [27,2], value = " " },
+    this [3] { position = [26,12], value = " UPDATE" },
+    this [4] { position = [27,12], value = "INSTRUC." },
+    this [5] { position = [26,22], value = " UPDATE" },
+    this [6] { position = [27,22], value = "TRANSFER" },
+    this [7] { position = [26,32], value = " " },
+    this [8] { position = [27,32], value = " " },
+    this [9] { position = [26,42], value = " " },
+    this [10] { position = [27,42], value = " " },
+    this [11] { position = [26,52], value = " " },
+    this [12] { position = [27,52], value = " " },
+    this [13] { position = [26,62], value = " " },
+    this [14] { position = [27,62], value = " " },
+    this [15] { position = [26,72], value = "  EXIT" },
+    this [16] { position = [27,72], value = " " }
+  };
+
+
+  * { position = [1,10], fieldLen = 64, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "*** CONSIGNMENT TRANSFER/INSTRUCTION ***                TD Dept."};
+  * { position = [2,66], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "User"};
+  * { position = [3,5], fieldLen = 11, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CONSIGNMENT"};
+  * { position = [4,1], fieldLen = 80, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "--------------------------------------------------------------------------------"};
+  * { position = [6,5], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "TO DEPT:"};
+  * { position = [6,21], fieldLen = 17, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "INSTRUCTION TYPE:"};
+  * { position = [6,46], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "DATE"};
+  * { position = [8,5], fieldLen = 16, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "DISTRIBUTION/TPS"};
+  * { position = [9,7], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "GATEWAY :"};
+  * { position = [9,19], fieldLen = 19, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = ">:P for Imports HUB"};
+  * { position = [9,46], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "DATE"};
+  * { position = [9,58], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "TIME"};
+  * { position = [10,20], fieldLen = 14, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = ":D for Exports"};
+  * { position = [12,7], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "VEHICLE : Cat"};
+  * { position = [12,25], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Size"};
+  * { position = [12,34], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Type"};
+  * { position = [12,43], fieldLen = 7, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Subtype"};
+  * { position = [14,5], fieldLen = 33, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "TERMINAL    Assign to Transport :"};
+  * { position = [14,52], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "MH-Status"};
+  * { position = [16,5], fieldLen = 18, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "BOOKING  : Traffic"};
+  * { position = [16,32], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "/ Date"};
+  * { position = [18,5], fieldLen = 17, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "INSTRUCTION TEXT:"};
+end 
+
+
+Form TR101M05 type textForm	
+ { screenSizes = [[27,132]], formSize = [27,132], msgField = VAGen_EZEMSG}
+
+
+  MENU char(8) 
+  { position = [1,1], fieldLen = 8, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  OVERSKRIFT char(40) 
+  { position = [1,12], fieldLen = 40, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  TDD char(5) 
+  { position = [1,65], fieldLen = 5, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_USER char(4) 
+  { position = [1,76], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CONSIGNO char(11) 
+  { position = [2,6], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  S char(1) 
+  { position = [2,22], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  MULTIKEY_LINK_V char(17) 
+  { position = [2,24], fieldLen = 17, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  MT char(2) 
+  { position = [2,42], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  FROMT char(6) 
+  { position = [2,48], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TOT char(6) 
+  { position = [2,58], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRANSNO char(11) 
+  { position = [2,69], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CUSTNO1 char(8) 
+  { position = [4,6], fieldLen = 8, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR1 char(34) 
+  { position = [4,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR2 char(30) 
+  { position = [4,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KREDLIM1 char(13) 
+  { position = [5,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR3 char(34) 
+  { position = [5,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR4 char(30) 
+  { position = [5,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CUSTNO2 char(8) 
+  { position = [6,6], fieldLen = 8, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR5 char(34) 
+  { position = [6,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR6 char(30) 
+  { position = [6,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KREDLIM2 char(13) 
+  { position = [7,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR7 char(34) 
+  { position = [7,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR8 char(30) 
+  { position = [7,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CUSTNO3 char(8) 
+  { position = [8,6], fieldLen = 8, color = defaultColor, highlight = reverse, 
+    intensity = normalIntensity, protect = noProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR9 char(34) 
+  { position = [8,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR10 char(30) 
+  { position = [8,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KREDLIM3 char(13) 
+  { position = [9,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR11 char(34) 
+  { position = [9,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR12 char(30) 
+  { position = [9,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CUSTNO4 char(8) 
+  { position = [10,6], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR13 char(34) 
+  { position = [10,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR14 char(30) 
+  { position = [10,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KREDLIM4 char(13) 
+  { position = [11,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR15 char(34) 
+  { position = [11,15], fieldLen = 34, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ADR16 char(30) 
+  { position = [11,50], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  KK1_KODE char(3) 
+  { position = [13,1], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  A_KODEVAERDI char(1) 
+  { position = [13,5], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK2_KODE char(3) 
+  { position = [13,7], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  B_KODEVAERDI char(1) 
+  { position = [13,11], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK3_KODE char(3) 
+  { position = [13,13], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  C_KODEVAERDI char(1) 
+  { position = [13,17], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK4_KODE char(3) 
+  { position = [13,19], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  D_KODEVAERDI char(1) 
+  { position = [13,23], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK5_KODE char(3) 
+  { position = [13,25], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  G_KODEVAERDI char(1) 
+  { position = [13,29], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK6_KODE char(3) 
+  { position = [13,31], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  W_KODEVAERDI char(1) 
+  { position = [13,35], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK7_KODE char(3) 
+  { position = [13,37], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  I_KODEVAERDI char(1) 
+  { position = [13,41], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK8_KODE char(3) 
+  { position = [13,43], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  J_KODEVAERDI char(1) 
+  { position = [13,47], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK9_KODE char(3) 
+  { position = [13,49], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  K_KODEVAERDI char(1) 
+  { position = [13,53], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK1_KODE char(3) 
+  { position = [13,55], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  L_KODEVAERDI char(1) 
+  { position = [13,59], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK2_KODE char(3) 
+  { position = [13,61], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  M_KODEVAERDI char(1) 
+  { position = [13,65], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK3_KODE char(3) 
+  { position = [13,67], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  N_KODEVAERDI char(1) 
+  { position = [13,71], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK4_KODE char(3) 
+  { position = [13,73], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  O_KODEVAERDI char(1) 
+  { position = [13,77], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK5_KODE char(3) 
+  { position = [13,79], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  P_KODEVAERDI char(1) 
+  { position = [13,83], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK6_KODE char(3) 
+  { position = [13,85], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  Q_KODEVAERDI char(1) 
+  { position = [13,89], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  OK7_KODE char(3) 
+  { position = [13,91], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  R_KODEVAERDI char(1) 
+  { position = [13,95], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PLS char(3) 
+  { position = [14,10], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  PTP char(3) 
+  { position = [14,16], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  NOOF char(5) 
+  { position = [14,20], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PKG char(4) 
+  { position = [14,26], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  MARKE char(18) 
+  { position = [15,1], fieldLen = 18, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = left, fillCharacter = nullFill}; 
+  VAGen_NO char(5) 
+  { position = [15,20], fieldLen = 5, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CLL char(4) 
+  { position = [15,26], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CONTENTS char(20) 
+  { position = [15,31], fieldLen = 20, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = left, fillCharacter = nullFill}; 
+  GWEIGHT char(8) 
+  { position = [15,52], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  NWEIGHT char(8) 
+  { position = [15,61], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  H char(1) 
+  { position = [15,71], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  T1 char(3) 
+  { position = [15,73], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  T2 char(3) 
+  { position = [15,77], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BTN char(8) 
+  { position = [16,5], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BT char(2) 
+  { position = [16,14], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BTL1 char(4) 
+  { position = [16,17], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  VAL char(3) 
+  { position = [16,28], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAL1 char(12) 
+  { position = [16,32], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CBM char(8) 
+  { position = [16,49], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  LDM char(8) 
+  { position = [16,62], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  ORI char(3) 
+  { position = [16,77], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  CUSTOMERREF char(30) 
+  { position = [18,15], fieldLen = 30, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TER char(4) 
+  { position = [18,55], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  TERMSCITY char(12) 
+  { position = [18,65], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DOCUREF char(12) 
+  { position = [19,15], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CDATE char(6) 
+  { position = [19,36], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  CTIM char(4) 
+  { position = [19,43], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CTTO char(4) 
+  { position = [19,48], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  Z char(1) 
+  { position = [19,53], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  X char(1) 
+  { position = [19,55], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DDATE char(6) 
+  { position = [19,62], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  DTIM char(4) 
+  { position = [19,69], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DTTO char(4) 
+  { position = [19,74], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  U char(1) 
+  { position = [19,79], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  Y char(1) 
+  { position = [19,81], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TSST char(4) 
+  { position = [20,15], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  CO char(3) 
+  { position = [20,30], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  CODVALUE char(12) 
+  { position = [20,34], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  RETUR char(6) 
+  { position = [20,60], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  RET char(4) 
+  { position = [20,67], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  RETUR1 char(8) 
+  { position = [20,72], fieldLen = 8, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  PLANREMARKS char(65) 
+  { position = [21,15], fieldLen = 65, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DOCUREMARKS1 char(32) 
+  { position = [22,15], fieldLen = 32, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DOCUREMARKS2 char(32) 
+  { position = [22,48], fieldLen = 32, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  F char(1) 
+  { position = [23,11], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  NEXTTRANS char(11) 
+  { position = [23,25], fieldLen = 11, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ODATA char(6) 
+  { position = [23,48], fieldLen = 6, color = defaultColor, 
+    highlight = underline, intensity = bold, protect = skipProtect, align = right, 
+    fillCharacter = nullFill}; 
+  OTIM char(4) 
+  { position = [23,60], fieldLen = 4, color = defaultColor, 
+    highlight = underline, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  LP char(4) 
+  { position = [23,70], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BJARKE char(1) 
+  { position = [23,80], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [26,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    value = " HJÆLP",
+    this [2] { position = [27,2], value = " " },
+    this [3] { position = [26,12], value = "ANDRE" },
+    this [4] { position = [27,12], value = "F-TASTER" },
+    this [5] { position = [26,22], value = "OPDATER" },
+    this [6] { position = [27,22], value = " " },
+    this [7] { position = [26,32], value = " NÆSTE" },
+    this [8] { position = [27,32], value = " KUNDE" },
+    this [9] { position = [26,42], value = " FAKTU-" },
+    this [10] { position = [27,42], value = " RERING" },
+    this [11] { position = [26,52], value = " TRANSP." },
+    this [12] { position = [27,52], value = "PLANLÆG." },
+    this [13] { position = [26,62], value = "MÆRKE &" },
+    this [14] { position = [27,62], value = "NUMMER" },
+    this [15] { position = [26,72], value = "  EXIT" },
+    this [16] { position = [27,72], value = " " }
+  };
+
+
+  * { position = [1,56], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "TD Dept."};
+  * { position = [1,71], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "User"};
+  * { position = [2,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Con."};
+  * { position = [2,18], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "St."};
+  * { position = [2,45], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Fm"};
+  * { position = [2,55], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "To"};
+  * { position = [2,65], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp"};
+  * { position = [3,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-----Customer no.--------------------------------------------------------------"};
+  * { position = [4,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "SPR"};
+  * { position = [4,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "1"};
+  * { position = [6,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "COLL"};
+  * { position = [6,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "2"};
+  * { position = [8,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CONS"};
+  * { position = [8,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "3"};
+  * { position = [10,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "DEL"};
+  * { position = [10,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "4"};
+  * { position = [12,1], fieldLen = 80, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-------------------- STATUSCODES or MARK & NUMBER LINE -------------------------"};
+  * { position = [14,1], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Mark PLS"};
+  * { position = [14,14], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "T"};
+  * { position = [14,31], fieldLen = 48, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Contents             Gross-WEIGHT-Net  Haz Temp."};
+  * { position = [16,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "BTN"};
+  * { position = [16,22], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Value"};
+  * { position = [16,45], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CBM"};
+  * { position = [16,58], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "LDM"};
+  * { position = [16,71], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Orig."};
+  * { position = [17,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-------------------------------------------------------------------------------"};
+  * { position = [18,1], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Customer ref."};
+  * { position = [18,48], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Terms:"};
+  * { position = [18,60], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "City"};
+  * { position = [19,1], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Document ref."};
+  * { position = [19,28], fieldLen = 7, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Pick-up"};
+  * { position = [19,57], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Del."};
+  * { position = [20,1], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "T-status"};
+  * { position = [20,20], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "COD value"};
+  * { position = [20,47], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Return items"};
+  * { position = [21,1], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Load remarks"};
+  * { position = [22,1], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Doc. remarks"};
+  * { position = [23,1], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Insurance"};
+  * { position = [23,15], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Next trp."};
+  * { position = [23,37], fieldLen = 10, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Order Date"};
+  * { position = [23,55], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Time"};
+  * { position = [23,67], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "LP"};
+end 
+
+
+Form TR101M06 type textForm	
+ { screenSizes = [[27,132]], formSize = [27,132], msgField = VAGen_EZEMSG}
+
+
+  MENU char(8) 
+  { position = [1,1], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  OVERSKRIFT char(40) 
+  { position = [1,13], fieldLen = 40, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  TDD char(5) 
+  { position = [1,65], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_USER char(4) 
+  { position = [1,76], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CONSIGNO char(11) 
+  { position = [2,6], fieldLen = 11, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  S char(1) 
+  { position = [2,22], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  MULTIKEY_LINK_V char(17) 
+  { position = [2,24], fieldLen = 17, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  MT char(2) 
+  { position = [2,42], fieldLen = 2, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  FROMT char(6) 
+  { position = [2,48], fieldLen = 6, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TOT char(6) 
+  { position = [2,58], fieldLen = 6, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  TRANSNO char(11) 
+  { position = [2,69], fieldLen = 11, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CUSTNO1 char(8) 
+  { position = [4,6], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR1 char(34) 
+  { position = [4,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR2 char(30) 
+  { position = [4,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KREDLIM1 char(13) 
+  { position = [5,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR3 char(34) 
+  { position = [5,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR4 char(30) 
+  { position = [5,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CUSTNO2 char(8) 
+  { position = [6,6], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR5 char(34) 
+  { position = [6,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR6 char(30) 
+  { position = [6,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KREDLIM2 char(13) 
+  { position = [7,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR7 char(34) 
+  { position = [7,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR8 char(30) 
+  { position = [7,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CUSTNO3 char(8) 
+  { position = [8,6], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR9 char(34) 
+  { position = [8,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR10 char(30) 
+  { position = [8,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KREDLIM3 char(13) 
+  { position = [9,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR11 char(34) 
+  { position = [9,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR12 char(30) 
+  { position = [9,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CUSTNO4 char(8) 
+  { position = [10,6], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR13 char(34) 
+  { position = [10,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR14 char(30) 
+  { position = [10,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KREDLIM4 char(13) 
+  { position = [11,1], fieldLen = 13, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR15 char(34) 
+  { position = [11,15], fieldLen = 34, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ADR16 char(30) 
+  { position = [11,50], fieldLen = 30, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK0_KODE char(3) 
+  { position = [13,1], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  A_KODEVAERDI char(1) 
+  { position = [13,5], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK1_KODE char(3) 
+  { position = [13,7], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  B_KODEVAERDI char(1) 
+  { position = [13,11], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK2_KODE char(3) 
+  { position = [13,13], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  C_KODEVAERDI char(1) 
+  { position = [13,17], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK3_KODE char(3) 
+  { position = [13,19], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  D_KODEVAERDI char(1) 
+  { position = [13,23], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK4_KODE char(3) 
+  { position = [13,25], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  E_KODEVAERDI char(1) 
+  { position = [13,29], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK5_KODE char(3) 
+  { position = [13,31], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  F_KODEVAERDI char(1) 
+  { position = [13,35], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK6_KODE char(3) 
+  { position = [13,37], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  G_KODEVAERDI char(1) 
+  { position = [13,41], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK7_KODE char(3) 
+  { position = [13,43], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  I_KODEVAERDI char(1) 
+  { position = [13,47], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK8_KODE char(3) 
+  { position = [13,49], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  J_KODEVAERDI char(1) 
+  { position = [13,53], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KK9_KODE char(3) 
+  { position = [13,55], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  K_KODEVAERDI char(1) 
+  { position = [13,59], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO1_KODE char(3) 
+  { position = [13,61], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  L_KODEVAERDI char(1) 
+  { position = [13,65], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO2_KODE char(3) 
+  { position = [13,67], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  M_KODEVAERDI char(1) 
+  { position = [13,71], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO3_KODE char(3) 
+  { position = [13,73], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  N_KODEVAERDI char(1) 
+  { position = [13,77], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO4_KODE char(3) 
+  { position = [13,79], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  O_KODEVAERDI char(1) 
+  { position = [13,83], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO5_KODE char(3) 
+  { position = [13,85], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  P_KODEVAERDI char(1) 
+  { position = [13,89], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  KO6_KODE char(3) 
+  { position = [13,91], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  Q_KODEVAERDI char(1) 
+  { position = [13,95], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PLS char(3) 
+  { position = [14,10], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PTP char(3) 
+  { position = [14,16], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  NOOF char(5) 
+  { position = [14,20], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  PKG char(4) 
+  { position = [14,26], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  MARKE char(18) 
+  { position = [15,1], fieldLen = 18, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  VAGen_NO char(5) 
+  { position = [15,20], fieldLen = 5, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CLL char(4) 
+  { position = [15,26], fieldLen = 4, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  CONTENTS char(20) 
+  { position = [15,31], fieldLen = 20, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = left, 
+    fillCharacter = nullFill}; 
+  GWEIGHT char(8) 
+  { position = [15,52], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  NWEIGHT char(8) 
+  { position = [15,61], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  H char(1) 
+  { position = [15,71], fieldLen = 1, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  T1 char(3) 
+  { position = [15,73], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  T2 char(3) 
+  { position = [15,77], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  BTN char(8) 
+  { position = [16,5], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  BT char(2) 
+  { position = [16,14], fieldLen = 2, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  BTL1 char(4) 
+  { position = [16,17], fieldLen = 4, cursor = yes, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  VAL char(3) 
+  { position = [16,28], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAL1 char(12) 
+  { position = [16,32], fieldLen = 12, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  CBM char(8) 
+  { position = [16,49], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  LDM char(8) 
+  { position = [16,62], fieldLen = 8, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  ORI char(3) 
+  { position = [16,77], fieldLen = 3, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  UTY char(4) 
+  { position = [18,11], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  UNITTXT char(25) 
+  { position = [18,16], fieldLen = 25, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  UNITNO char(11) 
+  { position = [18,47], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  UNIT char(11) 
+  { position = [18,59], fieldLen = 11, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  LGTH char(4) 
+  { position = [18,76], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  TARA char(6) 
+  { position = [19,6], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  T char(1) 
+  { position = [19,23], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  LOADINGINSTR char(12) 
+  { position = [19,42], fieldLen = 12, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  TT char(2) 
+  { position = [19,78], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CLEARE char(6) 
+  { position = [20,21], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  CLEARENCETXT char(23) 
+  { position = [20,28], fieldLen = 23, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  EXTERN_REF char(18) 
+  { position = [20,62], fieldLen = 18, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  REMARK char(50) 
+  { position = [21,21], fieldLen = 50, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BTRAF char(6) 
+  { position = [22,18], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  BDATE char(6) 
+  { position = [22,30], fieldLen = 6, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = right, fillCharacter = nullFill}; 
+  X char(1) 
+  { position = [22,37], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  DFER char(5) 
+  { position = [22,54], fieldLen = 5, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  TM char(2) 
+  { position = [22,78], fieldLen = 2, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  SETTL char(1) 
+  { position = [23,12], fieldLen = 1, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  NA1 char(3) 
+  { position = [23,24], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  NA2 char(3) 
+  { position = [23,28], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = none, fillCharacter = nullFill}; 
+  BORD char(4) 
+  { position = [23,40], fieldLen = 4, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    align = none, fillCharacter = nullFill}; 
+  BORDTXT char(16) 
+  { position = [23,45], fieldLen = 16, color = defaultColor, 
+    highlight = noHighlight, intensity = bold, protect = skipProtect, align = none, 
+    fillCharacter = nullFill}; 
+  AFS char(3) 
+  { position = [23,77], fieldLen = 3, color = defaultColor, 
+    highlight = reverse, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,2], fieldLen = 78, color = red, highlight = underline, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill}; 
+  FUNCKEY_LABEL char(8) [16] 
+  { position = [26,2], fieldLen = 8, color = cyan, highlight = reverse, 
+    intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
+    value = "LINEBOOK",
+    this [2] { position = [27,2], value = "  ELB" },
+    this [3] { position = [26,12], value = " " },
+    this [4] { position = [27,12], value = " " },
+    this [5] { position = [26,22], value = " UPDATE" },
+    this [6] { position = [27,22], value = "& EXIT" },
+    this [7] { position = [26,32], value = " NOTIFI" },
+    this [8] { position = [27,32], value = " CATION" },
+    this [9] { position = [26,42], value = " CANCEL" },
+    this [10] { position = [27,42], value = "NOTIFIC." },
+    this [11] { position = [26,52], value = " " },
+    this [12] { position = [27,52], value = " " },
+    this [13] { position = [26,62], value = "  COPY" },
+    this [14] { position = [27,62], value = "  FULL" },
+    this [15] { position = [26,72], value = " UPDATE" },
+    this [16] { position = [27,72], value = "  EXIT" }
+  };
+
+
+  * { position = [1,57], fieldLen = 7, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Depart."};
+  * { position = [1,71], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "User"};
+  * { position = [2,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Con."};
+  * { position = [2,18], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "St."};
+  * { position = [2,45], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Fm"};
+  * { position = [2,55], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "To"};
+  * { position = [2,65], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp"};
+  * { position = [3,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-----Customer no.--------------------------------------------------------------"};
+  * { position = [4,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "SPR"};
+  * { position = [4,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "1"};
+  * { position = [6,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "COLL"};
+  * { position = [6,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "2"};
+  * { position = [8,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CONS"};
+  * { position = [8,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "3"};
+  * { position = [10,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "DEL"};
+  * { position = [10,81], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "4"};
+  * { position = [12,1], fieldLen = 80, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "--------------------- STATUSCODES or MARK & NUMBER LINE ------------------------"};
+  * { position = [14,1], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Mark PLS"};
+  * { position = [14,14], fieldLen = 1, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "T"};
+  * { position = [14,31], fieldLen = 48, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Contents             Gross-WEIGHT-Net Haz. Temp."};
+  * { position = [16,1], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "BTN"};
+  * { position = [16,22], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Value"};
+  * { position = [16,45], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "CBM"};
+  * { position = [16,58], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "LDM"};
+  * { position = [16,71], fieldLen = 5, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Orig."};
+  * { position = [17,1], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "-------------------------------------------------------------------------------"};
+  * { position = [18,1], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Unit type"};
+  * { position = [18,42], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Eqpt"};
+  * { position = [18,71], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Len."};
+  * { position = [19,1], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Tare"};
+  * { position = [19,13], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Load-Type"};
+  * { position = [19,26], fieldLen = 14, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Loading instr."};
+  * { position = [19,62], fieldLen = 11, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Trp. Method"};
+  * { position = [20,1], fieldLen = 19, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Office of destinat."};
+  * { position = [20,52], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Ext. Ref."};
+  * { position = [21,1], fieldLen = 19, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Transport remarks.."};
+  * { position = [22,1], fieldLen = 16, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Booking: Traffic"};
+  * { position = [22,25], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Date"};
+  * { position = [22,40], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Dept.transfer"};
+  * { position = [22,62], fieldLen = 15, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Mode of Transp."};
+  * { position = [23,1], fieldLen = 10, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Settlement"};
+  * { position = [23,14], fieldLen = 9, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "National."};
+  * { position = [23,33], fieldLen = 6, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Border"};
+  * { position = [23,62], fieldLen = 14, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "Dispatch Cntry"};
+end 
+
+
+end 

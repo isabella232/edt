@@ -1,0 +1,119 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program replaceStatement_sql type BasicProgram
+	
+	dummyRecVar dummyRecord;
+	
+	function main()
+	
+	replace dummyRecVar with 
+		#sql{												--// 0
+			UPDATE CUSTOMERS								--// 0
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109		--// 0
+		};
+
+	replace dummyRecVar with 
+		#sql{												--// 0
+			UPDATE CUSTOMERS								--// 0
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109		--// 0
+ 			WHERE CURRENT OF cursor1						--// 0
+		};
+	
+	replace dummyRecVar with 
+		#sql{												
+			UPDATE CUSTOMERS								
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109		
+		} with 												// 1 The REPLACE SQL I/O statement does not allow the inline SQL statement to be specified more than once
+		#sql{												
+			UPDATE CUSTOMERS								
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109		
+		};
+	
+	replace dummyRecVar with #sql{};						// 1 The REPLACE SQL statement cannot be empty
+	
+	
+	replace dummyRecVar with 
+		#sql{												--// 1 The REPLACE SQL I/O statement requires the UPDATE clause, which is missing 
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109						
+		};
+	
+	replace dummyRecVar with 
+		#sql{												--// 1 The REPLACE SQL I/O statement requires the SET clause, which is missing
+			UPDATE CUSTOMERS											
+		};	
+
+	replace dummyRecVar with 
+		#sql{											
+			UPDATE											--// 1 The UPDATE SQL clause cannot be empty				
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109								
+		};
+		
+	replace dummyRecVar with 
+		#sql{												
+			UPDATE CUSTOMERS								
+   			SET												--// 1 The SET SQL clause cannot be empty	
+		};
+		
+	replace dummyRecVar with 
+		#sql{												
+			UPDATE CUSTOMERS								
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109		
+ 			WHERE CURRENT OF  	 							--// 1 The WHERE CURRENT OF SQL clause cannot be empty	
+		};	 
+
+	replace dummyRecVar with 
+		#sql{												--// 1 The REPLACE SQL I/O statement has clauses that are out of order. UPDATE must appear before the SET clause									
+			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109		
+			UPDATE CUSTOMERS							
+ 			WHERE CURRENT OF cursor1					
+		};
+	
+	replace dummyRecVar with 
+		#sql{												--// 2 The REPLACE SQL I/O statement has clauses that are out of order. SET must appear before the WHERE CURRENT OF clause | The REPLACE SQL I/O statement has clauses that are out of order. UPDATE must appear before the WHERE CURRENT OF clause	
+			WHERE CURRENT OF cursor1						
+			UPDATE CUSTOMERS							
+			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109							
+		};	
+	 
+	replace dummyRecVar with 
+		#sql{
+   			UPDATE CUSTOMERS
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109
+ 			WHERE CURRENT OF cursor1 
+ 			UPDATE CUSTOMERS2								--// 1 The REPLACE SQL I/O statement allows only one UPDATE clause
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109		--// 1 The REPLACE SQL I/O statement allows only one SET clause
+ 			WHERE CURRENT OF cursor2   						--// 1 The REPLACE SQL I/O statement allows only one WHERE CURRENT OF clause
+		}; 
+		
+	replace dummyRecVar with 
+		#sql{
+   			UPDATE CUSTOMERS
+   			SET CREDIT_LIMIT = 60000.00, CUST_REP = 109
+ 			INSERT INTO CUSTOMERS							--// 1 The REPLACE SQL I/O statement does not allow the INSERT INTO clause
+ 			}; 	
+		
+	
+	
+		 
+	end			
+	
+end
+
+Record dummyRecord type sqlRecord
+end
+
+
+
+
+
+
+

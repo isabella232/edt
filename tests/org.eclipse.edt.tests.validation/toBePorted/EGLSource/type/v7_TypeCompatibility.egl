@@ -1,0 +1,157 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+/*
+N = Numeric types: bin, int, smallint, bigint, decimal, num, pacf, numc, float, smallfloat, money, number
+T = Text types: char, unicode, string, mbchar
+D = Datetime types: date, time, timestamp, interval
+
+Target Type		Source Type
+N				N, T, date
+char			N, T, D, hex
+dbchar			dbchar, unicode, string
+mbchar			N, T, D
+unicode, string	N, T, D, hex, dbchar (this is everything!)
+hex				char, hex, unicode, string
+date			N, T, date, timestamp
+time			T, timestamp, time
+interval		interval, T, int, smallint, bigint, bin/decimal/num/pacf/numc/money with no decimals
+timestamp		T, timestamp, time, date
+*/
+
+Program pgm
+	function main()
+		numericVar int;
+		textVar char(4);
+		dateTimeVar date;
+		dateVar date;
+		timeVar time;
+		timestampVar timestamp;
+		intervalVar interval;
+		charVar char(4);
+		mbcharVar mbchar(4);
+		dbcharVar dbchar(4);
+		hexVar hex(4);
+		unicodeVar unicode(4);
+		stringVar string;
+		intVar int;
+		smallintVar smallInt;
+		bigintVar bigInt;
+		binDecVar bin(9,2);
+		binNoDecVar bin(9,0);
+		moneyDecVar bin(9,2);
+		moneyNoDecVar bin(9,0);
+		
+		numericVar = numericVar;	//0
+		numericVar = textVar;		//0
+		numericVar = dateVar;		//0
+		numericVar = intervalVar;	//0
+		numericVar = timeVar;		//1 not compatible
+		numericVar = timestampVar;	//1 not compatible
+		numericVar = dbcharVar;		//1 not compatible
+		
+		charVar = numericVar;		//0
+		charVar = textVar;			//0
+		charVar = dateTimeVar;		//0
+		charVar = hexVar;			//0
+		charVar = dbcharVar;		//1 not compatible
+		
+		dbcharVar = dbcharVar;		//0
+		dbcharVar = unicodeVar;		//0
+		dbcharVar = stringVar;		//0
+		dbcharVar = numericVar;		//1 not compatible
+		dbcharVar = dateTimeVar;	//1 not compatible
+		dbcharVar = hexVar;			//1 not compatible
+		
+		mbcharVar = numericVar;		//0
+		mbcharVar = textVar;		//0
+		mbcharVar = dateTimeVar;	//0
+		mbcharVar = timeVar;		//0
+		mbcharVar = dbcharVar;		//1 not compatible
+		
+		unicodeVar = numericVar;	//0
+		unicodeVar = textVar;		//0
+		unicodeVar = dateTimeVar;	//0
+		unicodeVar = hexVar;		//0
+		unicodeVar = dbcharVar;		//0
+		
+		stringVar = numericVar;		//0
+		stringVar = textVar;		//0
+		stringVar = dateTimeVar;	//0
+		stringVar = hexVar;			//0
+		stringVar = dbcharVar;		//0
+		
+		hexVar = charVar;			//0
+		hexVar = hexVar;			//0
+		hexVar = unicodeVar;		//0
+		hexVar = stringVar;			//0
+		hexVar = dateTimeVar;		//1 not compatible
+		hexVar = numericVar;		//1 not compatible
+		
+		dateVar = numericVar;		//0
+		dateVar = textVar;			//0
+		dateVar = dateVar;			//0
+		dateVar = timestampVar;		//0
+		dateVar = timeVar;			//1 not compatible
+		dateVar = intervalVar;		//1 not compatible
+		dateVar = hexVar;			//1 not compatible
+		
+		timeVar = textVar;			//0
+		timeVar = timestampVar;		//0
+		timeVar = timeVar;			//0
+		timeVar = numericVar;		//1 not compatible
+		timeVar = dateVar;			//1 not compatible
+		timeVar = intervalVar;		//1 not compatible
+		
+		intervalVar = intervalVar;	//0
+		intervalVar = textVar;		//0
+		intervalVar = intVar;		//0
+		intervalVar = smallintVar;	//0
+		intervalVar = bigintVar;	//0
+		intervalVar = binNoDecVar;	//0
+		intervalVar = binDecVar;	//1 not compatible
+		intervalVar = moneyNoDecVar;//0
+		intervalVar = moneyDecVar;	//1 not compatible
+		
+		timestampVar = textVar;		//0
+		timestampVar = timestampVar;//0
+		timestampVar = timeVar;		//0
+		timestampVar = dateVar;		//0
+		timestampVar = intervalVar;	//1 not compatible
+		timestampVar = numericVar;	//1 not compatible
+		
+		C1 int;
+		C1 = 12 + "123"; 	//0 {should result in 135.}
+		C1 = "123" + 12;	//0 {will result in 12312.}
+		C1 = 12 :: 123 ; 	//0 {will result in 12123}
+		
+		C2 char(20);
+		C2 = 12 + "123"; 	//0 {will result in 135}
+		C2 = 12 :: 123 ; 	//0 {will result in 12123}
+		C2 = "12" + "123";	//0 {should result in 12123.}
+
+		F float;
+		F = "10.0" + "200e2";	//0 {results in runtime error}
+		F = "10.0" :: "200e2";	//0 {result in runtime error}
+		F = 10.0 + "200e2"; 	//0 {20010.0}
+		
+		clobVar clob;
+		C1 = "123" + clobVar;	//1 The expression "123" is not compatible with the expression clobVar
+		C1 = "123" :: clobVar;	//1 The expression "123" is not compatible with the expression clobVar
+		C1 = clobVar + "123";	//1 The primitive type clob for clobVar is not valid for use in a numeric expression
+		C1 = clobVar :: "123";	//1 The expression clobVar is not compatible with the expression "123"
+		
+		ch char(20);
+		ch = dateFromInt(10) + 10;	//0
+	end
+end

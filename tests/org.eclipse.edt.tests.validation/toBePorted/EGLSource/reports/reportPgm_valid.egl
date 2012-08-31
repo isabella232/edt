@@ -1,0 +1,64 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program MyValidReportPgm type basicProgram
+	myReport Report;
+	//Jon - this needs to change for the ref DCR, if accepted
+	myReportData ReportData;
+	
+	function main()
+		parm1 string;
+		
+		//Initialize myReport file locations
+		myReport.reportDesignFile = "reportDesignFileName.jasper";
+		myReport.reportDestinationFile = "reportDestinationFileName.jrprint";
+
+		//Set the report data via writing EGL code
+		populateReportData();
+		myReport.reportData = myReportData;
+		
+		//Fill the report with the data
+		fillReport(myReport, DataSource.databaseConnection);
+		reportLib.fillReport(myReport, DataSource.reportData);
+		reportLib.fillReport(myReport, DataSource.sqlStatement);
+		
+		//Export the report in various formats
+		myReport.reportExportFile = "reportDesignFileName.html";
+		exportReport(myReport, ExportFormat.HTML);
+		myReport.reportExportFile = "reportDesignFileName.pdf";
+		reportLib.exportReport(myReport, ExportFormat.PDF);
+		myReport.reportExportFile = "reportDesignFileName.text";
+		reportLib.exportReport(myReport, ExportFormat.TEXT);
+		myReport.reportExportFile = "reportDesignFileName.xml";
+		reportLib.exportReport(myReport, ExportFormat.XML);
+		myReport.reportExportFile = "reportDesignFileName.csv";
+		reportLib.exportReport(myReport, ExportFormat.CSV);
+		
+		reportLib.addReportParameter(myReport, "newParm", parm1);
+		reportLib.resetReportParameters(myReport);
+	end
+	
+	function populateReportData()
+		//Insert EGL code here which populates myReportData
+		rdrec ReportDetailRecord;
+		
+		rdrec.a = 10;
+		rdrec.b = 20;
+		myReportData.data = rdrec;
+	end
+end
+
+record ReportDetailRecord
+	a int;
+	b int;
+end

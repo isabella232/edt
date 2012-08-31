@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+ExternalType StringBuffer extends Object type JavaObject
+	function insertValue(offset int, b boolean) returns (int[]) { javaName = "insert" };	//2 IN modifier must be specified|IN modifier must be specified
+	function insertValue(offset int, str string) returns (int) { javaName = "insert" };		//2 IN modifier must be specified|IN modifier must be specified
+end
+
+Program pgm
+	function main()
+		sb StringBuffer = new StringBuffer();
+		a int = sb.insertValue(3, "bar");				//0
+	end
+end
+
+ExternalType StringBuffer2 extends Object type JavaObject
+	function insertValue(offset int in, b boolean in) returns (int[]) { javaName = "insert" };		//0
+	function insertValue(offset int in, str string in) returns (int) { javaName = "insert" };		//0
+end
+
+Program pgm2
+	function main()
+		sb StringBuffer = new StringBuffer();
+		a int = sb.insertValue(3, "bar");				//0
+	end
+end

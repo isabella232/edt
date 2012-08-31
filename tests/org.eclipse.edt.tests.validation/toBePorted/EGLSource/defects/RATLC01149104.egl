@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * The invalid things correctly rejected by validation are: any,
+ * arraydictionary, blob, clob, delegate, and record. It should also reject
+ * dictionaries and handlers.
+ *
+ * It should also not allow arrays of invalid things.  Currently you can't
+ * use a record, but we allow you to use an array of records.
+ */
+ExternalType myJavaObject type JavaObject
+	thing any;			//1
+	dict dictionary;	//1
+	hndlr myHandler;	//1
+	rec rec;			//1
+	
+	things any[];		//1
+	dicts dictionary[];	//1
+	hndlrs myHandler[];	//1
+	recs rec[];			//1
+	
+	function func1(
+		p1 any in,		//1
+		p2 any[],		//1
+		p3 dictionary,	//1
+		p4 dictionary[]	//1
+	);
+	
+	function func2()
+	returns (any);			//1
+	
+	function func3()
+	returns (any[]);		//1
+	
+	function func4()
+	returns (dictionary);	//1
+	
+	function func5()
+	returns (dictionary[]);	//1
+	
+end
+
+Handler myHandler
+end
+
+Record rec
+end

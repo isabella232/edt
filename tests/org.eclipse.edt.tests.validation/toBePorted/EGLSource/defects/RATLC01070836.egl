@@ -1,0 +1,32 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	thisStr String;
+	thisChar char(4);
+
+	function main()
+		displayLineMode("int_minutes1");
+	    int_minutes1 interval  ( "mm" );
+	    int_minutes1 = "99";
+	    thisStr = int_minutes1;
+	    thisChar = int_minutes1;
+	    displayLineMode(thisStr);
+	    
+	    displayLineMode("int_year9_month2");
+	    int_year9_month2 interval( "yyyyyyyyymm" );
+	    int_year9_month2 = "12345678911";
+	    int_year9_month2 = int_year9_month2 + int_minutes1;   //1
+	    thisStr = int_year9_month2;
+	    displayLineMode(thisStr);
+	end
+end

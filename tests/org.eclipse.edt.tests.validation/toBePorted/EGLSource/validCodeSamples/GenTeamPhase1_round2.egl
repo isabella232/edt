@@ -1,0 +1,1561 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----s
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of #sql{statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+Program TestUpdate {V60ExceptionCompatibility=yes}
+
+Use DataLibrary;
+
+counter		int;
+iterations	int;
+myrecord	int;
+
+
+function main()
+	iterations = 1000;
+	updateOption();
+end
+
+function updateOption()
+	myrecord = 0;
+	counter = 1;
+  	while ( counter <= iterations )
+		
+		execute #sql{UPDATE customer SET lname="Leffler" WHERE fname="Ludwig"};
+		execute #sql{UPDATE customer SET lname="Gopal" WHERE fname="Carole" };
+		execute #sql{UPDATE customer SET lname="Jerry" WHERE fname="Philip" };
+		execute #sql{UPDATE customer SET lname="Sridhar" WHERE fname="Anthony" };
+		execute #sql{UPDATE customer SET lname="Amit" WHERE fname="Raymond" };
+		
+		execute #sql{UPDATE orders SET customer_num=204 WHERE  order_num=1001 };
+		execute #sql{UPDATE orders SET customer_num=205 WHERE  order_num=1002 };
+		execute #sql{UPDATE orders SET customer_num=206 WHERE  order_num=1003 };
+		execute #sql{UPDATE orders SET customer_num=207 WHERE  order_num=1004 };
+		execute #sql{UPDATE orders SET customer_num=208 WHERE  order_num=1005 };
+		
+		execute #sql{UPDATE items SET order_num=101 WHERE  item_num=1 };
+		execute #sql{UPDATE items SET order_num=102 WHERE  item_num=2 };
+		execute #sql{UPDATE items SET order_num=103 WHERE  item_num=3 };
+		execute #sql{UPDATE items SET order_num=104 WHERE  item_num=4 };
+		execute #sql{UPDATE items SET order_num=105 WHERE  item_num=5 };
+		
+		execute #sql{UPDATE stock SET manu_code="AAA"  WHERE  stock_num=1 };
+		execute #sql{UPDATE stock SET manu_code="BBB"  WHERE  stock_num=2 };
+		execute #sql{UPDATE stock SET manu_code="CCC"  WHERE  stock_num=3 };
+		execute #sql{UPDATE stock SET manu_code="DDD"  WHERE  stock_num=4 };
+		execute #sql{UPDATE stock SET manu_code="EEE"  WHERE  stock_num=5 };
+		counter = counter + 1;
+	end
+
+	myrecord = (myrecord + 20) * iterations;
+	
+	commit();	
+end
+
+end
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----s
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of #sql{statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+Program TestInsert {V60ExceptionCompatibility=yes}
+
+
+
+counter		int;
+iterations	int;
+myrecord	int;
+
+
+
+
+function main()
+	iterations = 1000;
+	insertOption();
+end
+
+
+
+function insertOption()
+	myrecord = 0;
+	counter = 1;
+	while ( counter <= iterations )
+		
+	    execute #sql{INSERT INTO customer VALUES (101,'Matti','Matti','All Sports Supplies','213 Erstwild Court',' ','Sunnyvale','CA','94086','408-789-8075' )};
+	    execute #sql{INSERT INTO customer VALUES (102,'Carole','Sadler','Sports Spot','785 Geary St',' ','San Francisco','CA','94117','415-822-1289' )};
+	    execute #sql{INSERT INTO customer VALUES (103, 'Philip','Currie','Phils Sports','654 Poplar','P. O. Box 3498','Palo Alto','CA','94303','415-328-4543')};
+	    execute #sql{INSERT INTO customer VALUES (104, 'Anthony','Higgins','Play Ball!','East Shopping Cntr.','422 Bay Road','Redwood City','CA','94026','415-368-1100')};
+	    execute #sql{INSERT INTO customer VALUES (105, 'Raymond','Vector','Los Altos Sports','1899 La Loma Drive',' ','Los Altos','CA','94022','415-776-3249')};
+	    
+	    execute #sql{INSERT INTO orders VALUES (1001,104, 'ups','n','B77836',20.4, 10.0 )};
+	    execute #sql{INSERT INTO orders VALUES (1002,105, 'dhl','o','B87836',32.1, 32.0 )};
+	    execute #sql{INSERT INTO orders VALUES (1003,106, 'am','p','B97836',12.3, 65.0)};
+	    execute #sql{INSERT INTO orders VALUES (1004,107, 'bell','q','B77837',1.1, 21.0)};
+	    execute #sql{INSERT INTO orders VALUES (1005,108, 'ibm','r','B88837',3.1, 56.0)};
+	    
+	    execute #sql{INSERT INTO items VALUES (1,1001,1,'HRO',1,250.0)};
+	    execute #sql{INSERT INTO items VALUES (2,2001,2,'REW',2,350.0)};
+	    execute #sql{INSERT INTO items VALUES (3,3001,3,'UIL',3,450.0)};
+	    execute #sql{INSERT INTO items VALUES (4,4001,4,'GHG',4,550.0)};
+	    execute #sql{INSERT INTO items VALUES (5,5001,5,'OIU',5,650.0)};
+	    
+	    execute #sql{INSERT INTO stock VALUES (1,'HRO','baseball gloves',250.00, 'case',10, 'gloves/case')};
+	    execute #sql{INSERT INTO stock VALUES (2,'REW','football',350.00,'ball',20,'gloves/case')};
+	    execute #sql{INSERT INTO stock VALUES (3,'UIL','foosball',450.00,'table',30,'stand')};
+	    execute #sql{INSERT INTO stock VALUES (4,'GHG','cricket',550.00,'bat',40,'wicket')};
+	    execute #sql{INSERT INTO stock VALUES (5,'OIU','kabaddi',650.00,'socks',50,'ground')};
+		counter = counter + 1;
+	end
+	myrecord = (myrecord + 20) * iterations;
+	
+	commit();
+end
+
+end
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of SQL statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+Program TestSelectOnlyVar {V60ExceptionCompatibility=yes}
+
+Use DataLibrary;
+
+
+
+
+counter		int;
+iterations	int;
+myrecord	int;
+
+mycust myCustomer;
+myorders myOrders;
+myitems myItems;
+mystock myStock;
+myintegers myIntegers;
+mydecimals myDecimals;
+mycharacters myCharacters;
+
+function main()
+	iterations = 10000;
+	selectOnlyVarOption();	
+end
+
+
+function selectOnlyVarOption()
+	bogus1 int;
+	bogus2 int;
+	bogus3 int;
+	bogus4 int;
+		
+	myrecord = 0;
+	bogus1 = 101;
+	bogus2 = 1001;
+	bogus3 = 1;
+	bogus4 = 1;
+
+	counter = 1;
+	while ( counter <= iterations ) 
+	
+		open aCurs with #sql{select * from customer where customer_num=:bogus1 } for mycust;
+		
+		try			
+			get next from aCurs;
+			myrecord = myrecord + 1;					
+	 	onException	 		
+		end
+	
+	
+		open bCurs with  #sql{select * from orders where order_num=:bogus2 } for myorders;
+	    
+		try			
+			get next from bCurs;
+			myrecord = myrecord + 1;				
+	 	onException	 		
+		end
+
+		open cCurs with  #sql{select * from items where item_num=:bogus3 } for myitems;
+	    
+		try			
+			get next from cCurs;
+			myrecord = myrecord + 1;				
+	 	onException	 		
+		end
+	
+		
+		open dCurs with  #sql{select * from stock where stock_num=:bogus4 } for mystock;
+	    
+		try			
+			get next from dCurs;
+			myrecord = myrecord + 1;				
+	 	onException	 		
+		end
+		
+		
+		
+    	counter = counter + 1;
+	end
+	
+end
+
+
+
+
+
+
+end
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----s
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of #sql{statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+Program TestSelectOnly {V60ExceptionCompatibility=yes}
+
+
+
+Use DataLibrary;
+
+counter		int;
+iterations	int;
+myrecord	int;
+
+
+mycust myCustomer;
+myorders myOrders;
+myitems myItems;
+mystock myStock;
+myintegers myIntegers;
+mydecimals myDecimals;
+mycharacters myCharacters;
+
+
+function main()	
+	iterations = 1000;
+	selectOnlyOption();
+end
+
+
+function selectOnlyOption()
+	myrecord = 0;
+	counter = 1;
+	while ( counter <= iterations ) 
+		open aaCurs with #sql{select * from customer} for mycust;
+		
+		try			
+			get next from aaCurs;
+			myrecord = myrecord + 1;					
+	 	onException	 		
+		end
+		
+		
+		
+
+		open bbCurs with #sql{select * from orders} for myorders;
+		
+		try			
+			get next from bbCurs;
+			myrecord = myrecord + 1;					
+	 	onException	 		
+		end		
+	    
+			
+			
+		open ccCurs with #sql{select * from items} for myitems;
+	    
+		try			
+			get next from ccCurs;
+			myrecord = myrecord + 1;					
+	 	onException	 		
+		end	
+		
+		open ddCurs with #sql{select * from stock} for mystock;
+	    
+		try			
+			get next from ddCurs;
+			myrecord = myrecord + 1;					
+	 	onException	 		
+		end	
+		
+				
+		
+		
+    	counter = counter + 1;
+    	
+    	if ( counter % 250 == 0 )
+    		rollback();
+    		disconnectAll();
+    	end
+	end
+	
+end
+
+end
+
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of SQL statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+Program TestSelectIntegers {V60ExceptionCompatibility=yes}
+
+Use DataLibrary;
+
+args		int;
+argval		char(2);
+optn		char(40);
+counter		int;
+iterations	int;
+myrecord	int;
+
+mycust myCustomer;
+myorders myOrders;
+myitems myItems;
+mystock myStock;
+myintegers myIntegers;
+mydecimals myDecimals;
+mycharacters myCharacters;
+
+function main()	
+	iterations = 1000;
+	selectIntegersOption();		
+end
+
+
+
+function selectIntegersOption()
+	myrecord = 0;
+	counter = 1;
+	
+	while ( counter <= iterations )
+		
+		open intCurs with  #sql{select * from integers } for myIntegers;
+		try
+			while(sysVar.sqlData.sqlcode == 0)
+				
+				get next from intCurs;
+				if(sysVar.sqlData.sqlcode == 100)
+					exit while;
+				end
+				myrecord = myrecord + 1;
+			end
+	 	onException
+		end
+		counter = counter + 1;
+	end
+	
+end
+
+
+
+
+
+end
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of SQL statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+Program TestSelectDecimal {V60ExceptionCompatibility=yes}
+
+Use DataLibrary;
+
+args		int;
+argval		char(2);
+optn		char(40);
+counter		int;
+iterations	int;
+myrecord	int;
+
+mycust myCustomer;
+myorders myOrders;
+myitems myItems;
+mystock myStock;
+myintegers myIntegers;
+mydecimals myDecimals;
+mycharacters myCharacters;
+
+function main()
+	iterations = 1000;
+	selectDecimalsOption();	
+end
+
+
+
+function selectDecimalsOption()
+	myrecord = 0;
+	counter = 1;
+	
+	while ( counter <= iterations )
+		
+		open decCurs with  #sql{select * from decimals } for myDecimals;
+		try
+			while(sysVar.sqlData.sqlcode == 0)
+				
+				get next from decCurs;
+				if(sysVar.sqlData.sqlcode == 100)
+					exit while;
+				end
+				myrecord = myrecord + 1;
+			end
+	 	onException
+		end
+		counter = counter + 1;
+	end
+	
+end
+
+
+
+
+
+
+end
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of SQL statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+Program TestSelectCharacters {V60ExceptionCompatibility=yes}
+
+Use DataLibrary;
+
+args		int;
+argval		char(2);
+optn		char(40);
+counter		int;
+iterations	int;
+myrecord	int;
+
+mycust myCustomer;
+myorders myOrders;
+myitems myItems;
+mystock myStock;
+myintegers myIntegers;
+mydecimals myDecimals;
+mycharacters myCharacters;
+
+function main()
+	iterations = 1000;
+	selectCharactersOption();
+end
+
+
+
+
+function selectCharactersOption()
+	myrecord = 0;
+	counter = 1;
+	
+	while ( counter <= iterations )
+		
+		open charCurs with  #sql{select * from characters } for mycharacters;
+		try
+			while(sysVar.sqlData.sqlcode == 0)
+				
+				get next from charCurs;
+				if(sysVar.sqlData.sqlcode == 100)
+					exit while;
+				end
+				myrecord = myrecord + 1;
+			end
+	 	onException
+		end
+		counter = counter + 1;
+	end
+	
+end
+
+
+
+
+
+
+
+end
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----s
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of #sql{statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+
+
+Program TestSelect {V60ExceptionCompatibility=yes}
+
+Use DataLibrary;
+
+
+
+
+counter		int;
+iterations	int;
+myrecord	int;
+
+
+
+mycust MC;
+myorders MO;
+myitems MI;
+mystock MS;
+myintegers MIN;
+mydecimals MD;
+mycharacters MCH;
+
+
+function main()	
+
+	iterations = 1000;
+	selectOption();
+end
+
+
+
+function selectOption()
+
+	
+
+	myrecord = 0;
+	counter = 1;
+	while ( counter <= iterations ) 
+		
+		open aCurs with #sql{select * from customer} for mycust;
+		
+		try
+
+			while(sysVar.sqlData.sqlcode == 0)
+				
+				get next from aCurs;
+				if(sysVar.sqlData.sqlcode == 100)
+					exit While;
+				end
+				myrecord = myrecord + 1;												
+
+			end		
+	 	onException	 	 		
+		end
+		
+		
+		
+
+		
+	
+		
+		open bCurs with #sql{select * from orders} for myorders;
+	    
+		try
+			while(sysVar.sqlData.sqlcode == 0)
+				
+	
+				get next from bCurs;
+				if(sysVar.sqlData.sqlcode == 100)
+					exit while;
+				end
+				myrecord = myrecord + 1;			
+			end
+	 	onException
+		end
+		
+		
+		
+	
+		
+		open cCurs with  #sql{select * from items };
+	    
+		try
+			while(sysVar.sqlData.sqlcode == 0)
+				
+	
+				get next from cCurs;
+				if(sysVar.sqlData.sqlcode == 100)
+					exit while;
+				end
+				myrecord = myrecord + 1;			
+			end
+	 	onException
+		end
+		
+		
+		
+		
+		
+		open dCurs with  #sql{select * from stock };
+	    
+		try
+			while(sysVar.sqlData.sqlcode == 0)
+				
+	
+				get next from dCurs;
+				if(sysVar.sqlData.sqlcode == 100)
+					exit while;
+				end
+				myrecord = myrecord + 1;			
+			end
+	 	onException
+		end
+		
+		
+	    
+    	
+    	counter = counter + 1;
+    	
+	end
+	
+	
+	
+end
+
+end
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+
+								----		TEST 2		  ----
+		  ----		  4GL- EGL Prototype benchmarking tests			----s
+
+
+		  i) Can be invoked with 2 command line options
+				<test2.4gl> insert 100
+				here test2.4gl is name of this program
+				insert	 - will execute insert statement 
+				100	- will execute in 100 loops (variable iteration)
+						  (if 2 argument is not given loop defaults to 100)
+		  ii) Returns NOTHING, except prints iterations, number of #sql{statements
+				executed
+
+		  iii) Command line options supported
+				 arithmetic - Does simple 4gl Binary Arithmatic on integer datatype,
+									no backend needed
+				 insert	  - Does repetative INSERT's
+				 update	  - Does UPDATE's
+				 select	  - Does SELECT*
+				 selectonly - Does SIMPLE SELECT ONLY
+		
+		NOTE: EGL Currently does not support Command line options.
+
+ -------------------------------------------------------------------------- */
+
+Program TestIntegersOnly {V60ExceptionCompatibility=yes}
+
+
+
+Use DataLibrary;
+
+counter		int;
+iterations	int;
+myrecord	int;
+
+
+mycust myCustomer;
+myorders myOrders;
+myitems myItems;
+mystock myStock;
+myintegers myIntegers;
+mydecimals myDecimals;
+mycharacters myCharacters;
+
+
+function main()	
+
+
+	iterations = 10;
+	selectIntegersOption();
+end
+
+function selectIntegersOption()
+	myrecord = 0;
+	counter = 1;
+	
+	while ( counter <= iterations )
+		
+		open intCurs with #sql{select * from integers} for myintegers;
+		try
+			while(sysVar.sqlData.sqlcode == 0)
+				
+				get next from intCurs;
+				if(sysVar.sqlData.sqlcode == 100)
+					exit while;
+				end
+				myrecord = myrecord + 1;
+			end
+	 	onException
+		end
+		counter = counter + 1;
+	end
+	
+end
+
+
+
+end
+
+
+
+
+
+Program TestArithmetic {V60ExceptionCompatibility=yes}
+
+
+
+
+
+
+counter		int;
+iterations	int;
+
+
+
+
+
+
+
+
+
+
+
+function main()
+	handleHardIOErrors = 1;
+	  
+	iterations = 1000;
+	arithmeticOption();
+	
+end
+
+function arithmeticOption()
+	
+	myadd int;
+	mysub int; 
+	mymul int;
+	mydiv int;
+
+	myadd = 0;
+	myadd = 10;
+	myadd = 100;
+	myadd = 1000;
+	myadd = 10000;
+	myadd = 40000;
+	myadd = 100000;
+	myadd = 1000000;
+	myadd = 10000000;
+	myadd = 100000000;
+	myadd = 400000000;
+	myadd = 1000000000;
+	myadd = 10000000000;
+	myadd = 100000000000;
+	myadd = 1000000000000;
+	myadd = 10000000000000;
+	myadd = 100000000000000;
+	myadd = 1000000000000000;
+	myadd = 10000000000000000;
+	myadd = 100000000000000000;
+	myadd = 1000000000000000000;
+	myadd = 9999999999999999999;
+	myadd = 10000000000000000000;
+	myadd = 100000000000000000000;
+	mysub = 0;
+	mymul = 0;
+	mydiv = 0;
+
+	
+	counter = 1;
+	while ( counter <= iterations )
+		myadd = (mysub + 1) + counter;
+		mysub = myadd - counter;
+		counter = counter + 1;
+	end
+
+	
+	counter = 1;
+	while ( counter <= iterations )
+		mymul = (mydiv + 1) * counter;
+		mydiv = mymul / counter;
+		counter = counter + 1;
+	end
+
+  
+  
+  
+  
+end
+
+end
+
+
+
+program Echo3 {V60ExceptionCompatibility=yes}
+	function main()
+		
+		
+		open dummy with #sql{ select * from employee };
+		close dummy;
+		
+		
+		i int;
+		for ( i from 1 to 1000 )
+			runtest();
+		end
+	end
+	
+	function runtest()
+		emprec emprec;
+		open rs1 with #sql{ 
+			select EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, 
+			PHONENO, JOB, EDLEVEL, SEX
+			from employee } for emprec;
+		get next from rs1;
+		while ( sysVar.sqlData.sqlCode != 100 )
+			get next from rs1;			
+		end
+	end
+end
+
+record emprec type sqlRecord { tableNames=[["employee"]] }
+	EMPNO string        	{column="EMPNO", maxLen=6};
+	FIRSTNME string     	{column="FIRSTNME", sqlVariableLen=yes, maxLen=12};
+	MIDINIT string      	{column="MIDINIT", maxLen=1};
+	LASTNAME string     	{column="LASTNAME", sqlVariableLen=yes, maxLen=15};
+	WORKDEPT string     	{column="WORKDEPT", isSqlNullable=yes, maxLen=3};
+	PHONENO string      	{column="PHONENO", isSqlNullable=yes, maxLen=4};
+	JOB string          	{column="JOB", isSqlNullable=yes, maxLen=8};
+	EDLEVEL smallInt    	{column="EDLEVEL"};
+	SEX string          	{column="SEX", isSqlNullable=yes, maxLen=1};
+	SALARY decimal(9,2) 	{column="SALARY", isSqlNullable=yes};
+	BONUS decimal(9,2)  	{column="BONUS", isSqlNullable=yes};
+	COMM decimal(9,2)   	{column="COMM", isSqlNullable=yes};
+end
+
+
+
+program Echo2 {V60ExceptionCompatibility=yes}
+
+	function main()
+		presidents string[ 20 ];
+		presidents = [
+			"Washington",
+			"Adams",
+			"Jefferson",
+			"Harrison",
+			"Johnson",
+			"Carter",
+			"Cleveland",
+			"Jackson",
+			"Clinton",
+			"Lincoln",
+			"Hoover",
+			"Wilson",
+			"Tyler",
+			"Pierce",
+			"Nixon",
+			"Kennedy",
+			"Ford",
+			"Monroe",
+			"Roosevelt",
+			"Truman" ];
+		i, j int;
+		for ( i from 1 to 20 )
+			for ( j from i to 20 )
+				if ( presidents[ i ] > presidents[ j ] )
+					swap( presidents, i, j );
+				end
+			end
+		end
+	end
+	function f() returns( string )
+		return( "hi" );
+	end
+	function swap( presidents string[], i int, j int )
+		temp string = presidents[ j ];
+		presidents[ j ] = presidents[ i ];
+		presidents[ i ] = temp;
+	end
+end
+
+
+
+Program Echo1 {V60ExceptionCompatibility=yes}
+	function main()
+		r1 Rec1;
+		r2 Rec2;
+		i int = 1;
+		ok int;
+		r1.r1f1 = "";
+		r2.r2f1.r2f2 = 15;
+		r2.r2f5 = 0;
+		while ( i <= 5 )
+			r1.r1f1 = r1.r1f1 + "Pickle";
+			r1.r1f2[ i ] = func( i );
+			r2.r2f1 = r2.r2f1.r2f2 + 1;
+			r2.r2f3[ i ] = "ABCDEFG";
+			r2.r2f3[ i ].r2f4[ i ] = "!";
+			r2.r2f5 = r2.r2f5 + r2.r2f5 + i;
+			r2.r2f6 = "lovely day for kites";
+			i = i + 1;
+		end
+		
+		if ( i == 6 && checkR1( r1 ) == 1 && 1 == checkR2( r2 ) 
+			&& inoutFunc( i, 17 * 10, func( 1 ), ok ) == 1776
+			&& ok == 1492 )
+			ok = 1;
+		else
+			ok = 0;
+		end
+	end
+	
+	function func( a int ) returns( int )
+		return( a * 75 );
+	end
+	
+	function checkR1( r1 Rec1 ) returns( smallint )
+		if ( r1.r1f1 == "PicklePicklePicklePicklePickle"
+			&& r1.r1f2[ 1 ] == 75
+			&& r1.r1f2[ 2 ] == 150
+			&& r1.r1f2[ 3 ] == 225
+			&& r1.r1f2[ 4 ] == 300
+			&& r1.r1f2[ 5 ] == 375 )			
+			return( 1 );
+		else
+			return( 0 );
+		end
+	end
+	
+	function checkR2( r2 Rec2 ) returns( smallint )
+		if ( r2.r2f1 == r2.r2f1.r2f2
+			&& r2.r2f1 == 20
+			&& r2.r2f1.r2f2 == 20
+			&& r2.r2f3[ 1 ] == "!BCDEFG"
+			&& r2.r2f3[ 2 ] == "A!CDEFG"
+			&& r2.r2f3[ 3 ] == "AB!DEFG"
+			&& r2.r2f3[ 4 ] == "ABC!EFG"
+			&& r2.r2f3[ 5 ] == "ABCD!FG"
+			&& r2.r2f3[ 6 ] == " " 
+			&& r2.r2f3[ 2 ].r2f4[ 1 ] == "A"
+			&& r2.r2f3[ 2 ].r2f4[ 2 ] == "!"
+			&& r2.r2f3[ 2 ].r2f4[ 3 ] == "C"
+			&& r2.r2f3[ 2 ].r2f4[ 4 ] == "D"
+			&& r2.r2f3[ 2 ].r2f4[ 5 ] == "E"
+			&& r2.r2f3[ 2 ].r2f4[ 6 ] == "F"
+			&& r2.r2f3[ 2 ].r2f4[ 7 ] == "G"
+			&& r2.r2f5 == 57
+			&& r2.r2f6 == "lovely day for kites" )
+			return( 1 );
+		else
+			return( 0 );
+		end
+	end
+	
+	function inoutFunc( a smallint in, b int in, c int in, d int out ) returns( int )
+		d = 1492;
+		return( a + b * 10 + c - 5 );
+	end
+end
+
+record Rec1
+	r1f1 string;
+	r1f2 smallint[5];
+end
+
+record Rec2
+	10 r2f1 int;
+		20 r2f2 int;
+	10 r2f3 char(7)[6];
+		20 r2f4 char(1)[7];
+	10 r2f5 int;
+	10 r2f6 char(20);
+end
+
+
+
+Library DataLibrary 
+	{ allowUnqualifiedItemReferences = no, includeReferencedFunctions = no}
+	
+	
+	
+	
+  	
+	
+	
+	
+	
+	
+	
+	
+	
+
+end
+
+Record MC type sqlRecord 
+	{
+		tableNames=[["customer"]],
+		keyItems=[customer_num]
+	}
+		
+	
+	customer_num 	int ;
+	fname 			char(15) ;
+	lname 			char(15);
+	company 		char(20) ;
+	address1 		char(20) ;
+	address2 		char(20) ;
+	city 			char(15);
+	state 			char(2) ;
+	zipcode 		char(5) ;
+	phone 			char(18);
+end
+
+Record MO type SQLRecord {tableNames=[["orders"]],keyItems=[order_num]}	
+	order_num     int ;
+	customer_num  int ;
+	ship_instruct char(40) ; 
+	backlog       char(1) ;
+	po_num        char(10) ;
+	ship_weight   decimal(8,2) ;
+   	ship_charge   decimal(8,2) ;
+end
+
+Record MS type SQLRecord {tableNames=[["stock"]]}
+   	stock_num     smallint; 
+    manu_code     char(3); 
+    descrption	  char(15); 
+    unit_price    decimal(8,2); 
+    unit          char(4); 
+    unit_qt       int ; 
+    unit_descr    char(15); 
+end
+
+Record MI type SQLRecord {tableNames=[["items"]]}
+	order_num     int ; 
+	stock_num     smallint ; 
+	manu_code     char(3) ; 
+	quantity      smallint ; 
+	total_price   decimal(8,2) ; 
+end
+
+Record MIN type SQLRecord {tableNames=[["integers"]]}
+	first_col 	int ; 
+	second_col 	int ; 
+	third_col 	int; 
+	fourth_col 	int; 
+	fifth_col 	int; 
+	sixth_col 	int; 
+	seventh_col int; 
+	eighth_col 	int; 
+	ninth_col 	int; 
+	tenth_col 	int; 
+end
+
+Record MD type SQLRecord {tableNames=[["decimals"]]}
+	first_col decimal(18,2); 
+	second_col decimal(18,2); 
+	third_col decimal(18,2); 
+	fourth_col decimal(18,2); 
+	fifth_col decimal(18,2) ; 
+	sixth_col decimal(18,2); 
+	seventh_col decimal(18,2); 
+	eighth_col decimal(18,2) ; 
+	ninth_col decimal(18,2); 
+	tenth_col decimal(18,2) ; 
+end
+
+Record MCH type SQLRecord {tableNames=[["characters"]]}
+	first_col char(15); 
+	second_col char(15) ; 
+	third_col char(15); 
+	fourth_col char(15); 
+	fifth_col char(15) ; 
+	sixth_col char(15); 
+	seventh_col char(15) ; 
+	eighth_col char(15) ; 
+	ninth_col char(15) ; 
+	tenth_col char(15) ; 
+end
+
+Record MyCustomer type sqlRecord 
+	{
+		tableNames=[["customer"]],
+		keyItems=[customer_num]
+	}
+		
+	
+	customer_num 	int ;
+	fname 			char(15) ;
+	lname 			char(15);
+	company 		char(20) ;
+	address1 		char(20) ;
+	address2 		char(20) ;
+	city 			char(15);
+	state 			char(2) ;
+	zipcode 		char(5) ;
+	phone 			char(18);
+end
+
+Record MyOrders type SQLRecord {tableNames=[["orders"]],keyItems=[order_num]}	
+	order_num     int ;
+	customer_num  int ;
+	ship_instruct char(40) ; 
+	backlog       char(1) ;
+	po_num        char(10) ;
+	ship_weight   decimal(8,2) ;
+   	ship_charge   decimal(8,2) ;
+end
+
+Record MyStock type SQLRecord {tableNames=[["stock"]]}
+   	stock_num     smallint; 
+    manu_code     char(3); 
+    descrption	  char(15); 
+    unit_price    decimal(8,2); 
+    unit          char(4); 
+    unit_qt       int ; 
+    unit_descr    char(15); 
+end
+
+Record MyItems type SQLRecord {tableNames=[["items"]]}
+	item_num smallint;
+	order_num     int ; 
+	stock_num     smallint ; 
+	manu_code     char(3) ; 
+	quantity      smallint ; 
+	total_price   decimal(8,2) ; 
+end
+
+Record MyIntegers type SQLRecord {tableNames=[["integers"]]}
+	first_col 	int ; 
+	second_col 	int ; 
+	third_col 	int; 
+	fourth_col 	int; 
+	fifth_col 	int; 
+	sixth_col 	int; 
+	seventh_col int; 
+	eighth_col 	int; 
+	ninth_col 	int; 
+	tenth_col 	int; 
+end
+
+Record MyDecimals type SQLRecord {tableNames=[["decimals"]]}
+	first_col decimal(18,2); 
+	second_col decimal(18,2); 
+	third_col decimal(18,2); 
+	fourth_col decimal(18,2); 
+	fifth_col decimal(18,2) ; 
+	sixth_col decimal(18,2); 
+	seventh_col decimal(18,2); 
+	eighth_col decimal(18,2) ; 
+	ninth_col decimal(18,2); 
+	tenth_col decimal(18,2) ; 
+end
+
+Record MyCharacters type SQLRecord {tableNames=[["characters"]]}
+	first_col char(15); 
+	second_col char(15) ; 
+	third_col char(15); 
+	fourth_col char(15); 
+	fifth_col char(15) ; 
+	sixth_col char(15); 
+	seventh_col char(15) ; 
+	eighth_col char(15) ; 
+	ninth_col char(15) ; 
+	tenth_col char(15) ; 
+end
+
+
+
+
+
+
+
+
+
+
+
+
+Program SchemaCreator {V60ExceptionCompatibility=yes}
+	counter int;
+	
+function main()
+	handleHardIOErrors = 1;
+	try execute #sql{DROP TABLE customer}; onException end
+	try execute #sql{DROP TABLE orders}; onException end
+	try execute #sql{DROP TABLE items}; onException end
+	try execute #sql{DROP TABLE stock}; onException end
+	try execute #sql{DROP TABLE integers}; onException end
+	try execute #sql{DROP TABLE decimals}; onException end
+	try execute #sql{DROP TABLE characters}; onException end
+
+	execute #sql{
+		CREATE TABLE customer (
+        	customer_num  INTEGER, -- SERIAL(101),
+	        fname         CHAR(50),
+	        lname         CHAR(50),
+	        company       CHAR(50),
+	        address1      CHAR(50),
+	        address2      CHAR(50),
+	        city          CHAR(50),
+	        state         CHAR(2),
+	        zipcode       CHAR(5),
+	        phone         CHAR(18)
+		)
+	};
+	
+	execute #sql{		
+		CREATE TABLE orders (
+        	order_num     INTEGER, -- SERIAL(1001),
+	        customer_num  INTEGER,
+	        ship_instruct CHAR(50),
+	        backlog       CHAR(1),
+	        po_num        CHAR(10),
+	        ship_weight   DECIMAL(8,2),
+	        ship_charge   DECIMAL(6,2) -- MONEY(6)
+		)
+	};
+	
+	execute #sql{				
+		CREATE TABLE items (
+        	item_num      SMALLINT,
+	        order_num     INTEGER,
+	        stock_num     SMALLINT,
+	        manu_code     CHAR(3),
+	        quantity      SMALLINT,
+	        total_price   DECIMAL(8,2) -- MONEY(8)
+		)
+	};
+	
+	execute #sql{
+		CREATE TABLE stock (
+        	stock_num     SMALLINT,
+	        manu_code     CHAR(10),
+	        descrption	  CHAR(50),
+	        unit_price    DECIMAL(6,2), -- MONEY(6),
+	        unit          CHAR(10),
+	        unit_qt       INTEGER, 
+	        unit_descr    CHAR(50)
+	  	)
+	};
+
+	execute #sql{
+		Create TABLE integers (
+	        first_col INTEGER,
+	        second_col INTEGER,
+	        third_col INTEGER,
+	        fourth_col INTEGER,
+	        fifth_col INTEGER,
+	        sixth_col INTEGER,
+	        seventh_col INTEGER,
+	        eighth_col INTEGER,
+	        ninth_col INTEGER,
+	        tenth_col INTEGER
+		)
+	};
+
+	execute #sql{
+		Create TABLE decimals (
+	       first_col DECIMAL(18,2),
+	       second_col DECIMAL(18,2),
+	       third_col DECIMAL(18,2),
+	       fourth_col DECIMAL(18,2),
+	       fifth_col DECIMAL(18,2),
+	       sixth_col DECIMAL(18,2),
+	       seventh_col DECIMAL(18,2),
+	       eighth_col DECIMAL(18,2),
+	       ninth_col DECIMAL(18,2),
+	       tenth_col DECIMAL(18,2)
+		)
+	};
+
+	execute #sql{
+		Create TABLE characters (
+	       first_col CHAR(50),
+	       second_col CHAR(50),
+	       third_col CHAR(50),
+	       fourth_col CHAR(50),
+	       fifth_col CHAR(50),
+	       sixth_col CHAR(50),
+	       seventh_col CHAR(50),
+	       eighth_col CHAR(50),
+	       ninth_col CHAR(50),
+    	   tenth_col CHAR(50)
+		)
+	};
+	commit();
+	insertValue();
+	commit();
+end
+
+function insertValue()
+	counter = 1;
+
+  	while(counter <= 100)
+  		
+    		
+
+		    execute #sql{INSERT INTO customer VALUES (101,'Ludwig','Pauli','All Sports Supplies','213 Erstwild Court',' ','Sunnyvale','CA','94086','408-789-8075' )};
+		    execute #sql{INSERT INTO customer VALUES (102,'Carole','Sadler','Sports Spot','785 Geary St',' ','San Francisco','CA','94117','415-822-1289' )};
+		    execute #sql{INSERT INTO customer VALUES (103, 'Philip','Currie','Phils Sports','654 Poplar','P. O. Box 3498','Palo Alto','CA','94303','415-328-4543')};
+		    execute #sql{INSERT INTO customer VALUES (104, 'Anthony','Higgins','Play Ball!','East Shopping Cntr.','422 Bay Road','Redwood City','CA','94026','415-368-1100')};
+		    execute #sql{INSERT INTO customer VALUES (105, 'Raymond','Vector','Los Altos Sports','1899 La Loma Drive',' ','Los Altos','CA','94022','415-776-3249')};
+		    
+		    execute #sql{INSERT INTO orders VALUES (1001,104, 'ups','n','B77836',20.4, 10.0 )};
+		    execute #sql{INSERT INTO orders VALUES (1002,105, 'dhl','o','B87836',32.1, 32.0 )};
+		    execute #sql{INSERT INTO orders VALUES (1003,106, 'am','p','B97836',12.3, 65.0)};
+		    execute #sql{INSERT INTO orders VALUES (1004,107, 'bell','q','B77837',1.1, 21.0)};
+		    execute #sql{INSERT INTO orders VALUES (1005,108, 'ibm','r','B88837',3.1, 56.0)};
+		    
+		    execute #sql{INSERT INTO items VALUES (1,1001,1,'HRO',1,250.0)};
+		    execute #sql{INSERT INTO items VALUES (2,2001,2,'REW',2,350.0)};
+		    execute #sql{INSERT INTO items VALUES (3,3001,3,'UIL',3,450.0)};
+		    execute #sql{INSERT INTO items VALUES (4,4001,4,'GHG',4,550.0)};
+		    execute #sql{INSERT INTO items VALUES (5,5001,5,'OIU',5,650.0)};
+		    
+		    execute #sql{INSERT INTO stock VALUES (1,'HRO','baseball gloves',250.00, 'case',10, 'gloves/case')};
+		    execute #sql{INSERT INTO stock VALUES (2,'REW','football',350.00,'ball',20,'gloves/case')};
+		    execute #sql{INSERT INTO stock VALUES (3,'UIL','foosball',450.00,'table',30,'stand')};
+		    execute #sql{INSERT INTO stock VALUES (4,'GHG','cricket',550.00,'bat',40,'wicket')};
+		    execute #sql{INSERT INTO stock VALUES (5,'OIU','kabaddi',650.00,'socks',50,'ground')};
+		    
+		    execute #sql{INSERT INTO integers(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010)};
+		    execute #sql{INSERT INTO integers(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010)};
+		    execute #sql{INSERT INTO integers(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010)};
+		    execute #sql{INSERT INTO integers(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010)};
+		    execute #sql{INSERT INTO integers(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010)};
+	    	
+		    execute #sql{INSERT INTO decimals(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (10001.25, 10002.25, 10003.25, 10004.25, 10005.25, 10006.25, 10007.25, 10008.25, 10009.25, 10010.25)};
+		    execute #sql{INSERT INTO decimals(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (20001.25, 20002.25, 20003.25, 20004.25, 20005.25, 20006.25, 20007.25, 20008.25, 20009.25, 20010.25)};
+		    execute #sql{INSERT INTO decimals(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (30001.25, 30002.25, 30003.25, 30004.25, 30005.25, 30006.25, 30007.25, 30008.25, 30009.25, 30010.25)};
+		    execute #sql{INSERT INTO decimals(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (40001.25, 40002.25, 40003.25, 40004.25, 40005.25, 40006.25, 40007.25, 40008.25, 40009.25, 40010.25)};
+		    execute #sql{INSERT INTO decimals(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES (50001.25, 50002.25, 50003.25, 50004.25, 50005.25, 50006.25, 50007.25, 50008.25, 50009.25, 50010.25)};
+		    
+		    execute #sql{INSERT INTO characters(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES ('aaaaa', 'abbbb', 'acccc', 'adddd', 'aeeee', 'affff', 'agggg', 'ahhhh', 'aiiii', 'ajjjj')};
+		    execute #sql{INSERT INTO characters(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES ('baaaa', 'bbbbb', 'bcccc', 'bdddd', 'beeee', 'bffff', 'bgggg', 'bhhhh', 'biiii', 'bjjjj')};
+		    execute #sql{INSERT INTO characters(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES ('caaaa', 'cbbbb', 'ccccc', 'cdddd', 'ceeee', 'cffff', 'cgggg', 'chhhh', 'ciiii', 'cjjjj')};
+		    execute #sql{INSERT INTO characters(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES ('daaaa', 'dbbbb', 'dcccc', 'ddddd', 'deeee', 'dffff', 'dgggg', 'dhhhh', 'diiii', 'djjjj')};
+	    	execute #sql{INSERT INTO characters(first_col, second_col, third_col, fourth_col, fifth_col, sixth_col, seventh_col, eighth_col, ninth_col, tenth_col) VALUES ('eaaaa', 'ebbbb', 'ecccc', 'edddd', 'eeeee', 'effff', 'egggg', 'ehhhh', 'eiiii', 'ejjjj')};
+		
+		counter = counter + 1;
+	end
+end
+
+end

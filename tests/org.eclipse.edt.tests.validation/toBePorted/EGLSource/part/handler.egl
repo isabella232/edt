@@ -1,0 +1,144 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validateUseStatement:
+// 1 Properties are not allowed for multiple use declarations. {3068, PROPERTIES_NOT_ALLOWED_IN_LIST_USE_DECLARATION}
+
+
+handler MySource
+type dddddd // 1 The type dddddd cannot be resolved.
+end
+
+handler Mysource2 type JasperReport // 0
+		mystring string;
+		myint int;
+		myany any;
+		myreportdata reportdata; 
+		/* reportHandler */
+		function somefunc()
+		getReportParameter(mystring);		//0
+		getReportParameter();				//1 requires exactly 1 argument
+		getReportParameter(mystring, mystring);//1 requires exactly 1 argument
+		myany = getReportParameter(mystring);//0
+		myany = getReportParameter();		//1 requires exactly 1 argument
+		myany = getReportParameter(mystring, mystring);//1 requires exactly 1 argument
+		setReportVariableValue(mystring);	//1 requires exactly 2 argument
+		setReportVariableValue(mystring, myint);//0
+		setReportVariableValue(mystring,myint, myint);//1 requires exactly 2 argument
+		getReportVariableValue(mystring);	//0
+		getReportVariableValue();			//1 requires exactly 1 argument
+		getReportVariableValue(mystring, mystring);//1 requires exactly 1 argument
+		myany = getReportVariableValue(mystring);//0
+		myany = getReportVariableValue();	//1 requires exactly 1 argument
+		myany = getReportVariableValue(mystring, mystring);//1 requires exactly 1 argument
+		getFieldValue();					//1 requires exactly 1 argument
+		getFieldValue(mystring, mystring);	//1 requires exactly 1 argument
+		myany = getFieldValue(mystring);	//0
+		myany = getFieldValue();			//1 requires exactly 1 argument
+		myany = getFieldValue(mystring, mystring);//1 requires exactly 1 argument
+		addReportData(myreportdata,mystring);//0
+		addReportData(myreportdata);		//1 requires exactly 2 argument
+		addReportData(myreportdata,mystring, mystring);	//1 requires exactly 2 argument
+		getReportData(mystring);			//0
+		getReportData();					//1 requires exactly 1 argument
+		getReportData(mystring,mystring);	//1 requires exactly 1 argument
+		myreportData = getReportData(mystring);	//0
+		myreportData = getReportData();		//1 requires exactly 1 argument
+		myreportData = getReportData(mystring,mystring);//1 requires exactly 1 argument
+	end
+	
+function beforeReportInit()// 0
+end
+
+function afterReportInit()// 0
+end
+
+function beforePageInit ()// 0
+end
+
+function afterPageInit ()// 0
+end
+
+function beforeColumnInit()// 0
+end
+
+function afterColumnInit()// 0
+end
+
+function beforeGroupInit(stringvar string in)// 0
+end
+
+function afterGroupInit (stringvar string in)// 0
+end
+
+function beforeDetailEval ()// 0
+end
+
+function afterDetailEval()// 0
+end
+
+
+ENd 
+
+
+handler Mysource3 type JasperReport // 0
+		mystring string;
+		myint int;
+		myany any;
+		myreportdata reportdata; 
+		/* reportHandler */
+
+function beforeReportInit(i int )// 1  The function declaration beforeReportInit contains an invalid number of parameters, 0 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function afterReportInit(i int )//  1  The function declaration afterReportInit contains an invalid number of parameters, 0 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function beforePageInit (i int )// 1  The function declaration beforePageInit contains an invalid number of parameters, 0 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function afterPageInit (i int )// 1  The function declaration afterPageInit contains an invalid number of parameters, 0 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function beforeColumnInit(i int )// 1  The function declaration beforeColumnInit contains an invalid number of parameters, 0 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function afterColumnInit(i int )// 1  The function declaration afterColumnInit contains an invalid number of parameters, 0 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function beforeGroupInit(stringvar int in)// 1   The parameter stringvar in function beforeGroupInit is declared with the wrong type.  It must be string {3016, PARAMETER_HAS_WRONG_TYPE}
+end
+
+function afterGroupInit (stringvar int in)// 1  The parameter stringvar in function afterGroupInit is declared with the wrong type.  It must be string {3016, PARAMETER_HAS_WRONG_TYPE}
+end
+
+function beforeGroupInit()// 1   The function declaration beforeGroupInit contains an invalid number of parameters, 1 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function afterGroupInit ()// 1  The function declaration afterGroupInit contains an invalid number of parameters, 1 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function beforeDetailEval (i int )// 1  The function declaration beforeDetailEval contains an invalid number of parameters, 0 parameters are expected {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+function afterDetailEval(i int )// 1 The function declaration afterDetailEval contains an invalid number of parameters, 0 parameters are expected  {3015, INVALID_NUMBER_OF_PARAMETERS}
+end
+
+
+end 
+
+Handler noSubType	//0
+{
+	view = "abc",	//1 view cannot be resolved
+	field1 = 10		//0
+}
+	field1 int;
+end

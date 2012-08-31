@@ -1,0 +1,112 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program readOnlyFields
+	function main()
+	
+		StringVar string;
+		intVar int;
+		
+		win window {                           // 0
+			name = "Dave",                     // 0
+			size = [1, 2],                     // 0
+			position = [3, 4 ],                // 0
+			color = red,                       // 0
+			highlight = [underline, reverse ], // 0
+			intensity = normalIntensity,       // 0
+			hasBorder = no,                    // 0
+			hasCommentLine = yes,              // 0
+			commentLine = 2,                   // 0
+			formLine = 3,                      // 0
+			messageLine = 4,                   // 0
+			menuLine = 5,                      // 0
+			promptLine = 6 };		           // 0
+			
+		// Only name, size, and position are read-only
+		win.name = "Frieda";   // 1 name is read-only and cannot be assigned to
+		win.size = [3, 4];     // 1 size is read-only and cannot be assigned to
+		win.position = [5, 6]; // 1 is read-only and cannot be assigned to
+		win.position[1] = 5;   // 1 is read-only and cannot be assigned to
+		win.position[2] = 5;   // 1 is read-only and cannot be assigned to
+		
+		win.color = red;                       // 0
+		win.highlight = [underline, reverse ]; // 0
+		win.intensity = normalIntensity;       // 0
+		win.hasBorder = no;                    // 0
+		win.hasCommentLine = yes;              // 0
+		win.commentLine = 2;                   // 0
+		win.formLine = 3;                      // 0
+		win.messageLine = 4;                   // 0
+		win.menuLine = 5;                      // 0
+		win.promptLine = 6;		               // 0
+		stringVar = "a";                       // 0
+		intVar = 42;                           // 0
+		
+		move "Frieda" to win.name;   // 1 name is read-only and cannot be assigned to
+		move [3,4] to win.size;      // 1 size is read-only and cannot be assigned to
+		move [5,6] to win.position;  // 1 position is read-only and cannot be assigned to
+		move 6 to win.position[1];   // 1 position is read-only and cannot be assigned to
+		move 6 to win.position[2];   // 1 position is read-only and cannot be assigned to
+		
+		move red to win.color;                       // 0
+		move [underline, reverse ] to win.highlight; // 0
+		move normalIntensity to win.intensity;       // 0
+		move no to win.hasBorder;                    // 0
+		move yes to win.hasCommentLine;              // 0
+		move 7 to win.commentLine;                   // 0
+		move 7 to win.formLine;                      // 0
+		move 7 to win.messageLine;                   // 0
+		move 7 to win.menuLine;                      // 0
+		move 7 to win.promptLine;                    // 0
+		move "a" to stringVar;                       // 0
+		move 42 to intVar;                           // 0
+		
+		inStringFunc( win.name );    // 0
+		outStringFunc( win.name );   // 1 win.name is read-only and can only be passed to IN function parameters
+		inOutStringFunc( win.name ); // 1 win.name is read-only and can only be passed to IN function parameters
+		
+		inIntFunc( win.position[1] );    // 0
+		outIntFunc( win.position[1] );   // 1 win.position is read-only and can only be passed to IN function parameters
+		inOutIntFunc( win.position[1] ); // 1 win.position is read-only and can only be passed to IN function parameters
+		
+		inStringFunc( stringVar );    // 0
+		outStringFunc( stringVar );   // 0
+		inOutStringFunc( stringVar ); // 0
+		
+		inIntFunc( intVar );    // 0
+		outIntFunc( intVar );   // 0
+		inOutIntFunc( intVar ); // 0
+		
+		win2 window = new Window {             // 0
+			name = "Dave",                     // 0
+			size = [1, 2],                     // 0
+			position = [3, 4 ],                // 0
+			color = red,                       // 0
+			highlight = [underline, reverse ], // 0
+			intensity = normalIntensity,       // 0
+			hasBorder = no,                    // 0
+			hasCommentLine = yes,              // 0
+			commentLine = 2,                   // 0
+			formLine = 3,                      // 0
+			messageLine = 4,                   // 0
+			menuLine = 5,                      // 0
+			promptLine = 6 };		           // 0
+	end
+	
+	function inStringFunc( p1 String in ) end
+	function outStringFunc( p1 String out ) end
+	function inOutStringFunc( p1 String inout ) end
+	
+	function inIntFunc( p1 int in ) end
+	function outIntFunc( p1 int out ) end
+	function inOutIntFunc( p1 int inout ) end
+end

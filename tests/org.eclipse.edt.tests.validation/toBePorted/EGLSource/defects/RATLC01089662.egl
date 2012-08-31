@@ -1,0 +1,40 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+DataTable TBLNUMD type basicTable  {	//0
+  shared = yes, resident = no			//0
+  }
+  3 NUMA num(4,4); 		//0
+  3 NUMB numc(4,4); 	//0
+   {contents = [		//0
+    [.1234, .5678],		//0
+    [-.1234, -.5678]	//0
+  ]}					//0
+end
+
+DataTable scratch type basicTable  {
+  shared = yes, resident = no
+  }
+  3 NUMA num(8,4); 
+  3 NUMB numc(8,4); 
+   {contents = [
+    [.1234, .5678],		//0
+    [-.1234, -.5678],	//0
+    [-.12345, -.5678],	//1
+    [.12345, -.5678],	//1
+    [1234.1234, -.5678], //0
+    [-1234.1234, -.5678], //0
+    [12345.1234, -.5678], //1
+    [-12345.1234, -.5678] //1
+  ]}
+end

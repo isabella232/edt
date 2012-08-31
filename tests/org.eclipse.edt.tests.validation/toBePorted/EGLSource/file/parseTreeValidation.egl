@@ -1,0 +1,26 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validateImports:
+// 1 The import statement {0} contains the part name {1} which could not be located in the package {2}. {3327, IMPORT_STATEMENT_PART_NAME_COULD_NOT_BE_LOCATED}
+// 1 The import statement {0} contains the part name {1} which is ambiguous in the package {2}. {3326, IMPORT_STATEMENT_PART_NAME_IS_AMBIGUOUS}
+// 1 The import statement {0} contains the package name {1} which could not be resolved. {3325, IMPORT_STATEMENT_PACKAGE_NAME_COULD_NOT_BE_RESOLVED}
+
+// validatePackageNode:
+// 1 The file residing in package {0} in the directory structure must specify a package statement. {3064, PACKAGE_NAME_NOT_PROVIDED}
+
+// validatePackageNode (1):
+// 1 The default package was used but the package was also named {0}. {3065, DEFAULT_PACKAGE_NAME_USED_IMPROPERLY}
+// 1 The name of the package given in the file must match the directory structure in which the file resides. The match must be exact, including case. {3049, PACKAGE_NAME_DOESNT_MATCH_DIRECTORY_STRUCTURE}
+
+// validatePart:
+// 1 An error has occurred while validating part {0}.  Check the CommonBaseEvents.log file for additional information. {3000, VALIDATION_EXCEPTION}
+

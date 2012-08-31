@@ -1,0 +1,191 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program pgm1
+
+		i1 inter1; //0
+		i2 inter1 {@BindService {}};  //0
+		i3 inter1 {};  //1
+		i4 inter1 {   //1
+		
+		
+		
+		};
+		
+		s1 serv1; //0
+		s2 serv1 {@BindService {}}; //0
+		s3 serv1 {};  //1
+		s4 serv1 {   //1
+		
+		
+		};
+
+
+	function main()
+		i1 inter1; //0
+		i2 inter1 {@BindService {}};  //0
+		i3 inter1 {};  //1
+		i4 inter1 {   //1
+		
+		
+		
+		};
+		
+		s1 serv1; //0
+		s2 serv1 {@BindService {}}; //0
+		s3 serv1 {};  //1
+		s4 serv1 {   //1
+		
+		
+		};
+		
+		
+	end
+	
+end
+
+
+function f1()
+		i1 inter1; //0
+		i2 inter1 {@BindService {}};  //0
+		i3 inter1 {};  //1
+		i4 inter1 {   //1
+		
+		
+		
+		};
+		
+		s1 serv1; //0
+		s2 serv1 {@BindService {}}; //0
+		s3 serv1 {};  //1
+		s4 serv1 {   //1
+		
+		
+		};
+end
+
+
+record rec1
+		i1 inter1; //0
+		i2 inter1 {@BindService {}};  //0
+		i3 inter1 {};  //1
+		i4 inter1 {   //1
+		
+		
+		
+		};
+		
+		s1 serv1; //0
+		s2 serv1 {@BindService {}}; //0
+		s3 serv1 {};  //1
+		s4 serv1 {   //1
+		
+		
+		};
+end
+
+interface inter1
+end
+
+service serv1
+end
+
+library lib1
+
+		i1 inter1; //0
+		i2 inter1 {@BindService {}};  //0
+		i3 inter1 {};  //1
+		i4 inter1 {   //1
+		
+		
+		
+		};
+		
+		s1 serv1; //0
+		s2 serv1 {@BindService {}}; //0
+		s3 serv1 {};  //1
+		s4 serv1 {   //1
+		
+		
+		};
+
+
+	function libF1()
+		i1 inter1; //0
+		i2 inter1 {@BindService {}};  //0
+		i3 inter1 {};  //1
+		i4 inter1 {   //1
+		
+		
+		
+		};
+		
+		s1 serv1; //0
+		s2 serv1 {@BindService {}}; //0
+		s3 serv1 {};  //1
+		s4 serv1 {   //1
+		
+		
+		};
+		
+		
+	end
+	
+end
+
+
+	
+	// RUI Handler
+
+handler Hand1 type RUIhandler {}
+	
+		i1 inter1; //0
+		i2 inter1 {@BindService {}};  //0
+		i3 inter1 {};  //1
+		i4 inter1 {   //1
+		
+		
+		
+		};
+		
+		s1 serv1; //0
+		s2 serv1 {@BindService {}}; //0
+		s3 serv1 {};  //1
+		s4 serv1 {   //1
+		
+		
+		};
+
+
+	function libF1()
+		i1 inter1; //0
+		i2 inter1 {@BindService {}};  //0
+		i3 inter1 {};  //1
+		i4 inter1 {   //1
+		
+		
+		
+		};
+		
+		s1 serv1; //0
+		s2 serv1 {@BindService {}}; //0
+		s3 serv1 {};  //1
+		s4 serv1 {   //1
+		
+		
+		};
+		
+		
+	end	
+	function start()
+	end	
+end
+	

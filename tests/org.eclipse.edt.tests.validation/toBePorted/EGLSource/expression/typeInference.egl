@@ -1,0 +1,191 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * This test is intended to verify the error messages produced when
+ * expressions in statements are bound. Ideally, no messages tested
+ * here should come from semantic validation.
+ */
+ 
+Program pgm
+	anyVar any;
+	intVar int;
+	charVar char(4);
+	dateVar date;
+	timeVar time;
+	timestampVar timestamp;
+	intervalVar interval;
+	stringVar string;
+	fixedRecordVar fixedRecord;
+	flexibleRecordVar flexibleRecord;
+	clobVar clob;
+	blobVar blob;
+	booleanVar boolean;
+
+	function main()
+		//Function invocation expressions:
+		
+		anyVar = noReturnsFunc();		//1
+		anyVar = (noReturnsFunc());		//1
+		anyVar = ((noReturnsFunc()));	//1
+		
+		anyVar = returnsFunc();		//0		
+		anyVar = (returnsFunc());	//0
+		
+		noReturnsFunc();	//0
+		returnsFunc();		//0
+		
+		//Unary expressions:
+
+		anyVar = +NoReturnsFunc();	//1
+		anyVar = -NoReturnsFunc();	//1
+		anyVar = +stringVar;		//0
+		anyVar = -stringVar;		//0
+		anyVar = +999999999999999999999999999999999;	//1
+		anyVar = +999999999999999999999999999999999;	//1
+		anyVar = +99999999999999999999.9999999999999;	//1
+		anyVar = -99999999999999999999.9999999999999;	//1	
+		anyVar = +9.9e99999999;							//1
+		anyVar = -9.9e99999999;							//1
+		anyVar = +fixedRecordVar;	//1
+		anyVar = -fixedRecordVar;	//1
+		anyVar = +"ab\tc";			//0
+		anyVar = -"abc";			//0
+		anyVar = +notDeclaredVar;	//1
+		
+		anyVar = +ReturnsFunc();	//0
+		anyVar = -ReturnsFunc();	//0
+		anyVar = +(anyVar as int);	//0
+		anyVar = -(anyVar as int);	//0
+		anyVar = +intVar;			//0
+		anyVar = -intVar;			//0
+		anyVar = +dateVar;			//0
+		anyVar = -dateVar;			//0
+		anyVar = +99999999999999999999999999999999;		//0
+		anyVar = +99999999999999999999999999999999;		//0
+		anyVar = +9999999999999999.9999999999999999;	//0
+		anyVar = -9999999999999999.9999999999999999;	//0
+		anyVar = +9.9e99;								//0
+		anyVar = -9.9e99;								//0
+		
+		//Binary expressions:
+		
+		anyVar = dateVar - dateVar;				//0
+		anyVar = dateVar + intervalVar;			//0
+		anyVar = dateVar - intervalVar;			//0		
+		anyVar = dateVar + intVar;				//0
+		anyVar = dateVar - intVar;				//0
+		anyVar = dateVar - timestampVar;		//0
+		anyVar = intVar + dateVar;				//0
+		anyVar = intervalVar + dateVar;			//0
+		anyVar = intervalVar + intervalVar;		//0
+		anyVar = intervalVar - intervalVar;		//0
+		anyVar = intervalVar * intVar;			//0
+		anyVar = intervalVar / intVar;			//0
+		anyVar = intervalVar + timestampVar;	//0
+		anyVar = timestampVar - dateVar;		//0
+		anyVar = timestampVar + intervalVar;	//0
+		anyVar = timestampVar - intervalVar;	//0
+		anyVar = timestampVar - timestampVar;	//0
+		
+		anyVar = dateVar + dateVar;				//1
+		anyVar = dateVar * dateVar;				//1
+		anyVar = dateVar / dateVar;				//1
+		anyVar = dateVar ** dateVar;			//1
+		anyVar = dateVar * intervalVar;			//1
+		anyVar = dateVar - timeVar;				//1
+		anyVar = intVar + timeVar;				//1
+		anyVar = intVar + timestampVar;			//1
+		anyVar = intVar + intervalVar;			//1
+		anyVar = intervalVar - dateVar;			//1
+		anyVar = intervalVar * timeVar;			//1
+		anyVar = intervalVar / intervalVar;		//1
+		anyVar = timestampVar + dateVar;		//1
+		anyVar = dateVar - anyVar;				//1
+		
+		anyVar = intVar + intVar;				//0
+		anyVar = intVar + returnsFunc();		//0
+
+		anyVar = fixedRecordVar - intVar;		//1
+		anyVar = intVar + stringVar;			//0
+		anyVar = intVar + "stringV";			//0
+		anyVar = stringVar - stringVar;			//0
+		anyVar = intVar + noReturnsFunc();		//1
+		anyVar = blobVar + clobVar;				//2
+		anyVar = blobVar ** fixedRecordVar;		//2
+		anyVar = intVar + flexibleRecordVar;	//1
+		//Uncomment when there's no longer an error about item1 not being resolved
+		//anyVar = intVar + flexibleRecordVar{item1=1};	//1
+		anyVar = notDeclaredVar + notDeclaredVar;	//2
+		
+		anyVar = stringVar + stringVar;			//0
+		anyVar = stringVar + intVar;			//0
+		anyVar = charVar + intVar;				//0
+		anyVar = charVar + 1;					//0
+		anyVar = "a" + 1;						//0
+		anyVar = "a" + "b" + 1 + "c";			//0
+		anyVar = "a" + "b" + (1 + 2) + "c";		//0
+		anyVar = stringVar + returnsFunc();		//0
+		anyVar = stringVar + "aaa";				//0
+		anyVar = stringVar + 5.4;				//0
+		anyVar = stringVar + 5.4e-2;			//0		
+		anyVar = stringVar + -intVar;			//0
+		anyVar = stringVar + (-intVar);			//0
+		
+		anyVar = stringVar + (-stringVar);		//0
+		anyVar = stringVar + blobVar;			//1
+		anyVar = stringVar + clobVar;			//1
+		anyVar = stringVar + fixedRecordVar;	//1
+		anyVar = stringVar + noReturnsFunc();	//1
+		anyVar = stringVar + flexibleRecordVar;				//1
+		//Uncomment when there's no longer an error about item1 not being resolved
+		//anyVar = stringVar + flexibleRecordVar{item1=1};	//1		
+		stringVar = stringVar + [1, 2, 3];		//1
+		anyVar = stringVar + notDeclaredVar;	//1
+		
+		//Conditional expressions:
+		
+		if(!(intVar == 1)) end									//0
+		if(1!=-1 && -2==3-5) end								//0
+		if(!(intVar != 1)) end									//0
+		if(!(intVar > 1)) end									//0
+		if(!(stringVar == "a")) end								//0
+		if(!(stringVar < "a")) end								//0
+		if(!(stringVar < "a") && (((anyVar as int==anyVar as int)))) end		//0
+		while(!(stringVar < "a") && (((anyVar as int==anyVar as int)))) end	//0
+		
+		if(stringVar && intVar) end					//1
+		if((stringVar || !intVar)) end				//1
+		if(("a" || !4)) end							//1
+		if((flexibleRecordVar || -stringVar)) end	//2
+		if(notDeclaredVar && !notDeclaredVar) end	//2
+		
+		anyVar = stringVar[1:2];	//0
+
+		anyVar = intVar[1:2];		//1
+	end
+	
+	function noReturnsFunc() end
+	function returnsFunc() returns(int) end
+	
+	function compoundAssignments()
+		blobVar *= blobVar;				//2
+	end
+end
+
+Record fixedRecord
+	10 item1 int;
+end
+
+Record flexibleRecord
+	item1 int;
+end

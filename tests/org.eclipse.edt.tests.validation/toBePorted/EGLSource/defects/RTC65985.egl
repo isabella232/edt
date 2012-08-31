@@ -1,0 +1,126 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+handler hand1 type RUIhandler {onConstructionFunction = start, title="hand1"}  //1
+	{@mvcview{publishHelper = fred, 			//1
+	retrieveViewHelper = barney,				//1
+	retrieveValidStateHelper = wilma,			//1
+	publishMessageHelper = betty				//1
+	}}
+	function start() returns (int)
+	end	
+	
+	function barney(p1 string in)
+	end
+	
+	function fred() returns (string)
+	end
+	
+	function wilma(p1 string in)
+	end
+	
+	function betty() returns (string)
+	end
+end
+
+handler hand2 type RUIhandler {onConstructionFunction = start, title="hand1"}  //0
+	{@mvcview{publishHelper = fred, 			//0
+	retrieveViewHelper = barney,				//0
+	retrieveValidStateHelper = wilma,			//0
+	publishMessageHelper = betty				//0
+	}}
+	
+	function start()
+	end	
+	
+	function fred(p1 string in)
+	end
+	
+	function barney() returns (string)
+	end
+	
+	function wilma() returns (string?)
+	end
+
+	function betty(p1 string in)
+	end
+end
+
+handler hand3 type RUIhandler {onConstructionFunction = start, title="hand1"}  //1
+	{@mvcview{publishHelper = fred, 			//1
+	retrieveViewHelper = barney,				//1
+	retrieveValidStateHelper = wilma,			//1
+	publishMessageHelper = betty				//1
+	}}
+
+	function start(p1 int)
+	end	
+	
+	function fred(p1 string)
+	end
+	
+	function barney() returns (int)
+	end
+
+	function wilma() returns (int?)
+	end
+	
+	function betty(p1 string)
+	end
+end
+
+
+externalType et1 type javascriptobject //0
+	{@mvcview{publishHelper = fred, 			//1
+	retrieveViewHelper = barney,				//1
+	retrieveValidStateHelper = wilma,			//1
+	publishMessageHelper = betty				//1
+	}}
+
+	function barney(p1 string in);
+	
+	function fred() returns (string);
+	
+	function wilma(p1 string in);
+	
+	function betty() returns (string?);
+end
+
+externalType et2 type javascriptobject //0
+	{@mvcview{publishHelper = fred, 			//0
+	retrieveViewHelper = barney,				//0
+	retrieveValidStateHelper = wilma,			//0
+	publishMessageHelper = betty				//0
+	}}
+
+	function fred(p1 string in);
+	
+	function barney() returns (string);
+	
+	function wilma() returns (string?);
+	
+	function betty(p1 string in);
+	
+end
+
+externalType et3 type javascriptobject //0
+	{@mvcview{publishHelper = fred, 			//1
+	retrieveViewHelper = barney,				//1
+	retrieveValidStateHelper = wilma,			//1
+	publishMessageHelper = betty				//1
+	}}
+
+	function fred(p1 string);	
+	function barney() returns (int);
+	function wilma() returns(int?);
+	function betty(p1 string);
+	
+end

@@ -1,0 +1,87 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program booleanUsagePgm
+
+	( programParm boolean ) 				//0
+
+	function main()	
+	end
+	
+	boolVar boolean;						//0
+	
+	function func( functionParm boolean )	//0
+		boolVar boolean;					//0
+	end
+	
+	function func2() returns (boolean) end	//0
+end
+
+handler booleanUsagePH type JSFHandler
+
+	function main()	
+	end
+	
+	boolVar boolean;						//0
+	
+	function func( functionParm boolean )	//0
+		boolVar boolean;					//0
+	end
+	
+	function func2() returns (boolean) end	//0
+end
+
+Service booleanUsageService
+
+	function main()	
+	end
+	
+	boolVar boolean;						//0
+	
+	function func( functionParm boolean )	//0
+		boolVar boolean;					//0
+	end
+	
+	function func2() returns (boolean) end	//0
+end
+
+Record booleanUsageFixedRecord type basicRecord
+	10 item1 boolean;						//0
+end
+
+Record booleanUsageFlexibleRecord type basicRecord
+	item1 boolean;							//0
+end
+
+Form booleanUsageTextForm type textForm
+	item1 boolean;							//1 Items of primtive type boolean may not be declared inside of a part with subtype TextForm.
+end
+
+Form booleanUsagePrintForm type PrintForm
+	item1 boolean;							//0
+end
+
+DataTable booleanUsageDataTable type MsgTable
+	10 item1 boolean;						//0
+end
+
+DataItem booleanItem boolean end 			//0
+
+Interface bscInterface
+	function func( functionParm boolean );	//0
+	function func2() returns (boolean);		//0
+end
+
+Interface jvaInterface
+	function func( functionParm boolean in);	//0
+	function func2() returns (boolean);			//0
+end

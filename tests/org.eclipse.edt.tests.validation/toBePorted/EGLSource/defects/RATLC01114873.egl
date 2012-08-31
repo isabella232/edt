@@ -1,0 +1,176 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program sysLibTest type basicProgram {
+	alias = "V61SYSLB",
+	includeReferencedFunctions = YES,
+	allowUnqualifiedItemReferences = YES 
+	}
+	
+	function main()
+		syslibMain() ; 
+	end
+	
+	function compareNumber(p1 int in, p2 int in) end
+	function compareString(p1 string in, p2 string in) end
+	function returnFloat(p1 float in) returns (float) end
+	function returnDecimal(p1 decimal(18) in) returns (decimal(18)) end
+	
+	function sysLibMain()
+		aChar20 char(20) ;
+		aUnicode20 unicode(20) ;
+		anInt int ;
+		aBin bin(9,3) ;
+		aRec sysLibRec1 ;
+		aString, bString string ;
+		aSmallInt, bSmallInt smallInt ;
+		aTimeStamp, bTimeSTamp timeStamp ;
+		seconds, secondsA, secondsB interval( "ssss" ) ;
+		
+		auditRec sysLibAuditRec { initialized = yes } ;
+		jid smallInt ;
+		auditRec.len = 132 ;
+		auditRec.id = "A000" ;
+		auditRec.auditData = " Audit Data " ;
+		
+		beginDataBaseTransaction() ;
+	 		
+ 		commit() ;
+			
+		beginDataBaseTransaction("SAMPLE") ;
+			
+		commit() ;
+			
+	    aString = "SAMP" ;
+		beginDataBaseTransaction( aString + "LE" ) ;
+			
+		commit() ;
+
+		compareNumber ( bytes ( aRec ), 20 ) ;
+		
+		compareNumber ( bytes ( aRec ) +
+						bytes( aChar20 ) +
+						bytes ( aUnicode20 ) -
+						bytes ( aBin ) , 76
+					   ) ;
+
+		aChar20 = "12345678901234567890" ;
+		calculateChkDigitMod10 ( aChar20, 20, aSmallInt ) ;
+		compareNumber ( aSmallInt, 0 ) ;
+		
+		aChar20 = "12345678901234567890" ;
+		bSmallInt = 10 ; 
+		calculateChkDigitMod10 ( aChar20, bSmallInt, aSmallInt ) ;
+		compareNumber ( aSmallInt, 0 ) ;
+		
+		aChar20 = "12345678901234567890" ;		
+		calculateChkDigitMod11 ( aChar20, 20, aSmallInt ) ;
+		compareNumber ( aSmallInt, 0 ) ;
+
+		aChar5 char(5) = "12345" ;
+		
+		convert ( aChar5, Local , "CSOJ37" ) ;
+		compareString ( aChar5AsHex ( aChar5 ) , "F1F2F3F4F5" ) ; 
+		
+		convert ( aChar5, Remote ) ;
+		compareString ( aChar5AsHex ( aChar5 ), "3132333435" ) ;
+
+		property, propertyKey string ;
+		nlsProperty char(12) = "vgj.nls.code" ;
+		
+		propertyKey = "egl.syntax.systemWords.generalSystemFunctions.rununit.property" ;
+   		property = sysLib.getProperty ( propertyKey ) ;
+  		compareString ( property, "rununit.property" ) ;
+		
+		propertyKey = "egl.syntax.systemWords.generalSystemFunctions." ;
+		property = sysLib.getProperty ( propertyKey + "rununit.property" ) ;
+   		compareString ( property, "rununit.property" ) ;
+		
+		propertyKey = "egl.syntax.systemWords.generalSystemFunctions." ;
+   		compareString ( 
+  			sysLib.GetProperty ( 
+  				propertyKey + getProperty ( 
+					propertyKey + "rununit.property" 
+					)
+				), 
+			"rununit.property" 
+		) ;
+		
+		compareString ( getProperty ( nlsProperty ) , "ENU" )  ;
+		
+		compareString ( getProperty ( "" + nlsProperty ) , "ENU" )  ;
+
+		aSetTranRec SysLibStartTransactionRec ;
+		aCharPrid char(4) = "100" ;
+		aBinPrid int = 100 ;
+		aCharTermid char(4) = "TM01" ;
+		aSetTranRec.len = 110 ;
+		aStringPrid string = "01A0" ;
+		aStringTermid string = "TM01" ;
+		aSetTranRec.transData = "Transaction data" ;
+		
+		startTransaction ( aSetTranRec, "PR01", "TM01" ) ;
+		
+		startTransaction ( aSetTranRec, aCharPrid, aCharTermid ) ;
+		
+		startTransaction ( aSetTranRec, aBinPrid, aCharTermid ) ;
+
+		aTimeStamp = currentTimeStamp() ;
+		sysLib.wait ( 3 ) ;
+		seconds = currentTimeStamp() - aTimeStamp ;
+		aString = seconds ;
+		compareString ( aString, "+0003" ) ;
+		
+		aTimeStamp = currentTimeStamp() ;
+		wait ( returnFloat(2) ) ;
+		seconds = currentTimeStamp() - aTimeStamp ;
+		aString = seconds ;
+		compareString ( aString, "+0002" ) ;
+		
+		aTimeStamp = currentTimeStamp() ;
+		wait ( returnFloat(2) + returnDecimal(1.43) + .57 ) ;
+		seconds = currentTimeStamp() - aTimeStamp ;
+		aString = seconds ;
+		compareString ( aString, "+0004" ) ;
+	end
+	
+	function aChar5AsHex ( aChar5 char(5) inOut ) returns ( string ) 
+		aRec Char5AsHex ;
+		aRec.aChar5 = aChar5 ;
+		return ( aRec.aHex10 ) ;
+	end
+	
+end
+
+Record Char5AsHex 
+	10 aChar5 char(5) ;
+	20 aHex10 hex(10) ;
+end
+
+Record sysLibRec1 type BasicRecord
+	10 aChar char(10) ;
+	10 bChar char(10) ;
+end
+
+Record sysLibAuditRec  type BasicRecord
+	10 len smallInt ;
+	10 id hex(4) ;
+	10 reserved char(28) ;
+	10 auditData char(100) ;
+end
+
+Record sysLibStartTransactionRec  type BasicRecord
+	10 len smallInt ;
+	10 reserved char(8) ;
+	10 transData char(100) ;
+end

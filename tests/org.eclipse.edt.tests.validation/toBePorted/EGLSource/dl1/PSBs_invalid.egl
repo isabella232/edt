@@ -1,0 +1,1606 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+// parts to be referenced by the PSBs
+Record ambig								//0
+	10 item1 char(10);						//0
+end
+Record ambig								//0
+	10 item1 char(10);						//0
+end
+
+
+
+Record basicrcd type basicrecord			//0
+	10 item1 char(10);						//0
+end											//0
+record segname type dlisegment				//0
+{segmentName = "seg"}						//0
+	10 xlocname char(4);					//0
+	10 itemx bin(9);						//0
+end											//0
+record segname2 type dlisegment				//0
+	10 xlocname char(4);					//0
+	10 itemx bin(9);						//0
+end											//0
+record seg1 type dlisegment					//0
+{segmentName = "seg"}						//0
+	10 item1 char(4);						//0
+end											//0
+record seg2 type dlisegment					//0
+	10 item2 char(4);						//0
+end											//0
+record seg3 type dlisegment					//0
+	10 item3 char(4);						//0
+end											//0
+record seg4 type dlisegment					//0
+	10 item4 char(4);						//0
+end											//0
+record seg5 type dlisegment					//0
+	10 item5 char(4);						//0
+end											//0
+record seg6 type dlisegment					//0
+	10 item6 char(4);						//0
+end											//0
+record seg7 type dlisegment					//0
+	10 item7 char(4);						//0
+end											//0
+record seg8 type dlisegment					//0
+	10 item8 char(4);						//0
+end											//0
+record seg9 type dlisegment					//0
+	10 item9 char(4);						//0
+end											//0
+record seg10 type dlisegment				//0
+	10 item10 char(4);						//0
+end											//0
+record seg11 type dlisegment				//0
+	10 item11 char(4);						//0
+end											//0
+record seg12 type dlisegment				//0
+	10 item12 char(4);						//0
+end											//0
+record seg13 type dlisegment				//0
+	10 item13 char(4);						//0
+end											//0
+record seg14 type dlisegment				//0
+	10 item14 char(4);						//0
+end											//0
+record seg15 type dlisegment				//0
+	10 item15 char(4);						//0
+end											//0
+record seg16 type dlisegment				//0
+	10 item16 char(4);						//0
+end											//0
+record seg17 type dlisegment				//0
+	10 item17 char(4);						//0
+end											//0
+
+record segWithoutSegNameProperty type dlisegment	//1 The name "segWithoutSegNameProperty" is not a valid DL/I name, so the record must specify the segmentName property
+end													//0
+
+// start the PSB tests
+Record myGoodPSB1 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = GSAM,				//0
+		 	 pcbType = TP,  				//0
+		 	 pcbType = DB,					//0
+		 	 pcbType = PCBKind.TP,			//0
+		 	 pcbType = PCBKind.GSAM,		//0
+		 	 pcbType = PCBKind.DB,			//0
+		 	 pcbName = "pcbname",			//0
+			 secondaryIndex = "Xloc",		//0
+			 secondaryIndexItem = "xlocname",//0	
+//FGD - I have two problems here.  
+// 1.  Why is the error about something being an invalid DL/I Name coming out on the 
+//		usage instead of on the definition.
+// 2.  EGLSource.DLI is a package name and therefore both references to segname are the same
+ 	
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };	 
+	pcb2 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = GSAM,				//0
+		 	 pcbType = TP,  				//0
+		 	 pcbType = DB,					//0
+		 	 pcbType = PCBKind.TP,			//0
+		 	 pcbType = PCBKind.GSAM,		//0
+		 	 pcbType = PCBKind.DB,			//0
+		 	 pcbName = "pcbname",			//0
+			 secondaryIndex = "Xloc",		//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };		 			 	
+end	
+
+// bad properties
+Record myErrorPSB1 type indexedrecord 
+	{defaultPSBName = "myname",			//1 defaultPSBName cannot be resolved
+	 keyItem=item1,					//0
+	 filename = "abc"}					//0
+	item1 DB_PCBRecord					//0
+		 {@PSB{}						//1 PSB cannot be resolved
+		 };	
+end		 
+Record myErrorPSB2 type PSBRecord 		//0
+	{defaultPSBName = "myname",			//0
+	 defaultPSBName = myname,			//1
+	 defaultPSBName = [123],			//1
+	 defaultPSBName = [1,2],			//1
+// Error message for following line is different b/c the record is flexible, so this could be an initializer for a field called filename
+	 filename = "abc"}					//1 filename cannot be resolved
+	pcb1 IO_PCBRecord					//0
+		 {@PSB							//1 PSB cannot be resolved
+		 	{pcbType = TP},				//0
+		  @PCB{pcbType = DB}};			//0
+	pcb2 DB_PCBRecord					//0
+		 {@PCB							//0
+		 	{garbage=no,				//1 garbage cannot be resolved.
+		 	 pcbType = "pcbname",		//1 pcbType.  The value for this property must be one of the following: DB, GSAM, TP.
+		 	 pcbType = myname,			//1 pcbType.  The value for this property must be one of the following: DB, GSAM, TP.
+			 pcbType = 123,				//1 pcbType.  The value for this property must be one of the following: DB, GSAM, TP.
+			 pcbType = [1,2],			//1 pcbType.  The value for this property must be one of the following: DB, GSAM, TP.
+		 	 pcbName = "pcbname",		//0
+		 	 pcbName = myname,			//1
+			 pcbName = [123],			//1
+			 pcbName = [1,2],			//1
+		 	 pcbType = TP,				//0
+		 	 pcbType = GSAM,			//0
+		 	 pcbType = DB,				//0
+			 secondaryIndex = "Xloc",	//0
+		 	 secondaryIndex = myname,	//1
+			 secondaryIndex = [123],		//1
+			 secondaryIndex = [1,2],	//1
+			 secondaryIndexItem = "xlocname",//0	 	
+		 	 secondaryIndexItem = myname,	//1
+			 secondaryIndexItem = [123],		//1
+			 secondaryIndexItem = [1,2],	//1
+			 hierarchy = "xlocname",		//1
+		 	 hierarchy = myname,			//1
+			 hierarchy = 123,				//1
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName,//0
+		 	 			 segmentRecord = myname,	//1
+			 			 segmentRecord = 123,		//1
+			 			 segmentRecord = [1,2] 		//1
+		 	 			},
+		 	 	  @Relationship	 
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName,	//0
+		 	 			 parentRecord = myname,		//1
+			 			 parentRecord = 123,		//1
+			 			 parentRecord = [1,2] 		//1
+		 	 			 },
+		 	 	  def, 								//1
+		 	 	  5									//0
+ 			  ]
+		 	 }
+		 };		  			 	
+end		 
+
+////
+//// These rules were taken from ESF Import in VAGen
+////	
+// DL1 name rules
+//		- max of 8 characters
+//		- 1st char must be a-z, @, $, #
+//		- 2-8 must be a-z, 0-9, @, $, #
+// 		- can be an EGL keyword
+// All of the following must satisfy DL1 name rules
+//		- PSB name (now defaultPSBName property)
+//		- new PCBName property (since has to match name in the PSBGEN)
+//		- secondary index key field (now secondaryindex property)
+//		- new secondaryindexItem (since it ends up in the SSA)	
+//Note:  The following used to be in this list as well.  However, there is a new
+//		level of indirection.  The segmentRecord and parentRecord properties
+//		point to dliSegment records that can have any valid EGL record name.
+//		If that record name contains characters that are invalid for DL/1, then
+//		the segmentName property will be required on that record definition.
+//		It's value will need to meet the above rules.
+//		- segment (now segmentRecord property)
+//		- parent (now parentRecord Property)	
+Record myErrorPSB3 type PSBRecord 			//0
+	{defaultPSBName = "0asdf",				//1 Invalid DLI name "0asdf". The first character must be a letter, or one of: (@, $, #)
+	 defaultPSBName = "a%xdf",				//1 Invalid DLI name "a%xdf". All characters must be letters, digits, or one of: (@, $, #)
+	 defaultPSBName = "a+b",				//1 Invalid DLI name "a+b". All characters must be letters, digits, or one of: (@, $, #)
+	 defaultPSBName = "abcdefghijklm",		//1 Invalid DLI name "abcdefghijklm". The maximum length of a DLI name is 8 characters.
+	 defaultPSBName = "@$#a1b9"}			//0
+	pcb1 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	 {pcbType = DB,					//0
+		 	 pcbName = "0asdf",				//1 Invalid DLI name "0asdf". The first character must be a letter, or one of: (@, $, #)
+			 pcbName = "a%xdf",				//1 Invalid DLI name "a%xdf". All characters must be letters, digits, or one of: (@, $, #)
+			 pcbName = "a+b",				//1 Invalid DLI name "a+b". All characters must be letters, digits, or one of: (@, $, #)
+	 		 pcbName = "abcdefghijklm",		//1 Invalid DLI name "abcdefghijklm". The maximum length of a DLI name is 8 characters.
+			 pcbName = "@$#a1b9",			//0
+		 	 secondaryIndex = "0asdf",		//1 Invalid DLI name "0asdf". The first character must be a letter, or one of: (@, $, #)
+			 secondaryIndex = "a%xdf",		//1 Invalid DLI name "a%xdf". All characters must be letters, digits, or one of: (@, $, #)
+			 secondaryIndex = "a+b",		//1 Invalid DLI name "a+b". All characters must be letters, digits, or one of: (@, $, #)
+	 		 secondaryIndex = "abcdefghijklm",//1 Invalid DLI name "abcdefghijklm". The maximum length of a DLI name is 8 characters.
+			 secondaryIndex = "@$#a1b9",	//0
+			 secondaryIndexItem = "add",	//0
+		 	 secondaryIndexItem = "0asdf",			//0
+			 secondaryIndexItem = "a%xdf",			//0
+			 secondaryIndexItem = "a+b",			//0
+	 		 secondaryIndexItem = "abcdefghijklm",	//0
+			 secondaryIndexItem = "@$#a1b9",		//0
+			 secondaryIndexItem = "xlocname",		//0
+ 	
+		 	 hierarchy = 							//0
+		 	 	[ @Relationship	 					//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//0
+		 	 			{segmentRecord=asdf,			//1
+		 				 segmentRecord = "a%xdf",			//1
+						 segmentRecord = "a+b",				//1
+				 		 segmentRecord=abcdefghijklm,	//1 The type abcdefghijklm cannot be resolved.
+				 		 segmentRecord = "@$#a1b9",			//1
+				 		 segmentRecord=seg1,			//0
+
+						 parentRecord=asdf,			//1
+		 				 parentRecord = a%xdf,			//1
+						 parentRecord = a+b,				//1
+				 		 parentRecord=abcdefghijklm,	//1 The type abcdefghijklm cannot be resolved.
+				 		 parentRecord = a@#a1b9,			//1
+				 		 parentRecord=segName} ]		//0
+		 	 }
+		 };	 			 	
+end	
+
+Record myErrorPSB3a type PSBRecord 			//0
+	pcb1 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	 {pcbType = DB,					//0
+		 	 hierarchy = 							//0
+		 	 	[ @Relationship	 					//0
+		 	 			{segmentRecord=segWithoutSegNameProperty},	//0 
+		 	 	  @Relationship	 										//0
+		 	 			{segmentRecord=seg1,						//0
+						 parentRecord=segWithoutSegNameProperty} ]	//0 
+		 	 }
+		 };	 			 	
+end	
+
+////
+//// These rules were taken from ESF Import in VAGen
+////	
+		
+// PCBs must be in order TP, DB, GSAM
+Record myErrorPSB4 type PSBRecord 			//1 PCBs in a PSB record must appear in the following order: TP, DB, GSAM. A TP PCB was found after a DB PCB.
+	{defaultPSBName = "myname"}				//0
+	pcb1 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 pcbName = "pcbname",			//0 	
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName}]//0
+	 		 }
+		 };	
+	pcb2 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0		
+	someitem char(10) {@PCB {PCBType = TP }};//1 All items in a PSBRecord must typedef to a fixed record
+	pcb3 basicrcd {@PCB {PCBType = GSAM }};//0	
+	pcb4  char(100) {@PCB {PCBType = TP }};	//1 All items in a PSBRecord must typedef to a fixed record
+
+end
+
+Record myErrorPSB5 type PSBRecord 			//1 PCBs in a PSB record must appear in the following order: TP, DB, GSAM. A TP PCB was found after a GSAM PCB.
+	{defaultPSBName = "myname"}				//0
+	pcb1 GSAM_PCBRecord 					//0
+		{@PCB {pcbType = GSAM }};			//0
+	pcb2 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0			 	
+end
+
+Record myErrorPSB5a type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0
+	pcb2 IO_PCBRecord 						//0
+		{@PCB {pcbType = DB, hierarchy=[] }};	//0			 	
+	pcb3 IO_PCBRecord 						//0
+		{@PCB {pcbType = GSAM }};			//0			 	
+end
+
+Record myErrorPSB5b type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 IO_PCBRecord 						//0
+		{@PCB {pcbType = GSAM }};			//0
+end
+
+Record myErrorPSB5c type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0
+end
+
+Record myErrorPSB5d type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb2 IO_PCBRecord 						//0
+		{@PCB {pcbType = DB, hierarchy=[] }};	//0			 	
+end
+
+Record myErrorPSB5e type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb3 IO_PCBRecord 						//0
+		{@PCB {pcbType = GSAM }};			//0			 	
+end
+
+Record myErrorPSB5f type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0
+	pcb3 IO_PCBRecord 						//0
+		{@PCB {pcbType = GSAM }};			//0			 	
+end
+
+Record myErrorPSB5g type PSBRecord 			//1 PCBs in a PSB record must appear in the following order: TP, DB, GSAM. A TP PCB was found after a DB PCB.
+	{defaultPSBName = "myname"}				//0
+	pcb1 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0
+	pcb2 IO_PCBRecord 						//0
+		{@PCB {pcbType = DB, hierarchy=[] }};	//0	
+	pcb3 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0			 	
+end
+
+Record myErrorPSB5h type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0
+	pcb2 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0			 	
+end
+
+////
+//// These rules were taken from ESF Import in VAGen
+////	
+
+// Validate TP PCB
+//	- dbname cannot be specified (no longer applicable) (now record item name for PCB in record)
+//	- no sensitive segments are allowed
+//		- no segment name (now segmentRecord)
+//		- no parentname (now parentRecord)
+//		- no indexkey name (now secondaryIndex)
+//		- new - secondaryIndexItem
+//			- because secondaryIndex and secondaryIndexItem	are IMS and EGL names for roughly the same thing
+Record myErrorPSB6 type PSBRecord 			//0
+ 	pcb1 IO_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = TP,					//0
+			 secondaryIndex = "Xloc",		//1 The field "secondaryIndex" is not allowed for a TP PCB.
+			 secondaryIndexItem = "xlocname",//1 The field "secondaryIndexItem" is not allowed for a TP PCB.
+		 	 hierarchy = 					//1 The field "hierarchy" is not allowed for a TP PCB.
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };	 			 	
+end
+
+
+////
+//// These rules were taken from ESF Import in VAGen
+////	
+
+// validate GSAM PCB
+//	- dbname must be specified (now record item name for PCB in record)
+//	- no sensitive segments are allowed
+//		- no segment name (now segmentRecord)
+//		- no parentname (now parentRecord)
+//		- no indexkey name (now secondaryIndex)
+//		- new - secondaryIndexItem
+//			- because secondaryIndex and secondaryIndexItem	are IMS and EGL names for roughly the same thing
+Record myErrorPSB7 type PSBRecord 			//0
+	pcb1 GSAM_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = GSAM,				//0
+			 secondaryIndex = "Xloc",		//1 The field "secondaryIndex" is not allowed for a GSAM PCB.
+			 secondaryIndexItem = "xlocname",//1 The field "secondaryIndexItem" is not allowed for a GSAM PCB.
+		 	 hierarchy = 					//1 The field "hierarchy" is not allowed for a GSAM PCB.
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };	 			 	
+end
+
+////
+//// These rules were taken from ESF Import in VAGen
+////	
+
+// validate DB PCB
+//	- if dbname is elawork or elamsg (now record item name for PCB in record) 
+//		- no segment name is required
+//		- no sensitive segments are allowed
+//			- no segment name (now segmentRecord)
+//			- no parentname (now parentRecord)
+//			- no indexkey name (now secondaryIndex)
+//			- new - secondaryIndexItem
+//				- because secondaryIndex and secondaryIndexItem	are IMS and EGL names for roughly the same thing
+//	- if dbname (now record item name for PCB in record) is not elawork or elamsg
+//		- must have segment name (restriction lifted in EGL)
+//	- dbname is required (now record item name for PCB in record)
+//	- first segment can't have parent name
+// 	- parent name can't be same as segment name
+//	- index key is only valid on root segment (because of hierarchy of properties, don't have to worry about this)
+//	- must have parent segment on all but root segment
+//	- can't have same segment name multiple times in same hierarchy
+//	- validate PCB structure
+//		- validate hierarchy - all segments have parents that are in this hierarchy
+//		- no more than 15 levels
+
+
+// elawork and elamsg situations
+Record myErrorPSB8 type PSBRecord 			//0
+	elawork DB_PCBRecord					//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+			 secondaryIndex = "Xloc",		//1 The field "secondaryIndex" is not allowed for a DB PCB for an item named "elawork" or "elamsg".
+			 secondaryIndexItem = "xlocname",//1 The field "secondaryIndexItem" is not allowed for a DB PCB for an item named "elawork" or "elamsg".
+		 	 hierarchy = 					//1 The field "hierarchy" is not allowed for a DB PCB for an item named "elawork" or "elamsg".
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };	
+	elamsg DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+			 secondaryIndex = "Xloc",		//1 The field "secondaryIndex" is not allowed for a DB PCB for an item named "elawork" or "elamsg".
+			 secondaryIndexItem = "xlocname",//1 The field "secondaryIndexItem" is not allowed for a DB PCB for an item named "elawork" or "elamsg".
+		 	 hierarchy = 					//1 The field "hierarchy" is not allowed for a DB PCB for an item named "elawork" or "elamsg".
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };
+	mypcb DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+			 secondaryIndex = "Xloc",		//0
+			 secondaryIndexItem = "xlocname",//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };		  			 	
+end
+
+// have to have segmentrecord situations
+Record myErrorPSB9 type PSBRecord 			//0
+		{defaultPSBName = "myname"}			//0
+	pcb1 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB}					//0
+		 };	 
+	pcb2 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship{ segmentRecord=segName },	//0
+		 	 	  @Relationship	 			//1 The field "segmentRecord" is required for the complex property relationship.
+		 	 			{parentRecord=segName} ]//0
+		 	 }
+		 };	
+	pcb3 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//1 The field "segmentRecord" is required for the complex property relationship.
+		 	 			{parentRecord=segName} ]//0
+		 	 }
+		 };
+end
+
+// validate hierarchy in every way possible
+Record myErrorPSB10 type PSBRecord 			//0
+		{defaultPSBName = "myname"}			//0
+	pcb1 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//1 The first relationship represents the root segment of the database, and therefore cannot have a parentRecord specified.
+		 	 	[ @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };
+	pcb2 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 					//0
+		 	 			{segmentRecord=segName2},//0 
+                  @Relationship	 				//1 The field "parentRecord" is missing. Only the first relationship represents the root segment of the database.
+		 	 			{segmentRecord=segName} ]//0
+		 	 }
+		 };	
+	pcb3 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//1 The fields "segmentRecord" and "parentRecord" cannot reference the same DL/I segment record.
+		 	 			{segmentRecord=segName,	//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };	
+	pcb4 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg3},//0 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//1 The segment seg3 already appears in the hierarchy.
+		 	 			 parentRecord=seg4} //1 A loop exists in the hierarchy, since segment seg3 already appears in the hierarchy.
+		 	 	 ]								//0
+		 	 }
+		 };	
+		 
+	pcb5 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg3},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg4},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg6},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg8,//0 
+		 	 			 parentRecord=seg7},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg9,//0 
+		 	 			 parentRecord=seg8},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg10,//0  
+		 	 			 parentRecord=seg9},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg11,//0  
+		 	 			 parentRecord=seg10},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg12,//0  
+		 	 			 parentRecord=seg11},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg13,//0  
+		 	 			 parentRecord=seg12},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg14,//0  
+		 	 			 parentRecord=seg13},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg15,//0  
+		 	 			 parentRecord=seg14},//0
+		 	 	  @Relationship	 				//1 There can be no more than 15 levels in a segment hierarchy
+		 	 			{segmentRecord=seg16,//0
+		 	 			 parentRecord=seg15},//0
+		 	 	  @Relationship	 				//1 There can be no more than 15 levels in a segment hierarchy
+		 	 			{segmentRecord=seg17,//0
+		 	 			 parentRecord=seg16} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	// can have more than 15 segments, just not in the same hierarchical path
+	pcb6 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg8,//0 
+		 	 			 parentRecord=seg6},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg9,//0 
+		 	 			 parentRecord=seg7},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg10,//0  
+		 	 			 parentRecord=seg8},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg11,//0  
+		 	 			 parentRecord=seg9},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg12,//0  
+		 	 			 parentRecord=seg10},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg13,//0  
+		 	 			 parentRecord=seg11},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg14,//0  
+		 	 			 parentRecord=seg12},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg15,//0  
+		 	 			 parentRecord=seg13},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg16,//0
+		 	 			 parentRecord=seg14},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg17,//0  
+		 	 			 parentRecord=seg15} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	// can have more than 15 segments, just not in the same hierarchical path
+	// reaorder the Relationship entries, shouldn't matter 
+	pcb6b DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg9,//0 
+		 	 			 parentRecord=seg7},//0			 	 			 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg8,//0 
+		 	 			 parentRecord=seg6},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg10,//0  
+		 	 			 parentRecord=seg8},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg11,//0  
+		 	 			 parentRecord=seg9},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg12,//0  
+		 	 			 parentRecord=seg10},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg13,//0  
+		 	 			 parentRecord=seg11},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg16,//0
+		 	 			 parentRecord=seg14},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg14,//0  
+		 	 			 parentRecord=seg12},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg15,//0  
+		 	 			 parentRecord=seg13},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg17,//0  
+		 	 			 parentRecord=seg15} //0
+		 	 	]								//0
+		 	 }
+		 };	
+
+	pcb7 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg3},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg8},//1 The parent record "seg8" must be in the hierarchical path of this PCB.
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg6} //0	
+
+		 	 	]								//0
+		 	 }
+		 }; 
+		 
+	pcb8 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg2},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg9,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg13,//0  
+		 	 			 parentRecord=seg7},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0 
+		 	 			 parentRecord=seg2},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg12,//0  
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg11,//0  
+		 	 			 parentRecord=seg4},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg10,//0  
+		 	 			 parentRecord=seg4},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg14,//0  
+		 	 			 parentRecord=seg10},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg8,//0  
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg17,//0  
+		 	 			 parentRecord=seg8},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg15,//0
+		 	 			 parentRecord=seg14},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg16,//0
+		 	 			 parentRecord=seg12} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	pcb9 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 secondaryIndex = "dliitem",	//0
+		 	 secondaryIndexItem = "item16",	//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg16},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg16},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	pcb10 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 secondaryIndex = "dliitem",	//0
+		 	 secondaryIndexItem = "item2",	//0 
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg16},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg16},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2} //0
+		 	 	]								//0
+		 	 }
+		 };
+	pcb11 DB_PCBRecord						//0
+		{@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=unknwnrd},//1 The type unknwnrd cannot be resolved.
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=unknwnrd} //1 The type unknwnrd cannot be resolved.
+		 	 	]								//0
+		 	 }
+		 };	
+	pcb12 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=ambig,//1 The type ambig is ambiguous.
+		 	 			 parentRecord=ambig} //1 The type ambig is ambiguous.
+		 	 	]								//0
+		 	 }
+		 };		 
+	pcb13 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=basicrcd},//1 The part "basicrcd" referenced by property "segmentRecord" must be a record of type DLISegment
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=basicrcd} //1 The part "basicrcd" referenced by property "parentRecord" must be a record of type DLISegment
+		 	 	]								//0
+		 	 }
+		 };	
+	pcb14 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 secondaryIndex = "xloc"		//0
+		 	 }
+		 };	
+	pcb15 DB_PCBRecord						//0
+		 {@PCB								//1 If the property secondaryIndexItem is specified, then the property secondaryIndex must be specified
+		 	{pcbType = DB,					//0 
+		 	 secondaryIndexItem = "xloc"	//0
+		 	 }
+		 };	
+	// same named segment at same level multiple times
+	pcb16 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//1 The segment seg5 already appears in the hierarchy.
+		 	 			 parentRecord=seg3},//0		 	 			 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg5} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	// same named segment has different parents
+	pcb17 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//1 The segment seg4 already appears in the hierarchy.
+		 	 			 parentRecord=seg3},//0			 	 			 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg5} //0
+		 	 	]								//0
+		 	 }
+		 };		 	
+	// loop and the whole thing is an orphan	 
+	pcb18 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//1 A loop exists in the hierarchy, since segment seg3 already appears in the hierarchy.
+		 	 			 parentRecord=seg7},//0 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//1 A loop exists in the hierarchy, since segment seg5 already appears in the hierarchy.
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//1 A loop exists in the hierarchy, since segment seg7 already appears in the hierarchy.  
+		 	 			 parentRecord=seg5} //0
+		 	 	]								//0
+		 	 }
+		 };		 
+		 		 		 	 	 			 		 	 		 		 		 		 	 			 		 	 		 		 		 		 	 			 	
+end
+
+//Now let the pcbType default to DB like it did in ESF.
+//Should get all the same messages
+Record myErrorPSB10a type PSBRecord 		//0
+		{defaultPSBName = "myname"}			//0
+	pcb1 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//1 The first relationship represents the root segment of the database, and therefore cannot have a parentRecord specified.
+		 	 	[ @Relationship	 					//0
+		 	 			{segmentRecord=segName2,//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };
+	pcb2 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 					//0
+		 	 			{segmentRecord=segName2},//0 
+                  @Relationship	 				//1 The field "parentRecord" is missing. Only the first relationship represents the root segment of the database.
+		 	 			{segmentRecord=segName} ]//0
+		 	 }
+		 };	
+	pcb3 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=segName},//0
+		 	 	  @Relationship	 					//1 The fields "segmentRecord" and "parentRecord" cannot reference the same DL/I segment record.
+		 	 			{segmentRecord=segName,	//0 
+		 	 			 parentRecord=segName} ]//0
+		 	 }
+		 };	
+	pcb4 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//1 The segment seg3 already appears in the hierarchy.
+		 	 			 parentRecord=seg4} //1 A loop exists in the hierarchy, since segment seg3 already appears in the hierarchy.
+		 	 	 ]								//0
+		 	 }
+		 };	
+		 
+	pcb5 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg3},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg4},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg6},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg8,//0 
+		 	 			 parentRecord=seg7},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg9,//0 
+		 	 			 parentRecord=seg8},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg10,//0  
+		 	 			 parentRecord=seg9},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg11,//0  
+		 	 			 parentRecord=seg10},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg12,//0  
+		 	 			 parentRecord=seg11},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg13,//0  
+		 	 			 parentRecord=seg12},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg14,//0  
+		 	 			 parentRecord=seg13},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg15,//0  
+		 	 			 parentRecord=seg14},//0
+		 	 	  @Relationship	 				//1 There can be no more than 15 levels in a segment hierarchy
+		 	 			{segmentRecord=seg16,//0
+		 	 			 parentRecord=seg15},//0
+		 	 	  @Relationship	 				//1 There can be no more than 15 levels in a segment hierarchy
+		 	 			{segmentRecord=seg17,//0
+		 	 			 parentRecord=seg16} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	// can have more than 15 segments, just not in the same hierarchical path
+	pcb6 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg8,//0 
+		 	 			 parentRecord=seg6},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg9,//0 
+		 	 			 parentRecord=seg7},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg10,//0  
+		 	 			 parentRecord=seg8},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg11,//0  
+		 	 			 parentRecord=seg9},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg12,//0  
+		 	 			 parentRecord=seg10},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg13,//0  
+		 	 			 parentRecord=seg11},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg14,//0  
+		 	 			 parentRecord=seg12},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg15,//0  
+		 	 			 parentRecord=seg13},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg16,//0
+		 	 			 parentRecord=seg14},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg17,//0  
+		 	 			 parentRecord=seg15} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	// can have more than 15 segments, just not in the same hierarchical path
+	// reaorder the Relationship entries, shouldn't matter 
+	pcb6b DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg9,//0 
+		 	 			 parentRecord=seg7},//0			 	 			 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg8,//0 
+		 	 			 parentRecord=seg6},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg10,//0  
+		 	 			 parentRecord=seg8},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg11,//0  
+		 	 			 parentRecord=seg9},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg12,//0  
+		 	 			 parentRecord=seg10},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg13,//0  
+		 	 			 parentRecord=seg11},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg16,//0
+		 	 			 parentRecord=seg14},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg14,//0  
+		 	 			 parentRecord=seg12},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg15,//0  
+		 	 			 parentRecord=seg13},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg17,//0  
+		 	 			 parentRecord=seg15} //0
+		 	 	]								//0
+		 	 }
+		 };	
+
+	pcb7 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg3},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg8},//1 The parent record "seg8" must be in the hierarchical path of this PCB.
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg6} //0	
+
+		 	 	]								//0
+		 	 }
+		 }; 
+		 
+	pcb8 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg2},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg9,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg13,//0  
+		 	 			 parentRecord=seg7},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0 
+		 	 			 parentRecord=seg2},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg12,//0  
+		 	 			 parentRecord=seg5},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg11,//0  
+		 	 			 parentRecord=seg4},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg10,//0  
+		 	 			 parentRecord=seg4},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg14,//0  
+		 	 			 parentRecord=seg10},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg8,//0  
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg17,//0  
+		 	 			 parentRecord=seg8},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg15,//0
+		 	 			 parentRecord=seg14},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg16,//0
+		 	 			 parentRecord=seg12} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	pcb9 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{secondaryIndex = "dliitem",	//0
+		 	 secondaryIndexItem = "item16",	//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg16},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg16},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	pcb10 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{secondaryIndex = "dliitem",	//0
+		 	 secondaryIndexItem = "item2",	//0 
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg16},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg16},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg2} //0
+		 	 	]								//0
+		 	 }
+		 };
+	pcb11 DB_PCBRecord						//0
+		{@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=unknwnrd},//1 The type unknwnrd cannot be resolved.
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=unknwnrd} //1 The type unknwnrd cannot be resolved.
+		 	 	]								//0
+		 	 }
+		 };	
+	pcb12 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=ambig,//1 The type ambig is ambiguous.
+		 	 			 parentRecord=ambig} //1 The type ambig is ambiguous.
+		 	 	]								//0
+		 	 }
+		 };		 
+	pcb13 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=basicrcd},//1 The part "basicrcd" referenced by property "segmentRecord" must be a record of type DLISegment
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=basicrcd} //1 The part "basicrcd" referenced by property "parentRecord" must be a record of type DLISegment
+		 	 	]								//0
+		 	 }
+		 };	
+	pcb14 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{secondaryIndex = "xloc"		//0
+		 	 }
+		 };	
+	pcb15 DB_PCBRecord						//0
+		 {@PCB								//1 If the property secondaryIndexItem is specified, then the property secondaryIndex must be specified.
+		 	{secondaryIndexItem = "xloc"	//0
+		 	 }
+		 };	
+	// same named segment at same level multiple times
+	pcb16 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//1 The segment seg5 already appears in the hierarchy. 
+		 	 			 parentRecord=seg3},//0		 	 			 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg5} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	// same named segment has different parents
+	pcb17 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//0 
+		 	 			 parentRecord=seg1},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//0 
+		 	 			 parentRecord=seg3},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//1 The segment seg4 already appears in the hierarchy.  
+		 	 			 parentRecord=seg3},//0			 	 			 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//0  
+		 	 			 parentRecord=seg5} //0
+		 	 	]								//0
+		 	 }
+		 };	
+	// loop and the whole thing is an orphan	 
+	pcb18 DB_PCBRecord						//0
+		 {@PCB								//0
+		 	{hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg3,//1 A loop exists in the hierarchy, since segment seg3 already appears in the hierarchy.
+		 	 			 parentRecord=seg7},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg4,//0  
+		 	 			 parentRecord=seg2},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg5,//1 A loop exists in the hierarchy, since segment seg5 already appears in the hierarchy. 
+		 	 			 parentRecord=seg3},//0 
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg6,//0 
+		 	 			 parentRecord=seg4},//0	
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg7,//1 A loop exists in the hierarchy, since segment seg7 already appears in the hierarchy. 
+		 	 			 parentRecord=seg5} //0
+		 	 	]								//0
+		 	 }
+		 };		 	 		 	 	 			 		 	 		 		 		 		 	 			 		 	 		 		 		 		 	 			 	
+end
+
+Record myErrorPSB11 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0
+	pcb3 IO_PCBRecord 	;					//1 The complex property "PCB" is required for every item in a PSBRecord.
+	pcb4 IO_PCBRecord 						//0
+		{@PCB {pcbType = TP }};				//0	
+	pcb5 IO_PCBRecord ;						//1 The complex property "PCB" is required for every item in a PSBRecord.
+	pcb6 char(4) 	 ;						//2 The complex property "PCB" is required for every item in a PSBRecord.|All items in a PSBRecord must typedef to a fixed record
+	pcb7 char(4)[3]							//2 Arrays are not allowed in records with a subtype of PSBRecord|All items in a PSBRecord must typedef to a fixed record
+		{@PCB {pcbType = TP }};				//0	
+	pcb8 DB_PCBRecord[3]					//1 Arrays are not allowed in records with a subtype of PSBRecord
+		{@PCB {pcbType = DB }};				//0			
+end
+
+Record myErrorPSB12 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	10 pcb1 IO_PCBRecord 					//1 Level numbers are not allowed in records of subtype
+		{@PCB {pcbType = TP }};				//0
+	10 pcb2 IO_PCBRecord 					//1 Level numbers are not allowed in records of subtype
+		{@PCB {pcbType = TP }};				//0	
+end
+
+Record myErrorPSB13 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 myIO_PCBRecord 					//0
+		{@PCB {pcbType = TP }};				//0
+	pcb2 myIO_PCBItem 	 					//1 All items in a PSBRecord must typedef to a fixed record
+		{@PCB {pcbType = TP }};				//0	
+end
+
+Record myErrorPSB14 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 myIO_PCBRecord 					//0
+		{@PCB {pcbType = TP }};				//0
+	pcb2 DB_PCBRecord	 					//0
+		{@PCB {pcbType = DB }};				//0	
+end
+Record myErrorPSB15 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 myIO_PCBRecord 					//0
+		{@PCB {pcbType = TP }};				//0
+	pcb2 DB_PCBRecord	 					//1 The properties pcb and redefines cannot both be specified
+		{@PCB {pcbType = DB },				//0
+		redefines = pcb1};				//1	
+end
+
+Record myErrorPSB16 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	iopcb myIO_PCBRecord 					//0
+		{@PCB {pcbType = TP }};				//0
+	elaalt Alt_PCBRecord	 				//0
+		{@PCB {pcbType = TP }};				//0
+	elaexp Alt_PCBRecord	 				//0
+		{@PCB {pcbType = TP }};				//0
+	elawork DB_PCBRecord	 				//0
+		{@PCB {pcbType = DB }};				//0
+	elamsg DB_PCBRecord	 					//0
+		{@PCB {pcbType = DB }};				//0	
+end
+
+Record myErrorPSB17 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	elamsg Alt_PCBRecord	 				//1 PCBs named "elamsg" must be DB PCBs
+		{@PCB {pcbType = TP }};				//0
+	elawork Alt_PCBRecord	 				//1 PCBs named "elawork" must be DB PCBs
+		{@PCB {pcbType = TP }};				//0
+	elaexp DB_PCBRecord	 					//1 PCBs named "elaexp" must be TP PCBs
+		{@PCB {pcbType = DB }};				//0
+	elaalt DB_PCBRecord	 					//1 PCBs named "elaalt" must be TP PCBs	
+		{@PCB {pcbType = DB }};				//0
+	iopcb myIO_PCBRecord 					//1 PCBs named "iopcb" must be TP PCBs	
+		{@PCB {pcbType = DB }};				//0
+end
+
+Record myErrorPSB18 type PSBRecord 			//0
+	{defaultPSBName = "myname"}				//0
+	pcb1 myIO_PCBRecord 					//0
+		{@PCB {pcbType = TP }};				//0
+	pcb2 flexRecord	 						//1 All items in a PSBRecord must typedef to a fixed record.
+		{@PCB {pcbType = DB }};				//0	
+end
+
+Record flexRecord type basicRecord
+	item1 string;							//0
+	abc char(2);							//0
+end
+Record myIO_PCBRecord type basicRecord
+	10 item1 char(10);						//0
+	10 abc char(2);							//0
+end
+Dataitem myIO_PCBItem char(100)				//0
+end
+
+dataitem myitem char(10)	
+	 {@PCB									//1 The property PCB is not valid in this location.
+		 	{pcbType = DB,					//0
+		 	 hierarchy = 					//0
+		 	 	[ @Relationship	 			//0
+		 	 			{segmentRecord=seg1},//0
+		 	 	  @Relationship	 				//0
+		 	 			{segmentRecord=seg2,//0 
+		 	 			 parentRecord=seg1} //0
+		 	 	]								//0
+		 	 }
+		 }
+end
+
+//TODO
+//typedef to user record and pick up PCB info from there

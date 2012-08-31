@@ -1,0 +1,724 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG NO_ERROR
+
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end
+DataItem Name char(18) { dliFieldName ="NAME" } end
+
+Record CourseRec type DLISegment 
+{ segmentName="COURSE", keyItem=courseNo }
+	10 courseNo CourseNo;
+	10 title char(33);
+	10 desc char(220) { dliFieldName="DESCRIPN" };
+end
+
+Record PrerqRec type DLISegment { keyItem=courseNo }
+	10 courseNo CourseNo;
+	10 title char(33);
+end
+
+Record OfferingRec type DLISegment  { segmentName="OFFRNG" }
+	10 offerdate num(6) { dliFieldName="DATE" };
+	10 location char(12);
+	10 format_ char(2) { dliFieldName="FORMAT" };
+end
+
+Record TeacherRec type DLISegment 
+{ segmentName="TEACHER", keyItem=empNo }
+	10 empNo EmpNo;
+	10 name Name;
+end 
+
+Record StudentRec type DLISegment { segmentName="STUDENT" }
+	10 empNo EmpNo;
+	10 name Name;
+	10 grade char(1);
+end
+
+
+Record Course2 type DLISegment 
+{ segmentName="COURSE", keyItem=courseNo }
+	10 courseNo CourseNo;
+	10 title char(33);
+	10 desc char(220) { dliFieldName="DESCRIPN" };
+end
+
+Record Prereq2 type DLISegment { keyItem=courseNo }
+	10 courseNo CourseNo;
+	10 title char(33);
+end
+
+Record Offerng2 type DLISegment 
+	10 offerdate num(6) { dliFieldName="DATE" };
+	10 location char(12);
+	10 format_ char(2) { dliFieldName="FORMAT" };
+end
+
+Record Teacher2 type DLISegment 
+{ segmentName="TEACHER", keyItem=empNo }
+	10 empNo EmpNo;
+	10 name Name;
+end 
+
+Record Student2 type DLISegment { segmentName="STUDENT" }
+	10 empNo EmpNo;
+	10 name Name;
+	10 grade char(1);
+end
+
+Record EducationPSB type PSBRecord {defaultPSBName = "EDUCPSB"}
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};
+ altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};
+	coursePCB DB_PCBRecord { @PCB {
+	  pcbType=DB,
+	  pcbName="CPCB",
+	  hierarchy = [
+	   @Relationship{ segmentRecord=CourseRec },
+	   @Relationship{
+      segmentRecord=PrerqRec, parentRecord=CourseRec },   	   @Relationship{
+      segmentRecord=OfferingRec,parentRecord=CourseRec },  	   @Relationship{
+      segmentRecord=TeacherRec,parentRecord=OfferingRec},
+	   @Relationship{
+	     segmentRecord=StudentRec, parentRecord=OfferingRec}
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {
+	  pcbType=DB,
+	  pcbName="OPCB",
+	  secondaryIndex="XLOC",
+	  hierarchy = [
+	   @Relationship{ segmentRecord=OfferingRec },
+	   @Relationship{
+	     segmentRecord=CourseRec,parentRecord=OfferingRec},
+	   @Relationship{
+	     segmentRecord=TeacherRec,parentRecord=OfferingRec},
+	   @Relationship{
+	     segmentRecord=StudentRec,parentRecord=OfferingRec}
+	  ] }};
+end
+
+
+Program DLIMainProg( pcb1 int ) { 
+	@DLI { psb = edpsb, pcbParms = [ pcb1 ], callInterface=CBLTDLI } }
+  edpsb EducationPSB;
+  
+  function main()
+  		char4Var char(4);
+  		stringVar string;
+  		a, b, c int;
+  		
+  		EGLTDLI( char4Var, edpsb.offeringPCB );
+  		EGLTDLI( char4Var, edpsb.offeringPCB, a, b, c );
+ 		dliLib.EGLTDLI( char4Var, edpsb.offeringPCB );
+  		dliLib.EGLTDLI( char4Var, edpsb.offeringPCB, a, b, c );
+  		  		
+  		AIBTDLI( char4Var, stringVar );
+ 		AIBTDLI( char4Var, stringVar, a, b, c );
+  		dliLib.AIBTDLI( char4Var, stringVar );
+ 		dliLib.AIBTDLI( char4Var, stringVar, a, b, c );
+ 		
+ 		psbData.psbName = "dave"; 		
+ 		dliLib.psbData.psbName = "dave";    		
+  end
+end
+
+Record STUDENT type DLISegment  {
+  keyItem = EMPNO
+  }
+  3 EMPNO char(6) ; 
+  3 FIRSTNME char(12) ; 
+  3 MIDINIT char(1) ; 
+  3 LASTNAME char(15) ; 
+  3 GRADE char(1) ; 
+end   
+
+Record TEACHER type DLISegment  {
+  keyItem = EMPNO
+  }
+  3 EMPNO char(6) ; 
+  3 FIRSTNME char(12) ; 
+  3 MIDINIT char(1) ; 
+  3 LASTNAME char(15) ; 
+end   
+
+Record DESCRIPT type DLISegment  {
+  }
+  3 DESCLEN int ; 
+  3 DESCRIPT char(2000) ; 
+end
+
+Record OFFERING type DLISegment  {
+  keyItem=LOCATION
+  }
+  3 LOCATION char(10) ; 
+  3 ADDRESS char(100) ; 
+    4 LINE1 char(50) ; 
+    4 LINE2 char(50) ; 
+  3 CITY char(30) ; 
+  3 STATE char(2) ; 
+  3 COUNTRY char(30) ; 
+end
+
+Record MYDBPRG_WS type basicRecord
+  3 MYDBDNAME char(8) ; 
+  3 MYKEY char(256) ; 
+  3 MYKEYLEN int ; 
+  3 MYSEGLEVEL num(2) ; 
+  3 MYPROCOPTS char(4) ; 
+  3 MYSEGNAME char(8) ; 
+  3 MYSENSEGS int ; 
+  3 MYSTATCD char(2) ; 
+  3 MYCICSERR char(2) ; 
+  3 MYCICSCON char(2) ; 
+  3 MYCICSRST num(1) ; 
+  3 MYCITY char(30) ; 
+  3 MYGRADE char(1) ; 
+  3 MYFUNC char(4) ; 
+  3 MYPCBNUM smallint ; 
+  3 MYIOAREASIZE smallint ; 
+  3 MYIOAREA char(500) ; 
+  3 MYSSA char(100) ; 
+  3 MYCHKPTSIZE char(3) ; 
+  3 MYCHKPTID char(8) ; 
+  3 MYJID smallint ; 
+  3 MYPRID char(4) ; 
+  3 MYPRID_BIN int ; 
+  3 MYRECIP char(4) ; 
+end
+
+Record MYAUDITRCD type basicRecord
+  3 AUDIT_HEADER char(28) ; 
+    4 AUDIT_LENGTH smallint ; 
+    4 AUDIT_ID hex(4) ; 
+    4 * char(24) ; 
+  3 AUDIT_DATA char(100) ; 
+end
+
+Record COURSE type DLISegment  {
+  keyItem=COURSE
+  }
+  3 COURSE char(10) ; 
+  3 TITLE char(80) ;
+  3 xindxkey char(4); 
+end
+
+Record MYCREATXRCD type basicRecord
+  3 CREATX_LENGTH smallint ; 
+  3 CREATX_TRXID char(8) ; 
+  3 CREATX_DATA char(100) ; 
+end
+
+Function MYDBPRG_ADD()
+  add STUDENT ;
+end
+
+Function MYDBPRG_MAIN()
+  MYDBPRG_ADD();
+  MYDBPRG_INQUIRY();
+  MYDBPRG_SCAN_GN();
+  MYDBPRG_SCAN_GN2();
+  MYDBPRG_SCAN_GHN();
+  MYDBPRG_SCAN_GNP();
+  MYDBPRG_SCAN_GHNP();
+  MYDBPRG_UPDATE();
+  MYDBPRG_REPLACE();
+  MYDBPRG_DELETE();
+
+  MYDBPRM_ADD();
+  MYDBPRM_INQUIRY();
+  MYDBPRM_SCAN_GN();
+  MYDBPRM_SCAN_GHN();
+  MYDBPRM_SCAN_GNP();
+  MYDBPRM_SCAN_GHNP();
+  MYDBPRM_UPDATE();
+  MYDBPRM_REPLACE();
+  MYDBPRM_DELETE();
+
+  MYDLI_EZEDLWORDS();
+  MYDLI_SERVICES();
+  MYDLI_CALLSTMTS();
+end
+
+Function MYDLI_EZEDLPCB()
+  /* source on assignment or move*/
+  DLIIOPCB.IOPCB = psb.iopcb; /* DLIIOPCB.VAGen_IOPCB = psb.iopcb;*/
+  IOPCB = pdb.iopcb; /* VAGen_.IOPCB = psb.iopcb;*/
+  DLIALPCB.ALPCB = psb.pcb1; /* DLIALPCB.ALPCB = psb.pcb1;*/
+  ALPCB = psb.pcb1; /* ALPCB = psb.pcb1;*/
+  DLIALPCB.ALPCB = psb.pcb1; /* DLIALPCB.ALPCB = psb.pcb1;*/
+  ALPCB = psb.pcb1; /* ALPCB = psb.pcb1;*/
+  DLIDBPCB.DBPCB = psb.pcb20; /* DLIDBPCB.DBPCB = psb.pcb20;*/
+  DBPCB = psb.pcb20; /* DBPCB = psb.pcb20;*/
+  DLIGSPCB.GSPCB = psb.pcb355; /* DLIGSPCB.GSPCB = psb.pcb355;*/
+  GSPCB = psb.pcb355; /* GSPCB = psb.pcb355;*/
+
+  /* argument on a CALL  -- all convert to psb.iopcb*/
+  call PRGX0 (psb.iopcb, ANOTHER_ITEM);
+  call PRGY0 (ANOTHER_ITEM, psb.iopcb, ASECOND_ITEM);
+  call PRGZ0 (ANOTHER_ITEM, psb.iopcb);
+
+  /* argument on a CALL  -- all convert to psb.pcb1*/
+  call PRGX1 (psb.pcb1, ANOTHER_ITEM);
+  call PRGY1 (ANOTHER_ITEM, psb.pcb1, ASECOND_ITEM);
+  call PRGZ1 (ANOTHER_ITEM, psb.pcb1);
+  call PRGX1 (psb.pcb1, ANOTHER_ITEM);
+  call PRGY1 (ANOTHER_ITEM, psb.pcb1, ASECOND_ITEM);
+  call PRGZ1 (ANOTHER_ITEM, psb.pcb1);
+
+  /* argument on a CALL -- all convert to psb.pcb20*/
+  call PRGX0 (psb.pcb20, ANOTHER_ITEM);
+  call PRGY0 (ANOTHER_ITEM, psb.pcb20, ASECOND_ITEM);
+  call PRGZ0 (ANOTHER_ITEM, psb.pcb20);
+
+  /* argument on a CALL -- all convert to psb.pcb355*/
+  call PRGX0 (psb.pcb355, ANOTHER_ITEM);
+  call PRGY0 (ANOTHER_ITEM, psb.pcb355, ASECOND_ITEM);
+  call PRGZ0 (ANOTHER_ITEM, psb.pcb355);
+
+end
+
+Function MYDLI_CALLSTMTS()
+  call "PGMB" (psb.psbData.PsbName);
+  call "PGMC" (psb.iopcb, psb.pcb1);
+  call "PGMD" (psb.pcb1);
+end 
+
+Function MYDBPRG_UPDATE()
+  get STUDENT forUpdate ;
+end 
+
+Function MYDBPRM_SCAN_GHNP()
+  get next STUDENT ;
+end 
+
+Function MYDBPRG_INQUIRY()
+  get STUDENT ;
+end 
+
+Function MYDBPRG_SCAN_GHN()
+  get next STUDENT ;
+end 
+
+Function MYDBPRG_SCAN_GNP()
+  get next STUDENT ;
+end 
+
+Function MYDBPRM_SCAN_GN()
+  get next STUDENT ;
+end 
+
+Function MYDLI_SERVICES()
+  /* CSPTDLI - no way to know type of DLI call for migration*/
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+
+
+  /* CALL AUDIT - jid ignored for ims gen*/
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+  sysLib.audit(MYAUDITRCD);
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+  sysLib.audit(MYAUDITRCD, MYJID);
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+
+  /* CALL CREATX - prid and recip ignored for ims gen*/
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+  vgLib.startTransaction(MYCREATXRCD);
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+  vgLib.startTransaction(MYCREATXRCD, MYPRID);
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+  vgLib.startTransaction(MYCREATXRCD, MYPRID, MYRECIP);
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+  vgLib.startTransaction(MYCREATXRCD, MYPRID_BIN);
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+  VAGen_EZEREPLY = VGVar.handleSysLibraryErrors;	  
+  VGVar.handleSysLibraryErrors = 0;		
+  vgLib.startTransaction(MYCREATXRCD, MYPRID_BIN, MYRECIP);
+  VGVar.handleSysLibraryErrors = VAGen_EZEREPLY;		
+  
+end 
+
+Function MYDBPRG_REPLACE()
+  replace STUDENT ;
+end 
+
+Function MYDLI_EZEDLPSB()
+  /* source of assignment, move or movea  -- convert to psb.psbData.psbName*/
+  MYPSB = psb.psbData.psbName;
+  MYPSB = psb.psbData.psbName;
+  move psb.psbData.psbName to MYPSB_ARRAY[1] for all;
+
+  /* target of assignment or move -- convert to psb.psbData.psbName*/
+  psb.psbData.psbName = "ABCDEFGH";
+  psb.psbData.psbName = "ABCDEFGH";
+
+  /* IF, WHILE, TEST -- convert to psb.psbData.psbName*/
+  if (psb.psbData.psbName == "ABCDEFGH")
+  end
+  if ((psb.psbData.psbName == "ABCDEFGH"))
+  end
+  while ("ABCDEFGH" == psb.psbData.psbName)
+  end
+  while (("ABCDEFGH" == psb.psbData.psbName))
+  end
+  if (psb.psbData.psbName is blanks)
+    TRUEFNCT();
+  else
+    FALSEFNCT();
+  end
+  if (psb.psbData.psbName is blanks)
+  else
+    FALSEFNCT();
+  end
+
+  /* argument on a CALL  -- convert to psb.psbData*/
+  call PRGX (psb.psbData.psbName, ANOTHER_ITEM);
+  call PRGY (ANOTHER_ITEM, psb.psbData.psbName, ASECOND_ITEM);
+  call PRGZ (ANOTHER_ITEM, psb.psbData.psbName);
+
+end 
+
+Function MYDBPRC_MAIN()
+  /* No op*/
+end 
+
+Function MYDBPRG_SCAN_GHNP()
+  get next STUDENT ;
+end 
+
+Function MYDBPRG_DELETE()
+  delete STUDENT ;
+end 
+
+Function MYDBPRM_INQUIRY()
+  get STUDENT ;
+end 
+
+Function MYDBPRM_UPDATE()
+  get STUDENT forUpdate ;
+end 
+
+Function MYDBPRM_DELETE()
+  delete STUDENT ;
+end 
+
+Function MYDLI_EZEDLWORDS()
+  dliVar.handleHardDLIErrors = 1; /* handleHardDLIIOErrors*/
+
+
+  MYKEY = dliVar.keyArea[1:dliVar.keyAreaLen];
+  MYKEYLEN = dliVar.keyAreaLen;
+  MYSEGLEVEL = dliVar.segmentLevel;
+  MYPROCOPTS = dliVar.procOptions;
+  MYSEGNAME = dliVar.SegmentName;
+  MYSENSEGS = dliVar.numSensitiveSegs;
+  MYSTATCD = dliVar.statusCode;
+
+  MYCICSERR = dliVar.cicsError;
+  MYCICSCON = dliVar.cicsCondition;
+  MYCICSRST = dliVar.cicsRestart;
+end 
+
+Function MYDBPRM_ADD()
+  add STUDENT ;
+end 
+
+Function MYDBPRM_SCAN_GNP()
+  get next STUDENT ;
+end 
+
+Function MYDBPRM_SCAN_GHN()
+  get next STUDENT ;
+end 
+
+Function MYDBPRM_REPLACE()
+  replace STUDENT ;
+end 
+
+Function MYDBPRG_SCAN_GN3()
+  if (STUDENT is duplicate)
+  end
+  if (STUDENT is unique)
+  end
+  get next STUDENT ;
+end 
+
+Function MYDBPRG_SCAN_GN2()
+  set STUDENT position;
+  get next STUDENT ;
+end 
+
+Function MYDBPRG_SCAN_GN()
+  get next STUDENT ;
+end 
+
+Program MYDBPRS type basicProgram 
+  (
+    psbData PSBDataRecord 
+  )
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no,
+  @DLI {
+         psb = psb, callInterface = CBLTDLI,
+         handleHardDLIErrors = yes
+       }
+  }
+
+  
+  MYDBPRG_WS MYDBPRG_WS; 
+  MYAUDITRCD MYAUDITRCD; 
+  MYCREATXRCD MYCREATXRCD; 
+  
+  VAGen_EZESYS char(8);
+  VAGen_EZEREPLY num(1);
+  VAGen_EZE_WAIT_TIME bin(9,2);
+  VAGen_EZE_ITEMLEN bin(9,2);
+
+  
+  psb MYDBPSB ;
+
+  function main()
+    
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    MYDBPRC_MAIN: MYDBPRC_MAIN();
+  end 
+end 
+
+Program MYDBPRG type basicProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no,
+  @DLI {
+         psb = psb, callInterface = CBLTDLI,
+         handleHardDLIErrors = yes
+       }
+  }
+
+  
+  MYDBPRG_WS MYDBPRG_WS; 
+  MYAUDITRCD MYAUDITRCD; 
+  MYCREATXRCD MYCREATXRCD; 
+  STUDENT STUDENT; 
+  course course;
+  offering offering;
+  
+  VAGen_EZESYS char(8);
+  VAGen_EZEREPLY num(1);
+  VAGen_EZE_WAIT_TIME bin(9,2);
+  VAGen_EZE_ITEMLEN bin(9,2);
+
+  
+  psb MYDBPSB ;
+
+  function main()
+    
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    MYDBPRG_MAIN: MYDBPRG_MAIN();
+  end 
+end 
+
+Program MYDBPRC type basicProgram 
+  (
+    pcb3 DB_PCBRecord, 
+    pcb0 IO_PCBRecord
+  )
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no,
+  @DLI {
+         psb = psb, callInterface = CBLTDLI,
+         handleHardDLIErrors = yes,
+         pcbParms = /*["pcb0", "pcb0", "", "pcb3", "", ""]*/[pcb0, pcb0, pcb3]
+       }
+  }
+
+  
+  MYDBPRG_WS MYDBPRG_WS; 
+  MYAUDITRCD MYAUDITRCD; 
+  MYCREATXRCD MYCREATXRCD; 
+  
+  VAGen_EZESYS char(8);
+  VAGen_EZEREPLY num(1);
+  VAGen_EZE_WAIT_TIME bin(9,2);
+  VAGen_EZE_ITEMLEN bin(9,2);
+
+  
+  psb MYDBPSB ;
+
+  function main()
+    
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    MYDBPRC_MAIN: MYDBPRC_MAIN();
+  end 
+end 
+
+Record MYDBPSB type PSBRecord
+  psbData  PSBDataRecord { @PCB { pcbType = PCBKind.TP } };  
+  iopcb  IO_PCBRecord  { @PCB { pcbType = PCBKind.TP } };
+  pcb0 IO_PCBRecord { redefines = iopcb};
+  pcb1 ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb2 ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  COURSE_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB,
+      hierarchy = [
+        @Relationship { segmentRecord=COURSE },
+        @Relationship { segmentRecord=OFFERING, parentRecord=COURSE },
+        @Relationship { segmentRecord=TEACHER, parentRecord=OFFERING },
+        @Relationship { segmentRecord=STUDENT, parentRecord=OFFERING }
+    ] } } ;
+  pcb3 DB_PCBRecord { redefines = COURSE_dbPCB };
+  COURSE2_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB, secondaryIndex = "XINDXKEY", secondaryIndexItem = "XINDXKEY",
+      hierarchy = [
+        @Relationship { segmentRecord=COURSE },
+        @Relationship { segmentRecord=DESCRIPT, parentRecord=COURSE }
+    ] } } ;
+  pcb4 DB_PCBRecord { redefines = COURSE2_dbPCB };
+  MYGSAM1_gsamPCB GSAM_PCBRecord
+    { @PCB { pcbType = PCBKind.GSAM } } ;
+  pcb5 GSAM_PCBRecord { redefines = MYGSAM1_gsamPCB };
+end
+
+Program MYDBPRG6 type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no,
+  @DLI { psb = psb, callInterface = DLICallInterfaceKind.CBLTDLI,
+         handleHardDLIErrors = yes }
+  }
+  STUDENT STUDENT6;
+  
+  psb MYDBPSB6 ;
+
+  function main()
+    MYDBPRG_MAIN: MYDBPRG_MAIN6();
+  end 
+end 
+
+Function MYDBPRG_MAIN6()
+  MYDBPRG_SCAN_GN36();
+end 
+
+Function MYDBPRG_SCAN_GN36()
+
+end 
+
+Record STUDENT6 type DLISegment  {
+  keyItem=EMPNO
+  }
+  3 EMPNO char(6) ; 
+  3 FIRSTNME char(12) ; 
+  3 MIDINIT char(1) ; 
+  3 LASTNAME char(15) ; 
+  3 GRADE char(1) ; 
+end   
+Record MYDBPSB6 type PSBRecord
+  iopcb  IO_PCBRecord  { @PCB { pcbType = PCBKind.TP } };
+  pcb0 IO_PCBRecord { redefines = iopcb};
+  pcb1 ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb2 ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  STUDENT_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB,
+      hierarchy = [
+        @Relationship { segmentRecord=STUDENT }
+    ] } } ;
+end  
+
+Record VAGen_#SEGNAM4 type DLISegment  {
+  segmentName = "#SEGNAM4" ,
+  keyItem=VAGen_CURRENT1
+  }
+  3 embed VAGen_#WSRRECD
+    { VAGen_#MYITEM1 { dliFieldName = "#MYITEM1" } ,
+      VAGen_@MYITEM2 { dliFieldName = "@MYITEM2" } ,
+      VAGen_CURRENT1 { dliFieldName = "CURRENT" }
+     } ;
+end
+
+Record VAGen_#WSRRECD type basicRecord
+  3 VAGen_#MYITEM1 char(3) ; 
+  3 VAGen_@MYITEM2 int ; 
+  3 VAGen_CURRENT1 char(3) ; 
+end
+
+//-----------------------------------------------------------------------------
+
+Record MYDBPSB2 type PSBRecord
+  iopcb  IO_PCBRecord  { @PCB { pcbType = PCBKind.TP } };
+  pcb0 IO_PCBRecord { redefines = iopcb};
+  pcb1 ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb2 ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+
+  VAGen_#RENAMED_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB, secondaryIndex = "#RENAMEI", secondaryIndexItem = "VAGen_#RENAMEI",
+      hierarchy = [
+        @Relationship { segmentRecord = VAGen_#RENAMES },
+        @Relationship { segmentRecord = VAGen_@RENAMEC, parentRecord = VAGen_#RENAMES }
+    ] } } ;
+  pcb6 DB_PCBRecord { redefines = VAGen_#RENAMED_dbPCB };
+
+  ELAWORK DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB } } ;
+  pcb7 DB_PCBRecord { redefines = ELAWORK };
+
+end
+
+Record VAGen_#RENAMES type DLISegment  {
+  segmentName = "#RENAMES" ,
+  keyItem=VAGen_#RENAMEI
+  }
+  3 VAGen_#RENAMEI char(6) { dliFieldName = "#RENAMEI" }; 
+  3 VAGen_#MYDATA char(12) { dliFieldName = "#MYDATA" }; 
+end
+
+Record VAGen_@RENAMEC type DLISegment  {
+  segmentName = "@RENAMEC" ,
+  keyItem=VAGen_@MYKEY
+  }
+  3 VAGen_@MYKEY char(6) { dliFieldName = "@MYEY" }; 
+  3 VAGen_@MYDATA char(12) { dliFieldName = "@MYDATA" }; 
+end
+
+Program Prog1 ( psbData PSBDataRecord ) {
+	@DLI { psbParm = psbData, psb = myPSB }  }
+	myPSB EducationPSB;
+	
+	function main() end
+end 

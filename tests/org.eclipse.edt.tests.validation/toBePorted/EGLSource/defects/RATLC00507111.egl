@@ -1,0 +1,27 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program exitOpenUI {I4GLItemsNullable=YES, LocalSQLScope=YES}
+
+FUNCTION main()
+   try 
+   	OpenUI new Menu{ labelText= "DELETE", menuItems=[] }
+   		onEvent (after_delete)
+		   	exit openUI;		//0
+			continue openUI;	//1
+   	end
+   onException (jex egl.core.AnyException)
+		exit openUI;		//1
+		continue openUI;	//2
+   end
+END 
+END

@@ -1,0 +1,253 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+delegate constDelegate(p1 int const) end
+delegate noconstDelegate(p1 int) end
+delegate fieldDelegate(p1 item1 field) end
+delegate nofieldDelegate(p1 item1) end
+
+// basic program
+//
+program pgm1 type BasicProgram {}
+	
+	const strConst string = "aaa";
+	const charConst char(5) = "aaaa";
+	const timeConst time = "5:43:32";
+	const intConst item1 = 333;
+	const timeConstArray time[] = ["5:43:32"];
+	const intConstArray item1[] = [1,2,3];
+	
+	constDelegate constDelegate;
+	noconstDelegate noconstDelegate;
+	fieldDelegate fieldDelegate;
+	nofieldDelegate nofieldDelegate;
+	
+	function misMatched()
+		constDelegate = constFunction;	//0
+		constDelegate = noconstFunction; //1
+		noconstDelegate = constFunction; //1
+		noconstDelegate = noconstFunction; //0
+		
+		fieldDelegate = fieldFunction; //0
+		fieldDelegate = nofieldFunction; //1
+		nofieldDelegate = fieldFunction; //1
+		nofieldDelegate = nofieldFunction; //0
+	
+	end
+	
+	function constFunction(p1 item1 const)
+	end
+
+	function noconstFunction(p1 item1)
+	end
+	
+	function fieldFunction(p1 item1 field)
+	end
+
+	function nofieldFunction(p1 item1)
+	end
+	
+	function main()
+		
+		f1(3, 4);
+		
+		constFunct(	//0  
+			strConst, //0
+			charConst, //0
+			timeConst, //0
+			intConst, //0
+			timeConstArray, //0
+			intConstArray);	//0
+	  
+
+		varFunct(	//0  
+			strConst, //0
+			charConst, //0
+			timeConst, //1
+			intConst, //0
+			timeConstArray, //0
+			intConstArray);	//0
+			
+		constFunct (
+			"abc",     //0
+			"def",	//0
+			"05:35:33",	//0
+			4,	//0
+			null,	//0
+			[1, 3]	//0
+		);
+
+		constFunctIn (
+			"abc",     //0
+			"def",	//0
+			"05:35:33",	//0
+			4,	//0
+			null,	//0
+			[1, 3]	//0
+
+		);
+	end
+	
+	function constFunct(  //0
+		p1 string const,	//0
+		p2 char(5) const,	//0
+		p3 time const,	//0
+		p4 item1 const,	//0
+		p5 time[] const,	//0
+		p6 item1[] const	//0
+	)
+	end
+
+	function constFunctIn(  //0
+		p1 string const in,	//0
+		p2 char(5) const in,	//0
+		p3 time const in,	//0
+		p4 item1 const in,	//0
+		p5 time[] const in,	//0
+		p6 item1[] const	in //0
+	)
+	end
+	
+	function varFunct(
+		p1 string ,	//0
+		p2 char(5) ,	//0
+		p3 time ,	//0
+		p4 item1 ,	//0
+		p5 time[] ,	//0
+		p6 item1[] 	//0
+	)
+	end
+	
+	function test10(p10 item1 const in, parr item1[] const in) 
+		test11(p10); //1    
+		test12(p10); //0
+		
+		p10 = 3;  //1
+		
+		move 3 to p10; //1  
+		
+		parr[3] = 3;  //0
+		parr = null; //1
+		
+	end
+	
+	
+	function test11(p11 item1 out)
+	end
+
+	function test12(p12 item1 const)
+	end
+	  
+
+	function f1(p1 item1 const, p2 item1) //0
+	end
+	
+	function f2(
+			p1 item1 const in,       //0
+			p2 item1 const inout,		//0
+			p3 item1 const,			//0
+			p4 item1 const out		//1     
+			)
+	end
+	
+	function f3 (
+		p0 item1 const in, //0
+		p1 item1 const in,  //0
+		p2 item1[] const in, //0
+		p3 item1[][] const in, //0
+		p4 any const in,  //0
+		p5 dictionary const in  //1
+		)
+	end
+
+	function f4 (
+		p0 item1 const inout, //0
+		p1 item1 const inout,  //0
+		p2 item1[] const inout, //0
+		p3 item1[][] const inout, //0
+		p4 any const inout,  //0
+		p5 dictionary const inout  //1
+		)
+	end
+
+	function f5 (
+		p0 item1 const, //0
+		p1 item1 const ,  //0
+		p2 item1[] const , //0
+		p3 item1[][] const , //0
+		p4 any const ,  //0
+		p5 dictionary const   //1
+		)
+	end
+	
+	function f6 (
+		p0 item1 field const,    //1
+		p1 item1 sqlnullable const //0
+	)
+	end
+		
+end
+
+DataItem item1 int end
+
+externalType et1 type JavaObject
+    
+	constructor (
+		p1 item1 const in, //1
+		p2 item1 in  //0
+	);
+
+	function f1 (
+		p1 item1 const in, //1
+		p2 item1 in  //0
+	); 
+end
+
+
+
+
+// native library
+library nlib1 type NativeLibrary {callingConvention = I4GL, dllname = "dllname"}
+	
+	function nativeFunc(
+		p1 item1 const,  //1
+		p2 item1			//0
+		) {}
+	end
+	
+end
+
+
+
+// service
+service serv1 {}
+	
+	
+	    
+	function f1(
+		p1 item1 const,  //1  
+		p2 item1			//0
+	)
+	end
+	
+end
+
+
+interface interf1
+
+	function f1(
+		p1 item1 const,  //1
+		p2 item1			//0
+	);
+	
+
+end

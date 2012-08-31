@@ -1,0 +1,33 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Record validationCheckUir type VGUIRecord
+    8 * char(6) ;
+        10 inputRequired char(5) {
+            validatorFunction = runAtProgramTwo
+        };
+        10 inputRequiredFlag char(1);
+end
+
+function runAtProgramTwo() end
+
+program pgm1 {
+	allowUnqualifiedItemReferences = yes
+}
+	rec validationCheckUir;
+
+	function main()
+		inputRequired = "xx";
+		inputRequiredFlag = "xx";
+	end	
+end

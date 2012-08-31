@@ -1,0 +1,151 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+function Xaddfunc ()
+		course Course;
+		add course; // 2 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		
+end
+
+Library MyLib {includereferencedfunctions = yes}
+	alibrec sqlrec;
+
+function addfunc ()
+		course Course;
+		coursePCB DB_PCBRecord;
+		courses Course[]; 
+		add course; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		Xaddfunc();
+end
+end
+
+
+Program MyProjXXX {includereferencedfunctions = yes}
+	 
+	function main()
+	Xaddfunc();
+	end
+end
+
+Program MyProj (pcb1 int) {@DLI { psb = psb, 					 
+         handleHardDLIErrors = yes,
+         pcbParms =/*["", "pcb1", "pcb2", "",""]*/[pcb1, pcb2] }
+         // when called from APPLA_valid pcb1 is pcbC1 and receives pcbA3 
+         //							     pcb2 is pcbC2 and receives pcbA5
+         // when called from APPLB_valid pcb1 is pcbC1 and receives pcbB4 
+         //							     pcb2 is pcbC2 and receives pcbB1
+         // this program cannot use pcbC3 or pcbC4 
+  }
+	 
+	function main()
+		course Course;
+		coursePCB DB_PCBRecord;
+		sqlRec sqlRec;
+		sqlrec2 sqlrec;
+		courses Course[]; 
+		sqlrecs sqlrec[];
+		indxrec IndxRecord;
+		mqrec MQRec;
+		relrec relrecord;
+		srec	srecord;
+		name string;
+		course2 Course;
+		sqlflex sqlRecFLEX;
+		
+		add course usingPCB pcb11;// 1 The usingPCB item must be defined in the program PSB 
+		add course usingPCB pcb1;// 0
+		add sqlRec; // 0
+		add sqlRec, sqlrec2; // 1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable {7869}
+		add indxrec;// 0
+		add mqrec ;// 0
+		add relrec;// 0
+		add srec;// 0
+		add courses; // 0
+		add course; // 0
+		add course with #dli{ ISRT COURSE }; // 0
+		add sqlflex; // 0			
+		add course with #dli{}; // 1 A modified DL/I call be must be specified {7898}
+
+		add sqlrecs;
+		add course with #sql{};	// 2 The ADD SQL statement cannot be empty | with sql clause is only allowed when the add statement target is an SQL record variable
+		add name; // 1 Invalid target name. The target of an add statement must be an SQL, MQ, indexed, serial, DL/I segment, or relative record variable or SQL record array, or DL/I segment record array {6639}
+		add sqlRec with #sql{insert into a (b) values :"ss"};	// 0 
+		add sqlRecs with #sql{insert into a (b) values :"ss"};	// 1 A with sql clause is only allowed when the add statement target is an SQL record variable {6640}
+		add indxrec with #sql{insert into a (b) values :"ss"};	// 1 A with sql clause is only allowed when the add statement target is an SQL record variable {6640} 
+		add mqrec with #sql{insert into a (b) values :"ss"};	// 1 A with sql clause is only allowed when the add statement target is an SQL record variable {6640} 
+		add relrec with #sql{insert into a (b) values :"ss"};	// 1 A with sql clause is only allowed when the add statement target is an SQL record variable {6640} 
+		add srec with #sql{insert into a (b) values :"ss"};	// 1 A with sql clause is only allowed when the add statement target is an SQL record variable {6640}
+		add course with #sql{insert into a (b) values :"ss"};	// 1 A with sql clause is only allowed when the add statement target is an SQL record variable {6640}
+		
+		add sqlRec with #dli{ ISRT COURSE }; // 1 The with #dli clause is only valid when the target record is a DL/I segment record variable {7870}
+		add indxrec with #dli{ ISRT COURSE }; // 1 The with #dli clause is only valid when the target record is a DL/I segment record variable {7870}
+		add mqrec with #dli{ ISRT COURSE }; // 1 The with #dli clause is only valid when the target record is a DL/I segment record variable {7870}
+		add relrec with #dli{ ISRT COURSE };// 1 The with #dli clause is only valid when the target record is a DL/I segment record variable {7870}
+		add srec with #dli{ ISRT COURSE }; // 1 The with #dli clause is only valid when the target record is a DL/I segment record variable {7870}
+		add srec with #dli{}; // 2 A modified DL/I call be must be specified | The with #dli clause is only valid when the target record is a DL/I segment record variable {7870}
+	end
+end
+
+Program My2Proj  
+	 
+	function main()
+		course Course;
+		course2 Course;
+		coursePCB DB_PCBRecord;
+		courses Course[]; 
+
+		add courses; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		add course; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		add course with #dli{ ISRT COURSE }; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		add course with #dli{}; // 2 A modified DL/I call be must be specified  | DL/I I/O is not allowed unless the program specifies the DLI and PSB properties{7898}
+
+	end
+end
+
+program uselibprog
+use MyLib;
+function main()
+	add MyLib.alibrec;// 1 I/O operations on records declared in used libraries are not permitted	{6170,EGLMESSAGE_USED_LIBRARY_RECORD_USED_FOR_IO}
+	add alibrec;// 1 I/O operations on records declared in used libraries are not permitted	{6170,EGLMESSAGE_USED_LIBRARY_RECORD_USED_FOR_IO}
+end
+end
+
+
+
+
+
+
+Record Course type DLISegment end
+Record sqlRec type sqlRecord
+	10 item1 int;
+end
+
+Record sqlRecFLEX type sqlRecord
+	item1 int;
+end
+
+
+Record IndxRecord type indexedrecord { filename = "myfile",keyitem = "item1"}
+	10 item1 int;
+end
+
+record MQRec type MQRecord { queuename = "www"}
+10 item1 int;
+end
+
+record relrecord type relativerecord { filename = "myfile",keyitem = "item1"}
+10 item1 int;
+end
+
+record srecord type serialrecord{ filename = "myfile"}
+10 item1 int;
+end

@@ -1,0 +1,43 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm {I4GLItemsNullable=yes}
+	function main()
+		abc string;
+		
+		if (abc[7:8] == null || abc[7:8] != NULL )	//0
+		end
+		
+		if(myFunc() == null)							//0
+		end
+		
+		if(myFunc() is trunc)							//1  Function invocations cannot be used in an is or not condition.
+		end
+		
+		if (abc[7:8] IS BLANKS || abc[7:8] NOT BLANKS )	//0
+		end
+		
+		sqlRec sqlRec;
+		
+		if (sqlRec.sqlItem[7:8] IS TRUNC || sqlRec.sqlItem[7:8] NOT TRUNC )	//2 Substring expressions may not be tested for trunc|Substring expressions may not be tested for trunc
+		end
+		
+		if (sqlRec.sqlItem IS TRUNC || sqlRec.sqlItem NOT TRUNC )	//0
+		end
+	end
+	
+	function myFunc() returns (int) end
+end
+
+Record sqlRec type sqlRecord
+	sqlItem string;
+end

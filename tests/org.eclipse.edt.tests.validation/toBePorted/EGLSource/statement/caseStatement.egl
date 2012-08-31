@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record point
+	x int;
+	y int;	
+end
+
+program pgm
+
+function main ()
+	i int;
+	pt point;
+	i = 5;
+	case (i) // 0
+		when (5)
+		when ( pt{x=1, y=2}) // 1 A set values block is not allowed in a when expression {7514, EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_WHEN_CLAUSE}
+	
+	end
+	
+	case //0
+		when (i < 6)
+		when (ConverseVar.eventKey is PF3) //0
+		when (ConverseVar.eventKey is BLA) //2 BLA is an invalid Event Key value. It must be one of following: enter, bypass, pa(#1-3), pf(#1-24), pakey, or pfkey	 {5164, EGLMESSAGE_INVALID_EVENT_KEY_VALUE}
+		when (sysVar.systemType is zosbatch) //0
+		when (sysVar.systemType is BLA) // 1 BLA is an invalid System Type value. It must be one of following: debug, iseriesc, zosbatch, zoscics, aix, iseriesj, linux, uss, win, hpux, solaris, imsvs, imsbmp		 {5165, EGLMESSAGE_INVALID_SYSTEM_TYPE_VALUE}
+	end
+	
+	case (sysVar.systemType)
+		when (zosbatch )//0
+		when (BLA ) // 1 BLA is an invalid System Type value. It must be one of following: debug, iseriesc, zosbatch, zoscics, aix, iseriesj, linux, uss, win, hpux, solaris, imsvs, imsbmp		 {5165, EGLMESSAGE_INVALID_SYSTEM_TYPE_VALUE}
+	end
+	
+	case (ConverseVar.eventKey)
+		when (PF3 )//0
+		when (BLA ) //1 BLA is an invalid Event Key value. It must be one of following: enter, bypass, pa(#1-3), pf(#1-24), pakey, or pfkey	 {5164, EGLMESSAGE_INVALID_EVENT_KEY_VALUE}
+	end
+		
+	case (i) 
+		when (i < 5) // 0
+			
+	end
+	
+	case (i) 
+		when (i + 5, 7) // 0
+	end
+	case  
+		when (i < 5, 5) // 0
+	end
+	
+	case ( pt{x=1, y=2}) // 1 A set values block is not allowed in a criterion for a case statement	 {7513, EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_CASE_CRITERION}
+	when (5)
+	end
+	
+	case ( pt.x) //0
+	when (5)
+	end
+	
+	myint int;
+	case 					//0
+		when (myint)		//0
+		otherwise
+	end
+end
+end
+
+
+

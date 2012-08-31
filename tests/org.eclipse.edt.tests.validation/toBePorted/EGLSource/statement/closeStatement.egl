@@ -1,0 +1,90 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validate:
+// 1 The variable access {1} is ambiguous. {6620, EGLMESSAGE_VARIABLE_ACCESS_AMBIGUOUS}
+// 1 {1} cannot be resolved. {6619, EGLMESSAGE_VARIABLE_NOT_FOUND}
+// 1 Invalid identifier {1}. The target of a close statement must be a printform, an SQL, MQ, indexed, relative, or serial record variable, or a result set identifier. {6659, EGLMESSAGE_INVALID_CLOSE_TARGET}
+
+Program MyProj  {@DLI { psb = "psb", 					 
+         handleHardDLIErrors = yes,
+         pcbParms =["", "pcb1", "pcb2", "",""] }	
+         // when called from APPLA_valid pcb1 is pcbC1 and receives pcbA3 
+         //							     pcb2 is pcbC2 and receives pcbA5
+         // when called from APPLB_valid pcb1 is pcbC1 and receives pcbB4 
+         //							     pcb2 is pcbC2 and receives pcbB1
+         // this program cannot use pcbC3 or pcbC4 
+  }
+	use fg;
+
+	function main()
+				sqlRec sqlRec;
+				sqlrecs sqlRec[];
+		indxrec IndxRecord;
+		mqrec MQRec;
+		relrec relrecord;
+		srec	srecord;
+		name string;
+		myany any;
+		course Course;	
+		close course;	// 1 Invalid identifier course. The target of a close statement must be a printform, an SQL, MQ, indexed, relative, or serial record variable, or a result set identifier {6659}
+		close name; // 1 Invalid identifier name. The target of a close statement must be a printform, an SQL, MQ, indexed, relative, or serial record variable, or a result set identifier {6659}
+		close myany; // 1 Invalid identifier myany. The target of a close statement must be a printform, an SQL, MQ, indexed, relative, or serial record variable, or a result set identifier {6659}
+		close sqlrecs; // 1 Invalid identifier sqlrecs. The target of a close statement must be a printform, an SQL, MQ, indexed, relative, or serial record variable, or a result set identifier {6659}
+		close sqlRec; // 0
+		close indxrec;// 0
+		close mqrec ;// 0
+		close relrec;// 0
+		close srec;// 0
+		close myprintform;	//0
+		open resultsetid for sqlRec;
+//		close resultsetid;// 0
+	end
+end
+
+Program webPgm type vgwebtransaction
+	use fg;
+
+	function main()
+		close myprintform;	//1 The target of a close statement cannot be a PrintForm in a web transaction
+	end
+end
+
+Formgroup fg
+	Form myprintform type printform end
+end
+
+
+Record Course type DLISegment end
+Record sqlRec type sqlRecord
+	10 item1 int;
+end
+
+Record sqlRecFLEX type sqlRecord
+	item1 int;
+end
+
+
+Record IndxRecord type indexedrecord { filename = "myfile",keyitem = "item1"}
+	10 item1 int;
+end
+
+record MQRec type MQRecord { queuename = "www"}
+10 item1 int;
+end
+
+record relrecord type relativerecord { filename = "myfile",keyitem = "item1"}
+10 item1 int;
+end
+
+record srecord type serialrecord{ filename = "myfile"}
+10 item1 int;
+end

@@ -1,0 +1,27 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler Page1 type JSFHandler { onPageLoadFunction = func1 }
+	item1 string ;
+	item2 matchValidTableChecVal;
+	
+	function func1()
+    end	
+end
+
+DataItem matchValidTableChecVal unicode(10) {
+	displayName = "Match valid table check",
+	displayUse = input,
+	validatorDataTable = matchValidTableChecVal,	//1 The value matchValidTableChecVal for property validatorDataTable must resolve to a data table.
+	validatorDataTableMsgKey = "206"
+}
+end

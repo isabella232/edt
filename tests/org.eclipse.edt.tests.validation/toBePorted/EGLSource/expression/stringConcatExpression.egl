@@ -1,0 +1,32 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main() end
+	
+	function func()
+		thing any;
+		
+// validate:
+		thing = "a" + red;				//1 The element red is not valid for use in the expression.
+		str string = "A" + [1,2];		//1 not compatible types
+		thing = "a" + #sqlcondition{};	//1
+		thing = "A" + 1;				//0
+
+// validate (1):		
+		thing = "a" + noReturnsFunction(); 	//1 must return a type.  {6654*, FUNCTION_MUST_RETURN_TYPE}
+		thing = "a" + returnsAnyFunction();	//0
+	end
+	
+	function noReturnsFunction() end
+	function returnsAnyFunction() returns(any) end
+end

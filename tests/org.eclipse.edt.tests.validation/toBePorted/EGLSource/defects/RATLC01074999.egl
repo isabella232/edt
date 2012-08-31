@@ -1,0 +1,413 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+// Original note in defect:
+//
+// Should prevent all je22lib, all javalib, all vglib system functions and
+// syslib.seterror, syslibstarttransaction, mathlib.round, mathlib.frexp, and
+// mathlib.ldexp from being used in expressions and from taking expressions as
+// arguments (except for one flavor of round). Java is not prepared to handle these yet.
+//
+// Added by Alice Connors:
+//
+// The only mathLib system functions that can be used in expressions are
+// stringAsDecimal, stringAsFloat, and stringAsInt.
+
+handler RATLC01074999 type JSFHandler
+
+	function anyParmFunc( p1 any in ) returns(any) end
+
+	function main()
+		thing any;
+		charVar char(8);
+		char18Var char(18);
+		stringVar string;
+		numberVar int;
+		
+		//----------------------------------------
+		// Prevent from use in expression:
+		//----------------------------------------
+
+		thing = thing as string + j2eeLib.clearRequestAttr(charVar); // 1
+		thing = thing as string + j2eeLib.clearSessionAttr(charVar); // 1
+		thing = thing as string + j2eeLib.getRequestAttr(charVar, charVar); // 1
+		thing = thing as string + j2eeLib.getSessionAttr(charVar, charVar); // 1
+		thing = thing as string + j2eeLib.setRequestAttr(charVar, ""); // 1
+		thing = thing as string + j2eeLib.setSessionAttr(charVar, ""); // 1
+		thing = thing as string + javaLib.invoke(stringVar, stringVar, charVar as "java:char"); // 0
+		thing = thing as string + javaLib.store( stringVar as "objid:java", stringVar, stringVar, charVar); // 1
+		thing = thing as string + javaLib.StoreNew( stringVar as "objid:java", stringVar, charVar); // 1
+		thing = thing as string + javaLib.getField(stringVar, stringVar); // 0
+		thing = thing as string + javaLib.setField(stringVar, stringVar, charVar as "objid:java"); // 1
+		thing = thing as string + javaLib.storeField( stringVar as "objid:java", stringVar, stringVar); // 1
+		thing = thing as string + javaLib.qualifiedTypeName( stringVar as "objid:java"); // 0
+		thing = thing as string + javaLib.storeCopy(stringVar as "objid:java", stringVar as "objid:java"); // 1
+		thing = thing as string + javaLib.remove( stringVar as "objid:java"); // 1
+		thing = thing as string + javaLib.removeAll(); // 1
+		thing = thing as string + javaLib.isNull( stringVar as "objid:java"); // 0
+		thing = thing as string + javaLib.isObjId( stringVar as "objid:java"); // 0
+		thing = thing as string + vgLib.getVAGSysType(); // 0
+		thing = thing as string + vgLib.connectionService(charVar,charVar,char18var,charVar,charVar,stringVar ); // 1
+		thing = thing as string + sysLib.setError(charVar, stringVar, stringVar); // 1
+		thing = thing as string + sysLib.startTransaction("record",charVar, charVar); // 1
+		thing = thing as string + mathLib.abs( numberVar ); // 0
+		thing = thing as string + mathLib.acos( numberVar ); // 0
+		thing = thing as string + mathLib.asin( numberVar ); // 0
+		thing = thing as string + mathLib.atan( numberVar ); // 0
+		thing = thing as string + mathLib.atan2(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.ceiling( numberVar ); // 0
+		thing = thing as string + vgLib.compareNum(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.cos( numberVar ); // 0
+		thing = thing as string + mathLib.cosh( numberVar ); // 0
+		thing = thing as string + mathLib.exp( numberVar ); // 0
+
+		thing = thing as string + vgLib.floatingDifference(numberVar, numberVar); // 0
+		thing = thing as string + vgLib.floatingMod(numberVar, numberVar); // 0
+		thing = thing as string + vgLib.floatingProduct(numberVar, numberVar); // 0
+		thing = thing as string + vgLib.floatingQuotient(numberVar, numberVar); // 0
+		thing = thing as string + vgLib.floatingSum(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.floor( numberVar ); // 0
+		thing = thing as string + mathLib.frexp(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.ldexp(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.log( numberVar ); // 0
+		thing = thing as string + mathLib.log10( numberVar ); // 0
+		thing = thing as string + mathLib.max(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.min(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.modf(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.pow(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.precision( numberVar ); // 0
+		thing = thing as string + mathLib.round(numberVar, numberVar); // 0
+		thing = thing as string + mathLib.sin( numberVar ); // 0
+		thing = thing as string + mathLib.sinh( numberVar ); // 0
+		thing = thing as string + mathLib.sqrt( numberVar ); // 0
+		thing = thing as string + mathLib.tan( numberVar ); // 0
+		thing = thing as string + mathLib.tanh( numberVar ); // 0
+
+
+		
+		thing = anyParmFunc( j2eeLib.clearRequestAttr(charVar ) ); // 1
+		thing = anyParmFunc( j2eeLib.clearSessionAttr(charVar ) ); // 1
+		thing = anyParmFunc( j2eeLib.getRequestAttr(charVar, charVar ) ); // 1
+		thing = anyParmFunc( j2eeLib.getSessionAttr(charVar, charVar ) ); // 1
+		thing = anyParmFunc( j2eeLib.setRequestAttr(charVar, "" ) ); // 1
+		thing = anyParmFunc( j2eeLib.setSessionAttr(charVar, "" ) ); // 1
+		thing = anyParmFunc( javaLib.invoke(stringVar, stringVar, charVar as "java:char" ) ); // 0
+		thing = anyParmFunc( javaLib.store( stringVar as "objid:java", stringVar, stringVar, charVar ) ); // 1
+		thing = anyParmFunc( javaLib.StoreNew( stringVar as "objid:java", stringVar, charVar ) ); // 1
+		thing = anyParmFunc( javaLib.getField(stringVar, stringVar ) ); // 0
+		thing = anyParmFunc( javaLib.setField(stringVar, stringVar, charVar as "objid:java" ) ); // 1
+		thing = anyParmFunc( javaLib.storeField( stringVar as "objid:java", stringVar, stringVar ) );// 1
+		thing = anyParmFunc( javaLib.qualifiedTypeName( stringVar as "objid:java" ) ); // 0
+		thing = anyParmFunc( javaLib.storeCopy(stringVar as "objid:java", stringVar as "objid:java" ) ); // 1
+		thing = anyParmFunc( javaLib.remove( stringVar as "objid:java" ) ); // 1
+		thing = anyParmFunc( javaLib.removeAll( ) ); // 1
+		thing = anyParmFunc( javaLib.isNull( stringVar as "objid:java" ) ); // 0
+		thing = anyParmFunc( javaLib.isObjId( stringVar as "objid:java" ) ); // 0
+		thing = anyParmFunc( vgLib.getVAGSysType( ) ); // 0
+		thing = anyParmFunc( vgLib.connectionService(charVar,charVar,char18var,charVar,charVar,stringVar  ) ); // 1
+		thing = anyParmFunc( sysLib.setError(charVar, stringVar, stringVar ) ); // 1
+		thing = anyParmFunc( sysLib.startTransaction("record",charVar, charVar ) ); // 1
+		thing = anyParmFunc( mathLib.abs( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.acos( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.asin( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.atan( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.atan2(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.ceiling( numberVar  ) ); // 0
+		thing = anyParmFunc( vgLib.compareNum(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.cos( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.cosh( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.exp( numberVar  ) ); // 0
+
+		thing = anyParmFunc( vgLib.floatingDifference(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( vgLib.floatingMod(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( vgLib.floatingProduct(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( vgLib.floatingQuotient(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( vgLib.floatingSum(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.floor( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.frexp(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.ldexp(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.log( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.log10( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.max(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.min(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.modf(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.pow(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.precision( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.round(numberVar, numberVar ) ); // 0
+		thing = anyParmFunc( mathLib.sin( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.sinh( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.sqrt( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.tan( numberVar  ) ); // 0
+		thing = anyParmFunc( mathLib.tanh( numberVar  ) ); // 0
+		
+		if( thing as int < j2eeLib.clearRequestAttr(charVar) ) end // 1
+		if( thing as int < j2eeLib.clearSessionAttr(charVar) ) end // 1
+		if( thing as int < j2eeLib.getRequestAttr(charVar, charVar) ) end // 1
+		if( thing as int < j2eeLib.getSessionAttr(charVar, charVar) ) end // 1
+		if( thing as int < j2eeLib.setRequestAttr(charVar, "") ) end // 1
+		if( thing as int < j2eeLib.setSessionAttr(charVar, "") ) end // 1
+		if( thing as int < javaLib.invoke(stringVar, stringVar, charVar) as int ) end // 0
+		if( thing as int < javaLib.store( stringVar as "objid:java", stringVar, stringVar, charVar) ) end // 1
+		if( thing as int < javaLib.StoreNew( stringVar as "objid:java", stringVar, charVar) ) end // 1
+		if( thing as int < javaLib.getField(stringVar, stringVar) as int ) end // 0
+		if( thing as int < javaLib.setField(stringVar, stringVar, charVar as "objid:java") ) end // 1
+		if( thing as int < javaLib.storeField( stringVar as "objid:java", stringVar, stringVar) ) end // 1
+		if( thing as int < javaLib.qualifiedTypeName( stringVar as "objid:java") ) end // 0
+		if( thing as int < javaLib.storeCopy(stringVar as "objid:java", stringVar as "objid:java") ) end // 1
+		if( thing as int < javaLib.remove( stringVar as "objid:java") ) end // 1
+		if( thing as int < javaLib.removeAll() ) end // 1
+		if( thing as int < javaLib.isNull( stringVar as "objid:java") ) end // 0
+		if( thing as int < javaLib.isObjId( stringVar as "objid:java") ) end // 0
+		if( thing as int < vgLib.getVAGSysType() ) end // 0
+		if( thing as int < vgLib.connectionService(charVar,charVar,char18var,charVar,charVar,stringVar ) ) end // 1
+		if( thing as int < sysLib.setError(charVar, stringVar, stringVar) ) end // 1
+		if( thing as int < sysLib.startTransaction("record",charVar, charVar) ) end // 1
+		if( thing as int < mathLib.abs( numberVar ) ) end // 0
+		if( thing as int < mathLib.acos( numberVar ) ) end // 0
+		if( thing as int < mathLib.asin( numberVar ) ) end // 0
+		if( thing as int < mathLib.atan( numberVar ) ) end // 0
+		if( thing as int < mathLib.atan2(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.ceiling( numberVar ) ) end // 0
+		if( thing as int < vgLib.compareNum(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.cos( numberVar ) ) end // 0
+		if( thing as int < mathLib.cosh( numberVar ) ) end // 0
+		if( thing as int < mathLib.exp( numberVar ) ) end // 0
+
+		if( thing as int < vgLib.floatingDifference(numberVar, numberVar) ) end // 0
+		if( thing as int < vgLib.floatingMod(numberVar, numberVar) ) end // 0
+		if( thing as int < vgLib.floatingProduct(numberVar, numberVar) ) end // 0
+		if( thing as int < vgLib.floatingQuotient(numberVar, numberVar) ) end // 0
+		if( thing as int < vgLib.floatingSum(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.floor( numberVar ) ) end // 0
+		if( thing as int < mathLib.frexp(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.ldexp(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.log( numberVar ) ) end // 0
+		if( thing as int < mathLib.log10( numberVar ) ) end // 0
+		if( thing as int < mathLib.max(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.min(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.modf(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.pow(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.precision( numberVar ) ) end // 0
+		if( thing as int < mathLib.round(numberVar, numberVar) ) end // 0
+		if( thing as int < mathLib.sin( numberVar ) ) end // 0
+		if( thing as int < mathLib.sinh( numberVar ) ) end // 0
+		if( thing as int < mathLib.sqrt( numberVar ) ) end // 0
+		if( thing as int < mathLib.tan( numberVar ) ) end // 0
+		if( thing as int < mathLib.tanh( numberVar ) ) end // 0
+		
+		if( javaLib.invoke(stringVar, stringVar, charVar) == null ) end // 0
+		if( javaLib.getField(stringVar, stringVar) == null ) end // 0
+		if( javaLib.qualifiedTypeName( stringVar as "objid:java") == null ) end // 0
+		if( javaLib.isNull( stringVar as "objid:java") == null ) end // 0
+		if( javaLib.isObjId( stringVar as "objid:java") == null ) end // 0
+		if( vgLib.getVAGSysType() == null ) end // 0
+		if( mathLib.abs( numberVar ) == null ) end // 0
+		if( mathLib.acos( numberVar ) == null ) end // 0
+		if( mathLib.asin( numberVar ) == null ) end // 0
+		if( mathLib.atan( numberVar ) == null ) end // 0
+		if( mathLib.atan2(numberVar, numberVar) == null ) end // 0
+		if( mathLib.ceiling( numberVar ) == null ) end // 0
+		if( vgLib.compareNum(numberVar, numberVar) == null ) end // 0
+		if( mathLib.cos( numberVar ) == null ) end // 0
+		if( mathLib.cosh( numberVar ) == null ) end // 0
+		if( mathLib.exp( numberVar ) == null ) end // 0
+
+		if( vgLib.floatingDifference(numberVar, numberVar) == null ) end // 0
+		if( vgLib.floatingMod(numberVar, numberVar) == null ) end // 0
+		if( vgLib.floatingProduct(numberVar, numberVar) == null ) end // 0
+		if( vgLib.floatingQuotient(numberVar, numberVar) == null ) end // 0
+		if( vgLib.floatingSum(numberVar, numberVar) == null ) end // 0
+		if( mathLib.floor( numberVar ) == null ) end // 0
+		if( mathLib.frexp(numberVar, numberVar) == null ) end // 0
+		if( mathLib.ldexp(numberVar, numberVar) == null ) end // 0
+		if( mathLib.log( numberVar ) == null ) end // 0
+		if( mathLib.log10( numberVar ) == null ) end // 0
+		if( mathLib.max(numberVar, numberVar) == null ) end // 0
+		if( mathLib.min(numberVar, numberVar) == null ) end // 0
+		if( mathLib.modf(numberVar, numberVar) == null ) end // 0
+		if( mathLib.pow(numberVar, numberVar) == null ) end // 0
+		if( mathLib.precision( numberVar ) == null ) end // 0
+		if( mathLib.round(numberVar, numberVar) == null ) end // 0
+		if( mathLib.sin( numberVar ) == null ) end // 0
+		if( mathLib.sinh( numberVar ) == null ) end // 0
+		if( mathLib.sqrt( numberVar ) == null ) end // 0
+		if( mathLib.tan( numberVar ) == null ) end // 0
+		if( mathLib.tanh( numberVar ) == null ) end // 0
+		
+		if( javaLib.invoke(stringVar, stringVar, charVar) != null ) end // 0
+		if( javaLib.getField(stringVar, stringVar) != null ) end // 0
+		if( javaLib.qualifiedTypeName( stringVar as "objid:java") != null ) end // 0
+		if( javaLib.isNull( stringVar as "objid:java") != null ) end // 0
+		if( javaLib.isObjId( stringVar as "objid:java") != null ) end // 0
+		if( vgLib.getVAGSysType() != null ) end // 0
+		if( mathLib.abs( numberVar ) != null ) end // 0
+		if( mathLib.acos( numberVar ) != null ) end // 0
+		if( mathLib.asin( numberVar ) != null ) end // 0
+		if( mathLib.atan( numberVar ) != null ) end // 0
+		if( mathLib.atan2(numberVar, numberVar) != null ) end // 0
+		if( mathLib.ceiling( numberVar ) != null ) end // 0
+		if( vgLib.compareNum(numberVar, numberVar) != null ) end // 0
+		if( mathLib.cos( numberVar ) != null ) end // 0
+		if( mathLib.cosh( numberVar ) != null ) end // 0
+		if( mathLib.exp( numberVar ) != null ) end // 0
+
+		if( vgLib.floatingDifference(numberVar, numberVar) != null ) end // 0
+		if( vgLib.floatingMod(numberVar, numberVar) != null ) end // 0
+		if( vgLib.floatingProduct(numberVar, numberVar) != null ) end // 0
+		if( vgLib.floatingQuotient(numberVar, numberVar) != null ) end // 0
+		if( vgLib.floatingSum(numberVar, numberVar) != null ) end // 0
+		if( mathLib.floor( numberVar ) != null ) end // 0
+		if( mathLib.frexp(numberVar, numberVar) != null ) end // 0
+		if( mathLib.ldexp(numberVar, numberVar) != null ) end // 0
+		if( mathLib.log( numberVar ) != null ) end // 0
+		if( mathLib.log10( numberVar ) != null ) end // 0
+		if( mathLib.max(numberVar, numberVar) != null ) end // 0
+		if( mathLib.min(numberVar, numberVar) != null ) end // 0
+		if( mathLib.modf(numberVar, numberVar) != null ) end // 0
+		if( mathLib.pow(numberVar, numberVar) != null ) end // 0
+		if( mathLib.precision( numberVar ) != null ) end // 0
+		if( mathLib.round(numberVar, numberVar) != null ) end // 0
+		if( mathLib.sin( numberVar ) != null ) end // 0
+		if( mathLib.sinh( numberVar ) != null ) end // 0
+		if( mathLib.sqrt( numberVar ) != null ) end // 0
+		if( mathLib.tan( numberVar ) != null ) end // 0
+		if( mathLib.tanh( numberVar ) != null ) end // 0
+		
+		if( j2eeLib.clearRequestAttr(charVar) isa int ) end // 1
+		if( j2eeLib.clearSessionAttr(charVar) isa int ) end // 1
+		if( j2eeLib.getRequestAttr(charVar, charVar) isa int ) end // 1
+		if( j2eeLib.getSessionAttr(charVar, charVar) isa int ) end // 1
+		if( j2eeLib.setRequestAttr(charVar, "") isa int ) end // 1
+		if( j2eeLib.setSessionAttr(charVar, "") isa int ) end // 1
+		if( javaLib.invoke(stringVar, stringVar, charVar) isa int ) end // 0
+		if( javaLib.store( stringVar as "objid:java", stringVar, stringVar, charVar) isa int ) end // 1
+		if( javaLib.StoreNew( stringVar as "objid:java", stringVar, charVar) isa int ) end // 1
+		if( javaLib.getField(stringVar, stringVar) isa int ) end // 0
+		if( javaLib.setField(stringVar, stringVar, charVar as "objid:java") isa int ) end // 1
+		if( javaLib.storeField( stringVar as "objid:java", stringVar, stringVar) isa int ) end // 1
+		if( javaLib.qualifiedTypeName( stringVar as "objid:java") isa int ) end // 0
+		if( javaLib.storeCopy(stringVar as "objid:java", stringVar as "objid:java") isa int ) end // 1
+		if( javaLib.remove( stringVar as "objid:java") isa int ) end // 1
+		if( javaLib.removeAll() isa int ) end // 1
+		if( javaLib.isNull( stringVar as "objid:java") isa int ) end // 0
+		if( javaLib.isObjId( stringVar as "objid:java") isa int ) end // 0
+		if( vgLib.getVAGSysType() isa int ) end // 0
+		if( vgLib.connectionService(charVar,charVar,char18var,charVar,charVar,stringVar ) isa int ) end // 1
+		if( sysLib.setError(charVar, stringVar, stringVar) isa int ) end // 1
+		if( sysLib.startTransaction("record",charVar, charVar) isa int ) end // 1
+		if( mathLib.abs( numberVar ) isa int ) end // 0
+		if( mathLib.acos( numberVar ) isa int ) end // 0
+		if( mathLib.asin( numberVar ) isa int ) end // 0
+		if( mathLib.atan( numberVar ) isa int ) end // 0
+		if( mathLib.atan2(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.ceiling( numberVar ) isa int ) end // 0
+		if( vgLib.compareNum(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.cos( numberVar ) isa int ) end // 0
+		if( mathLib.cosh( numberVar ) isa int ) end // 0
+		if( mathLib.exp( numberVar ) isa int ) end // 0
+
+		if( vgLib.floatingDifference(numberVar, numberVar) isa int ) end // 0
+		if( vgLib.floatingMod(numberVar, numberVar) isa int ) end // 0
+		if( vgLib.floatingProduct(numberVar, numberVar) isa int ) end // 0
+		if( vgLib.floatingQuotient(numberVar, numberVar) isa int ) end // 0
+		if( vgLib.floatingSum(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.floor( numberVar ) isa int ) end // 0
+		if( mathLib.frexp(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.ldexp(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.log( numberVar ) isa int ) end // 0
+		if( mathLib.log10( numberVar ) isa int ) end // 0
+		if( mathLib.max(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.min(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.modf(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.pow(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.precision( numberVar ) isa int ) end // 0
+		if( mathLib.round(numberVar, numberVar) isa int ) end // 0
+		if( mathLib.sin( numberVar ) isa int ) end // 0
+		if( mathLib.sinh( numberVar ) isa int ) end // 0
+		if( mathLib.sqrt( numberVar ) isa int ) end // 0
+		if( mathLib.tan( numberVar ) isa int ) end // 0
+		if( mathLib.tanh( numberVar ) isa int ) end // 0
+		
+		// Valid usages:
+		
+		thing = javaLib.invoke(stringVar, stringVar, charVar); // 0
+		thing = javaLib.getField(stringVar, stringVar); // 0
+		thing = javaLib.qualifiedTypeName( stringVar as "objid:java"); // 0
+		thing = javaLib.isNull( stringVar as "objid:java"); // 0
+		thing = javaLib.isObjId( stringVar as "objid:java"); // 0
+		thing = vgLib.getVAGSysType(); // 0
+		thing = mathLib.abs( numberVar ); // 0
+		thing = mathLib.acos( numberVar ); // 0
+		thing = mathLib.asin( numberVar ); // 0
+		thing = mathLib.atan( numberVar ); // 0
+		thing = mathLib.atan2(numberVar, numberVar); // 0
+		thing = mathLib.ceiling( numberVar ); // 0
+		thing = vgLib.compareNum(numberVar, numberVar); // 0
+		thing = mathLib.cos( numberVar ); // 0
+		thing = mathLib.cosh( numberVar ); // 0
+		thing = mathLib.exp( numberVar ); // 0
+
+		thing = vgLib.floatingDifference(numberVar, numberVar); // 0
+		thing = vgLib.floatingMod(numberVar, numberVar); // 0
+		thing = vgLib.floatingProduct(numberVar, numberVar); // 0
+		thing = vgLib.floatingQuotient(numberVar, numberVar); // 0
+		thing = vgLib.floatingSum(numberVar, numberVar); // 0
+		thing = mathLib.floor( numberVar ); // 0
+		thing = mathLib.frexp(numberVar, numberVar); // 0
+		thing = mathLib.ldexp(numberVar, numberVar); // 0
+		thing = mathLib.log( numberVar ); // 0
+		thing = mathLib.log10( numberVar ); // 0
+		thing = mathLib.max(numberVar, numberVar); // 0
+		thing = mathLib.min(numberVar, numberVar); // 0
+		thing = mathLib.modf(numberVar, numberVar); // 0
+		thing = mathLib.pow(numberVar, numberVar); // 0
+		thing = mathLib.precision( numberVar ); // 0
+		thing = mathLib.round(numberVar, numberVar); // 0
+		thing = mathLib.sin( numberVar ); // 0
+		thing = mathLib.sinh( numberVar ); // 0
+		thing = mathLib.sqrt( numberVar ); // 0
+		thing = mathLib.tan( numberVar ); // 0
+		thing = mathLib.tanh( numberVar ); // 0
+
+		//----------------------------------------
+		// Prevent from taking expression as arg:
+		//----------------------------------------
+		
+		j2eeLib.clearRequestAttr(charVar+charVar); // 0
+		j2eeLib.clearSessionAttr(charVar+charVar); // 0
+		j2eeLib.getRequestAttr(charVar+charVar, "" + stringVar); // 1
+		j2eeLib.getSessionAttr(charVar+charVar, "" + stringVar); // 1
+		j2eeLib.setRequestAttr(charVar+charVar, "" + stringVar); // 0
+		j2eeLib.setSessionAttr(charVar+charVar, "" + stringVar); // 0
+		thing = javaLib.invoke(stringVar+stringVar, stringVar+stringVar, charVar+charVar); // 0
+		javaLib.store( (stringVar + stringVar) as "objid:java", stringVar+stringVar, stringVar+stringVar, charVar+charVar); // 0
+		javaLib.StoreNew( (stringVar + stringVar) as "objid:java", stringVar+stringVar, charVar+charVar); // 0
+		thing = javaLib.getField(stringVar+stringVar, stringVar+stringVar); // 0
+		javaLib.setField(stringVar+stringVar, stringVar+stringVar, (charVar+charVar) as "objid:java"); // 0
+		javaLib.storeField( (stringVar + stringVar) as "objid:java", stringVar+stringVar, stringVar+stringVar); // 0
+		thing = javaLib.qualifiedTypeName( (stringVar + stringVar) as "objid:java");  // 0
+		javaLib.storeCopy((stringVar+stringVar) as "objid:java", (stringVar+stringVar) as "objid:java"); // 0
+		javaLib.remove( (stringVar + stringVar) as "objid:java");  // 0
+		thing = javaLib.isNull( (stringVar + stringVar) as "objid:java");  // 0
+		thing = javaLib.isObjId( (stringVar + stringVar) as "objid:java");  // 0
+		vgLib.connectionService(charVar+charVar,charVar+charVar,char18var+char18Var,charVar+charVar,charVar+charVar,stringVar+stringVar ); // 2
+		sysLib.setError(charVar+charVar, stringVar+stringVar, stringVar+stringVar); // 0
+		vgLib.startTransaction("record"+stringVar,charVar+charVar, charVar+charVar); // 3
+		thing = mathLib.frexp(numberVar+numberVar, numberVar+numberVar); // 1
+		thing = mathLib.ldexp(numberVar+numberVar, numberVar+numberVar); // 0
+		thing = mathLib.round(numberVar+numberVar, numberVar+numberVar); // 0
+		
+		// Can have expressions as args:
+		thing = mathLib.round(numberVar+numberVar, -decimals(thing as smallint));				// 0
+	end
+end

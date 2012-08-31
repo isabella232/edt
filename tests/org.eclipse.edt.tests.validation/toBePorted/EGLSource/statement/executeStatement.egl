@@ -1,0 +1,122 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validate (1):
+// 1 Invalid for target {1}. The target must be an SQL record. {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+// 1 The prepared statement identifier {1} cannot be resolved. {6537, EGLMESSAGE_PREPARED_STATEMENT_ID_NOT_FOUND}
+// 1 The {0} SQL I/O statement does not allow the {1} option to be specified more than once. {6510, EGLMESSAGE_DUPE_OPTION}
+// 1 The {0} SQL I/O statement does not allow the {1} clause to be specified more than once. {6511, EGLMESSAGE_DUPE_CLAUSE}
+// 1 The {0} SQL I/O statement does not allow the USING clause to be specified without the prepared statement reference being specified. {6514, EGLMESSAGE_CANT_HAVE_USING_WITHOUT_PREPARED_STMT_REF}
+// 1 The {0} SQL statement cannot be empty. {6500, EGLMESSAGE_EMPTY_SQL_STRING}
+
+Program MyProj  {@DLI { psb = "psb", 					 
+         handleHardDLIErrors = yes,
+         pcbParms =["", "pcb1", "pcb2", "",""] }	
+         // when called from APPLA_valid pcb1 is pcbC1 and receives pcbA3 
+         //							     pcb2 is pcbC2 and receives pcbA5
+         // when called from APPLB_valid pcb1 is pcbC1 and receives pcbB4 
+         //							     pcb2 is pcbC2 and receives pcbB1
+         // this program cannot use pcbC3 or pcbC4 
+  }
+	 	const dogConstant string = "dog";
+	function main()
+		course Course;
+		coursePCB DB_PCBRecord;
+		sqlRec sqlRec;
+		sqlrec2 sqlrec;
+		courses Course[]; 
+		sqlrecs sqlrec[];
+		indxrec IndxRecord;
+		mqrec MQRec;
+		relrec relrecord;
+		srec	srecord;
+		name string;
+		i int;
+		course2 Course;
+		sqlflex sqlRecFLEX;
+		myany any;
+		const catConstant string = "cat";
+		
+		
+		prepare prepareID from "ddddd" for sqlrec;// 0
+		
+		execute insert #sql{dds} for sqlrec;//0
+		execute delete #sql{dds} for sqlrec;//0
+		execute update #sql{dds} for sqlrec;//0
+		execute insert for sqlrec;//0
+		execute delete for sqlrec;//0
+		execute update for sqlrec;//0
+		
+		execute insert #sql{dds} ;//0
+		execute delete #sql{dds} ;//0
+		execute update #sql{dds} ;//0
+		
+		execute insert #sql{ } ;//1 The EXECUTE SQL statement cannot be empty {6500, EGLMESSAGE_EMPTY_SQL_STRING}
+		
+		execute delete #sql{ } ;//1 The EXECUTE SQL statement cannot be empty {6500, EGLMESSAGE_EMPTY_SQL_STRING}
+		execute update #sql{ } ;//1 The EXECUTE SQL statement cannot be empty {6500, EGLMESSAGE_EMPTY_SQL_STRING}
+		
+		execute prepareID;// 0
+//		execute noexist;// 1 The prepared statement identifier noexist cannot be resolved {6537, EGLMESSAGE_PREPARED_STATEMENT_ID_NOT_FOUND}
+		
+		execute prepareID using name;//0
+		execute prepareID using name for sqlrec;//0
+		execute prepareID using name, i for sqlrec;//0
+		execute prepareID using catConstant for sqlrec;// 1 catConstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant  {EGLMESSAGE_VARIABLE_NOT_FOUND_AS_ITEM}
+		execute prepareID using dogConstant for sqlrec;// 1 dogConstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant  {EGLMESSAGE_VARIABLE_NOT_FOUND_AS_ITEM}
+		execute prepareID using name[5:9] for sqlrec;//  1 Substring expressions are not valid in this statement location
+		
+		execute prepareID for sqlrec;//0
+
+		execute insert for sqlrec for sqlrec2 ;// 1 The EXECUTE SQL I/O statement does not allow the FOR option to be specified more than once {6511, EGLMESSAGE_DUPE_CLAUSE}
+		execute insert using name using i ;// 2 The EXECUTE SQL I/O statement does not allow the USING clause to be specified more than once | The EXECUTE SQL I/O statement does not allow the USING clause to be specified without the prepared statement reference being specified {6514, EGLMESSAGE_CANT_HAVE_USING_WITHOUT_PREPARED_STMT_REF}
+
+		execute insert #sql{dds} for course;//1 Invalid for target course. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for coursePCB;//1 Invalid for target coursePCB. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for courses;//1 Invalid for target courses. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for sqlrecs;//1 Invalid for target sqlrecs. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for indxrec;//1 Invalid for target indxrec. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for mqrec;//1 Invalid for target mqrec. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for relrec;//1 Invalid for target relrec. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for srec;//1 Invalid for target srec. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for name;//1 Invalid for target name. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		execute insert #sql{dds} for myany;//1 Invalid for target myany. The target must be an SQL record {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+	
+		
+				
+	end
+end
+
+Record Course type DLISegment end
+Record sqlRec type sqlRecord
+	10 item1 int;
+end
+
+Record sqlRecFLEX type sqlRecord
+	item1 int;
+end
+
+
+Record IndxRecord type indexedrecord { filename = "myfile",keyitem = "item1"}
+	10 item1 int;
+end
+
+record MQRec type MQRecord { queuename = "www"}
+10 item1 int;
+end
+
+record relrecord type relativerecord { filename = "myfile",keyitem = "item1"}
+10 item1 int;
+end
+
+record srecord type serialrecord{ filename = "myfile"}
+10 item1 int;
+end

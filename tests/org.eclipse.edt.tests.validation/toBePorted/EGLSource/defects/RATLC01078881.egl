@@ -1,0 +1,23 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record items_selForm type ConsoleForm { formSize = [4,80], showBrackets = yes }
+
+
+   item_num        ConsoleField[3]  { position = [1,4],  fieldLen = 4,  dataType = "unicode" };
+   description     ConsoleField[3]  { position = [1,10], fieldLen = 15, dataType = "unicode" };
+   unit_price      ConsoleField[3]  { position = [1,27], fieldLen = 9,  dataType = "unicode" };
+   quantityinhand  ConsoleField[3]  { position = [1,38], fieldLen = 8,  dataType = "unicode" };
+
+   s_item arrayDictionary { item_num=item_num, description=description, unit_price=unit_price, quantityinhand=quantityinhand}; // 0
+   items       Dictionary { item_num=item_num, description=description, unit_price=unit_price, quantityinhand=quantityinhand}; // 0
+end

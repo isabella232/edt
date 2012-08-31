@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program DeptMgt type TextUIProgram { V60ExceptionCompatibility = YES }
+	use DeptForms;
+	
+	function main()
+		depts Department [];
+		get depts;
+		move depts to form1 withv60compat;		//0
+	end 
+end
+
+formGroup DeptForms
+	{validationBypassKeys = [pf2], helpKey = pf1, 
+	 pfKeyEquate = yes, alias = "runtimeName",
+	 ScreenFloatingAreas=[
+	 	 @screenFloatingArea 
+	 		{screenSize = [24, 80], topMargin = 0, bottomMargin = 0,
+	 		 leftMargin = 0, rightMargin = 0}
+	 ],
+	 PrintFloatingAreas=[
+	 	 @printFloatingArea 
+	 		{pageSize = [24, 80], topMargin = 3, bottomMargin = 3, 
+	 		 leftMargin = 5, rightMargin = 5 }
+	 ]}  
+
+	form Form1 type textForm
+		{ formSize = [16,78], position = [1,1]}
+	
+		DEPTNO DEPTNO[5] {position = [3,2], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		DEPTNAME char(29)[5] {position = [3,10], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		MGRNO char(6)[5] {position = [3,41], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		ADMRDEPT char(3)[5] {position = [3,49], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		LOCATION char(16)[5] {position = [3,59], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		* {fieldLen = 6, position = [1,2], value = "DEPTNO", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 29, position = [1,10], value = "DEPTNAME", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 6, position = [1,41], value = "MGRNO", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 8, position = [1,49], value = "ADMRDEPT", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 16, position = [1,59], value = "LOCATION", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	end
+end
+
+Record Department type SQLRecord {tableNames = [["ndg.department"]]}
+	10 DEPTNO DEPTNO;
+	10 DEPTNAME DEPTNAME;
+	10 MGRNO MGRNO {isSqlNullable=yes};
+	10 ADMRDEPT ADMRDEPT;
+	10 LOCATION LOCATION {isSqlNullable=yes};
+end
+
+dataItem DEPTNO char(3) {column="DEPTNO"} end
+dataItem DEPTNAME char(29) {column="DEPTNAME", sqlVariableLen=yes} end
+dataItem MGRNO char(6) {column="MGRNO"} end
+dataItem ADMRDEPT char(3) {column="ADMRDEPT"} end
+dataItem LOCATION char(16) {column="LOCATION"} end

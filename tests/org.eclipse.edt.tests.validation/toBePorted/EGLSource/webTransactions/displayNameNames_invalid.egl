@@ -1,0 +1,176 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+//Note that VAGEN does not care if ui item properties are specified at multiple levels of
+//	items in the same hierarchy
+
+/// 
+/// Tests for UI item properties
+/// all kinds of bad property values
+///
+Record  propertyEdits1  Type  VGUIRecord
+	10 someitem9;											//0							
+		20 pgmLinkItem1b num(8)	{								//0
+							  displayName=["label1","label2"],	//1
+							  displayName = 123,				//1
+							  displayName = adsf,				//1
+							  displayName = 11.223 				//1
+		};				//0	
+end															
+
+///
+/// Tests for UI item properties
+/// specific value edits and cross checks
+///
+/// The following edits come from VAGen ESF and/or Editor
+
+///////item property edits related to uiType
+
+//IF UITYPE is NONE,
+//		 disallow displayName, displayNames, help, numelementsITem, selectedIndexItem,
+//		 programLinkData, linkParameter(comes with disallowing programLinkData)
+//		 inputrequired, needssosi, formatting attributes,  isBoolean, dateformat, timeformat,
+//		 validatorFunction, validatorDataTable, runValidatorFromProgram, minimuminput,
+//		 fillcharacter, validvalues, uppercase, all validator message keys
+
+// make sure edits work on root level items and subitems
+Record  typeKindEdits1  Type  VGUIRecord
+	10 noneitem3 num(8)		 {uiType=none,						//1 displayname property is not allowed when the uiType is one of the following: (none) 	
+							  displayName="mylabel" 			//0
+							  	};
+		20 noneitem3a num(8) {uiType=none,						//1 displayname property is not allowed when the uiType is one of the following: (none)		
+							  displayName="mylabel"				//0
+								};
+
+	10 uiFormItem1 num(16) 	 {uiType=uiForm,						//0
+							  @programLinkData{programName = "abc" }//0
+							  	};
+		20 uiFormitem1a num(8)[2]	 {uiType=uiForm,				//0	
+							  @programLinkData{programName = "abc" },//0
+							  displayName="mylabel" 				//0
+							  	};
+
+	10 pgmLinkItem1 num(8)[2]	 {uiType=programLink,			//0	
+							  @programlinkdata{programName="a"},//0
+							  displayName="mylabel\nlabel2"		//0
+							  };
+		20 pgmLinkItem1a num(8)  {uiType=programLink,			//0	
+							  @programlinkdata{programName="a"},//0
+							  displayName="mylabel\nlabel2 "	//0
+								};
+	10 someitem9a;												//0							
+		20 pgmLinkItem1ab num(8)[3]	 {uiType=programLink,		//0	
+							  @programlinkdata{programName="a"},//0
+							  displayName="mylabel" 			//0 
+							  };
+
+	10 submitItem3	char(10)[4]   {uiType=submit,				//0	
+							  displayName="mylabel" 			//0 
+							  };
+		20 submitItem3a	char(10)   {uiType=submit,				//0	
+							  displayName="mylabel"				//0 
+								};							  
+	10 submitBypassItem3	char(10)[2]   {uiType=submitbypass,	//0	
+							  displayName="mylabel\nabc" 		//0  
+							 };
+		20 submitBypassItem3a	char(10)   {uiType=submitbypass,//0	
+							  displayName="mylabel\nlabel2\nlable3\nline2"	//0 
+							  };							  						  
+end															
+
+Record  typeKindEdits2  Type  VGUIRecord
+	10 noneitem3 noneitem3;	 			//1 displayname property is not allowed when the uiType is one of the following: (none)
+		20 noneitem3a noneitem3a; 		//1 displayname property is not allowed when the uiType is one of the following: (none)
+	10 uiFormitem1 uiFormitem1 ;	 	//0
+		20 uiFormitem1a uiFormitem1a[2];//0
+	10 pgmLinkItem1 pgmLinkItem1[2];	//0
+		20 pgmLinkItem1a pgmLinkItem1A; //0
+	10 someitem9a;								//0							
+		20 pgmLinkItem1ab pgmLinkItem1ab[3]; 	 //0
+	10 submitItem3	submitItem3[4];   			 //0
+		20 submitItem3a	submitItem3a;  			 //0
+	10 submitBypassItem3 submitBypassItem3[2];   //0
+		20 submitBypassItem3a	submitBypassItem3a; //0
+end							
+
+Record  typeKindEdits3  Type  VGUIRecord
+	10 noneitem3 noneitem3 {uiType=submit};				//1 A uiType value of submit requires that the item be one of the following primitive types: (char, mbChar, dbChar, unicode)
+		20 noneitem3a noneitem3a {uitype=submitBypass}; //1 uiType value of submitBypass requires that the item be one of the following primitive types:
+	10 uiFormitem1 uiFormitem1b {displayName="mylabel"};//0
+		20 uiFormitem1a uiFormitem1ab[2] ;				//0
+	10 submitBypassItem3 submitBypassItem3[2]{uiType=uiForm};   //1 The @programLinkData property is required when the uiType is uiForm or programLink
+		20 submitBypassItem3a	submitBypassItem3a{uiType=uiForm}; //1 The @programLinkData property is required when the uiType is uiForm or programLink
+end	
+
+DataItem noneitem3 num(8)		 {uiType=none,		//0	
+					  displayName="mylabel" 		//0
+					  } 
+end
+DataItem noneitem3a num(8) {uiType=none,			//0	
+					  displayName="mylabel" 		//0
+					  }
+end
+DataItem uiFormitem1 num(16)	 {uiType=uiForm,		//0	
+					  @programlinkdata{programName="a"},//0	
+					  displayName="mylabel" 			//0
+					  }
+end
+DataItem uiFormitem1a num(8)	 {uiType=uiForm,		//0	
+					  @programlinkdata{programName="a"},//0
+					  displayName="mylabel" 		 }  //0
+end
+DataItem uiFormitem1b num(16)	 {uiType=uiForm,		//0	
+					  @programlinkdata{programName="a"} //0
+					  }
+end
+DataItem uiFormitem1ab num(8)	 {uiType=uiForm,		//0	
+					  @programlinkdata{programName="a"},//0
+					  displayName="mylabel" 		}	//0
+end	
+DataItem pgmLinkItem1 num(8) {uiType=programLink,		//0
+					  @programlinkdata{programName="a"},//0	
+					  displayName="mylabel" 		}	//0
+end
+DataItem pgmLinkItem1a num(8)	 {uiType=programLink,	//0
+					  @programlinkdata{programName="a"},//0	
+					  displayName="mylabel" 		}	//0
+end
+DataItem submitItem1 CHAR(8)	 {uiType=submit,		//0	
+					  displayName="mylabel" 		}	//0
+end
+DataItem submitItem1a DBCHAR(10) {uiType=submit,		//0	
+					  displayName="mylabel" }			//0
+end
+DataItem submitBypassItem1 mbchar(8) {uiType=submitBypass,	//0	
+					  displayName="mylabel" 		 }		//0
+end
+DataItem pgmLinkItem1ab num(8)	 {uiType=programLink,			//0	
+							  @programlinkdata{programName="a"},//0 
+							  displayName="mylabel" }			//0 
+end
+DataItem submitItem3	char(10)    {uiType=submit,				//0	
+							  displayName="mylabel" 		}	//0 
+end
+DataItem submitItem3a	char(10)    {uiType=submit,				//0 
+							  displayName="mylabel"	}			//0 
+end							  
+DataItem submitBypassItem3	char(10)    {uiType=submitbypass,	//0	
+							  displayName="mylabel/r/nabc" 	}	//0 
+end
+DataItem submitBypassItem3a	char(10)   {uiType=submitbypass,				//0	
+							  displayName="label1\nlabel2\nlabel3<brk>line2"}//0
+end
+
+DataItem submitBypassItem1a unicode(8)	 {uiType=submitBypass,//0	
+					  displayName="mylabel" 		 		} //0
+end

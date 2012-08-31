@@ -1,0 +1,168 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Library X
+	Function f1( str1 char(6) in ) end	//0
+	Function f1( str1 String in ) end	//0
+	Function f1( str1 String in ) end				//1 duplicate
+	Function f1( str1 String in ) returns(int) end	//1 duplicate
+	Function f1( str1 String out ) end				//1 duplicate
+	Function f1( str1 String inout ) end			//1 duplicate
+	Function f1( str1 String ) end					//1 duplicate
+End
+
+Delegate del (str1 String in) end
+
+Program pgm
+	function main()
+		str char(6) = "abc";
+		a int;
+		
+		X.f1(str); 		//0
+		X.f1(a);		//0
+		
+		pgmFunc();		//0
+		pgmFunc(1);		//0
+		pgmFunc(1, 2);	//1
+		
+		myDelegate del;
+		myDelegate = x.f1;	//1 ambiguous
+	end
+	
+	function pgmFunc() end			//0
+	function pgmFunc(a int) end		//0
+end
+
+Program pgm2
+	use X;
+	function main()
+		str String;
+		f1(5);			//0
+		f1(str);		//0
+		
+		myType myType = new myType();
+		myType.func();		//0
+		myType.func(1);		//0
+		myType.func("a");	//0
+		myType.func(1,2);	//1 Function func requires exactly 0 argument(s)
+	end
+end
+
+ExternalType myType
+	function func();		//0
+	function func(a int);	//0
+end
+
+Record fixedRec1
+	10 item1 int;
+end
+
+Record fixedRec2
+	10 item1 int;
+	10 item2 int;
+	10 item3 int;
+end
+
+Record fixedRec3
+	10 item1 int;
+	10 item2 int;
+end
+
+Program pgm3
+	function F1(p unicode(12) in) end				//0
+	function F1(p mbchar(12) in) returns (int) end	//0
+	
+	function F2(p fixedRec1 in) end					//0
+	function F2(p fixedRec2 in) returns (int) end	//0
+	
+	function F3(p1 string in, p2 int in) end		//0
+	function F3(p1 char(6) in, p2 float in) end		//0
+	
+	function F4(p1 string in) end
+	function F4(p1 blob in) end
+	
+	function main()
+		mychar char(12);
+		a int;
+		a = F1(mychar);			//0
+		
+		myRec3 fixedRec3;
+		a = F2(myRec3);			//0
+		
+		arg1 string;
+		arg2 float;
+		F3(arg1, arg2);			//0
+		
+		F4(a);					//0
+		
+		obj Object;
+		str Object;
+		obj.equals(obj);	//0
+		obj.equals(str);	//0
+		str.equals(obj);	//0
+		str.equals(str);	//0
+		str.equals(a);		//1 The types int and Object are not assignment compatible
+		
+		si smallInt;
+		ch char(4);
+		typeWithConstructors typeWithConstructors = new typeWithConstructors(si);	//0
+		typeWithConstructors = new typeWithConstructors(ch);						//0
+		typeWithConstructors = new typeWithConstructors(si, si);					//1 A constructor for typeWithConstructors which matches the supplied arguments could not be found
+		typeWithConstructors = new typeWithConstructors();							//1 A constructor for typeWithConstructors which matches the supplied arguments could not be found
+	end
+end
+
+ExternalType Object type JavaObject		//0
+	function equals(another Object in);	//0
+end
+
+ExternalType String_ extends Object type JavaObject //0
+	function equals(another String_ in);				//0
+end
+
+ExternalType typeWithConstructors type JavaObject
+	constructor(a int in);
+	constructor(a bigint in);
+end
+
+ExternalType typeWithDuplicates
+	Function f1( str1 char(6) in );	//0
+	Function f1( str1 String in );	//0
+	Function f1( str1 String in );				//1 duplicate
+	Function f1( str1 String in ) returns(int);	//1 duplicate
+	Function f1( str1 String out );				//1 duplicate
+	Function f1( str1 String inout );			//1 duplicate
+	Function f1( str1 String );					//1 duplicate
+End
+
+Interface interfaceWithDuplicates
+	Function f1( str1 char(6) in );	//0
+	Function f1( str1 String in );	//0
+	Function f1( str1 String in );				//1 duplicate
+	Function f1( str1 String in ) returns(int);	//1 duplicate
+	Function f1( str1 String out );				//1 duplicate
+	Function f1( str1 String inout );			//1 duplicate
+	Function f1( str1 String );					//1 duplicate
+End
+
+Program narrowingRuleAdd
+	function main()
+		bigintVar bigint;
+		func(bigintVar);			//0
+		
+		floatVar float;
+		MathLib.decimals(floatVar);	//0
+	end
+	
+	function func(p1 smallint in) end
+	function func(p1 int in) end
+end

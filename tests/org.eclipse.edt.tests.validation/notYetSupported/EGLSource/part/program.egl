@@ -1,0 +1,210 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validatePCBParmsWithProgramParms:
+// 1 {0} is not declared in the program parameter list. {7924, DLI_PCB_IS_NOT_DECLARED_IN_PROGRAM_PARM_LIST}
+// 1 {0} only contains {1} PCBs. Therefore, you can only have {1} entries in the pcbParms array value. Found {2}. {7925, DLI_PCB_PARM_LIST_IS_TOO_LARGE}
+
+// validatePSBParmInParameterList:
+// 1 The value "{0}" for the field PSBParm must match the name of a parameter for program {1}. {7939, DLI_PSBPARM_NOT_PROGRAM_PARAMETER}
+
+
+record qwertrec
+end
+
+record qwertrec2
+i int;
+end
+
+Record sqlRec type sqlRecord
+	10 item1X int;
+end
+
+Record sqlRecFLEX type sqlRecord
+	item1X int;
+end
+
+
+Record IndxRecord type indexedrecord { filename = "myfile",keyitem = "itemX"}
+	10 itemX int;
+end
+
+record MQRec type MQRecord { queuename = "www"}
+10 itemX int;
+end
+
+record relrecord type relativerecord { filename = "myfile",keyitem = "itemX"}
+10 itemX int;
+end
+
+record srecord type serialrecord{ filename = "myfile"}
+10 itemX int;
+end
+
+
+
+
+program p1 // 1 Program p1 has no functions named main. One is required {4922, PROGRAM_MAIN_FUNCTION_REQUIRED}
+(
+a int,// 1 The same name a also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+abool boolean,// 0
+anany any,// 1  The type any for this program parameter or call argument is invalid
+ananys any[],// 1 The type any[] for this program parameter or call argument is invalid 
+a string, // 1 The same name a also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+forms mytextform[], // 2  
+d p2, // 1
+pcb DB_PCBRecord ,// 1   A program cannot receive a PCB as a parameter unless the DLI property is specified for the program {7929, DLI_PCB_PARAMETER_REQUIRES_DLI_PROPERTY_ON_PROGRAM}
+arec qwertrec, // 1  Invalid parameter arec. There must be at least one structure item in the contents of the record arec {3118, RECORD_PARAMETER_WITH_NO_CONTENTS}
+arec2 qwertrec2, // 0
+sqlrec sqlRec,// 0
+IndxRecord IndxRecord,// 0
+MQRec MQRec,// 0
+relrecord relrecord,// 0
+srecord srecord,// 0
+arec2w qwertrec2[], // 0
+sqlrecw sqlRec[],// 0
+IndxRecordw IndxRecord[],//0
+MQRecw MQRec[],//0
+relrecordw relrecord[],//0
+srecordw srecord[]//0
+)
+use myformgx;// 0
+
+const a char(10) = "fff";// 0
+const cat string = "cat"; // 0
+const cat int = 5;// 1 The same name cat also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+
+dog string;// 0
+dog int;// 1 The same name dog also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+
+const mouse string = "mouse";// 0
+
+mouse int;// 1  The same name mouse also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+function zxcv ()
+end
+
+function zxcv ()// 1 A duplicate function
+end
+
+end
+
+
+program p3(i int,mylibx int)// 1 The same name i also appears as variable, parameter, use or constant declaration in Function, Program, or Library p3
+use mylibx;// 0  
+use mylibxx;// 0  
+mylibxx int;// 0
+i string;// 0
+function main ()
+end
+end
+
+
+library mylibX 
+end
+
+library mylibXX
+end
+
+
+Program VGWebTransactionPgm // 1  Invalid name VGWebTransactionPgm. The aliased name of a VGWebTransaction or VGWebTransaction alias must be no longer than 8 characters {7761, RUNTIME_NAME_OF_WEB_PROGRAM_EXCEEDS_8_CHARACTERS}
+type VGWebTransaction // 0
+( 
+i int // 0
+)
+	{
+	inputUIRecord=uiRec // 0
+	}
+	
+	uiRec myUIRecord;
+	
+	function main()
+	end
+end
+
+program toomanyparms
+(
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+a int,
+b int,
+c int // 0
+)
+function main ()
+end
+end
+
+program p10
+(
+a mytextform2,// 1  Parameter a is a form.  Form parameters must use the form with the same name as the typdef.  Found mytextform2  {4901, INVALID_FORM_TYPEDEF}
+mytextform2 mytextform2// 0
+)
+use myformgx2;
+function main ()
+end
+end
+
+
+formgroup myformgx 
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+
+formgroup myformgx2
+	form mytextform2 type textform {formsize=[24,80]}	
+	end		
+	form myprintform2 type printform {formsize=[24,80]}	
+	end
+end
+Record myUIRecord type VGUIRecord
+end
+
+Record EducationPSB type PSBRecord
+end
+
+Program DLIMainProg( 
+pcb1 int,
+pcb DB_PCBRecord // 0
+) { 
+	@DLI { psb = "edpsb", pcbParms = [ "pcb1" ], callInterface=CBLTDLI } }
+  edpsb EducationPSB;
+  
+  function main()
+  end
+end
+

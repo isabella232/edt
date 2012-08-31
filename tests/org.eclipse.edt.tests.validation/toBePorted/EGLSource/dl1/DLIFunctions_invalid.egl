@@ -1,0 +1,229 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	 
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end		 
+DataItem Name char(18) { dliFieldName ="NAME" } end		 
+
+Record Course type DLISegment 					 
+{ segmentName=Course, keyItem="courseNo" }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record Prereq type DLISegment { keyItem="courseNo" } 
+	10 courseNo CourseNo;							 
+	10 title char(33);								 
+end
+
+Record Offering type DLISegment 					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record Teacher type DLISegment 					 
+{ segmentName=Teacher, keyItem="empNo" }		 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+end 
+
+Record Student type DLISegment	 				 
+	{ segmentName=Student }						 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+	10 grade char(1);								 
+end
+Record EducationPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Course },		 
+	   @Relationship{											 
+     		segmentRecord=Prereq, parentRecord=Course },	    	   
+       @Relationship{											 
+      		segmentRecord=Offering,parentRecord=Course },  	  
+       @Relationship{											 
+      		segmentRecord=Teacher,parentRecord=Offering},  
+	   @Relationship{											 
+	     	segmentRecord=Student, parentRecord=Offering}	 
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Offering },	 
+	   @Relationship{								 
+	     segmentRecord=Course,parentRecord=Offering},	 
+	   @Relationship{										 
+	     segmentRecord=Teacher,parentRecord=Offering},	 
+	   @Relationship{										 
+	     segmentRecord=Student,parentRecord=Offering}	 
+	  ] }};
+end
+Program DLIFunctions_invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb2, 					 
+         handleHardDLIErrors = yes,
+         callInterface = CBLTDLI }	 
+  }
+  course course;						   
+  prereq prereq;						 
+  offering offering;					 
+  teacher teacher;						 
+  student student;						 
+  xloc char(4);							 
+  func4 char(4) = "CLSE";
+  funclong char(7) = "TOOLONG";
+  parmint int;
+  parmchar char(10);
+  myflexRecord myflexRecord;
+  myfixedRecord myfixedRecord;	
+  myPCB string;
+  yourPCB char(20);
+
+  // PSB Declaration
+  psb2 EducationPSB;					 
+
+  	function main()
+		testAIB();
+		testEGL();
+		testVG();  
+  	end
+  	function testAIB()
+  		aibtdli(func4, "psb2.coursePCB");						//0
+  		aibtdli("CLSE", "coursePCB");							//0
+  		aibtdli(func4, "coursePCB", parmint, parmchar);			//0
+  		dlilib.aibtdli(func4, "coursePCB", parmint, parmchar);	//0
+  		aibtdli(funclong, "coursePCB");							//0
+  		aibtdli(funclong, "coursePCB", parmint);				//0
+ 		aibtdli(func4, "coursePCB", parmchar);					//0
+ 		aibtdli("CLSE", "couse" + "PCB");						//0
+		aibtdli("cl"+"se", "myfixedrecord");					//0
+		aibtdli("clse", mypcb);									//0
+		aibtdli("clsee", mypcb);								//0
+		aibtdli("clse" + "e", mypcb);							//0
+		aibtdli(func4, yourpcb);								//0
+   	end
+   	function testEGL()
+   		egltdli(parmint);											//1 Function egltdli requires at least 2 argument(s).
+  		egltdli(func4, psb2.coursePCB);								//0
+  		egltdli(func4, psb2);										//1
+  		egltdli(func4, psb2.coursePCBxyz, parmint, parmchar);		//1 coursePCBxyz cannot be resolved
+  		egltdli(func4, "psb2.coursePCB", parmint, parmchar);		//1 "psb2.coursePCB" must resolve to a PCB defined in the program PSB or in the program parameter list
+  		egltdli(func4, coursePCB, parmint, parmchar);				//1 coursePCB cannot be resolved
+  		dlilib.egltdli(func4, psb2.coursePCB, parmint, parmchar);	//0
+  		egltdli(funclong, psb2.coursePCB);							//0
+  		egltdli(funclong, psb2.coursePCB, parmint);					//0
+		egltdli(func4, myfixedrecord);								//1 myfixedrecord must resolve to a PCB defined in the program PSB or in the program parameter list
+   	end
+   	function testVG()
+   		bin95 bin(9,5);
+   		bin90 bin(9,0); 
+   		vgtdli(parmint);											//0
+  		VGTDLI(func4, psb2.coursePCB, 5);							//2 The argument psb2.coursePCB cannot be passed to the in or out parameter pcbIndex of the function VGTDLI. The types DB_PCBRecord and smallInt are not assignment compatible
+  		vgtdli(func4, parmint, parmchar);							//0
+  		vglib.vgtdli(func4, parmint, parmint);						//0
+  		vgtdli(func4, parmint);										//0
+  		vgtdli(funclong, parmint);									//0
+  		vgtdli(funclong, parmint, parmint);							//0
+ 		vgtdli(func4, bin95, parmint);								//1 Argument 2 for VGTDLI may not contain decimals
+ 		vgtdli(func4, bin90, parmint);								//0
+ 		vgtdli("cl"+"se", bin90+1, 5);								//0		
+   	end   			
+end
+Record myfixedRecord type basicRecord
+	10 item1 char(5);						//0
+	10 abc char(2);							//0
+end
+Record myflexRecord type basicRecord
+	item1 string;							//0
+	abc char(2);							//0
+end
+
+Program DLIFunctions2_invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes}
+  func4 char(4) = "CLSE";
+  parmint int;
+  parmchar char(10);
+
+  // PSB Declaration
+  psb2 EducationPSB;					 
+
+  	function main()
+  		aibtdli(func4, "psb2.coursePCB");	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		egltdli(func4, psb2.coursePCB);		//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		vgtdli(func4, parmint, parmchar);	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+   	end		
+end
+LIbrary DLIFunctions3_invalid 
+  func4 char(4) = "CLSE";
+  parmint int;
+  parmchar char(10);
+
+  // PSB Declaration
+  psb2 EducationPSB;					 
+
+  	function main()
+  		aibtdli(func4, "psb2.coursePCB");	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		egltdli(func4, psb2.coursePCB);		//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		vgtdli(func4, parmint, parmchar);	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+   	end		
+end
+handler DLIFunctions4_invalid type JSFHandler 
+  func4 char(4) = "CLSE";
+  parmint int;
+  parmchar char(10);
+
+  // PSB Declaration
+  psb2 EducationPSB;					 
+
+  	function main()
+  		aibtdli(func4, "psb2.coursePCB");	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		egltdli(func4, psb2.coursePCB);		//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		vgtdli(func4, parmint, parmchar);	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+   	end		
+end
+Handler DLIFunctions5_invalid 
+  func4 char(4) = "CLSE";
+  parmint int;
+  parmchar char(10);
+
+  // PSB Declaration
+  psb2 EducationPSB;					 
+
+  	function main()
+  		aibtdli(func4, "psb2.coursePCB");	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		egltdli(func4, psb2.coursePCB);		//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		vgtdli(func4, parmint, parmchar);	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+   	end		
+end
+Service DLIFunctions6_invalid 
+  func4 char(4) = "CLSE";
+  parmint int;
+  parmchar char(10);
+
+  // PSB Declaration
+  psb2 EducationPSB;					 
+
+  	function main()
+  		aibtdli(func4, "psb2.coursePCB");	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		egltdli(func4, psb2.coursePCB);		//1 DL/I I/O is only allowed in a program that has the DLI property specified
+ 		vgtdli(func4, parmint, parmchar);	//1 DL/I I/O is only allowed in a program that has the DLI property specified
+   	end		
+end

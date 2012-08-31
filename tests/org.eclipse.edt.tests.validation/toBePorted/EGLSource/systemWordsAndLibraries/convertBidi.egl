@@ -1,0 +1,32 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program pgm
+
+
+	myStr string;
+	myCha char(10);
+	myUni unicode;
+
+	function main()
+	
+		convertBidi(myStr, local, "abc"); //0
+		convertBidi(mycha, remote, "abc"); //0
+		convertBidi(myuni, local, "abc"); //0
+		
+		convertBidi("test", remote, "abc"); //1
+		convertBidi(myStr, local, myStr); //1
+		
+		
+	end
+	
+	
+end

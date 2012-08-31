@@ -1,0 +1,133 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validate:
+// 1 The record {1} for the DELETE statement in program or function {1} must be one of the following types: Indexed, Relative, SQL. {4272, EGLMESSAGE_DELETE_STATEMENT_RECORD_IS_INVALID_TYPE}
+// 1 A FROM clause may only be specified when the delete target is a SQL record. {6626, EGLMESSAGE_DELETE_FROM_CLAUSE_WITH_NON_SQL_RECORD}
+// 1 The result set identifier {1} cannot be resolved. {6532, EGLMESSAGE_RESULTSETID_NOT_FOUND}
+
+Program DLIMainProg { @DLI{} }
+	student Student;
+	sqlRec sqlRec12;
+		
+	function main()
+		
+		delete student; //0 
+		
+//		delete sqlRec from undeclaredresultset;	// 1 
+//		delete student from resultset;	// 1 A FROM clause may only be specified when the delete target is an SQL record  {6626, EGLMESSAGE_DELETE_FROM_CLAUSE_WITH_NON_SQL_RECORD}
+		
+	end
+end
+
+Record Student type DLISegment end
+Record SqlRec12 type SqlRecord end
+
+Program MyProj (pcb1 int ) {@DLI { psb = psb, 					 
+         handleHardDLIErrors = yes,
+         pcbParms =/*["", "pcb1", "pcb2", "",""]*/[pcb1, pcb2] }	
+         // when called from APPLA_valid pcb1 is pcbC1 and receives pcbA3 
+         //							     pcb2 is pcbC2 and receives pcbA5
+         // when called from APPLB_valid pcb1 is pcbC1 and receives pcbB4 
+         //							     pcb2 is pcbC2 and receives pcbB1
+         // this program cannot use pcbC3 or pcbC4 
+  }
+	 
+	function main()
+		course Course;
+		coursePCB DB_PCBRecord;
+		sqlRec sqlRec;
+		sqlrec2 sqlrec;
+		courses Course[]; 
+		sqlrecs sqlrec[];
+		indxrec IndxRecord;
+		mqrec MQRec;
+		relrec relrecord;
+		srec	srecord;
+		name string;
+		course2 Course;
+		sqlflex sqlRecFLEX;
+		
+		delete  sqlRec; // 0
+		delete indxrec;// 0
+		delete mqrec ;// 1 The record mqrec for the DELETE statement must be one of the following types: Indexed, Relative, SQL, DL/I segment   {4272, EGLMESSAGE_DELETE_STATEMENT_RECORD_IS_INVALID_TYPE}
+		delete course usingPCB pcb11;// 1 The usingPCB item must be defined in the program PSB 
+		delete course usingPCB pcb1;// 0
+		delete relrec;// 0
+		delete srec; // 1 The record srec for the DELETE statement must be one of the following types: Indexed, Relative, SQL, DL/I segment   {4272, EGLMESSAGE_DELETE_STATEMENT_RECORD_IS_INVALID_TYPE}
+		delete courses; // 1 The record courses for the DELETE statement must be one of the following types: Indexed, Relative, SQL, DL/I segment   {4272, EGLMESSAGE_DELETE_STATEMENT_RECORD_IS_INVALID_TYPE}
+		delete course; // 0
+		delete sqlflex; // 0			
+//		delete course with #dli{}; // 1 A modified DL/I call be must be specified {7898}
+
+		delete sqlrecs;// 1 The record sqlrecs for the DELETE statement must be one of the following types: Indexed, Relative, SQL, DL/I segment   {4272, EGLMESSAGE_DELETE_STATEMENT_RECORD_IS_INVALID_TYPE}
+		delete name; // 1 The record name for the DELETE statement must be one of the following types: Indexed, Relative, SQL, DL/I segment   {4272, EGLMESSAGE_DELETE_STATEMENT_RECORD_IS_INVALID_TYPE}
+		
+		delete sqlRec with #sql{delete a};		//0
+		delete relrec with #sql{delete a};		//1
+		
+		delete sqlRec from rid;		//0
+		delete relrec from rid;		//1
+		
+	end
+end
+
+Program My2Proj  
+	 
+	function main()
+		course Course;
+		course2 Course;
+		coursePCB DB_PCBRecord;
+		courses Course[]; 
+
+		delete courses; // 2 The record courses for the DELETE statement must be one of the following types: Indexed, Relative, SQL, DL/I segment   {4272, EGLMESSAGE_DELETE_STATEMENT_RECORD_IS_INVALID_TYPE}
+		delete course; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		delete course with #dli{ DLET COURSE }; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+//		delete course with #dli{}; // 2 A modified DL/I call be must be specified  | DL/I I/O is not allowed unless the program specifies the DLI and PSB properties{7898}
+
+	end
+end
+
+Library MyLib
+function addfunc ()
+		course Course;
+		coursePCB DB_PCBRecord;
+		courses Course[]; 
+		delete course; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		
+end
+end
+
+Record Course type DLISegment end
+Record sqlRec type sqlRecord
+	10 item1 int;
+end
+
+Record sqlRecFLEX type sqlRecord
+	item1 int;
+end
+
+
+Record IndxRecord type indexedrecord { filename = "myfile",keyitem = "item1"}
+	10 item1 int;
+end
+
+record MQRec type MQRecord { queuename = "www"}
+10 item1 int;
+end
+
+record relrecord type relativerecord { filename = "myfile",keyitem = "item1"}
+10 item1 int;
+end
+
+record srecord type serialrecord{ filename = "myfile"}
+10 item1 int;
+end

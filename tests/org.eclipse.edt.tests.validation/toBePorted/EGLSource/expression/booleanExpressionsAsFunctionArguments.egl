@@ -1,0 +1,61 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * For late V6.0.0.1 requirement:
+ *
+ * sysLib.conditionAsInt ( booleanExpression boolean in ) returns ( smallInt ) ;
+ *
+ * Note:  boolean is an internally supported type. Any conditional expression can be
+ *        coded as an argument.  Output of the function is 1 if condition is true, or 0 if false.
+ */
+
+Program booleanExpressionAsFunctionArgument
+
+	function main()
+		i, j int;
+		result smallint;
+		
+		result = func( i );			// 0
+		result = func( i + j );		// 0
+		result = func( func( i ) );	// 0
+		
+		result = func( i < j );		// 0
+		result = func( !(i == j) );	// 0
+		result = func( i < k );		// 1 k cannot be resolved
+		
+		result = syslib.conditionAsInt( i < j );		// 0
+		result = syslib.conditionAsInt( !(i == j) );	// 0
+		
+		result = syslib.conditionAsInt( i < k );	 // 1 k cannot be resolved
+		result = syslib.conditionAsInt();			 // 1 exactly 1 argument
+		result = syslib.conditionAsInt( i != j, 0);	 // 1 exactly 1 argument
+		result = syslib.conditionAsInt( "8" );		 // 1 The types string and boolean are not assignment compatible
+		result = syslib.conditionAsInt( "8" as "java:int" ); // 1
+		
+		result = conditionAsInt( i < j );		// 0
+		result = conditionAsInt( !(i == j) );	// 0
+		
+		result = conditionAsInt( i < k );		// 1 k cannot be resolved
+		result = conditionAsInt();				// 1 exactly 1 argument
+		result = conditionAsInt( i != j, 0);	// 1 exactly 1 argument
+		result = conditionAsInt( "8" );		 	// 1 The types string and boolean are not assignment compatible
+		result = conditionAsInt( "8" as "java:int");	// 1
+		
+		result = mathlib.round( i, -decimals(result) );			// 0
+		result = mathlib.round( i != k, -decimals(result) );	// 2 more than one signature|k cannot be resolved.
+		result = round( i, -decimals(result) );					// 0
+		result = round( i != k, -decimals(result) );			// 2 more than one signature|k cannot be resolved.
+	end
+	
+	function func( parm any in ) returns (smallint) end
+end

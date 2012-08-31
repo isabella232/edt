@@ -1,0 +1,117 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Form valid1 type textForm 
+* { 
+	cursor = yes,                // 0
+	color = defaultColor,        // 0
+	fieldLen = 5,                // 0
+	value = "a",                 // 0
+	protect = protect,           // 0
+	highlight = noHighLight,     // 0
+	position = [1,2],            // 0
+	intensity = normalIntensity, // 0
+	detectable = yes             // 0
+}; end
+
+Form valid2 type textForm 
+* { 
+	cursor = no,       // 0
+	color = blue,      // 0
+	protect = skipProtect, // 0
+	highlight = blink, // 0
+	intensity = bold,  // 0
+	detectable = no    // 0
+}; end
+
+Form valid3 type textForm 
+* { 
+	color = green,         // 0
+	highlight = reverse,   // 0
+	intensity = invisible  // 0
+}; end
+
+Form valid4 type textForm 
+* { 
+	color = magenta,       // 0
+	highlight = underline  // 0
+}; end
+
+Form valid5 type textForm 
+* { 
+	color = red  // 0
+}; end
+
+Form valid6 type textForm 
+* { 
+	color = cyan  // 0
+}; end
+
+Form valid7 type textForm 
+* { 
+	color = yellow  // 0
+}; end
+
+Form valid8 type textForm 
+* { 
+	color = white  // 0
+}; end
+
+Form invalid1 type textForm
+* {                   // 2  Property: protect.  The value for this property for field * in invalid1 is invalid. The value must be one of the following: protect, skipProtect.
+	cursor = "a",     // 1
+	color = a,        // 1
+	fieldLen = "a",   // 1
+	value = ["a"],    // 0
+	protect = noProtect,     // 0
+	highlight = a,    // 1
+	position = a,     // 1
+	outline = a,      // 1
+	intensity = a,    // 1
+	detectable = "a"  // 1
+}; end
+
+Form invalid2 type textForm 
+* { 
+	cursor = a,        // 1
+	color = "a",       // 1
+	fieldLen = [5],    // 1
+//	protect = "a",     // 1
+	highlight = "a",   // 1
+	position = "a",    // 1
+	outline = [box,a], // 1
+	intensity = "a",   // 1
+	detectable = a     // 1
+}; end
+
+Form invalid3 type textForm 
+* { 
+	cursor = 5,     // 1
+	color = 5,      // 1
+//	protect = 5,    // 1
+	highlight = 5,  // 1
+	position = 5,   // 1
+	outline = 5,    // 1
+	intensity = 5,  // 1
+	detectable = 5  // 1
+}; end
+
+Form invalid4 type textForm 
+* { 
+	cursor = [yes],      // 1
+	color = [red],       // 1
+//	protect = [skip],    // 1
+	highlight = [blink], // 1
+	position = [[1,2]],  // 1
+	outline = "a",       // 1
+	intensity = [bold],  // 1
+	detectable = [yes]   // 1
+}; end

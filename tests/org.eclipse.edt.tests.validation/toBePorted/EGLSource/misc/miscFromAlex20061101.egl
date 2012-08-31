@@ -1,0 +1,51 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+handler EnhancedSelection02 type JSFHandler
+	{onConstructionFunction = onConstruction, 
+ 	 view = "EnhancedSelection02.jsp"} 
+ 	 
+	myRecd    MyRecd;
+	
+	myStateNames    String[5]  { displayUse=input, selectedRowItem = iSelection };
+	iSelection      int;
+
+	myStateNames01  String[5] { displayUse=input, selectedRowItem = iSelections };  /* ERROR */
+	iSelections     int[5];
+    
+    myStateNames02  String[5] { displayUse=input, selectedRowItem = myRecd.iSelections };  /* ERROR */
+    
+    myStateNames03  String[5] { displayUse = input, selectedRowItem = myRecd.iSelection };
+	
+    
+	process         String { displayUse = button, action = "doit",
+                             displayName = "Run Test" };
+
+
+	// Function Declarations
+	Function onConstruction()
+		myStateNames[1] = "California";
+		myStateNames[2] = "New York";
+		myStateNames[3] = "North Carolina";
+		myStateNames[4] = "Seattle";
+		myStateNames[5] = "Utah";
+	End
+	
+	function doit()
+	end
+End
+
+Record MyRecd  type BasicRecord
+	iSelection   int;
+	iSelections  int[5];
+end

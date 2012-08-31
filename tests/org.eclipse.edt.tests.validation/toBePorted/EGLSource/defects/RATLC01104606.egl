@@ -1,0 +1,183 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG NO_ERROR
+
+Record COURSE type DLISegment  {
+  keyItem = COURSE#
+  }
+  3 COURSE# char(10) ; 
+  3 TITLE char(80) ; 
+end   
+
+Record DESCRIPT type DLISegment  {
+  lengthItem = DESCLEN
+  }
+  3 DESCLEN int ; 
+  3 DESCRIPT char(2000) ; 
+end   
+
+Record MYAUDITRCD type basicRecord
+  3 AUDIT_HEADER char(28) ; 
+    4 AUDIT_LENGTH smallint ; 
+    4 AUDIT_ID hex(4) ; 
+    4 * char(24) ; 
+  3 AUDIT_DATA char(100) ; 
+end 
+
+Record MYCREATXRCD type basicRecord
+  3 CREATX_LENGTH smallint ; 
+  3 CREATX_TRXID char(8) ; 
+  3 CREATX_DATA char(100) ; 
+end 
+
+Record MYDBPRG_WS type basicRecord
+  3 MYDBDNAME char(8) ; 
+  3 MYKEY char(256) ; 
+  3 MYKEYLEN int ; 
+  3 MYSEGLEVEL num(2) ; 
+  3 MYPROCOPTS char(4) ; 
+  3 MYSEGNAME char(8) ; 
+  3 MYSENSEGS int ; 
+  3 MYSTATCD char(2) ; 
+  3 MYCICSERR char(2) ; 
+  3 MYCICSCON char(2) ; 
+  3 MYCICSRST num(1) ; 
+  3 MYCITY char(30) ; 
+  3 MYGRADE char(1) ; 
+  3 MYFUNC char(4) ; 
+  3 MYPCBNUM smallint ; 
+  3 MYIOAREASIZE smallint ; 
+  3 MYIOAREA char(500) ; 
+  3 MYSSA char(100) ; 
+  3 MYCHKPTSIZE char(3) ; 
+  3 MYCHKPTID char(8) ; 
+  3 MYJID smallint ; 
+  3 MYPRID char(4) ; 
+  3 MYPRID_BIN int ; 
+  3 MYRECIP char(4) ; 
+end 
+
+Record OFFERING type DLISegment  {
+  keyItem = LOCATION
+  }
+  3 LOCATION char(10) ; 
+  3 ADDRESS char(100) ; 
+    4 LINE1 char(50) ; 
+    4 LINE2 char(50) ; 
+  3 CITY char(30) ; 
+  3 STATE char(2) ; 
+  3 COUNTRY char(30) ; 
+end   
+
+Record STUDENT type DLISegment  {
+  keyItem = EMPNO
+  }
+  3 EMPNO char(6) ; 
+  3 FIRSTNME char(12) ; 
+  3 MIDINIT char(1) ; 
+  3 LASTNAME char(15) ; 
+  3 GRADE char(1) ; 
+end   
+
+Record TEACHER type DLISegment  {
+  keyItem = EMPNO
+  }
+  3 EMPNO char(6) ; 
+  3 FIRSTNME char(12) ; 
+  3 MIDINIT char(1) ; 
+  3 LASTNAME char(15) ; 
+end   
+
+Record MYDBPSB type PSBRecord
+  iopcb  IO_PCBRecord  { @PCB { pcbType = PCBKind.TP } };
+  pcb0 IO_PCBRecord { redefines = iopcb};
+  ELAALT ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb1 ALT_PCBRecord { redefines = ELAALT };
+  ELAEXP ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb2 ALT_PCBRecord { redefines = ELAEXP };
+
+  COURSE_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB,
+      hierarchy = [
+        @Relationship { segmentRecord = COURSE },
+        @Relationship { segmentRecord = OFFERING, parentRecord = COURSE },
+        @Relationship { segmentRecord = TEACHER, parentRecord = OFFERING },
+        @Relationship { segmentRecord = STUDENT, parentRecord = OFFERING }
+    ] } } ;
+  pcb3 DB_PCBRecord { redefines = COURSE_dbPCB };
+
+  COURSE2_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB, secondaryIndex = "XINDXKEY",
+      hierarchy = [
+        @Relationship { segmentRecord = COURSE },
+        @Relationship { segmentRecord = DESCRIPT, parentRecord = COURSE }
+    ] } } ;
+  pcb4 DB_PCBRecord { redefines = COURSE2_dbPCB };
+
+  MYGSAM1_gsamPCB GSAM_PCBRecord
+    { @PCB { pcbType = PCBKind.GSAM } } ;
+  pcb5 GSAM_PCBRecord { redefines = MYGSAM1_gsamPCB };
+end  
+
+Function MYDBPRG_ADD()
+  add STUDENT usingPCB psb.COURSE_dbPCB;   
+end 
+
+
+Function MYDBPRG_INQUIRY()
+  get STUDENT ;
+end 
+
+Function MYDBPRG_MAIN()
+  MYDBPRG_ADD();
+  MYDBPRG_INQUIRY();
+  MYDBPRG_UPDATE();
+end 
+
+Function MYDBPRG_UPDATE()
+  get STUDENT forUpdate ;
+end 
+
+
+Program DLIPGMA type basicProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no,
+  @DLI {
+         psb = psb, callInterface = DLICallInterfaceKind.CBLTDLI,
+         handleHardDLIErrors = no
+       }
+  }
+
+  
+  psb MYDBPSB;
+
+  
+  COURSE COURSE; 
+  MYAUDITRCD MYAUDITRCD; 
+  MYCREATXRCD MYCREATXRCD; 
+  MYDBPRG_WS MYDBPRG_WS; 
+  OFFERING OFFERING; 
+  STUDENT STUDENT; 
+
+  
+  VAGen_EZESYS char(8);
+  VAGen_EZEREPLY num(1);
+  VAGen_EZE_WAIT_TIME bin(9,2);
+  VAGen_EZE_ITEMLEN int;
+
+  function main()
+    
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    MYDBPRG_MAIN: MYDBPRG_MAIN();
+  end 
+end 

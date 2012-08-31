@@ -1,0 +1,102 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+// validateReferenceCompatibility:
+Program validateReferenceCompatibilityPgm
+	function main() end
+	
+	function func()
+		intVar int;
+		bin90Var bin(9,0);
+		bin91Var bin(9,1);
+		bin40Var bin(4,0);
+		decimalVar decimal;
+		smallintVar smallint;
+		char4Var char(4);
+		char8Var char(8);
+		mbcharVar mbchar(4);
+		stringVar string;
+		dec6Var decimal(6);
+		dec7Var decimal(7);
+		dec8Var decimal(8);
+		dec9Var decimal(9);
+		smallFixedRecVar smallFixedRecord;
+		bigFixedRecVar bigFixedRecord;
+		
+		convert(intVar);				//0
+		clearFields(activeForm.form1);	//0
+		
+		charInOutFunc(char4Var);		//0
+		charInOutFunc(mbcharVar);		//1 The argument mbcharVar cannot be passed to the loose parameter p1 of the function charInOutFunc. It must be of primitive type char
+		charInOutFunc(stringVar);		//1 The argument stringVar cannot be passed to the loose parameter p1 of the function charInOutFunc. It must be of primitive type char
+		charInOutFunc("a");				//0
+		
+		calculateChkDigitMod10(char4Var, intVar, smallIntVar);	//0
+		//String can be passed to char(0) parm for system function parameters
+		calculateChkDigitMod10(stringVar, intVar, smallIntVar);	//0
+		
+		numberInOutFunc(intVar);		//0
+		numberInOutFunc(bin90Var);		//0
+		numberInOutFunc(decimalVar);	//0
+		numberInOutFunc(char4Var);		//1 The argument char4Var cannot be passed to the loose parameter p1 of the function numberInOutFunc. It must have a numeric primitive type
+		
+		char4InOutFunc(char4Var);		//0
+		char4InOutFunc(char8Var);		//1 The argument char8Var cannot be passed to the inOut parameter p1 of the function char4InOutFunc. The types char(8) and char(4) are not reference compatible.  {6716*, FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM}
+		
+		intInOutFunc(intVar);			//0
+		intInOutFunc(bin90Var);			//0
+		intInOutFunc(smallintVar);		//1 cannot be passed to the inOut parameter		
+		intInOutFunc(bin91Var);			//1
+		intInOutFunc(bin40Var);			//1 cannot be passed to the inOut parameter
+		
+		smallIntInOutFunc(smallintVar);		//0
+		smallIntInOutFunc(bin40Var);		//0
+		smallIntInOutFunc(intVar);			//1 cannot be passed to the inOut parameter
+		smallIntInOutFunc(bin90Var);		//1
+		smallIntInOutFunc(bin91Var);		//1		
+		
+		smallFixedRecordInOutFunc(smallFixedRecVar);	//0
+		smallFixedRecordInOutFunc(bigFixedRecVar);		//0
+		
+		bigFixedRecordInOutFunc(smallFixedRecVar);		//1 cannot be passed to the inOut parameter
+		bigFixedRecordInOutFunc(bigFixedRecVar);		//0
+		
+		decimal7InOutFunc(dec6Var);			//0
+		decimal7InOutFunc(dec7Var);			//0
+		decimal7InOutFunc(dec8Var);			//1 cannot be passed to the inOut parameter
+		decimal7InOutFunc(dec9Var);			//1 cannot be passed to the inOut parameter
+		
+		decimal8InOutFunc(dec6Var);			//1 cannot be passed to the inOut parameter
+		decimal8InOutFunc(dec7Var);			//1 cannot be passed to the inOut parameter
+		decimal8InOutFunc(dec8Var);			//0
+		decimal8InOutFunc(dec9Var);			//1 cannot be passed to the inOut parameter
+	end
+	
+	function charInOutFunc(p1 char inout) end
+	function numberInOutFunc(p1 number inout) end
+	function char4InOutFunc(p1 char(4) inout) end
+	function intInOutFunc(p1 int inout) end
+	function smallIntInOutFunc(p1 smallint inout) end
+	function smallFixedRecordInOutFunc(p1 smallFixedRecord inout) end
+	function bigFixedRecordInOutFunc(p1 bigFixedRecord inout) end
+	function decimal7InOutFunc(p1 decimal(7) inout) end
+	function decimal8InOutFunc(p1 decimal(8) inout) end
+end
+
+Record smallFixedRecord
+	10 item1 int;
+end
+
+Record bigFixedRecord
+	10 item1 int[100];
+end

@@ -1,0 +1,1666 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler booleanItems type JSFHandler {
+	view = "booleanItems.jsp",
+ 	title = "Boolean Items Page"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Move boolean inputs to boolean outputs and display both to user" } ;
+	lastEvent LastEvent ;
+		
+	charInput CharacterBooleanItem { displayUse = input } ;
+	charOutput CharacterBooleanItem { displayUse = output, displayName = "Your choice:" } ;
+	numInput NumericBooleanItem { displayUse = input } ;
+	numOutput NumericBooleanItem { displayUse = output, displayName = "Your choice:" } ;
+	
+	// event buttons
+	buttonProcessInput ButtonProcessInput ;  
+	buttonQuit ButtonQuit ;
+	
+	//event handlers
+	function processInput()
+		lastEvent = "Process Input" ;
+		charOutput = charInput ;
+		numOutput = numInput ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+
+end	
+
+DataItem CharacterBooleanItem char(1) { 
+	displayName = "Character Boolean - Check or uncheck this box:", 
+	value = "N", 
+	isBoolean = yes }
+end 
+
+DataItem NumericBooleanItem smallInt { 
+	displayName = "Numeric Boolean - Check or uncheck this box:", 
+	value = 0, 
+	isBoolean = yes }
+end 
+
+
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler clobItems type JSFHandler {
+	view = "clobItems.jsp", 
+ 	title = "Character Large Object Page"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Move character large object input value to output value and display both to user" } ;
+	lastEvent LastEvent ;
+			
+	clobText clob {
+		displayUse = input,
+		displayName = "Enter lots of text here:  ",
+		help = "Any text you want to enter"
+	} ;
+	outputText clob {
+		displayUse = output,
+		displayName = "Text you entered:"
+	} ;
+	
+	// event buttons
+	buttonProcessInput buttonProcessInput ;
+	buttonQuit buttonQuit ;
+	
+	//event handlers
+	function processInput()
+		lastEvent = "Process character large object" ;
+		outputText = clobText ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end	
+
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler dateItems type JSFHandler {
+	view = "dateItems.jsp",
+ 	title = "Date Items Page"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Move input date value to formatted date outputs and display dates to user" } ;
+	lastEvent LastEvent ;
+	dates Dates ;
+	
+	// event buttons
+	buttonGetCurrentDate ButtonGetCurrentDate ;  
+	buttonProcessInput ButtonProcessInput ;  
+	buttonQuit ButtonQuit ;
+	
+	//event handlers
+	function processInput()
+		lastEvent = "Process Input" ;
+		dates.usaDate = dates.inputDate ;
+		dates.isoDate = dates.inputDate ;
+		dates.eurDate = dates.inputDate ;
+		dates.jisDate = dates.inputDate ;
+		dates.myDate = dates.inputDate ;
+		dates.defaultDate = dates.inputDate ;
+	end
+	
+	function getCurrentDate()  
+		dates.inputDate = currentDate() ;
+		processInput() ;
+		lastEvent = "Get Current Date" ;
+	end
+	
+	function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end	
+ 
+DataItem DateValue date  {
+	displayUse = output 
+	}
+end
+
+Record Dates 
+	inputDate DateValue { 
+		displayUse = input,
+		displayName = "Enter Date:",  
+		dateFormat = usaDateFormat 
+	} ;
+	usaDate DateValue {
+	   	displayName = "USA Format:",
+	   	dateFormat = usaDateFormat  
+   	} ;
+   	isoDate DateValue {
+   		dateFormat = isoDateFormat,
+   		displayName = "ISO Format:"
+   	} ;
+   	eurDate DateValue {
+   		dateFormat = eurDateFormat,
+   		displayName = "European Format:"
+   	} ;
+   	jisDate DateValue {
+   		dateFormat = jisDateFormat,
+   		displayName = "Japanese Format:"
+   	} ;
+   	myDate DateValue {
+   		dateFormat = "'Year: 'yyyy', month: 'MM', day: 'dd" ,
+   		displayName = "My Date Format:"
+   	} ;
+   	defaultDate DateValue {
+   		displayName = "Default (Locale) Date Format:"
+   	} ;
+end
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler eventHandler type JSFHandler {
+	view = "eventHandler.jsp",
+ 	title = "Event Handler Page"
+}
+	// page fields
+	desc ExerciseDescription { value = "Set output field when handling event" } ;
+	lastEvent LastEvent ;
+	
+	// event buttons
+	buttonProcessEvent buttonProcessEvent ;
+	buttonQuit buttonQuit ;
+	
+	// event handler functions
+	Function processEvent()
+		lastEvent = "Process Event" ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end	
+
+ 
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler forwardTo type JSFHandler {
+	view = "forwardTo.jsp", 
+ 	title = "Forward To Another Page",
+	onConstructionFunction = forwardToPageLoad
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Forward to target passing information as parameters to the arget \"on page load\" function" } ;
+	lastEvent LastEvent ;
+	
+	item ForwardToItem ;
+	numericItem ForwardToNumber ;
+	bean ForwardToRecord ;
+	
+	// event buttons
+	buttonGoForward ButtonGoForward ;
+	buttonStayHere ButtonStayHere ;
+	buttonQuit ButtonQuit ;
+		
+	// On page load event handler	
+	function forwardToPageLoad()
+		lastEvent = "ForwardTo Page Load" ;
+		item = "parameter value from ForwardTo" ;
+		numericItem = 100 ; 
+		bean.recordItem1 = item ;
+		bean.recordItem2 = item ;
+	end	
+		
+	//event handlers
+	function goForward()
+		lastEvent = "Go Forward" ;
+		forward item, numericItem, bean to "forwardToTarget" ;
+	end
+	
+	function stayHere()  
+		lastEvent = "Stay Here" ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end
+	
+DataItem ForwardToItem char(50) end
+
+DataItem ForwardToNumber decimal(10,2) end
+
+Record ForwardToRecord 
+	recordItem1 ForwardToItem ;
+	recordItem2 ForwardToItem ;
+end 
+
+Record ForwardParameterContents	
+	item OutputText { displayName = "Item Parameter Contents:" } ;
+	numericItem OutputNumber { displayName = "Numeric Parameter Contents:" } ;
+	recordItem1 OutputText  { displayName = "Record Parameter Contents, Item One:" } ;
+	recordItem2 OutputText  { displayName = "Record Parameter Contents, Item One:" } ;
+end
+	
+
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler forwardToTarget type JSFHandler {
+	view = "forwardToTarget.jsp",
+ 	title = "Target Of Foward To Another Page",
+	onConstructionFunction = forwardToTargetPageLoad
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Receive parameters in \"on page load\" function that were forwarded from another program" } ;
+	lastEvent LastEvent ;
+	
+	parameters ForwardParameterContents ;
+	
+	// event buttons
+	buttonQuit ButtonQuit ;
+	
+	// On page load event handler	
+	function forwardToTargetPageLoad( 
+		item ForwardToItem,
+		numericItem ForwardToNumber,
+		bean ForwardToRecord ) 
+		
+		lastEvent = "ForwardToTarget Page Load" ;
+		
+		parameters.item = item ;
+		parameters.numericItem = numericItem ;
+		move bean to parameters byName ; 		
+	end			
+	
+	//event handlers
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end
+
+
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler hyperlink type JSFHandler {
+	view = "hyperlink.jsp", 
+ 	title = " Hyperlink Page", 
+	onConstructionFunction = hyperlinkPageLoad
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Hyperlink to another page passing item parameters to on page load function" } ;
+	lastEvent LastEvent ;
+	
+	link HyperlinkAndParameters ;
+	
+	// event buttons
+	buttonStayHere ButtonStayHere ;
+	buttonQuit buttonQuit ;
+		
+	function hyperlinkPageLoad()	 
+		lastEvent = "hyperlinkPageLoad" ;
+		// set parameter values for link
+		link.pageLink = "Go to another page" ;
+		link.textItem = "Text parameter value" ;
+		link.numberItem = 100.01 ;
+	end	
+	
+	//event handlers
+	function stayHere()  
+		lastEvent = "Stay Here" ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end	
+
+DataItem PageLinkItem char(50) {
+	displayUse = hyperlink,
+	displayName = "Page Link",
+	value = "Go To Another Page",
+	action = "hyperlinkTarget.jsp"
+	}
+end
+
+DataItem PageLinkReturnItem char(10) {
+	displayUse = hyperlink,
+	displayName = "Return Link",
+	action = "hyperlink.jsp",
+	value = "Go Back"
+	}
+end
+	
+DataItem HyperlinkParameterContents char(50) {
+	displayUse = output,
+	displayName = "Input parameter contents:",
+	value = "No parameter passed"
+	}
+end
+
+DataItem HyperlinkText char(50) { 
+	displayName = "Text parameter:",
+	displayUse = output 
+	}
+end
+
+DataItem HyperlinkNumber decimal(10,2) { 
+	displayName = "Numeric parameter:",
+	displayUse = output 
+	}
+end
+
+Record HyperlinkAndParameters
+	textItem HyperlinkText ;
+	numberItem HyperlinkNumber ;
+	pageLink PageLinkItem ;
+end
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler hyperlinkTarget type JSFHandler {
+	view = "hyperlinkTarget.jsp", 
+ 	title = " Hyperlink Target Page",
+	onConstructionFunction = hyperlinkTargetPageLoad
+	}
+	
+	// page fields
+	desc ExerciseDescription { value = "Receive data from hyperlink in on page load function and move it to output fields" } ;
+	lastEvent LastEvent ;
+		
+	parameter HyperlinkParameterContents ;
+	textParameter hyperlinkText ;
+	numberParameter hyperlinkNumber ;
+	
+	returnLink PageLinkReturnItem ;
+	
+	// event buttons
+	buttonStayHere ButtonStayHere ;
+	buttonQuit buttonQuit ;	
+		
+	// on page load event handler
+	function hyperLinkTargetPageLoad(
+		textItem hyperlinkText, 
+		numberItem hyperlinkNumber,
+		pageLink pageLinkItem 
+		)
+		lastEvent = "HyperlinkTarget Page Load" ;
+		parameter = pageLink ;
+		textParameter = textItem ;
+		numberParameter = numberItem ;
+	end	
+	
+	// event handlers
+	function stayHere()  
+		lastEvent = "Stay Here" ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+ 		forward to "webExercisesMenu" ;
+	end
+end	
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler inputItem type JSFHandler {
+	view = "inputItem.jsp", 
+ 	title = "Input Item Page"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Move input value to output value and display both to user" } ;
+	lastEvent LastEvent ;
+			
+	inputText string {
+		displayUse = input,
+		displayName = "Enter text here:  ",
+		help = "Any text you want to enter"
+	} ;
+	outputText string {
+		displayUse = output,
+		displayName = "Text you entered:"
+	} ;
+	
+	// event buttons
+	buttonProcessInput buttonProcessInput ;
+	buttonQuit buttonQuit ;
+	
+	//event handlers
+	function processInput()
+		lastEvent = "Process Input" ;
+		outputText = inputText ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end	
+
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler monetaryItems type JSFHandler {
+	view = "monetaryItems.jsp",
+ 	title = "Monetary Item Page"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Move input monetary value to output value and display both to user" } ;
+	lastEvent LastEvent ;
+		
+	inputNumber MonetaryItem {
+		displayUse = input,
+		displayName = "Enter amount:",
+		help = "Any amount you want to enter"
+	} ;
+	outputNumber MonetaryItem {
+		displayUse = output,
+		displayName = "Amount you entered:"
+	} ;
+	
+	// event buttons
+	buttonProcessInput buttonProcessInput ;
+	buttonQuit buttonQuit ;
+		
+	//event handlers
+	function processInput()
+		lastEvent = "Process Input" ;
+		outputNumber = inputNumber ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+
+end	
+
+DataItem MonetaryItem decimal(16,2) {
+	currency = yes, 
+	sign = leading,
+	align = right,
+	zeroFormat = yes 
+	}
+end
+
+
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler multipleItemSelectLists type JSFHandler {
+	view = "multipleItemSelectLists.jsp", 
+ 	title = "Multiple Item Select Page",
+	onConstructionFunction = multipleItemSelectListsPageLoad
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Move selected input values to output values and display both to user" } ;
+	lastEvent LastEvent ;
+	
+	use ColorTable ;
+			
+	inputColorFromArrayByValue color[] {
+		displayUse = input,
+		displayName = "Color From Array By Value:" ,
+		selectFromListItem = colors,
+		selectType = value
+	} ;
+	outputColorFromArrayByValue outputColor[] ;
+	inputColorFromArrayByIndex colorCode[] {
+		displayUse = input,
+		displayName = "Color From Array By Index:" ,
+		selectFromListItem = colorsForIndices,
+		selectType = index
+	} ; 
+	outputColorFromArrayByIndex outputColor[] ;
+	
+	inputColorFromTableByValue color[] {
+		displayUse = input,
+		displayName = "Color from table by value:" ,
+		selectFromListItem = ColorTable.colorValue,
+		selectType = value
+	} ;
+	outputColorFromTableByValue outputColor[] ;
+	inputColorFromTableByIndex colorCode[] {
+		displayUse = input,
+		displayName = "Color from table by Index:" ,
+		selectFromListItem = ColorIndexTable.colorValue,
+		selectType = index
+	} ;
+	outputColorFromTableByIndex outputColor[] ;
+
+	colors color[] ;
+	colorsForIndices color[] ;	
+	
+	// event buttons
+	buttonProcessInput buttonProcessInput ;
+	buttonQuit buttonQuit ;
+	
+	// on page load event handler
+	function multipleItemSelectListsPageLoad()
+		 
+		colors = [
+		"red",
+		"blue",
+		"white",
+		"yellow",
+		"green",
+		"purple",
+		"orange"
+		] ;
+		colorsForIndices = colors ;
+		lastEvent = "Page Load" ;
+		
+		setOutputColors() ;
+	end
+	
+	// event handlers
+	function processInput() 
+		lastEvent = "Process Input" ;
+		setOutputColors() ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ; 
+	end
+	
+	private Function setOutputColors()
+		i, iLast int ;
+		j colorCode ;
+		outputColorFromArrayByValue = inputColorFromArrayByValue ;
+		outputColorFromArrayByIndex.removeAll() ;
+		iLast = inputColorFromArrayByIndex.getSize() ;
+		for ( i from 1 to iLast ) ; 
+			j =  inputColorFromArrayByIndex[i] ;
+			outputColorFromArrayByIndex.appendElement( colorsForIndices[j] );
+		end 
+		outputColorFromTableByValue = inputColorFromTableByValue ;
+		outputColorFromTableByIndex.removeAll() ;
+		iLast = inputColorFromTableByIndex.getSize() ;
+		for ( i from 1 to iLast ) ; 
+			j = inputColorFromTableByIndex[i] ;
+			outputColorFromTableByIndex.appendElement(ColorIndexTable.colorValue[j]);
+		end
+	end	
+end	
+
+
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler onPageLoad type JSFHandler {
+	view = "onPageLoad.jsp",
+ 	title = "OnPageLoad Event Page",
+	onConstructionFunction = pageLoadEvent
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Demonstrate that the \"on page load\" event occurs before the page is displayed" } ;
+	lastEvent LastEvent ;
+	
+	// event buttons
+	buttonAnotherEvent ButtonAnotherEvent ;
+	buttonQuit buttonQuit ;
+			
+	// On page load event handler	
+	Function pageLoadEvent()  
+		lastEvent = "Page Load Event" ;
+	end
+			
+	//event handlers
+	Function anotherEvent()
+		lastEvent = "Another Event" ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end
+	
+
+
+	
+
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler pageAttributeFunctions type JSFHandler {
+	view = "pageAttributeFunctions.jsp",
+ 	title = "Page Attribute Functions",
+	onConstructionFunction = pageAttributePageLoad
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Set, clear, and get session data and set and get request data" } ;
+	lastEvent LastEvent ;
+	
+	requestItem RequestAttributeItem ;
+	requestNumber RequestAttributeNumber ;
+	requestBean RequestAttributeRecord ;
+	sessionItem SessionAttributeItem ;
+	sessionNumber SessionAttributeNumber ;
+	sessionBean SessionAttributeRecord ;
+	 
+	// event buttons
+	buttonSetSessionAttributes ButtonSetSessionAttributes ;
+	buttonClearSessionAttributes ButtonClearSessionAttributes ;
+	buttonGoToReceiver ButtonGoToReceiver ;
+	buttonQuit ButtonQuit ;
+			
+	//event handlers
+	function pageAttributePageLoad()
+		lastEvent = "pageAttributePageLoad" ;
+		requestItem = "Request item value" ;
+		requestNumber = 1000.001 ;
+		requestBean.item1 = "Request record item1 value" ;
+		requestBean.item2 = "Request record item2 value" ;
+		sessionItem = "Session item value" ;
+		sessionNumber = 2000.002 ;
+		sessionBean.item1 = "Session record item1 value" ;
+		sessionBean.item2 = "Session record item2 value" ;
+  	end
+  
+  	function setSessionAttributes()
+  		lastEvent = "Set Session Attributes" ;
+		setSessionAttr("ItemAttr", sessionItem) ;
+		setSessionAttr("NumberAttr", sessionNumber) ;
+		setSessionAttr("BeanAttr", sessionBean) ;
+	end
+	
+	function clearSessionAttributes()
+		lastEvent = "Clear Session Attributes" ;
+		clearSessionAttr("ItemAttr") ;
+		clearSessionAttr("NumberAttr") ;
+		clearSessionAttr("BeanAttr") ;
+	end
+	
+	function goToReceiver()
+		// set request attributes just before forwarding
+		setRequestAttr("ItemAttr", requestItem) ;
+		setRequestAttr("NumberAttr", requestNumber) ;
+		setRequestAttr("BeanAttr", requestBean) ;
+		lastEvent = "Go To Receiver" ;
+		forward to "pageAttributeReceiver" ;
+  	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end
+	
+DataItem RequestAttributeItem char(50) {
+	displayUse = output,
+	displayName = "Request Attribute Text Value:" 
+	}
+end
+
+DataItem SessionAttributeItem char(50) {
+	displayUse = output,
+	displayName = "Session Attribute Text Value:" 
+	}
+end
+
+DataItem RequestAttributeNumber bin(9,3) {
+	displayUse = output,
+	displayName = "Request Attribute Number Value:" 
+	}
+end
+
+DataItem SessionAttributeNumber decimal(9,3) {
+	displayUse = output,
+	displayName = "Session Attribute Number Value:" 
+	}
+end
+
+Record RequestAttributeRecord 
+	item1 char(50) {
+		displayUse = output,
+		displayName = "Request Record Item1 Value:" }
+	;
+	item2 char(50) {
+		displayUse = output,
+		displayName = "Request Record Item2 Value:" }
+	;
+end 
+	
+Record SessionAttributeRecord 
+	item1 char(50) {	
+		displayUse = output,
+		displayName = "Session Record Item1 Value:" }
+	;
+	item2 char(50) {
+		displayUse = output,
+		displayName = "Session Record Item2 Value:" }
+	;
+end 
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler pageAttributeReceiver type JSFHandler {
+	view = "pageAttributeReceiver.jsp",
+ 	title = "Page Attribute Receiver",
+	onConstructionFunction = receiveRequestAttributesOnLoad
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Get request and session attributes and display them" } ;
+	lastEvent LastEvent ;
+	
+	receiverRequestItem RequestAttributeItem ;
+	receiverRequestNumber RequestAttributeNumber ;
+	receiverRequestBean RequestAttributeRecord ;
+	receiverSessionItem SessionAttributeItem ;
+	receiverSessionNumber SessionAttributeNumber ;
+	receiverSessionBean SessionAttributeRecord ;
+	
+	// event buttons
+	buttonGetSessionAttributes ButtonGetSessionAttributes ;
+	buttonReturnToSender ButtonReturnToSender ;
+	buttonQuit ButtonQuit ; 		
+	
+	// on page load event	
+	function receiveRequestAttributesOnLoad()
+		lastEvent = "Receive Request Attributes On Load" ;
+		getRequestAttr("ItemAttr", receiverRequestItem) ;
+		getRequestAttr("NumberAttr", receiverRequestNumber) ;
+		getRequestAttr("BeanAttr", receiverRequestBean) ;
+	end
+	
+	//event handlers
+	function getSessionAttributes()
+		lastEvent = "Get Session Attributes" ;
+		getSessionAttr("ItemAttr", receiverSessionItem) ;
+		getSessionAttr("NumberAttr", receiverSessionNumber) ;
+		getSessionAttr("BeanAttr", receiverSessionBean) ;  	
+	end
+	
+	function returnToSender() 
+		lastEvent = "Return To Sender" ;
+		forward to "pageAttributeFunctions" ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end
+	
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler picture type JSFHandler {
+	view = "picture.jsp", 
+ 	title = "Picture Page"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Upload a picture and show it on the page" } ;
+	lastEvent LastEvent ;
+		
+	inputFile blob {
+		displayUse = input,
+		displayName = "Select your own picture in a .jpg file ",
+		help = "Browse and select any picture you have in a .jpg file"
+	} ;
+	
+	picture blob {
+		displayUse = output,
+		displayName = "Your picture"
+	} ;
+		
+	// event buttons
+	buttonProcessInput buttonProcessInput ;
+	buttonQuit buttonQuit ;
+	
+	function processInput()
+		lastEvent = "Process input" ;
+		picture = inputFile ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end	
+
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler recordList type JSFHandler {
+	view = "recordList.jsp",
+ 	title = "Record List ",
+	onConstructionFunction = recordListPageLoad
+	}
+ 
+	// page fields
+	desc ExerciseDescription { value = "Add rows to a list represented by a dynamic array" } ;
+	lastEvent LastEvent ;
+		 
+	list SimpleListRecord[] ;
+	
+	// event buttons
+	buttonAddRow ButtonAddRow ;
+	buttonQuit buttonQuit ;
+	
+	//onPageLoad event handler
+	Function recordListPageLoad()
+		addRow() ;
+		lastEvent = "RecordList Page Load" ;
+	end
+		
+	//event handlers
+	function addRow()
+		lastEvent = "Add Row" ;
+		detail SimpleListRecord ;
+		i num(4) ;
+		iChar char(4) ;
+		listSize int ;
+		
+		listSize = size(list) ;
+		i = listSize + 1 ;
+		iChar = i ;
+		detail.rowId = iChar ;
+		detail.rowText = "Contents row " + iChar ;
+ 		list.appendElement(detail) ;
+	end
+
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+end	
+
+Record SimpleListRecord  
+	rowId SimpleListIdColumn ;
+	rowText SimpleListTextColumn ;
+end
+
+DataItem SimpleListIdColumn char(4) {
+	displayUse = output,
+	displayName = "Row Identifier",
+	align = right
+	}
+end
+
+DataItem SimpleListTextColumn char(30) {	
+	displayUse = output,
+	displayName = "Row Text"
+	}
+end	
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler rowHyperlink type JSFHandler {
+	view = "rowHyperlink.jsp" ,
+ 	title = "Row Hyperlink ",
+	onConstructionFunction = rowHyperlinkPageLoad
+	}
+ 
+	// page fields
+	desc ExerciseDescription { value = "Hyperlink from a row in a grid to detail page passing row contents" } ;
+	lastEvent LastEvent ;
+	 
+	list HyperlinkListRecord[] ;
+	
+	// event buttons
+	buttonQuit buttonQuit ;
+	
+	//onPageLoad event handler
+	Function RowHyperlinkPageLoad (
+		rowId SimpleListIdColumn,
+		rowText SimpleListTextColumn )
+		lastEvent = "RowHyperlink Page Load" ;
+		// retrieve list
+		getList() ;
+		// update modified row in list if present
+//		updateRow(rowId, rowText) ;
+	 	if ( rowId in list.rowId )
+	 		list[arrayIndex].rowText = rowText ;
+	 	end
+	 	// save current list in session data
+	 	setSessionAttr("HyperlinkList", list) ;
+	end
+
+	Function quit()
+		lastEvent = "Quit" ;
+		clearSessionAttr("HyperlinkList") ;
+		forward to "webExercisesMenu" ;
+	end
+	
+	private function getList()
+		arraySize int ;
+		
+		getSessionAttr("HyperlinkList", list) ;
+		arraySize = size(list) ;
+		if (arraySize == 0)
+			readList() ;
+		end
+	end	
+	
+	private function readList()
+		i num(4) ;
+		iChar char(4) ;
+		detail HyperlinkListRecord ;
+		// obtain list - real program usually retrieve list from data base
+		i = 1;
+		while (i <= 10) 
+		 	iChar = i ;
+		 	detail.rowId = iChar ;
+			detail.rowText = "Contents row " + iChar ;
+	 		list.appendElement(detail) ;
+	 		i = i + 1 ;
+	 	end	
+	end
+	
+	private function updateRow (
+		rowId SimpleListIdColumn,
+		rowText SimpleListTextColumn )
+		i num(4) ;
+		iChar char(4) ;
+		arraySize int ;
+		
+		arraySize = size(list) ;
+		i = 1 ;
+		while (i <= arraySize) 
+		 	iChar = i ;
+		 	if (list[i].rowId == rowId)
+		 		list[i].rowText = rowText ;
+		 	end
+			i = i + 1 ;
+	 	end	
+	 end
+end	
+
+Record HyperlinkListRecord  
+	rowId SimpleListIdColumn {
+		displayUse = hyperlink,
+		action = "rowHyperlinkDetail.jsp"
+	} ;
+	rowText SimpleListTextColumn ;
+end
+
+Record HyperlinkUpdateRecord 
+	rowId SimpleListIdColumn ;
+	rowText SimpleListTextColumn {
+		displayUse = input 
+	} ;
+end
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler rowHyperlinkDetail type JSFHandler {
+	view = "rowHyperlinkDetail.jsp", 
+ 	title = "Row Hyperlink Detail Page",
+	onConstructionFunction = rowHyperlinkDetailPageLoad
+	}
+	// page fields
+	desc ExerciseDescription { value = "Allow updating of contents of row selected from grid" } ;
+	lastEvent LastEvent ;
+		
+	detail HyperlinkUpdateRecord ;
+			
+	// on page load function	
+	function rowHyperlinkDetailPageLoad(
+		rowId SimpleListIdColumn,
+		rowText SimpleListTextColumn
+		)
+		lastEvent = "Row Hyperlink Detail Page Load" ;
+		detail.rowId = rowId ;
+		detail.rowText = rowText ;
+	end	
+	
+	// event buttons
+	buttonUpdateDetails ButtonUpdateDetails ;
+	buttonQuit buttonQuit ;
+
+	//event handlers
+	function updateDetails()  
+		lastEvent = "Update Details" ;
+		forward detail.rowId, detail.rowText to "rowHyperlink" ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+end	
+
+
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler setErrorFunction type JSFHandler {
+	view = "setErrorFunction.jsp", 
+ 	title = "SetError Function"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Display error messge related to page or to input item" } ;
+	lastEvent LastEvent ;
+	
+	inputText SetErrorInputItem ;
+	
+	// event buttons
+	buttonSetItemError buttonSetItemError ;
+	buttonSetPageError buttonSetPageError ;
+	buttonQuit buttonQuit ;	
+	
+	//event handlers
+	function setPageError()
+		lastEvent = "setPageError" ;
+ 		setError("Page error message.") ;
+ 		setError("Second page error message.") ;
+	end
+	
+	function setItemError()
+		lastEvent = "setItemError" ;
+ 		setError(inputText, "", "Input item error message.") ;
+	end
+
+	Function quit()
+		lastEvent = "quit" ;
+		forward to "webExercisesMenu" ;
+	end 
+	
+end
+	
+DataItem SetErrorInputItem char(50) {
+	displayUse = input,
+	displayName = "Input text:",
+	help = "Any text you want to enter"
+	}
+end
+
+
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler singleItemSelectLists type JSFHandler {
+	view = "singleItemSelectLists.jsp", 
+ 	title = "Single Item Select Page",
+	onConstructionFunction = SingleItemSelectListsPageLoad
+	}
+    use ColorTable ;
+    use ColorIndexTable ;
+    
+	// page fields
+	desc ExerciseDescription { value = "Move selected input values to output values and display both to user" } ;
+	lastEvent LastEvent ;
+	
+	inputColorFromArrayByValue color {
+		displayUse = input,
+		displayName = "Color from array by value:" ,
+		selectFromListItem = colors,
+		selectType = value
+	} ;
+	outputColorFromArrayByValue outputColor ;
+	inputColorFromArrayByIndex colorCode {
+		displayUse = input,
+		displayName = "Color from array by index:" ,
+		selectFromListItem = colorsForIndices,
+		selectType = index
+	} ;
+	outputColorFromArrayByIndex outputColor ;
+	
+	inputColorFromTableByValue color {
+		displayUse = input,
+		displayName = "Color from table by value:" ,
+		selectFromListItem = ColorTable.colorValue,
+		selectType = value
+	} ;
+	outputColorFromTableByValue outputColor ;
+	
+	inputColorFromTableByIndex colorCode {
+		displayUse = input,
+		displayName = "Color value from table via index:" ,
+		selectFromListItem = ColorIndexTable.colorValue,
+		selectType = index
+	} ;
+	outputColorFromTableByIndex outputColor ;
+			
+// event buttons 
+	buttonProcessInput buttonProcessInput ;
+	buttonQuit buttonQuit ;
+	
+//	colors Colors { initialized = yes } ;
+	
+	colors string[] ; 	
+	colorsForIndices string[] ;	
+		
+	// on page load event handler
+	function SingleItemSelectListsPageLoad()
+		colors = [
+		"red",
+		"blue",
+		"white",
+		"yellow",
+		"green",
+		"purple",
+		"orange"
+		] ;
+		colorsForIndices = colors ;
+		lastEvent = "Page Load" ;
+	end
+	 
+	// event handlers
+	function processInput()
+		lastEvent = "Process Input" ;
+		setOutputColors() ;
+	end
+	 
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+	private Function setOutputColors()
+		outputColorFromArrayByValue = inputColorFromArrayByValue ;
+		if ( inputColorFromArrayByIndex > 0 )
+			outputColorFromArrayByIndex = colors[inputColorFromArrayByIndex] ;
+		else
+			outputColorFromArrayByIndex = "" ;
+		end
+		outputColorFromTableByValue = inputColorFromTableByValue ;
+		if ( inputColorFromTableByIndex > 0 ) 
+			outputColorFromTableByIndex = ColorIndexTable.colorValue[inputColorFromTableByIndex] ;
+		else
+			outputColorFromTableByIndex = "" ;
+		end
+	end
+end	
+
+DataItem color string end
+DataItem outputColor string { displayUse = output, displayName = "Your selection:  " } end
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler timeItems type JSFHandler {
+	view = "timeItems.jsp", 
+ 	title = "Time Items Page"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Move input time value to formatted time outputs and display times to user" } ;
+	lastEvent LastEvent ;
+	
+	times Times ;
+	
+	// event buttons
+	buttonGetCurrentTime ButtonGetCurrentTime ;  
+	buttonProcessInput ButtonProcessInput ;  
+	buttonQuit ButtonQuit ;
+	
+	//event handlers
+	function processInput()
+		lastEvent = "Process Input" ;
+		times.usaTime = times.inputTime ;
+		times.isoTime = times.inputTime ;
+		times.eurTime = times.inputTime ;
+		times.jisTime = times.inputTime ;
+  		times.myTime = times.inputTime ;
+		times.defaultTime = times.inputTime ;
+	end
+	
+	function getCurrentTime()  
+		times.inputTime = currentFormattedTime ;
+		processInput() ;
+		lastEvent = "Get Current Time" ;
+	end
+	
+	function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+
+end	
+
+DataItem TimeValue time  {
+	displayUse = output
+	}
+end
+
+Record Times 
+	inputTime TimeValue { 
+		displayUse = input,
+		timeFormat = usaTimeFormat,
+		displayName = "Enter time value:" } ;
+	usaTime TimeValue {
+		timeFormat = usaTimeFormat,
+	   	displayName = "USA Format:"
+   	} ;
+   	isoTime TimeValue {
+   		timeFormat = isoTimeFormat,
+   		displayName = "ISO Format:"
+   	} ;  
+   	eurTime TimeValue {
+   		timeFormat = eurTimeFormat,
+   		displayName = "European Format:"
+   	} ;
+   	jisTime TimeValue {
+   		timeFormat = jisTimeFormat,
+   		displayName = "Japanese Format:"
+   	} ;
+   	myTime TimeValue {
+   		timeFormat = "'Hours: 'hh', minutes: 'mm', seconds: 'ss" ,
+   		displayName = "My Time Format:"
+   	} ;
+	defaultTime TimeValue {
+   		displayName = "Default (Locale) Format:"
+   	} ;  
+end
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler validatorBypassFunctions type JSFHandler {
+	view = "validatorBypassFunctions.jsp", 
+ 	title = "Validator Bypass Functions Page",
+	validatorFunction = pageValidator,
+	validationBypassFunctions = [ ignoreValidation, quit ]
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Check that validation can be bypassed for specified events" } ;
+	lastEvent LastEvent ;
+	
+	itemInput ItemValidatorInput ;
+	itemOutput ValidatorOutputItem ;
+	pageInput PageValidatorInput ;
+	pageOutput ValidatorOutputItem ;
+	
+	// event buttons
+	buttonTryValidation buttonTryValidation ;
+	buttonIgnoreValidation buttonIgnoreValidation ;
+	buttonQuit buttonQuit ;
+	
+	//event handlers
+	function tryValidation()
+		lastEvent = "Try Validation" ;
+		itemOutput = itemInput ;
+		pageOutput = pageInput ;
+	end
+	
+	function ignoreValidation()
+		lastEvent = "Ignore Validation" ;
+		itemOutput = itemInput ;
+		pageOutput = pageInput ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+
+end	
+
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler validatorFunctions type JSFHandler {
+	view = "validatorFunctions.jsp", 
+ 	title = "Validator Functions Page",
+	validatorFunction = pageValidator
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Use validator functions to check that input meets expectations" } ;
+	lastEvent LastEvent ;
+	
+	itemInput ItemValidatorInput ;
+	itemOutput ValidatorOutputItem ;
+	pageInput PageValidatorInput ;
+	pageOutput ValidatorOutputItem ;
+	
+	// event buttons
+	buttonTryValidation buttonTryValidation ;
+	buttonQuit buttonQuit ;
+	
+	//event handlers
+	function tryValidation()
+		lastEvent = "Try Validation" ;
+		itemOutput = itemInput ;
+		pageOutput = pageInput ;
+	end
+	
+	Function quit()
+		lastEvent = "Quit" ;
+		forward to "webExercisesMenu" ;
+	end
+	
+end	
+
+Function itemValidator ()
+	lastEvent = "itemValidator" ;
+	if (itemInput != "Valid")
+		setError(itemInput, "", "Please enter \\\"Valid\\\" in this field" ) ;
+	end
+end
+
+Function pageValidator ()
+	lastEvent = "pageValidator" ;
+	if (itemInput != "Valid")
+		setError(itemInput, "", "Please enter \\\"Valid\\\" in this field" ) ;
+	end
+	if (pageInput != "Input")
+		setError(pageInput, "", "Please enter \\\"Input\\\" in this field" ) ;
+	end
+end
+
+DataItem ItemValidatorInput char(50) {
+	displayUse = input,
+	displayName = "Item validator input:  ",
+	inputRequired = yes, 
+	validatorFunction = itemValidator
+	}
+end
+
+DataItem PageValidatorInput char(50) {
+	displayUse = input,
+	inputRequired = yes,
+	displayName = "Page validator input:  "
+	}
+end
+
+DataItem ValidatorOutputItem char(50) {
+	displayUse = output,
+	displayName = "Validated input:",
+	value = "** no input received **"
+	}
+end
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler viewPageProperty type JSFHandler {
+	title = "View Page Property",
+	view = "viewPage.jsp"
+	}
+
+	// page fields
+	desc ExerciseDescription { value = "Demonstrate that view property allows JSP name to be different than JSFHandler name" } ;
+	
+	// buttons
+	buttonQuit buttonQuit ;
+	
+	// event handler functions
+	Function quit()
+		forward to "webExercisesMenu" ;
+	end	
+end
+		
+
+// Shared part definitions are in simpleWebExercises.CommonParts.egl
+
+handler webExercisesMenu type JSFHandler {
+	view = "webExercisesMenu.jsp", 
+ 	title = "EGL Web Exercises Menu"
+}
+	// page fields 
+	desc ExerciseDescription { value = "Menu for linking to all other web exercises" } ;
+	
+	// links to web exercises
+	MenuEntryEventHandler WebMenuItem { 
+		value = "Event Handler",
+		action = "eventHandler.jsp"
+		} ;
+	MenuEntryOnPageLoad WebMenuItem { 
+		value = "On Page Load",
+		action = "onPageLoad.jsp"
+		} ;
+	MenuEntryViewPageProperty WebMenuItem { 
+		value = "View Page Property",
+		action = "viewPage.jsp"
+		} ;
+	MenuEntryInputItem WebMenuItem { 
+		value = "Input Item",
+		action = "inputItem.jsp"
+		} ;
+	MenuEntryMonetaryItems WebMenuItem { 
+		value = "Monetary Items",
+		action = "monetaryItems.jsp"
+		} ;
+	MenuEntryBooleanItems WebMenuItem { 
+		value = "Boolean Items",
+		action = "booleanItems.jsp"
+		} ;	
+	MenuEntryDateItems WebMenuItem { 
+		value = "Date Items",
+		action = "dateItems.jsp"
+		} ;	
+	MenuEntryTimeItems WebMenuItem { 
+		value = "Time Items",
+		action = "timeItems.jsp"
+		} ;
+	MenuEntryClobItems WebMenuItem { 
+		value = "Character Large Objects",
+		action = "clobItems.jsp"
+		} ;
+	MenuEntryPictures WebMenuItem { 
+		value = "Pictures",
+		action = "picture.jsp"
+		} ;
+	MenuEntryRecordList WebMenuItem { 
+		value = "Record List",
+		action = "recordList.jsp"
+		} ;
+	MenuEntrySetErrorFunction WebMenuItem { 
+		value = "Set Error Function",
+		action = "setErrorFunction.jsp"
+		} ;
+	MenuEntryPageAttributeFunctions WebMenuItem { 
+		value = "Page Attribute Functions",
+		action = "pageAttributeFunctions.jsp"
+		} ;
+	MenuEntryValidatorFunctions WebMenuItem { 
+		value = "Validator Functions",
+		action = "validatorFunctions.jsp"
+		} ;
+	MenuEntryValidatorBypassFunctions WebMenuItem { 
+		value = "Validator Bypass Functions",
+		action = "validatorBypassFunctions.jsp"
+		} ;
+	MenuEntryForwardTo WebMenuItem { 
+		value = "Forward To",
+		action = "forwardTo.jsp"
+		} ;
+	MenuEntryHyperlink WebMenuItem { 
+		value = "Hyperlink",
+		action = "hyperlink.jsp"
+		} ;
+	MenuEntryRowHyperlink WebMenuItem { 
+		value = "Row Hyperlink",
+		action = "rowHyperlink.jsp"
+		} ;
+ 	MenuEntrySingleItemSelectLists WebMenuItem { 
+ 		value = "Single Item Select Lists",
+ 		action = "singleItemSelectLists.jsp"
+ 		} ;	
+ 	MenuEntryMultipleItemSelectLists WebMenuItem { 
+ 		value = "Multiple Item Select Lists",
+ 		action = "multipleItemSelectLists.jsp"
+ 		} ;	
+//	MenuEntrySingleRowSelectLists WebMenuItem { 
+//		value = "Single Row Select List",
+//		action = "singleRowSelectList.jsp"
+//		} ;	
+//	MenuEntryMultipleRowSelectLists WebMenuItem { 
+//		value = "Multiple Row Select List",
+//		action = "multipleRowSelectList.jsp" 
+//		} ;	
+	
+end	
+
+
+
+// match valid table
+//
+DataTable ColorIndexTable type matchValidTable  
+	{shared = no, resident = no}
+	
+	3 colorValue ColorTableValue ;
+	3 colorCode ColorCode ;  
+	
+	{contents = 
+		[
+			[ "red", 1 ],
+			[ "white", 2 ],
+			[ "blue", 3 ],
+			[ "yellow", 4 ],
+			[ "green", 5 ],
+			[ "purple", 6 ],
+			[ "orange", 7 ]
+		]}
+	
+end
+
+
+
+// match valid table
+//
+DataTable ColorTable type matchValidTable  
+	{shared = no, resident = no}
+	
+	3 colorValue ColorTableValue ; 
+	3 colorCode ColorCode ;  
+	
+	{contents = 
+		[
+			[ "red", 1 ],
+			[ "white", 2 ],
+			[ "blue", 3 ],
+			[ "yellow", 4 ],
+			[ "green", 5 ],
+			[ "purple", 6 ],
+			[ "orange", 7 ]
+		]}
+	
+end
+
+DataItem ColorTableValue char(10) end
+DataItem ColorCode int end
+
+
+// Shared part definitions for simple Web exercises
+
+DataItem ExerciseDescription string {
+	displayUse = output,
+	displayName = "Exercise description: ",
+	value = "None"  
+	}
+end
+
+DataItem LastEvent string {
+	displayUse = output,
+	displayName = "Last event handler function executed:",
+	value = "None"  
+	}
+end
+
+DataItem WebMenuItem string {
+//	actionProgam = "PageHandlerOrWebProgramName.jsp",
+ 	displayName = "",
+	displayUse = hyperlink
+	}
+end
+
+
+DataItem RowId int { displayName = "Row Identifier", align = right } end
+DataITem RowText string {displayName = "Row Text" } end
+
+Record RowDetail
+	rowId RowId { displayUse = output } ;
+	rowText RowText { displayUse = output } ;
+end
+
+DataItem InputText string { displayUse = input } end
+DataItem OutputText string { displayUse = output } end
+
+DataItem InputNumber decimal(10,2) { displayUse = input } end 
+DataItem OutputNumber decimal(10,2) { displayUse = output } end 
+
+// Buttons
+DataItem ButtonAddRow char(1) { displayUse = button, action = "addRow", displayName = "Add Row" } end
+DataItem ButtonAnotherEvent char(1) { displayUse = button, action = "anotherEvent", displayName = "Another Event" } end
+DataItem ButtonDeleteRow char(1) { displayUse = button, action = "deleteRow", displayName = "Delete Row" } end
+DataItem ButtonDeleteRows char(1) { displayUse = button, action = "deleteRows", displayName = "Delete Selected Rows" } end
+DataItem ButtonGetCurrentDate char(1) { displayUse = button, action = "getCurrentDate", displayName = "Get Current Date" } end
+DataItem ButtonGetCurrentTime char(1) { displayUse = button, action = "getCurrentTime", displayName = "Get Current Time" } end
+DataItem ButtonGetRow char(1) { displayUse = button, action = "getRow", displayName = "Get Row" } end
+DataItem ButtonGoForward char(1) { displayUse = button, action = "goForward", displayName = "Go Forward" } end
+DataItem ButtonQuit char(1) { displayUse = button, action = "quit", displayName = "Quit" } end
+DataItem ButtonProcessEvent char(1) { displayUse = button, action = "processEvent", displayName = "Process Event" } end
+DataItem ButtonProcessInput char(1) { displayUse = button, action = "processInput", displayName = "Process Input" } end
+DataItem ButtonSetItemError char(1) { displayUse = button, action = "setItemError", displayName = "Set Item Error" } end
+DataItem ButtonSetPageError char(1) { displayUse = button, action = "setPageError", displayName = "Set Page Error" } end
+DataItem ButtonClearSessionAttributes char(1) { displayUse = button, action = "clearSessionAttributes", displayName = "Clear Session Attributes" } end
+DataItem ButtonSetSessionAttributes char(1) { displayUse = button, action = "setSessionAttributes", displayName = "Set Session Attributes" } end
+DataItem ButtonGetSessionAttributes char(1) { displayUse = button, action = "getSessionAttributes", displayName = "Get Session Attributes" } end
+DataItem ButtonGoToReceiver char(1) { displayUse = button, action = "goToReceiver", displayName = "Go To Receiver" } end
+DataItem ButtonReturnToSender char(1) { displayUse = button, action = "returnToSender", displayName = "returnToSender" } end
+DataItem ButtonStayHere char(1) { displayUse = button, action = "stayHere", displayName = "Stay Here" } end
+DataItem ButtonTryValidation char(1) { displayUse = button, action = "tryValidation", displayName = "Try Validation" } end
+DataItem ButtonIgnoreValidation char(1) { displayUse = button, action = "ignoreValidation", displayName = "Ignore Validation" } end
+DataItem ButtonUpdateDetails char(1) { displayUse = button, action = "updateDetails", displayName = "Update Details" } end
+DataItem ButtonUpdateRow char(1) { displayUse = button, action = "updateRow", displayName = "Update Row" } end	
+DataItem ButtonUpdateRows char(1) { displayUse = button, action = "updateRows", displayName = "Update Selected Rows" } end	

@@ -1,0 +1,347 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+// test serviceLib functions from program
+Program testServiceLibPgm {allowUnqualifiedItemReferences=yes}
+	serviceVar servicePartx;
+	interfaceVar interfacePartx;	
+	
+	use lib;
+
+	function main()
+		serviceVar servicePartx;
+		interfaceVar interfacePartx;
+		
+		serviceVar = null;				//0
+		interfaceVar = null;			//0
+		if( serviceVar == null ) end	//0
+		if( interfaceVar == null ) end	//0
+		
+		serviceVar = new servicePartx;		//1 The new operator is not allowed for services or interfaces
+		interfaceVar = new interfacePartx;	//1 The new operator is not allowed for services or interfaces
+		serviceFunc( new servicePartx );	//1 The new operator is not allowed for services or interfaces
+		
+		serviceFunc( serviceVar );		//0
+		
+	end
+	
+	function serviceFunc( p1 servicePartx ) end	//0
+end	
+
+Service servicePartx
+end
+
+Interface interfacePartx
+end
+
+Service servicePart
+end
+
+Interface interfacePart
+end
+
+Library lib type ServiceBindingLibrary
+	webServiceVar servicePart{@WebBinding{
+		wsdlFile = "WEB-INF/wsdl/StockQuote.wsdl",
+		wsdlPort = "StockQuote"}};
+		
+	webInterfaceVar interfacePart{@WebBinding{
+		wsdlFile = "WEB-INF/wsdl/StockQuote.wsdl",
+		wsdlPort = "StockQuote"}};
+	
+	tcpipServiceVar servicePart{@EGLBinding{
+		commType = TCPIP,
+		serviceName = "servicePart",
+		servicePackage = "",
+		tcpipLocation = "www.ibm.com:10"}};
+		
+	tcpipInterfaceVar interfacePart{@EGLBinding{
+		commType = TCPIP,
+		serviceName = "servicePart",
+		servicePackage = "",
+		tcpipLocation = "www.ibm.com:10"}};
+	
+	
+	function libFunc() returns( int ) end
+end
+
+// Take the example from the spec and mess it up.
+handler StockValueClient type JSFHandler 								//0
+	customerID String;										//0
+  	value float;											//0
+  	value2 string;											//0
+
+  	function getStockValueClicked()							//0
+    	value = StockValueServices.stockValue				//0
+                                .getStockValue(customerID);	//0
+        value = StockValueServices2.stockValue 				//1 StockValueServices2 cannot be resolved
+        						.getStockValue(customerID); //0
+        value = StockValueServices.getStockValue(customerID);//1 getStockValue cannot be resolved
+    	value = StockValueServices.stockValue.getStockValue(value);	//0
+		value = StockValueServices.stockValue				//0
+                               .publicGetStockValue(customerID);//0
+        value = StockValueServices.stockValue.PrivateGetStockValue(customerID);	//1 PrivateGetStockValue cannot be resolved
+   		value2 = StockValueServices.stockValue				//0
+                                .getStockValue(customerID);	//0
+   	end														
+end
+
+Service StockValue											// 0
+ 	use StockValueServices;									//0
+
+ 	function getStockValue (custID string in) returns (float)//0	
+  		value float;										//0
+		quote float;										//0
+  		customer Customer;									//0	
+
+  		customerInfo.getCustomerInfo(custID, customer);		//0
+  		customerInfo.getCustomerInfo2(custID, customer);	//1 getCustomerInfo2 cannot be resolved
+  		customerInfo.getCustomerInfo(customer, custID);		//2 not assignment compatible | not assignment compatible
+  		if (customer.errorMsg == "")						//0
+     		quote = stockQuote.getStockQuote(customer.symbol);//0
+    		 value = quote * customer.numShares;			//0
+  		end
+  		return (value);										//0
+ 	end
+ 	function publicGetStockValue (custID string in) returns (float)//0
+ 		return (privateGetStockValue(custID));				//0
+ 	end	
+ 	private function privateGetStockValue(custID string in) returns (float)//0
+ 		value float;										//0	
+ 		return (value);										//0
+ 	end	
+end
+Record Customer												//0
+  customerID String;										//0
+  firstName String;											//0
+  lastName String;											//0
+  symbol String;											//0
+  numShares float;											//0
+  errorMsg String;											//0
+end 	
+
+Interface CustomerInfo										//0
+  function getCustomerInfo (custID string in, 				//0
+                            cust Customer out); 			//0
+end
+
+Interface StockQuote 										//0
+
+	function getStockQuote (symbol string in) returns (float);//0
+end 
+
+Library StockValueServices		//0
+	stockValue StockValue {};			//1
+	customerInfo CustomerInfo {};		//1
+	stockQuote StockQuote {};							//1
+end 
+
+//End of example from spec
+
+// test assignment compatibility
+Interface Interface1a								//0
+end
+Interface Interface2a								//0
+end
+Service Service1a 									//0
+			implements Interface1a					//0
+end 
+Service Service2a 									//0
+			implements Interface2a					//0
+end 
+
+
+Program testCompatPgm type textuiProgram {allowUnqualifiedItemReferences=yes}
+	InterfaceVar1   Interface1a;				//0
+	InterfaceVar1a  Interface1a;				//0
+	InterfaceVar2   Interface2a;				//0
+	ServiceVar1		Service1a;					//0
+	ServiceVar1a	Service1a;					//0
+	ServiceVar2		Service2a;					//0
+	
+	use formg2;
+	
+	function main()
+		testAssignCompat();						//0
+		testCompareCompat();					//0
+		testMoveCompat();						//0 
+		testSetStmt();							//0
+		testCallStmt();							//0 
+		testMiscellaneousStmts();				//0
+	end
+	function testAssignCompat()
+		InterfaceVar1 = InterfaceVar1a;			//0
+		InterfaceVar1 = InterfaceVar2;			//1 Interface1a and Interface2a are not compatible
+		ServiceVar1 = ServiceVar1a;				//0
+		ServiceVar1 = ServiceVar2;				//1 Service1a and Service2a are not compatible
+		InterfaceVar1 = ServiceVar1;			//0
+		InterfaceVar1 = ServiceVar2;			//1 Interface1a and Service2a are not compatible
+		
+	end	
+	function testCompareCompat()
+		if (InterfaceVar1 == InterfaceVar1a)	//0
+		end
+		if (InterfaceVar1 == InterfaceVar2)		//1 InterfaceVar1 is not valid for compare to InterfaceVar2
+		end
+		if (ServiceVar1 == ServiceVar1a)		//0
+		end
+		if (ServiceVar1 == ServiceVar2)			//1 ServiceVar1 is not valid for compare to ServiceVar2
+		end
+		if (InterfaceVar1 == ServiceVar1)		//0
+		end
+		if (InterfaceVar1 == ServiceVar2)		//1 InterfaceVar1 is not valid for compare to ServiceVar2
+		end	
+	end
+	function testMoveCompat()
+		move InterfaceVar1a to InterfaceVar1;	//1 Invalid move source InterfaceVar1a
+		move InterfaceVar2 to InterfaceVar1;	//1 Invalid move source InterfaceVar2
+		move ServiceVar1a to ServiceVar1;		//1 Invalid move source ServiceVar1a
+		move ServiceVar2 to ServiceVar1;		//1 Invalid move source ServiceVar2
+		move ServiceVar1 to InterfaceVar1;		//1 Invalid move source ServiceVar1
+		move ServiceVar2 to InterfaceVar1;		//1 Invalid move source ServiceVar2
+
+		move 5 to InterfaceVar1;	//1 Invalid move target InterfaceVar1
+		move 5 to InterfaceVar1;	//1 Invalid move target InterfaceVar1
+		move 5 to ServiceVar1;		//1 Invalid move target ServiceVar1
+		move 5 to ServiceVar1;		//1 Invalid move target ServiceVar1
+		move 5 to InterfaceVar1;		//1 Invalid move target InterfaceVar1
+		move 5 to InterfaceVar1;		//1 Invalid move target InterfaceVar1
+	end	
+	function testsetStmt()
+		//Can we change these messages to be something like:
+		//the state red requries that interfacevar1a be an item reference in a form or......
+		// DEM - consider this when there's more time...
+		set interfacevar1a red;					//1 The state RED is not allowed for this item reference 
+		set servicevar2 initial;				//1 The state INITIAL is not allowed for this item reference 
+	end
+	function testCallStmt()
+		call "mypgm" (servicevar2);					//1 call argument is invalid
+		call "mypgm2" (interfacevar2);				//1 call argument is invalid
+	end 
+	function testMiscellaneousStmts()
+		transfer to mypgm passing servicevar2;	//1 The passing record identifier servicevar2 must be a record variable
+		show textform returning to mypgm passing interfacevar2; //1 The passing record identifier interfacevar2 must be a record variable
+	end 	
+end		
+program mypgm (servicevar Service2a)		//1 call argument is invalid
+	function main()
+	end
+end	
+program mypgm2 (interfacevar Interface2a)	//1 call argument is invalid
+	function main()
+	end
+end	
+Formgroup formg2 
+	form textform type textform {formsize=[24,80]}
+	end
+end
+
+// ****************************************************************************************
+// * Many asserted errors below this point were changed to assert no errors, because
+// * sysLib.currentException is a dictionary and there's no way to know what the
+// * types of its fields are. One example is the following:
+// *
+// * if(syslib.currentException.code == 2000)		//1 string and int are not compatible 
+// *
+// * was changed to:
+// *
+// * if(syslib.currentException.code == 2000)		//0
+// ****************************************************************************************
+
+// test exception information
+Library ExceptionTypeLibrary 
+	{
+	throwNrfEofExceptions = yes,
+	handleHardIOErrors = yes
+	}
+
+	function testServiceBindingException()
+		
+		if(syslib.currentException.code as String == "com.ibm.egl.ServiceBindingException")//0 
+		end
+		if(currentException.code as String == "com.ibm.egl.ServiceBindingException")	//0
+		end
+		
+		if(syslib.currentException.description as String == "abc")//0
+		end
+		if(currentException.description as String == "abc")		//0
+		end
+		if(syslib.currentException.code as int == 2000)		//0
+		end
+		if(currentException.code as int == 2000)				//0
+		end
+		if(syslib.currentException.description as int == 10)	//0
+		end
+		if(currentException.description as int == 5)			//0
+		end			
+	end
+	
+	function testServiceInvocationException()
+		
+		if(syslib.currentException.code as String == "com.ibm.egl.ServiceInvocationException") //0
+		end
+		if(currentException.code as String == "com.ibm.egl.ServiceInvocationException") //0
+		end
+		
+		if(syslib.currentException.description as String == "abc")		//0
+		end
+		if(currentException.description as String == "abc")				//0
+		end
+		
+		if(syslib.currentException.faultcode as String == "abcde")		//0
+		end
+		if(currentException.faultcode as String == "abcde")				//0
+		end
+		
+		if(syslib.currentException.source as String == "abcde")			//0
+		end
+		if(currentException.source as String == "abcde")					//0
+		end
+		
+		if(syslib.currentException.location as String == "abc")			//0
+		end
+		if(currentException.location as String == "abc")					//0
+		end
+		
+		if(syslib.currentException.diagnostic as String == "abcde")		//0
+		end
+		if(currentException.diagnostic as String == "abcde")				//0
+		end
+		
+		if(syslib.currentException.code as int == 2000)		//0
+		end
+		if(currentException.code as int == 2000)				//0
+		end
+		if(syslib.currentException.description as int == 10)	//0
+		end
+		if(currentException.description as int == 5)			//0
+		end
+		if(syslib.currentException.faultcode as int == 10)		//0
+		end
+		if(currentException.faultcode as int == 5)				//0
+		end
+		if(syslib.currentException.source as int == 10)		//0
+		end
+		if(currentException.source as int == 5)				//0
+		end
+		if(syslib.currentException.location as int == 10)		//0
+		end
+		if(currentException.location as int == 5)				//0
+		end
+		if(syslib.currentException.diagnostic as int == 10)	//0
+		end
+		if(currentException.diagnostic as int == 5)			//0
+		end
+
+	end
+end

@@ -1,0 +1,273 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program ConsoleUIOpenUIPgm type basicProgram {V60ExceptionCompatibility=yes}
+	myFormRec OpenUIRecord;
+	myForm OpenUIForm;
+
+	function main()
+	end
+
+	function propertiesTests()
+		myPresentationAttributes PresentationAttributes {color = blue, highlight = underline, intensity = bold}; // 1
+		
+		openUI {							// 0
+			allowAppend = no,	// 0
+			allowDelete = no,	// 0
+			allowInsert = yes,	// 0
+			bindingByName = no,	// 0
+			color = blue,	// 0
+			currentArrayCount = 6,	// 0
+			displayOnly = yes,	// 0
+			help = "hh",	// 0
+			helpMsgKey = "PF7",	// 0
+			highlight = nohighlight,	// 0
+			intensity = dim,	// 0
+			isConstruct = yes,	// 1 When isConstruct property is set, there must be exactly one bind target.
+			maxArrayCount = 7,	// 0
+			setInitial = no	// 0
+		} myForm	// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+		end	// 0
+		
+		ConsoleLib.currentRowAttributes = myPresentationAttributes; 		// 1
+		openUI {} myForm
+			OnEvent(BEFORE_OPENUI)	// 0
+		end
+		
+		openUI {
+			allowAppend = nox,				// 1 The value for this property must be one of
+			color = bluex,					// 1 Property: Color.  The value for this property must be one of the following: black, blue, cyan, defaultColor, green, magenta, red, white, yellow
+			currentArrayCount = "8",		// 0
+			displayOnly = "yes",			// 1
+			helpMsgKey = abc,				// 1
+			highlight = nohighlightx,		// 1 ighlight.  The value for this property must be one of the following: blink, defaultHighlight, noHighlight, reverse, underline
+			intensity = dimx				// 1 ntensity.  The value for this property must be one of the following: bold, defaultIntensity, dim, invisible, normalIntensity
+		} myForm
+			OnEvent(BEFORE_OPENUI)
+		end
+		
+		intVar int;
+		stringVar string;
+		
+		openUI {						//0
+			help = stringVar,			//0
+			helpMsgKey = stringVar,		//0
+			currentArrayCount = intVar,	//0
+			maxArrayCount = intVar		//0
+		} myForm						//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+		
+		openUI {							//0
+			help = stringFunc(),			//0
+			helpMsgKey = stringFunc(),		//0
+			currentArrayCount = intFunc(),	//0
+			maxArrayCount = intFunc()		//0
+		} myForm							//0
+			OnEvent(BEFORE_OPENUI)			//0
+		end									//0
+		
+		openUI {						//0
+			help = "a",					//0
+			helpMsgKey = "a",			//0
+			currentArrayCount = 5,		//0
+			maxArrayCount = 5			//0
+		} myForm						//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+		
+		openUI {							//0
+			help = intVar,					//0
+			helpMsgKey = intVar,			//0
+			currentArrayCount = stringVar,	//0
+			maxArrayCount = stringvar		//0
+		} myForm							//0
+			OnEvent(BEFORE_OPENUI)			//0
+		end									//0
+		
+		openUI {								//0
+			help = intFunc(),					//0
+			helpMsgKey = intFunc(),				//0
+			currentArrayCount = stringFunc(),	//0
+			maxArrayCount = stringFunc()		//0
+		} myForm								//0
+			OnEvent(BEFORE_OPENUI)				//0
+		end										//0
+
+		openUI {						//0
+			help = 5,					//0
+			helpMsgKey = 5,				//0
+			currentArrayCount = "a",	//0
+			maxArrayCount = "a"			//0
+		} myForm						//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+		
+		openUI {						//0
+			help = foo,					//1 cannot be resolved
+			helpMsgKey = foo,			//1 cannot be resolved
+			currentArrayCount = foo,	//1 cannot be resolved
+			maxArrayCount = foo			//1 cannot be resolved
+		} myForm						//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+		
+		openUI {						//0
+			help = foo(),				//1 cannot be resolved
+			helpMsgKey = foo(),			//1 cannot be resolved
+			currentArrayCount = foo(),	//1 cannot be resolved
+			maxArrayCount = foo()		//1 cannot be resolved
+		} myForm						//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+		
+	end
+	
+	function intFunc() returns (int) end
+	function stringFunc() returns (string) end
+
+	function targetObjectTests()
+		myWindow Window = new Window;	// 0
+		myMenu Menu {labelText = "aa", labelKey = "bb"};	// 0
+		myMenuItem MenuItem = new MenuItem;	// 0
+		myPrompt Prompt = new Prompt;	// 0
+		myPresentationAttributes PresentationAttributes;	// 0
+		
+		openUI myWindow	// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+		end	// 0
+		
+		openUI myMenu	// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+		end
+		
+		openUI myMenuItem					// 1 not a valid type to be opened by the OpenUI statement
+			OnEvent(BEFORE_OPENUI)	// 0
+		end
+		
+		openUI myPrompt	// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+		end
+		
+		openUI myForm.arrayField1	// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+		end
+		
+		openUI myForm.arrayField2	// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+		end
+		
+		openUI myForm.field1, myForm.field2	// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+		end
+		
+		openUI myPresentationAttributes		// 1 not a valid type to be opened by the OpenUI statement
+			OnEvent(BEFORE_OPENUI)	// 0
+		end
+
+		openUI myFormRec					// 1 not a valid type to be opened by the OpenUI statement
+		end
+
+		openUI myPrompt, myForm				// 2 must be a ConsoleField declared in a ConsoleForm when multiple targets are opened
+		end
+	end
+
+	function onEventTests()
+		myField string = "field1";
+		myKey string = "F1";
+		
+		openUI myForm bind myFormRec
+			OnEvent(AFTER_DELETE)	// 0
+			OnEvent(AFTER_FIELD: "field1")	// 0
+			OnEvent(AFTER_INSERT)	// 0
+			OnEvent(AFTER_OPENUI)	// 0
+			OnEvent(AFTER_ROW)	// 0
+			OnEvent(BEFORE_DELETE)	// 0
+			OnEvent(BEFORE_FIELD: "field1", "field2")	// 0
+			OnEvent(BEFORE_INSERT)	// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+			OnEvent(BEFORE_ROW)	// 0
+			OnEvent(MENU_ACTION)				// 1 Arguments must be supplied
+			OnEvent(ON_KEY: "F2")	// 0
+		end
+		
+		openUI myForm bind myFormRec
+			OnEvent(BEFORE_OPENUI1)				// 1 cannot be resolved
+			OnEvent(BEFORE_INSERT: "field1")	// 1 Arguments are not allowed
+			OnEvent(BEFORE_FIELD)				// 1 Arguments must be supplied
+			OnEvent(BEFORE_FIELD: "field3")	// 0
+		end
+	end
+	
+	function bindTests()
+		myWindow Window = new Window;	// 0
+		myPrompt Prompt = new Prompt;	// 0
+		field1 char(10);	// 0
+		field2 char(10);	// 0
+		abc int;	// 0
+		const c1 string = "abc";	// 0
+
+		OpenUI myForm bind field1, field2	// 0
+		end
+
+		OpenUI myForm.field1, myForm.field2 bind field1, field2	// 0
+		end
+
+		OpenUI myPrompt bind field1, field2	// 0
+		end
+
+		OpenUI myWindow bind field1, field2					// 1 bind clause is only applicable when
+		end
+
+		OpenUI myForm.field1, myForm.field2 bind field1  		// 0
+		end
+
+		OpenUI {displayOnly = yes} myForm.field1 bind c1	// 0
+		end
+
+		OpenUI myForm.field1 bind c1  						// 1 Cannot bind to read-only target
+		end
+
+		OpenUI myForm.field1 bind "jjj" 					// 0
+		end
+		
+//?		OpenUI myForm.field1 bind 1, 2, 3 					// 0
+//		end
+		
+		openUI {isConstruct = yes} myForm					// 1 there must be exactly one bind target
+		end
+		
+		openUI {isConstruct = yes} myForm bind abc 			// 1 bind target must be a text variable
+		end
+		
+		openUI myForm bind xyz								// 1 xyz cannot be resolved
+		end
+	end
+end
+
+record OpenUIForm type consoleForm {formSize = [14,80]}
+	* ConsoleField {position = [1,1], value = "test"};	// 0
+	field1 ConsoleField {field1 = "field1", position = [2,1], fieldLen = 5, protect = YES};	// 1
+	field2 ConsoleField {field2 = "field2", position = [3,1], fieldLen = 5};	// 1
+	arrayField1 ConsoleField[3] {arrayField1 = "arrayField1", position = [4,1], fieldLen = 40};	// 1
+	arrayField2 ConsoleField[3] {arrayField2 = "arrayField2", position = [5,1], fieldLen = 10, protect = YES};	// 1
+	
+	myDict dictionary {field1 = field1, field2 = field2};	// 0
+	myArrayDict arrayDictionary {arrayField1 = arrayField1, arrayField2 = arrayField2};	// 0
+end
+
+record OpenUIRecord type basicRecord
+	field1 char(5);
+	field2 char(5);
+	arrayField1 char(5)[3];
+	arrayField2 char(5)[3];
+end

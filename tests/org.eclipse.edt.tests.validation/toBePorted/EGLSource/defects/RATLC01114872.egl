@@ -1,0 +1,144 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program mathLibTest type basicProgram {
+	alias = "V61MTHLB",
+	includeReferencedFunctions = YES,
+	allowUnqualifiedItemReferences = YES 
+	}
+
+	function main()
+		mathLibMain() ; 
+	end
+	
+	function mathLibMain()
+		Re decimal(18,6);
+		X decimal(18,6);
+		Y decimal(18,6);
+
+		X = -000007894985.888000;	
+		Re = mathLib.round(mathLib.abs(X),-decimals(Re));
+
+		X = 000000000000.423486;
+		Re = mathLib.round(mathLib.acos(X),-decimals(Re));
+
+		X = 000000000000.523486;	
+		Re = mathLib.round(mathLib.asin(X),-decimals(Re));
+
+		X = 000000000223.523486;
+        Re = mathLib.round(mathLib.atan(X),-decimals(Re));
+
+		X = 000000000005.593919;
+		Y = 000000000000.490412;
+		Re = mathLib.round(mathLib.atan2(X, Y),-decimals(Re));
+
+		X = 000000429496.729700;
+		Re = mathLib.round(mathLib.ceiling(X),-decimals(Re));
+		
+		X = 000000000005.593919;
+		Y = 000000000000.490412;
+		IR int = 0 ;
+		IR = mathLib.round(VGLib.compareNum(X, Y),-decimals(IR));
+		
+		X = -000000000000.000480;
+		Re = mathLib.round(mathLib.cos(X),-decimals(Re));
+		
+		X = 000000000000.200000;
+		Re = mathLib.round(mathLib.cosh(X),-decimals(Re));
+		
+		X = 000000000001.000000;
+		Re = mathLib.round(mathLib.exp(X),-decimals(Re));
+		
+		X = 000000000327.670000;
+		f float;
+		MathLib.assign(X, f);
+		Re = mathLib.round(f,-decimals(Re));
+		
+		X = -000000000022.440000;
+		Y = 000000000022.440000;
+		Re = mathLib.round(VGLib.floatingDifference(X, Y),-decimals(Re));
+		
+		X = 000000000010.000000;
+		Y = 000000000008.000000;
+		Re = mathLib.round(VGLib.floatingMod(X, Y),-decimals(Re));
+		
+		X = 000000000432.378663;
+		Y = 000000000000.000588;	
+		Re = mathLib.round(VGLib.floatingProduct(X, Y),-decimals(Re));
+		
+		X = 000000000022.440000;
+		Y = 000000000002.000000;
+		Re = mathLib.round(VGLib.floatingQuotient(X, Y),-decimals(Re));
+		
+		X = 000000000022.440000;
+		Y = 000000000022.440000;
+		Re = mathLib.round(VGLib.floatingSum(X, Y),-decimals(Re));
+
+		X = -000000000000.000480;
+		Re = mathLib.round(mathLib.floor(X),-decimals(Re));
+		
+		X = 000000000002.000000;
+		E int = 2;
+		Re = mathLib.round(mathLib.frexp(X, E),-decimals(Re));
+		
+		X = 000000000010.000000;
+		exp int  = 2;
+		Re = mathLib.round(mathLib.ldexp(X,exp),-decimals(Re));
+		
+		
+		X = 000983771896.039000;
+		Re = mathLib.round(mathLib.log(X),-decimals(Re));
+		
+		X = 000000000000.200000;
+		Re = mathLib.round(mathLib.log10(X),-decimals(Re));
+		
+		X = 000000000000.212000;
+		Y = 000000000000.212300;
+		Re = mathLib.round(mathLib.max(X, Y),-decimals(Re));
+		
+		X = -000000000003.120000;
+		Y = 000000000001.670000;
+		Re = mathLib.round(mathLib.min(X, Y),-decimals(Re));
+		
+		X = 000000771896.039000;
+		Y = 000000771896.000000;
+		Re = mathLib.round(mathLib.modf(X, Y as int),-decimals(Re));
+		
+		X = 000000000003.000000;
+		Y = 000000000003.000000;
+		Re = mathLib.round(mathLib.pow(X, Y),-decimals(Re));
+		
+	    X = 1234; 
+		RP int ;
+		RP = mathLib.round(mathLib.precision(X),-decimals(RP));
+	
+		X = 000123499999.000000;
+		I int = 6;
+		Re = mathLib.round(X,I);
+		
+		X = 000983771896.039000;
+		Re = mathLib.round(mathLib.sin(X),-decimals(Re));
+		
+		X = 000000000000.200000;
+		Re = mathLib.round(mathLib.sinh(X),-decimals(Re));
+		
+		X = 000000000214.702732;
+		Re = mathLib.round(mathLib.sqrt(X),-decimals(Re));
+		
+		X = 000983771896.039000;
+		Re = mathLib.round(mathLib.tan(X),-decimals(Re));
+		
+		X = 000000000010.000000;
+        Re = mathLib.round(mathLib.tanh(X),-decimals(Re));
+	end
+end

@@ -1,0 +1,214 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+// Question on whether datatable is ever a valid source for a move statement.
+// answer is NO.
+
+Record fixed1 type sqlrecord {tableNames = [["tablename1", "lab1"]]}
+	10 item1 char(4);
+	10 item2 bin(9);
+end
+
+Record flex0 type sqlrecord {tableNames = [["tablename2", "lab1"]]}
+	itemx String;
+	itemy char(4);
+end
+
+Record flex1 type sqlrecord {tableNames = [["tablename3", "lab1"]], this.item1 = "dave"}
+	item1 String;
+	item2 char(4);
+	item3 blob; 
+	item4 clob;
+//	item5 ref flex2;
+//	item6 ref arraydictionary;
+//	item7 ref flex2;
+	item8 any;
+//	item9 ref blob;
+	item10 dictionary;
+//	item11 ref dictionary;
+end
+
+Record fixed2 type indexedrecord
+	{filename = "abc", keyitem = item1}
+	10 item1 char(4);
+	10 item2 bin(9);
+end
+
+Record fixed3 type indexedrecord
+	{filename = "abc", keyitem = itema}
+	10 itema char(4);
+	10 itemb bin(9);
+end
+
+Record flex2 type basicrecord
+	item1 String;
+	item2 char(4);
+	item3 blob;
+	item4 clob;
+//	item5 ref flex2;
+//	item6 ref arraydictionary;
+//	item7 ref flex2;
+	item8 any;
+//	item9 ref blob;
+	item10 dictionary;
+//	item11 ref dictionary;
+	item12 fixed2;
+	embed flex0;
+end
+
+Record flex3 type sqlrecord
+//	item5 ref flex3;
+//	item7 ref flex3;
+
+end
+Record flexmove1 type basicrecord
+	item1 char(10);
+	item2 int;
+end
+Record fixedmove1 type basicrecord
+	10 itema;
+		15 item1 char(10);
+	10 item2 int;
+end
+   
+// you can have arrays in flexible SQL records even though you can't in fixed SQL records
+Record flexSQLxyz type sqlrecord
+	 item3Array char(4) [3]; 	 
+	 item4Array char(4) [];	 	 
+end
+
+// typedef loop in flexible record is OK when they are refs involved
+Record dept type basicrecord
+	emps employee;		
+end
+
+Record employee type basicrecord
+//	dept ref dept;	
+end
+
+Record dept1 type basicrecord
+//	emps ref employee1;
+end
+
+Record employee1 type basicrecord
+	dept dept1;	
+end
+
+Record dept2 type basicrecord
+//	emps ref employee2;
+end
+
+Record employee2 type basicrecord
+//	dept ref dept2;
+end
+
+
+Record dept3 type basicrecord
+	emps employee3;			
+end
+
+Record employee3 type basicrecord
+	manager mgr3;				
+//	empdept ref dept3;
+end
+
+Record mgr3 type basicrecord
+//	mgrdept ref dept3;				
+end
+
+Datatable mydatatablemove1
+	10 itema char(10);
+	10 itemb int;
+	{contents = [["a234567890", 1],["b234567890",2]]}
+end
+Datatable mydatatablemove2
+	10 item2 int;
+	10 itema;
+		15 item1 char(10);
+	{contents = [[1, "a234567890"],[2, "b234567890"]]}
+end
+Program myprog type basicprogram
+	myflex1 flex1;
+	myflex2 flex2;
+	myflex2a flex2;
+	myfixed2 fixed2;
+//	myfixed3 fixed3 {redefines = "myfixed2" };// 1 The redefines property can only be specified on the variable declaration for a basic fixed record
+	myflexmove1 flexmove1;
+	myfixedmove1 fixedmove1;
+	use mydatatablemove1;
+	use mydatatablemove2;
+	function main()
+		move myflexmove1 to myfixedmove1 withV60Compat;
+		move myflexmove1 to myfixedmove1 byname;
+		move myflexmove1 to myfixedmove1 byposition;
+
+// Are the following really valid?
+//		move myflexmove1 to mydatatablemove2[1];
+//		move myflexmove1 to mydatatablemove2[1] byname;
+//		move myflexmove1 to mydatatablemove1[1] byposition;
+		
+		move myflexmove1 to myfixedmove1 withV60Compat;
+		move myflexmove1 to myfixedmove1 byname;
+		move myflexmove1 to myfixedmove1 byposition;
+		get myflex1;
+		replace myflex1;
+		get next myflex1;
+		add myflex1;
+
+		move myflex1 to myflex2 byposition;
+
+		move myflex1 to myflex2 byname;
+		myflex1.item2 = "abcd";
+
+//		myflex1.item7 = new flex2;
+		myflex2 = myflex2a;
+		myflex1["item2"] = "abcd";
+		
+		for(myFlex1["item1"] to myFlex1["item2"]) end	
+	end
+end
+
+
+record flexrecd1 type basicrecord
+	item123 string;
+	item456 char(4);
+end
+
+Program argprog type basicprogram
+	myflexarg1 flexrecd1;
+	function main()
+		validflexfunc(myflexarg1, myflexarg1 );
+	end
+	function validflexfunc (myflexparm1 flexrecd1 inout,
+						   myflexparm2 flexrecd1) 
+	end
+end
+
+
+
+record flexrecda type basicrecord
+	item123 string;
+	item456 char(4);
+end
+
+Program callargprog type basicprogram
+	myflexarg1 flexrecda;
+	function main()
+		call "validflexcall" (myflexarg1, myflexarg1);
+	end
+end
+program validflexcall (myflexparm3 flexrecda,
+					   myflexparm4 flexrecda)
+	function main()
+	end
+end

@@ -1,0 +1,352 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// ###############
+// # Valid case: #
+// ###############
+
+Record test1 Type VGUIRecord			
+	10 formItem char(20) {				// 0
+		uiType=uiForm,					// 0
+        @programLinkData { 				// 0
+        	programName="NewPgm",		// 0
+			newWindow=yes,				// 0
+			uiRecordName="NewUIR",		// 0
+			linkParms = [				// 0
+				@LinkParameter {		// 0
+					name="key1",		// 0
+					value="value1"		// 0
+				},						// 0
+				@LinkParameter {		// 0
+					name = "key2",		// 0
+					valueRef=formItem	// 0
+				}						// 0
+			]							// 0
+		}								// 0
+	};									// 0
+End										// 0
+
+// #######################################
+// # Wrong literal types for leaf items: #
+// #######################################
+
+Record test2 Type VGUIRecord			
+	10 formItem char(20) {				// 0
+		uiType=5,						// 1 The value for this property must be one of the following: hidden, input, inputOutput, none, output, programLink, submit, submitBypass, uiForm.
+        @programLinkData { 				// 0
+        	programName=5,				// 1
+			newWindow="text",			// 1 The value for this property must be one of the following: yes, no
+			uiRecordName=5,				// 1
+			linkParms = [				// 0
+				@LinkParameter {		// 0
+					name=1,				// 1
+					value=[2]			// 1 This property requires a quoted string as the value.
+				}						// 0
+			]							// 0
+		}								// 0
+	};									// 0
+End										// 0
+
+Record test2a Type VGUIRecord			
+	10 formItem char(20) {				// 0
+		uiType=uiForm,					// 0
+        @programLinkData { 				// 0
+        	programName="NewPgm",		// 0
+			newWindow=yes,				// 0
+			uiRecordName="NewUIR",		// 0
+			linkParms = 5				// 1 LinkParameter[] and int are not compatible types
+		}								// 0
+	};									// 0
+End										// 0
+
+// ####################################
+// # Inapplicable annotation on item: #
+// ####################################
+
+Record test3 Type VGUIRecord			
+	10 formItem char(20) {				// 0
+		uiType=uiForm,					// 0
+		@programLinkData{				// 0
+			programName="a"				// 0
+		},								// 0
+        @notAnAnnotation { 				// 1 notAnAnnotation cannot be resolved
+        	programName="NewPgm",		// 0
+			newWindow=yes,				// 0
+			uiRecordName="NewUIR",		// 0
+			linkParms = [				// 0
+				@LinkParameter {		// 0
+					name="key1",		// 0
+					value="value1"		// 0
+				},						// 0
+				@LinkParameter {		// 0
+					name = "key2",		// 0
+					valueRef="refItem"	// 0
+				}						// 0
+			]							// 0
+		}								// 0
+	};									// 0
+End										// 0
+
+// ##############################################
+// # Inapplicable annotation within annotation: #
+// ##############################################
+
+Record test4 Type VGUIRecord			
+	10 formItem char(20) {				// 0
+		uiType=uiForm,					// 0
+        @programLinkData { 				// 0
+        	programName="NewPgm",		// 0
+			newWindow=@notAnAnnotation,	// 1 The value for this property must be one of the following: yes, no
+			uiRecordName="NewUIR",		// 0
+			@notAnAnnotation {			// 1 notAnAnnotation cannot be resolved
+				myKey = "value"			// 0
+			},							// 0
+			linkParms = [				// 0
+				@LinkParameter {		// 0
+					name="key1",		// 0
+					value="value1"		// 0
+				},						// 0
+				@LinkParameter {		// 0
+					name = "key2",		// 0
+					valueRef=formItem	// 0
+				}						// 0
+			]							// 0
+		}								// 0
+	};									// 0
+End										// 0
+
+// ################################################
+// # Inapplicable property key within complex property: #
+// ################################################
+
+Record test5 Type VGUIRecord			
+	10 formItem char(20) {				// 0
+		uiType=uiForm,					// 0
+        @programLinkData { 				// 0
+        	programName="NewPgm",		// 0
+			newWindow=yes,				// 0
+			uiRecordName="NewUIR",		// 0
+			notAProgramLinkDataValue=5,	// 1 notAProgramLinkDataValue cannot be resolved
+			linkParms = [				// 0
+				@LinkParameter {		// 0
+					name="key1",		// 0
+					value="value1"		// 0
+				},						// 0
+				@LinkParameter {		// 0
+					name = "key2",		// 0
+					valueRef=formItem,	// 0
+					notProp="a"			// 1 notProp cannot be resolved
+				}						// 0
+			]							// 0
+		}								// 0
+	};									// 0
+End										// 0
+
+// ###################################################################
+// # Something other than key=value or complex property within complex property: #
+// ###################################################################
+
+Record test6 Type VGUIRecord			
+	10 formItem char(20) {				// 0
+		uiType=uiForm,					// 0
+        @programLinkData { 				// 0
+        	programName="NewPgm",		// 0
+			newWindow=yes,				// 0
+			1+2,						// 1 A positional property is not valid for use with ProgramLinkData. The item must be an array with a specified length.
+			3,							// 1 A positional property is not valid for use with ProgramLinkData. The item must be an array with a specified length.
+			uiRecordName="NewUIR",		// 0
+			linkParms = [				// 0
+				@LinkParameter {		// 0
+					name="key1",		// 0
+					value="value1"		// 0
+				},						// 0
+				@LinkParameter {		// 0
+					name = "key2",		// 0
+					valueRef=formItem,	// 0
+					1+2,				// 1 A positional property is not valid for use with LinkParameter. The item must be an array with a specified length.
+					3					// 1 A positional property is not valid for use with LinkParameter. The item must be an array with a specified length.
+				}						// 0
+			]							// 0
+		}								// 0
+	};									// 0
+End										// 0
+
+// #######################################
+// # Wrong complex property type within array: #
+// #######################################
+
+Record test7 Type VGUIRecord			
+	10 formItem char(20) {				// 0
+		uiType=uiForm,					// 0
+        @programLinkData { 				// 0
+        	programName="NewPgm",		// 0
+			newWindow=yes,				// 0
+			uiRecordName="NewUIR",		// 0
+			linkParms = [				// 1
+				@programLinkData {		// 0
+					newWindow=no		// 0
+				},						// 0
+				@LinkParameter {		// 1
+					name = "key2",		// 0
+					valueRef=refItem	// 0
+				},						// 0
+				"a"						// 0
+			]							// 0
+		}								// 0
+	};									// 0
+End										// 0
+
+Record serviceRec1 type basicRecord
+{								// 0
+	@xml {						// 1
+		name="10"				// 0
+	}							// 0
+}								// 0
+end								// 0
+
+Record serviceRec2 type basicRecord
+{							// 0
+	@xml {					// 1
+		name=10,			// 0
+		notValid="b",		// 0
+		length="b",			// 0
+		totalDigits="b",	// 0
+		fractionDigits="b"	// 0
+	},						// 0
+	@notAnnotation{}		// 1
+}							// 0
+end							// 0
+
+Interface wsdlTest1
+{								// 0
+
+
+
+}								// 0
+								// 0
+	function wsdlTest2()		// 0
+	{							// 0
+	};							// 0
+end								// 0
+
+Service wsdlTest3
+{								// 0
+
+
+
+	alias = "al",				// 0
+	localSQLScope=no			// 0
+}								// 0
+								// 0
+	function wsdlTest4()		// 0
+	{							// 0
+	}							// 0
+	end							// 0
+end								// 0
+
+Interface wsdlTest1a
+{								// 0
+
+
+
+
+}								// 0
+								// 0
+	function wsdlTest2a()		// 0
+	{							// 0
+	};							// 0
+end								// 0
+
+Service wsdlTest3a
+{								// 0
+
+
+
+
+}								// 0
+								// 0
+	function wsdlTest4a()		// 0
+	{							// 0
+	}							// 0
+	end							// 0
+end								// 0
+
+Interface StockValue end
+Interface CustomerInfo end
+Interface StockQuote end
+Library StockValueServices type ServiceBindingLibrary
+
+stockValue StockValue { @bindService {		// 0
+  bindingKey="abc" 							// 0
+}};
+end
+
+Record course type dlisegment
+end
+
+Record prereq type dlisegment
+end
+
+Record teacher type dlisegment
+end
+
+Record student type dlisegment
+end
+
+Record offering type dlisegment
+	10 xloc char(4);
+end
+
+Record EducationPSB type PSBRecord {
+	defaultPSBName = "EDUCPSB" }											// 0
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};								// 0
+	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};								// 0
+	coursePCB DB_PCBRecord { @PCB {											// 0
+	  pcbType=DB,															// 0
+	  pcbName="CPCB",														// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord=Course },								// 0
+	   @Relationship{ segmentRecord=Prereq, parentRecord=Course },		// 0
+	   @Relationship{ segmentRecord=Offering,parentRecord=Course },		// 0
+	   @Relationship{ segmentRecord=Teacher,parentRecord=Offering},		// 0
+	   @Relationship{ segmentRecord=Student, parentRecord=Offering}		// 0
+	  ]																		// 0
+	}};																		// 0
+
+	offeringPCB DB_PCBRecord { @PCB {										// 0
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord=Offering },							// 0
+	   @Relationship{ segmentRecord=Course,parentRecord=Offering}, 		// 0
+	   @Relationship{ segmentRecord=Teacher,parentRecord=Offering},		// 0
+	   @Relationship{ segmentRecord=Student,parentRecord=Offering}		// 0
+	  ]																		// 0
+	}};																		// 0
+end
+
+Program GetCourse (pcb1 int) {
+  @DLI{						// 0
+    psb = edpsb, 			// 0
+    pcbParms = [ pcb1 ],	// 0
+    callInterface=AIBTDLI	// 0
+  }}						// 0
+  edpsb mypsb;
+end
+
+Record mypsb type psbrecord
+	item1 db_pcbrecord;
+end
+
+

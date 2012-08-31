@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler myHandler type JSFHandler
+	fieldVar int;
+	recdVar rec;
+	
+	function func()
+		if ( fieldVar is modified )	//1
+		end
+		
+		if ( recdVar  is modified )	//1
+		end
+	end
+end
+
+Record rec
+	field1 int;
+end

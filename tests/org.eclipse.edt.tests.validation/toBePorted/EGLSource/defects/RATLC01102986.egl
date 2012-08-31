@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program DFDSB1 type basicProgram
+  {includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes }
+  
+  MYCHAR char(10);
+  function main()
+    DFDSB1_MAIN: DFDSB1_MAIN();
+  end
+end   
+
+Function DFDSB1_MAIN();
+  DFDSB1_FNCT2(MYCHAR,MYCHAR);
+  if (MYCHAR not blanks)		//0
+  end
+  if (MYCHAR not numeric)		//0
+  end
+end
+  
+Function DFDSB1_FNCT2(
+  PARMCHAR char,
+  PARMCHAR10 char(10)
+  )
+  if (PARMCHAR not blanks)		//0
+  end
+  if (PARMCHAR not numeric)		//0
+  end
+  if (PARMCHAR10 not blanks)	//0
+  end
+  if (PARMCHAR10 not numeric)	//0
+  end
+end

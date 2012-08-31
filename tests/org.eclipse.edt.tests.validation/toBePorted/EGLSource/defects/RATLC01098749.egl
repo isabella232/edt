@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * The check that needs to be done is if the program is defined with:
+ *
+ * {@DLI{..., callInterface=AIBTDLI, ...}
+ * 
+ * then any reference to the EGLTDLI or VGTDLI system functions should be flagged as invalid.
+ */
+ 
+Record psbRec type psbRecord
+	rec fixedRec {@pcb{}};
+end
+
+Record fixedRec
+	10 item1 int;
+end
+ 
+Program pgm1 {@DLI{psb=psb, callInterface=AIBTDLI}}
+	psb psbRec;
+		
+	function main()
+		egltdli("", psb.rec, "");		//1 {7947} The function EGLTDLI cannot be used when the value of callInterface is AIBTDLI.
+		vgtdli("", 1, "");				//1 {7947} The function VGTDLI cannot be used when the value of callInterface is AIBTDLI.
+		aibtdli("", "", "");			//0
+	end
+end
+
+Program pgm2 {@DLI{psb=psb}}
+	psb psbRec;
+		
+	function main()
+		egltdli("", psb.rec, "");		//1 {7947} The function EGLTDLI cannot be used when the value of callInterface is AIBTDLI.
+		vgtdli("", 1, "");				//1 {7947} The function VGTDLI cannot be used when the value of callInterface is AIBTDLI.
+		aibtdli("", "", "");			//0
+	end
+end
+
+Program pgm3 {@DLI{psb=psb, callInterface=CBLTDLI}}
+	psb psbRec;
+		
+	function main()
+		egltdli("", psb.rec, "");		//0
+		vgtdli("", 1, "");				//0
+		aibtdli("", "", "");			//0
+	end
+end

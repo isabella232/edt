@@ -1,0 +1,90 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+record ReturnTestPoint
+	x int;
+	y int;	
+end
+
+	function XrefReturnFunc() returns( window )	//0
+		return( nil );							//0
+	end											//0
+
+	function XprimReturnFunc() returns( int )	//0
+		return( nil );							// 0 
+	end											//0
+	
+	function Xemptyreturn () returns (int)
+		return; //0
+		
+	end
+	
+	function Xmissingrettype ()
+		return (5); // 1 The return statement specifies a return value but one is not defined for the function {6608, EGLMESSAGE_RETURN_VALUE_WO_RETURN_DEF}
+	end
+	
+	function Xbadretval() returns (int)
+		pxt ReturnTestPoint;
+		return (pxt{x=1, y=2});//  A set values block is not allowed on a return argument {7516, EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_RETURN_ARG}
+		
+		
+	end
+	
+Program pgm {I4GLItemsNullable=yes}
+	function main()	
+	end
+	
+	function refReturnFunc() returns( window )	//0
+		return( null );							//0
+	end											//0
+
+	function primReturnFunc() returns( int )	//0
+		return( null );							//0
+	end											//0
+	
+	function emptyreturn () returns (int)
+		return; //0
+		
+	end
+	
+	function missingrettype ()
+		return (5); // 1 The return statement specifies a return value but one is not defined for the function {6608, EGLMESSAGE_RETURN_VALUE_WO_RETURN_DEF}
+	end
+	
+	function badretval() returns (int)
+		pxt ReturnTestPoint;
+		return (pxt{x=1, y=2});// 2 The type ReturnTestPoint does not match the type int? which the function returns | A set values block is not allowed on a return argument {7516, EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_RETURN_ARG}
+		
+		
+	end
+	
+end
+
+Program V70ReturnStmtDCR
+	function main()
+	end
+	
+	function returnsFunc1() returns (int)
+		return;		//0
+	end
+	
+	function returnsFunc2() returns (int)
+		return(5);	//0
+	end
+	
+	function noReturnsFunc1()
+		return;		//0
+	end
+	
+	function noReturnsFunc2()
+		return(5);	//1
+	end
+end

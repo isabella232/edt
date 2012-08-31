@@ -1,0 +1,150 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+DataItem di int end
+
+Record recDef type indexedRecord {filename = "a", keyItem = item1}
+	10 item1 int;
+	
+end
+
+record myrecddef type indexedrecord {filename = "a", keyItem = item1}
+	10 item1 any;						// 1 any is not a valid type for an item in a structured record
+end
+
+Program anyAndIsa_InValid
+
+	function main()
+		diVal di;
+		thing, thing2 any;
+
+
+		//---------------------------------------------------------------------
+		// test isa for non-array types
+		
+		if( thing isa byte ) end		// 1 The type byte cannot be resolved.
+		if( thing isa diVal ) end		// 1 The type diVal cannot be resolved.
+
+		//---------------------------------------------------------------------
+		// test isa for array types
+	
+		if( thing isa garbage [] ) end		// 1 The type garbage cannot be resolved.
+
+		if( thing isa num(9,15) [] ) end	// 1 decimals value 15 for item num must be less than or equal to the length value 9
+		foo num(9,15);
+		//---------------------------------------------------------------------
+		// test isa boolean expression wherever boolean expressions can appear
+		
+		while( thing isa int ) end
+		case
+			when( thing isa int )
+		end
+		
+
+		//---------------------------------------------------------------------
+		// test "any" wherever variable can appear in a statement. According
+		// to the latest word, "any" typed variables are not allowed as the
+		// following:
+		//
+		// call argument, call parm, show argument, forward argument,
+		// transfer argument		
+		
+		call "anyprogram" (thing, thing2);	// 2 The type any for this program parameter or call argument is invalid.
+		
+		recParmFunction( thing ); // 0
+		
+		if( thing isa char ) end     // 1
+		if( thing isa number ) end   // 1
+		if ( thing isa mbchar) end   // 1
+		if ( thing isa dbchar ) end  // 1
+		if ( thing isa unicode ) end // 1
+		if( thing isa number[] ) end // 1
+		if( thing isa hex [] ) end   // 1	
+		if( thing isa decimal ) end  // 1
+		if( thing isa unicode ) end	 // 1
+	end
+	
+	function recParmFunction( p1 testRecord ) end
+end
+
+Record testRecord end
+
+Program anyandisa_invalid2 (thing3 any) // 1 The type any for this program parameter or call argument is invalid.
+	function main()
+	end
+end
+
+Program transferprog type basicprogram
+	thing any;
+	function main()
+		transfer to program transferanyprogram passing thing ; // 1 thing must be a record variable
+	end
+end	
+program  transferanyprogram
+	myparm1 any;
+	{inputrecord = myparm1}		// 1 value for property inputRecord must match a data declaration of a basic record
+	function main()
+	end	
+end	
+
+Program showprogram type textUIProgram
+	thing any;
+	use myformg;
+	function main()
+		show form1 returning to "showpgm1" passing thing ; // 1 thing must be a record variable
+	end
+end	
+
+program  showanyprogram 
+	myparm1 any;
+	{inputrecord = myparm1}		// 1 value for property inputRecord must match a data declaration of a basic record
+	function main()
+	end	
+end
+// test forward arguments - arguments must be assignment compatible and flexible records can only be passed to EGL JSFHandler 
+//???I'm not sure whether we already validate that the forward to label target has an onpageload function at all 
+// or that the arguments to it match the arguments on the forward statement.
+// note that the JSFHandler unknown message should only be produced if the argument list contains a flexible record
+handler forwardpgm type JSFHandler 
+	thing any;
+	function main()
+		forward thing to label "mypage1"; // 1 Items of type any are not allowed
+	end
+end	
+handler mypage1 type JSFHandler 
+	{onpageload = "fixedfunc" }
+	function main()
+	end	
+	function fixedfunc (thing2 any)
+	end
+end	
+
+Formgroup myformg
+	form form1 type textform
+		{formsize = [24,80] }
+		item1 char(10);
+	end
+end	
+
+Datatable testtable1
+	{contents = [["abc"]]}
+	10 anyInTable any;						// 1 any is not a valid type for an item
+end
+
+Form myform1 type textform
+	{formsize = [4,4] }
+	myfield any {position = [2,2], color=red};  // 1 any is not a valid type for form fields
+end
+
+Form myform2 type printform
+	{formsize = [3,3] }
+	myfield any {position = [2,2], color=red};  // 1 any is not a valid type for form fields
+end

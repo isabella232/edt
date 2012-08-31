@@ -1,0 +1,720 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// This file contains modified test SSAs where the content of the modified SSA
+// somehow conflicts with the EGL statement and options selected.
+// Examples:
+//		DL/I operation doesn't agree with EGL verb and options
+//		invalid command codes for DL/I opoeration
+//		invalid combinations of command codes  
+// All of the part names are short enough to be used asd DLI names and contain valid characters
+
+// Valid DL/I Function codes and corresponding EGL verbs and options for non-array I/O objects
+//		GU			get			
+//		GN			get next
+//		GHU			get forupdate
+//		GHN			get next forupdate
+//		GHNP		get next inparent forupdate 
+//		ISRT		add
+//		REPL		replace
+//		DLET		delete
+
+// valid DL/I Function codes and corresponding EGL verbs and options for ARRAY I/O objects
+//		GU and a GN		get
+//		GN				get next
+//		GNP				get next inparent
+//		ISRT			add
+
+
+// Command codes valid based upon verb/Function codes
+//	GU				get 		 		D L Q U V C P 		M R S W Z
+//	GHU				get forupdate		D L Q U V C P 		M R S W Z
+//	ISRT			add 				D L F U V C   		M R S W Z
+//	REPL			replace				N				 	M   S W Z
+//	DLET			delete										    Z
+//	GN/GNP/GHN/GHNP	get next, get next inparent,	D L F Q U V C P 	M R S W Z
+//	                get next forupdate,get next forupdate inparent
+
+// Invalid combinations of command codes (in the same SSA)
+//	R and F
+//	R and Q
+//	L and F
+//	U and V
+//	only one of M S W Z
+
+// OTHER RULES
+// 	max of 4 command codes (not countig the *)
+//	no duplication of command codes in a single SSA
+//	only one C command code in any set of SSAs, the qualification on that SSA must be a simple 
+//			field relationalOperator value
+//			i.e. no boolean operators
+//	on ISRT (add), qualified SSA cannot follow a D command code
+//	on ISRT (add), C command code cannot follow any SSA with a D command code  
+
+// for get operations against arrays, these restrictions are in place because the command codes don't make any sense
+//  the L command code is invalid for the GU DL/I call
+//  the F and L command codes are invalid for the GN DL/I call
+
+// valid PSBRecord, dliSegments and DataItems to use in statements
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	 
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end		 
+DataItem Name char(18) { dliFieldName ="NAME" } end		 
+
+Record Course type DLISegment 					 
+{ segmentName="COURSE", keyItem="courseNo" }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record Prereq type DLISegment { keyItem="courseNo" } 
+	10 courseNo CourseNo;							 
+	10 title char(33);								 
+end
+
+Record Offering type DLISegment 					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record Teacher type DLISegment 					 
+{ segmentName="TEACHER", keyItem="empNo" }		 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+end 
+
+Record Student type DLISegment	 				 
+	{ segmentName="STUDENT" }						 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+	10 grade char(1);								 
+end
+Record EducationPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord="Course" },		 
+	   @Relationship{											 
+     		segmentRecord="Prereq", parentRecord="Course" },	    	   
+       @Relationship{											 
+      		segmentRecord="Offering",parentRecord="Course" },  	  
+       @Relationship{											 
+      		segmentRecord="Teacher",parentRecord="Offering"},  
+	   @Relationship{											 
+	     	segmentRecord="Student", parentRecord="Offering"}	 
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord="Offering" },	 
+	   @Relationship{								 
+	     segmentRecord="Course",parentRecord="Offering"},	 
+	   @Relationship{										 
+	     segmentRecord="Teacher",parentRecord="Offering"},	 
+	   @Relationship{										 
+	     segmentRecord="Student",parentRecord="Offering"}	 
+	  ] }};
+end
+
+// Valid DL/I Function codes and corresponding EGL verbs and options for non-array I/O objects
+//		GU			get			
+//		GN			get next
+//		GHU			get forupdate
+//		GHN			get next forupdate
+//		GHNP		get next inparent forupdate 
+//		ISRT		add
+//		REPL		replace
+//		DLET		delete
+
+// valid DL/I Function codes and corresponding EGL verbs and options for ARRAY I/O objects
+//		GU and a GN		get
+//		GN				get next
+//		GNP				get next inparent
+//		ISRT			add
+
+Program InvalidDLIFunctionCodes type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = "psb", 					 
+         handleHardDLIErrors = yes }	 
+  }
+  course course;						   
+  prereq prereq;						 
+  offering offering;					 
+  teacher teacher;						 
+  student student;						 
+  course2 course;						   
+  prereq2 prereq;						 
+  offer2 offering;						 
+  teacher2 teacher;						 
+  student2 student;						 
+  courses course[20];					   
+  prereqs prereq[5];					 
+  offers offering[3];					 
+  teachers teacher[5];					 
+  students student[25];					   
+  xloc char(4);		
+  coursenoVar char(3);					 
+
+  // PSB Declaration
+  psb EducationPSB ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+ // Note that the wording of the message about a function code not being supported by EGL is specific because there are valid
+// DL/I function codes that we do not support.
+  	function addStmt()		
+	  	add course  with #dli{CLSE Course};			//1 The add statement requires the ISRT function code.  Found CLSE.
+	  	add course  with #dli{GHN   course};		//1 The add statement requires the ISRT function code.  Found GHN.  
+	  	add course  with #dli{GHNP  course};		//1 The add statement requires the ISRT function code.  Found GHNP.
+	  	add course  with #dli{GHU   course};		//1 The add statement requires the ISRT function code.  Found GHU.
+	  	add course  with #dli{GU    course};		//1 The add statement requires the ISRT function code.  Found GU.
+	  	add course  with #dli{DLET  course};		//1 The add statement requires the ISRT function code.  Found DLET.
+	  	add course  with #dli{GN    course};		//1 The add statement requires the ISRT function code.  Found GN.
+	  	add course  with #dli{GNP   course};		//1 The add statement requires the ISRT function code.  Found GNP.
+	  	add course  with #dli{REPL  course};		//1 The add statement requires the ISRT function code.  Found REPL.
+	  	add course  with #dli{ISRT course};			//0
+  	  
+			   	  
+  	// add arrays 
+	  	add courses  with #dli{CLSE Course};		//1 The add statement requires the ISRT function code.  Found CLSE.
+	  	add courses  with #dli{GHN   course};		//1 The add statement requires the ISRT function code.  Found GHN.  
+	  	add courses  with #dli{GHNP  course};		//1 The add statement requires the ISRT function code.  Found GHNP.
+	  	add courses  with #dli{GHU   course};		//1 The add statement requires the ISRT function code.  Found GHU.
+	  	add courses  with #dli{GU    course};		//1 The add statement requires the ISRT function code.  Found GU.
+	  	add courses  with #dli{DLET  course};		//1 The add statement requires the ISRT function code.  Found DLET.
+	  	add courses  with #dli{GN    course};		//1 The add statement requires the ISRT function code.  Found GN.
+	  	add courses  with #dli{GNP   course};		//1 The add statement requires the ISRT function code.  Found GNP.
+	  	add courses  with #dli{REPL  course};		//1 The add statement requires the ISRT function code.  Found REPL.
+	  	add courses  with #dli{ISRT course};		//0  		  
+
+   	end  
+  	function deleteStmt() 	
+	  	delete course  with #dli{CLSE Course};	//1 The delete statement requires the DLET function code.  Found CLSE.
+	  	delete course  with #dli{GHN   course};	//1 The delete statement requires the DLET function code.  Found GHN.  
+	  	delete course  with #dli{GHNP  course};	//1 The delete statement requires the DLET function code.  Found GHNP.
+	  	delete course  with #dli{GHU   course};	//1 The delete statement requires the DLET function code.  Found GHU.
+	  	delete course  with #dli{GU    course};	//1 The delete statement requires the DLET function code.  Found GU.
+	  	delete course  with #dli{ISRT  course};	//1 The delete statement requires the DLET function code.  Found ISRT.
+	  	delete course  with #dli{GN    course};	//1 The delete statement requires the DLET function code.  Found GN.
+	  	delete course  with #dli{GNP   course};	//1 The delete statement requires the DLET function code.  Found GNP.		 
+	  	delete course  with #dli{REPL  course};	//1 The delete statement requires the DLET function code.  Found REPL.		 
+	    delete course  with #dli{DLET course};	//0 	  		
+  	end 	
+ 	function getStmt() 
+ 		get course with #dli{CLSE Course};						   //1 The get by key statement requires the GU function code.  Found CLSE.
+ 		get course with #dli{GHN  course (course# = :coursenoVar)};//1 The get by key statement requires the GU function code.  Found GHN.
+  		get course with #dli{GHNP course (course# = :coursenoVar)};//1 The get by key statement requires the GU function code.  Found GHNP.
+ 		get course with #dli{GHU  course (course# = :coursenoVar)};//1 The get by key statement requires the GU function code.  Found GHU.
+ 		get course with #dli{ISRT course (course# = :coursenoVar)};//1 The get by key statement requires the GU function code.  Found ISRT.
+ 		get course with #dli{GN   course (course# = :coursenoVar)};//1 The get by key statement requires the GU function code.  Found GN.
+ 		get course with #dli{GNP  course (course# = :coursenoVar)};//1 The get by key statement requires the GU function code.  Found GNP.
+ 		get course with #dli{DLET course (course# = :coursenoVar)};//1 The get by key statement requires the GU function code.  Found DLET.
+ 		get course with #dli{REPL course };//1 The get by key statement requires the GU function code.  Found REPL.
+ 		get course with #dli{GU   course (course# = :coursenoVar)};//0
+		get course with #dli{GU course (course# = :coursenoVar)	 //0
+				  			 GN course			 };				 //1 Only one DL/I call is allowed unless the target of the statement is an array 			 
+  	  // get arrays 
+		get courses with #dli{GU course (course# = :coursenoVar)	 //0
+				  			  GN course			 		         //0	
+				  			  GN course};						 //1 A maximum of 2 DL/I calls are allowed on a get by key statement.
+
+		get courses with #dli{GN course (course# = :coursenoVar)};	 //2 The get by key statement requires the GU function code.  Found GN | The get by key statement for an array requires two DL/I calls.  The function code of the second DL/I call must be GN.
+		get courses with #dli{GN course (course# = :coursenoVar)	 //1 The get by key statement requires the GU function code.  Found GN. 
+				  			  GU course			 };				 	 //1  The function code of the second DL/I call on a get by key must be GN or GNP.  Found GU.
+		get courses with #dli{GHU course (course# = :coursenoVar)	 //1 The get by key statement requires the GU function code.  Found GHU.  
+				  			  GHN course			 };			 //1 The function code of the second DL/I call on a get by key must be GN or GNP.  Found GHN. 				  	  	  
+		get courses with #dli{GU course (course# = :coursenoVar)	 //0 
+				  			  GNP course			 };			 //0
+		get courses with #dli{ISRT course (course# = :coursenoVar)	 //1 The get by key statement requires the GU function code.  Found ISRT. 
+				  			  DLET course			 };			 //1 The function code of the second DL/I call on a get by key must be GN or GNP.  Found DLET.  	  
+		get courses with #dli{GHU course (course# = :coursenoVar)	 //1 The get by key statement requires the GU function code.  Found GHU. 
+				  			  GHNP course			 };			 //1 The function code of the second DL/I call on a get by key must be GN or GNP.  Found GHNP.  	  
+		get courses with #dli{REPL course 						 //1 The get by key statement requires the GU function code.  Found REPL. 
+				  			  GN course			 };			     //0  	  
+
+	end  
+ 	function getForUpdateStmt() 
+ 		get course forupdate with #dli{CLSE Course};						 //1 The get by key statement with the forupdate modifier requires the GHU function code.  Found CLSE.
+ 		get course forupdate with #dli{GHN  course (course# = :coursenoVar)};//1 The get by key statement with the forupdate modifier requires the GHU function code.  Found GHN.
+  		get course forupdate with #dli{GHNP course (course# = :coursenoVar)};//1 The get by key statement with the forupdate modifier requires the GHU function code.  Found GHNP.
+ 		get course forupdate with #dli{GU   course (course# = :coursenoVar)};//1 The get by key statement with the forupdate modifier requires the GHU function code.  Found GU.
+ 		get course forupdate with #dli{ISRT course (course# = :coursenoVar)};//1 The get by key statement with the forupdate modifier requires the GHU function code.  Found ISRT.
+ 		get course forupdate with #dli{GN   course (course# = :coursenoVar)};//1 The get by key statement with the forupdate modifier requires the GHU function code.  Found GN.
+ 		get course forupdate with #dli{GNP  course (course# = :coursenoVar)};//1 The get by key statement with the forupdate modifier requires the GHU function code.  Found GNP.
+ 		get course forupdate with #dli{DLET course (course# = :coursenoVar)};//1 The get by key statement with the forupdate modifier requires the GHU function code.  Found DLET.
+ 		get course forupdate with #dli{REPL course };//1 The get by key statement with the forupdate modifier requires the GHU function code.  Found REPL.
+ 		get course forupdate with #dli{GHU  course (course# = :coursenoVar)};//0			       	
+	end   
+ 	function getNextStmt() 
+	  	get next course  with #dli{CLSE Course};		//1 The get by position statement requires the GN function code.  Found CLSE.
+	  	get next course  with #dli{GHN   course};		//1 The get by position statement requires the GN function code.  Found GHN.  
+	  	get next course  with #dli{GHNP  course};		//1 The get by position statement requires the GN function code.  Found GHNP.
+	  	get next course  with #dli{GHU   course};		//1 The get by position statement requires the GN function code.  Found GHU.
+	  	get next course  with #dli{GU    course};		//1 The get by position statement requires the GN function code.  Found GU.
+	  	get next course  with #dli{DLET  course};		//1 The get by position statement requires the GN function code.  Found DLET.
+	  	get next course  with #dli{ISRT  course};		//1 The get by position statement requires the GN function code.  Found ISRT.
+	  	get next course  with #dli{GNP   course};		//1 The get by position statement requires the GN function code.  Found GNP.
+	  	get next course  with #dli{REPL  course};		//1 The get by position statement requires the GN function code.  Found REPL.
+	  	get next course  with #dli{GN   course};		//0			
+
+  	// get arrays 	
+	  	get next courses with #dli{CLSE Course};		//1 The get by position statement requires the GN function code.  Found CLSE.
+	  	get next courses with #dli{GHN   course};		//1 The get by position statement requires the GN function code.  Found GHN.  
+	  	get next courses with #dli{GHNP  course};		//1 The get by position statement requires the GN function code.  Found GHNP.
+	  	get next courses with #dli{GHU   course};		//1 The get by position statement requires the GN function code.  Found GHU.
+	  	get next courses with #dli{GU    course};		//1 The get by position statement requires the GN function code.  Found GU.
+	  	get next courses with #dli{DLET  course};		//1 The get by position statement requires the GN function code.  Found DLET.
+	  	get next courses with #dli{ISRT  course};		//1 The get by position statement requires the GN function code.  Found ISRT.
+	  	get next courses with #dli{GNP   course};		//1 The get by position statement requires the GN function code.  Found GNP.
+	  	get next courses with #dli{REPL  course};		//1 The get by position statement requires the GN function code.  Found REPL.
+	  	get next courses with #dli{GN   course};		//0				 	  
+	end   
+ 	function getNextForUpdateStmt() 
+	  	get next course forupdate with #dli{CLSE Course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found CLSE.
+	  	get next course forupdate with #dli{GN   course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found GN.  
+	  	get next course forupdate with #dli{GHNP  course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found GHNP.
+	  	get next course forupdate with #dli{GHU   course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found GHU.
+	  	get next course forupdate with #dli{GU    course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found GU.
+	  	get next course forupdate with #dli{DLET  course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found DLET.
+	  	get next course forupdate with #dli{ISRT  course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found ISRT.
+	  	get next course forupdate with #dli{GNP   course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found GNP.
+	  	get next course forupdate with #dli{REPL  course};		//1 The get by position statement with the forupdate modifier requires the GHN function code.  Found REPL.
+	  	get next course forupdate with #dli{GHN   course};		//0	 	
+	end 
+ 	function getNextInParentStmt() 
+	  	get next inparent course  with #dli{CLSE Course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found CLSE.
+	  	get next inparent course  with #dli{GN   course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GN.  
+	  	get next inparent course  with #dli{GHNP  course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GHNP.
+	  	get next inparent course  with #dli{GHU   course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GHU.
+	  	get next inparent course  with #dli{GU    course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GU.
+	  	get next inparent course  with #dli{DLET  course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found DLET.
+	  	get next inparent course  with #dli{ISRT  course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found ISRT.
+	  	get next inparent course  with #dli{GHN   course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GHN.
+	  	get next inparent course  with #dli{REPL   course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found REPL.
+	  	get next inparent course  with #dli{GNP   course};		//0
+
+  	// get arrays 
+	  	get next inparent courses with #dli{CLSE Course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found CLSE.
+	  	get next inparent courses with #dli{GN   course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GN.  
+	  	get next inparent courses with #dli{GHNP  course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GHNP.
+	  	get next inparent courses with #dli{GHU   course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GHU.
+	  	get next inparent courses with #dli{GU    course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GU.
+	  	get next inparent courses with #dli{DLET  course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found DLET.
+	  	get next inparent courses with #dli{ISRT  course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found ISRT.
+	  	get next inparent courses with #dli{GHN   course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found GHN.
+	  	get next inparent courses with #dli{REPL  course};		//1 The get by position statement with the inparent modifier requires the GNP function code.  Found REPL.
+	  	get next inparent courses with #dli{GNP   course};		//0 	
+	end   	
+ 	function getNextInParentForUpdateStmt() 
+	  	get next inparent course forupdate with #dli{CLSE Course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found CLSE.
+	  	get next inparent course forupdate with #dli{GN   course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found GN.  
+	  	get next inparent course forupdate with #dli{GHN   course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found GHN.
+	  	get next inparent course forupdate with #dli{GHU   course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found GHU.
+	  	get next inparent course forupdate with #dli{GU    course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found GU.
+	  	get next inparent course forupdate with #dli{DLET  course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found DLET.
+	  	get next inparent course forupdate with #dli{ISRT  course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found ISRT.
+	  	get next inparent course forupdate with #dli{GNP   course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found GNP.
+	  	get next inparent course forupdate with #dli{REPL  course};		//1 The get by position statement with the inparent and forupdate modifiers requires the GHNP function code.  Found REPL.
+	  	get next inparent course forupdate with #dli{GHNP  course};		//0
+	end 	
+	   
+  function replaceStmt()
+	  	replace course  with #dli{CLSE Course};		//1 The replace statement requires the REPL function code.  Found CLSE.
+	  	replace course  with #dli{GHN   course};	//1 The replace statement requires the REPL function code.  Found GHN.  
+	  	replace course  with #dli{GHNP  course};	//1 The replace statement requires the REPL function code.  Found GHNP.
+	  	replace course  with #dli{GHU   course};	//1 The replace statement requires the REPL function code.  Found GHU.
+	  	replace course  with #dli{GU    course};	//1 The replace statement requires the REPL function code.  Found GU.
+	  	replace course  with #dli{ISRT  course};	//1 The replace statement requires the REPL function code.  Found ISRT.
+	  	replace course  with #dli{GN    course};	//1 The replace statement requires the REPL function code.  Found GN.
+	  	replace course  with #dli{GNP   course};	//1 The replace statement requires the REPL function code.  Found GNP.		 
+	  	replace course  with #dli{DLET  course};	//1 The replace statement requires the REPL function code.  Found DLET.		 
+	    replace course  with #dli{REPL course};	//0 	
+ end
+
+
+end
+  	
+// Command codes valid based upon verb/Function codes
+//	GU				get 		 		D L Q U V C P 		M R S W Z
+//	GHU				get forupdate		D L Q U V C P 		M R S W Z
+//	ISRT			add 				D L F U V C   		M R S W Z
+//	REPL			replace				N				 	M   S W Z
+//	DLET			delete										    Z
+//	GN/GNP/GHN/GHNP	get next, get next inparent,	D L F Q U V C P 	M R S W Z
+//	                get next forupdate,get next forupdate inparent
+
+Program InvalidDLICommandCodesForFunctionCode type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = "psb", 					 
+         handleHardDLIErrors = yes }	 
+  }
+  course course;						   
+  prereq prereq;						 
+  offering offering;					 
+  teacher teacher;						 
+  student student;						 
+  course2 course;						   
+  prereq2 prereq;						 
+  offer2 offering;						 
+  teacher2 teacher;						 
+  student2 student;						 
+  courses course[20];					   
+  prereqs prereq[5];					 
+  offers offering[3];					 
+  teachers teacher[5];					 
+  students student[25];					   
+  xloc char(4);	
+  coursenoVar char(3);						 
+
+  // PSB Declaration
+  psb EducationPSB ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+
+  	function addStmt()		
+	  	add course  with #dli{ISRT course};			//0
+	  	add course  with #dli{ISRT course*DLQU};	//1 Q is not a valid command code for the ISRT call 
+	  	add course  with #dli{ISRT course*VCPF};	//1 P is not a valid command code for the ISRT call
+	  	add course  with #dli{ISRT  course*NMR};	//3 N is not a valid command code for the ISRT call | The command code M must have a number following it | The command code R must have a number following it	
+	  	add course  with #dli{ISRT  course*S};  	//1 The command code S must have a number following it
+	  	add course  with #dli{ISRT  course*W};  	//1 The command code W must have a number following it
+	  	add course  with #dli{ISRT  course*Z};  	//1 The command code Z must have a number following it	  	  		  		  	
+  	    add student 							 
+   	  		with #dli{ISRT course*DCQU (course# = :coursenoVar) //4 Q is not a valid command code for the ISRT call|When the C command code is used, a conditional expression is not allowed as the qualification|A qualified SSA cannot follow a D command code | Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement
+  	  					   offering*VPFW			//2 P is not a valid command code for the ISRT call	| The command code W must have a number following it		  
+  	  					   student*LNMR};			//3 N is not a valid command code for the ISRT call | The command code M must have a number following it | The command code R must have a number following it				   	  
+  	    add student 							 
+   	  		with #dli{ISRT course*S (course# = :coursenoVar) //1 The command code S must have a number following it
+  	  					   offering*Z				//1  The command code Z must have a number following it
+  	  					   student};				//0
+
+   	end  
+
+  	function deleteStmt() 	
+	    delete course  with #dli{DLET course*UPZ};	//3 U is not a valid command code for the DLET call|P is not a valid command code for the DLET call | The command code Z must have a number following it
+	    delete course  with #dli{DLET course*CVMQ};	//5 C is not a valid command code for the DLET call|V is not a valid command code for the DLET call|M is not a valid command code for the DLET call|Q is not a valid command code for the DLET call | The command code M must have a number following it
+	    delete course  with #dli{DLET course*SRDL};	//6 S is not a valid command code for the DLET call|R is not a valid command code for the DLET call|D is not a valid command code for the DLET call|L is not a valid command code for the DLET call | The command code S must have a number following it | The command code R must have a number following it
+	    delete course  with #dli{DLET course*WNF};	//4 W is not a valid command code for the DLET call|N is not a valid command code for the DLET call|F is not a valid command code for the DLET call | The command code W must have a number following it	
+  	end 
+		
+ 	function getStmt() 
+ 		get course with #dli{GU   course*FNZ  (course# = :coursenoVar)};//3 F is not a valid command code for the GU call|N is not a valid command code for the GU call | The command code Z must have a number following it
+ 		get course with #dli{GU   course*MRPC  (course# = :coursenoVar)};//3 When the C command code is used, a conditional expression is not allowed as the qualification | The command code M must have a number following it | The command code R must have a number following it
+ 		get course with #dli{GU   course*WVDL  (course# = :coursenoVar)};//1 The command code W must have a number following it
+ 		get course with #dli{GU   course*UQS   (course# = :coursenoVar)};//1 The command code S must have a number following it
+  	  // get arrays 
+ 		get courseS with #dli{GU   course*FNZ  (course# = :coursenoVar) //3 F is not a valid command code for the GU call|N is not a valid command code for the GU call | The command code Z must have a number following it
+ 							  GN course*DMUF			 };			 //3 F is not a valid command code for a GN call when the target of the statement is an array|D is not a valid command code for a GN call when the target of the statement is an array | The command code M must have a number following it
+ 		get courseS with #dli{GU   course*MRPC  (course# = :coursenoVar)//3 When the C command code is used, a conditional expression is not allowed as the qualification | The command code M must have a number following it | The command code R must have a number following it
+ 							  GN course*WLVC			 };		     //2 L is not a valid command code for a GN call when the target of the statement is an array | The command code W must have a number following it
+ 		get courseS with #dli{GU   course*WVDL  (course# = :coursenoVar)//3 L is not a valid command code for a GU call when the target of the statement is an array|D is not a valid command code for a GU call when the target of the statement is an array | The command code W must have a number following it
+ 							  GN course*QSN			 };				 //2 N is not a valid command code for the GN call | The command code S must have a number following it
+ 		get courseS with #dli{GU   course*UQSL   (course# = :coursenoVar)//2 L is not a valid command code for a GU call when the target of the statement is an array | The command code S must have a number following it
+ 							  GN course*PRZ			 };			     //2  The command code R must have a number following it | The command code Z must have a number following it	
+	end  
+ 	
+ 	function getForUpdateStmt() 
+		get course forupdate with #dli{GHU  course*WRUP (course# = :coursenoVar)};//2 The command code W must have a number following it | The command code R must have a number following it	
+		get course forupdate with #dli{GHU  course*SFVN (course# = :coursenoVar)};//3 F is not a valid command code for the GHU call|N is not a valid command code for the GHU call | The command code S must have a number following it	
+		get course forupdate with #dli{GHU  course*MQD  (course# = :coursenoVar)};//1 The command code M must have a number following it	
+		get course forupdate with #dli{GHU  course*ZLC  (course# = :coursenoVar)};//2 When the C command code is used, a conditional expression is not allowed as the qualification | The command code Z must have a number following it				       	
+	end  
+	 
+ 	function getNextStmt() 
+	  	get next course  with #dli{GN course*PRZ			 };			 //2 The command code R must have a number following it | The command code Z must have a number following it  
+	  	get next course  with #dli{GN course*WLVC			 };		     //1 The command code W must have a number following it
+	  	get next course  with #dli{GN course*DMUF			 };			 //1 The command code M must have a number following it
+	  	get next course  with #dli{GN course*QSN			 };			 //2 N is not a valid command code for the GN call | The command code S must have a number following it
+	// get arrays
+	  	get next courses with #dli{GN course*F};			//1 F is not a valid command code for a GN call when the target of the statement is an array		
+		get next courses with #dli{GN course*L};			//1 L is not a valid command code for a GN call when the target of the statement is an array	 	  
+	end   
+
+ 	function getNextForUpdateStmt() 
+	  	get next course forupdate with #dli{GHN   course*PRZ};	//2	The command code R must have a number following it | The command code Z must have a number following it
+	  	get next course forupdate with #dli{GHN   course*WLVC};	//1	The command code W must have a number following it
+	  	get next course forupdate with #dli{GHN   course*DMUF};	//1	The command code M must have a number following it
+	  	get next course forupdate with #dli{GHN   course*QSN};	//2 N is not a valid command code for the GHN call | The command code S must have a number following it	
+	end 
+	
+ 	function getNextInParentStmt() 
+	  	get next inparent course  with #dli{GNP   course*PRZ};		//2	The command code R must have a number following it | The command code Z must have a number following it
+	  	get next inparent course  with #dli{GNP   course*WLVC};		//1	The command code W must have a number following it
+	  	get next inparent course  with #dli{GNP   course*DMUF};		//1	The command code M must have a number following it
+	  	get next inparent course  with #dli{GNP   course*QSN};		//2 N is not a valid command code for the GNP call | The command code S must have a number following it		
+	// get arrays
+	  	get next inparent courses with #dli{GNP course*F};			//1 F is not a valid command code for a GNP call when the target of the statement is an array		
+		get next inparent courses with #dli{GNP course*L};			//1 L is not a valid command code for a GNP call when the target of the statement is an array	 	  
+	end 
+  	
+ 	function getNextInParentForUpdateStmt() 
+	  	get next inparent course forupdate with #dli{GHNP  course*PRZ};		//2 The command code R must have a number following it | The command code Z must have a number following it
+	  	get next inparent course forupdate with #dli{GHNP  course*WLVC};	//1	The command code W must have a number following it
+	  	get next inparent course forupdate with #dli{GHNP  course*DMUF};	//1	The command code M must have a number following it
+	  	get next inparent course forupdate with #dli{GHNP  course*QSN};		//2 N is not a valid command code for the GHNP call | The command code S must have a number following it	
+	end 	
+   
+  function replaceStmt()
+	    replace course  with #dli{REPL course*RZPC};//5 R is not a valid command code for the REPL call|P is not a valid command code for the REPL call|C is not a valid command code for the REPL call | The command code R must have a number following it | The command code Z must have a number following it		
+	    replace course  with #dli{REPL course*WQND};//3 Q is not a valid command code for the REPL call|D is not a valid command code for the REPL call | The command code W must have a number following it 
+	    replace course  with #dli{REPL course*USF};	//3 U is not a valid command code for the REPL call|F is not a valid command code for the REPL call | The command code S must have a number following it
+	    replace course  with #dli{REPL course*MVL};	//3 V is not a valid command code for the REPL call|L is not a valid command code for the REPL call | The command code M must have a number following it 
+ end
+
+
+end  	
+
+//
+// Invalid combinations of command codes (in the same SSA)
+//	R and F
+//	R and Q
+//	L and F
+//	U and V
+//	only one of M S W Z
+
+// OTHER RULES
+// 	max of 4 command codes (not counting the *)
+//	no duplication of command codes in a single SSA
+//	only one C command code in any set of SSAs, the qualification on that SSA must be a simple 
+//			field relationalOperator value
+//			i.e. no boolean operators
+//	on ISRT (add), qualified SSA cannot follow a D command code
+//	on ISRT (add), C command code cannot follow any SSA with a D command code   	
+//  	
+
+Program InvalidDLICommandCodeCombinations type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = "psb", 					 
+         handleHardDLIErrors = yes }	 
+  }
+  course course;						   
+  prereq prereq;						 
+  offering offering;					 
+  teacher teacher;						 
+  student student;						 
+  course2 course;						   
+  prereq2 prereq;						 
+  offer2 offering;						 
+  teacher2 teacher;						 
+  student2 student;						 
+  courses course[20];					   
+  prereqs prereq[5];					 
+  offers offering[3];					 
+  teachers teacher[5];					 
+  students student[25];					   
+  xloc char(4);			
+  coursenoVar char(3);				 
+
+  // PSB Declaration
+  psb EducationPSB ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+
+  	function addStmt()		
+  		add course  with #dli{ };					//1 call be must be specified
+	  	add course  with #dli{ISRT course};			//0
+	  	add course  with #dli{ISRT course*RF};		//2 The R and F command codes cannot be used in the same SSA | The command code R must have a number following it
+	  	add course  with #dli{ISRT course*RQ};		//3 Q is not a valid command code for the ISRT call|The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it
+	  	add course  with #dli{ISRT course*LF};		//1 The L and F command codes cannot be used in the same SSA.
+	  	add course  with #dli{ISRT  course*UV};  	//1 The U and V command codes cannot be used in the same SSA.	
+	  	add course  with #dli{ISRT course*CDPVR};	//3 A maximum of four command codes are allowed on the same SSA.|P is not a valid command code for the ISRT call | The command code R must have a number following it
+	  	add course  with #dli{ISRT  course*CDRD};	//2 Command codes must be unique in a single SSA. The D command code is repeated | The command code R must have a number following it
+	  	add course  with #dli{ISRT  course*R("abc")};	//2 A values clause can only be used in conjunction with a C command code | The command code R must have a number following it
+	  	add course  with #dli{ISRT  course("abc")};	//1 A values clause can only be used in conjunction with a C command code
+
+ 	  	//Note that these are the invalid combinations of command codes but they are on different SSAs so they
+ 	  	// are valid.
+  	    add student 							 
+   	  		with #dli{ISRT course*RLUPC (course# = :coursenoVar) //4 A maximum of four command codes are allowed on the same SSA.|P is not a valid command code for the ISRT call.| When the C command code is used, a conditional expression is not allowed as the qualification | The command code R must have a number following it
+  	  					   offering*RLUPD			//4 A maximum of four command codes are allowed on the same SSA.|P is not a valid command code for the ISRT call. | Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement | The command code R must have a number following it
+  	  					   student};				//0			   	  
+  	    add student 							 
+   	  		with #dli{ISRT course*MM (course# = :coursenoVar) //3 Command codes must be unique in a single SSA. The M command code is repeated | The command code M must have a number following it
+  	  					   offering*CC				//1 Command codes must be unique in a single SSA. The C command code is repeated.
+  	  					   student ("abc")};		//1 A values clause can only be used in conjunction with a C command code
+  	  	add student 							 
+   	  		with #dli{ISRT course*D (course# = :coursenoVar) //2 A qualified SSA cannot follow a D command code. | Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement
+  	  					   offering*C				//1 The C command code cannot follow an SSA that involves the D command code
+  	  					   student};				//0
+  	  	add student 							 
+   	  		with #dli{ISRT course*D (course# = :coursenoVar) //2 A qualified SSA cannot follow a D command code. | Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement
+  	  					   offering (date = "010105") 	//1 A qualified SSA cannot follow a D command code.
+  	  					   student (empno = "123456")};	//1 A qualified SSA cannot follow a D command code.
+  	    add student 							 
+   	  		with #dli{ISRT course*C (course# = :coursenoVar) //1 When the C command code is used, a conditional expression is not allowed as the qualification.
+  	  					   offering*C				//1 Only one C command code is allowed in a set of SSAa for a DL/I call.    
+  	  					   student};				//0	
+  	    add student 							 
+   	  		with #dli{ISRT course*C (course# = :coursenoVar	//1 When the C command code is used, a conditional expression is not allowed as the qualification
+   	  								& title = "some title") //0 
+  	  					   offering 				//0
+  	  					   student};				//0	
+   	end  
+
+  	function deleteStmt() 	
+	    delete course  with #dli{DLET course*RF};	//4 R is not a valid command code for the DLET call|F is not a valid command code for the DLET call|The R and F command codes cannot be used in the same SSA | The command code R must have a number following it
+	    delete course  with #dli{DLET course*RQ};	//4 R is not a valid command code for the DLET call|Q is not a valid command code for the DLET call|The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it
+	    delete course  with #dli{DLET course*LF};	//3 L is not a valid command code for the DLET call|F is not a valid command code for the DLET call|The L and F command codes cannot be used in the same SSA.
+	    delete course  with #dli{DLET course*UV};	//3 U is not a valid command code for the DLET call|V is not a valid command code for the DLET call|The U and V command codes cannot be used in the same SSA.	
+	    delete course  with #dli{DLET course*MSWZ};	//8 M is not a valid command code for the DLET call|S is not a valid command code for the DLET call|W is not a valid command code for the DLET call|Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it | The command code W must have a number following it | The command code Z must have a number following it
+	    delete course  with #dli{DLET course*ZLURQ};//8 L is not a valid command code for the DLET call|U is not a valid command code for the DLET call|R is not a valid command code for the DLET call|Q is not a valid command code for the DLET call|A maximum of four command codes are allowed on the same SSA.|The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it | The command code Z must have a number following it
+	    delete course  with #dli{DLET course*ZZDZ}; //6 Command codes must be unique in a single SSA. The Z command code is repeated|Command codes must be unique in a single SSA. The Z command code is repeated|D is not a valid command code for the DLET call | The command code Z must have a number following it
+	    delete course  with #dli{ };				//1 call be must be specified
+  	end 
+	
+ 	function getStmt() 
+ 		get course with #dli{ };						  		   //1 call be must be specified
+ 		get course with #dli{GU   course*RF (course# = :coursenoVar)};//3 F is not a valid command code for the GU call|The R and F command codes cannot be used in the same SSA | The command code R must have a number following it
+ 		get course with #dli{GU   course*RQ (course# = :coursenoVar)};//2 The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it
+ 		get course with #dli{GU   course*LF (course# = :coursenoVar)};//2 F is not a valid command code for the GU call|The L and F command codes cannot be used in the same SSA. 
+ 		get course with #dli{GU   course*UV (course# = :coursenoVar)};//1 The U and V command codes cannot be used in the same SSA.
+ 		get course with #dli{GU   course*MS (course# = :coursenoVar)};//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it
+ 		get course with #dli{GU   course*WZ (course# = :coursenoVar)};//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code W must have a number following it | The command code Z must have a number following it
+ 		get course with #dli{GU   course*MZ (course# = :coursenoVar)};//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code Z must have a number following it
+ 		get course with #dli{GU   course*SW (course# = :coursenoVar)};//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code S must have a number following it | The command code W must have a number following it
+ 		get course with #dli{GU   course*RUMCDP (course# = :coursenoVar)};//4 A maximum of four command codes are allowed on the same SSA.|When the C command code is used, a conditional expression is not allowed as the qualification | The command code R must have a number following it | The command code M must have a number following it
+ 		get course with #dli{GU   course*RUMR (course# = :coursenoVar)};//4 Command codes must be unique in a single SSA. The R command code is repeated | The command code R must have a number following it | The command code M must have a number following it
+  	  // get arrays 
+  	   	//Note that these are the invalid combinations of command codes but they are on different SSAs so they
+ 	  	// are valid.
+ 		get courseS with #dli{GU   course*FQ  (course# = :coursenoVar) //1 F is not a valid command code for the GU call
+ 							  GN course*R			 };				//1 The command code R must have a number following it
+ 		get courseS with #dli{GU   course*LU  (course# = :coursenoVar)	//1 L is not a valid command code for a GU call when the target of the statement is an array
+ 							  GN course*FV			 };		   		//1 F is not a valid command code for a GN call when the target of the statement is an array
+ 		get courseS with #dli{GU   course*M  (course# = :coursenoVar)	//1 The command code M must have a number following it 
+ 							  GN course*S			 };				//1 The command code S must have a number following it
+ 		get courseS with #dli{GU   course*W   (course# = :coursenoVar) //1 The command code W must have a number following it
+ 							  GN course*Z			 };			    //1 The command code Z must have a number following it
+ 		get courseS with #dli{GU   course*MS   (course# = :coursenoVar)//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it
+ 							  GN course*WZ			 };			    //3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code W must have a number following it | The command code Z must have a number following it
+ 		get courseS with #dli{GU   course*RUMCDP   (course# = :coursenoVar)//5 A maximum of four command codes are allowed on the same SSA.|When the C command code is used, a conditional expression is not allowed as the qualification|D is not a valid command code for a GU call when the target of the statement is an array | The command code R must have a number following it | The command code M must have a number following it
+ 							  GN course*RUMR			 };			    //4 Command codes must be unique in a single SSA. The R command code is repeated | The command code R must have a number following it | The command code M must have a number following it
+ 		get courseS with #dli{GU   course*RUMR  (course# = :coursenoVar) 	//4 Command codes must be unique in a single SSA. The R command code is repeated | The command code R must have a number following it | The command code M must have a number following it
+ 							  GN course*RUMCDP			 };				//4 A maximum of four command codes are allowed on the same SSA|D is not a valid command code for a GN call when the target of the statement is an array | The command code R must have a number following it | The command code M must have a number following it
+		//Note that the message about only having one C command code doesn't apply here becasue this is really two different DL/I calls.
+		get courseS with #dli{GU   course*C  (:coursenoVar) 				//0
+ 							  GN course*C			 };					//0
+	end  
+
+ 	function getForUpdateStmt() 
+ 		get course forupdate with #dli{ };									  //1 call be must be specified
+		get course forupdate with #dli{GHU  course*RF (course# = :coursenoVar)}; //3 F is not a valid command code for the GHU call|The R and F command codes cannot be used in the same SSA | The command code R must have a number following it	
+		get course forupdate with #dli{GHU  course*RQ (course# = :coursenoVar)}; //2 The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it
+		get course forupdate with #dli{GHU  course*LF  (course# = :coursenoVar)};//2 F is not a valid command code for the GHU call|The L and F command codes cannot be used in the same SSA.		
+		get course forupdate with #dli{GHU  course*UV  (course# = :coursenoVar)};//1 The U and V command codes cannot be used in the same SSA.				       	
+		get course forupdate with #dli{GHU  course*MZ  (course# = :coursenoVar)};//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code Z must have a number following it
+		get course forupdate with #dli{GHU  course*WS  (course# = :coursenoVar)};//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code W must have a number following it | The command code S must have a number following it
+		get course forupdate with #dli{GHU  course*ZS  (course# = :coursenoVar)};//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code Z must have a number following it | The command code S must have a number following it
+		get course forupdate with #dli{GHU  course*CDRVM  (course# = :coursenoVar)};//4 A maximum of four command codes are allowed on the same SSA.|When the C command code is used, a conditional expression is not allowed as the qualification | The command code R must have a number following it | The command code M must have a number following it
+		get course forupdate with #dli{GHU  course*CC  (course# = :coursenoVar)};	//3 Command codes must be unique in a single SSA. The C command code is repeated.|When the C command code is used, a conditional expression is not allowed as the qualification|When the C command code is used, a conditional expression is not allowed as the qualification
+	end  
+	 
+ 	function getNextStmt() 
+ 		get next course  with #dli{ };						 //1 call be must be specified
+	  	get next course  with #dli{GN course*RF		 };		 //2 The R and F command codes cannot be used in the same SSA | The command code R must have a number following it  
+	  	get next course  with #dli{GN course*RQ		 };	     //2 The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it
+	  	get next course  with #dli{GN course*LF		 };		 //1 The L and F command codes cannot be used in the same SSA. 
+	  	get next course  with #dli{GN course*UV		 };		 //1 The U and V command codes cannot be used in the same SSA.
+		get next course  with #dli{GN course*MSW 	 };	 	 //4 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it | The command code W must have a number following it
+		get next course  with #dli{GN course*SW 	 };	 	 //3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code S must have a number following it | The command code W must have a number following it
+		get next course  with #dli{GN course*MWZ 	 };	 	 //4 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code W must have a number following it | The command code Z must have a number following it
+		get next course  with #dli{GN course*RLUMP 	 };		 //3 A maximum of four command codes are allowed on the same SSA | The command code R must have a number following it | The command code M must have a number following it
+		get next course  with #dli{GN course*WWV 	 };		 //3 Command codes must be unique in a single SSA. The W command code is repeated | The command code W must have a number following it
+	end   
+
+ 	function getNextForUpdateStmt() 
+ 		get next course forupdate with #dli{ };							//1 call be must be specified
+	  	get next course forupdate with #dli{GHN   course*RF		 };		//2 The R and F command codes cannot be used in the same SSA | The command code R must have a number following it 
+	  	get next course forupdate with #dli{GHN   course*RQ		 };	    //2 The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it
+	  	get next course forupdate with #dli{GHN   course*LF		 };		//1 The L and F command codes cannot be used in the same SSA. 
+	  	get next course forupdate with #dli{GHN   course*UV		 };		//1 The U and V command codes cannot be used in the same SSA.
+	  	get next course forupdate with #dli{GHN   course*MSW 	 };	 	//4 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it | The command code W must have a number following it
+	  	get next course forupdate with #dli{GHN   course*SW 	 };	 	//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code S must have a number following it | The command code W must have a number following it
+	  	get next course forupdate with #dli{GHN   course*MWZ 	 };	 	//4 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code W must have a number following it | The command code Z must have a number following it
+	  	get next course forupdate with #dli{GHN   course*RLUMP 	 };		//3 A maximum of four command codes are allowed on the same SSA | The command code R must have a number following it | The command code M must have a number following it 
+	  	get next course forupdate with #dli{GHN   course*WWV 	 };		//3 Command codes must be unique in a single SSA. The W command code is repeated | The command code W must have a number following it
+	end 
+	
+ 	function getNextInParentStmt() 
+ 		get next inparent course  with #dli{ };							//1 call be must be specified
+	  	get next inparent course  with #dli{GNP   course*RF		 };		//2 The R and F command codes cannot be used in the same SSA | The command code R must have a number following it 
+	  	get next inparent course  with #dli{GNP   course*RQ		 };	    //2 The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it
+	  	get next inparent course  with #dli{GNP   course*LF		 };		//1 The L and F command codes cannot be used in the same SSA. 
+	  	get next inparent course  with #dli{GNP   course*UV		 };		//1 The U and V command codes cannot be used in the same SSA.
+	  	get next inparent course  with #dli{GNP   course*MSW 	 };	 	//4 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it | The command code W must have a number following it
+	  	get next inparent course  with #dli{GNP   course*SW 	 };	 	//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code S must have a number following it | The command code W must have a number following it
+	  	get next inparent course  with #dli{GNP   course*MWZ 	 };	 	//4 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code W must have a number following it | The command code Z must have a number following it
+	  	get next inparent course  with #dli{GNP   course*FVMCD	 };		//2 A maximum of four command codes are allowed on the same SSA | The command code M must have a number following it
+	  	get next inparent course  with #dli{GNP   course*ZZ 	 };		//3 Command codes must be unique in a single SSA. The Z command code is repeated | The command code Z must have a number following it
+	end 
+  	
+ 	function getNextInParentForUpdateStmt() 
+ 		get next inparent course forupdate with #dli{ };						//1 call be must be specified
+	  	get next inparent course forupdate with #dli{GHNP  course*RF	 };		//2 The R and F command codes cannot be used in the same SSA | The command code R must have a number following it  
+	  	get next inparent course forupdate with #dli{GHNP  course*RQ	 };	    //2 The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it
+	  	get next inparent course forupdate with #dli{GHNP  course*LF	 };		//1 The L and F command codes cannot be used in the same SSA. 
+	  	get next inparent course forupdate with #dli{GHNP  course*UV	 };		//1 The U and V command codes cannot be used in the same SSA.
+	  	get next inparent course forupdate with #dli{GHNP  course*MSW 	 };	 	//4 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it | The command code W must have a number following it
+	  	get next inparent course forupdate with #dli{GHNP  course*SW 	 };	 	//3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code S must have a number following it | The command code W must have a number following it
+	  	get next inparent course forupdate with #dli{GHNP  course*MWZ 	 };	 	//4 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code W must have a number following it | The command code Z must have a number following it
+	  	get next inparent course forupdate with #dli{GHNP  course*FVMCD	 };		//2 A maximum of four command codes are allowed on the same SSA | The command code M must have a number following it 
+	  	get next inparent course forupdate with #dli{GHNP  course*ZZ 	 };		//3 Command codes must be unique in a single SSA. The Z command code is repeated | The command code Z must have a number following it
+	end 	
+   
+  function replaceStmt()
+  		replace course  with #dli{ };				//1 call be must be specified
+	    replace course  with #dli{REPL course*RF};	//4 R is not a valid command code for the REPL call|F is not a valid command code for the REPL call|The R and F command codes cannot be used in the same SSA | The command code R must have a number following it  
+	    replace course  with #dli{REPL course*RQ};	//4 R is not a valid command code for the REPL call|Q is not a valid command code for the REPL call|The R and Q command codes cannot be used in the same SSA | The command code R must have a number following it  
+	    replace course  with #dli{REPL course*LF};	//3 L is not a valid command code for the REPL call|F is not a valid command code for the REPL call|The L and F command codes cannot be used in the same SSA.  
+	    replace course  with #dli{REPL course*UV};	//3 V is not a valid command code for the REPL call|U is not a valid command code for the REPL call|The U and V command codes cannot be used in the same SSA.  
+	    replace course  with #dli{REPL course*MSWZ};//5 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it | The command code W must have a number following it | The command code Z must have a number following it
+	    replace course  with #dli{REPL course*SM};  //3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code M must have a number following it | The command code S must have a number following it
+	    replace course  with #dli{REPL course*WZ};  //3 Only one of the M, S, W, and Z command codes are allowed on a single SSA | The command code W must have a number following it | The command code Z must have a number following it
+	    replace course  with #dli{REPL course*MMNNM};//7 A maximum of four command codes are allowed on the same SSA.|Command codes must be unique in a single SSA. The M command code is repeated.|Command codes must be unique in a single SSA. The N command code is repeated|Command codes must be unique in a single SSA. The M command code is repeated | The command code M must have a number following it
+ end
+end 

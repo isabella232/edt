@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// validatePositionProperty:
+Form validatePositionProperty type textForm {formSize=[24,80]}
+	* {position=[0,0]};	// 1 Property: position.  The value for this property for field * in validatePositionProperty is invalid. The value must be in the format [row, column], where row and column are positive integers. {5340, INVALID_FORM_FIELD_POSITION_PROPERTY_VALUE}
+end
+
+// validateProperty:
+Form validateProperty type textForm {formSize=[24,80]}
+	* {
+		detectable=yes,	//0
+		modified=yes,	//0
+		protect=skipProtect,	//0
+		intensity=dim,	//0
+		fieldLen=2,		//0
+		cursor=yes,		//0
+		color=red		//0
+	};
+end
+
+Form validateProperty2 type textForm {formSize=[24,80]}
+	* {					//2 Property: protect.  The value for this property for field * in validateProperty2 is invalid. The value must be one of the following: protect, skipProtect.|The value must be a string literal.
+		value=[5],		//0 
+		protect=noProtect,		//0
+		cursor = yes,	//0
+		foo = no		//1
+	};
+end
+
+Form validateProperty3 type printForm {formSize=[24,80]}
+	* {					//0
+		detectable=yes,	//0
+		modified=yes,	//0
+		protect=protect,//0
+		intensity=dim,	//0
+		color=red,		//0
+		fieldLen="2",	//1
+		cursor=yes		//0
+	};
+end

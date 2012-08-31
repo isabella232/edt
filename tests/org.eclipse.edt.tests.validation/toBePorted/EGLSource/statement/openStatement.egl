@@ -1,0 +1,261 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// validate (1):
+// 1 Invalid for target {1}. The target must be an SQL record. {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+
+program MyProj {@DLI { psb = "psb", 					 
+         handleHardDLIErrors = yes,
+         pcbParms =["", "pcb1", "pcb2", "",""] }	
+         // when called from APPLA_valid pcb1 is pcbC1 and receives pcbA3 
+         //							     pcb2 is pcbC2 and receives pcbA5
+         // when called from APPLB_valid pcb1 is pcbC1 and receives pcbB4 
+         //							     pcb2 is pcbC2 and receives pcbB1
+         // this program cannot use pcbC3 or pcbC4 
+  }
+	 	 const catConstant string = "cat";
+	function main()
+			const dogConstant int = 5;
+		course Course;
+		coursePCB DB_PCBRecord;
+		sqlRec sqlRec;
+		sqlrec2 sqlrec;
+		courses Course[]; 
+		sqlrecs sqlrec[];
+		indxrec IndxRecord;
+		mqrec MQRec;
+		relrec relrecord;
+		srec	srecord;
+		name string;
+		course2 Course;
+		sqlflex sqlRecFLEX;
+		a,b,c int;
+		d,e,f int;
+		myany any;
+		
+		prepare prepareid;
+		
+		open resultsetid for course;// 1 Invalid for target course. The target must be an SQL record		 {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		open resultsetid for sqlrecs;// 0
+		open resultsetid for indxrec;// 1 Invalid for target indxrec. The target must be an SQL record		 {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		open resultsetid for name;// 1 Invalid for target name. The target must be an SQL record		 {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		open resultsetid for myany;// 1 Invalid for target myany. The target must be an SQL record		 {6638, EGLMESSAGE_OPEN_FOR_TARGET_NOT_SQL_RECORD}
+		
+		open resultsetid scroll hold forupdate  usingkeys dogConstant,catconstant,name,myany,sqlRec.item1 for sqlrec;// 2 catconstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant | dogConstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant
+		open resultsetid scroll hold forupdate  usingkeys name[5:9] for sqlrec;//  1 Substring expressions are not valid in this statement location
+		open resultsetid scroll hold forupdate  usingkeys dogConstant,catconstant,name,myany,sqlRec.item1 for sqlrecs;// 2 catconstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant | dogConstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant
+		open resultsetid scroll hold forupdate  usingkeys name[5:9] for sqlrecs;//  1 Substring expressions are not valid in this statement location
+		
+		open resultsetid with prepareid   using dogConstant,catconstant,name,myany,sqlRec.item1 for sqlrec;// 2 catconstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant | dogConstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant
+		open resultsetid with prepareid  using name[5:9] for sqlrec;//  1 Substring expressions are not valid in this statement location
+		open resultsetid with prepareid using dogConstant,catconstant,name,myany,sqlRec.item1 for sqlrecs;// 2 catconstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant | dogConstant cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant
+		open resultsetid with prepareid using name[5:9] for sqlrecs;//  1 Substring expressions are not valid in this statement location
+		
+		open resultsetid with #sql{select * from tablex}into dogConstant,catconstant;// 2 catconstant cannot be resolved as an item or a container. It cannot be a constant | dogConstant cannot be resolved as an item or a container. It cannot be a constant
+		open resultsetid with #sql{select * from tablex}into name[5:9];//  1 Substring expressions are not valid in this statement location
+				
+		open resultstid forupdate forupdate with #sql{select * from tablex for update of ttt}for sqlrec;// 1 The OPEN SQL I/O statement does not allow the FORUPDATE option to be specified more than once		 {6510, EGLMESSAGE_DUPE_OPTION}
+		open resultsetid with #sql{select * from tablex}into a into b , c;// 1 The OPEN SQL I/O statement does not allow the INTO clause to be specified more than once		{6510, EGLMESSAGE_DUPE_OPTION}
+		open resultsetid with prepareid using d using e,f into a , b , c ;// 1  The OPEN SQL I/O statement does not allow the USING clause to be specified more than once		{6511, EGLMESSAGE_DUPE_CLAUSE}
+		open resultsetid usingkeys d usingkeys e,f for sqlrec;// 1 The OPEN SQL I/O statement does not allow the USINGKEYS clause to be specified more than once		 {6511, EGLMESSAGE_DUPE_CLAUSE}		
+		open resultsetid with prepareid with prepareid for sqlrec;// 1 The OPEN SQL I/O statement does not allow the prepared statement reference to be specified more than once			{6513, EGLMESSAGE_DUPE_PREPARED_STMT_REFERENCE}
+		open resultsetid with #sql{select * from tablex} with #sql{select * from tablex};// 1 The OPEN SQL I/O statement does not allow the inline SQL statement to be specified more than once		{6512, EGLMESSAGE_DUPE_INLINE_SQL}
+		open resultsetid for sqlrec for sqlrec;// 1 The OPEN SQL I/O statement does not allow the FOR option to be specified more than once		 {6510, EGLMESSAGE_DUPE_OPTION}
+		open resultsetid usingkeys a,b;// 2  The OPEN SQL I/O statement does not allow specification of the usingKeys option unless an SQL record is provided		{6530, EGLMESSAGE_CANT_HAVE_USINGKEYS_WITHOUT_SQLRECORD}
+		open resultsetid forupdate with #sql{select * from tablex  for update of ttt};// 0
+		open resultsetid with prepareid with #sql{select * from tablex};// 1  The OPEN SQL I/O statement does not allow both an inline SQL statement and a prepared statement reference		{6509, EGLMESSAGE_CANT_HAVE_BOTH_INLINE_SQL_PREPARED_STMT_REF}
+		open resultsetid ;// 1  The OPEN SQL I/O statement requires either an inline SQL statement, a prepared statement reference or a for record option			{6524, EGLMESSAGE_MUST_HAVE_SQLSTMT_OR_FOR_CLAUSE}
+		open resultsetid using d,e,f with #sql{select * from tablex};// 1  The OPEN SQL I/O statement does not allow the USING clause to be specified without the prepared statement reference being specified		 {6514, EGLMESSAGE_CANT_HAVE_USING_WITHOUT_PREPARED_STMT_REF}
+				
+				
+				
+		open resultsetid with #sql{select * from tablex};// 0
+		open resultsetid scroll with #sql{select * from tablex};// 0
+		open resultsetid hold with #sql{select * from tablex};// 0
+		open resultsetid scroll hold with #sql{select * from tablex};// 0
+		
+		open resultsetid with #sql{select * from tablex}into a , b , c;// 0
+		open resultsetid scroll with #sql{select * from tablex}into a , b , c;// 0
+		open resultsetid hold with #sql{select * from tablex}into a , b , c;// 0
+		open resultsetid scroll hold with #sql{select * from tablex}into a , b , c;// 0
+		
+		open resultsetid with prepareid;// 0
+		open resultsetid scroll with prepareid;// 0
+		open resultsetid hold with prepareid;// 0
+		open resultsetid scroll hold with prepareid;// 0
+		
+		open resultsetid with prepareid into a , b , c;// 0
+		open resultsetid scroll with prepareid into a , b , c;// 0
+		open resultsetid hold with prepareid into a , b , c;// 0
+		open resultsetid scroll hold with prepareid into a , b , c;// 0		
+		
+		open resultsetid with prepareid using d,e,f;// 0
+		open resultsetid scroll with prepareid using d,e,f;// 0
+		open resultsetid hold with prepareid using d,e,f;// 0
+		open resultsetid scroll hold with prepareid using d,e,f;// 0
+		
+		open resultsetid with prepareid using d,e,f into a , b , c ;// 0
+		open resultsetid scroll with prepareid using d,e,f into a , b , c;// 0
+		open resultsetid hold with prepareid using d,e,f into a , b , c;// 0
+		open resultsetid scroll hold with prepareid using d,e,f into a , b , c;// 0		
+
+		open resultsetid for sqlrec;// 0
+		open resultsetid scroll for sqlrec;// 0		
+		open resultsetid hold for sqlrec;// 0		
+		open resultsetid scroll hold for sqlrec;// 0								
+
+		open resultsetid forupdate for sqlrec;// 0
+		open resultsetid scroll forupdate for sqlrec;// 0		
+		open resultsetid hold forupdate for sqlrec;// 0		
+		open resultsetid scroll hold forupdate  for sqlrec;// 0	
+
+		open resultsetid usingkeys d,e,f for sqlrec;// 0
+		open resultsetid scroll usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid hold usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid scroll hold usingkeys d,e,f for sqlrec;// 0								
+		open resultsetid forupdate usingkeys d,e,f for sqlrec;// 0
+		open resultsetid scroll forupdate usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid hold forupdate usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid scroll hold forupdate  usingkeys d,e,f for sqlrec;// 0			
+		
+		open resultsetid with #sql{select * from tablex} for sqlrec;// 0
+		open resultsetid scroll with #sql{select * from tablex} for sqlrec;// 0		
+		open resultsetid hold with #sql{select * from tablex} for sqlrec;// 0		
+		open resultsetid scroll hold with #sql{select * from tablex} for sqlrec;// 0								
+
+		open resultsetid forupdate with #sql{select * from tablex for update of tablex} for sqlrec;// 0
+		open resultsetid scroll forupdate with #sql{select * from tablex for update of tablex}for sqlrec;// 0		
+		open resultsetid hold forupdate with #sql{select * from tablex for update of tablex} for sqlrec;// 0		
+		open resultsetid scroll hold forupdate  with #sql{select * from tablex for update of tablex} for sqlrec;// 0	
+
+		open resultsetid with #sql{select * from tablex} for sqlrec;// 0
+		open resultsetid scroll usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid hold usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid scroll hold usingkeys d,e,f for sqlrec;// 0								
+		open resultsetid forupdate with #sql{select * from tablex for update of tablex} for sqlrec;// 0
+		open resultsetid scroll forupdate usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid hold forupdate with #sql{select * from tablexfor for update of tablex} for sqlrec;// 0		
+		open resultsetid scroll hold forupdate with #sql{select * from tablex for update of tablex} for sqlrec;// 0			
+		
+		open resultsetid with prepareid for sqlrec;// 0
+		open resultsetid scroll with prepareid for sqlrec;// 0		
+		open resultsetid hold with prepareid for sqlrec;// 0		
+		open resultsetid scroll hold with prepareid for sqlrec;// 0								
+
+		open resultsetid forupdate with prepareid for sqlrec;// 0
+		open resultsetid scroll forupdate with prepareid for sqlrec;// 0		
+		open resultsetid hold forupdate with prepareid  for sqlrec;// 0		
+		open resultsetid scroll hold forupdate  with prepareid  for sqlrec;// 0	
+
+		open resultsetid usingkeys d,e,f for sqlrec;// 0
+		open resultsetid scroll usingkeys d,e,f  for sqlrec;// 0		
+		open resultsetid hold usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid scroll hold usingkeys d,e,f for sqlrec;// 0								
+		open resultsetid forupdate usingkeys d,e,f for sqlrec;// 0
+		open resultsetid scroll forupdate usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid hold forupdate usingkeys d,e,f for sqlrec;// 0		
+		open resultsetid scroll hold forupdate  usingkeys d,e,f for sqlrec;// 0			
+
+
+		open resultsetid with #sql{select * from tablex} for sqlrec into a,b,c;// 0
+		open resultsetid scroll with #sql{select * from tablex} for sqlrec into a,b,c;// 0		
+		open resultsetid hold with #sql{select * from tablex} for sqlrec into a,b,c;// 0		
+		open resultsetid scroll hold with #sql{select * from tablex} for sqlrec into a,b,c;// 0								
+
+		open resultsetid forupdate with #sql{select * from tablex for update of tablex} for sqlrec into a,b,c;// 0
+		open resultsetid scroll forupdate with #sql{select * from tablex for update of tablex}for sqlrec into a,b,c;// 0		
+		open resultsetid hold forupdate with #sql{select * from tablex for update of tablex} for sqlrec into a,b,c;// 0		
+		open resultsetid scroll hold forupdate  with #sql{select * from tablex for update of tablex} for sqlrec into a,b,c;// 0	
+
+		open resultsetid usingkeys d,e,f for sqlrec into a,b,c;// 0
+		open resultsetid scroll usingkeys d,e,f for sqlrec into a,b,c;// 0		
+		open resultsetid hold usingkeys d,e,f for sqlrec into a,b,c;// 0		
+		open resultsetid scroll hold usingkeys d,e,f for sqlrec into a,b,c;// 0								
+		open resultsetid forupdate with #sql{select * from tablex for update of tablex} for sqlrec into a,b,c;// 0
+		open resultsetid scroll forupdate with #sql{select * from tablex for update of tablex} for sqlrec into a,b,c;// 0		
+		open resultsetid hold forupdate usingkeys d,e,f for sqlrec into a,b,c;// 0		
+		open resultsetid scroll hold forupdate with #sql{select * from tablex for update of tablex} for sqlrec into a,b,c;// 0			
+		
+		open resultsetid with prepareid for sqlrec into a,b,c;// 0
+		open resultsetid scroll with prepareid for sqlrec into a,b,c;// 0		
+		open resultsetid hold with prepareid for sqlrec into a,b,c;// 0		
+		open resultsetid scroll hold with prepareid for sqlrec into a,b,c;// 0								
+
+		open resultsetid forupdate with prepareid for sqlrec into a,b,c;// 0
+		open resultsetid scroll forupdate with prepareid for sqlrec into a,b,c;// 0		
+		open resultsetid hold forupdate with prepareid  for sqlrec into a,b,c;// 0		
+		open resultsetid scroll hold forupdate  with prepareid  for sqlrec into a,b,c;// 0	
+
+		open resultsetid usingkeys d,e,f  for sqlrec into a,b,c;// 0
+		open resultsetid scroll usingkeys d,e,f  for sqlrec into a,b,c;// 0		
+		open resultsetid hold usingkeys d,e,f for sqlrec into a,b,c;// 0		
+		open resultsetid scroll hold usingkeys d,e,f for sqlrec into a,b,c;// 0								
+		open resultsetid forupdate usingkeys d,e,f for sqlrec into a,b,c;// 0
+		open resultsetid scroll forupdate usingkeys d,e,f for sqlrec into a,b,c;// 0		
+		open resultsetid hold forupdate usingkeys d,e,f for sqlrec into a,b,c;// 0		
+		open resultsetid scroll hold forupdate  usingkeys d,e,f for sqlrec into a,b,c;// 0			
+		
+
+	end
+end
+
+Program My2Proj  
+	 
+	function main()
+		course Course;
+		course2 Course;
+		coursePCB DB_PCBRecord;
+		courses Course[]; 
+
+		add courses; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		add course; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		add course with #dli{ ISRT COURSE }; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		add course with #dli{}; // 2 A modified DL/I call be must be specified  | DL/I I/O is not allowed unless the program specifies the DLI and PSB properties{7898}
+
+	end
+end
+
+Library MyLib
+function addfunc ()
+		course Course;
+		coursePCB DB_PCBRecord;
+		courses Course[]; 
+		add course; // 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+		
+end
+end
+
+Record Course type DLISegment end
+Record sqlRec type sqlRecord
+	10 item1 int;
+end
+
+Record sqlRecFLEX type sqlRecord
+	item1 int;
+end
+
+
+Record IndxRecord type indexedrecord { filename = "myfile",keyitem = "item1"}
+	10 item1 int;
+end
+
+record MQRec type MQRecord { queuename = "www"}
+10 item1 int;
+end
+
+record relrecord type relativerecord { filename = "myfile",keyitem = "item1"}
+10 item1 int;
+end
+
+record srecord type serialrecord{ filename = "myfile"}
+10 item1 int;
+end

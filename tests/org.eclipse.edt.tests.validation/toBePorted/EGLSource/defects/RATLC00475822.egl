@@ -1,0 +1,53 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	const x1 Decimal(7,2) = 100000.00;		//1 The number of non-decimal digits in value 100000.00 is 6, which is longer than the defined length 5 for non-decimal digits of constant x1. 
+	const x2 Decimal(7,2) = 10000.00;		//0
+	const x3 Decimal(8,2) = 100000.00;		//0
+	const x4 Decimal(7,2) = 10000;			//0
+	const x5 Decimal(7,2) = 100000;			//1
+	const x6 Decimal(7,2) = 10000.001;		//1 The number of decimal digits in value 10000.001 is 3, which is longer than the defined number of decimal digits 2 for constant x6.
+	const x1a Decimal(7,2) = -100000.00;	//1
+	const x2a Decimal(7,2) = -10000.00;		//0
+	const x3a Decimal(8,2) = -100000.00;	//0
+	const x4a Decimal(7,2) = -10000;		//0
+	const x5a Decimal(7,2) = -100000;		//1
+	const x6a Decimal(7,2) = -10000.001;	//1
+	const x1b Decimal(7,2) = +100000.00;	//1
+	const x2b Decimal(7,2) = +10000.00;		//0
+	const x3b Decimal(8,2) = +100000.00;	//0
+	const x4b Decimal(7,2) = +10000;		//0
+	const x5b Decimal(7,2) = +100000;		//1
+	const x6b Decimal(7,2) = +10000.001;	//1
+	
+	function main()
+		const x1 Decimal(7,2) = 100000.00;		//1
+		const x2 Decimal(7,2) = 10000.00;		//0
+		const x3 Decimal(8,2) = 100000.00;		//0
+		const x4 Decimal(7,2) = 10000;			//0
+		const x5 Decimal(7,2) = 100000;			//1
+		const x6 Decimal(7,2) = 10000.001;		//1
+		const x1a Decimal(7,2) = -100000.00;	//1
+		const x2a Decimal(7,2) = -10000.00;		//0
+		const x3a Decimal(8,2) = -100000.00;	//0
+		const x4a Decimal(7,2) = -10000;		//0
+		const x5a Decimal(7,2) = -100000;		//1
+		const x6a Decimal(7,2) = -10000.001;	//1
+		const x1b Decimal(7,2) = +100000.00;	//1
+		const x2b Decimal(7,2) = +10000.00;		//0
+		const x3b Decimal(8,2) = +100000.00;	//0
+		const x4b Decimal(7,2) = +10000;		//0
+		const x5b Decimal(7,2) = +100000;		//1
+		const x6b Decimal(7,2) = +10000.001;	//1
+	end
+end

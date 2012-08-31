@@ -1,0 +1,49 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm {allowUnqualifiedItemReferences=yes}
+
+	myNullableINT int? ;								//0
+	myArrayNullInts int?[] ;							//0
+
+	Function MyFunc( p1 int? ) returns ( char(6)? ) 	//0
+	end
+
+	Function Buy( inv Invoice? )						//0
+		if ( inv == NULL )								//0
+		end
+		
+		nullableFixedRec fixedRec?;						//0
+		notNullableFixedRec fixedRec;					//0
+		
+		if (nullableFixedRec == NULL)					//0
+		end
+		
+		if (notNullableFixedRec == NULL)				//0
+		end
+		
+		if ( myNullableINT != null)					//0
+		end
+		
+		nullableFixedRec.item1 = 10;					//0
+		nullableFixedRec = "a";							//0
+		item1 = 10;										//1 ambiguous
+	end
+end
+
+Record Invoice type basicRecord
+	item1 int;
+end
+
+Record fixedRec
+	10 item1 int;
+end

@@ -1,0 +1,142 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record PlainRec
+end
+
+Record ExceptionRec type Exception
+end
+
+Program V60CompatibilityPgm {
+	V60ExceptionCompatibility=yes	//0
+}
+	function main()
+		try
+		onException(ex4 exceptionRec)			//1 Since V60ExceptionCompatibility=yes, exception types cannot be named in onException clauses. {3442*, EXCEPTION_FILTER_NOT_VALID_WITH_V60EXCEPTIONCOMPATIBILITY}
+		onException(ex5 anyException)			//1 Since V60ExceptionCompatibility=yes, exception types cannot be named in onException clauses. {3442*, EXCEPTION_FILTER_NOT_VALID_WITH_V60EXCEPTIONCOMPATIBILITY}
+		end
+		
+		throw new exceptionRec;					//1 Since V60ExceptionCompatibility=yes, the throw statement cannot be used. {3445*, THROW_NOT_VALID_WITH_V60EXCEPTIONCOMPATIBILITY}
+	end
+end
+
+Program NoV60CompatibilityPgm1 {
+	V60ExceptionCompatibility=no	//0
+}
+	function main()
+			try
+			onException(ex1 V60CompatibilityPgm)	//1 Invalid type V60CompatibilityPgm. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+			onException(ex2 int)					//1 Invalid type int. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+			onException(ex3 PlainRec)				//1 Invalid type PlainRec. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+			onException(ex4 exceptionRec)			//0			
+			onException(ex5 anyException)			//0			
+			end
+			
+			try
+			onException(ex4 exceptionRec)			//0
+			onException(ex4 exceptionRec)			//1 The exception exceptionRec has already been named in another onException clause. {3441, DUPLICATE_ONEXCEPTION_EXCEPTION}
+			end
+			
+			try
+			onException(ex4 anyException)			//0
+			onException(ex4 anyException)			//1 The exception anyException has already been named in another onException clause. {3441, DUPLICATE_ONEXCEPTION_EXCEPTION}
+			end
+			
+			try
+			onException								//1 Unless V60ExceptionCompatibility=yes, an exception type must be named in onException clauses. {3443*, EXCEPTION_FILTER_REQUIRED}
+			end
+			
+			myPlainRec PlainRec;
+			myExceptionRec exceptionRec;
+			
+			throw new PlainRec;						//1 The type PlainRec must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+			throw new int;							//1 The type int must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+			throw myPlainRec;						//1 The type PlainRec must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+			throw new exceptionRec;					//0
+			throw new anyException;					//0
+			throw myExceptionRec;					//0
+	end
+end
+
+Program NoV60CompatibilityPgm2 {
+	includeReferencedFunctions = yes
+}
+	function main()
+			try
+			onException(ex1 V60CompatibilityPgm)	//1 Invalid type V60CompatibilityPgm. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+			onException(ex2 int)					//1 Invalid type int. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+			onException(ex3 PlainRec)				//1 Invalid type PlainRec. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+			onException(ex4 exceptionRec)			//0			
+			onException(ex5 anyException)			//0			
+			end
+			
+			try
+			onException(ex4 exceptionRec)			//0
+			onException(ex4 exceptionRec)			//1 The exception exceptionRec has already been named in another onException clause. {3441, DUPLICATE_ONEXCEPTION_EXCEPTION}
+			end
+			
+			try
+			onException(ex4 anyException)			//0
+			onException(ex4 anyException)			//1 The exception anyException has already been named in another onException clause. {3441, DUPLICATE_ONEXCEPTION_EXCEPTION}
+			end
+			
+			try
+			onException								//1 Unless V60ExceptionCompatibility=yes, an exception type must be named in onException clauses. {3443*, EXCEPTION_FILTER_REQUIRED}
+			end
+			
+			myPlainRec PlainRec;
+			myExceptionRec exceptionRec;
+			
+			throw new PlainRec;						//1 The type PlainRec must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+			throw new int;							//1 The type int must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+			throw myPlainRec;						//1 The type PlainRec must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+			throw new exceptionRec;					//0
+			throw new anyException;					//0
+			throw myExceptionRec;					//0
+			
+			topLevelFunc();							//0
+	end
+end
+
+function topLevelFunc()
+	try
+	onException(ex1 V60CompatibilityPgm)	//1 Invalid type V60CompatibilityPgm. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+	onException(ex2 int)					//1 Invalid type int. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+	onException(ex3 PlainRec)				//1 Invalid type PlainRec. The type in an onException clause must be an exception record or the type egl.core.AnyException. {3440, TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION}			
+	onException(ex4 exceptionRec)			//0			
+	onException(ex5 anyException)			//0			
+	end
+			
+	try
+	onException(ex4 exceptionRec)			//0
+	onException(ex4 exceptionRec)			//1 The exception exceptionRec has already been named in another onException clause. {3441, DUPLICATE_ONEXCEPTION_EXCEPTION}
+	end
+	
+	try
+	onException(ex4 anyException)			//0
+	onException(ex4 anyException)			//1 The exception anyException has already been named in another onException clause. {3441, DUPLICATE_ONEXCEPTION_EXCEPTION}
+	end
+			
+	try
+	onException								//1 Unless V60ExceptionCompatibility=yes, an exception type must be named in onException clauses. {3443*, EXCEPTION_FILTER_REQUIRED}
+	end
+			
+	myPlainRec PlainRec;
+	myExceptionRec exceptionRec;
+		
+	throw new PlainRec;						//1 The type PlainRec must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+	throw new int;							//1 The type int must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+	throw myPlainRec;						//1 The type PlainRec must be an exception record. {3444*, THROW_TARGET_MUST_BE_EXCEPTION}
+	throw new exceptionRec;					//0
+	throw new anyException;					//0
+	throw myExceptionRec;					//0
+end

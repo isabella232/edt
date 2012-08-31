@@ -1,0 +1,76 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Library ItemNameDiffColName{ V60ExceptionCompatibility = YES,
+	handleHardIOErrors = no, throwNrfEofExceptions = yes }
+
+	Function getCustomersByCustomerId ( startId CustomerId, customers Customer[], status int )
+		status = 0;
+		try
+			get customers usingKeys startId ;  								//0
+			get customers with #sql{select a from b} usingKeys startId ;  	//0
+			get customers with myPID usingKeys startId ;  					//0
+			get customers usingKeys startId with #sql{select a from b};  	//0
+			get customers usingKeys startId with myPID;  					//0
+			
+			customer Customer;
+			
+			delete customer usingKeys startId;								//0
+			delete customer with #sql{delete a} usingKeys startId;			//0
+			delete customer usingKeys startId with #sql{delete a};			//0
+			
+			open myResultSet for customer usingKeys startId;							//0
+			open myResultSet for customer with #sql{select a from b} usingKeys startId;	//0
+			open myResultSet for customer with myPID usingKeys startId;					//0
+			open myResultSet for customer usingKeys startId with #sql{select a from b};	//0
+			open myResultSet for customer usingKeys startId with myPID;					//0
+			
+			replace customer usingKeys startId;										//0
+			replace customer with #sql{update a set b} usingKeys startId;			//0
+			replace customer usingKeys startId with #sql{update a set b};			//0
+		onException 
+			status = SysVar.sqlData.sqlcode ;
+		end
+	end	
+	
+end
+
+DataItem Apartment char(10) { sqlVariableLen=yes, column="APARTMENT", displayName="Apartment #"} end	
+DataItem City char(30) { sqlVariableLen=yes, column="CITY", displayName="City" } end
+DataItem CustomerId int { column="CUSTOMER_ID", displayName="Customer Number"} end
+DataItem Directions char(1000) { sqlVariableLen=yes, column="DIRECTIONS", displayName="Driving Directions"} end
+DataItem EmailAddress char(50) { sqlVariableLen=yes, column="EMAIL_ADDRESS", displayName="Email Address"} end
+DataItem FirstName char(30) { sqlVariableLen=yes, column="FIRST_NAME", displayName="First Name" } end
+DataItem LastName char(30) { sqlVariableLen=yes, column="LAST_NAME", displayName="Last Name" } end
+DataItem Password char(8) { column="PASSWORD", displayName="Password" } end
+DataItem PostalCode char(10) { sqlVariableLen=yes, column="POSTALCODE", displayName="Zip Code" } end
+DataItem Phone char(10) { sqlVariableLen=yes, column="PHONE", displayName="Phone #" } end
+DataItem State char(2) { column="STATE", displayName="State"} end
+DataItem Street char(30) { sqlVariableLen=yes, column="STREET", displayName="Street Address"} end
+
+Record Customer type sqlRecord  
+	{tableNames=[["PIZZABYIBM.CUSTOMER"]], 
+	keyItems=[customerId]}
+
+	10 customerId CustomerId      	{isReadOnly=no, isNullable=no};
+	10 firstName FirstName     	{isReadOnly=no, isNullable=yes};
+	10 lastName LastName       	{isReadOnly=no, isNullable=yes};
+	10 password Password         	{isReadOnly=no, isNullable=yes};
+	10 phone Phone             	{isReadOnly=no, isNullable=yes};
+	10 emailAddress EmailAddress  {isReadOnly=no, isNullable=yes};
+	10 street Street	        	{isReadOnly=no, isNullable=yes};
+	10 apartment Apartment     	{isReadOnly=no, isNullable=yes};
+	10 city City               	{isReadOnly=no, isNullable=yes};
+	10 state State             	{isReadOnly=no, isNullable=yes};
+	10 postalCode PostalCode   	{isReadOnly=no, isNullable=yes};
+	10 directions Directions   	{isReadOnly=no, isNullable=yes};
+end

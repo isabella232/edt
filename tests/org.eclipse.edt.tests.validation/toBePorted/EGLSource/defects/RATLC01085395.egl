@@ -1,0 +1,26 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+  function func()
+    // VAGen Info - initialization needed for migration
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    MS07P00: MS07P00();
+    MS07P01: MS07P01();
+    MS07P10: MS07P10();
+    if (MS07W00.MS07SQL-ERR == "Y")
+      goto MS07P54;
+    end
+    ;
+    exit program;
+    MS07P54: MS07P54();    //0
+  end

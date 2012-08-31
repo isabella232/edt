@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		
+		connect("", "", "", EXPLICIT, READCOMMITTED, AUTOCOMMIT);			//0
+		connect("", "", "", AUTOMATIC, READUNCOMMITTED, NOAUTOCOMMIT);		//0
+		connect("", "", "", CONDITIONAL, READCOMMITTED, AUTOCOMMIT);		//0
+		connect("", "", "", EXPLICIT, REPEATABLEREAD, NOCOMMIT);			//0
+		connect("", "", "", EXPLICIT, SERIALIZABLETRANSACTION, AUTOCOMMIT);	//0
+		connect("", "", "", EXPLICIT, DEFAULT, AUTOCOMMIT);					//0
+		
+		connect("", "", "", A, B, C);	//3
+		
+		x int;
+		connect("", "", "", x, x, x);	//3		
+	end
+end

@@ -1,0 +1,316 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record fixedRec
+	10 item1 int;
+	10 item2 int;
+end
+
+Record emptyRec
+end
+
+Record fixedRecWithNonUniqueNames
+	10 item1 int;
+	15 item1 int;
+end
+
+Record fixedRecWithOneOccurs
+	10 occursItem1a int[2];
+end
+
+Record fixedRecWithMultiOccurs
+	10 occursItem1b int[2];
+		15 embed fixedRecWithOneOccurs;
+end
+
+Record flexRec
+	item1 int;
+	item2 int;
+end
+
+Record psbRecord type psbRecord
+	item1 int;
+end
+
+DataTable myTable
+	10 item1 int;
+		15 item1a int;
+end
+
+FormGroup fg
+	Form form1 type textForm
+		field1 int;
+		item1 int;
+	end
+end
+
+Service myService end
+Interface myInterface end
+
+Program moveStmtProgram
+	use fg;
+	function main() end
+	
+	function func()
+		intVar int;
+		intAry int[];
+		const intConst int = 5;
+		stringVar string;
+		const stringConst string = "a";
+		bin90Var bin(9,0);
+		bin92Var bin(9,2);
+		charVar char(4);
+		charAry char(4)[];
+		fixedRec fixedRec;
+		fixedRecAry fixedRec[];
+		fixedRecWithNonUniqueNames fixedRecWithNonUniqueNames;
+		fixedRecWithOneOccurs fixedRecWithOneOccurs;
+		fixedRecWithMultiOccurs fixedRecWithMultiOccurs;
+		flexRec flexRec;
+		flexRecAry flexRec[];
+		psbRecord psbRecord;
+		emptyRec emptyRec;
+		thing any;
+		serviceVar myService;
+		interfaceVar myInterface;
+		windowVar window;
+		arrayDictVar arrayDictionary;
+		
+// validate:
+		move intVar to intAry for 5;		//0
+		move intVar to intAry for 5+1;		//1 Invalid for count 5+1. The for count must be an integer item or literal.
+		move intVar to intAry for "a";		//1 Invalid for count "a". The for count must be an integer item or literal.  {5196*, MOVE_FOR_COUNT_NOT_INTEGER}
+		move intVar to intAry for thing;	//1 Invalid for count thing. The for count must be an integer item or literal.  {5196*, MOVE_FOR_COUNT_NOT_INTEGER}
+		
+		move fixedRec to fixedRec byname byposition;	//1 Only one modifier may be specified on a move statement. {6664, MOVE_STATEMENT_MAY_ONLY_HAVE_ONE_MODIFIER}
+		move intVar to intAry for 5 for all;			//1 Only one modifier may be specified on a move statement. {6664, MOVE_STATEMENT_MAY_ONLY_HAVE_ONE_MODIFIER}
+		move intVar to intAry for 5 for 5 for 5;		//1 Only one modifier may be specified on a move statement
+		
+// validate (1):
+		move thing as window to windowVar;	//0
+		move thing as fixedRec to form1 withV60Compat;		//0 {1 in edt?}
+		move thing to fg;			//1
+		move thing to serviceVar;	//1 Invalid move target serviceVar. The target must be a record, form, or item.  {6660*, MOVE_STATEMENT_INVALID_TARGET_TYPE}
+		move thing to interfaceVar;	//1 Invalid move target interfaceVar. The target must be a record, form, or item.  {6660*, MOVE_STATEMENT_INVALID_TARGET_TYPE}
+		move thing to myTable;		//1 Invalid move target myTable. The target must be a record, form, or item.  {6660*, MOVE_STATEMENT_INVALID_TARGET_TYPE}
+		
+		move fixedRec to form1 byposition;	//1 In the move statement, you specified a source-and-target combination that is not valid when you use byPosition. {4031, BYPOSITION_USED_WITH_FLEXIBLE_RECORD_AND_FORM}
+
+		move form1 to fixedRec byposition;	//1 In the move statement, you specified a source-and-target combination that is not valid when you use byPosition. {4031, BYPOSITION_USED_WITH_FLEXIBLE_RECORD_AND_FORM}
+		
+		move returnsIntFunc() to intVar;	//0
+		move noReturnsFunc() to intVar;		//1 Function noReturnsFunc must return a type.  {6654*, FUNCTION_MUST_RETURN_TYPE}
+		
+		move nil to intVar;				//1
+		move serviceVar to thing;		//1 Invalid move source serviceVar. The source must be a record, form, item, literal, or constant.  {6665*, MOVE_STATEMENT_INVALID_SOURCE_TYPE}
+		move interfaceVar to thing;		//1 Invalid move source interfaceVar. The source must be a record, form, item, literal, or constant.  {6665*, MOVE_STATEMENT_INVALID_SOURCE_TYPE}
+		move myTable to thing;			//1 Invalid move source myTable. The source must be a record, form, item, literal, or constant.  {6665*, MOVE_STATEMENT_INVALID_SOURCE_TYPE}
+		
+		move thing to thing;				//0
+		move thing as string to odbctimestampformat;	//1 Constants
+		move thing as arraydictionary to arrayDictVar;			//0
+		move thing as dictionary to arrayDictVar[1];		//1 It is invalid to assign to ArrayDictionary elements. {7744, CANNOT_ASSIGN_TO_ARRAY_DICTIONARY_ELEMENTS}
+		move intVar to stringVar;			//0
+		
+		move fixedRec to flexRec withV60Compat;			//0
+		move flexRec to fixedRec withV60Compat;			//0
+		move 5 to flexRec;					//1 int and flexRec are not compatible types in the expression MOVE
+		
+		move intVar to intAry for intVar;		//0
+		move intVar to intAry for bin90Var;		//0
+		move intVar to intAry for 1.2;			//1 Invalid for count 1.2. The for count must be an integer item or literal.  {5196*, MOVE_FOR_COUNT_NOT_INTEGER}
+		move intVar to intAry for bin92Var;		//1 Invalid for count bin92Var. The for count must be an integer item or literal.  {5196*, MOVE_FOR_COUNT_NOT_INTEGER}
+		move intVar to intAry for stringVar;	//1 Invalid for count stringVar. The for count must be an integer item or literal.  {5196*, MOVE_FOR_COUNT_NOT_INTEGER}
+		
+		move flexRecAry to flexRecAry;				//0
+		move flexRecAry to flexRecAry byname;		//1 Arrays of non-structured records cannot be moved byname or byposition.  {6722*, FLEXIBLE_RECORD_ARRAYS_MOVED_BYNAME_OR_BYPOSITION}
+		move flexRecAry to flexRecAry byposition;	//1 Arrays of non-structured records cannot be moved byname or byposition.  {6722*, FLEXIBLE_RECORD_ARRAYS_MOVED_BYNAME_OR_BYPOSITION}
+		
+		move fixedRecAry to fixedRecAry;			//0
+		move fixedRecAry to fixedRecAry byname;		//0
+		move fixedRecAry to fixedRecAry byposition;	//0
+		
+		move charVar to fixedRec;			//0
+		move fixedRec to charVar;			//0
+		
+		move thing as int to intVar;		//0
+		move thing as int to intConst;		//1 Invalid attempt to modify intConst which is a constant. Constants are not allowed to be modified.  {6646*, CANNOT_MODIFY_CONSTANT}
+		move thing as string to stringConst;	//1 Invalid attempt to modify stringConst which is a constant. Constants are not allowed to be modified.  {6646*, CANNOT_MODIFY_CONSTANT}
+		
+		
+		move "a" to fixedRec byname;			//1 Both operands must be containers in move byname or byposition
+		move stringConst to fixedRec byname;	//1 Both operands must be containers in move byname or byposition
+		move 5 to fixedRec byname;				//1 Both operands must be containers in move byname or byposition
+		move intAry to fixedRec byname;			//1 Invalid move operand intAry. Both operands must be containers in move byname or byposition
+		
+		move emptyRec to fixedRec byname;		//1 {warning} The item emptyRec has no substructure.  {6667*, MOVE_STATEMENT_BYNAME_BYPOSITION_ITEM_HAS_NO_SUBSTRUCTURE}
+
+		move fixedRecWithNonUniqueNames to fixedRec byname;	//1 Invalid move source fixedRecWithNonUniqueNames. All names in the source must be unique.  {6668*, MOVE_STATEMENT_NONUNIQUE_BYNAME_SOURCE}
+		move fixedRecWithNonUniqueNames to fixedRec withV60Compat;		//1 Invalid move source fixedRecWithNonUniqueNames. All names in the source must be unique.  {6668*, MOVE_STATEMENT_NONUNIQUE_BYNAME_SOURCE}
+		
+		move fixedRec to fixedRecWithNonUniqueNames byname;	//1 Invalid move target fixedRecWithNonUniqueNames. All names in the target must be unique.  {6669*, MOVE_STATEMENT_NONUNIQUE_BYNAME_TARGET}
+		move fixedRec to fixedRecWithNonUniqueNames withV60Compat;		//1 Invalid move target fixedRecWithNonUniqueNames. All names in the target must be unique.  {6669*, MOVE_STATEMENT_NONUNIQUE_BYNAME_TARGET}
+		
+		move fixedRecWithOneOccurs to fixedRec byname;	//0
+		move fixedRecWithOneOccurs to fixedRec;			//0
+		move fixedRec to fixedRecWithOneOccurs byname;	//0
+		move fixedRec to fixedRecWithOneOccurs;			//0
+		
+		move fixedRec to form1 byname;					//0
+		move form1 to fixedRec byname;					//0
+
+		move fixedRecWithMultiOccurs to fixedRec byname;	//1 Invalid move source fixedRecWithMultiOccurs. A multidimensional array may not be in the structure of the source of a byname or byposition move statement.  {6670*, MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_SOURCE}
+		move fixedRecWithMultiOccurs to fixedRec withV60Compat;			//1 Invalid move source fixedRecWithMultiOccurs. A multidimensional array may not be in the structure of the source of a byname or byposition move statement.  {6670*, MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_SOURCE}
+		
+		move fixedRec to fixedRecWithMultiOccurs byname;	//1 Invalid move target fixedRecWithMultiOccurs. A multidimensional array may not be in the structure of the target of a byname or byposition move statement.  {6671*, MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_TARGET}
+		move fixedRec to fixedRecWithMultiOccurs withV60Compat;			//1 Invalid move target fixedRecWithMultiOccurs. A multidimensional array may not be in the structure of the target of a byname or byposition move statement.  {6671*, MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_TARGET}
+		
+		move charVar to fixedRec byname;	//1 Invalid move operand charVar. Both operands must be containers in move byname or byposition.  {6718*, NON_CONTAINER_MOVE_OPERAND_MOVED_BY_NAME_OR_POSITION}
+		move fixedRec to charVar byname;	//1 Invalid move operand charVar. Both operands must be containers in move byname or byposition.  {6718*, NON_CONTAINER_MOVE_OPERAND_MOVED_BY_NAME_OR_POSITION}
+
+		
+		move "a" to fixedRec byposition;			//1 Both operands must be containers in move byname or byposition
+		move stringConst to fixedRec byposition;	//1 Both operands must be containers in move byname or byposition
+		move 5 to fixedRec byposition;				//1 Both operands must be containers in move byname or byposition
+		move intAry to fixedRec byposition;			//1 Invalid move operand intAry. Both operands must be containers in move byname or byposition
+		
+		move emptyRec to fixedRec byposition;		//1 {warning} The item emptyRec has no substructure.  {6667*, MOVE_STATEMENT_BYNAME_BYPOSITION_ITEM_HAS_NO_SUBSTRUCTURE}
+
+		move charVar to fixedRec byposition;	//1 Invalid move operand charVar. Both operands must be containers in move byname or byposition.  {6718*, NON_CONTAINER_MOVE_OPERAND_MOVED_BY_NAME_OR_POSITION}
+		move fixedRec to charVar byposition;	//1 Invalid move operand charVar. Both operands must be containers in move byname or byposition.  {6718*, NON_CONTAINER_MOVE_OPERAND_MOVED_BY_NAME_OR_POSITION}
+
+
+		move intVar to fixedRecWithOneOccurs.occursItem1a for all;		//0
+		move intVar to intAry for all;									//0
+		move intVar to fixedRecWithOneOccurs.occursItem1a[1] for all;	//0
+		move stringVar to fixedRecWithOneOccurs.occursItem1a for all;	//0
+		move stringVar to intAry for all;								//0
+		
+		move fixedRec to charAry for all;	//0
+		move stringVar to charAry for all;	//0
+		
+		move fixedRec to fixedRecAry for all;		//0
+		move fixedRec to fixedRecAry[1] for all;	//0
+		move fixedRec to flexRecAry;				//1 {this got no error in 6.0.1 code, but what would it mean to move a fixed record to an array of flexible records?}
+		
+		move fixedRecAry to fixedRecAry for all;	//0
+		move fixedRecAry to fixedRecAry[1] for all;	//0
+		move fixedRecAry to flexRecAry for all;		//0
+		move fixedRecAry to flexRecAry[1] for all;	//0
+		move fixedRecAry to intAry for all;			//1 Invalid move target intAry. The target must be a record array.  {6677*, MOVE_STATEMENT_TARGET_WRONG_TYPE_FOR_CONTAINER_SOURCE}
+		move fixedRecAry to intAry[1] for all;		//1 Invalid move target intAry[1]. The target must be a record array.  {6677*, MOVE_STATEMENT_TARGET_WRONG_TYPE_FOR_CONTAINER_SOURCE}		
+
+// validateTypeCompatibility:
+		fixedRecWithIntItem fixedRecWithIntItem;
+		fixedRecWithdbCharItem fixedRecWithdbCharItem;
+		fixedRecWithdbCharItem2 fixedRecWithdbCharItem2;
+		flexRecWithIntItem flexRecWithIntItem;
+		flexRecWithdbCharItem flexRecWithdbCharItem;
+		
+		move fixedRecWithIntItem to fixedRecWithIntItem byname;		//0
+		move fixedRecWithdbCharItem to fixedRecWithdbCharItem byname;	//0
+		move fixedRecWithdbCharItem2 to fixedRecWithdbCharItem2 byname;	//0
+		move flexRecWithIntItem to flexRecWithIntItem byname;		//0
+		move flexRecWithdbCharItem to flexRecWithdbCharItem byname;		//0
+		move form1 to form1 byname;									//0
+		
+		move fixedRecWithIntItem to fixedRecWithIntItem byposition;		//0
+		move fixedRecWithdbCharItem to fixedRecWithdbCharItem byposition;	//0
+		move fixedRecWithdbCharItem2 to fixedRecWithdbCharItem2 byposition;	//0
+		move flexRecWithIntItem to flexRecWithIntItem byposition;		//0
+		move flexRecWithdbCharItem to flexRecWithdbCharItem byposition;		//0
+		
+		move fixedRecWithIntItem to fixedRecWithdbCharItem byname;	//1 There is a problem moving the item named item1 byname. The types int and dbChar(4) are not compatible.  {6672*, MOVE_STATEMENT_INCOMPATIBLE_TYPES}
+		move fixedRecWithIntItem to fixedRecWithdbCharItem2 byname;	//1 byname
+		move fixedRecWithIntItem to flexRecWithIntItem byname;		//0
+		move fixedRecWithIntItem to flexRecWithdbCharItem byname;		//1 byname 
+		move fixedRecWithIntItem to form1 byname;					//0
+		
+		move fixedRecWithdbCharItem to fixedRecWithIntItem byname;	//1 There is a problem moving the item named item1 byname. The types dbChar(4) and int are not compatible.  {6672*, MOVE_STATEMENT_INCOMPATIBLE_TYPES}
+		move fixedRecWithdbCharItem to fixedRecWithdbCharItem2 byname;	//0
+		move fixedRecWithdbCharItem to flexRecWithIntItem byname;		//1 byname
+		move fixedRecWithdbCharItem to flexRecWithdbCharItem byname;	//0
+		move fixedRecWithdbCharItem to form1 byname;					//1
+		
+		move fixedRecWithdbCharItem2 to fixedRecWithIntItem byname;	//1 There is a problem moving the item named item1 byname. The types dbChar(4) and int are not compatible.  {6672*, MOVE_STATEMENT_INCOMPATIBLE_TYPES}
+		move fixedRecWithdbCharItem2 to fixedRecWithdbCharItem byname;	//0
+		move fixedRecWithdbCharItem2 to flexRecWithIntItem byname;	//1 byname
+		move fixedRecWithdbCharItem2 to flexRecWithdbCharItem byname;	//0
+		move fixedRecWithdbCharItem2 to form1 byname;					//1
+		
+		move flexRecWithIntItem to fixedRecWithIntItem byname;		//0
+		move flexRecWithIntItem to fixedRecWithdbCharItem byname;		//1 byname
+		move flexRecWithIntItem to fixedRecWithdbCharItem2 byname;	//1 byname
+		move flexRecWithIntItem to flexRecWithdbCharItem byname;		//1 byname
+		move flexRecWithIntItem to form1 byname;					//0
+		
+		move flexRecWithdbCharItem to fixedRecWithIntItem byname;		//1 byname
+		move flexRecWithdbCharItem to fixedRecWithdbCharItem byname;	//0
+		move flexRecWithdbCharItem to fixedRecWithdbCharItem2 byname;	//0
+		move flexRecWithdbCharItem to flexRecWithIntItem byname;		//1 byname
+		move flexRecWithdbCharItem to form1 byname;					//1 byname
+		
+		move fixedRecWithIntItem to fixedRecWithdbCharItem byposition;	//1 There is a problem moving the item named item1 byposition to item1. The types int and dbChar(4) are not compatible.  {6702*, MOVE_BY_POSITION_INCOMPATIBLE_TYPES}
+		move fixedRecWithIntItem to fixedRecWithdbCharItem2 byposition;	//1 There is a problem moving the item named item1 byposition to topItem. The types int and dbChar(4) are not compatible.  {6702*, MOVE_BY_POSITION_INCOMPATIBLE_TYPES}
+		move fixedRecWithIntItem to flexRecWithIntItem byposition;		//0
+		move fixedRecWithIntItem to flexRecWithdbCharItem byposition;		//1 byposition
+		
+		move fixedRecWithdbCharItem to fixedRecWithIntItem byposition;	//1 byposition
+		move fixedRecWithdbCharItem to fixedRecWithdbCharItem2 byposition;	//0
+		move fixedRecWithdbCharItem to flexRecWithIntItem byposition;		//1 byposition
+		move fixedRecWithdbCharItem to flexRecWithdbCharItem byposition;	//0
+		
+		move fixedRecWithdbCharItem2 to fixedRecWithIntItem byposition;	//1 byposition
+		move fixedRecWithdbCharItem2 to fixedRecWithdbCharItem byposition;	//0
+		move fixedRecWithdbCharItem2 to flexRecWithIntItem byposition;	//1 byposition
+		move fixedRecWithdbCharItem2 to flexRecWithdbCharItem byposition;	//0
+	
+		move flexRecWithIntItem to fixedRecWithIntItem byposition;		//0
+		move flexRecWithIntItem to fixedRecWithdbCharItem byposition;		//1 byposition
+		move flexRecWithIntItem to fixedRecWithdbCharItem2 byposition;	//1 byposition
+		move flexRecWithIntItem to flexRecWithdbCharItem byposition;		//1 byposition
+		
+		move flexRecWithdbCharItem to fixedRecWithIntItem byposition;		//1 byposition
+		move flexRecWithdbCharItem to fixedRecWithdbCharItem byposition;	//0
+		move flexRecWithdbCharItem to fixedRecWithdbCharItem2 byposition;	//0
+		move flexRecWithdbCharItem to flexRecWithIntItem byposition;		//1 byposition	
+		
+		move flexRec to flexRec withV60Compat;								//0
+		move intVar to stringVar withV60Compat;								//0
+		move intVar to serviceVar withV60Compat;							//1
+		move flexRecWithIntItem to fixedRecWithdbCharItem withV60Compat;	//1 byname
+	end
+	
+	function noReturnsFunc() end
+	function returnsIntFunc() returns (int) end
+end
+
+Record fixedRecWithIntItem
+	10 item1 int;
+end
+
+Record fixedRecWithdbCharItem
+	10 item1 dbChar(4);
+end
+
+Record fixedRecWithdbCharItem2
+	10 topItem dbChar(4);
+		15 item1 dbChar(4);
+end
+
+Record flexRecWithIntItem
+	item1 int;
+end
+
+Record flexRecWithdbCharItem
+	item1 dbChar(4);
+end

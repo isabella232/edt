@@ -1,0 +1,84 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+interface interface1
+
+	function f1(a1 int) {@oneway}; //1
+	function f2() returns (string) {@oneway}; //1
+	function f3(a1 int) returns (string) {@oneway}; //2	
+	function f4 (a int, b int, c int) {@oneway}; //3
+	function f5 (a int out, b int out, c int out) {@oneway}; //3
+	function f6 (a int inout, b int inout, c int inout) {@oneway}; //3
+	function f7 (a int in, b int in, c int in) {@oneway}; //0
+
+
+	function f1a(a1 int) {oneway = yes}; //1
+	function f2a() returns (string) {oneway = yes}; //1
+	function f3a(a1 int) returns (string) {oneway = yes}; //2	
+	function f4a (a int, b int, c int) {oneway = yes}; //3
+	function f5a (a int out, b int out, c int out) {oneway = yes}; //3
+	function f6a (a int inout, b int inout, c int inout) {oneway = yes}; //3
+	function f7a (a int in, b int in, c int in) {oneway = yes}; //0	
+	
+	function f1b(a1 int) {oneway = no}; //0
+	function f2b() returns (string) {oneway = no}; //0
+	function f3b(a1 int) returns (string) {oneway = no}; //0
+	function f4b (a int, b int, c int) {oneway = no}; //0
+	function f5b (a int out, b int out, c int out) {oneway = no}; //0
+	function f6b (a int inout, b int inout, c int inout) {oneway = no}; //0
+	function f7b (a int in, b int in, c int in) {oneway = no}; //0
+	
+	function f1c(a1 int) ; //0
+	function f2c() returns (string) ; //0
+	function f3c(a1 int) returns (string) ; //0
+	function f4c (a int, b int, c int) ; //0
+	function f5c (a int out, b int out, c int out) ; //0
+	function f6c (a int inout, b int inout, c int inout) ; //0
+	function f7c (a int in, b int in, c int in) ; //0
+	
+end
+
+service serv1
+
+	function f1(a1 int) {@oneway}  end //1
+	function f2() returns (string) {@oneway}  end //1
+	function f3(a1 int) returns (string) {@oneway}  end //2	
+	function f4 (a int, b int, c int) {@oneway}  end //3
+	function f5 (a int out, b int out, c int out) {@oneway}  end //3
+	function f6 (a int inout, b int inout, c int inout) {@oneway}  end //3
+	function f7 (a int in, b int in, c int in) {@oneway}  end //0
+
+
+	function f1a(a1 int) {oneway = yes}  end //1
+	function f2a() returns (string) {oneway = yes}  end //1
+	function f3a(a1 int) returns (string) {oneway = yes}  end //2	
+	function f4a (a int, b int, c int) {oneway = yes}  end //3
+	function f5a (a int out, b int out, c int out) {oneway = yes}  end //3
+	function f6a (a int inout, b int inout, c int inout) {oneway = yes}  end //3
+	function f7a (a int in, b int in, c int in) {oneway = yes}  end //0	
+	
+	function f1b(a1 int) {oneway = no}  end //0
+	function f2b() returns (string) {oneway = no}  end //0
+	function f3b(a1 int) returns (string) {oneway = no}  end //0
+	function f4b (a int, b int, c int) {oneway = no}  end //0
+	function f5b (a int out, b int out, c int out) {oneway = no}  end //0
+	function f6b (a int inout, b int inout, c int inout) {oneway = no}  end //0
+	function f7b (a int in, b int in, c int in) {oneway = no}  end //0
+	
+	function f1c(a1 int)   end //0
+	function f2c() returns (string)   end //0
+	function f3c(a1 int) returns (string)   end //0
+	function f4c (a int, b int, c int)   end //0
+	function f5c (a int out, b int out, c int out)   end //0
+	function f6c (a int inout, b int inout, c int inout)   end //0
+	function f7c (a int in, b int in, c int in)   end //0
+	
+end

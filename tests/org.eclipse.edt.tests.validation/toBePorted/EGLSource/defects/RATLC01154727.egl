@@ -1,0 +1,40 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+ExternalType NotObject type JavaObject {
+}
+end
+
+ExternalType ArrayList type JavaObject {
+	packageName = "java.util"
+}
+	function get_(index int in) returns (Object) {javaName = "get"};
+end
+
+Program pgm
+	function main()
+		myObject Object;
+		myNotObject NotObject;
+		myList ArrayList;
+
+		myList = myObject;				//0
+		myObject = myList;				//0
+		myObject = myList as Object;	//0
+		
+		myList = myNotObject;			//1
+		myNotObject = myList;			//1
+		
+		str string;
+		str = myList.get_(0);			//1
+		str = myList.get_(0) as string;	//1
+	end
+end

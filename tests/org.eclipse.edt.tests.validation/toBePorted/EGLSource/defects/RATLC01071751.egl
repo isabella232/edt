@@ -1,0 +1,69 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program varrysql type textUIProgram { throwNrfEofExceptions = yes }
+	employees Employee[] {maxSize=17};
+	use EmployeeFormGroup;
+
+	Function main()
+	end 
+
+	Function displayEmployees()
+	    move employees to employeeListForm byName;	//1
+	end 
+end
+
+Record Employee type sqlRecord  
+  {tableNames=[["Employee"]], keyItems=[EMPNO]}
+	EMPNO char(6)        	{column="EMPNO", isReadOnly=no, isSQLNullable=no};
+	FIRSTNME char(12) 	    {sqlVariableLen=yes, column="FIRSTNME", isReadOnly=no, isSQLNullable=no};
+	MIDINIT char(1)      	{column="MIDINIT", isReadOnly=no, isSQLNullable=no};
+	LASTNAME char(15) 	    {sqlVariableLen = yes, column="LASTNAME", isReadOnly=no, isSQLNullable=no};
+	WORKDEPT char(3)     	{column="WORKDEPT", isReadOnly=no, isSQLNullable=yes};
+	PHONENO char(4)      	{column="PHONENO", isReadOnly=no, isSQLNullable=yes};
+	HIREDATE char(10)    	{column="HIREDATE", isReadOnly=no, isSQLNullable=yes};
+	JOB char(8)          	{column="JOB", isReadOnly=no, isSQLNullable=yes};
+	EDLEVEL smallInt     	{column="EDLEVEL", isReadOnly=no, isSQLNullable=no};
+	SEX char(1)          	{column="SEX", isReadOnly=no, isSQLNullable=yes};
+	BIRTHDATE char(10)   	{column="BIRTHDATE", isReadOnly=no, isSQLNullable=yes};
+	SALARY decimal(9,2)  	{column="SALARY", isReadOnly=no, isSQLNullable=yes};
+	BONUS decimal(9,2)   	{column="BONUS", isReadOnly=no, isSQLNullable=yes};
+	COMM decimal(9,2)    	{column="COMM", isReadOnly=no, isSQLNullable=yes};
+end
+
+FormGroup EmployeeFormGroup { validationBypassKeys=[pf3] }
+  Form employeeListForm type TextForm { formSize=[24,80], msgField=message }
+    * { position=[1,33],  value="Employee List" } ;
+    * { position=[2,1],  value="EMPNO" } ;
+    * { position=[2,11],  value="Last Name" } ;
+    * { position=[2,25],  value="First Name" } ;
+    * { position=[2,37],  value="MI" } ;
+    * { position=[2,40],  value="DPT" } ;
+    * { position=[2,44],  value="Phone" } ;
+    * { position=[2,52],  value="Job" } ;
+    * { position=[2,59],  value="ED" } ;
+    * { position=[2,63],  value="S" } ;
+    * { position=[2,68],  value="Salary" } ;
+    EMPNO char(6)[17] { position=[3,1], protect=skipProtect } ;
+    LASTNAME char(15)[17] { position=[3,8], protect=skipProtect } ;
+    FIRSTNME char(12)[17] { position=[3,24], protect=skipProtect } ;
+    MIDINIT char(1)[17] { position=[3,37], protect=skipProtect } ;
+    WORKDEPT char(3)[17] { position=[3,40], protect=skipProtect } ;
+    PHONENO char(4)[17] { position=[3,44], protect=skipProtect } ;
+    JOB char(8)[17] { position=[3,50], protect=skipProtect } ;
+    EDLEVEL num(2,0)[17] { position=[3,59], protect=skipProtect, zeroFormat=yes, align=right } ;
+    SEX char(1)[17] { position=[3,63], protect=skipProtect } ;
+    SALARY num(9,2)[17] { position=[3,66], protect=skipProtect, currency=yes, numericSeparator=yes, zeroFormat=yes, align=right } ;
+    message char(72) {position=[22,1], protect=skipProtect };
+    * { position=[23,1], value="Press PF3 to quit, PF8 to scroll forward, PF7 to scroll backward" };
+  end
+end

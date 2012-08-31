@@ -1,0 +1,67 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record RCD_IDX_FILEONLY type indexedRecord  {
+  fileName = "MYFILENM", keyItem = "MYDATA1"
+  }
+  3 MYDATAA smallint ; 
+  3 MYDATAB smallint ; 
+  3 MYDATA1 char(20) ; 
+  3 MYDATA2 char(60) ; 
+end 
+
+Record RCD_REL_FILEONLY type relativeRecord  {
+  fileName = "MYFILENM", keyItem = "MYDATAA"
+  }
+  3 MYDATAA smallint ; 
+  3 MYDATAB smallint ; 
+  3 MYDATA1 char(20) ; 
+  3 MYDATA2 char(60) ; 
+end 
+
+Record RCD_SQL_KEY_NOALT type sqlRecord  {
+  tableNames = [["MYTABLE", "T1"]]
+  }
+  3 VAGen_KEY char(3) { column = "KEY", isNullable = yes} ;
+  3 DATA1 char(3) { column = "DATA1", isNullable = yes} ;
+  3 DATA2 char(3) { column = "DATA2", isNullable = yes} ;
+end
+
+Record dliSegRec type dliSegment
+end
+
+Program TSTMBCH type basicProgram {@dli{psb=""}}
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no  }
+
+  
+  RCD_IDX_FILEONLY RCD_IDX_FILEONLY;
+  RCD_REL_FILEONLY RCD_REL_FILEONLY;
+  RCD_SQL_KEY_NOALT RCD_SQL_KEY_NOALT;
+  dliSegRec dliSegRec;
+  
+  function main()
+    SCAN_FILEONLY: SCAN_FILEONLY();
+  end 
+  
+  Function SCAN_FILEONLY()
+  get next RCD_IDX_FILEONLY forUpdate ;   	//1 The forUpdate clause is only valid when the target record is a DLISegment record variable.
+  get next RCD_REL_FILEONLY forUpdate ;		//1 The forUpdate clause is only valid when the target record is a DLISegment record variable.
+  get next RCD_SQL_KEY_NOALT forUpdate ;	//1 The forUpdate clause is only valid when the target record is a DLISegment record variable.
+  get next dliSegRec forupdate;				//0
+  
+  get next RCD_IDX_FILEONLY ;             	//0
+  get next RCD_REL_FILEONLY ;				//0
+  get next RCD_SQL_KEY_NOALT ;				//0
+  get next dliSegRec;						//0
+end 
+end 

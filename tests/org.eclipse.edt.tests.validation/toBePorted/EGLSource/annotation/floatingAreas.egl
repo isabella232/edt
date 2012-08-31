@@ -1,0 +1,51 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//new:
+formGroup FG1 {														//0
+	validationBypassKeys = [pf2], helpKey = pf1, pfKeyEquate = yes,	//0
+	screenFloatingAreas = [											//0
+		@screenFloatingArea {										//0
+			screenSize = [10, 60],									//0
+			topMargin = 0, bottomMargin = 0,						//0
+			leftMargin = 0, rightMargin = 0},						//0
+		@screenFloatingArea {										//0
+			screenSize = [5, 10],									//0
+			topMargin = 2, bottomMargin = 2,						//0
+			leftMargin = 1, rightMargin = 1}						//0
+	],																//0
+	printFloatingAreas = [											//0
+		@printFloatingArea {										//0
+			pageSize = [24, 80],									//0
+			topMargin = 3, bottomMargin = 3, 						//0
+		 	leftMargin = 5, rightMargin = 5}						//0
+	]																//0
+}	 																//0
+end																	//0
+
+//old:
+formGroup FG2 {														//0
+	validationBypassKeys = [pf2], helpKey = pf1, pfKeyEquate = yes,	//0
+	@screenFloatingArea {											//1
+		screenSize = [10, 60],										//0
+		topMargin = 0, bottomMargin = 0,							//0
+		leftMargin = 0, rightMargin = 0},							//0
+	@screenFloatingArea {											//1
+		screenSize = [5, 10],										//0
+		topMargin = 2, bottomMargin = 2,							//0
+		leftMargin = 1, rightMargin = 1},							//0
+	@printFloatingArea {											//1
+		pageSize = [24, 80],										//0
+		topMargin = 3, bottomMargin = 3, 							//0
+	 	leftMargin = 5, rightMargin = 5}							//0
+}	 																//0
+end																	//0

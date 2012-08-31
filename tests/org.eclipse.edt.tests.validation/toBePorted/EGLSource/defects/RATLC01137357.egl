@@ -1,0 +1,29 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program RATLC01137357 type BasicProgram {alias = "runtimeName"}
+		 
+		 function main()
+		 		 combovar int;
+		 		 myForm dropDownForm { };
+		 		 
+		 		 openUI { bindingByName=no,SetInitial = yes } myForm.combo bind combovar end	//0
+		 end
+end
+
+RECORD dropDownForm TYPE ConsoleForm { name="stdForm", formsize=[15,55] }
+
+		 combo consolecombo {
+		 		  name = "myCombo", bounds = [8,4,15,1]
+		  };
+END

@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler test1
+	top HBox { 
+		children = [new TextField{}, new Button{}.widget]			//1
+	};
+	
+	top2 HBox { 
+		children = [new TextField{}]								//1
+	};	
+
+	top3 HBox { 
+		children = [new TextField{}.widget]							//0
+	};	
+	
+	top4 HBox { 
+		children = [new TextField{}.widget, new Button{}.widget]	//0
+	};	
+end
+
+Handler HBox
+	children Widget[];
+end
+
+Handler TextField
+	widget Widget;
+end
+
+Handler Button
+	widget Widget;
+end
+
+Handler Widget
+end

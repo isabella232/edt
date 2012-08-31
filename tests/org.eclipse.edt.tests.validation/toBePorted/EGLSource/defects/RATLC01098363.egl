@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+Program MYDBPRG type basicProgram 
+  {includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no,
+  @DLI {psb = "psb", callInterface = DLICallInterfaceKind.CBLTDLI,
+        handleHardDLIErrors = no
+  }  }
+
+  psb MYDBPSB;
+  myCOURSE COURSE {hostVarQualifier = "myCOURSE"}; 
+  OFFERING OFFERING;
+
+  function main()
+    TEST_MAIN: TEST_MAIN();
+  end 
+end 
+
+Function TEST_MAIN();
+  get myCOURSE;
+  get OFFERING;
+end
+
+Record COURSE type DLISegment  {
+  keyItem = "COURSE#" 
+  }
+  3 COURSE# char(10) ; 
+  3 TITLE char(80) ; 
+end   
+
+Record OFFERING type DLISegment  {
+  keyItem = "LOCATION"
+  }
+  3 LOCATION char(10) ; 
+  3 CITY char(30) ; 
+  3 STATE char(2) ; 
+  3 COUNTRY char(30) ; 
+end   
+
+Record MYDBPSB type PSBRecord
+  iopcb  IO_PCBRecord  { @PCB { pcbType = PCBKind.TP } };
+  pcb0 IO_PCBRecord { redefines = "iopcb"};
+  ELAALT ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb1 ALT_PCBRecord { redefines = "ELAALT" };
+  ELAEXP ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb2 ALT_PCBRecord { redefines = "ELAEXP" };
+
+  COURSE_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB,
+      hierarchy = [
+        @Relationship { segmentRecord = "COURSE" },
+        @Relationship { segmentRecord = "OFFERING", parentRecord = "COURSE" }
+    ] } } ;
+  pcb3 DB_PCBRecord { redefines = "COURSE_dbPCB" };
+
+end  

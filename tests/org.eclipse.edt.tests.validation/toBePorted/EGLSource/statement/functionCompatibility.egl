@@ -1,0 +1,637 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program FunctionCompatibility
+	Function main()
+		fixedRec FunctionFixedRecord;
+		flexRec FunctionFlexibleRecord;
+		aCharArray char(10)[];
+		aConsoleField ConsoleField;
+		ioRec FunctionIORecord;
+		add ioRec;
+		flexRec2 FunctionFlexibleRecord2;
+		
+		// The Test Cases
+		defaultFuncTime(fixedRec);	// 1
+		inFuncTime(fixedRec);	// 1
+		outFuncTime(fixedRec);	// 1
+		inoutFuncTime(fixedRec);	// 1
+		fixedRec = returnFuncTime();	// 1
+		
+		defaultFuncChar10(fixedRec);	// 1
+		inFuncChar10(fixedRec);	// 0
+		outFuncChar10(fixedRec);	// 0
+		inoutFuncChar10(fixedRec);	// 1
+		fixedRec = returnFuncChar10();	// 0
+		
+		defaultFuncFixedRec(fixedRec);	// 0
+		inFuncFixedRec(fixedRec);	// 0
+		outFuncFixedRec(fixedRec);	// 0
+		inoutFuncFixedRec(fixedRec);	// 0
+//		fixedRec = returnFuncFixedRec();	// 0
+		
+		defaultFuncFlexRec(fixedRec);	// 1
+		inFuncFlexRec(fixedRec);	// 1
+		outFuncFlexRec(fixedRec);	// 1
+		inoutFuncFlexRec(fixedRec);	// 1
+//		fixedRec = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(fixedRec);	// 1
+		inFuncConsoleField(fixedRec);	// 1
+		outFuncConsoleField(fixedRec);	// 1
+		inoutFuncConsoleField(fixedRec);	// 1
+		fixedRec = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(fixedRec);	// 1
+		inFuncIntArray(fixedRec);	// 1
+		outFuncIntArray(fixedRec);	// 1
+		inoutFuncIntArray(fixedRec);	// 1
+//		fixedRec = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(fixedRec);	// 1
+		inFuncAny(fixedRec);	// 0
+		outFuncAny(fixedRec);	// 0
+		inoutFuncAny(fixedRec);	// 1
+		fixedRec = returnFuncAny() as FunctionFixedRecord;	// 0
+		
+		// I/O record parameters match only same record typedef
+		defaultFuncIORec(fixedRec);	// 1
+		inFuncIORec(fixedRec);	// 1
+		outFuncIORec(fixedRec);	// 1
+		inoutFuncIORec(fixedRec);	// 1
+//		fixedRec = returnFuncIORec();	// 0
+		
+		defaultFuncFlexRec2(fixedRec);	// 1
+		inFuncFlexRec2(fixedRec);	// 1
+		outFuncFlexRec2(fixedRec);	// 1
+		inoutFuncFlexRec2(fixedRec);	// 1
+//		fixedRec = returnFuncFlexRec2();	// 1
+		
+		defaultFuncTime(fixedRec.occurredItem);	// 1
+		inFuncTime(fixedRec.occurredItem);	// 1
+		outFuncTime(fixedRec.occurredItem);	// 1
+		inoutFuncTime(fixedRec.occurredItem);	// 1
+		fixedRec.occurredItem = returnFuncTime();	// 1
+		
+		defaultFuncChar10(fixedRec.occurredItem);	// 1
+		inFuncChar10(fixedRec.occurredItem);	// 1
+		outFuncChar10(fixedRec.occurredItem);	// 1
+		inoutFuncChar10(fixedRec.occurredItem);	// 1
+		fixedRec.occurredItem = returnFuncChar10();	// 1
+		
+		defaultFuncFixedRec(fixedRec.occurredItem);	// 1
+		inFuncFixedRec(fixedRec.occurredItem);	// 1
+		outFuncFixedRec(fixedRec.occurredItem);	// 1
+		inoutFuncFixedRec(fixedRec.occurredItem);	// 1
+//		fixedRec.occurredItem = returnFuncFixedRec();	// 1
+		
+		defaultFuncFlexRec(fixedRec.occurredItem);	// 1
+		inFuncFlexRec(fixedRec.occurredItem);	// 1
+		outFuncFlexRec(fixedRec.occurredItem);	// 1
+		inoutFuncFlexRec(fixedRec.occurredItem);	// 1
+//		fixedRec.occurredItem = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(fixedRec.occurredItem);	// 1
+		inFuncConsoleField(fixedRec.occurredItem);	// 1
+		outFuncConsoleField(fixedRec.occurredItem);	// 1
+		inoutFuncConsoleField(fixedRec.occurredItem);	// 1
+		fixedRec.occurredItem = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(fixedRec.occurredItem);	// 1
+		inFuncIntArray(fixedRec.occurredItem);	// 1
+		outFuncIntArray(fixedRec.occurredItem);	// 1
+		inoutFuncIntArray(fixedRec.occurredItem);	// 1
+//		fixedRec.occurredItem = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(fixedRec.occurredItem);	// 1
+		inFuncAny(fixedRec.occurredItem);	// 0
+		outFuncAny(fixedRec.occurredItem);	// 0
+		inoutFuncAny(fixedRec.occurredItem);	// 1
+		fixedRec.occurredItem = returnFuncAny();	// 0
+		
+		defaultFuncIORec(fixedRec.occurredItem);	// 1
+		inFuncIORec(fixedRec.occurredItem);	// 1
+		outFuncIORec(fixedRec.occurredItem);	// 1
+		inoutFuncIORec(fixedRec.occurredItem);	// 1
+//		fixedRec.occurredItem = returnFuncIORec();	// 1
+		
+		defaultFuncFlexRec2(fixedRec.occurredItem);	// 1
+		inFuncFlexRec2(fixedRec.occurredItem);	// 1
+		outFuncFlexRec2(fixedRec.occurredItem);	// 1
+		inoutFuncFlexRec2(fixedRec.occurredItem);	// 1
+//		fixedRec.occurredItem = returnFuncFlexRec2();	// 1
+		
+		defaultFuncTime(fixedRec.occurredItem[1]);	// 1
+		inFuncTime(fixedRec.occurredItem[1]);	// 1
+		outFuncTime(fixedRec.occurredItem[1]);	// 1
+		inoutFuncTime(fixedRec.occurredItem[1]);	// 1
+		fixedRec.occurredItem[1] = returnFuncTime();	// 1
+		
+		defaultFuncChar10(fixedRec.occurredItem[1]);	// 1
+		inFuncChar10(fixedRec.occurredItem[1]);	// 0
+		outFuncChar10(fixedRec.occurredItem[1]);	// 0
+		inoutFuncChar10(fixedRec.occurredItem[1]);	// 1
+		fixedRec.occurredItem[1] = returnFuncChar10();	// 0
+		
+		defaultFuncFixedRec(fixedRec.occurredItem[1]);	// 1
+		inFuncFixedRec(fixedRec.occurredItem[1]);	// 1
+		outFuncFixedRec(fixedRec.occurredItem[1]);	// 1
+		inoutFuncFixedRec(fixedRec.occurredItem[1]);	// 1
+//		fixedRec.occurredItem[1] = returnFuncFixedRec();	// 1
+		
+		defaultFuncFlexRec(fixedRec.occurredItem[1]);	// 1
+		inFuncFlexRec(fixedRec.occurredItem[1]);	// 1
+		outFuncFlexRec(fixedRec.occurredItem[1]);	// 1
+		inoutFuncFlexRec(fixedRec.occurredItem[1]);	// 1
+//		fixedRec.occurredItem[1] = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(fixedRec.occurredItem[1]);	// 1
+		inFuncConsoleField(fixedRec.occurredItem[1]);	// 1
+		outFuncConsoleField(fixedRec.occurredItem[1]);	// 1
+		inoutFuncConsoleField(fixedRec.occurredItem[1]);	// 1
+		fixedRec.occurredItem[1] = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(fixedRec.occurredItem[1]);	// 1
+		inFuncIntArray(fixedRec.occurredItem[1]);	// 1
+		outFuncIntArray(fixedRec.occurredItem[1]);	// 1
+		inoutFuncIntArray(fixedRec.occurredItem[1]);	// 1
+//		fixedRec.occurredItem[1] = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(fixedRec.occurredItem[1]);	// 1
+		inFuncAny(fixedRec.occurredItem[1]);	// 0
+		outFuncAny(fixedRec.occurredItem[1]);	// 0
+		inoutFuncAny(fixedRec.occurredItem[1]);	// 1
+		fixedRec.occurredItem[1] = returnFuncAny() as int;	// 0
+		
+		defaultFuncIORec(fixedRec.occurredItem[1]);	// 1
+		inFuncIORec(fixedRec.occurredItem[1]);	// 1
+		outFuncIORec(fixedRec.occurredItem[1]);	// 1
+		inoutFuncIORec(fixedRec.occurredItem[1]);	// 1
+//		fixedRec.occurredItem[1] = returnFuncIORec();	// 1
+		
+		defaultFuncFlexRec2(fixedRec.occurredItem[1]);	// 1
+		inFuncFlexRec2(fixedRec.occurredItem[1]);	// 1
+		outFuncFlexRec2(fixedRec.occurredItem[1]);	// 1
+		inoutFuncFlexRec2(fixedRec.occurredItem[1]);	// 1
+//		fixedRec.occurredItem[1] = returnFuncFlexRec2();	// 1
+		
+		defaultFuncTime(flexRec);	// 1
+		inFuncTime(flexRec);	// 1
+		outFuncTime(flexRec);	// 1
+		inoutFuncTime(flexRec);	// 1
+		flexRec = returnFuncTime();	// 1
+		
+		defaultFuncChar10(flexRec);	// 1
+		inFuncChar10(flexRec);	// 1
+		outFuncChar10(flexRec);	// 1
+		inoutFuncChar10(flexRec);	// 1
+		flexRec = returnFuncChar10();	// 1
+		
+		defaultFuncFixedRec(flexRec);	// 1
+		inFuncFixedRec(flexRec);	// 1
+		outFuncFixedRec(flexRec);	// 1
+		inoutFuncFixedRec(flexRec);	// 1
+//		flexRec = returnFuncFixedRec();	// 1
+		
+		defaultFuncFlexRec(flexRec);	// 0
+		inFuncFlexRec(flexRec);	// 0
+		outFuncFlexRec(flexRec);	// 0
+		inoutFuncFlexRec(flexRec);	// 0
+//		flexRec = returnFuncFlexRec();	// 0
+		
+		defaultFuncConsoleField(flexRec);	// 1
+		inFuncConsoleField(flexRec);	// 1
+		outFuncConsoleField(flexRec);	// 1
+		inoutFuncConsoleField(flexRec);	// 1
+		flexRec = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(flexRec);	// 1
+		inFuncIntArray(flexRec);	// 1
+		outFuncIntArray(flexRec);	// 1
+		inoutFuncIntArray(flexRec);	// 1
+//		flexRec = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(flexRec);	// 1
+		inFuncAny(flexRec);	// 0
+		outFuncAny(flexRec);	// 0
+		inoutFuncAny(flexRec);	// 1
+		flexRec = returnFuncAny() as FunctionFlexibleRecord;	// 0
+		
+		defaultFuncIORec(flexRec);	// 1
+		inFuncIORec(flexRec);	// 1
+		outFuncIORec(flexRec);	// 1
+		inoutFuncIORec(flexRec);	// 1
+//		flexRec = returnFuncIORec();	// 1
+		
+		defaultFuncFlexRec2(flexRec);	// 1
+		inFuncFlexRec2(flexRec);	// 1
+		outFuncFlexRec2(flexRec);	// 1
+		inoutFuncFlexRec2(flexRec);	// 1
+//		flexRec = returnFuncFlexRec2();	// 1
+		
+		defaultFuncTime(flexRec.timeField);	// 0
+		inFuncTime(flexRec.timeField);	// 0
+		outFuncTime(flexRec.timeField);	// 0
+		inoutFuncTime(flexRec.timeField);	// 0
+		flexRec.timeField = returnFuncTime();	// 0
+		
+		// char is assignment compatible with time
+		defaultFuncChar10(flexRec.timeField);	// 1
+		inFuncChar10(flexRec.timeField);	// 0
+		outFuncChar10(flexRec.timeField);	// 0
+		inoutFuncChar10(flexRec.timeField);	// 1
+		flexRec.timeField = returnFuncChar10();	// 0
+		
+		defaultFuncFixedRec(flexRec.timeField);	// 1
+		inFuncFixedRec(flexRec.timeField);	// 1
+		outFuncFixedRec(flexRec.timeField);	// 1
+		inoutFuncFixedRec(flexRec.timeField);	// 1
+//		flexRec.timeField = returnFuncFixedRec();	// 1
+		
+		defaultFuncFlexRec(flexRec.timeField);	// 1
+		inFuncFlexRec(flexRec.timeField);	// 1
+		outFuncFlexRec(flexRec.timeField);	// 1
+		inoutFuncFlexRec(flexRec.timeField);	// 1
+//		flexRec.timeField = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(flexRec.timeField);	// 1
+		inFuncConsoleField(flexRec.timeField);	// 1
+		outFuncConsoleField(flexRec.timeField);	// 1
+		inoutFuncConsoleField(flexRec.timeField);	// 1
+		flexRec.timeField = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(flexRec.timeField);	// 1
+		inFuncIntArray(flexRec.timeField);	// 1
+		outFuncIntArray(flexRec.timeField);	// 1
+		inoutFuncIntArray(flexRec.timeField);	// 1
+//		flexRec.timeField = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(flexRec.timeField);	// 1
+		inFuncAny(flexRec.timeField);	// 0
+		outFuncAny(flexRec.timeField);	// 0
+		inoutFuncAny(flexRec.timeField);	// 1
+		flexRec.timeField = returnFuncAny() as time;	// 0
+		
+		defaultFuncIORec(flexRec.timeField);	// 1
+		inFuncIORec(flexRec.timeField);	// 1
+		outFuncIORec(flexRec.timeField);	// 1
+		inoutFuncIORec(flexRec.timeField);	// 1
+//		flexRec.timeField = returnFuncIORec();	// 1
+		
+		defaultFuncFlexRec2(flexRec.timeField);	// 1
+		inFuncFlexRec2(flexRec.timeField);	// 1
+		outFuncFlexRec2(flexRec.timeField);	// 1
+		inoutFuncFlexRec2(flexRec.timeField);	// 1
+//		flexRec.timeField = returnFuncFlexRec2();	// 1
+		
+		defaultFuncTime(aCharArray);	// 1
+		inFuncTime(aCharArray);	// 1
+		outFuncTime(aCharArray);	// 1
+		inoutFuncTime(aCharArray);	// 1
+		aCharArray = returnFuncTime();	// 1
+		
+		defaultFuncChar10(aCharArray);	// 1
+		inFuncChar10(aCharArray);	// 1
+		outFuncChar10(aCharArray);	// 1
+		inoutFuncChar10(aCharArray);	// 1
+		aCharArray = returnFuncChar10();	// 1
+		
+		defaultFuncFixedRec(aCharArray);	// 1
+		inFuncFixedRec(aCharArray);	// 1
+		outFuncFixedRec(aCharArray);	// 1
+		inoutFuncFixedRec(aCharArray);	// 1
+//		aCharArray = returnFuncFixedRec();	// 1
+		
+		defaultFuncFlexRec(aCharArray);	// 1
+		inFuncFlexRec(aCharArray);	// 1
+		outFuncFlexRec(aCharArray);	// 1
+		inoutFuncFlexRec(aCharArray);	// 1
+//		aCharArray = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(aCharArray);	// 1
+		inFuncConsoleField(aCharArray);	// 1
+		outFuncConsoleField(aCharArray);	// 1
+		inoutFuncConsoleField(aCharArray);	// 1
+		aCharArray = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(aCharArray);	// 1
+		inFuncIntArray(aCharArray as int[]);	// 0
+		outFuncIntArray(aCharArray as int[]);	// 0
+		inoutFuncIntArray(aCharArray);	// 1
+//		aCharArray = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(aCharArray);	// 1
+		inFuncAny(aCharArray);	// 0
+		outFuncAny(aCharArray);	// 0
+		inoutFuncAny(aCharArray);	// 1
+		aCharArray = returnFuncAny() as char(10)[];	// 0
+		
+		defaultFuncIORec(aCharArray);	// 1
+		inFuncIORec(aCharArray);	// 1
+		outFuncIORec(aCharArray);	// 1
+		inoutFuncIORec(aCharArray);	// 1
+//		aCharArray = returnFuncIORec();	// 1
+		
+		defaultFuncFlexRec2(aCharArray);	// 1
+		inFuncFlexRec2(aCharArray);	// 1
+		outFuncFlexRec2(aCharArray);	// 1
+		inoutFuncFlexRec2(aCharArray);	// 1
+//		aCharArray = returnFuncFlexRec2();	// 1
+		
+		// time and char are move compatible
+		defaultFuncTime(aCharArray[1]);	// 1
+		inFuncTime(aCharArray[1]);	// 0
+		outFuncTime(aCharArray[1]);	// 0
+		inoutFuncTime(aCharArray[1]);	// 1
+		aCharArray[1] = returnFuncTime();	// 0
+		
+		defaultFuncChar10(aCharArray[1]);	// 0
+		inFuncChar10(aCharArray[1]);	// 0
+		outFuncChar10(aCharArray[1]);	// 0
+		inoutFuncChar10(aCharArray[1]);	// 0
+		aCharArray[1] = returnFuncChar10();	// 0
+		
+		defaultFuncFixedRec(aCharArray[1]);	// 1
+		inFuncFixedRec(aCharArray[1]);	// 0
+		outFuncFixedRec(aCharArray[1]);	// 0
+		inoutFuncFixedRec(aCharArray[1]);	// 1
+//		aCharArray[1] = returnFuncFixedRec();	// 0
+		
+		defaultFuncFlexRec(aCharArray[1]);	// 1
+		inFuncFlexRec(aCharArray[1]);	// 1
+		outFuncFlexRec(aCharArray[1]);	// 1
+		inoutFuncFlexRec(aCharArray[1]);	// 1
+//		aCharArray[1] = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(aCharArray[1]);	// 1
+		inFuncConsoleField(aCharArray[1]);	// 1
+		outFuncConsoleField(aCharArray[1]);	// 1
+		inoutFuncConsoleField(aCharArray[1]);	// 1
+		aCharArray[1] = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(aCharArray[1]);	// 1
+		inFuncIntArray(aCharArray[1]);	// 1
+		outFuncIntArray(aCharArray[1]);	// 1
+		inoutFuncIntArray(aCharArray[1]);	// 1
+//		aCharArray[1] = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(aCharArray[1]);	// 1
+		inFuncAny(aCharArray[1]);	// 0
+		outFuncAny(aCharArray[1]);	// 0
+		inoutFuncAny(aCharArray[1]);	// 1
+		aCharArray[1] = returnFuncAny() as char(10);	// 0
+		
+		defaultFuncIORec(aCharArray[1]);	// 1
+		inFuncIORec(aCharArray[1]);	// 0
+		outFuncIORec(aCharArray[1]);	// 0
+		inoutFuncIORec(aCharArray[1]);	// 1
+//		aCharArray[1] = returnFuncIORec();	// 0
+		
+		defaultFuncFlexRec2(aCharArray[1]);	// 1
+		inFuncFlexRec2(aCharArray[1]);	// 1
+		outFuncFlexRec2(aCharArray[1]);	// 1
+		inoutFuncFlexRec2(aCharArray[1]);	// 1
+//		aCharArray[1] = returnFuncFlexRec2();	// 1
+		
+		defaultFuncTime(aConsoleField);	// 1
+		inFuncTime(aConsoleField);	// 1
+		outFuncTime(aConsoleField);	// 1
+		inoutFuncTime(aConsoleField);	// 1
+		aConsoleField = returnFuncTime();	// 1
+		
+		defaultFuncChar10(aConsoleField);	// 1
+		inFuncChar10(aConsoleField);	// 1
+		outFuncChar10(aConsoleField);	// 1
+		inoutFuncChar10(aConsoleField);	// 1
+		aConsoleField = returnFuncChar10();	// 1
+		
+		defaultFuncFixedRec(aConsoleField);	// 1
+		inFuncFixedRec(aConsoleField);	// 1
+		outFuncFixedRec(aConsoleField);	// 1
+		inoutFuncFixedRec(aConsoleField);	// 1
+//		aConsoleField = returnFuncFixedRec();	// 1
+		
+		defaultFuncFlexRec(aConsoleField);	// 1
+		inFuncFlexRec(aConsoleField);	// 1
+		outFuncFlexRec(aConsoleField);	// 1
+		inoutFuncFlexRec(aConsoleField);	// 1
+//		aConsoleField = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(aConsoleField);	// 0
+		inFuncConsoleField(aConsoleField);	// 0
+		outFuncConsoleField(aConsoleField);	// 0
+		inoutFuncConsoleField(aConsoleField);	// 0
+		aConsoleField = returnFuncConsoleField();	// 0
+		
+		defaultFuncIntArray(aConsoleField);	// 1
+		inFuncIntArray(aConsoleField);	// 1
+		outFuncIntArray(aConsoleField);	// 1
+		inoutFuncIntArray(aConsoleField);	// 1
+//		aConsoleField = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(aConsoleField);	// 1
+		inFuncAny(aConsoleField);	// 0
+		outFuncAny(aConsoleField);	// 0
+		inoutFuncAny(aConsoleField);	// 1
+		aConsoleField = returnFuncAny() as ConsoleField;	// 0
+		
+		defaultFuncIORec(aConsoleField);	// 1
+		inFuncIORec(aConsoleField);	// 1
+		outFuncIORec(aConsoleField);	// 1
+		inoutFuncIORec(aConsoleField);	// 1
+//		aConsoleField = returnFuncIORec();	// 1
+		
+		defaultFuncFlexRec2(aConsoleField);	// 1
+		inFuncFlexRec2(aConsoleField);	// 1
+		outFuncFlexRec2(aConsoleField);	// 1
+		inoutFuncFlexRec2(aConsoleField);	// 1
+//		aConsoleField = returnFuncFlexRec2();	// 1
+		
+		defaultFuncTime(ioRec);	// 1
+		inFuncTime(ioRec);	// 1
+		outFuncTime(ioRec);	// 1
+		inoutFuncTime(ioRec);	// 1
+		ioRec = returnFuncTime();	// 1
+		
+		defaultFuncChar10(ioRec);	// 1
+		inFuncChar10(ioRec);	// 0
+		outFuncChar10(ioRec);	// 0
+		inoutFuncChar10(ioRec);	// 1
+		ioRec = returnFuncChar10();	// 0
+		
+		defaultFuncFixedRec(ioRec);	// 1
+		inFuncFixedRec(ioRec);	// 0
+		outFuncFixedRec(ioRec);	// 0
+		inoutFuncFixedRec(ioRec);	// 1
+//		ioRec = returnFuncFixedRec();	// 0
+		
+		defaultFuncFlexRec(ioRec);	// 1
+		inFuncFlexRec(ioRec);	// 1
+		outFuncFlexRec(ioRec);	// 1
+		inoutFuncFlexRec(ioRec);	// 1
+//		ioRec = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(ioRec);	// 1
+		inFuncConsoleField(ioRec);	// 1
+		outFuncConsoleField(ioRec);	// 1
+		inoutFuncConsoleField(ioRec);	// 1
+		ioRec = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(ioRec);	// 1
+		inFuncIntArray(ioRec);	// 1
+		outFuncIntArray(ioRec);	// 1
+		inoutFuncIntArray(ioRec);	// 1
+//		ioRec = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(ioRec);	// 1
+		inFuncAny(ioRec);	// 0
+		outFuncAny(ioRec);	// 0
+		inoutFuncAny(ioRec);	// 1
+		ioRec = returnFuncAny() as FunctionIORecord;	// 0
+		
+		defaultFuncIORec(ioRec);	// 0
+		inFuncIORec(ioRec);	// 0
+		outFuncIORec(ioRec);	// 0
+		inoutFuncIORec(ioRec);	// 0
+//		ioRec = returnFuncIORec();	// 0
+		
+		defaultFuncFlexRec2(ioRec);	// 1
+		inFuncFlexRec2(ioRec);	// 1
+		outFuncFlexRec2(ioRec);	// 1
+		inoutFuncFlexRec2(ioRec);	// 1
+//		ioRec = returnFuncFlexRec2();	// 1
+		
+		defaultFuncTime(flexRec2);	// 1
+		inFuncTime(flexRec2);	// 1
+		outFuncTime(flexRec2);	// 1
+		inoutFuncTime(flexRec2);	// 1
+		flexRec2 = returnFuncTime();	// 1
+		
+		defaultFuncChar10(flexRec2);	// 1
+		inFuncChar10(flexRec2);	// 1
+		outFuncChar10(flexRec2);	// 1
+		inoutFuncChar10(flexRec2);	// 1
+		flexRec2 = returnFuncChar10();	// 1
+		
+		defaultFuncFixedRec(flexRec2);	// 1
+		inFuncFixedRec(flexRec2);	// 1
+		outFuncFixedRec(flexRec2);	// 1
+		inoutFuncFixedRec(flexRec2);	// 1
+//		flexRec2 = returnFuncFixedRec();	// 1
+		
+		defaultFuncFlexRec(flexRec2);	// 1
+		inFuncFlexRec(flexRec2);	// 1
+		outFuncFlexRec(flexRec2);	// 1
+		inoutFuncFlexRec(flexRec2);	// 1
+//		flexRec2 = returnFuncFlexRec();	// 1
+		
+		defaultFuncConsoleField(flexRec2);	// 1
+		inFuncConsoleField(flexRec2);	// 1
+		outFuncConsoleField(flexRec2);	// 1
+		inoutFuncConsoleField(flexRec2);	// 1
+		flexRec2 = returnFuncConsoleField();	// 1
+		
+		defaultFuncIntArray(flexRec2);	// 1
+		inFuncIntArray(flexRec2);	// 1
+		outFuncIntArray(flexRec2);	// 1
+		inoutFuncIntArray(flexRec2);	// 1
+//		flexRec2 = returnFuncIntArray();	// 1
+		
+		defaultFuncAny(flexRec2);	// 1
+		inFuncAny(flexRec2);	// 0
+		outFuncAny(flexRec2);	// 0
+		inoutFuncAny(flexRec2);	// 1
+		flexRec2 = returnFuncAny() as FunctionFlexibleRecord2;	// 0
+		
+		defaultFuncIORec(flexRec2);	// 1
+		inFuncIORec(flexRec2);	// 1
+		outFuncIORec(flexRec2);	// 1
+		inoutFuncIORec(flexRec2);	// 1
+//		flexRec2 = returnFuncIORec();	// 1
+		
+		defaultFuncFlexRec2(flexRec2);	// 0
+		inFuncFlexRec2(flexRec2);	// 0
+		outFuncFlexRec2(flexRec2);	// 0
+		inoutFuncFlexRec2(flexRec2);	// 0
+//		flexRec2 = returnFuncFlexRec2();	// 0
+	End
+
+	// Function Definitions
+	Function defaultFuncTime(param time) End	// 0
+	Function inFuncTime(param time in) End	// 0
+	Function outFuncTime(param time out) End	// 0
+	Function inoutFuncTime(param time inout) End	// 0
+	Function returnFuncTime() returns(time) End	// 0
+	
+	Function defaultFuncChar10(param char(10)) End	// 0
+	Function inFuncChar10(param char(10) in) End	// 0
+	Function outFuncChar10(param char(10) out) End	// 0
+	Function inoutFuncChar10(param char(10) inout) End	// 0
+	Function returnFuncChar10() returns(char(10)) End	// 0
+	
+	Function defaultFuncFixedRec(param FunctionFixedRecord) End	// 0
+	Function inFuncFixedRec(param FunctionFixedRecord in) End	// 0
+	Function outFuncFixedRec(param FunctionFixedRecord out) End	// 0
+	Function inoutFuncFixedRec(param FunctionFixedRecord inout) End	// 0
+//	Function returnFuncFixedRec() returns(FunctionFixedRecord) End	// 1
+	
+	Function defaultFuncFlexRec(param FunctionFlexibleRecord) End	// 0
+	Function inFuncFlexRec(param FunctionFlexibleRecord in) End	// 0
+	Function outFuncFlexRec(param FunctionFlexibleRecord out) End	// 0
+	Function inoutFuncFlexRec(param FunctionFlexibleRecord inout) End	// 0
+//	Function returnFuncFlexRec() returns(FunctionFlexibleRecord) End	// 1
+	
+	Function defaultFuncConsoleField(param ConsoleField) End	// 1
+	Function inFuncConsoleField(param ConsoleField in) End	// 0
+	Function outFuncConsoleField(param ConsoleField out) End	// 1
+	Function inoutFuncConsoleField(param ConsoleField inout) End // 1
+	Function returnFuncConsoleField() returns(ConsoleField) End	// 0
+	
+	Function defaultFuncIntArray(param int[]) End	// 0
+	Function inFuncIntArray(param int[] in) End	// 0
+	Function outFuncIntArray(param int[] out) End	// 0
+	Function inoutFuncIntArray(param int[] inout) End	// 0
+	Function returnFuncIntArray() returns(int[]) End	// 0
+	
+	Function defaultFuncAny(param any) End	// 0
+	Function inFuncAny(param any in) End	// 0
+	Function outFuncAny(param any out) End	// 0
+	Function inoutFuncAny(param any inout) End	// 0
+	Function returnFuncAny() returns(any) End	// 0
+	
+	Function defaultFuncIORec(param FunctionIORecord) End	// 0
+	Function inFuncIORec(param FunctionIORecord in) End	// 0
+	Function outFuncIORec(param FunctionIORecord out) End	// 0
+	Function inoutFuncIORec(param FunctionIORecord inout) End	// 0
+//	Function returnFuncIORec() returns(FunctionIORecord) End	// 1
+	
+	Function defaultFuncFlexRec2(param FunctionFlexibleRecord2) End	// 0
+	Function inFuncFlexRec2(param FunctionFlexibleRecord2 in) End	// 0
+	Function outFuncFlexRec2(param FunctionFlexibleRecord2 out) End	// 0
+	Function inoutFuncFlexRec2(param FunctionFlexibleRecord2 inout) End	// 0
+//	Function returnFuncFlexRec2() returns(FunctionFlexibleRecord2) End	// 1
+End
+
+Private Record FunctionFixedRecord
+	10 occurredItem int[10];
+End
+
+Private Record FunctionFlexibleRecord
+	timeField Time;
+End
+
+Private Record FunctionIORecord type serialRecord { fileName = "default" }
+	item1 int;
+End
+
+Private Record FunctionFlexibleRecord2
+	aField int;
+End

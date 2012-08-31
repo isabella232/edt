@@ -1,0 +1,207 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+record psbBadPCB type psbRecord 
+
+	pcb1 DB_PCBRECORD {
+			@pcb{
+				hierarchy = [ @relationship{segmentRecord=segRec}, @relationship{segmentRecord=segRec} ],	//1
+				
+				hierarchy = [ "a", "b" ],	//1
+				hierarchy = "a",			//1
+				hierarchy = 5				//1
+			}};
+end
+
+record notaPSB  {@pcb{}}  //1
+	x int {@pcb{}};   //0
+end
+
+record segRec type dliSegment
+end
+
+
+Program pgm {
+	allowUnqualifiedItemReferences = yes,    //0
+	allowUnqualifiedItemReferences = no,     //0
+	
+	allowUnqualifiedItemReferences = "fred", //1
+	allowUnqualifiedItemReferences = 5, 	 //1
+	allowUnqualifiedItemReferences = [5],    //1
+	allowUnqualifiedItemReferences = red     //1	
+	} 
+	function main()
+	end
+end
+
+DataTable dataTableContents1
+{ contents = [ [ "20040701", "010800", "20040701010800", "200407", "2004", "2004" ] ] } // 0
+	10 dateItem date;                              // 0
+	10 timeItem time;                              // 0
+	10 noPatternTimeStampItem timeStamp;           // 0
+	10 noPatternIntervalItem interval;             // 1
+	10 patternTimeStampItem timeStamp( "yyyy" );   // 0
+	10 patternIntervalItem interval( "yyyy" );     // 0
+end
+
+DataTable dataTableContents1a
+{ contents = [ "20040701", "010800", "20040701010800", "200407", "2004", "2004" ] } // 1
+	10 dateItem date;                              // 0
+	10 timeItem time;                              // 0
+	10 noPatternTimeStampItem timeStamp;           // 0
+	10 noPatternIntervalItem interval;             // 1
+	10 patternTimeStampItem timeStamp( "yyyy" );   // 0
+	10 patternIntervalItem interval( "yyyy" );     // 0
+end
+
+Datatable dataTableContents2
+	10 item1 char(2);                    // 0
+	10 item2 char(2);                    // 0
+	10 item3 char(2);                    // 0
+	{contents = [ ["aa", "bb", "cc"],    // 0
+				  ["dd", "ee", "ff"] ] } // 0
+end                                      // 0
+
+Datatable dataTableContents2a
+	10 item1 char(2);                      // 0
+	10 item2 char(2);                      // 0
+	10 item3 char(2);                      // 0
+	{contents = [[ ["aa", "bb", "cc"],     // 2
+				   ["dd", "ee", "ff"] ]] } // 1
+end                                        // 0
+
+DataItem di int {
+	action = "xyz",			//0
+	action = "ABC" + "xyz",	//0
+	
+
+	action = [5],			//1
+
+	action = red,			//1
+	
+	dateFormat = "yyyymm",						//0
+	dateFormat = ISODATEFORMAT,					//0
+	dateFormat = USADATEFORMAT,					//0
+	dateFormat = strlib.ISODATEFORMAT,			//0
+	dateFormat = vgVar.systemJulianDateFormat,	//0
+	
+
+	dateFormat = [5],			//1
+
+	dateFormat = foo,			//1
+	
+	fillCharacter = "a",		//0
+	fillCharacter = nullFill,	//0
+	
+
+
+	fillCharacter = [5],	//1
+	fillCharacter = red,	//1
+	
+	outline = [noOutline],		//0
+	outline = [box],			//0
+	outline = [left, right],	//0
+	
+	outline = ["left"],	//1
+	outline = 5,		//1
+	outline = [5],		//1
+	outline = [red],	//1
+	outline = red,		//1
+		
+	
+	color = red		//0
+}
+end
+
+form myForm1 type textForm
+{
+	screenSizes = [[100,200], [400,500]],	//0
+	formSize = [10,20],		//0
+	helpKey = "a"			//1
+}
+end
+
+form myForm2 type textForm
+{
+	screenSizes = [[[100,200]], [[400,500]]],	//1
+	formSize = ["a",20],	//1
+	formSize = ["a","b"],	//1
+	helpKey = foo			//1
+}
+end
+
+form myForm3 type textForm
+{
+	screenSizes = [100,200],	//1
+	formSize = "a",			//1
+	helpKey = 5				//1
+}
+end
+
+form myForm4 type textForm
+{
+	screenSizes = 100,		//1
+	formSize = red,			//1
+	helpKey = ["a"]			//1
+}
+end
+
+form myForm5 type textForm
+{
+	screenSizes = [[100,""]],	//2
+	screenSizes = [["",""]],	//1
+	helpKey = pf1			//0
+}
+end
+
+Record mySQLRec type sqlRecord	{
+
+	tableNames = [["a", "b"]],	//0
+
+	tableNames = ["a", "b"],	//1
+	tableNames = [[red, blue]],	//1
+	tableNames = "a",			//1
+	tableNames = red,			//1
+	
+	tableNameVariables = [["a", "b"]],	//0
+
+	tableNameVariables = ["a", "b"],	//1
+	tableNameVariables = [[red, blue]],	//1
+	tableNameVariables = "a",			//1
+	tableNameVariables = red,			//1
+
+	keyItems = ["a", "b"],	//2
+	keyItems = [a, b],		//0
+	keyItems = [c, d],		//2
+	keyItems = a,			//1
+
+	keyItems = [5],	//1
+	keyItems = 4,	//1
+	keyItems = "3",	//1
+	keyItems = red	//1
+}
+	a int;
+	b int;
+end
+
+record psbxxx type PSBRecord
+	pcb1 DB_PCBRECORD {@pcb {hierarchy = 4}};  //1
+	pcb2 DB_PCBRECORD {@pcb {hierarchy = [1]}};  //1
+	pcb3 DB_PCBRECORD {@pcb {hierarchy = [1,5]}};  //1
+	pcb4 DB_PCBRECORD {@pcb {hierarchy = [@relationship {segmentRecord = seg1}, "abc"]}}; //2
+	
+end
+
+record seg1 type DLISegment
+	field1 int;
+end
+
+

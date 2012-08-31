@@ -1,0 +1,55 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+RECORD WORK_31_FormType TYPE ConsoleForm { formsize = [5,40], showBrackets=yes }
+
+	*    ConsoleField { position=[2,5], value="field 1" };
+	f1   ConsoleField { name="f1", position=[2,15], fieldLen=15, value="" };
+	
+END
+  
+PROGRAM WORK_31
+	FUNCTION main()
+
+		form1 WORK_31_FormType { name = "fmform1" };
+		xChar char(200);
+		xString String;
+		
+		xChar = "Hello Char World";
+		xString = "Hello String World";
+		
+		displayForm(form1);
+		
+		form1.f1.value = xChar;
+		displayFields(form1.f1);
+		
+		displaymessage("press any key to continue test...");
+		getKey();
+
+		form1.f1.value = xString;
+		displayFields(form1.f1);
+		
+		displaymessage("press any key to end test...");
+		getKey();
+		
+		openui form1.f1
+			onEvent (on_key :"a")
+				exit openui;	
+			
+			onEvent (after_field :"a")
+				continue openui;
+		end
+		
+	END
+	
+END

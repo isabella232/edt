@@ -1,0 +1,51 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//arrayName.reSizeAll(sizes)                                    
+//This function adds or shrinks every dimension of a            
+//multidimensional array.                                       
+//The parameter sizes is an array of integers, with each        
+//successive element specifying                                 
+//the size of a successive dimension. If the number of          
+//dimensions resized is greater                                 
+//than the number of dimensions in arrayName, or if a value of  
+//an element in sizes is                                        
+//greater than the maximum size allowed in the equivalent       
+//dimension of arrayName, the run unit terminates.              
+                                                                
+program MyArray(returnStatus INT)                               
+                                                                
+        function main()                                         
+                anArray INT[][]{maxSize=5};                     
+                anotherArray INT[2];                            
+                anotherArray[1] = 10;                           
+                anotherArray[2] = 20;                           
+                anArray.resizeAll(anotherArray);	// 0        
+                anArray.setMaxSizes(anotherArray);	// 0
+                                                                
+                myInt04 INT[] = [10,20];                        
+                anArray.resizeAll(myInt04);		// 0            
+                anArray.setMaxSizes(myInt04);	// 0
+                                                                
+                anArray.resizeAll([10,20]);		// 0            
+                anArray.setMaxSizes([10,20]);	// 0            
+                
+                anArray.resizeAll(10);			// 1            
+                anArray.setMaxSizes(10);		// 1            
+                
+                anArray.resizeAll([["a"],["b"]]);		// 1            
+                anArray.setMaxSizes([["a"],["b"]]);		// 1            
+                
+                anArray.setMaxSizes([foo, bar]);	// 2 foo cannot be resolved | bar cannot be resolved
+                                                                
+        end                                                     
+                                                                
+end             

@@ -1,0 +1,88 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main() end
+	
+	function func()
+		anyVar any;
+		intVar int;
+		charVar char(4);
+		dateVar date;
+		timeVar time;
+		timestampVar timestamp;
+		intervalVar interval;
+		stringVar string;
+		fixedRecordVar fixedRecord;
+		flexibleRecordVar flexibleRecord;
+		clobVar clob;
+		blobVar blob;
+		floatVar float;
+
+// checkDateTimeArithmeticCompatibility:
+		anyVar = dateVar - dateVar;				//0
+		anyVar = dateVar + intervalVar;			//0
+		anyVar = dateVar - intervalVar;			//0		
+		anyVar = dateVar + intVar;				//0
+		anyVar = dateVar - intVar;				//0
+		anyVar = dateVar - timestampVar;		//0
+		anyVar = intVar + dateVar;				//0
+		anyVar = intervalVar + dateVar;			//0
+		anyVar = intervalVar + intervalVar;		//0
+		anyVar = intervalVar - intervalVar;		//0
+		anyVar = intervalVar * intVar;			//0
+		anyVar = intervalVar / intVar;			//0
+		anyVar = intervalVar + timestampVar;	//0
+		anyVar = timestampVar - dateVar;		//0
+		anyVar = timestampVar + intervalVar;	//0
+		anyVar = timestampVar - intervalVar;	//0
+		anyVar = timestampVar - timestampVar;	//0
+		anyVar = dateVar - (anyVar as string);	//0
+		
+		anyVar = dateVar + dateVar;				//1 The operand dateVar is not valid for use with the operand dateVar with the + operator
+		anyVar = dateVar * dateVar;				//1 The operand dateVar is not valid for use with the operand dateVar with the * operator
+		anyVar = dateVar / dateVar;				//1 The operand dateVar is not valid for use with the operand dateVar with the / operator
+		anyVar = dateVar ** dateVar;			//1 The operand dateVar is not valid for use with the operand dateVar with the ** operator
+		anyVar = dateVar * intervalVar;			//1 The operand dateVar is not valid for use with the operand intervalVar with the * operator
+		anyVar = dateVar - timeVar;				//1 The operand dateVar is not valid for use with the operand timeVar with the - operator
+		anyVar = intVar + timeVar;				//1 The operand intVar is not valid for use with the operand timeVar with the + operator
+		anyVar = intVar + timestampVar;			//1 The operand intVar is not valid for use with the operand timestampVar with the + operator
+		anyVar = intVar + intervalVar;			//1 The operand intVar is not valid for use with the operand intervalVar with the + operator
+		anyVar = intervalVar - dateVar;			//1 The operand intervalVar is not valid for use with the operand dateVar with the - operator
+		anyVar = intervalVar * timeVar;			//1 The operand intervalVar is not valid for use with the operand timeVar with the * operator
+		anyVar = intervalVar / intervalVar;		//1 The operand intervalVar is not valid for use with the operand intervalVar with the / operator
+		anyVar = timestampVar + dateVar;		//1 The operand timestampVar is not valid for use with the operand dateVar with the + operator		
+		anyVar = dateVar - (anyVar as boolean);	//1 The operand dateVar is not valid for use with the operand anyVar as boolean with the - operator
+
+// validate:
+		anyVar = 1 + "a";				//0
+		anyVar = 1 + sysVar.systemType;	//0
+
+// validate (1):
+		anyVar = 1 + noReturnsFunc();		//1 Function noReturnsFunc must return a type.  {6654*, FUNCTION_MUST_RETURN_TYPE}
+		anyVar = 1 + returnsStringFunc();	//0
+		anyVar = 1 + charVar;				//0
+		anyVar = floatVar % floatVar;		//2 The primitive type float for floatVar is not valid for use with the % operator.  {5049*, TYPE_NOT_VALID_IN_EXPRESSION}|The primitive type float for floatVar is not valid for use with the % operator.  {5049*, TYPE_NOT_VALID_IN_EXPRESSION}
+		anyVar = 1 + fixedRecordVar;		//1 The element fixedRecordVar is not valid for use in the expression.  {5085*, ELEMENT_NOT_VALID_IN_EXPRESSION}
+	end
+	
+	function noReturnsFunc() end
+	function returnsStringFunc() returns(String) end
+end
+
+Record fixedRecord
+	10 item1 int;
+end
+
+Record flexibleRecord
+	item1 int;
+end

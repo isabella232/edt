@@ -1,0 +1,102 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program substringProgram( parm char )
+	function main() end
+	
+	function func() returns( char(24) )
+		charVar char(24);
+		i, j int;
+		
+		charVar = charVar[i:j];       // 0
+		charVar = charVar[charVar:j]; // 1
+		i = i[i:j];                   // 1
+	
+		/* Assignment statement
+			- as target, invalid
+			- as souce, valid (tested above) */
+
+			
+		/* Call statement
+			- as argument, invalid */
+		call "substringProgram" (charVar[i:j]); // 1
+			
+		/* Case statement
+			- as criterion itemVariable, valid
+			- as criterion stateVariable, invalid
+			- as when clause itemVariable, valid
+			- as when clause stateVariableValue, invalid */
+		case( charVar[i:j] )        // 0
+			when( charVar )         // 0
+			when( charVar[i:j] )    // 0
+		end
+		case( converseVar.eventKey )      // 0
+			when( pf1 )              // 0
+			when( pf1[i:j] )         // 1
+		end
+		case( charVar )             // 0
+			when( charVar )         // 0
+			when( charVar[i:j] )    // 0
+		end
+		case( converseVar.eventKey[i:j] ) // 1
+			when( pf1 )              
+			when( pf1[i:j] )         // 1
+		end
+		case( eventKey[i:j] )        // 1
+			when( pf1 )              
+			when( pf1[i:j] )         // 1
+		end
+
+		/* Move statement
+			- as source, valid
+			- as target, invalid */
+		move charVar[i:j] to charVar; // 0
+
+
+		/* Return statement
+			- as returnValue, valid */
+		return( charVar[i:j] ); // 0
+
+		/* Set statement
+			- as dataReference, invalid */
+		set charVar[i:j] initial; // 1
+
+		/* Into Clause on SQL statements
+			- as item, invalid */
+		open myResultSetID1 with #sql{select a from b};
+		get next from myResultSetID1 into charVar[i:j]; // 1
+
+		/* Using Clause on SQL statements
+			- as item, invalid */
+		prepare myPID1 from "dave";
+		execute myPID1 using charVar[i:j]; // 1
+
+		/* UsingKeys Clause on SQL statements
+			- as item, invalid */
+		sqlRecVar mySqlRecDef;
+		open resultSetID2 usingkeys charVar[i:j] for sqlRecVar; // 1
+	end
+end
+
+handler myActionProgram type JSFHandler
+
+	function main()
+		charVar char(24);
+		i, j int;
+		
+		/* Forward statement
+			- as argument, invalid */
+		forward charVar[i:j] to "dave"; // 1
+	end
+end
+
+Record myUIRecDef type uiRecord end
+Record mySqlRecDef type sqlRecord 10 item1 int; end

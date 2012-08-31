@@ -1,0 +1,109 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program collections_invalid
+
+	function func1( p1 dictionary ) returns (dictionary)
+		myDict dictionary;		
+		return( myDict );
+	end
+	
+	function func2( p1 arrayDictionary ) returns (arrayDictionary)
+		myDict arrayDictionary;
+		return( myDict );
+	end
+
+
+	function main()
+			myTable ArrayDictionary{ col1 = new int[10]{ 0 }, 		//1 The columns of an arraydictionary must all be arrays of the same size
+		                         col2 = new String[5]{} };			
+			
+		//---------------------------------------------------------------------
+		// test dictionary declarations
+		
+		row1 Dictionary {
+			ordering = bykey,
+			casesensitive = no,
+			id=0001, 
+			lastname="Wilson",
+			lastname="Murray", 			
+			firstName="Tim",
+			salary=50000,
+			birthday="021959" };
+			
+		row2 Dictionary { 
+			ordering = bykey,
+			row.ordering = 6,
+			id=0001, 
+			lastname="Wilson",
+			firstName="Tim",
+			firstName = "Joe", 			
+			salary=50000,
+			birthday="021959" };
+			
+		row3 dictionary {
+			ordering = garbage,			// 1 Property: Ordering.  The value for this property must be one of the following: byInsertion, byKey, none.
+			casesensitive = badvalue, 	// 1 Property: CaseSensitive.  The value for this property must be one of the following: yes, no
+			id = 00001,
+			lastName="Murray",
+			lastname="Wilson"};
+
+		//---------------------------------------------------------------------
+		// test dictionary member functions			
+			
+		binVar bin(9,1);
+		strAry string[];
+		anyAry any[];
+		myString string;
+		myBoolean boolean;
+		
+		binVar = row1.containsKey("id");	//0
+		myBoolean = row1.containsKey("id");	//0
+		mystring = row1.getKeys(); 			//1 string and string[] are not compatible
+		row1.insertAll( strAry );			//1 The argument strAry cannot be passed to the in or out parameter dictionary of the function insertAll. The types string[] and dictionary are not assignment compatible
+		row1.removeElement( strAry ); 		//1 The argument strAry cannot be passed to the in or out parameter key of the function removeElement. The types string[] and string are not assignment compatible
+		row1.removeAll(binvar);				//1 Function removeAll requires exactly 0 argument(s)
+		
+		
+		//---------------------------------------------------------------------
+		// test arrayDictionary declarations and access
+			
+//		myTable ArrayDictionary{ col1 = new int[10]{ 0 }, 		//1 The columns of an arraydictionary must all be arrays of the same size
+//		                         col2 = new String[5]{} };			
+			
+		Column1 int[10];
+		Column2 String;		
+		myTable2 ArrayDictionary{ col1=Column1, col2=Column2 };					
+		Column4 int[5];													 
+		Column5 String[10];		
+		myTable3 ArrayDictionary{ col1=Column4, col2=Column5 };				
+			
+		Column6 int;
+		Column7 String;		
+		myTable4 ArrayDictionary{ col1=Column6, col2=Column7 };		
+
+		//---------------------------------------------------------------------
+		// test array dictionary move/assignment/function argument
+		//These are all valid.
+		myTable = myTable2;				//0
+		move myTable to myTable2;		//0
+		myTable = func2( myTable );		//0
+		
+		//---------------------------------------------------------------------
+		// test dictionary access
+		
+		set row1 black;						// 1 state BLACK is not allowed for this item reference
+		set mytable red;					// 1 state RED is not allowed for this item reference
+		for( row1 to mytable ) end			// 2 counter variable must be integer type | For statement end must be an integer literal
+		execute prepareStmtId using row1, mytable;// 2 row1 cannot be resolved as an item | mytable cannot be resolved as an item
+		prepare prepareStmtId from mytable; 	// 1 mytable is not valid for use in the expression
+	end												 
+end

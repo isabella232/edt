@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+formgroup fg1 {}
+	form formx type printForm
+		{ FormSize = [7, 132]}
+	
+	  field1 char(4) {Position = [1, 2]};
+	                 
+	  field2 char(4) {Position = [1, 1]};     //1                              
+	        
+	end
+	
+	
+	form Detail1 type printForm
+		{addSpaceForSOSI = no,  FormSize = [1, 158]}
+		fill1  char(4) {Position = [1, 1]};
+		Station char(5) {Position = [1, 5]}; //1
+		ProdNum char(12) {Position = [1, 14]};
+		ProdName mbChar(16) {Position = [1, 27]};
+		Msun mbChar(6) {Position = [1, 54]};
+		CustNum char(9) {Position = [1, 62]};
+		CustName mbChar(30) {Position = [1, 72]};
+		BillNum char(15) {Position = [1, 102]};  //1
+		Qty decimal(12,3) {fieldLen=13, Position = [1, 117]}; //1
+	end
+	
+		form prnbody type printForm
+		{ FormSize = [7, 132]}
+		name char(23) [2] {Position = [3,3], fieldLen = 23, align = left, fillCharacter = " ",
+						value = "***********************",
+						this [2] {position = [1,1]}};
+		rank char(20) {Position = [1, 24], fieldLen = 20, align = left, fillCharacter = " ", //1
+						value = "********************"};
+		serial char(12) {Position = [1, 46], fieldLen = 12, align = left, fillCharacter = " ",
+						value = "************"};
+		array char(131) [3] {position = [4,1], fieldlen = 131, align=left, fillCharacter = " ", value="1234567890"
+		,indexOrientation=down,
+			this [2] {value = "ABCDEFGHIJ"},
+			this [3] {value = "abcdefghij"}
+		};
+	end
+	
+
+end
+

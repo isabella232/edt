@@ -1,0 +1,49 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program intervalTest
+	function main()
+		secondSpanInterval interval("mmmmss");		//0
+		monthSpanInterval interval("yyyyMM");		//0
+		looseInterval interval;						//1
+		looseChar char;								//1
+		
+		secondSpanInterval = secondSpanInterval;	//0
+		secondSpanInterval = monthSpanInterval;		//1 not compatible
+		monthSpanInterval = monthSpanInterval;		//0
+		monthSpanInterval = secondSpanInterval;		//1 not compatible
+		
+		looseIntervalFunc(secondSpanInterval);		//0
+		looseIntervalFunc(monthSpanInterval);		//0
+		
+		looseIntervalFunc(1);		//1
+		looseIntervalFunc("2");		//1
+		
+		secondSpanIntervalFunc(secondSpanInterval);		//0
+		secondSpanIntervalFunc(monthSpanInterval);		//1
+		
+		monthSpanIntervalFunc(secondSpanInterval);		//1
+		monthSpanIntervalFunc(monthSpanInterval);		//0
+	end
+	
+	function looseIntervalFunc(p1 interval)						//0
+	end
+	
+	function secondSpanIntervalFunc(p1 interval("ssss") in)		//0
+	end
+	
+	function monthSpanIntervalFunc(p1 interval("yyyy") in)		//0
+	end
+	
+	function returnsLooseChar() returns(char) end			//1
+	function returnsLooseInterval() returns(interval) end	//1
+end

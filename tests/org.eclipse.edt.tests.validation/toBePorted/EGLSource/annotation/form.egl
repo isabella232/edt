@@ -1,0 +1,1232 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validateValue (from DataItemPropertiesValdiator)
+// 1 Invalid value {0} found for property {1}, which must contain only digits since it is defined with numeric primitive {2}. {3186, EGLMESSAGE_PROPERTY_NUMERIC_PRIMITIVE_USED_WITH_NONNUMERIC_VALUE}
+// when not in VAG mode 1 A length of {0} is allocated for the value property.  More space may be required because of the use of the following properties: {1}. {3113, EGLMESSAGE_ACTUAL_REQUIRED_LENGTH_TOO_LARGE}
+	// validate length using numericseparator/currency/sign (use currencysymbol?)
+	
+// validateMinimumInput (from DataItemPropertiesValidator)
+// 1 The value of property minimumInput must be greater than 0, but {0} was found. {3181, EGLMESSAGE_PROPERTY_MINIMUM_INPUT_MUST_BE_GREATER_THAN_ZERO}
+// 1 The value {0} of property minimumInput must be less than or equal to the length {1} defined by its corresponding primitive type {2} or fieldlen and associated properties. {3103, EGLMESSAGE_PROPERTY_MINIMUM_INPUT_MUST_BE_LESS_THAN_PRIMITIVE_LENGTH}
+// 1 The value {0} of property minimumInput must be less than or equal to the length {1} defined by its corresponding primitive type {2} or fieldlen and associated properties. {3103, EGLMESSAGE_PROPERTY_MINIMUM_INPUT_MUST_BE_LESS_THAN_PRIMITIVE_LENGTH}
+// validate length using numericseparator/currency/sign (use currencySymbol?)
+
+// validateDateFormat (from DataItemPropertiesValidator)
+// 1 Property: {0}.  The value for this property must be one of the following: {1}. {3054, EGLMESSAGE_PROPERTY_REQUIRES_SPECIFIC_VALUE}
+// 1 Property: {0}.  The {0} property is not valid for the primitive type {1}. {3174, EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_TYPE}
+// 1 Property: {0}.  The {0} property is not valid for field or items with decimals. {3175, EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_DECIMALS}
+// 1 Property: {0}.  The length of primitive type {1} for item or field {2} must be greater than or equal to the dateFormat property mask length. {3172, EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_LENGTH}
+// 1 Property: {0}.  The value {1} for property dateFormat in {2} requires the fieldLen property or primitive length to be either {3} or {4} for fields of type {5}. {3177, EGLMESSAGE_PROPERTY_INVALID_VALUE_DATEFORMAT}
+// 1 Property: {0}.  The value {1} for property dateFormat in {2} requires the fieldLen property or primitive length to be either {3} or {4} for fields of type {5}. {3177, EGLMESSAGE_PROPERTY_INVALID_VALUE_DATEFORMAT_GREGORIAN_AND_JULIAN}
+// 1 Property: {0}.  The length of value {1} for property dateFormat in {2} must match the length of the fieldLen property.  If fieldLen is not specified, dateFormat length must match the primitive length. {3178, EGLMESSAGE_PROPERTY_INVALID_VALUE_DATEFORMAT_MUST_MATCH_FIELDLEN}
+
+// validateDateFormat (1): (from DataItemPropertiesValidator)
+// 1 Property: {0}.  The {0} property cannot be specified with the numericSeparator, currency, or sign properties. {3176, EGLMESSAGE_PROPERTY_DATEFORMAT_INVALID_INCOMPATIBLE_PROPERTIES}
+// 	currency symbol?
+
+// validateDateFormatContent: (from DataItemPropertiesValidator)
+// 1 Property: {0}.  The character {1} is not a valid character in the dateFormat property value. {3171, EGLMESSAGE_PROPERTY_INVALID_CHARACTER_IN_DATEFORMAT}
+
+
+
+Form msgFieldFormOne type printForm
+	{ msgField = field1, //0
+	  formSize = [100, 100] //0
+	} 
+	field1 char(10) ;
+end
+
+Form msgFieldFormTwo type printForm
+	{ msgField = fieldA, //1 cannot be resolved
+	  formSize = [10, 20] //0
+	} 
+	field1 char(10);
+	field2 char(10);
+end
+
+Form msgFieldFormThree type printForm
+	{ msgField = fieldA, //1
+	  formSize = [10, 20]} //0
+	field1 char(10);
+end
+
+Form msgFieldFormFour type printForm
+	{ msgField = field1, //0
+	  formSize = [10, 20]} //0
+	field1 char(10);
+end
+
+Form cursorFormOne type textForm
+	{field1{cursor = yes}, //0 
+	 formSize = [10, 20] //0
+	 }
+	field1 char(10);
+end
+
+Form cursorFormTwo type textForm
+	{field1{cursor = yes}, //0
+	  field2{cursor = yes}, //0
+	  formSize = [10, 20] //0
+	 }
+	field1 char(10);
+	field2 char(10); //1
+end
+
+Form cursorFormThree type printForm
+	{field1{cursor = yes}, //0
+	 formSize = [10, 20] //0
+	 }
+	field1 char(10);
+end
+
+Form cursorVariableFormOne type textForm
+	{field1{cursor = "yes"}, //1 
+	 formSize = [10, 20] //0
+	 }
+	field1 char(10);
+end
+
+Form cursorVariableFormTwo type textForm
+	{ formSize = [10, 20] //0
+	 }
+	field1 char(10){cursor = "yes"};//1
+end
+
+Form cursorVariableFormThree type textForm
+	{ formSize = [10, 20] //0
+	 }
+	field1 char(10){cursor = yes};//0
+end
+
+Form cursorVariableFormFour type textForm
+	{ field1[2]{cursor="yes"}, //1
+	  formSize = [10, 20] //0
+	 }
+	field1 char(10)[2];
+end
+
+Form cursorVariableFormFive type textForm
+	{ field1[2]{cursor=yes}, //0
+	  formSize = [10, 20] //0
+	 }
+	field1 char(10)[2];
+end
+
+Form cursorConstantFormOne type textForm
+	* {cursor = "yes"}; //1
+end
+
+Form cursorConstantFormTwo type textForm
+	* {cursor = yes}; //0
+end
+
+Form detectableVariableFormOne type textForm
+	{field3{detectable = "yes"}, //1 
+	 field4{detectable = no}, //0
+	 field5[2]{detectable = "yes"}, //1
+	 formSize = [10, 20] //0
+	 }
+	 field1 char(10){detectable = "yes"};//1
+	 field2 char(10){detectable = yes};//0
+	 field3 char(10);
+	 field4 char(10);
+end
+
+Form detectableVariableFormTwo type printForm
+	{field1{detectable = yes}, //0
+	 formSize = [10, 20] //0
+	 }
+	field1 char(10);
+end
+
+Form detectableConstantFormOne type textForm
+	* {detectable = "yes"}; //1
+	* {detectable = yes}; //0
+end
+
+Form isHexDigitVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{isHexDigit = "yes"}, //1
+	  field4{isHexDigit = yes}, //0
+	  field5[1]{isHexDigit = yes} //1
+	}
+	field1 char(10) {isHexDigit = yes}; //0
+	field2 char(10) {isHexDigit = "yes"}; //1
+	field3 char(10);
+	field4 char(10);
+	field5 char(10)[2];
+end
+
+Form isHexDigitVariableFormTwo type printForm
+	{formSize=[10,20]}//0
+	// Can't be used on a print form
+	field1 char(10) {isHexDigit = yes}; //0
+end
+
+Form isDecimalDigitVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{isDecimalDigit = "yes"}, //1
+	  field4{isDecimalDigit = yes}, //0
+	  field5[1]{isDecimalDigit = yes} //1
+	}
+	field1 char(10) {isDecimalDigit = yes}; //0
+	field2 char(10) {isDecimalDigit = "yes"}; //1
+	field3 char(10);
+	field4 char(10);
+	field5 char(10)[2];
+end
+
+Form isDecimalDigitVariableFormTwo type printForm
+	{formSize=[10,20]}//0
+	field1 char(10) {isDecimalDigit = yes}; //0
+end
+
+Form inputRequiredVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{inputRequired = "yes"}, //1
+	  field4{inputRequired = yes}, //0
+	  
+	  // Cannot override individual elements of the array
+	  field5[1]{inputRequired = yes} //1
+	}
+	field1 char(10) {inputRequired = yes}; //0
+	field2 char(10) {inputRequired = "yes"}; //1
+	field3 char(10);
+	field4 char(10);
+	field5 char(10)[2];
+end
+
+Form inputRequiredVariableFormTwo type printForm
+	{formSize=[10,20]}//0
+	
+	// Cannot be used on print form
+	field1 char(10) {inputRequired = yes}; //0
+end
+
+Form inputRequiredVariableFormThree type textForm
+	{formSize=[10,20]}//0
+	
+	field1 char(10)[5] {inputRequired = yes}; //0
+end
+
+Form lowerCaseVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{lowerCase = "yes"}, //1
+	  field4{lowerCase = yes}, //0
+	  
+	  // can't override a single element
+	  field5[1]{lowerCase = yes} //1
+	}
+	field1 char(10) {lowerCase = yes}; //0
+	field2 char(10) {lowerCase = "yes"}; //1
+	field3 char(10);
+	field4 char(10);
+	field5 char(10)[2];
+	
+	// must be on a text type
+	field6 int {lowercase = yes,	//1 Property LowerCase must be defined with one of the character primitives. int found.
+	            lowercase = yes}; 	//1 Property LowerCase must be defined with one of the character primitives. int found.
+	            
+	field7 int {lowercase = yes,	//1 Property LowerCase must be defined with one of the character primitives. int found.
+	            lowercase = no}; 	//0
+	            
+	field8 int {lowercase = no,		//0
+	            lowercase = yes}; 	//1 Property LowerCase must be defined with one of the character primitives. int found.
+	            
+	field9 int {lowercase = no,		//0
+	            lowercase = no}; 	//0
+end
+
+Form upperCaseVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{upperCase = "yes"}, //1
+	  field4{upperCase = yes}, //0
+	  
+	  // can't override a single element
+	  field5[1]{upperCase = yes} //1
+	}
+	field1 char(10) {upperCase = yes}; //0
+	field2 char(10) {upperCase = "yes"}; //1
+	field3 char(10);
+	field4 char(10);
+	field5 char(10)[2];
+	
+	// must be on a text type
+	field6 int {upperCase = yes}; //1
+end
+
+Form numericSeparatorVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{numericSeparator = "yes"}, //1
+	  field4{numericSeparator = yes}, //0
+	  field5[1]{numericSeparator = yes} //1
+	}
+	field1 int {numericSeparator = yes}; //0
+	field2 int {numericSeparator = "yes"}; //1
+	field3 int;
+	field4 int;
+	field5 int[2];
+	field6 char(10) {numericSeparator = yes}; //1 Property NumericSeparator must be defined with a numeric primitive. The type of this item is char.
+end
+
+Form zeroFormatVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{zeroFormat = "yes"}, //1
+	  field4{zeroFormat = yes}, //0
+	  field5[1]{zeroFormat = yes} //1
+	}
+	field1 int {zeroFormat = yes}; //0
+	field2 int {zeroFormat = "yes"}; //1
+	field3 int;
+	field4 int;
+	field5 int[2];
+	field6 char(10) {zeroFormat = yes}; //1
+end
+
+Form isBooleanVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{isBoolean = "yes"}, //1
+	  field4{isBoolean = yes}, //0
+	  field5[1]{isBoolean = yes} //1
+	}
+	field1 char(10) {isBoolean = yes}; //0
+	field2 char(10) {isBoolean = "yes"}; //1
+	field3 char(10);
+	field4 char(10);
+	field5 char(10)[2];
+	field6 date {isBoolean = yes}; //1 The property isBoolean is valid only for the following primitive types: (char, bin, num, numc, decimal, pacf, int, bigInt, smallInt, float, money)
+end
+
+Form maskedVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{masked = "yes"}, //1
+	  field4{masked = yes}, //0
+	  field5[1]{masked = yes} //1
+	}
+	field1 date {masked = yes}; //0
+	field2 date {masked = "yes"}; //1
+	field3 date;
+	field4 date;
+	field5 date[2];
+end
+
+Form needsSOSIVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{needsSOSI = "yes"}, //1
+	  field4{needsSOSI = yes}, //0
+	  field5[1]{needsSOSI = yes} //1
+	}
+	field1 mbchar(10) {needsSOSI = yes}; //0
+	field2 mbchar(10) {needsSOSI = "yes"}; //1
+	field3 mbchar(10);
+	field4 mbchar(10);
+	field5 mbchar(10)[2];
+end
+
+Form needsSOSIVariableFormTwo type printForm
+	{formSize=[10,20]}//0
+	
+	field1 mbchar(10) {needsSOSI = yes}; //0
+end
+
+Form needsSOSIConstantFormOne type textForm
+	{ formsize=[10,20]}//0
+	// Property not valid on constant fields
+	* {needsSOSI = yes}; //0
+end
+
+Form modifiedVariableFormOne type textForm
+	{formsize =[10,20], //0
+	  field3{modified = "yes"}, //1
+	  field4{modified = yes}, //0
+	  field5[1]{modified = yes} //0
+	}
+	field1 char(10) {modified = yes}; //0
+	field2 char(10) {modified = "yes"}; //1
+	field3 char(10);
+	field4 char(10);
+	field5 char(10)[2];
+end
+
+Form modifiedVariableFormTwo type printForm
+	{formSize=[10,20]}//0
+	field1 char(10) {modified = yes}; //0
+end
+
+Form modififedConstantFormOne type textForm
+	* {modified = "yes"}; //1
+end
+
+Form modifiedConstantFormTwo type textForm
+	* {modified = yes};//0
+end
+
+Form validationOrderFormOne type textForm
+	{field1{validationOrder = 1}, //0
+     formSize = [10, 20] //0
+	 }
+	field1 char(10);
+	field2 char(10); //0
+end
+
+Form validationOrderFormTwo type textForm
+	{field1{validationOrder = 1}, //0
+	 field2{validationOrder = 2}, //0
+	 formSize = [10, 20] //0
+	 }
+	field1 char(10);
+	field2 char(10); 
+end
+
+Form validationOrderFormThree type printForm
+	// Can't be on print form
+	{field1{validationOrder = 1}, //0
+	 formSize = [10, 20] //0
+	 }
+	field1 char(10);
+end
+
+Form validationOrderFormFour type textForm
+	{formSize = [10, 20] //0
+	 }
+	field1 char(10) {validationOrder = 1}; //0
+	field2 char(10) {validationOrder = 2}; //0
+	
+	// Must be an int
+	field3 char(10) {validationOrder = "a"}; //1
+	field4 char(10) {validationOrder = yes}; //1
+	field5 char(10) {validationOrder = 3.2}; //1
+end
+
+Form validationOrderFormFive type textForm
+	{ formSize = [10,20] //0
+	}
+	
+	// Can't be used on constant field
+	* {validationOrder = 1}; //0
+end
+
+Form validationOrderFormSix type textForm
+	{formSize = [10, 20] //0
+	 }
+	field1 char(10){validationOrder = 1};//0
+	
+
+	field2 char(10); //0
+end
+
+
+Form formSizeFormOne type printForm //1
+	{}
+	field1 char(10);
+	field2 char(10); 
+end
+
+Form currencyFieldTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 char(10) {currency = yes}; //1
+	field2 int {currency = yes}; //0
+	field3 int {currency = "yes"}; //1
+	field4 int {currency = "bob"}; //1
+	field5 int {currency = no}; //0
+end
+
+Form currencySymbolFieldTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// String, max of 3 characters
+	field1 char(10) {currencySymbol = "USA"}; //1
+	field2 int {currencySymbol = "USA"}; //0
+	field3 int {currencySymbol = "USA1"}; //1 exceeds the maximum length
+	field4 int {currencySymbol = "USA1"}; //1
+	field6 int {currencySymbol = "USA"}; //0
+	field7 int {currencySymbol = USA}; //1
+	field8 int {currencySymbol = "USAF"}; //1
+end
+
+Form fillcharacterFieldTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// nullFill enumeration or a single quoted character
+	field1 char(10) {fillCharacter = "USA"}; //1
+	field2 char(10) {fillCharacter = "A"}; //0
+	field3 int {fillCharacter = "A"}; //0
+	field4 char(10) {fillCharacter = ""}; //0
+
+	field6 char(10) {fillCharacter = A}; //1
+	field7 char(10) {fillCharacter = nullFill};//0
+	field8 char(10) {fillCharacter = strLib.nullFill};//0
+	field9 char(10) {fillCharacter = egl.core.StrLib.nullFill};//0
+	field10 char(10) {fillCharacter = "nullFill"};//1
+end
+
+Form fillFieldTestForm type TEXTFORM
+	{field8{fill = yes}, //0
+	 field9{fill = "no"} //1
+	 }
+	{formSize = [10, 20]} //0
+	field1 char(10) {fill = yes}; //0
+	field2 char(10) {fill = no}; //0
+//	field3 int {fill = booleankind.yes}; //0
+//	field4 char(10) {fill = egl.core.booleankind.no}; //0
+
+	field6 char(10) {fill = bob}; //1
+	field7 char(10) {fill = "yes"}; //1
+	field8 char(10);
+	field9 char(10);
+end
+
+Form dateFormatFieldTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// enumeration or a quoted string pattern
+	field1 char(10){ dateFormat = isoDateFormat }; //0
+	field2 char(10){ dateFormat = usaDateFormat }; //0
+	field3 char(10){ dateFormat = eurDateFormat }; //0
+	field4 char(10){ dateFormat = jisDateFormat }; //0 
+	field5 char(10){ dateFormat = defaultDateFormat }; //0
+	field6 char(10){ dateFormat = systemGregorianDateFormat }; //0
+	field7 char(8){ dateFormat = systemJulianDateFormat }; //0 
+	field9 char(10){ dateFormat = "abc" }; //0
+	field10 char(10){ dateFormat = strlib.jisDateFormat }; //0
+	field11 char(10){ dateFormat = egl.core.strlib.jisDateFormat }; //0
+	field12 char(10){ dateFormat = jisdateFormat }; //0
+	field13 char(4){dateFormat = systemJulianDateFormat}; //1 Property: dateFormat.  The value systemJulianDateFormat for property dateFormat in field13 requires the fieldLen property or primitive length to be either 6 or 8 for fields of type char.
+	field14 char(4){dateFormat = systemGregorianDateFormat}; //1
+	field15 char(4){dateFormat = jisDateFormat }; //0
+	field16 char(10){dateFormat = abcdefg }; // 1
+end
+
+Form timeFormatFieldTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// enumeration or a quoted string
+	field1 char(10){ timeFormat = isoTimeFormat }; //0
+	field2 char(10){ timeFormat = usaTimeFormat }; //0
+	field3 char(10){ timeFormat = eurTimeFormat }; //0
+	field4 char(10){ timeFormat = jisTimeFormat }; //0
+	field5 char(10){ timeFormat = defaultTimeFormat }; //0
+	field6 char(10){ timeFormat = "abc" }; //0
+	field7 char(10){ timeFormat = strlib.jisTimeFormat }; //0
+	field8 char(10){ timeFormat = egl.core.strlib.jisTimeFormat }; //0
+	field9 char(10){ timeFormat = jistimeFormat }; //0
+	field10 char(4){ timeFormat = jisTimeFormat }; //0
+	field11 char(10){ timeFormat = abcdefg }; // 1
+end
+
+Form timeStampFormatTestForm type TEXTFORM 
+	{formSize = [10, 20]} //0
+	field1 timeStamp{ timeStampFormat = db2TimeStampFormat }; //0
+	field2 timeStamp{ timeStampFormat = odbcTimeStampFormat }; //0
+	field3 timeStamp{ timeStampFormat = "abc" }; //0
+	field4 char(26){ timeStampFormat = db2TimeStampFormat}; //1 timeStampFormat is only valid for primitive type timeStamp
+	field5 char(26){ timeStampFormat = odbcTimeStampFormat}; //1 timeStampFormat is only valid for primitive type timeStamp
+	field6 char(26){ timeStampFormat = defaultTimeStampFormat }; //1 timeStampFormat is only valid for primitive type timeStamp
+	field7 char(26){ timeStampFormat = bob }; //1
+	field8 char(26){ timeStampFormat = abcdefg }; // 1
+end
+
+Form fieldLenDateTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 date{ dateFormat = usaDateFormat, fieldLen = 5}; //1 Property: fieldLen.  The value for this property for field field1 is invalid. For char and mbchar types, the value must match the primitive length.  For dbchar, it must match the bytes.  It must be an integer that is the number of bytes needed to display the largest number in the type declaration with all formatting characters.
+	field2 date{ dateFormat = isoDateFormat, fieldLen = 5}; //1
+	field3 date{ dateFormat = eurDateFormat, fieldLen = 5}; //1
+	field4 date{ dateFormat = jisDateFormat, fieldLen = 5}; //1
+	field5 date{ dateFormat = defaultDateFormat, fieldLen = 5}; //0
+	field6 date{ dateFormat = systemGregorianDateFormat, fieldLen = 10 }; //0
+	field7 date{ dateFormat = systemJulianDateFormat, fieldLen = 8 }; //0
+	field8 date{ dateFormat = "12345678901234567890", fieldLen = 5 }; //1
+	field9 date{ fieldlen = 8 }; //0 
+	field10 date{ dateFormat = usaDateFormat, fieldLen = 10}; //0
+	field11 date{ dateFormat = usaDateFormat, fieldLen = ["1"]}; //1	
+end
+
+Form fieldLenTimeTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 time{ timeFormat = usatimeFormat, fieldLen = 5}; //1
+	field2 time{ timeFormat = isotimeFormat, fieldLen = 5}; //1
+	field3 time{ timeFormat = eurtimeFormat, fieldLen = 5}; //1
+	field4 time{ timeFormat = jistimeFormat, fieldLen = 5}; //1
+	field5 time{ timeFormat = defaulttimeFormat, fieldLen = 5}; //0
+	field6 time{ timeFormat = "12345678901234567890", fieldLen = 5 }; //1
+	field7 time{ fieldlen = 8 }; //0 
+end
+
+Form fieldLenTimeStampTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 timeStamp{ timeStampFormat = db2StampFormat, fieldLen = 5}; //1
+	field2 timeStamp{ timeStampFormat = odbctimeStampFormat, fieldLen = 5}; //1
+	field3 timeStamp{ timeStampFormat = odbctimeStampFormat, fieldLen = 26}; //0
+	field4 timeStamp{ timeStampFormat = defaulttimeStampFormat, fieldLen = 5}; //0
+	field5 timeStamp{ timeStampFormat = "12345678901234567890", fieldLen = 5 }; //1
+	field6 timeStamp{ fieldlen = 8 }; //0 
+	field7 timeStamp{ fieldlen = 26 }; //0 
+end
+
+Form fieldLenIntervalTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 date{ timeStampFormat = db2TimeStampFormat, fieldLen = 5}; //1
+	field2 time{ timeStampFormat = odbctimeStampFormat, fieldLen = 5}; //1
+	field3 char(26){ timeStampFormat = odbctimeStampFormat, fieldLen = 26}; //1
+	field3a char(26){ timeStampFormat = odbctimeStampFormat, fieldLen = 23}; //2
+	field5 char(26){ timeStampFormat = defaultTimestampFormat}; //1
+	field6 char(26){ timeStampFormat = "12345678901234567890" }; //1
+end 
+
+Form fieldLenCharTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 char(10){ fieldLen = 5}; //1
+	field2 char(10){ fieldLen = 10}; //0
+	field3 interval("yyyyMM") {fieldlen = 10}; //1 interval is not a valid type
+	field4 interval ("yymm") {fieldlen = 3}; //1 interval is not a valid type
+	field5 interval; //1 interval is not a valid type
+	field6 interval ("yymm");//1 interval is not a valid type
+end
+
+Form fieldLenMBCharTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 mbchar(10){ fieldLen = 5}; //1
+	field2 mbchar(10){ fieldLen = 10}; //0
+end
+
+Form fieldLenDBCharTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 dbchar(10){ fieldLen = 5}; //1
+	field2 dbchar(10){ fieldLen = 20}; //0
+end
+
+Form colorVariableTestForm type TEXTFORM
+	// enumeration only
+	{field4[1]{color = red}, //0
+	 field4[2]{color = tom}, //1
+	 field4[3]{color = "red"} //1
+	}
+	{formSize = [10, 20]} //0
+	field1 char(10){ color = red }; //0
+	field2 char(10){ color = colorkind.red }; //0
+	field3 char(10){ color = egl.ui.colorkind.red }; //0
+	field4 char(10)[4];
+	field5 char(10){ color = tom}; //1
+	field6 char(10){ color = "red" }; //1
+	field7 char(10){ color = black }; //0
+end
+
+Form outlineTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// array of enumeration types
+	{field9[1]{outline = [box]}, //0
+  	 field9[2]{outline = tom}, //1
+	 field9[3]{outline = "box"}, //1
+	 field9[4]{outline = ["top", "bottom"]} //1
+	}
+	field1 char(10){outline = [box]}; //0
+	field2 char(10){outline = "box"}; //1
+	field3 char(10){outline = tom}; //1
+	field4 char(10){outline = []}; //0
+	field5 char(10){outline = [top, bottom, left, right]}; //0
+	field6 char(10){outline = [top, top]}; //0
+	field7 char(10){outline = [bob]}; //1
+	field8 char(10){outline = ["top"]}; //1
+	field9 char(10)[4];
+	field10 char(10){outline = [top, bob]};//2
+	field11 char(10){outline = outlinekind.top};//1
+	field12 char(10){outline = egl.core.outlinekind.top};//1
+	field13 char(10){outline = [outlinekind.top, outlinekind.bottom]};//0
+
+
+
+	field17 char(10){outline = [nooutline]};//0
+
+
+	field20 char(10){outline = ["top", "bottom"]};//1
+	field21 char(10){outline = ["a"+"b"]};//1
+end
+
+Form alignTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// align enumeration only
+	field1 char(10){align = center}; //0
+	field2 char(10){align = left}; //0
+	field3 char(10){align = none}; //0
+	field4 char(10){align = right}; //0
+	field5 char(10){align = alignKind.left}; //0
+	field6 char(10){align = egl.ui.alignkind.right }; //0
+	field7 char(10){align = "left"}; //1
+	field8 char(10){align = ["left"]}; //1
+	field9 char(10){align = tom}; //1
+end
+
+Form highlightVariableTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// enumeration only
+	{field12[1]{highlight = blink}, //0
+  	 field12[2]{highlight = tom}, //1
+	 field12[3]{highlight = "blink"}, //1
+	 field12[4]{highlight = ["blink"]} //1 
+	}
+	field1 char(10){highlight = blink}; //0
+	field2 char(10){highlight = noHighlight}; //0
+	field3 char(10){highlight = reverse}; //0
+	field4 char(10){highlight = underline}; //0
+	field5 char(10){highlight = "box"}; //1
+	field6 char(10){highlight = tom}; //1
+	field7 char(10){highlight = []}; //1
+	field8 char(10){highlight = highlightkind.blink}; //0
+	field9 char(10){highlight = egl.ui.highlightkind.blink}; //0
+	field10 char(10){highlight = ["blink"]}; //1
+	field12 char(10)[4];
+	field13 char(10){highlight = "egl.ui.highlightkind.blink"}; //1
+end
+
+Form highlightVariablePrintTestForm type PrintForm
+	{formSize = [10, 20]} //0
+	{field3[1]{highlight = highlightkind.underline},//0
+	 field3[2]{highlight = highlightkind.blink} //0
+	 }
+	
+	field1 char(10){position=[1,1], highlight = highlightkind.underline}; 	//0
+	field2 char(10){position=[2,1], highlight = highlightkind.blink}; 		//1 Property: highlight.  The value for this property for field field2 in form highlightVariablePrintTestForm is invalid. For print forms, underline is the only valid value for highlight.
+	field3 char(10)[2] {position=[3,1]};									//1 Property: highlight.  The value for this property for field field3 in form highlightVariablePrintTestForm is invalid. For print forms, underline is the only valid value for highlight.
+end
+
+Form intensityVariableTestForm type TEXTFORM
+	{field12[1]{intensity = dim}, //0
+  	 field12[2]{intensity = tom}, //1
+	 field12[3]{intensity = "dim"}, //1
+	 field12[4]{intensity = ["dim"]} //1
+	}
+	{formSize = [10, 20]} //0
+	field1 char(10){intensity = bold}; //0
+	field2 char(10){intensity = dim}; //0
+	field3 char(10){intensity = invisible}; //0
+	field4 char(10){intensity = normalIntensity}; //0
+	field5 char(10){intensity = "bold"}; //1
+	field6 char(10){intensity = tom}; //1
+	field7 char(10){intensity = []}; //1
+	field8 char(10){intensity = intensityKind.dim}; //0
+	field9 char(10){intensity = egl.ui.intensityKind.invisible}; //0
+	field10 char(10){intensity = ["bold"]}; //1
+	field12 char(10)[4];
+	field13 char(10){intensity = "egl.ui.intensityKind.invisible"}; //1
+end
+
+Form protectVariableTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// enumeration only
+	{field10[1]{protect = skipProtect}, //0
+  	 field10[2]{protect = tom} //1
+//	 field10[3]{protect = "skipProtect"}, //1
+//	 field10[4]{protect = ["skipProtect"]} //1
+	}
+	field1 char(10){protect = skipProtect}; //0
+	field2 char(10){protect = protect}; //0
+	field3 char(10){protect = noProtect}; //0
+//	field4 char(10){protect = "skipProtect"}; //1
+	field5 char(10){protect = tom}; //1
+//	field6 char(10){protect = []}; //1
+	field7 char(10){protect = protectKind.skipProtect}; //0
+	field8 char(10){protect = noProtect}; //0
+//	field9 char(10){protect = ["skipProtect"]}; //1
+	field10 char(10)[4];
+//	field11 char(10){protect = "protect"}; //1
+end
+
+Form lineWrapVariableTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// Can only be linewrap enumeration values
+	field1 char(10){lineWrap = compress}; //0
+	field2 char(10){lineWrap = character}; //0
+	field3 char(10){lineWrap = word}; //0
+	field4 char(10){lineWrap = "compress"}; //1
+	field5 char(10){lineWrap = tom}; //1
+	field6 char(10){lineWrap = []}; //1
+	field7 char(10){lineWrap = linewrapkind.compress}; //0
+	field8 char(10){lineWrap = egl.ui.lineWRAPKIND.WORD}; //0
+	field9 char(10){lineWrap = ["compress"]}; //1
+end
+
+Form signVariableTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// numeric type only
+	// enumeration of leading, trailing, parens, none
+	field1 int{sign = leading}; //0
+	field2 int{sign = none}; //0
+	field3 int{sign = parens}; //0
+	field4 int{sign = trailing}; //0
+	field5 int{sign = "leading"}; //1
+	field6 int{sign = tom}; //1
+	field7 int{sign = []}; //1
+	field8 int{sign = signKind.parens}; //0
+	field9 int{sign = egl.ui.signkind.TRAILING}; //0
+	field10 int{sign = ["leading"]}; //1
+end
+
+Form indexOrientationVariableTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// across or down enumeration only
+	field1 char(10)[2]{indexOrientation = across}; //0
+	field2 char(10)[2]{indexOrientation = down}; //0
+	field3 char(10)[2]{indexOrientation = "across"}; //1
+	field4 char(10)[2]{indexOrientation = tom}; //1
+	field5 char(10)[2]{indexOrientation = []}; //1
+	field6 char(10)[2]{indexOrientation = indexorientationkind.across}; //0
+	field7 char(10)[2]{indexOrientation = egl.ui.text.indexorientationkind.across}; //0
+	field8 char(10)[2]{indexOrientation = ["across"]}; //1
+end
+
+Form screenSizesFormTest1 type TEXTFORM
+	{ formSize = [10, 20], //0
+  	  screenSizes = [[24,80]] } //0
+end
+
+Form screenSizesFormTest2 type TEXTFORM
+	{ formSize = [10, 20],  //0
+	  screenSizes = [24,80] } //1
+end
+
+Form screenSizesFormTest3 type TEXTFORM
+	{ formSize = [10, 20],  //0
+	  screenSizes = "abc" } //1
+end
+
+Form screenSizesFormTest4 type TEXTFORM
+	{ formSize = [10, 20],  //0
+	  screenSizes = [[24,80], [100,100]] } //0
+end
+
+Form screenSizesFormTest5 type TEXTFORM
+	{ formSize = [10, 20], // 0
+	  screenSizes = 24 //1
+	}
+end
+
+// ---------------------------------------------------
+// validatorDataTable:
+Form validatorDataTableTest1 type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 num(3){ validatorDataTable = TBLMVAL1 }; //0
+end
+DataTable TBLMVAL1 type matchValidTable
+	{contents = [["abc"]]} 
+	10 item1 char(10);
+end
+
+Form validatorDataTableTest2 type TEXTFORM	
+	{formSize = [10, 20]} //0
+	// Table is not resolved
+	field1 num(3){ validatorDataTable = TBLMVAL2 }; //1
+end
+DataTable TBLMVAL2 type matchValid //1
+	{contents = [["abc"]]} 
+	10 item1 char(10);
+end
+
+Form validatorDataTableTest3 type TEXTFORM
+	{formSize = [10, 20]} //0
+	field1 num(3){ validatorDataTable = TBLMVAL3 }; //0
+end
+DataTable TBLMVAL3 type matchValidTable
+	{contents = [["abc"]]} 
+	10 item1 char(10);
+end
+
+Form colorConstantTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	* { color = red }; //0
+	* { color = colorkind.red }; //0
+	* { color = egl.ui.colorkind.red }; //0
+	* { color = tom}; //1
+	* { color = "red" }; //1
+	* { color = black }; //0
+end
+
+Form outlineConstantTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// array of enumeration types or syslib.box
+	* {outline = [box]}; //0
+	* {outline = "box"}; //1
+	* {outline = tom}; //1 
+	* {outline = []}; //0
+	* {outline = [top, bottom, left, right]}; //0
+	* {outline = [top, top]}; //0
+	* {outline = [bob]}; //1
+	* {outline = ["top"]}; //1
+	* {outline = [top, bob]};//2
+	* {outline = outlinekind.top};//1
+	* {outline = egl.core.outlinekind.top};//1
+	* {outline = [outlinekind.top, outlinekind.bottom]};//0
+
+	* {outline = ["top", "bottom"]};//1
+end
+
+Form highlightConstantTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// enumeration only
+	* {highlight = blink}; //0
+	* {highlight = noHighlight}; //0
+	* {highlight = reverse}; //0
+	* {highlight = underline}; //0
+	* {highlight = "blink"}; //1
+	* {highlight = tom}; //1
+	* {highlight = []}; //1
+	* {highlight = highlightkind.blink}; //0
+	* {highlight = egl.ui.highlightkind.blink}; //0
+	* {highlight = ["blink"]}; //1
+end
+
+Form highlightConstantPrintForm type PrintForm
+	{formSize = [10, 20]} //0
+	* {position=[1,1], highlight = highlightkind.underline};//0
+	* {position=[2,1], highlight = highlightkind.blink};//1
+end
+
+Form intensityConstantTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	// enumeration only
+	* {intensity = bold}; //0
+	* {intensity = dim}; //0
+	* {intensity = invisible}; //0
+	* {intensity = normalintensity}; //0
+	* {intensity = "bold"}; //1
+	* {intensity = tom}; //1
+	* {intensity = []}; //1
+	* {intensity = intensitykind.dim}; //0
+	* {intensity = egl.ui.intensitykind.invisible}; //0
+	* {intensity = ["bold"]}; //1
+end
+
+Form valueVariableFormOne type TextForm
+	{formsize = [10,20], //0
+	  field4{value=123}, //0
+	  field3{value="123"}, //0
+	  field5[1]{value="123"},//0
+	  field9{value=123}, //0
+	  field9{align = center},//0
+	  field11[2]{value=123}//0
+	 }
+	 
+	 field1 char(10){ value = "123"}; //0
+	 
+	 // type is char, so value must be char
+	 field2 char(10){ value = 123}; //1 Property: value.  The value for this property for field field2 in valueVariableFormOne is invalid. The value must be a string literal.
+	 field3 char(10);
+	 field4 char(10);				//1 The value must be a string literal.
+	 field5 char(10)[2];
+	 field5a char(10) {value=bob};					//1
+	 // type is int, so value must be an int
+	 field6 int { value = 123 }; 					//0
+	 field7 int { value = "123" }; 					//1 Property: value.  This property requires an integer value. 
+	 field8 int { value = bob }; 					//1
+	 field8a int[3] {this[3] {value="123"}};		//1 Property: value.  This property requires an integer value. 
+	 
+	 field9 int { protect = protect}; //0
+	 field10 char(3)[2]{this[2]{value = "1234"}};	//1 The contents 1234 of the value property exceeds the maximum defined length of 3.
+	 field11 char(3)[2];						 	//1 The value must be a string literal.
+	 
+	 field12 num(17,2){fieldLen = 18, value = "123456789012345.78"};	//0
+	 field13 num(17,2)[2]{fieldLen = 18, value = "123456789012345.78"}; //0
+end
+
+FormGroup FormGroupOne
+	Form valueVariableFormOne type TextForm
+	{formsize = [25,25], //0
+	 screenSizes=[[25,25]],	//0
+	  field4{value=123}, //0
+	  field3{value="123"}, //0
+	  field5[1]{value="123"},//0
+	  field9{value=123}, //0
+	  field9{align = center},//0
+	  field11[2]{value=123}//0
+	 }
+ 
+	 field1 char(10){ position=[1,1], value = "123"}; //0
+	 
+	 // type is char, so value must be char
+	 field2 char(10){ position=[2,1], value = 123}; //1 The value must be a string literal.
+	 field3 char(10){ position=[3,1]};
+	 field4 char(10){ position=[4,1]};				//1 The value must be a string literal.
+	 field5 char(10)[2] {position=[5,1], indexOrientation=across, columns=2};
+	 
+	 // type is int, so value must be an int
+	 field6 int { position=[6,1], value = 123 };	//0
+	 field7 int { position=[7,1], value = "123" };	//1
+	 field8 int { position=[8,1], value = bob };	//1
+	 
+	 field9 int { position=[9,1], protect = protect};							//0
+	 field10 char(3)[2]{position=[10,1], this[2]{value = "1234"}, columns=2};	//1
+	 field11 char(3)[2]{position=[11,1], columns=2};							//1
+	 
+	 field12 num(17,2){position=[12,1], fieldLen = 18, value = "123456789012345.78"}; //0
+	 field13 num(17,2)[2]{position=[13,1], fieldLen = 18, value = "123456789012345.78"}; //0
+	end
+end
+
+Form valueConstantTestForm1 type TEXTFORM
+	{formSize = [10, 20]} //0
+	* {value = 123}; //1
+	* {value = "123"}; //0
+	* {value = bob } ; //1
+end
+
+Form valueConstantTestForm2 type TEXTFORM
+	{formsize = [24, 20]}
+ * { position = [23,1], fieldLen = 158, color = blue, highlight = noHighlight,  
+      intensity = normalIntensity, protect = skip,
+      value = "F1= Help      F2=          F3= Exit       F4=           F5=         F6=" //0
+             + "         F7=           F8=          F9=           F10=          F11=   "
+                + "     F12= Cancel"};
+end 
+
+Form protectConstantTestForm type TEXTFORM
+	{formSize = [10, 20]} //0
+	* {protect = skipProtect}; //0
+	* {protect = protect}; //0
+	* {protect = noProtect}; //1
+//	* {protect = "skipProtect"}; //1
+	* {protect = tom}; //1
+//	* {protect = []}; //1
+	* {protect = protectKind.skipProtect}; //0
+//	* {protect = noProtect}; //1
+//	* {protect = ["skipProtect"]}; //1
+	* {protect = protect}; //0
+end
+
+Form helpKeyForm1 type textForm
+	{formSize = [10, 20],
+	 helpKey = pf1 //0
+	 }
+end
+
+Form helpKeyForm2 type textForm
+	{formSize = [10, 20],
+	 helpKey = pfKeyKind.pf1 //0
+	 }
+end
+
+Form helpKeyForm3 type textForm
+	{formSize = [10, 20],
+	 helpKey = egl.ui.pfKeyKind.pf2 //0
+	 }
+end
+
+Form helpKeyForm4 type textForm
+	{formSize = [10, 20],
+	 helpKey = "pf1" //1
+	 }
+end
+
+Form helpKeyForm5 type textForm
+	{formSize = [10, 20],
+	 helpKey = ["pf1"] //1
+	 }
+end
+
+Form validationBypassKeysForm1 type textForm
+	{formSize = [10, 20],
+	 validationBypassKeys = [pf1] //0
+	 }
+end
+
+Form validationBypassKeysForm2 type textForm
+	{formSize = [10, 20],
+	 validationBypassKeys = [pfKeyKind.pf1, pfKeyKind.pf2] //0
+	 }
+end
+
+Form validationBypassKeysForm3 type textForm
+	{formSize = [10, 20],
+	 validationBypassKeys = [egl.ui.pfKeyKind.pf2] //0
+	 }
+end
+
+Form validationBypassKeysForm4 type textForm
+	{formSize = [10, 20],
+	 validationBypassKeys = [pf1] //0
+	 }
+end
+
+Form validationBypassKeysForm5 type textForm
+	{formSize = [10, 20],
+	 validationBypassKeys = ["pf1"] //1
+	 }
+end
+
+Form validationBypassKeysForm6 type textForm
+	{formSize = [10, 20],
+	 validationBypassKeys = "pf1" //1
+	 }
+end
+
+Form validationBypassKeysForm7 type textForm
+	{formSize = [10, 20],
+	 validationBypassKeys = ["pf1", "pf2"] //1
+	 }
+end
+
+
+Form aliasFormOne type textForm
+	{formSize = [10, 20]} //0
+	{ alias = "bob" } //0
+end
+
+Form aliasFormTwo type printForm
+	{formSize = [10, 20]} //0
+	{ alias = "bob" } //0
+end
+
+Form aliasFormThree type textForm
+	{formSize = [10, 20]} //0
+	{ alias = bob } //1
+end
+
+Form validatorDataTableMsgKeyOne type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { validatorDataTableMsgKey = "1234" }; // 0
+end
+
+Form validatorDataTableMsgKeyTwo type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { validatorDataTableMsgKey = [1234] }; // 1
+end
+
+Form inputRequiredMsgKeyOne type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { inputRequiredMsgKey = "1234" }; // 0
+end
+
+Form inputRequiredMsgKeyTwo type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { inputRequiredMsgKey = [1234] }; // 1
+end
+
+Form validValuesMsgKeyOne type TextForm
+	{formSize = [10, 20]} //0
+	field1 int { validValuesMsgKey = "1234" }; // 0
+end
+
+Form validValuesMsgKeyTwo type TextForm
+	{formSize = [10, 20]} //0
+	field1 int { validValuesMsgKey = [1234] }; // 1
+end
+
+Form typeChkMsgKeyOne type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { typeChkMsgKey = "1234" }; // 0
+end
+
+Form typeChkMsgKeyTwo type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { typeChkMsgKey = [1234] }; // 1
+end
+
+Form minimumInputMsgKeyOne type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { minimumInputMsgKey = "1234" }; // 0
+end
+
+Form minimumInputMsgKeyTwo type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { minimumInputMsgKey = [1234] }; // 1
+end
+
+Form minimumInputOne type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { minimumInput = 9 }; // 0
+	
+	// Too long - must be less than the number of positions
+	field2 char(10) { minimumInput = 11}; // 1
+	
+	// Must be an integer
+	field3 char(10) { minimumInput = "a" }; //1
+end
+
+Form validatorFunctionMsgKeyOne type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { validatorFunctionMsgKey = "1234" }; // 0
+end
+
+Form validatorFunctionMsgKeyTwo type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { validatorFunctionMsgKey = [1234] }; // 1
+end
+
+Form validatorFunctionOne type TextForm
+	{formSize = [10, 20]} //0
+	field1 char(10) { validatorFunction = bob }; // 0
+end
+
+Function bob()
+end
+
+Form validatorFunctionTwo type TextForm
+	{formSize = [10, 20]} //0
+	// must be a quoted string
+	field1 char(10) { validatorFunction = "bob" }; // 1
+end
+
+Form columnsVariableFormOne type textForm
+	{formSize = [10, 20] 
+	 }
+	 field1 char(10)[1]{columns = 1}; //0
+	 // Must be an integer
+	 field2 char(10)[1]{columns = "a"}; //1
+end
+
+Form columnsConstantFormOne type textForm
+	{formSize = [10,20]
+	}
+	// Can't be on a constant
+	* {columns = 1}; //0
+end
+
+Form linesBetweenRowsVariableFormOne type textForm
+	{formSize = [10, 20] 
+	 }
+	 field1 char(10)[1]{linesBetweenRows = 1}; //0
+	 // Must be an integer
+	 field2 char(10)[1]{linesBetweenRows = "a"}; //1
+end
+
+Form linesBetweenRowsConstantFormOne type textForm
+	{formSize = [10,20]
+	}
+	// Can't be on a constant
+	* {linesBetweenRows = 1}; //0
+end
+
+Form spacesBetweenColumnsVariableFormOne type textForm
+	{formSize = [10, 20] 
+	 }
+	 field1 char(10)[1]{spacesBetweenColumns = 1}; //0
+	 // Must be an integer
+	 field2 char(10)[1]{spacesBetweenColumns = "a"}; //1
+end
+
+Form spacesBetweenColumnsConstantFormOne type textForm
+	{formSize = [10,20]
+	}
+	// Can't be on a constant
+	* {spacesBetweenColumns = 1}; //0
+end
+
+Form positionVariableFormOne type textForm
+	// Must be an array of integers
+	{formSize = [10,20]}
+	field1 char(10) {position = [1,2]}; //0
+	field2 char(10) {position = ["1", "2"]}; //1
+	field3 char(10) {position = 1}; //1
+end
+
+Form AAA0MT14 type textForm
+ { screenSizes = [[24,80]], formSize = [2,79], position = [23,1]}
+
+  * { position = [1,1], fieldLen = 158, color = defaultColor,	//0
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "PF4  Pmpt    PF11 Apt     PF12 Exit    PF13 BoxS                               "
+            + "PF16 Date    PF17 OddSh   PF18 Supm    PF19 Copy    PF20 ShBill    PF23 AltPos"};
+end

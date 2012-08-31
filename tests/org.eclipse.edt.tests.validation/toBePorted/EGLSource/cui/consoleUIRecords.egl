@@ -1,0 +1,198 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program ConsoleUIRecords type basicProgram
+	myForm MyForm1 {name = "a"};
+	myWindow Window {
+		color = black,
+		commentLine = 5,
+		formLine = 6,
+		hasBorder = no,
+		hasCommentLine = yes,
+		highlight = [defaultHighlight], 
+		intensity = dim,
+		menuLine = 7,
+		messageLine = 8,
+		name = "aaa",
+		position = [4,6],
+		promptLine = 3,
+		size = [2,2]
+	};
+	myMenu Menu {
+		labelKey = "dd",
+		labelText = "dd",
+		menuItems = [new MenuItem {name="Cmd1", labelText="Command1"}]
+	};
+	myMenuItem MenuItem {
+		accelerators = ["accelerator"],
+		comment = "ddd",
+		commentKey = "aaa",
+		help = "aa",
+		helpMsgKey = "hh",
+		labelKey = "ss",
+		labelText = "gg",
+		name = "aa"
+	};
+		
+	myPrompt Prompt {
+		isChar = no,
+		message = "vvv",
+		messageKey = "a",
+		responseAttr = myPresentationAttributes		
+	};
+	
+	myPresentationAttributes PresentationAttributes {
+		color = cyan,
+		highlight = [nohighlight],
+		intensity = invisible};
+
+	function main()
+	end
+end
+
+record MyForm1 type consoleForm {formSize=[14,80]}
+	* ConsoleField {position = [1,1], value = "test"};
+	field1 ConsoleField {name = "field1", position = [2,1], fieldLen = 5, protect = YES};
+	field2 ConsoleField {name = "field2", position = [3,1], fieldLen = 5};
+	arrayField1 ConsoleField[3] {name = "arrayField1", position = [4,1], fieldLen = 40};
+	arrayField2 ConsoleField[3] {name = "arrayField2", position = [5,1], fieldLen = 10, protect = YES};
+	
+	myDict dictionary {field1 = field1, field2 = field2};
+	myArrayDict arrayDictionary {arrayField1 = arrayField1, arrayField2 = arrayField2};
+end
+
+record MyRecord type basicRecord
+	field1 char(5);
+	field2 char(5);
+	arrayField1 char(5)[3];
+	arrayField2 char(5)[3];
+end
+
+record MyForm2 type consoleForm {
+	delimiters = ",",
+	formSize = [20,40],
+	name = "nnn",
+	showBrackets = no}
+	
+	* ConsoleField {
+		align = AlignKind.center, 
+		autoNext = no, 
+		binding = "bindData",
+		caseFormat = CaseFormatKind.lower,
+		color = magenta,
+		comment = "ccc",
+		commentKey = "aa",
+		dataType = "string",
+		editor = "e",
+		fieldlen = 6,
+		help = "hh",
+		helpMsgKey = "hhh",
+		highlight = [HighlightKind.reverse],
+		initialValue = "gg",
+		initialValueKey = "gg",
+		inputRequired = yes,
+		intensity = IntensityKind.invisible,
+		isBoolean = no,
+		masked = yes,
+		minimumInput = 7,
+		name = "tt",
+		numericFormat = "aa",
+		pattern = "pp",
+		position = [4,5],
+		protect = yes,
+		segments = [[2,4,3],[3,3,7]],
+		sqlColumnName = "col",
+		timeFormat = "hhmmss",
+		timestampFormat = "tt",
+		validValues = [3,9],
+		value = "88",
+		verify = no};
+		
+	field2 ConsoleField {
+		align = AlignKind.none,
+		autoNext = no,
+		binding = "bindData",
+		caseFormat = CaseFormatKind.upper,
+		color = cyan,
+		comment = "jj",
+		commentKey = "ss",
+		dataType = "string",
+		editor = "d",
+		fieldlen = 7,
+		help = "s",
+		helpMsgKey = "hh",
+		highlight = [HighlightKind.underline],
+		initialValue = "oo",
+		initialValueKey = "q",
+		inputRequired = yes,
+		intensity = IntensityKind.invisible,
+		isBoolean = yes,
+		masked = no,
+		minimumInput = 8,
+		name = "qq",
+		numericFormat = "pp",
+		pattern = "ss",
+		position = [3,4],
+		protect = yes,
+		segments = [[3,4,2]],
+		sqlColumnName = "kk",
+		timeFormat = "hhmmss",
+		timestampFormat = "uu",
+		validValues = ["2","4"],
+		value = "abc",
+		verify = yes};
+		
+	arrayField1 ConsoleField[3] {
+		align = AlignKind.left,
+		autoNext = no,
+		binding = "bindData",
+		caseFormat = CaseFormatKind.upper,
+		color = blue,
+		columns = 2,
+		comment = "ee",
+		commentKey = "q",
+		dataType = "string",
+		dateFormat = "yymmdd",
+		editor = "w",
+		fieldlen = 5,
+		help = "h",
+		helpMsgKey = "hhh",
+		highlight = [HighlightKind.underline],
+		initialValue = "p",
+		initialValueKey = "o",
+		inputRequired = yes,
+		intensity = IntensityKind.normalIntensity,
+		isBoolean = no,
+		linesBetweenRows = 3,
+		masked = yes,
+		minimumInput = 9,
+		name = "nn",
+		numericFormat = "pp",
+		orientIndexAcross = yes,
+		pattern = "q",
+		position = [2,4],
+		protect = no,
+		segments = [[1,2,3]],
+		spacesBetweenColumns = 7,
+		sqlColumnName = "rr",
+		timestampFormat = "pp",
+		validValues = [2,8],
+		value = "abc",
+		verify = no};
+		
+	bindData bindRecord;
+end
+
+record BindRecord
+	field1 char(10);
+end

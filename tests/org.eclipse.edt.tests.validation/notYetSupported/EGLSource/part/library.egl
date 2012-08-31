@@ -1,0 +1,82 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+library ZMySource
+
+function arr (
+c char(0) in,// 2 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types |  The parameter c of type char for Function arr in Library ZMySource must specify a length  {5602,LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH}
+c1 char(0) out,// 1 The parameter c1 of type char for Function arr in Library ZMySource must specify a length  {5602,LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH}
+mbc mbChar(0) in,// 2 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types |  The parameter mbc of type mbChar for Function arr in Library ZMySource must specify a length  {5602,LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH}
+mbc1 mbChar(0) out,// 1 The parameter mbc1 of type mbChar for Function arr in Library ZMySource must specify a length  {5602,LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH}
+dbc dbChar in,// 2 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types |  The parameter dbc of type dbChar for Function arr in Library ZMySource must specify a length  {5602,LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH}
+dbc1 dbChar out,// 1 The parameter dbc1 of type dbChar for Function arr in Library ZMySource must specify a length  {5602,LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH}
+h hex in,// 2 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types |  The parameter h of type hex for Function arr in Library ZMySource must specify a length  {5602,LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH}
+h1 hex out,	// 1 The parameter h1 of type hex for Function arr in Library ZMySource must specify a length  {5602,LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH}
+xxx int field // 1 The parameter xxx for Function arr in Part ZMySource has an unsupported modifier - field  {5604, LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_SqlNullable_AND_FIELD}
+)
+end
+
+// sqlNullable not supported in edt
+function SqlNullableparam(
+b bigInt SqlNullable,//1  The parameter b of type bigInt for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+mbc mbChar(30) SqlNullable,//1   The parameter mbc of type mbChar for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+n num(5) SqlNullable,//1 The parameter n of type num for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+nc numc(5) SqlNullable,  //1 The parameter nc of type numc for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+pc pacf(5) SqlNullable,// 1 The parameter pc of type pacf for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+bi bin(4) SqlNullable,// 0
+bi2 bin (18)SqlNullable,// 1  The parameter bi2 of type bin for Function SqlNullableparam cannot be SqlNullable if bi2 contains decimals or has a length of 18 {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+bi3 bin (4,0) SqlNullable,// 0
+bi33 bin (4,2) SqlNullable// 1 The parameter bi33 of type bin for Function SqlNullableparam cannot be SqlNullable if bi33 contains decimals or has a length of 18 {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+)
+end
+
+
+
+library ZMyNativeLib type NativeLibrary 
+i int;// 1  The declaration i cannot occur in Library ZMyNativeLib.  Declarations are not allowed in a native or serviceBinding library {5615, NATIVE_LIBRARYS_DO_NOT_SUPPORT_DECLARATIONS}
+const j int = 5;// 1  The constant declaration j cannot occur in Library ZMyNativeLib.  Constant declarations are not allowed in a native or serviceBinding library{5614, NATIVE_LIBRARYS_DO_NOT_SUPPORT_CONSTANT_DECLARATIONS}
+function numberfunc (f number)// 1 The type number for parameter f of Function numberfunc in Library ZMyNativeLib is invalid {5603, LIBRARY_PARAMETER_TYPES_NUMBER_IS_INVALID}
+end
+function arr (
+a any in,
+ints int[], // 1 The parameter ints for Function arr in Library ZMyNativeLib cannot be an array in a native library {5606, NATIVE_LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_ARRAYS}
+m Zmyrec, // 1  The parameter m for Function arr in Library ZMyNativeLib cannot be a record in a native library {5608, NATIVE_LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_RECORDS}
+f Zmyform, // 1  The parameter f for function arr must be a reference type or one of the following types: record, data item, dictionary, arrayDictionary, presentationAttributes
+xxx int field, // 1 The parameter xxx for Function arr in Part ZMyNativeLib has an unsupported modifier - field  {5604, LIBRARY_FUNCTION_PARAMETERS_DO_NOT_SUPPORT_SqlNullable_AND_FIELD}
+dfg Zyyyy // 1   The parameter dfg for function arr must be a reference type or one of the following types: record, data item, dictionary, arrayDictionary, presentationAttributes
+)
+const i int = 5;// 1  The constant declaration i cannot occur in Function arr.  Constant declarations are not allowed in a native library		 {5611, NATIVE_LIBRARY_FUNCTIONS_DO_NOT_SUPPORT_CONSTANT_DECLARATIONS}
+jj int = 5;// 1   The declaration jj cannot occur in Function arr.  Declarations are not allowed in a native library {5613, NATIVE_LIBRARY_FUNCTIONS_DO_NOT_SUPPORT_DECLARATIONS}
+noparam();// 1  Statements are not allowed in a native library {5612, NATIVE_LIBRARY_FUNCTIONS_DO_NOT_SUPPORT_STATEMENTS}
+
+end
+
+function noparam()
+end
+
+function returnsprogram ()returns (Zyyyy) // 1  The return Zyyyy for function returnsprogram must be a reference type or one of the following types: data item, dictionary, arrayDictionary {4914, FUNCTION_RETURN_HAS_INCORRECT_TYPE}
+end
+
+// sqlNullable not supported in edt
+function SqlNullableparam(
+b bigInt SqlNullable,//1  The parameter b of type bigInt for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+mbc mbChar(30) SqlNullable,//1   The parameter mbc of type mbChar for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+n num(5) SqlNullable,//1 The parameter n of type num for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+nc numc(5) SqlNullable,  //1 The parameter nc of type numc for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+pc pacf(5) SqlNullable,// 1 The parameter pc of type pacf for Function SqlNullableparam cannot be SqlNullable {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+bi bin(4) SqlNullable,// 0
+bi2 bin (18)SqlNullable,// 1  The parameter bi2 of type bin for Function SqlNullableparam cannot be SqlNullable if bi2 contains decimals or has a length of 18 {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+bi3 bin (4,0) SqlNullable,// 0
+bi33 bin (4,2) SqlNullable// 1 The parameter bi33 of type bin for Function SqlNullableparam cannot be SqlNullable if bi33 contains decimals or has a length of 18 {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+)
+end
+
+end

@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Record sqlRec type SQLRecord
+	dItemA1 unicode(4) {sqlDataCode = 384};
+	dItemA2 unicode(4) {sqlDataCode = 385};
+	dItemA3 unicode(4) {sqlDataCode = 388};
+	dItemA4 unicode(4) {sqlDataCode = 389};
+	dItemA5 unicode(4) {sqlDataCode = 392};
+	dItemA6 unicode(4) {sqlDataCode = 393};
+	
+	dItemB1 char(4) {sqlDataCode = 384};
+	dItemB2 char(4) {sqlDataCode = 385};
+	dItemB3 char(4) {sqlDataCode = 388};
+	dItemB4 char(4) {sqlDataCode = 389};
+	dItemB5 char(4) {sqlDataCode = 392};
+	dItemB6 char(4) {sqlDataCode = 393};
+end

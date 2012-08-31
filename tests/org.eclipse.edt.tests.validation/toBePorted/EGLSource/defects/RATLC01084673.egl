@@ -1,0 +1,98 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * When this defect was written, setLocale could only be used in three places:
+ * 1. A function that's in a PageHandler
+ * 2. A validator function of a UI record, but only if the UI record's runValidatorFromProgram property is set to no
+ * 3. A validator function of a UI record's item, but only if the item's runValidatorFromProgram property is set to no
+ * Since then, it was decided that the function is allowed anywhere.
+ */
+
+function externalFunc()		//0
+	setLocale( "1", "2" );	//0
+end							//0
+
+Program webTransaction type vgwebtransaction
+	{includeReferencedFunctions = yes}
+	function main()
+		setLocale( "1", "2" );	//0
+	
+		externalFunc();			//0
+	end
+end
+
+Program basicProgram type basicProgram
+	{includeReferencedFunctions = yes}
+	function main()
+		setLocale( "1", "2" );	//0
+	
+		externalFunc();			//0
+	end
+end
+
+Library mylibrary
+	{includeReferencedFunctions = yes}
+	function main()
+		setLocale( "1", "2" );	//0
+	
+		externalFunc();			//0
+	end
+end
+
+handler myPage type JSFHandler
+	{includeReferencedFunctions = yes}
+	function main()
+		setLocale( "1", "2" );	//0
+	
+		externalFunc();			//0
+	end
+end
+
+Program vgPgm type vgWebTransaction
+	uiRecord1 uiRecord1;	//0
+	uiRecord2 uiRecord2;	//0
+	uiRecord3 uiRecord3;	//0
+	uiRecord4 uiRecord4;	//0
+end
+
+Record uiRecord1 type vgUIRecord {
+	runValidatorFromProgram = yes,
+	validatorFunction = externalFunc }		//0
+	10 item1 char(4) {							//0
+		runValidatorFromProgram = no,			//0
+		validatorFunction = externalFunc};	//0
+end
+
+Record uiRecord2 type vgUIRecord {
+	runValidatorFromProgram = no,
+	validatorFunction = externalFunc }		//0
+	10 item1 char(4) {							//0
+		runValidatorFromProgram = no,			//0
+		validatorFunction = externalFunc};	//0
+end
+
+Record uiRecord3 type vgUIRecord {
+	runValidatorFromProgram = no,
+	validatorFunction = externalFunc }					//0
+	10 item1 char(4) {										//0
+		runValidatorFromProgram = yes,						//0
+	    validatorFunction = externalFunc};				//0
+end
+
+Record uiRecord4 type vgUIRecord {
+	runValidatorFromProgram = yes,
+	validatorFunction = externalFunc }					//0
+	10 item1 char(4) {										//0
+		runValidatorFromProgram = yes,						//0
+	    validatorFunction = externalFunc};				//0
+end

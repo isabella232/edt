@@ -1,0 +1,58 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program RATLC01083520 type BasicProgram
+	function main()
+		 
+		cRec, dRec ComplexFixedRecord02 ;
+		cRec = dRec ;
+		if ( cRec == dRec ) ;	//1 Records can only be compared to null
+		end
+	end	
+end
+
+Record ComplexFixedRecord02
+	10 item04 char(40);
+		20 subItem02 char(20);
+			30 subSubItem01 int[5];
+		20 subItem04 int[5];
+end
+
+program RATLC01083423 type BasicProgram
+    flexRecord1 FlexibleRecord01;
+    results int;
+	
+	function main()
+		flexRecord1.item1 = "TestIn";
+		flexRecord1.item2.item1 = nil;
+		
+        if ( flexRecord1.item1 == "TestIn" )	//1 Records can only be compared to null
+            results = 1;
+        else
+            results = 0;
+        end		    	        
+	end
+	
+end
+
+Record FixedRecord01 type basicRecord
+	10 item1 char(10);
+end
+
+Record FlexibleRecord02 type basicRecord
+	item1 Window;
+end
+
+Record FlexibleRecord01 type basicRecord
+	item1 FixedRecord01;
+	item2 FlexibleRecord02;
+end

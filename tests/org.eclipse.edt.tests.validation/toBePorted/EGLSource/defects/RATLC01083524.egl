@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * Validation not catching reference incompatiblity when in or out options
+ * specified with fixed record.  In the example below, aSub would be tagged
+ * by validation if the parm modified was inOut. No tag is being given if
+ * in or out are specifed. JavaGen is building a program that will not compile.
+ */
+
+
+program RATLC01083524 
+	function main()
+		aRec RATLC01083524SuperFix ;
+		aSub ( aRec.aFix ) ;
+ 	end	
+ 	
+	function aSub( aRec RATLC01083524Fix in )
+		aRec.item04 = "abc" ;
+	end
+end
+
+Record RATLC01083524Fix
+	10 item04 char(40);
+end
+
+Record RATLC01083524SuperFix
+	10 aFix RATLC01083524Fix ;
+end

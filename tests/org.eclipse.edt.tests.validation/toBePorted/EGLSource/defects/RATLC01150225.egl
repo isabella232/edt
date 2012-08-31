@@ -1,0 +1,56 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+handler TestPage type JSFHandler
+	{onConstructionFunction = onConstruction,
+ 	 view = "TestPage.jsp"} 
+
+	// Function Declarations
+	function onConstruction()
+	J2EELib.clearEGLSessionAttrs();//0
+	J2EELib.clearApplicationAttr("sss");//0
+	J2EELib.clearRequestAttr("sss");//0
+	J2EELib.clearSessionAttr("ssss");//0
+	J2EELib.getQueryParameter("wwww");//0
+	result any;
+	J2EELib.getRequestAttr("sss",result );//0
+	J2EELib.getRequestAttr("aaaa");//0
+	J2EELib.getSessionAttr("www",result);//0
+	J2EELib.getSessionAttr("eeee");//0
+	J2EELib.getApplicationAttr("wwww");//0
+	J2EELib.setApplicationAttr("eeee",result);//0
+	J2EELib.setRequestAttr("qqqq",result);//0
+	J2EELib.setSessionAttr("rrrr","wwww");//0
+	end
+	
+
+
+		
+end
+
+program TestProgram 
+function main ()
+	J2EELib.clearEGLSessionAttrs();//0 
+	J2EELib.clearApplicationAttr("sss");//0 
+	J2EELib.clearRequestAttr("sss");//0 
+	J2EELib.clearSessionAttr("ssss");//0 
+	J2EELib.getQueryParameter("wwww");//0 
+	result any;
+	J2EELib.getRequestAttr("sss",result );//0 
+	J2EELib.getRequestAttr("aaaa");//0 
+	J2EELib.getSessionAttr("www",result);//0 
+	J2EELib.getSessionAttr("eeee");//0 
+	J2EELib.getApplicationAttr("wwww");//0 
+	J2EELib.setApplicationAttr("eeee",result);//0 
+	J2EELib.setRequestAttr("qqqq",result);//0 
+	J2EELib.setSessionAttr("rrrr","wwww");//0 
+end
+end

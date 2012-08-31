@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program convertEncoded
+	function main()
+		ch char(4);
+		dbch dbchar(4);
+		mbch mbchar(4);
+		str string;
+		
+		str = convertEncodedTextToString(ch, str);
+		str = convertEncodedTextToString(dbch, str);
+		str = convertEncodedTextToString(mbch, str);
+		
+		convertStringToEncodedText(str, str, ch);
+		convertStringToEncodedText(str, str, dbch);
+		convertStringToEncodedText(str, str, mbch);
+		
+		str = SysLib.convertEncodedTextToString(ch, str);
+		str = SysLib.convertEncodedTextToString(dbch, str);
+		str = SysLib.convertEncodedTextToString(mbch, str);
+		
+		SysLib.convertStringToEncodedText(str, str, ch);
+		SysLib.convertStringToEncodedText(str, str, dbch);
+		SysLib.convertStringToEncodedText(str, str, mbch);
+	end
+end

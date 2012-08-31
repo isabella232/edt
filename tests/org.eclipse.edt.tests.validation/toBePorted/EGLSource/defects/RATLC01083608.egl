@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record  record1  Type  VGUIRecord								//0
+	10 inputitem1 char(10) {uiType=input, validationOrder=2}; 	//0
+	10 inputitem2 char(10) {uiType=input, validationOrder=1}; 	//0
+	10 inputitem3 char(10) {uiType=input, validationOrder=4}; 	//0
+	10 inputitem4 char(10) {uiType=input, validationOrder=3}; 	//0
+end
+
+Record  record2  Type  VGUIRecord								//0
+	10 inputitem1 char(10) {uiType=input, validationOrder=2}; 	//0
+	10 inputitem2 char(10) {uiType=input, validationOrder=1}; 	//0
+	10 inputitem3 char(10) {uiType=input};					 	//0
+	10 inputitem4 char(10) {uiType=input, validationOrder=3}; 	//0
+end
+
+Record  record3  Type  VGUIRecord								//0
+	10 inputitem1 char(10) {uiType=input, validationOrder=2}; 	//0
+	10 inputitem2 char(10) {uiType=input, validationOrder=1}; 	//0
+	10 inputitem3 char(10) {uiType=input, validationOrder=4}; 	//0
+	10 inputitem4 char(10) {uiType=input};					 	//0
+end
+
+Record  record4  Type  VGUIRecord								//0
+	10 inputitem1 char(10) {uiType=input, validationOrder=2}; 	//0
+	10 inputitem2 char(10) {uiType=input, validationOrder=5}; 	//0
+	10 inputitem3 char(10) {uiType=input, validationOrder=4}; 	//0
+	10 inputitem4 char(10) {uiType=input, validationOrder=3}; 	//0
+end
+
+Record  record5  Type  VGUIRecord								//1
+	10 inputitem1 char(10) {uiType=input, validationOrder=1}; 	//0
+	10 inputitem2 char(10) {uiType=input, validationOrder=1}; 	//0
+end
+
+Form form1  Type  TextForm {formSize=[20,40]}	//0
+	inputitem1 char(10) {validationOrder=2}; 	//0
+	inputitem2 char(10) {validationOrder=1}; 	//0
+	inputitem3 char(10) {validationOrder=4}; 	//0
+	inputitem4 char(10) {validationOrder=3}; 	//0
+end
+
+Form form2  Type  TextForm {formSize=[20,40]}	//0
+	inputitem1 char(10) {validationOrder=2}; 	//0
+	inputitem2 char(10) {validationOrder=1}; 	//0
+	inputitem3 char(10) {};						//0
+	inputitem4 char(10) {validationOrder=3}; 	//0
+end
+
+Form form3  Type  TextForm {formSize=[20,40]}	//0
+	inputitem1 char(10) {validationOrder=2}; 	//0
+	inputitem2 char(10) {validationOrder=1}; 	//0
+	inputitem3 char(10) {validationOrder=4}; 	//0
+	inputitem4 char(10) {};						//0
+end
+
+Form form4  Type  TextForm {formSize=[20,40]}	//0
+	inputitem1 char(10) {validationOrder=2}; 	//0
+	inputitem2 char(10) {validationOrder=5}; 	//0
+	inputitem3 char(10) {validationOrder=4}; 	//0
+	inputitem4 char(10) {validationOrder=3}; 	//0
+end
+
+Form form5  Type  TextForm {formSize=[20,40]}	//1
+	inputitem1 char(10) {validationOrder=1}; 	//0
+	inputitem2 char(10) {validationOrder=1}; 	//0
+end

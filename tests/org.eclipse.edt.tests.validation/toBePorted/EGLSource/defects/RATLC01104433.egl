@@ -1,0 +1,182 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR VAG
+
+Record VAGen_#UI-CHARS2@3#4$ type VGUIRecord  {
+  alias = "#UI-CHARS2@3#4$", 
+  commandValueItem = VAGen_#ITEM3#,
+  title = "Test Special Characters"
+  }
+  3 ITEM1-DASH char(3) 
+    { uiType = inputOutput,
+      displayName = "item1"
+    } ; 
+  3 VAGen_@ITEM2@ char(3) 
+    { uiType = inputOutput, alias = "@ITEM2@",
+      displayName = "item2"
+    } ; 
+  3 VAGen_#ITEM3# char(3) 
+    { uiType = inputOutput, alias = "#ITEM3#",
+      displayName = "item3"
+    } ; 
+  3 $ITEM4$ char(3) 
+    { uiType = inputOutput,
+      displayName = "item4"
+    } ; 
+  3 ABSTRACT char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_BOOLEAN char(3) 
+    { uiType = output, alias = "BOOLEAN"
+    } ; 
+  3 BREAK char(3) 
+    { uiType = output
+    } ; 
+  3 BYTE char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_CASE char(3) 
+    { uiType = output, alias = "CASE"
+    } ; 
+  3 CATCH char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_CHAR char(3) 
+    { uiType = output, alias = "CHAR"
+    } ; 
+  3 CLASS char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_CONST char(3) 
+    { uiType = output, alias = "CONST"
+    } ; 
+  3 VAGen_CONTINUE char(3) 
+    { uiType = output, alias = "CONTINUE"
+    } ; 
+  3 VAGen_DEFAULT char(3) 
+    { uiType = output, alias = "DEFAULT"
+    } ; 
+  3 DO char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_DOUBLE char(3) 
+    { uiType = output, alias = "DOUBLE"
+    } ; 
+  3 VAGen_ELSE char(3) 
+    { uiType = output, alias = "ELSE"
+    } ; 
+  3 VAGen_EXTENDS char(3) 
+    { uiType = output, alias = "EXTENDS"
+    } ; 
+  3 VAGen_FALSE char(3) 
+    { uiType = output, alias = "FALSE"
+    } ; 
+  3 FINAL char(3) 
+    { uiType = output
+    } ; 
+  3 FINALLY char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_FLOAT char(3) 
+    { uiType = output, alias = "FLOAT"
+    } ; 
+  3 VAGen_FOR char(3) 
+    { uiType = output, alias = "FOR"
+    } ; 
+  3 VAGen_GOTO char(3) 
+    { uiType = output, alias = "GOTO"
+    } ; 
+  3 VAGen_IF char(3) 
+    { uiType = output, alias = "IF"
+    } ; 
+  3 VAGen_IMPLEMENTS char(3) 
+    { uiType = output, alias = "IMPLEMENTS"
+    } ; 
+  3 VAGen_IMPORT char(3) 
+    { uiType = output, alias = "IMPORT"
+    } ; 
+  3 INSTANCEOF char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_INT char(3) 
+    { uiType = output, alias = "INT"
+    } ; 
+  3 VAGen_INTERFACE char(3) 
+    { uiType = output, alias = "INTERFACE"
+    } ; 
+  3 VAGen_LONG char(3) 
+    { uiType = output, alias = "LONG"
+    } ; 
+  3 NATIVE char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_NEW char(3) 
+    { uiType = output, alias = "NEW"
+    } ; 
+  3 VAGen_NULL char(3) 
+    { uiType = output, alias = "NULL"
+    } ; 
+  3 VAGen_PACKAGE char(3) 
+    { uiType = output, alias = "PACKAGE"
+    } ; 
+  3 VAGen_PRIVATE char(3) 
+    { uiType = output, alias = "PRIVATE"
+    } ; 
+  3 PROTECTED char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_PUBLIC char(3) 
+    { uiType = output, alias = "PUBLIC"
+    } ; 
+  3 VAGen_RETURN char(3) 
+    { uiType = output, alias = "RETURN"
+    } ; 
+  3 SHORT char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_STATIC char(3) 
+    { uiType = output, alias = "STATIC"
+    } ; 
+  3 SUPER char(3) 
+    { uiType = output
+    } ; 
+  3 SWITCH char(3) 
+    { uiType = output
+    } ; 
+  3 SYNCHRONIZED char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_THIS char(3) 
+    { uiType = output, alias = "THIS"
+    } ; 
+  3 THROWx char(3) 
+    { uiType = output
+    } ; 
+  3 THROWS char(3) 
+    { uiType = output
+    } ; 
+  3 TRANSIENT char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_TRUE char(3) 
+    { uiType = output, alias = "TRUE"
+    } ; 
+  3 VOID char(3) 
+    { uiType = output
+    } ; 
+  3 VOLATILE char(3) 
+    { uiType = output
+    } ; 
+  3 VAGen_WHILE char(3) 
+    { uiType = output, alias = "WHILE"
+    } ; 
+end

@@ -1,0 +1,227 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+//Note that VAGEN does not care if ui item properties are specified at multiple levels of 
+//	items in the same hierarchy
+
+///
+/// Some elementary record tests
+/// 
+
+// DEM - removed 'can be only one generatable part per file', as this message is only posted on
+//       subsequent parts
+Record myFlexUIRecord1 type vguiRecord //0
+	myitem char(2); 					//0
+	myitem2 string;						//1 string is not a valid type for an item in a structured record
+	mybigint  bigint;					//0
+end
+
+// DEM - removed 'name of vguirecord must match the file name', as this message is only posted
+//       on the first part
+Record myFixedUIRecord2 type vgUIRecord //0
+	10 myitem char(2);		//0
+	10 mydate date;			//1 datatype date is not allowed in a VGUIRecord
+	10 mytime time;			//1 datatype time is not allowed in a VGUIRecord
+	10 myfloat float;		//1 datatype float is not allowed in a VGUIRecord
+	10 mymoney money(9);	//1 datatype money is not allowed in a VGUIRecord
+	10 mytimestamp timestamp;//1 The datatype timeStamp is not allowed in a VGUIRecord.
+	10 myinterval interval("yyyyMM"); //1 datatype interval is not allowed in a VGUIRecord
+	10 myint int;			//0
+end	
+
+Record myErrorTypeUIRecord1 type garbagerecordtype //1  garbagerecordtype cannot be resolved
+	10 myitem char(2);		//0
+end
+
+//initializiers are new in 6.0.1 in fixed records
+
+// just to prove the syntax for an initializier
+Record myflex 
+	buttomitem char(1)[3] = [ "E", "H", "C" ]; //0
+end
+// record with multi-dimensional multiply occurring items
+Record uirecordarrays type vgUIRecord // 1 Error on item item1.item2.item3. Mutlidimensional multiply occurring items are not allowed in VGUIRecords.
+	10 item1 char(10) [5];
+		20 item2;
+			30 item3 char(2) [5];
+	10 item4 bin(9);
+	10 item5 char(200);
+		20 item6 char(10) [20];			
+			
+end
+
+Record ARRAYSONEFORM type VGUIRecord		//0
+		3 EVERYTHING char(60); 				//0
+     		4 MANY_NONE char(10) [3]; 		//0
+		4 HIDDEN_PARTS char(10) [3]; 		//0
+end											//0
+
+Record fixedRecdWithInitializers1 type basicrecord
+	10 item1 int  = "a"; // 0
+	10 item2 char(8) = "abcdefghijk"; //0
+	10 item3 char(4) = 1.0;	//0
+	10 item4 dbchar(3) = 2;	//1 dbChar and int are not compatible types
+	10 item5 mbchar(3) = 3;	//0
+	10 item6 float = "def";	//0
+	10 item7 bin(4) = "a";	//0
+	10 item8 int = item1 + item7; //1 Items in structured records can only be initialized with literal values.
+
+	10 parent;
+	15 item1a int  = "a"; // 0
+	15 item2a char(8) = "abcdefghijk"; //0
+	15 item3a char(4) = 1.0;	//0
+	15 item4a dbchar(3) = 2;	//1 dbChar and int are not compatible types
+	15 item5a mbchar(3) = 3;	//0
+	15 item6a float = "def";	//0
+	15 item7a bin(4) = "a";	//0
+	15 item8a int = item1 + item7; //1 Items in structured records can only be initialized with literal values.
+end
+//initializers should be allowed/checked in any fixed UI record.
+Record fixedUIRecdWithInitializers2 type vgUIRecord
+	10 item1 int  = "a"; 	// 0
+	10 item2 char(8) = "abcdefghijk";//0
+	10 item3 char(4) = 1.0;	//0
+	10 item4 dbchar(3) = 2;	//1 dbChar and int are not compatible types
+	10 item5 mbchar(3) = 3;	//0
+	10 item6 float = "def";	//1 The datatype float is not allowed in a VGUIRecord
+	10 item7 bin(4) = "a";	//0
+	10 item8 int = item1;	//1 Items in structured records can only be initialized with literal values.
+	
+	10 parent;
+	15 item1a int  = "a"; // 0
+	15 item2a char(8) = "abcdefghijk"; //0
+	15 item3a char(4) = 1.0;	//0
+	15 item4a dbchar(3) = 2;	//1 dbChar and int are not compatible types
+	15 item5a mbchar(3) = 3;	//0
+	15 item6a float = "def";	//1 The datatype float is not allowed in a VGUIRecord
+	15 item7a bin(4) = "a";	//0
+	15 item8a int = func(); //1 Items in structured records can only be initialized with literal values.
+end
+
+function func() returns(int) end
+
+///
+/// Record annotations value of wrong type tests
+/// 
+
+Record myannotationsErrorUIRecord1 type vgUIRecord // 1 All item names in a VGUIRecord must be unique.
+	{alias = name,			//1
+	alias = 123,			//1
+	alias = "a.b.c",		//1 Alias a.b.c cannot be qualified	
+	title = name,			//1
+	title = [123],			//1
+	help = name,			//1
+	help = [123],			//1
+	//The message about this not resolving cannot be issed here.  Has to be from the program
+	validatorFunction = myfunction, //1 The function reference myfunction cannot be resolved
+	RunValidatorFromProgram = "abc", 	//1
+	RunValidatorFromProgram = 1.23,		//1
+	RunValidatorFromProgram = def,		//1 The value for this property must be one of the following 
+	commandValueItem = myItem2,					//1 myItem2 referenced by the commandValueItem property must be declared in record myannotationsErrorUIRecord1
+	commandValueItem = AmbiguousItem,			//0
+	commandValueItem = someitem.ambiguousItem} 	//0
+	10 myitem1 char(4);			//0
+	//10 myitem2 char(5);    // commented out to make commandvalueitem fail above.
+	10 ambiguousITem char(4);	//0
+	10 someitem;				//0
+		15 ambiguousItem char(9);//0
+end
+
+///
+/// Test resolution occuring at the correct point
+///
+Record myannotationsErrorUIRecord2 type vgUIRecord
+	{
+	validatorFunction = myrecord}  	//1 The function reference myrecord cannot be resolved
+
+	10 myitem1 char(4);					//0
+end
+Record myannotationsErrorUIRecord3 type vgUIRecord
+	{
+	validatorFunction = myfunction, //1 The function reference myfunction cannot be resolved
+	validatorFunction = myrecord}   //1 The function reference myrecord cannot be resolved
+
+	10 myitem1 char(4);
+end
+Record myPropertiesErrorUIRecord4 type vgUIRecord
+	{
+	validatorFunction = myrecord, //1 The function reference myrecord cannot be resolved
+	validatorFunction = myfunction}  	//1 The function reference myfunction cannot be resolved
+
+	10 myitem1 char(4);
+end
+
+//from the spec as a starting point for error cases.
+Record  MyUIRecord1  Type  VGUIRecord 
+		{ commandValueItem=buttonValue }	//0
+	10 formItem  char(21)					//0 
+	   {uiType=uiForm, 						//0
+        @programLinkData { 					//0
+			programName="NewPgm",			//0
+			newWindow=yes,					//0
+			uiRecordName="NewUIR",			//0
+			linkParms = [					//0
+			   				@LinkParameter { name="key1", value="value1" },		//0
+			   				@LinkParameter { name="key2", valueRef=refItem }	//0
+						]				
+        }
+	   };
+	  20 nametem  char(16)	{ uiType=input, inputRequired=yes }; 			//0
+	  20 buttonItem char(1)[3]	{uiType=submit,			//0
+  								 displayName="Enter \n Help \n Cancel" 	//0
+								} 						//0
+								= [ "E", "H", "C" ];	//0
+	  20 buttonValue char(1) { uiType=none };			//0
+      20 refItem     char(1) { uiType=none };			//0
+End
+
+
+///
+/// Tests for UI record annotations
+/// specific value edits and cross checks
+///
+/// The following edits come from VAGen ESF and/or Editor 
+
+///////record annotation edits
+////	commandvalueitem can't be same as record name
+////	commandvalueitem must be in this record
+////	commanvalueitem must be of type char, DBchar, mbchar, or unicode 
+
+Record  testCommandValueItem1  Type  VGUIRecord 
+		{ commandValueItem=testCommandValueItem1 }	//1 value of property commandValueItem cannot be the same as the VGUIRecord name
+	 20 testCommandValueItem1     char(1) { uiType=none };	//0
+End
+
+Record  testCommandValueItem2  Type  VGUIRecord 
+		{ commandValueItem=testCommandValueItem1 }//1 The item testCommandValueItem1 referenced by the commandValueItem property must be declared in record testCommandValueItem2 
+	 20 refItem     char(1) { uiType=none };		//0
+End
+
+Record  testCommandValueItem3  Type  VGUIRecord 
+		{ commandValueItem=testCommandValueItem1 }//1 The item testCommandValueItem1 referenced by the commandValueItem property must be declared in record testCommandValueItem3
+End
+
+Record  testCommandValueItem4  Type  VGUIRecord 
+		{ commandValueItem=testCommandValueItem1,		//1 commandValueItem item must be of type char, dbchar, mbchar, or unicode
+		  commandValueItem=testCommandValueItem2,		//0
+		  commandValueItem=testCommandValueItem3,		//0
+		  commandValueItem=testCommandValueItem4a,	//0
+		  commandValueItem=testCommandValueItem5 		//0
+		}
+	 20 testCommandValueItem1     bin(4);			//0
+ 	 20 testCommandValueItem2     char(4);			//0
+ 	 20 testCommandValueItem3     dbchar(4);		//0
+  	 20 testCommandValueItem4a    mbchar(4);		//0
+  	 20 testCommandValueItem5     unicode(4);		//0
+end
+

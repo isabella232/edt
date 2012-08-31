@@ -1,0 +1,264 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+Program stringConcatenation
+	function main()
+		bigintVal bigint;
+		binVal bin(9,2);
+		blobVal blob;
+		charVal char(10);
+		clobVal clob;
+		dateVal date;
+		dbcharVal dbchar(10);
+		decimalVal decimal(9);
+		floatVal float;
+		hexVal hex(2);
+		intVal int;
+		interValVal interVal;
+		mbcharVal mbchar(10);
+		moneyVal money(9,2);
+		numVal num(9,2);
+		numberVal num(9,2);
+		numcVal numc(9,2);
+		pacfVal pacf(9,2);
+		smallintVal smallint;
+		smallfloatVal smallfloat;
+		stringVal string;
+		timeVal time;
+		timestampVal timestamp;
+		unicodeVal unicode(2);
+		
+		const stringConst string = "abc";
+		const charConst char(3) = "xyz";
+		
+		// --------------------------------------------------------------------
+		// Append a string-move-compatible type to a string type
+				
+		stringVal = stringVal + bigintVal;     // 0
+		stringVal = stringVal + binVal;        // 0
+		stringVal = stringVal + charVal;       // 0
+		stringVal = stringVal + dateVal;       // 0
+		stringVal = stringVal + decimalVal;    // 0
+		stringVal = stringVal + floatVal;      // 0
+		stringVal = stringVal + hexVal;        // 0
+		stringVal = stringVal + intVal;        // 0
+		stringVal = stringVal + interValVal;   // 0
+		stringVal = stringVal + mbcharVal;     // 0
+		stringVal = stringVal + moneyVal;      // 0
+		stringVal = stringVal + numVal;        // 0
+		stringVal = stringVal + smallintVal;   // 0
+		stringVal = stringVal + smallfloatVal; // 0
+		stringVal = stringVal + stringVal;     // 0
+		stringVal = stringVal + timeVal;       // 0
+		stringVal = stringVal + timestampVal;  // 0
+		stringVal = stringVal + unicodeVal;    // 0
+		stringVal = stringVal + numcVal;       // 0
+		stringVal = stringVal + pacfVal;       // 0
+		
+		// --------------------------------------------------------------------
+		// Append a non-string-move-compatible type to a string type; should be invalid
+		
+		// The two messages are, for the first example:
+		// - The expression stringVal is not compatible with the expression clobVal
+		// - The primitive type clob for clobVal is not valid for use in a string concatenation expression
+		// Admittidly verbose, but both are appropriate.		
+		stringVal = stringVal + dbcharVal;   // 0
+		stringVal = stringVal + clobVal;     // 1
+		
+		// --------------------------------------------------------------------
+		// Append a string-move-compatible type to a string literal
+		
+		stringVal = "abc" + bigintVal;     // 0
+		stringVal = "abc" + binVal;        // 0
+		stringVal = "abc" + charVal;       // 0
+		stringVal = "abc" + dateVal;       // 0
+		stringVal = "abc" + decimalVal;    // 0
+		stringVal = "abc" + floatVal;      // 0
+		stringVal = "abc" + hexVal;        // 0
+		stringVal = "abc" + intVal;        // 0
+		stringVal = "abc" + interValVal;   // 0
+		stringVal = "abc" + mbcharVal;     // 0
+		stringVal = "abc" + moneyVal;      // 0
+		stringVal = "abc" + numVal;        // 0
+		stringVal = "abc" + smallintVal;   // 0
+		stringVal = "abc" + smallfloatVal; // 0
+		stringVal = "abc" + stringVal;     // 0
+		stringVal = "abc" + timeVal;       // 0
+		stringVal = "abc" + timestampVal;  // 0
+		stringVal = "abc" + unicodeVal;    // 0	
+		stringVal = "abc" + numcVal;       // 0
+		stringVal = "abc" + pacfVal;       // 0
+		stringVal = "abc" + dbcharVal;	   // 0
+		
+		// --------------------------------------------------------------------
+		// Append a non-string-move-compatible type to a string literal; should be invalid
+		
+		stringVal = "abc" + clobVal;     // 1
+		
+		// --------------------------------------------------------------------
+		// Append a string-move-compatible type to a string typed function result
+		
+		stringVal = stringFunc() + bigintVal;     // 0
+		stringVal = stringFunc() + binVal;        // 0
+		stringVal = stringFunc() + charVal;       // 0
+		stringVal = stringFunc() + dateVal;       // 0
+		stringVal = stringFunc() + decimalVal;    // 0
+		stringVal = stringFunc() + floatVal;      // 0
+		stringVal = stringFunc() + hexVal;        // 0
+		stringVal = stringFunc() + intVal;        // 0
+		stringVal = stringFunc() + interValVal;   // 0
+		stringVal = stringFunc() + mbcharVal;     // 0
+		stringVal = stringFunc() + moneyVal;      // 0
+		stringVal = stringFunc() + numVal;        // 0
+		stringVal = stringFunc() + smallintVal;   // 0
+		stringVal = stringFunc() + smallfloatVal; // 0
+		stringVal = stringFunc() + stringVal;     // 0
+		stringVal = stringFunc() + timeVal;       // 0
+		stringVal = stringFunc() + timestampVal;  // 0
+		stringVal = stringFunc() + unicodeVal;    // 0
+		stringVal = stringFunc() + numcVal;       // 0
+		stringVal = stringFunc() + pacfVal;       // 0
+		
+		// --------------------------------------------------------------------
+		// Append a non-string-move-compatible type to a string typed function result; should be invalid
+		
+		stringVal = stringFunc() + dbcharVal;   // 0
+		stringVal = stringFunc() + clobVal;     // 1
+		
+		// --------------------------------------------------------------------
+		// Append a string-move-compatible type to a string constant
+		
+		stringVal = stringConst + bigintVal;     // 0
+		stringVal = stringConst + binVal;        // 0
+		stringVal = stringConst + charVal;       // 0
+		stringVal = stringConst + dateVal;       // 0
+		stringVal = stringConst + decimalVal;    // 0
+		stringVal = stringConst + floatVal;      // 0
+		stringVal = stringConst + hexVal;        // 0
+		stringVal = stringConst + intVal;        // 0
+		stringVal = stringConst + interValVal;   // 0
+		stringVal = stringConst + mbcharVal;     // 0
+		stringVal = stringConst + moneyVal;      // 0
+		stringVal = stringConst + numVal;        // 0
+		stringVal = stringConst + smallintVal;   // 0
+		stringVal = stringConst + smallfloatVal; // 0
+		stringVal = stringConst + stringVal;     // 0
+		stringVal = stringConst + timeVal;       // 0
+		stringVal = stringConst + timestampVal;  // 0
+		stringVal = stringConst + unicodeVal;    // 0
+		stringVal = stringConst + numcVal;       // 0
+		stringVal = stringConst + pacfVal;       // 0
+		stringVal = stringConst + dbcharVal;   // 0
+		
+		// --------------------------------------------------------------------
+		// Append a non-string-move-compatible type to a string constant; should be invalid
+		
+		charConst = charConst + dbcharVal;	   // 2
+		stringVal = stringConst + clobVal;     // 1
+		
+		// --------------------------------------------------------------------
+		// Use a string in an arithmetic expression (a plus sign where the left hand side
+		// is not a text type. Should be invalid.
+		
+		stringVal = bigintVal + stringVal;     // 0
+		stringVal = binVal + stringVal;        // 0
+		stringVal = dateVal + stringVal;       // 0
+		stringVal = decimalVal + stringVal;    // 0
+		stringVal = floatVal + stringVal;      // 0
+		stringVal = intVal + stringVal;        // 0
+		stringVal = moneyVal + stringVal;      // 0
+		stringVal = numVal + stringVal;        // 0
+		stringVal = smallintVal + stringVal;   // 0
+		stringVal = smallfloatVal + stringVal; // 0
+		stringVal = timeVal + stringVal;       // 1
+		stringVal = timestampVal + stringVal;  // 1
+		// Holy lots of errors, Batman. Each one is justifiable and has been around since 5.12
+		stringVal = clobVal + stringVal;     // 1
+		stringVal = interValVal + stringVal; // 1
+		stringVal = numcVal + stringVal;     // 0
+		stringVal = pacfVal + stringVal;     // 0
+		
+		stringVal = bigintVal + "abc";     // 0
+		stringVal = binVal + "abc";        // 0
+		stringVal = dateVal + "abc";       // 0
+		stringVal = decimalVal + "abc";    // 0
+		stringVal = floatVal + "abc";      // 0
+		stringVal = intVal + "abc";        // 0
+		stringVal = interValVal + "abc";   // 1
+		stringVal = moneyVal + "abc";      // 0
+		stringVal = numVal + "abc";        // 0
+		stringVal = smallintVal + "abc";   // 0
+		stringVal = smallfloatVal + "abc"; // 0
+		stringVal = timeVal + "abc";       // 1
+		stringVal = timestampVal + "abc";  // 1
+		stringVal = clobVal + "abc";       // 1
+		stringVal = numcVal + "abc";       // 0
+		stringVal = pacfVal + "abc";       // 0
+		stringVal = dbcharVal + stringVal; // 0
+		
+		// --------------------------------------------------------------------
+		// Use a string in a string concatenation expression (a plus sign where the left hand side
+		// is a text type. Should be valid.
+		
+		stringVal = charVal + stringVal;       // 0
+		stringVal = hexVal + stringVal;        // 0
+		stringVal = mbcharVal + stringVal;     // 0
+		stringVal = unicodeVal + stringVal;    // 0	
+		
+		stringVal = charVal + "abc";       // 0
+		stringVal = mbcharVal + "abc";     // 0
+		stringVal = unicodeVal + "abc";    // 0
+		
+		// --------------------------------------------------------------------
+		// Some valid cases w/ more than one plus sign.
+		
+		stringVal = stringVal + bigintVal + stringVal;     // 0
+		stringVal = stringVal + binVal + stringVal;        // 0
+		stringVal = stringVal + charVal + stringVal;       // 0
+		stringVal = stringVal + dateVal + stringVal;       // 0
+		stringVal = stringVal + decimalVal + stringVal;    // 0
+		stringVal = stringVal + floatVal + stringVal;      // 0
+		stringVal = stringVal + hexVal + stringVal;        // 0
+		stringVal = stringVal + intVal + stringVal;        // 0
+		stringVal = stringVal + intervalVal + stringVal;   // 0
+		stringVal = stringVal + mbcharVal + stringVal;     // 0
+		stringVal = stringVal + moneyVal + stringVal;      // 0
+		stringVal = stringVal + numVal + stringVal;        // 0
+		stringVal = stringVal + smallintVal + stringVal;   // 0
+		stringVal = stringVal + smallfloatVal + stringVal; // 0
+		stringVal = stringVal + stringVal + stringVal;     // 0
+		stringVal = stringVal + timeVal + stringVal;       // 0
+		stringVal = stringVal + timestampVal + stringVal;  // 0
+		stringVal = stringVal + unicodeVal + stringVal;    // 0	
+		
+		stringVal = stringVal + bigintVal + "abc";     // 0
+		stringVal = stringVal + binVal + "abc";        // 0
+		stringVal = stringVal + charVal + "abc";       // 0
+		stringVal = stringVal + dateVal + "abc";       // 0
+		stringVal = stringVal + decimalVal + "abc";    // 0
+		stringVal = stringVal + floatVal + "abc";      // 0
+		stringVal = stringVal + hexVal + "abc";        // 0
+		stringVal = stringVal + intVal + "abc";        // 0
+		stringVal = stringVal + mbcharVal + "abc";     // 0
+		stringVal = stringVal + moneyVal + "abc";      // 0
+		stringVal = stringVal + numVal + "abc";        // 0
+		stringVal = stringVal + smallintVal + "abc";   // 0
+		stringVal = stringVal + smallfloatVal + "abc"; // 0
+		stringVal = stringVal + stringVal + "abc";     // 0
+		stringVal = stringVal + timeVal + "abc";       // 0
+		stringVal = stringVal + timestampVal + "abc";  // 0
+		stringVal = stringVal + unicodeVal + "abc";    // 0	
+	end
+	
+	function stringFunc() returns (string) end
+end

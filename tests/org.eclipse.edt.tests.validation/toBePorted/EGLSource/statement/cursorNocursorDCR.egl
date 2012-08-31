@@ -1,0 +1,52 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+DataItem LastName string { column = "LASTNAME" } end
+
+Record Customer type SQLRecord{
+	tableNames = [["T1", "Customer"]],
+	keyItems = [ custid ] }
+	
+	lastname LastName;
+	custid int;
+end
+
+Record notSQLRec type indexedRecord
+end
+
+Program pgm	
+	aCust Customer;
+	notSQLRec notSQLRec;
+	
+	function main()
+			
+		DELETE aCust;  			//0
+		DELETE aCust NOCURSOR;	//0
+		
+		DELETE aCust USINGKEYS aCust.lastname;	//0
+		
+		delete aCust noCursor usingKeys aCust.lastname;	//1
+		
+		DELETE notSQLRec;			//0
+		DELETE notSQLRec NOCURSOR;	//1 The NOCURSOR clause is only valid when the target record is an SQL record variable
+		
+		replace aCust;		  	//0
+		replace aCust NOCURSOR;	//0
+		
+		replace aCust USINGKEYS aCust.lastname;	//0
+		
+		replace aCust noCursor usingKeys aCust.lastname;	//1
+		
+		replace notSQLRec;	  		//0
+		replace notSQLRec NOCURSOR;	//1 The NOCURSOR clause is only valid when the target record is an SQL record variable
+	end
+end

@@ -1,0 +1,89 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record Employeeblob type SQLRecord
+	employeeID char(6);
+	empPic Blob;
+end
+
+Record Employeeclob type SQLRecord
+	employeeID char(6);
+	empPic clob;
+end
+
+Library clob_invalid
+
+	emp1 Employeeblob;
+	emp2 Employeeclob;
+	
+	function assignmentTest()
+		emp2.empPic = emp1.empPic;				// 1 clob and blob are not compatible types
+	end
+
+	function moveTest()
+		move emp2.empPic to emp1.empPic;		// 1 clob and blob are not compatible types
+	end
+	
+	function equalTest()
+		if(emp2.empPic == emp1.empPic)			// 1 emp2.empPic is not valid for compare to emp1.empPic
+		end
+	end
+	
+	function blobFunctionArgAndReturnTest()
+		tempBlob blob;
+		clobFunctionArgTestHelperOne(emp1.empPic);	  // 1 inOut
+		tempBlob = clobFunctionReturnTestOne();		  // 1 blob and clob are not compatible types
+	end
+	
+	function clobFunctionArgTestHelperOne(parm1 Clob)
+	end
+	
+	function clobFunctionReturnTestOne()
+		returns(Clob);
+		
+		return (emp2.empPic);
+	end
+	
+	function clobProgramCallTest()
+		call clobProgramOne(emp1.empPic);		// 2 program clobProgramOne(clob) is not applicable for the arguments (blob)
+	end
+	
+	function clobFunctionTests()
+		mybigint bigint;
+		string1 string;
+		pos, length  bigint;
+		attachClobToFile(emp1.empPic, "C:\\Temp\\Employee1.jpg");		// 1 inOut
+		attachClobToFile(emp1.empPic, string1);					 		// 1 inOut
+		
+		mybigint = getClobLen(emp1.empPic);								// 1 The argument emp1.empPic cannot be passed to the in or out parameter clobVariable of the function getClobLen. The types blob and clob are not assignment compatible
+
+		truncateClob(emp1.empPic, 100);									// 1 inOut
+		truncateClob(emp1.empPic, mybigint);							// 1 inOut
+		
+		loadClobFromFile(emp1.empPic, "C:\\Temp\\Employee1.jpg");		// 1 inOut
+		loadClobFromFile(emp1.empPic, string1);							// 1 inOut
+		
+		updateClobToFile(emp1.empPic, "C:\\Temp\\Employee1.jpg");		// 1 inOut
+		updateClobToFile(emp1.empPic, string1);							// 1 inOut
+		
+		freeClob(emp1.empPic);											// 1 inOut
+		
+		// new as of 10/14
+		attachClobToTempFile(emp1.empPic);								// 1 inOut
+
+	end
+end
+
+Program clobProgramOne (parm1 Clob)
+	
+	function main()
+	end
+end

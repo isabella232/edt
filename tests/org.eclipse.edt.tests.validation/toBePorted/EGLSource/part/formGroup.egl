@@ -1,0 +1,278 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/****************
+** Annotations **
+****************/
+ 
+// validateFloatingAreaProperty:
+Formgroup validateFloatingAreaProperty
+{
+	PrintFloatingAreas=[
+		@printFloatingArea{screenSize=[10,10], pageSize=[100,100]},	//1
+		@printFloatingArea{pageSize = [0,0]},						//1 Property: pageSize.  The value for this property in validateFloatingAreaProperty is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers. {5311, INVALID_SIZE_PROPERTY_VALUE}
+		@printFloatingArea{pageSize = [10,20], deviceType=foo},			//1 Property: deviceType.  The value for this property must be one of the following: doubleByte, singleByte.
+		@printFloatingArea{pagesize=[13,13], leftMargin=-1},			//1 Property: leftMargin.  The value for this property in validateFloatingAreaProperty is invalid. The value must be an integer greater or equal to zero. {5312, INVALID_POSITIVE_INTEGER_PROPERTY_VALUE}
+		@printFloatingArea{pagesize=[14,14], rightMargin=-1},		//1 Property: rightMargin.  The value for this property in validateFloatingAreaProperty is invalid. The value must be an integer greater or equal to zero. {5312, INVALID_POSITIVE_INTEGER_PROPERTY_VALUE}
+		@printFloatingArea{pagesize=[15,15], bottomMargin=-1},		//1 Property: bottomMargin.  The value for this property in validateFloatingAreaProperty is invalid. The value must be an integer greater or equal to zero. {5312, INVALID_POSITIVE_INTEGER_PROPERTY_VALUE}
+		@printFloatingArea{pagesize=[16,16], topMargin=-1}			//1 Property: topMargin.  The value for this property in validateFloatingAreaProperty is invalid. The value must be an integer greater or equal to zero. {5312, INVALID_POSITIVE_INTEGER_PROPERTY_VALUE}
+	],
+	
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize = [0,0]},						//1 Property: screenSize.  The value for this property in validateFloatingAreaProperty is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers. {5311, INVALID_SIZE_PROPERTY_VALUE}
+		@screenFloatingArea{screenSize=[11,11], pageSize=[100,100]},	//1
+		@screenFloatingArea{screenSize = [12,12], deviceType=singleByte},//2
+		@screenFloatingArea{screensize=[13,13], leftMargin=-1},			//1 Property: leftMargin.  The value for this property in validateFloatingAreaProperty is invalid. The value must be an integer greater or equal to zero. {5312, INVALID_POSITIVE_INTEGER_PROPERTY_VALUE}
+		@screenFloatingArea{screensize=[14,14], rightMargin=-1},			//1 Property: rightMargin.  The value for this property in validateFloatingAreaProperty is invalid. The value must be an integer greater or equal to zero. {5312, INVALID_POSITIVE_INTEGER_PROPERTY_VALUE}
+		@screenFloatingArea{screensize=[15,15], bottomMargin=-1},		//1 Property: bottomMargin.  The value for this property in validateFloatingAreaProperty is invalid. The value must be an integer greater or equal to zero. {5312, INVALID_POSITIVE_INTEGER_PROPERTY_VALUE}
+		@screenFloatingArea{screensize=[16,16], topMargin=-1}			//1 Property: topMargin.  The value for this property in validateFloatingAreaProperty is invalid. The value must be an integer greater or equal to zero. {5312, INVALID_POSITIVE_INTEGER_PROPERTY_VALUE}
+	]
+}
+end
+
+// validateProperty:
+Formgroup validateProperty
+{
+	validationBypassKeys = [pf25],	//1
+	helpKey = pf25,					//1 
+	pfKeyEquate="yes",				//1
+	foo = 10						//1 foo cannot be resolved
+}
+end
+ 
+ /*****************
+ ** Other Checks **
+ *****************/
+
+// isDuplicateFloatingArea:
+FormGroup fg1
+	{
+		ScreenFloatingAreas=[
+			@screenFloatingArea {screensize = [10,10]},	//1 There are duplicate floating areas declared in FormGroup fg1. A print floating area is always different from a screen floating area. Two floating areas are duplicates if they have the same size. {5329, INVALID_FORMGROUP_FLOATINGAREA_DUPLICATION}
+			@screenFloatingArea {screensize = [10,10]},	//1 There are duplicate floating areas declared in FormGroup fg1. A print floating area is always different from a screen floating area. Two floating areas are duplicates if they have the same size. {5329, INVALID_FORMGROUP_FLOATINGAREA_DUPLICATION}
+			@screenFloatingArea {screensize = [10,20]}	//0
+		]
+	}
+end
+
+FormGroup fg2
+	{
+		PrintFloatingAreas=[
+			@printFloatingArea {pagesize = [10,11]},	//1 There are duplicate floating areas declared in FormGroup fg2. A print floating area is always different from a screen floating area. Two floating areas are duplicates if they have the same size. {5329, INVALID_FORMGROUP_FLOATINGAREA_DUPLICATION}
+			@printFloatingArea {pagesize = [10,11]},	//1 There are duplicate floating areas declared in FormGroup fg2. A print floating area is always different from a screen floating area. Two floating areas are duplicates if they have the same size. {5329, INVALID_FORMGROUP_FLOATINGAREA_DUPLICATION}
+			@printFloatingArea {pagesize = [10,20]}	//0
+		]
+	}
+end
+
+FormGroup fg3
+	{
+		ScreenFloatingAreas=[
+			@screenFloatingArea {screensize = [20,20]}	//0
+		],
+		PrintFloatingAreas=[
+			@printFloatingArea {pagesize = [20,20]}		//0
+		]
+	}
+end
+
+//----------------------------------------------------------------------------- 
+ 
+// validate:
+Formgroup fg4
+	{
+		PrintFloatingAreas=[
+			@printFloatingArea {}			//1 Property: printFloatingArea.  The value for this property in FormGroup fg4 is invalid. This is probably because the pageSize property is not specified. {5389, INVALID_FORMGROUP_PRINTFLOATINGAREA_PROPERTY_VALUE}
+		]
+	}
+end
+
+Formgroup fg5
+	{
+		PrintFloatingAreas=[
+			@notScreenOrPrintFloatingArea{}	//1 notScreenOrPrintFloatingArea cannot be resolved
+		]
+	}
+end
+
+Formgroup fg6
+	{
+		ScreenFloatingAreas=[
+			@screenFloatingArea[5] {}		//1
+		]
+	}
+end
+
+Formgroup fg7
+	{
+		5+6								//1 A positional property is not valid for use with fg7. The item must be an array with a specified length.
+	}
+end
+
+// validateAliasNameProperty:
+Formgroup fg8
+	Form form1 type textForm {formsize=[10,10]} {
+		alias = "alias1"					//1 The alias property value "alias1" in form form1 duplicates the alias property value of another form in FormGroup fg8.  Forms in a FormGroup may not have duplicate alias names. {5325, INVALID_FORMGROUP_ALIAS_PROPERTY_DUPLICATE}
+	} end
+	
+	Form form2 type textForm {formsize=[10,10]} {
+		alias = "alias1"					//1 The alias property value "alias1" in form form2 duplicates the alias property value of another form in FormGroup fg8.  Forms in a FormGroup may not have duplicate alias names. {5325, INVALID_FORMGROUP_ALIAS_PROPERTY_DUPLICATE}
+	} end
+	
+	Form form3 {
+		alias = "alias2"					//1 The alias property value "alias2" in form form3 duplicates the alias property value of another form in FormGroup fg8.  Forms in a FormGroup may not have duplicate alias names. {5325, INVALID_FORMGROUP_ALIAS_PROPERTY_DUPLICATE}
+	} end
+	
+	use formWithAliasAlias2;				//1 The alias property value "alias2" in form formWithAliasAlias2 duplicates the alias property value of another form in FormGroup fg8.  Forms in a FormGroup may not have duplicate alias names. {5325, INVALID_FORMGROUP_ALIAS_PROPERTY_DUPLICATE}
+	
+	use formWithAliasAlias3;				//0
+	
+	Form form4 {
+		alias = "alias4"					//0
+	} end
+	
+	Form form5 {
+		alias = "form1"						//1 The alias property value "form1" in form form5 duplicates a form name in FormGroup fg8.  An alias for one form may not duplicate the name of another form in the FormGroup. {5326, INVALID_FORMGROUP_ALIAS_PROPERTY_FORM_NAME}
+	} end
+	
+	Form form6 {
+		alias = "formWithAliasAlias2"		//1 The alias property value "formWithAliasAlias2" in form form6 duplicates a form name in FormGroup fg8.  An alias for one form may not duplicate the name of another form in the FormGroup. {5326, INVALID_FORMGROUP_ALIAS_PROPERTY_FORM_NAME}
+	} end
+	
+	use formWithAliasForm2;					//1 The alias property value "form2" in form formWithAliasForm2 duplicates a form name in FormGroup fg8.  An alias for one form may not duplicate the name of another form in the FormGroup. {5326, INVALID_FORMGROUP_ALIAS_PROPERTY_FORM_NAME}
+	
+	use formWithAliasFormWithAliasAlias3;	//1 The alias property value "formWithAliasAlias3" in form formWithAliasFormWithAliasAlias3 duplicates a form name in FormGroup fg8.  An alias for one form may not duplicate the name of another form in the FormGroup. {5326, INVALID_FORMGROUP_ALIAS_PROPERTY_FORM_NAME}
+end
+
+Form formWithAliasAlias2 {
+	alias = "alias2"
+} end
+
+Form formWithAliasAlias3 {
+	alias = "alias3"
+} end
+
+Form formWithAliasForm2 {
+	alias = "form2"
+} end
+
+Form formWithAliasFormWithAliasAlias3 {
+	alias = "formWithAliasAlias3"
+} end
+
+// validateScreenAndPageMargins:
+Formgroup fg9
+	{
+		ScreenFloatingAreas=[@screenFloatingArea{ bottomMargin = 23, topMargin = 1 }]							//1 Property: topMargin and bottomMargin.  The sum of the values for these properties must be less than the screen or page height. {5398, INVALID_MARGINS_VERSES_HEIGHT}
+	}
+end
+
+Formgroup fg9a
+	{
+		ScreenFloatingAreas=[@screenFloatingArea{ leftMargin = 79, rightMargin = 1 }]							//1 Property: leftMargin and rightMargin.  The sum of the values for these properties must be less than the screen or page width. {5399, INVALID_MARGINS_VERSES_WIDTH}
+	}
+end
+
+Formgroup fg9b
+	{
+		ScreenFloatingAreas=[@screenFloatingArea{ bottomMargin = 22, topMargin = 1 }]							//0
+	}
+end
+
+Formgroup fg9c
+	{
+		ScreenFloatingAreas=[@screenFloatingArea{ leftMargin = 78, rightMargin = 1 }]							//0
+	}
+end
+
+Formgroup fg10
+	{
+		ScreenFloatingAreas=[@screenFloatingArea{ screenSize = [11, 20], leftMargin = 19, rightMargin = 1 }]	//1 Property: leftMargin and rightMargin.  The sum of the values for these properties must be less than the screen or page width. {5399, INVALID_MARGINS_VERSES_WIDTH}
+	}
+end
+
+Formgroup fg10a
+	{
+		ScreenFloatingAreas=[@screenFloatingArea{ screenSize = [11, 20], bottomMargin = 10, topMargin = 1 }]	//1 Property: topMargin and bottomMargin.  The sum of the values for these properties must be less than the screen or page height. {5399, INVALID_MARGINS_VERSES_WIDTH}
+	}
+end
+	
+Formgroup fg11
+	{
+		ScreenFloatingAreas=[@screenFloatingArea{ screenSize = [11, 5], bottomMargin = 9, topMargin = 1 }]		//0
+	}
+end
+	
+Formgroup fg12
+	{
+		ScreenFloatingAreas=[@screenFloatingArea{ screenSize = [11, 20], leftMargin = 18, rightMargin = 1 }]	//0
+	}
+end
+
+Formgroup fg13
+	{
+		PrintFloatingAreas=[@printFloatingArea{ pageSize = [11, 20], leftMargin = 19, rightMargin = 1 }]	//1 Property: leftMargin and rightMargin.  The sum of the values for these properties must be less than the screen or page width. {5399, INVALID_MARGINS_VERSES_WIDTH}
+	}
+end
+
+Formgroup fg14
+	{
+		PrintFloatingAreas=[@printFloatingArea{ pageSize = [11, 20], bottomMargin = 10, topMargin = 1 }]	//1 Property: topMargin and bottomMargin.  The sum of the values for these properties must be less than the screen or page height. {5399, INVALID_MARGINS_VERSES_WIDTH}
+	}
+end
+	
+Formgroup fg15
+	{
+		PrintFloatingAreas=[@printFloatingArea{ pageSize = [11, 10], bottomMargin = 9, topMargin = 1, leftMargin = 0 }]	//0
+	}
+end
+
+Formgroup fg15a
+	{
+		PrintFloatingAreas=[@printFloatingArea{ pageSize = [11, 10], bottomMargin = 9, topMargin = 1 }]	//1 Property: leftMargin and rightMargin.  The sum of the values for these properties must be less than the screen or page width.
+	}
+end
+	
+Formgroup fg16
+	{
+		PrintFloatingAreas=[@printFloatingArea{ pageSize = [11, 20], leftMargin = 18, rightMargin = 1 }]	//0
+	}
+end
+
+// validateUniqueIdentifiers:
+Formgroup fg17
+	Form form1 type textForm {formSize=[10,20]} end //0
+	Form form1 type textForm {formSize=[10,20]} end //1 There are multiple use and/or form declarations form1 in FormGroup fg17. {5331, INVALID_FORMGROUP_MULTIPLE_DECLARATION}
+	
+	Form form2 type textForm {formSize=[10,20]} end	//0
+	use form2;										//1 There are multiple use and/or form declarations form2 in FormGroup fg17. {5331, INVALID_FORMGROUP_MULTIPLE_DECLARATION}
+end
+
+Form form2 type textForm {formSize=[10,20]} end
+
+// validateUseStatement:
+Formgroup fg18
+	use undeclaredForm;	//1 The type undeclaredForm cannot be resolved.
+	use ambiguousItem;	//1
+	use lib;			//1 The value of use declaration lib in FormGroup fg18 is invalid. In a FormGroup you may only use a form. {5378, INVALID_FORMGROUP_USEDECLARATION_VALUE}
+	use pgm;			//1 The value of use declaration pgm in FormGroup fg18 is invalid. In a FormGroup you may only use a form. {5378, INVALID_FORMGROUP_USEDECLARATION_VALUE}
+	use dItem;			//1 The value of use declaration dItem in FormGroup fg18 is invalid. In a FormGroup you may only use a form. {5378, INVALID_FORMGROUP_USEDECLARATION_VALUE}
+
+	use form2;			//0
+end
+
+DataItem ambiguousItem int end
+DataItem ambiguousItem int end
+
+Library lib end
+Program pgm end
+DataItem dItem int end

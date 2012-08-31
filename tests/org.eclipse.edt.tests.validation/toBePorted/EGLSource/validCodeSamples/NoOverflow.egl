@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program NoOverflow
+	function main()
+		writeStdout( "This program demonstrates that a numeric expression's result" );
+		writeStdout( "can have more than 32 digits." );
+		writeStdout( "" );
+		
+
+
+		// The first part of the expression is a number with 42 digits.  The second
+		// part divides it back down to 2 digits.
+		writeStdout( "Test 1 of 4" );
+		i int = 
+			(6 * 100000000 * 100000000 * 100000000 * 100000000 * 100000000 * 2)
+			/ 100000000 / 100000000 / 100000000 / 100000000 / 100000000;
+		writeStdout( "This should be 12: " + i );
+		
+
+
+		// Similar to the previous test but uses numbers with decimals.
+		writeStdout( "Test 2 of 4" );
+		d decimal(9,5) =
+			(1111.11111 * 100000000.0 * 100000000.0 * 100000000.0 * 100000000.0 
+				* 100000000.0 * 2.0)
+			/ 100000000.0 / 100000000.0 / 100000000.0 / 100000000.0 / 100000000.0;
+		writeStdout( "This should be 2222.22222: " + d );
+			
+
+
+		// Test that overflows on assignments still work.
+		writeStdout( "Test 3 of 4" );
+		writeStdout( "This will make sure overflows still happen on assignments." );
+		overflowIndicator = 0;
+		i = 6 * 100000000 * 100000000 * 100000000 * 100000000 * 100000000 * 2;
+		if ( i == 12 && overflowIndicator == 1 )
+			writeStdout( "OK" );
+		else
+			writeStdout( "Error!  Wanted 12 and 1, but got " + i + " and " + overflowIndicator );
+		end
+
+
+
+		// Test that overflows on assignments still work.
+		writeStdout( "Test 4 of 4" );
+		writeStdout( "This will make sure overflows still happen on assignments." );
+		writeStdout( "*** The program is about to crash! ***" );
+		handleOverflow = 1;
+		i = 6 * 100000000 * 100000000 * 100000000 * 100000000 * 100000000 * 2;
+		writeStdout( "Error!  The program should have ended due to overflow on assignment!" );
+	end
+end

@@ -1,0 +1,92 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Library nativeLibrary_valid type nativeLibrary	
+{callingConvention=I4GL, dllname="123Anything", alias="test"}
+	function myfunction(arg1 String in, 
+					    arg2 String out, 
+					    arg3 String inout,
+					    arg4 char(5) SqlNullable inout ) 
+					    returns(char(10))
+	{alias="myalias"}	
+	end
+end
+
+Library nativeLibrary_valid2 type nativeLibrary	
+{callingConvention=I4GL }
+	function myfunction() returns(String)
+	{alias="123NormallyInvalidAlias"}	
+	end
+	function anotherfunction() 
+	{alias="anotheralias"}
+	end
+end
+
+Library nonNativeLibrary type basicLibrary	
+{alias="myalias"}
+	function myfunction(arg1 char(10))
+		arg1 = "abc";	
+	end
+end
+
+program myprogramnative type basicprogram {V60ExceptionCompatibility=yes}
+	use nativeLibrary_valid;
+	mystring1, mystring2, mystring3 string;
+	mychar5 char(5);
+	function main()
+		try 
+		nativeLibrary_valid.myfunction ( mystring1,
+											mystring2,
+											mystring3,
+											mychar5);
+		onexception 										  	
+			case (syslib.currentException.code)				
+			end
+		end
+	end	
+end 
+
+//Examples from spec
+//Migrated I4GL Library interface fronting I4GL C dll
+Library I4GLFunctions type nativeLibrary
+{callingConvention=I4GL}
+	Function entryPoint1( p1 any in, 
+          p2 any in, p3 any in, 
+			p4 any out, p5 any out) 
+	end
+	Function entryPoint2( p1 any in, p2 any in, 
+				p3 any out)
+	end
+	Function entryPoint3( p1 any in, p2 any in, 
+				p3 any out)
+	end
+
+end
+
+
+//Library interface fronting I4GL C dll
+Library I4GLFunctions2 type nativeLibrary
+{callingConvention=I4GL, dllname="mydll"}
+	Function entryPoint1( p1 int SqlNullable in, 
+							p2 date in, p3 time in, p4 interval("ssss") in, 
+							p5 any out) 
+	end
+	Function entryPoint2( p1 float in, p2 String in, 
+							p3 smallint out)
+	end
+	Function entryPoint3( p1 any in, p2 any in, 
+							p3 any out, p4 clob inout)
+	end
+
+end
+

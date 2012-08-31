@@ -1,0 +1,180 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+record myrec type SQLRecord
+name char(30);
+end
+
+function toplevelfunction ()
+	if(yes) exit; end//0
+	if(yes) exit program (1); end//0
+	if(yes) exit stack shshshsh; end
+	
+end
+
+Program pgm
+	function main()
+		a char(10);
+		b int;
+		const intConst int = 4;
+		const charConst char(1) = "a";
+		
+				if(yes) exit stack; end // 0
+					if(yes) exit stack stacklabel; end// 0	
+//							if(yes) exit stack xxxxx; end// 1 Invalid modifier xxxxx. The modifier for an exit stack statement must be a label defined within the main function of the program
+							
+		if(yes) exit program (1 + 1); end 		// 0
+		
+		if(yes) exit program (b + 1); end 		// 0
+		
+		if(yes) exit program (b * b); end 		// 0
+		
+		if(yes) exit program (intConst); end 	// 0
+		
+		if(yes) exit program( b ); end // 0
+		
+		if(yes) exit program( returnCode ); end // 0
+		
+		if(yes) exit program( sysVar.returnCode ); end	// 0
+		
+//		if(yes) exit blah; end // 1
+				
+		case (b)
+			when(5)
+				if(yes) exit case; end // 0
+			when (6)
+				if(yes) exit; end //0
+			when (7)
+				if(yes) exit for; end//1 Invalid exit modifier. The for exit modifier may only be used within a for statement block
+								if(yes) exit program; end//0				
+												if(yes) exit stack; end// 0		
+				if(yes) exit stack stacklabel; end// 0	
+//											exit stack xxxxx;// 1 Invalid modifier xxxxx. The modifier for an exit stack statement must be a label defined within the main function of the program
+		end
+		
+		if (b == 1)
+			if(yes) exit; end// 0
+			if(yes) exit if; end//0
+			if(yes) exit case; end // 1 Invalid exit modifier. The case exit modifier may only be used within a case statement block
+							if(yes) exit program; end//0	
+										if(yes) exit stack; end// 0
+	//																exit stack xxxxx;// 1 Invalid modifier xxxxx. The modifier for an exit stack statement must be a label defined within the main function of the program
+			if(yes) exit stack stacklabel; end// 0					
+		end
+				
+		while (b < 5)
+		if(yes) exit ; end// 0
+		if(yes) exit while; end// 0
+		if(yes) exit if; end // 0
+				if(yes) exit stack; end// 0
+					if(yes) exit stack stacklabel; end// 0	
+//												exit stack xxxxx;// 1 Invalid modifier xxxxx. The modifier for an exit stack statement must be a label defined within the main function of the program
+		
+		if(yes) exit program; end//0
+		end
+		
+		for (b from 1 to 10 by 1)
+		if (b == 5)
+			if(yes) exit; end // 0
+			if(yes) exit for; end// 0
+			if(yes) exit program; end // 0
+						if(yes) exit stack; end// 0
+//							if(yes) exit stack xxxxx; end// 1 Invalid modifier xxxxx. The modifier for an exit stack statement must be a label defined within the main function of the program						
+						if(yes) exit stack stacklabel; end// 0	
+			if(yes) exit while; end// 1 Invalid exit modifier. The while exit modifier may only be used within a while statement block
+			
+		end
+	end
+
+			open selectEmp with #sql{ select name from employee } ;	
+		forEach (from selectEmp) 
+	if(yes) exit; end// 0
+	if(yes) exit program; end// 0
+		if(yes) exit stack; end// 0
+//							if(yes) exit stack xxxxx; end// 1 Invalid modifier xxxxx. The modifier for an exit stack statement must be a label defined within the main function of the program		
+				if(yes) exit stack stacklabel; end// 0	
+	if(yes) exit forEach; end // 0
+	if(yes) exit for; end // 1 Invalid exit modifier. The for exit modifier may only be used within a for statement block
+	
+	end
+							
+		if(yes) exit program ("abc" + "def"); end	// 1 Invalid return code "abc"+"def". The return code for an exit program statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
+		
+		if(yes) exit program (charConst); end 		// 1 Invalid return code charConst. The return code for an exit program statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
+		
+		if(yes) exit program ("A"); end				// 1
+		
+		if(yes) exit program (a); end 				// 1 Invalid return code a. The return code for an exit program statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
+		
+		if(yes) exit program (a+a); end 			// 1 Invalid return code a+a. The return code for an exit program statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
+stacklabel:		
+		if(yes) exit; end//0		
+	end
+	
+	function func()
+		x string;
+xxxxx:		
+				if(yes) exit stack; end// 0
+				if(yes) exit stack stacklabel ; end// 0
+		while (1==1)
+			openUI new PROMPT {message="press J to exit this loop:", ischar=yes}
+				 bind x
+				 OnEvent(ON_KEY:"J")
+					while (1==1)
+						if(yes) exit while; end				// 0
+						continue while; 		// 0
+					end
+				 	if(yes) exit while; end		// 0
+				 	if(yes) exit case ; end// The case exit modifier may only be used within a case statement block.
+				 	if(yes) exit if; end// 0
+				 	
+				 	if(yes) exit for; end//1 The for exit modifier may only be used within a for statement block.
+				 	
+				 	if(yes) exit forEach; end // Invalid exit modifier. The forEach exit modifier may only be used within a forEach statement block.
+				 	
+				 	if(yes) exit program; end// 0
+				 					 	if(yes) exit stack; end// 0
+ 					if(yes) exit stack stacklabel ; end// 0
+//				 	if(yes) exit stack xxxxx; end// 1 Invalid modifier xxxxx. The modifier for an exit stack statement must be a label defined within the main function of the program
+				 	
+				 	
+			end;
+		end	
+	end
+end
+
+Library lib
+	function func()
+		if(yes) exit program; end	//1
+		if(yes) exit stack; end		//1
+	end
+end
+
+Service svc
+	function func()
+		if(yes) exit program; end	//1
+		if(yes) exit stack; end		//1
+	end
+end
+
+Handler hndlr
+	function func()
+		if(yes) exit program; end	//1
+		if(yes) exit stack; end		//1
+	end
+end
+
+handler ph type JSFHandler
+	function func()
+		if(yes) exit program; end	//1
+		if(yes) exit stack; end		//1
+	end
+end

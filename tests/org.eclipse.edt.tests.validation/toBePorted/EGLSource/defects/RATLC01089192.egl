@@ -1,0 +1,264 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+Record OTHERSQLIF type sqlRecord  {
+  tableNames = [["SQLTABLEIF", "T1"]]
+  }
+  3 SQL1IF char(8) { column = "SQL1IF", isNullable = yes} ;
+  3 SQL2IF char(72) { column = "SQL2IF", isNullable = yes} ;
+end 
+
+Record SQLIF type sqlRecord  {
+  tableNames = [["SQLTABLEIF", "T1"]]
+  }
+  3 SQL1IF char(8) { column = "SQL1IF", isNullable = yes} ;
+  3 SQL2IF char(72) { column = "SQL2IF", isNullable = yes} ;
+  3 ITEM3IF char(3) { column = "ITEM3IF", isNullable = yes} ;
+end 
+
+Record RELATIVEIF type relativeRecord  {
+  fileName = "MYRELIF", keyItem = "RELATIVEKIF"
+  }
+  3 RELATIVEKIF smallint ; 
+  3 RELATIVERIF char(78) ; 
+end 
+
+Record RECORDPIF type basicRecord
+  3 RECORD1IF char(8) ; 
+  3 RECORD2IF char(72) ; 
+end 
+
+Record RECORDIF type basicRecord
+  3 RECORD1IF char(8) ; 
+  3 RECORD2IF char(72) ; 
+end 
+
+Record DLIIF type DLISegment  {
+  keyItem = "DLIKIF",
+  lengthItem = "DLIVIF"
+  }
+  3 DLIVIF smallint ; 
+  3 DLIKIF char(8) ; 
+  3 DLI2IF char(72) ; 
+end   
+
+Record SERIALIF type serialRecord  {
+  fileName = "FILEIF", lengthItem = "SERIALVIF", 
+  numElementsItem = "SERIALOIF"
+  }
+  3 SERIALVIF smallint ; 
+  3 SERIALOIF smallint ; 
+  3 SERIAL1IF char(72) ; 
+  3 SERIAL2IF char(8) ; 
+  3 ITEM1IF char(3) [10] ; 
+end 
+
+Record TSTIFWHP type PSBRecord
+  iopcb  IO_PCBRecord  { @PCB { pcbType = PCBKind.TP } };
+  pcb0 IO_PCBRecord { redefines = "iopcb"};
+  ELAALT ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb1 ALT_PCBRecord { redefines = "ELAALT" };
+  ELAEXP ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb2 ALT_PCBRecord { redefines = "ELAEXP" };
+
+  DLIIF_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB,
+      hierarchy = [
+        @Relationship { segmentRecord = "DLIIF" }
+    ] } } ;
+  pcb3 DB_PCBRecord { redefines = "DLIIF_dbPCB" };
+end  
+
+Function TSTIFWH_HIF(
+  ITEMPIF char(3), 
+  MAPPIF char(3) field, 
+  SQLPIF char(3) sqlnullable, 
+  RECORDPIF RECORDPIF 
+  )
+  /* dummy function*/
+end 
+
+Function TSTIFWH_DIF()
+  try
+    add SQLIF ;
+    onException exit stack TSTIFWH_MAINIF ;
+  end
+end 
+
+Function TSTIFWH_IIF()
+  converse MAPIF ;
+end 
+
+Function TSTIFWH_EIF()
+  try
+    add DLIIF ;
+    onException TSTIFWH_BIF() ;
+  end
+  TSTIFWH_FIF();
+end 
+
+Function TSTIFWH_JIF()
+  TSTIFWH_KIF();
+
+end 
+
+Function TSTIFWH_AIF()
+  try
+    add SERIALIF ;
+  end
+end 
+
+Function TSTIFWH_FIF()
+  TSTIFWH_GIF();
+
+end 
+
+Function TSTIFWH_KIF()
+  get RELATIVEIF ;
+end 
+
+Function TSTIFWH_MAINWHILE()
+  /* dummy function as placeholder*/
+end 
+
+Function TSTIFWH_BIF()
+  TSTIFWH_DIF();
+end 
+
+Function TSTIFWH_MAINIF()
+  TSTIFWH_AIF();
+  TSTIFWH_BIF();
+  TSTIFWH_CIF();
+  TSTIFWH_HIF(ITEM1IF, ITEM2IF, ITEM3IF, RECORDIF);
+  TSTIFWH_IIF();
+  if (ITEM2IF is blanks)
+    TSTIFWH_BIF();
+  else
+    TSTIFWH_CIF();
+  end
+  if (ITEM2IF in TABLEIF.ITEMTIF)
+    TSTIFWH_BIF();
+  else
+    TSTIFWH_CIF();
+  end
+  if (ITEM2IF in TABLEIF.ITEMTIF)
+    TSTIFWH_BIF();
+  else
+    TSTIFWH_CIF();
+  end
+  if (ITEM2IF in TABLEIF.ITEMTIF)
+    ITEM3IF = TABLEIF.ITEMTAIF[sysVar.arrayIndex];
+  end
+  if (ITEM2IF in TABLEIF.ITEMTIF)
+    ITEM3IF = TABLEIF.ITEMTAIF[sysVar.arrayIndex];
+  end
+end 
+
+Function TSTIFWH_GIF()
+  try
+    add OTHERSQLIF ;
+    onException exit program ;
+  end
+end 
+
+Function TSTIFWH_CIF()
+  TSTIFWH_EIF();
+end 
+
+DataTable TABLEIF type basicTable  {
+  shared = yes, resident = no
+  }
+  3 ITEMTIF char(3); 
+  3 ITEMTAIF char(3); 
+   {contents = [
+    [" IF", "LN1"],
+    ["IF ", "LN2"]
+  ]}
+end
+
+FormGroup TSTGIF
+ 
+  use MAPIF;
+end 
+
+Form MAPIF type textForm	
+ { screenSizes = [[24,80]], formSize = [24,80], position = [1,1]}
+
+
+  ITEM2IF char(3) 
+  { position = [3,6], fieldLen = 3, cursor = yes, validationOrder = 1, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = no, upperCase = yes, align = left, 
+    fillCharacter = nullFill, validatorFunction = "TSTIFWH_JIF"}; 
+
+
+  * { position = [6,5], fieldLen = 38, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "constant with if( and if ( in the text"};
+end 
+
+Program TSTIFWH type textUIProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no, 
+  segmented = yes,   @DLI {          psb = "psb", callInterface = DLICallInterfaceKind.CBLTDLI,          handleHardDLIErrors = no        }
+  }
+
+  DLIIF DLIIF; 
+  OTHERSQLIF OTHERSQLIF; 
+
+  SERIALIF SERIALIF; 
+  SQLIF SQLIF; 
+   
+  VAGen_EZESYS char(8);
+  VAGen_EZEREPLY num(1);
+  VAGen_EZE_WAIT_TIME bin(9,2);
+  VAGen_EZE_ITEMLEN bin(9,2);
+
+  
+  use TABLEIF {deleteAfterUse = yes}; 
+  use TSTGIF {
+    pfKeyEquate = yes
+  };
+
+  function main()
+    
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    TSTIFWH_MAINIF: TSTIFWH_MAINIF();
+    if (1 == 0)
+      goto TSTIFWH_MAINIF;
+    end
+    if (ITEM2IF is blanks)
+      goto TSTIFWH_MAINIF;
+    else
+      goto TSTIFWH_MAINWHILE;
+    end
+    if (ITEM2IF in TABLEIF.ITEMTIF)
+      goto TSTIFWH_MAINIF;
+    else
+      goto TSTIFWH_MAINWHILE;
+    end
+    if (ITEM2IF in TABLEIF.ITEMTIF)
+      goto TSTIFWH_MAINIF;
+    else
+      goto TSTIFWH_MAINWHILE;
+    end
+    if (ITEM2IF in TABLEIF.ITEMTIF)
+      ITEM3IF = TABLEIF.ITEMTAIF[sysVar.arrayIndex];
+    end
+    if (ITEM2IF in TABLEIF.ITEMTIF)
+      ITEM3IF = TABLEIF.ITEMTAIF[sysVar.arrayIndex];
+    end
+    TSTIFWH_MAINWHILE: TSTIFWH_MAINWHILE();
+  end 
+end

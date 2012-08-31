@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR VAG
+
+Record CS93WSR_EZESTRING type basicRecord
+  3 STRING_RESULT int  ; 
+  3 TARGET unicode(20)  ; 
+  3 SOURCE unicode(20)  ; 
+  3 SEPARATOR unicode(1)  ; 
+  3 TINDEX int  ; 
+  3 TLENGTH int  ; 
+  3 SINDEX int  ; 
+  3 SLENGTH int  ; 
+  3 TOKEN unicode(3)  ; 
+  3 CHAR-OR-LIT unicode(1)  ; 
+  3 DELIMITERS unicode(1)  ; 
+  3 ARRAY unicode(20)  [3] ; 
+end
+
+Program pgm {allowUnqualifiedItemReferences=yes}
+	rec CS93WSR_EZESTRING;
+	Function main() end
+	Function CS93A-EZESTRING()
+	  STRING_RESULT = VGLib.compareBytes(TARGET, TINDEX, TLENGTH, SOURCE, SINDEX, SLENGTH);
+	  STRING_RESULT = VGLib.compareBytes(TARGET, 1, 10, SOURCE, 12, 22);
+	  /**/
+	  STRING_RESULT = VGLib.concatenateBytes(TARGET, SOURCE);
+	  STRING_RESULT = VGLib.concatenateBytes(TARGET, "S");
+	
+	  /**/
+	  VGLib.copyBytes(TARGET, TINDEX, TLENGTH, SOURCE, SINDEX, SLENGTH);
+	  VGLib.copyBytes(TARGET, 1, 16, SOURCE, 16, 10);
+	  VGLib.copyBytes(TARGET, 1, 10, SOURCE, 14, 16);
+	end
+end

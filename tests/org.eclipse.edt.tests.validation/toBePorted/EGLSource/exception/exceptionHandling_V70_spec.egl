@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record SQLException type Exception	//0
+	sqlCode int;					//0
+end
+
+Program pgm
+	function main()
+		myException SQLException {msgKey="43"} = new SQLException {sqlCode=42};	//0
+//		myException.code = "a";			//0
+//		myException.description = "b";	//0
+		myException.message = "c";		//0
+		myException.messageID = "c";	//0
+		
+		try								//0
+			throw new SQLException{};	//0
+		onException(ex SQLException)	//0
+			ex.message = "xxx";			//0
+		onException(ex anyException)	//0
+			ex.message = "yyy";			//0			
+			ex = new SQLException{};	//0			
+			throw ex;					//0
+		onException(ex NullValueException)			//0
+		onException(ex egl.core.TypeCastException)	//0
+		end		
+	end
+end

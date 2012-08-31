@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm {I4GLItemsNullable=yes}
+	function main()
+		intArray int[10];
+		strArray String[10];
+		intVar int;
+	
+		// IWN.VAL.5095
+		if (intArray[1] == NULL || intArray[1] != NULL)		//0
+			ConsoleLib.displayLineMode ("Validation is OK");
+		end
+	
+		// IWN.VAL.5095
+		if (strArray[1] == NULL || strArray[1] != NULL)		//0
+			ConsoleLib.displayLineMode ("Validation is OK.");
+		end
+	
+		// this is OK
+		intVar = intArray[1];
+		if (intVar == NULL || intVar != NULL)					//0
+			ConsoleLib.displayLineMode ("Validation is OK.");
+		end
+	end
+end

@@ -1,0 +1,29 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//Examples of the problem: a hex field can be given the value 00000300, and a
+//dbchar field can be given the value c"I'm a char".
+
+DataTable dTable {
+	contents = [
+		[
+			00000300,		//1
+			c"char"			//1
+		],
+		[
+			x"00000300",	//0
+			d"char"			//0
+		]
+	]
+}
+	10 hexField hex(8);
+	10 dbcharField dbchar(10);
+end

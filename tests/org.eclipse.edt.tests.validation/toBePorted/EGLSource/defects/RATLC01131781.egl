@@ -1,0 +1,196 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+ExternalType XYz type JavaObject
+	a0 int;					//0
+	a1 bigint;				//0
+	a2 smallint;			//0
+	a3 num(3);				//0
+	a4 num(3,2);			//0
+	a5 decimal(3);			//0
+	a6 decimal(3,2);		//0
+	a7 float;				//0
+	a8 smallfloat;			//0
+	a9 string;				//0
+	a10 string(10);			//0
+	a11 char(10);			//0
+	a12 mbchar(10);			//0
+	a13 dbchar(10);			//0
+	a14 unicode(10);		//0
+	a15 hex(2);				//0
+	a16 date;				//0
+	a17 time;				//0
+	a18 timestamp;			//0
+	a19 interval("yyMM");	//0
+	a20 interval("dddd");	//0
+	x21 blob;				//1
+	x22 clob;				//1
+	x23 dictionary;			//1
+	x24 arraydictionary;	//1
+	x25 zip;				//1
+	x26 zop;				//1
+	a27 XYz2;				//0
+	x28 any;				//1
+	a29 boolean;			//0
+	x30 mydel;				//1
+
+	aa0 int[];					//0
+	aa1 bigint[];				//0
+	aa2 smallint[];				//0
+	aa3 num(3)[];				//0
+	aa4 num(3,2)[];				//0
+	aa5 decimal(3)[];			//0
+	aa6 decimal(3,2)[];			//0
+	aa7 float[];				//0
+	aa8 smallfloat[];			//0
+	aa9 string[];				//0
+	aa10 string(10)[];			//0
+	aa11 char(10)[];			//0
+	aa12 mbchar(10)[];			//0
+	aa13 dbchar(10)[];			//0
+	aa14 unicode(10)[];			//0
+	aa15 hex(2)[];				//0
+	aa16 date[];				//0
+	aa17 time[];				//0
+	aa18 timestamp[];			//0
+	aa19 interval("yyMM")[];	//0
+	aa20 interval("dddd")[];	//0
+	xx21 blob[];				//1
+	xx22 clob[];				//1
+	xx23 dictionary[];			//1
+	xx24 arraydictionary[];		//1
+	xx25 zip[];					//1
+	xx26 zop[];					//1
+	aa27 XYz2[];				//0
+	xx28 any[];					//1
+	aa29 boolean[];				//0
+	xx30 mydel[];				//1
+	
+	function paramsOutTheWazoo(
+		a0 int in,					//0
+		a1 bigint in,				//0
+		a2 smallint in,				//0
+		a3 num(3) in,				//0
+		a4 num(3,2) in,				//0
+		a5 decimal(3) in,			//0
+		a6 decimal(3,2) in,			//0
+		a7 float in,				//0
+		a8 smallfloat in,			//0
+		a9 string in,				//0
+		a10 string(10) in,			//0
+		a11 char(10) in,			//0
+		a12 mbchar(10) in,			//0
+		a13 dbchar(10) in,			//0
+		a14 unicode(10) in,			//0
+		a15 hex(2) in,				//0
+		a16 date in,				//0
+		a17 time in,				//0
+		a18 timestamp in,			//0
+		a19 interval("yyMM") in,	//0
+		a20 interval("dddd") in,	//0
+		x21 blob in,				//1
+		x22 clob in,				//1
+		x23 dictionary,				//1
+		x24 arraydictionary,		//1
+		x25 zip,					//1
+		x26 zop,					//1
+		a27 XYz2 in,				//0
+		x28 any in,					//1
+		a29 boolean in,				//0
+		x30 mydel,					//1
+		aa0 int[],					//0
+		aa1 bigint[],				//0
+		aa2 smallint[],				//0
+		aa3 num(3)[],				//0
+		aa4 num(3,2)[],				//0
+		aa5 decimal(3)[],			//0
+		aa6 decimal(3,2)[],			//0
+		aa7 float[],				//0
+		aa8 smallfloat[],			//0
+		aa9 string[],				//0
+		aa10 string(10)[],			//0
+		aa11 char(10)[],			//0
+		aa12 mbchar(10)[],			//0
+		aa13 dbchar(10)[],			//0
+		aa14 unicode(10)[],			//0
+		aa15 hex(2)[],				//0
+		aa16 date[],				//0	
+		aa17 time[],				//0
+		aa18 timestamp[],			//0
+		aa19 interval("yyMM")[],	//0
+		aa20 interval("dddd")[],	//0
+		xx21 blob[],				//1
+		xx22 clob[],				//1
+		xx23 dictionary[],			//1
+		xx24 arraydictionary[],		//1
+		xx25 zip[],					//1
+		xx26 zop[],					//1
+		aa27 XYz2[],				//0
+		xx28 any[],					//1
+		aa29 boolean[],				//0
+		xx30 mydel[]				//1
+	);
+	
+	function getX21() returns( blob );					//1
+	
+	function getX22() returns( clob );					//1
+		
+	function getX23() returns( dictionary );			//1
+	
+	function getX24() returns( arraydictionary );		//1
+	
+	function getX28() returns( any );					//1
+	
+	function getX30() returns( mydel );					//1
+	
+	function getXX21() returns( blob[] );				//1
+	
+	function getXX22() returns( clob[] );				//1
+	
+	function getXX23() returns( dictionary[] );			//1
+	
+	function getXX24() returns( arraydictionary[] );	//1
+	
+	function getXX25() returns( zip[] );				//1
+	
+	function getXX26() returns( zop[] );				//1
+	
+	function getXX28() returns( any[] );				//1
+	
+	function getXX30() returns( mydel[] );				//1
+end
+
+delegate mydel()
+end
+
+record zip
+	i int;
+end
+
+record zop
+	10 i int;
+end
+
+ExternalType XYz2 type JavaObject
+end
+
+ExternalType XYz3 type JavaObject
+	x1 mydel {@EventListener{method="xxx()"}};						//0
+	x2, x3 mydel {@EventListener{method="xxx()"}};					//0
+	x4 mydel[] {@EventListener{method="xxx()"}};					//0
+	x5, x6 mydel[] {@EventListener{method="xxx()"}};				//0
+	
+	x7 mydel;						//1
+	x8, x9 mydel;					//2
+	x10 mydel[];					//1
+	x11, x12 mydel[];				//2
+end

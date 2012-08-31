@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+DataTable teacheri type basictable  {
+  shared = yes, resident = no
+  } 
+ 
+    10 TeacherID ID ;
+    10 TeacherName SCHName;
+ 
+  {contents = [
+    ["0001", "Spice          Boy"    ], 
+	["0002", "Lopper         Emma"   ],  
+	["0003", "Baldy          Soccer" ],  
+	["0004", "Karn           Singer" ],  
+	["0005", "Lindy          Bus"    ],  
+	["0006", "Boller         Dr"     ],  
+	["0007", "Benne          Granny" ],  
+	["0008", "IBM            Ex"     ],  
+	["0009", "Whit           Mama"   ],  
+	["0010", "Drink          Mac"    ],  
+	["0011", "Fish           Liz"    ],  
+	["0012", "Sui            Sue"    ], 
+	["0013", "Holl           Greek"  ], 
+	["0014", "Bass           Soprano"],
+	["0015", "Band           Jazz"   ]
+  ]}
+end
+
+Record SCHName type basicRecord
+	10 LastName  char(15);
+	10 FirstName char(15);
+		15 firstinitial char(1);
+		15 rest char(14);
+end	
+DataItem ID char(4) end

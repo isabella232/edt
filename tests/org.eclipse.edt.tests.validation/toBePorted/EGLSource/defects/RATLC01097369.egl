@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program RATLC01097369 type TextUIProgram {
+    inputForm = RA1097369Form,
+    includeReferencedFunctions = yes
+    }
+	use RATLC01097369Group ;
+	function main()
+		converse RA1097369Form ;		//0
+		
+		tlf();
+	end 	
+end
+
+function tlf()
+	converse RA1097369Form ;			//0
+end 	
+
+formGroup RATLC01097369Group
+	Form RA1097369Form type TextForm { 
+		screenSizes = [[ 24, 80 ]], 
+		formsize = [24,80]}	  
+		* { position = [3, 30], color = green, value = "Hello World!"} ;  					
+	end	 
+end

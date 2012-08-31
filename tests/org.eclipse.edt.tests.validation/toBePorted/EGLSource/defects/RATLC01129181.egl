@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler myPage type JSFHandler
+	intItem1 int {									//0
+		onValueChangeFunction = intInOutFunc
+	};
+	
+	intItem2 int {									//0
+		onValueChangeFunction = smallintInOutFunc
+	};
+	
+	intItem3 int {									//0
+		onValueChangeFunction = intInFunc
+	};
+	
+	intItem4 int {									//0
+		onValueChangeFunction = smallintInFunc
+	};
+	
+	smallintItem1 smallint {						//0
+		onValueChangeFunction = intInOutFunc
+	};
+	
+	smallintItem2 smallint {						//0
+		onValueChangeFunction = smallintInOutFunc
+	};
+	
+	smallintItem3 smallint {						//0
+		onValueChangeFunction = intInFunc
+	};
+	
+	smallintItem4 smallint {						//0
+		onValueChangeFunction = smallintInFunc
+	};
+	
+	function intInOutFunc(p1 int) end
+	function smallintInOutFunc(p1 smallint) end
+	function intInFunc(p1 int in) end
+	function smallintInFunc(p1 smallint in) end
+end

@@ -1,0 +1,86 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record IndexedRecordDateFormatOne type IndexedRecord
+	{ 
+		sItem13{DateFormat = "ABCDE"},
+		sItem14{Currency = yes},
+		sItem15{Currency = yes}
+	}
+	
+	10 sItem1 char(100){DateFormat = "ABCDE", NumericSeparator = yes}; // 1
+	10 sItem2 char(100){DateFormat = "ABCDE", NumericSeparator = no}; // 0
+	10 sItem3 char(100){DateFormat = "ABCDE", Currency = yes}; // 1
+	10 sItem4 char(100){DateFormat = "ABCDE", Currency = no}; // 0
+	10 sItem5 char(100){DateFormat = "ABCDE", Sign = leading}; // 1
+	10 sItem6 char(100){DateFormat = "ABCDE", Sign = none}; // 0
+	10 sItem7 char(100){DateFormat = "ABCDE", ZeroFormat = yes}; // 1
+	10 sItem8 char(100){DateFormat = "ABCDE", ZeroFormat = no}; // 0
+	10 sItem9 char(100){DateFormat = "ABCDE", ValidValues = ["ABC"]}; // 1
+	
+	10 sItem10 DateFormatItem{Currency = yes}; // 1
+	10 sItem11 NumericSeparatorItem{DateFormat = "ABCDE"}; // 0
+	
+	10 sItem12 char(100){DateFormat = "ABCDE", NumericSeparator = yes, Currency = yes}; // 2
+	
+	10 sItem13 char(100){Currency = yes}; // 1
+	10 sItem14 char(100){DateFormat = "ABCDE"}; // 1
+	10 sItem15 DateFormatItem; // 1
+end
+
+Record SerialRecordDateFormatOne type IndexedRecord
+	{ 
+		sItem13{DateFormat = "ABCDE"},
+		sItem14{Currency = yes},
+		sItem15{Currency = yes}
+	}
+	
+	10 sItem1 char(100){DateFormat = "ABCDE", NumericSeparator = yes}; // 1
+	10 sItem2 char(100){DateFormat = "ABCDE", NumericSeparator = no}; // 0
+	10 sItem3 char(100){DateFormat = "ABCDE", Currency = yes}; // 1
+	10 sItem4 char(100){DateFormat = "ABCDE", Currency = no}; // 0
+	10 sItem5 char(100){DateFormat = "ABCDE", Sign = leading}; // 1
+	10 sItem6 char(100){DateFormat = "ABCDE", Sign = none}; // 0
+	10 sItem7 char(100){DateFormat = "ABCDE", ZeroFormat = yes}; // 1
+	10 sItem8 char(100){DateFormat = "ABCDE", ZeroFormat = no}; // 0
+	10 sItem9 char(100){DateFormat = "ABCDE", ValidValues = ["ABC"]}; // 1
+	
+	10 sItem10 DateFormatItem{Currency = yes}; // 1
+	10 sItem11 NumericSeparatorItem{DateFormat = "ABCDE"}; // 0
+	
+	10 sItem12 char(100){DateFormat = "ABCDE", NumericSeparator = yes, Currency = yes}; // 2
+	
+	10 sItem13 char(100){Currency = yes}; // 1
+	10 sItem14 char(100){DateFormat = "ABCDE"}; // 1
+	10 sItem15 DateFormatItem; // 1
+end
+
+DataItem DateFormatItem char(100) {DateFormat = "ABCDE"} end
+DataItem NumericSeparatorItem char(100) {NumericSeparator = yes} end
+
+handler BasicPageHandlerDateFormatOne type JSFHandler 
+	
+	var1 char(100){DateFormat = "ABCDE", NumericSeparator = yes}; // 1
+	var2 char(100){DateFormat = "ABCDE", NumericSeparator = no}; // 0
+	var3 char(100){DateFormat = "ABCDE", Currency = yes}; // 1
+	var4 char(100){DateFormat = "ABCDE", Currency = no}; // 0
+	var5 char(100){DateFormat = "ABCDE", Sign = leading}; // 1
+	var6 char(100){DateFormat = "ABCDE", Sign = none}; // 0
+	var7 char(100){DateFormat = "ABCDE", ZeroFormat = yes}; // 1
+	var8 char(100){DateFormat = "ABCDE", ZeroFormat = no}; // 0
+	var9 char(100){DateFormat = "ABCDE", ValidValues = ["ABC"]}; // 1
+	
+	var10 DateFormatItem{Currency = yes}; // 1
+	var11 NumericSeparatorItem{DateFormat = "ABCDE"}; // 0
+	
+	var12 char(100){DateFormat = "ABCDE", NumericSeparator = yes, Currency = yes}; // 2
+end

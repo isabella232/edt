@@ -1,0 +1,73 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+program initializers_valid
+
+	function main()
+		
+		local1 int = 4;
+		local2 int = local1;
+		
+		local7 string = f2();
+		local8 string = f2() + f(2) + "def";
+		
+		local9 int = cos(local1);
+		
+		
+	end
+	
+	Function f(p1 int in) returns (string) end
+	
+	Function f1 ()  	 
+		a, b int = 5 ;  
+		c int = b ;  	 
+	end
+	
+	function f2() returns (string)
+		return ("abc");
+	end
+	
+	global1 int = global2;
+	global2 int = 4;
+	
+	global7 int = cos(global1);
+	global8 int = init_Valid.x;
+	global9 int = init_Valid.f1();
+end	
+
+
+record point
+	x int = init_Valid.x;
+	y int = init_Valid.f1();
+end
+
+record anSQLRec type sqlRecord
+	 xxx char(9) {column = "EMPNO"} = "abcd12345";
+end
+
+library init_Valid
+
+	x int = 4;
+	
+	function f1() returns (int)
+		return (3);
+	end
+	
+end
+
+Program pgm2
+	function main()
+		
+	end
+end
+		

@@ -1,0 +1,32 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record myRec type vguiRecord
+	10 item1 char(4) {validatorFunction="runatwebone", runValidatorFromProgram=no};
+	
+	10 lastProgramEditFunction char(4);
+	10 lastWebItemEditFunction char(4);
+	
+	10 topLevelItem int;
+		15 * int;
+			20 numericRangeCheck int;
+end
+
+Function RunAtWebOne () {
+                containerContextDependent = yes
+                }
+                writeStdOut ( "Run W1" ) ;
+                lastProgramEditFunction = "RunAtWebOne" ;					//0
+                lastWebItemEditFunction = "RunAtWebOne" ;					//0
+                if ( numericRangeCheck == 1.549 )							//0
+                        setError ( numericRangeCheck, "0220", "-1.549" ) ;	//0
+                end                
+end 

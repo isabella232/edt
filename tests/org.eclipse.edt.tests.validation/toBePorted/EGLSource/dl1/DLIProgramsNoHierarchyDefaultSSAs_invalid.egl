@@ -1,0 +1,142 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//ignore_case
+
+// Tests that we don't trip up over not having a hierarchy in a PSB when trying to build default SSAs 
+Record CourseInfo type DLISegment 					 
+{ segmentName="COURSE", keyItem=courseNo }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record OfferingInfo type DLISegment 
+	{segmentName = "OFFERING"}					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record NoHierarchyPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB" }};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC" }};
+end
+
+
+Program DLIProgramsNoHierarchyDefaultSSAs_invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb2, 					 
+         handleHardDLIErrors = yes }	 
+  }
+  course courseInfo;						   
+  offering offeringInfo;					 
+  courses courseInfo[20];					   
+  offers offeringInfo[3];	
+  garbage offeringInfo;				 
+
+  // PSB Declaration
+  psb2 NoHierarchyPSB ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+  	function addStmt()		
+  	  add course 		;								//1 No PCB in psb2 contains the course segment
+	  // add segment with another PCB 
+ 	  add offering usingPCB psb2.offeringPCB ;		 	//1 Cannot build default SSAs because psb2.offeringPCB does not contain any hierarchy
+ 	  // add arrays 
+  	  add courses 		;								//1 No PCB in psb2 contains the course segment
+  	  // add arrays of segment with another PCB 
+  	  add offers usingPCB psb2.offeringPCB ;			//1 Cannot build default SSAs because psb2.offeringPCB does not contain any hierarchy
+   	  // add segments using path calls 
+  	  add course, offering				;				//1 No PCB in psb2 contains the segment hierarchy: course, offering
+  	  // add segments using path calls, another PCB	
+      add offering, course usingPCB psb2.offeringPCB ;  //1 Cannot build default SSAs because psb2.offeringPCB does not contain any hierarchy
+  	end  
+
+  	function deleteStmt() 	
+	  delete offering ; 					 			//1 No PCB in psb2 contains the offering segment
+	  delete course usingPCB psb2.offeringPCB 	;		//0 
+	end
+ 	function getStmt() 
+    	// get segment with no modifiers
+		get offering;									//1 No PCB in psb2 contains the offering segment
+    	// get segment with another PCB
+		get course usingPCB psb2.offeringPCB;  			//1 Cannot build default SSAs because psb2.offeringPCB does not contain any hierarchy
+  		// get arrays of segments with no modifiers 
+		get offers ;									//1 No PCB in psb2 contains the offering segment
+	 	// get arrays of segment with another PCB
+		get courses usingPCB psb2.offeringPCB ; 		//1 Cannot build default SSAs because psb2.offeringPCB does not contain any hierarchy
+  		// get segments using path calls, another PCB
+		get offering, course usingPCB psb2.offeringPCB; //1 Cannot build default SSAs because psb2.offeringPCB does not contain any hierarchy
+	end  
+	
+ 	function getForUpdateStmt() 
+		get offering forupdate; 							//1 No PCB in psb2 contains the offering segment
+   		// get segment with another PCB
+		get offering forupdate usingPCB psb2.offeringPCB;	//1 Cannot build default SSAs because psb2.offeringPCB does not contain any hierarchy
+	    // get segments using path calls, another PCB, 
+		get offering, garbage forupdate usingPCB psb2.coursePCB;//1 Cannot build default SSAs because psb2.coursePCB does not contain any hierarchy
+	end 
+ 	  
+ 	function getNextStmt() 
+		get next garbage;						 		//1 No PCB in psb2 contains the OFFERING segment
+    	// get segment with another PCB 
+		get next garbage usingPCB psb2.offeringPCB;		//0
+	  	// get arrays of segments with no modifiers 	
+		get next offers ;								//1 No PCB in psb2 contains the offering segment
+	end   
+
+ 	function getNextForUpdateStmt() 
+		get next offering forupdate	;					 		//1 No PCB in psb2 contains the offering segment
+   		// get segment with another PCB
+		get next offering forupdate usingPCB psb2.offeringPCB;	//0 
+	end 
+
+ 	function getNextInParentStmt() 
+		get next inparent course;				 			//1 No PCB in psb2 contains the course segment
+    	// get segment with another PCB 
+		get next inparent course usingPCB psb2.offeringPCB; //0
+	end
+	
+ 	function getNextInParentForUpdateStmt() 
+		get next inparent offering forupdate; 							//1 No PCB in psb2 contains the offering segment
+    	// get segment with another PCB 
+		get next inparent offering forupdate usingPCB psb2.offeringPCB; //0
+	end 	
+	
+  function replaceStmt()
+ 	  	replace offering ;							//1 No PCB in psb2 contains the offering segment	 
+		// replace segment with another PCB 
+	  	replace offering usingPCB psb2.offeringPCB ;//0
+
+	 
+  end
+
+
+end

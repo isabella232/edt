@@ -1,0 +1,25 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Formgroup fg
+	Form form1 type textForm {formsize=[20,20]}
+	  NUMVAR1 num(1)	//0
+	  { position = [10,1], fieldLen = 1, align = left, fillCharacter = nullFill, 
+    	value = "1"};	
+    	
+      NUMVAR2 num(1) 	//0
+	  { position = [11,1], fieldLen = 1, align = left, fillCharacter = nullFill, 
+    	value = 1};		
+    	
+      var3 unicode;
+	end
+end

@@ -1,0 +1,70 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record buttonsUir type VGUIRecord {
+	title = "Version 6.0.1 Buttons And Validator Functions Web Transaction Test",
+	alias = "buttons",
+	help = "Help For Version 6.0.1 Buttons And Validator Functions Web Transaction Test",
+	commandValueItem = buttonValue,
+	validatorFunction = programNumberValidator, //0
+	runValidatorFromProgram = no
+	}
+	10 userAction char(50) { 
+		displayName = "User action:",
+		uiType = output 
+		} ;
+	10 inputText  char(50) { 
+		displayName = "Input text",
+		uiType = inputOutput,
+		validatorFunction = textValidator,
+		upperCase = yes  
+		} ;
+	10 inputNumber decimal(12,2) {
+		displayName = "Input number",
+		runValidatorFromProgram=no,
+		validatorFunction = programNumberValidator, //0
+		uiType = inputOutput
+		} ;
+	10 buttonArray char(5)[3] {
+		uiType = submit,
+		displayName = "Enter\nHelp" 
+		} = [ "PF3", "PF1" ] ;
+	10 quitArray char(5)[3] {
+		uiType = submitBypass,
+		displayName = "Refresh\nCancel" 
+		} = [ "PF4", "PF12" ] ;
+	10 buttonValue char(5) {
+		uiType = none
+		} ;
+	10 expectedText char(50) {
+		uiType = hidden
+		} ;
+	10 expectedNumber decimal(12,2) {
+		uiType = hidden
+		} ;
+end
+
+function textValidator ()
+	if ( inputText != expectedText )
+		userAction = " " ;
+		if ( expectedText == "XXX" )
+			sysLib.setError ( inputText, "102" ) ;
+		else
+			syslib.setError( inputText, "101", expectedText ) ;
+		end
+	end
+end
+
+function programNumberValidator()
+	syslib.setError( inputText, "103", formatNumber( expectedNumber ) ) ;	//0
+	xxx = 10;																//1
+end

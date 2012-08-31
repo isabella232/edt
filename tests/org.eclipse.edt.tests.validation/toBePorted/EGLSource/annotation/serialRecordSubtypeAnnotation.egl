@@ -1,0 +1,464 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record SerialRecordValidMembersValue type SerialRecord //0
+	{ fileName = "bob", //0
+	  lengthItem=sItem2, //0
+	  numElementsItem=sItem3, //0
+	  @XSD{}
+	  
+	}
+		
+	10 sItem1 char(10);
+	10 sItem2 num(9);
+	10 sItem3 num(9);
+	
+	10 sItem4 char(10)[2];
+end
+
+Record SerialRecordInvalidMembersValueOne type SerialRecord
+	{ fileName = [2],	//1
+	  lengthItem = 3, //1
+	  numElementsItem = 4, //1
+	  @XSD{}
+	}
+		
+	10 sItem1 char(10);
+end
+
+Record SerialRecordInvalidMembersValueTwo type SerialRecord
+	{ fileName = [bob],	//1
+	  lengthItem = [sitem2], //1
+	  numElementsItem = [sitem3], //1
+	  @XSD{}
+	}
+		
+	10 sItem1 char(10);
+end
+
+Record SerialRecordUnresolvableMembers type SerialRecord
+	{ fileName = "bob",
+	  lengthItem=sItem3, // 0
+	  numElementsItem=sItem4, //1
+	  @XSD{}
+	}
+		
+	10 sItem1 char(10);
+end
+
+Record SerialRecordMissingRequiredMembers type SerialRecord //1
+	{}
+		
+	10 sItem1 char(10);
+end
+
+Record SerialRecordInvalidLengthItemLengthOne type SerialRecord
+	{ fileName = "bob",
+	  lengthItem=sItem2, //1
+	  @XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(10);
+end
+
+Record SerialRecordValidLengthItemLengthOne type SerialRecord
+	{ fileName = "bob",
+	  lengthItem=sItem2, //0
+	  @XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9);
+end
+
+Record SerialRecordInvalidLengthItemTypeOne type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 char(5);
+end
+
+Record SerialRecordValidLengthItemTypeOne type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 bin(4);
+end
+
+Record SerialRecordValidLengthItemTypeTwo type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(4);
+end
+
+Record SerialRecordValidLengthItemTypeThree type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 numc(4);
+end
+
+Record SerialRecordValidLengthItemTypeFour type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 pacf(4);
+end
+
+Record SerialRecordValidLengthItemTypeFive type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 decimal(4);
+end
+
+Record SerialRecordValidLengthItemTypeSix type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 int;
+end
+
+Record SerialRecordValidLengthItemTypeSeven type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 smallint;
+end
+
+Record SerialRecordInvalidLengthItemDecimalsOne type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 2);
+end
+
+Record SerialRecordValidLengthItemDecimalsOne type SerialRecord
+	{ fileName = "bob",
+		lengthItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+end
+
+Record SerialRecordInvalidNumElementsItemLengthOne type SerialRecord
+	{ fileName = "bob",
+	  numElementsItem=sItem2, //1
+	  @XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(10);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemLengthOne type SerialRecord
+	{ fileName = "bob",
+	  numElementsItem=sItem2, //0
+	  @XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordInvalidNumElementsItemTypeOne type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 char(5);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordInvalidNumElementsItemTypeTwo type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2;
+		15	sItem3 char(10);
+	
+	10 sItem4 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemTypeOne type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 bin(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemTypeTwo type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemTypeThree type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 numc(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemTypeFour type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 pacf(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemTypeFive type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 decimal(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemTypeSix type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 int;
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemTypeSeven type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 smallint;
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordInvalidNumElementsItemDecimalsOne type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 2);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemDecimalsOne type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //0
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record SerialRecordValidNumElementsItemLastItemCantBeLastItemOne type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+end
+
+Record SerialRecordValidNumElementsItemLastItemCantBeLastItemTwo type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem4, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+//	10 embed MyOtherRecord;
+end
+
+Record SerialRecordValidNumElementsItemLastItemTypedWithNoOccurs type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 char(10);
+end
+
+Record SerialRecordValidNumElementsItemLastItemUntypedWithNoOccurs type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem2, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3;
+		15 sItem4 char(10);
+end
+
+Record SerialRecordValidNumElementsItemUnderVariableLengthItemOne type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem4, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 char(10)[10];
+		15 sItem4 num(9);
+end
+
+Record SerialRecordValidNumElementsItemUnderVariableLengthItemTwo type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem5, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 char(10)[10];
+		15 sItem4 char(10);
+			20 sItem5 num(9);
+end
+
+Record SerialRecordValidNumElementsItemUnderVariableLengthItemThree type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem4, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3[10];
+		15 sItem4 num(9);
+end
+
+Record SerialRecordValidNumElementsItemUnderVariableLengthItemFour type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem5, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 MyOtherRecord[10];
+end
+
+Record MyOtherRecord type basicRecord
+	10 sItem4 num(9);
+		15 sItem5 num(9);
+end
+
+Record SerialRecordValidNumElementsItemUnderVariableLengthItemFive type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem5, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	//10 embed MyOtherRecord[10]{sItem4{InputRequired = yes}};
+end
+
+Record SerialRecordValidNumElementsItemUnderVariableLengthItemSix type SerialRecord
+	{ fileName = "bob",
+		numElementsItem=sItem5, //1
+		@XSD{}
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	//10 * MyOtherRecord[10];
+end

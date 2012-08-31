@@ -1,0 +1,110 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+Record FixedRecord4 type basicRecord				//0
+    1 item01 char(156)[3];							//0
+    2 subItem01 char(10)[2] =						//0
+       	[["lzWgouYmVm", "lzWgouYmVm"],				//0
+    	 ["lzWgouYmVm", "lzWgouYmVm"],				//0
+    	 ["lzWgouYmVm", "lzWgouYmVm"]];				//0
+    2 subItem02 mbchar(10)[2] =						//0
+    	[["CZQsPZJGnw", "CZQsPZJGnw"],				//0
+       	 ["CZQsPZJGnw", "CZQsPZJGnw"],				//0
+    	 ["CZQsPZJGnw", "CZQsPZJGnw"]];				//0
+    2 subItem03 unicode(10)[2] =					//0
+    	[["AKDhuNqwto", "AKDhuNqwto"],				//0
+    	 ["AKDhuNqwto", "AKDhuNqwto"],				//0
+    	 ["AKDhuNqwto", "AKDhuNqwto"]];				//0
+    2 subItem04 int[2] =							//0
+    	[[2104066893, 2104066893],					//0
+    	 [2104066893, 2104066893],					//0
+    	 [2104066893, 2104066893]];					//0
+    2 subItem05 smallint[2] =						//0
+    	[[5673, 5673],								//0
+    	 [5673, 5673],								//0
+    	 [5673, 5673]];								//0
+    2 subItem06 bigint[2] =							//0
+    	[[558039127322422299, 558039127322422299],	//0
+    	 [558039127322422299, 558039127322422299],	//0
+    	 [558039127322422299, 558039127322422299]];	//0
+    2 subItem07 float[2] =							//0
+    	[[5706.1164856, 5706.1164856],				//0
+    	 [5706.1164856, 5706.1164856],				//0
+    	 [5706.1164856, 5706.1164856]];				//0
+    2 subItem08 num(10)[2] =						//0
+    	[[4687523889, 4687523889],					//0
+    	 [4687523889, 4687523889],					//0
+    	 [4687523889, 4687523889]];					//0
+    2 subItem09 decimal( 10, 2)[2] =				//0
+    	[[34925955.73, 34925955.73],				//0
+    	 [34925955.73, 34925955.73],				//0
+    	 [34925955.73, 34925955.73]];				//0
+end													//0
+
+Record FixedRecord5 type basicRecord									//0
+    1 item01 char(78)[3];												//0
+    2 subItem01 char(10) =												//0
+    	["lzWgouYmVm", "lzWgouYmVm", "lzWgouYmVm"];						//0
+    2 subItem02 mbchar(10) =											//0
+    	["CZQsPZJGnw", "CZQsPZJGnw", "CZQsPZJGnw"];						//0
+    2 subItem03 unicode(10) =											//0
+    	["AKDhuNqwto", "AKDhuNqwto", "AKDhuNqwto"];						//0
+    2 subItem04 int =													//0
+    	[2104066893, 2104066893, 2104066893];							//0
+    2 subItem05 smallint =												//0
+    	[5673, 5673, 5673];												//0
+    2 subItem06 bigint =												//0
+    	[558039127322422299, 558039127322422299, 558039127322422299];	//0
+    2 subItem07 float =													//0
+    	[5706.1164856, 5706.1164856, 5706.1164856];						//0
+    2 subItem08 num(10) =												//0
+    	[4687523889, 4687523889, 4687523889];							//0
+    2 subItem09 decimal(10, 2) =										//0
+    	[34925955.73, 34925955.73, 34925955.73];						//0
+end																		//0
+
+
+Record Jeri_DCR_Record type basicRecord				//0
+  3 item1a char(3) = "abc";							//0
+  3 item1b char(3) = ["abc"];						//1 Only multiply occurring items can be initialized with an array literal. item1b is not multiply occurring.
+  3 item2 char(3) [3] = ["abc"];					//0
+  3 item3 char(3) [3] = ["abc","def","ghi"];		//0
+  3 item4 char(3) [3] = ["abc","def","ghi","xyz"];	//1 The number of elements in the initializer array must be no greater than the number of occurs of item item4. 4 elements found for occurs size 3
+end													//0
+
+Record Jeri_DCR_Record2 type VGUIRecord								//0
+  3 item1a char(3){uiType=submit} = "abc";							//0
+  3 item1b char(3){uiType=submit} = [ "abc"] ;						//1 Only multiply occurring items can be initialized with an array literal. item1b is not multiply occurring.
+  3 item2 char(3) [3] {uiType=submit} = ["abc"];					//0
+  3 item3 char(3) [3] {uiType=submit} = ["abc","def","ghi"];		//0
+  3 item4 char(3) [3] {uiType=submit} = ["abc","def","ghi","xyz"];	//1 The number of elements in the initializer array must be no greater than the number of occurs of item item4. 4 elements found for occurs size 3
+end																	//0
+
+record RATLC01083602									//0
+   10 array1$ char(20)[4] = [ "a","b","c","d","e" ];	//1 The number of elements in the initializer array must be no greater than the number of occurs of item array1$. 5 elements found for occurs size 4
+end														//0
+
+Record Initializer type VGUIRecord						//0
+	10  item1	char(30)	{ uiType = submit 			//0
+				   	} = "Initial value";				//0	 
+	10  item2	char(30)[3] { uiType = submit			//0
+					} = [ "Initial value 1",			//0
+					      "Initial value 2",			//0
+					      "Initial value 3" ];			//0
+	10  item3 	char(30) 	{ uiType = submit			//0
+					} = "Multi\nline\ninitial\nvalue";	//0				 
+	10  item4 	char(30)[3] { uiType = submit			//0
+					} = [ "initial value" ];			//0
+	10  item5	char(30)[3] { uiType = submit			//0
+					} = [ "value 1", "value 2" ];		//0				
+end														//0

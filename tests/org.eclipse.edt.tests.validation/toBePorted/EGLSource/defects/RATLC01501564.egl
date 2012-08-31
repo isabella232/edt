@@ -1,0 +1,167 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package mypkg;
+
+// basic program
+//
+program constTest type BasicProgram {}
+
+	 const anyConst1 any = "this is an any";					//0
+	 const anyConst1Save any = "this is an any";					//0
+//	 anyConst1SaveRef any[] = [anyConst1];					//0
+	
+	const anyConst2 any = ["this is an array any"];					//0
+	const anyConst2Save any = ["this is an array any"];					//0
+//	anyConst2SaveRef any = anyConst2;					//0
+	
+	const anyArrayConst any[] = [555];	   					//0
+	const anyArrayConstSave any[] = [555];					//0
+//	 anyArrayConstSaveRef any[] = anyArrayConst;					//0
+	
+	const intConst int = 42;					//0				
+	const intConstSave int = 42;					//0
+		   
+	const intArrayConst int[] = [100];					//0
+	const intArrayConstSave int[] = [100];					//0
+//	intArrayConstSaveRef int[] = intArrayConst;					//0
+	
+	const stringConst string = "this is a string";					//0
+	const stringConstSave string = "this is a string"; 					//0
+
+	const stringArrayConst string[] = ["this is a string array"];					//0
+	const stringArrayConstSave string[] = ["this is a string array"]; 					//0
+//  stringArrayConstSaveRef string[] = stringArrayConst;					//0
+	
+	function main()					//0
+			
+		testConstants("Main First");					//0
+		
+		funcIn(anyConst1, anyConst2, anyArrayConst, intConst, intArrayConst, stringConst, stringArrayConst);  //0
+		testConstants("After funcIn()");					//0
+
+		funcInOut(anyConst1, anyConst2, anyArrayConst, intConst, intArrayConst, stringConst, stringArrayConst);   //0
+		testConstants("After funcInOut()");					//0
+		
+	end					//0
+	
+	function funcIn (p1 any in, p2 any in, p3 any[] in, p4 int in, p5 int[] in, p6 string in, p7 string[] in)					//0
+		
+		p1 = "";					//0
+		p2 = [""];					//0
+		p3 = [0];					//0
+		p4 = 0;					//0
+		p5 = [0];					//0
+		p6 = "";					//0
+		p7 = [""];					//0
+		
+	end					//0
+	
+	
+
+	function funcInOut (p1 any inout, p2 any inout, p3 any[] inout, p4 int inout, p5 int[] inout, p6 string inout, p7 string[] inout)					//0
+		
+		p1 = "";					//0
+		p2 = [""];					 //0
+		p3 = [0];					//0
+		p4 = 0;					//0
+		p5 = [0];					//0
+		p6 = "";					//0
+		p7 = [""];					//0
+		
+	end					//0
+	
+	
+	
+	function testConstants(testNumber string)					//0
+		
+		prefix1 String = "Pass ";					//0
+		prefix2 String = "Fail ";					//0
+		
+		
+		if (anyConst1 as String == anyConst1Save as String)					//0 
+			writeStdOut(prefix1 + "AnyConst1 Test" + testNumber);					//0
+		else					//0
+			writeStdOut(prefix2 + "AnyConst1 Test" + testNumber);					//0
+		end						//0
+
+//		if (anyConst1 == anyConst1SaveRef[1])					//0 
+//			writeStdOut(prefix1 + "AnyConst1 Reference Test" + testNumber);					//0
+//		else					//0
+//			writeStdOut(prefix2 + "AnyConst1 Reference Test" + testNumber);					//0
+//		end						//0
+			
+		if ((anyConst2 as string[])[1] == (anyConst2Save as string[])[1])					//0 
+			writeStdOut(prefix1 + "AnyConst2 Test" + testNumber);					//0
+		else					//0
+			writeStdOut(prefix2 + "AnyConst2 Test" + testNumber);					//0
+		end							//0
+
+//		if (anyConst2 == anyConst2SaveRef)					//0 
+//			writeStdOut(prefix1 + "AnyConst2 Reference Test" + testNumber);					//0
+//		else					//0
+//			writeStdOut(prefix2 + "AnyConst2 Reference Test" + testNumber);					//0
+//		end							//0
+
+		if (anyArrayConst[1] as int == anyArrayConstSave[1] as int)					//0 
+			writeStdOut(prefix1 + "AnyArrayConst Test" + testNumber);					//0
+		else					//0
+			writeStdOut(prefix2 + "AnyArrayConst Test" + testNumber);					//0
+		end							//0
+
+//		if (anyArrayConst == anyArrayConstSaveRef)					//0 
+//			writeStdOut(prefix1 + "AnyArrayConst Reference Test" + testNumber);					//0
+//		else					//0
+//			writeStdOut(prefix2 + "AnyArrayConst Reference Test" + testNumber);					//0
+//		end							//0
+
+		if (intConst == intConstSave)					//0 
+			writeStdOut(prefix1 + "IntConst Test" + testNumber);					//0
+		else					//0
+			writeStdOut(prefix2 + "IntConst Test" + testNumber);					//0
+		end							//0
+
+
+		if (intArrayConst[1] == intArrayConstSave[1])					//0 
+			writeStdOut(prefix1 + "IntArrayConst Test" + testNumber);					//0
+		else					//0
+			writeStdOut(prefix2 + "IntArrayConst Test" + testNumber);					//0
+		end							//0
+
+//		if (intArrayConst == intArrayConstSaveRef)					//0 
+//			writeStdOut(prefix1 + "IntArrayConst Referece Test" + testNumber);					//0
+//		else					//0
+//			writeStdOut(prefix2 + "IntArrayConst Reference Test" + testNumber);					//0
+//		end							//0
+
+		if (stringConst == stringConstSave)					//0 
+			writeStdOut(prefix1 + "StringConst Test" + testNumber);					//0
+		else					//0
+			writeStdOut(prefix2 + "StringConst Test" + testNumber);					//0
+		end							//0
+
+		if (stringArrayConst[1] == stringArrayConstSave[1])					//0 
+			writeStdOut(prefix1 + "stringArrayConst Test" + testNumber);					//0
+		else					//0
+			writeStdOut(prefix2 + "stringArrayConst Test" + testNumber);					//0
+		end							//0
+
+//		if (stringArrayConst == stringArrayConstSaveRef)					//0 
+//			writeStdOut(prefix1 + "stringArrayConst Referece Test" + testNumber);					//0
+//		else					//0
+//			writeStdOut(prefix2 + "stringArrayConst Reference Test" + testNumber);					//0
+//		end							//0
+
+		writeStdOut("");					//0
+
+	end					//0
+	
+end					//0

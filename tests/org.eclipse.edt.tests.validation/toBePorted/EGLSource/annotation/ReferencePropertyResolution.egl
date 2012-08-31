@@ -1,0 +1,601 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program test1 {inputRecord = var1} //2 The value for property inputRecord must match a data declaration
+end
+
+program test2 {inputRecord = var1} //2 The value for property inputRecord must match a data declaration of a basic record
+	var1 int;
+end
+
+record test3rec1
+	10 a int;
+end
+
+program test3 {inputRecord = var1} //1
+	var1 test3rec1;
+end
+
+record test4 type indexedRecord {filename = "fred", keyItem = item1} //1 The keyItem property value item1 must be defined in the indexed record
+end
+
+record test5 type indexedRecord {filename = "fred", keyItem = item1} //0
+	item1 int;
+end
+
+record test6 type dliSegment {keyItem = item1} //1 The keyItem property value item1 must be defined in the DL/I segment test6.
+end
+
+record test7 type dliSegment {keyItem = item1} //0
+	item1 int;
+end
+
+record test8 type relativeRecord {filename = "fred", recordNumItem = "item1"} //0
+end
+
+record test9 type sqlrecord {keyItems = [item1, item2, item3]} //3 The keyItems property value item1 must be defined in the SQL record test9|The keyItems property value item2 must be defined in the SQL record test9|The keyItems property value item3 must be defined in the SQL record test9
+end
+
+record test10 type sqlrecord {keyItems = [item1, item2, item3]} //1 The keyItems property value item2 must be defined in the SQL record test10
+	item1 int;
+	item3 int;
+end
+
+record test11 type sqlrecord {keyItems = [item1, item2, item3]} //0
+	item1 int;
+	item2 int;
+	item3 int;
+end
+
+record test12a type serialRecord {filename = "fred", lengthItem = wilma} //0
+end
+
+record test12b type serialRecord {filename = "fred", lengthItem = barney} //0
+	barney int;
+end
+
+program test12c
+	var1 test12a; //1 "wilma" cannot be resolved
+	var2 test12b; //0
+end
+
+record test13 type serialRecord {filename = "fred", numElementsItem = item1} //1 The item item1 referenced by numElementsItem property must be declared in the fixed portion of record test13
+end
+
+record test14 type serialRecord {filename = "fred", numElementsItem = item1} //0
+	item1 int;
+	item2 int[2];
+end
+
+record myPSB type psbrecord
+end
+
+program test15
+	{@dli{psb = myPsb}} //1 Invalid name myPsb. The value of the psb field must be the name of a variable declaration of a PSBRecord
+end
+
+program test16
+	{@dli{psb = myPsb,			
+		  pcbparms = [parm1, parm2, parm3]}} //3 parm1 is not declared in the program parameter list|parm2 is not declared in the program parameter list|parm3 is not declared in the program parameter list
+	mypsb myPsb;
+end
+
+record test17rec type dlisegment
+end
+
+program test18 (parm3 test17rec, parm2 test17rec, parm1 test17rec)
+	{@dli{psb = myPsb,			
+		  pcbparms = [parm1, parm2, parm3]}} //0
+	mypsb myPsb;
+end
+
+program test19 
+	{@dli{psb = myPsb,			//0
+		  psbparm = parm1}} //1 The value "parm1" for the field PSBParm must match the name of a parameter for program test19
+	mypsb myPsb;
+end
+
+program test20 (parm1 int) 
+	{@dli{psb = myPsb,			//0
+		  psbparm = parm1}} //0
+	mypsb myPsb;
+end
+
+program test21 type textuiprogram  {inputForm = form1} //2 The form form1 referenced by the inputForm property must be declared within the main FormGroup for the program
+end
+
+formgroup test21fg1
+  form form1 type textform
+  end
+end
+
+program test22 type textuiprogram  {inputForm = fred} //2 The form fred referenced by the inputForm property must be declared within the main FormGroup for the program
+	use test21fg1;
+	fred int;
+end
+
+program test23 type textuiprogram  {inputForm = form1} //1
+	use test21fg1;
+end
+
+record test24uirec type vguirecord
+end
+
+program test24 type vgWebtransaction {inputUiRecord = test24uirec} //2 The value for property inputUIRecord must match a data declaration.
+end
+
+program test25 type vgWebtransaction {inputUiRecord = test24uirec} //2 The value for property inputUIRecord must match a data declaration of a user interface record
+	test24uirec int;
+end
+
+program test26 type vgWebtransaction {inputUiRecord = test24uirec} //1
+	test24uirec test24uirec;
+end
+
+record test27 type psbrecord
+	pcb1 DB_PCBRecord {@pcb{hierarchy = [@relationship {segmentRecord = bogus}, @relationship {parentRecord = bogus, segmentRecord = bogus2}]}}; //3 The type bogus cannot be resolved|The type bogus2 cannot be resolved|The type bogus cannot be resolved
+	pcb2 DB_PCBRecord {@pcb{hierarchy = [@relationship {segmentRecord = test27a}, @relationship {parentRecord = test27a, segmentRecord = test27b}]}}; //1 The part "test27b" referenced by property "segmentRecord" must be a record of type DLISegment
+	
+end
+	
+record test27a type dlisegment
+end
+
+record test27b
+end
+
+handler test28 type JSFHandler {validationBypassFunctions = [func28a, func28b, func28c]} //1 func28b cannot be resolved
+	function func28a()
+	end
+	function func28c()
+	end
+end
+
+function func28b()
+end
+
+handler test29 type JSFHandler {validationBypassFunctions = [func29a, func29b, func29c]} //3 cannot be resolved|cannot be resolved|cannot be resolved
+end
+
+dataitem test30 int {validatorDataTable = bogus} end //1 The type bogus cannot be resolved
+
+dataitem test31 int {validatorDataTable = test31tbl} end //1 The value test31tbl for the validatorDataTable property must be a DataTable of type MatchValidTable, MatchInvalidTable or RangeChkTable
+
+datatable test31tbl
+end
+
+dataitem test32 int {validatorDataTable = test32tbl} end //0
+
+datatable test32tbl type matchvalidtable
+end
+
+
+dataitem test33 int {validatorFunction = bogus} end //1 bogus cannot be resolved
+dataitem test34 int {validatorFunction = test34func} end //0
+dataitem test34a int {@validatorFunction{value = test34func}} end //0
+dataitem test34b int {@validatorFunction{test34func}} end //0
+function test34func() end
+
+handler test35 type JSFHandler {viewrootvar = bogus} end  //1 viewRootVar bogus does not exist. It must be an item declared in the JSFHandler
+
+handler test36 type JSFHandler {viewrootvar = field1} //0
+	field1 int;
+end
+
+handler test37 type JSFHandler {viewrootvar = field1} //0
+	field1 test37interface;
+end
+
+interface test37interface
+end
+
+
+record test38 type vguirecord
+	{a1{numelementsItem = bogus, selectedIndexItem = bogus,   			//2 The numElementsItem bogus for a1 in test38 must name an item within the same record|The selectedIndexItem bogus for a1 in test38 must name an item within the same record
+		a2{numelementsItem = bogus, selectedIndexItem = bogus,			//2 The numElementsItem bogus for a2 in test38 must name an item within the same record|The selectedIndexItem bogus for a2 in test38 must name an item within the same record
+			a3{numelementsItem = bogus, selectedIndexItem = bogus}}},	//2 The numElementsItem bogus for a3 in test38 must name an item within the same record|The selectedIndexItem bogus for a3 in test38 must name an item within the same record
+	 b1.b2.b3{numelementsItem = bogus, selectedIndexItem = bogus},		//2 The numElementsItem bogus for b3 in test38 must name an item within the same record|The selectedIndexItem bogus for b3 in test38 must name an item within the same record
+	 c1{numelementsItem = z, selectedIndexItem = x,   					//0
+		c2{numelementsItem = y, selectedIndexItem = a,					//0
+			c3{numelementsItem = x, selectedIndexItem = z}}}			//0
+	}
+
+	10 a1[2] {numelementsItem = bogus, selectedIndexItem = bogus, 			//2 The numElementsItem bogus for a1 in test38 must name an item within the same record|The selectedIndexItem bogus for a1 in test38 must name an item within the same record
+				a2{numelementsItem = bogus, selectedIndexItem = bogus,  	//2 The numElementsItem bogus for a2 in test38 must name an item within the same record|The selectedIndexItem bogus for a2 in test38 must name an item within the same record
+					a3{numelementsItem = bogus, selectedIndexItem = bogus} 	//2 The numElementsItem bogus for a3 in test38 must name an item within the same record|The selectedIndexItem bogus for a3 in test38 must name an item within the same record
+				}};					
+	  20 a2 {numelementsItem = bogus, selectedIndexItem = bogus, 		//2 The numElementsItem bogus for a2 in test38 must name an item within the same record|The selectedIndexItem bogus for a2 in test38 must name an item within the same record
+	  		 a3{numelementsItem = bogus, selectedIndexItem = bogus}};	//2  The numElementsItem bogus for a3 in test38 must name an item within the same record|The selectedIndexItem bogus for a3 in test38 must name an item within the same record.
+	  
+	    30 a3 int {numelementsItem = bogus, selectedIndexItem = bogus};  //2 The numElementsItem bogus for a3 in test38 must name an item within the same record|The selectedIndexItem bogus for a3 in test38 must name an item within the same record
+	    
+	10 b1[2]{b2.b3{numelementsItem = bogus, selectedIndexItem = bogus}}; //2 The numElementsItem bogus for b3 in test38 must name an item within the same record|The selectedIndexItem bogus for b3 in test38 must name an item within the same record
+	  20 b2;
+	    30 b3 int;
+	 10 c1[2] {numelementsItem = z, selectedIndexItem = x,   					//0
+				c2{numelementsItem = y, selectedIndexItem = y,					//0
+				c3{numelementsItem = x, selectedIndexItem = z}}};				//0
+	   20 c2 {numelementsItem = x, selectedIndexItem = y,						//0
+				c3{numelementsItem = x, selectedIndexItem = z}};				//0
+	     30 c3 int {numelementsItem = x, selectedIndexItem = z};				//0
+	 10 x int;
+	   15 y int;
+	     20 z int;
+	     	25 a int;
+end
+	  
+record test39 type vguirecord
+	10 a1 test39itema[2]; //2 The numElementsItem bogus for a1 in test39 must name an item within the same record.|The selectedIndexItem bogus for a1 in test39 must name an item within the same record.				
+	  20 a2 test39itema; //2 The numElementsItem bogus for a2 in test39 must name an item within the same record|The selectedIndexItem bogus for a2 in test39 must name an item within the same record
+	    30 a3 test39itema; //2 The numElementsItem bogus for a3 in test39 must name an item within the same record.|The selectedIndexItem bogus for a3 in test39 must name an item within the same record.
+	    
+	10 b1 test39itemb[2]; //0					
+	  20 b2 test39itemb; //0	  
+	    30 b3 test39itemb; //0
+	    
+	 10 x int;
+	   15 y int;
+	     20 z int;
+end
+
+dataitem test39itema int {numelementsItem = bogus, selectedIndexItem = bogus} end
+dataitem test39itemb int {numelementsItem = x, selectedIndexItem = z} end
+
+record test40 type vguirecord
+	10 embed test40a; //8 The numElementsItem bogus for a1 in test40 must name an item within the same record|The selectedIndexItem bogus for a1 in test40 must name an item within the same record|The numElementsItem bogus for a2 in test40 must name an item within the same record|The selectedIndexItem bogus for a2 in test40 must name an item within the same record|The numElementsItem bogus for a3 in test40 must name an item within the same record|The selectedIndexItem bogus for a3 in test40 must name an item within the same record|The numElementsItem bogus for b2 in test40 must name an item within the same record|The selectedIndexItem bogus for b2 in test40 must name an item within the same record
+	10 top test40a; //8 The numElementsItem bogus for a1 in test40 must name an item within the same record|The selectedIndexItem bogus for a1 in test40 must name an item within the same record|The numElementsItem bogus for a2 in test40 must name an item within the same record|The selectedIndexItem bogus for a2 in test40 must name an item within the same record|The numElementsItem bogus for a3 in test40 must name an item within the same record|The selectedIndexItem bogus for a3 in test40 must name an item within the same record|The numElementsItem bogus for b2 in test40 must name an item within the same record|The selectedIndexItem bogus for b2 in test40 must name an item within the same record
+
+	 10 x int;
+	   15 y int;
+	     20 z int;
+end
+
+record test40a
+	{b2 {numelementsItem = bogus, selectedIndexItem = bogus}}
+	10 a1 test39itema[2]; //0					
+	  20 a2 test39itema;  //0	  
+	    30 a3 test39itema; //0
+	    
+	10 b1 test39itemb[2]; //0					
+	  20 b2 test39itemb; //0	  
+	    30 b3 test39itemb; //0
+	    
+end
+
+record test41
+	{field1{redefines=field3}} 			//1 The value for property redefines must match a structured record variable declaration
+	field1 test41rec;
+	field2 test41rec;
+end
+
+record test41a
+	{field1{@redefines{value=field3}}}	//1 The value for property redefines must match a structured record variable declaration
+	field1 test41rec;
+	field2 test41rec;
+end
+
+record test41b
+	{field1{@redefines{field3}}}		//1 The value for property redefines must match a structured record variable declaration
+	field1 test41rec;
+	field2 test41rec;
+end
+
+record test41rec
+	10 a int;
+end
+
+record test42
+	{field1{redefines=field2}} //0
+	{field1{@redefines{value=field2}}} //0
+	{field1{@redefines{field2}}} //0
+	field1 test41rec;
+	field2 test41rec;
+end
+
+record test43
+	field1 test41rec;
+	field2 test41rec {redefines = field3}; //1 The value for property redefines must match a structured record variable declaration
+end
+
+record test44
+	field1 test41rec;
+	field2 test41rec {redefines = field2}; //1
+end
+
+record test45
+	field1 test45rec {a{numelementsitem = bogus}}; //1 The numElementsItem bogus for a in test45rec must name an item within the same record
+	field2 test45rec {a{selectedindexitem = bogus}}; //1 The selectedIndexItem bogus for a in test45rec must name an item within the same record
+	field3 test45rec {a{numelementsitem = bogus}}; //1 The numElementsItem bogus for a in test45rec must name an item within the same record
+	field4 test45rec {a{selectedindexitem = bogus}}; //1 The selectedIndexItem bogus for a in test45rec must name an item within the same record
+end
+
+record test45rec type vguirecord
+	a int[5];
+	b int;
+end
+	
+record test46
+	field1 test45rec {a{numelementsitem = b}}; //0
+	field2 test45rec {a{selectedindexitem = b}}; //0
+	field3 test45rec {a{numelementsitem = b}}; //0
+	field4 test45rec {a{selectedindexitem = b}}; //0
+end
+
+record test47 
+	field1 test47rec {fielda.a{numelementsitem = bogus}}; //1 The numElementsItem bogus for a in test45rec must name an item within the same record
+	field2 test47rec {fielda.a{selectedindexitem = bogus}}; //1 The selectedIndexItem bogus for a in test45rec must name an item within the same record
+end
+
+record test47rec
+	fielda test45rec;
+end
+
+record test48 
+	field1 test47rec {fielda{a{numelementsitem = bogus}}}; //1 The numElementsItem bogus for a in test45rec must name an item within the same record
+	field2 test47rec {fielda{a{selectedindexitem = bogus}}}; //1 The selectedIndexItem bogus for a in test45rec must name an item within the same record
+end
+
+record test49
+	field1 test47rec {fielda.a{numelementsitem = b}}; //0
+	field2 test47rec {fielda.a{selectedindexitem = b}}; //0
+end
+
+record test50 
+	field1 test47rec {fielda{a{numelementsitem = b}}}; //0
+	field2 test47rec {fielda{a{selectedindexitem = b}}}; //0
+end
+
+program test51 {allowUnqualifiedItemReferences = yes}
+	rec1 test51rec1;  //1 "bogus" cannot be resolved
+	rec2 test51rec2;  //0
+	rec3 test51rec3;  //1 "rec6.bogus" cannot be resolved
+	rec4 test51rec4;  //0
+	rec5 test51rec5;  //0
+
+	rec1a test51rec1 {lengthitem = bogus};  //1  "bogus" cannot be resolved
+	rec2a test51rec2 {lengthitem = a};  //0
+	rec3a test51rec3 {lengthitem = rec6.bogus};  //1 "rec6.bogus" cannot be resolved
+	rec4a test51rec4 {lengthitem = rec6.b};  //1 primitive type of char, which is invalid for the lengthItem property
+	rec5a test51rec5 {lengthitem = unqualified};  //0
+	
+	a int;
+	rec6 test51rec6;
+	
+
+	
+end
+
+record test51rec1 type serialRecord {lengthitem = bogus}
+	data int;
+end
+
+record test51rec2 type serialRecord {lengthitem = a}
+	data int;
+end
+
+record test51rec3 type serialRecord {lengthitem = rec6.bogus}
+	data int;
+end
+
+record test51rec4 type serialRecord {lengthitem = rec6.a}
+	data int;
+end
+
+record test51rec5 type serialRecord {lengthitem = unqualified}
+	data int;
+end
+
+record test51rec6
+	10 a int;
+	  15 *;
+	    20 b;
+	      25 *;
+	        30 unqualified int;
+end
+
+program test52
+	rec1 test52rec1 {keyitem = bogus};  //1 The keyItem property value bogus must be defined in the indexed record 
+	rec2 test52rec2 {keyitem = bogus};  //1 The keyItem property value bogus must be defined in the DL/I segment test52rec2
+	rec3 test52rec3 {recordNumItem = bogus};  //1 requires a quoted string
+
+	rec4 test52rec1 {keyitem = x};  //0
+	rec5 test52rec2 {keyitem = x};  //0
+	rec6 test52rec3 {recordNumItem = "x"};  //0
+	rec7 test52rec3 {recordNumItem = y};  //1 requires a quoted string
+	y int;	
+end
+
+record test52rec1 type indexedRecord {filename = "fred"} 
+	x int;
+end
+
+record test52rec2 type dliSegment {} 
+	x int;
+end
+
+record test52rec3 type relativeRecord {filename = "fred"} 
+	x int;
+end
+
+program test53
+	rec1 test53rec1 {tablenamevariables=[["bogus", "b"], ["bogus", "c"]]};			//0
+	rec2 test53rec1 {tablenamevariables=[["bogus.b", "b"], ["bogus", "c"]]};		//0
+	rec3 test53rec1 {tablenamevariables=[["bogus.b[5]", "b"], ["bogus", "c"]]};		//0
+	
+	rec4 test53rec1 {tablenamevariables=[["a", "b"], ["a", "c"]]};			//0
+	rec5 test53rec1 {tablenamevariables=[["b.x", "b"], ["b.x", "c"]]};		//0
+	rec6 test53rec1 {tablenamevariables=[["b.x[2]", "b"], ["b.x[2]", "c"]]};		//0
+	rec7 test53rec1 {tablenamevariables=[["b.y[2]", "b"], ["b.y[2]", "c"]]};		//0
+	
+	a string;
+	b test53rec2;
+	
+end
+
+record test53rec1 type sqlRecord
+	10 item1 int;
+end
+
+record test53rec2
+	x string;
+	y string[];
+end
+
+
+library test54a
+	field1 test54arec {a{numelementsitem = bogus}}; //1 The numElementsItem bogus for a in test54arec must name an item within the same record
+	field2 test54arec {a{selectedindexitem = bogus}}; //1 The selectedIndexItem bogus for a in test54arec must name an item within the same record
+	field3 test54arec {a{numelementsitem = bogus}}; //1 The numElementsItem bogus for a in test54arec must name an item within the same record
+	field4 test54arec {a{selectedindexitem = bogus}}; //1 The selectedIndexItem bogus for a in test54arec must name an item within the same record
+end
+
+record test54arec type vguirecord
+	a int[5];
+	b int;
+end
+	
+library test54
+	field1 test54arec {a{numelementsitem = b}}; //0
+	field2 test54arec {a{selectedindexitem = b}}; //0
+	field3 test54arec {a{numelementsitem = b}}; //0
+	field4 test54arec {a{selectedindexitem = b}}; //0
+end
+
+record test55 
+	field1 test55rec {fielda.a{numelementsitem = bogus}}; //1 The numElementsItem bogus for a in test54arec must name an item within the same record
+	field2 test55rec {fielda.a{selectedindexitem = bogus}}; //1 The selectedIndexItem bogus for a in test54arec must name an item within the same record
+end
+
+record test55rec
+	fielda test54arec;
+end
+
+library test56
+	field1 test55rec {fielda{a{numelementsitem = bogus}}}; //1 The numElementsItem bogus for a in test54arec must name an item within the same record
+	field2 test55rec {fielda{a{selectedindexitem = bogus}}}; //1 The selectedIndexItem bogus for a in test54arec must name an item within the same record
+end
+
+library test57
+	field1 test55rec {fielda.a{numelementsitem = b}}; //0
+	field2 test55rec {fielda.a{selectedindexitem = b}}; //0
+end
+
+library test58 
+	field1 test55rec {fielda{a{numelementsitem = b}}}; //0
+	field2 test55rec {fielda{a{selectedindexitem = b}}}; //0
+end
+
+handler test59 type JSFHandler
+	field1 test59rec {a{numelementsitem = bogus}}; //1 The numElementsItem bogus for a in test59rec must name an item within the same record
+	field3 test59rec {a{numelementsitem = bogus}}; //1 The numElementsItem bogus for a in test59rec must name an item within the same record
+end
+
+record test59rec
+	10 a int[5];
+	10 b int;
+end
+	
+handler test60 type JSFHandler
+	field1 test59rec {a{numelementsitem = b}}; //0
+	field3 test59rec {a{numelementsitem = b}}; //0
+end
+
+record test61 
+	field1 test61rec {fielda.a{numelementsitem = bogus}}; //0
+end
+
+record test61rec
+	fielda test59rec;
+end
+
+handler test62 type JSFHandler
+	field1 test61rec {fielda{a{numelementsitem = bogus}}}; //1 The numElementsItem bogus for a in test59rec must name an item within the same record
+end
+
+handler test63 type JSFHandler
+	field1 test61rec {fielda.a{numelementsitem = b}}; //0
+end
+
+handler test64 type JSFHandler
+	field1 test61rec {fielda{a{numelementsitem = b}}}; //0
+end
+
+program test65
+	field1 test65rec1 {a{selectedIndexItem = bogus}};  //1 The selectedIndexItem bogus for a in test65rec1 must name an item within the same record
+	field2 test65rec1 {a{selectedIndexItem = b}};		//0
+end
+
+record test65rec1 type vguirecord
+   10 a char(10) [7];
+   10 b int;
+end
+
+program test66
+	field1 test66rec1 {redefines = bogus}; //1 The value for property redefines must match a structured record variable declaration
+	field2 test66rec1 {redefines = field2}; //1 The value for property redefines cannot refer to a variable declaration that also contains a redefines property
+	field3 test66rec1; //0
+end
+
+record test66rec1 
+	10 a int;
+end
+
+
+program test67
+	field1 test67rec1; //5 could not be resolved|could not be resolved|could not be resolved|could not be resolved|could not be resolved
+	field2 test67rec2; //0
+	
+	field3 test67rec2 {
+	getOptionsRecord = "bogusGet", //1 could not be resolved
+	putOptionsRecord = "bogusPut", //1 could not be resolved
+	msgDescriptorRecord = "bogusMsg", //1 could not be resolved
+	openOptionsRecord = "bogusOpen", //1 could not be resolved
+	queueDescriptorRecord = "bogusQueue" //1 could not be resolved
+	};
+	
+	field4 test67rec1 {
+	getOptionsRecord = "getRec",   //0	
+	putOptionsRecord = "putRec",   //0
+	msgDescriptorRecord = "msgRec", //0
+	openOptionsRecord = "openRec", //0
+	queueDescriptorRecord = "queueRec" //0
+	};
+	
+	getRec test67rec3;
+	putRec test67rec3;
+	msgRec test67rec3;
+	openRec test67rec3;
+	queueRec test67rec3;
+end
+
+record test67rec1 type MQRecord {
+	queueName = "fred",
+	getOptionsRecord = "bogusGet", 
+	putOptionsRecord = "bogusPut", 
+	msgDescriptorRecord = "bogusMsg", 
+	openOptionsRecord = "bogusOpen", 
+	queueDescriptorRecord = "bogusQueue"} 
+end
+
+record test67rec2 type MQRecord {
+	queueName = "fred",
+	getOptionsRecord = "getRec", 
+	putOptionsRecord = "putRec", 
+	msgDescriptorRecord = "msgRec", 
+	openOptionsRecord = "openRec", 
+	queueDescriptorRecord = "queueRec"} 
+end
+
+record test67rec3
+ 10 a int;
+end
+
+

@@ -1,0 +1,40 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program prepareStmtPgm {includeReferencedFunctions = yes}
+
+	a char(23);
+	b char(23);
+	
+	function main()
+		pspOuterFunc(); // 0 
+
+		recVar pspRecDef;
+		charVar char(12);
+		const charConst char(4) = "a";
+		intVar int;
+		prepare myId for recVar from "dave" + charVar + charConst + "murray"; // 0
+		
+		prepare myDupeId from "1"; // 0
+		prepare myDupeId from "2"; // 0
+		
+		prepare myIdWithNoFromClause; // 1
+		prepare myIdWithFromClause from "I am correct!!"; // 0
+	end
+end
+
+function pspOuterFunc()
+	execute myId;
+	execute myUndefinedId;
+	prepare myDupeId from "3";
+end
+
+Record pspRecDef type sqlRecord end

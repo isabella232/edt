@@ -1,0 +1,136 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Handler validateParamsAndDeclarationsHandler type jasperReport
+	function func(
+		p1 notEmptyRec,		//1 Only dataItems are allowed for parameters or return types in a report handler. {7711, ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER}
+		p2 intItem			//0
+	)
+	end
+end
+
+function validateParms(
+	p4 myForm,									//1 The parameter p4 for function validateParms must be a reference type or one of the following types: record, data item, dictionary, arrayDictionary, presentationAttributes. {4902, FUNCTION_PARAMETER_HAS_INCORRECT_TYPE}
+	p5 presentationAttributes,					//0
+	p6 basicRecord SqlNullable,					//1 The parameter p6 of type record for Function validateParms cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+	p7 notEmptyFlexRec SqlNullable,				//1 The parameter p7 of type record for Function validateParms cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+	p8 basicRecord field,						//1 The parameter p8 of type record for Function validateParms cannot be declared with the field modifier. {4946, FUNCTION_PARAMETER_TYPE_CANNOT_BE_FIELD}
+	p9 notEmptyFlexRec field,					//1	The parameter p9 of type record for Function validateParms cannot be declared with the field modifier. {4946, FUNCTION_PARAMETER_TYPE_CANNOT_BE_FIELD}
+	p10 psbrcd,									//1 PSBRecord is not a valid type for a function parameter. {7931, DLI_PSBRECORD_NOT_VALID_AS_PARAMETER}
+	p11 indexedRecord[],						//0
+	p12 relativeRecord[],						//0
+	p13 mqRecord[],								//0
+	p14 serialRecord[],							//0
+	p19 window in,								//0
+	p20 window out,								//0
+	p21 window inout,							//0
+	p27 window[],								//0
+)
+end
+
+Program validateReturnProgram
+	function func5() returns (arraydictionary) end			//0
+	function func6() returns (window) end					//0
+	function func9() returns (indexedRecord) end			//1 The return indexedRecord for function func9 must be a reference type or one of the following types: data item, dictionary, arrayDictionary. {4914, FUNCTION_RETURN_HAS_INCORRECT_TYPE}
+end
+
+// sqlNullable not supported in EDT
+function SqlNullableChecks(
+	p1 bigInt SqlNullable,			//1 The parameter p1 of type bigInt for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+
+	p2 bin(9,2) SqlNullable,		//1 The parameter p2 of type bin for Function SqlNullableChecks cannot be SqlNullable if p2 contains decimals or has a length of 18. {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+	p3 bin(18,2) SqlNullable,		//1 The parameter p3 of type bin for Function SqlNullableChecks cannot be SqlNullable if p3 contains decimals or has a length of 18. {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+	p4 bin(18,0) SqlNullable,		//1 The parameter p4 of type bin for Function SqlNullableChecks cannot be SqlNullable if p4 contains decimals or has a length of 18. {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+	p5 bin(9,0) SqlNullable,		//0
+	
+	p6 mbChar(4) SqlNullable,		//1 The parameter p6 of type mbChar for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+	p7 num(4) SqlNullable,			//1 The parameter p7 of type num for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+	p8 numc(4) SqlNullable,		//1 The parameter p8 of type numc for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+	p9 pacf(4) SqlNullable,		//1 The parameter p9 of type pacf for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+
+	lastParm any
+)
+end
+
+// sqlNullable not supported in EDT
+Library SqlNullableChecksLibrary
+	function SqlNullableChecks(
+		p1 bigInt SqlNullable,			//1 The parameter p1 of type bigInt for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+	
+		p2 bin(9,2) SqlNullable,		//1 The parameter p2 of type bin for Function SqlNullableChecks cannot be SqlNullable if p2 contains decimals or has a length of 18. {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+		p3 bin(18,2) SqlNullable,		//1 The parameter p3 of type bin for Function SqlNullableChecks cannot be SqlNullable if p3 contains decimals or has a length of 18. {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+		p4 bin(18,0) SqlNullable,		//1 The parameter p4 of type bin for Function SqlNullableChecks cannot be SqlNullable if p4 contains decimals or has a length of 18. {4943, FUNCTION_PARAMETER_BIN_CANNOT_BE_SqlNullable}
+		p5 bin(9,0) SqlNullable,		//0
+		
+		p6 mbChar(4) SqlNullable,		//1 The parameter p6 of type mbChar for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+		p7 num(4) SqlNullable,			//1 The parameter p7 of type num for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+		p8 numc(4) SqlNullable,		//1 The parameter p8 of type numc for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+		p9 pacf(4) SqlNullable,		//1 The parameter p9 of type pacf for Function SqlNullableChecks cannot be SqlNullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_SqlNullable}
+	
+		lastParm any
+	)
+	end
+end
+
+// sqlNullable not supported in EDT
+Service SqlNullableChecksService
+	function SqlNullableChecks(
+		p1 bigInt SqlNullable,			//0	
+		p2 bin(9,2) SqlNullable,		//0
+		p3 bin(18,2) SqlNullable,		//0
+		p4 bin(18,0) SqlNullable,		//0
+		p5 bin(9,0) SqlNullable,		//0		
+		p6 mbChar(4) SqlNullable,		//0
+		p7 num(4) SqlNullable,			//0
+		p8 numc(4) SqlNullable,		//0
+		p9 pacf(4) SqlNullable,		//0
+	
+		lastParm any
+	)
+	end
+end
+
+// sqlNullable not supported in edt
+Interface SqlNullableChecksInterface
+	function SqlNullableChecks(
+		p1 bigInt SqlNullable,			//0	
+		p2 bin(9,2) SqlNullable,		//0
+		p3 bin(18,2) SqlNullable,		//0
+		p4 bin(18,0) SqlNullable,		//0
+		p5 bin(9,0) SqlNullable,		//0		
+		p6 mbChar(4) SqlNullable,		//0
+		p7 num(4) SqlNullable,			//0
+		p8 numc(4) SqlNullable,		//0
+		p9 pacf(4) SqlNullable,		//0
+	
+		lastParm any
+	);
+end
+
+Record indexedRecord type indexedRecord
+	item1 int;
+end
+Record relativeRecord type relativeRecord
+	item1 int;
+end
+Record mqRecord type mqRecord
+	item1 int;
+end
+Record serialRecord type serialRecord
+	item1 int;
+end
+Record sqlRecord type sqlRecord
+	item1 int;
+end
+
+Record psbRcd type psbRecord
+	10 item1 int;
+end

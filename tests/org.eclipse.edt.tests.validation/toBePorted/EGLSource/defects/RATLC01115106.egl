@@ -1,0 +1,26 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//From George: For the problem mentioned below; it is validation error because
+//             position information in consoleField is required unless segments
+//             is specified.
+
+Record ConsoleFormRecord01 type ConsoleForm
+	{ formSize = [10, 20] }
+	
+	ConsoleField1 ConsoleField {fieldLen = 10};		//1 Unless the property segments is specified, the property position is required for fields of type ConsoleField.
+	ConsoleField2 ConsoleField {fieldLen = 10};		//1
+	ConsoleField3 ConsoleField {fieldLen = 10};		//1
+	ConsoleField4 ConsoleField {fieldLen = 10};		//1
+	ConsoleField5 ConsoleField {fieldLen = 10, position=[10,10]};		//0
+	ConsoleField6 ConsoleField {fieldLen = 10, segments=[[1,2]]};		//0
+end

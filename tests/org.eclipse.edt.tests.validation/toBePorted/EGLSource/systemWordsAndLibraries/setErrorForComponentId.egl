@@ -1,0 +1,36 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		setErrorForComponentId("a", "b");					//0
+		setErrorForComponentId("a", "b", "c");				//0
+		setErrorForComponentId("a", "b", "c", "d");			//0
+		
+		SysLib.setErrorForComponentId("a", "b");			//0
+		SysLib.setErrorForComponentId("a", "b", "c");		//0
+		SysLib.setErrorForComponentId("a", "b", "c", "d");	//0
+		
+		charVar char(4);
+		
+		setErrorForComponentId(charVar,charVar);						//0
+		setErrorForComponentId(charVar,charVar,charVar);				//0
+		setErrorForComponentId(charVar,charVar,charVar,charVar);		//0
+		
+		SysLib.setErrorForComponentId(charVar,charVar);					//0
+		SysLib.setErrorForComponentId(charVar,charVar,charVar);			//0
+		SysLib.setErrorForComponentId(charVar,charVar,charVar,charVar);	//0
+		
+		setErrorForComponentId(charVar);								//1
+		SysLib.setErrorForComponentId(charVar);							//1
+	end
+end

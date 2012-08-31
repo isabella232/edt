@@ -1,0 +1,55 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+dataTable validTbl type MatchValidTable {
+	contents = [["a", "b"]]
+}
+	3 top char(20);
+		6 sub char(20);
+	3 validField char(20);
+end
+
+record struct
+	10 i int[5];
+		20 j int[1];
+	10 k int[5];
+end
+
+handler test type JSFHandler
+	// Error: validTbl.top is not a leaf
+	use validTbl {
+		selectedValueItem = target1,
+		@SelectionList {
+			valueItem = top,		//1
+			labelItem = top			//1
+		}
+	};
+	
+	target1 char(20);
+
+	// Error: validTbl.top.bottom is not toplevel
+	target2 char(20) { selectFromListItem = validTbl.top.sub, selectType=value };			//1
+
+	// Valid: validTbl.validField is both toplevel and a leaf
+	target3 char(20) { selectFromListItem = validTbl.validField, selectType=value };		//0
+
+	s struct;
+
+	// Error: struct.i is not a leaf
+	target4 int { selectFromListItem = s.i };							//1
+
+	// Error: struct.i.j is not toplevel
+	target5 int { selectFromListItem = s.i.j };							//1
+
+	// Valid: struct.k is both toplevel and a leaf
+	target6 int { selectFromListItem = s.k };							//0
+end

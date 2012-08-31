@@ -1,0 +1,76 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+DataTable dataTableContents
+{ contents = [ [ "20040701", "010800", "20040701010800", "200407", "2004", "2004" ] ] } // 0
+
+	10 dateItem date;                              // 0
+	10 timeItem time;                              // 0
+	10 noPatternTimeStampItem timeStamp;           // 0
+	10 noPatternIntervalItem interval;             // 1
+	10 patternTimeStampItem timeStamp( "yyyy" );   // 0
+	10 patternIntervalItem interval( "yyyy" );     // 0
+end
+
+DataTable dataTableContents2 //0
+{ contents = [ [
+	"200407010",       // 0
+	"0108000",         // 0
+	"200407010108000", // 0
+	"2004070",         // 0
+	"200407",          // 0
+	"200407",          // 0
+	"lakdsjfldskjf"    // 0
+  ] ] }
+  
+	10 dateItem date;                              // 0
+	10 timeItem time;                              // 0
+	10 noPatternTimeStampItem timeStamp;           // 0
+	10 noPatternIntervalItem interval;             // 1
+	10 patternTimeStampItem timeStamp( "yyyy" );   // 0
+	10 patternIntervalItem interval( "yyyy" );     // 0
+	10 patternIntervalItem2 interval( "mmyyyy" );
+end
+
+DataTable dataTableContents3 //0
+{ contents = [ [ notLiteral, "a" + notLiteral ] ] } // 4
+	10 charItem1 char(12); // 0
+	10 charItem2 char(12); // 0
+end
+
+DataTable dataTableContents4 //0
+{ contents = [ "a", "b" ] }		//1 must be a comma-separated list
+end
+
+DataTable dataTableContents5 //0
+{ contents = [ [ "a" + "b" ] ] } // 0
+	10 charItem char(12); // 0
+end
+
+Datatable dataTableContents6 //0
+	10 item1 char(2);                    // 0
+	10 item2 char(2);                    // 0
+	10 item3 char(2);                    // 0
+	{contents = [ ["aa", "bb", "cc"],    // 0
+				  ["dd", "ee", "ff"] ] } // 0
+end                                      // 0
+
+Datatable dataTableContents7 //0
+	10 item1 int;                    // 0
+	10 item2 int;                    // 0
+	10 item3 int;                    // 0
+	{contents = [ ["aa",             // 1 must contain only digits
+	               "bb",             // 1 must contain only digits
+	               "cc"],            // 1 must contain only digits
+				  [1,                // 0
+				   2,                // 0
+				   3] ] }            // 0
+end                                  // 0

@@ -1,0 +1,18 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+function abc(arr_cnt INT IN, arr_elmt String(78) IN )
+	sel_opt  String(1);
+	sel_opt = ("" + (( arr_cnt -  27)));
+	sel_opt = "" + (arr_cnt-27);
+end

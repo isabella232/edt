@@ -1,0 +1,736 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+Program SchoolReports type textUIProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no, 
+  msgTablePrefix = "SCHM", inputForm = "SCHRpt1", 
+  segmented = yes, alias = "SchRept",
+  @DLI {
+         psb = "psb", callInterface = DLICallInterfaceKind.CBLTDLI,
+         handleHardDLIErrors = yes
+       }
+  }
+
+  
+  Course SCCOURSE;	
+  Teacher SCTEACHR; 
+  Student SCSTUDNT; 
+
+  Offering SCOFFER; 
+  ClassMember SCMEMBER; 
+  Assignment SCASGMNT;	
+  
+  ClassMemberArray scmember[5];
+
+  
+  use SCH01G { pfKeyEquate = no };
+  
+  
+  psb SCHOOLPSB;
+
+  function main() 
+   	results.startTest("Test of DLI record arrays and print under IMS");
+    if ( SCHRpt1.inputCourse is modified &&
+    	SCHRpt1.inputTeacherName not modified &&
+    	SCHRpt1.inputStudentName not modified)
+    		
+    		printCourseReport();
+   else 
+   		if (SCHRpt1.inputCourse not modified &&
+	    	SCHRpt1.inputTeacherName is modified &&
+	    	SCHRpt1.inputStudentName not modified)
+	    		
+	    		printTeacherReport();
+	    else 
+	    	if (SCHRpt1.inputCourse not modified &&
+		    	SCHRpt1.inputTeacherName not modified &&
+		    	SCHRpt1.inputStudentName is modified)
+		    		
+		    		printStudentReport();
+		    else	
+
+
+
+
+
+
+    				SCHRpt1.usermsg = SCHMENU.MSG_TXT[43];
+    		end
+    	end	
+    end
+    
+    converse schrpt1;
+    results.endTest();
+  end 
+end 
+
+Library results
+	function success() end
+end
+
+Function printCourseReport()
+	Offering.OfferingPeriod.Year = SCHRpt1.InputYear;
+    Offering.OfferingPeriod.Semester = SCHRpt1.InputSemester;
+	
+	
+	SCHRpt1.usermsg = SCHMENU.MSG_TXT[43];
+end
+
+Function printTeacherReport()
+	SCHRpt1.usermsg = SCHMENU.MSG_TXT[43];
+end
+
+Function printStudentReport()
+	SCHRpt1.usermsg = SCHMENU.MSG_TXT[43];
+end
+
+
+Function SchReptEditYear()
+  /* *******************************************************************/
+  /* This function validates that the year and semester entered on     */
+  /* the form are valid.  They must be valid numbers and must reside   */
+  /* in the COURSES database as that combination.                      */
+  /* *******************************************************************/
+  results.setVariation("validating year");
+  Offering.OfferingPeriod.Year = InputYear;
+  Offering.OfferingPeriod.Semester = InputSemester;
+  get offering;
+  if (dlivar.statuscode == "  ")
+  end
+  if (Offering.statuscode == "  ")
+  	
+  else converseLib.validationFailed(46);
+  end
+  results.success();
+end 
+
+
+Function SchReptEditStudent()
+	FirstName char(15);
+	FirstNameStart int;
+	found int;
+	commaPosition int;
+	comma int;
+	tokenPosition int; 
+  /* *******************************************************************/
+  /* This function validates that the student name entered is really   */
+  /* a student in the STUDENTS database.                               */
+  /* *******************************************************************/
+  results.setVariation("validating student");
+  found = strlib.findstr(InputStudentName, commaPosition, comma, ",");
+  if (found == 0) 
+  	Student.StudentName.LastName = InputStudentName[1:commaPosition-1];
+  	
+  	strlib.getNextToken(FirstName, InputStudentName[commaPosition:30],
+  						1, tokenPosition, " ,");
+  	Student.StudentName.FirstName = FirstName;
+  else
+  	Student.StudentName.LastName = InputStudentName;
+  	Student.StudentName.FirstName = " ";
+  end
+
+  get student with
+  	#dli{
+  		GU SCSTUDNT (lastName = :Student.StudentName.LastName)
+  	};
+  if (student is norecordfound)
+  		converseLib.validationFailed(49);
+  else if (firstName == "  ")
+  		
+  		
+  		get next student with
+		  	#dli{
+		  		GN SCSTUDNT (lastName = :Student.StudentName.LastName)
+		  	};
+		if (student.statuscode == "  ")
+			
+			converseLib.validationFailed(54);
+		else
+			
+		end
+  	else 
+  		if(Student.StudentName.FirstName == FirstName)
+  		
+  		else
+  			
+  			while (student not norecordfound &&
+  					Student.StudentName.FirstName != FirstName)
+  				get next student with
+		  			#dli{
+		  				GN SCSTUDNT (lastName = :Student.StudentName.LastName)
+		 		 	};		
+  			end
+  			if (student is norecordfound)
+  				converseLib.validationFailed(49);
+  			else 
+  			end	
+  		end
+  	end
+  end
+  if (conversevar.validationMsgNum != 0)
+  	
+  else  
+  		
+  		Offering.OfferingPeriod.Year = InputYear;
+  		Offering.OfferingPeriod.Semester = InputSemester;
+  		
+  		ClassMember.StudentID = Student.studentID;
+  		get classmember usingpcb psb.courses; 
+  		if (classmember is norecordfound ||
+  			classmember is endoffile)
+  				converseLib.validationFailed(56);	
+  		end
+  end  
+  results.success();
+end 
+
+
+Function SchReptEditTeacher()
+	FirstName char(15);
+	FirstNameStart int;
+	found int;
+	commaPosition int;
+	comma int;
+	tokenPosition int; 
+  /* *******************************************************************/
+  /* This function validates that the teacher name entered is really   */
+  /* a student in the TEACHERS database.                               */
+  /* *******************************************************************/
+  results.setVariation("validating teacher");
+  found = strlib.findstr(InputTeacherName, commaPosition, comma, ",");
+  if (found == 0) 
+  	Teacher.TeacherName.LastName = InputTeacherName[1:commaPosition-1];
+  	
+  	strlib.getNextToken(FirstName, InputTeacherName[commaPosition:30],
+  						1, tokenPosition, " ,");
+  	Teacher.TeacherName.FirstName = FirstName;
+  else
+  	Teacher.TeacherName.LastName = InputTeacherName;
+  	Teacher.TeacherName.FirstName = " ";
+  end
+
+  get Teacher  with
+  	#dli{
+  		GU SCTEACHR (lastName = :Teacher.TeacherName.LastName)
+  	};
+  if (Teacher is norecordfound)
+  		converseLib.validationFailed(48);
+  else if (firstName == "  ")
+  		
+  		
+  		get next Teacher with
+		  	#dli{
+		  		GN SCTEACHR (lastName = :Teacher.TeacherName.LastName)
+		  	};
+		if (Teacher.statuscode == "  ")
+			
+			converseLib.validationFailed(55);
+		else
+			
+		end
+  	else 
+  		if(Teacher.TeacherName.FirstName == FirstName)
+  		
+  		else
+  			
+  			while (Teacher not norecordfound &&
+  					Teacher.TeacherName.FirstName != FirstName)
+  				get next Teacher  with
+		  			#dli{
+		  				GN SCTEACHR (lastName = :Teacher.TeacherName.LastName)
+		 		 	};		
+  			end
+  			if (Teacher is norecordfound)
+  				converseLib.validationFailed(48);
+  			else 
+  			end	
+  		end
+  	end
+  end
+  if (conversevar.validationMsgNum != 0)
+  	
+  else  
+  		
+  		Offering.OfferingPeriod.Year = InputYear;
+  		Offering.OfferingPeriod.Semester = InputSemester;
+  		
+  		get teacher  with
+  			#dli{
+  				GU SCCOURSE 
+  				   SCOFFER (offerTme = :SCOFFER.OfferingPeriod)
+  				   SCTEACHR (TeachID = :Teacher.TeacherID)
+  			}; 
+  		if (teacher is norecordfound ||
+  			teacher is endoffile)
+  				converseLib.validationFailed(53);	
+  		end
+  end
+  results.success();
+end 
+
+
+
+Function SchReptEditCourse()
+  Offering.OfferingPeriod.Year = InputYear;
+  Offering.OfferingPeriod.Semester = InputSemester;
+  /* *******************************************************************/
+  /* This function validates that the course is offered in the         */
+  /* year and semester combination requested.  If not specified, the   */
+  /* section defaults to '01'.                                         */
+  /* *******************************************************************/
+  results.setVariation("validating course");
+  if (inputCourseSection not modified)
+  	inputCourseSection = "01";
+  end
+  
+  Course.CourseNum.CourseID = inputCourse;
+  Course.CourseNum.section = inputCourseSection;
+
+  get Offering usingpcb psb.Courses;
+  if (offering is norecordfound ||
+  		offering is endOfFile )
+  		converseLib.validationFailed(47);
+  else
+	
+  end
+  results.success();
+end 
+
+FormGroup SCH01G
+	{helpKey = pF1}
+
+form SCHRpt1H type textForm
+	{ position = [1,1],  formSize = [24,80]}
+	
+	* {fieldLen = 75, position = [1,1], value = "SchRpt1H                   S C H O O L  S Y S T E M              1 of 1 ", color = blue, intensity = bold, protect = skip};
+	* {fieldLen = 42, position = [2,20], value = "P r i n t   G r a d e   R e p o r t s", color = blue, intensity = bold, protect = skip};
+	* {fieldLen = 68, position = [4,3], value = "This transaction allows one to produce one or more grade reports,", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 65, position = [5,3], value = "depending upon the selections entered.", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 65, position = [6,3], value = "You must select a year and semester first.  It is not valid to ", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 65, position = [7,3], value = "attempt to produce a report for multiple years or semesters.", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 64, position = [9,3], value = "Course  Teacher  Student   Results", color = blue, intensity = bold, protect = skip};
+	* {fieldLen = 67, position = [10,3], value = "   X                        a report for all students in the course", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 68, position = [11,3], value = "           X                a report of all grades for all students", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 68, position = [12,3], value = "                                 of that teacher", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 67, position = [13,3], value = "                    X       a report of all grades for all courses", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 67, position = [14,3], value = "                                  of that student", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 67, position = [15,3], value = "   X       X                a report for all students in the course", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 67, position = [16,3], value = "                                  of that teacher", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 69, position = [17,3], value = "   X                X       a report for one course for one student", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 67, position = [18,3], value = "           X        X       a report for all courses a student has ", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 67, position = [19,3], value = "                                   with a specific teacher", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 68, position = [20,3], value = "   X       X        X       a report for one course for one student", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 56, position = [24,4], value = "Press PF3 to return to the Report menu", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 65, position = [22,3], value = "Entering a section number is optional.  The default is '01'.", color = cyan, intensity = normalIntensity, protect = skip};
+end 
+
+	form SCHRpt1 type textForm
+		{ formSize = [24,80], position = [1,1], msgField = "usermsg", helpform = "SCHRpt1H"}
+	
+		* {fieldLen = 11, position = [1,3], value = "SchRpt1", color = blue, intensity = bold, protect = skip};
+		* {fieldLen = 30, position = [1,26], value = "IMS School System Report Menu", color = blue, intensity = bold, protect = skip};
+		* {fieldLen = 26, position = [3,29], value = "Produce Grade Reports", color = blue, intensity = bold, protect = skip};
+		* {fieldLen = 35, position = [6,3], value = "Enter offering period for report:", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 5, position = [7,27], value = "Year:", color = cyan, intensity = normalIntensity, protect = skip};
+		* {position = [8,23], value = "Semester:", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 12, position = [9,34], value = "1= Spring", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 8, position = [10,34], value = "2 = Fall", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 58, position = [12,2], value = "Enter one or more of the following to limit the report: ", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 14, position = [13,12], value = "Course Number:", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 13, position = [14,13], value = "Teacher Name:", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 13, position = [15,13], value = "Student Name:", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 12, position = [13,38], value = "and Section:", color = cyan, intensity = normalIntensity, protect = skip};
+		* {fieldLen = 52, position = [23,3], value = "ENTER=Print Report       F1=Help         F3=Exit ", color = cyan, intensity = normalIntensity, protect = skip};
+
+		InputYear char(4) {typeChkMsgKey = "0035", minimumInputMsgKey = "0035", inputRequiredMsgKey = "0035", minimumInput = 4, inputRequired = yes, validatorFunction = "SchReptEditYear", position = [7,34], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+		InputSemester char(1) {validValues = ["1","2"], 
+		
+		typeChkMsgKey = "0044", inputRequired = no,  position = [8,34], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+		InputCourse char(4) {validatorFunction = "SchReptEditCourse", fieldLen = 4, position = [13,28], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+		InputCourseSection char(2) {
+		
+		fillCharacter = "0", align = right, validValues = ["01", "02", "03"], fieldLen = 2, position = [13,52], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+		InputTeacherName char(30) {validatorFunction = "SchReptEditTeacher", fieldLen = 30, position = [14,28], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+		InputStudentName char(30) {validatorFunction = "SchReptEditStudent", fieldLen = 30, position = [15,28], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+		usermsg userMsg {fieldLen = 78, position = [19,80], color = red, intensity = bold, protect = skip};
+
+	end
+end 
+
+Record SCHLOADPSB type PSBRecord 
+	{defaultPSBName = "SCHLOAD"}
+	ioPcb 	IO_PCBRecord 	{ @PCB{ pcbType=TP }};
+	TP1 	ALT_PCBRecord 	{ @PCB{ pcbType=TP }};
+	TP2 	ALT_PCBRecord 	{ @PCB{ pcbType=TP }};
+	COURSES DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="COURSES",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCCOURSE" },
+	   		@Relationship{ segmentRecord="SCOFFER",  parentRecord="SCCOURSE" },
+	   		@Relationship{ segmentRecord="SCTEACHR", parentRecord="SCOFFER"  },
+	   		@Relationship{ segmentRecord="SCMEMBER", parentRecord="SCOFFER"  },
+	   		@Relationship{ segmentRecord="SCASGMNT", parentRecord="SCMEMBER" }
+  		] }};
+  	TEACHERS DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="TEACHERS",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCTEACHR" }
+  		] }};
+  	STUDENTS DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="STUDENTS",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCSTUDNT" }
+  		] }};  			
+	ELAWORK DB_PCBRecord 	{ @PCB{ pcbType=DB }} ;
+	TeacherInput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	StudentInput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	CoursesInput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	ClassMemberInput GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	TeacherOutput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	StudentOutput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	CoursesOutput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	ClassMemberOutput GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	Report			 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+end
+
+Record SCHOOLPSB type PSBRecord 
+	{defaultPSBName = "SCHOOL"}
+	ioPcb 	IO_PCBRecord 	{ @PCB{ pcbType=TP }};
+	TP1 	ALT_PCBRecord 	{ @PCB{ pcbType=TP }};
+	TP2 	ALT_PCBRecord 	{ @PCB{ pcbType=TP }};
+	COURSES DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="COURSES",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCCOURSE" },
+	   		@Relationship{ segmentRecord="SCOFFER",  parentRecord="SCCOURSE" },
+	   		@Relationship{ segmentRecord="SCTEACHR", parentRecord="SCOFFER"  },
+	   		@Relationship{ segmentRecord="SCMEMBER", parentRecord="SCOFFER"  },
+	   		@Relationship{ segmentRecord="SCASGMNT", parentRecord="SCMEMBER" }
+  		] }};
+  	TEACHERS DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="TEACHERS",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCTEACHR" }
+  		] }};
+  	STUDENTS DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="STUDENTS",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCSTUDNT" }
+  		] }};  			
+	ELAWORK DB_PCBRecord 	{ @PCB{ pcbType=DB }} ;
+end
+
+
+Record SCCOURSE type DLISegment
+	{keyItem = "CourseNum",
+	 segmentName = "SCCOURSE"}
+	 10 CourseNum 	CourseNum {dliFieldName = "CoursNum"}; 
+	 10 Title 		char(20);   /* text description of class   */
+end	
+ 
+
+Record SCOFFER type DLISegment
+	{segmentName = "SCOFFER",
+	keyitem = "offeringperiod"}
+	 10 OfferingPeriod 	OfferingPeriod {dlifieldname="offerTme"};   
+	 10 ClassPeriod	char(2);   /* B1=Block 1, B2=Block2, etc   */
+	 10 Room		char(5);
+end
+		
+
+Record SCTEACHR type DLISegment
+	{keyItem = "TeacherID",
+	 segmentName = "SCTEACHR"}
+	 10 TeacherID ID {dliFieldName = "TeachID"};
+	 10 TeacherName SCHName;
+end
+	 
+
+Record SCMEMBER type DLISegment
+	{keyItem = "StudentID",
+	 lengthItem = "memberLen",
+	 segmentName = "SCMEMBER"}
+	 10 StudentID ID {dliFieldName = "StudID"};
+	 10 Grades Grades;
+	 10 memberLen bin(9);
+	 10 Notes char(30) [5];
+end	
+
+
+Record SCSTUDNT type DLISegment
+	{keyItem = "StudentID",
+	 segmentName = "SCSTUDNT"}
+	 10 StudentID ID {dliFieldName = "StudID"};
+	 10 StudentName SCHName;
+	 10 GradeLevel num(2);		/* 1-12*/
+end	 
+
+
+Record SCASGMNT type DLISegment
+	{segmentName = "SCASGMNT",
+	keyitem = "assign#"}
+	 10 assign# int;	
+	 10 dateAssigned date;
+	 10 dateDue		 date;
+	 10 description char(30);
+	 10 score		 bin(4);
+	 10 maxScore	 bin(4);
+end	
+
+
+Record TeacherFileRecd type serialRecord
+	{fileName = "TEACHERI"  }
+	10 embed SCTEACHR;
+end 
+
+
+Record StudentFileRecd type serialRecord
+	{fileName = "STUDENTI"}
+	10 embed SCSTUDNT;
+end
+
+
+Record CourseFileRecd type serialRecord
+	{fileName = "COURSEI"}
+	10 embed SCCOURSE;
+	10 embed SCOFFER;
+	10 teacherID ID;
+end
+
+
+Record ClassMemberFileRecd type serialRecord
+	{fileName = "CLASMBRI"}
+	10 embed CourseNum;
+	10 embed OfferingPeriod;
+	10 studentID ID;
+    10 Notes char(30) [5];
+end
+
+Record report type serialrecord
+	{fileName = "REPORT"}
+	05 course;
+	 10 CourseNum 	CourseNum;
+	 10 * 		char(3);
+	 10 section char(2);
+	 10 *       char(3);
+	 10 Title 		char(20);   /* text description of class   */
+	 10 *             char(3); 
+	05 OFfering;
+	 10 Semester 	char(6);
+	 10 * 		char(3);
+	 10 year		char(4);
+	 10 *             char(3);   
+	 10 ClassPeriod	char(2);   /* B1=Block 1, B2=Block2, etc   */
+	 10 * 		char(3);
+	 10 Room		char(5);
+	05 teacher;
+	 10 *			char(3);
+	 10 TeacherID ID ;
+	 10 * 		char(3);
+	 10 TeacherName 	Char(30);
+	05 ClassMember;
+	 10 *			char(3);
+	 10 StudentID ID ;
+	 10 *			char(3);
+	 10 StudentName	char(30);
+	 10 *			char(3);
+	 10 gradelevel	char(1);
+	 10 Grades ;
+		15 *		char(3);
+		15 q1		num(5,2);
+		15 *		char(3);
+		15 q2		num(5,2);
+		15 *		char(3);
+		15 q3		num(5,2);
+		15 *		char(3);
+		15 q4		num(5,2);
+	 10 *			char(3);
+	 10 Notes char(30) [5];
+end	
+
+Record SCHName type basicRecord
+	10 LastName  char(15);
+	10 FirstName char(15);
+		15 firstinitial char(1);
+		15 rest char(14);
+end	
+DataItem ID char(4)
+end	  
+Record CourseNum type basicRecord	
+	10 Discipline char(1);  /* M=math, S=science, L=language, etc*/
+	10 Level      char(1);  /* 1=Fresh, 2=Soph, 3=Junior, 4=Senior*/
+	10 CourseID	  char(2);  /* unique within Discipline/Level*/
+	10 section    char(2);  /* section number */
+end	 
+Record OfferingPeriod type basicRecord	
+	10 Semester  char(1);  /* 1=Fall, 2=Spring*/
+	10 Year      char(4);  
+end	 
+Record Grades type basicRecord
+	10 Quarter1Grade num(5,2);
+	10 Quarter2Grade num(5,2);
+	10 Quarter3Grade num(5,2);
+	10 Quarter4Grade num(5,2); 
+end
+
+Record SCHOOL00W type basicRecord
+  10 GETOUT smallint ; 
+  10 TSTUSRID userid ; 
+  10 TSTPASSWORD password ; 
+end 
+
+
+DataItem PASSWORD char(8)  {
+	color = defaultColor, highlight = noHighlight, intensity = invisible, 
+    inputRequired = yes, inputRequiredMsgKey = "0003",
+    protect = no, upperCase = yes, align = left, fillCharacter = nullFill
+}
+end
+
+
+DataItem USERID char(8)  {
+    color = defaultColor, highlight = noHighlight, 
+    inputRequired = yes, inputRequiredMsgKey = "0003",
+    intensity = normalIntensity, protect = no, upperCase = yes, align = left, 
+    fillCharacter = nullFill}
+end
+
+DataItem  userMsg char(78) 
+  { color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = no, upperCase = yes, align = left, 
+    fillCharacter = nullFill} 
+end 
+
+
+DataItem menuOption num(1)  {
+  color = defaultColor, highlight = underline, intensity = normalIntensity, 
+    protect = no, align = left, fillCharacter = nullFill, 
+    validatorDataTableMsgKey = "0004", 
+    inputRequired = yes, inputRequiredMsgKey = "0004", typeChkMsgKey = "0004"
+}
+end
+
+
+DataItem APPL char(20)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+
+Function CheckDBPCBInfo(dbIN char(100) in, variation char(60))
+	database DB_PCBRecord ;
+	database = dbin;
+	currentDB char(8);
+	variationString char(100);
+	if (database.dbName == "TEACHERS")
+		currentDB = "TEACHERS";
+	else if (database.dbName == "STUDENTS")
+			currentDB = "STUDENTS";
+		 else currentDB = "COURSES";
+		 end
+	end	
+	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - dbName.";	 
+  	results.setVariation(variationString);
+  	if (database.dbName == dlivar.dbName)
+  		results.success();
+  	else results.failure();	
+  	end
+  	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - segmentLevel.";
+  	results.setVariation(variationString);
+  	if (database.segmentLevel == dlivar.segmentLevel)
+  		results.success();
+  	else results.failure();
+  	end
+  	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - statusCode.";
+  	results.setVariation(variationString);
+  	if (database.statusCode == dlivar.statusCode)
+  		results.success();
+  	else results.failure();
+  	end
+  	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - procoptions.";
+  	results.setVariation(variationString);
+  	if (database.procoptions == dlivar.procoptions)
+  		results.success();
+  	else results.failure();
+  	end
+  	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - segmentName.";
+  	results.setVariation(variationString);
+  	if (database.segmentName == dlivar.segmentName)
+  		results.success();
+  	else results.failure();
+  	end
+  	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - keyarealen.";
+  	results.setVariation(variationString);
+  	if (database.keyarealen == dlivar.keyarealen)
+  		results.success();
+  	else results.failure();
+  	end
+  	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - keyarea.";
+  	results.setVariation(variationString);
+  	if (database.keyarea == dlivar.keyarea)
+  		results.success();
+  	else results.failure();  	
+  	end
+  	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - numsensitivesegs.";
+  	results.setVariation(variationString);
+  	if (database.numsensitivesegs == dlivar.numsensitivesegs)
+  		results.success();
+  	else results.failure();  	
+  	end
+end
+
+Function CheckGSAMPCBInfo(dbin char(200) in, variation char(60))
+	database GSAM_PCBRecord;
+	database = dbIN;
+	currentDB char(8);
+	variationString char(100);
+	if (database.dbName == "TEACHERS")
+		currentDB = "TEACHERS";
+	else if (database.dbName == "STUDENTS")
+			currentDB = "STUDENTS";
+		 else currentDB = "COURSES";
+		 end
+	end		 
+	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - dbName.";
+  	results.setVariation(variationString);
+  	if (database.dbName == dlivar.dbName)
+  		results.success();
+  	else results.failure();	
+  	end
+
+	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - statusCode.";
+  	results.setVariation(variationString);
+  	if (database.statusCode == dlivar.statusCode)
+  		results.success();
+  	else results.failure();
+  	end
+  	
+  	variationString = "validating PCB Info after " + variation + " for " + currentDB
+  							+ " - procoptions.";
+  	results.setVariation(variationString);
+  	if (database.procoptions == dlivar.procoptions)
+  		results.success();
+  	else results.failure();
+  	end
+end

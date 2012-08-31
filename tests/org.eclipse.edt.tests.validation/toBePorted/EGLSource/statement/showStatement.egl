@@ -1,0 +1,246 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+// validateShowType:
+// 1 {1} is not a text form. The target of the {2} statement must be a text form. {7502, EGLMESSAGE_STATEMENT_TARGET_MUST_BE_TEXT_FORM}
+
+// validateStateRecord:
+// 1 The passing clause {1} of the {2} statment must resolve to a record. {5193, EGLMESSAGE_PASSING_RECORD_MUST_BE_RECORD}
+// 1 {1} input record ({2}) is not applicable for the record ({3}). {6711, EGLMESSAGE_PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM}
+// 1 {1} input record ({2}) is not applicable for the record ({3}). {6711, EGLMESSAGE_PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM}
+
+
+Program MyProj type VGWebTransaction
+	use myformg;
+	vgUIRec vgUIRecDef;
+	basicRec basicRecDef;
+
+	function main()
+	name string;
+	myany any;
+	show vgUIRec returning to showProgram2 passing basicRec;// 1  showProgram2 input record () is not applicable for the record (basicRecDef)				{EGLMESSAGE_PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM}
+	show vgUIRec returning to showProgram22 passing basicRec;// 0
+	show vgUIRec returning to showProgram3 passing vgUIRec;  // 1  showProgram3 input UI record () is not applicable for the UI record (vgUIRecDef){EGLMESSAGE_PROGRAM_INPUT_UIRECORD_DOESNT_MATCH_PARAM}
+	show vgUIRec returning to showProgram33 passing vgUIRec;  // 0
+	show mytextform passing basicRec;// 2  Invalid show statement. The passing option may only be used in combination with the returning to option	{5183, EGLMESSAGE_INVALID_SHOW_STMT_PASSING_WITH_OUT_RETURNING_OPTION}
+	show mytextform {IsExternal=yes};// 1
+	show basicrec;// 1 The target of the show statement must be either a text form or VGUIRecord	{EGLMESSAGE_SHOW_STATEMENT_TARGET_WRONG_TYPE}
+	show vgUIRec returning to showProgram passing name; // 1  The passing record identifier name must be a record variable	{EGLMESSAGE_PASSING_RECORD_NOT_RECORD}
+
+
+		
+		show vgUIRec; // 0
+		show vgUIRec returning to showProgram; // 0
+		show vgUIRec returning to transferName; // 0
+		show vgUIRec returning to sysVar.transferName; // 0
+		show vgUIRec returning to sysVar.transferName; // 0
+		show vgUIRec returning to showProgram passing basicRec; // 0
+		show vgUIRec returning to transferName passing basicRec; // 0
+		show vgUIRec returning to sysVar.transferName passing basicRec; // 0
+		show vgUIRec returning to sysVar.transferName passing basicRec; // 0
+		
+		show mytextform; // 1 
+		show mytextform returning to showProgram; // 0
+		show mytextform returning to transferName; // 0
+		show mytextform returning to sysVar.transferName; // 0
+		show mytextform returning to sysVar.transferName; // 0
+		show mytextform returning to showProgram passing basicRec; // 0
+		show mytextform returning to transferName passing basicRec; // 0
+		show mytextform returning to sysVar.transferName passing basicRec; // 0
+		show mytextform returning to sysVar.transferName passing basicRec; // 0
+		
+
+		
+	end
+end
+
+Program showProgram type VGWebTransaction
+	{inputRecord = basicRec}
+	
+	basicRec basicRecDef;
+	
+	function main()
+	end
+end
+
+Program showProgram2 type VGWebTransaction
+	{inputUIRecord = uirec}
+	
+	uirec vgUIRecDef;
+	
+	function main()
+	end
+end
+
+Program showProgram22 type VGWebTransaction
+	{inputRecord = uirec}
+	
+	uirec basicrefDef2;
+	
+	function main()
+	end
+end
+
+
+Program showProgram3 type VGWebTransaction
+	{inputRecord = basicRec}
+	
+	basicRec basicrefDef2;
+	
+	function main()
+	end
+end
+
+Program showProgram33 type VGWebTransaction
+	{inputUIRecord = basicRec}
+	
+	basicRec vgUIRecDef2;
+	
+	function main()
+	end
+end
+
+Program showProgram4 type VGWebTransaction
+	{inputRecord = basicRec}
+	
+	basicRec basicrefDef2;
+	
+	function main()
+	end
+end
+
+Record basicRecDef
+	10 item1 int;
+end
+Record basicrefDef2
+	10 item1 int;
+end
+
+handler MyProj2 type JSFHandler 
+
+	function forwardFunction() 
+		age int;
+		xxx int;
+		name string;
+		thetime any;
+		children string[];
+	end	
+end
+	
+handler MyProjPH type JSFHandler {
+	view = "forwardTo.jsp", 
+ 	title = "Forward To Another Page",
+	onPageLoadFunction = "forwardToPageLoad"
+	}
+use myformg;
+	myURLItem char(100);
+	function forwardToPageLoad(age int,name string,children string[])
+		show mytextform;// 1 The show statement may not be used in a JSFHandler		{6553, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_PAGE_HANDLER}
+	end	
+	
+	function forwardFunction() 
+		age int;
+		name string;
+		thetime any;
+		children string[];
+		vgdef vgUIRecDef;
+	end
+end
+	
+Program MyWeb type  VGWebTransaction
+	
+	vgUIRec vgUIRecDef;
+
+	function main()
+	
+
+	end
+end
+
+Program MyWeb2 type  VGWebTransaction{
+inputUIRecord = "vgUIRec"
+}
+	
+	vgUIRec vgUIRecDef;
+
+	function main()
+	
+
+	end
+end
+
+Program MyProjBasic type BasicProgram {includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	use myformg;	
+	function main()
+show mytextform;// 2 The show statement may not be used in a web or basic program {6551, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_ACTION_OR_BASIC_PROGRAM}
+	end
+end
+
+Library MyLib{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+use myformg;
+	function myfunc()
+show mytextform;// 1
+	end
+end
+
+Record  MyUIRecord  Type  VGUIRecord 
+		{ commandValueItem="buttonValue" }	
+	10 formItem  char(21)					 
+	   {uiType=uiForm, 						
+        @programLinkData { 					
+			programName="NewPgm",			
+			newWindow=yes,					
+			uiRecordName="NewUIR",			
+			linkParms = [					
+			   				@LinkParameter { name="key1", value="value1" },		
+			   				@LinkParameter { name="key2", valueRef="refItem" }
+						]				
+        }
+	   };
+	  20 nametem  char(16)	{ uiType=input, inputRequired=yes }; 			
+	  20 buttonItem char(1)[3]	{uiType=submit,			
+  								 displayName="Enter \n Help \n Cancel"	
+								} 						
+								= [ "E", "H", "C" ];	
+	  20 buttonValue char(1) { uiType=none };			
+      20 refItem     char(1) { uiType=none };			
+End
+
+formgroup myformg 
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+
+Program myBasicProgram1  type textuiprogram ( i int)
+{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	use myformg;
+ 		function main()
+ 			show mytextform;// 2 The show statement may not be used in a called textUI program  			{6557, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_CALLED_TEXT_UI_PROGRAM}
+	end	
+end
+
+Program myBasicProgram2  type textuiprogram 
+{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	use myformg;
+ 		function main()
+ 			vgdef vgUIRecDef;
+ 			show vgdef;// 1 The target of the show statement can only be a VGUIRecord in a VGWebTransaction program 			{EGLMESSAGE_SHOW_UIRECORD_ONLY_VALID_IN_VGWEBTRANSACTION}
+	end	
+end
+
+Record vgUIRecDef type VGUIRecord end
+Record vgUIRecDef2 type VGUIRecord end
+
+

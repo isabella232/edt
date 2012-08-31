@@ -1,0 +1,304 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler ovcHandler01 type JSFHandler
+{
+	view="handler01.jsp", scope=session,
+	onConstructionFunction=onPageLoad
+}
+	aPerson  Person1;													//0
+	aNumber  int { displayUse=input, onValueChangeFunction=proc010 };	//0
+	aNumber2  int { displayUse=input, onValueChangeFunction=topLevelIntFunc };	//0
+	process	string  { displayUse=button, action="doit" };
+
+	function onPageLoad()
+		syslib.writestdout( " --- handler03.onPageLoad() --- " );
+		aNumber = 1;
+	end
+
+	function proc010( num1 int in )
+		syslib.writestdout( " --- proc010() --- " );
+	end
+	
+	function proc011( name String in )
+		syslib.writestdout( " --- proc011() --- " );
+	end
+
+	function doit()
+		syslib.writestdout( " --- doit() --- " );
+	end
+end
+    
+Record Person1 type basicRecord
+	Name string  { displayUse=input, onValueChangeFunction=proc011};	//1 cannot be resolved
+	Id		int	 { displayUse=input };
+End 
+
+Handler ovcHandler02 type JSFHandler {
+	view="handler02.jsp", scope=session,
+	onConstructionFunction=onPageLoad
+}
+	aPerson  Person2;													//0
+	aNumber  int { displayUse=input, onValueChangeFunction=proc021 };	//0
+	process	string  { displayUse=button, action="doit" };
+
+	function onPageLoad()
+		syslib.writestdout( " --- handler02.onPageLoad() --- " );
+		aNumber = 1;
+	end
+
+	function proc021( num1 int in )
+		syslib.writestdout( " --- proc021() --- " );
+		if ( num1 != 3 )
+			setError( " --- error from proc021():  enter 3  ---" );
+		end
+	end
+
+	function proc022( name string in )
+		syslib.writestdout( " --- proc022() --- " );
+	end
+
+	function doit()
+		syslib.writestdout( " --- doit() --- " );
+	end
+end
+
+Library lib1
+	function proc021( num1 int in )
+		syslib.writestdout( " --- proc021() --- " );
+		if ( num1 != 3 )
+			setError( " --- error from proc021():  enter 3  ---" );
+		end
+	end
+	
+	function proc022( name string in )
+		syslib.writestdout( " --- proc022() --- " );
+	end
+end
+
+Handler ovcHandler03 type JSFHandler {
+	view="handler02.jsp", scope=session,
+	onConstructionFunction=onPageLoad
+}
+	aPerson  Person2;													//0
+	aNumber  int { displayUse=input, onValueChangeFunction=proc021 };	//0
+	process	string  { displayUse=button, action="doit" };
+	
+	use lib1;
+
+	function onPageLoad()
+		syslib.writestdout( " --- handler02.onPageLoad() --- " );
+		aNumber = 1;
+	end
+end
+    
+Record Person2 type  basicRecord
+	Name string { displayUse=input, onValueChangeFunction=proc022};
+	Id int { displayUse=input, validatorFunction = foo};
+End 
+
+Record Person2a type  basicRecord
+	Name string { displayUse=input, onValueChangeFunction=proc022};				//1 cannot be resolved
+	Id int { displayUse=input, validatorFunction = foo};						//1 cannot be resolved
+End 
+
+Handler ovcHandler04 type JSFHandler {
+	view="handler02.jsp", scope=session,
+	onConstructionFunction=notFoundFunc											//1 cannot be resolved
+}
+	aPerson  Person3;															//0
+	aNumber  int { displayUse=input, onValueChangeFunction=notFoundFunc };		//1 cannot be resolved
+	aNumber2  int { displayUse=input, onValueChangeFunction=intAryFunc };			//1 Function intAryFunc must have one parameter whose type is compatible with the type int of item aNumber2. The types int[] and int are not compatible.
+	aNumber3  int { displayUse=input, onValueChangeFunction=noParmFunc };		//1 Function noParmFunc must have one parameter whose type is compatible with the type int of item aNumber3. Function noParmFunc has 0 arguments.
+	aNumber4 int[] { displayUse=input, onValueChangeFunction=intAryFunc };		//1 The property onValueChangeFunction cannot be specified for an array {7684, PROPERTY_INVALID_FOR_ARRAYS}
+	
+	function intAryFunc( p1 int[] in )
+	end
+	
+	function noParmFunc()
+	end
+end
+    
+Record Person3 type basicRecord
+	Name string { displayUse=input, onValueChangeFunction=notFoundFunc};	//1 cannot be resolved
+	Id int { displayUse=input };
+End
+
+Library lib2
+	function libFunc(p1 string in)
+	end
+
+	function libNumFunc(p1 int in)
+	end
+
+	function intAryFunc( p1 int[] in )
+	end
+	
+	function noParmFunc()
+	end
+end
+
+Handler ovcHandler05 type JSFHandler {
+	view="handler02.jsp", scope=session
+}
+	aPerson  Person4;															//0
+	aNumber  int { displayUse=input, onValueChangeFunction=lib2.libNumFunc };	//0
+	aNumber2  int { displayUse=input, onValueChangeFunction=lib2.intAryFunc };	//1 Function intAryFunc must have one parameter whose type is compatible with the type int of item aNumber2. The types int[] and int are not compatible.
+	aNumber3  int { displayUse=input, onValueChangeFunction=lib2.noParmFunc };	//1 Function noParmFunc must have one parameter whose type is compatible with the type int of item aNumber3. Function noParmFunc has 0 arguments.
+end
+    
+Record Person4 type basicRecord
+	Name string { displayUse=input, onValueChangeFunction=lib2.libFunc};	//0
+	Id int { displayUse=input };
+End
+
+Record Person5 type basicRecord
+	Name string { displayUse=input, onValueChangeFunction=topLevelStringFunc};	//0
+	Id int { displayUse=input };
+End
+
+function topLevelIntFunc(p1 int in) end
+function topLevelStringFunc(p1 string in) end
+
+Handler  handler06 type JSFHandler {
+	view="handler01.jsp", scope=session,
+	onConstructionFunction=onPageLoad,
+	onPreRenderFunction=proc01,
+	onPostRenderFunction=proc01
+}
+	aNumber int { displayUse=input };
+	process string  { displayUse=button, action="doit" };
+	
+	function onPageLoad()
+		syslib.writestdout( " --- handler01.onPageLoad() --- " );
+		aNumber = 7;
+	end
+	
+	function proc01()
+		syslib.writestdout( " --- proc01() --- " );
+		aNumber = aNumber + 2;
+	end
+	
+	function doit()
+	end
+end
+
+Handler handler07 type JSFHandler {
+	onPreRenderFunction = notFoundFunc,				//1 cannot be resolved
+	onPostRenderFunction = notFoundFunc				//1 cannot be resolved
+}
+	function main()
+		forward yes to label "handler06";			//2
+	end
+end
+
+Handler handler08 type JSFHandler {			//2 onPreRenderFunction or onPostRenderFunction func2 has 1 parameter(s), and onConstructionFunction func1 has 2 parameter(s). The parameter lists for both functions must match exactly. {7685, ONPRERENDERFUNCTION_ONCONSTRUCTION_FUNCTION_PARAMETER_MISMATCH_NUMBER}|onPostRenderFunction func3 has 3 parameter(s), and onConstructionFunction func1 has 2 parameter(s). The parameter lists for both functions must match exactly. {7685, ONPRERENDERFUNCTION_ONCONSTRUCTION_FUNCTION_PARAMETER_MISMATCH_NUMBER}
+	onConstructionFunction = func1,			//0
+	onPreRenderFunction = func2,			//0
+	onPostRenderFunction = func3			//0
+}
+	function func1(p1 int, p2 int)
+	end
+	
+	function func2(p1 int)
+	end
+	
+	function func3(p1 int, p2 int, p3 int)
+	end
+end
+
+Handler handler09 type JSFHandler {			//0
+	onConstructionFunction = func1,			//0
+	onPreRenderFunction = func2,			//0
+	onPostRenderFunction = func3			//0
+}
+	function func1(p1 int, p2 int)
+	end
+	
+	function func2()
+	end
+	
+	function func3()
+	end
+end
+
+Handler handler10 type JSFHandler {			//0
+	onConstructionFunction = func1,			//0
+	onPreRenderFunction = func2,			//0
+	onPostRenderFunction = func2			//0
+}
+	function func1()
+	end
+	
+	function func2(p1 int)
+	end
+end
+
+Handler handler11 type JSFHandler {			//2 The type of the parameter at position 1 for onPreRenderFunction or onPostRenderFunction func2 is bigInt, and the type of the parameter at position 1 of onConstructionFunction func1 is int. The parameter lists for both functions must match exactly. {7686, ONPRERENDERFUNCTION_ONCONSTRUCTION_FUNCTION_PARAMETER_MISMATCH_TYPE}
+	onConstructionFunction = func1,			//0
+	onPreRenderFunction = func2,			//0
+	onPostRenderFunction = func2			//0
+}
+	function func1(p1 int)
+	end
+	
+	function func2(p1 bigint)
+	end
+end
+
+Handler handler12 type JSFHandler {			//2 The type of the parameter at position 2 for onPreRenderFunction or onPostRenderFunction func2 is int[], and the type of the parameter at position 2 of onConstructionFunction func1 is int. The parameter lists for both functions must match exactly. {7686, ONPRERENDERFUNCTION_ONCONSTRUCTION_FUNCTION_PARAMETER_MISMATCH_TYPE}
+	onConstructionFunction = func1,			//0
+	onPreRenderFunction = func2,			//0
+	onPostRenderFunction = func2			//0
+}
+	function func1(p1 int, p2 int)
+	end
+	
+	function func2(p1 int, p2 int[])
+	end
+end
+
+Library vfLib
+	function func()
+	end
+end
+
+handler vfPage1 type JSFHandler {
+	validatorFunction = vfLib.func					//1
+}
+	field1 int {validatorFunction = vfLib.func};	//1
+end
+
+handler vfPage2 type JSFHandler {
+	validatorFunction = func						//1
+}
+	use vfLib;
+	
+	field1 int {validatorFunction = func};			//1
+end
+
+handler vfPage3 type JSFHandler {
+	validatorFunction = pageFunc					//0
+}
+	field1 int {validatorFunction = pageFunc};		//0
+	
+	function pageFunc() end
+end
+
+Record vfRec1
+	10 item1 int {validatorFunction = vfLib.func};	//1
+end
+
+DataItem dItem int {
+	validatorFunction = vfLib.func					//1
+}
+end

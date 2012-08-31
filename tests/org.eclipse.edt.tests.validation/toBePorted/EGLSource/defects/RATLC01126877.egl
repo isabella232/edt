@@ -1,0 +1,48 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler ph type JSFHandler
+	d decimal(1){dateFormat="MM/dd/yyyy"};		//1
+	d1 decimal(8){dateFormat="MM/dd/yyyy"};		//0
+	
+	dc1 char(10) {dateFormat=""};				//0
+	dc2 char(9) {dateFormat=""};				//1
+	dc3 char(11) {dateFormat=""};				//0
+	
+	dyyyyddd1 decimal(7){dateFormat="DDDyyyy"};	//0
+	dyyyyddd2 decimal(6){dateFormat="DDDyyyy"};	//1
+	dyyyyddd3 decimal(8){dateFormat="DDDyyyy"};	//0
+	
+	dyyddd1 decimal(5){dateFormat="DDDyy"};	//0
+	dyyddd2 decimal(4){dateFormat="DDDyy"};	//1
+	dyyddd3 decimal(6){dateFormat="DDDyy"};	//0
+
+	dyyyy1 decimal(8){dateFormat="yyyy"};	//0
+	dyyyy2 decimal(7){dateFormat="yyyy"};	//1
+	dyyyy3 decimal(9){dateFormat="yyyy"};	//0
+	
+	dyy1 decimal(6){dateFormat="yy"};	//0
+	dyy2 decimal(5){dateFormat="yy"};	//1
+	dyy3 decimal(7){dateFormat="yy"};	//0
+
+	dna1 decimal(8){dateFormat=""};	//0
+	dna2 decimal(7){dateFormat=""};	//1
+	dna3 decimal(9){dateFormat=""};	//0
+	
+	tc1 char(8) {timeFormat=""};				//0
+	tc2 char(7) {timeFormat=""};				//1
+	tc3 char(9) {timeFormat=""};				//0
+	
+	tn1 decimal(6) {timeFormat=""};				//0
+	tn2 decimal(5) {timeFormat=""};				//1
+	tn3 decimal(7) {timeFormat=""};				//0	
+end

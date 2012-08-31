@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+Program VALBUG12 type textUIProgram 
+  {   includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no }
+
+  REQUEST REQUEST { initialized = yes }; 
+  REQUEST_Level77Items REQUEST_Level77Items { initialized = yes }; 
+
+  function main()
+    vgLib.startTransaction(REQUEST, PRID, RECIP); // 0
+  end 
+end 
+
+Record REQUEST type basicRecord
+  3 LL LL ; 
+  3 TRXID TRXID ; 
+  3 CALLTRX CALLTRX ; 
+  3 RQSCRN RQSCRN ; 
+  3 RQLANG RQLANG ; 
+  3 RQCKEY RQCKEY ; 
+  3 RQAFD RQAFD ; 
+  3 RQUSER RQUSER ; 
+  3 RQPASW RQPASW ; 
+  3 RQPARM RQPARM ; 
+  3 FILLER FILLER ; 
+end 
+
+Record REQUEST_Level77Items type basicRecord
+  3 PRID PRID;
+  3 RECIP RECIP;
+end 
+
+DataItem LL smallint    end
+DataItem TRXID char(8)  end
+DataItem CALLTRX char(5) end 
+DataItem RQAFD char(5)  end
+DataItem RQCKEY char(50) end
+DataItem RQLANG char(1)  end
+DataItem RQPARM char(300) end
+DataItem RQPASW char(8)  end
+DataItem RQSCRN char(2)  end
+DataItem FILLER char(10) end
+DataItem RQUSER char(8)  end
+DataItem PRID  int      end
+DataItem RECIP char(4)  end

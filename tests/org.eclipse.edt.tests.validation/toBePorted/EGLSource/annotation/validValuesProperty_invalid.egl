@@ -1,0 +1,189 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// 
+// valid values property invalid test case
+// Paul R. Hoffman
+// 10/28/2004
+
+/*
+ * Notes from Dave which pertain to V7.0 rewrite:
+ * Two of the messages in this test case are issued in the class SettingsBlockAnnotationBindingCompletor
+ * whose code runs when the formgroup/form/whatever binding is created and its annotations are
+ * processed. These messages are:
+ *   "The value for a range in a validValues list must be in the format [firstValue, secondValue]"
+ *   "Valid values must be specified as a literal array of single values or ranges"
+ *
+ * The rest of the messages, of the form:
+ *   "A variable of type XXX requires a literal value that is of YYY type"
+ * should be issued during semantic validation that is aware of the declaration type.
+ */
+
+DataItem invalidNumericRange money { 
+	validValues = [[ "$-10.5", "$10.5"  ]] //1 A variable of type money(16,2) requires a literal value that is of numeric type.
+	} 
+end
+
+Program validValuesProperty_invalid
+	function main()
+	end
+end
+
+FormGroup ValidValueInvalidFormGroup 
+	Form ValidValuesForm type TextForm {formsize=[24,80]}
+	 	f_validCharRange char(30) { position = [7,1],  
+	 		validValues = [[ "x", "y", "c" ]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue]
+			} 
+		;
+		f_validCharValues char(30) { position = [8,1], uppercase=yes,
+			validValues = [ "x", 1 ] //1 A variable of type char(30) requires a literal value that is of string type.
+			} 
+		;
+		f_validCharRangesAndValues char(30) { position = [9,1], 
+			validValues = [[ "x", "z" ], [[[ "c"]]], "b", "a", ["1", "3" ]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue]
+			} 
+		;
+		f_validNumericRange money { position = [10,1], 
+			validValues = [[ "$-10.5", "$10.5"  ]] //1 A variable of type money(16,2) requires a literal value that is of numeric type.
+			} 
+		;
+		f_validNumericValues float { position = [11,1], 
+			validValues = [ 10, 4.5E3, "-10" ] //1 A variable of type float requires a literal value that is of numeric type.
+			} 
+		;
+		f_validNumericRangesAndValues int { position = [12,1], 
+			validValues = 100 //1 Valid values must be specified as a literal array of single values or ranges
+			} 
+		;
+		f_validCharRangeValues char(30) { position = [13,1], 
+			validValues = [ ["x", 1], "b" ] //1 A variable of type char(30) requires a literal value that is of string type.
+			} 
+		;
+		f_validUnaryNumericValues float { position = [14,1], 
+			validValues = [ -10.5, +10.5 ] //0
+			} 
+		;
+		f_emptyValues float { position = [15,1], 
+			validValues = [] //0
+			} 
+		;
+		f_emptyArrayValues float { position = [16,1], 
+			validValues = [[]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue].
+			} 
+		;
+		f_invalidNumericRange money { position = [17,1], 
+			validValues = [ "$-10.5", "$10.5"  ] //1 A variable of type money(16,2) requires a literal value that is of numeric type.
+			} 
+		;
+		f_invalidNamedValue char(30) { position = [18,1], 
+			validValues = [ 5  ] //1 A variable of type char(30) requires a literal value that is of string type.
+			} 
+		;
+		
+	end
+end
+
+handler ValidValuesInvalidPage type JSFHandler 
+//UNCOMMENT WHEN ANNOTATION OVERRIDES ON DECLARATIONS ARE SUPPORTED
+// 	f_validCharRange char(30) {  
+// 		validValues = [[ "x", "y", "c" ]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue]
+//		} 
+//	;
+//	f_validCharValues char(30) { 
+//		validValues = [ "x", 1 ] //1 A variable of type char requires a literal value that is of string type.
+//		} 
+//	;
+//	f_validCharRangesAndValues char(30) { 
+//		validValues = [[ "x", "z" ], [[[ "c"]]], "b", "a", ["1", "3" ]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue]
+//		} 
+//	;
+//	f_validNumericRange money { 
+//		validValues = [[ "$-10.5", "$10.5"  ]] //1 A variable of type money requires a literal value that is of numeric type.
+//		} 
+//	;
+//	f_validNumericValues float { 
+//		validValues = [ 10, 4.5E3, "-10" ] //1 A variable of type float requires a literal value that is of numeric type.
+//		} 
+//	;
+//	f_validNumericRangesAndValues int { 
+//		validValues = 100 //1 Property: validValues.  This property does not allow an integer as the value.
+//		} 
+//	;
+//	f_validCharRangeValues char(30) {  
+//		validValues = [ ["x", 1], "b" ] //1 A variable of type char requires a literal value that is of string type.
+//		} 
+//	;
+//	f_validUnaryNumericValues float {
+//		validValues = [ -10.5, +10.5 ] //0
+//		} 
+//	;
+//	f_emptyValues float {
+//		validValues = [] //1 Valid values must be specified as a literal array of single values or ranges.
+//		} 
+//	;
+//	f_emptyArrayValues float {
+//		validValues = [[]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue].
+//		} 
+//	;
+//	f_invalidNumericRange money {
+//		validValues = [ "$-10.5", "$10.5"  ] //1 A variable of type money requires a literal value that is of numeric type.
+//		} 
+//	;
+//	f_invalidNamedValue char(30) {
+//		validValues = [ 5  ] //1 A variable of type char requires a literal value that is of string type.
+//		} 
+//	;
+end
+	
+DataItem invalidCharRange char(30) { 
+ 	validValues = [[ "x", "y", "c" ]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue]
+	} 
+end
+DataItem invalidCharValues char(30) { 
+	validValues = [ "x", 1 ] //1 A variable of type char(30) requires a literal value that is of string type.
+	}
+end
+DataItem invalidCharRangesAndValues char(30) { 
+	validValues = [[ "x", "z" ], [[[ "c"]]], "b", "a", ["1", "3" ]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue]
+	} 
+end
+
+DataItem invalidNumericValues float { 
+	validValues = [ 10, 4.5E3, "-10" ] //1 A variable of type float requires a literal value that is of numeric type.
+	} 
+end
+DataItem invalidNumericRangesAndValues int { 
+	validValues = 100 //1 Valid values must be specified as a literal array of single values or ranges.
+	} 
+end
+DataItem invalidCharRangeValues char(30) {
+	validValues = [ ["x", 1], "b" ] //1 A variable of type char(30) requires a literal value that is of string type.
+	} 
+end
+DataItem invalidUnaryNumericValues float {
+			validValues = [ -10.5, +10.5 ] //0
+			} 
+end
+DataItem invalidEmptyValues float {
+	validValues = [] //0
+	} 
+end
+DataItem invalidEmptyArrayValues float {
+	validValues = [[]] //1 The value for a range in a validValues list must be in the format [firstValue, secondValue].
+	} 
+end
+
+DataItem invalidNamedValue char(30) {
+	validValues = [ 5  ] //1 A variable of type char(30) requires a literal value that is of string type.
+	} 
+end
+
+	

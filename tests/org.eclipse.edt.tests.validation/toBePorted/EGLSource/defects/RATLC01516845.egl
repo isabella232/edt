@@ -1,0 +1,21 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+library lib1
+
+	const a int = 5; //0
+	
+	const b int[] = [a]; //1
+	
+	const c int[] = [1, 1.2, 3];  //1
+	
+	const d int[][] = [new int[]]; //1
+end

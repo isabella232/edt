@@ -1,0 +1,1314 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR VAG
+
+// This test case has two purposes:
+//      1. To test that the system functions resolve to the correct library
+//		2. To test that the system words correctly respect the IN, OUT, or INOUT parameter definitions. 
+//		   IN and OUT should result in assignment compatability rules being applied.
+//		   INOUT should result in reference compatability rules being applied.
+//
+//  Notes:  VG compatibility needs to be on for this test.
+//			datetime library checking to make sure things are in the right library are in the DCR_DateTimeLib test cases
+//
+//  Still to be done:
+//		j2eelib
+//		vglib
+//		syslib
+//		converselib
+//		javalib
+//		conversevar
+//		loblib
+//		mathlib
+//		sysvar
+//		vgvar
+//
+//		all of the data system words
+//		I haven't done anything with hex types throughout
+//
+Record SampleForm type ConsoleForm { formSize=[14,80] }
+* ConsoleField { position=[1,31], value="Sample Dynamic Form" } ;
+* ConsoleField { position=[3,18], value="Activity:"} ;
+* ConsoleField { position=[3,61], value="Command Code:"} ;
+* ConsoleField { position=[10,1], value="Response:" } ;
+* ConsoleField { position=[13,1], value="Command:" } ;
+* ConsoleField { position=[14,1], value="Enter=Run PF3=Exit" };
+
+// Fields available to reference in code
+activity ConsoleField[5]
+ { name="activity", fieldLen = 10 } ;
+commandCode ConsoleField[5]
+ { name="commandCode", fieldLen = 10} ;
+response ConsoleField
+ { name="response", fieldLen = 10, position=[1,1] } ;
+command ConsoleField
+ { name="command", fieldLen = 10, position=[1,1] } ;
+
+End
+
+program systemlibraries_valid
+
+	myint int;
+	mysmallint smallint;
+	mybigint bigint;
+	mydecimal decimal(9,2);
+	mymoney money(15);
+	mybin9 bin(9);
+	mybin40 bin(4,0);
+	mybin94 bin(9,4);
+	myfloat float;
+	mysmallfloat smallfloat;
+	mychar char(10);
+	mydbchar dbchar(5);
+	mymbchar mbchar(10);
+	myhex hex(8);
+	mynum50 num(5,0);
+	mynum84 num(8,4);
+	mynumc60 numc(6,0);
+	mynumc72 numc(7,2);
+	mypacf90 pacf(9,0);
+	mypacf185 pacf(18,5);
+	myunicode unicode(15);
+	myblob blob;
+	myclob clob;
+	mytimestamp timestamp; 
+	mydate date;
+	mytime time; 
+	myinterval interval("yyyyMM");
+	mystring string;
+	myany any;
+	
+	myreportdata reportdata;
+	myreport report;
+		
+	myconsoleform sampleform;
+	// the following declarations were taken from the consoleUIRecords test case
+	myWindow Window {
+		color = black,
+		commentLine = 5,
+		formLine = 6,
+		hasBorder = no,
+		hasCommentLine = yes,
+		intensity = dim,
+		menuLine = 7,
+		messageLine = 8,
+		name = "aaa",
+		position = [4,6],
+		promptLine = 3,
+		size = [2,2]
+	};
+	myMenu Menu {
+		labelKey = "dd",
+		labelText = "dd"
+	};
+	myMenuItem MenuItem {
+		accelerators = ["accelerator"],
+		comment = "ddd",
+		commentKey = "aaa",
+		help = "aa",
+		helpMsgKey = "PF5",
+		labelKey = "ss",
+		labelText = "gg",
+		name = "aa"
+	};
+			
+	function main()
+		consolelibfuncs();
+		datetimelibfuncs();
+		reportLibFuncs();
+		strlibfuncs();
+	end
+//
+// Console Lib
+//		
+	function consolelibfuncs()
+	
+		// these have no args
+		CancelArrayDelete();
+		CancelArrayInsert();
+		ClearActiveForm();
+		ClearActiveWindow();
+		CloseActiveWindow();
+		myint = CurrentArrayScreenLine();
+		myint = CurrentArrayDataLine( );
+		myint = getKey( );
+		HideErrorWindow();
+		myint = LastKeyTyped( );
+		NextField();
+		PreviousField();
+		ScrollDownPage();
+		ScrollUpPage();
+		
+		consolelib.CancelArrayDelete();
+		consolelib.CancelArrayInsert();
+		consolelib.ClearActiveForm();
+		consolelib.ClearActiveWindow();
+		consolelib.CloseActiveWindow();
+		myint = consolelib.CurrentArrayScreenLine();
+		myint = consolelib.CurrentArrayDataLine( );
+		myint = consolelib.getKey( );
+		consolelib.HideErrorWindow();
+		myint = consolelib.LastKeyTyped( );
+		consolelib.NextField();
+		consolelib.PreviousField();
+		consolelib.ScrollDownPage();
+		consolelib.ScrollUpPage();
+		
+		egl.ui.console.consolelib.CancelArrayDelete();
+		egl.ui.console.consolelib.CancelArrayInsert();
+		egl.ui.console.consolelib.ClearActiveForm();
+		egl.ui.console.consolelib.ClearActiveWindow();
+		egl.ui.console.consolelib.CloseActiveWindow();
+		myint = egl.ui.console.consolelib.CurrentArrayScreenLine();
+		myint = egl.ui.console.consolelib.CurrentArrayDataLine( );
+		myint = egl.ui.console.consolelib.getKey( );
+		egl.ui.console.consolelib.HideErrorWindow();
+		myint = egl.ui.console.consolelib.LastKeyTyped( );
+		egl.ui.console.consolelib.NextField();
+		egl.ui.console.consolelib.PreviousField();
+		egl.ui.console.consolelib.ScrollDownPage();
+		egl.ui.console.consolelib.ScrollUpPage();
+		
+		// these are all IN parameters 
+		// ActivateWindowByName(String)
+		ActivateWindowByName(myString);
+		ActivateWindowByName(mymbchar);
+		ActivateWindowByName(myunicode);
+		ActivateWindowByName(mychar);
+		
+		// ClearWindowByName(String)
+		ClearWindowByName(myString);
+		ClearWindowByName(mymbchar);
+		ClearWindowByName(myunicode);
+		ClearWindowByName(mychar);
+		
+		//CloseWindowByName(String)
+		CloseWindowByName(myString);
+		CloseWindowByName(mymbchar);
+		CloseWindowByName(myunicode);
+		CloseWindowByName(mychar);
+					
+		//ClearFieldsByName(String,....)
+		ClearFieldsByName(myString, mymbchar, myunicode, mychar);
+		
+		// displayAtLine(String , int)
+		displayAtLine(mystring, myint);
+		displayAtLine(mymbchar, mybigint);
+		displayAtLine(myunicode, mysmallint);
+		displayAtLine(mychar, mybin40);
+		displayAtLine(mychar, myfloat);
+		displayAtLine(mychar, mysmallfloat);
+		displayAtLine(mychar, mynum50);
+		displayAtLine(mychar, mynumc60);
+		displayAtLine(mychar, mypacf90);
+		
+		// displayAtPosition(String,int,int)
+		displayAtPosition(mystring, myint, myfloat);
+		displayAtPosition(mymbchar, mybigint, mysmallfloat);
+		displayAtPosition(myunicode, mysmallint,mynum50);
+		displayAtPosition(mychar, mybin40, mynumc60);
+		displayAtPosition(mychar, mypacf90, mypacf90);
+		
+		//displayError(String)
+		displayError(myString);
+		displayError(mymbchar);
+		displayError(myunicode);
+		displayError(mychar);
+		
+		// displayFieldsbyName(String,....)
+		displayFieldsbyName(myString, mymbchar, myunicode, mychar);	
+				
+		//displayFormByName(String)
+		displayFormByName(myString);
+		displayFormByName(mymbchar);
+		displayFormByName(myunicode);
+		displayFormByName(mychar);
+					
+		//displayLineMode(String) 
+		displayLineMode(myString);
+		displayLineMode(mymbchar);
+		displayLineMode(myunicode);
+		displayLineMode(mychar);
+		
+		//displayMessage(String)
+		displayMessage(myString);
+		displayMessage(mymbchar);
+		displayMessage(myunicode);
+		displayMessage(mychar);
+		
+		//DrawBox(int, int, int, int)
+		DrawBox(myint, myfloat, mybigint, mysmallfloat);
+		DrawBox(mysmallint, mynum50, mybin40, mynumc60);
+		DrawBox(mysmallint, mynum50, mybin40, mypacf90);	
+				
+		// DrawBoxWithColor(int, int, int, int, ColorKind)
+		DrawBoxWithColor(myint, myfloat, mybigint, mysmallfloat, red);
+		DrawBoxWithColor(mysmallint, mynum50, mybin40, mynumc60, ColorKind.green);
+		DrawBoxWithColor(mysmallint, mynum50, mybin40, mypacf90, ColorKind.blue);
+		
+		// getKeyCode(String) returns (int)
+		myint = getKeyCode(myString);
+		myint = getKeyCode(mymbchar);
+		myint = getKeyCode(myunicode);
+		myint = getKeyCode(mychar);	
+	
+		// getKeyName(int) returns String
+		mystring = getKeyName( myint);
+		mystring = getKeyName( mybigint);
+		mystring = getKeyName( mysmallint);
+		mystring = getKeyName( mybin40);
+		mystring = getKeyName( myfloat);
+		mystring = getKeyName( mysmallfloat);
+		mystring = getKeyName( mynum50);
+		mystring = getKeyName( mynumc60);
+		mystring = getKeyName( mypacf90);
+		
+		//gotoFieldByName(String)
+		gotoFieldByName(myString);
+		gotoFieldByName(mymbchar);
+		gotoFieldByName(myunicode);
+		gotoFieldByName(mychar);
+		
+		//gotoMenuItemByName(String)
+		gotoMenuItemByName(myString);
+		gotoMenuItemByName(mymbchar);
+		gotoMenuItemByName(myunicode);
+		gotoMenuItemByName(mychar);
+		
+		//hideMenuItemByName(String
+		hideMenuItemByName(myString);
+		hideMenuItemByName(mymbchar);
+		hideMenuItemByName(myunicode);
+		hideMenuItemByName(mychar);
+		
+		// IsCurrentFieldByName(String) returns Boolean
+		if (iscurrentfieldbyName(mystring) == yes)
+		end
+		if (iscurrentfieldbyName(mymbchar) == yes)
+		end
+		if (iscurrentfieldbyName(myunicode) == yes)
+		end				
+		if (iscurrentfieldbyName(mychar) == yes)
+		end
+		
+		// IsFieldModifiedByName(String) returns Boolean 
+		if (IsFieldModifiedByName(mystring) == yes)
+		end
+		if (IsFieldModifiedByName(mymbchar) == yes)
+		end
+		if (IsFieldModifiedByName(myunicode) == yes)
+		end				
+		if (IsFieldModifiedByName(mychar) == yes)
+		end		
+		
+		//OpenWindowByName(String)
+		OpenWindowByName(myString);
+		OpenWindowByName(mymbchar);
+		OpenWindowByName(myunicode);
+		OpenWindowByName(mychar);	
+			
+		// OpenWindowWithFormByName(String, String)		
+		OpenWindowWithFormByName(myString, "");
+		OpenWindowWithFormByName(mymbchar, "");
+		OpenWindowWithFormByName(myunicode, "");
+		OpenWindowWithFormByName(mychar, "");
+		
+		// promptLineMode(String) returns String
+		mystring = promptLineMode(myString);
+		mystring = promptLineMode(mymbchar);
+		mystring = promptLineMode(myunicode);
+		mystring = promptLineMode(mychar);
+		
+		// scrollDownLines(int)
+        scrollDownLines( myint);
+		scrollDownLines( mybigint);
+		scrollDownLines( mysmallint);
+		scrollDownLines( mybin40);
+		scrollDownLines( myfloat);
+		scrollDownLines( mysmallfloat);
+		scrollDownLines( mynum50);
+		scrollDownLines( mynumc60);
+		scrollDownLines( mypacf90);
+					
+		// ScrollUpLines(int)
+		ScrollUpLines( myint);
+		ScrollUpLines( mybigint);
+		ScrollUpLines( mysmallint);
+		ScrollUpLines( mybin40);
+		ScrollUpLines( myfloat);
+		ScrollUpLines( mysmallfloat);
+		ScrollUpLines( mynum50);
+		ScrollUpLines( mynumc60);
+		ScrollUpLines( mypacf90);
+		
+		// SetArrayLine(integer)
+		SetArrayLine( myint);
+		SetArrayLine( mybigint);
+		SetArrayLine( mysmallint);
+		SetArrayLine( mybin40);
+		SetArrayLine( myfloat);
+		SetArrayLine( mysmallfloat);
+		SetArrayLine( mynum50);
+		SetArrayLine( mynumc60);
+		SetArrayLine( mypacf90);	
+			
+		// SetCurrentArrayCount(integer)
+		SetCurrentArrayCount( myint);
+		SetCurrentArrayCount( mybigint);
+		SetCurrentArrayCount( mysmallint);
+		SetCurrentArrayCount( mybin40);
+		SetCurrentArrayCount( myfloat);
+		SetCurrentArrayCount( mysmallfloat);
+		SetCurrentArrayCount( mynum50);
+		SetCurrentArrayCount( mynumc60);
+		SetCurrentArrayCount( mypacf90);
+		
+		//showHelp(String)
+		showHelp(myString);
+		showHelp(mymbchar);
+		showHelp(myunicode);
+		showHelp(mychar);
+		
+		//showMenuItemByName(String)
+		showMenuItemByName(myString);
+		showMenuItemByName(mymbchar);
+		showMenuItemByName(myunicode);
+		showMenuItemByName(mychar);
+
+		// now qualify with library name
+		// ActivateWindowByName(String)
+		consolelib.ActivateWindowByName(myString);
+		consolelib.ActivateWindowByName(mymbchar);
+		consolelib.ActivateWindowByName(myunicode);
+		consolelib.ActivateWindowByName(mychar);
+		
+		// ClearWindowByName(String)
+		consolelib.ClearWindowByName(myString);
+		consolelib.ClearWindowByName(mymbchar);
+		consolelib.ClearWindowByName(myunicode);
+		consolelib.ClearWindowByName(mychar);
+		
+		//CloseWindowByName(String)
+		consolelib.CloseWindowByName(myString);
+		consolelib.CloseWindowByName(mymbchar);
+		consolelib.CloseWindowByName(myunicode);
+		consolelib.CloseWindowByName(mychar);
+					
+		//ClearFieldsByName(String,....)
+		consolelib.ClearFieldsByName(myString, mymbchar, myunicode, mychar);
+		
+		// displayAtLine(String , int)
+		consolelib.displayAtLine(mystring, myint);
+		consolelib.displayAtLine(mymbchar, mybigint);
+		consolelib.displayAtLine(myunicode, mysmallint);
+		consolelib.displayAtLine(mychar, mybin40);
+		consolelib.displayAtLine(mychar, myfloat);
+		consolelib.displayAtLine(mychar, mysmallfloat);
+		consolelib.displayAtLine(mychar, mynum50);
+		consolelib.displayAtLine(mychar, mynumc60);
+		consolelib.displayAtLine(mychar, mypacf90);
+		
+		// displayAtPosition(String,int,int)
+		consolelib.displayAtPosition(mystring, myint, myfloat);
+		consolelib.displayAtPosition(mymbchar, mybigint, mysmallfloat);
+		consolelib.displayAtPosition(myunicode, mysmallint,mynum50);
+		consolelib.displayAtPosition(mychar, mybin40, mynumc60);
+		consolelib.displayAtPosition(mychar, mypacf90, mypacf90);
+		
+		//displayError(String)
+		consolelib.displayError(myString);
+		consolelib.displayError(mymbchar);
+		consolelib.displayError(myunicode);
+		consolelib.displayError(mychar);
+		
+		// displayFieldsbyName(String,....)
+		consolelib.displayFieldsbyName(myString, mymbchar, myunicode, mychar);	
+				
+		//displayFormByName(String)
+		consolelib.displayFormByName(myString);
+		consolelib.displayFormByName(mymbchar);
+		consolelib.displayFormByName(myunicode);
+		consolelib.displayFormByName(mychar);
+					
+		//displayLineMode(String) 
+		consolelib.displayLineMode(myString);
+		consolelib.displayLineMode(mymbchar);
+		consolelib.displayLineMode(myunicode);
+		consolelib.displayLineMode(mychar);
+		
+		//displayMessage(String)
+		consolelib.displayMessage(myString);
+		consolelib.displayMessage(mymbchar);
+		consolelib.displayMessage(myunicode);
+		consolelib.displayMessage(mychar);
+		
+		//DrawBox(int, int, int, int)
+		consolelib.DrawBox(myint, myfloat, mybigint, mysmallfloat);
+		consolelib.DrawBox(mysmallint, mynum50, mybin40, mynumc60);
+		consolelib.DrawBox(mysmallint, mynum50, mybin40, mypacf90);	
+				
+		// DrawBoxWithColor(int, int, int, int, ColorKind)
+		consolelib.DrawBoxWithColor(myint, myfloat, mybigint, mysmallfloat, red);
+		consolelib.DrawBoxWithColor(mysmallint, mynum50, mybin40, mynumc60, ColorKind.green);
+		consolelib.DrawBoxWithColor(mysmallint, mynum50, mybin40, mypacf90, ColorKind.blue);
+		
+		// getKeyCode(String) returns (int)
+		myint = consolelib.getKeyCode(myString);
+		myint = consolelib.getKeyCode(mymbchar);
+		myint = consolelib.getKeyCode(myunicode);
+		myint = consolelib.getKeyCode(mychar);	
+	
+		// getKeyName(int) returns String
+		mystring = consolelib.getKeyName( myint);
+		mystring = consolelib.getKeyName( mybigint);
+		mystring = consolelib.getKeyName( mysmallint);
+		mystring = consolelib.getKeyName( mybin40);
+		mystring = consolelib.getKeyName( myfloat);
+		mystring = consolelib.getKeyName( mysmallfloat);
+		mystring = consolelib.getKeyName( mynum50);
+		mystring = consolelib.getKeyName( mynumc60);
+		mystring = consolelib.getKeyName( mypacf90);
+		
+		//gotoFieldByName(String)
+		consolelib.gotoFieldByName(myString);
+		consolelib.gotoFieldByName(mymbchar);
+		consolelib.gotoFieldByName(myunicode);
+		consolelib.gotoFieldByName(mychar);
+		
+		//gotoMenuItemByName(String)
+		consolelib.gotoMenuItemByName(myString);
+		consolelib.gotoMenuItemByName(mymbchar);
+		consolelib.gotoMenuItemByName(myunicode);
+		consolelib.gotoMenuItemByName(mychar);
+		
+		//hideMenuItemByName(String
+		consolelib.hideMenuItemByName(myString);
+		consolelib.hideMenuItemByName(mymbchar);
+		consolelib.hideMenuItemByName(myunicode);
+		consolelib.hideMenuItemByName(mychar);
+		
+		// IsCurrentFieldByName(String) returns Boolean
+		if (consolelib.iscurrentfieldbyName(mystring) == yes)
+		end
+		if (consolelib.iscurrentfieldbyName(mymbchar) == yes)
+		end
+		if (consolelib.iscurrentfieldbyName(myunicode) == yes)
+		end				
+		if (consolelib.iscurrentfieldbyName(mychar) == yes)
+		end
+		
+		// IsFieldModifiedByName(String) returns Boolean
+		if (consolelib.IsFieldModifiedByName(mystring) == yes)
+		end
+		if (consolelib.IsFieldModifiedByName(mymbchar) == yes)
+		end
+		if (consolelib.IsFieldModifiedByName(myunicode) == yes)
+		end				
+		if (consolelib.IsFieldModifiedByName(mychar) == yes)
+		end		
+		
+		//OpenWindowByName(String)
+		consolelib.OpenWindowByName(myString);
+		consolelib.OpenWindowByName(mymbchar);
+		consolelib.OpenWindowByName(myunicode);
+		consolelib.OpenWindowByName(mychar);	
+			
+		// OpenWindowWithFormByName(String, String)		
+		consolelib.OpenWindowWithFormByName(myString, "");
+		consolelib.OpenWindowWithFormByName(mymbchar, "");
+		consolelib.OpenWindowWithFormByName(myunicode, "");
+		consolelib.OpenWindowWithFormByName(mychar, "");
+		
+		// promptLineMode(String) returns String
+		mystring = consolelib.promptLineMode(myString);
+		mystring = consolelib.promptLineMode(mymbchar);
+		mystring = consolelib.promptLineMode(myunicode);
+		mystring = consolelib.promptLineMode(mychar);
+		
+		// scrollDownLines(int)
+        consolelib.scrollDownLines( myint);
+		consolelib.scrollDownLines( mybigint);
+		consolelib.scrollDownLines( mysmallint);
+		consolelib.scrollDownLines( mybin40);
+		consolelib.scrollDownLines( myfloat);
+		consolelib.scrollDownLines( mysmallfloat);
+		consolelib.scrollDownLines( mynum50);
+		consolelib.scrollDownLines( mynumc60);
+		consolelib.scrollDownLines( mypacf90);
+					
+		// ScrollUpLines(int)
+		consolelib.ScrollUpLines( myint);
+		consolelib.ScrollUpLines( mybigint);
+		consolelib.ScrollUpLines( mysmallint);
+		consolelib.ScrollUpLines( mybin40);
+		consolelib.ScrollUpLines( myfloat);
+		consolelib.ScrollUpLines( mysmallfloat);
+		consolelib.ScrollUpLines( mynum50);
+		consolelib.ScrollUpLines( mynumc60);
+		consolelib.ScrollUpLines( mypacf90);
+		
+		// SetArrayLine(integer)
+		consolelib.SetArrayLine( myint);
+		consolelib.SetArrayLine( mybigint);
+		consolelib.SetArrayLine( mysmallint);
+		consolelib.SetArrayLine( mybin40);
+		consolelib.SetArrayLine( myfloat);
+		consolelib.SetArrayLine( mysmallfloat);
+		consolelib.SetArrayLine( mynum50);
+		consolelib.SetArrayLine( mynumc60);
+		consolelib.SetArrayLine( mypacf90);	
+			
+		// SetCurrentArrayCount(integer)
+		consolelib.SetCurrentArrayCount( myint);
+		consolelib.SetCurrentArrayCount( mybigint);
+		consolelib.SetCurrentArrayCount( mysmallint);
+		consolelib.SetCurrentArrayCount( mybin40);
+		consolelib.SetCurrentArrayCount( myfloat);
+		consolelib.SetCurrentArrayCount( mysmallfloat);
+		consolelib.SetCurrentArrayCount( mynum50);
+		consolelib.SetCurrentArrayCount( mynumc60);
+		consolelib.SetCurrentArrayCount( mypacf90);
+		
+		//showHelp(String)
+		consolelib.showHelp(myString);
+		consolelib.showHelp(mymbchar);
+		consolelib.showHelp(myunicode);
+		consolelib.showHelp(mychar);
+		
+		//showMenuItemByName(String)
+		consolelib.showMenuItemByName(myString);
+		consolelib.showMenuItemByName(mymbchar);
+		consolelib.showMenuItemByName(myunicode);
+		consolelib.showMenuItemByName(mychar);
+		
+		// now fully qualify
+		// ActivateWindowByName(String)
+		egl.ui.console.consolelib.ActivateWindowByName(myString);
+		egl.ui.console.consolelib.ActivateWindowByName(mymbchar);
+		egl.ui.console.consolelib.ActivateWindowByName(myunicode);
+		egl.ui.console.consolelib.ActivateWindowByName(mychar);
+		
+		// ClearWindowByName(String)
+		egl.ui.console.consolelib.ClearWindowByName(myString);
+		egl.ui.console.consolelib.ClearWindowByName(mymbchar);
+		egl.ui.console.consolelib.ClearWindowByName(myunicode);
+		egl.ui.console.consolelib.ClearWindowByName(mychar);
+		
+		//CloseWindowByName(String)
+		egl.ui.console.consolelib.CloseWindowByName(myString);
+		egl.ui.console.consolelib.CloseWindowByName(mymbchar);
+		egl.ui.console.consolelib.CloseWindowByName(myunicode);
+		egl.ui.console.consolelib.CloseWindowByName(mychar);
+					
+		//ClearFieldsByName(String,....)
+		egl.ui.console.consolelib.ClearFieldsByName(myString, mymbchar, myunicode, mychar);
+		
+		// displayAtLine(String , int)
+		egl.ui.console.consolelib.displayAtLine(mystring, myint);
+		egl.ui.console.consolelib.displayAtLine(mymbchar, mybigint);
+		egl.ui.console.consolelib.displayAtLine(myunicode, mysmallint);
+		egl.ui.console.consolelib.displayAtLine(mychar, mybin40);
+		egl.ui.console.consolelib.displayAtLine(mychar, myfloat);
+		egl.ui.console.consolelib.displayAtLine(mychar, mysmallfloat);
+		egl.ui.console.consolelib.displayAtLine(mychar, mynum50);
+		egl.ui.console.consolelib.displayAtLine(mychar, mynumc60);
+		egl.ui.console.consolelib.displayAtLine(mychar, mypacf90);
+		
+		// displayAtPosition(String,int,int)
+		egl.ui.console.consolelib.displayAtPosition(mystring, myint, myfloat);
+		egl.ui.console.consolelib.displayAtPosition(mymbchar, mybigint, mysmallfloat);
+		egl.ui.console.consolelib.displayAtPosition(myunicode, mysmallint,mynum50);
+		egl.ui.console.consolelib.displayAtPosition(mychar, mybin40, mynumc60);
+		egl.ui.console.consolelib.displayAtPosition(mychar, mypacf90, mypacf90);
+		
+		//displayError(String)
+		egl.ui.console.consolelib.displayError(myString);
+		egl.ui.console.consolelib.displayError(mymbchar);
+		egl.ui.console.consolelib.displayError(myunicode);
+		egl.ui.console.consolelib.displayError(mychar);
+		
+		// displayFieldsbyName(String,....)
+		egl.ui.console.consolelib.displayFieldsbyName(myString, mymbchar, myunicode, mychar);	
+				
+		//displayFormByName(String)
+		egl.ui.console.consolelib.displayFormByName(myString);
+		egl.ui.console.consolelib.displayFormByName(mymbchar);
+		egl.ui.console.consolelib.displayFormByName(myunicode);
+		egl.ui.console.consolelib.displayFormByName(mychar);
+					
+		//displayLineMode(String) 
+		egl.ui.console.consolelib.displayLineMode(myString);
+		egl.ui.console.consolelib.displayLineMode(mymbchar);
+		egl.ui.console.consolelib.displayLineMode(myunicode);
+		egl.ui.console.consolelib.displayLineMode(mychar);
+		
+		//displayMessage(String)
+		egl.ui.console.consolelib.displayMessage(myString);
+		egl.ui.console.consolelib.displayMessage(mymbchar);
+		egl.ui.console.consolelib.displayMessage(myunicode);
+		egl.ui.console.consolelib.displayMessage(mychar);
+		
+		//DrawBox(int, int, int, int)
+		egl.ui.console.consolelib.DrawBox(myint, myfloat, mybigint, mysmallfloat);
+		egl.ui.console.consolelib.DrawBox(mysmallint, mynum50, mybin40, mynumc60);
+		egl.ui.console.consolelib.DrawBox(mysmallint, mynum50, mybin40, mypacf90);	
+				
+		// DrawBoxWithColor(int, int, int, int, ColorKind)
+		egl.ui.console.consolelib.DrawBoxWithColor(myint, myfloat, mybigint, mysmallfloat, red);
+		egl.ui.console.consolelib.DrawBoxWithColor(mysmallint, mynum50, mybin40, mynumc60, ColorKind.green);
+		egl.ui.console.consolelib.DrawBoxWithColor(mysmallint, mynum50, mybin40, mypacf90, ColorKind.blue);
+		
+		// getKeyCode(String) returns (int)
+		myint = egl.ui.console.consolelib.getKeyCode(myString);
+		myint = egl.ui.console.consolelib.getKeyCode(mymbchar);
+		myint = egl.ui.console.consolelib.getKeyCode(myunicode);
+		myint = egl.ui.console.consolelib.getKeyCode(mychar);	
+	
+		// getKeyName(int) returns String
+		mystring = egl.ui.console.consolelib.getKeyName( myint);
+		mystring = egl.ui.console.consolelib.getKeyName( mybigint);
+		mystring = egl.ui.console.consolelib.getKeyName( mysmallint);
+		mystring = egl.ui.console.consolelib.getKeyName( mybin40);
+		mystring = egl.ui.console.consolelib.getKeyName( myfloat);
+		mystring = egl.ui.console.consolelib.getKeyName( mysmallfloat);
+		mystring = egl.ui.console.consolelib.getKeyName( mynum50);
+		mystring = egl.ui.console.consolelib.getKeyName( mynumc60);
+		mystring = egl.ui.console.consolelib.getKeyName( mypacf90);
+		
+		//gotoFieldByName(String)
+		egl.ui.console.consolelib.gotoFieldByName(myString);
+		egl.ui.console.consolelib.gotoFieldByName(mymbchar);
+		egl.ui.console.consolelib.gotoFieldByName(myunicode);
+		egl.ui.console.consolelib.gotoFieldByName(mychar);
+		
+		//gotoMenuItemByName(String)
+		egl.ui.console.consolelib.gotoMenuItemByName(myString);
+		egl.ui.console.consolelib.gotoMenuItemByName(mymbchar);
+		egl.ui.console.consolelib.gotoMenuItemByName(myunicode);
+		egl.ui.console.consolelib.gotoMenuItemByName(mychar);
+		
+		//hideMenuItemByName(String
+		egl.ui.console.consolelib.hideMenuItemByName(myString);
+		egl.ui.console.consolelib.hideMenuItemByName(mymbchar);
+		egl.ui.console.consolelib.hideMenuItemByName(myunicode);
+		egl.ui.console.consolelib.hideMenuItemByName(mychar);
+		
+		// IsCurrentFieldByName(String) returns Boolean
+		if (egl.ui.console.consolelib.iscurrentfieldbyName(mystring) == yes)
+		end
+		if (egl.ui.console.consolelib.iscurrentfieldbyName(mymbchar) == yes)
+		end
+		if (egl.ui.console.consolelib.iscurrentfieldbyName(myunicode) == yes)
+		end				
+		if (egl.ui.console.consolelib.iscurrentfieldbyName(mychar) == yes)
+		end
+		
+		// IsFieldModifiedByName(String) returns Boolean 
+		if (egl.ui.console.consolelib.IsFieldModifiedByName(mystring) == yes)
+		end
+		if (egl.ui.console.consolelib.IsFieldModifiedByName(mymbchar) == yes)
+		end
+		if (egl.ui.console.consolelib.IsFieldModifiedByName(myunicode) == yes)
+		end				
+		if (egl.ui.console.consolelib.IsFieldModifiedByName(mychar) == yes)
+		end		
+		
+		//OpenWindowByName(String)
+		egl.ui.console.consolelib.OpenWindowByName(myString);
+		egl.ui.console.consolelib.OpenWindowByName(mymbchar);
+		egl.ui.console.consolelib.OpenWindowByName(myunicode);
+		egl.ui.console.consolelib.OpenWindowByName(mychar);	
+			
+		// OpenWindowWithFormByName(String, String)		
+		egl.ui.console.consolelib.OpenWindowWithFormByName(myString, "a");
+		egl.ui.console.consolelib.OpenWindowWithFormByName(mymbchar, "a");
+		egl.ui.console.consolelib.OpenWindowWithFormByName(myunicode, "a");
+		egl.ui.console.consolelib.OpenWindowWithFormByName(mychar, "a");
+		
+		// promptLineMode(String) returns String
+		mystring = egl.ui.console.consolelib.promptLineMode(myString);
+		mystring = egl.ui.console.consolelib.promptLineMode(mymbchar);
+		mystring = egl.ui.console.consolelib.promptLineMode(myunicode);
+		mystring = egl.ui.console.consolelib.promptLineMode(mychar);
+		
+		// scrollDownLines(int)
+        egl.ui.console.consolelib.scrollDownLines( myint);
+		egl.ui.console.consolelib.scrollDownLines( mybigint);
+		egl.ui.console.consolelib.scrollDownLines( mysmallint);
+		egl.ui.console.consolelib.scrollDownLines( mybin40);
+		egl.ui.console.consolelib.scrollDownLines( myfloat);
+		egl.ui.console.consolelib.scrollDownLines( mysmallfloat);
+		egl.ui.console.consolelib.scrollDownLines( mynum50);
+		egl.ui.console.consolelib.scrollDownLines( mynumc60);
+		egl.ui.console.consolelib.scrollDownLines( mypacf90);
+					
+		// ScrollUpLines(int)
+		egl.ui.console.consolelib.ScrollUpLines( myint);
+		egl.ui.console.consolelib.ScrollUpLines( mybigint);
+		egl.ui.console.consolelib.ScrollUpLines( mysmallint);
+		egl.ui.console.consolelib.ScrollUpLines( mybin40);
+		egl.ui.console.consolelib.ScrollUpLines( myfloat);
+		egl.ui.console.consolelib.ScrollUpLines( mysmallfloat);
+		egl.ui.console.consolelib.ScrollUpLines( mynum50);
+		egl.ui.console.consolelib.ScrollUpLines( mynumc60);
+		egl.ui.console.consolelib.ScrollUpLines( mypacf90);
+		
+		// SetArrayLine(integer)
+		egl.ui.console.consolelib.SetArrayLine( myint);
+		egl.ui.console.consolelib.SetArrayLine( mybigint);
+		egl.ui.console.consolelib.SetArrayLine( mysmallint);
+		egl.ui.console.consolelib.SetArrayLine( mybin40);
+		egl.ui.console.consolelib.SetArrayLine( myfloat);
+		egl.ui.console.consolelib.SetArrayLine( mysmallfloat);
+		egl.ui.console.consolelib.SetArrayLine( mynum50);
+		egl.ui.console.consolelib.SetArrayLine( mynumc60);
+		egl.ui.console.consolelib.SetArrayLine( mypacf90);	
+			
+		// SetCurrentArrayCount(integer)
+		egl.ui.console.consolelib.SetCurrentArrayCount( myint);
+		egl.ui.console.consolelib.SetCurrentArrayCount( mybigint);
+		egl.ui.console.consolelib.SetCurrentArrayCount( mysmallint);
+		egl.ui.console.consolelib.SetCurrentArrayCount( mybin40);
+		egl.ui.console.consolelib.SetCurrentArrayCount( myfloat);
+		egl.ui.console.consolelib.SetCurrentArrayCount( mysmallfloat);
+		egl.ui.console.consolelib.SetCurrentArrayCount( mynum50);
+		egl.ui.console.consolelib.SetCurrentArrayCount( mynumc60);
+		egl.ui.console.consolelib.SetCurrentArrayCount( mypacf90);
+		
+		//showHelp(String)
+		egl.ui.console.consolelib.showHelp(myString);
+		egl.ui.console.consolelib.showHelp(mymbchar);
+		egl.ui.console.consolelib.showHelp(myunicode);
+		egl.ui.console.consolelib.showHelp(mychar);
+		
+		//showMenuItemByName(String)
+		egl.ui.console.consolelib.showMenuItemByName(myString);
+		egl.ui.console.consolelib.showMenuItemByName(mymbchar);
+		egl.ui.console.consolelib.showMenuItemByName(myunicode);
+		egl.ui.console.consolelib.showMenuItemByName(mychar);		
+	
+		// these parameters are staying INOUT 
+		// so the real test will be in the invalid bucket to make sure they still keep the tight match
+		//activateWindow (window)
+		activateWindow (mywindow);
+		
+		// clearfields (consoleField,....)
+		ClearFields(myconsoleform.activity[1], myconsoleform.commandcode[1], 
+					myconsoleform.response, myconsoleform.command );
+		
+		//clearform(consoleform)
+	    ClearForm(myConsoleForm);
+	    
+	    // clearwindow(window)
+	    ClearWindow (mywindow);
+	    
+	    // closewindow(window)
+		CloseWindow(myWindow);
+		
+		// displayform(consoleform)
+		DisplayForm(myConsoleForm);
+		
+		// displayfields (consolefield,...)
+		DisplayFields(myconsoleform.activity[1], myconsoleform.commandcode[1], 
+						myconsoleform.response, myconsoleform.command  );	
+		
+		// gotoField(consolefield)
+		GotoField(myconsoleform.activity[1]) ;
+		
+		// gotoMenuitem(menuitem)
+		gotoMenuItem(myMenuItem);
+		
+		// hidemenuitem(menuitem)
+		hideMenuItem(myMenuItem);
+		
+		//IsCurrentField(consolefield) returns Boolean
+		if (iscurrentfield(myconsoleform.command) == yes)
+		end
+		//IsFieldModified(consolefield) returns Boolean
+		if (IsFieldModified(myconsoleform.response) == yes)
+		end
+		
+		// openwindow(window)
+		OpenWindow(myWindow); 
+		
+		// openwindowwithform(window, consoleform)
+		OpenWindowWithForm(myWindow, myConsoleForm);
+		
+		// showmenuitem(menuitem) 
+		showMenuItem(mymenuItem);
+		
+		// now qualifiy with the library name
+		//activateWindow (window)
+		consolelib.activateWindow (mywindow);
+		
+		// clearfields (consoleField,....)
+		consolelib.ClearFields(myconsoleform.activity[2], myconsoleform.commandcode[2], 
+					myconsoleform.response, myconsoleform.command );
+		
+		//clearform(consoleform)
+	    consolelib.ClearForm(myConsoleForm);
+	    
+	    // clearwindow(window)
+	    consolelib.ClearWindow (mywindow);
+	    
+	    // closewindow(window)
+		consolelib.CloseWindow(myWindow);
+		
+		// displayform(consoleform)
+		consolelib.DisplayForm(myConsoleForm);
+		
+		// displayfields (consolefield,...)
+		consolelib.DisplayFields(myconsoleform.activity[2], myconsoleform.commandcode[2], 
+						myconsoleform.response, myconsoleform.command  );	
+		
+		// gotoField(consolefield)
+		consolelib.GotoField(myconsoleform.activity[2]) ;
+		
+		// gotoMenuitem(menuitem)
+		consolelib.gotoMenuItem(myMenuItem);
+		
+		// hidemenuitem(menuitem)
+		consolelib.hideMenuItem(myMenuItem);
+		
+		//IsCurrentField(consolefield) returns Boolean
+		if (consolelib.iscurrentfield(myconsoleform.command) == yes)
+		end
+		//IsFieldModified(consolefield) returns Boolean
+		if (consolelib.IsFieldModified(myconsoleform.response) == yes)
+		end
+		
+		// openwindow(window)
+		consolelib.OpenWindow(myWindow); 
+		
+		// openwindowwithform(window, consoleform)
+		consolelib.OpenWindowWithForm(myWindow, myConsoleForm);
+		
+		// showmenuitem(menuitem) 
+		consolelib.showMenuItem(mymenuItem);
+		
+		// now fully qualify
+		//activateWindow (window)
+		egl.ui.console.consolelib.activateWindow (mywindow);
+		
+		// clearfields (consoleField,....)
+		egl.ui.console.consolelib.ClearFields(myconsoleform.activity[2], myconsoleform.commandcode[2], 
+					myconsoleform.response, myconsoleform.command );
+		
+		//clearform(consoleform)
+	    egl.ui.console.consolelib.ClearForm(myConsoleForm);
+	    
+	    // clearwindow(window)
+	    egl.ui.console.consolelib.ClearWindow (mywindow);
+	    
+	    // closewindow(window)
+		egl.ui.console.consolelib.CloseWindow(myWindow);
+		
+		// displayform(consoleform)
+		egl.ui.console.consolelib.DisplayForm(myConsoleForm);
+		
+		// displayfields (consolefield,...)
+		egl.ui.console.consolelib.DisplayFields(myconsoleform.activity[2], myconsoleform.commandcode[2], 
+						myconsoleform.response, myconsoleform.command  );	
+		
+		// gotoField(consolefield)
+		egl.ui.console.consolelib.GotoField(myconsoleform.activity[2]) ;
+		
+		// gotoMenuitem(menuitem)
+		egl.ui.console.consolelib.gotoMenuItem(myMenuItem);
+		
+		// hidemenuitem(menuitem)
+		egl.ui.console.consolelib.hideMenuItem(myMenuItem);
+		
+		//IsCurrentField(consolefield) returns Boolean
+		if (egl.ui.console.consolelib.iscurrentfield(myconsoleform.command) == yes)
+		end
+		//IsFieldModified(consolefield) returns Boolean
+		if (egl.ui.console.consolelib.IsFieldModified(myconsoleform.response) == yes)
+		end
+		
+		// openwindow(window)
+		egl.ui.console.consolelib.OpenWindow(myWindow); 
+		
+		// openwindowwithform(window, consoleform)
+		egl.ui.console.consolelib.OpenWindowWithForm(myWindow, myConsoleForm);
+		
+		// showmenuitem(menuitem) 
+		egl.ui.console.consolelib.showMenuItem(mymenuItem);				
+	
+	end
+//
+// Date Time Lib
+//	
+	function datetimelibfuncs()
+		// the parameter for these are all IN
+		// dateValue(s String in) returns date	
+		mydate = datevalue(myString);
+		mydate = datevalue(mymbchar);
+		mydate = datevalue(myunicode);
+		mydate = datevalue(mychar);
+		
+		// dateValueFromGregorian( i int in ) returns date 
+		mydate = dateValueFromGregorian( myint);
+		mydate = dateValueFromGregorian( mybigint);
+		mydate = dateValueFromGregorian( mysmallint);
+		mydate = dateValueFromGregorian( mybin40);
+		mydate = dateValueFromGregorian( myfloat);
+		mydate = dateValueFromGregorian( mysmallfloat);
+		mydate = dateValueFromGregorian( mynum50);
+		mydate = dateValueFromGregorian( mynumc60);
+		mydate = dateValueFromGregorian( mypacf90);
+		 
+		//dateValueFromJulian( i int in ) returns date 
+		mydate = dateValueFromJulian( myint);
+		mydate = dateValueFromJulian( mybigint);
+		mydate = dateValueFromJulian( mysmallint);
+		mydate = dateValueFromJulian( mybin40);
+		mydate = dateValueFromJulian( myfloat);
+		mydate = dateValueFromJulian( mysmallfloat);
+		mydate = dateValueFromJulian( mynum50);
+		mydate = dateValueFromJulian( mynumc60);
+		mydate = dateValueFromJulian( mypacf90);
+		
+		//timeValue(s String in) returns time
+		mytime = timeValue(myString);
+		mytime = timeValue(mymbchar);
+		mytime = timeValue(myunicode);
+		mytime = timeValue(mychar);
+		
+		//intervalValue(s String in) returns interval
+		myinterval = intervalValue(myString);
+		myinterval = intervalValue(mymbchar);
+		myinterval = intervalValue(myunicode);
+		myinterval = intervalValue(mychar);
+		
+		//intervalValueWithPattern(s String in, intervalPattern String in) returns interval 
+		myinterval = intervalValueWithPattern(mystring, mymbchar);
+		myinterval = intervalValueWithPattern(myunicode, mychar);
+		
+		//timestampValue(s String in ) returns timestamp
+		mytimestamp = timestampValue(myString);
+		mytimestamp = timestampValue(mymbchar);
+		mytimestamp = timestampValue(myunicode);
+		mytimestamp = timestampValue(mychar);
+		
+		//timestampValueWithPattern(s String in, timespanPattern String in) returns timestamp  
+		mytimestamp = timestampValueWithPattern(mystring, mymbchar);
+		mytimestamp = timestampValueWithPattern(myunicode, mychar);
+
+		//mdy(m int in, d int in, y int in) returns date
+		mydate = mdy( myint, mybigint, mysmallint);
+		mydate = mdy( mybin40,  myfloat,  mysmallfloat);
+		mydate = mdy( mynum50, mynumc60, mypacf90);
+		
+		//extend(d timestamp in, timespanPattern String in) returns timestamp
+		mytimestamp = extend(mytimestamp,myString);
+		mytimestamp = extend(mydate,mymbchar);
+		mytimestamp = extend(mytime,myunicode);
+		mytimestamp = extend(mytimestamp,mychar);
+		
+		
+		// dayOf(d timestamp in) returns int
+ 		myint = dayOf(mytimestamp);
+ 		myint = dayOf(mydate);
+ 		myint = dayOf(mytime);
+ 		
+ 		//monthOf(d timestamp in) returns int
+ 		myint = monthOf(mytimestamp);
+ 		myint = monthOf(mydate);
+ 		myint = monthOf(mytime);
+ 		
+  		//yearOf(d timestamp in) returns int
+  		myint = yearOf(mytimestamp);
+ 		myint = yearOf(mydate);
+ 		myint = yearOf(mytime);
+ 		
+		//weekdayOf(d timestamp in) returns int
+		myint = weekdayOf(mytimestamp);
+ 		myint = weekdayOf(mydate);
+ 		myint = weekdayOf(mytime);
+
+		//dateOf(t timestamp in) returns date
+		mydate = dateOf(mytimestamp);
+ 		mydate = dateOf(mydate);
+ 		mydate = dateOf(mytime);
+ 		
+		//timeOf(t timestamp in) returns time
+		mytime = timeOf(mytimestamp);
+ 		mytime = timeOf(mydate);
+ 		mytime = timeOf(mytime);
+	
+		// These take no argument
+		// currenttimestamp() returns timestamp
+		mytimestamp = currentTimestamp();
+		//currentDate() returns date
+		mydate = currentdate();
+		//currentTime() returns time
+		mytime = currenttime();
+	
+	end
+//
+// report lib functions
+//	
+	function reportlibfuncs()
+		
+		// Now for the ones with combinations of IN and INOUT
+		// addReportParameter (report Report INOUT, parameter String IN, value Any IN);
+		addReportParameter (myreport, mystring, myany);
+		
+		// fillreport (rp report INOUT, ds DataSource INOUT)
+		fillReport(myReport, dataSource.reportData);
+		
+		// exportReport (rp report INOUT, ef exportformat INOUT)
+		exportReport(myReport, html);
+		
+		// resetReportParameters( rp report inout)
+		resetReportParameters (myreport);
+	end
+//
+// string lib functions
+//	
+	function strlibfuncs()
+		mybin90 bin(9,0);
+		
+		// All arguments can be IN because none are modified by the functions
+		//   the fact that the indicies and the lengths have to be integers (verses having decimal places)
+		//   is a semantic edit
+		
+		// charAsInt(character char IN) returns int
+		myint = charAsInt(mychar);
+		myint = charAsInt(myunicode);
+		myint = charAsInt(mymbchar);
+		myint = charAsInt(mystring);
+		
+		// clip(characterItem char IN) returns string
+		mystring = clip(mychar);
+		mystring = clip(myunicode);
+		mystring = clip(mymbchar);
+		mystring = clip(mystring);
+		
+		// compareStr(target char IN, targetIndex bin(9) IN, targetLength bin(9) IN, 
+		//       	  source char IN, sourceIndex bin(9) IN, sourceLength bin(9) IN) returns bin(9)
+		myint = compareStr( mychar, myint, myint, mychar, myint, myint);
+		myint = compareStr( mychar, mybigint, mybigint, mychar, mybigint, mybigint);
+		myint = compareStr( myunicode, mysmallint, mysmallint, myunicode, mysmallint, mysmallint);
+		myint = compareStr( mymbchar, mybin40, mybin40, mymbchar, mybin40, mybin40);
+		myint = compareStr( mychar, myfloat, myfloat, mychar, myfloat, myfloat);
+		myint = compareStr( mychar, mysmallfloat, mysmallfloat, mychar, mysmallfloat, mysmallfloat);
+		myint = compareStr( mychar, mynum50, mynum50, mychar, mynum50, mynum50);
+		myint = compareStr( mychar, mynumc60, mynumc60, mychar, mynumc60, mynumc60);
+		myint = compareStr( mychar, mypacf90, mypacf90, mychar, mypacf90, mypacf90);
+
+		// findStr(source char IN, sourceIndex bin(9) IN, sourceLength bin(9) IN, searchString char IN) returns bin(9)
+		myint = findStr( mychar, mybin9, myint, mychar);
+		myint = findStr( mychar, mybin9, mybigint, mychar);
+		myint = findStr( myunicode, mybin9, mysmallint, myunicode);
+		myint = findStr( mymbchar, mybin9, mybin40, mymbchar);
+		myint = findStr( mychar, mybin9, myfloat, mychar);
+		myint = findStr( mychar, mybin9, mysmallfloat, mychar);
+		myint = findStr( mychar, mybin9, mynum50, mychar);
+		myint = findStr( mychar, mybin9, mynumc60, mychar);
+		myint = findStr( mychar, mybin9, mypacf90, mychar);		
+
+		
+		// formatDate(inputItem char IN, characterDateFormat char IN) returns date
+		mydate = formatDate (mychar, mychar);
+		mydate = formatDate(mystring, mystring);
+		myDate = formatDate(myunicode, myunicode);
+		myDate = formatDate(mymbchar, mymbchar);
+
+		// formatNumber(numericExpression number IN, numericFormat char IN) returns char
+		mystring = formatNumber(myint, mystring);
+		mystring = formatNumber(mybigint, mychar);
+		mystring = formatNumber(mysmallint, myunicode);
+		mystring = formatNumber(mybin40, mymbchar);
+		mystring = formatNumber(myfloat, mymbchar);
+		mystring = formatNumber(mysmallfloat, mymbchar);
+		mystring = formatNumber(mynum50, mymbchar);
+		mystring = formatNumber(mynumc60, mymbchar);
+		mystring = formatNumber(mypacf90, mymbchar);
+		
+		// formatTime(inputItem char IN, characterTimeFormat char IN) returns time
+		mytime = formatTime(mychar, mychar);
+		mytime = formatTime(mystring, mystring);
+		mytime = formatTime(mymbchar, mymbchar);
+		mytime = formatTime(myunicode, myunicode);
+		
+		// formatTimeStamp(inputItem char IN, timeStampFormat char IN) returns timestamp
+		mytimestamp = formatTimeStamp(mychar, mychar);
+		mytimestamp = formatTimeStamp(mystring, mystring);
+		mytimestamp = formatTimeStamp(mymbchar, mymbchar);
+		mytimestamp = formatTimeStamp(myunicode, myunicode);
+		
+		// intAsChar(integerExpression number IN) returns string
+		mystring = intAsChar(myint );
+		mystring = intAsChar(mybigint );
+		mystring = intAsChar(mysmallint );
+		mystring = intAsChar(mybin40 );
+		
+		// lowerCase(characterItem char IN) returns string
+		mystring = lowercase (mychar);
+		mystring = lowercase (mystring);
+		mystring = lowercase (myunicode);
+		mystring = lowercase (mymbchar);
+		
+		// spaces(characterCount int IN) returns string
+		mystring = spaces(myint );
+		mystring = spaces(mybigint );
+		mystring = spaces(mysmallint );
+		mystring = spaces(mybin40 );
+		mystring = spaces(myfloat );
+		mystring = spaces(mysmallfloat );
+		mystring = spaces(mynum50 );
+		mystring = spaces(mynumc60 );
+		mystring = spaces(mypacf90);
+		
+		// bytelen(source char IN ) returns bin(9)
+		myint = bytelen(mychar);
+		myint = bytelen(mymbchar);
+		myint = bytelen(myunicode);
+
+		
+		// upperCase(characterItem char IN) returns string
+		mystring = upperCase (mychar);
+		mystring = upperCase (mystring);
+		mystring = upperCase (myunicode);
+		mystring = upperCase (mymbchar);
+
+	
+		// All arguments have to stay INOUT because they are modified by the function
+		// setBlankTerminator(target char INOUT)
+		setBlankTerminator(mychar);
+	
+		// setNullTerminator(target char INOUT)
+		setNullTerminator(mychar);
+		
+		// Arguments are a mixture of IN, OUT, and INOUT because some are modified by the function
+		//  concatenate (target char INOUT, source char IN) returns bin(9,0)
+
+		myint = concatenate(mychar, mychar);
+		myint = concatenate(myunicode, mychar);
+		myint = concatenate(mymbchar, mychar);
+
+		//  concatenateWithSeparator (target char INOUT, source char IN, separator char IN) returns bin(9,0)
+
+		myint = concatenateWithSeparator(mychar, mychar, mychar);
+		myint = concatenateWithSeparator(myunicode, mychar, mychar);
+		myint = concatenateWithSeparator(mymbchar, mychar, mychar);
+		
+		// copyStr(target char IN, targetIndex bin(9) IN, targetLength bin(9) IN, 
+		//       	  source char IN, sourceIndex bin(9) IN, sourceLength bin(9) IN) 
+		copyStr( mychar, myint, myint, mychar, myint, myint);
+		copyStr( mychar, mybigint, mybigint, mychar, mybigint, mybigint);
+		copyStr( myunicode, mysmallint, mysmallint, myunicode, mysmallint, mysmallint);
+		copyStr( mymbchar, mybin40, mybin40, mymbchar, mybin40, mybin40);
+		copyStr( mychar, myfloat, myfloat, mychar, myfloat, myfloat);
+		copyStr( mychar, mysmallfloat, mysmallfloat, mychar, mysmallfloat, mysmallfloat);
+		copyStr( mychar, mynum50, mynum50, mychar, mynum50, mynum50);
+		copyStr( mychar, mynumc60, mynumc60, mychar, mynumc60, mynumc60);
+		copyStr( mychar, mypacf90, mypacf90, mychar, mypacf90, mypacf90);
+		
+		//  getNextToken (target char OUT, source char IN, sourceIndex bin(9) INOUT, 
+		//            sourceLength bin(9) INOUT, delimiter char IN) returns bin(9)
+		myint = getNextToken(mychar, mychar, mybin90, mybin90, mychar);
+		myint = getNextToken(mychar, mychar, mybin90, mybin90, mychar);
+		myint = getNextToken(myunicode, mychar, mybin90, mybin90, myunicode);
+		myint = getNextToken(mymbchar, mychar, mybin90, mybin90, mymbchar);
+
+		// setSubStr(target char INOUT, targetIndex bin(9) IN, targetLength bin(9) IN, source char IN) 
+		setSubStr( mychar, myint, myint, mychar);
+		setSubStr( mychar, mybigint, mybigint, mychar);
+		setSubStr( mychar, mysmallint, mysmallint, mychar);
+		setSubStr( mymbchar, mybin40, mybin40, mymbchar);
+		setSubStr( mychar, myfloat, myfloat, mychar);
+		setSubStr( mychar, mysmallfloat, mysmallfloat, mychar);
+		setSubStr( mychar, mynum50, mynum50, mychar);
+		setSubStr( mychar, mynumc60, mynumc60, mychar);
+		setSubStr( mychar, mypacf90, mypacf90, mychar);
+		
+	end
+	
+end
+
+Handler reporthandler type jasperReport
+
+	myint int;
+	mysmallint smallint;
+	mybigint bigint;
+	mydecimal decimal(9,2);
+	mymoney money(15);
+	mybin40 bin(4,0);
+	mybin94 bin(9,4);
+	myfloat float;
+	mysmallfloat smallfloat;
+	mychar char(10);
+	mydbchar dbchar(5);
+	mymbchar mbchar(10);
+	myhex hex(8);
+	mynum50 num(5,0);
+	mynum84 num(8,4);
+	mynumc60 numc(6,0);
+	mynumc72 numc(7,2);
+	mypacf90 pacf(9,0);
+	mypacf185 pacf(18,5);
+	myunicode unicode(15);
+	myblob blob;
+	myclob clob;
+	mytimestamp timestamp; 
+	mydate date;
+	mytime time; 
+	myinterval interval("yyyyMM");
+	mystring string;
+	myany any;
+	
+	myreportdata reportdata;
+	myreport report;
+	
+//
+// report lib functions
+//	
+	function reportlibfuncs()	
+		// setReportVariableValue (variable String, value Any);
+		setReportVariableValue(mystring, mystring);
+		setReportVariableValue(mymbchar, mymbchar);
+		setReportVariableValue(myunicode, myunicode);
+		setReportVariableValue(mychar, mychar);
+		
+ 		// getReportVariableValue (variable String) returns Any;
+ 		myAny = getReportVariableValue( mystring);
+		myAny = getReportVariableValue( mymbchar);
+		myAny = getReportVariableValue( myunicode);
+		myAny = getReportVariableValue( mychar);
+		
+		// getFieldValue (fieldName String) returns Any;
+		myAny = getFieldValue( mystring);
+		myAny = getFieldValue( mymbchar);
+		myAny = getFieldValue( myunicode);
+		myAny = getFieldValue( mychar);
+		
+		// getReportParameter (parameter String) returns Any;
+		myAny = getReportParameter( mystring);
+		myAny = getReportParameter( mymbchar);
+		myAny = getReportParameter( myunicode);
+		myAny = getReportParameter( mychar);
+		
+		// getReportData (dataSetName String) returns ReportData;
+		myreportdata = getreportdata(mystring);
+		myreportdata = getreportdata( mymbchar);
+		myreportdata = getreportdata( myunicode);
+		myreportdata = getreportdata( mychar);
+		
+		// Now for the ones with combinations of IN and INOUT
+		// addReportData (rd ReportData INOUT, dataSetName String IN);
+		addReportData(myreportdata, mystring);
+
+	end
+end

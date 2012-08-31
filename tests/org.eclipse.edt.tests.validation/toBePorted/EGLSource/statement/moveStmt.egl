@@ -1,0 +1,113 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+Program p
+	function main()
+		VPFKTABL VPFKTABL;
+		move VCM00T2.UACTSAVE to VCM00T2.UACTIVE[1] for all; // 0
+		move VPFKTABL.UMAPCNTL to VCM00T2.UMAPCNTL[1] for all; // 0
+		
+		itemArray char(12)[5];
+		const intConstant int = 3;
+		const charConstant char(2) = "a";
+		move itemArray to itemArray for 5; // 0
+		move itemArray to itemArray for intConstant; // 0
+		move itemArray to itemArray for "dave"; // 1
+		move itemArray to itemArray for charConstant; // 1
+		move itemArray to itemArray for undefinedVariable; // 1
+		move itemArray to itemArray for 12.2; // 1
+		move itemArray to itemArray for abc%zxc; // 3 cannot be resolved|cannot be resolved|for count must be an integer item or literal
+		
+		flexRec1Var flexRec1;
+		flexRecThatMatches1Var flexRecThatMatches1;
+		flexRec2Var flexRec2;
+		flexRec3Var flexRec3;
+		
+		move flexRec1Var to flexRecThatMatches1Var byposition; // 0
+		move flexRec1Var to flexRec2Var byname; // 3
+		move flexRec1Var to flexRec3Var byname; // 2 item2 | item3
+	end
+end
+
+Record flexRec1
+	item1 int;
+	item2 int[];
+	item3 int[][];
+end
+
+Record flexRecThatMatches1
+	item1a int;
+	item2a int[];
+	item3a int[][];
+end
+
+Record flexRec2
+	item1 int[];
+	item2 int[][];
+	item3 int[][][];
+end
+
+Record flexRec3
+	item1 int;
+	item2 int;
+	item3 int[];
+	item4 int;
+	item5 int[];
+	item6 int[][];
+end
+
+Record VPFKTABL type basicRecord
+  10 UACTIVE UACTIVE [50] ; 
+  10 UPFKEY UPFKEY [50] ; 
+  10 UMAPCNTL UMAPCNTL [50] ; 
+  10 UCMDVERB UCMDVERB [50] ; 
+  10 UCMDABBR UCMDABBR [50] ; 
+  10 UPFLABEL UPFLABEL [50] ; 
+end
+
+DataTable VCM00T2 type basicTable  {
+  shared = no, resident = no
+  }
+  10 UPFKEY UPFKEY; 
+  10 UCMDVERB UCMDVERB; 
+  10 UCMDABBR UCMDABBR; 
+  10 UMAPCNTL UMAPCNTL; 
+  10 UACTIVE UACTIVE; 
+  10 UACTSAVE UACTSAVE; 
+  10 UUNIVIND UUNIVIND; 
+  10 UPFLABEL UPFLABEL; 
+   {contents = [
+    ["PF1 ", "HELP     ", "HLP ", "HELP     ", "N", "Y", "N", "1=Help         "],
+    ["PF1 ", "PHELP    ", "HLP ", "HELP     ", "N", "N", "N", "1=Hlp          "],
+    ["PF2 ", "ALTKEYS  ", "ALT ", "ALTKEYS  ", "N", "N", "Y", "2=Alt Keys     "],
+    ["PF3 ", "EXIT     ", "X   ", "EXIT     ", "N", "Y", "N", "3=Exit         "],
+    ["PF3 ", "PEXIT    ", "X   ", "EXIT     ", "N", "N", "N", "3=Ex           "],
+    ["****", "*********", "****", "*********", "*", "*", "*", "***************"]
+  ]}
+end
+
+DataItem UACTIVE char(1)  {
+  align = left, fillCharacter = null, inputRequired = no
+}
+end
+
+// Active Save Area
+DataItem UACTSAVE char(1)  {
+  align = left, fillCharacter = null, inputRequired = no
+}
+end
+
+DataItem UMAPCNTL char(9)  {
+  align = left, fillCharacter = null, inputRequired = no
+}
+end

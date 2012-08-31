@@ -1,0 +1,59 @@
+/*******************************************************************************
+ * Copyright © 2010, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+LIBRARY d4_orders{localSQLScope=YES, I4GLItemsNullable=yes}
+	use d4_globals;
+
+	FUNCTION insert_items()
+	returns (Int)
+	    pitem   recordtype_p_items;
+		stocknum smallint;
+		
+		pitem    = p_items[1];
+		stocknum = p_items[1].stock_num;
+		
+		// IWN.VAL.6721.e
+		if ( p_items[1].stock_num != null )
+			ConsoleLib.displayLineMode ( "bug ");
+		end
+		if ( pitem.stock_num != null )
+			ConsoleLib.displayLineMode ( "bug ");
+		end
+		if ( stocknum != null )
+			ConsoleLib.displayLineMode ( "bug ");
+		end
+		// IWN.VAL.6721.e
+		if ( p_items[1].stock_num == null )
+			ConsoleLib.displayLineMode ( "bug ");
+		end
+		if ( pitem.stock_num == null )
+			ConsoleLib.displayLineMode ( "bug ");
+		end
+		if ( stocknum == null )
+			ConsoleLib.displayLineMode ( "bug ");
+		end
+	END 
+end
+
+DataItem dataitem_like_items_stock_num   smallint  end
+
+LIBRARY d4_globals{localSQLScope=YES, I4GLItemsNullable=yes}
+
+//	use ConversionGlobals;
+
+    p_items  recordtype_p_items [10];
+END
+
+record recordtype_p_items type SqlRecord {I4GLItemsNullable=yes}
+    stock_num  dataitem_like_items_stock_num{isSqlNullable=yes};
+END

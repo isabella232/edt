@@ -1,0 +1,65 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record myrec type SQLRecord
+name char(30);
+end
+
+program pgm
+
+function main ()
+		i int;
+	for (i from 1 to 10 by 1)
+		if (i == 5)
+			continue; //0
+		end
+	end
+	
+	open selectEmp with #sql{ select name from employee } ;
+	
+	forEach (from selectEmp) 
+	i = i + 1;
+	continue;//0
+	end
+
+while (i < 5)
+	continue;//0
+end
+
+func();
+continue;// 1 The continue statement must be inside either a for, foreach, or while statement block {5054, EGLMESSAGE_CONTINUE_STATEMENT_LOCATION}
+continue while;// 2 Invalid continue modifier. The while continue modifier may only be used within a while statement block {5055, EGLMESSAGE_INVALID_CONTINUE_EXIT_MODIFIER}
+continue for;// 2 Invalid continue modifier. The for continue modifier may only be used within a for statement block {5055, EGLMESSAGE_INVALID_CONTINUE_EXIT_MODIFIER}
+continue forEach;// 2  Invalid continue modifier. The forEach continue modifier may only be used within a forEach statement block {5055, EGLMESSAGE_INVALID_CONTINUE_EXIT_MODIFIER}
+end
+
+	function func()
+		x string;
+		while (1==1)
+			openUI new PROMPT {message="press J to exit this loop:", ischar=yes}
+				 bind x
+				 OnEvent(ON_KEY:"J")
+					while (1==1)
+						exit while;				// 0
+						continue while; 		// 1 Unreachable code {warning}
+					end
+				 	continue while;	// 0
+				 	continue for;// 2 The for continue modifier may only be used within a for statement block
+					continue forEach;// 2  The forEach continue modifier may only be used within a forEach statement block
+			end;
+		end	
+	end
+	
+end
+
+
+

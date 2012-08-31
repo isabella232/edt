@@ -1,0 +1,308 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler myPage type JSFHandler
+	myStateRecs StateRec[5] { selectedValueItem = selectedRow,			//0
+	                          @SelectionList{ valueItem = population }	//0
+						};
+
+	selectedRow  int;
+	
+	use StateTable { selectedValueItem = selectedRow,			//0
+		    @SelectionList { labelItem = abbr,					//0
+			               valueItem = population }				//0
+	};
+end
+
+Record StateRec type basicRecord 
+{ @SelectionList { labelItem = state,							//0
+					 	 valueItem = abbr } }					//0
+		state	string;		   
+		abbr	char(2);
+		population	int;
+end
+
+Datatable StateTable {
+	contents = [["", "", 0]]
+} 
+{ @SelectionList { labelItem = state,							//0
+					 	 valueItem = abbr } }					//0
+		state	char(4);		   
+		abbr	char(2);
+		population	int;
+end
+
+
+Handler myPageA type JSFHandler
+	myStateRecs StateRecA[5] { selectedValueItem = xxx,				//1 must match a data declaration
+	                          @SelectionList{ valueItem = xxx }		//1 xxx cannot be resolved
+						};
+						
+	selectedRow  string;
+	
+	use StateTableA { selectedValueItem = xxx,						//1 must match a data declaration
+		    @SelectionList { labelItem = xxx,						//1 xxx cannot be resolved
+			                 valueItem = xxx }						//1 xxx cannot be resolved
+	};
+end
+
+Record StateRecA type basicRecord 
+{ @SelectionList { labelItem = xxx,									//1 xxx cannot be resolved
+				   valueItem = xxx } }								//1 xxx cannot be resolved
+		state	string;		   
+		abbr	char(2);
+		population	int;
+end
+
+Datatable StateTableA {
+	contents = [["", "", 0]]
+} 
+{ @SelectionList { labelItem = xxx,									//1 xxx cannot be resolved
+				   valueItem = xxx } }								//1 xxx cannot be resolved
+		state	char(4);		   
+		abbr	char(2);
+		population	int;
+end
+
+
+Handler myPageB type JSFHandler
+	myStateRecs StateRecA[5] { selectedRowItem = selectedRows };	//0
+	myStateRecs2 StateRecA[5] {				//1 The properties selectedRowItem and selectedValueItem cannot both be specified
+		selectedRowItem = selectedRows,		//0
+		selectedValueItem = selectedRow		//0
+	};
+						
+	selectedRow String;
+	selectedRows int[];
+	
+	stringArrRow string[];
+	intRow int;
+	booleanRow boolean;
+	
+	intWithIsBooleanRow int {isBoolean=yes};									//0
+	
+	myStateRecsA StateRecA[5] { selectedRowItem = stringArrRow };	//1 Invalid selectedRowItem stringArrRow. When a selectedRowItem is specified for a record array or DataTable, its type must be int[] or boolean[], or the item must specify isBoolean=yes. {7681, SELECTEDROWITEM_TYPE_INVALID_FOR_RECORD_ARRAY_OR_TABLE}
+	myStateRecsB StateRecA[5] { selectedRowItem = intRow };			//1
+	myStateRecsC StateRecA[5] { selectedRowItem = booleanRow };		//1	
+	myStateRecsD StateRecA[5] { selectedRowItem = intWithIsBooleanRow };	//0
+
+	//For primitive targets, selectedRowItem must be int or int[]
+	myStringsA String[5] { selectedRowItem = intRow };			//0
+	myStringsB String[5] { selectedRowItem = selectedRows };	//0
+	myStringsC String[5] { selectedRowItem = intWithIsBooleanRow };	//0
+
+	myStringsD String[5] { selectedRowItem = stringArrRow };	//1 Invalid selectedRowItem stringArrRow. When a selectedRowItem is specified for an item array, its type must be int or int[].	
+	myStringsE String[5] { selectedRowItem = booleanRow };		//1
+	
+
+end
+
+Handler myPageC type JSFHandler
+	myStateRecs StateRecA[5] { selectedRowItem = selectedRows };	//0
+						
+	selectedRows boolean[];
+	
+
+end
+
+Handler myPageD type JSFHandler
+	myStateRecs StateRecA[5] { selectedRowItem = xxx };				//1 must match a data declaration
+
+end
+
+Handler myPageE type JSFHandler
+	myStateRecsA StateRecC[5] { @SelectionList {
+		labelItem = blobField,							//1 Invalid labelItem blobField. The type of the labelItem must be a primitive type besides hex and blob. 
+		valueItem = arr									//1 Invalid valueItem arr. The type of the valueItem may not be an array. {7680, VALUEITEM_OR_LABELITEM_CANNOT_BE_ARRAY}
+	}};
+	
+	myStateRecsB StateRecC[5] { @SelectionList {
+		labelItem = clobField,							//0
+		valueItem = arr									//1 Invalid valueItem arr. The type of the valueItem may not be an array. {7680, VALUEITEM_OR_LABELITEM_CANNOT_BE_ARRAY}
+	}};
+	
+	myStateRecsC StateRecC[5] { @SelectionList {
+		labelItem = hexField,							//1 Invalid labelItem hexField. The type of the labelItem must be a primitive type besides hex and blob.
+		valueItem = arr									//1 Invalid valueItem arr. The type of the valueItem may not be an array. {7680, VALUEITEM_OR_LABELITEM_CANNOT_BE_ARRAY}
+	}};
+	
+	myStateRecsD StateRecD[5] { @SelectionList {
+		labelItem = state,								//0
+		valueItem = nested.abbr							//1 nested.abbr cannot be resolved
+	}};
+	
+	invalidRows1 string[];
+	
+
+
+end
+
+Record StateRecC type basicRecord 
+{ @SelectionList { labelItem = blobField,							//1 Invalid labelItem blobField.
+				   valueItem = arr } }								//1 Invalid valueItem arr. The type of the valueItem may not be an array. {7680, VALUEITEM_OR_LABELITEM_CANNOT_BE_ARRAY}
+		state	string;		   
+		abbr	char(2);
+		population	int;
+		arr String[];
+		blobField blob;
+		clobField clob;
+		hexField hex(4);
+end
+
+Record StateRecD type basicRecord 
+{ @SelectionList { labelItem = state,								//0
+				   valueItem = nested.abbr } }						//1 nested.abbr cannot be resolved
+		state	string;		   
+		abbr	char(2);
+		population	int;
+		arr String[];
+		nested StateRecC;
+		blobField blob;
+end
+
+Handler myPageF type JSFHandler
+	selectedRow boolean;
+	selectedRows boolean[];
+	selectedValues char(2);
+		
+
+
+
+
+end
+
+Handler myPageG type JSFHandler
+	myStringsA String[5] {					//1 The type int for selectedValueItem intRow is not compatible with the type string[] for item myStringsA. {7683, VALUEITEM_PRIMITIVEARRAY_OR_COLUMN_TARGET_TYPE_MISMATCH}
+		selectedValueItem = intRow			//0
+	};
+	myStringsB String[5] {					//0
+		selectedValueItem = selectedRow		//0
+	};
+	myStringsC String[5] {					//0
+		selectedValueItem = stringArrRow	//0
+	};
+	myStringsD char(4)[5] {					//0
+		selectedValueItem = stringArrRow	//0
+	};
+
+
+	myStateRecsA StateRec[5] {					//1 The type blob for selectedValueItem blobRow is not compatible with the type int for valueItem population. {7682, SELECTEDVALUEITEM_VALUEITEM_TYPE_MISMATCH}
+		selectedValueItem = blobRow,			//0
+	    @SelectionList{
+	    	valueItem = population				//0
+	    }										
+	};
+	myStateRecsB StateRecD[5] {					//0
+		selectedValueItem = blobRow,			//0
+	    @SelectionList{
+	    	valueItem = blobField				//0
+	    }										
+	};
+	
+	myStateRecsC StateRecE[5] {					//0
+		selectedValueItem = blobRow				//0
+	};
+	myStateRecsD StateRecE[5] {					//1
+		selectedValueItem = intRow				//0
+	};
+	myStateRecsDa StateRecE[5] {				//0
+		selectedValueItem = blobArrRow			//0
+	};
+	myStateRecsDb StateRecE[5] {				//1 The type clob[] for selectedValueItem clobArrRow is not compatible with the type blob for valueItem blobField
+		selectedValueItem = clobArrRow			//0
+	};
+	myStateRecsE StateRecE[5] {					//0
+		selectedValueItem = intRow,				//0
+	    @SelectionList{
+	    	valueItem = population				//0
+	    }
+	};
+	
+	myStateRecsF StateRecF[5] {					//0
+		selectedValueItem = blobRow				//0
+	};
+	myStateRecsG StateRecF[5] {					//1
+		selectedValueItem = intRow				//0
+	};
+	myStateRecsH StateRecF[5] {					//0
+		selectedValueItem = intRow,				//0
+	    @SelectionList{
+	    	valueItem = population				//0
+	    }
+	};
+	
+	myStateRecsI StateRecG[5] {					//0
+		selectedValueItem = blobRow				//0
+	};
+	myStateRecsJ StateRecG[5] {					//1
+		selectedValueItem = intRow				//0
+	};
+	
+	myStateRecsL StateRecH[5] {					//0
+		selectedValueItem = blobRow				//0
+	};
+	myStateRecsM StateRecH[5] {					//0
+		selectedValueItem = intRow				//0
+	};
+
+	selectedRow  string;
+	intRow int;
+	stringArrRow string[];
+	blobRow blob;
+	blobArrRow blob[];
+	clobArrRow clob[];
+	
+	use StateTable {							//1 The type blob for selectedValueItem blobRow is not compatible with the type int for valueItem population. {7682, SELECTEDVALUEITEM_VALUEITEM_TYPE_MISMATCH}
+		selectedValueItem = blobRow,			//0
+	    @SelectionList{
+	    	valueItem = population				//0
+	    }										
+	};
+end
+
+Record StateRecE type basicRecord 
+{ @SelectionList { labelItem = state,								//0
+				   valueItem = blobField } }						//0
+		state	string;		   
+		abbr	char(2);
+		population	int;
+		arr String[];
+		nested StateRecC;
+		blobField blob;
+end
+
+Record StateRecF type basicRecord 
+		state	string;		   
+		blobField blob;
+		population int;
+end
+
+Record StateRecG type basicRecord 
+		blobField blob;
+end
+
+Record StateRecH type basicRecord 
+end
+
+Handler myPageH type JSFHandler
+	myStateRecs1 StateRec[5] { selectedValueItem = selectedRow,			//2
+	                          @SelectionList{ valueItem = population },	//0
+	                          selectType=value,							//0
+	                          selectFromListItem=myStateRecs1			//1
+						};
+	myStateRecs2 StateRecA[5] { selectedRowItem = selectedRows,			//2
+	                           selectType=value,						//0
+                               selectFromListItem=myStateRecs2			//1
+                        };
+	selectedRows int[];
+	selectedRow  int;
+end

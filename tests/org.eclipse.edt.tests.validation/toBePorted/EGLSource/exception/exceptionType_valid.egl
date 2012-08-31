@@ -1,0 +1,173 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+Record Employee type SQLRecord
+	10 name char(20);
+end
+
+Library ExceptionTypeLibrary 
+	{
+	throwNrfEofExceptions = yes,
+	handleHardIOErrors = yes
+	}
+
+	function testSQLException()
+		
+		if(syslib.currentException.sqlca == 2000) //1
+		end
+		if(currentException.sqlca == 2000)  //1
+		end
+		
+		if(syslib.currentException.sqlcode == 2000) //1
+		end
+		if(currentException.sqlcode == 2000)  //1
+		end
+		
+		if(syslib.currentException.sqlErrd == 2000)  //1
+		end
+		if(currentException.sqlErrd == 2000)  //1
+		end
+		
+		if(syslib.currentException.sqlErrmc == 2000)  //1
+		end
+		if(currentException.sqlErrmc == 2000)   //1
+		end
+		
+		if(syslib.currentException.sqlWarn == "abc")  //1
+		end
+		if(currentException.sqlWarn == "abc")   //1
+		end
+		
+		if(syslib.currentException.sqlState == "abcde")  //1
+		end
+		if(currentException.sqlState == "abcde")  //1
+		end
+	end
+	
+	function testRemoteInvocationException()
+	
+		if(syslib.currentException.name == "program1")  //1
+		end
+		if(currentException.name == "program1") //1
+		end
+		
+		if(syslib.currentException.errorCode == 2000)  //1
+		end
+		if(currentException.errorCode == 2000)
+		end
+	end
+
+	function testFileIOException()
+	
+		if(syslib.currentException.fileName == "file1.txt")  //1
+		end
+		if(currentException.fileName == "file1.txt")  //1
+		end
+		
+		if(syslib.currentException.errorCode == 2000)  //1
+		end
+		if(currentException.errorCode == 2000)  //1
+		end
+	end
+	
+	function testMQIOException()
+	
+		if(syslib.currentException.name == "queue1")  //1
+		end
+		if(currentException.name == "queue1")
+		end
+		
+		if(syslib.currentException.errorCode == 2000) //1
+		end
+		if(currentException.errorCode == 2000)
+		end
+		
+		if(syslib.currentException.mqConditionCode == 2000) //1
+		end
+		if(currentException.mqConditionCode == 2000)  //1
+		end
+	end	
+	
+	function testAssignCurrentExceptionToDictionary()
+//		lastException ref Dictionary ;
+
+	
+//		lastException = currentException;
+//		lastException = syslib.currentException;
+	end
+	
+	function testSetCurrentExceptionToNil()
+//		currentException = nil;
+//		syslib.currentException = nil;
+	end
+	
+	function testCompareCurrentExceptionToNil()
+//		if(currentException == nil)
+//		end
+		
+//		if(syslib.currentException == nil)
+//		end
+		
+//		if(nil == currentException)
+//		end
+		
+//		if(nil == syslib.currentException)
+//		end
+
+	end
+	
+	function testCompareCurrentExceptionToLastException()
+//		lastException ref Dictionary ;
+	
+//		lastException = currentException;
+		
+//		if(currentException == lastException)
+//		end
+		
+//		if(sysLib.currentException == lastException)
+//		end
+		
+//		if(lastException == currentException)
+//		end
+		
+//		if(lastException == sysLib.currentException)
+//		end
+		
+	end
+end
+
+handler ExceptionTypePage type JSFHandler
+	{
+	throwNrfEofExceptions = no,
+	handleHardIOErrors = no
+	}	
+
+	function testSetCurrentExceptionToNil()
+		//currentException = nil;
+		//syslib.currentException = nil;
+	end
+	
+end
+
+handler reportHandler type JasperReport
+	{
+	throwNrfEofExceptions = no,
+	handleHardIOErrors = no
+	}	
+
+	function testSetCurrentExceptionToNil()
+		//currentException = nil;
+		//syslib.currentException = nil;
+	end
+	
+end

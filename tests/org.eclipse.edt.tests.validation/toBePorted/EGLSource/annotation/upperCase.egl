@@ -1,0 +1,69 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//------------------------------------------------
+// DataItem
+//------------------------------------------------
+DataItem UpperCaseValidOne char(10) {UpperCase = yes} end //0
+
+DataItem UpperCaseValidTwo char(10) {UpperCase = no} end //0
+
+DataItem UpperCaseValidThree char(10) {UpperCase = no} end //0
+
+DataItem UpperCaseInvalidOne int {UpperCase = yes} end //1
+
+DataItem UpperCaseInvalidTwo char(10) {UpperCase = "yes"} end //1
+
+//------------------------------------------------
+// Basic Record
+//------------------------------------------------
+Record BRUpperCaseValid type basicRecord
+	10 sItem1 char(10) {UpperCase = yes}; //0
+	10 sItem2 char(10) {UpperCase = no}; //0
+	10 sItem3 int {UpperCase = no}; //0
+	10 sItem4 BRUpperCaseDataItemOne {UpperCase = no}; //0
+	10 sItem5 BRUpperCaseDataItemTwo {UpperCase = yes}; //0
+end
+
+Record BRUpperCaseInvalid type basicRecord
+	10 sItem1 int {UpperCase = yes}; //1
+	10 sItem2 char(10) {UpperCase = "yes"}; //1
+	10 sItem3 BRUpperCaseDataItemOne {UpperCase = yes}; //1
+	10 sItem4 BRUpperCaseRecordOne {UpperCase = yes}; //0
+end
+
+DataItem BRUpperCaseDataItemOne int end //0
+DataItem BRUpperCaseDataItemTwo char(10) end //0
+
+Record BRUpperCaseRecordOne 
+	10 sItem1 char(10);
+end
+
+Record BRUpperCaseRecordTwo
+{
+	item1 {uppercase=yes},			//1
+	item1.item2 {uppercase=yes},	//1
+	item1{item2{uppercase=yes}}		//1
+}
+	10 item1 int {uppercase=yes};	//1
+		15 item1a int;
+end
+
+Record BRUpperCaseRecordThree
+	10 embed BRUpperCaseRecordFour {item1{uppercase=yes}};	//1
+end
+
+Record BRUpperCaseRecordFour
+	10 item1 int {item2{uppercase=yes}};	//1
+		15 item2 int;
+	10 item2 int;
+end

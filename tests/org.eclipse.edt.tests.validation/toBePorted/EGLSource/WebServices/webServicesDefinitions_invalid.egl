@@ -1,0 +1,350 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+// The latest version of the Web Services spec does not include a 'type' clause in the grammar for a service
+//Service myservice0 type garbageService	//1 Invalid part subtype found
+//end
+Service myserviceA 						//0
+end
+Interface myInterface1 
+end
+program myprog1 type bgarasdf
+end
+
+// The latest version of the Web Services spec does not include a 'type' clause in the grammar for a service
+//Service myservice1 type basicService	//0
+Service myservice1	//0
+		 implements interface1,			//1 interface1 cannot be resolved
+		 		    interface2,			//0
+		 		    myserviceA			//1 service must implement an interface
+		{alias = "abcd",
+		 alias = yes,					//1
+		 alias = name,					//1
+		 alias = [123],					//1
+		 alias = "a.b.c",				//0
+		 bogus = 10,					//1 bogus cannot be resolved
+		 localSQLScope = "x",			//1
+		 localSQLScope = red,			//1
+		 localSQLScope = "5.4",			//1
+		 localSQLScope = yes}
+		 
+		 myInterface1 interface1;		//1 The type interface1 cannot be resolved
+		 myinterface2 interface2;		//0
+		 
+		 use myservice;					//1 The type myservice cannot be resolved
+		 use myservice2;				//1 A use statement in a service cannot have another service as the target.
+		 use formg;						//1 A FormGroup cannot be used in a service.
+		 
+		 private const privateConst int = 42;
+		 const publicConst int = 10;
+		 
+		 private const privateConst2 int = publicConst;//1 The value of a constant must be a literal
+		 const publicConst2 int = "1";		//0
+		 
+		 private privateField1 int = publicConst;
+		 publicField2 int = "3";			//0
+		 publicField3 char(0);				//1 The length value 0 for item publicField3, primitive type CHAR, must be a number in the (1..32767) range.
+		 
+		 private function myPrivateServicefunc ()	//0
+	 	 end
+	 	 function myPublicServicefunc ()			//0
+	 	 end
+	 	 
+	 	 function myPublicServiceFunc2( parm1 char,		//1 Loose datatypes are not supported for function parameters in a service
+	 	 								parm2 mbchar,	//1 Loose datatypes are not supported for function parameters in a service
+	 	 								parm3 dbchar,	//1 Loose datatypes are not supported for function parameters in a service
+	 	 								parm4 hex,		//1 Loose datatypes are not supported for function parameters in a service
+	 	 								parm5 number,	//1 Loose datatypes are not supported for function parameters in a service
+	 	 								parm6 unicode,	//1 Loose datatypes are not supported for function parameters in a service
+	 	 								parm7 any,		//1 The type any is not supported for function parameters in a service
+	 	 								parm8 dictionary,//1 The type dictionary is not supported for function parameters in a service
+	 	 								parm9 arraydictionary,//1 The type arrayDictionary is not supported for function parameters in a service
+	 	 								parm10 clob,	//0
+	 	 								parm11 blob)	//0
+	 	 				returns (blob) 					//0
+	 	 end
+	 	 function myPublicServiceFunc3( )				//0
+	 	 				returns (clob) 					//0
+	 	 end				
+	 	 function myPublicServiceFunc4( )				//0
+	 	 				returns (any) 					//1 The type any is not supported as a return type in a service or interface	 	 				
+	 	 end
+	 	 function myPublicServiceFunc5( )				//0
+	 	 				returns (dictionary) 			//1 The type dictionary is not supported as a return type in a service or interface	 	 				
+	 	 end
+	 	 function myPublicServiceFunc6( )				//0
+	 	 				returns (arraydictionary) 		//1 The type arrayDictionary is not supported as a return type in a service or interface	 	 				
+		 end
+	 	 function myPublicServiceFunc7(parm1 char(10) field,	//1 The field attribute is not supported for function parameters in a service or interface.
+	 	 							   parm2 hex(4) SqlNullable )	//0
+	 	 				returns (clob) 					//0
+	 	 end
+	 	 
+	 	 function myPublicServiceFunc7() end				//0
+	 	 				
+end
+
+Service myService2 end
+
+Interface interface2
+end
+
+
+interface myinterface0
+	static function myservicefunc();//0
+end
+
+interface myinterface0a
+	static function myservicefunc();//0
+end
+
+Interface myAmbigInterface end
+
+
+
+DataItem intItem int end
+Record basicRecord type basicRecord
+	10 item1 int;
+end
+
+// validate for overrides
+Interface realInterface
+		// this can technically be overridden with anything
+		// Since it is private, it isn't "seen" so it is like the Service just adds a method that the 
+		// Interface never had 
+		private function privateInterfaceFunction(parm1 int, parm2 string);	//1 Functions in an interface cannot be private
+		// these are public so they can be overridden as long as the parameter list and the returns matches
+		function publicInterfaceFunction1 (parm1 float, parm2 int);			//0
+		function publicInterfaceFunction2 (parm1 decimal(5), parm2 char(10));//0
+		function publicInterfaceFunction3 (parm1 decimal(5), parm2 char(10));//0
+		function publicInterfaceFunction4 (parm1 bin(9));					//0
+		function publicInterfaceFunction5 (parm1 bin(9));					//0
+		function publicInterfaceFunctionWithReturn1 (parm1 string) returns(string);
+		function publicInterfaceFunctionWithReturn2 (parm1 mbchar(4)) returns(dbchar(6));
+		function publicInterfaceFunctionWithReturn3 (parm1 hex(6)) returns(myservice5);
+		function publicInterfaceFunctionWithReturn4 (parm1 hex(6)) returns(myservice5);
+		function publicInterfaceFunctionWithReturn5 (parm1 mbchar(4)) returns(dbchar(5));
+		function publicInterfaceFunctionWithReturn6 (parm1 hex(6)) returns(myservice5);
+		
+		function aryParmFunc1D( p1 int[] );
+		function aryParmFunc1Da( p1 int );
+		function aryParmFunc2D( p1 int[][] );
+		
+		function dataItemFunction( p1 intItem );
+		function basicRecordFUnction( p1 basicRecord );
+end		
+
+// when service implements an interface and overrides a function, the protocol must match 
+
+// The latest version of the Web Services spec does not include a 'type' clause in the grammar for a service
+//Service myservice5 type basicService	//0
+Service myservice5						//9
+		 implements realinterface		//0
+		 
+		 // not really an override
+		 function privateInterfaceFunction (parm1 char(10))	//0
+		 			returns(bin(4))							//0
+		 	return (10);									//0	
+	 	 end
+	 	 // this group really are attempts to override  
+		 function publicInterfaceFunction1 					//0
+		 				(parm1 int, parm2 float)			//0
+		 end				
+		 function publicInterfaceFunction2 					//0
+		 				(parm1 decimal(3), parm2 char(2)) 	//0
+		 end				
+		 function publicInterfaceFunction3 					//0
+		 				(parm1 decimal(5))				 	//0
+		 end				
+		 // int and bin(9) are really the same
+		 function publicInterfaceFunction4 (parm1 int) 		//0
+		 end
+		 
+		 function publicInterfaceFunction5 ()		 		//0
+		 end
+		 
+		 function publicInterfaceFunctionWithReturn1 		//0
+		 				(parm1 string) returns(char(4)) 	//0
+		 end				
+		 function publicInterfaceFunctionWithReturn2 		//0
+		 				(parm1 mbchar(4)) returns(dbchar(5))//0
+		 end				
+		 function publicInterfaceFunctionWithReturn3 		//0
+		 				(parm1 hex(6)) returns(myinterface5)//1
+		 end				
+	 	 function publicInterfaceFunctionWithReturn4 		//0
+	 	 				(parm1 hex(6)) returns(myservice6)	//1
+	 	 end	
+		 function publicInterfaceFunctionWithReturn5 		//0
+		 				(parm1 mbchar(4)) returns(char(5))	//0
+		 end
+		 
+ 		 function publicInterfaceFunctionWithReturn6 		//0
+ 				(parm1 hex(6)) returns(myservice5)			//1
+		 end
+		 
+		function aryParmFunc1D( p1 int[] ) end				//0
+		function aryParmFunc1Da( p1 int  ) end				//0
+		function aryParmFunc2D( p1 int[][] ) end 	 		//0	
+	
+		function dataItemFunction( p1 intItem ) end			//0
+		function basicRecordFUnction( p1 basicRecord ) end	//0
+end
+
+Service myService5a implements realinterface				//16
+		function aryParmFunc1D( p1 int ) end				//0
+		function aryParmFunc1Da( p1 int[] ) end				//0
+		function aryParmFunc2D( p1 int[][][] ) end 	 		//0
+end
+
+Service myService5b implements realinterface				//16
+		function aryParmFunc1D( p1 String[] ) end			//0
+end
+
+Interface myinterface5
+end
+
+// The latest version of the Web Services spec does not include a 'type' clause in the grammar for a service
+//Service myservice6 type basicservice
+Service myservice6
+end
+
+
+
+
+
+
+
+
+
+
+
+
+Library myLibrary1  type garbageType 	//1 garbageType cannot be resolved
+end
+
+Formgroup formg 
+	form myform type printform {formsize=[24,80]}
+	end
+end
+
+Service servicePart
+end
+
+Interface interfacePart
+end
+
+//validate XSD information in data items
+DataItem myXSDItem1 string
+	{@XCD								//1 XCD cannot be resolved
+		{
+		}
+	}
+end
+
+record somerec
+	10 item1 char(10);
+end	 
+
+Program arrayRestrictionProgram
+	ary1 myService1[];		//1 Arrays of services or interfaces are not allowed.
+	ary2 myService1[][];	//1 Arrays of services or interfaces are not allowed.
+	ary3 myInterface1[];	//1 Arrays of services or interfaces are not allowed.
+	ary4 myInterface1[][];	//1 Arrays of services or interfaces are not allowed.
+	
+	function main()	
+		ary1 myService1[];		//1 Arrays of services or interfaces are not allowed.
+		ary2 myService1[][];	//1 Arrays of services or interfaces are not allowed.
+		ary3 myInterface1[];	//1 Arrays of services or interfaces are not allowed.
+		ary4 myInterface1[][];	//1 Arrays of services or interfaces are not allowed.
+	end
+	
+	function f(	
+		ary1 myService1[],		//1 Arrays of services or interfaces are not allowed.
+		ary2 myService1[][],	//1 Arrays of services or interfaces are not allowed.
+		ary3 myInterface1[],	//1 Arrays of services or interfaces are not allowed.
+		ary4 myInterface1[][]	//1 Arrays of services or interfaces are not allowed.
+	)
+	end
+end
+
+Library arrayRestrictionLibrary
+	ary1 myService1[];		//1 Arrays of services or interfaces are not allowed.
+	ary2 myService1[][];	//1 Arrays of services or interfaces are not allowed.
+	ary3 myInterface1[];	//1 Arrays of services or interfaces are not allowed.
+	ary4 myInterface1[][];	//1 Arrays of services or interfaces are not allowed.
+	
+	function main()	
+		ary1 myService1[];		//1 Arrays of services or interfaces are not allowed.
+		ary2 myService1[][];	//1 Arrays of services or interfaces are not allowed.
+		ary3 myInterface1[];	//1 Arrays of services or interfaces are not allowed.
+		ary4 myInterface1[][];	//1 Arrays of services or interfaces are not allowed.
+	end
+	
+	function f(	
+		ary1 myService1[],		//1 Arrays of services or interfaces are not allowed.
+		ary2 myService1[][],	//1 Arrays of services or interfaces are not allowed.
+		ary3 myInterface1[],	//1 Arrays of services or interfaces are not allowed.
+		ary4 myInterface1[][]	//1 Arrays of services or interfaces are not allowed.
+	)
+	end
+end
+
+handler arrayRestrictionPageHandler type JSFHandler
+	ary1 myService1[];		//1 Arrays of services or interfaces are not allowed.
+	ary2 myService1[][];	//1 Arrays of services or interfaces are not allowed.
+	ary3 myInterface1[];	//1 Arrays of services or interfaces are not allowed.
+	ary4 myInterface1[][];	//1 Arrays of services or interfaces are not allowed.
+	
+	function main()	
+		ary1 myService1[];		//1 Arrays of services or interfaces are not allowed.
+		ary2 myService1[][];	//1 Arrays of services or interfaces are not allowed.
+		ary3 myInterface1[];	//1 Arrays of services or interfaces are not allowed.
+		ary4 myInterface1[][];	//1 Arrays of services or interfaces are not allowed.
+	end
+	
+	function f(	
+		ary1 myService1[],		//1 Arrays of services or interfaces are not allowed.
+		ary2 myService1[][],	//1 Arrays of services or interfaces are not allowed.
+		ary3 myInterface1[],	//1 Arrays of services or interfaces are not allowed.
+		ary4 myInterface1[][]	//1 Arrays of services or interfaces are not allowed.
+	)
+	end
+end
+
+Interface arrayRestrictionInterface
+	function f(	
+		ary1 myService1[],		//1 Arrays of services or interfaces are not allowed.
+		ary2 myService1[][],	//1 Arrays of services or interfaces are not allowed.
+		ary3 myInterface1[],	//1 Arrays of services or interfaces are not allowed.
+		ary4 myInterface1[][]	//1 Arrays of services or interfaces are not allowed.
+	);
+end
+
+// isLastParamReturnValue DCR:
+//  - A validation error occurs if:
+//    - isLastParamReturnValue=YES  and the EGL function has a 'returns' clause
+//    - isLastParamReturnValue=YES  and the last parameter of the EGL function signature is not an OUT parameter
+//    - an OUT parameter appears in a service function signature before any IN or INOUT parameters.
+
+Service isLastParamReturnValueService
+	function func14( p1 int out ) end							//0
+	function func15( p1 int in, p2 int out ) end				//0
+	function func16( p1 int inout, p2 int out ) end				//0
+	function func17( p1 int out, p2 int out ) end				//0
+	function func18( p1 int out, p2 int in ) end				//0
+	function func19( p1 int out, p2 int inout ) end				//0
+	function func20( p1 int out, p2 int ) end					//0
+	function func21( p1 int out, p2 int out, p3 int in ) end	//0
+end	
+	

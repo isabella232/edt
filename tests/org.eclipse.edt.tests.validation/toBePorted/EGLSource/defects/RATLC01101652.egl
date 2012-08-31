@@ -1,0 +1,45 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//Nothing particular to assert -- just want to make sure there is no exception thrown
+
+formGroup FormGroup1
+	{validationBypassKeys = [pf2], helpKey = pf1, 
+	 pfKeyEquate = yes, alias = "runtimeName",
+	 ScreenFloatingAreas=[
+	 	 @screenFloatingArea 
+	 		{screenSize = [24, 80], topMargin = 0, bottomMargin = 0,
+	 		 leftMargin = 0, rightMargin = 0}
+	 ],
+	 PrintFloatingAreas=[
+	 	 @printFloatingArea 
+	 		{pageSize = [24, 80], topMargin = 3, bottomMargin = 3, 
+	 		 leftMargin = 5, rightMargin = 5 }
+	 ]}  
+	
+	form Form1 type TextForm 
+		{formSize = [12, 80], screenSizes = [[12, 80], [24, 80]], position = [1, 1], 
+		 validationBypassKeys = [pf2], 
+		 helpKey = pf1, helpForm = "helpFormName", 
+		 msgField = "identifierName", 
+		 alias = "runtimeName"}	
+		
+		  AAGRMIN num(13) [7]  
+		  { position = [6,65], fieldLen = 13, validationOrder = 11, 
+		    color = defaultColor, highlight = noHighlight, 
+		    intensity = normalIntensity, protect = no, align = right, 
+		    fillCharacter = nullFill, validValues = [[0,9999999999999]],
+		    validValues=[[0,99999999999999999999999999999999999999999999999.9e9999999999]],
+		    indexOrientation = down, linesBetweenRows = 1
+		  };
+	end
+end

@@ -1,0 +1,385 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+function vfuncchar30()
+end
+
+dataItem item1char30 char(30) {
+alias = "asdfghjklxcv",
+validatorFunction = "vfuncchar30",//0
+runValidatorFromProgram = yes,//0
+action = "ddd", // 0
+align = left,
+align = right,
+align = none,
+align = center,
+allowAppend = yes,// 1 is not valid in this location {3052}
+allowDelete = yes,// 1 is not valid in this location {3052}
+allowInsert = yes,// 1 is not valid in this location {3052}
+base = "ggg",// 1 is not valid in this location {3052}
+
+bottomMargin = yes,// 2 is not valid in this location {3052} | Property: bottomMargin.  This property requires an integer value {3085}
+bypassValidation = yes,// 0
+callingConvention = "yes",// 2 is not valid in this location {3052} | Property: callingConvention.  The value for this property must be one of the following: I4GL, library.{3054}
+callInterface = aibtdli,// 1 is not valid in this location {3052}
+caseSensitive = yes,// 1 is not valid in this location {3052}
+color = green,// 0
+color = red, // 0
+color = white,// 0 
+color = cyan, // 0
+color = magenta,// 0 
+color = blue,// 0 
+color = yellow, // 0
+color = defaultColor,// 0 
+color = black ,// 0
+color = yes,// 1 Property: color.  The value for this property must be one of the following: black, blue, cyan, defaultColor, green, magenta, red, white, yellow. { 3054}
+column = yes,// 1 Property: column.  This property requires a quoted string as the value {3060}
+column = "mycol",// 0
+columns = yes,// 2 is not valid in this location {3052} | Property: columns.  This property requires an integer value. {3085}
+commandValueItem = yes,// 2 is not valid in this location {3052} | Property: commandValueItem.  This property requires a quoted string as the value {3060}
+commType = yes,// 2 is not valid in this location {3052} | Property: commType.  The value for this property must be one of the following: local, tcpip.{3054}
+containerContextDependent = yes,// 1 is not valid in this location {3052}
+contents = yes,// 2 is not valid in this location {3052} | Each row of the contents of a data table must be a comma-separated list of values surrounded by square brackets.  All of the rows must be surrounded by another set of square brackets. {5002}
+highlight = reverse, // 0
+highlight = defaultHighlight,// 0 
+highlight = underline, // 0
+highlight = blink, // 0
+highlight = nohighlight,// 0
+highlight = yes,// 1  Property: highlight.  The value for this property must be one of the following: blink, defaultHighlight, noHighlight, reverse, underline. {3054} 
+protect = yes,// 0
+currency = yes,// 1 Property currency must be defined with a numeric primitive. The type of this item is char.
+currencySymbol = yes,// 1 Property: currencySymbol.  This property requires a quoted string as the value {3060}
+currencySymbol = "$",//Property currencySymbol must be defined with a numeric primitive. The type of this item is char.
+currentArrayCount = yes,// 2 is not valid in this location {3052} | Property: currentArrayCount.  This property requires an integer value.  {3085}
+cursor = yes,// 1 The property cursor is not valid in this location {2058}
+dataType = yes,// 2 is not valid in this location {3052} | Property: dataType.  This property requires a quoted string as the value. {3060}
+debugImpl = yes,// 2 is not valid in this location {3052} | Property: debugImpl.  This property requires a quoted string as the value {3060}
+defaultPSBName = yes,// 2 is not valid in this location {3052} | Property: defaultPSBName.  This property requires a quoted string as the value {3060}
+defaultSelectCondition = yes,// 2 is not valid in this location {3052} | Property: defaultSelectCondition.  This property requires an SQL string enclosed in the sql and end keywords {3080}
+deleteAfterUse = yes,// 1 is not valid in this location {3052}
+delimiters = yes,// 2 is not valid in this location {3052} | Property: delimiters.  This property requires a quoted string as the value {3060}
+detectable = yes,// 0
+deviceType = yes,// 2 is not valid in this location {3052} | Property: deviceType.  The value for this property must be one of the following: doubleByte, singleByte
+deviceType = doubleByte,// 1 is not valid in this location {3052}
+deviceType = singleByte,// 1 is not valid in this location {3052}
+displayName = yes,// 1 Property: displayName.  This property requires a quoted string as the value {3060}
+displayName = "mycol",//0
+displayOnly = yes,// 1 is not valid in this location {3052}
+displayUse = table, // 0
+displayUse = input, // 0
+displayUse = output, // 0
+displayUse = hyperlink, // 0
+displayUse = button, // 0
+displayUse = secret ,// 0
+displayUse = yes,// 1 Property: displayUse.  The value for this property must be one of the following: button, hyperlink, input, output, secret, table {3054}
+dliFieldName = yes,// 1 Property: dliFieldName.  This property requires a quoted string as the value {3060}
+dliFieldName  = "mycol",// 0
+DLI = yes,// 1 is not valid in this location {3052}
+dllName = yes,// 2 is not valid in this location {3052} | Property: dllName.  This property requires a quoted string as the value {3060}
+EGLBinding = yes,// 1 is not valid in this location {3052}
+elementName = yes,// 2 is not valid in this location {3052} | Property: elementName.  This property requires a quoted string as the value {3060}
+endPoint = yes,// 2 is not valid in this location {3052} | Property: endpoint.  This property requires a quoted string as the value {3060}
+enumeration = yes,// 2 is not valid in this location {3052} | Property: enumeration.  This property requires an array of quoted strings {3084}
+enumeration = ["1","2","3"],// 1 is not valid in this location {3052}
+fieldLen = yes,// 1 Property: fieldLen.  This property requires an integer value {3085}
+fileName = yes,// 2 is not valid in this location {3052} | Property: fileName.  This property requires a quoted string as the value {3060}
+fillCharacter = "g",// 0
+fillCharacter  = nullFill,// 0
+fillCharacter = yes,// 1 Property: fillCharacter.  This property requires either a quoted string or one of the following values: (nullFill) {3075}
+fill = yes,// 0
+formSize = yes,// 2 is not valid in this location {3052} | Property: formSize.  This property requires an array of integers {3086}
+formsize = [1,2],//1 is not valid in this location {3052}
+getOptionsRecord = yes,// 2 is not valid in this location {3052} | Property: getOptionsRecord.  This property requires a quoted string as the value {3060}
+handleHardDLIErrors = yes,// 1 is not valid in this location {3052}
+handleHardIOErrors = yes,// 1 is not valid in this location {3052}
+helpForm = yes,// 2 is not valid in this location {3052} | Property: helpForm.  This property requires a quoted string as the value {3060}
+helpGroup = yes,// 1 is not valid in this location {3052}
+helpKey = yes,// 2 is not valid in this location {3052} | Property: helpKey.  The value for this property must be one of the following
+helpKey = pf1, // 1 is not valid in this location {3052}
+helpKey = pf10, // 1 is not valid in this location {3052}
+helpKey = pf11, // 1 is not valid in this location {3052}
+helpKey = pf12, // 1 is not valid in this location {3052}
+helpKey = pf13, // 1 is not valid in this location {3052}
+helpKey = pf14, // 1 is not valid in this location {3052}
+helpKey = pf15, // 1 is not valid in this location {3052}
+helpKey = pf16, // 1 is not valid in this location {3052}
+helpKey = pf17, // 1 is not valid in this location {3052}
+helpKey = pf18, // 1 is not valid in this location {3052}
+helpKey = pf19, // 1 is not valid in this location {3052}
+helpKey = pf2, // 1 is not valid in this location {3052}
+helpKey = pf20, // 1 is not valid in this location {3052}
+helpKey = pf21, // 1 is not valid in this location {3052}
+helpKey = pf22, // 1 is not valid in this location {3052}
+helpKey = pf23, // 1 is not valid in this location {3052}
+helpKey = pf24, // 1 is not valid in this location {3052}
+helpKey = pf3, // 1 is not valid in this location {3052}
+helpKey = pf4, // 1 is not valid in this location {3052}
+helpKey = pf5, // 1 is not valid in this location {3052}
+helpKey = pf6, // 1 is not valid in this location {3052}
+helpKey = pf7, // 1 is not valid in this location {3052}
+helpKey = pf8, // 1 is not valid in this location {3052}
+helpKey = pf9,// 1 is not valid in this location {3052}
+helpMsgKey = yes,// 2 is not valid in this location {3052} | Property: helpMsgKey.  This property requires a quoted string as the value {3060}
+help = yes,// 1 Property: help.  This property requires a quoted string as the value {3060}
+hierarchy = yes,// 2 is not valid in this location {3052} | The value of the property hierarchy must be an array of relationship complex properties {7747}
+hostVarQualifier = yes,// 2 is not valid in this location {3052} | Property: hostVarQualifier.  This property requires a quoted string as the value {3060}
+includeMsgInTransaction = yes,// 1 is not valid in this location {3052}
+includeReferencedFunctions = yes,// 1 is not valid in this location {3052}
+indexOrientation = yes,// 2 is not valid in this location {3052} | Property: indexOrientation.  The value for this property must be one of the following: across, down {3054}
+indexOrientation = across,// 1 is not valid in this location {3052}
+indexOrientation = down,// 1 is not valid in this location {3052}
+initialized = yes,// 1 is not valid in this location {3052}
+inputForm = yes,// 2 is not valid in this location {3052} | Property: inputForm.  This property requires a quoted string as the value {3060}
+inputRecord = yes,// 2 is not valid in this location {3052} | Property: inputRecord.  This property requires a quoted string as the value {3060}
+inputRequiredMsgKey = yes,// 1 Property: inputRequiredMsgKey.  This property requires a quoted string as the value {3060}
+inputRequiredMsgKey = "eeee",// 0
+inputRequired = yes,// 0
+inputUIRecord = yes,// 2 is not valid in this location {3052} | Property: inputUIRecord.  This property requires a quoted string as the value {3060}
+intensity = defaultIntensity, // 0
+intensity = dim, // 0
+intensity = bold, //0
+intensity = invisible,//0 
+intensity = normalIntensity ,//0
+intensity = yes,// 1  Property: intensity.  The value for this property must be one of the following: bold, defaultIntensity, dim, invisible, normalIntensity {3054}
+isConstruct = yes,// 1 is not valid in this location {3052}
+isDecimalDigit = yes,//0
+isHexDigit = yes,//0
+isLastParamReturnValue = yes,// 1 is not valid in this location {3052}
+isNullable = yes,// 0
+isReadOnly = yes,// 0
+javaName = yes,// 2 is not valid in this location {3052} | Property: javaName.  This property requires a quoted string as the value {3060}
+keyItem = yes,// 2 is not valid in this location {3052} | Property: keyItem.  This property requires a quoted string as the value {3060}
+keyItems = yes,// 2 is not valid in this location {3052} | Property: keyItems.  This property requires an array of quoted strings {3084}
+keyItems = ["2","abc"],// 2 is not valid in this location {3052} | The value 2 for property keyItems must be a valid name with no qualifications {2061}
+value = yes,// 1 Property: value.  The value specified is not the right type of value for this property {3077}
+value = "djddj",// 0
+labelAndHelpResource = yes,// 2 is not valid in this location {3052} | Property: labelAndHelpResource.  This property requires a quoted string as the value {3060}
+leftMargin = yes,// 2 is not valid in this location {3052} | Property: leftMargin.  This property requires an integer value {3085}
+lengthItem = yes,// 2 is not valid in this location {3052} | Property: lengthItem.  This property requires a quoted string as the value {3060}
+linesBetweenRows = yes,// 2 is not valid in this location {3052} | Property: linesBetweenRows.  This property requires an integer value {3085}
+lineWrap = word, // 0
+lineWrap = character,// 0 
+lineWrap = compress ,// 0
+lineWrap  = yes,// 1 Property: lineWrap.  The value for this property must be one of the following: character, compress, word  {3054}
+linkParameter = yes,// 1 is not valid in this location {3052}
+linkParms= yes,// 2 is not valid in this location {3052} | The value of the property linkParms must be an array of linkParameter complex properties {7747}
+localSQLScope = yes,// 1 is not valid in this location {3052}
+lowerCase = yes,// 0
+masked = yes,// 0
+maxArrayCount = yes,// 2 is not valid in this location {3052} | Property: maxArrayCount.  This property requires an integer value {3085}
+maxExclusive = yes,// 2 is not valid in this location {3052} | Property: maxExclusive.  This property requires a quoted string as the value {3060}
+maxInclusive = yes,// 2 is not valid in this location {3052} | Property: maxInclusive.  This property requires a quoted string as the value {3060}
+maxLength = yes,// 2 is not valid in this location {3052} | Property: maxLength.  This property requires a quoted string as the value {3060}
+maxLen = 5,// 1   Property maxLen must be defined with an item of primitive type string. char found {3170}
+maxLen = yes,// 1 Property: maxLen.  This property requires an integer value {3085}
+maxSize = yes,// 2 is not valid in this location {3052} | Property: maxSize.  This property requires an integer value {3085}
+minExclusive = yes,// 2 is not valid in this location {3052} | Property: minExclusive.  This property requires a quoted string as the value {3060}
+minimumInputMsgKey = "dddd",// 0
+minimumInputMsgKey = yes,// 1 Property: minimumInputMsgKey.  This property requires a quoted string as the value {3060}
+minimumInput = 5,// 0
+minimumInput = yes,// 1 Property: minimumInput.  This property requires an integer value {3085}
+minInclusive = yes,// 2 is not valid in this location {3052} | Property: minInclusive.  This property requires a quoted string as the value {3060}
+minLength = yes,// 2 is not valid in this location {3052} | Property: minLength.  This property requires a quoted string as the value {3060}
+modified = yes,// 0
+msgDescriptorRecord = yes,// 2 is not valid in this location {3052} | Property: msgDescriptorRecord.  This property requires a quoted string as the value {3060}
+msgField = yes,// 2 is not valid in this location {3052} | Property: msgField.  This property requires a quoted string as the value {3060}
+msgResource = yes,// 2 is not valid in this location {3052} | Property: msgResource.  This property requires a quoted string as the value {3060}
+msgTablePrefix = yes,// 2 is not valid in this location {3052} | Property: msgTablePrefix.  This property requires a quoted string as the value {3060}
+position = yes,// 2 is not valid in this location {3052} | Property: position.  This property requires an array of integers {3086}
+position = [1,2,3,4],//1 is not valid in this location {3052} 
+position = ["1","2"],//2 is not valid in this location {3052} | Property: position.  This property requires an array of integers {3086}
+name = yes,// 2 is not valid in this location {3052} | Property: name.  This property requires a quoted string as the value. {3060}
+namespace= yes,// 2 is not valid in this location {3052} | Property: namespace.  This property requires a quoted string as the value {3060}
+needsSOSI = yes,// 1 Only mbchar items are allowed to be used for property needsSOSI, but primitive type char was found which does not support multi-byte characters {3196}
+newWindow = yes,// 0
+numElementsItem = "www",// 0
+numElementsItem = yes,// 1 Property: numElementsItem.  This property requires a quoted string as the value {3060}
+numericSeparator = yes,// 1 Property numericSeparator must be defined with a numeric primitive. The type of this item is char {3194}
+openOptionsRecord = yes,// 2 is not valid in this location {3052} | Property: openOptionsRecord.  This property requires a quoted string as the value {3060}
+openQueueExclusive = yes,// 1 is not valid in this location {3052}
+ordering = yes,// 2 is not valid in this location {3052} | Property: ordering.  The value for this property must be one of the following: byInsertion, byKey, none {3054}
+ordering = byInsertion,// 1 is not valid in this location {3052}
+ordering = byKey, // 1 is not valid in this location {3052}
+ordering = none,// 1 is not valid in this location {3052}
+orientIndexAcross = yes,// 1 is not valid in this location {3052}
+outline = [left,right,top,bottom], //0
+outline = top,// 1 For the outline property, the valid values in an array are left, right, top, and bottom. Error on value top {3184}
+outline = right, // 1 For the outline property, the valid values in an array are left, right, top, and bottom. Error on value right {3184}
+outline = left, // 1 For the outline property, the valid values in an array are left, right, top, and bottom. Error on value left {3184}
+outline = bottom, // 1 For the outline property, the valid values in an array are left, right, top, and bottom. Error on value bottom {3184}
+outline = yes,// 1 For the outline property, the valid values in an array are left, right, top, and bottom. Error on value yes {3184}
+packageName= yes,// 2 is not valid in this location {3052} | Property: packageName.  This property requires a quoted string as the value {3060}
+pageSize = yes,// 2 is not valid in this location {3052} | Property: pageSize.  This property requires an array of integers {3086}
+pageSize = [1,2,3,4],//1 is not valid in this location {3052}
+pageSize = ["1","2"],//2 is not valid in this location {3052} | Property: pageSize.  This property requires an array of integers {3086}
+parentRecord = yes,// 2 is not valid in this location {3052} | Property: parentRecord.  This property requires a quoted string as the value {3060}
+pattern = "www",// 0
+pattern = yes,// 1 Property: pattern.  This property requires a quoted string as the value {3060}
+pcbName= yes,// 2 is not valid in this location {3052} | Property: pcbName.  This property requires a quoted string as the value {3060}
+pcbParms = yes,// 2 is not valid in this location {3052} | Property: pcbParms.  This property requires an array of quoted strings {3084}
+PCB = yes,// 1 is not valid in this location {3052}
+pcbType = yes,// 2 is not valid in this location {3052} | Property: pcbType.  The value for this property must be one of the following: DB, GSAM, TP {3054}
+pcbType = DB,// 1 is not valid in this location {3052}
+pcbType = GSAM, // 1 is not valid in this location {3052}
+pcbType = TP,// 1 is not valid in this location {3052}
+persistent = yes,// 0
+pfKeyEquate = yes,// 1 is not valid in this location {3052}
+//programLinkData = [1],// 1 The property programLinkData in pageHandler invalidprops is not supported {5305, INVALID_PAGEHANDLER_PROPERTY}
+programName = yes,// 2 is not valid in this location {3052} | Property: programName.  This property requires a quoted string as the value {3060}
+psbParm = yes,// 2 is not valid in this location {3052} | Property: psbParm.  This property requires a quoted string as the value {3060}
+psb = yes,// 2 is not valid in this location {3052} | Property: psb.  This property requires a quoted string as the value {3060}
+putOptionsRecord = yes,// 2 is not valid in this location {3052} | Property: putOptionsRecord.  This property requires a quoted string as the value {3060}
+queueDescriptorRecord = yes,// 2 is not valid in this location {3052} | Property: queueDescriptorRecord.  This property requires a quoted string as the value {3060}
+queueName = yes,// 2 is not valid in this location {3052} | Property: queueName.  This property requires a quoted string as the value {3060}
+Relationship = yes,// 1 is not valid in this location {3052}
+resident = yes,// 1 is not valid in this location {3052}
+rightMargin = yes,// 2 is not valid in this location {3052} | Property: rightMargin.  This property requires an integer value {3085}
+runValidatorFromProgram = yes,// 0
+screenSize = yes,// 2 is not valid in this location {3052} | Property: screenSize.  This property requires an array of integers {3086}
+screenSize = [1,2,3,4],//1 is not valid in this location {3052} 
+screenSize = ["1","2"],//2 is not valid in this location {3052} | Property: screenSize.  This property requires an array of integers {3086}
+screenSizes = yes,// 2 is not valid in this location {3052} | Property: screenSizes.  This property requires an array of integer arrays {3087}
+secondaryIndexItem = yes,// 2 is not valid in this location {3052}| Property: secondaryIndexItem.  This property requires a quoted string as the value {3060}
+secondaryIndex = yes,// 2 is not valid in this location {3052}| Property: secondaryIndex.  This property requires a quoted string as the value {3060}
+segmented = yes,// 1 is not valid in this location {3052}
+segmentName = yes,// 2 is not valid in this location {3052}| Property: segmentName.  This property requires a quoted string as the value {3060}
+segmentRecord = yes,// 2 is not valid in this location {3052} | Property: segmentRecord.  This property requires a quoted string as the value {3060}
+segments = yes,// 2 is not valid in this location {3052} | Property: segments.  This property requires an array of integer arrays {3087}
+selectedIndexItem = "ffff",// 0
+selectedIndexItem = yes,// 1 Property: selectedIndexItem.  This property requires a quoted string as the value {3060}
+selectFromListItem = "dddd",// 0
+selectFromListItem = yes,// 1 Property: selectFromListItem.  This property requires a quoted string as the value {3060}
+selectType = index, // 1 Because selectType = index, this item must be numeric with no decimal places {3131}
+selectType = value ,// 0
+selectType = yes,// 1 Property: selectType.  The value for this property must be one of the following: index, value {3054}
+serviceAlias= yes,// 2 is not valid in this location {3052} | Property: serviceAlias.  This property requires a quoted string as the value {3060}
+serviceName = yes,// 2 is not valid in this location {3052} | Property: serviceName.  This property requires a quoted string as the value {3060}
+servicePackage = yes,// 2 is not valid in this location {3052} | Property: servicePackage.  This property requires a quoted string as the value {3060}
+setInitial = yes,// 1 is not valid in this location {3052}
+shared = yes,// 1 is not valid in this location {3052}
+showBrackets = yes,// 1 is not valid in this location {3052}
+sign = none, //1 Property sign must be defined with a numeric primitive. The type of this item is char {3194}
+sign = parens, //1 Property sign must be defined with a numeric primitive. The type of this item is char {3194}
+sign = leading, //1 Property sign must be defined with a numeric primitive. The type of this item is char {3194}
+sign = trailing ,//1 Property sign must be defined with a numeric primitive. The type of this item is char {3194}
+sign = yes,// 1 Property: sign.  The value for this property must be one of the following: leading, none, parens, trailing. {3054}
+spacesBetweenColumns = yes,// 2 is not valid in this location {3052} | Property: spacesBetweenColumns.  This property requires an integer value {3085}
+sqlDataCode  = 300,// 1 Property: sqlDataCode.  This property can only be used when VAGCompatability mode is enabled {3180}
+sqlDataCode= yes,// 1  Property: sqlDataCode.  This property requires an integer value {3085}
+sqlVariableLen = yes,// 0
+tableNames = yes,// 2 is not valid in this location {3052} | Property: tableNames.  The value for this property must be an array of quoted string arrays {6590}
+tableNameVariables = yes,// 2 is not valid in this location {3052} | Property: tableNameVariables.  The value for this property must be an array of quoted string arrays {6590}
+TCPIPLocation = yes,// 2 is not valid in this location {3052} | Property: tcpipLocation.  This property requires a quoted string as the value {3060}
+throwNrfEofExceptions = yes,// 1 The property throwNrfEofExceptions is not valid in this location {2058}
+timeformat = usaTimeFormat, //0
+timeformat = eurTimeFormat, //0
+timeformat = jisTimeFormat, //0
+timeformat = isoTimeFormat, //0
+timeformat = defaultTimeFormat,//0
+timeFormat  = yes,// 1 Property: timeFormat.  This property requires either a quoted string or one of the following values: (isoTimeFormat, usaTimeFormat, eurTimeFormat, jisTimeFormat, defaultTimeFormat). {3075}
+timeStampFormat = yes,// 1 Property: timestampFormat.  This property requires either a quoted string or one of the following values: (db2TimeStampFormat, odbcTimeStampFormat, defaultTimeStampFormat). {3054} 
+timeStampFormat = defaultTimeStampFormat,//1 The property timeStampFormat is only valid for primitive type timeStamp {5414}
+title = yes,// 2 is not valid in this location {3052} | Property: title.  This property requires a quoted string as the value {3060}
+topMargin = yes,// 2 is not valid in this location {3052} | Property: topMargin.  This property requires an integer value {3085}
+typeChkMsgKey = "fff",// 0
+typeChkMsgKey = yes,// 1 Property: typeChkMsgKey.  This property requires a quoted string as the value {3060}
+uiRecordName = yes,// 2 is not valid in this location {3052} | Property: uiRecordName.  This property requires a quoted string as the value {3060}
+uiType = input, //0
+uiType = submitBypass,//0 
+uiType = submit, //0
+uiType = none, //0
+uiType = output, //0
+uiType = hidden, //0
+uiType = programLink,//0 
+uiType = inputOutput, //0
+uiType = uiForm,//0
+uiType = yes,// 1   Property: uiType.  The value for this property must be one of the following: hidden, input, inputOutput, none, output, programLink, submit, submitBypass, uiForm. {3054}
+upperCase = yes,// 0
+validationBypassKeys = yes,// 2 is not valid in this location {3052} | Property: validationBypassKeys.  The value for this property is invalid. The value must be in the format [pfn, pfn], where n is 1-24. {3054}
+validationOrder = 5,// 0
+validationOrder = yes,// 1  Property: validationOrder.  This property requires an integer value {3085}
+validatorDataTableMsgKey = "sss",// 0
+validatorDataTableMsgKey = yes,// 1 Property: validatorDataTableMsgKey.  This property requires a quoted string as the value {3060}
+validatorDataTable = "ddd",// 1 The type ddd cannot be resolved {3260}
+validatorDataTable = "mydtchar30",// 0
+validatorDataTable = "mydt2char30",// 0
+validatorDataTable = "mydt3char30",// 0
+validatorDataTable = "mydt4",// 1 The value mydt4 for the validatorDataTable property must be a data table of type matchValid, matchInvalid or rangeCheck {3187}
+validatorDataTable = yes,// 1 Property: validatorDataTable.  This property requires a quoted string as the value {3060}
+validatorFunctionMsgKey = "sss",// 0
+validatorFunctionMsgKey = yes,// 1 Property: validatorFunctionMsgKey.  This property requires a quoted string as the value {3060}
+validatorFunction = "sss",// 1  The function reference sss cannot be resolved {6679}
+validatorFunction = "myfchar30",// 0
+validatorFunction = yes,// 1 Property: validatorFunction.  This property requires a quoted string as the value {3060}
+validValuesMsgKey = "sdddd",// 0
+validValuesMsgKey = yes,// 1 Property: validValuesMsgKey.  This property requires a quoted string as the value {3060}
+validValues = [1,2,3],// 1 A variable of type char(30) requires a literal value that is of string type {7672}
+validValues = ["a","b","c"],// 0
+validValues = "dd",// 1 Valid values must be specified as a literal array of single values or ranges {7670}
+valueRef = yes,// 2 is not valid in this location {3052} | Property: valueRef.  This property requires a quoted string as the value.{3060}
+verifyMsgKey = yes,// 2 is not valid in this location {3052} | Property: verifyMsgKey.  This property requires a quoted string as the value {3060}
+verify = yes,// 1 is not valid in this location {3052}
+view = "yes",// 1 is not valid in this location {3052}
+WebBinding = yes,// 1 is not valid in this location {3052}
+whitespace = yes,// 2 is not valid in this location {3052} | Property: whitespace.  This property requires a quoted string as the value {3060}
+wsdlFile = yes,// 2 is not valid in this location {3052} | Property: wsdlFile.  This property requires a quoted string as the value.{3060}
+wsdlPort = yes,// 2 is not valid in this location {3052} | Property: wsdlPort.  This property requires a quoted string as the value {3060}
+WSDL = yes,// 1 is not valid in this location {3052}
+wsdlService = yes,// 2 is not valid in this location {3052} | Property: wsdlService.  This property requires a quoted string as the value {3060}
+//xsd = 1,// 1 The property xsd in pageHandler invalidprops is not supported {5305, INVALID_PAGEHANDLER_PROPERTY}
+zeroFormat = yes,// 1 Property zeroFormat must be defined with a numeric primitive. The type of this item is char {3194}
+isBoolean = yes
+}end
+
+function myfchar30()
+end
+
+datatable mydtchar30 type MatchInvalidTable
+end
+
+datatable mydt2char30 type MatchValidTable
+end
+
+datatable mydt3char30 type RangeChkTable
+end
+
+datatable mydt4 type BasicTable
+end
+
+
+dataItem item2char30 char(30) {
+align = yes,// 1 Property: align.  The value for this property must be one of the following: center, left, none, right. {3054}
+addSpaceForSOSI = "llll",// 2 is not valid in this location {3052} | Property: addSpaceForSOSI.  The value for this property must be one of the following: no, yes {3054}
+onpageloadfunction = XXXX, // 2  onpageloadfunction is not valid in this location  {3052} | Property: onPageLoadFunction.  This property requires a quoted string as the value {3060}
+scope = request,// 1 is not valid in this location  {3052}
+view = "eeee",// 1 is not valid in this location  {3052}
+eventValueItem = "myhandlerX",//1 is not valid in this location  {3052}
+validationBypassFunctions = myvalbypass ,//2 is not valid in this location  {3052} | Property: validationBypassFunctions.  This property requires an array of quoted strings {3084}
+msgResource = "eeeeee",//1 is not valid in this location  {3052}
+allowUnqualifiedItemReferences = yes,// 1 is not valid in this location  {3052}
+includeReferencedFunctions = yes// 1 is not valid in this location  {3052}
+}end
+
+
+dataItem specialitem33char30 char(30) {
+dateFormat = usaDateFormat, //0
+dateFormat = eurDateFormat, //0
+dateFormat = jisDateFormat, //0
+dateFormat = isoDateFormat, //0
+dateFormat = defaultDateFormat,//0 
+dateFormat = systemGregorianDateFormat,//0 
+dateFormat = systemJulianDateFormat,//0
+dateFormat = fsdfsf,//1  Property: dateFormat.  This property requires either a quoted string or one of the following values: (isoDateFormat, usaDateFormat, eurDateFormat, jisDateFormat, defaultDateFormat, systemGregorianDateFormat, systemJulianDateFormat). {3075}
+isBoolean = yes// 0
+}
+end
+

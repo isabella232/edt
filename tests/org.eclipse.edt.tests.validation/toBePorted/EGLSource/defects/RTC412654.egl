@@ -1,0 +1,215 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+program pgm1 type uiprogram{  //0
+	inputrecord = bogus   //1
+	}
+	function main()
+	end
+end
+
+record sqlRec1 type sqlrecord
+end
+
+
+
+program pgm2 type uiprogram{   //0
+	inputrecord = sqlrec1   //1
+	}
+	
+	sqlrec1 sqlrec1;
+	
+	function main()
+	end
+end
+
+record flex1
+	a int;
+end
+
+record struct1
+	10 a int;
+end
+
+program pgm3 type uiprogram{  //0
+	inputrecord = struct1   //0
+	}
+	
+	struct1 struct1;
+	
+	function main()
+	end
+end
+
+program pgm3 type uiprogram{  //0
+	inputrecord = flex1   //0
+	}
+	
+	flex1 flex1;
+	
+	function main()
+	end
+end
+
+program pgm4 type uiprogram () //0
+	function main()
+	end
+end
+
+library lib1
+	libF1 flex1;
+	libF2 struct1;
+	libF3 sqlrec1;
+end
+
+program pgm5 type uiprogram //0
+
+	use lib1;
+	
+	flex1 flex1;
+	struct1 struct1;
+	sqlrec1 sqlrec1;
+	
+	
+	function main()
+		converse flex1;   //0
+		converse struct1;  //1
+		converse sqlrec1;  //0
+		
+		converse lib1.libF1; //0
+		converse libF1;  //0
+		converse lib1.libF2; //2
+		converse libF2;  //2
+		converse lib1.libF3; //0
+		converse libF3;  //0
+
+		show flex1;   //0
+		show struct1;  //1
+		show sqlrec1;  //0
+
+		show lib1.libF1; //0
+		show libF1;  //0
+		show lib1.libF2; //2
+		show libF2;  //2
+		show lib1.libF3; //0
+		show libF3;  //0
+
+		
+		show flex1 returning to "fred" passing flex1;   //1
+		
+
+	end
+
+end
+
+program pgm6 type uiprogram //0
+	flex1 flex1;
+	
+	function main()
+		show flex1 returning to pgm5;   //0
+		show flex1 returning to pgm7;   //1
+		
+		transfer to program pgm5;      //0
+		transfer to transaction pgm5;  //2
+	end
+end
+
+program pgm7
+  function main()
+  end
+end
+
+
+program pgm8 type uiprogram {includeReferencedFunctions = yes}
+
+	function main()
+		transfer to pgm9; //1
+		transfer to program pgm9; //1
+
+		transfer to pgm10; //1
+		transfer to program pgm10; //1
+		
+		transfer to transaction pgm11; //1
+
+		pgm8F1();
+	end
+	
+end
+
+function pgm8F1() 
+		transfer to pgm9; //1
+		transfer to program pgm9; //1
+
+		transfer to pgm10; //1
+		transfer to program pgm10; //1
+		
+		transfer to transaction pgm11; //1
+
+end
+
+program pgm9 type vgwebtransaction
+	function main()
+	end
+end
+
+program pgm10 (p1 int)
+	function main()
+	end
+end
+
+program pgm11
+	function main()
+	end
+end
+
+
+formgroup libxfg
+	form form1 type textform {formsize = [24,80]}
+		a int;
+	end
+end
+
+record libxUIRec type vguirecord
+	10 a int;
+end
+
+record libxrec1
+	a int;
+end
+
+record libxrec2 type sqlrecord
+	a int;
+end
+
+library libx
+	use libxfg;
+	uirec libxuirec;
+	rec1 libxrec1;
+	rec2 libxrec2;
+	
+	function f1()
+	
+		converse form1; //1
+		converse uirec; //1
+		converse rec1; //0
+		converse rec2; //0
+		
+		show form1; //1
+		show uirec; //1
+		show rec1; //0
+		show rec2; //0
+	
+	end
+
+end
+	

@@ -1,0 +1,191 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// valid PSBRecord, dliSegments to use in statements
+Record part type DLISegment 					 
+{ segmentName="part", keyItem="partNo" }		 
+	10 PartNo Char(10);							 
+	10 partName char(33);								  
+	10 partdesc char(220) ;	 
+end 
+
+Record Order type DLISegment { keyItem="orderNo" } 
+	10 ORderNo char(6);						 
+	10 vendorName char(33);								 
+end
+
+Record Journal type DLISegment 					 
+	10 activity Char(60) ;	 
+ 
+end
+
+Record PSBD type PSBRecord 				 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};  		 
+	pcbD1 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Parts",								 
+	  hierarchy = [	@Relationship{ segmentRecord="Part" } ]	 
+    }};  
+	pcbD2 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Journal",								 
+	  hierarchy = [	@Relationship{ segmentRecord="Journal" } ]	 
+    }};
+	pcbD3 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Orders",								 
+	  hierarchy = [	@Relationship{ segmentRecord="Order" } ]	 
+    }}; 
+end    
+
+
+
+// Now for invalid cases
+
+
+Program APPLD1_invalid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 		//0
+         handleHardDLIErrors = yes,				//0
+         pcbParms =[null, pcb1, pcb2, pcb3] }	//1 pcb3 is not declared in the program parameter list
+         // pcb1 is pcbD1
+         // pcb2 is pcbD2
+         // this program cannot use pcbD3                   	 
+  }
+  	// PSB Declaration
+ 	psb PSBD ;					 				//0
+ 
+  	function main()								//0
+  	end											//0		
+end
+Program APPLD2_invalid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 		//1 PSBD only contains 4 PCBs. Therefore, you can only have 4 entries in the pcbParms array value. Found 5.
+         handleHardDLIErrors = yes,				//0
+         pcbParms =/*["", "pcb1", "", "", "pcb2"]*/[pcb1, pcb1, pcb1, pcb1, pcb2] }	//0
+         // pcb1 is pcbD1
+         // pcb2 is pcbD2
+         // this program cannot use pcbD3                   	 
+  }
+  	// PSB Declaration
+ 	psb PSBD ;					 				//0
+
+  	function main()								//0
+  	end											//0
+end
+Program APPLD3_invalid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+	// We don't have a PSB in this case so we can't build defaults
+	// PSBD is not our program PSB because we don't have the psb property on the @DLI 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI {										//1 The field "psb" is required for the complex property dli.
+  		// psb = psb, 					 	//0
+         handleHardDLIErrors = yes,				//0
+         pcbParms =/*["", "pcb1", "pcb2", ""]*/[pcb1, pcb2] }		//0
+        //The pcbParms property also requires the PSB property
+         // pcb1 is pcbD1
+         // pcb2 is pcbD2
+         // this program cannot use pcbD3                   	 
+  }	
+  	order order;						//0
+  	part part;							//0
+  	parts part[3];						//0
+  	// PSB Declaration
+ 	psb PSBD ;							//0
+ 	pcb3 DB_PCBRecord;					//0
+ 	partNoVar char(10);
+
+  	function main()						//0
+		buildDefaults();				//0  
+		checkModified();				//0 		 	
+  	end									//0
+  	function buildDefaults()			//0
+  		// try to use pcbparms
+  		 add order usingPCB pcb1 ;			//0
+  		 replace order usingPCB pcb1;		//0
+  		 delete order usingPCB pcb1;		//0
+  		 get next order usingPCB pcb1;		//0
+  		 get next order forupdate usingPCB pcb1;//0
+  		 get next inparent order  usingPCB pcb1;//0
+  		 get next inparent order forupdate usingPCB pcb1;//0
+
+  		 get part usingPCB pcb2;		//0
+  		// try to use pcbs in PSBD, they aren't avaiable because the psb property is omitted from the DLI annotation.  
+  		 add order usingPCB pcbD1 ;		//1 pcbD1 cannot be resolved
+  		 get part usingPCB pcbD2;		//1 pcbD2 cannot be resolved
+  	end	 
+  	function checkModified()			//0
+  		//I'm not going to do them all, just a sampling to show that the same errors should
+  		// occurs as when we are validating a modified SSA where the PCB has no hierarchy.
+  		// see DLIProgramsNoHierarchyModifiedSSAs_invalid.egl for the complete list.
+  	  add order usingPCB pcb1 							//0
+   	  		with #dli{ISRT offering	};		  			//1 The last SSA in the DL/I call must be for Order
+  	  add part	usingPCB pcb2				 			//0
+  	  		with #dli{ISRT part (part# = :PartNoVar)	//0
+  	  					   vendor}; 					//1 The last SSA in the DL/I call must be for part
+ 	  add part	usingPCB pcb2							//0
+  	  		with #dli{ISRT part							//0
+  	  					   part};   	 				//1 Multiple SSAs for DL/I Segment part found. Only one SSA per DL/I segment is allowed in a DL/I call.
+	  get parts usingPCB pcb2							//0
+			with #dli{GU part (part# = :PartNoVar)	  	//0
+						 part (title > "abc")			//1 Multiple SSAs for DL/I Segment part found. Only one SSA per DL/I segment is allowed in a DL/I call.
+					  GN vendor 						//1 Only one SSA is allowed for the second DL/I call when the target of the get by key statement is an array.		
+					  	 part			 };				//0	
+	  get parts usingPCB pcb2							//0
+			with #dli{GU vendor*d (vendor# = :vendorName) //2 D is not a valid command code for a GU call when the target of the statement is an array|Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the vendor segment
+					     part							//0	
+					  GN part			 };				//0	
+  	end  					   	
+end
+
+Program APPLD4_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { 								//1 The field "psb" is required for the complex property dli.
+  		 //psb = psb, 			 
+         handleHardDLIErrors = yes,
+         // trailing pcbs that are not used don't have to be specified
+         pcbParms =/*["", "pcb1", "pcb2"]*/[pcb1, pcb2] }	//0
+        // The pcbParms property also requires the PSB property
+         // when called from APPLA_valid pcb1 is pcbD1 and receives pcbA5 
+         //							     pcb2 is pcbD2 and receives pcbA2
+         // when called from APPLB_valid pcb1 is pcbD1 and receives pcbB1 
+         //							     pcb2 is pcbD2 and receives pcbB5
+         // this program cannot use pcbD3                   	 
+  }
+  	// PSB Declaration
+ 	//psb PSBD ;					 
+
+  	function main()
+  	end
+end
+Program APPLD5_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { 							//1 The field "psb" is required for the complex property dli.
+  		 //psb = psb, 					 
+         handleHardDLIErrors = yes,
+         pcbParms =/*["", "pcb1"]*/[pcb1] }		//0
+         // The pcbParms property also requires the PSB property
+         // when called from APPLA_valid pcb1 is pcbD1 and receives pcbA5 
+         //							     pcb2 receives pcbA2, but can't use it as a PCB
+         // when called from APPLB_valid pcb1 is pcbD1 and receives pcbB1 
+         //							     pcb2 receives pcbB5, but can't use it as a PCB
+         // this program cannot use pcbD2 or pcbD3 as PCBs                  	 
+  }
+	part part;
+	order order;
+	journal journal;
+	
+  	// PSB Declaration, can still declare the PSB without the psb property, but it is just a record.
+ 	psb PSBD ;					 
+
+  	function main()
+  	end
+end

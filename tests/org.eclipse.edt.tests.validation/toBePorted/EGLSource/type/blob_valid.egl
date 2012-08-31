@@ -1,0 +1,110 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+Record Employeeblob type SQLRecord
+	employeeID char(6);
+	empPic Blob;
+//	empResume ref Blob;
+	empResume Blob;
+end
+
+Library blob_valid
+
+	emp1 Employeeblob;
+	emp2 Employeeblob;
+	
+	function assignmentTest() 
+		emp1.empPic = emp2.empPic;
+		emp1.empResume = emp2.empResume;
+	end
+ 
+	function moveTest() 
+		move emp1.empPic to emp2.empPic;
+		move emp1.empResume to emp2.empResume;
+	end
+	
+	function blobFunctionArgAndReturnTest()
+		tempBlob blob;
+//		tempBlobref ref blob;
+		tempBlobref blob;
+		blobFunctionArgTestHelperOne(emp1.empPic);
+		blobFunctionArgTestHelperTwo(emp1.empResume);
+		tempBlob = blobFunctionReturnTestOne();
+		tempBlobref = blobFunctionReturnTestTwo();
+	end
+	
+	function blobFunctionArgTestHelperOne(parm1 Blob)
+	end
+	
+//	function blobFunctionArgTestHelperTwo(parm1 ref Blob)
+	function blobFunctionArgTestHelperTwo(parm1 Blob)
+	end
+	
+	function blobFunctionReturnTestOne()
+		returns(Blob);
+		
+		return (emp1.empPic);
+	end
+	
+	function blobFunctionReturnTestTwo()
+//		returns(ref Blob)
+		returns(Blob)
+		
+		return(emp1.empResume);
+	end
+	
+	function blobProgramCallTest()
+	end
+	
+	function blobFunctionTests()
+		mybigint bigint;
+		string1 string;
+		attachBlobToFile(emp1.empPic, "C:\\Temp\\Employee1.jpg");
+		attachBlobToFile(emp1.empPic, string1);
+		
+		mybigint = getBlobLen(emp1.empPic);
+		
+		truncateBlob(emp1.empPic, 100);
+		truncateBlob(emp1.empPic, mybigint);
+		
+		loadBlobFromFile(emp1.empPic, "C:\\Temp\\Employee1.jpg");
+		loadBlobFromFile(emp1.empPic, string1);
+		
+		updateBlobToFile(emp1.empPic, "C:\\Temp\\Employee1.jpg");
+		updateBlobToFile(emp1.empPic, string1);
+		
+		freeBlob(emp1.empPic);
+		
+		// new as of 10/14
+		attachBlobToTempFile(emp1.empPic);
+	end
+end
+
+Program blobProgramOne ()
+	
+	function main()
+	end
+end
+
+Program blobProgramTwo ()
+
+	function main()
+	end
+end
+
+Library nativeLibrary_validblob type nativeLibrary	
+		{callingConvention=I4GL}
+	function myfunction(arg1 Blob ) 
+	
+	end
+end

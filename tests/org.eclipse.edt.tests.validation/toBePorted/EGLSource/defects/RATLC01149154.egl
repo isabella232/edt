@@ -1,0 +1,133 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record sqlRec type SQLRecord
+	field1 int;
+end
+
+Program pgm
+	SQLRecAry sqlRec[10];
+	SQLRec sqlRec;
+	
+	function main()
+		get ClassMemberArray
+ 			with #dli{
+				GU SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			} 
+			with #dli{													//1 does not allow the inline DLI statement to be specified more than once
+				GU SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			}
+			;
+
+		get SQLRecAry
+			with #sql{
+				select a from b
+			}
+			with #sql{													//1 does not allow the inline SQL statement to be specified more than once
+				select a from b
+			}
+			;
+			
+		get next from rId
+ 			with #dli{
+				GN SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			} 
+			with #dli{													//1 does not allow the inline DLI statement to be specified more than once
+				GN SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			}
+			;
+			
+		add ClassMemberArray
+ 			with #dli{
+				ISRT SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			}
+			with #dli{													//1 does not allow the inline DLI statement to be specified more than once
+				ISRT SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			}
+			;
+
+		add SQLRec
+			with #sql{
+				select a from b
+			}
+			with #sql{													//1 does not allow the inline SQL statement to be specified more than once
+				add a
+			}
+			;
+			
+		delete ClassMemberArray
+ 			with #dli{
+				DLET SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			}
+			with #dli{													//1 does not allow the inline DLI statement to be specified more than once
+				DLET SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			}
+			;
+
+		delete SQLRec
+			with #sql{
+				select a from b
+			}
+			with #sql{													//1 does not allow the inline SQL statement to be specified more than once
+				delete a
+			}
+			;			
+					
+		replace ClassMemberArray
+ 			with #dli{
+				REPL SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			}
+			with #dli{													//1 does not allow the inline DLI statement to be specified more than once
+				REPL SCCOURSE (Course   = :COURSE.CourseNum)
+				   SCOFFER *P (offerTme = :OFFERing.offeringperiod)
+				   SCMEMBER
+				GNP SCMEMBER
+			}
+			;
+
+		replace SQLRec
+			with #sql{
+				select a from b
+			}
+			with #sql{													//1 does not allow the inline SQL statement to be specified more than once
+				replace a
+			}
+			;
+	end
+end

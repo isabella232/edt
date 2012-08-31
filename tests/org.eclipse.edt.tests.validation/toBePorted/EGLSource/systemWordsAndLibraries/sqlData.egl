@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		thing any;
+
+		thing = sqlLib.sqlData.sqlerrmc;	//0
+		thing = sysVar.sqlData.sqlerrmc;	//0
+
+		thing = sysVar.sqlData.sqlWarn.getSize();	//1 cannot be resolved
+		
+		thing = sqlerrmc;					//1 cannot be resolved
+		thing = sqlLib.sqlerrmc;			//1 cannot be resolved
+		thing = sqlData.sqlerrmc;			//1 must be qualified
+		
+		myRec egl.core.sqlData;				//0
+		move sqlData to myRec;				//1 must be qualified
+		move sqlLib.sqlData to myRec;		//0
+		move sysVar.sqlData to myRec;		//0
+	end
+end

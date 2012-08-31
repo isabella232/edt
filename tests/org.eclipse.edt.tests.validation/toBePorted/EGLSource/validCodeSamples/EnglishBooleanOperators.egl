@@ -1,0 +1,39 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program EnglishBooleanOperators
+	function main()
+
+		writeStdout( "This program demonstrates the use of 'and' and 'or' in place" );
+		writeStdout( "of '&&' and '||'." );
+		writeStdout( "" );
+
+
+		i int = 42;
+		d decimal(9,5) = 9876.54321;
+		
+		if ( (i == 42 and d != 9876.54321)
+			or (i == 42 and d == 9876.54321) )
+			writeStdout( "OK" );
+		else
+			writeStdout( "Error!" );
+		end
+		
+		if ( !(i == 42 and d == 9876.54321)
+			or !(i == 42 and d != 9876.54321) )
+			writeStdout( "OK" );
+		else
+			writeStdout( "Error!" );
+		end
+	end
+end

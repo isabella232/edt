@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program pgm1
+	function main()
+		myint int;
+		myString string;
+		
+		//error here that more than 1 function was found:
+		f1(myInt, myString);     
+		f1(myString, myString);
+		
+		//this works fine
+		f2(myInt, myString);
+		f2(myString, myString);
+
+		myChar char(10);
+		myUnicode unicode(10);
+		myDecimal decimal(10, 2);
+		myMoney money(8, 3);
+
+		f1(myInt, myChar);
+		f1(myString, myChar);
+		
+		f1(myInt, myUnicode);
+		f1(myString, myUnicode);
+		
+		f1(myInt, myDecimal);
+		f1(myString, myDecimal);
+		
+		f1(myInt, myMoney);
+		f1(myString, myMoney);
+	end
+	
+	function f1( index int in, value any in )
+	end
+	
+	function f1( name string in, value any in )
+	end
+
+
+	function f2( index int in, value float in )
+	end
+	
+	function f2( name string in, value float in )
+	end
+end

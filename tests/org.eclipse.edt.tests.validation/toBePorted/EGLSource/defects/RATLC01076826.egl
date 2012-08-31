@@ -1,0 +1,147 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program rpt001{localSQLScope=YES}
+
+p_table1 recordtype_p_table1 [14];
+
+FUNCTION main()
+     
+i      smallint;
+
+
+	try execute #sql{create database rpt001 };
+	onException 
+//	/*ERROR*/	//errfunc();
+	end
+
+	try execute #sql{create table table1 
+        (
+         column1   smallint,
+         column2   integer,
+         column3   decimal(16),
+         column4   smallfloat,
+         column5   float,
+         column6   money(8),
+         column7   char(20),
+         column8   date,
+         column9   datetime year to year
+   
+        ) };
+	onException 
+//	/*ERROR*/	//errfunc();
+	end
+
+        try Syslib.loadTable ( "rpt001a.unl", "insert into table1");
+        onException 
+//        /*ERROR*/	//errfunc();
+        end
+
+        labels();
+
+
+       
+end 
+
+
+function labels()
+
+  
+    i    smallint;
+
+
+        try PREPARE $_STMT_curs FROM
+          "select * from table1 order by column1";
+        onException 
+//        /*ERROR*/	//errfunc();
+        end
+
+
+	labels_rep_START() ;
+ 
+        try open curs with $_STMT_curs;
+        onException 
+//        /*ERROR*/	//errfunc();
+        end
+        for( i  from  1  to  14)
+          try get next from curs into p_table1[i].column1, p_table1[i].column2, p_table1[i].column3, p_table1[i].column4, p_table1[i].column5, p_table1[i].column6, p_table1[i].column7, p_table1[i].column8, p_table1[i].column9;
+          onException 
+//          /*ERROR*/	//errfunc();
+          end
+          labels_rep_OUTPUT(p_table1[i]); // 0
+          
+        end 
+        try close curs;
+        onException 
+//        /*ERROR*/	//errfunc();
+        end
+
+	try execute #sql{ CLOSE DATABASE };
+	onException 
+//	/*ERROR*/	//errfunc();
+	end
+
+	try execute #sql{drop database rpt001 };
+	onException 
+//	/*ERROR*/	//errfunc();
+	end
+
+end 
+
+
+function labels_rep_START()
+    execute #sql{
+        create temp table labels_rep_report_table (
+            p_column1 smallint ,
+            p_column2 int,
+            p_column3 decimal (16) ,
+            p_column4 smallfloat ,
+            p_column5 float ,
+            p_column6 money (8) ,
+            p_column7 char (20) ,
+            p_column8 date ,
+            p_column9 datetime year to year
+           
+        )
+    };
+end
+Function labels_rep_OUTPUT(p recordtype_p_table1)
+    Prepare insert_stmt_labels_rep from "Insert Into labels_rep_report_table values (?,?,?,?,?,?,?,?,?)";
+
+    Execute insert_stmt_labels_rep using 
+            p.column1,
+            p.column2,
+            p.column3,
+            p.column4,
+            p.column5,
+            p.column6,
+            p.column7,
+            p.column8,
+            p.column9
+            
+;
+End
+
+
+END
+
+      record recordtype_p_table1 type SqlRecord
+         column1   smallint{isNullable=yes};
+         column2   INT{isNullable=yes};
+         column3   FLOAT{isNullable=yes};
+         column4   SMALLFLOAT{isNullable=yes};
+         column5   FLOAT{isNullable=yes};
+         column6   FLOAT{isNullable=yes};
+         column7   UNICODE(20){isNullable=yes};
+         column8   DATE{isNullable=yes};
+         column9   timestamp( "yyyy" /* year to year */){isNullable=yes};
+      end 

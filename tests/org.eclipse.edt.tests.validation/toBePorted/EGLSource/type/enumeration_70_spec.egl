@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Enumeration MyColorKind	//0
+	MyRED,			//0
+	MyBLUE,			//0
+	MyGREEN,		//0
+	MyYELLOW,		//0
+	MyBLACK,		//0
+	MyWHITE,		//0
+	MyCYAN,			//0
+	MyMAGENTA		//0
+End
+
+Enumeration MyBoolean		//0
+	MyYES = "YES",	//0
+	MyNO = "NO"		//0
+End
+
+Program MyTextProgram
+	myColor MyColorKind; 										//0
+	use MyColorKind;											//0
+	Function changeColor(f char(20) field, color MyColorKind)	//0
+	  	case (color)											//0
+			when (MyBLUE) set f blue;							//0
+			when (MyRED) set f red;								//0
+		end
+	end
+	
+	Function main()
+		if(myColor == MyGreen)	//0
+			myColor = MyRed;	//0
+		end
+	end
+end
+
+

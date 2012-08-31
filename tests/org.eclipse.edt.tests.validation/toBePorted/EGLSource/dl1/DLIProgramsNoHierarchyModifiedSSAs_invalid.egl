@@ -1,0 +1,791 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//ignore_case
+
+//Note that there are many test cases in this file that are not expected to produce errors.
+// This is intentional in that it is meant to prove that wer are not producing an error message
+// where we normally would if we had a known hierarchy.
+
+// valid PSBRecord, dliSegments and DataItems to use in statements
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	 
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end		 
+DataItem Name char(18) { dliFieldName ="NAME" } end		 
+
+Record Course type DLISegment 					 
+{ segmentName="COURSE", keyItem=courseNo }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record Prereq type DLISegment { keyItem=courseNo } 
+	10 courseNo CourseNo;							 
+	10 title char(33);								 
+end
+
+Record Offering type DLISegment 					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record Teacher type DLISegment 					 
+{ segmentName="TEACHER", keyItem=empNo }		 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+end 
+
+Record Student type DLISegment	 				 
+	{ segmentName="STUDENT" }						 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+	10 grade char(1);								 
+end
+Record NoHierarchy type PSBRecord 				 
+				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB"}};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC"}};
+end
+//No hierarchy in the PCBs, so only do edits that have nothing to do with the order of the 
+//segments (but can do "target has to be last) 
+Program DLIProgramsNoHierarchyModifiedSSAs_invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb2, 					 
+         handleHardDLIErrors = yes }	 
+  }
+  course course;						   
+  prereq prereq;						 
+  offering offering;					 
+  teacher teacher;						 
+  student student;						 
+  courses course[20];					   
+  prereqs prereq[5];					 
+  offers offering[3];					 
+  teachers teacher[5];					 
+  students student[25];					   
+  xloc char(4);							 
+
+  // PSB Declaration
+  psb2 noHierarchy ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+  	function addStmt()		
+  	  add student 	usingPCB psb2.coursePCB 			//0
+   	  		with #dli{ISRT offering	};		  			//1 The last SSA in the DL/I call must be for STUDENT
+  	  add teacher	usingPCB psb2.coursePCB	 			//0
+  	  		with #dli{ISRT course (course# = :course.courseno) //0
+  	  					   teacher			  			//0
+  	  					   offering}; 					//1 The last SSA in the DL/I call must be for teacher
+ 	  add teacher	usingPCB psb2.coursePCB				//0
+  	  		with #dli{ISRT course (course# = :course.courseno) //0
+  	  					   teacher};   	  				//0
+ 	  add teacher	usingPCB psb2.coursePCB				//0
+  	  		with #dli{ISRT course (course# = :course.courseno) //0
+  	  					   course (title >= "abc")		//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call
+  	  					   teacher						//0
+  	  					   offering						//0
+  	  					   teacher};   	 				//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.
+	 // add segment with another PCB and modified SSAs 
+ 	  add teacher usingPCB psb2.offeringPCB 		 	//0
+  	      with #dli{ISRT offering (XLOC = :XLOC) 		//0
+  	  					 teacher};  					//0 
+ 	  add teacher usingPCB psb2.offeringPCB 		 	//0
+  	      with #dli{ISRT offering (XLOC = :XLOC) 		//0
+  	  					 teacher						//0
+	  					 course};  						//1 The last SSA in the DL/I call must be for teacher 
+      add course usingPCB psb2.offeringPCB				//0
+      	  with #dli{ISRT offering (date = "060505")		//0
+      	  				 offering (date = "010205")		//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+      	  				 course};							  				 
+
+  // add arrays - should have same set of errors as single segment adds 
+  	  add students 	usingPCB psb2.coursePCB				//0
+   	  		with #dli{ISRT course (course# = :course.courseno) //0
+  	  					   offering			  			//0
+  	  					   student};					//0
+   	  add teachers	usingPCB psb2.coursePCB				//0
+  	  		with #dli{ISRT course (course# = :course.courseno) //0
+  	  					   teacher			  			//0
+  	  					   offering}; 					//1 The last SSA in the DL/I call must be for teacher
+ 	  add teachers	usingPCB psb2.coursePCB				//0
+  	  		with #dli{ISRT course (course# = :course.courseno) //0
+  	  					   course (title >= "abc")		//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call
+  	  					   teacher						//0
+  	  					   offering						//0
+  	  					   teacher};   	 				//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.
+  	  add teachers 	usingPCB psb2.coursePCB				//0
+   	  		with #dli{ISRT course*D (course# = :course.courseno) //3 A qualified SSA cannot follow a D command code|D is not a valid command code for a ISRT call when the target of the statement is an array|Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement
+  	  					   offering			  			//0
+  	  					   teacher};					//0 	  					   
+ 	  					   				   	    	  
+   // add arrays of segment with another PCB and modified  SSAs 
+   	  add teachers usingPCB psb2.offeringPCB 	 		//0
+  	      with #dli{ISRT offering (XLOC = :XLOC)};		//1 The last SSA in the DL/I call must be for teacher	  					 
+  	  add courses usingPCB psb2.offeringPCB 	 		//0
+  	      with #dli{ISRT offering (XLOC = :XLOC) 		//0
+  	      				 offering (xloc = :xloc)		//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+  	  					 course};						//0
+
+   	// add segments using path calls 
+	// This should basically be the same as add of a single segment except that 
+	//		- there has to be an ssa for every I/O object	
+	// 		- The D command code must be present on the first segment named as a target	
+	//		- when there are multiple segments named, you can't leave out intermediate segments.
+	//		  You don't have to specify higher or lower segments as targets, but you can't skip any.
+	//		  SSAs for higher level segments are optional.
+  	  add course, offering, teacher usingPCB psb2.coursePCB	//0
+   	  		with #dli{ISRT offering*D		  			//1 There must be an SSA for each target of the statement. None found for COURSE
+  	  					   teacher};					//0
+  	  add course, offering, teacher usingPCB psb2.coursePCB						//0
+   	  		with #dli{ISRT course						//1 The D command code is required on the SSA for the course segment
+   	  					   offering*D		  			//0
+  	  					   teacher};					//0
+  	  add course, offering, student usingPCB psb2.coursePCB	//0
+   	  		with #dli{ISRT offering	};		  			//3 The last SSA in the DL/I call must be for student|There must be an SSA for each target of the statement. None found for COURSE|There must be an SSA for each target of the statement. None found for STUDENT
+ 	  add course, offering, teacher	usingPCB psb2.coursePCB	//0
+  	  		with #dli{ISRT course*D 					//0
+  	  					   course (title >= "abc")		//2 A qualified SSA cannot follow a D command code.|Multiple SSAs for DL/I Segment course found
+  	  					   teacher						//0
+  	  					   offering						//0
+  	  					   teacher};   	 				//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.
+  	  					   	        
+  // add segments using path calls, another PCB, and modified SSAs	
+      add offering, teacher usingPCB psb2.offeringPCB   //0
+          with #dli{ISRT teacher}; 						//1 There must be an SSA for each target of the statement. None found for offering.      	  				 
+      add offering, course usingPCB psb2.offeringPCB    //0
+          with #dli{ISRT offering   (XLOC = :XLOC) 		//1 The D command code is required on the SSA for the offering segment.	
+      	  				 course}; 						//0      	  				 
+      add offering, course usingPCB psb2.offeringPCB   	//0
+          with #dli{ISRT course*D (XLOC = :XLOC) 		//1 A qualified SSA cannot follow a D command code
+      	  				 offering}; 					//2 The last SSA in the DL/I call must be for course|The D command code is required on the SSA for the offering segment      	  				 
+       add offering, course usingPCB psb2.offeringPCB   //0
+          with #dli{ISRT offering*D (XLOC = :XLOC) 		//1 A qualified SSA cannot follow a D command code
+          				 offering   (XLOC = :XLOC) 		//2 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.|A qualified SSA cannot follow a D command code
+      	  				 course}; 						//0     	  				 
+  	end  
+
+  	function deleteStmt() 	
+  	// modified SSAs	  
+	  delete student usingPCB psb2.coursePCB			//0
+	  		with #dli{DLET student};	 				//0
+	  delete offering	usingPCB psb2.coursePCB			//0
+	  		with #dli{DLET course						//1 Only one SSA is allowed on a DLET call
+	  					   offering};					//0
+	  delete offering	usingPCB psb2.coursePCB			//0
+	  		with #dli{DLET course};						//1 The last SSA in the DL/I call must be for Offering
+	  delete teacher usingPCB psb2.offeringPCB 			//0
+	  	  		with #dli{DLET teacher};	 			//0
+	  delete offering usingPCB psb2.offeringPCB 		//0
+	  	  		with #dli{DLET teacher};	 			//1 The last SSA in the DL/I call must be for Offering
+	  delete course usingPCB psb2.offeringPCB			//0
+	  			with #dli{DLET offering					//1 Only one SSA is allowed on a DLET call
+	  						   course};		  			//0
+  	end 	
+
+ 	function getStmt() 
+    // get segment with no modifiers and modified SSAs	
+		get student usingPCB psb2.coursePCB				//0
+			with #dli{GU course (course# = :course.courseno)  	//0
+					     offering  };					//1 The last SSA in the DL/I call must be for student  	
+		get teacher usingPCB psb2.coursePCB				//0 
+			with #dli{GU offering						//0
+					     teacher (emp# = :teacher.empno) };		//0	
+		get teacher usingPCB psb2.coursePCB				//0	 
+			with #dli{GU garbage (course# = :course.courseno)  //0
+					     offering						//0 
+					     teacher (emp# = :teacher.empno) };		//0
+		get teacher usingPCB psb2.coursePCB				//0 
+			with #dli{GU course (course# = :course.courseno)   //0
+						 course (title > "abc")			//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering						//0 
+					     teacher (emp# = :teacher.empno) };		//0						     			     					     		     
+    // get segment with another PCB and modified SSAs	
+		get student usingPCB psb2.offeringPCB  			//0
+			with #dli{GU  offering (XLOC = :XLOC)	 	//0
+						  student };				 	//0
+		get student usingPCB psb2.offeringPCB  			//0
+			with #dli{GU  offering (XLOC = :XLOC) };	//1 The last SSA in the DL/I call must be for student
+		get course usingPCB psb2.offeringPCB  			//0
+			with #dli{GU  offering (XLOC = :XLOC)		//0
+						  garbage (course# = :course.courseno)};//1 The last SSA in the DL/I call must be for COURSE
+		get course usingPCB psb2.offeringPCB  			//0
+			with #dli{GU  offering (XLOC = :XLOC)	 	//0
+						  course (title >"defg")		//0
+						  course (course# = :course.courseno)};//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+   	
+  	// get arrays of segments with no modifiers and modified SSAs
+  	// For get by key for arrays, I am assuming all of the same rules/messages as for 
+  	// the get by key for a single segment with the additional validation for the second DL/I call	
+		get students usingPCB psb2.coursePCB			//0
+			with #dli{GU course (course# = :course.courseno)  	//0
+					     offering						//0 
+					     student    					//0 
+					  GN teacher			 };			//1 The last SSA in the DL/I call must be for STUDENT
+		get students usingPCB psb2.coursePCB			//0
+			with #dli{GU course (course# = :course.courseno)  	//0
+					     offering   					//1 The last SSA in the DL/I call must be for student
+					  GN offering 						//1 Only one SSA is allowed for the second DL/I call when the target of the get by key statement is an array
+					  	 student			 };			//0 
+		get teachers usingPCB psb2.coursePCB			//0	 
+			with #dli{GU garbage (course# = :course.courseno)  //0
+					     offering						//0 
+					     teacher (emp# = :teacher.empno)   		//0	
+					  GN teacher			 };			//0
+		get teachers usingPCB psb2.coursePCB			//0 
+			with #dli{GU course (course# = :course.courseno)   //0
+						 course (title > "abc")			//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering						//0 
+					     teacher (emp# = :teacher.empno)   		//0	
+					  GN offering 						//1 Only one SSA is allowed for the second DL/I call when the target of the get by key statement is an array
+					  	 student			 };			//1 The last SSA in the DL/I call must be for TEACHER	
+		get teachers usingPCB psb2.coursePCB			//0 
+			with #dli{GU course*d (course# = :course.courseno) //2 D is not a valid command code for a GU call when the target of the statement is an array|Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the course segment
+					     offering						//0 
+					     teacher (emp# = :teacher.empno)   		//0	
+					  GN teacher			 };						  	 
+ 
+   // get arrays of segment with another PCB and modified SSAs	 
+		get students usingPCB psb2.offeringPCB  		//0
+			with #dli{GU  student  					 	//0
+					  GN offering 						//1 Only one SSA is allowed for the second DL/I call when the target of the get by key statement is an array.		
+					  	 student			 };			//0 						  
+		get students usingPCB psb2.offeringPCB  		//0
+			with #dli{GU  offering (XLOC = :XLOC)  		//1 The last SSA in the DL/I call must be for student
+					  GN  student };	  				//0	
+			  
+		get courses usingPCB psb2.offeringPCB  			//0
+			with #dli{GU  offering (XLOC = :XLOC)	 	//0
+						  extra							//0
+						  course (course# = :course.courseno)  //0
+					  GN  teacher };		  			//1 The last SSA in the DL/I call must be for COURSE
+		get courses usingPCB psb2.offeringPCB  			//0
+			with #dli{GU  offering (XLOC = :XLOC)	 	//0
+						  course (title >"defg")		//0
+						  course (course# = :course.courseno)  //1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+					  GN offering 						//1 Only one SSA is allowed for the second DL/I call when the target of the get by key statement is an array
+					  	 course			 };				//0
+	    // get segments using path calls and modified SSAs	
+		get course, offering, student usingPCB psb2.coursePCB	//0
+			with #dli{GU course*D (course# = :course.courseno) //1 There must be an SSA for each target of the statement. None found for STUDENT
+					     offering	};					//2 The last SSA in the DL/I call must be for student|The D command code is required on the SSA for the offering segment     					     
+		get offering, teacher usingPCB psb2.coursePCB	//0
+			with #dli{GU offering*D						//0
+					     teacher (emp# = :teacher.empno) };		//0
+		//I'm OK if you want to suppress one or the other of these messages
+		get course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GU course*D (course# = :course.courseno) //1 There must be an SSA for each target of the statement. None found for Offering
+					     teacher (emp# = :teacher.empno) };		//0
+		get course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GU course*D (course# = :course.courseno) //0
+					     offering						//1 The D command code is required on the SSA for the offering segment
+					     extra							//0
+					     teacher (emp# = :teacher.empno) };		//0
+		get course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GU course (course# = :course.courseno)   //1 The D command code is required on the SSA for the course segment
+						 course (title > "abc")			//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering						//1 The D command code is required on the SSA for the offering segment
+					     teacher (emp# = :teacher.empno) };		//0
+   // get segments using path calls, another PCB, and modified SSAs
+		get offering, student usingPCB psb2.offeringPCB //0
+			with #dli{GU  offering*D (XLOC = :XLOC)		//1 There must be an SSA for each target of the statement. None found for STUDENT
+						  course };						//1 The last SSA in the DL/I call must be for student						  
+		get offering, teacher usingPCB psb2.offeringPCB //0
+			with #dli{GU  teacher (emp# = :teacher.empno)};		//1 There must be an SSA for each target of the statement. None found for Offering
+		get offering, teacher usingPCB psb2.offeringPCB //0 
+			with #dli{GU  offering*D (XLOC = :XLOC)		//0
+						  extra							//0
+					      teacher (emp# = :teacher.empno)};		//0
+ 		get offering, teacher usingPCB psb2.offeringPCB //0 
+			with #dli{GU  offering*D (XLOC = :XLOC)		//0
+						  teacher (emp# = :teacher.empno)		//0
+						  teacher (emp# = :teacher.empno)};		//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.    					     
+	end  
+	
+ 	function getForUpdateStmt() 
+
+		get student forupdate usingPCB psb2.coursePCB	//0
+			with #dli{GHU course (course# = :course.courseno)  //0
+					     offering  };					//1 The last SSA in the DL/I call must be for student  	
+		get teacher forupdate usingPCB psb2.coursePCB	//0 
+			with #dli{GHU offering						//0
+					     teacher (emp# = :teacher.empno) };		//0	
+		get teacher forupdate usingPCB psb2.coursePCB	//0 
+			with #dli{GHU course (course# = :course.courseno)  //0
+						 extra	 						//0
+					     offering						//0 
+					     teacher (emp# = :teacher.empno) };		//0	
+		get teacher forupdate usingPCB psb2.coursePCB	//0 
+			with #dli{GHU course (course# = :course.courseno)  //0
+						 course (title > "abc")			//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering						//0 
+					     teacher (emp# = :teacher.empno) };		//0							   
+   // get segment with another PCB and modified SSAs	
+		get student forupdate usingPCB psb2.offeringPCB //0
+			with #dli{GHU  offering (XLOC = :XLOC) };	//1 The last SSA in the DL/I call must be for student
+		get course forupdate usingPCB psb2.offeringPCB  //0
+			with #dli{GHU  course (course# = :course.courseno)};//0
+		get course forupdate usingPCB psb2.offeringPCB  //0
+			with #dli{GHU  offering (XLOC = :XLOC)		//0
+						  garbage (course# = :course.courseno)};//1 The last SSA in the DL/I call must be for COURSE
+		get course forupdate usingPCB psb2.offeringPCB  //0
+			with #dli{GHU  offering (XLOC = :XLOC)	 	//0
+						  course (title >"defg")		//0
+						  course (course# = :course.courseno)};//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+   	
+	    // get segments using path calls and modified SSAs	
+		get course, offering, student forupdate usingPCB psb2.coursePCB		//0
+			with #dli{GHU course*D (course# = :course.courseno)//1 There must be an SSA for each target of the statement. None found for STUDENT 
+					     offering	};					//2 The last SSA in the DL/I call must be for STUDENT|The D command code is required on the SSA for the offering segment
+		get offering, teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHU offering*D					//0
+					     teacher (emp# = :teacher.empno) };		//0
+		get course, offering, teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHU course*D (course# = :course.courseno)//1 There must be an SSA for each target of the statement. None found for Offering
+					     teacher (emp# = :teacher.empno) };		//0
+		get course, offering, teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHU garbage*D (course# = :course.courseno)//2 Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the garbage segment|There must be an SSA for each target of the statement. None found for COURSE
+					     offering						//1 The D command code is required on the SSA for the offering segment
+					     teacher (emp# = :teacher.empno) };		//0	
+		get course, offering, teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHU course (course# = :course.courseno)  //1 The D command code is required on the SSA for the course segment
+						 course (title > "abc")			//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering						//1 The D command code is required on the SSA for the offering segment
+					     teacher (emp# = :teacher.empno) };		//0
+   // get segments using path calls, another PCB, and modified SSAs
+		get offering, student forupdate usingPCB psb2.offeringPCB //0
+			with #dli{GHU  offering*D (XLOC = :XLOC)	//1 There must be an SSA for each target of the statement. None found for STUDENT
+						  course };						//1 The last SSA in the DL/I call must be for student						  
+		get offering, teacher forupdate usingPCB psb2.offeringPCB 	//0
+			with #dli{GHU  teacher (emp# = :teacher.empno)};	//1 There must be an SSA for each target of the statement.
+		get offering, teacher forupdate usingPCB psb2.offeringPCB 	//0 
+			with #dli{GHU  garbage*D (XLOC = :XLOC)		//2 There must be an SSA for each target of the statement. None found for Offering|Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the garbage segment
+						  teacher (emp# = :teacher.empno)};		//0
+ 		get offering, teacher forupdate usingPCB psb2.offeringPCB 	//0 
+			with #dli{GHU  offering*D (XLOC = :XLOC)	//0
+						  teacher (emp# = :teacher.empno)		//0
+						  teacher (emp# = :teacher.empno)};		//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.    					     
+	end 
+ 	  
+ 	function getNextStmt() 
+ 		// It's OK to leave out intervening segments on a Get next call.
+		get next student usingPCB psb2.coursePCB	 	//0
+			with #dli{GN course (course# = :course.courseno)  	//0
+					     offering   };					//1 The last SSA in the DL/I call must be for student			
+  		get next teacher usingPCB psb2.coursePCB		//0 
+			with #dli{GN course 					 	//0
+						 teacher						//0
+					     offering };					//1 The last SSA in the DL/I call must be for teacher
+ 		get next teacher usingPCB psb2.coursePCB		//0 
+			with #dli{GN course 					 	//0
+						 extra	 						//0
+						 offering						//0
+					     teacher };						//0
+ 		get next teacher usingPCB psb2.coursePCB		//0 
+			with #dli{GN course (course# = :course.courseno) 	//0
+						 offering						//0
+						 course (course# = :course.courseno) 	//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+					     teacher };						//0
+
+    // get segment with another PCB and modified SSAs
+		get next student usingPCB psb2.offeringPCB 	 	//0
+			with #dli{GN course (course# = :course.courseno)  	//0
+					     offering   };					//1 The last SSA in the DL/I call must be for student			
+  		get next course usingPCB psb2.offeringPCB 		//0 
+			with #dli{GN offering (XLOC = :XLOC) 		//0
+						extra	 						//0
+						course};						//0
+  		get next course usingPCB psb2.offeringPCB 		//0 
+			with #dli{GN  offering (XLOC = :XLOC) 		//0
+						offering (XLOC = :XLOC) 		//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						course};						//0
+
+  	// get arrays of segments with no modifiers and modified SSAs	
+
+		get next students usingPCB psb2.coursePCB		//0
+			with #dli{GN course (course# = :course.courseno)  	//0
+					     student						//0 
+					     offering    		 };			//1 The last SSA in the DL/I call must be for student
+		get next teachers usingPCB psb2.coursePCB		//0 
+			with #dli{GN offering						//0
+						course (course# = :course.courseno) 	//0
+					     teacher  };					//0
+		get next teachers usingPCB psb2.coursePCB		//0 
+			with #dli{GN garbage (course# = :course.courseno) 	//0
+					     offering						//0 
+					     teacher  };					//0
+		get next teachers usingPCB psb2.coursePCB		//0 
+			with #dli{GN course (course# = :course.courseno) 	//0
+						course							//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+					     offering						//0 
+					     teacher  };					//0
+		// The D command code is invalid because it's presence would require that multiple segments be
+		// listed as I/O objects.  But, you can't specify multiple targets when one is an array.
+		get next teachers usingPCB psb2.coursePCB		//0 
+			with #dli{GN course*d  						//2 D is not a valid command code for a GN call when the target of the statement is an array|Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the course segment
+					     offering						//0 
+					     teacher 		 };	
+
+    // get arrays of segments with another PCB and modified SSAs
+		get next students usingPCB psb2.offeringPCB 	//0
+			with #dli{GN course (course# = :course.courseno)  	//0
+					     student						//0 
+					     offering    		 };			//1 The last SSA in the DL/I call must be for student
+  		get next courses usingPCB psb2.offeringPCB 		//0 
+			with #dli{GN offering (XLOC = :XLOC) 		//0
+						extra	 						//0
+						course};						//0
+  		get next courses usingPCB psb2.offeringPCB 		//0 
+			with #dli{GN  offering (XLOC = :XLOC) 		//0
+						offering (XLOC = :XLOC) 		//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						course};						//0
+  		get next courses usingPCB psb2.offeringPCB 		//0 
+			with #dli{GN offering*d (XLOC = :XLOC)	 	//2 D is not a valid command code for a GN call when the target of the statement is an array|Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the offering segment
+						  course  };					//0
+   
+    // get segments using path calls and modified SSAs
+		get next course, offering, student usingPCB psb2.coursePCB//0
+			with #dli{GN course*D (course# = :course.courseno)	//1 There must be an SSA for each target of the statement. None found for STUDENT
+					     offering	};					//2 The last SSA in the DL/I call must be for STUDENT|The D command code is required on the SSA for the offering segment
+		get next course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GN course*D (course# = :course.courseno)	//1 There must be an SSA for each target of the statement. None found for Offering
+					     teacher };						//0
+		get next course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GN garbage*D (course# = :course.courseno)//2 Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the garbage segment|There must be an SSA for each target of the statement. None found for COURSE
+					     offering						//1 The D command code is required on the SSA for the offering segment
+					     teacher  };					//0	
+		get next course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GN course (course# = :course.courseno)  	//1 The D command code is required on the SSA for the course segment
+						 course (title > "abc")			//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering						//1 The D command code is required on the SSA for the offering segment
+					     teacher (emp# = :teacher.empno) };		//0
+	 			
+    // get segments using path calls, another PCB, and modified SSAs
+		get next offering, student usingPCB psb2.offeringPCB //0
+			with #dli{GN  offering*D (XLOC = :XLOC)			//1 There must be an SSA for each target of the statement. None found for STUDENT
+						  course };							//1 The last SSA in the DL/I call must be for student						  
+		get next offering, teacher usingPCB psb2.offeringPCB//0 
+			with #dli{GN  offering*D (XLOC = :XLOC)	};		//2 There must be an SSA for each target of the statement.|The last SSA in the DL/I call must be for teacher
+		get next offering, teacher usingPCB psb2.offeringPCB//0 
+			with #dli{GN  offering*D (XLOC = :XLOC)			//0
+						  extra								//0
+					      teacher (emp# = :teacher.empno)};			//0
+ 		get next offering, teacher usingPCB psb2.offeringPCB//0 
+			with #dli{GN  offering*D (XLOC = :XLOC)			//0
+						  teacher (emp# = :teacher.empno)			//0
+						  teacher (emp# = :teacher.empno)};			//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.    					     
+	end   
+
+ 	function getNextForUpdateStmt() 
+		get next student forupdate	usingPCB psb2.coursePCB	//0
+			with #dli{GHN  course (course# = :course.courseno)  	//0
+					     offering   };						//1 The last SSA in the DL/I call must be for student			
+		get next teacher forupdate	usingPCB psb2.coursePCB//0 
+			with #dli{GHN  course 					 	//0
+						 extra	 						//0
+						 offering						//0
+					     teacher };						//0
+ 		get next teacher forupdate usingPCB psb2.coursePCB//0 
+			with #dli{GHN  course (course# = :course.courseno) //0
+						 offering						//0
+						 course (course# = :course.courseno) 	//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+					     teacher };						//0
+
+    // get segment with another PCB and modified SSAs
+		get next student forupdate usingPCB psb2.offeringPCB 	//0
+			with #dli{GHN  course (course# = :course.courseno)  		//0
+					     offering   };							//1 The last SSA in the DL/I call must be for student			
+  		get next course forupdate usingPCB psb2.offeringPCB //0 
+			with #dli{GHN  offering (XLOC = :XLOC) 			//0
+						extra	 							//0
+						course};							//0
+  		get next course forupdate usingPCB psb2.offeringPCB //0 
+			with #dli{GHN  offering (XLOC = :XLOC) 			//0
+						offering (XLOC = :XLOC) 			//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+							course};						//0
+
+   // get segments using path calls and modified SSAs
+		get next course, offering, student forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHN  course*D (course# = :course.courseno)	//1 There must be an SSA for each target of the statement. None found for STUDENT
+					     offering	};						//2 The last SSA in the DL/I call must be for STUDENT|The D command code is required on the SSA for the offering segment
+		get next course, offering, teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHN  course*D (course# = :course.courseno)	//1 There must be an SSA for each target of the statement. None found for Offering
+					     teacher };							//0
+		get next course, offering, teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHN  course*D (course# = :course.courseno)	//1 There must be an SSA for each target of the statement. None found for TEACHER  
+					     offering				 };			//2 The last SSA in the DL/I call must be for TEACHER|The D command code is required on the SSA for the offering segment
+		get next course, offering, teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHN  course*D (course# = :course.courseno)	//0
+					     offering							//1 The D command code is required on the SSA for the offering segment
+					     extra								//0
+					     teacher  };						//0
+		get next course, offering, teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHN  course (course# = :course.courseno) 	//1 The D command code is required on the SSA for the course segment
+						 course (title > "abc")				//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering							//1 The D command code is required on the SSA for the offering segment
+					     teacher (emp# = :teacher.empno) };			//0
+	 			
+    // get segments using path calls, another PCB, and modified SSAs
+		get next offering, student forupdate usingPCB psb2.offeringPCB 	//0
+			with #dli{GHN  offering*D (XLOC = :XLOC)					//1 There must be an SSA for each target of the statement. None found for STUDENT
+						  course };										//1 The last SSA in the DL/I call must be for student						  
+		get next offering, teacher forupdate usingPCB psb2.offeringPCB 	//0
+			with #dli{GHN  teacher (emp# = :teacher.empno)};					//1 There must be an SSA for each target of the statement.
+		get next offering, teacher forupdate usingPCB psb2.offeringPCB 	//0 
+			with #dli{GHN  offering*D (XLOC = :XLOC)					//0
+						  extra											//0
+					      teacher (emp# = :teacher.empno)};						//0
+ 		get next offering, teacher forupdate usingPCB psb2.offeringPCB 	//0 
+			with #dli{GHN  offering*D (XLOC = :XLOC)					//0
+						  teacher (emp# = :teacher.empno)						//0
+						  teacher (emp# = :teacher.empno)};						//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.	   
+	end 
+
+ 	function getNextInParentStmt() 
+		get next inparent student usingPCB psb2.coursePCB//0
+			with #dli{GNP course (course# = :course.courseno)  //0
+					     offering   };					//1 The last SSA in the DL/I call must be for student			
+ 		get next inparent teacher usingPCB psb2.coursePCB//0 
+			with #dli{GNP course 					 	//0
+						 teacher						//0
+					     offering };					//1 The last SSA in the DL/I call must be for teacher
+		get next inparent teacher usingPCB psb2.coursePCB//0 
+			with #dli{GNP course 					 	//0
+						 extra	 						//0
+						 offering						//0
+					     teacher };						//0
+		get next inparent teacher usingPCB psb2.coursePCB//0 
+			with #dli{GNP course (course# = :course.courseno) 	//0
+						 offering						//0
+						 course (course# = :course.courseno) 	//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+					     teacher };						//0
+
+    // get segment with another PCB and modified SSAs
+		
+		get next inparent student usingPCB psb2.offeringPCB	//0
+			with #dli{GNP course (course# = :course.courseno)  	//0
+					     offering   };						//1 The last SSA in the DL/I call must be for student			
+  		get next inparent course usingPCB psb2.offeringPCB 	//0 
+			with #dli{GNP offering (XLOC = :XLOC) 			//0
+						extra	 							//0
+						course};							//0
+  		get next inparent course usingPCB psb2.offeringPCB 	//0 
+			with #dli{GNP  offering (XLOC = :XLOC) 			//0
+						offering (XLOC = :XLOC) 			//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+							course};						//0
+
+  	// get arrays of segments with no modifiers and modified SSAs	
+		get next inparent students 	usingPCB psb2.coursePCB	//0
+			with #dli{GNP course (course# = :course.courseno)  	//0
+					     student							//0 
+					     offering    		 };				//1 The last SSA in the DL/I call must be for student
+		get next inparent teachers 	usingPCB psb2.coursePCB	//0 
+			with #dli{GNP course (course# = :course.courseno) 		//0
+						extra								//0
+					     offering							//0 
+					     teacher  };						//0
+		get next inparent teachers 	usingPCB psb2.coursePCB	//0 
+			with #dli{GNP course (course# = :course.courseno) 		//0
+						course								//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+					     offering							//0 
+					     teacher  };						//0
+		// The D command code is invalid because it's presence would require that multiple segments be
+		// listed as I/O objects.  But, you can't specify multiple targets when one is an array.
+		get next inparent teachers usingPCB psb2.coursePCB	//0 
+			with #dli{GNP course*d  						//2 D is not a valid command code for a GNP call when the target of the statement is an array|Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the course segment
+					     offering							//0 
+					     teacher 		 };	
+
+    // get arrays of segments with another PCB and modified SSAs
+		get next inparent students usingPCB psb2.offeringPCB 	//0
+			with #dli{GNP course (course# = :course.courseno)  		//0
+					     student								//0 
+					     offering    		 };					//1 The last SSA in the DL/I call must be for student
+  		get next inparent courses usingPCB psb2.offeringPCB 	//0 
+			with #dli{GNP offering (XLOC = :XLOC) 				//0
+						extra	 								//0
+						course};								//0
+  		get next inparent courses usingPCB psb2.offeringPCB 	//0 
+			with #dli{GNP  offering (XLOC = :XLOC) 				//0
+						offering (XLOC = :XLOC) 				//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						course};								//0
+  		get next inparent courses usingPCB psb2.offeringPCB 	//0 
+			with #dli{GNP offering*d (XLOC = :XLOC)	 			//2 D is not a valid command code for a GNP call when the target of the statement is an array|Every SSA that specifies the D command code must have a corresponding DLISegmentRecord target on the I/O statement. No target was found for the offering segment
+						  course  };							//0
+   
+    // get segments using path calls and modified SSAs
+
+		get next inparent course, offering, student usingPCB psb2.coursePCB//0
+			with #dli{GNP course*D (course# = :course.courseno)//1 There must be an SSA for each target of the statement. None found for STUDENT 
+					     offering	};					//2 The last SSA in the DL/I call must be for STUDENT|The D command code is required on the SSA for the offering segment
+		get next inparent course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GNP course*D (course# = :course.courseno)//1 There must be an SSA for each target of the statement. None found for Offering
+					     teacher };						//0
+		get next inparent course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GNP course*D (course# = :course.courseno)//1 There must be an SSA for each target of the statement. None found for TEACHER
+					     offering				 };		//2 The last SSA in the DL/I call must be for TEACHER|The D command code is required on the SSA for the offering segment
+		get next inparent course, offering, teacher usingPCB psb2.coursePCB//0
+			with #dli{GNP course (course# = :course.courseno)  //1 The D command code is required on the SSA for the course segment
+						 course (title > "abc")			//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering						//1 The D command code is required on the SSA for the offering segment
+					     teacher (emp# = :teacher.empno) };		//0
+	 			
+    // get segments using path calls, another PCB, and modified SSAs
+		get next inparent offering, student usingPCB psb2.offeringPCB 	//0
+			with #dli{GNP  offering*D (XLOC = :XLOC)					//1 There must be an SSA for each target of the statement. None found for STUDENT
+						  course };										//1 The last SSA in the DL/I call must be for student						  
+		get next inparent offering, teacher usingPCB psb2.offeringPCB 	//0
+			with #dli{GNP  teacher (emp# = :teacher.empno)};					//1 There must be an SSA for each target of the statement.
+		get next inparent offering, teacher usingPCB psb2.offeringPCB 	//0 
+			with #dli{GNP  offering*D (XLOC = :XLOC)	};				//2 There must be an SSA for each target of the statement.|The last SSA in the DL/I call must be for teacher
+ 		get next inparent offering, teacher usingPCB psb2.offeringPCB 	//0 
+			with #dli{GNP  offering*D (XLOC = :XLOC)					//0
+						  teacher (emp# = :teacher.empno)						//0
+						  teacher (emp# = :teacher.empno)};						//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.    					     
+	end
+	
+ 	function getNextInParentForUpdateStmt() 
+		get next inparent student forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHNP course (course# = :course.courseno) //0
+					     offering   };					//1 The last SSA in the DL/I call must be for student			
+		get next inparent teacher forupdate usingPCB psb2.coursePCB//0 
+			with #dli{GHNP offering						//0
+						 course (course# = :course.courseno) 	//0
+					     teacher };						//0
+  		get next inparent teacher forupdate usingPCB psb2.coursePCB//0 
+			with #dli{GHNP course  					 	//0
+						 teacher						//0
+					     offering };					//1 The last SSA in the DL/I call must be for teacher
+ 		get next inparent teacher forupdate usingPCB psb2.coursePCB//0
+			with #dli{GHNP offering						//0
+						 extra	 						//0
+					     teacher };						//0
+ 		get next inparent teacher forupdate usingPCB psb2.coursePCB//0 
+			with #dli{GHNP course (course# = :course.courseno) //0
+						 offering						//0
+						 course (course# = :course.courseno) 	//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+					     teacher };						//0
+
+    // get segment with another PCB and modified SSAs
+		get next inparent student forupdate usingPCB psb2.offeringPCB 	//0
+			with #dli{GHNP course (course# = :course.courseno)				  	//0
+					     offering   };									//1 The last SSA in the DL/I call must be for student			
+  		get next inparent course forupdate usingPCB psb2.offeringPCB 	//0 
+			with #dli{GHNP offering (XLOC = :XLOC) 						//0
+						extra					 						//0
+						course};										//0
+  		get next inparent course forupdate usingPCB psb2.offeringPCB	//0 
+			with #dli{GHNP  offering (XLOC = :XLOC)					 	//0
+						offering (XLOC = :XLOC) 						//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						course};										//0
+
+    // get segments using path calls and modified SSAs
+		get next inparent course, offering, student forupdate usingPCB psb2.coursePCB	//0
+			with #dli{GHNP course*D (course# = :course.courseno)		//1 There must be an SSA for each target of the statement. None found for STUDENT
+					     offering	};							//2 The last SSA in the DL/I call must be for STUDENT|The D command code is required on the SSA for the offering segment
+		get next inparent course, offering, teacher forupdate usingPCB psb2.coursePCB	//0
+			with #dli{GHNP course*D (course# = :course.courseno)		//1 There must be an SSA for each target of the statement. None found for Offering
+					     teacher };								//0
+		get next inparent course, offering, teacher forupdate usingPCB psb2.coursePCB	//0
+			with #dli{GHNP course*D (course# = :course.courseno)		//1 There must be an SSA for each target of the statement. None found for TEACHER  
+					     offering				 };				//2 The last SSA in the DL/I call must be for TEACHER|The D command code is required on the SSA for the offering segment
+		get next inparent course, offering, teacher forupdate usingPCB psb2.coursePCB	//0
+			with #dli{GHNP course*D (course# = :course.courseno)		//0
+					     offering								//1 The D command code is required on the SSA for the offering segment
+					     extra									//0
+					     teacher  };							//0
+		get next inparent course, offering, teacher forupdate usingPCB psb2.coursePCB	//0
+			with #dli{GHNP course (course# = :course.courseno)  		//1 The D command code is required on the SSA for the course segment
+						 course (title > "abc")					//1 Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						 offering								//1 The D command code is required on the SSA for the offering segment
+					     teacher (emp# = :teacher.empno) };				//0
+	 			
+    // get segments using path calls, another PCB, and modified SSAs
+		get next inparent offering, student forupdate usingPCB psb2.offeringPCB //0
+			with #dli{GHNP  offering*D (XLOC = :XLOC)							//1 There must be an SSA for each target of the statement. None found for STUDENT
+						  course };												//1 The last SSA in the DL/I call must be for student						  
+		get next inparent offering, teacher forupdate usingPCB psb2.offeringPCB //0
+			with #dli{GHNP  teacher (emp# = :teacher.empno)};							//1 There must be an SSA for each target of the statement.
+
+		get next inparent offering, teacher forupdate usingPCB psb2.offeringPCB //0 
+			with #dli{GHNP  offering*D (XLOC = :XLOC)							//0
+						  extra													//0
+					      teacher (emp# = :teacher.empno)};								//0
+ 		get next inparent offering, teacher forupdate usingPCB psb2.offeringPCB	//0 
+			with #dli{GHNP  offering*D (XLOC = :XLOC)							//0
+						  teacher (emp# = :teacher.empno)								//0
+						  teacher (emp# = :teacher.empno)};								//1 Multiple SSAs for DL/I Segment teacher found. Only one SSA per DL/I segment is allowed in a DL/I call.    					     									 
+	end 	
+	
+  function replaceStmt()
+  	  replace student usingPCB psb2.coursePCB//0
+  	  		with #dli{REPL  course			//0
+						offering			//0
+						student } ;			//0
+  	  replace student usingPCB psb2.coursePCB//0
+  	  		with #dli{REPL  offering } ;	//1 The last SSA in the DL/I call must be for student
+	  replace student usingPCB psb2.coursePCB//0
+  	  		with #dli{REPL  course (course# = :course.courseno)//1 SSAs for the REPL function code cannot contain a qualification statement.
+						offering*n			//0
+						student } ;			//0
+	  replace teacher usingPCB psb2.coursePCB//0
+			with #dli{REPL  course			//0
+						teacher				//0
+						offering };			//1 The last SSA in the DL/I call must be for TEACHER
+	  replace teacher usingPCB psb2.coursePCB//0
+			with #dli{REPL  course			//0
+						offering			//0
+						extra	 			//0
+						teacher };			//0
+	  replace teacher usingPCB psb2.coursePCB//0
+			with #dli{REPL  course			//0
+						offering			//0
+						offering	 		//1 Multiple SSAs for DL/I Segment offering found. Only one SSA per DL/I segment is allowed in a DL/I call.
+						teacher };			//0
+
+    // replace segment with another PCB and modified SSAs 
+	  replace student usingPCB psb2.offeringPCB  		//0
+			with #dli{REPL  offering (XLOC = :XLOC) };	//2 SSAs for the REPL function code cannot contain a qualification statement|The last SSA in the DL/I call must be for STUDENT
+	  replace course usingPCB psb2.offeringPCB  		//0
+			with #dli{REPL  course (course# = :course.courseno)//1 SSAs for the REPL function code cannot contain a qualification statement
+						  offering (XLOC = :XLOC)	 }; //2 SSAs for the REPL function code cannot contain a qualification statement|The last SSA in the DL/I call must be for COURSE						  
+	  replace course usingPCB psb2.offeringPCB  		//0
+			with #dli{REPL  offering (XLOC = :XLOC)	 	//1 SSAs for the REPL function code cannot contain a qualification statement
+						  extra							//0
+						  course (course# = :course.courseno)};//1 SSAs for the REPL function code cannot contain a qualification statement
+	  replace course usingPCB psb2.offeringPCB  		//0
+			with #dli{REPL  offering (XLOC = :XLOC)	 	//1 SSAs for the REPL function code cannot contain a qualification statement
+						  course (title >"defg")		//1 SSAs for the REPL function code cannot contain a qualification statement
+						  course (course# = :course.courseno)};//2 SSAs for the REPL function code cannot contain a qualification statement|Multiple SSAs for DL/I Segment course found. Only one SSA per DL/I segment is allowed in a DL/I call.
+	 
+  end
+
+
+end
+  

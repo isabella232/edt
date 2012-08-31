@@ -1,0 +1,36 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		//set annotation field value in new
+		r1 rec = new rec {tableNames = [["a","b"]]};		//1
+		
+		//apply annotation in new
+		r2 rec = new rec {@I4GLItemsNullable{yes}};			//1
+		
+		//apply annotation on subfield in new
+		r3 rec = new rec {field1 {IsSqlNullable = yes}};	//1
+		r4 rec = new rec {field1 {@IsSqlNullable {yes}}};	//1
+		
+		//set annotation field value for subfield in new
+		r5 rec = new rec {field2 {tableNames = [["a","b"]]}};//1
+	end
+end
+
+Record rec type SQLRecord
+	field1 int;
+	field2 sqlrec;
+end
+
+Record sqlrec type SQLRecord
+end

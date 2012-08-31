@@ -1,0 +1,127 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program arrays_invalid {allowUnqualifiedItemReferences = yes}
+
+//	yy ref Rec1;	// 1 ref modifier cannot be used with a fixed record
+//	a ref[] Rec;	// 1 ref modifier cannot be used with a fixed record
+	notAnArray int;
+	
+	pgmAry1 int[][];   // 0
+	pgmAry2 int[4][4]; // 0
+	pgmAry3 int[][4];  // 1 Once a dimension is left unspecified no further dimensions can be specified.
+	pgmAry4 int[4][];  // 0
+	fixeddimarray int[3]; // 0
+	myarray int[3] = [1,2,3,4]; // 0
+	myarray2 int[] = [1,2,3,4]; // 0
+//	refints ref int[5]; 	// 1 Dimensions may not be specified when the ref modifier is used
+	somerec myrec;          // 0
+	chararray char(3) [3];  // 0
+	recdarray myrec[5];     // 0
+	blobArray blob[];		// 0
+
+	function main()
+	
+		// Don't trip over multiple levels of occurs on a single declaration
+		ary1 int[][] {maxsize=-1}; // 1 Invalid maxSize value -1.
+		ary2 int[4][4]; // 0
+		ary3 int[][4];  // 1 Once a dimension is left unspecified no further dimensions can be specified.
+		ary4 int[4][];  // 0
+		
+		ary5 int[][][] {maxsize=5}; // 0
+//		myints ref[10]int[5];	// 1 When declaring an array of references to an array, no occurs may be specified for the referenced array
+		
+		if (notAnArray in pgmary2[2][1][3]) // 1 pgmary2[2][1] is not an array and cannot be subscripted
+		end
+		// can't assign array to occurred item and vice versa
+		somerec.item2[3,2] = chararray; 	// 1 char and char(3)[] are not compatible types
+		chararray = somerec.item2[3,2];   // 1 char(3)[] and char are not compatible types
+		somerec.item2 = chararray; 		// 1 not compatible
+		chararray = somerec.item2;  	// 1 not compatible
+		
+		
+//		recdarray.item2[1,1,2] = "ab"; // 1 recdarray is an array and is not subscripted
+		recdarray[1][1].item2[2] = "ab"; // 1 recdarray[1] is not an array and cannot be subscripted
+				
+		ary2[2][1][2] = ary5[1][2][3]; // 1 ary2[2][1] is not an array and cannot be subscripted
+		ary2[1] = ary5[1][2][3]; // 1 int[] and int are not compatible types
+		
+		// handle new way to declare constants
+//		const constAry2 String[][2] = [["one", "fish"], ["two", "fish", "extra"]]; // 1 Invalid array literal [[one, fish], [two, fish, extra]]. The size of each element array must be the same.
+		const constAry3 String[3][2] = [["one", "fish", "added"], ["two", "fish", "extra"]]; // 0
+		const constAry4 int[3] = [1, 2, 3, 4]; // 0
+//		const constAry5 int[3] = [1, "B", 3];  // 1 The type of each element literal must be the same.
+//		const constAry6 int[3] = [1, [2], 3];  // 1 The type of each element literal must be the same.
+		
+		// allow dynamic array functions on what used to be a fixed array
+		notAnArray.appendelement(1);	// 1 appendelement cannot be resolved
+		notAnArray.appendall(ary1[1]); 	// 1 appendall cannot be resolved
+//		notAnArray.insertelement(5); 	// 1 insertelement cannot be resolved
+		notAnArray.removeelement(5);	// 1 removeelement cannot be resolved
+		notAnArray.removeall();			// 1 removeall cannot be resolved
+		notAnArray.resize(4);			// 1 resize cannot be resolved
+		notAnArray.setmaxsize(6);		// 1 setmaxsize cannot be resolved
+		myint1 int = notAnArray.getsize();// 1 getsize cannot be resolved
+		myint1 = notAnArray.getmaxsize();	// 1 getmaxsize cannot be resolved
+//		notAnArray.setmaxsizes(3,2,4);		// 1 setmaxsizes cannot be resolved
+	//	array5.setmaxsizes(3,2,4);  // 1 array5 cannot be resolved 
+		
+		recdarray.appendelement(somerec);	// 0
+
+//		ary1 = [[1, 2,3,4,5], [3, 4], [5, 6]]; // 1 The size of each element array must be the same.
+	
+		func1( ary3[3][2], ary1 ); // 1 ary3[3][2] cannot be passed to the inOut parameter p1
+		func2(ary1); 				// 1 ary1 cannot be passed to the inOut parameter p1
+		
+		intArray int[2] ;
+		anInt int ;
+//		intArray.appendElement( intaRRAY ) ; // 1 type of the argument must be compatible with the items contained in the dynamic array qualifier
+		
+//		flexRecArray ref RefFlexRecord2  ;
+//		flexRecArray = new RefFlexRecord2[] ; // 1 not compatible types in the expression
+		
+//		call noneglpgm ary1; 	// 1 noneglpgm must be EGL program in order to pass an array
+		
+		intArray1 int[1];
+		stringArray2 dbchar[];		
+		intArray1 = stringArray2; // 1 not compatible types
+		
+		bVar blob;
+		blobArray = [bVar];			//0
+		blobArray = [1];			//1
+		blobArray = [1, bVar];		//1
+		blobArray = [bVar, bVar];	//0
+	end
+
+	// allow function parms to be defined as arrays	
+	function func1( p1 int[], p2 int[][] ) end // 0
+	
+	// allow function parms to accept array element	
+	function func2( p1 int ) end // 0
+	
+	function func3( p1 int[5], p2 int[][] ) end // 1 The array parameter p1 in the function definition func3 cannot have a dimension specified
+end
+
+Record RefFlexRecord2
+end
+
+record rec1 type basicrecord
+	10 item1 char(4);
+end
+
+record rec type basicrecord
+	10 item1 char(4);
+end
+record myrec type basicrecord
+	10 item1  [3];            
+		15 item2 char(3) [2];
+end

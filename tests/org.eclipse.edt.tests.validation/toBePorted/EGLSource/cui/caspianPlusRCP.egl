@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+RECORD myFormType TYPE ConsoleForm { formsize=[10,55] }
+	* ConsoleField { position=[2,5], value="Some Label" };
+	
+	someField ConsoleField {
+		name="someField", position=[2,20], fieldLen=15,
+		value="", inputRequired=no
+	};
+	
+	someCheckbox ConsoleCheckbox {
+		name = "someCheckbox",
+		bounds=[8, 5, 20, 1],
+		text="Check Me"
+	};
+	
+	someButton ConsoleButton {
+		name = "someButton",
+		bounds=[8, 35, 20, 1],
+		text="Push Me"
+	};
+end
+
+Program pgm
+	myForm myFormType;
+	
+	function main()
+		fieldVar string;
+		boolvar boolean;
+		
+		OPENUI myform.someField, myForm.someCheckbox, myForm.someButton
+			BIND fieldvar, boolvar
+			ONEVENT( BEFORE_FIELD : "someField" )
+			// do something
+			
+			ONEVENT( ConsoleCheckbox.STATE_CHANGED : "someCheckbox" )
+			// do something else
+			
+			ONEVENT( ConsoleButton.PUSHED : "someButton" )
+			// do yet something else
+		END
+	end
+end

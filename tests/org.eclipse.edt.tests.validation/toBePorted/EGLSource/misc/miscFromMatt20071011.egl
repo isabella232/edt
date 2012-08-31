@@ -1,0 +1,59 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record AssertException type Exception end
+
+library Assert type BasicLibrary {}
+	function assertEqual(actual boolean, expected boolean) returns (blob)
+		if (actual != expected) 
+			throw new AssertException;
+		end
+	end
+	
+	function assertEqual(actual int, expected int) returns (clob)
+		if (actual != expected)
+			throw new AssertException;
+		end
+	end
+	
+	function justBooleanAssertEqual(actual boolean, expected boolean)
+	end
+	
+	function justIntAssertEqual(actual int, expected int)
+	end
+end
+
+
+Program OverloadTest
+	use Assert;
+	
+	function main()
+		blobVar blob;
+		clobVar clob;
+		b boolean;
+		i int;
+		
+		blobVar = assertEqual(true, true);	//0
+		clobVar = assertEqual(1,2);			//0
+		
+		justBooleanAssertEqual(b, b);	//0
+		justBooleanAssertEqual(i, i);	//2
+		
+		justIntAssertEqual(b, b);	//2
+		justIntAssertEqual(i, i);	//0
+		
+		justBooleanAssertEqual(true, true);	//0
+		justBooleanAssertEqual(1, 2);		//2
+		
+		justIntAssertEqual(true, true);		//2
+		justIntAssertEqual(1, 2);			//0
+	end
+end

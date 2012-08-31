@@ -1,0 +1,137 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// Note:  most invalid test cases for dynamic types are in the collections and any test cases
+
+Record flexrecd1 type basicrecord
+	item1a char(4);
+	item1b flexrecd2;
+	item1c string;
+	item1d flexrecd3;
+	embed flexrecd4;
+end
+Record flexrecd2 type basicrecord
+	item2a bin(9,4);
+	item2b string;
+	item2c blob;
+	
+end
+record flexrecd3 type basicrecord
+	item3a flexrecd2;
+	item3b any;
+	item3c dictionary;
+end
+record flexrecd4 type basicrecord
+	item4a item4a;
+	item4b fixedrecd1;
+end
+record flexrecdwitharrays type basicrecord
+	flexarray flexrecd2 [];
+end
+dataitem item4a Dictionary {
+			ordering = ByInsertion,
+			id=0001, 
+			lastname="Wilson",
+			firstName="Tim",
+			salary=50000,
+			birthday="021959" }
+end
+dataitem itemxyz Dictionary {
+			ordering = ByInsertion,
+			id=0001, 
+			lastname="Wilson",
+			lastname = "duplicate",       
+			firstName="Tim",
+			salary=50000,
+			birthday="021959",
+			ordering = "mine" }
+end
+record fixedrecd1 type basicrecord
+	10 fixeditem1 int;
+end
+
+Record fixedrecdoccurs type basicrecord
+	10 level10 [3];
+		15 level15 char(4) [2];
+	
+end
+// validate dynamic access at multiple levels
+program mydynamicpgm
+	myflex1 flexrecd1;
+	myflexarray flexrecd1 [];
+	arraywitharray flexrecdwitharrays [3];
+	arraywithoccurs fixedrecdoccurs [4];
+	name1, name2, name3 String;
+	index int;
+	stringindex string;
+	function main()
+			//  a typedef to a flexible record is involved
+			myflex1.item1b.item2b = "abc"; 
+			myflex1.item2b = "abc";   				// 1 myflex1.item2b cannot be resolved   
+
+
+ 			myflex1.item1b["xyz"] = "abc";			// 0
+
+
+			// a typedef to a fixed record is involved
+			myflex1.fixeditem1 = 15;				// 1 myflex1.fixeditem1 cannot be resolved
+
+			myflex1["item4b"].fixeditem1 = "a";		// 1 Once dynamic notation is used in a reference, all remaining qualifications must use dynamic notation
+
+			// now mix in variables, these are all the same as the previous set
+			name1 = "item1d";
+			name2 = "item3a";
+			name3 = "item2a";	
+			
+			// now mix in arrays
+			myflexarray.item1d["item3a"]["item2a"] = 10; 	// 1 myflexarray is an array and is not subscripted 
+			myflexarray.item1d[2]["item3a"]["item2a"] = 10; // 1 myflexarray is an array and is not subscripted
+			myflexarray[2].item1d[2]["item3a"]["item2a"] = 10;	//1 myflexarray[2].item1d is not an array and cannot be subscripted
+			myflexarray[name1][3]["item3a"][name3] = 10;	// 1 myflexarray cannot be accessed with a string subscript
+			myflexarray[stringindex][name1]["item3a"][name3] = 10; // 1 myflexarray cannot be accessed with a string subscript
+		
+			arraywitharray[2].flexarray[1].item2a = 2.1;
+
+
+			arraywitharray.flexarray[2,1]["item2a"] = 2.1;	// 1 arraywitharray is an array and is not subscripted
+			arraywitharray.flexarray[2,1][name3] = 2.1;		// 1 arraywitharray is an array and is not subscripted
+
+			arraywitharray.flexarray[2,index]["item2a"] = 2.1;// 1 arraywitharray is an array and is not subscripted
+			arraywitharray.flexarray[index,1][name3] = 2.1;	// 1 arraywitharray is an array and is not subscripted
+
+	
+			arraywitharray[2].flexarray.item2a[1] = 2.1;		// 1 flexarray is an array and is not subscripted
+			arraywitharray[2].flexarray[1].item2a[1] = 2.1;		//1 arraywitharray[2].flexarray[1].item2a is not an array and cannot be subscripted
+		 	arraywitharray[name3].flexarray[name3][2,1] = 2.1;	// 2 arraywitharray cannot be accessed with a string subscript|Once dynamic notation is used
+			arraywitharray[2].flexarray[stringindex]["item2a"] = 2.1;// 1 arraywitharray[2].flexarray cannot be accessed with a string subscript
+
+
+			
+			// now add expressions as part of the names  keep as variable or string
+			namestart String;
+			namestart = "item";
+			name1 = "1d";
+			name2 = "3a";
+			name3 = namestart + "2a";
+
+
+
+
+			// now arrays of records with multiply occurring items
+			arraywithoccurs[1].level10[3].level15[2] = "abcd";
+
+
+		end
+		
+		function myfunc() returns (int)
+		end
+end

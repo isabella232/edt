@@ -1,0 +1,369 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// formGroupProperties ::= 
+//	[validationBypassKey = keyValue | ( keyValue{, keyValue} )]
+//	[helpKey = keyValue]
+//	[pfKeyEquate =  yes | no]
+//	[alias = “runtimeName”] 
+//	{ screenFloatingArea }
+//	{ printFloatingArea }	
+//
+//	keyValue::=  fn | pfn 
+//	n::=  1-24 for pf keys, 1-64 for fkeys
+//
+//screenFloatingArea::=
+//screenFloatingArea { screenFloatingAreaProperties }
+//
+//screenFloatingAreaProperties::=
+//	[screenSize = ( lines, columns ) | (24, 80) ]
+//	[topMargin =  lines|0 ]
+//	[bottomMargin =  lines|0 ]
+//	[leftMargin =  columns|0 ]
+//	[rightMargin = columns|0 ]
+//
+//printFloatingArea::=
+//printFloatingArea { printFloatingAreaProperties }
+//
+//printFloatingAreaProperties::=  
+//	[deviceType = singleByte | doubleByte]
+//	pageSize = (lines, columns) 
+//	[topMargin =  lines|3 ]
+//	[bottomMargin =  lines|3 ]
+//	[leftMargin =  columns|5 ]
+//	[rightMargin = columns|5 ]
+
+
+FormGroup validFG1               // 0
+{
+	validationBypassKeys = [pf1],  // 0
+	helpKey = pf1,               // 0
+	pfKeyEquate = yes,           // 0
+	alias = "dave",              // 0
+	ScreenFloatingAreas=[
+		@screenFloatingArea {         // 0
+			screenSize = [10,20],    // 0
+			topMargin = 5	         // 0
+		}
+	],
+	PrintFloatingAreas=[
+		@printFloatingArea {          // 0
+			pageSize = [10, 20],     // 0
+			deviceType = singleByte	 // 0
+		}
+	]
+}
+end
+
+FormGroup validFG2                    // 0
+{
+	validationBypassKeys = [pf1,pf2], // 0
+	helpKey = pf5,                    // 0
+	pfKeyEquate = no,                 // 0
+	PrintFloatingAreas=[
+		@printFloatingArea {               // 0
+			pageSize = [10, 20],          // 0
+			deviceType = doubleByte	      // 0
+		}
+	]                                 // 0
+}
+end
+
+FormGroup invalidFG1          // 0
+{
+	validationBypassKeys = 4, // 1
+	helpKey = 5,              // 1
+	pfKeyEquate = 3,          // 1
+	alias = bob,			  // 1
+	ScreenFloatingAreas=[
+		@screenFloatingArea {
+			screenSize = 5,       // 1
+			topMargin = "a"		  // 1
+		}
+	],
+	PrintFloatingAreas=[
+		@printFloatingArea {
+			pageSize = [10, 20],  // 0
+			deviceType = dave	  // 1
+		}
+	]
+}
+end
+
+FormGroup invalidFG2            // 0
+{
+	validationBypassKeys = "a", // 1
+	helpKey = "a",              // 1
+	pfKeyEquate = "a",          // 1
+	ScreenFloatingAreas=[
+		@screenFloatingArea {
+			screenSize = "a",       // 1
+			topMargin = [4]	        // 1
+		}
+	],
+	PrintFloatingAreas=[
+		@printFloatingArea {
+			pageSize = [10, 20],    // 0
+			deviceType = "dave"     // 1
+		}
+	]
+}
+end
+
+FormGroup invalidFG3             // 0
+{
+	validationBypassKeys = pf65, // 1
+	helpKey = [pf1],             // 1
+	pfKeyEquate = [yes],         // 1
+	alias = ["dave"],            // 1
+	ScreenFloatingAreas=[
+		@screenFloatingArea {
+			screenSize = [5, "a"]    // 1
+		}
+	],
+	PrintFloatingAreas=[
+		@printFloatingArea {
+			pageSize = [10, 20],     // 0
+			deviceType = 4           // 1
+		}
+	]
+}
+end
+
+FormGroup invalidFG4                      // 0
+{
+	validationBypassKeys = [ pf1, [pf2]], // 2
+	PrintFloatingAreas=[
+		@printFloatingArea {
+			pageSize = [10, 20],     // 0
+			deviceType = [singleByte]         // 1
+		}
+	]
+}
+end
+
+// Test the alias property
+FormGroup invalidFG5 // 0
+
+	use aliasTestFormOne;  
+	use aliasTestFormTwo;
+	
+	Form FormOne type PRINTFORM
+		{ alias = "FormAlias" }
+	end
+ 
+	Form FormTwo type PRINTFORM
+		{ alias = "FormAlias" } //1
+	end
+	
+	Form FormThree type PRINTFORM
+		{ alias = "FormOne" } //1
+	end
+	  
+	Form FormSix type PRINTFORM 
+		{ alias = "UseFormAlias"} //1
+	end 
+	
+	// BWS - 10/29/2004 - This is a bug that needs to be fixed
+	Form FormSeven type PRINTFORM //1
+	end 
+end
+
+Form aliasTestFormOne type PRINTFORM
+	{ alias = "UseFormAlias"}
+end
+
+Form aliasTestFormTwo type PRINTFORM
+	{ alias = "FormSeven" }
+end
+
+FormGroup nestedFormTestFormGroup //0
+	
+	Form msgFieldFormOne type printForm
+		{ msgField = field1, //0
+		  formSize = [100, 100] //0
+		} 
+		field1 char(10) ;
+	end
+	
+	Form msgFieldFormTwo type printForm
+		{ msgField = "fieldA", //1
+		  formSize = [10, 20] //0
+		} 
+		field1 char(10);
+		field2 char(10);
+		fieldA char(10);
+	end
+	
+	Form msgFieldFormThree type printForm
+		{ msgField = fieldA, //1
+		  formSize = [10, 20]} //0
+		field1 char(10);
+	end
+	
+	Form cursorFormOne type textForm
+		{field1{cursor = yes}, //0 
+		 formSize = [10, 20] //0
+		 }
+		field1 char(10);
+	end
+	
+	Form cursorFormTwo type textForm
+		{field1{cursor = yes}, //0
+		  field2{cursor = yes}, //0
+		  formSize = [10, 20] //0
+		 }
+		field1 char(10) {position=[1,1]};
+		field2 char(10) {position=[2,1]}; //1
+	end
+	
+	Form cursorFormThree type printForm
+		{field1{cursor = yes}, //0
+		 formSize = [10, 20] //0
+		 }
+		field1 char(10);
+	end
+	
+	Form validationOrderFormOne type textForm
+		{field1{validationOrder = 1}, //0
+	     formSize = [10, 20] //0
+		 }
+		field1 char(10) {position=[1,1]};
+		field2 char(10) {position=[2,1]}; //0
+	end
+	
+	Form validationOrderFormTwo type textForm
+		{field1{validationOrder = 1}, //0
+		 field2{validationOrder = 2}, //0
+		 formSize = [10, 20] //0
+		 }
+		field1 char(10);
+		field2 char(10); 
+	end
+	
+	Form validationOrderFormTwo type printForm
+		{field1{validationOrder = 1}, //0
+		 formSize = [10, 20] //0
+		 }
+		field1 char(10);
+	end
+	
+	Form formSizeFormOne type printForm //1
+		{}
+		field1 char(10);
+		field2 char(10); 
+	end
+end
+
+FormGroup deviceTypeFormGroupOne  // 0
+{
+	PrintFloatingAreas=[
+		@printFloatingArea {               // 0
+			pageSize = [10, 20],          // 0
+			deviceType = deviceTypeKind.doubleByte	      // 0
+		}
+	]                                 // 0
+}
+end
+
+FormGroup deviceTypeFormGroupTwo                    // 0
+{
+	PrintFloatingAreas=[
+		@printFloatingArea {               // 0
+			pageSize = [10, 20],          // 0
+			deviceType = egl.ui.text.deviceTypeKind.doubleByte	      // 0
+		}
+	]                                 // 0
+}
+end
+
+FormGroup deviceTypeFormGroupThree                    // 0
+{
+	PrintFloatingAreas=[
+		@printFloatingArea {               // 0
+			pageSize = [10, 20],          // 0
+			deviceType = DEVICETYPEKIND.singleByte	      // 0
+		}
+	]                                 // 0
+}
+end
+
+FormGroup deviceTypeFormGroupFour                   // 0
+{
+	PrintFloatingAreas=[
+		@printFloatingArea {               // 0
+			pageSize = [10, 20],          // 0
+			deviceType = EGL.UI.TEXT.DEVICETYPEKIND.singleByte	      // 0
+		}
+	]                                 // 0
+}
+end
+
+FormGroup helpKeyFormGroup1                   // 0
+{
+	helpKey = pf1 //0
+}
+end
+
+FormGroup helpKeyFormGroup2                   // 0
+{
+	helpKey = pfKeyKind.pf1 //0
+}
+end
+
+FormGroup helpKeyFormGroup3                   // 0
+{
+	helpKey = egl.ui.pfKeyKind.pf2 //0
+}
+end
+
+FormGroup helpKeyFormGroup4                   // 0
+{
+	helpKey = "pf1" //1
+}
+end
+
+FormGroup helpKeyFormGroup5                   // 0
+{
+	helpKey = ["pf1"] //1
+}
+end
+
+FormGroup validationBypassKeysFormGroup1 // 0
+	{validationBypassKeys = [pf1] //0
+	 }
+end
+
+FormGroup validationBypassKeysFormGroup2 // 0
+	{validationBypassKeys = [pfKeyKind.pf1, pfKeyKind.pf2] //0
+	 }
+end
+
+FormGroup validationBypassKeysFormGroup3 // 0
+	{validationBypassKeys = [egl.ui.pfKeyKind.pf2] //0
+	 }
+end
+
+FormGroup validationBypassKeysFormGroup4 // 0
+	{validationBypassKeys = pf1 //1
+	 }
+end
+
+FormGroup validationBypassKeysFormGroup5 // 0
+	{validationBypassKeys = ["pf1"] //1
+	 }
+end
+
+FormGroup validationBypassKeysFormGroup6 // 0
+	{validationBypassKeys = "pf1" //1
+	 }
+end

@@ -1,0 +1,380 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+Record myuirec1 type vguirecord
+	10 item1 char(4);
+end
+
+Record mybasicrec1 type basicRecord
+	10 item1 char(4);
+end
+///
+/// Program properties tests
+///
+
+Program myWebProgram1 type VGWebTransaction
+		// invalid properties
+	   {alias = "name",							//0
+		allowUnqualifiedItemReferences = yes,	//0
+		handleHardIOErrors = yes,				//0
+		includeReferencedFunctions = yes,		//0
+		inputForm = myform,			//2 inputForm cannot be resolved
+		inputRecord = myrecord,		//1 value for property inputRecord must match a data declaration
+		inputUIRecord = myuirecord,	//1 value for property inputUIRecord must match a data declaration
+		localSQLScope = no,						//0
+		msgTablePrefix = "abc",					//0
+		segmented = no,				//1 segmented cannot be resolved
+		throwNrfEofExceptions = yes }			//0
+		function main()							//0
+		end										//0
+end
+
+Program myWebProgram2 type VGWebTransaction
+		// valid properties, but invalid values
+		// Note that we should no longer get a message on duplicate properties but should use the last one. 
+	   {alias = name,			//1
+		alias = [123],			//1
+		alias = "a.b.c",		//0
+		allowUnqualifiedItemReferences = "abc", //1
+		allowUnqualifiedItemReferences = 1.23,	//1
+		allowUnqualifiedItemReferences = def,	//1 AllowUnqualifiedItemReferences.  The value for this property must be one of the following 
+		handleHardIOErrors = "abc", 			//1
+		handleHardIOErrors = 1.23,				//1
+		handleHardIOErrors = def,				//1 HandleHardIOErrors.  The value for this property must be one of the following 
+		includeReferencedFunctions = "abc", 	//1
+		includeReferencedFunctions = 1.23,		//1
+		includeReferencedFunctions = def,		//1 IncludeReferencedFunctions.  The value for this property must be one of the following 
+		
+		inputRecord = yes,						//1
+		inputRecord = 1.23,						//1
+		inputRecord = def,						//1
+		inputUIRecord = yes, 					//1
+		inputUIRecord = 1.23,					//1
+		inputUIRecord = def,					//1
+		localSQLScope = "abc", 					//1
+		localSQLScope = 1.23,					//1
+		localSQLScope = def,					//1 LocalSQLScope.  The value for this property must be one of the following 
+		msgTablePrefix = no, 					//1
+		msgTablePrefix = [1.23],				//1
+		msgTablePrefix = def,					//1
+		msgTablePrefix = "a.c",					//1 length of the unqualified value c for property msgTablePrefix must be between 3 and 4, inclusive
+		msgTablePRefix = "toolong",				//1 The length of the unqualified value toolong for property msgTablePrefix must be between 3 and 4, inclusive
+	
+		throwNrfEofExceptions = "abc", 			//1
+		throwNrfEofExceptions = 1.23,			//1
+		throwNrfEofExceptions = def,			//1 ThrowNrfEofExceptions.  The value for this property must be one of the following 
+		inputRecord = myrecord,					//1 value for property inputRecord must match a data declaration
+		inputUIRecord = myuirecord}				//1 value for property inputUIRecord must match a data declaration
+
+		function main()							//0
+		end										//0
+end
+
+Record indexrecd type indexedrecord {fileName = "abc", keyitem = "myitem"}
+	10 myitem char(4);
+end
+Program myWebProgram3 type VGWebTransaction
+		indexedRecord indexrecd;				//0
+		ambigRecordName myuirec1;				//0
+		ambigRecordName indexrecd;				//1 The same name ambigRecordName also appears as variable, parameter, use or constant declaration in Function, Program, or Library myWebProgram3
+		// valid properties, but values don't resolve correctly
+		// Note that we should no longer get a message on duplicate properties but should use the last one. 
+	   {inputRecord = ambigRecordName,			//1 The value for property inputRecord must match a data declaration of a basic record.
+		inputUIRecord = ambigRecordName,		//0
+		//wrong type
+		inputUIREcord = indexedrecord,			//1 The value for property inputUIRecord must match a data declaration of a user interface record.
+		//doesn't resolve
+		inputRecord = myrecord,					//1 value for property inputRecord must match a data declaration
+		inputUIRecord = myuirecord}				//1 value for property inputUIRecord must match a data declaration
+
+		function main()
+		end	
+end
+
+Program myWebProgram4 type VGWebTransaction
+{
+		inputRecord = myrecord,				//0
+		inputUIRecord = myuirecord			//0
+}
+	myrecord mybasicrec1;
+	myuirecord myuirecord;
+end
+
+Record staterecord type basicrecord		//0
+	10 item2 char(4);					//0
+end 
+
+Program myWebProgram4a type VGWebTransaction
+	   {inputRecord = myrecord,		//0
+		inputUIRecord = myuirecord}	//0 
+		
+ 		myuirecord myuirecord;			//0
+ 		myrecord staterecord;			//0
+		function main()					//0
+		end	
+end
+
+///
+/// Statements tests
+///
+
+Program myWebProgram5 type VGWebTransaction 
+		(parm1 int)						//0 
+		use myformg;					//1 FormGroups cannot be the target of a use statement in a web transaction.
+		myuirecord myuirecord;			//0
+ 		staterecord staterecord;		//0
+ 		myuirecarray myuirec1[3];		//1 It is invalid to declare an array of VGUIRecords.
+ 		myurl1 string = "http://localhost:8080/VAGenGatewayServlet"; //0
+ 		myurl2 char(41) = "http://localhost:8080/VAGenGatewayServlet"; //0
+ 		myurl3 int;						//0	
+ 		myurl4 dbchar(10);				//0		
+		function main()					//0
+			closeStmt();				//0
+			converseStmt();				//0	
+			formIOStmt();				//0
+			showStmt();					//0
+			transferStmt();				//0
+			recordIOStmt();				//0
+			setStmt();					//0
+			forwardStmt();				//0
+			systemwords();				//0
+		end
+		function closeStmt()			//0
+			close myprintform;			//1 The target of a close statement cannot be a PrintForm in a web transaction
+			close mytextform;			//1 The target of a close statement must be a printform, an SQL, MQ, indexed, relative, CSV, or serial record variable, or a result set identifier
+			close myuirecord;			//1 The target of a close statement must be a printform, an SQL, MQ, indexed, relative, CSV, or serial record variable, or a result set identifier
+		end
+		function converseStmt()			//0
+			converse myuirecord;		//0
+			converse mytextform;		//1 The target of a converse statement in a web program must be a UI record variable. At line 
+		end
+		function formIOStmt()			//0
+			print myprintform;			//1 The print statement may not be used in a web program
+			display mytextform;			//1 The display statement may not be used in a web or basic program
+		end
+		function showStmt()				//0
+			show myuirecord returning to mywebprogram3 passing staterecord; //1 myWebProgram3 input record () is not applicable for the record (staterecord)
+			show myuirecord;			//0
+			show myuirecord returning to "myuirecord"; 			//0
+			show myuirecord returning to sysvar.transfername;	//0
+			show myuirecord returning to transfername;			//0
+			show myuirecord returning to "someprogram";			//0
+			show myuirecord returning to myWebProgram3;			//0
+			show myuirecord returning to mywebprogram4 passing staterecord; //0
+			show myuirecord returning to mywebprogram4 passing textform;	//1 textform cannot be resolved
+			show myuirecord returning to mywebprogram4 passing staterecord.item2; //1 staterecord.item2 must be a record variable
+
+		end
+		function transferStmt()						//0
+			transfer to program mywebprogram3;		//0
+			transfer to mywebprogram3;				//0
+			transfer to transaction mywebprogram3;	//2 The transfer to transaction statement is not supported  | program is not a valid target for transfer to transaction statement
+			transfer to program calledbatch;		//1 The target of transfer to program in a VGWebTransaction or UIProgram must be to the same type of program or a main batch program 
+		end
+		function recordIOStmt()				//0
+			add myuirecord;					//1 The target of an add statement must be an SQL, MQ, indexed, serial, CSV, DL/I segment, or relative record variable or SQL record array, or DL/I segment record array
+			get myuirecord;					//1 The target of a get by key statement must be
+			delete myuirecord;				//1 The record myuirecord for the DELETE statement must be one of the following types: Indexed, Relative, SQL, DL/I segment
+			replace myuirecord;				//1 The target of a replace statement must be an SQL, relative, DL/I segment, or indexed record variable.
+		end
+		function setStmt()					//0
+			set myuirecord empty;			//0
+//OPEN-QUESTION			set myuirecord initial;			//0
+//OPEN-QUESTION			set myuirecord null; 			//1 ?? is it invalid to set entire record to null??
+			set myuirecord alarm;			//1 The state ALARM is not allowed for a record reference
+			set myuirecord position;		//1 The set statement specifies the POSITION option, which requires myuirecord to be an indexed or DLISegment record
+		end	
+		function forwardStmt()				//0
+			forward to label "mylabel";		//1 forward statement may only be used in a JSFHandler
+			forward to url "myurl";			//1 forward statement may only be used in a JSFHandler  
+			forward to url myurl1;			//1 forward statement may only be used in a JSFHandler
+			forward to url myurl2;			//1 forward statement may only be used in a JSFHandler
+			forward to url myurl3;			//1 forward statement may only be used in a JSFHandler
+			forward to url myurl4;			//2 forward statement may only be used in a JSFHandler|target of forward to url must be a character literal or item
+			forward myuirecord to url "myurl";	//2 forward statement may only be used in a JSFHandler|Arguments are not allowed on a forward to URL statement
+		end
+		function systemwords()
+			myconvID string = conversationID;//0
+			mytermID string = terminalID;	//0
+			mysessionID string =  sessionID;//0
+			setLocale("mylang","cc");		//0
+			setError("myerror");			//0
+			if (eventkey is PF1)			//0
+			end
+		end
+			
+end
+
+Program myWebProgram6 type VGWebTransaction
+		(parm1 int)						//0
+		{includeReferencedFunctions = yes} 
+		use myformg;					//1 FormGroups cannot be the target of a use statement in a web transaction.
+		myuirecord myuirecord;			//0
+ 		staterecord staterecord;		//0
+ 		myurl1 string = "http://localhost:8080/VAGenGatewayServlet"; //0
+ 		myurl2 char(41) = "http://localhost:8080/VAGenGatewayServlet"; //0
+ 		myurl3 int;						//0	 
+ 		myurl4 dbchar(10);					//0			
+		function main()					//0
+			closeStmt();				//0
+			converseStmt();				//0
+			formIOStmt();				//0
+			showStmt();					//0
+			transferStmt();				//0
+			recordIOStmt();				//0
+//OPEN-QUESTION			setStmt();					//2?3 ?? is it invalid to set entire record to null??|alarm is not a valid state for a vgUIrecord|position is not a valid state for a vgUIrecord
+			forwardStmt();				//0
+		end
+end
+
+
+function closeStmt()			//0
+	close myprintform;			//0
+	close mytextform;			//1 The target of a close statement must be a printform, an SQL, MQ, indexed, relative, CSV, or serial record variable, or a result set identifier
+	close myuirecord;			//1 The target of a close statement must be a printform, an SQL, MQ, indexed, relative, CSV, or serial record variable, or a result set identifier
+end
+function converseStmt()			//0 
+	converse myuirecord;		//0
+	converse mytextform;		//1 Invalid identifier mytextform. The target of a converse statement in a web program must be a UI record variable
+end
+function formIOStmt()			//0
+	print myprintform;			//1 The print statement may not be used in a web program
+	display mytextform;			//1 The display statement may not be used in a web or basic program
+end
+function showStmt()				// 0
+	show myuirecord;			//0
+	show myuirecord returning to "myuirecord"; 			//0
+	show myuirecord returning to sysvar.transfername;	//0
+	show myuirecord returning to transfername;			//0
+	show myuirecord returning to "someprogram";			//0
+	show myuirecord returning to myWebProgram3;			//0
+	show myuirecord returning to mywebprogram4 passing staterecord; //0
+	show myuirecord returning to mywebprogram4 passing textform;	//1 textform cannot be resolved
+	show myuirecord returning to mywebprogram4 passing staterecord.item2; //1 The passing record identifier staterecord.item2 must be a record variable
+	show myuirecord returning to mywebprogram3 passing staterecord; //1  myWebProgram3 input record () is not applicable for the record (staterecord) 
+end
+function transferStmt()						//0
+	transfer to program mywebprogram3;		//0
+	transfer to mywebprogram3;				//0
+	transfer to transaction mywebprogram3;	//2 The transfer to transaction statement is not supported in a UIProgram or VGWebTransaction program | program is not a valid target for transfer to transaction statement
+	transfer to program calledbatch;		//1 The target of transfer to program in a VGWebTransaction or UIProgram must be to the same type of program or a main batch program 
+end
+function recordIOStmt()						//0
+	add myuirecord;							//1 The target of an add statement must be an SQL, MQ, indexed, serial, CSV, DL/I segment, or relative record variable or SQL record array, or DL/I segment record array
+	get myuirecord;							//1 Invalid target myuirecord. The target of a get by key statement must be an SQL, indexed, relative, or DL/I segment record variable or an SQL record array
+	delete myuirecord;						//1 The record myuirecord for the DELETE statement must be one of the following types: Indexed, Relative, SQL, DL/I segment
+	replace myuirecord;						//1 Invalid target myuirecord. The target of a replace statement must be an SQL, relative, DL/I segment, or indexed record variable
+end
+function setStmt()							//0
+	set myuirecord empty;					//0
+	set myuirecord initial;					//0
+	myuirecord = null; 						//0 
+	set myuirecord alarm;					//0 
+	set myuirecord position;				//0 
+end	
+function forwardStmt()						//0
+	forward to label "mylabel";				//0
+	forward to url "myurl";					//0  
+	forward to url myurl1;					//0
+	forward to url myurl2;					//0
+	forward to url myurl3;					//0
+	forward to url myurl4;					//1 The target of forward to url must be a character literal or item
+	forward myuirecord to url "myurl";		//1 Arguments are not allowed on a forward to URL statement.
+end
+
+handler mypagehandler1 type JSFHandler 
+ 		myurl1 string = "http://localhost:8080/VAGenGatewayServlet";   //0
+ 		myurl2 char(41) = "http://localhost:8080/VAGenGatewayServlet"; //0
+ 		myurl3 int;						//0	 
+ 		myurl4 dbchar(10);					//0
+ 		myuirecarray myuirec1[3];		//1 It is invalid to declare an array of VGUIRecords.
+		myuirecord myuirecord;			//0
+		function forwardStmt()						//0
+			forward to label "mylabel";				//0
+			forward to url "myurl";					//0
+			forward to url myurl1;					//0
+			forward to url myurl2;					//0
+			forward to url myurl3;					//0
+			forward to url myurl4;					//1 The target of forward to url must be a character literal or item
+			forward myuirecord to url "myurl";		//1 Arguments are not allowed on a forward to URL statement
+		end
+end
+
+formgroup myformg 
+	form mytextform type textform {formsize=[24,80]}	//0
+	end		
+	form myprintform type printform {formsize=[24,80]}	//0
+	end
+end
+
+Program myBasicProgram1 type textuiprogram
+		use myformg;					//0
+		myuirecord myuirecord; 			//0
+ 		myuirecarray myuirec1[3];		//1 It is invalid to declare an array of VGUIRecords.
+		function main()
+			converse myuirecord;		//1 The target of a converse statement in a textUI program must be a text form
+			show myuirecord;			//1 The target of the show statement can only be a VGUIRecord in a VGWebTransaction program
+			show myuirecord returning to "myuirecord"; 	//1 The target of the show statement can only be a VGUIRecord in a VGWebTransaction program
+			transfer to program mywebprogram3;		//0
+			transfer to mywebprogram3;				//0
+			transfer to transaction mywebprogram3;	//1 program is not a valid target for transfer to transaction statement
+			transfer to mywebprogram3 passing myuirecord;//1 myWebProgram3 input UI record () is not applicable for the UI record (MyUIRecord). At line
+			transfer to mywebprogram4 passing myuirecord;//0
+		end	
+end
+
+Program myBasicProgram2 type basicprogram
+		use myformg;					//0
+		myuirecord myuirecord;			//0
+ 		
+		function main()
+			converse myuirecord;		//1 converse statement may not be used in a basic program
+			show myuirecord;			//2 show statement may not be used in a web or basic program | The target of the show statement can only be a VGUIRecord in a VGWebTransaction program
+			show myuirecord returning to "myuirecord"; 	//2 show statement may not be used in a web or basic program | The target of the show statement can only be a VGUIRecord in a VGWebTransaction program
+		end	
+end
+
+Program calledbatch(i int)
+end
+
+///
+/// Tests for UI record item properties
+///
+
+// just to prove the syntax for an initializier
+Record myflexxyz
+	buttomitem char(1)[3] = [ "E", "H", "C" ]; //0
+end
+//from the spec as a starting point for error cases.
+Record  MyUIRecord  Type  VGUIRecord 
+		{ commandValueItem=buttonValue }	//0
+	10 formItem  char(21)					//0 
+	   {uiType=uiForm, 						//0
+        @programLinkData { 					//0
+			programName="NewPgm",			//0
+			newWindow=yes,					//0
+			uiRecordName="NewUIR",			//0
+			linkParms = [					//0
+			   				@LinkParameter { name="key1", value="value1" },		//0
+			   				@LinkParameter { name="key2", valueRef=refItem }	//0
+						]				
+        }
+	   };
+	  20 nametem  char(16)	{ uiType=input, inputRequired=yes }; 			//0
+	  20 buttonItem char(1)[3]	{uiType=submit,			//0
+  								 displayName="Enter \n Help \n Cancel"	//0
+								} 						//0
+								= [ "E", "H", "C" ];	//0
+	  20 buttonValue char(1) { uiType=none };			//0
+      20 refItem     char(1) { uiType=none };			//0
+End

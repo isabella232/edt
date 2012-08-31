@@ -1,0 +1,201 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+ExternalType SomeType type JavaObject		//0
+	f1 int;									//0
+	f2 String;								//0
+	constructor (s1 String in , s2 String in);		//0
+	function func();						//0
+End
+
+Program pgm
+	function main()
+		myType SomeType = new SomeType("string1", "string2") {	//0
+			f1 = 100,											//0
+			f2 = "Some string data"								//0
+		};
+		
+		myType = new SomeType();								//1 A constructor for SomeType which matches the supplied arguments could not be found
+		
+		myType.func();		//0		
+		myType.fred();		//1 cannot be resolved
+		
+		myType.f1 = myType.f2;	//0
+		myType.fred = 10;		//1 cannot be resolved
+		
+		thing any = myType;										//0
+		(thing as SomeType).func();								//0
+		(thing as SomeType).fred();								//1 cannot be resolved
+		(thing as SomeType).f1 = 10;							//0
+		(thing as SomeType).fred = 10;							//1 cannot be resolved
+		
+		thing = new ConsoleField(1);							//1 A constructor for ConsoleField which matches the supplied arguments could not be found
+	end
+end
+
+Service svc
+end
+
+ExternalType superType
+	superField int;
+	function superFunc();
+end
+
+ExternalType subType extends superType
+	subField int;
+	function subFunc();
+end
+
+Program pgm2
+	function main()
+		subType subType;
+		superType superType;
+		
+		superType.superField = 10;	//0
+		superType.superFunc();		//0
+		superType.subField = 10;	//1 cannot be resolved
+		superType.subFunc();		//1 cannot be resolved
+		
+		subType.superField = 10;	//0
+		subType.superFunc();		//0
+		subType.subField = 10;		//0
+		subType.subFunc();			//0
+	end
+end
+
+Record JavaProperty type Annotation					//0
+	{ targets = [ ElementKind.FieldMbr ] } 			//0
+	getMethod String;								//0
+	setMethod String;								//0
+end
+
+Record EventListener type Annotation				//0
+	{ targets = [ ElementKind.FieldMbr ] } 			//0
+	addMethod String;								//0
+	listenerType String;							//0
+	method String;									//0
+end
+
+Record JavaName type Annotation										//0
+	{ targets = [ElementKind.FieldMbr, ElementKind.FunctionMbr]}	//0
+	value String;													//0
+end
+
+Record ThrowsExceptions type Annotation				//0
+	{ targets = [ElementKind.FunctionMbr] }			//0
+	value boolean = true;							//0
+end
+
+ExternalType MyObj type JavaObject 						//0
+	{ packageName = "my.pkg" }							//0
+	f1 String;											//0
+	constructor ( s1 String in, s2 String in );			//0
+end
+
+Program pgm3
+	function main()
+		anObj MyObj = new MyObj("abc", "efg"){ f1 = "xyz" };	//0
+	end
+end
+
+ExternalType  MyObj2 type JavaObject { packageName = "my.pkg" }	//0
+	f1 int { @JavaProperty };									//0
+	f2 int { @JavaProperty{ getMethod="getF2" } };				//0
+End
+
+Program pgm4
+	function main()
+		anObj MyObj2 = new MyObj2();		//0
+		anObj.f1 = 5;						//0
+		SomeFunction( anObj.f1 );			//0
+		OtherFunction( anObj.f2 );			//0
+		anObj.f2 = 101;						/*Validation error!*/
+	end
+	
+	function someFunction(p1 int in) end
+	function otherFunction(p1 int in) end
+end
+
+ExternalType MouseEvent type JavaObject		//0
+end
+
+ExternalType SelectionEvent type JavaObject	//0
+end
+
+delegate MouseEventHandler(e MouseEvent in) end			//0
+delegate SelectionEventHandler(e SelectionEvent in) end	//0
+
+ExternalType Button type JavaObject { packageName=".." }	//0
+	
+	mouseUp MouseEventHandler[] { @EventListener{			//1 {might be temporary for V7.0?} type MouseEventHandler cannot be used in a JavaObject ExternalType part
+	  listenerType="org.eclipse...MouseMoveAdapter",		//0
+	  addMethod="addMouseMoveListener" }					//0
+	};
+	mouseDown MouseEventHandler[] { @EventListener{			//1 {might be temporary for V7.0?} type MouseEventHandler cannot be used in a JavaObject ExternalType part
+	  listenerType="org.eclipse...MouseMoveAdapter",		//0
+	  addMethod="addMouseMoveListener" }					//0
+	};
+	mouseDoubleClick MouseEventHandler[] { @EventListener{	//1 {might be temporary for V7.0?} type MouseEventHandler cannot be used in a JavaObject ExternalType part
+	  listenerType="org.eclipse...MouseMoveAdapter",		//0
+	  addMethod="addMouseMoveListener" }					//0
+	};
+	onClick SelectionEventHandler[] { @EventListener{		//1 {might be temporary for V7.0?} type SelectionEventHandler cannot be used in a JavaObject ExternalType part
+	  listenerType="org.eclipse...SelectionAdapter",		//0
+	    addMethod=" addSelectionListener",					//0
+	    method="widgetSelected" }							//0
+	};
+	onDefaultClick SelectionEventHandler[] { 				//1 {might be temporary for V7.0?} type SelectionEventHandler cannot be used in a JavaObject ExternalType part
+	  @EventListener{										//0
+	    listenerType="org.eclipse...SelectionAdapter",		//0
+	    addMethod=" addSelectionListener",					//0
+	    method="widgetDefaultSelected" }					//0
+	};
+end
+
+Program pgm5
+	function main()		
+		myButton Button {				//0
+		  onClick ::= MyButtonClicked	//0
+		};
+	end
+	
+	Function MyButtonClicked(e SelectionEvent in)	//0
+	end
+end
+
+ExternalType Iterator type JavaObject			//0
+	{ packageName="java.util" }					//0
+	Function NextElement() { javaName="next" };	//0
+end
+
+ExternalType DataInput type JavaObject			//0
+	{ packageName="java.io" }					//0
+
+	Function readUTF8() { @ThrowsExceptions };	//0
+end
+
+ExternalType Selection type JavaObject {		//0
+	packageName = "org.eclipse.jface"			//0
+}
+end
+
+ExternalType StructuredSelection extends Selection 			//0
+	type JavaObject { packageName = "org.eclipse.jface" }	//0
+	function getFirstElement() returns(int);				//0
+end
+
+Program pgm6
+	function main() end
+	
+	Function SelectionChanged( sel Selection in)						//0
+		user Any = (sel AS StructuredSelection).getFirstElement();	//0
+	end
+end

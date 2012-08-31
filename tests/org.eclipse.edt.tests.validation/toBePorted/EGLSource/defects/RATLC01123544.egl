@@ -1,0 +1,49 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program prog1 type BasicProgram {V60ExceptionCompatibility = yes}
+	function main()
+		a int;
+		b char(10);
+		z decimal(10,2);
+
+		try
+			execute #sql{ drop table myfoobar };
+		onException
+			displayLineMode( "error on drop: " + currentException.description );
+		end
+
+		try
+			displayLineMode( "setting up the table" );
+			execute #sql{ create table myfoobar (x integer, y varchar(10), z decimal(10,2)) };
+			execute #sql{ insert into myfoobar values (10, 'abcde', 100.01) };
+			execute #sql{ insert into myfoobar values (20, 'ABCDE', 200.02) };
+			execute #sql{ insert into myfoobar values (30, '12345', 300.03) };
+			execute #sql{ insert into myfoobar values (10, '09876', 400.04) };
+
+			displayLineMode( "preparing the statement" );
+			prepare stmt from "select sum(z) from myfoobar where x = ? and y = ?";
+
+			displayLineMode( "running the statement" );
+			a = 20;
+			b = "ABCDE";
+			open rs1 with stmt using a, clip(b) into z;		//1 Invalid expression clip() found in using clause. Only data accesses and string or numeric literals are allowed.
+
+			displayLineMode( "getting the results" );
+			get next from rs1;
+
+			displayLineMode( "got " + z + " (expecting 200.02)" );
+		onException
+			displayLineMode( "error: " + currentException.description );
+		end
+	end
+end

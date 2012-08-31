@@ -1,0 +1,247 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+DataTable myTable type matchValidTable end
+
+function myFunc() end
+
+//---------------------------------------------------------------
+// Numeric and general field properties
+
+Form valid1 type textForm 
+valid1A int { 						//4 isBoolean and numericseparator cannot both be specified. |isBoolean and currency cannot both be specified. |isBoolean and zeroformat cannot both be specified. |isBoolean and validvalues cannot both be specified. 
+	position = [1,2],              // 0
+	currency = yes,                // 0
+	fill = yes,                    // 0
+	detectable = yes,              // 0
+	columns = 1,                   // 0
+	fillCharacter = nullfill,          // 0
+	IsBoolean = yes,                 // 0
+	sign = none,                   // 0
+	modified = yes,                // 0
+	cursor = yes,                  // 0
+	numericSeparator = yes,        // 0
+	minimumInput = 0,              // 0
+	validatorDataTableMsgKey = "9999", // 0
+	highlight = underline,         // 0
+	align = left,                  // 0
+	validatorDataTable = myTable,      // 0
+	validationOrder = 5,           // 0
+	inputRequiredMsgKey = "9999",  // 0
+	value = 5,	                   // 0
+	typeChkMsgKey = "9999",        // 0
+	protect = protect,                 // 0
+	inputRequired = yes,           // 0
+	validValues = [1,2],                 // 0
+	validatorFunctionMsgKey = "9999",      // 0
+	linesBetweenRows = 1,          // 0
+	indexOrientation = across,     // 0
+	validatorFunction = myFunc,            // 0
+	validValuesMsgKey = "9999",          // 0
+	spacesBetweenColumns = 1,      // 0
+	zeroFormat = yes,              // 0
+	minimumInputMsgKey = "9999"    // 0
+}; end
+
+Form valid2 type textForm 
+valid2A int { 					//0
+	currency = no,            // 0
+	fill = no,                // 0
+	detectable = no,          // 0
+	columns = 2,              // 0
+	fillCharacter = "A",      // 0
+	IsBoolean = no,             // 0
+	sign = leading,           // 0
+	modified = no,            // 0
+	cursor = no,              // 0
+	numericSeparator = no,    // 0
+	minimumInput = 1,         // 0
+	validatorDataTableMsgKey = "1", // 0
+	align = right,            // 0
+	inputRequiredMsgKey = "1",  // 0
+	typeChkMsgKey = "1",        // 0
+	protect = noProtect,             // 0
+	inputRequired = no,       // 0
+	validatorFunctionMsgKey = "1",      // 0
+	linesBetweenRows = 2,     // 0
+	indexOrientation = down,  // 0
+	validValuesMsgKey = "1",          // 0
+	spacesBetweenColumns = 2, // 0
+	zeroFormat = no,          // 0
+	minimumInputMsgKey = "1"    // 0
+}; end
+
+Form valid3 type textForm 
+valid3A int { 					//0
+	currency = yes,            // 0
+	currencySymbol = "$",		//0
+	sign = trailing,           // 0
+	validatorDataTableMsgKey = "-1", // 0
+	align = none,              // 0
+	inputRequiredMsgKey = "-1",  // 0
+	typeChkMsgKey = "-1",        // 0
+	protect = skipProtect,            // 0
+	validatorFunctionMsgKey = "-1",      // 0
+	validValuesMsgKey = "-1",          // 0
+	minimumInputMsgKey = "-1"    // 0
+}; end
+
+Form invalid1 type textForm 
+invalid1A int { 				// 10 Property: value.  This property requires an integer value. | Property: validatorDataTableMsgKey.  The value for this property for field invalid1A in invalid1 is invalid.  The value must be an integer between -9999 and 9999.|Property: inputRequiredMsgKey|Property: typeChkMsgKey|validatorFunctionMsgKey|minimumInputMsgKey|
+	position = a,               // 1
+	currency = [yes],           // 1
+	fill = "a",                 // 1
+	detectable = "a",           // 1
+	columns = a,                // 1
+	fillCharacter = [nil],     // 1
+	IsBoolean = "a",              // 1
+	sign = a,                   // 1
+	modified = "a",             // 1
+	cursor = "a",               // 1
+	numericSeparator = "a",     // 1
+	minimumInput = "a",         // 1 
+	validatorDataTableMsgKey = "a", // 0
+	highlight = a,              // 1
+	align = a,                  // 1
+	validatorDataTable = 4,         // 1
+	validationOrder = "1",      // 1
+	inputRequiredMsgKey = "a",  // 0
+	value = "a",                // 0
+	typeChkMsgKey = "a",        // 0
+//	protect = "a",              // 1
+	inputRequired = "a",        // 1
+	validValues = 1,                  // 1
+	validatorFunctionMsgKey = "a",      // 0
+	linesBetweenRows = a,       // 1
+	indexOrientation = a,       // 1
+	validatorFunction = 5,              // 1
+	validValuesMsgKey = "a",          // 0
+	spacesBetweenColumns = a,   // 1
+	zeroFormat = "a",           // 1
+	minimumInputMsgKey = "a"    // 0
+}; end
+
+Form invalid3 type textForm 
+invalid3A int { 					//8 Property: inputRequiredMsgKey.  The value for this property for field invalid3A in invalid3 is invalid.  The value must be an integer between -9999 and 9999.|Property: minimumInputMsgKey.  The value for this property for field invalid3A in invalid3 is invalid.  The value must be an integer between -9999 and 9999.|Property: typeChkMsgKey.  The value for this property for field invalid3A in invalid3 is invalid.  The value must be an integer between -9999 and 9999.|Property: validatorDataTableMsgKey.  The value for this property for field invalid3A in invalid3 is invalid.  The value must be an integer between -9999 and 9999.|Property: validatorFunctionMsgKey.  The value for this property for field invalid3A in invalid3 is invalid.  The value must be an integer between -9999 and 9999.|Property: validValuesMsgKey.  The value for this property for field invalid3A in invalid3 is invalid.  The value must be an integer between -9999 and 9999.
+	position = 5,                    // 1
+	fill = 5,                        // 1
+	detectable = 5,                  // 1
+	columns = [1],                   // 1
+	IsBoolean = 5,                     // 1
+	sign = 5,                        // 1
+	modified = 5,                    // 1
+	cursor = 5,                      // 1
+	numericSeparator = 5,            // 1
+	minimumInput = [0],              // 1
+	validatorDataTableMsgKey = "-10000", // 0
+	highlight = 5,                   // 1
+	align = 5,                       // 1
+	validationOrder = [5],           // 1
+	inputRequiredMsgKey = "-10000",  // 0
+	typeChkMsgKey = "-10000",        // 0
+//	protect = [skip],                // 1
+	inputRequired = 5,               // 1
+	validValues = "a",                     // 1
+	validatorFunctionMsgKey = "-10000",      // 0
+	linesBetweenRows = [1],          // 1
+	indexOrientation = 5,            // 1
+	validValuesMsgKey = "-10000",          // 0
+	spacesBetweenColumns = [1],      // 1
+	zeroFormat = 5,                  // 1
+	minimumInputMsgKey = "-10000"    // 0
+}; end
+
+Form invalid4 type textForm 
+invalid4A int { 
+	position = [[1,2]],           // 1
+	fill = [yes],                 // 1
+	detectable = [yes],           // 1
+	IsBoolean = [yes],              // 1
+	sign = [none],                // 1
+	modified = [yes],             // 1
+	cursor = [yes],               // 1
+	numericSeparator = [yes],     // 1
+	validatorDataTableMsgKey = ["a"], // 1
+	highlight = [underline],      // 1
+	align = [left],               // 1
+	inputRequiredMsgKey = ["a"],  // 1
+	typeChkMsgKey = ["a"],        // 1
+	inputRequired = [yes],        // 1
+	validValues = [1],                  // 0
+	validatorFunctionMsgKey = ["a"],      // 1
+	indexOrientation = [across],  // 1
+	validValuesMsgKey = ["a"],          // 1
+	zeroFormat = [yes],           // 1
+	minimumInputMsgKey = ["a"]    // 1
+}; end
+
+Form invalid5 type textForm 
+invalid5A int { 
+	validValues = [1,2,3]  // 0
+}; end
+
+Form invalid6 type textForm 
+invalid6A int { 
+	validValues = [4,-5]  // 0
+}; end
+
+//---------------------------------------------------------------
+// Character field properties
+
+Form valid1char type textForm 
+valid1A char(24) { 
+	needsSOSI = yes,      // 1 Only mbchar items are allowed to be used for property needsSOSI, but primitive type char was found which does not support multi-byte characters
+	isHexDigit = yes,     // 0
+	value = "a",          // 0
+	isDecimalDigit = yes, // 0
+	upperCase = yes       // 0
+}; end
+
+Form valid2char type textForm 
+valid2A char(24) { 
+	needsSOSI = no,      // 1 Only mbchar items are allowed to be used for property needsSOSI, but primitive type char was found which does not support multi-byte characters
+	isHexDigit = no,     // 0
+	isDecimalDigit = no, // 0
+	upperCase = no       // 0
+}; end
+
+Form invalid1char type textForm 
+invalid1A char(24) { 		//1
+	needsSOSI = "a",      // 2
+	isHexDigit = "a",     // 1
+	value = ["a"],        // 0
+	isDecimalDigit = "a", // 1
+	upperCase = "a"       // 1
+}; end
+
+Form invalid2char type textForm 
+invalid2A char(24) { 
+	needsSOSI = a,      // 1
+	isHexDigit = a,     // 1
+	isDecimalDigit = a, // 1
+	upperCase = a       // 1
+}; end
+
+Form invalid3char type textForm 
+invalid3A char(24) { 
+	needsSOSI = 5,      // 2
+	isHexDigit = 5,     // 1
+	isDecimalDigit = 5, // 1
+	upperCase = 5       // 1
+}; end
+
+Form invalid4char type textForm 
+invalid4A char(24) { 
+	needsSOSI = [yes],      // 2
+	isHexDigit = [yes],     // 1
+	isDecimalDigit = [yes], // 1
+	upperCase = [yes]       // 1
+}; end

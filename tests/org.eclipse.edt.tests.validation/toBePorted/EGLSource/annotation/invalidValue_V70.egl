@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Dataitem dItem int {
+	minimumInput = 5,				//0
+	minimumInput = "5",				//1
+	minimumInput = yes,				//1
+	minimumInput = mathlib.abs(5),	//1
+	minimumInput = abs(5),			//1
+	minimumInput = [5],				//1
+	
+	displayName = 5,				//1
+	displayName = "5",				//0
+	displayName = "5"+"5",			//0
+	displayName = yes,				//1
+	displayName = mathlib.abs(5),	//1
+	displayName = abs(5),			//1
+	displayName = [5]				//1
+}
+end
+
+Record cForm type ConsoleForm
+{
+	formSize = [1,1],		//0
+	formSize = ["1",1],		//1
+	formSize = [1,"1"],		//1
+	formSize = ["1","1"],	//1
+	formSize = 1,			//1	
+	formSize = "1",			//1	
+	formSize = yes,			//1	
+	formSize = [yes]		//1	
+}
+end

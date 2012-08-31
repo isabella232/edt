@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program OpenuiBind type BasicProgram
+	
+	function main()
+		ustr1, ustr2 UNICODE(50);
+		openForm(ustr1, ustr2);
+	end
+	
+	function openForm(vl_dir UNICODE(50) IN, vl_datei UNICODE(50) IN)
+		openUI new Window  {name="w", position=[ 1, 1], hasBorder=YES, formLine=1} end;
+		openWindowWithFormByName("w","My Form");
+		
+		OpenUI { displayOnly=YES }
+		      activeForm.dir,  activeForm.datei bind  vl_dir, vl_datei end;	//0
+		
+		// next line generates IWN.VAL.7706
+		OpenUI  activeForm.dir,  activeForm.datei bind  vl_dir, vl_datei	//0
+		End
+	end 	
+end

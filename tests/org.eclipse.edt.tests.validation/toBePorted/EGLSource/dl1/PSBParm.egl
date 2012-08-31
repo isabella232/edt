@@ -1,0 +1,113 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program Prog1
+( psbData PSBDataRecord ) {							//0
+	@DLI { psbParm=psbData, psb = myPSB }  }	//0
+	myPSB EducationPSB;								//0
+													//0
+	function main() end								//0
+end													//0
+
+/*
+ * 1.  If psbParm is specified, then it's value (unquoted) must match one of
+ *     the parameter names in the called parameter list. We will not verify
+ *     that this parameter actually typedefs to an appropriate structure. The
+ *     user is on their own for this. 
+ */
+Program Prog2
+( psbData PSBDataRecord ) {							//0
+	@DLI { psbParm=psbData2, psb = myPSB }  }	//1 The value "psbData2" for the field PSBParm must match the name of a parameter for program Prog2.
+	myPSB EducationPSB;								//0
+													//0
+	function main() end								//0
+end													//0
+ 
+/*
+ * 2.  It is OK to have psbParm and pcbParms specified together.
+ */
+ 
+ Program Prog3
+( psbData PSBDataRecord,							//0
+  pcb1 IO_PCBRECORD,								//0
+  pcb2 DB_PCBRECORD ) {								//0
+	@DLI { psbParm=psbData,						//0
+	       pcbParms = /*["pcb1", "pcb2" ]*/[pcb1, pcb2],			//0
+	       psb = myPSB }  }						//0
+	myPSB EducationPSB;								//0
+													//0
+	function main() end								//0
+end													//0
+
+Record EducationPSB type PSBRecord {defaultPSBName = "EDUCPSB"}
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};
+ altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};
+	coursePCB DB_PCBRecord { @PCB {
+	  pcbType=DB,
+	  pcbName="CPCB",
+	  hierarchy = [
+	   @Relationship{ segmentRecord="CourseRec" },
+	   @Relationship{
+      segmentRecord="PrerqRec", parentRecord="CourseRec" },   	   @Relationship{
+      segmentRecord="OfferingRec",parentRecord="CourseRec" },  	   @Relationship{
+      segmentRecord="TeacherRec",parentRecord="OfferingRec"},
+	   @Relationship{
+	     segmentRecord="StudentRec", parentRecord="OfferingRec"}
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {
+	  pcbType=DB,
+	  pcbName="OPCB",
+	  secondaryIndex="XLOC",
+	  hierarchy = [
+	   @Relationship{ segmentRecord="OfferingRec" },
+	   @Relationship{
+	     segmentRecord="CourseRec",parentRecord="OfferingRec"},
+	   @Relationship{
+	     segmentRecord="TeacherRec",parentRecord="OfferingRec"},
+	   @Relationship{
+	     segmentRecord="StudentRec",parentRecord="OfferingRec"}
+	  ] }};
+end
+
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end
+DataItem Name char(18) { dliFieldName ="NAME" } end
+
+Record CourseRec type DLISegment 
+{ segmentName="COURSE", keyItem="courseNo" }
+	10 courseNo CourseNo;
+	10 title char(33);
+	10 desc char(220) { dliFieldName="DESCRIPN" };
+end
+
+Record PrerqRec type DLISegment { keyItem="courseNo" }
+	10 courseNo CourseNo;
+	10 title char(33);
+end
+
+Record OfferingRec type DLISegment  { segmentName="OFFRNG" }
+	10 offerdate num(6) { dliFieldName="DATE" };
+	10 location char(12);
+	10 format_ char(2) { dliFieldName="FORMAT" };
+end
+
+Record TeacherRec type DLISegment 
+{ segmentName="TEACHER", keyItem="empNo" }
+	10 empNo EmpNo;
+	10 name Name;
+end 
+
+Record StudentRec type DLISegment { segmentName="STUDENT" }
+	10 empNo EmpNo;
+	10 name Name;
+	10 grade char(1);
+end

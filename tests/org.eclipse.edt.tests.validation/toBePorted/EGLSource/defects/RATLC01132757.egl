@@ -1,0 +1,41 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+/*
+ * Only primitive arrays, record arrays, and data tables should be allowed to 
+ * specify the new selectedRowItem and selectedValueItem properties. The
+ * following should be an error:
+ */
+ 
+Handler myHandler type JSFHandler
+	target1 int;
+	source1 int { selectedRowItem = target1 };			//1
+	
+	target2 int;
+	source2 flexRecord { selectedValueItem = target2 };	//1
+	
+	target8 SRI6;
+	source8 SRI5[3] { selectedRowItem = target8.b };	//0
+end
+
+Record flexRecord
+	field1 int;
+end
+
+record SRI5{}
+		 10 name char(10);
+		 10 age char(10);
+end
+
+record SRI6
+		 10 b int[2];
+		 10 i int[2];
+end

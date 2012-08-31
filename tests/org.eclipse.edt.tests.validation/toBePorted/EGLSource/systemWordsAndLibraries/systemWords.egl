@@ -1,0 +1,1546 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+program SystemFunctionsAsArgs type textUIProgram {allowunqualifieditemreferences = yes}
+
+	use mygroup;
+
+	myblob blob;
+	myclob clob;
+	myreport report;
+	myreportdata reportdata; //0
+	basicrecord basicrecord;
+	text char(5);
+	text8 char(8);
+	dbtext dbchar(4);
+	myunicode unicode(4);
+	mysmallint smallint; 
+	myint int;
+	myfloat float; //0
+	myString string;
+	mydbchar dbchar(5);
+	mymbchar mbchar(10);
+	myhex hex(4);
+	inserts string[];
+	mystringarray string[];
+	myanyarray any[];
+	myWindow Window;
+	myConsoleForm masterConsoleForm;
+	myMenuItem menuItem;
+	myDate Date;
+	myTime Time;
+	myTimeStamp TimeStamp;
+    myInterval Interval("yyyyMM");
+    myArray int[];
+    myDictionary dictionary;	
+    myflexrecord flexrecord;
+	
+	function main()
+	
+		CheckForCorrectNumberOfArgs();
+		CheckThatSystemFunctionsAllowExpressionArgs();
+		CheckThatFunctionsAreAllowedAsArgsToSystemFunctions();
+		
+//		CheckFunctionMustHaveCorrectReturnValueToBeUsedAsArg();
+//		CheckThatFunctionsArePreventedForOUTorINOUTArguments();
+//		CheckSpecialRestrictionsForSystemFunctions();   
+//		CheckMaliciousNesting();
+		display myForm;
+	  
+	end
+	function userdbCharFunction(dbcharParm dbchar(20) in)
+		connect("DEFAULT", getProperty("DEFAULT_USERID"), getProperty("DEFAULT_PASSWORD"), type1, explicit, readCommitted, autoCommit);
+	end
+	function userBinFunction(binParm bin(9,4) in)  
+	end	
+	function userFunctionReturnsCHAR() returns (char(3))
+	end
+	function userFunctionReturnsDBChar() returns (dbchar(4))
+	end
+	function userFunctionReturnsBin() returns (bin(9))
+	end	 
+		
+	/***********************************************************/
+	/********  Check that number of arguments is validated *****/ 
+	/********  correctly                                   *****/  	 
+	/***********************************************************/	
+	function CheckForCorrectNumberOfArgs()
+		/* syslib functions */
+		audit();							//1 requires either 1 or 2 argument
+	 	audit(basicRecord);					//0
+		audit(basicRecord,myint);			//0
+		audit(basicRecord,myint,myint);		//1 requires either 1 or 2 argument
+		beginDataBaseTransaction();			//0
+		beginDataBaseTransaction("dbname");	//0
+		beginDataBaseTransaction("dbname",myint);//1 requires either 0 or 1 arguments
+	//	bytes(text);						//0
+	//	bytes(basicrecord);					//0
+	//	bytes(myflexrecord);				//1 bytes(itemOrRecord) is not applicable
+	//	bytes(mystring);					//1 bytes(itemOrRecord) is not applicable
+	//	bytes(myclob);						//1 bytes(itemOrRecord) is not applicable
+	//	bytes(myblob);						//1 bytes(itemOrRecord) is not applicable
+	//	bytes();							//1 requires exactly 1 argument
+	//	bytes(text,basicrecord);			//1 requires exactly 1 argument
+		myint = bytes(text);				//0
+		myint = bytes(basicrecord);			//0
+		myint = bytes(myflexrecord);		//1 
+		myint = bytes(mystring);			//1 
+		myint = bytes(myclob);				//1 
+		myint = bytes(myblob);				//1 
+		calculateChkDigitMod10("abc");		//1 requires exactly 3 argument
+		calculateChkDigitMod10("abc",5);	//1 requires exactly 3 argument
+		calculateChkDigitMod10("abc",5,4);	//0
+		calculateChkDigitMod10("abc",5,4,3);//1 requires exactly 3 argument
+		calculateChkDigitMod11("abc");		//1 requires exactly 3 argument
+		calculateChkDigitMod11("abc",5);	//1 requires exactly 3 argument
+		calculateChkDigitMod11("abc",5,4);	//0
+		calculateChkDigitMod11("abc",5,4,3);//1 requires exactly 3 argument	
+		callCmd("abc");						//0
+		callCmd("abc","def");				//0
+		callCmd("abc", "def",5);			//1 requires either 1 or 2 argument	
+		commit();							//0
+		commit(5);							//1 requires exactly 0 argument
+		connect("db1", "id");				//1 requires either 3, 4, 5 or 6 arguments
+		connect("db1", "id", "pass"); 		//0
+		connect("db1", "id", "pass"); //0
+		connect("db1", "id", "pass", automatic); //0
+		connect("db1", "id", "pass", automatic,repeatableread); //0
+		connect("db1", "id", "pass", automatic,readcommitted,autocommit ); //0
+		connect("db1", "id", "pass", automatic,readuncommitted,noautocommit,myint); //1 requires either 3, 4, 5 or 6 arguments
+//		connect("db1", "id", "pass", garbage2, garbage3, garbage4); // 4 commit scope must be either type1, type2, or twophase | disconnect option must be either automatic, conditional, or explicit | isolation level must be either repeatableread, serializabletransaction, readuncommitted or readcommitted | commitcontrol must be either noautocommit or autocommit
+
+		convert(text, LOCAL, "table");		//0
+		convert(text, REMOTE, "table");		//0
+		convert(text, LOCAL);					//0
+		convert(text);						//0
+		defineDataBaseAlias("abc");			//1 requires exactly 2 argument
+		defineDataBaseALias("abc", "def");	//0
+		defineDataBaseALias("abc", "def", "ghi");//1 requires exactly 2 argument
+		disconnect();						//0
+		disconnect("abc");					//0
+		disconnect ("abc", "def");			//1 requires either 0 or 1 arguments
+		disconnectall();					//0
+		disconnectall("abc");				//1 requires exactly 0 argument
+	//	getCmdLineArg();					//1 requires exactly 1 argument
+	//	getCmdLineArg(myint);				//0
+		mystring = getcmdlinearg(myint);	//0
+	//	getCmdLineArg(myint, myint);		//1 requires exactly 1 argument
+		mystring = getcmdlinearg(myint,myint);//1 requires exactly 1 argument
+	//	getCmdLineArgCount();				//0
+		myint = getCmdLineArgCount();		//0
+	//	getCmdLineArgCount(myint );			//1 requires exactly 0 argument
+		myint = getCmdLineArgCount(myint);	//1 requires exactly 0 argument
+	//	getMessage("key", inserts);			//0
+		mystring = getMessage("keu", inserts);//0
+	//	getMessage("key" );					//0
+		mystring = getMessage("keu"  );		//0
+	//	getMessage("key", inserts, myint );	//1 requires either 1 or 2 argument
+		mystring = getMessage("keu", inserts, myint );//1 requires either 1 or 2 argument
+	//	getProperty("propName");			//0
+		mystring = getProperty("propName"); //0
+	//	getProperty();						//1 requires exactly 1 argument
+		mystring = getProperty();			//1 requires exactly 1 argument
+	//	getProperty("propName", myint);		//1 requires exactly 1 argument
+		mystring = getProperty("propName","def"); //1 requires exactly 1 argument
+		loadtable("file", "into clause" );	//0
+		loadtable("file", "into clause", "a");//0
+		loadtable("file");					//1 requires either 2 or 3 argument
+		loadtable("file", "into clause", "a", 1);//1 requires either 2 or 3 argument
+	//	maximumsize();						//1 requires exactly 1 argument
+	//	maximumsize(inserts, "abc");		//1 requires exactly 1 argument
+	//	maximumsize(inserts);				//0
+		myint = maximumsize();				//1 requires exactly 1 argument
+	 	myint = maximumsize(inserts, "abc");//1 requires exactly 1 argument
+	 	myint = maximumsize(inserts);		//0
+		purge("abc");						//0
+		purge();							//1 requires exactly 1 argument
+		purge("def", "abc");				//1 requires exactly 1 argument
+		queryCurrentDatabase("abc", "def"); //0
+		queryCurrentDatabase("abc");		//1 requires exactly 2 argument
+		querycurrentdatabase("abc", "def", mystring); //1 requires exactly 2 argument
+		rollback();							//0
+		rollback("abc");					//1 requires exactly 0 argument
+		setCurrentDatabase();				//1 requires exactly 1 argument
+		setcurrentDatabase("abc");			//0
+		setCurrentDatabase("abc", "Def");	//1 requires exactly 1 argument
+		setError();							//1 requires at least 1 argument
+		setError(mystring, "abc");			//0
+		setError(mystring, "abc", mystring);//0
+		setError(this.mystring, "abc");		//0
+		setError("abc");					//0
+//		setLocale("ab");					//1 requires either 2 or 3 arguments
+//		setLocale("ab", "cd");				//0
+//		setLocale("ab", "cd", "ed");		//0
+//		setLocale("ab", "cd", "ed", "gh");	//1 requires either 2 or 3 arguments
+		setRemoteUser("ab");				//1 requires exactly 2 argument
+		setRemoteUser("ab", "cd");			//0
+		setRemoteUser("ab", "cd", "ed");	//1 requires exactly 2 argument
+		myint = size(inserts);			//0
+		startCmd("ab");						//0
+		startCmd("ab", "cd");				//0
+		startCmd("ab", "cd", "ed");			//1 requires either 1 or 2 argument
+		startTransaction(basicrecord);				//0
+		startTransaction(basicrecord, myint);		//0
+		startTransaction(basicrecord, myint, "ed");	//0
+		startTransaction(basicrecord, myint, "ef", "gh");//1 startTransaction requires exactly 1 argument(s)
+		startTransaction(basicrecord, text as char(4));//0
+		startTransaction(basicrecord, myint);//0
+		unloadtable("file", "into clause" );//0
+		unloadtable("file", "into clause", "a");//0
+		unloadtable("file");				//1 requires either 2 or 3 argument
+		unloadtable("file", "into clause", "a", 1);//1 requires either 2 or 3 argument	
+		verifyChkDigitMod10("abc");			//1 requires exactly 3 argument
+		verifyChkDigitMod10("abc",5);		//1 requires exactly 3 argument
+		verifyChkDigitMod10("abc",5,4);		//0
+		verifyChkDigitMod10("abc",5,4,3);	//1 requires exactly 3 argument
+		verifyChkDigitMod11("abc");			//1 requires exactly 3 argument
+		verifyChkDigitMod11("abc",5);		//1 requires exactly 3 argument
+		verifyChkDigitMod11("abc",5,4);		//0
+		verifyChkDigitMod11("abc",5,4,3);	//1 requires exactly 3 argument		
+		wait();								//1 requires exactly 1 argument
+		wait(myint);						//0
+		wait(myint, myint);					//1 requires exactly 1 argument		
+		
+		/* consolelib */
+		activateWindow();					//1 requires exactly 1 argument
+		activateWindow(mywindow);			//0
+		activateWindow(myWindow, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		activateWindowByName();				//1 requires exactly 1 argument
+		activateWindowByName(mystring);		//0
+		activateWindowByName(mystring, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		cancelArrayDelete();				//0
+		cancelArrayDelete(mystring);		//1 requires exactly 0 argument
+		cancelArrayInsert();				//0
+		cancelArrayInsert(mystring);		//1 requires exactly 0 argument
+		clearActiveForm();					//0
+		clearActiveForm(mystring);			//1 requires exactly 0 argument
+		clearActiveWindow();				//0
+		clearActiveWindow(mystring);		//1 requires exactly 0 argument
+		clearFields();						//0
+		clearFields(myConsoleForm.myConsoleField);	//0
+		clearFields(activeForm.myConsoleField as ConsoleField);	//0
+		clearFields(myConsoleForm.myConsoleField,myConsoleForm.myConsoleField);//0
+		clearFieldsByName();				//1 requires at least 1 argument
+		clearFieldsByName(mystring);		//0
+		clearFieldsByName(mystring, text);//0
+		clearFieldsByName(mystring, text, mymbchar,myunicode, "abc");//0
+		clearForm();						//1 requires exactly 1 argument
+		clearForm(myConsoleForm);			//0
+		clearForm(myConsoleForm, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		clearWindow();						//1 requires exactly 1 argument
+		clearWindow(mywindow);				//0
+		clearWindow(myWindow, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		clearWindowByName();				//1 requires exactly 1 argument
+		clearWindowByName(mystring);		//0
+		clearWindowByName(mystring, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		closeActiveWindow();				//0
+		closeActiveWindow(mystring);		//1 requires exactly 0 argument
+		closeWindow();						//1 requires exactly 1 argument
+		closeWindow(mywindow);				//0
+		closeWindow(myWindow, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		closeWindowByName();				//1 requires exactly 1 argument
+		closeWindowByName(mystring);		//0
+		closeWindowByName(mystring, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		currentArrayDataLine();				//0
+		currentArrayDataLine(mystring);		//1 requires exactly 0 argument
+		myint = currentArrayDataLine();		//0
+		myint = currentArrayDataLine(mystring);	//1 requires exactly 0 argument
+		currentArrayScreenLine();			//0
+		currentArrayScreenLine(mystring);	//1 requires exactly 0 argument
+		myint = currentArrayScreenLine();	//0
+		myint = currentArrayScreenLine(mystring);//1 requires exactly 0 argument
+		displayAtLine("abc",myint);			//0
+		displayAtLine("abc");				//1 requires exactly 2 argument
+		displayAtLine("abc", myint, myint); //1 requires exactly 2 argument
+		displayAtPosition("abc",myint,myint);//0
+		displayAtPosition("abc");			//1 requires exactly 3 argument
+		displayAtPosition("abc", myint, myint,mystring); //1 requires exactly 3 argument
+ 		displayError("abc");				//0
+ 		displayError();						//1 requires exactly 1 argument
+ 		displayError("abc", "def");			//1 requires exactly 1 argument
+ 		displayFields();					//0
+		displayFields(myConsoleForm.myConsoleField);//0
+		displayFields(activeForm.myConsoleField as consolefield);//0
+		displayFields(myConsoleForm.myConsoleField,myConsoleForm.myConsoleField);//0
+ 		displayFieldsByName();				//1 requires at least 1 argument
+		displayFieldsByName(mystring);		//0
+		displayFieldsByName(mystring, text);//0
+		displayFieldsByName(mystring, text, mymbchar,myunicode, "abc");//0
+		displayForm();						//1 requires exactly 1 argument
+		displayForm(myConsoleForm);			//0
+		displayForm(myConsoleForm, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		displayFormByName();				//1 requires exactly 1 argument
+		displayFormByName("myForm");		//0
+		displayFormByName("myForm", myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+ 		displayLineMode();					//1 requires exactly 1 argument
+		displayLineMode(mystring);			//0
+		displayLineMode(mystring, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		displayMessage();					//1 requires exactly 1 argument
+		displayMessage(mystring);			//0
+		displayMessage(mystring, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		drawBox(myint);						//1 requires exactly 4 argument 
+		drawBox(myint, myint, myint, myint);//0
+		drawBox(myint, myint, myint, myint,myint);//1 requires exactly 4 argument
+		drawBoxWithColor(myint);			//1 requires exactly 5 argument
+		drawBoxWithColor(myint, myint, myint, myint, red);//0
+		drawBoxWithColor(myint, myint, myint, myint,red, myint);//1 requires exactly 5 argument
+		getKey();							//0
+		getKey("abc");						//1 requires exactly 0 argument
+		myint = getKey();					//0
+		myint = getKey("abc");				//1 requires exactly 0 argument
+		getKeyCode();						//1 requires exactly 1 argument
+		getKeyCode("abc");					//0
+		myint = getKeyCode();				//1 requires exactly 1 argument
+		myint = getKeyCode("abc");			//0
+		getKeyName();						//1 requires exactly 1 argument
+		getKeyName(myint);					//0
+		mystring = getKeyName();			//1 requires exactly 1 argument
+		mystring = getKeyName(myint);		//0
+		gotoField(myConsoleForm.myConsoleField);//0
+		gotoField(activeForm.myConsoleField as consoleField);//0
+		gotoField();						//1 requires exactly 1 argument
+		gotoField(myConsoleForm.myConsoleField, myint);//1 requires exactly 1 argument
+		gotoFieldByName();					//1 requires exactly 1 argument
+		gotoFieldByName("abc");				//0
+		gotoFieldByName("abc", "def");		//1 requires exactly 1 argument
+		gotoMenuItem(myMenuItem);			//0
+		gotoMenuItem();						//1 requires exactly 1 argument
+		gotoMenuItem(myMenuItem, myint);	//1 requires exactly 1 argument
+		gotoMenuItemByName();				//1 requires exactly 1 argument
+		gotoMenuItemByName("abc");			//0
+		gotoMenuItemByName("abc", "def");	//1 requires exactly 1 argument
+		hideErrorWindow();					//0
+		hideErrorWindow(myconsoleForm);		//1 requires exactly 0 argument
+		hideMenuItem(myMenuItem);			//0
+		hideMenuItem();						//1 requires exactly 1 argument
+		hideMenuItem(myMenuItem, myint);	//1 requires exactly 1 argument
+		hideMenuItemByName();				//1 requires exactly 1 argument
+		hideMenuItemByName("abc");			//0
+		hideMenuItemByName("abc", "def");	//1 requires exactly 1 argument
+		hideAllMenuItems();					//0
+		hideAllMenuItems(myMenuItem);		//1 requires exactly 0 argument
+		if (isCurrentField(myConsoleForm.myConsoleField)==yes)//0
+		end
+		if (isCurrentField(activeForm.myConsoleField as consoleField)==yes)//0
+		end
+		if (isCurrentField()==yes	)			//1 requires exactly 1 argument
+		end
+		if (isCurrentField(activeForm.myConsoleField as consoleField,activeForm.myConsoleForm as consoleField)==yes)//1 requires exactly 1 argument
+		end
+		if (isCurrentFieldByName("myfield")==yes)//0
+		end
+		if (isCurrentFieldByName() == yes	)		//1 requires exactly 1 argument
+		end
+		if (isCurrentFieldByName("myfield",activeForm.myConsoleForm)== yes)//1 requires exactly 1 argument
+		end		
+		if (isFieldModified(myConsoleForm.myConsoleField)==yes)//0
+		end
+		if (isFieldModified(activeForm.myConsoleField as consoleField)==yes)//0
+		end
+		if (isFieldModified()==yes	)			//1 requires exactly 1 argument
+		end
+		if (isFieldModified(activeForm.myConsoleField as consoleField,activeForm.myConsoleForm as consoleField)== yes)//1 requires exactly 1 argument
+		end
+		if (isFieldModifiedByName("myfield")== yes)//0
+		end
+		if (isFieldModifiedByName()== yes	)		//1 requires exactly 1 argument
+		end
+		if (isFieldModifiedByName("myfield",activeForm.myConsoleForm)== yes)//1 requires exactly 1 argument
+		end	
+		lastKeyTyped();						//0
+		lastKeyTyped(myconsoleForm);		//1 requires exactly 0 argument
+		myint = lastKeyTyped();				//0
+		myint = lastKeyTyped(myconsoleForm);//1 requires exactly 0 argument
+		nextField();						//0
+		nextField(myconsoleForm);			//1 requires exactly 0 argument
+		openWindow();						//1 requires exactly 1 argument
+		openWindow(mywindow);				//0
+		openWindow(myWindow, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		openWindowByName();					//1 requires exactly 1 argument
+		openWindowByName(mystring);			//0
+		openWindowByName(mystring, myConsoleForm.myConsoleField);//1 requires exactly 1 argument		
+		openWindowWithForm(myWindow);		//1 requires exactly 2 argument
+		openWindowWithForm(mywindow,myConsoleForm);	//0
+		openWindowWithForm(myWindow, myConsoleForm, myconsoleForm.myConsoleField);//1 requires exactly 2 argument
+		openWindowWithFormByName(mystring);	//1 requires exactly 2 argument
+		openWindowWithFormByName(mystring, mystring);//0
+		openWindowWithFormByName(mystring, mystring, myConsoleForm.myConsoleField);//1 requires exactly 2 argument				
+		previousField();					//0
+		previousField(myconsoleForm);		//1 requires exactly 0 argument
+		
+		promptLineMode();					//1 requires exactly 1 argument
+		promptLineMode(mystring);			//0
+		promptLineMode(mystring, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		mystring = promptLineMode();		//1 requires exactly 1 argument
+		mystring = promptLineMode(mystring);//0
+		mystring = promptLineMode(mystring, myConsoleForm.myConsoleField);//1 requires exactly 1 argument
+		scrollDownLines();					//1 requires exactly 1 argument
+		scrollDownLines(myint);				//0
+		scrollDownLines(myint, myint);		//1 requires exactly 1 argument
+		scrollDownPage();					//0
+		scrollDownPage(myint);				//1 requires exactly 0 argument
+		scrollUpLines();					//1 requires exactly 1 argument
+		scrollUpLines(myint);				//0
+		scrollUpLines(myint, myint);		//1 requires exactly 1 argument
+		scrollUpPage();						//0
+		scrollUpPage(myint);				//1 requires exactly 0 argument
+		setArrayLine();						//1 requires exactly 1 argument
+		setArrayLine(myint);				//0
+		setArrayLine(myint, myint);			//1 requires exactly 1 argument
+		setCurrentArrayCount();				//1 requires exactly 1 argument
+		setCurrentArrayCount(myint);		//0
+		setCurrentArrayCount(myint, myint);	//1 requires exactly 1 argument
+		showHelp();							//1 requires exactly 1 argument
+		showHelp(mystring);					//0
+		showHelp(mystring, mystring);		//1 requires exactly 1 argument
+		showMenuItem();						//1 requires exactly 1 argument
+		showMenuItem(myMenuItem);			//0
+		showMenuItem(myMenuItem, mystring);	//1 requires exactly 1 argument
+		showMenuItemByName();				//1 requires exactly 1 argument
+		showMenuItemByName(mystring);		//0
+		showMenuItemByName(mystring, mystring);//1 requires exactly 1 argument
+		showAllMenuItems();					//0
+		showAllMenuItems(myMenuItem);		//1 requires exactly 0 argument
+		
+		
+		/* converselib */
+		clearScreen();						//0
+		clearScreen("abc");					//1 requires exactly 0 argument
+		displayMsgNum();					//1 requires exactly 1 argument
+		displayMsgNum(myint);				//0
+		displayMsgNum(myint, myint);		//1 requires exactly 1 argument
+	//	fieldInputLength();					//1 requires exactly 1 argument
+	//	fieldInputLength(myCharFormField);	//0
+	//	fieldInputLength(myIntFormField);	//0
+	//	fieldInputLength(myIntFormField, myint);//1 requires exactly 1 argument
+		myint = fieldInputLength();			//1 requires exactly 1 argument
+		myint = fieldInputLength(myCharFormField);//0
+		myint = fieldInputLength(myIntFormField);//0
+		myint = fieldInputLength(myIntFormField, myint);//1 requires exactly 1 argument
+		pageEject();						//0
+		pageEject("abc");					//1 requires exactly 0 argument
+		validationFailed();					//0
+		validationFailed(myint);			//0
+		validationFailed(myint, myint);		//1 requires either 0 or 1 argument
+		
+		/* dateTimeLib */
+	//	currentDate();						//0
+	//	currentDate(myint);					//1 requires exactly 0 argument
+		myTime = currentTime();				//0
+		myTime = currentTime(myint);		//1 requires exactly 0 argument
+	//	currentTimeStamp();					//0
+	//	currentTimeStamp(myint);			//1 requires exactly 0 argument
+		myTimeStamp = currentTimeStamp();	//0
+		myTimeStamp = currentTimeStamp(myint);//1 requires exactly 0 argument
+	//	dateOf();							//1 requires exactly 1 argument
+	//	dateOf(mytimestamp);				//0
+	//	dateOf(myTimestamp,mytimestamp);	//1 requires exactly 1 argument
+		mydate = dateOf();					//1 requires exactly 1 argument
+		mydate = dateOf(mytimestamp);		//0
+		mydate = dateOf(myTimestamp,mytimestamp);//1 requires exactly 1 argument
+	//	dateValue();						//1 requires exactly 1 argument
+	//	dateValue(mystring);				//0
+	//	dateValue(mystring,mystring);		//1 requires exactly 1 argument
+		mydate = dateValue();				//1 requires exactly 1 argument
+		mydate = dateValue(mystring);		//0
+		mydate = dateValue(mystring,mystring);//1 requires exactly 1 argument
+	//	dateValueFromGregorian();			//1 requires exactly 1 argument
+	//	dateValueFromGregorian(myint);		//0
+	//	dateValueFromGregorian(myint,myint);//1 requires exactly 1 argument
+		mydate = dateValueFromGregorian();	//1 requires exactly 1 argument
+		mydate = dateValueFromGregorian(myint);	//0
+		mydate = dateValueFromGregorian(myint,myint);//1 requires exactly 1 argument
+	//	dateValueFromJulian();				//1 requires exactly 1 argument
+	//	dateValueFromJulian(myint);			//0
+	//	dateValueFromJulian(myint,myint);	//1 requires exactly 1 argument
+		mydate = dateValueFromJulian();		//1 requires exactly 1 argument
+		mydate = dateValueFromJulian(myint);//0
+		mydate = dateValueFromJulian(myint,myint);//1 requires exactly 1 argument
+	//	dayOf();							//1 requires exactly 1 argument
+	//	dayOf(mytimestamp);					//0
+	//	dayOf(myTimestamp,mytimestamp);		//1 requires exactly 1 argument
+		myint = dayOf();					//1 requires exactly 1 argument
+		myint = dayOf(mytimestamp);			//0
+		myint = dayOf(myTimestamp,mytimestamp);//1 requires exactly 1 argument
+	//	extend();							//1 requires either 1 or 2 argument
+	//	extend(mytimestamp,mystring);		//0
+	//	extend(mydate,mystring);			//0
+	//	extend(mytime,mystring);			//0
+	//	extend(mytimestamp);				//0
+	//	extend(mytimestamp,mystring, mystring);//1 requires either 1 or 2 argument
+		mytimestamp = extend();				//1 
+		mytimestamp = extend(mytimestamp,mystring);	//0
+		mytimestamp = extend(mydate,mystring);//0
+		mytimestamp = extend(mytime,mystring);//0
+		mytimestamp = extend(mytimestamp);	//0
+		mytimestamp = extend(mytimestamp,mystring, mystring);//1
+	//	intervalValue();						//1 requires exactly 1 argument
+	//	intervalValue("123");					//0
+	//	intervalValue("123",mystring);			//1 requires exactly 1 argument
+		myinterval = intervalValue();			//1 requires exactly 1 argument
+		myinterval = intervalValue("123");		//0
+		myinterval = intervalValue("123",mystring);//1 requires exactly 1 argument
+	//	intervalValueWithPattern();				//1 requires either 1 or 2 argument
+	//	intervalValueWithPattern("123");		//0
+	//	intervalValueWithPattern("123",mystring);//0
+	//	intervalValueWIthPattern("123",mystring,mystring);//1 requires either 1 or 2 argument
+		myinterval = intervalValueWithPattern();			//1 requires either 1 or 2 argument
+		myinterval = intervalValueWithPattern("123");		//0
+		myinterval = intervalValueWithPattern("123",mystring);//0
+		myinterval = intervalValueWIthPattern("123",mystring,mystring);//1 requires either 1 or 2 argument
+	//	mdy();								//1 requires exactly 3 argument
+	//	mdy(myint,myint,myint);				//0
+	//	mdy(myint,myint,myint,myint);		//1 requires exactly 3 argument
+		mydate = mdy();						//1 requires exactly 3 argument
+		mydate = mdy(myint,myint,myint);	//0
+		mydate = mdy(myint,myint,myint,myint);//1 requires exactly 3 argument
+	//	monthOf();							//1 requires exactly 1 argument
+	//	monthOf(mytimestamp);				//0
+	//	monthOf(myTimestamp,mytimestamp);	//1 requires exactly 1 argument
+		myint = monthOf();					//1 requires exactly 1 argument
+		myint = monthOf(mytimestamp);		//0
+		myint = monthOf(myTimestamp,mytimestamp);//1 requires exactly 1 argument
+	//	timeOf();							//1 requires exactly 1 argument
+	//	timeOf(mytimestamp);				//0
+	//	timeOf(myTimestamp,mytimestamp);	//1 requires exactly 1 argument
+//		mytime = timeOf();					//1 requires exactly 1 argument
+		mytime = timeOf(mytimestamp);		//0
+//		mytime = timeOf(myTimestamp,mytimestamp);//1 requires exactly 1 argument
+	//	timeStampFrom();					//1 requires exactly 2 argument
+	//	timeStampFrom(mydate,mytime);		//0
+	//	timeStampFrom(mydate,mytime,mytimestamp);//1 requires exactly 2 argument
+		mytimestamp = timeStampFrom();		//1 requires exactly 2 argument
+		mytimestamp = timeStampFrom(mydate,mytime);	//0
+		mytimestamp = timeStampFrom(mydate,mytime,mytimestamp);//1 requires exactly 2 argument
+	//	timeStampValue();					//1 requires exactly 1 argument
+	//	timeStampValue(mystring);			//0
+	//	timeStampValue(mystring,mytimestamp);//1 requires exactly 1 argument
+		mytimestamp = timeStampValue();		//1 requires exactly 1 argument
+		mytimestamp = timeStampValue(mystring);//0
+		mytimestamp = timeStampValue(mystring,mytimestamp);//1 requires exactly 1 argument
+	//	timeStampValueWithPattern();		//1 requires either 1 or 2 argument
+	//	timeStampValueWithPattern(mystring);//0
+	//	timeStampValueWithPattern(mystring,mystring);//0
+	//	timeStampValueWithPattern(mystring,mystring,mystring);//1 requires either 1 or 2 argument
+		mytimestamp = timeStampValueWithPattern();//1 requires either 1 or 2 argument
+		mytimestamp = timeStampValueWithPattern(mystring);	//0
+		mytimestamp = timeStampValueWithPattern(mystring,mystring);//0
+		mytimestamp = timeStampValueWithPattern(mystring,mystring,mystring);//1 requires either 1 or 2 argument
+	//	timeValue();						//1 requires exactly 1 argument
+	//	timeValue(mystring);				//0
+	//	timeValue(mystring,mytimestamp);	//1 requires exactly 1 argument
+		mytime = timeValue();				//1 requires exactly 1 argument
+		mytime = timeValue(mystring);		//0
+		mytime = timeValue(mystring,mytimestamp);//1 requires exactly 1 argument	
+	//	weekdayOf();						//1 requires exactly 1 argument
+	//	weekdayOf(mytimestamp);				//0
+	//	weekdayOf(myTimestamp,mytimestamp);	//1 requires exactly 1 argument
+		myint = weekdayOf();				//1 requires exactly 1 argument
+		myint = weekdayOf(mytimestamp);		//0
+		myint = weekdayOf(myTimestamp,mytimestamp);//1 requires exactly 1 argument
+	//	yearOf();							//1 requires exactly 1 argument
+	//	yearOf(mytimestamp);				//0
+	//	yearOf(myTimestamp,mytimestamp);	//1 requires exactly 1 argument
+		myint = yearOf();					//1 requires exactly 1 argument
+		myint = yearOf(mytimestamp);		//0
+		myint = yearOf(myTimestamp,mytimestamp);//1 requires exactly 1 argument
+
+		/* javaLib */
+	//	getField();							//1 requires exactly 2 argument
+	//	getField((String)mystring,"field"); //0
+	//	getField("myclass","field",mystring);//1 requires exactly 2 argument		
+		mystring = getField() as string;				//1 requires exactly 2 argument
+		mystring = getField("myclass","field") as string;//0
+		mystring = getField("myclass","field",mystring) as string;//1 requires exactly 2 argument
+		myint = getField() as int;					//1 requires exactly 2 argument
+		myint = getField("myclass","field") as int;//0
+		myint = getField("myclass","field",mystring) as int;//1 requires exactly 2 argument
+	//	invoke();							//1 requires at least 2 argument
+	//	invoke((String)mystring,"field");	//0
+	//	invoke("myclass","field",mystring);	//0
+	//	invoke("myclass","field",mystring,myint);//0
+	//	invoke("myclass","field",mystring,myint,myblob);//1	 invoke(string, string, anyEglPrimitive, anyEglPrimitive, anyEglPrimitive) is not applicable for the arguments
+		mystring = invoke() as string;				//1 requires at least 2 argument
+		mystring = invoke("myclass","field") as string;//0
+		mystring = invoke("myclass","field",mystring) as string;//0
+		mystring = invoke("myclass","field",mystring,myint) as string;//0
+	//	isNull();							//1 requires exactly 1 argument
+	//	isNull("abc");						//0
+	//	isNull("abc",mystring);				//1 requires exactly 1 argument	
+		myint = isNull();					//1 requires exactly 1 argument
+//		myint = isNull("abc");				//0
+//		myint = isNull("abc",mystring);		//1 requires exactly 1 argument
+	//	isObjId();							//1 requires exactly 1 argument
+	//	isObjId("abc");						//0
+	//	isObjId("abc",mystring);			//1 requires exactly 1 argument	
+		myint = isObjId();					//1 requires exactly 1 argument
+//		myint = isObjId("abc");				//0
+//		myint = isObjId("abc",mystring);	//1 requires exactly 1 argument
+	//	qualifiedTypeName();				//1 requires exactly 1 argument
+	//	qualifiedTypeName("abc");			//0
+	//	qualifiedTypeName("abc",mystring);	//1 requires exactly 1 argument	
+		mystring = qualifiedTypeName();		//1 requires exactly 1 argument
+//		mystring = qualifiedTypeName("abc");//0
+//		mystring = qualifiedTypeName("abc",mystring);//1 requires exactly 1 argument
+	 	remove();							//1 requires exactly 1 argument
+//		remove("abc");						//0
+//		remove("abc",mystring);				//1 requires exactly 1 argument
+		removeall();						//0
+		removeall("abc");					//1 requires exactly 0 argument
+		setField();							//1 requires exactly 3 argument
+		setField("abc",mystring,mystring);	//0
+		setField("abc",mystring,mystring,mystring);//1 requires exactly 3 argument
+		setField("abc",mystring,myblob);	//1 The argument myblob in function invocation JavaLib.setField is invalid. The argument must have a primitive type.
+		store();							//1 requires at least 3 argument
+//		store("myclass","field");			//1 requires at least 3 argument
+//		store("myclass","field",mystring);	//0
+//		store("myclass","field",mystring,myint,mystring);//0
+//		store("myclass","field",mystring,myint,mystring,myclob);//1 store(string, string, string, anyEglPrimitive, anyEglPrimitive, anyEglPrimitive) is not applicable for the arguments
+		storeCopy();						//1 requires exactly 2 argument
+//		storeCopy("abc","def");				//0
+//		storeCopy("abc","def","ghi");		//1 requires exactly 2 argument 
+		storeField();						//1 requires exactly 3 argument
+//		storeField("abc",(String)mystring,mystring);//0
+//		storeField("abc",mystring,mystring,mystring);//1 requires exactly 3 argument	
+		storeNew();							//1 requires at least 2 argument
+//		storeNew("myclass","field");		//0
+//		storeNew("myclass","field",mystring);//0
+//		storeNew("myclass","field",mystring,myint,mystring);//0
+//		storeNew("myclass","field",mystring,myint,mystring,myblob);//1 storeNew(string, string, anyEglPrimitive, anyEglPrimitive, anyEglPrimitive, anyEglPrimitive) is not applicable for the arguments
+		
+		/* strLib */
+	//	charAsInt();					//1 requires exactly 1 argument
+	//	charAsInt("a");				//0
+	//	charAsInt(text,text);			//1 requires exactly 1 argument
+		myint = charAsInt();			//1 requires exactly 1 argument
+		myint = charAsInt("a");		//0
+		myint = charAsInt(text,text);	//1 requires exactly 1 argument
+	//	clip();								//1 requires exactly 1 argument
+	//	clip("a");							//0
+	//	clip(text,mystring);				//1 requires exactly 1 argument
+		mystring = clip();					//1 requires exactly 1 argument
+		mystring = clip("a");				//0
+		mystring = clip(text,text,text);	//1 requires exactly 1 argument
+	//	compareStr();						//1 requires exactly 6 argument
+	//	compareStr(text,myint,myint,mymbchar,myint,myint);//0
+	//	compareStr(text,myint,myint,mymbchar,myint,myint,myint);//1 requires exactly 6 argument
+		myint = compareStr();				//1 requires exactly 6 argument
+//Need compareStr for hex?		myint = compareStr(myhex,myint,myint,myhex,myint,myint);//0
+		myint = compareStr(text,myint,myint,text,myint,myint,myint);//1 requires exactly 6 argument
+	//	concatenate();						//1 requires exactly 2 argument
+	//	concatenate(text,mydbchar);			//0
+	//	concatenate(text,mydbchar,myhex);	//1 requires exactly 2 argument
+		myint = concatenate();				//1 requires exactly 2 argument
+		myint = concatenate(text,mydbchar);	//1
+		myint = concatenate(text,mydbchar,myhex);//2 requires exactly 2 argument
+	//	concatenateWithSeparator();			//1 requires exactly 3 argument
+	//	concatenateWithSeparator(text,mydbchar,myhex);//0
+	//	concatenateWithSeparator(text,mydbchar,myhex,mymbchar);//1 requires exactly 3 argument
+		myint = concatenateWithSeparator();	//1 requires exactly 3 argument
+		myint = concatenateWithSeparator(text,mydbchar,mymbchar);//1
+		myint = concatenateWithSeparator(text,mydbchar,myhex,mymbchar);//2 requires exactly 3 argument
+		copyStr();							//1 requires exactly 6 argument
+		copyStr(text,myint,myint,mymbchar,myint,myint);//0
+		copyStr(text,myint,myint,mymbchar,myint,myint,myint);//1 requires exactly 6 argument
+	//	findStr();							//1 requires exactly 4 argument
+	//	findStr(text,myint,myint,mymbchar);//0
+	//	findStr(text,myint,myint,mymbchar,myint);//1 requires exactly 4 argument
+		myint = findStr();					//1 requires exactly 4 argument
+		myint = findStr(text,myint,myint,mymbchar);//0
+		myint = findStr(text,myint,myint,mymbchar,myint);//1 requires exactly 4 argument
+	//	formatDate();						//1 requires either 1 or 2 argument
+	//	formatDate(mydate);					//0
+	//	formatDate(myDate,"xxyy");			//0
+	//	formatDate(myDate,"xxxyy",mystring);//1 requires either 1 or 2 argument
+		mystring = formatDate();			//1 requires either 1 or 2 argument
+		mystring = formatDate(mydate);		//0
+		mystring = formatDate(myDate,"xxyy");//0
+		mystring = formatDate(myDate,"xxxyy",mystring);//1 requires either 1 or 2 argument
+	//	formatNumber();						//1 requires either 1 or 2 argument
+	//	formatNumber(myint,"xxyy");			//0
+	//	formatNumber(myint);				//0
+	//	formatNumber(myint,"xxxyy",mystring); //1 requires either 1 or 2 argument
+		mystring = formatNumber();			//1 requires either 1 or 2 argument
+		mystring = formatNumber(myfloat);	//0
+		mystring = formatNumber(myfloat,"xxyy");//0
+		mystring = formatNumber(myfloat,"xxxyy",mystring);//1 requires either 1 or 2 argument
+	//	formatTime();						//1 requires either 1 or 2 argument
+	//	formatTime(myTime);					//0
+	//	formatTime(myTime,"xxyy");			//0
+	//	formatTime(myTime,"xxxyy",mystring);//1 requires either 1 or 2 argument
+		mystring = formatTime();			//1 requires either 1 or 2 argument
+		mystring = formatTime(myTime);		//0
+		mystring = formatTime(myTime,"xxyy");//0
+		mystring = formatTime(myTime,"xxxyy",mystring);//1 requires either 1 or 2 argument
+	//	formatTimeStamp();					//1 requires either 1 or 2 argument
+	//	formatTimeStamp(myTimeStamp);		//0
+	//	formatTimeStamp(myTimeStamp,"xxyy");//0
+	//	formatTimeStamp(myTimeStamp,"xxxyy",mystring);//1 requires either 1 or 2 argument
+		mystring = formatTimeStamp();		//1 requires either 1 or 2 argument
+		mystring = formatTimeStamp(myTimeStamp);//0
+		mystring = formatTimeStamp(myTimeStamp,"xxyy");//0
+		mystring = formatTimeStamp(myTimeStamp,"xxxyy",mystring);//1 requires either 1 or 2 argument
+	//	getNextToken();						//1 requires exactly 5 argument
+	//	getNextToken(text,mymbchar,myint,myint,mymbchar);//0
+	//	getNextToken(text,myhex,myint,myint,mymbchar,myint);//1 requires exactly 5 argument
+		myint = getNextToken();				//1 requires exactly 5 argument
+		myint = getNextToken(text,mymbchar,myint,myint,mymbchar);//0
+		myint = getNextToken(text,myhex,myint,myint,mymbchar,myint);//1 requires exactly 5 argument
+	//	integerAsChar();					//1 requires exactly 1 argument
+	//	integerAsChar(myint);				//0
+	//	integerAsChar(myint,mystring);		//1 requires exactly 1 argument
+	//	lowerCase();						//1 requires exactly 1 argument
+	//	lowerCase(text);					//0
+	//	lowerCase(text,mystring);			//1 requires exactly 1 argument
+		mystring = lowerCase();				//1 requires exactly 1 argument
+		mystring = lowerCase(text);			//0
+		mystring = lowerCase(text,mystring); //1 requires exactly 1 argument
+		setBlankTerminator();				//1 requires exactly 1 argument
+		setBlankTerminator(text);			//0
+		setBlankTerminator(text,mystring);	//1 requires exactly 1 argument
+		setNullTerminator();				//1 requires exactly 1 argument
+		setNullTerminator(text);			//0
+		setNullTerminator(text,mystring);	//1 requires exactly 1 argument
+		setSubstr();						//1 requires exactly 4 argument
+		setSubstr(mymbchar,myint,myint,mymbchar);//0
+		setSubstr(text,myint,myint,text,myint);//1 requires exactly 4 argument
+	//	spaces();							//1 requires exactly 1 argument
+	//	spaces(myint);						//0
+	//	spaces(myint,mystring);				//1 requires exactly 1 argument
+		mystring = spaces();				//1 requires exactly 1 argument
+		mystring = spaces(myint);			//0
+		mystring = spaces(myint,mystring);	//1 requires exactly 1 argument
+	//	byteLen();							//1 requires exactly 1 argument
+	//	byteLen(text);						//0
+	//	byteLen(text,mystring);				//1 requires exactly 1 argument
+		myint = byteLen();					//1 requires exactly 1 argument
+		myint = byteLen(text);				//0
+		myint = byteLen(text,mystring);  	//1 requires exactly 1 argument
+	//	upperCase();						//1 requires exactly 1 argument
+	//	upperCase(text);					//0
+	//	upperCase(text,mystring);			//1 requires exactly 1 argument
+		mystring = upperCase();				//1 requires exactly 1 argument
+		mystring = upperCase(text);			//0
+		mystring = upperCase(text,mystring); //1 requires exactly 1 argument
+		
+		/* vglib */
+		connectionservice("user","pass");	//1 requires either 3, 5 or 6 argument
+		connectionservice("user","pass","dbname");//0
+		connectionservice("user","pass","dbname",text8);//1 requires either 3, 5 or 6 argument
+		connectionservice("user","pass","dbname",text8,text8);//0
+		connectionservice("user","pass","dbname",text8,text8,text8);//0
+		connectionservice("user","pass","dbname",text8,text8,text8,text8);//1 requires either 3, 5 or 6 argument
+	//	getVagSysType();					//0
+	//	getVagSysType(mystring);			//1 requires exactly 0 argument
+		mystring = getVagSysType();			//0
+		mystring = getVagSysType(mystring);	//1 requires exactly 0 argument
+		
+		/* arrays */
+		myarray.appendall();				//1 requires exactly 1 argument
+		myarray.appendall(myarray);			//0
+		myarray.appendall(myarray,myint);	//1 requires exactly 1 argument
+		myarray.appendelement();			//1 requires exactly 1 argument
+		myarray.appendElement(myint);		//0
+		myarray.appendelement(myint,myint);	//1 requires exactly 1 argument
+		myarray.getmaxsize();				//0
+		myarray.getMaxsize(myint);			//1 requires exactly 0 argument
+		myint = myarray.getmaxsize();		//0
+		myint = myarray.getMaxsize(myint);	//1 requires exactly 0 argument
+		myarray.getsize();					//0
+		myarray.getsize(myint);				//1 requires exactly 0 argument
+		myint = myarray.getsize();			//0
+		myint = myarray.getsize(myint);		//1 requires exactly 0 argument
+		myarray.insertelement();			//1 requires exactly 2 argument
+		myarray.insertelement(myint,myint); //0
+		myarray.insertelement(myint,myint,myint);//1 requires exactly 2 argument
+		myarray.removeall();				//0
+		myarray.removeall(myint);			//1 requires exactly 0 argument
+		myarray.removeelement();			//1 requires exactly 1 argument
+		myarray.removeelement(myint);		//0
+		myarray.removeelement(myint,myint); //1 requires exactly 1 argument
+		myarray.resize();					//1 requires exactly 1 argument
+		myarray.resize(myint);				//0
+		myarray.resize(myint,myint);		//1 requires exactly 1 argument
+		myarray.resizeall();				//1 requires exactly 1 argument
+		myarray.resizeall(myarray);			//0
+		myarray.resizeall(myarray,myint);	//1 requires exactly 1 argument
+		myarray.setmaxsize();				//1 requires exactly 1 argument
+		myarray.setmaxsize(myint);			//0
+		myarray.setmaxsize(myint,myint);	//1 requires exactly 1 argument
+		myarray.setmaxsizes();				//1 requires exactly 1 argument
+		myarray.setmaxsizes(myarray);		//0
+		myarray.setmaxsizes(myarray,myint);	//1 requires exactly 1 argument
+		
+		/* dictionary */
+		mydictionary.containsKey();			//1 requires exactly 1 argument
+		mydictionary.containsKey("abc");	//0
+		mydictionary.containsKey("abc","def");//1 requires exactly 1 argument
+		if (mydictionary.containsKey()==yes)//1 requires exactly 1 argument
+		end
+		if (mydictionary.containsKey("abc")==yes)//0
+		end
+		if (mydictionary.containsKey("abc","def")==yes)//1 requires exactly 1 argument
+		end
+		mydictionary.getKeys();				//0
+		mydictionary.getKeys(myint);		//1 requires exactly 0 argument
+		mystringarray = mydictionary.getKeys();//0
+		mystringarray = mydictionary.getKeys(myint);//1 requires exactly 0 argument
+		mydictionary.getValues();			//0
+		mydictionary.getValues(myint);		//1 requires exactly 0 argument
+		myanyarray = mydictionary.getValues();//0
+		myanyarray = mydictionary.getValues(myint);//1 requires exactly 0 argument
+		mydictionary.insertall();			//1 requires exactly 1 argument
+		mydictionary.insertall(mydictionary);//0
+		mydictionary.removeelement();		//1 requires exactly 1 argument
+		mydictionary.removeelement(mystring);//0
+		mydictionary.removeall();			//0
+		mydictionary.removeall(myint);		//1 requires exactly 0 argument
+		mydictionary.size();				//0
+		mydictionary.size(myint);			//1 requires exactly 0 argument
+		myint = mydictionary.size();		//0
+		myint = mydictionary.size(myint);	//1 requires exactly 0 argument
+		
+		/* reportlib */
+		fillreport (myreport, DataSource.reportdata);	//0
+		fillreport (myreport, databaseConnection);//0
+		fillreport (myreport, sqlstatement);	//0
+		fillreport (myreport);				//1 requires exactly 2 argument
+		fillreport (myreport, DataSource.reportdata, DataSource.reportdata); //1 requires exactly 2 argument
+		exportreport(myreport, html);		//0 
+		exportreport(myreport, pdf);		//0 
+		exportreport(myreport, ExportFormat.text);//0 
+		exportreport(myreport, xml);		//0 
+		exportreport(myreport);				//1 requires exactly 2 argument
+		exportreport(myreport, html, html);	//1 requires exactly 2 argument
+		addReportParameter(myreport,mystring, mystring); //0
+		addReportParameter(myreport,mystring); //1 requires exactly 3 argument
+		addReportParameter(myreport,mystring, myint, mystring); //1 requires exactly 3 argument
+		resetReportParameters(myreport);	//0
+		resetReportParameters();			//1 requires exactly 1 argument
+		resetReportParameters(myreport,mystring);//1 requires exactly 1 argument
+	
+		/* loblibrary */
+		//?????????
+		
+	
+		/* mathlib */
+		//?????????????????????????????????????
+		
+		
+	end
+
+		
+	/***********************************************************/
+	/********  Check that any function used as an argument *****/
+	/********  must be one that has a return value         *****/ 
+	/********  For the functions that have a return type,  *****/
+	/********  check that the return type is valid for the *****/
+	/********  argument                                    *****/  	 
+	/***********************************************************/	
+	function CheckFunctionMustHaveCorrectReturnValueToBeUsedAsArg()
+//		// first show what happens when no system functions are involved
+//		userbinfunction(userdbcharfunction(dbtext)); 			// 1 function userdbcharfunction must return a type
+//		userdbcharFunction(userFunctionReturnsChar()); 			// 1 not applicable for arguments (char(3))
+//		// now check every system function by passing to user defined function	
+//		userdbCharFunction( audit(basicrecord) ); 				// 1 audit must return a type
+//		userdbCharFunction( syslib.audit(basicrecord) ); 		// 1 audit must return a type
+//		userdbCharFunction( beginDataBaseTransaction("mydb") ); // 1 beginDataBaseTransaction must return a type
+//		userdbCharFunction( syslib.beginDataBaseTransaction("mydb") ); // 1 beginDataBaseTransaction must return a type
+//		userdbCharFunction( bytes("mydb") );					// 1 not applicable for the arguments (bin(4))
+//		userdbCharFunction( syslib.bytes("mydb") ); 			// 1 not applicable for the arguments (bin(4))
+//		userBinFunction( bytes("mydb") ); 						// 0
+//		userBinFunction( syslib.bytes("mydb") ); 				// 0
+//		userdbCharFunction( calculateChkDigitMod10(text,5,myint) ); // 1 calculateChkDigitMod10 must return a type
+//		userdbCharFunction( syslib.calculateChkDigitMod10(text,5,myint)); 	// 1 calculateChkDigitMod10 must return a type
+//		userdbCharFunction( calculateChkDigitMod11(text,5,myint) ); 		// 1 calculateChkDigitMod11 must return a type
+//		userdbCharFunction( syslib.calculateChkDigitMod11(text,5,myint)); 	// 1 calculateChkDigitMod11 must return a type
+//		userdbCharFunction( callcmd("abc", "def") ); 				// 1 callcmd must return a type
+//		userdbCharFunction( syslib.callcmd("abc", "def") ); 		// 1 callcmd must return a type
+//		userdbCharFunction( commit() ); 							// 1 commit must return a type
+//		userdbCharFunction( syslib.commit() ); 						// 1 commit must return a type
+// 		userdbCharFunction( connect("db", "userid", "password") ); 	// 1 connect must return a type
+//		userdbCharFunction( syslib.connect("db", "userid","password") ); // 1 connect must return a type
+
+	  
+	end
+
+	/***********************************************************/
+	/********  Check that any system function that has     *****/
+	/********  one or more parameters will accept another  *****/ 
+	/********  user or system function as the argument     *****/  
+	/***********************************************************/	
+	function CheckThatSystemFunctionsAllowExpressionArgs()
+//		// first show what happens when no system functions are involved
+// 		userdbcharFunction(userFunctionReturnsChar()); 			// 1 not applicable for arguments (char(3))
+//	 	userbinfunction(userFunctionReturnsBin() );				// 0
+//		// now check every system function that takes args by 
+//		//         passing a user defined function	
+//		//         passing another system function 
+		/* syslib functions */
+	 	audit(bytes(text));					//1 The argument bytes() in function invocation SysLib.audit is invalid. The argument must be a record.
+		audit(basicRecord,bytes(text));		//0
+		beginDataBaseTransaction( getMessage("keu"  ));	//0
+		beginDataBaseTransaction( bytes(text));	//0
+		myint = bytes(text);				//0
+		myint = bytes(basicrecord);			//0
+		calculateChkDigitMod10("abc",5,4);	//0
+		calculateChkDigitMod11("abc",5,4);	//0
+		callCmd("abc");						//0
+		callCmd("abc","def");				//0
+		commit();							//0
+		connect("db1", "id", "pass"); 		//0
+		connect("db1", "id", "pass"); //0
+		connect("db1", "id", "pass", automatic); //0
+		connect("db1", "id", "pass", automatic,repeatableread); //0
+		connect("db1", "id", "pass", automatic,readcommitted,autocommit ); //0
+		convert(text, Local, "table");		//0
+		convert(text, Remote, "table");		//0
+		defineDataBaseALias("abc", "def");	//0
+		disconnect();						//0
+		disconnect("abc");					//0
+		disconnectall();					//0
+		mystring = getcmdlinearg(myint);	//0
+		myint = getCmdLineArgCount();		//0
+		mystring = getMessage("keu"  );		//0
+		mystring = getProperty("propName"); //0
+		loadtable("file", "into clause" );	//0
+		loadtable("file", "into clause", "a");//0
+	 	myint = maximumsize(inserts);		//0
+		purge("abc");						//0
+		queryCurrentDatabase("abc", "def"); //0
+		rollback();							//0
+		setcurrentDatabase("abc");			//0
+		setError(mystring, "abc");			//0
+		setError(mystring, "abc", mystring);//0
+		setError(this.mystring, "abc");		//0
+		setError("abc");					//0
+//		setLocale("ab", "cd");				//0
+//		setLocale("ab", "cd", "ed");		//0
+		setRemoteUser("ab", "cd");			//0
+		myint = size(inserts);			//0
+ 		startCmd("ab");						//0
+		startCmd("ab", "cd");				//0
+		startTransaction(basicrecord);				//0
+		startTransaction(basicrecord, "cd");		//0
+		startTransaction(basicrecord, "cd", "ed");	//0
+		startTransaction(basicrecord, text as char(4));//0
+		startTransaction(basicrecord, myint);//0
+		unloadtable("file", "into clause" );//0
+		unloadtable("file", "into clause", "a");//0
+		verifyChkDigitMod10("abc",5,4);		//0
+		verifyChkDigitMod11("abc",5,4);		//0
+		wait(myint);						//0
+		
+		/* consolelib */
+		activateWindow(mywindow);			//0
+		activateWindowByName(mystring);		//0
+		cancelArrayDelete();				//0
+		cancelArrayInsert();				//0
+		clearActiveForm();					//0
+		clearActiveWindow();				//0
+		clearFields(myConsoleForm.myConsoleField);	//0
+		clearFields(activeForm.myConsoleField as consoleField);	//0
+		clearFields(myConsoleForm.myConsoleField,myConsoleForm.myConsoleField);//0
+		clearFieldsByName(mystring);		//0
+		clearFieldsByName(mystring, text);//0
+		clearFieldsByName(mystring, text, mymbchar,myunicode, "abc");//0
+		clearForm(myConsoleForm);			//0
+		clearWindow(mywindow);				//0
+		clearWindowByName(mystring);		//0
+		closeActiveWindow();				//0
+		closeWindow(mywindow);				//0
+		closeWindowByName(mystring);		//0
+		currentArrayDataLine();				//0
+		myint = currentArrayDataLine();		//0
+		currentArrayScreenLine();			//0
+		myint = currentArrayScreenLine();	//0
+		displayAtLine("abc",myint);			//0
+		displayAtPosition("abc",myint,myint);//0
+ 		displayError("abc");				//0
+		displayFields(myConsoleForm.myConsoleField);//0
+		displayFields(activeForm.myConsoleField as consoleField);//0
+		displayFields(myConsoleForm.myConsoleField,myConsoleForm.myConsoleField);//0
+		displayFieldsByName(mystring);		//0
+		displayFieldsByName(mystring, text);//0
+		displayFieldsByName(mystring, text, mymbchar,myunicode, "abc");//0
+		displayForm(myConsoleForm);			//0
+		displayFormByName("myForm");		//0
+		displayLineMode(mystring);			//0
+		displayMessage(mystring);			//0
+		drawBox(currentArrayDataLine(), myint, myint, myint);//0
+		drawBox(currentArrayDataLine(), getKeyName(myint), myint, myint);//0
+		drawBoxWithColor(myint, currentArrayDataLine(), myint, myint, red);//0
+		drawBoxWithColor(myint, currentArrayDataLine(), getKeyName(myint), myint, red);//0
+		getKey();							//0
+		myint = getKey();					//0
+		getKeyCode("abc");					//0
+		myint = getKeyCode("abc");			//0
+		getKeyName(myint);					//0
+		mystring = getKeyName(myint);		//0
+		gotoField(myConsoleForm.myConsoleField);//0
+		gotoField(activeForm.myConsoleField as consoleField);//0
+		gotoFieldByName("abc");				//0
+		gotoMenuItem(myMenuItem);			//0
+		gotoMenuItemByName("abc");			//0
+		hideErrorWindow();					//0
+		hideMenuItem(myMenuItem);			//0
+		hideMenuItemByName("abc");			//0
+		if (isCurrentField(myConsoleForm.myConsoleField)==yes)//0
+		end
+		if (isCurrentField(activeForm.myConsoleField as consoleField)==yes)//0
+		end
+		if (isCurrentFieldByName("myfield")==yes)//0
+		end
+		if (isFieldModified(myConsoleForm.myConsoleField)==yes)//0
+		end
+		if (isFieldModified(activeForm.myConsoleField as consoleField)==yes)//0
+		end
+		if (isFieldModifiedByName("myfield")== yes)//0
+		end
+		lastKeyTyped();						//0
+		myint = lastKeyTyped();				//0
+		nextField();						//0
+		openWindow(mywindow);				//0
+		openWindowByName(mystring);			//0
+		openWindowWithForm(mywindow,myConsoleForm);	//0
+		openWindowWithFormByName(mystring, mystring);//0
+		previousField();					//0
+		promptLineMode(mystring);			//0
+		mystring = promptLineMode(mystring);//0
+		scrollDownLines(myint);				//0
+		scrollDownPage();					//0
+		scrollUpLines(myint);				//0
+		scrollUpPage();						//0
+		setArrayLine(myint);				//0
+		setCurrentArrayCount(myint);		//0
+		showHelp(mystring);					//0
+		showMenuItem(myMenuItem);			//0
+		showMenuItemByName(mystring);		//0
+		
+		/* converselib */
+		clearScreen();						//0
+		displayMsgNum(myint);				//0
+		myint = fieldInputLength(myCharFormField);//0
+		myint = fieldInputLength(myIntFormField);//0
+		pageEject();						//0
+		validationFailed(myint);			//0
+		
+		/* dateTimeLib */
+		myTime = currentTime();				//0
+		myTimeStamp = currentTimeStamp();	//0
+		mydate = dateOf(mytimestamp);		//0
+		mydate = dateValue(mystring);		//0
+		mydate = dateValueFromGregorian(myint);	//0
+		mydate = dateValueFromJulian(myint);//0
+		myint = dayOf(mytimestamp);			//0
+		mytimestamp = extend(mytimestamp,mystring);	//0
+		mytimestamp = extend(mydate,mystring);//0
+		mytimestamp = extend(mytime,mystring);//0
+		mytimestamp = extend(mytimestamp);	//0
+		myinterval = intervalValue("123");		//0
+		myinterval = intervalValueWithPattern("123");//0
+		myinterval = intervalValueWithPattern("123",mystring);//0
+		mydate = mdy(myint,myint,myint);	//0
+		myint = monthOf(mytimestamp);		//0
+		mytime = timeOf(mytimestamp);		//0
+		mytimestamp = timeStampFrom(mydate,mytime);	//0
+		mytimestamp = timeStampValue(mystring);//0
+		mytimestamp = timeStampValueWithPattern(mystring);	//0
+		mytimestamp = timeStampValueWithPattern(mystring,mystring);//0
+		mytime = timeValue(mystring);		//0
+		myint = weekdayOf(mytimestamp);		//0
+		myint = yearOf(mytimestamp);		//0
+
+
+		/* javaLib */
+		mystring = getField("myclass","field") as string;//0
+		myint = getField("myclass","field") as int;//0
+		mystring = invoke("myclass","field") as int;//0
+		mystring = invoke("myclass","field",mystring) as string;//0
+		mystring = invoke("myclass","field",mystring,myint) as string;//0
+//		myint = isNull("abc");				//0
+//		myint = isObjId("abc");				//0
+//		mystring = qualifiedTypeName(clip("a"));//1
+//		remove("abc");						//0
+		removeall();						//0
+		setField("abc",mystring,mystring);	//0
+//		store("myclass","field",mystring);	//0
+//		store("myclass","field",mystring,myint,mystring);//0
+//		storeCopy("abc","def");				//0
+//		storeField("abc",(String)mystring,mystring);//0
+//		storeNew("myclass","field");		//0
+//		storeNew("myclass","field",mystring);//0
+//		storeNew("myclass","field",mystring,myint,mystring);//0
+		
+		/* strLib */
+		myint = charAsInt("a");		//0
+		mystring = clip("a");				//0
+		myint = compareStr(mydbchar,myint,myint,mydbchar,myint,myint);//0
+		myint = concatenate(text,mydbchar);	//1
+		myint = concatenateWithSeparator(text,mydbchar,mymbchar);//1
+		copyStr(text,myint,myint,mymbchar,myint,myint);//0
+		myint = findStr(text,myint,myint,mymbchar);//0
+		mystring = formatDate(mydate);		//0
+		mystring = formatDate(myDate,"xxyy");//0
+		mystring = formatNumber(myfloat,"xxyy");//0
+		mystring = formatTime(myTime);		//0
+		mystring = formatTime(myTime,"xxyy");//0
+		mystring = formatTimeStamp(myTimeStamp);//0
+		mystring = formatTimeStamp(myTimeStamp,"xxyy");//0
+		myint = getNextToken(text,mymbchar,myint,myint,mymbchar);//0
+
+		mystring = lowerCase(text);			//0
+		setBlankTerminator(text);			//0
+		setNullTerminator(text);			//0
+		setSubstr(mymbchar,myint,myint,mymbchar);//0
+		mystring = spaces(myint);			//0
+		myint = byteLen(text);				//0
+		mystring = upperCase(text);			//0
+		
+		/* vglib */
+		connectionservice("user","pass","dbname");//0
+		connectionservice("user","pass","dbname",text8,text8);//0
+		connectionservice("user","pass","dbname",text8,text8,text8);//0
+		mystring = getVagSysType();			//0
+		
+		/* arrays */
+		myarray.appendall(myarray);			//0
+		myarray.appendElement(myint);		//0
+		myarray.getmaxsize();				//0
+		myint = myarray.getmaxsize();		//0
+		myarray.getsize();					//0
+		myint = myarray.getsize();			//0
+		myarray.insertelement(myint,myint); //0
+		myarray.removeall();				//0
+		myarray.removeelement(myint);		//0
+		myarray.resize(myint);				//0
+		myarray.resizeall(myarray);			//0
+		myarray.setmaxsize(myint);			//0
+		myarray.setmaxsizes(myarray);		//0
+		
+		/* dictionary */
+		mydictionary.containsKey("abc");	//0
+		if (mydictionary.containsKey("abc")==yes)//0
+		end
+		mydictionary.getKeys();				//0
+		mystringarray = mydictionary.getKeys();//0
+		mydictionary.getValues();			//0
+		myanyarray = mydictionary.getValues();//0
+		mydictionary.insertall(mydictionary);//0
+		mydictionary.removeelement(mystring);//0
+		mydictionary.removeall();			//0
+		mydictionary.size();				//0
+		myint = mydictionary.size();		//0
+		
+		/* reportlib */
+		fillreport (myreport, DataSource.reportdata);	//0
+		exportreport(myreport, xml);		//0 
+		addReportParameter(myreport,mystring, mystring); //0
+		resetReportParameters(myreport);	//0
+
+	
+		/* loblibrary */
+		//?????????
+		
+	
+		/* mathlib */
+		//?????????????????????????????????????
+
+	end	
+	
+	/***********************************************************/
+	/********  Check that any system function that returns *****/
+	/********  a value can be used as an argument to       *****/ 
+	/********  another function.                           *****/  
+	/***********************************************************/	
+	function CheckThatFunctionsAreAllowedAsArgsToSystemFunctions()
+//		// first show what happens when no system functions are involved
+// 		userdbcharFunction(userFunctionReturnsChar()); 			// 1 not applicable for arguments (char(3))
+//	 	userbinfunction(userFunctionReturnsBin() );				// 0
+//		// now check every system function that takes args by 
+//		//         passing a user defined function	
+//		//         passing another system function 
+		/* syslib functions */
+	 	audit(basicRecord);					//0
+		audit(basicRecord,myint);			//0
+		beginDataBaseTransaction();			//0
+		beginDataBaseTransaction("dbname");	//0
+		myint = bytes(text);				//0
+		myint = bytes(basicrecord);			//0
+		calculateChkDigitMod10("abc",5,4);	//0
+		calculateChkDigitMod11("abc",5,4);	//0
+		callCmd("abc");						//0
+		callCmd("abc","def");				//0
+		commit();							//0
+		connect("db1", "id", "pass"); 		//0
+		connect("db1", "id", "pass"); //0
+		connect("db1", "id", "pass", automatic); //0
+		connect("db1", "id", "pass", automatic,repeatableread); //0
+		connect("db1", "id", "pass", automatic,readcommitted,autocommit ); //0
+		convert(text, Local, "table");		//0
+		convert(text, Remote, "table");		//0
+		defineDataBaseALias("abc", "def");	//0
+		disconnect();						//0
+		disconnect("abc");					//0
+		disconnectall();					//0
+		mystring = getcmdlinearg(myint);	//0
+		myint = getCmdLineArgCount();		//0
+		mystring = getMessage("keu"  );		//0
+		mystring = getProperty("propName"); //0
+		loadtable("file", "into clause" );	//0
+		loadtable("file", "into clause", "a");//0
+	 	myint = maximumsize(inserts);		//0
+		purge("abc");						//0
+		queryCurrentDatabase("abc", "def"); //0
+		rollback();							//0
+		setcurrentDatabase("abc");			//0
+		setError(mystring, "abc");			//0
+		setError(mystring, "abc", mystring);//0
+		setError(this.mystring, "abc");		//0
+		setError("abc");					//0
+//		setLocale("ab", "cd");				//0
+//		setLocale("ab", "cd", "ed");		//0
+		setRemoteUser("ab", "cd");			//0
+
+		myint = size(inserts);			//0
+ 		startCmd("ab");						//0
+		startCmd("ab", "cd");				//0
+		startTransaction(basicrecord);				//0
+		startTransaction(basicrecord, "cd");		//0
+		startTransaction(basicrecord, "cd", "ed");	//0
+		startTransaction(basicrecord, text as char(4));//0
+		startTransaction(basicrecord, myint);//0
+		unloadtable("file", "into clause" );//0
+		unloadtable("file", "into clause", "a");//0
+		verifyChkDigitMod10("abc",5,4);		//0
+		verifyChkDigitMod11("abc",5,4);		//0
+		wait(myint);						//0
+		
+		/* consolelib */
+		activateWindow(mywindow);			//0
+		activateWindowByName(mystring);		//0
+		cancelArrayDelete();				//0
+		cancelArrayInsert();				//0
+		clearActiveForm();					//0
+		clearActiveWindow();				//0
+		clearFields(myConsoleForm.myConsoleField);	//0
+		clearFields(activeForm.myConsoleField as consoleField);	//0
+		clearFields(myConsoleForm.myConsoleField,myConsoleForm.myConsoleField);//0
+		clearFieldsByName(mystring);		//0
+		clearFieldsByName(mystring, text);//0
+		clearFieldsByName(mystring, text, mymbchar,myunicode, "abc");//0
+		clearForm(myConsoleForm);			//0
+		clearWindow(mywindow);				//0
+		clearWindowByName(mystring);		//0
+		closeActiveWindow();				//0
+		closeWindow(mywindow);				//0
+		closeWindowByName(mystring);		//0
+		currentArrayDataLine();				//0
+		myint = currentArrayDataLine();		//0
+		currentArrayScreenLine();			//0
+		myint = currentArrayScreenLine();	//0
+		displayAtLine("abc",myint);			//0
+		displayAtPosition("abc",myint,myint);//0
+ 		displayError("abc");				//0
+		displayFields(myConsoleForm.myConsoleField);//0
+		displayFields(activeForm.myConsoleField as consoleField);//0
+		displayFields(myConsoleForm.myConsoleField,myConsoleForm.myConsoleField);//0
+		displayFieldsByName(mystring);		//0
+		displayFieldsByName(mystring, text);//0
+		displayFieldsByName(mystring, text, mymbchar,myunicode, "abc");//0
+		displayForm(myConsoleForm);			//0
+		displayFormByName("myForm");		//0
+		displayLineMode(mystring);			//0
+		displayMessage(mystring);			//0
+		drawBox(myint, myint, myint, myint);//0
+		drawBoxWithColor(myint, myint, myint, myint, red);//0
+		getKey();							//0
+		myint = getKey();					//0
+		getKeyCode("abc");					//0
+		myint = getKeyCode("abc");			//0
+		getKeyName(myint);					//0
+		mystring = getKeyName(myint);		//0
+		gotoField(myConsoleForm.myConsoleField);//0
+		gotoField(activeForm.myConsoleField as consoleField);//0
+		gotoFieldByName("abc");				//0
+		gotoMenuItem(myMenuItem);			//0
+		gotoMenuItemByName("abc");			//0
+		hideErrorWindow();					//0
+		hideMenuItem(myMenuItem);			//0
+		hideMenuItemByName("abc");			//0
+		if (isCurrentField(myConsoleForm.myConsoleField)==yes)//0
+		end
+		if (isCurrentField(activeForm.myConsoleField as consoleField)==yes)//0
+		end
+		if (isCurrentFieldByName("myfield")==yes)//0
+		end
+		if (isFieldModified(myConsoleForm.myConsoleField)==yes)//0
+		end
+		if (isFieldModified(activeForm.myConsoleField as consoleField)==yes)//0
+		end
+		if (isFieldModifiedByName("myfield")== yes)//0
+		end
+		lastKeyTyped();						//0
+		myint = lastKeyTyped();				//0
+		nextField();						//0
+		openWindow(mywindow);				//0
+		openWindowByName(mystring);			//0
+		openWindowWithForm(mywindow,myConsoleForm);	//0
+		openWindowWithFormByName(mystring, mystring);//0
+		previousField();					//0
+		promptLineMode(mystring);			//0
+		mystring = promptLineMode(mystring);//0
+		scrollDownLines(myint);				//0
+		scrollDownPage();					//0
+		scrollUpLines(myint);				//0
+		scrollUpPage();						//0
+		setArrayLine(myint);				//0
+		setCurrentArrayCount(myint);		//0
+		showHelp(mystring);					//0
+		showMenuItem(myMenuItem);			//0
+		showMenuItemByName(mystring);		//0
+		
+		/* converselib */
+		clearScreen();						//0
+		displayMsgNum(myint);				//0
+		myint = fieldInputLength(myCharFormField);//0
+		myint = fieldInputLength(myIntFormField);//0
+		pageEject();						//0
+		validationFailed(myint);			//0
+		
+		/* dateTimeLib */
+		myTime = currentTime();				//0
+		myTimeStamp = currentTimeStamp();	//0
+		mydate = dateOf(mytimestamp);		//0
+		mydate = dateValue(mystring);		//0
+		mydate = dateValueFromGregorian(myint);	//0
+		mydate = dateValueFromJulian(myint);//0
+		myint = dayOf(mytimestamp);			//0
+		mytimestamp = extend(mytimestamp,mystring);	//0
+		mytimestamp = extend(mydate,mystring);//0
+		mytimestamp = extend(mytime,mystring);//0
+		mytimestamp = extend(mytimestamp);	//0
+		myinterval = intervalValue("123");		//0
+		myinterval = intervalValueWithPattern("123");//0
+		myinterval = intervalValueWithPattern("123",mystring);//0
+		mydate = mdy(myint,myint,myint);	//0
+		myint = monthOf(mytimestamp);		//0
+		mytime = timeOf(mytimestamp);		//0
+		mytimestamp = timeStampFrom(mydate,mytime);	//0
+		mytimestamp = timeStampValue(mystring);//0
+		mytimestamp = timeStampValueWithPattern(mystring);	//0
+		mytimestamp = timeStampValueWithPattern(mystring,mystring);//0
+		mytime = timeValue(mystring);		//0
+		myint = weekdayOf(mytimestamp);		//0
+		myint = yearOf(mytimestamp);		//0
+
+
+		/* strLib */
+		myint = charAsInt("a");		//0
+		mystring = clip("a");				//0
+		myint = compareStr(mydbchar,myint,myint,mydbchar,myint,myint);//0
+		myint = concatenate(text,mydbchar);	//1
+		myint = concatenateWithSeparator(text,mydbchar,mymbchar);//1
+		copyStr(text,myint,myint,mymbchar,myint,myint);//0
+		myint = findStr(text,myint,myint,mymbchar);//0
+		mystring = formatDate(mydate);		//0
+		mystring = formatDate(myDate,"xxyy");//0
+		mystring = formatNumber(myfloat,"xxyy");//0
+		mystring = formatTime(myTime);		//0
+		mystring = formatTime(myTime,"xxyy");//0
+		mystring = formatTimeStamp(myTimeStamp);//0
+		mystring = formatTimeStamp(myTimeStamp,"xxyy");//0
+		myint = getNextToken(text,mymbchar,myint,myint,mymbchar);//0
+
+		mystring = lowerCase(text);			//0
+		setBlankTerminator(text);			//0
+		setNullTerminator(text);			//0
+		setSubstr(mymbchar,myint,myint,mymbchar);//0
+		mystring = spaces(myint);			//0
+		myint = byteLen(text);				//0
+		mystring = upperCase(text);			//0
+		
+		/* vglib */
+		connectionservice("user","pass","dbname");//0
+		connectionservice("user","pass","dbname",text8,text8);//0
+		connectionservice("user","pass","dbname",text8,text8,text8);//0
+		mystring = getVagSysType();			//0
+		
+		/* arrays */
+		myarray.appendall(myarray);			//0
+		myarray.appendElement(myint);		//0
+		myarray.getmaxsize();				//0
+		myint = myarray.getmaxsize();		//0
+		myarray.getsize();					//0
+		myint = myarray.getsize();			//0
+		myarray.insertelement(myint,myint); //0
+		myarray.removeall();				//0
+		myarray.removeelement(myint);		//0
+		myarray.resize(myint);				//0
+		myarray.resizeall(myarray);			//0
+		myarray.setmaxsize(myint);			//0
+		myarray.setmaxsizes(myarray);		//0
+		
+		/* dictionary */
+		mydictionary.containsKey("abc");	//0
+		if (mydictionary.containsKey("abc")==yes)//0
+		end
+		mydictionary.getKeys();				//0
+		mystringarray = mydictionary.getKeys();//0
+		mydictionary.getValues();			//0
+		myanyarray = mydictionary.getValues();//0
+		mydictionary.insertall(mydictionary);//0
+		mydictionary.removeelement(mystring);//0
+		mydictionary.removeall();			//0
+		mydictionary.size();				//0
+		myint = mydictionary.size();		//0
+		
+		/* reportlib */
+		fillreport (myreport, DataSource.reportdata);	//0
+		exportreport(myreport, xml);		//0 
+		addReportParameter(myreport,mystring, mystring); //0
+		resetReportParameters(myreport);	//0
+
+	
+		/* loblibrary */
+		//?????????
+		
+	
+		/* mathlib */
+		//?????????????????????????????????????
+
+	end	
+	
+	
+	
+	/***********************************************************/
+	/********  Check that any system function that has     *****/
+	/********  an OUT parameter or an INOUT parameter      *****/
+	/********  rejects an expression, user function, or    *****/ 
+	/********  system function as the argument             *****/  
+	/***********************************************************/	
+	function CheckThatFunctionsArePreventedForOUTorINOUTArguments()
+		myinserts String[];
+		// Note that there are no system functions that have a parameter defined as OUT.
+		// We have lots of IN and lots of INOUT but no OUT.	
+//		calculateChkDigitMod10(userFunctionReturnsChar(),5,text); // 1  Error in argument userFunctionReturnsChar() in function invocation calculateChkDigitMod10. This type of argument requires that the parameter be defined with the IN modifier. 
+//		calculateChkDigitMod10(text,5,userFunctionReturnsChar()); // 1  Error in argument userFunctionReturnsChar() in function invocation calculateChkDigitMod10. This type of argument requires that the parameter be defined with the IN modifier.
+//		calculateChkDigitMod10(userFunctionReturnsChar(),5,userFunctionReturnsChar()); // 2  Error in argument userFunctionReturnsChar() in function invocation calculateChkDigitMod10. This type of argument requires that the parameter be defined with the IN modifier. | Error in argument userFunctionReturnsChar() in function invocation calculateChkDigitMod10. This type of argument requires that the parameter be defined with the IN modifier.
+//		calculateChkDigitMod10(getMessage("abc", myinserts),5,text);// 1  Error in argument getMessage("abc", myinserts) in function invocation calculateChkDigitMod10. This type of argument requires that the parameter be defined with the IN modifier.
+//		calculateChkDigitMod10(text,getKey(),text); //0
+		
+		
+	
+	end	
+		
+	/***********************************************************/
+	/********  Check any special restrictions for any      *****/
+	/********  system function                             *****/  
+	/***********************************************************/	
+	function CheckSpecialRestrictionsForSystemFunctions()
+		// check every system function by passing to user defined function	
+		//move 99 to fixedrecWithOccursItem.abc; // 0 
+//		mysmallint = bytes(text);		// why?????
+//		mysmallint = bytes(basicrecord); // why???? 
+	end	
+		 
+	/***********************************************************/
+	/********  Verify malicious nesting of functions as args****/  
+	/***********************************************************/	
+	function CheckMaliciousNesting()
+		// check every system function by passing to user defined function	
+		//move 99 to fixedrecWithOccursItem.abc; // 0
+	end	
+	
+	
+end
+handler myPage type JSFHandler 
+	mystring string;
+	myint int;
+	function mainOne()
+		/* j2eelib */
+		clearRequestAttr();					//1 requires exactly 1 argument
+		clearRequestAttr(mystring);			//0
+		clearRequestAttr(mystring,myint);	//1 requires exactly 1 argument
+		clearSessionAttr();					//1 requires exactly 1 argument
+		clearSessionAttr(mystring);			//0
+		clearSessionAttr(mystring,myint);	//1 requires exactly 1 argument
+		getRequestAttr();					//1 requires exactly 2 argument
+		getRequestAttr("abc",myInt);			//0
+		getRequestAttr("abc",myInt,mystring);//1 requires exactly 2 argument
+		getSessionAttr();					//1 requires exactly 2 argument
+		getSessionAttr("abc",myInt);		//0
+		getSessionAttr("abc",myInt,mystring);//1 requires exactly 2 argument
+		setRequestAttr();					//1 requires exactly 2 argument
+		setRequestAttr("abc","def");		//0
+		setRequestAttr("abc","def",mystring);//1 requires exactly 2 argument
+		setSessionAttr();					//1 requires exactly 2 argument
+		setSessionAttr("abc","def");		//0
+		setSessionAttr("abc","def",mystring);//1 requires exactly 2 argument
+	end
+end
+
+Handler reportHandler type JasperReport //0
+
+		mystring string;
+		myint int;
+		myany any;
+		myreportdata reportdata; 
+		/* reportHandler */
+		function somefunc()
+		getReportParameter(mystring);		//0
+		getReportParameter();				//1 requires exactly 1 argument
+		getReportParameter(mystring, mystring);//1 requires exactly 1 argument
+		myany = getReportParameter(mystring);//0
+		myany = getReportParameter();		//1 requires exactly 1 argument
+		myany = getReportParameter(mystring, mystring);//1 requires exactly 1 argument
+		setReportVariableValue(mystring);	//1 requires exactly 2 argument
+		setReportVariableValue(mystring, myint);//0
+		setReportVariableValue(mystring,myint, myint);//1 requires exactly 2 argument
+		getReportVariableValue(mystring);	//0
+		getReportVariableValue();			//1 requires exactly 1 argument
+		getReportVariableValue(mystring, mystring);//1 requires exactly 1 argument
+		myany = getReportVariableValue(mystring);//0
+		myany = getReportVariableValue();	//1 requires exactly 1 argument
+		myany = getReportVariableValue(mystring, mystring);//1 requires exactly 1 argument
+		getFieldValue();					//1 requires exactly 1 argument
+		getFieldValue(mystring, mystring);	//1 requires exactly 1 argument
+		myany = getFieldValue(mystring);	//0
+		myany = getFieldValue();			//1 requires exactly 1 argument
+		myany = getFieldValue(mystring, mystring);//1 requires exactly 1 argument
+		addReportData(myreportdata,mystring);//0
+		addReportData(myreportdata);		//1 requires exactly 2 argument
+		addReportData(myreportdata,mystring, mystring);	//1 requires exactly 2 argument
+		getReportData(mystring);			//0
+		getReportData();					//1 requires exactly 1 argument
+		getReportData(mystring,mystring);	//1 requires exactly 1 argument
+		myreportData = getReportData(mystring);	//0
+		myreportData = getReportData();		//1 requires exactly 1 argument
+		myreportData = getReportData(mystring,mystring);//1 requires exactly 1 argument
+	end
+ENd 
+record flexrecord type basicrecord
+	 item1 char(10);
+end
+
+record basicrecord type basicrecord
+	10 item1 char(10);
+end
+record masterConsoleForm type ConsoleForm {formsize=[24,80]}
+	myConsoleFIeld ConsoleField {fieldlen = 5};
+end
+FormGroup mygroup
+	Form myForm type textform {formsize=[24,80]}
+		myCharFormField char(5);
+		myIntFormField int;
+	end
+end

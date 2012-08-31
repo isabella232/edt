@@ -1,0 +1,138 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Library lib1
+	ambig int;
+end
+
+Library lib2
+	ambig int;
+end
+
+handler ph1 type JSFHandler
+	phVar int;
+	phAry int[];
+	phCharAry char(4)[];
+
+	use lib1, lib2;
+	
+// validatePageItemProperties:
+	item1 int {validationOrder=1}; //1 Error in validation order property for item item1. Another item has the property set to 1. Duplicate validation order values within the context of a JSFHandler are not allowed. {3140, EGLMESSAGE_DUPLICATE_VALIDATION_ORDER_VALUES_FOUND}
+	item2 int {validationOrder=1}; //1 Error in validation order property for item item2. Another item has the property set to 1. Duplicate validation order values within the context of a JSFHandler are not allowed. {3140, EGLMESSAGE_DUPLICATE_VALIDATION_ORDER_VALUES_FOUND}
+
+// visit:
+	item3 int {bypassvalidation=yes};	//1 The bypassValidation property is not supported in JSFHandlers. {5405, EGLMESSAGE_BYPASSVALIDATION_IN_PAGEHANDLER}
+	item4 int {bypassvalidation=no};	//0
+	
+	item5 rec1 {item1{numElementsItem=numericItem}};						//1 The numElementsItem property is allowed to be specified only for a top-level item defined as a single-dimensional array. {3139, EGLMESSAGE_NUMELEMENTSITEM_ITEM_MUST_BE_ARRAY}
+	item6 rec1 {item1.item1a{numElementsItem=numericItem}};				//1 The numElementsItem property is allowed to be specified only for a top-level item defined as a single-dimensional array. {3139, EGLMESSAGE_NUMELEMENTSITEM_ITEM_MUST_BE_ARRAY}
+	item7 rec1 {item1.item1b{numElementsItem=numericItem}};				//0
+	item8 rec1 {aryItem{numElementsItem=numericItem}};					//0
+	item9 rec1 {aryItem.aryItemA{numElementsItem=numericItem}};			//1 The numElementsItem property is allowed to be specified only for a top-level item defined as a single-dimensional array. {3139, EGLMESSAGE_NUMELEMENTSITEM_ITEM_MUST_BE_ARRAY}
+	item10 rec1 {aryItem.aryItemA.aryItemB{numElementsItem=numericItem}};	//1 The numElementsItem property is allowed to be specified only for a top-level item defined as a single-dimensional array. {3139, EGLMESSAGE_NUMELEMENTSITEM_ITEM_MUST_BE_ARRAY}
+	
+	item11 rec1 {aryItem{numElementsItem=phVar}};				//1 The numElementsItem phVar for aryItem in rec1 must name an item within the same record.
+	item12 rec1 {aryItem{numElementsItem=nonNumericItem1}};	//1 The numElementsItem nonNumericItem1 for aryItem in rec1 must name a numeric item with no decimal places.
+	item13 rec1 {aryItem{numElementsItem=nonNumericItem2}};	//1 The numElementsItem nonNumericItem2 for aryItem in rec1 must name a numeric item with no decimal places.
+	item14 rec1 {aryItem{numElementsItem=numericItem2}};		//0
+	
+	item15 int {selectFromListItem=phAry};	//0
+	item16 int {selectFromListItem=foo};		//1 Property: selectFromListItem.  The value foo for this property for item item16 cannot be resolved.
+	item17 int {selectFromListItem=ambig};	//1 Property: selectFromListItem.  The value ambig for this property for item item17 is ambiguous.
+	item18 int {selectFromListItem=phVar};	//1 The selectFromList property must name an item array
+	
+	item19 int {selectType=index};								//1 SelectType may be specified only if selectFromListItem is also specified. {3133, EGLMESSAGE_SELECTTYPE_REQUIRES_SELECTFROMLIST}
+	item20 int {selectType=index, selectFromListItem=phAry};	//0
+	
+	item21 int {selectType=value, selectFromListItem=phAry};			//0
+	item22 int {selectType=value, selectFromListItem=phCharAry};		//1
+	item23 char(4) {selectType=value, selectFromListItem=phAry};		//1
+	item24 char(4) {selectType=value, selectFromListItem=phCharAry};	//0
+	
+	item25 int {selectType=index, selectFromListItem=phAry};			//0
+	item26 bin(9,2) {selectType=index, selectFromListItem=phAry};		//1 Because selectType = index is specified or selectType is not specified, item item26 must have type int or int[].
+	item27 char(4) {selectType=index, selectFromListItem=phCharAry};	//1 Because selectType = index is specified or selectType is not specified, item item27 must have type int or int[].
+	item28 bin(9,0) {selectType=index, selectFromListItem=phAry};		//0
+	
+	item29 int {newWindow=yes, action="xxx"};	//0
+	item30 int {newWindow=no};					//0
+	item31 int {newWindow=yes};					//1 NewWindow=yes is valid only if the action property is also specified. {3135, EGLMESSAGE_NEWWINDOW_REQUIRES_ACTION}
+end
+
+Record rec1
+	10 numericItem int;
+	10 numericItem2 bin(9,0);
+	10 nonNumericItem1 char(4);
+	10 nonNumericItem2 bin(9,2);
+	
+	10 item1 char(10);
+		15 item1a char(5);
+		15 item1b char(1)[5];
+		
+	10 aryItem int[10];
+		15 aryItemA int;
+			20 aryItemB int[10];
+end
+
+handler ph2 type JSFHandler
+	{
+		bidiConversionTable = "fred" //0	
+	}
+	
+	x int	{
+				bidiType = visual,   //0
+				bidiType = logical,  //0
+				bidiType = bidiTypeKind.visual, //0
+				bidiType = bidiTypeKind.logical, //0
+				bidiType = egl.ui.bidiTypeKind.visual, //0
+				bidiType = egl.ui.bidiTypeKind.logical, //0
+				
+				bidiType = 1,     //1
+				biditype = "logical" //1
+				
+			};
+			
+	y recph2;
+	z itemph2;
+	
+end
+
+record recph2
+
+	10 a char(10) 	{
+						bidiType = visual,   //0
+						bidiType = logical,  //0
+						bidiType = bidiTypeKind.visual, //0
+						bidiType = bidiTypeKind.logical, //0
+						bidiType = egl.ui.bidiTypeKind.visual, //0
+						bidiType = egl.ui.bidiTypeKind.logical, //0
+						
+						bidiType = 1,     //1
+						biditype = "logical" //1
+					};
+end
+
+dataitem itemph2 string 
+						{
+							bidiType = visual,   //0
+							bidiType = logical,  //0
+							bidiType = bidiTypeKind.visual, //0
+							bidiType = bidiTypeKind.logical, //0
+							bidiType = egl.ui.bidiTypeKind.visual, //0
+							bidiType = egl.ui.bidiTypeKind.logical, //0
+							
+							bidiType = 1,     //1
+							biditype = "logical" //1
+						} end
+						
+
+

@@ -1,0 +1,65 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//From Justin
+program myprogA
+
+	function main()
+		rec rec1A;
+		i int = rec.k[1].i;	//1 rec.k is not an array and cannot be subscripted
+	end
+	
+end
+
+record rec1A
+	10 k rec2A[1];
+end
+
+record rec2A
+	10 i int;
+end
+
+//From Paul:
+program myprogB
+
+	function main()
+		rec rec1B;
+		i int = rec.k[1].i;	//1 rec.k is not an array and cannot be subscripted
+	end
+	
+end
+
+record rec1B
+	10 k rec2B;
+end
+
+record rec2B
+	10 i int;
+end
+
+//From me:
+program myprogC
+
+	function main()
+		rec rec1C;
+		i int = rec.k[1].i;	//0
+	end
+	
+end
+
+record rec1C
+	10 k rec2C[2];		//0
+end
+
+record rec2C
+	10 i int;
+end

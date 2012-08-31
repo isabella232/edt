@@ -1,0 +1,56 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program MyProj
+	 	 const catConstant string = "cat";
+	function main()
+		const dogConstant int = 5;
+		basRec basRecDef;
+		sqlRec sqlRecDef;
+		sqlAry sqlRecDef[];
+		name string;
+		open myResultSetID with #sql{ select a from b };
+		a, b, c int;
+		
+		foreach( sqlRec into a, b, c ) // 0
+		end
+		
+		foreach( sqlAry[2] ) // 0
+		end
+		
+		foreach( sqlAry ) // 1 target must be an SQL record
+		end
+		
+		foreach( from myResultSetID into a, b, c ) // 0
+		end
+		
+		foreach( from myResultSetID into catConstant, dogConstant, c )// 2 catConstant cannot be resolved as an item or a container. It cannot be a constant | dogConstant cannot be resolved as an item or a container. It cannot be a constant
+		end
+		
+		foreach( from myResultSetID into name[5:9]) // 1  Substring expressions are not valid in this statement location
+		end
+				
+		foreach( basRec ) // 1 target must be an SQL record		
+		end
+		
+		foreach( sqlRec into d, e, f ) // 3 d cannot be resolved|e cannot be resolved|f cannot be resolved
+		end
+		
+		foreach( undeclaredRecord into d ) // 2 undeclaredRecord cannot be resolved|d cannot be resolved
+		end
+		
+		foreach( 1+2 ) end	//1
+	end
+end
+
+Record sqlRecDef type sqlRecord end
+Record basRecDef type basicRecord end

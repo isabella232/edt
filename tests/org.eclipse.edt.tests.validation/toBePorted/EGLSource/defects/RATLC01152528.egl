@@ -1,0 +1,34 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+ExternalType Interface1 type JavaObject
+	function i1Func();
+end
+
+ExternalType Interface2 type JavaObject
+	function i2Func();
+end
+
+ExternalType ImplementsType extends Interface1, Interface2 type JavaObject
+	function childFunc();
+end
+
+Program pgm
+	function main()
+		child ImplementsType;
+		
+		child.i1Func();
+		child.i2Func();
+		child.childFunc();
+	end
+end

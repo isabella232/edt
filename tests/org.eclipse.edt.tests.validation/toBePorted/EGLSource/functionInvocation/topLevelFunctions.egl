@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm1 {includeReferencedFunctions = yes}
+	a int;					//0
+	c int;					//0
+							//0
+	function main()			//0
+		func();				//0
+	end						//0
+end
+
+Program pgm2 {includeReferencedFunctions = yes}
+	b int;					//0
+	c int;					//0
+							//0
+	function main()			//0
+		func();				//0
+	end						//0
+							//0
+	function func3()		//0
+		e = 10;				//1 e cannot be resolved
+	end						//0
+end
+
+function func() {containerContextDependent = yes}
+	a = 10;		//1 pgm2 - a cannot be resolved
+	a = b;		//2 pgm1 - b cannot be resolved|pgm2 - a cannot be resolved
+	c = 10;		//0
+	
+	//2 messages; one for each program that invokes func()
+	var undeclaredVar;	// 2 The type undeclaredVar cannot be resolved
+	
+	func2();	//0
+	func3();	//1 func3 cannot be resolved
+	
+	func();		//0
+end
+
+function func2()
+	c = 10;		//0
+	d = 12;		//2 pgm1 - d cannot be resolved|pgm2 - d cannot be resolved
+	
+	func();		//0
+end

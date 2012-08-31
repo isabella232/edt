@@ -1,0 +1,39 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		sInt smallInt;
+		length int;
+		numVar1 num(4);
+		numVar2 num(8);
+		
+		mb mbchar(4);
+		concatenate(mb, "xxx");
+		
+		calculateChkDigitMod10(numVar1, length, sInt);	//0
+		calculateChkDigitMod10(numVar2, length, sInt);	//0
+
+		calculateChkDigitMod11(numVar1, length, sInt);	//0
+		calculateChkDigitMod11(numVar2, length, sInt);	//0
+		
+		verifyChkDigitMod10(numVar1, length, sInt);		//0
+		verifyChkDigitMod10(numVar2, length, sInt);		//0
+
+		verifyChkDigitMod11(numVar1, length, sInt);		//0
+		verifyChkDigitMod11(numVar2, length, sInt);		//0
+		
+		//Per John R., concatentation with a num variable would
+		//never have done anything, so it is ok for this to fail
+		//concatenate(numVar1, "xxx");					//0
+	end
+end

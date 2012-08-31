@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program defaultString1 {
+	textLiteralDefaultIsString = yes	//0
+}
+	function main()
+		func("abc");					//1 types string(3) and int[] are not reference compatible
+	end
+	
+	function func(a int[]) end
+end
+
+Library defaultString2 {
+}
+	function main()
+		func("abc");					//1 types string(3) and int[] are not reference compatible
+	end
+	
+	function func(a int[]) end
+end
+
+Handler defaultString3 type JSFHandler {
+	textLiteralDefaultIsString = no		//0
+}
+	function main()
+		func("abc");					//1 types char(3) and int[] are not reference compatible
+	end
+	
+	function func(a int[]) end
+end
+
+Record defaultString4 {
+	textLiteralDefaultIsString = no		//0
+}
+	field1 int[] = "abc";				// int[] and char are not compatible
+end
+
+Record defaultString5 {
+	textLiteralDefaultIsString = yes	//0
+}
+	field1 int[] = "abc";				// int[] and string are not compatible
+end
+
+Record defaultString6 {
+}
+	field1 int[] = "abc";				// int[] and string are not compatible
+end

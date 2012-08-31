@@ -1,0 +1,101 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+dataItem bigIntItem bigInt end
+dataItem binItem bin(4) end
+dataItem blobItem blob end
+dataItem booleanItem boolean end
+
+dataItem charItem char(8) end
+dataItem clobItem clob end
+dataItem dateItem date end
+dataItem dbCharItem dbChar(20) end
+
+dataItem decimalItem decimal(5) end
+dataItem floatItem float end
+dataItem hexItem hex(4) end
+dataItem intItem int end
+
+dataItem intervalItem interval("yyyyMM") end
+dataItem mbCharItem mbChar(20) end
+dataItem moneyItem money end
+dataItem numItem num(3) end
+
+dataItem smallFloatItem smallFloat end
+dataItem smallIntItem smallInt end
+dataItem stringItem string end
+dataItem timeItem time end
+
+dataItem timestampItem timeStamp end
+dataItem timestampItema timeStamp("yyyyMMddHHmmss") end
+dataItem uniItem unicode(128) end
+
+interface arrayRefInterface
+    function charTypeArray1(parmOne charItem[] in) returns (intItem);
+    function charTypeArray2(parmOne intItem in) returns (charItem[]);
+    function charType2Array1(parmOne mbCharItem, parmTwo dbCharItem[]) returns (booleanItem);
+    function charType2Array2(parmOne mbCharItem, parmTwo dbCharItem) returns (mbCharItem[]);
+    
+    function impliedLengthTypeArray1(parmOne moneyItem[], parmTwo dateItem, parmThree intervalItem) returns (booleanItem);
+    function impliedLengthTypeArray2(parmOne moneyItem, parmTwo dateItem[], parmThree intervalItem) returns (booleanItem);
+    function impliedLengthTypeArray3(parmOne moneyItem, parmTwo dateItem, parmThree intervalItem[]) returns (booleanItem);
+    function impliedLengthTypeArray4(parmOne moneyItem, parmTwo dateItem, parmThree interval) returns (moneyItem[]);
+    
+    function numberTypeArray1(parmOne numItem[], parmTwo num(32)) returns (decimalItem);
+    function numberTypeArray2(parmOne numItem, parmTwo num(32)) returns (decimalItem[]);
+    
+    function timeTypeArray1(parmOne timestampItem[], parmTwo timeItem) returns (intItem);
+    function timeTypeArray2(parmOne timestampItem, parmTwo timeItem) returns (timeItem[]);
+end
+
+handler myPage3 type JSFHandler
+	{onConstructionFunction = onConstruction, 
+ 	 view = "myPage3.jsp"} 
+
+	arrayRefInterface_timeTypeArray1_parmOne timeStamp[];
+	arrayRefInterface_timeTypeArray1_parmTwo time;
+	arrayRefInterface_timeTypeArray1_result int;
+	arrayRefInterface arrayRefInterface {@bindService};				
+	arrayRefInterface_timeTypeArray2_parmOne timeStamp;
+	arrayRefInterface_timeTypeArray2_parmTwo time;
+	arrayRefInterface_timeTypeArray2_result time[];
+
+	function onConstruction()
+	end
+	
+	function arrayRefInterface_timeTypeArray1_Action()
+		arrayRefInterface_timeTypeArray1_result = arrayRefInterface.timeTypeArray1(arrayRefInterface_timeTypeArray1_parmOne, arrayRefInterface_timeTypeArray1_parmTwo);
+		arrayRefInterface_timeTypeArray1_result = localtimeTypeArray1(arrayRefInterface_timeTypeArray1_parmOne, arrayRefInterface_timeTypeArray1_parmTwo);
+		arrayRefInterface_timeTypeArray1_result = localtimeTypeArray1a(arrayRefInterface_timeTypeArray1_parmOne, arrayRefInterface_timeTypeArray1_parmTwo);
+	end
+	
+	function arrayRefInterface_timeTypeArray2_Action()
+		arrayRefInterface_timeTypeArray2_result = arrayRefInterface.timeTypeArray2(arrayRefInterface_timeTypeArray2_parmOne, arrayRefInterface_timeTypeArray2_parmTwo);
+		arrayRefInterface_timeTypeArray2_result = localtimeTypeArray2(arrayRefInterface_timeTypeArray2_parmOne, arrayRefInterface_timeTypeArray2_parmTwo);
+		arrayRefInterface_timeTypeArray2_result = localtimeTypeArray2a(arrayRefInterface_timeTypeArray2_parmOne, arrayRefInterface_timeTypeArray2_parmTwo);
+	end
+	
+	function localtimeTypeArray1(parmOne timestampItem[], parmTwo timeItem) returns (intItem) end
+	function localtimeTypeArray1a(parmOne timestampItem[], parmTwo timeItem) returns (intItem) end
+    function localtimeTypeArray2(parmOne timestampItema, parmTwo timeItem) returns (timeItem[]) end
+    function localtimeTypeArray2a(parmOne timestampItema, parmTwo timeItem) returns (timeItem[]) end
+end
+
+Program pgm
+	function main()
+		t1 timestamp("yyyyMMdd");
+		func(t1);
+	end
+	
+	function func(p1 timestamp("yyyymmdd")) end
+end

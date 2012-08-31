@@ -1,0 +1,175 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+service serv1
+	function serv1_f1()
+	end
+	
+	function serv1_f2 (parm1 rec1 in , parm2 int out, parm3 rec1) returns (int)
+	end
+
+	function serv1_f3 (parm0 int in, parm1 rec1 in , parm2 int out, parm3 rec1) returns (int)
+	end
+	
+end
+
+interface interf1
+	function interf1_f1();
+	function interf1_f2(parm1 rec1 in , parm2 int out, parm3 rec1) returns (int);
+	function interf1_f3(parm0 int in, parm1 rec1 in , parm2 int out, parm3 rec1) returns (int);
+end
+
+delegate del1 () end
+delegate del2 () returns (int) end
+
+library lib1
+	function f1()
+	end
+end
+
+record rec1
+	a int;
+	b string;
+end
+
+handler h1 type basichandler {includeReferencedFunctions = yes}
+	del1 del1;
+	del2 del2;
+	serv1 serv1;
+	interf1 interf1;
+	
+	mystring string;
+	
+	rec1 rec1;
+	myint int;
+	
+	function f1()
+		tlFunc1();
+		call "abc" returning to f1;     //1
+		call myString returning to f1;		//1
+		call "abc" onException f1;    //1
+		call myString onException f1;		//1
+		
+		call del1; //1
+		
+		call serv1.serv1_f1() returning to f1;  //0
+		
+		call tlFunc1() returning to f1;  //1
+		call f1() returning to f1;   //1
+		
+		call serv1.serv1_f1();  //1
+		
+		call serv1.serv1_f1() returning to myString; //1
+		call serv1.serv1_f1() returning to "abc"; //1
+		call serv1.serv1_f1() returning to lib1.f1; //1
+
+		call serv1.serv1_f1() returning to f1; //0
+		call serv1.serv1_f1() returning to del1; //0
+		call serv1.serv1_f1() returning to tlfunc1; //0
+		call serv1.serv1_f1() returning to tlfunc3; //0
+		
+		call serv1.serv1_f1() returning to f2; //1
+		call serv1.serv1_f1() returning to del2; //1
+		
+
+
+		call serv1.serv1_f1() returning to tlfunc3 onexception f1; //1
+		call serv1.serv1_f1() returning to tlfunc3 onexception f3; //1
+		call serv1.serv1_f1() returning to tlfunc3 onexception f4; //1
+		call serv1.serv1_f1() returning to tlfunc3 onexception f5; //1
+		call serv1.serv1_f1() returning to tlfunc3 onexception f6; //0
+		
+		call serv1.serv1_f2(rec1, myInt, rec1) returning to  f4; //1
+		call serv1.serv1_f2(rec1, myInt, rec1) returning to  f7; //3
+		call serv1.serv1_f2(rec1, myInt, rec1) returning to  f8; //0
+		call serv1.serv1_f2(rec1, myInt, rec1) returning to  f9; //0
+		
+		call serv1.serv1_f2(myInt, myInt, rec1) returning to  f9; //1
+		call serv1.serv1_f2(rec1, rec1, rec1) returning to  f9; //1
+		call serv1.serv1_f3("abc", rec1, myint, rec1) returning to  f9; //0
+		
+		
+
+	end
+	
+	function f2() returns(int)
+	end
+	
+	function f3(p1 anyException in, p2 int in)
+	end
+	
+	function f4 (p1 int in)
+	end
+	
+	function f5 (p1 anyexception)
+	end
+	
+	function f6 (p1 anyexception in)
+	end
+	
+	function f7 (p1 rec1 in , p2 int in, p3 rec1 in)
+	end
+
+	function f8 (p1 int in , p2 rec1 in, p3 int in)
+	end
+	
+	function f9 (p1 string in, p2 rec1 in, p3 float in)
+	end
+	
+end
+
+function tlFunc1() {ContainerContextDependent = yes}
+		call "abc" returning to f1;   //1
+		call myString returning to f1;  //1
+		call "abc" onException f1;     //1
+		call myString onException f1;		//1
+		call interf1.interf1_f1() returning to f1;  //0
+		
+		call tlFunc1() returning to f1; //1
+		call f1() returning to f1;   //1
+		
+		call interf1.interf1_f1();  //1
+
+		call interf1.interf1_f1() returning to myString; //1
+		call interf1.interf1_f1() returning to "abc"; //1
+		call interf1.interf1_f1() returning to lib1.f1; //1
+
+		call interf1.interf1_f1() returning to f1; //0
+		call interf1.interf1_f1() returning to del1; //0
+		call interf1.interf1_f1() returning to tlfunc1; //0
+		call interf1.interf1_f1() returning to tlfunc2; //0
+
+		call interf1.interf1_f1() returning to f2; //1
+		call interf1.interf1_f1() returning to del2; //1
+		
+		call interf1.interf1_f1() returning to tlfunc2 onexception f1; //1
+		call interf1.interf1_f1() returning to tlfunc2 onexception f3; //1
+		call interf1.interf1_f1() returning to tlfunc2 onexception f4; //1
+		call interf1.interf1_f1() returning to tlfunc2 onexception f5; //1
+		call interf1.interf1_f1() returning to tlfunc2 onexception f6; //0
+
+		call interf1.interf1_f2(rec1, myInt, rec1) returning to  f4; //1
+		call interf1.interf1_f2(rec1, myInt, rec1) returning to  f7; //3
+		call interf1.interf1_f2(rec1, myInt, rec1) returning to  f8; //0
+		call interf1.interf1_f2(rec1, myInt, rec1) returning to  f9; //0
+		
+		call interf1.interf1_f2(myInt, myInt, rec1) returning to  f9; //1
+		call interf1.interf1_f2(rec1, rec1, rec1) returning to  f9; //1
+		call interf1.interf1_f3("abc", rec1, myint, rec1) returning to  f9; //0
+		
+
+end
+
+function tlfunc2()
+end
+
+function tlfunc3()
+end

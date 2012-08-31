@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//Validation should allow the DLI annotation with the psb property and
+//callInterface = AIBTDLI  (the defautl call interface ) to be specified in libraries.
+
+//Validation should red tag used of callInterface = CBLTDLI or the pcbParms or psbParm
+//properties when specified for libraries.
+
+library dliLibraryTest type basicLibrary {
+    @DLI {												//0
+         psb = psb, 									//0
+         callInterface = DLICallInterfaceKind.AIBTDLI	//0
+       }												//0
+  }
+
+  // PSB Declaration
+  psb AibToDliPSB ;
+  dliRec dliRec;
+  
+  function main()
+  	dliVar.dbname = "xxx";			//0 	
+  	dlilib.aibtdli("a","a","a");	//0
+  	
+  	add dliRec;					//0
+  	delete dliRec;				//0
+  	replace dliRec;				//0
+  	get dliRec;					//0
+  	get next dliRec;				//0
+  end
+
+end
+
+Record AibToDliPSB type PSBRecord
+	pcb1 IO_PCBRecord {@pcb{
+		hierarchy=[
+			@relationship{segmentRecord=dliRec}
+		]
+	}};	
+end
+
+Record dliRec type DLISegment
+end
+
+library dliLibraryTest2 type basicLibrary {				//1 CBLTDLI is not allowed as the value of callInterface in a library.
+    @DLI {												//0
+         psb = psb, 									//0
+         callInterface = DLICallInterfaceKind.CBLTDLI,	//0
+         pcbParms=[p1],									//1 pcbParms is not a supported property for a library.
+         psbParm=p1										//1 psbParm is not a supported property for a library.
+       }												//0
+    , blah=5
+  }
+
+  // PSB Declaration
+  psb AibToDliPSB ;
+end

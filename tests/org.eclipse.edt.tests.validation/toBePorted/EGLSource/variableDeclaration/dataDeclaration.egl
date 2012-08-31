@@ -1,0 +1,151 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//Put EGL Source File Contents Here
+
+// getAndValidateSetValuesCandidates:
+// 1 Cannot override record properties because the record is not a fixed record. {3376, EGLMESSAGE_CANNOT_OVERRIDE_FLEX_RECORD_PROPERTIES}
+// 1 Cannot override record properties because the record is not a fixed record. {3376, EGLMESSAGE_CANNOT_OVERRIDE_FLEX_RECORD_PROPERTIES}
+// 1 Cannot override record properties because the record is not a fixed record. {3376, EGLMESSAGE_CANNOT_OVERRIDE_FLEX_RECORD_PROPERTIES}
+// validateDataDeclaration:
+// 1 Invalid maxSize value {0}. The value of maxSize must be a positive integer. {3254, EGLMESSAGE_MAXSIZE_NOT_POSITIVE}
+
+
+
+
+
+library lib type NativeLibrary
+i int ;  // 1 The declaration i cannot occur in Library lib.  Declarations are not allowed in a native or serviceBinding library {EGLMESSAGE_NATIVE_LIBRARYS_DO_NOT_SUPPORT_DECLARATIONS}
+end
+
+record one
+i int;
+end
+
+record two
+i int;
+j one[3];
+end
+
+record three
+i int;
+j two[3];
+end
+
+record four
+i int;
+j three[3];
+end
+
+record five
+i int;
+j four[3];
+end
+
+record six
+i int;
+j five[3];
+end
+
+record seven
+i int;
+j six[3];
+end 
+
+record eight
+i int;
+j seven[3];
+end 
+
+
+
+
+record xone
+10 i int;
+end
+
+record xtwo
+10i int;
+10 j xone[3];
+end
+
+record xthree
+10 i int;
+10 j xtwo[3];
+end
+
+record xfour
+10 i int;
+10 j xthree[3];
+end
+
+record xfive
+10 i int;
+10 j xfour[3];
+end
+
+record xsix
+10 i int;
+10 j xfive[3];
+end
+
+record xseven
+10 i int;
+10 j xsix[3];
+end 
+
+record xeight
+10 i int;
+10 j xseven[3];
+end 
+
+program MySource
+const myint int = 5;//0
+const mychar char(3) = "a";
+const myany any = "222";
+const myrec one = "ssss";// 2 Only primitive types or arrays of primitive types may be used for constants {4954, EGLMESSAGE_CONSTANT_DECL_MUST_BE_PRIMITIVE}
+myr one;
+const myreca one[1] = myr;// 3  Only primitive types or arrays of primitive types may be used for constants |  The value of a constant must be a literal{4955, EGLMESSAGE_CONSTANT_VALUE_MUST_BE_LITERAL}
+mypr myprog  ; // 1 The type myprog is not a valid type for a data declaration.
+myints int[-1];// 1 Invalid array size -1. Array sizes must be non-negative integer literals.
+myints2 int[1][][2];// 1 Once a dimension is left unspecified no further dimensions can be specified {3255, EGLMESSAGE_ARRAY_DIMENSION_SPECIFIED_AFTER_DYNAMIC_DIMENSION}
+   
+function main()
+const myint int = 5;//0
+const mychar char(3) = "a";
+const myany any = "222";
+const myrec one = "ssss";// 2 Only primitive types or arrays of primitive types may be used for constants {4954, EGLMESSAGE_CONSTANT_DECL_MUST_BE_PRIMITIVE}
+mypr myprog  ; // 1 The type myprog is not a valid type for a data declaration.
+myints int[-1];// 1 Invalid array size -1. Array sizes must be non-negative integer literals.
+myints2 int[1][][2];// 1 Once a dimension is left unspecified no further dimensions can be specified {3255, EGLMESSAGE_ARRAY_DIMENSION_SPECIFIED_AFTER_DYNAMIC_DIMENSION}
+end
+
+function ax (myrecs xeight[])// 1 Cannot declare array for myrecs because record xeight already has more than 6 dimensions {5034, EGLMESSAGE_TOO_MANY_DIMENTIONS_FOR_RECORD_ARRAY}
+end
+function a (myrecs eight[])// 1 Cannot declare array for myrecs because record eight already has more than 6 dimensions {5034, EGLMESSAGE_TOO_MANY_DIMENTIONS_FOR_RECORD_ARRAY}
+end
+
+
+end
+
+
+
+
+program myprog 
+(myrecs eight[])// 1 Cannot declare array for myrecs because record eight already has more than 6 dimensions {5034, EGLMESSAGE_TOO_MANY_DIMENTIONS_FOR_RECORD_ARRAY}
+function main ()
+end
+end
+
+interface iface 
+function s (myrecs eight[]);// 1 Cannot declare array for myrecs because record eight already has more than 6 dimensions {5034, EGLMESSAGE_TOO_MANY_DIMENTIONS_FOR_RECORD_ARRAY}
+end
+

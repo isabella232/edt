@@ -1,0 +1,62 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+FormGroup PWAOG
+Form PWAOM01 type textForm	
+ {screenSizes = [[24,80],[32,80]], formSize = [24,80], position = [1,1]  }
+  VAGen_DATE num(8)  
+  { position = [1,71], fieldLen = 8, validationOrder = 1, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = skip, align = right, 
+    fillCharacter = "0", dateFormat = "MM/dd/yy"}; 
+end 
+Form PWAOM02 type textForm	
+ { screenSizes = [[24,80],[32,80]], formSize = [24,80], position = [1,1] } 
+  VAGen_DATE num(8)  
+  { position = [1,70], fieldLen = 8, validationOrder = 1, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = skip, align = right, 
+    fillCharacter = "0", dateFormat = "MM/dd/yy"}; 
+end 
+Form PWAOM0S type textForm	
+ {screenSizes = [[24,80],[32,80]], formSize = [24,80], position = [1,1] }
+  VAGen_DATE num(8)  
+  { position = [1,70], fieldLen = 8, validationOrder = 1, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = skip, align = left, 
+    fillCharacter = nullFill, dateFormat = "MM/dd/yy"}; 
+end 
+end
+
+Program VALBUG1 type textUIProgram 
+  ()
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no
+  }
+  use PWAOG.PWAFM0S,  	//1 cannot be resolved
+      PWAOG.PWAOM01, 	//0
+      PWAOG.PWAOM02		//0
+   {
+    helpKey = pf1,
+    pfKeyEquate = yes
+  };
+  function main()
+    PWAOP01: PWAOP01();
+  end 
+end 
+
+Function PWAOP01()
+	converse PWAFM0S;	//1 cannot be resolved
+	converse PWAOM01;	//0
+	converse PWAOM02;	//0
+end	

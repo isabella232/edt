@@ -1,0 +1,243 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program string_invalid {includeReferencedFunctions=yes}
+
+	invalidString String(2);				//0
+	
+	function main()
+		
+		invalidString String(4);			//0
+
+		stringItem1 String;
+		stringItem2 String;
+		stringItem3 String[];		
+		staticArray String[4];		
+		
+		stringLiteralConst1 string = "abcd";
+		stringLiteralConst2 string = "efgh";
+		unicodeItem1 unicode(4);
+		unicodeItem2 unicode(4);
+		binItem bin(9,2);
+		intItem int;
+		bigintItem bigInt;
+		smallintItem smallInt;
+		decimalItem decimal(5,3);
+		numItem num(5);
+		numcItem numc(5);
+		pacfitem pacf(9,4);
+		floatItem float;
+		smallfloatItem smallfloat;
+		moneyItem money (16);
+		blobitem blob;
+		clobitem clob;
+				
+		stringItem1 = abcd;				//1 cannot be resolved
+		
+		stringArray String[-1];			//1 Invalid array size -1
+		stringItem1 = blobitem;		    //1 string and blob are not compatible types		
+		stringItem1 = clobitem;			//1 string and clob are not compatible types				
+		blobitem = stringItem1;			//1 blob and string are not compatible types
+		clobitem = stringItem1;			//1 clob and string are not compatible types
+			
+		move stringItem1 to blobitem;		//1 string and blob are not compatible types		
+		move stringItem1 to clobitem;		//1 string and clob are not compatible types				
+		move blobitem to stringItem1;		//1 blob and string are not compatible types
+		move clobitem to stringItem1;		//1 clob and string are not compatible types			
+			
+		stringItem1 = "abcd" + 5;		//0
+
+		stringArg1 String;
+		stringArg2 String;
+		stringArg3 String[];
+		stringArg4 String[];
+		stringArg5 String[];
+		stringStaticArray String[10];			
+		charArg1 char(20);
+		charArg2 char(20);						
+		charArg3 char(20)[];			
+		
+		stringFunction(stringArg1, stringArg2, staticArray);
+		stringFunction2(stringArg1, stringArg2);					//3 The argument stringArg1 cannot be passed to the inOut parameter stringArg3|The argument stringArg2 cannot be passed to the inOut |Function stringFunction2 requires exactly 3 argument(s).
+		stringFunction(charArg1, charArg2, charArg3);				//1 The argument charArg3 cannot be passed to the inOut parameter stringArg3 of the function stringFunction. The types char(20)[] and string[] are not reference compatible
+		charFunction(stringArg1, stringArg2, StringArg3);			//1 The argument StringArg3 cannot be passed to the inOut parameter charArg3 of the function charFunction. The types string[] and char(20)[] are not reference compatible
+		unicodeFunction(stringArg1);								//1 The argument stringArg1 cannot be passed to the inOut parameter unicodeArg of the function unicodeFunction. The types string and unicode(10) are not reference compatible.
+		mbcharFunction(stringArg1);								    //1 not reference compatible
+		dbcharFunction(stringArg1);                                 //1 not reference compatible
+		hexFunction(stringArg1);									//1 The argument stringArg1 cannot be passed to the inOut parameter hexArg1 of the function hexFunction. The types string and hex(20) are not reference compatible.
+		binFunction(stringArg1);									//1 not reference compatible
+		intFunction(stringArg1);									//1 not reference compatible
+		bigintFunction(stringArg1);									//1 not reference compatible
+		smallintFunction(stringArg1);								//1 not reference compatible
+		decimalFunction(stringArg1);								//1 not reference compatible
+		floatFunction(stringArg1);									//1 not reference compatible
+		smallfloatFunction(stringArg1);								//1 not reference compatible
+		moneyFunction(stringArg1);									//1 not reference compatible
+		numFunction(stringArg1);									//1 not reference compatible
+		numcFunction(stringArg1);									//1 not reference compatible
+		pacfFunction(stringArg1);									//1 not reference compatible
+		blobFunction(stringArg1);									//1 not reference compatible
+		clobFunction(stringArg1);									//1 not reference compatible
+		dateFunction(stringArg1);									//1 not reference compatible
+		timeFunction(stringArg1);									//1 not reference compatible
+		intervalFunction(stringArg1);								//1 not reference compatible
+		timestampFunction(stringArg1);								//1 not reference compatible
+
+		if (stringItem1 <= blobItem)							//1 Only valid comparison between ref types is == or !=.
+		end		
+		if (stringItem1 == blobItem)							//1 not valid for compare to
+		end		
+			
+	end
+
+end
+
+function stringFunction( intItem String in, stringArg2 String out, stringArg3 String[] inout  ) 
+	
+
+end
+function stringFunction1( intItem String(3) ) //0
+	
+
+end
+
+function stringFunction2( stringArg3 String[], stringArg4 String[], stringArg5 String[]) //0
+	
+
+end
+
+function stringFunction3( stringArg1 String in, stringArg2 String out, stringArg3 String[4]) 	//1 The array parameter stringArg3 in the function definition stringFunction3 cannot have a dimension specified
+	
+
+end
+
+
+function charFunction(charArg1 char(20) in, charArg2 char(20) out, charArg3 char(20)[] inout ) 
+end
+
+function unicodeFunction(unicodeArg unicode(10) )					
+end
+
+function mbcharFunction(mbcharArg1 mbchar(20) ) 						
+end
+
+function dbcharFunction(dbcharArg1 dbchar(20) ) 						
+end
+
+function hexFunction(hexArg1 hex(20) )								
+end
+function binFunction(binArg1 bin(9,4) )								
+end
+
+function intFunction(intArg1 int )								
+end
+
+function bigintFunction(bigintArg1 bigint )								
+end
+
+function smallintFunction(smallintArg1 smallint )								
+end
+
+function decimalFunction(decimalArg1 decimal(20) )								
+end
+
+function floatFunction(floatArg1 float )								
+end
+
+function smallfloatFunction(smallfloatArg1 smallfloat )								
+end
+
+function moneyFunction(moneyArg1 money(20) )								
+end
+
+function numFunction(numArg1 num(20) )								
+end
+
+function numberFunction(numberArg1 number )								
+end
+function numcFunction(numcArg1 numc(5) )								
+end
+
+function pacfFunction(pacfArg1 pacf(6,4) )								
+end
+
+function blobFunction(blobArg1 blob )								
+end
+
+function clobFunction(clobArg1 clob )								
+end
+function dateFunction(dateArg1 date )								
+end
+
+function timeFunction(timeArg1 time )								
+end
+function intervalFunction(intervalArg1 interval("yyyyMM") )								
+end
+
+function timestampFunction(timestampArg1 timestamp )								
+end
+
+
+
+function getStringFunction() returns (String) 			
+	stringVar int;											
+	
+	return (stringVar);											
+end
+
+function externalStringFunction()
+	
+	stringVar String(5);						//0
+					
+end
+
+DataItem 
+	invalidString String(10)					//0
+end   
+
+
+Record testRecord
+	invalidItem String(1);						//0		
+end
+
+Library lib
+	invalidString String(3);    				//0	
+end
+
+handler pageh type JSFHandler
+	invalidString String(2);    				//0
+end
+
+Record testRecord2 
+	10 stringInFixed String;					// 1 string is not a valid type for an item
+end
+
+Record testRecord3
+	5 someitem;  
+		10 stringInFixed String;				// 1 string is not a valid type for an item
+end
+
+Datatable testtable1
+	{contents = [["abc"]]}
+	10 stringInTable string;					// 1 string is not a valid type for an item
+end
+
+Form myform1 type textform
+	{formsize = [4,4] }
+	myfield string {position = [2,2], color=red};  // 1 string is not a valid type for form fields
+end
+
+Form myform2 type printform
+	{formsize = [3,3] }
+	myfield string {position = [2,2], color=red};  // 1 string is not a valid type for form fields
+end

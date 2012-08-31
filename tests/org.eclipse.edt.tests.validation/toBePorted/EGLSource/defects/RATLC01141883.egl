@@ -1,0 +1,22 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Library lib	
+	function func()
+	    diff01 interval("yyyyMM");
+	    t1, t2 timestamp("yyyyMMdd");	    
+	    diff01 = t2 - t1;				//1
+	    
+	    t3, t4 timestamp("yyyyMM");
+	    diff01 = t4 - t3;				//0
+	end	
+end

@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// In the above below, abc is not a valid field in the current form, nor is a
+// variable within the scope. There are no validation errors thrown. However,
+// there are Javagen exceptions thrown.
+
+Record custformForm type ConsoleForm { formSize = [13,80], showBrackets = yes }
+
+ *ConsoleField { position = [3,28], value = "Customer Form" };
+ *ConsoleField { position = [5,9], value = "Number      :" };
+ customer_num ConsoleField { position = [5,23], fieldLen = 11,  dataType = "int",  protect = no};
+ *ConsoleField { position = [6,9], value = "Owner Name  :" };
+ fname ConsoleField { position = [6,23], fieldLen = 15,  dataType = "char"};
+ lname ConsoleField { position = [6,40], fieldLen = 15,  dataType = "char"};
+ *ConsoleField { position = [7,9], value = "Company     :" };
+ company ConsoleField { position = [7,23], fieldLen = 20,  dataType = "char"};
+ *ConsoleField { position = [8,9], value = "Address     :" };
+ address1 ConsoleField { position = [8,23], fieldLen = 20,  dataType = "char"};
+ address2 ConsoleField { position = [9,23], fieldLen = 20,  dataType = "char"};
+ *ConsoleField { position = [10,9], value = "City        :" };
+ city ConsoleField { position = [10,23], fieldLen = 15,  dataType = "char"};
+ *ConsoleField { position = [10,40], value = "State:" };
+ state ConsoleField { position = [10,47], fieldLen = 2,  dataType = "char",  caseFormat = upper};
+ *ConsoleField { position = [10,51], value = "Zipcode:" };
+ zipcode ConsoleField { position = [10,60], fieldLen = 5,  dataType = "char"};
+ *ConsoleField { position = [11,9], value = "Telephone   :" };
+ phone ConsoleField { position = [11,23], fieldLen = 18,  dataType = "char",  pattern = "###-###-#### XXXXX"};
+ 
+ customer Dictionary{
+ 	customer_num=abc,	// 1 abc cannot be resolved
+ 	fname=fname,		// 0
+ 	lname=lname,		// 0
+ 	company=company,	// 0
+ 	address1=address1,	// 0
+ 	address2=address2,	// 0
+ 	city=city,			// 0
+ 	state=state,		// 0
+ 	zipcode=zipcode,	// 0
+ 	phone=phone};		// 0
+end

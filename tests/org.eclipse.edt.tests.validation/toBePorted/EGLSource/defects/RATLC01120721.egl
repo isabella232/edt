@@ -1,0 +1,30 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Library lib
+	c char(10) = CX"313";		//1 must be even
+	c2 char(10) = CX"3131";		//0
+	
+	m mbchar(10) = MX"313";		//1 must be even
+	m2 mbchar(10) = MX"3131";	//0
+	
+	h hex(10) = X"313";			//1 must be even
+	h2 hex(10) = X"3131";		//0
+	
+	d dbchar(10) = dX"313";		//1 must be a multiple of four
+	d2 dbchar(10) = dX"3131";	//0
+	d3 dbchar(10) = dX"313131";	//1 must be a multiple of four
+	
+	u string = uX"313";			//1 must be a multiple of four
+	u2 string = uX"3131";		//0
+	u3 string = uX"313131";		//1 must be a multiple of four
+end

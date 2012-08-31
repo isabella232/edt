@@ -1,0 +1,102 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR VAG
+
+Record textDataTypesUir type VGUIRecord {
+	title = "Test Formatting For Text Types",
+	alias = "tdtuir"
+	}
+
+	5 userAction char(50) { 
+		displayName = "User action:  ",
+		uiType = output
+		} = "Please press enter" ;		
+	5 aForm char(145) {
+		uiType = uiForm,
+		@ programLinkData {
+			programName = "WEBTDTFC",
+			uiRecordName = "textDataTypesAsCharUir"
+			}
+		} ;
+	10 aChar10 char(10) {
+		displayName = "Char",
+		uiType = inputOutput
+		} ;
+	10 aChar10WithFill char(10) {
+		displayName = "Char with fill",
+		uiType = inputOutput,
+		fillCharacter = "*"
+		} ;
+	10 aChar10WithUpperCase char(10) {
+		displayName = "Char uppercase",
+		uiType = inputOutput,
+		upperCase = yes
+		} ;
+	10 aCharBoolean char(1) {
+		displayName = "Char boolean",
+		uiType = inputOutput,
+		isBoolean = yes
+		} ;
+	10 aCharTime char(8) {
+		displayName = "Char time",
+		uiType = inputOutput,
+		timeFormat = "hh*mm aa"
+		} ;
+	10 aCharDate char(10) {
+		displayName = "Char date",
+		uiType = inputOutput,
+		dateFormat = "yyyy-MM-dd"
+		} ;
+	10 aUnicode10 unicode(10) {
+		displayName = "Unicode",
+		uiType = inputOutput
+		}  ;
+	10 aUnicode10WithFill unicode(10) {
+		displayName = "Unicode with fill",
+		uiType = inputOutput,
+		fillCharacter = "*"
+		} ;
+	10 aUnicode10WithUpperCase unicode(10) {
+		displayName = "Unicode uppercase",
+		uiType = inputOutput,
+		upperCase = yes
+		} ;
+	10 aHex10 hex(10) {
+		uiType = inputOutput
+		} ;
+	10 aNumBoolean num(1) {
+		displayName = "Num boolean",
+		uiType = inputOutput,
+		isBoolean = yes
+		} ;
+	10 aNumTime num(8) {
+		displayName = "Num time",
+		uiType = inputOutput,
+		timeFormat = "HH:mm:ss"
+		} ;
+	10 aNumDate num(10) {
+		displayName = "Num date",
+		uiType = inputOutput,
+		dateFormat = isoDateFormat
+//		dateFormat = "MM/dd/yyyy"
+		} ;	
+	10 aShortNumDate num(8) {
+		displayName = "Short num date",
+		uiType = inputOutput,
+		dateFormat = "dd/MM/yy"
+		} ;			
+	10 enter char(4) { 
+		displayName = "Enter",
+		uiType = submit
+		} = "PF3" ;
+		
+end

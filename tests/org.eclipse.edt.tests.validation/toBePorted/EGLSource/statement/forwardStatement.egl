@@ -1,0 +1,165 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record mydata 
+		age int;
+		name string;
+		thetime any;
+		children string[];
+end
+
+record uirec type VGUIRecord
+i int;
+end
+
+record uirec2 type VGUIRecord
+i int;
+end
+
+handler MyProj2 type JSFHandler 
+
+	function forwardFunction() 
+		age int;
+		xxx int;
+		name string;
+		thetime any;
+		children string[];
+		myuirec uirec;
+		forward xxx,name,children to label "MyProjPH";// 0
+		forward age,children to label "MyProjPH";// 1 The function forwardToPageLoad(int, string, string[]) is not applicable for the arguments (int, string[])		{6708, EGLMESSAGE_PAGEHANDLER_ARGS_DONT_MATCH_PARAMS}
+	end	
+end
+	
+handler MyProjPH type JSFHandler {
+	view = "forwardTo.jsp", 
+ 	title = "Forward To Another Page",
+	onConstructionFunction = forwardToPageLoad
+	}
+
+	myURLItem char(100);
+	data, data2 mydata;
+	function forwardToPageLoad(age int,name string,children string[])
+	end	
+	
+	function forwardFunction() 
+		age int;
+		name string;
+		thetime any;
+		children string[];
+		myuirec uirec;
+		myuirec2 uirec2;
+		vgdef vgUIRecDef;
+		forward myuirec returning to MyWeb;	// 1 The type of the passed UI record must match the type of the input page record in MyWeb   {5194, EGLMESSAGE_FORWARD_UI_RECORD_DEFINITION_MUST_MATCH_INPUT_PAGE_RECORD}
+		forward vgdef returning to MyWeb2;	//0
+		forward vgdef returning to MyProjBasic;	//1 The returning to program MyProjBasic must be defined as an action program  		{5195, EGLMESSAGE_FORWARD_RETURN_TO_MUST_BE_ACTION_PROGRAM}
+		
+		Forward to URL "abcdefg"; // 0
+		forward data to URL "abcdef";// 1 Arguments are not allowed on a forward to URL statement		{7778,ARGUMENTS_NOT_ALLOWED_ON_FORWARD_TO_URL}
+		forward data to "aaaaa";// 0
+		forward data,data2 to "wwwww";// 0
+		myURLItem = "abcdefg";	
+		Forward to URL myURLItem; //0
+		forward to URL age;//0
+		
+		forward to label "abcdef";// 0
+		forward data,age,name,thetime,children to "abcdef";// 1 The argument thetime on the forward statement must be an item, a record or a dynamic array. Items of type any are not allowed  {5192, EGLMESSAGE_FORWARD_ARG_MUST_BE_ITEM_RECORD_OR_DYNAMIC_ARRAY}
+		forward  data to "aaaa" passing data2 returning to myprog;// 0
+		forward  data to "aaaa" passing name returning to myprog;//1 The passing record identifier name must be a record variable		{6541,PASSING_RECORD_NOT_RECORD}
+		forward  to "aaaa" passing data2 returning to myprog;// 1  Invalid number of arguments. The forward UIRecord statement must have exactly one record argument		{5178, EGLMESSAGE_INVALID_FORWARD_UIRECORD_NUM_ARGS}
+		forward data to "aaaa" passing data2;// 1  Invalid forward statement. The passing option may only be used in combination with the returning to option		{5182, EGLMESSAGE_INVALID_FORWARD_STMT_PASSING_WITH_OUT_RETURNING_OPTION}
+		forward data to "aaaa" returning to myprog passing data2;// 0
+		forward myuirec returning to myproj;// 0
+
+		forward data returning to myproj;// 1 The argument data on the forward statement must be a UI record  	{5191, EGLMESSAGE_FORWARD_ARG_MUST_BE_UI_RECORD}
+		
+		forward age,children to label "MyProj2";// 1  Forward to label target must have an onConstructionFunction specified		{6712, EGLMESSAGE_FORWARD_TARGET_DOESNT_HAVE_onConstruction_FUNCTION}
+	end
+end
+	
+Program MyWeb type  VGWebTransaction
+	
+	vgUIRec vgUIRecDef;
+
+	function main()
+	
+		Forward to "abcdefg"; // 1 The forward statement may only be used in a JSFHandler		{6558,STATEMENT_CAN_ONLY_BE_IN_PAGE_HANDLER}
+
+	end
+end
+
+Program MyWeb2 type  VGWebTransaction{
+inputUIRecord = vgUIRec
+}
+	
+	vgUIRec vgUIRecDef;
+
+	function main()
+	
+		Forward to "abcdefg"; // 1 The forward statement may only be used in a JSFHandler		{6558,STATEMENT_CAN_ONLY_BE_IN_PAGE_HANDLER}
+
+	end
+end
+
+Program MyProjBasic type BasicProgram {includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	
+	function main()
+		Forward to "abcdefg"; // 1 The forward statement may only be used in a JSFHandler		{6558,STATEMENT_CAN_ONLY_BE_IN_PAGE_HANDLER}
+	end
+end
+
+Library MyLib{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+
+	function myfunc()
+		Forward to "abcdefg"; // 1 The forward statement may only be used in a JSFHandler		{6558,STATEMENT_CAN_ONLY_BE_IN_PAGE_HANDLER}
+	end
+end
+
+Record  MyUIRecord  Type  VGUIRecord 
+		{ commandValueItem="buttonValue" }	
+	10 formItem  char(21)					 
+	   {uiType=uiForm, 						
+        @programLinkData { 					
+			programName="NewPgm",			
+			newWindow=yes,					
+			uiRecordName="NewUIR",			
+			linkParms = [					
+			   				@LinkParameter { name="key1", value="value1" },		
+			   				@LinkParameter { name="key2", valueRef="refItem" }
+						]				
+        }
+	   };
+	  20 nametem  char(16)	{ uiType=input, inputRequired=yes }; 			
+	  20 buttonItem char(1)[3]	{uiType=submit,			
+  								 displayName="Enter \n Help \n Cancel"	
+								} 						
+								= [ "E", "H", "C" ];	
+	  20 buttonValue char(1) { uiType=none };			
+      20 refItem     char(1) { uiType=none };			
+End
+
+formgroup myformg 
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+
+Program myBasicProgram1 type textuiprogram{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	
+ 		function main()
+		Forward to "abcdefg"; // 1 The forward statement may only be used in a JSFHandler		{6558,STATEMENT_CAN_ONLY_BE_IN_PAGE_HANDLER}
+	end	
+end
+
+
+Record vgUIRecDef type VGUIRecord end
+

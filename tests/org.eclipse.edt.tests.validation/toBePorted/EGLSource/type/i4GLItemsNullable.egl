@@ -1,0 +1,238 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program notNullablePgm1 {
+	I4GLItemsNullable=no
+}
+	use testLib;
+
+	ca int;
+	cb int?;
+
+	function main()
+		a int;
+		compileFailsIfArgNotNullable(a);			//1
+		
+		compileFailsIfArgNotNullable(ca);			//1
+		
+		b int? = null;		//0
+		compileFailsIfArgNotNullable(b);			//0
+		
+		compileFailsIfArgNotNullable(cb);			//0
+		
+		nullRec nullableRec;
+		compileFailsIfArgNotNullable(nullRec.a);	//0
+		
+		notNullRec notNullableRec;
+		compileFailsIfArgNotNullable(notNullRec.a);	//1
+		
+		notNullRec2 notNullableRec2;
+		compileFailsIfArgNotNullable(notNullRec2.a);	//1
+		
+		inOutFunc(a);					//0
+		inOutFunc(b);					//1
+	end
+	
+	function returnsFunc(a int in) returns (int)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+	
+	function returnsNullableFunc(a int? in) returns (int?)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+	
+	function inOutFunc(a int)
+		compileFailsIfArgNotNullable(a);			//1
+		if(a == null) end	//0
+	end	
+	
+	function nullableParmFunc(a int SqlNullable)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+end
+
+Program notNullablePgm2 {
+	I4GLItemsNullable=no
+}
+	use testLib;
+	
+	ca int;
+	cb int?;
+	
+	function main()
+		a int = null;		//0
+		compileFailsIfArgNotNullable(a);	//1
+		if(a == null) end	//0
+		
+		compileFailsIfArgNotNullable(ca);			//1
+		if(ca == null) end	//0
+		
+		b int? = null;		//0
+		compileFailsIfArgNotNullable(b);			//0
+		if(b == null) end	//0
+		
+		compileFailsIfArgNotNullable(cb);			//0
+		if(cb == null) end	//0
+		
+		nullRec nullableRec;
+		compileFailsIfArgNotNullable(nullRec.a);			//0
+		if(nullRec.a == null) end	//0
+		
+		notNullRec notNullableRec;
+		compileFailsIfArgNotNullable(notNullRec.a);			//1
+		if(notNullRec.a == null) end	//0
+		
+		notNullRec2 notNullableRec2;
+		compileFailsIfArgNotNullable(notNullRec2.a);			//1
+		if(notNullRec2.a == null) end	//0
+		
+		if(returnsNullableFunc(a) == null) end	//0
+		
+		inOutFunc(a);					//0
+		inOutFunc(b);					//1
+	end
+	
+	function returnsFunc(a int in) returns (int)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+	
+	function returnsNullableFunc(a int? in) returns (int?)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+	
+	function inOutFunc(a int)
+		compileFailsIfArgNotNullable(a);			//1
+		if(a == null) end	//0
+	end	
+	
+	function nullableParmFunc(a int SqlNullable)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+end
+
+Program nullablePgm {
+	I4GLItemsNullable=yes
+}
+	use testLib;
+	
+	ca int;
+	cb int?;
+
+	function main()
+		a int = null;		//0
+		a = null;			//0
+		if(a == null) end	//0
+		compileFailsIfArgNotNullable(a);	//0
+		
+		ca = null;			//0
+		if(ca == null) end	//0
+		compileFailsIfArgNotNullable(ca);	//0
+
+		b int? = null;		//0
+		b = null;			//0
+		if(b == null) end	//0
+		compileFailsIfArgNotNullable(b);	//0
+		
+		cb = null;			//0
+		if(cb == null) end	//0
+		compileFailsIfArgNotNullable(cb);	//0
+		
+		nullRec nullableRec;
+		nullRec.a = null;			//0
+		if(nullRec.a == null) end	//0
+		compileFailsIfArgNotNullable(nullRec.a);	//0
+		
+		notNullRec notNullableRec;
+		notNullRec.a = null;			//0
+		if(notNullRec.a == null) end	//0
+		compileFailsIfArgNotNullable(notNullRec.a);	//1
+		
+		notNullRec2 notNullableRec2;
+		notNullRec2.a = null;			//0
+		if(notNullRec2.a == null) end	//0
+		compileFailsIfArgNotNullable(notNullRec2.a);	//1
+		
+		if(returnsFunc(a) == null) end			//0
+		if(returnsNullableFunc(a) == null) end	//0
+		
+		inOutFunc(a);					//0
+		inOutFunc(b);					//0
+	end
+	
+	function returnsFunc(a int in) returns (int)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+	
+	function returnsNullableFunc(a int? in) returns (int?)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+	
+	function inOutFunc(a int)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+	
+	function nullableParmFunc(a int SqlNullable)
+		a = null;			//0
+		if(a == null) end	//0
+	end
+end
+
+Record nullableRec {
+	I4GLItemsNullable=yes
+}
+	a int;
+end
+
+Record notNullableRec {
+	I4GLItemsNullable=no
+}
+	a int;
+end
+
+Record notNullableRec2
+	a int;
+end
+
+Record sqlRec type SQLRecord
+	10 item1 int;
+end
+
+Program pgmThatInvokesTopLevelFunction1 {includeReferencedFunctions=yes, I4GLItemsNullable=yes}
+	function main()
+		topLevelFunction(5);
+	end
+end
+
+Program pgmThatInvokesTopLevelFunction2 {includeReferencedFunctions=yes, I4GLItemsNullable=no}
+	function main()
+		topLevelFunction(5);
+	end
+end
+
+function topLevelFunction(p1 int in)
+	testLib.compileFailsIfArgNotNullable(p1);	//1 pgmThatInvokesTopLevelFunction2 -
+	a int;
+	testLib.compileFailsIfArgNotNullable(a);	//1 pgmThatInvokesTopLevelFunction2 -
+end
+
+Library testLib
+	function compileFailsIfArgNotNullable(p1 int? inout) end
+end

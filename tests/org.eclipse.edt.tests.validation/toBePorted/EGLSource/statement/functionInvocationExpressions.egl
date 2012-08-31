@@ -1,0 +1,314 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program functionInvocationExpressions
+	MYREC basicrec;
+	myflex flexrecord;
+    aChar20 char(20) ; 
+    hex8 hex(8);
+    aUnicode20 unicode(20) ;
+    anInt int ;
+    aBin bin(9,3) ;
+    mystring string; 
+    numitem num(5);
+    
+    function userfunc(mystring string in) returns (string)
+	end
+    
+    function main() 
+			aunicode20 = aunicode20[3:4];
+			achar20 = achar20[anint:anint]; 
+			mystring = mystring[anint:6];
+			if ((mystring) not null)
+			end
+			anint = round(hex8);
+			mystring = mystring[func():3+4];
+			mystring[anint+1:3+4] = "ab c";
+
+	 		userfunc(abin + "abc");														// 0
+	 		mystring = userfunc(abin + "abc");											// 0
+			userfunc( getCmdLineArg("abc"));											// 0
+		 	mystring = userfunc(abin + getCmdLineArg(1)); 								// 0
+		 	callcmd(getCmdLineArg("abc"));												// 0
+		 	mystring = getProperty(getCmdLineArg("xyz")+ getCmdLineArg("def"));			// 0
+		 	mystring = getProperty(abin + getCmdLineArg("abc")+ getCmdLineArg("def"));	// 0
+			disconnect(getCmdLineArg(1));												// 0
+			mystring = getProperty(getCmdLineArg(2));									// 0
+			callcmd(getCmdLineArg(isObjId( "abc" as "objid:java")));										// 0
+
+//			anint = isObjId( (objid)getCmdLineArg(2));											// 0
+			a string = getCmdLineArg(isObjId("abc" as "objid:java"));
+			userfunc(abin + "abc");																				// 0
+	 		mystring = userfunc(abin + "abc");																	// 0
+			userfunc( syslib.getCmdLineArg("abc"));																// 0
+		 	mystring = userfunc(abin +  syslib.getCmdLineArg(1));  												// 0
+		 	syslib.callcmd( syslib.getCmdLineArg("abc"));														// 0
+		 	mystring =  syslib.getProperty( syslib.getCmdLineArg("xyz")+  syslib.getCmdLineArg("def"));			// 0
+		 	mystring =  syslib.getProperty(abin +  syslib.getCmdLineArg("abc")+  syslib.getCmdLineArg("def"));	// 0
+			disconnect( syslib.getCmdLineArg(1));																// 0
+			mystring =  syslib.getProperty( syslib.getCmdLineArg(2));											// 0
+			syslib.callcmd( syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java")));										// 0
+			mystring =  syslib.getProperty( syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java" )));						// 0
+//			anint = javalib.isObjId( (objid)getCmdLineArg(2));															// 0
+
+	 		if (mystring == userfunc(abin + "abc"))											// 0
+	 		end
+		 	if (mystring == userfunc(abin + getCmdLineArg(1)))								// 0
+		 	end 
+		 	if (mystring == getProperty(getCmdLineArg("xyz")+ getCmdLineArg("def")))		// 0
+		 	end
+		 	if (mystring == getProperty(abin + getCmdLineArg("abc")+ getCmdLineArg("def")))	// 0
+		 	end
+			if (mystring == getProperty(getCmdLineArg(2)))									// 0
+			end
+			if (mystring == getProperty(getCmdLineArg(isObjId( "abc" as "objid:java"))))						// 0
+			end
+//			if (anint == isObjId( (objid)getCmdLineArg(2)))											// 0
+//			end			
+			
+		 	if (mystring == userfunc(abin + syslib.getCmdLineArg(1)))										// 0
+		 	end 
+		 	if (mystring == syslib.getProperty(syslib.getCmdLineArg("xyz")+ syslib.getCmdLineArg("def")))	// 0
+		 	end
+		 	if (mystring == getProperty(abin + syslib.getCmdLineArg("abc")+ syslib.getCmdLineArg("def")))	// 0
+		 	end
+			if (mystring == syslib.getProperty(syslib.getCmdLineArg(2)))									// 0
+			end
+			if (mystring == syslib.getProperty(syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java"))))				// 0
+			end
+//			if (anint == javalib.isObjId( (objid)syslib.getCmdLineArg(2)))											// 0
+//			end		
+
+
+	 		call "mypgm" (userfunc(abin + "abc"));											// 0
+	 		call "mypgm" (userfunc(abin + getCmdLineArg(1)));								// 0
+		 	call "mypgm" (""::getProperty(getCmdLineArg("xyz")+ getCmdLineArg("def")));			// 0
+		 	call "mypgm" (""::getProperty(abin + getCmdLineArg("abc")+ getCmdLineArg("def")));	// 0
+		 	call "mypgm" (""::getProperty(getCmdLineArg(2)));									// 0
+			call "mypgm" (""::getProperty(getCmdLineArg(isObjId( "abc" as "objid:java"))));						// 0
+//			call "mypgm2" (isObjId( getCmdLineArg(2) as "objid:java"));										// 1
+
+	 		call "mypgm" (userfunc(abin + "abc"));																// 0
+	 		call "mypgm" (userfunc(abin + syslib.getCmdLineArg(1)));											// 0
+		 	call "mypgm" (""::syslib.getProperty(syslib.getCmdLineArg("xyz")+ syslib.getCmdLineArg("def")));		// 0
+		 	call "mypgm" (""::syslib.getProperty(abin + syslib.getCmdLineArg("abc")+ syslib.getCmdLineArg("def")));	// 0
+		 	call "mypgm" (""::syslib.getProperty(syslib.getCmdLineArg(2)));											// 0
+			call "mypgm" (""::syslib.getProperty(syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java"))));					// 0
+//			call "mypgm2" (javalib.isObjId( syslib.getCmdLineArg(2) as "objid:java"));											// 1
+
+		
+			case (mystring)
+				when (userfunc(abin + "abc"))											// 0
+		 		when (userfunc(abin + getCmdLineArg(1)))								// 0
+		 		when (getProperty(getCmdLineArg("xyz")+ getCmdLineArg("def")))			// 0
+		 		when (getProperty(abin + getCmdLineArg("abc")+ getCmdLineArg("def")))	// 0
+		 		when (getProperty(getCmdLineArg(2)))									// 0
+				when (getProperty(getCmdLineArg(isObjId( "abc" as "objid:java"))))						// 0
+			end
+			case (anint)
+//				when (isObjId( (objid)getCmdLineArg(2)))										// 0
+			end
+			
+			case (mystring)
+				when (userfunc(abin + "abc"))																// 0
+		 		when (userfunc(abin + syslib.getCmdLineArg(1)))												// 0
+		 		when (syslib.getProperty(syslib.getCmdLineArg("xyz")+ syslib.getCmdLineArg("def")))			// 0
+		 		when (syslib.getProperty(abin + syslib.getCmdLineArg("abc")+ syslib.getCmdLineArg("def")))	// 0
+		 		when (syslib.getProperty(getCmdLineArg(2)))													// 0
+				when (syslib.getProperty(syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java"))))						// 0
+			end
+			case (anint)
+//				when (javalib.isObjId( (objid)getCmdLineArg(2)))													// 0
+			end
+			
+			case
+				when (userfunc(abin + "abc") != "")											// 0
+		 		when (userfunc(abin + getCmdLineArg(1)) != "")								// 0
+		 		when (getProperty(getCmdLineArg("xyz")+ getCmdLineArg("def")) != "")		// 0
+		 		when (getProperty(abin + getCmdLineArg("abc")+ getCmdLineArg("def")) != "")	// 0
+		 		when (getProperty(getCmdLineArg(2)) != "")									// 0
+				when (getProperty(getCmdLineArg(isObjId( "abc" as "objid:java"))) != "")						// 0
+			end
+			case
+//				when (isObjId( (objid)getCmdLineArg(2)) != 0)										// 0
+			end
+			
+			case
+				when (userfunc(abin + "abc") != "")																	// 0
+		 		when (userfunc(abin + syslib.getCmdLineArg(1)) != "")												// 0
+		 		when (syslib.getProperty(syslib.getCmdLineArg("xyz")+ syslib.getCmdLineArg("def")) != "")			// 0
+		 		when (syslib.getProperty(abin + syslib.getCmdLineArg("abc")+ syslib.getCmdLineArg("def")) != "")	// 0
+		 		when (syslib.getProperty(getCmdLineArg(2)) != "")													// 0
+				when (syslib.getProperty(syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java"))) != "")						// 0
+			end
+			case
+//				when (javalib.isObjId( (objid)getCmdLineArg(2)) != 0)														// 0
+			end
+
+
+			if(yes) exit program; end
+			if(yes) exit program  (intuserfunc(abin + "abc")); end											// 0
+		 	if(yes) exit program  (intuserfunc(abin + getCmdLineArg(1))); end								// 0
+		 	if(yes) exit program  (charAsInt(getCmdLineArg("xyz")+ getCmdLineArg("def"))); end			// 0
+		 	if(yes) exit program  (charAsInt(abin + getCmdLineArg("abc")+ getCmdLineArg("def"))); end	// 0
+		 	if(yes) exit program  (charAsInt(getCmdLineArg(2))); end									// 0
+			if(yes) exit program  (charAsInt(getCmdLineArg(isObjId( "abc" as "objid:java")))); end						// 0
+
+//			if(yes) exit program  (isObjId( (objid)getCmdLineArg(2))); end											// 0
+//
+	
+			if(yes) exit program  (intuserfunc(abin + "abc")); end																// 0
+
+		 	if(yes) exit program  (intuserfunc(abin + syslib.getCmdLineArg(1))); end											// 0
+
+		 	if(yes) exit program  (strlib.charAsInt(syslib.getCmdLineArg("xyz")+ syslib.getCmdLineArg("def"))); end		// 0
+
+		 	if(yes) exit program  (strlib.charAsInt(abin + syslib.getCmdLineArg("abc")+ syslib.getCmdLineArg("def"))); end	// 0
+
+		 	if(yes) exit program  (strlib.charAsInt(syslib.getCmdLineArg(2))); end											// 0
+
+			if(yes) exit program  (strlib.charAsInt(syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java")))); end					// 0
+
+//			if(yes) exit program  (javalib.isObjId( (objid)syslib.getCmdLineArg(2))); end												// 0
+//
+			 
+
+			for (anint from intuserfunc(abin + "abc") to anint by anint)											// 0
+			end
+			for (anint from intuserfunc(abin + getCmdLineArg(1)) to anint by anint)									// 0
+			end
+			for (anint from charAsInt(getCmdLineArg("xyz")+ getCmdLineArg("def")) to anint by anint)			// 0
+			end
+			for (anint from charAsInt(abin + getCmdLineArg("abc")+ getCmdLineArg("def")) to anint by anint)	// 0
+			end
+			for (anint from charAsInt(getCmdLineArg(2)) to anint by anint)										// 0
+			end
+			for (anint from charAsInt(getCmdLineArg(isObjId( "abc" as "objid:java"))) to anint by anint)						// 0
+			end
+//			for (anint from isObjId( (objid)getCmdLineArg(2)) to anint by anint)											// 0
+//			end
+			
+			for (anint from intuserfunc(abin + "abc") to anint by anint)																// 0
+			end
+			for (anint from intuserfunc(abin + sysLib.getCmdLineArg(1)) to anint by anint)												// 0
+			end
+			for (anint from strlib.charAsInt(sysLib.getCmdLineArg("xyz")+ sysLib.getCmdLineArg("def")) to anint by anint)			// 0
+			end
+			for (anint from strlib.charAsInt(abin + sysLib.getCmdLineArg("abc")+ sysLib.getCmdLineArg("def")) to anint by anint)	// 0
+			end
+			for (anint from strlib.charAsInt(sysLib.getCmdLineArg(2)) to anint by anint)											// 0
+			end
+			for (anint from strlib.charAsInt(sysLib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java"))) to anint by anint)						// 0
+			end
+//			for (anint from javaLib.isObjId( (objid)sysLib.getCmdLineArg(2)) to anint by anint)													// 0
+//			end
+			
+			for( anint from foo2() to foo3() by foo4() ) end // 3			
+			for( anint to foo2() by foo3() ) end			 // 2
+			for( anint to foo2() ) end						 // 1
+				
+			move userfunc(abin + "abc") to mystring;											// 0
+	 		move userfunc(abin + getCmdLineArg(1)) to mystring;									// 0
+	 		move getProperty(getCmdLineArg("xyz")+ getCmdLineArg("def")) to mystring;			// 0
+	 		move getProperty(abin + getCmdLineArg("abc")+ getCmdLineArg("def")) to mystring;	// 0
+	 		move getProperty(getCmdLineArg(2)) to mystring;										// 0
+	 		move getProperty(getCmdLineArg(isObjId( "abc" as "objid:java"))) to mystring;						// 0
+//	 		move isObjId( (objid)getCmdLineArg(2)) to anint;											// 0
+	 		
+	 		move userfunc(abin + "abc") to mystring;																// 0
+	 		move userfunc(abin + syslib.getCmdLineArg(1)) to mystring;												// 0
+	 		move syslib.getProperty(syslib.getCmdLineArg("xyz")+ syslib.getCmdLineArg("def")) to mystring;			// 0
+	 		move syslib.getProperty(abin + syslib.getCmdLineArg("abc")+ syslib.getCmdLineArg("def")) to mystring;	// 0
+	 		move syslib.getProperty(syslib.getCmdLineArg(2)) to mystring;											// 0
+	 		move syslib.getProperty(syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java"))) to mystring;						// 0
+//	 		move javalib.isObjId( (objid)syslib.getCmdLineArg(2)) to anint;													// 0
+	
+			myarray int[];
+			move 1 to myarray for intuserfunc("abc");													// 1
+			move 1 to myarray for intuserfunc(abin + "abc");											// 1
+			move 1 to myarray for intuserfunc(abin + getCmdLineArg(1));									// 1
+			move 1 to myarray for charAsInt(getCmdLineArg("xyz")+ getCmdLineArg("def"));			// 1
+			move 1 to myarray for charAsInt(abin + getCmdLineArg("abc")+ getCmdLineArg("def"));	// 1
+			move 1 to myarray for charAsInt(getCmdLineArg(2));										// 1	
+			move 1 to myarray for charAsInt(getCmdLineArg(isObjId( "abc" as "objid:java")));						// 1
+//			move 1 to myarray for isObjId( (objid)getCmdLineArg(2));											// 1
+
+			open result1 for sqlrecd;	// 1
+			open result1 for sqlrecd;	// 1
+				
+			prepare id from 
+				(userfunc(abin + "abc"))											// 0
+		 		+ (userfunc(abin + getCmdLineArg(1)))								// 0
+		 		+ (getProperty(getCmdLineArg("xyz")+ getCmdLineArg("def")))			// 0
+		 		+ (getProperty(abin + getCmdLineArg("abc")+ getCmdLineArg("def")))	// 0
+		 		+ (getProperty(getCmdLineArg(2)))									// 0
+				+ (getProperty(getCmdLineArg(isObjId( "abc" as "objid:java"))));						// 0
+
+			prepare id  from 
+				(userfunc(abin + "abc"))																// 0
+		 		+ (userfunc(abin + syslib.getCmdLineArg(1)))											// 0
+		 		+ (syslib.getProperty(syslib.getCmdLineArg("xyz")+ syslib.getCmdLineArg("def")))		// 0
+		 		+ (syslib.getProperty(abin + syslib.getCmdLineArg("abc")+ syslib.getCmdLineArg("def")))	// 0
+		 		+ (syslib.getProperty(syslib.getCmdLineArg(2)))											// 0
+				+ (syslib.getProperty(syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java"))));					// 0
+		 end	
+	 
+		 function intuserfunc(mystring string in) returns (int)
+	 		return  (intuserfunc(abin + "abc"));											// 0
+
+		 	return  (intuserfunc(abin + getCmdLineArg(1)));									// 0
+
+		 	return  (charAsInt(getCmdLineArg("xyz")+ getCmdLineArg("def")));			// 0
+
+		 	return  (charAsInt(abin + getCmdLineArg("abc")+ getCmdLineArg("def")));	// 0
+
+		 	return  (charAsInt(getCmdLineArg(2)));										// 0
+
+			return  (charAsInt(getCmdLineArg(isObjId( "abc" as "objid:java"))));						// 0
+
+//			return  (isObjId( (objid)getCmdLineArg(2)));											// 0
+//
+			
+			return  (intuserfunc(abin + "abc"));																// 0
+
+		 	return  (intuserfunc(abin + syslib.getCmdLineArg(1)));												// 0
+
+		 	return  (strlib.charAsInt(syslib.getCmdLineArg("xyz")+ syslib.getCmdLineArg("def")));			// 0
+
+		 	return  (strlib.charAsInt(abin + syslib.getCmdLineArg("abc")+ syslib.getCmdLineArg("def")));	// 0
+
+		 	return  (strlib.charAsInt(syslib.getCmdLineArg(2)));											// 0
+
+			return  (strlib.charAsInt(syslib.getCmdLineArg(javalib.isObjId( "abc" as "objid:java"))));						// 0
+
+//			return  (javalib.isObjId( (objid)syslib.getCmdLineArg(2)));													// 0
+//
+		 end 
+end
+
+Program myPgm(p1 string)
+end
+
+Program myPgm2(p1 string)
+end
+
+DataItem returnItem CHAR(8)
+end
+record basicrec
+	10 char4 char(4);
+	10 target char(10);
+	10 method char(10);
+	10 argument char(10);
+end
+record flexrecord
+	string1 string;
+end

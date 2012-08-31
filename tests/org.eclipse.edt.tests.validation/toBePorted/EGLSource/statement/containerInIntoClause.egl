@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program pgm
+	function main()
+		rec1 rec1;
+		fixedRec1 fixedRec1;
+		sqlRec sqlRec;
+		
+		open resultSet1 for sqlRec into rec1.item1, rec1.item2;
+		open resultSet2 for sqlRec into rec1;
+		
+		open resultSet3 for sqlRec into fixedRec1.item1, fixedRec1.item2;
+		open resultSet4 for sqlRec into fixedRec1;
+		
+		foreach(sqlRec into rec1.item1, rec1.item2)
+		end
+		foreach(sqlRec into rec1)
+		end
+		
+		foreach(sqlRec into fixedRec1.item1, fixedRec1.item2)
+		end
+		foreach(sqlRec into fixedRec1)
+		end
+	end
+end
+
+Record rec1
+	item1 int;
+	item2 int;
+end
+
+Record fixedRec1
+	10 item1 int;
+	10 item2 int;
+end
+
+Record sqlRec type sqlRecord
+	item1 int;
+end

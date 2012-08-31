@@ -1,0 +1,320 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//can't do DL/I in a Library
+Library mylib	type BasicLibrary 
+	{@DLI {psb = mypsb}}			//0
+
+  	course course;					//0			   
+  	prereq prereq;					//0	 
+  	offering offering;				//0 	 
+  	teacher teacher;				//0		 
+  	student student;				//0		 
+  	students student[25];			//0
+	mypsb EducationPSB;				//0
+	
+	function myLibFunc()
+		mypsb.coursePCB.dbName = "mydb";
+		mypsb.offeringPCB.dbName = "myaltdb";
+		add course ;							//0
+		delete prereq;							//0
+		get teacher;							//0
+		get student forupdate;					//0
+		get next students;						//0
+		get next course forupdate;				//0
+		get next offering, student forupdate;	//0
+		get next inparent student usingPCB mypsb.offeringPCB;//0
+		replace offering;						//0
+	end
+end
+		
+//can't do DLI in a JSFHandler
+handler mypage type JSFHandler 
+	{@DLI {psb = mypsb}}			//1 The property DLI is not valid in this location
+
+  	course course;					//0			   
+  	prereq prereq;					//0	 
+  	offering offering;				//0 	 
+  	teacher teacher;				//0		 
+  	student student;				//0		 
+  	students student[25];			//0
+	mypsb EducationPSB;				//0
+	
+	function mypageFunc()
+		mypsb.coursePCB.dbName = "mydb";
+		mypsb.offeringPCB.dbName = "myaltdb";
+		// Otherwise valid statements that just can't be used in a JSFHandler
+		add course ;							//1 DL/I segments are only valid as I/O targets in a program
+		delete prereq;							//1 DL/I segments are only valid as I/O targets in a program
+		get teacher;							//1 DL/I segments are only valid as I/O targets in a program
+		get student forupdate;					//1 DL/I segments are only valid as I/O targets in a program
+		get next students;						//1 DL/I segments are only valid as I/O targets in a program
+		get next course forupdate;				//1 DL/I segments are only valid as I/O targets in a program
+		get next offering, student forupdate;	//1 DL/I segments are only valid as I/O targets in a program
+		get next inparent student usingPCB mypsb.offeringPCB;//1 DL/I segments are only valid as I/O targets in a program
+		replace offering;						//1 DL/I segments are only valid as I/O targets in a program
+	end
+end	
+
+//can't do DLI in a  handler
+Handler myhandler
+	{@DLI {psb = mypsb}}			//1 The property DLI is not valid in this location
+
+  	course course;					//0			   
+  	prereq prereq;					//0	 
+  	offering offering;				//0 	 
+  	teacher teacher;				//0		 
+  	student student;				//0		 
+  	students student[25];			//0
+	mypsb EducationPSB;				//0
+	
+	function mypageFunc()
+		mypsb.coursePCB.dbName = "mydb";
+		mypsb.offeringPCB.dbName = "myaltdb";
+		// Otherwise valid statements that just can't be used in a JSFHandler
+		add course ;							//1 DL/I segments are only valid as I/O targets in a program
+		delete prereq;							//1 DL/I segments are only valid as I/O targets in a program
+		get teacher;							//1 DL/I segments are only valid as I/O targets in a program
+		get student forupdate;					//1 DL/I segments are only valid as I/O targets in a program
+		get next students;						//1 DL/I segments are only valid as I/O targets in a program
+		get next course forupdate;				//1 DL/I segments are only valid as I/O targets in a program
+		get next offering, student forupdate;	//1 DL/I segments are only valid as I/O targets in a program
+		get next inparent student usingPCB mypsb.offeringPCB;//1 DL/I segments are only valid as I/O targets in a program
+		replace offering;						//1 DL/I segments are only valid as I/O targets in a program
+	end
+end	
+
+//can't do DLI in a  service
+service myservice
+	{@DLI {psb = mypsb}}			//1 The property DLI is not valid in this location
+
+  	course course;					//0			   
+  	prereq prereq;					//0	 
+  	offering offering;				//0 	 
+  	teacher teacher;				//0		 
+  	student student;				//0		 
+  	students student[25];			//0
+	mypsb EducationPSB;				//0
+	
+	function mypageFunc()
+		mypsb.coursePCB.dbName = "mydb";
+		mypsb.offeringPCB.dbName = "myaltdb";
+		// Otherwise valid statements that just can't be used in a JSFHandler
+		add course ;							//1 DL/I segments are only valid as I/O targets in a program
+		delete prereq;							//1 DL/I segments are only valid as I/O targets in a program
+		get teacher;							//1 DL/I segments are only valid as I/O targets in a program
+		get student forupdate;					//1 DL/I segments are only valid as I/O targets in a program
+		get next students;						//1 DL/I segments are only valid as I/O targets in a program
+		get next course forupdate;				//1 DL/I segments are only valid as I/O targets in a program
+		get next offering, student forupdate;	//1 DL/I segments are only valid as I/O targets in a program
+		get next inparent student usingPCB mypsb.offeringPCB;//1 DL/I segments are only valid as I/O targets in a program
+		replace offering;						//1 DL/I segments are only valid as I/O targets in a program
+	end
+end
+	
+// limit arrays to supported statements
+// multiple arrays should be prevented
+// if target is array, only one target
+Program DLIMiscellaneous_Invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes }	 
+  }
+  	course course;						   
+  	prereq prereq;						 
+   	courses course[20];					   
+	prereqs prereq[5];					 
+  // PSB Declaration
+  	psb EducationPSB ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+  	function addStmt()		
+      add course, prereqs;		//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.
+      add courses, prereq;		//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.
+
+   	end 
+  	function deleteStmt() 	  
+	  delete courses ;			//1 must be one of the following types: Indexed, Relative, SQL, DL/I segment.
+ 	end 	
+ 	function getStmt() 
+		get courses, prereq;	//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable. 
+		get course, prereqs;	//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.
+  
+	end  
+ 	function getForUpdateStmt() 
+		get courses forupdate;			//1 The forUpdate clause is not allowed when the target is an array.
+		get courses, prereq forupdate;	//2 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.|The forUpdate clause is not allowed when the target is an array.
+		get course, prereqs forupdate;	//2 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.|The forUpdate clause is not allowed when the target is an array.			 	
+	end   
+ 	function getNextStmt() 
+		get next courses, prereq;		//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.
+		get next course, prereqs;		//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.
+ 
+	end  
+ 	function getNextForUpdateStmt() 
+		get next courses forupdate;			//1 The forUpdate clause is not allowed when the target is an array.
+		get next courses, prereq forupdate;	//2 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.|The forUpdate clause is not allowed when the target is an array.
+		get next course, prereqs forupdate;	//2 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.|The forUpdate clause is not allowed when the target is an array.
+	   
+	end 
+ 	function getNextInParentStmt() 
+		get next inparent courses;			//0
+		get next inparent courses, prereq;	//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.
+		get next inparent course, prereqs;	//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.	 
+	   
+	end 
+ 	function getNextInParentForUpdateStmt() 
+		get next inparent courses forupdate;			//1 The forUpdate clause is not allowed when the target is an array.
+		get next inparent courses, prereq forupdate;	//2 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.|The forUpdate clause is not allowed when the target is an array.
+		get next inparent course, prereqs forupdate;	//2 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable.|The forUpdate clause is not allowed when the target is an array.			 
+	   
+	end 	
+	   
+  function replaceStmt()
+  	  replace courses ;			//1 The target of a replace statement must be an SQL, relative, DL/I segment, or indexed record variable
+  end
+
+
+end
+
+	
+	
+// valid PSBRecord, dliSegments and DataItems to use in statements
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	 
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end		 
+DataItem Name char(18) { dliFieldName ="NAME" } end		 
+
+Record Course type DLISegment 					 
+{ segmentName=Course, keyItem="courseNo" }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record Prereq type DLISegment { keyItem="courseNo" } 
+	10 courseNo CourseNo;							 
+	10 title char(33);								 
+end
+
+Record Offering type DLISegment 					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record Teacher type DLISegment 					 
+{ segmentName=Teacher, keyItem="empNo" }		 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+end 
+
+Record Student type DLISegment	 				 
+	{ segmentName=Student }						 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+	10 grade char(1);								 
+end
+Record EducationPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Course },		 
+	   @Relationship{											 
+     		segmentRecord=Prereq, parentRecord=Course },	    	   
+       @Relationship{											 
+      		segmentRecord=Offering,parentRecord=Course },  	  
+       @Relationship{											 
+      		segmentRecord=Teacher,parentRecord=Offering},  
+	   @Relationship{											 
+	     	segmentRecord=Student, parentRecord=Offering}	 
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Offering },	 
+	   @Relationship{								 
+	     segmentRecord=Course,parentRecord=Offering},	 
+	   @Relationship{										 
+	     segmentRecord=Teacher,parentRecord=Offering},	 
+	   @Relationship{										 
+	     segmentRecord=Student,parentRecord=Offering}	 
+	  ] }};
+end	
+
+program NoDliAnnotation
+
+  	course course;					//0			   
+  	prereq prereq;					//0	 
+  	offering offering;				//0 	 
+  	teacher teacher;				//0		 
+  	student student;				//0		 
+  	students student[25];			//0
+	mypsb EducationPSB;				//0
+
+	function main()
+		mypsb.coursePCB.dbName = "mydb";
+		mypsb.offeringPCB.dbName = "myaltdb";
+		// Otherwise valid statements that just can't be used without the proper IMS properties
+		add course ;							//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+		delete prereq;							//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+		get teacher;							//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+		get student forupdate;					//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+		get next students;						//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+		get next course forupdate;				//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+		get next offering, student forupdate;	//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+		get next inparent student usingPCB mypsb.offeringPCB;//2 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties|The usingPCB item must be defined in the program PSB
+		replace offering;						//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	end
+end
+program DliAnnotationWithOutPSBProperty 
+	{@DLI}							//1 The field "psb" is required for the complex property dli.
+
+  	course course;					//0			   
+  	prereq prereq;					//0	 
+  	offering offering;				//0 	 
+  	teacher teacher;				//0		 
+  	student student;				//0		 
+  	students student[25];			//0
+	mypsb EducationPSB;				//0
+
+	function main()
+		mypsb.coursePCB.dbName = "mydb";
+		mypsb.offeringPCB.dbName = "myaltdb";
+
+
+		add course ;							//0
+		delete prereq;							//0
+		get teacher;							//0
+		get student forupdate;					//0
+		get next students;						//0
+		get next course forupdate;				//0
+		get next offering, student forupdate;	//)
+		get next inparent student usingPCB mypsb.offeringPCB;//1 The usingPCB item must be defined in the program PSB
+		replace offering;						//0
+	end
+end

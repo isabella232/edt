@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+Record fixedRecdWithInitializers1 type basicrecord
+	10 item1 int  = "a"; 				//0
+	10 item2 char(8) = "abcdefghijk"; 	//0
+	10 item3 char(8) = "abcdefghijk"; 	//1 Initializers in structured records are only allowed on leaf items.
+		20 item3a char(2);				//0
+		20 item3b char(6);				//0
+	10 item4 char(4) = 1.0;				//0
+	10 item5 char(10);					//0
+		30 item5a char(5) = "abcdef";	//0
+		30 item5b char(5) = "ghi";		//1 Initializers in structured records are only allowed on leaf items.
+			50 item5ba char(5);			//0
+	10 item6 dbChar(3) = 2;				//1 dbChar and int are not compatible types
+	10 item7 mbchar(3) = 3;				//0
+	10 item8 float = "def";				//0
+	10 item9 bin(4) = "a";				//0
+	10 item10 int = item1 + item11;		//1 Items in structured records can only be initialized with literal values.
+	10 item11 int = item1;				//1 Items in structured records can only be initialized with literal values.
+	10 item12 char(10)	{item12b {"abcd"}};//1
+		12 item12a char(5);				//0
+		12 item12b char(3);				//0
+		12 item12c char(2);				//0
+	10 item13 char(20)[2]	{ "abcd"};		//1
+		12 item13a char(5)[2];				//0
+		12 item13b char(3)[2];				//0
+		12 item13c char(2)[2] {"xx"};		//1
+end
+//initializers should be allowed/checked in any fixed UI record.
+//this test case should be identical to the one above, but let's make sure.
+Record fixedUIRecdWithInitializers2 type vgUIRecord
+	10 item1 int  = "a"; 				//0
+	10 item2 char(8) = "abcdefghijk"; 	//0
+	10 item3 char(8) = "abcdefghijk"; 	//1 Initializers in structured records are only allowed on leaf items.
+		20 item3a char(2);				//0
+		20 item3b char(6);				//0
+	10 item4 char(4) = 1.0;				//0
+	10 item5 char(10);					//0
+		30 item5a char(5) = "abcdef";	//0
+		30 item5b char(5) = "ghi";		//1 Initializers in structured records are only allowed on leaf items.
+			50 item5ba char(5);			//0
+	10 item6 dbChar(3) = 2;				//1 dbChar and int are not compatible types
+	10 item7 mbchar(3) = 3;				//0
+	10 item8 float = "def";				//1 float is not allowed in a VGUIRecord.
+	10 item9 bin(4) = "a";				//0
+	10 item10 int = item1 + item11;		//1 Items in structured records can only be initialized with literal values.
+	10 item11 int = item1;				//1 Items in structured records can only be initialized with literal values.
+	10 item12 char(10)	{item12b {"abcd"}};//1
+		12 item12a char(5);				//0
+		12 item12b char(3);				//0
+		12 item12c char(2);				//0
+	10 item13 char(10)	{ "abcd"};		//1
+		12 item13a char(5);				//0
+		12 item13b char(3);				//0
+		12 item13c char(2) {"xx"};		//1
+end
+//datatables cannot have initializers
+datatable mytable type basictable
+	10 item1 char(10) = "abcd";			//1 Initializers are not allowed in a DataTable.
+	10 item2 char(10);					//0
+		20 item2a char(5) = "abcdef";	//1 Initializers are not allowed in a DataTable.
+		20 item2b char(5) = "def";		//1 Initializers are not allowed in a DataTable.
+	10 item3 char(4) {"def"};			//1
+	{contents = [ ["asdf", "asdfasdf", "adsf"],	//0
+				  ["123","43653", "2435"] 	]  }//0
+end	

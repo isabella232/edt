@@ -1,0 +1,105 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validateConverseType:
+// 1 The {1} statement may not be used in a basic program. {6554, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_BASIC_PROGRAM}
+// 1 The {1} statement may not be used in a library. {6552, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_LIBRARY}
+// 1 The {1} statement may not be used in a JSFHandler. {6553, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_PAGE_HANDLER}
+// 1 Invalid itentifier {1}. The target of a converse statement in a textUI program must be a text form. {6662, EGLMESSAGE_INVALID_CONVERSE_TARGET_FOR_TEXTUI_PROGRAM}
+// 1 Invalid identifier {1}. The target of a converse statement in an action program must be a UI record variable. {6661, EGLMESSAGE_INVALID_CONVERSE_TARGET_FOR_ACTION_PROGRAM}
+
+Program MyProj type  VGWebTransaction
+	
+	vgUIRec vgUIRecDef;
+
+	function main()
+	
+		converse vgUIRec; // 0	
+	end
+end
+
+Program MyProj2 type BasicProgram {includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	
+	vgUIRec vgUIRecDef;
+
+	function main()
+		converse vgUIRec; // 1 The converse statement may not be used in a basic program {6554}
+	end
+end
+
+handler MyHandler type JSFHandler{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	
+	
+	vgUIRec vgUIRecDef;
+
+	function main()
+	converse vgUIRec; // 1 The converse statement may not be used in a JSFHandler {6553}
+	end
+end
+
+Library MyLib{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+
+	function myfunc()
+	vgUIRec vgUIRecDef;
+	converse vgUIRec; // 1
+	end
+end
+
+Record  MyUIRecord  Type  VGUIRecord 
+		{ commandValueItem="buttonValue" }	
+	10 formItem  char(21)					 
+	   {uiType=uiForm, 						
+        @programLinkData { 					
+			programName="NewPgm",			
+			newWindow=yes,					
+			uiRecordName="NewUIR",			
+			linkParms = [					
+			   				@LinkParameter { name="key1", value="value1" },		
+			   				@LinkParameter { name="key2", valueRef="refItem" }
+						]				
+        }
+	   };
+	  20 nametem  char(16)	{ uiType=input, inputRequired=yes }; 			
+	  20 buttonItem char(1)[3]	{uiType=submit,			
+  								 displayName="Enter \n Help \n Cancel"	
+								} 						
+								= [ "E", "H", "C" ];	
+	  20 buttonValue char(1) { uiType=none };			
+      20 refItem     char(1) { uiType=none };			
+End
+
+formgroup myformg 
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+
+Program myBasicProgram1 type textuiprogram{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+		use myformg;					
+		myuirecord myuirecord; 			
+ 		function main()
+			converse myuirecord;		//1 Invalid identifier myuirecord. The target of a converse statement in a textUI program must be a text form {6662}
+			converse mytextform; //0
+	end	
+end
+
+Program myBasicProgram2 type VGWebTransaction{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+		use myformg;					
+		myuirecord myuirecord; 			
+ 		function main()
+			converse myuirecord;		//0
+			converse mytextform; // 1 Invalid identifier mytextform. The target of a converse statement in a web program must be a UI record variable{6661}
+			
+	end	
+end
+
+Record vgUIRecDef type VGUIRecord end

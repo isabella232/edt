@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//The following testcase will ensure that the topLevelFunctions that are used as validator functions will
+//be added to the dependency requestor
+handler ph1 type JSFHandler {includeReferencedFunctions = yes} 
+ x int;
+ field1 int {validatorFunction = f2};
+ function f1()
+ end 
+end
+ 
+handler ph2 type JSFHandler {includeReferencedFunctions = yes, validatorFunction = f2}
+ x int;
+ field1 int;
+ function f1()
+ end
+end
+ 
+record rec1
+ 10 item1 int {validatorFunction = f2};
+end
+ 
+handler ph3 type JSFHandler
+ x int;
+ field1 rec1;
+end
+
+handler ph4 type JSFHandler
+ x int;
+ field1 rec1;
+end
+ 
+function f2()
+ x = 3;   //0
+ a = 5;   //4 ph1 - a cannot be resolved|ph2 - a cannot be resolved|ph3 - a cannot be resolved|ph4 - a cannot be resolved
+end

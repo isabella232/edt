@@ -1,0 +1,378 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//DLILib and VGLIB are covered in DLIFunctions_invalid.egl
+
+// DLIVar is only available if @dli annotation is specified
+Program DLIVar_invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes}
+  func4 char(4) = "CLSE";
+  parmint int;
+  parmchar char(10);
+
+  // PSB Declaration
+ // psb2 EducationPSB;					 
+
+  	function main()
+  		dbname = "mydb";			//1 dbname cannot be resolved
+  		if (segmentLevel == 2)		//1 segmentLevel cannot be resolved
+  		end
+  		if (statuscode == "GE")		//1 statuscode cannot be resolved
+  		end  		
+  		if (procOptions == "GHU ")	//1 procOptions cannot be resolved
+  		end
+  		if (segmentName == "myseg")	//1 segmentName cannot be resolved
+  		end
+  		if (keyAreaLen >0)			//1 keyAreaLen cannot be resolved
+  		end  		
+  		if (keyarea[1:5] == "12345")//1 keyarea cannot be resolved
+  		end  
+  		if (numsensitivesegs >1)	//1 numsensitivesegs cannot be resolved
+  		end  		
+
+  		if (cicserror == "02")		//1 cicserror cannot be resolved
+  		end
+  		if (cicscondition == "ab")	//1 cicscondition cannot be resolved
+  		end  		
+  		cicsrestart = 0;			//1 cicsrestart cannot be resolved
+  		dlivar.dbname = "mydb";				//1 dlivar cannot be resolved
+  		if (dlivar.segmentLevel == 2)		//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.statuscode == "GE")		//1 dlivar cannot be resolved
+  		end  		
+  		if (dlivar.procOptions == "GHU ")	//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.segmentName == "myseg")	//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.keyAreaLen >0)			//1 dlivar cannot be resolved
+  		end  		
+  		if (dlivar.keyarea[1:5] == "12345")	//1 dlivar cannot be resolved
+  		end  
+  		if (dlivar.numsensitivesegs >1)		//1 dlivar cannot be resolved
+  		end  		
+  		dlivar.handleHardDLIErrors = 1;		//1 dlivar cannot be resolved
+  		if (dlivar.cicserror == "02")		//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.cicscondition == "ab")	//1 dlivar cannot be resolved
+  		end  		
+  		dlivar.cicsrestart = 0;				//1 dlivar cannot be resolved  		
+  	end
+end  		
+Library DLIVar2_invalid
+  	function mine()
+  		dbname = "mydb";			//1 dbname cannot be resolved
+  		if (segmentLevel == 2)		//1 segmentLevel cannot be resolved
+  		end
+  		if (statuscode == "GE")		//1 statuscode cannot be resolved
+  		end  		
+  		if (procOptions == "GHU ")	//1 procOptions cannot be resolved
+  		end
+  		if (segmentName == "myseg")	//1 segmentName cannot be resolved
+  		end
+  		if (keyAreaLen >0)			//1 keyAreaLen cannot be resolved
+  		end  		
+  		if (keyarea[1:5] == "12345")//1 keyarea cannot be resolved
+  		end  
+  		if (numsensitivesegs >1)	//1 numsensitivesegs cannot be resolved
+  		end  		
+
+  		if (cicserror == "02")		//1 cicserror cannot be resolved
+  		end
+  		if (cicscondition == "ab")	//1 cicscondition cannot be resolved
+  		end  		
+  		cicsrestart = 0;			//1 cicsrestart cannot be resolved
+  		dlivar.dbname = "mydb";				//1 dlivar cannot be resolved
+  		if (dlivar.segmentLevel == 2)		//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.statuscode == "GE")		//1 dlivar cannot be resolved
+  		end  		
+  		if (dlivar.procOptions == "GHU ")	//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.segmentName == "myseg")	//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.keyAreaLen >0)			//1 dlivar cannot be resolved
+  		end  		
+  		if (dlivar.keyarea[1:5] == "12345")	//1 dlivar cannot be resolved
+  		end  
+  		if (dlivar.numsensitivesegs >1)		//1 dlivar cannot be resolved
+  		end  		
+  		dlivar.handleHardDLIErrors = 1;		//1 dlivar cannot be resolved
+  		if (dlivar.cicserror == "02")		//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.cicscondition == "ab")	//1 dlivar cannot be resolved
+  		end  		
+  		dlivar.cicsrestart = 0;				//1 dlivar cannot be resolved  		
+  	end
+end  
+handler DLIVar3_invalid type JSFHandler 
+ 	function main()
+  		dbname = "mydb";			//1 dbname cannot be resolved
+  		if (segmentLevel == 2)		//1 segmentLevel cannot be resolved
+  		end
+  		if (statuscode == "GE")		//1 statuscode cannot be resolved
+  		end  		
+  		if (procOptions == "GHU ")	//1 procOptions cannot be resolved
+  		end
+  		if (segmentName == "myseg")	//1 segmentName cannot be resolved
+  		end
+  		if (keyAreaLen >0)			//1 keyAreaLen cannot be resolved
+  		end  		
+  		if (keyarea[1:5] == "12345")//1 keyarea cannot be resolved
+  		end  
+  		if (numsensitivesegs >1)	//1 numsensitivesegs cannot be resolved
+  		end  		
+
+  		if (cicserror == "02")		//1 cicserror cannot be resolved
+  		end
+  		if (cicscondition == "ab")	//1 cicscondition cannot be resolved
+  		end  		
+  		cicsrestart = 0;			//1 cicsrestart cannot be resolved
+  		dlivar.dbname = "mydb";				//1 dlivar cannot be resolved
+  		if (dlivar.segmentLevel == 2)		//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.statuscode == "GE")		//1 dlivar cannot be resolved
+  		end  		
+  		if (dlivar.procOptions == "GHU ")	//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.segmentName == "myseg")	//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.keyAreaLen >0)			//1 dlivar cannot be resolved
+  		end  		
+  		if (dlivar.keyarea[1:5] == "12345")	//1 dlivar cannot be resolved
+  		end  
+  		if (dlivar.numsensitivesegs >1)		//1 dlivar cannot be resolved
+  		end  		
+  		dlivar.handleHardDLIErrors = 1;		//1 dlivar cannot be resolved
+  		if (dlivar.cicserror == "02")		//1 dlivar cannot be resolved
+  		end
+  		if (dlivar.cicscondition == "ab")	//1 dlivar cannot be resolved
+  		end  		
+  		dlivar.cicsrestart = 0;				//1 dlivar cannot be resolved  		
+  	end
+end  
+
+
+Program DLIVar4_invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = "psb2", 					 
+         handleHardDLIErrors = yes }	 
+  }  
+  func4 char(4) = "CLSE";
+  parmint int;
+  parmchar char(10);
+
+  // PSB Declaration
+  psb2 EducationPSB;					 
+
+  	function main()
+  		// note that these resolve to dlivar because they aren't qualified
+  		// PSBRecords are variable records and therefore must be fully qualified
+  		// Therefore cousePCB and offeringPCB don't get in the way here.
+  		dbname = "mydb";			//0
+  		if (segmentLevel == 2)		//0
+  		end
+  		if (statuscode == "GE")		//0
+  		end  		
+  		if (procOptions == "GHU ")	//0
+  		end
+  		if (segmentName == "myseg")	//0
+  		end
+  		if (keyAreaLen >0)			//0
+  		end  		
+  		if (keyarea[1:5] == "12345")//0
+  		end  
+  		if (numsensitivesegs >1)	//0
+  		end  		
+  		handleHardDLIErrors = 1;	//0
+  		if (cicserror == "02")		//0
+  		end
+  		if (cicscondition == "ab")	//0
+  		end  		
+  		cicsrestart = 0;			//0
+  		dlivar.dbname = "mydb";				//0
+  		if (dlivar.segmentLevel == 2)		//0
+  		end
+  		if (dlivar.statuscode == "GE")		//0
+  		end  		
+  		if (dlivar.procOptions == "GHU ")	//0
+  		end
+  		if (dlivar.segmentName == "myseg")	//0
+  		end
+  		if (dlivar.keyAreaLen >0)			//0
+  		end  		
+  		if (dlivar.keyarea[1:5] == "12345")	//0
+  		end  
+  		if (dlivar.numsensitivesegs >1)		//0
+  		end  		
+  		dlivar.handleHardDLIErrors = 1;		//0
+  		if (dlivar.cicserror == "02")		//0
+  		end
+  		if (dlivar.cicscondition == "ab")	//0
+  		end  		
+  		dlivar.cicsrestart = 0;				//0
+  	end
+end  		
+
+Program DLIVar5_invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = "psb2", 					 
+         handleHardDLIErrors = yes }	 
+  }  
+  func4 char(4) = "CLSE";
+  parmint int;
+  parmchar char(10);
+  mydbchar dbchar(10);
+  myint int;
+  mychar char(5);
+  mydbchar dbchar(5);
+
+  // PSB Declaration
+  psb2 EducationPSB;					 
+
+  	function main()
+  		// note that these resolve to dlivar because they aren't qualified
+  		// PSBRecords are variable records and therefore must be fully qualified
+  		// Therefore cousePCB and offeringPCB don't get in the way here.
+  		dbname = mydbchar;				//1 char and dbChar are not compatible types
+  		segmentlevel = mydbchar;		//1 num and dbChar are not compatible types
+  		statuscode = myint;				//0
+  		procoptions = myint;			//0
+  		segmentname = myint;			//0
+  		keyarealen = mychar;			//0
+  		keyarea =mydbchar;				//2 char and dbChar are not compatible types
+  		numsensitivesegs = mychar;		//0
+  		handleHardDLIErrors = mychar;	//0  		
+		cicserror = myint;				//0
+		cicscondition = mydbchar;		//1 char and dbChar are not compatible types	
+  		cicsrestart = mydbchar;			//1 num and dbChar are not compatible types		
+  		if (segmentLevel == mydbchar)	//1 segmentLevel is not valid for compare to mydbchar
+  		end
+  		if (statuscode == mydbchar)		//1 statuscode is not valid for compare to mydbchar
+  		end  		
+  		if (procOptions == mydbchar)		//1 procOptions is not valid for compare to mydbchar
+  		end
+  		if (segmentName == mydbchar)		//1 segmentName is not valid for compare to mydbchar
+  		end
+  		if (keyAreaLen >mydbchar)			//1 keyAreaLen is not valid for compare to mydbchar
+  		end  		
+  		if (keyarea[1:5] == mydbchar)		//1 keyarea[1:5] is not valid for compare to mydbchar
+  		end  
+  		if (numsensitivesegs >mydbchar)	//1 numsensitivesegs is not valid for compare to mydbchar
+  		end  		
+ 		if (cicserror == mydbchar)			//1 cicserror is not valid for compare to mydbchar
+  		end
+  		if (cicscondition == mydbchar)		//1 cicscondition is not valid for compare to mydbchar
+  		end 
+  		//now qualify everything.  All should be the same
+  		dlivar.dbname = mydbchar;			//1 char and dbChar are not compatible types
+  		dlivar.segmentlevel = mydbchar;		//1 num and dbChar are not compatible types
+  		dlivar.statuscode = myint;			//0
+  		dlivar.procoptions = myint;			//0
+  		dlivar.segmentname = myint;			//0
+  		dlivar.keyarealen = mychar;			//0
+  		dlivar.keyarea =mydbchar;			//2 char and dbChar are not compatible types
+  		dlivar.numsensitivesegs = mychar;	//0
+  		dlivar.handleHardDLIErrors = mychar;//0  		
+		dlivar.cicserror = myint;			//0
+		dlivar.cicscondition = mydbchar;	//1 char and dbChar are not compatible types	
+  		dlivar.cicsrestart = mydbchar;		//1 num and dbChar are not compatible types		
+  		if (dlivar.segmentLevel == mydbchar)//1 dlivar.segmentLevel is not valid for compare to mydbchar
+  		end
+  		if (dlivar.statuscode == mydbchar)		//1 dlivar.statuscode is not valid for compare to mydbchar
+  		end  		
+  		if (dlivar.procOptions == mydbchar)	//1 dlivar.procOptions is not valid for compare to mydbchar
+  		end
+  		if (dlivar.segmentName == mydbchar)	//1 dlivar.segmentName is not valid for compare to mydbchar
+  		end
+  		if (dlivar.keyAreaLen >mydbchar)		//1 dlivar.keyAreaLen is not valid for compare to mydbchar
+  		end  		
+  		if (dlivar.keyarea[1:5] == mydbchar)	//1 dlivar.keyarea[1:5] is not valid for compare to mydbchar
+  		end  
+  		if (dlivar.numsensitivesegs >mydbchar)//1 dlivar.numsensitivesegs is not valid for compare to mydbchar
+  		end  		
+ 		if (dlivar.cicserror == mydbchar)		//1 dlivar.cicserror is not valid for compare to mydbchar
+  		end
+  		if (dlivar.cicscondition == mydbchar)	//1 dlivar.cicscondition is not valid for compare to mydbchar
+  		end  		
+  	end
+end  		
+
+
+
+
+
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	 
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end		 
+DataItem Name char(18) { dliFieldName ="NAME" } end		 
+
+Record Course type DLISegment 					 
+{ segmentName="COURSE", keyItem="courseNo" }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record Prereq type DLISegment { keyItem="courseNo" } 
+	10 courseNo CourseNo;							 
+	10 title char(33);								 
+end
+
+Record Offering type DLISegment 					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record Teacher type DLISegment 					 
+{ segmentName="TEACHER", keyItem="empNo" }		 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+end 
+
+Record Student type DLISegment	 				 
+	{ segmentName="STUDENT" }						 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+	10 grade char(1);								 
+end
+Record EducationPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord="Course" },		 
+	   @Relationship{											 
+     		segmentRecord="Prereq", parentRecord="Course" },	    	   
+       @Relationship{											 
+      		segmentRecord="Offering",parentRecord="Course" },  	  
+       @Relationship{											 
+      		segmentRecord="Teacher",parentRecord="Offering"},  
+	   @Relationship{											 
+	     	segmentRecord="Student", parentRecord="Offering"}	 
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord="Offering" },	 
+	   @Relationship{								 
+	     segmentRecord="Course",parentRecord="Offering"},	 
+	   @Relationship{										 
+	     segmentRecord="Teacher",parentRecord="Offering"},	 
+	   @Relationship{										 
+	     segmentRecord="Student",parentRecord="Offering"}	 
+	  ] }};
+end

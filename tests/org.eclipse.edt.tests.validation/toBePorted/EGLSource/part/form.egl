@@ -1,0 +1,757 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+/****************
+** Annotations **
+****************/
+
+// validateMsgFieldProperty:
+Form validateMsgFieldProperty type textForm {formSize=[24,80], msgField=field1}	//0
+	field1 int;
+end
+
+Form validateMsgFieldProperty2 type textForm
+{
+	formSize=[24,80],
+	msgField=field1	//1 field1 cannot be resolved
+}
+end
+
+// validateProperty:
+Form validateProperty type textForm
+{
+	alias="xxx",						//0
+	helpForm="validateProperty2",		//0
+	HelpKey=pf21,						//0
+	validationBypassKeys = [pf1, pf20],	//0
+	position=[1,1],						//0
+	screenSizes=[[24,80]],				//0
+	formSize=[24,80]					//0
+}
+end
+
+Form validateProperty2 type textForm
+{
+	formSize=[24,0],				//{formsize} 1 Property: formSize.  The value for this property in validateProperty2 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	screenSizes = [[0,0]],			//{screensizes} 1 Property: screenSizes.  The value for this property in form validateProperty2 is invalid. The value must be in the form of [[size, size]] where size is [depth, width]. Depth and width must be positive integers. ScreenSizes identifies which size screens the textForm should be generated for.
+	position=[0,0],					//{position} 1 Property: position.  The value for this property in validateProperty2 is invalid. The value must be in the format [row, column], where row and column must be positive integers.  The position of the form must be such that it fits in its corresponding output device. {5314, INVALID_FORM_POSITION_PROPERTY_VALUE}
+	validationBypassKeys = [yes],	//{validationbypasskeys} 1
+	HelpKey = no,					//{HelpKey} 1 Property: helpKey.  The value for this property must be one of the following:
+	helpForm = [5],					//{helpform} 1
+	msgField = [no],				//{msgField} 1
+	addSpaceForSOSI=no,				//{addspaceforsosi} 1 addSpaceForSOSI cannot be resolved
+	foo = yes 						// 1 foo cannot be resolved
+}
+end
+
+Form validateProperty3 type printForm
+{
+	addSpaceForSOSI=no,		//0
+	screenSizes=[[24,80]],	//{screensizes} 1 screenSizes cannot be resolved
+	formSize=[24,80]
+}
+end
+
+/*****************
+** Other Checks **
+*****************/
+
+/*
+ * If the formSize annotation is not specified, edits regarding the placements of fields
+ * cannot be performed.
+ */
+Form noSizeForm type printForm						//1 The formsize property is not specified for form noSizeForm. This property is required.
+	fieldAtOneOne int {fieldLen=5, position=[1,1]};	//1
+	* {fieldLen=1, position=[1,1]};					//0
+end
+
+/*
+ * If the form does not fit in the output device(s), edits regarding the placements of fields
+ * are not performed in 6.0.1 validation. For text forms this is appropriate, since the
+ * placement of fields can depend on the floating area characteristics, because of the rules
+ * regarding field wrapping. For print forms, there are no such rules, so I'm deviating from
+ * the 6.0.1 validation code by issuing the overlapping errors anyways.
+ */
+FormGroup notFittingOnScreenFG
+	{PrintFloatingAreas=[
+	 	 @printFloatingArea{pageSize=[20,20], topMargin=0, bottomMargin=0, leftMargin=0, rightMargin=0}
+	 ]}
+	
+	Form notFittingOnScreenForm type printForm {
+		formSize=[25,25]								//1 Property: formSize.  The value for this property in notFittingOnScreenForm is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device.
+	}
+		fieldAtOneOne int {fieldLen=5, position=[1,1]};	//1
+		* {fieldLen=1, position=[1,1]};					//1 overlapping
+	end
+	
+	Form fitsOnScreenForm type printForm {
+		formSize=[20,20]								//0
+	}
+		fieldAtOneOne int {fieldLen=5, position=[1,1]};	//1
+		* {fieldLen=1, position=[1,1]};					//1 overlapping
+	end
+	
+	Form fitsOnScreenForm2 type printForm {
+		position=[1,1], formSize=[10,10]				//0
+	}
+		fieldAtOneOne int {fieldLen=5, position=[1,1]};	//1
+		* {fieldLen=1, position=[1,1]};					//1 overlapping
+	end
+end
+
+
+//############################################### overlappingFieldsOnPrintForm:
+
+//############### Case 1: printForm with position annotation
+
+Form form1 type printForm {position=[1,1], formSize = [10,10]}	//0
+	fieldAtOneOne int {fieldLen = 5, position=[1,1]};	//1
+
+	* {fieldLen = 1, position=[1,1]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	* {fieldLen = 1, position=[1,2]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	* {fieldLen = 1, position=[1,3]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	* {fieldLen = 1, position=[1,4]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	* {fieldLen = 1, position=[1,5]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	* {fieldLen = 1, position=[1,6]};	//1
+	
+	* {fieldLen = 1, position=[2,1]};	//0
+	* {fieldLen = 1, position=[2,2]};	//1
+	* {fieldLen = 1, position=[2,3]};	//1
+	* {fieldLen = 1, position=[2,4]};	//1
+	* {fieldLen = 1, position=[2,5]};	//1
+	* {fieldLen = 1, position=[2,6]};	//1
+	
+	fieldAtTenOne int {fieldLen = 10, position=[10,1]};	//1
+	* {fieldLen = 1, position=[10,1]};					//1 The form form1 field fieldAtTenOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+
+	//Default position is [1,1]	
+	* {fieldLen = 1};					//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	
+	fieldAry int[5] {indexOrientation=across, columns=5, fieldLen = 1, position=[1,1]};		//5 fieldAtOneOne is overlapping field fieldAry[1]|fieldAtOneOne is overlapping field fieldAry[2]|fieldAtOneOne is overlapping field fieldAry[3]
+	fieldAry2 int[2] {indexOrientation=across, columns=3, fieldLen = 1, position=[2,7]};	//2
+	
+	fieldAtThreeThree int {fieldLen = 1, position=[3,3]};	//1
+	//Default length is length of value
+	* {value="aaa", position=[3,1]};						//1 fieldAtThreeThree is overlapping
+	
+	fieldAtFourThree int {fieldLen = 1, position=[4,3]};	//1
+	//Default length is length of value
+	* {value="aa", position=[4,1]};							//1
+	
+	fieldAtFiveThree int {fieldLen = 1, position=[5,3]};	//1
+	//Default length is length of value
+	* {value="a\t", position=[5,1]};						//1
+	
+	fieldAtSixThree int {fieldLen = 1, position=[6,3]};	//1
+	//Default length is length of value
+	* {value="a\t\t", position=[6,1]};						//1 fieldAtSixThree is overlapping	
+
+	//In 6.0.1, gets an error and no overlap checking is done. In edt, can it get the
+	//same error but not be included in overlapping checks?	
+	* {fieldLen = 100, position=[50,1]};	//1 The form form1 field * is outside the form size = [rows, columns]. This is not allowed. {5338, INVALID_FORM_FIELD_OVERFLOWING}
+end
+
+Form form1a type printForm {position=[1,1], formSize = [10,10]}	//0
+	fieldAry int[5] {indexOrientation=across, columns=5, fieldLen = 1, position=[1,1]};	//1
+end
+
+Form form1b type printForm {position=[1,1], formSize = [0,0]}	
+	fieldAtOneOne int {fieldLen = 1, position=[1,1]};			//1
+end
+
+//############### Case 2: printForm with no position annotation
+
+/*
+ * Validation is only performed when the form is defined inside of a formGroup.
+ */
+Form topLevelPrintForm type printForm {formSize=[10,10]}	//0
+	fieldAtOneOne int {fieldLen=5};							//1
+end
+
+Form topLevelPrintForm2 type printForm {formSize=[10,10]}	//0
+	fieldAtOneOne int {fieldLen=5};							//1
+	* {fieldLen=1, position=[1,1]};							//1 The form topLevelPrintForm2 field fieldAtOneOne is overlapping field *, this is not allowed.
+end
+
+FormGroup formgroupThatUsesTopLevelPrintForm
+	use topLevelPrintForm;							//0
+end
+
+FormGroup formgroupThatUsesTopLevelPrintForm2
+	use topLevelPrintForm2;							//0
+end
+
+FormGroup formgroupThatUsesTopLevelPrintForm3
+{
+	PrintFloatingAreas=[
+		@printFloatingArea{pageSize = [5,5], leftMargin=0, rightMargin=0, topMargin=0, bottomMargin=0}
+	]
+}
+	use topLevelPrintForm2;							//1 Property: formSize.  The value for this property in topLevelPrintForm2 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device.
+end
+
+FormGroup formGroup1
+	Form form1 type printForm {formSize = [10,10]}			//0
+		fieldAtOneOne int {fieldLen = 5, position=[1,1]};	//1
+	
+		* {fieldLen = 1, position=[1,1]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+		* {fieldLen = 1, position=[1,2]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+		* {fieldLen = 1, position=[1,3]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+		* {fieldLen = 1, position=[1,4]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+		* {fieldLen = 1, position=[1,5]};	//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+		* {fieldLen = 1, position=[1,6]};	//1
+		
+		fieldAtTwoOne int {fieldLen = 1, position=[2,1]};	//1
+		fieldAtTwoTwo int {fieldLen = 1, position=[2,2]};	//2
+		* {fieldLen = 1, position=[2,3]};	//1
+		* {fieldLen = 1, position=[2,4]};	//1
+		* {fieldLen = 1, position=[2,5]};	//1
+		* {fieldLen = 1, position=[2,6]};	//1
+		
+		* {fieldLen = 2, position=[2,1]};	//2 fieldAtTwoOne is overlapping|fieldAtTwoTwo is overlapping
+		
+		fieldAtTenOne int {fieldLen = 10, position=[10,1]};	//1
+		* {fieldLen = 1, position=[10,1]};					//1 The form form1 field fieldAtTenOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	
+		//Default position is [1,1]	
+		* {fieldLen = 1};					//1 The form form1 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+		
+		//indexOrientation is down by default		
+		fieldAry int[5] {fieldLen = 1, position=[1,1]};		//3 fieldAtOneOne is overlapping field fieldAry[1]|fieldAtTwoOne is overlapping field fieldAry[2]
+		fieldAry2 int[5] {fieldLen = 2, position=[2,7]};	//2
+	
+		* {fieldLen = 100, position=[50,1]};	//1 The form form1 field * is outside the form size = [rows, columns]. This is not allowed. {5338, INVALID_FORM_FIELD_OVERFLOWING}
+	end
+end
+
+/*
+ * In 6.0.1 validation, validation is not performed for printFloatingArea with
+ * deviceType=doubleByte when the form does not contain a dbchar field. I don't
+ * see a problem with doing it anyway in edt.
+ */
+FormGroup formGroup2 {
+	PrintFloatingAreas=[
+		@printFloatingArea{pageSize=[100,100], deviceType=doubleByte}
+	]
+}
+	Form form1 type printForm {formSize = [10,10]}			//0
+		fieldAtOneOne int {fieldLen = 5, position=[1,1]};	//1
+		* {fieldLen = 1, position=[1,1]};					//1 fieldAtOneOne is overlapping
+	end
+	
+	Form form2 type printForm {formSize = [10,10]}				//0
+		fieldAtOneOne int {fieldLen = 5, position=[1,1]};		//1
+		* {fieldLen = 1, position=[1,1]};						//1 The form form2 field fieldAtOneOne is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+		dbcharField dbchar(4) {fieldLen=8, position=[2,1]};		//0
+	end
+end
+
+FormGroup formGroup3 {
+	PrintFloatingAreas=[
+		@printFloatingArea{pageSize=[100,100], deviceType=singleByte}
+	]
+}
+	Form form1 type printForm {formSize = [10,10]}			//0
+		fieldAtOneOne int {fieldLen = 5, position=[1,1]};	//1
+		* {fieldLen = 1, position=[1,1]};					//1 overlapping
+	end
+end
+
+FormGroup formGroup4 {
+	PrintFloatingAreas=[
+		@printFloatingArea{pageSize=[100,100]}
+	]
+}
+	Form form1 type printForm {formSize = [10,10]}			//0
+		fieldAtOneOne int {fieldLen = 5, position=[1,1]};	//1
+		* {fieldLen = 1, position=[1,1]};					//1 overlapping
+	end
+end
+
+//################################################ overlappingFieldsOnTextForm:
+
+/*
+ * In 6.0.1 code, there are 9 invocations of overlappingFieldsOnTextForm() in validateOverlappingFields()
+ */
+
+//############### Case 1: Both position and screenSizes property set on form
+//horizontal and veritical wrap allowed
+Form form2 type textForm {formsize=[10,10], position=[1,1], screenSizes=[[10,10]]}	//0
+	field1 int {fieldLen=2, position=[1,10]};	//1
+	//[1,9] is occupied by the 'attribute byte' for field1
+	* {fieldLen=1, position=[1,9]};				//1 The form form2 field field1 is overlapping field *, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	field2 int {fieldLen=1, position=[2,1]};	//2 The form form2 field field1 is overlapping field field2, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	field3 int {fieldLen=2, position=[10,10]};	//1
+	field4 int {fieldLen=1, position=[1,1]};	//2 The form form2 field field3 is overlapping field field4, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+end
+
+//just horizontal wrap allowed
+Form form2a type textForm {formsize=[9,10], position=[1,1], screenSizes=[[10,10]]}	//0
+	field1 int {fieldLen=2, position=[1,10]};	//1
+	field2 int {fieldLen=1, position=[2,1]};	//2 The form form2a field field1 is overlapping field field2, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+	field3 int {fieldLen=2, position=[9,10]};	//2 The field field3 in form form2a extends beyond the margins of the form.  Field wrapping is allowed only on forms with size = screenSize.
+	//The 'attribute byte' for field4 would go to [9,10], which is occupied by field3
+	field4 int {fieldLen=1, position=[1,1]};	//2 The form form2a field field3 is overlapping field field4, this is not allowed. {5337, INVALID_FORM_FIELD_OVERLAPPING}
+end
+
+//just verical wrap allowed
+Form form3 type textForm {formsize=[10,9], position=[1,1], screenSizes=[[10,10]]}	//0
+	field1 int {fieldLen=2, position=[1,9]};	//2 The field field1 in form form3 extends beyond the margins of the form.  Field wrapping is allowed only on forms with size = screenSize.
+	field2 int {fieldLen=1, position=[2,9]};	//1
+end
+
+Form form4 type textForm {formsize=[9,9], position=[1,1], screenSizes=[[10,10]]}		//0
+	field1 int [4] {fieldLen=1, position=[1,2], indexOrientation=across, columns=4};	//1
+	field2 int [4] {fieldLen=1, position=[2,2], indexOrientation=across, columns=4};	//1
+	
+	//Occupies attribute byte of field1
+	* {fieldLen=1, position=[1,1]};					//1 field1[1] is overlapping
+	
+	//Space occupied by field2
+	* {fieldLen=1, position=[2,8]};					//1 field2[4] is overlapping
+	
+	//Space for attribute byte occupied by field2
+	* {fieldLen=1, position=[2,9]};					//1 field2[4] is overlapping
+	
+	* {fieldLen=1, position=[3,2]};					//0
+	* {fieldLen=1, position=[3,4]};					//0
+	* {fieldLen=1, position=[3,6]};					//0
+	* {fieldLen=1, position=[3,8]};					//0
+	
+	field3 int [6] {fieldLen=1, position=[4,2]};	//1
+	
+	* {fieldLen=1, position=[4,4]};					//0
+	* {fieldLen=1, position=[5,4]};					//0
+	* {fieldLen=1, position=[6,4]};					//0
+	* {fieldLen=1, position=[7,4]};					//0
+	* {fieldLen=1, position=[8,4]};					//0
+	* {fieldLen=1, position=[9,4]};					//0
+	
+	//Space for attribute byte is taken
+	* {fieldLen=1, position=[4,5]};					//1 * is overlapping
+	* {fieldLen=1, position=[5,5]};					//1 * is overlapping
+	* {fieldLen=1, position=[6,5]};					//1 * is overlapping
+	* {fieldLen=1, position=[7,5]};					//1 * is overlapping
+	* {fieldLen=1, position=[8,5]};					//1 * is overlapping
+	* {fieldLen=1, position=[9,5]};					//1 * is overlapping
+end
+
+//############### Case 2: Position property set on form, but not screenSizes.
+/*
+ * ScreenSizes is implicitly [[12,80], [24,80], [32,80], [43,80], [27,132]]
+ *
+ * No errors are issued in this invocation. If the fields 'fit' with one of
+ * the default screen sizes, no more validation is performed.
+ */
+Form form5 type textForm {position=[1,1], formSize=[27,132]}	//0
+	//out-of-bounds for some defaults
+	field1 int {fieldLen=1, position=[20,100]};		//1
+	
+	//wrap problem for some defaults
+	field2 int {fieldLen=2, position=[1,80]};		//1
+end
+
+Form form5a type textForm {position=[1,1], formSize=[24,80]}	//0
+	field1 int {fieldLen=2, position=[1,80]};		//1
+	field2 int {fieldLen=1, position=[2,1]};		//2 The form form5a field field1 is overlapping field field2, this is not allowed.
+end
+
+//############### Case 3: Position property set on form, but not screenSizes.
+/*
+ * ScreenSizes is implicitly [[12,80], [24,80], [32,80], [43,80], [27,132]]
+ *
+ * There are overlapping field problems with any default screen size, and
+ * the form is able to fit with any of the sizes
+ */
+Form form6 type textForm {position=[1,1], formSize=[12,80]}	//0
+	field1 int {fieldLen=2, position=[1,80]};				//1
+	field2 int {fieldLen=1, position=[2,1]};				//2 The form form6 field field1 is overlapping field field2, this is not allowed.
+end
+
+Form form7 type textForm {position=[1,1], formSize=[12,80]}	//0
+	//wrap problem for some defaults
+	field1 int {fieldLen=2, position=[1,80]};				//1
+	field2 int {fieldLen=1, position=[1,80]};				//2 field1 is overlapping
+end
+ 
+//############### Case 4: Position property not set on form, and screenSizes property is set,
+//###############         and there is a screenFloatingArea in the formgroup whose size matches
+//###############         a screenSize
+/*
+ * Validation only performed within context of form group.
+ */
+Form form8 type textForm {formSize=[10,10], screenSizes=[[10,10]]}	//0
+	* {fieldLen=1, position=[1,2]};		//0
+	* {fieldLen=1, position=[1,2]};		//0
+end
+
+Form form9 type textForm {formSize=[10,10], screenSizes=[[10,10]]}	//0
+	* {fieldLen=1, position=[1,2]};		//0
+	* {fieldLen=1, position=[1,2]};		//0
+end
+
+Formgroup formgroup5
+	use form9;		//1 field * is overlapping field *
+end
+
+Formgroup formgroup6
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[10,10]}
+	]
+}
+	Form form1 type textForm {formSize=[10,10], screenSizes=[[10,10]]}	//0
+		* {fieldLen=1, position=[1,2]};		//0
+		* {fieldLen=1, position=[1,2]};		//1 field * is overlapping field *
+	end
+end
+
+Formgroup formgroup7
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[10,10], leftMargin=5}
+	]
+}
+	Form form1 type textForm {formSize=[5,5], screenSizes=[[10,10]]}	//0
+		field1 int {fieldLen=6, position=[1,2]};						//2 The field field1 in form form1 extends beyond the margins of the form.  Field wrapping is allowed only on forms with size = screenSize.
+		//Constant fields are always allowed to wrap
+		* {fieldLen=6, position=[2,2]};									//0
+	end
+	
+	Form form2 type textForm {formSize=[10,10], screenSizes=[[10,10]]}	//1 Property: formSize.  The value for this property in form2 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device.
+		field1 int {fieldLen=30, position=[1,2]};						//0
+	end
+end
+
+Formgroup formgroup8
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[10,10], leftMargin=5}
+	]
+}
+	Form form1 type textForm {formSize=[5,5], screenSizes=[[10,10]]}	//0
+		field1 int {fieldLen=4, position=[1,2]};		//1
+	end
+end
+
+//############### Case 5: Position property not set on form, and screenSizes property is set,
+//###############         and there is no screenFloatingArea in the formgroup whose size matches
+//###############         a screenSize
+
+Formgroup formgroup9
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[15,15], leftMargin=5}
+	]
+}
+	Form form1 type textForm {formSize=[5,5], screenSizes=[[10,10]]}	//0
+		field1 int {fieldLen=4, position=[1,2]};		//1
+		field2 int {fieldLen=4, position=[2,2]};		//1
+		* {fieldLen=1, position=[2,4]};					//1 field2 is overlapping
+	end
+end
+
+Formgroup formgroup10
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[15,15]},
+		@screenFloatingArea{screenSize=[10,10]}
+	]
+}
+	Form form1 type textForm {formSize=[5,5], screenSizes=[[10,10]]}	//0
+		field1 int {fieldLen=4, position=[1,2]};		//1
+		field2 int {fieldLen=4, position=[2,2]};		//1
+		* {fieldLen=1, position=[2,4]};					//1 field2 is overlapping
+	end
+end
+
+Formgroup formgroup11
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[10,10], leftMargin=9},
+		@screenFloatingArea{screenSize=[15,15]}
+	]
+}
+	Form form1 type textForm {formSize=[5,5], screenSizes=[[15,15]]}	//0
+		field1 int {fieldLen=4, position=[1,2]};		//1
+		field2 int {fieldLen=4, position=[2,2]};		//1
+	end
+	
+	Form form2 type textForm {formSize=[5,5], screenSizes=[[10,10]]}	//1 Property: formSize.  The value for this property in form2 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device.
+		field1 int {fieldLen=4, position=[1,2]};		//1
+		field2 int {fieldLen=4, position=[2,2]};		//1
+	end
+end
+
+//############### Case 6, 8: Position property not set on form, and screenSizes property is not set,
+//###############         and there is a screenFloatingArea in the formgroup whose size matches
+//###############         a standard screenSize
+
+/*
+ * ScreenSizes is implicitly [[12,80], [24,80], [32,80], [43,80], [27,132]]
+ *
+ * No errors are issued in this invocation. If the fields 'fit' with one of
+ * the default screen sizes, no more validation is performed.
+ */
+Formgroup formgroup12
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea {screenSize=[24,80]}
+	]
+}
+	Form form1 type textForm {formSize=[24,80]}		//0
+		field1 int {fieldLen=2, position=[1,22]};	//1
+	end
+end
+
+Formgroup formgroup12a
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea {screenSize=[24,80]}
+	]
+}
+	Form form1 type textForm {formSize=[24,80]}		//0
+		field1 int {fieldLen=2, position=[1,22]};	//1
+		field2 int {fieldLen=2, position=[1,22]};	//2 field1 is overlapping
+	end
+end
+
+//############### Case 7, 9: Position property not set on form, and screenSizes property is not set,
+//###############         and there is no screenFloatingArea in the formgroup whose size matches
+//###############         a standard screenSize
+
+Formgroup formgroup13
+	Form form1 type textForm {formSize=[24,80]}		//0
+		field1 int {fieldLen=2, position=[1,22]};	//1
+	end
+end
+
+Formgroup formgroup13a
+	Form form1 type textForm {formSize=[24,80]}		//0
+		field1 int {fieldLen=2, position=[1,22]};	//1
+		field2 int {fieldLen=2, position=[1,22]};	//2 field1 is overlapping
+	end
+end
+
+// validateCursor:
+Form validateCursorForm type textForm {position=[1,1], formSize=[10,10]}	//0
+	field1 int {position=[1,1], cursor=yes};	//0
+	field2 int {position=[2,1], cursor=yes};	//1 The property cursor = yes in form validateCursorForm must be specified on only one field or not specified at all. {5336, INVALID_FORM_CURSOR_PROPERTY_SPECIFICATION}
+	* {position=[3,1], cursor=yes};				//1 The property cursor = yes in form validateCursorForm must be specified on only one field or not specified at all. {5336, INVALID_FORM_CURSOR_PROPERTY_SPECIFICATION}
+	field3 int {position=[4,1], cursor=no};		//0
+	* {position=[5,1], cursor=no};				//0
+end
+
+Form validateCursorForm2 type textForm {position=[1,1], formSize=[10,10]}	//0
+	field1 int {position=[1,1], cursor=yes};	//0
+	field2 int {position=[2,1], cursor=no};		//0
+	* {position=[3,1]};							//0
+	field3 int {position=[4,1], cursor=no};		//0
+	* {position=[5,1], cursor=no};				//0
+end
+
+// validateFormType:
+form validateFormType {position=[1,1], formSize=[10,10]}					//1 The form validateFormType has an invalid type. Valid types are textForm or printForm. {5390, INVALID_FORM_TYPE_DEFINATION}
+end
+form validateFormType2 type garbage {position=[1,1], formSize=[10,10]}		//2 The type garbage cannot be resolved|The form validateFormType2 has an invalid type. Valid types are textForm or printForm. {5390, INVALID_FORM_TYPE_DEFINATION}
+end
+form validateFormType3 type sqlRecord {position=[1,1], formSize=[10,10]}	//2 The type egl.io.sql.SQLRecord is not a valid subtype for part validateFormType3|The form validateFormType3 has an invalid type. Valid types are textForm or printForm. {5390, INVALID_FORM_TYPE_DEFINATION}
+end
+form validateFormType4 type textForm {position=[1,1], formSize=[10,10]}		//0
+end
+form validateFormType5 type printForm {position=[1,1], formSize=[10,10]}	//0
+end
+
+// validateMandatoryProperties:
+Form validateMandatoryProperties type textForm {}					//1 The formsize property is not specified for form validateMandatoryProperties. This property is required. {5333, INVALID_FORM_SIZE_PROPERTY_NOT_SPECIFIED}
+end
+Form validateMandatoryProperties2 type printForm {}					//1 The formsize property is not specified for form validateMandatoryProperties2. This property is required. {5333, INVALID_FORM_SIZE_PROPERTY_NOT_SPECIFIED}
+end
+Form validateMandatoryProperties3 type textForm {formSize=[5,5]}	//0
+end
+Form validateMandatoryProperties4 type textForm	//0
+	field1 int;									//0
+	{formSize=[5,5]}							//0
+end												//0
+
+// validateOverflowingFields:
+Form validateOverflowingFields type textForm {formSize=[10,10]}
+	field1 int {position=[1,11]};										//1 The form validateOverflowingFields field field1 is outside the form size = [rows, columns]. This is not allowed.
+	field2 int [10] {fieldLen=1, position=[2,2]};						//2 The form validateOverflowingFields field field2[10] is outside the form size = [rows, columns]. This is not allowed.
+	field3 int [9] {fieldLen=1, position=[2,4]};						//1
+	field4 int [9] {linesBetweenRows=2, fieldLen=1, position=[2,6]};	//7 field4[4] is outside|field4[5] is outside|field4[6] is outside|field4[7] is outside|field4[8] is outside|field4[9] is outside
+	* {fieldLen=1, position=[20,8]};									//1 The form validateOverflowingFields field * is outside the form size = [rows, columns]. This is not allowed.
+end
+
+// validateOverlappingFields:
+
+//############################# Case 1: text form w/ position and screensizes (size validation)
+Form form10 type textForm {formSize=[10,10], screenSizes=[[5,5], [2,2], [100,100]], position=[1,1]} // 1 Property: formSize.  The value for this property in form10 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+end
+Form form11 type textForm {formSize=[10,10], screenSizes=[[15,15]], position=[7,1]} //1 Property: formSize.  The value for this property in form11 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+end
+Form form12 type textForm {formSize=[10,10], screenSizes=[[15,15]], position=[1,7]} //1 Property: formSize.  The value for this property in form12 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+end
+Form form12a type textForm {formSize=[10,10], screenSizes=[[15,15]], position=[1,1]} //0
+end
+
+//############################# Case 2: text form w/ position and screensizes (position validation)
+Form form13 type textForm {formSize=[1,1], screenSizes=[[5,5], [2,2]], position=[1,3]} //1 Property: position.  The value for this property in form13 is invalid. The value must be in the format [row, column], where row and column must be positive integers.  The position of the form must be such that it fits in its corresponding output device. {5314, INVALID_FORM_POSITION_PROPERTY_VALUE}
+end
+Form form14 type textForm {formSize=[1,1], screenSizes=[[5,5], [2,2]], position=[3,1]} //1 Property: position.  The value for this property in form14 is invalid. The value must be in the format [row, column], where row and column must be positive integers.  The position of the form must be such that it fits in its corresponding output device. {5314, INVALID_FORM_POSITION_PROPERTY_VALUE}
+end
+Form form15 type textForm {formSize=[1,1], screenSizes=[[5,5], [2,2]], position=[1,1]} //0
+end
+
+//############################# Case 3: text form w/ position, no screensizes (size validation)
+// ScreenSizes is implicitly [[12,80], [24,80], [32,80], [43,80], [27,132]]
+Form form16 type textForm {formSize = [43,10], position=[2,1]} //1 Property: formSize.  The value for this property in form16 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+end
+Form form17 type textForm {formSize = [43,10], position=[1,1]} //0
+end
+Form form18 type textForm {formSize = [27,132], position=[1,2]} //1 Property: formSize.  The value for this property in form18 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+end
+
+//############################# Case 4: text form w/ position, no screensizes (position validation)
+// ScreenSizes is implicitly [[12,80], [24,80], [32,80], [43,80], [27,132]]
+Form form19 type textForm {formSize=[10,10], position=[44,1]} //1 Property: position.  The value for this property in form19 is invalid. The value must be in the format [row, column], where row and column must be positive integers.  The position of the form must be such that it fits in its corresponding output device. {5314, INVALID_FORM_POSITION_PROPERTY_VALUE}
+end
+Form form20 type textForm {formSize=[10,10], position=[1,133]} //1 Property: position.  The value for this property in form20 is invalid. The value must be in the format [row, column], where row and column must be positive integers.  The position of the form must be such that it fits in its corresponding output device. {5314, INVALID_FORM_POSITION_PROPERTY_VALUE}
+end
+Form form21 type textForm {formSize=[10,10], position=[5,120]} //0
+end
+
+//############################# Case 5: text form w/ no position, has screensizes, screensize fits a screenfloatingarea
+Formgroup formgroup14
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[10,10], topMargin=5, leftMargin=5}
+	]
+}
+	Form form1 type textForm {formSize=[10,10], screenSizes=[[10,10]]}	//1 Property: formSize.  The value for this property in form1 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+	Form form2 type textForm {formSize=[5,5], screenSizes=[[10,10]]}	//0
+	end
+	Form form3 type textForm {formSize=[6,1], screenSizes=[[10,10]]}	//1 Property: formSize.  The value for this property in form3 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+	Form form4 type textForm {formSize=[1,6], screenSizes=[[10,10]]}	//1 Property: formSize.  The value for this property in form4 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+	
+	use form22;		//1 Property: formSize.  The value for this property in form22 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+end
+
+Form form22 type textForm {formSize=[1,6], screenSizes=[[10,10]]}	//0
+end
+
+Form form23 type textForm {formSize=[1,6], screenSizes=[[10,10]]}	//0
+end
+
+//############################# Case 6: text form w/ no position, has screensizes, screensize does not fit a screenfloatingarea
+Formgroup formgroup15
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[10,10], topMargin=5, leftMargin=5}
+	]
+}
+	Form form1 type textForm {formSize=[20,20], screenSizes=[[11,11]]}	//1 Property: formSize.  The value for this property in form1 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+	Form form2 type textForm {formSize=[11,11], screenSizes=[[11,11]]}	//0
+	end
+	Form form3 type textForm {formSize=[12,1], screenSizes=[[11,11]]}	//1 Property: formSize.  The value for this property in form3 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+	Form form4 type textForm {formSize=[1,12], screenSizes=[[11,11]]}	//1 Property: formSize.  The value for this property in form4 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+	
+	use form24;		//1 Property: formSize.  The value for this property in form24 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device.
+end
+
+Form form24 type textForm {formSize=[1,12], screenSizes=[[11,11]]}	//0
+end
+
+Form form25 type textForm {formSize=[1,12], screenSizes=[[11,11]]}	//0
+end
+
+//############################# Case 7: text form w/ no position, no screensizes, screensize does not fit a screenfloatingarea
+// ScreenSizes is implicitly [[12,80], [24,80], [32,80], [43,80], [27,132]]
+Formgroup formgroup16
+{
+	ScreenFloatingAreas=[
+		@screenFloatingArea{screenSize=[32,80], topMargin=5, leftMargin=5}
+	]
+}
+	Form form1 type textForm {formSize=[50,50]}		//1 Property: formSize.  The value for this property in form1 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+	Form form2 type textForm {formSize=[32,80]}		//0
+	end
+	Form form3 type textForm {formSize=[44,1]}		//1 Property: formSize.  The value for this property in form3 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+	Form form4 type textForm {formSize=[1,133]}		//1 Property: formSize.  The value for this property in form4 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device. {5313, INVALID_FORM_SIZE_PROPERTY_VALUE}
+	end
+end
+
+//############################# Case 8: print form w/ no position
+FormGroup formgroup17
+	{PrintFloatingAreas=[
+	 	 @printFloatingArea{pageSize=[20,20], topMargin=0, bottomMargin=0, leftMargin=0, rightMargin=0}
+	 ]}
+	
+	Form form1 type printForm {formSize=[25,25]}		//1 Property: formSize.  The value for this property in form1 is invalid. The value must be in the format [rows, columns], where rows and columns must be positive integers.  The size of the form must be such that it fits in its corresponding output device.
+	end
+	Form form2 type printForm {formSize=[20,20]}		//0
+	end
+end
+
+// validateUniqueIdentifiers:
+Form form26 type textForm {formSize=[10,10]}
+	field1 int {position=[1,2]};	//0
+	field1 int {position=[2,2]};	//1 The form field field1 is duplicated in form form26. {5334, INVALID_FORM_FIELD_IDENTIFIER_DUPLICATION}
+end
+
+// validateValidationOrder:
+Form form27 type textForm {formSize=[10,10]} 		//0
+	field1 int {position=[1,2], validationOrder=1};
+	field2 int {position=[1,2], validationOrder=2};
+	field3 int {position=[1,2], validationOrder=3};
+	field4 int {position=[1,2], validationOrder=4};
+	field5 int {position=[1,2], validationOrder=5};
+end
+
+Form form28 type textForm {formSize=[10,10]} 		//0
+	field1 int {position=[1,2], validationOrder=1};
+	field2 int {position=[1,2], validationOrder=3};
+	field3 int {position=[1,2], validationOrder=2};
+	field4 int {position=[1,2], validationOrder=5};
+	field5 int {position=[1,2], validationOrder=4};
+end
+
+Form form29 type textForm {formSize=[10,10]} 		//0
+	field1 int {position=[1,2], validationOrder=1};
+	field2 int {position=[1,2], validationOrder=3};
+	field3 int {position=[1,2], validationOrder=2};
+	field4 int {position=[1,2]};
+	field5 int {position=[1,2], validationOrder=4};
+end
+
+Form form30 type textForm {formSize=[10,10]} 		//0
+	field1 int {position=[1,2]};
+	field2 int {position=[1,2], validationOrder=3};
+	field3 int {position=[1,2], validationOrder=2};
+	field4 int {position=[1,2], validationOrder=5};
+	field5 int {position=[1,2], validationOrder=4};
+end
+
+Form form31 type textForm {formSize=[10,10]} 		//0
+	field1 int {position=[1,2], validationOrder=1};
+	field2 int {position=[1,2], validationOrder=3};
+	field3 int {position=[1,2]};
+	field4 int {position=[1,2], validationOrder=5};
+	field5 int {position=[1,2], validationOrder=4};
+end

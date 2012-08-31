@@ -1,0 +1,24 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program IncludeLineNumbers
+	function main()
+		writeStdout( "To test this feature, generate with includeLineNumers=YES in the" );
+		writeStdout( "build descriptor." );
+		writeStdout( "" );
+		writeStdout( "About to die with an error message, which should say the error is" );
+		writeStdout( "at line 11 of RFE_1094688/IncludeLineNumbers.egl" );
+		a int[ 3 ];
+		a[ 5 ] = 99;
+	end
+end

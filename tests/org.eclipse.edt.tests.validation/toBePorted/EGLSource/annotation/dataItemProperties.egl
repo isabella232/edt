@@ -1,0 +1,1265 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// ---------------------------------------------------
+// validValues:
+DataItem validValuesItem1 int
+	{validValues = [2, 5]} //0
+end
+
+
+dataitem dfz char(2){
+dateFormat = "Y"// 1 Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value {3171}
+
+}end
+
+
+form ddddd type TextForm{
+formsize = [5,5]
+}
+mydf char(2){// 1 Property: dateFormat.  The value systemJulianDateFormat for property dateFormat in mydf requires the fieldLen property or primitive length to be either 6 or 8 for fields of type char {3177}
+dateFormat = systemJulianDateFormat// 0
+
+};
+
+mydf2 char (2){// 1 Property: dateFormat.  The value systemGregorianDateFormat for property dateFormat in mydf2 requires the fieldLen property or primitive length to be either 8 or 10 for fields of type char {3177}
+dateFormat = systemGregorianDateFormat//0
+
+};
+	
+mydate date {// 1 Property: fieldLen.  The value for this property for field mydate is invalid. For char and mbchar types, the value must match the primitive length.  For dbchar, it must match the bytes.  It must be an integer that is the number of bytes needed to display the largest number in the type declaration with all formatting characters.
+dateFormat = eurDateFormat,
+fieldLen = 1 // 0
+
+};
+
+i int {	// 2 
+fieldlen = 5,
+minimumInput = 6 
+};
+
+end
+
+dataitem df char(2){
+dateFormat = systemJulianDateFormat 
+}end
+
+
+dataitem dff num(10,2){
+dateFormat = usaDateFormat,// 1 Property: dateFormat.  The dateFormat property is not valid for field or items with decimals {3175}
+minimumInput = -1 // 1 The value of property minimumInput must be greater than 0, but -1 was found
+}end
+
+
+
+dataitem xxxx int {
+fieldlen = 5,
+minimumInput = 6 // 0
+
+}end
+
+
+// ---------------------------------------------------
+// boolean:
+DataItem boolean1 char(10) 
+	{isBoolean = yes} //0
+end
+
+DataItem boolean2 char(10) 
+	{isBoolean = "yes"} //1
+end
+
+DataItem boolean3 char(10) 
+	{isBoolean = no} //0
+end
+
+DataItem boolean4 char(10) 
+	{isBoolean = "no"} //1
+end
+
+DataItem boolean5 char(10) 
+	{isBoolean = bob} //1
+end
+
+DataItem boolean6 char(10) 
+	{isBoolean = "bob"} //1
+end
+
+DataItem boolean7 bin(4) 
+	{isBoolean = yes} //0
+end
+
+DataItem boolean8 num 
+	{isBoolean = yes} //0
+end
+
+DataItem boolean9 numc
+	{isBoolean = yes} //0
+end
+
+DataItem boolean10 decimal
+	{isBoolean = yes} //0
+end
+
+DataItem boolean11 pacf
+	{isBoolean = yes} //0
+end
+
+DataItem boolean12 int
+	{isBoolean = yes} //0
+end
+
+DataItem boolean13 bigint
+	{isBoolean = yes} //0
+end
+
+DataItem boolean14 smallint 
+	{isBoolean = yes} //0
+end
+
+DataItem boolean15 float 
+	{isBoolean = yes} //0
+end
+
+DataItem boolean16 money
+	{isBoolean = yes} //0
+end
+
+DataItem boolean17 dbchar
+	{isBoolean = yes} //1
+end
+
+DataItem boolean18 hex 
+	{isBoolean = yes} //1
+end
+
+DataItem boolean19 int
+	{isBoolean = yes, numericSeparator = no} //0
+end
+
+DataItem boolean20 int
+	{isBoolean = yes, numericSeparator = yes} //0
+end
+
+DataItem boolean21 int
+	{isBoolean = yes, numericSeparator = no} //0
+end
+
+DataItem boolean22 int
+	{isBoolean = yes, currency = yes} //0
+end
+
+DataItem boolean23 int
+	{isBoolean = yes, currency = no} //0
+end
+
+DataItem boolean24 int
+	{isBoolean = yes, sign = leading} //0
+end
+
+DataItem boolean25 int
+	{isBoolean = yes, sign = none} //0
+end
+
+DataItem boolean26 int
+	{isBoolean = yes, zeroFormat = yes} //0
+end
+
+DataItem boolean27 int
+	{isBoolean = yes, zeroFormat = no} //0
+end
+
+DataItem boolean28 int
+	{isBoolean = yes, validValues = [1,2]} 
+end
+
+// ---------------------------------------------------
+// upperCase:
+DataItem upperCase1 char(10)
+	{upperCase = yes} //0
+end
+
+DataItem upperCase2 char(10)
+	{upperCase = "yes"} //1
+end
+
+DataItem upperCase3 char(10)
+	{upperCase = no} //0
+end
+
+DataItem upperCase4 char(10)
+	{upperCase = "no"} //1
+end
+
+DataItem upperCase5 char(10)
+	{upperCase = bob} //1
+end
+
+DataItem upperCase6 char(10)
+	{upperCase = "bob"} //1
+end
+
+DataItem upperCase7 int
+	{upperCase = yes} //1
+end
+
+DataItem upperCase8 int
+	{upperCase = no} //0
+end
+
+// ---------------------------------------------------
+// lowerCase:
+DataItem lowerCase1 char(10)
+	{lowerCase = yes} //0
+end
+
+DataItem lowerCase2 char(10)
+	{lowerCase = "yes"} //1
+end
+
+DataItem lowerCase3 char(10)
+	{lowerCase = no} //0
+end
+
+DataItem lowerCase4 char(10)
+	{lowerCase = "no"} //1
+end
+
+DataItem lowerCase5 char(10)
+	{lowerCase = bob} //1
+end
+
+DataItem lowerCase6 char(10)
+	{lowerCase = "bob"} //1
+end
+
+DataItem lowerCase7 int
+	{lowerCase = yes} //1
+end
+
+DataItem lowerCase8 int
+	{lowerCase = no} //0
+end
+
+// ---------------------------------------------------
+// currency:
+DataItem currencyItem1 int
+	{ currency = no } //0
+end
+
+DataItem currencyItem2 int
+	{ currency = yes } //0
+end
+
+DataItem currencyItem3 int
+	{ currency = bob } //1
+end
+
+DataItem currencyItem4 int
+	{ currency = "yes" } //1
+end
+
+DataItem currencyItem5 int
+	{ currency = [] } //1
+end
+
+DataItem currencyItem6 char(10)
+	{ currency = yes } //1
+end
+
+// ---------------------------------------------------
+// currencySymbol:
+DataItem currencySymbolItem1 int
+	{ currencySymbol = "enu" } //0
+end
+
+DataItem currencySymbolItem2 int
+	{ currencySymbol = enu } //1
+end
+
+DataItem currencySymbolItem3 int
+	{ currencySymbol = [] } //1
+end
+
+DataItem currencySymbolItem4 char(10)
+	{ currencySymbol = "abc" } //1
+end
+
+DataItem currencySymbolItem5 int
+	{ currencySymbol = "a" } //0
+end
+
+DataItem currencySymbolItem6 int
+	{ currencySymbol = "ab" } //0
+end
+
+DataItem currencySymbolItem7 int
+	{ currencySymbol = "" } //1 Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+end
+
+DataItem currencySymbolItem8 int
+	{ currencySymbol = "\"bc" } //0
+end
+
+DataItem currencySymbolItem9 int
+	{ currencySymbol = "\"bcd" } //1
+end
+
+DataItem currencySymbolItem10 int
+	{ currencySymbol = "abcd" } //1
+end
+
+// ---------------------------------------------------
+// fillCharacter:
+DataItem fillCharacterItem1 int
+	{fillCharacter = "a"} //0
+end
+
+DataItem fillCharacterItem2 int
+	{fillCharacter = "ab"} //1
+end
+
+DataItem fillCharacterItem4 int
+	{fillCharacter = nullFill} //0
+end
+
+DataItem fillCharacterItem5 int
+	{fillCharacter = Strlib.nullFill} //0
+end
+
+DataItem fillCharacterItem6 int
+	{fillCharacter = egl.core.Strlib.nullFill} //0
+end
+
+DataItem fillCharacterItem7 int
+	{fillCharacter = "nullFill"} //1
+end
+
+// ---------------------------------------------------
+// maxLen
+DataItem maxLen1 string
+	{maxLen = 1} //0
+end
+
+DataItem maxLen2 string	
+	{maxLen = -1} //1
+end
+
+DataItem maxLen3 string	
+	{maxLen = 0} //1
+end
+
+DataItem maxLen4 char(10)	
+	{maxLen = 1} //1
+end
+
+DataItem maxLen5 int
+	{maxLen = 2} //1
+end
+
+DataItem maxLen6 string
+	{maxLen = "2"} //1
+end
+
+DataItem maxLen7 string
+	{maxLen = []} //1
+end
+
+
+// ---------------------------------------------------
+// outline:
+DataItem outline1 char(10)
+	{outline = [box]} //0
+end
+
+DataItem outline2 char(10)
+	{outline = "box"} //1
+end
+
+DataItem outline3 char(10)
+	{outline = tom} //1
+end
+
+DataItem outline4 char(10)
+	{outline = []} //0
+end
+
+DataItem outline5 char(10)
+	{outline = [top, bottom, left, right]}//0
+end
+
+DataItem outline6 char(10)
+	{outline = [top, top]} //0
+end
+
+DataItem outline7 char(10)
+	{outline = [bob]} //1
+end
+
+DataItem outline8 char(10)
+	{outline = ["top"]} //1
+end
+
+DataItem outline9 char(10)
+	{outline = [noOutline]} //0
+end
+
+DataItem outline10 char(10)
+	{outline = [OutlineKind.box]} //0
+end
+
+DataItem outline11 char(10)
+	{outline = [egl.ui.text.OutlineKind.box]} //0
+end
+
+DataItem outline12 char(10)
+	{outline = [OutlineKind.noOutline]} //0
+end
+
+DataItem outline13 char(10)
+	{outline = [egl.ui.text.OutlineKind.noOutline]} //0
+end
+
+DataItem outline14 char(10)
+	{outline = [outlinekind.top, egl.ui.text.outlinekind.bottom]}//0
+end
+
+DataItem outline15 char(10)
+	{outline = [top, bob]} //1
+end
+
+// ---------------------------------------------------
+// sign:
+DataItem sign1 int
+	{sign = leading} //0
+end
+
+DataItem sign2 int
+	{sign = "leading"} //1
+end
+
+DataItem sign3 int
+	{sign = tom} //1
+end
+
+DataItem sign4 int
+	{sign = []} //1
+end
+
+DataItem sign5 int
+	{sign = none}//0
+end
+
+DataItem sign6 int
+	{sign = parens} //0
+end
+
+DataItem sign7 int
+	{sign = [bob]} //1
+end
+
+DataItem sign8 int
+	{sign = ["parens"]} //1
+end
+
+DataItem sign9 int
+	{sign = trailing} //0
+end
+
+DataItem sign10 int
+	{sign = signKind.none} //0
+end
+
+DataItem sign11 int
+	{sign = egl.ui.signkind.NONE} //0
+end
+
+// ---------------------------------------------------
+// selectType:
+DataItem selectType1 int
+	{selectType = index} //0
+end
+
+DataItem selectType2 int
+	{selectType = "index"} //1
+end
+
+DataItem selectType3 int
+	{selectType = tom} //1
+end
+
+DataItem selectType4 int
+	{selectType = []} //1
+end
+
+DataItem selectType5 int
+	{selectType = value}//0
+end
+
+DataItem selectType6 int
+	{selectType = [bob]} //1
+end
+
+DataItem selectType7 int
+	{selectType = ["index"]} //1
+end
+
+DataItem selectType8 int
+	{selectType = selectTypeKind.value} //0
+end
+
+DataItem selectType9 int
+	{selectType = egl.ui.jsf.selectTypeKind.index} //0
+end
+
+// ---------------------------------------------------
+// tableNames:
+Record SQLRecordTableName1 type SQLRecord
+	{ tableNames = "abc"} // 1
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName2 type SQLRecord
+	{ tableNames = [["table1"]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName3 type SQLRecord
+	{ tableNames = [["table1", "T1"]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName4 type SQLRecord
+	{ tableNames = [[]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName5 type SQLRecord
+	{ tableNames = [[table1]]} // 2
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName6 type SQLRecord
+	{ tableNames = [["table1", t1]]} // 2
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName7 type SQLRecord
+	{ tableNames = [["table1", "t1"], ["table2"]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName8 type SQLRecord
+	{ tableNames = [["table1", "t1"], ["table2", "t2"]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName9 type SQLRecord
+	{ tableNames = []} //0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName10 type SQLRecord
+	{ tableNames = table1} // 1
+	10 item1 char(10);
+end
+
+Record SQLRecordTableName11 type SQLRecord
+	{ tableNames = ["table1"]} // 1
+	10 item1 char(10);
+end
+
+// ---------------------------------------------------
+// tableNameVariables:
+Record SQLRecordTableNameVariables1 type SQLRecord
+	{ tableNameVariables = "abc"} // 1
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables2 type SQLRecord
+	{ tableNameVariables = [["table1"]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables3 type SQLRecord
+	{ tableNameVariables = [["table1", "T1"]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables4 type SQLRecord
+	{ tableNameVariables = [[]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables5 type SQLRecord
+	{ tableNameVariables = [[table1]]} // 2
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables6 type SQLRecord
+	{ tableNameVariables = [["table1", t1]]} // 2
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables7 type SQLRecord
+	{ tableNameVariables = [["table1", "t1"], ["table2"]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables8 type SQLRecord
+	{ tableNameVariables = [["table1", "t1"], ["table2", "t2"]]} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables9 type SQLRecord
+	{ tableNameVariables = []} // 0
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables10 type SQLRecord
+	{ tableNameVariables = table1} // 1
+	10 item1 char(10);
+end
+
+Record SQLRecordTableNameVariables11 type SQLRecord
+	{ tableNameVariables = ["table1"]} // 1
+	10 item1 char(10);
+end
+
+// ---------------------------------------------------
+// keyItem:
+Record indexedRecordKeyItem1 type indexedRecord
+	{fileName = "abc",
+	 keyItem = bob} // 0
+
+	10 item1 char(10); 
+	10 bob char(10);
+end
+
+Record indexedRecordKeyItem2 type indexedRecord //0
+	{fileName = "abc",
+	 keyItem = bob} // 0
+
+	10 item1 char(10); 
+	10 bob char(10);
+end
+ 
+Record relativeRecordKeyItem1 type relativeRecord	
+	{fileName = "abc",
+	 recordNumItem = "bob"} // 0
+
+	10 item1 char(10);
+	10 bob int;
+end
+
+Record relativeRecordKeyItem2 type relativeRecord	//0
+	{fileName = "abc",
+	 recordNumItem = "bob"} // 1
+
+	10 item1 char(10);
+	10 bob char(10);
+end
+
+// ---------------------------------------------------
+// keyItems:
+Record sqlRecordKeyItems1 type sqlRecord
+	{keyItems = [bob, item1]} //0
+	
+	10 item1 char(10);
+	10 bob char(10);
+end
+
+Record sqlRecordKeyItems2 type sqlRecord
+	{keyItems = "bob"} //1
+	
+	10 item1 char(10);
+	10 bob char(10);
+end
+
+Record sqlRecordKeyItems3 type sqlRecord
+	{keyItems = bob} //1
+	
+	10 item1 char(10);
+	10 bob char(10);
+end
+
+Record sqlRecordKeyItems4 type sqlRecord
+	{keyItems = [bob] } //0
+	
+	10 item1 char(10);
+	10 bob char(10);
+end
+
+Record sqlRecordKeyItems5 type sqlRecord
+	{keyItems = [[]] } //1
+	
+	10 item1 char(10);
+	10 bob char(10);
+end
+
+// ---------------------------------------------------
+// dateFormat:
+DataItem dateFormatItem1 char(10)
+	{ dateFormat = isoDateFormat } //0
+end
+
+DataItem dateFormatItem2 char(10)
+	{ dateFormat = usaDateFormat } //0
+end
+
+DataItem dateFormatItem3 char(10)
+	{ dateFormat = eurDateFormat } //0
+end
+
+DataItem dateFormatItem4 char(10)
+	{ dateFormat = jisDateFormat } //0
+end
+
+DataItem dateFormatItem5 char(10)
+	{ dateFormat = defaultDateFormat } //0
+end
+
+DataItem dateFormatItem6 char(10)
+	{ dateFormat = systemGregorianDateFormat } //0
+end 
+
+DataItem dateFormatItem7 char(6)
+	{ dateFormat = systemJulianDateFormat } //0 
+end 
+
+DataItem dateFormatItem8 char(10)
+	{ dateFormat = "abc" } //0
+end
+
+DataItem dateFormatItem9 char(10)
+	{ dateFormat = strlib.jisDateFormat } //0
+end 
+
+DataItem dateFormatItem10 char(10)
+	{ dateFormat = egl.core.strlib.jisDateFormat } //0
+end
+
+DataItem dateFormatItem11 char(10)
+	{ dateFormat = [jisdateFormat] } //1
+end
+
+DataItem dateFormatItem12 char(10)
+	{ dateFormat = abcDateFormat } //1
+end
+
+// ---------------------------------------------------
+// timeFormat:
+DataItem timeFormatItem1 char(10)
+	{ timeFormat = isoTimeFormat } //0
+end
+
+DataItem timeFormatItem2 char(10)
+	{ timeFormat = usaTimeFormat } //0
+end
+
+DataItem timeFormatItem3 char(10)
+	{ timeFormat = eurTimeFormat } //0
+end
+
+DataItem timeFormatItem4 char(10)
+	{ timeFormat = jisTimeFormat } //0
+end
+
+DataItem timeFormatItem5 char(10)
+	{ timeFormat = defaultTimeFormat } //0
+end
+
+DataItem timeFormatItem6 char(10)
+	{ timeFormat = "abc" } //0
+end
+
+DataItem timeFormatItem7 char(10)
+	{ timeFormat = strlib.jisTimeFormat } //0
+end
+
+DataItem timeFormatItem8 char(10)
+	{ timeFormat = egl.core.strlib.jisTimeFormat } //0
+end
+
+DataItem timeFormatItem9 char(10)
+	{ timeFormat = [jisTimeFormat] } //1
+end
+
+DataItem timeFormatItem10 char(10)
+	{ timeFormat = abcTimeFormat } //1
+end
+
+// ---------------------------------------------------
+// timeStampFormat:
+DataItem timeStampFormatItem1 timestamp
+	{   timeStampFormat = db2TimeStampFormat } //0
+end
+
+DataItem timeStampFormatItem2 timestamp
+	{ timeStampFormat = odbcTimeStampFormat } //0
+end
+
+DataItem timeStampFormatItem3 timestamp
+	{ timeStampFormat = "abc" } //0
+end
+
+DataItem timeStampFormatItem4 timestamp
+	{ timeStampFormat = ["abc"] } //1
+end
+
+DataItem timeStampFormatItem5 timestamp
+	{ timeStampFormat = abcTimeStampFormat } //1 This property requires a quoted string as the value.
+end
+
+DataItem timeStampFormatItem6 timestamp
+	{   timeStampFormat = db2TimeStampFormat } //0
+end
+
+DataItem timeStampFormatItem7 timestamp
+	{ timeStampFormat = odbcTimeStampFormat } //0
+end
+
+DataItem timeStampFormatItem8 timestamp
+	{ timeStampFormat = defaultTimeStampFormat } //0
+end 
+
+DataItem timeStampFormatItem9 timestamp
+	{ timeStampFormat = strlib.defaultTimeStampFormat } //0
+end 
+
+DataItem timeStampFormatItem10 timestamp
+	{ timeStampFormat = egl.core.strlib.defaultTimeStampFormat } //0
+end 
+
+
+
+
+
+
+// ---------------------------------------------------
+// validValuesMsgKey:
+DataItem validValuesMsgKeyItem1 int
+	{validValuesMsgKey = "bob"} //0
+end
+
+// ---------------------------------------------------
+// fill:
+DataItem fillItem1 int
+	{fill = yes} //0
+end
+
+DataItem fillItem2 int
+	{fill = no} //0
+end
+
+//DataItem fillItem3 int
+//	{fill = booleanKind.yes} //0
+//end
+
+//DataItem fillItem4 int
+//	{fill = egl.core.booleanKind.yes} //0
+//end
+
+DataItem fillItem5 int
+	{fill = bob} //1
+end
+
+
+// ---------------------------------------------------
+// validatorDataTable:
+DataItem validatorDataTableItem1 num(3)
+	{validatorDataTable = TBLMVAL1} //0
+end
+
+DataTable TBLMVAL1 type matchValidTable
+	{contents = [["abc"]]} 
+	10 item1 char(10);
+end
+
+DataItem validatorDataTableItem2 num(3)
+	{validatorDataTable = TBLMVAL2} //1
+end
+
+DataTable TBLMVAL2 type matchValid //1
+	{contents = [["abc"]]} 
+	10 item1 char(10);
+end
+
+// ---------------------------------------------------
+// validatorFunction:
+DataItem validatorFunctionItem1 num(3)  {
+  validatorFunction = sysLib.verifyChkDigitMod10 } //0
+end
+
+DataItem validatorFunctionItem2 num(3)  {
+  validatorFunction = verifyChkDigitMod10 } //0
+end
+
+DataItem validatorFunctionItem3 num(3)  {
+  validatorFunction = sysLib.verifyChkDigitMod11 } //0
+end
+
+DataItem validatorFunctionItem4 num(3)  {
+  validatorFunction = verifyChkDigitMod11 } //0
+end 
+
+DataItem validatorFunctionItem5 num(3)  {
+  validatorFunction = verifyChkDigitMod11 } //0
+end 
+
+DataItem validatorFunctionItem6 num(3)  {
+  validatorFunction = bob } //1
+end 
+
+DataTable myTable type matchValidTable end
+
+function myFunc() end
+
+DataItem valid1 int { 
+	column = "dave",               // 0
+	currency = yes,                // 0
+	fill = yes,                    // 0
+	detectable = yes,              // 0
+	bypassValidation = yes,        // 0
+	fillCharacter = nullFill,      // 0
+	sign = none,                   // 0
+	help = "dave",                 // 0
+	modified = yes,                // 0
+	numericSeparator = yes,        // 0
+	minimumInput = 0,              // 0
+	newWindow = yes,               // 0
+	align = left,                  // 0
+	highlight = underline,         // 0
+
+	isReadOnly = yes,              // 0
+	validationOrder = 5,           // 0
+	selectType = index,            // 0
+	displayUse = input,            // 0
+	inputRequiredMsgKey = "9999",  // 0
+	value = "a",                   // 0
+	action = "pgmId",              // 0
+	isDecimalDigit = yes,          // 1 must be defined with one of the character primitives
+	typeChkMsgKey = "9999",        // 0
+	protect = protect,             // 0
+	inputRequired = yes,           // 0
+	validValues = [1,2],           // 0
+	intensity = normalIntensity,   // 0
+
+	fieldlen = 5,                  // 0
+	numElementsItem = item1,       // 0
+
+	color = defaultColor,          // 0
+	isHexDigit = yes,              // 1 must be defined with one of the character primitives
+	validValuesMsgKey = "9999",    // 0
+	runValidatorFromProgram = yes, // 0
+	pattern = "abc",               // 0
+	isSQLNullable = yes,           // 0
+	masked = yes,                  // 0
+	zeroFormat = yes,              // 0
+	selectFromListItem = item1,    // 0
+	displayName = "dave",          // 0
+	minimumInputMsgKey = "9999"    // 0
+} end
+
+DataItem valid2 int { 
+	column = "dave",              // 0
+	currency = no,                // 0
+	fill = no,                    // 0
+	detectable = no,              // 0
+	bypassValidation = no,        // 0
+	fillCharacter = "A",          // 0
+	sign = leading,               // 0
+	modified = no,                // 0
+	numericSeparator = no,        // 0
+	minimumInput = 1,             // 0
+	newWindow = no,               // 0
+	validatorDataTableMsgKey = "1",  // 0
+	align = right,                // 0
+	isReadOnly = no,              // 0
+	selectType = value,           // 0
+	displayUse = output,          // 0
+	inputRequiredMsgKey = "1",    // 0
+	value = "5",                  // 0
+	isDecimalDigit = no,          // 0
+	typeChkMsgKey = "1",          // 0
+	protect = noProtect,          // 0
+	inputRequired = no,           // 0
+	intensity = bold,             // 0
+	validatorFunctionMsgKey = "1",// 0
+	color = blue,                 // 0
+	isHexDigit = no,              // 0
+	validValuesMsgKey = "1",              // 0
+	runValidatorFromProgram = no, // 0
+	isSQLNullable = no,           // 0
+	masked = no,                  // 0
+	zeroFormat = no,              // 0
+	minimumInputMsgKey = "1"        // 0
+} end
+
+DataItem valid3 int { 
+	currency = yes,            // 0
+	currencySymbol = "$",            // 0
+	sign = trailing,           // 0
+	validatorDataTableMsgKey = "-1", // 0
+	align = none,              // 0
+	displayUse = secret,       // 0
+	inputRequiredMsgKey = "-1",  // 0
+	value = 5,                 // 0
+	typeChkMsgKey = "-1",        // 0
+	protect = skipProtect,            // 0
+	intensity = invisible,     // 0
+	validatorFunctionMsgKey = "-1",      // 0
+	color = green,             // 0
+	validValuesMsgKey = "-1",          // 0
+	minimumInputMsgKey = "-1"    // 0
+} end
+
+DataItem valid4 int { 
+	displayUse = button, // 0
+	color = magenta      // 0
+} end
+
+DataItem valid5 int { 
+	displayUse = hyperlink, // 0
+	color = red             // 0
+} end
+
+DataItem valid6 int { 
+	displayUse = table, // 0
+	color = cyan        // 0
+} end
+
+DataItem valid7 int { 
+	color = yellow  // 0
+} end
+
+DataItem valid8 int { 
+	color = white  // 0
+} end
+
+DataItem invalid1 int { 
+	column = [5],                  // 1
+	currency = 5,                  // 1
+	fill = "a",                    // 1
+	detectable = "a",              // 1
+	bypassValidation = "a",        // 1
+	fillCharacter = [5],           // 1
+	upperCase = "a",               // 1
+	sign = a,                      // 1
+	help = [5],                    // 1
+	modified = "a",                // 1
+	numericSeparator = "a",        // 1
+	minimumInput = "a",            // 1
+	newWindow = "a",               // 1
+	align = a,                     // 1
+	highlight = a,                 // 1
+	isReadOnly = "a",              // 1
+	validationOrder = ["a"],       // 1
+	selectType = "dave",           // 1
+	outline = a,                   // 1
+	displayUse = dave,             // 1
+	value = ["a"],                 // 0
+	action = [5],                  // 1
+	isDecimalDigit = "a",          // 1
+//	protect = "a",                 // 1
+	inputRequired = "a",           // 1
+	validValues = 1,                     // 1
+	intensity = a,                 // 1
+	fieldlen = ["a"],              // 1
+
+	
+	color = a,                     // 1
+	isHexDigit = "a",              // 1
+	lowerCase = "a",               // 1
+	runValidatorFromProgram = "a", // 1
+	pattern = [5],                 // 1
+	isNullable = "a",              // 1
+	masked = "a",                  // 1
+	zeroFormat = "a",              // 1
+	displayName = [5]              // 1
+} end
+
+DataItem invalid2 int { 
+	column = ["dave"],           // 1
+	currency = [yes],            // 1
+	fill = a,                    // 1
+	detectable = a,              // 1
+	bypassValidation = a,        // 1
+	fillCharacter = [nullFill],  // 1
+	upperCase = a,               // 1
+	sign = "A",                  // 1
+	help = ["dave"],             // 1
+	modified = a,                // 1
+	numericSeparator = a,        // 1
+	minimumInput = a,            // 1
+	newWindow = a,               // 1
+	align = "a",                 // 1
+	highlight = "a",             // 1
+	isReadOnly = a,              // 1
+	validationOrder = a,         // 1
+	selectType = 5,              // 1
+	outline = 5,                 // 1
+	displayUse = "dave",         // 1
+
+	isDecimalDigit = a,          // 1
+//	protect = 5,                 // 1
+	inputRequired = a,           // 1
+	validValues = a,                   // 1
+	intensity = "a",             // 1
+	fieldlen = [5],              // 1
+	numElementsItem = 5,         // 1
+	color = "a",                 // 1
+	isHexDigit = a,              // 1
+	lowerCase = a,               // 1
+	runValidatorFromProgram = a, // 1
+	pattern = ["abc"],           // 1
+	isSQLNullable = a,           // 1
+	masked = a,                  // 1
+	zeroFormat = a,              // 1
+	displayName = ["dave"]       // 1
+} end
+
+DataItem invalid3 int { 
+	fill = 5,                    // 1
+	detectable = 5,              // 1
+	bypassValidation = 5,        // 1
+	fillCharacter = ["a"],       // 1
+	upperCase = 5,               // 1
+	sign = 5,                    // 1
+	help = [5],                  // 1
+	modified = 5,                // 1
+	numericSeparator = 5,        // 1
+	minimumInput = [0],          // 1
+	newWindow = 5,               // 1
+	align = 5,                   // 1
+	highlight = 5,               // 1
+	isReadOnly = 5,              // 1
+	validationOrder = [5],       // 1
+	selectType = [index],        // 1
+	outline = "a",               // 1
+	displayUse = 5,              // 1
+	action = ["pgmId"],          // 1
+	isDecimalDigit = 5,          // 1
+//	protect = [skip],            // 1
+	inputRequired = 5,           // 1
+	validValues = "a",                 // 1
+	intensity = 5,               // 1
+	numElementsItem = [item1],   // 1
+	color = 5,                   // 1
+	isHexDigit = 5,              // 1
+	lowerCase = 5,               // 1
+	runValidatorFromProgram = 5, // 1
+	isNullable = 5,              // 1
+	masked = 5,                  // 1
+	zeroFormat = 5,              // 1
+	displayName = [5]            // 1
+} end
+
+DataItem invalid4 int { 
+	fill = [yes],                    // 1
+	detectable = [yes],              // 1
+	bypassValidation = [yes],        // 1
+	upperCase = [yes],               // 1
+	sign = [none],                   // 1
+	modified = [yes],                // 1
+	numericSeparator = [yes],        // 1
+	newWindow = [yes],               // 1
+	align = [left],                  // 1
+	highlight = [underline],         // 1
+	isReadOnly = [yes],              // 1
+	displayUse = [button],           // 1
+	isDecimalDigit = [yes],          // 1
+	inputRequired = [yes],           // 1
+
+	intensity = [bold],              // 1
+	color = [red],                   // 1
+	isHexDigit = [yes],              // 1
+	lowerCase = [yes],               // 1
+	runValidatorFromProgram = [yes], // 1
+	isNullable = [yes],              // 1
+	masked = [yes],                  // 1
+	zeroFormat = [yes]              // 1
+	} end
+
+DataItem invalid5 int { 
+	validValues = [1,2,3]  // 0
+} end
+
+DataItem invalid6 int { 
+	validValues = [4,-5]  // 0
+} end
+
+DataItem valid1 mbchar(12) { 
+	needsSOSI = yes, // 0
+	sqlVariableLen = yes     // 0
+} end
+
+DataItem valid2 mbchar(12) { 
+	needsSOSI = no, // 0
+	sqlVariableLen = no     // 0
+} end
+
+DataItem invalid1rtdfbhj mbchar(12) { 
+	needsSOSI = "a" // 1
+	
+} end
+
+DataItem invalid2sdfg mbchar(12) { 
+	needsSOSI = a // 1
+	
+} end
+
+DataItem invalid3qwe mbchar(12) { 
+	needsSOSI = 5 // 1
+	
+} end
+
+DataItem invalid4xcv mbchar(12) { 
+	needsSOSI = [yes] // 1
+	
+} end
+
+form fieldlenform type textform
+i int {fieldLen = 5};// 1
+bi bigint {fieldLen = 5};// 1
+bin4 bin(4) {fieldLen = 5};// 0
+m money {fieldLen = 5};// 1
+n num(32) {fieldLen = 5};// 1
+sf smallfloat {fieldLen = 5};// 0
+str string {fieldLen = 5};// 1
+uni unicode(30) {fieldLen = 5};// 1
+bl blob {fieldLen = 5};// 0
+cl clob {fieldLen = 5};// 0
+inter interval {fieldLen = 5};// 1
+end
+
+form fieldlenforme type textform 
+ch char(30) {fieldLen = 5};// 1 Property: fieldLen.  The value for this property for field ch is invalid. For char and mbchar types, the value must match the primitive length.  For dbchar, it must match the bytes.  It must be an integer that is the number of bytes needed to display the largest number in the type declaration with all formatting characters.
+end
+
+form fieldlenformw type textform 
+db dbchar(30) {fieldLen = 5};// 1 Property: fieldLen.  The value for this property for field db is invalid. For char and mbchar types, the value must match the primitive length.  For dbchar, it must match the bytes.  It must be an integer that is the number of bytes needed to display the largest number in the type declaration with all formatting characters.
+end
+
+
+form fieldlenformh type textform
+d date {dateformat = eurDateFormat,fieldLen = 5};// 1 Property: fieldLen.  The value for this property for field d is invalid. For char and mbchar types, the value must match the primitive length.  For dbchar, it must match the bytes.  It must be an integer that is the number of bytes needed to display the largest number in the type declaration with all formatting characters.
+end
+
+form fieldlenformx type textform
+t time {timeformat = eurTimeFormat, fieldLen = 5};// 1 Property: fieldLen.  The value for this property for field t is invalid. For char and mbchar types, the value must match the primitive length.  For dbchar, it must match the bytes.  It must be an integer that is the number of bytes needed to display the largest number in the type declaration with all formatting characters.
+end
+
+form fieldlenformz type textform
+ts timestamp {timestampformat = db2TimeStampFormat, fieldLen = 5};// 1 Property: fieldLen.  The value for this property for field ts is invalid. For char and mbchar types, the value must match the primitive length.  For dbchar, it must match the bytes.  It must be an integer that is the number of bytes needed to display the largest number in the type declaration with all formatting characters.
+end
+
