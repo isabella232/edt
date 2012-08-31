@@ -11,17 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultTypeValidator.DateTimePattern;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.TimestampType;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 
@@ -29,24 +25,24 @@ public class StructTimestampValidator extends
 		AbstractStructParameterAnnotationValidator {
 
 	
-	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
-		super.validate(annotation, errorNode, targetBinding, problemRequestor);
+	protected void validateType(Annotation annotation, Node errorNode, Type type) {
+		super.validateType(annotation, errorNode, type);
 		
-		if (targetBinding != null && isValidType(targetBinding.getType())) {
-			if (targetBinding.getType() instanceof TimestampType &&
-					!"null".equalsIgnoreCase(((TimestampType)targetBinding.getType()).getPattern())) {
-				validatePatternNotSpecified(annotation, errorNode, problemRequestor);
+		if (type != null && isValidType(type)) {
+			if (type instanceof TimestampType &&
+					!"null".equalsIgnoreCase(((TimestampType)type).getPattern())) {
+				validatePatternNotSpecified(annotation, errorNode);
 			}
 			else {
 				//Must specify pattern
-				validatePatternSpecified(annotation, errorNode, problemRequestor);
-				validatePattern(annotation, errorNode, problemRequestor);
+				validatePatternSpecified(annotation, errorNode);
+				validatePattern(annotation, errorNode);
 			}
 		}
 	}
 	
 	
-	private void validatePattern(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	private void validatePattern(Annotation ann, Node errorNode) {
 		String pattern = (String)ann.getValue("eglPattern");
 		if (pattern != null) {
 	  		DateTimePattern dtPat = new DateTimePattern( pattern );
@@ -63,23 +59,21 @@ public class StructTimestampValidator extends
 		}
 	}
 
-	protected void validatePatternNotSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	protected void validatePatternNotSpecified(Annotation ann, Node errorNode) {
 		if (ann.getValue("eglPattern") != null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"eglPattern", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
-	protected void validatePatternSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	protected void validatePatternSpecified(Annotation ann, Node errorNode) {
 		if (ann.getValue("eglPattern") == null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"eglPattern", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
 	@Override
-	protected List<String> getSupportedTypes() {
-		List<String> list = new ArrayList<String>();
-		list.add(MofConversion.Type_EGLTimestamp);
-		return list;
+	protected Type getSupportedType() {
+		return TypeUtils.Type_TIMESTAMP;
 	}
 	@Override
 	protected String getName() {

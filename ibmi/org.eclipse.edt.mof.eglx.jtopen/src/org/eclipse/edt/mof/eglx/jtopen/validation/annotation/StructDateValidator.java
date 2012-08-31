@@ -11,18 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-import org.eclipse.edt.mof.egl.MofConversion;
-
-public class StructDateValidator extends
-		AbstractStructParameterAnnotationValidator {
+public class StructDateValidator extends AbstractStructParameterAnnotationValidator {
 	
-	protected List<String> getSupportedTypes() {
-		List<String> list = new ArrayList<String>();
-		list.add(MofConversion.Type_EGLDate);
-		return list;
+	@Override
+	protected Type getSupportedType() {
+		return TypeUtils.Type_DATE;
 	}
 	@Override
 	protected String getName() {

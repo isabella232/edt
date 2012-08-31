@@ -15,6 +15,8 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Handler;
@@ -48,23 +50,17 @@ public class ServiceInterfaceValidatorUtil {
 				
 				Type typeBinding = functionParameter.getType().resolveType();
 				if (typeBinding != null){
-					boolean typeIsPrimitive = TypeUtils.isPrimitive(typeBinding);
-					boolean typeIsReference = TypeUtils.isReferenceType(typeBinding);
-					if (typeIsReference && typeIsPrimitive){
-						problemRequestor.acceptProblem(functionParameter.getType(),
-									IProblemRequestor.LOOSE_TYPES_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM);
-					}
-					
+
 					if( !isTypeValidInServicesAndProxy( typeBinding ) ) {
 						problemRequestor.acceptProblem(functionParameter.getType(),
-								IProblemRequestor.TYPE_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM,
+								IProblemRequestor.TYPE_NOT_ALLOWED_IN_SERVICE_OR_PROXY_FUNC_PARM,
 									new String[] {typeBinding.getTypeSignature()});
 
 					}
 					
 					if( functionParameter.getName().resolveMember() instanceof Field)
 						problemRequestor.acceptProblem(functionParameter,
-								IProblemRequestor.FIELD_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM);
+								IProblemRequestor.FIELD_NOT_ALLOWED_IN_SERVICE_OR_PROXY_FUNC_PARM);
 
 					}
 				return false;
@@ -75,7 +71,7 @@ public class ServiceInterfaceValidatorUtil {
 					Type typeBinding = nestedFunction.getReturnType().resolveType();
 					if (typeBinding != null && !isTypeValidInServicesAndProxy( typeBinding )){
 						problemRequestor.acceptProblem(nestedFunction.getReturnType(),
-								IProblemRequestor.TYPE_NOT_ALLOWED_AS_SERVICE_OR_INTERFACE_FUNC_RETURN,
+								IProblemRequestor.TYPE_NOT_ALLOWED_AS_SERVICE_OR_PROXY_FUNC_RETURN,
 								new String[] {typeBinding.getTypeSignature()});
 					}
 					
@@ -85,17 +81,14 @@ public class ServiceInterfaceValidatorUtil {
 	}
 
 	public static boolean isTypeValidInServicesAndProxy(Type typeBinding){
-		return ((typeBinding.equals(TypeUtils.Type_SMALLINT) ||
-				typeBinding.equals(TypeUtils.Type_INT) ||
-				typeBinding.equals(TypeUtils.Type_BIGINT) ||
-				typeBinding.equals(TypeUtils.Type_DECIMAL) ||
-				typeBinding.equals(TypeUtils.Type_SMALLFLOAT) ||
-				typeBinding.equals(TypeUtils.Type_FLOAT) ||
-				typeBinding.equals(TypeUtils.Type_DATE) ||
-				typeBinding.equals(TypeUtils.Type_TIME) ||
-				typeBinding.equals(TypeUtils.Type_TIMESTAMP) ||
-				typeBinding.equals(TypeUtils.Type_STRING) ||
-				typeBinding.equals(TypeUtils.Type_BOOLEAN)) && !TypeUtils.isReferenceType(typeBinding)) ||
+		return (TypeUtils.isTextType(typeBinding) ||
+				TypeUtils.isNumericType(typeBinding) ||
+				(typeBinding != null && typeBinding.getClassifier() instanceof EGLClass &&
+						(typeBinding.getClassifier().equals(TypeUtils.Type_DATE) ||
+						typeBinding.getClassifier().equals(TypeUtils.Type_TIME) ||
+						typeBinding.getClassifier().equals(TypeUtils.Type_TIMESTAMP) ||
+						typeBinding.getClassifier().equals(TypeUtils.Type_BOOLEAN)))) ||
+				(typeBinding instanceof ArrayType && isTypeValidInServicesAndProxy(((ArrayType)typeBinding).getElementType())) ||
 				typeBinding instanceof Record ||
 				typeBinding instanceof Handler;
 	}

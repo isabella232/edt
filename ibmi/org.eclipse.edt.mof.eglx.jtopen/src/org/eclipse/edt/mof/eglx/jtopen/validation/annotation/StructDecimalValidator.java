@@ -11,38 +11,33 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
-public abstract class StructDecimalValidator extends
-		AbstractStructParameterAnnotationValidator {
+public abstract class StructDecimalValidator extends AbstractStructParameterAnnotationValidator {
 
-	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
-		super.validate(annotation, errorNode, targetBinding, problemRequestor);
+	protected void validateType(Annotation annotation, Node errorNode, Type type) {
+		super.validateType(annotation, errorNode, type);
 		
-		if (targetBinding != null && isValidType(targetBinding.getType())) {
-			if(targetBinding.getType() instanceof FixedPrecisionType ) {
-				validateLengthAndDecimalsNotSpecified(annotation, errorNode, problemRequestor);
+		if (type != null && isValidType(type)) {
+			if(type instanceof FixedPrecisionType ) {
+				validateLengthAndDecimalsNotSpecified(annotation, errorNode);
 			}
 			else {
 				//Must specify both length and decimals
-				validateLengthAndDecimalsSpecified(annotation, errorNode, problemRequestor);
-				validateLength(annotation, errorNode, problemRequestor);
-				validateDecimals(annotation, errorNode, problemRequestor);
+				validateLengthAndDecimalsSpecified(annotation, errorNode);
+				validateLength(annotation, errorNode);
+				validateDecimals(annotation, errorNode);
 			}
 		}
 	}
 	
-	private void validateLength(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	private void validateLength(Annotation ann, Node errorNode) {
 		Integer length = (Integer)ann.getValue("length");
 		if (length != null) {
 			if (length.intValue() < 1 || length.intValue() > 32) {
@@ -51,7 +46,7 @@ public abstract class StructDecimalValidator extends
 		}
 	}
 
-	protected void validateDecimals(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	protected void validateDecimals(Annotation ann, Node errorNode) {
 		Integer decimals = (Integer)ann.getValue("decimals");
 		if (decimals != null) {
 			if (decimals.intValue() < 0) {
@@ -64,7 +59,7 @@ public abstract class StructDecimalValidator extends
 		}
 	}
 
-	protected void validateLengthAndDecimalsNotSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	protected void validateLengthAndDecimalsNotSpecified(Annotation ann, Node errorNode) {
 		if (ann.getValue("length") != null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
@@ -73,7 +68,7 @@ public abstract class StructDecimalValidator extends
 		}
 	}
 
-	protected void validateLengthAndDecimalsSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	protected void validateLengthAndDecimalsSpecified(Annotation ann, Node errorNode) {
 		if (ann.getValue("length") == null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
@@ -83,9 +78,8 @@ public abstract class StructDecimalValidator extends
 	}
 	
 	
-	protected List<String> getSupportedTypes() {
-		List<String> list = new ArrayList<String>();
-		list.add(MofConversion.Type_EGLDecimal);
-		return list;
+	@Override
+	protected Type getSupportedType() {
+		return TypeUtils.Type_DECIMAL;
 	}
 }

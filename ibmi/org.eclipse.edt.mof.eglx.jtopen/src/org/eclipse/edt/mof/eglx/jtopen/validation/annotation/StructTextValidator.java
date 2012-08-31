@@ -11,39 +11,34 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.SequenceType;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
-public class StructTextValidator extends
-		AbstractStructParameterAnnotationValidator {
+public class StructTextValidator extends AbstractStructParameterAnnotationValidator {
 
 	
-	public void validate(Annotation annotation, Node errorNode, Member targetBinding, IProblemRequestor problemRequestor) {
-		super.validate(annotation, errorNode, targetBinding, problemRequestor);
+	protected void validateType(Annotation annotation, Node errorNode, Type type) {
+		super.validateType(annotation, errorNode, type);
 		
-		if (targetBinding != null && isValidType(targetBinding.getType())) {
-			if (targetBinding.getType() instanceof SequenceType) {
-				validateLengthNotSpecified(annotation, errorNode, problemRequestor);
+		if (type != null && isValidType(type)) {
+			if (type instanceof SequenceType) {
+				validateLengthNotSpecified(annotation, errorNode);
 			}
 			else {
 				//Must specify both length
-				validateLengthSpecified(annotation, errorNode, problemRequestor);
-				validateLength(annotation, errorNode, problemRequestor);
+				validateLengthSpecified(annotation, errorNode);
+				validateLength(annotation, errorNode);
 			}
 		}
 	}
 	
 	
-	private void validateLength(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	private void validateLength(Annotation ann, Node errorNode) {
 		Integer length = (Integer)ann.getValue("length");
 		if (length != null) {
 			if (length.intValue() < 1 || length.intValue() > Integer.MAX_VALUE) {
@@ -52,13 +47,13 @@ public class StructTextValidator extends
 		}
 	}
 
-	protected void validateLengthNotSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	protected void validateLengthNotSpecified(Annotation ann, Node errorNode) {
 		if (ann.getValue("length") != null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 
-	protected void validateLengthSpecified(Annotation ann, Node errorNode, IProblemRequestor problemRequestor) {
+	protected void validateLengthSpecified(Annotation ann, Node errorNode) {
 		if (ann.getValue("length") == null) {
 			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_PROPERTY_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {"length", getName()}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
@@ -66,10 +61,8 @@ public class StructTextValidator extends
 	
 	
 	@Override
-	protected List<String> getSupportedTypes() {
-		List<String> list = new ArrayList<String>();
-		list.add(MofConversion.Type_EGLString);
-		return list;
+	protected Type getSupportedType() {
+		return TypeUtils.Type_STRING;
 	}
 	@Override
 	protected String getName() {

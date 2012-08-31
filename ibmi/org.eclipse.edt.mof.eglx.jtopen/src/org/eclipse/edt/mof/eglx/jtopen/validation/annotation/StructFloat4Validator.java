@@ -11,19 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
-import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class StructFloat4Validator extends AbstractStructParameterAnnotationValidator implements IAnnotationValidationRule {
 	
 	@Override
-	protected List<String> getSupportedTypes() {
-		List<String> list = new ArrayList<String>();
-		list.add(MofConversion.Type_EGLSmallfloat);
-		return list;
+	protected Type getSupportedType() {
+		return TypeUtils.Type_SMALLFLOAT;
 	}
 	@Override
 	protected String getName() {

@@ -11,17 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public abstract class StructSmallIntValidator extends AbstractStructParameterAnnotationValidator {
 
-	protected List<String> getSupportedTypes() {
-		List<String> list = new ArrayList<String>();
-		list.add(MofConversion.Type_EGLSmallint);
-		return list;
+	@Override
+	protected Type getSupportedType() {
+		return TypeUtils.Type_SMALLINT;
 	}
 }

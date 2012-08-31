@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.jtopen.validation.annotation;
+package org.eclipse.edt.mof.eglx.jtopen.validation;
 
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -21,8 +21,8 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Member;
@@ -32,7 +32,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 
-public class IBMiProgramParameterAnnotationsValidator implements IValueValidationRule {
+public class IBMiFunctionParameterValidator implements IValueValidationRule {
 
 	public void validate(Node errorNode, Node target, Annotation annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		Function functionBinding = getFunctionBinding(target);
@@ -61,8 +61,8 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 				}
 				
 			}
-			else {
-				AbstractStructParameterAnnotationValidator validator = getValidator(values[i]);
+//FIXME				else {
+/*			AbstractStructParameterAnnotationValidator validator = getValidator(values[i]);
 				
 				if (validator == null) {
 					problemRequestor.acceptProblem(getNodeForArrayEntry(errorNode, i), 
@@ -73,29 +73,8 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 				else {
 					validator.validate((Annotation)values[i], getNodeForArrayEntry(errorNode, i), functionBinding.getParameters().get(i), problemRequestor);
 				}
-			}
+			}*/
 		}
-	}
-	
-	public static AbstractStructParameterAnnotationValidator getValidator(Object obj) {
-		if (!(obj instanceof Annotation)) {
-			return null;
-		}
-		
-		String proxy = ((AnnotationType)(((Annotation)obj).getEClass())).getValidationProxy();
-		Object proxyInstance = null;
-		
-		try {
-			Class<?> proxyClass = AbstractStructParameterAnnotationValidator.class.forName(proxy);
-			proxyInstance = proxyClass.newInstance();
-		} catch (Exception e) {
-		}
-		
-		if (proxyInstance instanceof AbstractStructParameterAnnotationValidator) {
-			return (AbstractStructParameterAnnotationValidator)proxyInstance;
-		}
-		
-		return null;
 	}
 	
 	private Node getNodeForArrayEntry(Node node, final int index) {
@@ -154,7 +133,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 			return true; //avoid excess error messages
 		}
 		
-		if( type.equals(isSupportedPrimitiveTypes(type))){
+		if(isSupportedPrimitiveTypes(type)){
 			return true;
 		}
 		if (type instanceof Handler) {
@@ -169,7 +148,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 			if (((ArrayType)type).getElementType() ==null) {
 				return true; //avoid excess error messages
 			}
-			if (((ArrayType)type) instanceof ArrayType) {
+			if (((ArrayType)type).getElementType() instanceof ArrayType) {
 				return false;
 			}
 			return isValidAS400Type(((ArrayType)type).getElementType());
@@ -179,17 +158,13 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 	}
 	
 	private static boolean isSupportedPrimitiveTypes(Type type){
-		return type.equals(TypeUtils.Type_SMALLINT) ||
-						type.equals(TypeUtils.Type_INT) ||
-						type.equals(TypeUtils.Type_BIGINT) ||
-						type.equals(TypeUtils.Type_DECIMAL) ||
-						type.equals(TypeUtils.Type_SMALLFLOAT) ||
-						type.equals(TypeUtils.Type_FLOAT) ||
-						type.equals(TypeUtils.Type_DATE) ||
-						type.equals(TypeUtils.Type_TIME) ||
-						type.equals(TypeUtils.Type_TIMESTAMP) ||
-						type.equals(TypeUtils.Type_STRING) ||
-						type.equals(TypeUtils.Type_BOOLEAN) || 
-						type.equals(TypeUtils.Type_BYTES);
+			return TypeUtils.isNumericType(type) ||
+					TypeUtils.isTextType(type) ||
+					(type != null && type.getClassifier() instanceof EGLClass &&
+							(type.getClassifier().equals(TypeUtils.Type_DATE) ||
+							type.getClassifier().equals(TypeUtils.Type_TIME) ||
+							type.getClassifier().equals(TypeUtils.Type_TIMESTAMP) ||
+							type.getClassifier().equals(TypeUtils.Type_BOOLEAN) || 
+							type.getClassifier().equals(TypeUtils.Type_BYTES)));
 	}
 }
