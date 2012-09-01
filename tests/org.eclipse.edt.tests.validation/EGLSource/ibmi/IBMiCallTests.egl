@@ -1,0 +1,60 @@
+
+program pgm1 {}
+	conn JTopenConnection?;
+	function main()
+	end
+	
+	function f1(p1 decimal)
+			i1 int;
+			call fp10(i1) using conn;//target function has no ibmiProgram
+	end
+
+	function f2(p1 decimal)
+			i1 int;
+			call fp9(i1);//can't resolve connection
+	end
+
+	function f3(p1 decimal)
+			i1 boolean;
+			call fp9(i1) using conn;//wrong data type
+	end
+
+	function f4(p1 decimal)
+			i1 int;
+			call fp9(i1) using conn returning to fp9;//no callback
+	end
+
+	function f5(p1 decimal)
+			i1 int;
+			call fp9(i1) using conn onexception fp9;//no onexception
+	end
+
+	function f6(p1 decimal)
+			i1, i2 int;
+			call fp9(i1) using conn returns(i2);//fp9 doesn't return anything
+	end
+
+	function f7(p1 decimal)
+			i1 int;
+			i2 time;
+			call fp8(i1) using conn returns(i2);//f8 returns an int time is wrong return type
+	end
+
+	function f8(p1 decimal)
+			i1 int;
+			i2 time;
+			call fp8(i1) using conn;//f8 returns an int no return
+	end
+
+	function fp8 (p1 int)returns(int)
+		{@IBMiProgram{isServiceProgram=true}} 
+	end
+
+	function fp9 (p1 int)
+		{@IBMiProgram{}} 
+	end
+
+	function fp10 (p1 int) 
+	end
+end
+
