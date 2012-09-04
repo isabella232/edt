@@ -1,0 +1,55 @@
+
+program pgm1 {}
+	function main()
+	end
+	
+	function f1(p1 decimal)
+			i1 int;
+			call fp10(i1) using new HttpProxy;//target function has no rest annotations
+	end
+
+	function f2(p1 decimal)
+			i1 int;
+			call fp9(i1);//can't resolve connection
+	end
+
+	function f3(p1 decimal)
+			i1 boolean;
+			call fp9(i1) using new HttpREST;//wrong data type
+	end
+
+	function f4(p1 decimal)
+			i1 int;
+			call Service1.fp9(i1) using new HttpProxy;//target function is a service function
+	end
+
+	function f5(p1 decimal)
+			i1 int;
+			call field1(i1) using conn;//target is a field not a function
+	end
+
+	function f6(p1 decimal)
+			i1 int;
+			call Service1.fp9(i1) using new HttpRest;//target function is a service function
+	end
+
+	function fp9 (p1 int in)
+		{@REST{method=_GET}} 
+	end
+
+	function fp10 (p1 int) 
+	end
+
+	field1 int;
+	
+end
+
+service service1 {}
+	function f1(p1 decimal)
+			i1 int;
+			call this.fp9(i1) using new HttpRest;
+	end
+	function fp9 (p1 int in)
+		{@REST{method=POST}} 
+	end
+end

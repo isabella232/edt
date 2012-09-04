@@ -14,12 +14,10 @@ package org.eclipse.edt.mof.eglx.services.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.StatementValidator;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -28,6 +26,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.core.validation.AbstractStatementValidator;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -41,11 +40,44 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
-public class ServicesCallStatementValidator implements StatementValidator{
+public class ServicesCallStatementValidator extends AbstractStatementValidator {
+	@Override
+	public boolean visit(CallStatement callStatement){
+		Member function = callStatement.getInvocationTarget().resolveMember();
+		if (function == null || !(function instanceof Function)) {
+			//error...target must be a function if callback or error routine specified
+            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), ResourceKeys.FUNCTION_CALL_TARGET_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
+			return false;
+		}
+		
+		this.problemRequestor = problemRequestor;
+		if (callStatement.getUsing() != null) {
+			Type usingType = callStatement.getUsing().resolveType();
+			if (usingType != null) {
+				if (!Utils.isIHTTP(usingType)) {
+					problemRequestor.acceptProblem(callStatement.getUsing(), ResourceKeys.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
+				}
+			}
+		}
 
-	private IProblemRequestor problemRequestor;
-   	@Override
-	public void validate(Node node, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		//validate the arguments against the parms
+		callStatement.accept(new FunctionArgumentValidator((Function)function, problemRequestor, compilerOptions));
+		
+		//check to make sure a callback is specified
+		if (callStatement.getCallSynchronizationValues() == null || callStatement.getCallSynchronizationValues().getReturnTo() == null) {
+			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), ResourceKeys.FUNCTION_CALLBACK_FUNCTION_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
+		}
+
+		if (callStatement.getCallSynchronizationValues() != null) {
+			//validate callback/error routine
+			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+				validateCallback(callStatement, callStatement.getCallSynchronizationValues().getReturnTo().getExpression(), false, callStatement.getInvocationTarget());
+			}
+			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+				validateCallback(callStatement, callStatement.getCallSynchronizationValues().getOnException().getExpression(), true, callStatement.getInvocationTarget());
+			}		
+		}
+		return false;
 	}
 
 	@Override

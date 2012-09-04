@@ -1,16 +1,14 @@
 package org.eclipse.edt.mof.eglx.services.validation;
 
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.part.ServiceInterfaceValidatorUtil;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Function;
 
-public class EglServiceProxyFunctionValidator extends
-		ServiceProxyFunctionValidator {
+public class EglServiceProxyFunctionValidator extends ServiceProxyFunctionValidator {
 
 	@Override
-	protected void validate(NestedFunction nestedFunction, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		// TODO Auto-generated method stub
+	protected void validate(NestedFunction nestedFunction) {
 		ServiceInterfaceValidatorUtil.validateParametersAndReturn(nestedFunction, problemRequestor);
 	}
 
@@ -19,4 +17,8 @@ public class EglServiceProxyFunctionValidator extends
 		return "EglService";
 	}
 
+	@Override
+	protected Annotation getAnnotation(Function function) {
+		return function.getAnnotation("eglx.rest.EglService");
+	}
 }
