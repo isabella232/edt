@@ -12,13 +12,16 @@
 package org.eclipse.edt.mof.eglx.jtopen.validation;
 
 
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractStatementValidator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
@@ -39,6 +42,18 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 		
 		//validate the arguments against the parms
 		callStatement.accept(new FunctionArgumentValidator((Function)targFunction, problemRequestor, compilerOptions));
+		
+		callStatement.getInvocationTarget().accept( new AbstractASTVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName){
+				if(qualifiedName.getQualifier() instanceof SimpleName
+						&& qualifiedName.getQualifier().resolveType() instanceof Service){
+					problemRequestor.acceptProblem(qualifiedName.getQualifier(), IBMiResourceKeys.IBMIPROGRAM_TARGET_IS_SERVICE_QUALIFIED, IMarker.SEVERITY_ERROR, new String[] {}, IBMiResourceKeys.getResourceBundleForKeys());
+					return false;
+				}
+				return true;
+			}
+		});
+		
 		
 		//if the function returns a value, a returns is required
 		if (((Function)targFunction).getReturnType() != null &&

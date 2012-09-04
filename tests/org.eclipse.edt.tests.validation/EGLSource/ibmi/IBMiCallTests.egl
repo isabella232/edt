@@ -46,6 +46,10 @@ program pgm1 {}
 			call fp8(i1) using conn;//f8 returns an int no return
 	end
 
+	function f9(p1 decimal)
+			i1 int;
+			call Service1.fp9(i1) using conn;//target function is a service function
+	end
 	function fp8 (p1 int)returns(int)
 		{@IBMiProgram{isServiceProgram=true}} 
 	end
@@ -58,3 +62,13 @@ program pgm1 {}
 	end
 end
 
+service service1 {}
+	conn JTopenConnection?;
+	function f1(p1 decimal)
+			i1 int;
+			call this.fp9(i1) using conn;//target function has no ibmiProgram
+	end
+	function fp9 (p1 int)
+		{@IBMiProgram{}} 
+	end
+end

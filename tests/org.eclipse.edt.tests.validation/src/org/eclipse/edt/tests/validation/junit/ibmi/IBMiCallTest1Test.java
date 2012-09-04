@@ -60,7 +60,7 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The types boolean and int are not reference compatible" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The types boolean and int are not reference compatible" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The types boolean and int are not reference compatible\" was issued." );
 	}
 
 	/*
@@ -99,7 +99,7 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The call statement cannot specify a returns value, because the function fp9 does not return a value" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement cannot specify a returns value, because the function fp9 does not return a value" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement cannot specify a returns value, because the function fp9 does not return a value\" was issued." );
 	}
 
 	/*
@@ -112,7 +112,7 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The return type int of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The return type int of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type int of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement\" was issued." );
 	}
 
 	/*
@@ -125,7 +125,20 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a returns expression" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a returns expression" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a returns expression\" was issued." );
+	}
+
+	/*
+	 * call Service1.fp9(i1) using conn;//target function is a service function
+	 * 1 validation message is expected.
+	 * It is expected to contain "A service cannot be use as a qualifier.".
+	 */
+	public void testLine51() {
+		List messages = getMessagesAtLine( 51 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "A service cannot be use as a qualifier." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A service cannot be use as a qualifier.\" was issued." );
 	}
 
 }
