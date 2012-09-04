@@ -50,6 +50,12 @@ program pgm1 {}
 			i1 int;
 			call Service1.fp9(i1) using conn;//target function is a service function
 	end
+
+	function f10(p1 decimal)
+			i1 int;
+			call field1(i1) using conn;//target is a field not a function
+	end
+
 	function fp8 (p1 int)returns(int)
 		{@IBMiProgram{isServiceProgram=true}} 
 	end
@@ -60,6 +66,9 @@ program pgm1 {}
 
 	function fp10 (p1 int) 
 	end
+
+	field1 int;
+	
 end
 
 service service1 {}

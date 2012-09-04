@@ -31,6 +31,8 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 	public boolean visit(CallStatement callStatement){
 		Member targFunction = callStatement.getInvocationTarget().resolveMember();
 		if (!(targFunction instanceof Function)) {
+			//error...target must be a function if callback or error routine specified
+            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IBMiResourceKeys.FUNCTION_CALL_TARGET_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {}, IBMiResourceKeys.getResourceBundleForKeys());
 			return false;
 		}
 		

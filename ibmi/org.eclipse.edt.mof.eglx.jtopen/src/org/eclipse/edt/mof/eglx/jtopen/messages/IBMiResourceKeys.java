@@ -59,5 +59,7 @@ public class IBMiResourceKeys{
     public static final int IBMIPROGRAM_CALLBACK_NOT_SUPPORTED = 5729;
     public static final int IBMIPROGRAM_USING_HAS_NO_CONNECTION = 5730;
     public static final int IBMIPROGRAM_TARGET_IS_SERVICE_QUALIFIED = 5731;
+    public static final int FUNCTION_CALL_TARGET_MUST_BE_FUNCTION = 5732;
+    
     
 }

@@ -141,4 +141,17 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		if( messageWithSubstring == null ) fail( "No message with substring \"A service cannot be use as a qualifier.\" was issued." );
 	}
 
+	/*
+	 * call field1(i1) using conn;//target is a field not a function
+	 * 1 validation message is expected.
+	 * It is expected to contain "The target of the Call must be a proxy function.".
+	 */
+	public void testLine56() {
+		List messages = getMessagesAtLine( 56 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The target of the Call must be a proxy function." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The target of the Call must be a proxy function." );
+	}
+
 }
