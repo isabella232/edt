@@ -8,8 +8,8 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.IValidationProxy;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
-import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ReturnsDeclaration;
+import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractFunctionValidator;
@@ -30,7 +30,6 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
-import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.Utils;
@@ -236,12 +235,12 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 		}
 		return false;
 	}
-	private void validateFunctionBodyIsEmpty(Function function, Node node, IProblemRequestor problemRequestor) {
-		if (function.getStatementBlock() != null && function.getStatementBlock().getStatements() != null && 
-				function.getStatementBlock().getStatements().size() > 0) {
-			
-			for(Statement stmt : function.getStatementBlock().getStatements()) {
-				problemRequestor.acceptProblem(stmt, IProblemRequestor.PROXY_FUNCTIONS_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()});
+	private void validateFunctionBodyIsEmpty(Function function, NestedFunction nestedFunction, IProblemRequestor problemRequestor) {
+		if (nestedFunction != null && nestedFunction.getStmts() != null) {
+			for(Object stmt : nestedFunction.getStmts()) {
+				if(stmt instanceof Statement){
+					problemRequestor.acceptProblem((Statement)stmt, IProblemRequestor.PROXY_FUNCTIONS_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()});
+				}
 			}
 		}
 	}

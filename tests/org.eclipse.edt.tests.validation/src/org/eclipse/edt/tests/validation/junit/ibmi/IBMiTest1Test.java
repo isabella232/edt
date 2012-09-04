@@ -632,7 +632,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "cannot contain statements.".
 	 */
 	public void testLine95() {
-		List messages = getMessagesAtLine( 93 );
+		List messages = getMessagesAtLine( 95 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "cannot contain statements." );
