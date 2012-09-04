@@ -20,8 +20,8 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractStatementValidator;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
@@ -48,7 +48,7 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 		callStatement.getInvocationTarget().accept( new AbstractASTVisitor() {
 			public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName){
 				if(qualifiedName.getQualifier() instanceof SimpleName
-						&& qualifiedName.getQualifier().resolveType() instanceof Service){
+						&& !(qualifiedName.getQualifier().resolveType() instanceof Library)){
 					problemRequestor.acceptProblem(qualifiedName.getQualifier(), IBMiResourceKeys.IBMIPROGRAM_TARGET_IS_SERVICE_QUALIFIED, IMarker.SEVERITY_ERROR, new String[] {}, IBMiResourceKeys.getResourceBundleForKeys());
 					return false;
 				}
