@@ -19,11 +19,11 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.jtopen.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 public class IBMiProgramCallStatementValidator extends AbstractStatementValidator {
@@ -82,7 +82,7 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), 
 														IBMiResourceKeys.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, 
 														IMarker.SEVERITY_ERROR, 
-														new String[] {Utils.getTypeName((Function)targFunction), ((Function)targFunction).getCaseSensitiveName(), Utils.getTypeName(callReturnsMember), callReturnsExpr.getCanonicalString()},
+														new String[] {StatementValidator.getTypeName((Function)targFunction), ((Function)targFunction).getCaseSensitiveName(), StatementValidator.getTypeName(callReturnsMember), callReturnsExpr.getCanonicalString()},
 														IBMiResourceKeys.getResourceBundleForKeys());
 					}
 				}

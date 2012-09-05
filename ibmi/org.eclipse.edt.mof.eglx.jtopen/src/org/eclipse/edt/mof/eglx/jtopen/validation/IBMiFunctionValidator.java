@@ -119,7 +119,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {Utils.getTypeName(parm), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {StatementValidator.getTypeName(parm), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 				
 			if (parm.getType() instanceof ArrayType && ((ArrayType)parm.getType()).getElementType() != null){
@@ -177,7 +177,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 
@@ -185,7 +185,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			
@@ -194,7 +194,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 					problemRequestor.acceptProblem(functionParameter, 
 							IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID, 
 							IMarker.SEVERITY_ERROR, 
-							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}
