@@ -14,30 +14,29 @@ package org.eclipse.edt.mof.eglx.services.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
 public class ServicesCallStatementValidator extends AbstractStatementValidator {
@@ -50,24 +49,29 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 			return false;
 		}
 		
-		this.problemRequestor = problemRequestor;
-		if (callStatement.getUsing() != null) {
-			Type usingType = callStatement.getUsing().resolveType();
-			if (usingType != null) {
-				if (!Utils.isIHTTP(usingType)) {
-					problemRequestor.acceptProblem(callStatement.getUsing(), ResourceKeys.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
-				}
-			}
-		}
-
 		//validate the arguments against the parms
 		callStatement.accept(new FunctionArgumentValidator((Function)function, problemRequestor, compilerOptions));
 		
-		//check to make sure a callback is specified
-		if (callStatement.getCallSynchronizationValues() == null || callStatement.getCallSynchronizationValues().getReturnTo() == null) {
+		callStatement.getInvocationTarget().accept( new AbstractASTVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName){
+				if(qualifiedName.getQualifier() instanceof SimpleName
+						&& !(qualifiedName.getQualifier().resolveType() instanceof Library ||
+								qualifiedName.getQualifier().resolveType() instanceof Service)){
+					problemRequestor.acceptProblem(qualifiedName.getQualifier(), ResourceKeys.TARGET_QUALIFIER_ERROR, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
+					return false;
+				}
+				return true;
+			}
+		});
+
+		//the target function has a return but there is no returning to or returns expression
+		if(((Function)function).getReturnType() != null
+				&& (callStatement.getCallSynchronizationValues() == null ||
+						(callStatement.getCallSynchronizationValues().getReturns() == null &&
+								callStatement.getCallSynchronizationValues().getReturnTo() == null))){
+			
 			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), ResourceKeys.FUNCTION_CALLBACK_FUNCTION_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
 		}
-
 		if (callStatement.getCallSynchronizationValues() != null) {
 			//validate callback/error routine
 			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
@@ -80,46 +84,6 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 		return false;
 	}
 
-	@Override
-	public void validateStatement(Statement stmt, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if(stmt instanceof CallStatement){
-			return;
-		}
-		Member function = ((CallStatement)stmt).getInvocationTarget().resolveMember();
-		if (function == null || !(function instanceof Function)) {
-			//error...target must be a function if callback or error routine specified
-            problemRequestor.acceptProblem(((CallStatement)stmt).getInvocationTarget(), ResourceKeys.FUNCTION_CALL_TARGET_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
-			return;
-		}
-		
-		this.problemRequestor = problemRequestor;
-		if (((CallStatement)stmt).getUsing() != null) {
-			Type usingType = ((CallStatement)stmt).getUsing().resolveType();
-			if (usingType != null) {
-				if (!Utils.isIHTTP(usingType)) {
-					problemRequestor.acceptProblem(((CallStatement)stmt).getUsing(), ResourceKeys.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
-				}
-			}
-		}
-
-		//validate the arguments against the parms
-		((CallStatement)stmt).accept(new FunctionArgumentValidator((Function)function, problemRequestor, compilerOptions));
-		
-		//check to make sure a callback is specified
-		if (((CallStatement)stmt).getCallSynchronizationValues() == null || ((CallStatement)stmt).getCallSynchronizationValues().getReturnTo() == null) {
-			problemRequestor.acceptProblem(((CallStatement)stmt).getInvocationTarget(), ResourceKeys.FUNCTION_CALLBACK_FUNCTION_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
-		}
-
-		if (((CallStatement)stmt).getCallSynchronizationValues() != null) {
-			//validate callback/error routine
-			if (((CallStatement)stmt).getCallSynchronizationValues().getReturnTo() != null) {
-				validateCallback(((CallStatement)stmt), ((CallStatement)stmt).getCallSynchronizationValues().getReturnTo().getExpression(), false, ((CallStatement)stmt).getInvocationTarget());
-			}
-			if (((CallStatement)stmt).getCallSynchronizationValues().getOnException() != null) {
-				validateCallback(((CallStatement)stmt), ((CallStatement)stmt).getCallSynchronizationValues().getOnException().getExpression(), true, ((CallStatement)stmt).getInvocationTarget());
-			}		
-		}
-	}
 	private void validateCallback(CallStatement stmt, Expression expr, boolean isErrorCallback, Expression invocTarget ) {
 		// 1) must be a function or delegeate
 		
@@ -133,8 +97,9 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 		}
 		
 		//2) if is it is a nested function it must be defined inside this part 
-		if (stmt.getParent() instanceof Part && !cbMember.getContainer().equals(((Part)stmt.getParent()).getName().resolveType())) {
-			problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_MUST_BE_DEFINED_IN_PART, IMarker.SEVERITY_ERROR, new String[] {cbMember.getId(), ((Part)stmt.getParent()).getName().getCanonicalName()}, ResourceKeys.getResourceBundleForKeys());
+		Node container = getContainer(stmt.getParent());
+		if (container instanceof Part && !cbMember.getContainer().equals(((Part)container).getName().resolveType())) {
+			problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_MUST_BE_DEFINED_IN_PART, IMarker.SEVERITY_ERROR, new String[] {cbMember.getCaseSensitiveName(), ((Part)container).getName().getCanonicalName()}, ResourceKeys.getResourceBundleForKeys());
 		}
 		
 				
@@ -175,7 +140,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 
 				for (int i = 0; i < args.size(); i++) {
 					if (!argTypeCompatibleWithParm(args.get(i), parms.get(i))) {
-						problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {args.get(i).getType().getTypeSignature(), parms.get(i).getCaseSensitiveName(), expr.getCanonicalString(), parms.get(i).getType().getTypeSignature()}, ResourceKeys.getResourceBundleForKeys());
+						problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getTypeName(args.get(i)), parms.get(i).getCaseSensitiveName(), expr.getCanonicalString(), StatementValidator.getTypeName(parms.get(i))}, ResourceKeys.getResourceBundleForKeys());
 					}
 				}
 			
@@ -188,6 +153,12 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 		
 	}
 	
+	private Node getContainer(Node node){
+		while(node.getParent() != null && !(node instanceof Part)){
+			node = node.getParent();
+		}
+		return node;
+	}
 	private boolean lastParmIsIHttp(List<FunctionParameter> parms){
 		if(parms.size() > 0){
 			//function has 1 extra parameter 
@@ -206,21 +177,19 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 			}
 		}
 		
-		Type retType = invocTarget.resolveType();
-		if (retType != null) {
-			list.add(invocTarget.resolveMember());
+		Member function = invocTarget.resolveMember();
+		if (function != null && function.getType() != null) {
+			list.add(function);
 		}
 		
 		return list;
 	}
 	private List<FunctionParameter> getParameters(Expression expr) {
-		if (expr.resolveType() != null) {
-			if (expr.resolveType() instanceof Delegate) {
-				return ((Delegate)expr.resolveType()).getParameters();
-			}
-			if (expr.resolveType() instanceof Function) {
-				return ((Function)expr.resolveType()).getParameters();
-			}
+		if (expr.resolveMember() instanceof Delegate) {
+			return ((Delegate)expr.resolveMember()).getParameters();
+		}
+		if (expr.resolveMember() instanceof Function) {
+			return ((Function)expr.resolveMember()).getParameters();
 		}
 		return new ArrayList<FunctionParameter>();
 	}
@@ -235,17 +204,6 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 		}
 		return null;
 	}
-	
-	private FunctionContainerScope getFunctionContainerScope(Scope scope) {
-		if (scope == null) {
-			return null;
-		}
-		if (scope instanceof FunctionContainerScope) {
-			return (FunctionContainerScope)scope;
-		}
-		return getFunctionContainerScope(scope.getParentScope());
-	}
-	
 	
 	private boolean argTypeCompatibleWithParm(Member argRHS, FunctionParameter parmLHS) {
 		if (argRHS == null) {
