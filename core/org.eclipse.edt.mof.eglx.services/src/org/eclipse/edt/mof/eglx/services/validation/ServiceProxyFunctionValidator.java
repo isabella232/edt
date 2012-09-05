@@ -34,7 +34,7 @@ public abstract class ServiceProxyFunctionValidator extends AbstractFunctionVali
 	
 	public boolean visit(NestedFunction nestedFunction){
 		if(nestedFunction.getName().resolveMember() instanceof Function){
-			validateContainerIsCorrect(((IRPartBinding)declaringPart).getIrPart(), nestedFunction, problemRequestor);		
+			validateContainerIsCorrect(((IRPartBinding)declaringPart).getIrPart(), nestedFunction);		
 			validateFunctionBodyIsEmpty((Function)nestedFunction.getName().resolveMember(), nestedFunction);
 			validate(nestedFunction);
 		}
@@ -51,7 +51,7 @@ public abstract class ServiceProxyFunctionValidator extends AbstractFunctionVali
 		}
 	}
 	
-	private void validateContainerIsCorrect(Part part, NestedFunction errorNode, IProblemRequestor problemRequestor) {
+	private void validateContainerIsCorrect(Part part, NestedFunction errorNode) {
 		// Only allowed on function of Programs, Libraries, Services, and Basic Handlers
 		
 		if (part != null) {

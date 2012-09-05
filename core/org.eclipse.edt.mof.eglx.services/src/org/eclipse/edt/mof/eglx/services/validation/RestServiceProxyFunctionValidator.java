@@ -17,7 +17,6 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
-import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
@@ -64,11 +63,6 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 		}
 	}
 
-	private NestedFunction nestedFunction;
-	private Node uriTemplateNode;
-	private Node requestFormatNode;
-
-
 	@Override
 	protected Annotation getAnnotation(Function function) {
 		return function.getAnnotation("eglx.rest.Rest");
@@ -78,7 +72,6 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 
 		Function function = (Function) nestedFunction.getName().resolveMember();
 		Annotation restAnnotation = getAnnotation(function);
-		this.nestedFunction = nestedFunction;
 
 		if (function.getReturnType() != null) {
 			// If the function returns a type, it must be a resource
