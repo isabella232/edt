@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.egl"
+            id="org.eclipse.edt.tests.validation_tools.contribution1">
+         <menu
+               label="EDT Development Tools"
+               path="additions"
+               id="org.eclipse.edt.tests.validation_tools.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               class="org.eclipse.edt.tests.validation_tools.popup.actions.NewAction"
+               id="org.eclipse.edt.tests.validation_tools.action1"
+               label="Generate JUnit Test For EDT"
+               menubarPath="org.eclipse.edt.tests.validation_tools.menu1/group1"/>
+      </objectContribution>
+            <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaProject"
+            id="org.eclipse.edt.tests.validation_tools.contribution1">
+         <menu
+               label="EDT Development Tools"
+               path="additions"
+               id="org.eclipse.edt.tests.validation_tools.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               enablesFor="1"
+               label="Generate test templates"
+               class="org.eclipse.edt.tests.validation_tools.popup.actions.TestTemplateGen"
+               menubarPath="org.eclipse.edt.tests.validation_tools.menu1/group1"
+               id="org.eclipse.edt.tests.validation_tools.ttg">
+         </action>
+      </objectContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            id="Paul.Plugin.contribution1">
+         <menu
+               label="New Submenu"
+               path="additions"
+               id="Paul.Plugin.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="New Action"
+               class="paul.plugin.popup.actions.NewAction"
+               menubarPath="Paul.Plugin.menu1/group1"
+               enablesFor="1"
+               id="Paul.Plugin.newAction">
+         </action>
+      </objectContribution>
+   </extension>
+   
+
+</plugin>
