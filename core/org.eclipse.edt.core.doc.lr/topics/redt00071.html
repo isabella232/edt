@@ -5,11 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Rest annotation"></meta>
-<meta name="abstract" content="ServiceLib supports service access."></meta>
-<meta name="description" content="ServiceLib supports service access."></meta>
-<meta name="DC.subject" content="EGL external types, ServiceLib, ServiceLib EGL external type, overview"></meta>
-<meta name="keywords" content="EGL external types, ServiceLib, ServiceLib EGL external type, overview"></meta>
+<meta name="DC.Title" content="REST annotation"></meta>
+<meta name="abstract" content="The REST annotation supports access of REST and EGL REST-RPC services."></meta>
+<meta name="description" content="The REST annotation supports access of REST and EGL REST-RPC services."></meta>
+<meta name="DC.subject" content="EGL annotations, REST, REST EGL external type, overview"></meta>
+<meta name="keywords" content="EGL annotations, REST, REST EGL external type, overview"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00299.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
@@ -17,17 +17,17 @@
 <meta name="DC.Identifier" content="redt00071"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Rest annotation</title>
+<title>REST annotation</title>
 </head>
 <body id="redt00071">
 
 
-<h1 class="title topictitle1">Rest annotation</h1>
+<h1 class="title topictitle1">REST annotation</h1>
 
 
 
-<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">ServiceLib</span></span> supports
-service access.</p>
+<div class="body" id="body"><p class="shortdesc">The <span class="ph synph"><span class="keyword kwd">REST</span></span> annotation
+supports access of REST and EGL REST-RPC services.</p>
 
 <dl class="dl" id="redt00071__main">
 <dt class="dt dlterm"><a name="redt00071__package"><!-- --></a>Package</dt>
@@ -38,10 +38,115 @@ service access.</p>
 
 <dt class="dt dlterm"><a name="redt00071__comments"><!-- --></a>Comments</dt>
 
-<dd class="dd"><p class="p">The fields in the <span class="ph synph"><span class="keyword kwd">Rest</span></span> annotation
-include the following ones:</p>
+<dd class="dd"><p class="p">The fields in the <span class="ph synph"><span class="keyword kwd">REST</span></span> annotation
+are as follows:</p>
 <div class="p"><dl class="dl parml">
-<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">uriTemplate</span></span></dt>
+<dt class="dt pt dlterm">method eglx.http.HttpMethod?</dt>
+
+<dd class="dd pd">Identifies the HTTP method used to invoke the REST service. Specify
+one of the following values:<ul class="ul">
+<li class="li">_GET</li>
+
+<li class="li">POST</li>
+
+<li class="li">_DELETE</li>
+
+<li class="li">PUT</li>
+
+</ul>
+</dd>
+
+
+<dt class="dt pt dlterm">requestCharSet string</dt>
+
+<dd class="dd pd">The character encoding for the request message. The default value
+is "UTF-8".</dd>
+
+
+<dt class="dt pt dlterm">requestContentType string?</dt>
+
+<dd class="dd pd">The content type on the request message.</dd>
+
+
+<dt class="dt pt dlterm">requestFormat eglx.services.Encoding?</dt>
+
+<dd class="dd pd">A value that indicates the format of the representation that is
+sent from the Rich UI proxy to the service: <ul class="ul">
+<li class="li">XML, to indicate that the format is Extensible Markup Language</li>
+
+<li class="li">NONE, to indicate that the representation is a string, or a value
+that is compatible with a string, and is sent as is</li>
+
+<li class="li">JSON, to indicate that the format is JavaScript™ Object Notation</li>
+
+<li class="li">FORM, to indicate that the format is form data, which is a record
+composed of argument-value pairs. In the following example of the
+content sent to the service, each pair is separated from the next
+by an ampersand (&amp;):<pre class="pre codeblock">division=Consumer&amp;dept=Sales</pre>
+<div class="p">For
+a given field in the Record part that is the basis of form data, you
+can specify the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property. You can
+use that property to work with an argument name that is an EGL reserved
+word or is not valid in EGL. Here is an example use of the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property:<pre class="pre codeblock">record anyRecord
+   continue boolean {FormName="continue-content"};
+end</pre>
+</div>
+<div class="p">The runtime code uses the value
+of the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property as the name of
+the argument transmitted to the service. Here is a representation
+that might be sent to the service: <pre class="pre codeblock">continue-content=yes</pre>
+</div>
+<p class="p">The
+default value of the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property is
+the name of the record field. In this example, the default is <samp class="ph codeph">continue</samp>.</p>
+<p class="p">You
+cannot override the value of the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property
+when you declare a record that is based on the Record part.</p>
+</li>
+
+</ul>
+<div class="p">If the representation is a record, the following statements
+apply:<ul class="ul">
+<li class="li">The default value of <span class="ph synph"><span class="keyword kwd">requestFormat</span></span> is <em class="ph i">XML</em>.</li>
+
+<li class="li"><em class="ph i">JSON</em> is also valid.</li>
+
+<li class="li"><em class="ph i">FORM</em> is valid only if every field in the record is of type
+STRING or is of a type that is assignment-compatible with STRING. <em class="ph i">FORM</em> is
+not valid if the record references another record.</li>
+
+</ul>
+</div>
+</dd>
+
+
+<dt class="dt pt dlterm">responseCharSet string?</dt>
+
+<dd class="dd pd">The character encoding for the response message.</dd>
+
+
+<dt class="dt pt dlterm">responseFormat eglx.services.Encoding?</dt>
+
+<dd class="dd pd">A value that indicates the format of the representation that is
+returned to the Rich UI Proxy:<ul class="ul">
+<li class="li">XML, to indicate that the returned representation is in XML format</li>
+
+<li class="li">NONE, to indicate that the returned representation is a string</li>
+
+<li class="li">JSON, to indicate that the returned representation is in JSON
+format</li>
+
+</ul>
+<p class="p">If the return value in the Interface part function prototype
+is a string or a value that is compatible with a string, the default
+value of <span class="ph synph"><span class="keyword kwd">responseFormat</span></span> is <em class="ph i">NONE</em>,
+which is the only valid format. If the return value is a record, the
+default value of <span class="ph synph"><span class="keyword kwd">responseFormat</span></span> is <em class="ph i">XML</em>,
+and <em class="ph i">JSON</em> is also valid.</p>
+</dd>
+
+
+<dt class="dt pt dlterm">uriTemplate string?</dt>
 
 <dd class="dd pd">A string, or <dfn class="term">template</dfn>, that in most cases outlines
 a relative URI, which identifies the last qualifiers in the URI that
@@ -77,7 +182,17 @@ is a relative URI:<pre class="pre codeblock">/GetWeatherByZip/02135</pre>
 </div>
 <p class="p">The
 EGL runtime code automatically completes a URI encoding on each substitution
-value that is specified in a service invocation statement. </p>
+value that is specified in a service invocation statement, with one
+exception.</p>
+<p class="p">For example, if your service-invocation statement
+indicates that the value for a given substitution variable is "Jeff
+Smith", the EGL runtime code converts the string to "Jeff%20Smith"
+so that the URI is valid. However, if the value of a substitution
+value begins with <em class="ph i">http://</em>, the EGL runtime code does no URI
+encoding because the service-invocation statement is specifying an
+argument that provides a complete URI. If you are responsible for
+URI encoding, review the documentation on the <span class="ph synph"><span class="keyword kwd">HttpLib.convertToURLEncoded</span></span> system
+function.</p>
 </li>
 
 </ul>
@@ -86,82 +201,10 @@ is an empty string so that, by default, you can specify the complete
 URI by setting the base URI.</p>
 </dd>
 
-
-<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">requestFormat</span></span></dt>
-
-<dd class="dd pd">A value that indicates the format of the representation that is
-sent to the service: <ul class="ul">
-<li class="li">XML, to indicate that the format is Extensible Markup Language</li>
-
-<li class="li">NONE, to indicate that the representation is a string, or a value
-that is compatible with a string, and is sent as is</li>
-
-<li class="li">JSON, to indicate that the format is JavaScript™ Object Notation</li>
-
-<li class="li">FORM, to indicate that the format is form data, which is a record
-composed of argument-value pairs. In the following example of the
-content sent to the service, each pair is separated from the next
-by an ampersand (&amp;):<pre class="pre codeblock">division=Consumer&amp;dept=Sales</pre>
-<div class="p">For
-a given field in the Record part that is the basis of form data, you
-can specify the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property. You can
-use that property to work with an argument name that is an EGL reserved
-word or is not valid in EGL. Here is an example use of the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property:<pre class="pre codeblock">record anyRecord
-   continue boolean {FormName="continue-content"};
-end</pre>
-</div>
-<div class="p">The runtime code uses the value of the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property
-as the name of the argument transmitted to the service. Here is a
-representation that might be sent to the service: <pre class="pre codeblock">continue-content=yes</pre>
-</div>
-<p class="p">The
-default value of the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property is
-the name of the record field. In this example, the default is <samp class="ph codeph">continue</samp>.</p>
-<p class="p">You
-cannot override the value of the <span class="ph synph"><span class="keyword kwd">FormName</span></span> property
-when you declare a record that is based on the Record part.</p>
-</li>
-
-</ul>
-<div class="p">If the representation is a record, the following statements
-apply:<ul class="ul">
-<li class="li">The default value of <span class="ph synph"><span class="keyword kwd">requestFormat</span></span> is <em class="ph i">XML</em>.</li>
-
-<li class="li"><em class="ph i">JSON</em> is also valid.</li>
-
-<li class="li"><em class="ph i">FORM</em> is valid only if every field in the record is of type
-STRING or is of a type that is assignment-compatible with STRING. <em class="ph i">FORM</em> is
-not valid if the record references another record.</li>
-
-</ul>
-</div>
-</dd>
-
-
-<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">responseFormat</span></span></dt>
-
-<dd class="dd pd">A value that indicates the format of the representation that is
-returned to the requester: <ul class="ul">
-<li class="li">XML, to indicate that the returned representation is in XML format</li>
-
-<li class="li">NONE, to indicate that the returned representation is a string</li>
-
-<li class="li">JSON, to indicate that the returned representation is in JSON
-format</li>
-
-</ul>
-<p class="p">If the return value in the Interface part function prototype
-is a string or a value that is compatible with a string, the default
-value of <span class="ph synph"><span class="keyword kwd">responseFormat</span></span> is <em class="ph i">NONE</em>,
-which is the only valid format. If the return value is a record, the
-default value of <span class="ph synph"><span class="keyword kwd">responseFormat</span></span> is <em class="ph i">XML</em>,
-and <em class="ph i">JSON</em> is also valid.</p>
-</dd>
-
 </dl>
 </div>
 <div class="p">You can specify an <span class="ph synph"><span class="keyword kwd">@xREST</span></span> property
-without assigning values to the property fields: <pre class="pre codeblock">Interface IEmployeeService
+without assigning values to the property fields: <pre class="pre codeblock">Library EmployeeService
    Function GetEmployeeDetail() returns(myRecordPart)
       {@GetRest{}};
 end</pre>
@@ -174,9 +217,9 @@ in the deployment descriptor entry. </li>
 value) is a string, the EGL runtime code does no conversion. You must
 handle the conversion and can use any of the following functions for
 that purpose: <ul class="ul" compact="compact">
-<li class="li">jsonLib.convertFromJSON</li>
+<li class="li">JSONLib.convertFromJSON</li>
 
-<li class="li">jsonLib.convertToJSON</li>
+<li class="li">JSONLib.convertToJSON</li>
 
 <li class="li">XMLLib.convertFromXML</li>
 
@@ -204,9 +247,9 @@ code converts that record from XML format.</li>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00071__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="50%" id="d37186e362">Target</th>
+<th class="entry" valign="bottom" width="50%" id="d36867e400">Target</th>
 
-<th class="entry" valign="bottom" width="50%" id="d37186e365">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d36867e403">Issue</th>
 
 </tr>
 
@@ -215,17 +258,17 @@ code converts that record from XML format.</li>
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00071__compat_java" class="row">
-<td class="entry" valign="top" width="50%" headers="d37186e362 ">Java</td>
+<td class="entry" valign="top" width="50%" headers="d36867e400 ">Java</td>
 
-<td class="entry" valign="top" width="50%" headers="d37186e365 ">Service access is not supported.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d36867e403 ">Service access is not supported.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00071__compat_javascript" class="row">
-<td class="entry" valign="top" width="50%" headers="d37186e362 ">JavaScript</td>
+<td class="entry" valign="top" width="50%" headers="d36867e400 ">JavaScript</td>
 
-<td class="entry" valign="top" width="50%" headers="d37186e365 ">No issues.<p class="p compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d36867e403 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
