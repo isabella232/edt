@@ -725,4 +725,19 @@ public class IBMiTest1Test extends ValidationTestCase {
 		List messages = getMessagesAtLine( 125 );
 		assertEquals( 4, messages.size() );
 	}
+
+	/*
+	 * function f11(p1 string, p2 decimal)
+			{@IBMiProgram{
+				parameterAnnotations = [@StructText{Length = 20}}]  //must exactly match the number of parameters
+			}}
+	 * 1 validation messages are expected.
+	 */
+	public void testLine129() {
+		List messages = getMessagesAtLine( 129 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11.\" was issued." );
+	}
 }

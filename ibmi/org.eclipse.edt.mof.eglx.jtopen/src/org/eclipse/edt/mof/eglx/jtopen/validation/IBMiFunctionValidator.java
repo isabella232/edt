@@ -47,8 +47,8 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 	public boolean visit(NestedFunction nestedFunction){
 		if (nestedFunction.getName().resolveMember() instanceof Function) {
 		
-			validateContainerIsCorrect(((IRPartBinding)declaringPart).getIrPart(), nestedFunction, problemRequestor);		
-			validateFunctionBodyIsEmpty((Function)nestedFunction.getName().resolveMember(), nestedFunction, problemRequestor);
+			validateContainerIsCorrect(((IRPartBinding)declaringPart).getIrPart(), nestedFunction);		
+			validateFunctionBodyIsEmpty((Function)nestedFunction.getName().resolveMember(), nestedFunction);
 
 			this.nestedFunction = nestedFunction;
 			annotation = nestedFunction.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram");
@@ -235,7 +235,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 		}
 		return false;
 	}
-	private void validateFunctionBodyIsEmpty(Function function, NestedFunction nestedFunction, IProblemRequestor problemRequestor) {
+	private void validateFunctionBodyIsEmpty(Function function, NestedFunction nestedFunction) {
 		if (nestedFunction != null && nestedFunction.getStmts() != null) {
 			for(Object stmt : nestedFunction.getStmts()) {
 				if(stmt instanceof Statement){
@@ -244,7 +244,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 			}
 		}
 	}
-	private void validateContainerIsCorrect(Part part, NestedFunction errorNode, IProblemRequestor problemRequestor) {
+	private void validateContainerIsCorrect(Part part, NestedFunction errorNode) {
 		// Only allowed on function of Programs, Libraries, Services, and Basic Handlers
 		
 		if (part != null) {

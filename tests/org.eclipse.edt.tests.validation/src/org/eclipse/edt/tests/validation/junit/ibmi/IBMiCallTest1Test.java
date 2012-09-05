@@ -131,14 +131,14 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 	/*
 	 * call Service1.fp9(i1) using conn;//target function is a service function
 	 * 1 validation message is expected.
-	 * It is expected to contain "A service cannot be use as a qualifier.".
+	 * It is expected to contain "Only a library part can be use as a qualifier.".
 	 */
 	public void testLine51() {
 		List messages = getMessagesAtLine( 51 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "A service cannot be use as a qualifier." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"A service cannot be use as a qualifier.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Only a library part can be use as a qualifier." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Only a library part can be use as a qualifier.\" was issued." );
 	}
 
 	/*
