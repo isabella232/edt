@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.Name;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
@@ -105,13 +106,33 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
-		for(Iterator iter = callStatement.getArguments().iterator(); iter.hasNext();) {
-			checkArg((Expression) iter.next());
+		if(callStatement.getArguments().size() != getFunctionParameterCount()){
+			problemRequestor.acceptProblem(
+					callStatement,
+					IProblemRequestor.ARGUMENT_COUNT_NOT_EQUAL_PARAMETER_COUNT,
+					new String[] {
+							String.valueOf(callStatement.getArguments().size()),
+							String.valueOf(getFunctionParameterCount()),
+							functionBinding.getCaseSensitiveName()
+					});
+		}
+		
+		for(Node expr : callStatement.getArguments()) {
+			checkArg((Expression)expr);
 		}
 
 		return false;
 	}
 	
+	private int getFunctionParameterCount(){
+		if(functionBinding instanceof Delegate){
+			return ((Delegate)functionBinding).getParameters().size();
+		}
+		if(functionBinding instanceof FunctionMember){
+			return ((FunctionMember)functionBinding).getParameters().size();
+		}
+		return -1;
+	}
 	public boolean checkArg(Expression argExpr) {
 		numArgs += 1;
 		if(!parameterIter.hasNext()) {			

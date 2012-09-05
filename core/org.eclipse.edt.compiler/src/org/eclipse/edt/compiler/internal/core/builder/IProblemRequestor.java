@@ -688,6 +688,7 @@ public interface IProblemRequestor {
 //	public static final int ADD_STATEMENT_RECORD_IS_INVALID_TYPE = 4270;
 //	public static final int CLOSE_STATEMENT_RECORD_IS_INVALID_TYPE = 4271;
 	public static final int DELETE_STATEMENT_RECORD_IS_INVALID_TYPE = 4272;
+	public static final int ARGUMENT_COUNT_NOT_EQUAL_PARAMETER_COUNT = 4291;
 //	public static final int INQUIRY_STATEMENT_RECORD_IS_INVALID_TYPE = 4273;
 //	public static final int REPLACE_STATEMENT_RECORD_IS_INVALID_TYPE = 4274;
 //	public static final int SCANBACK_STATEMENT_RECORD_IS_INVALID_TYPE = 4275;
