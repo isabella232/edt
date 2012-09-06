@@ -234,7 +234,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 	}
 
 	public boolean visit(BooleanLiteral booleanLiteral) {
-		value = booleanLiteral.booleanValue();
+		value = new Boolean(booleanLiteral.booleanValue() == org.eclipse.edt.compiler.core.Boolean.YES);
 		return false;
 	}
 	
