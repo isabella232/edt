@@ -18,10 +18,10 @@ import org.eclipse.edt.tests.validation.junit.ValidationTestCase;
 /*
  * A JUnit test case for the file EGLSource/ibmi/IBMiTest1.egl
  */
-public class ServiceTest1Test extends ValidationTestCase {
+public class ServiceProxyFunctionTests extends ValidationTestCase {
 
-	public ServiceTest1Test() {
-		super( "EGLSource/services/ServiceTest1.egl", false );
+	public ServiceProxyFunctionTests() {
+		super( "EGLSource/services/ServiceProxyFunctionTests.egl", false );
 	}
 
 	/*

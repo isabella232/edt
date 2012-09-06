@@ -6,10 +6,10 @@ service myserv
 	function srvFunc() returns (int)
 	end
 	
-	function srvIBMiNoReturn() {@IBMiProgram}
+	function srvIBMiNoReturn() {@Resource{uri=""}, @IBMiProgram}
 	end
 
-	function srvIBMiReturn() returns (int) {@IBMiProgram{isServiceProgram = yes}}
+	function srvIBMiReturn() returns (int) {@Resource{uri=""}, @IBMiProgram{isServiceProgram = yes}}
 	end
 	
 	function testLocalCallsToService()
@@ -37,17 +37,17 @@ service myserv
 					returns (i); //0 
 					
 		call srvIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 		call this.srvIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 
 		call srvIBMiReturn() 
-				using syslib.getResource("binding:fred")as IBMiConnection   //0
+				using Resources.getResource("binding:fred")as IBMiConnection   //0
 					returns (i); //0 
 		call this.srvIBMiReturn() 
-				using syslib.getResource("binding:fred") as IBMiConnection  //0
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
 					returns (i); //0 
 					
 					
@@ -76,16 +76,16 @@ library lib1
 	function libFunc() returns (int)
 	end
 	
-	function libIBMiNoReturn() {@IBMiProgram}
+	function libIBMiNoReturn() {@Resource{uri=""}, @IBMiProgram}
 	end
 
-	function libIBMiReturn() returns (int) {@IBMiProgram{isServiceProgram = yes}}
+	function libIBMiReturn() returns (int) {@Resource{uri=""}, @IBMiProgram{isServiceProgram = yes}}
 	end
 end
 
 
 library LocalFunctionCallTestsLib
-	
+	USE lib1;
 	i int;
 	d date;
 	
@@ -107,11 +107,11 @@ library LocalFunctionCallTestsLib
 					returns (i); //0 
 					
 		call lib1.libIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 
 		call lib1.libIBMiReturn() 
-				using syslib.getResource("binding:fred") as IBMiConnection  //0
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
 					returns (i); //0 
 					
 					
@@ -136,10 +136,10 @@ Handler LocalFunctionCallTestsHand
 	function handFunc() returns (int)
 	end
 	
-	function handIBMiNoReturn() {@IBMiProgram}
+	function handIBMiNoReturn() {@Resource{uri=""}, @IBMiProgram}
 	end
 
-	function handIBMiReturn() returns (int) {@IBMiProgram{isServiceProgram = yes}}
+	function handIBMiReturn() returns (int) {@Resource{uri=""}, @IBMiProgram{isServiceProgram = yes}}
 	end
 	
 	
@@ -169,17 +169,17 @@ Handler LocalFunctionCallTestsHand
 
 					
 		call handIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 		call this.handIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 
 		call handIBMiReturn() 
-				using syslib.getResource("binding:fred") as IBMiConnection  //0
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
 					returns (i); //0 
 		call this.handIBMiReturn() 
-				using syslib.getResource("binding:fred") as IBMiConnection  //0
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
 					returns (i); //0 
 					
 					
@@ -211,10 +211,10 @@ program LocalFunctionCallTestsPgm
 	function pgmFunc() returns (int)
 	end
 	
-	function pgmIBMiNoReturn() {@IBMiProgram}
+	function pgmIBMiNoReturn() {@Resource{uri=""}, @IBMiProgram}
 	end
 
-	function pgmIBMiReturn() returns (int) {@IBMiProgram{isServiceProgram = yes}}
+	function pgmIBMiReturn() returns (int) {@Resource{uri=""}, @IBMiProgram{isServiceProgram = yes}}
 	end
 	
 	
@@ -244,17 +244,17 @@ program LocalFunctionCallTestsPgm
 
 					
 		call pgmIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 		call this.pgmIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 
 		call pgmIBMiReturn() 
-				using syslib.getResource("binding:fred") as IBMiConnection  //0
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
 					returns (i); //0 
 		call this.pgmIBMiReturn() 
-				using syslib.getResource("binding:fred") as IBMiConnection  //0
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
 					returns (i); //0 
 					
 					
@@ -288,11 +288,11 @@ program LocalFunctionCallTestsPgm
 					returns (i); //0 
 					
 		call lib1.libIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 
 		call lib1.libIBMiReturn() 
-				using syslib.getResource("binding:fred") as IBMiConnection  //0
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
 					returns (i); //0 
 					
 					
@@ -323,11 +323,11 @@ program LocalFunctionCallTestsPgm
 					returns (i); //0 
 					
 		call hand1.handIBMiReturn() 
-				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+				using Resources.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
 					returns (i); //0 
 
 		call hand1.handIBMiReturn() 
-				using syslib.getResource("binding:fred") as IBMiConnection  //0
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
 					returns (i); //0 
 					
 					

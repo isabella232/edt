@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.tests.validation.junit.callStatement;
+package org.eclipse.edt.tests.validation.junit.ibmi;
 
 import java.util.List;
 
@@ -18,10 +18,10 @@ import org.eclipse.edt.tests.validation.junit.ValidationTestCase;
 /*
  * A JUnit test case for the file EGLSource/callStatement/LocalFunctionCallTests.egl
  */
-public class LocalFunctionCallTestsTest extends ValidationTestCase {
+public class IBMiCallTests2 extends ValidationTestCase {
 
-	public LocalFunctionCallTestsTest() {
-		super( "EGLSource/callStatement/LocalFunctionCallTests.egl", false );
+	public IBMiCallTests2() {
+		super( "EGLSource/ibmi/IBMiCallTests2.egl", false );
 	}
 
 	/*
@@ -141,14 +141,13 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
 	 */
-	public void testLine33() {
-		List messages = getMessagesAtLine( 33 );
+	public void testLine32() {
+		List messages = getMessagesAtLine( 32 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection\" was issued." );
 	}
 
 	/*
@@ -163,14 +162,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine36() {
-		List messages = getMessagesAtLine( 36 );
+	public void testLine35() {
+		List messages = getMessagesAtLine( 35 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection\" was issued." );
 	}
 
 	/*
@@ -185,14 +184,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine40() {
-		List messages = getMessagesAtLine( 40 );
+	public void testLine39() {
+		List messages = getMessagesAtLine( 39 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection\" was issued." );
 	}
 
 	/*
@@ -207,14 +206,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine43() {
-		List messages = getMessagesAtLine( 43 );
+	public void testLine42() {
+		List messages = getMessagesAtLine( 42 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection\" was issued." );
 	}
 
 	/*
@@ -265,27 +264,27 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * call srvFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "".
 	 */
 	public void testLine54() {
 		List messages = getMessagesAtLine( 54 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior\" was issued." );
 	}
 
 	/*
 	 * call this.srvFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "".
 	 */
 	public void testLine55() {
 		List messages = getMessagesAtLine( 55 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior\" was issued." );
 	}
 
 	/*
@@ -400,14 +399,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine106() {
-		List messages = getMessagesAtLine( 106 );
+	public void testLine105() {
+		List messages = getMessagesAtLine( 105 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -422,14 +421,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine110() {
-		List messages = getMessagesAtLine( 110 );
+	public void testLine109() {
+		List messages = getMessagesAtLine( 109 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -462,14 +461,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * call lib1.libFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "".
 	 */
 	public void testLine118() {
 		List messages = getMessagesAtLine( 118 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior\" was issued." );
 	}
 
 	/*
@@ -615,14 +614,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine164() {
-		List messages = getMessagesAtLine( 164 );
+	public void testLine163() {
+		List messages = getMessagesAtLine( 163 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -637,14 +636,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine167() {
-		List messages = getMessagesAtLine( 167 );
+	public void testLine166() {
+		List messages = getMessagesAtLine( 166 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -659,14 +658,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine172() {
-		List messages = getMessagesAtLine( 172 );
+	public void testLine171() {
+		List messages = getMessagesAtLine( 171 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -681,14 +680,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine175() {
-		List messages = getMessagesAtLine( 175 );
+	public void testLine174() {
+		List messages = getMessagesAtLine( 174 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -739,27 +738,27 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * call handFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior.".
 	 */
 	public void testLine186() {
 		List messages = getMessagesAtLine( 186 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior\" was issued." );
 	}
 
 	/*
 	 * call this.handFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "".
 	 */
 	public void testLine187() {
 		List messages = getMessagesAtLine( 187 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior\" was issued." );
 	}
 
 	/*
@@ -931,14 +930,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine239() {
-		List messages = getMessagesAtLine( 239 );
+	public void testLine238() {
+		List messages = getMessagesAtLine( 238 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -953,14 +952,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine242() {
-		List messages = getMessagesAtLine( 242 );
+	public void testLine241() {
+		List messages = getMessagesAtLine( 241 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -975,14 +974,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine247() {
-		List messages = getMessagesAtLine( 247 );
+	public void testLine246() {
+		List messages = getMessagesAtLine( 246 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -997,14 +996,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "".
 	 */
-	public void testLine250() {
-		List messages = getMessagesAtLine( 250 );
+	public void testLine249() {
+		List messages = getMessagesAtLine( 249 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1055,27 +1054,27 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * call pgmFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "".
 	 */
 	public void testLine261() {
 		List messages = getMessagesAtLine( 261 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior.\" was issued." );
 	}
 
 	/*
 	 * call this.pgmFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior.".
 	 */
 	public void testLine262() {
 		List messages = getMessagesAtLine( 262 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior.\" was issued." );
 	}
 
 	/*
@@ -1190,14 +1189,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine287() {
-		List messages = getMessagesAtLine( 287 );
+	public void testLine286() {
+		List messages = getMessagesAtLine( 286 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1212,14 +1211,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine291() {
-		List messages = getMessagesAtLine( 291 );
+	public void testLine290() {
+		List messages = getMessagesAtLine( 290 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1252,14 +1251,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * call lib1.libFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior.".
 	 */
 	public void testLine299() {
 		List messages = getMessagesAtLine( 299 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior.\" was issued." );
 	}
 
 	/*
@@ -1300,14 +1299,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * call hand1.handIBMiReturn();
 	 * 1 validation message is expected.
-	 * It is expected to contain "must specify a returns".
+	 * It is expected to contain "The call statement must specify a returns expression".
 	 */
 	public void testLine313() {
 		List messages = getMessagesAtLine( 313 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must specify a returns" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a returns\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a returns expression" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a returns expression\" was issued." );
 	}
 
 	/*
@@ -1348,14 +1347,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine322() {
-		List messages = getMessagesAtLine( 322 );
+	public void testLine321() {
+		List messages = getMessagesAtLine( 321 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1370,14 +1369,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * using syslib.getResource("binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine326() {
-		List messages = getMessagesAtLine( 326 );
+	public void testLine325() {
+		List messages = getMessagesAtLine( 325 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1410,14 +1409,14 @@ public class LocalFunctionCallTestsTest extends ValidationTestCase {
 	/*
 	 * call hand1.handFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior.".
 	 */
 	public void testLine334() {
 		List messages = getMessagesAtLine( 334 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior.\" was issued." );
 	}
 
 	/*

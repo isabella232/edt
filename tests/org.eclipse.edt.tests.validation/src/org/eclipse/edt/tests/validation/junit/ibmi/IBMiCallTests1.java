@@ -18,10 +18,10 @@ import org.eclipse.edt.tests.validation.junit.ValidationTestCase;
 /*
  * A JUnit test case for the file EGLSource/ibmi/IBMiTest1.egl
  */
-public class IBMiCallTest1Test extends ValidationTestCase {
+public class IBMiCallTests1 extends ValidationTestCase {
 
-	public IBMiCallTest1Test() {
-		super( "EGLSource/ibmi/IBMiCallTests.egl", false );
+	public IBMiCallTests1() {
+		super( "EGLSource/ibmi/IBMiCallTests1.egl", false );
 	}
 
 	/*
