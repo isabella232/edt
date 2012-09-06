@@ -64,9 +64,9 @@ public class EFieldImpl extends EMemberImpl implements EField {
 			if (type instanceof EDataType) {
 				String typeName = ((EDataType)type).getJavaClassName();
 				if (typeName != null){
-					if (typeName.equals("java.lang.Integer")) {
+					if (typeName.equals(EDataType.EDataType_Int32)) {
 						value = Integer.valueOf((String)value);
-					} else if (typeName.equals("java.lang.Boolean")) {
+					} else if (typeName.equals(EDataType.EDataType_Boolean)) {
 						value = Boolean.valueOf((String)value);
 					}
 				}

@@ -46,6 +46,7 @@ public interface ITypeBinding extends IBinding {
     int EXTERNALTYPE_BINDING = 28;
     int FOREIGNLANGUAGETYPE_BINDING = 29;
     int CLASS_BINDING = 30;
+    int STEREOTYPE_BINDING = 31;
     
     int getKind();
 

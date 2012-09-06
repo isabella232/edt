@@ -130,11 +130,23 @@ public class Util {
 			}
 
 			public boolean visit(Record record) {
+				if(record.isAnnotationType()){
+					value[0] = new Integer(ITypeBinding.ANNOTATION_BINDING);
+					return false;
+				}
+				
+				if(record.isStereotypeType()){
+					value[0] = new Integer(ITypeBinding.STEREOTYPE_BINDING);
+					return false;
+				}
+				
 				if(record.isFlexible()){
 					value[0] = new Integer(ITypeBinding.FLEXIBLE_RECORD_BINDING);
-				}else{
-					value[0] = new Integer(ITypeBinding.FIXED_RECORD_BINDING);
+					return false;
 				}
+				
+				value[0] = new Integer(ITypeBinding.FIXED_RECORD_BINDING);
+
 				return false;
 			}
 	

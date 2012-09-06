@@ -25,7 +25,6 @@ import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.internal.EGLBaseNlsStrings;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
-import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
@@ -46,7 +45,6 @@ public class SystemEnvironment implements ISystemEnvironment {
     private Map<String, Map<String, IRPartBinding>> systemPackages = new HashMap<String, Map<String,IRPartBinding>>();
     private Map<String, IRPartBinding> unqualifiedSystemParts = new HashMap<String, IRPartBinding>();
     
-    private EnumerationManager enumerationManager;
     private SystemLibraryManager sysLibManager;
     private ICompiler compiler;
 
@@ -117,7 +115,6 @@ public class SystemEnvironment implements ISystemEnvironment {
 					}
 				}
 				
-				addSystemTypes(EnumerationManager.getEnumTypeBindings());
 				if (notifier != null) {
 					notifier.checkCancel();
 					notifier.updateProgressDelta(0.02f);
@@ -183,11 +180,9 @@ public class SystemEnvironment implements ISystemEnvironment {
         this.parentSystemEnvironment = parentEnv;
         this.compiler = compiler;
         if (parentEnv != null) {
-        	enumerationManager = new EnumerationManager(parentEnv.getEnumerationManager());
-        	sysLibManager = new SystemLibraryManager(parentEnv.getSystemLibraryManager());
+         	sysLibManager = new SystemLibraryManager(parentEnv.getSystemLibraryManager());
         }
         else {
-        	enumerationManager = new EnumerationManager(null);
         	sysLibManager = new SystemLibraryManager(null);
         }
     }
@@ -318,11 +313,7 @@ public class SystemEnvironment implements ISystemEnvironment {
 	public org.eclipse.edt.mof.serialization.IEnvironment getIREnvironment() {
 		return irEnv;
 	}
-	
-	public EnumerationManager getEnumerationManager() {
-		return enumerationManager;
-	}
-	
+		
 	@Override
 	public SystemLibraryManager getSystemLibraryManager() {
 		return sysLibManager;

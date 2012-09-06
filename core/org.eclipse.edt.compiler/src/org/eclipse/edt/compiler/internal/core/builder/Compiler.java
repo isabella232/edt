@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.AnnotationTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.DelegateBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.EGLClassBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationBinder;
@@ -36,6 +37,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ProgramBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.RecordBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.ServiceBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.StereotypeTypeBinder;
 
 
 /**
@@ -193,6 +195,34 @@ public abstract class Compiler extends DefaultASTVisitor{
 				try{
 					astNode.accept(new ServiceBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 			    	validatePart(astNode, partBinding, problemRequestor, compilerOptions);
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
+			case ITypeBinding.ANNOTATION_BINDING:
+				try{
+				    astNode.accept(new AnnotationTypeBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
+			case ITypeBinding.STEREOTYPE_BINDING:
+				try{
+				    astNode.accept(new StereotypeTypeBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){

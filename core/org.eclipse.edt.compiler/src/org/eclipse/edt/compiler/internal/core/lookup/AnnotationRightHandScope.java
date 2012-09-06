@@ -26,12 +26,10 @@ import org.eclipse.edt.mof.egl.Type;
 
 
 public class AnnotationRightHandScope extends Scope{
-    private Annotation annotation;
     private EField field;
 
-    public AnnotationRightHandScope(Scope parentScope, Annotation annotation, EField field) {
+    public AnnotationRightHandScope(Scope parentScope, EField field) {
         super(parentScope);
-        this.annotation = annotation;
         this.field = field;
     }
 

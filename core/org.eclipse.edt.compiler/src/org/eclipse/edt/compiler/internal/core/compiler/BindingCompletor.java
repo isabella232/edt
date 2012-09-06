@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.compiler;
 
+import org.eclipse.edt.compiler.binding.AnnotationTypeCompletor;
 import org.eclipse.edt.compiler.binding.DelegateBindingCompletor;
 import org.eclipse.edt.compiler.binding.EGLClassBindingCompletor;
 import org.eclipse.edt.compiler.binding.EnumerationBindingCompletor;
@@ -26,6 +27,7 @@ import org.eclipse.edt.compiler.binding.LibraryBindingCompletor;
 import org.eclipse.edt.compiler.binding.ProgramBindingCompletor;
 import org.eclipse.edt.compiler.binding.RecordBindingCompletor;
 import org.eclipse.edt.compiler.binding.ServiceBindingCompletor;
+import org.eclipse.edt.compiler.binding.StereotypeTypeCompletor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
@@ -82,6 +84,12 @@ public class BindingCompletor {
 				break;			
 			case ITypeBinding.EXTERNALTYPE_BINDING:
 				astNode.accept(new ExternalTypeBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				break;			
+			case ITypeBinding.ANNOTATION_BINDING:
+				astNode.accept(new AnnotationTypeCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				break;			
+			case ITypeBinding.STEREOTYPE_BINDING:
+				astNode.accept(new StereotypeTypeCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;			
 		}
 	}

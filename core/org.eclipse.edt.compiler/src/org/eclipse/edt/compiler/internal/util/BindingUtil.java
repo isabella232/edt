@@ -36,6 +36,7 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.ExitStatement;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
@@ -191,6 +192,12 @@ public class BindingUtil {
 		if (part instanceof Form) {
 			return ITypeBinding.FORM_BINDING;
 		}
+		if (part instanceof StereotypeType) {
+			return ITypeBinding.STEREOTYPE_BINDING;
+		}
+		if (part instanceof AnnotationType) {
+			return ITypeBinding.ANNOTATION_BINDING;
+		}
 		if (part instanceof Record || part instanceof AnnotationType) {
 			return ITypeBinding.FLEXIBLE_RECORD_BINDING;
 		}
@@ -281,10 +288,31 @@ public class BindingUtil {
         case ITypeBinding.CLASS_BINDING:
         	part = createEGLClass(pkgName, name);
         	return createPartBinding(part);
+        case ITypeBinding.ANNOTATION_BINDING:
+        	part = createAnnotationType(pkgName, name);
+        	return createPartBinding(part);
+        case ITypeBinding.STEREOTYPE_BINDING:
+        	part = createStereotypeType(pkgName, name);
+        	return createPartBinding(part);
         
         default:
             throw new RuntimeException("Unsupported kind: " + type);
 		}		
+	}
+
+
+	private static AnnotationType createAnnotationType(String pkgName, String name) {
+		AnnotationType annType = IrFactory.INSTANCE.createAnnotationType();
+		annType.setName(name);
+		annType.setPackageName(pkgName);
+		return annType;		
+	}
+
+	private static StereotypeType createStereotypeType(String pkgName, String name) {
+		StereotypeType sterType = IrFactory.INSTANCE.createStereotypeType();
+		sterType.setName(name);
+		sterType.setPackageName(pkgName);
+		return sterType;		
 	}
 	
 	private static Program createProgram(String pkgName, String name) {
@@ -594,13 +622,9 @@ public class BindingUtil {
 		return false;
 	}
 	
-	private static ElementKind getElementKind(Element elem) {
+	public static ElementKind getElementKind(Element elem) {
 		if (elem instanceof Record) {
 			return ElementKind.RecordPart;
-		}
-		
-		if (elem instanceof StructuredRecord) {
-			return ElementKind.StructuredRecordPart;
 		}
 		
 		if (elem instanceof Program) {
@@ -614,7 +638,7 @@ public class BindingUtil {
 		if (elem instanceof Handler) {
 			return ElementKind.HandlerPart;
 		}
-		
+				
 		if (elem instanceof Interface) {
 			return ElementKind.InterfacePart;
 		}
@@ -631,60 +655,28 @@ public class BindingUtil {
 			return ElementKind.DelegatePart;
 		}
 		
-		if (elem instanceof FormGroup) {
-			return ElementKind.FormGroupPart;
-		}
-
-		if (elem instanceof Form) {
-			return ElementKind.FormPart;
-		}
-
-		if (elem instanceof DataTable) {
-			return ElementKind.DataTablePart;
-		}
-
-		if (elem instanceof DataItem) {
-			return ElementKind.DataItemPart;
+		if (elem instanceof Enumeration) {
+			return ElementKind.EnumerationPart;
 		}
 		
-		if (elem instanceof FunctionPart) {
-			return ElementKind.FunctionPart;
+		if (elem instanceof EnumerationEntry) {
+			return ElementKind.EnumerationEntry;
 		}
 		
 		if (elem instanceof Field) {
 			return ElementKind.FieldMbr;
 		}
-		
-		if (elem instanceof StructuredField) {
-			return ElementKind.StructuredFieldMbr;
+				
+		if (elem instanceof Constructor) {
+			return ElementKind.ConstructorMbr;
 		}
-		
+			
 		if (elem instanceof Function) {
 			return ElementKind.FunctionMbr;
 		}
 
-		if (elem instanceof Constructor) {
-			return ElementKind.ConstructorMbr;
-		}
-		
-		if (elem instanceof CallStatementImpl) {
-			return ElementKind.CallStatement;
-		}
-		
-		if (elem instanceof ExitStatement) {
-			return ElementKind.ExitStatement;
-		}
-
-		if (elem instanceof ShowStatement) {
-			return ElementKind.ShowStatement;
-		}
-		
-		if (elem instanceof TransferStatement) {
-			return ElementKind.TransferStatement;
-		}
-
-		if (elem instanceof OpenUIStatement) {
-			return ElementKind.OpenUIStatement;
+		if (elem instanceof EGLClass) {
+			return ElementKind.ClassPart;
 		}
 		
 		return null;

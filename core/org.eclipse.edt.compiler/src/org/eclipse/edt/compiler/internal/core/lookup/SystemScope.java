@@ -65,14 +65,7 @@ public class SystemScope extends Scope {
 		if (result != null) {
 			return result;
 		}
-		
-		EnumerationEntry entry = sysEnvironment.getSystemEnvironment().getEnumerationManager().findData(simpleName);
-		if (entry != null) {
-			List<Member> list = new ArrayList<Member>();
-			list.add(entry);
-			return list;
-		}
-		
+				
 		return parentScope.findMember(simpleName);
 	}
 

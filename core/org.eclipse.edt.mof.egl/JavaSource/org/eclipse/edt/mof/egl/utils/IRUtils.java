@@ -605,33 +605,37 @@ public class IRUtils {
 	}
 
 	public static StructPart getCommonSupertype(Type type1, Type type2) {
-		StructPart class1 = (StructPart)type1.getClassifier();
-		StructPart class2 = (StructPart)type2.getClassifier();
-		StructPart result = null;
-		if (class1.equals(class2) || class2.isSubtypeOf(class1)) {
-			result = class1;
-		}
-		else {
-			for (StructPart superType : class1.getSuperTypes()) {
-				if (isValidWidenConversion(type2, superType)) {
-					result = superType;
-					break;
-				}
+		if (type1.getClassifier() instanceof StructPart && type2.getClassifier() instanceof StructPart) {
+		
+			StructPart class1 = (StructPart)type1.getClassifier();
+			StructPart class2 = (StructPart)type2.getClassifier();
+			StructPart result = null;
+			if (class1.equals(class2) || class2.isSubtypeOf(class1)) {
+				result = class1;
 			}
-			if (result == null) {
+			else {
 				for (StructPart superType : class1.getSuperTypes()) {
-					result = getCommonSupertype(superType, type2);
-					if (result != null) break;
+					if (isValidWidenConversion(type2, superType)) {
+						result = superType;
+						break;
+					}
 				}
 				if (result == null) {
-					result = getCommonSupertype(type2, type1);
+					for (StructPart superType : class1.getSuperTypes()) {
+						result = getCommonSupertype(superType, type2);
+						if (result != null) break;
+					}
+					if (result == null) {
+						result = getCommonSupertype(type2, type1);
+					}
+				}
+				if (result == null) {
+					result = (StructPart)TypeUtils.Type_ANY;
 				}
 			}
-			if (result == null) {
-				result = (StructPart)TypeUtils.Type_ANY;
-			}
+			return result;
 		}
-		return result;
+		return null;
 	}
 	
 	public static Operation getConversionOperation(Expression expr, Type trg) {
