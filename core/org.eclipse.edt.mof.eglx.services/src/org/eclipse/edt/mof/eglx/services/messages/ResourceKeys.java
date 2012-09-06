@@ -52,5 +52,7 @@ public class ResourceKeys{
 	
 	public static final int XXXREST_NO_RESOURCE_PARM = 3411;
 	public static final int XXXREST_NO_METHOD = 3412;
+    public static final int USING_HAS_NO_CONNECTION = 3413;
+    public static final int WRONG_USING_CLAUSE_TYPE = 3414;
 	
 }

@@ -14,11 +14,16 @@ package org.eclipse.edt.mof.eglx.jtopen;
 import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiElementGenerator;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiFunctionValidator;
@@ -61,16 +66,43 @@ public class IBMiExtension implements ICompilerExtension {
 	private boolean shouldExtend(Node node) {
 		if (node instanceof CallStatement) {
 			CallStatement stmt = (CallStatement)node;
-			if (stmt.getUsing() != null) {
-				return Utils.isIBMiConnection(stmt.getUsing().resolveType());
+			if (stmt.getUsing() != null && Utils.isIBMiConnection(stmt.getUsing().resolveType())){
+				return true;
 			}
 			else {
 				if(((CallStatement)node).getInvocationTarget() != null &&
 						((CallStatement)node).getInvocationTarget().resolveElement() instanceof Function){
-					Function function = (Function)((CallStatement)node).getInvocationTarget().resolveElement();
-					return !Utils.isFunctionServiceQualified(((CallStatement)node).getInvocationTarget(), function) &&
-							function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+					final Boolean[] result = new Boolean[1];
+					final Function function = (Function)((CallStatement)node).getInvocationTarget().resolveElement();
+					result[0] = false;
+					((CallStatement)node).getInvocationTarget().accept( new AbstractASTVisitor() {
+						public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName){
+							if(qualifiedName.getQualifier() instanceof SimpleName &&
+									qualifiedName.getQualifier().resolveElement() instanceof Part &&
+									!(qualifiedName.getQualifier().resolveElement() instanceof Library)){
+								return false;
+							}
+							result[0] = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+							return false;
+						}
+						public boolean visit(org.eclipse.edt.compiler.core.ast.SimpleName simpleName){
+							result[0] = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+							return false;
+						}
+						public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess){
+							result[0] = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+							return false;
+						}
+					});
+					return result[0];
 				}
+				return false;
+//				if(((CallStatement)node).getInvocationTarget() != null &&
+//						((CallStatement)node).getInvocationTarget().resolveElement() instanceof Function){
+//					Function function = (Function)((CallStatement)node).getInvocationTarget().resolveElement();
+//					return !Utils.isFunctionServiceQualified(((CallStatement)node).getInvocationTarget(), function) &&
+//							function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+//				}
 			}
 		}
 		else if (node instanceof NestedFunction) {

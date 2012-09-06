@@ -19,7 +19,6 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
@@ -32,11 +31,13 @@ import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
 public class ServicesCallStatementValidator extends AbstractStatementValidator {
@@ -54,16 +55,40 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 		
 		callStatement.getInvocationTarget().accept( new AbstractASTVisitor() {
 			public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName){
-				if(qualifiedName.getQualifier() instanceof SimpleName
-						&& !(qualifiedName.getQualifier().resolveType() instanceof Library ||
-								qualifiedName.getQualifier().resolveType() instanceof Service)){
+				if(qualifiedName.getQualifier() instanceof SimpleName &&
+						qualifiedName.getQualifier().resolveElement() instanceof Part &&
+						!(qualifiedName.getQualifier().resolveElement() instanceof Library ||
+								qualifiedName.getQualifier().resolveElement() instanceof Service)){
 					problemRequestor.acceptProblem(qualifiedName.getQualifier(), ResourceKeys.TARGET_QUALIFIER_ERROR, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
 					return false;
 				}
-				return true;
+				return false;
 			}
 		});
 
+		//@Resource or a using clause are not required if the qualifier is a service
+		if (callStatement.getUsing() == null && function.getAnnotation("eglx.lang.Resource") == null) {
+			final boolean[] isService = new boolean[1];
+			callStatement.getInvocationTarget().accept( new AbstractASTVisitor() {
+				public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName){
+					if(qualifiedName.getQualifier() instanceof SimpleName &&
+							qualifiedName.getQualifier().resolveElement() instanceof Part &&
+							!(qualifiedName.getQualifier().resolveElement() instanceof Library)){
+						isService[0] = qualifiedName.getQualifier().resolveElement() instanceof Service;
+						return false;
+					}
+					return false;
+				}
+			});
+			if(!isService[0]){
+				problemRequestor.acceptProblem(callStatement, ResourceKeys.USING_HAS_NO_CONNECTION, IMarker.SEVERITY_ERROR, new String[] {}, ResourceKeys.getResourceBundleForKeys());
+			}
+		}
+	
+		if (callStatement.getUsing() != null && !Utils.isIHTTP(callStatement.getUsing().resolveType())) {
+			problemRequestor.acceptProblem(callStatement, ResourceKeys.WRONG_USING_CLAUSE_TYPE, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(callStatement.getUsing().resolveType(), true)}, ResourceKeys.getResourceBundleForKeys());
+		}
+	
 		//the target function has a return but there is no returning to or returns expression
 		if(((Function)function).getReturnType() != null
 				&& (callStatement.getCallSynchronizationValues() == null ||
@@ -98,8 +123,8 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 		
 		//2) if is it is a nested function it must be defined inside this part 
 		Node container = getContainer(stmt.getParent());
-		if (container instanceof Part && !cbMember.getContainer().equals(((Part)container).getName().resolveType())) {
-			problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_MUST_BE_DEFINED_IN_PART, IMarker.SEVERITY_ERROR, new String[] {cbMember.getCaseSensitiveName(), ((Part)container).getName().getCanonicalName()}, ResourceKeys.getResourceBundleForKeys());
+		if (container instanceof org.eclipse.edt.compiler.core.ast.Part && !cbMember.getContainer().equals(((org.eclipse.edt.compiler.core.ast.Part)container).getName().resolveType())) {
+			problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_MUST_BE_DEFINED_IN_PART, IMarker.SEVERITY_ERROR, new String[] {cbMember.getCaseSensitiveName(), ((org.eclipse.edt.compiler.core.ast.Part)container).getName().getCanonicalName()}, ResourceKeys.getResourceBundleForKeys());
 		}
 		
 				
@@ -154,7 +179,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 	}
 	
 	private Node getContainer(Node node){
-		while(node.getParent() != null && !(node instanceof Part)){
+		while(node.getParent() != null && !(node instanceof org.eclipse.edt.compiler.core.ast.Part)){
 			node = node.getParent();
 		}
 		return node;
