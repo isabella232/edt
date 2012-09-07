@@ -84,6 +84,7 @@ public class EGL2IR {
 						Class<?> clazz = Class.forName(extensions[i].trim(), true, EGL2IR.class.getClassLoader());
 						Object o = clazz.newInstance();
 						if (o instanceof ICompilerExtension) {
+							((ICompilerExtension)o).setCompiler(compiler);
 							compiler.addExtension((ICompilerExtension)o);
 						}
 						else {

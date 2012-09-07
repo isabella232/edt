@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.eglx.persistence.sql;
 
 import org.eclipse.edt.compiler.ASTValidator;
-import org.eclipse.edt.compiler.ICompilerExtension;
+import org.eclipse.edt.compiler.BaseCompilerExtension;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
@@ -33,7 +33,7 @@ import org.eclipse.edt.mof.eglx.persistence.sql.gen.SQLActionStatementGenerator;
 import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.validation.SQLActionStatementValidator;
 
-public class SQLExtension implements ICompilerExtension {
+public class SQLExtension extends BaseCompilerExtension {
 	
 	@Override
 	public String[] getSystemEnvironmentPaths() {

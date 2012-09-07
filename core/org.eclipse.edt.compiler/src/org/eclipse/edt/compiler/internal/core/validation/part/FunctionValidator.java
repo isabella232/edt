@@ -90,7 +90,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.StructuredRecord;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class FunctionValidator extends AbstractASTVisitor {
@@ -122,7 +122,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	
 	public boolean visit(TopLevelFunction topLevelFunction) {
 		functionName = topLevelFunction.getName().getCanonicalName();
-		if(topLevelFunction.getIdentifier() == InternUtil.intern(IEGLConstants.MNEMONIC_MAIN)) {
+		if(NameUtile.equals(topLevelFunction.getIdentifier(), NameUtile.getAsName(IEGLConstants.MNEMONIC_MAIN))) {
 			problemRequestor.acceptProblem(
 				topLevelFunction.getName(),
 				IProblemRequestor.FUNCTION_NO_MAIN_FUNCTION_ALLOWED,

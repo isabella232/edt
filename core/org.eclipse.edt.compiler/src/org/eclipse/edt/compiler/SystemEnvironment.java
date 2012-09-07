@@ -31,7 +31,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.osgi.util.NLS;
@@ -86,7 +85,7 @@ public class SystemEnvironment implements ISystemEnvironment {
 					File libfolder = new File(paths[i]);
 					if (libfolder.exists() && libfolder.isDirectory()){
 						File[] files = libfolder.listFiles();
-						sysPackages.addAll(factory.createEntries(this, irEnv, files, new ISystemPartBindingLoadedRequestor(){
+						addSystemPackages(factory.createEntries(this, irEnv, files, new ISystemPartBindingLoadedRequestor(){
 							public void partBindingLoaded(IRPartBinding part){
 								addSystemEntry(part);
 							}
@@ -151,7 +150,7 @@ public class SystemEnvironment implements ISystemEnvironment {
     private void addSystemEntry(IRPartBinding partBinding) {
     	
     	Part part = partBinding.getIrPart();
-    	String partName = InternUtil.intern(part.getName());
+    	String partName = part.getName();
     	
     	if (shouldAddToUnqualified(part)) {
     		this.getUnqualifiedSystemParts().put(partName, partBinding);
@@ -327,5 +326,8 @@ public class SystemEnvironment implements ISystemEnvironment {
 	public SystemLibraryManager getSystemLibraryManager() {
 		return sysLibManager;
 	}
-
+	
+	protected void addSystemPackages(List<ISystemPackageBuildPathEntry> entries) {
+    	sysPackages.addAll(entries);
+    }
 }

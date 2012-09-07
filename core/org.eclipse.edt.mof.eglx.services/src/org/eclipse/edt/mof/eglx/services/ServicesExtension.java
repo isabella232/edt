@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.eglx.services;
 
 import org.eclipse.edt.compiler.ASTValidator;
-import org.eclipse.edt.compiler.ICompilerExtension;
+import org.eclipse.edt.compiler.BaseCompilerExtension;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -27,7 +27,7 @@ import org.eclipse.edt.mof.eglx.services.validation.EglServiceProxyFunctionValid
 import org.eclipse.edt.mof.eglx.services.validation.RestServiceProxyFunctionValidator;
 import org.eclipse.edt.mof.eglx.services.validation.ServicesCallStatementValidator;
 
-public class ServicesExtension implements ICompilerExtension {
+public class ServicesExtension extends BaseCompilerExtension {
 	
 	@Override
 	public String[] getSystemEnvironmentPaths() {

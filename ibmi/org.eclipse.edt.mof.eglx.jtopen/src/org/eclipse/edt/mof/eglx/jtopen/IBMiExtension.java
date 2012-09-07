@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.eglx.jtopen;
 
 import org.eclipse.edt.compiler.ASTValidator;
-import org.eclipse.edt.compiler.ICompilerExtension;
+import org.eclipse.edt.compiler.BaseCompilerExtension;
 import org.eclipse.edt.compiler.SystemEnvironmentUtil;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiElementGenerator;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiFunctionValidator;
 import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramCallStatementValidator;
 
-public class IBMiExtension implements ICompilerExtension {
+public class IBMiExtension extends BaseCompilerExtension {
 	
 	@Override
 	public String[] getSystemEnvironmentPaths() {

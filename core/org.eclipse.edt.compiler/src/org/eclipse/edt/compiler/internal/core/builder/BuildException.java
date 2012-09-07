@@ -41,13 +41,11 @@ public class BuildException extends RuntimeException {
 		super(cause);
 	}
 	
-	static public String getPartName (String[] packageName, String partName){
-		StringBuffer buffer = new StringBuffer();
-		if (packageName.length > 0){
-			for (int i = 0; i < packageName.length; i++){
-				buffer.append(packageName[i]);
-				buffer.append('.');
-			}
+	static public String getPartName (String packageName, String partName){
+		StringBuilder buffer = new StringBuilder();
+		if (packageName.length() > 0) {
+			buffer.append(packageName);
+			buffer.append('.');
 		}
 		
 		buffer.append(partName);

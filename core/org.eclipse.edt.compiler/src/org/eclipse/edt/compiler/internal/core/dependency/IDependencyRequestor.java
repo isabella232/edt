@@ -14,7 +14,6 @@ package org.eclipse.edt.compiler.internal.core.dependency;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
-import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.Type;
 
 
@@ -36,10 +35,6 @@ public interface IDependencyRequestor {
 	
 	public void recordPackageBinding(IPackageBinding binding);
 	public void recordType(Type type);
-	public void recordTopLevelFunction(FunctionPart function);
-	
-	public void stopRecordingTopLevelFunctions();
-	public void startRecordingTopLevelFunctions();
 	
 	public void recordFunctionContainerScope(FunctionContainerScope scope);
 }

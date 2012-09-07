@@ -47,5 +47,17 @@ public interface ICompilerExtension {
 	 * @see ASTValidator
 	 * @return a validator for the given node, or null if no extra validation is required.
 	 */
-	ASTValidator getValidatorFor(Node node);	
+	ASTValidator getValidatorFor(Node node);
+	
+	/**
+	 * Sets the compiler for which this extension is registered.
+	 * 
+	 * @param compiler The compiler.
+	 */
+	void setCompiler(ICompiler compiler);
+	
+	/**
+	 * @return the compiler for which this extension is registered.
+	 */
+	ICompiler getCompiler();
 }

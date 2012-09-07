@@ -56,7 +56,6 @@ import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.ParameterizableType;
@@ -337,9 +336,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
                         result = null;
                 	}
                 	else {
-                		if (resolvedPart instanceof FunctionPart) {
-                			dependencyRequestor.recordTopLevelFunction((FunctionPart)resolvedPart);
-                		}
                 		List<Part> tempList = new ArrayList<Part>();
                 		tempList.add(resolvedPart);
                 		result = tempList;
