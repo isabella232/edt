@@ -12,13 +12,19 @@
 package org.eclipse.edt.mof.eglx.jtopen.validation;
 
 
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.NamedElement;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
@@ -28,6 +34,8 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 	public boolean visit(CallStatement callStatement){
 		Member targFunction = callStatement.getInvocationTarget().resolveMember();
 		if (!(targFunction instanceof Function)) {
+			//error...target must be a function if callback or error routine specified
+            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IBMiResourceKeys.FUNCTION_CALL_TARGET_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {}, IBMiResourceKeys.getResourceBundleForKeys());
 			return false;
 		}
 		
@@ -40,6 +48,19 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 		//validate the arguments against the parms
 		callStatement.accept(new FunctionArgumentValidator((Function)targFunction, problemRequestor, compilerOptions));
 		
+		callStatement.getInvocationTarget().accept( new AbstractASTVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName){
+				if(qualifiedName.getQualifier() instanceof SimpleName &&
+						qualifiedName.getQualifier().resolveElement() instanceof Part
+						&& !(qualifiedName.getQualifier().resolveElement() instanceof Library)){
+					problemRequestor.acceptProblem(qualifiedName.getQualifier(), IBMiResourceKeys.IBMIPROGRAM_TARGET_IS_SERVICE_QUALIFIED, IMarker.SEVERITY_ERROR, new String[] {}, IBMiResourceKeys.getResourceBundleForKeys());
+					return false;
+				}
+				return true;
+			}
+		});
+		
+		
 		//if the function returns a value, a returns is required
 		if (((Function)targFunction).getReturnType() != null &&
 				(callStatement.getCallSynchronizationValues() == null || callStatement.getCallSynchronizationValues().getReturns() == null)) {
@@ -50,7 +71,10 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 			problemRequestor.acceptProblem(callStatement, IBMiResourceKeys.IBMIPROGRAM_USING_HAS_NO_CONNECTION, IMarker.SEVERITY_ERROR, new String[] {}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	
-		
+		if (callStatement.getUsing() != null && !Utils.isIBMiConnection(callStatement.getUsing().resolveType())) {
+			problemRequestor.acceptProblem(callStatement, IBMiResourceKeys.WRONG_USING_CLAUSE_TYPE, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(callStatement.getUsing().resolveType(), true)}, IBMiResourceKeys.getResourceBundleForKeys());
+		}
+	
 		if (callStatement.getCallSynchronizationValues() != null) {
 			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
 				//If a returns is specified, the function must return a value
@@ -61,11 +85,11 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 				//Ensure that the returns type of the call is compatible with the function's return type
 					Expression callReturnsExpr = callStatement.getCallSynchronizationValues().getReturns().getExpression();
 					Member callReturnsMember = callReturnsExpr.resolveMember();
-					if (!TypeUtils.areCompatible(((Function)targFunction).getReturnType().getClassifier(), callReturnsMember)){
+					if (callReturnsMember.getType() instanceof NamedElement && !TypeUtils.areCompatible(((Function)targFunction).getReturnType().getClassifier(), (NamedElement)callReturnsMember.getType())){
 						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), 
 														IBMiResourceKeys.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, 
 														IMarker.SEVERITY_ERROR, 
-														new String[] {Utils.getTypeName((Function)targFunction), ((Function)targFunction).getCaseSensitiveName(), Utils.getTypeName(callReturnsMember), callReturnsExpr.getCanonicalString()},
+														new String[] {StatementValidator.getTypeName((Function)targFunction), ((Function)targFunction).getCaseSensitiveName(), StatementValidator.getTypeName(callReturnsMember), callReturnsExpr.getCanonicalString()},
 														IBMiResourceKeys.getResourceBundleForKeys());
 					}
 				}

@@ -18,10 +18,10 @@ import org.eclipse.edt.tests.validation.junit.ValidationTestCase;
 /*
  * A JUnit test case for the file EGLSource/ibmi/IBMiTest1.egl
  */
-public class IBMiTest1Test extends ValidationTestCase {
+public class IBMiProxyFunctionTests extends ValidationTestCase {
 
-	public IBMiTest1Test() {
-		super( "EGLSource/ibmi/IBMiTest1.egl", false );
+	public IBMiProxyFunctionTests() {
+		super( "EGLSource/ibmi/IBMiProxyFunctionTests.egl", false );
 	}
 
 	/*
@@ -632,7 +632,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * It is expected to contain "cannot contain statements.".
 	 */
 	public void testLine95() {
-		List messages = getMessagesAtLine( 93 );
+		List messages = getMessagesAtLine( 95 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "cannot contain statements." );
@@ -724,5 +724,20 @@ public class IBMiTest1Test extends ValidationTestCase {
 	public void testLine126() {
 		List messages = getMessagesAtLine( 125 );
 		assertEquals( 4, messages.size() );
+	}
+
+	/*
+	 * function f11(p1 string, p2 decimal)
+			{@IBMiProgram{
+				parameterAnnotations = [@StructText{Length = 20}}]  //must exactly match the number of parameters
+			}}
+	 * 1 validation messages are expected.
+	 */
+	public void testLine129() {
+		List messages = getMessagesAtLine( 129 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11.\" was issued." );
 	}
 }

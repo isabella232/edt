@@ -48,9 +48,11 @@ public class ResourceKeys{
 	public static final int XXXREST_FORMAT_MUST_BE_NONE = 3407;
 	public static final int XXXREST_RESPONSEFORMAT_NOT_SUPPORTD = 3408;
 	public static final int XXXREST_PARM_TYPE_MUST_BE_FLAT_RECORD = 3409;
+    public static final int TARGET_QUALIFIER_ERROR = 3410;
 	
 	public static final int XXXREST_NO_RESOURCE_PARM = 3411;
 	public static final int XXXREST_NO_METHOD = 3412;
-	public static final int SERVICE_CALL_USING_WRONG_TYPE = 3415;
+    public static final int USING_HAS_NO_CONNECTION = 3413;
+    public static final int WRONG_USING_CLAUSE_TYPE = 3414;
 	
 }

@@ -36,13 +36,13 @@ public class EDataTypeImpl extends EClassifierImpl implements EDataType {
 		String typeName = getJavaClassName();
 		if (typeName == null || typeName.equals(""))
 			return null;
-		else if (typeName.equals("java.lang.String"))
+		else if (typeName.equals(EDataType.EDataType_String))
 			return "";
-		else if (typeName.equals("java.lang.Integer")) 
+		else if (typeName.equals(EDataType.EDataType_Int32)) 
 			return 0;
-		else if (typeName.equals("java.lang.Boolean"))
+		else if (typeName.equals(EDataType.EDataType_Boolean))
 			return Boolean.FALSE;
-		else if (typeName.equals("java.util.List")) {
+		else if (typeName.equals(EDataType.EDataType_List)) {
 			return new EList();
 		}
 		return null;

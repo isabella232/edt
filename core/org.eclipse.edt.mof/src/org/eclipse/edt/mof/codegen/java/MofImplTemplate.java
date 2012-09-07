@@ -152,13 +152,13 @@ public class MofImplTemplate extends AbstractTemplate implements MofImplConstant
 
 	public String getETypeSignature(EClassifier type, TemplateContext ctx) {
 		if (type == factory.getEStringEDataType() )
-			return "java.lang.String";
+			return EDataType.EDataType_String;
 		if (type == factory.getEBooleanEDataType() )
-			return "java.lang.Boolean";
+			return EDataType.EDataType_Boolean;
 		if ( type == factory.getEIntEDataType() )
-			return "java.lang.Integer";
+			return EDataType.EDataType_Int32;
 		if ( type == factory.getEListEDataType() )
-			return "java.util.List";
+			return EDataType.EDataType_List;
 		return getPackageName(type, ctx)+"."+getETypeName(type);
 	}
 

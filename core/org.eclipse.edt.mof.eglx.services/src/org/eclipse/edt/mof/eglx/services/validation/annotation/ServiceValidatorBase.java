@@ -15,19 +15,11 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Program;
-import org.eclipse.edt.mof.egl.Service;
-import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
 
 
@@ -47,31 +39,6 @@ public abstract class ServiceValidatorBase implements IAnnotationValidationRule 
 	}
 	
 	protected void validateAnnotation(Annotation annotation, Node errorNode, NestedFunction target, Element targetBinding) {
-		if(targetBinding instanceof Function){
-			validateContainerIsCorrect(((Function)targetBinding).getContainer(), target);
-		}
-	}
-	private void validateContainerIsCorrect(Container part, NestedFunction errorNode) {
-		// Only allowed on function of Programs, Libraries, Services, and Basic Handlers
-
-		if (part != null) {
-			if (part instanceof Program) {
-				return;
-			}
-			if (part instanceof Library) {
-				return;
-			}
-			if (part instanceof Service) {
-				return;
-			}
-			if (part instanceof Handler && ((Handler) part).getStereotype() == null) {
-				//must be basic handler!
-				return;
-			}
-		}
-		
-		//If we got this far, the container is invalid!
-		problemRequestor.acceptProblem(errorNode, ResourceKeys.INVALID_CONTAINER, IMarker.SEVERITY_ERROR, new String[] {errorNode.getName().getCaseSensitiveIdentifier()}, ResourceKeys.getResourceBundleForKeys());
 	}
 	
 	protected abstract String getAnnotationName();

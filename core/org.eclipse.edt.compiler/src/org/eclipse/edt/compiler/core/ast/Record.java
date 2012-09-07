@@ -48,6 +48,22 @@ public class Record extends Part{
 		return contents;
 	}
 	
+	public boolean isAnnotationType() {
+		if(partSubTypeOpt != null && partSubTypeOpt.isSimpleName()) {
+			String subTypeName = partSubTypeOpt.getIdentifier();
+			return (subTypeName.equalsIgnoreCase("annotation"));
+		}
+		return false;
+	}
+
+	public boolean isStereotypeType() {
+		if(partSubTypeOpt != null && partSubTypeOpt.isSimpleName()) {
+			String subTypeName = partSubTypeOpt.getIdentifier();
+			return (subTypeName.equalsIgnoreCase("stereotype"));
+		}
+		return false;
+	}
+
 	public boolean isFlexible() {
 		
 		for(Iterator iter = getContents().iterator(); iter.hasNext();) {

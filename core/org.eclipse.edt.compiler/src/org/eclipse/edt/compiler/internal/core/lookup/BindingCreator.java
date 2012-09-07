@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
+import org.eclipse.edt.compiler.Util;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -57,7 +58,8 @@ public class BindingCreator extends DefaultASTVisitor {
 	}
 	
 	public boolean visit(Record record) {
-	    partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FLEXIBLE_RECORD_BINDING);
+		
+	    partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, Util.getPartType(record));
 		return false;
 	}
 	

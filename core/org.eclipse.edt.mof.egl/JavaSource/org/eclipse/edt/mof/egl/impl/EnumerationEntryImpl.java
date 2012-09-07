@@ -13,6 +13,8 @@ package org.eclipse.edt.mof.egl.impl;
 
 import java.util.List;
 
+import org.eclipse.edt.mof.EEnum;
+import org.eclipse.edt.mof.EMemberContainer;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -74,13 +76,12 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	public void setName(String value) {
 		slotSet(Slot_name, value);
 	}
-	
+		
 	@Override
 	public Type getType() {
 		return (Type)getContainer();
-//		return (Type)slotGet(Slot_type);
 	}
-	
+
 	@Override
 	public void setType(Type value) {
 		slotSet(Slot_type, value);
@@ -129,6 +130,15 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	@Override
 	public Container getContainer() {
 		return (Container)slotGet(Slot_Container);
+	}
+	
+	@Override
+	public EMemberContainer getDeclarer() {
+		EMemberContainer decl = super.getDeclarer();
+		if (decl == null) {
+			decl = (EEnum)getContainer();
+		}
+		return decl;
 	}
 	
 	@Override

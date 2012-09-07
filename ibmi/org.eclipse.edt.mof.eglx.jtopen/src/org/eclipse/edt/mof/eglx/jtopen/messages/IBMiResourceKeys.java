@@ -54,9 +54,12 @@ public class IBMiResourceKeys{
     public static final int IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED = 5724;
     public static final int IBMIPROGRAM_RETURNS_NOT_ALLOWED = 5725;
     public static final int IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION = 5726;
-    public static final int IBMIPROGRAM_USING_HAS_WRONG_TYPE = 5727;
     public static final int IBMIPROGRAM_MUST_BE_SPECIFIED = 5728;
     public static final int IBMIPROGRAM_CALLBACK_NOT_SUPPORTED = 5729;
     public static final int IBMIPROGRAM_USING_HAS_NO_CONNECTION = 5730;
+    public static final int IBMIPROGRAM_TARGET_IS_SERVICE_QUALIFIED = 5731;
+    public static final int FUNCTION_CALL_TARGET_MUST_BE_FUNCTION = 5732;
+    public static final int WRONG_USING_CLAUSE_TYPE = 5733;
+    
     
 }

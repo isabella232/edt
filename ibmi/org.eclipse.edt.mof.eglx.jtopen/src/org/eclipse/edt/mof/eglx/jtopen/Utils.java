@@ -98,13 +98,4 @@ public class Utils {
 							type.getClassifier().equals(TypeUtils.Type_TIMESTAMP) ||
 							type.getClassifier().equals(TypeUtils.Type_BYTES)));
 	}
-	
-	public static String getTypeName(Member member){
-		if(member.isNullable()){
-			return StatementValidator.getShortTypeString(member.getType(), true) + "?";
-		}
-		else{
-			return StatementValidator.getShortTypeString(member.getType(), true);
-		}
-	}
 }

@@ -8,8 +8,8 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.IValidationProxy;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
-import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ReturnsDeclaration;
+import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractFunctionValidator;
@@ -30,7 +30,6 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
-import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.Utils;
@@ -48,8 +47,8 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 	public boolean visit(NestedFunction nestedFunction){
 		if (nestedFunction.getName().resolveMember() instanceof Function) {
 		
-			validateContainerIsCorrect(((IRPartBinding)declaringPart).getIrPart(), nestedFunction, problemRequestor);		
-			validateFunctionBodyIsEmpty((Function)nestedFunction.getName().resolveMember(), nestedFunction, problemRequestor);
+			validateContainerIsCorrect(((IRPartBinding)declaringPart).getIrPart(), nestedFunction);		
+			validateFunctionBodyIsEmpty((Function)nestedFunction.getName().resolveMember(), nestedFunction);
 
 			this.nestedFunction = nestedFunction;
 			annotation = nestedFunction.getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram");
@@ -120,7 +119,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {Utils.getTypeName(parm), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {StatementValidator.getTypeName(parm), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 				
 			if (parm.getType() instanceof ArrayType && ((ArrayType)parm.getType()).getElementType() != null){
@@ -178,7 +177,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 
@@ -186,7 +185,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			
@@ -195,7 +194,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 					problemRequestor.acceptProblem(functionParameter, 
 							IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID, 
 							IMarker.SEVERITY_ERROR, 
-							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), Utils.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}
@@ -236,16 +235,16 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 		}
 		return false;
 	}
-	private void validateFunctionBodyIsEmpty(Function function, Node node, IProblemRequestor problemRequestor) {
-		if (function.getStatementBlock() != null && function.getStatementBlock().getStatements() != null && 
-				function.getStatementBlock().getStatements().size() > 0) {
-			
-			for(Statement stmt : function.getStatementBlock().getStatements()) {
-				problemRequestor.acceptProblem(stmt, IProblemRequestor.PROXY_FUNCTIONS_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()});
+	private void validateFunctionBodyIsEmpty(Function function, NestedFunction nestedFunction) {
+		if (nestedFunction != null && nestedFunction.getStmts() != null) {
+			for(Object stmt : nestedFunction.getStmts()) {
+				if(stmt instanceof Statement){
+					problemRequestor.acceptProblem((Statement)stmt, IProblemRequestor.PROXY_FUNCTIONS_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()});
+				}
 			}
 		}
 	}
-	private void validateContainerIsCorrect(Part part, NestedFunction errorNode, IProblemRequestor problemRequestor) {
+	private void validateContainerIsCorrect(Part part, NestedFunction errorNode) {
 		// Only allowed on function of Programs, Libraries, Services, and Basic Handlers
 		
 		if (part != null) {

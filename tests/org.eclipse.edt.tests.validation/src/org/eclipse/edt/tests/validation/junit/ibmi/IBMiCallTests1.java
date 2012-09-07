@@ -18,10 +18,10 @@ import org.eclipse.edt.tests.validation.junit.ValidationTestCase;
 /*
  * A JUnit test case for the file EGLSource/ibmi/IBMiTest1.egl
  */
-public class IBMiCallTest1Test extends ValidationTestCase {
+public class IBMiCallTests1 extends ValidationTestCase {
 
-	public IBMiCallTest1Test() {
-		super( "EGLSource/ibmi/IBMiCallTests.egl", false );
+	public IBMiCallTests1() {
+		super( "EGLSource/ibmi/IBMiCallTests1.egl", false );
 	}
 
 	/*
@@ -60,7 +60,7 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The types boolean and int are not reference compatible" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The types boolean and int are not reference compatible" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The types boolean and int are not reference compatible\" was issued." );
 	}
 
 	/*
@@ -99,7 +99,7 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The call statement cannot specify a returns value, because the function fp9 does not return a value" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement cannot specify a returns value, because the function fp9 does not return a value" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement cannot specify a returns value, because the function fp9 does not return a value\" was issued." );
 	}
 
 	/*
@@ -112,7 +112,7 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The return type int of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The return type int of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type int of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement\" was issued." );
 	}
 
 	/*
@@ -125,7 +125,33 @@ public class IBMiCallTest1Test extends ValidationTestCase {
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a returns expression" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a returns expression" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a returns expression\" was issued." );
+	}
+
+	/*
+	 * call Service1.fp9(i1) using conn;//target function is a service function
+	 * 1 validation message is expected.
+	 * It is expected to contain "Only a library part can be use as a qualifier.".
+	 */
+	public void testLine51() {
+		List messages = getMessagesAtLine( 51 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Only a library part can be use as a qualifier." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Only a library part can be use as a qualifier.\" was issued." );
+	}
+
+	/*
+	 * call field1(i1) using conn;//target is a field not a function
+	 * 1 validation message is expected.
+	 * It is expected to contain "The target of the Call must be a proxy function.".
+	 */
+	public void testLine56() {
+		List messages = getMessagesAtLine( 56 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The target of the Call must be a proxy function." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The target of the Call must be a proxy function." );
 	}
 
 }

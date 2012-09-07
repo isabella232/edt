@@ -1,5 +1,7 @@
 package org.eclipse.edt.compiler.binding;
 
+import java.math.BigDecimal;
+
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
@@ -45,10 +47,10 @@ public class AnnotationValueGatherer extends DefaultBinder{
 	public AnnotationValueGatherer(Expression expr, Scope currentScope, Part currentBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		super(currentScope, currentBinding, dependencyRequestor, problemRequestor, compilerOptions);
 		this.expr = expr;
-		expr.accept(this);
 	}
 	
 	public Object getValue() {
+		expr.accept(this);
 		return value;
 	}
 		
@@ -80,31 +82,12 @@ public class AnnotationValueGatherer extends DefaultBinder{
 			str = "-" + str;
 		}
 		
-		if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
-			try {
-				value = new Long(str);
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.BIGINT_LITERAL_OUT_OF_RANGE, new String[] { str });
-				value = null;
-			}
+		try {
+			value = new Integer(str);
+		} catch (NumberFormatException e) {
+			problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
+			value = null;
 		}
-		else if (integerLiteral.getLiteralKind() == LiteralExpression.SMALLINT_LITERAL) {
-			try {
-				value = new Short(str);
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.SMALLINT_LITERAL_OUT_OF_RANGE, new String[] { str });
-				value = null;
-			}
-		}
-		else {
-			try {
-				value = new Integer(str);
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
-				value = null;
-			}
-		}
-		
 		return false;
 	}
 
@@ -122,7 +105,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 		if (isNegative) {
 			str = "-" + str;
 		}
-		value = new Float(str);
+		value = new BigDecimal(str);
 		return false;
 	}
 
@@ -251,7 +234,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 	}
 
 	public boolean visit(BooleanLiteral booleanLiteral) {
-		value = booleanLiteral.booleanValue();
+		value = new Boolean(booleanLiteral.booleanValue() == org.eclipse.edt.compiler.core.Boolean.YES);
 		return false;
 	}
 	
@@ -297,7 +280,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 	public boolean visit(ArrayLiteral arrayLiteral) {
 		EList<Object> entries = new EList<Object>();
 		for (Expression expr : arrayLiteral.getExpressions()) {
-			AnnotationValueGatherer gatherer = new AnnotationValueGatherer(expr, currentScope, currentBinding, dependencyRequestor, problemRequestor, compilerOptions);
+			AnnotationValueGatherer gatherer = getGatherer(expr);
 			if (gatherer.getValue() != null) {
 				entries.add(gatherer.getValue());
 			}
@@ -305,6 +288,10 @@ public class AnnotationValueGatherer extends DefaultBinder{
 
 		value = entries;
 		return false;
+	}
+	
+	AnnotationValueGatherer getGatherer(Expression expr) {
+		return new AnnotationValueGatherer(expr, currentScope, currentBinding, dependencyRequestor, problemRequestor, compilerOptions);
 	}
 
 	public boolean visit(UnaryExpression unaryExpression) {

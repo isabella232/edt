@@ -1,0 +1,175 @@
+
+program pgm1 {}
+	httpProxy HttpProxy;
+	httpRest HttpRest;
+	function main()
+	end
+	
+	function f5(p1 decimal)
+			i1 int;
+			call field1(i1) using httpProxy;//wrong target type
+	end
+
+	function f5a(p1 decimal)
+			i1 int;
+			call field1(i1) using httpRest;//wrong target type
+	end
+
+	function f7(p1 decimal)
+			i1 int;
+			call fp8(i1) using httpRest;//missing returning to or returns
+	end
+
+	function f7a(p1 decimal)
+			i1 int;
+			call fp8(i1) using httpProxy;//missing returning to or returns
+	end
+
+	function f9(p1 decimal)
+			i1 int;
+			call fp8(i1) using httpProxy returning to response1;//wrong returning to type
+	end
+	
+	function f9a(p1 decimal)
+			i1 int;
+			s1 string;
+			r1 rec1;
+			call fp13(s1, r1, i1) using httpProxy returning to response6;//wrong returning to type
+	end
+
+	function f11(p1 decimal)
+			i1 int;
+			call fp7(i1) using httpProxy onexception response1;// wrong type in onexception handler
+	end
+
+	function f12(p1 decimal)
+			i1 int;
+			call fp8(i1) using httpProxy returning to response2;//returning to function has out types
+	end
+
+	function f12a(p1 decimal)
+			i1 int;
+			call fp8(i1) using httpProxy returning to response3;//returning to function has inout types
+	end
+
+	function f14(p1 decimal)
+			i1 int;
+			call fp8(i1) using httpProxy returning to field1;//returning to is a field not function
+	end
+
+	function f15(p1 decimal)
+			i1 int;
+			call fp8(i1) using httpProxy returning to response4;// wrong type in onexception handler
+	end
+
+	function f16(p1 decimal)
+			i1 int;
+			call lib1.fp1(i1) using httpProxy returning to lib1.response1;//callback handler in the wrong part
+	end
+
+	function f17(p1 decimal)
+			i1 int;
+			call fp7(i1) using httpProxy returning to response5;
+	end
+	
+	function f18(p1 decimal)
+			i1 int;
+			s1 string;
+			r1 rec1;
+			call fp13(s1, i1, i1) using httpProxy returning to response7;//wrong parameter in the call
+	end
+
+	function f19(p1 decimal)
+			i1 string;
+			call fp13(i1) using httpProxy returning to response7;//wrong number of parameters in the call
+	end
+
+	function f20(p1 decimal)
+			i1 int;
+			call HANDLER1.fp1(i1) using httpProxy returning to response5;//proxy function accessed as a static in the wrong part
+	end
+
+	function f21(p1 decimal)
+			i1 boolean;
+			call fp7(i1) using httpProxy onexception response8;//bad onexception function
+	end
+
+
+	function response1 (p1 boolean in)
+	end
+
+	function response2 (p1 rec1 out)
+	end
+
+	function response3 (p1 rec1 inout)
+	end
+
+	function response4 (p1 rec1 in)returns(int)
+	end
+
+	function response5 (http Rec1 in)
+	end
+
+	function response6 (p2 rec1 in, p3 boolean in)
+	end
+
+	function response7 (p2 rec1 in, p3 int in)
+	end
+
+	function response8 ()
+	end
+
+	function fp7 (p1 String in)
+		{@REST{method=POST}} 
+	end
+
+	function fp8 (p1 String in)returns(rec1)
+		{@REST{method=POST}} 
+	end
+
+	function fp9 (p1 String in)
+		{@REST{method=POST}} 
+	end
+
+	function fp10 (p1 int) 
+	end
+
+	function fp12 (p1 String)returns(rec1)
+		{@EglService} 
+	end
+
+	function fp13 (p1 String in, p2 rec1 out, p3 int inout)
+		{@EglService} 
+	end
+
+	field1 int;
+	
+end
+
+handler handler1
+	function fp1 (p1 String in)returns(rec1)
+		{@EglService} 
+	end
+end
+
+library lib1
+	function response1 (p1 String in, p2 rec1 in)
+	end
+	function fp1 (p1 String inout)returns(rec1)
+		{@EglService} 
+	end
+end
+
+service service1 {}
+	function f1(p1 decimal)
+			i1 int;
+//			call this.fp9(i1) using new HttpRest;
+	end
+	function fp9 (p1 string in)
+		{@REST{method=POST}} 
+	end
+end
+
+record rec1 
+	f1 string;
+end

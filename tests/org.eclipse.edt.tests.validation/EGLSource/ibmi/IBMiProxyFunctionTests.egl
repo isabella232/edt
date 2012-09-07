@@ -125,5 +125,12 @@ program pgm1 {}
 	function f10 (p1 rec1) 
 		{@IBMiProgram{}}  //4
 	end
+	
+	function f11(p1 string, p2 string(10))
+			{@IBMiProgram{
+				parameterAnnotations = [@StructText{Length = 20}]  //must exactly match the number of parameters
+			}}
+	end
+
 end
 

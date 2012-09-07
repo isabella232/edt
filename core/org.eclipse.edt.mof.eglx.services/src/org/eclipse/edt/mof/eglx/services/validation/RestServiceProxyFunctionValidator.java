@@ -11,34 +11,31 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.services.validation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
-import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 
 /**
  * @author demurray
  */
-public class RestServiceProxyFunctionValidator extends
-		ServiceProxyFunctionValidator {
+public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValidator {
 
 	private static class SubstitutionVar {
 		int startOffset;
@@ -66,22 +63,20 @@ public class RestServiceProxyFunctionValidator extends
 		}
 	}
 
-	private NestedFunction nestedFunction;
-	private Node uriTemplateNode;
-	private Node responseFormatNode;
-	private Node requestFormatNode;
-
-	protected void validate(NestedFunction nestedFunction, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	@Override
+	protected Annotation getAnnotation(Function function) {
+		return function.getAnnotation("eglx.rest.Rest");
+	}
+	@Override
+	protected void validate(NestedFunction nestedFunction) {
 
 		Function function = (Function) nestedFunction.getName().resolveMember();
-		Annotation restAnnotation = function.getAnnotation("eglx.rest.Rest");
-		this.nestedFunction = nestedFunction;
+		Annotation restAnnotation = getAnnotation(function);
 
-		final List<FunctionParameter> parms = new ArrayList<FunctionParameter>();
 		if (function.getReturnType() != null) {
 			// If the function returns a type, it must be a resource
 			if (!isResourceType(function.getReturnType(), restAnnotation)) {
-				problemRequestor.acceptProblem(function.getReturnType(),
+				problemRequestor.acceptProblem(nestedFunction.getReturnType(),
 						ResourceKeys.XXXREST_MUST_RETURN_RESOURCE,
 						IMarker.SEVERITY_ERROR,
 						new String[] { function.getName(), getName() },
@@ -90,12 +85,10 @@ public class RestServiceProxyFunctionValidator extends
 			// If the return type is String, the responseFormat must be NONE if
 			// is is specified
 			if (function.getReturnType().equals(TypeUtils.Type_STRING)) {
-				String respForm = (String) restAnnotation
-						.getValue(IEGLConstants.PROPERTY_RESPONSEFORMAT);
-				if (respForm != null && respForm.length() > 0) {
-					problemRequestor
-							.acceptProblem(
-									getResponseFormatNode(),
+				EnumerationEntry respForm = (EnumerationEntry) restAnnotation.getValue(IEGLConstants.PROPERTY_RESPONSEFORMAT);
+				if (respForm != null) {
+					problemRequestor.acceptProblem(
+									nestedFunction.getReturnType(),
 									ResourceKeys.XXXREST_FORMAT_MUST_BE_NONE,
 									IMarker.SEVERITY_ERROR,
 									new String[] { IEGLConstants.PROPERTY_RESPONSEFORMAT },
@@ -106,15 +99,14 @@ public class RestServiceProxyFunctionValidator extends
 
 		HashMap<String, FunctionParameter> parmNamesToNodes = new HashMap<String, FunctionParameter>();
 		// All parameters must be IN
-		for (FunctionParameter parm : parms) {
-			parmNamesToNodes.put(parm.getName().getCanonicalName()
-					.toLowerCase(), parm);
+		for (Object parm : nestedFunction.getFunctionParameters()) {
+			parmNamesToNodes.put(((FunctionParameter)parm).getName().getCanonicalName().toLowerCase(),(FunctionParameter)parm);
 
-			if (parm.getUseType() != UseType.IN) {
-				problemRequestor.acceptProblem(parm,
+			if (((FunctionParameter)parm).getUseType() != UseType.IN) {
+				problemRequestor.acceptProblem((FunctionParameter)parm,
 						ResourceKeys.XXXREST_ALL_PARMS_MUST_BE_IN,
 						IMarker.SEVERITY_ERROR,
-						new String[] { parm.getName().getCanonicalName(),
+						new String[] { ((FunctionParameter)parm).getName().getCanonicalName(),
 								function.getName(), getName() },
 						ResourceKeys.getResourceBundleForKeys());
 			}
@@ -142,53 +134,42 @@ public class RestServiceProxyFunctionValidator extends
 						if (parm.getType().resolveType() != null) {
 							if (!isResourceType(parm.getType().resolveType(),
 									restAnnotation)) {
-								problemRequestor
-										.acceptProblem(
-												parm.getType(),
+								problemRequestor.acceptProblem(
+												parm,
 												ResourceKeys.XXXREST_RESOURCE_PARM_MUST_BE_RESOURCE,
 												IMarker.SEVERITY_ERROR,
 												new String[] {
-														parm.getName()
-																.getCanonicalName(),
+														parm.getName().getCanonicalName(),
 														function.getName(),
 														getName() },
-												ResourceKeys
-														.getResourceBundleForKeys());
+												ResourceKeys.getResourceBundleForKeys());
 							} else {
 								// if the resource parameter is String, the
 								// request Format has to be NONE if specified
-								if (parm.getType().resolveType()
-										.equals(TypeUtils.Type_STRING)) {
-									String reqForm = (String) restAnnotation
-											.getValue(IEGLConstants.PROPERTY_REQUESTFORMAT);
+								if (parm.getType().resolveType().equals(TypeUtils.Type_STRING)) {
+									EnumerationEntry reqForm = (EnumerationEntry) restAnnotation.getValue(IEGLConstants.PROPERTY_REQUESTFORMAT);
 									if (reqForm != null
-											&& "none".equals(reqForm)) {
-										problemRequestor
-												.acceptProblem(
-														getRequestFormatNode(),
+											&& !"none".equals(reqForm.getName())) {
+										problemRequestor.acceptProblem(
+														Utils.getRequestFormat(nestedFunction),
 														ResourceKeys.XXXREST_FORMAT_MUST_BE_NONE,
 														IMarker.SEVERITY_ERROR,
 														new String[] { IEGLConstants.PROPERTY_REQUESTFORMAT },
-														ResourceKeys
-																.getResourceBundleForKeys());
+														ResourceKeys.getResourceBundleForKeys());
 									}
 								}
 								// If the requestFormat is formData, then the
 								// resource parameter must be a flat record
-								if ("formdata"
-										.equals((String) restAnnotation
-												.getValue(IEGLConstants.PROPERTY_REQUESTFORMAT))) {
-									org.eclipse.edt.mof.egl.Type type = parm
-											.getType().resolveType();
+								EnumerationEntry reqForm = (EnumerationEntry) restAnnotation.getValue(IEGLConstants.PROPERTY_REQUESTFORMAT);
+								if (reqForm != null && "_form".equals(reqForm.getName())) {
+									org.eclipse.edt.mof.egl.Type type = parm.getType().resolveType();
 									if (!isFlatRecord(type)) {
-										problemRequestor
-												.acceptProblem(
-														parm.getType(),
+										problemRequestor.acceptProblem(
+														parm,
 														ResourceKeys.XXXREST_PARM_TYPE_MUST_BE_FLAT_RECORD,
 														IMarker.SEVERITY_ERROR,
 														new String[] {
-																parm.getName()
-																		.getCanonicalName(),
+																parm.getName().getCanonicalName(),
 																function.getName() },
 														ResourceKeys
 																.getResourceBundleForKeys());
@@ -198,7 +179,7 @@ public class RestServiceProxyFunctionValidator extends
 						}
 					}
 				} else {
-					problemRequestor.acceptProblem(parm,
+					problemRequestor.acceptProblem(nestedFunction,
 							ResourceKeys.XXXREST_NO_RESOURCE_PARM,
 							IMarker.SEVERITY_ERROR,
 							new String[] { function.getName(), getName(),
@@ -210,14 +191,12 @@ public class RestServiceProxyFunctionValidator extends
 				if (parm.getType().resolveType() != null) {
 					Member member =  parm.getName().resolveMember();
 					if (member != null && !IRUtils.isMoveCompatible(TypeUtils.Type_STRING, member.getType(), member)) {
-						problemRequestor
-								.acceptProblem(
-										parm.getType(),
+						problemRequestor.acceptProblem(
+										parm,
 										ResourceKeys.XXXREST_NON_RESOUCE_MUST_BE_STRING_COMPAT,
 										IMarker.SEVERITY_ERROR,
 										new String[] {
-												parm.getName()
-														.getCanonicalName(),
+												parm.getName().getCanonicalName(),
 												function.getName(), getName() },
 										ResourceKeys.getResourceBundleForKeys());
 					}
@@ -228,9 +207,8 @@ public class RestServiceProxyFunctionValidator extends
 		// loop through the substitution variables
 		for (String key : namesToSubstitutionVars.keySet()) {
 			SubstitutionVar var = namesToSubstitutionVars.get(key);
-			int absStart = getUriTemplateNode().getOffset() + 1;
-			FunctionParameter parm = (FunctionParameter) parmNamesToNodes
-					.get(key);
+			int absStart = Utils.getUriTemplateNode(nestedFunction).getOffset() + 1;
+			FunctionParameter parm = (FunctionParameter) parmNamesToNodes.get(key);
 			if (parm == null) {
 				// substitution variable must match a parameter name
 				problemRequestor.acceptProblem(absStart + var.getStartOffset(),
@@ -243,37 +221,18 @@ public class RestServiceProxyFunctionValidator extends
 
 			}
 		}
-
-		// validate that responseFormat is not formData
-		if ("formData".equals((String) restAnnotation
-				.getValue(IEGLConstants.PROPERTY_RESPONSEFORMAT))) {
-			problemRequestor
-					.acceptProblem(
-							restAnnotation,
-							ResourceKeys.XXXREST_RESPONSEFORMAT_NOT_SUPPORTD,
-							IMarker.SEVERITY_ERROR,
-							new String[] {
-									(String) restAnnotation
-											.getValue(IEGLConstants.PROPERTY_RESPONSEFORMAT),
-									IEGLConstants.PROPERTY_RESPONSEFORMAT },
-							ResourceKeys.getResourceBundleForKeys());
-		}
-
 	}
 
-	private boolean isResourceType(org.eclipse.edt.mof.egl.Type type,
-			Annotation restAnnotation) {
+	private boolean isResourceType(org.eclipse.edt.mof.egl.Type type, Annotation restAnnotation) {
 		if (type == null) {
 			return false;
 		}
 
 		// If responseFormat is JSON, allow single dimension array of strings or
 		// flexible records
-		if ("json"
-				.equals(((String) restAnnotation
-						.getValue(IEGLConstants.PROPERTY_RESPONSEFORMAT))
-						.toLowerCase())
-				&& type instanceof ArrayType) {
+		EnumerationEntry responseFormat = (EnumerationEntry) restAnnotation.getValue(IEGLConstants.PROPERTY_RESPONSEFORMAT);
+		if (responseFormat != null && "json".equals(responseFormat.getName()) && 
+				type instanceof ArrayType) {
 			type = ((ArrayType) type).getElementType();
 		}
 
@@ -284,71 +243,40 @@ public class RestServiceProxyFunctionValidator extends
 		return type instanceof Record;
 	}
 
-	private boolean isFlatRecord(org.eclipse.edt.mof.egl.Type type) {
+	private boolean isFlatRecord(Type type) {
 		if (type == null) {
 			return false;
 		}
 
-		if (!(type instanceof Record)) {
-			return false;
-		}
-
-		for (Member member : ((Record) type).getMembers()) {
-			if (member.getType() instanceof Record) {
-				return false;
-			}
-		}
-		return true;
-
-	}
-
-	private Node getRequestFormatNode() {
-		if (requestFormatNode == null) {
-			requestFormatNode = getAnnotationValueNode(IEGLConstants.PROPERTY_REQUESTFORMAT);
-		}
-		return requestFormatNode;
-
-	}
-
-	private Node getResponseFormatNode() {
-		if (responseFormatNode == null) {
-			responseFormatNode = getAnnotationValueNode(IEGLConstants.PROPERTY_RESPONSEFORMAT);
-		}
-		return responseFormatNode;
-	}
-
-	private Node getUriTemplateNode() {
-		if (uriTemplateNode == null) {
-			uriTemplateNode = getAnnotationValueNode(IEGLConstants.PROPERTY_URITEMPLATE);
-		}
-		return uriTemplateNode;
-	}
-
-	private Node getAnnotationValueNode(String annName) {
-		final Node[] result = new Node[1];
-		final String name = InternUtil.intern(annName);
-		nestedFunction.getParent().accept(new AbstractASTVisitor() {
-			public boolean visit(
-					org.eclipse.edt.compiler.core.ast.Assignment assignment) {
-				if (assignment.resolveBinding() != null
-						&& assignment.resolveBinding().getEClass()
-								.getETypeSignature().equals(name)) {
-					result[0] = assignment.getRightHandSide();
+		if (isSupportedContainer(type)) {
+			for (Member member : ((Container) type).getMembers()) {
+				if (member.getType() instanceof Record) {
+					return false;
 				}
-				return false;
 			}
-		});
-
-		return result[0];
-
+			return true;
+		}
+		if (type instanceof Handler) {
+			for (Member member : ((Handler)type).getMembers()) {
+				if (isSupportedContainer(member.getType())) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
-	private HashMap<String, SubstitutionVar> parseSubtitutionVars(
-			Annotation restAnnotation) {
+	private boolean isSupportedContainer(Type type){
+		return type instanceof Record ||
+				type instanceof Handler;
+	}
+
+
+	private HashMap<String, SubstitutionVar> parseSubtitutionVars( Annotation restAnnotation) {
 		HashMap<String, SubstitutionVar> namesToSubstitutionVars = new HashMap<String, SubstitutionVar>();
-		String uriTemp = (String) restAnnotation
-				.getValue(IEGLConstants.PROPERTY_URITEMPLATE);
-		char[] chars = uriTemp.toCharArray();
+		String uriTemp = (String) restAnnotation.getValue(IEGLConstants.PROPERTY_URITEMPLATE);
+		char[] chars = uriTemp != null ? uriTemp.toCharArray() : new char[0];
 
 		int lOffset = 0;
 
@@ -361,10 +289,8 @@ public class RestServiceProxyFunctionValidator extends
 				}
 			} else {
 				if (chars[i] == '}') {
-					SubstitutionVar var = new SubstitutionVar(lOffset + 1, i,
-							uriTemp);
-					namesToSubstitutionVars.put(var.getVarName().toUpperCase()
-							.toLowerCase(), var);
+					SubstitutionVar var = new SubstitutionVar(lOffset + 1, i, uriTemp);
+					namesToSubstitutionVars.put(var.getVarName().toUpperCase().toLowerCase(), var);
 					lookingForL = true;
 				}
 			}
@@ -373,11 +299,11 @@ public class RestServiceProxyFunctionValidator extends
 	}
 
 	private boolean supportsResourceParm(Annotation restAnnotation) {
-		String method = (String) restAnnotation.getValue("method");
-		return !(method != null && "_get"
-				.equalsIgnoreCase(method.toLowerCase()));
+		EnumerationEntry method = (EnumerationEntry) restAnnotation.getValue("method");
+		return !(method != null && "_get".equalsIgnoreCase(method.getName()));
 	}
 
+	@Override
 	protected String getName() {
 		return "REST";
 	}

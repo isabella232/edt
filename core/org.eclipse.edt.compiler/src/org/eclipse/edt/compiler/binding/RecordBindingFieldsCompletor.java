@@ -11,16 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IASTVisitor;
-import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
@@ -49,8 +45,6 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
     
     private Set<String> definedNames = new HashSet<String>();
     
-    private Map<String, Name> fieldNamesToNodes = new HashMap<String, Name>();
-
     public RecordBindingFieldsCompletor(Scope currentScope, org.eclipse.edt.mof.egl.Record recordBinding,
     		String canonicalRecordName, IDependencyRequestor dependencyRequestor,
 			IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
@@ -162,13 +156,8 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
         if (!structureItem.isFiller()) {
             structureItem.getName().setMember(field);
             structureItem.getName().setType(type);
-            fieldNamesToNodes.put(fieldName, structureItem.getName());
         }
         return field;
     }
     
-    
-    public Node getNode(String fieldName) {
-    	return (Node) fieldNamesToNodes.get(fieldName);
-    }
-}
+  }

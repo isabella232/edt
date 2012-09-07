@@ -16,11 +16,7 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
-import org.eclipse.edt.compiler.core.ast.NewExpression;
-import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
@@ -31,43 +27,20 @@ import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.mof.EClassifier;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
-import org.eclipse.edt.mof.EGenericType;
-import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.ConstantField;
-import org.eclipse.edt.mof.egl.Constructor;
-import org.eclipse.edt.mof.egl.Delegate;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
-import org.eclipse.edt.mof.egl.Enumeration;
-import org.eclipse.edt.mof.egl.EnumerationEntry;
-import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Interface;
-import org.eclipse.edt.mof.egl.IrFactory;
-import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Program;
-import org.eclipse.edt.mof.egl.Record;
-import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.SubType;
-import org.eclipse.edt.mof.serialization.DeserializationException;
-import org.eclipse.edt.mof.serialization.Environment;
-import org.eclipse.edt.mof.serialization.TypeNotFoundException;
-import org.eclipse.edt.mof.utils.EList;
-
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
-	private static EType elistType;
 	private AnnotationLeftHandScope annotationLeftHandScope;
 	private Binder lhsBinder;
 	private Binder rhsBinder;
@@ -134,13 +107,21 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 	public boolean visit(SettingsBlock settingsBlock) {
 		settingsBlock.accept(new AbstractASTExpressionVisitor() {
 
+			private EField getEField(AnnotationType annType, String name) {
+				for (EField f : annType.getEFields()) {
+					if (f.getName().equalsIgnoreCase(name))
+						return f;
+				}
+				return null;
+			}
+			
 			public boolean visit(Assignment assignment) {
 				
 				if (annotationLeftHandScope.getElementBeingAnnotated() instanceof Annotation && assignment.getLeftHandSide() instanceof SimpleName) {
 					Annotation ann = (Annotation) annotationLeftHandScope.getElementBeingAnnotated();
 					AnnotationType annType = (AnnotationType)ann.getEClass();
 					String fieldName = ((SimpleName)assignment.getLeftHandSide()).getIdentifier();
-					EField field = annType.getEField(fieldName);
+					EField field = getEField(annType, fieldName);
 					if (field != null) {
 						Object obj = getValue(assignment.getRightHandSide(), ann, field);
 						setValueIntoAnnotation(obj, assignment.getRightHandSide(), ann, field);
@@ -209,115 +190,18 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 	}
 	
 	private Object getValue(Expression expr, Annotation ann, EField field) {
-		AnnotationRightHandScope rhScope = new AnnotationRightHandScope(currentScope, ann, field);
+		AnnotationRightHandScope rhScope = new AnnotationRightHandScope(currentScope, field);
 		return new AnnotationValueGatherer(expr, rhScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions).getValue();
 	}
-	
-	private Object validateValue(Object value, Expression expr, Annotation ann, EField field) {		
-	
-		//check for invalid expression type
-		if (!isValidExpressionForAnnotationValue(expr)) {
-    		problemRequestor.acceptProblem(
-        			expr,
-        			IProblemRequestor.EXPRESSION_NOT_VALID_FOR_PROPERTY,
-        			new String[] {
-        				field.getName()
-        			});   
-    		return null;
-		}
-		
-		//replace constant values
-		if (value instanceof ConstantField) {
-			value = ((ConstantField)value).getValue().getObjectValue();
-		}
-
-
-		boolean valueIsList = value instanceof EList;
-		boolean typeIsList = isGenericElistType(field.getEType());
-
-		//if value is a list and the type is not, error
-		if (value instanceof EList) {
-			if (!(field.getEType() instanceof EGenericType)) {
-				//array is invalid value for annotation field
-			}
-		}
-		
-		//if the type is a list and the value is not, error
-		if ((field.getEType() instanceof EGenericType)) {
-			
-		}
-		
-		//if the value is nullLiteral, the field must be nullable
-		
-		//if both value and type is a list, recursively check the elements of the array
-		
-		//not dealing with arrays, check the EData types: javaobject, estring, eboolean, eint32, efloat, edecimal, elist
-		
-		//check the resolveable types like typeref and fieldref
-		
-		//finally check if the type of the value is compatible with the etype of the field....if the object is a ETypedElement, just get
-		// the type, otherwise, if it is an EObject, get the eclass
-		
-		return value;
-
-	}
-	
-	private static EType getElistType() {
-		if (elistType == null) {
-			try {
-				elistType = (EType)Environment.getCurrentEnv().findType(MofConversion.Type_EList);
-			} catch (Exception e) {
-			} 
-		}
-		return elistType;
-	}
-	
-	private boolean isGenericElistType (EType type) {
-		if (type instanceof EGenericType) {
-			try {
-				EType elistType = getElistType();
-				EClassifier eclassifier = ((EGenericType) type).getEClassifier();
-				return elistType.equals(eclassifier);
-			} catch (Exception e) {
-			} 
-		}
-		return false;
-	}
-	
+				
 	private void setValueIntoAnnotation(Object value, Expression expr, Annotation ann, EField field) {
-		
-		Object result = validateValue(value, expr, ann, field);
+		AnnotationValueValidator validator =  new AnnotationValueValidator(problemRequestor);
+		Object result = validator.validateValue(value, expr, field, field.getEType(), field.isNullable());
 		if (result != null) {
-			ann.eSet(field, value);			
+			ann.eSet(field, result);			
 		}
 	}
 		
-    private boolean isValidExpressionForAnnotationValue(Expression expr) {
-    	
-    	final boolean[] valid = new boolean[] {true};
-    	DefaultASTVisitor visitor = new DefaultASTVisitor() {
-   		
-    		public boolean visit(NewExpression newExpression) {
-    			valid[0] = false;
-    			return false;
-    		};
-    		
-    		public boolean visit(FunctionInvocation functionInvocation) {
-    			valid[0] = false;
-    			return false;
-    		};
-    		
-    		public boolean visit(ParenthesizedExpression parenthesizedExpression) {
-    			return true;
-    		};
-    		
-    	};
-    	
-    	expr.accept(visitor);
-		return valid[0];
-    	
-    }	
-	 	
 	private void setAnnotationOnElement(Element elem, Annotation ann, AnnotationExpression annotationExpression) {
 		if (ann == null) {
 			return;
@@ -340,58 +224,37 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 	
 	
 	private boolean isApplicableFor(Element targetBinding, List<ElementKind> targets) {
-		for(ElementKind nextTarget : targets) {
-			boolean result = false;
-			switch(nextTarget) {
-				case DelegatePart:
-					result = targetBinding instanceof Delegate;
-					break;
-				case ExternalTypePart:
-					result = targetBinding instanceof ExternalType;
-					break;
-				case HandlerPart:
-					result = targetBinding instanceof Handler;
-					break;
-				case ClassPart:
-					result = targetBinding instanceof EGLClass;
-					break;
-				case InterfacePart:
-					result = targetBinding instanceof Interface;
-					break;
-				case Part:
-					result = targetBinding instanceof Part;
-					break;
-				case ProgramPart:
-					result = targetBinding instanceof Program;
-					break;
-				case RecordPart:
-					result = targetBinding instanceof Record;
-					break;
-				case LibraryPart:
-					result = targetBinding instanceof Library;
-					break;
-				case ServicePart:
-					result = targetBinding instanceof Service;
-					break;
-				case FieldMbr:
-					result = targetBinding instanceof Field;
-					break;
-				case FunctionMbr:
-					result = targetBinding instanceof Function;
-					break;
-				case ConstructorMbr:
-					result = targetBinding instanceof Constructor;
-					break;
-				case EnumerationPart:
-					result = targetBinding instanceof Enumeration;
-					break;
-				case EnumerationEntry:
-					result = targetBinding instanceof EnumerationEntry;
-					break;
+		
+		ElementKind targetType = BindingUtil.getElementKind(targetBinding);
+		if (targetType == null) {
+			return false;
+		}
+		
+		String targetTypeName = NameUtile.getAsName(targetType.name());
+
+		for(Object nextTarget : targets) {
+
+			String nextTargetName = null;
+
+			if (nextTarget instanceof ElementKind) {
+				if (targetType == nextTarget) {
+					return true;
+				}
+				else {
+					nextTargetName = NameUtile.getAsName(((ElementKind)nextTarget).name());
+				}
 			}
-			if(result){
-				return result;
+			else {			
+				if (nextTarget instanceof EEnumLiteral) {
+					nextTargetName = NameUtile.getAsName(((EEnumLiteral)nextTarget).getName());
+					if (NameUtile.equals(nextTargetName, targetTypeName));
+				}
 			}
+			
+			if (targetBinding instanceof Part && NameUtile.equals(nextTargetName, NameUtile.getAsName("part"))) {
+				return true;
+			}
+
 		}
 		return false;
 	}

@@ -71,10 +71,6 @@ public class RecordBindingCompletor extends DefaultBinder {
 
 	public void endVisit(Record record) {
     	irBinding.setValid(true);
-    	
-        currentScope = new RecordScope(currentScope, recordBinding);
-
-        currentScope = currentScope.getParentScope();
         super.endVisit(record);
     }
 	

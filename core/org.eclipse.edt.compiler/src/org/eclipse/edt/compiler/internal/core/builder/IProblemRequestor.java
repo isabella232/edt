@@ -365,6 +365,16 @@ public interface IProblemRequestor {
 	public static final int TYPE_ARG_NOT_VALID = 3282;
 	public static final int TYPE_ARGS_INVALID_SIZE = 3283;
 	
+	public static final int ANNOTATION_CANNOT_BE_ARRAY = 3290;
+	public static final int ANNOTATION_MUST_BE_ARRAY = 3291;
+	public static final int ANNOTATION_CANNOT_BE_NULL= 3292;
+	public static final int ANNOTATION_MUST_BE_STRING = 3293;
+	public static final int ANNOTATION_MUST_BE_BOOL = 3294;
+	public static final int ANNOTATION_MUST_BE_INT = 3295;
+	public static final int ANNOTATION_MUST_BE_FLOAT = 3296;
+	public static final int ANNOTATION_MUST_BE_DECIMAL = 3297;
+	public static final int ANNOTATION_VALUE_NOT_COMPAT = 3298;
+
 	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
 	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	
 	public static final int RUI_ONCONSTRUCTOR_FUNCTION_INVALID = 3322;	
@@ -498,6 +508,13 @@ public interface IProblemRequestor {
 	public static final int PART_CANNOT_EXTEND_ITSELF = 3475;
 	
 	public static final int THROWS_NOT_VALID_HERE= 3480;
+
+	public static final int STEREOTYPE_NO_FILLERS = 3510;
+	public static final int STEREOTYPE_NO_EMBED = 3511;
+	public static final int STEREOTYPE_TYPE_REQUIRED = 3512;
+	public static final int STEREOTYPE_NO_BLOCK = 3513;
+	public static final int STEREOTYPE_NO_PARMS = 3514;
+	public static final int STEREOTYPE_BAD_TYPE = 3515;
 
 
 //3896-3999 ARE IN EGLMESSAGES 					
@@ -688,6 +705,7 @@ public interface IProblemRequestor {
 //	public static final int ADD_STATEMENT_RECORD_IS_INVALID_TYPE = 4270;
 //	public static final int CLOSE_STATEMENT_RECORD_IS_INVALID_TYPE = 4271;
 	public static final int DELETE_STATEMENT_RECORD_IS_INVALID_TYPE = 4272;
+	public static final int ARGUMENT_COUNT_NOT_EQUAL_PARAMETER_COUNT = 4291;
 //	public static final int INQUIRY_STATEMENT_RECORD_IS_INVALID_TYPE = 4273;
 //	public static final int REPLACE_STATEMENT_RECORD_IS_INVALID_TYPE = 4274;
 //	public static final int SCANBACK_STATEMENT_RECORD_IS_INVALID_TYPE = 4275;

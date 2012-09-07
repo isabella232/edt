@@ -70,6 +70,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class StatementValidator {
@@ -296,5 +297,13 @@ public class StatementValidator {
 		}
 		
 		return result[0];
+	}
+	public static String getTypeName(Member member){
+		if(member.isNullable()){
+			return getShortTypeString(member.getType(), true) + "?";
+		}
+		else{
+			return getShortTypeString(member.getType(), true);
+		}
 	}
 }
