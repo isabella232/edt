@@ -203,7 +203,7 @@ public class FileSystemObjectStore extends AbstractObjectStore implements Object
 	@Override
 	public String toString() {
 		// For easier debugging.
-		return "FileSystemObjectStore root=" + root;
+		return "FileSystemObjectStore root=" + root + " scheme=" + getScheme();
 	}
 }
 
