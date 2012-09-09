@@ -84,20 +84,24 @@ Rich UI proxy</dfn> is runtime software that is installed with your
 Rich UI code, which runs on an application server that is compliant
 with Java EE. The proxy handles
 the communication between the application and any services that are
-accessed by the application:<ul class="ul">
-<li class="li">When a SOAP service is requested, the proxy receives the request
-from the application, reads a WSDL file on the server, formats a SOAP
-message for transmission to the service, and sends a service request.
-When the service sends a response, the proxy reformats that response
-for use in the callback function and sends the response to the application.</li>
+accessed by the application:</div>
+<ul class="ul">
+<li class="li">The browser assembles an HTTP request for transmission to the
+service. The browser embeds that request in the body of an HTTP request
+that is sent to the Rich UI proxy.</li>
 
-<li class="li">When another kind of service is requested, the process is similar
-but simpler. No WSDL file is involved.</li>
+<li class="li">The Rich UI proxy sends the embedded message to the service.</li>
+
+<li class="li">The Rich UI proxy receives the HTTP response from the service.
+The proxy embeds that response in the body of an HTTP response that
+is sent to the browser. </li>
 
 </ul>
-</div>
-<p class="p">The Rich UI application uses the EGL Rich UI proxy to
-access every invoked service, even services that are on the same server. </p>
+<p class="p">The format of the body of the enclosing HTTP message is JavaScript™ Object
+Notation (JSON).</p>
+<p class="p">The Rich UI application uses the EGL Rich UI
+proxy to access every invoked service, even services that are on the
+same server. </p>
 </div>
 
 <div class="section"><h2 class="title sectiontitle">Services that can be accessed from Rich UI</h2><div class="p">Your
