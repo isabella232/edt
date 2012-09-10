@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
+import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 
 
 /**
@@ -107,4 +108,9 @@ public class BindingCreator extends DefaultASTVisitor {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.INTERFACE_BINDING);
 		return false;
 	}
+	
+	public boolean visit(TopLevelFunction topLevelFunction) {
+		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FUNCTION_BINDING);
+		return false;
+	};
 }
