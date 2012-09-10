@@ -179,6 +179,7 @@ public class ForEachStatement extends Statement {
 			}
 			else {
 				declarationName.accept(visitor);
+				declarationType.accept(visitor);
 			}
 			resultSet.accept(visitor);
 			acceptChildren(visitor, stmts);
