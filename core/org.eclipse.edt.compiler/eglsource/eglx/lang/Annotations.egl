@@ -23,8 +23,8 @@ Record EGLProperty type Annotation
 	targets = [ElementKind.FieldMbr],
 	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationProxy"
 } 
-	getMethod FunctionMemberRef;
-	setMethod FunctionMemberRef;
+	getMethod egl.lang.reflect.FunctionMbr;
+	setMethod egl.lang.reflect.FunctionMbr;
 end
 
 /**
@@ -58,10 +58,10 @@ end
 /**
  * The stereotype for all Exceptions.
  */
-Record Exception type Annotation
+Record Exception type Stereotype
 {
 	targets = [ElementKind.recordPart],
-	@Stereotype { defaultSuperType = AnyException }
+	defaultSuperType = AnyException
 }
 end
 

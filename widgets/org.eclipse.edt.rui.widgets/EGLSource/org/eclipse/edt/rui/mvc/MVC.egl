@@ -17,8 +17,8 @@ Record MVC type Annotation
 		ElementKind.FieldMbr
 	]
 } 
-	model FieldRef;
-	view FieldRef;
+	model egl.lang.reflect.FieldMbr;
+	view egl.lang.reflect.FieldMbr;
 end
 
 Delegate 
@@ -127,7 +127,7 @@ Record ValidationPropertiesLibrary type Annotation
 	,
 	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.ValidationPropertiesLibraryAnnotationTypeBinding"
 }
-	value TypeRef;
+	value egl.lang.reflect.TypeType;
 end
 
 Record IsBoolean type Annotation
@@ -245,7 +245,7 @@ Record ValidatorFunction type Annotation
 	],
 	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.ValidatorFunctionAnnotationTypeBinding"
 }
-	value InternalRef;
+	value egl.lang.reflect.FunctionMbr;
 end
 
 Record ValidatorFunctionMsgKey type Annotation

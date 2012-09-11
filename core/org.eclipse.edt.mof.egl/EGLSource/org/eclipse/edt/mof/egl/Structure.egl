@@ -47,8 +47,8 @@ end
 externalType StereotypeType extends AnnotationType type MofClass 
 	memberAnnotations AnnotationType[];
 	referenceType boolean;
-	partType TypeRef;
-	defaultSuperType TypeRef;
+	partType egl.lang.reflect.mof.EType;
+	defaultSuperType egl.lang.reflect.mof.EType;
 end
 
 externalType NamedElement extends Element type MofClass{isAbstract=yes}
@@ -180,7 +180,7 @@ externalType DataType extends Classifier, Container type MofClass
 end
 
 externalType ParameterizableType extends EGLClass type MofClass
-	parameterizedType TypeRef;
+	parameterizedType egl.lang.reflect.mof.EType;
 end
 
 externalType EGLField extends Member type MofClass {name="Field"}

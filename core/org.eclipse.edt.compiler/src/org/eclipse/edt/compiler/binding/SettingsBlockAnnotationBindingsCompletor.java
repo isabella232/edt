@@ -218,49 +218,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
 	private boolean isApplicableFor(Element elem, Annotation ann) {
 		AnnotationType annType = (AnnotationType)ann.getEClass();
-		return isApplicableFor(elem, annType.getTargets());
+		return BindingUtil.isApplicableFor(elem, annType.getTargets());
 	}
 	
-	
-	
-	private boolean isApplicableFor(Element targetBinding, List<ElementKind> targets) {
-		
-		ElementKind targetType = BindingUtil.getElementKind(targetBinding);
-		if (targetType == null) {
-			return false;
-		}
-		
-		String targetTypeName = NameUtile.getAsName(targetType.name());
-
-		for(Object nextTarget : targets) {
-
-			String nextTargetName = null;
-
-			if (nextTarget instanceof ElementKind) {
-				if (targetType == nextTarget) {
-					return true;
-				}
-				else {
-					nextTargetName = NameUtile.getAsName(((ElementKind)nextTarget).name());
-				}
-			}
-			else {			
-				if (nextTarget instanceof EEnumLiteral) {
-					nextTargetName = NameUtile.getAsName(((EEnumLiteral)nextTarget).getName());
-					if (NameUtile.equals(nextTargetName, targetTypeName));
-				}
-			}
-			
-			if (targetBinding instanceof Part && NameUtile.equals(nextTargetName, NameUtile.getAsName("part"))) {
-				return true;
-			}
-
-		}
-		return false;
-	}
-
-		
-	
-
-
 }

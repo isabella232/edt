@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.TernaryExpression;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -609,14 +610,45 @@ public class BindingUtil {
 	}
 	
 	public static boolean isApplicableFor(AnnotationType annType, Element elem) {
-		List<ElementKind> targs = annType.getTargets();
-		for (ElementKind kind : targs) {
-			if (kind == getElementKind(elem)) {
+		return isApplicableFor(elem, annType.getTargets());
+	}
+	
+	public static boolean isApplicableFor(Element targetBinding, List<ElementKind> targets) {
+		
+		ElementKind targetType = BindingUtil.getElementKind(targetBinding);
+		if (targetType == null) {
+			return false;
+		}
+		
+		String targetTypeName = NameUtile.getAsName(targetType.name());
+
+		for(Object nextTarget : targets) {
+
+			String nextTargetName = null;
+
+			if (nextTarget instanceof ElementKind) {
+				if (targetType == nextTarget) {
+					return true;
+				}
+				else {
+					nextTargetName = NameUtile.getAsName(((ElementKind)nextTarget).name());
+				}
+			}
+			else {			
+				if (nextTarget instanceof EEnumLiteral) {
+					nextTargetName = NameUtile.getAsName(((EEnumLiteral)nextTarget).getName());
+					if (NameUtile.equals(nextTargetName, targetTypeName));
+				}
+			}
+			
+			if (targetBinding instanceof Part && NameUtile.equals(nextTargetName, NameUtile.getAsName("part"))) {
 				return true;
 			}
+
 		}
 		return false;
 	}
+
 	
 	public static ElementKind getElementKind(Element elem) {
 		if (elem instanceof Record) {

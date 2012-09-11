@@ -14,6 +14,6 @@ package eglx.persistence;
 //record ManyToMany type Annotation {
 //	targets=[FieldMbr]
 //}
-//	mappedBy FieldRef?;
-//	joinTable TypeRef[]?;
+//	mappedBy egl.lang.reflect.FieldMbr?;
+//	joinTable egl.lang.reflect.TypeType[]?;
 //end

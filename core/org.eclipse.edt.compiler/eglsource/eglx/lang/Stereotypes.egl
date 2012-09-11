@@ -11,9 +11,8 @@
  *******************************************************************************/
 package eglx.lang;
 
-Record BasicProgram type Annotation
+Record BasicProgram type Stereotype
 {
 	targets = [ElementKind.programPart],
-	@Stereotype
 }
 end

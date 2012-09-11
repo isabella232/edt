@@ -14,16 +14,10 @@ package eglx.javascript;
 import eglx.lang.Property;
 import org.eclipse.edt.mof.egl.Stereotype;
 
-Record JavaScriptObject type Annotation
+Record JavaScriptObject type Stereotype
 	{ 
-		targets = [	ElementKind.ExternalTypePart ],
-	 
-		@Stereotype
-			{
-		  		// State annotations that may be placed on
-	 	 		// members of an ExternalType definition
-	 	 		memberAnnotations = [ Property ]
-			},
+		targets = [	ElementKind.ExternalTypePart ],	 
+ 		memberAnnotations = [ Property ],
 		validationProxy = "org.eclipse.edt.compiler.binding.annotationType.JavaScriptObjectAnnotationProxy"
 	}
 

@@ -11,31 +11,31 @@
  *******************************************************************************/
 package eglx.ui.rui;
 
-Record RUIHandler type Annotation {
+Record RUIHandler type Stereotype {
 	targets = [ElementKind.handlerPart],
-	@Stereotype{defaultSuperType=View}
+	defaultSuperType=View
 }
-	onConstructionFunction FunctionMemberRef;
+	onConstructionFunction egl.lang.reflect.FunctionMbr;
 	includeFile String;
 	cssFile String;
 	title String;
 	theme String; //TODO the initial value is "claro"
 end
 
-Record RUIWidget type Annotation {
+Record RUIWidget type Stereotype {
 	targets = [ElementKind.handlerPart],
-	@Stereotype{defaultSuperType=Widget}
+	defaultSuperType=Widget
 }
 	tagName String;
-	onConstructionFunction FunctionMemberRef;
+	onConstructionFunction egl.lang.reflect.FunctionMbr;
 	includeFile String;
 	cssFile String;
 end
 
-Record RUIPropertiesLibrary type Annotation
+Record RUIPropertiesLibrary type Stereotype
 {
 	targets = [ElementKind.libraryPart],
-	@Stereotype{defaultSuperType=NLSLibrary},
+	defaultSuperType=NLSLibrary,
 	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIPropertiesLibraryAnnotationProxy"
 }
 	propertiesFile String;
