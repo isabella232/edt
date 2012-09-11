@@ -23,6 +23,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.8.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.edt.ide.compiler
+Export-Package: org.eclipse.edt.ide.compiler,
+ org.eclipse.edt.ide.compiler.gen,
+ org.eclipse.edt.ide.compiler.gen.ui
 Bundle-Vendor: %providerName
 Bundle-Activator: org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin
