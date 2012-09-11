@@ -30,25 +30,18 @@ Record IsEMetadataType type Annotation {
 	value boolean = true;
 end
 
-Record ProxyType type Annotation {
-	targets=[ElementKind.Part],
-	@IsEMetadataType
-}
-	value InternalRef;
-end
-
 Record DefaultSuperType type Annotation {
 	targets=[ElementKind.RecordPart, ElementKind.ExternalTypePart],
 	@IsEMetadataType
 }
-	value TypeRef;
+	value egl.lang.reflect.mof.EType;
 end
 
 Record Interfaces type Annotation {
 	targets=[ElementKind.RecordPart, ElementKind.ExternalTypePart],
 	@IsEMetadataType
 }
-	value TypeRef[];
+	value egl.lang.reflect.mof.EType[];
 end
 
 

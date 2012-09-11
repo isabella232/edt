@@ -11,8 +11,8 @@
  *******************************************************************************/
 package eglx.lang;
 
-Record NativeType type Annotation { 
+Record NativeType type Stereotype { 
 	targets = [ElementKind.ExternalTypePart],
-	@Stereotype { memberAnnotations = [EventListener] }
+	memberAnnotations = [EventListener]
 }
 end
