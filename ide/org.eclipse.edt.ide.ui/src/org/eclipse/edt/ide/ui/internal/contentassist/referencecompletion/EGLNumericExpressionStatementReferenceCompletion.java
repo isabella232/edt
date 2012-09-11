@@ -22,7 +22,6 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctio
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTableUseStatementProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLNumericExpressionStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -88,13 +87,6 @@ public class EGLNumericExpressionStatementReferenceCompletion extends EGLAbstrac
 				//Get user function proposals with return value
 				proposals.addAll(
 					new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
-				
-				proposals.addAll(
-					new EGLTableUseStatementProposalHandler(viewer,
-						documentOffset,
-						prefix,
-						editor,
-						boundNode).getProposals());
 			}});			
 		}
 		

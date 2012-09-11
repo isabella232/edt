@@ -14,8 +14,6 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -32,8 +30,8 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSea
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPropertyValueProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTableUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLVariableDotProposalHandler;
+import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -122,14 +120,6 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 								prefix,
 								boundNode)
 								.getProposals(boundNode));
-						
-						//Get all table use statement proposals
-						proposals.addAll(
-							new EGLTableUseStatementProposalHandler(viewer,
-								documentOffset,
-								prefix,
-								editor,
-								boundNode).getProposals());
 						
 						//Get user field proposals using library use statements
 						proposals.addAll(
