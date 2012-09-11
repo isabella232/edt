@@ -308,6 +308,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     	final org.eclipse.edt.mof.egl.Constructor constructorBinding = IrFactory.INSTANCE.createConstructor();
     	constructorBinding.setName(NameUtile.getAsCaseSensitiveName(IEGLConstants.KEYWORD_CONSTRUCTOR));
     	constructorBinding.setType(functionContainerBinding);
+    	constructorBinding.setContainer((Container)functionContainerBinding);
     	final Set<String> definedParameters = new HashSet<String>();
     	
     	constructor.setBinding(constructorBinding);

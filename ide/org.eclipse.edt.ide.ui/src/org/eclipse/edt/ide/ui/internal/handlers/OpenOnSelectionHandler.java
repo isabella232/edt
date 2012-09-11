@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
@@ -27,6 +28,7 @@ import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedForm;
@@ -202,10 +204,18 @@ public class OpenOnSelectionHandler extends EGLHandler {
 						
 						@Override
 					    public boolean visit(SuperExpression superExpression){
-					    	//TODO super() highlights the part instead of the matching constructor
+							Node parent = superExpression.getParent();
+							if (parent instanceof FunctionInvocation && ((FunctionInvocation)parent).resolveElement() instanceof org.eclipse.edt.mof.egl.Constructor) {
+								org.eclipse.edt.mof.egl.Constructor binding = (org.eclipse.edt.mof.egl.Constructor)((FunctionInvocation)parent).resolveElement();
+								address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, superExpression, currentFile.getProject());
+					    		setProjectIfMissed(address[0]);
+					    		selectedNodeName[0] = binding.getName();
+					    		return false;
+							}
+							
 					    	Type binding = superExpression.resolveType();
 					    	if (binding != null) {
-					    		address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
+					    		address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, superExpression, currentFile.getProject());
 					    		setProjectIfMissed(address[0]);
 					    		selectedNodeName[0] = binding.getClassifier().getName();
 					    	}
@@ -215,10 +225,18 @@ public class OpenOnSelectionHandler extends EGLHandler {
 						
 						@Override
 						public boolean visit(ThisExpression thisExpression){
-							//TODO this() highlights the part instead of the matching constructor
+							Node parent = thisExpression.getParent();
+							if (parent instanceof FunctionInvocation && ((FunctionInvocation)parent).resolveElement() instanceof org.eclipse.edt.mof.egl.Constructor) {
+								org.eclipse.edt.mof.egl.Constructor binding = (org.eclipse.edt.mof.egl.Constructor)((FunctionInvocation)parent).resolveElement();
+								address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, thisExpression, currentFile.getProject());
+					    		setProjectIfMissed(address[0]);
+					    		selectedNodeName[0] = binding.getName();
+					    		return false;
+							}
+							
 							Type binding = thisExpression.resolveType();
 					    	if (binding != null) {
-					    		address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
+					    		address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, thisExpression, currentFile.getProject());
 					    		setProjectIfMissed(address[0]);
 					    		selectedNodeName[0] = binding.getClassifier().getName();
 					    	}
@@ -355,6 +373,12 @@ public class OpenOnSelectionHandler extends EGLHandler {
 			selectAndReveal(nestedFunction.getName());								
 			return false;
 		}
+		
+		@Override
+		public boolean visit(Constructor constructor) {
+			selectAndReveal(NameUtile.getAsName(IEGLConstants.KEYWORD_CONSTRUCTOR), constructor.getOffset(), IEGLConstants.KEYWORD_CONSTRUCTOR.length());
+			return false;
+		};
 
 		@Override
 		public boolean visit(VariableFormField field) {
@@ -386,25 +410,27 @@ public class OpenOnSelectionHandler extends EGLHandler {
 		}
 		
 		private void selectAndReveal(Name name) {
+			selectAndReveal(name.getIdentifier(), name.getOffset(), name.getLength());
+		}
+		
+		private void selectAndReveal(String identifier, int start, int length) {
 			final IFile file = address[0].getDeclaringFile();
 			if(file.equals(currentFile)){
 				document.reconcile();
-				EditorUtility.revealInEditor(fEditor, name);
+				EditorUtility.revealInEditor(fEditor, start, length);
 			}else{	
 				if(file.isReadOnly()) {
 					// Resolve the IR part's matching name from the node.
-					String irName = file instanceof BinaryReadOnlyFile ? ((BinaryReadOnlyFile)file).getIrName() : IRFileNameUtility.toIRFileName(name.getIdentifier());
+					String irName = file instanceof BinaryReadOnlyFile ? ((BinaryReadOnlyFile)file).getIrName() : IRFileNameUtility.toIRFileName(identifier);
 					
 					IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(file.getProject(), file.getFullPath().toString(), file.getProjectRelativePath().toString(), irName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
-					int start = name.getOffset();
-					int length = name.getLength();
 					if(part instanceof EGLEditor){
 						((EGLEditor) part).selectAndReveal(start, length);
 					}else if(part instanceof IEvEditor){
 						((IEvEditor) part).selectAndReveal(start, length);
 					}
 				} else {
-					EditorUtility.revealInEditor(openInEditor(file), name);		
+					EditorUtility.revealInEditor(openInEditor(file), start, length);		
 				}
 			}
 			beep = false;

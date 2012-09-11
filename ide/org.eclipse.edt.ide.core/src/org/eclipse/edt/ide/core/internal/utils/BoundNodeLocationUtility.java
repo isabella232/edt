@@ -19,9 +19,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.SystemPackageMOFPathEntry;
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.EnumerationField;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -46,7 +48,6 @@ import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
@@ -104,13 +105,13 @@ public class BoundNodeLocationUtility {
 	
 	private static class BoundFunctionBindingAddress extends BoundPartAddress {
 		
-		private Function functionBinding;
-		public BoundFunctionBindingAddress(IFile declaringFile, String partName, Function binding) {
+		private FunctionMember functionBinding;
+		public BoundFunctionBindingAddress(IFile declaringFile, String partName, FunctionMember binding) {
 			super(declaringFile, partName);
 			this.functionBinding = binding;
 		}
 		
-		public Function getFunctionBinding(){
+		public FunctionMember getFunctionBinding(){
 			return this.functionBinding;
 		}
 	}
@@ -203,26 +204,34 @@ public class BoundNodeLocationUtility {
 		
 		@Override
 		public boolean visit(NestedFunction nestedFunction) {
-				if(NameUtile.equals(address.getFunctionBinding().getName(), nestedFunction.getName().getIdentifier())){
-					List<FunctionParameter> aParameterList = nestedFunction.getFunctionParameters();
-					if(aParameterList.size() == fSearchFuncParaList.size()){
-						Iterator<FunctionParameter> aParaItr = aParameterList.iterator();
-						Iterator<org.eclipse.edt.mof.egl.FunctionParameter> fSearchParaItr = fSearchFuncParaList.iterator();
-						FunctionParameter aParameter;
-						org.eclipse.edt.mof.egl.FunctionParameter aSearchParameter;
+			return visitFunctionMember(nestedFunction, nestedFunction.getName().getIdentifier(), nestedFunction.getFunctionParameters());
+		}
+		
+		@Override
+		public boolean visit(Constructor constructor) {
+			return visitFunctionMember(constructor, NameUtile.getAsName(IEGLConstants.KEYWORD_CONSTRUCTOR), constructor.getParameters());
+		};
+		
+		private boolean visitFunctionMember(Node node, String funcName, List<FunctionParameter> parms) {
+			if(NameUtile.equals(address.getFunctionBinding().getName(), funcName)){
+				if(parms.size() == fSearchFuncParaList.size()){
+					Iterator<FunctionParameter> aParaItr = parms.iterator();
+					Iterator<org.eclipse.edt.mof.egl.FunctionParameter> fSearchParaItr = fSearchFuncParaList.iterator();
+					FunctionParameter aParameter;
+					org.eclipse.edt.mof.egl.FunctionParameter aSearchParameter;
+					
+					while(aParaItr.hasNext()){
+						aParameter = aParaItr.next();
+						aSearchParameter = fSearchParaItr.next();
 						
-						while(aParaItr.hasNext()){
-							aParameter = aParaItr.next();
-							aSearchParameter = fSearchParaItr.next();
-							
-							if(!aSearchParameter.getType().equals(aParameter.getType().resolveType())){
-								return(true);
-							}
+						if(!aSearchParameter.getType().equals(aParameter.getType().resolveType())){
+							return(true);
 						}
-						
-						result = nestedFunction;
-						return false;			
 					}
+					
+					result = node;
+					return false;
+				}
 			}
 			
 			return true;
@@ -286,9 +295,9 @@ public class BoundNodeLocationUtility {
 					address = new BoundFunctionParameterBindingAddress(getFileForNode(declaringPart, project), declaringPart.getName(), (org.eclipse.edt.mof.egl.FunctionParameter) dataBinding);
 				}
 			}
-			else if (dataBinding instanceof Function) {
+			else if (dataBinding instanceof FunctionMember) {
 				if (declaringPart != null) {
-					address = new BoundFunctionBindingAddress(getFileForNode(declaringPart, project), declaringPart.getName(), (Function)dataBinding);
+					address = new BoundFunctionBindingAddress(getFileForNode(declaringPart, project), declaringPart.getName(), (FunctionMember)dataBinding);
 				}
 			}
 			else {

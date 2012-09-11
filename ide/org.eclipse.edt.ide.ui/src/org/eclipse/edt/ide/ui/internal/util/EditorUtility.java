@@ -147,9 +147,16 @@ public class EditorUtility {
 	 * Selects a EGL Element in an editor
 	 */	
 	public static void revealInEditor(IEditorPart part, Node node) {
-		if (node != null && (part instanceof EGLEditor || part instanceof IEvEditor)) {
-			int start = node.getOffset();
-			int length = node.getLength();
+		if (node != null) {
+			revealInEditor(part, node.getOffset(), node.getLength());
+		}
+	}
+	
+	/** 
+	 * Selects a EGL Element in an editor
+	 */	
+	public static void revealInEditor(IEditorPart part, int start, int length) {
+		if (part instanceof EGLEditor || part instanceof IEvEditor) {
 			if(part instanceof EGLEditor){
 				((EGLEditor) part).selectAndReveal(start, length);
 			}else if(part instanceof IEvEditor){
