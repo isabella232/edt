@@ -209,13 +209,6 @@
 	  		name="%OrganizeImports.name"
 			description="%OrganizeImports.description"	  		
 			id="org.eclipse.edt.ide.ui.source.importGroup.organizeImports"/>
-		<!-- Source create -->
-<!-- Uncomment when callback function is ready
-		<command
-	  		name="%CreateCallbackFunction.name"
-			description="%CreateCallbackFunction.description"	  		
-			id="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction"/>
--->	
 		<!-- References/Project -->
 		<command
 			name="%InProject.name"

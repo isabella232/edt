@@ -15,15 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
@@ -32,7 +29,6 @@ import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
@@ -78,11 +74,12 @@ import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class MatchLocator2 {//extends MatchLocator { 
 	
@@ -322,11 +319,11 @@ public class MatchLocator2 {//extends MatchLocator {
 					if (matchImports){
 						String fileastPartName = org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(ioFile);
 						IPackageFragment packageFragment = (IPackageFragment)eglFile.getAncestor(IEGLElement.PACKAGE_FRAGMENT);
-						String[] packageName;
+						String packageName;
 						if(packageFragment.isDefaultPackage()){
-							packageName = new String[0];
+							packageName = "";
 						}else{
-							packageName = packageFragment.getElementName().split("\\.");
+							packageName = packageFragment.getElementName();
 						}
 						
 						WorkingCopyCompiler.getInstance().compilePart(ioFile.getProject(),packageName, ioFile, new IWorkingCopy[0], fileastPartName,new IWorkingCopyCompileRequestor(){
@@ -1088,32 +1085,11 @@ public class MatchLocator2 {//extends MatchLocator {
 							accuracy);
 					
 				} catch (CoreException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 				return false;
 			}
-			
-			public boolean visit(NestedForm nestedForm) {
-				try {
-					report(
-							nestedForm.getName().getOffset(), 
-							nestedForm.getName().getOffset() + nestedForm.getName().getLength(),
-							(parent instanceof IPart) ?
-								((IPart)parent).getPart(new String(nestedForm.getName().getCanonicalName())):
-								parent,
-							accuracy);
-					
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				return false;
-			}
-			
-			
 		});
 	}
 	/**
@@ -1316,7 +1292,7 @@ public class MatchLocator2 {//extends MatchLocator {
 		if (part != null) {
 			
 			final Name[] result = new Name[1];
-			final String iName = InternUtil.intern(functionName);
+			final String iName = NameUtile.getAsName(functionName);
 			part.accept(new AbstractASTVisitor() {
 				public boolean visit(NestedFunction nestedFunction) {
 					if (nestedFunction.getName().getIdentifier() == iName) {
@@ -1368,7 +1344,7 @@ public class MatchLocator2 {//extends MatchLocator {
 			String sourceFileName = getClassFileSource((ClassFile)classFile);
 			BinaryReadOnlyFile broFile = new BinaryReadOnlyFile(eglarPath, sourceFileName, classFile.getPart().getElementName());
 			
-	       return (Part) ASTManager.getInstance().getAST(broFile, InternUtil.intern(classFile.getPart().getElementName()));
+	       return (Part) ASTManager.getInstance().getAST(broFile, NameUtile.getAsName(classFile.getPart().getElementName()));
 		}
 		return null;
 	}
@@ -1488,29 +1464,18 @@ public class MatchLocator2 {//extends MatchLocator {
 		return pattern.matchContainer();
 	}
 	
-	public int matchesPartType(Name node,IPartBinding partBinding){
+	public int matchesPartType(Name node,org.eclipse.edt.mof.egl.Part partBinding){
 		return pattern.matchesPartType(node,partBinding,forceQualification);
 	}
 	
-	public int matchesNestedFormPart(NestedForm node){
-		return pattern.matchesNestedFormPart(node);
-	}
 	public int matchesPart(IPart iPart) {
 		return pattern.matchesPart(iPart);
 	}
 	public int matchesPart(Part node){
 		return pattern.matchesPart(node);
 	}
-	public int matchesFunctionPartType(Name node,IPartBinding partBinding){
+	public int matchesFunctionPartType(Name node,FunctionPart partBinding){
 		return pattern.matchesFunctionPartType(node,partBinding);
-	}
-	
-	public int matchesFunctionPart(TopLevelFunction function){
-		return pattern.matchesFunctionPart(function);
-	}
-	
-	public int matchesAnnotationType(Name node, IAnnotationTypeBinding binding){
-		return pattern.matchesAnnotationType(node, binding, forceQualification);
 	}
 	
 	protected int matchCheck(Node node) {

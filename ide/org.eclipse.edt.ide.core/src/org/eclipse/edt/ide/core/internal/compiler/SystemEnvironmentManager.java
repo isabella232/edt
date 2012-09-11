@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.compiler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -23,7 +21,6 @@ import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.SystemIREnvironment;
 import org.eclipse.edt.compiler.SystemPackageBuildPathEntryFactory;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.IIDECompiler;
 import org.eclipse.edt.ide.core.internal.lookup.IDESystemEnvironment;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
@@ -35,13 +32,13 @@ public class SystemEnvironmentManager {
 	
 	private static Map<String, ISystemEnvironment> systemMap = new HashMap();
 	
-	public static synchronized ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, List<String> implicitEnums, IBuildNotifier notifier, ICompiler compiler) {
+	public static synchronized ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, IBuildNotifier notifier, ICompiler compiler) {
 		if (systemMap.containsKey(path)) {
 			return systemMap.get(path);
 		}
 				
-		IDESystemEnvironment sysEnv = new IDESystemEnvironment(new SystemIREnvironment(), parentEnv, implicitEnums, compiler);
-		sysEnv.initializeSystemPackages(path,  new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)), notifier);
+		IDESystemEnvironment sysEnv = new IDESystemEnvironment(new SystemIREnvironment(), parentEnv, compiler);
+		sysEnv.initializeSystemPackages(path,  new SystemPackageBuildPathEntryFactory(), notifier);
 		
 		systemMap.put(path, sysEnv);
 		return sysEnv;
@@ -60,7 +57,7 @@ public class SystemEnvironmentManager {
     		}
         	return compiler.getSystemEnvironment(notifier);
         }
-        return new SystemEnvironment(new SystemIREnvironment(), null, new ArrayList(), compiler);
+        return new SystemEnvironment(new SystemIREnvironment(), null, compiler);
 
 	}
 }

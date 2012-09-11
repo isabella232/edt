@@ -12,13 +12,13 @@
 package org.eclipse.edt.ide.core.internal.search;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.ide.core.internal.model.Util;
 import org.eclipse.edt.ide.core.internal.model.util.EGLModelUtil;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
-import org.eclipse.edt.ide.core.internal.model.Util;
 
 public abstract class PartInfo {
 

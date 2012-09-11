@@ -103,7 +103,6 @@ public class AllPartsCache {
 		PartInfo[] allParts= getAllParts(monitor);
 		
 		boolean isWorkspaceScope= scope.equals(SearchEngine.createWorkspaceScope());
-		boolean isBoth= (kind == IEGLSearchConstants.PART);
 		for (int i= 0; i < allParts.length; i++) {
 			PartInfo info= (PartInfo) fgTypeCache[i];
 			if (isWorkspaceScope || info.isEnclosed(scope)) {
@@ -318,8 +317,7 @@ public class AllPartsCache {
 	 * Checks if the search index is up to date.
 	 */
 	public static boolean isIndexUpToDate() {
-		class TypeFoundException extends Error {
-		}
+		class TypeFoundException extends Error {private static final long serialVersionUID = 1L;}
 		IPartNameRequestor requestor= new IPartNameRequestor() {
 			public void acceptPart(char[] packageName, char[] simplePartName, char partType, char[][] enclosingPartNames,  String path, IPath projectPath) {
 				throw new TypeFoundException();

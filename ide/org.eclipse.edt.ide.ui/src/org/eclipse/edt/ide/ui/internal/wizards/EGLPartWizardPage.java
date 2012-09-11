@@ -164,7 +164,7 @@ public class EGLPartWizardPage extends EGLFileWizardPage {
 				}
 			}
 			if(problem!=null){
-				String messageFromBundle = DefaultProblemRequestor.getMessageFromBundle(problem.getProblemKind(), problem.getInserts());
+				String messageFromBundle = DefaultProblemRequestor.getMessageFromBundle(problem.getProblemKind(), problem.getInserts(), problem.getResourceBundle());
 				if(currentSeverity==IMarker.SEVERITY_ERROR){						
 					status.setError(messageFromBundle);				
 				}

@@ -103,12 +103,13 @@ public class EGLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 		//TODO Adjust content assist tips & link to preferences (for colors, timings, etc.)
 		ContentAssistant assistant = new ContentAssistant();
 
-		// Add completion processor for the default EGL partition 
-		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
-		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.EGL_MULTI_LINE_COMMENT), IPartitions.EGL_MULTI_LINE_COMMENT);
-		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.EGL_SINGLE_LINE_COMMENT), IPartitions.EGL_SINGLE_LINE_COMMENT);
-		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.SQL_CONTENT_TYPE), IPartitions.SQL_CONTENT_TYPE);
-		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.SQL_CONDITION_CONTENT_TYPE), IPartitions.SQL_CONDITION_CONTENT_TYPE);
+		// Add completion processor for the default EGL partition
+		//TODO EXTENSIBILITY - CA needs to be ported to the new model. currently blows up
+//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
+//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.EGL_MULTI_LINE_COMMENT), IPartitions.EGL_MULTI_LINE_COMMENT);
+//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.EGL_SINGLE_LINE_COMMENT), IPartitions.EGL_SINGLE_LINE_COMMENT);
+//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.SQL_CONTENT_TYPE), IPartitions.SQL_CONTENT_TYPE);
+//		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.SQL_CONDITION_CONTENT_TYPE), IPartitions.SQL_CONDITION_CONTENT_TYPE);
 		
 		assistant.setInformationControlCreator(getInformationControlCreator(sourceViewer));
 

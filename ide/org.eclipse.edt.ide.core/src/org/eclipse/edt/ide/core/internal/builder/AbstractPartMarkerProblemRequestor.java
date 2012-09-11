@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.builder;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author svihovec
@@ -31,7 +33,8 @@ public abstract class AbstractPartMarkerProblemRequestor extends	AbstractMarkerP
 		this.containerContextName = containerContextName;
 	}
 	
-	protected IMarker createMarker(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) throws CoreException {
+	@Override
+	protected IMarker createMarker(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) throws CoreException {
 		IMarker marker;
 		if(messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
 			inserts = shiftInsertsIfNeccesary(problemKind, inserts);
@@ -39,10 +42,10 @@ public abstract class AbstractPartMarkerProblemRequestor extends	AbstractMarkerP
 			int lineNumber = getLineNumberOfOffset(startOffset);
 			inserts[inserts.length-2] = Integer.toString(lineNumber+1);
 			inserts[inserts.length-1] = file.getFullPath().toOSString();
-			marker = super.createMarker(startOffset, endOffset, lineNumber, severity, problemKind, inserts); 
+			marker = super.createMarker(startOffset, endOffset, lineNumber, severity, problemKind, inserts, bundle); 
 		}
 		else {
-			marker = super.createMarker(startOffset, endOffset, severity, problemKind, inserts);
+			marker = super.createMarker(startOffset, endOffset, severity, problemKind, inserts, bundle);
 		}
 		
 		marker.setAttribute(PART_NAME, partName);
@@ -51,8 +54,8 @@ public abstract class AbstractPartMarkerProblemRequestor extends	AbstractMarkerP
 	}
 	
 	protected boolean shouldRemoveMarker(IMarker marker) {
-		String markerPartName = InternUtil.intern(marker.getAttribute(MarkerProblemRequestor.PART_NAME, "")); //$NON-NLS-1$
-		if (markerPartName == partName){
+		String markerPartName = NameUtile.getAsName(marker.getAttribute(MarkerProblemRequestor.PART_NAME, "")); //$NON-NLS-1$
+		if (NameUtile.equals(markerPartName, partName)){
 			return true;
 		}
 		return false;

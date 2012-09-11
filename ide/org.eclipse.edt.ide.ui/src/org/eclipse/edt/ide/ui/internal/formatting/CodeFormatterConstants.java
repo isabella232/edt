@@ -46,7 +46,6 @@ public class CodeFormatterConstants {
 	public static final int FORMATTER_PREF_WS_SORTBY_WSPOSITION = 0;
 	public static final int FORMATTER_PREF_WS_SORTBY_EGLSYNTAX = 1;
 	//after ,
-	public static final String FORMATTER_PREF_WS_AFTER_COMMA_NUMERICPRIMITIVE = FORMATTER_CATEGORY_WS + ".afterComma.numericPrimitive"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_DATADECL = FORMATTER_CATEGORY_WS + ".afterComma.dataDecl"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_SETSTMT = FORMATTER_CATEGORY_WS + ".afterComma.setStatement"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_ENUM = FORMATTER_CATEGORY_WS + ".afterComma.enumeration"; //$NON-NLS-1$
@@ -58,7 +57,7 @@ public class CodeFormatterConstants {
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_ARRAY = FORMATTER_CATEGORY_WS + ".afterComma.array"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_FUNCINVOC = FORMATTER_CATEGORY_WS + ".afterComma.funcInvoc"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_CALLSTMT = FORMATTER_CATEGORY_WS + ".afterComma.callStmt"; //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_AFTER_COMMA_NEWEXPR = FORMATTER_CATEGORY_WS + ".afterComma.newExpr";	 //$NON-NLS-1$
+	public static final String FORMATTER_PREF_WS_AFTER_COMMA_NAMEDTYPE = FORMATTER_CATEGORY_WS + ".afterComma.namedType";	 //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_SETTINGS = FORMATTER_CATEGORY_WS + ".afterComma.settings"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_IMPL = FORMATTER_CATEGORY_WS + ".afterComma.implClause"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_COMMA_USESTMT = FORMATTER_CATEGORY_WS + ".afterComma.useStatement"; //$NON-NLS-1$
@@ -77,14 +76,12 @@ public class CodeFormatterConstants {
 	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_GETBYPOS = FORMATTER_CATEGORY_WS + ".afterLParen.getByPos"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_WHEN = FORMATTER_CATEGORY_WS + ".afterLParen.when";	 //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_ONEXCEPTION = FORMATTER_CATEGORY_WS + ".afterLParen.onException"; //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_NEWEXPR = FORMATTER_CATEGORY_WS + ".afterLParen.newExpr";	 //$NON-NLS-1$
+	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_NAMEDTYPE = FORMATTER_CATEGORY_WS + ".afterLParen.namedType";	 //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_CASE = FORMATTER_CATEGORY_WS + ".afterLParen.case";
 	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_EXIT = FORMATTER_CATEGORY_WS + ".afterLParen.exit";
 	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_PARENTEXPR = FORMATTER_CATEGORY_WS + ".afterLParen.parentExpr"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_FUNCINVOC = FORMATTER_CATEGORY_WS + ".afterLParen.funcInvoc";	 //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_AFTER_LPAREN_PRIMITIVE = FORMATTER_CATEGORY_WS + ".afterLParen.primitive"; //$NON-NLS-1$
 	//before ,
-	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_NUMERICPRIMITIVE = FORMATTER_CATEGORY_WS + ".beforeComma.numericPrimitive"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_DATADECL = FORMATTER_CATEGORY_WS + ".beforeComma.dataDecl"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_SETSTMT = FORMATTER_CATEGORY_WS + ".beforeComma.setStatement"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_ENUM = FORMATTER_CATEGORY_WS + ".beforeComma.enumeration"; //$NON-NLS-1$
@@ -96,7 +93,7 @@ public class CodeFormatterConstants {
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_ARRAY = FORMATTER_CATEGORY_WS + ".beforeComma.array"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_FUNCINVOC = FORMATTER_CATEGORY_WS + ".beforeComma.funcInvoc"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_CALLSTMT = FORMATTER_CATEGORY_WS + ".beforeComma.callStmt"; //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_NEWEXPR = FORMATTER_CATEGORY_WS + ".beforeComma.newExpr";		 //$NON-NLS-1$
+	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_NAMEDTYPE = FORMATTER_CATEGORY_WS + ".beforeComma.namedType";		 //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_SETTINGS = FORMATTER_CATEGORY_WS + ".beforeComma.settings"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_IMPL = FORMATTER_CATEGORY_WS + ".beforeComma.implClause"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COMMA_USESTMT = FORMATTER_CATEGORY_WS + ".beforeComma.useStatement"; //$NON-NLS-1$
@@ -118,12 +115,11 @@ public class CodeFormatterConstants {
 	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_GETBYPOS = FORMATTER_CATEGORY_WS + ".beforeLParen.getByPos"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_WHEN = FORMATTER_CATEGORY_WS + ".beforeLParen.when";	 //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_ONEXCEPTION = FORMATTER_CATEGORY_WS + ".beforeLParen.onException"; //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_NEWEXPR = FORMATTER_CATEGORY_WS + ".beforeLParen.newExpr";	 //$NON-NLS-1$
+	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_NAMEDTYPE = FORMATTER_CATEGORY_WS + ".beforeLParen.namedType";	 //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_CASE = FORMATTER_CATEGORY_WS + ".beforeLParen.case";
 	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_EXIT = FORMATTER_CATEGORY_WS + ".beforeLParen.exit";
 	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_PARENTEXPR = FORMATTER_CATEGORY_WS + ".beforeLParen.parentExpr"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_FUNCINVOC = FORMATTER_CATEGORY_WS + ".beforeLParen.funcInvoc";	 //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_BEFORE_LPAREN_PRIMITIVE = FORMATTER_CATEGORY_WS + ".beforeLParen.primitive"; //$NON-NLS-1$
 	//before )
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_FUNCPARMS = FORMATTER_CATEGORY_WS + ".beforeRParen.funcParms"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_PGMPARAMS = FORMATTER_CATEGORY_WS + ".beforeRParen.pgmParms"; //$NON-NLS-1$
@@ -137,19 +133,20 @@ public class CodeFormatterConstants {
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_GETBYPOS = FORMATTER_CATEGORY_WS + ".beforeRParen.getByPos"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_WHEN = FORMATTER_CATEGORY_WS + ".beforeRParen.when";	 //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_ONEXCEPTION = FORMATTER_CATEGORY_WS + ".beforeRParen.onException"; //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_NEWEXPR = FORMATTER_CATEGORY_WS + ".beforeRParen.newExpr";	 //$NON-NLS-1$
+	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_NAMEDTYPE = FORMATTER_CATEGORY_WS + ".beforeRParen.namedType";	 //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_CASE = FORMATTER_CATEGORY_WS + ".beforeRParen.case";
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_EXIT = FORMATTER_CATEGORY_WS + ".beforeRParen.exit";
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_PARENTEXPR = FORMATTER_CATEGORY_WS + ".beforeRParen.parentExpr"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_FUNCINVOC = FORMATTER_CATEGORY_WS + ".beforeRParen.funcInvoc";	 //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_BEFORE_RPAREN_PRIMITIVE = FORMATTER_CATEGORY_WS + ".beforeRParen.primitive"; //$NON-NLS-1$
 	
 	public static final String FORMATTER_PREF_WS_BEFORE_OP_ASSIGNMENT = FORMATTER_CATEGORY_WS + ".beforeOperator.assignment"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_OP_BINARY = FORMATTER_CATEGORY_WS + ".beforeOperator.binary"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_OP_ASSIGNMENT = FORMATTER_CATEGORY_WS + ".afterOperator.assignment"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_OP_UNARY = FORMATTER_CATEGORY_WS + ".afterOperator.unary"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_AFTER_OP_BINARY = FORMATTER_CATEGORY_WS + ".afterOperator.binary"; //$NON-NLS-1$
-	public static final String FORMATTER_PREF_WS_BEFORE_QUESTION_NULLABLETYPE = FORMATTER_CATEGORY_WS + ".beforeQuestion.nullableType"; //$NON-NLS-1$
+	public static final String FORMATTER_PREF_WS_BEFORE_QUESTION_FIELDS = FORMATTER_CATEGORY_WS + ".beforeQuestion.nullableFields"; //$NON-NLS-1$
+	public static final String FORMATTER_PREF_WS_BEFORE_QUESTION_PARMS = FORMATTER_CATEGORY_WS + ".beforeQuestion.nullableParameters"; //$NON-NLS-1$
+	public static final String FORMATTER_PREF_WS_BEFORE_QUESTION_RETURNS = FORMATTER_CATEGORY_WS + ".beforeQuestion.nullableReturns"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COLON_SUBSTRING = FORMATTER_CATEGORY_WS + ".beforeColon.subString"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COLON_LABELSTMT = FORMATTER_CATEGORY_WS + ".beforeColon.labelStmt"; //$NON-NLS-1$
 	public static final String FORMATTER_PREF_WS_BEFORE_COLON_ONEVENT = FORMATTER_CATEGORY_WS + ".beforeColon.onEvent"; //$NON-NLS-1$

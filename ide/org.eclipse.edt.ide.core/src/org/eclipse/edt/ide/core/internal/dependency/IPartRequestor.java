@@ -17,5 +17,5 @@ package org.eclipse.edt.ide.core.internal.dependency;
  */
 public interface IPartRequestor {
 
-	public void acceptPart(String[] packageName,String partName);
+	public void acceptPart(String packageName,String partName);
 }

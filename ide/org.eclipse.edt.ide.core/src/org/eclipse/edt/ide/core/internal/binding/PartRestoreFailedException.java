@@ -14,10 +14,9 @@ package org.eclipse.edt.ide.core.internal.binding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 
 public class PartRestoreFailedException extends BuildException {
+	private static final long serialVersionUID = 1L;
 
-	public PartRestoreFailedException(String[] packageName, String partName, Exception e){
+	public PartRestoreFailedException(String packageName, String partName, Exception e){
 		super("Error restoring part: " + getPartName(packageName,partName),e);
 	}
-	
-	
 }

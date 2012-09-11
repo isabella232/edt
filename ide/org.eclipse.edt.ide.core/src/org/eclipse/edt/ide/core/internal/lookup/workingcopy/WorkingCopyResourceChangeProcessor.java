@@ -50,7 +50,7 @@ import org.eclipse.edt.ide.core.internal.lookup.IFileInfoDifferenceNotificationR
 import org.eclipse.edt.ide.core.internal.lookup.ZipFileBuildPathEntryManager;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.internal.utils.Util;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  */
@@ -115,9 +115,9 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 	
 	private class FileDelta extends Delta {
 		private IFile file;
-		private String[] packageName;
+		private String packageName;
 		
-		public FileDelta(IProject project, int deltaType, String[] packageName, IFile file) {
+		public FileDelta(IProject project, int deltaType, String packageName, IFile file) {
 			super(project, deltaType);
 			this.file = file;
 			this.packageName = packageName;
@@ -131,17 +131,17 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			return file;
 		}
 		
-		public String[] getPackageName(){
+		public String getPackageName(){
 			return packageName;
 		}
 	}
 	
 	private class PackageDelta extends Delta {
 		private IResource packageResource;
-		private String[] packageName;
+		private String packageName;
 		private List removedFiles;
 		
-		public PackageDelta(IProject project, int deltaType, String[] packageName, List removedFiles, IResource packageResource) {
+		public PackageDelta(IProject project, int deltaType, String packageName, List removedFiles, IResource packageResource) {
 			super(project, deltaType);
 			this.packageResource = packageResource;
 			this.packageName = packageName;
@@ -152,7 +152,7 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			return PACKAGE;
 		}
 		
-		public String[] getPackageName(){
+		public String getPackageName(){
 			return packageName;
 		}
 		
@@ -267,7 +267,7 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 										case IResource.FILE :
 											if (org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(proxy.getName())) {
 												IFile file = (IFile)resource;
-												String[] packageName = InternUtil.intern(Util.pathToStringArray(resource.getFullPath().removeFirstSegments(segmentCount).removeLastSegments(1)));
+												String packageName = NameUtile.getAsName(Util.pathToQualifiedName(resource.getFullPath().removeFirstSegments(segmentCount).removeLastSegments(1)));
 												
 												try {
 													String fileContents = Util.getFileContents(file);
@@ -445,14 +445,14 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 	     	WorkingCopyProjectBuildPathManager.getInstance().remove(project);
 		}
 		
-		private void processAddedPackage(IProject project, String[] packageName, IResource packageResource) {
+		private void processAddedPackage(IProject project, String packageName, IResource packageResource) {
 			// Make sure that the resource wasn't removed before we could process this add
 			if(packageResource.exists()){
-				WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project).packageAdded(InternUtil.intern(packageName));
+				WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project).packageAdded(NameUtile.getAsName(packageName));
 			}
 		}
 		
-		private void processRemovedPackage(IProject project, String[] packageName, IResource packageResource, List removedFiles) {
+		private void processRemovedPackage(IProject project, String packageName, IResource packageResource, List removedFiles) {
 			WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 			
 			// Make sure that the package exists in our model - it may have been added and quickly removed, which caused us to throw away the add event
@@ -485,7 +485,7 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			}
 		}
 		
-		private void processAddedFile(IProject project, String[] packageName, IFile addedFile) {
+		private void processAddedFile(IProject project, String packageName, IFile addedFile) {
 			// Make sure this file wasn't removed before we have a chance to process this add
 			if(addedFile.exists()){
 				
@@ -507,7 +507,7 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			}
 		}
 		
-		private void processRemovedFile(IProject project, String[] packageName, IFile removedFile) {
+		private void processRemovedFile(IProject project, String packageName, IFile removedFile) {
 			WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 		    
 			IFileInfo fileInfo = WorkingCopyFileInfoManager.getInstance().getFileInfo(project, removedFile.getProjectRelativePath());
@@ -530,7 +530,7 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			}
 		}
 		
-		private void processChangedFile(final IProject project, final String[] packageName, final IFile changedFile) {
+		private void processChangedFile(final IProject project, final String packageName, final IFile changedFile) {
 			
 			// Make sure that the changed file hasn't been removed
 			if(changedFile.exists()){
@@ -572,14 +572,14 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			}
 		}
 		
-		private void processDuplicateFiles(IProject project, String[] packageName, HashSet otherFilesToProcess) {
+		private void processDuplicateFiles(IProject project, String packageName, HashSet otherFilesToProcess) {
 			for (Iterator iter = otherFilesToProcess.iterator(); iter.hasNext();) {
 				IFile file = (IFile) iter.next();
 				processChangedFile(project, packageName, file);
 			}
 		}
 		
-		protected void locateDuplicateFile(IProject project, HashSet otherFilesToProcess, String[] packageName, String partName) {
+		protected void locateDuplicateFile(IProject project, HashSet otherFilesToProcess, String packageName, String partName) {
 			Set filesForDuplicatePart = WorkingCopyDuplicatePartManager.getInstance().getDuplicatePartList(project).getFilesForDuplicatePart(packageName, partName);
 			if(filesForDuplicatePart != null){
 				for (Iterator filesIter = filesForDuplicatePart.iterator(); filesIter.hasNext();) {
@@ -641,7 +641,7 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 					switch (sourceDelta.getKind()) {
 						case IResourceDelta.ADDED :
 							IPath addedPackagePath = resource.getFullPath().removeFirstSegments(segmentCount);
-							changes.add(new PackageDelta(project, Delta.ADDED, InternUtil.intern(Util.pathToStringArray(addedPackagePath)), Collections.EMPTY_LIST, resource));
+							changes.add(new PackageDelta(project, Delta.ADDED, NameUtile.getAsName(Util.pathToQualifiedName(addedPackagePath)), Collections.EMPTY_LIST, resource));
 							// fall thru & collect all the source files
 						case IResourceDelta.CHANGED :
 							IResourceDelta[] children = sourceDelta.getAffectedChildren();
@@ -664,8 +664,8 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 								}
 							}
 							List removedFiles = new ArrayList();
-							processRemovedPackageHelper(InternUtil.intern(Util.pathToStringArray(removedPackagePath)), sourceDelta.getAffectedChildren(), removedFiles);
-							changes.add(new PackageDelta(project, Delta.REMOVED, InternUtil.intern(Util.pathToStringArray(removedPackagePath)), removedFiles, resource));
+							processRemovedPackageHelper(NameUtile.getAsName(Util.pathToQualifiedName(removedPackagePath)), sourceDelta.getAffectedChildren(), removedFiles);
+							changes.add(new PackageDelta(project, Delta.REMOVED, NameUtile.getAsName(Util.pathToQualifiedName(removedPackagePath)), removedFiles, resource));
 							return;
 					}
 				case IResource.FILE :
@@ -675,16 +675,16 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 						IPath packagePath = resource.getFullPath().removeFirstSegments(segmentCount).removeLastSegments(1);
 						switch (sourceDelta.getKind()) {
 							case IResourceDelta.ADDED :
-								changes.add(new FileDelta(project, Delta.ADDED, InternUtil.intern(Util.pathToStringArray(packagePath)), (IFile)resource));
+								changes.add(new FileDelta(project, Delta.ADDED, NameUtile.getAsName(Util.pathToQualifiedName(packagePath)), (IFile)resource));
 								return;
 							case IResourceDelta.REMOVED :
-								changes.add(new FileDelta(project, Delta.REMOVED, InternUtil.intern(Util.pathToStringArray(packagePath)), (IFile)resource));
+								changes.add(new FileDelta(project, Delta.REMOVED, NameUtile.getAsName(Util.pathToQualifiedName(packagePath)), (IFile)resource));
 								return;
 							case IResourceDelta.CHANGED :
 								if ((sourceDelta.getFlags() & IResourceDelta.CONTENT) == 0){
 									return; // skip it since it really isn't changed
 								}
-								changes.add(new FileDelta(project, Delta.CHANGED, InternUtil.intern(Util.pathToStringArray(packagePath)), (IFile)resource));
+								changes.add(new FileDelta(project, Delta.CHANGED, NameUtile.getAsName(Util.pathToQualifiedName(packagePath)), (IFile)resource));
 								return;
 							}
 						return;
@@ -693,15 +693,13 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			}
 		}
 		
-		private void processRemovedPackageHelper(String[] packageName, IResourceDelta[] children, List removedFiles){
+		private void processRemovedPackageHelper(String packageName, IResourceDelta[] children, List removedFiles){
 			for (int i = 0; i < children.length; i++) {
 				IResource resource = children[i].getResource();
 				switch(resource.getType()) {
 					case IResource.FOLDER :
-						String[] subPackageName = new String[packageName.length + 1];
-						System.arraycopy(packageName, 0, subPackageName, 0, packageName.length);
-						subPackageName[packageName.length] = resource.getName();
-						processRemovedPackageHelper(InternUtil.intern(subPackageName), children[i].getAffectedChildren(), removedFiles);
+						String subPackageName = org.eclipse.edt.ide.core.internal.utils.Util.appendToQualifiedName(packageName, resource.getName(), ".");
+						processRemovedPackageHelper(NameUtile.getAsName(subPackageName), children[i].getAffectedChildren(), removedFiles);
 						break;
 					case IResource.FILE :
 						removedFiles.add(new FileDelta(project, Delta.REMOVED, packageName, (IFile)resource));

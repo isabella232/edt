@@ -44,9 +44,9 @@ import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.InvalidPartTypeException;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 import com.ibm.icu.util.StringTokenizer;
 
@@ -87,20 +87,20 @@ public class GenerationQueue {
 	public static final boolean DEBUG = false;
 	
 	public class GenerationUnit {
-        public String[] packageName;
+        public String packageName;
         public String caseSensitiveInternedPartName;
        
-        GenerationUnit(String[] packageName, String caseSensitiveInternedPartName) {
+        GenerationUnit(String packageName, String caseSensitiveInternedPartName) {
             this.packageName = packageName;
             this.caseSensitiveInternedPartName = caseSensitiveInternedPartName; 
         }
     }
     
     public class GenerationUnitKey {
-    	private String[] packageName;
+    	private String packageName;
     	private String caseInsensitiveInternedPartName;
     	
-    	public GenerationUnitKey(String[] packageName, String caseInsensitiveInternedPartName) {
+    	public GenerationUnitKey(String packageName, String caseInsensitiveInternedPartName) {
     		this.packageName = packageName;
     		this.caseInsensitiveInternedPartName = caseInsensitiveInternedPartName;
     	}
@@ -110,7 +110,7 @@ public class GenerationQueue {
     		}
     		if (otherObject instanceof GenerationUnitKey) {
     			GenerationUnitKey otherGUKey = (GenerationUnitKey)otherObject;
-    			return otherGUKey.packageName == packageName && otherGUKey.caseInsensitiveInternedPartName == caseInsensitiveInternedPartName;
+    			return NameUtile.equals(otherGUKey.packageName, packageName) && NameUtile.equals(otherGUKey.caseInsensitiveInternedPartName, caseInsensitiveInternedPartName);
     		}
     		return false;
     	}
@@ -137,8 +137,8 @@ public class GenerationQueue {
     /**
      * Adds a part to the generation queue.
      */
-	public void addPart(String[] packageName, String caseSensitiveInternedPartName) {
-		pendingUnits.put(new GenerationUnitKey(packageName, InternUtil.intern(caseSensitiveInternedPartName)), new GenerationUnit(packageName, caseSensitiveInternedPartName));
+	public void addPart(String packageName, String caseSensitiveInternedPartName) {
+		pendingUnits.put(new GenerationUnitKey(packageName, NameUtile.getAsName(caseSensitiveInternedPartName)), new GenerationUnit(packageName, caseSensitiveInternedPartName));
 	}
 	
 	public void generate() {
@@ -181,7 +181,7 @@ public class GenerationQueue {
 	}
 	
 	private void generate(GenerationUnit genUnit) {
-		pendingUnits.remove(new GenerationUnitKey(genUnit.packageName, InternUtil.intern(genUnit.caseSensitiveInternedPartName)));
+		pendingUnits.remove(new GenerationUnitKey(genUnit.packageName, NameUtile.getAsName(genUnit.caseSensitiveInternedPartName)));
 		
 		notifier.subTask(CoreIDEPluginStrings.bind(CoreIDEPluginStrings.GeneratePartsOperation_SubTaskName, genUnit.caseSensitiveInternedPartName));
 		
@@ -196,7 +196,7 @@ public class GenerationQueue {
 					if (generators.length != 0) {
 						try {
 							Environment.pushEnv(projectEnvironment.getIREnvironment());
-							Part part = projectEnvironment.findPart(InternUtil.intern(genUnit.packageName), InternUtil.intern(genUnit.caseSensitiveInternedPartName));
+							Part part = projectEnvironment.findPart(NameUtile.getAsName(genUnit.packageName), NameUtile.getAsName(genUnit.caseSensitiveInternedPartName));
 							
 							//TODO should we skip generation if dependent parts have compile errors?
 							if (part != null && !part.hasCompileErrors()) {
@@ -224,7 +224,7 @@ public class GenerationQueue {
 				//file.deleteMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
 				IMarker[] markers = file.findMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
 				for (IMarker marker : markers) {
-					String attr = InternUtil.intern(marker.getAttribute(MarkerProblemRequestor.PART_NAME, "")); //$NON-NLS-1$
+					String attr = NameUtile.getAsName(marker.getAttribute(MarkerProblemRequestor.PART_NAME, "")); //$NON-NLS-1$
 					if (attr == genUnit.caseSensitiveInternedPartName) {
 						marker.delete();
 					}

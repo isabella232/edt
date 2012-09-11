@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.edt.gen" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.edt.ide.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.edt.gen" id="GenerationContributors" name="GenerationContributors"/>
+         <meta.schema plugin="org.eclipse.edt.ide.core" id="GenerationContributors" name="GenerationContributors"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]

@@ -13,11 +13,6 @@ package org.eclipse.edt.ide.core.internal.search.matching;
 
 import java.io.IOException;
 
-import org.eclipse.edt.compiler.binding.AnnotationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -25,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.internal.model.EGLElement;
+import org.eclipse.edt.ide.core.internal.model.IRPartType;
 import org.eclipse.edt.ide.core.internal.model.SourcePartElementInfo;
 import org.eclipse.edt.ide.core.internal.model.index.IEntryResult;
 import org.eclipse.edt.ide.core.internal.model.index.impl.IndexInput;
@@ -37,6 +33,21 @@ import org.eclipse.edt.ide.core.model.IIndexConstants;
 import org.eclipse.edt.ide.core.model.IMember;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.StructuredRecord;
 
 public class PartReferencePattern extends MultipleSearchPattern {
 
@@ -271,9 +282,6 @@ public int matchLevel(Node node, boolean resolve) {
 //	if (node instanceof NestedFunction){
 //		return matchLevelName(((NestedFunction)node).getName());
 //	}
-//	if (node instanceof NestedForm){
-//		return matchLevelName(((NestedForm)node).getName());
-//	}
 //
 //	if (node instanceof NameType) {
 //		return matchLevelName(((NameType)node).getName());
@@ -481,36 +489,6 @@ private int matchLevel(Expression accessRef, boolean resolve) {
 //	}
 }
 
-private Node getContainingLibrary(IDataBinding dataBinding){
-	return null;
-	//TODO search
-//    //  Tear off the fields from this binding until we find a table or library
-//	while(dataBinding != null && !dataBinding.getType().isLibraryType())
-//	{
-//	    dataBinding = dataBinding.getContainer();
-//	}
-//	if(dataBinding != null){
-//	    return dataBinding.getType().getTSN();
-//	} else {
-//	    return null;
-//	}
-}
-
-private Node getContainingTableOrLibrary(IDataBinding dataBinding){
-	return null;
-//    //  Tear off the fields from this binding until we find a table or library
-//	while(dataBinding != null &&
-//	        (!dataBinding.getType().isDataTableType() && !dataBinding.getType().isLibraryType()))
-//	{
-//	    dataBinding = dataBinding.getContainer();
-//	}
-//	if(dataBinding != null){
-//	    return dataBinding.getType().getTSN();
-//	} else {
-//	    return null;
-//	}
-}
-
 /**
  * Returns whether this type pattern matches the given name reference.
  * Look at resolved information only if specified.
@@ -561,13 +539,6 @@ private int matchLevelName(Name nameRef) {
 //		
 //		if (binding == null || binding == IBinding.NOT_FOUND_BINDING){
 //			return INACCURATE_MATCH;//X
-//		}
-//		
-//		if (binding.isTypeBinding() && ((ITypeBinding)binding).getKind() == ITypeBinding.FORM_BINDING){
-//			if (nameRef.getParent() instanceof NestedForm){
-//				return  IMPOSSIBLE_MATCH;
-//			}
-//			
 //		}
 //		
 //		IPartBinding partBinding = null;
@@ -653,7 +624,7 @@ private int matchLevelName(Name nameRef) {
 //	}
 }
 
-	public int matchesPartType(Name nameRef,IPartBinding partBinding,boolean forceQualification){
+	public int matchesPartType(Name nameRef,Part partBinding,boolean forceQualification){
 //		IBinding binding = nameRef.resolveBinding();
 //		
 //		if (binding == null || binding == IBinding.NOT_FOUND_BINDING){
@@ -774,59 +745,52 @@ private int matchLevelName(Name nameRef) {
 /**
  * Check to make sure that the part type we have resolved to is of the type we are looking for.
  */
-public boolean matchesPartType(IPartBinding partBinding){
+public boolean matchesPartType(Part partBinding){
 	boolean match = false;
 	
 	switch(partTypes)
 	{
 		case IIndexConstants.PROGRAM_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.PROGRAM_BINDING;
+			match = partBinding instanceof Program;
 			break;
 		case IIndexConstants.RECORD_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING ||
-					partBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING;
-			break;
-		case IIndexConstants.ITEM_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.DATAITEM_BINDING;
+			match = partBinding instanceof Record || partBinding instanceof StructuredRecord;
 			break;
 		case IIndexConstants.LIBRARY_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.LIBRARY_BINDING;
+			match = partBinding instanceof Library;
 			break;
 		case IIndexConstants.FUNCTION_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.FUNCTION_BINDING;
-			break;
-		case IIndexConstants.FORMGRP_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.FORMGROUP_BINDING;
-			break;
-		case IIndexConstants.FORM_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.FORM_BINDING;
-			break;
-		case IIndexConstants.TABLE_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.DATATABLE_BINDING;
+			match = partBinding instanceof FunctionMember;
 			break;
 		case IIndexConstants.HANDLER_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.HANDLER_BINDING;
+			match = partBinding instanceof Handler;
 			break;
 		case IIndexConstants.DELEGATE_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.DELEGATE_BINDING;
+			match = partBinding instanceof Delegate;
 			break;
 		case IIndexConstants.EXTERNALTYPE_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING;
+			match = partBinding instanceof ExternalType;
 			break;
 		case IIndexConstants.ENUMERATION_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.ENUMERATION_BINDING;
+			match = partBinding instanceof Enumeration;
 			break;
 		case IIndexConstants.SERVICE_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.SERVICE_BINDING;
+			match = partBinding instanceof Service;
 			break;
 		case IIndexConstants.INTERFACE_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.INTERFACE_BINDING;
+			match = partBinding instanceof Interface;
+			break;
+		case IIndexConstants.STEREOTYPE_SUFFIX:
+			match = partBinding instanceof StereotypeType;
+			break;
+		case IIndexConstants.ANNOTATION_SUFFIX:
+			match = partBinding instanceof AnnotationType;
+			break;
+		case IIndexConstants.CLASS_SUFFIX:
+			match = partBinding instanceof EGLClass;
 			break;
 		case IIndexConstants.PART_SUFFIX:
 			match = true;
-			break;
-		case IIndexConstants.CLASS_SUFFIX:
-			match = partBinding.getKind() == ITypeBinding.CLASS_BINDING;
 			break;
 	}
 	
@@ -840,50 +804,51 @@ public boolean matchesPartType(IPartBinding partBinding){
 		boolean match = false;
 		try {
 			SourcePartElementInfo partInfo = (SourcePartElementInfo)(((EGLElement)part).getElementInfo());
-			if(partTypes == IIndexConstants.PART_SUFFIX){
-				match = true;
-			}
-			else if(partInfo.isProgram()){
-				match = partTypes == IIndexConstants.PROGRAM_SUFFIX;
-			}
-			else if(partInfo.isRecord()){
-				match = partTypes == IIndexConstants.RECORD_SUFFIX;
-			}
-			else if(partInfo.isDataItem()){
-				match = partTypes == IIndexConstants.ITEM_SUFFIX;
-			}
-			else if(partInfo.isLibrary()){
-				match = partTypes == IIndexConstants.LIBRARY_SUFFIX;
-			}
-			else if(partInfo.isFunction()){
-				match = partTypes == IIndexConstants.FUNCTION_SUFFIX;
-			}
-			else if(partInfo.isFormGroup()){
-				match = partTypes == IIndexConstants.FORMGRP_SUFFIX;
-			}
-			else if(partInfo.isForm()){
-				match = partTypes == IIndexConstants.FORM_SUFFIX;
-			}
-			else if(partInfo.isDataTable()){
-				match = partTypes == IIndexConstants.TABLE_SUFFIX;
-			}
-			else if(partInfo.isHandler()){
-				match = partTypes == IIndexConstants.HANDLER_SUFFIX;
-			}
-			else if(partInfo.isService()){
-				match = partTypes == IIndexConstants.SERVICE_SUFFIX;
-			}
-			else if(partInfo.isInterface()){
-				match = partTypes == IIndexConstants.INTERFACE_SUFFIX;
-			}
-			else if(partInfo.isDelegate()){
-				match = partTypes == IIndexConstants.DELEGATE_SUFFIX;
-			}
-			else if(partInfo.isExternalType()){
-				match = partTypes == IIndexConstants.EXTERNALTYPE_SUFFIX;
-			}
-			else if(partInfo.isEnumeration()){
-				match = partTypes == IIndexConstants.ENUMERATION_SUFFIX;
+			
+			switch(partTypes)
+			{
+				case IIndexConstants.PROGRAM_SUFFIX:
+					match = partInfo.isProgram();
+					break;
+				case IIndexConstants.RECORD_SUFFIX:
+					match = partInfo.isRecord() && !isAnnotation(part);
+					break;
+				case IIndexConstants.ANNOTATION_SUFFIX:
+					match = partInfo.isRecord() && isAnnotation(part);
+					break;
+				case IIndexConstants.STEREOTYPE_SUFFIX:
+					match = partInfo.isRecord() && isStereotype(part);
+					break;
+				case IIndexConstants.LIBRARY_SUFFIX:
+					match = partInfo.isLibrary();
+					break;
+				case IIndexConstants.FUNCTION_SUFFIX:
+					match = partInfo.isFunction();
+					break;
+				case IIndexConstants.HANDLER_SUFFIX:
+					match = partInfo.isHandler();
+					break;
+				case IIndexConstants.SERVICE_SUFFIX:
+					match = partInfo.isService();
+					break;
+				case IIndexConstants.INTERFACE_SUFFIX:
+					match = partInfo.isInterface();
+					break;
+				case IIndexConstants.DELEGATE_SUFFIX:
+					match = partInfo.isDelegate();
+					break;
+				case IIndexConstants.EXTERNALTYPE_SUFFIX:
+					match = partInfo.isExternalType();
+					break;
+				case IIndexConstants.ENUMERATION_SUFFIX:
+					match = partInfo.isEnumeration();
+					break;
+				case IIndexConstants.CLASS_SUFFIX:
+					match = partInfo.isClass();
+					break;
+				case IIndexConstants.PART_SUFFIX:
+					match = true;
+					break;
 			}
 		} catch (EGLModelException e) {
 			e.printStackTrace();
@@ -891,49 +856,6 @@ public boolean matchesPartType(IPartBinding partBinding){
 		return match;
 	}
 	
-	public int matchesAnnotationType(Name node, IAnnotationTypeBinding binding, boolean forceQualification){
-		if (binding == null){
-			return INACCURATE_MATCH;
-		}
-		
-		// Stereotypes are a type of annotation so allow both types
-		if (matchesAnnotationType(binding)) {
-			if (forceQualification && qualification == null && node.isQualifiedName()){
-				return IMPOSSIBLE_MATCH;
-			}
-			
-			if (node.isSimpleName()){
-				return this.matchLevelForType(this.simpleName, this.qualification, binding);
-			} else { // QualifiedNameReference
-				char[][] tokens =  CharOperation.splitOn('.', node.getCanonicalName().toCharArray());
-				int lastIndex = tokens.length-1;
-				// try to match all enclosing types for which the token matches as well.
-				while (lastIndex >= 0){
-					if (this.matchesName(this.simpleName, tokens[lastIndex--])) {
-						int level = this.matchLevelForType(this.simpleName, this.qualification, binding);
-						if (level != IMPOSSIBLE_MATCH) {
-							return level;
-						}
-					}
-				}
-				return IMPOSSIBLE_MATCH;
-			}
-		}
-		return IMPOSSIBLE_MATCH;
-	}
-	
-	public boolean matchesAnnotationType(IAnnotationTypeBinding binding) {
-		switch(partTypes) {
-			case IIndexConstants.PART_SUFFIX:
-				return true;
-			case IIndexConstants.ANNOTATION_SUFFIX:
-				return binding.isPartSubType() || binding.getAnnotation(AnnotationAnnotationTypeBinding.getInstance()) != null;
-			case IIndexConstants.STEREOTYPE_SUFFIX:
-				return binding.isPartSubType();
-		}
-		return false;
-	}
-
 	@Override
 	public int matchesFunctionPartType(IFunction function){
 		try {
@@ -959,5 +881,23 @@ public boolean matchesPartType(IPartBinding partBinding){
 	public int getPatternType() {
 		return SearchPattern.REFERENCE;
 	}
+	
+	private boolean isAnnotation(IPart part) {
+		try {
+			SourcePartElementInfo partInfo = (SourcePartElementInfo)(((EGLElement)part).getElementInfo());
 
+			return IRPartType.ANNOTATION.equals(new String(partInfo.getSubTypeName())) || isStereotype(part);
+		} catch (EGLModelException e) {
+		}
+		return false;
+	}
+	private boolean isStereotype(IPart part) {
+		try {
+			SourcePartElementInfo partInfo = (SourcePartElementInfo)(((EGLElement)part).getElementInfo());
+
+			return IRPartType.STEREOTYPETYPE.equals(new String(partInfo.getSubTypeName()));
+		} catch (EGLModelException e) {
+		}
+		return false;
+	}
 }

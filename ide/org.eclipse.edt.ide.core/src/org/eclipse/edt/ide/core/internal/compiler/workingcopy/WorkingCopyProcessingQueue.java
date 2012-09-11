@@ -12,16 +12,16 @@
 package org.eclipse.edt.ide.core.internal.compiler.workingcopy;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.edt.compiler.PartEnvironmentStack;
 import org.eclipse.edt.compiler.binding.FileBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -32,8 +32,13 @@ import org.eclipse.edt.compiler.internal.core.builder.AbstractProcessingQueue;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.*;
-import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
+import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
+import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.compiler.Binder;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
@@ -47,8 +52,9 @@ import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEn
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 
@@ -63,38 +69,34 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 	private boolean pushedEnvironment;
 	
 	private class WorkingCopyDependencyInfo extends AbstractDependencyInfo {
-
-		protected void recordQualifiedName(String[] strings) {
+		@Override
+		protected void recordQualifiedName(String strings) {
 			// noop			
 		}
-
+		@Override
 		public Set getQualifiedNames() {
 			// noop
 			return Collections.EMPTY_SET;
 		}
-
+		@Override
 		public Set getSimpleNames() {
 			// noop
 			return Collections.EMPTY_SET;
 		}
-
-		public void recordBinding(IBinding binding) {
-			// noop			
-		}
-
+		@Override
 		public void recordName(Name name) {
 			// noop			
 		}
-
+		@Override
 		public void recordPackageBinding(IPackageBinding binding) {
 			// noop			
 		}
-
+		@Override
 		public void recordSimpleName(String simpleName) {
 			// noop			
 		}
-
-		public void recordTypeBinding(ITypeBinding binding) {
+		@Override
+		public void recordType(Type binding) {
 			// noop			
 		}		
 	}
@@ -113,6 +115,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		this.projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 		
 		Environment.pushEnv(this.projectEnvironment.getIREnvironment());
+		PartEnvironmentStack.pushEnv(this.projectEnvironment);
 		this.pushedEnvironment = true;
 	}
 	
@@ -128,14 +131,18 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		return false;
 	}
 
-	protected IPartBinding level03Compile(String[] packageName, String caseSensitiveInternedPartName) {
+	@Override
+	protected IPartBinding level03Compile(String packageName, String caseSensitiveInternedPartName) {
 
-		String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
+		String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
 		IFile declaringFile = projectInfo.getPartOrigin(packageName, caseInsensitiveInternedPartName).getEGLFile();
 		Node partAST = WorkingCopyASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
 		
 		IPartBinding binding = new BindingCreator(projectEnvironment, packageName, caseSensitiveInternedPartName, partAST).getPartBinding();
 		binding.setEnvironment(projectEnvironment);
+		if (binding instanceof IRPartBinding) {
+			BindingUtil.setEnvironment(((IRPartBinding)binding).getIrPart(), projectEnvironment);
+		}
       
 		AbstractDependencyInfo dependencyInfo = new WorkingCopyDependencyInfo();
 		Scope scope = createScope(packageName, declaringFile, binding, dependencyInfo);
@@ -151,31 +158,29 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 			Binder.getInstance().bindPart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
 		}
 		
-		TopLevelFunctionInfo[] topLevelFunctions = new TopLevelFunctionInfo[0];
-		if(dependencyInfo.getFunctionContainerScope() != null){
-			topLevelFunctions = processTopLevelFunctions(dependencyInfo.getTopLevelFunctions(), dependencyInfo.getFunctionContainerScope(), dependencyInfo);
-		}
-		  
 		// Post result
-		requestor.acceptResult(new WorkingCopyCompilationResult(partAST,binding,declaringFile,topLevelFunctions ));
+		requestor.acceptResult(new WorkingCopyCompilationResult(partAST,binding,declaringFile ));
 		
 		WorkingCopyASTManager.getInstance().reportNestedFunctions(partAST,declaringFile);
 		return binding;
 	}
 
-	protected IPartBinding level02Compile(String[] packageName, String caseSensitiveInternedPartName) {
+	@Override
+	protected IPartBinding level02Compile(String packageName, String caseSensitiveInternedPartName) {
 		return WorkingCopyProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project).compileLevel2Binding(packageName, caseSensitiveInternedPartName);
 	}
 
-	protected IPartBinding level01Compile(String[] packageName, String caseSensitiveInternedPartName) {
+	@Override
+	protected IPartBinding level01Compile(String packageName, String caseSensitiveInternedPartName) {
 		  return projectEnvironment.level01Compile(packageName, caseSensitiveInternedPartName);
 	}
 
-	protected IPartBinding getPartBindingFromCache(String[] packageName, String partName) {
+	@Override
+	protected IPartBinding getPartBindingFromCache(String packageName, String partName) {
 		return WorkingCopyProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project).getPartBindingFromCache(packageName, partName);
 	}
 	
-	private Scope createScope(String[] packageName, IFile declaringFile, IPartBinding binding, AbstractDependencyInfo dependencyInfo) {
+	private Scope createScope(String packageName, IFile declaringFile, IPartBinding binding, AbstractDependencyInfo dependencyInfo) {
 		Scope scope;
 		if(binding.getKind() == ITypeBinding.FILE_BINDING){
 			scope = new EnvironmentScope(projectEnvironment, dependencyInfo);
@@ -187,19 +192,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		return scope;
 	}
 	
-	private TopLevelFunctionInfo[] processTopLevelFunctions(Set topLevelFunctions, FunctionContainerScope contextScope, AbstractDependencyInfo dependencyInfo){
-	    WorkingCopyTopLevelFunctionProcessingQueue queue = new WorkingCopyTopLevelFunctionProcessingQueue(project, contextScope, dependencyInfo, compilerOptions, problemRequestorFactory);
-		for (Iterator iter = topLevelFunctions.iterator(); iter.hasNext();) {
-			IPartBinding function = (IPartBinding) iter.next();
-			queue.addPart(function);			
-		}
-		
-		queue.process();
-		
-		return queue.getTopLevelFunctionInfos();
-	}
-
-	protected void doAddPart(String[] packageName, String caseInsensitiveInternedPartName) {
+	protected void doAddPart(String packageName, String caseInsensitiveInternedPartName) {
 		addPart(packageName, projectInfo.getCaseSensitivePartName(packageName, caseInsensitiveInternedPartName));		
 	}
 
@@ -213,12 +206,12 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		return newRequestor;
 	}
 	
-	private void validatePackageDeclaration(String[] packageName, IFile declaringFile, Node partAST, FileBinding binding, IProblemRequestor problemRequestor) {
+	private void validatePackageDeclaration(String packageName, IFile declaringFile, Node partAST, FileBinding binding, IProblemRequestor problemRequestor) {
 		try{
 		    IPackageBinding declaringPackage = binding.getDeclaringPackage();
 		
-			if(declaringPackage != null && declaringPackage.getPackageName() != packageName){
-				if(packageName.length == 0){
+			if(declaringPackage != null && !NameUtile.equals(declaringPackage.getPackageName(), packageName)){
+				if(packageName.length() == 0){
 					// package name specified in default package
 					problemRequestor.acceptProblem(((File)partAST).getPackageDeclaration(), IProblemRequestor.PACKAGE_NAME_DOESNT_MATCH_DIRECTORY_STRUCTURE, new String[0]);
 				}else if(((File)partAST).hasPackageDeclaration()){
@@ -227,7 +220,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 				}else{
 					// missing package declaration
 					IPath packagePath = declaringFile.getProjectRelativePath().removeFileExtension().removeLastSegments(1);
-					packagePath = packagePath.removeFirstSegments(packagePath.segmentCount() - packageName.length);
+					packagePath = packagePath.removeFirstSegments(packagePath.segmentCount() - Util.qualifiedNameToStringArray(packageName).length);
 					problemRequestor.acceptProblem(0, 0, IMarker.SEVERITY_ERROR, IProblemRequestor.PACKAGE_NAME_NOT_PROVIDED, new String[]{packagePath.toString().replace(IPath.SEPARATOR, '.')});
 				}
 			}else{
@@ -236,7 +229,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 					String packageDeclName = ((File)partAST).getPackageDeclaration().getName().getCanonicalName();
 					// get package path, minus source folder
 					IPath packagePath = declaringFile.getProjectRelativePath().removeFileExtension().removeLastSegments(1);
-					packagePath = packagePath.removeFirstSegments(packagePath.segmentCount() - packageName.length);
+					packagePath = packagePath.removeFirstSegments(packagePath.segmentCount() - Util.qualifiedNameToStringArray(packageName).length);
 					if(!packageDeclName.equals(packagePath.toString().replace(IPath.SEPARATOR, IEGLConstants.PACKAGE_SEPARATOR.charAt(0)))){
 						//package name does not match case of package on file system
 						problemRequestor.acceptProblem(((File)partAST).getPackageDeclaration(), IProblemRequestor.PACKAGE_NAME_DOESNT_MATCH_DIRECTORY_STRUCTURE, IMarker.SEVERITY_ERROR, new String[0]);

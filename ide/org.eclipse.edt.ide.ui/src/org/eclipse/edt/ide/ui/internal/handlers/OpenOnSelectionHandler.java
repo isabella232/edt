@@ -16,18 +16,14 @@ import java.util.Iterator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
+import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
@@ -38,15 +34,12 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.ProgramParameter;
-import org.eclipse.edt.compiler.core.ast.ServiceReference;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
-import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.BoundNodeLocationUtility;
 import org.eclipse.edt.ide.core.internal.utils.IBoundNodeAddress;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -61,6 +54,11 @@ import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.edt.ide.ui.internal.editor.util.BoundNodeModelUtility;
 import org.eclipse.edt.ide.ui.internal.editor.util.IBoundNodeRequestor;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorPart;
@@ -70,14 +68,14 @@ public class OpenOnSelectionHandler extends EGLHandler {
 
 	private static class LocalVariableDeclarationFinder extends AbstractASTVisitor {
 		Name localVariableDeclarationName;
-		LocalVariableBinding referenceBinding;
+		Member referenceBinding;
 		
-		public LocalVariableDeclarationFinder(LocalVariableBinding binding) {
+		public LocalVariableDeclarationFinder(Member binding) {
 			referenceBinding = binding;
 		}
 
 		private void handleName(Name name) {
-			if(referenceBinding == name.resolveDataBinding()) {
+			if(referenceBinding.equals(name.resolveMember())) {
 				localVariableDeclarationName = name;
 			}
 		}
@@ -92,6 +90,13 @@ public class OpenOnSelectionHandler extends EGLHandler {
 		public boolean visit(ForStatement forStatement) {
 			if(forStatement.hasVariableDeclaration()) {
 				handleName(forStatement.getVariableDeclarationName());
+			}
+			return true;
+		}
+		
+		public boolean visit(ForEachStatement foreachStatement) {
+			if(foreachStatement.hasVariableDeclaration()) {
+				handleName(foreachStatement.getVariableDeclarationName());
 			}
 			return true;
 		}
@@ -142,6 +147,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 				
 				if(!(selectedNode instanceof Part) && !(selectedNode instanceof Statement)) {
 				
+					//TODO F3 on enumerationfields doesn't work
 					selectedNode.accept(new AbstractASTExpressionVisitor(){
 						public boolean visit(org.eclipse.edt.compiler.core.ast.File file) {
 							//short circuit here so we do not end up visiting the imports of the file
@@ -149,67 +155,77 @@ public class OpenOnSelectionHandler extends EGLHandler {
 						}
 						
 						public boolean visitName(Name name){
-							IBinding binding = name.resolveBinding();
-							if (binding != null && binding != IBinding.NOT_FOUND_BINDING){
-								if(binding.isDataBinding() && IDataBinding.LOCAL_VARIABLE_BINDING == ((IDataBinding) binding).getKind()) {
-									localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
+							Member binding = name.resolveMember();
+							if (binding != null){
+								if(isLocal(binding)) {
+									localVariableDefinition[0] = findLocalVariableDeclaration(binding, boundPart);
 								}
 								else {
-									binding = getActualBinding(binding);
 									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, name, currentFile.getProject());
 									setProjectIfMissed(address[0]);
 									
 								}
 								selectedNodeName[0] = name.getIdentifier();
-							}				
+							}
+							else if (name.resolveType() != null) {
+								// A type reference
+								address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(name.resolveType(), name, currentFile.getProject());
+								setProjectIfMissed(address[0]);
+								selectedNodeName[0] = name.getIdentifier();
+							}
 							return false;
 						}
 						
-						public boolean visit(org.eclipse.edt.compiler.core.ast.PrimitiveType primitiveType) {
-							IBinding binding = getActualBinding(primitiveType.resolveTypeBinding());
-							if (Binding.isValidBinding(binding)) {
-								address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
-								setProjectIfMissed(address[0]);
-								selectedNodeName[0] = binding.getName();
+						private boolean isLocal(Member m) {
+							Container parent = m.getContainer();
+							
+							while (parent != null) {
+								if (parent instanceof FunctionMember) {
+									return true;
+								}
+								
+								if (parent instanceof Member) {
+									parent = ((Member)parent).getContainer();
+								}
+								else if (parent instanceof org.eclipse.edt.mof.egl.Statement) {
+									parent = ((org.eclipse.edt.mof.egl.Statement)parent).getContainer();
+								}
+								else {
+									parent = null;
+								}
 							}
 							return false;
 						}
 						
 					    public boolean visit(SuperExpression superExpression){
-					    	IBinding binding = getActualBinding(superExpression.resolveTypeBinding());
-					    	if (Binding.isValidBinding(binding)) {
+					    	//TODO super() highlights the part instead of the matching constructor
+					    	Type binding = superExpression.resolveType();
+					    	if (binding != null) {
 					    		address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
 					    		setProjectIfMissed(address[0]);
-					    		selectedNodeName[0] = binding.getName();
+					    		selectedNodeName[0] = binding.getClassifier().getName();
 					    	}
 							
 							return false;
 						}
 						
 						public boolean visit(ThisExpression thisExpression){
-							IBinding binding = getActualBinding(thisExpression.resolveTypeBinding());
-					    	if (Binding.isValidBinding(binding)) {
+							//TODO this() highlights the part instead of the matching constructor
+							Type binding = thisExpression.resolveType();
+					    	if (binding != null) {
 					    		address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
 					    		setProjectIfMissed(address[0]);
-					    		selectedNodeName[0] = binding.getName();
+					    		selectedNodeName[0] = binding.getClassifier().getName();
 					    	}
 					    	
 							return false;
 						}
 						
-						private IBinding getActualBinding(IBinding binding) {
-							if (currentFile.getProject() != null && Binding.isValidBinding(binding) && binding.getActualBindingName() != null) {
-								return WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(currentFile.getProject()).getPartBinding(binding.getActualBindingPackage(), binding.getActualBindingName());
-							}
-							return binding;
-						}
-						
 						public boolean visit(FieldAccess fieldAccess){
-							IDataBinding binding = fieldAccess.resolveDataBinding();
-							if(Binding.isValidBinding(binding)) {
-								ITypeBinding type = binding.getType();
-								if(IDataBinding.LOCAL_VARIABLE_BINDING == binding.getKind()) {
-									localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
+							Member binding = fieldAccess.resolveMember();
+							if(binding != null) {
+								if(isLocal(binding)) {
+									localVariableDefinition[0] = findLocalVariableDeclaration(binding, boundPart);
 								}
 								else {
 									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, fieldAccess, currentFile.getProject());
@@ -220,17 +236,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							}
 							return false;
 						}
-
-						public boolean visit(StringLiteral stringLiteral){
-							ITypeBinding typeBinding = stringLiteral.resolveTypeBinding();
-							if (Binding.isValidBinding(typeBinding)) {
-								if (typeBinding.isPartBinding()) {
-									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress((IPartBinding) typeBinding, stringLiteral, currentFile.getProject());
-								}
-							}
-							return false;
-						}
-
+						
 						public boolean visit(NestedFunction nestedFunction) {
 							return false;
 						}
@@ -239,7 +245,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							return false;
 						}
 
-						private int[] findLocalVariableDeclaration(LocalVariableBinding binding, Node boundPart) {
+						private int[] findLocalVariableDeclaration(Member binding, Node boundPart) {
 							final int[][] result = new int[][] {null};
 							LocalVariableDeclarationFinder finder = new LocalVariableDeclarationFinder(binding);
 							boundPart.accept(finder);
@@ -317,7 +323,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 			for (Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
 				Name name = (Name) iter.next();
 
-				if(name.getIdentifier() == selectedNodeName[0]){
+				if(NameUtile.equals(name.getIdentifier(), selectedNodeName[0])){
 					selectAndReveal(name);
 				}
 			}
@@ -351,11 +357,6 @@ public class OpenOnSelectionHandler extends EGLHandler {
 
 		public boolean visit(StructureItem structureItem){
 			selectAndReveal(structureItem.getName());
-			return false;
-		}
-
-		public boolean visit(ServiceReference serviceReference){
-			selectAndReveal(serviceReference.getName());
 			return false;
 		}
 

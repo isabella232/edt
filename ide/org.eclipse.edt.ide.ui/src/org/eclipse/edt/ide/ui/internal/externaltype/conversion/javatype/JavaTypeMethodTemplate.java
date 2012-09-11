@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.compiler.internal.sql.SQLConstants;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.ui.internal.externaltype.util.ReflectionUtil;
 import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
@@ -36,35 +35,33 @@ public class JavaTypeMethodTemplate extends AbstractTemplate {
 			methodName = JavaTypeConstants.UNDERSTORE_PREFIX + methodName;
 		}
 		
-		out.print(methodName + SQLConstants.LPAREN);
+		out.print(methodName + "(");
 		
 		Class<?>[] parameterTypes = javaMethod.getParameterTypes();
 		for(int i=0; i < parameterTypes.length; i++) {
-			out.print("arg" + i + SQLConstants.SPACE + ReflectionUtil.getEGLTypeName(parameterTypes[i])
-					+ SQLConstants.SPACE + JavaTypeConstants.EGL_KEYWORD_IN);
+			out.print("arg" + i + " " + ReflectionUtil.getEGLTypeName(parameterTypes[i])
+					+ " " + JavaTypeConstants.EGL_KEYWORD_IN);
 			if(i != parameterTypes.length -1) {
-				out.print(SQLConstants.COMMA);
+				out.print(',');
 			}
 		}
-		out.print(SQLConstants.RPAREN);
+		out.print(')');
 		
 		Class<?> returnedType = javaMethod.getReturnType();
 		if(!JavaTypeConstants.JAVA_VOID_TYPE.equals(returnedType.getSimpleName())) {
-			out.print("  returns" + SQLConstants.LPAREN + ReflectionUtil.getEGLTypeName(returnedType) +
-					SQLConstants.RPAREN);
+			out.print("  returns(" + ReflectionUtil.getEGLTypeName(returnedType) + ')');
 		} 
 		
 		if(isEGLKeyWord || isStartWithEze) {
-			out.print("   {externalName = " + SQLConstants.DOUBLE_QUOTE + javaMethod.getName()
-					  + SQLConstants.DOUBLE_QUOTE);
+			out.print("   {externalName = \"" + javaMethod.getName() + "\"");
 			if(javaMethod.getExceptionTypes().length > 0) {
-				out.print(SQLConstants.COMMA + JavaTypeConstants.EGL_THROWS_ANNOTATION);
+				out.print("," + JavaTypeConstants.EGL_THROWS_ANNOTATION);
 			}
 			out.print("}");
 		} else if(javaMethod.getExceptionTypes().length > 0) {
 			out.print("{" + JavaTypeConstants.EGL_THROWS_ANNOTATION + "}");
 		}
 		
-		out.println(SQLConstants.SEMICOLON);
+		out.println(';');
 	}
 }

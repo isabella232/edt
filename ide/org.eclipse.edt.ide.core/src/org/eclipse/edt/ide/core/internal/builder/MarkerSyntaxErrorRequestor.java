@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.core.internal.builder;
 
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.NodeNameUtility;
-import org.eclipse.edt.compiler.core.ast.NodeTypes;
 import org.eclipse.edt.compiler.core.ast.SyntaxError;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -24,11 +23,11 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 public class MarkerSyntaxErrorRequestor implements ISyntaxErrorRequestor {
     
     private SyntaxMarkerProblemRequestor problemRequestor;
-    private String fileContents;
+//    private String fileContents;
     
     public MarkerSyntaxErrorRequestor(SyntaxMarkerProblemRequestor problemRequestor, String fileContents) {
         this.problemRequestor = problemRequestor;
-        this.fileContents = fileContents;
+//        this.fileContents = fileContents;
     }
     
     private void createErrorMarker(int type, int startOffset, int endOffset, String insert) {
@@ -65,18 +64,7 @@ public class MarkerSyntaxErrorRequestor implements ISyntaxErrorRequestor {
 	}
 	
 	public void keywordAsName(int terminalType, int startOffset, int endOffset) {
-		String insert;
-		switch(terminalType) {
-			case NodeTypes.PRIMITIVE:
-			case NodeTypes.NUMERICPRIMITIVE:
-			case NodeTypes.CHARPRIMITIVE:
-			case NodeTypes.TIMESTAMPINTERVALPRIMITIVE:
-				insert = fileContents.substring(startOffset, endOffset).toUpperCase();
-				break;
-			default:
-				insert = NodeNameUtility.getTerminalName(terminalType);
-		}
-		createErrorMarker(SyntaxError.KEYWORD_AS_NAME, startOffset, endOffset, insert);		
+		createErrorMarker(SyntaxError.KEYWORD_AS_NAME, startOffset, endOffset, NodeNameUtility.getTerminalName(terminalType));		
 	}
 
 	public void missingNonTerminal(int nonTerminalType, int startOffset, int endOffset) {

@@ -13,28 +13,33 @@ package org.eclipse.edt.ide.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.BaseCompiler;
+import org.eclipse.edt.compiler.ICompiler;
+import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.StatementValidator;
-import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.osgi.framework.Bundle;
 
 /**
- * Base implementation of ICompiler intended to be subclassed by clients.
+ * Base implementation of IIDECompiler intended to be subclassed by clients.
  */
 public class IDEBaseCompiler implements IIDECompiler {
-
+	
 	protected ISystemEnvironment systemEnvironment;
+	
+	protected String systemPath;
 
 	protected org.eclipse.edt.compiler.ICompiler baseCompiler;
-	protected IIDECompiler parentCompiler;
 	
 	/**
 	 * The id of the preference page associated with this compiler.
@@ -45,8 +50,15 @@ public class IDEBaseCompiler implements IIDECompiler {
 	 * Constructor.
 	 */
 	public IDEBaseCompiler() {
+		this(new BaseCompiler());
+	}
+	
+	/**
+	 * Constructor.
+	 */
+	public IDEBaseCompiler(ICompiler baseCompiler) {
 		super();
-		baseCompiler = new BaseCompiler();
+		this.baseCompiler = baseCompiler;
 	}
 
 	@Override
@@ -59,7 +71,7 @@ public class IDEBaseCompiler implements IIDECompiler {
 		return preferencePageId;
 	}
 		
-	protected String getPathToPluginDirectory(String pluginID, String subDir) {
+	public static String getPathToPluginDirectory(String pluginID, String subDir) {
 		Bundle bundle = Platform.getBundle(pluginID);
 		try {
 			String file = FileLocator.resolve( bundle.getEntry( "/" ) ).getFile(); //$NON-NLS-1$
@@ -73,23 +85,6 @@ public class IDEBaseCompiler implements IIDECompiler {
 			ioe.printStackTrace();
 		}
 		return null;
-	}
-	
-	@Override
-	public String getSystemEnvironmentPath() {
-		
-		if (parentCompiler == null) {
-			return getSystemEnvironmentPathEntry();
-		}
-		else {
-			return getSystemEnvironmentPathEntry() + File.pathSeparator + parentCompiler.getSystemEnvironmentPath();
-		}
-	}
-
-
-	@Override
-	public List<String> getAllImplicitlyUsedEnumerations() {
-		return baseCompiler.getAllImplicitlyUsedEnumerations();
 	}
 	
 	@Override
@@ -131,24 +126,48 @@ public class IDEBaseCompiler implements IIDECompiler {
 	public String getVersion() {
 		return baseCompiler.getVersion();
 	}
-
+	
 	@Override
-	public List<String> getImplicitlyUsedEnumerations() {
-		return baseCompiler.getImplicitlyUsedEnumerations();
+	public String getSystemEnvironmentPath() {
+		if (systemPath == null) {
+			List<String> entries = getSystemEnvironmentPathEntries();
+			StringBuilder buf = new StringBuilder(200);
+			for (String entry : entries) {
+				if (entry == null) {
+					continue;
+				}
+				if (buf.length() > 0) {
+					buf.append(File.pathSeparatorChar);
+				}
+				if ((entry = entry.trim()).length() > 0) {
+					buf.append(entry);
+				}
+			}
+			systemPath = buf.toString();
+		}
+		return systemPath;
 	}
 	
-	protected String getSystemEnvironmentPathEntry() {
-		return getPathToPluginDirectory("org.eclipse.edt.mof.egl", "lib");
-	}
-
-	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
-		ISystemEnvironment parentEnv = null;
-		if (parentCompiler != null) {
-			parentEnv = parentCompiler.getSystemEnvironment(notifier);
+	protected List<String> getSystemEnvironmentPathEntries() {
+		List<String> list = new ArrayList(1);
+		list.add(getPathToPluginDirectory("org.eclipse.edt.mof.egl", "lib"));
+		
+		for (ICompilerExtension ext : baseCompiler.getExtensions()) {
+			String[] paths = ext.getSystemEnvironmentPaths();
+			if (paths != null && paths.length > 0) {
+				for (int i = 0; i < paths.length; i++) {
+					list.add(paths[i]);
+				}
+			}
 		}
-		return SystemEnvironmentManager.getSystemEnvironment(getSystemEnvironmentPathEntry(), parentEnv, getImplicitlyUsedEnumerations(), notifier, this);
+		
+		return list;
 	}
-
+	
+	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
+		return SystemEnvironmentManager.getSystemEnvironment(getSystemEnvironmentPath(), null, notifier, this);
+	}
+	
 	@Override
 	public synchronized ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
 		if (systemEnvironment == null) {
@@ -156,12 +175,24 @@ public class IDEBaseCompiler implements IIDECompiler {
 		}
 		return systemEnvironment;
 	}
-
+	
 	@Override
-	public StatementValidator getValidatorFor(Statement stmt) {
-		return baseCompiler.getValidatorFor(stmt);
+	public List<ASTValidator> getValidatorsFor(Node node) {
+		return baseCompiler.getValidatorsFor(node);
 	}
 	
+	@Override
+	public ElementGenerator getElementGeneratorFor(Node node) {
+		return baseCompiler.getElementGeneratorFor(node);
+	}
 	
+	@Override
+	public List<ICompilerExtension> getExtensions() {
+		return baseCompiler.getExtensions();
+	}
 	
+	@Override
+	public void addExtension(ICompilerExtension extension) {
+		baseCompiler.addExtension(extension);
+	}
 }

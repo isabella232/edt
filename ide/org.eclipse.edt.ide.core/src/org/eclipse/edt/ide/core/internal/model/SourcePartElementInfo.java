@@ -311,22 +311,6 @@ public String toString() {
 	}
 }
 
-	public boolean isDataItem() {
-		return fPartType == Part.DATAITEM;
-	}
-
-	public boolean isDataTable() {
-		return fPartType == Part.DATATABLE;
-	}
-
-	public boolean isForm() {
-		return fPartType == Part.FORM;
-	}
-
-	public boolean isFormGroup() {
-		return fPartType == Part.FORMGROUP;
-	}
-
 	public boolean isFunction() {
 		return fPartType == Part.FUNCTION;
 	}
@@ -487,8 +471,4 @@ public String toString() {
 	protected void setUsagePartPackages(char[][] usagePartPackages) {
 		this.usagePartPackages = usagePartPackages;
 	}
-	
-	
-	
-	
 }

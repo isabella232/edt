@@ -23,19 +23,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.compiler.binding.FormBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
-import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.model.EGLElement;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.internal.model.indexing.AbstractSearchScope;
@@ -196,11 +188,6 @@ public void add(Node node) throws EGLModelException {
 		public void visitPart(Part part){
 			addPart(part,part.getName());
 		}
-		
-		public boolean visit(NestedForm form){
-			addPart(form,form.getName());
-			return  false;
-		}
 	});
 }
 
@@ -274,30 +261,29 @@ protected IFile getFile(Part part){
 	return getFile(part.getName());
 }
 protected IFile getFile(Name part){
-	if (part != null){
-		IBinding binding = part.resolveBinding();
-		if (binding != null && binding != IBinding.NOT_FOUND_BINDING){
-			IPartBinding partBinding = null;
-			if (binding.isDataBinding()){
-				partBinding = ((IDataBinding)binding).getDeclaringPart();
-			}else if (binding.isTypeBinding() && ((ITypeBinding)binding).isPartBinding()){
-				if (((ITypeBinding)binding).getKind() == ITypeBinding.FORM_BINDING && ((FormBinding)binding).getEnclosingFormGroup() != null){
-					partBinding = ((FormBinding)binding).getEnclosingFormGroup();
-				}else partBinding = (IPartBinding)binding;
-			}else if (binding.isFunctionBinding()){
-				partBinding  = (IPartBinding)binding;
-			}
-			
-			if (partBinding != null && partBinding.getEnvironment() != null){
-				IEnvironment ienv = partBinding.getEnvironment();
-				if (ienv instanceof WorkingCopyProjectEnvironment) {
-					WorkingCopyProjectEnvironment environment = (WorkingCopyProjectEnvironment) partBinding.getEnvironment();
-					IFile declaringFile = environment.getPartOrigin(partBinding.getPackageName(), partBinding.getName()).getEGLFile();
-					return declaringFile;
-				}
-			}
-		}
-	}
+	// TODO No code references this anymore (parts browser and parts reference views were removed), and the new model doesn't have enough info to resolve the IFile.
+//	if (part != null){
+//		IBinding binding = part.resolveBinding();
+//		if (binding != null && binding != IBinding.NOT_FOUND_BINDING){
+//			IPartBinding partBinding = null;
+//			if (binding.isDataBinding()){
+//				partBinding = ((IDataBinding)binding).getDeclaringPart();
+//			}else if (binding.isTypeBinding() && ((ITypeBinding)binding).isPartBinding()){
+//				partBinding = (IPartBinding)binding;
+//			}else if (binding.isFunctionBinding()){
+//				partBinding  = (IPartBinding)binding;
+//			}
+//			
+//			if (partBinding != null && partBinding.getEnvironment() != null){
+//				IEnvironment ienv = partBinding.getEnvironment();
+//				if (ienv instanceof WorkingCopyProjectEnvironment) {
+//					WorkingCopyProjectEnvironment environment = (WorkingCopyProjectEnvironment) partBinding.getEnvironment();
+//					IFile declaringFile = environment.getPartOrigin(partBinding.getPackageName(), partBinding.getName()).getEGLFile();
+//					return declaringFile;
+//				}
+//			}
+//		}
+//	}
 	return null;
 }
 /* (non-EGLdoc)
@@ -319,8 +305,6 @@ public boolean encloses(IEGLElement element) {
                         IFile partFile = null;
                         if (part instanceof Part){
                         	partFile = getFile((Part)part);
-                        }else if (part instanceof NestedForm){
-                        	partFile = getFile(((NestedForm)part).getName());
                         }
                         	
                         IEGLElement elementFile = searchedElement.getAncestor(IEGLElement.EGL_FILE);

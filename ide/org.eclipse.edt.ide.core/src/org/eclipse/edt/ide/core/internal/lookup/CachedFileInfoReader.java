@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * 
@@ -76,7 +76,7 @@ public class CachedFileInfoReader {
 					md5Key = new byte[md5KeyLength];
 					inputStream.read(md5Key, 0, md5KeyLength);
 					
-					fileInfo.addPart(InternUtil.intern(partName), partType, elementOffset, elementLength, InternUtil.internCaseSensitive(caseSensitivePartName), md5Key);
+					fileInfo.addPart(NameUtile.getAsName(partName), partType, elementOffset, elementLength, NameUtile.getAsCaseSensitiveName(caseSensitivePartName), md5Key);
 				}
 			}finally{
 			   inputStream.close();

@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.ui.internal.externaltype.conversion.javatype;
 
 import java.lang.reflect.Constructor;
 
-import org.eclipse.edt.compiler.internal.sql.SQLConstants;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.ui.internal.externaltype.util.ReflectionUtil;
 import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
@@ -22,22 +21,22 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 public class JavaTypeConstructorTemplate extends AbstractTemplate {
 	public void genConstructor(Constructor<?> constructor, EglSourceContext ctx, TabbedWriter out){
 		StringBuilder builder = new StringBuilder(80);
-		builder.append("   constructor" + SQLConstants.LPAREN);
+		builder.append("   constructor(");
 		
 		Class<?>[] parameterTypes = constructor.getParameterTypes();
 		for(int i=0; i < parameterTypes.length; i++) {
-			builder.append("arg" + i + SQLConstants.SPACE + ReflectionUtil.getEGLTypeName(parameterTypes[i])
-					+ SQLConstants.SPACE + JavaTypeConstants.EGL_KEYWORD_IN);
+			builder.append("arg" + i + " " + ReflectionUtil.getEGLTypeName(parameterTypes[i])
+					+ " " + JavaTypeConstants.EGL_KEYWORD_IN);
 			if(i != parameterTypes.length -1) {
-				builder.append(SQLConstants.COMMA);
+				builder.append(',');
 			}
 		}
 		
-		builder.append(SQLConstants.RPAREN);
+		builder.append(')');
 		if(constructor.getExceptionTypes().length > 0) {
 			builder.append("{" + JavaTypeConstants.EGL_THROWS_ANNOTATION + "}");
 		}
-		builder.append(SQLConstants.SEMICOLON);
+		builder.append(';');
 		out.println(builder.toString());
 	}
 }

@@ -13,8 +13,6 @@ package org.eclipse.edt.ide.core.internal.search.matching;
 
 import java.io.IOException;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -32,6 +30,7 @@ import org.eclipse.edt.ide.core.model.IIndexConstants;
 import org.eclipse.edt.ide.core.model.IMember;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
+import org.eclipse.edt.mof.egl.Type;
 
 public class FunctionDeclarationPattern extends FunctionPattern {
 public FunctionDeclarationPattern(
@@ -164,12 +163,12 @@ public int matchLevel(Node node, boolean resolve) {
 		return POSSIBLE_MATCH;
 	}
 
-protected IPartBinding getPartBinding(Part part){
-	IBinding b = part.getName().resolveBinding();
-	if (b != null && b != IBinding.NOT_FOUND_BINDING){
-		return (IPartBinding)b;
-	}else return null;
-
+protected org.eclipse.edt.mof.egl.Part getPartBinding(Part part){
+	Type type = part.getName().resolveType();
+	if (type instanceof org.eclipse.edt.mof.egl.Part){
+		return (org.eclipse.edt.mof.egl.Part)type;
+	}
+	return null;
 }
 
 //public int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern,TopLevelFunction function) {
@@ -247,7 +246,6 @@ public int getPatternType() {
 				return this.matchTopLevelFunctionLevel(part);
 			}
 		} catch (EGLModelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -256,6 +256,7 @@ protected void moveAndResizeGap(int position, int size) {
  * Notify the listeners that this buffer has changed.
  * To avoid deadlock, this should not be called in a synchronized block.
  */
+@SuppressWarnings("deprecation")
 protected void notifyChanged(final BufferChangedEvent event) {
 	if (this.changeListeners != null) {
 		for (int i = 0, size = this.changeListeners.size(); i < size; ++i) {

@@ -21,19 +21,15 @@ import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class IDESystemEnvironment extends SystemEnvironment {
 
-	public IDESystemEnvironment(IEnvironment irEnv,
-			ISystemEnvironment parentEnv,
-			List<String> implicitlyUsedEnumerations, ICompiler compiler) {
-		super(irEnv, parentEnv, implicitlyUsedEnumerations, compiler);
+	public IDESystemEnvironment(IEnvironment irEnv, ISystemEnvironment parentEnv, ICompiler compiler) {
+		super(irEnv, parentEnv, compiler);
 	}
 	
 	@Override
 	protected void addSystemPackages(List<ISystemPackageBuildPathEntry> entries) {
-		// TODO Auto-generated method stub
 		super.addSystemPackages(entries);
 		for (ISystemPackageBuildPathEntry entry : entries) {
 			ZipFileBuildPathEntryManager.addSystemPathEntry(getCompiler(), entry);
 		}
 	}
-
 }

@@ -26,6 +26,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
 import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public abstract class AbstractASTManager {
 
@@ -110,7 +111,7 @@ public abstract class AbstractASTManager {
         
         for(Iterator iter = parts.iterator(); iter.hasNext();) {
             Part part = (Part) iter.next();
-            if(part.getIdentifier() == partName){
+            if(NameUtile.equals(part.getIdentifier(), partName)){
             	Part result = part.clonePart();
             	
             	doGetPartAST(declaringFile, result);
@@ -127,7 +128,7 @@ public abstract class AbstractASTManager {
 	}
 
 	public Node getAST(IFile declaringFile, String partName){
-    	 if(Util.getFilePartName(declaringFile)== partName){
+    	 if(NameUtile.equals(Util.getFilePartName(declaringFile), partName)){
     		return getFilePartAST(declaringFile);
     	}else{
     		return getPartAST(declaringFile, partName);

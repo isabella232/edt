@@ -20,7 +20,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -59,6 +58,7 @@ import org.eclipse.edt.ide.ui.wizards.EGLPartConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ExtractInterfaceConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ExtractInterfaceOperation;
 import org.eclipse.edt.ide.ui.wizards.PartTemplateException;
+import org.eclipse.edt.mof.egl.Element;
 
 public class ServiceOperation extends EGLFileOperation {
 	
@@ -188,8 +188,8 @@ public class ServiceOperation extends EGLFileOperation {
 			        if(iSize == 1) {
 			            //add the xml annotation of the interface to the service, 
 			            //if the service implements more than one interface, then do not create the wsdl annotation for service.		            
-			            IBinding interfaceNameBinding = boundInterfacePart.getName().resolveBinding();
-			            if(interfaceNameBinding != null && interfaceNameBinding != IBinding.NOT_FOUND_BINDING) {		            	
+			            Element interfaceNameBinding = boundInterfacePart.getName().resolveType();
+			            if(interfaceNameBinding != null) {		            	
 			            	StringBuffer nameVal = new StringBuffer();
 			            	StringBuffer namespaceVal = new StringBuffer();
 			            	EGLFileConfiguration.getXMLAnnotationValueFromBinding(interfaceNameBinding, nameVal, namespaceVal);		            

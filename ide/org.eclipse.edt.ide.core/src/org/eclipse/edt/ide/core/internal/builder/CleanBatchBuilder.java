@@ -28,7 +28,8 @@ public class CleanBatchBuilder extends AbstractBatchBuilder {
 		super(builder, notifier);
 	}
 	
-	protected void addEGLFile(IFile file, String[] packageName) {
+	@Override
+	protected void addEGLFile(IFile file, String packageName) {
 		try {
 			String fileContents = org.eclipse.edt.ide.core.internal.utils.Util.getFileContents(file);
 			
@@ -54,7 +55,8 @@ public class CleanBatchBuilder extends AbstractBatchBuilder {
 		}
 	}
 
-	protected void addEGLPackage(String[] packageName) {
+	@Override
+	protected void addEGLPackage(String packageName) {
 		projectInfo.packageAdded(packageName);		
 	}
 

@@ -18,30 +18,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.ConstantFormField;
-import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
@@ -50,20 +43,17 @@ import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.ServiceReference;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.ide.core.internal.model.Util;
 import org.eclipse.edt.ide.core.internal.model.util.HashtableOfLong;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.ICompiledFileUnit;
 import org.eclipse.edt.ide.core.search.IEGLSearchResultCollector;
+import org.eclipse.edt.mof.egl.FunctionPart;
 
 /**
  * A set of matches and potential matches.
@@ -144,19 +134,10 @@ public class MatchingNodeSet {
 		return this.locator.matchCheck(node);
 	}
 	
-	public int isMatchingFunctionType(Name node,IPartBinding partBinding) {
+	public int isMatchingFunctionType(Name node,FunctionPart partBinding) {
 		int level = getMatchingLevel(node);
 		if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
 			return locator.matchesFunctionPartType(node,partBinding);
-			
-		}
-		return level;
-	}
-	
-	public int isMatchingFunctionPart(TopLevelFunction node) {
-		int level = getMatchingLevel(node);
-		if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
-			return locator.matchesFunctionPart(node);
 			
 		}
 		return level;
@@ -171,15 +152,7 @@ public class MatchingNodeSet {
 		return level;
 	}
 	
-	public int isMatchingNestedFormPart(NestedForm node) {
-		int level = getMatchingLevel(node);
-		if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
-			return locator.matchesNestedFormPart(node);
-			
-		}
-		return level;
-	}
-	public int isMatchingType(Name node,IPartBinding partBinding) {
+	public int isMatchingType(Name node,org.eclipse.edt.mof.egl.Part partBinding) {
 		int level = getMatchingLevel(node);
 		if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
 			return locator.matchesPartType(node,partBinding);
@@ -192,15 +165,6 @@ public class MatchingNodeSet {
 		int level = getMatchingLevel(part);
 		if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
 			return locator.matchesPart(part);
-			
-		}
-		return level;
-	}
-	
-	public int isMatchingAnnotationType(Name node, IAnnotationTypeBinding binding) {
-		int level = getMatchingLevel(node);
-		if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
-			return locator.matchesAnnotationType(node,binding);
 			
 		}
 		return level;
@@ -494,18 +458,9 @@ public class MatchingNodeSet {
 			case Part.LIBRARY :
 				reportMatchingLibrary((Library) part, enclosingElement);
 				break;
-			case Part.FORM :
-				reportMatchingForm((TopLevelForm) part, enclosingElement);
-				break;
-			case Part.FORMGROUP :
-				reportMatchingFormGroup((FormGroup) part, enclosingElement);
-				break;
 			case Part.RECORD :
 				reportMatchingRecord((Record)part, enclosingElement);
 				break;				
-			case Part.DATATABLE :
-				reportMatchingDataTable((DataTable)part, enclosingElement);
-				break;
 			case Part.HANDLER :
 				reportMatchingHandler((Handler) part, enclosingElement);
 				break;
@@ -515,9 +470,6 @@ public class MatchingNodeSet {
 			case Part.INTERFACE :
 				reportMatchingInterface((Interface) part, enclosingElement);
 				break;
-			case Part.FUNCTION :
-				reportMatchingFunction((TopLevelFunction) part, enclosingElement);
-				break;
 			case Part.DELEGATE :
 				reportMatchingDelegate((Delegate) part, enclosingElement);
 				break;
@@ -526,9 +478,6 @@ public class MatchingNodeSet {
 				break;
 			case Part.ENUMERATION :
 				reportMatchingEnumeration((Enumeration) part, enclosingElement);
-				break;
-			case Part.DATAITEM :
-				reportMatchingDataItem((DataItem) part, enclosingElement);
 				break;
 			case Part.CLASS :
 				reportMatchingClass((EGLClass) part, enclosingElement);
@@ -541,10 +490,6 @@ public class MatchingNodeSet {
 		}
 		
 		reportMatchingSettings(part,enclosingElement);
-	}
-	
-	private void reportMatchingDataItem(DataItem dataItem, IEGLElement enclosingElement) throws CoreException{
-
 	}
 	
 	private void reportMatchingDelegate(final Delegate delegate, IEGLElement enclosingElement) throws CoreException{
@@ -624,7 +569,6 @@ public class MatchingNodeSet {
 				try {
 					reportMatchingFunction(nestedFunction, enclosingElement);
 				} catch (CoreException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return false;
@@ -690,68 +634,6 @@ public class MatchingNodeSet {
 		reportMatchingFields(part,enclosingElement);
 	}
 				
-	private void reportMatchingDataTable(DataTable part, IEGLElement enclosingElement)throws CoreException{
-		reportMatchingFields(part,enclosingElement);
-	}
-	
-	private void reportMatchingForm(TopLevelForm form, IEGLElement enclosingElement) throws CoreException {
-		reportMatchingFields(form, enclosingElement);
-		
-		// check to see if this form declaration is being searched for
-		Integer level;
-		if ((level = (Integer) this.matchingNodes.remove(form)) != null) {
-			if ((this.matchContainer & SearchPattern.PART) != 0) {
-				this.locator.reportPartDeclaration(
-					form,
-					enclosingElement,
-					level.intValue() == SearchPattern.ACCURATE_MATCH
-						? IEGLSearchResultCollector.EXACT_MATCH
-						: IEGLSearchResultCollector.POTENTIAL_MATCH);
-			}
-		}
-	}
-	
-	private void reportMatchingFormGroup(FormGroup formGroup, IEGLElement enclosingElement) throws CoreException {
-		reportMatchingFields(formGroup,enclosingElement);
-		reportMatchingUses(formGroup, enclosingElement);
-	}
-	
-	private void reportMatchingFunction(TopLevelFunction function, IEGLElement enclosingElement) throws CoreException {
-		reportMatchingFields(function, enclosingElement);
-	
-		Integer level;
-		// Check for fields that are being referenced within this function
-		Node[] nodes = this.matchingNodes(function.getOffset(), function.getOffset() + function.getLength());
-		for (int i = 0; i < nodes.length; i++) {
-			Node node = nodes[i];
-			level = (Integer) this.matchingNodes.get(node);
-			if ((this.matchContainer & SearchPattern.FIELD) != 0) {
-				this.locator.reportReference(
-					node,
-					//part,
-					function,
-					enclosingElement,
-					level.intValue() == SearchPattern.ACCURATE_MATCH
-						? IEGLSearchResultCollector.EXACT_MATCH
-						: IEGLSearchResultCollector.POTENTIAL_MATCH);
-				this.matchingNodes.remove(node);
-			}
-		}
-		
-		// check to see if this function declaration is being searched for
-		if ((level = (Integer) this.matchingNodes.remove(function)) != null) {
-			if ((this.matchContainer & SearchPattern.FUNCTION) != 0) {
-				this.locator.reportFunctionDeclaration(
-					function,
-					enclosingElement,
-					level.intValue() == SearchPattern.ACCURATE_MATCH
-						? IEGLSearchResultCollector.EXACT_MATCH
-						: IEGLSearchResultCollector.POTENTIAL_MATCH);
-			}
-		}
-	}
-	
-	
 	private void reportMatchingFunction(NestedFunction function, IEGLElement enclosingElement) throws CoreException {
 		reportMatchingFields(function, enclosingElement);
 	
@@ -807,7 +689,6 @@ public class MatchingNodeSet {
 					
 					reportMatchingField(node, parent);
 				} catch (CoreException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -827,32 +708,10 @@ public class MatchingNodeSet {
 				return false;
 			}
 			
-			public boolean visit(ServiceReference serviceReference) {
-				reportNamedNode(serviceReference,enclosingElement);
-				return false;
-			}
-			
 			public boolean visit(StructureItem structureItem){
 				reportNamedNode(structureItem,enclosingElement);
 				return false;
 			}
-			
-			public boolean visit(NestedForm nestedForm){
-				reportNamedNode(nestedForm,((IPart)enclosingElement).getPart(nestedForm.getName().getCanonicalName()));
-				return false;
-			}
-			
-			public boolean visit(VariableFormField variableFormField){
-				reportNamedNode(variableFormField,enclosingElement);
-				return false;
-			}
-			
-			public boolean visit(ConstantFormField constantFormField){
-				reportNamedNode(constantFormField,enclosingElement);
-				return false;
-			}
-			
-
 		});
 
 	}
@@ -873,23 +732,11 @@ public class MatchingNodeSet {
 	
 	private void reportMatchingSettings(final Part part,final IEGLElement enclosingElement) throws CoreException {
 		part.accept(new DefaultASTVisitor(){
-			public boolean visit(DataItem dataItem) {
-				return true;
-			}
-
-			public boolean visit(DataTable dataTable) {
-				return true;
-			}
-			
 			public boolean visit(Delegate delegate) {
 				return true;
 			}
 			
 			public boolean visit(ExternalType externalType) {
-				return true;
-			}
-
-			public boolean visit(FormGroup formGroup) {
 				return true;
 			}
 
@@ -917,14 +764,6 @@ public class MatchingNodeSet {
 				return true;
 			}
 
-			public boolean visit(TopLevelForm topLevelForm) {
-				return true;
-			}
-
-			public boolean visit(TopLevelFunction topLevelFunction) {
-				return true;
-			}
-			
 			public boolean visit(Enumeration enumeration) {
 				return true;
 			}
@@ -942,12 +781,10 @@ public class MatchingNodeSet {
 			Node decl = (Node) iter.next();
 			decl.accept(new DefaultASTVisitor() {
 
-				Integer level;
 				private void reportNamedNode(Node node,IEGLElement parent){
 					try {
 						reportMatchingField(node, parent);
 					} catch (CoreException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -956,10 +793,10 @@ public class MatchingNodeSet {
 					Expression expr = setValuesExpression.getExpression();
 					if (expr instanceof AnnotationExpression) {
 						Name name = ((AnnotationExpression)expr).getName();
-						if (name.resolveTypeBinding() != null){
+						if (name.resolveType() != null){
 							reportNamedNode(name,enclosingElement);
 						}
-						else if (name.resolveBinding() != null) {
+						else if (name.resolveElement() != null) {
 							reportNamedNode(name,enclosingElement);
 						}
 					}
@@ -973,7 +810,7 @@ public class MatchingNodeSet {
 					Expression expr = assignment.getRightHandSide();
 					expr.accept(new AbstractASTExpressionVisitor(){
 						public boolean visitName(Name name) {
-							if (name.resolveTypeBinding() != null){
+							if (name.resolveType() != null){
 								reportNamedNode(name,enclosingElement);
 							}
 						    return false;
@@ -985,7 +822,7 @@ public class MatchingNodeSet {
 					});
 					assignment.getLeftHandSide().accept(new AbstractASTExpressionVisitor(){
 						public boolean visitName(Name name) {
-							if (name.resolveTypeBinding() != null){
+							if (name.resolveType() != null){
 								reportNamedNode(name,enclosingElement);
 							}
 						    return false;

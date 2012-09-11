@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.editor;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 
@@ -32,9 +34,10 @@ public class AccumulatingTopLevelProblemRequestor extends DefaultProblemRequesto
 		this.requestor = requestor;
 	}
 	
-	public void acceptProblem(int startOffset, int endOffset, int severity,	int problemKind, String[] inserts) {
+	@Override
+	public void acceptProblem(int startOffset, int endOffset, int severity,	int problemKind, String[] inserts, ResourceBundle bundle) {
 		if (shouldReportProblem(problemKind)) {
-			requestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts);	
+			requestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 		}
 	}
 	

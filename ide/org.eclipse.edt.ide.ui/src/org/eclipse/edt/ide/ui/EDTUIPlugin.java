@@ -64,9 +64,6 @@ public class EDTUIPlugin extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.edt.ide.ui";
 	public static final String EGL_EDITOR_ID = "org.eclipse.edt.ide.ui.EGLEditor"; //$NON-NLS-1$
 	public static final int INTERNAL_ERROR= 10001;
-	public static final int TARGET_RUNTIME_JAVA_MASK = 1 << 0;
-	public static final int TARGET_RUNTIME_JAVASCRIPT_MASK = 1 << 1;
-	public static final int TARGET_RUNTIME_COBOL_MASK = 1 << 2;
 
 	// The shared instance
 	private static EDTUIPlugin plugin;

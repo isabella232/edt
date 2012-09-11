@@ -13,18 +13,23 @@ package org.eclipse.edt.ide.core.internal.lookup.workingcopy;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.internal.lookup.EglarBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.ZipFileOrigin;
 
 public class WorkingCopyEglarBuildPathEntry extends EglarBuildPathEntry implements IWorkingCopyBuildPathEntry {
 
-	public WorkingCopyEglarBuildPathEntry(IEnvironment environment, IPath path, String fileExtension, Mof2Binding converter){
-		super(environment, path, fileExtension, converter);
+	public WorkingCopyEglarBuildPathEntry(IEnvironment environment, IPath path, String fileExtension){
+		super(environment, path, fileExtension);
 	}
 	
-	public IPartOrigin getPartOrigin(String[] packageName, String partName) {
+	@Override
+	public IPartOrigin getPartOrigin(String packageName, String partName) {
 		return new ZipFileOrigin();
+	}
+	
+	@Override
+	protected boolean shouldSetEnvironmentOnIr() {
+		return true;
 	}
 }

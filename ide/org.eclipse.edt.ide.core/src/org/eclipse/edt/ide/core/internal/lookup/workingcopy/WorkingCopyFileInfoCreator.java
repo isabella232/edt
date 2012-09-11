@@ -30,12 +30,13 @@ public class WorkingCopyFileInfoCreator extends AbstractFileInfoCreator {
 	
 	private IWorkingCopy workingCopy;
 
-	public WorkingCopyFileInfoCreator(IProject project, String[] packageName, IFile file, IWorkingCopy workingCopy, File fileAST, IDuplicatePartRequestor duplicatePartRequestor) {
+	public WorkingCopyFileInfoCreator(IProject project, String packageName, IFile file, IWorkingCopy workingCopy, File fileAST, IDuplicatePartRequestor duplicatePartRequestor) {
 		super(WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project), packageName, file, fileAST, duplicatePartRequestor);
 		
 		this.workingCopy = workingCopy;
 	}
 	
+	@Override
 	public String getContents() throws CoreException, IOException {
 		if(workingCopy != null) {
 		  return ((IEGLFile)workingCopy).getBuffer().getContents();
@@ -51,6 +52,7 @@ public class WorkingCopyFileInfoCreator extends AbstractFileInfoCreator {
 	 * It is possible that the WCC Resource Change job hasn't been run yet.  This means that we can't rely completely on the parents isDuplicatePart method, which 
 	 * requires that the resources changes have been processed.
 	 */
+	@Override
 	protected boolean isDuplicatePart(String caseInsensitivePartName) {
 		if(projectInfo.hasPackage(packageName)){
 			return super.isDuplicatePart(caseInsensitivePartName);

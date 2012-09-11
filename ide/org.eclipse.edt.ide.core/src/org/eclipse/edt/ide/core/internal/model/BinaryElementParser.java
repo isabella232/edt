@@ -60,7 +60,7 @@ public class BinaryElementParser {
 	private char[] packageName;
 	private ISourceElementRequestor requestor;
 	private IProject project;
-	private boolean reportReferencesInStatements;
+//	private boolean reportReferencesInStatements;
 	
 	public BinaryElementParser(ISourceElementRequestor requestor,IProject project) {
 		this.requestor = requestor;
@@ -68,7 +68,7 @@ public class BinaryElementParser {
 	}
 
 	public void parseDocument(IDocument file, boolean reportReferencesInStatements) {
-		this.reportReferencesInStatements = reportReferencesInStatements;
+//		this.reportReferencesInStatements = reportReferencesInStatements;
 		byte[] contents;
 		try { 
 			contents = file.getByteContent();
@@ -241,7 +241,7 @@ public class BinaryElementParser {
 			int modifier = isPublic ? Flags.AccPublic : Flags.AccPrivate;
 			ElementLocation location = getElementLocation(delegate);
 			int declStart = location.elementOffSet;
-			int declEnd = location.elementOffSet + location.elementLen; 
+//			int declEnd = location.elementOffSet + location.elementLen; 
 			int nameStart = 0;
 			int nameEnd = nameStart;
 			
@@ -333,7 +333,7 @@ public class BinaryElementParser {
 				return false;
 			}
 			
-			this.partType = IRPartType.PART_EXTERNALTYPE;
+			this.partType = IRPartType.PART_CLASS;
 			visitPart(partType, partInfo, eglClass);
 			return true;
 		}
@@ -367,7 +367,7 @@ public class BinaryElementParser {
 			
 			ElementLocation location = getElementLocation(function);
 			int declStart = location.elementOffSet;
-			int declEnd = location.elementOffSet + location.elementLen; 
+//			int declEnd = location.elementOffSet + location.elementLen; 
 			
 			AccessKind accessKind = function.getAccessKind();
 			boolean isPublic = true;

@@ -82,6 +82,8 @@ public class PluginImages {
 	public static final String IMG_OBJS_FORM= NAME_PREFIX + "form_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_DATAITEM = NAME_PREFIX + "dtaitm_obj.gif"; //$NON-NLS-1$
 	public static final String IMG_OBJS_STRUCTUREITEM = NAME_PREFIX + "stritm_obj.gif"; //$NON-NLS-1$
+	//TODO we need an icon for class!
+	public static final String IMG_OBJS_CLASS= NAME_PREFIX + "class_obj.gif"; 			//$NON-NLS-1$
 
 	public static final String IMG_OBJS_IMPORT = NAME_PREFIX + "import.gif"; //$NON-NLS-1$
 	public static final String IMG_OBJS_IMPORTS = NAME_PREFIX + "imports.gif"; //$NON-NLS-1$
@@ -206,6 +208,7 @@ public class PluginImages {
 	public static final ImageDescriptor DESC_OBJS_FORM= createManaged(T_OBJ, IMG_OBJS_FORM);
 	public static final ImageDescriptor DESC_OBJS_DATAITEM = createManaged(T_OBJ, IMG_OBJS_DATAITEM);
 	public static final ImageDescriptor DESC_OBJS_STRUCTUREITEM = createManaged(T_OBJ, IMG_OBJS_STRUCTUREITEM);
+	public static final ImageDescriptor DESC_OBJS_CLASS= createManaged(T_OBJ, IMG_OBJS_CLASS);
 
 	public static final ImageDescriptor DESC_OBJS_IMPORT = createManaged(T_OBJ, IMG_OBJS_IMPORT);
 	public static final ImageDescriptor DESC_OBJS_IMPORTS = createManaged(T_OBJ, IMG_OBJS_IMPORTS);

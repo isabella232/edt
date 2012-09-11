@@ -192,26 +192,18 @@ public class EGLUIHelp {
 					if (record.hasSubType()) {
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_BASIC))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_BASICRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM))
-							return IUIHelpConstants.EGL_EDITOR_RECORD_CONSOLEFORM;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_DLI_SEGMENT))
-							return IUIHelpConstants.EGL_EDITOR_RECORD_DLISEGMENT;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_EXCEPTION))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_EXCEPTION;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_INDEXED))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_INDEXRECORD;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_MQ))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_MQRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_PSB_RECORD))
-							return IUIHelpConstants.EGL_EDITOR_RECORD_PSBRECORD;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_RELATIVE))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_RELATIVERECORD;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_SERIAL))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_SERIALRECORD;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_SQl))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_SQLRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_VGUI))
-							return IUIHelpConstants.EGL_EDITOR_RECORD_VGUIRECORD;
 					}
 					return IUIHelpConstants.EGL_EDITOR_RECORD;
 				}

@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.search.matching;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.internal.model.index.IEntryResult;
@@ -124,17 +121,6 @@ protected boolean matchIndexEntry(){
 	return true;
 }
 
-public int matchesNestedFormPart(NestedForm node){
-	if (partTypes != IIndexConstants.FORM_SUFFIX && partTypes != IIndexConstants.PART_SUFFIX){
-		return IMPOSSIBLE_MATCH;
-	}
-	
-	IPartBinding partBinding = getPartBinding(node.getName());
-	if (partBinding != null && partBinding != IBinding.NOT_FOUND_BINDING){
-//		char[] enclosingTypeName = this.enclosingTypeNames == null ? null : CharOperation.concatWith(this.enclosingTypeNames, '.');
-		return this.matchLevelForType(this.simpleName, this.qualification, null, getPartBinding(node.getName()));
-	}else return INACCURATE_MATCH;
-}
 /**
  * @see SearchPattern#matchLevel(IEGLPart)
  */

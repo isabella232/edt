@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.NodeNameUtility;
-import org.eclipse.edt.compiler.core.ast.NodeTypes;
 import org.eclipse.edt.compiler.core.ast.SyntaxError;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -155,18 +154,7 @@ public class AccumulatingSyntaxProblemRequestor implements ISyntaxErrorRequestor
 	 }
 
 	public void keywordAsName(int terminalType, int startOffset, int endOffset) {	
-		String insert;
-		switch(terminalType) {
-			case NodeTypes.PRIMITIVE:
-			case NodeTypes.NUMERICPRIMITIVE:
-			case NodeTypes.CHARPRIMITIVE:
-			case NodeTypes.TIMESTAMPINTERVALPRIMITIVE:
-				insert = fileContents.substring(startOffset, endOffset).toUpperCase();
-				break;
-			default:
-				insert = NodeNameUtility.getTerminalName(terminalType);
-		}
-		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.KEYWORD_AS_NAME, new String[] { insert }));	
+		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.KEYWORD_AS_NAME, new String[] {NodeNameUtility.getTerminalName(terminalType)}));	
 	}
 	
 }

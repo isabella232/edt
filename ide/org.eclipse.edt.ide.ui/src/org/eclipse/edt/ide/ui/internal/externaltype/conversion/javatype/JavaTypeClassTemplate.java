@@ -19,7 +19,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.compiler.internal.sql.SQLConstants;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.ui.internal.externaltype.util.ReflectionUtil;
 import org.eclipse.edt.ide.ui.internal.externaltype.wizards.javatype.JavaType;
@@ -67,14 +66,14 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			}
 			out.println(" type JavaObject ");
 			if(isEGLKeyWord || isStartWithEze) {
-				out.print("{externalName = " + SQLConstants.DOUBLE_QUOTE);
+				out.print("{externalName = \"");
 				if(declaringClass.getEnclosingClass() == null) {
 					out.print(declaringClass.getSimpleName());
 				} else {
-					out.print(declaringClass.getEnclosingClass().getSimpleName() + SQLConstants.QUALIFICATION_DELIMITER);
+					out.print(declaringClass.getEnclosingClass().getSimpleName() + ".");
 					out.print(declaringClass.getSimpleName());
 				}
-				out.print(SQLConstants.DOUBLE_QUOTE);
+				out.print('\"');
 				
 				if(notNeedPackage) {
 					out.println("}");
@@ -83,21 +82,19 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 				}
 			} else {
 				if(declaringClass.getEnclosingClass() != null) {
-					out.print("{externalName = " + SQLConstants.DOUBLE_QUOTE);
-					out.print(declaringClass.getEnclosingClass().getSimpleName() + SQLConstants.QUALIFICATION_DELIMITER);
+					out.print("{externalName = \"");
+					out.print(declaringClass.getEnclosingClass().getSimpleName() + ".");
 					out.print(declaringClass.getSimpleName());
-					out.print(SQLConstants.DOUBLE_QUOTE);
+					out.print('\"');
 					
 					if(notNeedPackage) {
 						out.println("}");
 					} else {
-						out.println(SQLConstants.COMMA + " PackageName = " + SQLConstants.DOUBLE_QUOTE +
-								packageName + SQLConstants.DOUBLE_QUOTE + "}");
+						out.println(", PackageName = \"" + packageName + "\"}");
 					}
 					
 				} else if(!notNeedPackage) {
-					out.println("{ PackageName = " + SQLConstants.DOUBLE_QUOTE +
-							packageName + SQLConstants.DOUBLE_QUOTE + "}");
+					out.println("{ PackageName = \"" + packageName + "\"}");
 				}
 			}
 			
@@ -136,7 +133,7 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 		for(Class<?> interfaceClass : interfaces) {
 			if(JavaType.SelectedType == source
 				 || allClassMeta.contains(interfaceClass)) {
-				buffer.append(SQLConstants.COMMA);
+				buffer.append(',');
 				boolean isEGLPart =JavaTypeConstants.EglPartNames.contains(interfaceClass.getSimpleName().toLowerCase(Locale.ENGLISH));
 				if(isEGLPart) {
 					buffer.append(JavaTypeConstants.UNDERSTORE_PREFIX );
@@ -158,7 +155,7 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			}
 		} 
 		
-		if(buffer.length() > 0 && SQLConstants.COMMA.equals(buffer.substring(0, 1))){
+		if(buffer.length() > 0 && ",".equals(buffer.substring(0, 1))){
 			buffer.deleteCharAt(0);
 		}
 	

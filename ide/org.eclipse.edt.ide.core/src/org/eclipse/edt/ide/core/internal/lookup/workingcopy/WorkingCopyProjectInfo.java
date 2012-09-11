@@ -48,18 +48,19 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		}
 	}
 	
-	private HashMap packageMap = new HashMap(); // TODO Possibly refactor to use ResourceInfo from ProjectInfo, but this may be too heavy handed for this
+	private HashMap<String, HashMap<String, WorkingCopyProjectInfoEntry>> packageMap = new HashMap(); // TODO Possibly refactor to use ResourceInfo from ProjectInfo, but this may be too heavy handed for this
 	
 	public WorkingCopyProjectInfo(IProject project) {
 		super(project);
 	}
 	
-	public IPartOrigin getPartOrigin(String[] packageName, String partName) {
+	@Override
+	public IPartOrigin getPartOrigin(String packageName, String partName) {
 		// First check the working copy project info
-		HashMap partMap = (HashMap)packageMap.get(packageName);
+		HashMap<String, WorkingCopyProjectInfoEntry> partMap = packageMap.get(packageName);
 		
 		if(partMap != null){
-			WorkingCopyProjectInfoEntry entry = (WorkingCopyProjectInfoEntry)partMap.get(partName);
+			WorkingCopyProjectInfoEntry entry = partMap.get(partName);
 			
 			if(entry != null){
 				return new EGLFileOrigin(entry.file);
@@ -85,7 +86,8 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		return partOrigin;
 	}
 
-	public boolean hasPackage(String[] packageName) {
+	@Override
+	public boolean hasPackage(String packageName) {
 		// always go to the project info for packages
 		boolean hasPackage = super.hasPackage(packageName);
 		if(!hasPackage) {
@@ -99,10 +101,11 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		return hasPackage;
 	}
 
-	public int hasPart(String[] packageName, String partName) {
+	@Override
+	public int hasPart(String packageName, String partName) {
 		
 		// First check the working copy project info
-		HashMap partMap = (HashMap)packageMap.get(packageName);
+		HashMap partMap = packageMap.get(packageName);
 		
 		if(partMap != null){
 			WorkingCopyProjectInfoEntry entry = (WorkingCopyProjectInfoEntry)partMap.get(partName);
@@ -134,8 +137,8 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		return partType;
 	}
 	
-	private void recordEntry(String[] packageName, String partName, WorkingCopyProjectInfoEntry entry){
-		HashMap partMap = (HashMap)packageMap.get(packageName);
+	private void recordEntry(String packageName, String partName, WorkingCopyProjectInfoEntry entry){
+		HashMap partMap = packageMap.get(packageName);
 		
 		if(partMap == null){
 			partMap = new HashMap();
@@ -145,6 +148,7 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		partMap.put(partName, entry);
 	}
 
+	@Override
 	public void clear() {
 		super.clear();
 		packageMap.clear();		
@@ -154,16 +158,18 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		packageMap.clear();		
 	}
 
+	@Override
 	protected IFileInfo getCachedFileInfo(IProject project, IPath projectRelativePath) {
 		return WorkingCopyFileInfoManager.getInstance().getFileInfo(project, projectRelativePath);
 	}
 	
-	public String getCaseSensitivePartName(String[] packageName, String partName){
+	@Override
+	public String getCaseSensitivePartName(String packageName, String partName){
 		// First check the working copy project info
-		HashMap partMap = (HashMap)packageMap.get(packageName);
+		HashMap<String, WorkingCopyProjectInfoEntry> partMap = packageMap.get(packageName);
 		
 		if(partMap != null){
-			WorkingCopyProjectInfoEntry entry = (WorkingCopyProjectInfoEntry)partMap.get(partName);
+			WorkingCopyProjectInfoEntry entry = partMap.get(partName);
 			
 			if(entry != null){
 				return entry.caseSensitivePartName;
@@ -201,19 +207,20 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		return caseSensitivePartName;
 	}
 
+	@Override
 	protected IContainer[] getSourceLocations(IProject project) {
 		return WorkingCopyProjectBuildPathManager.getInstance().getProjectBuildPath(project).getSourceLocations();
 	}
 
-	public void workingCopyPartAdded(String[] packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
+	public void workingCopyPartAdded(String packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
 		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.ADDITION, caseSensitivePartName));
 	}
 
-	public void workingCopyPartRemoved(String[] packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
+	public void workingCopyPartRemoved(String packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
 		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.REMOVAL, caseSensitivePartName));		
 	}
 
-	public void workingCopyPartChanged(String[] packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
+	public void workingCopyPartChanged(String packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
 		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.CHANGE, caseSensitivePartName));
 	}
 }

@@ -19,15 +19,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.compiler.binding.AnnotationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.AnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
-import org.eclipse.edt.compiler.binding.annotationType.StereotypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
@@ -51,6 +43,9 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.Type;
 
 public class PartDeclarationPattern extends SearchPattern {
 
@@ -241,18 +236,6 @@ public int matchesPart(IPart part) {
 	return this.matchLevel(part);
 }
 
-public int matchesNestedFormPart(NestedForm node){
-	if (partTypes != IIndexConstants.FORM_SUFFIX && partTypes != IIndexConstants.PART_SUFFIX){
-		return IMPOSSIBLE_MATCH;
-	}
-	
-	IPartBinding partBinding = getPartBinding(node.getName());
-	if (partBinding != null && partBinding != IBinding.NOT_FOUND_BINDING){
-		char[] enclosingTypeName = this.enclosingTypeNames == null ? null : CharOperation.concatWith(this.enclosingTypeNames, '.');
-		return this.matchLevelForType(this.simpleName, this.pkg, enclosingTypeName, getPartBinding(node.getName()));
-	}else return INACCURATE_MATCH;
-}
-
 /**
  * @see SearchPattern#matchLevel(AstNode, boolean)
  */
@@ -264,13 +247,8 @@ public int matchLevel(Node node, boolean resolve) {
 			return IMPOSSIBLE_MATCH;
 		}
 		
-	}else if (node instanceof NestedForm){
-		NestedForm type = (NestedForm)node;
-		// type name
-		if (this.simpleName != null && !this.matchesName(this.simpleName, type.getName().getCanonicalName().toCharArray())){
-			return IMPOSSIBLE_MATCH;
-		}
-	}else return IMPOSSIBLE_MATCH;
+	}
+	else return IMPOSSIBLE_MATCH;
 
 	return POSSIBLE_MATCH ;
 }
@@ -324,8 +302,8 @@ protected boolean matchesType(char[] simpleNamePattern, char[] pkgPattern, char[
  * Returns whether the given part matches the given simple name pattern 
  * qualification pattern and enclosing type name pattern.
  */
-protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, char[] enclosingNamePattern, IPartBinding partBinding) {
-	if (partBinding != null && partBinding != IBinding.NOT_FOUND_BINDING){
+protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, char[] enclosingNamePattern, org.eclipse.edt.mof.egl.Part partBinding) {
+	if (partBinding != null){
 		if (enclosingNamePattern == null) {
 			return this.matchLevelForType(simpleNamePattern, qualificationPattern, partBinding);
 			} else {
@@ -451,23 +429,11 @@ private boolean matchesPartType(Part part){
 		case IIndexConstants.STEREOTYPE_SUFFIX:
 			match = partType == Part.RECORD && isStereotype(part);
 			break;
-		case IIndexConstants.ITEM_SUFFIX:
-			match = partType == Part.DATAITEM;
-			break;
 		case IIndexConstants.LIBRARY_SUFFIX:
 			match = partType == Part.LIBRARY;
 			break;
 		case IIndexConstants.FUNCTION_SUFFIX:
 			match = partType == Part.FUNCTION;
-			break;
-		case IIndexConstants.FORMGRP_SUFFIX:
-			match = partType == Part.FORMGROUP;
-			break;
-		case IIndexConstants.FORM_SUFFIX:
-			match = partType == Part.FORM;
-			break;
-		case IIndexConstants.TABLE_SUFFIX:
-			match = partType == Part.DATATABLE;
 			break;
 		case IIndexConstants.HANDLER_SUFFIX:
 			match = partType == Part.HANDLER;
@@ -518,25 +484,14 @@ private boolean isStereotype(IPart part) {
 }
 private boolean isAnnotation(Part part) {
 	Name name = part.getName();
-	IBinding binding = name.resolveBinding();
-	if (binding != null && binding instanceof PartBinding) {
-		IAnnotationBinding subtype = ((PartBinding)binding).getSubTypeAnnotationBinding();
-		return subtype instanceof AnnotationBinding && subtype.getType() instanceof AnnotationAnnotationTypeBinding;
-	}
-	return false;
+	Type binding = name.resolveType();
+	return binding instanceof Annotation;
 }
 
 private boolean isStereotype(Part part) {
 	Name name = part.getName();
-	IBinding binding = name.resolveBinding();
-	if (binding != null && binding instanceof PartBinding) {
-		IAnnotationBinding subtype = ((PartBinding)binding).getSubTypeAnnotationBinding();
-		if (subtype instanceof AnnotationBinding && subtype.getType() instanceof AnnotationAnnotationTypeBinding) {
-			IAnnotationBinding stereotype = subtype.getAnnotation( StereotypeAnnotationTypeBinding.getInstance() );
-			return stereotype != null && stereotype.getType() instanceof StereotypeAnnotationTypeBinding;
-		}
-	}
-	return false;
+	Type binding = name.resolveType();
+	return binding instanceof Stereotype;
 }
 
 /**
@@ -561,23 +516,11 @@ private boolean matchesPartType(IPart part){
 			case IIndexConstants.STEREOTYPE_SUFFIX:
 				match = partInfo.isRecord() && isStereotype(part);
 				break;
-			case IIndexConstants.ITEM_SUFFIX:
-				match = partInfo.isDataItem();
-				break;
 			case IIndexConstants.LIBRARY_SUFFIX:
 				match = partInfo.isLibrary();
 				break;
 			case IIndexConstants.FUNCTION_SUFFIX:
 				match = partInfo.isFunction();
-				break;
-			case IIndexConstants.FORMGRP_SUFFIX:
-				match = partInfo.isFormGroup();
-				break;
-			case IIndexConstants.FORM_SUFFIX:
-				match = partInfo.isForm();
-				break;
-			case IIndexConstants.TABLE_SUFFIX:
-				match = partInfo.isDataTable();
 				break;
 			case IIndexConstants.HANDLER_SUFFIX:
 				match = partInfo.isHandler();
@@ -596,6 +539,9 @@ private boolean matchesPartType(IPart part){
 				break;
 			case IIndexConstants.ENUMERATION_SUFFIX:
 				match = partInfo.isEnumeration();
+				break;
+			case IIndexConstants.CLASS_SUFFIX:
+				match = partInfo.isClass();
 				break;
 			case IIndexConstants.PART_SUFFIX:
 				match = true;

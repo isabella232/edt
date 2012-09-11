@@ -11,42 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.dependency;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
-public abstract class AbstractDependencyInfo  implements IDependencyInfo, IDependencyRequestor {
+public abstract class AbstractDependencyInfo implements IDependencyInfo, IDependencyRequestor {
 
-	private Set topLevelFunctions = new LinkedHashSet();
 	private FunctionContainerScope functionContainerScope;
-	private boolean recordTopLevelFunctions = true;
 	
-	public Set getTopLevelFunctions(){
-		return Collections.unmodifiableSet(topLevelFunctions);
-	}
-	
-	public void recordTopLevelFunctionBinding(IFunctionBinding functionBinding) {
-	    
-	    if(recordTopLevelFunctions && functionBinding.isTopLevelFunction()){
-			topLevelFunctions.add(functionBinding);	
-			
-			String[] qualifiedName = ((TopLevelFunctionBinding)functionBinding).getPackageName();
-			int length = qualifiedName.length;
-			System.arraycopy(qualifiedName, 0, qualifiedName = new String[length + 1], 0, length);
-			qualifiedName[length] = functionBinding.getName();
-			
-			recordQualifiedName(InternUtil.intern(qualifiedName));
-	    }
-	}	
-	
-	protected abstract void recordQualifiedName(String[] strings);
+	protected abstract void recordQualifiedName(String strings);
 
 	public void recordFunctionContainerScope(FunctionContainerScope scope) {
 		functionContainerScope = scope;
@@ -55,13 +28,4 @@ public abstract class AbstractDependencyInfo  implements IDependencyInfo, IDepen
 	public FunctionContainerScope getFunctionContainerScope(){
 		return functionContainerScope;
 	}
-    
-	public void stopRecordingTopLevelFunctionBindings() {
-        recordTopLevelFunctions = false;       
-    }
-
-	public void startRecordingTopLevelFunctionBindings() {
-       recordTopLevelFunctions = true;        
-    }
-
 }

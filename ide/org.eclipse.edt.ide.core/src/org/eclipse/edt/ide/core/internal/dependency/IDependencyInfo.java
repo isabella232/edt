@@ -19,8 +19,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
  *
  */
 public interface IDependencyInfo {
-	public Set getQualifiedNames();
-    public Set getSimpleNames();
-    public Set getTopLevelFunctions();
+	public Set<String> getQualifiedNames();
+    public Set<String> getSimpleNames();
     public FunctionContainerScope getFunctionContainerScope();
 }

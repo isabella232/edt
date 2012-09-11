@@ -14,7 +14,6 @@ package org.eclipse.edt.ide.core.internal.utils;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +31,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.internal.model.EGLModel;
-import org.eclipse.edt.ide.core.internal.model.index.impl.JarFileEntryDocument;
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
 import org.eclipse.edt.ide.core.internal.search.PartInfo;
 import org.eclipse.edt.ide.core.internal.search.PartInfoRequestor;
@@ -43,12 +41,10 @@ import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IIndexConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
-import org.eclipse.edt.ide.core.search.IEGLSearchResultCollector;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
-import org.eclipse.edt.ide.core.search.ISearchPattern;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author svihovec
@@ -71,13 +67,52 @@ public class Util {
 		return result;
 	}
 	
+	public static String[] qualifiedNameToStringArray(String name) {
+		if (name == null || name.length() == 0) {
+			return new String[0];
+		}
+		return name.split("\\.");
+	}
+	
+	public static String pathToQualifiedName(IPath path){
+		String result = path.toString();
+		
+		// strip off leading '/'
+		if (result.length() > 0 && result.charAt(0) == IPath.SEPARATOR) {
+			result = result.substring(1);
+		}
+		
+		return result.replace(IPath.SEPARATOR, '.');
+	}
+	
+	public static String appendToQualifiedName(String name, String toAppend, String delimiter){
+		if (name.length() == 0) {
+			return toAppend;
+		}
+		if (name.endsWith(delimiter)) {
+			return name + toAppend;
+		}
+		return name + delimiter + toAppend;
+	}
+	
+	public static String stringArrayToQualifiedName(String[] array) {
+		StringBuilder buf = new StringBuilder(100);
+		for (int i = 0; i < array.length; i++) {
+			if (i > 0) {
+				buf.append('.');
+			}
+			buf.append(array[i]);
+		}
+		return buf.toString();
+	}
+	
 	// TODO Can we intern file names?  Should we use Sun.Intern and don't normalize?  What about files with the same name but different case on Linux?
 	public static String getFilePartName(IFile file){
-		return InternUtil.intern(file.getProjectRelativePath().toString());
+		return NameUtile.getAsName(file.getProjectRelativePath().toString());
 	}
 	
 	public static String getCaseSensitiveFilePartName(IFile file){
-		return InternUtil.internCaseSensitive(file.getProjectRelativePath().toString());
+		return NameUtile.getAsCaseSensitiveName(file.getProjectRelativePath().toString());
 	}
 	
 	public static String getFileContents(IFile file) throws IOException, CoreException{
@@ -301,41 +336,8 @@ public class Util {
 		return null;
 	}
 	
-	//get the nested Record/Dataitem/ inside a Record field
-	public static PartInfo getRecordFieldNestedPart(IEGLProject project, String partDeclPackage, String partTypeName)
-	{
-		PartInfo[] parts = null;
-		List partslist = new ArrayList();
-		try
-		{
-			IEGLProject[] projects = new IEGLProject[] {project};
-			IEGLSearchScope searchScope = SearchEngine.createEGLSearchScope(projects , true);
-			PartInfoRequestor searchResult = new PartInfoRequestor(partslist);
-			new SearchEngine().searchAllPartNames(
-				ResourcesPlugin.getWorkspace(), 
-				partDeclPackage.toCharArray(), 
-				partTypeName.toCharArray(), 
-				IIndexConstants.EXACT_MATCH, 
-				IEGLSearchConstants.CASE_INSENSITIVE, 
-				IEGLSearchConstants.RECORD | IEGLSearchConstants.ITEM, 
-				searchScope, 
-				searchResult, 
-				IEGLSearchConstants.WAIT_UNTIL_READY_TO_SEARCH, 
-				null);
-			parts = (PartInfo[]) partslist.toArray(new PartInfo[partslist.size()]);
-		}
-		catch (EGLModelException e)
-		{
-			e.printStackTrace();
-		}
-		if(parts != null && parts.length > 0)
-			return parts[0];
-		
-		return null;
-	}
-	
 	//get the part for data declaration
-	//the part could be: Record, Dataitem, Delegate, Handler, Service, ExternalType, Interface
+	//the part could be: Record, Delegate, Handler, Service, ExternalType, Interface
 	public static PartInfo getDataDeclarationPart(IEGLProject project, String partDeclPackage, String partTypeName)
 	{
 		PartInfo[] parts = null;
@@ -351,7 +353,7 @@ public class Util {
 				partTypeName.toCharArray(), 
 				IIndexConstants.EXACT_MATCH, 
 				IEGLSearchConstants.CASE_INSENSITIVE, 
-				IEGLSearchConstants.RECORD | IEGLSearchConstants.ITEM | IEGLSearchConstants.DELEGATE
+				IEGLSearchConstants.RECORD | IEGLSearchConstants.DELEGATE
 				| IEGLSearchConstants.HANDLER | IEGLSearchConstants.SERVICE | IEGLSearchConstants.EXTERNALTYPE | IEGLSearchConstants.INTERFACE, 
 				searchScope, 
 				searchResult, 
@@ -397,79 +399,80 @@ public class Util {
 	{
 		final HashMap<IResource, ResourceAndTLFMap> resMap = new HashMap<IResource, ResourceAndTLFMap>();
 		
-		IEGLSearchResultCollector collector = new IEGLSearchResultCollector(){
-			private HashMap<IResource, String> fileCache = new HashMap<IResource, String>();
-			
-			public void aboutToStart() { /* do nothing */ }
-			public void done() { /* do nothing */ }
-
-			public void accept(IResource resource, int start, int end,
-					IEGLElement enclosingElement, int accuracy)
-					throws CoreException {
-				String fileContents = fileCache.get(resource);
-				if(fileContents == null) {
-					if(resource instanceof IFile) {
-						fileContents = getFileContent(((IFile)resource).getContents());
-						fileCache.put(resource, fileContents);
-					}
-				}
-				int lastCharIndex = -1;
-				if(fileContents != null) {
-					lastCharIndex = fileContents.length() - 1;
-				}
-				if(start > lastCharIndex || end > lastCharIndex) {
-					System.out.println("Wrong position!");
-					return;
-				}
-				String irFileName = fileContents.substring(start, end);
-				IPath resPath = resource.getFullPath();
-				//Get the package name
-				resPath = resPath.removeFirstSegments(2).removeLastSegments(1);
-				resPath = resPath.append(irFileName.toLowerCase());//The IR files always in lower case.
-				ResourceAndTLFMap map = resMap.get(resource);
-				if(map != null) {
-					map.addPath(resPath);
-				} else {
-					map = new ResourceAndTLFMap(resource, resPath);
-					resMap.put(resource, map);
-				}
-			}
-
-			public void accept(IEGLElement element, int start, int end,
-					IResource resource, int accuracy) throws CoreException {
-				/* do nothing */
-			}
-
-			public IProgressMonitor getProgressMonitor() {
-				return null;
-			}
-			
-			private String getFileContent(InputStream inputStream) {
-				InputStreamReader reader = new InputStreamReader(new BufferedInputStream(inputStream));
-				StringBuffer s = new StringBuffer();
-				try {
-					char cbuf[] = new char[4096];
-					int length = 0;
-					while ((length = reader.read(cbuf)) >= 0) {
-						s.append(cbuf, 0, length);
-					}
-				} catch (IOException e) {
-				}
-				return s.toString();
-			}
-			
-		};
-		
-		try
-		{
-			IEGLSearchScope searchScope = SearchEngine.createEGLSearchScope(new IEGLProject[]{eglProj} , true);
-			ISearchPattern pattern = SearchEngine.createSearchPattern("*", IEGLSearchConstants.FUNCTION_PART, IEGLSearchConstants.DECLARATIONS, false);
-			new SearchEngine().search(ResourcesPlugin.getWorkspace(), pattern, searchScope, collector);
-		}
-		catch (EGLModelException e)
-		{
-			e.printStackTrace();
-		}
+		//TLFs are not supported
+//		IEGLSearchResultCollector collector = new IEGLSearchResultCollector(){
+//			private HashMap<IResource, String> fileCache = new HashMap<IResource, String>();
+//			
+//			public void aboutToStart() { /* do nothing */ }
+//			public void done() { /* do nothing */ }
+//
+//			public void accept(IResource resource, int start, int end,
+//					IEGLElement enclosingElement, int accuracy)
+//					throws CoreException {
+//				String fileContents = fileCache.get(resource);
+//				if(fileContents == null) {
+//					if(resource instanceof IFile) {
+//						fileContents = getFileContent(((IFile)resource).getContents());
+//						fileCache.put(resource, fileContents);
+//					}
+//				}
+//				int lastCharIndex = -1;
+//				if(fileContents != null) {
+//					lastCharIndex = fileContents.length() - 1;
+//				}
+//				if(start > lastCharIndex || end > lastCharIndex) {
+//					System.out.println("Wrong position!");
+//					return;
+//				}
+//				String irFileName = fileContents.substring(start, end);
+//				IPath resPath = resource.getFullPath();
+//				//Get the package name
+//				resPath = resPath.removeFirstSegments(2).removeLastSegments(1);
+//				resPath = resPath.append(irFileName.toLowerCase());//The IR files always in lower case.
+//				ResourceAndTLFMap map = resMap.get(resource);
+//				if(map != null) {
+//					map.addPath(resPath);
+//				} else {
+//					map = new ResourceAndTLFMap(resource, resPath);
+//					resMap.put(resource, map);
+//				}
+//			}
+//
+//			public void accept(IEGLElement element, int start, int end,
+//					IResource resource, int accuracy) throws CoreException {
+//				/* do nothing */
+//			}
+//
+//			public IProgressMonitor getProgressMonitor() {
+//				return null;
+//			}
+//			
+//			private String getFileContent(InputStream inputStream) {
+//				InputStreamReader reader = new InputStreamReader(new BufferedInputStream(inputStream));
+//				StringBuffer s = new StringBuffer();
+//				try {
+//					char cbuf[] = new char[4096];
+//					int length = 0;
+//					while ((length = reader.read(cbuf)) >= 0) {
+//						s.append(cbuf, 0, length);
+//					}
+//				} catch (IOException e) {
+//				}
+//				return s.toString();
+//			}
+//			
+//		};
+//		
+//		try
+//		{
+//			IEGLSearchScope searchScope = SearchEngine.createEGLSearchScope(new IEGLProject[]{eglProj} , true);
+//			ISearchPattern pattern = SearchEngine.createSearchPattern("*", IEGLSearchConstants.FUNCTION_PART, IEGLSearchConstants.DECLARATIONS, false);
+//			new SearchEngine().search(ResourcesPlugin.getWorkspace(), pattern, searchScope, collector);
+//		}
+//		catch (EGLModelException e)
+//		{
+//			e.printStackTrace();
+//		}
 		
 		return resMap.values().toArray(new ResourceAndTLFMap[resMap.values().size()]);
 	}

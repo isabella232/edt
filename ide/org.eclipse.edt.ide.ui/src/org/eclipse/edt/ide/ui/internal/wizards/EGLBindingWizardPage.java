@@ -76,7 +76,7 @@ public class EGLBindingWizardPage extends EGLDDBindingWizardPage {
 				//if it's interface, do not set these field
 				if(elemInfo.isService()){
 					fServiceNameField.setText(servicePart.getFullyQualifiedName());
-					fAliasField.setText(getBindingEGLConfiguration().getAliasFrServicePart(servicePart));					
+					fAliasField.setText("");					
 				}					
 			} catch (EGLModelException e) {
 				e.printStackTrace();

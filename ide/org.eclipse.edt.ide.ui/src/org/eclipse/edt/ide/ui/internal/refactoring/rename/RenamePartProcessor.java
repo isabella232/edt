@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -167,20 +168,11 @@ public class RenamePartProcessor extends RenameProcessor implements IReferenceUp
 		int result = IEGLSearchConstants.ALL_ELEMENTS;
 		if(part instanceof SourcePart) {
 			SourcePart sPart = ((SourcePart) part);
-			if(sPart.isDataItem()) {
-				result = IEGLSearchConstants.ITEM_PART;
-			}
-			else if (sPart.isDataTable()) {
-				result = IEGLSearchConstants.TABLE_PART;
-			}
-			else if (sPart.isDelegate()) {
+			if (sPart.isDelegate()) {
 				result = IEGLSearchConstants.DELEGATE_PART;
 			}
 			else if (sPart.isExternalType()) {
 				result = IEGLSearchConstants.EXTERNALTYPE_PART;
-			}
-			else if (sPart.isFormGroup()) {
-				result = IEGLSearchConstants.FORMGROUP_PART;
 			}
 			else if (sPart.isHandler()) {
 				result = IEGLSearchConstants.HANDLER_PART;
@@ -200,11 +192,14 @@ public class RenamePartProcessor extends RenameProcessor implements IReferenceUp
 			else if (sPart.isService()) {
 				result = IEGLSearchConstants.SERVICE_PART;
 			}
+			else if (sPart.isEnumeration()) {
+				result = IEGLSearchConstants.ENUMERATION_PART;
+			}
+			else if (sPart.isClass()) {
+				result = IEGLSearchConstants.CLASS_PART;
+			}
 			else if (sPart.isFunction()) {
 				result = IEGLSearchConstants.ALL_FUNCTIONS;
-			}
-			else if (sPart.isForm()) {
-				result = IEGLSearchConstants.FORM_PART;
 			}
 		}
 		return result;
@@ -348,9 +343,10 @@ public class RenamePartProcessor extends RenameProcessor implements IReferenceUp
 	public RefactoringStatus checkNewElementName(String newName) throws CoreException {
 		final RefactoringStatus[] result = new RefactoringStatus[] {new RefactoringStatus()};
 		EGLNameValidator.validate(newName, EGLNameValidator.PART, new DefaultProblemRequestor() {
-			public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+			@Override
+			public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 				if(result[0].isOK()) {
-					result[0] = RefactoringStatus.createFatalErrorStatus(getMessageFromBundle(problemKind, inserts));
+					result[0] = RefactoringStatus.createFatalErrorStatus(getMessageFromBundle(problemKind, inserts, bundle));
 				}
 			}
 		}, 

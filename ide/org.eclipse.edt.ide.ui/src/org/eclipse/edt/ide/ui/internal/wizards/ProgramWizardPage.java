@@ -12,7 +12,6 @@
 package org.eclipse.edt.ide.ui.internal.wizards;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
@@ -53,9 +52,7 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 	
 	private Group fProgramTypeGroup;
 	private Button fBasicProgramButton;
-	private Button fTextProgramButton;
 //	private Button fActionProgramButton;
-	private Button fVGWebTransProgramButton;
 	//private Button fCalledProgramButton;
 	private Button fUIProgramButton;
 
@@ -176,10 +173,6 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 		});
 	}
 	
-	private boolean hasMultipleTypesEnabled(){
-		return EGLBasePlugin.isVGUI() || EGLBasePlugin.isTUI();
-	}
-	
 	private void createProgramTypeControls(Composite parent) {		
 		Composite programTypeComposite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -221,55 +214,10 @@ public class ProgramWizardPage extends EGLPartWizardPage {
 		else
 			fBasicProgramButton.setSelection(false);
 		
-		if (!hasMultipleTypesEnabled()){
-			//since this is the only choice, no need to show it to the user
-			fBasicProgramButton.setVisible(false);
-			fProgramTypeGroup.setVisible(false);
-		}
+		//since this is the only choice, no need to show it to the user
+		fBasicProgramButton.setVisible(false);
+		fProgramTypeGroup.setVisible(false);
 
-		if (EGLBasePlugin.isTUI()){
-			fTextProgramButton = new Button(fProgramTypeGroup, SWT.RADIO);
-			fTextProgramButton.setText(NewWizardMessages.NewEGLProgramWizardPageProgramTypeText);
-			fTextProgramButton.addSelectionListener(new SelectionListener() {
-				public void widgetSelected(SelectionEvent e) {
-					/*if(!fCalledProgramButton.isEnabled())
-						fCalledProgramButton.setEnabled(true);
-						
-					if(fCalledProgramButton.getSelection())
-						getConfiguration().setProgramType(ProgramConfiguration.TEXT_UI_CALLED_PROGRAM);
-					else
-						getConfiguration().setProgramType(ProgramConfiguration.TEXT_UI_PROGRAM);*/
-					getConfiguration().setProgramType(ProgramConfiguration.TEXT_UI_PROGRAM);
-				}
-				public void widgetDefaultSelected(SelectionEvent e) {}
-			});
-			
-			if(progType==ProgramConfiguration.TEXT_UI_PROGRAM || progType==ProgramConfiguration.TEXT_UI_CALLED_PROGRAM)
-				fTextProgramButton.setSelection(true);
-			else
-				fTextProgramButton.setSelection(false);
-		}
-
-		if (EGLBasePlugin.isVGUI()){
-			fVGWebTransProgramButton = new Button(fProgramTypeGroup, SWT.RADIO);
-			fVGWebTransProgramButton.setText(NewWizardMessages.NewEGLProgramWizardPageProgramTypeVgwebtrans);
-			fVGWebTransProgramButton.addSelectionListener(new SelectionListener() {
-				public void widgetSelected(SelectionEvent e) {
-					/*if(fCalledProgramButton.getSelection())
-						fCalledProgramButton.setSelection(false);
-					if(fCalledProgramButton.isEnabled())
-						fCalledProgramButton.setEnabled(false);*/
-										
-					getConfiguration().setProgramType(ProgramConfiguration.VGWEBTRANS_PROGRAM);
-				}
-				public void widgetDefaultSelected(SelectionEvent e) {}
-			});
-			if(progType==ProgramConfiguration.VGWEBTRANS_PROGRAM)
-			    fVGWebTransProgramButton.setSelection(true);
-			else
-			    fVGWebTransProgramButton.setSelection(false);		
-		}
-		
 		fUIProgramButton = new Button(fProgramTypeGroup, SWT.RADIO);
 		fUIProgramButton.setText(NewWizardMessages.NewEGLProgramWizardPageProgramTypeUI);
 		fUIProgramButton.addSelectionListener(new SelectionListener() {

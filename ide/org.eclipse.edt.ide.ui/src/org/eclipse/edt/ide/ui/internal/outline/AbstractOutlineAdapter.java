@@ -20,13 +20,13 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.PrimitiveType;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.ide.core.internal.utils.EGLSourceFormatUtil;
 import org.eclipse.edt.ide.ui.internal.EGLElementImageDescriptor;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.viewsupport.ElementImageProvider;
+import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
@@ -119,24 +119,12 @@ public abstract class AbstractOutlineAdapter implements IOutlineAdapter {
 			typeDisplay.append(formatArrayType((ArrayType)type));
 		}
 		else{
-			typeDisplay.append(type.getCanonicalName());
-			
-			if(type instanceof PrimitiveType){
-				PrimitiveType primType = (PrimitiveType)type;
-				if(primType.hasPrimLength()){
-					typeDisplay.append('(');
-					typeDisplay.append(primType.getPrimLength());
-					if(primType.hasPrimDecimals()){
-						typeDisplay.append(',');
-						typeDisplay.append(primType.getPrimDecimals());
-					}
-					typeDisplay.append(')');
-				}
-				else if(primType.hasPrimPattern()){
-					typeDisplay.append('(');
-					typeDisplay.append(primType.getPrimPattern());
-					typeDisplay.append(')');
-				}			
+			org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
+			if (typeBinding instanceof ParameterizedType) {
+				typeDisplay.append(typeBinding.getTypeSignature());
+			}
+			else {
+				typeDisplay.append(type.toString());
 			}
 		}
 

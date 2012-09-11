@@ -33,15 +33,18 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public abstract class AbstractDuplicatePartManager {
 	public static class DuplicatePartList implements Serializable{
+		private static final long serialVersionUID = 1L;
+
 		private class DuplicatePartKey{
-			private String[] packageName;
+			private String packageName;
 			private String partName;
 			
-			public DuplicatePartKey(String[] packageName, String partName){
+			public DuplicatePartKey(String packageName, String partName){
 				this.packageName = packageName;
 				this.partName = partName;
 			}
@@ -53,7 +56,7 @@ public abstract class AbstractDuplicatePartManager {
 				
 				if(obj instanceof DuplicatePartKey){
 					DuplicatePartKey otherKey = (DuplicatePartKey)obj;
-					if(otherKey.packageName == packageName && otherKey.partName == partName){
+					if(NameUtile.equals(otherKey.packageName, packageName) && NameUtile.equals(otherKey.partName, partName)){
 						return true;
 					}
 				}
@@ -68,7 +71,7 @@ public abstract class AbstractDuplicatePartManager {
 		transient private HashMap duplicatePartsByFileMap = new HashMap();
 		transient private HashMap duplicatePartsByPartMap = new HashMap();
 				
-		public void addDuplicatePart(String[] packageName, String partName, IFile file){
+		public void addDuplicatePart(String packageName, String partName, IFile file){
 			
 			HashSet files = (HashSet)duplicatePartsByPartMap.get(new DuplicatePartKey(packageName, partName));
 			
@@ -87,7 +90,7 @@ public abstract class AbstractDuplicatePartManager {
 			
 		}
 		
-		public boolean isDuplicatePart(String[] packageName, String partName){
+		public boolean isDuplicatePart(String packageName, String partName){
 			HashSet files = (HashSet)duplicatePartsByPartMap.get(new DuplicatePartKey(packageName, partName));
 				
 			if(files != null){
@@ -97,7 +100,7 @@ public abstract class AbstractDuplicatePartManager {
 			return false;
 		}
 		
-		public Set getFilesForDuplicatePart(String[] packageName, String partName){
+		public Set getFilesForDuplicatePart(String packageName, String partName){
 			HashSet files = (HashSet)duplicatePartsByPartMap.get(new DuplicatePartKey(packageName, partName));
 				
 			if(files != null){
@@ -135,7 +138,10 @@ public abstract class AbstractDuplicatePartManager {
 				
 				for (Iterator iterator = parts.iterator(); iterator.hasNext();) {
 					DuplicatePartKey partKey = (DuplicatePartKey) iterator.next();
-					out.writeObject(partKey.packageName); // TODO Test default package	
+					
+					// Write using the old String[] format
+					String[] segments = Util.qualifiedNameToStringArray(partKey.packageName);
+					out.writeObject(segments); // TODO Test default package	
 					out.writeObject(partKey.partName);
 				}				
 			}
@@ -155,10 +161,11 @@ public abstract class AbstractDuplicatePartManager {
 				String[] packageName;
 				String partName;
 				for(int j=0; j<numParts; j++){
+					// Read using old String[] format
 					packageName = (String[])in.readObject();
 					partName = (String)in.readObject();
 					
-					addDuplicatePart(InternUtil.intern(packageName), InternUtil.intern(partName), file);
+					addDuplicatePart(NameUtile.getAsName(Util.stringArrayToQualifiedName(packageName)), NameUtile.getAsName(partName), file);
 				}				
 			}			
 		}

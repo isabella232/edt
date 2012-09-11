@@ -16,7 +16,11 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -112,6 +116,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	/**
 	 * Constants for extension points.
 	 */
+	public static final String PT_COMPILEREXTENSIONS = "compilerExtensions"; //$NON-NLS-1$
 	public static final String PT_GENERATIONCONTRIBUTORS = "GenerationContributors"; //$NON-NLS-1$
 	public static final String PT_COMPILERS = "compilers"; //$NON-NLS-1$
 	public static final String PT_GENERATORS = "generators"; //$NON-NLS-1$
@@ -565,10 +570,10 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 						// An ID is required.
 						String id = elements[i].getAttribute(ID);
 						if (id != null && id.length() != 0) {
-							compiler.setId(id);
-							compiler.setName(elements[i].getAttribute(NAME));
-							compiler.setPreferencePageId(elements[i].getAttribute(PREFERENCE_PAGE_ID));
-							compiler.setVersion(elements[i].getAttribute(VERSION));
+							compiler.setId(id.trim());
+							compiler.setName(trim(elements[i].getAttribute(NAME)));
+							compiler.setPreferencePageId(trim(elements[i].getAttribute(PREFERENCE_PAGE_ID)));
+							compiler.setVersion(trim(elements[i].getAttribute(VERSION)));
 							compilers.add(compiler);
 						}
 					}
@@ -580,6 +585,48 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		}
 		else {
 			this.compilers = new IIDECompiler[0];
+		}
+		
+		// Next the compiler extensions
+		elements = Platform.getExtensionRegistry().getConfigurationElementsFor(PLUGIN_ID + "." + PT_COMPILEREXTENSIONS); //$NON-NLS-1$
+		if (elements != null) {
+			Map<String, IIDECompilerExtension> extensions = new HashMap<String, IIDECompilerExtension>();
+			for (int i = 0; i < elements.length; i++) {
+				try {
+					Object o = elements[i].createExecutableExtension(EDTCoreIDEPlugin.CLASS); // makes sure the class exists.
+					if (o instanceof IIDECompilerExtension) {
+						IIDECompilerExtension ext = (IIDECompilerExtension)o;
+						// ID and compiler are required.
+						String id = elements[i].getAttribute(ID);
+						String compilerId = elements[i].getAttribute(COMPILER);
+						if (id != null && id.length() != 0 && compilerId != null && compilerId.length() != 0) {
+							ext.setId(id.trim());
+							ext.setCompilerId(compilerId.trim());
+							ext.setName(trim(elements[i].getAttribute(NAME)));
+							ext.setVersion(trim(elements[i].getAttribute(VERSION)));
+							ext.setRequires(trim(elements[i].getAttribute(EDTCoreIDEPlugin.REQUIRES)));
+							extensions.put(id, ext);
+						}
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (extensions.size() > 0) {
+				// Register with the compilers. For those that depend on another extension, only add to the compiler if that dependency is met and
+				// the dependency is being added to the same compiler.
+				for (IIDECompilerExtension ext : extensions.values()) {
+					if (dependencyIsSatisfied(ext, extensions, new HashSet<IIDECompilerExtension>(extensions.size()))) {
+						for (IIDECompiler compiler : this.compilers) {
+							if (compiler.getId().equals(ext.getCompilerId())) {
+								compiler.addExtension(ext);
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 		
 		// Now the generators
@@ -598,15 +645,15 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 							// As well as a compiler.
 							IIDECompiler compiler = findCompiler(elements[i].getAttribute(COMPILER));
 							if (compiler != null) {
-								gen.setId(id);
-								gen.setName(elements[i].getAttribute(NAME));
+								gen.setId(id.trim());
+								gen.setName(trim(elements[i].getAttribute(NAME)));
 								gen.setCompiler(compiler);
-								gen.setVersion(elements[i].getAttribute(VERSION));
-								gen.setDescription(elements[i].getAttribute(DESCRIPTION));
-								gen.setParentGeneratorId(elements[i].getAttribute(PARENT_GEN_ID));
-								gen.setLanguage(elements[i].getAttribute(LANGUAGE));
-								gen.setProvider(elements[i].getAttribute(PROVIDER));
-								gen.setEnabledWith(elements[i].getAttribute(ENABLED_WITH));
+								gen.setVersion(trim(elements[i].getAttribute(VERSION)));
+								gen.setDescription(trim(elements[i].getAttribute(DESCRIPTION)));
+								gen.setParentGeneratorId(trim(elements[i].getAttribute(PARENT_GEN_ID)));
+								gen.setLanguage(trim(elements[i].getAttribute(LANGUAGE)));
+								gen.setProvider(trim(elements[i].getAttribute(PROVIDER)));
+								gen.setEnabledWith(trim(elements[i].getAttribute(ENABLED_WITH)));
 								gens.add(gen);
 								compiler.addGenerator(gen);
 							}
@@ -621,6 +668,30 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		else {
 			generators = new IGenerator[0];
 		}
+	}
+	
+	private String trim(String s) {
+		return s == null ? null : s.trim();
+	}
+	
+	private boolean dependencyIsSatisfied(IIDECompilerExtension ext, Map<String, IIDECompilerExtension> allExtensions, Set<IIDECompilerExtension> seen) {
+		if (seen.contains(ext)) {
+			return true;
+		}
+		seen.add(ext);
+		
+		String dep = ext.getRequires();
+		if (dep != null && dep.length() > 0) {
+			IIDECompilerExtension depExt = allExtensions.get(dep);
+			if (depExt == null) {
+				return false;
+			}
+			if (!depExt.getCompilerId().equals(ext.getCompilerId())) {
+				return false;
+			}
+			return dependencyIsSatisfied(depExt, allExtensions, seen);
+		}
+		return true;
 	}
 	
 	/**

@@ -48,8 +48,8 @@ import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.InvalidPartTypeException;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
@@ -386,7 +386,7 @@ public class GeneratePartsOperation {
 							try {
 								ProjectEnvironment environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
 								
-								String[] packageName;
+								String packageName;
 								if (EGLCore.create(project).isBinary()) {
 									packageName = getPackageName(partFile, environment);
 								}
@@ -394,7 +394,7 @@ public class GeneratePartsOperation {
 									packageName = getPackageName(partFile, ProjectInfoManager.getInstance().getProjectInfo(project));
 								}
 	
-								part = environment.findPart(InternUtil.intern(packageName), InternUtil.intern(partName));
+								part = environment.findPart(NameUtile.getAsName(packageName), NameUtile.getAsName(partName));
 								
 								//TODO EDT check for errors of dependent parts?
 								if (part != null && !part.hasCompileErrors()) {
@@ -618,32 +618,32 @@ public class GeneratePartsOperation {
 		}
 	}
 	
-	protected String[] getPackageName(String filename, ProjectInfo projectInfo) {
+	protected String getPackageName(String filename, ProjectInfo projectInfo) {
 		IPath path = new Path(filename);
 		path = path.removeFirstSegments(1); // project name
 		path = path.removeLastSegments(1);// filename
-		String[] retVal = Util.pathToStringArray(path);
-		while (retVal.length > 0) {
-			if (projectInfo.hasPackage(InternUtil.intern(retVal))) {
+		String retVal = Util.pathToQualifiedName(path);
+		while (retVal.length() > 0) {
+			if (projectInfo.hasPackage(NameUtile.getAsName(retVal))) {
 				break;
 			}
 			path = path.removeFirstSegments(1);// source folder
-			retVal = Util.pathToStringArray(path);
+			retVal = Util.pathToQualifiedName(path);
 		}
 		return retVal;
 	}
 	
-	protected String[] getPackageName(String filename, ProjectEnvironment env) {
+	protected String getPackageName(String filename, ProjectEnvironment env) {
 		IPath path = new Path(filename);
 		path = path.removeFirstSegments(1); // project name
 		path = path.removeLastSegments(1);// filename
-		String[] retVal = Util.pathToStringArray(path);
-		while (retVal.length > 0) {
-			if (env.hasPackage(InternUtil.intern(retVal))) {
+		String retVal = Util.pathToQualifiedName(path);
+		while (retVal.length() > 0) {
+			if (env.hasPackage(NameUtile.getAsName(retVal))) {
 				break;
 			}
 			path = path.removeFirstSegments(1);// source folder
-			retVal = Util.pathToStringArray(path);
+			retVal = Util.pathToQualifiedName(path);
 		}
 		return retVal;
 	}

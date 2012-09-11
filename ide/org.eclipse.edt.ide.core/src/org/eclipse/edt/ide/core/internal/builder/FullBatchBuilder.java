@@ -24,7 +24,8 @@ public class FullBatchBuilder extends AbstractBatchBuilder {
 		super(builder, notifier);
 	}
 
-	protected void addEGLFile(IFile file, String[] packageName) {
+	@Override
+	protected void addEGLFile(IFile file, String packageName) {
 		IFileInfo fileInfo = FileInfoManager.getInstance().getFileInfo(builder.getProject(), file.getProjectRelativePath());
 		
 		for (Iterator iter = fileInfo.getPartNames().iterator(); iter.hasNext();) {
@@ -33,7 +34,8 @@ public class FullBatchBuilder extends AbstractBatchBuilder {
 		}
 	}
 	
-	protected void addEGLPackage(String[] packageName) {
+	@Override
+	protected void addEGLPackage(String packageName) {
 		// noop
 	}
 }

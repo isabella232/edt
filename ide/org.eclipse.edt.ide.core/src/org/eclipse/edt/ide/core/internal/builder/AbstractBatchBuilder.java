@@ -20,7 +20,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public abstract class AbstractBatchBuilder extends AbstractBuilder {
 
@@ -54,18 +55,18 @@ public abstract class AbstractBatchBuilder extends AbstractBuilder {
 									case IResource.FILE :
 										if (!processedFiles.contains(resource)){
 											IFile file = (IFile)resource;
-											String[] packageName = InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(resource.getFullPath().removeFirstSegments(segmentCount).removeLastSegments(1)));
+											String packageName = NameUtile.getAsName(Util.pathToQualifiedName(resource.getFullPath().removeFirstSegments(segmentCount).removeLastSegments(1)));
 											if (org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(proxy.getName())) {
 												addEGLFile(file, packageName);											
 											}
 											
 											if (isOKToCopy(proxy.getName())){
-												copyFileToOutputLocation(file,packageName);
+												copyFileToOutputLocation(file, packageName);
 											}
 										}
 										return false;
 									case IResource.FOLDER :
-										addEGLPackage(InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(resource.getFullPath().removeFirstSegments(segmentCount))));
+										addEGLPackage(NameUtile.getAsName(Util.pathToQualifiedName(resource.getFullPath().removeFirstSegments(segmentCount))));
 										break;
 								}
 								return true;
@@ -80,6 +81,6 @@ public abstract class AbstractBatchBuilder extends AbstractBuilder {
 		}
 	}
 
-	protected abstract void addEGLPackage(String[] packageName);
-	protected abstract void addEGLFile(IFile file, String[] packageName);
+	protected abstract void addEGLPackage(String packageName);
+	protected abstract void addEGLFile(IFile file, String packageName);
 }

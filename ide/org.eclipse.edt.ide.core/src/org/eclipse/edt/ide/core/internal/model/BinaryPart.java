@@ -21,7 +21,7 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.IProperty;
 import org.eclipse.edt.ide.core.model.IUseDeclaration;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class BinaryPart extends BinaryMember implements IPart {
@@ -242,7 +242,7 @@ public class BinaryPart extends BinaryMember implements IPart {
 		try {
 			SourcePartElementInfo part = (SourcePartElementInfo) getElementInfo();
 			if (part.getSubTypeName() == null) {return false;}
-			return InternUtil.intern(new String(part.getSubTypeName())) == InternUtil.intern("SQLRecord");
+			return NameUtile.equals(NameUtile.getAsName(new String(part.getSubTypeName())), NameUtile.getAsName("SQLRecord"));
 		}
 		catch (EGLModelException e) {
 			return false;
@@ -267,15 +267,6 @@ public class BinaryPart extends BinaryMember implements IPart {
 		}
 	}
 	
-	public boolean isDataItem() {
-		try {
-			return ((SourcePartElementInfo)getElementInfo()).isDataItem();
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-	
 	public boolean isLibrary() {
 		try {
 			return ((SourcePartElementInfo)getElementInfo()).isLibrary();
@@ -288,24 +279,6 @@ public class BinaryPart extends BinaryMember implements IPart {
 	public boolean isFunction() {
 		try {
 			return ((SourcePartElementInfo)getElementInfo()).isFunction();
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-	
-	public boolean isFormGroup() {
-		try {
-			return ((SourcePartElementInfo)getElementInfo()).isFormGroup();
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-	
-	public boolean isForm() {
-		try {
-			return ((SourcePartElementInfo)getElementInfo()).isForm();
 		}
 		catch (EGLModelException e) {
 			return false;
@@ -342,6 +315,24 @@ public class BinaryPart extends BinaryMember implements IPart {
 	public boolean isExternalType() {
 		try {
 			return ((SourcePartElementInfo)getElementInfo()).isExternalType();
+		}
+		catch (EGLModelException e) {
+			return false;
+		}
+	}
+	
+	public boolean isEnumeration() {
+		try {
+			return ((SourcePartElementInfo)getElementInfo()).isEnumeration();
+		}
+		catch (EGLModelException e) {
+			return false;
+		}
+	}
+	
+	public boolean isClass() {
+		try {
+			return ((SourcePartElementInfo)getElementInfo()).isClass();
 		}
 		catch (EGLModelException e) {
 			return false;

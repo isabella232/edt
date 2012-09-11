@@ -208,9 +208,6 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 		configuration.setProjectName(project.getName());
 		configuration.setConfigureEGLPathOnly( true );
 		
-		configuration.addJavaPlatform();
-		configuration.addJavaScriptPlatform();
-		
 		//Construct the list from existing entries
 		try{
 			entries = EGLCore.create(project).getRawEGLPath();

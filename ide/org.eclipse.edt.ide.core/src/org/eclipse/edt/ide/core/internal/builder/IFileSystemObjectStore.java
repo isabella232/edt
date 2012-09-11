@@ -311,6 +311,6 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 	@Override
 	public String toString() {
 		// For easier debugging.
-		return "IFileSystemObjectStore root=" + root;
+		return "IFileSystemObjectStore root=" + root + " scheme=" + getScheme();
 	}
 }

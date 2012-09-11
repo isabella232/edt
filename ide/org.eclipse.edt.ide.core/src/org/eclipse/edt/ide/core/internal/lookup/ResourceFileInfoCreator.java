@@ -27,7 +27,7 @@ public class ResourceFileInfoCreator extends AbstractFileInfoCreator {
 
 	private String contents = null;
 	
-	public ResourceFileInfoCreator(AbstractProjectInfo projectInfo, String[] packageName, IFile file, File fileAST, String fileContents, IDuplicatePartRequestor duplicatePartRequestor){
+	public ResourceFileInfoCreator(AbstractProjectInfo projectInfo, String packageName, IFile file, File fileAST, String fileContents, IDuplicatePartRequestor duplicatePartRequestor){
 		super(projectInfo, packageName, file, fileAST, duplicatePartRequestor);
 		
 		this.contents = fileContents;

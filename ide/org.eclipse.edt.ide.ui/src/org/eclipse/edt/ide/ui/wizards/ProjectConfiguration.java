@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.ide.core.model.PPListElement;
 import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
 
@@ -27,7 +26,11 @@ public class ProjectConfiguration {
 	public final static int COBOL_PLATFORM = 4;
 	public final static int JAVA_COBOL_PLATFORMS = 5;
 	public final static int JAVASCRIPT_COBOL_PLATFORMS = 6;
-	public final static int JAVA_JAVASCRIPT_COBOL_PLATFORMS = 7;	
+	public final static int JAVA_JAVASCRIPT_COBOL_PLATFORMS = 7;
+	
+	public static final int TARGET_RUNTIME_JAVA_MASK = 1 << 0;
+	public static final int TARGET_RUNTIME_JAVASCRIPT_MASK = 1 << 1;
+	public static final int TARGET_RUNTIME_COBOL_MASK = 1 << 2;
 
 	public static final String EDT_COMPILER_ID = "org.eclipse.edt.ide.compiler.edtCompiler";
 	public static final String JAVA_GENERATOR_ID = "org.eclipse.edt.ide.gen.JavaGenProvider";
@@ -234,27 +237,27 @@ public class ProjectConfiguration {
 	}
 	
 	public void addCobolPlatform() {
-		targetRuntimeValue |= EGLBasePlugin.TARGET_RUNTIME_COBOL_MASK;
+		targetRuntimeValue |= TARGET_RUNTIME_COBOL_MASK;
 	}
 	
 	public void addJavaPlatform() {
-		targetRuntimeValue |= EGLBasePlugin.TARGET_RUNTIME_JAVA_MASK;
+		targetRuntimeValue |= TARGET_RUNTIME_JAVA_MASK;
 	}
 	
 	public void addJavaScriptPlatform() {
-		targetRuntimeValue |= EGLBasePlugin.TARGET_RUNTIME_JAVASCRIPT_MASK;
+		targetRuntimeValue |= TARGET_RUNTIME_JAVASCRIPT_MASK;
 	}
 	
 	public boolean isCobolPlatform() {
-		return ((targetRuntimeValue & EGLBasePlugin.TARGET_RUNTIME_COBOL_MASK) != 0);
+		return ((targetRuntimeValue & TARGET_RUNTIME_COBOL_MASK) != 0);
 	}
 		
 	public boolean isJavaPlatform() {
-		return ((targetRuntimeValue & EGLBasePlugin.TARGET_RUNTIME_JAVA_MASK) != 0);
+		return ((targetRuntimeValue & TARGET_RUNTIME_JAVA_MASK) != 0);
 	}
 	
 	public boolean isJavaScriptPlatform() {
-		return ((targetRuntimeValue & EGLBasePlugin.TARGET_RUNTIME_JAVASCRIPT_MASK) != 0);
+		return ((targetRuntimeValue & TARGET_RUNTIME_JAVASCRIPT_MASK) != 0);
 	}
 	
 	public List<String> getSelectedWidgetLibraries() {

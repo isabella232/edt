@@ -30,7 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -1231,7 +1231,7 @@ public class ReorgPolicyFactory {
 		
 		private void addImportsToReferencedTypes(String partName, final IEGLFile sourceCu, final OrganizedImportSection importSection, IProgressMonitor pm) throws EGLModelException {
 			IPackageFragment packageFragment = (IPackageFragment)sourceCu.getAncestor(IEGLElement.PACKAGE_FRAGMENT);
-			String[] packageName = packageFragment.isDefaultPackage() ? new String[0] : packageFragment.getElementName().split( "\\." );
+			String packageName = packageFragment.isDefaultPackage() ? "" : packageFragment.getElementName();
 			
 			WorkingCopyCompiler.getInstance().compilePart(
 					sourceCu.getEGLProject().getProject(),
@@ -1269,15 +1269,14 @@ public class ReorgPolicyFactory {
 			
 			boundPart.accept(new AbstractASTVisitor() {
 				public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName) {
-					
 					if (newPkg.equalsIgnoreCase(qualifiedName.getQualifier().getCanonicalName())) {
-						IBinding qualBinding = qualifiedName.getQualifier().resolveBinding();
-						if (qualBinding == null || qualBinding == IBinding.NOT_FOUND_BINDING || !qualBinding.isPackageBinding()) {
+						Object qualBinding = qualifiedName.getQualifier().resolveElement();
+						if (!(qualBinding instanceof IPackageBinding)) {
 							return false;
 						}
 						
-						IBinding nameBinding = qualifiedName.resolveBinding();
-						if (nameBinding == null || nameBinding == IBinding.NOT_FOUND_BINDING || !nameBinding.isPackageBinding()) {
+						Object nameBinding = qualifiedName.resolveElement();
+						if (nameBinding == null || !(nameBinding instanceof IPackageBinding)) {
 							GetNodeAtOffsetVisitor visitor = new GetNodeAtOffsetVisitor(qualifiedName.getOffset(), qualifiedName.getLength());
 							dnr.getDocument().getNewModelEGLFile().accept(visitor);
 							Node node = visitor.getNode();
@@ -1291,7 +1290,6 @@ public class ReorgPolicyFactory {
 					return true;
 				}
 			});
-			
 		}
 				
 		private void removeImportsForNewPackage(IEGLFile sourceCu) {
@@ -1651,7 +1649,7 @@ public class ReorgPolicyFactory {
 		
 		private void addImportsToReferencedTypes(String partName, final IEGLFile sourceCu, final OrganizedImportSection importSection, IProgressMonitor pm) throws EGLModelException {
 			IPackageFragment packageFragment = (IPackageFragment)sourceCu.getAncestor(IEGLElement.PACKAGE_FRAGMENT);
-			String[] packageName = packageFragment.isDefaultPackage() ? new String[0] : packageFragment.getElementName().split( "\\." );
+			String packageName = packageFragment.isDefaultPackage() ? "" : packageFragment.getElementName();
 			
 			WorkingCopyCompiler.getInstance().compilePart(
 				sourceCu.getEGLProject().getProject(),

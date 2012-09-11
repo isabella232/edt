@@ -61,7 +61,6 @@ public class EGLContextBoundaryUtility {
 		boundaryStatesSet.set(NodeTypes.programParametersOpt);
 		boundaryStatesSet.set(NodeTypes.programParameter);
 		boundaryStatesSet.set(NodeTypes.functionParameter);
-		boundaryStatesSet.set(NodeTypes.attrTypeOpt);
 		boundaryStatesSet.set(NodeTypes.returnsOpt);
 		boundaryStatesSet.set(NodeTypes.classContent);
 		boundaryStatesSet.set(NodeTypes.stmt);
@@ -91,6 +90,6 @@ public class EGLContextBoundaryUtility {
 		boundaryStatesSet.set(NodeTypes.settingsBlockOpt);
 		boundaryStatesSet.set(NodeTypes.settingsBlock);
 		boundaryStatesSet.set(NodeTypes.literal);
-		boundaryStatesSet.set(NodeTypes.type);
+		boundaryStatesSet.set(NodeTypes.namedType);
 	}
 }

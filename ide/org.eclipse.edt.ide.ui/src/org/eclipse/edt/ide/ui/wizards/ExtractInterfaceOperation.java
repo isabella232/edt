@@ -15,9 +15,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.compiler.binding.DataBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
@@ -26,6 +23,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IFunction;
+import org.eclipse.edt.mof.egl.Member;
 
 public class ExtractInterfaceOperation extends EGLFileOperation {
 	private ExtractInterfaceConfiguration configuration;
@@ -80,13 +78,12 @@ public class ExtractInterfaceOperation extends EGLFileOperation {
 	    	});	    	
 	    }
 	        
-	    IBinding nestedFuncBinding = eglfunc.getName().resolveBinding();
-	    if(nestedFuncBinding != null && nestedFuncBinding != IBinding.NOT_FOUND_BINDING) {
+	    Member nestedFuncBinding = eglfunc.getName().resolveMember();
+	    if(nestedFuncBinding != null) {
 	    	StringBuffer nameVal = new StringBuffer();
 	    	StringBuffer namespaceVal = new StringBuffer();
-	    	ITypeBinding nestedFuncTypeBinding = ((DataBinding)nestedFuncBinding).getType();
 	    	//use the function type binding, because annotation information is stored there
-	    	EGLFileConfiguration.getXMLAnnotationValueFromBinding(nestedFuncTypeBinding, nameVal, namespaceVal);
+	    	EGLFileConfiguration.getXMLAnnotationValueFromBinding(nestedFuncBinding, nameVal, namespaceVal);
 	    	
 	        //here is a senario, if the function has exact 1 out parameter(you could have more than one in, in/out params) and no return
 	        //this out parameter should be at the end (validation makes sure of that)
@@ -138,8 +135,8 @@ public class ExtractInterfaceOperation extends EGLFileOperation {
         
         Part boundServicePart = configuration.getTheBoundPart();
         //need to get the annotation values
-        IBinding serviceNameBinding = boundServicePart.getName().resolveBinding();
-        if(serviceNameBinding != null && serviceNameBinding != IBinding.NOT_FOUND_BINDING) {
+        org.eclipse.edt.mof.egl.Type serviceNameBinding = boundServicePart.getName().resolveType();
+        if(serviceNameBinding != null) {
         	StringBuffer nameVal = new StringBuffer();
         	StringBuffer namespaceVal = new StringBuffer();
         	EGLFileConfiguration.getXMLAnnotationValueFromBinding(serviceNameBinding, nameVal, namespaceVal);        	
