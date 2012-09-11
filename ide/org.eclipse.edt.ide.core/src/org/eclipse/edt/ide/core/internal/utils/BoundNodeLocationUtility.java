@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.EnumerationField;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -65,10 +66,12 @@ public class BoundNodeLocationUtility {
 			this.partName = partName;
 		}
 
+		@Override
 		public IFile getDeclaringFile() {
 			return declaringFile;
 		}
 
+		@Override
 		public String getPartName() {
 			return partName;
 		}
@@ -79,7 +82,7 @@ public class BoundNodeLocationUtility {
 		
 		private String address;
 		
-		public BoundDataBindingAddress(IFile declaringFile, String partName, /*int bindingKind,*/ String address) {
+		public BoundDataBindingAddress(IFile declaringFile, String partName, String address) {
 			super(declaringFile, partName);
 
 			this.address = address;
@@ -121,6 +124,7 @@ public class BoundNodeLocationUtility {
 			this.address = address;
 		}
 
+		@Override
 		public boolean visit(ClassDataDeclaration classDataDeclaration) {
 			for (Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
 				Name name = (Name) iter.next();
@@ -133,6 +137,7 @@ public class BoundNodeLocationUtility {
 			return true;
 		}
 
+		@Override
 		public boolean visit(NestedFunction nestedFunction) {
 			if(NameUtile.equals(address.address, nestedFunction.getName().getIdentifier())){
 				result = nestedFunction;
@@ -142,6 +147,7 @@ public class BoundNodeLocationUtility {
 			return true;
 		}
 
+		@Override
 		public boolean visit(StructureItem structureItem){			
 			if(structureItem.getName() != null && NameUtile.equals(address.address, structureItem.getName().getIdentifier())){
 				result = structureItem;
@@ -149,6 +155,15 @@ public class BoundNodeLocationUtility {
 			}
 			return true;
 		}
+		
+		@Override
+		public boolean visit(EnumerationField enumerationField) {
+			if (enumerationField.getName() != null && NameUtile.equals(address.address, enumerationField.getName().getIdentifier())){
+				result = enumerationField;
+				return false;
+			}
+			return true;
+		};
 	}
 	
 	private class BoundFunctionParameterBindingNodeLocator extends AbstractASTVisitor {
@@ -160,6 +175,7 @@ public class BoundNodeLocationUtility {
 			this.address = address;
 		}
 		
+		@Override
 		public boolean visit(FunctionParameter functionParameter) {
 			Member binding = functionParameter.getName().resolveMember();
 			if(binding instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
@@ -185,6 +201,7 @@ public class BoundNodeLocationUtility {
 			this.fSearchFuncParaList = this.functionBinding.getParameters();
 		}
 		
+		@Override
 		public boolean visit(NestedFunction nestedFunction) {
 				if(NameUtile.equals(address.getFunctionBinding().getName(), nestedFunction.getName().getIdentifier())){
 					List<FunctionParameter> aParameterList = nestedFunction.getFunctionParameters();
@@ -292,10 +309,12 @@ public class BoundNodeLocationUtility {
 		
 		final Type[] result = new Type[1];
 		expr.accept(new DefaultASTVisitor() {
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName) {
 				result[0] = qualifiedName.getQualifier().resolveType();
 				return false;
 			}
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess) {
 				result[0] = fieldAccess.getPrimary().resolveType();
 				return false;

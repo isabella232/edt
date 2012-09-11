@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
+import org.eclipse.edt.compiler.core.ast.EnumerationField;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
@@ -79,28 +80,28 @@ public class OpenOnSelectionHandler extends EGLHandler {
 				localVariableDeclarationName = name;
 			}
 		}
-		
+		@Override
 		public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
 			for(Iterator iter = functionDataDeclaration.getNames().iterator(); iter.hasNext();) {
 				handleName((Name) iter.next());
 			}
 			return false;
 		}
-		
+		@Override
 		public boolean visit(ForStatement forStatement) {
 			if(forStatement.hasVariableDeclaration()) {
 				handleName(forStatement.getVariableDeclarationName());
 			}
 			return true;
 		}
-		
+		@Override
 		public boolean visit(ForEachStatement foreachStatement) {
 			if(foreachStatement.hasVariableDeclaration()) {
 				handleName(foreachStatement.getVariableDeclarationName());
 			}
 			return true;
 		}
-		
+		@Override
 		public boolean visit(OnExceptionBlock onExceptionBlock) {
 			if(onExceptionBlock.hasExceptionDeclaration()) {
 				handleName(onExceptionBlock.getExceptionName());
@@ -111,7 +112,8 @@ public class OpenOnSelectionHandler extends EGLHandler {
 	
 	private boolean beep;
 	private IBinding targetBinding;
-
+	
+	@Override
 	public void run() {
 		beep = true;
 
@@ -142,18 +144,19 @@ public class OpenOnSelectionHandler extends EGLHandler {
 		final IBoundNodeAddress[]  address = new IBoundNodeAddress[]{null};
 		final String[] selectedNodeName = new String[]{null};
 		BoundNodeModelUtility.getBoundNodeAtOffset(currentFile, currentPosition, new IBoundNodeRequestor(){
-
+			@Override
 			public void acceptNode(final Node boundPart, final Node selectedNode) {
 				
 				if(!(selectedNode instanceof Part) && !(selectedNode instanceof Statement)) {
-				
-					//TODO F3 on enumerationfields doesn't work
+					
 					selectedNode.accept(new AbstractASTExpressionVisitor(){
+						@Override
 						public boolean visit(org.eclipse.edt.compiler.core.ast.File file) {
 							//short circuit here so we do not end up visiting the imports of the file
 							return false;
 						}
 						
+						@Override
 						public boolean visitName(Name name){
 							Member binding = name.resolveMember();
 							if (binding != null){
@@ -197,6 +200,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							return false;
 						}
 						
+						@Override
 					    public boolean visit(SuperExpression superExpression){
 					    	//TODO super() highlights the part instead of the matching constructor
 					    	Type binding = superExpression.resolveType();
@@ -209,6 +213,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							return false;
 						}
 						
+						@Override
 						public boolean visit(ThisExpression thisExpression){
 							//TODO this() highlights the part instead of the matching constructor
 							Type binding = thisExpression.resolveType();
@@ -221,6 +226,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							return false;
 						}
 						
+						@Override
 						public boolean visit(FieldAccess fieldAccess){
 							Member binding = fieldAccess.resolveMember();
 							if(binding != null) {
@@ -237,10 +243,12 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							return false;
 						}
 						
+						@Override
 						public boolean visit(NestedFunction nestedFunction) {
 							return false;
 						}
-
+						
+						@Override
 						public boolean visit(Constructor constructor) {
 							return false;
 						}
@@ -318,7 +326,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 			this.currentFile = currentFile;
 		}
 		
-		
+		@Override
 		public boolean visit(ClassDataDeclaration classDataDeclaration) {
 			for (Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
 				Name name = (Name) iter.next();
@@ -330,36 +338,49 @@ public class OpenOnSelectionHandler extends EGLHandler {
 			return true;						
 		}
 		
+		@Override
 		public boolean visit(FunctionParameter functionParameter) {
 			selectAndReveal(functionParameter.getName());
 			return false;
 		}
 		
+		@Override
+		public boolean visit(EnumerationField enumerationField) {
+			selectAndReveal(enumerationField.getName());
+			return false;
+		};
+		
+		@Override
 		public boolean visit(NestedFunction nestedFunction) {
 			selectAndReveal(nestedFunction.getName());								
 			return false;
 		}
 
+		@Override
 		public boolean visit(VariableFormField field) {
 			selectAndReveal(field.getName());								
 			return false;
 		}
 
+		@Override
 		public boolean visit(NestedForm nestedForm) {
 			selectAndReveal(nestedForm.getName());								
 			return false;
 		}
 
+		@Override
 		public boolean visit(ProgramParameter programParameter) {
 			selectAndReveal(programParameter.getName());
 			return false;
 		}
 
+		@Override
 		public boolean visit(StructureItem structureItem){
 			selectAndReveal(structureItem.getName());
 			return false;
 		}
 
+		@Override
 		public void visitPart(Part part) {
 			selectAndReveal(part.getName());
 		}
