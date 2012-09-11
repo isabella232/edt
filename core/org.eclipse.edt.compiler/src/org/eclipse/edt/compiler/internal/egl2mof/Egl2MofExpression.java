@@ -335,7 +335,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				
 			}
 			
-			boolean isStatic = functionBinding != null && functionBinding.isStatic() || functionBinding.getContainer() instanceof Library;
+			boolean isStatic = functionBinding != null && (functionBinding.isStatic() || functionBinding.getContainer() instanceof Library);
 			if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression
 					|| node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
 				// Constructor invocation.
