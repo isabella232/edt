@@ -153,11 +153,17 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
     			Map<String, IRPartBinding> partpackage = getPackagePartBinding(packageName);
     			partpackage.put(retVal.getIrPart().getName(),retVal);
     			retVal.setEnvironment(getEnvironment());
+    			if (shouldSetEnvironmentOnIr()) {
+    				BindingUtil.setEnvironment(retVal.getIrPart(), getEnvironment());
+    			}
     			bindingLoaded(retVal);   			
     		}
     	}
     	return retVal;
-		
+	}
+	
+	protected boolean shouldSetEnvironmentOnIr() {
+		return false;
 	}
 
 	protected EObject getPartObject(String entry){
