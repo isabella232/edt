@@ -11,46 +11,46 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.handlers;
 
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.DataItemBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
+import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel;
+import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel.Context;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataNode;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataNodeFactory;
-import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel.Context;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ArrayTypeBindingHandler extends DataTypeBindingHandler {
-
-	public void handle(IDataBinding dataBinding, ITypeBinding typeBinding, InsertDataModel insertDataModel) {
+	
+	public void handle(Member dataBinding, Type typeBinding, InsertDataModel insertDataModel) {
 		//create self
-		ArrayTypeBinding arrayTypeBinding = (ArrayTypeBinding)typeBinding;
+		ArrayType arrayTypeBinding = (ArrayType)typeBinding;
 		String bindingName = (String)insertDataModel.getContext().get(Context.BINDING_NAME);	
-		InsertDataNode insertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, dataBinding.getType().getName());
+		InsertDataNode insertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, StatementValidator.getShortTypeString(dataBinding.getType(), true));
 		insertDataNode.setArray(true);
 		insertDataNode.setContainer(false);
-		int elementTypeKind = arrayTypeBinding.getElementType().getKind();
 		// primitive type array
-		if(elementTypeKind == ITypeBinding.PRIMITIVE_TYPE_BINDING){
-			PrimitiveTypeBinding primitiveTypeBinding = (PrimitiveTypeBinding)arrayTypeBinding.getElementType();
+		if(TypeUtils.isPrimitive(arrayTypeBinding.getElementType())){
 			insertDataNode.setNodeType(InsertDataNode.NodeType.TYPE_PRIMITIVE_ALL);
-			insertDataNode.addNodeTypeDetail(BindingHandlerHelper.getPrimitiveInsertDataNodeTypeDetail(primitiveTypeBinding));
+			insertDataNode.addNodeTypeDetail(BindingHandlerHelper.getPrimitiveInsertDataNodeTypeDetail(arrayTypeBinding.getElementType()));
 		}
-		// dataitem array
-		if(elementTypeKind == ITypeBinding.DATAITEM_BINDING){
-			DataItemBinding dataItemBinding = (DataItemBinding)arrayTypeBinding.getElementType();
-			PrimitiveTypeBinding primitiveTypeBinding = dataItemBinding.getPrimitiveTypeBinding();
-			insertDataNode.setNodeType(InsertDataNode.NodeType.TYPE_PRIMITIVE_ALL);
-			insertDataNode.addNodeTypeDetail(BindingHandlerHelper.getPrimitiveInsertDataNodeTypeDetail(primitiveTypeBinding));
-		}
+		//TODO data item not currently supported
+//		// dataitem array
+//		if(elementTypeKind == ITypeBinding.DATAITEM_BINDING){
+//			DataItemBinding dataItemBinding = (DataItemBinding)arrayTypeBinding.getElementType();
+//			PrimitiveTypeBinding primitiveTypeBinding = dataItemBinding.getPrimitiveTypeBinding();
+//			insertDataNode.setNodeType(InsertDataNode.NodeType.TYPE_PRIMITIVE_ALL);
+//			insertDataNode.addNodeTypeDetail(BindingHandlerHelper.getPrimitiveInsertDataNodeTypeDetail(primitiveTypeBinding));
+//		}
 		// record array
-		if(elementTypeKind == ITypeBinding.FLEXIBLE_RECORD_BINDING){
+		if(arrayTypeBinding.getElementType() instanceof Record){
 			insertDataNode.setNodeType(InsertDataNode.NodeType.TYPE_RECORD_ALL);
 		}
 		//set annotation
-		IAnnotationBinding displayNameAnnotationBinding = dataBinding.getAnnotation(BindingHandlerHelper.EGLUI, BindingHandlerHelper.ANNOTATION_DISPLAYNAME);
+		Annotation displayNameAnnotationBinding = dataBinding.getAnnotation(BindingHandlerHelper.EGLUI + BindingHandlerHelper.ANNOTATION_DISPLAYNAME);
 		if(displayNameAnnotationBinding != null){
 			insertDataNode.setLabelText((String)displayNameAnnotationBinding.getValue());
 		}

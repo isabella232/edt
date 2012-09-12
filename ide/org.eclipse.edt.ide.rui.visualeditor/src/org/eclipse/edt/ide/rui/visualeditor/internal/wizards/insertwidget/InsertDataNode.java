@@ -174,7 +174,7 @@ public class InsertDataNode {
 	
 	
 	public WidgetType[] getWidgetTypes(){
-		boolean isTimeStamp = fieldType.equalsIgnoreCase("timestamp(\"hhmmss\")") || fieldType.equalsIgnoreCase("timestamp(\"yyyyMMddhhmmss\")") || fieldType.equalsIgnoreCase("timestamp");		
+		boolean isTimeStamp = fieldType.equalsIgnoreCase("timestamp(hhmmss)") || fieldType.equalsIgnoreCase("timestamp(yyyyMMddhhmmss)") || fieldType.equalsIgnoreCase("timestamp");		
 		if(purpose.equals(InsertDataNode.Purpose.FOR_DISPLAY)){
 			if(forDisplayWidgetTypes == null){
 				forDisplayDataTemplates = WidgetDescriptorRegistry.getInstance(model.getProject()).getMappingDescriptorDataTemplates(purpose, nodeType, nodeTypeDetails, isArray, isContainer);

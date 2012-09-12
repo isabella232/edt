@@ -13,23 +13,23 @@ package org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.model;
 
 import java.util.List;
 
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
-
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.DataItemBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
+import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.HandlerFieldsResolver;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.ParameterizedType;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class PageDataModelBuilder {
 	private static PageDataModelBuilder instance;
@@ -78,13 +78,19 @@ public class PageDataModelBuilder {
 								Object oName = names.get(j);
 								if(oName instanceof SimpleName){
 									SimpleName simpleName = (SimpleName)oName;
-									IDataBinding dataBinding = simpleName.resolveDataBinding();
+									Member dataBinding = simpleName.resolveMember();
+									Type typeBinding = simpleName.resolveType();
 									if(dataBinding != null){
-										ITypeBinding typeBinding = dataBinding.getType();
 										if(typeBinding != null && isAcceptType(typeBinding)){
+											if (typeBinding instanceof ParameterizedType) {
+												typeBinding = ((ParameterizedType)typeBinding).getParameterizableType();
+											}
+											
 											//Single
-											if(typeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING || typeBinding.getKind() == ITypeBinding.DATAITEM_BINDING || typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){	
-												if(!isAnyType(typeBinding)){
+											if(TypeUtils.isPrimitive(typeBinding)
+//													|| typeBinding.getKind() == ITypeBinding.DATAITEM_BINDING
+													|| typeBinding instanceof Record){	
+												if(!TypeUtils.Type_ANY.equals(typeBinding)){
 													DataFieldPageDataNode dataFieldPageDataNode = null;
 													if(classDataDeclaration.isPrivate()){
 														dataFieldPageDataNode= (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE_PRIVATE);
@@ -96,11 +102,13 @@ public class PageDataModelBuilder {
 												}
 											}
 											//Array
-											if(typeBinding.getKind() == ITypeBinding.ARRAY_TYPE_BINDING ){
-												ArrayTypeBinding arrayTypeBinding = (ArrayTypeBinding)typeBinding;
-												ITypeBinding elementTypeBinding = arrayTypeBinding.getElementType();
-												if(elementTypeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING || elementTypeBinding.getKind() == ITypeBinding.DATAITEM_BINDING || elementTypeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
-													if(!isAnyType(elementTypeBinding)){
+											if(typeBinding instanceof ArrayType ){
+												ArrayType arrayTypeBinding = (ArrayType)typeBinding;
+												Type elementTypeBinding = arrayTypeBinding.getElementType();
+												if(TypeUtils.isPrimitive(elementTypeBinding)
+//														|| elementTypeBinding.getKind() == ITypeBinding.DATAITEM_BINDING
+														|| elementTypeBinding instanceof Record){
+													if(!TypeUtils.Type_ANY.equals(elementTypeBinding)){
 														DataFieldPageDataNode dataFieldPageDataNode = null;
 														if(classDataDeclaration.isPrivate()){
 															dataFieldPageDataNode= (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE_PRIVATE);
@@ -123,30 +131,12 @@ public class PageDataModelBuilder {
 		}
 	}
 	
-	private boolean isAcceptType(ITypeBinding typeBinding){
-		String packageQualifiedName = typeBinding.getPackageQualifiedName();
+	private boolean isAcceptType(Type typeBinding){
+		String packageQualifiedName = typeBinding.getTypeSignature();
 		if(packageQualifiedName.equals("org.eclipse.edt.rui.mvc.FormField")){
 			return false;
 		}
 		return true;
-	}
-	
-	private boolean isAnyType(ITypeBinding typeBinding){
-		if(typeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING ){
-			PrimitiveTypeBinding primitiveTypeBinding = (PrimitiveTypeBinding)typeBinding;
-			if(primitiveTypeBinding.getPrimitive().getType() == Primitive.ANY_PRIMITIVE){
-				return true;
-			}
-		}
-		
-		if(typeBinding.getKind() == ITypeBinding.DATAITEM_BINDING ){
-			DataItemBinding dataItemBinding = (DataItemBinding)typeBinding;
-			if(dataItemBinding.getPrimitiveTypeBinding().getPrimitive().getType() == Primitive.ANY_PRIMITIVE){
-				return true;
-			}
-		}
-		
-		return false;
 	}
 	
 	private String getName(Handler handler){
@@ -159,10 +149,10 @@ public class PageDataModelBuilder {
 		return sbName.toString();
 	}
 	
-	private String getName(IDataBinding dataBinding){
+	private String getName(Member dataBinding){
 		StringBuffer sbName = new StringBuffer(dataBinding.getCaseSensitiveName());
 		sbName.append(" : ");//$NON-NLS-1$
-		sbName.append(dataBinding.getType().getName());
+		sbName.append(StatementValidator.getShortTypeString(dataBinding.getType(), true));
 		return sbName.toString();
 	}
 }

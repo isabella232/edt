@@ -11,29 +11,31 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.handlers;
 
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel;
+import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel.Context;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataNode;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataNodeFactory;
-import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel.Context;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
 
 public class FlexibleRecordBindingHandler extends DataTypeBindingHandler {
 	
-	public void handle(IDataBinding dataBinding, ITypeBinding typeBinding, InsertDataModel insertDataModel){
+	public void handle(Member dataBinding, Type typeBinding, InsertDataModel insertDataModel){
 		//create self
-		FlexibleRecordBinding flexibleRecordBinding = (FlexibleRecordBinding)typeBinding;
+		Record flexibleRecordBinding = (Record)typeBinding;
 		String bindingName = (String)insertDataModel.getContext().get(Context.BINDING_NAME);
-		InsertDataNode insertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, dataBinding.getType().getName());
+		InsertDataNode insertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, StatementValidator.getShortTypeString(dataBinding.getType(), true));
 		insertDataNode.setArray(false);
 		insertDataNode.setContainer(true);
 		insertDataNode.setNodeType(InsertDataNode.NodeType.TYPE_RECORD_ALL);
 		insertDataNode.addNodeTypeDetail(InsertDataNode.NodeTypeDetail.TYPE_RECORD_SIMPLE);
 		//set annotation
-		IAnnotationBinding displayNameAnnotationBinding = dataBinding.getAnnotation(BindingHandlerHelper.EGLUI, BindingHandlerHelper.ANNOTATION_DISPLAYNAME);
+		Annotation displayNameAnnotationBinding = dataBinding.getAnnotation(BindingHandlerHelper.EGLUI + BindingHandlerHelper.ANNOTATION_DISPLAYNAME);
 		if(displayNameAnnotationBinding != null){
 			insertDataNode.setLabelText((String)displayNameAnnotationBinding.getValue());
 		}
@@ -72,9 +74,7 @@ public class FlexibleRecordBindingHandler extends DataTypeBindingHandler {
 		}		
 		WorkingCopyProjectEnvironmentManager.getInstance().initialize();
 		//process children
-		IDataBinding[] dataBindings = flexibleRecordBinding.getFields();
-		for(int i=0; i<dataBindings.length; i++){
-			IDataBinding cDataBinding = dataBindings[i];
+		for (Field cDataBinding : flexibleRecordBinding.getFields()) {
 			StringBuffer sbBindName = new StringBuffer(bindingName).append(".").append(cDataBinding.getCaseSensitiveName());
 			insertDataModel.getContext().set(Context.BINDING_NAME, sbBindName.toString());
 			//set self as parent

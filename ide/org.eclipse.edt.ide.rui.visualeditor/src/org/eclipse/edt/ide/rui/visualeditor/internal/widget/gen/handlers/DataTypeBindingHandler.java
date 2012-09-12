@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.handlers;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 public abstract class DataTypeBindingHandler implements IDataTypeBindingHandler {
 
-	public abstract void handle(IDataBinding dataBinding, ITypeBinding typeBinding, InsertDataModel insertDataModel);
+	public abstract void handle(Member dataBinding, Type typeBinding, InsertDataModel insertDataModel);
 }
