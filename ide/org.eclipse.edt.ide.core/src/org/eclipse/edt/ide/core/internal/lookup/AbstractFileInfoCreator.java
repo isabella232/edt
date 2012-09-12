@@ -81,7 +81,7 @@ public abstract class AbstractFileInfoCreator {
 	}
 
 	protected AbstractProjectInfo projectInfo;
-	protected String[] packageName;
+	protected String packageName;
 	protected IFile file;
 	protected IDuplicatePartRequestor duplicatePartRequestor;
 	protected ASTFileInfo result = new ASTFileInfo();;
@@ -91,7 +91,7 @@ public abstract class AbstractFileInfoCreator {
 	private MessageDigest messageDigest;
 	private List errors = new ArrayList();
 	
-	public AbstractFileInfoCreator(AbstractProjectInfo projectInfo, String[] packageName, IFile file, File fileAST, IDuplicatePartRequestor duplicatePartRequestor){
+	public AbstractFileInfoCreator(AbstractProjectInfo projectInfo, String packageName, IFile file, File fileAST, IDuplicatePartRequestor duplicatePartRequestor){
 		
 		this.projectInfo = projectInfo;
 		this.packageName = packageName;
@@ -271,7 +271,7 @@ public abstract class AbstractFileInfoCreator {
 	}
 	
 	private void processPart(ASTPartSourceReader reader, Part part, int partType, int sourceStart, int sourceLength) {
-		if(part.isGeneratable()){
+		if(partRequiresOnePerFile(part)){
 			validateGeneratablePart(part);
 		}
 		
@@ -345,5 +345,18 @@ public abstract class AbstractFileInfoCreator {
 	public IASTFileInfo getASTInfo() {
 		initializeASTInfo();
 		return result;		
+	}
+	
+	private boolean partRequiresOnePerFile(Part part) {
+		switch (part.getPartType()) {
+			case Part.PROGRAM:
+			case Part.LIBRARY:
+			case Part.CLASS:
+			case Part.HANDLER:
+			case Part.SERVICE:
+				return true;
+			default:
+				return false;
+		}
 	}
 }

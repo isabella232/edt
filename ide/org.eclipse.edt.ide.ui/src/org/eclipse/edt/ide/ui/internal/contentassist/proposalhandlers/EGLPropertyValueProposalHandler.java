@@ -357,8 +357,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 		List proposals = new ArrayList();
 		if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_HELPKEY))
 			proposals.addAll(getNamedValueHelpKeyProposals(getDocumentOffset(), VALIDATIONBYPASSKEYS_PFN_LIST_PROPOSAL));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_INPUTFORM))
-			proposals.addAll(getNameValueInputFormProposals(getDocumentOffset()));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONCONSTRUCTIONFUNCTION)
 			|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONPRERENDERFUNCTION)
 			|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONPOSTRENDERFUNCTION)
@@ -374,8 +372,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 			proposals.addAll(getNameValueSelectedValueItemProposals(getDocumentOffset()));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_VALIDATIONBYPASSFUNCTIONS))
 			proposals.addAll(referenceCompletion.getListValueValidationBypassFunctionsProposals(viewer, getDocumentOffset(), prefix, true));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_VALIDATORDATATABLE))
-			proposals.addAll(getNameValueValidatorTableProposals(getDocumentOffset()));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_VALIDATORFUNCTION))
 			proposals.addAll(getNameValueValidatorFunctionProposals(getDocumentOffset()));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_VIEWROOTVAR))
@@ -698,23 +694,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	/**
 	 * @return proposal list
 	 */
-	private List getNameValueValidatorTableProposals(int documentOffset) {
-		String[] types = new String [] {
-			IEGLConstants.DATATABLE_SUBTYPE_MATCHINVALID,
-			IEGLConstants.DATATABLE_SUBTYPE_MATCHVALID,
-			IEGLConstants.DATATABLE_SUBTYPE_RANGECHK,
-			};
-		List proposals = new EGLPartSearchProposalHandler(viewer, getDocumentOffset(), prefix, editor).getProposals(
-				IEGLSearchConstants.TABLE, "", types, false); //$NON-NLS-1$
-		if (proposals.size() == 0)
-			proposals.addAll(getQuotedValueProposal(getDocumentOffset()));
-
-		return proposals;
-	}
-
-	/**
-	 * @return proposal list
-	 */
 	private List getNameValueRecordProposals(int documentOffset, int recordTypes) {
 		//add variable record proposals
 		return new EGLDeclarationProposalHandler(
@@ -783,15 +762,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 				boundNode).getRecordProposals(recordType, false, false);
 		}
 		return proposals;
-	}
-
-	/**
-	 * @return proposal list
-	 */
-	private List getNameValueInputFormProposals(int documentOffset) {
-		//Get text forms from formGroup use statement proposals
-		return new EGLFormUseStatementProposalHandler(viewer, getDocumentOffset(), prefix, editor, boundNode).getProposals(
-			IEGLConstants.FORM_SUBTYPE_TEXT, false);
 	}
 
 	/**

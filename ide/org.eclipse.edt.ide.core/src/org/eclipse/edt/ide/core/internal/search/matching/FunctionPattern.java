@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.search.matching;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.model.IFunction;
+import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.Member;
 
 public abstract class FunctionPattern extends SearchPattern {
 
@@ -117,7 +117,7 @@ public String toString(){
 	return buffer.toString();
 }
 
-protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern,String[] packageName,String partName) {
+protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern,String packageName,String partName) {
 	if (partName == null  ) return INACCURATE_MATCH;
 	
 	StringBuffer qualifiedPartName = new StringBuffer();
@@ -125,16 +125,8 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 
 	qualifiedPartName.append(partName);
 	
-   	StringBuffer result = new StringBuffer();
-
 	if(packageName != null) {
-		for(int i = 0; i < packageName.length; i++) {
-			result.append(packageName[i]);
-			if ((i + 1) < packageName.length){
-				result.append('.');
-			}
-		}    		
-		qualifiedPackageName = result.toString().toCharArray();
+		qualifiedPackageName = packageName.toCharArray();
 	}else{
 		qualifiedPackageName = null;
 	}
@@ -148,58 +140,43 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 				CharOperation.concat(qualifiedPackageName, qualifiedSourceName, '.'))) {
 		return ACCURATE_MATCH;
 	} else {
-		// search for a part.form in any package (only valid for nested forms)
-			if(qualificationPattern != null && new String(qualificationPattern).indexOf('.') == -1){
-				if(this.matchesType(
-						CharOperation.concat(qualificationPattern, simpleNamePattern, '.'),
-						null,
-						qualifiedPackageName == null ? 
-								qualifiedSourceName : 
-								CharOperation.concat(qualifiedPackageName, qualifiedSourceName, '.'))){
-					return ACCURATE_MATCH;
-				}
-			}						
-			
+		if(qualificationPattern != null && new String(qualificationPattern).indexOf('.') == -1){
+			if(this.matchesType(
+					CharOperation.concat(qualificationPattern, simpleNamePattern, '.'),
+					null,
+					qualifiedPackageName == null ? 
+							qualifiedSourceName : 
+							CharOperation.concat(qualifiedPackageName, qualifiedSourceName, '.'))){
+				return ACCURATE_MATCH;
+			}
+		}
 	}
 	return IMPOSSIBLE_MATCH;
 	
 }
 
-public int matchesFunctionPartType(Name node,IPartBinding partBinding){
-	if (partBinding != null && partBinding.getKind() == ITypeBinding.FUNCTION_BINDING){
+public int matchesFunctionPartType(Name node,FunctionPart partBinding){
+	if (partBinding != null){
 		return this.matchLevelForType(this.selector, this.declaringQualification, partBinding);
 	}
 	
-	IBinding b = node.resolveBinding();
+	// Nested functions aren't types
+	Member m = node.resolveMember();
 	
-	if (b != null && b != IBinding.NOT_FOUND_BINDING){
-		ITypeBinding typeBinding = null;
-		if (b.isDataBinding()){
-			typeBinding = ((IDataBinding)b).getType();
+	if (m instanceof FunctionMember){
+		Container parent = m.getContainer();
+		String packageName;
+		String partName;
+		if (parent instanceof Classifier) {
+			packageName = ((Classifier)parent).getCaseSensitivePackageName().length() > 0 ? ((Classifier)parent).getCaseSensitivePackageName() : null;
+			partName = ((Classifier)parent).getCaseSensitiveName() + "." + m.getCaseSensitiveName();
 		}
-		if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding.getKind() == ITypeBinding.FUNCTION_BINDING){
-			IPartBinding pBinding = ((IFunctionBinding)typeBinding).getDeclarer();
-			String[] packageName;
-			String partName;
-			if (pBinding != null) {
-				packageName = pBinding.getPackageName().length > 0 ? pBinding.getPackageName(): null;
-				partName = pBinding.getCaseSensitiveName() + "." + typeBinding.getCaseSensitiveName();
-			}
-			else {
-				packageName = null;
-				partName = typeBinding.getCaseSensitiveName();
-			}
-//			if (node.isQualifiedName()){
-//				//see if node is qualified with declaring part
-//				if (pBinding.getName().compareToIgnoreCase(((QualifiedName)node).getQualifier().getIdentifier()) == 0){
-//					String[] subPackageName = new String[packageName.length + 1];
-//					System.arraycopy(packageName, 0, subPackageName, 0, packageName.length);
-//					subPackageName[packageName.length] = pBinding.getName();
-//					packageName = subPackageName;
-//				}
-//			}
-			return matchLevelForType(this.selector, this.declaringQualification,packageName,partName);
+		else {
+			packageName = null;
+			partName = m.getCaseSensitiveName();
 		}
+		
+		return matchLevelForType(this.selector, this.declaringQualification,packageName,partName);
 	}
 
 	return INACCURATE_MATCH;

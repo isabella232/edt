@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 
 /**
@@ -64,7 +65,7 @@ public class EGLProjectFeatureContributionsRegistry {
     	this.initialized = true;
     	
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		IConfigurationElement[] conf = reg.getConfigurationElementsFor("org.eclipse.edt.ide.ui.eglProjectFeature"); //$NON-NLS-1$
+		IConfigurationElement[] conf = reg.getConfigurationElementsFor(EDTUIPlugin.PLUGIN_ID + ".eglProjectFeature"); //$NON-NLS-1$
 		IConfigurationElement currentConf;
 		  
 		for (int i=0; i < conf.length; i++) {

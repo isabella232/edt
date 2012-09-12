@@ -12,7 +12,6 @@
 package org.eclipse.edt.ide.ui.project.templates;
 
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.SourceProjectWizardCapabilityPage;
-import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;

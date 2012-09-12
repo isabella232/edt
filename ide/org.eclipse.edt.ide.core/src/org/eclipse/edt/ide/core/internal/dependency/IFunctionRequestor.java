@@ -16,5 +16,5 @@ package org.eclipse.edt.ide.core.internal.dependency;
  */
 public interface IFunctionRequestor {
 
-    public void acceptFunction(String projectName, String[] packageName, String partName);
+    public void acceptFunction(String projectName, String packageName, String partName);
 }

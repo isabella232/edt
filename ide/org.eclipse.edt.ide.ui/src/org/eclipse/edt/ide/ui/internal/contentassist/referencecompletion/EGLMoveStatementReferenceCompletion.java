@@ -18,11 +18,9 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFormUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTableUseStatementProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLMoveStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -48,22 +46,6 @@ public class EGLMoveStatementReferenceCompletion extends EGLAbstractReferenceCom
 					boundNode)
 					.getProposals(boundNode));
 			
-			//Get all table use statement proposals
-			proposals.addAll(
-				new EGLTableUseStatementProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals());
-			
-			//Get all forms from formGroup use statement proposals
-			proposals.addAll(
-				new EGLFormUseStatementProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals());
-
 			//Get system function proposals with return value
 			proposals.addAll(
 				new EGLSystemWordProposalHandler(viewer,

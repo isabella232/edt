@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 

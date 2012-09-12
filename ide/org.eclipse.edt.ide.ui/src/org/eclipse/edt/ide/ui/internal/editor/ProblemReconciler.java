@@ -290,12 +290,12 @@ public class ProblemReconciler implements IReconciler {
 				IWorkingCopy[] currRegedWCs = EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory());
 				IEGLFile eglFile = EGLCore.createEGLFileFrom(file);
 				if (eglFile != null) {
-					String[] pkgName;
+					String pkgName;
 					IPackageFragment packageFragment = (IPackageFragment) eglFile.getAncestor(IEGLElement.PACKAGE_FRAGMENT);
 					if (packageFragment.isDefaultPackage()) {
-						pkgName = new String[0];
+						pkgName = "";
 					} else {
-						pkgName = packageFragment.getElementName().split("\\.");
+						pkgName = packageFragment.getElementName();
 					}
 					ReconcilerProblemRequestorFactory problemFactory = new ReconcilerProblemRequestorFactory(file);
 					

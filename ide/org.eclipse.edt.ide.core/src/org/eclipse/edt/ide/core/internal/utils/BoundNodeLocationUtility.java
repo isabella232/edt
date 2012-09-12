@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,53 +19,41 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.SystemPackageMOFPathEntry;
-import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FixedStructureBinding;
-import org.eclipse.edt.compiler.binding.FormBinding;
-import org.eclipse.edt.compiler.binding.FormDataBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.TypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.EnumerationField;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
-import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class BoundNodeLocationUtility {
 	
@@ -81,10 +67,12 @@ public class BoundNodeLocationUtility {
 			this.partName = partName;
 		}
 
+		@Override
 		public IFile getDeclaringFile() {
 			return declaringFile;
 		}
 
+		@Override
 		public String getPartName() {
 			return partName;
 		}
@@ -93,13 +81,11 @@ public class BoundNodeLocationUtility {
 	
 	private static class BoundDataBindingAddress extends BoundPartAddress {
 		
-		private int bindingKind;
 		private String address;
 		
-		public BoundDataBindingAddress(IFile declaringFile, String partName, int bindingKind, String address) {
+		public BoundDataBindingAddress(IFile declaringFile, String partName, String address) {
 			super(declaringFile, partName);
 
-			this.bindingKind = bindingKind;
 			this.address = address;
 		}		
 	}	
@@ -109,63 +95,25 @@ public class BoundNodeLocationUtility {
 		private String address;
 		private String functionSignature;
 		
-		public BoundFunctionParameterBindingAddress(IFile declaringFile, String partName, FunctionParameterBinding binding) {
+		public BoundFunctionParameterBindingAddress(IFile declaringFile, String partName, org.eclipse.edt.mof.egl.FunctionParameter binding) {
 			super(declaringFile, partName);
 
 			this.address = binding.getName();
-			this.functionSignature = getSignature(binding.getFunctionBinding());
+			this.functionSignature = getSignature((FunctionMember)binding.getContainer());
 		}
 	}
 	
 	private static class BoundFunctionBindingAddress extends BoundPartAddress {
 		
-		private NestedFunctionBinding functionBinding;
-		public BoundFunctionBindingAddress(IFile declaringFile, String partName, NestedFunctionBinding binding) {
+		private FunctionMember functionBinding;
+		public BoundFunctionBindingAddress(IFile declaringFile, String partName, FunctionMember binding) {
 			super(declaringFile, partName);
 			this.functionBinding = binding;
 		}
 		
-		public NestedFunctionBinding getFunctionBinding(){
+		public FunctionMember getFunctionBinding(){
 			return this.functionBinding;
 		}
-	}
-	
-	private class BoundStructureItemBindingAddress extends BoundPartAddress {
-		
-		private int bindingKind;
-		private StructureItemAddressInfo[] address;
-		
-		public BoundStructureItemBindingAddress(IFile declaringFile, String partName, int bindingKind, StructureItemAddressInfo[] address) {
-			super(declaringFile, partName);
-
-			this.bindingKind = bindingKind;
-			this.address = address;
-		}		
-	}
-
-	private class BoundFormFieldBindingAddress extends BoundPartAddress {
-		
-		private String formName;
-		private String fieldName;
-		
-		public BoundFormFieldBindingAddress(IFile declaringFile, String partName, String formName, String fieldName) {
-			super(declaringFile, partName);
-
-			this.formName = formName;
-			this.fieldName = fieldName;
-		}		
-	}
-	
-	
-	private class BoundFormBindingAddress extends BoundPartAddress {
-		
-		private String formName;
-		
-		public BoundFormBindingAddress(IFile declaringFile, String partName, String formName) {
-			super(declaringFile, partName);
-
-			this.formName = formName;
-		}		
 	}
 	
 	private class BoundDataBindingNodeLocator extends AbstractASTVisitor {
@@ -177,51 +125,46 @@ public class BoundNodeLocationUtility {
 			this.address = address;
 		}
 
+		@Override
 		public boolean visit(ClassDataDeclaration classDataDeclaration) {
-			if(address.bindingKind == IDataBinding.CLASS_FIELD_BINDING){
-				for (Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
-					Name name = (Name) iter.next();
-					
-					if(name.getIdentifier() == address.address){
-						result = classDataDeclaration;
-						return false;
-					}
+			for (Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
+				Name name = (Name) iter.next();
+				
+				if(NameUtile.equals(name.getIdentifier(), address.address)){
+					result = classDataDeclaration;
+					return false;
 				}
 			}
 			return true;
 		}
 
+		@Override
 		public boolean visit(NestedFunction nestedFunction) {
-			if(address.bindingKind == IDataBinding.NESTED_FUNCTION_BINDING){
-				if(address.address == nestedFunction.getName().getIdentifier()){
-					result = nestedFunction;
-					return false;
-				}
+			if(NameUtile.equals(address.address, nestedFunction.getName().getIdentifier())){
+				result = nestedFunction;
+				return false;
 			}
 			
 			return true;
 		}
 
-		public boolean visit(ProgramParameter programParameter) {
-			if(address.bindingKind == IDataBinding.PROGRAM_PARAMETER_BINDING){
-				if(address.address == programParameter.getName().getIdentifier()){
-					result = programParameter;
-					return false;
-				}
-			}
-			return false;
-		}
-
+		@Override
 		public boolean visit(StructureItem structureItem){			
-			IDataBinding binding = (IDataBinding)structureItem.resolveBinding();
-			if(binding != null && address.bindingKind == IDataBinding.FLEXIBLE_RECORD_FIELD && binding.getKind() == IDataBinding.FLEXIBLE_RECORD_FIELD){
-				if(structureItem.getName() != null && address.address == structureItem.getName().getIdentifier()){
-					result = structureItem;
-					return false;
-				}
-			}	
+			if(structureItem.getName() != null && NameUtile.equals(address.address, structureItem.getName().getIdentifier())){
+				result = structureItem;
+				return false;
+			}
 			return true;
 		}
+		
+		@Override
+		public boolean visit(EnumerationField enumerationField) {
+			if (enumerationField.getName() != null && NameUtile.equals(address.address, enumerationField.getName().getIdentifier())){
+				result = enumerationField;
+				return false;
+			}
+			return true;
+		};
 	}
 	
 	private class BoundFunctionParameterBindingNodeLocator extends AbstractASTVisitor {
@@ -233,10 +176,11 @@ public class BoundNodeLocationUtility {
 			this.address = address;
 		}
 		
+		@Override
 		public boolean visit(FunctionParameter functionParameter) {
-			IDataBinding binding = (IDataBinding)functionParameter.getName().resolveDataBinding();
-			if(Binding.isValidBinding(binding)) {
-				if(address.address == binding.getName() && address.functionSignature.equals(getSignature(((FunctionParameterBinding) binding).getFunctionBinding()))) {
+			Member binding = functionParameter.getName().resolveMember();
+			if(binding instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
+				if(NameUtile.equals(address.address, binding.getName()) && address.functionSignature.equals(getSignature((FunctionMember)((org.eclipse.edt.mof.egl.FunctionParameter)binding).getContainer()))) {
 					result = functionParameter;
 					return false;
 				}
@@ -249,170 +193,57 @@ public class BoundNodeLocationUtility {
 		
 		private BoundFunctionBindingAddress address;
 		private Node result;
-		private IFunctionBinding functionBinding;
-		private List fSearchFuncParaList;
+		private FunctionMember functionBinding;
+		private List<org.eclipse.edt.mof.egl.FunctionParameter> fSearchFuncParaList;
 		
 		public BoundFunctionNodeLocator(BoundFunctionBindingAddress address) {
 			this.address = address;
-			this.functionBinding = (IFunctionBinding)address.getFunctionBinding().getType();
+			this.functionBinding = address.getFunctionBinding();
 			this.fSearchFuncParaList = this.functionBinding.getParameters();
 		}
 		
+		@Override
 		public boolean visit(NestedFunction nestedFunction) {
-				if(address.getFunctionBinding().getName() == nestedFunction.getName().getIdentifier()){
-					List aParameterList = nestedFunction.getFunctionParameters();
-					if(aParameterList.size() == fSearchFuncParaList.size()){
-						Iterator aParaItr = aParameterList.iterator();
-						Iterator fSearchParaItr = fSearchFuncParaList.iterator();
-						FunctionParameter aParameter = null;
-						FunctionParameterBinding aSearchParameter = null;
+			return visitFunctionMember(nestedFunction, nestedFunction.getName().getIdentifier(), nestedFunction.getFunctionParameters());
+		}
+		
+		@Override
+		public boolean visit(Constructor constructor) {
+			return visitFunctionMember(constructor, NameUtile.getAsName(IEGLConstants.KEYWORD_CONSTRUCTOR), constructor.getParameters());
+		};
+		
+		private boolean visitFunctionMember(Node node, String funcName, List<FunctionParameter> parms) {
+			if(NameUtile.equals(address.getFunctionBinding().getName(), funcName)){
+				if(parms.size() == fSearchFuncParaList.size()){
+					Iterator<FunctionParameter> aParaItr = parms.iterator();
+					Iterator<org.eclipse.edt.mof.egl.FunctionParameter> fSearchParaItr = fSearchFuncParaList.iterator();
+					FunctionParameter aParameter;
+					org.eclipse.edt.mof.egl.FunctionParameter aSearchParameter;
+					
+					while(aParaItr.hasNext()){
+						aParameter = aParaItr.next();
+						aSearchParameter = fSearchParaItr.next();
 						
-						while(aParaItr.hasNext()){
-							aParameter = (FunctionParameter)aParaItr.next();
-							aSearchParameter = (FunctionParameterBinding)fSearchParaItr.next();
-							
-							String fSearchTypeName = aSearchParameter.getType().getActualBindingName();
-							if(fSearchTypeName == null){
-								fSearchTypeName = aSearchParameter.getType().getName();
-							}
-							
-							String aTypeName = aParameter.getType().getBaseType().resolveTypeBinding().getActualBindingName();//.getCanonicalName();
-							if(aTypeName == null){
-								aTypeName = aParameter.getType().getBaseType().getCanonicalName();
-							}
-							
-							if(!fSearchTypeName.equalsIgnoreCase(aTypeName)){
-								return(true);
-							}
+						if(!aSearchParameter.getType().equals(aParameter.getType().resolveType())){
+							return(true);
 						}
-						
-						result = nestedFunction;
-						return false;			
-					}
-			}
-			
-			return true;
-		}
-	}
-
-	private class BoundFormBindingNodeLocator extends AbstractASTVisitor {
-		
-		private BoundFormBindingAddress address;
-		private Node result;
-		
-		public BoundFormBindingNodeLocator(BoundFormBindingAddress address) {
-			this.address = address;
-		}
-		
-		public boolean visit(NestedForm nestedForm) {
-				if(address.formName == nestedForm.getName().getIdentifier()) {
-					result = nestedForm;
-					return false;
-				}
-			return false;
-		}
-	}
-
-	private class BoundFormFieldBindingNodeLocator extends DefaultASTVisitor {
-		
-		private BoundFormFieldBindingAddress address;
-		private Node result;
-		
-		public BoundFormFieldBindingNodeLocator(BoundFormFieldBindingAddress address) {
-			this.address = address;
-		}
-		
-		public boolean visit(FormGroup fg) {
-			return true;
-		}
-		
-		public boolean visit(NestedForm nestedForm) {
-				if(address.formName == nestedForm.getName().getIdentifier()) {
-					return true;  //found the right form! Now look inside for the right field
-				}
-			return false;
-		}
-
-		public boolean visit(TopLevelForm tlForm) {
-			return true;
-		}
-		
-		public boolean visit(VariableFormField field){
-			if(result != null) {return false;};
-			
-			IDataBinding binding = field.getName().resolveDataBinding();
-			if (Binding.isValidBinding(binding) && binding.getName() == address.fieldName) {
-				result = field;
-			}
-			
-			return false;
-		}
-		
-		
-	}
-
-	private class BoundStructureItemBindingNodeLocator extends AbstractASTVisitor {
-
-		protected BoundStructureItemBindingAddress address;
-		protected Node result;
-		
-		public BoundStructureItemBindingNodeLocator(BoundStructureItemBindingAddress address) {
-			this.address = address;
-		}
-		
-		public boolean visit(StructureItem structureItem){
-			if(result != null) {return false;};
-			
-			IDataBinding binding = (IDataBinding)structureItem.resolveBinding();
-			if(address.bindingKind == IDataBinding.STRUCTURE_ITEM_BINDING && binding.getKind() == IDataBinding.STRUCTURE_ITEM_BINDING){
-				StructureItemBinding sItemBinding = (StructureItemBinding) binding;
-				StructureItemAddressInfo[] structureItemNameSegments = getStructureItemAddressInfos(sItemBinding);
-				
-				if(structureItemNameSegments.length == address.address.length){
-					boolean equalNames = true;
-					for (int i = 0; i < structureItemNameSegments.length; i++) {
-						if(structureItemNameSegments[i].name != address.address[i].name ||
-						   structureItemNameSegments[i].indexInContainer != address.address[i].indexInContainer){
-							equalNames = false;
-							break;
-						}						
 					}
 					
-					if(equalNames){
-						result = structureItem; 
-					}
+					result = node;
+					return false;
 				}
-			}				
+			}
+			
 			return true;
 		}
 	}
-	
+
 	private static final BoundNodeLocationUtility INSTANCE = new BoundNodeLocationUtility();
 	
 	private BoundNodeLocationUtility(){}
 	
 	public static BoundNodeLocationUtility getInstance(){
 		return INSTANCE;
-	}
-	
-	private IBoundNodeAddress getAddressOfForm(FormDataBinding form) {
-		if (form == null) {
-			return null;
-		}
-		return getAddressOfForm((FormBinding) form.getType());
-	}
-	
-	private IBoundNodeAddress getAddressOfForm(FormBinding form) {
-		if (form == null) {
-			return null;
-		}
-		
-		if (form.getEnclosingFormGroup() == null) {
-			return new BoundPartAddress(getFileForNode(form), form.getName());
-		}
-		else {
-			//embedded form
-			return new BoundFormBindingAddress(getFileForNode(form.getEnclosingFormGroup()), form.getEnclosingFormGroup().getName(), form.getName());		}
 	}
 	
 	/**
@@ -430,86 +261,48 @@ public class BoundNodeLocationUtility {
 	 * local variables are encouraged to handle local variables in a special way. For
 	 * an example, see class EGLOpenOnSelectionAction in plugin com.ibm.etools.egl.ui.
 	 */
-	public IBoundNodeAddress createBoundNodeAddress(IBinding selectedNodeBinding, Expression expr, IProject  project){
+	public IBoundNodeAddress createBoundNodeAddress(Element selectedNodeBinding, Expression expr, IProject  project){
 		
 		IBoundNodeAddress address = null;
 		
-		if(selectedNodeBinding.isTypeBinding()){
-			if(((ITypeBinding)selectedNodeBinding).isPartBinding()){
-				
-				//TODO must add code to handle nested forms for EGLARs
-				if (((ITypeBinding)selectedNodeBinding).getKind() == TypeBinding.FORM_BINDING) {
-					return getAddressOfForm((FormBinding)selectedNodeBinding);
+		if(selectedNodeBinding instanceof Type){
+			// Annotation fields will come in as an AnnotationType. Check if the parent is an Assignment.
+			if (selectedNodeBinding instanceof AnnotationType) {
+				Node parent = expr.getParent();
+				if (parent instanceof Assignment) {
+					Assignment assignment = (Assignment)parent;
+					String name = assignment.getLeftHandSide().getCanonicalString();
+					if (((AnnotationType)selectedNodeBinding).getEField(NameUtile.getAsName(name)) != null) {
+						IFile file = getFileForNode((org.eclipse.edt.mof.egl.Part)selectedNodeBinding, project);
+						address = new BoundDataBindingAddress(file, ((org.eclipse.edt.mof.egl.Part)selectedNodeBinding).getName(), name);
+					}
 				}
+			}
+			
+			if(address == null && selectedNodeBinding instanceof org.eclipse.edt.mof.egl.Part){
 				
 				// This address involves only a file and a part name
-				IFile file = getFileForNode((IPartBinding)selectedNodeBinding);
-				address = new BoundPartAddress(file, ((IPartBinding)selectedNodeBinding).getName());
+				IFile file = getFileForNode((org.eclipse.edt.mof.egl.Part)selectedNodeBinding, project);
+				address = new BoundPartAddress(file, ((org.eclipse.edt.mof.egl.Part)selectedNodeBinding).getName());
 			}
-		}else if(selectedNodeBinding.isDataBinding()){
+		}else if(selectedNodeBinding instanceof Member){
 			// This address is a node within a part
-			IDataBinding dataBinding = (IDataBinding)selectedNodeBinding;
+			Member dataBinding = (Member)selectedNodeBinding;
 			
-			if (dataBinding.getKind() == IDataBinding.FORM_BINDING) {
-				//form bindings are tricky, because they may be top level or embedded
-				address = getAddressOfForm((FormDataBinding)dataBinding);				
+			org.eclipse.edt.mof.egl.Part declaringPart = getContainingBinding(dataBinding, expr);
+			if (dataBinding instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
+				if (declaringPart != null) {
+					address = new BoundFunctionParameterBindingAddress(getFileForNode(declaringPart, project), declaringPart.getName(), (org.eclipse.edt.mof.egl.FunctionParameter) dataBinding);
+				}
+			}
+			else if (dataBinding instanceof FunctionMember) {
+				if (declaringPart != null) {
+					address = new BoundFunctionBindingAddress(getFileForNode(declaringPart, project), declaringPart.getName(), (FunctionMember)dataBinding);
+				}
 			}
 			else {
-				IPartBinding declaringPart = getActualBinding(getContainingBinding(dataBinding, expr), project);
-				switch(dataBinding.getKind()){
-					case IDataBinding.ANNOTATION_BINDING:
-						if (dataBinding.getType() instanceof AnnotationTypeBindingImpl){
-							address = new BoundPartAddress(getFileForNode(((AnnotationTypeBindingImpl)dataBinding.getType()).getAnnotationRecord()), dataBinding.getName());
-						}
-						else {
-							if (dataBinding instanceof AnnotationFieldBinding) {
-								IAnnotationTypeBinding encl = ((AnnotationFieldBinding)dataBinding).getEnclosingAnnotationType();
-								if (encl instanceof AnnotationTypeBindingImpl) {
-									address = new BoundDataBindingAddress(getFileForNode(((AnnotationTypeBindingImpl)encl).getAnnotationRecord()), encl.getName(), IDataBinding.FLEXIBLE_RECORD_FIELD, dataBinding.getName());
-								}
-							}
-						}
-						break;
-					case IDataBinding.LIBRARY_BINDING:
-					case IDataBinding.EXTERNALTYPE_BINDING:
-					case IDataBinding.DATATABLE_BINDING:
-					case IDataBinding.PROGRAM_BINDING:
-					case IDataBinding.TOP_LEVEL_FUNCTION_BINDING:
-						if(Binding.isValidBinding(declaringPart)) {
-							address = new BoundPartAddress(getFileForNode(declaringPart), declaringPart.getName());
-						}
-						break;
-					case IDataBinding.STRUCTURE_ITEM_BINDING:
-						if(Binding.isValidBinding(declaringPart)) {
-							address = new BoundStructureItemBindingAddress(getFileForNode(declaringPart), declaringPart.getName(), dataBinding.getKind(), getStructureItemAddressInfos((StructureItemBinding)dataBinding));
-						}
-						break;
-					case IDataBinding.FORM_FIELD:
-						if(Binding.isValidBinding(declaringPart)) {
-							FormBinding form = (FormBinding) declaringPart;
-							if (form.getEnclosingFormGroup() == null) {
-								address = new BoundFormFieldBindingAddress(getFileForNode(declaringPart), declaringPart.getName(), null, dataBinding.getName());
-							}
-							else {
-								address = new BoundFormFieldBindingAddress(getFileForNode(form.getEnclosingFormGroup()), form.getEnclosingFormGroup().getName(), form.getName(), dataBinding.getName());
-							}
-						}
-						break;
-					case IDataBinding.FUNCTION_PARAMETER_BINDING:
-						if(Binding.isValidBinding(declaringPart)) {
-							address = new BoundFunctionParameterBindingAddress(getFileForNode(declaringPart), declaringPart.getName(), (FunctionParameterBinding) dataBinding);
-						}
-						break;
-					case IDataBinding.NESTED_FUNCTION_BINDING:
-						if(Binding.isValidBinding(declaringPart)) {
-							address = new BoundFunctionBindingAddress(getFileForNode(declaringPart), declaringPart.getName(), (NestedFunctionBinding)dataBinding);
-						}
-						break;
-					default:
-						if(Binding.isValidBinding(declaringPart)) {
-							address = new BoundDataBindingAddress(getFileForNode(declaringPart), declaringPart.getName(), dataBinding.getKind(), dataBinding.getName());
-						}
-						break;
+				if (declaringPart != null) {
+					address = new BoundDataBindingAddress(getFileForNode(declaringPart, project), declaringPart.getName(), /*dataBinding.getKind(),*/ dataBinding.getName());
 				}
 			}
 		}		
@@ -517,43 +310,36 @@ public class BoundNodeLocationUtility {
 		return address;
 	}	
 	
-	private IPartBinding getActualBinding(IBinding binding, IProject project) {
-		if (project != null && Binding.isValidBinding(binding) && binding.getActualBindingName() != null) {
-			return WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getPartBinding(binding.getActualBindingPackage(), binding.getActualBindingName());
-		}
-		if (binding instanceof IPartBinding) {
-			return (IPartBinding) binding;
-		}
-		return null;
-	}
-	
-	private IBinding getContainingBinding(IDataBinding binding, Expression expr) {
-		IPartBinding decl = binding.getDeclaringPart();
-		if (Binding.isValidBinding(decl)) {
+	private org.eclipse.edt.mof.egl.Part getContainingBinding(Member binding, Expression expr) {
+		org.eclipse.edt.mof.egl.Part decl = BindingUtil.getDeclaringPart(binding);
+		if (decl != null) {
 			return decl;
 		}
 		
-		final IBinding[] result = new IBinding[1];
+		final Type[] result = new Type[1];
 		expr.accept(new DefaultASTVisitor() {
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName) {
-				result[0] = qualifiedName.getQualifier().resolveTypeBinding();
+				result[0] = qualifiedName.getQualifier().resolveType();
 				return false;
 			}
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess) {
-				result[0] = fieldAccess.getPrimary().resolveTypeBinding();
+				result[0] = fieldAccess.getPrimary().resolveType();
 				return false;
 			}
 		});
-		return result[0];
+		return result[0] instanceof org.eclipse.edt.mof.egl.Part ? (org.eclipse.edt.mof.egl.Part)result[0] : null;
 	}
 
 	
-	private IFile getFileForNode(IPartBinding partBinding){
+	private IFile getFileForNode(org.eclipse.edt.mof.egl.Part partBinding, IProject project){
 		IFile result = null;
-		String[] packageName = partBinding.getPackageName();
+		String packageName = partBinding.getPackageName();
 		String partName = partBinding.getName();
 	
-		IEnvironment ienv = partBinding.getEnvironment();
+		IEnvironment ienv = BindingUtil.getEnvironment(partBinding);
+		
 		if (ienv instanceof WorkingCopyProjectEnvironment) {
 			WorkingCopyProjectEnvironment environment = (WorkingCopyProjectEnvironment) ienv;
 			IPartOrigin origin = environment.getPartOrigin(packageName, partName);
@@ -566,7 +352,7 @@ public class BoundNodeLocationUtility {
 			List<ISystemPackageBuildPathEntry> list = ((SystemEnvironment)ienv).getSysPackages();
 			for ( ISystemPackageBuildPathEntry entry : list ) {
 				if (!(entry instanceof SystemPackageMOFPathEntry) && entry.getPartBinding( packageName, partName ) != null ) {
-					String mofSignature = IRUtils.concatWithSeparator(packageName, ".") + "." + partName;
+					String mofSignature = packageName + "." + partName;
 					String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
 					EObject irPart = null;
 					
@@ -614,7 +400,7 @@ public class BoundNodeLocationUtility {
 		if(packageName == null) 
 			return null;
 		
-		compiler.compilePart(address.getDeclaringFile().getProject(), packageName , address.getDeclaringFile(), workingCopies, address.getPartName(), new IWorkingCopyCompileRequestor(){
+		compiler.compilePart(address.getDeclaringFile().getProject(), Util.stringArrayToQualifiedName(packageName), address.getDeclaringFile(), workingCopies, address.getPartName(), new IWorkingCopyCompileRequestor(){
 
 			public void acceptResult(WorkingCopyCompilationResult result) {
 				
@@ -638,21 +424,6 @@ public class BoundNodeLocationUtility {
 						part.accept(locator);							
 						astNode[0] = locator.result;
 					}
-					else if(address instanceof BoundStructureItemBindingAddress) {
-						BoundStructureItemBindingNodeLocator locator = new BoundStructureItemBindingNodeLocator((BoundStructureItemBindingAddress)address);
-						part.accept(locator);							
-						astNode[0] = locator.result;
-					}
-					else if(address instanceof BoundFormBindingAddress) {
-						BoundFormBindingNodeLocator locator = new BoundFormBindingNodeLocator((BoundFormBindingAddress)address);
-						part.accept(locator);							
-						astNode[0] = locator.result;
-					}
-					else if(address instanceof BoundFormFieldBindingAddress) {
-						BoundFormFieldBindingNodeLocator locator = new BoundFormFieldBindingNodeLocator((BoundFormFieldBindingAddress)address);
-						part.accept(locator);							
-						astNode[0] = locator.result;
-					}
 					else{
 						// return this node
 						astNode[0] = part;
@@ -669,89 +440,22 @@ public class BoundNodeLocationUtility {
 		return astNode[0];
 	}
 	
-	private static class StructureItemAddressInfo {
-		String name;
-		int indexInContainer;
-		
-		public StructureItemAddressInfo(String name, int indexInContainer) {
-			this.name = name;
-			this.indexInContainer = indexInContainer;
-		}
-	}
-	
-	/**
-	 * The name segments for a strutcure item include the name of the current item, and the name of all parent structure items
-	 * that share the same declaring part.  This covers the following cases:
-	 * 
-	 *  RecordA
-	 *  	10 item1 int;
-	 *  		20 item2 RecordB;
-	 *  end
-	 *  
-	 *  RecordB
-	 *  	10 item3 int;
-	 *  end
-	 *  
-	 *  Given the bound structure items for the following statements:
-	 *  myVar RecordA;
-	 *  myVar.item1 = 1;
-	 *  myVar.item1.item2.item3 = 2;
-	 *
-	 *  The Segments for item1 are ["item1"]
-	 *  The Segments for item2 are ["item1", "item2]
-	 *  The Segments for item3 are ["item3"]
-	 */	
-	private StructureItemAddressInfo[] getStructureItemAddressInfos(StructureItemBinding binding) {
-		List segments = new ArrayList();
-
-		segments.add(new StructureItemAddressInfo(binding.getName(), getIndexInContainer(binding)));
-		
-		IPartBinding declaringPart = binding.getDeclaringPart();
-		StructureItemBinding parentItem = binding.getParentItem();
-		
-		while(parentItem != null && parentItem.getDeclaringPart() == declaringPart){
-			segments.add(0, new StructureItemAddressInfo(parentItem.getName(), getIndexInContainer(parentItem)));
-			
-			parentItem = parentItem.getParentItem();
-		}
-		return (StructureItemAddressInfo[])segments.toArray(new StructureItemAddressInfo[segments.size()]);
-	}
-	
-	private int getIndexInContainer(StructureItemBinding binding) {
-		List structureItems = Collections.EMPTY_LIST;
-		StructureItemBinding parentItem = binding.getParentItem();
-		if(parentItem == null) {
-			FixedStructureBinding enclosingStructureBinding = binding.getEnclosingStructureBinding();
-			structureItems = enclosingStructureBinding.getStructureItems();			
-		}
-		else {
-			structureItems = parentItem.getChildren();
-		}
-		
-		for(int i = 0; i < structureItems.size(); i++) {
-			if(binding == structureItems.get(i)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-	
-	private static String getSignature(IFunctionBinding functionBinding) {
+	private static String getSignature(FunctionMember functionBinding) {
 		StringBuffer sig = new StringBuffer();
 		if(functionBinding == null) {
 			sig.append("null");
 		}
 		else {
 			sig.append(functionBinding.getName());		
-			for(Iterator iter = functionBinding.getParameters().iterator(); iter.hasNext();) {
+			for(Iterator<org.eclipse.edt.mof.egl.FunctionParameter> iter = functionBinding.getParameters().iterator(); iter.hasNext();) {
 				sig.append("|");
-				ITypeBinding tBinding = ((IDataBinding) iter.next()).getType();
-				sig.append(tBinding == null ? "null" : tBinding.getPackageQualifiedName());
+				Type tBinding = iter.next().getType();
+				sig.append(tBinding == null ? "null" : tBinding.getTypeSignature());
 			}
-			ITypeBinding tBinding = functionBinding.getReturnType();
+			Type tBinding = functionBinding.getReturnType();
 			if(tBinding != null) {
 				sig.append("|");
-				sig.append(tBinding.getPackageQualifiedName());
+				sig.append(tBinding.getTypeSignature());
 			}
 		}
 		return sig.toString();

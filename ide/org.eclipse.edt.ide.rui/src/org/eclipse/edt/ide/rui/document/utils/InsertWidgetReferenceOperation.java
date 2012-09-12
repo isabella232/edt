@@ -19,7 +19,6 @@ import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.utils.Util;
@@ -27,6 +26,7 @@ import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * Insert Widget Reference and update the Z order of the declared widgets
@@ -53,11 +53,11 @@ public class InsertWidgetReferenceOperation {
 				final Node container = DocumentUtil.getWidgetNode(currentDocument,containerOffset, containerLength);
 				container.accept(new DefaultASTVisitor(){
 					public boolean visit(Handler handler){
-						String typeName = InternUtil.intern(new String(handler.getSubType().getCanonicalName()));
-						if( typeName == Util.RUIHANDLER ){
+						String typeName = NameUtile.getAsName(new String(handler.getSubType().getCanonicalName()));
+						if( NameUtile.equals(typeName, Util.RUIHANDLER) ){
 							EGLRUIHandlerUpdateStrategy updateStrategy = new EGLRUIHandlerUpdateStrategy(handler, currentDocument);
 							totalCharactersAdded = updateStrategy.updateHandler(insertText, containerIndex);
-						} else if ( typeName == Util.RUIWIDGET ) {
+						} else if ( NameUtile.equals(typeName, Util.RUIWIDGET) ) {
 							EGLRUIWidgetUpdateStrategy updateStrategy = new EGLRUIWidgetUpdateStrategy(handler, currentDocument);
 							totalCharactersAdded = updateStrategy.insertTargetWidget(insertText);
 						}

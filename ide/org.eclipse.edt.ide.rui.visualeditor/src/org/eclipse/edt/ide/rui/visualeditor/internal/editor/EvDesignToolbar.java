@@ -331,10 +331,11 @@ public class EvDesignToolbar extends Composite implements SelectionListener, IPr
 
 	// IBM BIDI Append Start
 	public void propertyChange(PropertyChangeEvent event) {
-		if (EGLBasePlugin.BIDI_ENABLED_OPTION.equals(event.getProperty())){
-			if (!_itemBidiPreferences.isDisposed())
-				_itemBidiPreferences.setEnabled( ((Boolean)event.getNewValue()).booleanValue() );			
-		}
+		//TODO EDT BIDI
+//		if (EGLBasePlugin.BIDI_ENABLED_OPTION.equals(event.getProperty())){
+//			if (!_itemBidiPreferences.isDisposed())
+//				_itemBidiPreferences.setEnabled( ((Boolean)event.getNewValue()).booleanValue() );			
+//		}
 	}
 	// IBM BIDI Append End
 

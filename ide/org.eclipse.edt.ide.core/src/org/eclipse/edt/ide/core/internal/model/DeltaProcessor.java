@@ -476,7 +476,6 @@ public class DeltaProcessor implements IResourceChangeListener {
 			if (monitor != null) monitor.beginTask("", 1); //$NON-NLS-1$
 
 			for (int i = 0, length = elementsScope.length; i < length; i++) {
-				IEGLElement element = elementsScope[i];
 				this.addForRefresh(elementsScope[i]);
 			}
 			HashSet elementsToRefresh = this.removeExternalElementsToRefresh();
@@ -1357,7 +1356,7 @@ public class DeltaProcessor implements IResourceChangeListener {
 		//long start = System.currentTimeMillis();
 		if (rootDelta != null) {
 			// use local exception to quickly escape from delta traversal
-			class FoundRelevantDeltaException extends RuntimeException {}
+			class FoundRelevantDeltaException extends RuntimeException {private static final long serialVersionUID = 1L;}
 			try {
 				rootDelta.accept(new IResourceDeltaVisitor() {
 					public boolean visit(IResourceDelta delta) throws CoreException {

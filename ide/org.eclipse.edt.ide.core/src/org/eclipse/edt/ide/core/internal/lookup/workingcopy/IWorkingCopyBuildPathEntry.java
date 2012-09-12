@@ -15,5 +15,5 @@ import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 
 public interface IWorkingCopyBuildPathEntry extends IBuildPathEntry {
-	IPartOrigin getPartOrigin(String[] packageName,String partName);
+	IPartOrigin getPartOrigin(String packageName,String partName);
 }

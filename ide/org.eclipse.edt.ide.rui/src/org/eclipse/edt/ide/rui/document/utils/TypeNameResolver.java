@@ -18,10 +18,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.text.edits.MalformedTreeException;
-
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Handler;
@@ -32,16 +28,19 @@ import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
-import org.eclipse.edt.ide.core.model.document.IEGLDocument;
-import org.eclipse.edt.ide.rui.internal.Activator;
-import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
-import org.eclipse.edt.ide.core.internal.model.EGLFile;
+import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.mof.utils.NameUtile;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.text.edits.MalformedTreeException;
 
 /**
  * Insert a new widget into the RUIHandler
@@ -127,7 +126,7 @@ public class TypeNameResolver {
 		List parts = fileAST.getParts();	
 		for (Iterator iter = parts.iterator(); iter.hasNext();) {
 			Part nextPart = (Part) iter.next();
-			if(nextPart.getIdentifier() == InternUtil.intern(partName)){
+			if(NameUtile.equals(nextPart.getIdentifier(), NameUtile.getAsName(partName))){
 				part = nextPart;
 				break;
 			}
@@ -151,10 +150,10 @@ public class TypeNameResolver {
 		
 		// Check to see if the widget we just inserted can be resolved to the proper type
 		BoundFieldLocator locator = new BoundFieldLocator(TEMP_FIELD_NAME);
-		WorkingCopyCompiler.getInstance().compilePart(project, partPackageName, file, new IWorkingCopy[]{workingCopy}, partName, locator);
+		WorkingCopyCompiler.getInstance().compilePart(project, Util.stringArrayToQualifiedName(partPackageName), file, new IWorkingCopy[]{workingCopy}, partName, locator);
 		if(locator.getField() != null){
-			if(Binding.isValidBinding(locator.getField().getType().resolveTypeBinding())){
-				if(locator.getField().getType().resolveTypeBinding().getPackageName() != InternUtil.intern(widgetPackageName.split("\\."))){
+			if(locator.getField().getType().resolveType() != null && locator.getField().getType().resolveType().getClassifier() != null){
+				if(!NameUtile.equals(locator.getField().getType().resolveType().getClassifier().getPackageName(), NameUtile.getAsName(widgetPackageName))){
 					// We resolved a simple type name to the wrong part, which means we need to fully qualify the field
 					typeName = getFullyQualifiedTypeName(widgetPackageName, widgetTypeName);
 				}else{

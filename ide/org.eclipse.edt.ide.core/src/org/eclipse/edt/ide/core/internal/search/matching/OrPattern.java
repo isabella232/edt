@@ -16,13 +16,9 @@ import java.io.IOException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.ide.core.internal.model.index.IEntryResult;
 import org.eclipse.edt.ide.core.internal.model.index.impl.IndexInput;
 import org.eclipse.edt.ide.core.internal.search.IIndexSearchRequestor;
@@ -32,6 +28,7 @@ import org.eclipse.edt.ide.core.model.IFunction;
 import org.eclipse.edt.ide.core.model.IMember;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
+import org.eclipse.edt.mof.egl.FunctionPart;
 
 public class OrPattern extends SearchPattern {
 
@@ -173,21 +170,15 @@ public class OrPattern extends SearchPattern {
 		}
 	}
 	
-	public int matchesPartType(Name node ,IPartBinding partBinding,boolean forceQualification){
+	public int matchesPartType(Name node ,org.eclipse.edt.mof.egl.Part partBinding,boolean forceQualification){
 		int leftlevel = this.leftPattern.matchesPartType(node,partBinding,forceQualification);
 		int rightlevel = this.rightPattern.matchesPartType(node,partBinding,forceQualification);
 		return compareLevels(leftlevel,rightlevel);
 	}
 	
-	public int matchesFunctionPartType(Name node,IPartBinding partBinding){
+	public int matchesFunctionPartType(Name node,FunctionPart partBinding){
 		int leftlevel = this.leftPattern.matchesFunctionPartType(node,partBinding);
 		int rightlevel = this.rightPattern.matchesFunctionPartType(node,partBinding);
-		return compareLevels(leftlevel,rightlevel);
-	}
-	
-	public int matchesAnnotationType(Name node,IAnnotationTypeBinding binding, boolean forceQualification){
-		int leftlevel = this.leftPattern.matchesAnnotationType(node,binding, forceQualification);
-		int rightlevel = this.rightPattern.matchesAnnotationType(node,binding, forceQualification);
 		return compareLevels(leftlevel,rightlevel);
 	}
 	
@@ -210,24 +201,12 @@ public class OrPattern extends SearchPattern {
 		return compareLevels(leftlevel,rightlevel);
 	}
 	
-	public int matchesFunctionPart(TopLevelFunction node){
-		int leftlevel = this.leftPattern.matchesFunctionPart(node);
-		int rightlevel = this.rightPattern.matchesFunctionPart(node);
-		return compareLevels(leftlevel,rightlevel);
-	}
-	
 	protected int compareLevels(int leftlevel,int rightlevel){
 		if (leftlevel == ACCURATE_MATCH || rightlevel == ACCURATE_MATCH){
 			return ACCURATE_MATCH;
 		}else if (leftlevel == INACCURATE_MATCH || rightlevel == INACCURATE_MATCH){
 			return INACCURATE_MATCH;
 		}else return IMPOSSIBLE_MATCH;		
-	}
-	
-	public int matchesNestedFormPart(NestedForm node){
-		int leftlevel = this.leftPattern.matchesNestedFormPart(node);
-		int rightlevel = this.rightPattern.matchesNestedFormPart(node);
-		return compareLevels(leftlevel,rightlevel);
 	}
 	
 	@Override

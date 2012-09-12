@@ -14,40 +14,17 @@ package org.eclipse.edt.ide.core.internal.compiler.workingcopy;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 
 public class WorkingCopyCompilationResult {
 
 	private Node boundPart = null;
 	private IPartBinding partBinding = null;
 	private IFile declaredFile = null;
-	private TopLevelFunction[] boundFunctions = null;
-	private TopLevelFunctionInfo[] functionInfos = null;
 	
-	public WorkingCopyCompilationResult(Node part,IPartBinding binding ,IFile file, TopLevelFunctionInfo[] functions) {
-		functionInfos = functions;
+	public WorkingCopyCompilationResult(Node part,IPartBinding binding ,IFile file) {
 		boundPart = part;
 		declaredFile = file;
 		partBinding = binding;
-	}
-
-	public TopLevelFunction[] getBoundFunctions() {
-		if (functionInfos == null) {
-			return null;
-		}
-		
-		if (boundFunctions == null) {
-			boundFunctions = new TopLevelFunction[functionInfos.length];
-			for (int i = 0; i < boundFunctions.length; i++) {
-				boundFunctions[i] = functionInfos[i].getBoundAst();
-			}
-		}
-		return boundFunctions;
-	}
-	
-	public TopLevelFunctionInfo[] getTopLevelFunctionInfos() {
-		return functionInfos;
 	}
 
 	public Node getBoundPart() {
@@ -61,5 +38,4 @@ public class WorkingCopyCompilationResult {
 	public IPartBinding getPartBinding() {
 		return partBinding;
 	}
-	
 }

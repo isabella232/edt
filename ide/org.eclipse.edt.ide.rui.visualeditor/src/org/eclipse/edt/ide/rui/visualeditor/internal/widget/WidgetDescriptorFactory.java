@@ -38,67 +38,67 @@ import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.EList;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.ImageData;
 
 public class WidgetDescriptorFactory {
 	private static final String defaultTemplate = "${typeName}{}";
 	
-	private static final String		VEWIDGET					= InternUtil.intern( "eglx.ui.rui.VEWidget" );
-	private static final String		VEDATATEMPLATE				= InternUtil.intern( "eglx.ui.rui.VEDataTemplate" );
-	private static final String		VEPROPERTY					= InternUtil.intern( "eglx.ui.rui.VEProperty" );
-	private static final String		VEEVENT						= InternUtil.intern( "eglx.ui.rui.VEEvent" );
+	private static final String		VEWIDGET					= NameUtile.getAsName( "eglx.ui.rui.VEWidget" );
+	private static final String		VEDATATEMPLATE				= NameUtile.getAsName( "eglx.ui.rui.VEDataTemplate" );
+	private static final String		VEPROPERTY					= NameUtile.getAsName( "eglx.ui.rui.VEProperty" );
+	private static final String		VEEVENT						= NameUtile.getAsName( "eglx.ui.rui.VEEvent" );
 
-	private static final String		WIDGET_CATEGORY				= InternUtil.intern( "category" );
-	private static final String		WIDGET_DISPLAYNAME			= InternUtil.intern( "displayName" );
-	private static final String		WIDGET_SMALLICON			= InternUtil.intern( "smallIcon" );
-	private static final String		WIDGET_LARGEICON			= InternUtil.intern( "largeIcon" );
-	private static final String		WIDGET_TEMPLATE				= InternUtil.intern( "template" );
-	private static final String		WIDGET_DATA_TEMPLATES		= InternUtil.intern( "dataTemplates" );
-	private static final String		WIDGET_DESCRIPTION			= InternUtil.intern( "description" );
-	private static final String		WIDGET_CONTAINER			= InternUtil.intern( "container" );
-	private static final String		WIDGET_LAYOUTDATATYPE		= InternUtil.intern( "layoutDataType" );
-	private static final String		WIDGET_PROVIDER				= InternUtil.intern( "provider" );
+	private static final String		WIDGET_CATEGORY				= NameUtile.getAsName( "category" );
+	private static final String		WIDGET_DISPLAYNAME			= NameUtile.getAsName( "displayName" );
+	private static final String		WIDGET_SMALLICON			= NameUtile.getAsName( "smallIcon" );
+	private static final String		WIDGET_LARGEICON			= NameUtile.getAsName( "largeIcon" );
+	private static final String		WIDGET_TEMPLATE				= NameUtile.getAsName( "template" );
+	private static final String		WIDGET_DATA_TEMPLATES		= NameUtile.getAsName( "dataTemplates" );
+	private static final String		WIDGET_DESCRIPTION			= NameUtile.getAsName( "description" );
+	private static final String		WIDGET_CONTAINER			= NameUtile.getAsName( "container" );
+	private static final String		WIDGET_LAYOUTDATATYPE		= NameUtile.getAsName( "layoutDataType" );
+	private static final String		WIDGET_PROVIDER				= NameUtile.getAsName( "provider" );
 	
-	private static final String		DATA_TEMPLATE_NAME			= InternUtil.intern( "name" );
-	private static final String		DATA_TEMPLATE_DATA_MAPPING	= InternUtil.intern( "dataMapping" );
-	private static final String		DATA_TEMPLATE_PURPOSES	    = InternUtil.intern( "purposes" );
-	private static final String		DATA_TEMPLATE_TEMPLATE   	= InternUtil.intern( "template" );
-	private static final String		DATA_TEMPLATE_GEN_CONTROLLER = InternUtil.intern( "genController" );
-	private static final String		DATA_TEMPLATE_FORM_MANAGER_TEMPLATE	= InternUtil.intern( "formManagerTemplate" );
-	private static final String		DATA_TEMPLATE_CHILD_LAYOUT_DATA_TEMPLATE	= InternUtil.intern( "childLayoutDataTemplate" );
-	private static final String		DATA_TEMPLATE_CHILD_NAME_LABEL_TEMPLATE	= InternUtil.intern( "childNameLabelTemplate" );
-	private static final String		DATA_TEMPLATE_CHILD_ERROR_LABEL_TEMPLATE	= InternUtil.intern( "childErrorLabelTemplate" );
-	private static final String		DATA_TEMPLATE_CHILD_CONTROLLER_TEMPLATE	= InternUtil.intern( "childControllerTemplate" );
-	private static final String		DATA_TEMPLATE_CHILD_CONTROLLER_VALID_STATE_SETTER_TEMPLATE	= InternUtil.intern( "childControllerValidStateSetterTemplate" );
-	private static final String		DATA_TEMPLATE_CHILD_CONTROLLER_PUBLISH_MESSAGE_HELPER_TEMPLATE	= InternUtil.intern( "childControllerPublishMessageHelperTemplate" );
-	private static final String		DATA_TEMPLATE_CHILD_FORM_FIELD_TEMPLATE	= InternUtil.intern( "childFormFieldTemplate" );
+	private static final String		DATA_TEMPLATE_NAME			= NameUtile.getAsName( "name" );
+	private static final String		DATA_TEMPLATE_DATA_MAPPING	= NameUtile.getAsName( "dataMapping" );
+	private static final String		DATA_TEMPLATE_PURPOSES	    = NameUtile.getAsName( "purposes" );
+	private static final String		DATA_TEMPLATE_TEMPLATE   	= NameUtile.getAsName( "template" );
+	private static final String		DATA_TEMPLATE_GEN_CONTROLLER = NameUtile.getAsName( "genController" );
+	private static final String		DATA_TEMPLATE_FORM_MANAGER_TEMPLATE	= NameUtile.getAsName( "formManagerTemplate" );
+	private static final String		DATA_TEMPLATE_CHILD_LAYOUT_DATA_TEMPLATE	= NameUtile.getAsName( "childLayoutDataTemplate" );
+	private static final String		DATA_TEMPLATE_CHILD_NAME_LABEL_TEMPLATE	= NameUtile.getAsName( "childNameLabelTemplate" );
+	private static final String		DATA_TEMPLATE_CHILD_ERROR_LABEL_TEMPLATE	= NameUtile.getAsName( "childErrorLabelTemplate" );
+	private static final String		DATA_TEMPLATE_CHILD_CONTROLLER_TEMPLATE	= NameUtile.getAsName( "childControllerTemplate" );
+	private static final String		DATA_TEMPLATE_CHILD_CONTROLLER_VALID_STATE_SETTER_TEMPLATE	= NameUtile.getAsName( "childControllerValidStateSetterTemplate" );
+	private static final String		DATA_TEMPLATE_CHILD_CONTROLLER_PUBLISH_MESSAGE_HELPER_TEMPLATE	= NameUtile.getAsName( "childControllerPublishMessageHelperTemplate" );
+	private static final String		DATA_TEMPLATE_CHILD_FORM_FIELD_TEMPLATE	= NameUtile.getAsName( "childFormFieldTemplate" );
 	
-	private static final String		DATA_MAPPING_FOR_ARRAY   	= InternUtil.intern( "forArray" );
-	private static final String  	DATA_MAPPING_GEN_CHILD_WIDGET = InternUtil.intern( "genChildWidget" );
-	private static final String  	DATA_MAPPING_IS_CONTAINER 	= InternUtil.intern( "isContainer" );
-	private static final String  	DATA_MAPPING_IS_DEFAULT 	= InternUtil.intern( "isDefault" );
-	private static final String		DATA_MAPPING_MAPPINGS    	= InternUtil.intern( "mappings" );
+	private static final String		DATA_MAPPING_FOR_ARRAY   	= NameUtile.getAsName( "forArray" );
+	private static final String  	DATA_MAPPING_GEN_CHILD_WIDGET = NameUtile.getAsName( "genChildWidget" );
+	private static final String  	DATA_MAPPING_IS_CONTAINER 	= NameUtile.getAsName( "isContainer" );
+	private static final String  	DATA_MAPPING_IS_DEFAULT 	= NameUtile.getAsName( "isDefault" );
+	private static final String		DATA_MAPPING_MAPPINGS    	= NameUtile.getAsName( "mappings" );
 	
-	private static final String		PROPERTY_PROPERTYTYPE		= InternUtil.intern( "propertyType" );
-	private static final String		PROPERTY_DISPLAYNAME		= InternUtil.intern( "displayName" );
-	private static final String		PROPERTY_DEFAULT			= InternUtil.intern( "default" );
-	private static final String		PROPERTY_CATEGORY			= InternUtil.intern( "category" );
-	private static final String		PROPERTY_CHOICES			= InternUtil.intern( "choices" );
+	private static final String		PROPERTY_PROPERTYTYPE		= NameUtile.getAsName( "propertyType" );
+	private static final String		PROPERTY_DISPLAYNAME		= NameUtile.getAsName( "displayName" );
+	private static final String		PROPERTY_DEFAULT			= NameUtile.getAsName( "default" );
+	private static final String		PROPERTY_CATEGORY			= NameUtile.getAsName( "category" );
+	private static final String		PROPERTY_CHOICES			= NameUtile.getAsName( "choices" );
 
-	private static final String		PROPERTYCHOICE_DISPLAYNAME	= InternUtil.intern( "displayName" );
-	private static final String		PROPERTYCHOICE_ID			= InternUtil.intern( "id" );
+	private static final String		PROPERTYCHOICE_DISPLAYNAME	= NameUtile.getAsName( "displayName" );
+	private static final String		PROPERTYCHOICE_ID			= NameUtile.getAsName( "id" );
 
-	private static final String		EVENT_DISPLAYNAME			= InternUtil.intern( "displayName" );
+	private static final String		EVENT_DISPLAYNAME			= NameUtile.getAsName( "displayName" );
 	
-	private static final String		PROPERTY_FILTER_TYPE 		= InternUtil.intern( "propertyFilterType" );
-	private static final String		EVENT_FILTER_TYPE			= InternUtil.intern( "eventFilterType" );
-	private static final String		PROPERTY_FILTER 			= InternUtil.intern( "propertyFilter" );
-	private static final String		EVENT_FILTER				= InternUtil.intern( "eventFilter" );
+	private static final String		PROPERTY_FILTER_TYPE 		= NameUtile.getAsName( "propertyFilterType" );
+	private static final String		EVENT_FILTER_TYPE			= NameUtile.getAsName( "eventFilterType" );
+	private static final String		PROPERTY_FILTER 			= NameUtile.getAsName( "propertyFilter" );
+	private static final String		EVENT_FILTER				= NameUtile.getAsName( "eventFilter" );
 
 	private static final boolean	DEBUG						= false;
 
@@ -120,7 +120,7 @@ public class WidgetDescriptorFactory {
 	 * @param partName
 	 * @return null if any exceptions are thrown while creating the descriptor or if the part could not be found for some reason
 	 */
-	public WidgetDescriptor createWidgetDescriptor( String[] packageName, String partName ) {
+	public WidgetDescriptor createWidgetDescriptor( String packageName, String partName ) {
 
 		WidgetDescriptor widgetDescriptor = null;
 
@@ -135,14 +135,7 @@ public class WidgetDescriptorFactory {
 				widgetDescriptor._strProjectName = this.project.getName();
 				processWidget( part, widgetDescriptor );
 				
-				// Combine separate package segments into a single string
-				StringBuffer strbPackage = new StringBuffer();
-				for( int i=0; i<packageName.length; i++ ){
-					strbPackage.append( packageName[i] );
-					if( i < packageName.length - 1 )
-						strbPackage.append( '.' );
-				}
-				widgetDescriptor.setPackage( strbPackage.toString() );			
+				widgetDescriptor.setPackage( packageName );			
 				processWidgetFields( part, widgetDescriptor );
 				
 				if( DEBUG ) {
@@ -522,16 +515,16 @@ public class WidgetDescriptorFactory {
 					layoutDataType = layoutDataType.replaceFirst( "\\s*}.*", "" );
 					int lastIndex = layoutDataType.lastIndexOf( '.' );
 					String typeName = null;
-					String[] packageName = null;
+					String packageName;
 					if ( lastIndex < 0 ) {
 						typeName = layoutDataType;
-						packageName = new String[0];
+						packageName = "";
 					} else {
 						typeName = layoutDataType.substring( lastIndex + 1 );
 						layoutDataType = layoutDataType.substring( 0, lastIndex );
-						packageName = layoutDataType.split( "\\." );
+						packageName = layoutDataType;
 					}
-					LogicAndDataPart part = (LogicAndDataPart)environment.findPart( InternUtil.intern( packageName ) , InternUtil.intern( typeName ) );
+					LogicAndDataPart part = (LogicAndDataPart)environment.findPart( NameUtile.getAsName( packageName ) , NameUtile.getAsName( typeName ) );
 					List<Field> allFields = getAllFields(part);
 					for( int i = 0; i < allFields.size(); i++ ) {
 						Field field = allFields.get(i);

@@ -18,14 +18,22 @@ import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.*;
+import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FileASTScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
+import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
@@ -39,11 +47,10 @@ import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.CachingObjectStore;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.ObjectStore;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * Project Build Path entries are caches used when binding an AST tree.  A new WorkingCopyProjectBuildPathEntry must be created each time a set of AST trees
@@ -55,28 +62,26 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
 public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEntry {
 	
 	private class RealizingEnvironment implements IEnvironment{
-
-		public IPartBinding getPartBinding(String[] packageName, String partName) {
+		@Override
+		public IPartBinding getPartBinding(String packageName, String partName) {
 			return WorkingCopyProjectBuildPathEntry.this.getPartBinding(packageName, partName, true);
         }
-
-		public IPartBinding getNewPartBinding(String[] packageName, String caseSensitiveInternedPartName, int kind) {
+		@Override
+		public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
 			return WorkingCopyProjectBuildPathEntry.this.getNewPartBinding(packageName, caseSensitiveInternedPartName, kind);
 		}
-
-		public boolean hasPackage(String[] packageName) {
+		@Override
+		public boolean hasPackage(String packageName) {
 			return WorkingCopyProjectBuildPathEntry.this.hasPackage(packageName);
 		}
-
+		@Override
 		public IPackageBinding getRootPackage() {
 			return declaringEnvironment.getRootPackage();
 		}
-
 		@Override
 		public ISystemEnvironment getSystemEnvironment() {
 			return WorkingCopyProjectBuildPathEntry.this.getSystemEnvironment();
 		}		
-
 		@Override
 		public ICompiler getCompiler() {
 			return WorkingCopyProjectBuildPathEntry.this.getCompiler();
@@ -97,15 +102,15 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		this.realizingEnvironment = new RealizingEnvironment();
 	}
 	
-	 public boolean hasPackage(String[] packageName) {
+	 public boolean hasPackage(String packageName) {
     	return projectInfo.hasPackage(packageName);
     }
 
-	 public IPartBinding getPartBinding(String[] packageName, String partName) {
+	 public IPartBinding getPartBinding(String packageName, String partName) {
         return getPartBinding(packageName, partName, false);
     }
     
-    public IPartBinding getPartBinding(String[] packageName, String partName, boolean force) {
+    public IPartBinding getPartBinding(String packageName, String partName, boolean force) {
         IPartBinding result = null;
         if(processingQueue != null) {
             result = processingQueue.requestCompilationFor(packageName, partName, force);
@@ -190,11 +195,11 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         return result;
     }
         
-    public IPartBinding getNewPartBinding(String[] packageName, String caseSensitiveInternedPartName, int kind) {
-    	String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
+    public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
+    	String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
         IPartBinding partBinding = bindingCache.get(packageName, caseInsensitiveInternedPartName);
         if(partBinding == null || partBinding.getKind() != kind) {
-            partBinding = PartBinding.newPartBinding(kind, packageName, caseSensitiveInternedPartName);
+            partBinding = BindingUtil.createPartBinding(kind, packageName, caseSensitiveInternedPartName);
             bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
         }
         else {
@@ -208,11 +213,11 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		this.declaringEnvironment = projectEnvironment;		
 	}
 
-	public IPartBinding getPartBindingFromCache(String[] packageName, String partName) {
+	public IPartBinding getPartBindingFromCache(String packageName, String partName) {
 		return bindingCache.get(packageName, partName);
 	}
 	
-	public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
+	public IPartBinding getCachedPartBinding(String packageName, String partName) {
 		return getPartBindingFromCache(packageName, partName);
 	}
 
@@ -242,7 +247,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 //					File irFile = getIRFile(packageName, partName.toLowerCase());
 //					if(irFile.exists()){
 //						long irLastModified = irFile.lastModified();
-//						long sourceLastModified = projectInfo.getPartOrigin(packageName, InternUtil.intern(partName)).getEGLFile().getModificationStamp();
+//						long sourceLastModified = projectInfo.getPartOrigin(packageName, NameUtile.getAsName(partName)).getEGLFile().getModificationStamp();
 //						
 //						if(sourceLastModified > irLastModified){
 //			        		return compileLevel2Binding(packageName, caseSensitiveInternedPartName);
@@ -250,7 +255,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 //			        		IPartBinding partBinding = readPartBinding(irFile);
 //			        		if(partBinding.isValid()){
 //								partBinding.setEnvironment(declaringEnvironment);
-//						        bindingCache.put(packageName, InternUtil.intern(partName), partBinding);
+//						        bindingCache.put(packageName, NameUtile.getAsName(partName), partBinding);
 //						        //? WorkingCopyASTManager.getInstance().reportNestedFunctions(partAST,declaringFile);
 //						        return partBinding;
 //							}
@@ -264,7 +269,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 //				IPartBinding partBinding = readPartBinding(irFile);
 //				if(partBinding.isValid()){
 //					partBinding.setEnvironment(declaringEnvironment);
-//			        bindingCache.put(packageName, InternUtil.intern(partName), partBinding);
+//			        bindingCache.put(packageName, NameUtile.getAsName(partName), partBinding);
 //			        //? WorkingCopyASTManager.getInstance().reportNestedFunctions(partAST,declaringFile);
 //			        return partBinding;
 //				}
@@ -273,8 +278,8 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 //		return null;
 //	}
    
-	public IPartBinding compileLevel2Binding(String[] packageName, String caseSensitiveInternedPartName) {
-		String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
+	public IPartBinding compileLevel2Binding(String packageName, String caseSensitiveInternedPartName) {
+		String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
 		IFile declaringFile = projectInfo.getPartOrigin(packageName, caseInsensitiveInternedPartName).getEGLFile();
         
         Node partAST = WorkingCopyASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
@@ -294,6 +299,9 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, DefaultCompilerOptions.getInstance());
         partBinding.setEnvironment(declaringEnvironment);
+        if (partBinding instanceof IRPartBinding) {
+			BindingUtil.setEnvironment(((IRPartBinding)partBinding).getIrPart(), declaringEnvironment);
+		}
        
         bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
 		WorkingCopyASTManager.getInstance().reportNestedFunctions(partAST,declaringFile);
@@ -306,7 +314,8 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	 * This should only be called on 'Source' projects, as a read only project would result in the part being loaded
 	 * directly from an IR instead of being compiled.
 	 */
-	public int hasPart(String[] packageName, String partName) {
+	@Override
+	public int hasPart(String packageName, String partName) {
 		return projectInfo.hasPart(packageName, partName);
 	}
 
@@ -314,10 +323,12 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		return projectInfo.getProject();
 	}
 
-	public IPartOrigin getPartOrigin(String[] packageName, String partName) {
+	@Override
+	public IPartOrigin getPartOrigin(String packageName, String partName) {
 		return projectInfo.getPartOrigin(packageName,partName);
 	}
 	
+	@Override
 	public IEnvironment getRealizingEnvironment() {
 		return realizingEnvironment;
 	}
@@ -348,10 +359,10 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 		return getProject().getName();
 	}
 	
-	private EObject readPart(String[] packageName, String name) throws DeserializationException {
+	private EObject readPart(String packageName, String name) throws DeserializationException {
 		String key;
-    	if (packageName != null && packageName.length > 0) {
-    		key = IRUtils.concatWithSeparator(packageName, ".") + "." + name;
+		if (packageName != null && packageName.length() > 0) {
+    		key = packageName + "." + name;
     	}
     	else {
     		key = name;
@@ -366,11 +377,11 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
     	return null;
 	}
 	
-	private IPartBinding readPartBinding(String[] packageName, String partName) {
+	private IPartBinding readPartBinding(String packageName, String partName) {
 		try {
 	    	EObject ir = readPart(packageName, partName);
 	    	if (ir != null) {
-	    		IPartBinding partBinding = declaringEnvironment.getConverter().convert(ir);
+	    		IPartBinding partBinding = BindingUtil.createPartBinding(ir);
 	    		if (partBinding != null) {
 	    			bindingCache.put(packageName, partName, partBinding);
 	    			return partBinding;
@@ -383,9 +394,9 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
     	}		
 	}
 	
-    public FileBinding getFileBinding(String[] packageName, String fileName, org.eclipse.edt.compiler.core.ast.File fileAST) {
+    public FileBinding getFileBinding(String packageName, String fileName, org.eclipse.edt.compiler.core.ast.File fileAST) {
        	
-    	String caseInsensitiveInternedFileName = InternUtil.intern(fileName);
+    	String caseInsensitiveInternedFileName = NameUtile.getAsName(fileName);
     	FileBinding fileBinding = getFileBindingFromCache(packageName, caseInsensitiveInternedFileName);
     	if (fileBinding != null) {
     		return fileBinding;
@@ -405,7 +416,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         return fileBinding;
     }
 
-    public FileBinding getFileBindingFromCache(String[] packageName, String partName){
+    public FileBinding getFileBindingFromCache(String packageName, String partName){
         return (FileBinding)bindingCache.get(packageName, partName);
     }
     
@@ -415,11 +426,6 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	
 	private ICompiler getCompiler() {
 		return ProjectSettingsUtility.getCompiler(getProject());
-	}
-	
-	@Override
-	public void addPartBindingToCache(IPartBinding partBinding) {
-		bindingCache.put(InternUtil.intern(partBinding.getPackageName()), InternUtil.intern(partBinding.getCaseSensitiveName()), partBinding );
 	}
 	
 	protected void setObjectStores(ObjectStore[] stores) {
@@ -437,7 +443,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	}
 
 	@Override
-	public org.eclipse.edt.mof.egl.Part findPart(String[] packageName, String name) throws PartNotFoundException {
+	public org.eclipse.edt.mof.egl.Part findPart(String packageName, String name) throws PartNotFoundException {
 		if(ProjectBuildPathManager.getInstance().getProjectBuildPath(projectInfo.getProject()).isReadOnly()
 				|| projectInfo.hasPart(packageName, name) != ITypeBinding.NOT_FOUND_BINDING){
 			try {
@@ -456,7 +462,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	/**
 	 * Remove this part binding from the cache since it has been removed from the workspace
 	 */
-	public void removePartBindingInvalid(String[] packageName, String partName) {
+	public void removePartBindingInvalid(String packageName, String partName) {
 		bindingCache.remove(packageName, partName);		
 	}
 	

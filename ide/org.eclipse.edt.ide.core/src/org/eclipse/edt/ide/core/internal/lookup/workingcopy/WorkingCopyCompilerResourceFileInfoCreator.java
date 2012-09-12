@@ -23,11 +23,12 @@ import org.eclipse.edt.ide.core.internal.lookup.ResourceFileInfoCreator;
 public class WorkingCopyCompilerResourceFileInfoCreator extends ResourceFileInfoCreator {
 	private boolean checkForDuplicates;
 	
-	public WorkingCopyCompilerResourceFileInfoCreator(AbstractProjectInfo projectInfo, String[] packageName, IFile file, File fileAST, String fileContents, IDuplicatePartRequestor duplicatePartRequestor, boolean checkForDuplicates) {
+	public WorkingCopyCompilerResourceFileInfoCreator(AbstractProjectInfo projectInfo, String packageName, IFile file, File fileAST, String fileContents, IDuplicatePartRequestor duplicatePartRequestor, boolean checkForDuplicates) {
 		super(projectInfo, packageName, file, fileAST, fileContents, duplicatePartRequestor);
 		this.checkForDuplicates = checkForDuplicates;
 	}
 	
+	@Override
 	protected boolean checkForDuplicates(){
 		return checkForDuplicates;
 	}

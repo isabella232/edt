@@ -153,6 +153,7 @@ public class CopyResourceElementsOperation extends MultiOperation {
 	/**
 	 * Creates any destination package fragment(s) which do not exists yet.
 	 */
+	@SuppressWarnings("deprecation")
 	protected void createNeededPackageFragments(IContainer sourceFolder, IPackageFragmentRoot root, String newFragName, boolean moveFolder) throws EGLModelException {
 		IContainer parentFolder = (IContainer) root.getResource();
 		EGLElementDelta projectDelta = null;
@@ -546,9 +547,7 @@ public class CopyResourceElementsOperation extends MultiOperation {
 		boolean defaultPackage = pkgName.equals(IPackageFragment.DEFAULT_PACKAGE_NAME);
 		boolean seenPackageNode = false;
 		
-		IPackageDeclaration[] packageDeclarations = cu.getPackageDeclarations();
-		for(int i = 0; i < packageDeclarations.length; i++) {
-			IPackageDeclaration packageDeclaration = packageDeclarations[i];
+		for(IPackageDeclaration packageDeclaration : cu.getPackageDeclarations()) {
 			ISourceRange sourceRange = packageDeclaration.getSourceRange();
 			if (!defaultPackage) {
 				buffer.replace(sourceRange.getOffset(), sourceRange.getOffset()+sourceRange.getLength(), "package " + pkgName + ";"); //$NON-NLS-1$ //$NON-NLS-2$				

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
@@ -36,6 +35,7 @@ import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.dialogs.RecordPartSelectionDialog;
 import org.eclipse.edt.ide.ui.internal.editor.EditorUtility;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -49,16 +49,6 @@ public class SQLEditorUtility extends EditorUtility{
 			return true;
 		
 		return false;
-	}
-	
-	public static ClassFieldBinding createRecordBinding(Record record) {
-		if (record != null) {
-			ITypeBinding typeBinding = (ITypeBinding) record.getName().resolveBinding();
-			if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING) {
-				return new ClassFieldBinding(typeBinding.getCaseSensitiveName(), null, typeBinding);
-			}
-		}
-		return null;
 	}
 	
 	public static Record getSQLRecord(TextEditor editor) {
@@ -127,7 +117,7 @@ public class SQLEditorUtility extends EditorUtility{
 				new ProgressMonitorDialog(parent), 
 				IEGLSearchConstants.RECORD, 
 				scope, 
-				SQLEditorUtility.getSQLRecords(editor, "", IIndexConstants.PREFIX_MATCH, scope)); //$NON-NLS-1$
+				getSQLRecords(editor, "", IIndexConstants.PREFIX_MATCH, scope)); //$NON-NLS-1$
 		dialog.setMatchEmptyString(true);
 		dialog.setTitle(UINlsStrings.SQLRecordPartDialogTitle);
 		dialog.setMessage(

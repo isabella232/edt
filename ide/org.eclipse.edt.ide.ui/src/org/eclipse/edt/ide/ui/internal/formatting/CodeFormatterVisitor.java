@@ -108,11 +108,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		fPendingWrapEdits = new LinkedList();
 		fContextPath = new Stack();
 		String strSource = document.get();
-		//TODO commented out EGLVAGCompatibilitySetting
-//       	if(EGLVAGCompatibilitySetting.isVAGCompatibility())
-//       		fScanner = new VAGLexer(new BufferedReader(new StringReader(strSource)));
-//       	else
-       		fScanner = new Lexer(new BufferedReader(new StringReader(strSource)));
+      	fScanner = new Lexer(new BufferedReader(new StringReader(strSource)));
 	}
 		
 	private void setGlobalFormattingSettings(int numOfBlankLines, boolean addSpace, int wrappingPolicy){
@@ -1021,6 +1017,60 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
+	public boolean visit(EGLClass eglClass) {
+//		|	privateAccessModifierOpt:privateAccessModifier1 CLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
+//		{: RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
+		push2ContextPath(eglClass);
+		
+		if(eglClass.isPrivate()){
+			//print PRIVATE
+			printStuffBeforeNode(eglClass.getOffset(), getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL), false);			
+		}
+		int numOfBlankLines = eglClass.isPrivate() ? -1 :  getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL);
+		boolean addSpace = eglClass.isPrivate() ? true : false;
+		printStuffBeforeToken(NodeTypes.CLASS, numOfBlankLines, addSpace);
+		
+		Name name = eglClass.getName();
+		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+		name.accept(this);
+
+		Name superType = eglClass.getExtends();
+		if(superType != null){			
+//			|	EXTENDS name:name1
+//			{: RESULT = name1; :}
+			printStuffBeforeToken(NodeTypes.EXTENDS, -1, true);
+			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+			superType.accept(this);
+		}
+		
+		List impls = eglClass.getImplementedInterfaces();
+		if(impls != null && !impls.isEmpty()){			
+//			|	IMPLEMENTS name_plus:names1
+//			{: RESULT = names1; :}
+			printStuffBeforeToken(NodeTypes.IMPLEMENTS, -1, true);
+			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+			formatCommaSeparatedNodeList(impls, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_COMMA_IMPL), 
+					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_COMMA_IMPL), 
+					getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_IMPL));
+		}
+		
+		if(eglClass.hasSubType()){
+			printStuffBeforeToken(NodeTypes.TYPE, -1, true);
+			Name subTypeName = eglClass.getSubType();
+			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+			subTypeName.accept(this);
+		}
+		
+		indent();
+		List clsContents = eglClass.getContents();
+		formatContents(clsContents);
+		unindent();
+		
+		printStuffBeforeToken(NodeTypes.END, 0, false);
+		popContextPath();
+		return false;
+	}
+	
 	public boolean visit(Program program) {
 //		|	privateAccessModifierOpt:privateAccessModifier1 PROGRAM:program1 ID:id1 partSubTypeOpt:partSubType1 programParametersOpt:programParameters1 classContent_star:classContents1 END:end1
 //		{: RESULT = new Program(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, programParameters1, classContents1, privateAccessModifier1 == Boolean.FALSE ? program1left : privateAccessModifier1left, end1right); :}		
@@ -1075,6 +1125,11 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		Type type = programParameter.getType();
 		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 		type.accept(this);
+		
+		//I decided not to put space before ?
+		if (programParameter.isNullable()) {
+			printStuffBeforeToken(NodeTypes.QUESTION, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_QUESTION_PARMS));
+		}
 		
 		popContextPath();
 		return false;
@@ -1539,6 +1594,11 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		
 		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 		type.accept(this);
+		
+		//I decided not to put space before ?
+		if (functionDataDeclaration.isNullable()) {
+			printStuffBeforeToken(NodeTypes.QUESTION, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_QUESTION_FIELDS));
+		}
 				
 		if(settingsBlock != null){
 			setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
@@ -3590,6 +3650,11 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 		type.accept(this);
 		
+		//I decided not to put space before ?
+		if (classDataDeclaration.isNullable()) {
+			printStuffBeforeToken(NodeTypes.QUESTION, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_QUESTION_FIELDS));
+		}
+		
 		if(settingsBlock != null){
 			setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
 					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
@@ -3680,7 +3745,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		unindent(numOfIndents4Wrapping);
 	}
 	
-	public boolean visit(FunctionParameter functionParameter) {
+	public boolean visit(final FunctionParameter functionParameter) {
 		push2ContextPath(functionParameter);
 		final CodeFormatterVisitor thisVisitor = this;
 		final Type paramType = functionParameter.getType();
@@ -3692,11 +3757,14 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 				if(currToken.left == paramType.getOffset()){
 					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 					paramType.accept(thisVisitor);
+					
+					//I decided not to put space before ?
+					if (functionParameter.isNullable()) {
+						printStuffBeforeToken(NodeTypes.QUESTION, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_QUESTION_PARMS));
+					}
 				}
 				else{
 					switch(currToken.sym){
-					case NodeTypes.SQLNULLABLE:
-					case NodeTypes.FIELD:
 					case NodeTypes.IN:
 					case NodeTypes.INOUT:
 					case NodeTypes.OUT:
@@ -3717,30 +3785,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 
-	public boolean visit(PrimitiveType primitiveType) {
-		push2ContextPath(primitiveType);
-		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
-			public void format(Symbol prevToken, Symbol currToken) {
-				boolean addSpace = false;
-				if(prevToken.sym == NodeTypes.COMMA)	//add a space after comma
-					addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_COMMA_NUMERICPRIMITIVE);	
-				else if(prevToken.sym == NodeTypes.LPAREN)	//space after (
-					addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_PRIMITIVE);
-				else if(currToken.sym == NodeTypes.COMMA)	//add a space before comma
-					addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_COMMA_NUMERICPRIMITIVE);
-				else if(currToken.sym == NodeTypes.LPAREN)	//space before (
-					addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_PRIMITIVE);					
-				else if(currToken.sym == NodeTypes.RPAREN)	//space before )
-					addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_PRIMITIVE);
-				
-				printToken(prevToken, currToken, -1, addSpace);
-			}
-		};
-		formatNode(primitiveType, callbackFormatter, fGlobalNumOfBlankLines, fGlobalAddSpace);
-		popContextPath();
-		return false;
-	};
-		
 	public boolean visit(ArrayType arrayType) {
 		push2ContextPath(arrayType);
 		Type arrayElemType = arrayType.getElementType();
@@ -3982,17 +4026,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		Type type = newExpression.getType();
 		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 		type.accept(this);
-		
-		if(newExpression.hasArgumentList()){
-			printStuffBeforeToken(NodeTypes.LPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_NEWEXPR));
-			List funcArgs = newExpression.getArguments();
-			setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_NEWEXPR), CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			formatExpressions(funcArgs,
-					getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_ARGS),
-					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_COMMA_NEWEXPR),
-					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_COMMA_NEWEXPR));			
-			printStuffBeforeToken(NodeTypes.RPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_NEWEXPR));
-		}
 		
 		SettingsBlock settingsBlock = newExpression.getSettingsBlock();
 		if(settingsBlock != null){
@@ -4318,19 +4351,19 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 	}
 	
 	
-	public boolean visit(NullableType nullableType) {
-//		|	typeNoName:typeNoName1 QUESTION:question1
-//		{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
-//		|	namedType:name1 QUESTION:question1
-//		{: RESULT = new NullableType(name1, name1left, question1right); :}		
-		push2ContextPath(nullableType);
-		Type baseType = nullableType.getBaseType();
-		baseType.accept(this);
-		//I decided not to put space before ?
-		printStuffBeforeToken(NodeTypes.QUESTION, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_QUESTION_NULLABLETYPE));
-		popContextPath();
-		return false;
-	}
+//	public boolean visit(NullableType nullableType) {
+////		|	typeNoName:typeNoName1 QUESTION:question1
+////		{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
+////		|	namedType:name1 QUESTION:question1
+////		{: RESULT = new NullableType(name1, name1left, question1right); :}		
+//		push2ContextPath(nullableType);
+//		Type baseType = nullableType.getBaseType();
+//		baseType.accept(this);
+//		//I decided not to put space before ?
+//		printStuffBeforeToken(NodeTypes.QUESTION, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_QUESTION_NULLABLETYPE));
+//		popContextPath();
+//		return false;
+//	}
 	
 	public boolean visit(NameType nameType) {
 //		::=	name:name1
@@ -4338,6 +4371,18 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		push2ContextPath(nameType);
 		Name name = nameType.getName();
 		name.accept(this);
+		
+		if(nameType.hasArguments()){
+			printStuffBeforeToken(NodeTypes.LPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_NAMEDTYPE));
+			List funcArgs = nameType.getArguments();
+			setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_NAMEDTYPE), CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+			formatExpressions(funcArgs,
+					getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_ARGS),
+					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_COMMA_NAMEDTYPE),
+					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_COMMA_NAMEDTYPE));			
+			printStuffBeforeToken(NodeTypes.RPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_NAMEDTYPE));
+		}
+		
 		popContextPath();
 		return false;
 	}	
@@ -4366,7 +4411,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
-	public boolean visit(ReturnsDeclaration returnsDeclaration) {
+	public boolean visit(final ReturnsDeclaration returnsDeclaration) {
 //		|	RETURNS:returns1 LPAREN type:type1 sqlNullableOpt:nullable1 RPAREN:rparen1
 //		{: RESULT = new ReturnsDeclaration(type1, nullable1, returns1left, rparen1right); :}		
 		push2ContextPath(returnsDeclaration);
@@ -4380,11 +4425,14 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 				if(currToken.left == returnType.getOffset()){
 					setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_RETURN), CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 					returnType.accept(thisVisitor);
+					
+					//I decided not to put space before ?
+					if (returnsDeclaration.isNullable()) {
+						printStuffBeforeToken(NodeTypes.QUESTION, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_QUESTION_RETURNS));
+					}
 				}
 				else{
-					if(currToken.sym == NodeTypes.SQLNULLABLE)
-						addSpace = true;
-					else if(currToken.sym == NodeTypes.LPAREN)
+					if(currToken.sym == NodeTypes.LPAREN)
 						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_RETURN);
 					else if(currToken.sym == NodeTypes.RPAREN)
 						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_RETURN);

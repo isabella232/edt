@@ -35,7 +35,6 @@ import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
-import org.eclipse.edt.ide.core.internal.dependency.IFunctionRequestor;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoDifferencer;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.IASTFileInfo;
@@ -46,7 +45,7 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.ResourceFileInfoCreator;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * The abstract superclass of EGL builders. Provides the building and
@@ -90,7 +89,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		ProjectEnvironmentManager.getInstance().endBuilding(this);
 	}
 
-	protected void addPart(String[] packageName, String caseSensitiveInternedPartName) {
+	protected void addPart(String packageName, String caseSensitiveInternedPartName) {
 		processingQueue.addPart(packageName, caseSensitiveInternedPartName);
 	}
 
@@ -102,24 +101,17 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	/**
 	 * Always let the processing queue decide if we should add dependents of a part.
 	 */
-	protected void addDependents(String[] packageName, String partName) {
+	protected void addDependents(String packageName, String partName) {
 		processingQueue.addDependents(packageName, partName);
 	}
 
 	/**
 	 * Always let the processing queue decide if we should add dependents of a qualifiedName
 	 */
-	protected void addDependents(String[] qualifiedName){
+	protected void addDependents(String qualifiedName){
 		processingQueue.addDependents(qualifiedName);
 	}
 	
-	/**
-	 * Always let the processing queue decide if we should add dependents of a partName
-	 */
-	protected void addDependents(String partName){
-		processingQueue.addDependents(partName);
-	}
-
 	public boolean build(IResourceDelta sourceDelta) {
 		boolean abortedBuild = false;
 		try{
@@ -201,7 +193,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 				switch (sourceDelta.getKind()) {
 					case IResourceDelta.ADDED :
 						IPath addedPackagePath = resource.getFullPath().removeFirstSegments(segmentCount);
-						processAddedPackage(InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(addedPackagePath)));
+						processAddedPackage(NameUtile.getAsName(org.eclipse.edt.ide.core.internal.utils.Util.pathToQualifiedName(addedPackagePath)));
 						// fall thru & collect all the source files
 					case IResourceDelta.CHANGED :
 						IResourceDelta[] children = sourceDelta.getAffectedChildren();
@@ -223,7 +215,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 								}
 							}
 						}
-						processRemovedPackage(InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(removedPackagePath)), sourceDelta);
+						processRemovedPackage(NameUtile.getAsName(org.eclipse.edt.ide.core.internal.utils.Util.pathToQualifiedName(removedPackagePath)), sourceDelta);
 						return;
 				}
 			case IResource.FILE :
@@ -235,17 +227,17 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 					switch (sourceDelta.getKind()) {
 						case IResourceDelta.ADDED :
 							cleanMarkersFromFile((IFile)resource);
-							processAddedFile(InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(packagePath)), (IFile)resource);
+							processAddedFile(NameUtile.getAsName(org.eclipse.edt.ide.core.internal.utils.Util.pathToQualifiedName(packagePath)), (IFile)resource);
 							return;
 						case IResourceDelta.REMOVED :
-							processRemovedFile(InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(packagePath)), (IFile)resource);
+							processRemovedFile(NameUtile.getAsName(org.eclipse.edt.ide.core.internal.utils.Util.pathToQualifiedName(packagePath)), (IFile)resource);
 							return;
 						case IResourceDelta.CHANGED :
 							if ((sourceDelta.getFlags() & IResourceDelta.CONTENT) == 0 
 									&& (sourceDelta.getFlags() & IResourceDelta.ENCODING) == 0){
 								return; // skip it since it really isn't changed
 							}
-							processChangedFile(InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(packagePath)), (IFile)resource);
+							processChangedFile(NameUtile.getAsName(org.eclipse.edt.ide.core.internal.utils.Util.pathToQualifiedName(packagePath)), (IFile)resource);
 							return;
 						}
 					return;
@@ -253,18 +245,19 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 				
 				if (isOKToCopy(resourceName) && sourceDelta.getKind() != IResourceDelta.REMOVED) {
 					IPath packagePath = resource.getFullPath().removeFirstSegments(segmentCount).removeLastSegments(1);
-					copyFileToOutputLocation((IFile)resource,org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(packagePath));
+					copyFileToOutputLocation((IFile)resource, org.eclipse.edt.ide.core.internal.utils.Util.pathToQualifiedName(packagePath));
 				}
 			return;
 		}
 	}
 	
-	private void recordStructuralChange(String[] packageName){
+	private void recordStructuralChange(String packageName){
 		this.hasStructuralChanges = true;
 		buildManager.recordPackage(builder.getProject(), packageName);
 	}
 	
-	public void recordStructuralChange(String[] packageName, String partName, int partType){
+	@Override
+	public void recordStructuralChange(String packageName, String partName, int partType){
 		buildManager.recordPart(builder.getProject(), packageName, partName, partType);	
     	hasStructuralChanges = true;	
 	}
@@ -274,15 +267,13 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	 * Do not add dependents of the parts processed from a removed package.  We have already added the dependents of the removed package,
 	 * which should also cover the dependents of all of these parts.
 	 */
-	private void processRemovedPackageHelper(String[] packageName, IResourceDelta[] children){
+	private void processRemovedPackageHelper(String packageName, IResourceDelta[] children){
 		for (int i = 0; i < children.length; i++) {
 			IResource resource = children[i].getResource();
 			switch(resource.getType()) {
 				case IResource.FOLDER :
-					String[] subPackageName = new String[packageName.length + 1];
-					System.arraycopy(packageName, 0, subPackageName, 0, packageName.length);
-					subPackageName[packageName.length] = resource.getName();
-					processRemovedPackageHelper(InternUtil.intern(subPackageName), children[i].getAffectedChildren());
+					String subPackageName = org.eclipse.edt.ide.core.internal.utils.Util.appendToQualifiedName(packageName, resource.getName(), ".");
+					processRemovedPackageHelper(NameUtile.getAsName(subPackageName), children[i].getAffectedChildren());
 					break;
 				case IResource.FILE :
 					IPath filePath = resource.getProjectRelativePath();
@@ -291,7 +282,6 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 						Set partNames = fileInfo.getPartNames();
 						for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 							String partName = (String) iter.next();
-							removeMarkersFromInvokedFunctions((IFile)resource, packageName, partName);
 							dependencyGraph.removePart(packageName, partName, org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName((IFile)resource));
 							ProjectEnvironmentManager.getInstance().getProjectEnvironment(builder.getProject()).removePartBinding(packageName, partName);
 							HashSet otherFilesToProcess = new HashSet();
@@ -318,7 +308,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	/**
 	 * @param addedPackagePath
 	 */
-	private void processAddedPackage(String[] packageName) {
+	private void processAddedPackage(String packageName) {
 	    if(Builder.DEBUG){
 	        System.out.println("Found added package " + packageName); //$NON-NLS-1$
 	    }
@@ -328,7 +318,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		recordStructuralChange(packageName);
 	}	
 		
-	private void processRemovedPackage(String[] packageName, IResourceDelta sourceDelta) {
+	private void processRemovedPackage(String packageName, IResourceDelta sourceDelta) {
 	    if(Builder.DEBUG){
 	        System.out.println("Found removed package " + packageName); //$NON-NLS-1$
 	    }
@@ -346,7 +336,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	 * @param typePath
 	 * @param partLocator
 	 */
-	private void processAddedFile(String[] packageName, IFile addedFile) {
+	private void processAddedFile(String packageName, IFile addedFile) {
 	    
 	    if(Builder.DEBUG){
 	        System.out.println("Found added source file " + addedFile); //$NON-NLS-1$
@@ -402,7 +392,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	/**
 	 * @param typePath
 	 */
-	private void processRemovedFile(String[] packageName, IFile removedFile) {
+	private void processRemovedFile(String packageName, IFile removedFile) {
 	    if(Builder.DEBUG){
 	        System.out.println("Found removed source file " + removedFile); //$NON-NLS-1$
 	    }
@@ -414,7 +404,6 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 			String partName = (String) iter.next();
 			recordStructuralChange(packageName, partName, fileInfo.getPartType(partName));
-			removeMarkersFromInvokedFunctions(removedFile, packageName, partName);
         	dependencyGraph.removePart(packageName, partName, org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(removedFile));
         	projectInfo.partRemoved(packageName, partName, removedFile);
         	
@@ -439,7 +428,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		processDuplicateFiles(packageName, otherFilesToProcess);
 	}
 	
-	private void processDuplicateFiles(String[] packageName, HashSet otherFilesToProcess) {
+	private void processDuplicateFiles(String packageName, HashSet otherFilesToProcess) {
 		for (Iterator iter = otherFilesToProcess.iterator(); iter.hasNext();) {
 			IFile file = (IFile) iter.next();
 			processedFiles.add(file);
@@ -447,7 +436,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		}
 	}
 
-	private void locateDuplicateFile(HashSet otherFilesToProcess, String[] packageName, String partName) {
+	private void locateDuplicateFile(HashSet otherFilesToProcess, String packageName, String partName) {
 		Set filesForDuplicatePart = DuplicatePartManager.getInstance().getDuplicatePartList(builder.getProject()).getFilesForDuplicatePart(packageName, partName);
 		if(filesForDuplicatePart != null){
 			for (Iterator filesIter = filesForDuplicatePart.iterator(); filesIter.hasNext();) {
@@ -460,7 +449,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		}
 	}
 
-	private void processChangedFile(final String[] packageName, final IFile changedFile) {
+	private void processChangedFile(final String packageName, final IFile changedFile) {
 	    if(Builder.DEBUG){
 			System.out.println("Compile this changed source file " + changedFile); //$NON-NLS-1$
 	    }
@@ -511,7 +500,6 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		        	
 		            public void partRemoved(String partName){
 		            	new MarkerProblemRequestor(changedFile, partName); // remove markers for this part
-		            	removeMarkersFromInvokedFunctions(changedFile, packageName, partName);
 		            	removeContextSpecificMarkers(changedFile, partName);
 		            	recordStructuralChange(packageName, partName, oldFileInfo.getPartType(partName));
 		               	dependencyGraph.removePart(packageName, partName, org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(changedFile));
@@ -571,7 +559,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	    try{
 			IMarker[] markers = changedFile.findMarkers(AbstractMarkerProblemRequestor.CONTEXT_SPECIFIC_PROBLEM, false, IResource.DEPTH_INFINITE);
 			for (int i = 0; i < markers.length; i++){
-			    String markerPartName = InternUtil.intern(markers[i].getAttribute(MarkerProblemRequestor.PART_NAME, "")); //$NON-NLS-1$
+			    String markerPartName = NameUtile.getAsName(markers[i].getAttribute(MarkerProblemRequestor.PART_NAME, "")); //$NON-NLS-1$
 				if (markerPartName == removedPartName){
 					markers[i].delete();
 				}
@@ -581,25 +569,16 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		}
 	}
 	
-	private void removeMarkersFromInvokedFunctions(final IFile contextFile, final String[] contextPackageName, final String contextPartName){
-		dependencyGraph.findFunctionDependencies(contextPackageName, contextPartName, new IFunctionRequestor(){
-	
-	        public void acceptFunction(String projectName, String[] packageName, String partName) {
-	            Util.removeMarkersFromInvokedFunctions(contextPartName, contextFile.getFullPath(), projectName, packageName, partName);          
-	        }            
-	    });
-	}
-	
 	protected boolean isOKToCopy(String name){
 		return !org.eclipse.edt.ide.core.internal.model.Util.isEGLBLDFileName(name)
 				&& !org.eclipse.edt.compiler.tools.IRUtils.isEGLIRFileName(name)
 				&& !org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(name);
 	}
 	
-	protected void copyFileToOutputLocation(IFile file,String[] packageName){
+	protected void copyFileToOutputLocation(IFile file, String packageName){
 		IContainer outputLocation = ProjectBuildPathManager.getInstance().getProjectBuildPath(builder.getProject()).getOutputLocation();
 	   	try {
-			IContainer outputFolder = Util.createFolder(org.eclipse.edt.ide.core.internal.utils.Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packageName)),outputLocation);
+			IContainer outputFolder = Util.createFolder(new Path(IRFileNameUtility.toIRFileName(packageName).replace('.', '/')),outputLocation);
 			IPath filePath = new Path(IRFileNameUtility.toIRFileName(file.getName()));
 			IFile newfile = outputFolder.getFile(filePath);
 			if (!file.getLocation().isPrefixOf(newfile.getLocation())){

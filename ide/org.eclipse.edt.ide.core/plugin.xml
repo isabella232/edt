@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
 	<extension-point id="compilers" name="Compilers" schema="schema/compilers.exsd"/>
+	<extension-point id="compilerExtensions" name="Compilers" schema="schema/compilerExtensions.exsd"/>
 	<extension-point id="generators" name="Generators" schema="schema/generators.exsd"/>
 	<extension-point id="GenerationContributors" name="GenerationContributors" schema="schema/GenerationContributors.exsd"/>
  	<extension-point id="eglpathContainerInitializer" name="eglpathContainerInitializer" schema="schema/eglpathContainerInitializer.exsd"/>

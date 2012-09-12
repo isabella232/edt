@@ -14,11 +14,8 @@ package org.eclipse.edt.ide.core.search;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.edt.compiler.binding.FileBinding;
-import org.eclipse.edt.compiler.binding.FunctionContainerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Node;
 
@@ -27,9 +24,7 @@ public interface ICompiledFileUnit {
 	FileBinding getFileBinding();
 	List getFileParts();
 	HashMap getReferencedFiles();
-	IFile getContainingFile(Node part);
 	Node getPartAST(IBinding partBinding);
-	Node getPartInContextAST(FunctionContainerBinding functionContainerBinding, TopLevelFunctionBinding functionBinding);
 	Node[] getAllParts();
 	List<IBinding> getIBindingsFromIR();
 }

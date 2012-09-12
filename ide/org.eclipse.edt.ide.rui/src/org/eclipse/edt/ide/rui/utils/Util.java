@@ -43,7 +43,7 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.rui.document.utils.AssignmentLocator;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -51,8 +51,8 @@ import org.eclipse.ui.PlatformUI;
 
 public class Util {
 
-	public static final String RUIHANDLER = InternUtil.intern("RUIHandler"); //$NON-NLS-1$
-	public static final String RUIWIDGET = InternUtil.intern("RUIWIdget"); //$NON-NLS-1$
+	public static final String RUIHANDLER = NameUtile.getAsName("RUIHandler"); //$NON-NLS-1$
+	public static final String RUIWIDGET = NameUtile.getAsName("RUIWIdget"); //$NON-NLS-1$
 	public static final String	WIDGET_ID_SEPARATOR	= "@@";
 	
 	public static boolean useCompression = true;
@@ -102,11 +102,11 @@ public class Util {
 				if(part.exists() && ((SourcePart)part).isHandler()){
 					SourcePartElementInfo partInfo = (SourcePartElementInfo) ((SourcePart)part).getElementInfo();
 					if (partInfo.getSubTypeName() == null) {return false;}
-					String typeName = InternUtil.intern(new String(partInfo.getSubTypeName()));
-					if( typeName == RUIHANDLER ){
+					String typeName = NameUtile.getAsName(new String(partInfo.getSubTypeName()));
+					if( NameUtile.equals(typeName, RUIHANDLER) ){
 						return true;
 					}
-					if ( typeName == RUIWIDGET ) {
+					if ( NameUtile.equals(typeName, RUIWIDGET) ) {
 						IEGLElement[] children = partInfo.getChildren();
 						SourcePropertyBlock spb = null;
 						for ( int i = 0; i < children.length; i ++ ) {
@@ -128,7 +128,7 @@ public class Util {
 						if ( spb != null ) {
 							final org.eclipse.edt.compiler.core.ast.File fileAST = currentDocument.getNewModelEGLFile();
 							final Node perpertiesBlock = currentDocument.getNewModelNodeAtOffset(spb.getSourceRange().getOffset(), spb.getSourceRange().getLength());
-							AssignmentLocator assignmentLocator = new AssignmentLocator(InternUtil.intern( "tagName" ));
+							AssignmentLocator assignmentLocator = new AssignmentLocator(NameUtile.getAsName( "tagName" ));
 							perpertiesBlock.accept(assignmentLocator);
 							Assignment setting = assignmentLocator.getAssignment();
 							if ( setting != null ) {
@@ -160,8 +160,8 @@ public class Util {
 				if(part.exists() && ((SourcePart)part).isHandler()){
 					SourcePartElementInfo partInfo = (SourcePartElementInfo) ((SourcePart)part).getElementInfo();
 					if (partInfo.getSubTypeName() == null) {return false;}
-					String typeName = InternUtil.intern(new String(partInfo.getSubTypeName()));
-					return ( typeName == RUIWIDGET );
+					String typeName = NameUtile.getAsName(new String(partInfo.getSubTypeName()));
+					return ( NameUtile.equals(typeName, RUIWIDGET) );
 				}
 			}finally{
 				sharedWorkingCopy.destroy();
@@ -240,13 +240,13 @@ public class Util {
 	private static boolean isRUIWidgetOrExternalType(IPart part) {
 		if(part instanceof SourcePart) {
 			if ( ((SourcePart)part).isHandler() && part.getSubTypeSignature() != null
-					&& RUIWIDGET == InternUtil.intern((Signature.toString(part.getSubTypeSignature()))) ) {
+					&& NameUtile.equals(RUIWIDGET, NameUtile.getAsName((Signature.toString(part.getSubTypeSignature())))) ) {
 				return true;
 			}
 			return ((SourcePart)part).isExternalType();
 		} else if(part instanceof BinaryPart) {
 			if ( ((BinaryPart)part).isHandler() && part.getSubTypeSignature() != null
-					&& RUIWIDGET == InternUtil.intern((Signature.toString(part.getSubTypeSignature()))) ) {
+					&& NameUtile.equals(RUIWIDGET, NameUtile.getAsName((Signature.toString(part.getSubTypeSignature())))) ) {
 				return true;
 			}
 			return ((BinaryPart)part).isExternalType();

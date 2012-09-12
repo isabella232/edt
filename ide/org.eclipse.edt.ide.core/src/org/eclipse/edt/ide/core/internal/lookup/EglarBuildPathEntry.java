@@ -14,16 +14,15 @@ package org.eclipse.edt.ide.core.internal.lookup;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.internal.utils.AbsolutePathUtility;
 
 public class EglarBuildPathEntry extends ZipFileBindingBuildPathEntry {
 
 	protected IEnvironment environment;
 	
-	public EglarBuildPathEntry(IEnvironment environment, IPath path, String fileExtension, Mof2Binding converter) {
+	public EglarBuildPathEntry(IEnvironment environment, IPath path, String fileExtension) {
 		
-		super(AbsolutePathUtility.getAbsolutePathString(path), fileExtension, converter);
+		super(AbsolutePathUtility.getAbsolutePathString(path), fileExtension);
 		this.environment = environment;
 	}
 	

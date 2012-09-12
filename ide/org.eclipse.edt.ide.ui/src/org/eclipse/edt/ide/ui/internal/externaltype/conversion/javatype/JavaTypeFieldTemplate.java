@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.ui.internal.externaltype.conversion.javatype;
 
 import java.lang.reflect.Field;
 
-import org.eclipse.edt.compiler.internal.sql.SQLConstants;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.ui.internal.externaltype.util.ReflectionUtil;
 import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
@@ -21,6 +20,6 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class JavaTypeFieldTemplate extends AbstractTemplate{
 	public void genField(Field javaField, EglSourceContext ctx, TabbedWriter out){
-		out.println(ReflectionUtil.getFieldLabel(javaField) + SQLConstants.SEMICOLON);
+		out.println(ReflectionUtil.getFieldLabel(javaField) + ";");
 	}
 }

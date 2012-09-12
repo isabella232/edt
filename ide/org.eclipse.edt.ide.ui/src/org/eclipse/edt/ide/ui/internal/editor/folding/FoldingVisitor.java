@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -176,6 +177,11 @@ public class FoldingVisitor extends AbstractASTVisitor{
 
 	public boolean visit(Program program) {
 		addNodeToFoldingRegion(program, fCollapseParts&&fAllowCollapsing);
+		return true;
+	}
+	
+	public boolean visit(EGLClass eglClass) {
+		addNodeToFoldingRegion(eglClass, fCollapseParts&&fAllowCollapsing);
 		return true;
 	}
 

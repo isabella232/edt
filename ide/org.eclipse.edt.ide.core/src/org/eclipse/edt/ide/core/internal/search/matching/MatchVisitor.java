@@ -14,16 +14,6 @@ package org.eclipse.edt.ide.core.internal.search.matching;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
-import org.eclipse.edt.compiler.binding.ProgramParameterBinding;
-import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -31,14 +21,12 @@ import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
@@ -48,7 +36,6 @@ import org.eclipse.edt.compiler.core.ast.IsAExpression;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -60,18 +47,21 @@ import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.ReturningToNameClause;
 import org.eclipse.edt.compiler.core.ast.ReturnsDeclaration;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.ServiceReference;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.StructuredRecord;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 /**
@@ -81,7 +71,7 @@ import org.eclipse.edt.compiler.core.ast.VariableFormField;
 public class MatchVisitor extends AbstractASTExpressionVisitor {
 
 	public MatchingNodeSet matchSet;
-	private IPartBinding binding = null;
+	private org.eclipse.edt.mof.egl.Part binding;
 	
 	public boolean visit(Enumeration enumeration) {
 		visitPart(enumeration);
@@ -156,55 +146,6 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 
 	}
 
-	public boolean visit(DataItem dataItem) {
-		visitPart(dataItem);
-		return super.visit(dataItem);
-	}
-
-	public boolean visit(DataTable dataTable) {
-		visitPart(dataTable);
-		return super.visit(dataTable);
-	}
-
-	public boolean visit(TopLevelForm form) {
-		visitPart(form);
-		return super.visit(form);
-	}
-
-	public boolean visit(NestedForm form) {
-		if ((this.matchSet.matchContainer & SearchPattern.FORM_PART) != 0 ||
-				(this.matchSet.matchContainer & SearchPattern.PART) != 0){ 
-			int level = matchSet.isMatchingNestedFormPart(form) ; 
-			if (level == SearchPattern.ACCURATE_MATCH){
-				matchSet.addTrustedMatch(form);
-			}else if (level == SearchPattern.INACCURATE_MATCH){
-				matchSet.addInaccurateMatch(form);
-			}
-		}
-		form.accept(new SpecialVisitor(this));
-		return super.visit(form);
-	}
-	
-	public boolean visit(FormGroup formGroup) {
-		visitPart(formGroup);
-		return super.visit(formGroup);
-	}
-
-	public boolean visit(TopLevelFunction function) {
-		if ((this.matchSet.matchContainer & SearchPattern.ALL_FUNCTIONS) != 0 ||
-				(this.matchSet.matchContainer & SearchPattern.FUNCTION) != 0 ||
-			(this.matchSet.matchContainer & SearchPattern.PART) != 0){ // part
-				int level = matchSet.isMatchingFunctionPart(function) ; 
-				if (level == SearchPattern.ACCURATE_MATCH){
-					matchSet.addTrustedMatch(function);
-				}else if (level == SearchPattern.INACCURATE_MATCH){
-					matchSet.addInaccurateMatch(function);
-				}
-			}
-		function.accept(new SpecialVisitor(this));
-		return super.visit(function);
-	}
-	
 	public boolean visit(NestedFunction function) {
 		if ((this.matchSet.matchContainer & SearchPattern.ALL_FUNCTIONS) != 0 ||
 			(this.matchSet.matchContainer & SearchPattern.PART) != 0){ // functions
@@ -256,6 +197,11 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 		visitPart(program);
 		return super.visit(program);
 	}
+	
+	public boolean visit(EGLClass eglClass) {
+		visitPart(eglClass);
+		return super.visit(eglClass);
+	}
 
 	public boolean visit(Record record) {
 		visitPart(record);
@@ -296,11 +242,15 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 		public boolean visit (NewExpression newExpr ){
 			Type type = newExpr.getType();
 			handleType(type);
-			List list = newExpr.getArguments();
-			Iterator iter = list.iterator();
-			while (iter.hasNext()){
-				Node node = (Node)iter.next();
-				node.accept(new SpecialVisitor(visitor));
+			
+			Type root = type.getBaseType();
+			if (root.isNameType()) {
+				List list = ((NameType)root).getArguments();
+				Iterator iter = list.iterator();
+				while (iter.hasNext()){
+					Node node = (Node)iter.next();
+					node.accept(new SpecialVisitor(visitor));
+				}
 			}
 			
 			if (newExpr.hasSettingsBlock()) {
@@ -355,10 +305,9 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 	
 	private boolean isAny(Type type){
 		Type baseType = type.getBaseType();
-		ITypeBinding typeBinding = baseType.resolveTypeBinding();
-		if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING){
-			return typeBinding.isDynamic();
-		
+		org.eclipse.edt.mof.egl.Type typeBinding = baseType.resolveType();
+		if (typeBinding != null){
+			return TypeUtils.Type_ANY.equals(typeBinding);
 		}
 		
 		return false;
@@ -431,36 +380,15 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 		binding = null;
 	}
 	
-	public void endVisit(ServiceReference serviceReference) {
-		if (binding != null){
-			this.matchSet.addTrustedMatch(serviceReference.getType().getBaseType());
-		}
-		binding = null;
-
-	}
-	
-
-	public void endVisit(VariableFormField variableFormField){
-		boolean bContinue = !isAny(variableFormField.getType());
-		if (bContinue && binding != null){
-			this.matchSet.addTrustedMatch(variableFormField.getType().getBaseType());
-		}
-		binding = null;
-	}
-	
 	public void endVisit(FunctionInvocation functionInvocation) {
 		if (binding != null){
 			this.matchSet.addTrustedMatch(functionInvocation.getTarget());
 		}else if (functionInvocation.getTarget().isName()){
 			Name target = (Name)functionInvocation.getTarget();
-			IBinding b = target.resolveBinding();
-			if (b != null && b != IBinding.NOT_FOUND_BINDING){
-				ITypeBinding typeBinding = null;
-				if (b.isDataBinding()){
-					typeBinding = ((IDataBinding)b).getType();
-				}
-				if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding.getKind() == ITypeBinding.FUNCTION_BINDING){
-					int level = matchSet.isMatchingFunctionType(target, typeBinding.isPartBinding()?(IPartBinding)typeBinding : null);
+			org.eclipse.edt.mof.egl.Type typeBinding = target.resolveType();
+			if (typeBinding != null){
+				if (typeBinding instanceof FunctionPart){
+					int level = matchSet.isMatchingFunctionType(target, (FunctionPart)typeBinding);
 					
 					if (level == SearchPattern.ACCURATE_MATCH){
 						matchSet.addTrustedMatch(target);
@@ -469,16 +397,30 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 					}
 					
 					return ;
-				} else if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding.getKind() == ITypeBinding.DELEGATE_BINDING) {
+				} else if (typeBinding instanceof org.eclipse.edt.mof.egl.Delegate) {
 					/**
 					 * stop processing if the invocation is a delegate, since the
 					 * delegate will always be a variable, and should really not be
 					 * found by any search...as we do not have a variable search
 					 */
-					int level = matchSet.isMatchingType(target,typeBinding.isPartBinding()?(IPartBinding)typeBinding : null);
+					int level = matchSet.isMatchingType(target,(org.eclipse.edt.mof.egl.Delegate)typeBinding);
 					if (level == SearchPattern.ACCURATE_MATCH){
 						matchSet.addTrustedMatch(target);
 					}
+					return ;
+				}
+			}
+			else {
+				Member m = target.resolveMember();
+				if (m instanceof FunctionMember) {
+					int level = matchSet.isMatchingFunctionType(target, null);
+					
+					if (level == SearchPattern.ACCURATE_MATCH){
+						matchSet.addTrustedMatch(target);
+					}else if (level == SearchPattern.INACCURATE_MATCH){
+						matchSet.addInaccurateMatch(target);
+					}
+					
 					return ;
 				}
 			}
@@ -506,9 +448,9 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 	
 	public void endVisit(StructureItem embeddedRecordStructureItem) {
 		boolean bContinue = embeddedRecordStructureItem.getType() != null && !isAny(embeddedRecordStructureItem.getType());
-		if (bContinue && binding != null && binding != IBinding.NOT_FOUND_BINDING){
+		if (bContinue && binding != null){
 //			if (embeddedRecordStructureItem.isEmbedded()||binding.getKind() == ITypeBinding.DATAITEM_BINDING){
-				if (embeddedRecordStructureItem.isFiller() || binding.getKind() == ITypeBinding.FIXED_RECORD_BINDING || binding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING)
+				if (embeddedRecordStructureItem.isFiller() || binding instanceof StructuredRecord || binding instanceof org.eclipse.edt.mof.egl.Record)
 					this.matchSet.addTrustedMatch(embeddedRecordStructureItem.getType().getBaseType());
 				else this.matchSet.addTrustedMatch(embeddedRecordStructureItem.getType().getBaseType());
 //			}
@@ -517,8 +459,6 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 	}
 	
 	
-	// EGLTODO: If we modify IEGLUseStatement/IEGLUseFormStatement so that they are common or one extends the other,
-	// we need to update the source element parser and the two visit methods here 
 	public boolean visit(UseStatement useStatement) {
 		List useTargets = useStatement.getNames();
 		
@@ -552,11 +492,11 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 	public boolean visit(NameType nameType) {
 		nameType.accept(new AbstractASTExpressionVisitor(){
 			public boolean visitName(Name name) {
-				IBinding b = name.resolveBinding();
-				if (b != null && b != IBinding.NOT_FOUND_BINDING){
-					if (b.isTypeBinding() && ((ITypeBinding)b).isPartBinding()){
-						if (matchSet.isMatchingType(name, (PartBinding)b) == SearchPattern.ACCURATE_MATCH){
-							binding = (PartBinding)b;
+				org.eclipse.edt.mof.egl.Type type = name.resolveType();
+				if (type != null){
+					if (type instanceof org.eclipse.edt.mof.egl.Part){
+						if (matchSet.isMatchingType(name, (org.eclipse.edt.mof.egl.Part)type) == SearchPattern.ACCURATE_MATCH){
+							binding = (org.eclipse.edt.mof.egl.Part)type;
 							return false;
 						}
 
@@ -587,12 +527,14 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 	
 	//NewExpression is handled in the SpecialVisitor
 	public boolean visit (NewExpression newExpr ){
-		
-		List list = newExpr.getArguments();
-		Iterator iter = list.iterator();
-		while (iter.hasNext()){
-			Node node = (Node)iter.next();
-			node.accept(this);
+		Type root = newExpr.getType().getBaseType();
+		if (root.isNameType()) {
+			List list = ((NameType)root).getArguments();
+			Iterator iter = list.iterator();
+			while (iter.hasNext()){
+				Node node = (Node)iter.next();
+				node.accept(this);
+			}
 		}
 
 		return false;
@@ -600,12 +542,12 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 
 	
 	public boolean visitName(Name name) {
-		IBinding b = name.resolveBinding();
+		org.eclipse.edt.mof.egl.Type type = name.resolveType();
 //		if (b != null && b.isDataBinding() && ((IDataBinding)b).getKind() == IDataBinding.CLASS_FIELD_BINDING){
 //			this.matchName(name,b);
 //		}
-		if (b != null && b.isValidBinding() && b.isAnnotationBinding()) {
-			matchName(name, b);
+		if (type instanceof AnnotationType) {
+			matchName(name, type);
 		}
 		return false;
 	}
@@ -613,7 +555,11 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 	public boolean visit(QualifiedName name) {
 		int level = this.matchSet.getMatchingLevel(name);
 		if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
-			IBinding b = name.resolveBinding();
+			Element element = name.resolveType();
+			if (element == null) {
+				element = name.resolveMember();
+			}
+			
 			Name matchNode = name;
 			Name loopname = name;
 			while(loopname.isQualifiedName()){
@@ -621,14 +567,11 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 				level = matchSet.getMatchingLevel(loopname);
 				if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
 					matchNode = loopname;
-					b = loopname.resolveBinding();
+					element = loopname.resolveType();
 					//If we find a record binding, then throw it out. A record name that is used as a qualifier is not
 					//a valid reference in EGL
-					if (Binding.isValidBinding(b) 
-							&& b.isTypeBinding() 
-							&& (((ITypeBinding)b).getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING 
-									|| ((ITypeBinding)b).getKind() == ITypeBinding.FIXED_RECORD_BINDING)) {
-						b = null;
+					if (element instanceof org.eclipse.edt.mof.egl.Record || element instanceof StructuredRecord) {
+						element = null;
 					}
 					
 					
@@ -637,17 +580,12 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 			}
 			
 			//don't match if classfield
-			if (b == null || b == IBinding.NOT_FOUND_BINDING){
+			if (element == null) {
 				return false;
 			}
-			if (b.isDataBinding()){
-				if (b instanceof VariableBinding ||
-					b instanceof ProgramParameterBinding||
-					b instanceof FunctionParameterBinding)
-					return false;
-			}
 			
-			matchName(matchNode,b);
+			matchName(matchNode, element);
+			
 //			if (b != null && b != IBinding.NOT_FOUND_BINDING){
 //				ITypeBinding typeBinding = b.isTypeBinding()? (ITypeBinding)b : null;
 //				if (b.isDataBinding()){
@@ -797,35 +735,17 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 			
 
 	protected void matchName(Name name){
-		matchName(name,name.resolveBinding());
+		Element e = name.resolveType();
+		if (e == null) {
+			e = name.resolveMember();
+		}
+		matchName(name, e);
 	}
-	protected void matchName(Name name,IBinding b){
+	protected void matchName(Name name, Element element){
 		int level = this.matchSet.getMatchingLevel(name);
 		if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
-			if (Binding.isValidBinding(b)){
-				ITypeBinding typeBinding = b.isTypeBinding()? (ITypeBinding)b : null;
-				if (b.isDataBinding()){
-					
-					IDataBinding dbinding = (IDataBinding) b;
-					int kind = dbinding.getKind();
-					switch (kind) {
-					case IDataBinding.CLASS_FIELD_BINDING:
-					case IDataBinding.FLEXIBLE_RECORD_FIELD:
-					case IDataBinding.FUNCTION_PARAMETER_BINDING:
-					case IDataBinding.LOCAL_VARIABLE_BINDING:
-					case IDataBinding.PROGRAM_PARAMETER_BINDING:
-					case IDataBinding.STRUCTURE_ITEM_BINDING:
-					case IDataBinding.SYSTEM_VARIABLE_BINDING:						
-						return;
-
-					default:
-						break;
-					}
-					
-					typeBinding = ((IDataBinding)b).getType();
-				}
-				
-				if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding.isFunctionBinding()){
+			if (element != null){
+				if (element instanceof FunctionMember) {
 					level = matchSet.isMatchingFunctionType(name,null);
 					if (level == SearchPattern.ACCURATE_MATCH){
 						matchSet.addTrustedMatch(name);
@@ -833,27 +753,17 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 						matchSet.addInaccurateMatch(name);
 					}
 					return;
-
-				}else if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding.isPartBinding()){
-					level = matchSet.isMatchingType(name, (IPartBinding)typeBinding); 
+				}else if (element instanceof org.eclipse.edt.mof.egl.Part){
+					level = matchSet.isMatchingType(name, (org.eclipse.edt.mof.egl.Part)element); 
 					if (level == SearchPattern.ACCURATE_MATCH){
 						matchSet.addTrustedMatch(name);
 					}else if (level == SearchPattern.INACCURATE_MATCH){
 						matchSet.addInaccurateMatch(name);
 					}
 					return; 
-				}else if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding instanceof IAnnotationTypeBinding){
-					level = matchSet.isMatchingAnnotationType(name, (IAnnotationTypeBinding)typeBinding); 
-					if (level == SearchPattern.ACCURATE_MATCH){
-						matchSet.addTrustedMatch(name);
-					}else if (level == SearchPattern.INACCURATE_MATCH){
-						matchSet.addInaccurateMatch(name);
-					}
-					return;
 				}else return;
 				
 			}
-
 			
 			this.matchSet.addInaccurateMatch(name);
 		}

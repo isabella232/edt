@@ -15,7 +15,6 @@ package org.eclipse.edt.ide.ui.internal.record.conversion.sqldb;
 import org.eclipse.datatools.connectivity.sqm.core.definition.DatabaseDefinition;
 import org.eclipse.datatools.modelbase.sql.tables.Column;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.internal.sql.StringToken;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLRetrieveUtility;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLStructureItem;
@@ -84,9 +83,9 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 	protected String getFieldName(Column column, EGLSQLStructureItem item){
 		String colNameAlias = getAliasName(item.getName().trim());
 		if( colNameAlias != null) {
-			return StringToken.trim(colNameAlias).toLowerCase();
+			return trim(colNameAlias).toLowerCase();
 		} else {
-			return StringToken.trim(item.getName()).toLowerCase();
+			return trim(item.getName()).toLowerCase();
 		}
 	}
 	
@@ -148,7 +147,7 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 			
 			builder.append(SQLConstants.DOUBLE_QUOTE);
 			//TODO why column.getname()?
-			builder.append(StringToken.trim(item.getColumnName()));
+			builder.append(trim(item.getColumnName()));
 			builder.append(SQLConstants.DOUBLE_QUOTE);
 			if (column.isPartOfPrimaryKey()) {
 				builder.append("}");
@@ -190,4 +189,33 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		   "char for bit data", //$NON-NLS-1$
 		   "varchar for bit data", //$NON-NLS-1$
 		};
+	
+	public static String trim(String string) {
+
+		int len = string.length();
+		int st = 0;
+		char[] val = string.toCharArray();
+
+		while ((st < len) && (val[st] <= ' ')) {
+			st++;
+		}
+		while ((st < len) && (val[len - 1] <= ' ')) {
+			len--;
+		}
+
+		String pre = ""; //$NON-NLS-1$
+		String post = ""; //$NON-NLS-1$
+		if (st > 0) {
+			pre = " "; //$NON-NLS-1$
+		}
+		if (len < string.length()) {
+			post = " "; //$NON-NLS-1$
+		}
+		StringBuffer buff = new StringBuffer();
+		buff.append(pre);
+		buff.append(string.substring(st, len));
+		buff.append(post);
+
+		return buff.toString();
+	}
 }

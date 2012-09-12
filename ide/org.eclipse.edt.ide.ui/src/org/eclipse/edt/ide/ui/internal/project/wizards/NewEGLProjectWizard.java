@@ -56,7 +56,7 @@ public class NewEGLProjectWizard extends Wizard
 	
 	private ProjectConfiguration model;	
 	private IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-	private IConfigurationElement configElement;
+//	private IConfigurationElement configElement;
 
 	public NewEGLProjectWizard() {
 		model = new ProjectConfiguration();
@@ -213,7 +213,7 @@ public class NewEGLProjectWizard extends Wizard
 	 * in <code>performFinish</code> to set the result perspective.
 	 */
 	public void setInitializationData(IConfigurationElement cfig, String propertyName, Object data) {
-		configElement= cfig;
+//		configElement= cfig;
 	}
 	
 	/**

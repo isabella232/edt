@@ -44,7 +44,7 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.ZipFileBuildPathEntryManager;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author cduval
@@ -54,12 +54,12 @@ public class ResourceChangeProcessor implements IResourceChangeListener {
    
     public class ContextSpecificMarkerRemovalRequest {
 	    private String functionProjectName;
-	    private String[] functionPackageName;
+	    private String functionPackageName;
 	    private String functionPartName;
 	    private IPath contextFilePath;
         private String contextPartName;
 	    
-	    public ContextSpecificMarkerRemovalRequest(String functionProjectName, String[] functionPackageName, String functionPartName, String contextPartName, IPath contextFilePath){
+	    public ContextSpecificMarkerRemovalRequest(String functionProjectName, String functionPackageName, String functionPartName, String contextPartName, IPath contextFilePath){
 	        this.functionProjectName = functionProjectName;
 	        this.functionPackageName = functionPackageName;
 	        this.functionPartName = functionPartName;
@@ -155,7 +155,7 @@ public class ResourceChangeProcessor implements IResourceChangeListener {
 									case IResource.FILE :
 									    final IFile file = (IFile)resource;
 										if (org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(resource.getName())) {
-											String[] packageName = InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(resource.getFullPath().removeFirstSegments(segmentCount).removeLastSegments(1)));
+											String packageName = NameUtile.getAsName(org.eclipse.edt.ide.core.internal.utils.Util.pathToQualifiedName(resource.getFullPath().removeFirstSegments(segmentCount).removeLastSegments(1)));
 										
 										    IFileInfo fileInfo = FileInfoManager.getInstance().getFileInfo(project, file.getProjectRelativePath());
 											
@@ -167,8 +167,8 @@ public class ResourceChangeProcessor implements IResourceChangeListener {
 													final String partName = (String) iter.next();
 													DependencyGraph dependencyGraph = DependencyGraphManager.getInstance().getDependencyGraph(project);
 												    dependencyGraph.findFunctionDependencies(packageName, partName, new IFunctionRequestor(){
-		
-											            public void acceptFunction(String functionProjectName, String[] functionPackageName, String functionPartName) {
+												    	@Override
+											            public void acceptFunction(String functionProjectName, String functionPackageName, String functionPartName) {
 											            	List changes = (List)contextSpecificMarkersForDeletion.get(functionProjectName);
 											            	
 											            	if(changes == null){

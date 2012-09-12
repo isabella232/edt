@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.TernaryExpression;
+import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
@@ -38,7 +39,6 @@ import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
-import org.eclipse.edt.mof.egl.ExitStatement;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Form;
@@ -54,27 +54,23 @@ import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NamedElement;
-import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
-import org.eclipse.edt.mof.egl.ShowStatement;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.StructuredRecord;
-import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.impl.CallStatementImpl;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 public class BindingUtil {
 	
 	private static final String INVALID_ANNOTATION = "edt invalid";
+	private static final String ENVIRONMENT_ANNOTATION = "edt environment";
 	
 	private static Annotation ValidAnn;
 	
@@ -1028,5 +1024,28 @@ public class BindingUtil {
 		}
 		
 		return expr.resolveType();
+	}
+	
+	public static void setEnvironment(Element e, IEnvironment env) {
+		if (e == null) {
+			return;
+		}
+		Annotation a = e.getAnnotation(ENVIRONMENT_ANNOTATION);
+		if (a == null) {
+			a = createAnnotation(ENVIRONMENT_ANNOTATION);
+			a.setValue(env);
+			e.addAnnotation(a);
+		}
+	}
+	
+	public static IEnvironment getEnvironment(Element e) {
+		if (e == null) {
+			return null;
+		}
+		Annotation a = e.getAnnotation(ENVIRONMENT_ANNOTATION);
+		if (a != null) {
+			return (IEnvironment)a.getValue();
+		}
+		return null;
 	}
 }

@@ -24,9 +24,9 @@ public class DuplicatePartRequestor implements IDuplicatePartRequestor {
 
 	private DuplicatePartList duplicatePartsList;
 	private IFile file;
-	private String[] packageName;
+	private String packageName;
 	
-	public DuplicatePartRequestor(IProject project, String[] packageName, IFile file){
+	public DuplicatePartRequestor(IProject project, String packageName, IFile file){
 		this.file = file;
 		this.packageName = packageName;
 		this.duplicatePartsList = DuplicatePartManager.getInstance().getDuplicatePartList(project);

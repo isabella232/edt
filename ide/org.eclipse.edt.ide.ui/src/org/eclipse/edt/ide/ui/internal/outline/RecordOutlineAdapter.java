@@ -18,7 +18,6 @@ import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.swt.graphics.Image;
 
@@ -72,13 +71,7 @@ public class RecordOutlineAdapter extends AbstractOutlineAdapter {
 	 * @see org.eclipse.edt.ide.ui.internal.outline.IOutlineAdapter#getImage(java.lang.Object)
 	 */
 	public Image getImage(Object element) {
-		Record record = (Record) element;
 		nodeIcon = PluginImages.DESC_OBJS_RECORD;
-									//interned string comparison
-		if(record.hasSubType() && record.getSubType().getIdentifier() == InternUtil.intern("ConsoleForm"))
-			nodeIcon = PluginImages.DESC_OBJS_CONSOLE_FORM_ELEMENT;
-
-			
 		return super.getImage(element);
 	}
 }

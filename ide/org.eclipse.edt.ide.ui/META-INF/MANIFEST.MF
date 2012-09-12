@@ -75,8 +75,6 @@ Export-Package:
  org.eclipse.edt.ide.ui.internal.outline,
  org.eclipse.edt.ide.ui.internal.packageexplorer,
  org.eclipse.edt.ide.ui.internal.preferences,
- org.eclipse.edt.ide.ui.internal.project.features,
- org.eclipse.edt.ide.ui.internal.project.features.operations,
  org.eclipse.edt.ide.ui.internal.project.wizard.pages,
  org.eclipse.edt.ide.ui.internal.project.wizards,
  org.eclipse.edt.ide.ui.internal.util,

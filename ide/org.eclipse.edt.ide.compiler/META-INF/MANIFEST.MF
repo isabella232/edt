@@ -2,8 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.ide.compiler;singleton:=true
-Bundle-Version: 0.8.1.qualifier
-Bundle-Activator: org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin
+Bundle-Version: 0.8.2.qualifier
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -12,17 +11,20 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
  org.eclipse.edt.compiler;bundle-version="0.8.2",
  org.eclipse.edt.gen;bundle-version="0.8.2",
- org.eclipse.edt.mof;bundle-version="0.8.1",
+ org.eclipse.edt.mof;bundle-version="0.8.2",
  org.eclipse.edt.mof.egl;bundle-version="0.8.2",
  org.eclipse.edt.gen.generator.java;bundle-version="0.8.1",
  org.eclipse.edt.gen.generator.javascript;bundle-version="0.8.1",
  org.eclipse.jdt.core,
  org.eclipse.ui.ide,
  org.eclipse.edt.gen.java.templates.eglx.jtopen;bundle-version="0.8.2",
- org.eclipse.edt.mof.eglx.jtopen;bundle-version="0.8.1"
+ org.eclipse.edt.mof.eglx.jtopen;bundle-version="0.8.2",
+ org.eclipse.edt.mof.eglx.services;bundle-version="0.8.2",
+ org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.8.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.edt.ide.compiler,
  org.eclipse.edt.ide.compiler.gen,
  org.eclipse.edt.ide.compiler.gen.ui
 Bundle-Vendor: %providerName
+Bundle-Activator: org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin

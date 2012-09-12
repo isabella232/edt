@@ -27,6 +27,8 @@ import java.util.EventObject;
  */
 public class ElementChangedEvent extends EventObject {
 	
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Event type constant (bit mask) indicating an after-the-fact 
 	 * report of creations, deletions, and modifications

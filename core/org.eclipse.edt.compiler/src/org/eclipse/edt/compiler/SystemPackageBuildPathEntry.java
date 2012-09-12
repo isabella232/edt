@@ -48,5 +48,9 @@ public class SystemPackageBuildPathEntry extends ZipFileBindingBuildPathEntry im
 	protected IEnvironment getEnvironment() {
 		return ienvironment;
 	}
-				
+	
+	@Override
+	protected boolean shouldSetEnvironmentOnIr() {
+		return true;
+	}
 }

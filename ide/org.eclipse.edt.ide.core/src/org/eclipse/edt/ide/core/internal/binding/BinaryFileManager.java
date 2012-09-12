@@ -33,11 +33,9 @@ import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
-import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.SerializationException;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author winghong
@@ -145,7 +143,7 @@ public class BinaryFileManager {
 				String name =new String(bufferFile.getName());
 				IPath path = new Path(name);
 				path = path.removeFileExtension();
-				entries.add(InternUtil.intern(path.toString())); // Intern entry names, which in this case are part names
+				entries.add(NameUtile.getAsName(path.toString())); // Intern entry names, which in this case are part names
 			}
 		
 			return entries;
@@ -166,10 +164,10 @@ public class BinaryFileManager {
         return INSTANCE;
     }
 
-    private IFile[] getOutputFileForRead(String[] packageName, String partName, IProject project){
+    private IFile[] getOutputFileForRead(String packageName, String partName, IProject project){
     	try{
     		IContainer output = ProjectBuildPathManager.getInstance().getProjectBuildPath(project).getOutputLocation();
-    		IPath pathWithoutExt = Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packageName)).append(IRFileNameUtility.toIRFileName(partName));
+    		IPath pathWithoutExt = new Path(IRFileNameUtility.toIRFileName(packageName).replace('.', '/')).append(IRFileNameUtility.toIRFileName(partName));
     		return new IFile[] {
     				output.getFile(pathWithoutExt.addFileExtension("eglxml")),
     				output.getFile(pathWithoutExt.addFileExtension("eglbin")),
@@ -182,11 +180,11 @@ public class BinaryFileManager {
     
     }
     
-    public void removePart(String[] packageName, String name, IProject project){
+    public void removePart(String packageName, String name, IProject project){
     	removePart(packageName, name, project, true);
     }
     
-    public void removePart(String[] packageName, String name, IProject project, boolean deleteFromDisk){
+    public void removePart(String packageName, String name, IProject project, boolean deleteFromDisk){
     	if (deleteFromDisk) {
 	   		IFile[] files = getOutputFileForRead(packageName, name, project);
 	   		
@@ -205,40 +203,40 @@ public class BinaryFileManager {
     	env.remove(mofIRKey(packageName, name));
     }
     
-    public static String eglIRKey(String[] packageName, String partName) {
+    public static String eglIRKey(String packageName, String partName) {
 		StringBuilder buf = new StringBuilder();
 		buf.append(Type.EGL_KeyScheme);
 		buf.append(Type.KeySchemeDelimiter);
-		if (packageName != null && packageName.length > 0) {
-			buf.append(IRUtils.concatWithSeparator(packageName, "."));
+		if (packageName != null && packageName.length() > 0) {
+			buf.append(packageName);
 			buf.append('.');
 		}
 		buf.append(partName);
 		return buf.toString();
 	}
     
-    public static String mofIRKey(String[] packageName, String partName) {
+    public static String mofIRKey(String packageName, String partName) {
 		StringBuilder buf = new StringBuilder();
-		if (packageName != null && packageName.length > 0) {
-			buf.append(IRUtils.concatWithSeparator(packageName, "."));
+		if (packageName != null && packageName.length() > 0) {
+			buf.append(packageName);
 			buf.append('.');
 		}
 		buf.append(partName);
 		return buf.toString();
 	}
     
-    public void addPackage(String[] packages,IProject project){
+    public void addPackage(String packages,IProject project){
     	IContainer container = ProjectBuildPathManager.getInstance().getProjectBuildPath(project).getOutputLocation();
     	try {
-    		org.eclipse.edt.ide.core.internal.builder.Util.createFolder(Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packages)),container);
+    		org.eclipse.edt.ide.core.internal.builder.Util.createFolder(new Path(IRFileNameUtility.toIRFileName(packages).replace('.', '/')),container);
 		} catch (CoreException e) {
 			throw new BuildException(e);
 		}    	
     }
     
-    public void removePackage(String[] packages,IProject project){
+    public void removePackage(String packages,IProject project){
     	IContainer container = ProjectBuildPathManager.getInstance().getProjectBuildPath(project).getOutputLocation();
-    	container = container.getFolder(Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packages)));
+    	container = container.getFolder(new Path(IRFileNameUtility.toIRFileName(packages).replace('.', '/')));
     	if (container.exists() && container.getType() != IResource.PROJECT){ // if somehow using the project root, don't delete it
     		try {
     			container.delete(true,null);

@@ -301,20 +301,11 @@ public class MoveReferenceUpdater {
 		int result = IEGLSearchConstants.ALL_ELEMENTS;
 		if(part instanceof SourcePart) {
 			SourcePart sPart = ((SourcePart) part);
-			if(sPart.isDataItem()) {
-				result = IEGLSearchConstants.ITEM_PART;
-			}
-			else if (sPart.isDataTable()) {
-				result = IEGLSearchConstants.TABLE_PART;
-			}
-			else if (sPart.isDelegate()) {
+			if (sPart.isDelegate()) {
 				result = IEGLSearchConstants.DELEGATE_PART;
 			}
 			else if (sPart.isExternalType()) {
 				result = IEGLSearchConstants.EXTERNALTYPE_PART;
-			}
-			else if (sPart.isFormGroup()) {
-				result = IEGLSearchConstants.FORMGROUP_PART;
 			}
 			else if (sPart.isHandler()) {
 				result = IEGLSearchConstants.HANDLER_PART;
@@ -334,11 +325,14 @@ public class MoveReferenceUpdater {
 			else if (sPart.isService()) {
 				result = IEGLSearchConstants.SERVICE_PART;
 			}
+			else if (sPart.isEnumeration()) {
+				result = IEGLSearchConstants.ENUMERATION_PART;
+			}
+			else if (sPart.isClass()) {
+				result = IEGLSearchConstants.CLASS_PART;
+			}
 			else if (sPart.isFunction()) {
 				result = IEGLSearchConstants.ALL_FUNCTIONS;
-			}
-			else if (sPart.isForm()) {
-				result = IEGLSearchConstants.FORM_PART;
 			}
 		}
 		return result;

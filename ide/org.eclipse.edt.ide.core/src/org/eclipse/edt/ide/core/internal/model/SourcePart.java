@@ -24,7 +24,6 @@ import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.IProperty;
 import org.eclipse.edt.ide.core.model.IPropertyContainer;
 import org.eclipse.edt.ide.core.model.IUseDeclaration;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 
@@ -315,42 +314,6 @@ protected void toStringInfo(int tab, StringBuffer buffer, Object info) {
 	}
 }
 	
-	public boolean isDataItem() {
-		try {
-			return ((SourcePartElementInfo)getElementInfo()).isDataItem();
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-
-	public boolean isDataTable() {
-		try {
-			return ((SourcePartElementInfo)getElementInfo()).isDataTable();
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-
-	public boolean isForm() {
-		try {
-			return ((SourcePartElementInfo)getElementInfo()).isForm();
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-
-	public boolean isFormGroup() {
-		try {
-			return ((SourcePartElementInfo)getElementInfo()).isFormGroup();
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-
 	public boolean isFunction() {
 		try {
 			return ((SourcePartElementInfo)getElementInfo()).isFunction();
@@ -361,8 +324,7 @@ protected void toStringInfo(int tab, StringBuffer buffer, Object info) {
 	}
 
 	public boolean isGeneratable() {
-		return isProgram() || isDataTable() || isLibrary() || isConsoleForm()
-			|| isFormGroup() || isVGUIRecord() || isHandler() || isService();
+		return isProgram() || isLibrary() || isHandler() || isService();
 	}
 
 	public boolean isDelegate() {
@@ -401,78 +363,6 @@ protected void toStringInfo(int tab, StringBuffer buffer, Object info) {
 		}
 	}
 	
-	public boolean isJSFHandler() {
-		if (!isHandler()) return false;
-		try {
-			SourcePartElementInfo part = (SourcePartElementInfo) getElementInfo();
-			if (part.getSubTypeName() == null) {return false;}
-			return InternUtil.intern(new String(part.getSubTypeName())) == InternUtil.intern("JSFHandler");
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-
-	public boolean isConsoleForm() {
-		if (!isRecord()) return false;
-		try {
-			SourcePartElementInfo part = (SourcePartElementInfo) getElementInfo();
-			if (part.getSubTypeName() == null) {return false;}
-			return InternUtil.intern(new String(part.getSubTypeName())) == InternUtil.intern("consoleForm");
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-
-	public boolean isVGUIRecord() {
-		if (!isRecord()) return false;
-		try {
-			SourcePartElementInfo part = (SourcePartElementInfo) getElementInfo();
-			if (part.getSubTypeName() == null) {return false;}
-			return InternUtil.intern(new String(part.getSubTypeName())) == InternUtil.intern("VGUIRecord");
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-
-	public boolean isSQLRecord() {
-		if (!isRecord()) return false;
-		try {
-			SourcePartElementInfo part = (SourcePartElementInfo) getElementInfo();
-			if (part.getSubTypeName() == null) {return false;}
-			return InternUtil.intern(new String(part.getSubTypeName())) == InternUtil.intern("SQLRecord");
-		}
-		catch (EGLModelException e) {
-			return false;
-		}
-	}
-    
-    public boolean isDLIRecord() {
-        if (!isRecord()) return false;
-        try {
-            SourcePartElementInfo part = (SourcePartElementInfo) getElementInfo();
-			if (part.getSubTypeName() == null) {return false;}
-            return InternUtil.intern(new String(part.getSubTypeName())) == InternUtil.intern("DLISegment");
-        }
-        catch (EGLModelException e) {
-            return false;
-        }
-    }
-    
-    public boolean isPSBRecord() {
-        if (!isRecord()) return false;
-        try {
-            SourcePartElementInfo part = (SourcePartElementInfo) getElementInfo();
-			if (part.getSubTypeName() == null) {return false;}
-            return InternUtil.intern(new String(part.getSubTypeName())) == InternUtil.intern("PSBRecord");
-        }
-        catch (EGLModelException e) {
-            return false;
-        }
-    }
-	
 	public boolean isLibrary() {
 		try {
 			return ((SourcePartElementInfo)getElementInfo()).isLibrary();
@@ -485,6 +375,15 @@ protected void toStringInfo(int tab, StringBuffer buffer, Object info) {
 	public boolean isProgram() {
 		try {
 			return ((SourcePartElementInfo)getElementInfo()).isProgram();
+		}
+		catch (EGLModelException e) {
+			return false;
+		}
+	}
+	
+	public boolean isClass() {
+		try {
+			return ((SourcePartElementInfo)getElementInfo()).isClass();
 		}
 		catch (EGLModelException e) {
 			return false;

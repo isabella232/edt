@@ -17,16 +17,9 @@ import java.io.StringReader;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.edt.compiler.binding.FormBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -45,6 +38,9 @@ import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.ISearchPattern;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.Type;
 
 public abstract class SearchPattern implements ISearchPattern, IIndexConstants, IEGLSearchConstants {
 
@@ -81,7 +77,7 @@ public static SearchPattern createPattern(String patternString, int searchFor, i
 	switch (searchFor) {
 
 		case IEGLSearchConstants.ALL_ELEMENTS:
-			// Search for all declerations, references, or both for all top level parts, nested functions, and nested forms
+			// Search for all declerations, references, or both for all top level parts and nested functions
 			searchPattern = new OrPattern(createPartPattern(patternString, PART_SUFFIX, limitTo, matchMode, isCaseSensitive),
 					createAllFunctionPattern(patternString, limitTo, matchMode, isCaseSensitive));
 			break;
@@ -91,20 +87,8 @@ public static SearchPattern createPattern(String patternString, int searchFor, i
 		case IEGLSearchConstants.RECORD_PART:
 			searchPattern = createPartPattern(patternString, RECORD_SUFFIX, limitTo, matchMode, isCaseSensitive);
 			break;
-		case IEGLSearchConstants.ITEM_PART:
-			searchPattern = createPartPattern(patternString, ITEM_SUFFIX, limitTo, matchMode, isCaseSensitive);
-			break;
 		case IEGLSearchConstants.LIBRARY_PART:
 			searchPattern = createPartPattern(patternString, LIBRARY_SUFFIX, limitTo, matchMode, isCaseSensitive);
-			break;
-		case IEGLSearchConstants.FORMGROUP_PART:
-			searchPattern = createPartPattern(patternString, FORMGRP_SUFFIX, limitTo, matchMode, isCaseSensitive);
-			break;
-		case IEGLSearchConstants.FORM_PART:
-			searchPattern = createPartPattern(patternString, FORM_SUFFIX, limitTo, matchMode, isCaseSensitive);
-			break;
-		case IEGLSearchConstants.TABLE_PART:
-			searchPattern = createPartPattern(patternString, TABLE_SUFFIX, limitTo, matchMode, isCaseSensitive);
 			break;
 		case IEGLSearchConstants.HANDLER_PART:
 			searchPattern = createPartPattern(patternString, HANDLER_SUFFIX, limitTo, matchMode, isCaseSensitive);
@@ -129,26 +113,18 @@ public static SearchPattern createPattern(String patternString, int searchFor, i
 //			searchPattern = createPackagePattern(patternString, limitTo, matchMode, isCaseSensitive);
 			break;
 		case IEGLSearchConstants.ALL_FUNCTIONS:
-			// Search for top level and nested functions
+			// Search for nested functions
 			searchPattern = createAllFunctionPattern(patternString, limitTo, matchMode, isCaseSensitive);
 			break;
 		
-		// The FUNCTION_PART case should not be used anymore.
-		case IEGLSearchConstants.FUNCTION_PART:
-			// When searching for a Function Part, only declaration searches are supported at this time.  Function Parts are top level functions.
-			if(limitTo != IEGLSearchConstants.DECLARATIONS){
-				throw new UnsupportedOperationException();
-			}else {
-				searchPattern = createPartPattern(patternString, FUNCTION_SUFFIX, limitTo, matchMode, isCaseSensitive);
-				// searchPatter = createFunctionPattern(patternString, limitTo, matchMode, isCaseSensitive);
-			}
-			break;
-			
 		case IEGLSearchConstants.ANNOTATION_PART:
 			searchPattern = createPartPattern(patternString, ANNOTATION_SUFFIX, limitTo, matchMode, isCaseSensitive );
 			break;
 		case IEGLSearchConstants.STEREOTYPE_PART:
 			searchPattern = createPartPattern(patternString, STEREOTYPE_SUFFIX, limitTo, matchMode, isCaseSensitive );
+			break;
+		case IEGLSearchConstants.CLASS_PART:
+			searchPattern = createPartPattern(patternString, CLASS_SUFFIX, limitTo, matchMode, isCaseSensitive );
 			break;
 	}
 	return searchPattern;
@@ -174,7 +150,6 @@ public static SearchPattern createPattern(String patternString, int searchFor, i
 //}
 public static SearchPattern createPattern(IEGLElement element, int limitTo) {
 	SearchPattern searchPattern = null;
-	int lastDot;
 	switch (element.getElementType()) {
 //		case IEGLElement.FIELD :
 //			IField field = (IField) element; 
@@ -431,205 +406,6 @@ private static SearchPattern createPartPattern(char[] simpleName, char[] package
 //					EXACT_MATCH, 
 //					CASE_SENSITIVE));
 //			break;
-	}
-	return searchPattern;
-}
-
-/**
- * Method pattern are formed by [declaringType.]selector[(parameterTypes)][returnType]
- * e.g. java.lang.Runnable.run() void
- *		main(*)
- */
-private static SearchPattern createFunctionPattern(String patternString, int limitTo, int matchMode, boolean isCaseSensitive) {
-
-	
-	
-//	 Remove the whitespace from this string
-	Lexer lexer = new Lexer(new StringReader(patternString));
-	int token;
-	final int InsideSelector = 1;
-	final int InsideParameter = 2;
-	int mode = InsideSelector;
-	
-	String declaringType = null, selector = null, parameterType = null;
-	String[] parameterTypes = null;
-	int parameterCount = -1;
-	
-	boolean foundClosingParenthesis = false;
-	
-	try {
-		token = lexer.next_token().sym;
-	} catch (IOException e) {
-		return null;
-	}
-	while (token != NodeTypes.EOF) {
-		switch(mode){
-			//	read declaring type and selector
-			case InsideSelector :
-				switch (token) {
-					case NodeTypes.DOT :
-						if(declaringType == null){
-							if(selector == null) return null;
-							declaringType = selector;
-						}else {
-							String tokenSource = new String(lexer.yytext());
-							declaringType += tokenSource + selector;
-						}
-						selector = null;
-						break;
-					case NodeTypes.LPAREN :
-						parameterTypes = new String[5];
-						parameterCount = 0;
-						mode = InsideParameter;
-						break;
-					default: // all other tokens are considered identifiers (see bug 21763 Problem in Java search [search])
-						if (selector == null) {
-							selector = new String(lexer.yytext());
-						} else {
-							selector += new String(lexer.yytext());
-						}
-						break;
-				}
-				break;
-			// read parameter types
-			case InsideParameter :
-				switch (token) {
-					case NodeTypes.COMMA:
-						if (parameterType == null) return null;
-						if (parameterTypes.length == parameterCount){
-							System.arraycopy(parameterTypes, 0, parameterTypes = new String[parameterCount*2], 0, parameterCount);
-						}
-						parameterTypes[parameterCount++] = parameterType;
-						parameterType = null;
-						break;
-					case NodeTypes.RPAREN:
-						foundClosingParenthesis = true;
-						if (parameterType != null){
-							if (parameterTypes.length == parameterCount){
-								System.arraycopy(parameterTypes, 0, parameterTypes = new String[parameterCount*2], 0, parameterCount);
-							}
-							parameterTypes[parameterCount++] = parameterType;
-						}
-						break;
-					default: // all other tokens are considered identifiers (see bug 21763 Problem in Java search [search])
-						if (parameterType == null){
-							parameterType = new String(lexer.yytext());
-						} else {
-							parameterType += new String(lexer.yytext());
-						}
-				}
-				break;
-		}
-		try {
-			token = lexer.next_token().sym;
-		} catch (IOException e) {
-			return null;
-		}
-	}
-	
-	// parenthesis mismatch
-	if (parameterCount>0 && !foundClosingParenthesis) return null;
-	if (selector == null) return null;
-
-	char[] selectorChars = selector.toCharArray();
-	if (selectorChars.length == 1 && selectorChars[0] == '*') selectorChars = null;
-		
-	char[] declaringTypeQualification = null; //, declaringTypeSimpleName = null;
-	//char[] returnTypeQualification = null, returnTypeSimpleName = null;
-	char[][] parameterTypeQualifications = null, parameterTypeSimpleNames = null;
-
-	// extract declaring type infos
-	if (declaringType != null){
-		declaringTypeQualification = declaringType.toCharArray();
-		if (declaringTypeQualification.length == 1 && declaringTypeQualification[0] == '*') declaringTypeQualification = null;
-		
-//		int lastDotPosition = CharOperation.lastIndexOf('.', declaringTypePart);
-//		if (lastDotPosition >= 0){
-//			declaringTypeQualification = CharOperation.subarray(declaringTypePart, 0, lastDotPosition);
-//			if (declaringTypeQualification.length == 1 && declaringTypeQualification[0] == '*') declaringTypeQualification = null;
-//			declaringTypeSimpleName = CharOperation.subarray(declaringTypePart, lastDotPosition+1, declaringTypePart.length);
-//		} else {
-//			declaringTypeQualification = null;
-//			declaringTypeSimpleName = declaringTypePart;
-//		}
-//		if (declaringTypeSimpleName.length == 1 && declaringTypeSimpleName[0] == '*') declaringTypeSimpleName = null;
-	}
-	// extract parameter types infos
-	if (parameterCount >= 0){
-		parameterTypeQualifications = new char[parameterCount][];
-		parameterTypeSimpleNames = new char[parameterCount][];
-		for (int i = 0; i < parameterCount; i++){
-			char[] parameterTypePart = parameterTypes[i].toCharArray();
-			int lastDotPosition = CharOperation.lastIndexOf('.', parameterTypePart);
-			if (lastDotPosition >= 0){
-				parameterTypeQualifications[i] = CharOperation.subarray(parameterTypePart, 0, lastDotPosition);
-				if (parameterTypeQualifications[i].length == 1 && parameterTypeQualifications[i][0] == '*') {
-					parameterTypeQualifications[i] = null;
-				} else {
-					// prefix with a '*' as the full qualification could be bigger (because of an import)
-					parameterTypeQualifications[i] = CharOperation.concat(ONE_STAR, parameterTypeQualifications[i]);
-				}
-				parameterTypeSimpleNames[i] = CharOperation.subarray(parameterTypePart, lastDotPosition+1, parameterTypePart.length);
-			} else {
-				parameterTypeQualifications[i] = null;
-				parameterTypeSimpleNames[i] = parameterTypePart;
-			}
-			if (parameterTypeSimpleNames[i].length == 1 && parameterTypeSimpleNames[i][0] == '*') parameterTypeSimpleNames[i] = null;
-		}
-	}	
-//	// extract return type infos
-//	if (returnType != null){
-//		char[] returnTypePart = returnType.toCharArray();
-//		int lastDotPosition = CharOperation.lastIndexOf('.', returnTypePart);
-//		if (lastDotPosition >= 0){
-//			returnTypeQualification = CharOperation.subarray(returnTypePart, 0, lastDotPosition);
-//			if (returnTypeQualification.length == 1 && returnTypeQualification[0] == '*') {
-//				returnTypeQualification = null;
-//			} else {
-//				// because of an import
-//				returnTypeQualification = CharOperation.concat(ONE_STAR, returnTypeQualification);
-//			}			
-//			returnTypeSimpleName = CharOperation.subarray(returnTypePart, lastDotPosition+1, returnTypePart.length);
-//		} else {
-//			returnTypeQualification = null;
-//			returnTypeSimpleName = returnTypePart;
-//		}
-//		if (returnTypeSimpleName.length == 1 && returnTypeSimpleName[0] == '*') returnTypeSimpleName = null;
-//	}
-	SearchPattern searchPattern = null;
-	switch (limitTo){
-		case IEGLSearchConstants.DECLARATIONS :
-			searchPattern = createPartPattern(patternString, FUNCTION_SUFFIX, limitTo, matchMode, isCaseSensitive);
-			break;
-		case IEGLSearchConstants.REFERENCES :
-			searchPattern = 
-				new FunctionReferencePattern(
-					selectorChars, 
-					matchMode, 
-					isCaseSensitive, 
-					declaringTypeQualification, 
-					//declaringTypeSimpleName, 
-					//returnTypeQualification, 
-					//returnTypeSimpleName, 
-					//parameterTypeQualifications, 
-					//parameterTypeSimpleNames,
-					null);
-			break;
-		case IEGLSearchConstants.ALL_OCCURRENCES :
-			searchPattern = new OrPattern(
-					createPartPattern(patternString, FUNCTION_SUFFIX, limitTo, matchMode, isCaseSensitive),
-				new FunctionReferencePattern(
-					selectorChars, 
-					matchMode, 
-					isCaseSensitive, 
-					declaringTypeQualification, 
-					//declaringTypeSimpleName, 
-					//returnTypeQualification, 
-					//returnTypeSimpleName, 
-					//parameterTypeQualifications, 
-					//parameterTypeSimpleNames,
-					null));
-			break;
 	}
 	return searchPattern;
 }
@@ -1113,28 +889,16 @@ protected void matchReportReference(Node reference, IEGLElement element, int acc
 	locator.report(reference.getOffset(), reference.getOffset() + reference.getLength(), element, accuracy);
 }
 
-protected IPartBinding getPartBinding(Part part){
+protected org.eclipse.edt.mof.egl.Part getPartBinding(Part part){
 	return getPartBinding(part.getName());
 }
 
-protected IPartBinding getPartBinding(Name name){
-	IBinding b = name.resolveBinding();
-	
-	if (b != null && b != IBinding.NOT_FOUND_BINDING){
-		ITypeBinding typeBinding = b.isTypeBinding()? (ITypeBinding)b : null;
-		if (b.isDataBinding()){
-			typeBinding = ((IDataBinding)b).getType();
-		}
-		
-		if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding.isPartBinding()){
-			return (IPartBinding)typeBinding;
-		}else if (typeBinding == null && b instanceof IPartBinding){
-			return (IPartBinding)b;
-		}
+protected org.eclipse.edt.mof.egl.Part getPartBinding(Name name){
+	Type type = name.resolveType();
+	if (type instanceof org.eclipse.edt.mof.egl.Part) {
+		return (org.eclipse.edt.mof.egl.Part)type;
 	}
-	
 	return null;
-	
 }
 
 /**
@@ -1146,9 +910,9 @@ protected IPartBinding getPartBinding(Name name){
  */
 protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, TopLevelFunction function) {
 	if (function == null) return INACCURATE_MATCH;
-	IPartBinding partBinding = getPartBinding(function);
+	org.eclipse.edt.mof.egl.Part partBinding = getPartBinding(function);
 	
-	if (partBinding == null || partBinding == IBinding.NOT_FOUND_BINDING){
+	if (partBinding == null){
 		return INACCURATE_MATCH;
 	}
 	
@@ -1281,21 +1045,13 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
  * Returns INACCURATE_MATCH if resolve failed.
  * Returns IMPOSSIBLE_MATCH if it doesn't.
  */
-protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, IPartBinding partBinding) {
+protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, org.eclipse.edt.mof.egl.Part partBinding) {
 	if (partBinding == null  ) return INACCURATE_MATCH;
 	
 	StringBuffer qualifiedPartName = new StringBuffer();
 	char[] qualifiedPackageName;
-	IPartBinding topLevelPart;
 
-	if (partBinding.getKind() == ITypeBinding.FORM_BINDING && ((FormBinding)partBinding).isNestedForm()){
-		topLevelPart = ((FormBinding)partBinding).getEnclosingFormGroup();
-		qualifiedPartName.append(topLevelPart.getName());
-		qualifiedPartName.append("." + partBinding.getName()); //$NON-NLS-1$
-	}else{
-		topLevelPart = partBinding;
-		qualifiedPartName.append(partBinding.getName());
-	}
+	qualifiedPartName.append(partBinding.getName());
 //	
 //	IEGLPackageDeclaration pkgDecl = ((IEGLFile)topLevelPart.getContainer()).getPackageDeclaration();
 //	PackageDeclaration pkgDecl = null;
@@ -1303,16 +1059,9 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 //		qualifiedPackageName = pkgDecl.getPackageName().getCanonicalName().toCharArray();
 //	}else{
 	
-   	StringBuffer result = new StringBuffer();
-	String[] packageName = partBinding.getPackageName();
-	if(packageName != null) {
-		for(int i = 0; i < packageName.length; i++) {
-			result.append(packageName[i]);
-			if ((i + 1) < packageName.length){
-				result.append('.');
-			}
-		}    		
-		qualifiedPackageName = result.toString().toCharArray();
+	String packageName = partBinding.getPackageName();
+	if(packageName != null && packageName.length() > 0) {
+		qualifiedPackageName = packageName.toCharArray();
 	}else{
 		qualifiedPackageName = null;
 	}
@@ -1329,9 +1078,7 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 				CharOperation.concat(qualifiedPackageName, qualifiedSourceName, '.'))) {
 		return ACCURATE_MATCH;
 	} else {
-		// search for a part.form in any package (only valid for nested forms)
-		
-		if(partBinding.getKind() == ITypeBinding.FORM_BINDING && ((FormBinding)partBinding).isNestedForm()&& new String(qualificationPattern).indexOf('.') == -1){
+		if(qualificationPattern != null && new String(qualificationPattern).indexOf('.') == -1){
 			if(this.matchesType(
 					CharOperation.concat(qualificationPattern, simpleNamePattern, '.'),
 					null,
@@ -1341,18 +1088,6 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 				return ACCURATE_MATCH;
 			}
 					
-		}else{
-			if(qualificationPattern != null && new String(qualificationPattern).indexOf('.') == -1){
-				if(this.matchesType(
-						CharOperation.concat(qualificationPattern, simpleNamePattern, '.'),
-						null,
-						qualifiedPackageName == null ? 
-								qualifiedSourceName : 
-								CharOperation.concat(qualifiedPackageName, qualifiedSourceName, '.'))){
-					return ACCURATE_MATCH;
-				}
-						
-			}
 		}
 		return IMPOSSIBLE_MATCH;
 	}
@@ -1365,7 +1100,7 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
  * Returns INACCURATE_MATCH if resolve failed.
  * Returns IMPOSSIBLE_MATCH if it doesn't.
  */
-protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, IAnnotationTypeBinding binding) {
+protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, AnnotationType binding) {
 	if (binding == null){
 		return INACCURATE_MATCH;
 	}
@@ -1375,16 +1110,9 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 
 	qualifiedPartName.append(binding.getName());
 	
-   	StringBuffer result = new StringBuffer();
-	String[] packageName = binding.getPackageName();
-	if(packageName != null) {
-		for(int i = 0; i < packageName.length; i++) {
-			result.append(packageName[i]);
-			if ((i + 1) < packageName.length){
-				result.append('.');
-			}
-		}    		
-		qualifiedPackageName = result.toString().toCharArray();
+	String packageName = binding.getPackageName();
+	if(packageName != null && packageName.length() > 0) {
+		qualifiedPackageName = packageName.toString().toCharArray();
 	}else{
 		qualifiedPackageName = null;
 	}
@@ -1418,22 +1146,19 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 	if (part == null  ) return INACCURATE_MATCH;
 	
 	StringBuffer qualifiedPartName = new StringBuffer();
-	IPart topLevelPart;
-
-	topLevelPart = part;
 	qualifiedPartName.append(part.getElementName());
 	
 	if (this.matchesType(
 			simpleNamePattern, 
 			qualificationPattern, 
-			topLevelPart.getFullyQualifiedName().toCharArray())) {
+			part.getFullyQualifiedName().toCharArray())) {
 		return ACCURATE_MATCH;
 	} else {
 		if(qualificationPattern != null && new String(qualificationPattern).indexOf('.') == -1){
 			if(this.matchesType(
 					CharOperation.concat(qualificationPattern, simpleNamePattern, '.'),
 					null,
-					topLevelPart.getFullyQualifiedName().toCharArray())){
+					part.getFullyQualifiedName().toCharArray())){
 				return ACCURATE_MATCH;
 			}
 					
@@ -1442,11 +1167,7 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 	return IMPOSSIBLE_MATCH;
 }
 
-	public int matchesPartType(Name node,IPartBinding partBinding,boolean forceQualification){
-		return IMPOSSIBLE_MATCH;
-	}
-	
-	public int matchesNestedFormPart(NestedForm node){
+	public int matchesPartType(Name node,org.eclipse.edt.mof.egl.Part partBinding,boolean forceQualification){
 		return IMPOSSIBLE_MATCH;
 	}
 	
@@ -1459,19 +1180,11 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 		return IMPOSSIBLE_MATCH;
 	}
 	
-	public int matchesAnnotationType(Name node, IAnnotationTypeBinding binding, boolean forceQualification){
-		return IMPOSSIBLE_MATCH;
-	}
-	
-	public int matchesFunctionPartType(Name node,IPartBinding partBinding){
+	public int matchesFunctionPartType(Name node,FunctionPart partBinding){
 		return IMPOSSIBLE_MATCH;
 	}
 	
 	public int matchesFunctionPartType(IFunction function){
-		return IMPOSSIBLE_MATCH;
-	}
-	
-	public int matchesFunctionPart(TopLevelFunction function){
 		return IMPOSSIBLE_MATCH;
 	}
 	

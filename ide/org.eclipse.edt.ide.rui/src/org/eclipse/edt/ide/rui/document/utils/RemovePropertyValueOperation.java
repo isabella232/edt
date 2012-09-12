@@ -13,8 +13,6 @@ package org.eclipse.edt.ide.rui.document.utils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.text.BadLocationException;
-
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -24,13 +22,14 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.ide.core.model.document.IEGLDocument;
-import org.eclipse.edt.ide.rui.internal.Activator;
-import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.mof.utils.NameUtile;
+import org.eclipse.jface.text.BadLocationException;
 
 /**
  * Insert Widget Reference and update the Z order of the declared widgets
@@ -64,7 +63,7 @@ public class RemovePropertyValueOperation {
 							try{
 								if(newExpression.hasSettingsBlock()){
 									SettingsBlock settingsBlockOpt = newExpression.getSettingsBlock();
-									AssignmentLocator assignmentLocator = new AssignmentLocator(InternUtil.intern(propertyName));
+									AssignmentLocator assignmentLocator = new AssignmentLocator(NameUtile.getAsName(propertyName));
 									settingsBlockOpt.accept(assignmentLocator);
 									Assignment setting = assignmentLocator.getAssignment();
 									if(setting != null){
@@ -87,7 +86,7 @@ public class RemovePropertyValueOperation {
 										try{
 											if(classDataDeclaration.hasSettingsBlock()){
 												SettingsBlock settingsBlockOpt = classDataDeclaration.getSettingsBlockOpt();
-												AssignmentLocator assignmentLocator = new AssignmentLocator(InternUtil.intern(propertyName));
+												AssignmentLocator assignmentLocator = new AssignmentLocator(NameUtile.getAsName(propertyName));
 												settingsBlockOpt.accept(assignmentLocator);
 												Assignment setting = assignmentLocator.getAssignment();
 												if(setting != null){
@@ -106,7 +105,7 @@ public class RemovePropertyValueOperation {
 										try{
 											if(functionDataDeclaration.hasSettingsBlock()){
 												SettingsBlock settingsBlockOpt = functionDataDeclaration.getSettingsBlockOpt();
-												AssignmentLocator assignmentLocator = new AssignmentLocator(InternUtil.intern(propertyName));
+												AssignmentLocator assignmentLocator = new AssignmentLocator(NameUtile.getAsName(propertyName));
 												settingsBlockOpt.accept(assignmentLocator);
 												Assignment setting = assignmentLocator.getAssignment();
 												if(setting != null){

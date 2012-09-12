@@ -16,17 +16,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.binding.AmbiguousTypeBinding;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.Boolean;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -54,8 +45,9 @@ import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
-import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.ui.internal.codemanipulation.OrganizeImportsOperation.OrganizedImportSection;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
@@ -64,7 +56,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	private OrganizedImportSection resolvedTypes;
 	private Map /*<String>, <Name>*/unresolvedTypes;
 	Set /*<ImportDeclaration>*/ originalImports;
-	private Boolean fIsIncludeRefFunc;
+//	private Boolean fIsIncludeRefFunc;
 	private IProject project;
 	private IEnvironment env;
 
@@ -73,7 +65,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		this.resolvedTypes = resolvedTypes;
 		this.unresolvedTypes = unresolvedTypes;
 		this.originalImports = oldImports;
-		this.fIsIncludeRefFunc = isIncludeRefFunc;
+//		this.fIsIncludeRefFunc = isIncludeRefFunc;
 		this.project = project;
 		this.env = SystemEnvironmentManager.findSystemEnvironment(project, null).getIREnvironment();
 	}
@@ -107,8 +99,8 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	public boolean visit(CallStatement callStatement) {
 		Expression invocationTarget = callStatement.getInvocationTarget();
 		if(!invocationTarget.isName()) {
-			IBinding binding = invocationTarget.resolveTypeBinding();
-			if(isResolvedBinding(binding)) {
+			Type binding = invocationTarget.resolveType();
+			if(binding != null) {
 				addToResovledTypes(binding);
 			}
 		}
@@ -125,7 +117,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		// sysPartBinding is a FlexibleRecordBinding for system annotations
 		// sysPartBinding is a NotFoundBinding for user-defined annotations
 		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project, null).getPartBinding(null, annotationName.getIdentifier());
-		if( !Binding.isValidBinding(sysPartBinding) ) {
+		if(sysPartBinding == null || !sysPartBinding.isValid()) {
 			addUnresolvedName(annotationName);
 		}
 		return true;
@@ -134,15 +126,6 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	public boolean visit(SettingsBlock settingsBlock) {
 		settingsBlock.accept(new AbstractASTVisitor(){
 			public boolean visit(Assignment assignment) {
-				IAnnotationBinding annotationBinding = assignment.resolveBinding();
-				if(annotationBinding != null && annotationBinding != IBinding.NOT_FOUND_BINDING){
-					if(annotationBinding.getName().equalsIgnoreCase(IEGLConstants.PROPERTY_MSGTABLEPREFIX)){
-						String prefixValue = (String)annotationBinding.getValue();
-						if(prefixValue != null && prefixValue.length() > 0){
-							check4MsgTablePrefix(prefixValue);
-						}
-					}
-				}
 				Expression lhsExp = assignment.getLeftHandSide();
 				visitExpression(lhsExp);
 				return true;
@@ -151,49 +134,6 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		return true;
 	}
 	
-	/**
-	 * if there is msgTablePrefix annotation
-	 * if the oldImports has single type imports that starts with the prefixValue, need to keep it
-	 * or if the oldImports has any onDemand imports, need to keep it as well							
-	 * 
-	 * @param msgTablePrefixValue
-	 */
-	private void check4MsgTablePrefix(String msgTablePrefixValue){
-		if(msgTablePrefixValue != null && msgTablePrefixValue.length() > 0){
-			boolean fndSingleTypeMatch = false;
-			//check to see if this part is already in the existing import section
-			Iterator oldIt = originalImports.iterator();						
-			while(oldIt.hasNext() && !fndSingleTypeMatch)
-			{
-				ImportDeclaration oldImportDecl = (ImportDeclaration)(oldIt.next());
-				Name importNameNode = oldImportDecl.getName();
-				String oldPackageName = "";							 //$NON-NLS-1$
-				
-				if(!oldImportDecl.isOnDemand())
-				{
-					String oldPartName = importNameNode.getIdentifier();
-					if(oldPartName.startsWith(msgTablePrefixValue))
-					{					
-						fndSingleTypeMatch = true;
-						if(importNameNode instanceof QualifiedName)
-						{
-							oldPackageName = ((QualifiedName)importNameNode).getQualifier().getCanonicalName();
-						}//else if SimpleName, packagename is empty string  
-						
-						resolvedTypes.addImport(oldPackageName, oldPartName);					
-					}
-				}
-				else  //on demand
-				{		
-					oldPackageName = importNameNode.getCanonicalName();					
-					//we need to keep the onDemand					
-					resolvedTypes.addImport(oldPackageName, "*");
-				}
-			}		
-		}
-		
-	}
-
 	public boolean visit(Service service) {
 		handlePart(service);
         for(Iterator iter = service.getImplementedInterfaces().iterator(); iter.hasNext();) {
@@ -279,8 +219,8 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	public boolean visit(TransferStatement transferStatement) {
 		Expression invocationTarget = transferStatement.getInvocationTarget();
 		if(!invocationTarget.isName()) {
-			IBinding binding = invocationTarget.resolveTypeBinding();
-			if(isResolvedBinding(binding)) {
+			Type binding = invocationTarget.resolveType();
+			if(binding != null) {
 				addToResovledTypes(binding);
 			}
 		}		
@@ -303,19 +243,14 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		return true;
 	}
 	
-	private boolean isResolvedBinding(IBinding binding)
-	{
-		return ((binding != null) && binding != IBinding.NOT_FOUND_BINDING && !(binding instanceof AmbiguousTypeBinding));
-	}
-	
 	private void addUnresolvedName(Name nameNode)
 	{
-		IBinding binding = nameNode.resolveBinding();
+		Type binding = nameNode.resolveType();
 		addToUnresolvedTypes(nameNode, binding);
 	}
 
-	private void addToUnresolvedTypes(Name nameNode, IBinding binding) {
-		if(!isResolvedBinding(binding)){
+	private void addToUnresolvedTypes(Name nameNode, Type binding) {
+		if (binding != null){
 			addToUnresolvedTypes(nameNode);
 		}
 	}
@@ -331,7 +266,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		
 	
 	public boolean visit(NameType nameType) {		
-		ITypeBinding typeBinding = nameType.resolveTypeBinding();
+		Type typeBinding = nameType.resolveType();
 		addToUnresolvedTypes(nameType.getName(), typeBinding);		
 		return true;
 	}
@@ -339,8 +274,8 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	public boolean visitName(Name name) {
 		if(name != currentPartName)			//skip the current bound part
 		{
-			IBinding binding = name.resolveBinding();		
-			if(isResolvedBinding(binding)) 
+			Type binding = name.resolveType();		
+			if(binding != null) 
 			{
 				addToResovledTypes(binding);
 			}
@@ -354,49 +289,15 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		return true;
 	}
 
-	private void addToResovledTypes(IBinding binding) {
-		ITypeBinding typeBinding = null;		
-		if(binding.isTypeBinding())
+	private void addToResovledTypes(Type typeBinding) {
+		if(typeBinding instanceof org.eclipse.edt.mof.egl.Part)
 		{
-			//cast to type binding
-			typeBinding = (ITypeBinding)binding;
-		}
-		else if(binding.isAnnotationBinding()){
-			IAnnotationBinding annotationBinding = (IAnnotationBinding)binding;
-			if(!annotationBinding.isAnnotationField())
-				typeBinding = annotationBinding.getType();
-		}
-		else if(binding.isDataBinding())
-		{
-			IDataBinding dataBinding = (IDataBinding)binding;
-			switch(dataBinding.getKind())
-			{
-			case IDataBinding.LIBRARY_BINDING:
-			case IDataBinding.DATATABLE_BINDING:
-			case IDataBinding.EXTERNALTYPE_BINDING:
-			case IDataBinding.FORMGROUP_BINDING:
-			case IDataBinding.PROGRAM_BINDING:
-				typeBinding = dataBinding.getType();
-				break;
-			case IDataBinding.TOP_LEVEL_FUNCTION_BINDING:
-				//if(fIsIncludeRefFunc == Boolean.YES) what if calling a topLevelFunc inside another topLevelFunc
-					typeBinding = dataBinding.getType();
-					break;
-			default:
-				break;
-			}
-		}
-		
-		if(typeBinding != null && typeBinding.isPartBinding())			//non primitive part binding
-		{
-			IPartBinding partBinding = (IPartBinding) typeBinding;
-			String partName = typeBinding.getCaseSensitiveName();
+			org.eclipse.edt.mof.egl.Part classBinding = (org.eclipse.edt.mof.egl.Part) typeBinding;
+			String partName = classBinding.getCaseSensitiveName();
 			
-			String[] pkgName = typeBinding.getPackageName();
-			IPath pkgPath = Util.stringArrayToPath(pkgName);
-			String packageName = pkgPath.toString().replace(IPath.SEPARATOR, '.');
+			String packageName = classBinding.getPackageName();
 			boolean isSysPart;
-			if(null !=packageName && "" != packageName){
+			if(packageName != null && packageName.length() > 0){
 				isSysPart = IRUtils.isSystemPart(packageName + "." + partName, this.env);
 			}else{
 				isSysPart = IRUtils.isSystemPart(partName, this.env);
@@ -405,24 +306,21 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 				resolvedTypes.addImport(packageName, partName);
 			}
 		}
-		else if(typeBinding != null && typeBinding instanceof IAnnotationTypeBinding){
-			IAnnotationTypeBinding annotationTypeBinding = (IAnnotationTypeBinding)typeBinding;
+		else if(typeBinding instanceof AnnotationType){
+			AnnotationType annotationTypeBinding = (AnnotationType)typeBinding;
 			String partName = annotationTypeBinding.getCaseSensitiveName();			
-			String[] pkgName = annotationTypeBinding.getPackageName();
+			String pkgName = annotationTypeBinding.getPackageName();
 			if(pkgName != null) {
-				IPath pkgPath = Util.stringArrayToPath(pkgName);
-				String packageName = pkgPath.toString().replace(IPath.SEPARATOR, '.');
-				
 				boolean isSysAnnotation;
-				if(null !=packageName && "" != packageName){
-					isSysAnnotation = IRUtils.isSystemPart(packageName + "." + partName, this.env);
+				if(pkgName.length() > 0){
+					isSysAnnotation = IRUtils.isSystemPart(pkgName + "." + partName, this.env);
 				}else{
 					isSysAnnotation = IRUtils.isSystemPart(partName, this.env);
 				}				
 				//if it is the system annotation, but it was already in the original imports
 				//we want to keep it
-				if(!isSysAnnotation || (isSysAnnotation && isInOriginalImports(packageName, partName))){
-					resolvedTypes.addImport(packageName, partName);
+				if(!isSysAnnotation || (isSysAnnotation && isInOriginalImports(pkgName, partName))){
+					resolvedTypes.addImport(pkgName, partName);
 				}
 			}
 		}
@@ -470,7 +368,8 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		
 	private void addToMapTypes(Name name, Map types){
 		String strname = name.getIdentifier();
-		if(!types.containsKey(strname))
+		if(!types.containsKey(strname)) {
 			types.put(strname, name);
+		}
 	}
 }

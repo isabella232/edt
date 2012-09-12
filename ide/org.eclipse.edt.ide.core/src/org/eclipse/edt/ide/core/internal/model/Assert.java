@@ -90,6 +90,8 @@ public static boolean isTrue(boolean expression, String message) {
 }
 
 	public static class AssertionFailedException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
 		public AssertionFailedException() {
 		}
 		public AssertionFailedException(String detail) {

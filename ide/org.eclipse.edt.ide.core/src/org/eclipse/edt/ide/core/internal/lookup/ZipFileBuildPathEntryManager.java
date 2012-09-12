@@ -114,13 +114,13 @@ public class ZipFileBuildPathEntryManager {
 	private IZipFileBindingBuildPathEntry createEntry(ProjectEnvironment env, IPath path) {
 		String extension = path.getFileExtension();
 		if (extension.equalsIgnoreCase(MOFAR_EXTENSION)) {
-			MofarBuildPathEntry entry = new MofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
+			MofarBuildPathEntry entry = new MofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML);
 			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
 			entry.setStore(store);
 			return entry;
 		}
 		else if (extension.equalsIgnoreCase(EGLAR_EXTENSION)) {
-			EglarBuildPathEntry entry = new EglarBuildPathEntry(env, path, EGL2IR.EGLXML, env.getConverter());
+			EglarBuildPathEntry entry = new EglarBuildPathEntry(env, path, EGL2IR.EGLXML);
 			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, EGL2IR.EGLXML, Type.EGL_KeyScheme, entry);
 			entry.setStore(store);
 			return entry;
@@ -131,13 +131,13 @@ public class ZipFileBuildPathEntryManager {
 	private IZipFileBindingBuildPathEntry createEntry(WorkingCopyProjectEnvironment env, IPath path) {
 		String extension = path.getFileExtension();
 		if (extension.equalsIgnoreCase(MOFAR_EXTENSION)) {
-			MofarBuildPathEntry entry = new WorkingCopyMofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
+			MofarBuildPathEntry entry = new WorkingCopyMofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML);
 			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
 			entry.setStore(store);
 			return entry;
 		}
 		else if (extension.equalsIgnoreCase(EGLAR_EXTENSION)) {
-			EglarBuildPathEntry entry = new WorkingCopyEglarBuildPathEntry(env, path, EGL2IR.EGLXML, env.getConverter());
+			EglarBuildPathEntry entry = new WorkingCopyEglarBuildPathEntry(env, path, EGL2IR.EGLXML);
 			ObjectStore store = new ZipFileObjectStore(new File(AbsolutePathUtility.getAbsolutePathString(path)), env.getIREnvironment(), ObjectStore.XML, EGL2IR.EGLXML, Type.EGL_KeyScheme, entry);
 			entry.setStore(store);
 			return entry;

@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 import org.eclipse.edt.ide.core.internal.model.index.IIndex;
 import org.eclipse.edt.ide.core.internal.model.index.IQueryResult;
 import org.eclipse.edt.ide.core.internal.model.search.EGLSearchDocument;
@@ -182,7 +181,6 @@ public class AddEglarFileToIndex extends IndexRequest {
 							isValidPackageNameForIR(zipEntryName)) {
 						// index only classes coming from valid packages - https://bugs.eclipse.org/bugs/show_bug.cgi?id=293861
 						final byte[] classFileBytes = Util.getZipEntryByteContent(ze, zip);
-						String path = ((IPath)zipFilePath) + FileInEglar.EGLAR_SEPARATOR + ze.getName();
 						EGLSearchDocument entryDocument = new EGLSearchDocument(ze, zipFilePath, classFileBytes, participant);
 						index.add(entryDocument, binaryIndexer);
 					}

@@ -69,8 +69,6 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLNumericExpressionStatementReferenceCompletion());
 			completionList.add(new EGLParameterModifierReferenceCompletion());
 			completionList.add(new EGLProgramArgumentsReferenceCompletion());
-			completionList.add(new EGLProgramParameterNameReferenceCompletion());
-			completionList.add(new EGLProgramParameterTypeReferenceCompletion());
 			completionList.add(new EGLProgramVariableNameReferenceCompletion());
 			completionList.add(new EGLPropertyListValueReferenceCompletion());
 			completionList.add(new EGLPropertyListValue2ReferenceCompletion());

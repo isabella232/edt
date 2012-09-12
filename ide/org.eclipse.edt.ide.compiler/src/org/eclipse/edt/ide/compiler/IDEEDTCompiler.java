@@ -11,30 +11,22 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.compiler;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.edt.compiler.EDTCompiler;
 import org.eclipse.edt.ide.core.IDEBaseCompiler;
-import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 
 public class IDEEDTCompiler extends IDEBaseCompiler {
 	
 	public IDEEDTCompiler() {
-		super();
-		baseCompiler = new org.eclipse.edt.compiler.EDTCompiler();
-		parentCompiler = new IDEBaseCompiler();
+		super(new EDTCompiler());
 	}
 	
-	protected String getSystemEnvironmentPathEntry() {
-		String path = getPathToPluginDirectory("org.eclipse.edt.compiler", "lib");
-		path += File.pathSeparator;
-		path += getPathToPluginDirectory("org.eclipse.edt.mof.eglx.persistence.sql", "egllib");
-		path += File.pathSeparator;
-		path += getPathToPluginDirectory("org.eclipse.edt.mof.eglx.services", "egllib");
-//FIXME JV this need to be extensible 
-		path += File.pathSeparator;
-		path += getPathToPluginDirectory(IBMiFactory.packageName, "egllib");
-		return path;
+	@Override
+	protected List<String> getSystemEnvironmentPathEntries() {
+		List<String> list = new ArrayList(super.getSystemEnvironmentPathEntries());
+		list.add(0, getPathToPluginDirectory("org.eclipse.edt.compiler", "lib"));
+		return list;
 	}
-
-
 }

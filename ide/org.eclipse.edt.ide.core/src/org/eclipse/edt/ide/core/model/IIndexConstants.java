@@ -29,11 +29,8 @@ public interface IIndexConstants {
 	char PART_SUFFIX = 0x7FFF; // All types ORed together
 	char PROGRAM_SUFFIX = 0x0001;
 	char ANNOTATION_SUFFIX = 0x0002;
-	char TABLE_SUFFIX = 0x0004;
 	char RECORD_SUFFIX = 0x0008;
-	char ITEM_SUFFIX = 0x0010;
-	char FORM_SUFFIX = 0x0020;
-	char FORMGRP_SUFFIX = 0x0040;
+	char CLASS_SUFFIX = 0x0020;
 	char FUNCTION_SUFFIX = 0x0080;
 	char LIBRARY_SUFFIX = 0x0100;
 	char HANDLER_SUFFIX = 0x0200;
@@ -43,7 +40,6 @@ public interface IIndexConstants {
 	char EXTERNALTYPE_SUFFIX = 0x2000;
 	char ENUMERATION_SUFFIX = 0x4000;
 	char STEREOTYPE_SUFFIX = 0x8000;
-	char CLASS_SUFFIX = 0x0000;   //TODO remove unsupported types and free up a bit for CLASS to use
 	
 
 

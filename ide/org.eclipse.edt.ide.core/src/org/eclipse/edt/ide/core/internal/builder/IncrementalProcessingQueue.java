@@ -30,32 +30,27 @@ public class IncrementalProcessingQueue extends AbstractProcessingQueue{
 		
 		this.dependencyGraph = DependencyGraphManager.getInstance().getDependencyGraph(project);
 	}
-
-	public void addDependents(String[] packageName, String partName){
+	
+	@Override
+	public void addDependents(String packageName, String partName){
 		dependencyGraph.findDependents(packageName, partName, new IPartRequestor(){
-
-			public void acceptPart(String[] packageName, String partName) {
+			@Override
+			public void acceptPart(String packageName, String partName) {
 				doAddPart(packageName, partName);
 			}});		
 	}
 	
-	protected void addDependents(String[] qualifiedName){
+	@Override
+	protected void addDependents(String qualifiedName){
 		dependencyGraph.findDependents(qualifiedName, new IPartRequestor(){
-
-			public void acceptPart(String[] packageName, String partName) {
+			@Override
+			public void acceptPart(String packageName, String partName) {
 				doAddPart(packageName, partName);
 			}});		
 	}
 	
-	protected void addDependents(String topLevelFunctionName){
-		dependencyGraph.findDependents(topLevelFunctionName, new IPartRequestor(){
-
-			public void acceptPart(String[] packageName, String partName) {
-				doAddPart(packageName, partName);
-			}});
-	}
-	
-	protected void addPartFromCompiledFile(String[] packageName, String partName){
+	@Override
+	protected void addPartFromCompiledFile(String packageName, String partName){
 		// When incremental building, add all parts from this file
 		// We don't need to do this when batch building because the parts have already been added
 		addPart(packageName, partName);	

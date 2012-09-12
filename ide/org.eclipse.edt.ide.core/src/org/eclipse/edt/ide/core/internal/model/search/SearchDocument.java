@@ -18,8 +18,7 @@ import org.eclipse.edt.ide.core.internal.model.index.IIndex;
 
 public abstract class SearchDocument implements IDocument{
 
-	private IIndex index;
-	private String containerRelativePath;
+//	private IIndex index;
 //	private SourceElementParser parser;
 	private String documentPath;
 	private SearchParticipant participant;
@@ -48,14 +47,6 @@ public abstract class SearchDocument implements IDocument{
 	public void addIndexEntry(char[] category, char[] key) {
 //		if (this.index != null)
 //			this.index.addIndexEntry(category, key, getContainerRelativePath());
-	}
-
-
-
-	private String getContainerRelativePath() {
-//		if (this.containerRelativePath == null)
-//			this.containerRelativePath = this.index.containerRelativePath(getPath());
-		return this.containerRelativePath;
 	}
 
 	/**
@@ -101,7 +92,7 @@ public abstract class SearchDocument implements IDocument{
 	 * @noreference This method is not intended to be referenced by clients.
 	 */
 	public void setIndex(IIndex indexToSet) {
-		this.index = indexToSet;
+//		this.index = indexToSet;
 	}
 	
 	/**

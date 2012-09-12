@@ -43,10 +43,10 @@ import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.search.ui.text.Match;
 import org.eclipse.swt.SWT;
@@ -147,9 +147,16 @@ public class EditorUtility {
 	 * Selects a EGL Element in an editor
 	 */	
 	public static void revealInEditor(IEditorPart part, Node node) {
-		if (node != null && (part instanceof EGLEditor || part instanceof IEvEditor)) {
-			int start = node.getOffset();
-			int length = node.getLength();
+		if (node != null) {
+			revealInEditor(part, node.getOffset(), node.getLength());
+		}
+	}
+	
+	/** 
+	 * Selects a EGL Element in an editor
+	 */	
+	public static void revealInEditor(IEditorPart part, int start, int length) {
+		if (part instanceof EGLEditor || part instanceof IEvEditor) {
 			if(part instanceof EGLEditor){
 				((EGLEditor) part).selectAndReveal(start, length);
 			}else if(part instanceof IEvEditor){
@@ -580,7 +587,7 @@ public class EditorUtility {
 		final IWorkbenchWindow ww = EDTUIPlugin.getActiveWorkbenchWindow();		
         BinaryReadOnlyFile storage = getBinaryReadonlyFile(proj, eglarFilePath, sourcePath, classFile.getElementName());
 		
-        Node node = ASTManager.getInstance().getAST(storage, InternUtil.intern(classFile.getPart().getElementName()));
+        Node node = ASTManager.getInstance().getAST(storage, NameUtile.getAsName(classFile.getPart().getElementName()));
         Name name = null;
         if (node != null) {
         	name = ((Part)node).getName();

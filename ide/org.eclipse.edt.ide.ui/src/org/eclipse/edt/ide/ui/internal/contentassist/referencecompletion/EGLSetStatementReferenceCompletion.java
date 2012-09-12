@@ -17,8 +17,6 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFormUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTableUseStatementProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLSetStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -46,21 +44,6 @@ public class EGLSetStatementReferenceCompletion extends EGLAbstractReferenceComp
 					boundNode)
 					.getProposals(false, false));
 			
-			//Get all table use statement proposals
-			proposals.addAll(
-				new EGLTableUseStatementProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals());
-			
-			//Get all forms from formGroup use statement proposals
-			proposals.addAll(
-				new EGLFormUseStatementProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals());
 		}});		
 		
 		return proposals;

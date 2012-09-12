@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.compiler.PartEnvironmentStack;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.builder.AbstractBuilder;
 import org.eclipse.edt.ide.core.internal.builder.AbstractProcessingQueue;
@@ -119,6 +120,7 @@ public class ProjectEnvironmentManager {
    		env.initIREnvironments();
         
         Environment.pushEnv(env.getIREnvironment());
+        PartEnvironmentStack.pushEnv(env);
         environmentPushed = true;
     }
     
@@ -128,6 +130,7 @@ public class ProjectEnvironmentManager {
         entry.setProcessingQueue(null);
         if (environmentPushed) {
             Environment.popEnv();
+            PartEnvironmentStack.popEnv();
             environmentPushed = false;
         }
     }

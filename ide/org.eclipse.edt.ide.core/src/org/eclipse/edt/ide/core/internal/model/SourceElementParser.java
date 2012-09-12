@@ -900,7 +900,7 @@ public class SourceElementParser {
 
 			char[] typeName = parm.getType().getCanonicalName().toCharArray();
 			char[] parmName = parm.getName().getCanonicalName().toCharArray();
-			boolean isNullable = parm.getType().isNullableType();
+			boolean isNullable = parm.isNullable();
 			//TODO test use types. 06/18
 			char[] useType = new char[0];
 			if(parm.getUseType() != null){

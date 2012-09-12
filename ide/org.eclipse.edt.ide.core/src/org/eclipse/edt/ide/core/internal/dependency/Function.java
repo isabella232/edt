@@ -24,7 +24,7 @@ import java.io.IOException;
 	private QualifiedName packageName;
 	private SimpleName partName;
 	
-	public Function(String projectName, String[] packageName, String partName) {
+	public Function(String projectName, String packageName, String partName) {
 	    this.projectName = projectName;
 		this.packageName = new QualifiedName(packageName);
 		this.partName = new SimpleName(partName);
@@ -36,7 +36,7 @@ import java.io.IOException;
 	    return projectName;
 	}
 	
-	public String[] getPackageName(){
+	public String getPackageName(){
 		return packageName.getQualifiedName();
 	}
 	

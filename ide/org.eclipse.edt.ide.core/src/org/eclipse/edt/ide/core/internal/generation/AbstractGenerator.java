@@ -22,7 +22,8 @@ import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * Base generator that processes deltas and kicks off the generation queue.
@@ -121,7 +122,7 @@ public abstract class AbstractGenerator {
 						case IResourceDelta.ADDED:
 							IPath fullPath = resource.getFullPath();
 							IPath packagePath = fullPath.removeFirstSegments(segmentCount).removeLastSegments(1);
-							generationQueue.addPart(InternUtil.intern(org.eclipse.edt.ide.core.internal.utils.Util.pathToStringArray(packagePath)), InternUtil.intern(fullPath.removeFileExtension().lastSegment()));
+							generationQueue.addPart(NameUtile.getAsName(Util.pathToQualifiedName(packagePath)), NameUtile.getAsName(fullPath.removeFileExtension().lastSegment()));
 							break;
 						case IResourceDelta.REMOVED:
 							//TODO cleanup generated artifacts?

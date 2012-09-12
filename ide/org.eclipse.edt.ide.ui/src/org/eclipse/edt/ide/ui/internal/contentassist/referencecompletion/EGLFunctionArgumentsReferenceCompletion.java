@@ -30,7 +30,6 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctio
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTableUseStatementProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -96,14 +95,6 @@ public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenc
 								boundNode)
 								.getProposals(boundNode));
 			
-						//Get all table use statement proposals
-						proposals.addAll(
-							new EGLTableUseStatementProposalHandler(viewer,
-								documentOffset,
-								prefix,
-								editor,
-								boundNode).getProposals());
-						
 						//Get user field proposals using library use statements
 						proposals.addAll(
 							new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());

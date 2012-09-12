@@ -1252,17 +1252,6 @@ public class ASTRewrite {
 		return startOffset;
 	}
 	
-	private static int offsetOfClosestCharToRight(IDocument document, char ch, int startOffset) throws BadLocationException {
-		int currentOffset = startOffset+1;
-		while(currentOffset != document.getLength()) {
-			if(document.getChar(currentOffset) == ch) {
-				return currentOffset;
-			}
-			currentOffset += 1;
-		}
-		return startOffset;
-	}
-	
 	private static String precedingWhitespaceCharacters(IDocument document, Node node) throws BadLocationException {
 		int offset = node.getOffset();
 		StringBuffer sb = new StringBuffer();

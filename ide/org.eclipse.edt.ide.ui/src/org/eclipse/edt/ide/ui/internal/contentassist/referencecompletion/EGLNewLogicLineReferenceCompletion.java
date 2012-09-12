@@ -22,14 +22,12 @@ import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFormUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchVariableDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTableUseStatementProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLNewLogicLineReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -69,22 +67,6 @@ public class EGLNewLogicLineReferenceCompletion extends EGLAbstractReferenceComp
 					prefix,
 					boundNode)
 					.getProposals(boundNode));
-			
-			//Get all table use statement proposals
-			proposals.addAll(
-				new EGLTableUseStatementProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals());
-			
-			//Get all forms from formGroup use statement proposals
-			proposals.addAll(
-				new EGLFormUseStatementProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals());
 			
 			//Get user field proposals using library use statements
 			proposals.addAll(

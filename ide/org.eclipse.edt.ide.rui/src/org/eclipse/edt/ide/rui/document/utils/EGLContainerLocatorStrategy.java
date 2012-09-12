@@ -22,11 +22,11 @@ import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class EGLContainerLocatorStrategy {
 	
-	private static final String CHILDREN_PROPERTY_NAME = InternUtil.intern("children");
+	private static final String CHILDREN_PROPERTY_NAME = NameUtile.getAsName("children");
 	
 	private class ChildrenArrayVisitor extends DefaultASTVisitor{
 		private int index;
@@ -62,7 +62,7 @@ public class EGLContainerLocatorStrategy {
 					// This widget is anonymous
 					if(newExpression.hasSettingsBlock()){
 						SettingsBlock settingsBlockOpt = newExpression.getSettingsBlock();
-						AssignmentLocator assignmentLocator = new AssignmentLocator(InternUtil.intern(CHILDREN_PROPERTY_NAME));
+						AssignmentLocator assignmentLocator = new AssignmentLocator(NameUtile.getAsName(CHILDREN_PROPERTY_NAME));
 						settingsBlockOpt.accept(assignmentLocator);
 						Assignment setting = assignmentLocator.getAssignment();
 						if(setting != null){

@@ -52,7 +52,7 @@ public class ReportedProblem {
 				inserts[inserts.length - 2] = Integer.toString(lineNumber + 1);
 				inserts[inserts.length - 1] = filePath;
 			}
-			this.message = getErrorMessageText(problemKind, startOffset, lineNumber, severity, DefaultProblemRequestor.getMessageFromBundle(problemKind, inserts));
+			this.message = getErrorMessageText(problemKind, startOffset, lineNumber, severity, DefaultProblemRequestor.getMessageFromBundle(problemKind, inserts, problem.getResourceBundle()));
 		}
 		else {
 			this.message = getErrorMessageText(problemKind, startOffset, lineNumber, severity, inserts[0]);

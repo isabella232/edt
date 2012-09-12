@@ -140,13 +140,9 @@ public void enterPart(int partType, char[] subType, int contentCode, int declara
 	// TODO Handle parttype searches
 	switch (partType) {
 		case Part.FUNCTION : 	partChar = FUNCTION_SUFFIX; break;
-		case Part.FORM : 		partChar = FORM_SUFFIX; break;
-		case Part.FORMGROUP : 	partChar = FORMGRP_SUFFIX; break;
 		case Part.LIBRARY : 	partChar = LIBRARY_SUFFIX; break;
 		case Part.PROGRAM : 	partChar = PROGRAM_SUFFIX; break;
-		case Part.DATATABLE : 	partChar = TABLE_SUFFIX; break;
 		case Part.RECORD : 		partChar = RECORD_SUFFIX; break;
-		case Part.DATAITEM :	partChar = ITEM_SUFFIX; break;
 		case Part.HANDLER : 	partChar = HANDLER_SUFFIX; break;
 		case Part.INTERFACE : 	partChar = INTERFACE_SUFFIX; break;
 		case Part.DELEGATE : 	partChar = DELEGATE_SUFFIX; break;

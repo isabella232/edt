@@ -26,21 +26,20 @@ public class BatchProcessingQueue extends AbstractProcessingQueue {
 		super(project, notifier);
 	}
 
-	protected void addDependents(String[] packageName, String partName) {
+	@Override
+	protected void addDependents(String packageName, String partName) {
 		// do nothing		
 	}
 	
-	protected void addDependents(String[] qualifiedName){
+	@Override
+	protected void addDependents(String qualifiedName){
 		// do nothing
-	}
-	
-	protected void addDependents(String partName) {
-		// do nothing		
 	}
 	
 	/**
 	 * Safety net - should never exceed max loop in batch processing
 	 */
+	@Override
 	protected boolean hasExceededMaxLoop(){
    		return false;
    }

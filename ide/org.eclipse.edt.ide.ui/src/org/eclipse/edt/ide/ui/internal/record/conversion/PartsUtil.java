@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.record.conversion;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -40,18 +42,21 @@ public abstract class PartsUtil {
 		int _problemKind = 0;
 		int _severity = 0;
 		String[] _inserts = new String[0];
+		ResourceBundle _bundle;
 		
 		public NameValidatorProblemRequestor(){
 		}
 		
-		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+		@Override
+		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
+			_bundle = bundle;
 			if (_problemKind ==0) {
 				_inserts = shiftInsertsIfNeccesary(problemKind, inserts);
 				_problemKind = problemKind;
 				_severity = severity;
 			}
 			if (_severity > IMarker.SEVERITY_WARNING) {
-				throw (new RuntimeException(getMessageFromBundle(problemKind, inserts)));
+				throw (new RuntimeException(getMessageFromBundle(problemKind, inserts, bundle)));
 			}
 		}
 		
@@ -70,6 +75,10 @@ public abstract class PartsUtil {
 			return _inserts;
 		}
 		
+		public ResourceBundle getBundle()
+		{
+			return _bundle;
+		}
 	}
 
 	private String getName(String str, DefaultProblemRequestor problemRequestor) {
@@ -96,11 +105,11 @@ public abstract class PartsUtil {
 					name = newName;
 					problemRequestor.setProblemKind(0);
 				} else {
-					throw (new RuntimeException(DefaultProblemRequestor.getMessageFromBundle(problemRequestor.getProblemKind(), problemRequestor.getInserts())));
+					throw (new RuntimeException(DefaultProblemRequestor.getMessageFromBundle(problemRequestor.getProblemKind(), problemRequestor.getInserts(), problemRequestor.getBundle())));
 				}
 			}
 			if (problemRequestor.getProblemKind() != 0) {
-				throw (new RuntimeException(DefaultProblemRequestor.getMessageFromBundle(problemRequestor.getProblemKind(), problemRequestor.getInserts())));
+				throw (new RuntimeException(DefaultProblemRequestor.getMessageFromBundle(problemRequestor.getProblemKind(), problemRequestor.getInserts(), problemRequestor.getBundle())));
 			}
 		}
 		return getFinalType(name);
@@ -176,12 +185,12 @@ public abstract class PartsUtil {
 				} 
 				else 
 				{
-					throw (new RuntimeException(DefaultProblemRequestor.getMessageFromBundle(problemRequestor.getProblemKind(), problemRequestor.getInserts())));
+					throw (new RuntimeException(DefaultProblemRequestor.getMessageFromBundle(problemRequestor.getProblemKind(), problemRequestor.getInserts(), problemRequestor.getBundle())));
 				}
 			}
 			if (problemRequestor.getProblemKind() != 0) 
 			{
-				throw (new RuntimeException(DefaultProblemRequestor.getMessageFromBundle(problemRequestor.getProblemKind(), problemRequestor.getInserts())));
+				throw (new RuntimeException(DefaultProblemRequestor.getMessageFromBundle(problemRequestor.getProblemKind(), problemRequestor.getInserts(), problemRequestor.getBundle())));
 			}
 		}
 		name = getFinalName(name);

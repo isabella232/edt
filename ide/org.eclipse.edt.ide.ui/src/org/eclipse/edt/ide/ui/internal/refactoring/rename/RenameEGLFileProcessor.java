@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.refactoring.rename;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -211,9 +213,10 @@ public class RenameEGLFileProcessor extends RenameProcessor implements IReferenc
 		else {
 			final RefactoringStatus[] result = new RefactoringStatus[] {new RefactoringStatus()};
 			EGLNameValidator.validate(newName, EGLNameValidator.FILENAME, new DefaultProblemRequestor() {
-				public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+				@Override
+				public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 					if(result[0].isOK()) {
-						result[0] = RefactoringStatus.createFatalErrorStatus(getMessageFromBundle(problemKind, inserts));
+						result[0] = RefactoringStatus.createFatalErrorStatus(getMessageFromBundle(problemKind, inserts, bundle));
 					}
 				}
 			}, 

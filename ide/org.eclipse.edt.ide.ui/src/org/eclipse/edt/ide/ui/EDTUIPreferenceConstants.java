@@ -17,6 +17,7 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposalComputerRegistry;
 import org.eclipse.edt.ide.ui.internal.preferences.IColorConstants;
@@ -365,6 +366,9 @@ public class EDTUIPreferenceConstants {
 	 */
 	public static final String NEWPROJECTWIZARD_BASEPACKAGE = "newProjectWizard_BasePackage"; //$NON-NLS-1$
 	public static final String NEWPROJECTWIZARD_SELECTEDTEMPLATE = "newProjectWizard_SelectedTemplate"; //$NON-NLS-1$
+	
+	public static final String EGLFEATURE_MASK = "EGLFeatureMask";//$NON-NLS-1$
+	public static final int EGLFEATURE_EGLDD = 1 << 4;
 
 
 	/**
@@ -397,7 +401,10 @@ public class EDTUIPreferenceConstants {
 		
 		//Content Assist default setting
 		store.setDefault(EDTUIPreferenceConstants.CODEASSIST_EXCLUDED_CATEGORIES, ""); //$NON-NLS-1$
-		store.setDefault(EDTUIPreferenceConstants.CODEASSIST_CATEGORY_ORDER, "org.eclipse.edt.ide.ui.keywordProposalCategory:2\0org.eclipse.edt.ide.ui.TemplateProposalCategory:5\0org.eclipse.edt.ide.ui.ReferenceProposalCategory:4\0"); //$NON-NLS-1$	
+		store.setDefault(EDTUIPreferenceConstants.CODEASSIST_CATEGORY_ORDER, "org.eclipse.edt.ide.ui.keywordProposalCategory:2\0org.eclipse.edt.ide.ui.TemplateProposalCategory:5\0org.eclipse.edt.ide.ui.ReferenceProposalCategory:4\0"); //$NON-NLS-1$
+		
+		// To be backwards compatible, store this in the compiler plug-in
+		EGLBasePlugin.getPlugin().getPreferenceStore().setDefault(EGLFEATURE_MASK, EGLFEATURE_EGLDD);
 		
 		initializeDefaultEGLColorPreferences( store );
 	}

@@ -43,12 +43,12 @@ terminal LINE_COMMENT, BLOCK_COMMENT, LINEBREAKS;
 // Regular terminals
 terminal PACKAGE, IMPORT;
 terminal END;
-terminal DATAITEM, RECORD, DATATABLE, FORMGROUP, FORM, HANDLER, EGLCLASS;
+terminal DATAITEM, RECORD, DATATABLE, FORMGROUP, FORM, HANDLER, CLASS;
 terminal PROGRAM, LIBRARY, FUNCTION, SERVICE, INTERFACE, DELEGATE, EXTERNALTYPE, ENUMERATION;
 terminal IMPLEMENTS, EXTENDS;
 terminal TYPE;
 terminal EMBED, USE, RETURNS;
-terminal SQLNULLABLE, FIELD, INOUT, OUT;
+terminal INOUT, OUT;
 terminal THIS, NEW, SUPER;
 terminal PRIVATE, STATIC;
 terminal CONSTRUCTOR;
@@ -67,9 +67,6 @@ terminal IntegerLiteral BIGINTLIT, SMALLINTLIT;
 terminal NULL;
 terminal InlineSQLStatement SQLSTMTLIT, SQLCONDITION;
 terminal InlineDLIStatement INLINE_DLI;
-
-terminal Primitive PRIMITIVE, NUMERICPRIMITIVE, CHARPRIMITIVE;
-terminal Primitive TIMESTAMPINTERVALPRIMITIVE;
 
 // Statement terminals
 terminal CALL, CASE, CONTINUE, EXIT, GOTO, IF, MOVE, TO, RETURN, SET, TRANSFER;
@@ -96,14 +93,12 @@ terminal WRAP;
 nonterminal addOption;
 nonterminal Expression arrayAccess;
 nonterminal Assignment assignment;
-nonterminal FunctionParameter.AttrType attrTypeOpt;
 nonterminal List bindOpt;
 nonterminal List callParametersOpt;
 nonterminal CallSynchronizationValues callSynchronizationOpt;
 nonterminal CallbackTarget callReturnTo, callOnException;
 nonterminal Expression callUsingOpt;
 nonterminal CallReturns callReturns;
-nonterminal String charPrimitiveSpecOpt;
 nonterminal classContent;
 nonterminal handlerContent;
 nonterminal eglClassContent;
@@ -135,6 +130,7 @@ nonterminal getByKeyOption;
 nonterminal getByPositionOption;
 nonterminal GetByPositionStatement.GetByPositionSource getByPositionSource;
 nonterminal String IDOpt;
+nonterminal Boolean questionOpt;
 nonterminal List implementsOpt;
 nonterminal ImportDeclaration importDecl;
 nonterminal Expression initializerOpt;
@@ -150,11 +146,7 @@ nonterminal Expression lvalue;
 nonterminal MoveModifier moveModifierOpt;
 nonterminal Name name;
 nonterminal Type namedType;
-nonterminal Type notNullableNamedType;
-nonterminal Type nullableNamedType;
-nonterminal Boolean sqlNullableOpt;
 nonterminal Boolean parmConstOpt;
-nonterminal String[] numericPrimitiveSpecOpt;
 nonterminal String occursOpt;
 nonterminal OnExceptionBlock onException;
 nonterminal Boolean[] openModifierOpt;
@@ -183,14 +175,7 @@ nonterminal ForStatement.ForStep stepOpt;
 nonterminal stmt;
 nonterminal Node strItemDecl;
 nonterminal Node structureContent;
-nonterminal String timestampIntervalPrimitiveSpecOpt;
 nonterminal TransferStatement.TransferTarget transferTargetOpt;
-nonterminal Type type;
-nonterminal Type nullableType;
-nonterminal Type notNullableType;
-nonterminal Type typeNoName;
-nonterminal Type notNullableTypeNoName;
-nonterminal Type nullableTypeNoName;
 nonterminal FunctionParameter.UseType useTypeOpt;
 nonterminal WhenClause whenClause;
 nonterminal Name withNameOpt;
@@ -205,6 +190,7 @@ nonterminal List enumerationField_star, enumerationField_plus;
 nonterminal List eventBlock_star, eventBlock_plus;
 nonterminal List executeOption_star, executeOption_plus;
 nonterminal List expr_star, expr_plus;
+nonterminal List argumentsOpt;
 nonterminal List externalTypeContent_star, externalTypeContent_plus;
 nonterminal List formContent_star, formContent_plus;
 nonterminal List formGroupContent_star, formGroupContent_plus;
@@ -231,7 +217,6 @@ nonterminal List structureContent_star, structureContent_plus;
 nonterminal List whenClause_star, whenClause_plus;
 
 // Precedences
-precedence left QUESTION;
 precedence left OR;
 precedence left AND;
 precedence left IS, NOT, IN, LIKE, MATCHES;
@@ -253,6 +238,7 @@ precedence left DOT;
 precedence left RPAREN;		// For Casting
 precedence left LBRACKET;	// To prefer "(new type [])" over "(new type) []"
 precedence left LCURLY;		// To prefer "(new type) {}" over "(new type {})"
+precedence left QUESTION;
 
 // The overall structure of the file
 file
@@ -279,7 +265,7 @@ importDecl
 // parts
 
 part
-	::=	privateAccessModifierOpt:privateAccessModifier1 DATAITEM:dataItem1 ID:id1 type:type1 settingsBlock_star:settingsBlocks1 END:end1
+	::=	privateAccessModifierOpt:privateAccessModifier1 DATAITEM:dataItem1 ID:id1 namedType:type1 settingsBlock_star:settingsBlocks1 END:end1
 	{: RESULT = new DataItem(privateAccessModifier1, new SimpleName(id1, id1left, id1right), type1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? dataItem1left : privateAccessModifier1left, end1right); :}
 	
 	|	privateAccessModifierOpt:privateAccessModifier1 DELEGATE:delegate1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlock_star:settingsBlocks1 END:end1
@@ -300,7 +286,7 @@ part
 	|	privateAccessModifierOpt:privateAccessModifier1 HANDLER:handler1 ID:id1 implementsOpt:implements1 partSubTypeOpt:partSubType1 handlerContent_star:handlerContents1 END:end1
 	{: RESULT = new Handler(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, partSubType1, handlerContents1, privateAccessModifier1 == Boolean.FALSE ? handler1left : privateAccessModifier1left, end1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 EGLCLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
+	|	privateAccessModifierOpt:privateAccessModifier1 CLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
 	{: RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 PROGRAM:program1 ID:id1 partSubTypeOpt:partSubType1 programParametersOpt:programParameters1 classContent_star:classContents1 END:end1
@@ -364,20 +350,20 @@ structureContent
 	;
 
 strItemDecl
-	::=	levelOpt:level1 ID:id1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // StructureItem
-	{: RESULT = new StructureItem(level1, new SimpleName(id1, id1left, id1right), type1, null, settingsBlock1, initializer1, false, false, level1 == null ? id1left : level1left, semi1right); :}
+	::=	levelOpt:level1 ID:id1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // StructureItem
+	{: RESULT = new StructureItem(level1, new SimpleName(id1, id1left, id1right), type1, questionOpt1, null, settingsBlock1, initializer1, false, false, level1 == null ? id1left : level1left, semi1right); :}
 
 	|	levelOpt:level1 ID:id1 occursOpt:occurs1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // UntypedStructureItem
-	{: RESULT = new StructureItem(level1, new SimpleName(id1, id1left, id1right), null, occurs1, settingsBlock1, initializer1, false, false, level1 == null ? id1left : level1left, semi1right); :}
+	{: RESULT = new StructureItem(level1, new SimpleName(id1, id1left, id1right), null, Boolean.FALSE, occurs1, settingsBlock1, initializer1, false, false, level1 == null ? id1left : level1left, semi1right); :}
 
-	|	levelOpt:level1 TIMES:times type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // FillerStructureItem
-	{: RESULT = new StructureItem(level1, null, type1, null, settingsBlock1, initializer1, true, false, level1 == null ? timesleft : level1left, semi1right); :}
+	|	levelOpt:level1 TIMES:times namedType:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // FillerStructureItem
+	{: RESULT = new StructureItem(level1, null, type1, Boolean.FALSE, null, settingsBlock1, initializer1, true, false, level1 == null ? timesleft : level1left, semi1right); :}
 
 	|	levelOpt:level1 TIMES:times occursOpt:occurs1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // UntypedFillerStructureItem
-	{: RESULT = new StructureItem(level1, null, null, occurs1, settingsBlock1, initializer1, true, false, level1 == null ? timesleft : level1left, semi1right); :}
+	{: RESULT = new StructureItem(level1, null, null, Boolean.FALSE, occurs1, settingsBlock1, initializer1, true, false, level1 == null ? timesleft : level1left, semi1right); :}
 
 	|	levelOpt:level1 EMBED:embed name:name1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // EmbeddedRecordStructureItem
-	{: RESULT = new StructureItem(level1, null, new NameType(name1, name1left, name1right), null, settingsBlock1, initializer1, false, true, level1 == null ? embedleft : level1left, semi1right); :}
+	{: RESULT = new StructureItem(level1, null, new NameType(name1, null, name1left, name1right), Boolean.FALSE, null, settingsBlock1, initializer1, false, true, level1 == null ? embedleft : level1left, semi1right); :}
 	;
 	
 levelOpt
@@ -404,7 +390,7 @@ formGroupContent
 	;
 
 formContent
-	::=	ID:id1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable field
+	::=	ID:id1 namedType:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable field
 	{: RESULT = new VariableFormField(new SimpleName(id1, id1left, id1right), type1, settingsBlock1, initializer1, id1left, semi1right); :}
 
 	|	TIMES:times1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Constant field
@@ -421,22 +407,15 @@ programParametersOpt
 	;
 
 programParameter
-	::=	ID:id1 type:type1
-	{: RESULT = new ProgramParameter(new SimpleName(id1, id1left, id1right), type1, id1left, type1right); :}
+	::=	ID:id1 namedType:type1
+	{: RESULT = new ProgramParameter(new SimpleName(id1, id1left, id1right), type1, Boolean.FALSE, id1left, type1right); :}
+	| ID:id1 namedType:type1 QUESTION:question1
+	{: RESULT = new ProgramParameter(new SimpleName(id1, id1left, id1right), type1, Boolean.TRUE, id1left, question1right); :}
 	;
 	
 functionParameter
-	::=	ID:id1 type:type1 attrTypeOpt:attrType1 parmConstOpt:parmConst1 useTypeOpt:useType1
-	{: RESULT = new FunctionParameter(new SimpleName(id1, id1left, id1right), type1, attrType1, parmConst1, useType1, id1left, useType1right); :}
-	;
-
-attrTypeOpt
-	::=
-	|	SQLNULLABLE
-	{: RESULT = FunctionParameter.AttrType.SQLNULLABLE; :}
-
-	|	FIELD
-	{: RESULT = FunctionParameter.AttrType.FIELD; :}
+	::=	ID:id1 namedType:type1 questionOpt:questionOpt1 parmConstOpt:parmConst1 useTypeOpt:useType1
+	{: RESULT = new FunctionParameter(new SimpleName(id1, id1left, id1right), type1, questionOpt1, parmConst1, useType1, id1left, useType1right); :}
 	;
 
 parmConstOpt
@@ -461,18 +440,10 @@ useTypeOpt
 
 returnsOpt
 	::=
-	|	RETURNS:returns1 LPAREN type:type1 sqlNullableOpt:nullable1 RPAREN:rparen1
-	{: RESULT = new ReturnsDeclaration(type1, nullable1, returns1left, rparen1right); :}
+	|	RETURNS:returns1 LPAREN namedType:type1 questionOpt:questionOpt1 RPAREN:rparen1
+	{: RESULT = new ReturnsDeclaration(type1, questionOpt1, returns1left, rparen1right); :}
 	;
 	
-sqlNullableOpt
-	::=
-	{: RESULT = Boolean.FALSE; :}
-
-	|	SQLNULLABLE
-	{: RESULT = Boolean.TRUE; :}
-	;
-
 handlerContent
 	::=	classContent:classContent
 	{: RESULT = classContent; :}
@@ -488,11 +459,11 @@ eglClassContent
 	|	privateAccessModifierOpt:privateModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 stmt_star:stmts END:end1
 	{: RESULT = new NestedFunction(privateModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), parms, returns1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
-	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, settingsBlock1, initializer1, false, privateAccessModifier1 == Boolean.FALSE ? IDs1left : privateAccessModifier1left, semi1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, questionOpt1, settingsBlock1, initializer1, false, privateAccessModifier1 == Boolean.FALSE ? IDs1left : privateAccessModifier1left, semi1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 CONST:const1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 ASSIGN expr:expr1 SEMI:semi1 // constant
-	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, settingsBlock1, expr1, true, privateAccessModifier1 == Boolean.FALSE ? const1left : privateAccessModifier1left, semi1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 CONST:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 ASSIGN expr:expr1 SEMI:semi1 // constant
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, questionOpt1, settingsBlock1, expr1, true, privateAccessModifier1 == Boolean.FALSE ? const1left : privateAccessModifier1left, semi1right); :}
 
 	|	settingsBlock:settingsBlock1
 	{: RESULT = settingsBlock1; :}
@@ -508,11 +479,11 @@ classContent
 	|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 stmt_star:stmts END:end1
 	{: RESULT = new NestedFunction(privateModifier1, Boolean.FALSE, new SimpleName(id1,id1left,id1right), parms, returns1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
-	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, settingsBlock1, initializer1, false, privateAccessModifier1 == Boolean.FALSE ? IDs1left : privateAccessModifier1left, semi1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, questionOpt1, settingsBlock1, initializer1, false, privateAccessModifier1 == Boolean.FALSE ? IDs1left : privateAccessModifier1left, semi1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 CONST:const1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 ASSIGN expr:expr1 SEMI:semi1 // constant
-	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, settingsBlock1, expr1, true, privateAccessModifier1 == Boolean.FALSE ? const1left : privateAccessModifier1left, semi1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 CONST:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 ASSIGN expr:expr1 SEMI:semi1 // constant
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, questionOpt1, settingsBlock1, expr1, true, privateAccessModifier1 == Boolean.FALSE ? const1left : privateAccessModifier1left, semi1right); :}
 
 	|	settingsBlock:settingsBlock1
 	{: RESULT = settingsBlock1; :}
@@ -525,8 +496,8 @@ externalTypeContent
 	|	privateAccessModifierOpt:privateAccessModifier1 CONSTRUCTOR:constructor1 LPAREN functionParameter_star:functionParameters1 RPAREN settingsBlockOpt:settingsBlock1 SEMI:semi1
 	{: RESULT = new Constructor(privateAccessModifier1, functionParameters1, settingsBlock1, null, privateAccessModifier1 == Boolean.FALSE ? constructor1left : privateAccessModifier1left, semi1right); :}
 	
-	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
-	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, settingsBlock1, initializer1, false, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? IDs1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, questionOpt1, settingsBlock1, initializer1, false, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? IDs1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
 
 	|	settingsBlock:settingsBlock1
 	{: RESULT = settingsBlock1; :}
@@ -566,11 +537,11 @@ enumerationField
 // Statements
 
 stmt
-	::=	ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable declaration
-	{: RESULT = new FunctionDataDeclaration(IDs1, type1, settingsBlock1, initializer1, false, IDs1left, semi1right); :}
+	::=	ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable declaration
+	{: RESULT = new FunctionDataDeclaration(IDs1, type1, questionOpt1, settingsBlock1, initializer1, false, IDs1left, semi1right); :}
 
-	|	CONST:const1 ID_plus:IDs1 type:type1 settingsBlockOpt:settingsBlock1 ASSIGN expr:expr1 SEMI:semi1 // Constant declaration
-	{: RESULT = new FunctionDataDeclaration(IDs1, type1, settingsBlock1, expr1, true, const1left, semi1right); :}
+	|	CONST:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 ASSIGN expr:expr1 SEMI:semi1 // Constant declaration
+	{: RESULT = new FunctionDataDeclaration(IDs1, type1, questionOpt1, settingsBlock1, expr1, true, const1left, semi1right); :}
 
 	|	settingsBlock:settingsBlock1
 	{: RESULT = settingsBlock1; :}
@@ -642,16 +613,16 @@ stmt
 	{: RESULT = new WhileStatement(expr1, stmts1, while1left, end1right); :}
 	
 	|	FOR:for1 LPAREN lvalue:lvalue1 fromExprOpt:fromExpr1 TO expr:expr1 stepOpt:step1 RPAREN stmt_star:stmts1 END:end1
-	{: RESULT = new ForStatement(lvalue1, null, null, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
+	{: RESULT = new ForStatement(lvalue1, null, null, Boolean.FALSE, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
 	
-	|	FOR:for1 LPAREN ID:id1 type:type1 fromExprOpt:fromExpr1 TO expr:expr1 stepOpt:step1 RPAREN stmt_star:stmts1 END:end1
-	{: RESULT = new ForStatement(null, new SimpleName(id1, id1left, id1right), type1, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
+	|	FOR:for1 LPAREN ID:id1 namedType:type1 questionOpt:questionOpt1 fromExprOpt:fromExpr1 TO expr:expr1 stepOpt:step1 RPAREN stmt_star:stmts1 END:end1
+	{: RESULT = new ForStatement(null, new SimpleName(id1, id1left, id1right), type1, questionOpt1, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
 
 	|	FOREACH:foreach1 LPAREN expr_plus:exprs1 FROM:from1 expr:fromexpr1 RPAREN:rparen1 stmt_star:stmts1 END:end1
-	{: RESULT = new ForEachStatement(exprs1, null, null, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), stmts1, rparen1left, foreach1left, end1right); :}
+	{: RESULT = new ForEachStatement(exprs1, null, null, Boolean.FALSE, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), stmts1, rparen1left, foreach1left, end1right); :}
 	
-	|	FOREACH:foreach1 LPAREN ID:id1 type:type1 FROM:from1 expr:fromexpr1 RPAREN:rparen1 stmt_star:stmts1 END:end1
-	{: RESULT = new ForEachStatement(null, new SimpleName(id1, id1left, id1right), type1, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), stmts1, rparen1left, foreach1left, end1right); :}
+	|	FOREACH:foreach1 LPAREN ID:id1 namedType:type1 questionOpt:questionOpt1 FROM:from1 expr:fromexpr1 RPAREN:rparen1 stmt_star:stmts1 END:end1
+	{: RESULT = new ForEachStatement(null, new SimpleName(id1, id1left, id1right), type1, questionOpt1, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), stmts1, rparen1left, foreach1left, end1right); :}
 
 	|	CONTINUE:continue1 continueModifierOpt:continueModifier1 SEMI:semi1
 	{: RESULT = new ContinueStatement(continueModifier1, continue1left, semi1right); :}
@@ -912,6 +883,14 @@ getByKeyOption
 	|	FROM:from1 expr:expr1
 	{: RESULT = new FromOrToExpressionClause(expr1, from1left, expr1right); :}
 	;
+
+questionOpt
+	::=
+	{: RESULT = Boolean.FALSE; :}
+	| QUESTION
+	{: RESULT = Boolean.TRUE; :}
+	;
+	
 
 IDOpt
 	::=
@@ -1203,10 +1182,10 @@ openTarget
 
 onException
 	::=	ONEXCEPTION:onexception1 stmt_star:stmts1
-	{: RESULT = new OnExceptionBlock(stmts1, null, null, onexception1left, stmts1right); :}
+	{: RESULT = new OnExceptionBlock(stmts1, null, null, Boolean.FALSE, onexception1left, stmts1right); :}
 	
-	|	ONEXCEPTION:onexception1 LPAREN ID:id1 type:type1 RPAREN stmt_star:stmts1
-	{: RESULT = new OnExceptionBlock(stmts1, new SimpleName(id1, id1left, id1right), type1, onexception1left, stmts1right); :}
+	|	ONEXCEPTION:onexception1 LPAREN ID:id1 namedType:type1 questionOpt:questionOpt1 RPAREN stmt_star:stmts1
+	{: RESULT = new OnExceptionBlock(stmts1, new SimpleName(id1, id1left, id1right), type1, questionOpt1, onexception1left, stmts1right); :}
 	;
 
 expr
@@ -1288,10 +1267,10 @@ expr
 	|	expr:expr1 GE expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.GREATER_EQUALS, expr1, expr2, expr1left, expr2right); :}
 
-	|	expr:expr1 ISA notNullableType:type1
+	|	expr:expr1 ISA namedType:type1
 	{: RESULT = new IsAExpression(expr1, type1, expr1left, type1right); :}
 	
-	|	expr:expr1 AS notNullableType:type1
+	|	expr:expr1 AS namedType:type1
 	{: RESULT = new AsExpression(expr1, type1, expr1left, type1right); :}
 	
 	|	expr:expr1 AS STRING:stringLiteral
@@ -1309,18 +1288,6 @@ expr
 	|	expr:expr1 NOT expr:expr2
 	{: RESULT = new IsNotExpression(IsNotExpression.Operator.NOT, expr1, expr2, expr1left, expr2right); :}
 
-//	|	expr:expr1 LIKE expr:expr2
-//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, null, expr1left, expr2right); :}
-
-//	|	expr:expr1 MATCHES expr:expr2
-//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, null, expr1left, expr2right); :}
-	
-//	|	expr:expr1 LIKE expr:expr2 ESCAPE STRING:escapeCharacter
-//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
-
-//	|	expr:expr1 MATCHES expr:expr2 ESCAPE STRING:escapeCharacter
-//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
-
 	|	name:name1
 	{: RESULT = name1; :}
 
@@ -1333,32 +1300,8 @@ expr
 	|	name:name1 settingsBlock:settingsBlock1
 	{: RESULT = new SetValuesExpression(name1, settingsBlock1, name1left, settingsBlock1right); :}
 	
-	|	PRIMITIVE:prim1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new NoSpecPrimitiveType(prim1, prim1left, prim1right), prim1left, typeKeywordright); :}
-
-	|	NUMERICPRIMITIVE:numericprimitive1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new NumericSpecPrimitiveType(numericprimitive1, null, numericprimitive1left, numericprimitive1right), numericprimitive1left, typeKeywordright); :}
-
-	|	CHARPRIMITIVE:charprimitive1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new CharacterSpecPrimitiveType(charprimitive1, null, charprimitive1left, charprimitive1right), charprimitive1left, typeKeywordright); :}
-
-	|	TIMESTAMPINTERVALPRIMITIVE:timestampintervalprimitive1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, null, timestampintervalprimitive1left, timestampintervalprimitive1right), timestampintervalprimitive1left, typeKeywordright); :}
-	
-	|	PRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new NoSpecPrimitiveType(prim1, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
-
-	|	NUMERICPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new NumericSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
-
-	|	CHARPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new CharacterSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
-
-	|	TIMESTAMPINTERVALPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new TimestampIntervalSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
-	
 	|	name:name1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new NameType(name1, name1left, name1right), null, name1left, rbracket1right), name1left, typeKeywordright); :}
+	{: RESULT = new TypeLiteralExpression(new ArrayType(new NameType(name1, null, name1left, name1right), null, false, name1left, rbracket1right), name1left, typeKeywordright); :}
 
 	|	LCURLY:lcurly1  RCURLY:rcurly1
 	{: RESULT = new ObjectExpression(new ArrayList(), lcurly1left, rcurly1right); :}
@@ -1391,14 +1334,8 @@ primary
 	::= primaryNoNew:primaryNoNew
 	{: RESULT = primaryNoNew; :}
 	
-	|	NEW:new1 typeNoName:type1 settingsBlockOpt:settingsBlock1
-	{: RESULT = new NewExpression(type1, null, settingsBlock1, new1left, settingsBlock1right); :}	
-	
 	|	NEW:new1 namedType:type1 settingsBlockOpt:settingsBlock1
-	{: RESULT = new NewExpression(type1, null, settingsBlock1, new1left, settingsBlock1right); :}	
-	
-	|	NEW:new1 namedType:type1 LPAREN expr_star:funcArgs RPAREN settingsBlockOpt:settingsBlock1
-	{: RESULT = new NewExpression(type1, funcArgs, settingsBlock1, new1left, settingsBlock1right); :}	
+	{: RESULT = new NewExpression(type1, settingsBlock1, new1left, settingsBlock1right); :}	
 	;
 	
 primaryNoNew
@@ -1589,6 +1526,11 @@ assignment
 	{: RESULT = new Assignment(Assignment.Operator.RIGHT_SHIFT_LOGICAL, lvalue1, expr1, lvalue1left, expr1right); :}
 	;
 
+argumentsOpt
+	::=
+	| LPAREN expr_star:args RPAREN
+	{: RESULT = args; :}
+	;
 
 settingsBlockOpt
 	::=
@@ -1622,119 +1564,22 @@ name
 	|	name:name1 DOT ID:id1
 	{: RESULT = new QualifiedName(name1, id1, name1left, id1right); :}
 	;
-	
-type
-	::=	nullableType:nullableType1
-	{: RESULT = nullableType1; :}
-
-	|	notNullableType:notNullableType1
-	{: RESULT = notNullableType1; :}
-	;
-
-nullableType
-	::=	nullableTypeNoName:nullableTypeNoName1
-	{: RESULT = nullableTypeNoName1; :}
-
-	|	nullableNamedType:nullableNamedType1
-	{: RESULT = nullableNamedType1; :}
-	;
-
-notNullableType
-	::=	notNullableTypeNoName:notNullableTypeNoName1
-	{: RESULT = notNullableTypeNoName1; :}
-
-	|	notNullableNamedType:notNullableNamedType1
-	{: RESULT = notNullableNamedType1; :}
-	;
-
-typeNoName
-	::= nullableTypeNoName:nullableTypeNoName1
-	{: RESULT = nullableTypeNoName1; :}
-
-	|	notNullableTypeNoName:notNullableTypeNoName1
-	{: RESULT = notNullableTypeNoName1; :}
-	;
-	
-nullableTypeNoName
-	::=	notNullableTypeNoName:typeNoName1 QUESTION:question1
-	{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
-	;
-	
-notNullableTypeNoName
-	::= PRIMITIVE:prim1
-	{: RESULT = new NoSpecPrimitiveType(prim1, prim1left, prim1right); :}
-	
-	|	NUMERICPRIMITIVE:numericprimitive1 numericPrimitiveSpecOpt:numericPrimitiveSpec1
-	{: RESULT = new NumericSpecPrimitiveType(numericprimitive1, numericPrimitiveSpec1, numericprimitive1left, numericPrimitiveSpec1right); :}
-
-	|	CHARPRIMITIVE:charprimitive1 charPrimitiveSpecOpt:charPrimitiveSpec1
-	{: RESULT = new CharacterSpecPrimitiveType(charprimitive1, charPrimitiveSpec1, charprimitive1left, charPrimitiveSpec1right); :}
-
-	|	TIMESTAMPINTERVALPRIMITIVE:timestampintervalprimitive1 timestampIntervalPrimitiveSpecOpt:timestampIntervalPrimitiveSpec1
-	{: RESULT = new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, timestampIntervalPrimitiveSpec1, timestampintervalprimitive1left, timestampIntervalPrimitiveSpec1right); :}
-	
-	|	notNullableTypeNoName:typeNoName1 LBRACKET RBRACKET:rbracket1
-	{: RESULT = new ArrayType(typeNoName1, null, typeNoName1left, rbracket1right); :}
-
-	|	notNullableTypeNoName:typeNoName1 LBRACKET expr:expr1 RBRACKET:rbracket1
-	{: RESULT = new ArrayType(typeNoName1, expr1, typeNoName1left, rbracket1right); :}
-
-	|	notNullableTypeNoName:typeNoName1 QUESTION:question1 LBRACKET RBRACKET:rbracket1
-	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, question1right), null, typeNoName1left, rbracket1right); :}
-
-	|	notNullableTypeNoName:typeNoName1 QUESTION:question1 LBRACKET expr:expr1 RBRACKET:rbracket1
-	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, question1right), expr1, typeNoName1left, rbracket1right); :}
-	;
-	
-charPrimitiveSpecOpt
-	::=
-	|	LPAREN:lparen1 INTEGER:length RPAREN:rparen1
-	{: RESULT = length; :}
-	;
-
-numericPrimitiveSpecOpt
-	::=
-	|	LPAREN:lparen1 INTEGER:length COMMA INTEGER:decimal RPAREN:rparen1
-	{: RESULT = new String[] { length, decimal }; :}
-
-	|	LPAREN:lparen1 INTEGER:length RPAREN:rparen1
-	{: RESULT = new String[] { length }; :}
-	;
-	
-timestampIntervalPrimitiveSpecOpt
-	::=
-	|	LPAREN:lparen1 STRING:pattern RPAREN:rparen1
-	{: RESULT = pattern.getCanonicalString(); :}
-	;
-
+				
 namedType
-	::=	notNullableNamedType:notNullableNamedType1
-	{: RESULT = notNullableNamedType1; :}
-	
-	|	nullableNamedType:nullableNamedType1
-	{: RESULT = nullableNamedType1; :}
-	;
-	
-notNullableNamedType
-	::=	name:name1
-	{: RESULT = new NameType(name1, name1left, name1right); :}
+	::=	name:name1 argumentsOpt:args
+	{: RESULT = new NameType(name1, args, name1left, argsright); :}
 
-	|	notNullableNamedType:name1 LBRACKET RBRACKET:rbracket1
-	{: RESULT = new ArrayType(name1, null, name1left, rbracket1right); :}
+	|	namedType:name1 LBRACKET RBRACKET:rbracket1
+	{: RESULT = new ArrayType(name1, null, false, name1left, rbracket1right); :}
 
-	|	notNullableNamedType:name1 LBRACKET expr:expr1 RBRACKET:rbracket1
-	{: RESULT = new ArrayType(name1, expr1, name1left, rbracket1right); :}
+	|	namedType:name1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(name1, expr1, false, name1left, rbracket1right); :}
 
-	|	notNullableNamedType:name1 QUESTION:question1 LBRACKET RBRACKET:rbracket1
-	{: RESULT = new ArrayType(new NullableType(name1, name1left, question1right), null, name1left, rbracket1right); :}
+	|	namedType:name1 QUESTION:question1 LBRACKET RBRACKET:rbracket1
+	{: RESULT = new ArrayType(name1, null, true, name1left, rbracket1right); :}
 
-	|	notNullableNamedType:name1 QUESTION:question1 LBRACKET expr:expr1 RBRACKET:rbracket1
-	{: RESULT = new ArrayType(new NullableType(name1, name1left, question1right), expr1, name1left, rbracket1right); :}
-	;
-	
-nullableNamedType
-	::= notNullableNamedType:name1 QUESTION:question1
-	{: RESULT = new NullableType(name1, name1left, question1right); :}
+	|	namedType:name1 QUESTION:question1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(name1, expr1, true, name1left, rbracket1right); :}
 	;
 	
 ID_plus

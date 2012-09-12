@@ -52,8 +52,6 @@ public class Util {
 	public final static char[] SUFFIX_zip = ".zip".toCharArray(); //$NON-NLS-1$
 	public final static char[] SUFFIX_ZIP = ".ZIP".toCharArray(); //$NON-NLS-1$
 		
-	private final static char[] DOUBLE_QUOTES = "''".toCharArray(); //$NON-NLS-1$
-	private final static char[] SINGLE_QUOTE = "'".toCharArray(); //$NON-NLS-1$
 	private static final int DEFAULT_READING_SIZE = 8192;
 	
 	/**
@@ -411,15 +409,11 @@ public class Util {
 	
 	private static Element getEGLPathRoot(File file){
 		String xmlPath = file.getAbsolutePath() + "/" + EGLPATH_FILENAME;
-		if (xmlPath == null)
-			return null;
 		Element cpElement;
 		try {
 			BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(xmlPath));
 			byte[] bytes = org.eclipse.edt.ide.core.internal.model.util.Util.getInputStreamAsByteArray(inputStream, -1);
 			String contents = new String(bytes, "UTF-8");
-			if (contents == null)
-				return null;
 			StringReader reader = new StringReader(contents);
 			
 			try {

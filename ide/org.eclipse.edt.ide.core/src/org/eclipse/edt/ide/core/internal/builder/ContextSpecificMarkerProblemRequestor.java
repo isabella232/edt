@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.builder;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -36,21 +38,25 @@ public class ContextSpecificMarkerProblemRequestor extends	AbstractPartMarkerPro
         removeMarkers();
     }
 	
-	protected IMarker createMarker(int startOffset, int endOffset, int severity, int problemKind, String[] inserts)
+	@Override
+	protected IMarker createMarker(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle)
 			throws CoreException {
-		IMarker marker = super.createMarker(startOffset, endOffset, severity, problemKind, inserts);
+		IMarker marker = super.createMarker(startOffset, endOffset, severity, problemKind, inserts, bundle);
 		marker.setAttribute(CONTEXT_PATH, containerContextPath.toOSString());
 		return marker;
 	}
 	
+	@Override
 	protected String getMarkerType(int problemKind){
 		return CONTEXT_SPECIFIC_PROBLEM;
 	}
 	
+	@Override
 	protected String[] getMarkerTypes() {
 		return new String[] {CONTEXT_SPECIFIC_PROBLEM};
 	}
 	
+	@Override
 	protected boolean shouldRemoveMarker(IMarker marker) {
 		if(super.shouldRemoveMarker(marker)){
 			IPath specifiedProgramPath = new Path(marker.getAttribute(ContextSpecificMarkerProblemRequestor.CONTEXT_PATH, "")); //$NON-NLS-1$

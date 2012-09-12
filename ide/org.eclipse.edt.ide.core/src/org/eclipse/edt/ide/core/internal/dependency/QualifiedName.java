@@ -14,9 +14,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.ide.core.internal.utils.Util;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author svihovec
@@ -24,20 +23,20 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  */
 /*package*/ class QualifiedName implements IDependencyGraphValue{
 
-	private String[] qualifiedName;
+	private String qualifiedName;
 	
-	public QualifiedName(String[] qualifiedName) {
+	public QualifiedName(String qualifiedName) {
 		this.qualifiedName = qualifiedName;
 	}
 
 	public QualifiedName() {}
 	
-	public String[] getQualifiedName(){
+	public String getQualifiedName(){
 		return qualifiedName;
 	}
 	
 	public String toString(){
-		return Util.stringArrayToPath(qualifiedName).toString().replace(IPath.SEPARATOR, '.');
+		return qualifiedName;
 	}
 	
 	
@@ -46,45 +45,42 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 			return true;
 		}
 		if(obj instanceof QualifiedName){
-		    return qualifiedName == ((QualifiedName)obj).qualifiedName;
+		    return NameUtile.equals(qualifiedName, ((QualifiedName)obj).qualifiedName);
 		}
 		return false;
 	}
 	
 	public int hashCode() {
-		int result = 17;
-		
-		for (int i = 0; i < qualifiedName.length; i++) {
-			result = 37 * result + qualifiedName[i].hashCode();
-		}
-		return result;
+		return qualifiedName.hashCode();
 	}
 	
 	public int getNormalizedHashCode() {
-		int result = 17;
-		
-		for (int i = 0; i < qualifiedName.length; i++) {
-			result = 37 * result + qualifiedName[i].toUpperCase().toLowerCase().hashCode();
-		}
-		return result;
+		return qualifiedName.toUpperCase().toLowerCase().hashCode();
 	}
 
 	public void serialize(DataOutputStream outputStream) throws IOException {
-		outputStream.writeInt(qualifiedName.length);
+		// Write out in the old format so as to not break existing workspaces.
+		String[] segments = Util.qualifiedNameToStringArray(qualifiedName);
+		outputStream.writeInt(segments.length);
 		
-		for (int i = 0; i < qualifiedName.length; i++) {
-			outputStream.writeUTF(qualifiedName[i]);
+		for (int i = 0; i < segments.length; i++) {
+			outputStream.writeUTF(segments[i]);
 		}		
 	}
 
 	public void deserialize(DataInputStream inputStream) throws IOException {
-		qualifiedName = new String[inputStream.readInt()];
+		// Read in the old format so as to not break existing workspaces.
+		int segments = inputStream.readInt();
+		StringBuilder buf = new StringBuilder();
 	
-		for(int i=0; i < qualifiedName.length; i++){
-			qualifiedName[i] = inputStream.readUTF();
+		for (int i=0; i < segments; i++) {
+			if (i > 0) {
+				buf.append('.');
+			}
+			buf.append(inputStream.readUTF());
 		}		
 		
-		qualifiedName = InternUtil.intern(qualifiedName);
+		qualifiedName = NameUtile.getAsName(buf.toString());
 	}
 	
 	public int getKind() {

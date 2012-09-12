@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.core.internal.model.search;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.ide.core.internal.model.index.IDocument;
-import org.eclipse.edt.ide.core.internal.model.indexing.BinaryIndexer;
 
 
 
