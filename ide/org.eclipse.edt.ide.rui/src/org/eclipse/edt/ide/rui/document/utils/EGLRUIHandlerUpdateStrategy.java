@@ -12,8 +12,6 @@
 package org.eclipse.edt.ide.rui.document.utils;
 
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.text.BadLocationException;
-
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -22,9 +20,10 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.mof.utils.NameUtile;
+import org.eclipse.jface.text.BadLocationException;
 
 public class EGLRUIHandlerUpdateStrategy {
 	
@@ -63,7 +62,7 @@ public class EGLRUIHandlerUpdateStrategy {
 				}
 				public boolean visit(final Assignment assignment) {
 					try{
-						if(assignment.getLeftHandSide().isName() && InternUtil.intern("initialUI") == ((Name)assignment.getLeftHandSide()).getIdentifier()){
+						if(assignment.getLeftHandSide().isName() && NameUtile.equals(NameUtile.getAsName("initialUI"), ((Name)assignment.getLeftHandSide()).getIdentifier())){
 							foundInitialUI = true;
 							assignment.getRightHandSide().accept(new DefaultASTVisitor(){
 								public boolean visit(ArrayLiteral array){

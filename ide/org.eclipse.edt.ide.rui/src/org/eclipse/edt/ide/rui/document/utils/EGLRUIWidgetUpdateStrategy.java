@@ -12,19 +12,14 @@
 package org.eclipse.edt.ide.rui.document.utils;
 
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.text.BadLocationException;
-
-import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
-import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Handler;
-import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.jface.text.BadLocationException;
 
 public class EGLRUIWidgetUpdateStrategy {
 	

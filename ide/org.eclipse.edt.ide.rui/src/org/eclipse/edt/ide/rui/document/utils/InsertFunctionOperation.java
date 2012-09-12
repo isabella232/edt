@@ -18,18 +18,17 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.text.edits.MalformedTreeException;
-
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.ide.core.model.document.IEGLDocument;
-import org.eclipse.edt.ide.rui.internal.Activator;
-import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.mof.utils.NameUtile;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.text.edits.MalformedTreeException;
 
 /**
  * Insert a new widget into the RUIHandler
@@ -71,7 +70,7 @@ public class InsertFunctionOperation {
 		List parts = fileAST.getParts();	
 		for (Iterator iter = parts.iterator(); iter.hasNext();) {
 			Part nextPart = (Part) iter.next();
-			if(nextPart.getIdentifier() == InternUtil.intern(partName)){
+			if(NameUtile.equals(nextPart.getIdentifier(), NameUtile.getAsName(partName))){
 				part = nextPart;
 				break;
 			}

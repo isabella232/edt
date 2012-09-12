@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.rui.document.utils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Status;
-
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
@@ -24,14 +23,14 @@ import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.server.EventValue;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
-import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * Get the value of a property
@@ -105,7 +104,7 @@ public class GetEventValueOperation {
 									public boolean visit(ClassDataDeclaration classDataDeclaration){
 										boolean foundEvent = false;
 										if(classDataDeclaration.hasSettingsBlock()){
-											AssignmentLocator locator = new AssignmentLocator(InternUtil.intern(eventName));
+											AssignmentLocator locator = new AssignmentLocator(NameUtile.getAsName(eventName));
 											classDataDeclaration.getSettingsBlockOpt().accept(locator);
 											if(locator.getAssignment() != null){
 												foundEvent = true;
@@ -128,7 +127,7 @@ public class GetEventValueOperation {
 									public boolean visit(FunctionDataDeclaration functionDataDeclaration){
 										boolean foundEvent = false;
 										if(functionDataDeclaration.hasSettingsBlock()){
-											AssignmentLocator locator = new AssignmentLocator(InternUtil.intern(eventName));
+											AssignmentLocator locator = new AssignmentLocator(NameUtile.getAsName(eventName));
 											functionDataDeclaration.getSettingsBlockOpt().accept(locator);
 											if(locator.getAssignment() != null){
 												foundEvent = true;
@@ -168,7 +167,7 @@ public class GetEventValueOperation {
 
 	private void processNewExpression(final String eventName, final NewExpression newExpression) {
 		if(newExpression.hasSettingsBlock()){
-			AssignmentLocator locator = new AssignmentLocator(InternUtil.intern(eventName));
+			AssignmentLocator locator = new AssignmentLocator(NameUtile.getAsName(eventName));
 			newExpression.getSettingsBlock().accept(locator);
 			if(locator.getAssignment() != null){
 				//processExpression(locator.getAssignment().getRightHandSide());

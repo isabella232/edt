@@ -33,6 +33,7 @@ import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompile
 import org.eclipse.edt.ide.core.internal.generation.IDEContext;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.internal.model.EGLModelStatus;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
@@ -94,7 +95,7 @@ public class WorkingCopyGenerationOperation {
 				final IEnvironment previewEnvironment = PreviewIREnvironmentManager.getPreviewIREnvironment(file.getProject(), outputLocation.toFile());
 
 				//compile all Parts in file, if there's another open file with working copy content, VE won't recognize it
-				WorkingCopyCompiler.getInstance().compileAllParts(file.getProject(), ((EGLFile)modelFile).getPackageName(), file, new IWorkingCopy[]{sharedWorkingCopy}, new IWorkingCopyCompileRequestor(){
+				WorkingCopyCompiler.getInstance().compileAllParts(file.getProject(), Util.stringArrayToQualifiedName(((EGLFile)modelFile).getPackageName()), file, new IWorkingCopy[]{sharedWorkingCopy}, new IWorkingCopyCompileRequestor(){
 			
 					public void acceptResult(final WorkingCopyCompilationResult result) {
 						Node boundPart = result.getBoundPart();
