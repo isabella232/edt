@@ -25,6 +25,7 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 
 public class HandlerFieldsResolver {
 	
@@ -62,7 +63,7 @@ public class HandlerFieldsResolver {
 			
 			try{
 				String partName = new Path(currentFile.getName()).removeFileExtension().toString();
-				WorkingCopyCompiler.getInstance().compilePart(currentFile.getProject(), ((EGLFile)modelFile).getPackageName(), currentFile, new IWorkingCopy[] {tempWorkingCopy}, partName, requestor);
+				WorkingCopyCompiler.getInstance().compilePart(currentFile.getProject(), Util.stringArrayToQualifiedName(((EGLFile)modelFile).getPackageName()), currentFile, new IWorkingCopy[] {tempWorkingCopy}, partName, requestor);
 				ruiHandler = requestor.getBoundPart();
 			}catch(Exception e){
 				Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, "Type Name Resolver: Error resolving type name", e));
