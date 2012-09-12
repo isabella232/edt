@@ -16,6 +16,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -55,6 +56,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.ParameterizableType;
+import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
@@ -788,6 +790,7 @@ public class BindingUtil {
 	
 	public static String getUnaliasedTypeName(Type type) {
 		Classifier classifier = type.getClassifier();
+		String unaliasedName = null;
 		if (classifier != null) {
 			String pkg = NameUtile.getAsName(classifier.getPackageName());
 			String name = NameUtile.getAsName(classifier.getName());
@@ -795,17 +798,37 @@ public class BindingUtil {
 			for (Map.Entry<String, PackageAndPartName> entry : aliasedTypesNames.entrySet()) {
 				PackageAndPartName value = entry.getValue();
 				if (NameUtile.equals(value.getPackageName(), pkg) && NameUtile.equals(value.getPartName(), name)) {
-					return entry.getKey();
+					unaliasedName = entry.getKey();
+					
+					// Don't lose the args
+					if (type instanceof ParameterizedType) {
+						String sig = type.getTypeSignature();
+						int paren = sig.indexOf(Type.PrimArgsStartDelimiter);
+						if (paren != -1) {
+							unaliasedName += sig.substring(paren);
+						}
+					}
+					break;
 				}
 			}
 		}
 		
-		String sig = type.getTypeSignature();
-		int lastDot = sig.lastIndexOf('.');
-		if (lastDot == -1) {
-			return sig;
+		if (unaliasedName == null) {
+			unaliasedName = type.getTypeSignature();
+			int lastDot = unaliasedName.lastIndexOf('.');
+			if (lastDot != -1) {
+				unaliasedName = unaliasedName.substring(lastDot + 1);
+			}
 		}
-		return sig.substring(lastDot + 1);
+		
+		if (type instanceof ParameterizedType) {
+			// MOF returns the args in the format "(arg1:arg2)" instead of "(arg1, arg2)".
+			int paren = unaliasedName.indexOf(Type.PrimArgsStartDelimiter);
+			if (paren != -1) {
+				unaliasedName = unaliasedName.replaceAll(Type.PrimArgDelimiter, ",");
+			}
+		}
+		return unaliasedName;
 	}
 	
 	public static Type getType(Member mbr) {
@@ -1015,6 +1038,11 @@ public class BindingUtil {
 						throw new ExitVisitor();
 					}
 					return false;
+				};
+				@Override
+				public boolean visit(FieldAccess fieldAccess) {
+					type[0] = fieldAccess.getPrimary().resolveType();
+					throw new ExitVisitor();
 				};
 			});
 		}
