@@ -35,8 +35,8 @@ import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.launching.JavaLaunchableTester;
 
@@ -207,15 +207,15 @@ public class EGLLaunchableTester extends PropertyTester
 						
 						List<IFile> files = new ArrayList<IFile>( javaGens.size() );
 						
-						String[] pkg;
+						String pkg;
 						IPackageDeclaration[] pkgDecl = element.getPackageDeclarations();
 						if ( pkgDecl != null && pkgDecl.length > 0 )
 						{
-							pkg = IRFileNameUtility.toIRFileName( pkgDecl[ 0 ].getElementName().split( "\\." ) ); //$NON-NLS-1$
+							pkg = IRFileNameUtility.toIRFileName( pkgDecl[ 0 ].getElementName() ); //$NON-NLS-1$
 						}
 						else
 						{
-							pkg = new String[ 0 ];
+							pkg = "";
 						}
 						
 						for ( IPart ipart : element.getParts() )
@@ -225,7 +225,7 @@ public class EGLLaunchableTester extends PropertyTester
 								try
 								{
 									String name = IRFileNameUtility.toIRFileName( ipart.getElementName() );
-									Part part = env.findPart( InternUtil.intern( pkg ), InternUtil.intern( name ) );
+									Part part = env.findPart( NameUtile.getAsName( pkg ), NameUtile.getAsName( name ) );
 									for ( IGenerator gen : javaGens )
 									{
 										if ( gen instanceof org.eclipse.edt.ide.core.IGenerator )
