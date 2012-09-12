@@ -197,7 +197,7 @@ public class BindingUtil {
 		if (part instanceof AnnotationType) {
 			return ITypeBinding.ANNOTATION_BINDING;
 		}
-		if (part instanceof Record || part instanceof AnnotationType) {
+		if (part instanceof Record) {
 			return ITypeBinding.FLEXIBLE_RECORD_BINDING;
 		}
 		if (part instanceof FormGroup) {
@@ -449,11 +449,7 @@ public class BindingUtil {
 		if (part instanceof AnnotationType) {
 			return (AnnotationType) part;
 		}	
-		
-		if (part instanceof Record) {
-			return convertRecordToAnnotationType((Record)part);
-		}
-		
+				
 		return null;
 	}
 	
@@ -462,17 +458,9 @@ public class BindingUtil {
 			return (AnnotationType) type;
 		}
 		
-		if (type instanceof Record) {
-			return convertRecordToAnnotationType((Record)type);
-		}
 		return null;
 	}
 	
-	private static AnnotationType convertRecordToAnnotationType(Record annRecord) {
-		//TODO add logic to convert a record defininition of type Annotation or Stereotype to an AnnotationType
-		return null;
-	}
-
 	public static Part realize(Part part) {
 		if (isValid(part)) {
 			return part;
@@ -612,6 +600,7 @@ public class BindingUtil {
 	}
 	
 	public static boolean isApplicableFor(AnnotationType annType, Element elem) {
+		annType = (AnnotationType)realize(annType);
 		return isApplicableFor(elem, annType.getTargets());
 	}
 	
@@ -639,7 +628,9 @@ public class BindingUtil {
 			else {			
 				if (nextTarget instanceof EEnumLiteral) {
 					nextTargetName = NameUtile.getAsName(((EEnumLiteral)nextTarget).getName());
-					if (NameUtile.equals(nextTargetName, targetTypeName));
+					if (NameUtile.equals(nextTargetName, targetTypeName)) {
+						return true;
+					}
 				}
 			}
 			
@@ -707,6 +698,10 @@ public class BindingUtil {
 
 		if (elem instanceof EGLClass) {
 			return ElementKind.ClassPart;
+		}
+		
+		if (elem instanceof AnnotationType) {
+			return ElementKind.RecordPart;
 		}
 		
 		return null;
@@ -933,8 +928,11 @@ public class BindingUtil {
 			}
 		}
 		
-		//add the passed supertype to the supertype list
-		superTypes.add(0, defaultSuperType);
+		//Make sure we do not set a part as it's own supertype (such as for EAny
+		if (!part.equals(defaultSuperType)) {
+			//add the passed supertype to the supertype list
+			superTypes.add(0, defaultSuperType);
+		}
 		
 	}
 	

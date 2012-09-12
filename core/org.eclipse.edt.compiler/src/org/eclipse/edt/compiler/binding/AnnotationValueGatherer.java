@@ -88,6 +88,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 			problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
 			value = null;
 		}
+		integerLiteral.setBindAttempted(true);
 		return false;
 	}
 
@@ -97,6 +98,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 			str = "-" + str;
 		}
 		value = new Double(str);
+		floatLiteral.setBindAttempted(true);
 		return false;
 	}
 
@@ -106,11 +108,13 @@ public class AnnotationValueGatherer extends DefaultBinder{
 			str = "-" + str;
 		}
 		value = new BigDecimal(str);
+		decimalLiteral.setBindAttempted(true);
 		return false;
 	}
 
 	public boolean visit(StringLiteral stringLiteral) {
 		value = stringLiteral.getValue();
+		stringLiteral.setBindAttempted(true);
 		return false;
 	}
 	
@@ -147,6 +151,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 			else {
 				exprValid = false;
 			}
+			binaryExpression.setBindAttempted(true);
 			return false;
 		}
 		
@@ -157,6 +162,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 			else {
 				concatenatedString.append(stringLiteral.getValue());
 			}
+			stringLiteral.setBindAttempted(true);
 			return false;
 		}
 		
@@ -190,6 +196,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 		
 		public boolean visitExpression(Expression expression) {
 			exprValid = false;
+			expression.setBindAttempted(true);
 			return false;
 		}			
 	}
@@ -210,47 +217,56 @@ public class AnnotationValueGatherer extends DefaultBinder{
 
 	public boolean visit(HexLiteral stringLiteral) {
 		value = stringLiteral.getValue();
+		stringLiteral.setBindAttempted(true);
 		return false;
 	}
 
 	public boolean visit(CharLiteral stringLiteral) {
 		value = stringLiteral.getValue();
+		stringLiteral.setBindAttempted(true);
 		return false;
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NullLiteral nullLiteral) {
 		value = IrFactory.INSTANCE.createNullLiteral();
+		nullLiteral.setBindAttempted(true);
 		return false;
 	}
 
 	public boolean visit(DBCharLiteral stringLiteral) {
 		value = stringLiteral.getValue();
+		stringLiteral.setBindAttempted(true);
 		return false;
 	}
 
 	public boolean visit(MBCharLiteral stringLiteral) {
 		value = stringLiteral.getValue();
+		stringLiteral.setBindAttempted(true);
 		return false;
 	}
 
 	public boolean visit(BooleanLiteral booleanLiteral) {
 		value = new Boolean(booleanLiteral.booleanValue() == org.eclipse.edt.compiler.core.Boolean.YES);
+		booleanLiteral.setBindAttempted(true);
 		return false;
 	}
 	
 	public boolean visit(BytesLiteral bytesLiteral) {
 		value = bytesLiteral.getValue();
+		bytesLiteral.setBindAttempted(true);
 		return false;
 	}
 
 	public boolean visit(SQLLiteral sQLLiteral) {
 		value = sQLLiteral.getValue();
+		sQLLiteral.setBindAttempted(true);
 		return false;
 	}
 
 	public boolean visit(TypeLiteralExpression typeLiteralExpression) {
 		super.visit(typeLiteralExpression);
 		value = typeLiteralExpression.getType().resolveType();
+		typeLiteralExpression.setBindAttempted(true);
 		return false;
 	}
 
@@ -287,6 +303,7 @@ public class AnnotationValueGatherer extends DefaultBinder{
 		}
 
 		value = entries;
+		arrayLiteral.setBindAttempted(true);
 		return false;
 	}
 	

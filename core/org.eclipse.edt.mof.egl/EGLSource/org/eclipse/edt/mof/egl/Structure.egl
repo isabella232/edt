@@ -23,7 +23,7 @@ import egl.lang.reflect.mof.MofName;
 import egl.lang.reflect.mof.MofSerializable;
 
 externalType Element extends EObject type MofClass {isAbstract=yes}
-	annotations Annotation[] {containment=true};
+	annotations Annotation[] {@Containment{true}};
 	
 	function getAnnotation(name string) returns(Annotation);
 	function addAnnotation(ann Annotation in);
@@ -57,7 +57,7 @@ externalType NamedElement extends Element type MofClass{isAbstract=yes}
 end
 
 externalType TypedElement extends NamedElement type MofClass {isAbstract = yes}
-	_type EGLType {mofName="type"};
+	_type EGLType {@MofName{"type"}};
 	isNullable boolean;
 end
 
@@ -137,7 +137,7 @@ externalType GenericType extends EGLType type MofClass
 end
 
 externalType ArrayType extends GenericType type MofClass
-	initialSize Expression {containment=true};
+	initialSize Expression {@Containment{true}};
 	elementsNullable boolean;
 	
 	function hasInitialSize() returns(boolean);
@@ -153,7 +153,7 @@ externalType Classifier extends NamedElement, EGLType type MofClass {isAbstract=
 	fileName string;
 	hasCompileErrors boolean;
 	packageName string;
-	typeParameters TypeParameter[] {containment=true};
+	typeParameters TypeParameter[] {@Containment{true}};
 	
 	function getStereotype() returns (Stereotype);
 end
@@ -164,19 +164,19 @@ end
 
 externalType StructPart extends Part, Container type MofClass
 	superTypes StructPart[];
-	structuredFields StructuredField[] {containment=true};
-	constructors EGLConstructor[] {containment=true};
-	functions EGLFunction[] {containment=true};
-	operations EGLOperation[] {containment=true};
-	initializerStatements StatementBlock {containment=true};
+	structuredFields StructuredField[] {@Containment{true}};
+	constructors EGLConstructor[] {@Containment{true}};
+	functions EGLFunction[] {@Containment{true}};
+	operations EGLOperation[] {@Containment{true}};
+	initializerStatements StatementBlock {@Containment{true}};
 	
 	function isSubtypeOf(part StructPart in) returns (boolean);
 end
 
 externalType DataType extends Classifier, Container type MofClass
 	typeKind ETypeKind?;
-	functions EGLFunction[] {containment=true};
-	operations EGLOperation[] {containment=true};
+	functions EGLFunction[] {@Containment{true}};
+	operations EGLOperation[] {@Containment{true}};
 end
 
 externalType ParameterizableType extends EGLClass type MofClass
@@ -184,7 +184,7 @@ externalType ParameterizableType extends EGLClass type MofClass
 end
 
 externalType EGLField extends Member type MofClass {name="Field"}
-	initializerStatements StatementBlock {containment=true};
+	initializerStatements StatementBlock {@Containment{true}};
 	hasSetValuesBlock boolean;
 	isImplicit boolean;
 	isSystemField boolean;
@@ -193,7 +193,7 @@ externalType EGLField extends Member type MofClass {name="Field"}
 end
 
 externalType ConstantField extends EGLField type MofClass
-	value PrimitiveTypeLiteral {containment=true};
+	value PrimitiveTypeLiteral {@Containment{true}};
 end
 
 externalType FunctionReturnField extends EGLField type MofClass
@@ -218,9 +218,9 @@ externalType FunctionParameter extends Parameter type MofClass
 end
 
 externalType FunctionMember extends Member, Container, InvocableElement type MofClass
-	parameters FunctionParameter[] {containment=true};
-	localDeclarations EGLField[] {containment=true};
-	statementBlock StatementBlock {containment=true};
+	parameters FunctionParameter[] {@Containment{true}};
+	localDeclarations EGLField[] {@Containment{true}};
+	statementBlock StatementBlock {@Containment{true}};
 	
 	function getSignature() returns(string);
 	function getStatements() returns(Statement[]);
@@ -231,7 +231,7 @@ externalType FunctionMember extends Member, Container, InvocableElement type Mof
 end
 
 externalType EGLFunction extends FunctionMember type MofClass {name="Function"}
-	returnField EGLField {containment=true};
+	returnField EGLField {@Containment{true}};
 end
 
 externalType EGLOperation extends EGLFunction type MofClass {name="Operation"}
@@ -254,7 +254,7 @@ externalType EGLConstructor extends FunctionMember type MofClass {name="Construc
 end
 
 externalType StructuredField extends EGLField type MofClass
-	elementAnnotations ElementAnnotations[] {containment=true};
+	elementAnnotations ElementAnnotations[] {@Containment{true}};
 	children StructuredField[];
 	parent StructuredField;
 	occurs int;
@@ -265,7 +265,7 @@ externalType StructuredField extends EGLField type MofClass
 end
 
 externalType FormField extends EGLField type MofClass
-	elementAnnotations ElementAnnotations[] {containment=true};
+	elementAnnotations ElementAnnotations[] {@Containment{true}};
 	occurs int;
 	
 	function getElementAnnotations(index int in) returns(Annotation[]);
@@ -304,7 +304,7 @@ externalType StructuredRecord extends StructPart, StructuredContainer type MofCl
 end
 
 externalType LogicAndDataPart extends StructPart type MofClass {isAbstract=true}
-	fields EGLField[] {containment=true};
+	fields EGLField[] {@Containment{true}};
 	usedParts Part[];
 	
 	function addInitializerStatements(block StatementBlock in);
@@ -321,7 +321,7 @@ externalType EGLExternalType extends EGLClass type MofClass {name="ExternalType"
 end
 
 externalType EGLProgram extends EGLClass type MofClass {name="Program"} 
-	parameters ProgramParameter[] {containment=true};
+	parameters ProgramParameter[] {@Containment{true}};
 	isCallable boolean;
 end
 
@@ -338,7 +338,7 @@ externalType EGLInterface extends EGLClass type MofClass {name="Interface"}
 end
 
 externalType EGLDelegate extends Part, Container, InvocableElement type MofClass {name="Delegate"}
-	parameters FunctionParameter[] {containment=true};
+	parameters FunctionParameter[] {@Containment{true}};
 	isNullable boolean;
 	returnType EGLType;
 end
@@ -362,18 +362,18 @@ end
 
 externalType EGLForm extends EGLRecord type MofClass {name="Form"}
 	container EGLFormGroup;
-	formFields FormField[] {containment=yes};
+	formFields FormField[] {@Containment{true}};
 	
 	function getConstantFields() returns (ConstantFormField[]);
 	function getVariableFields() returns (VariableFormField[]);
 end
 
 externalType EGLFormGroup extends Part type MofClass {name="FormGroup"}
-	forms EGLForm[] {containment=true};
+	forms EGLForm[] {@Containment{true}};
 	nestedForms EGLForm[];
 	usedForms EGLForm[];
 end
 
 externalType FunctionPart extends LogicAndDataPart type MofClass
-	_function EGLFunction {mofName="function", containment=true};
+	_function EGLFunction {@MofName{"function"}, @Containment{true}};
 end

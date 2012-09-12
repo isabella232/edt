@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.egl.Stereotype;
 
 record InterfacePartType type Stereotype {
 	targets = [ElementKind.ExternalTypePart],
-	@PartType{"org.eclipse.edt.mof.egl.Interface"},
+	@PartType{"org.eclipse.edt.mof.egl.Interface"}
 }
 	name string;
 	typeParameters string[];

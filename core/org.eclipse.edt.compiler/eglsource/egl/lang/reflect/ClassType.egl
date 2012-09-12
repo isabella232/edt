@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.egl.Stereotype;
 
 record ClassType type Stereotype {
 	targets = [ElementKind.ExternalTypePart],
-	@PartType{"org.eclipse.edt.mof.egl.EGLClass"},
+	@PartType{"org.eclipse.edt.mof.egl.EGLClass"}
 }
 	name string;
 	isAbstract boolean;

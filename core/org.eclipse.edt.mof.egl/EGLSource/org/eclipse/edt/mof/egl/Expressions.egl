@@ -43,11 +43,11 @@ externalType NumericLiteral extends PrimitiveTypeLiteral type MofClass {isAbstra
 end
 
 externalType IntegerLiteral extends NumericLiteral type MofClass
-	eType EGLType{MofName = "type"};
+	eType EGLType{@MofName{"type"}};
 end
 
 externalType FloatingPointLiteral extends NumericLiteral type MofClass
-	eType EGLType{MofName = "type"};
+	eType EGLType{@MofName{"type"}};
 end
 
 externalType DecimalLiteral extends NumericLiteral type MofClass
@@ -76,7 +76,7 @@ externalType NullLiteral extends Literal type MofClass
 end
 
 externalType ArrayLiteral extends Literal type MofClass
-	entries Expression[] {containment=true};
+	entries Expression[] {@Containment{true}};
 end
 
 externalType LHSExpr extends Expression type MofClass { isAbstract=yes, isInterface=yes }
@@ -100,7 +100,7 @@ externalType MemberName extends Name type MofClass
 end
 
 externalType TypeName extends Name type MofClass
-	_type EGLType {transient=true, mofName="type"};
+	_type EGLType {@Transient{true}, @MofName{"type"}};
 	function getFullyQualifiedName() returns(string);
 end
 
@@ -111,8 +111,8 @@ externalType PartName extends TypeName type MofClass
 end
 
 externalType MemberAccess extends Name type MofClass
-	member Member {transient=true};
-	qualifier Expression {containment=true};
+	member Member {@Transient{true}};
+	qualifier Expression {@Containment{true}};
 end
 
 externalType TopLevelFunctionName extends PartName type MofClass
@@ -127,8 +127,8 @@ externalType SuperExpression extends Expression type MofClass
 end
 
 externalType SetValuesExpression extends Expression type MofClass
-	target Expression {containment=true};
-	settings StatementBlock {containment=true};
+	target Expression {@Containment{true}};
+	settings StatementBlock {@Containment{true}};
 end
 
 externalType SystemFunctionArgumentMnemonicName extends Name type MofClass
@@ -137,9 +137,9 @@ end
 externalType MultiOperandExpression extends Expression type MofClass{
 	isAbstract=true
 }
-	operands Expression[] {containment=true};
+	operands Expression[] {@Containment{true}};
 	operator string;
-	operation EGLOperation {transient=true};
+	operation EGLOperation {@Transient{true}};
 end
 
 externalType BinaryExpression extends MultiOperandExpression type MofClass
@@ -159,42 +159,42 @@ externalType TernaryExpression extends MultiOperandExpression type MofClass
 end
 
 externalType UnaryExpression extends Expression type MofClass
-	expression Expression {containment=yes};
+	expression Expression {@Containment{true}};
 	operator string;
-	operation EGLOperation {transient=true};
+	operation EGLOperation {@Transient{true}};
 end
 
 externalType ArrayElementMemberAccess extends MemberAccess type MofClass
 end
 
 externalType DynamicAccess extends Expression, LHSExpr type MofClass
-	access Expression {containment=true};
-	expression Expression {containment=true};	
-	operation EGLOperation {transient=true};
+	access Expression {@Containment{true}};
+	expression Expression {@Containment{true}};	
+	operation EGLOperation {@Transient{true}};
 end
 
 externalType Assignment extends Expression type MofClass
-	LHS LHSExpr {containment=true};
-	RHS Expression {containment=true};
+	LHS LHSExpr {@Containment{true}};
+	RHS Expression {@Containment{true}};
 	operator String;
-	operation EGLOperation {transient=true};
+	operation EGLOperation {@Transient{true}};
 end
 
 externalType ArrayAccess extends Expression, LHSExpr type MofClass
-	array Expression {containment=true};
-	index Expression {containment=true};
-	operation EGLOperation {transient=true};
+	array Expression {@Containment{true}};
+	index Expression {@Containment{true}};
+	operation EGLOperation {@Transient{true}};
 end
 
 externalType InvocationExpression extends Expression type MofClass { isAbstract=true }
 	id string;
-	arguments Expression[] {containment=true};
+	arguments Expression[] {@Containment{true}};
 	
 	function getTarget() returns(InvocableElement);
 end
 
 externalType NewExpression extends InvocationExpression type MofClass 
-	target EGLConstructor {transient=true};
+	target EGLConstructor {@Transient{true}};
 end
 
 externalType FunctionInvocation extends InvocationExpression type MofClass
@@ -204,39 +204,39 @@ externalType FunctionInvocation extends InvocationExpression type MofClass
 end
 
 externalType ConstructorInvocation extends InvocationExpression type MofClass
-	target EGLConstructor {transient=true};
-	expression Expression {containment=true};
+	target EGLConstructor {@Transient{true}};
+	expression Expression {@Containment{true}};
 end
 
 externalType DelegateInvocation extends InvocationExpression type MofClass
-	expression Expression {containment=true};
+	expression Expression {@Containment{true}};
 end
 
 
 externalType FunctionPartInvocation extends FunctionInvocation type MofClass
 	packageName string;
-	functionPart FunctionPart {transient=yes}; 
+	functionPart FunctionPart {@Transient{true}}; 
 
 	function getFullyQualifiedName() returns(string);
 end
 
 externalType QualifiedFunctionInvocation extends InvocationExpression type MofClass
-	target FunctionMember {transient=true};
-	qualifier Expression {containment=true};
+	target FunctionMember {@Transient{true}};
+	qualifier Expression {@Containment{true}};
 end
 
 externalType TypeExpression extends Expression type MofClass {isAbstract=true}
-	objectExpr Expression {containment=true};
+	objectExpr Expression {@Containment{true}};
 	typeSignature string;
 	eType EGLType;
 end
 
 externalType BoxingExpression extends Expression type MofClass
-	expr Expression {containment=yes};
+	expr Expression {@Containment{true}};
 end
 
 externalType AsExpression extends TypeExpression type MofClass
-	conversionOperation EGLOperation {transient=true};
+	conversionOperation EGLOperation {@Transient{true}};
 end
 
 externalType IsAExpression extends TypeExpression type MofClass
@@ -244,13 +244,13 @@ end
 
 externalType IsNotExpression extends Expression type MofClass
 	operation string;
-	expr Expression {containment=yes};
+	expr Expression {@Containment{true}};
 	mnemonic string;
 end
 
 externalType DeclarationExpression extends Expression type MofClass
-	fields EGLField[] {containment=true};
-	initializers Expression[] {containment=true};
+	fields EGLField[] {@Containment{true}};
+	initializers Expression[] {@Containment{true}};
 end
 
 externalType BuiltInOperationExpression extends InvocationExpression type MofClass
@@ -267,21 +267,21 @@ externalType SizeOfExpression extends BuiltInOperationExpression type MofClass
 end
 
 externalType SubstringAccess extends Expression type MofClass
-	stringExpression Expression {containment=true};
-	start Expression {containment=true};
-	_end Expression {containment=true, mofName="end"}; 
-	operation EGLOperation {transient=true};
+	stringExpression Expression {@Containment{true}};
+	start Expression {@Containment{true}};
+	_end Expression {@Containment{true}, @MofName{"end"}}; 
+	operation EGLOperation {@Transient{true}};
 end
 
 externalType ObjectExpressionEntry extends Element type MofClass {
 }
 	id string;
-	expression expression {containment=true};
+	expression expression {@Containment{true}};
 end
 
 externalType ObjectExpression extends Expression type MofClass {
 }
-	entries ObjectExpressionEntry[] {containment=true};
+	entries ObjectExpressionEntry[] {@Containment{true}};
 end
 
 

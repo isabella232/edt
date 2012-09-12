@@ -17,10 +17,10 @@ import egl.lang.reflect.mof.MofEnum;
 import egl.lang.reflect.mof.MofName;
 
 externalType IOStatement extends Statement type MofClass{isAbstract=true}
-	targets Expression[] {containment=true};
-	dataSource Expression {containment=true};
-	usingExpressions Expression[] {containment=true};
-	usingKeyExpressions Expression[] {containment=true};
+	targets Expression[] {@Containment{true}};
+	dataSource Expression {@Containment{true}};
+	usingExpressions Expression[] {@Containment{true}};
+	usingKeyExpressions Expression[] {@Containment{true}};
 	
 	function getTarget() returns (Expression);
 end
@@ -57,7 +57,7 @@ end
 
 externalType GetByPositionStatement extends IOStatement type MofClass
 	directive GetByPositionKind?;
-	position Expression {containment=true};
+	position Expression {@Containment{true}};
 
 	function getDirectiveString() returns(string);
 end
@@ -75,8 +75,8 @@ externalType ReplaceStatement extends IOStatement type MofClass
 end
 
 externalType ShowStatement extends IOStatement type MofClass
-	passingExpr Expression {mofName="passing", containment=true};
-	returnTo Expression {containment=true};
+	passingExpr Expression {@MofName{"passing"}, @Containment{true}};
+	returnTo Expression {@Containment{true}};
 	
 	function getLinkageKey() returns(string);
 	function isExternal() returns(boolean);

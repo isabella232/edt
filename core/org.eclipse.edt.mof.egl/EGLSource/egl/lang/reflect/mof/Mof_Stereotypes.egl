@@ -23,7 +23,7 @@ Record MofClass type Stereotype {
 	name string;
 	isAbstract boolean;
 	isInterface boolean;
-	typeParameters egl.lang.reflect.mof.EField[];
+	typeParameters string[];
 	isProxy boolean;
 end
 
