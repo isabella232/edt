@@ -57,8 +57,8 @@ import org.eclipse.edt.ide.egldoc.Activator;
 import org.eclipse.edt.ide.egldoc.Messages;
 import org.eclipse.edt.ide.egldoc.gen.EGLDocGenerator;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -429,7 +429,7 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 								if (monitor.isCanceled()) {
 									throw new CanceledException();
 								}
-								parts.add(new PartKey(InternUtil.intern(Util.pathToQualifiedName(packagePath)), InternUtil.intern(eglPart.getElementName()), fullPath.toString()));
+								parts.add(new PartKey(NameUtile.getAsName(Util.pathToQualifiedName(packagePath)), NameUtile.getAsName(eglPart.getElementName()), fullPath.toString()));
 							}
 						}
 					}

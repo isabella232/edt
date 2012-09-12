@@ -26,7 +26,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.NamedElement;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 
@@ -85,7 +85,7 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 		else{
 			Annotation annotation = part.getAnnotation(Constants.Annotation_JavaScriptObject);
 			if(annotation != null){
-				String packageName = (String) annotation.getValue(InternUtil.intern("relativePath"));
+				String packageName = (String) annotation.getValue(NameUtile.getAsName("relativePath"));
 				if(packageName != null && !(packageName.isEmpty())){
 					packageName = packageName.replace('/', '.');
 					packageName = packageName.replace('\\', '.');
@@ -94,7 +94,7 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 				}else{
 					packageName = "";
 				}
-				String partName = (String) annotation.getValue(InternUtil.intern("externalName"));
+				String partName = (String) annotation.getValue(NameUtile.getAsName("externalName"));
 				if(partName == null || partName.isEmpty()){
 					partName = part.getName();
 				}

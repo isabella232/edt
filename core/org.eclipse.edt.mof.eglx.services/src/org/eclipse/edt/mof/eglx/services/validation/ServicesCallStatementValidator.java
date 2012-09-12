@@ -35,10 +35,10 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class ServicesCallStatementValidator extends AbstractStatementValidator {
 	@Override
@@ -253,7 +253,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 	}
 	
 	private String getQualAnyExceptionString() {
-		return InternUtil.intern("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
+		return NameUtile.getAsName("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
 	}
 
 }

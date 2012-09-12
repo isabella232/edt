@@ -52,8 +52,8 @@ import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.egl.UnaryExpression;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class CommonUtilities {
 
@@ -405,10 +405,10 @@ public class CommonUtilities {
 	{
 		// Do not Alias the name of this library for the properties file - it is referenced as a string at runtime
 		String result = null;
-		Annotation annotation = ruiPropertiesLibrary.getAnnotation(InternUtil.intern(Constants.RUI_PROPERTIES_LIBRARY));
+		Annotation annotation = ruiPropertiesLibrary.getAnnotation(NameUtile.getAsName(Constants.RUI_PROPERTIES_LIBRARY));
 		
 		if(annotation != null){
-			String value = (String)annotation.getValue(InternUtil.intern("propertiesFile"));
+			String value = (String)annotation.getValue(NameUtile.getAsName("propertiesFile"));
 			if(value != null && value.length() > 0){
 				result = value;
 			}
