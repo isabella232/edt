@@ -88,6 +88,9 @@ public class TypeUtils implements MofConversion {
 	public static final Type Type_BLOB = getType(Type_EGLBlob);
 	public static final Type Type_BOOLEAN = getType(Type_EGLBoolean);
 	public static final Type Type_BYTES = getType(Type_EGLBytes);
+	public static final Type Type_NUMBER = getType(Type_EGLNumber);
+	public static final Type Type_ANYTEXT = getType(Type_AnyText);
+	public static final Type Type_ANYVALUE = getType(Type_AnyValue);
 
 	public static final int TypeKind_UNDEFINED = -1;
 	public static final int TypeKind_VOID = 0;
@@ -228,7 +231,7 @@ public class TypeUtils implements MofConversion {
 				return false;
 			}
 			
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyValue));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_ANYVALUE);
 		}
 		else {
 			return false;
@@ -238,7 +241,7 @@ public class TypeUtils implements MofConversion {
 	
 	public static boolean isNumericType(Type type) {
 		if (type.getClassifier() instanceof EGLClass) {
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_EGLNumber));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_NUMBER);
 		}
 		else {
 			return false;
@@ -248,7 +251,7 @@ public class TypeUtils implements MofConversion {
 	
 	public static boolean isTextType(Type type) {
 		if (type != null && type.getClassifier() instanceof EGLClass) {
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyText));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_ANYTEXT);
 		}
 		else {
 			return false;
