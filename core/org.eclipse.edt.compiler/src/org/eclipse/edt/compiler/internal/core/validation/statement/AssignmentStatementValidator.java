@@ -72,11 +72,11 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 					boolean parmsValid = true;
 					if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
 						Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), lhsType);
-						parmsValid = IRUtils.isMoveCompatible(t, lhsType, lhsMember);
+						parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), lhsType, lhsMember);
 					}
 					if (parmsValid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
 						Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), lhsType);
-						parmsValid = IRUtils.isMoveCompatible(t, rhsType, rhsMember);
+						parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), rhsType, rhsMember);
 					}
 					
 					if (parmsValid) {
@@ -92,7 +92,7 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 				resolvedRHSType = BindingUtil.resolveGenericType(rhsType, rhs);
 			}
 			
-			if (resolvedRHSType == null || (!IRUtils.isMoveCompatible(lhsType, resolvedRHSType, rhsMember) && !TypeUtils.isDynamicType(resolvedRHSType))) {
+			if (resolvedRHSType == null || (!IRUtils.isMoveCompatible(lhsType, lhsMember, resolvedRHSType, rhsMember) && !TypeUtils.isDynamicType(resolvedRHSType))) {
 				problemRequestor.acceptProblem(rhs,
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 						new String[] {lhsType != null ? StatementValidator.getShortTypeString(lhsType) : lhs.getCanonicalString(),

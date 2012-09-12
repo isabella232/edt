@@ -235,7 +235,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 			return true;
 		}
 		
-    	if (IRUtils.isMoveCompatible(parmLHS.getType(), argRHS.getType(), argRHS)) {
+    	if (IRUtils.isMoveCompatible(parmLHS.getType(), parmLHS, argRHS.getType(), argRHS)) {
     		return true;
     	}
 		

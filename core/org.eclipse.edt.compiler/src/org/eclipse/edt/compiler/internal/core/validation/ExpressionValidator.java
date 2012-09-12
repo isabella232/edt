@@ -95,11 +95,11 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				valid = true;
 				if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
 					Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), operand1.resolveType());
-					valid = IRUtils.isMoveCompatible(t, operand1.resolveType(), operand1.resolveMember());
+					valid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), operand1.resolveType(), operand1.resolveMember());
 				}
 				if (valid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
 					Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), operand1.resolveType());
-					valid = IRUtils.isMoveCompatible(t, operand2.resolveType(), operand2.resolveMember());
+					valid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), operand2.resolveType(), operand2.resolveMember());
 				}
 			}
 			

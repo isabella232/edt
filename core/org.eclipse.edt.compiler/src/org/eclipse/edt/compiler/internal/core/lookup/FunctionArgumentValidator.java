@@ -328,7 +328,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	parmType = BindingUtil.resolveGenericType(parmType, qualifier);
     	argType = BindingUtil.resolveGenericType(argType, argExpr);
     	
-    	if (!IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember()) && !TypeUtils.isDynamicType(argType)) {
+    	if (!IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember()) && !TypeUtils.isDynamicType(argType)) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
@@ -405,7 +405,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	parmType = (ArrayType)BindingUtil.resolveGenericType(parmType, qualifier);
     	argType = BindingUtil.resolveGenericType(argType, argExpr);
     	
-    	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember())) {
+    	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,

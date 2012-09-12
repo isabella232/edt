@@ -90,7 +90,7 @@ public class CaseStatementValidator extends DefaultASTVisitor {
 							else {
 								Type criterionType = caseStatement.getCriterion().resolveType();
 								criterionType = BindingUtil.resolveGenericType(criterionType, caseStatement.getCriterion());
-								boolean compatible = IRUtils.isMoveCompatible(criterionType, binding, expr.resolveMember());
+								boolean compatible = IRUtils.isMoveCompatible(criterionType, caseStatement.getCriterion().resolveMember(), binding, expr.resolveMember());
 								
 								if (!compatible) {
 									problemRequestor.acceptProblem(
