@@ -13,37 +13,40 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public class RUIPropertiesLibraryValidator implements IAnnotationValidationRule {
 	
-		
-	public void validate(Node errorNode, Node target, ITypeBinding targetTypeBinding, Map allAnnotations, final IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	@Override
+	public void validate(Node errorNode, Node target, Element targetElement, Map<String, Object> allAnnotationsAndFields, final IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 
 		//validate that this library only contains fields of type String
 		
 		DefaultASTVisitor visitor = new DefaultASTVisitor() {
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.Library library) {
 				return true;
 			}
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.NestedFunction nestedFunction) {
 				problemRequestor.acceptProblem(nestedFunction, IProblemRequestor.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {});
 				return false;
 			}
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.UseStatement useStatement) {
 				problemRequestor.acceptProblem(useStatement, IProblemRequestor.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {});
 				return false;
 			}
+			@Override
 			public boolean visit(ClassDataDeclaration classDataDeclaration) {
 				if (!isValidInRUIPropertiesLibrary(classDataDeclaration)) {
 					problemRequestor.acceptProblem(classDataDeclaration, IProblemRequestor.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {});
@@ -61,13 +64,13 @@ public class RUIPropertiesLibraryValidator implements IAnnotationValidationRule 
 			return false;
 		}
 		
-		ITypeBinding type = classDataDeclaration.getType().resolveTypeBinding();
+		Type type = classDataDeclaration.getType().resolveType();
 		
-		if (!Binding.isValidBinding(type)) {
+		if (type == null) {
 			return false;
 		}
 		
-		if (type == PrimitiveTypeBinding.getInstance(Primitive.STRING)) {
+		if (TypeUtils.Type_STRING.equals(type.getClassifier())) {
 			return true;
 		}
 		

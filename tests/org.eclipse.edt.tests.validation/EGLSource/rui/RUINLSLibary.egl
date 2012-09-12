@@ -10,6 +10,7 @@
  *
  *******************************************************************************/
 Library lib1 type RUIPropertiesLibrary
+	{propertiesFile = "contains-dash"} //1
 
 	Const myConst String = "blah";  //1
 	
@@ -28,6 +29,9 @@ Library lib1 type RUIPropertiesLibrary
 	
 end
 
-
 library lib2
+end
+
+Library lib3 type RUIPropertiesLibrary
+	{propertiesFile = "noDash"} //0
 end
