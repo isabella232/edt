@@ -16,7 +16,7 @@ import org.eclipse.edt.mof.egl.Stereotype;
 
 record ParameterizableType type Stereotype {
 	targets = [ElementKind.ExternalTypePart],
-	@PartType{"org.eclipse.edt.mof.egl.ParameterizableType"},
+	@PartType{"org.eclipse.edt.mof.egl.ParameterizableType"}
 }
 	name string;
 	parameterizedType egl.lang.reflect.TypeType;

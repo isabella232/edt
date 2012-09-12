@@ -24,9 +24,12 @@ import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
+import org.eclipse.edt.compiler.internal.core.lookup.RecordScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.EClassifier;
@@ -34,7 +37,10 @@ import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EGenericType;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.MofFactory;
+import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EClassProxy;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Type;
@@ -100,9 +106,18 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     			}
     			return false;
     		}
+    		public void endVisit(SettingsBlock settingsBlock) {
+    	    	//Now that we are done processing the field settings for the annotationType, process any annotations on the 
+    	    	//annotationType
+    	        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(NullScope.INSTANCE, annotationType, annotationType, annotationType);
+    	        SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, annotationType, scope,
+    	                dependencyRequestor, problemRequestor, compilerOptions);
+    	        settingsBlock.accept(blockCompletor);
+    		}
     		
 		});
-     }
+ 
+    }
     
     private void processFields(Record record) {
     	
@@ -283,8 +298,35 @@ public class AnnotationTypeCompletor extends DefaultBinder {
 				return ((EType) type);
 			}
 			
+			if (type instanceof Classifier) {
+				//check for mof class proxy
+				Annotation mofClassAnn = type.getAnnotation("egl.lang.reflect.mof.mofclass");;
+				if (mofClassAnn != null) {
+					String name =  (String)mofClassAnn.getValue("name");
+					String pkgName = (String)mofClassAnn.getValue("packageName");
+					if (name == null || name.length() == 0) {
+						name = ((Classifier)type).getCaseSensitiveName();
+					}
+					if (pkgName == null || pkgName.length() == 0) {
+						pkgName = ((Classifier)type).getCaseSensitivePackageName();
+					}
+					
+					String fullName;
+					if (pkgName.length() == 0) {
+						fullName = name;
+					}
+					else {
+						fullName = pkgName + "." + name;
+					}
+					
+					MofSerializable proxiedType = Environment.getCurrentEnv().findType(fullName);
+					if (proxiedType instanceof EType) {
+						return (EType)proxiedType;
+					}
+				}
+			}
+			
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
     	
     	//IF we get here, the type is not valid for use on an annotation field

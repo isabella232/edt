@@ -27,7 +27,7 @@ import egl.lang.reflect.mof.MofClass;
 import egl.lang.reflect.mof.MofName;
 
 externalType SqlActionStatement extends IOStatement type MofClass {isAbstract=yes}
-	preparedStatement Expression {containment=true};
+	preparedStatement Expression {@Containment{true}};
 	hasExplicitSql boolean;
 	sqlString String;
 	
@@ -55,7 +55,7 @@ externalType SqlOpenStatement extends SqlActionStatement, OpenStatement type Mof
 end
 
 externalType SqlPrepareStatement extends SqlActionStatement, PrepareStatement type MofClass
-	sqlStringExpr Expression {containment=true};
+	sqlStringExpr Expression {@Containment{true}};
 end
 
 externalType SqlReplaceStatement extends SqlActionStatement, ReplaceStatement type MofClass
