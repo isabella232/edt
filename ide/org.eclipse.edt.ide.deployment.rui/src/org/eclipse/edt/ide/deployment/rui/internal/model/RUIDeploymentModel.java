@@ -65,8 +65,8 @@ import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.javart.resources.egldd.Parameter;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  *
@@ -539,13 +539,13 @@ public class RUIDeploymentModel {
 			
 			IEGLElement element = EGLCore.create(file);
 			if (element instanceof IEGLFile) {
-				String[] pkg;
+				String pkg;
 				IPackageDeclaration[] pkgs = ((IEGLFile)element).getPackageDeclarations();
 				if (pkgs.length > 0) {
-					pkg = pkgs[0].getElementName().split("\\.");;
+					pkg = pkgs[0].getElementName();
 				}
 				else {
-					pkg = new String[0];
+					pkg = "";
 				}
 				
 				String name = ((IEGLFile)element).getElementName();
@@ -554,7 +554,7 @@ public class RUIDeploymentModel {
 					name = name.substring(0, lastDot);
 				}
 				
-				Part part = environment.findPart(InternUtil.intern(pkg), InternUtil.intern(name));
+				Part part = environment.findPart(NameUtile.getAsName(pkg), NameUtile.getAsName(name));
 				if (part != null) {
 					findPropertiesFiles(part, propFiles);
 				}
@@ -632,7 +632,7 @@ public class RUIDeploymentModel {
 				DotDeployFile deployFile = getDeployFile(ruiHandler);
 				
 				try{
-					Part part = environment.findPart(InternUtil.intern(DeploymentUtilities.convertPackage(deployFile.getPackageName())), InternUtil.intern(deployFile.getPartName()));
+					Part part = environment.findPart(NameUtile.getAsName(DeploymentUtilities.convertPackage(deployFile.getPackageName())), NameUtile.getAsName(deployFile.getPartName()));
 						
 					if(part != null){
 						ValidatorMessageRequestor messageRequestor = new ValidatorMessageRequestor();

@@ -16,7 +16,6 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
@@ -26,7 +25,7 @@ import org.eclipse.edt.ide.deployment.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorDescriptor;
@@ -120,14 +119,19 @@ public class DeploymentContext {
 	}
 	
 	public Part findPart( String qualifiedPartName ) throws PartNotFoundException {
-		String[] splits = qualifiedPartName.split("\\.");
-		String[] packageName = new String[splits.length-1];
-		for(int i=0; i<splits.length-1; i++){
-			packageName[i] = splits[i];
+		String packageName;
+		String partName;
+		int lastDot = qualifiedPartName.lastIndexOf('.');
+		if (lastDot == -1) {
+			packageName = "";
+			partName = qualifiedPartName;
 		}
-		String partName = splits[splits.length-1];
+		else {
+			packageName = qualifiedPartName.substring(0, lastDot);
+			partName = qualifiedPartName.substring(lastDot + 1);
+		}
 
-		return environment.findPart(InternUtil.intern(packageName), InternUtil.intern(partName));
+		return environment.findPart(NameUtile.getAsName(packageName), NameUtile.getAsName(partName));
 	}
 	
 	public void setShell(Shell shell) {

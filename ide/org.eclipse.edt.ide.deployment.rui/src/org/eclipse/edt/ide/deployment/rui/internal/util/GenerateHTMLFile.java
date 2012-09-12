@@ -26,14 +26,15 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.ClassFile;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.xml.sax.SAXException;
 
 /**
@@ -125,7 +126,7 @@ public class GenerateHTMLFile{
 				packageName[i] = splits[i];
 			}
 			String partName = splits[splits.length-1];
-			Part part = environment.findPart(InternUtil.intern(packageName), InternUtil.intern(partName));
+			Part part = environment.findPart(NameUtile.getAsName(Util.stringArrayToQualifiedName(packageName)), NameUtile.getAsName(partName));
 			
 			if (part != null && !part.hasCompileErrors()) {
 				EGL2HTML4VE cmd = new EGL2HTML4VE();
