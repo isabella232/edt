@@ -22,15 +22,15 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlGetByKeyStatement;
 
 public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 
 	public void genStatementBody(SqlGetByKeyStatement stmt, Context ctx, TabbedWriter out) {
 		boolean hasPreparedStmt = stmt.getPreparedStatement() != null;
 		boolean hasDataSource = stmt.getDataSource() != null;
-		boolean isResultSet = hasDataSource && SQL.isSQLResultSet(stmt.getDataSource().getType());
+		boolean isResultSet = hasDataSource && Utils.isSQLResultSet(stmt.getDataSource().getType());
 		
 		String var_resultSet = ctx.nextTempName();
 		if (hasPreparedStmt) {
@@ -54,13 +54,13 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			// the values of the target default key fields
 			if (!hasPreparedStmt && stmt.getUsingExpressions().isEmpty() && !stmt.hasExplicitSql()) {
 				Type type = stmt.getTarget().getType();
-				if (type instanceof EGLClass && !SQL.isWrappedSQLType((EGLClass)type)) {
+				if (type instanceof EGLClass && !Utils.isWrappedSQLType((EGLClass)type)) {
 					// The assumption here is that the order of the SQL compare expressions
 					// in the default WHERE clause derived by the order of the key fields in the type
 					int i = 1;
 					String varName = getExprString(stmt.getTarget(), ctx);
 					for (Field f : ((EGLClass)type).getFields()) {
-						if (SQL.isKeyField(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
+						if (Utils.isKeyField(f) && Utils.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 							// TODO need a generalized way to generate the appropriate
 							// accessor without assuming the field value to accessed is public
 							// and is not an EGLProperty or Property field

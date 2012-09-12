@@ -14,8 +14,8 @@ package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlExecuteStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlExecuteStatement;
 
 public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 
@@ -33,9 +33,9 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 				ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 				out.println(".getConnection().createStatement();");
 				for (String sql : stmts) {
-					if (!SQL.isComment(sql)) {
+					if (!Utils.isComment(sql)) {
 						out.print("ezeStmt.execute(");
-						out.print(quoted(SQL.removeCommentsCRLFs(sql)));
+						out.print(quoted(Utils.removeCommentsCRLFs(sql)));
 						out.println(");");
 					}
 				}

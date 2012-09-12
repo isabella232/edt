@@ -19,8 +19,8 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlAddStatement;
 
 public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 
@@ -49,7 +49,7 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 			}
 			else{
 				targetType = (EGLClass)addStmt.getTarget().getType().getClassifier();
-				if(SQL.isMappedSQLType(targetType)){
+				if(Utils.isMappedSQLType(targetType)){
 					genSetColumnValue(addStmt, addStmt.getTarget(), var_statement, 1, ctx, out);
 				}
 				else{
@@ -93,7 +93,7 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 			}
 			else{
 				targetType = (EGLClass)addStmt.getTarget().getType().getClassifier();
-				if(SQL.isMappedSQLType(targetType)){
+				if(Utils.isMappedSQLType(targetType)){
 				}
 				else{
 					for(Field field : targetType.getFields()){
@@ -124,7 +124,7 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 		}
 		else{
 			targetType = (EGLClass)addStmt.getTarget().getType().getClassifier();
-			if(SQL.isMappedSQLType(targetType)){
+			if(Utils.isMappedSQLType(targetType)){
 			}
 			else{
 				for(Field field : targetType.getFields()){
@@ -140,7 +140,7 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 	private void genAddSingleValue(EGLClass type, String varName, Context ctx, TabbedWriter out) {		
 		int i = 1;
 		for (Field f : type.getFields()) {
-			if (SQL.isInsertable(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
+			if (Utils.isInsertable(f) && Utils.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 				genSetColumnValue(f, var_statement, varName, i, ctx, out);
 				i++;
 			}

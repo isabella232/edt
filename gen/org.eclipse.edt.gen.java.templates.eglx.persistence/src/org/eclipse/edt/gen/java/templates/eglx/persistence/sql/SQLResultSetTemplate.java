@@ -16,8 +16,8 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.sql.SqlDeleteStatement;
-import org.eclipse.edt.mof.egl.sql.SqlReplaceStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlDeleteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlReplaceStatement;
 
 public class SQLResultSetTemplate extends JavaTemplate {
 

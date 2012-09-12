@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.DummyExpression;
 
 public class DummyExpressionTemplate extends JavaTemplate {
 	

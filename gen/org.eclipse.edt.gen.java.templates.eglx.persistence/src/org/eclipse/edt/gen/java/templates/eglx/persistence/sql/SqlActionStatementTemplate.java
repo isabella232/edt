@@ -34,11 +34,11 @@ import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.DummyExpression;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlPrepareStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.impl.DummyExpressionDynamicImpl;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
 public abstract class SqlActionStatementTemplate extends StatementTemplate implements org.eclipse.edt.gen.java.templates.eglx.persistence.Constants{
 	public static final String sqlStmtKey = "org.eclipse.edt.gen.java.sql.stmtkey";
@@ -106,7 +106,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 	protected void genGetSingleRowFromResultSet(Expression target, String resultSet, Context ctx, TabbedWriter out) {
 		EGLClass type = (EGLClass)target.getType().getClassifier();
 
-		if (SQL.isMappedSQLType(type)) { 
+		if (Utils.isMappedSQLType(type)) { 
 			genSetTargetFromResultSet(target, resultSet, 1, ctx, out);
 		}
 		else{
@@ -124,8 +124,8 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 			for (Field field : type.getFields()) {
 				if (!field.isStatic() && 
 						field.getAccessKind()!= AccessKind.ACC_PRIVATE && 
-						SQL.isReadable(field) &&
-						SQL.isMappedSQLType((EGLClass)field.getType().getClassifier())) {
+								Utils.isReadable(field) &&
+								Utils.isMappedSQLType((EGLClass)field.getType().getClassifier())) {
 					genSetTargetFromResultSet(target, field, resultSet, idx++, ctx, out);
 				}
 			}
@@ -184,7 +184,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 	}
 
 	public boolean genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out, String var_stmt, boolean stmtDeclared) {
-		boolean isCall = SQL.isCallStatement(stmt.getSqlString());
+		boolean isCall = Utils.isCallStatement(stmt.getSqlString());
 		out.println("try {");
 		if (stmt.getPreparedStatement() == null || stmt instanceof SqlPrepareStatement) {
 			Integer stmtNumber = getNextStatementKey(ctx);
@@ -237,7 +237,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 					out.print(var_stmt + ".registerOutParameter(");
 					out.print(i);
 					out.print(", ");
-					out.print(SQL.getSQLTypeConstant(uexpr.getType().getClassifier()));
+					out.print(Utils.getSQLTypeConstant(uexpr.getType().getClassifier()));
 					if (uexpr.getType() instanceof FixedPrecisionType) {
 						out.print(", ");
 						out.print(((FixedPrecisionType)uexpr.getType()).getDecimals());
@@ -258,7 +258,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 	}
 	
 	public void genSQLString(SqlActionStatement stmt, Context ctx, TabbedWriter out){
-		out.print(quoted(SQL.removeCRLFs(stmt.getSqlString())));
+		out.print(quoted(Utils.removeCRLFs(stmt.getSqlString())));
 	}
 	public void genGetStatement(SqlActionStatement stmt, Context ctx, TabbedWriter out, Integer stmtNumber){
 		String typeSignature = quoted(((Type)((Function)stmt.getContainer()).getContainer()).getTypeSignature());
@@ -306,7 +306,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 			EGLClass targetType = getTargetType(stmt);
 			String varName = getExprString(targetExpr, ctx);
 			for (Field f : targetType.getFields()) {
-				if (SQL.isKeyField(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
+				if (Utils.isKeyField(f) && Utils.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 					genSetColumnValue(f, var_statement, varName, i, ctx, out);
 					i++;
 				}
@@ -314,7 +314,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 		}
 		else{
 			for (Expression using : stmt.getUsingExpressions()) {
-				if (SQL.isMappedSQLType((EGLClass)using.getType().getClassifier())) {
+				if (Utils.isMappedSQLType((EGLClass)using.getType().getClassifier())) {
 					genSetColumnValue(stmt, using, var_statement, i, ctx, out);
 					i++;
 				}
@@ -335,17 +335,17 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 	// Handles conversion of EGL values to SQL values in places where the default mapping
 	// is not sufficient, i.e. dates and timestamps need to become SQL dates and timestamps
 	public void genConvertValueStart(EGLClass type, Context ctx, TabbedWriter out) {
-		if (SQL.isWrappedSQLType(type)) {
+		if (Utils.isWrappedSQLType(type)) {
 			out.print("new ");
-			out.print(SQL.getSQLTypeName(type));
+			out.print(Utils.getSQLTypeName(type));
 			out.print('(');	
 		}
 	}
 	
 	public void genConvertValueEnd(EGLClass type, Context ctx, TabbedWriter out) {
-		if (SQL.isWrappedSQLType(type)) {
+		if (Utils.isWrappedSQLType(type)) {
 			out.print('.');
-			out.print(SQL.getConvertToSQLConstructorOptions(type));
+			out.print(Utils.getConvertToSQLConstructorOptions(type));
 			out.print(')');
 		}
 	}
@@ -402,7 +402,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 			out.print(".setNull(");
 			out.print(columnIndex);
 			out.print(", ");
-			out.print(SQL.getSQLTypeConstant(type));
+			out.print(Utils.getSQLTypeConstant(type));
 			out.println(");");
 			out.println("}");
 			out.println("else{");
@@ -434,7 +434,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 			out.print(".setNull(");
 			out.print(columnIndex);
 			out.print(", ");
-			out.print(SQL.getSQLTypeConstant(field.getType().getClassifier()));
+			out.print(Utils.getSQLTypeConstant(field.getType().getClassifier()));
 			out.println(");");
 			out.println("}");
 			out.println("else{");
@@ -459,13 +459,13 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate imple
 	
 	public void genSqlGetValueMethodName(Classifier type, Context ctx, TabbedWriter out) {
 		String name = "get";
-		name += SQL.getSqlSimpleTypeName(type);
+		name += Utils.getSqlSimpleTypeName(type);
 		out.print(name);
 	}
 	
 	public void genSqlSetValueMethodName(Classifier type, Context ctx, TabbedWriter out) {
 		String name = "set";
-		name += SQL.getSqlSimpleTypeName(type);
+		name += Utils.getSqlSimpleTypeName(type);
 		out.print(name);
 	}
 
