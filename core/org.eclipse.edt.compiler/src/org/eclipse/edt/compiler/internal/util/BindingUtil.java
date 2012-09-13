@@ -45,6 +45,7 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.FormGroup;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.GenericType;
@@ -58,6 +59,7 @@ import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PatternType;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
@@ -783,7 +785,11 @@ public class BindingUtil {
 		return findPart(ppn.getPackageName(), ppn.getPartName());
 	}
 	
-	public static String getUnaliasedTypeName(Type type) {
+	public static String getUnaliasedTypeName(Type type, boolean includeParams) {
+		if (type == null) {
+			return "";
+		}
+		
 		Classifier classifier = type.getClassifier();
 		String unaliasedName = null;
 		if (classifier != null) {
@@ -795,12 +801,13 @@ public class BindingUtil {
 				if (NameUtile.equals(value.getPackageName(), pkg) && NameUtile.equals(value.getPartName(), name)) {
 					unaliasedName = entry.getKey();
 					
-					// Don't lose the args
-					if (type instanceof ParameterizedType) {
-						String sig = type.getTypeSignature();
-						int paren = sig.indexOf(Type.PrimArgsStartDelimiter);
-						if (paren != -1) {
-							unaliasedName += sig.substring(paren);
+					if (includeParams) {
+						if (type instanceof ParameterizedType) {
+							String sig = type.getTypeSignature();
+							int paren = sig.indexOf(Type.PrimArgsStartDelimiter);
+							if (paren != -1) {
+								unaliasedName += sig.substring(paren);
+							}
 						}
 					}
 					break;
@@ -808,12 +815,12 @@ public class BindingUtil {
 			}
 		}
 		
+		if (!includeParams && unaliasedName == null && type instanceof ParameterizedType) {
+			type = ((ParameterizedType)type).getParameterizableType();
+		}
+		
 		if (unaliasedName == null) {
 			unaliasedName = type.getTypeSignature();
-			int lastDot = unaliasedName.lastIndexOf('.');
-			if (lastDot != -1) {
-				unaliasedName = unaliasedName.substring(lastDot + 1);
-			}
 		}
 		
 		if (type instanceof ParameterizedType) {
@@ -822,8 +829,65 @@ public class BindingUtil {
 			if (paren != -1) {
 				unaliasedName = unaliasedName.replaceAll(Type.PrimArgDelimiter, ",");
 			}
+			
+			if (type instanceof PatternType && paren != -1) {
+				// Need to surround the pattern with quotes.
+				int closeParen = unaliasedName.indexOf(Type.PrimArgsEndDelimiter);
+				if (closeParen != -1) {
+					unaliasedName = unaliasedName.substring(0, paren + 1) + "\"" + unaliasedName.substring(paren + 1, closeParen)
+							+ "\"" + unaliasedName.substring(closeParen);
+				}
+			}
 		}
 		return unaliasedName;
+	}
+	
+	public static String getTypeString(Type binding, boolean includeParams) {
+		StringBuilder result = new StringBuilder();
+		if (binding instanceof ArrayType) {
+			result.append(getTypeString(((ArrayType)binding).getElementType(), includeParams));
+			if (((ArrayType)binding).elementsNullable()) {
+				result.append('?');
+			}
+			result.append("[]");
+		}				
+		else if (binding instanceof AnnotationType) {
+			result.append('@');
+			result.append(binding.getTypeSignature());
+		}				
+		else if (binding != null) {
+			result.append(BindingUtil.getUnaliasedTypeName(binding, includeParams));
+		}
+		
+		return result.toString();
+	}
+	
+	public static String getShortTypeString(Type binding) {
+		return getShortTypeString(binding, false);
+	}
+	
+	public static String getShortTypeString(Type binding, boolean includeParams) {
+		String s = getTypeString(binding, includeParams);
+		int lastDot = s.lastIndexOf('.');
+		if (lastDot == -1) {
+			return s;
+		}
+		return s.substring(lastDot + 1);
+	}
+	
+	public static String getTypeName(Member member) {
+		StringBuilder buf = new StringBuilder();
+		if (member instanceof FunctionMember) {
+			buf.append(member.getName());
+		}
+		else if (member != null) {
+			buf.append(getShortTypeString(member.getType(), true));
+		}
+		
+		if(member.isNullable()){
+			buf.append('?');;
+		}
+		return buf.toString();
 	}
 	
 	public static Type getType(Member mbr) {

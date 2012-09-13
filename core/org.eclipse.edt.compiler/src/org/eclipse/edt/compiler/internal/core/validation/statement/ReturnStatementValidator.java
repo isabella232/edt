@@ -88,14 +88,14 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 					}
 				}
 				else {
-					typeString = StatementValidator.getShortTypeString(returnStmtType);
+					typeString = BindingUtil.getShortTypeString(returnStmtType);
 				}
 				
 				problemRequestor.acceptProblem(returnStatement.getParenthesizedExprOpt(),
 						IProblemRequestor.RETURN_STATEMENT_TYPE_INCOMPATIBLE,
 						new String[] {
 								typeString,
-								StatementValidator.getShortTypeString(visitor.getReturnType())});
+								BindingUtil.getShortTypeString(visitor.getReturnType())});
 			}
 		}
 		

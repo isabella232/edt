@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.HandlerFieldsResolver;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.mof.egl.ArrayType;
@@ -152,7 +152,7 @@ public class PageDataModelBuilder {
 	private String getName(Member dataBinding){
 		StringBuffer sbName = new StringBuffer(dataBinding.getCaseSensitiveName());
 		sbName.append(" : ");//$NON-NLS-1$
-		sbName.append(StatementValidator.getShortTypeString(dataBinding.getType(), true));
+		sbName.append(BindingUtil.getShortTypeString(dataBinding.getType(), true));
 		return sbName.toString();
 	}
 }

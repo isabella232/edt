@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.handlers;
 
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel.Context;
@@ -29,7 +29,7 @@ public class FlexibleRecordBindingHandler extends DataTypeBindingHandler {
 		//create self
 		Record flexibleRecordBinding = (Record)typeBinding;
 		String bindingName = (String)insertDataModel.getContext().get(Context.BINDING_NAME);
-		InsertDataNode insertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, StatementValidator.getShortTypeString(dataBinding.getType(), true));
+		InsertDataNode insertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, BindingUtil.getShortTypeString(dataBinding.getType(), true));
 		insertDataNode.setArray(false);
 		insertDataNode.setContainer(true);
 		insertDataNode.setNodeType(InsertDataNode.NodeType.TYPE_RECORD_ALL);

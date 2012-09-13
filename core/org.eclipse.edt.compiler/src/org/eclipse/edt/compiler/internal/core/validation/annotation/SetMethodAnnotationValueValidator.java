@@ -16,7 +16,6 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Function;
@@ -103,7 +102,7 @@ public class SetMethodAnnotationValueValidator implements IValueValidationRule {
 						new String[] {
 							function.getCaseSensitiveName(),
 							IEGLConstants.PROPERTY_SETMETHOD,
-							StatementValidator.getShortTypeString(fieldType[0])
+							BindingUtil.getShortTypeString(fieldType[0])
 						});
 			}
 		}

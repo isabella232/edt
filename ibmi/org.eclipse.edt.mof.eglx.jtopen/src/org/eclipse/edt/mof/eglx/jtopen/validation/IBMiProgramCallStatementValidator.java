@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
@@ -72,7 +72,7 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 		}
 	
 		if (callStatement.getUsing() != null && !Utils.isIBMiConnection(callStatement.getUsing().resolveType())) {
-			problemRequestor.acceptProblem(callStatement, IBMiResourceKeys.WRONG_USING_CLAUSE_TYPE, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(callStatement.getUsing().resolveType(), true)}, IBMiResourceKeys.getResourceBundleForKeys());
+			problemRequestor.acceptProblem(callStatement, IBMiResourceKeys.WRONG_USING_CLAUSE_TYPE, IMarker.SEVERITY_ERROR, new String[] {BindingUtil.getShortTypeString(callStatement.getUsing().resolveType(), true)}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	
 		if (callStatement.getCallSynchronizationValues() != null) {
@@ -89,7 +89,7 @@ public class IBMiProgramCallStatementValidator extends AbstractStatementValidato
 						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), 
 														IBMiResourceKeys.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, 
 														IMarker.SEVERITY_ERROR, 
-														new String[] {StatementValidator.getTypeName((Function)targFunction), ((Function)targFunction).getCaseSensitiveName(), StatementValidator.getTypeName(callReturnsMember), callReturnsExpr.getCanonicalString()},
+														new String[] {BindingUtil.getTypeName((Function)targFunction), ((Function)targFunction).getCaseSensitiveName(), BindingUtil.getTypeName(callReturnsMember), callReturnsExpr.getCanonicalString()},
 														IBMiResourceKeys.getResourceBundleForKeys());
 					}
 				}

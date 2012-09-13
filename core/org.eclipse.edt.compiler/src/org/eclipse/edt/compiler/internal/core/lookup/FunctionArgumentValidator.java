@@ -30,7 +30,6 @@ import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.ConstantField;
@@ -142,8 +141,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		FunctionParameter parameterBinding = parameterIter.next();
 		Type parameterType = parameterBinding.getType();
 		Type argType = argExpr.resolveType();
+		Member argmember = argExpr.resolveMember();
 		
-		if(argType == null) {
+		if(argType == null && argmember == null) {
 			return false;
 		}
 		
@@ -336,8 +336,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     				argExpr.getCanonicalString(),
 					funcParmBinding.getCaseSensitiveName(),
 					canonicalFunctionName,
-					StatementValidator.getShortTypeString(argType),
-					StatementValidator.getShortTypeString(parmType)
+					// arg can be a function, which has no type
+					argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
+					BindingUtil.getShortTypeString(parmType)
     			});
     		return false;
     	}
@@ -385,8 +386,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	    				argExpr.getCanonicalString(),
 						funcParmBinding.getCaseSensitiveName(),
 						canonicalFunctionName,
-						StatementValidator.getShortTypeString(argType, true),
-						StatementValidator.getShortTypeString(parmType, true)
+						// arg can be a function, which has no type
+						argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
+						BindingUtil.getShortTypeString(parmType, true)
 	    			});
     		return false;
    		}
@@ -413,8 +415,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     				argExpr.getCanonicalString(),
 					funcParmBinding.getCaseSensitiveName(),
 					canonicalFunctionName,
-					StatementValidator.getShortTypeString(argType),
-					StatementValidator.getShortTypeString(parmType)
+					// arg can be a function, which has no type
+					argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
+					BindingUtil.getShortTypeString(argType),
+					BindingUtil.getShortTypeString(parmType)
     			});
     		return false;
     	}
@@ -445,9 +449,15 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		}
     	}
     	
-    	boolean argCompatible = TypeUtils.areCompatible(argType.getClassifier(), parmType.getClassifier());
+    	boolean argCompatible = true;
+    	if (argType != null) {
+    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argType.getClassifier());
+    	}
+    	else if (argDBinding != null) {
+    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argDBinding);
+    	}
     	if (argCompatible) {
-    		argCompatible = argExpr.resolveMember() != null && argExpr.resolveMember().isNullable() == funcParmBinding.isNullable();
+    		argCompatible = argDBinding != null && argDBinding.isNullable() == funcParmBinding.isNullable();
     	}
     	
     	if (!argCompatible) {
@@ -458,8 +468,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     				argExpr.getCanonicalString(),
 					funcParmBinding.getCaseSensitiveName(),
 					canonicalFunctionName,
-					StatementValidator.getShortTypeString(argType, true),
-					StatementValidator.getShortTypeString(parmType, true)
+					// arg can be a function, which has no type
+					argType == null ? BindingUtil.getTypeName(argDBinding) : BindingUtil.getShortTypeString(argType, true),
+					BindingUtil.getShortTypeString(parmType, true)
     			});
     		return false;
    		}

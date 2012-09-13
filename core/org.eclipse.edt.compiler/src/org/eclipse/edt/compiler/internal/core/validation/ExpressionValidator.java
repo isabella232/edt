@@ -49,7 +49,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -389,9 +388,9 @@ public class ExpressionValidator extends AbstractASTVisitor {
 						asExpression,
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 						new String[] {
-							StatementValidator.getTypeString(fromType),
-							StatementValidator.getTypeString(toType),
-							asExpression.getCanonicalString()
+								BindingUtil.getTypeString(fromType, true),
+								BindingUtil.getTypeString(toType, true),
+								asExpression.getCanonicalString()
 						});
 				}
 			}

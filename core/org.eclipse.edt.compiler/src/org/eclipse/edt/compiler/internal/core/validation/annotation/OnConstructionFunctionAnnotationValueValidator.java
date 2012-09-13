@@ -16,20 +16,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.FunctionBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 
 
 /**
@@ -63,9 +58,9 @@ public class OnConstructionFunctionAnnotationValueValidator implements IValueVal
 						errorNode,
 						IProblemRequestor.ONPAGELOADFUNCTION_PARAMETER_HAS_INVALID_TYPE,
 						new String[] {
-							StatementValidator.getShortTypeString(invalidParameterType),
-							invalidParameterName,
-							value.getName()
+								BindingUtil.getShortTypeString(invalidParameterType),
+								invalidParameterName,
+								value.getName()
 						});
 				}
 				

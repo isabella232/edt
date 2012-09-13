@@ -75,61 +75,6 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class StatementValidator {
 
-	public static String getTypeString(org.eclipse.edt.mof.egl.Type binding) {
-		StringBuilder result = new StringBuilder();
-		if (binding.equals(TypeUtils.Type_ARRAYDICTIONARY)) {
-			result.append(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING);
-		}
-		else if (binding.equals(TypeUtils.Type_DICTIONARY)) {
-			result.append(IEGLConstants.MIXED_DICTIONARY_STRING);
-		}
-		else if (binding instanceof org.eclipse.edt.mof.egl.ArrayType) {
-			result.append(getShortTypeString(((org.eclipse.edt.mof.egl.ArrayType)binding).getElementType(), true));
-			if (((org.eclipse.edt.mof.egl.ArrayType)binding).elementsNullable()) {
-				result.append('?');
-			}
-			result.append("[]");
-		}				
-		else if (binding instanceof AnnotationType) {
-			result.append('@');
-			result.append(getUnqualifiedSignature(binding.getTypeSignature()));
-		}				
-		else {
-			result.append(BindingUtil.getUnaliasedTypeName(binding));
-		}
-		
-		return result.toString();
-	}
-	
-	public static String getShortTypeString(org.eclipse.edt.mof.egl.Type binding) {
-		return getShortTypeString(binding, false);
-	}
-	
-	public static String getShortTypeString(org.eclipse.edt.mof.egl.Type binding, boolean includeLengthForPrimitives) {
-		StringBuilder result;
-		if (TypeUtils.isPrimitive(binding)) {
-			if (includeLengthForPrimitives || binding.equals(TypeUtils.Type_MONTHSPANINTERVAL) || binding.equals(TypeUtils.Type_SECONDSPANINTERAL)) {
-				result = new StringBuilder(getTypeString(binding));
-			}
-			else {
-				result = new StringBuilder(BindingUtil.getUnaliasedTypeName(binding));
-			}
-		}
-		else {
-			result = new StringBuilder(getTypeString(binding));
-		}
-		
-		return result.toString();
-	}
-	
-	private static String getUnqualifiedSignature(String sig) {
-		int lastDot = sig.lastIndexOf('.');
-		if (lastDot == -1) {
-			return sig;
-		}
-		return sig.substring(lastDot + 1);
-	}
-	
 	public static void validatePrimitiveConstant(Type type,final IProblemRequestor problemRequestor){
 		if (type.isArrayType()){
 			type = ((ArrayType)type).getBaseType();
@@ -297,13 +242,5 @@ public class StatementValidator {
 		}
 		
 		return result[0];
-	}
-	public static String getTypeName(Member member){
-		if(member.isNullable()){
-			return getShortTypeString(member.getType(), true) + "?";
-		}
-		else{
-			return getShortTypeString(member.getType(), true);
-		}
 	}
 }

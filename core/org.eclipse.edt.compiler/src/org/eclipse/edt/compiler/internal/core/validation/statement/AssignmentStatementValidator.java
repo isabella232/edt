@@ -95,8 +95,8 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 			if (resolvedRHSType == null || (!IRUtils.isMoveCompatible(lhsType, lhsMember, resolvedRHSType, rhsMember) && !TypeUtils.isDynamicType(resolvedRHSType))) {
 				problemRequestor.acceptProblem(rhs,
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-						new String[] {lhsType != null ? StatementValidator.getShortTypeString(lhsType) : lhs.getCanonicalString(),
-						rhsType != null ? StatementValidator.getShortTypeString(rhsType):rhs.getCanonicalString(),
+						new String[] {lhsType != null ? BindingUtil.getShortTypeString(lhsType) : lhs.getCanonicalString(),
+						rhsType != null ? BindingUtil.getShortTypeString(rhsType) : rhs.getCanonicalString(),
 						lhs.getCanonicalString() + " " + assignmentOperator.toString() + " " + rhs.getCanonicalString()});
 			}
 		}

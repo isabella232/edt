@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.handlers;
 
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel.Context;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataNode;
@@ -26,7 +26,7 @@ public class PrimitiveTypeBindingHandler extends DataTypeBindingHandler {
 	public void handle(Member dataBinding, Type typeBinding, InsertDataModel insertDataModel) {
 		//create self
 		String bindingName = (String)insertDataModel.getContext().get(Context.BINDING_NAME);
-		InsertDataNode insertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, StatementValidator.getShortTypeString(dataBinding.getType(), true));
+		InsertDataNode insertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, BindingUtil.getShortTypeString(dataBinding.getType(), true));
 		insertDataNode.setArray(false);
 		insertDataNode.setContainer(false);
 		insertDataNode.setNodeType(InsertDataNode.NodeType.TYPE_PRIMITIVE_ALL);
@@ -42,7 +42,7 @@ public class PrimitiveTypeBindingHandler extends DataTypeBindingHandler {
 		//a simple primitive type field
 		if(parent == null){
 			//create a layout container for the simple primitive type field
-			InsertDataNode parentInsertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, StatementValidator.getShortTypeString(dataBinding.getType(), true));
+			InsertDataNode parentInsertDataNode = InsertDataNodeFactory.newInsertDataNode(insertDataModel, bindingName, BindingUtil.getShortTypeString(dataBinding.getType(), true));
 			parentInsertDataNode.setArray(false);
 			parentInsertDataNode.setContainer(true);
 			parentInsertDataNode.setNodeType(InsertDataNode.NodeType.TYPE_PRIMITIVE_ALL);
