@@ -4189,8 +4189,8 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	}
 	else if ( type == "time" ) {
 		date.setFullYear( 2000 );
-		date.setMonth( now.getMonth() );
-		date.setDate( now.getDate() );
+		date.setMonth( 0 );//Bug 372937 changed from current month due to issues with February 29
+		date.setDate( 1 ); //Bug 372937 changed from current date due to issues with February 29
 		date.setMilliseconds( 0 );
 		if (!pattern || pattern == "" )
 			pattern = "yyyyMMddHHmmss";
@@ -4205,9 +4205,10 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	//second function is for pattern missing chars on the right side (zeros)
 	var chars = 
 		[ // bug 365262, change to leap year 2000 to accept date like "0229"
+		//Bug 372937 changed from current month and date due to issues with February 29
 		  [ "y", function(d){ d.setFullYear( 2000 ); }, function(d){ d.setFullYear( 0 ); } ],
-	      [ "M", function(d){ d.setMonth( now.getMonth() ); }, function(d){ d.setMonth( 0 ); } ], 
-	      [ "d", function(d){ d.setDate( now.getDate() ); }, function(d){ d.setDate( 1 ); } ],
+	      [ "M", function(d){ d.setMonth( 0 ); }, function(d){ d.setMonth( 0 ); } ], 
+	      [ "d", function(d){ d.setDate( 1 ); }, function(d){ d.setDate( 1 ); } ],
 	      [ "h", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],
 	      [ "m", function(d){ d.setMinutes( now.getMinutes() ); }, function(d){ d.setMinutes( 0 ); } ],
 	      [ "s", function(d){ d.setSeconds( now.getSeconds() ); }, function(d){ d.setSeconds( 0 ); } ], 

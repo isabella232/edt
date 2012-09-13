@@ -1227,9 +1227,8 @@ egl.eglx.lang.ETimestamp.timeOf = function (ts, pattern){
 //		throw egl.createTypeCastException( "CRRUI2017E", [ ts, 'timestamp', 'time' ], 'time', 'timestamp' );
 	}
 	var timeCopy = new Date( ts );
-	var now = new Date ();
-	timeCopy.setDate( now.getDate() );
-	timeCopy.setMonth( now.getMonth() );
+	timeCopy.setDate( 1 ); //Bug 372937 changed from current date due to issues with February 29
+	timeCopy.setMonth( 0 ); //Bug 372937 changed from current month due to issues with February 29
 	timeCopy.setFullYear( 2000 );	
 	timeCopy.setMilliseconds( 0 );
 	return timeCopy;	
