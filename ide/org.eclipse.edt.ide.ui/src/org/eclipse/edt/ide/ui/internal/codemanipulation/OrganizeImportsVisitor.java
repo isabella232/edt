@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.DataTable;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Handler;
@@ -180,6 +181,11 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		return true;
 	}
 	
+	public boolean visit(EGLClass eglClass) {
+		handlePart(eglClass);
+		return true;
+	}
+	
 	public boolean visit(Interface interfaceNode) {
 		handlePart(interfaceNode);
 		return true;
@@ -250,7 +256,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	}
 
 	private void addToUnresolvedTypes(Name nameNode, Type binding) {
-		if (binding != null){
+		if (binding == null){
 			addToUnresolvedTypes(nameNode);
 		}
 	}
