@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
@@ -61,12 +62,12 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 					new String[] {});
 		}
 		
-		if (rhsType != null && lhsType != null) {
+		if ((rhsType != null || rhsMember != null) && lhsType != null) {
 			// For complex assignments like "x &= y" we must treat it as if it was coded "x = x & y". To do this, retrieve the operation and use its type.
 			Type resolvedRHSType = null;
 			if (assignmentOperator != Assignment.Operator.ASSIGN) {
 				String symbol = assignmentOperator.toString().substring(0, assignmentOperator.toString().length() - 1);
-				Operation op = IRUtils.getBinaryOperation(lhsType.getClassifier(), rhsType.getClassifier(), symbol);
+				Operation op = IRUtils.getBinaryOperation(lhsType.getClassifier(), rhsType == null ? rhsMember : rhsType.getClassifier(), symbol);
 				if (op != null) {
 					// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the lhs type).
 					boolean parmsValid = true;
@@ -92,7 +93,8 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 				resolvedRHSType = BindingUtil.resolveGenericType(rhsType, rhs);
 			}
 			
-			if (resolvedRHSType == null || (!IRUtils.isMoveCompatible(lhsType, lhsMember, resolvedRHSType, rhsMember) && !TypeUtils.isDynamicType(resolvedRHSType))) {
+			if ((resolvedRHSType == null && !(rhsMember instanceof FunctionMember))
+					|| (!IRUtils.isMoveCompatible(lhsType, lhsMember, resolvedRHSType, rhsMember) && !TypeUtils.isDynamicType(resolvedRHSType))) {
 				problemRequestor.acceptProblem(rhs,
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 						new String[] {lhsType != null ? BindingUtil.getShortTypeString(lhsType) : lhs.getCanonicalString(),
