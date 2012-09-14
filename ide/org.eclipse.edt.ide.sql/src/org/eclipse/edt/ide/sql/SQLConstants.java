@@ -39,6 +39,7 @@ public class SQLConstants {
 	public static final String VALUES = "values"; //$NON-NLS-1$
 	public static final String WHERE = "where"; //$NON-NLS-1$
     public static final String LIMITED_STRING = "limited string"; //$NON-NLS-1$
+    public final static String USING = "using"; //$NON-NLS-1$
    
 	// SQL I/O types 
 	public static final String ADD_IO_TYPE = "add"; //$NON-NLS-1$

@@ -80,7 +80,7 @@ public class Utils {
 		return field.getAnnotation("eglx.persistence.Id") != null;
 	}
 
-	private static boolean isGeneratedValue(Field field){
+	public static boolean isGeneratedValue(Field field){
 		return field.getAnnotation("eglx.persistence.sql.GeneratedValue") != null;
 	}
 	public static boolean isAssociationField(Field field) {
