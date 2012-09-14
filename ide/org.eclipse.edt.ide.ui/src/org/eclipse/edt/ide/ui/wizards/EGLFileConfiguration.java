@@ -167,12 +167,24 @@ public class EGLFileConfiguration extends EGLPackageConfiguration {
 		pcs.removePropertyChangeListener(pcl);
 	}
 	
-	
+	/**
+	 * @deprecated this method breaks the WCC contract. all processing on the bound part should be done inside acceptResult!
+	 * @see #processBoundPart(IEGLFile, String, IWorkingCopyCompileRequestor)
+	 */
 	static public Part getBoundPart(IEGLFile eglFile, String partSimpleName)
 	{
 		final Part[] boundPart = new Part[]{null};
+		processBoundPart(eglFile, partSimpleName, new IWorkingCopyCompileRequestor(){
+			public void acceptResult(WorkingCopyCompilationResult result) {
+				boundPart[0] = (Part)result.getBoundPart();						
+			}			
+		});
+		
+		return boundPart[0];
+	}
+	
+	static public void processBoundPart(IEGLFile eglFile, String partSimpleName, IWorkingCopyCompileRequestor requestor) {
 		try {		
-
 			IFile file = (IFile)(eglFile.getCorrespondingResource());
 		
 			IEGLElement eglPkgFrag = eglFile.getParent();
@@ -180,19 +192,15 @@ public class EGLFileConfiguration extends EGLPackageConfiguration {
 			
 			IBufferFactory UIBufferFactory = EGLUI.getBufferFactory();		
 			WorkingCopyCompiler compiler = WorkingCopyCompiler.getInstance();
-			compiler.compilePart(file.getProject(), packageName, file, EGLCore.getSharedWorkingCopies(UIBufferFactory), partSimpleName, 
-					new IWorkingCopyCompileRequestor(){
-						public void acceptResult(WorkingCopyCompilationResult result) {
-							boundPart[0] = (Part)result.getBoundPart();						
-						}			
-			});
+			compiler.compilePart(file.getProject(), packageName, file, EGLCore.getSharedWorkingCopies(UIBufferFactory), partSimpleName, requestor);
 		}catch (EGLModelException e) {
 			e.printStackTrace();
 		}
-		
-		return boundPart[0];
 	}
 		
+	/**
+	 * @deprecated this method breaks the WCC contract. all processing on the bound part should be done inside acceptResult!
+	 */
 	static public List getBoundParts(IEGLFile eglFile)
 	{
 		final List boundPartList = new ArrayList();

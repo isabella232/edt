@@ -36,11 +36,14 @@ import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.quickfix.IInvocationContext;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
@@ -119,113 +122,122 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		final String newLineDelimiter = TextUtilities.getDefaultLineDelimiter(context.getDocument());
 		getImportsAndPkg(currImports, context.getFileAST(), currPkg);//Get the current import part and pkg
 
-		Part boundPart = EGLFileConfiguration.getBoundPart(context.getEGLFile(), context.getPart().getName().getCanonicalName());
-		boundPart.accept(new AbstractASTVisitor(){
-			public boolean visit(CallStatement callStatement) {
-				int callEndOffset = callStatement.getOffset() + callStatement.getLength();
-				if(callStatement.getOffset()<= errorOffset && errorOffset<= callEndOffset ){
-					Expression serviceFunctionExpr = callStatement.getInvocationTarget();
-					CallbackTarget callbackTgt = null;
-					CallbackTarget errCallbackTgt = null;
-					
-					if (callStatement.getCallSynchronizationValues() != null) {
-						callbackTgt = callStatement.getCallSynchronizationValues().getReturnTo();
-						errCallbackTgt = callStatement.getCallSynchronizationValues().getOnException();
-					}
-
-					Expression callbackExpr = null, errCallbackExpr =null;
-
-					if(callbackTgt != null){
-						callbackExpr = callbackTgt.getExpression();
-					}
-					if(errCallbackTgt != null){
-						errCallbackExpr = errCallbackTgt.getExpression();
-					}
-					
-					if(callbackExpr != null && callbackExpr.resolveMember() == null && errorOffset >= callbackExpr.getOffset() && errorOffset <= callbackExpr.getOffset() + callbackExpr.getLength()){
-						 createCallbackFunction( serviceFunctionExpr, callbackExpr, currImports, currPkg[0], functionTextBuffer, needImports, newLineDelimiter, functionName);	
-					}else if(errCallbackExpr != null && errCallbackExpr.resolveMember() == null && errorOffset >= errCallbackExpr.getOffset() && errorOffset <= errCallbackExpr.getOffset() + errCallbackExpr.getLength()){
-						createErrCallbackFunction(serviceFunctionExpr, errCallbackExpr, newLineDelimiter, functionTextBuffer, functionName);
-					}
-				}
-									
-				return false;
-			}
-			
-			public boolean visit(Assignment assignment) {
-				if(assignment.getOffset() <= errorOffset && errorOffset <= assignment.getOffset() + assignment.getLength()){
-					createDelegateFunction(assignment, functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
-				}
-				
-				return false;
-			}
-			
-			public boolean visit(AssignmentStatement assStmt){
-				if(assStmt.getOffset() <= errorOffset && errorOffset <= assStmt.getOffset() + assStmt.getLength()){
-					createDelegateFunction(assStmt.getAssignment(), functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
-				}
-				return false;
-			}
-			
-			public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
-				checkInitializer(functionDataDeclaration.getNames().get(0), functionDataDeclaration.getInitializer());
-				return false;
-			};
-			
-			public boolean visit(ClassDataDeclaration classDataDeclartaion) {
-				checkInitializer(classDataDeclartaion.getNames().get(0), classDataDeclartaion.getInitializer());
-				return false;
-			};
-			
-			private void checkInitializer(Expression lhs, Expression initializer) {
-				if (initializer == null) {
+		EGLFileConfiguration.processBoundPart(context.getEGLFile(), context.getPart().getName().getCanonicalName(), new IWorkingCopyCompileRequestor() {
+			@Override
+			public void acceptResult(WorkingCopyCompilationResult result) {
+				Node boundPart = result.getBoundPart();
+				if (boundPart == null) {
 					return;
 				}
 				
-				if(initializer.getOffset() <= errorOffset && errorOffset <= initializer.getOffset() + initializer.getLength()){
-					createDelegateFunction(lhs, initializer, functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
-				}
-			}
-			
-			public boolean visit(FunctionInvocationStatement functionInvoke){
-				if(functionInvoke.getOffset() <= errorOffset && errorOffset<= functionInvoke.getOffset() + functionInvoke.getLength()){
-					FunctionInvocation functionInvocation = functionInvoke.getFunctionInvocation();
-					Member member = functionInvocation.getTarget().resolveMember();
-					
-					List<FunctionParameter> paraDefList = null;
-					if (member instanceof FunctionMember) {
-						paraDefList = ((FunctionMember)member).getParameters();
-					}
-					else if (functionInvocation.getTarget().resolveType() instanceof Delegate) {
-						paraDefList = ((Delegate)functionInvocation.getTarget().resolveType()).getParameters();
-					}
-					
-					if (paraDefList != null) {
-						Iterator<Expression> realIter = functionInvocation.getArguments().iterator();
-						
-						FunctionParameter errorParaBinding = null;
-						Type typeBinding = null;
-						String name = null;
-						
-						for (Iterator<FunctionParameter> iterator = paraDefList.iterator(); iterator.hasNext();) {
-							Expression aSimpleName = realIter.next();
-							if(aSimpleName.getOffset() <= errorOffset && errorOffset<= aSimpleName.getOffset() + aSimpleName.getLength()){
-								name = aSimpleName.getCanonicalString();
-								errorParaBinding = iterator.next();
-								typeBinding = errorParaBinding.getType();
-								break;
+				boundPart.accept(new AbstractASTVisitor(){
+					public boolean visit(CallStatement callStatement) {
+						int callEndOffset = callStatement.getOffset() + callStatement.getLength();
+						if(callStatement.getOffset()<= errorOffset && errorOffset<= callEndOffset ){
+							Expression serviceFunctionExpr = callStatement.getInvocationTarget();
+							CallbackTarget callbackTgt = null;
+							CallbackTarget errCallbackTgt = null;
+							
+							if (callStatement.getCallSynchronizationValues() != null) {
+								callbackTgt = callStatement.getCallSynchronizationValues().getReturnTo();
+								errCallbackTgt = callStatement.getCallSynchronizationValues().getOnException();
+							}
+
+							Expression callbackExpr = null, errCallbackExpr =null;
+
+							if(callbackTgt != null){
+								callbackExpr = callbackTgt.getExpression();
+							}
+							if(errCallbackTgt != null){
+								errCallbackExpr = errCallbackTgt.getExpression();
 							}
 							
-							iterator.next();
+							if(callbackExpr != null && callbackExpr.resolveMember() == null && errorOffset >= callbackExpr.getOffset() && errorOffset <= callbackExpr.getOffset() + callbackExpr.getLength()){
+								 createCallbackFunction( serviceFunctionExpr, callbackExpr, currImports, currPkg[0], functionTextBuffer, needImports, newLineDelimiter, functionName);	
+							}else if(errCallbackExpr != null && errCallbackExpr.resolveMember() == null && errorOffset >= errCallbackExpr.getOffset() && errorOffset <= errCallbackExpr.getOffset() + errCallbackExpr.getLength()){
+								createErrCallbackFunction(serviceFunctionExpr, errCallbackExpr, newLineDelimiter, functionTextBuffer, functionName);
+							}
+						}
+											
+						return false;
+					}
+					
+					public boolean visit(Assignment assignment) {
+						if(assignment.getOffset() <= errorOffset && errorOffset <= assignment.getOffset() + assignment.getLength()){
+							createDelegateFunction(assignment, functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
 						}
 						
-						if (typeBinding instanceof Delegate){
-							getDelegateFunctionString((Delegate)typeBinding, name, functionName, functionTextBuffer, newLineDelimiter, needImports, currImports, currPkg[0]);
+						return false;
+					}
+					
+					public boolean visit(AssignmentStatement assStmt){
+						if(assStmt.getOffset() <= errorOffset && errorOffset <= assStmt.getOffset() + assStmt.getLength()){
+							createDelegateFunction(assStmt.getAssignment(), functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
+						}
+						return false;
+					}
+					
+					public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
+						checkInitializer(functionDataDeclaration.getNames().get(0), functionDataDeclaration.getInitializer());
+						return false;
+					};
+					
+					public boolean visit(ClassDataDeclaration classDataDeclartaion) {
+						checkInitializer(classDataDeclartaion.getNames().get(0), classDataDeclartaion.getInitializer());
+						return false;
+					};
+					
+					private void checkInitializer(Expression lhs, Expression initializer) {
+						if (initializer == null) {
+							return;
+						}
+						
+						if(initializer.getOffset() <= errorOffset && errorOffset <= initializer.getOffset() + initializer.getLength()){
+							createDelegateFunction(lhs, initializer, functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
 						}
 					}
-				}
+					
+					public boolean visit(FunctionInvocationStatement functionInvoke){
+						if(functionInvoke.getOffset() <= errorOffset && errorOffset<= functionInvoke.getOffset() + functionInvoke.getLength()){
+							FunctionInvocation functionInvocation = functionInvoke.getFunctionInvocation();
+							Member member = functionInvocation.getTarget().resolveMember();
+							
+							List<FunctionParameter> paraDefList = null;
+							if (member instanceof FunctionMember) {
+								paraDefList = ((FunctionMember)member).getParameters();
+							}
+							else if (functionInvocation.getTarget().resolveType() instanceof Delegate) {
+								paraDefList = ((Delegate)functionInvocation.getTarget().resolveType()).getParameters();
+							}
+							
+							if (paraDefList != null) {
+								Iterator<Expression> realIter = functionInvocation.getArguments().iterator();
+								
+								FunctionParameter errorParaBinding = null;
+								Type typeBinding = null;
+								String name = null;
+								
+								for (Iterator<FunctionParameter> iterator = paraDefList.iterator(); iterator.hasNext();) {
+									Expression aSimpleName = realIter.next();
+									if(aSimpleName.getOffset() <= errorOffset && errorOffset<= aSimpleName.getOffset() + aSimpleName.getLength()){
+										name = aSimpleName.getCanonicalString();
+										errorParaBinding = iterator.next();
+										typeBinding = errorParaBinding.getType();
+										break;
+									}
+									
+									iterator.next();
+								}
+								
+								if (typeBinding instanceof Delegate){
+									getDelegateFunctionString((Delegate)typeBinding, name, functionName, functionTextBuffer, newLineDelimiter, needImports, currImports, currPkg[0]);
+								}
+							}
+						}
 
-				return false;
+						return false;
+					}
+				});
 			}
 		});
 
