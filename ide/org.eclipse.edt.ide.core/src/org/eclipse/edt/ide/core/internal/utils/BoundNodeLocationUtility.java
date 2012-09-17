@@ -86,7 +86,7 @@ public class BoundNodeLocationUtility {
 		public BoundDataBindingAddress(IFile declaringFile, String partName, String address) {
 			super(declaringFile, partName);
 
-			this.address = address;
+			this.address = NameUtile.getAsName(address);
 		}		
 	}	
 	
