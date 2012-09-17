@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<Enumeration ID="1" eClass="org.eclipse.edt.mof.egl.Enumeration" name="PurposeKind" fileName="eglx/ui/rui/Annotations.egl" hasCompileErrors="false" packageName="eglx.ui.rui" >
+	<literals ID="2" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="1" name="FOR_DISPLAY" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="3" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:15" off="i:2130" line="i:91" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="4" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="2" name="FOR_CREATE" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="5" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:15" off="i:2148" line="i:92" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="6" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="3" name="FOR_UPDATE" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="7" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:15" off="i:2166" line="i:93" />
+		<container IDREF="1"/>
+	</literals>
+	<annotations ID="8" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:80" off="i:2105" line="i:90" />
+</Enumeration>

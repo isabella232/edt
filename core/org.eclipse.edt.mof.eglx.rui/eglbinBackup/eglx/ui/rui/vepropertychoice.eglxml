@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" name="VEPropertyChoice" fileName="eglx/ui/rui/Annotations.egl" hasCompileErrors="false" packageName="eglx.ui.rui" >
+	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="id" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="3" eClass="org.eclipse.edt.mof.EField" name="displayName" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<annotations ID="4" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:76" off="i:1866" line="i:74" />
+</AnnotationType>

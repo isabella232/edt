@@ -1,0 +1,43 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" name="DataTemplate" fileName="eglx/ui/rui/Annotations.egl" hasCompileErrors="false" packageName="eglx.ui.rui" >
+	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="name" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="3" eClass="org.eclipse.edt.mof.EField" name="purposes" eType="org.eclipse.edt.mof.EList&lt;egl:eglx.ui.rui.purposekind&gt;" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="4" eClass="org.eclipse.edt.mof.EField" name="dataMapping" eType="egl:eglx.ui.rui.datamapping" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="5" eClass="org.eclipse.edt.mof.EField" name="genController" eType="org.eclipse.edt.mof.EBoolean" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="6" eClass="org.eclipse.edt.mof.EField" name="template" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="7" eClass="org.eclipse.edt.mof.EField" name="formManagerTemplate" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="8" eClass="org.eclipse.edt.mof.EField" name="childLayoutDataTemplate" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="9" eClass="org.eclipse.edt.mof.EField" name="childNameLabelTemplate" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="10" eClass="org.eclipse.edt.mof.EField" name="childErrorLabelTemplate" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="11" eClass="org.eclipse.edt.mof.EField" name="childControllerTemplate" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="12" eClass="org.eclipse.edt.mof.EField" name="childControllerValidStateSetterTemplate" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="13" eClass="org.eclipse.edt.mof.EField" name="childControllerPublishMessageHelperTemplate" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="14" eClass="org.eclipse.edt.mof.EField" name="childFormFieldTemplate" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<annotations ID="15" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:440" off="i:1087" line="i:39" />
+</AnnotationType>

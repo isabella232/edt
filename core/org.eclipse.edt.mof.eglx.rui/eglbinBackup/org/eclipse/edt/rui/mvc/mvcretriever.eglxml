@@ -1,0 +1,4 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<Delegate ID="1" eClass="org.eclipse.edt.mof.egl.Delegate" name="MVCRetriever" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" isNullable="false" returnType="egl:eglx.lang.estring" >
+	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:46" off="i:975" line="i:44" />
+</Delegate>

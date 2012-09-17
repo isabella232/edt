@@ -1,0 +1,11 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" validationProxy="org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.LowerCaseAnnotationProxy" name="LowerCase" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" >
+	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="value" eType="org.eclipse.edt.mof.EBoolean" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+		<initialValue ID="3" eClass="org.eclipse.edt.mof.egl.BooleanLiteral" value="yes" >
+			<annotations ID="4" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:3" off="i:3314" line="i:170" />
+		</initialValue>
+	</eFields>
+	<targets>FieldMbr</targets>
+	<annotations ID="5" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:202" off="i:3120" line="i:163" />
+</AnnotationType>

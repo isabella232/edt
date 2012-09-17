@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<Delegate ID="1" eClass="org.eclipse.edt.mof.egl.Delegate" name="MVCValidatorFunction" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" isNullable="true" returnType="egl:eglx.lang.estring" >
+	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:69" off="i:745" line="i:28" />
+	<parameters ID="3" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="input" type="egl:eglx.lang.estring" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+		<annotations ID="4" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:15" off="i:777" line="i:29" />
+		<container IDREF="1"/>
+	</parameters>
+</Delegate>

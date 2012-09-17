@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<StereotypeType ID="1" eClass="org.eclipse.edt.mof.egl.StereotypeType" isAbstract="false" isInterface="false" name="RUIHandler" fileName="eglx/ui/rui/Stereotypes.egl" hasCompileErrors="false" packageName="eglx.ui.rui" referenceType="false" defaultSuperType="egl:eglx.ui.rui.view" >
+	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="onConstructionFunction" eType="org.eclipse.edt.mof.egl.Function" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="3" eClass="org.eclipse.edt.mof.EField" name="includeFile" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="4" eClass="org.eclipse.edt.mof.EField" name="cssFile" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="5" eClass="org.eclipse.edt.mof.EField" name="title" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="6" eClass="org.eclipse.edt.mof.EField" name="theme" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<targets>HandlerPart</targets>
+	<annotations ID="7" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:262" off="i:554" line="i:14" />
+</StereotypeType>
