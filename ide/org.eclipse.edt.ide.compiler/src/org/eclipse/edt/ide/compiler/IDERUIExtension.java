@@ -9,18 +9,21 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package eglx.ui.rui;
+package org.eclipse.edt.ide.compiler;
 
-Record MVCView type Annotation
-{
-	targets = [
-		ElementKind.HandlerPart, ElementKind.ExternalTypePart
-	],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.MVCViewAnnotationProxy"
-} 
-	retrieveViewHelper egl.lang.reflect.FunctionMbr;
-	publishHelper egl.lang.reflect.FunctionMbr;
-	retrieveValidStateHelper egl.lang.reflect.FunctionMbr;
-	publishMessageHelper egl.lang.reflect.FunctionMbr;
-	showErrorState egl.lang.reflect.FunctionMbr;
-end
+import org.eclipse.edt.ide.core.IDEBaseCompiler;
+import org.eclipse.edt.ide.core.IDEBaseCompilerExtension;
+import org.eclipse.edt.mof.eglx.rui.RUIExtension;
+
+public class IDERUIExtension extends IDEBaseCompilerExtension {
+	
+	public IDERUIExtension() {
+		this.baseExtension = new RUIExtension();
+	}
+	
+	@Override
+	public String[] getSystemEnvironmentPaths() {
+		return new String[]{IDEBaseCompiler.getPathToPluginDirectory("org.eclipse.edt.mof.eglx.rui", "egllib")};
+	}
+	
+}

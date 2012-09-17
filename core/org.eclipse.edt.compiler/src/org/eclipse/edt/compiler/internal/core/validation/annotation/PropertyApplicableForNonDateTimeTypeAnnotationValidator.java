@@ -11,28 +11,26 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
-/**
- * @author Dave Murray
- */
 public class PropertyApplicableForNonDateTimeTypeAnnotationValidator extends PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator {
 	
-	public PropertyApplicableForNonDateTimeTypeAnnotationValidator(IAnnotationTypeBinding annotationType, String canonicalAnotationName) {
-		super(annotationType, canonicalAnotationName);
+	public PropertyApplicableForNonDateTimeTypeAnnotationValidator(String canonicalAnotationName) {
+		super(canonicalAnotationName);
 	}
 	
-	protected void validatePrimitiveType(Node errorNode, IAnnotationBinding annotationBinding, IProblemRequestor problemRequestor, Primitive primitive, String canonicalItemName) {
-		if(primitive == Primitive.DATE || primitive == Primitive.TIME) {
+	@Override
+	protected void validateType(final Node errorNode, final Annotation annotationBinding, final IProblemRequestor problemRequestor, Type type, String canonicalItemName) {
+		if(TypeUtils.Type_DATE.equals(type) || TypeUtils.Type_TIME.equals(type)){
 			problemRequestor.acceptProblem(
 				errorNode,
 				IProblemRequestor.INVALID_FORM_FIELD_NOT_SUPPORTED_FOR_DATETIME,
-				new String[] {canonicalAnnotationName, canonicalItemName});
+				new String[]{canonicalAnnotationName, canonicalItemName});
 		}
 	}
 }

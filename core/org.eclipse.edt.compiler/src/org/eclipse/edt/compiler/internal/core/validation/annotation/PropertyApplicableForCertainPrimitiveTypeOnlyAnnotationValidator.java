@@ -14,23 +14,22 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.ast.ConstantFormField;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 
@@ -39,30 +38,35 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  */
 public abstract class PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator extends AnnotationValidationRule {
 	
-	protected IAnnotationTypeBinding annotationType;
 	protected String canonicalAnnotationName;
 	
-	protected PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator(IAnnotationTypeBinding annotationType, String canonicalAnnotationName) {
+	protected PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator(String canonicalAnnotationName) {
 		super(InternUtil.internCaseSensitive("PropertyApplicableForCertainPrimitiveOnly"));
-		this.annotationType = annotationType;
 		this.canonicalAnnotationName = canonicalAnnotationName;
 	}
 	
-	public void validate(final Node errorNode, Node target, ITypeBinding targetTypeBinding, Map allAnnotations, final IProblemRequestor problemRequestor, ICompilerOptions compilerOptions){
+	@Override
+	public void validate(Node errorNode, Node target, Element targetElement, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions){
 		
-		final IAnnotationBinding annotationBinding = (IAnnotationBinding)allAnnotations.get(annotationType.getName());
+		final Annotation annotationBinding = (Annotation)allAnnotationsAndFields.get(NameUtile.getAsName(canonicalAnnotationName));
 		
-		// TODO REmove this null check and possibly the not found check?
-		if(annotationBinding.getValue() != null  && annotationBinding.getValue()!= IBinding.NOT_FOUND_BINDING){
-			if(targetTypeBinding != null && IBinding.NOT_FOUND_BINDING != targetTypeBinding) {
-				if(ITypeBinding.PRIMITIVE_TYPE_BINDING == targetTypeBinding.getKind()) {
-					validatePrimitiveType(errorNode, annotationBinding, problemRequestor, ((PrimitiveTypeBinding) targetTypeBinding).getPrimitive(), getCanonicalName(target));
-				}
+		// TODO REmove this null check?
+		if(annotationBinding != null && annotationBinding.getValue() != null){
+			Type type = null;
+			if (targetElement instanceof Type) { 
+				type = (Type)targetElement;
+			}
+			else if (targetElement instanceof TypedElement) {
+				type = ((TypedElement)targetElement).getType();
+			}
+			
+			if(type != null) {
+				validateType(errorNode, annotationBinding, problemRequestor, type, getCanonicalName(target));
 			}
 		}
 	}
 	
-	protected abstract void validatePrimitiveType(final Node errorNode, final IAnnotationBinding annotationBinding, final IProblemRequestor problemRequestor, Primitive primitive, String canonicalItemName);
+	protected abstract void validateType(final Node errorNode, final Annotation annotationBinding, final IProblemRequestor problemRequestor, Type type, String canonicalItemName);
 	
 	private String getCanonicalName(Node node) {
 		final String[] result = new String[] {""};

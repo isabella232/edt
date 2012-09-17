@@ -11,12 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ParameterizedType;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 /**
@@ -24,12 +25,17 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
  */
 public class PropertyApplicableForTimestampTypeOnlyAnnotationValidator extends PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator {
 	
-	public PropertyApplicableForTimestampTypeOnlyAnnotationValidator(IAnnotationTypeBinding annotationType, String canonicalAnnotationName) {
-		super(annotationType, canonicalAnnotationName);
+	public PropertyApplicableForTimestampTypeOnlyAnnotationValidator(String canonicalAnnotationName) {
+		super(canonicalAnnotationName);
 	}
 	
-	protected void validatePrimitiveType(final Node errorNode, final IAnnotationBinding annotationBinding, final IProblemRequestor problemRequestor, Primitive primitive, String canonicalItemName) {
-		if(Primitive.TIMESTAMP != primitive) {
+	@Override
+	protected void validateType(final Node errorNode, final Annotation annotationBinding, final IProblemRequestor problemRequestor, Type type, String canonicalItemName) {
+		if (type instanceof ParameterizedType) {
+			type = ((ParameterizedType)type).getParameterizableType();
+		}
+		
+		if(!TypeUtils.Type_TIMESTAMP.equals(type)){
 			problemRequestor.acceptProblem(
 				errorNode,
 				IProblemRequestor.PROPERTY_ONLY_VALID_FOR_PRIMITIVE_TYPE,
