@@ -29,3 +29,61 @@ handler currencyChecks type ruihandler
 	s7 string{@currencySymbol{"USD"}}; //1 Property currencySymbol must be defined with a numeric type. The type of this item is string.
 	s8 string{@currencySymbol{"USD$"}}; //2 Property currencySymbol must be defined with a numeric type. The type of this item is string.|The length of value USD$ for property currencySymbol exceeds the maximum length of 3.
 end
+
+handler dateFormatChecks type ruihandler
+	// valid types
+	i1 int{@dateFormat}; //0
+	i2 int{@dateFormat{value = "AAAA"}}; //0
+	i3 int{@dateFormat{value = "MM-dd-yyyy"}}; //0
+	i4 int{@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	s1 string{@dateFormat}; //0
+	s2 string{@dateFormat{value = "AAAA"}}; //0
+	s3 string{@dateFormat{value = "MM-dd-yyyy"}}; //0
+	s4 string{@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	ls1 string(10){@dateFormat}; //0
+	ls2 string(10){@dateFormat{value = "AAAA"}}; //0
+	ls3 string(10){@dateFormat{value = "MM-dd-yyyy"}}; //0
+	ls4 string(10){@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	d1 date{@dateFormat}; //0
+	d2 date{@dateFormat{value = "AAAA"}}; //0
+	d3 date{@dateFormat{value = "MM-dd-yyyy"}}; //0
+	d4 date{@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	dc1 decimal(4){@dateFormat}; //0
+	dc2 decimal(4){@dateFormat{value = "AAAA"}}; //0
+	dc3 decimal(4){@dateFormat{value = "MM-dd-yyyy"}}; //0
+	dc4 decimal(4){@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	
+	// invalid types
+	t1 time{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type time.
+	t2 time{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type time.
+	t3 time{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type time.
+	t4 time{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type time.
+	ts1 timestamp?{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	ts2 timestamp?{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	ts3 timestamp?{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	ts4 timestamp?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	tsp1 timestamp("yy"){@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	tsp2 timestamp("yy"){@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	tsp3 timestamp("yy"){@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	tsp4 timestamp("yy"){@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	b1 boolean{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type boolean.
+	b2 boolean{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type boolean.
+	b3 boolean{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type boolean.
+	b4 boolean{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type boolean.
+	dcd1 decimal(4,2){@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.
+	dcd2 decimal(4,2){@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.
+	dcd3 decimal(4,2){@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.
+	dcd4 decimal(4,2){@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.
+	a1 any?{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type any.
+	a2 any?{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type any.
+	a3 any?{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type any.
+	a4 any?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type any.
+	by1 bytes?{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	by2 bytes?{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	by3 bytes?{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	by4 bytes?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	byl1 bytes(1)?{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	byl2 bytes(1)?{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	byl3 bytes(1)?{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	byl4 bytes(1)?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+end

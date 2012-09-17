@@ -19,7 +19,8 @@ import org.eclipse.edt.mof.egl.Annotation;
 
 
 public class PropertiesFileAnnotationValueValidator implements IValueValidationRule {
-
+	
+	@Override
 	public void validate(Node errorNode, Node target, Annotation annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		if (annotationBinding.getValue() != null) {
 			String value = (String)annotationBinding.getValue();
