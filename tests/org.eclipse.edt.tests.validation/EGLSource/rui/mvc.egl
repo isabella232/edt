@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+ 
+handler currencyChecks type ruihandler
+	i1 int{@currency}; //0
+	i2 int{@currency{yes}}; //0
+	i3 int{@currency{no}}; //0
+	i4 int{@currencySymbol}; //1 Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+	i5 int{@currencySymbol{""}}; //1 Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+	i6 int{@currencySymbol{"$"}}; //0
+	i7 int{@currencySymbol{"USD"}}; //0
+	i8 int{@currencySymbol{"USD$"}}; //1 The length of value USD$ for property currencySymbol exceeds the maximum length of 3.
+	
+	s1 string{@currency}; //1 Property currency must be defined with a numeric type. The type of this item is string.
+	s2 string{@currency{yes}}; //1 Property currency must be defined with a numeric type. The type of this item is string.
+	s3 string{@currency{no}}; //0
+	s4 string{@currencySymbol}; //2 Property currencySymbol must be defined with a numeric type. The type of this item is string.|Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+	s5 string{@currencySymbol{""}}; //2 Property currencySymbol must be defined with a numeric type. The type of this item is string.|Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+	s6 string{@currencySymbol{"$"}}; //1 Property currencySymbol must be defined with a numeric type. The type of this item is string.
+	s7 string{@currencySymbol{"USD"}}; //1 Property currencySymbol must be defined with a numeric type. The type of this item is string.
+	s8 string{@currencySymbol{"USD$"}}; //2 Property currencySymbol must be defined with a numeric type. The type of this item is string.|The length of value USD$ for property currencySymbol exceeds the maximum length of 3.
+end
