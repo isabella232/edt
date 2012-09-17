@@ -290,7 +290,7 @@ public class AnnotationTypeCompletor extends DefaultBinder {
 			
 			//handle proxy types
 			if (type instanceof EClassProxy) {
-				return ((EClassProxy)type).getEClass();
+				return ((EClassProxy)type).getProxiedEClass();
 			}
 			
 			//If the type is an annotationType or an Enumeration, it is already an EType
