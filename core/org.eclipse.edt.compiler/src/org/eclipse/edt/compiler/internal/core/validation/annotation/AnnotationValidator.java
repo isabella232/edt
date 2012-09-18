@@ -123,7 +123,9 @@ public class AnnotationValidator {
 					if (proxy.length() > 0) {
 						try {
 							Class c = AnnotationValidator.class.getClassLoader().loadClass(proxy);
-							return (IValidationProxy)c.getMethod("getInstance", (Class[])null).invoke(null, (Object[])null);
+							IValidationProxy valProxy = (IValidationProxy)c.getMethod("getInstance", (Class[])null).invoke(null, (Object[])null);
+							valProxy.setType((AnnotationType)eclass);
+							return valProxy;
 						}
 						catch(ClassNotFoundException e) {
 							throw new RuntimeException(e);
@@ -492,7 +494,7 @@ public class AnnotationValidator {
 					SettingsBlock settingsBlock = setValuesExpression.getSettingsBlock();
 					
 					IValidationProxy proxy = getValidationProxy((Annotation)annotationExpressionDBinding);
-					if (proxy != null) {					   
+					if (proxy != null) {
 						processSubAnnotations(annotationExpression, target, targetElement, (Annotation)annotationExpressionDBinding, proxy.getAnnotationValidators());
 						processComplexAnnotationFields(target, settingsBlock, proxy);
 					}
@@ -622,14 +624,13 @@ public class AnnotationValidator {
 					org.eclipse.edt.mof.egl.Type rhType = assignment.getRightHandSide().resolveType();
 					if (lhType != null && rhType != null && !(lhType instanceof AnnotationType)) {
 						new AssignmentStatementValidator(problemRequestor, 	compilerOptions, null).validateAssignment(
-											assignment.getOperator(), 
-											assignment.getLeftHandSide(), 
-											assignment.getRightHandSide(), 
-											assignment.getLeftHandSide().resolveType(), 
-											assignment.getRightHandSide().resolveType(), 
-											assignment.getLeftHandSide().resolveMember(), 
-											assignment.getRightHandSide().resolveMember());
-						
+								assignment.getOperator(),
+								assignment.getLeftHandSide(),
+								assignment.getRightHandSide(),
+								assignment.getLeftHandSide().resolveType(),
+								assignment.getRightHandSide().resolveType(),
+								assignment.getLeftHandSide().resolveMember(),
+								assignment.getRightHandSide().resolveMember());
 					}
 				}
 				return false;
@@ -641,11 +642,13 @@ public class AnnotationValidator {
 	 * Process annotations found on fields of this complex annotation.
 	 */
 	private void processComplexAnnotationFields(final Node target, final SettingsBlock settingsBlock, final IValidationProxy proxy) {
-		settingsBlock.accept(new AbstractASTVisitor(){
+		final boolean[] processed = {false};
+		settingsBlock.accept(new AbstractASTExpressionVisitor() {
 			@Override
 			public boolean visit(SetValuesExpression setValuesExpression) {
 				// we have found a nested annotation, start the process over
 				processAnnotations(setValuesExpression, null);
+				processed[0] = true;
 				return false;
 			}
 			
@@ -653,15 +656,38 @@ public class AnnotationValidator {
 			public boolean visit(AnnotationExpression annotationExpression) {
 				// we have found a nested annotation, start the process over
 				processAnnotations(annotationExpression, null);
+				processed[0] = true;
 				return false;
 			}
 			
 			@Override
 			public boolean visit(Assignment assignment){
 				processComplexAnnotationFields(target, assignment, proxy);
+				processed[0] = true;
 				return true;
 			}
 		});
+		
+		// When there's just 1 field users can omit the name: @MyAnnot{"abc"} instead of @MyAnnot{value = "abc"}
+		if (!processed[0] && settingsBlock.getSettings().size() == 1 && settingsBlock.getParent() instanceof SetValuesExpression) {
+			Object element = ((SetValuesExpression)settingsBlock.getParent()).getExpression().resolveElement();
+			if (element instanceof Annotation) {
+				Annotation annot = (Annotation)element;
+				List<EField> fields = annot.getEClass().getEFields();
+				if (fields.size() == 1) {
+					String name = NameUtile.getAsName(fields.get(0).getName());
+					Object value = annot.getValue(name);
+					if (value != null) {
+						List<ValueValidationRule> rules = proxy.getFieldValidators(name);
+						if (rules != null && rules.size() > 0) {
+							for (ValueValidationRule nextRule : rules) {
+								nextRule.validate(settingsBlock.getParent(), target, annot, problemRequestor, compilerOptions);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private void processComplexAnnotationFields(Node target, Assignment assignment, IValidationProxy proxy) {
@@ -680,7 +706,7 @@ public class AnnotationValidator {
 			}
 		}
 	}
-
+	
 	/**
 	 * process annotations specified for all fields of this annotation
 	 */
