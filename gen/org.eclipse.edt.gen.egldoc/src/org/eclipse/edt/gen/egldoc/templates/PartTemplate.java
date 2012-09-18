@@ -3,56 +3,30 @@ package org.eclipse.edt.gen.egldoc.templates;
 import java.util.List;
 
 import org.eclipse.edt.gen.egldoc.Context;
+import org.eclipse.edt.gen.egldoc.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.Stereotype;
 
 public class PartTemplate extends EGLDocTemplate {
 
-	public void preGenPart(Part part, Context ctx) {
-		ctx.put("partName", part.getName());
-		ctx.put("packageName", part.getPackageName());
-		ctx.put("fullPartName", part.getFullyQualifiedName());
-		ctx.invokeSuper(this, preGenPart, part, ctx);
-	}
-	
-	public void genPartContent(Part part, Context ctx, TabbedWriter out) {
-
-		ctx.invoke(genPackage, part, ctx, out);
-        
-		ctx.invoke(genClassContent, part, ctx, out);
+	public void preGenContent(Part part, Context ctx) {
+		ctx.put(Constants.PARTNAME, part.getName());
+		ctx.put(Constants.PACKAGENAME, part.getPackageName());
+		ctx.put(Constants.FULLPARTNAME, part.getFullyQualifiedName());
 		
-		ctx.invoke(genLastComments, part, ctx, out);
-	
-		// ctx.invoke(genCompatibility, part, ctx, out);
+		ctx.invokeSuper(this, preGenContent, part, ctx);
 	}
-
-	public void genClassContent(Part part, Context ctx, TabbedWriter out) {
+	
+	
+	public void genContent(Part part, Context ctx, TabbedWriter out) {
 
 		ctx.invoke(genStereotypeName, part, ctx, out);
+		// loops back to the current method:  ctx.invokeSuper(this, genContent, part, ctx, out);
 
-	}
-
-	public void genLastComments(Element part, Context ctx, TabbedWriter out) {
-		   String postFirstPara = (String) ctx.get("postFirstPara");
-		   if(postFirstPara != null){
-			   postFirstPara.replaceAll("\n", "<p class=\"p\"></p>");
-			   out.println("<dt class=\"dt dlterm\"><a name=\"comments\"</a>Comments</dt>");		    
-			   out.println("<dd class=\"dd\">" + postFirstPara + "</dd>");
-		   } 
-		}
-	
-	public void genPackage(Part part, Context ctx, TabbedWriter out) {
-
-		out.println("<dt class=\"dt dlterm\"><a name=\"package\"</a>EGL package name</dt>");
-
-		if (part.getPackageName() == "") {
-			out.println("<dd> <p class=\"p\">The default package is in use.</p>");
-		} else {
-			out.println("<dd> <p class=\"p\">" + part.getPackageName() + "</p>");
-		}
-		out.println("<p class=\"p\"></p></dd></dt>");
 	}
 
 	public void genStereotypeName(Part part, Context ctx, TabbedWriter out) {

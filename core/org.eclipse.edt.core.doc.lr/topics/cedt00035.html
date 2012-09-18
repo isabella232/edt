@@ -8,6 +8,8 @@
 <meta name="DC.Title" content="Service classifier overview"></meta>
 <meta name="abstract" content="The capabilities of the Service classifier are made available when you code a service. The type is like a program that has multiple entry points."></meta>
 <meta name="description" content="The capabilities of the Service classifier are made available when you code a service. The type is like a program that has multiple entry points."></meta>
+<meta name="DC.subject" content="classifier, Service, Service classifier"></meta>
+<meta name="keywords" content="classifier, Service, Service classifier"></meta>
 <meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -30,14 +32,8 @@ has multiple entry points.</p>
 <p class="p">The logic in an EGL-written service is <dfn class="term">stateless</dfn>,
 which means that the value of each variable is specific to the invocation.</p>
 
-<p class="p">Any EGL logic type can request a service. When you code the requester,
-you declare a variable for service access, and that variable is based
-on a type. If the service was written in EGL, you can use the Service
-type as the type. Otherwise, you can only use an Interface type for
-that purpose. </p>
-
-<p class="p">For further details on service invocation, see details on the Interface
-classifier in “Classifiers for defining EGL prototype parts.”</p>
+<p class="p">At this writing, EGL logic can request a service only if that logic
+is generated to JavaScript.</p>
 
 <div class="p">Here is an example of a service:<pre class="pre codeblock">Service MyService{}
 

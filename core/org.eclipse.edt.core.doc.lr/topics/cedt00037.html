@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Interface classifier overview"></meta>
-<meta name="abstract" content="The capabilities of the Interface classifier are made available when you code a Interface type, which has prototypes for some or all of the operations provided by a service. That part is the basis of a service-access variable, which is used in the statement that invokes the service."></meta>
-<meta name="description" content="The capabilities of the Interface classifier are made available when you code a Interface type, which has prototypes for some or all of the operations provided by a service. That part is the basis of a service-access variable, which is used in the statement that invokes the service."></meta>
+<meta name="abstract" content="The capabilities of the Interface classifier are made available when you code a Interface type, which describe the functionality that you want to see coded in an EGL Class or Handler type."></meta>
+<meta name="description" content="The capabilities of the Interface classifier are made available when you code a Interface type, which describe the functionality that you want to see coded in an EGL Class or Handler type."></meta>
+<meta name="DC.subject" content="classifier, Interface, Interface classifier"></meta>
+<meta name="keywords" content="classifier, Interface, Interface classifier"></meta>
 <meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -24,122 +26,22 @@
 
 
 <div class="body"><p class="shortdesc">The capabilities of the Interface classifier are made available
-when you code a <dfn class="term">Interface type</dfn>, which has prototypes
-for some or all of the operations provided by a service. That part
-is the basis of a <dfn class="term">service-access variable</dfn>, which is used
-in the statement that invokes the service.</p>
+when you code a <dfn class="term">Interface type</dfn>, which describe the functionality
+that you want to see coded in an EGL Class or Handler type. </p>
 
-<p class="p">A second use of the Interface part is as a design tool.</p>
+<p class="p">After the Interface type is complete, you or others can code the
+Class or Handler type, which is said to <em class="ph i">implement the interface</em>.
+The meaning of that phrase is that the Class or Handler type contains
+every function described in the Interface type. The Interface type
+provides a kind of contract that the other type must fulfill.</p>
 
-</div>
-
-<div class="topic nested1" xml:lang="en-us" lang="en-us" id="theinterfacepartasanaccessassistant">
-<h2 class="title topictitle2">The Interface type as a custom type</h2>
-
-<div class="body">
-<p class="p">If you accessing a service written in a language other than EGL,
-you must use an Interface part to declare the service-access variable.
-If you are accessing a service written in EGL, you can use either
-an Interface type or the related Service type to declare the variable. </p>
-
-<div class="p">If you are writing an EGL service and want to distribute details
-to those who are developing a service requester, you might distribute
-an Interface type to avoid disclosing the logic inside the service:<ul class="ul">
-<li class="li">You might want to hide the source code from developers outside
-of your organization. In particular, you might ship EGL Interface
-parts to customers, along with the Java™ classes
-that were generated from the Service type.</li>
-
-<li class="li">You might want to reduce complexity. The Interface type helps
-developers focus on the service operations rather than on the internal
-logic.</li>
-
-</ul>
-</div>
-
-<div class="p">Here is an example Interface type, which is based on the service
-shown in “The Service classifier”:<pre class="pre codeblock">Interface IMyService
-   Function calculate(theList INT[] IN) 
-            returns(BIN (4,2));
-
-   // other function prototypes are here
-end
-</pre>
-</div>
-
-<div class="p">Here is the declaration of the service-access variable:<pre class="pre codeblock">myServiceVariable IMyService;
-</pre>
-</div>
-
-<p class="p">In this case, you also must declare a variable that is based on <samp class="ph codeph">BIN
-(4,2)</samp>, which is the return type. </p>
-
-<div class="p">Two cases apply:<ul class="ul">
-<li class="li">If you are writing EGL code to be generated into Java, the service invocation is <dfn class="term">synchronous</dfn>,
-which means that the invoking logic waits for the service to return
-control. Here is the code that sets up and fulfills the invocation:<pre class="pre codeblock">average BIN(4,2);
-average = myServiceVariable.calculate([90, 70, 80]);</pre>
-</li>
-
-<li class="li">If you are writing EGL code to be generated to JavaScript™, the service invocation is <dfn class="term">asynchronous</dfn>,
-which means that the invoking logic continues running. The EGL runtime
-code directs the service-response data to one of the following functions:<ul class="ul">
-<li class="li">A <dfn class="term">callback function</dfn>, which is a function that is
-coded to receive the return value after a successful invocation.</li>
-
-<li class="li">An <dfn class="term">exception handler</dfn>, which is a function that is
-coded to receive error details after a failed invocation.</li>
-
-</ul>
-<div class="p">Here is the code that invokes the service asynchronously from
-a Rich UI handler:<pre class="pre codeblock">   call myServiceVariable.calculate([90, 70, 80])
-      returning to myCallbackFunction 
-                   onException ServiceLib.serviceExceptionHandler;</pre>
-</div>
-</li>
-
-</ul>
-</div>
-
-<p class="p">A service-access variable is tied to a <dfn class="term">service binding</dfn>,
-which is a definition that identifies the service location and access
-protocol. The binding can be in the deployment descriptor, and that
-practice provides the greatest flexibility. If you are invoking a
-web service, you can set the binding in the code itself.</p>
-
-<p class="p">An Interface type does not include a stereotype.</p>
-
-</div>
-
-</div>
-
-<div class="topic nested1" xml:lang="en-us" lang="en-us" id="theinterfacepartasadesigntool">
-<h2 class="title topictitle2">The Interface type as a design tool</h2>
-
-<div class="body">
-<p class="p">You can also use an Interface type to describe the functionality
-that you want to see coded in an EGL service. After the Interface
-type is complete, you or others can code the service, which is said
-to <em class="ph i">implement the interface</em>. The meaning of that phrase is that
-the service contains every function described in the Interface type.
-The type provides a kind of contract that the service must fulfill.</p>
-
-<div class="p">Using an Interface type as a design tool has the following benefits:<ul class="ul">
-<li class="li">Helps developers and business analysts think clearly about what
-operations are needed in a service before service development begins.</li>
-
-<li class="li">Helps developers write the service-access code while the service
-is under development.</li>
-
-</ul>
-</div>
-
+<p class="p">Using an Interface type as a design tool helps developers and business
+analysts think clearly about what operations are needed before other
+development begins.</p>
 
 </div>
 
 <anchor id="related_links"></anchor>
-
-</div>
 
 
 

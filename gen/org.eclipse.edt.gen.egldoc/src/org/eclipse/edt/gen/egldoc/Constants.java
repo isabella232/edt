@@ -19,4 +19,17 @@ public class Constants {
 	// EGL message id's
 	public static final String EGLMESSAGE_EXCEPTION_OCCURED = "9998";
 	public static final String EGLMESSAGE_STACK_TRACE = "9999";
+	
+	// Context strings
+	public static final String BLOCKCOMMENTS = "blockComments";
+	public static final String DOCTYPE = "docType";	
+	public static final String FIELDCONTAINERTYPE = "fieldContainerType";
+	public static final String FILECONTENTS = "fileContents";
+	public static final String FIRSTPARA = "firstPara";
+	public static final String FULLPARTNAME = "fullPartName";
+	public static final String LINECOMMENTS = "lineComments";
+	public static final String LINETRACKER = "lineTracker";
+	public static final String PACKAGENAME = "packageName";
+	public static final String PARTNAME = "partName";	
+	public static final String POSTFIRSTPARA = "postFirstPara";	
 }

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.edt.tests.validation_tools.contribution1"
+            nameFilter="*.egl"
+            objectClass="org.eclipse.core.resources.IFile">
+         <menu
+               label="EDT Validation Tools"
+               path="additions"
+               id="org.eclipse.edt.tests.validation_tools.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="Generate JUnit Test For EDT"
+               class="org.eclipse.edt.tests.validation_tools.popup.actions.NewAction"
+               menubarPath="org.eclipse.edt.tests.validation_tools.menu1/group1"
+               enablesFor="1"
+               id="org.eclipse.edt.tests.validation_tools.newAction">
+         </action>
+      </objectContribution>
+            <objectContribution
+                  adaptable="true"
+                  id="org.eclipse.edt.tests.validation_tools.contribution1"
+                  objectClass="org.eclipse.jdt.core.IJavaProject">
+         <menu
+               label="EDT Validation Tools"
+               path="additions"
+               id="org.eclipse.edt.tests.validation_tools.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               enablesFor="1"
+               label="Generate test templates"
+               class="org.eclipse.edt.tests.validation_tools.popup.actions.TestTemplateGen"
+               menubarPath="org.eclipse.edt.tests.validation_tools.menu1/group1"
+               id="org.eclipse.edt.tests.validation_tools.ttg">
+         </action>
+      </objectContribution>
+            <objectContribution
+                  adaptable="true"
+                  id="org.eclipse.edt.tests.validation_tools.objectContribution1"
+                  nameFilter="*.egl"
+                  objectClass="org.eclipse.edt.ide.core.model.IEGLFile">
+               <menu
+                     id="org.eclipse.edt.tests.validation_tools.menu2"
+                     label="EDT Validation Tools"
+                     path="additions">
+                  <separator
+                        name="group1">
+                  </separator>
+               </menu>
+               <action
+                     class="org.eclipse.edt.tests.validation_tools.popup.actions.NewAction"
+                     enablesFor="1"
+                     id="org.eclipse.edt.tests.validation_tools.newAction1"
+                     label="Generate JUnit Test For EDT"
+                     menubarPath="org.eclipse.edt.tests.validation_tools.menu2/group1">
+               </action>
+            </objectContribution>
+            <objectContribution
+                  adaptable="true"
+                  id="org.eclipse.edt.tests.validation_tools.contribution2"
+                  objectClass="org.eclipse.edt.ide.core.model.IEGLProject">
+               <menu
+                     id="org.eclipse.edt.tests.validation_tools.menu3"
+                     label="EDT Validation Tools"
+                     path="additions">
+                  <separator
+                        name="group1">
+                  </separator>
+               </menu>
+               <action
+                     class="org.eclipse.edt.tests.validation_tools.popup.actions.TestTemplateGen"
+                     enablesFor="1"
+                     id="org.eclipse.edt.tests.validation_tools.ttg"
+                     label="Generate test templates"
+                     menubarPath="org.eclipse.edt.tests.validation_tools.menu3/group1">
+               </action>
+            </objectContribution>
+            <objectContribution
+                  adaptable="false"
+                  id="org.eclipse.edt.tests.validation_tools.objectContribution1"
+                  objectClass="org.eclipse.core.resources.IFolder">
+               <menu
+                     id="org.eclipse.edt.tests.validation_tools.menu1"
+                     label="EDT Validation Tools"
+                     path="additions">
+                  <groupMarker
+                        name="group1">
+                  </groupMarker>
+               </menu>
+               <action
+                     class="org.eclipse.edt.tests.validation_tools.popup.actions.NewAction"
+                     enablesFor="1"
+                     id="org.eclipse.edt.tests.validation_tools.newAction"
+                     label="Generate JUnit Test For EDT"
+                     menubarPath="org.eclipse.edt.tests.validation_tools.menu1/group1">
+               </action>
+            </objectContribution>
+      
+   </extension>
+
+</plugin>

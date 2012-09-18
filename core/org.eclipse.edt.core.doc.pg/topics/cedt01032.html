@@ -235,30 +235,7 @@ easily between accessing the code being developed and, later, the
 code that is deployed, you can handle the situation by updating the
 deployment-descriptor entry or by switching deployment descriptors.
 The use of multiple deployment descriptors is robust, but requires
-that you assign the same-named entry in each of them. <div class="p">Alternatively,
-you can rely on the following rule: if the <span class="ph synph"><span class="keyword kwd">using</span></span> clause
-is present but contains a null, a call to an EGL Service type accesses
-a dedicated service. Here is a partial example: <pre class="pre codeblock">function callTheService()
-
-   try 
-      myBindingVar IHttp? = Resources.getResource("binding:myEntry");   
-   onException(exception AnyException)
-   end
-    	
-   call 
-      MyServiceType.myFunction()                              // "how"
-      using myBindingVar                                      // "where" 
-      returning to myCallBackFunction
-      onException myExceptionHandler;    		
-end</pre>
-</div>
-</li>
-
-<li class="li"><p class="p">If the EGL DD entry is present, the call statement accesses
-an EGL REST-RPC service. If the EGL DD entry is absent, the <span class="ph synph"><span class="keyword kwd">call</span></span> statement
-accesses the service under development or, at run time, a dedicated
-service.</p>
-</li>
+that you assign the same-named entry in each of them. </li>
 
 </ul>
 </div>

@@ -27,7 +27,6 @@
 a service asynchronously from a Rich UI application; or to call a
 program on IBM i.</p>
 
-
 <p class="p">You typically work with the <strong class="ph b">call</strong> statement as you do with
 any of the other action statements such as <strong class="ph b">add</strong> or <strong class="ph b">get</strong>:</p>
 
@@ -47,7 +46,8 @@ descriptor, as is true in the current example; or </li>
 
 <li class="li">When you code the action statement, reference the binding variable
 in the <strong class="ph b">using</strong> clause. Here is a <strong class="ph b">call</strong> statement that references
-the <samp class="ph codeph">myBindingDetail</samp> variable:<pre class="pre codeblock">call MyInterfaceType.myOperation() using myBindingDetail 
+the <samp class="ph codeph">myBindingDetail</samp> variable:<pre class="pre codeblock">call myProxyFunction.myOperation() 
+   using myBindingDetail
    returning to myCallbackFunction
    onException myExceptionHandler;</pre>
 </li>
@@ -57,7 +57,7 @@ the <samp class="ph codeph">myBindingDetail</samp> variable:<pre class="pre code
 
 <div class="p">The following topics include the details necessary to use the <strong class="ph b">call</strong> statement
 for one or another purpose:<ul class="ul">
-<li class="li"><a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/tedt01023.html">../../org.eclipse.edt.core.doc.pg/topics/tedt01023.html</a></li>
+<li class="li"><a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/cedt01032.html" title="To access a service, you must specify both how to interact with the external logic and where it resides. You can think of the two kinds of information in an abbreviated way: &#34;how&#34; and &#34;where.&#34;">Service bindings</a></li>
 
 <li class="li"><a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/tedt01042.html" title="EGL code that is generated to Java can access IBM i called programs, as well as procedures in IBM service programs. The language also supports access of those programs from a Rich UI application, by way of an EGL service type generated to Java.">IBM i bindings</a></li>
 

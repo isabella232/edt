@@ -56,7 +56,7 @@ public class AnnotationTemplate extends EGLDocTemplate {
 			out.println(" [ ]</a>");
 		}
 
-		out.println("{");
+		out.print("{");
 
 		// java.lang.UnsupportedOperationException
 		// List<EMetadataObject> metadata = annotation.getMetadataList();
@@ -81,15 +81,18 @@ public class AnnotationTemplate extends EGLDocTemplate {
 			String theSignature = theEField.getTypeSignature();
 			String theName = theEField.getName();
 
+			/* to format spacing
 			if (numberOfAnnoFields > 1) {
 				out.println("<p>&nbsp;&nbsp;&nbsp;&nbsp;");
+				
 			}
-			out.println(theName);
+			*/
+			out.print(theName);
 			
 			/* START... if you want to show the field type.  
 			 * 
 			 * the display name, element name, and (if appropriate) the List type name	
-			 */ 
+ 
 			ArrayList<String> stringDetails;
 			stringDetails = (ArrayList<String>) Util.getEGLSimpleType(theSignature);
             out.println("<a href=\"" + stringDetails.get(1) + "\">");
@@ -99,9 +102,10 @@ public class AnnotationTemplate extends EGLDocTemplate {
 				out.println("<a href=\"" + stringDetails.get(2) + "\">");
 				out.println(" [ ]</a>");
 			}
-            /* END... if you want to show the field type. */
+               END... if you want to show the field type. 
+           */
 			
-			out.println(" = ");
+			out.print(" = ");
 
 			Object theDetail = annotation.eGet(theEField);
 
@@ -109,14 +113,14 @@ public class AnnotationTemplate extends EGLDocTemplate {
 				ctx.invoke(genDeclaration, theDetail, ctx, out);
 			} else {
 				if (theSignature.endsWith("String")) {
-					out.println("\"" + theDetail.toString() + "\"");
+					out.print("\"" + theDetail.toString() + "\"");
 				} else {
-					out.println(theDetail.toString());
+					out.print(theDetail.toString());
 				}
 			}			
 			
 			if (counter < numberOfAnnoFields) {
-				out.println(", ");
+				out.print(", ");
 			}	
 		}
 

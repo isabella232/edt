@@ -29,8 +29,8 @@ public class EGL2Doc extends AbstractGeneratorCommand {
 
 	public static void main(String[] args) {
 		// set up the command processor and pass the overriding command line options
-		EGL2Doc genPart = new EGL2Doc();
-		genPart.generate(args, new EGLDocGenerator(genPart), null, null);
+		EGL2Doc genContent = new EGL2Doc();
+		genContent.generate(args, new EGLDocGenerator(genContent), null, null);
 	}
 	
 	public IFile getEGLFile(){
