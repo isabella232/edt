@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.egl.api.gen;
+package org.eclipse.edt.mof.codegen.java;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,8 +26,6 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.Template;
 import org.eclipse.edt.mof.codegen.api.TemplateContext;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
-import org.eclipse.edt.mof.codegen.java.EFactoryImplTemplate;
-import org.eclipse.edt.mof.codegen.java.MofImplTemplateFactory;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
 import org.eclipse.edt.mof.serialization.ObjectStore;
