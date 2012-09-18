@@ -16,6 +16,7 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
@@ -25,6 +26,7 @@ import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.rui.messages.RUIResourceKeys;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -52,8 +54,10 @@ public class DateFormatAnnotationValidator extends AnnotationValidationRule {
 		if (type instanceof FixedPrecisionType) {
 			if (((FixedPrecisionType)type).getDecimals() > 0) {
 				problemRequestor.acceptProblem(errorNode,
-						IProblemRequestor.PROPERTY_DATEFORMAT_INVALID_DECIMALS,
-						new String[]{IEGLConstants.PROPERTY_DATEFORMAT});
+						RUIResourceKeys.PROPERTY_INVALID_FOR_DECIMALS,
+						IMarker.SEVERITY_ERROR,
+						new String[]{IEGLConstants.PROPERTY_DATEFORMAT},
+						RUIResourceKeys.getResourceBundleForKeys());
 			}
 			return;
 		}
@@ -68,9 +72,10 @@ public class DateFormatAnnotationValidator extends AnnotationValidationRule {
 		}
 		
 		problemRequestor.acceptProblem(errorNode,
-				IProblemRequestor.PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_TYPE,
-				new String[]{IEGLConstants.PROPERTY_DATEFORMAT,
-				BindingUtil.getShortTypeString(type, false)});
+				RUIResourceKeys.PROPERTY_INVALID_FOR_TYPE,
+				IMarker.SEVERITY_ERROR,
+				new String[]{IEGLConstants.PROPERTY_DATEFORMAT, BindingUtil.getShortTypeString(type, false)},
+				RUIResourceKeys.getResourceBundleForKeys());
 	}
 	
 }

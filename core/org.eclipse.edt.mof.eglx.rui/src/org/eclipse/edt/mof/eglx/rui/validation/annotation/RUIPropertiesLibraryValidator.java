@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationV
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.rui.messages.RUIResourceKeys;
 
 
 public class RUIPropertiesLibraryValidator implements IAnnotationValidationRule {
@@ -39,18 +40,18 @@ public class RUIPropertiesLibraryValidator implements IAnnotationValidationRule 
 			}
 			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.NestedFunction nestedFunction) {
-				problemRequestor.acceptProblem(nestedFunction, IProblemRequestor.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {});
+				problemRequestor.acceptProblem(nestedFunction, RUIResourceKeys.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {}, RUIResourceKeys.getResourceBundleForKeys());
 				return false;
 			}
 			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.UseStatement useStatement) {
-				problemRequestor.acceptProblem(useStatement, IProblemRequestor.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {});
+				problemRequestor.acceptProblem(useStatement, RUIResourceKeys.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {}, RUIResourceKeys.getResourceBundleForKeys());
 				return false;
 			}
 			@Override
 			public boolean visit(ClassDataDeclaration classDataDeclaration) {
 				if (!isValidInRUIPropertiesLibrary(classDataDeclaration)) {
-					problemRequestor.acceptProblem(classDataDeclaration, IProblemRequestor.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {});
+					problemRequestor.acceptProblem(classDataDeclaration, RUIResourceKeys.ONLY_STRING_FIELDS_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {}, RUIResourceKeys.getResourceBundleForKeys());
 				}
 				return false;
 			}

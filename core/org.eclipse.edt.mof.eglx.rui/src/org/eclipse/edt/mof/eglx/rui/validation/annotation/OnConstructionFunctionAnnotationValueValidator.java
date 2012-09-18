@@ -11,54 +11,36 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.rui.validation.annotation;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.eglx.rui.messages.RUIResourceKeys;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
-/**
- * @author svihovec
- */
-public class DateFormatAnnotationValueValidator implements IValueValidationRule {
-	private static Set<Character> invalidDateFormatChars = new TreeSet();
-	static {
-		invalidDateFormatChars.add( 'Y' );
-	}
-	
+public class OnConstructionFunctionAnnotationValueValidator implements IValueValidationRule {
+
 	public void validate(Node errorNode, Node target, Annotation annotation, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (annotation.getValue() instanceof String) {
-			String value = (String)annotation.getValue();
-			try {
-				char[] dateFormatPropertyValue = value.toCharArray();
-				boolean validating = true;
-				Set<Character> markedChars = new TreeSet();
-									
-				for( int i = 0; i < dateFormatPropertyValue.length; i++ ) {
-					char currentChar = dateFormatPropertyValue[i];
-					if( currentChar == '\'' ) {
-						validating = !validating;
-					}
-					else if( validating &&
-							 invalidDateFormatChars.contains( currentChar ) &&
-							 !markedChars.contains( currentChar ) ) {
-						markedChars.add( currentChar );
-						problemRequestor.acceptProblem(errorNode,
-								RUIResourceKeys.PROPERTY_INVALID_CHARACTER_IN_DATEFORMAT,
-								IMarker.SEVERITY_ERROR,
-								new String[] {IEGLConstants.PROPERTY_DATEFORMAT, "'" + currentChar + "'"},
-								RUIResourceKeys.getResourceBundleForKeys());
-					}
-				}			
-			}
-			catch( Exception e ) {
+		Object value = annotation.getValue(NameUtile.getAsName(IEGLConstants.PROPERTY_ONCONSTRUCTIONFUNCTION));
+		if (value instanceof FunctionMember) {
+			FunctionMember func = (FunctionMember)value;
+			
+			Part valueDeclarer = BindingUtil.getDeclaringPart(func);
+			Part annotDeclarer = BindingUtil.getDeclaringPart(target);
+			if (valueDeclarer != null && !valueDeclarer.equals(annotDeclarer)) {
+				problemRequestor.acceptProblem(
+					errorNode,
+					RUIResourceKeys.EXTERNAL_FUNCTION_NOT_ALLOWED_FOR_PROPERTY,
+					IMarker.SEVERITY_ERROR,
+					new String[] {IEGLConstants.PROPERTY_ONCONSTRUCTIONFUNCTION, annotDeclarer.getCaseSensitiveName()},
+					RUIResourceKeys.getResourceBundleForKeys());
 			}
 		}
 	}

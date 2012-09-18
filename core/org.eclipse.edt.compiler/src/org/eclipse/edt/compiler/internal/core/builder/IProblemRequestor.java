@@ -76,8 +76,6 @@ public interface IProblemRequestor {
 	public static final int SELECTEDINDEXITEM_MUST_BE_IN_RECORD  = 2063;
 	public static final int ANNOTATION_VALUE_MUST_BE_NAME_ARRAY = 2064;
 	public static final int NOT_AN_ANNOTATION = 2065;
-	public static final int ONLY_STRING_FIELDS_ALLOWED = 2066;
-	
 	
 		
 //Also see EGLMessage for messages 3000 - 3030			
@@ -197,7 +195,6 @@ public interface IProblemRequestor {
 	public static final int PROPERTY_INVALID_PRIMITIVE_LENGTH_USED_WITH_ISNULLABLE_PROPERTY = 3098;
 	public static final int PROPERTY_INVALID_SQLDATACODE_AND_PRIMITIVE_COMBINATION = 3099;
 	public static final int PROPERTY_INVALID_PRIMITIVE_USED_WITH_SQLDATACODE_PROPERTY = 3100;
-	public static final int PROPERTY_EXCEEDS_ALLOWED_LENGTH = 3101;
 	public static final int PROPERTY_INVALID_PRIMITIVE_USED_WITH_ISNULLABLE_PROPERTY = 3102;
 	public static final int PROPERTY_MINIMUM_INPUT_MUST_BE_LESS_THAN_PRIMITIVE_LENGTH = 3103;
 	public static final int PROPERTY_MUST_RESOLVE_TO_FORM = 3104;
@@ -220,9 +217,7 @@ public interface IProblemRequestor {
 	public static final int RECORD_PARAMETER_WITH_NO_CONTENTS = 3118;
 	public static final int PROGRAM_PARAMETER_OF_TYPE_ANY = 3119;
     public static final int INVALID_TYPE_USED_FOR_THIS_PROPERTY = 3120;
-    public static final int PROPERTY_ONLY_VALID_FOR_PRIMITIVE_LIST = 3121;
 	public static final int REDEFINING_MUST_BE_FIXED_RECORD = 3122;
-	public static final int PROPERTY_REQUIRES_NONDECIMAL_DIGITS = 3123;
 	public static final int REDEFINES_MUST_FOLLOW = 3124;
 	public static final int REDEFINES_TARGET_IS_ARRAY = 3125;
 	public static final int REDEFINER_AND_REDEFINED_MUST_BE_DECLARED_IN_SAME_PART = 3126;
@@ -238,27 +233,23 @@ public interface IProblemRequestor {
 	public static final int SELECTTYPE_REQUIRES_SELECTFROMLIST = 3133;	
 	public static final int PROP_REQUIRES_DISPLAYUSE_BUTTON_OR_HYPERLINK = 3134;
 	public static final int NEWWINDOW_REQUIRES_ACTION = 3135;
-		public static final int NUMELEMENTSITEM_INVALID_FOR_DYNAMIC_ARRAY = 3136;
+	public static final int NUMELEMENTSITEM_INVALID_FOR_DYNAMIC_ARRAY = 3136;
 	public static final int NUMELEMENTSITEM_MUST_BE_IN_RECORD  = 3137;
 	public static final int NUMELEMENTSITEM_MUST_BE_NUMERIC = 3138;
 	public static final int NUMELEMENTSITEM_ITEM_MUST_BE_ARRAY = 3139;
 	public static final int DUPLICATE_VALIDATION_ORDER_VALUES_FOUND = 3140;
-	public static final int INVALID_PROPERTY_VALUE_FOR_ITEM_TYPE = 3141;
 	public static final int SELECTTYPE_TARGET_MUST_BE_INT = 3142;	
 
 	public static final int PROPERTY_MUST_NOT_RESOLVE_TO_LIBRARY_FUNCTION= 3169;
 	public static final int PROPERTY_CERTAIN_PRIMITIVE_REQUIRED = 3170;
-	public static final int PROPERTY_INVALID_CHARACTER_IN_DATEFORMAT = 3171;
 	public static final int PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_LENGTH_DATEFORMAT_MASK = 3172;
 	public static final int PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_LENGTH = 3173;
-	public static final int PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_TYPE = 3174;
-	public static final int PROPERTY_DATEFORMAT_INVALID_DECIMALS = 3175;
+	
 	public static final int PROPERTY_DATEFORMAT_INVALID_INCOMPATIBLE_PROPERTIES = 3176;
 	public static final int PROPERTY_INVALID_VALUE_DATEFORMAT_GREGORIAN_AND_JULIAN = 3177;
 	public static final int PROPERTY_INVALID_VALUE_DATEFORMAT_MUST_MATCH_FIELDLEN = 3178;
 	public static final int PROPERTY_INVALID_VALUE_DATEFORMAT = 3179;
 	public static final int PROPERTY_ONLY_VALID_WHEN_IN_VAGCOMPATABILITY_MODE= 3180;
-	public static final int PROPERTY_MINIMUM_INPUT_MUST_BE_GREATER_THAN_ZERO= 3181;
 	public static final int PROPERTY_LENGTH_EXCEEDS_DEFINED_LENGTH = 3182;	
 	public static final int PROPERTY_MUST_RESOLVE_TO_FUNCTION= 3183;
 	public static final int PROPERTY_VALUES_FOR_OUTLINE_PROPERTY_INVALID = 3184;
@@ -348,15 +339,12 @@ public interface IProblemRequestor {
 	public static final int HEX_LITERAL_LENGTH_MUST_BE_EVEN = 3265;
 	public static final int HEX_LITERAL_LENGTH_MUST_BE_MULTIPLE_OF_FOUR = 3266;
 	public static final int USER_FIELD_NAME_CONFLICTS_WITH_IMPLICIT_FIELD_NAME = 3267;
-	public static final int VALIDATOR_FUNCTION_HAS_PARAMETERS = 3268;
 	public static final int TYPEAHEAD_FUNCTION_BAD_SIGNATURE = 3269;
 	public static final int TYPEAHEAD_REQUIRES_PROPERTIES = 3270;
 	public static final int VALIDVALUES_RANGE_WITH_TYPEAHEAD = 3271;
 	public static final int VALDATATABLE_TYPE_INVALID_FOR_TYPEAHEAD = 3272;
 	public static final int TYPE_INVALID_FOR_TYPEAHEAD = 3273;
-	public static final int TYPE_VALIDATOR_FUNCTION_NOT_VALID_FOR_VGUIRECORD = 3274;
 	public static final int NULLABLE_INVALID_IN_ISA_AS_OR_NEW = 3275;
-	public static final int VALIDATION_PROPERTIES_LIBRARY_WRONG_TYPE = 3276;
 	public static final int BYTES_LITERAL_LENGTH_MUST_BE_EVEN = 3277;
 	public static final int BIGINT_LITERAL_OUT_OF_RANGE = 3278;
 	public static final int SMALLINT_LITERAL_OUT_OF_RANGE = 3279;
@@ -430,7 +418,6 @@ public interface IProblemRequestor {
     public static final int FUNCTION_INVOCOATION_NOT_ALLOWED_IN_ARRAY_SUBSCRIPT_IN_INTO_CLAUSE = 3377;
     public static final int DYNAMIC_ACCESS_NOT_ALLOWED_IN_INTO_CLAUSE = 3378;
     
-    public static final int PROPERTIESFILE_NAME_CANNOT_CONTAIN_DASH = 3384;
     public static final int FUNCTION_CANT_HAVE_PARMS = 3385;
     public static final int FUNCTION_REQUIRES_RETURN_TYPE = 3386;
     public static final int FUNCTION_MUST_HAVE_ONE_PARM = 3387;
@@ -487,7 +474,6 @@ public interface IProblemRequestor {
 	public static final int PART_OR_STATEMENT_NOT_SUPPORTED = 3458;
 	public static final int SYSTEM_PART_NOT_SUPPORTED = 3459;
 	public static final int SYSTEM_LIBRARY_NOT_SUPPORTED = 3460;
-	public static final int LIBRARY_FUNCTION_NOT_ALLOWED_FOR_PROPERTY = 3461;
 	public static final int PROPERTY_NOT_VALID_FOR_TYPES = 3462;
 
 	public static final int STATEMENT_NOT_SUPPORTED = 3463;
@@ -1182,8 +1168,6 @@ public interface IProblemRequestor {
 	public static final int INVALID_NUMERIC_FORM_FIELD_FIELDLEN_PROPERTY_VALUE = 5349;	
 	public static final int INVALID_FORM_FIELD_GREATER_ZERO_PROPERTY_VALUE = 5350;
 	public static final int INVALID_FORM_FIELD_POSITIVE_INTEGER_PROPERTY_VALUE = 5351;
-	public static final int INVALID_FORM_FIELD_CURRENCY_SYMBOL_PROPERTY_VALUE = 5352;
-	public static final int INVALID_FORM_FIELD_FILLCHARACTER_PROPERTY_VALUE = 5353;
 	public static final int INVALID_FORM_FIELD_DATEFORMAT_PROPERTY_VALUE = 5354;
 	public static final int INVALID_FORM_FIELD_TIMEFORMAT_PROPERTY_VALUE = 5355;
 	public static final int INVALID_FORM_FIELD_PROPERTY = 5356;

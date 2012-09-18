@@ -11,29 +11,34 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.rui.validation.annotation;
 
+import java.util.Map;
+
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.eglx.rui.messages.RUIResourceKeys;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
-public class PropertiesFileAnnotationValueValidator implements IValueValidationRule {
-	
+public class FillCharacterValidator implements IAnnotationValidationRule {
+
 	@Override
-	public void validate(Node errorNode, Node target, Annotation annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (annotationBinding.getValue() != null) {
-			String value = (String)annotationBinding.getValue();
-			if (value.indexOf('-') != -1) {
+	public void validate(Node errorNode, Node target, Element targetElement, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions){
+		Annotation annotationBinding = (Annotation)allAnnotationsAndFields.get(NameUtile.getAsName(IEGLConstants.PROPERTY_FILLCHARACTER));
+		if(annotationBinding != null && annotationBinding.getValue() != null) {
+			if(annotationBinding.getValue().toString().length() > 1) {
 				problemRequestor.acceptProblem(
 						errorNode,
-						RUIResourceKeys.PROPERTIESFILE_NAME_CANNOT_CONTAIN_DASH,
+						RUIResourceKeys.INVALID_FILLCHARACTER_PROPERTY_VALUE,
 						IMarker.SEVERITY_ERROR,
-						new String[] {},
+						new String[] {IEGLConstants.PROPERTY_FILLCHARACTER},
 						RUIResourceKeys.getResourceBundleForKeys());
-			}			
+			}
 		}
-	}	
+	}
 }

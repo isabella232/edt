@@ -13,7 +13,8 @@ package eglx.ui.rui;
 
 Record RUIHandler type Stereotype {
 	targets = [ElementKind.handlerPart],
-	defaultSuperType=View
+	defaultSuperType=View,
+	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.RUIHandlerAnnotationProxy"
 }
 	onConstructionFunction egl.lang.reflect.FunctionMbr;
 	includeFile String;
@@ -24,7 +25,8 @@ end
 
 Record RUIWidget type Stereotype {
 	targets = [ElementKind.handlerPart],
-	defaultSuperType=Widget
+	defaultSuperType=Widget,
+	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.RUIWidgetAnnotationProxy"
 }
 	tagName String;
 	onConstructionFunction egl.lang.reflect.FunctionMbr;

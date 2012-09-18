@@ -643,47 +643,47 @@ public class MvcTest extends ValidationTestCase {
 	/*
 	 * dcd1 decimal(4,2){@dateFormat};
 	 * 1 validation message is expected.
-	 * It is expected to contain "Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.".
+	 * It is expected to contain "Property: dateFormat.  The dateFormat property is not valid for types with decimals.".
 	 */
 	public void testLine73() {
 		List messages = getMessagesAtLine( 73 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for field or items with decimals." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for types with decimals." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for types with decimals.\" was issued." );
 	}
 
 	/*
 	 * dcd2 decimal(4,2){@dateFormat{value = "AAAA"}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.".
+	 * It is expected to contain "Property: dateFormat.  The dateFormat property is not valid for types with decimals.".
 	 */
 	public void testLine74() {
 		List messages = getMessagesAtLine( 74 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for field or items with decimals." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for types with decimals." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for types with decimals.\" was issued." );
 	}
 
 	/*
 	 * dcd3 decimal(4,2){@dateFormat{value = "MM-dd-yyyy"}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.".
+	 * It is expected to contain "Property: dateFormat.  The dateFormat property is not valid for types with decimals.".
 	 */
 	public void testLine75() {
 		List messages = getMessagesAtLine( 75 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for field or items with decimals." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for types with decimals." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for types with decimals.\" was issued." );
 	}
 
 	/*
 	 * dcd4 decimal(4,2){@dateFormat{value = "Y"}};
 	 * 2 validation messages are expected.
 	 * One message is expected to contain "Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.".
-	 * One message is expected to contain "Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.".
+	 * One message is expected to contain "Property: dateFormat.  The dateFormat property is not valid for types with decimals.".
 	 */
 	public void testLine76() {
 		List messages = getMessagesAtLine( 76 );
@@ -693,8 +693,8 @@ public class MvcTest extends ValidationTestCase {
 		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.\" was issued." );
 		
 		messages.remove( messageWithSubstring );
-		messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for field or items with decimals." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for field or items with decimals.\" was issued." );
+		messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for types with decimals." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for types with decimals.\" was issued." );
 	}
 
 	/*
@@ -866,5 +866,719 @@ public class MvcTest extends ValidationTestCase {
 		messages.remove( messageWithSubstring );
 		messageWithSubstring = messageWithSubstring( messages, "Property: dateFormat.  The dateFormat property is not valid for the type bytes." );
 		if( messageWithSubstring == null ) fail( "No message with substring \"Property: dateFormat.  The dateFormat property is not valid for the type bytes.\" was issued." );
+	}
+
+	/*
+	 * i1 int{@fillCharacter};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine92() {
+		List messages = getMessagesAtLine( 92 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i2 int{@fillCharacter{"x"}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine93() {
+		List messages = getMessagesAtLine( 93 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i3 int{@fillCharacter{"xyz"}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: fillCharacter.  The value for this property is invalid. The value must be a single character string literal.".
+	 */
+	public void testLine94() {
+		List messages = getMessagesAtLine( 94 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: fillCharacter.  The value for this property is invalid. The value must be a single character string literal." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: fillCharacter.  The value for this property is invalid. The value must be a single character string literal.\" was issued." );
+	}
+
+	/*
+	 * i4 int{@fillCharacter{1}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be a quoted string or a string constant.".
+	 */
+	public void testLine95() {
+		List messages = getMessagesAtLine( 95 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be a quoted string or a string constant." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be a quoted string or a string constant.\" was issued." );
+	}
+
+	/*
+	 * i1 int{@MinimumInput};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine99() {
+		List messages = getMessagesAtLine( 99 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i2 int{@MinimumInput{"abc"}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.".
+	 */
+	public void testLine100() {
+		List messages = getMessagesAtLine( 100 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.\" was issued." );
+	}
+
+	/*
+	 * i3 int{@MinimumInput{123}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine101() {
+		List messages = getMessagesAtLine( 101 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i4 int{@MinimumInput{-52}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "The value of property minimumInput must be greater than 0, but -52 was found.".
+	 */
+	public void testLine102() {
+		List messages = getMessagesAtLine( 102 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The value of property minimumInput must be greater than 0, but -52 was found." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value of property minimumInput must be greater than 0, but -52 was found.\" was issued." );
+	}
+
+	/*
+	 * i5 int{@MinimumInput{0}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine103() {
+		List messages = getMessagesAtLine( 103 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i6 int{@MinimumInput{10.5}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.".
+	 */
+	public void testLine104() {
+		List messages = getMessagesAtLine( 104 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.\" was issued." );
+	}
+
+	/*
+	 * i1 int{@ValidatorFunction{valid1}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine108() {
+		List messages = getMessagesAtLine( 108 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i2 int{@ValidatorFunction{value = valid2}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine109() {
+		List messages = getMessagesAtLine( 109 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i3 int{@ValidatorFunction{invalid}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Invalid value invalid for validatorFunction. Validator functions must have no parameters.".
+	 */
+	public void testLine110() {
+		List messages = getMessagesAtLine( 110 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Invalid value invalid for validatorFunction. Validator functions must have no parameters." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Invalid value invalid for validatorFunction. Validator functions must have no parameters.\" was issued." );
+	}
+
+	/*
+	 * i1 int{@ValidationPropertiesLibrary{valPropLib}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine117() {
+		List messages = getMessagesAtLine( 117 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i2 int{@ValidationPropertiesLibrary{basicLib}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Invalid value basicLib for validationPropertiesLibrary. The value must be a RUIPropertiesLibrary.".
+	 */
+	public void testLine118() {
+		List messages = getMessagesAtLine( 118 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Invalid value basicLib for validationPropertiesLibrary. The value must be a RUIPropertiesLibrary." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Invalid value basicLib for validationPropertiesLibrary. The value must be a RUIPropertiesLibrary.\" was issued." );
+	}
+
+	/*
+	 * i3 int{@ValidationPropertiesLibrary{notALibrary}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Invalid value notALibrary for validationPropertiesLibrary. The value must be a RUIPropertiesLibrary.".
+	 */
+	public void testLine119() {
+		List messages = getMessagesAtLine( 119 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Invalid value notALibrary for validationPropertiesLibrary. The value must be a RUIPropertiesLibrary." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Invalid value notALibrary for validationPropertiesLibrary. The value must be a RUIPropertiesLibrary.\" was issued." );
+	}
+
+	/*
+	 * i1 int{@sign{SignKind.leading}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine128() {
+		List messages = getMessagesAtLine( 128 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i2 int{@sign{SignKind.none}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine129() {
+		List messages = getMessagesAtLine( 129 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i3 int{@sign{SignKind.trailing}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine130() {
+		List messages = getMessagesAtLine( 130 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i4 int{@sign{SignKind.parens}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine131() {
+		List messages = getMessagesAtLine( 131 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si1 smallint{@sign{SignKind.leading}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine132() {
+		List messages = getMessagesAtLine( 132 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si2 smallint{@sign{SignKind.none}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine133() {
+		List messages = getMessagesAtLine( 133 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si3 smallint{@sign{SignKind.trailing}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine134() {
+		List messages = getMessagesAtLine( 134 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si4 smallint{@sign{SignKind.parens}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine135() {
+		List messages = getMessagesAtLine( 135 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * bi1 bigint{@sign{SignKind.leading}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine136() {
+		List messages = getMessagesAtLine( 136 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * bi2 bigint{@sign{SignKind.none}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine137() {
+		List messages = getMessagesAtLine( 137 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * bi3 bigint{@sign{SignKind.trailing}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine138() {
+		List messages = getMessagesAtLine( 138 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * bi4 bigint{@sign{SignKind.parens}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine139() {
+		List messages = getMessagesAtLine( 139 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * de1 decimal(4){@sign{SignKind.leading}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine140() {
+		List messages = getMessagesAtLine( 140 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * de2 decimal(4){@sign{SignKind.none}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine141() {
+		List messages = getMessagesAtLine( 141 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * de3 decimal(4){@sign{SignKind.trailing}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine142() {
+		List messages = getMessagesAtLine( 142 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * de4 decimal(4){@sign{SignKind.parens}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine143() {
+		List messages = getMessagesAtLine( 143 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * f1 float{@sign{SignKind.leading}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine145() {
+		List messages = getMessagesAtLine( 145 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * f2 float{@sign{SignKind.none}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine146() {
+		List messages = getMessagesAtLine( 146 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * f3 float{@sign{SignKind.trailing}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "The value trailing for property sign is incompatible with the type float.".
+	 */
+	public void testLine147() {
+		List messages = getMessagesAtLine( 147 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The value trailing for property sign is incompatible with the type float." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value trailing for property sign is incompatible with the type float.\" was issued." );
+	}
+
+	/*
+	 * f4 float{@sign{SignKind.parens}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine148() {
+		List messages = getMessagesAtLine( 148 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * sf1 smallfloat{@sign{SignKind.leading}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine149() {
+		List messages = getMessagesAtLine( 149 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * sf2 smallfloat{@sign{SignKind.none}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine150() {
+		List messages = getMessagesAtLine( 150 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * sf3 smallfloat{@sign{SignKind.trailing}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "The value trailing for property sign is incompatible with the type smallfloat.".
+	 */
+	public void testLine151() {
+		List messages = getMessagesAtLine( 151 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The value trailing for property sign is incompatible with the type smallfloat." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value trailing for property sign is incompatible with the type smallfloat.\" was issued." );
+	}
+
+	/*
+	 * sf4 smallfloat{@sign{SignKind.parens}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine152() {
+		List messages = getMessagesAtLine( 152 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * s1 string{@sign{SignKind.leading}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property sign must be defined with a numeric type. The type of this item is string.".
+	 */
+	public void testLine153() {
+		List messages = getMessagesAtLine( 153 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property sign must be defined with a numeric type. The type of this item is string." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property sign must be defined with a numeric type. The type of this item is string.\" was issued." );
+	}
+
+	/*
+	 * b1 boolean{@sign{SignKind.leading}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property sign must be defined with a numeric type. The type of this item is boolean.".
+	 */
+	public void testLine154() {
+		List messages = getMessagesAtLine( 154 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property sign must be defined with a numeric type. The type of this item is boolean." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property sign must be defined with a numeric type. The type of this item is boolean.\" was issued." );
+	}
+
+	/*
+	 * d1 date{@sign{SignKind.leading}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property sign must be defined with a numeric type. The type of this item is date.".
+	 */
+	public void testLine155() {
+		List messages = getMessagesAtLine( 155 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property sign must be defined with a numeric type. The type of this item is date." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property sign must be defined with a numeric type. The type of this item is date.\" was issued." );
+	}
+
+	/*
+	 * t1 time{@sign{SignKind.leading}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property sign must be defined with a numeric type. The type of this item is time.".
+	 */
+	public void testLine156() {
+		List messages = getMessagesAtLine( 156 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property sign must be defined with a numeric type. The type of this item is time." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property sign must be defined with a numeric type. The type of this item is time.\" was issued." );
+	}
+
+	/*
+	 * ts1 timestamp?{@sign{SignKind.leading}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property sign must be defined with a numeric type. The type of this item is timestamp.".
+	 */
+	public void testLine157() {
+		List messages = getMessagesAtLine( 157 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property sign must be defined with a numeric type. The type of this item is timestamp." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property sign must be defined with a numeric type. The type of this item is timestamp.\" was issued." );
+	}
+
+	/*
+	 * by1 bytes?{@sign{SignKind.leading}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property sign must be defined with a numeric type. The type of this item is bytes.".
+	 */
+	public void testLine158() {
+		List messages = getMessagesAtLine( 158 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property sign must be defined with a numeric type. The type of this item is bytes." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property sign must be defined with a numeric type. The type of this item is bytes.\" was issued." );
+	}
+
+	/*
+	 * a1 any?{@sign{SignKind.leading}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property sign must be defined with a numeric type. The type of this item is any.".
+	 */
+	public void testLine159() {
+		List messages = getMessagesAtLine( 159 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property sign must be defined with a numeric type. The type of this item is any." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property sign must be defined with a numeric type. The type of this item is any.\" was issued." );
+	}
+
+	/*
+	 * r1 signrec{@sign{SignKind.leading}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property sign must be defined with a numeric type. The type of this item is signRec.".
+	 */
+	public void testLine160() {
+		List messages = getMessagesAtLine( 160 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property sign must be defined with a numeric type. The type of this item is signRec." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property sign must be defined with a numeric type. The type of this item is signRec.\" was issued." );
+	}
+
+	/*
+	 * i int{@isboolean{yes}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine165() {
+		List messages = getMessagesAtLine( 165 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si smallint{@isboolean{yes}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine166() {
+		List messages = getMessagesAtLine( 166 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * bi bigint{@isboolean{yes}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine167() {
+		List messages = getMessagesAtLine( 167 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * f float{@isboolean{yes}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine168() {
+		List messages = getMessagesAtLine( 168 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * de1 decimal{@isboolean{yes}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine169() {
+		List messages = getMessagesAtLine( 169 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * de2 decimal(10,2){@isboolean{yes}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine170() {
+		List messages = getMessagesAtLine( 170 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * de3 decimal(10,10){@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "The property isBoolean is invalid for type decimal(10,10), which has no non-decimal digits.".
+	 */
+	public void testLine171() {
+		List messages = getMessagesAtLine( 171 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The property isBoolean is invalid for type decimal(10,10), which has no non-decimal digits." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The property isBoolean is invalid for type decimal(10,10), which has no non-decimal digits.\" was issued." );
+	}
+
+	/*
+	 * sf smallfloat{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type smallfloat.".
+	 */
+	public void testLine172() {
+		List messages = getMessagesAtLine( 172 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type smallfloat." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type smallfloat.\" was issued." );
+	}
+
+	/*
+	 * s string{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type string.".
+	 */
+	public void testLine173() {
+		List messages = getMessagesAtLine( 173 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type string." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type string.\" was issued." );
+	}
+
+	/*
+	 * ls string(10){@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type string(10).".
+	 */
+	public void testLine174() {
+		List messages = getMessagesAtLine( 174 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type string(10)." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type string(10).\" was issued." );
+	}
+
+	/*
+	 * t time{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type time.".
+	 */
+	public void testLine175() {
+		List messages = getMessagesAtLine( 175 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type time." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type time.\" was issued." );
+	}
+
+	/*
+	 * ts1 timestamp?{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type timestamp.".
+	 */
+	public void testLine176() {
+		List messages = getMessagesAtLine( 176 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type timestamp." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type timestamp.\" was issued." );
+	}
+
+	/*
+	 * ts2 timestamp("yyyy"){@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type timestamp(\"yyyy\").".
+	 */
+	public void testLine177() {
+		List messages = getMessagesAtLine( 177 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type timestamp(\"yyyy\")." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type timestamp(\"yyyy\").\" was issued." );
+	}
+
+	/*
+	 * d date{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type date.".
+	 */
+	public void testLine178() {
+		List messages = getMessagesAtLine( 178 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type date." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type date.\" was issued." );
+	}
+
+	/*
+	 * b boolean{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type boolean.".
+	 */
+	public void testLine179() {
+		List messages = getMessagesAtLine( 179 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type boolean." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type boolean.\" was issued." );
+	}
+
+	/*
+	 * byt bytes{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type bytes.".
+	 */
+	public void testLine180() {
+		List messages = getMessagesAtLine( 180 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type bytes." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type bytes.\" was issued." );
+	}
+
+	/*
+	 * n number{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type number.".
+	 */
+	public void testLine181() {
+		List messages = getMessagesAtLine( 181 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type number." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type number.\" was issued." );
+	}
+
+	/*
+	 * rec boolrec{@isboolean{yes}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "Property: isBoolean.  The isBoolean property is not valid for the type boolrec.".
+	 */
+	public void testLine182() {
+		List messages = getMessagesAtLine( 182 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "Property: isBoolean.  The isBoolean property is not valid for the type boolrec." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Property: isBoolean.  The isBoolean property is not valid for the type boolrec.\" was issued." );
 	}
 }

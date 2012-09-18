@@ -17,23 +17,27 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.eglx.rui.messages.RUIResourceKeys;
 
 
-public class PropertiesFileAnnotationValueValidator implements IValueValidationRule {
+public class ValidatorFunctionAnnotationValidator implements IValueValidationRule{
 	
 	@Override
-	public void validate(Node errorNode, Node target, Annotation annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		if (annotationBinding.getValue() != null) {
-			String value = (String)annotationBinding.getValue();
-			if (value.indexOf('-') != -1) {
-				problemRequestor.acceptProblem(
-						errorNode,
-						RUIResourceKeys.PROPERTIESFILE_NAME_CANNOT_CONTAIN_DASH,
-						IMarker.SEVERITY_ERROR,
-						new String[] {},
-						RUIResourceKeys.getResourceBundleForKeys());
-			}			
+	public void validate(final Node annotation, Node container, Annotation annotationBinding, final IProblemRequestor problemRequestor, ICompilerOptions compilerOptions){
+		
+		if (!(annotationBinding.getValue() instanceof FunctionMember)) {
+			return;
 		}
-	}	
+		FunctionMember value = (FunctionMember)annotationBinding.getValue();
+			
+		if(!value.getParameters().isEmpty()) {
+			problemRequestor.acceptProblem(
+				annotation,
+				RUIResourceKeys.VALIDATOR_FUNCTION_HAS_PARAMETERS,
+				IMarker.SEVERITY_ERROR,
+				new String[] {value.getCaseSensitiveName()},
+				RUIResourceKeys.getResourceBundleForKeys());
+		}
+	}
 }

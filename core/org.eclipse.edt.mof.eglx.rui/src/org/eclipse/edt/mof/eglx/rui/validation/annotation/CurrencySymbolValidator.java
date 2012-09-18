@@ -15,11 +15,13 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.eglx.rui.messages.RUIResourceKeys;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -33,14 +35,18 @@ public class CurrencySymbolValidator implements IAnnotationValidationRule {
 			if(lengthWithoutEscapeChars == 0) {
 				problemRequestor.acceptProblem(
 					errorNode,
-					IProblemRequestor.INVALID_FORM_FIELD_CURRENCY_SYMBOL_PROPERTY_VALUE,
-					new String[] {IEGLConstants.PROPERTY_CURRENCYSYMBOL});
+					RUIResourceKeys.INVALID_CURRENCY_SYMBOL_PROPERTY_VALUE,
+					IMarker.SEVERITY_ERROR,
+					new String[] {IEGLConstants.PROPERTY_CURRENCYSYMBOL},
+					RUIResourceKeys.getResourceBundleForKeys());
 			}
 			else if(lengthWithoutEscapeChars > 3) {
 				problemRequestor.acceptProblem(
 					errorNode,
-					IProblemRequestor.PROPERTY_EXCEEDS_ALLOWED_LENGTH,
-					new String[] {(String) annotationBinding.getValue(), IEGLConstants.PROPERTY_CURRENCYSYMBOL, Integer.toString(3)});
+					RUIResourceKeys.PROPERTY_EXCEEDS_ALLOWED_LENGTH,
+					IMarker.SEVERITY_ERROR,
+					new String[] {(String) annotationBinding.getValue(), IEGLConstants.PROPERTY_CURRENCYSYMBOL, Integer.toString(3)},
+					RUIResourceKeys.getResourceBundleForKeys());
 			}
 		}
 	}
