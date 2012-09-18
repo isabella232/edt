@@ -43,7 +43,7 @@ public class SetMethodAnnotationValueValidator implements IValueValidationRule {
 		if (valueDeclarer != null && !valueDeclarer.equals(declaringPart)) {
 			problemRequestor.acceptProblem(
 				errorNode,
-				IProblemRequestor.LIBRARY_FUNCTION_NOT_ALLOWED_FOR_PROPERTY,
+				IProblemRequestor.EXTERNAL_FUNCTION_NOT_ALLOWED_FOR_PROPERTY,
 				new String[] {
 					IEGLConstants.PROPERTY_GETMETHOD,
 					declaringPart.getCaseSensitiveName()

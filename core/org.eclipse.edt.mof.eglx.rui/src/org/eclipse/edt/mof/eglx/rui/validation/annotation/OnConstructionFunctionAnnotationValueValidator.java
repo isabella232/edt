@@ -13,7 +13,6 @@ package org.eclipse.edt.mof.eglx.rui.validation.annotation;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
@@ -21,7 +20,6 @@ import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.eglx.rui.messages.RUIResourceKeys;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -37,10 +35,8 @@ public class OnConstructionFunctionAnnotationValueValidator implements IValueVal
 			if (valueDeclarer != null && !valueDeclarer.equals(annotDeclarer)) {
 				problemRequestor.acceptProblem(
 					errorNode,
-					RUIResourceKeys.EXTERNAL_FUNCTION_NOT_ALLOWED_FOR_PROPERTY,
-					IMarker.SEVERITY_ERROR,
-					new String[] {IEGLConstants.PROPERTY_ONCONSTRUCTIONFUNCTION, annotDeclarer.getCaseSensitiveName()},
-					RUIResourceKeys.getResourceBundleForKeys());
+					IProblemRequestor.EXTERNAL_FUNCTION_NOT_ALLOWED_FOR_PROPERTY,
+					new String[] {IEGLConstants.PROPERTY_ONCONSTRUCTIONFUNCTION, annotDeclarer.getCaseSensitiveName()});
 			}
 		}
 	}

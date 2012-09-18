@@ -32,7 +32,6 @@ public class RUIResourceKeys {
 	public static final int VALIDATOR_FUNCTION_HAS_PARAMETERS = 3268;
 	public static final int VALIDATION_PROPERTIES_LIBRARY_WRONG_TYPE = 3276;
 	public static final int PROPERTIESFILE_NAME_CANNOT_CONTAIN_DASH = 3384;
-	public static final int EXTERNAL_FUNCTION_NOT_ALLOWED_FOR_PROPERTY = 3461;
 	public static final int INVALID_CURRENCY_SYMBOL_PROPERTY_VALUE = 5352;
 	public static final int INVALID_FILLCHARACTER_PROPERTY_VALUE = 5353;
 }

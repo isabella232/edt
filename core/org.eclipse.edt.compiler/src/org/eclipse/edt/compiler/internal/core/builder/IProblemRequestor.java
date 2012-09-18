@@ -474,6 +474,7 @@ public interface IProblemRequestor {
 	public static final int PART_OR_STATEMENT_NOT_SUPPORTED = 3458;
 	public static final int SYSTEM_PART_NOT_SUPPORTED = 3459;
 	public static final int SYSTEM_LIBRARY_NOT_SUPPORTED = 3460;
+	public static final int EXTERNAL_FUNCTION_NOT_ALLOWED_FOR_PROPERTY = 3461;
 	public static final int PROPERTY_NOT_VALID_FOR_TYPES = 3462;
 
 	public static final int STATEMENT_NOT_SUPPORTED = 3463;
