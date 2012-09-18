@@ -88,6 +88,51 @@ handler dateFormatChecks type ruihandler
 	byl4 bytes(1)?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type bytes.
 end
 
+handler timeFormatChecks type ruihandler
+	// valid types
+	i1 int{@timeFormat}; //0
+	i2 int{@timeFormat{value = "AAAA"}}; //0
+	i3 int{@timeFormat{value = "HH:mm:ss"}}; //0
+	s1 string{@timeFormat}; //0
+	s2 string{@timeFormat{value = "AAAA"}}; //0
+	s3 string{@timeFormat{value = "HH:mm:ss"}}; //0
+	ls1 string(10){@timeFormat}; //0
+	ls2 string(10){@timeFormat{value = "AAAA"}}; //0
+	ls3 string(10){@timeFormat{value = "HH:mm:ss"}}; //0
+	t1 time{@timeFormat}; //0
+	t2 time{@timeFormat{value = "AAAA"}}; //0
+	t3 time{@timeFormat{value = "HH:mm:ss"}}; //0
+	dc1 decimal(4){@timeFormat}; //0
+	dc2 decimal(4){@timeFormat{value = "AAAA"}}; //0
+	dc3 decimal(4){@timeFormat{value = "HH:mm:ss"}}; //0
+	
+	// invalid types
+	d1 date{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type date.
+	d2 date{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type date.
+	d3 date{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type date.
+	ts1 timestamp?{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	ts2 timestamp?{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	ts3 timestamp?{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	tsp1 timestamp("yy"){@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	tsp2 timestamp("yy"){@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	tsp3 timestamp("yy"){@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	b1 boolean{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type boolean.
+	b2 boolean{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type boolean.
+	b3 boolean{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type boolean.
+	dcd1 decimal(4,2){@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for types with decimals.
+	dcd2 decimal(4,2){@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for types with decimals.
+	dcd3 decimal(4,2){@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for types with decimals.
+	a1 any?{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type any.
+	a2 any?{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type any.
+	a3 any?{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type any.
+	by1 bytes?{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	by2 bytes?{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	by3 bytes?{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	byl1 bytes(1)?{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	byl2 bytes(1)?{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	byl3 bytes(1)?{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+end
+
 handler fillcharChecks type RUIHandler
 	i1 int{@fillCharacter}; //0
 	i2 int{@fillCharacter{"x"}}; //0
@@ -182,3 +227,64 @@ handler isboolChecks type RUIHandler
 	rec boolrec{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type boolrec.
 end
 record boolrec end
+
+handler mvcViewChecks type RUIHandler{
+	@MVCView{publishHelper = pub0}, //0
+	@MVCView{publishHelper = pub1}, //1 The function pub1 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub2}, //1 The function pub2 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub3}, //1 The function pub3 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub4}, //1 The function pub4 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub5}, //1 The function pub5 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub6}, //1 The function pub6 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub7}, //1 The function pub7 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub8}, //1 The function pub8 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub9}, //1 The function pub9 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	
+	@MVCView{publishMessageHelper = pub0}, //0
+	@MVCView{publishMessageHelper = pub1}, //1 The function pub1 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub2}, //1 The function pub2 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub3}, //1 The function pub3 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub4}, //1 The function pub4 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub5}, //1 The function pub5 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub6}, //1 The function pub6 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub7}, //1 The function pub7 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub8}, //1 The function pub8 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub9}, //1 The function pub9 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	
+	@MVCView{retrieveValidStateHelper = retState0}, //0
+	@MVCView{retrieveValidStateHelper = retState1}, //1 The function retState1 specified for the retrieveValidStateHelper property is invalid. It must be defined with no parameters and a return type of String?.
+	@MVCView{retrieveValidStateHelper = retState2}, //1 The function retState2 specified for the retrieveValidStateHelper property is invalid. It must be defined with no parameters and a return type of String?.
+	@MVCView{retrieveValidStateHelper = retState3}, //1 The function retState3 specified for the retrieveValidStateHelper property is invalid. It must be defined with no parameters and a return type of String?.
+	@MVCView{retrieveValidStateHelper = retState4}, //1 The function retState4 specified for the retrieveValidStateHelper property is invalid. It must be defined with no parameters and a return type of String?.
+	
+	@MVCView{retrieveViewHelper = retView0}, //0
+	@MVCView{retrieveViewHelper = retView1}, //1 The function retView1 specified for the retrieveViewHelper property is invalid. It must be defined with no parameters and a return type of String.
+	@MVCView{retrieveViewHelper = retView2}, //1 The function retView2 specified for the retrieveViewHelper property is invalid. It must be defined with no parameters and a return type of String.
+	@MVCView{retrieveViewHelper = retView3}, //1 The function retView3 specified for the retrieveViewHelper property is invalid. It must be defined with no parameters and a return type of String.
+	@MVCView{retrieveViewHelper = retView4}, //1 The function retView4 specified for the retrieveViewHelper property is invalid. It must be defined with no parameters and a return type of String.
+	
+	@lastSetting
+}
+	function pub0(s string in) end
+	function pub1(s string(10) in) end
+	function pub2(s string inout) end
+	function pub3(s string out) end
+	function pub4(s string in) returns(string) end
+	function pub5(s string in, x int) end
+	function pub6(s int in) end
+	function pub7() end
+	function pub8() returns(string) end
+	function pub9(s string? in) end
+	
+	function retState0() returns(string?) end
+	function retState1() returns(string) end
+	function retState2(s string in) returns(string?) end
+	function retState3() end
+	function retState4() returns(string(10)?)end
+	
+	function retView0() returns(string) end
+	function retView1() returns(string?) end
+	function retView2(s string in) returns(string) end
+	function retView3() end
+	function retView4() returns(string(10))end
+end

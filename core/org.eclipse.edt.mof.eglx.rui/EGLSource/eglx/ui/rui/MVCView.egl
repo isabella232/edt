@@ -16,7 +16,7 @@ Record MVCView type Annotation
 	targets = [
 		ElementKind.HandlerPart, ElementKind.ExternalTypePart
 	],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.MVCViewAnnotationProxy"
+	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.MVCViewAnnotationProxy"
 } 
 	retrieveViewHelper egl.lang.reflect.FunctionMbr;
 	publishHelper egl.lang.reflect.FunctionMbr;

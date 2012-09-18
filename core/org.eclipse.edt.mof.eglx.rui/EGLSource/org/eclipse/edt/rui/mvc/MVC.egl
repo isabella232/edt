@@ -209,6 +209,16 @@ Record Sign type Annotation
 	value SignKind?;
 end
 
+Record TimeFormat type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.TimeFormatAnnotationProxy"
+}
+	value string;
+end
+
 Record TimestampFormat type Annotation
 {
 	targets = [

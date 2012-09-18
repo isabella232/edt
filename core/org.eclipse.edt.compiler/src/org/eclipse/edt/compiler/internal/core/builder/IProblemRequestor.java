@@ -363,12 +363,6 @@ public interface IProblemRequestor {
 	public static final int ANNOTATION_MUST_BE_DECIMAL = 3297;
 	public static final int ANNOTATION_VALUE_NOT_COMPAT = 3298;
 
-	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
-	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	
-	public static final int RUI_ONCONSTRUCTOR_FUNCTION_INVALID = 3322;	
-	public static final int PUBLISHMESSAGEHELPER_FUNCTION_INVALID = 3323;	
-	public static final int RETRIEVEVALIDSTATEHELPER_FUNCTION_INVALID = 3324;	
-	
 	public static final int IMPORT_STATEMENT_PACKAGE_NAME_COULD_NOT_BE_RESOLVED = 3325;	
 	public static final int IMPORT_STATEMENT_PART_NAME_IS_AMBIGUOUS = 3326;	
 	public static final int IMPORT_STATEMENT_PART_NAME_COULD_NOT_BE_LOCATED = 3327;	
