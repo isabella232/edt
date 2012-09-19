@@ -12,9 +12,7 @@
 package org.eclipse.edt.compiler;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -27,7 +25,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
@@ -40,8 +37,6 @@ import org.eclipse.edt.compiler.internal.sdk.compile.IProcessor;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
-import org.eclipse.edt.compiler.internal.sdk.compile.TopLevelFunctionProcessor;
-import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -102,17 +97,12 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 
 		Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
         
-        TopLevelFunctionInfo[] functions = null;
-        if(dependencyInfo.getFunctionContainerScope() != null){
-			functions = processTopLevelFunctions(dependencyInfo.getTopLevelFunctions(), dependencyInfo.getFunctionContainerScope(), dependencyInfo);
-		}
-        
         if(!skipSerialization && binding.getKind() != ITypeBinding.FILE_BINDING){
         	
             org.eclipse.edt.compiler.core.ast.File fileAST = ASTManager.getInstance().getFileAST(declaringFile);
             
 	        try {
-		        MofSerializable part = createIRFromBoundAST2(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
+		        MofSerializable part = createIRFromBoundAST2(partAST, declaringFile, fileAST.getImportDeclarations(), problemRequestor);
 		        if(part == null) {
 		        	System.out.println("Part is null!");
 		        	return binding;
@@ -140,7 +130,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 	}
     
 
-    private MofSerializable createIRFromBoundAST2(Node partAST, File declaringFile,TopLevelFunctionInfo[] functions, List imports, IProblemRequestor problemRequestor) {
+    private MofSerializable createIRFromBoundAST2(Node partAST, File declaringFile, List imports, IProblemRequestor problemRequestor) {
     	
         Egl2Mof generator = new Egl2Mof(environment);
         return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile, compiler), problemRequestor);
@@ -166,16 +156,6 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
         return SourcePathEntry.getInstance().getPartBindingFromCache(packageName, partName);
     }
 
-    private TopLevelFunctionInfo[] processTopLevelFunctions(Set topLevelFunctions, FunctionContainerScope contextScope, DependencyInfo dependencyInfo) {
-    	TopLevelFunctionProcessor queue = new TopLevelFunctionProcessor(environment, contextScope, dependencyInfo, compilerOptions, problemRequestorFactory);
-		for (Iterator iter = topLevelFunctions.iterator(); iter.hasNext();) {
-//			IPartBinding function = (IPartBinding) iter.next();
-//			queue.addPart(function);
-		}
-		
-		return queue.process();        
-    }
-    
     public void doAddPart(String packageName, String caseInsensitivePartName) {
 		addPart(packageName, SourcePathInfo.getInstance().getCaseSensitivePartName(packageName, caseInsensitivePartName));		
 	}	
