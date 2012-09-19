@@ -1603,7 +1603,6 @@ public interface IProblemRequestor {
 	public static final int SET_VALUES_BLOCK_NOT_VALID_AS_RETURN_ARG = 7516;
 	public static final int SET_VALUES_BLOCK_NOT_VALID_HERE = 7517;
 	public static final int THISARRAY_ONLY_IN_SET_VALUES_BLOOCK = 7518;
-	public static final int SERVICE_AND_INTERFACE_EMPTY_BLOCK = 7519;
 
 	public static final int ARG_MUST_BE_MATH_NUMERIC_ITEM = 7550;		 
 	public static final int ARG_MUST_BE_MATH_INTEGER_ITEM = 7551; //$N

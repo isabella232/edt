@@ -24,13 +24,12 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
+import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Interface;
-import org.eclipse.edt.mof.egl.Service;
 
 
 public class FieldValidator extends DefaultASTVisitor {
@@ -48,7 +47,6 @@ public class FieldValidator extends DefaultASTVisitor {
 	@Override
 	public boolean visit(final ClassDataDeclaration classDataDeclaration) {
 		Type type = classDataDeclaration.getType();
-		validateNoEmptySettingsBlockForServiceOrInterface(classDataDeclaration.getType(), classDataDeclaration.getSettingsBlockOpt());
 		TypeValidator.validate(classDataDeclaration.getType(), declaringPart, problemRequestor, compilerOptions);
 		
 		if (classDataDeclaration.hasInitializer()) {
@@ -81,7 +79,6 @@ public class FieldValidator extends DefaultASTVisitor {
 	public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
 		Type type = functionDataDeclaration.getType();
 		if (type != null) {
-			validateNoEmptySettingsBlockForServiceOrInterface(type, functionDataDeclaration.getSettingsBlockOpt());
 			TypeValidator.validate(type, declaringPart, problemRequestor, compilerOptions);
 			
 			if (functionDataDeclaration.hasInitializer()) {
@@ -113,10 +110,9 @@ public class FieldValidator extends DefaultASTVisitor {
 	}
 	
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.StructureItem structureItem) {
+	public boolean visit(StructureItem structureItem) {
 		Type type = structureItem.getType();
 		if (type != null) {
-			validateNoEmptySettingsBlockForServiceOrInterface(type, structureItem.getSettingsBlock());
 			TypeValidator.validate(type, declaringPart, problemRequestor, compilerOptions);
 			
 			if (structureItem.hasInitializer()) {
@@ -172,6 +168,7 @@ public class FieldValidator extends DefaultASTVisitor {
 	private void issueErrorForInitialization(SettingsBlock settings, final String fieldName, int errorNo) {
 		final Node[] errorNode = new Node[1];
     	settings.accept(new AbstractASTExpressionVisitor() {
+    		@Override
     		public boolean visit(Assignment assignment) {
     			if (errorNode[0] != null) {
     				return false;
@@ -187,10 +184,12 @@ public class FieldValidator extends DefaultASTVisitor {
     			return false;
     		}
     		
+    		@Override
     		public boolean visit(AnnotationExpression annotationExpression) {
     			return false;
     		}
     		
+    		@Override
     		public boolean visit(SetValuesExpression setValuesExpression) {
     			if (errorNode[0] != null) {
     				return false;
@@ -202,6 +201,7 @@ public class FieldValidator extends DefaultASTVisitor {
 				return false; 			
     		}
     		
+    		@Override
     		public boolean visitExpression(Expression expression) {
     			if (errorNode[0] != null) {
     				return false;
@@ -288,21 +288,4 @@ public class FieldValidator extends DefaultASTVisitor {
 //    	});
 //		problemRequestor.acceptProblem(errorNode[0], IProblemRequestor.PROPERTY_OVERRIDES_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {fieldBinding.getCaseSensitiveName()});
 //    }
-	
-	private boolean isServiceOrInterfaceType(Type type) {
-		org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
-		return typeBinding instanceof Service || typeBinding instanceof Interface;
-	}
-	
-	private void validateNoEmptySettingsBlockForServiceOrInterface (Type type, SettingsBlock block) {
-		if (block == null || !isServiceOrInterfaceType(type)) {
-			return;
-		}	
-		
-		if (block.getSettings().size() == 0) {
-			problemRequestor.acceptProblem(type,
-					IProblemRequestor.SERVICE_AND_INTERFACE_EMPTY_BLOCK,
-					new String[]{type.resolveType().getTypeSignature()});
-		}
-	}
 }
