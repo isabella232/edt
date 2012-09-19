@@ -45,7 +45,6 @@ import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BytesLiteral;
-import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.DynamicAccess;
 import org.eclipse.edt.mof.egl.Element;
@@ -65,7 +64,6 @@ import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
-import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Statement;
@@ -792,9 +790,6 @@ class Egl2MofMember extends Egl2MofPart {
 			setElementInformation(initializer, field.getInitializerStatements());
 			initializer.accept(this);
 			Expression expr = (Expression)stack.pop();
-			if (field instanceof ConstantField && expr instanceof PrimitiveTypeLiteral) {
-				((ConstantField)field).setValue((PrimitiveTypeLiteral)expr);
-			}
 			Statement stmt = createAssignmentStatement(field, expr);
 			setElementInformation(initializer, stmt);
 			field.getInitializerStatements().getStatements().add(stmt);

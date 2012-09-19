@@ -32,7 +32,6 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidat
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -274,7 +273,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		}
 		
 		if (expressionIsLiteralOrName[0] && parmBinding.getParameterKind() != ParameterKind.PARM_IN) {
-			if(!checkArgNotConstantOrLiteral(argExpr, IProblemRequestor.FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER)) {
+			if(!checkArgNotConstantOrLiteral(argExpr, parmBinding)) {
 				return false;
 			}
 		}
@@ -282,16 +281,34 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	return true;
     }
     
-    private boolean checkArgNotConstantOrLiteral(Expression argExpr, final int problemKind) {
-    	Member argDBinding = argExpr.resolveMember();
-		if (argDBinding instanceof ConstantField) {
-			problemRequestor.acceptProblem(
-				argExpr,
-				problemKind,
-				new String[] {
-					argExpr.getCanonicalString(),
-					functionBinding.getCaseSensitiveName()
-				});
+    private boolean checkArgNotConstantOrLiteral(Expression argExpr, FunctionParameter parmBinding) {
+    	final int problemKind = parmBinding.getParameterKind() == ParameterKind.PARM_INOUT
+    			? IProblemRequestor.FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_PARAMETER
+    			: IProblemRequestor.FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER;
+    	
+    	Name constName = LValueValidator.findConstName(argExpr);
+		Member constMember = constName == null ? null : constName.resolveMember();
+		if (constMember != null) {
+			boolean canPassConst = false;
+			if (parmBinding.getParameterKind() == ParameterKind.PARM_INOUT && parmBinding.isConst()) {
+				canPassConst = true;
+			}
+			else {
+				// Value types means every part of the field (including accesses) are constant. For reference types it's just the field declaration that's constant.
+				if (constName != argExpr && !(constMember.getType() != null && TypeUtils.isValueType(constMember.getType()))) {
+					canPassConst = true;
+				}
+			}
+			
+			if (!canPassConst) {
+				problemRequestor.acceptProblem(
+					argExpr,
+					problemKind,
+					new String[] {
+						argExpr.getCanonicalString(),
+						functionBinding.getCaseSensitiveName()
+					});
+			}
 			return false;
 		}
 		final boolean[] foundError = new boolean[] {false};

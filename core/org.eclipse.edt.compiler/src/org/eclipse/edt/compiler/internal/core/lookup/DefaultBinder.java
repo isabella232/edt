@@ -79,7 +79,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;

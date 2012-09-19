@@ -42,11 +42,6 @@ public class ClassDataDeclarationValidator extends DefaultASTVisitor {
 			EGLNameValidator.validate((Name) iter.next(), EGLNameValidator.PART, problemRequestor, compilerOptions);
 		}
 		
-		//TODO StatementValidator has many errors
-//		if (classDataDeclaration.isConstant()){
-//			StatementValidator.validatePrimitiveConstant(classDataDeclaration.getType(),problemRequestor);
-//		}
-		
 		TypeValidator.validateTypeDeclaration(classDataDeclaration.getType(), declaringPart, problemRequestor);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(classDataDeclaration);
 		classDataDeclaration.accept(new FieldValidator(problemRequestor, compilerOptions, declaringPart));

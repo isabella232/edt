@@ -861,7 +861,7 @@ public interface IProblemRequestor {
     public static final int CONSTANT_VALUE_MUST_BE_LITERAL = 4955;
 	public static final int FUNCTION_PARAMETER_MODIFIER_NOT_ALLOWED_WITH_LOOSE_TYPE = 4956;
 	public static final int IN_MODIFIER_REQUIRED_FOR_EXTERNALTYPE = 4957;
-	public static final int CONST_MODIFIER_NOT_ALLOWED_WITH_IN_MODIFIER = 4958;
+	public static final int CONST_MODIFIER_NOT_ALLOWED_WITH_OUT_MODIFIER = 4958;
     public static final int FUNCTION_PARM_CONST_AND_FIELD_MUTEX = 4960;
     public static final int EXTERNALTYPE_PARM_CANNOT_BE_CONST = 4961;
     public static final int SERVICE_PARM_CANNOT_BE_CONST = 4962;
@@ -1464,7 +1464,8 @@ public interface IProblemRequestor {
 	public static final int MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_SOURCE = 6670;
 	public static final int MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_TARGET = 6671;
 	public static final int MOVE_STATEMENT_INCOMPATIBLE_TYPES = 6672;
-	public static final int FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER = 6673;		
+	
+	public static final int FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_PARAMETER = 6673;		
 	public static final int FUNCTION_ARG_REQUIRES_IN_PARAMETER = 6674;
 	public static final int FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER = 6675;
 	

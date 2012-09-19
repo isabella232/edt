@@ -13,17 +13,20 @@ package org.eclipse.edt.compiler.internal.core.validation.statement;
 
 import org.eclipse.edt.compiler.binding.FieldAccessValidationRule;
 import org.eclipse.edt.compiler.binding.IValidationProxy;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.Name;
+import org.eclipse.edt.compiler.core.ast.QualifiedName;
+import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public class LValueValidator {
@@ -43,26 +46,26 @@ public class LValueValidator {
 	}
 	
 	public static class DefaultLValueValidationRules implements ILValueValidationRules {
+		@Override
 		public boolean canAssignToConstantVariables() {
 			return false;
 		}
-		
+		@Override
 		public boolean canAssignToReadOnlyVariables() {
 			return false;
 		}
-		
+		@Override
 		public boolean canAssignToFunctionReferences() {
 			return false;
 		}
-		
+		@Override
 		public boolean canAssignToFunctionParmConst() {
 			return false;
 		}
-
+		@Override
 		public boolean shouldRunAccessRules() {
 			return true;
 		}
-
 	}
 	
 	public LValueValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, Member member, Expression lValue) {
@@ -102,39 +105,19 @@ public class LValueValidator {
 			result = invokeFieldAccessValidators();
 		}
 		
-		if (member instanceof FunctionParameter) {
-			if(!validationRules.canAssignToFunctionParmConst() && ((FunctionParameter)member).isConst()) {
-				boolean settingValueOfConstantArrayElement = false;
-				Type memberType = member.getType();
-				Type exprType = lValue.resolveType();
-				if (memberType != null && exprType != null) {
-					settingValueOfConstantArrayElement = memberType instanceof ArrayType && !memberType.equals(exprType);
-				}
-				
-				if (!settingValueOfConstantArrayElement) {
+		Name constName = findConstName(lValue);
+		Member constMember = constName == null ? null : constName.resolveMember();
+		if (constMember != null) {
+			boolean canAssignToConst = constMember instanceof FunctionParameter ? validationRules.canAssignToFunctionParmConst() : validationRules.canAssignToConstantVariables();
+			if (!canAssignToConst) {
+				// No part of the field can be modified for value types. For reference types only the declaration itself cannot be modified.
+				if (constName == lValue || (constMember.getType() != null && TypeUtils.isValueType(constMember.getType()))) {
 					problemRequestor.acceptProblem(
-						lValue,
-						IProblemRequestor.CANNOT_MODIFY_CONSTANT,
-						new String[] {member.getCaseSensitiveName()});
-					result = false;
+							lValue,
+							IProblemRequestor.CANNOT_MODIFY_CONSTANT,
+							new String[] {member.getCaseSensitiveName()});
+						result = false;
 				}
-			}
-		}
-		
-		if (!validationRules.canAssignToConstantVariables() && member instanceof ConstantField) {
-			boolean settingValueOfConstantArrayElement = false;
-			Type memberType = member.getType();
-			Type exprType = lValue.resolveType();
-			if (memberType != null && exprType != null) {
-				settingValueOfConstantArrayElement = memberType instanceof ArrayType && !memberType.equals(exprType);
-			}
-			
-			if (!settingValueOfConstantArrayElement) {
-				problemRequestor.acceptProblem(
-					lValue,
-					IProblemRequestor.CANNOT_MODIFY_CONSTANT,
-					new String[] {member.getCaseSensitiveName()});
-				result = false;
 			}
 		}
 		
@@ -149,5 +132,34 @@ public class LValueValidator {
 		}
 		
 		return result;
+	}
+	
+	public static Name findConstName(Expression e) {
+		if (e == null) {
+			return null;
+		}
+		
+		final Name[] value = new Name[1];
+		e.accept(new AbstractASTVisitor() {
+			@Override
+			public boolean visit(SimpleName simpleName) {
+				Member m = simpleName.resolveMember();
+				if (m instanceof ConstantField || (m instanceof FunctionParameter && ((FunctionParameter)m).isConst())) {
+					value[0] = simpleName;
+				}
+				return false;
+			};
+			@Override
+			public boolean visit(QualifiedName qualifiedName) {
+				Member m = qualifiedName.resolveMember();
+				if (m instanceof ConstantField || (m instanceof FunctionParameter && ((FunctionParameter)m).isConst())) {
+					value[0] = qualifiedName;
+					return false;
+				}
+				return true;
+			};
+		});
+		
+		return value[0];
 	}
 }

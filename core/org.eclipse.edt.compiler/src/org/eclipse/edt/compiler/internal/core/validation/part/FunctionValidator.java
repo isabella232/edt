@@ -285,24 +285,18 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkInputParm(FunctionParameter functionParameter) {
-		if (functionParameter.isParmConst()) {
-			validatePrimitiveConst(functionParameter.getType());
-		}
 	}
 	
 	private void checkOutputParm(FunctionParameter functionParameter) {
 		if (functionParameter.isParmConst()) {
 			problemRequestor.acceptProblem(
             		functionParameter,
-					IProblemRequestor.CONST_MODIFIER_NOT_ALLOWED_WITH_IN_MODIFIER,
+					IProblemRequestor.CONST_MODIFIER_NOT_ALLOWED_WITH_OUT_MODIFIER,
 					new String[] {IEGLConstants.KEYWORD_OUT.toUpperCase(), IEGLConstants.KEYWORD_INTERVAL.toUpperCase()});
 		}
 	}
 	
 	private void checkInputOutputParm(FunctionParameter functionParameter) {
-		if (functionParameter.isParmConst()) {
-			validatePrimitiveConst(functionParameter.getType());
-		}
 	}
 	
 	private void preVisitStatement(Statement statement) {
@@ -671,11 +665,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return false;
 	}
 
-	private void validatePrimitiveConst(Type type){
-		//TODO primitives are being removed, and this check will no longer be valid. see bug 377632
-//		StatementValidator.validatePrimitiveConstant(type, problemRequestor);
-	}
-	
 	public static String getName(Statement statement) {
 		final String[] result = new String[] {null};
 		statement.accept(new DefaultASTVisitor() {

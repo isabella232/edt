@@ -193,7 +193,6 @@ externalType EGLField extends Member type MofClass {name="Field"}
 end
 
 externalType ConstantField extends EGLField type MofClass
-	value PrimitiveTypeLiteral {@Containment{true}};
 end
 
 externalType FunctionReturnField extends EGLField type MofClass

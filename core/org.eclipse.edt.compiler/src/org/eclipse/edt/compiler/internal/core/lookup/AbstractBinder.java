@@ -20,18 +20,13 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
-import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.DBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
-import org.eclipse.edt.compiler.core.ast.HexLiteral;
 import org.eclipse.edt.compiler.core.ast.IASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
-import org.eclipse.edt.compiler.core.ast.LiteralExpression;
-import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -52,17 +47,11 @@ import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.BooleanLiteral;
-import org.eclipse.edt.mof.egl.BytesLiteral;
-import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
@@ -593,11 +582,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 
 			public void endVisitExpression(Expression expression) {
     			expression.accept(thisVisitor);
-    			
-    			Member mbr = expression.resolveMember();
-    			if(mbr instanceof ConstantField) {
- 					bindFromString(expression, ((ConstantField) mbr).getValue().getValue());
-    			}   			
     		}
     	});
     	return;
@@ -635,159 +619,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 
     }
 	
-    protected static PrimitiveTypeLiteral getConstantValue(Expression expr) {
-    	ConstantValueCreator constValueCreator = new ConstantValueCreator();
-		expr.accept(constValueCreator);
-		return constValueCreator.constantValue;
-    }
-    
-    private static class ConstantValueCreator extends DefaultASTVisitor {
-    	PrimitiveTypeLiteral constantValue;
-    	boolean isNegative = false;
-    	
-		public ConstantValueCreator() {
-		}
-    	
-    	public boolean visit(IntegerLiteral integerLiteral) {
-    		String str = integerLiteral.getValue();
-    		
-    		org.eclipse.edt.mof.egl.IntegerLiteral lit = IrFactory.INSTANCE.createIntegerLiteral();
-    		lit.setIsNegated(isNegative);
-    		lit.setValue(str);
-    		org.eclipse.edt.mof.egl.Type type;
-    		switch (integerLiteral.getLiteralKind()) {
-			case LiteralExpression.BIGINT_LITERAL:
-    			type = TypeUtils.Type_BIGINT;
-				break;
-			case LiteralExpression.INTEGER_LITERAL:
-    			type = TypeUtils.Type_INT;
-				break;
-			case LiteralExpression.SMALLINT_LITERAL:
-    			type = TypeUtils.Type_SMALLINT;
-				break;
-			default:
-    			type = TypeUtils.Type_INT;
-			}
-    		lit.setType(type);
-    		
-			return false;
-		}
-    	
-		public boolean visit(FloatLiteral floatLiteral) {
-    		String str = floatLiteral.getValue();
-    		
-    		org.eclipse.edt.mof.egl.FloatingPointLiteral lit = IrFactory.INSTANCE.createFloatingPointLiteral();
-    		lit.setIsNegated(isNegative);
-    		lit.setValue(str);
-    		org.eclipse.edt.mof.egl.Type type;
-    		switch (floatLiteral.getLiteralKind()) {
-			case LiteralExpression.FLOAT_LITERAL:
-    			type = TypeUtils.Type_FLOAT;
-				break;
-			case LiteralExpression.SMALLFLOAT_LITERAL:
-    			type = TypeUtils.Type_SMALLFLOAT;
-				break;
-			default:
-    			type = TypeUtils.Type_FLOAT;
-			}
-
-    		lit.setType(type);
-    		constantValue = lit;
-    		
-			return false;
-		}
-		
-		public boolean visit(DecimalLiteral decimalLiteral) {
-    		String str = decimalLiteral.getValue();
-    		
-    		org.eclipse.edt.mof.egl.DecimalLiteral lit = IrFactory.INSTANCE.createDecimalLiteral();
-    		lit.setIsNegated(isNegative);
-    		lit.setValue(str);
-    		constantValue = lit;
-    		
-			return false;
-		}
-		
-		public boolean visit(StringLiteral stringLiteral) {
-    		String str = stringLiteral.getValue();
-    		
-    		org.eclipse.edt.mof.egl.StringLiteral lit = IrFactory.INSTANCE.createStringLiteral();
-    		lit.setValue(str);
-    		lit.setIsHex(stringLiteral.isHex());
-    		constantValue = lit;
-    		
-			return false;
-		}
-		
-		public boolean visit(HexLiteral stringLiteral) {
-    		String str = stringLiteral.getValue();
-    		
-    		org.eclipse.edt.mof.egl.HexLiteral lit = IrFactory.INSTANCE.createHexLiteral();
-    		lit.setValue(str);
-    		constantValue = lit;
-    		
-			return false;
-		}
-		
-		public boolean visit(CharLiteral stringLiteral) {
-    		String str = stringLiteral.getValue();
-    		
-    		org.eclipse.edt.mof.egl.CharLiteral lit = IrFactory.INSTANCE.createCharLiteral();
-    		lit.setValue(str);
-    		lit.setIsHex(stringLiteral.isHex());
-    		constantValue = lit;
-    		
-			return false;
-		}
-		
-		public boolean visit(DBCharLiteral stringLiteral) {
-    		String str = stringLiteral.getValue();
-    		
-    		org.eclipse.edt.mof.egl.DBCharLiteral lit = IrFactory.INSTANCE.createDBCharLiteral();
-    		lit.setValue(str);
-    		lit.setIsHex(stringLiteral.isHex());
-    		constantValue = lit;
-    		
-			return false;
-		}
-		
-		public boolean visit(MBCharLiteral stringLiteral) {
-    		String str = stringLiteral.getValue();
-    		
-    		org.eclipse.edt.mof.egl.MBCharLiteral lit = IrFactory.INSTANCE.createMBCharLiteral();
-    		lit.setValue(str);
-    		lit.setIsHex(stringLiteral.isHex());
-    		constantValue = lit;
-    		
-			return false;
-		}
-		
-		public boolean visit(org.eclipse.edt.compiler.core.ast.BooleanLiteral booleanLiteral) {
-			BooleanLiteral lit = IrFactory.INSTANCE.createBooleanLiteral();
-			lit.setBooleanValue(booleanLiteral.booleanValue().booleanValue());
-			constantValue = lit;
-			return false;
-		}
-		
-		public boolean visit(org.eclipse.edt.compiler.core.ast.BytesLiteral bytesLiteral) {
-    		String str = bytesLiteral.getValue();
-
-    		BytesLiteral lit = IrFactory.INSTANCE.createBytesLiteral();
-    		lit.setValue(str);
-			constantValue = lit;
-			return false;
-		};
-
-		public boolean visit(UnaryExpression unaryExpression) {
-			if(unaryExpression.getOperator() == UnaryExpression.Operator.MINUS) {
-				isNegative = !isNegative;
-			}
-			return true;
-		}
-		
-		//TODO handle array literals when mof constant fields support them
-    }
-    
     protected static void setBindAttemptedForNames(Node node) {
     	node.accept(new AbstractASTVisitor() {
     		public void endVisit(SimpleName simpleName) {

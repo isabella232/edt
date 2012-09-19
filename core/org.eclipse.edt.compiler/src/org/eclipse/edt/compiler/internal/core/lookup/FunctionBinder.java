@@ -48,12 +48,10 @@ import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
-import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 
 
 /**
@@ -153,19 +151,12 @@ public class FunctionBinder extends DefaultBinder {
             // type cannot be resolved
         }
     	        
-        PrimitiveTypeLiteral constantValue = null;
-        if (isConstantDeclaration) {
-            constantValue = getConstantValue(initializer); 
-        }
-        
         for (Name name : names) {
             String dataName = name.getIdentifier();
             
             Field field;
             if (isConstantDeclaration) {
-            	ConstantField cons = IrFactory.INSTANCE.createConstantField();
-            	cons.setValue(constantValue);
-            	field = cons;
+            	field = IrFactory.INSTANCE.createConstantField();
             }
             else {
             	field = IrFactory.INSTANCE.createField();
