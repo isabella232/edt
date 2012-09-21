@@ -178,23 +178,22 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 					}
 					
 					public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
-						checkInitializer(functionDataDeclaration.getNames().get(0), functionDataDeclaration.getInitializer());
-						return false;
+						return checkInitializer(functionDataDeclaration.getNames().get(0), functionDataDeclaration.getInitializer());
 					};
 					
 					public boolean visit(ClassDataDeclaration classDataDeclartaion) {
-						checkInitializer(classDataDeclartaion.getNames().get(0), classDataDeclartaion.getInitializer());
-						return false;
+						return checkInitializer(classDataDeclartaion.getNames().get(0), classDataDeclartaion.getInitializer());
 					};
 					
-					private void checkInitializer(Expression lhs, Expression initializer) {
+					private boolean checkInitializer(Expression lhs, Expression initializer) {
 						if (initializer == null) {
-							return;
+							return true;
 						}
 						
 						if(initializer.getOffset() <= errorOffset && errorOffset <= initializer.getOffset() + initializer.getLength()){
 							createDelegateFunction(lhs, initializer, functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
 						}
+						return functionTextBuffer.length() > 0;
 					}
 					
 					public boolean visit(FunctionInvocationStatement functionInvoke){
