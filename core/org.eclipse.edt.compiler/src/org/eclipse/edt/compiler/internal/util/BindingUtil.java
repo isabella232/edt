@@ -74,7 +74,7 @@ import org.eclipse.edt.mof.utils.NameUtile;
 public class BindingUtil {
 	
 	private static final String INVALID_ANNOTATION = "edt invalid";
-	private static final String ENVIRONMENT_ANNOTATION = "edt environment";
+	public static final String ENVIRONMENT_ANNOTATION = "edt environment";
 	
 	private static Annotation ValidAnn;
 	
