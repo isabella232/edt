@@ -12,7 +12,6 @@ public class StereotypeTypeCompletor extends AnnotationTypeCompletor {
 			IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		super(currentScope, irBinding, dependencyRequestor, problemRequestor,
 				compilerOptions);
-		// TODO Auto-generated constructor stub
 	}
 
 }

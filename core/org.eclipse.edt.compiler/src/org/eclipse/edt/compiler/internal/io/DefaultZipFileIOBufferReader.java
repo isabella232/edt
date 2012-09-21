@@ -27,7 +27,6 @@ public class DefaultZipFileIOBufferReader extends CommonZipFileIOBufferReader {
 
 	@Override
 	public Object readEntry(String name) throws IOException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
