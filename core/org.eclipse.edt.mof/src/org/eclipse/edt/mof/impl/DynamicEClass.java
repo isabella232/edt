@@ -45,7 +45,7 @@ public class DynamicEClass extends EClassImpl implements Dynamic {
 			} catch (ClassNotFoundException e) {
 				if (!getSuperTypes().isEmpty()) {
 					EClass eClass = getSuperTypes().get(0);
-					String typeSignature = eClass.getPackageName() + ".impl." + eClass.getName()+ "DynamicImpl";
+					String typeSignature = eClass.getCaseSensitivePackageName() + ".impl." + eClass.getCaseSensitiveName()+ "DynamicImpl";
 					try {
 						clazz = (Class<EObject>)Class.forName(typeSignature);						
 					} catch (ClassNotFoundException e1) {
@@ -59,7 +59,7 @@ public class DynamicEClass extends EClassImpl implements Dynamic {
 
 	@Override
 	public String getImplTypeSignature() {
-		return getPackageName() + ".impl." + getName() + "DynamicImpl";
+		return getCaseSensitivePackageName() + ".impl." + getName() + "DynamicImpl";
 	}
 	
 	@Override

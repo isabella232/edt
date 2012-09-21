@@ -40,7 +40,7 @@ public class CommonUtilities {
 	}
 
 	public static String createProxyFunctionName(Function function) {
-		return Constants.FUNCTION_HELPER_PREFIX + function.getName() + Constants.FUNCTION_HELPER_SUFFIX;
+		return Constants.FUNCTION_HELPER_PREFIX + function.getCaseSensitiveName() + Constants.FUNCTION_HELPER_SUFFIX;
 	}
 	
 	public static Set<String> getGeneratedHelpers(Context ctx) {

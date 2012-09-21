@@ -39,7 +39,7 @@ public abstract class EModelElementImpl extends EObjectImpl implements EModelEle
 	public EMetadataObject getMetadata(String typeName) {
 		List<EMetadataObject> anns = getMetadataList();
 		for (int i = anns.size()-1; i >= 0; i--) {
-			if (anns.get(i).getEClass().getName().equalsIgnoreCase(typeName)) {
+			if (anns.get(i).getEClass().getCaseSensitiveName().equalsIgnoreCase(typeName)) {
 				return anns.get(i);
 			}
 		}

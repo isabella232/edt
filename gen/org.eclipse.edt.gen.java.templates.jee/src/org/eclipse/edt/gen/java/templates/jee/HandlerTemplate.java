@@ -28,7 +28,7 @@ public class HandlerTemplate extends org.eclipse.edt.gen.java.templates.HandlerT
 			// add an xmlElement
 			try {
 				Annotation annotation = CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
-				annotation.setValue(field.getId());
+				annotation.setValue(field.getCaseSensitiveName());
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			}
 			catch (Exception e) {}
@@ -37,7 +37,7 @@ public class HandlerTemplate extends org.eclipse.edt.gen.java.templates.HandlerT
 			// if there is not a scema type we may need to add it for type like time, date, timestamp
 			ctx.invoke(preGenAddXMLSchemaType, field.getType(), ctx, field);
 		}
-		if (!field.getName().equals(JavaAliaser.getAlias(field.getName())) &&
+		if (!field.getCaseSensitiveName().equals(JavaAliaser.getAlias(field.getCaseSensitiveName())) &&
 				CommonUtilities.getAnnotation(field, Constants.AnnotationXmlElement, ctx) == null &&
 						CommonUtilities.getAnnotation(field, Constants.AnnotationXmlAttribute, ctx) == null) {
 			//if the generated name is not the same as the EGL name
@@ -45,7 +45,7 @@ public class HandlerTemplate extends org.eclipse.edt.gen.java.templates.HandlerT
 			//if no name is specified on an XMLElement or XMLAttribute set the name to the EGL name, other wise use the supplied name
 			try {
 				Annotation annotation = CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXmlElement);
-				annotation.setValue("name", field.getName());
+				annotation.setValue("name", field.getCaseSensitiveName());
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			} catch (Exception e) {}
 		}

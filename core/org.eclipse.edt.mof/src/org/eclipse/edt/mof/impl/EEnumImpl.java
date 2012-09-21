@@ -50,7 +50,7 @@ public class EEnumImpl extends EDataTypeImpl implements EEnum {
 	@Override
 	public EEnumLiteral getEEnumLiteral(String name) {
 		for (EEnumLiteral literal : getLiterals()) {
-			if (literal.getName().equalsIgnoreCase(name)) return literal;
+			if (literal.getCaseSensitiveName().equalsIgnoreCase(name)) return literal;
 		}
 		return null;
 	}

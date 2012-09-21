@@ -32,7 +32,7 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.E
 		out.println(",");
 		out.print(quoted("eze$$getName"));
 		out.println(": function() {");
-		out.println("return \"" + part.getId() + "\";");
+		out.println("return \"" + part.getCaseSensitiveName()+ "\";");
 		out.println("}");
 	}
 	

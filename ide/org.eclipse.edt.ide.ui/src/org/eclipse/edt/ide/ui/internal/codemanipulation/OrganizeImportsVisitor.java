@@ -301,7 +301,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 			org.eclipse.edt.mof.egl.Part classBinding = (org.eclipse.edt.mof.egl.Part) typeBinding;
 			String partName = classBinding.getCaseSensitiveName();
 			
-			String packageName = classBinding.getPackageName();
+			String packageName = classBinding.getCaseSensitivePackageName();
 			boolean isSysPart;
 			if(packageName != null && packageName.length() > 0){
 				isSysPart = IRUtils.isSystemPart(packageName + "." + partName, this.env);
@@ -315,7 +315,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		else if(typeBinding instanceof AnnotationType){
 			AnnotationType annotationTypeBinding = (AnnotationType)typeBinding;
 			String partName = annotationTypeBinding.getCaseSensitiveName();			
-			String pkgName = annotationTypeBinding.getPackageName();
+			String pkgName = annotationTypeBinding.getCaseSensitivePackageName();
 			if(pkgName != null) {
 				boolean isSysAnnotation;
 				if(pkgName.length() > 0){

@@ -66,7 +66,7 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 
 	@SuppressWarnings("unchecked")
 	protected void generateDriverLibraryBody(Library part, Context ctx, TabbedWriter out, TestCounter counter) {
-		out.println("library " + part.getName());
+		out.println("library " + part.getCaseSensitiveName());
 		out.pushIndent();
 		// out.println("use " + part.getFullyQualifiedName() + ";");
 		out.println("function " + CommonUtilities.exeTestMethodName + "()");
@@ -75,8 +75,8 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 		out.println("td TestDescription;");
 		out.println("td.expCnt = " + counter.getCount() + ";");
 		out.println("td.rootDir = \"\";");
-		out.println("td.pkgName = \"" + part.getPackageName() + "\";");
-		out.println("td.name = \"" + part.getName() + "\";");
+		out.println("td.pkgName = \"" + part.getCaseSensitivePackageName() + "\";");
+		out.println("td.name = \"" + part.getCaseSensitiveName() + "\";");
 		out.println("td.title = \"\";");
 		out.println("td.description = \"\";");
 		out.print("td.testcases = \"");
@@ -89,7 +89,7 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 			flag1 = true;
 		}
 		out.println("\";");
-		out.println("td.sources = \"" + part.getName() + ".egl\";");
+		out.println("td.sources = \"" + part.getCaseSensitiveName() + ".egl\";");
 		out.println("td.keywords = \"\";");
 		out.println("TestExecutionLib.testMain(exeLibTestMtd, td, true);");
 		out.popIndent();

@@ -25,9 +25,9 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 
 	public void genClassHeader(Handler type, Context ctx, TabbedWriter out) {
 		out.print("egl.defineRUIHandler(");
-		out.print(quoted(type.getPackageName().toLowerCase()));
+		out.print(quoted(type.getCaseSensitivePackageName().toLowerCase()));
 		out.print(", ");
-		out.print(quoted(type.getName()));
+		out.print(quoted(type.getCaseSensitiveName()));
 		out.println(", {");
 		out.print(quoted("eze$$fileName"));
 		out.print(" : ");
@@ -45,7 +45,7 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 		out.println(": function() {");
 
 		Stereotype stereotype = type.getStereotype();
-		if ((stereotype != null) && ("RUIHandler".equals(stereotype.getEClass().getName()))){
+		if ((stereotype != null) && ("RUIHandler".equals(stereotype.getEClass().getCaseSensitiveName()))){
 			MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
 			if (onConstruction != null) {
 				out.print("this.");

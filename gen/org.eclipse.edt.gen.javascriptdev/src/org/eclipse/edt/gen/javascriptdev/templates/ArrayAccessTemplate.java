@@ -29,7 +29,7 @@ public class ArrayAccessTemplate extends org.eclipse.edt.gen.javascript.template
 		String name = null;
 		Expression array = expr.getArray();
 		if (array instanceof NamedElement) {
-			name = ((NamedElement)array).getName();
+			name = ((NamedElement)array).getCaseSensitiveName();
 		}
 		else if (array instanceof Name) {
 			name = ((Name)array).getId();

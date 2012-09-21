@@ -56,15 +56,20 @@ public class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 	public void setPackageName(String name) {
 		slotSet(Slot_packageName, name);
 	}
+	
+	@Override
+	public String getCaseSensitivePackageName() {
+		return (String)slotGet(Slot_packageName);
+	}
 				
 	@Override
 	public String getETypeSignature() {
 		String typeSignature;
-		String pkgName = getPackageName();
-		if (pkgName == null || pkgName.equals(""))
-			typeSignature = getName();
+		String pkgName = getCaseSensitivePackageName();
+		if (pkgName == null || pkgName.length() == 0)
+			typeSignature = getCaseSensitiveName();
 		else 
-			typeSignature = pkgName + "." + getName();
+			typeSignature = pkgName + "." + getCaseSensitiveName();
 		return typeSignature;
 	}
 		
@@ -74,11 +79,11 @@ public class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 	}
 	
 	public EFactory getEFactory() {
-		EFactory factory = EFactory.Registry.INSTANCE.get(getPackageName());
+		EFactory factory = EFactory.Registry.INSTANCE.get(getCaseSensitivePackageName());
 		if (factory == null) {
 			factory = new EFactoryImpl();
-			factory.setPackageName(getPackageName());
-			EFactory.Registry.INSTANCE.put(getPackageName(), factory);
+			factory.setPackageName(getCaseSensitivePackageName());
+			EFactory.Registry.INSTANCE.put(getCaseSensitivePackageName(), factory);
 		}
 		return factory;
 	}
@@ -105,7 +110,7 @@ public class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 			int size = getETypeParameters().size();
 			for (int i=0; i<size; i++) {
 				ETypeParameter type = getETypeParameters().get(i);
-				signature.append(type.getName());
+				signature.append(type.getCaseSensitiveName());
 				if (i < size-1) signature.append(", ");
 			}
 			signature.append('>');

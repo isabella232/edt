@@ -83,7 +83,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 	 * @param field
 	 */
 	public void preGen(AnnotationType aType, Context ctx, Annotation annot, Field field) {
-		if ("MVC".equals(annot.getEClass().getName())) {
+		if ("MVC".equals(annot.getEClass().getCaseSensitiveName())) {
 			Expression model = (Expression)annot.getValue("model");
 			Member modelMember = null;
 			if ( model instanceof MemberName )
@@ -141,10 +141,10 @@ public class MVCTemplate extends JavaScriptTemplate {
 	 * @param contextTemplateMethod
 	 */
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field, String contextTemplateMethod) {
-		if ("MVC".equals(annot.getEClass().getName()) && genInitializeMethod.equals(contextTemplateMethod)) {
+		if ("MVC".equals(annot.getEClass().getCaseSensitiveName()) && genInitializeMethod.equals(contextTemplateMethod)) {
 			if ( !field.isImplicit() /* NOGO sbg neither of these checks work as they should?!   && field.getType() instanceof Member && field.hasSetValuesBlock() */ ) {
 				
-				String controllerName  = field.getName();
+				String controllerName  = field.getCaseSensitiveName();
 				Expression view = (Expression)annot.getValue("view"); 
 				Expression model = (Expression)annot.getValue("model"); 
 
@@ -483,7 +483,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 		field2.setIsNullable(true);
 		MemberName nameExpression = factory.createMemberName();
 		nameExpression.setMember(field2);
-		nameExpression.setId(field2.getName());
+		nameExpression.setId(field2.getCaseSensitiveName());
 	
 		if (!nameExpression.getType().equals(type)) {
 			// Timestamp needs to use the classifier to match what's expected by the internal formatter.
@@ -1030,7 +1030,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 			if ((annot = getAnnotation(member, PROPERTY_SIGN)) != null) {
 				Object value = annot.getValue();
 				if (value instanceof EnumerationEntry) {
-					signkind = ((EnumerationEntry)value).getId();
+					signkind = ((EnumerationEntry)value).getCaseSensitiveName();
 				}
 			}
 			PartName pn = IrFactory.INSTANCE.createPartName();

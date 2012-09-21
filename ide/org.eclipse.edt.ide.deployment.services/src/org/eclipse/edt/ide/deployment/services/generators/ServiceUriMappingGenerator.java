@@ -118,7 +118,7 @@ public class ServiceUriMappingGenerator
 			//throw new JavaGenException( new Exception(Messages.bind(Messages.J2EEDeploymentSolution_87, uriMappingFileName),  e) );
 		}
 		//String fullyQualifiedName = Aliaser.packageNameAlias( logicPart.getPackageName(), '.' ) + '.' + Utilities.getServiceCoreName( logicPart );
-		String fullyQualifiedName = JavaAliaser.packageNameAlias( logicPart.getPackageName() ) + '.' + logicPart.getId();
+		String fullyQualifiedName = JavaAliaser.packageNameAlias( logicPart.getCaseSensitivePackageName() ) + '.' + logicPart.getCaseSensitiveName();
 		removeServiceContextNode( RestServiceUtilities.CONTEXT_ROOT_ELEM );
 		removeServiceContextNode( RestServiceUtilities.CLASSPATH_ELEM );
 		removeServiceNode( fullyQualifiedName );

@@ -37,7 +37,7 @@ public class Utils {
 	public static String getTableName(EGLClass entity) {
 		Annotation table = entity.getAnnotation("eglx.persistence.sql.Table");
 		Annotation secTables = entity.getAnnotation("eglx.persistence.sql.SecondaryTables");
-		String names = table == null ? entity.getName() : (String)table.getValue();
+		String names = table == null ? entity.getCaseSensitiveName() : (String)table.getValue();
 		if (secTables != null) {
 			names += " t1";
 			int i = 2;
@@ -51,7 +51,7 @@ public class Utils {
 	
 	public static String getColumnName(Field field) {
 		Annotation column = field.getAnnotation("eglx.persistence.sql.Column");
-		String name = column != null && column.getValue("name") != null && !((String)column.getValue("name")).isEmpty()  ? (String)column.getValue("name") : field.getName();
+		String name = column != null && column.getValue("name") != null && !((String)column.getValue("name")).isEmpty()  ? (String)column.getValue("name") : field.getCaseSensitiveName();
 		// Determine table alias prefix if necessary
 		EGLClass entity = (EGLClass)field.getContainer();
 		Annotation secTables = entity.getAnnotation("eglx.persistence.sql.SecondaryTables");

@@ -132,7 +132,7 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 				if (stmt.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					rhs.addAnnotation(stmt.getAnnotation(IEGLConstants.EGL_LOCATION));
 				rhs.setMember(field);
-				rhs.setId(field.getName());
+				rhs.setId(field.getCaseSensitiveName());
 
 				assignment.setLHS((LHSExpr)target);
 				assignment.setRHS(rhs);

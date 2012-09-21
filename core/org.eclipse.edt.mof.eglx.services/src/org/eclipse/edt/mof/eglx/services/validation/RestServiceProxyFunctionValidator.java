@@ -31,6 +31,7 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author demurray
@@ -79,7 +80,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 				problemRequestor.acceptProblem(nestedFunction.getReturnType(),
 						ResourceKeys.XXXREST_MUST_RETURN_RESOURCE,
 						IMarker.SEVERITY_ERROR,
-						new String[] { function.getName(), getName() },
+						new String[] { function.getCaseSensitiveName(), getName() },
 						ResourceKeys.getResourceBundleForKeys());
 			}
 			// If the return type is String, the responseFormat must be NONE if
@@ -107,7 +108,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 						ResourceKeys.XXXREST_ALL_PARMS_MUST_BE_IN,
 						IMarker.SEVERITY_ERROR,
 						new String[] { ((FunctionParameter)parm).getName().getCanonicalName(),
-								function.getName(), getName() },
+								function.getCaseSensitiveName(), getName() },
 						ResourceKeys.getResourceBundleForKeys());
 			}
 		}
@@ -117,7 +118,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 		// loop through the parms and do resource/non-resource checks
 		boolean foundResourceParm = false;
 		for (FunctionParameter parm : parmNamesToNodes.values()) {
-			if (namesToSubstitutionVars.get(parm.getName().getCanonicalName()) == null) {
+			if (namesToSubstitutionVars.get(NameUtile.getAsName(parm.getName().getCanonicalName())) == null) {
 
 				if (supportsResourceParm(restAnnotation)) {
 					// Only 1 resource parameter is allowed!
@@ -125,7 +126,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 						problemRequestor.acceptProblem(parm,
 								ResourceKeys.XXXREST_ONLY_1_RESOURCE_PARM,
 								IMarker.SEVERITY_ERROR,
-								new String[] { function.getName(), getName(),
+								new String[] { function.getCaseSensitiveName(), getName(),
 										parm.getName().getCanonicalName() },
 								ResourceKeys.getResourceBundleForKeys());
 					} else {
@@ -140,7 +141,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 												IMarker.SEVERITY_ERROR,
 												new String[] {
 														parm.getName().getCanonicalName(),
-														function.getName(),
+														function.getCaseSensitiveName(),
 														getName() },
 												ResourceKeys.getResourceBundleForKeys());
 							} else {
@@ -149,7 +150,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 								if (parm.getType().resolveType().equals(TypeUtils.Type_STRING)) {
 									EnumerationEntry reqForm = (EnumerationEntry) restAnnotation.getValue(IEGLConstants.PROPERTY_REQUESTFORMAT);
 									if (reqForm != null
-											&& !"none".equals(reqForm.getName())) {
+											&& !NameUtile.equals(NameUtile.getAsName("none"), reqForm.getName())) {
 										problemRequestor.acceptProblem(
 														Utils.getRequestFormat(nestedFunction),
 														ResourceKeys.XXXREST_FORMAT_MUST_BE_NONE,
@@ -161,7 +162,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 								// If the requestFormat is formData, then the
 								// resource parameter must be a flat record
 								EnumerationEntry reqForm = (EnumerationEntry) restAnnotation.getValue(IEGLConstants.PROPERTY_REQUESTFORMAT);
-								if (reqForm != null && "_form".equals(reqForm.getName())) {
+								if (reqForm != null && NameUtile.equals(NameUtile.getAsName("_form"), reqForm.getName())) {
 									org.eclipse.edt.mof.egl.Type type = parm.getType().resolveType();
 									if (!isFlatRecord(type)) {
 										problemRequestor.acceptProblem(
@@ -170,7 +171,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 														IMarker.SEVERITY_ERROR,
 														new String[] {
 																parm.getName().getCanonicalName(),
-																function.getName() },
+																function.getCaseSensitiveName() },
 														ResourceKeys
 																.getResourceBundleForKeys());
 									}
@@ -182,7 +183,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 					problemRequestor.acceptProblem(nestedFunction,
 							ResourceKeys.XXXREST_NO_RESOURCE_PARM,
 							IMarker.SEVERITY_ERROR,
-							new String[] { function.getName(), getName(),
+							new String[] { function.getCaseSensitiveName(), getName(),
 									parm.getName().getCanonicalName() },
 							ResourceKeys.getResourceBundleForKeys());
 				}
@@ -197,7 +198,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 										IMarker.SEVERITY_ERROR,
 										new String[] {
 												parm.getName().getCanonicalName(),
-												function.getName(), getName() },
+												function.getCaseSensitiveName(), getName() },
 										ResourceKeys.getResourceBundleForKeys());
 					}
 				}
@@ -214,7 +215,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 				problemRequestor.acceptProblem(absStart + var.getStartOffset(),
 						absStart + var.getEndOffset(), IMarker.SEVERITY_ERROR,
 						ResourceKeys.XXXREST_UMATCHED_SUBS_VAR, new String[] {
-								var.getVarName(), function.getName() },
+								var.getVarName(), function.getCaseSensitiveName() },
 						ResourceKeys.getResourceBundleForKeys());
 
 			} else {
@@ -231,7 +232,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 		// If responseFormat is JSON, allow single dimension array of strings or
 		// flexible records
 		EnumerationEntry responseFormat = (EnumerationEntry) restAnnotation.getValue(IEGLConstants.PROPERTY_RESPONSEFORMAT);
-		if (responseFormat != null && "json".equals(responseFormat.getName()) && 
+		if (responseFormat != null && NameUtile.equals(NameUtile.getAsName("json"), responseFormat.getName()) && 
 				type instanceof ArrayType) {
 			type = ((ArrayType) type).getElementType();
 		}
@@ -290,7 +291,7 @@ public class RestServiceProxyFunctionValidator extends ServiceProxyFunctionValid
 			} else {
 				if (chars[i] == '}') {
 					SubstitutionVar var = new SubstitutionVar(lOffset + 1, i, uriTemp);
-					namesToSubstitutionVars.put(var.getVarName().toUpperCase().toLowerCase(), var);
+					namesToSubstitutionVars.put(NameUtile.getAsName(var.getVarName()), var);
 					lookingForL = true;
 				}
 			}

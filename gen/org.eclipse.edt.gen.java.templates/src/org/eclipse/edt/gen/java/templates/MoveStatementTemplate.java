@@ -91,20 +91,20 @@ public class MoveStatementTemplate extends JavaTemplate
 					LogicAndDataPart sourcePart = (LogicAndDataPart)sourceExpr.getType();
 					for ( Field sourceField : sourcePart.getFields() )
 					{
-						Field targetField = targetPart.getField( sourceField.getName() );
+						Field targetField = targetPart.getField( sourceField.getCaseSensitiveName() );
 						if ( targetField != null )
 						{
 							Assignment assign = ctx.getFactory().createAssignment();
 							assign.setOperator( "=" );
 							
 							MemberName targetName = ctx.getFactory().createMemberName();
-							targetName.setId( targetField.getName() );
+							targetName.setId( targetField.getCaseSensitiveName() );
 							targetName.setMember( (Member)targetField );
 							MemberAccess access = (MemberAccess)targetName.addQualifier( targetExpr );
 							assign.setLHS( access );
 							
 							MemberName sourceName = ctx.getFactory().createMemberName();
-							sourceName.setId( sourceField.getName() );
+							sourceName.setId( sourceField.getCaseSensitiveName() );
 							sourceName.setMember( (Member)sourceField );
 							access = (MemberAccess)sourceName.addQualifier( sourceExpr );
 							assign.setRHS( access );

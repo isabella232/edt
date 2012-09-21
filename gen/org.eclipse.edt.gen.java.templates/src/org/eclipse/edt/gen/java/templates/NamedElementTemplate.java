@@ -23,7 +23,7 @@ public class NamedElementTemplate extends JavaTemplate {
 		String propertyFunction = CommonUtilities.getPropertyFunction(element, false, ctx);
 		if (propertyFunction != null) {
 			FunctionMember currentFunction = ctx.getCurrentFunction();
-			if (currentFunction != null && propertyFunction.equals(currentFunction.getName()))
+			if (currentFunction != null && propertyFunction.equals(currentFunction.getCaseSensitiveName()))
 				genName(element, ctx, out);
 			else {
 				out.print(propertyFunction);
@@ -41,10 +41,10 @@ public class NamedElementTemplate extends JavaTemplate {
 				if (member.getAnnotation("eglx.lang.ExternalName") != null)
 					out.print((String) member.getAnnotation("eglx.lang.ExternalName").getValue());
 				else
-					out.print(element.getName());
+					out.print(element.getCaseSensitiveName());
 				return;
 			}
 		}
-		out.print(JavaAliaser.getAlias(element.getName()));
+		out.print(JavaAliaser.getAlias(element.getCaseSensitiveName()));
 	}
 }

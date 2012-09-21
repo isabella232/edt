@@ -96,7 +96,7 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 				}
 				String partName = (String) annotation.getValue(NameUtile.getAsName("externalName"));
 				if(partName == null || partName.isEmpty()){
-					partName = part.getName();
+					partName = part.getCaseSensitiveName();
 				}
 				out.print(eglnamespace + packageName.toLowerCase() + partName);
 			}
@@ -115,12 +115,12 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 	
 	public void genModuleName(ExternalType part, StringBuilder buf) {
 		buf.append("\"");
-		String pkg = part.getPackageName();
+		String pkg = part.getCaseSensitivePackageName();
 		if (pkg.length() > 0) {
 			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		buf.append(JavaScriptAliaser.getAliasForExternalType(JavaScriptAliaser.getAlias(part.getId())));
+		buf.append(JavaScriptAliaser.getAliasForExternalType(JavaScriptAliaser.getAlias(part.getCaseSensitiveName())));
 		buf.append("\"");
 	}
 	private String getExternalJSPath(ExternalType part) {
@@ -132,10 +132,10 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 			name = (String)annot.getValue( Constants.EXTERNALTYPE_EXTERNAL_NAME );			
 		}
 		if (pkg == null || pkg.isEmpty()) {
-			pkg = part.getPackageName().replace( '.', '/' );
+			pkg = part.getCaseSensitivePackageName().replace( '.', '/' );
 		}
 		if (name == null || name.isEmpty()) {
-			name = part.getName();
+			name = part.getCaseSensitiveName();
 		}
 		if (pkg.length() > 0) {
 			fullName = pkg;

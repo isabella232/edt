@@ -186,7 +186,7 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
     				try {
     					org.eclipse.edt.mof.egl.Part part = pathEntry.findPart(packageName, partName);
     					if(part != null) {
-    						caseSensitivePartName = part.getName();
+    						caseSensitivePartName = part.getCaseSensitiveName();
     					} else  {
     						int index = partName.lastIndexOf(".");
     						if(index > -1) {	

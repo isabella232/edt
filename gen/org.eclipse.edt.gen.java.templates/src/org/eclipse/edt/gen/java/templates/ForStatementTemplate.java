@@ -96,7 +96,7 @@ public class ForStatementTemplate extends JavaTemplate {
 			if (stmt.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				nameExpressionCond.addAnnotation(stmt.getAnnotation(IEGLConstants.EGL_LOCATION));
 			nameExpressionCond.setMember(fieldCond);
-			nameExpressionCond.setId(fieldCond.getName());
+			nameExpressionCond.setId(fieldCond.getCaseSensitiveName());
 			// add the field to the declaration expression
 			declarationExpressionCond.getFields().add(fieldCond);
 			// connect the declaration expression to the local declaration

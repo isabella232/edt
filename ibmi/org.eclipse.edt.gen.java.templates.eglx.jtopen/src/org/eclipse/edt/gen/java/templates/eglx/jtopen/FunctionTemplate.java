@@ -35,7 +35,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants, org.ecl
 
 	private MemberName createMember(FunctionParameter parameter){
 		MemberName mn = factory.createMemberName();
-		mn.setId(parameter.getId());
+		mn.setId(parameter.getCaseSensitiveName());
 		mn.setMember(parameter);
 		return mn;
 	}
@@ -178,7 +178,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants, org.ecl
 		
 		ctx.invokeSuper(this, genDeclaration, createFunction(function, ctx), ctx, out);
 		Function proxyFunction = CommonUtilities.createProxyFunction(function);
-		ctx.putAttribute(proxyFunction, subKey_realFunctionName, function.getName());
+		ctx.putAttribute(proxyFunction, subKey_realFunctionName, function.getCaseSensitiveName());
 		ctx.invokeSuper(this, genDeclaration, proxyFunction, ctx, out);
 		ctx.remove(proxyFunction);
 		for(FunctionParameter parameter : function.getParameters()){
@@ -190,7 +190,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants, org.ecl
 		Function newFunction = factory.createFunction();
 		if (function.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 			newFunction.addAnnotation(function.getAnnotation(IEGLConstants.EGL_LOCATION));
-		newFunction.setName(function.getName());
+		newFunction.setName(function.getCaseSensitiveName());
 		for(FunctionParameter parameter : function.getParameters()){
 			FunctionParameter newParameter = (FunctionParameter)parameter.clone();
 			newParameter.setContainer(newFunction);

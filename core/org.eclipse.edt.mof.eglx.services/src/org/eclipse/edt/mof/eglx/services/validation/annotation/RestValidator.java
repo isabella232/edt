@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class RestValidator extends ServiceValidatorBase{
@@ -38,7 +39,7 @@ public class RestValidator extends ServiceValidatorBase{
 		}
 		// validate that responseFormat is not formData
 		EnumerationEntry responseFormat = (EnumerationEntry) annotation.getValue(IEGLConstants.PROPERTY_RESPONSEFORMAT);
-		if (responseFormat != null && "_form".equals(responseFormat.getName())) {
+		if (responseFormat != null && NameUtile.equals(NameUtile.getAsName("_form"), responseFormat.getName())) {
 			problemRequestor.acceptProblem(
 					Utils.getResponseFormat(target),
 							ResourceKeys.XXXREST_RESPONSEFORMAT_NOT_SUPPORTD,

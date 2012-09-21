@@ -60,7 +60,7 @@ public class AS400GenArrayResize {
 	
 	private MemberAccess createMemberAccess(Member member, LHSExpr qual){
 		MemberAccess ma = JavaTemplate.factory.createMemberAccess();
-		ma.setId(member.getId());
+		ma.setId(member.getCaseSensitiveName());
 		ma.setMember(member);
 		ma.setQualifier(qual);
 		return ma;
@@ -68,7 +68,7 @@ public class AS400GenArrayResize {
 	
 	private MemberName createMemberName(Member member){
 		MemberName mn = JavaTemplate.factory.createMemberName();
-		mn.setId(member.getId());
+		mn.setId(member.getCaseSensitiveName());
 		mn.setMember(member);
 		return mn;
 	}

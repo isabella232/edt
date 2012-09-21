@@ -221,7 +221,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 			
 			String typeSignature = arg.getObjectExpr().getType().getClassifier().getTypeSignature();			
 			//TODO shouldn't have to special case ENumber and Decimal
-			if ( "asAny".equalsIgnoreCase(op.getName()) || ((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) || ("eglx.lang.EDecimal".equalsIgnoreCase(typeSignature))) {
+			if ( "asAny".equalsIgnoreCase(op.getCaseSensitiveName()) || ((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) || ("eglx.lang.EDecimal".equalsIgnoreCase(typeSignature))) {
 				out.print(",\"");
 				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
 				out.print("\"");

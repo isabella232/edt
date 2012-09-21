@@ -58,7 +58,7 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 			String irName = "";
 			if(part != null) {
 				sourceName = part.eGet("filename").toString();
-				irName = IRFileNameUtility.toIRFileName(part.getName());
+				irName = IRFileNameUtility.toIRFileName(part.getCaseSensitiveName());
 			} else {
 				ZipFile zipFile = null;
 				try {

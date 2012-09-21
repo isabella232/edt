@@ -107,7 +107,7 @@ public abstract class RestBase extends JavaScriptTemplate implements Constants{
 		Map<String, RestArgument> mapFuncParams = new Hashtable<String, RestArgument>();	//key is String(parameter variable name in lower case), value is the RestArugment
 		for (int idx=0; idx<function.getParameters().size(); idx++){
 			FunctionParameter param = function.getParameters().get(idx);
-			mapFuncParams.put(param.getId().toLowerCase(), new RestArgument(param, idx));
+			mapFuncParams.put(param.getCaseSensitiveName().toLowerCase(), new RestArgument(param, idx));
 		}
 		return mapFuncParams;
 	}

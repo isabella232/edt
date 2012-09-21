@@ -67,10 +67,10 @@ public class ClassTemplate extends EglTemplate{
 		org.eclipse.edt.mof.egl.Annotation javaObject = CommonUtilities.getAnnotation(ctx, Constants.Property);
 		if(javaObject != null){
 			eType.addAnnotation(javaObject);
-			if(!clazz.getSimpleName().equals(eType.getName())){
+			if(!clazz.getSimpleName().equals(eType.getCaseSensitiveName())){
 				javaObject.setValue(IEGLConstants.PROPERTY_JAVANAME, clazz.getSimpleName());
 			}
-			if(!clazz.getPackage().getName().equals(eType.getPackageName())){
+			if(!clazz.getPackage().getName().equals(eType.getCaseSensitivePackageName())){
 				javaObject.setValue(IEGLConstants.PROPERTY_PACKAGENAME, clazz.getPackage().getName());
 			}
 		}

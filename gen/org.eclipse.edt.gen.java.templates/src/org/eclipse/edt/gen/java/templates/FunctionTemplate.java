@@ -61,7 +61,7 @@ public class FunctionTemplate extends JavaTemplate {
 			// we need to create the member access
 			MemberName nameExpression = factory.createMemberName();
 			nameExpression.setMember(field);
-			nameExpression.setId(field.getName());
+			nameExpression.setId(field.getCaseSensitiveName());
 			// add the field to the declaration expression
 			declarationExpression.getFields().add(field);
 			// connect the declaration expression to the local declaration

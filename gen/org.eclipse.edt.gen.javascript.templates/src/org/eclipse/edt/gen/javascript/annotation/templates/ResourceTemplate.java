@@ -43,7 +43,7 @@ public class ResourceTemplate extends JavaScriptTemplate {
 		if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 			nameExpression.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
 		nameExpression.setMember(field);
-		nameExpression.setId(field.getName());
+		nameExpression.setId(field.getCaseSensitiveName());
 		assignment.setLHS(nameExpression);
 		assignment.setRHS(getLibraryInvocation(annot, field));
 		// add the assignment to the declaration statement block
@@ -69,7 +69,7 @@ public class ResourceTemplate extends JavaScriptTemplate {
 			uri.setValue((String)annot.getValue(Constants.SubKey_uri));
 		}
 		else{
-			uri.setValue("binding:" + field.getName());
+			uri.setValue("binding:" + field.getCaseSensitiveName());
 		}
 		return invocation;
 	}

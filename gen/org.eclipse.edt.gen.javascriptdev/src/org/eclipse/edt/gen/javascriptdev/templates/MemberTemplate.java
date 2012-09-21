@@ -33,7 +33,7 @@ public class MemberTemplate extends org.eclipse.edt.gen.javascript.templates.Mem
 	
 	public void genAddLocalFunctionVariable(Member m, Context ctx, TabbedWriter out) {
 		if (org.eclipse.edt.gen.javascriptdev.CommonUtilities.shouldDebug(m)) {
-			out.print("egl.addLocalFunctionVariable(" + quoted(m.getId()) + ", ");
+			out.print("egl.addLocalFunctionVariable(" + quoted(m.getCaseSensitiveName()) + ", ");
 			ctx.invoke(genName, m, ctx, out);
 			out.print(", \"");
 			ctx.invoke(Constants.genDebugTypeInfo, m, ctx, out);
@@ -45,7 +45,7 @@ public class MemberTemplate extends org.eclipse.edt.gen.javascript.templates.Mem
 	
 	public void genSetLocalFunctionVariable(Member m, Context ctx, TabbedWriter out) {
 		if (org.eclipse.edt.gen.javascriptdev.CommonUtilities.shouldDebug(m)) {
-			out.print("egl.setLocalFunctionVariable(" + quoted(m.getId()) + ", ");
+			out.print("egl.setLocalFunctionVariable(" + quoted(m.getCaseSensitiveName()) + ", ");
 			ctx.invoke(genName, m, ctx, out);
 			out.print(", \"");
 			ctx.invoke(Constants.genDebugTypeInfo, m, ctx, out);

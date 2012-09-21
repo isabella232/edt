@@ -107,7 +107,7 @@ public class RUITemplate extends JavaScriptTemplate {
 			title = (String)annot.getValue("title");
 		}
 		if (title == null || title.length() == 0) {
-			title = part.getName();
+			title = part.getCaseSensitiveName();
 		}
 		out.print( "<title>" ); //$NON-NLS-1$
 		out.print( title );
@@ -161,12 +161,12 @@ public class RUITemplate extends JavaScriptTemplate {
 	
 	private void genModuleName(Handler part, boolean isDevelopment, StringBuilder buf) {
 		buf.append("\"");
-		String pkg = part.getPackageName();
+		String pkg = part.getCaseSensitivePackageName();
 		if (pkg.length() > 0) {
 			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		buf.append(JavaScriptAliaser.getAlias(part.getId()));
+		buf.append(JavaScriptAliaser.getAlias(part.getCaseSensitiveName()));
 		if(isDevelopment){
 			buf.append(".js?contextKey=\" + egl__contextKey");
 		}else{
@@ -239,13 +239,13 @@ public class RUITemplate extends JavaScriptTemplate {
 	}
 
 	private String getFullPartName(Handler part) {
-		String packageName = part.getPackageName().replace('/', '.').toLowerCase();
+		String packageName = part.getCaseSensitivePackageName().replace('/', '.').toLowerCase();
 		if(packageName != null && !(packageName.isEmpty())){
 			packageName +=".";
 		}else{
 			packageName = "";
 		}
-		return packageName + part.getName();
+		return packageName + part.getCaseSensitiveName();
 	}
 	
 	private void generateRootHandler( Handler part, TabbedWriter out ) {

@@ -186,7 +186,7 @@ public class JavaScriptAliaser
 				Type type = ((Type)f.getContainer()).getClassifier();
 				
 				if (TypeUtils.isTextType(type)) {
-					if (f.getName().equals("length")) {
+					if (f.getCaseSensitiveName().equals("length")) {
 						result = (Function) f.clone();
 						result.setName("textLen");
 					}

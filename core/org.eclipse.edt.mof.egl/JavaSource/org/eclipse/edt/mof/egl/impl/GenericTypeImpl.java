@@ -95,7 +95,7 @@ public class GenericTypeImpl extends TypeImpl implements GenericType {
 		StringBuffer signature = new StringBuffer();
 		if (getTypeParameter() != null && getClassifier() == null) {
 			signature.append('<');
-			signature.append(getTypeParameter().getName());
+			signature.append(getTypeParameter().getCaseSensitiveName());
 			signature.append('>');
 		}
 		else {

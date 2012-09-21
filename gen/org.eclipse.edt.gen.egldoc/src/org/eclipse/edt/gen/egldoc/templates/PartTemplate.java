@@ -1,7 +1,5 @@
 package org.eclipse.edt.gen.egldoc.templates;
 
-import java.util.List;
-
 import org.eclipse.edt.gen.egldoc.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Element;
@@ -11,8 +9,8 @@ import org.eclipse.edt.mof.egl.Stereotype;
 public class PartTemplate extends EGLDocTemplate {
 
 	public void preGenPart(Part part, Context ctx) {
-		ctx.put("partName", part.getName());
-		ctx.put("packageName", part.getPackageName());
+		ctx.put("partName", part.getCaseSensitiveName());
+		ctx.put("packageName", part.getCaseSensitivePackageName());
 		ctx.put("fullPartName", part.getFullyQualifiedName());
 		ctx.invokeSuper(this, preGenPart, part, ctx);
 	}
@@ -47,10 +45,10 @@ public class PartTemplate extends EGLDocTemplate {
 
 		out.println("<dt class=\"dt dlterm\"><a name=\"package\"</a>EGL package name</dt>");
 
-		if (part.getPackageName() == "") {
+		if (part.getCaseSensitivePackageName().length() == 0) {
 			out.println("<dd> <p class=\"p\">The default package is in use.</p>");
 		} else {
-			out.println("<dd> <p class=\"p\">" + part.getPackageName() + "</p>");
+			out.println("<dd> <p class=\"p\">" + part.getCaseSensitivePackageName() + "</p>");
 		}
 		out.println("<p class=\"p\"></p></dd></dt>");
 	}
@@ -82,7 +80,7 @@ public class PartTemplate extends EGLDocTemplate {
 		if (stereotypeType == null) {
 			out.println("<dd> <p class=\"p\">None.</p>");
 		} else {
-			String stereoString = part.getStereotype().getEClass().getName();
+			String stereoString = part.getStereotype().getEClass().getCaseSensitiveName();
 			out.println("<dd> <p class=\"p\">" + stereoString + "</p>");
 		}
 		out.println("<p class=\"p\"></p></dd></dt>");

@@ -29,7 +29,7 @@ public class XMLRootElementTemplate extends JavaScriptTemplate {
 			out.print(quoted((String) annot.getValue("name")));
 		}
 		else{
-			StringBuilder name = new StringBuilder(part.getName());
+			StringBuilder name = new StringBuilder(part.getCaseSensitiveName());
 			if(Character.isUpperCase(name.charAt(0))){
 				name.setCharAt(0, Character.toLowerCase(name.charAt(0)));
 			}

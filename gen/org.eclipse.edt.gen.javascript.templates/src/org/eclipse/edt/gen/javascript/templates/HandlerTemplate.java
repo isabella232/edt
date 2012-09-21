@@ -39,9 +39,9 @@ public class HandlerTemplate extends JavaScriptTemplate {
 			out.print("egl.defineClass(");
 		}
 
-		out.print(singleQuoted(handler.getPackageName().toLowerCase()));
+		out.print(singleQuoted(handler.getCaseSensitivePackageName().toLowerCase()));
 		out.print(", ");
-		out.print(singleQuoted(handler.getName()));
+		out.print(singleQuoted(handler.getCaseSensitiveName()));
 		out.println(", ");
 		out.println("{");
 		out.print("'eze$$fileName': ");
@@ -67,7 +67,7 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		ctx.invoke(genFields, handler, ctx, out);
 		
 		Stereotype stereotype = handler.getStereotype();
-		if ((stereotype != null) && ("RUIWidget".equals(stereotype.getEClass().getName()))){
+		if ((stereotype != null) && ("RUIWidget".equals(stereotype.getEClass().getCaseSensitiveName()))){
 			MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
 			if (onConstruction != null) {
 				out.print("this.");

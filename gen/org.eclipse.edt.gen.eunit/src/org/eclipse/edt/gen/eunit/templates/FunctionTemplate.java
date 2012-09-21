@@ -72,7 +72,7 @@ public class FunctionTemplate extends EUnitTemplate {
 	}
 
 	private void addTestFunctions(List<String> functions, Function function, TestCounter couter) {
-		functions.add(function.getName());
+		functions.add(function.getCaseSensitiveName());
 		couter.increment();
 	}
 }

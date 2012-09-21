@@ -47,7 +47,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			// add an xmlRootElement
 			try {
 				Annotation annotation = org.eclipse.edt.gen.CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
-				annotation.setValue("name", part.getId());
+				annotation.setValue("name", part.getCaseSensitiveName());
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(part, annotation, ctx);
 			}
 			catch (Exception e) {}
@@ -56,7 +56,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	private void addNamespaceMap(EGLClass part, Context ctx) {
-		String localName = part.getName();
+		String localName = part.getCaseSensitiveName();
 		String namespace = CommonUtilities.createNamespaceFromPackage(part);
 		
 		Annotation annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(part, Constants.AnnotationXMLRootElement, ctx);
@@ -110,12 +110,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	
 	public void genModuleName(EGLClass part, StringBuilder buf) {
 		buf.append("\"");
-		String pkg = part.getPackageName();
+		String pkg = part.getCaseSensitivePackageName();
 		if (pkg.length() > 0) {
 			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		buf.append(JavaScriptAliaser.getAlias(part.getId()));
+		buf.append(JavaScriptAliaser.getAlias(part.getCaseSensitiveName()));
 		buf.append("\"");
 	}
 	
@@ -177,9 +177,9 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
 		out.print("egl.defineClass(");
-		out.print(singleQuoted(part.getPackageName().toLowerCase()));
+		out.print(singleQuoted(part.getCaseSensitivePackageName().toLowerCase()));
 		out.print(", ");
-		out.print(quoted(part.getName()));
+		out.print(quoted(part.getCaseSensitiveName()));
 		out.print(", ");
 		ctx.invoke(genSuperClass, part, ctx, out);
 		out.print(", ");
@@ -207,7 +207,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.println(",");
 		out.print(quoted("toString"));
 		out.println(": function() {");
-		out.println("return \"[" + part.getId() + "]\";");
+		out.println("return \"[" + part.getCaseSensitiveName() + "]\";");
 		out.println("}");
 	}
 
@@ -289,7 +289,8 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			// that gets overridden by the initializers.
 			for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(field, ctx)) {
 				try {
-					ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field, genInitializeMethod);
+					//TODO uncomment!
+//					ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field, genInitializeMethod);
 				}
 				catch (TemplateException ex) {
 					//NOGO sbg Seems bogus, but apparently we lack templates for some annotations?
@@ -431,7 +432,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genQualifier(EGLClass part, Context ctx, TabbedWriter out, NamedElement arg) {
 		for (Member mbr : part.getAllMembers()) {
-			if (mbr.getId().equalsIgnoreCase(arg.getId())) {
+			if (mbr.getCaseSensitiveName().equalsIgnoreCase(arg.getCaseSensitiveName())) {
 				Object alias = ctx.getAttribute(ctx.getClass(), Constants.QUALIFIER_ALIAS);
 				if (alias != null) 
 					out.print(alias.toString());
