@@ -253,15 +253,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			}
 		}
 		
-		if (element == null) {
-			// Super and this will already have a binder error.
-			if (!(target instanceof ThisExpression || target instanceof SuperExpression)) {
-				problemRequestor.acceptProblem(
-						target,
-						IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
-			}
-		}
-		else {
+		if (element instanceof FunctionMember || element instanceof Delegate) {
 			// returnType is required when the invocation is not part of a FunctionInvocationStatement ("voidFunc();" good, "x int = voidFunc();" bad).
 			if (returnType == null && !(functionInvocation.getParent() instanceof FunctionInvocationStatement)) {
 				problemRequestor.acceptProblem(
@@ -276,6 +268,11 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			else if (element instanceof FunctionMember) {
 				functionInvocation.accept(new FunctionArgumentValidator((FunctionMember)element, problemRequestor, compilerOptions));
 			}
+		}
+		else if (element != null) {
+			problemRequestor.acceptProblem(
+					target,
+					IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
 		}
 	}
 	
