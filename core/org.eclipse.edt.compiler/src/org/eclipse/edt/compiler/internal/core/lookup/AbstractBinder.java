@@ -274,10 +274,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     public Object bindExpressionName(Name name, boolean isFunctionInvocation) throws ResolutionException {
         List<?> result = null;
         if(name.isSimpleName()) {
-        	List<Member> mbrs = currentScope.findMember(name.getIdentifier());
-        	mbrs = removePrivateMembersNotInCurrentPart(mbrs);
-        	
-            result = mbrs;
+            result = currentScope.findMember(name.getIdentifier());
             
             if(result == null) {
             	result = currentScope.findType(name.getIdentifier());
@@ -604,7 +601,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 		org.eclipse.edt.mof.egl.Type type = aType.getClassifier();
 		if (type != null && type.equals(currentBinding)) {
 			result = BindingUtil.findMembers(type, identifier);
-			result = removePrivateMembersNotInCurrentPart(result);
 		}
 		else {
 			result = BindingUtil.findPublicMembers(type, identifier);
@@ -622,29 +618,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 		return null;
 
     }
-	
-	private List<Member> removePrivateMembersNotInCurrentPart(List<Member> list) {
-		if (list == null || currentBinding == null) {
-			return list;
-		}
-		List<Member> result = new ArrayList<Member>();
-		for (Member mbr : list) {
-			if (mbr.getAccessKind() == AccessKind.ACC_PRIVATE) {
-				if (mbr.getContainer() instanceof org.eclipse.edt.mof.egl.Type) {
-					if (((org.eclipse.edt.mof.egl.Type)mbr.getContainer()).equals(currentBinding)) {
-						list.add(mbr);
-					}
-				}
-			}
-			else {
-				result.add(mbr);
-			}
-		}
-		if (result.size() == 0) {
-			return null;
-		}
-		return result;
-	}
 	
     protected static void setBindAttemptedForNames(Node node) {
     	node.accept(new AbstractASTVisitor() {
