@@ -49,7 +49,6 @@ public class EGLNewPropertiesHandler {
     public static final int arrayOfArrays = 9;
     public static final int arrayOf = 10;
     public static final int complexPropertyValue = 11;
-    public static final int bidiEnabled = 12;
     
     // locations for properties
     // locations that cannot contain nested properties

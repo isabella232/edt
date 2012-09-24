@@ -34,7 +34,7 @@ Delegate
 end
 
 Delegate 
-	MVCValidStateSetter(widget Widget in, valid boolean in) 
+	MVCValidStateSetter(widget eglx.ui.rui.Widget in, valid boolean in) 
 end
 
 Delegate 

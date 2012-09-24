@@ -47,6 +47,8 @@ import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.ParameterizableType;
@@ -278,10 +280,8 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 		List<Member> result = new ArrayList<Member>();
 		for (Member mbr : list) {
 			if (mbr.getAccessKind() == AccessKind.ACC_PRIVATE) {
-				if (mbr.getContainer() instanceof org.eclipse.edt.mof.egl.Type) {
-					if (((org.eclipse.edt.mof.egl.Type)mbr.getContainer()).equals(currentBinding)) {
-						list.add(mbr);
-					}
+				if (isContainedBy(mbr, currentBinding)) {
+					result.add(mbr);
 				}
 			}
 			else {
@@ -292,6 +292,25 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 			return null;
 		}
 		return result;
+	}
+	
+	private boolean isContainedBy(Member mbr, Element container) {
+		if (mbr.getContainer() == container) {
+			return true;
+		}
+		
+		if (mbr.getContainer() instanceof org.eclipse.edt.mof.egl.Type && container instanceof org.eclipse.edt.mof.egl.Type) {
+			if (((org.eclipse.edt.mof.egl.Type)mbr.getContainer()).equals((org.eclipse.edt.mof.egl.Type)container)) {
+				return true;
+			}
+		}
+		
+		if (mbr.getContainer() instanceof Member) {
+			return isContainedBy((Member)mbr.getContainer(), container);
+		}
+		
+		return false;
+
 	}
 
     public Object bindExpressionName(Name name, boolean isFunctionInvocation) throws ResolutionException {
