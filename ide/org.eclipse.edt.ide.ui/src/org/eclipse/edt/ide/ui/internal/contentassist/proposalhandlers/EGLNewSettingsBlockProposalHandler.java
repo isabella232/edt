@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBindingImpl;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLNewSettingsBlockProposalHandler extends EGLAbstractProposalHandler {
@@ -32,45 +32,37 @@ public class EGLNewSettingsBlockProposalHandler extends EGLAbstractProposalHandl
 	
 	public List getProposals(List propertyBlockList, Name name) {
 		List proposals = new ArrayList();
-		IBinding binding = name.resolveBinding();
-		if (binding instanceof FlexibleRecordBindingImpl)
-			return getFlexibleRecordProposals((FlexibleRecordBindingImpl) binding, propertyBlockList);
-		else if (binding instanceof ExternalTypeBinding)
-			return getExternalTypeProposals((ExternalTypeBinding) binding, propertyBlockList);
+		Type type = name.resolveType();
+		if (type instanceof Record)
+			return getRecordProposals((Record) type, propertyBlockList);
+		else if (type instanceof ExternalType)
+			return getExternalTypeProposals((ExternalType) type, propertyBlockList);
 		return proposals;
 	}
 
-	private List getFlexibleRecordProposals(FlexibleRecordBindingImpl flexibleRecordBindingImpl, List propertyBlockList) {
+	private List getRecordProposals(Record record, List propertyBlockList) {
 		List proposals = new ArrayList();
-		IDataBinding[] fields = flexibleRecordBindingImpl.getFields();
-		if (fields != null) {
-			for (int i = 0; i < fields.length; i++) {
-				IDataBinding field = fields[i];
-				proposals.addAll(createProposals(field, propertyBlockList));
-			}
+		for (Field field : record.getFields()) {
+			proposals.addAll(createProposals(field, propertyBlockList));
 		}
 		return proposals;
 	}
 
-	private List getExternalTypeProposals(ExternalTypeBinding externalTypeBinding, List propertyBlockList) {
+	private List getExternalTypeProposals(ExternalType externalType, List propertyBlockList) {
 		List proposals = new ArrayList();
-		List fields = externalTypeBinding.getDeclaredData();
-		if (fields != null) {
-			for (int i = 0; i < fields.size(); i++) {
-				IDataBinding field = (IDataBinding) fields.get(i);
-				proposals.addAll(createProposals(field, propertyBlockList));
-			}
+		for (Field field : externalType.getFields()) {
+			proposals.addAll(createProposals(field, propertyBlockList));
 		}
 		return proposals;
 	}
 
-	public List createProposals(IDataBinding field, List propertyBlockList) {
+	public List createProposals(Field field, List propertyBlockList) {
 		List proposals = new ArrayList();
 		String displayString = field.getCaseSensitiveName();
 		String proposalString = displayString + " = "; //$NON-NLS-1$
 		if (displayString.toUpperCase().startsWith(getPrefix().toUpperCase())) {
 			if (!containsProperty(displayString, propertyBlockList)) {
-				proposals.add(createProposal(viewer, displayString, proposalString, getPrefix(), field.getType().getCaseSensitiveName(), getDocumentOffset(), proposalString.length(), 0));
+				proposals.add(createProposal(viewer, displayString, proposalString, getPrefix(), getTypeString(field.getType()), getDocumentOffset(), proposalString.length(), 0));
 				return proposals;
 			}
 		}

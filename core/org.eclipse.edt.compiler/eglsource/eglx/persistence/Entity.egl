@@ -12,6 +12,6 @@
 package eglx.persistence;
 
 record Entity type Stereotype {
-	targets=[ExternalTypePart, RecordPart, HandlerPart],
+	targets=[ExternalTypePart, RecordPart, HandlerPart]
 }
 end

@@ -19,9 +19,8 @@ import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLNumericExpressionStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -71,22 +70,14 @@ public class EGLNumericExpressionStatementReferenceCompletion extends EGLAbstrac
 						prefix,
 						boundNode)
 							.getDataItemProposals(EGLDeclarationProposalHandler.ALL_DATAITEMS, true));
-	
-				//Get system function proposals with return value
-				proposals.addAll(
-					new EGLSystemWordProposalHandler(viewer,
-						documentOffset,
-						prefix,
-						editor,
-						boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
-				
+					
 				//Get user function proposals with return value using library use statements
 				proposals.addAll(
 					new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 				
 				//Get user function proposals with return value
 				proposals.addAll(
-					new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+					new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 			}});			
 		}
 		

@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLDeclarationArrayProposalHandler extends EGLDeclarationProposalHandler {
@@ -36,10 +37,10 @@ public class EGLDeclarationArrayProposalHandler extends EGLDeclarationProposalHa
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler#precondition()
 	 */
-	protected boolean precondition(IDataBinding dBinding) {
-		ITypeBinding tBinding = dBinding.getType();
-		if(tBinding != null) {
-			return ITypeBinding.ARRAY_TYPE_BINDING == tBinding.getKind();
+	protected boolean precondition(Member member) {
+		Type type = member.getType();
+		if(type != null) {
+			return type instanceof ArrayType;
 		}
 		
 		return false;

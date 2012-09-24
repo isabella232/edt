@@ -493,7 +493,6 @@ public interface IProblemRequestor {
 	public static final int STEREOTYPE_NO_FILLERS = 3510;
 	public static final int STEREOTYPE_NO_EMBED = 3511;
 	public static final int STEREOTYPE_TYPE_REQUIRED = 3512;
-	public static final int STEREOTYPE_NO_BLOCK = 3513;
 	public static final int STEREOTYPE_NO_PARMS = 3514;
 	public static final int STEREOTYPE_BAD_TYPE = 3515;
 

@@ -18,13 +18,10 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLEnumerationNameProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public abstract class EGLAbstractReturnStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -52,31 +49,15 @@ public abstract class EGLAbstractReturnStatementReferenceCompletion extends EGLA
 				proposals.addAll(
 					new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 				
-				//Get system function proposals with no return value
-				proposals.addAll(
-						new EGLSystemWordProposalHandler(viewer,
-							documentOffset,
-							prefix,
-							editor,
-							boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
-
 				//Get user function proposals with return value
 				proposals.addAll(
-					new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+					new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 			}
 		});
 		
 		//Get all library and external type proposals
 		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
 			IEGLSearchConstants.LIBRARY|IEGLSearchConstants.EXTERNALTYPE));
-
-		//Get all system library proposals
-		proposals.addAll(
-			new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
-		
-		//Get all enumeration name proposals
-		proposals.addAll(
-			new EGLEnumerationNameProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 		
 		return proposals;
 	}

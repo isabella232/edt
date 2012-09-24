@@ -20,7 +20,7 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLConditionSysVarProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
@@ -66,31 +66,15 @@ public class EGLBooleanExpressionReferenceCompletion extends EGLAbstractReferenc
 			proposals.addAll(
 				new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 			
-			//Get system function proposals with return value
-			proposals.addAll(
-				new EGLSystemWordProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
-
 			//Get user function proposals with return value
 			proposals.addAll(
-				new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+				new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 		}});
 		
 		//Get all library proposals
 		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
 				IEGLSearchConstants.LIBRARY));
 		
-		//Get all system library proposals
-		proposals.addAll(
-			new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
-				
-		//JON - not sure this should be here for all the cases above???
-		proposals.addAll(
-			new EGLConditionSysVarProposalHandler(viewer, documentOffset, prefix).getProposals());
-
 		return proposals;
 	}
 }

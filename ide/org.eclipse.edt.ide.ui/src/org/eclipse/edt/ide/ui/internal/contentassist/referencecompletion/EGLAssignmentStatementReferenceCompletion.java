@@ -25,12 +25,15 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclara
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLEnumerationNameProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPropertyValueProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLVariableDotProposalHandler;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -81,29 +84,29 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 						Node nodeThatMightBeAssignment = getNodeThatMightBeAssignment(boundNode);
 						if(nodeThatMightBeAssignment instanceof Assignment) {
 							Assignment assignmentNode = ((Assignment) nodeThatMightBeAssignment);
-							IBinding lhBinding = assignmentNode.getLeftHandSide().resolveDataBinding();
-							if(lhBinding != null && IBinding.NOT_FOUND_BINDING != lhBinding) {
-								if(lhBinding.isAnnotationBinding()) {
+							Object elem = assignmentNode.getLeftHandSide().resolveElement();
+							if(elem != null) {
+								if(elem instanceof Annotation) {
 									//We are completing the rhs of a property value
-									proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((IAnnotationBinding) lhBinding));
+									proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((Annotation) elem, assignmentNode.getLeftHandSide().getCanonicalString()));
 									isPropertySetting[0] = true;
 									isDone[0] = true;
 //									return;
-								}else if(lhBinding instanceof ClassFieldBinding &&
-										EGLVariableDotProposalHandler.needSetFunctionForTheField((ClassFieldBinding)lhBinding)){
+								}else if(elem instanceof Field &&
+										EGLVariableDotProposalHandler.needSetFunctionForTheField((Field)elem)){
 									isPropertySetting[0] = true;
 									isDone[0] = true;
 									return;
 								}
-								else if(lhBinding instanceof ClassFieldBinding && 
+								else if(elem instanceof Field && 
 										assignmentNode.getParent() != null &&								
 										assignmentNode.getParent() instanceof SettingsBlock &&
 										parseStack.getCurrentState() != invokeInArray) {  //added for RUI widget class fields
-									proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((ClassFieldBinding) lhBinding));
+									proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((Field) elem));
 									isPropertySetting[0] = true;
 									isDone[0] = true;
 //									return;
-								}else if(lhBinding instanceof ClassFieldBinding && 
+								}else if(elem instanceof Field && 
 										assignmentNode.getParent() != null &&								
 										assignmentNode.getParent() instanceof SettingsBlock && 
 										parseStack.getCurrentState() == invokeInArray){
@@ -129,21 +132,13 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 						proposals.addAll(
 							new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 						
-						//Get system function proposals with no return value
-						proposals.addAll(
-								new EGLSystemWordProposalHandler(viewer,
-									documentOffset,
-									prefix,
-									editor,
-									boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
-
 						//Get user function proposals with return value
 						if(!isPropertySetting[0]){
 							proposals.addAll(
-									new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+									new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 						}else{
 							proposals.addAll(
-									new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, false, boundNode).getProposals());
+									new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, false, boundNode).getProposals());
 						}
 						
 						thisCompletion.boundNode = null;
@@ -155,14 +150,7 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 				//Get all library and external type proposals
 				proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
 					IEGLSearchConstants.LIBRARY|IEGLSearchConstants.EXTERNALTYPE));
-		
-				//Get all system library proposals
-				proposals.addAll(
-					new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
-				
-				//Get all enumeration name proposals
-				proposals.addAll(
-					new EGLEnumerationNameProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
+						
 			}
 		}
 

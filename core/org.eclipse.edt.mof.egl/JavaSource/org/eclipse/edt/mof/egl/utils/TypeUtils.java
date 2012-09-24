@@ -29,6 +29,7 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -250,7 +251,22 @@ public class TypeUtils implements MofConversion {
 		}
 
 	}
-	
+
+	public static boolean isNumericTypeWithNoDecimals(Type type) {
+		if (!isNumericType(type)) {
+			return false;
+		}
+		
+		if (TypeUtils.Type_INT.equals(type) || TypeUtils.Type_SMALLINT.equals(type) || TypeUtils.Type_BIGINT.equals(type)) {
+			return true;
+		}
+		
+		if (type instanceof FixedPrecisionType) {
+			return ((FixedPrecisionType)type).getDecimals() == null || ((FixedPrecisionType)type).getDecimals().intValue() == 0;
+		}
+		return false;
+	}
+
 	public static boolean isTextType(Type type) {
 		if (type != null && type.getClassifier() instanceof EGLClass) {
 			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_ANYTEXT);

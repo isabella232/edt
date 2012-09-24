@@ -13,6 +13,6 @@ package eglx.lang;
 
 Record BasicProgram type Stereotype
 {
-	targets = [ElementKind.programPart],
+	targets = [ElementKind.programPart]
 }
 end

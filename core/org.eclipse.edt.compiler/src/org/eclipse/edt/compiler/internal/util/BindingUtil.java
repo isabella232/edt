@@ -65,6 +65,7 @@ import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -567,6 +568,12 @@ public class BindingUtil {
 	public static boolean isApplicableFor(Element targetBinding, List<ElementKind> targets) {
 		
 		ElementKind targetType = BindingUtil.getElementKind(targetBinding);
+		return isApplicableFor(targetType, targets, targetBinding instanceof Part);
+	}
+
+	
+	public static boolean isApplicableFor(ElementKind targetType, List<ElementKind> targets, boolean targetIsPart) {
+		
 		if (targetType == null) {
 			return false;
 		}
@@ -594,7 +601,7 @@ public class BindingUtil {
 				}
 			}
 			
-			if (targetBinding instanceof Part && NameUtile.equals(nextTargetName, NameUtile.getAsName("part"))) {
+			if (targetIsPart && NameUtile.equals(nextTargetName, NameUtile.getAsName("part"))) {
 				return true;
 			}
 
@@ -709,7 +716,34 @@ public class BindingUtil {
 		}
 		return null;
 	}
+	
+	public static List<Field> getAllFields(Type type) {
+		List<Field> fields = new ArrayList<Field>();
+		if (type instanceof Container) {
+			for (Member mbr : ((Container)type).getAllMembers()) {
+				if (mbr instanceof Field) {
+					fields.add((Field) mbr);
+				}
+			}
+		}
 
+		return fields;
+	}
+
+
+	public static List<Function> getAllFunctions(Type type) {
+		List<Function> functions = new ArrayList<Function>();
+		if (type instanceof Container) {
+			for (Member mbr : ((Container)type).getAllMembers()) {
+				if (mbr instanceof Function) {
+					functions.add((Function) mbr);
+				}
+			}
+		}
+
+		return functions;
+	}
+	
 	public static ArrayType getArrayType(Type elemType, boolean nullable)  {
 		Map<Type, WeakReference<ArrayType>> map;
 		
@@ -740,7 +774,7 @@ public class BindingUtil {
 			return null;
 		}
 		
-		return findPart(ppn.getPackageName(), ppn.getPartName());
+		return IRUtils.getEGLType(ppn.getPackageName() + "." + ppn.getPartName());		
 	}
 	
 	public static String getUnaliasedTypeName(Type type, boolean includeParams) {

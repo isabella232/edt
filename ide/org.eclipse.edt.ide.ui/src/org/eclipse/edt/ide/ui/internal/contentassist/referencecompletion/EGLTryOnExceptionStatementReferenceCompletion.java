@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLExceptionVariableDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchExceptionVariableDeclarationProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -37,7 +36,6 @@ public class EGLTryOnExceptionStatementReferenceCompletion extends EGLAbstractRe
 		List proposals = new ArrayList();
 		proposals.addAll(new EGLPartSearchExceptionVariableDeclarationProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
 			IEGLSearchConstants.RECORD, "", new String[] {IEGLConstants.RECORD_SUBTYPE_EXCEPTION}, false)); //$NON-NLS-1$
-		proposals.addAll(new EGLExceptionVariableDeclarationProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 		return proposals;
 	}
 

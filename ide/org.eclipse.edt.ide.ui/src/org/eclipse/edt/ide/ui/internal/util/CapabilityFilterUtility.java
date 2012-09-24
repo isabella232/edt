@@ -17,7 +17,6 @@ import java.util.Iterator;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.EGLPropertyRule;
-import org.eclipse.edt.ide.core.internal.utils.Util;
 
 public class CapabilityFilterUtility {
 	
@@ -30,17 +29,17 @@ public class CapabilityFilterUtility {
 	}
 	
 	public abstract static class PackageNameFilter implements IPartBindingFilter, IPropertyRuleFilter {
-		private String[][] packageNames;
+		private String[] packageNames;
 
-		public PackageNameFilter(String[] packageName) {
-			this(new String[][] {packageName});
+		public PackageNameFilter(String packageName) {
+			this(new String[] {packageName});
 		}
 		
-		public PackageNameFilter(String[][] packageNames) {
+		public PackageNameFilter(String[] packageNames) {
 			this.packageNames = packageNames;
 		}
 		
-		private boolean allowed(String[] packageName) {
+		private boolean allowed(String packageName) {
 			boolean passes = true;
 			for(int i = 0; i < packageNames.length && passes; i++) {
 				if(equals(packageName, packageNames[i])) {
@@ -51,7 +50,7 @@ public class CapabilityFilterUtility {
 		}
 		
 		public boolean partBindingPasses(IPartBinding partBinding) {
-			return allowed(Util.qualifiedNameToStringArray(partBinding.getPackageName()));
+			return allowed(partBinding.getPackageName());
 		}
 		
 		public boolean propertyRulePasses(EGLPropertyRule propertyRule) {
@@ -60,16 +59,16 @@ public class CapabilityFilterUtility {
 
 		protected abstract boolean isAllowed();
 
-		private boolean equals(String[] partPackageName, String[] packageName2) {
-			if(partPackageName == null || partPackageName.length != packageName2.length) {
+		private boolean equals(String partPackageName, String packageName2) {
+			if (partPackageName == packageName2) {
+				return true;
+			}
+
+			if (partPackageName == null || packageName2 == null) {
 				return false;
 			}
-			for(int i = 0; i < partPackageName.length; i++) {
-				if(!partPackageName[i].equalsIgnoreCase(packageName2[i])) {
-					return false;
-				}
-			}
-			return true;
+
+			return partPackageName.equalsIgnoreCase(packageName2);
 		}
 	}
 	
