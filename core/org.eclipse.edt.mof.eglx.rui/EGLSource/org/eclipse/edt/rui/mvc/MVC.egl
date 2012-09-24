@@ -66,7 +66,7 @@ Record Currency type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.CurrencyAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.CurrencyAnnotationProxy"
 }
 	value boolean = yes;
 end
@@ -76,7 +76,7 @@ Record CurrencySymbol type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.CurrencySymbolAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.CurrencySymbolAnnotationProxy"
 }
 	value string;
 end
@@ -86,7 +86,7 @@ Record DateFormat type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.DateFormatAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.DateFormatAnnotationProxy"
 }
 	value string;
 end
@@ -96,7 +96,7 @@ Record FillCharacter type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.FillCharacterAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.FillCharacterAnnotationProxy"
 }
 	value string;
 end
@@ -125,7 +125,7 @@ Record ValidationPropertiesLibrary type Annotation
 		ElementKind.fieldMbr
 	]
 	,
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.ValidationPropertiesLibraryAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.ValidationPropertiesLibraryAnnotationProxy"
 }
 	value egl.lang.reflect.TypeType;
 end
@@ -135,7 +135,7 @@ Record IsBoolean type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.IsBooleanAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.IsBooleanAnnotationProxy"
 }
 	value boolean = yes;
 end
@@ -145,7 +145,7 @@ Record IsDecimalDigit type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.IsDecimalDigitAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.IsDecimalDigitAnnotationProxy"
 }
 	value boolean = yes;
 end
@@ -155,7 +155,7 @@ Record IsHexDigit type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.IsHexDigitAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.IsHexDigitAnnotationProxy"
 }
 	value boolean = yes;
 end
@@ -165,7 +165,7 @@ Record LowerCase type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.LowerCaseAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.LowerCaseAnnotationProxy"
 }
 	value boolean = yes;
 end
@@ -175,7 +175,7 @@ Record MinimumInput type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.MinimumInputAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.MinimumInputAnnotationProxy"
 }
 	value int;
 end
@@ -194,7 +194,7 @@ Record NumericSeparator type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.NumericSeparatorAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.NumericSeparatorAnnotationProxy"
 }
 	value boolean = yes;
 end
@@ -204,7 +204,7 @@ Record Sign type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.SignAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.SignAnnotationProxy"
 }
 	value SignKind?;
 end
@@ -214,7 +214,7 @@ Record TimeFormat type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.TimeFormatAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.TimeFormatAnnotationProxy"
 }
 	value string;
 end
@@ -224,7 +224,7 @@ Record TimestampFormat type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.TimeStampFormatAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.TimeStampFormatAnnotationProxy"
 }
 	value string;
 end
@@ -243,7 +243,7 @@ Record UpperCase type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.UpperCaseAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.UpperCaseAnnotationProxy"
 }
 	value boolean = yes;
 end
@@ -253,7 +253,7 @@ Record ValidatorFunction type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.ValidatorFunctionAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.ValidatorFunctionAnnotationProxy"
 }
 	value egl.lang.reflect.FunctionMbr;
 end
@@ -272,7 +272,7 @@ Record ZeroFormat type Annotation
 	targets = [
 		ElementKind.fieldMbr
 	],
-	validationProxy = "org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.ZeroFormatAnnotationProxy"
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.ZeroFormatAnnotationProxy"
 }
 	value boolean = yes;
 end

@@ -236,23 +236,23 @@ public abstract class Compiler extends DefaultASTVisitor{
 	}
 	
 	private void validatePart(Node astNode, IPartBinding partBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-//	    try {
-//			List<ASTValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor(astNode);
-//	    	if (validators != null && validators.size() > 0) {
-//	    		for (ASTValidator validator : validators) {
-//	    			validator.validate(astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
-//	    		}
-//	    	}
-//		}
-//	    catch(CancelledException e) {
-//		    throw e;
-//		}
-//	    catch(CircularBuildRequestException e) {
-//	    	throw e;
-//	    }
-//	    catch(RuntimeException e) {
-//		    handleValidationException((Part)astNode, problemRequestor, e);
-//		}
+	    try {
+			List<ASTValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor(astNode);
+	    	if (validators != null && validators.size() > 0) {
+	    		for (ASTValidator validator : validators) {
+	    			validator.validate(astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+	    		}
+	    	}
+		}
+	    catch(CancelledException e) {
+		    throw e;
+		}
+	    catch(CircularBuildRequestException e) {
+	    	throw e;
+	    }
+	    catch(RuntimeException e) {
+		    handleValidationException((Part)astNode, problemRequestor, e);
+		}
 	}
 	
 	protected abstract void logPartBinderException(RuntimeException e);

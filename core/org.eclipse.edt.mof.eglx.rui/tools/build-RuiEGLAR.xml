@@ -11,7 +11,7 @@
 -->
 <project name="BuildPlugin" default="Jarem" basedir="../">
 
-<property name="pluginName" value="org.eclipse.edt.mof.eglx.rui"/>
+<property name="pluginName" value="org.eclipse.edt.rui"/>
 
 <target name="init">    
     <echo message="processing ${pluginName}." />

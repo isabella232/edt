@@ -1,5 +1,5 @@
 <?xml version="1.1" encoding="UTF-8"?>
-<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" validationProxy="org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.ZeroFormatAnnotationProxy" name="ZeroFormat" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" >
+<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" validationProxy="org.eclipse.edt.rui.validation.annotation.proxy.ZeroFormatAnnotationProxy" name="ZeroFormat" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" >
 	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="value" eType="org.eclipse.edt.mof.EBoolean" nullable="false" isTransient="false" containment="true" >
 		<declarer IDREF="1"/>
 		<initialValue ID="3" eClass="org.eclipse.edt.mof.egl.BooleanLiteral" value="yes" >
