@@ -23,7 +23,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.WhenClause;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -94,9 +93,6 @@ public class EGLLabelPrecedingControlStatementProposalHandler extends EGLAbstrac
 		}
 		if(node instanceof NestedFunction) {
 			return Arrays.asList(new List[] {((NestedFunction) node).getStmts()});
-		}
-		if(node instanceof TopLevelFunction) {
-			return Arrays.asList(new List[] {((TopLevelFunction) node).getStmts()});
 		}
 		return null;
 	}

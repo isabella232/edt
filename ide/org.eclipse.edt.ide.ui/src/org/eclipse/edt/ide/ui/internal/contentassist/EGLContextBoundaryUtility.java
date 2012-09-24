@@ -54,17 +54,11 @@ public class EGLContextBoundaryUtility {
 		boundaryStatesSet.set(NodeTypes.part);
 		boundaryStatesSet.set(NodeTypes.structureContent);
 		boundaryStatesSet.set(NodeTypes.strItemDecl);
-		boundaryStatesSet.set(NodeTypes.levelOpt);
 		boundaryStatesSet.set(NodeTypes.occursOpt);
-		boundaryStatesSet.set(NodeTypes.formGroupContent);
-		boundaryStatesSet.set(NodeTypes.formContent);
-		boundaryStatesSet.set(NodeTypes.programParametersOpt);
-		boundaryStatesSet.set(NodeTypes.programParameter);
 		boundaryStatesSet.set(NodeTypes.functionParameter);
 		boundaryStatesSet.set(NodeTypes.returnsOpt);
 		boundaryStatesSet.set(NodeTypes.classContent);
 		boundaryStatesSet.set(NodeTypes.stmt);
-		boundaryStatesSet.set(NodeTypes.showOption);
 //		boundaryStatesSet.set(NodeTypes.prepareOption);
 		boundaryStatesSet.set(NodeTypes.replaceOption);
 		boundaryStatesSet.set(NodeTypes.getByKeyOption);
@@ -77,9 +71,6 @@ public class EGLContextBoundaryUtility {
 		boundaryStatesSet.set(NodeTypes.exitModifierOpt);
 		boundaryStatesSet.set(NodeTypes.deleteOption);
 		boundaryStatesSet.set(NodeTypes.functionInvocation);
-		boundaryStatesSet.set(NodeTypes.transferTargetOpt);
-		boundaryStatesSet.set(NodeTypes.passingRecordOpt);
-		boundaryStatesSet.set(NodeTypes.forwardTargetOpt);
 		boundaryStatesSet.set(NodeTypes.executeOption);
 		boundaryStatesSet.set(NodeTypes.inlineSQLStatement);
 		boundaryStatesSet.set(NodeTypes.elseOpt);

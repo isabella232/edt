@@ -32,7 +32,6 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
@@ -607,9 +606,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			final Stack blocks = new Stack();	//elements are List objects, representing lists of variables			
 			blocks.push(new ArrayList());			
 			
-			List statements = functionPart instanceof TopLevelFunction ?
-				((TopLevelFunction) functionPart).getStmts() :
-				((NestedFunction) functionPart).getStmts();
+			List statements = ((NestedFunction) functionPart).getStmts();
 				
 			addDeclarations(statements, blocks);
 			
