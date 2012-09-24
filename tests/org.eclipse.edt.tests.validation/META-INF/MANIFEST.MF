@@ -10,4 +10,5 @@ Require-Bundle: org.junit;bundle-version="3.8.2",
  org.eclipse.edt.mof.eglx.jtopen;bundle-version="0.8.2",
  org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.8.2",
  org.eclipse.edt.mof.eglx.services;bundle-version="0.8.2",
- org.eclipse.edt.mof.eglx.rui;bundle-version="0.8.2"
+ org.eclipse.edt.rui;bundle-version="0.8.2"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

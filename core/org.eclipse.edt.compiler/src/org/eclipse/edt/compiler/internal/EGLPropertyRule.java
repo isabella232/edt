@@ -11,9 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.enumerations.EGLEnumeration;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EDataType;
@@ -29,6 +35,7 @@ import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
@@ -64,6 +71,9 @@ public class EGLPropertyRule implements Comparable{
 	
 	private AnnotationType elementAnnotationType;
 	
+	public static int DONT_VALIDATE_IN_OPENUI_STATEMENT = 1 << 1;
+	public static int IS_DLI_NAME = 1 << 2;
+
 	public EGLPropertyRule(String name, String description, int [] types, String [] specificValues, boolean arrayOnly) {
 		super();
 		this.name = name;
@@ -433,6 +443,13 @@ public class EGLPropertyRule implements Comparable{
 		specialRules = newRules;
 	}
 	
+	public boolean shouldValidateInOpenUIStatement() {
+		return (specialRules & DONT_VALIDATE_IN_OPENUI_STATEMENT) == 0;
+	}
+	
+	public boolean isDLIName() {
+		return (specialRules & IS_DLI_NAME) != 0;
+	}
     /**
      * @return Returns the description.
      */

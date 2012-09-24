@@ -537,14 +537,8 @@ public abstract class EGLAbstractProposalHandler {
 //						return IEGLConstants.MIXED_CONSOLEFIELD_STRING;
 //					}
 					return IEGLConstants.KEYWORD_RECORD;
-				case ITypeBinding.DATATABLE_BINDING :
-					return IEGLConstants.KEYWORD_DATATABLE;
 				case ITypeBinding.LIBRARY_BINDING :
 					return IEGLConstants.KEYWORD_LIBRARY;
-				case ITypeBinding.FORM_BINDING :
-					return IEGLConstants.KEYWORD_FORM;
-				case ITypeBinding.FORMGROUP_BINDING :
-					return IEGLConstants.KEYWORD_FORMGROUP;
 				case ITypeBinding.ARRAY_TYPE_BINDING :
 					return UINlsStrings.CAProposal_Array;
 				case ITypeBinding.ARRAYDICTIONARY_BINDING :

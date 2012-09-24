@@ -205,8 +205,6 @@ public class EGLCompletionProposalComputer implements IEGLCompletionProposalComp
 			switch(((TerminalNode) node).terminalType) {
 				case NodeTypes.ERRORSQLSTMTLIT:
 					return "#sql{}";
-				case NodeTypes.ERROR_INLINE_DLI:
-					return "#dli{}";
 			}
 		}
 		return node.getText();
