@@ -731,25 +731,6 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 	/**
 	 * @return proposal list
 	 */
-	public List getListValueValidationBypassKeysProposals(ITextViewer viewer, int documentOffset, String prefix, boolean brackets) {
-		List proposals = new ArrayList();
-		String displayString = EGLPropertyValueProposalHandler.VALIDATIONBYPASSKEYS_PFN_LIST_PROPOSAL;
-		String proposalString = brackets ? "[" + displayString + "]" : displayString; //$NON-NLS-1$ //$NON-NLS-2$
-		proposals.addAll(createProposal(
-			viewer,
-			displayString,
-			proposalString,
-			prefix,
-			UINlsStrings.CAProposal_KeyValue,
-			documentOffset,
-			brackets ? proposalString.length()-2: proposalString.length()-1,
-			1));
-		return proposals;
-	}
-
-	/**
-	 * @return proposal list
-	 */
 	public List getListValueValidationBypassFunctionsProposals(ITextViewer viewer, int documentOffset, String prefix, boolean brackets) {
 		List proposals = new ArrayList();
 		//should really remove items already in the list

@@ -17,9 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -32,6 +29,12 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion;
 import org.eclipse.edt.ide.ui.internal.editor.CodeConstants;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
@@ -39,23 +42,12 @@ import org.eclipse.ui.IEditorPart;
 public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler {
 
 	public static final String NUMERIC_LITERAL = "numericLiteral"; //$NON-NLS-1$
-	public static final String POSITION_PROPOSAL = "line,column"; //$NON-NLS-1$
-	public static final String POSITION_LIST_PROPOSAL = "[line,column]"; //$NON-NLS-1$
-	public static final String SIZE_PROPOSAL = "lines,columns"; //$NON-NLS-1$
-	public static final String SIZE_LIST_PROPOSAL = "[lines,columns]"; //$NON-NLS-1$
-	public static final String VALID_VALUES_PROPOSAL = "lowValue,highValue"; //$NON-NLS-1$
-	public static final String TABLENAMES_LIST_PROPOSAL = "[\"tableName\", \"tableLabel\"]"; //$NON-NLS-1$
-	public static final String TABLENAMEVARIABLES_LIST_PROPOSAL = "[\"variableName\", \"tableLabel\"]"; //$NON-NLS-1$
-	public static final String VALIDATIONBYPASSKEYS_PFN_LIST_PROPOSAL = "pfn"; //$NON-NLS-1$
-	public static final String VALIDATIONBYPASSKEYS_FN_LIST_PROPOSAL = "fn"; //$NON-NLS-1$
 	public static final String ALIAS_PROPOSAL = "runtimeName"; //$NON-NLS-1$
 	public static final String SEGMENTS_LIST_PROPOSAL = "[line,column,length]"; //$NON-NLS-1$
 	public static final String TCPIPLOCATION_LIST_PROPOSAL = "host:port"; //$NON-NLS-1$
 
 	public static final String ROW_CONTENTS = "rowContents"; //$NON-NLS-1$
 	public static final String SQL_CONDITION = "condition"; //$NON-NLS-1$
-
-	public static final String UI_VIEW_ROOT = "UIViewRoot"; //$NON-NLS-1$
 
 	private String prefix=""; //$NON-NLS-1$
 
@@ -64,7 +56,7 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	private EGLAbstractReferenceCompletion referenceCompletion;
 	private ParseStack parseStack;
 	private Node boundNode;
-	private ITypeBinding partBinding;
+	private org.eclipse.edt.mof.egl.Part part;
 	
 	/**
 	 * @param viewer
@@ -87,7 +79,7 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 		this.boundNode = boundNode;
 		while(!(boundNode instanceof File)) {
 			if(boundNode instanceof Part) {
-				partBinding = (ITypeBinding) ((Part) boundNode).getName().resolveBinding();
+				part = (org.eclipse.edt.mof.egl.Part) ((Part) boundNode).getName().resolveType();
 			}
 			boundNode = boundNode.getParent();
 		}
@@ -114,20 +106,26 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 		}
 	}	
 
-	public List getProposals(IAnnotationBinding annotationBinding) {
+	public List getProposals(Annotation ann, String fieldName) {
 		List proposals = new ArrayList();
 
 		prepareGetProposals();
-		proposals.addAll(handleProperty(annotationBinding.getCaseSensitiveName(), viewer, getDocumentOffset(), new EGLPropertyRule((IAnnotationTypeBinding) annotationBinding.getType())));
+		
+		if (fieldName == null) {
+			proposals.addAll(handleProperty(ann.getEClass().getName(), viewer, getDocumentOffset(), new EGLPropertyRule((AnnotationType)ann.getEClass())));
+		}
+		else {
+			proposals.addAll(handleProperty(fieldName, viewer, getDocumentOffset(), new EGLPropertyRule((AnnotationType)ann.getEClass(), fieldName)));
+		}
 
 		return proposals;
 	}
 
-	public List getProposals(ClassFieldBinding classFieldBinding) {
+	public List getProposals(Field field) {
 		List proposals = new ArrayList();
 
 		prepareGetProposals();
-		proposals.addAll(handleProperty(classFieldBinding.getCaseSensitiveName(), viewer, getDocumentOffset(), new EGLPropertyRule(classFieldBinding)));
+		proposals.addAll(handleProperty(field.getCaseSensitiveName(), viewer, getDocumentOffset(), new EGLPropertyRule(field)));
 		return proposals;
 	}
 
@@ -142,15 +140,7 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 		
 		if (propertyName.equalsIgnoreCase(rule.getName())) {
 			if (rule.hasType(EGLPropertiesHandler.integerValue))
-				proposals.addAll(getIntegerValueProposals());
-			if (rule.hasType(EGLPropertiesHandler.listValue))
-				proposals.addAll(getListValueProposals(propertyName, parseStack, rule));
-
-			if (rule.getName().equalsIgnoreCase(IEGLConstants.PROPERTY_CONTENTS)) {
-				proposals.addAll(getLiteralArrayValueProposals(propertyName));
-				return proposals;
-			}
-			
+				proposals.addAll(getIntegerValueProposals());			
 			if (rule.hasType(EGLPropertiesHandler.arrayOf))
 				proposals.addAll(getArrayOfProposals(propertyName));
 			if (rule.hasType(EGLPropertiesHandler.arrayOfArrays))
@@ -181,61 +171,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 			UINlsStrings.CAProposal_PropertyValue,
 			getDocumentOffset(),
 			0);
-	}
-
-	/**
-	 * keyItems = [item,item]
-	 * outline = [right,left,top,bottom,box,noOutline]
-	 * pageSize = [lines,columns]
-	 * position = [line,column]
-	 * validValues = [lowValue,highValue]
-	 * screenSize = [lines,columns]
-	 * screenSizes = [[lines,columns],[lines,columns]]
-	 * formSize = [lines,columns]
-	 * size = [lines,columns]
-	 * validationBypassFunctions = [fct1,fct2]
-	 * validationBypassKeys = [PFn,PFn]  pf1..pf64
-	 */
-	private List getListValueProposals(String propertyName, ParseStack parseStack, EGLPropertyRule rule) {
-		List proposals = new ArrayList();
-		if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_KEYITEMS))
-			proposals.addAll(referenceCompletion.getListValueKeyItemsProposals(viewer, getDocumentOffset(), prefix, true));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_OUTLINE))
-			proposals.addAll(referenceCompletion.getListValueOutlineProposals(viewer, getDocumentOffset(), prefix, true, parseStack, rule));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_PAGESIZE))
-			proposals.addAll(getListValueProposal(SIZE_PROPOSAL, 5));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_POSITION))
-			proposals.addAll(getListValueProposal(POSITION_PROPOSAL, 4));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_VALIDVALUES))
-			proposals.addAll(getListValueProposal(VALID_VALUES_PROPOSAL, 8));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_SCREENSIZE))
-			proposals.addAll(getListValueProposal(SIZE_PROPOSAL, 5));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_SCREENSIZES))
-			proposals.addAll(getListValueListProposal(SIZE_LIST_PROPOSAL, 5));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_FORMSIZE))
-			proposals.addAll(getListValueProposal(SIZE_PROPOSAL, 5));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_VALIDATIONBYPASSKEYS))
-			proposals.addAll(referenceCompletion.getListValueValidationBypassKeysProposals(viewer, getDocumentOffset(), prefix, true));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_SEGMENTS))
-			proposals.addAll(getListValueListProposal(SEGMENTS_LIST_PROPOSAL, 4));
-		else
-			proposals.addAll(getListValueProposal("", 0)); //$NON-NLS-1$
-
-		return proposals;
-	}
-
-	private List getListValueListProposal(String value, int selectionLength) {
-		String openBracket = "["; //$NON-NLS-1$
-		String closeBracket = "]"; //$NON-NLS-1$
-		String proposalString = openBracket + value + closeBracket;
-		return referenceCompletion.createProposal(
-			viewer,
-			proposalString,
-			prefix,
-			UINlsStrings.CAProposal_PropertyValue,
-			getDocumentOffset(),
-			openBracket.length()+1,
-			selectionLength);
 	}
 
 	private List getListValueProposal(String value, int selectionLength) {
@@ -313,14 +248,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	private List getArrayOfArraysProposals(String propertyName) {
 		String value = ""; //$NON-NLS-1$
 		int selectionLength = 0;
-		if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_TABLENAMES)) {
-			value = TABLENAMES_LIST_PROPOSAL;
-			selectionLength = 9;
-		}
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_TABLENAMEVARIABLES)) {
-			value = TABLENAMEVARIABLES_LIST_PROPOSAL;
-			selectionLength = 12;
-		}
 		String proposalString = "[" + value + "]";	//$NON-NLS-1$	//$NON-NLS-2$
 		return referenceCompletion.createProposal(
 			viewer,
@@ -355,9 +282,7 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	 */
 	private List getNameValueProposals(ITextViewer viewer, int documentOffset, String propertyName) {
 		List proposals = new ArrayList();
-		if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_HELPKEY))
-			proposals.addAll(getNamedValueHelpKeyProposals(getDocumentOffset(), VALIDATIONBYPASSKEYS_PFN_LIST_PROPOSAL));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONCONSTRUCTIONFUNCTION)
+		if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONCONSTRUCTIONFUNCTION)
 			|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONPRERENDERFUNCTION)
 			|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONPOSTRENDERFUNCTION)
 			|| 	propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONVALUECHANGEFUNCTION))
@@ -374,8 +299,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 			proposals.addAll(referenceCompletion.getListValueValidationBypassFunctionsProposals(viewer, getDocumentOffset(), prefix, true));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_VALIDATORFUNCTION))
 			proposals.addAll(getNameValueValidatorFunctionProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_VIEWROOTVAR))
-			proposals.addAll(getNameValueClassFieldNames(viewer, getDocumentOffset(), UI_VIEW_ROOT));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_NUMELEMENTSITEM)
 				|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_MSGFIELD)
 				|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_KEYITEM)
@@ -491,24 +414,8 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	public List getQuotedValueProposal(String propertyName) {
 		List proposals = new ArrayList();
 
-		if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ACTION))
-			proposals.addAll(getQuotedValueActionProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ALIAS))
-			proposals.addAll(getQuotedValueAliasProposal(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_HELPMSGKEY))
-			proposals.addAll(getQuotedValueHelpMsgKeyProposals(getDocumentOffset(), VALIDATIONBYPASSKEYS_FN_LIST_PROPOSAL));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_HELPFORM))
-			proposals.addAll(getQuotedValueHelpFormProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_PROGRAMNAME))
-			proposals.addAll(getQuotedValueProgramNameProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_UIRECORDNAME))
-			proposals.addAll(getQuotedValueUIRecordNameProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_SERVICENAME))
+		if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_SERVICENAME))
 			proposals.addAll(getQuotedValueServiceNameProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_DEBUGIMPL))
-			proposals.addAll(getQuotedValueDebugImplProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_TCPIPLOCATION))
-			proposals.addAll(getQuotedValueTcpipLocationProposals());
 		else {
 			proposals.addAll(getQuotedValueProposal(getDocumentOffset()));
 		}
@@ -672,18 +579,11 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	private List getNameValueValidatorFunctionProposals(int documentOffset) {
 		List proposals = new ArrayList();
 		
-		if(partBinding != null){
-			switch(partBinding.getKind()) {
-				case ITypeBinding.DATAITEM_BINDING:
-				case ITypeBinding.HANDLER_BINDING:
-				case ITypeBinding.FORMGROUP_BINDING:
-				case ITypeBinding.FORM_BINDING:
-				case ITypeBinding.FIXED_RECORD_BINDING:
-				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					proposals.addAll(
-						new EGLPartSearchProposalHandler(viewer, getDocumentOffset(), prefix, editor).getProposals(
-							IEGLSearchConstants.FUNCTION, "", new String[0], false)); //$NON-NLS-1$
-			}
+		if (part instanceof Handler ||
+			part instanceof Record) {
+			proposals.addAll(
+					new EGLPartSearchProposalHandler(viewer, getDocumentOffset(), prefix, editor).getProposals(
+						IEGLSearchConstants.FUNCTION, "", new String[0], false)); //$NON-NLS-1$
 		}
 		if (proposals.size() == 0)
 			proposals.addAll(getNameValueFunctionProposals(getDocumentOffset()));
@@ -754,7 +654,7 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	private List getNameValueVariableRecordProposals(int documentOffset, int recordType) {
 		//add variable basic record proposals
 		List proposals = new ArrayList();
-		if(ITypeBinding.PROGRAM_BINDING == partBinding.getKind()) {
+		if(part instanceof Program) {
 			proposals = new EGLDeclarationProposalHandler(
 				viewer,
 				getDocumentOffset(),

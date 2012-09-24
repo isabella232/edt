@@ -25,7 +25,7 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionSignatureProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
@@ -98,30 +98,19 @@ public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenc
 						//Get user field proposals using library use statements
 						proposals.addAll(
 							new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
-						
-						//Get system function proposals with return value
-						proposals.addAll(
-							new EGLSystemWordProposalHandler(viewer,
-								documentOffset,
-								prefix,
-								editor,
-								boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
-						
+												
 						//Get user function proposals with return value using library use statements
 						proposals.addAll(
 							new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 			
 						//Get user function proposals with return value
 						proposals.addAll(
-							new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+							new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 						
 						//Get all library and external type proposals
 						proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
 							IEGLSearchConstants.LIBRARY|IEGLSearchConstants.EXTERNALTYPE));
 						
-						//Get all system library proposals
-						proposals.addAll(
-							new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 					}
 				}
 			});

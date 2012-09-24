@@ -283,23 +283,35 @@ public class IRUtils {
 		return (Type)getType(mofKey);
 	}
 	
+	public static Type getEGLType(String primSignature, int length, int decimals) {
+		String sig = primSignature + "(" + length + Type.PrimArgDelimiter + decimals + ")";
+		return getEGLType(sig);
+	}
+	
+	public static Type getEGLType(String primSignature, int length) {
+		String sig = primSignature + "(" + length + ")";
+		return getEGLType(sig);
+	}
+	
+	public static Type getEGLType(String primSignature, String pattern) {
+		String sig = primSignature + "(" + pattern + ")";
+		return getEGLType(sig);
+	}
+		
 	public static StructPart getEGLPrimitiveType(String primSignature) {
 		return (StructPart) getEGLType(primSignature);
 	}
 	
 	public static FixedPrecisionType getEGLPrimitiveType(String primSignature, int length, int decimals) {
-		String sig = primSignature + "(" + length + Type.PrimArgDelimiter + decimals + ")";
-		return (FixedPrecisionType)getEGLType(sig);
+		return (FixedPrecisionType)getEGLType(primSignature, length, decimals);
 	}
 	
 	public static SequenceType getEGLPrimitiveType(String primSignature, int length) {
-		String sig = primSignature + "(" + length + ")";
-		return (SequenceType)getEGLType(sig);
+		return (SequenceType)getEGLType(primSignature, length);
 	}
 	
 	public static PatternType getEGLPrimitiveType(String primSignature, String pattern) {
-		String sig = primSignature + "(" + pattern + ")";
-		return (PatternType)getEGLType(sig);
+		return (PatternType)getEGLType(primSignature, pattern);
 	}
 	
 	/**

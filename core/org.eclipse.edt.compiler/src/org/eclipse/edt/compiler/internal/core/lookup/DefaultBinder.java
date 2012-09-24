@@ -50,6 +50,7 @@ import org.eclipse.edt.compiler.core.ast.LikeMatchesExpression;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.MoveStatement;
+import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -79,7 +80,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -470,6 +470,9 @@ public abstract class DefaultBinder extends AbstractBinder {
 				List<Expression> arguments = ((NameType)newExpression.getType()).getArguments();
 				Constructor cons = null;
 				if (targetType.getClassifier() instanceof EGLClass) {
+					List<Constructor> constructors = getConstructors(targetType);
+					((NameType) newExpression.getType()).getName().setAttribute(Name.OVERLOADED_FUNCTION_SET, constructors);
+					
 					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)targetType.getClassifier(), getArgumentTypes(arguments), false);
 				}
 				if (cons == null) {
@@ -668,7 +671,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		if(!decimalLiteral.isBindAttempted()){
 			int len = decimalLiteral.getValue().length();
 			int dec = len - (decimalLiteral.getValue().indexOf('.') + 1);
-			decimalLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Decimal, len-1, dec));
+			decimalLiteral.setType(IRUtils.getEGLType(MofConversion.Type_Decimal, len-1, dec));
 		}
 	}
 	
@@ -692,37 +695,37 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	public void endVisit(StringLiteral stringLiteral) {
 		if(!stringLiteral.isBindAttempted()){
-			stringLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_String, stringLiteral.getValue().length()));
+			stringLiteral.setType(IRUtils.getEGLType(MofConversion.Type_String, stringLiteral.getValue().length()));
 		}
 	}
 	
 	public void endVisit(org.eclipse.edt.compiler.core.ast.BytesLiteral bytesLiteral) {
 		if(!bytesLiteral.isBindAttempted()){
-			bytesLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Bytes, bytesLiteral.getValue().length() / 2));
+			bytesLiteral.setType(IRUtils.getEGLType(MofConversion.Type_Bytes, bytesLiteral.getValue().length() / 2));
 		}
 	}
 	
 	public void endVisit(HexLiteral hexLiteral) {
 		if(!hexLiteral.isBindAttempted()){
-			hexLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Hex, hexLiteral.getValue().length()));
+			hexLiteral.setType(IRUtils.getEGLType(MofConversion.Type_Hex, hexLiteral.getValue().length()));
 		}
 	}
 	
 	public void endVisit(CharLiteral charLiteral) {
 		if(!charLiteral.isBindAttempted()){
-			charLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Char, charLiteral.getValue().length()));
+			charLiteral.setType(IRUtils.getEGLType(MofConversion.Type_Char, charLiteral.getValue().length()));
 		}
 	}
 	
 	public void endVisit(DBCharLiteral dbcharLiteral) {
 		if(!dbcharLiteral.isBindAttempted()){
-			dbcharLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_DBChar, dbcharLiteral.getValue().length()));
+			dbcharLiteral.setType(IRUtils.getEGLType(MofConversion.Type_DBChar, dbcharLiteral.getValue().length()));
 		}
 	}
 	
 	public void endVisit(MBCharLiteral mbcharLiteral) {
 		if(!mbcharLiteral.isBindAttempted()){
-			mbcharLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_MBChar, mbcharLiteral.getValue().length()));
+			mbcharLiteral.setType(IRUtils.getEGLType(MofConversion.Type_MBChar, mbcharLiteral.getValue().length()));
 		}
 	}
 	
@@ -905,6 +908,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 				List<Constructor> constructors = getConstructors(type);
 				Constructor cons = null;				
 				if (constructors != null) {
+					functionInvocation.getTarget().setAttributeOnName(Name.OVERLOADED_FUNCTION_SET, cons);
 					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)type.getClassifier(), getArgumentTypes(functionInvocation.getArguments()), false);
 				}
 				if (cons == null || (BindingUtil.isPrivate(cons) &&  functionInvocation.getTarget() instanceof SuperExpression)) {
@@ -928,6 +932,8 @@ public abstract class DefaultBinder extends AbstractBinder {
 
 		//If there is a list, then it must be a list of function. 
 		if (elem instanceof List) {
+			functionInvocation.getTarget().setAttributeOnName(Name.OVERLOADED_FUNCTION_SET, elem);
+			
 			@SuppressWarnings("unchecked")
 			List<Function> functions = (List<Function>)elem;
 			List<Function> functionsWithSameNumberArgs = new ArrayList();

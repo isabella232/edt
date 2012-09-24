@@ -180,15 +180,16 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     				definedNames.add(NameUtile.getAsName(field.getName()));
     				annotationType.getEFields().add(field);
     			}
-    			    			
-    			if (structureItem.hasSettingsBlock()) {
-     	    		problemRequestor.acceptProblem(
-    	    				structureItem.getSettingsBlock(),
-    	    				IProblemRequestor.STEREOTYPE_NO_BLOCK,
-    	    				new String[] {structureItem.getName().getCaseSensitiveIdentifier(), annotationType.getCaseSensitiveName()});
-    				setBindAttemptedForNames(structureItem.getSettingsBlock());
-    			}
     			
+    			if (structureItem.hasSettingsBlock()) {
+    				
+    				AnnotationLeftHandScope lhScope =  new AnnotationLeftHandScope(NullScope.INSTANCE, null, null, null);
+    	            SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, annotationType, lhScope,
+    	                    dependencyRequestor, problemRequestor, compilerOptions);
+    	            structureItem.getSettingsBlock().accept(blockCompletor);
+    			}
+
+    			    			    			
     			if (structureItem.hasInitializer()) {
     				AnnotationRightHandScope rhScope = new AnnotationRightHandScope(currentScope, field);
     				Object obj =  new AnnotationValueGatherer(structureItem.getInitializer(), rhScope, annotationType, dependencyRequestor, problemRequestor, compilerOptions).getValue();
@@ -290,7 +291,7 @@ public class AnnotationTypeCompletor extends DefaultBinder {
 			
 			//handle proxy types
 			if (type instanceof EClassProxy) {
-				return ((EClassProxy)type).getEClass();
+				return ((EClassProxy)type).getProxiedEClass();
 			}
 			
 			//If the type is an annotationType or an Enumeration, it is already an EType

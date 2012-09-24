@@ -12,24 +12,19 @@
 package org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ConstructorBinding;
-import org.eclipse.edt.compiler.binding.DelegateBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.OverloadedFunctionSet;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.QualifiedName;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLProposalContextInformation;
+import org.eclipse.edt.mof.egl.Constructor;
+import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLFunctionSignatureProposalHandler extends EGLAbstractProposalHandler {
@@ -44,69 +39,54 @@ public class EGLFunctionSignatureProposalHandler extends EGLAbstractProposalHand
 	public List getProposals() {
 		List proposals = new ArrayList();
 		
-		OverloadedFunctionSet functionSet = (OverloadedFunctionSet) invocationTarget.getAttributeFromName(Name.OVERLOADED_FUNCTION_SET);
-		if(functionSet != null) {
-			for(Iterator iter = functionSet.getNestedFunctionBindings().iterator(); iter.hasNext();) {
-				IBinding nextFunc = (IBinding) iter.next();
-				addProposal(proposals, nextFunc);
+		Object obj =  invocationTarget.getAttributeFromName(Name.OVERLOADED_FUNCTION_SET);
+		if(obj != null && obj instanceof List) {
+			List list = (List) obj;
+			for(Object value : list) {
+				addProposal(proposals, value);
 			}			
 		}
 		else {		
-			addProposal(proposals, invocationTarget.resolveTypeBinding());
+			addProposal(proposals, invocationTarget.resolveMember());
 		}
 		
 		return proposals;
 	}
 
-	private void addProposal(List proposals, IBinding binding) {
-		Object proposal = createProposal(binding);
+	private void addProposal(List proposals, Object obj) {
+		Object proposal = createProposal(obj);
 		if(proposal != null) {
 			proposals.add(proposal);
 		}
 	}
 
-	private Object createProposal(IBinding binding) {
-		if(Binding.isValidBinding(binding)) {
-			if(binding.isFunctionBinding()) {
-				return createProposal((IFunctionBinding) binding); 
-			}
-			else if(binding.isDataBinding()) {
-				IDataBinding dBinding = (IDataBinding) binding;
-				switch(dBinding.getKind()) {
-					case IDataBinding.NESTED_FUNCTION_BINDING:
-						return createProposal((IFunctionBinding) dBinding.getType());
-					case IDataBinding.CONSTRUCTOR_BINDING:
-						ConstructorBinding cBinding = (ConstructorBinding) dBinding;
-						return createProposal(cBinding.getCaseSensitiveName(), cBinding.getParameters(), null, cBinding.getDeclaringPart().getCaseSensitiveName());
-				}
-			}
-			else if(binding.isTypeBinding()) {
-				ITypeBinding tBinding = (ITypeBinding) binding;
-				switch(tBinding.getKind()) {
-					case ITypeBinding.DELEGATE_BINDING:
-						DelegateBinding delBinding = (DelegateBinding) tBinding;
-						return createProposal(delBinding.getCaseSensitiveName(), delBinding.getParemeters(), delBinding.getReturnType(), getPackageName(delBinding));
-				}
+	private Object createProposal(Object obj) {
+		
+		
+		if (obj instanceof Function) {
+			return createProposal((Function) obj);
+		}
+		
+		if (obj instanceof Constructor) {
+			Constructor constructor = (Constructor) obj;
+			return createProposal("constructor", constructor.getParameters(), null, getNameFromElement(constructor.getContainer()));
+		}
+		
+		if (obj instanceof Field) {
+			Type type = BindingUtil.getBaseType(((Field)obj).getType());
+			if (type instanceof Delegate) {
+				Delegate delegate = (Delegate) type;
+				return createProposal(delegate.getCaseSensitiveName(), delegate.getParameters(), delegate.getReturnType(), getPackageName(delegate));
 			}
 		}
 		return null;
 	}
 	
-	private Object createProposal(IFunctionBinding fBinding) {
-		IPartBinding declarer = fBinding.getDeclarer();
-		String declarerName = null;
-		if(declarer == null) {
-			if(invocationTarget instanceof QualifiedName) {
-				declarerName = ((QualifiedName) invocationTarget).getQualifier().getCanonicalName();
-			}
-		}
-		else {
-			declarerName = declarer == fBinding ? getPackageName(declarer) : declarer.getCaseSensitiveName();
-		}
-		return createProposal(fBinding.getCaseSensitiveName(), fBinding.getParameters(), fBinding.getReturnType(), declarerName);
+	private Object createProposal(Function function) {
+		return createProposal(function.getCaseSensitiveName(), function.getParameters(), function.getReturnType(), getNameFromElement(function.getContainer()));
 	}
 
-	private Object createProposal(String funcName, List parameters, ITypeBinding returnType, String declarerName) {
+	private Object createProposal(String funcName, List<FunctionParameter> parameters, Type returnType, String declarerName) {
 		if(parameters == null || parameters.size() == 0) {
 			return null;
 		}
@@ -120,7 +100,7 @@ public class EGLFunctionSignatureProposalHandler extends EGLAbstractProposalHand
 		proposalSB.append(")");
 		if(returnType != null) {
 			proposalSB.append(" ");
-			proposalSB.append(StatementValidator.getTypeString(returnType));
+			proposalSB.append(getTypeString(returnType));
 		}
 		proposalSB.append(" - ");
 		proposalSB.append(declarerName);

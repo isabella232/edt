@@ -23,7 +23,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLConditionalStateProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
@@ -55,13 +55,6 @@ public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCom
 			}
 		}, new IBoundNodeProcessor() {
 			public void processBoundNode(Node boundNode) {
-				IDataBinding statementTargetBinding = getStatementTargetBinding(boundNode);
-				if(statementTargetBinding != null && IBinding.NOT_FOUND_BINDING != statementTargetBinding) {
-					if(AbstractBinder.dataBindingIs(statementTargetBinding, EGLCORE, IEGLConstants.KEYWORD_SYSVAR, IEGLConstants.SYSTEM_WORD_SYSTEMTYPE)) {
-						proposals.addAll(new EGLConditionalStateProposalHandler(viewer, documentOffset, prefix, statementTargetBinding).getProposals());
-						return;
-					}
-				}				
 				
 				//Get all variable proposals
 				proposals.addAll(
@@ -70,23 +63,12 @@ public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCom
 						prefix,
 						boundNode)
 						.getProposals(boundNode));
-			
-				//Get system function proposals with return value
-				proposals.addAll(
-						new EGLSystemWordProposalHandler(viewer,
-							documentOffset,
-							prefix,
-							editor,
-							boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
-				
+							
 				//Get user function proposals with no return value
 				proposals.addAll(
-					new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).
+					new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).
 						getProposals());
 				
-				//Get all system library proposals
-				proposals.addAll(
-					new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 			}
 		});
 		

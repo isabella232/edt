@@ -17,9 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -28,6 +25,8 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
 
@@ -58,11 +57,9 @@ public abstract class EGLAbstractFromLibraryUseStatementProposalHandler extends 
 							public boolean visit(UseStatement useStatement) {
 								for(Iterator iter = useStatement.getNames().iterator(); iter.hasNext();) {
 									Name nextName = (Name) iter.next();
-									IBinding binding = nextName.resolveBinding();
-									if(binding != null && IBinding.NOT_FOUND_BINDING != binding) {
-										if(binding.isTypeBinding() && ITypeBinding.LIBRARY_BINDING == ((ITypeBinding) binding).getKind()) {
-											librares.add(binding);
-										}
+									Type type = nextName.resolveType();
+									if(type instanceof Library ) {
+										librares.add(type);
 									}
 								}
 								return false;
@@ -80,7 +77,7 @@ public abstract class EGLAbstractFromLibraryUseStatementProposalHandler extends 
 		
 		List proposals = new ArrayList();
 		
-		LibraryBinding[] libraryContexts = (LibraryBinding[]) librares.toArray(new LibraryBinding[0]);
+		Library[] libraryContexts = (Library[]) librares.toArray(new Library[0]);
 		for( int i = 0; i < libraryContexts.length; i++ ) {
 			proposals.addAll(getProposals(libraryContexts, i));
 		}
@@ -88,6 +85,6 @@ public abstract class EGLAbstractFromLibraryUseStatementProposalHandler extends 
 		return proposals;
 	}
 
-	protected abstract List getProposals(LibraryBinding[] libraryContexts, int i);
+	protected abstract List getProposals(Library[] libraryContexts, int i);
 
 }

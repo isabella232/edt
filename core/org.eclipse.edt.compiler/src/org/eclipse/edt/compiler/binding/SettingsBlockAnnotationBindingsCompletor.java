@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.List;
-
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
@@ -28,16 +26,13 @@ import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.SubType;
-import org.eclipse.edt.mof.utils.NameUtile;
 
 public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
@@ -203,7 +198,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 	}
 		
 	private void setAnnotationOnElement(Element elem, Annotation ann, AnnotationExpression annotationExpression) {
-		if (ann == null) {
+		if (ann == null || elem == null) {
 			return;
 		}
 		

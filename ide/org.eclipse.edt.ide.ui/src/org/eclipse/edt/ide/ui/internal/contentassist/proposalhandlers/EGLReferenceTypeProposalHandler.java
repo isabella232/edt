@@ -27,7 +27,6 @@ public class EGLReferenceTypeProposalHandler extends EGLAbstractProposalHandler 
 
 	public List getProposals(Node boundNode) {
 		List proposals = new ArrayList();
-		proposals.addAll(new EGLExceptionProposalHandler(viewer, getDocumentOffset(), getPrefix(), editor).getProposals());
 		proposals.addAll(new EGLPartSearchProposalHandler(viewer, getDocumentOffset(), getPrefix(), editor).getProposals(
 				IEGLSearchConstants.EXTERNALTYPE | IEGLSearchConstants.DELEGATE | IEGLSearchConstants.INTERFACE | 
 				IEGLSearchConstants.SERVICE | IEGLSearchConstants.RECORD, "")); //$NON-NLS-1$

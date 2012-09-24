@@ -27,7 +27,7 @@ import org.eclipse.jface.text.ITextViewer;
 
 public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 
-	private ITypeBinding partBinding;
+	private org.eclipse.edt.mof.egl.Part part;
 
 	public EGLPrimitiveProposalHandler(ITextViewer viewer, int documentOffset, String prefix, Node boundNode) {
 		super(viewer, documentOffset, prefix);
@@ -35,7 +35,7 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 		if (boundNode != null) {
 			while(!(boundNode instanceof File)) {
 				if(boundNode instanceof Part) {
-					partBinding = (ITypeBinding) ((Part) boundNode).getName().resolveBinding();
+					part = (org.eclipse.edt.mof.egl.Part) ((Part) boundNode).getName().resolveType();
 				}
 				boundNode = boundNode.getParent();
 			}
@@ -48,42 +48,22 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 
 	public List getProposals(boolean loose) {
 		List proposals = new ArrayList();
-		boolean vagCompatibility = EGLBasePlugin.getPlugin().getPreferenceStore().getBoolean(EGLBasePlugin.VAGCOMPATIBILITY_OPTION);
 
-		proposals.addAll(createPrimitiveProposals(false, vagCompatibility, getPrimitiveTypes()));
-		if (loose)
-			proposals.addAll(createPrimitiveProposals(true, vagCompatibility, EGLDataTypeUtility.PRIMITIVE_TYPE_LOOSE_STRINGS));
+		proposals.addAll(createPrimitiveProposals(getPrimitiveTypes()));
 		return proposals;
 	}
 
 	private String[] getPrimitiveTypes() {
-		if (partBinding != null) {
-			switch(partBinding.getKind()) {
-				case ITypeBinding.FIXED_RECORD_BINDING:
-					return EGLDataTypeUtility.PRIMITIVE_TYPE_NONFLEXIBLE_STRINGS;
-					
-				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					return EGLDataTypeUtility.PRIMITIVE_TYPE_STRINGS;
-					
-				case ITypeBinding.DATATABLE_BINDING:
-					return EGLDataTypeUtility.PRIMITIVE_TYPE_NONFLEXIBLE_STRINGS;
-					
-				case ITypeBinding.FORM_BINDING:
-				case ITypeBinding.FORMGROUP_BINDING:
-					return EGLDataTypeUtility.PRIMITIVE_TYPE_FORM_STRINGS;
-				}
-		}
 		return EGLDataTypeUtility.PRIMITIVE_TYPE_STRINGS;
 	}
 
-	private List createPrimitiveProposals(boolean loose, boolean vagCompatibility, String[] primitiveStrings) {
+	private List createPrimitiveProposals(String[] primitiveStrings) {
 		List proposals = new ArrayList();
 		int curserDelta;
 		for (int i = 0; i < primitiveStrings.length; i++) {
 			if (primitiveStrings[i].toUpperCase().startsWith(getPrefix().toUpperCase())) {
-				if (checkVagCompatibility(primitiveStrings[i], vagCompatibility)) {
 					String primitiveString = primitiveStrings[i];
-					if (!loose && needsParens(primitiveString)) {
+					if (needsParens(primitiveString)) {
 						curserDelta = 1;
 						primitiveString = primitiveString + "()"; //$NON-NLS-1$
 					} else {
@@ -93,14 +73,13 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 						new EGLCompletionProposal(viewer,
 							null,
 							primitiveString,
-							getAdditionalInfo(loose),
+							getAdditionalInfo(),
 							getDocumentOffset() - getPrefix().length(),
 							getPrefix().length(),
 							primitiveString.length() - curserDelta,
 							EGLCompletionProposal.RELEVANCE_PRIMITIVE,
 							EGLCompletionProposal.NO_IMG_KEY));
 				}
-			}
 		}
 		return proposals;
 	}
@@ -109,11 +88,8 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 	 * @param loose
 	 * @return
 	 */
-	private String getAdditionalInfo(boolean loose) {
-		if (loose)
-			return UINlsStrings.CAProposal_LoosePrimitiveType;
-		else
-			return UINlsStrings.CAProposal_PrimitiveType;
+	private String getAdditionalInfo() {
+		return UINlsStrings.CAProposal_PrimitiveType;
 	}
 
 	/**

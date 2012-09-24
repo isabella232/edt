@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.TreeMap;
 
 import org.eclipse.edt.compiler.internal.enumerations.EGLCommTypeKindEnumeration;
-import org.eclipse.edt.compiler.internal.enumerations.EGLDLICallInterfaceKindEnumeration;
-import org.eclipse.edt.compiler.internal.enumerations.EGLPCBKindEnumeration;
 import org.eclipse.edt.compiler.internal.enumerations.EGLUITypeKindEnumeration;
 
 
@@ -612,12 +610,6 @@ public class EGLPropertiesHandler {
 		EGLPropertyRule minInclusive = new EGLPropertyRule( IEGLConstants.PROPERTY_MININCLUSIVE, quotedValueValid);
 		EGLPropertyRule maxExclusive = new EGLPropertyRule( IEGLConstants.PROPERTY_MAXEXCLUSIVE, quotedValueValid);
 		EGLPropertyRule minExclusive = new EGLPropertyRule( IEGLConstants.PROPERTY_MINEXCLUSIVE, quotedValueValid);
-		EGLPropertyRule callInterface = new EGLPropertyRule( IEGLConstants.PROPERTY_CALLINTERFACE, specificValueValid, new String[] {IEGLConstants.MNEMONIC_AIBTDLI, IEGLConstants.MNEMONIC_CBLTDLI});
-		callInterface.setEnumeration( EGLDLICallInterfaceKindEnumeration.getInstance() );
-		EGLPropertyRule handleHardDLIErrors = new EGLPropertyRule( IEGLConstants.PROPERTY_HANDLEHARDDLIERRORS, specificValueValid, yesOrNo );
-		EGLPropertyRule pcbParms = new EGLPropertyRule( IEGLConstants.PROPERTY_PCBPARMS, listValueValid );
-		EGLPropertyRule psb = new EGLPropertyRule( IEGLConstants.PROPERTY_PSB, quotedValueValid );
-		EGLPropertyRule psbParm = new EGLPropertyRule( IEGLConstants.PROPERTY_PSBPARM, quotedValueValid );        
         
 		EGLPropertyRule action = new EGLPropertyRule(IEGLConstants.PROPERTY_ACTION, quotedValueValid);
         EGLPropertyRule addSpaceForSOSI = new EGLPropertyRule(IEGLConstants.PROPERTY_ADDSPACEFORSOSI, specificValueValid, yesOrNo );
@@ -651,8 +643,6 @@ public class EGLPropertiesHandler {
         EGLPropertyRule dataType = new EGLPropertyRule(IEGLConstants.PROPERTY_DATATYPE, quotedValueValid);
         EGLPropertyRule dateFormat = new EGLPropertyRule(IEGLConstants.PROPERTY_DATEFORMAT, new int [] {specificValue, quotedValue}, new String [] {IEGLConstants.MNEMONIC_ISODATEFORMAT, IEGLConstants.MNEMONIC_USADATEFORMAT, IEGLConstants.MNEMONIC_EURDATEFORMAT, IEGLConstants.MNEMONIC_JISDATEFORMAT, IEGLConstants.MNEMONIC_DEFAULTDATEFORMAT, IEGLConstants.MNEMONIC_SYSTEMGREGORIANDATEFORMAT, IEGLConstants.MNEMONIC_SYSTEMJULIANDATEFORMAT }, true );
         EGLPropertyRule debugImpl = new EGLPropertyRule(IEGLConstants.PROPERTY_DEBUGIMPL, quotedValueValid);
-        EGLPropertyRule defaultPSBName = new EGLPropertyRule(IEGLConstants.PROPERTY_DEFAULTPSBNAME, quotedValueValid );
-        defaultPSBName.setSpecialRules( EGLPropertyRule.IS_DLI_NAME );
         EGLPropertyRule defaultSelectCondition = new EGLPropertyRule(IEGLConstants.PROPERTY_DEFAULTSELECTCONDITION, sqlValueValid );
         EGLPropertyRule deleteAfterUse = new EGLPropertyRule(IEGLConstants.PROPERTY_DELETEAFTERUSE, specificValueValid, yesOrNo );
         EGLPropertyRule delimiters = new EGLPropertyRule(IEGLConstants.PROPERTY_DELIMITERS, quotedValueValid);
@@ -661,8 +651,6 @@ public class EGLPropertiesHandler {
         EGLPropertyRule displayName = new EGLPropertyRule(IEGLConstants.PROPERTY_DISPLAYNAME, quotedValueValid);
         EGLPropertyRule displayOnly = new EGLPropertyRule(IEGLConstants.PROPERTY_DISPLAYONLY, specificValueValid, yesOrNo);
         EGLPropertyRule displayUse =new EGLPropertyRule(IEGLConstants.PROPERTY_DISPLAYUSE, specificValueValid, new String [] { IEGLConstants.MNEMONIC_INPUT, IEGLConstants.MNEMONIC_OUTPUT, IEGLConstants.MNEMONIC_SECRET, IEGLConstants.MNEMONIC_BUTTON, IEGLConstants.MNEMONIC_HYPERLINK, IEGLConstants.MNEMONIC_TABLE } );
-        EGLPropertyRule dliFieldName = new EGLPropertyRule(IEGLConstants.PROPERTY_DLIFIELDNAME, quotedValueValid);
-        dliFieldName.setSpecialRules( EGLPropertyRule.IS_DLI_NAME );
         EGLPropertyRule dllName = new EGLPropertyRule(IEGLConstants.PROPERTY_DLLNAME, quotedValueValid);
         EGLPropertyRule endpoint = new EGLPropertyRule(IEGLConstants.PROPERTY_ENDPOINT, quotedValueValid);
         EGLPropertyRule fieldLen = new EGLPropertyRule(IEGLConstants.PROPERTY_FIELDLEN, integerValueValid );
@@ -697,7 +685,6 @@ public class EGLPropertiesHandler {
         EGLPropertyRule isDecimalDigit = new EGLPropertyRule(IEGLConstants.PROPERTY_ISDECIMALDIGIT, specificValueValid, yesOrNo, true );
         EGLPropertyRule isHexDigit = new EGLPropertyRule(IEGLConstants.PROPERTY_ISHEXDIGIT, specificValueValid, yesOrNo, true );
         EGLPropertyRule isLastParamReturnValue = new EGLPropertyRule(IEGLConstants.PROPERTY_ISLASTPARAMRETURNVALUE, specificValueValid, yesOrNo );
-        EGLPropertyRule isSqlNullable = new EGLPropertyRule(IEGLConstants.PROPERTY_ISSQLNULLABLE, specificValueValid, yesOrNo );
         EGLPropertyRule isReadOnly = new EGLPropertyRule(IEGLConstants.PROPERTY_ISREADONLY, specificValueValid, yesOrNo );
         EGLPropertyRule javaName = new EGLPropertyRule(IEGLConstants.PROPERTY_JAVANAME, quotedValueValid );
         EGLPropertyRule keyItem = new EGLPropertyRule(IEGLConstants.PROPERTY_KEYITEM, quotedValueValid );
@@ -734,10 +721,6 @@ public class EGLPropertiesHandler {
         EGLPropertyRule pageSize = new EGLPropertyRule(IEGLConstants.PROPERTY_PAGESIZE, listValueValid );
         EGLPropertyRule parentRecord = new EGLPropertyRule(IEGLConstants.PROPERTY_PARENTRECORD, quotedValueValid );
         EGLPropertyRule pattern = new EGLPropertyRule(IEGLConstants.PROPERTY_PATTERN, quotedValueValid );
-        EGLPropertyRule pcbName = new EGLPropertyRule(IEGLConstants.PROPERTY_PCBNAME, quotedValueValid );
-        pcbName.setSpecialRules( EGLPropertyRule.IS_DLI_NAME );
-        EGLPropertyRule pcbType = new EGLPropertyRule(IEGLConstants.PROPERTY_PCBTYPE, specificValueValid, new String[] {IEGLConstants.MNEMONIC_DB, IEGLConstants.MNEMONIC_GSAM, IEGLConstants.MNEMONIC_TP} );
-        pcbType.setEnumeration( EGLPCBKindEnumeration.getInstance() );
         EGLPropertyRule persistent = new EGLPropertyRule(IEGLConstants.PROPERTY_PERSISTENT, specificValueValid, yesOrNo );
         EGLPropertyRule pfEquate = new EGLPropertyRule(IEGLConstants.PROPERTY_PFKEYEQUATE, specificValueValid, yesOrNo );
         EGLPropertyRule position = new EGLPropertyRule(IEGLConstants.PROPERTY_POSITION, listValueValid );
@@ -834,23 +817,7 @@ public class EGLPropertiesHandler {
         
         linkParms.elementAnnotationTypes = new EGLPropertyRule[] { linkParameter };
         
-//        EGLPropertyRule wsdl = new EGLPropertyRule(
-//        	IEGLConstants.PROPERTY_WSDL,
-//			new EGLPropertyRule[] {
-//        		elementName, namespace, isLastParamReturnValue
-//        	} );
-        EGLPropertyRule dli = new EGLPropertyRule(
-        	IEGLConstants.PROPERTY_DLI,
-			new EGLPropertyRule[] {
-       			callInterface, handleHardDLIErrors, pcbParms, psb, psbParm
-        	} );
         
-        EGLPropertyRule pcb = new EGLPropertyRule(
-           	IEGLConstants.PROPERTY_PCB,
-			new EGLPropertyRule[] {
-       			pcbType, pcbName, secondaryIndex, secondaryIndexItem, hierarchy
-        	} );
-
         EGLPropertyRule relationship = new EGLPropertyRule(
         	IEGLConstants.PROPERTY_RELATIONSHIP,
 			new EGLPropertyRule[] {
@@ -898,7 +865,6 @@ public class EGLPropertiesHandler {
         // sql item properties
         sqlItemProperties.put(IEGLConstants.PROPERTY_COLUMN, column);
         sqlItemProperties.put(IEGLConstants.PROPERTY_ISREADONLY, isReadOnly);
-        sqlItemProperties.put(IEGLConstants.PROPERTY_ISSQLNULLABLE, isSqlNullable);
         sqlItemProperties.put(IEGLConstants.PROPERTY_SQLDATACODE, sqlDataCode );
  		sqlItemProperties.put(IEGLConstants.PROPERTY_SQLVARIABLELEN, sqlVariableLen );
  		sqlItemProperties.put(IEGLConstants.PROPERTY_PERSISTENT, persistent );
@@ -916,9 +882,6 @@ public class EGLPropertiesHandler {
         pageItemProperties.put(IEGLConstants.PROPERTY_SELECTFROMLISTITEM, selectFromListItem );
         pageItemProperties.put(IEGLConstants.PROPERTY_NEWWINDOW, newWindow);
         pageItemProperties.put(IEGLConstants.PROPERTY_SELECTTYPE, selectType );
-        
-        // dli item properties
-        dliItemProperties.put(IEGLConstants.PROPERTY_DLIFIELDNAME, dliFieldName );
         
         fillerStructureItemProperties.put(IEGLConstants.PROPERTY_UITYPE, uiType );
 
@@ -1122,8 +1085,6 @@ public class EGLPropertiesHandler {
         vgUIRecordProperties.put(IEGLConstants.PROPERTY_RUNVALIDATORFROMPROGRAM, runValidatorFromProgram);
         vgUIRecordProperties.put(IEGLConstants.PROPERTY_COMMANDVALUEITEM, commandValueItem);
 
-        psbRecordProperties.put(IEGLConstants.PROPERTY_DEFAULTPSBNAME, defaultPSBName);
-
         dliSegmentProperties.put(IEGLConstants.PROPERTY_HOSTVARQUALIFIER, hostVarQualifier);
         dliSegmentProperties.put(IEGLConstants.PROPERTY_KEYITEM, keyItem);
         dliSegmentProperties.put(IEGLConstants.PROPERTY_LENGTHITEM, lengthItem);
@@ -1278,7 +1239,6 @@ public class EGLPropertiesHandler {
         programProperties.put(IEGLConstants.PROPERTY_LOCALSQLSCOPE, localSQLScope);
         programProperties.put(IEGLConstants.PROPERTY_HANDLEHARDIOERRORS, handleHardIOErrors);
         programProperties.put(IEGLConstants.PROPERTY_THROWNRFEOFEXCEPTIONS, throwNrfEofExceptions);
-        programProperties.put(IEGLConstants.PROPERTY_DLI, dli);
         programProperties.put(IEGLConstants.PROPERTY_V60EXCEPTIONCOMPATIBILITY, v60ExceptionCompatibility);
        
         serviceProperties.put(IEGLConstants.PROPERTY_ALIAS, alias);
@@ -1378,10 +1338,7 @@ public class EGLPropertiesHandler {
         complexDataItemProperties.put(IEGLConstants.PROPERTY_PROGRAMLINKDATA, programLinkData );
         
         complexItemDeclarationProperties.put(IEGLConstants.PROPERTY_PROGRAMLINKDATA, programLinkData );
-        complexItemDeclarationProperties.put(IEGLConstants.PROPERTY_PCB, pcb );
         
-        complexProgramProperties.put(IEGLConstants.PROPERTY_DLI, dli );
-        complexProgramProperties.put(IEGLConstants.PROPERTY_PCB, pcb );
         complexProgramProperties.put(IEGLConstants.PROPERTY_RELATIONSHIP, relationship );
         
 //        complexFunctionProperties.put(IEGLConstants.PROPERTY_WSDL, wsdl );
@@ -1394,9 +1351,6 @@ public class EGLPropertiesHandler {
 
         linkParameterProperties.put(IEGLConstants.PROPERTY_LINKPARAMETER, linkParameter);
         linkParmsProperties.put(IEGLConstants.PROPERTY_LINKPARMS, linkParms);
-        pcbParmsProperties.put(IEGLConstants.PROPERTY_PCBPARMS, pcbParms);
-        
-        psbRecordItemProperties.put(IEGLConstants.PROPERTY_PCB, pcb);
 
         hierarchyProperties.put(IEGLConstants.PROPERTY_HIERARCHY, hierarchy);
         relationshipProperties.put(IEGLConstants.PROPERTY_RELATIONSHIP, relationship);
@@ -1477,8 +1431,6 @@ public class EGLPropertiesHandler {
                                     return IEGLConstants.RECORD_SUBTYPE_MQ;
                     case locationSQLRecord :
                                     return IEGLConstants.RECORD_SUBTYPE_SQl;
-                    case locationVGUIRecord :
-                                    return IEGLConstants.RECORD_SUBTYPE_VGUI;
                     case locationAnyRecord :
                                     return IEGLConstants.KEYWORD_RECORD;
                     case locationFormGroup :
@@ -1599,10 +1551,6 @@ public class EGLPropertiesHandler {
 									return "openUI";
 					case locationTuiArrayElementFormField:
 									return "array element form field properties";
-					case locationPSBRecord :
-									return IEGLConstants.RECORD_SUBTYPE_PSB_RECORD;
-					case locationDLISegment :
-                        			return IEGLConstants.RECORD_SUBTYPE_DLI_SEGMENT;
                     case locationBasicAbstractFunction :
                     case locationJavaOnlyAbstractFunction :
                     				return "abstract function";
@@ -2207,10 +2155,6 @@ public class EGLPropertiesHandler {
 						return getComplexAnnotationPropertyRules(uiItemProperties, IEGLConstants.PROPERTY_PROGRAMLINKDATA);
 					case locationLinkParameter :
 						return getComplexAnnotationPropertyRules(linkParameterProperties, IEGLConstants.PROPERTY_LINKPARAMETER);
-					case locationDLI :
-						return getComplexAnnotationPropertyRules(complexProgramProperties, IEGLConstants.PROPERTY_DLI);
-					case locationPCB :
-						return getComplexAnnotationPropertyRules(complexProgramProperties, IEGLConstants.PROPERTY_PCB);
 					case locationRelationship :
 						return getComplexAnnotationPropertyRules(complexProgramProperties, IEGLConstants.PROPERTY_RELATIONSHIP);
 					case locationEGLBinding :

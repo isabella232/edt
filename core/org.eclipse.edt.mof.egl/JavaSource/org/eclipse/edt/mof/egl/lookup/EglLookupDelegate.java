@@ -95,20 +95,25 @@ public class EglLookupDelegate implements LookupDelegate {
 				? null 
 				: (Classifier)env.find(baseType, false);
 			if (typeArgs == null) {
-				EClass parameterizedTypeClass = ((ParameterizableType)eBaseType).getParameterizedType();
-				if (parameterizedTypeClass != null) {
-					ParameterizedType type = (ParameterizedType)parameterizedTypeClass.newInstance();
-					type.setParameterizableType((ParameterizableType)eBaseType);
-					int totalSlots = parameterizedTypeClass.getAllEFields().size();
-					for (int l=totalSlots-primArgs.length; l<totalSlots; l++) {
-						String value = primArgs[l - (totalSlots-primArgs.length)];
-						if (!"".equals(value)) {
-							EField field = parameterizedTypeClass.getAllEFields().get(l);
-							Object converted = MofFactory.INSTANCE.createFromString((EDataType)field.getEType(), value);
-							type.eSet(field, converted);
+				if (eBaseType instanceof ParameterizableType) {
+					EClass parameterizedTypeClass = ((ParameterizableType)eBaseType).getParameterizedType();
+					if (parameterizedTypeClass != null) {
+						ParameterizedType type = (ParameterizedType)parameterizedTypeClass.newInstance();
+						type.setParameterizableType((ParameterizableType)eBaseType);
+						int totalSlots = parameterizedTypeClass.getAllEFields().size();
+						for (int l=totalSlots-primArgs.length; l<totalSlots; l++) {
+							String value = primArgs[l - (totalSlots-primArgs.length)];
+							if (!"".equals(value)) {
+								EField field = parameterizedTypeClass.getAllEFields().get(l);
+								Object converted = MofFactory.INSTANCE.createFromString((EDataType)field.getEType(), value);
+								type.eSet(field, converted);
+							}
 						}
+						result = type;
 					}
-					result = type;
+				}
+				else {
+					result = eBaseType;
 				}
 			}
 			else {

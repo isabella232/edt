@@ -23,18 +23,22 @@ import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLDataTypeUtility;
+import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLPredefinedDataTypeProposalHandler extends EGLAbstractProposalHandler {
 	
-	private ITypeBinding partBinding;
+	private org.eclipse.edt.mof.egl.Part part;
 
 	public EGLPredefinedDataTypeProposalHandler(ITextViewer viewer, int documentOffset, String prefix, Node boundNode) {
 		super(viewer, documentOffset, prefix);
 		
 		while(!(boundNode instanceof File)) {
 			if(boundNode instanceof Part) {
-				partBinding = (ITypeBinding) ((Part) boundNode).getName().resolveBinding();
+				part = (org.eclipse.edt.mof.egl.Part) ((Part) boundNode).getName().resolveType();
 			}
 			boundNode = boundNode.getParent();
 		}
@@ -62,52 +66,24 @@ public class EGLPredefinedDataTypeProposalHandler extends EGLAbstractProposalHan
 	}
 
 	private String[] getPredefinedTypes() {
-		if (partBinding != null) {
-			switch(partBinding.getKind()) {
-				case ITypeBinding.FIXED_RECORD_BINDING:
-				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					if(ITypeBinding.FLEXIBLE_RECORD_BINDING == partBinding.getKind()) {
-						return EGLDataTypeUtility.PREDEFINED_DATA_TYPE_STRINGS;
-					}
-					else {
-						return new String[0];
-					}
-					
-				case ITypeBinding.LIBRARY_BINDING:
-					if(partBinding.getAnnotation(EGLLANG, IEGLConstants.LIBRARY_SUBTYPE_NATIVE) != null) {
-						return EGLDataTypeUtility.PREDEFINED_NATIVE_LIBRARY_TYPE_STRINGS;
-					}
-					break;
-					
-				case ITypeBinding.SERVICE_BINDING:
-				case ITypeBinding.INTERFACE_BINDING:
-					return EGLDataTypeUtility.PREDEFINED_SERVICE_FUNCTION_TYPE_STRINGS;
+		if (part != null) {
+			
+			if (part instanceof Record) {
+				return EGLDataTypeUtility.PREDEFINED_DATA_TYPE_STRINGS;
 			}
-		
+			
+			if (part instanceof Service || part instanceof Interface) {
+				return EGLDataTypeUtility.PREDEFINED_SERVICE_FUNCTION_TYPE_STRINGS;
+			}
+			
 			if (isNewExpression())
 				return EGLDataTypeUtility.PREDEFINED_NEWABLE_TYPE_STRINGS;
 		}
-		
-		return EGLDataTypeUtility.All_PREDEFINED_TYPE_STRINGS;
+			
+			return EGLDataTypeUtility.All_PREDEFINED_TYPE_STRINGS;
 	}
 	
 	public static String[] getFilteredPredefinedTypesByCapability(String[] types) {
-		List result = new ArrayList();
-		for(int i = 0; i < types.length; i++) {
-			if(!EGLBasePlugin.isReports() && EGLDataTypeUtility.JASPER_REPORT_TYPE_STRINGS.contains(types[i])) {
-				continue;
-			}
-			if(!EGLBasePlugin.isBIRT() && EGLDataTypeUtility.BIRT_REPORT_TYPE_STRINGS.contains(types[i])) {
-				continue;
-			}
-			if(!EGLBasePlugin.isCUI() && EGLDataTypeUtility.CONSOLE_UI_TYPE_STRINGS.contains(types[i])) {
-				continue;
-			}
-			if(!EGLBasePlugin.isDLI() && EGLDataTypeUtility.DLI_TYPE_STRINGS.contains(types[i])) {
-				continue;
-			}
-			result.add(types[i]);
-		}		
-		return (String[]) result.toArray(new String[0]);
+		return types;
 	}
 }
