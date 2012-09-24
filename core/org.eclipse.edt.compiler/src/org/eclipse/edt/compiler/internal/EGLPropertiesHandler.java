@@ -310,7 +310,6 @@ public class EGLPropertiesHandler {
         static TreeMap menuProperties;
         static TreeMap menuItemProperties;
         static TreeMap promptProperties;
-        static TreeMap openUIProperties;
         static TreeMap formArrayElementProperties; // AJP
         static TreeMap psbRecordProperties;
         static TreeMap dliSegmentProperties;
@@ -553,7 +552,6 @@ public class EGLPropertiesHandler {
                 menuProperties = new TreeMap();
                 menuItemProperties = new TreeMap();
                 promptProperties = new TreeMap();
-                openUIProperties = new TreeMap();
                 formArrayElementProperties = new TreeMap();
                 psbRecordProperties = new TreeMap();
                 dliSegmentProperties = new TreeMap();
@@ -636,8 +634,6 @@ public class EGLPropertiesHandler {
         EGLPropertyRule contents = new EGLPropertyRule(IEGLConstants.PROPERTY_CONTENTS, literalArrayValid );
         EGLPropertyRule currency = new EGLPropertyRule(IEGLConstants.PROPERTY_CURRENCY, specificValueValid, yesOrNo, true );
         EGLPropertyRule currencySymbol = new EGLPropertyRule(IEGLConstants.PROPERTY_CURRENCYSYMBOL, quotedValueValid, null, true );
-        EGLPropertyRule currentArrayCount = new EGLPropertyRule(IEGLConstants.PROPERTY_CURRENTARRAYCOUNT, integerValueValid );
-        currentArrayCount.setSpecialRules( EGLPropertyRule.DONT_VALIDATE_IN_OPENUI_STATEMENT );
         EGLPropertyRule cursor =  new EGLPropertyRule(IEGLConstants.PROPERTY_CURSOR, specificValueValid, yesOrNo );
         EGLPropertyRule data = new EGLPropertyRule(IEGLConstants.PROPERTY_DATA, quotedValueValid);
         EGLPropertyRule dataType = new EGLPropertyRule(IEGLConstants.PROPERTY_DATATYPE, quotedValueValid);
@@ -660,17 +656,11 @@ public class EGLPropertiesHandler {
         EGLPropertyRule formSize = new EGLPropertyRule(IEGLConstants.PROPERTY_FORMSIZE, listValueValid );
         EGLPropertyRule getOptionsRecord = new EGLPropertyRule(IEGLConstants.PROPERTY_GETOPTIONSRECORD, quotedValueValid );
         EGLPropertyRule handleHardIOErrors = new EGLPropertyRule(IEGLConstants.PROPERTY_HANDLEHARDIOERRORS, specificValueValid, yesOrNo );
-        EGLPropertyRule help = new EGLPropertyRule(IEGLConstants.PROPERTY_HELP, quotedValueValid );
-        help.setSpecialRules( EGLPropertyRule.DONT_VALIDATE_IN_OPENUI_STATEMENT );
         EGLPropertyRule helpForm = new EGLPropertyRule(IEGLConstants.PROPERTY_HELPFORM, quotedValueValid );
         EGLPropertyRule helpGroup = new EGLPropertyRule(IEGLConstants.PROPERTY_HELPGROUP, specificValueValid, yesOrNo );
         EGLPropertyRule helpKey = new EGLPropertyRule(IEGLConstants.PROPERTY_HELPKEY, nameValueValid );
-        EGLPropertyRule helpMsgKey = new EGLPropertyRule(IEGLConstants.PROPERTY_HELPMSGKEY, quotedValueValid );
-        helpMsgKey.setSpecialRules( EGLPropertyRule.DONT_VALIDATE_IN_OPENUI_STATEMENT );
         EGLPropertyRule hierarchy = new EGLPropertyRule(IEGLConstants.PROPERTY_HIERARCHY, arrayOfValid, complexPropertyValueValid, null );        
         EGLPropertyRule highlight = new EGLPropertyRule(IEGLConstants.PROPERTY_HIGHLIGHT, specificValueValid, new String [] { IEGLConstants.MNEMONIC_DEFAULTHIGHLIGHT, IEGLConstants.MNEMONIC_NOHIGHLIGHT, IEGLConstants.MNEMONIC_BLINK, IEGLConstants.MNEMONIC_REVERSE, IEGLConstants.MNEMONIC_UNDERLINE } );
-        EGLPropertyRule hostVarQualifier = new EGLPropertyRule(IEGLConstants.PROPERTY_HOSTVARQUALIFIER, quotedValueValid );
-        hostVarQualifier.setSpecialRules( EGLPropertyRule.IS_DLI_NAME );
         EGLPropertyRule includeFunctions = new EGLPropertyRule(IEGLConstants.PROPERTY_INCLUDEREFERENCEDFUNCTIONS, specificValueValid, yesOrNo );
         EGLPropertyRule includeMsgInTransaction = new EGLPropertyRule(IEGLConstants.PROPERTY_INCLUDEMSGINTRANSACTION, specificValueValid, yesOrNo );
         EGLPropertyRule indexOrientation = new EGLPropertyRule(IEGLConstants.PROPERTY_INDEXORIENTATION, specificValueValid, new String [] {IEGLConstants.MNEMONIC_ACROSS, IEGLConstants.MNEMONIC_DOWN } );
@@ -696,8 +686,6 @@ public class EGLPropertiesHandler {
         EGLPropertyRule localSQLScope = new EGLPropertyRule(IEGLConstants.PROPERTY_LOCALSQLSCOPE, specificValueValid, yesOrNo);
         EGLPropertyRule lowercase = new EGLPropertyRule(IEGLConstants.PROPERTY_LOWERCASE, specificValueValid, yesOrNo );
         EGLPropertyRule masked = new EGLPropertyRule(IEGLConstants.PROPERTY_MASKED, specificValueValid, yesOrNo );
-        EGLPropertyRule maxArrayCount = new EGLPropertyRule(IEGLConstants.PROPERTY_MAXARRAYCOUNT, integerValueValid );
-        maxArrayCount.setSpecialRules( EGLPropertyRule.DONT_VALIDATE_IN_OPENUI_STATEMENT );
         EGLPropertyRule maxLen = new EGLPropertyRule(IEGLConstants.PROPERTY_MAXLEN, integerValueValid );
         EGLPropertyRule maxSize = new EGLPropertyRule(IEGLConstants.PROPERTY_MAXSIZE, integerValueValid );
         EGLPropertyRule minimumInput = new EGLPropertyRule(IEGLConstants.PROPERTY_MINIMUMINPUT, integerValueValid, null, true );
@@ -744,12 +732,8 @@ public class EGLPropertiesHandler {
         EGLPropertyRule screenFloatingArea = new EGLPropertyRule(IEGLConstants.PROPERTY_SCREENFLOATINGAREA, nestedValueValid );
         EGLPropertyRule screenSize = new EGLPropertyRule(IEGLConstants.PROPERTY_SCREENSIZE, listValueValid );
         EGLPropertyRule screenSizes = new EGLPropertyRule(IEGLConstants.PROPERTY_SCREENSIZES, arrayOfArraysValid );
-        EGLPropertyRule secondaryIndex = new EGLPropertyRule(IEGLConstants.PROPERTY_SECONDARYINDEX, quotedValueValid );
-        secondaryIndex.setSpecialRules( EGLPropertyRule.IS_DLI_NAME );
         EGLPropertyRule secondaryIndexItem = new EGLPropertyRule(IEGLConstants.PROPERTY_SECONDARYINDEXITEM, quotedValueValid );        
         EGLPropertyRule segmented = new EGLPropertyRule(IEGLConstants.PROPERTY_SEGMENTED, specificValueValid, yesOrNo );
-        EGLPropertyRule segmentName = new EGLPropertyRule(IEGLConstants.PROPERTY_SEGMENTNAME, quotedValueValid );
-        segmentName.setSpecialRules( EGLPropertyRule.IS_DLI_NAME );
         EGLPropertyRule segmentRecord = new EGLPropertyRule(IEGLConstants.PROPERTY_SEGMENTRECORD, quotedValueValid );
         EGLPropertyRule segments = new EGLPropertyRule(IEGLConstants.PROPERTY_SEGMENTS, arrayOfArraysValid );
         EGLPropertyRule selectedIndexItem =new EGLPropertyRule(IEGLConstants.PROPERTY_SELECTEDINDEXITEM, quotedValueValid);
@@ -872,7 +856,6 @@ public class EGLPropertiesHandler {
 
         // page item properties
         pageItemProperties.put(IEGLConstants.PROPERTY_DISPLAYNAME, displayName);
-        pageItemProperties.put(IEGLConstants.PROPERTY_HELP, help);
         pageItemProperties.put(IEGLConstants.PROPERTY_VALUE, valuePageItem);
         pageItemProperties.put(IEGLConstants.PROPERTY_VALIDATIONORDER, validationOrder);
         pageItemProperties.put(IEGLConstants.PROPERTY_NUMELEMENTSITEM, numElementsItem);
@@ -892,7 +875,6 @@ public class EGLPropertiesHandler {
         uiItemProperties.put(IEGLConstants.PROPERTY_DATEFORMAT, dateFormat);
         uiItemProperties.put(IEGLConstants.PROPERTY_DISPLAYNAME, displayName);
         uiItemProperties.put(IEGLConstants.PROPERTY_FILLCHARACTER, fillCharacter );
-        uiItemProperties.put(IEGLConstants.PROPERTY_HELP, help);
         uiItemProperties.put(IEGLConstants.PROPERTY_INPUTREQUIRED, inputRequired);
         uiItemProperties.put(IEGLConstants.PROPERTY_INPUTREQUIREDMSGKEY, inputRequiredMsgKey );
         uiItemProperties.put(IEGLConstants.PROPERTY_ISBOOLEAN, isBoolean);
@@ -921,7 +903,6 @@ public class EGLPropertiesHandler {
         // ui Item for Source Assistant editor properties
         uiItemSAProperties.put(IEGLConstants.PROPERTY_ALIAS, alias);
         uiItemSAProperties.put(IEGLConstants.PROPERTY_DISPLAYNAME, displayName);
-        uiItemSAProperties.put(IEGLConstants.PROPERTY_HELP, help);
         uiItemSAProperties.put(IEGLConstants.PROPERTY_NUMELEMENTSITEM, numElementsItem);
         uiItemSAProperties.put(IEGLConstants.PROPERTY_RUNVALIDATORFROMPROGRAM, runValidatorFromProgram);
         uiItemSAProperties.put(IEGLConstants.PROPERTY_SELECTEDINDEXITEM, selectedIndexItem);
@@ -1080,15 +1061,12 @@ public class EGLPropertiesHandler {
         
         vgUIRecordProperties.put(IEGLConstants.PROPERTY_ALIAS, alias);
         vgUIRecordProperties.put(IEGLConstants.PROPERTY_TITLE, title);
-        vgUIRecordProperties.put(IEGLConstants.PROPERTY_HELP, help);
         vgUIRecordProperties.put(IEGLConstants.PROPERTY_VALIDATORFUNCTION, validatorFunction);
         vgUIRecordProperties.put(IEGLConstants.PROPERTY_RUNVALIDATORFROMPROGRAM, runValidatorFromProgram);
         vgUIRecordProperties.put(IEGLConstants.PROPERTY_COMMANDVALUEITEM, commandValueItem);
 
-        dliSegmentProperties.put(IEGLConstants.PROPERTY_HOSTVARQUALIFIER, hostVarQualifier);
         dliSegmentProperties.put(IEGLConstants.PROPERTY_KEYITEM, keyItem);
         dliSegmentProperties.put(IEGLConstants.PROPERTY_LENGTHITEM, lengthItem);
-        dliSegmentProperties.put(IEGLConstants.PROPERTY_SEGMENTNAME, segmentName);        
 
 //      locationFormGroup = formGroupProperties
 //                                + commonFormProperties
@@ -1319,22 +1297,7 @@ public class EGLPropertiesHandler {
         consoleArrayFieldProperties.put(IEGLConstants.PROPERTY_LINESBETWEENROWS, linesBetweenRows);
         consoleArrayFieldProperties.put(IEGLConstants.PROPERTY_SPACESBETWEENCOLUMNS, spacesBetweenColumns);
         consoleArrayFieldProperties.put(IEGLConstants.PROPERTY_ORIENTINDEXACROSS, orientIndexAcross);
-       
-        openUIProperties.put(IEGLConstants.PROPERTY_ISCONSTRUCT, isConstruct);
-        openUIProperties.put(IEGLConstants.PROPERTY_SETINITIAL, setInitial);
-        openUIProperties.put(IEGLConstants.PROPERTY_DISPLAYONLY, displayOnly);
-        openUIProperties.put(IEGLConstants.PROPERTY_HELP, help);
-        openUIProperties.put(IEGLConstants.PROPERTY_HELPMSGKEY, helpMsgKey);
-        openUIProperties.put(IEGLConstants.PROPERTY_BINDINGBYNAME, bindingByName);
-        openUIProperties.put(IEGLConstants.PROPERTY_COLOR, color);
-        openUIProperties.put(IEGLConstants.PROPERTY_HIGHLIGHT, highlight);
-        openUIProperties.put(IEGLConstants.PROPERTY_INTENSITY, intensity);
-        openUIProperties.put(IEGLConstants.PROPERTY_ALLOWDELETE, allowDelete);
-        openUIProperties.put(IEGLConstants.PROPERTY_ALLOWINSERT, allowInsert);
-        openUIProperties.put(IEGLConstants.PROPERTY_ALLOWAPPEND, allowAppend);
-        openUIProperties.put(IEGLConstants.PROPERTY_CURRENTARRAYCOUNT, currentArrayCount);
-        openUIProperties.put(IEGLConstants.PROPERTY_MAXARRAYCOUNT, maxArrayCount);
-        
+               
         complexDataItemProperties.put(IEGLConstants.PROPERTY_PROGRAMLINKDATA, programLinkData );
         
         complexItemDeclarationProperties.put(IEGLConstants.PROPERTY_PROGRAMLINKDATA, programLinkData );
@@ -1708,8 +1671,6 @@ public class EGLPropertiesHandler {
 									return getMenuItemPropertyNames();                                                
 					case locationPrompt :
 									return getPromptPropertyNames();                                                
-					case locationOpenUI :
-									return getOpenUIPropertyNames();
 					case locationTuiArrayElementFormField:
 									return getTuiArrayElementFormFieldPropertyNames();
 					case locationPSBRecord :
@@ -1857,8 +1818,6 @@ public class EGLPropertiesHandler {
 									return getMenuItemPropertyNamesToLowerCase();                                                
 					case locationPrompt :
 									return getPromptPropertyNamesToLowerCase();                                                
-					case locationOpenUI :
-									return getOpenUIPropertyNamesToLowerCase();
 					case locationTuiArrayElementFormField:
 									return getTuiArrayElementFormFieldPropertyNamesToLowerCase();
 					case locationPSBRecord :
@@ -2119,8 +2078,6 @@ public class EGLPropertiesHandler {
 						return getMenuItemPropertyRules();                                                
 					case locationPrompt :
 						return getPromptPropertyRules();                                                
-					case locationOpenUI :
-						return getOpenUIPropertyRules();
 					case locationCommonVariableFormField :
 						return getCommonVariableFormFieldPropertyRules();
 					case locationFormField :
@@ -4048,27 +4005,6 @@ private static ArrayList getComplexAnnotationPropertyRules(TreeMap properties, S
 	}
 
     /**
-	 * return the List of EGL property rules valid for an openUI
-	 */
-	public static ArrayList getOpenUIPropertyRules() {
-		return getPropertyRules(openUIProperties);
-	}
-
-	/**
-	 * return the List of EGL property names valid for an openUI
-	 */
-	public static List getOpenUIPropertyNames() {
-		return getNamesFromValues(getOpenUIPropertyRules());
-	}
-	
-	/**
-	 * return the List of lowercase EGL property names valid for an openUI
-	 */
-	public static List getOpenUIPropertyNamesToLowerCase() {
-		return getNamesFromValuesToLowerCase(getOpenUIPropertyRules());
-	}
-
-    /**
 	 * return the List of EGL property rules valid for a Basic Interface
 	 */
 	public static ArrayList getBasicInterfacePropertyRules() {
@@ -4112,13 +4048,6 @@ private static ArrayList getComplexAnnotationPropertyRules(TreeMap properties, S
 	 */
 	public static List getJavaObjectInterfacePropertyNames() {
 		return getNamesFromValues(getJavaObjectInterfacePropertyRules());
-	}
-
-	/**
-	 * return the List of lowercase EGL property names valid for an Interface
-	 */
-	public static List getInterfacePropertyNamesToLowerCase() {
-		return getNamesFromValuesToLowerCase(getOpenUIPropertyRules());
 	}
 
     /**
