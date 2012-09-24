@@ -13,7 +13,7 @@ package org.eclipse.edt.ide.compiler;
 
 import org.eclipse.edt.ide.core.IDEBaseCompiler;
 import org.eclipse.edt.ide.core.IDEBaseCompilerExtension;
-import org.eclipse.edt.mof.eglx.rui.RUIExtension;
+import org.eclipse.edt.rui.RUIExtension;
 
 public class IDERUIExtension extends IDEBaseCompilerExtension {
 	
@@ -23,7 +23,7 @@ public class IDERUIExtension extends IDEBaseCompilerExtension {
 	
 	@Override
 	public String[] getSystemEnvironmentPaths() {
-		return new String[]{IDEBaseCompiler.getPathToPluginDirectory("org.eclipse.edt.mof.eglx.rui", "egllib")};
+		return new String[]{IDEBaseCompiler.getPathToPluginDirectory("org.eclipse.edt.rui", "egllib")};
 	}
 	
 }

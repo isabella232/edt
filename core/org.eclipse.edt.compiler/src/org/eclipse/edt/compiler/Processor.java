@@ -133,11 +133,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
     private MofSerializable createIRFromBoundAST2(Node partAST, File declaringFile, List imports, IProblemRequestor problemRequestor) {
     	
         Egl2Mof generator = new Egl2Mof(environment);
-  //      return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile, compiler), problemRequestor);
-        if (partAST instanceof Part) {
-        	return ((Part)partAST).getName().resolveType();
-        }
-        return null;
+        return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile, compiler), problemRequestor);
     }
     
     private IProblemRequestor createProblemRequestor(File file,Node partAST, IPartBinding binding) {

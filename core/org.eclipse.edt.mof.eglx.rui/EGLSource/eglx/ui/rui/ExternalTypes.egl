@@ -70,7 +70,7 @@ ExternalType Widget type JavaScriptObject {
 		relativePath = "eglx/ui/rui" 
 	}
 	
-	private document Document;
+	document Document;
 	pixelWidth int { @Property { getMethod = "getPixelWidth", setMethod = "setPixelWidth" } };
 	function getPixelWidth() returns (int);
 	function setPixelWidth(value int in);
@@ -641,8 +641,8 @@ ExternalType View type JavaScriptObject { relativePath = "eglx/ui/rui"	}
 		
 	function getProperty(property String in) returns (String);
 	function appendChildToParent(p1 Widget in, p2 Widget in);
-	private document Document;
-	private initialUI Widget[];
+	document Document;
+	initialUI Widget[];
 	
 	static function $EQ(lvalue View? in, rvalue View? in) returns(EBoolean) {@Operation{"=="}};
 	static function $NEQ(lvalue View? in, rvalue View? in) returns(EBoolean) {@Operation{"!="}};
