@@ -77,7 +77,7 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 			Type type = returnStatement.getParenthesizedExprOpt().resolveType();
 			type = BindingUtil.resolveGenericType(type, returnStatement.getParenthesizedExprOpt());
 			
-			boolean compatible = IRUtils.isMoveCompatible(visitor.getReturnField(), type, returnStatement.getParenthesizedExprOpt().resolveMember());
+			boolean compatible = IRUtils.isMoveCompatible(visitor.getReturnType(), visitor.getReturnField(), type, returnStatement.getParenthesizedExprOpt().resolveMember());
 			if (!compatible) {
 				String typeString = "";
 				Type returnStmtType = returnStatement.getParenthesizedExprOpt().resolveType();
@@ -88,14 +88,14 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 					}
 				}
 				else {
-					typeString = StatementValidator.getShortTypeString(returnStmtType);
+					typeString = BindingUtil.getShortTypeString(returnStmtType);
 				}
 				
 				problemRequestor.acceptProblem(returnStatement.getParenthesizedExprOpt(),
 						IProblemRequestor.RETURN_STATEMENT_TYPE_INCOMPATIBLE,
 						new String[] {
 								typeString,
-								StatementValidator.getShortTypeString(visitor.getReturnType())});
+								BindingUtil.getShortTypeString(visitor.getReturnType())});
 			}
 		}
 		

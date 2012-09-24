@@ -125,8 +125,8 @@ public class ConfigureRuntimePropertiesOperation extends AbstractDeploymentOpera
 					
 					for (Part part : services) {
 						String generatedName;
-						String id = part.getName();
-						String pkg = part.getPackageName();
+						String id = part.getCaseSensitiveName();
+						String pkg = part.getCaseSensitivePackageName();
 						
 						if (pkg == null || pkg.length() == 0) {
 							generatedName = JavaAliaser.getAlias(id);

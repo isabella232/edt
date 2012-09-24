@@ -39,14 +39,12 @@ import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
-import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
@@ -126,19 +124,13 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
 
         dataDeclarations.add(classDataDeclaration);
         boolean isConstantDeclaration = classDataDeclaration.isConstant();
-        PrimitiveTypeLiteral constantValue = null;
-        if (isConstantDeclaration) {
-            constantValue = getConstantValue(classDataDeclaration.getInitializer()); 
-        }
         
         for (Name name : classDataDeclaration.getNames()) {
             String dataName = name.getIdentifier();
             
             Field field;
             if (isConstantDeclaration) {
-            	ConstantField cons = IrFactory.INSTANCE.createConstantField();
-            	cons.setValue(constantValue);
-            	field = cons;
+            	field = IrFactory.INSTANCE.createConstantField();
             }
             else {
             	field = IrFactory.INSTANCE.createField();

@@ -47,7 +47,7 @@ public class ResourceTemplate extends JavaTemplate implements Constants {
 			if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				nameExpression.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
 			nameExpression.setMember(field);
-			nameExpression.setId(field.getName());
+			nameExpression.setId(field.getCaseSensitiveName());
 			assignment.setLHS(nameExpression);
 			assignment.setRHS(getLibraryInvocation(annot, field));
 			// add the assignment to the declaration statement block
@@ -75,7 +75,7 @@ public class ResourceTemplate extends JavaTemplate implements Constants {
 		if (annot.getValue(org.eclipse.edt.gen.Constants.SubKey_uri) instanceof String && !((String) annot.getValue(org.eclipse.edt.gen.Constants.SubKey_uri)).isEmpty()) {
 			uri.setValue((String) annot.getValue(org.eclipse.edt.gen.Constants.SubKey_uri));
 		} else {
-			uri.setValue("binding:" + field.getName());
+			uri.setValue("binding:" + field.getCaseSensitiveName());
 		}
 		return invocation;
 	}

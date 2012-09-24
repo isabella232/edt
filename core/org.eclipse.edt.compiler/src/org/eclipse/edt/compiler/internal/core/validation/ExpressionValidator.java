@@ -49,7 +49,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -95,11 +94,11 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				valid = true;
 				if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
 					Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), operand1.resolveType());
-					valid = IRUtils.isMoveCompatible(t, operand1.resolveType(), operand1.resolveMember());
+					valid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), operand1.resolveType(), operand1.resolveMember());
 				}
 				if (valid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
 					Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), operand1.resolveType());
-					valid = IRUtils.isMoveCompatible(t, operand2.resolveType(), operand2.resolveMember());
+					valid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), operand2.resolveType(), operand2.resolveMember());
 				}
 			}
 			
@@ -254,15 +253,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			}
 		}
 		
-		if (element == null) {
-			// Super and this will already have a binder error.
-			if (!(target instanceof ThisExpression || target instanceof SuperExpression)) {
-				problemRequestor.acceptProblem(
-						target,
-						IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
-			}
-		}
-		else {
+		if (element instanceof FunctionMember || element instanceof Delegate) {
 			// returnType is required when the invocation is not part of a FunctionInvocationStatement ("voidFunc();" good, "x int = voidFunc();" bad).
 			if (returnType == null && !(functionInvocation.getParent() instanceof FunctionInvocationStatement)) {
 				problemRequestor.acceptProblem(
@@ -277,6 +268,11 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			else if (element instanceof FunctionMember) {
 				functionInvocation.accept(new FunctionArgumentValidator((FunctionMember)element, problemRequestor, compilerOptions));
 			}
+		}
+		else if (element != null) {
+			problemRequestor.acceptProblem(
+					target,
+					IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
 		}
 	}
 	
@@ -389,9 +385,9 @@ public class ExpressionValidator extends AbstractASTVisitor {
 						asExpression,
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 						new String[] {
-							StatementValidator.getTypeString(fromType),
-							StatementValidator.getTypeString(toType),
-							asExpression.getCanonicalString()
+								BindingUtil.getTypeString(fromType, true),
+								BindingUtil.getTypeString(toType, true),
+								asExpression.getCanonicalString()
 						});
 				}
 			}

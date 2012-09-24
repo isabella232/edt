@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
-
 package org.eclipse.edt.compiler.core.ast;
 
 import java.util.*;
@@ -672,6 +660,8 @@ nonterminalIntToStringMap.put(new Integer(152), "stmt_star");
 nonterminalStringToIntMap.put("stmt_star", new Integer(152));
 nonterminalIntToStringMap.put(new Integer(106), "enumerationField_plus");
 nonterminalStringToIntMap.put("enumerationField_plus", new Integer(106));
+nonterminalIntToStringMap.put(new Integer(62), "constOpt");
+nonterminalStringToIntMap.put("constOpt", new Integer(62));
 nonterminalIntToStringMap.put(new Integer(116), "formContent_star");
 nonterminalStringToIntMap.put("formContent_star", new Integer(116));
 nonterminalIntToStringMap.put(new Integer(55), "intoClauseOpt");
@@ -706,8 +696,6 @@ nonterminalIntToStringMap.put(new Integer(126), "getByPositionOption_star");
 nonterminalStringToIntMap.put("getByPositionOption_star", new Integer(126));
 nonterminalIntToStringMap.put(new Integer(133), "setTarget_plus");
 nonterminalStringToIntMap.put("setTarget_plus", new Integer(133));
-nonterminalIntToStringMap.put(new Integer(62), "parmConstOpt");
-nonterminalStringToIntMap.put("parmConstOpt", new Integer(62));
 nonterminalIntToStringMap.put(new Integer(139), "part_star");
 nonterminalStringToIntMap.put("part_star", new Integer(139));
 nonterminalIntToStringMap.put(new Integer(30), "singleExtendsOpt");

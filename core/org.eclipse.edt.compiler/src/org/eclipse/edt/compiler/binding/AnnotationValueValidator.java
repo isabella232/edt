@@ -17,7 +17,6 @@ import org.eclipse.edt.mof.EGenericType;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.ETypedElement;
-import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Type;
@@ -47,11 +46,6 @@ public class AnnotationValueValidator {
         				field.getName()
         			});   
     		return null;
-		}
-		
-		//replace constant values
-		if (value instanceof ConstantField) {
-			value = ((ConstantField)value).getValue().getObjectValue();
 		}
 		
 		boolean valueIsList = value instanceof EList;

@@ -180,12 +180,12 @@ public class JavaCoreGenerator extends Generator {
 			}
 		}
 		else {
-			String pkg = part.getPackageName();
+			String pkg = part.getCaseSensitivePackageName();
 			if (pkg.length() > 0) {
 				buf.append(JavaAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 				buf.append('/');
 			}
-			buf.append(JavaAliaser.getAlias(part.getId()));
+			buf.append(JavaAliaser.getAlias(part.getCaseSensitiveName()));
 		}
 		buf.append(getFileExtension());
 		return buf.toString();

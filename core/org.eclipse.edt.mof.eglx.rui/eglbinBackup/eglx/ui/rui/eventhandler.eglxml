@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<Delegate ID="1" eClass="org.eclipse.edt.mof.egl.Delegate" name="EventHandler" fileName="eglx/ui/rui/ExternalTypes.egl" hasCompileErrors="false" packageName="eglx.ui.rui" isNullable="false" >
+	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:39" off="i:1156" line="i:42" />
+	<parameters ID="3" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="e" type="egl:eglx.ui.rui.event" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+		<annotations ID="4" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:10" off="i:1179" line="i:42" />
+		<container IDREF="1"/>
+	</parameters>
+</Delegate>

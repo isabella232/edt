@@ -20,7 +20,6 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
-import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;

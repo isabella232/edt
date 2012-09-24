@@ -14,7 +14,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractFunctionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Field;
@@ -119,7 +119,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {StatementValidator.getTypeName(parm), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {BindingUtil.getTypeName(parm), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 			}
 				
 			if (parm.getType() instanceof ArrayType && ((ArrayType)parm.getType()).getElementType() != null){
@@ -127,7 +127,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 					problemRequestor.acceptProblem(functionParameter, 
 							IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_INVALID, 
 							IMarker.SEVERITY_ERROR, 
-							new String[] {StatementValidator.getShortTypeString(((ArrayType)parm.getType()).getElementType(), true), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
+							new String[] {BindingUtil.getShortTypeString(((ArrayType)parm.getType()).getElementType(), true), parm.getCaseSensitiveName()}, IBMiResourceKeys.getResourceBundleForKeys());
 				}
 			}
 			
@@ -177,7 +177,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), BindingUtil.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 
@@ -185,7 +185,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 				problemRequestor.acceptProblem(functionParameter, 
 						IBMiResourceKeys.IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID, 
 						IMarker.SEVERITY_ERROR, 
-						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+						new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), BindingUtil.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 				return;
 			}
 			
@@ -194,7 +194,7 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 					problemRequestor.acceptProblem(functionParameter, 
 							IBMiResourceKeys.IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID, 
 							IMarker.SEVERITY_ERROR, 
-							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), StatementValidator.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
+							new String[] {parm.getCaseSensitiveName(), containerName, field.getCaseSensitiveName(), BindingUtil.getTypeName(field)}, IBMiResourceKeys.getResourceBundleForKeys());
 					return;
 				}
 			}

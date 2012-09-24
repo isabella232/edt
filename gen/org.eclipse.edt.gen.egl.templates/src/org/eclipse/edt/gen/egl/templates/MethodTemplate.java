@@ -48,7 +48,7 @@ public class MethodTemplate extends EglTemplate{
 				ctx.invoke(genType, (Object)method.getGenericReturnType(), ctx, eFunction);
 			}
 
-			if(!eFunction.getName().equals(method.getName())){
+			if(!eFunction.getCaseSensitiveName().equals(method.getName())){
 				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.ExternalName);
 				if(annotation != null){
 					annotation.setValue(method.getName());

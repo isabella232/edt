@@ -1,0 +1,84 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<Enumeration ID="1" eClass="org.eclipse.edt.mof.egl.Enumeration" name="MappingKind" fileName="eglx/ui/rui/Annotations.egl" hasCompileErrors="false" packageName="eglx.ui.rui" >
+	<literals ID="2" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="100" name="TYPE_PRIMITIVE_ALL" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="3" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:24" off="i:2212" line="i:97" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="4" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="101" name="TYPE_PRIMITIVE_STRING" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="5" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:27" off="i:2239" line="i:98" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="6" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="102" name="TYPE_PRIMITIVE_DATE" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="7" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:25" off="i:2269" line="i:99" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="8" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="103" name="TYPE_PRIMITIVE_TIME" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="9" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:25" off="i:2297" line="i:100" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="10" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="104" name="TYPE_PRIMITIVE_TIMESTAMP" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="11" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:30" off="i:2325" line="i:101" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="12" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="105" name="TYPE_PRIMITIVE_BIGINT" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="13" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:27" off="i:2358" line="i:102" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="14" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="106" name="TYPE_PRIMITIVE_BIN" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="15" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:24" off="i:2388" line="i:103" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="16" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="107" name="TYPE_PRIMITIVE_DECIMAL" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="17" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:28" off="i:2415" line="i:104" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="18" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="108" name="TYPE_PRIMITIVE_FLOAT" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="19" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:26" off="i:2446" line="i:105" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="20" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="109" name="TYPE_PRIMITIVE_INT" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="21" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:24" off="i:2475" line="i:106" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="22" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="110" name="TYPE_PRIMITIVE_NUM" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="23" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:24" off="i:2502" line="i:107" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="24" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="111" name="TYPE_PRIMITIVE_MONEY" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="25" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:26" off="i:2529" line="i:108" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="26" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="112" name="TYPE_PRIMITIVE_BOOLEAN" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="27" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:28" off="i:2558" line="i:109" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="28" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="113" name="TYPE_PRIMITIVE_SMALLFLOAT" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="29" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:31" off="i:2589" line="i:110" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="30" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="114" name="TYPE_PRIMITIVE_SMALLINT" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="31" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:29" off="i:2623" line="i:111" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="32" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="200" name="TYPE_RECORD_ALL" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="33" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:21" off="i:2655" line="i:112" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="34" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="201" name="TYPE_RECORD_SIMPLE" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="35" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:24" off="i:2679" line="i:113" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="36" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="202" name="TYPE_RECORD_EMBED_RECORD" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="37" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:30" off="i:2706" line="i:114" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="38" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="203" name="TYPE_RECORD_WITH_PRIMITIVE_ARRAY" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="39" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:38" off="i:2739" line="i:115" />
+		<container IDREF="1"/>
+	</literals>
+	<literals ID="40" eClass="org.eclipse.edt.mof.egl.EnumerationEntry" nullable="false" value="204" name="TYPE_RECORD_WITH_RECORD_ARRAY" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="41" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:35" off="i:2780" line="i:116" />
+		<container IDREF="1"/>
+	</literals>
+	<annotations ID="42" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:632" off="i:2187" line="i:96" />
+</Enumeration>

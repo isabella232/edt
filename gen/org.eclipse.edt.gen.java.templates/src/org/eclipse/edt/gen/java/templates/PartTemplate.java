@@ -120,7 +120,7 @@ public class PartTemplate extends JavaTemplate {
 	}
 
 	public void genClassName(Part part, Context ctx, TabbedWriter out) {
-		out.print(JavaAliaser.getAlias(part.getId()));
+		out.print(JavaAliaser.getAlias(part.getCaseSensitiveName()));
 	}
 
 	public void genSuperClass(Part part, Context ctx, TabbedWriter out) {

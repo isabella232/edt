@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" name="VEProperty" fileName="eglx/ui/rui/Annotations.egl" hasCompileErrors="false" packageName="eglx.ui.rui" >
+	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="propertyType" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="3" eClass="org.eclipse.edt.mof.EField" name="displayName" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="4" eClass="org.eclipse.edt.mof.EField" name="category" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="5" eClass="org.eclipse.edt.mof.EField" name="default" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<eFields ID="6" eClass="org.eclipse.edt.mof.EField" name="choices" eType="org.eclipse.edt.mof.EList&lt;egl:eglx.ui.rui.vepropertychoice&gt;" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<targets>FieldMbr</targets>
+	<annotations ID="7" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:184" off="i:1680" line="i:63" />
+</AnnotationType>

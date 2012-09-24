@@ -24,7 +24,7 @@ public class CommonUtilities {
 
 	public static MemberName createMember(FunctionParameter parameter, Context ctx){
 		MemberName mn = ctx.getFactory().createMemberName();
-		mn.setId(parameter.getId());
+		mn.setId(parameter.getCaseSensitiveName());
 		mn.setMember(parameter);
 		return mn;
 	}
@@ -54,7 +54,7 @@ public class CommonUtilities {
 	}
 
 	public static String createProxyFunctionName(Function function) {
-		return Constants.FUNCTION_HELPER_PREFIX + function.getName() + Constants.FUNCTION_HELPER_SUFFIX;
+		return Constants.FUNCTION_HELPER_PREFIX + function.getCaseSensitiveName() + Constants.FUNCTION_HELPER_SUFFIX;
 	}
 	
 }

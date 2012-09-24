@@ -23,7 +23,7 @@ public class CommonUtilities {
 	
 	public static String getECKGenPackageName(Part part){
 		//prepend "eckgen" to the part package name		
-		String packageName = part.getPackageName();
+		String packageName = part.getCaseSensitivePackageName();
 		String eckgenPkgName = prependECKGen(packageName);
 		return eckgenPkgName;	
 	}

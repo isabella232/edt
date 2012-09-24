@@ -30,7 +30,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 						org.eclipse.edt.gen.CommonUtilities.getAnnotation(field, Constants.AnnotationXmlAttribute, ctx) == null) {
 			try {
 				Annotation annotation = org.eclipse.edt.gen.CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXmlElement);
-				annotation.setValue("name", field.getName());
+				annotation.setValue("name", field.getCaseSensitiveName());
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			} catch (Exception e) {}
 		}
@@ -39,7 +39,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 			//add an xmlElement
 			try {
 				Annotation annotation = org.eclipse.edt.gen.CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
-				annotation.setValue(field.getId());
+				annotation.setValue(field.getCaseSensitiveName());
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			} catch (Exception e) {}
 		}	
@@ -108,9 +108,9 @@ public class FieldTemplate extends JavaScriptTemplate {
 
 	protected static String genGetterSetterFunctionName(String prefix, Field field) {
 		StringBuilder name = new StringBuilder(prefix);
-		name.append(field.getName().substring(0, 1).toUpperCase());
-		if (field.getName().length() > 1)
-			name.append(field.getName().substring(1));
+		name.append(field.getCaseSensitiveName().substring(0, 1).toUpperCase());
+		if (field.getCaseSensitiveName().length() > 1)
+			name.append(field.getCaseSensitiveName().substring(1));
 		return name.toString();
 	}
 

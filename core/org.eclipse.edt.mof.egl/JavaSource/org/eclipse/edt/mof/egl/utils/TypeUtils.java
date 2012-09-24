@@ -12,7 +12,9 @@
 package org.eclipse.edt.mof.egl.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
@@ -89,6 +91,9 @@ public class TypeUtils implements MofConversion {
 	public static final Type Type_BLOB = getType(Type_EGLBlob);
 	public static final Type Type_BOOLEAN = getType(Type_EGLBoolean);
 	public static final Type Type_BYTES = getType(Type_EGLBytes);
+	public static final Type Type_NUMBER = getType(Type_EGLNumber);
+	public static final Type Type_ANYTEXT = getType(Type_AnyText);
+	public static final Type Type_ANYVALUE = getType(Type_AnyValue);
 
 	public static final int TypeKind_UNDEFINED = -1;
 	public static final int TypeKind_VOID = 0;
@@ -229,7 +234,7 @@ public class TypeUtils implements MofConversion {
 				return false;
 			}
 			
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyValue));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_ANYVALUE);
 		}
 		else {
 			return false;
@@ -239,7 +244,7 @@ public class TypeUtils implements MofConversion {
 	
 	public static boolean isNumericType(Type type) {
 		if (type.getClassifier() instanceof EGLClass) {
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_EGLNumber));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_NUMBER);
 		}
 		else {
 			return false;
@@ -264,7 +269,7 @@ public class TypeUtils implements MofConversion {
 
 	public static boolean isTextType(Type type) {
 		if (type != null && type.getClassifier() instanceof EGLClass) {
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyText));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_ANYTEXT);
 		}
 		else {
 			return false;
@@ -306,7 +311,8 @@ public class TypeUtils implements MofConversion {
 	 * explicit conversion operations defined between them or the rhsType being
 	 * a subtype of the lhsType or the lhsType being a subtype of the rhsType
 	 * 
-	 * For a function to be compatible with a delegate, the parameters and return type must match exactly
+	 * For a function to be compatible with a delegate, the parameters and return type must match exactly.
+	 * The same is true for comparing two delegates.
 	 * 
 	 * @param lhsType
 	 * @param rhsType
@@ -314,6 +320,10 @@ public class TypeUtils implements MofConversion {
 	 */
 	public static boolean areCompatible(Classifier lhsType, NamedElement rhsType) {
 		if (lhsType.equals(rhsType)) return true;
+		
+		if (lhsType instanceof Delegate && rhsType instanceof Delegate) {
+			return areCompatible((Delegate)lhsType, (Delegate)rhsType, new HashSet<DelegateSet>());
+		}
 		
 		if (lhsType instanceof StructPart && rhsType instanceof SubType) {
 			if (((SubType)rhsType).isSubtypeOf((StructPart)lhsType)) {
@@ -348,13 +358,26 @@ public class TypeUtils implements MofConversion {
 	 * @return
 	 */
 	public static boolean areCompatible(Delegate lhsType, Function rhsType) {
-
 		if (lhsType.getParameters().size() != rhsType.getParameters().size()) {
 			return false;
 		}
 		
-		if (!lhsType.getReturnType().equals(rhsType.getReturnType())) {
-			return false;
+		if (lhsType.getReturnType() == null) {
+			if (rhsType.getReturnType() != null) {
+				return false;
+			}
+		}
+		else {
+			Type lhsReturnType = lhsType.getReturnType();
+			Type rhsReturnType = rhsType.getReturnType();
+			if (lhsReturnType instanceof Delegate && rhsReturnType instanceof Delegate) {
+				if (!areCompatible((Delegate)lhsReturnType, (Delegate)rhsReturnType, new HashSet<DelegateSet>())) {
+					return false;
+				}
+			}
+			else if (!lhsType.getReturnType().equals(rhsType.getReturnType())) {
+				return false;
+			}
 		}
 		
 		if (rhsType.getReturnField() != null && rhsType.getReturnField().isNullable() != lhsType.isNullable().booleanValue()) {
@@ -385,12 +408,123 @@ public class TypeUtils implements MofConversion {
 				return false;
 			}
 			
-			if (!lhsParm.getType().equals(rhsParm.getType())) {
+			Type lhsParmType = lhsParm.getType();
+			Type rhsParmType = rhsParm.getType();
+			if (lhsParmType instanceof Delegate && rhsParmType instanceof Delegate) {
+				if (!areCompatible((Delegate)lhsParmType, (Delegate)rhsParmType, new HashSet<DelegateSet>())) {
+					return false;
+				}
+			}
+			else if (!lhsParmType.equals(rhsParmType)) {
 				return false;
 			}
 		}
 
 		return true;
+	}
+	
+	public static boolean areCompatible(Delegate lhsType, Delegate rhsType, Set<DelegateSet> seenComparisons) {
+		DelegateSet set = new DelegateSet(lhsType, rhsType);
+		if (seenComparisons.contains(set)) {
+			return true;
+		}
+		seenComparisons.add(set);
+		
+		if (lhsType.getParameters().size() != rhsType.getParameters().size()) {
+			return false;
+		}
+		
+		if (lhsType.getReturnType() == null) {
+			if (rhsType.getReturnType() != null) {
+				return false;
+			}
+		}
+		else {
+			Type lhsReturnType = lhsType.getReturnType();
+			Type rhsReturnType = rhsType.getReturnType();
+			if (lhsReturnType instanceof Delegate && rhsReturnType instanceof Delegate) {
+				if (!areCompatible((Delegate)lhsReturnType, (Delegate)rhsReturnType, seenComparisons)) {
+					return false;
+				}
+			}
+			else if (!lhsType.getReturnType().equals(rhsType.getReturnType())) {
+				return false;
+			}
+		}
+		
+		if (rhsType.isNullable().booleanValue() != lhsType.isNullable().booleanValue()) {
+			return false;
+		}
+		
+		for (int i = 0; i < lhsType.getParameters().size(); i++) {
+			FunctionParameter lhsParm = lhsType.getParameters().get(i);
+			FunctionParameter rhsParm = rhsType.getParameters().get(i);
+			
+			if (lhsParm.isNullable() != rhsParm.isNullable()) {
+				return false;
+			}
+			
+			if (lhsParm.getParameterKind() != rhsParm.getParameterKind()) {
+				return false;
+			}
+			
+			if (lhsParm.isConst().booleanValue() != rhsParm.isConst().booleanValue()) {
+				return false;
+			}
+
+			if (lhsParm.isField().booleanValue() != rhsParm.isField().booleanValue()) {
+				return false;
+			}
+			
+			if (lhsParm.isDefinedSqlNullable().booleanValue() != rhsParm.isDefinedSqlNullable().booleanValue()) {
+				return false;
+			}
+			
+			Type lhsParmType = lhsParm.getType();
+			Type rhsParmType = rhsParm.getType();
+			if (lhsParmType instanceof Delegate && rhsParmType instanceof Delegate) {
+				if (!areCompatible((Delegate)lhsParmType, (Delegate)rhsParmType, seenComparisons)) {
+					return false;
+				}
+			}
+			else if (!lhsParmType.equals(rhsParmType)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	private static class DelegateSet {
+		private final Delegate del1;
+		private final Delegate del2;
+		
+		DelegateSet(Delegate del1, Delegate del2) {
+			this.del1 = del1;
+			this.del2 = del2;
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			if (o == this) {
+				return true;
+			}
+			if (o instanceof DelegateSet) {
+				DelegateSet other = (DelegateSet)o;
+				if (this.del1.equals(other.del1)) {
+					return this.del2.equals(other.del2);
+				}
+				else if (this.del1.equals(other.del2)) {
+					return this.del2.equals(other.del1);
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return del1.hashCode() * del2.hashCode();
+		}
 	}
 	
 	/**

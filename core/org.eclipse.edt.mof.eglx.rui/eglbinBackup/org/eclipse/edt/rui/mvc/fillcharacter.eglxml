@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" validationProxy="org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.FillCharacterAnnotationProxy" name="FillCharacter" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" >
+	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="value" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<targets>FieldMbr</targets>
+	<annotations ID="3" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:203" off="i:1842" line="i:94" />
+</AnnotationType>

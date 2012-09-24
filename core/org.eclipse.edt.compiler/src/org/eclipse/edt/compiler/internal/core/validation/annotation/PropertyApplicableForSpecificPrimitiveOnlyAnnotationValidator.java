@@ -11,35 +11,40 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
-/**
- * @author Dave Murray
- */
 public class PropertyApplicableForSpecificPrimitiveOnlyAnnotationValidator extends PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator {
 	
-	Primitive requiredPrimitive;
+	Type requiredType;
 	
-	public PropertyApplicableForSpecificPrimitiveOnlyAnnotationValidator(IAnnotationTypeBinding annotationType, String canonicalAnnotationName, Primitive requiredPrimitive) {
-		super(annotationType, canonicalAnnotationName);
-		this.requiredPrimitive = requiredPrimitive;
+	public PropertyApplicableForSpecificPrimitiveOnlyAnnotationValidator(String canonicalAnnotationName, Type requiredType) {
+		super(canonicalAnnotationName);
+		this.requiredType = requiredType;
 	}
-
-	protected void validatePrimitiveType(Node errorNode, IAnnotationBinding annotationBinding, IProblemRequestor problemRequestor, Primitive primitive, String canonicalItemName) {
-		if(primitive != requiredPrimitive) {
+	
+	@Override
+	protected void validateType(final Node errorNode, final Annotation annotationBinding, final IProblemRequestor problemRequestor, Type type, String canonicalItemName) {
+		if(!requiredType.equals(requiredType)) {
 			problemRequestor.acceptProblem(
 				errorNode,
 				IProblemRequestor.PROPERTY_CERTAIN_PRIMITIVE_REQUIRED,
 				new String[] {
 					canonicalAnnotationName,
-					requiredPrimitive.getName(),
-					primitive.getName()
+					BindingUtil.getShortTypeString(requiredType, false),
+					BindingUtil.getShortTypeString(type, false)
 				});
+		}
+		if(TypeUtils.Type_DATE.equals(type) || TypeUtils.Type_TIME.equals(type)){
+			problemRequestor.acceptProblem(
+				errorNode,
+				IProblemRequestor.INVALID_FORM_FIELD_NOT_SUPPORTED_FOR_DATETIME,
+				new String[]{canonicalAnnotationName, canonicalItemName});
 		}
 	}
 }

@@ -16,7 +16,6 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Function;
@@ -42,7 +41,7 @@ public class GetMethodAnnotationValueValidator implements IValueValidationRule {
 		if (valueDeclarer != null && !valueDeclarer.equals(declaringPart)) {
 			problemRequestor.acceptProblem(
 				errorNode,
-				IProblemRequestor.LIBRARY_FUNCTION_NOT_ALLOWED_FOR_PROPERTY,
+				IProblemRequestor.EXTERNAL_FUNCTION_NOT_ALLOWED_FOR_PROPERTY,
 				new String[] {
 					IEGLConstants.PROPERTY_GETMETHOD,
 					declaringPart.getCaseSensitiveName()
@@ -78,7 +77,7 @@ public class GetMethodAnnotationValueValidator implements IValueValidationRule {
 						new String[] {
 							function.getCaseSensitiveName(),
 							IEGLConstants.PROPERTY_GETMETHOD,
-							StatementValidator.getShortTypeString(fieldType[0])
+							BindingUtil.getShortTypeString(fieldType[0])
 						});
 			}
 		}

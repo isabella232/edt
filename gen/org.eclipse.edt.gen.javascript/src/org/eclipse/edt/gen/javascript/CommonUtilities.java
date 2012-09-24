@@ -52,8 +52,8 @@ import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.egl.UnaryExpression;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class CommonUtilities {
 
@@ -100,7 +100,7 @@ public class CommonUtilities {
 	@SuppressWarnings("static-access")
 	public static String getNativeRuntimeOperationName(UnaryExpression expr) throws GenerationException {
 		// safety check to make sure the operation has been defined properly
-		if (expr.getOperation() == null || expr.getOperation().getName() == null)
+		if (expr.getOperation() == null || expr.getOperation().getCaseSensitiveName() == null)
 			throw new GenerationException();
 		// process the operator
 		String op = expr.getOperator();
@@ -116,7 +116,7 @@ public class CommonUtilities {
 	@SuppressWarnings("static-access")
 	public static String getNativeRuntimeOperationName(BinaryExpression expr) throws GenerationException {
 		// safety check to make sure the operation has been defined properly
-		if (expr.getOperation() == null || expr.getOperation().getName() == null)
+		if (expr.getOperation() == null || expr.getOperation().getCaseSensitiveName() == null)
 			throw new GenerationException();
 		// process the operator
 		String op = expr.getOperator();
@@ -276,7 +276,7 @@ public class CommonUtilities {
 	}
 
 	public static String createNamespaceFromPackage(Part part) {
-		String ePackage = part.getPackageName();
+		String ePackage = part.getCaseSensitivePackageName();
 		if (ePackage == null || ePackage.length() == 0) {
 			return "http://default";
 		} else {
@@ -366,7 +366,7 @@ public class CommonUtilities {
 	}
 	
 	public static boolean isWidget(ExternalType et) {
-		if (et.getName().equalsIgnoreCase("Widget") && et.getPackageName().equalsIgnoreCase("eglx.ui.rui")) {
+		if (et.getCaseSensitiveName().equalsIgnoreCase("Widget") && et.getCaseSensitivePackageName().equalsIgnoreCase("eglx.ui.rui")) {
 			return true;
 		}
 		
@@ -405,17 +405,17 @@ public class CommonUtilities {
 	{
 		// Do not Alias the name of this library for the properties file - it is referenced as a string at runtime
 		String result = null;
-		Annotation annotation = ruiPropertiesLibrary.getAnnotation(InternUtil.intern(Constants.RUI_PROPERTIES_LIBRARY));
+		Annotation annotation = ruiPropertiesLibrary.getAnnotation(NameUtile.getAsName(Constants.RUI_PROPERTIES_LIBRARY));
 		
 		if(annotation != null){
-			String value = (String)annotation.getValue(InternUtil.intern("propertiesFile"));
+			String value = (String)annotation.getValue(NameUtile.getAsName("propertiesFile"));
 			if(value != null && value.length() > 0){
 				result = value;
 			}
 		}
 		
 		if(result == null){
-			result = ruiPropertiesLibrary.getId();
+			result = ruiPropertiesLibrary.getCaseSensitiveName();
 		}
 		return result;
 	}
@@ -435,7 +435,7 @@ public class CommonUtilities {
 	public static String getPropertyFunction(Object property) {
 		String result = null;
 		if (property != null) {
-			result = property instanceof MemberName ? ((MemberName) property).getNamedElement().getName() : (String) property;
+			result = property instanceof MemberName ? ((MemberName) property).getNamedElement().getCaseSensitiveName() : (String) property;
 		}
 		return result;
 	}
@@ -473,7 +473,7 @@ public class CommonUtilities {
 					&& ( otherPropFn == null || ( otherPropFn instanceof String && ((String)otherPropFn).length() == 0 ) );
 			if ( bothUnspecified )
 			{
-				String fieldName = field.getName();
+				String fieldName = field.getCaseSensitiveName();
 				result = (setter ? Constants.SetterPrefix : Constants.GetterPrefix)
 								+ fieldName.substring( 0, 1 ).toUpperCase();
 				if ( fieldName.length() > 1 )
@@ -493,12 +493,12 @@ public class CommonUtilities {
 					if ( setter )
 					{
 						MemberName argName = context.getFactory().createMemberName();
-						argName.setId( field.getName() );
+						argName.setId( field.getCaseSensitiveName() );
 						argName.setMember( (Member)field );
 						qfi.getArguments().add( argName );
 					}	
 					
-					result = qfi.getTarget().getName();
+					result = qfi.getTarget().getCaseSensitiveName();
 				}
 			}
 			else
@@ -524,7 +524,7 @@ public class CommonUtilities {
 				return false;
 			}
 		}
-		return ((currentFunction != null) && currentFunction.getName().equals(functionName) );
+		return ((currentFunction != null) && currentFunction.getCaseSensitiveName().equals(functionName) );
 	}
 	
 		
@@ -535,7 +535,7 @@ public class CommonUtilities {
 		if ( isSetter )
 		{
 			MemberName argName = context.getFactory().createMemberName();
-			argName.setId( field.getName() );
+			argName.setId( field.getCaseSensitiveName() );
 			argName.setMember( (Member)field );
 			qfi.getArguments().add( argName );
 		}	
@@ -566,7 +566,7 @@ public class CommonUtilities {
 	
 	
 	public static String getOpName(Context ctx, Operation op) {
-		String result = op.getName();
+		String result = op.getCaseSensitiveName();
 		
 		//TODO shouldn't have to special case asNumber 
 		if (result.startsWith("as") && (!"asNumber".equalsIgnoreCase(result))) {
@@ -603,7 +603,7 @@ public class CommonUtilities {
 
 		EGLClass part = (EGLClass) fn.getContainer();
 		if (!(part instanceof ExternalType) && (!part.isNativeType())) {
-			String fnName = fn.getName();
+			String fnName = fn.getCaseSensitiveName();
 			/* Relies on reference equality among the list of fns in a part;
 			 * start by finding the 1st part fn that has a matching name;
 			 * then, look to see if it there are any other functions that
@@ -612,10 +612,10 @@ public class CommonUtilities {
 			 * and we can return its mangled name.
 			 */
 			for (Function f1 : part.getFunctions()) {
-				String f1Name = f1.getName();
+				String f1Name = f1.getCaseSensitiveName();
 				if (fnName.equals(f1Name)) {
 					for (Function f2 : part.getFunctions()) {
-						if ((f1 != f2) && (f1Name.equals(f2.getName()))){
+						if ((f1 != f2) && (f1Name.equals(f2.getCaseSensitiveName()))){
 							result = getOverloadedFunctionAlias(ctx, fn);
 							break;
 						}
@@ -638,12 +638,12 @@ public class CommonUtilities {
 	//		else {
 	//			EGLClass part = (EGLClass) fn.getContainer();
 	//			for (Function f1 : part.getFunctions()) {
-	//				String f1Name = f1.getName();
+	//				String f1Name = f1.getCaseSensitiveName();
 	//				String alias = null;
 	//				for (Function f2 : part.getFunctions()) {
-	//					if ((f1 != f2) && (f1Name.equals(f2.getName()))){
+	//					if ((f1 != f2) && (f1Name.equals(f2.getCaseSensitiveName()))){
 	//						alias = getOverloadedFunctionAlias(ctx, f1);
-	//						if ((f1Name.equals(fn.getName()) 
+	//						if ((f1Name.equals(fn.getCaseSensitiveName()) 
 	//							&& fn.getParameters().containsAll(f1.getParameters()))) {
 	//							result = alias;
 	//						}
@@ -665,7 +665,7 @@ public class CommonUtilities {
 	 */
 	private static String getOverloadedFunctionAlias(Context ctx, Function fn) {
 		String delim = "_";
-		StringBuffer result = new StringBuffer(fn.getName());
+		StringBuffer result = new StringBuffer(fn.getCaseSensitiveName());
 		
 		List<FunctionParameter> args = fn.getParameters();
 		result.append(delim);
@@ -766,7 +766,7 @@ public class CommonUtilities {
 	 * @return boolean
 	 */
 	public static boolean isNativeType(Part part){
-		return !(part instanceof Annotation) && !part.getPackageName().startsWith("eglx.lang");
+		return !(part instanceof Annotation) && !part.getCaseSensitivePackageName().startsWith("eglx.lang");
 	}
 	
 	/**

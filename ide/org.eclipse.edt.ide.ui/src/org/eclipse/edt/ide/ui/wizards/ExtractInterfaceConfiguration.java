@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.core.ast.Parameter;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.Type;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -305,19 +306,7 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
      * @param simpleTypeString
      */
     static public void getSimpleTypeString(org.eclipse.edt.mof.egl.Type elemTypeBinding, StringBuffer simpleTypeString){
-    	if(elemTypeBinding instanceof ArrayType){
-    		ArrayType arrayTypeBinding = (ArrayType)elemTypeBinding;
-    		getSimpleTypeString(arrayTypeBinding.getElementType(), simpleTypeString);
-    		if (arrayTypeBinding.elementsNullable()) {
-    			simpleTypeString.append('?');
-    		}
-    		simpleTypeString.append("[]"); //$NON-NLS-1$
-    	}
-    	else {
-    		String sig = elemTypeBinding.getTypeSignature();
-    		int lastDot = sig.lastIndexOf('.');
-    		simpleTypeString.append(lastDot == -1 ? sig : sig.substring(lastDot + 1));
-    	}
+    	simpleTypeString.append(BindingUtil.getShortTypeString(elemTypeBinding, true));
     }
 
     /**
@@ -334,10 +323,9 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 	    {
 	    	//get the element type till it's no longer an array type binding 
 	    	while (typeBinding instanceof ArrayType) {
-				ArrayType arrayTypeBinding = (ArrayType) typeBinding;
-				typeBinding = arrayTypeBinding.getElementType();
+				typeBinding = ((ArrayType)typeBinding).getElementType();
 			}
-	    	String sig = typeBinding.getTypeSignature();
+	    	String sig = BindingUtil.getTypeString(typeBinding, false);
 	    	int lastDot = sig.lastIndexOf('.');
 	    	if(lastDot != -1) {
 	    		qualifier = sig.substring(0, lastDot);
@@ -345,8 +333,9 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 	    }
 	    	    
 	    //if the parameter's qualifier is the same as the file qualifier, no need to qualify
-	    if(currFilePkg.equalsIgnoreCase(qualifier))
+	    if(currFilePkg.equalsIgnoreCase(qualifier)) {
 	        return ""; //$NON-NLS-1$
+	    }
 	    return qualifier;
 	}
 	

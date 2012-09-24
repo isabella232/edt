@@ -42,11 +42,6 @@ public class FunctionDataDeclarationValidator extends DefaultASTVisitor {
 			EGLNameValidator.validate((Name) iter.next(), EGLNameValidator.PART, problemRequestor, compilerOptions);
 		}
 		
-		//TODO StatementValidator has many errors
-//		if (functionDataDeclaration.isConstant()){
-//			StatementValidator.validatePrimitiveConstant(functionDataDeclaration.getType(),problemRequestor);
-//		}
-		
 		TypeValidator.validateTypeDeclaration(functionDataDeclaration.getType(), enclosingPart, problemRequestor);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(functionDataDeclaration);
 		functionDataDeclaration.accept(new FieldValidator(problemRequestor, compilerOptions, enclosingPart));

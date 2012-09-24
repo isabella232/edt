@@ -1,0 +1,290 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+ 
+handler currencyChecks type ruihandler
+	i1 int{@currency}; //0
+	i2 int{@currency{yes}}; //0
+	i3 int{@currency{no}}; //0
+	i4 int{@currencySymbol}; //1 Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+	i5 int{@currencySymbol{""}}; //1 Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+	i6 int{@currencySymbol{"$"}}; //0
+	i7 int{@currencySymbol{"USD"}}; //0
+	i8 int{@currencySymbol{"USD$"}}; //1 The length of value USD$ for property currencySymbol exceeds the maximum length of 3.
+	
+	s1 string{@currency}; //1 Property currency must be defined with a numeric type. The type of this item is string.
+	s2 string{@currency{yes}}; //1 Property currency must be defined with a numeric type. The type of this item is string.
+	s3 string{@currency{no}}; //0
+	s4 string{@currencySymbol}; //2 Property currencySymbol must be defined with a numeric type. The type of this item is string.|Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+	s5 string{@currencySymbol{""}}; //2 Property currencySymbol must be defined with a numeric type. The type of this item is string.|Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+	s6 string{@currencySymbol{"$"}}; //1 Property currencySymbol must be defined with a numeric type. The type of this item is string.
+	s7 string{@currencySymbol{"USD"}}; //1 Property currencySymbol must be defined with a numeric type. The type of this item is string.
+	s8 string{@currencySymbol{"USD$"}}; //2 Property currencySymbol must be defined with a numeric type. The type of this item is string.|The length of value USD$ for property currencySymbol exceeds the maximum length of 3.
+end
+
+handler dateFormatChecks type ruihandler
+	// valid types
+	i1 int{@dateFormat}; //0
+	i2 int{@dateFormat{value = "AAAA"}}; //0
+	i3 int{@dateFormat{value = "MM-dd-yyyy"}}; //0
+	i4 int{@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	s1 string{@dateFormat}; //0
+	s2 string{@dateFormat{value = "AAAA"}}; //0
+	s3 string{@dateFormat{value = "MM-dd-yyyy"}}; //0
+	s4 string{@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	ls1 string(10){@dateFormat}; //0
+	ls2 string(10){@dateFormat{value = "AAAA"}}; //0
+	ls3 string(10){@dateFormat{value = "MM-dd-yyyy"}}; //0
+	ls4 string(10){@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	d1 date{@dateFormat}; //0
+	d2 date{@dateFormat{value = "AAAA"}}; //0
+	d3 date{@dateFormat{value = "MM-dd-yyyy"}}; //0
+	d4 date{@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	dc1 decimal(4){@dateFormat}; //0
+	dc2 decimal(4){@dateFormat{value = "AAAA"}}; //0
+	dc3 decimal(4){@dateFormat{value = "MM-dd-yyyy"}}; //0
+	dc4 decimal(4){@dateFormat{value = "Y"}}; //1  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.
+	
+	// invalid types
+	t1 time{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type time.
+	t2 time{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type time.
+	t3 time{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type time.
+	t4 time{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type time.
+	ts1 timestamp?{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	ts2 timestamp?{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	ts3 timestamp?{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	ts4 timestamp?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	tsp1 timestamp("yy"){@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	tsp2 timestamp("yy"){@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	tsp3 timestamp("yy"){@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	tsp4 timestamp("yy"){@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type timestamp.
+	b1 boolean{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type boolean.
+	b2 boolean{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type boolean.
+	b3 boolean{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type boolean.
+	b4 boolean{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type boolean.
+	dcd1 decimal(4,2){@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for types with decimals.
+	dcd2 decimal(4,2){@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for types with decimals.
+	dcd3 decimal(4,2){@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for types with decimals.
+	dcd4 decimal(4,2){@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for types with decimals.
+	a1 any?{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type any.
+	a2 any?{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type any.
+	a3 any?{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type any.
+	a4 any?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type any.
+	by1 bytes?{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	by2 bytes?{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	by3 bytes?{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	by4 bytes?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	byl1 bytes(1)?{@dateFormat}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	byl2 bytes(1)?{@dateFormat{value = "AAAA"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	byl3 bytes(1)?{@dateFormat{value = "MM-dd-yyyy"}}; //1 Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+	byl4 bytes(1)?{@dateFormat{value = "Y"}}; //2  Property: dateFormat.  The character 'Y' is not a valid character in the dateFormat property value.|Property: dateFormat.  The dateFormat property is not valid for the type bytes.
+end
+
+handler timeFormatChecks type ruihandler
+	// valid types
+	i1 int{@timeFormat}; //0
+	i2 int{@timeFormat{value = "AAAA"}}; //0
+	i3 int{@timeFormat{value = "HH:mm:ss"}}; //0
+	s1 string{@timeFormat}; //0
+	s2 string{@timeFormat{value = "AAAA"}}; //0
+	s3 string{@timeFormat{value = "HH:mm:ss"}}; //0
+	ls1 string(10){@timeFormat}; //0
+	ls2 string(10){@timeFormat{value = "AAAA"}}; //0
+	ls3 string(10){@timeFormat{value = "HH:mm:ss"}}; //0
+	t1 time{@timeFormat}; //0
+	t2 time{@timeFormat{value = "AAAA"}}; //0
+	t3 time{@timeFormat{value = "HH:mm:ss"}}; //0
+	dc1 decimal(4){@timeFormat}; //0
+	dc2 decimal(4){@timeFormat{value = "AAAA"}}; //0
+	dc3 decimal(4){@timeFormat{value = "HH:mm:ss"}}; //0
+	
+	// invalid types
+	d1 date{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type date.
+	d2 date{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type date.
+	d3 date{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type date.
+	ts1 timestamp?{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	ts2 timestamp?{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	ts3 timestamp?{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	tsp1 timestamp("yy"){@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	tsp2 timestamp("yy"){@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	tsp3 timestamp("yy"){@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type timestamp.
+	b1 boolean{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type boolean.
+	b2 boolean{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type boolean.
+	b3 boolean{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type boolean.
+	dcd1 decimal(4,2){@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for types with decimals.
+	dcd2 decimal(4,2){@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for types with decimals.
+	dcd3 decimal(4,2){@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for types with decimals.
+	a1 any?{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type any.
+	a2 any?{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type any.
+	a3 any?{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type any.
+	by1 bytes?{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	by2 bytes?{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	by3 bytes?{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	byl1 bytes(1)?{@timeFormat}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	byl2 bytes(1)?{@timeFormat{value = "AAAA"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+	byl3 bytes(1)?{@timeFormat{value = "HH:mm:ss"}}; //1 Property: timeFormat.  The timeFormat property is not valid for the type bytes.
+end
+
+handler fillcharChecks type RUIHandler
+	i1 int{@fillCharacter}; //0
+	i2 int{@fillCharacter{"x"}}; //0
+	i3 int{@fillCharacter{"xyz"}}; //1 Property: fillCharacter.  The value for this property is invalid. The value must be a single character string literal.
+	i4 int{@fillCharacter{1}}; //1 The value specified for the annotation field or literal array entry value must be a quoted string or a string constant.
+end
+
+handler minInputChecks type RUIHandler
+	i1 int{@MinimumInput}; //0
+	i2 int{@MinimumInput{"abc"}}; //1 The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.
+	i3 int{@MinimumInput{123}}; //0
+	i4 int{@MinimumInput{-52}}; //1 The value of property minimumInput must be greater than 0, but -52 was found.
+	i5 int{@MinimumInput{0}}; //0
+	i6 int{@MinimumInput{10.5}}; //1 The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.
+end
+
+handler valFuncChecks type RUIHandler
+	i1 int{@ValidatorFunction{valid1}}; //0
+	i2 int{@ValidatorFunction{value = valid2}}; //0
+	i3 int{@ValidatorFunction{invalid}}; //1 Invalid value invalid for validatorFunction. Validator functions must have no parameters.
+	function valid1() end
+	function valid2() returns(string) end
+	function invalid(i int) end
+end
+
+handler valPropLibChecks type RUIHandler
+	i1 int{@ValidationPropertiesLibrary{valPropLib}}; //0
+	i2 int{@ValidationPropertiesLibrary{basicLib}}; //1 Invalid value basicLib for validationPropertiesLibrary. The value must be a RUIPropertiesLibrary.
+	i3 int{@ValidationPropertiesLibrary{notALibrary}}; //1 Invalid value notALibrary for validationPropertiesLibrary. The value must be a RUIPropertiesLibrary.
+end
+
+library valPropLib type ruipropertieslibrary end
+library basicLib end
+handler notALibrary end
+
+
+handler signChecks type RUIHandler
+	i1 int{@sign{SignKind.leading}}; //0
+	i2 int{@sign{SignKind.none}}; //0
+	i3 int{@sign{SignKind.trailing}}; //0
+	i4 int{@sign{SignKind.parens}}; //0
+	si1 smallint{@sign{SignKind.leading}}; //0
+	si2 smallint{@sign{SignKind.none}}; //0
+	si3 smallint{@sign{SignKind.trailing}}; //0
+	si4 smallint{@sign{SignKind.parens}}; //0
+	bi1 bigint{@sign{SignKind.leading}}; //0
+	bi2 bigint{@sign{SignKind.none}}; //0
+	bi3 bigint{@sign{SignKind.trailing}}; //0
+	bi4 bigint{@sign{SignKind.parens}}; //0
+	de1 decimal(4){@sign{SignKind.leading}}; //0
+	de2 decimal(4){@sign{SignKind.none}}; //0
+	de3 decimal(4){@sign{SignKind.trailing}}; //0
+	de4 decimal(4){@sign{SignKind.parens}}; //0
+	
+	f1 float{@sign{SignKind.leading}}; //0
+	f2 float{@sign{SignKind.none}}; //0
+	f3 float{@sign{SignKind.trailing}}; //1 The value trailing for property sign is incompatible with the type float.
+	f4 float{@sign{SignKind.parens}}; //0
+	sf1 smallfloat{@sign{SignKind.leading}}; //0
+	sf2 smallfloat{@sign{SignKind.none}}; //0
+	sf3 smallfloat{@sign{SignKind.trailing}}; //1 The value trailing for property sign is incompatible with the type smallfloat.
+	sf4 smallfloat{@sign{SignKind.parens}}; //0
+	s1 string{@sign{SignKind.leading}}; //1 Property sign must be defined with a numeric type. The type of this item is string.
+	b1 boolean{@sign{SignKind.leading}}; //1 Property sign must be defined with a numeric type. The type of this item is boolean.
+	d1 date{@sign{SignKind.leading}}; //1 Property sign must be defined with a numeric type. The type of this item is date.
+	t1 time{@sign{SignKind.leading}}; //1 Property sign must be defined with a numeric type. The type of this item is time.
+	ts1 timestamp?{@sign{SignKind.leading}}; //1 Property sign must be defined with a numeric type. The type of this item is timestamp.
+	by1 bytes?{@sign{SignKind.leading}}; //1 Property sign must be defined with a numeric type. The type of this item is bytes.
+	a1 any?{@sign{SignKind.leading}}; //1 Property sign must be defined with a numeric type. The type of this item is any.
+	r1 signrec{@sign{SignKind.leading}}; //1 Property sign must be defined with a numeric type. The type of this item is signRec.
+end
+record signRec end
+
+handler isboolChecks type RUIHandler
+	i int{@isboolean{yes}}; //0
+	si smallint{@isboolean{yes}}; //0
+	bi bigint{@isboolean{yes}}; //0
+	f float{@isboolean{yes}}; //0
+	de1 decimal{@isboolean{yes}}; //0
+	de2 decimal(10,2){@isboolean{yes}}; //0
+	de3 decimal(10,10){@isboolean{yes}}; //1 The property isBoolean is invalid for type decimal(10,10), which has no non-decimal digits.
+	sf smallfloat{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type smallfloat.
+	s string{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type string.
+	ls string(10){@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type string(10).
+	t time{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type time.
+	ts1 timestamp?{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type timestamp.
+	ts2 timestamp("yyyy"){@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type timestamp("yyyy").
+	d date{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type date.
+	b boolean{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type boolean.
+	byt bytes{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type bytes.
+	n number{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type number.
+	rec boolrec{@isboolean{yes}}; //1 Property: isBoolean.  The isBoolean property is not valid for the type boolrec.
+end
+record boolrec end
+
+handler mvcViewChecks type RUIHandler{
+	@MVCView{publishHelper = pub0}, //0
+	@MVCView{publishHelper = pub1}, //1 The function pub1 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub2}, //1 The function pub2 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub3}, //1 The function pub3 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub4}, //1 The function pub4 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub5}, //1 The function pub5 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub6}, //1 The function pub6 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub7}, //1 The function pub7 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub8}, //1 The function pub8 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishHelper = pub9}, //1 The function pub9 specified for the publishHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	
+	@MVCView{publishMessageHelper = pub0}, //0
+	@MVCView{publishMessageHelper = pub1}, //1 The function pub1 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub2}, //1 The function pub2 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub3}, //1 The function pub3 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub4}, //1 The function pub4 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub5}, //1 The function pub5 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub6}, //1 The function pub6 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub7}, //1 The function pub7 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub8}, //1 The function pub8 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	@MVCView{publishMessageHelper = pub9}, //1 The function pub9 specified for the publishMessageHelper property is invalid. It must be defined with a single IN parameter of type String, with no return type.
+	
+	@MVCView{retrieveValidStateHelper = retState0}, //0
+	@MVCView{retrieveValidStateHelper = retState1}, //1 The function retState1 specified for the retrieveValidStateHelper property is invalid. It must be defined with no parameters and a return type of String?.
+	@MVCView{retrieveValidStateHelper = retState2}, //1 The function retState2 specified for the retrieveValidStateHelper property is invalid. It must be defined with no parameters and a return type of String?.
+	@MVCView{retrieveValidStateHelper = retState3}, //1 The function retState3 specified for the retrieveValidStateHelper property is invalid. It must be defined with no parameters and a return type of String?.
+	@MVCView{retrieveValidStateHelper = retState4}, //1 The function retState4 specified for the retrieveValidStateHelper property is invalid. It must be defined with no parameters and a return type of String?.
+	
+	@MVCView{retrieveViewHelper = retView0}, //0
+	@MVCView{retrieveViewHelper = retView1}, //1 The function retView1 specified for the retrieveViewHelper property is invalid. It must be defined with no parameters and a return type of String.
+	@MVCView{retrieveViewHelper = retView2}, //1 The function retView2 specified for the retrieveViewHelper property is invalid. It must be defined with no parameters and a return type of String.
+	@MVCView{retrieveViewHelper = retView3}, //1 The function retView3 specified for the retrieveViewHelper property is invalid. It must be defined with no parameters and a return type of String.
+	@MVCView{retrieveViewHelper = retView4}, //1 The function retView4 specified for the retrieveViewHelper property is invalid. It must be defined with no parameters and a return type of String.
+	
+	@lastSetting
+}
+	function pub0(s string in) end
+	function pub1(s string(10) in) end
+	function pub2(s string inout) end
+	function pub3(s string out) end
+	function pub4(s string in) returns(string) end
+	function pub5(s string in, x int) end
+	function pub6(s int in) end
+	function pub7() end
+	function pub8() returns(string) end
+	function pub9(s string? in) end
+	
+	function retState0() returns(string?) end
+	function retState1() returns(string) end
+	function retState2(s string in) returns(string?) end
+	function retState3() end
+	function retState4() returns(string(10)?)end
+	
+	function retView0() returns(string) end
+	function retView1() returns(string?) end
+	function retView2(s string in) returns(string) end
+	function retView3() end
+	function retView4() returns(string(10))end
+end

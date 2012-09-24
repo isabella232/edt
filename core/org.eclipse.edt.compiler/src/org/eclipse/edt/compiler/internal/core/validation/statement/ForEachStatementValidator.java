@@ -48,8 +48,8 @@ public class ForEachStatementValidator extends DefaultASTVisitor {
 				Type elementType = ((ArrayType)sourceType).getElementType();
 				if (targetType != null && !(IRUtils.isMoveCompatible(targetType, elementType, source.resolveMember()))) {
 					problemRequestor.acceptProblem(source, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH, new String[]{
-							StatementValidator.getShortTypeString(targetType),
-							StatementValidator.getShortTypeString(elementType),
+							BindingUtil.getShortTypeString(targetType),
+							BindingUtil.getShortTypeString(elementType),
 							forEachStatement.toString()
 					});
 				}

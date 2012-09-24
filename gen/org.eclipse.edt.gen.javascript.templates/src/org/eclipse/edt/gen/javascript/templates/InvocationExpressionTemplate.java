@@ -57,7 +57,7 @@ public class InvocationExpressionTemplate extends JavaScriptTemplate {
 				break;
 		}
 		name.append("$");
-		name.append(parm.getName());
+		name.append(parm.getCaseSensitiveName());
 		return name.toString();
 	}
 }

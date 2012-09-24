@@ -279,7 +279,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 
 		// this isn't used but it's a required parameter.
 		args[idx++] = "-p"; //$NON-NLS-1$
-		args[idx++] = part.getName();
+		args[idx++] = part.getCaseSensitiveName();
 
 		// this isn't used but it's a required parameter.
 		args[idx++] = "-r"; //$NON-NLS-1$

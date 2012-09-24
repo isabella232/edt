@@ -30,10 +30,8 @@ import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -142,8 +140,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		FunctionParameter parameterBinding = parameterIter.next();
 		Type parameterType = parameterBinding.getType();
 		Type argType = argExpr.resolveType();
+		Member argmember = argExpr.resolveMember();
 		
-		if(argType == null) {
+		if(argType == null && argmember == null) {
 			return false;
 		}
 		
@@ -274,7 +273,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		}
 		
 		if (expressionIsLiteralOrName[0] && parmBinding.getParameterKind() != ParameterKind.PARM_IN) {
-			if(!checkArgNotConstantOrLiteral(argExpr, IProblemRequestor.FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER)) {
+			if(!checkArgNotConstantOrLiteral(argExpr, parmBinding)) {
 				return false;
 			}
 		}
@@ -282,16 +281,34 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	return true;
     }
     
-    private boolean checkArgNotConstantOrLiteral(Expression argExpr, final int problemKind) {
-    	Member argDBinding = argExpr.resolveMember();
-		if (argDBinding instanceof ConstantField) {
-			problemRequestor.acceptProblem(
-				argExpr,
-				problemKind,
-				new String[] {
-					argExpr.getCanonicalString(),
-					functionBinding.getCaseSensitiveName()
-				});
+    private boolean checkArgNotConstantOrLiteral(Expression argExpr, FunctionParameter parmBinding) {
+    	final int problemKind = parmBinding.getParameterKind() == ParameterKind.PARM_INOUT
+    			? IProblemRequestor.FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_PARAMETER
+    			: IProblemRequestor.FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER;
+    	
+    	Name constName = LValueValidator.findConstName(argExpr);
+		Member constMember = constName == null ? null : constName.resolveMember();
+		if (constMember != null) {
+			boolean canPassConst = false;
+			if (parmBinding.getParameterKind() == ParameterKind.PARM_INOUT && parmBinding.isConst()) {
+				canPassConst = true;
+			}
+			else {
+				// Value types means every part of the field (including accesses) are constant. For reference types it's just the field declaration that's constant.
+				if (constName != argExpr && !(constMember.getType() != null && TypeUtils.isValueType(constMember.getType()))) {
+					canPassConst = true;
+				}
+			}
+			
+			if (!canPassConst) {
+				problemRequestor.acceptProblem(
+					argExpr,
+					problemKind,
+					new String[] {
+						argExpr.getCanonicalString(),
+						functionBinding.getCaseSensitiveName()
+					});
+			}
 			return false;
 		}
 		final boolean[] foundError = new boolean[] {false};
@@ -328,7 +345,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	parmType = BindingUtil.resolveGenericType(parmType, qualifier);
     	argType = BindingUtil.resolveGenericType(argType, argExpr);
     	
-    	if (!IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember()) && !TypeUtils.isDynamicType(argType)) {
+    	if (!IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember()) && !TypeUtils.isDynamicType(argType)) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
@@ -336,8 +353,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     				argExpr.getCanonicalString(),
 					funcParmBinding.getCaseSensitiveName(),
 					canonicalFunctionName,
-					StatementValidator.getShortTypeString(argType),
-					StatementValidator.getShortTypeString(parmType)
+					// arg can be a function, which has no type
+					argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
+					BindingUtil.getShortTypeString(parmType)
     			});
     		return false;
     	}
@@ -385,8 +403,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	    				argExpr.getCanonicalString(),
 						funcParmBinding.getCaseSensitiveName(),
 						canonicalFunctionName,
-						StatementValidator.getShortTypeString(argType, true),
-						StatementValidator.getShortTypeString(parmType, true)
+						// arg can be a function, which has no type
+						argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
+						BindingUtil.getShortTypeString(parmType, true)
 	    			});
     		return false;
    		}
@@ -405,7 +424,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	parmType = (ArrayType)BindingUtil.resolveGenericType(parmType, qualifier);
     	argType = BindingUtil.resolveGenericType(argType, argExpr);
     	
-    	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, argType, argExpr.resolveMember())) {
+    	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
     		problemRequestor.acceptProblem(
     			argExpr,
     			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
@@ -413,8 +432,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     				argExpr.getCanonicalString(),
 					funcParmBinding.getCaseSensitiveName(),
 					canonicalFunctionName,
-					StatementValidator.getShortTypeString(argType),
-					StatementValidator.getShortTypeString(parmType)
+					// arg can be a function, which has no type
+					argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
+					BindingUtil.getShortTypeString(argType),
+					BindingUtil.getShortTypeString(parmType)
     			});
     		return false;
     	}
@@ -445,9 +466,15 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		}
     	}
     	
-    	boolean argCompatible = TypeUtils.areCompatible(argType.getClassifier(), parmType.getClassifier());
+    	boolean argCompatible = true;
+    	if (argType != null) {
+    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argType.getClassifier());
+    	}
+    	else if (argDBinding != null) {
+    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argDBinding);
+    	}
     	if (argCompatible) {
-    		argCompatible = argExpr.resolveMember() != null && argExpr.resolveMember().isNullable() == funcParmBinding.isNullable();
+    		argCompatible = argDBinding != null && argDBinding.isNullable() == funcParmBinding.isNullable();
     	}
     	
     	if (!argCompatible) {
@@ -458,8 +485,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     				argExpr.getCanonicalString(),
 					funcParmBinding.getCaseSensitiveName(),
 					canonicalFunctionName,
-					StatementValidator.getShortTypeString(argType, true),
-					StatementValidator.getShortTypeString(parmType, true)
+					// arg can be a function, which has no type
+					argType == null ? BindingUtil.getTypeName(argDBinding) : BindingUtil.getShortTypeString(argType, true),
+					BindingUtil.getShortTypeString(parmType, true)
     			});
     		return false;
    		}

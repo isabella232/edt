@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
@@ -72,7 +72,7 @@ public abstract class AbstractStructParameterAnnotationValidator implements IAnn
 	
 	protected void validateType(Annotation annotation, Node errorNode, Node target, Type type) {
 		if (!isValidType(type)) {
-			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_TYPE_MISMATCH, IMarker.SEVERITY_ERROR, new String[] {getName(), StatementValidator.getShortTypeString(type, true)}, IBMiResourceKeys.getResourceBundleForKeys());
+			problemRequestor.acceptProblem(errorNode, IBMiResourceKeys.AS400_ANNOTATION_TYPE_MISMATCH, IMarker.SEVERITY_ERROR, new String[] {getName(), BindingUtil.getShortTypeString(type, true)}, IBMiResourceKeys.getResourceBundleForKeys());
 		}
 	}
 	

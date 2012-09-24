@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<StereotypeType ID="1" eClass="org.eclipse.edt.mof.egl.StereotypeType" isAbstract="false" isInterface="false" validationProxy="org.eclipse.edt.mof.eglx.rui.validation.annotation.proxy.RUIPropertiesLibraryAnnotationProxy" name="RUIPropertiesLibrary" fileName="eglx/ui/rui/Stereotypes.egl" hasCompileErrors="false" packageName="eglx.ui.rui" referenceType="false" defaultSuperType="egl:eglx.ui.rui.nlslibrary" >
+	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="propertiesFile" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
+		<declarer IDREF="1"/>
+	</eFields>
+	<targets>LibraryPart</targets>
+	<annotations ID="3" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:261" off="i:1034" line="i:35" />
+</StereotypeType>

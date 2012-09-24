@@ -1107,18 +1107,13 @@ public class IRUtils {
 		return TypeUtils.areCompatible(type.getClassifier(), opType);	
 	}
 
-	public static boolean isMoveCompatible(Member lhsMember, Type rhsType, Member rhsMember) {
+	public static boolean isMoveCompatible(Type lhsType, Member lhsMember, Type rhsType, Member rhsMember) {
 		// If the lhs or rhs can't be resolved, then we assume they're valid. Validation will have a bind error already.
-		if ((rhsMember == null && rhsType == null) || lhsMember == null) {
+		if ((rhsMember == null && rhsType == null) || (lhsMember == null && lhsType == null)) {
 			return true;
 		}
 		
-		Type lhsType = lhsMember.getType();
-		if (lhsType == null) {
-			return true;
-		}
-		
-		if (rhsType != null && TypeUtils.Type_NULLTYPE.equals(rhsType)) {
+		if (rhsType != null && lhsMember != null && TypeUtils.Type_NULLTYPE.equals(rhsType)) {
 			// "null" is compatible with any nullable type.
 			return lhsMember.isNullable();
 		}

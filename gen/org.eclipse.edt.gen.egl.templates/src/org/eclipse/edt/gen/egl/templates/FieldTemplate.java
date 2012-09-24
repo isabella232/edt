@@ -44,7 +44,7 @@ public class FieldTemplate extends EglTemplate{
 					eField.addAnnotation(annotation);
 				}
 			}
-			if(!eField.getName().equals(field.getName())){
+			if(!eField.getCaseSensitiveName().equals(field.getName())){
 				org.eclipse.edt.mof.egl.Annotation annotation = CommonUtilities.getAnnotation(ctx, Constants.ExternalName);
 				if(annotation != null){
 					annotation.setValue(field.getName());

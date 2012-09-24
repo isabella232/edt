@@ -82,10 +82,8 @@ public class TestLoadPart {
 //			xml.serialize(eClass);
 //			System.out.print((String)xml.getContents());
 		} catch (MofObjectNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (DeserializationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -1,0 +1,50 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<ExternalType ID="1" eClass="org.eclipse.edt.mof.egl.ExternalType" name="RuiLib" fileName="eglx/ui/rui/RuiLib.egl" hasCompileErrors="false" packageName="eglx.ui.rui" isAbstract="false" >
+	<annotations ID="2" eClass="egl:eglx.lang.nativetype" />
+	<annotations ID="3" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:693" off="i:610" line="i:17" />
+	<superTypes href="egl:eglx.lang.eany"/>
+	<constructors ID="4" eClass="org.eclipse.edt.mof.egl.Constructor" name="constructor" type="egl:eglx.ui.rui.ruilib" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" >
+		<annotations ID="5" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:22" off="i:648" line="i:19" />
+		<container IDREF="1"/>
+	</constructors>
+	<functions ID="6" eClass="org.eclipse.edt.mof.egl.Function" name="setTextSelectionEnabled" isNullable="false" isStatic="true" isAbstract="false" >
+		<annotations ID="7" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:58" off="i:735" line="i:22" />
+		<container IDREF="1"/>
+		<parameters ID="8" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="value" type="egl:eglx.lang.eboolean" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+			<annotations ID="9" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:16" off="i:775" line="i:22" />
+			<container IDREF="6"/>
+		</parameters>
+	</functions>
+	<functions ID="10" eClass="org.eclipse.edt.mof.egl.Function" name="getTextSelectionEnabled" type="egl:eglx.lang.eboolean" isNullable="false" isStatic="true" isAbstract="false" >
+		<annotations ID="11" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:59" off="i:795" line="i:23" />
+		<container IDREF="1"/>
+	</functions>
+	<functions ID="12" eClass="org.eclipse.edt.mof.egl.Function" name="getUserAgent" type="egl:eglx.lang.estring" isNullable="false" isStatic="true" isAbstract="false" >
+		<annotations ID="13" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:47" off="i:901" line="i:26" />
+		<container IDREF="1"/>
+	</functions>
+	<functions ID="14" eClass="org.eclipse.edt.mof.egl.Function" name="setTitle" isNullable="false" isStatic="true" isAbstract="false" >
+		<annotations ID="15" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:42" off="i:1004" line="i:29" />
+		<container IDREF="1"/>
+		<parameters ID="16" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="value" type="egl:eglx.lang.estring" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+			<annotations ID="17" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:15" off="i:1029" line="i:29" />
+			<container IDREF="14"/>
+		</parameters>
+	</functions>
+	<functions ID="18" eClass="org.eclipse.edt.mof.egl.Function" name="getTitle" type="egl:eglx.lang.estring" isNullable="false" isStatic="true" isAbstract="false" >
+		<annotations ID="19" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:1087" line="i:32" />
+		<container IDREF="1"/>
+	</functions>
+	<functions ID="20" eClass="org.eclipse.edt.mof.egl.Function" name="setTheme" isNullable="false" isStatic="true" isAbstract="false" >
+		<annotations ID="21" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:42" off="i:1172" line="i:35" />
+		<container IDREF="1"/>
+		<parameters ID="22" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="value" type="egl:eglx.lang.estring" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+			<annotations ID="23" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:15" off="i:1197" line="i:35" />
+			<container IDREF="20"/>
+		</parameters>
+	</functions>
+	<functions ID="24" eClass="org.eclipse.edt.mof.egl.Function" name="getTheme" type="egl:eglx.lang.estring" isNullable="false" isStatic="true" isAbstract="false" >
+		<annotations ID="25" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:1256" line="i:38" />
+		<container IDREF="1"/>
+	</functions>
+</ExternalType>

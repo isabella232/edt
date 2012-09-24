@@ -19,4 +19,5 @@ package org.eclipse.edt.mof;
 public interface ENamedElement extends EModelElement {
 	String getName();
 	void setName(String name);
+	String getCaseSensitiveName();
 }

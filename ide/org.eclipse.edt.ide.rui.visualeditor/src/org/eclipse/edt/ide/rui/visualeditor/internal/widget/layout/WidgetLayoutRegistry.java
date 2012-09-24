@@ -37,11 +37,12 @@ public class WidgetLayoutRegistry {
 		Class layout = (Class)_hashWidgetLayouts.get( widgetId );
 		if ( layout == null && isContainer ) {
 			return new DefaultWidgetLayout();
-		} 
-		try {
-			return (WidgetLayout)layout.newInstance();
-		} catch ( Exception e ) {
-			
+		}
+		if (layout != null) {
+			try {
+				return (WidgetLayout)layout.newInstance();
+			} catch ( Exception e ) {
+			}
 		}
 		return null;
 	}

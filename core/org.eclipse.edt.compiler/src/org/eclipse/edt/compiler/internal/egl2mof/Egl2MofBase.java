@@ -46,6 +46,7 @@ import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Constructor;
@@ -56,7 +57,6 @@ import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.GenericType;
-import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
@@ -406,7 +406,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (type instanceof Part) {
 			Part part = (Part) type;
 			PartName partName = factory.createPartName();
-			partName.setId(part.getId());
+			partName.setId(part.getCaseSensitiveName());
 			partName.setPackageName(part.getCaseSensitivePackageName());
 			return partName;
 		}
@@ -759,18 +759,36 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	protected EObject mofTypeFor(Type type) {
 		EObject eType = null;
-		if(type != null){
-			eType = getMofSerializable(type.getMofSerializationKey());
-			if (eType == null) {
-				if (type instanceof Part) {
-					if (inMofContext && isMofClass((Part)type) && type instanceof org.eclipse.edt.mof.egl.ExternalType) {
-						eType = createTempEClass((org.eclipse.edt.mof.egl.ExternalType)type);
-					}
-					else {
-						eType = createProxyPart(((Part)type).getFullyQualifiedName());
+		if (type instanceof ArrayType) {
+			Type elementType = ((ArrayType)type).getElementType();
+			EObject mofType = mofTypeFor(elementType);
+			if (inMofContext && mofType instanceof EType) {
+				EGenericType generic = mof.createEGenericType(true);
+				generic.setEClassifier(mof.getEListEDataType());
+				generic.getETypeArguments().add((EType)mofType);
+				eType = generic;
+			}
+			else {
+				ArrayType generic = factory.createArrayType();
+				generic.setClassifier((Classifier)getMofSerializable(Type_EGLList));
+				generic.getTypeArguments().add((Type)mofType);
+				generic.setElementsNullable(((ArrayType)type).elementsNullable());
+				eType = generic;
+			}
+		}
+		else {
+			if(type != null){
+				eType = getMofSerializable(type.getMofSerializationKey());
+				if (eType == null) {
+					if (type instanceof Part) {
+						if (inMofContext && isMofClass((Part)type) && type instanceof org.eclipse.edt.mof.egl.ExternalType) {
+							eType = createTempEClass((org.eclipse.edt.mof.egl.ExternalType)type);
+						}
+						else {
+							eType = createProxyPart(((Part)type).getFullyQualifiedName());
+						}
 					}
 				}
-			
 			}
 		}
 		

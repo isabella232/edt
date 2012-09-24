@@ -36,9 +36,7 @@ public class UserDefinedValueValidationRule extends	ValueValidationRule {
 	@Override
 	public void validate(Node errorNode, Node target, Annotation annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
-			if(annotationBinding.getValue() != null) {
-				((IValueValidationRule)validatorClass.newInstance()).validate(errorNode, target, annotationBinding, problemRequestor, compilerOptions);
-			}
+			((IValueValidationRule)validatorClass.newInstance()).validate(errorNode, target, annotationBinding, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

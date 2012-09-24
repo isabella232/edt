@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.rui.visualeditor.internal.wizards.newvariable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -40,9 +41,11 @@ public class NewEGLVariableWizardUtil {
 		case Record:
 			partType = IEGLSearchConstants.RECORD;
 			break;
+		//TODO data item not currently supported
 		case DataItem:
-			partType = IEGLSearchConstants.ITEM;
-			break;
+//			partType = IEGLSearchConstants.ITEM;
+//			break;
+			return Collections.EMPTY_LIST;
 		}
 		List<PartDeclarationInfo> partInfos = new ArrayList<PartDeclarationInfo>();
 		try {

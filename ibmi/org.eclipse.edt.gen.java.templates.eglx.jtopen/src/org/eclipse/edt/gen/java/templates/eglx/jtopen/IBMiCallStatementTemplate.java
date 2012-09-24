@@ -68,7 +68,7 @@ public class IBMiCallStatementTemplate extends JavaTemplate implements Constants
 		Function callTarget = (Function)ma.getNamedElement();
 		Function invocTarget = CommonUtilities.createProxyFunction(callTarget);
 		invoc.setTarget(invocTarget);
-		invoc.setId(invocTarget.getId());
+		invoc.setId(invocTarget.getCaseSensitiveName());
 		invoc.getArguments().addAll(callStatement.getArguments());
 		invoc.getArguments().add(callStatement.getUsing() != null ? callStatement.getUsing() : factory.createNullLiteral());
 

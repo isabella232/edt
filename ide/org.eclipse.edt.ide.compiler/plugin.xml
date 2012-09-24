@@ -94,5 +94,11 @@
              name="%ServicesExtensionName"
              version="0.8.2">
        </compilerExtension>
+       <compilerExtension
+             class="org.eclipse.edt.ide.compiler.IDERUIExtension"
+             compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+             id="org.eclipse.edt.ide.compiler.ruiExtension"
+             version="0.8.2">
+       </compilerExtension>
     </extension>
 </plugin>

@@ -319,7 +319,7 @@ public class TypeTemplate extends JavaTemplate {
 		// check to see if a conversion is required
 		if (arg.getConversionOperation() != null) {
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + ".");
-			out.print(arg.getConversionOperation().getName());
+			out.print(arg.getConversionOperation().getCaseSensitiveName());
 			out.print("(");
 			// do a callout to allow certain source types to decide to create a boxing expression
 			ctx.invoke(genAsExpressionBoxing, arg.getObjectExpr().getType(), ctx, out, arg);

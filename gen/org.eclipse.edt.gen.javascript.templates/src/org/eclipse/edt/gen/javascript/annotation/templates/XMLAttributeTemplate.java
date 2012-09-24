@@ -33,7 +33,7 @@ public class XMLAttributeTemplate extends JavaScriptTemplate {
 			out.print(quoted((String) annot.getValue("name")));
 		}
 		else{
-			out.print(quoted(field.getId()));
+			out.print(quoted(field.getCaseSensitiveName()));
 		}
 		out.print(", ");
 		if(annot.getValue("namespace") instanceof String && !"##default".equals(annot.getValue("namespace"))){

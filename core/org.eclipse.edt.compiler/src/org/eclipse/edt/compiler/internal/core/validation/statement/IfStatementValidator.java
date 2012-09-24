@@ -15,6 +15,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IfStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -37,7 +38,7 @@ public class IfStatementValidator extends DefaultASTVisitor {
 				ifStatement.getCondition(),
 				IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 				new String[] {
-					StatementValidator.getShortTypeString(type),
+					BindingUtil.getShortTypeString(type),
 					IEGLConstants.KEYWORD_BOOLEAN,
 					ifStatement.getCondition().getCanonicalString()
 				});

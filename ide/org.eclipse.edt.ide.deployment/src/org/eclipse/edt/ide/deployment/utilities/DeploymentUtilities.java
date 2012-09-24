@@ -31,10 +31,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -46,7 +44,6 @@ import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.internal.search.AllPartsCache;
 import org.eclipse.edt.ide.core.internal.search.PartInfo;
-import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
@@ -57,16 +54,13 @@ import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.Activator;
-import org.eclipse.edt.ide.deployment.core.DeploymentDescFileLocator;
 import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentProject;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentTarget;
-import org.eclipse.edt.ide.deployment.internal.nls.Messages;
-import org.eclipse.edt.ide.deployment.results.DeploymentResultsCollectorManager;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -78,7 +72,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class DeploymentUtilities {
 		
-	private static final String RUIHANDLER = InternUtil.intern( "RUIHandler" ); //$NON-NLS-1$
+	private static final String RUIHANDLER = NameUtile.getAsName( "RUIHandler" ); //$NON-NLS-1$
 	public static String createExceptionMessage( Throwable t )
 	{
 		while( t.getCause() != null && !t.getCause().equals(t) )
@@ -405,7 +399,7 @@ public class DeploymentUtilities {
 			IPart part = partinfo.resolvePart( projSearchScope );
 			if(part instanceof SourcePart){
 			SourcePart sourcePart = (SourcePart)partinfo.resolvePart( projSearchScope );
-			if ( sourcePart.isHandler() && sourcePart.getSubTypeSignature() != null && RUIHANDLER == InternUtil.intern( Signature.toString( sourcePart.getSubTypeSignature() ) ) )
+			if ( sourcePart.isHandler() && sourcePart.getSubTypeSignature() != null && NameUtile.equals( RUIHANDLER, NameUtile.getAsName( Signature.toString( sourcePart.getSubTypeSignature() ) ) ) )
 			{
 				String impl = partinfo.getFullyQualifiedName();
 				String htmlDefault = impl;
@@ -421,7 +415,7 @@ public class DeploymentUtilities {
 		}
 			else if(part instanceof BinaryPart){
 				BinaryPart binaryPart = (BinaryPart)partinfo.resolvePart( projSearchScope );
-				if ( binaryPart.isHandler() && binaryPart.getSubTypeSignature() != null && RUIHANDLER == InternUtil.intern( Signature.toString( binaryPart.getSubTypeSignature() ) ) )
+				if ( binaryPart.isHandler() && binaryPart.getSubTypeSignature() != null && NameUtile.equals( RUIHANDLER, NameUtile.getAsName( Signature.toString( binaryPart.getSubTypeSignature() ) ) ) )
 				{
 					String impl = partinfo.getFullyQualifiedName();
 					String htmlDefault = impl;

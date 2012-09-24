@@ -31,7 +31,7 @@ public class ElementTemplate extends EGLDocTemplate {
 
 	public void preGenPart(Element part, Context ctx) {
 		
-		String docType = part.getEClass().getName(); 
+		String docType = part.getEClass().getCaseSensitiveName(); 
 		String fieldContainerType = new String(docType);
 		
 		// control display of the identifiers used

@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Type;
@@ -45,6 +44,6 @@ public class JavaObjectFieldTypeValidator extends DefaultFieldContentAnnotationV
 	}
 	
 	@Override
-	public void validateFunctionReturnType(Type typeNode, org.eclipse.edt.mof.egl.Type typeBinding, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	public void validateFunctionReturnType(Type typeNode, org.eclipse.edt.mof.egl.Type typeBinding, Member memberBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 	}
 }

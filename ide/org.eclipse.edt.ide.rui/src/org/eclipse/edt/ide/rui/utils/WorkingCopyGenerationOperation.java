@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.gen.deployment.javascript.CompileErrorHTMLGenerator;
 import org.eclipse.edt.gen.javascriptdev.ide.VEJavaScriptDevGenerator;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IProblemRequestorFactory;
@@ -46,32 +47,25 @@ import org.eclipse.edt.ide.rui.internal.nls.EWTPreviewMessages;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.SerializationException;
 
 public class WorkingCopyGenerationOperation {
-	private String EGL_SCHEMA = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
 
 	private IFile file;
 	private IProblemRequestorFactory problemRequestorFactory;
-	private IPath buildDescriptorFile;
-	private String buildDescriptorName;
 	private IPath outputLocation;
-	private String eglPath;
 	private IGenerationMessageRequestor generationMessageRequestor;
 	private IWorkingCopyGenerationOperationNotifier notifier;
-	private boolean editingMode = false;
 	
 	public WorkingCopyGenerationOperation(IFile file, IProblemRequestorFactory problemRequestorFactory, IGenerationMessageRequestor generationMessageRequestor, IPath buildDescriptorFile, String buildDescriptorName, IPath outputLocation, String eglPath, IWorkingCopyGenerationOperationNotifier notifier) {
 		this.file = file;
 		this.problemRequestorFactory = problemRequestorFactory;
 		this.generationMessageRequestor = generationMessageRequestor;
-		this.buildDescriptorFile = buildDescriptorFile;
-		this.buildDescriptorName = buildDescriptorName;
 		this.outputLocation = outputLocation;
-		this.eglPath = eglPath;
 		this.notifier = notifier;
 	}
 	
@@ -110,6 +104,16 @@ public class WorkingCopyGenerationOperation {
 								generatePartList.add(qualifiedName);
 							
 								if(!problemRequestorFactory.getProblemRequestor(file, partName).hasError()){
+									// Some operations need the environment in order to resolve the original IFile, so the WCC sets the environment
+									// as an annotation. Generation doesn't like this, so we must first remove it.
+									Type type = partAST.getName().resolveType();
+									if (type != null) {
+										Annotation annot = type.getAnnotation(BindingUtil.ENVIRONMENT_ANNOTATION);
+										if (annot != null) {
+											type.removeAnnotation(annot);
+										}
+									}
+									
 									Egl2Mof generator = new Egl2Mof(previewEnvironment);
 							        EObject mof = generator.convert(partAST, new IDEContext(file, ProjectSettingsUtility.getCompiler(file.getProject())), problemRequestorFactory.getProblemRequestor(file, partName));
 

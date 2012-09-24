@@ -273,7 +273,7 @@ public class EClassImpl extends EClassifierImpl implements EClass {
 	}
 	
 	public String getImplTypeSignature() {
-		return getPackageName() + ".impl." + getName() + "Impl";
+		return getCaseSensitivePackageName() + ".impl." + getName() + "Impl";
 	}
 	
 	@Override

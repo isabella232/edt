@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.edt.mof.eglx.jtopen;singleton:=true
 Bundle-Version: 0.8.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
-Eclipse-RegisterBuddy: org.eclipse.edt.mof
+Eclipse-RegisterBuddy: org.eclipse.edt.mof,org.eclipse.edt.compiler
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.edt.mof.egl;bundle-version="0.8.2",
  org.eclipse.core.runtime;bundle-version="3.6.0",

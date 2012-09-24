@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.egl.Field;
 public class FieldTemplate extends org.eclipse.edt.gen.javascript.templates.FieldTemplate {
 	
 	public void genGetVariablesEntry(Field field, Context ctx, TabbedWriter out) {
-		out.print("{name: " + quoted(field.getId()) + ", value : ");
+		out.print("{name: " + quoted(field.getCaseSensitiveName()) + ", value : ");
 		
 		Annotation property = CommonUtilities.getPropertyAnnotation(field);
 		if (property != null && property.getValue("getMethod") != null) {

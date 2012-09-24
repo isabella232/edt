@@ -20,12 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Status;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.DelegateBinding;
-import org.eclipse.edt.compiler.binding.FunctionBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
@@ -33,23 +27,33 @@ import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.AssignmentStatement;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.CallbackTarget;
+import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.File;
+import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.quickfix.IInvocationContext;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ExtractInterfaceConfiguration;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.swt.graphics.Image;
 
@@ -73,7 +77,6 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 
 	@Override
 	protected ASTRewrite getRewrite() {
-		
 		try{
 			ASTRewrite rewrite = ASTRewrite.create(fFile);
 			for (String aImportStr : fNeedImport) {
@@ -100,27 +103,6 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		strbuf.append(IEGLConstants.KEYWORD_IN);
 	}
 	
-	private void appendArguments(String argName, ITypeBinding paramTypeBinding, boolean isFirst, StringBuffer strbuf,
-			List currImports, String currFilePkg, Set insertedImports, String newLineDelimiter, List<String> needImport) {
-		
-		StringBuffer strBufTypeName = new StringBuffer();
-		ExtractInterfaceConfiguration.getSimpleTypeString(paramTypeBinding,strBufTypeName);
-		appendArgument(argName, strBufTypeName.toString(), isFirst, strbuf);
-
-		if (paramTypeBinding.getBaseType().isPartBinding()) {
-			String qualifier = ExtractInterfaceConfiguration.getReferenceTypeParamQualifier(paramTypeBinding,currFilePkg);
-			if (!qualifier.equalsIgnoreCase(currFilePkg)) {
-				// build the import string
-				String strImport = qualifier + (qualifier.length() > 0 ? "." : "");
-				strImport += paramTypeBinding.getBaseType().getCaseSensitiveName();
-
-				if(!isAlreadyImported(currImports, qualifier, strImport) && !insertedImports.contains(strImport) && strImport.contains(".")){
-					needImport.add(strImport);
-				}
-			}
-		}
-	}
-	
 	private static boolean isAlreadyImported(List currentImports, String qualifier, String strImport){
 		for (Iterator it = currentImports.iterator(); it.hasNext(); ) {
 			ImportDeclaration importDecl = (ImportDeclaration) it.next();
@@ -140,85 +122,121 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		final String newLineDelimiter = TextUtilities.getDefaultLineDelimiter(context.getDocument());
 		getImportsAndPkg(currImports, context.getFileAST(), currPkg);//Get the current import part and pkg
 
-		Part boundPart = EGLFileConfiguration.getBoundPart(context.getEGLFile(), context.getPart().getName().getCanonicalName());
-		boundPart.accept(new AbstractASTVisitor(){
-			public boolean visit(CallStatement callStatement) {
-				int callEndOffset = callStatement.getOffset() + callStatement.getLength();
-				if(callStatement.getOffset()<= errorOffset && errorOffset<= callEndOffset ){
-					Expression serviceFunctionExpr = callStatement.getInvocationTarget();
-					CallbackTarget callbackTgt = null;
-					CallbackTarget errCallbackTgt = null;
-					
-					if (callStatement.getCallSynchronizationValues() != null) {
-						callbackTgt = callStatement.getCallSynchronizationValues().getReturnTo();
-						errCallbackTgt = callStatement.getCallSynchronizationValues().getOnException();
-					}
-
-					Expression callbackExpr = null, errCallbackExpr =null;
-
-					if(callbackTgt != null){
-						callbackExpr = callbackTgt.getExpression();
-					}
-					if(errCallbackTgt != null){
-						errCallbackExpr = errCallbackTgt.getExpression();
-					}
-					
-					if(callbackExpr != null && !callbackExpr.resolveDataBinding().isValidBinding() && errorOffset >= callbackExpr.getOffset() && errorOffset <= callbackExpr.getOffset() + callbackExpr.getLength()){
-						 createCallbackFunction( serviceFunctionExpr, callbackExpr, currImports, currPkg[0], functionTextBuffer, needImports, newLineDelimiter, functionName);	
-					}else if(errCallbackExpr != null && !errCallbackExpr.resolveDataBinding().isValidBinding() && errorOffset >= errCallbackExpr.getOffset() && errorOffset <= errCallbackExpr.getOffset() + errCallbackExpr.getLength()){
-						createErrCallbackFunction(serviceFunctionExpr, errCallbackExpr, newLineDelimiter, functionTextBuffer, functionName);
-					}
-				}
-									
-				return false;
-			}
-			
-			public boolean visit(Assignment assignment) {
-				if(assignment.getOffset() <= errorOffset && errorOffset <= assignment.getOffset() + assignment.getLength()){
-					createDelegateFunction(assignment, functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
+		EGLFileConfiguration.processBoundPart(context.getEGLFile(), context.getPart().getName().getCanonicalName(), new IWorkingCopyCompileRequestor() {
+			@Override
+			public void acceptResult(WorkingCopyCompilationResult result) {
+				Node boundPart = result.getBoundPart();
+				if (boundPart == null) {
+					return;
 				}
 				
-				return false;
-			}
-			
-			public boolean visit(AssignmentStatement assStmt){
-				if(assStmt.getOffset() <= errorOffset && errorOffset <= assStmt.getOffset() + assStmt.getLength()){
-					createDelegateFunction(assStmt.getAssignment(), functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
-				}
-				return false;
-			}
-			
-			public boolean visit(FunctionInvocationStatement functionInvoke){
-				if(functionInvoke.getOffset() <= errorOffset && errorOffset<= functionInvoke.getOffset() + functionInvoke.getLength()){
-					FunctionInvocation functionInvocation = functionInvoke.getFunctionInvocation();
-					FunctionBinding functionBiding = (FunctionBinding)functionInvocation.getTarget().resolveTypeBinding();
-					List paraDefList = functionBiding.getParameters();
-					Iterator realIter = functionInvocation.getArguments().iterator();
+				boundPart.accept(new AbstractASTVisitor(){
+					public boolean visit(CallStatement callStatement) {
+						int callEndOffset = callStatement.getOffset() + callStatement.getLength();
+						if(callStatement.getOffset()<= errorOffset && errorOffset<= callEndOffset ){
+							Expression serviceFunctionExpr = callStatement.getInvocationTarget();
+							CallbackTarget callbackTgt = null;
+							CallbackTarget errCallbackTgt = null;
+							
+							if (callStatement.getCallSynchronizationValues() != null) {
+								callbackTgt = callStatement.getCallSynchronizationValues().getReturnTo();
+								errCallbackTgt = callStatement.getCallSynchronizationValues().getOnException();
+							}
+
+							Expression callbackExpr = null, errCallbackExpr =null;
+
+							if(callbackTgt != null){
+								callbackExpr = callbackTgt.getExpression();
+							}
+							if(errCallbackTgt != null){
+								errCallbackExpr = errCallbackTgt.getExpression();
+							}
+							
+							if(callbackExpr != null && callbackExpr.resolveMember() == null && errorOffset >= callbackExpr.getOffset() && errorOffset <= callbackExpr.getOffset() + callbackExpr.getLength()){
+								 createCallbackFunction( serviceFunctionExpr, callbackExpr, currImports, currPkg[0], functionTextBuffer, needImports, newLineDelimiter, functionName);	
+							}else if(errCallbackExpr != null && errCallbackExpr.resolveMember() == null && errorOffset >= errCallbackExpr.getOffset() && errorOffset <= errCallbackExpr.getOffset() + errCallbackExpr.getLength()){
+								createErrCallbackFunction(serviceFunctionExpr, errCallbackExpr, newLineDelimiter, functionTextBuffer, functionName);
+							}
+						}
+											
+						return false;
+					}
 					
-					FunctionParameterBinding errorParaBinding = null;
-					ITypeBinding typeBinding = null;
-					String name = null;
-					
-					for (Iterator iterator = paraDefList.iterator(); iterator.hasNext();) {
-						Expression aSimpleName = (Expression) realIter.next();
-						if(aSimpleName.getOffset() <= errorOffset && errorOffset<= aSimpleName.getOffset() + aSimpleName.getLength()){
-							name = aSimpleName.getCanonicalString();
-							errorParaBinding = (FunctionParameterBinding)iterator.next();
-							typeBinding = errorParaBinding.getType();
-							break;
+					public boolean visit(Assignment assignment) {
+						if(assignment.getOffset() <= errorOffset && errorOffset <= assignment.getOffset() + assignment.getLength()){
+							createDelegateFunction(assignment, functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
 						}
 						
-						iterator.next();
+						return false;
 					}
 					
-					if(null != typeBinding && typeBinding instanceof DelegateBinding){
-						getDelegateFunctionString((DelegateBinding)typeBinding, name, functionName, functionTextBuffer, newLineDelimiter, needImports, currImports, currPkg[0]);
+					public boolean visit(AssignmentStatement assStmt){
+						if(assStmt.getOffset() <= errorOffset && errorOffset <= assStmt.getOffset() + assStmt.getLength()){
+							createDelegateFunction(assStmt.getAssignment(), functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
+						}
+						return false;
 					}
 					
-					return(false);
-				}
+					public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
+						return checkInitializer(functionDataDeclaration.getNames().get(0), functionDataDeclaration.getInitializer());
+					};
+					
+					public boolean visit(ClassDataDeclaration classDataDeclartaion) {
+						return checkInitializer(classDataDeclartaion.getNames().get(0), classDataDeclartaion.getInitializer());
+					};
+					
+					private boolean checkInitializer(Expression lhs, Expression initializer) {
+						if (initializer == null) {
+							return true;
+						}
+						
+						if(initializer.getOffset() <= errorOffset && errorOffset <= initializer.getOffset() + initializer.getLength()){
+							createDelegateFunction(lhs, initializer, functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
+						}
+						return functionTextBuffer.length() > 0;
+					}
+					
+					public boolean visit(FunctionInvocationStatement functionInvoke){
+						if(functionInvoke.getOffset() <= errorOffset && errorOffset<= functionInvoke.getOffset() + functionInvoke.getLength()){
+							FunctionInvocation functionInvocation = functionInvoke.getFunctionInvocation();
+							Member member = functionInvocation.getTarget().resolveMember();
+							
+							List<FunctionParameter> paraDefList = null;
+							if (member instanceof FunctionMember) {
+								paraDefList = ((FunctionMember)member).getParameters();
+							}
+							else if (functionInvocation.getTarget().resolveType() instanceof Delegate) {
+								paraDefList = ((Delegate)functionInvocation.getTarget().resolveType()).getParameters();
+							}
+							
+							if (paraDefList != null) {
+								Iterator<Expression> realIter = functionInvocation.getArguments().iterator();
+								
+								FunctionParameter errorParaBinding = null;
+								Type typeBinding = null;
+								String name = null;
+								
+								for (Iterator<FunctionParameter> iterator = paraDefList.iterator(); iterator.hasNext();) {
+									Expression aSimpleName = realIter.next();
+									if(aSimpleName.getOffset() <= errorOffset && errorOffset<= aSimpleName.getOffset() + aSimpleName.getLength()){
+										name = aSimpleName.getCanonicalString();
+										errorParaBinding = iterator.next();
+										typeBinding = errorParaBinding.getType();
+										break;
+									}
+									
+									iterator.next();
+								}
+								
+								if (typeBinding instanceof Delegate){
+									getDelegateFunctionString((Delegate)typeBinding, name, functionName, functionTextBuffer, newLineDelimiter, needImports, currImports, currPkg[0]);
+								}
+							}
+						}
 
-				return false;
+						return false;
+					}
+				});
 			}
 		});
 
@@ -228,37 +246,42 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 	protected static void createDelegateFunction(Assignment assignment,
 			StringBuffer functionTextBuffer, List<String> needImports, 
 			List<String> currImports, StringBuffer bfFunctionName, int errorOffset, String currPkg, String newLine) {
-
-		ITypeBinding leftSideBinding = assignment.getLeftHandSide().resolveTypeBinding();
-		DelegateBinding delegateBinding = null;
+		createDelegateFunction(assignment.getLeftHandSide(), assignment.getRightHandSide(), functionTextBuffer, needImports, currImports, bfFunctionName, errorOffset, currPkg, newLine);
+	}
+	protected static void createDelegateFunction(Expression lhs, Expression rhs,
+			StringBuffer functionTextBuffer, List<String> needImports, 
+			List<String> currImports, StringBuffer bfFunctionName, int errorOffset, String currPkg, String newLine) {
+		Type leftSideBinding = lhs.resolveType();
+		Delegate delegateBinding = null;
 		String functionName = "";
 		
-			Expression rightEP =  assignment.getRightHandSide();
-			if(rightEP instanceof ArrayLiteral){
-				List<Expression> expressions = ((ArrayLiteral)rightEP).getExpressions();
-				for (Expression expression : expressions) {
-					if(expression instanceof SimpleName){
-						if(((SimpleName)expression).getOffset() <= errorOffset && errorOffset <=((SimpleName)expression).getLength() + ((SimpleName)expression).getOffset()){
-							functionName = ((SimpleName)expression).getCanonicalName().trim();
-						}
+		if(rhs instanceof ArrayLiteral){
+			List<Expression> expressions = ((ArrayLiteral)rhs).getExpressions();
+			for (Expression expression : expressions) {
+				if(expression instanceof SimpleName){
+					if(((SimpleName)expression).getOffset() <= errorOffset && errorOffset <=((SimpleName)expression).getLength() + ((SimpleName)expression).getOffset()){
+						functionName = ((SimpleName)expression).getCanonicalName().trim();
 					}
 				}
-			}else if(rightEP instanceof SimpleName){
-				SimpleName simpleName = (SimpleName)rightEP;
-				functionName = simpleName.getCanonicalName().trim();
 			}
-			
-			if(leftSideBinding instanceof DelegateBinding){
-				delegateBinding = (DelegateBinding)leftSideBinding;
-			}else if(leftSideBinding instanceof ArrayTypeBinding){
-				ArrayTypeBinding arrayTypeBinding = (ArrayTypeBinding)leftSideBinding;
-				ITypeBinding elementTypeBinding = arrayTypeBinding.getElementType();
-				if(elementTypeBinding instanceof DelegateBinding){
-					delegateBinding = (DelegateBinding)elementTypeBinding;
-				}
+		}else if(rhs instanceof SimpleName){
+			SimpleName simpleName = (SimpleName)rhs;
+			functionName = simpleName.getCanonicalName().trim();
+		}
+		
+		if(leftSideBinding instanceof Delegate){
+			delegateBinding = (Delegate)leftSideBinding;
+		}else if(leftSideBinding instanceof ArrayType){
+			Type rootType = leftSideBinding;
+			while (rootType instanceof ArrayType) {
+				rootType = ((ArrayType)rootType).getElementType();
 			}
-			
-			getDelegateFunctionString(delegateBinding, functionName, bfFunctionName, functionTextBuffer, newLine, needImports, currImports, currPkg );
+			if(rootType instanceof Delegate){
+				delegateBinding = (Delegate)rootType;
+			}
+		}
+		
+		getDelegateFunctionString(delegateBinding, functionName, bfFunctionName, functionTextBuffer, newLine, needImports, currImports, currPkg );
 	}
 	
 	private static void createCallbackFunction( Expression serviceExpr, Expression callbackExpr, final List<String> currImports, final String currFilePkg, 
@@ -288,35 +311,35 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 	
 	private static void createCallbackFunctionArguments(Expression serviceExpr,StringBuffer strbuf, List currImports,
 			String currFilePkg, List<String> needImports, String newLineDelimiter) {
-		ITypeBinding serviceExprBinding = serviceExpr.resolveTypeBinding();
-		if (serviceExprBinding != null && serviceExprBinding.getKind() == ITypeBinding.FUNCTION_BINDING) {
+		Member serviceExprBinding = serviceExpr.resolveMember();
+		if (serviceExprBinding instanceof FunctionMember) {
 			Set argNames = new HashSet();
 			Set insertedImports = new HashSet();
 			
-			FunctionBinding svrFuncBinding = (FunctionBinding) serviceExprBinding;
-			List params = svrFuncBinding.getParameters();
+			FunctionMember svrFuncBinding = (FunctionMember) serviceExprBinding;
+			List<FunctionParameter> params = svrFuncBinding.getParameters();
 			boolean isFirst = true;
-			for (Iterator it = params.iterator(); it.hasNext();) {
-				Object obj = it.next();
-				if (obj instanceof FunctionParameterBinding) {
-					FunctionParameterBinding paramBinding = (FunctionParameterBinding) obj;
-					if (paramBinding.isOutput() || paramBinding.isInputOutput()) {
+			for (Iterator<FunctionParameter> it = params.iterator(); it.hasNext();) {
+				FunctionParameter paramBinding = it.next();
+				switch (paramBinding.getParameterKind()) {
+					case PARM_OUT:
+					case PARM_INOUT:
 						String argName = paramBinding.getCaseSensitiveName();
 						argNames.add(argName);
 						
 						appendArguments(argName, paramBinding.getType(), isFirst, strbuf, currImports,currFilePkg, insertedImports, needImports, newLineDelimiter);
 						isFirst = false;
-					}
+						break;
 				}
 			}
 
-			ITypeBinding retType = svrFuncBinding.getReturnType();
-			if (Binding.isValidBinding(retType)) {
+			Type retType = svrFuncBinding.getReturnType();
+			if (retType != null) {
 				// get the unique argument name for the return argument
 				int n = 1;
-				String retArgNm = AddFunctionProposal.RETARGNAME;
+				String retArgNm = RETARGNAME;
 				while (argNames.contains(retArgNm)) {
-					retArgNm = AddFunctionProposal.RETARGNAME + Integer.toString(n);
+					retArgNm = RETARGNAME + Integer.toString(n);
 					n++;
 				}
 				appendArguments(retArgNm, retType, isFirst, strbuf, currImports, currFilePkg,  insertedImports, needImports, newLineDelimiter);
@@ -325,22 +348,24 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		}
 	}
 	
-	private static void appendArguments(String argName, ITypeBinding paramTypeBinding, boolean isFirst, StringBuffer strbuf,
+	private static void appendArguments(String argName, Type paramTypeBinding, boolean isFirst, StringBuffer strbuf,
 			List currImports, String currFilePkg, Set insertedImports, List<String>needImport, String newLineDelimiter) {
 		
-		StringBuffer strBufTypeName = new StringBuffer();
-		ExtractInterfaceConfiguration.getSimpleTypeString(paramTypeBinding,strBufTypeName);
-		appendArgument(argName, strBufTypeName.toString(), isFirst, strbuf);
-
-		if (paramTypeBinding.getBaseType().isPartBinding()) {
+		appendArgument(argName, BindingUtil.getShortTypeString(paramTypeBinding, true), isFirst, strbuf);
+		
+		Type rootType = paramTypeBinding;
+		while (rootType instanceof ArrayType) {
+			rootType = ((ArrayType)rootType).getElementType();
+		}
+		if (rootType instanceof org.eclipse.edt.mof.egl.Part) {
 			String qualifier = ExtractInterfaceConfiguration.getReferenceTypeParamQualifier(paramTypeBinding,currFilePkg);
 			
 			if (!qualifier.equalsIgnoreCase(currFilePkg)) {
 				// build the import string
 				String strImport = qualifier + (qualifier.length() > 0 ? "." : "");
-				strImport += paramTypeBinding.getBaseType().getCaseSensitiveName();
+				strImport += getSimpleName(rootType, false);
 
-				if(!isAlreadyImported(currImports, qualifier, strImport) && !insertedImports.contains(strImport) && strImport.length() > 0){
+				if(!isAlreadyImported(currImports, qualifier, strImport) && !insertedImports.contains(strImport) && strImport.contains(".")){
 					needImport.add(strImport);
 				}
 			}
@@ -351,15 +376,6 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		public void printArgs(Expression serviceExpr, StringBuffer strbuf);
 	}
 
-	private static Node getContainerFunction(Node callstmt) {
-		Node parent = callstmt.getParent();
-		while (parent != null && !(parent instanceof NestedFunction)) {
-			parent = getContainerFunction(parent);
-		}
-		
-		return parent;
-	}
-	
 	private static void getImportsAndPkg(final List imports, File file, final String[] fCurrPkg){
 		file.accept(new DefaultASTVisitor(){
 			public boolean visit(File file) {return true;}
@@ -392,7 +408,7 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		callBackFuncStr.append(newLineDelimiter);
 	}	
 	
-	private static void getDelegateFunctionString(DelegateBinding delegateBinding, String functionName, StringBuffer bfFunctionName, StringBuffer delegateFunctionStr,
+	private static void getDelegateFunctionString(Delegate delegateBinding, String functionName, StringBuffer bfFunctionName, StringBuffer delegateFunctionStr,
 			String newLineDelimeter, List<String> needImports, List<String> currImiports, String currFilePkg){
 		
 		delegateFunctionStr.append(IEGLConstants.KEYWORD_FUNCTION);
@@ -400,60 +416,73 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		delegateFunctionStr.append(functionName);
 		delegateFunctionStr.append("(");
 		
-		List parameters = delegateBinding.getParemeters();
+		List<FunctionParameter> parameters = delegateBinding.getParameters();
 		for (int parameterIndex = 0; parameterIndex < parameters.size(); parameterIndex++) {
-			Object object = parameters.get(parameterIndex);
-			if(object instanceof FunctionParameterBinding){
-				FunctionParameterBinding functionParameterBinding = (FunctionParameterBinding)object;
-				String name = functionParameterBinding.getCaseSensitiveName();
-				ITypeBinding paraTypeBinding = functionParameterBinding.getType();
-				String type = paraTypeBinding.getCaseSensitiveName();
-				String qualifier = ExtractInterfaceConfiguration.getReferenceTypeParamQualifier(paraTypeBinding,currFilePkg);
-				if (!qualifier.equalsIgnoreCase(currFilePkg)) {
-					// build the import string
-					String strImport = qualifier + (qualifier.length() > 0 ? "." : "");
-					strImport += paraTypeBinding.getBaseType().getCaseSensitiveName();
-					if(!isAlreadyImported(currImiports, qualifier, strImport) && !needImports.contains(strImport) && strImport.contains(".")){
-						needImports.add(strImport);
-					}
+			FunctionParameter functionParameterBinding = parameters.get(parameterIndex);
+			String name = functionParameterBinding.getCaseSensitiveName();
+			Type paraTypeBinding = functionParameterBinding.getType();
+			String type = getSimpleName(paraTypeBinding, true);
+			String qualifier = ExtractInterfaceConfiguration.getReferenceTypeParamQualifier(paraTypeBinding,currFilePkg);
+			if (!qualifier.equalsIgnoreCase(currFilePkg)) {
+				// build the import string
+				Type rootType = paraTypeBinding;
+				while (rootType instanceof ArrayType) {
+					rootType = ((ArrayType)rootType).getElementType();
 				}
 				
-				String decorate = null;
-				if(functionParameterBinding.isInput()){
+				String strImport = qualifier + (qualifier.length() > 0 ? "." : "");
+				strImport += getSimpleName(rootType, false);
+				if(!isAlreadyImported(currImiports, qualifier, strImport) && !needImports.contains(strImport) && strImport.contains(".")){
+					needImports.add(strImport);
+				}
+			}
+			
+			String decorate = null;
+			switch (functionParameterBinding.getParameterKind()) {
+				case PARM_IN:
 					decorate = IEGLConstants.KEYWORD_IN;
-				}else if(functionParameterBinding.isOutput()){
+					break;
+				case PARM_OUT:
 					decorate = IEGLConstants.KEYWORD_OUT;
-				}else if(functionParameterBinding.isInputOutput()){
+					break;
+				case PARM_INOUT:
+				default:
 					decorate = IEGLConstants.KEYWORD_INOUT;
-				}
-				delegateFunctionStr.append(name).append(" ").append(type);
-				if(decorate != null){
-					delegateFunctionStr.append(" ").append(decorate);
-				}
+					break;
+			}
 				
-				if(parameterIndex+1 < parameters.size()){
-					delegateFunctionStr.append(", ");
-				}
+			delegateFunctionStr.append(name).append(" ").append(type);
+			if(decorate != null){
+				delegateFunctionStr.append(" ").append(decorate);
+			}
+			
+			if(parameterIndex+1 < parameters.size()){
+				delegateFunctionStr.append(", ");
 			}
 		}
 		
 		delegateFunctionStr.append(") ");
 		
 		//returns
-		ITypeBinding returnsTypeBinding = delegateBinding.getReturnType();
+		Type returnsTypeBinding = delegateBinding.getReturnType();
 		if(returnsTypeBinding != null){
 			String qualifier = ExtractInterfaceConfiguration.getReferenceTypeParamQualifier(returnsTypeBinding,currFilePkg);
 			if (!qualifier.equalsIgnoreCase(currFilePkg)) {
 				// build the import string
+				Type rootType = returnsTypeBinding;
+				while (rootType instanceof ArrayType) {
+					rootType = ((ArrayType)rootType).getElementType();
+				}
+				
 				String strImport = qualifier + (qualifier.length() > 0 ? "." : "");
-				strImport += returnsTypeBinding.getBaseType().getCaseSensitiveName();
+				strImport += getSimpleName(rootType, false);
 				if(!isAlreadyImported(currImiports, qualifier, strImport) && !needImports.contains(strImport) && strImport.contains(".")){
 					needImports.add(strImport);
 				}
 			}
-			String type = returnsTypeBinding.getCaseSensitiveName();
+			String type = getSimpleName(returnsTypeBinding, true);
 			String nullable = null;
-			if(returnsTypeBinding.isNullable()){
+			if(delegateBinding.isNullable()){
 				nullable = "?";
 			}else{
 				nullable = "";
@@ -468,4 +497,7 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		delegateFunctionStr.append(newLineDelimeter).append(IEGLConstants.KEYWORD_END);
 	}
 	
+	private static String getSimpleName(Type type, boolean includeParams) {
+		return BindingUtil.getShortTypeString(type, includeParams);
+	}
 }

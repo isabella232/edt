@@ -45,7 +45,7 @@ public class LibraryTemplate extends EUnitTemplate {
 	}
 	
 	public void genClassBody(Library part, Context ctx, TabbedWriter out, TestCounter counter) {
-		out.println("library " + part.getName());
+		out.println("library " + part.getCaseSensitiveName());
 		out.pushIndent();
 		out.println("function " + CommonUtilities.exeTestMethodName + "()");
 		out.pushIndent();		
@@ -59,7 +59,7 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println("function " + CommonUtilities.runningTestMethodName + "()");
 		out.pushIndent();
 		out.println("//reset the test library name (TestDescription.name)");
-		out.println("TestListMgr.testLibName = \"" + part.getName() + "\" + \"_\" + TestListMgr.getBindingTypeString(TestListMgr.bindingType);");
+		out.println("TestListMgr.testLibName = \"" + part.getCaseSensitiveName() + "\" + \"_\" + TestListMgr.getBindingTypeString(TestListMgr.bindingType);");
 		
 		List<String> functions = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partFunctionsWanted);
 		out.println("//reset the list of test method names in this libary ");
@@ -120,8 +120,8 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println("td TestDescription;");
 		out.println("td.expCnt = " + counter.getCount() + ";");
 		out.println("td.rootDir = \"\";");
-		out.println("td.pkgName = \"" + part.getPackageName() + "\";");
-		out.println("td.name = \"" + part.getName() + "\";");
+		out.println("td.pkgName = \"" + part.getCaseSensitivePackageName() + "\";");
+		out.println("td.name = \"" + part.getCaseSensitiveName() + "\";");
 		out.println("td.title = \"\";");
 		out.println("td.description = \"\";");
 		out.print("td.testcases = \"");
@@ -134,7 +134,7 @@ public class LibraryTemplate extends EUnitTemplate {
 			flag1 = true;
 		}
 		out.println("\";");
-		out.println("td.sources = \"" + part.getName() + ".egl\";");
+		out.println("td.sources = \"" + part.getCaseSensitiveName() + ".egl\";");
 		out.println("td.keywords = \"\";");
 		
 		out.println("TestExecutionLib.writeResults(td, TestListMgr.ms, true);");						
@@ -146,7 +146,7 @@ public class LibraryTemplate extends EUnitTemplate {
 	}
 	
 	public void genLibDriverClassBody(Library part, Context ctx, TabbedWriter out, String driverPartNameAppend, TestCounter counter){
-		String genedHandlerName = part.getName() + driverPartNameAppend;
+		String genedHandlerName = part.getCaseSensitiveName() + driverPartNameAppend;
 		out.println("Handler " + genedHandlerName + " type RUIhandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" +genedHandlerName + "\"} ");
 		
 		out.pushIndent();	

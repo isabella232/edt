@@ -40,7 +40,7 @@ public class FormImpl extends FormImplBase implements Form {
 	@Override
 	public String getFullyQualifiedName() {
 		FormGroup fg = getContainer();
-		return fg == null ? super.getFullyQualifiedName() : fg.getFullyQualifiedName() + Type.NestedPartDelimiter + getName();
+		return fg == null ? super.getFullyQualifiedName() : fg.getFullyQualifiedName() + Type.NestedPartDelimiter + getCaseSensitiveName();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -75,7 +75,7 @@ public class FormImpl extends FormImplBase implements Form {
 			return super.getMofSerializationKey();
 		}
 		else {
-			return getContainer().getMofSerializationKey() + Type.NestedPartDelimiter + getName();
+			return getContainer().getMofSerializationKey() + Type.NestedPartDelimiter + getCaseSensitiveName();
 		}
 	}
 	

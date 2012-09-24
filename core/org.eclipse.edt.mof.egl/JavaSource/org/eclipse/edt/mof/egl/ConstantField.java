@@ -13,8 +13,4 @@ package org.eclipse.edt.mof.egl;
 
 
 public interface ConstantField extends Field {
-	PrimitiveTypeLiteral getValue();
-	
-	void setValue(PrimitiveTypeLiteral value);
-	
 }

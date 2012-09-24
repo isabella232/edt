@@ -284,17 +284,15 @@ public class EditorUtility {
 		return EditorUtility.searchIndex(IEGLSearchConstants.RECORD, editor, name, matchMode, scope);
 	}
 	
-	public static String[] getPackageName(IFile file) {
+	public static String getPackageName(IFile file) {
     	IEGLFile eglFile = (IEGLFile) EGLCore.create(file);
     	IPackageFragment packageFragment = (IPackageFragment)eglFile.getAncestor(IEGLElement.PACKAGE_FRAGMENT);
-    	String[] packageName;
     	if (packageFragment.isDefaultPackage()){
-    		packageName = new String[0];
+    		return "";
     	}
     	else{
-    		packageName = packageFragment.getElementName().split("\\.");
+    		return packageFragment.getElementName();
     	}
-		return packageName;
 	}
 	
 	/**

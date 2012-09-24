@@ -1051,7 +1051,7 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 	StringBuffer qualifiedPartName = new StringBuffer();
 	char[] qualifiedPackageName;
 
-	qualifiedPartName.append(partBinding.getName());
+	qualifiedPartName.append(partBinding.getCaseSensitiveName());
 //	
 //	IEGLPackageDeclaration pkgDecl = ((IEGLFile)topLevelPart.getContainer()).getPackageDeclaration();
 //	PackageDeclaration pkgDecl = null;
@@ -1059,7 +1059,7 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 //		qualifiedPackageName = pkgDecl.getPackageName().getCanonicalName().toCharArray();
 //	}else{
 	
-	String packageName = partBinding.getPackageName();
+	String packageName = partBinding.getCaseSensitivePackageName();
 	if(packageName != null && packageName.length() > 0) {
 		qualifiedPackageName = packageName.toCharArray();
 	}else{
@@ -1108,9 +1108,9 @@ protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPa
 	StringBuffer qualifiedPartName = new StringBuffer();
 	char[] qualifiedPackageName;
 
-	qualifiedPartName.append(binding.getName());
+	qualifiedPartName.append(binding.getCaseSensitiveName());
 	
-	String packageName = binding.getPackageName();
+	String packageName = binding.getCaseSensitivePackageName();
 	if(packageName != null && packageName.length() > 0) {
 		qualifiedPackageName = packageName.toString().toCharArray();
 	}else{

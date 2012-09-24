@@ -15,7 +15,7 @@ public class FieldTemplate extends EGLDocTemplate {
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
 
 		out.println("<dt class=\"dt pt dlterm\"><span class=\"ph synph\"><span class=\"keyword kwd\">"
-				+ field.getName() + "</span>");
+				+ field.getCaseSensitiveName() + "</span>");
 
 		// display, element, and list (if appropriate)
 		ArrayList<String> stringDetails;

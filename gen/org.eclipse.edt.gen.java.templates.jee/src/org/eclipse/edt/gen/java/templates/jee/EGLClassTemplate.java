@@ -39,7 +39,7 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.java.templates.EGLClas
 			// add an xmlRootElement
 			try {
 				Annotation annotation = CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
-				annotation.setValue("name", part.getName());
+				annotation.setValue("name", part.getCaseSensitiveName());
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(part, annotation, ctx);
 			}
 			catch (Exception e) {}

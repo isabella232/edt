@@ -261,7 +261,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				nameExpression.setMember(field);
-				nameExpression.setId(field.getName());
+				nameExpression.setId(field.getCaseSensitiveName());
 				// add the field to the declaration expression
 				declarationExpression.getFields().add(field);
 				// connect the declaration expression to the local declaration
@@ -302,7 +302,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				nameExpression.setMember(field);
-				nameExpression.setId(field.getName());
+				nameExpression.setId(field.getCaseSensitiveName());
 				// we need to create an assignment statement
 				AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -341,7 +341,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				Function serviceInterfaceFunction = (Function) ((MemberAccess) object.getInvocationTarget()).getMember();
 				FunctionInvocation invocation = factory.createFunctionInvocation();
 				invocation.setTarget(serviceInterfaceFunction);
-				invocation.setId(serviceInterfaceFunction.getId());
+				invocation.setId(serviceInterfaceFunction.getCaseSensitiveName());
 				invocation.getArguments().addAll(object.getArguments());
 				processInvocation(invocation);
 			}
@@ -390,7 +390,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			nameExpression.setMember(field);
-			nameExpression.setId(field.getName());
+			nameExpression.setId(field.getCaseSensitiveName());
 			// we need to create an assignment statement
 			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -504,7 +504,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			nameExpression.setMember(field);
-			nameExpression.setId(field.getName());
+			nameExpression.setId(field.getCaseSensitiveName());
 			// we need to create an assignment statement
 			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -589,7 +589,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				nameExpression.setMember(field);
-				nameExpression.setId(field.getName());
+				nameExpression.setId(field.getCaseSensitiveName());
 				// we need to create an assignment statement
 				AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -630,7 +630,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						nameExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpressionBin.setMember(fieldBin);
-					nameExpressionBin.setId(fieldBin.getName());
+					nameExpressionBin.setId(fieldBin.getCaseSensitiveName());
 					// we need to create an assignment statement
 					AssignmentStatement assignmentStatementBin = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -687,7 +687,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						nameExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpressionBin.setMember(fieldBin);
-					nameExpressionBin.setId(fieldBin.getName());
+					nameExpressionBin.setId(fieldBin.getCaseSensitiveName());
 					// we need to create an assignment statement
 					AssignmentStatement assignmentStatementBin = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -780,7 +780,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 				nameExpression.setMember(field);
-				nameExpression.setId(field.getName());
+				nameExpression.setId(field.getCaseSensitiveName());
 				// we need to create an assignment statement
 				AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -821,7 +821,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						nameExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpressionBin.setMember(fieldBin);
-					nameExpressionBin.setId(fieldBin.getName());
+					nameExpressionBin.setId(fieldBin.getCaseSensitiveName());
 					// we need to create an assignment statement
 					AssignmentStatement assignmentStatementBin = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -900,7 +900,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						nameExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpressionBin.setMember(fieldBin);
-					nameExpressionBin.setId(fieldBin.getName());
+					nameExpressionBin.setId(fieldBin.getCaseSensitiveName());
 					// we need to create an assignment statement
 					AssignmentStatement assignmentStatementBin = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -969,14 +969,14 @@ public class ReorganizeCode extends AbstractVisitor {
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			nameExpression.setMember(field);
-			nameExpression.setId(field.getName());
+			nameExpression.setId(field.getCaseSensitiveName());
 			// we need to create the member access for the setExpression's temporary variable
 			declarationExpression = (DeclarationExpression) ((LocalVariableDeclarationStatement) object.getSettings().getStatements().get(0)).getExpression();
 			MemberName tempExpression = factory.createMemberName();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				tempExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 			tempExpression.setMember(declarationExpression.getFields().get(0));
-			tempExpression.setId(declarationExpression.getFields().get(0).getName());
+			tempExpression.setId(declarationExpression.getFields().get(0).getCaseSensitiveName());
 			// we need to create an assignment statement and place inside of the setExpression block
 			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -1112,7 +1112,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpression.setMember(field);
-					nameExpression.setId(field.getName());
+					nameExpression.setId(field.getCaseSensitiveName());
 					// we need to create an assignment statement
 					AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -1160,7 +1160,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpression.setMember(field);
-					nameExpression.setId(field.getName());
+					nameExpression.setId(field.getCaseSensitiveName());
 					// now do the assignment of the original to this temporary variable
 					AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -1223,7 +1223,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						nameExpressionWork.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpressionWork.setMember(fieldWork);
-					nameExpressionWork.setId(fieldWork.getName());
+					nameExpressionWork.setId(fieldWork.getCaseSensitiveName());
 					// add the field to the declaration expression
 					declarationExpressionWork.getFields().add(fieldWork);
 					// connect the declaration expression to the local declaration
@@ -1249,7 +1249,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpression.setMember(field);
-					nameExpression.setId(field.getName());
+					nameExpression.setId(field.getCaseSensitiveName());
 					// now do the assignment of the original to this temporary variable
 					AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)

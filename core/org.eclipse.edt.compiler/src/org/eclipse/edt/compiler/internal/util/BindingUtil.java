@@ -16,6 +16,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -56,7 +57,9 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.ParameterizableType;
+import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PatternType;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
@@ -72,7 +75,7 @@ import org.eclipse.edt.mof.utils.NameUtile;
 public class BindingUtil {
 	
 	private static final String INVALID_ANNOTATION = "edt invalid";
-	private static final String ENVIRONMENT_ANNOTATION = "edt environment";
+	public static final String ENVIRONMENT_ANNOTATION = "edt environment";
 	
 	private static Annotation ValidAnn;
 	
@@ -816,8 +819,13 @@ public class BindingUtil {
 		return IRUtils.getEGLType(ppn.getPackageName() + "." + ppn.getPartName());		
 	}
 	
-	public static String getUnaliasedTypeName(Type type) {
+	public static String getUnaliasedTypeName(Type type, boolean includeParams) {
+		if (type == null) {
+			return "";
+		}
+		
 		Classifier classifier = type.getClassifier();
+		String unaliasedName = null;
 		if (classifier != null) {
 			String pkg = NameUtile.getAsName(classifier.getPackageName());
 			String name = NameUtile.getAsName(classifier.getName());
@@ -825,17 +833,95 @@ public class BindingUtil {
 			for (Map.Entry<String, PackageAndPartName> entry : aliasedTypesNames.entrySet()) {
 				PackageAndPartName value = entry.getValue();
 				if (NameUtile.equals(value.getPackageName(), pkg) && NameUtile.equals(value.getPartName(), name)) {
-					return entry.getKey();
+					unaliasedName = entry.getKey();
+					
+					if (includeParams) {
+						if (type instanceof ParameterizedType) {
+							String sig = type.getTypeSignature();
+							int paren = sig.indexOf(Type.PrimArgsStartDelimiter);
+							if (paren != -1) {
+								unaliasedName += sig.substring(paren);
+							}
+						}
+					}
+					break;
 				}
 			}
 		}
 		
-		String sig = type.getTypeSignature();
-		int lastDot = sig.lastIndexOf('.');
-		if (lastDot == -1) {
-			return sig;
+		if (!includeParams && unaliasedName == null && type instanceof ParameterizedType) {
+			type = ((ParameterizedType)type).getParameterizableType();
 		}
-		return sig.substring(lastDot + 1);
+		
+		if (unaliasedName == null) {
+			unaliasedName = type.getTypeSignature();
+		}
+		
+		if (type instanceof ParameterizedType) {
+			// MOF returns the args in the format "(arg1:arg2)" instead of "(arg1, arg2)".
+			int paren = unaliasedName.indexOf(Type.PrimArgsStartDelimiter);
+			if (paren != -1) {
+				unaliasedName = unaliasedName.replaceAll(Type.PrimArgDelimiter, ",");
+			}
+			
+			if (type instanceof PatternType && paren != -1) {
+				// Need to surround the pattern with quotes.
+				int closeParen = unaliasedName.indexOf(Type.PrimArgsEndDelimiter);
+				if (closeParen != -1) {
+					unaliasedName = unaliasedName.substring(0, paren + 1) + "\"" + unaliasedName.substring(paren + 1, closeParen)
+							+ "\"" + unaliasedName.substring(closeParen);
+				}
+			}
+		}
+		return unaliasedName;
+	}
+	
+	public static String getTypeString(Type binding, boolean includeParams) {
+		StringBuilder result = new StringBuilder();
+		if (binding instanceof ArrayType) {
+			result.append(getTypeString(((ArrayType)binding).getElementType(), includeParams));
+			if (((ArrayType)binding).elementsNullable()) {
+				result.append('?');
+			}
+			result.append("[]");
+		}				
+		else if (binding instanceof AnnotationType) {
+			result.append('@');
+			result.append(binding.getTypeSignature());
+		}				
+		else if (binding != null) {
+			result.append(BindingUtil.getUnaliasedTypeName(binding, includeParams));
+		}
+		
+		return result.toString();
+	}
+	
+	public static String getShortTypeString(Type binding) {
+		return getShortTypeString(binding, false);
+	}
+	
+	public static String getShortTypeString(Type binding, boolean includeParams) {
+		String s = getTypeString(binding, includeParams);
+		int lastDot = s.lastIndexOf('.');
+		if (lastDot == -1) {
+			return s;
+		}
+		return s.substring(lastDot + 1);
+	}
+	
+	public static String getTypeName(Member member) {
+		StringBuilder buf = new StringBuilder();
+		if (member instanceof FunctionMember) {
+			buf.append(member.getName());
+		}
+		else if (member != null) {
+			buf.append(getShortTypeString(member.getType(), true));
+		}
+		
+		if(member.isNullable()){
+			buf.append('?');;
+		}
+		return buf.toString();
 	}
 	
 	public static Type getType(Member mbr) {
@@ -1048,6 +1134,11 @@ public class BindingUtil {
 						throw new ExitVisitor();
 					}
 					return false;
+				};
+				@Override
+				public boolean visit(FieldAccess fieldAccess) {
+					type[0] = fieldAccess.getPrimary().resolveType();
+					throw new ExitVisitor();
 				};
 			});
 		}

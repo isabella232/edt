@@ -169,7 +169,7 @@ public class WidgetDescriptorRegistry implements IWidgetDescriptorRegistry {
 						DataMapping dataMapping = dataTemplate.getDataMapping();
 						EnumerationEntry[] mappings = dataMapping.getMappings();
 						for(EnumerationEntry mapping : mappings){
-							String key = new StringBuffer(_purpose.getId()).append(".").append(dataMapping.isForArray()).append(".").append(dataMapping.isContainer()).append(".").append(mapping.getId()).toString();
+							String key = new StringBuffer(_purpose.getCaseSensitiveName()).append(".").append(dataMapping.isForArray()).append(".").append(dataMapping.isContainer()).append(".").append(mapping.getCaseSensitiveName()).toString();
 							List<DataTemplate> dataTemplates = _hashDataTemplateMappings.get(key.toString());
 							if(dataTemplates == null){
 								dataTemplates = new ArrayList<DataTemplate>();

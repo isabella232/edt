@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.editor.sql;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
@@ -32,10 +35,18 @@ import org.eclipse.edt.compiler.core.ast.WithIDClause;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.sqltokenizer.EGLSQLParser;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.sql.SQLConstants;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
 
 public class SQLIOStatementUtility {
 	public static SQLIOStatementActionInfo getAddSQLIoStatementActionInfo(IEGLDocument document, Node node) {
@@ -136,11 +147,6 @@ public class SQLIOStatementUtility {
 					info.setShouldAddSQLStatement(false);
 					info.setSqlStatement(inlineSQL.getSqlStmt().getValue());
 					info.setSqlStatementNode(inlineSQL);
-					EGLSQLParser parser = new EGLSQLParser(info.getSqlStatement(), IEGLConstants.KEYWORD_OPEN, compileOptions);
-					String selectClause = parser.getSelectClause();
-					if (selectClause != null) {
-						info.setOpenWithSelectStatement(true);
-					}
 					return false;
 				}
 				public boolean visit(IntoClause intoClause) {
@@ -205,4 +211,147 @@ public class SQLIOStatementUtility {
 		}
 		return info;
 	}
+	
+	public static boolean isEntityRecord(Type typeBinding) {
+        while (typeBinding instanceof ArrayType) {
+        	typeBinding = ((ArrayType)typeBinding).getElementType();
+        }
+        if (typeBinding != null) {
+        	return typeBinding.getAnnotation("eglx.persistence.Entity") != null;
+        }
+        
+        return false;
+    }
+	
+	public static boolean isBasicRecord(Type typeBinding) {
+		while (typeBinding instanceof ArrayType) {
+        	typeBinding = ((ArrayType)typeBinding).getElementType();
+        }
+		return typeBinding instanceof org.eclipse.edt.mof.egl.Record;
+	}
+	
+	public static boolean getIsReadOnly(Field field) {
+		return Utils.isGeneratedValue(field) || !Utils.isInsertable(field);
+	}
+	
+	public static boolean getIsUpdateable(Field field) {
+		return Utils.isUpdateable(field);
+    }
+	
+	public static boolean containsOnlyKeyOrReadOnlyColumns(Type sqlRecordType, List<Field> recordKeyItems) {
+        // Check the columns in the I/O object (SQL record) to see if there are
+        // only key or read only columns.
+
+        if (!(sqlRecordType instanceof LogicAndDataPart)) {
+            return false;
+        }
+
+        List<Field> sqlDataItems = ((LogicAndDataPart)sqlRecordType).getFields();
+
+        Field itemBinding;
+        for (int i = 0; i < sqlDataItems.size(); i++) {
+            itemBinding = sqlDataItems.get(i);
+            if (getIsReadOnly(itemBinding) || recordKeyItems.contains(itemBinding)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+	
+	public static boolean containsOnlyKeyOrReadOnlyColumns(Type sqlRecordType, String[][] usingKeyItemAndColumnNames) {
+
+        // Check the columns in the I/O object (SQL record) to see if there are
+        // only key or read only columns.
+
+		if (!(sqlRecordType instanceof LogicAndDataPart)) {
+            return false;
+        }
+
+		List<Field> sqlDataItems = ((LogicAndDataPart)sqlRecordType).getFields();
+
+		Field itemBinding;
+        for (int i = 0; i < sqlDataItems.size(); i++) {
+        	itemBinding = sqlDataItems.get(i);
+            if (getIsReadOnly(itemBinding) || isUsingKeyColumn(itemBinding, usingKeyItemAndColumnNames, sqlRecordType)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+	
+	public static boolean isUsingKeyColumn(Field field, String[][] usingKeyItemAndColumnNames, Type recordType) {
+        for (int i = 0; i < usingKeyItemAndColumnNames.length; i++) {
+            if (Utils.getColumnName(field).equalsIgnoreCase(usingKeyItemAndColumnNames[i][1])) {
+                return true;
+            }
+        }
+        return false;
+    }
+	
+	public static String getIdColumnName(Type type) {
+		if (type instanceof LogicAndDataPart) {
+			for (Field field : ((LogicAndDataPart)type).getFields()) {
+				if (Utils.isKeyField(field)) {
+					return Utils.getColumnName(field);
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static String getTableName(Type typeBinding) {
+		if (typeBinding != null) {
+			Annotation annotation = typeBinding.getAnnotation("eglx.persistence.sql.Table");
+	    	if (annotation != null) {
+				return (String) annotation.getValue("name");
+			}
+		}
+		
+		return null;
+	}
+	
+	//The map key refers to type binding of master table
+    //The map value refers to name of foreign key of slave table
+    public static Map<Type,String> getForeignKeys(Member dataBinding, Type typeBinding) {
+    	if (!(typeBinding instanceof LogicAndDataPart)) {
+    		return null;
+    	}
+    	Map<Type,String> foreignKeys = null;
+    	List<Field> fieldBindings = ((LogicAndDataPart)typeBinding).getFields();
+    	
+    	for(Field fieldBinding : fieldBindings) {
+    		String foreignKey = getForeignKeyName(fieldBinding);
+    		if(foreignKey != null) {
+    			if(foreignKeys == null) {
+    				foreignKeys = new HashMap<Type,String>();
+    			}
+    			if(TypeUtils.isPrimitive(fieldBinding.getType())) {
+    				foreignKeys.put(BindingUtil.getDeclaringPart(dataBinding), foreignKey);
+    			} else {
+    				foreignKeys.put(BindingUtil.getDeclaringPart(fieldBinding), foreignKey);
+    			}
+    		}
+    	}
+    	
+    	return foreignKeys;
+    }
+    
+    private static String getForeignKeyName(Field fieldBinding) {
+    	String columnName = null;
+    	 Annotation annotation = fieldBinding.getAnnotation("eglx.persistence.ManyToOne");
+    	 if(annotation != null) {
+    		 /**
+    		  * if typeBinding is PrimitiveTypeBinding, use entity field as column name;
+    		  * Otherwise, get column name from JoinColumn annotation.
+    		  */
+    		 //TODO:
+    		 columnName = fieldBinding.getCaseSensitiveName();
+    	 }
+    	
+    	return columnName;
+    }
 }

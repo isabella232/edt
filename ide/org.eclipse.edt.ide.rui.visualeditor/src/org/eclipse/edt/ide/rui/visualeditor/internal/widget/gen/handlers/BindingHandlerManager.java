@@ -11,23 +11,25 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class BindingHandlerManager {
 	private static BindingHandlerManager instance;
-	private Map<String, IDataTypeBindingHandler> bindingHandlerRegister;
+	private final FlexibleRecordBindingHandler recordHandler;
+	private final PrimitiveTypeBindingHandler primitiveHandler;
+//	private final DataItemBindingHandler dataItemHandler; //TODO data items not currently supported in EDT
+	private final ArrayTypeBindingHandler arrayHandler;
 	
 	private BindingHandlerManager(){
-		bindingHandlerRegister = new HashMap<String, IDataTypeBindingHandler>();
-		bindingHandlerRegister.put(parseIntToString(ITypeBinding.FLEXIBLE_RECORD_BINDING), new FlexibleRecordBindingHandler());
-		bindingHandlerRegister.put(parseIntToString(ITypeBinding.PRIMITIVE_TYPE_BINDING), new PrimitiveTypeBindingHandler());
-		bindingHandlerRegister.put(parseIntToString(ITypeBinding.DATAITEM_BINDING), new DataItemBindingHandler());
-		bindingHandlerRegister.put(parseIntToString(ITypeBinding.ARRAY_TYPE_BINDING), new ArrayTypeBindingHandler());
+		recordHandler = new FlexibleRecordBindingHandler();
+		primitiveHandler = new PrimitiveTypeBindingHandler();
+//		dataItemHandler = new DataItemBindingHandler();
+		arrayHandler = new ArrayTypeBindingHandler();
 	}
 	
 	public static BindingHandlerManager getInstance(){
@@ -37,14 +39,20 @@ public class BindingHandlerManager {
 		return instance;
 	}
 	
-	public void handle(IDataBinding dataBinding, ITypeBinding typeBinding, InsertDataModel insertDataModel){
-		IDataTypeBindingHandler handler = bindingHandlerRegister.get(parseIntToString(typeBinding.getKind()));
+	public void handle(Member dataBinding, Type typeBinding, InsertDataModel insertDataModel){
+		IDataTypeBindingHandler handler = null;
+		if (typeBinding instanceof ArrayType) {
+			handler = arrayHandler;
+		}
+		else if (typeBinding instanceof Record) {
+			handler = recordHandler;
+		}
+		else if (TypeUtils.isPrimitive(typeBinding)) {
+			handler = primitiveHandler;
+		}
+		
 		if(handler != null){
 			handler.handle(dataBinding, typeBinding, insertDataModel);
 		}
-	}
-	
-	private String parseIntToString(int i){
-		return Integer.toString(i);
 	}
 }

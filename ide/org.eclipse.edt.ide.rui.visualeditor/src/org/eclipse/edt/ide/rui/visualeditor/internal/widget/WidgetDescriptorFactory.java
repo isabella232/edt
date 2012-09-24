@@ -230,7 +230,7 @@ public class WidgetDescriptorFactory {
 	}
 
 	private void processWidgetID( LogicAndDataPart part, WidgetDescriptor widgetDescriptor ) {
-		widgetDescriptor._strType = part.getId();
+		widgetDescriptor._strType = part.getCaseSensitiveName();
 
 		if( DEBUG ) {
 			System.out.println( "Widget ID: " + widgetDescriptor.getID() );
@@ -600,7 +600,7 @@ public class WidgetDescriptorFactory {
 
 	private void processEvent( Annotation annotation, Field field, WidgetDescriptor widgetDescriptor ) {
 		if( DEBUG ) {
-			System.out.println( "Start processing VEEvent annotation for Field: " + field.getId() );
+			System.out.println( "Start processing VEEvent annotation for Field: " + field.getCaseSensitiveName() );
 		}
 
 		WidgetEventDescriptor eventDescriptor = new WidgetEventDescriptor();
@@ -617,12 +617,12 @@ public class WidgetDescriptorFactory {
 		widgetDescriptor.addEventDescriptor( eventDescriptor );
 
 		if( DEBUG ) {
-			System.out.println( "Finished processing VEEvent annotation for Field: " + field.getId() );
+			System.out.println( "Finished processing VEEvent annotation for Field: " + field.getCaseSensitiveName() );
 		}
 	}
 
 	private void processEventID( Field field, WidgetEventDescriptor eventDescriptor ) {
-		eventDescriptor._strID = field.getId();
+		eventDescriptor._strID = field.getCaseSensitiveName();
 
 		if( DEBUG ) {
 			System.out.println( "Event ID: " + eventDescriptor.getID() );
@@ -681,7 +681,7 @@ public class WidgetDescriptorFactory {
 	private void processProperty( Annotation annotation, Field field,  VEPropertyContainer widgetDescriptor ) {
 
 		if( DEBUG ) {
-			System.out.println( "Start processing VEProperty annotation for Field: " + field.getId() );
+			System.out.println( "Start processing VEProperty annotation for Field: " + field.getCaseSensitiveName() );
 		}
 
 		WidgetPropertyDescriptor propertyDescriptor = new WidgetPropertyDescriptor();
@@ -711,7 +711,7 @@ public class WidgetDescriptorFactory {
 		widgetDescriptor.addPropertyDescriptor( propertyDescriptor );
 
 		if( DEBUG ) {
-			System.out.println( "Finished processing VEProperty annotation for Field: " + field.getId() );
+			System.out.println( "Finished processing VEProperty annotation for Field: " + field.getCaseSensitiveName() );
 		}
 	}
 
@@ -780,7 +780,7 @@ public class WidgetDescriptorFactory {
 	}
 
 	private void processPropertyID( Field field, WidgetPropertyDescriptor propertyDescriptor ) {
-		propertyDescriptor._strID = field.getId();
+		propertyDescriptor._strID = field.getCaseSensitiveName();
 
 		if( DEBUG ) {
 			System.out.println( "Property ID: " + propertyDescriptor.getID() );

@@ -14,8 +14,6 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.List;
 
 import org.eclipse.edt.mof.EClass;
-import org.eclipse.edt.mof.EClassifier;
-import org.eclipse.edt.mof.EDataType;
 import org.eclipse.edt.mof.EEnum;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
@@ -221,7 +219,10 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	
 	@Override
 	public String getTypeSignature() {
-		return getPackageName()+"."+getName();
+		if (getCaseSensitivePackageName().length() == 0) {
+			return getCaseSensitiveName();
+		}
+		return getCaseSensitivePackageName()+"."+getCaseSensitiveName();
 	}
 
 	@Override

@@ -57,8 +57,8 @@ import org.eclipse.edt.ide.egldoc.Activator;
 import org.eclipse.edt.ide.egldoc.Messages;
 import org.eclipse.edt.ide.egldoc.gen.EGLDocGenerator;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -170,11 +170,11 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 		}
 	}
 	
-	private void generateIndex(IProject project, Map<String[], Set<PartKey>> packageLists) {
+	private void generateIndex(IProject project, Map<String, Set<PartKey>> packageLists) {
 		List<String> allParts = new ArrayList<String>();
-		Set<String[]> allPackages = new HashSet<String[]>();
-		for (Iterator<String[]> packageIterator = packageLists.keySet().iterator(); packageIterator.hasNext();) {
-			String[] packageName = (String[]) packageIterator.next();
+		Set<String> allPackages = new HashSet<String>();
+		for (Iterator<String> packageIterator = packageLists.keySet().iterator(); packageIterator.hasNext();) {
+			String packageName = packageIterator.next();
 						
 			allPackages.add(packageName);
 			
@@ -209,7 +209,7 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 		}
 	}
 	
-	private void writePackagesFiles(IProject project, Set<String[]> allPackages) {
+	private void writePackagesFiles(IProject project, Set<String> allPackages) {
 		try {
 			String fileContents = loadFileContents("eze_packages.html");
 			StringBuffer packagesString = new StringBuffer();
@@ -220,17 +220,17 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 			packagesString.append("</A><dt>");
 			packagesString.append(System.getProperty("line.separator"));
 			
-			for (Iterator<String[]> iterator = allPackages.iterator(); iterator.hasNext();) {
-				String[] packageName = (String[]) iterator.next();
+			for (Iterator<String> iterator = allPackages.iterator(); iterator.hasNext();) {
+				String packageName = iterator.next();
 				
 				packagesString.append("<dt><A href=\"./");
-				if(packageName.length > 0){
-					packagesString.append(Util.stringArrayToPath(packageName).toPortableString().toLowerCase());
+				if(packageName.length() > 0){
+					packagesString.append(new Path(packageName.replace('.', IPath.SEPARATOR)).toPortableString().toLowerCase());
 					packagesString.append("/");
 				}
 				packagesString.append("eze_packageList.html\" target=\"partList\">");
-				if(packageName.length > 0){
-					packagesString.append(Util.stringArrayToPath(packageName).toPortableString().replace("/", ".").toLowerCase());
+				if(packageName.length() > 0){
+					packagesString.append(packageName.toLowerCase());
 				}else{
 					packagesString.append("default");
 				}
@@ -272,16 +272,16 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 		
 	}
 
-	private void writePackageFile(IProject project, String[] packageName, List<String> partsList) {
+	private void writePackageFile(IProject project, String packageName, List<String> partsList) {
 		try {
 			String fileContents = loadFileContents("eze_packageList.html");
 			StringBuffer partsString = new StringBuffer();
 			
 			String packageNameString;
-			if(packageName.length == 0){
+			if(packageName.length() == 0){
 				packageNameString = "default";
 			}else{
-				packageNameString = Util.stringArrayToPath(packageName).toPortableString().replace("/", ".").toLowerCase();
+				packageNameString = packageName.toLowerCase();
 			}
 			
 			for (Iterator<String> iterator = partsList.iterator(); iterator.hasNext();) {
@@ -297,7 +297,7 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 			fileContents = fileContents.replace("{$PACKAGE_NAME}", packageNameString);
 			fileContents = fileContents.replace("{$PARTS}", partsString.toString());
 			
-			writeFileContents(project.getFolder(new EGLDocGenerator().getRootOutputDirectory()).getFolder(Util.stringArrayToPath(packageName).toString().toLowerCase()), "eze_packageList.html", new StringBufferInputStream(fileContents));
+			writeFileContents(project.getFolder(new EGLDocGenerator().getRootOutputDirectory()).getFolder(new Path(packageName.replace('.', IPath.SEPARATOR)).toString().toLowerCase()), "eze_packageList.html", new StringBufferInputStream(fileContents));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -386,8 +386,8 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 		this.site = targetPart.getSite();
 	}
 	
-	private Map<String[], Set<PartKey>> sortPartsByPackage(Set<PartKey> generatedPartSet){
-		Map<String[], Set<PartKey>> result = new HashMap<String[], Set<PartKey>>();
+	private Map<String, Set<PartKey>> sortPartsByPackage(Set<PartKey> generatedPartSet){
+		Map<String, Set<PartKey>> result = new HashMap<String, Set<PartKey>>();
 		for (Iterator<PartKey> iterator = generatedPartSet.iterator(); iterator.hasNext();) {
 			PartKey partKey = (PartKey) iterator.next();
 			Set<PartKey> partSet = result.get(partKey.packageName);
@@ -429,7 +429,7 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 								if (monitor.isCanceled()) {
 									throw new CanceledException();
 								}
-								parts.add(new PartKey(InternUtil.intern(Util.pathToStringArray(packagePath)), InternUtil.intern(eglPart.getElementName()), fullPath.toString()));
+								parts.add(new PartKey(NameUtile.getAsName(Util.pathToQualifiedName(packagePath)), NameUtile.getAsName(eglPart.getElementName()), fullPath.toString()));
 							}
 						}
 					}
@@ -450,26 +450,21 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 	}
 	
 	private class PartKey {
-		public String[] packageName;
+		public String packageName;
 		public String partName;
 		public String filePath;
 		
-		public PartKey(String[] pkg, String part, String filePath) {
+		public PartKey(String pkg, String part, String filePath) {
 			this.packageName = pkg;
 			this.partName = part;
 			this.filePath = filePath;
 		}
 		
 		String getQualifiedName() {
-			StringBuilder buf = new StringBuilder(100);
-			
-			for (int i = 0; i < packageName.length; i++) {
-				buf.append(packageName[i]);
-				buf.append('.');
+			if (packageName == null || packageName.length() == 0) {
+				return partName;
 			}
-			buf.append(partName);
-			
-			return buf.toString();
+			return packageName + "." + partName;
 		}
 	}
 	

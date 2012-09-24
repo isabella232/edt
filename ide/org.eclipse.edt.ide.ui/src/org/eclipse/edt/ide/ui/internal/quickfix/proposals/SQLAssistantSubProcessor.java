@@ -16,8 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
@@ -31,9 +29,11 @@ import org.eclipse.edt.ide.ui.editor.IEGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.editor.sql.SQLIOStatementActionInfo;
 import org.eclipse.edt.ide.ui.internal.quickfix.CorrectionMessages;
 import org.eclipse.edt.ide.ui.internal.quickfix.IInvocationContext;
+import org.eclipse.edt.ide.ui.internal.quickfix.proposals.AbstractSQLStatementProposal.IBoundNodeProcessor;
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementAddAssistProposal;
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementRemoveAssistProposal;
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementResetAssistProposal;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
 
 public class SQLAssistantSubProcessor {
 	public static boolean hasAssists(IInvocationContext context)
@@ -60,7 +60,7 @@ public class SQLAssistantSubProcessor {
 	}
 	
 	public static List<IEGLCompletionProposal> getAssist(IInvocationContext context){
-		List<IEGLCompletionProposal> proposals = new LinkedList<IEGLCompletionProposal>();
+		final List<IEGLCompletionProposal> proposals = new LinkedList<IEGLCompletionProposal>();
 		Node coveringAstNode = AbstractSQLStatementProposal.SQLStatementFinder(context);
 		if (isValidOperation(coveringAstNode)) {
 			if (isSQLStatementExisted(coveringAstNode)) {
@@ -71,13 +71,18 @@ public class SQLAssistantSubProcessor {
 						CorrectionMessages.SQLStatementResetProposalLabel, 2,
 						null, context));
 			} else {
-				SQLStatementAddAssistProposal addAssistProposal = new SQLStatementAddAssistProposal(
+				final SQLStatementAddAssistProposal addAssistProposal = new SQLStatementAddAssistProposal(
 						CorrectionMessages.SQLStatementAddProposalLabel, 2,
 						null, context);
-				Node boundNode = addAssistProposal.getBoundASTNode(context);
-				if (isDataSource(boundNode)) {
-					proposals.add(addAssistProposal);
-				}
+				addAssistProposal.bindASTNode(context, new IBoundNodeProcessor() {
+					@Override
+					public void processBoundNode(Node boundNode, Node containerNode) {
+						if (isDataSource(boundNode)) {
+							proposals.add(addAssistProposal);
+						}
+					}
+				});
+				
 			}
 		}
 		return proposals;
@@ -85,7 +90,6 @@ public class SQLAssistantSubProcessor {
 		
 		
 	private static boolean isDataSource(Node astNode) {
-		boolean isDataSource = false;
 		FromOrToExpressionClause dataSource = null;
 		List expressions = null;
 
@@ -121,16 +125,11 @@ public class SQLAssistantSubProcessor {
 			}
 		}
 
-		if (dataSource != null) {
-			ITypeBinding typeBinding = dataSource.getExpression().resolveTypeBinding();
-			if (typeBinding != null
-					&& IEGLConstants.PROPERTY_SQLDATASOURCE
-							.equalsIgnoreCase(typeBinding.getCaseSensitiveName())) {
-				isDataSource = true;
-			}
+		if (dataSource != null && Utils.isSQLDataSource(dataSource.getExpression().resolveType())) {
+			return true;
 		}
 
-		return isDataSource;
+		return false;
 	}
 
 	private static boolean isSQLStatementExisted(Node astNode) {

@@ -37,5 +37,9 @@ public abstract class ENamedElementImpl extends EModelElementImpl implements ENa
 	public void setName(String name) {
 		slotSet(Slot_name, name);
 	}
-
+	
+	@Override
+	public String getCaseSensitiveName() {
+		return (String)slotGet(Slot_name);
+	}
 }

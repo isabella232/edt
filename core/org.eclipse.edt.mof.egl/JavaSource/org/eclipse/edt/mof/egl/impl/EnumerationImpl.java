@@ -174,7 +174,10 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getPackageName() + "." + getName();
+		if (getCaseSensitivePackageName().length() == 0) {
+			return getCaseSensitiveName();
+		}
+		return getCaseSensitivePackageName() + "." + getCaseSensitiveName();
 	}
 
 	@Override

@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.handlers;
 
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataNode;
+import org.eclipse.edt.mof.egl.ParameterizedType;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class BindingHandlerHelper {
-	public static final String[] EGLUI = new String[] {"egl", "ui"}; //$NON-NLS-1$
-	public static final String[] EGLUIRUI = new String[] {"egl", "ui", "rui"}; //$NON-NLS-1$
+	public static final String EGLUI = "egl.ui."; //$NON-NLS-1$
 	
 	public static final String ANNOTATION_DISPLAYNAME = "displayName";  //$NON-NLS-1$
 	public static final String ANNOTATION_DISPLAYUSE = "displayUse";  //$NON-NLS-1$
@@ -26,38 +26,54 @@ public class BindingHandlerHelper {
 	public static final String Widget_Combo = "Combo";  //$NON-NLS-1$
 	public static final String Widget_DojoComboBox = "DojoComboBox";  //$NON-NLS-1$
 	
-	public static String getPrimitiveInsertDataNodeTypeDetail(PrimitiveTypeBinding primitiveTypeBinding){
-		switch(primitiveTypeBinding.getPrimitive().getType()){
-		case Primitive.STRING_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_STRING;
-		case Primitive.DATE_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_DATE;
-		case Primitive.TIME_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_TIME;
-		case Primitive.TIMESTAMP_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_TIMESTAMP;
-		case Primitive.BIGINT_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_BIGINT;
-		case Primitive.BIN_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_BIN;
-		case Primitive.DECIMAL_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_DECIMAL;
-		case Primitive.FLOAT_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_FLOAT;
-		case Primitive.INT_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_INT;
-		case Primitive.NUM_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_NUM;
-		case Primitive.MONEY_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_MONEY;
-		case Primitive.SMALLINT_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_SMALLINT;
-		case Primitive.SMALLFLOAT_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_SMALLFLOAT;
-		case Primitive.BOOLEAN_PRIMITIVE:
-			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_BOOLEAN;
-		default:
-			return null;
+	public static String getPrimitiveInsertDataNodeTypeDetail(Type primitiveTypeBinding){
+		if (primitiveTypeBinding instanceof ParameterizedType) {
+			primitiveTypeBinding = ((ParameterizedType)primitiveTypeBinding).getParameterizableType();
 		}
+		
+		if (primitiveTypeBinding.equals(TypeUtils.Type_STRING)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_STRING;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_DATE)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_DATE;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_TIME)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_TIME;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_TIMESTAMP)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_TIMESTAMP;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_BIGINT)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_BIGINT;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_DECIMAL)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_DECIMAL;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_FLOAT)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_FLOAT;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_INT)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_INT;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_SMALLINT)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_SMALLINT;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_SMALLFLOAT)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_SMALLFLOAT;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_BOOLEAN)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_BOOLEAN;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_BIN)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_BIN;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_NUM)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_NUM;
+		}
+		else if (primitiveTypeBinding.equals(TypeUtils.Type_MONEY)) {
+			return InsertDataNode.NodeTypeDetail.TYPE_PRIMITIVE_MONEY;
+		}
+		
+		return null;
 	}
 }

@@ -48,7 +48,7 @@ import org.eclipse.edt.mof.egl.UnaryExpression;
 public class CommonUtilities {
 
 	public static String packageName(Part part) {
-		return packageName(part.getPackageName());
+		return packageName(part.getCaseSensitivePackageName());
 	}
 
 	public static String packageName(String pkg) {
@@ -65,8 +65,8 @@ public class CommonUtilities {
 	 * @return
 	 */
 	public static String fullClassAlias(Part part) {
-		String alias = JavaAliaser.getAlias(part.getName());
-		String pkg = part.getPackageName();
+		String alias = JavaAliaser.getAlias(part.getCaseSensitiveName());
+		String pkg = part.getCaseSensitivePackageName();
 		if (pkg.length() > 0) {
 			pkg = packageName(pkg);
 			return pkg + '.' + alias;
@@ -80,7 +80,7 @@ public class CommonUtilities {
 	 * @return
 	 */
 	public static String classAlias(Part part) {
-		return JavaAliaser.getAlias(part.getName());
+		return JavaAliaser.getAlias(part.getCaseSensitiveName());
 	}
 
 	/**
@@ -134,12 +134,12 @@ public class CommonUtilities {
 		// First see if we're looking at java.io.Serializable.
 		Annotation annot = et.getAnnotation("eglx.java.JavaObject");
 		if (annot != null) {
-			String name = et.getName();
+			String name = et.getCaseSensitiveName();
 			if (annot.getValue("externalName") != null && ((String) annot.getValue("externalName")).length() > 0) {
 				name = (String) annot.getValue("externalName");
 			}
 			if ("Serializable".equals(name)) {
-				String pkg = et.getPackageName();
+				String pkg = et.getCaseSensitivePackageName();
 				if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
 					pkg = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME);
 				}
@@ -150,8 +150,8 @@ public class CommonUtilities {
 		} else {
 			annot = et.getAnnotation("eglx.java.RootJavaObject");
 			if (annot != null) {
-				if ("Serializable".equals(et.getName())) {
-					String pkg = et.getPackageName();
+				if ("Serializable".equals(et.getCaseSensitiveName())) {
+					String pkg = et.getCaseSensitivePackageName();
 					if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
 						pkg = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME);
 					}
@@ -177,7 +177,7 @@ public class CommonUtilities {
 
 	public static String getNativeRuntimeOperationName(UnaryExpression expr) throws GenerationException {
 		// safety check to make sure the operation has been defined properly
-		if (expr.getOperation() == null || expr.getOperation().getName() == null)
+		if (expr.getOperation() == null || expr.getOperation().getCaseSensitiveName() == null)
 			throw new GenerationException();
 		// process the operator
 		String op = expr.getOperator();
@@ -192,7 +192,7 @@ public class CommonUtilities {
 
 	public static String getNativeRuntimeOperationName(BinaryExpression expr) throws GenerationException {
 		// safety check to make sure the operation has been defined properly
-		if (expr.getOperation() == null || expr.getOperation().getName() == null)
+		if (expr.getOperation() == null || expr.getOperation().getCaseSensitiveName() == null)
 			throw new GenerationException();
 		// process the operator
 		String op = expr.getOperator();
@@ -444,7 +444,7 @@ public class CommonUtilities {
 		String unqualifiedName = qualifiedName;
 		if (unqualifiedName.indexOf('.') >= 0)
 			unqualifiedName = unqualifiedName.substring(unqualifiedName.lastIndexOf('.') + 1);
-		if (unqualifiedName.equalsIgnoreCase(partBeingGenerated.getName()))
+		if (unqualifiedName.equalsIgnoreCase(partBeingGenerated.getCaseSensitiveName()))
 			return;
 		// if we get here, then we haven't processed this type before
 		for (String imported : typesImported) {
@@ -461,7 +461,7 @@ public class CommonUtilities {
 
 	public static void generateSmapExtension(Member field, Context ctx) {
 		// if this isn't an internal variable, then add the data to the debug extension buffer
-		if (!field.getName().startsWith("eze")) {
+		if (!field.getCaseSensitiveName().startsWith("eze")) {
 			// get the line number. If it is not found, then we can't write the debug extension
 			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
@@ -472,8 +472,8 @@ public class CommonUtilities {
 					ctx.getSmapExtension().append("#" + (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
 				} else
 					ctx.getSmapExtension().append("#1" + ";");
-				ctx.getSmapExtension().append(field.getName() + ";");
-				ctx.getSmapExtension().append(JavaAliaser.getAlias(field.getName()) + ";");
+				ctx.getSmapExtension().append(field.getCaseSensitiveName() + ";");
+				ctx.getSmapExtension().append(JavaAliaser.getAlias(field.getCaseSensitiveName()) + ";");
 				ctx.getSmapExtension().append(field.getType().getTypeSignature() + "\n");
 			}
 		}
@@ -490,7 +490,7 @@ public class CommonUtilities {
 				ctx.getSmapExtension().append("#" + (ctx.getSmapFiles().indexOf(ctx.getCurrentFile()) + 1) + ";");
 			} else
 				ctx.getSmapExtension().append("#1" + ";");
-			ctx.getSmapExtension().append("F:" + function.getName() + ";" + JavaAliaser.getAlias(function.getName()) + ";(");
+			ctx.getSmapExtension().append("F:" + function.getCaseSensitiveName() + ";" + JavaAliaser.getAlias(function.getCaseSensitiveName()) + ";(");
 			for (int i = 0; i < function.getParameters().size(); i++) {
 				FunctionParameter decl = function.getParameters().get(i);
 				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst())
@@ -530,7 +530,7 @@ public class CommonUtilities {
 
 	public static void generateSmapExtension(ProgramParameter programParameter, Context ctx) {
 		ctx.getSmapExtension().append(
-			Constants.smap_extensionProgramParameter + ";" + programParameter.getName() + ";" + JavaAliaser.getAlias(programParameter.getName()) + ";");
+			Constants.smap_extensionProgramParameter + ";" + programParameter.getCaseSensitiveName() + ";" + JavaAliaser.getAlias(programParameter.getCaseSensitiveName()) + ";");
 		ctx.getSmapExtension().append(programParameter.getType().getTypeSignature() + "\n");
 	}
 
@@ -619,7 +619,7 @@ public class CommonUtilities {
 			boolean bothUnspecified = (propFn == null || (propFn instanceof String && ((String) propFn).length() == 0))
 				&& (otherPropFn == null || (otherPropFn instanceof String && ((String) otherPropFn).length() == 0));
 			if (bothUnspecified) {
-				String fieldName = field.getName();
+				String fieldName = field.getCaseSensitiveName();
 				result = (setter ? Constants.SetterPrefix : Constants.GetterPrefix) + fieldName.substring(0, 1).toUpperCase();
 				if (fieldName.length() > 1) {
 					result += fieldName.substring(1);
@@ -635,12 +635,12 @@ public class CommonUtilities {
 					qfi.setQualifier(expressionForContainer(((Field) field).getContainer(), context));
 					if (setter) {
 						MemberName argName = context.getFactory().createMemberName();
-						argName.setId(field.getName());
+						argName.setId(field.getCaseSensitiveName());
 						argName.setMember((Member) field);
 						qfi.getArguments().add(argName);
 					}
 
-					result = qfi.getTarget().getName();
+					result = qfi.getTarget().getCaseSensitiveName();
 				}
 			} else {
 				if (propFn instanceof Name) {
@@ -673,7 +673,7 @@ public class CommonUtilities {
 	}
 	public static String getEnumerationName(Object enm){
 		if(enm instanceof EnumerationEntry){
-			return ((EnumerationEntry)enm).getName();
+			return ((EnumerationEntry)enm).getCaseSensitiveName();
 		}
 		else{
 			return "";

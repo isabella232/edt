@@ -15,6 +15,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ThrowStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -43,7 +44,7 @@ public class ThrowStatementValidator extends DefaultASTVisitor {
 					problemRequestor.acceptProblem(
 						throwStatement.getExpression(),
 						IProblemRequestor.THROW_TARGET_MUST_BE_EXCEPTION,
-						new String[] {StatementValidator.getShortTypeString(type)});
+						new String[] {BindingUtil.getShortTypeString(type)});
 				}
 			}
 		}

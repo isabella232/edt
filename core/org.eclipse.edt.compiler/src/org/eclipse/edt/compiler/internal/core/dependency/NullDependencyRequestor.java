@@ -78,15 +78,11 @@ public class NullDependencyRequestor implements IDependencyRequestor {
      * @see org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor#stopRecordingTopLevelFunctionBindings()
      */
     public void stopRecordingTopLevelFunctions() {
-        // TODO Auto-generated method stub
-        
     }
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor#startRecordingTopLevelFunctionBindings()
      */
     public void startRecordingTopLevelFunctions() {
-        // TODO Auto-generated method stub
-        
     }
 
 }

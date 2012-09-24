@@ -30,12 +30,17 @@ import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.ContinueStatement;
+import org.eclipse.edt.compiler.core.ast.ConverseStatement;
+import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
+import org.eclipse.edt.compiler.core.ast.DisplayStatement;
 import org.eclipse.edt.compiler.core.ast.EmptyStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.ExitStatement;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
+import org.eclipse.edt.compiler.core.ast.ForwardStatement;
+import org.eclipse.edt.compiler.core.ast.FreeSQLStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
@@ -49,16 +54,20 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
+import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
+import org.eclipse.edt.compiler.core.ast.PrintStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.ReturnStatement;
 import org.eclipse.edt.compiler.core.ast.SetStatement;
 import org.eclipse.edt.compiler.core.ast.SetValuesStatement;
+import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.ThrowStatement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
+import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.WhileStatement;
@@ -80,7 +89,6 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.LabelStatemen
 import org.eclipse.edt.compiler.internal.core.validation.statement.MoveStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ReturnStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.SetStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ThrowStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.TryStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatementValidator;
@@ -277,24 +285,18 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkInputParm(FunctionParameter functionParameter) {
-		if (functionParameter.isParmConst()) {
-			validatePrimitiveConst(functionParameter.getType());
-		}
 	}
 	
 	private void checkOutputParm(FunctionParameter functionParameter) {
 		if (functionParameter.isParmConst()) {
 			problemRequestor.acceptProblem(
             		functionParameter,
-					IProblemRequestor.CONST_MODIFIER_NOT_ALLOWED_WITH_IN_MODIFIER,
+					IProblemRequestor.CONST_MODIFIER_NOT_ALLOWED_WITH_OUT_MODIFIER,
 					new String[] {IEGLConstants.KEYWORD_OUT.toUpperCase(), IEGLConstants.KEYWORD_INTERVAL.toUpperCase()});
 		}
 	}
 	
 	private void checkInputOutputParm(FunctionParameter functionParameter) {
-		if (functionParameter.isParmConst()) {
-			validatePrimitiveConst(functionParameter.getType());
-		}
 	}
 	
 	private void preVisitStatement(Statement statement) {
@@ -326,7 +328,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	
 	private boolean checkStatementAllowedInContainer(Statement statement) {
 		if(statementValidInContainerInfo != null && !statementValidInContainerInfo.statementIsValidInContainer(statement)) {
-			problemRequestor.acceptProblem(statement, statementValidInContainerInfo.getProblemKind(), new String[] {StatementValidator.getName(statement)});
+			problemRequestor.acceptProblem(statement, statementValidInContainerInfo.getProblemKind(), new String[] {getName(statement)});
 			return false;
 		}
 		return true;
@@ -663,9 +665,138 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return false;
 	}
 
-	private void validatePrimitiveConst(Type type){
-		//TODO primitives are being removed, and this check will no longer be valid. see bug 377632
-//		StatementValidator.validatePrimitiveConstant(type, problemRequestor);
+	public static String getName(Statement statement) {
+		final String[] result = new String[] {null};
+		statement.accept(new DefaultASTVisitor() {
+			public void endVisit(AddStatement addStatement) {
+				result[0] = IEGLConstants.KEYWORD_ADD;
+			}
+
+			public void endVisit(CallStatement callStatement) {
+				result[0] = IEGLConstants.KEYWORD_CALL;
+			}
+
+			public void endVisit(CaseStatement caseStatement) {
+				result[0] = IEGLConstants.KEYWORD_CASE;
+			}
+
+			public void endVisit(CloseStatement closeStatement) {
+				result[0] = IEGLConstants.KEYWORD_CLOSE;
+			}
+
+			public void endVisit(ContinueStatement continueStatement) {
+				result[0] = IEGLConstants.KEYWORD_CONTINUE;
+			}
+
+			public void endVisit(ConverseStatement converseStatement) {
+				result[0] = IEGLConstants.KEYWORD_CONVERSE;
+			}
+			
+			public void endVisit(DeleteStatement deleteStatement) {
+				result[0] = IEGLConstants.KEYWORD_DELETE;
+			}
+
+			public void endVisit(DisplayStatement displayStatement) {
+				result[0] = IEGLConstants.KEYWORD_DISPLAY;
+			}
+
+			public void endVisit(ExecuteStatement executeStatement) {
+				result[0] = IEGLConstants.KEYWORD_EXECUTE;
+			}
+
+			public void endVisit(ExitStatement exitStatement) {
+				result[0] = IEGLConstants.KEYWORD_EXIT;
+			}
+
+			public void endVisit(ForEachStatement forEachStatement) {
+				result[0] = IEGLConstants.KEYWORD_FOREACH;
+			}
+
+			public void endVisit(ForStatement forStatement) {
+				result[0] = IEGLConstants.KEYWORD_FOR;
+			}
+
+			public void endVisit(ForwardStatement forwardStatement) {
+				result[0] = IEGLConstants.KEYWORD_FORWARD;
+			}
+
+			public void endVisit(FreeSQLStatement freeSQLStatement) {
+				result[0] = IEGLConstants.KEYWORD_FREESQL;
+			}
+
+			public void endVisit(GetByKeyStatement getByKeyStatement) {
+				result[0] = IEGLConstants.KEYWORD_GET;
+			}
+
+			public void endVisit(GetByPositionStatement getByPositionStatement) {
+				result[0] = IEGLConstants.KEYWORD_GET;
+			}
+
+			public void endVisit(GotoStatement gotoStatement) {
+				result[0] = IEGLConstants.KEYWORD_GOTO;
+			}
+			
+			public void endVisit(IfStatement ifStatement) {
+				result[0] = IEGLConstants.KEYWORD_IF;
+			}
+
+			public void endVisit(MoveStatement moveStatement) {
+				result[0] = IEGLConstants.KEYWORD_MOVE;
+			}
+
+			public void endVisit(OpenStatement openStatement) {
+				result[0] = IEGLConstants.KEYWORD_OPEN;
+			}
+
+			public void endVisit(OpenUIStatement openUIStatement) {
+				result[0] = IEGLConstants.KEYWORD_OPENUI;
+			}
+
+			public void endVisit(PrintStatement printStatement) {
+				result[0] = IEGLConstants.KEYWORD_PRINT;
+			}
+
+			public void endVisit(ReplaceStatement replaceStatement) {
+				result[0] = IEGLConstants.KEYWORD_REPLACE;
+			}
+
+			public void endVisit(ShowStatement showStatement) {
+				result[0] = IEGLConstants.KEYWORD_SHOW;
+			}
+			
+			public void endVisit(ThrowStatement throwStatement) {
+				result[0] = IEGLConstants.KEYWORD_THROW;
+			}
+
+			public void endVisit(TransferStatement transferStatement) {
+				result[0] = IEGLConstants.KEYWORD_TRANSFER;
+			}
+
+			public void endVisit(TryStatement tryStatement) {
+				result[0] = IEGLConstants.KEYWORD_TRY;
+			}
+
+			public void endVisit(WhileStatement whileStatement) {
+				result[0] = IEGLConstants.KEYWORD_WHILE;
+			}
+			
+		    public void endVisit(ReturnStatement returnStatement) {
+		        result[0] = IEGLConstants.KEYWORD_RETURN;
+		    }
+		    
+		    public void endVisit(SetStatement setStatement) {
+		        result[0] = IEGLConstants.KEYWORD_SET;
+		    }
+		    
+		    public void endVisit(PrepareStatement prepareStatement) {
+		        result[0] = IEGLConstants.KEYWORD_PREPARE;
+		    }
+		});
+		
+		if(result[0] == null) {
+			throw new RuntimeException("Must define visit() for class " + statement.getClass() + " in " + FunctionValidator.class.getSimpleName() + "::getName()");
+		}
+		
+		return result[0];
 	}
-	
 }

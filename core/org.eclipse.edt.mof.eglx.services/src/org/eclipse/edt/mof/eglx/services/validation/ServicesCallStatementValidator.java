@@ -23,7 +23,7 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.validation.AbstractStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -35,10 +35,10 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.services.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class ServicesCallStatementValidator extends AbstractStatementValidator {
 	@Override
@@ -86,7 +86,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 		}
 	
 		if (callStatement.getUsing() != null && !Utils.isIHTTP(callStatement.getUsing().resolveType())) {
-			problemRequestor.acceptProblem(callStatement, ResourceKeys.WRONG_USING_CLAUSE_TYPE, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(callStatement.getUsing().resolveType(), true)}, ResourceKeys.getResourceBundleForKeys());
+			problemRequestor.acceptProblem(callStatement, ResourceKeys.WRONG_USING_CLAUSE_TYPE, IMarker.SEVERITY_ERROR, new String[] {BindingUtil.getShortTypeString(callStatement.getUsing().resolveType(), true)}, ResourceKeys.getResourceBundleForKeys());
 		}
 	
 		//the target function has a return but there is no returning to or returns expression
@@ -165,7 +165,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 
 				for (int i = 0; i < args.size(); i++) {
 					if (!argTypeCompatibleWithParm(args.get(i), parms.get(i))) {
-						problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getTypeName(args.get(i)), parms.get(i).getCaseSensitiveName(), expr.getCanonicalString(), StatementValidator.getTypeName(parms.get(i))}, ResourceKeys.getResourceBundleForKeys());
+						problemRequestor.acceptProblem(expr, ResourceKeys.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {BindingUtil.getTypeName(args.get(i)), parms.get(i).getCaseSensitiveName(), expr.getCanonicalString(), BindingUtil.getTypeName(parms.get(i))}, ResourceKeys.getResourceBundleForKeys());
 					}
 				}
 			
@@ -235,7 +235,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 			return true;
 		}
 		
-    	if (IRUtils.isMoveCompatible(parmLHS.getType(), argRHS.getType(), argRHS)) {
+    	if (IRUtils.isMoveCompatible(parmLHS.getType(), parmLHS, argRHS.getType(), argRHS)) {
     		return true;
     	}
 		
@@ -253,7 +253,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 	}
 	
 	private String getQualAnyExceptionString() {
-		return InternUtil.intern("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
+		return NameUtile.getAsName("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
 	}
 
 }

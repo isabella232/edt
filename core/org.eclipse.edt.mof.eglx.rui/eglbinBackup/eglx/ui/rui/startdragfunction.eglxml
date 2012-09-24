@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<Delegate ID="1" eClass="org.eclipse.edt.mof.egl.Delegate" name="StartDragFunction" fileName="eglx/ui/rui/ExternalTypes.egl" hasCompileErrors="false" packageName="eglx.ui.rui" isNullable="false" returnType="egl:eglx.lang.eboolean" >
+	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:85" off="i:25518" line="i:661" />
+	<parameters ID="3" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="widget" type="egl:eglx.ui.rui.widget" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+		<annotations ID="4" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:16" off="i:25545" line="i:661" />
+		<container IDREF="1"/>
+	</parameters>
+	<parameters ID="5" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="x" type="egl:eglx.lang.eint" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+		<annotations ID="6" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:8" off="i:25563" line="i:661" />
+		<container IDREF="1"/>
+	</parameters>
+	<parameters ID="7" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="y" type="egl:eglx.lang.eint" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+		<annotations ID="8" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:8" off="i:25573" line="i:661" />
+		<container IDREF="1"/>
+	</parameters>
+</Delegate>

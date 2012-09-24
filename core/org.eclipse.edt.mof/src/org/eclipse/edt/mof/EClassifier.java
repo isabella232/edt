@@ -24,6 +24,7 @@ public interface EClassifier extends ENamedElement, EType {
 	
 	String getPackageName();
 	void setPackageName(String name);
+	String getCaseSensitivePackageName();
 			
 	String getETypeSignature();
 	

@@ -79,7 +79,7 @@ public class AnnotationTemplate extends EGLDocTemplate {
 			EField theEField = fieldsIterator.next();
 			counter = counter + 1;
 			String theSignature = theEField.getTypeSignature();
-			String theName = theEField.getName();
+			String theName = theEField.getCaseSensitiveName();
 
 			if (numberOfAnnoFields > 1) {
 				out.println("<p>&nbsp;&nbsp;&nbsp;&nbsp;");

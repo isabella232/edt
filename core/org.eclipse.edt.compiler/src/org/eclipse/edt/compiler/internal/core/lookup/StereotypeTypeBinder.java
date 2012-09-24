@@ -10,7 +10,6 @@ public class StereotypeTypeBinder extends AnnotationTypeBinder {
 			IDependencyRequestor dependencyRequestor,
 			IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		super(irBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
-		// TODO Auto-generated constructor stub
 	}
 
 }

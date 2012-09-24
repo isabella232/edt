@@ -16,14 +16,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IValidValuesElement;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Element;
@@ -31,20 +29,15 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
-import org.eclipse.edt.mof.egl.FloatingPointLiteral;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Literal;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.PatternType;
-import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -56,8 +49,8 @@ public class MVCTemplate extends JavaScriptTemplate {
 	private static final String MVC_NAMESPACE = "egl."+MVC_PACKAGE;
 	
 	private static final String PROPERTY_INPUTREQUIRED = MVC_PACKAGE + "inputRequired";
-	private static final String PROPERTY_VALIDVALUESMSGKEY = MVC_PACKAGE + "validValuesMsgKey";
-	private static final String PROPERTY_VALIDVALUES = MVC_PACKAGE + "validValues";
+//	private static final String PROPERTY_VALIDVALUESMSGKEY = MVC_PACKAGE + "validValuesMsgKey";
+//	private static final String PROPERTY_VALIDVALUES = MVC_PACKAGE + "validValues";
 	private static final String PROPERTY_INPUTREQUIREDMSGKEY = MVC_PACKAGE + "inputRequiredMsgKey";
 	private static final String PROPERTY_ISHEXDIGIT = MVC_PACKAGE + "isHexDigit";
 	private static final String PROPERTY_TYPECHKMSGKEY = MVC_PACKAGE + "typeChkMsgKey";
@@ -90,7 +83,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 	 * @param field
 	 */
 	public void preGen(AnnotationType aType, Context ctx, Annotation annot, Field field) {
-		if ("MVC".equals(annot.getEClass().getName())) {
+		if ("MVC".equals(annot.getEClass().getCaseSensitiveName())) {
 			Expression model = (Expression)annot.getValue("model");
 			Member modelMember = null;
 			if ( model instanceof MemberName )
@@ -148,10 +141,10 @@ public class MVCTemplate extends JavaScriptTemplate {
 	 * @param contextTemplateMethod
 	 */
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field, String contextTemplateMethod) {
-		if ("MVC".equals(annot.getEClass().getName()) && genInitializeMethod.equals(contextTemplateMethod)) {
+		if ("MVC".equals(annot.getEClass().getCaseSensitiveName()) && genInitializeMethod.equals(contextTemplateMethod)) {
 			if ( !field.isImplicit() /* NOGO sbg neither of these checks work as they should?!   && field.getType() instanceof Member && field.hasSetValuesBlock() */ ) {
 				
-				String controllerName  = field.getName();
+				String controllerName  = field.getCaseSensitiveName();
 				Expression view = (Expression)annot.getValue("view"); 
 				Expression model = (Expression)annot.getValue("model"); 
 
@@ -490,7 +483,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 		field2.setIsNullable(true);
 		MemberName nameExpression = factory.createMemberName();
 		nameExpression.setMember(field2);
-		nameExpression.setId(field2.getName());
+		nameExpression.setId(field2.getCaseSensitiveName());
 	
 		if (!nameExpression.getType().equals(type)) {
 			// Timestamp needs to use the classifier to match what's expected by the internal formatter.
@@ -652,37 +645,38 @@ public class MVCTemplate extends JavaScriptTemplate {
 			}
 		}
 		
-		if ((annot = getAnnotation(modelMember, PROPERTY_VALIDVALUES)) != null) {
-			usedValidationLib = true;
-			if (!fastCheck) {
-				// Convert validvalues to any[][].
-				IValidValuesElement[] values = (IValidValuesElement[])annot.getValue();
-				List<Expression> entries = new ArrayList<Expression>(values.length);
-				
-				for (int i = 0; values != null && i < values.length; i++) {
-					IValidValuesElement next = (IValidValuesElement)values[i];
-					List<Expression> subentries = new ArrayList<Expression>();
-					
-					if (next.isRange()) {
-						IValidValuesElement[] rangeElements = next.getRangeElements();
-						subentries.add(literalForValidValue( rangeElements[0] ));
-						subentries.add(literalForValidValue( rangeElements[1] ));
-					}
-					else {
-						subentries.add(literalForValidValue(next));
-					}
-					ArrayLiteral arrayLiteral = IrFactory.INSTANCE.createArrayLiteral();
-					arrayLiteral.getEntries().addAll(subentries);
-					entries.add(i, arrayLiteral);
-				}
-				ArrayLiteral literal = IrFactory.INSTANCE.createArrayLiteral();
-				literal.getEntries().addAll(entries);
-				
-				String literalValue = generateMemberToString(ctx, literal);
-				String validationNLSLibrary = getValidationPropertiesLibraryString(ctx, modelMember, library, PROPERTY_VALIDVALUESMSGKEY);
-				validators.add(MVC_NAMESPACE + "InternalValidators.$inst, "+MVC_NAMESPACE + "InternalValidators.$inst.checkValidValues, " + literalValue + ", " + validationNLSLibrary);
-			}
-		}
+		//TODO valid values not currently supported
+//		if ((annot = getAnnotation(modelMember, PROPERTY_VALIDVALUES)) != null) {
+//			usedValidationLib = true;
+//			if (!fastCheck) {
+//				// Convert validvalues to any[][].
+//				IValidValuesElement[] values = (IValidValuesElement[])annot.getValue();
+//				List<Expression> entries = new ArrayList<Expression>(values.length);
+//				
+//				for (int i = 0; values != null && i < values.length; i++) {
+//					IValidValuesElement next = (IValidValuesElement)values[i];
+//					List<Expression> subentries = new ArrayList<Expression>();
+//					
+//					if (next.isRange()) {
+//						IValidValuesElement[] rangeElements = next.getRangeElements();
+//						subentries.add(literalForValidValue( rangeElements[0] ));
+//						subentries.add(literalForValidValue( rangeElements[1] ));
+//					}
+//					else {
+//						subentries.add(literalForValidValue(next));
+//					}
+//					ArrayLiteral arrayLiteral = IrFactory.INSTANCE.createArrayLiteral();
+//					arrayLiteral.getEntries().addAll(subentries);
+//					entries.add(i, arrayLiteral);
+//				}
+//				ArrayLiteral literal = IrFactory.INSTANCE.createArrayLiteral();
+//				literal.getEntries().addAll(entries);
+//				
+//				String literalValue = generateMemberToString(ctx, literal);
+//				String validationNLSLibrary = getValidationPropertiesLibraryString(ctx, modelMember, library, PROPERTY_VALIDVALUESMSGKEY);
+//				validators.add(MVC_NAMESPACE + "InternalValidators.$inst, "+MVC_NAMESPACE + "InternalValidators.$inst.checkValidValues, " + literalValue + ", " + validationNLSLibrary);
+//			}
+//		}
 		
 		return usedValidationLib ? MVC_PACKAGE + "InternalValidators" : null;
 	}
@@ -767,33 +761,33 @@ public class MVCTemplate extends JavaScriptTemplate {
 
 
 	
-	/**
-	 * literalForValidValue
-	 * 
-	 * @param value
-	 * @return
-	 */
-	private static Literal literalForValidValue(IValidValuesElement value) {
-		Literal result = null;
-		if (value.isString()) {
-			StringLiteral literal = IrFactory.INSTANCE.createStringLiteral(); 
-			literal.setValue(value.getStringValue());
-			result = literal;
-		}
-		if (value.isInt()) {
-			IntegerLiteral literal = IrFactory.INSTANCE.createIntegerLiteral();
-			literal.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
-			literal.setValue(String.valueOf(value.getLongValue()));
-			result = literal;
-		}
-		if (value.isFloat()) {
-			FloatingPointLiteral literal = IrFactory.INSTANCE.createFloatingPointLiteral();
-			literal.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Float));
-			literal.setValue(String.valueOf(value.getFloatValue()));
-			result = literal;
-		}
-		return result;
-	}
+//	/**
+//	 * literalForValidValue
+//	 * 
+//	 * @param value
+//	 * @return
+//	 */
+//	private static Literal literalForValidValue(IValidValuesElement value) {
+//		Literal result = null;
+//		if (value.isString()) {
+//			StringLiteral literal = IrFactory.INSTANCE.createStringLiteral(); 
+//			literal.setValue(value.getStringValue());
+//			result = literal;
+//		}
+//		if (value.isInt()) {
+//			IntegerLiteral literal = IrFactory.INSTANCE.createIntegerLiteral();
+//			literal.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
+//			literal.setValue(String.valueOf(value.getLongValue()));
+//			result = literal;
+//		}
+//		if (value.isFloat()) {
+//			FloatingPointLiteral literal = IrFactory.INSTANCE.createFloatingPointLiteral();
+//			literal.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Float));
+//			literal.setValue(String.valueOf(value.getFloatValue()));
+//			result = literal;
+//		}
+//		return result;
+//	}
 
 	/**
 	 * @param member      The field.
@@ -1036,7 +1030,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 			if ((annot = getAnnotation(member, PROPERTY_SIGN)) != null) {
 				Object value = annot.getValue();
 				if (value instanceof EnumerationEntry) {
-					signkind = ((EnumerationEntry)value).getId();
+					signkind = ((EnumerationEntry)value).getCaseSensitiveName();
 				}
 			}
 			PartName pn = IrFactory.INSTANCE.createPartName();

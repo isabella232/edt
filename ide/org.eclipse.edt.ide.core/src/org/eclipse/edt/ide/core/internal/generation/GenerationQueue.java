@@ -276,7 +276,7 @@ public class GenerationQueue {
 				generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, requestor);
 			}
 			catch (RuntimeException e) {
-				handleRuntimeException(e, messageRequestor, part.getId(), new HashSet());
+				handleRuntimeException(e, messageRequestor, part.getCaseSensitiveName(), new HashSet());
 			}
 			catch (final Exception e) {
 				handleUnknownException(e, messageRequestor);
