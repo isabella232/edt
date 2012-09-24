@@ -18,7 +18,6 @@ import java.util.Stack;
 
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
-import org.eclipse.edt.compiler.core.ast.LikeMatchesExpression;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -749,25 +748,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		expr.setOperation(isNotExpression.getOperator().toString());
 		SimpleName mnemonic = (SimpleName)isNotExpression.getSecondExpression();
 		expr.setMnemonic(mnemonic.getIdentifier());
-		return false;
-	}
-
-	@Override
-	public boolean visit(LikeMatchesExpression likeMatchesExpression) {
-		TernaryExpression expr = factory.createTernaryExpression();
-		setElementInformation(likeMatchesExpression, expr);
-		stack.push(expr);
-		likeMatchesExpression.getFirstExpression().accept(this);
-		expr.setFirst((Expression)stack.pop());
-		likeMatchesExpression.getSecondExpression().accept(this);
-		expr.setSecond((Expression)stack.pop());
-		expr.setOperator(likeMatchesExpression.getOperator().toString());
-		if (likeMatchesExpression.getEscapeString() != null) {
-			StringLiteral lit = factory.createStringLiteral();
-			lit.setValue(likeMatchesExpression.getEscapeString());
-			setElementInformation(likeMatchesExpression, lit);
-			expr.setThird(lit);			
-		}
 		return false;
 	}
 

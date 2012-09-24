@@ -116,9 +116,7 @@ public class FieldValidator extends DefaultASTVisitor {
 			TypeValidator.validate(type, declaringPart, problemRequestor, compilerOptions);
 			
 			if (structureItem.hasInitializer()) {
-				if (!structureItem.isEmbedded()) {
-					validateInitializer(structureItem.getName(), structureItem.getInitializer());
-				}
+				validateInitializer(structureItem.getName(), structureItem.getInitializer());
 				
 				if (structureItem.hasSettingsBlock()) {
 					if (structureItem.getName() != null) {

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
@@ -23,14 +22,11 @@ import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
@@ -130,13 +126,6 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
         return true;
     }
     
-	public boolean visit(DataTable dataTable) {
-		if (dataTable.hasSubType()) {
-			checkSubType(dataTable.getSubType());
-		}
-		return true;
-	}
-
     public boolean visit(Program program) {
         if (program.hasSubType()) {
             checkSubType(program.getSubType());
@@ -186,24 +175,6 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
         return true;
     }
 
-    public boolean visit(NestedForm nestedForm) {
-        if (nestedForm.hasSubType()) {
-            checkSubType(nestedForm.getSubType());
-        }
-        return true;
-    }
-    
-    public boolean visit(TopLevelForm topLevelForm) {
-        if (topLevelForm.hasSubType()) {
-            checkSubType(topLevelForm.getSubType());
-        }
-        return true;
-    }
-    
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		return true;
-	}
-	
 	private void checkSubType(Name name) {
 
         StereotypeType stereotypeType = null;        

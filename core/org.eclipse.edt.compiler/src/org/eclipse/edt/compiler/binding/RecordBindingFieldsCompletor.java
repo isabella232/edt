@@ -64,14 +64,9 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
     		public boolean visit(StructureItem structureItem) {
     			if (structureItem.hasSettingsBlock()) {
     				Field field = null;
-    				if (structureItem.isFiller()) {
-    					field =  (Field)structureItem.resolveMember();
-    				}
-    				else {
-    					if (structureItem.getName() != null) {
-    						field = (Field)structureItem.getName().resolveMember();
-    					}
-    				}
+					if (structureItem.getName() != null) {
+						field = (Field)structureItem.getName().resolveMember();
+					}
     				
     				if (field != null) {
     					final Field fld = field;
@@ -114,17 +109,6 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
             return false; // Do not create the field binding if its type cannot be resolved
         }
         
-        if (structureItem.isFiller()) {
-            Field fieldBinding = createField(structureItem, type);
-            recordBinding.getFields().add(fieldBinding);
-            structureItem.setMember(fieldBinding);
-            return false;
-        }
-
-        if (structureItem.isEmbedded()) {
-        	//TODO handle embedded records if we support them
-        }
-        
         Field fieldBinding = createField(structureItem, type);
     	if(definedNames.contains(fieldBinding.getName())) {
     		problemRequestor.acceptProblem(
@@ -145,7 +129,7 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
 
     public Field createField(StructureItem structureItem, Type type) {
 
-        String fieldName = structureItem.isFiller() ? "*" : structureItem.getName().getCaseSensitiveIdentifier();
+        String fieldName = structureItem.getName().getCaseSensitiveIdentifier();
 
         Field field = IrFactory.INSTANCE.createField();
         field.setName(fieldName);
@@ -153,10 +137,8 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
         field.setType(type);
         field.setIsNullable(structureItem.isNullable());
         
-        if (!structureItem.isFiller()) {
-            structureItem.getName().setMember(field);
-            structureItem.getName().setType(type);
-        }
+        structureItem.getName().setMember(field);
+        structureItem.getName().setType(type);
         return field;
     }
     

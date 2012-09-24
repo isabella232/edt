@@ -44,12 +44,6 @@ public class ProgramValidator extends FunctionContainerValidator {
 		aprogram.accept(new ExpressionValidator(partBinding, problemRequestor, compilerOptions));
 		validateProgramFunctions();
 		
-		if (program.isCallable()) {
-			problemRequestor.acceptProblem(program.getName(),
-					IProblemRequestor.PART_OR_STATEMENT_NOT_SUPPORTED,
-					new String[] {program.getIdentifier()});
-		}
-
 		return true;
 	}
 	

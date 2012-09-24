@@ -19,7 +19,6 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
@@ -93,7 +92,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
         DependencyInfo dependencyInfo = new DependencyInfo();
         
         Scope scope = createPartScope(packageName, declaringFile, binding, dependencyInfo);
-        IProblemRequestor problemRequestor = createProblemRequestor(declaringFile,partAST, binding);
+        IProblemRequestor problemRequestor = problemRequestorFactory.getProblemRequestor(declaringFile,binding.getName());
 
 		Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
         
@@ -136,14 +135,6 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
         return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile, compiler), problemRequestor);
     }
     
-    private IProblemRequestor createProblemRequestor(File file,Node partAST, IPartBinding binding) {
-		IProblemRequestor newRequestor = problemRequestorFactory.getProblemRequestor(file,binding.getName());
-		if(binding.getKind() == ITypeBinding.FUNCTION_BINDING){
-			newRequestor = problemRequestorFactory.getGenericTopLevelFunctionProblemRequestor(file,binding.getName(),((TopLevelFunction)partAST).isContainerContextDependent());
-		}
-		return newRequestor;
-	}
-
     public IPartBinding level02Compile(String packageName, String caseSensitivePartName) {
         return SourcePathEntry.getInstance().compileLevel2Binding(packageName, caseSensitivePartName);
     }

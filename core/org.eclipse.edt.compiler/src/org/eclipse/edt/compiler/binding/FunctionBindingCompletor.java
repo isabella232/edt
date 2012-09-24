@@ -18,7 +18,6 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -30,7 +29,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
@@ -108,49 +106,6 @@ public class FunctionBindingCompletor extends AbstractBinder {
             }
         });
     	
-    }
-    
-    public boolean visit(TopLevelFunction function) {
-        function.getName().setMember(functionBinding);
-        
-
-        if (function.hasReturnType()) {
-            org.eclipse.edt.mof.egl.Type typeBinding = null;
-            try {
-                typeBinding = bindType(function.getReturnType());
-            } catch (ResolutionException e) {
-                problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
-                return false;
-            }
-            
-            functionBinding.setType(typeBinding);
-            functionBinding.setIsNullable(function.getReturnDeclaration().isNullable());
-        }
-
-        if (function.isPrivate()) {
-        	functionBinding.setAccessKind(AccessKind.ACC_PRIVATE);
-        }
-        
-        return true;
-    }
-    
-    public void endVisit(TopLevelFunction function){
-        function.accept(new DefaultASTVisitor() {
-
-            public boolean visit(TopLevelFunction function) {
-                return true;
-            }
-
-            public boolean visit(SettingsBlock settingsBlock) {
-                FunctionScope functionScope = new FunctionScope(currentScope, functionBinding);
-                AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, functionBinding, null, functionBinding);
-                SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, partBinding, scope, 
-                        dependencyRequestor, problemRequestor, compilerOptions);
-                settingsBlock.accept(blockCompletor);
-                return false;
-            }
-        });
-    	BindingUtil.setValid(partBinding, true);
     }
     
     public boolean visit(FunctionParameter functionParameter) {

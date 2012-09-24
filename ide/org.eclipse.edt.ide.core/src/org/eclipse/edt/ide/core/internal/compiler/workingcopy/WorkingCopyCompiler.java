@@ -24,7 +24,6 @@ import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -307,7 +306,6 @@ public class WorkingCopyCompiler {
 														if (part instanceof Program ||
 																part instanceof Library ||
 																part instanceof Handler||
-																part instanceof FormGroup||
 																part instanceof Service){
 															queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
 															break;

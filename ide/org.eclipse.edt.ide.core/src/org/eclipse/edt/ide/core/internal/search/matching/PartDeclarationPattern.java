@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.internal.model.EGLElement;
 import org.eclipse.edt.ide.core.internal.model.IRPartType;
@@ -213,10 +212,6 @@ public char[] indexEntryPrefix(){
  */
 protected int matchContainer() {
 	return EGL_FILE | PART | FUNCTION | FIELD;
-}
-
-public int matchesFunctionPart(TopLevelFunction function){
-	return matchesPart(function);
 }
 
 public int matchesPart(Part type){

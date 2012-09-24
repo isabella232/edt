@@ -200,16 +200,13 @@ public interface IUIHelpConstants {
 	public static final String EGL_EDITOR_CASE_STATEMENT = PREFIX + "kwd_case"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_CLOSE_STATEMENT = PREFIX + "kwd_close"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_CONTINUE_STATEMENT = PREFIX + "kwd_continue"; //$NON-NLS-1$
-	public static final String EGL_EDITOR_CONVERSE_STATEMENT = PREFIX + "kwd_converse"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_DELETE_STATEMENT = PREFIX + "kwd_delete"; //$NON-NLS-1$
-	public static final String EGL_EDITOR_DISPLAY_STATEMENT = PREFIX + "kwd_display"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_ELSE_BLOCK = PREFIX + "kwd_else"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_EXECUTE_STATEMENT = PREFIX + "kwd_execute"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_EXIT_STATEMENT = PREFIX + "kwd_exit"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_FOR_STATEMENT = PREFIX + "kwd_for"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_FOREACH_STATEMENT = PREFIX + "kwd_foreach"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_FORWARD_STATEMENT = PREFIX + "kwd_forward"; //$NON-NLS-1$
-	public static final String EGL_EDITOR_FREESQL_STATEMENT = PREFIX + "kwd_freesql"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_FUNCTION_INVOCATION_STATEMENT = PREFIX + "stmnt_function"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_GET_STATEMENT_BY_KEY = PREFIX + "kwd_get"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_GET_STATEMENT_BY_POSITION = PREFIX + "kwd_get"; //$NON-NLS-1$
@@ -217,14 +214,10 @@ public interface IUIHelpConstants {
 	public static final String EGL_EDITOR_IF_STATEMENT = PREFIX + "kwd_if"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_MOVE_STATEMENT = PREFIX + "kwd_move"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_OPEN_STATEMENT = PREFIX + "kwd_open"; //$NON-NLS-1$
-	public static final String EGL_EDITOR_OPENUI_STATEMENT = PREFIX + "kwd_openui"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_PREPARE_STATEMENT = PREFIX + "kwd_prepare"; //$NON-NLS-1$
-	public static final String EGL_EDITOR_PRINT_STATEMENT = PREFIX + "kwd_print"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_REPLACE_STATEMENT = PREFIX + "kwd_replace"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_RETURN_STATEMENT = PREFIX + "kwd_return"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_SET_STATEMENT = PREFIX + "kwd_set"; //$NON-NLS-1$
-	public static final String EGL_EDITOR_SHOW_STATEMENT = PREFIX + "kwd_show"; //$NON-NLS-1$
-	public static final String EGL_EDITOR_TRANSFER_STATEMENT = PREFIX + "kwd_transfer"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_TRY_STATEMENT = PREFIX + "kwd_try"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_WHILE_STATEMENT = PREFIX + "kwd_while"; //$NON-NLS-1$
 	

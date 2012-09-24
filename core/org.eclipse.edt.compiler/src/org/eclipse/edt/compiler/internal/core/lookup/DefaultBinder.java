@@ -23,10 +23,8 @@ import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
-import org.eclipse.edt.compiler.core.ast.DBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
@@ -40,15 +38,12 @@ import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.GetByPositionStatement;
-import org.eclipse.edt.compiler.core.ast.HexLiteral;
 import org.eclipse.edt.compiler.core.ast.InExpression;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.IntoClause;
 import org.eclipse.edt.compiler.core.ast.IsAExpression;
 import org.eclipse.edt.compiler.core.ast.IsNotExpression;
-import org.eclipse.edt.compiler.core.ast.LikeMatchesExpression;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
-import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.MoveStatement;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
@@ -57,7 +52,6 @@ import org.eclipse.edt.compiler.core.ast.NullLiteral;
 import org.eclipse.edt.compiler.core.ast.ObjectExpression;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.ReturningToNameClause;
@@ -89,6 +83,7 @@ import org.eclipse.edt.mof.egl.MultiOperandExpression;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.SubType;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -417,17 +412,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 		return null;
 	}
 
-	public void endVisit(LikeMatchesExpression likeMatchesExpression) {
-		
-		Operation op = IRUtils.getBinaryOperation(
-									getOperandType(likeMatchesExpression.getFirstExpression()), 
-									getOperandType(likeMatchesExpression.getSecondExpression()), 
-									likeMatchesExpression.getOperator().toString());
-		if (op != null) {
-			likeMatchesExpression.setType(op.getType());		
-		}
-	}
-		
 	public boolean visit(NewExpression newExpression) {
 		try {
 		    if (!newExpression.isBindAttempted()) {
@@ -698,30 +682,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 	public void endVisit(org.eclipse.edt.compiler.core.ast.BytesLiteral bytesLiteral) {
 		if(!bytesLiteral.isBindAttempted()){
 			bytesLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Bytes, bytesLiteral.getValue().length() / 2));
-		}
-	}
-	
-	public void endVisit(HexLiteral hexLiteral) {
-		if(!hexLiteral.isBindAttempted()){
-			hexLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Hex, hexLiteral.getValue().length()));
-		}
-	}
-	
-	public void endVisit(CharLiteral charLiteral) {
-		if(!charLiteral.isBindAttempted()){
-			charLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Char, charLiteral.getValue().length()));
-		}
-	}
-	
-	public void endVisit(DBCharLiteral dbcharLiteral) {
-		if(!dbcharLiteral.isBindAttempted()){
-			dbcharLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_DBChar, dbcharLiteral.getValue().length()));
-		}
-	}
-	
-	public void endVisit(MBCharLiteral mbcharLiteral) {
-		if(!mbcharLiteral.isBindAttempted()){
-			mbcharLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_MBChar, mbcharLiteral.getValue().length()));
 		}
 	}
 	

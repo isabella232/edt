@@ -21,7 +21,6 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.DelegateBinder;
@@ -260,28 +259,6 @@ public abstract class Compiler extends DefaultASTVisitor{
 	
 	protected abstract void logValidationException(RuntimeException e);
 
-    public void compileTopLevelFunction(TopLevelFunction functionAST, IPartBinding functionBinding, Scope scope, IPartBinding parentBinding, IDependencyRequestor dependencyInfo, IProblemRequestor requestor, ICompilerOptions compilerOptions) {
-//       try{
-//           functionAST.accept(new FunctionBinder((TopLevelFunctionBinding)functionBinding, (TopLevelFunctionBinding)functionBinding, scope, dependencyInfo, requestor, compilerOptions));
-//           
-//			try{
-//			    functionAST.accept(new FunctionValidator(requestor, parentBinding, compilerOptions));
-//			}catch(CancelledException e){
-//			    throw e;
-//       		}catch(RuntimeException e){
-//			    requestor.acceptProblem(functionAST.getName(), IProblemRequestor.CONTEXT_SPECIFIC_COMPILATION_EXCEPTION, new String[]{functionAST.getName().getCanonicalName()});
-//			    logValidationException(e);
-//			}
-//		}catch(CancelledException e){
-//		    throw e;
-//		}catch(CircularBuildRequestException e){
-//		    throw e; 
-//		}catch(RuntimeException e){
-//		   requestor.acceptProblem(functionAST.getName(), IProblemRequestor.CONTEXT_SPECIFIC_COMPILATION_EXCEPTION, new String[]{functionAST.getName().getCanonicalName()});
-//		   logPartBinderException(e);
-//		}
-	}
-    
     private void handleValidationException(Part astNode, IProblemRequestor problemRequestor, RuntimeException e) {
         problemRequestor.acceptProblem(astNode.getName(), IProblemRequestor.COMPILATION_EXCEPTION, new String[]{astNode.getName().getCanonicalName()});
         logValidationException(e);

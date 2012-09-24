@@ -19,7 +19,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.ReturnStatement;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -51,12 +50,6 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 				if (fBinding[0] != null) {
 					returnField = ((Function)fBinding[0]).getReturnField();
 				}
-				return false;
-			}
-			@Override
-			public boolean visit(TopLevelFunction tlFunction) {
-				bcontinue = false;
-				fBinding[0] = (FunctionMember) tlFunction.getName().resolveMember();
 				return false;
 			}
 		};

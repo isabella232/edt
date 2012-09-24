@@ -18,13 +18,11 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
@@ -32,8 +30,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -75,60 +71,61 @@ public class Util {
     	final Integer[] value = new Integer[1];
     	
     	part.accept(new DefaultASTVisitor(){
+    		@Override
 	    	public boolean visit(Handler handler){
 	    		value[0] = new Integer(ITypeBinding.HANDLER_BINDING);
 	    		return false;
 			}
-
+	    	
+	    	@Override
 	    	public boolean visit(EGLClass eglClass){
 	    		value[0] = new Integer(ITypeBinding.CLASS_BINDING);
 	    		return false;
 			}
-
+	    	
+	    	@Override
 	    	public boolean visit(ExternalType extType){
 	    		value[0] = new Integer(ITypeBinding.EXTERNALTYPE_BINDING);
 	    		return false;
 			}
+	    	
+	    	@Override
 	    	public boolean visit(Enumeration enumeration){
 	    		value[0] = new Integer(ITypeBinding.ENUMERATION_BINDING);
 	    		return false;
 			}
-
+	    	
+	    	@Override
 			public boolean visit(DataItem dataItem) {
 				value[0] = new Integer(ITypeBinding.DATAITEM_BINDING);
 				return false;
 			}
-	
-			public boolean visit(DataTable dataTable) {
-				value[0] = new Integer(ITypeBinding.DATATABLE_BINDING);
-				return false;
-			}
-	
-			public boolean visit(FormGroup formGroup) {
-				value[0] = new Integer(ITypeBinding.FORMGROUP_BINDING);
-				return false;
-			}
-	
+			
+			@Override
 			public boolean visit(Interface interfaceNode) {
 				value[0] = new Integer(ITypeBinding.INTERFACE_BINDING);
 				return false;
 			}
-	
+			
+			@Override
 			public boolean visit(Library library) {
 				value[0] = new Integer(ITypeBinding.LIBRARY_BINDING);
 				return false;
 			}
-	
+			
+			@Override
 			public boolean visit(Program program) {
 				value[0] = new Integer(ITypeBinding.PROGRAM_BINDING);
 				return false;
 			}
-
+			
+			@Override
 			public boolean visit(Delegate delegate) {
 				value[0] = new Integer(ITypeBinding.DELEGATE_BINDING);
 				return false;
 			}
-
+			
+			@Override
 			public boolean visit(Record record) {
 				if(record.isAnnotationType()){
 					value[0] = new Integer(ITypeBinding.ANNOTATION_BINDING);
@@ -149,22 +146,14 @@ public class Util {
 
 				return false;
 			}
-	
+			
+			@Override
 			public boolean visit(Service service) {
 				value[0] = new Integer(ITypeBinding.SERVICE_BINDING);
 				return false;
 			}
-	
-			public boolean visit(TopLevelForm topLevelForm) {
-				value[0] = new Integer(ITypeBinding.FORM_BINDING);
-				return false;
-			}
-	
-			public boolean visit(TopLevelFunction topLevelFunction) {
-				value[0] = new Integer(ITypeBinding.FUNCTION_BINDING);
-				return false;
-			}
 			
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.File file){
 			    value[0] = new Integer(ITypeBinding.FILE_BINDING);
 			    return false;

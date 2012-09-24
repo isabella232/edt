@@ -15,31 +15,24 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.ConstantFormField;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 
@@ -67,7 +60,6 @@ public class OutlineAdapterFactory {
 		adapterMap.put(ClassDataDeclaration.class, new ClassFieldDeclarationOutlineAdapter(editor));
 		adapterMap.put(Constructor.class, new ConstructorOutlineAdapter(editor));
 		//adapterMap.put(EGLFunctionDeclaration.class, new FunctionOutlineAdapter(editor));//		
-		adapterMap.put(TopLevelFunction.class, new FunctionOutlineAdapter(editor));//
 		adapterMap.put(NestedFunction.class, new FunctionOutlineAdapter(editor));
 		//adapterMap.put(EGLAbstractFunctionDeclaration.class, new FunctionOutlineAdapter(editor));//
 		adapterMap.put(DataItem.class, new DataItemOutlineAdapter(editor));//
@@ -78,14 +70,7 @@ public class OutlineAdapterFactory {
 		//adapterMap.put(EGLUntypedStructureItem.class, new StructureContentOutlineAdapter(editor));//
 		//adapterMap.put(EGLEmbeddedRecordStructureItem.class, new StructureContentOutlineAdapter(editor));//
 		adapterMap.put(UseStatement.class, new UseStatementOutlineAdapter(editor));//
-		adapterMap.put(DataTable.class, new DataTableOutlineAdapter(editor));//
-		adapterMap.put(FormGroup.class, new FormGroupOutlineAdapter(editor));//
-		adapterMap.put(TopLevelForm.class, new FormOutlineAdapter(editor));//
-		adapterMap.put(NestedForm.class, new FormOutlineAdapter(editor));
 		adapterMap.put(UseStatement.class, new UseFormStatementOutlineAdapter(editor));//
-		//adapterMap.put(EGLFormDeclaration.class, new FormOutlineAdapter(editor)); //
-		adapterMap.put(VariableFormField.class, new VariableFormFieldOutlineAdapter(editor));//
-		adapterMap.put(ConstantFormField.class, new ConstantFormFieldOutlineAdapter(editor));//
 		adapterMap.put(Library.class, new LibraryOutlineAdapter(editor)); //
 		adapterMap.put(Handler.class, new HandlerOutlineAdapter(editor));//
 		adapterMap.put(Enumeration.class, new EnumerationOutlineAdapter(editor));//

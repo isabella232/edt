@@ -74,7 +74,6 @@ public class ExitStatement extends Statement {
 		public static final DefaultExitModifier WHILE = new DefaultExitModifier();
 		public static final DefaultExitModifier FOR = new DefaultExitModifier();
 		public static final DefaultExitModifier FOREACH = new DefaultExitModifier();
-		public static final DefaultExitModifier OPENUI = new DefaultExitModifier();
 		
 		protected Object clone() throws CloneNotSupportedException{
 			return this;
@@ -242,10 +241,6 @@ public class ExitStatement extends Statement {
 	
 	public boolean isExitForEach() {
 		return exitModifierOpt == DefaultExitModifier.FOREACH;
-	}
-	
-	public boolean isExitOpenUI() {
-		return exitModifierOpt == DefaultExitModifier.OPENUI;
 	}
 	
 	public void accept(IASTVisitor visitor) {

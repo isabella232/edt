@@ -64,7 +64,6 @@ import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
-import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
@@ -154,11 +153,7 @@ class Egl2MofMember extends Egl2MofPart {
 			obj = f;
 		}
 		else {
-			//TODO must handle embedded and structure items that type to a struct record
-			if (node.isEmbedded()) {
-				stack.push(null);
-				return false;
-			}
+			//TODO must handle structure items that type to a struct record
 			EClass fieldClass = mofMemberTypeFor(field);
 			Field f = (Field)fieldClass.newInstance();
 			setUpEglTypedElement(f, field);
@@ -326,21 +321,6 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ProgramParameter node) {
-		ProgramParameter parameter = (ProgramParameter)node.getName().resolveMember();
-		// Do not create members that have invalid types!
-		if (parameter == null) {
-			stack.push(null);
-			return false;
-		}
-		ProgramParameter parm = factory.createProgramParameter();
-		setUpEglTypedElement(parm, parameter);
-		eObjects.put(parameter, parm);
-		setElementInformation(node, parm);
-		stack.push(parm);
-		return false;
-	}
-
 	public boolean visit(SettingsBlock node) {
 		stack.push(null);
 		return false;

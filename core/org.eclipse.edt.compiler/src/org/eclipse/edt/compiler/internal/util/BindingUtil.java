@@ -33,7 +33,6 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
-import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
@@ -42,8 +41,6 @@ import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Form;
-import org.eclipse.edt.mof.egl.FormGroup;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -181,17 +178,11 @@ public class BindingUtil {
 		if (part instanceof Delegate) {
 			return ITypeBinding.DELEGATE_BINDING;
 		}
-		if (part instanceof DataTable) {
-			return ITypeBinding.DATATABLE_BINDING;
-		}
 		if (part instanceof ExternalType) {
 			return ITypeBinding.EXTERNALTYPE_BINDING;
 		}
 		if (part instanceof StructuredRecord) {
 			return ITypeBinding.FIXED_RECORD_BINDING;
-		}
-		if (part instanceof Form) {
-			return ITypeBinding.FORM_BINDING;
 		}
 		if (part instanceof StereotypeType) {
 			return ITypeBinding.STEREOTYPE_BINDING;
@@ -201,9 +192,6 @@ public class BindingUtil {
 		}
 		if (part instanceof Record) {
 			return ITypeBinding.FLEXIBLE_RECORD_BINDING;
-		}
-		if (part instanceof FormGroup) {
-			return ITypeBinding.FORMGROUP_BINDING;
 		}
 		if (part instanceof Handler) {
 			return ITypeBinding.HANDLER_BINDING;
@@ -244,9 +232,6 @@ public class BindingUtil {
     	case ITypeBinding.DELEGATE_BINDING:
     		part = createDelegate(pkgName, name);
     		return createPartBinding(part);
-        case ITypeBinding.DATATABLE_BINDING:
-        	part = createDataTable(pkgName, name);
-            return createPartBinding(part);
         case ITypeBinding.EXTERNALTYPE_BINDING:
         	part = createExternalType(pkgName, name);
         	return createPartBinding(part);
@@ -255,12 +240,6 @@ public class BindingUtil {
         	return createPartBinding(part);
         case ITypeBinding.FLEXIBLE_RECORD_BINDING:
         	part = createRecord(pkgName, name);
-        	return createPartBinding(part);
-        case ITypeBinding.FORM_BINDING:
-        	part = createForm(pkgName, name);
-        	return createPartBinding(part);
-        case ITypeBinding.FORMGROUP_BINDING:
-        	part = createFormGroup(pkgName, name);
         	return createPartBinding(part);
         case ITypeBinding.HANDLER_BINDING:
         	part = createHandler(pkgName, name);
@@ -379,27 +358,6 @@ public class BindingUtil {
 		return rcd;		
 	}
 	
-	private static Form createForm(String pkgName, String name) {
-		Form frm = IrFactory.INSTANCE.createForm();
-		frm.setName(name);
-		frm.setPackageName(pkgName);
-		return frm;		
-	}
-
-	private static FormGroup createFormGroup(String pkgName, String name) {
-		FormGroup fmg = IrFactory.INSTANCE.createFormGroup();
-		fmg.setName(name);
-		fmg.setPackageName(pkgName);
-		return fmg;		
-	}
-
-	private static DataTable createDataTable(String pkgName, String name) {
-		DataTable dtb = IrFactory.INSTANCE.createDataTable();
-		dtb.setName(name);
-		dtb.setPackageName(pkgName);
-		return dtb;		
-	}
-
 	private static Delegate createDelegate(String pkgName, String name) {
 		Delegate del = IrFactory.INSTANCE.createDelegate();
 		del.setName(name);

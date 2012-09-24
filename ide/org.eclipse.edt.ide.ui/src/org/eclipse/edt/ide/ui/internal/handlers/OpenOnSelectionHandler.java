@@ -31,17 +31,14 @@ import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.utils.BoundNodeLocationUtility;
 import org.eclipse.edt.ide.core.internal.utils.IBoundNodeAddress;
@@ -379,24 +376,6 @@ public class OpenOnSelectionHandler extends EGLHandler {
 			selectAndReveal(NameUtile.getAsName(IEGLConstants.KEYWORD_CONSTRUCTOR), constructor.getOffset(), IEGLConstants.KEYWORD_CONSTRUCTOR.length());
 			return false;
 		};
-
-		@Override
-		public boolean visit(VariableFormField field) {
-			selectAndReveal(field.getName());								
-			return false;
-		}
-
-		@Override
-		public boolean visit(NestedForm nestedForm) {
-			selectAndReveal(nestedForm.getName());								
-			return false;
-		}
-
-		@Override
-		public boolean visit(ProgramParameter programParameter) {
-			selectAndReveal(programParameter.getName());
-			return false;
-		}
 
 		@Override
 		public boolean visit(StructureItem structureItem){

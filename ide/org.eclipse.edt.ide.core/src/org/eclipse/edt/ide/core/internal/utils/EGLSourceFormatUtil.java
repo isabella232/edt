@@ -51,8 +51,6 @@ public class EGLSourceFormatUtil {
 					buffer.append(next_token.value.toString());
 				} else if(type == NodeTypes.SQLSTMTLIT) {
 				    buffer.append("#sql{ ... }"); //$NON-NLS-1$
-				} else if(type == NodeTypes.INLINE_DLI) {
-				    buffer.append("#dli{ ... }"); //$NON-NLS-1$
 				} else {
 					buffer.append(lexer.yytext());
 				}

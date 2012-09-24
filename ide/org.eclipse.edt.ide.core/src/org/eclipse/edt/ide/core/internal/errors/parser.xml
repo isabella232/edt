@@ -12,7 +12,7 @@
 <project name="Parse egl.cup" default="run">
 	<target name="run">
 		<!-- Set this to the location of JavaCup on your machine. -->
-		<property name="JavaCup" value="/tmp/"/>
+		<property name="JavaCup" value="/home/justin/javacup/"/>
 		
 		<java classpath="${JavaCup}" classname="java_cup.Main" fork="true" error="egl.cup.dump" failonerror="true">
 			<jvmarg value="-Xmx64m"/>
@@ -28,7 +28,7 @@
 			<arg value="error.cup"/>
 		</java>
 		
-		<java classpath="../../../../../../../../../org.eclipse.edt.compiler/bin2" fork="true" classname="org.eclipse.edt.compiler.core.ast.ActionMethodSplitter" output="temp.file" failonerror="true">
+		<java classpath="../../../../../../../../../../core/org.eclipse.edt.compiler/bin2" fork="true" classname="org.eclipse.edt.compiler.core.ast.ActionMethodSplitter" output="temp.file" failonerror="true">
 			<arg value="ErrorBaseParser"/>
 		</java>
 		

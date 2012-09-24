@@ -27,7 +27,6 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.AbstractProcessingQueue;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -147,7 +146,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		AbstractDependencyInfo dependencyInfo = new WorkingCopyDependencyInfo();
 		Scope scope = createScope(packageName, declaringFile, binding, dependencyInfo);
 		
-		IProblemRequestor problemRequestor = createProblemRequestor(caseInsensitiveInternedPartName, declaringFile, partAST, binding);
+		IProblemRequestor problemRequestor = problemRequestorFactory.getProblemRequestor(declaringFile, caseInsensitiveInternedPartName);
 		if(problemRequestor != NullProblemRequestor.getInstance()){
 			Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
 			
@@ -196,16 +195,6 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		addPart(packageName, projectInfo.getCaseSensitivePartName(packageName, caseInsensitiveInternedPartName));		
 	}
 
-	private IProblemRequestor createProblemRequestor(String partName, IFile file, Node partAST, IPartBinding binding) {
-		IProblemRequestor newRequestor;
-		if(binding.getKind() == ITypeBinding.FUNCTION_BINDING){
-			newRequestor = problemRequestorFactory.getGenericTopLevelFunctionProblemRequestor(file, partName, ((TopLevelFunction)partAST).isContainerContextDependent());
-		}else{
-			 newRequestor = problemRequestorFactory.getProblemRequestor(file, partName);
-		}
-		return newRequestor;
-	}
-	
 	private void validatePackageDeclaration(String packageName, IFile declaringFile, Node partAST, FileBinding binding, IProblemRequestor problemRequestor) {
 		try{
 		    IPackageBinding declaringPackage = binding.getDeclaringPackage();

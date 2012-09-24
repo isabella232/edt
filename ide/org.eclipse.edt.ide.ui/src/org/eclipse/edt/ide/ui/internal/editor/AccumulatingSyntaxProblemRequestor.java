@@ -105,10 +105,6 @@ public class AccumulatingSyntaxProblemRequestor implements ISyntaxErrorRequestor
 		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.UNCLOSED_BLOCK_COMMENT, new String[0]));
 	}
 
-	public void unclosedDLI(int startOffset, int endOffset) {
-		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.UNCLOSED_DLI, new String[0]));
-	}
-
 	public void unclosedSQL(int startOffset, int endOffset) {
 		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.UNCLOSED_SQL, new String[0]));
 	}
@@ -119,10 +115,6 @@ public class AccumulatingSyntaxProblemRequestor implements ISyntaxErrorRequestor
 
 	public void unclosedString(int startOffset, int endOffset) {
 		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.UNCLOSED_STRING, new String[0]));
-	}
-
-	public void whitespaceInDLI(int startOffset, int endOffset) {
-		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_WARNING, SyntaxError.WHITESPACE_DLI, new String[0]));
 	}
 
 	public void whitespaceInSQL(int startOffset, int endOffset) {

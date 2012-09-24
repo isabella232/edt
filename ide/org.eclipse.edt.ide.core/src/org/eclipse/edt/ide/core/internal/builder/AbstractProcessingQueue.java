@@ -26,9 +26,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.CappedProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.builder.GenericTopLevelFunctionProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -39,7 +37,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
-import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
@@ -105,7 +102,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		DependencyInfo dependencyInfo = new DependencyInfo();
 		Scope scope = createScope(packageName, declaringFile, binding, dependencyInfo);
 		CappedProblemRequestor cappedProblemRequestor = new CappedProblemRequestor();
-		cappedProblemRequestor.setRequestor(createProblemRequestor(caseInsensitiveInternedString, declaringFile, partAST, binding));
+		cappedProblemRequestor.setRequestor(new MarkerProblemRequestor(declaringFile, caseInsensitiveInternedString));
 		
 		Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, cappedProblemRequestor, compilerOptions);
 		
@@ -147,8 +144,6 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 	}
     
 	private void processCompiledPart(String packageName, String caseInsensitiveInternedString, String qualifiedName, Part partAST, IPartBinding binding, IFile declaringFile, DependencyInfo dependencyInfo, CappedProblemRequestor cappedProblemRequestor) {
-    	TopLevelFunctionInfo[] functionInfos = null;
-		
 		notifier.subTask(NLS.bind(BuilderResources.buildCreatingIR, qualifiedName));
 		File fileAST = ASTManager.getInstance().getFileAST(declaringFile);
 
@@ -168,7 +163,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		}
 		
 		try {
-			MofSerializable part = createIRFromBoundAST(partAST, declaringFile, functionInfos, fileAST.getImportDeclarations(), cappedProblemRequestor);
+			MofSerializable part = createIRFromBoundAST(partAST, declaringFile, fileAST.getImportDeclarations(), cappedProblemRequestor);
 			if(previousPart == null || !TypeUtils.areStructurallyEquivalent(previousPart, part)){
 				notifier.subTask(NLS.bind(BuilderResources.buildAddingDependentsOf, qualifiedName));
 				
@@ -193,7 +188,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		}
 	}
 	
-    private MofSerializable createIRFromBoundAST(Part partAST, IFile declaringFile,TopLevelFunctionInfo[] functions, List imports, IProblemRequestor problemRequestor) {
+    private MofSerializable createIRFromBoundAST(Part partAST, IFile declaringFile, List imports, IProblemRequestor problemRequestor) {
     	IEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment();
         Egl2Mof generator = new Egl2Mof(env);
         return (MofSerializable)generator.convert(partAST, new IDEContext(declaringFile, projectEnvironment.getCompiler()), problemRequestor);
@@ -238,14 +233,6 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		return scope;
 	}
     
-    private IProblemRequestor createProblemRequestor(String partName, IFile declaringFile, Node partAST, IPartBinding binding) {
-		IProblemRequestor problemRequestor = new MarkerProblemRequestor(declaringFile, partName);
-		if(binding.getKind() == ITypeBinding.FUNCTION_BINDING){
-			problemRequestor = new GenericTopLevelFunctionProblemRequestor(problemRequestor, ((TopLevelFunction)partAST).isContainerContextDependent());
-		}
-		return problemRequestor;
-	}
-
 	private void validatePackageDeclaration(String packageName, IFile declaringFile, Node partAST, FileBinding binding, IProblemRequestor problemRequestor) {
 		try{
 		    IPackageBinding declaringPackage = binding.getDeclaringPackage();

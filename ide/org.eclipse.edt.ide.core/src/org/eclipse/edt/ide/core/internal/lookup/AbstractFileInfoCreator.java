@@ -25,14 +25,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Interface;
@@ -42,8 +40,6 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.ide.core.internal.utils.Util;
@@ -181,16 +177,6 @@ public abstract class AbstractFileInfoCreator {
 					return false;
 				}
 	
-				public boolean visit(DataTable dataTable) {
-					processPart(reader, dataTable, ITypeBinding.DATATABLE_BINDING, dataTable.getOffset(), dataTable.getLength());
-					return false;
-				}
-	
-				public boolean visit(FormGroup formGroup) {
-					processPart(reader, formGroup, ITypeBinding.FORMGROUP_BINDING, formGroup.getOffset(), formGroup.getLength());
-					return false;
-				}
-	
 				public boolean visit(Interface interfaceNode) {
 					processPart(reader, interfaceNode, ITypeBinding.INTERFACE_BINDING, interfaceNode.getOffset(), interfaceNode.getLength());
 					return false;
@@ -237,16 +223,6 @@ public abstract class AbstractFileInfoCreator {
 	
 				public boolean visit(Delegate delegate) {
 					processPart(reader, delegate, ITypeBinding.DELEGATE_BINDING, delegate.getOffset(), delegate.getLength());
-					return false;
-				}
-	
-				public boolean visit(TopLevelForm topLevelForm) {
-					processPart(reader, topLevelForm, ITypeBinding.FORM_BINDING, topLevelForm.getOffset(), topLevelForm.getLength());
-					return false;
-				}
-	
-				public boolean visit(TopLevelFunction topLevelFunction) {
-					processPart(reader, topLevelFunction, ITypeBinding.FUNCTION_BINDING, topLevelFunction.getOffset(), topLevelFunction.getLength());
 					return false;
 				}
 			});

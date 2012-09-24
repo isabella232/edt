@@ -48,16 +48,8 @@ public abstract class AbstractASTStatementVisitor extends AbstractASTVisitor {
 		return internalVisitStatement(continueStatement);
 	}
 
-	public boolean visit(ConverseStatement converseStatement) {
-		return internalVisitStatement(converseStatement);
-	}
-	
 	public boolean visit(DeleteStatement deleteStatement) {
 		return internalVisitStatement(deleteStatement);
-	}
-
-	public boolean visit(DisplayStatement displayStatement) {
-		return internalVisitStatement(displayStatement);
 	}
 
 	public boolean visit(EmptyStatement emptyStatement) {
@@ -82,10 +74,6 @@ public abstract class AbstractASTStatementVisitor extends AbstractASTVisitor {
 
 	public boolean visit(ForwardStatement forwardStatement) {
 		return internalVisitStatement(forwardStatement);
-	}
-
-	public boolean visit(FreeSQLStatement freeSQLStatement) {
-		return internalVisitStatement(freeSQLStatement);
 	}
 
 	public boolean visit(FunctionInvocationStatement functionInvocationStatement) {
@@ -120,27 +108,11 @@ public abstract class AbstractASTStatementVisitor extends AbstractASTVisitor {
 		return internalVisitStatement(openStatement);
 	}
 
-	public boolean visit(OpenUIStatement openUIStatement) {
-		return internalVisitStatement(openUIStatement);
-	}
-
-	public boolean visit(PrintStatement printStatement) {
-		return internalVisitStatement(printStatement);
-	}
-
 	public boolean visit(ReplaceStatement replaceStatement) {
 		return internalVisitStatement(replaceStatement);
 	}
 
-	public boolean visit(ShowStatement showStatement) {
-		return internalVisitStatement(showStatement);
-	}
-	
 	public boolean visit(ThrowStatement transferStatement) {
-		return internalVisitStatement(transferStatement);
-	}
-
-	public boolean visit(TransferStatement transferStatement) {
 		return internalVisitStatement(transferStatement);
 	}
 

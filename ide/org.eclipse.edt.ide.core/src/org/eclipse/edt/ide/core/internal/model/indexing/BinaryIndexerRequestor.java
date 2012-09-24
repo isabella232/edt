@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.model.indexing;
 
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.ide.core.internal.model.IRPartType;
 import org.eclipse.edt.ide.core.internal.model.ISourceElementRequestor;
 import org.eclipse.edt.ide.core.internal.model.index.IDocument;
@@ -189,11 +188,7 @@ public class BinaryIndexerRequestor implements ISourceElementRequestor, IIndexCo
 
 	public void popPartName(){
 		try {
-			int partType = partTypes[--partTypesDepth];
 			partTypes[partTypesDepth] = 0;
-			if(partType == Part.FORMGROUP){
-				enclosingTypeNames[--depth] = null;
-			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 		}
@@ -204,9 +199,6 @@ public class BinaryIndexerRequestor implements ISourceElementRequestor, IIndexCo
 		}
 		if (partTypesDepth == partTypes.length){
 			System.arraycopy(partTypes, 0, partTypes = new int[partTypesDepth*2], 0, partTypesDepth);
-		}
-		if(partType == Part.FORMGROUP){
-			enclosingTypeNames[depth++] = typeName;
 		}
 		partTypes[partTypesDepth++] = partType;
 	}

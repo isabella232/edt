@@ -49,11 +49,6 @@ public class EGLModelUtility {
 				return false;
 			};
 			
-			public boolean visit(org.eclipse.edt.compiler.core.ast.NestedForm nestedForm) {
-				visitNestedPart(nestedForm);
-				return false;
-			};
-			
 			private void visitNestedPart(Node nestedNode)
 			{
 				if(documentOffset >= nestedNode.getOffset() && documentOffset <= nestedNode.getOffset() + nestedNode.getLength())

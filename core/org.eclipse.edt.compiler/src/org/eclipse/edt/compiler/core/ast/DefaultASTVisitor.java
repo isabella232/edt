@@ -85,19 +85,11 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(CharLiteral charLiteral) {
-		return false;
-	}
-	
 	public boolean visit(ClassDataDeclaration classDataDeclaration) {
 		return false;
 	}
 	
 	public boolean visit(CloseStatement closeStatement) {
-		return false;
-	}
-	
-	public boolean visit(ConstantFormField constantFormField) {
 		return false;
 	}
 	
@@ -109,19 +101,7 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(ConverseStatement converseStatement) {
-		return false;
-	}
-	
 	public boolean visit(DataItem dataItem) {
-		return false;
-	}
-	
-	public boolean visit(DataTable dataTable) {
-		return false;
-	}
-	
-	public boolean visit(DBCharLiteral dBCharLiteral) {
 		return false;
 	}
 	
@@ -134,10 +114,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	}
 	
 	public boolean visit(DeleteStatement deleteStatement) {
-		return false;
-	}
-	
-	public boolean visit(DisplayStatement displayStatement) {
 		return false;
 	}
 	
@@ -193,10 +169,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(FormGroup formGroup) {
-		return false;
-	}
-	
 	public boolean visit(ForStatement forStatement) {
 		return false;
 	}
@@ -206,10 +178,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	}
 	
 	public boolean visit(ForwardStatement forwardStatement) {
-		return false;
-	}
-	
-	public boolean visit(FreeSQLStatement freeSQLStatement) {
 		return false;
 	}
 	
@@ -253,10 +221,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(HexLiteral hexLiteral) {
-		return false;
-	}
-	
 	public boolean visit(ImportDeclaration importDeclaration) {
 		return false;
 	}
@@ -266,10 +230,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	}
 	
 	public boolean visit(InExpression inExpression) {
-		return false;
-	}
-	
-	public boolean visit(InlineDLIStatement inlineDLIStatement) {
 		return false;
 	}
 	
@@ -305,23 +265,11 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(LikeMatchesExpression likeMatchesExpression) {
-		return false;
-	}
-	
-	public boolean visit(MBCharLiteral mBCharLiteral) {
-		return false;
-	}
-	
 	public boolean visit(MoveStatement moveStatement) {
 		return false;
 	}
 	
 	public boolean visit(NameType nameType) {
-		return false;
-	}
-	
-	public boolean visit(NestedForm nestedForm) {
 		return false;
 	}
 	
@@ -349,19 +297,11 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 
-	public boolean visit(OnEventBlock onEventBlock) {
-		return false;
-	}
-
 	public boolean visit(OnExceptionBlock onExceptionBlock) {
 		return false;
 	}
 	
 	public boolean visit(OpenStatement openStatement) {
-		return false;
-	}
-	
-	public boolean visit(OpenUIStatement openUIStatement) {
 		return false;
 	}
 	
@@ -377,23 +317,11 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(PassingClause passingClause) {
-		return false;
-	}
-	
 	public boolean visit(PrepareStatement prepareStatement) {
 		return false;
 	}
 	
-	public boolean visit(PrintStatement printStatement) {
-		return false;
-	}
-	
 	public boolean visit(Program program) {
-		return false;
-	}
-	
-	public boolean visit(ProgramParameter programParameter) {
 		return false;
 	}
 	
@@ -441,10 +369,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(ShowStatement showStatement) {
-		return false;
-	}
-	
 	public boolean visit(SimpleName simpleName) {
 		return false;
 	}
@@ -485,18 +409,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(TopLevelForm topLevelForm) {
-		return false;
-	}
-	
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		return false;
-	}
-	
-	public boolean visit(TransferStatement transferStatement) {
-		return false;
-	}
-	
 	public boolean visit(TryStatement tryStatement) {
 		return false;
 	}
@@ -525,14 +437,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(UsingPCBClause usingPCBClause) {
-		return false;
-	}
-	
-	public boolean visit(VariableFormField variableFormField) {
-		return false;
-	}
-	
 	public boolean visit(WhenClause whenClause) {
 		return false;
 	}
@@ -546,10 +450,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	}
 	
 	public boolean visit(WithExpressionClause withExprClause) {
-		return false;
-	}
-	
-	public boolean visit(WithInlineDLIClause withInlineDLIClause) {
 		return false;
 	}
 	
@@ -589,33 +489,21 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(CaseStatement caseStatement) {}
 	
-	public void endVisit(CharLiteral charLiteral) {}
-	
 	public void endVisit(ClassDataDeclaration classDataDeclaration) {}
 	
 	public void endVisit(CloseStatement closeStatement) {}
-	
-	public void endVisit(ConstantFormField constantFormField) {}
 	
 	public void endVisit(Constructor constructor) {}
 	
 	public void endVisit(ContinueStatement continueStatement) {}
 	
-	public void endVisit(ConverseStatement converseStatement) {}
-	
 	public void endVisit(DataItem dataItem) {}
-	
-	public void endVisit(DataTable dataTable) {}
-	
-	public void endVisit(DBCharLiteral dBCharLiteral) {}
 	
 	public void endVisit(DecimalLiteral decimalLiteral) {}
 	
 	public void endVisit(Delegate delegate) {}
 	
 	public void endVisit(DeleteStatement deleteStatement) {}
-	
-	public void endVisit(DisplayStatement displayStatement) {}
 	
 	public void endVisit(EGLClass eglClass) {}
 
@@ -643,15 +531,11 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(ForExpressionClause forExpressionClause) {}
 	
-	public void endVisit(FormGroup formGroup) {}
-	
 	public void endVisit(ForStatement forStatement) {}
 	
 	public void endVisit(ForUpdateClause forUpdateClause) {}
 	
 	public void endVisit(ForwardStatement forwardStatement) {}
-	
-	public void endVisit(FreeSQLStatement freeSQLStatement) {}
 	
 	public void endVisit(FromExpressionClause fromExpressionClause) {}
 	
@@ -673,15 +557,11 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(Handler handler) {}
 	
-	public void endVisit(HexLiteral hexLiteral) {}
-	
 	public void endVisit(ImportDeclaration importDeclaration) {}
 	
 	public void endVisit(IfStatement ifStatement) {}
 	
 	public void endVisit(InExpression inExpression) {}
-	
-	public void endVisit(InlineDLIStatement inlineDLIStatement) {}
 	
 	public void endVisit(InlineSQLStatement inlineSQLStatement) {}
 	
@@ -699,15 +579,9 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(Library library) {}
 	
-	public void endVisit(LikeMatchesExpression likeMatchesExpression) {}
-	
-	public void endVisit(MBCharLiteral mBCharLiteral) {}
-	
 	public void endVisit(MoveStatement moveStatement) {}
 	
 	public void endVisit(NameType nameType) {}
-	
-	public void endVisit(NestedForm nestedForm) {}
 	
 	public void endVisit(NestedFunction nestedFunction) {}
 	
@@ -721,13 +595,9 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 
 	public void endVisit(ObjectExpressionEntry objExprEntry) {}
 
-	public void endVisit(OnEventBlock onEventBlock) {}
-
 	public void endVisit(OnExceptionBlock onExceptionBlock) {}
 	
 	public void endVisit(OpenStatement openStatement) {}
-	
-	public void endVisit(OpenUIStatement openUIStatement) {}
 	
 	public void endVisit(OtherwiseClause otherwiseClause) {}
 	
@@ -735,15 +605,9 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(ParenthesizedExpression parenthesizedExpression) {}
 	
-	public void endVisit(PassingClause passingClause) {}
-	
 	public void endVisit(PrepareStatement prepareStatement) {}
 		
-	public void endVisit(PrintStatement printStatement) {}
-	
 	public void endVisit(Program program) {}
-	
-	public void endVisit(ProgramParameter programParameter) {}
 	
 	public void endVisit(Record record) {}
 	
@@ -767,8 +631,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(SettingsBlock settingsBlock) {}
 	
-	public void endVisit(ShowStatement showStatement) {}
-	
 	public void endVisit(SimpleName simpleName) {}
 	
 	public void endVisit(SingleRowClause singleRowClause) {}
@@ -789,12 +651,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(ThrowStatement throwStatement) {}
 	
-	public void endVisit(TopLevelForm topLevelForm) {}
-	
-	public void endVisit(TopLevelFunction topLevelFunction) {}
-	
-	public void endVisit(TransferStatement transferStatement) {}
-	
 	public void endVisit(TryStatement tryStatement) {}
 	
 	public void endVisit(TypeLiteralExpression typeLiteralExpression) {}
@@ -809,10 +665,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(UseStatement useStatement) {}
 	
-	public void endVisit(UsingPCBClause usingPCBClause) {}
-	
-	public void endVisit(VariableFormField variableFormField) {}
-	
 	public void endVisit(WhenClause whenClause) {}
 	
 	public void endVisit(WhileStatement whileStatement) {}
@@ -820,8 +672,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(WithIDClause withIDClause) {}
 
 	public void endVisit(WithExpressionClause withExprClause) {}
-	
-	public void endVisit(WithInlineDLIClause withInlineDLIClause) {}
 	
 	public void endVisit(WithInlineSQLClause withInlineSQLClause) {}
 }

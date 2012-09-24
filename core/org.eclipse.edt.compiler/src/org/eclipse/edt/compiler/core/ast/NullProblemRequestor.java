@@ -70,9 +70,6 @@ public class NullProblemRequestor implements ISyntaxErrorRequestor {
 	public void unclosedBlockComment(int startOffset, int endOffset) {
 	}
 
-	public void unclosedDLI(int startOffset, int endOffset) {
-	}
-
 	public void unclosedSQL(int startOffset, int endOffset) {
 	}
 
@@ -80,9 +77,6 @@ public class NullProblemRequestor implements ISyntaxErrorRequestor {
 	}
 
 	public void unclosedString(int startOffset, int endOffset) {
-	}
-
-	public void whitespaceInDLI(int startOffset, int endOffset) {
 	}
 
 	public void whitespaceInSQL(int startOffset, int endOffset) {

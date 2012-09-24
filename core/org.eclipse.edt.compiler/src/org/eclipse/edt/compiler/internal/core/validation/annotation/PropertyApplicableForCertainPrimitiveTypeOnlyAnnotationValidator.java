@@ -14,14 +14,12 @@ package org.eclipse.edt.compiler.internal.core.validation.annotation;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
-import org.eclipse.edt.compiler.core.ast.ConstantFormField;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -72,15 +70,7 @@ public abstract class PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationVal
 		final String[] result = new String[] {""};
 		node.accept(new DefaultASTVisitor() {
 			public boolean visit(StructureItem structureItem) {
-				result[0] = structureItem.isFiller() || structureItem.isEmbedded() ? "*" : structureItem.getName().getCanonicalName();
-				return false;
-			}
-			public boolean visit(VariableFormField variableFormField) {
-				result[0] = variableFormField.getName().getCanonicalName();
-				return false;
-			}
-			public boolean visit(ConstantFormField constantFormField) {
-				result[0] = "*";
+				result[0] = structureItem.getName().getCanonicalName();
 				return false;
 			}
 			public boolean visit(SimpleName simpleName) {

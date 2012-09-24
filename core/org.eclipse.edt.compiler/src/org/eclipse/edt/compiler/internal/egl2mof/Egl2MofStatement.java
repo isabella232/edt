@@ -344,8 +344,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			stmt.setContinueType(ContinueStatement.CONTINUE_FOR);
 		} else if (node.isContinueForEach()) {
 			stmt.setContinueType(ContinueStatement.CONTINUE_FOREACH);
-		} else if (node.isContinueOpenUI()) {
-			stmt.setContinueType(ContinueStatement.CONTINUE_OPENUI);
 		} else if (node.isContinueWhile()) {
 			stmt.setContinueType(ContinueStatement.CONTINUE_WHILE);
 		}
@@ -407,8 +405,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			ext.setExitStatementType(ExitStatement.EXIT_FOREACH);
 		} else if (node.isExitIf()) {
 			ext.setExitStatementType(ExitStatement.EXIT_IF);
-		} else if (node.isExitOpenUI()) {
-			ext.setExitStatementType(ExitStatement.EXIT_OPENUI);
 		} else if (node.isExitProgram()) {
 			ext.setExitStatementType(ExitStatement.EXIT_PROGRAM);
 		} else if (node.isExitRunUnit()) {
@@ -517,16 +513,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		setElementInformation(forStatement, block);
 		return false;
 
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.FreeSQLStatement freeSQLStatement) {
-		FreeSqlStatement stmt = factory.createFreeSqlStatement();	
-//		stmt.setPreparedStatementID(freeSQLStatement.getID());
-		
-		stack.push(stmt);
-		setElementInformation(freeSQLStatement, stmt);
-		return false;
 	}
 
 	@Override

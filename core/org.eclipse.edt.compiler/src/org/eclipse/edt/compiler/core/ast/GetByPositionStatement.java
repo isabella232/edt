@@ -38,8 +38,6 @@ import java.util.List;
  * visit() for the following types:
  *  - ForUpdateClause
  *  - IntoClause 
- *  - UsingPCBClause
- *  - WithInlineDLIClause
  *
  * @author Albert Ho
  * @author David Murray

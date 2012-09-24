@@ -132,11 +132,6 @@ public class AccumulatingSyntaxErrorMessageRequestor implements ISyntaxErrorRequ
     			DefaultProblemRequestor.getMessageFromBundle(SyntaxError.UNCLOSED_BLOCK_COMMENT, new String[0]));
 	}
 
-	public void unclosedDLI(int startOffset, int endOffset) {
-    	syntaxErrors.put(new SyntaxError(SyntaxError.UNCLOSED_DLI, startOffset, endOffset),
-    			DefaultProblemRequestor.getMessageFromBundle(SyntaxError.UNCLOSED_DLI, new String[0]));
-	}
-
 	public void unclosedSQL(int startOffset, int endOffset) {
     	syntaxErrors.put(new SyntaxError(SyntaxError.UNCLOSED_SQL, startOffset, endOffset),
     			DefaultProblemRequestor.getMessageFromBundle(SyntaxError.UNCLOSED_SQL, new String[0]));
@@ -150,11 +145,6 @@ public class AccumulatingSyntaxErrorMessageRequestor implements ISyntaxErrorRequ
 	public void unclosedString(int startOffset, int endOffset) {
     	syntaxErrors.put(new SyntaxError(SyntaxError.UNCLOSED_STRING, startOffset, endOffset),
     			DefaultProblemRequestor.getMessageFromBundle(SyntaxError.UNCLOSED_STRING, new String[0]));
-	}
-
-	public void whitespaceInDLI(int startOffset, int endOffset) {
-    	syntaxErrors.put(new SyntaxError(SyntaxError.WHITESPACE_DLI, startOffset, endOffset),
-    			DefaultProblemRequestor.getMessageFromBundle(SyntaxError.WHITESPACE_DLI, new String[0]));
 	}
 
 	public void whitespaceInSQL(int startOffset, int endOffset) {

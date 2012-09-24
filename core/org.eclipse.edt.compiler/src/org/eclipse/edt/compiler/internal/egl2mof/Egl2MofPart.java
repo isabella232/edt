@@ -21,8 +21,6 @@ import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EMember;
@@ -282,24 +280,11 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	private MofSerializable defaultHandleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
 		MofSerializable part = handleVisitPart(node);
 		handleContents(node, part);
-		handleParms(node, part);
 		handleEndVisitPart(node, part);
 		
 		return part;
 	}
 	
-	private void handleParms(org.eclipse.edt.compiler.core.ast.Part part, EObject container) {
-		if (part instanceof Program) {
-			for (ProgramParameter parmAst : (List<ProgramParameter>)((Program)part).getParameters()) {
-				parmAst.accept(this);
-				org.eclipse.edt.mof.egl.ProgramParameter parm = (org.eclipse.edt.mof.egl.ProgramParameter) stack.pop();
-				parm.setContainer((org.eclipse.edt.mof.egl.Program)container);
-				((org.eclipse.edt.mof.egl.Program)container).getParameters().add(parm);
-			}
-			((org.eclipse.edt.mof.egl.Program)container).setIsCallable(((Program)part).isCallable());
-		}
-	}
-
 	private MofSerializable handleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
 		Part partBinding = (Part)node.getName().resolveType();
 		

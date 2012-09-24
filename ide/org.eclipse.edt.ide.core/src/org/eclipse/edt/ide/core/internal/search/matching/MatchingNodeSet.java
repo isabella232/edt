@@ -40,7 +40,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
@@ -695,11 +694,6 @@ public class MatchingNodeSet {
 			
 			public boolean visit(ClassDataDeclaration classDataDeclaration) {
 				reportNamedNode(classDataDeclaration,enclosingElement);
-				return false;
-			}
-			
-			public boolean visit(ProgramParameter programParameter) {
-				reportNamedNode(programParameter,enclosingElement);
 				return false;
 			}
 			

@@ -18,7 +18,6 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.internal.search.matching.MatchLocator2;
@@ -252,8 +251,7 @@ public class RenameAction extends SelectionDispatchAction {
 		final Node node = document.getNewModelNodeAtOffset(currentPosition);
 		if(node instanceof Name) {
 			Node parent = node.getParent();
-			//TODO: remove condition for TopLevelFunction when rename of function is supported
-			if(parent instanceof Part && !(parent instanceof TopLevelFunction) && ((Part) parent).getName() == node) {
+			if(parent instanceof Part && ((Part) parent).getName() == node) {
 				return new PartNameAndFile(((Part) parent).getName().getCanonicalName(), file);
 			}
 			else if(parent instanceof NestedFunction) {
@@ -350,7 +348,7 @@ public class RenameAction extends SelectionDispatchAction {
 
 	private static boolean isRenameAvailable(Node node) throws CoreException {
 		//TODO: remove when rename of function is supported
-		if(node instanceof TopLevelFunction || node instanceof NestedFunction) {
+		if(node instanceof NestedFunction) {
 			return false;
 		}
 		

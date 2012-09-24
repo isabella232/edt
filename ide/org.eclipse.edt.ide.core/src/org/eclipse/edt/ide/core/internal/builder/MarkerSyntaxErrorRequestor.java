@@ -116,10 +116,6 @@ public class MarkerSyntaxErrorRequestor implements ISyntaxErrorRequestor {
 		createErrorMarker(SyntaxError.UNCLOSED_BLOCK_COMMENT, startOffset, endOffset);
 	}
 
-	public void unclosedDLI(int startOffset, int endOffset) {
-		createErrorMarker(SyntaxError.UNCLOSED_DLI, startOffset, endOffset);
-	}
-
 	public void unclosedSQL(int startOffset, int endOffset) {
 		createErrorMarker(SyntaxError.UNCLOSED_SQL, startOffset, endOffset);
 	}
@@ -130,10 +126,6 @@ public class MarkerSyntaxErrorRequestor implements ISyntaxErrorRequestor {
 
 	public void unclosedString(int startOffset, int endOffset) {
 		createErrorMarker(SyntaxError.UNCLOSED_STRING, startOffset, endOffset);
-	}
-
-	public void whitespaceInDLI(int startOffset, int endOffset) {
-		createWarningMarker(SyntaxError.WHITESPACE_DLI, startOffset, endOffset);
 	}
 
 	public void whitespaceInSQL(int startOffset, int endOffset) {

@@ -177,9 +177,6 @@ public class File extends Node {
             case SyntaxError.UNCLOSED_SQLCONDITION:
                 syntaxErrorRequestor.unclosedSQLCondition(startOffset, endOffset);
                 break;
-            case SyntaxError.UNCLOSED_DLI:
-                syntaxErrorRequestor.unclosedDLI(startOffset, endOffset);
-                break;
             case SyntaxError.INVALID_ESCAPE:
                 syntaxErrorRequestor.invalidEscapeSequence(startOffset, endOffset);
                 break;
@@ -188,9 +185,6 @@ public class File extends Node {
                 break;
             case SyntaxError.WHITESPACE_SQLCONDITION:
                 syntaxErrorRequestor.whitespaceInSQLCondition(startOffset, endOffset);
-                break;
-            case SyntaxError.WHITESPACE_DLI:
-                syntaxErrorRequestor.whitespaceInDLI(startOffset, endOffset);
                 break;
             case SyntaxError.INVALID_CHARACTER_IN_HEX_LITERAL:
             	syntaxErrorRequestor.invalidCharacterInHexLiteral(startOffset, endOffset);

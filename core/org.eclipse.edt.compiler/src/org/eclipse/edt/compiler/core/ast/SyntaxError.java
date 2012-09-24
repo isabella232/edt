@@ -39,11 +39,9 @@ public class SyntaxError {
 	public static final int UNCLOSED_BLOCK_COMMENT = 2201;
 	public static final int UNCLOSED_SQL = 2202;
 	public static final int UNCLOSED_SQLCONDITION = 2203;
-	public static final int UNCLOSED_DLI = 2204;
 	public static final int INVALID_ESCAPE = 2205;
 	public static final int WHITESPACE_SQL = 2206;
 	public static final int WHITESPACE_SQLCONDITION = 2207;
-	public static final int WHITESPACE_DLI = 2208;
 	public static final int INVALID_CHARACTER_IN_HEX_LITERAL = 2209;
 	
 	// Severities

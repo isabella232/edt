@@ -9,16 +9,11 @@ import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
 import org.eclipse.edt.compiler.core.ast.BytesLiteral;
-import org.eclipse.edt.compiler.core.ast.CharLiteral;
-import org.eclipse.edt.compiler.core.ast.DBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
-import org.eclipse.edt.compiler.core.ast.HexLiteral;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
-import org.eclipse.edt.compiler.core.ast.LiteralExpression;
-import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SQLLiteral;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
@@ -215,33 +210,9 @@ public class AnnotationValueGatherer extends DefaultBinder{
 		}
 	}
 
-	public boolean visit(HexLiteral stringLiteral) {
-		value = stringLiteral.getValue();
-		stringLiteral.setBindAttempted(true);
-		return false;
-	}
-
-	public boolean visit(CharLiteral stringLiteral) {
-		value = stringLiteral.getValue();
-		stringLiteral.setBindAttempted(true);
-		return false;
-	}
-	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NullLiteral nullLiteral) {
 		value = IrFactory.INSTANCE.createNullLiteral();
 		nullLiteral.setBindAttempted(true);
-		return false;
-	}
-
-	public boolean visit(DBCharLiteral stringLiteral) {
-		value = stringLiteral.getValue();
-		stringLiteral.setBindAttempted(true);
-		return false;
-	}
-
-	public boolean visit(MBCharLiteral stringLiteral) {
-		value = stringLiteral.getValue();
-		stringLiteral.setBindAttempted(true);
 		return false;
 	}
 

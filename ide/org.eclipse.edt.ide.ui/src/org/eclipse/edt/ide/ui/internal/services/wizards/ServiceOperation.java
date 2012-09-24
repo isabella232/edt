@@ -27,7 +27,6 @@ import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
@@ -268,23 +267,6 @@ public class ServiceOperation extends EGLFileOperation {
 	    	public boolean visit(Program program) {
 	    		strbuf.append("("); //$NON-NLS-1$	    		
 	    		return true;
-	    	}
-	    	
-	    	public boolean visit(ProgramParameter programParameter) {
-	    		if(!first[0]) {
-                    strbuf.append(", "); //$NON-NLS-1$
-                    strbufParamList.append(", "); //$NON-NLS-1$
-                }
-	    		
-                String paramName = programParameter.getName().getIdentifier();		//get the simple name	                
-                String paramFQTypeName = ExtractInterfaceConfiguration.getQualifiedTypeString(programParameter, currFilePkg, true);
-                strbuf.append(paramName);
-                strbuf.append(" "); //$NON-NLS-1$
-                strbuf.append(paramFQTypeName);
-                
-                strbufParamList.append(paramName);
-                first[0] = false;
-                return false;
 	    	}
 	    	
 	    	public void endVisit(Program program) {

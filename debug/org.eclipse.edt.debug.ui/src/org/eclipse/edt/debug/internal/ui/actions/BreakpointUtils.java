@@ -29,11 +29,9 @@ import org.eclipse.edt.compiler.core.ast.EmptyStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.OnEventBlock;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.WhenClause;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
@@ -188,6 +186,7 @@ public class BreakpointUtils
 		final Node[] statementContainerNode = new Node[ 1 ];
 		final List[] statements = new List[ 1 ];
 		node.accept( new DefaultASTVisitor() {
+			@Override
 			public boolean visit( ElseBlock visitedNode )
 			{
 				statementContainerNode[ 0 ] = visitedNode;
@@ -195,6 +194,7 @@ public class BreakpointUtils
 				return false;
 			}
 			
+			@Override
 			public boolean visit( NestedFunction visitedNode )
 			{
 				statementContainerNode[ 0 ] = visitedNode;
@@ -202,6 +202,7 @@ public class BreakpointUtils
 				return false;
 			}
 			
+			@Override
 			public boolean visit( OnExceptionBlock visitedNode )
 			{
 				statementContainerNode[ 0 ] = visitedNode;
@@ -209,20 +210,7 @@ public class BreakpointUtils
 				return false;
 			}
 			
-			public boolean visit( OnEventBlock visitedNode )
-			{
-				statementContainerNode[ 0 ] = visitedNode;
-				statements[ 0 ] = visitedNode.getStatements();
-				return false;
-			}
-			
-			public boolean visit( TopLevelFunction visitedNode )
-			{
-				statementContainerNode[ 0 ] = visitedNode;
-				statements[ 0 ] = visitedNode.getStmts();
-				return false;
-			}
-			
+			@Override
 			public boolean visit( WhenClause visitedNode )
 			{
 				statementContainerNode[ 0 ] = visitedNode;
@@ -230,6 +218,7 @@ public class BreakpointUtils
 				return false;
 			}
 			
+			@Override
 			public boolean visit( OtherwiseClause visitedNode )
 			{
 				statementContainerNode[ 0 ] = visitedNode;

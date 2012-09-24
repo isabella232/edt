@@ -106,9 +106,6 @@ public class ClassFileMatchLocator {
 				if(((SourcePartElementInfo)((EGLElement)function.getParent()).getElementInfo()).isDelegate()){
 					return true;
 				}
-				if(((SourcePartElementInfo)((EGLElement)function.getParent()).getElementInfo()).isFunction()){
-					return true;
-				}
 			}
 		} catch (EGLModelException e) {
 			e.printStackTrace();

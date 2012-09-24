@@ -11,18 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
-import org.eclipse.edt.compiler.core.ast.Type;
-import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
-import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.utils.NameUtile;
@@ -47,54 +41,12 @@ public class ProgramBindingCompletor extends FunctionContainerBindingCompletor {
         if (program.isPrivate()) {
         	programBinding.setAccessKind(AccessKind.ACC_PRIVATE);
         }
-        programBinding.setIsCallable(program.isCallable());
-                
+        
         setDefaultSuperType();
         return true;
     }  
     
 	public void endVisit(org.eclipse.edt.compiler.core.ast.Program program) {
-		/*
-		 * Process the program parameters after the rest of the binding has
-		 * been completed, since some of the types may be forms declared in
-		 * the main form group which we may not know about otherwise.
-		 */
-		
-		
-		for (ProgramParameter programParameter : program.getParameters()) {
-			Name parameterNameNode = programParameter.getName();;
-	        String parameterName = parameterNameNode.getIdentifier();
-	        Type parameterType = programParameter.getType();
-	        
-	        org.eclipse.edt.mof.egl.Type typeBinding = null;
-	        try {
-	            typeBinding = bindType(parameterType);
-	        } catch (ResolutionException e) {
-		        	problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
-		            continue;
-	        }
-	        	        
-	        
-	        org.eclipse.edt.mof.egl.ProgramParameter parameterBinding = IrFactory.INSTANCE.createProgramParameter();
-	        parameterBinding.setType(typeBinding);
-	        parameterBinding.setName(parameterNameNode.getCaseSensitiveIdentifier());
-	        parameterBinding.setIsNullable(programParameter.isNullable());
-	        parameterBinding.setAccessKind(AccessKind.ACC_PRIVATE);
-	        
-	        if(definedDataNames.contains(parameterName)) {
-	        	problemRequestor.acceptProblem(
-	        		parameterNameNode,
-					IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS,
-					new String[] {parameterNameNode.getCanonicalName(), programBinding.getCaseSensitiveName()});
-	        }
-	        else {
-	        	programBinding.getParameters().add(parameterBinding);
-	        	definedDataNames.add(parameterName);
-	        }
-	        
-	        parameterNameNode.setMember(parameterBinding);
-	        parameterNameNode.setType(parameterBinding.getType());
-		}
         processSettingsBlocks();
 		endVisitFunctionContainer(program);
     }

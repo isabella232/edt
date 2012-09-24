@@ -26,9 +26,7 @@ import org.eclipse.edt.compiler.core.ast.IfStatement;
 import org.eclipse.edt.compiler.core.ast.LabelStatement;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -52,6 +50,7 @@ public class ExitStatementValidator extends DefaultASTVisitor {
 		this.labeledLoops = labeledLoops;
 	}
 	
+	@Override
 	public boolean visit(final ExitStatement exitStatement) {			
 		if (exitStatement.isExitProgram() || exitStatement.isExitRunUnit()){
 			validateExitProgramRunUnit(exitStatement);
@@ -93,6 +92,7 @@ public class ExitStatementValidator extends DefaultASTVisitor {
 		Node current = exitStatement.getParent();
 		String label = exitStatement.getLabel();
 		ParentASTVisitor visitor = new ParentASTVisitor(isExitNULL(exitStatement), label){
+			@Override
 			public boolean visit(NestedFunction anestedFunction) {
 				bcontinue = false;
 				if (isnull){
@@ -101,45 +101,35 @@ public class ExitStatementValidator extends DefaultASTVisitor {
 				return false;
 			}
 			
-			public boolean visit(TopLevelFunction tlFunction) {
-				bcontinue = false;
-//				this.nestedFunction = nestedFunction;
-				if (isnull){
-					valid = true;
-				}
-				return false;
-			}
-			
+			@Override
 			public boolean visit(WhileStatement whileStatement) {
 				if (exitStatement.isExitWhile() || isnull || hasMatchingLabel(whileStatement, labelText))
 					valid = true;
 				return false;
 			}
 			
-			public boolean visit(OpenUIStatement openuiStatement) {
-				if (exitStatement.isExitOpenUI() || isnull)
-					valid = true;
-				return false;
-			}
-			
+			@Override
 			public boolean visit(ForEachStatement forEachStatement) {
 				if (exitStatement.isExitForEach() || isnull || hasMatchingLabel(forEachStatement, labelText))
 					valid = true;
 				return false;
 			}
 			
+			@Override
 			public boolean visit(ForStatement forStatement) {
 				if (exitStatement.isExitFor()|| isnull || hasMatchingLabel(forStatement, labelText))
 					valid = true;
 				return false;
 			}
 			
+			@Override
 			public boolean visit(CaseStatement caseStatement) {
 				if (exitStatement.isExitCase() || isnull || hasMatchingLabel(caseStatement, labelText))
 					valid = true;
 				return false;
 			}
 			
+			@Override
 			public boolean visit(IfStatement caseStatement) {
 				if (exitStatement.isExitIf() || isnull || hasMatchingLabel(caseStatement, labelText))
 					valid = true;
@@ -170,8 +160,6 @@ public class ExitStatementValidator extends DefaultASTVisitor {
 						errorIns1 = IEGLConstants.KEYWORD_FOREACH;
 					}else if (exitStatement.isExitIf()){
 						errorIns1 = IEGLConstants.KEYWORD_IF;
-					}else if (exitStatement.isExitOpenUI()){
-						errorIns1 = IEGLConstants.KEYWORD_OPENUI;
 					}else if (exitStatement.isExitStack()){
 						errorIns1 = IEGLConstants.KEYWORD_STACK;
 					}else {
@@ -223,7 +211,6 @@ public class ExitStatementValidator extends DefaultASTVisitor {
 			!exitStatement.isExitForEach() &&
 			!exitStatement.isExitIf() &&
 			!exitStatement.isExitStack() &&
-			!exitStatement.isExitOpenUI() &&
 			!exitStatement.isExitWhile() &&
 			exitStatement.getLabel() == null);
 	}

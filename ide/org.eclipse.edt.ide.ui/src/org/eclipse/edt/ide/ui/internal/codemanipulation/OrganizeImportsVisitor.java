@@ -23,7 +23,6 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
@@ -33,7 +32,6 @@ import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
@@ -41,9 +39,6 @@ import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.ReturningToNameClause;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.ui.internal.codemanipulation.OrganizeImportsOperation.OrganizedImportSection;
@@ -81,21 +76,6 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 			addUnresolvedName((Name)expression);
 		return true;
 	}
-
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		//the bound part is a top level function
-		//check for containerContextDependent annotation value
-		//if yes
-			//if called from the current file generable part(program)
-				//try to resolve all the imports needed for this top level function, add to the same file
-			//else
-				//do nothing
-		
-		//if no
-			//if from a program(generatable) file, or otherwise 
-				//try to resolve all the imports needed for this top level function, add to its file
-		return true;
-	};
 
 	public boolean visit(CallStatement callStatement) {
 		Expression invocationTarget = callStatement.getInvocationTarget();
@@ -158,24 +138,6 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		return true;
 	}
 	
-	public boolean visit(DataTable dataTable) {
-		handlePart(dataTable);
-		return true;
-	}
-	
-	public boolean visit(TopLevelForm topLevelForm) {
-		handlePart(topLevelForm);
-		return true;
-	}
-	
-	public boolean visit(NestedForm nestedForm) {
-		Name subType = nestedForm.getSubType();
-		if(subType != null) {
-			addUnresolvedName(subType);
-		}
-		return true;
-	}
-	
 	public boolean visit(Handler handler) {
 		handlePart(handler);
 		return true;
@@ -219,19 +181,6 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 
 	public boolean visit(ReturningToNameClause returningToNameClause) {
 		addUnresolvedName(returningToNameClause.getName());
-		return true;
-	}
-	
-	public boolean visit(TransferStatement transferStatement) {
-		Expression invocationTarget = transferStatement.getInvocationTarget();
-		if(!invocationTarget.isName()) {
-			Type binding = invocationTarget.resolveType();
-			if(binding != null) {
-				addToResovledTypes(binding);
-			}
-		}		
-		else
-			addUnresolvedName((Name)invocationTarget);
 		return true;
 	}
 	

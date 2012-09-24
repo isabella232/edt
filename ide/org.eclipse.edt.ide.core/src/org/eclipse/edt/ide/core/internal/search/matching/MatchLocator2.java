@@ -34,7 +34,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
@@ -454,28 +453,6 @@ public class MatchLocator2 {//extends MatchLocator {
 				new String(importName));
 		}
 		return null;
-	}
-	/**
-	 * Creates an IFunction from the given function declaration and part. 
-	 */
-	public IFunction createFunctionHandle(TopLevelFunction function,IPart part) {
-		if (part == null) return null;
-		List parameters = function.getFunctionParameters();
-		int length = parameters.size();
-		
-		String[] parameterTypeSignatures = new String[length];
-		for (int i = 0; i < length; i++) {
-			Type parameterType = ((FunctionParameter)parameters.get(i)).getType();
-			char[] typeName = new char[0];
-			while(parameterType.isArrayType())
-			{
-				typeName = CharOperation.concat(typeName, "[]" .toCharArray()); //$NON-NLS-1$
-				parameterType = ((ArrayType) parameterType).getElementType();
-			}
-			typeName = CharOperation.concat( parameterType.getCanonicalName().toCharArray(), typeName );
-			parameterTypeSignatures[i] = Signature.createTypeSignature(typeName, false);
-		}
-		return part.getFunction(function.getName().getCanonicalName(), parameterTypeSignatures);
 	}
 	
 	/**
@@ -1109,21 +1086,6 @@ public class MatchLocator2 {//extends MatchLocator {
 	public void reportPackageDeclaration(PackageDeclaration node) {
 		// TBD
 	}
-	/**
-	 * Reports the given reference to the search requestor.
-	 * It is done in the given method and the method's defining types 
-	 * have the given simple names.
-	 */
-	public void reportReference(
-		Node reference,
-		TopLevelFunction function,
-		IEGLElement parent,
-		int accuracy)
-		throws CoreException {
-
-		// accept reference
-		this.pattern.matchReportReference(reference, parent, accuracy, this);
-	}
 	
 	public void reportReference(
 			Node reference,
@@ -1382,23 +1344,6 @@ public class MatchLocator2 {//extends MatchLocator {
 				accuracy);
 	}
 		
-	/**
-	 * Reports the given function declaration to the search requestor.
-	 */
-	public void reportFunctionDeclaration(TopLevelFunction functionDeclaration,	IEGLElement parent,
-		int accuracy)throws CoreException {
-
-		Name name = functionDeclaration.getName();
-		// accept class or interface declaration
-		this.report(
-			name.getOffset(),
-			name.getOffset() + name.getLength(),
-			(parent == null) ?
-				this.createPartHandle(name.getCanonicalName()) :
-				parent,
-			accuracy);
-	}
-	
 	public void reportFunctionDeclaration(NestedFunction functionDeclaration,	IEGLElement parent,
 			int accuracy)throws CoreException {
 

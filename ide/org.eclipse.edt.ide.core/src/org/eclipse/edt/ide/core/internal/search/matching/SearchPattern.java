@@ -23,7 +23,6 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.internal.model.index.IEntryResult;
 import org.eclipse.edt.ide.core.internal.model.index.IIndex;
@@ -899,82 +898,6 @@ protected org.eclipse.edt.mof.egl.Part getPartBinding(Name name){
 		return (org.eclipse.edt.mof.egl.Part)type;
 	}
 	return null;
-}
-
-/**
- * Returns whether the given part matches the given simple name pattern 
- * and qualification pattern.
- * Returns ACCURATE_MATCH if it does.
- * Returns INACCURATE_MATCH if resolve failed.
- * Returns IMPOSSIBLE_MATCH if it doesn't.
- */
-protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, TopLevelFunction function) {
-	if (function == null) return INACCURATE_MATCH;
-	org.eclipse.edt.mof.egl.Part partBinding = getPartBinding(function);
-	
-	if (partBinding == null){
-		return INACCURATE_MATCH;
-	}
-	
-	return matchLevelForType(simpleNamePattern,qualificationPattern,partBinding);
-//	StringBuffer qualifiedPartName = new StringBuffer();
-//	char[] qualifiedPackageName;
-//	Part topLevelPart = function;
-//	qualifiedPartName.append(function.getName().getCanonicalName());
-//
-//
-//	
-//  	StringBuffer result = new StringBuffer();
-//	String[] packageName = partBinding.getPackageName();
-//	if(packageName != null) {
-//		for(int i = 0; i < packageName.length; i++) {
-//			result.append(packageName[i]);
-//			if ((i + 1) < packageName.length){
-//				result.append('.');
-//			}
-//		}    		
-//		qualifiedPackageName = result.toString().toCharArray();
-//	}else{
-//		qualifiedPackageName = null;
-//	}
-//		
-//	IEGLPackageDeclaration pkgDecl = ((IEGLFile)topLevelPart.getContainer()).getPackageDeclaration();
-//	PackageDeclaration pkgDecl = null;
-//	if(pkgDecl != null){
-//		qualifiedPackageName = pkgDecl.getPackageName().getCanonicalName().toCharArray();
-//	}else{
-//		qualifiedPackageName = null;
-//	}
-//	char[] qualifiedSourceName = qualifiedPartName.toString().toCharArray();
-//	
-//	// The user could be searching for a function name:
-//	// w/ no package or part qualifier
-//	// w/ just a package qualifier
-//	// w/ just a part qualifier
-//	// w/ a package and a part qualifier 
-//	// This first check handles all cases except for "just a part qualifier"
-//	if (this.matchesType(
-//			simpleNamePattern, 
-//			qualificationPattern, 
-//			qualifiedPackageName == null ? 
-//				qualifiedSourceName : 
-//				CharOperation.concat(qualifiedPackageName, qualifiedSourceName, '.'))) {
-//		return ACCURATE_MATCH;
-//	} else {
-//		// search for a part.function in any package
-//		if(new String(qualificationPattern).indexOf('.') == -1){
-//			if(this.matchesType(
-//					CharOperation.concat(qualificationPattern, simpleNamePattern, '.'),
-//					null,
-//					qualifiedPackageName == null ? 
-//							qualifiedSourceName : 
-//							CharOperation.concat(qualifiedPackageName, qualifiedSourceName, '.'))){
-//				return ACCURATE_MATCH;
-//			}
-//					
-//		}
-//		return IMPOSSIBLE_MATCH;
-//	}
 }
 
 //protected int matchLevelForType(char[] simpleNamePattern, char[] qualificationPattern, NestedFunction function) {

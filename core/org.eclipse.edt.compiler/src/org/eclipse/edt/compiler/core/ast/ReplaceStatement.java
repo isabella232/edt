@@ -69,7 +69,6 @@ public class ReplaceStatement extends Statement {
 	}
 
     /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.core.ast.IDliIoStatement#getTargets()
      */
     public List getTargets() {
         List list = new ArrayList();

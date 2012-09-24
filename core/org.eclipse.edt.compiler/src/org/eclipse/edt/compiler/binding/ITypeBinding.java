@@ -22,11 +22,8 @@ public interface ITypeBinding extends IBinding {
     int ARRAY_TYPE_BINDING = 2;
     int PRIMITIVE_TYPE_BINDING = 3;
     int DYNAMIC_BINDING = 4;
-    int DATATABLE_BINDING = 5;
     int FIXED_RECORD_BINDING = 6;
     int FLEXIBLE_RECORD_BINDING = 7;
-    int FORM_BINDING = 8;
-    int FORMGROUP_BINDING = 9;
     int HANDLER_BINDING = 10;
     int LIBRARY_BINDING = 11;
     int PROGRAM_BINDING = 13;
@@ -39,7 +36,6 @@ public interface ITypeBinding extends IBinding {
     int FUNCTION_BINDING = 20;
     int DICTIONARY_BINDING = 21;
     int ARRAYDICTIONARY_BINDING = 22;
-    int SPECIALSYSTEMFUNCTIONPARAMETER_BINDING = 23;
     int NIL_BINDING = 25;
     int MULTIPLY_OCCURING_ITEM = 26;
     int DELEGATE_BINDING = 27;

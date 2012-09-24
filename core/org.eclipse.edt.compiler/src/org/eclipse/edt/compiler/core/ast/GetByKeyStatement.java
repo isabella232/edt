@@ -25,11 +25,9 @@ import java.util.List;
  * - SingleRowClause
  * - WithIDClause
  * - WithInlineSQLClause
- * - WithInlineDLIClause
  * - IntoClause
  * - UsingClause
  * - UsingKeysClause
- * - UsingPCBClause
  *
  * @author Albert Ho
  * @author David Murray

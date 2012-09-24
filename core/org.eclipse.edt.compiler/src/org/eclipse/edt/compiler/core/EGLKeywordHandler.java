@@ -30,7 +30,6 @@ public class EGLKeywordHandler {
 			"all", //$NON-NLS-1$
 			"and", //$NON-NLS-1$
 			"as", //$NON-NLS-1$
-			"bind", //$NON-NLS-1$
 			"by", //$NON-NLS-1$
 			"byName", //$NON-NLS-1$
 			"byPosition", //$NON-NLS-1$
@@ -41,20 +40,14 @@ public class EGLKeywordHandler {
 			"const", //$NON-NLS-1$
 			"continue", //$NON-NLS-1$
 			"constructor", //$NON-NLS-1$
-			"converse", //$NON-NLS-1$
 			"current", //$NON-NLS-1$
 			"dataItem", //$NON-NLS-1$
-			"dataTable", //$NON-NLS-1$
 			"decrement", //$NON-NLS-1$
 			"delegate", //$NON-NLS-1$
 			"delete", //$NON-NLS-1$
-			"display", //$NON-NLS-1$
-			"dliCall", //$NON-NLS-1$
 			"else", //$NON-NLS-1$
-			"embed", //$NON-NLS-1$
 			"end", //$NON-NLS-1$
 			"enumeration", //$NON-NLS-1$
-			"escape", //$NON-NLS-1$
 			"execute", //$NON-NLS-1$
 			"exit", //$NON-NLS-1$
 			"extends", //$NON-NLS-1$			
@@ -63,11 +56,7 @@ public class EGLKeywordHandler {
 			"first", //$NON-NLS-1$
 			"for", //$NON-NLS-1$
 			"forEach", //$NON-NLS-1$
-			"form", //$NON-NLS-1$
-			"formGroup", //$NON-NLS-1$
 			"forUpdate", //$NON-NLS-1$
-			"forward", //$NON-NLS-1$
-			"freeSql", //$NON-NLS-1$
 			"from", //$NON-NLS-1$
 			"function", //$NON-NLS-1$
 			"get", //$NON-NLS-1$
@@ -90,8 +79,6 @@ public class EGLKeywordHandler {
 			"languageBundle", //$NON-NLS-1$
 			"last", //$NON-NLS-1$
 			"library", //$NON-NLS-1$
-			"like", //$NON-NLS-1$
-			"matches", //$NON-NLS-1$
 			"move", //$NON-NLS-1$
 			"new", //$NON-NLS-1$
 			"next", //$NON-NLS-1$
@@ -100,18 +87,14 @@ public class EGLKeywordHandler {
 			"noCursor", //$NON-NLS-1$
 			"not", //$NON-NLS-1$
 			"of", //$NON-NLS-1$
-			"onEvent", //$NON-NLS-1$
 			"onException", //$NON-NLS-1$
 			"open", //$NON-NLS-1$
-			"openUI", //$NON-NLS-1$
 			"or", //$NON-NLS-1$
 			"otherwise", //$NON-NLS-1$
 			"out", //$NON-NLS-1$
 			"package", //$NON-NLS-1$
-			"passing", //$NON-NLS-1$
 			"prepare", //$NON-NLS-1$
 			"previous", //$NON-NLS-1$
-			"print", //$NON-NLS-1$
 			"private", //$NON-NLS-1$
 			"program", //$NON-NLS-1$
 			"record", //$NON-NLS-1$
@@ -126,7 +109,6 @@ public class EGLKeywordHandler {
 			"self", //$NON-NLS-1$
 			"service", //$NON-NLS-1$
 			"set", //$NON-NLS-1$
-			"show", //$NON-NLS-1$
 			"singleRow", //$NON-NLS-1$
 			"stack", //$NON-NLS-1$
 			"static", //$NON-NLS-1$
@@ -134,8 +116,6 @@ public class EGLKeywordHandler {
 			"this", //$NON-NLS-1$
 			"throw", //$NON-NLS-1$
 			"to", //$NON-NLS-1$
-			"transaction", //$NON-NLS-1$
-			"transfer", //$NON-NLS-1$
 			"true", //$NON-NLS-1$
 			"try", //$NON-NLS-1$
 			"type", //$NON-NLS-1$
@@ -144,7 +124,6 @@ public class EGLKeywordHandler {
 			"use", //$NON-NLS-1$
 			"using", //$NON-NLS-1$
 			"usingKeys", //$NON-NLS-1$
-			"usingPCB", //$NON-NLS-1$
 			"when", //$NON-NLS-1$
 			"where", //$NON-NLS-1$
 			"while", //$NON-NLS-1$

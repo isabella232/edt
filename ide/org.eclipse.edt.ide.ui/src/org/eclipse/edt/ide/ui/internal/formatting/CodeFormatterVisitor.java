@@ -19,9 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.Stack;
-import java.util.TreeSet;
 
 import java_cup.runtime.Symbol;
 
@@ -577,58 +575,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
-	public boolean visit(DataTable dataTable) {
-//		|	privateAccessModifierOpt:privateAccessModifier1 DATATABLE:dataTable1 ID:id1 partSubTypeOpt:partSubType1 structureContent_star:structureContents1 END:end1
-//		{: RESULT = new DataTable(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, structureContents1, privateAccessModifier1 == Boolean.FALSE ? dataTable1left : privateAccessModifier1left, end1right); :}		
-		push2ContextPath(dataTable);
-		final CodeFormatterVisitor thisVisitor = this;
-		final List structureContents = dataTable.getStructureContents();
-		final Node firstStructureContent = (structureContents != null && !structureContents.isEmpty()) ? (Node)structureContents.get(0) : null;
-		final Name subTypeName = dataTable.getSubType();
-		
-		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
-
-			public void format(Symbol prevToken, Symbol currToken) {
-				boolean addSpace = false;				
-				
-				if(firstStructureContent != null && currToken.left == firstStructureContent.getOffset()){
-					indent();
-					formatStructureContents(structureContents);
-				}
-				else if(subTypeName != null && currToken.left == subTypeName.getOffset()){
-					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-					//add a space before the name
-					subTypeName.accept(thisVisitor);
-				}
-				else{
-					int numOfBlankLines = -1;					
-					switch(prevToken.sym){
-					case NodeTypes.PRIVATE:
-					case NodeTypes.DATATABLE:
-						addSpace = true;
-						break;
-					default:
-						addSpace = false;
-						break;
-					}
-					
-					if(currToken.sym == NodeTypes.TYPE)
-						addSpace = true;
-					else if(currToken.sym == NodeTypes.END){			
-						if(firstStructureContent != null)
-							unindent();
-						numOfBlankLines = 0;	
-					}
-					printToken(prevToken, currToken, numOfBlankLines, addSpace);
-				}
-			}
-			
-		};		
-		formatNode(dataTable, callbackFormatter, getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL), false);		
-		popContextPath();
-		return false;
-	}
-	
 	public boolean visit(StructureItem structureItem) {
 //		::=	levelOpt:level1 ID:id1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // StructureItem
 //		{: RESULT = new StructureItem(level1, new SimpleName(id1, id1left, id1right), type1, null, settingsBlock1, initializer1, false, false, level1 == null ? id1left : level1left, semi1right); :}
@@ -642,25 +588,14 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 //		{: RESULT = new StructureItem(level1, null, new NameType(name1, name1left, name1right), null, settingsBlock1, initializer1, false, true, level1 == null ? embedleft : level1left, semi1right); :}
 		push2ContextPath(structureItem);
 		
-		boolean hasLevel = structureItem.hasLevel();
-		//print level number if there is any
-		if(hasLevel)
-			printStuffBeforeNode(structureItem.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
+		int numOfBlankLines = fGlobalNumOfBlankLines;
+		boolean addSpace = fGlobalAddSpace;
+		int wrappingPolicy = fCurrentWrappingPolicy;
 		
-		int numOfBlankLines = hasLevel ? -1 : fGlobalNumOfBlankLines;
-		boolean addSpace = hasLevel ? true : fGlobalAddSpace;
-		int wrappingPolicy = hasLevel ? CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP : fCurrentWrappingPolicy;
-		
-		if(structureItem.isFiller())
-			printStuffBeforeToken(NodeTypes.TIMES, numOfBlankLines, addSpace, wrappingPolicy);
-		else if(structureItem.isEmbedded())
-			printStuffBeforeToken(NodeTypes.EMBED, numOfBlankLines, addSpace, wrappingPolicy);
-		else{
-			Name name = structureItem.getName();
-			if(name != null){
-				setGlobalFormattingSettings(numOfBlankLines, addSpace, wrappingPolicy);
-				name.accept(this);
-			}
+		Name name = structureItem.getName();
+		if(name != null){
+			setGlobalFormattingSettings(numOfBlankLines, addSpace, wrappingPolicy);
+			name.accept(this);
 		}
 		
 		if(structureItem.hasType()){
@@ -699,268 +634,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			unindent(numOfIndents4Wrapping);
 		}
 		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(FormGroup formGroup) {
-//		|	privateAccessModifierOpt:privateAccessModifier1 FORMGROUP:formGroup1 ID:id1 formGroupContent_star:formGroupContents1 END:end1
-//		{: RESULT = new FormGroup(privateAccessModifier1, new SimpleName(id1, id1left, id1right), formGroupContents1, privateAccessModifier1 == Boolean.FALSE ? formGroup1left : privateAccessModifier1left, end1right); :}		
-		push2ContextPath(formGroup);
-		final List formGrpContents = formGroup.getContents();
-		final Node firstFormGrpContent = (formGrpContents != null && !formGrpContents.isEmpty()) ? (Node)formGrpContents.get(0) : null;
-		
-		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
-			public void format(Symbol prevToken, Symbol currToken) {
-				boolean addSpace = false;				
-				
-				if(firstFormGrpContent != null && currToken.left == firstFormGrpContent.getOffset()){
-					indent();
-					formatContents(formGrpContents);
-				}
-				else{
-					int numOfBlankLines = -1;					
-					switch(prevToken.sym){
-					case NodeTypes.PRIVATE:
-					case NodeTypes.FORMGROUP:
-						addSpace = true;
-						break;
-					default:
-						addSpace = false;
-						break;
-					}
-					
-					if(currToken.sym == NodeTypes.END){			
-						if(firstFormGrpContent != null)
-							unindent();
-						numOfBlankLines = 0;	
-					}
-					printToken(prevToken, currToken, numOfBlankLines, addSpace);
-				}
-			}			
-		};		
-		formatNode(formGroup, callbackFormatter, getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL), false);				
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(NestedForm nestedForm) {
-//		|	privateAccessModifierOpt:privateAccessModifier1 FORM:form1 ID:id1 partSubTypeOpt:partSubType1 formContent_star:formContents1 END:end1
-//		{: RESULT = new NestedForm(privateAccessModifier1, new SimpleName(id1,id1left,id1right), partSubType1, formContents1, privateAccessModifier1 == Boolean.FALSE ? form1left : privateAccessModifier1left, end1right); :}
-		push2ContextPath(nestedForm);
-		
-		if(nestedForm.isPrivate()){
-			//print PRIVATE
-			printStuffBeforeNode(nestedForm.getOffset(), getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_NESTEDFORM), false);			
-		}
-		int numOfBlankLines = nestedForm.isPrivate() ? -1 :  getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_NESTEDFORM);
-		boolean addSpace = nestedForm.isPrivate() ? true : false;
-		printStuffBeforeToken(NodeTypes.FORM, numOfBlankLines, addSpace);
-		
-		Name name = nestedForm.getName();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		name.accept(this);
-		
-		if(nestedForm.hasSubType()){
-			printStuffBeforeToken(NodeTypes.TYPE, -1, true);
-			Name subTypeName = nestedForm.getSubType();
-			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			subTypeName.accept(this);
-		}
-		
-		indent();
-		List formContents = nestedForm.getContents();		
-		formatFormContent(formContents);		
-		unindent();
-		
-		printStuffBeforeToken(NodeTypes.END, 0, false);
-		popContextPath();
-		return false;
-	}
-	
-	private void formatFormContent(List formContents){
-		if(formContents != null){
-			boolean isFirstContent = true;
-			for(Iterator it=formContents.iterator(); it.hasNext();){
-				Node formContent = (Node)it.next();
-				if(formContent instanceof SettingsBlock){
-					setGlobalFormattingSettings(isFirstContent ? getNumOfBlankLinesBeforeCurlyBrace() : 0, 
-							getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
-							CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);					
-				}
-				else
-					setGlobalFormattingSettings(getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDATADECL), false, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-				formContent.accept(this);
-				isFirstContent = false;
-			}
-		}
-	}
-	
-	public boolean visit(VariableFormField variableFormField) {
-//		::=	ID:id1 type:type1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable field
-//		{: RESULT = new VariableFormField(new SimpleName(id1, id1left, id1right), type1, settingsBlock1, initializer1, id1left, semi1right); :}
-		push2ContextPath(variableFormField);
-		printStuffBeforeNode(variableFormField.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		Type type = variableFormField.getType();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		type.accept(this);
-		
-		if(variableFormField.hasSettingsBlock()){
-			SettingsBlock settingsBlock = variableFormField.getSettingsBlock();
-			setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
-					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
-					CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			settingsBlock.accept(this);
-		}
-		
-		if(variableFormField.hasInitializer()){
-//			|	ASSIGN expr:expr1
-//			{: RESULT = expr1; :}
-			printStuffBeforeToken(NodeTypes.ASSIGN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_OP_ASSIGNMENT));
-
-			Expression initExpr = variableFormField.getInitializer();			
-			setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_OP_ASSIGNMENT), 
-					getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_INITEXPR));
-			int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);
-			indent(numOfIndents4Wrapping);			
-			initExpr.accept(this);			
-			unindent(numOfIndents4Wrapping);
-		}
-		
-		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
-		
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(ConstantFormField constantFormField) {
-//		|	TIMES:times1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Constant field
-//		{: RESULT = new ConstantFormField(settingsBlock1, initializer1, times1left, semi1right); :}
-		push2ContextPath(constantFormField);
-		//print TIMES
-		printStuffBeforeNode(constantFormField.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-
-		if(constantFormField.hasSettingsBlock()){
-			SettingsBlock settingsBlock = constantFormField.getSettingsBlock();
-			setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
-					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
-					CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);			
-			settingsBlock.accept(this);
-		}
-		
-		if(constantFormField.hasInitializer()){
-			printStuffBeforeToken(NodeTypes.ASSIGN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_OP_ASSIGNMENT));
-
-			Expression initExpr = constantFormField.getInitializer();
-			setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_OP_ASSIGNMENT), 
-					getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_INITEXPR));
-			int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);
-			indent(numOfIndents4Wrapping);
-			initExpr.accept(this);
-			unindent(numOfIndents4Wrapping);
-		}
-		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
-		
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(TopLevelForm topLevelForm) {
-//		|	privateAccessModifierOpt:privateAccessModifier1 FORM:form1 ID:id1 partSubTypeOpt:partSubType1 formContent_star:formContents1 END:end1
-//		{: RESULT = new TopLevelForm(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, formContents1, privateAccessModifier1 == Boolean.FALSE ? form1left : privateAccessModifier1left, end1right); :}
-		push2ContextPath(topLevelForm);
-		if(topLevelForm.isPrivate()){
-			//print PRIVATE
-			printStuffBeforeNode(topLevelForm.getOffset(), getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL), false);			
-		}
-		int numOfBlankLines = topLevelForm.isPrivate() ? -1 :  getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL);
-		boolean addSpace = topLevelForm.isPrivate() ? true : false;
-		printStuffBeforeToken(NodeTypes.FORM, numOfBlankLines, addSpace);
-		
-		Name name = topLevelForm.getName();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		name.accept(this);
-		
-		if(topLevelForm.hasSubType()){
-			printStuffBeforeToken(NodeTypes.TYPE, -1, true);
-			Name subTypeName = topLevelForm.getSubType();
-			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			subTypeName.accept(this);
-		}
-		
-		indent();
-		List formContents = topLevelForm.getContents();		
-		formatFormContent(formContents);		
-		unindent();
-		
-		printStuffBeforeToken(NodeTypes.END, 0, false);
-		
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(TopLevelFunction topLevelFunction) {
-//		|	privateAccessModifierOpt:privateAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 stmt_star:stmts1 END:end1
-//		{: RESULT = new TopLevelFunction(privateAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, stmts1, privateAccessModifier1 == Boolean.FALSE ? function1left : privateAccessModifier1left, end1right); :}
-		push2ContextPath(topLevelFunction);
-		final CodeFormatterVisitor thisVisitor = this;
-		final ReturnsDeclaration returnDecl = topLevelFunction.getReturnDeclaration();		
-		final List parameters = topLevelFunction.getFunctionParameters();
-		final Parameter firstParameter = (parameters != null && !parameters.isEmpty()) ? (Parameter)parameters.get(0) : null;
-		final List stmts = topLevelFunction.getStmts();
-		final Node firstStmt = (stmts != null && !stmts.isEmpty()) ? (Node)stmts.get(0) : null;
-		
-		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
-			public void format(Symbol prevToken, Symbol currToken) {
-				if(firstParameter != null && currToken.left == firstParameter.getOffset()){
-					//print parameters					
-					formatParameters(parameters, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_FUNCPARMS));
-				}
-				else if(returnDecl != null && currToken.left == returnDecl.getOffset()){
-					//print returns
-					returnDecl.accept(thisVisitor);	
-				}		
-				else if(firstStmt != null && currToken.left == firstStmt.getOffset()){
-					indent();
-					formatStatements(stmts);
-				}
-				else{				
-					boolean addSpace = false;
-					int numOfBlankLines = -1;
-					
-					switch(prevToken.sym){
-					case NodeTypes.PRIVATE:
-					case NodeTypes.FUNCTION:
-						addSpace = true;
-						break;
-					default:
-						addSpace = false;
-						break;					
-					}
-					
-					if(currToken.sym == NodeTypes.LPAREN)
-						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_FUNCPARMS);
-					else if(currToken.sym == NodeTypes.RPAREN)
-						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_FUNCPARMS);
-					else if(currToken.sym ==  NodeTypes.SEMI)
-						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT);					
-					
-					if(currToken.sym == NodeTypes.END){
-						if(firstStmt != null)
-							unindent();						
-						numOfBlankLines = 0;
-					}
-					else
-						numOfBlankLines = -1;
-					printToken(prevToken, currToken, numOfBlankLines, addSpace);
-					
-				}
-				
-			}
-		};
-		formatNode(topLevelFunction, callbackFormatter, getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL), false);
-		
 		popContextPath();
 		return false;
 	}
@@ -1095,42 +768,12 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			subTypeName.accept(this);
 		}
 		
-		if(program.isCallable()){	//has programParametersOpt
-//			|	LPAREN programParameter_star:programParameters1 RPAREN
-//			{: RESULT = programParameters1; :}
-			printStuffBeforeToken(NodeTypes.LPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_PGMPARAMS));
-			List pgmParams = program.getParameters();		
-			formatParameters(pgmParams, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_PGMPARAMS),
-					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_COMMA_PGMPARAMS),
-					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_COMMA_PGMPARAMS));
-			printStuffBeforeToken(NodeTypes.RPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_PGMPARAMS));
-		}
-		
 		indent();
 		List classContents = program.getContents();
 		formatContents(classContents);
 		unindent();
 
 		printStuffBeforeToken(NodeTypes.END, 0, false);
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(ProgramParameter programParameter) {
-//		::=	ID:id1 type:type1
-//		{: RESULT = new ProgramParameter(new SimpleName(id1, id1left, id1right), type1, id1left, type1right); :}
-		push2ContextPath(programParameter);
-		printStuffBeforeNode(programParameter.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		Type type = programParameter.getType();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		type.accept(this);
-		
-		//I decided not to put space before ?
-		if (programParameter.isNullable()) {
-			printStuffBeforeToken(NodeTypes.QUESTION, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_QUESTION_PARMS));
-		}
-		
 		popContextPath();
 		return false;
 	}
@@ -1417,37 +1060,11 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 	
 	private void formatStructureContents(List structureContents){
 		if(structureContents != null){
-	    	//sort the levels, so we know how to indent each structure item with the level number
-			Integer[] sortedLevels = new Integer[0];
-	    	SortedSet levels = new TreeSet();    	
-			
-			for(Iterator itLevel = structureContents.iterator(); itLevel.hasNext();){
-				Object obj = itLevel.next();
-				if(obj instanceof StructureItem){
-					StructureItem structureItem = (StructureItem)obj;
-					if(structureItem.hasLevel()){
-						String strLevel = structureItem.getLevel();
-						levels.add(Integer.valueOf(strLevel));
-					}
-				}				
-			}
-			sortedLevels = (Integer[])levels.toArray(new Integer[levels.size()]);
-			
 			boolean isFirstContent = true;
 			for(Iterator it=structureContents.iterator(); it.hasNext();){
 				int levelIndex = 0;
 				//print new line for each class content			
 				Node structureContent = (Node)it.next();
-				if(structureContent instanceof StructureItem){
-					//determine the indentation level based on the level number 
-					StructureItem structureItem = (StructureItem)structureContent;
-					if(structureItem.hasLevel()){
-						String strLevel = structureItem.getLevel();
-						int level = Integer.parseInt(strLevel);					
-		        		levelIndex = getLevelIndexInSortedArray(sortedLevels, level);
-		        		indent(levelIndex); //add the correct number of indentation
-					}
-				}				
 				if(structureContent instanceof SettingsBlock && isFirstContent)
 					setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
 							getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
@@ -1461,14 +1078,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			}
 		}
 	}	
-	
-    private int getLevelIndexInSortedArray(Integer[] sortedLevels, int level2test){
-    	for(int i=0; i<sortedLevels.length; i++){
-    		if(sortedLevels[i].intValue() == level2test)
-    			return i;
-    	}
-    	return -1;
-    }
 	
 	public boolean visit(NestedFunction nestedFunction) {
 //		|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 stmt_star:stmts END:end1
@@ -2010,70 +1619,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		push2ContextPath(emptyStatement);
 		//print SEMI
 		printStuffBeforeNode(emptyStatement.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace);
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(TransferStatement transferStatement) {
-//		|	TRANSFER:transfer1 TO transferTargetOpt:transferTarget1 name:expr1 passingRecordOpt:passingRecord1 settingsBlockOpt:settingsBlock SEMI:semi1
-//		{: RESULT = new TransferStatement(transferTarget1, expr1, passingRecord1, settingsBlock, transfer1left, semi1right); :}		
-//		|	TRANSFER:transfer1 TO transferTargetOpt:transferTarget1 primaryNoNew:expr1 passingRecordOpt:passingRecord1 settingsBlockOpt:settingsBlock SEMI:semi1
-//		{: RESULT = new TransferStatement(transferTarget1, expr1, passingRecord1, settingsBlock, transfer1left, semi1right); :}		
-		push2ContextPath(transferStatement);
-		
-		final CodeFormatterVisitor thisVisitor = this;
-		final Expression transferTargetExpr = transferStatement.getInvocationTarget();
-		final Expression passingRecodExpr = transferStatement.getPassingRecord();
-		final SettingsBlock settingsBlock = transferStatement.getSettingsBlock();
-		
-		final int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);		
-		
-		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
-			public void format(Symbol prevToken, Symbol currToken) {
-		
-				if(currToken.left == transferTargetExpr.getOffset()){
-					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-					transferTargetExpr.accept(thisVisitor);
-				}
-				else if(passingRecodExpr != null && currToken.left == passingRecodExpr.getOffset()){
-					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-					passingRecodExpr.accept(thisVisitor);
-				}
-				else if(settingsBlock != null && currToken.left == settingsBlock.getOffset()){
-					setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
-							getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
-							CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);					
-					settingsBlock.accept(thisVisitor);
-				}
-				else
-				{
-					int numOfBlankLines = -1;
-					boolean addSpace = false;
-					int wrappingPolicy = CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP;
-					switch(prevToken.sym){
-					case NodeTypes.TRANSFER:
-					case NodeTypes.TO:
-						addSpace = true;
-						break;
-					}
-					
-					if(currToken.sym == NodeTypes.PASSING){		//this implies that passingRecordExpr != null
-						addSpace = true;
-						wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_IOSTMT);
-						indent(numOfIndents4Wrapping);	//indentA
-					}
-					else if(currToken.sym == NodeTypes.SEMI){
-						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT);
-						if(passingRecodExpr != null)
-							unindent(numOfIndents4Wrapping);	//match indentA
-					}
-					
-					printToken(prevToken, currToken, numOfBlankLines, addSpace, wrappingPolicy);
-				}
-			}			
-		};
-		formatNode(transferStatement, callbackFormatter, fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
 		popContextPath();
 		return false;
 	}
@@ -2723,36 +2268,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;		
 	}
 	
-	public boolean visit(WithInlineDLIClause withInlineDLIClause) {
-//		|	WITH:with1 INLINE_DLI:dliStatement
-//		{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
-		push2ContextPath(withInlineDLIClause);
-		
-		//print with
-		printStuffBeforeNode(withInlineDLIClause.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		InlineDLIStatement inlineDLiStmt = withInlineDLIClause.getDliStmt();
-		printStuffBeforeNode(inlineDLiStmt.getOffset(), -1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(UsingPCBClause usingPCBClause) {
-//		|	USINGPCB:usingpcb1 lvalue:lvalue1
-//		{: RESULT = new UsingPCBClause(lvalue1, usingpcb1left, lvalue1right); :}		
-		push2ContextPath(usingPCBClause);
-		
-		//print usingPCB
-		printStuffBeforeNode(usingPCBClause.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		Expression lvalue = usingPCBClause.getPCB();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		lvalue.accept(this);
-		
-		popContextPath();
-		return false;
-	}
-	
 	public boolean visit(CloseStatement closeStatement) {
 //		|	CLOSE:close1 expr:expr1 SEMI:semi1
 //		{: RESULT = new CloseStatement(expr1, close1left, semi1right); :}
@@ -2767,36 +2282,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		
 		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
 		
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(ConverseStatement converseStatement) {
-//		|	CONVERSE:converse1 expr:expr1 withNameOpt:withName1 SEMI:semi1
-//		{: RESULT = new ConverseStatement(expr1, withName1, converse1left, semi1right); :}
-		
-		push2ContextPath(converseStatement);
-		
-		//print CONVERSE
-		printStuffBeforeNode(converseStatement.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		Expression expr = converseStatement.getTarget();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		expr.accept(this);
-		
-//	withNameOpt
-//		::=
-//		|	WITH name:name1
-//		{: RESULT = name1; :}
-		Name withName = converseStatement.getWithNameOpt();
-		if(withName != null){
-			printStuffBeforeToken(NodeTypes.WITH, -1, true);
-			
-			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			withName.accept(this);
-		}
-		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
-
 		popContextPath();
 		return false;
 	}
@@ -2882,23 +2367,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
-	public boolean visit(DisplayStatement displayStatement) {
-//		|	DISPLAY:display1 expr:expr1 SEMI:semi1
-//		{: RESULT = new DisplayStatement(expr1, display1left, semi1right); :}		
-		push2ContextPath(displayStatement);
-		
-		//print DISPLAY
-		printStuffBeforeNode(displayStatement.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		Expression expr = displayStatement.getExpr();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		expr.accept(this);
-		
-		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
-		popContextPath();
-		return false;
-	}
-			
 	public boolean visit(ForwardStatement forwardStatement) {
 //		|	FORWARD:forward1 expr_star:exprs1 forwardTargetOpt:forwardTarget1 forwardOption_star:forwardOptions1 SEMI:semi1
 //		{: RESULT = new ForwardStatement(exprs1, forwardTarget1, forwardOptions1, forward1left, semi1right); :}
@@ -2967,44 +2435,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		Name name = returningToNameClause.getName();
 		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 		name.accept(this);
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(PassingClause passingClause) {
-//		|	PASSING:passing1 expr:expr1
-//		{: RESULT = new PassingClause(expr1, passing1left, expr1right); :}
-//		|	PASSING:passing1 primaryNoNew:expr1
-//		{: RESULT = new PassingClause(expr1, passing1left, expr1right); :}		
-		push2ContextPath(passingClause);
-		printStuffBeforeNode(passingClause.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		Expression expr = passingClause.getExpression();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		expr.accept(this);
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(FreeSQLStatement freeSQLStatement) {
-//		|	FREESQL:freesql1 ID:preparedStatementReference SEMI:semi1
-//		{: RESULT = new FreeSQLStatement(preparedStatementReference, freesql1left, semi1right); :}		
-		push2ContextPath(freeSQLStatement);
-		
-		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
-			public void format(Symbol prevToken, Symbol currToken) {
-				int numOfBlankLines = -1;
-				boolean addSpace = false;
-				
-				if(prevToken.sym == NodeTypes.FREESQL)
-					addSpace = true;				
-				if(currToken.sym == NodeTypes.SEMI)
-					addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT);
-				printToken(prevToken, currToken, numOfBlankLines, addSpace);
-			}			
-		};
-		formatNode(freeSQLStatement, callbackFormatter, fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-	
 		popContextPath();
 		return false;
 	}
@@ -3363,96 +2793,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		popContextPath();
 		return false;
 	}
-	
-	public boolean visit(OpenUIStatement openUIStatement) {
-//		|	OPENUI:openui1 settingsBlockOpt:settingsBlock1 expr_plus:exprs1 bindOpt:bind1 eventBlock_star:eventBlocks1 END:end1
-//		{: RESULT = new OpenUIStatement(settingsBlock1, exprs1, bind1, eventBlocks1, openui1left, end1right); :}
-		push2ContextPath(openUIStatement);
-		
-		//print OPENUI
-		printStuffBeforeNode(openUIStatement.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		if(openUIStatement.hasOpenAttributes()){
-			SettingsBlock settingsBlock = openUIStatement.getOpenAttributes();
-			setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
-					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
-					CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);			
-			settingsBlock.accept(this);
-		}
-		
-		indent();
-		List exprs = openUIStatement.getOpenableElements();
-		//start the expr_plus on a new line (indented)
-		setGlobalFormattingSettings(0, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		formatExpressions(exprs);
-		
-		if(openUIStatement.hasBindClause()){
-//			bindOpt
-//			::=
-//			|	BIND expr_plus:exprs1
-//			{: RESULT = exprs1; :}		
-			
-			//start the bind on a new line (indented)
-			printStuffBeforeToken(NodeTypes.BIND, 0, true);
-			
-			List bindOpts = openUIStatement.getBindClauseVariables();
-			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			formatExpressions(bindOpts);
-		}
-		unindent();
-		
-		List onEvents = openUIStatement.getEventBlocks();
-		if(onEvents != null && !onEvents.isEmpty()){
-			for(Iterator it = onEvents.iterator(); it.hasNext();){
-				Node onEventBlock = (Node)it.next();
-				setGlobalFormattingSettings(0, false, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-				onEventBlock.accept(this);
-			}
-		}
-		
-		printStuffBeforeToken(NodeTypes.END, 0, false);
-		
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(OnEventBlock onEventBlock) {
-//		::=	ONEVENT:onevent1 LPAREN expr:eventType fieldsOpt:fields1 RPAREN stmt_star:stmts1
-//		{: RESULT = new OnEventBlock(eventType, fields1, stmts1, onevent1left, stmts1right); :}		
-		push2ContextPath(onEventBlock);
-		
-		printStuffBeforeNode(onEventBlock.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		printStuffBeforeToken(NodeTypes.LPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_ONEVENT));
-		
-		Expression expr = onEventBlock.getEventTypeExpr();
-		setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_ONEVENT), 
-				CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		expr.accept(this);
-		
-//		fieldsOpt
-//		::=
-//		{: RESULT = Collections.EMPTY_LIST; :}
-//		|	COLON expr_plus:exprs1
-//		{: RESULT = exprs1; :}
-//		;
-		if(onEventBlock.hasStringList()){
-			printStuffBeforeToken(NodeTypes.COLON, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_COLON_ONEVENT));
-			List fields = onEventBlock.getStringList();
-			setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_COLON_ONEVENT), 
-					CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			formatExpressions(fields);
-		}
-		
-		printStuffBeforeToken(NodeTypes.RPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_ONEVENT));
-		
-		indent();
-		final List stmts = onEventBlock.getStatements();
-		formatStatements(stmts);
-		unindent();
-
-		popContextPath();
-		return false;
-	}
 		
 	public boolean visit(PrepareStatement prepareStatement) {
 //		|	PREPARE:prepare1 ID:preparedStmtID prepareOption_star:prepareOptions1 SEMI:semi1
@@ -3503,22 +2843,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;		
 	}
 	
-	public boolean visit(PrintStatement printStatement) {
-//		|	PRINT:print1 expr:expr1 SEMI:semi1
-//		{: RESULT = new PrintStatement(expr1, print1left, semi1right); :}		
-		push2ContextPath(printStatement);
-		printStuffBeforeNode(printStatement.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		Expression expr = printStatement.getTarget();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		expr.accept(this);		
-		
-		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
-		
-		popContextPath();
-		return false;
-	}
-	
 	public boolean visit(ReplaceStatement replaceStatement) {
 //		|	REPLACE:replace1 expr:expr1 replaceOption_star:replaceOptions1 SEMI:semi1
 //		{: RESULT = new ReplaceStatement(expr1, replaceOptions1, replace1left, semi1right); :}
@@ -3549,45 +2873,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 
-	public boolean visit(ShowStatement showStatement) {
-//		|	SHOW:show1 name:expr1 showOption_star:showOptions1 settingsBlockOpt:settingsBlock SEMI:semi1
-//		{: RESULT = new ShowStatement(expr1, showOptions1, settingsBlock, show1left, semi1right); :}		
-//		|	SHOW:show1 primaryNoNew:expr1 showOption_star:showOptions1 settingsBlockOpt:settingsBlock SEMI:semi1
-//		{: RESULT = new ShowStatement(expr1, showOptions1, settingsBlock, show1left, semi1right); :}		
-		push2ContextPath(showStatement);		
-		printStuffBeforeNode(showStatement.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
-		
-		Expression expr = showStatement.getPageRecordOrForm();
-		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-		expr.accept(this);
-		
-		int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);			
-		int wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_IOSTMT);		
-					
-		List showOpts = showStatement.getShowOptions();
-		if(showOpts != null && !showOpts.isEmpty()){
-			indent(numOfIndents4Wrapping);	
-			for(Iterator it=showOpts.iterator(); it.hasNext();){
-				Node showOpt = (Node)it.next();
-				setGlobalFormattingSettings(-1, true, wrappingPolicy);
-				showOpt.accept(this);
-			}
-			unindent(numOfIndents4Wrapping);
-		}
-		
-		if(showStatement.hasSettingsBlock()){
-			SettingsBlock settingsBlock = showStatement.getSettingsBlock();
-			setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
-					getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
-					CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);			
-			settingsBlock.accept(this);
-		}
-		
-		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));		
-		popContextPath();
-		return false;
-	}
-	
 	public boolean visit(ReturningToInvocationTargetClause returningToInvocationTargetClause) {
 //		::=	RETURNING:returning1 TO name:expr1
 //		{: RESULT = new ReturningToInvocationTargetClause(expr1, returning1left, expr1right); :}
@@ -3866,10 +3151,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 	public boolean visit(DecimalLiteral decimalLiteral) {return visitTerminalExpression(decimalLiteral);}
 	public boolean visit(FloatLiteral floatLiteral) {return visitTerminalExpression(floatLiteral);}
 	public boolean visit(StringLiteral stringLiteral) {return visitTerminalExpression(stringLiteral);}
-	public boolean visit(HexLiteral hexLiteral) {return visitTerminalExpression(hexLiteral);}
-	public boolean visit(CharLiteral charLiteral) {return visitTerminalExpression(charLiteral);}
-	public boolean visit(DBCharLiteral dBCharLiteral) {return visitTerminalExpression(dBCharLiteral);}
-	public boolean visit(MBCharLiteral mBCharLiteral) {return visitTerminalExpression(mBCharLiteral);}
 	public boolean visit(BooleanLiteral booleanLiteral) {return visitTerminalExpression(booleanLiteral);}
 	public boolean visit(NullLiteral nullLiteral) {return visitTerminalExpression(nullLiteral);}
 	public boolean visit(SQLLiteral sQLLiteral) {return visitTerminalExpression(sQLLiteral);}
@@ -4264,41 +3545,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		Expression secondExpr = isNotExpression.getSecondExpression();
 		format2ndExpressionInBinaryExpression(secondExpr);
 				
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(LikeMatchesExpression likeMatchesExpression) {
-//		|	expr:expr1 LIKE expr:expr2
-//		{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, null, expr1left, expr2right); :}
-//		|	expr:expr1 MATCHES expr:expr2
-//		{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, null, expr1left, expr2right); :}		
-//		|	expr:expr1 LIKE expr:expr2 ESCAPE STRING:escapeCharacter
-//		{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getCanonicalString(), expr1left, escapeCharacterright); :}
-//		|	expr:expr1 MATCHES expr:expr2 ESCAPE STRING:escapeCharacter
-//		{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getCanonicalString(), expr1left, escapeCharacterright); :}
-		push2ContextPath(likeMatchesExpression);
-		Expression firstExpr = likeMatchesExpression.getFirstExpression();
-		firstExpr.accept(this);
-		
-		LikeMatchesExpression.Operator likeMatchOp = likeMatchesExpression.getOperator();
-		if(likeMatchOp == LikeMatchesExpression.Operator.LIKE)
-			printStuffBeforeToken(NodeTypes.LIKE, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_OP_BINARY));
-		else if(likeMatchOp == LikeMatchesExpression.Operator.MATCHES)
-			printStuffBeforeToken(NodeTypes.MATCHES, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_OP_BINARY));
-		
-		Expression secondExpr = likeMatchesExpression.getSecondExpression();
-		format2ndExpressionInBinaryExpression(secondExpr);
-		
-		if(likeMatchesExpression.hasEscapeString()){
-			printStuffBeforeToken(NodeTypes.ESCAPE, -1, true);
-			
-			//now we need to calculate the escapeCharacter's starting offset to print this node, since STRING is not a terminal NodeTypes
-			String escapeString = likeMatchesExpression.getEscapeString();
-			int escapeOffset = likeMatchesExpression.getOffset() + likeMatchesExpression.getLength() - escapeString.length();
-			printStuffBeforeNode(escapeOffset, -1, true);			
-		}
-		
 		popContextPath();
 		return false;
 	}

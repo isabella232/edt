@@ -15,13 +15,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.FunctionBindingCompletor;
 import org.eclipse.edt.compiler.binding.SettingsBlockAnnotationBindingsCompletor;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.Constructor;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ExitStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
@@ -32,15 +30,10 @@ import org.eclipse.edt.compiler.core.ast.IfStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.OnEventBlock;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
-import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.WhenClause;
@@ -73,7 +66,8 @@ public class FunctionBinder extends DefaultBinder {
         this.partBinding = partBinding;
         this.functionBinding = functionBinding;
     }
-
+    
+    @Override
     public boolean visit(NestedFunction function) {
     	canonicalFunctionName = function.getName().getCanonicalName();
     	
@@ -89,6 +83,7 @@ public class FunctionBinder extends DefaultBinder {
         return true;
     }
     
+    @Override
     public boolean visit(Constructor constructor) {
     	canonicalFunctionName = IEGLConstants.KEYWORD_CONSTRUCTOR;
     	
@@ -104,28 +99,12 @@ public class FunctionBinder extends DefaultBinder {
         return true;
     }
 
-
-    public boolean visit(TopLevelFunction function) {
-    	canonicalFunctionName = function.getName().getCanonicalName();
-    	
-        function.accept(new FunctionBindingCompletor(partBinding, currentScope, functionBinding, dependencyRequestor,
-                problemRequestor, compilerOptions));
-
-        FunctionScope functionScope = new FunctionScope(currentScope, functionBinding);
-        currentScope = functionScope;
-        
-        for (org.eclipse.edt.mof.egl.FunctionParameter parm : functionBinding.getParameters()) {
-        	functionScope.addDeclaredDataName(parm.getName());
-        }
-        
-
-        return true;
-    }
-    
+    @Override
     public boolean visit(FunctionParameter functionParameter) {
         return false;
     }
     
+    @Override
     public boolean visit(FunctionDataDeclaration dataDecl) {
     	functionDataDecls.add(dataDecl);
     	processDataDeclaration(dataDecl.getNames(), dataDecl.getType(), dataDecl.isNullable(), dataDecl.getSettingsBlockOpt(), dataDecl.isConstant(), dataDecl.getInitializer());
@@ -189,12 +168,11 @@ public class FunctionBinder extends DefaultBinder {
         }
     }
     
-	public void endVisit(TopLevelFunction topLevelFunction) {
-	}
-    
+    @Override
     public void endVisit(NestedFunction nestedFunction) {
     }
-
+    
+    @Override
     public boolean visit(SetValuesExpression setValuesExpression) {
         setValuesExpression.getExpression().accept(this);
         final org.eclipse.edt.mof.egl.Type type = setValuesExpression.getExpression().resolveType();
@@ -207,41 +185,8 @@ public class FunctionBinder extends DefaultBinder {
         }
         return false;
     }
-
-    public boolean visit(OpenUIStatement openUIStatement) {
-        
-        if(openUIStatement.hasOpenAttributes()) {
-        	openUIStatement.getOpenAttributes().accept(this);
-        }
-        
-        for(Node node : openUIStatement.getOpenableElements()) {
-        	node.accept(this);
-        }
-        
-        for(Node node : openUIStatement.getBindClauseVariables()) {
-        	node.accept(this);
-        }
-        
-        for(OnEventBlock nextBlock : openUIStatement.getEventBlocks()) {
-        	
-        	nextBlock.getEventTypeExpr().accept(this);
-        	
-        	if(nextBlock.hasStringList()) {
-        		for(Node node : nextBlock.getStringList()) {
-        			node.accept(this);
-        		}
-        	}
-        	
-        	currentScope = new StatementBlockScope(currentScope);
-        	for(Node node : nextBlock.getStatements()) {
-    			node.accept(this);
-    		}
-        	currentScope = currentScope.getParentScope();
-        }
-        
-		return false;
-    }
     
+    @Override
     public boolean visit(CallStatement callStatement) {
         
 		bindingCallTarget = true;
@@ -279,46 +224,7 @@ public class FunctionBinder extends DefaultBinder {
 		return false;
     }
     
-    public boolean visit(TransferStatement transferStatement) {
-        
-		bindInvocationTarget(transferStatement.getInvocationTarget());
-		
-		if(transferStatement.hasPassingRecord()){
-			transferStatement.getPassingRecord().accept(this);
-		}
-		
-		if(transferStatement.hasSettingsBlock()) {
-			transferStatement.getSettingsBlock().accept(this);
-		}
-				
-		return false;
-	}
-    
-    public boolean visit(ShowStatement showStatement) {
-		
-		showStatement.getPageRecordOrForm().accept(this);
-		
-		final DefaultBinder thisBinder = this;
-		for(Node node : showStatement.getShowOptions()) {
-			node.accept(new DefaultASTVisitor() {
-				public boolean visit(org.eclipse.edt.compiler.core.ast.PassingClause passingClause) {
-					passingClause.accept(thisBinder);
-					return false;
-				}
-				public boolean visit(org.eclipse.edt.compiler.core.ast.ReturningToInvocationTargetClause returningToInvocationTargetClause) {
-					bindInvocationTarget(returningToInvocationTargetClause.getExpression());
-					return false;
-				}
-			});
-		}
-		
-		if(showStatement.hasSettingsBlock()) {
-			showStatement.getSettingsBlock().accept(this);
-		}
-		
-		return false;
-	}
-    
+    @Override
     public boolean visit(ExitStatement exitStatement) {
         
         if (exitStatement.getExitModifierOpt() != null) {
@@ -331,9 +237,6 @@ public class FunctionBinder extends DefaultBinder {
 		
 		return false;
     }
-
-    public void endVisit(OpenUIStatement openUIStatement) {
-    };
     
     private void visitStatementBlocks(Statement statement) {
     	for(List<Node> block : statement.getStatementBlocks()) {
@@ -344,13 +247,15 @@ public class FunctionBinder extends DefaultBinder {
 			currentScope = currentScope.getParentScope();
 		}
     }
-    
+
+    @Override
     public boolean visit(IfStatement ifStatement) {
     	ifStatement.getCondition().accept(this);
     	visitStatementBlocks(ifStatement);
     	return false;
     }
     
+    @Override
 	public boolean visit(CaseStatement caseStatement) {
 		if(caseStatement.hasCriterion()) {
 			Expression expr = caseStatement.getCriterion();
@@ -366,6 +271,7 @@ public class FunctionBinder extends DefaultBinder {
 		return false;
 	}
     
+    @Override
     public boolean visit(ForStatement forStatement) {
     	currentScope = new StatementBlockScope(currentScope);
     	
@@ -401,6 +307,7 @@ public class FunctionBinder extends DefaultBinder {
     	return false;
     }
     
+    @Override
     public boolean visit(ForEachStatement forEachStatement) {
     	currentScope = new StatementBlockScope(currentScope);
     	
@@ -430,12 +337,14 @@ public class FunctionBinder extends DefaultBinder {
     	return false;
     }
     
+    @Override
     public boolean visit(WhileStatement whileStatement) {
     	whileStatement.getExpr().accept(this);    	
     	visitStatementBlocks(whileStatement);
     	return false;
     }
     
+    @Override
     public boolean visit(TryStatement tryStatement) {
     	currentScope = new StatementBlockScope(currentScope);
     	for(Node node : tryStatement.getStmts()) {

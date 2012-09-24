@@ -22,23 +22,19 @@ import org.eclipse.edt.mof.egl.Member;
  */
 public class StructureItem extends Node {
 
-	private String levelOpt;
 	private SimpleName name;
 	private Type type;
 	private boolean isNullable;
 	private SettingsBlock settingsBlockOpt;
 	private Expression initializerOpt;
 	String occursOpt;
-	private boolean isFiller;
-	private boolean isEmbedded;
 	//Since there is no node to attach binding for filler items...also used to hold the structure imported for
 	// an embed.
 	private Member member;
 
-	public StructureItem(String levelOpt, SimpleName name, Type type, Boolean isNullable, String occursOpt, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isFiller, boolean isEmbedded, int startOffset, int endOffset) {
+	public StructureItem(SimpleName name, Type type, Boolean isNullable, String occursOpt, SettingsBlock settingsBlockOpt, Expression initializerOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.levelOpt = levelOpt;
 		if(name != null) {
 			this.name = name;
 			name.setParent(this);
@@ -56,17 +52,7 @@ public class StructureItem extends Node {
 			this.initializerOpt = initializerOpt;
 			initializerOpt.setParent(this);
 		}
-		this.isFiller = isFiller;
-		this.isEmbedded = isEmbedded;
 		this.isNullable = isNullable.booleanValue();
-	}
-	
-	public boolean hasLevel() {
-		return levelOpt != null;
-	}
-	
-	public String getLevel() {
-		return levelOpt;
 	}
 	
 	public Name getName() {
@@ -95,14 +81,6 @@ public class StructureItem extends Node {
 	 */
 	public String getOccurs() {
 		return occursOpt;
-	}
-	
-	public boolean isFiller() {
-		return isFiller;
-	}
-	
-	public boolean isEmbedded() {
-		return isEmbedded;
 	}
 	
 	public boolean hasSettingsBlock() {
@@ -136,10 +114,7 @@ public class StructureItem extends Node {
 		if(member != null) {
 			return member;
 		}
-		if(!isFiller && !isEmbedded) {
-			return getName().resolveMember();
-		}
-		return null;
+		return getName().resolveMember();
     }
     
     public void setMember(Member member) {
@@ -152,8 +127,6 @@ public class StructureItem extends Node {
 
 	
 	protected Object clone() throws CloneNotSupportedException {
-		String newLevelOpt = levelOpt != null ? new String(levelOpt) : null;
-		
 		SimpleName newName = name != null ? (SimpleName)name.clone() : null;
 		
 		Type newType = type != null ? (Type)type.clone() : null;
@@ -164,28 +137,16 @@ public class StructureItem extends Node {
 		
 		Expression newInitializerOpt = initializerOpt != null ? (Expression)initializerOpt.clone() : null;
 		
-		return new StructureItem(newLevelOpt, newName, newType, Boolean.valueOf(isNullable), newOccursOpt, newSettingsBlockOpt, newInitializerOpt, isFiller, isEmbedded, getOffset(), getOffset() + getLength());
+		return new StructureItem(newName, newType, Boolean.valueOf(isNullable), newOccursOpt, newSettingsBlockOpt, newInitializerOpt, getOffset(), getOffset() + getLength());
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder(100);
 		
-		if (levelOpt != null) {
-			buf.append(levelOpt);
-			buf.append(' ');
-		}
-		
-		if (isEmbedded) {
-			buf.append("embed ");
-		}
-		
 		if (name != null) {
 			buf.append(name);
 			buf.append(' ');
-		}
-		else if (isFiller) {
-			buf.append("* ");
 		}
 		
 		if (type != null) {

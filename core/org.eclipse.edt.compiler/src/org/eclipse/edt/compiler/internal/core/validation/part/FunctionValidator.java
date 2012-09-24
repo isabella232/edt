@@ -30,17 +30,14 @@ import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.ContinueStatement;
-import org.eclipse.edt.compiler.core.ast.ConverseStatement;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
-import org.eclipse.edt.compiler.core.ast.DisplayStatement;
 import org.eclipse.edt.compiler.core.ast.EmptyStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.ExitStatement;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.core.ast.ForwardStatement;
-import org.eclipse.edt.compiler.core.ast.FreeSQLStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
@@ -54,27 +51,21 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
-import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
-import org.eclipse.edt.compiler.core.ast.PrintStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.ReturnStatement;
 import org.eclipse.edt.compiler.core.ast.SetStatement;
 import org.eclipse.edt.compiler.core.ast.SetValuesStatement;
-import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.ThrowStatement;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.validation.ExpressionValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
@@ -98,7 +89,6 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.StructuredRecord;
-import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class FunctionValidator extends AbstractASTVisitor {
@@ -110,17 +100,12 @@ public class FunctionValidator extends AbstractASTVisitor {
 	private ArrayList gotoList = new ArrayList();
     ICompilerOptions compilerOptions;
     private boolean nextStatementIsUnreachable;
-	private IStatementValidInContainerInfo statementValidInContainerInfo;
 	private LabelStatement labelPrecedingStatement;
 	private Map labeledLoops = new HashMap();
 	
 	public FunctionValidator(IProblemRequestor problemRequestor, IPartBinding enclosingPart, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
 		this.enclosingPart = enclosingPart;
-		
-		if(enclosingPart != null) {
-			this.statementValidInContainerInfo = StatementValidInContainerInfoFactory.INSTANCE.create(enclosingPart);
-		}
 		this.compilerOptions = compilerOptions;
 	}
 	
@@ -128,23 +113,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		this(problemRequestor, null, compilerOptions);
 	}
 	
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		functionName = topLevelFunction.getName().getCanonicalName();
-		if(NameUtile.equals(topLevelFunction.getIdentifier(), NameUtile.getAsName(IEGLConstants.MNEMONIC_MAIN))) {
-			problemRequestor.acceptProblem(
-				topLevelFunction.getName(),
-				IProblemRequestor.FUNCTION_NO_MAIN_FUNCTION_ALLOWED,
-				new String[] {IEGLConstants.MNEMONIC_MAIN});
-		}
-		
-		checkFunctionName(topLevelFunction.getName(), false);
-		checkNumberOfParms(topLevelFunction.getFunctionParameters(), topLevelFunction.getName(), functionName);
-		checkForConstructorCalls(topLevelFunction);
-		topLevelFunction.accept(new ExpressionValidator(enclosingPart, problemRequestor, compilerOptions));
-		
-		return true;
-	}
-	
+	@Override
 	public boolean visit(NestedFunction nestedFunction) {
 		functionName = nestedFunction.getName().getCanonicalName();
 		
@@ -156,6 +125,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return true;
 	}
 	
+	@Override
 	public boolean visit(Constructor constructor) {
 		functionName = IEGLConstants.KEYWORD_CONSTRUCTOR;
 		
@@ -166,6 +136,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		return true;
 	}
 	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ReturnsDeclaration returnsDeclaration) {
 		Type type = returnsDeclaration.getType();
 		TypeValidator.validate(type, enclosingPart, problemRequestor, compilerOptions);
@@ -175,8 +146,8 @@ public class FunctionValidator extends AbstractASTVisitor {
 	
 	private void checkForConstructorCalls(Node node) {
 		node.accept(new AbstractASTVisitor() {
+			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionInvocation functionInvocation) {
-				
 				//ensure that constructor invocations are the first statement in a constructor
 				if (functionInvocation.getTarget() instanceof SuperExpression || functionInvocation.getTarget() instanceof ThisExpression) {
 					if (functionInvocation.getParent() instanceof FunctionInvocationStatement) {
@@ -198,7 +169,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 		});
 	}
 	
-	
 	void checkNumberOfParms(List parms, Node name, String nameString) {
 		if (parms.size() > 255) {
         	problemRequestor.acceptProblem(
@@ -208,6 +178,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		}
 	}
 	
+	@Override
 	public boolean visit(FunctionParameter functionParameter) {
         
 		Type parmType = functionParameter.getType();
@@ -326,302 +297,264 @@ public class FunctionValidator extends AbstractASTVisitor {
 		}
 	}
 	
-	private boolean checkStatementAllowedInContainer(Statement statement) {
-		if(statementValidInContainerInfo != null && !statementValidInContainerInfo.statementIsValidInContainer(statement)) {
-			problemRequestor.acceptProblem(statement, statementValidInContainerInfo.getProblemKind(), new String[] {getName(statement)});
-			return false;
-		}
-		return true;
-	}
-	
+	@Override
 	public boolean visit(AddStatement addStatement) {
 		preVisitStatement(addStatement);
-		if (checkStatementAllowedInContainer(addStatement)) {
-			validateStatement(addStatement);
-		}
+		validateStatement(addStatement);
 		postVisitStatement(addStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(AssignmentStatement assignmentStatement) {
 		preVisitStatement(assignmentStatement);
-		if (checkStatementAllowedInContainer(assignmentStatement)) {
-			assignmentStatement.accept(new AssignmentStatementValidator(problemRequestor, compilerOptions, enclosingPart));
-		}
+		assignmentStatement.accept(new AssignmentStatementValidator(problemRequestor, compilerOptions, enclosingPart));
 		postVisitStatement(assignmentStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(CallStatement callStatement) {
 		preVisitStatement(callStatement);
-		if (checkStatementAllowedInContainer(callStatement)) {
-			validateStatement(callStatement);
-		}
+		validateStatement(callStatement);
 		postVisitStatement(callStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(CaseStatement caseStatement) {
 		if(labelPrecedingStatement != null) {
 			labeledLoops.put(caseStatement, labelPrecedingStatement);
 		}
 		preVisitStatement(caseStatement);
-		if (checkStatementAllowedInContainer(caseStatement)) {
-			caseStatement.accept(new CaseStatementValidator(problemRequestor, compilerOptions));
-		}		
+		caseStatement.accept(new CaseStatementValidator(problemRequestor, compilerOptions));
 		postVisitStatement(caseStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(CloseStatement closeStatement) {
 		preVisitStatement(closeStatement);
-		if (checkStatementAllowedInContainer(closeStatement)) {
-			validateStatement(closeStatement);
-		}
+		validateStatement(closeStatement);
 		postVisitStatement(closeStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(ContinueStatement continueStatement) {
 		preVisitStatement(continueStatement);
-		if (checkStatementAllowedInContainer(continueStatement)) {
-			continueStatement.accept(new ContinueStatementValidator(problemRequestor, labeledLoops));
-			nextStatementIsUnreachable = true;
-		}
+		continueStatement.accept(new ContinueStatementValidator(problemRequestor, labeledLoops));
+		nextStatementIsUnreachable = true;
 		postVisitStatement(continueStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(DeleteStatement deleteStatement) {
 		preVisitStatement(deleteStatement);
-		if (checkStatementAllowedInContainer(deleteStatement)) {
-			validateStatement(deleteStatement);
-		}
+		validateStatement(deleteStatement);
 		postVisitStatement(deleteStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(ExecuteStatement executeStatement) {
 		preVisitStatement(executeStatement);
-		if (checkStatementAllowedInContainer(executeStatement)) {
-			validateStatement(executeStatement);
-		}
+		validateStatement(executeStatement);
 		postVisitStatement(executeStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(EmptyStatement emptyStatement) {
 		preVisitStatement(emptyStatement, false);
-		if (checkStatementAllowedInContainer(emptyStatement)) {
-		}
 		postVisitStatement(emptyStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(ExitStatement exitStatement) {
 		preVisitStatement(exitStatement);
-		if (checkStatementAllowedInContainer(exitStatement)) {
-			exitStatement.accept(new ExitStatementValidator(problemRequestor, labeledLoops, enclosingPart, compilerOptions));
-			nextStatementIsUnreachable = true;
-		}
+		exitStatement.accept(new ExitStatementValidator(problemRequestor, labeledLoops, enclosingPart, compilerOptions));
+		nextStatementIsUnreachable = true;
 		postVisitStatement(exitStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(ForEachStatement forEachStatement) {
 		if(labelPrecedingStatement != null) {
 			labeledLoops.put(forEachStatement, labelPrecedingStatement);
 		}
 		preVisitStatement(forEachStatement);
-		if (checkStatementAllowedInContainer(forEachStatement)) {
-			validateStatement(forEachStatement);
-		}		
+		validateStatement(forEachStatement);
 		postVisitStatement(forEachStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(ForStatement forStatement) {
 		if(labelPrecedingStatement != null) {
 			labeledLoops.put(forStatement, labelPrecedingStatement);
 		}
 		preVisitStatement(forStatement);
-		if (checkStatementAllowedInContainer(forStatement)) {
-			forStatement.accept(new ForStatementValidator(problemRequestor, compilerOptions));
-		}		
+		forStatement.accept(new ForStatementValidator(problemRequestor, compilerOptions));
 		postVisitStatement(forStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(FunctionInvocationStatement functionInvocationStatement) {
 		preVisitStatement(functionInvocationStatement);
-		if (checkStatementAllowedInContainer(functionInvocationStatement)) {
-		}
 		postVisitStatement(functionInvocationStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
 		preVisitStatement(functionDataDeclaration);
-		if (checkStatementAllowedInContainer(functionDataDeclaration)) {
-			functionDataDeclaration.accept(new FunctionDataDeclarationValidator(problemRequestor, compilerOptions, enclosingPart));
-		}
+		functionDataDeclaration.accept(new FunctionDataDeclarationValidator(problemRequestor, compilerOptions, enclosingPart));
 		postVisitStatement(functionDataDeclaration);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(GetByKeyStatement getByKeyStatement) {
 		preVisitStatement(getByKeyStatement);
-		if (checkStatementAllowedInContainer(getByKeyStatement)) {
-			validateStatement(getByKeyStatement);
-		}
+		validateStatement(getByKeyStatement);
 		postVisitStatement(getByKeyStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(GetByPositionStatement getByPositionStatement) {
 		preVisitStatement(getByPositionStatement);
-		if (checkStatementAllowedInContainer(getByPositionStatement)) {
-			validateStatement(getByPositionStatement);
-		}
+		validateStatement(getByPositionStatement);
 		postVisitStatement(getByPositionStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(GotoStatement gotoStatement) {
 		preVisitStatement(gotoStatement);
-		if (checkStatementAllowedInContainer(gotoStatement)) {
-			gotoStatement.accept(new GotoStatementValidator(problemRequestor, compilerOptions));
-			gotoList.add(gotoStatement);
-		}
+		gotoStatement.accept(new GotoStatementValidator(problemRequestor, compilerOptions));
+		gotoList.add(gotoStatement);
 		postVisitStatement(gotoStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(IfStatement ifStatement) {
 		if(labelPrecedingStatement != null) {
 			labeledLoops.put(ifStatement, labelPrecedingStatement);
 		}
 		preVisitStatement(ifStatement);
-		if (checkStatementAllowedInContainer(ifStatement)) {
-			ifStatement.accept(new IfStatementValidator(problemRequestor));
-		}
+		ifStatement.accept(new IfStatementValidator(problemRequestor));
 		postVisitStatement(ifStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(LabelStatement labelStatement) {
 		nextStatementIsUnreachable = false;
 		preVisitStatement(labelStatement);
 		labelPrecedingStatement = labelStatement;
-		if (checkStatementAllowedInContainer(labelStatement)) {
-			labelStatement.accept(new LabelStatementValidator(problemRequestor, compilerOptions));
-			if (labelMap.containsKey(labelStatement.getLabel())) {
-				problemRequestor.acceptProblem(labelStatement, IProblemRequestor.DUPLICATE_LABEL, new String[] {
-						labelStatement.getLabel(), this.functionName });
-			} else {
-				labelMap.put(labelStatement.getLabel(), labelStatement);
-			}
+		
+		labelStatement.accept(new LabelStatementValidator(problemRequestor, compilerOptions));
+		if (labelMap.containsKey(labelStatement.getLabel())) {
+			problemRequestor.acceptProblem(labelStatement, IProblemRequestor.DUPLICATE_LABEL, new String[] {
+					labelStatement.getLabel(), this.functionName });
+		} else {
+			labelMap.put(labelStatement.getLabel(), labelStatement);
 		}
+		
 		postVisitStatement(labelStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(MoveStatement moveStatement) {
 		preVisitStatement(moveStatement);
-		if (checkStatementAllowedInContainer(moveStatement)) {
-			moveStatement.accept(new MoveStatementValidator(problemRequestor, compilerOptions, enclosingPart));
-		}
+		moveStatement.accept(new MoveStatementValidator(problemRequestor, compilerOptions, enclosingPart));
 		postVisitStatement(moveStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(OpenStatement openStatement) {
 		preVisitStatement(openStatement);
-		if (checkStatementAllowedInContainer(openStatement)) {
-			validateStatement(openStatement);
-		}
+		validateStatement(openStatement);
 		postVisitStatement(openStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(PrepareStatement prepareStatement) {
 		preVisitStatement(prepareStatement);
-		if (checkStatementAllowedInContainer(prepareStatement)) {
-			validateStatement(prepareStatement);
-		}
+		validateStatement(prepareStatement);
 		postVisitStatement(prepareStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(ReplaceStatement replaceStatement) {
 		preVisitStatement(replaceStatement);
-		if (checkStatementAllowedInContainer(replaceStatement)) {
-			validateStatement(replaceStatement);
-		}
+		validateStatement(replaceStatement);
 		postVisitStatement(replaceStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(ReturnStatement returnStatement) {
 		preVisitStatement(returnStatement);
-		if (checkStatementAllowedInContainer(returnStatement)) {
-			returnStatement.accept(new ReturnStatementValidator(problemRequestor, compilerOptions));
-		}
+		returnStatement.accept(new ReturnStatementValidator(problemRequestor, compilerOptions));
 		postVisitStatement(returnStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(SetStatement setStatement) {
 		preVisitStatement(setStatement);
-		if (checkStatementAllowedInContainer(setStatement)) {
-			setStatement.accept(new SetStatementValidator(problemRequestor, enclosingPart, compilerOptions));
-		}
+		setStatement.accept(new SetStatementValidator(problemRequestor, enclosingPart, compilerOptions));
 		postVisitStatement(setStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(SetValuesStatement setValuesStatement) {
 		preVisitStatement(setValuesStatement);
-		if (checkStatementAllowedInContainer(setValuesStatement)) {
-		}
 		postVisitStatement(setValuesStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(ThrowStatement throwStatement) {
 		preVisitStatement(throwStatement);
-		if (checkStatementAllowedInContainer(throwStatement)) {
-			throwStatement.accept(new ThrowStatementValidator(problemRequestor, enclosingPart));
-		}
+		throwStatement.accept(new ThrowStatementValidator(problemRequestor, enclosingPart));
 		postVisitStatement(throwStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(TryStatement tryStatement) {
 		preVisitStatement(tryStatement);
-		if (checkStatementAllowedInContainer(tryStatement)) {
-			tryStatement.accept(new TryStatementValidator(problemRequestor, enclosingPart));
-		}
+		tryStatement.accept(new TryStatementValidator(problemRequestor, enclosingPart));
 		postVisitStatement(tryStatement);
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(WhileStatement whileStatement) {
 		if(labelPrecedingStatement != null) {
 			labeledLoops.put(whileStatement, labelPrecedingStatement);
 		}
 		preVisitStatement(whileStatement);
-		if (checkStatementAllowedInContainer(whileStatement)) {
-			whileStatement.accept(new WhileStatementValidator(problemRequestor));
-		}		
+		whileStatement.accept(new WhileStatementValidator(problemRequestor));
 		postVisitStatement(whileStatement);
 		return false;
 	}
 	
-	public void endVisit(TopLevelFunction topLevelFunction) {
-		validateGotoLabels();
-	}
-	
+	@Override
 	public void endVisit(NestedFunction nestedFunction) {
 		validateGotoLabels();
 	}
@@ -668,126 +601,99 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public static String getName(Statement statement) {
 		final String[] result = new String[] {null};
 		statement.accept(new DefaultASTVisitor() {
+			@Override
 			public void endVisit(AddStatement addStatement) {
 				result[0] = IEGLConstants.KEYWORD_ADD;
 			}
-
+			@Override
 			public void endVisit(CallStatement callStatement) {
 				result[0] = IEGLConstants.KEYWORD_CALL;
 			}
-
+			@Override
 			public void endVisit(CaseStatement caseStatement) {
 				result[0] = IEGLConstants.KEYWORD_CASE;
 			}
-
+			@Override
 			public void endVisit(CloseStatement closeStatement) {
 				result[0] = IEGLConstants.KEYWORD_CLOSE;
 			}
-
+			@Override
 			public void endVisit(ContinueStatement continueStatement) {
 				result[0] = IEGLConstants.KEYWORD_CONTINUE;
 			}
-
-			public void endVisit(ConverseStatement converseStatement) {
-				result[0] = IEGLConstants.KEYWORD_CONVERSE;
-			}
-			
+			@Override
 			public void endVisit(DeleteStatement deleteStatement) {
 				result[0] = IEGLConstants.KEYWORD_DELETE;
 			}
-
-			public void endVisit(DisplayStatement displayStatement) {
-				result[0] = IEGLConstants.KEYWORD_DISPLAY;
-			}
-
+			@Override
 			public void endVisit(ExecuteStatement executeStatement) {
 				result[0] = IEGLConstants.KEYWORD_EXECUTE;
 			}
-
+			@Override
 			public void endVisit(ExitStatement exitStatement) {
 				result[0] = IEGLConstants.KEYWORD_EXIT;
 			}
-
+			@Override
 			public void endVisit(ForEachStatement forEachStatement) {
 				result[0] = IEGLConstants.KEYWORD_FOREACH;
 			}
-
+			@Override
 			public void endVisit(ForStatement forStatement) {
 				result[0] = IEGLConstants.KEYWORD_FOR;
 			}
-
+			@Override
 			public void endVisit(ForwardStatement forwardStatement) {
 				result[0] = IEGLConstants.KEYWORD_FORWARD;
 			}
-
-			public void endVisit(FreeSQLStatement freeSQLStatement) {
-				result[0] = IEGLConstants.KEYWORD_FREESQL;
-			}
-
+			@Override
 			public void endVisit(GetByKeyStatement getByKeyStatement) {
 				result[0] = IEGLConstants.KEYWORD_GET;
 			}
-
+			@Override
 			public void endVisit(GetByPositionStatement getByPositionStatement) {
 				result[0] = IEGLConstants.KEYWORD_GET;
 			}
-
+			@Override
 			public void endVisit(GotoStatement gotoStatement) {
 				result[0] = IEGLConstants.KEYWORD_GOTO;
 			}
-			
+			@Override
 			public void endVisit(IfStatement ifStatement) {
 				result[0] = IEGLConstants.KEYWORD_IF;
 			}
-
+			@Override
 			public void endVisit(MoveStatement moveStatement) {
 				result[0] = IEGLConstants.KEYWORD_MOVE;
 			}
-
+			@Override
 			public void endVisit(OpenStatement openStatement) {
 				result[0] = IEGLConstants.KEYWORD_OPEN;
 			}
-
-			public void endVisit(OpenUIStatement openUIStatement) {
-				result[0] = IEGLConstants.KEYWORD_OPENUI;
-			}
-
-			public void endVisit(PrintStatement printStatement) {
-				result[0] = IEGLConstants.KEYWORD_PRINT;
-			}
-
+			@Override
 			public void endVisit(ReplaceStatement replaceStatement) {
 				result[0] = IEGLConstants.KEYWORD_REPLACE;
 			}
-
-			public void endVisit(ShowStatement showStatement) {
-				result[0] = IEGLConstants.KEYWORD_SHOW;
-			}
-			
+			@Override
 			public void endVisit(ThrowStatement throwStatement) {
 				result[0] = IEGLConstants.KEYWORD_THROW;
 			}
-
-			public void endVisit(TransferStatement transferStatement) {
-				result[0] = IEGLConstants.KEYWORD_TRANSFER;
-			}
-
+			@Override
 			public void endVisit(TryStatement tryStatement) {
 				result[0] = IEGLConstants.KEYWORD_TRY;
 			}
-
+			@Override
 			public void endVisit(WhileStatement whileStatement) {
 				result[0] = IEGLConstants.KEYWORD_WHILE;
 			}
-			
+			@Override
 		    public void endVisit(ReturnStatement returnStatement) {
 		        result[0] = IEGLConstants.KEYWORD_RETURN;
 		    }
-		    
+		    @Override
 		    public void endVisit(SetStatement setStatement) {
 		        result[0] = IEGLConstants.KEYWORD_SET;
 		    }
-		    
+		    @Override
 		    public void endVisit(PrepareStatement prepareStatement) {
 		        result[0] = IEGLConstants.KEYWORD_PREPARE;
 		    }

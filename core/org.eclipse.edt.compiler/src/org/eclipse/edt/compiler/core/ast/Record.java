@@ -65,14 +65,6 @@ public class Record extends Part{
 	}
 
 	public boolean isFlexible() {
-		
-		for(Iterator iter = getContents().iterator(); iter.hasNext();) {
-			Object nextContent = iter.next();
-			if(nextContent instanceof StructureItem) {
-				return !((StructureItem) nextContent).hasLevel(); 
-			}
-		}
-		
 		return true;
 	}
 	

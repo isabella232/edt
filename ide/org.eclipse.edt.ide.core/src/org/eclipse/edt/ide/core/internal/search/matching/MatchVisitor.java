@@ -41,7 +41,6 @@ import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.ReturningToNameClause;
@@ -49,10 +48,8 @@ import org.eclipse.edt.compiler.core.ast.ReturnsDeclaration;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -363,15 +360,6 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 		binding = null;
 	}
 	
-	
-	public void endVisit(ProgramParameter programParameter) {
-		if (binding != null){
-			this.matchSet.addTrustedMatch(programParameter.getType().getBaseType());
-		}
-		binding = null;
-
-	}
-	
 	public void endVisit(ClassDataDeclaration classDataDeclaration) {
 		boolean bContinue = !isAny(classDataDeclaration.getType());
 		if (bContinue && binding != null){
@@ -450,7 +438,7 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 		boolean bContinue = embeddedRecordStructureItem.getType() != null && !isAny(embeddedRecordStructureItem.getType());
 		if (bContinue && binding != null){
 //			if (embeddedRecordStructureItem.isEmbedded()||binding.getKind() == ITypeBinding.DATAITEM_BINDING){
-				if (embeddedRecordStructureItem.isFiller() || binding instanceof StructuredRecord || binding instanceof org.eclipse.edt.mof.egl.Record)
+				if (binding instanceof StructuredRecord || binding instanceof org.eclipse.edt.mof.egl.Record)
 					this.matchSet.addTrustedMatch(embeddedRecordStructureItem.getType().getBaseType());
 				else this.matchSet.addTrustedMatch(embeddedRecordStructureItem.getType().getBaseType());
 //			}
@@ -702,38 +690,6 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 		return false;
 	}
 			
-	public boolean visit(ShowStatement showStatement) {
-		showStatement.accept(new AbstractASTVisitor(){
-			public boolean visit(ReturningToNameClause returningToNameClause) {
-				Name program = returningToNameClause.getName();
-				matchName(program);
-//				int level = matchSet.getMatchingLevel(program);
-//				if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
-//					matchSet.addPossibleMatch(program);
-//				
-//				}						
-				return false;
-			}
-		});
-
-		return false;
-	}
-			
-	public boolean visit(TransferStatement transferStatement) {
-		if (transferStatement.isToProgram()){
-			Expression program = transferStatement.getInvocationTarget();
-			if(program.isName()) {
-				matchName((Name) program);
-			}
-//			int level = matchSet.getMatchingLevel(program);
-//			if (level == SearchPattern.POSSIBLE_MATCH || level == SearchPattern.ACCURATE_MATCH){
-//				matchSet.addPossibleMatch(program);
-//			}	
-		}
-		return false;
-	}
-			
-
 	protected void matchName(Name name){
 		Element e = name.resolveType();
 		if (e == null) {

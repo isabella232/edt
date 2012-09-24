@@ -794,20 +794,8 @@ public class AnnotationValidator {
 						Member structureItemBinding = structureItem.resolveMember();
 						if (structureItemBinding != null) {
 							List<Annotation> annotations = structureItemBinding.getAnnotations();
-							Node nodeForErrors;
-							String canonicalItemName;
-							if (structureItem.isFiller()) {
-								nodeForErrors = new Node(structureItem.getOffset(), structureItem.getOffset()+1);
-								canonicalItemName = "*";
-							}
-							else if (structureItem.isEmbedded()) {
-								nodeForErrors = structureItem.getType();
-								canonicalItemName = structureItem.getType().getCanonicalName();
-							}
-							else {
-								nodeForErrors = structureItem.getName();
-								canonicalItemName = structureItem.getName().getCanonicalName();
-							}
+							Node nodeForErrors = structureItem.getName();
+							String canonicalItemName = structureItem.getName().getCanonicalName();
 							processContentAnnotations(structureItem, nodeForErrors, structureItemBinding, canonicalItemName, annotations);
 						}
 //					}

@@ -14,7 +14,6 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ProgramBindingCompletor;
 import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
@@ -52,9 +51,4 @@ public class ProgramBinder extends FunctionContainerBinder {
     public void endVisit(Program program) {
 		doneVisitingPart();
 	}
-    
-    public boolean visit(ProgramParameter programParameter) {
-        return false;
-    }
-
 }

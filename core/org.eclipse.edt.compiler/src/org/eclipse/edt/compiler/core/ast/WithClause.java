@@ -28,8 +28,4 @@ public abstract class WithClause extends Node {
 	public boolean isWithInlineSQL() {
 		return false;
 	}
-
-	public boolean isWithInlineDLI() {
-		return false;
-	}
 }
