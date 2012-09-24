@@ -1,0 +1,13 @@
+SMAP
+iDataAccessException.java
+egl
+*S egl
+*F
++ 1 iDataAccessException.egl
+org/eclipse/edt/jtopen/data/common/iDataAccessException.egl
+*L
+*E
+4#1;functionName;functionName;eglx.lang.EString
+5#1;path;path;eglx.lang.EString
+6#1;exception;exception;eglx.lang.AnyException
+*X
