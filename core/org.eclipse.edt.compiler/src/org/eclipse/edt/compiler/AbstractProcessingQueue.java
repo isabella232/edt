@@ -1,4 +1,3 @@
-package org.eclipse.edt.compiler;
 /*******************************************************************************
  * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
@@ -10,6 +9,8 @@ package org.eclipse.edt.compiler;
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
+package org.eclipse.edt.compiler;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;

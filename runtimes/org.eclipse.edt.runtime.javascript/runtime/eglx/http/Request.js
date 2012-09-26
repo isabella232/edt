@@ -6,9 +6,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     IBM Corporation - initial API and implementation
+ * IBM Corporation - initial API and implementation
  *
-*******************************************************************************/
+ *******************************************************************************/
 egl.defineClass('eglx.http', 'Request',
 {
 	'eze$$fileName': 'eglx/http/Request.egl',
