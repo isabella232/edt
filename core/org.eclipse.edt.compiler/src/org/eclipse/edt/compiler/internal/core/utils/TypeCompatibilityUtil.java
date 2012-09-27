@@ -275,7 +275,7 @@ public class TypeCompatibilityUtil {
 		}
 		if(ITypeBinding.ARRAY_TYPE_BINDING == targetType.getKind()) {
 			return ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind() &&
-			       targetType == sourceType;
+				       typesOrElementTypesMoveCompatible(((ArrayTypeBinding) targetType).getElementType(), ((ArrayTypeBinding) sourceType).getElementType(), compilerOptions);
 		}
 		if(ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind()) {
 			return false;
@@ -1074,7 +1074,7 @@ public class TypeCompatibilityUtil {
 		}
 		
 		if (targetType.isReference()) {		
-			return false;
+			return isReferenceCompatible(sourceType, targetType, compilerOptions);
 		}
 		
 		else {
