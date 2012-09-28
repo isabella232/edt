@@ -2754,6 +2754,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 			ITypeBinding toType = asExpression.getType().resolveTypeBinding();
 			if(fromType != null && fromType.isValid() && toType != null && toType.isValid()) {
 				if(fromType.isDynamic() ||
+				   fromType.getBaseType().isDynamic() && ITypeBinding.ARRAY_TYPE_BINDING == toType.getKind() ||
 				   TypeCompatibilityUtil.typesOrElementTypesMoveCompatible(toType, fromType, compilerOptions) ||
 				   TypeCompatibilityUtil.areCompatibleExceptions(fromType, toType, compilerOptions)) {
 					asExpression.setTypeBinding(convertDataItemToPrimitive(toType));
