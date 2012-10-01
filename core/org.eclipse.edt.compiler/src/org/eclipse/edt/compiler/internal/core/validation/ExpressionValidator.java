@@ -68,7 +68,6 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 /*
 TODO Remaining expressions to port from the old DefaultBinder:
-array access
 in
 */
 public class ExpressionValidator extends AbstractASTVisitor {
@@ -562,10 +561,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		Type tBinding = index.resolveType();
 		if (tBinding != null) {
 			boolean typeIsValid = false;
-			if (BindingUtil.isDynamicallyAccessible(tBinding)) {
-				typeIsValid = true;
-			}
-			else if (TypeUtils.isNumericType(tBinding)) {
+			if (TypeUtils.Type_ANY.equals((tBinding)) || TypeUtils.isNumericType(tBinding)) {
 				if (tBinding instanceof FixedPrecisionType) {
 					typeIsValid = ((FixedPrecisionType)tBinding).getDecimals() == 0;
 				}
@@ -629,4 +625,57 @@ public class ExpressionValidator extends AbstractASTVisitor {
 					});
 		}
 	};
+	
+	@Override
+	public void endVisit(ArrayAccess arrayAccess) {
+		if (arrayAccess.getIndices().size() > 1) {
+			problemRequestor.acceptProblem(
+					arrayAccess,
+					IProblemRequestor.MULTI_INDICES_NOT_SUPPORTED,
+					new String[]{arrayAccess.getCanonicalString()});
+		}
+		else {
+			Expression index = arrayAccess.getIndices().get(0);
+			Type indexType = index.resolveType();
+			Type arrayType = arrayAccess.getArray().resolveType();
+			if (indexType != null) {
+				if (TypeUtils.isTextType(indexType)) {
+					// Dynamic access.
+					if (arrayType != null && !BindingUtil.isDynamicallyAccessible(arrayType)) {
+						problemRequestor.acceptProblem(
+		    					arrayAccess.getArray(),
+								IProblemRequestor.NON_DYNAMIC_ACCESS_ACCESSED_DYNAMICALLY,
+								new String[]{arrayAccess.getArray().getCanonicalString()});
+					}
+				}
+				else {
+					// Array access.
+					boolean indexTypeIsValid = false;
+					if (TypeUtils.Type_ANY.equals((indexType)) || TypeUtils.isNumericType(indexType)) {
+						if (indexType instanceof FixedPrecisionType) {
+							indexTypeIsValid = ((FixedPrecisionType)indexType).getDecimals() == 0;
+						}
+						else {
+							indexTypeIsValid = true;
+						}
+					}			
+					if (!indexTypeIsValid) {
+						problemRequestor.acceptProblem(
+	    						index,
+								IProblemRequestor.SUBSCRIPT_MUST_BE_INTEGER_ITEM,
+								new String[] {index.getCanonicalString(), arrayAccess.getCanonicalString()});
+					}
+					
+					if (arrayType != null && (!TypeUtils.Type_ANY.equals(arrayType) && !(arrayType instanceof org.eclipse.edt.mof.egl.ArrayType))) {
+						problemRequestor.acceptProblem(
+		    					arrayAccess.getArray(),
+								IProblemRequestor.NON_ARRAY_ACCESS_SUBSCRIPTED,
+								new String[] {
+		    						arrayAccess.getArray().getCanonicalString()
+		    					});
+					}
+				}
+			}
+		}
+	}
 }
