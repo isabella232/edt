@@ -873,15 +873,23 @@ public class BindingUtil {
 	}
 	
 	public static String getTypeName(Member member) {
+		if (member == null) {
+			return "";
+		}
+		
+		return getTypeName(member, member.getType());
+	}
+	
+	public static String getTypeName(Member member, Type type) {
 		StringBuilder buf = new StringBuilder();
 		if (member instanceof FunctionMember) {
 			buf.append(member.getName());
 		}
-		else if (member != null) {
-			buf.append(getShortTypeString(member.getType(), true));
+		else if (type != null) {
+			buf.append(getShortTypeString(type, true));
 		}
 		
-		if(member.isNullable()){
+		if(member != null && member.isNullable()){
 			buf.append('?');;
 		}
 		return buf.toString();

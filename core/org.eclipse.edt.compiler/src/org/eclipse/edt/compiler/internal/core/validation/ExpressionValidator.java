@@ -399,7 +399,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				
 				for (Map.Entry<Expression, Type> entry : exprMap.entrySet()) {
 					if (entry.getValue() != null) {
-						if (!TypeUtils.isDynamicType(entry.getValue()) && !IRUtils.isMoveCompatible(toType, entry.getValue(), entry.getKey().resolveMember())) {
+						if (!IRUtils.isMoveCompatible(toType, entry.getValue(), entry.getKey().resolveMember())) {
 							problemRequestor.acceptProblem(
 								entry.getKey(),
 								IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,

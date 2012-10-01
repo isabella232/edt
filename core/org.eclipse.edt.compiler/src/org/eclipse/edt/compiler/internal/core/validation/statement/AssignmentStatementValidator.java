@@ -115,7 +115,7 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 			}
 			else {
 				for (Map.Entry<Expression, Type> entry : resolvedRHSMap.entrySet()) {
-					if (!TypeUtils.isDynamicType(entry.getValue()) && !IRUtils.isMoveCompatible(lhsType, lhsMember, entry.getValue(), entry.getKey().resolveMember())) {
+					if (!IRUtils.isMoveCompatible(lhsType, lhsMember, entry.getValue(), entry.getKey().resolveMember())) {
 						errors.put(entry.getKey(), entry.getValue());
 					}
 				}

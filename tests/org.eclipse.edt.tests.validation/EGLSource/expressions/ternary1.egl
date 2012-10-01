@@ -92,13 +92,18 @@ handler ternary1
 			? 10 //1 Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.
 			: constRec.i); //0
 		
-		// Checks just for IN: arg can't be 'super', CAN be 'this'
+		// Checks for IN: arg can't be 'super', CAN be 'this', arg & parm must be assignment compatible
 		setTernaryIn(true ? this : this); //0
 		setTernaryIn(true
 			? super //1 The expression "super" is not valid as a function argument.
 			: super); //1 The expression "super" is not valid as a function argument.
+		setStringIn(true ? a : a); //0
+		setArrayIn(true ? a : a); //0
+		setBooleanIn(true
+			? i //1 The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.
+			: i); //1 The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.
 		
-		// Checks just for OUT: arg can't be 'super' or 'this', arg & parm 'is reference type' must match
+		// Checks for OUT: arg can't be 'super' or 'this', arg & parm 'is reference type' must match, arg & parm must be assignment compatible
 		setTernaryOut(true
 			? this //1 The expression "this" is not valid for use with parameters defined with the INOUT or OUT modifier.
 			: this); //1 The expression "this" is not valid for use with parameters defined with the INOUT or OUT modifier.
@@ -111,24 +116,13 @@ handler ternary1
 		setDecimalOut2(true
 			? dec1 //1 The argument dec1 cannot be passed to the inOut or Out parameter d of the function setDecimalOut2. The types decimal and decimal(4,2) are not reference compatible.
 			: dec2); //0
-		
-		// Checks for IN and OUT: arg & parm must be assignment compatible (for array parms, arg also cannot be dynamic type)
-		setStringIn(true ? a : a); //0
-		setArrayIn(true
-			? a //1 The argument a cannot be passed to the in or out parameter i of the function setArrayIn. The types any and int[] are not assignment compatible.
-			: a); //1 The argument a cannot be passed to the in or out parameter i of the function setArrayIn. The types any and int[] are not assignment compatible.
 		setStringOut(true ? a : a); //0
-		setArrayOut(true
-			? a //1 The argument a cannot be passed to the in or out parameter i of the function setArrayOut. The types any and int[] are not assignment compatible.
-			: a); //1 The argument a cannot be passed to the in or out parameter i of the function setArrayOut. The types any and int[] are not assignment compatible.
-		setBooleanIn(true
-			? i //1 The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.
-			: i); //1 The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.
+		setArrayOut(true ? a : a); //0
 		setBooleanOut(true
 			? i //1 The argument i cannot be passed to the in or out parameter b of the function setBooleanOut. The types int and boolean are not assignment compatible.
 			: i); //1 The argument i cannot be passed to the in or out parameter b of the function setBooleanOut. The types int and boolean are not assignment compatible.
 		
-		// Checks just for INOUT: arg can't be 'super' or 'this', arg & parm are reference compatible, arg & parm nullability matches
+		// Checks for INOUT: arg can't be 'super' or 'this', arg & parm are reference compatible, arg & parm nullability matches
 		setTernaryInout(true
 			? this //1 The expression "this" is not valid for use with parameters defined with the INOUT or OUT modifier.
 			: this); //1 The expression "this" is not valid for use with parameters defined with the INOUT or OUT modifier.

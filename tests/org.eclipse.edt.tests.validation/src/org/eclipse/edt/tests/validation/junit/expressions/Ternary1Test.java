@@ -495,12 +495,56 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
+	 * setStringIn(true ? a : a);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine100() {
+		List messages = getMessagesAtLine( 100 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * setArrayIn(true ? a : a);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine101() {
+		List messages = getMessagesAtLine( 101 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * ? i
+	 * 1 validation message is expected.
+	 * It is expected to contain "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.".
+	 */
+	public void testLine103() {
+		List messages = getMessagesAtLine( 103 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.\" was issued." );
+	}
+
+	/*
+	 * : i);
+	 * 1 validation message is expected.
+	 * It is expected to contain "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.".
+	 */
+	public void testLine104() {
+		List messages = getMessagesAtLine( 104 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.\" was issued." );
+	}
+
+	/*
 	 * ? this
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier.".
 	 */
-	public void testLine103() {
-		List messages = getMessagesAtLine( 103 );
+	public void testLine108() {
+		List messages = getMessagesAtLine( 108 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier." );
@@ -512,8 +556,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier.".
 	 */
-	public void testLine104() {
-		List messages = getMessagesAtLine( 104 );
+	public void testLine109() {
+		List messages = getMessagesAtLine( 109 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier." );
@@ -525,8 +569,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"super\" is not valid as a function argument.".
 	 */
-	public void testLine106() {
-		List messages = getMessagesAtLine( 106 );
+	public void testLine111() {
+		List messages = getMessagesAtLine( 111 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The expression \"super\" is not valid as a function argument." );
@@ -538,8 +582,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"super\" is not valid as a function argument.".
 	 */
-	public void testLine107() {
-		List messages = getMessagesAtLine( 107 );
+	public void testLine112() {
+		List messages = getMessagesAtLine( 112 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The expression \"super\" is not valid as a function argument." );
@@ -550,8 +594,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * ? dec1
 	 * 0 validation messages are expected.
 	 */
-	public void testLine109() {
-		List messages = getMessagesAtLine( 109 );
+	public void testLine114() {
+		List messages = getMessagesAtLine( 114 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -560,8 +604,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument dec2 cannot be passed to the inOut or Out parameter d of the function setDecimalOut1. The types decimal(4,2) and decimal are not reference compatible.".
 	 */
-	public void testLine110() {
-		List messages = getMessagesAtLine( 110 );
+	public void testLine115() {
+		List messages = getMessagesAtLine( 115 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The argument dec2 cannot be passed to the inOut or Out parameter d of the function setDecimalOut1. The types decimal(4,2) and decimal are not reference compatible." );
@@ -573,8 +617,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument dec1 cannot be passed to the inOut or Out parameter d of the function setDecimalOut2. The types decimal and decimal(4,2) are not reference compatible.".
 	 */
-	public void testLine112() {
-		List messages = getMessagesAtLine( 112 );
+	public void testLine117() {
+		List messages = getMessagesAtLine( 117 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The argument dec1 cannot be passed to the inOut or Out parameter d of the function setDecimalOut2. The types decimal and decimal(4,2) are not reference compatible." );
@@ -585,48 +629,22 @@ public class Ternary1Test extends ValidationTestCase {
 	 * : dec2);
 	 * 0 validation messages are expected.
 	 */
-	public void testLine113() {
-		List messages = getMessagesAtLine( 113 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * setStringIn(true ? a : a);
-	 * 0 validation messages are expected.
-	 */
-	public void testLine116() {
-		List messages = getMessagesAtLine( 116 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * ? a
-	 * 1 validation message is expected.
-	 * It is expected to contain "The argument a cannot be passed to the in or out parameter i of the function setArrayIn. The types any and int[] are not assignment compatible.".
-	 */
 	public void testLine118() {
 		List messages = getMessagesAtLine( 118 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument a cannot be passed to the in or out parameter i of the function setArrayIn. The types any and int[] are not assignment compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument a cannot be passed to the in or out parameter i of the function setArrayIn. The types any and int[] are not assignment compatible.\" was issued." );
-	}
-
-	/*
-	 * : a);
-	 * 1 validation message is expected.
-	 * It is expected to contain "The argument a cannot be passed to the in or out parameter i of the function setArrayIn. The types any and int[] are not assignment compatible.".
-	 */
-	public void testLine119() {
-		List messages = getMessagesAtLine( 119 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument a cannot be passed to the in or out parameter i of the function setArrayIn. The types any and int[] are not assignment compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument a cannot be passed to the in or out parameter i of the function setArrayIn. The types any and int[] are not assignment compatible.\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * setStringOut(true ? a : a);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine119() {
+		List messages = getMessagesAtLine( 119 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * setArrayOut(true ? a : a);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine120() {
@@ -635,64 +653,12 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? a
-	 * 1 validation message is expected.
-	 * It is expected to contain "The argument a cannot be passed to the in or out parameter i of the function setArrayOut. The types any and int[] are not assignment compatible.".
-	 */
-	public void testLine122() {
-		List messages = getMessagesAtLine( 122 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument a cannot be passed to the in or out parameter i of the function setArrayOut. The types any and int[] are not assignment compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument a cannot be passed to the in or out parameter i of the function setArrayOut. The types any and int[] are not assignment compatible.\" was issued." );
-	}
-
-	/*
-	 * : a);
-	 * 1 validation message is expected.
-	 * It is expected to contain "The argument a cannot be passed to the in or out parameter i of the function setArrayOut. The types any and int[] are not assignment compatible.".
-	 */
-	public void testLine123() {
-		List messages = getMessagesAtLine( 123 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument a cannot be passed to the in or out parameter i of the function setArrayOut. The types any and int[] are not assignment compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument a cannot be passed to the in or out parameter i of the function setArrayOut. The types any and int[] are not assignment compatible.\" was issued." );
-	}
-
-	/*
-	 * ? i
-	 * 1 validation message is expected.
-	 * It is expected to contain "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.".
-	 */
-	public void testLine125() {
-		List messages = getMessagesAtLine( 125 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.\" was issued." );
-	}
-
-	/*
-	 * : i);
-	 * 1 validation message is expected.
-	 * It is expected to contain "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.".
-	 */
-	public void testLine126() {
-		List messages = getMessagesAtLine( 126 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.\" was issued." );
-	}
-
-	/*
 	 * ? i
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument i cannot be passed to the in or out parameter b of the function setBooleanOut. The types int and boolean are not assignment compatible.".
 	 */
-	public void testLine128() {
-		List messages = getMessagesAtLine( 128 );
+	public void testLine122() {
+		List messages = getMessagesAtLine( 122 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The argument i cannot be passed to the in or out parameter b of the function setBooleanOut. The types int and boolean are not assignment compatible." );
@@ -704,8 +670,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument i cannot be passed to the in or out parameter b of the function setBooleanOut. The types int and boolean are not assignment compatible.".
 	 */
-	public void testLine129() {
-		List messages = getMessagesAtLine( 129 );
+	public void testLine123() {
+		List messages = getMessagesAtLine( 123 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The argument i cannot be passed to the in or out parameter b of the function setBooleanOut. The types int and boolean are not assignment compatible." );
@@ -717,8 +683,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier.".
 	 */
-	public void testLine133() {
-		List messages = getMessagesAtLine( 133 );
+	public void testLine127() {
+		List messages = getMessagesAtLine( 127 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier." );
@@ -730,8 +696,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier.".
 	 */
-	public void testLine134() {
-		List messages = getMessagesAtLine( 134 );
+	public void testLine128() {
+		List messages = getMessagesAtLine( 128 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier." );
@@ -743,8 +709,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"super\" is not valid as a function argument.".
 	 */
-	public void testLine136() {
-		List messages = getMessagesAtLine( 136 );
+	public void testLine130() {
+		List messages = getMessagesAtLine( 130 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The expression \"super\" is not valid as a function argument." );
@@ -756,8 +722,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"super\" is not valid as a function argument.".
 	 */
-	public void testLine137() {
-		List messages = getMessagesAtLine( 137 );
+	public void testLine131() {
+		List messages = getMessagesAtLine( 131 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The expression \"super\" is not valid as a function argument." );
@@ -768,8 +734,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * ? s
 	 * 0 validation messages are expected.
 	 */
-	public void testLine139() {
-		List messages = getMessagesAtLine( 139 );
+	public void testLine133() {
+		List messages = getMessagesAtLine( 133 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -778,8 +744,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument nullableS cannot be passed to the inOut or Out parameter s of the function setStringInout. The types string? and string are not reference compatible.".
 	 */
-	public void testLine140() {
-		List messages = getMessagesAtLine( 140 );
+	public void testLine134() {
+		List messages = getMessagesAtLine( 134 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The argument nullableS cannot be passed to the inOut or Out parameter s of the function setStringInout. The types string? and string are not reference compatible." );
@@ -791,8 +757,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument s cannot be passed to the inOut or Out parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible.".
 	 */
-	public void testLine142() {
-		List messages = getMessagesAtLine( 142 );
+	public void testLine136() {
+		List messages = getMessagesAtLine( 136 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The argument s cannot be passed to the inOut or Out parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible." );
@@ -803,8 +769,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * : nullableS);
 	 * 0 validation messages are expected.
 	 */
-	public void testLine143() {
-		List messages = getMessagesAtLine( 143 );
+	public void testLine137() {
+		List messages = getMessagesAtLine( 137 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -813,8 +779,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.".
 	 */
-	public void testLine145() {
-		List messages = getMessagesAtLine( 145 );
+	public void testLine139() {
+		List messages = getMessagesAtLine( 139 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible." );
@@ -826,8 +792,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.".
 	 */
-	public void testLine146() {
-		List messages = getMessagesAtLine( 146 );
+	public void testLine140() {
+		List messages = getMessagesAtLine( 140 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible." );
@@ -839,8 +805,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean[] does not match the type string which the function returns.".
 	 */
-	public void testLine150() {
-		List messages = getMessagesAtLine( 150 );
+	public void testLine144() {
+		List messages = getMessagesAtLine( 144 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type boolean[] does not match the type string which the function returns." );
@@ -852,8 +818,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean[] does not match the type string which the function returns.".
 	 */
-	public void testLine151() {
-		List messages = getMessagesAtLine( 151 );
+	public void testLine145() {
+		List messages = getMessagesAtLine( 145 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type boolean[] does not match the type string which the function returns." );
@@ -864,8 +830,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * if (true) return true ? i : i; end
 	 * 0 validation messages are expected.
 	 */
-	public void testLine152() {
-		List messages = getMessagesAtLine( 152 );
+	public void testLine146() {
+		List messages = getMessagesAtLine( 146 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -874,8 +840,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean[] does not match the type string which the function returns.".
 	 */
-	public void testLine154() {
-		List messages = getMessagesAtLine( 154 );
+	public void testLine148() {
+		List messages = getMessagesAtLine( 148 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type boolean[] does not match the type string which the function returns." );
@@ -887,8 +853,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean[] does not match the type string which the function returns.".
 	 */
-	public void testLine155() {
-		List messages = getMessagesAtLine( 155 );
+	public void testLine149() {
+		List messages = getMessagesAtLine( 149 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type boolean[] does not match the type string which the function returns." );
@@ -899,8 +865,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * if (true) return true ? myrec : ba; end
 	 * 0 validation messages are expected.
 	 */
-	public void testLine160() {
-		List messages = getMessagesAtLine( 160 );
+	public void testLine154() {
+		List messages = getMessagesAtLine( 154 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -909,8 +875,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "doNotExist cannot be resolved.".
 	 */
-	public void testLine161() {
-		List messages = getMessagesAtLine( 161 );
+	public void testLine155() {
+		List messages = getMessagesAtLine( 155 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "doNotExist cannot be resolved." );
@@ -922,8 +888,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type int does not match the type rec which the function returns.".
 	 */
-	public void testLine166() {
-		List messages = getMessagesAtLine( 166 );
+	public void testLine160() {
+		List messages = getMessagesAtLine( 160 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type int does not match the type rec which the function returns." );
@@ -935,8 +901,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean does not match the type rec which the function returns.".
 	 */
-	public void testLine167() {
-		List messages = getMessagesAtLine( 167 );
+	public void testLine161() {
+		List messages = getMessagesAtLine( 161 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type boolean does not match the type rec which the function returns." );
@@ -947,13 +913,48 @@ public class Ternary1Test extends ValidationTestCase {
 	 * if (true) return true ? ba.appendElement(true) : ba :: true; end
 	 * 0 validation messages are expected.
 	 */
-	public void testLine172() {
-		List messages = getMessagesAtLine( 172 );
+	public void testLine166() {
+		List messages = getMessagesAtLine( 166 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * return true ? d : f1;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine170() {
+		List messages = getMessagesAtLine( 170 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = (true ? i : ba) as string;
+	 * 1 validation message is expected.
+	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
+	 */
+	public void testLine174() {
+		List messages = getMessagesAtLine( 174 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "boolean[] and string are not compatible types in the expression ba as string" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"boolean[] and string are not compatible types in the expression ba as string\" was issued." );
+	}
+
+	/*
+	 * a = (true ? ba : i) as string;
+	 * 1 validation message is expected.
+	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
+	 */
+	public void testLine175() {
+		List messages = getMessagesAtLine( 175 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "boolean[] and string are not compatible types in the expression ba as string" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"boolean[] and string are not compatible types in the expression ba as string\" was issued." );
+	}
+
+	/*
+	 * a = (true ? i : i) as string;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine176() {
@@ -962,7 +963,29 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? i : ba) as string;
+	 * a = (true ? myrec : ba) as any;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine177() {
+		List messages = getMessagesAtLine( 177 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = (true ? doNotExist : ba) as any;
+	 * 1 validation message is expected.
+	 * It is expected to contain "doNotExist cannot be resolved.".
+	 */
+	public void testLine178() {
+		List messages = getMessagesAtLine( 178 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "doNotExist cannot be resolved." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"doNotExist cannot be resolved.\" was issued." );
+	}
+
+	/*
+	 * ? (true ? i : ba)
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
 	 */
@@ -975,7 +998,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? ba : i) as string;
+	 * : (true ? ba : i)
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
 	 */
@@ -988,69 +1011,12 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? i : i) as string;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine182() {
-		List messages = getMessagesAtLine( 182 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = (true ? myrec : ba) as any;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine183() {
-		List messages = getMessagesAtLine( 183 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = (true ? doNotExist : ba) as any;
-	 * 1 validation message is expected.
-	 * It is expected to contain "doNotExist cannot be resolved.".
-	 */
-	public void testLine184() {
-		List messages = getMessagesAtLine( 184 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "doNotExist cannot be resolved." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"doNotExist cannot be resolved.\" was issued." );
-	}
-
-	/*
-	 * ? (true ? i : ba)
-	 * 1 validation message is expected.
-	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
-	 */
-	public void testLine186() {
-		List messages = getMessagesAtLine( 186 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "boolean[] and string are not compatible types in the expression ba as string" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"boolean[] and string are not compatible types in the expression ba as string\" was issued." );
-	}
-
-	/*
-	 * : (true ? ba : i)
-	 * 1 validation message is expected.
-	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
-	 */
-	public void testLine187() {
-		List messages = getMessagesAtLine( 187 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "boolean[] and string are not compatible types in the expression ba as string" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"boolean[] and string are not compatible types in the expression ba as string\" was issued." );
-	}
-
-	/*
 	 * ? getValue()
 	 * 1 validation message is expected.
 	 * It is expected to contain "int and rec are not compatible types in the expression getValue() as rec".
 	 */
-	public void testLine190() {
-		List messages = getMessagesAtLine( 190 );
+	public void testLine184() {
+		List messages = getMessagesAtLine( 184 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "int and rec are not compatible types in the expression getValue() as rec" );
@@ -1062,8 +1028,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean and rec are not compatible types in the expression getBoolean() as rec".
 	 */
-	public void testLine191() {
-		List messages = getMessagesAtLine( 191 );
+	public void testLine185() {
+		List messages = getMessagesAtLine( 185 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "boolean and rec are not compatible types in the expression getBoolean() as rec" );
@@ -1074,13 +1040,31 @@ public class Ternary1Test extends ValidationTestCase {
 	 * ? ba.appendElement(true)
 	 * 0 validation messages are expected.
 	 */
-	public void testLine194() {
-		List messages = getMessagesAtLine( 194 );
+	public void testLine188() {
+		List messages = getMessagesAtLine( 188 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * : ba :: true
+	 * 0 validation messages are expected.
+	 */
+	public void testLine189() {
+		List messages = getMessagesAtLine( 189 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = (true ? d : f1) as del1;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine191() {
+		List messages = getMessagesAtLine( 191 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = ba :: (true ? true : ba[1]);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine195() {
@@ -1089,7 +1073,16 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? d : f1) as del1;
+	 * a = ba :: (true ? true && false : ba :: true);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine196() {
+		List messages = getMessagesAtLine( 196 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = ba :: (true ? true ? false : false : false);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine197() {
@@ -1098,38 +1091,11 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = ba :: (true ? true : ba[1]);
-	 * 0 validation messages are expected.
-	 */
-	public void testLine201() {
-		List messages = getMessagesAtLine( 201 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = ba :: (true ? true && false : ba :: true);
-	 * 0 validation messages are expected.
-	 */
-	public void testLine202() {
-		List messages = getMessagesAtLine( 202 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = ba :: (true ? true ? false : false : false);
-	 * 0 validation messages are expected.
-	 */
-	public void testLine203() {
-		List messages = getMessagesAtLine( 203 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
 	 * a = i * (true ? s : i);
 	 * 0 validation messages are expected.
 	 */
-	public void testLine204() {
-		List messages = getMessagesAtLine( 204 );
+	public void testLine198() {
+		List messages = getMessagesAtLine( 198 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -1139,8 +1105,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * One message is expected to contain "No operation is defined for expressions b and s with the * operator in the expression b * s.".
 	 * One message is expected to contain "No operation is defined for expressions b and i with the * operator in the expression b * i.".
 	 */
-	public void testLine205() {
-		List messages = getMessagesAtLine( 205 );
+	public void testLine199() {
+		List messages = getMessagesAtLine( 199 );
 		assertEquals( 2, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "No operation is defined for expressions b and s with the * operator in the expression b * s." );
@@ -1155,8 +1121,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * a = s + true ? true : true;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine206() {
-		List messages = getMessagesAtLine( 206 );
+	public void testLine200() {
+		List messages = getMessagesAtLine( 200 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -1164,8 +1130,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * i = i * 76 - (true ? 22 : i - 99) % (false ? getValue() * 88 : i >> 2);
 	 * 0 validation messages are expected.
 	 */
-	public void testLine207() {
-		List messages = getMessagesAtLine( 207 );
+	public void testLine201() {
+		List messages = getMessagesAtLine( 201 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -1174,8 +1140,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "No operation is defined for expressions ba and d with the :: operator in the expression ba :: d.".
 	 */
-	public void testLine208() {
-		List messages = getMessagesAtLine( 208 );
+	public void testLine202() {
+		List messages = getMessagesAtLine( 202 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "No operation is defined for expressions ba and d with the :: operator in the expression ba :: d." );
@@ -1186,8 +1152,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * for (i from true ? 10 : 20 to true ? 10 : 20 by true ? 10 : 20) end
 	 * 0 validation messages are expected.
 	 */
-	public void testLine212() {
-		List messages = getMessagesAtLine( 212 );
+	public void testLine206() {
+		List messages = getMessagesAtLine( 206 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -1195,8 +1161,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * for (i from true ? getValue() : getValue() to true ? getValue() : getValue() by true ? getValue() : getValue()) end
 	 * 0 validation messages are expected.
 	 */
-	public void testLine213() {
-		List messages = getMessagesAtLine( 213 );
+	public void testLine207() {
+		List messages = getMessagesAtLine( 207 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -1204,8 +1170,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * for (i from true ? true ? getValue() : getValue() : true ? getValue() : getValue()
 	 * 0 validation messages are expected.
 	 */
-	public void testLine214() {
-		List messages = getMessagesAtLine( 214 );
+	public void testLine208() {
+		List messages = getMessagesAtLine( 208 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -1213,8 +1179,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * to true ? true ? getValue() : getValue() : true ? getValue() : getValue()
 	 * 0 validation messages are expected.
 	 */
-	public void testLine215() {
-		List messages = getMessagesAtLine( 215 );
+	public void testLine209() {
+		List messages = getMessagesAtLine( 209 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -1222,8 +1188,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * by true ? true ? getValue() : getValue() : true ? getValue() : getValue()) end
 	 * 0 validation messages are expected.
 	 */
-	public void testLine216() {
-		List messages = getMessagesAtLine( 216 );
+	public void testLine210() {
+		List messages = getMessagesAtLine( 210 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -1232,8 +1198,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
 	 */
-	public void testLine219() {
-		List messages = getMessagesAtLine( 219 );
+	public void testLine213() {
+		List messages = getMessagesAtLine( 213 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
@@ -1244,65 +1210,91 @@ public class Ternary1Test extends ValidationTestCase {
 	 * : getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
+	 */
+	public void testLine214() {
+		List messages = getMessagesAtLine( 214 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement start must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+	}
+
+	/*
+	 * ? getBoolean()
+	 * 1 validation message is expected.
+	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
+	 */
+	public void testLine216() {
+		List messages = getMessagesAtLine( 216 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+	}
+
+	/*
+	 * : getBoolean()
+	 * 1 validation message is expected.
+	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
+	 */
+	public void testLine217() {
+		List messages = getMessagesAtLine( 217 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+	}
+
+	/*
+	 * ? getBoolean()
+	 * 1 validation message is expected.
+	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
+	 */
+	public void testLine219() {
+		List messages = getMessagesAtLine( 219 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+	}
+
+	/*
+	 * : getBoolean()
+	 * 1 validation message is expected.
+	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
 	 */
 	public void testLine220() {
 		List messages = getMessagesAtLine( 220 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement start must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
 	}
 
 	/*
 	 * ? getBoolean()
 	 * 1 validation message is expected.
-	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
-	 */
-	public void testLine222() {
-		List messages = getMessagesAtLine( 222 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
-	}
-
-	/*
-	 * : getBoolean()
-	 * 1 validation message is expected.
-	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
-	 */
-	public void testLine223() {
-		List messages = getMessagesAtLine( 223 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
-	}
-
-	/*
-	 * ? getBoolean()
-	 * 1 validation message is expected.
-	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
+	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
 	 */
 	public void testLine225() {
 		List messages = getMessagesAtLine( 225 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement start must be an integer literal, integer item or numeric expression of integers.\" was issued." );
 	}
 
 	/*
 	 * : getBoolean()
 	 * 1 validation message is expected.
-	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
+	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
 	 */
 	public void testLine226() {
 		List messages = getMessagesAtLine( 226 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement start must be an integer literal, integer item or numeric expression of integers.\" was issued." );
 	}
 
 	/*
@@ -1310,8 +1302,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
 	 */
-	public void testLine231() {
-		List messages = getMessagesAtLine( 231 );
+	public void testLine228() {
+		List messages = getMessagesAtLine( 228 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
@@ -1322,50 +1314,50 @@ public class Ternary1Test extends ValidationTestCase {
 	 * : getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
+	 */
+	public void testLine229() {
+		List messages = getMessagesAtLine( 229 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement start must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+	}
+
+	/*
+	 * ? getBoolean()
+	 * 1 validation message is expected.
+	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
 	 */
 	public void testLine232() {
 		List messages = getMessagesAtLine( 232 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement start must be an integer literal, integer item or numeric expression of integers.\" was issued." );
-	}
-
-	/*
-	 * ? getBoolean()
-	 * 1 validation message is expected.
-	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
-	 */
-	public void testLine234() {
-		List messages = getMessagesAtLine( 234 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement start must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
 	}
 
 	/*
 	 * : getBoolean()
 	 * 1 validation message is expected.
-	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
+	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
+	 */
+	public void testLine233() {
+		List messages = getMessagesAtLine( 233 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+	}
+
+	/*
+	 * ? getBoolean()
+	 * 1 validation message is expected.
+	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
 	 */
 	public void testLine235() {
 		List messages = getMessagesAtLine( 235 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement start must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement start must be an integer literal, integer item or numeric expression of integers.\" was issued." );
-	}
-
-	/*
-	 * ? getBoolean()
-	 * 1 validation message is expected.
-	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
-	 */
-	public void testLine238() {
-		List messages = getMessagesAtLine( 238 );
-		assertEquals( 1, messages.size() );
-		
 		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
 		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
 	}
@@ -1374,50 +1366,50 @@ public class Ternary1Test extends ValidationTestCase {
 	 * : getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
+	 */
+	public void testLine236() {
+		List messages = getMessagesAtLine( 236 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+	}
+
+	/*
+	 * ? getBoolean()
+	 * 1 validation message is expected.
+	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
 	 */
 	public void testLine239() {
 		List messages = getMessagesAtLine( 239 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
-	}
-
-	/*
-	 * ? getBoolean()
-	 * 1 validation message is expected.
-	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
-	 */
-	public void testLine241() {
-		List messages = getMessagesAtLine( 241 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
 	}
 
 	/*
 	 * : getBoolean()
 	 * 1 validation message is expected.
-	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
+	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
+	 */
+	public void testLine240() {
+		List messages = getMessagesAtLine( 240 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
+	}
+
+	/*
+	 * ? getBoolean()
+	 * 1 validation message is expected.
+	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
 	 */
 	public void testLine242() {
 		List messages = getMessagesAtLine( 242 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement end must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement end must be an integer literal, integer item or numeric expression of integers.\" was issued." );
-	}
-
-	/*
-	 * ? getBoolean()
-	 * 1 validation message is expected.
-	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
-	 */
-	public void testLine245() {
-		List messages = getMessagesAtLine( 245 );
-		assertEquals( 1, messages.size() );
-		
 		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
 		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
 	}
@@ -1427,34 +1419,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
 	 */
-	public void testLine246() {
-		List messages = getMessagesAtLine( 246 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
-	}
-
-	/*
-	 * ? getBoolean()
-	 * 1 validation message is expected.
-	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
-	 */
-	public void testLine248() {
-		List messages = getMessagesAtLine( 248 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"For statement delta must be an integer literal, integer item or numeric expression of integers.\" was issued." );
-	}
-
-	/*
-	 * : getBoolean()
-	 * 1 validation message is expected.
-	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
-	 */
-	public void testLine249() {
-		List messages = getMessagesAtLine( 249 );
+	public void testLine243() {
+		List messages = getMessagesAtLine( 243 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "For statement delta must be an integer literal, integer item or numeric expression of integers." );
@@ -1465,13 +1431,40 @@ public class Ternary1Test extends ValidationTestCase {
 	 * a = true
 	 * 0 validation messages are expected.
 	 */
+	public void testLine249() {
+		List messages = getMessagesAtLine( 249 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = (1 >= 1)
+	 * 0 validation messages are expected.
+	 */
+	public void testLine251() {
+		List messages = getMessagesAtLine( 251 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = b
+	 * 0 validation messages are expected.
+	 */
+	public void testLine253() {
+		List messages = getMessagesAtLine( 253 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = ba[1]
+	 * 0 validation messages are expected.
+	 */
 	public void testLine255() {
 		List messages = getMessagesAtLine( 255 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * a = (1 >= 1)
+	 * a = (true ? false : true)
 	 * 0 validation messages are expected.
 	 */
 	public void testLine257() {
@@ -1480,7 +1473,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = b
+	 * a = getBoolean()
 	 * 0 validation messages are expected.
 	 */
 	public void testLine259() {
@@ -1489,39 +1482,12 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = ba[1]
-	 * 0 validation messages are expected.
-	 */
-	public void testLine261() {
-		List messages = getMessagesAtLine( 261 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = (true ? false : true)
-	 * 0 validation messages are expected.
-	 */
-	public void testLine263() {
-		List messages = getMessagesAtLine( 263 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = getBoolean()
-	 * 0 validation messages are expected.
-	 */
-	public void testLine265() {
-		List messages = getMessagesAtLine( 265 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
 	 * a = doNotExist
 	 * 1 validation message is expected.
 	 * It is expected to contain "doNotExist cannot be resolved.".
 	 */
-	public void testLine268() {
-		List messages = getMessagesAtLine( 268 );
+	public void testLine262() {
+		List messages = getMessagesAtLine( 262 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "doNotExist cannot be resolved." );
@@ -1533,8 +1499,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "string and boolean are not compatible types in the expression s".
 	 */
-	public void testLine270() {
-		List messages = getMessagesAtLine( 270 );
+	public void testLine264() {
+		List messages = getMessagesAtLine( 264 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "string and boolean are not compatible types in the expression s" );
@@ -1546,8 +1512,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "any and boolean are not compatible types in the expression a".
 	 */
-	public void testLine272() {
-		List messages = getMessagesAtLine( 272 );
+	public void testLine266() {
+		List messages = getMessagesAtLine( 266 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "any and boolean are not compatible types in the expression a" );
@@ -1559,8 +1525,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "int and boolean are not compatible types in the expression getValue()".
 	 */
-	public void testLine274() {
-		List messages = getMessagesAtLine( 274 );
+	public void testLine268() {
+		List messages = getMessagesAtLine( 268 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "int and boolean are not compatible types in the expression getValue()" );
@@ -1572,8 +1538,8 @@ public class Ternary1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "null and boolean are not compatible types in the expression null".
 	 */
-	public void testLine276() {
-		List messages = getMessagesAtLine( 276 );
+	public void testLine270() {
+		List messages = getMessagesAtLine( 270 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "null and boolean are not compatible types in the expression null" );

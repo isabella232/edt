@@ -38,7 +38,6 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidat
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -374,17 +373,13 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     }
     
     private boolean checkArgForInOrOutParameter(Map<Expression, Type> argMap, FunctionParameter funcParmBinding, Type parmType, int argNum) {
-    	if (parmType instanceof ArrayType) {
-    		return checkArgForInOrOutArrayParameter(argMap, funcParmBinding, (ArrayType)parmType);
-    	}
-    	
     	boolean result = true;
     	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
     		Expression argExpr = entry.getKey();
     		Type argType = entry.getValue();
     		parmType = BindingUtil.resolveGenericType(parmType, qualifier);
 	    	
-	    	if (!TypeUtils.isDynamicType(argType) && !IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
+	    	if (!IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
 	    		problemRequestor.acceptProblem(
 	    			argExpr,
 	    			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
@@ -481,31 +476,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	return true;
     }
     
-    private boolean checkArgForInOrOutArrayParameter(Map<Expression, Type> argMap, FunctionParameter funcParmBinding, ArrayType parmType) {
-    	boolean result = true;
-    	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
-    		Expression argExpr = entry.getKey();
-    		Type argType = entry.getValue();
-    		parmType = (ArrayType)BindingUtil.resolveGenericType(parmType, qualifier);
-    		
-	    	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
-	    		problemRequestor.acceptProblem(
-	    			argExpr,
-	    			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
-					new String[] {
-	    				argExpr.getCanonicalString(),
-						funcParmBinding.getCaseSensitiveName(),
-						canonicalFunctionName,
-						// arg can be a function, which has no type
-						argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
-						BindingUtil.getShortTypeString(parmType)
-	    			});
-	    		result = false;
-	    	}
-    	}
-    	return result;
-    }
-    
     private boolean checkArgForInOutParameter(Map<Expression, Type> argMap, final FunctionParameter funcParmBinding, Type parmType, int argNum) {
     	boolean result = true;
     	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
@@ -537,15 +507,14 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	    		}
 	    	}
 	    	
-	    	boolean argCompatible = true;
-	    	if (argType != null) {
-	    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argType.getClassifier());
-	    	}
-	    	else if (argMember != null) {
-	    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argMember);
-	    	}
-	    	if (argCompatible && argMember != null) {
-	    		argCompatible = argMember.isNullable() == funcParmBinding.isNullable();
+	    	boolean argCompatible = argMember == null || argMember.isNullable() == funcParmBinding.isNullable();
+	    	if (argCompatible) {
+		    	if (argType != null) {
+		    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argType.getClassifier());
+		    	}
+		    	else if (argMember != null) {
+		    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argMember);
+		    	}
 	    	}
 	    	
 	    	if (!argCompatible) {
@@ -556,7 +525,8 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	    				argExpr.getCanonicalString(),
 						funcParmBinding.getCaseSensitiveName(),
 						canonicalFunctionName,
-						BindingUtil.getTypeName(argMember),
+						// Use getTypeName() so that nullability is included in the message, since nullability must match ("string is not compatible with string" would look odd)
+						BindingUtil.getTypeName(argMember, argType),
 						BindingUtil.getTypeName(funcParmBinding)
 	    			});
 	    		result = false;

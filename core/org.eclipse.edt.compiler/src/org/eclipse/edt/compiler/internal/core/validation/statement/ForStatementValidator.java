@@ -44,7 +44,7 @@ public class ForStatementValidator extends DefaultASTVisitor {
 				for (Map.Entry<Expression, Type> entry : rhsExprMap.entrySet()) {
 					Type tBinding = entry.getValue();
 					if (tBinding != null){
-						if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, entry.getKey().resolveMember()) && !TypeUtils.isDynamicType(tBinding)) {
+						if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, entry.getKey().resolveMember())) {
 							if (expr == forStatement.getCounterVariable() || expr == forStatement.getVariableDeclarationName()) {
 								problemRequestor.acceptProblem(entry.getKey(),
 										IProblemRequestor.FOR_STATEMENT_COUNTER_MUST_BE_INT);
