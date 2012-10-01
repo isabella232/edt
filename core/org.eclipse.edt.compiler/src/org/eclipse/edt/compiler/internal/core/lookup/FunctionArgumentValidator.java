@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
@@ -20,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
@@ -27,9 +30,13 @@ import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
+import org.eclipse.edt.compiler.core.ast.TernaryExpression;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -139,56 +146,62 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		
 		FunctionParameter parameterBinding = parameterIter.next();
 		Type parameterType = parameterBinding.getType();
-		Type argType = argExpr.resolveType();
-		Member argmember = argExpr.resolveMember();
 		
-		if(argType == null && argmember == null) {
+		// Set values exprs have no type or member so do this check before the next check below
+		if (!checkArgumentNotSetValuesExpression(argExpr)) {
 			return false;
 		}
 		
-		if(!checkArgumentNotSetValuesExpression(argExpr)) {
+		if (argExpr.resolveType() == null && argExpr.resolveMember() == null) {
 			return false;
 		}
 		
-		if(!checkSubstringNotUsedAsArgument(parameterBinding, argExpr)) {
+		// An argument can be a ternary, which really has 2 (or more) args to validate.
+		Map<Expression, Type> argMap = new HashMap<Expression, Type>();
+		TypeValidator.collectExprsForTypeCompatibility(argExpr, argMap);
+		
+		if (!checkSubstringNotUsedAsArgument(parameterBinding, argMap)) {
+			return false;
+		}
+		
+		if (!checkNullPassedToNonNullable(argMap, parameterBinding)) {
 			return false;
 		}
 
-		if(!checkArgumentUsedCorrectlyWithInAndOut(argExpr, parameterBinding, parameterType)) {
+		if (!checkArgumentUsedCorrectlyWithInAndOut(argMap, parameterBinding, parameterType)) {
 			return false;
 		}
 		
-		boolean argMatchesParm = true;
-				
-		if(parameterBinding.getParameterKind() == ParameterKind.PARM_IN) {
-			argMatchesParm = checkArgForInParameter(argExpr, argType, parameterBinding, parameterType, numArgs);
-		}
-		else if(parameterBinding.getParameterKind() == ParameterKind.PARM_OUT) {
-			argMatchesParm = checkArgForOutParameter(argExpr, argType, parameterBinding, parameterType, numArgs);
-		}
-		else {
-			argMatchesParm = checkArgForInOutParameter(argExpr, argType, parameterBinding, parameterType, numArgs);
-		}
-		
-		if(!argMatchesParm) {
-			return false;
+		switch (parameterBinding.getParameterKind()) {
+			case PARM_IN:
+				checkArgForInParameter(argMap, parameterBinding, parameterType, numArgs);
+				break;
+			case PARM_OUT:
+				checkArgForOutParameter(argMap, parameterBinding, parameterType, numArgs);
+				break;
+			case PARM_INOUT:
+				checkArgForInOutParameter(argMap, parameterBinding, parameterType, numArgs);
+				break;
 		}
 		
-		checkNullPassedToNonNullable(argExpr, parameterType, parameterBinding);
-				
 		return false;
 	}
 	
-	private void checkNullPassedToNonNullable(Expression argExpr, Type parameterType, FunctionParameter parameterBinding) {
-		if (TypeUtils.Type_NULLTYPE.equals(argExpr.resolveType()) && parameterBinding != null && !parameterBinding.isNullable()) {
-			problemRequestor.acceptProblem(
-					argExpr,
-					IProblemRequestor.CANNOT_PASS_NULL,
-					new String[] {
-						parameterBinding.getCaseSensitiveName(),
-						functionBinding.getCaseSensitiveName()
-					});
+	private boolean checkNullPassedToNonNullable(Map<Expression, Type> argMap, FunctionParameter parameterBinding) {
+		boolean result = true;
+		for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
+			if (TypeUtils.Type_NULLTYPE.equals(entry.getValue()) && parameterBinding != null && !parameterBinding.isNullable()) {
+				problemRequestor.acceptProblem(
+						entry.getKey(),
+						IProblemRequestor.CANNOT_PASS_NULL,
+						new String[] {
+							parameterBinding.getCaseSensitiveName(),
+							functionBinding.getCaseSensitiveName()
+						});
+				result = false;
+			}
 		}
+		return result;
 	}
 	
 	private boolean checkArgumentNotSetValuesExpression(final Expression argExpr) {
@@ -199,9 +212,15 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 				return true;
 			}
 			@Override
+			public boolean visit(TernaryExpression ternaryExpression) {
+				ternaryExpression.getSecondExpr().accept(this);
+				ternaryExpression.getThirdExpr().accept(this);
+				return false;
+			}
+			@Override
 			public boolean visit(SetValuesExpression setValuesExpression) {
 				problemRequestor.acceptProblem(
-					argExpr,
+					setValuesExpression,
 					IProblemRequestor.SET_VALUES_BLOCK_NOT_VALID_AS_FUNC_ARG);
 				result[0] = false;
 				return false;
@@ -210,15 +229,20 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		return result[0];
 	}
 	
-	private boolean checkSubstringNotUsedAsArgument(FunctionParameter parm, Expression argExpr) {
-		if (parm != null && parm.getParameterKind() != ParameterKind.PARM_IN && argExpr instanceof SubstringAccess) {
-			problemRequestor.acceptProblem(argExpr,
-					IProblemRequestor.SUBSTRING_IMMUTABLE,
-					new String[] {});
-			return false;
+	private boolean checkSubstringNotUsedAsArgument(FunctionParameter parm, Map<Expression, Type> argMap) {
+		boolean result = true;
+		if (parm != null && parm.getParameterKind() != ParameterKind.PARM_IN) {
+			for (Expression argExpr : argMap.keySet()) {
+				 if (argExpr instanceof SubstringAccess) {
+					problemRequestor.acceptProblem(argExpr,
+							IProblemRequestor.SUBSTRING_IMMUTABLE,
+							new String[] {});
+					result = false;
+				}
+			}
 		}
 		
-		return true;
+		return result;
 	}
 
     private abstract static class NonLiteralAndNonNameExpressionVisitor extends AbstractASTExpressionVisitor {
@@ -236,6 +260,12 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		@Override
 		public void endVisit(FieldAccess fieldAccess) {}
 		@Override
+		public void endVisit(SuperExpression superExpression) {}
+		@Override
+		public void endVisit(ThisExpression thisExpression) {}
+		@Override
+		public void endVisitLiteral(LiteralExpression literal) {}
+		@Override
 		public void endVisitExpression(Expression expression) {
 			handleExpressionThatIsNotNameOrLiteral(expression);
 		}
@@ -243,42 +273,44 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		abstract void handleExpressionThatIsNotNameOrLiteral(Expression expression);
 	} 
     
-    private boolean checkArgumentUsedCorrectlyWithInAndOut(final Expression argExpr, final FunctionParameter parmBinding, Type parmType) {
-    	Type argTypeBinding = argExpr.resolveType();
-		if(argTypeBinding == null) {
-    		return true;
-    	}
-    	
-    	final boolean[] expressionIsLiteralOrName = new boolean[] {true};
-    	final boolean[] foundError = new boolean[] {false};
-		argExpr.accept(new NonLiteralAndNonNameExpressionVisitor() {
-			@Override
-			void handleExpressionThatIsNotNameOrLiteral(Expression expression) {
-				if(parmBinding.getParameterKind() != ParameterKind.PARM_IN) {
-					problemRequestor.acceptProblem(
-						expression,
-						IProblemRequestor.FUNCTION_ARG_REQUIRES_IN_PARAMETER,
-						new String[] {
-							expression.getCanonicalString(),
-							functionBinding.getCaseSensitiveName()
-						});		
-					foundError[0] = true;
+    private boolean checkArgumentUsedCorrectlyWithInAndOut(Map<Expression, Type> argMap, final FunctionParameter parmBinding, Type parmType) {
+    	boolean result = true;
+    	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
+			if (entry.getValue() == null) {
+	    		continue;
+	    	}
+			
+			Expression argExpr = entry.getKey();
+	    	final boolean[] expressionIsLiteralOrName = new boolean[] {true};
+	    	final boolean[] foundError = new boolean[] {false};
+			argExpr.accept(new NonLiteralAndNonNameExpressionVisitor() {
+				@Override
+				void handleExpressionThatIsNotNameOrLiteral(Expression expression) {
+					if(parmBinding.getParameterKind() != ParameterKind.PARM_IN) {
+						problemRequestor.acceptProblem(
+							expression,
+							IProblemRequestor.FUNCTION_ARG_REQUIRES_IN_PARAMETER,
+							new String[] {
+								expression.getCanonicalString(),
+								functionBinding.getCaseSensitiveName()
+							});
+						foundError[0] = true;
+					}
+					expressionIsLiteralOrName[0] = false;
 				}
-				expressionIsLiteralOrName[0] = false;
+			});
+			
+			if (foundError[0]) {
+				result = false;
 			}
-		});
-		
-		if (foundError[0]) {
-			return false;
-		}
-		
-		if (expressionIsLiteralOrName[0] && parmBinding.getParameterKind() != ParameterKind.PARM_IN) {
-			if(!checkArgNotConstantOrLiteral(argExpr, parmBinding)) {
-				return false;
+			else if (expressionIsLiteralOrName[0] && parmBinding.getParameterKind() != ParameterKind.PARM_IN) {
+				if(!checkArgNotConstantOrLiteral(argExpr, parmBinding)) {
+					result = false;
+				}
 			}
-		}
+    	}
 		
-    	return true;
+    	return result;
     }
     
     private boolean checkArgNotConstantOrLiteral(Expression argExpr, FunctionParameter parmBinding) {
@@ -322,6 +354,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 			@Override
 			public void endVisit(SubstringAccess substringAccess) {}
 			@Override
+			public void endVisit(SuperExpression superExpression) {}
+			@Override
+			public void endVisit(ThisExpression thisExpression) {};
+			@Override
 			public void endVisitExpression(Expression expression) {
 				problemRequestor.acceptProblem(
 					expression,
@@ -337,80 +373,105 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		return !foundError[0];
     }
     
-    private boolean checkArgForInOrOutParameter(Expression argExpr, Type argType, FunctionParameter funcParmBinding, Type parmType, int argNum) {
+    private boolean checkArgForInOrOutParameter(Map<Expression, Type> argMap, FunctionParameter funcParmBinding, Type parmType, int argNum) {
     	if (parmType instanceof ArrayType) {
-    		return checkArgForInOrOutArrayParameter(argExpr, argType, funcParmBinding, (ArrayType)parmType);
+    		return checkArgForInOrOutArrayParameter(argMap, funcParmBinding, (ArrayType)parmType);
     	}
     	
-    	parmType = BindingUtil.resolveGenericType(parmType, qualifier);
-    	argType = BindingUtil.resolveGenericType(argType, argExpr);
-    	
-    	if (!IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember()) && !TypeUtils.isDynamicType(argType)) {
-    		problemRequestor.acceptProblem(
-    			argExpr,
-    			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
-				new String[] {
-    				argExpr.getCanonicalString(),
-					funcParmBinding.getCaseSensitiveName(),
-					canonicalFunctionName,
-					// arg can be a function, which has no type
-					argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
-					BindingUtil.getShortTypeString(parmType)
-    			});
-    		return false;
-    	}
-    	return true;
-    }
-    
-    private boolean checkArgForInParameter(Expression argExpr, Type argType, FunctionParameter funcParmBinding, Type parmType, int argNum) {
-    	Member argDBinding = argExpr.resolveMember();
-    	if(argDBinding != null) {
-    		if(!new RValueValidator(problemRequestor, compilerOptions, argDBinding, argExpr).validate()) {
-    			return false;
-    		}
-    	}
-    	
-    	validateNotSuper(argExpr);
-    	
-    	return checkArgForInOrOutParameter(argExpr, argType, funcParmBinding, parmType, argNum);
-    }
-    
-    private boolean checkArgForOutParameter(Expression argExpr, Type argType, final FunctionParameter funcParmBinding, Type parmType, int argNum) {
-    	Member argDBinding = argExpr.resolveMember();
-    	if(argDBinding != null) {
-    		if(!new LValueValidator(problemRequestor, compilerOptions, argDBinding, argExpr, new LValueValidator.DefaultLValueValidationRules() {
-    			@Override
-     			public boolean canAssignToFunctionParmConst() {
-     				return funcParmBinding.isConst();
-     			}
-    			@Override
-     			public boolean canAssignToConstantVariables() {
-     				return funcParmBinding.isConst();
-     			}
-    		}).validate()) {
-    			return false;
-    		}
-    	}
-    	validateNotThis(argExpr);
-    	validateNotSuper(argExpr);
-    	
-    	//Cannot pass a value type to an reference type OUT parm
-   		if (!isRefCompatForOutParm(argType, parmType)) {
-    		problemRequestor.acceptProblem(
+    	boolean result = true;
+    	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
+    		Expression argExpr = entry.getKey();
+    		Type argType = entry.getValue();
+    		parmType = BindingUtil.resolveGenericType(parmType, qualifier);
+	    	
+	    	if (!TypeUtils.isDynamicType(argType) && !IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
+	    		problemRequestor.acceptProblem(
 	    			argExpr,
-	    			IProblemRequestor.FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM,
+	    			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
 					new String[] {
 	    				argExpr.getCanonicalString(),
 						funcParmBinding.getCaseSensitiveName(),
 						canonicalFunctionName,
 						// arg can be a function, which has no type
 						argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
-						BindingUtil.getShortTypeString(parmType, true)
+						BindingUtil.getShortTypeString(parmType)
 	    			});
+	    		result = false;
+	    	}
+    	}
+    	return result;
+    }
+    
+    private boolean checkArgForInParameter(Map<Expression, Type> argMap, FunctionParameter funcParmBinding, Type parmType, int argNum) {
+    	boolean result = true;
+    	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
+    		Expression argExpr = entry.getKey();
+	    	Member argDBinding = argExpr.resolveMember();
+	    	if (argDBinding != null) {
+	    		if (!new RValueValidator(problemRequestor, compilerOptions, argDBinding, argExpr).validate()) {
+	    			result = false;
+	    		}
+	    	}
+	    	
+	    	validateNotSuper(argExpr);
+    	}
+    	
+    	if (!result) {
     		return false;
-   		}
-   		
-    	return checkArgForInOrOutParameter(argExpr, argType, funcParmBinding, parmType, argNum);
+    	}
+    	
+    	return checkArgForInOrOutParameter(argMap, funcParmBinding, parmType, argNum);
+    }
+    
+    private boolean checkArgForOutParameter(Map<Expression, Type> argMap, final FunctionParameter funcParmBinding, Type parmType, int argNum) {
+    	boolean result = true;
+    	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
+    		Expression argExpr = entry.getKey();
+    		Type argType = entry.getValue();
+    		Member argMember = argExpr.resolveMember();
+    		
+        	if(argMember != null) {
+        		if(!new LValueValidator(problemRequestor, compilerOptions, argMember, argExpr, new LValueValidator.DefaultLValueValidationRules() {
+        			@Override
+         			public boolean canAssignToFunctionParmConst() {
+         				return funcParmBinding.isConst();
+         			}
+        			@Override
+         			public boolean canAssignToConstantVariables() {
+         				return funcParmBinding.isConst();
+         			}
+        		}).validate()) {
+        			result = false;
+            		continue;
+        		}
+        	}
+        	
+        	validateNotThis(argExpr);
+        	validateNotSuper(argExpr);
+        	
+        	//Cannot pass a value type to an reference type OUT parm
+       		if (!isRefCompatForOutParm(argType, parmType)) {
+        		problemRequestor.acceptProblem(
+        				argExpr,
+    	    			IProblemRequestor.FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM,
+    					new String[] {
+    	    				argExpr.getCanonicalString(),
+    						funcParmBinding.getCaseSensitiveName(),
+    						canonicalFunctionName,
+    						// arg can be a function, which has no type
+    						argType == null ? BindingUtil.getTypeName(argMember) : BindingUtil.getShortTypeString(argType, true),
+    						BindingUtil.getShortTypeString(parmType, true)
+    	    			});
+        		result = false;
+        		continue;
+       		}
+    	}
+    	
+    	if (!result) {
+    		return false;
+    	}
+    	
+    	return checkArgForInOrOutParameter(argMap, funcParmBinding, parmType, argNum);
     }
     
     private boolean isRefCompatForOutParm(Type argType, Type parmType) {
@@ -420,88 +481,99 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	return true;
     }
     
-    private boolean checkArgForInOrOutArrayParameter(Expression argExpr, Type argType, FunctionParameter funcParmBinding, ArrayType parmType) {
-    	parmType = (ArrayType)BindingUtil.resolveGenericType(parmType, qualifier);
-    	argType = BindingUtil.resolveGenericType(argType, argExpr);
-    	
-    	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
-    		problemRequestor.acceptProblem(
-    			argExpr,
-    			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
-				new String[] {
-    				argExpr.getCanonicalString(),
-					funcParmBinding.getCaseSensitiveName(),
-					canonicalFunctionName,
-					// arg can be a function, which has no type
-					argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
-					BindingUtil.getShortTypeString(argType),
-					BindingUtil.getShortTypeString(parmType)
-    			});
-    		return false;
+    private boolean checkArgForInOrOutArrayParameter(Map<Expression, Type> argMap, FunctionParameter funcParmBinding, ArrayType parmType) {
+    	boolean result = true;
+    	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
+    		Expression argExpr = entry.getKey();
+    		Type argType = entry.getValue();
+    		parmType = (ArrayType)BindingUtil.resolveGenericType(parmType, qualifier);
+    		
+	    	if (TypeUtils.isDynamicType(argType) || !IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
+	    		problemRequestor.acceptProblem(
+	    			argExpr,
+	    			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,
+					new String[] {
+	    				argExpr.getCanonicalString(),
+						funcParmBinding.getCaseSensitiveName(),
+						canonicalFunctionName,
+						// arg can be a function, which has no type
+						argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
+						BindingUtil.getShortTypeString(parmType)
+	    			});
+	    		result = false;
+	    	}
     	}
-    	return true;
+    	return result;
     }
     
-    private boolean checkArgForInOutParameter(Expression argExpr, Type argType, final FunctionParameter funcParmBinding, Type parmType, int argNum) {
-    	Member argDBinding = argExpr.resolveMember();
-    	if(argDBinding != null) {
-    		if(!new RValueValidator(problemRequestor, compilerOptions, argDBinding, argExpr).validate()) {
-    			return false;
-    		}    		
-    		if(!new LValueValidator(problemRequestor, compilerOptions, argDBinding, argExpr, new LValueValidator.DefaultLValueValidationRules() {
-    			@Override
-    			public boolean canAssignToFunctionReferences() {
-    				return true;
-    			}
-    			@Override
-     			public boolean canAssignToConstantVariables() {
-      				return true;
-     			}
-    			@Override
-     			public boolean canAssignToFunctionParmConst() {
-     				return funcParmBinding.isConst();
-     			}
-    		}).validate()) {
-    			return false;
-    		}
+    private boolean checkArgForInOutParameter(Map<Expression, Type> argMap, final FunctionParameter funcParmBinding, Type parmType, int argNum) {
+    	boolean result = true;
+    	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
+    		Expression argExpr = entry.getKey();
+    		Type argType = entry.getValue();
+	    	Member argMember = argExpr.resolveMember();
+	    	
+	    	if (argMember != null) {
+	    		if(!new RValueValidator(problemRequestor, compilerOptions, argMember, argExpr).validate()) {
+	    			result = false;
+		    		continue;
+	    		}    		
+	    		if(!new LValueValidator(problemRequestor, compilerOptions, argMember, argExpr, new LValueValidator.DefaultLValueValidationRules() {
+	    			@Override
+	    			public boolean canAssignToFunctionReferences() {
+	    				return true;
+	    			}
+	    			@Override
+	     			public boolean canAssignToConstantVariables() {
+	      				return true;
+	     			}
+	    			@Override
+	     			public boolean canAssignToFunctionParmConst() {
+	     				return funcParmBinding.isConst();
+	     			}
+	    		}).validate()) {
+	    			result = false;
+		    		continue;
+	    		}
+	    	}
+	    	
+	    	boolean argCompatible = true;
+	    	if (argType != null) {
+	    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argType.getClassifier());
+	    	}
+	    	else if (argMember != null) {
+	    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argMember);
+	    	}
+	    	if (argCompatible && argMember != null) {
+	    		argCompatible = argMember.isNullable() == funcParmBinding.isNullable();
+	    	}
+	    	
+	    	if (!argCompatible) {
+	    		problemRequestor.acceptProblem(
+	    			argExpr,
+	    			IProblemRequestor.FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM,
+					new String[] {
+	    				argExpr.getCanonicalString(),
+						funcParmBinding.getCaseSensitiveName(),
+						canonicalFunctionName,
+						BindingUtil.getTypeName(argMember),
+						BindingUtil.getTypeName(funcParmBinding)
+	    			});
+	    		result = false;
+	    		continue;
+	   		}
+	    	
+	    	validateNotThis(argExpr);
+	    	validateNotSuper(argExpr);
     	}
     	
-    	boolean argCompatible = true;
-    	if (argType != null) {
-    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argType.getClassifier());
-    	}
-    	else if (argDBinding != null) {
-    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argDBinding);
-    	}
-    	if (argCompatible) {
-    		argCompatible = argDBinding != null && argDBinding.isNullable() == funcParmBinding.isNullable();
-    	}
-    	
-    	if (!argCompatible) {
-    		problemRequestor.acceptProblem(
-    			argExpr,
-    			IProblemRequestor.FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM,
-				new String[] {
-    				argExpr.getCanonicalString(),
-					funcParmBinding.getCaseSensitiveName(),
-					canonicalFunctionName,
-					// arg can be a function, which has no type
-					argType == null ? BindingUtil.getTypeName(argDBinding) : BindingUtil.getShortTypeString(argType, true),
-					BindingUtil.getShortTypeString(parmType, true)
-    			});
-    		return false;
-   		}
-    	
-    	validateNotThis(argExpr);
-    	validateNotSuper(argExpr);
-    	
-    	return true;
+    	return result;
     }
     
     private void validateNotThis(Expression expr) {
     	DefaultASTVisitor visitor = new DefaultASTVisitor() {
     		@Override
-    		public boolean visit(org.eclipse.edt.compiler.core.ast.ThisExpression thisExpression) {
+    		public boolean visit(ThisExpression thisExpression) {
 		    		problemRequestor.acceptProblem(
 			    			thisExpression,
 			    			IProblemRequestor.FUNCTION_ARG_CANNOT_BE_THIS,
@@ -515,7 +587,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     private void validateNotSuper(Expression expr) {
     	DefaultASTVisitor visitor = new DefaultASTVisitor() {
     		@Override
-    		public boolean visit(org.eclipse.edt.compiler.core.ast.SuperExpression superExpression) {
+    		public boolean visit(SuperExpression superExpression) {
 		    		problemRequestor.acceptProblem(
 			    			superExpression,
 			    			IProblemRequestor.FUNCTION_ARG_CANNOT_BE_SUPER,

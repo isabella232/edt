@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.TernaryExpression;
+import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
@@ -780,6 +781,10 @@ public class BindingUtil {
 	public static String getUnaliasedTypeName(Type type, boolean includeParams) {
 		if (type == null) {
 			return "";
+		}
+		
+		if (type.equals( TypeUtils.Type_NULLTYPE)) {
+			return IEGLConstants.KEYWORD_NULL;
 		}
 		
 		Classifier classifier = type.getClassifier();

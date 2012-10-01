@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.AssignmentStatement;
@@ -19,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Member;
@@ -38,6 +42,7 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		this.compilerOptions = compilerOptions;
 	}
 	
+	@Override
 	public boolean visit(AssignmentStatement assignmentStatement) {
 		Assignment assignment = assignmentStatement.getAssignment();
 		Expression lhs = assignment.getLeftHandSide();
@@ -63,43 +68,65 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		}
 		
 		if ((rhsType != null || rhsMember != null) && lhsType != null) {
+			Map<Expression, Type> resolvedRHSMap = new HashMap<Expression, Type>();
+			Map<Expression, Type> errors = new HashMap<Expression, Type>();
+			
 			// For complex assignments like "x &= y" we must treat it as if it was coded "x = x & y". To do this, retrieve the operation and use its type.
-			Type resolvedRHSType = null;
 			if (assignmentOperator != Assignment.Operator.ASSIGN) {
 				String symbol = assignmentOperator.toString().substring(0, assignmentOperator.toString().length() - 1);
-				Operation op = IRUtils.getBinaryOperation(lhsType.getClassifier(), rhsType == null ? rhsMember : rhsType.getClassifier(), symbol);
-				if (op != null) {
-					// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the lhs type).
-					boolean parmsValid = true;
-					if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
-						Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), lhsType);
-						parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), lhsType, lhsMember);
-					}
-					if (parmsValid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
-						Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), lhsType);
-						parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), rhsType, rhsMember);
-					}
-					
-					if (parmsValid) {
-						Type opType = op.getType();
-						if (BindingUtil.isUnresolvedGenericType(opType)) {
-							opType = BindingUtil.resolveGenericType(opType, lhsType);
+				Map<Expression, Type> exprMap = new HashMap<Expression, Type>();
+				TypeValidator.collectExprsForTypeCompatibility(rhs, exprMap);
+				for (Map.Entry<Expression, Type> entry : exprMap.entrySet()) {
+					Operation op = IRUtils.getBinaryOperation(lhsType.getClassifier(), entry.getValue() == null ? entry.getKey().resolveMember() : entry.getValue().getClassifier(), symbol);
+					if (op != null) {
+						// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the lhs type).
+						boolean parmsValid = true;
+						if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
+							Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), lhsType);
+							parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), lhsType, lhsMember);
 						}
-						resolvedRHSType = opType;
+						if (parmsValid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
+							Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), lhsType);
+							parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), entry.getValue(), entry.getKey().resolveMember());
+						}
+						
+						if (parmsValid) {
+							Type opType = op.getType();
+							if (BindingUtil.isUnresolvedGenericType(opType)) {
+								opType = BindingUtil.resolveGenericType(opType, lhsType);
+							}
+							resolvedRHSMap.put(entry.getKey(), opType);
+						}
+						else {
+							errors.put(entry.getKey(), entry.getValue());
+						}
+					}
+					else {
+						errors.put(entry.getKey(), entry.getValue());
 					}
 				}
 			}
 			else {
-				resolvedRHSType = BindingUtil.resolveGenericType(rhsType, rhs);
+				TypeValidator.collectExprsForTypeCompatibility(rhs, resolvedRHSMap);
 			}
 			
-			if ((resolvedRHSType == null && !(rhsMember instanceof FunctionMember))
-					|| (!IRUtils.isMoveCompatible(lhsType, lhsMember, resolvedRHSType, rhsMember) && !TypeUtils.isDynamicType(resolvedRHSType))) {
-				problemRequestor.acceptProblem(rhs,
+			if (resolvedRHSMap.size() == 0 && !(rhsMember instanceof FunctionMember)) {
+				errors.put(rhs, rhsType);
+			}
+			else {
+				for (Map.Entry<Expression, Type> entry : resolvedRHSMap.entrySet()) {
+					if (!TypeUtils.isDynamicType(entry.getValue()) && !IRUtils.isMoveCompatible(lhsType, lhsMember, entry.getValue(), entry.getKey().resolveMember())) {
+						errors.put(entry.getKey(), entry.getValue());
+					}
+				}
+			}
+			
+			for (Map.Entry<Expression, Type> entry : errors.entrySet()) {
+				problemRequestor.acceptProblem(entry.getKey(),
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 						new String[] {lhsType != null ? BindingUtil.getShortTypeString(lhsType) : lhs.getCanonicalString(),
-						rhsType != null ? BindingUtil.getShortTypeString(rhsType) : rhs.getCanonicalString(),
-						lhs.getCanonicalString() + " " + assignmentOperator.toString() + " " + rhs.getCanonicalString()});
+						entry.getValue() != null ? BindingUtil.getShortTypeString(entry.getValue()) : entry.getKey().getCanonicalString(),
+						lhs.getCanonicalString() + " " + assignmentOperator.toString() + " " + entry.getKey().getCanonicalString()});
 			}
 		}
 		

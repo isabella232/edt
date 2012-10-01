@@ -11,13 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -36,30 +39,33 @@ public class ForStatementValidator extends DefaultASTVisitor {
 		forStatement.accept(new AbstractASTExpressionVisitor() {
 			@Override
 			public boolean visitExpression(Expression expr) {
-				Type tBinding = expr.resolveType();
-				if (tBinding != null){
-					tBinding = BindingUtil.resolveGenericType(tBinding, expr);
-					if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, expr.resolveMember()) && !TypeUtils.isDynamicType(tBinding)) {
-						if (expr == forStatement.getCounterVariable() || expr == forStatement.getVariableDeclarationName()) {
-							problemRequestor.acceptProblem(expr,
-									IProblemRequestor.FOR_STATEMENT_COUNTER_MUST_BE_INT);
-						}
-						else {
-							String insert = "";
-							if (expr == forStatement.getFromIndex()) {
-								insert = "start";
+				Map<Expression, Type> rhsExprMap = new HashMap<Expression, Type>();
+				TypeValidator.collectExprsForTypeCompatibility(expr, rhsExprMap);
+				for (Map.Entry<Expression, Type> entry : rhsExprMap.entrySet()) {
+					Type tBinding = entry.getValue();
+					if (tBinding != null){
+						if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, entry.getKey().resolveMember()) && !TypeUtils.isDynamicType(tBinding)) {
+							if (expr == forStatement.getCounterVariable() || expr == forStatement.getVariableDeclarationName()) {
+								problemRequestor.acceptProblem(entry.getKey(),
+										IProblemRequestor.FOR_STATEMENT_COUNTER_MUST_BE_INT);
 							}
-							else if (expr == forStatement.getEndIndex()) {
-								insert = "end";
-							}
-							else if (expr == forStatement.getDeltaExpression()) {
-								insert = "delta";
-							}
-							
-							if (insert.length() > 0) {
-								problemRequestor.acceptProblem(expr,
-									IProblemRequestor.FOR_STATEMENT_EXPR_MUST_BE_INT,
-									new String[]{insert});
+							else {
+								String insert = "";
+								if (expr == forStatement.getFromIndex()) {
+									insert = "start";
+								}
+								else if (expr == forStatement.getEndIndex()) {
+									insert = "end";
+								}
+								else if (expr == forStatement.getDeltaExpression()) {
+									insert = "delta";
+								}
+								
+								if (insert.length() > 0) {
+									problemRequestor.acceptProblem(entry.getKey(),
+										IProblemRequestor.FOR_STATEMENT_EXPR_MUST_BE_INT,
+										new String[]{insert});
+								}
 							}
 						}
 					}

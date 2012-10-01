@@ -35,10 +35,12 @@ public class ParenthesizedExpression extends Expression {
 		return expr;
 	}
 	
+	@Override
 	public String getCanonicalString() {
-  		return expr.getCanonicalString();
+  		return "(" + expr.getCanonicalString() + ")";
     }
-	   
+	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -47,14 +49,17 @@ public class ParenthesizedExpression extends Expression {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new ParenthesizedExpression((Expression)expr.clone(), getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
 	public Member resolveMember() {
 		return expr.resolveMember();
 	}
 	
+	@Override
 	public Type resolveType() {
 		return expr.resolveType();
 	}
