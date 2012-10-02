@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.TernaryExpression;
+import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
@@ -788,6 +789,10 @@ public class BindingUtil {
 			return "";
 		}
 		
+		if (type.equals( TypeUtils.Type_NULLTYPE)) {
+			return IEGLConstants.KEYWORD_NULL;
+		}
+		
 		Classifier classifier = type.getClassifier();
 		String unaliasedName = null;
 		if (classifier != null) {
@@ -874,15 +879,23 @@ public class BindingUtil {
 	}
 	
 	public static String getTypeName(Member member) {
+		if (member == null) {
+			return "";
+		}
+		
+		return getTypeName(member, member.getType());
+	}
+	
+	public static String getTypeName(Member member, Type type) {
 		StringBuilder buf = new StringBuilder();
 		if (member instanceof FunctionMember) {
 			buf.append(member.getName());
 		}
-		else if (member != null) {
-			buf.append(getShortTypeString(member.getType(), true));
+		else if (type != null) {
+			buf.append(getShortTypeString(type, true));
 		}
 		
-		if(member.isNullable()){
+		if(member != null && member.isNullable()){
 			buf.append('?');;
 		}
 		return buf.toString();

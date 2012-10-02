@@ -12,13 +12,18 @@
 package org.eclipse.edt.compiler.internal.core.validation.type;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
+import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
+import org.eclipse.edt.compiler.core.ast.TernaryExpression;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -113,5 +118,31 @@ public class TypeValidator {
 				type = ((ArrayType)type).getElementType();
 			}
 		}
+	}
+	
+	/**
+	 * Finds all the expressions that should be validated against another type. This is typically just the
+	 * expr as-is, except that for ternary expressions we need to check both the second and third exprs against
+	 * some other type (including any nested ternary exprs - e.g. second expr is itself another ternary). Any generic
+	 * types for the expressions will already be resolved.
+	 */
+	public static void collectExprsForTypeCompatibility(Expression rootExpr, final Map<Expression, org.eclipse.edt.mof.egl.Type> exprMap) {
+		rootExpr.accept(new AbstractASTExpressionVisitor() {
+			@Override
+			public boolean visit(TernaryExpression ternaryExpression) {
+				ternaryExpression.getSecondExpr().accept(this);
+				ternaryExpression.getThirdExpr().accept(this);
+				return false;
+			};
+			@Override
+			public boolean visit(ParenthesizedExpression parenthesizedExpression) {
+				return true;
+			};
+			@Override
+			public boolean visitExpression(Expression expression) {
+				exprMap.put(expression, BindingUtil.resolveGenericType(expression.resolveType(), expression));
+				return false;
+			}
+		});
 	}
 }

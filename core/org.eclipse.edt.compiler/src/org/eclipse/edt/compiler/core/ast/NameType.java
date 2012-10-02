@@ -42,18 +42,22 @@ public class NameType extends Type {
 		return name;
 	}
 	
+	@Override
 	public int getKind() {
 		return NAMETYPE;
 	}
 	
+	@Override
 	public boolean isNameType() {
 		return true;
 	}
 	
+	@Override
 	public org.eclipse.edt.mof.egl.Type resolveType() {
 		return name.resolveType();
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -63,8 +67,23 @@ public class NameType extends Type {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalName() {
-		return name.getCanonicalName();
+		if (arguments == null || arguments.size() == 0) {
+			return name.getCanonicalName();
+		}
+		
+		StringBuilder buf = new StringBuilder();
+		buf.append(name.getCanonicalName());
+		buf.append('(');
+		for (int i = 0; i < arguments.size(); i++) {
+			if (i > 0) {
+				buf.append(',');
+			}
+			buf.append(arguments.get(i));
+		}
+		buf.append(')');
+		return buf.toString();
 	}
 	
 	public boolean hasArguments() {
@@ -76,30 +95,18 @@ public class NameType extends Type {
 		return arguments;
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new NameType((Name)name.clone(), cloneList(arguments), getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
 	public Type getBaseType() {
 		return this;
 	}
 	
 	@Override
 	public String toString() {
-		if (arguments == null || arguments.size() == 0) {
-			return getCanonicalName();
-		}
-		
-		StringBuilder buf = new StringBuilder();
-		buf.append(getCanonicalName());
-		buf.append('(');
-		for (int i = 0; i < arguments.size(); i++) {
-			if (i > 0) {
-				buf.append(',');
-			}
-			buf.append(arguments.get(i));
-		}
-		buf.append(')');
-		return buf.toString();
+		return getCanonicalName();
 	}
 }

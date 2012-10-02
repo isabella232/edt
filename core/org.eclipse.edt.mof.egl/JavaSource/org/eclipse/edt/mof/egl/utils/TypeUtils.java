@@ -332,7 +332,7 @@ public class TypeUtils implements MofConversion {
 		}
 		
 		if (lhsType instanceof SubType && rhsType instanceof StructPart) {		
-			if (isReferenceType(lhsType) && ((SubType)lhsType).isSubtypeOf((StructPart)rhsType)) {
+			if (((SubType)lhsType).isSubtypeOf((StructPart)rhsType)) {
 				return true;
 			}
 		}

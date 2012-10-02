@@ -11,9 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
@@ -22,6 +26,7 @@ import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
@@ -67,28 +72,29 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 		validateNoSetValues(returnStatement);
 		
 		if (visitor.hasReturnType() && returnStatement.getParenthesizedExprOpt() != null) {
-			Type type = returnStatement.getParenthesizedExprOpt().resolveType();
-			type = BindingUtil.resolveGenericType(type, returnStatement.getParenthesizedExprOpt());
+			Map<Expression, Type> rhsExprMap = new HashMap<Expression, Type>();
+			TypeValidator.collectExprsForTypeCompatibility(returnStatement.getParenthesizedExprOpt(), rhsExprMap);
 			
-			boolean compatible = IRUtils.isMoveCompatible(visitor.getReturnType(), visitor.getReturnField(), type, returnStatement.getParenthesizedExprOpt().resolveMember());
-			if (!compatible) {
-				String typeString = "";
-				Type returnStmtType = returnStatement.getParenthesizedExprOpt().resolveType();
-				if (returnStmtType == null) {
-					Member m = returnStatement.getParenthesizedExprOpt().resolveMember();
-					if (m != null) {
-						typeString = m.getCaseSensitiveName();
+			for (Map.Entry<Expression, Type> entry : rhsExprMap.entrySet()) {
+				boolean compatible = IRUtils.isMoveCompatible(visitor.getReturnType(), visitor.getReturnField(), entry.getValue(), entry.getKey().resolveMember());
+				if (!compatible) {
+					String typeString = "";
+					if (entry.getValue() == null) {
+						Member m = entry.getKey().resolveMember();
+						if (m != null) {
+							typeString = m.getCaseSensitiveName();
+						}
 					}
+					else {
+						typeString = BindingUtil.getShortTypeString(entry.getValue());
+					}
+					
+					problemRequestor.acceptProblem(entry.getKey(),
+							IProblemRequestor.RETURN_STATEMENT_TYPE_INCOMPATIBLE,
+							new String[] {
+									typeString,
+									BindingUtil.getShortTypeString(visitor.getReturnType())});
 				}
-				else {
-					typeString = BindingUtil.getShortTypeString(returnStmtType);
-				}
-				
-				problemRequestor.acceptProblem(returnStatement.getParenthesizedExprOpt(),
-						IProblemRequestor.RETURN_STATEMENT_TYPE_INCOMPATIBLE,
-						new String[] {
-								typeString,
-								BindingUtil.getShortTypeString(visitor.getReturnType())});
 			}
 		}
 		

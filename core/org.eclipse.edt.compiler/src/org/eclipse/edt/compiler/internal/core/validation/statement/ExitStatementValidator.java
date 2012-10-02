@@ -189,7 +189,7 @@ public class ExitStatementValidator extends DefaultASTVisitor {
 		
 		Type binding = expr.resolveType();
 		if (binding != null) {
-			boolean valid = TypeUtils.isDynamicType(binding)
+			boolean valid = TypeUtils.Type_ANY.equals(binding)
 					|| (TypeUtils.isNumericType(binding) && !binding.equals(TypeUtils.Type_FLOAT) && !binding.equals(TypeUtils.Type_SMALLFLOAT));
 			
 			if (valid && binding instanceof FixedPrecisionType) {

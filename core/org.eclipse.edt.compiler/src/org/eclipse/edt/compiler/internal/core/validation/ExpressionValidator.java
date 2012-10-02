@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -64,9 +68,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 /*
 TODO Remaining expressions to port from the old DefaultBinder:
-array access
 in
-ternary
 */
 public class ExpressionValidator extends AbstractASTVisitor {
 	
@@ -82,29 +84,41 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	
 	@Override
 	public void endVisit(BinaryExpression binaryExpression) {
-		Expression operand1 = binaryExpression.getFirstExpression();
-		Expression operand2 = binaryExpression.getSecondExpression();
-		NamedElement elem1 = DefaultBinder.getOperandType(operand1);
-		NamedElement elem2 = DefaultBinder.getOperandType(operand2);
-		if (elem1 != null && elem2 != null) {
-			boolean valid = false;
-			Operation op = IRUtils.getBinaryOperation(elem1, elem2, binaryExpression.getOperator().toString());
-			if (op != null) {
-				// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the first operand).
-				valid = true;
-				if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
-					Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), operand1.resolveType());
-					valid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), operand1.resolveType(), operand1.resolveMember());
+		// Both the lhs and the rhs can be a ternary expression, in which case both of the ternary's possible results must be checked
+		// against the other side.
+		Map<Expression, Type> operand1Map = new HashMap<Expression, Type>();
+		Map<Expression, Type> operand2Map = new HashMap<Expression, Type>();
+		TypeValidator.collectExprsForTypeCompatibility(binaryExpression.getFirstExpression(), operand1Map);
+		TypeValidator.collectExprsForTypeCompatibility(binaryExpression.getSecondExpression(), operand2Map);
+		
+		for (Map.Entry<Expression, Type> entry1 : operand1Map.entrySet()) {
+			NamedElement elem1 = DefaultBinder.getOperandType(entry1.getKey());
+			if (elem1 != null) {
+				for (Map.Entry<Expression, Type> entry2 : operand2Map.entrySet()) {
+					NamedElement elem2 = DefaultBinder.getOperandType(entry2.getKey());
+					if (elem2 != null) {
+						boolean valid = false;
+						Operation op = IRUtils.getBinaryOperation(elem1, elem2, binaryExpression.getOperator().toString());
+						if (op != null) {
+							// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the first operand).
+							valid = true;
+							if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
+								Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), entry1.getValue());
+								valid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), entry1.getValue(), entry1.getKey().resolveMember());
+							}
+							if (valid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
+								Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), entry1.getValue());
+								valid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), entry2.getValue(), entry2.getKey().resolveMember());
+							}
+						}
+						
+						if (!valid) {
+							problemRequestor.acceptProblem(entry1.getKey(), IProblemRequestor.MISSING_OPERATION_FOR_BINARY_EXPRESSION,
+									new String[]{entry1.getKey().getCanonicalString(), entry2.getKey().getCanonicalString(), binaryExpression.getOperator().toString(),
+												entry1.getKey().getCanonicalString() + " " + binaryExpression.getOperator().toString() + " " + entry2.getKey().getCanonicalString()});
+						}
+					}
 				}
-				if (valid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
-					Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), operand1.resolveType());
-					valid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), operand2.resolveType(), operand2.resolveMember());
-				}
-			}
-			
-			if (!valid) {
-				problemRequestor.acceptProblem(binaryExpression, IProblemRequestor.MISSING_OPERATION_FOR_BINARY_EXPRESSION,
-						new String[]{operand1.getCanonicalString(), operand2.getCanonicalString(), binaryExpression.getOperator().toString()});
 			}
 		}
 	}
@@ -377,18 +391,24 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		if (asExpression.hasType()) {
 			checkTypeForIsaOrAs(asExpression.getType());
 			
-			Type fromType = BindingUtil.resolveGenericType(asExpression.getExpression().resolveType(), asExpression.getExpression());
 			Type toType = asExpression.getType().resolveType();
-			if (fromType != null && toType != null) {
-				if (!TypeUtils.isDynamicType(fromType) && !IRUtils.isMoveCompatible(toType, fromType, asExpression.getExpression().resolveMember())) {
-					problemRequestor.acceptProblem(
-						asExpression,
-						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-						new String[] {
-								BindingUtil.getTypeString(fromType, true),
-								BindingUtil.getTypeString(toType, true),
-								asExpression.getCanonicalString()
-						});
+			if (toType != null) {
+				Map<Expression, Type> exprMap = new HashMap<Expression, Type>();
+				TypeValidator.collectExprsForTypeCompatibility(asExpression.getExpression(), exprMap);
+				
+				for (Map.Entry<Expression, Type> entry : exprMap.entrySet()) {
+					if (entry.getValue() != null) {
+						if (!IRUtils.isMoveCompatible(toType, entry.getValue(), entry.getKey().resolveMember())) {
+							problemRequestor.acceptProblem(
+								entry.getKey(),
+								IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
+								new String[] {
+										BindingUtil.getShortTypeString(entry.getValue(), true),
+										BindingUtil.getShortTypeString(toType, true),
+										entry.getKey().getCanonicalString() + " as " + asExpression.getType().getCanonicalName()
+								});
+						}
+					}
 				}
 			}
 		}
@@ -541,10 +561,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		Type tBinding = index.resolveType();
 		if (tBinding != null) {
 			boolean typeIsValid = false;
-			if (BindingUtil.isDynamicallyAccessible(tBinding)) {
-				typeIsValid = true;
-			}
-			else if (TypeUtils.isNumericType(tBinding)) {
+			if (TypeUtils.Type_ANY.equals((tBinding)) || TypeUtils.isNumericType(tBinding)) {
 				if (tBinding instanceof FixedPrecisionType) {
 					typeIsValid = ((FixedPrecisionType)tBinding).getDecimals() == 0;
 				}
@@ -590,6 +607,75 @@ public class ExpressionValidator extends AbstractASTVisitor {
 					qualifiedName.getQualifier(),
 					IProblemRequestor.ARRAY_ACCESS_NOT_SUBSCRIPTED,
 					new String[] {qualifiedName.getQualifier().getCanonicalName()});
+		}
+	}
+	
+	@Override
+	public void endVisit(org.eclipse.edt.compiler.core.ast.TernaryExpression ternaryExpression) {
+		// The first expr is the condition and must be boolean.
+		Type conditionType = ternaryExpression.getFirstExpr().resolveType();
+		if (conditionType != null && !conditionType.equals(TypeUtils.Type_BOOLEAN)) {
+			problemRequestor.acceptProblem(
+					ternaryExpression.getFirstExpr(),
+					IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
+					new String[] {
+						BindingUtil.getShortTypeString(conditionType),
+						IEGLConstants.KEYWORD_BOOLEAN,
+						ternaryExpression.getFirstExpr().getCanonicalString()
+					});
+		}
+	};
+	
+	@Override
+	public void endVisit(ArrayAccess arrayAccess) {
+		if (arrayAccess.getIndices().size() > 1) {
+			problemRequestor.acceptProblem(
+					arrayAccess,
+					IProblemRequestor.MULTI_INDICES_NOT_SUPPORTED,
+					new String[]{arrayAccess.getCanonicalString()});
+		}
+		else {
+			Expression index = arrayAccess.getIndices().get(0);
+			Type indexType = index.resolveType();
+			Type arrayType = arrayAccess.getArray().resolveType();
+			if (indexType != null) {
+				if (TypeUtils.isTextType(indexType)) {
+					// Dynamic access.
+					if (arrayType != null && !BindingUtil.isDynamicallyAccessible(arrayType)) {
+						problemRequestor.acceptProblem(
+		    					arrayAccess.getArray(),
+								IProblemRequestor.NON_DYNAMIC_ACCESS_ACCESSED_DYNAMICALLY,
+								new String[]{arrayAccess.getArray().getCanonicalString()});
+					}
+				}
+				else {
+					// Array access.
+					boolean indexTypeIsValid = false;
+					if (TypeUtils.Type_ANY.equals((indexType)) || TypeUtils.isNumericType(indexType)) {
+						if (indexType instanceof FixedPrecisionType) {
+							indexTypeIsValid = ((FixedPrecisionType)indexType).getDecimals() == 0;
+						}
+						else {
+							indexTypeIsValid = true;
+						}
+					}			
+					if (!indexTypeIsValid) {
+						problemRequestor.acceptProblem(
+	    						index,
+								IProblemRequestor.SUBSCRIPT_MUST_BE_INTEGER_ITEM,
+								new String[] {index.getCanonicalString(), arrayAccess.getCanonicalString()});
+					}
+					
+					if (arrayType != null && (!TypeUtils.Type_ANY.equals(arrayType) && !(arrayType instanceof org.eclipse.edt.mof.egl.ArrayType))) {
+						problemRequestor.acceptProblem(
+		    					arrayAccess.getArray(),
+								IProblemRequestor.NON_ARRAY_ACCESS_SUBSCRIPTED,
+								new String[] {
+		    						arrayAccess.getArray().getCanonicalString()
+		    					});
+					}
+				}
+			}
 		}
 	}
 }

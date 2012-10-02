@@ -83,6 +83,7 @@ public class ArrayTypeImpl extends GenericTypeImpl implements ArrayType {
 			if (!array.getTypeArguments().isEmpty()) {
 				ArrayType newType = IrFactory.INSTANCE.createArrayType();
 				newType.setElementsNullable(elementsNullable());
+				newType.setClassifier(getClassifier());
 				
 				// To handle multidim arrays, must resolve the typearg too.
 				Type elementType = array.resolveTypeParameter(array.getTypeArguments().get(0));

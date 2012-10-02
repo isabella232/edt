@@ -26,9 +26,9 @@ import org.eclipse.edt.mof.egl.Member;
 public class ArrayAccess extends Expression {
 
 	private Expression array;
-	private List subscripts;
+	private List<Expression> subscripts;
 
-	public ArrayAccess(Expression primary, List subscripts, int startOffset, int endOffset) {
+	public ArrayAccess(Expression primary, List<Expression> subscripts, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.array = primary;
@@ -41,10 +41,11 @@ public class ArrayAccess extends Expression {
 		return array;
 	}
 	
-	public List getIndices() {
+	public List<Expression> getIndices() {
 		return subscripts;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -54,6 +55,7 @@ public class ArrayAccess extends Expression {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(getArray().getCanonicalString());
@@ -68,18 +70,22 @@ public class ArrayAccess extends Expression {
 		return sb.toString();
 	}
 	
+	@Override
 	public void setAttributeOnName(int attr, Object value) {
 		array.setAttributeOnName(attr, value);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new ArrayAccess((Expression)array.clone(), cloneList(subscripts), getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
 	public Member resolveMember() {
 		return getArray().resolveMember();
 	}
 	
+	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(array.toString());
@@ -97,5 +103,4 @@ public class ArrayAccess extends Expression {
 		buffer.append("]");
 		return buffer.toString();
 	}
-		
 }

@@ -50,14 +50,17 @@ public class ArrayType extends Type {
 		return initialSize;
 	}
 	
+	@Override
 	public int getKind() {
 		return ARRAYTYPE;
 	}
 	
+	@Override
 	public boolean isArrayType() {
 		return true;
 	}
-
+	
+	@Override
     public org.eclipse.edt.mof.egl.Type resolveType() {
         return arrayType;
     }
@@ -66,6 +69,7 @@ public class ArrayType extends Type {
         this.arrayType = arrayType;
     }
 	
+    @Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -75,16 +79,29 @@ public class ArrayType extends Type {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalName() {
-		return elementType.getCanonicalName() + "[]";
+		StringBuilder buf = new StringBuilder(100);
+		buf.append(elementType.getCanonicalName());
+		if (isNullable) {
+			buf.append('?');
+		}
+		buf.append('[');
+		if (initialSize != null) {
+			buf.append(initialSize.getCanonicalString());
+		}
+		buf.append(']');
+		return buf.toString();
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		Expression newInitialSize = initialSize != null ? (Expression)initialSize.clone() : null;
 		
 		return new ArrayType((Type)elementType.clone(), newInitialSize, isNullable, getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
 	public Type getBaseType() {
 		return elementType.getBaseType();
 	}
@@ -95,16 +112,6 @@ public class ArrayType extends Type {
 	
 	@Override
 	public String toString() {
-		StringBuilder buf = new StringBuilder(100);
-		buf.append(elementType.toString());
-		if (isNullable) {
-			buf.append('?');
-		}
-		buf.append('[');
-		if (initialSize != null) {
-			buf.append(initialSize.toString());
-		}
-		buf.append(']');
-		return buf.toString();
+		return getCanonicalName();
 	}
 }
