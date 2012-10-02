@@ -36,6 +36,7 @@ import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator;
+import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
@@ -713,6 +714,9 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 		try {
 			type = bindTypeName(annotationExpression.getName());
 		} catch (ResolutionException e) {
+            problemRequestor
+            .acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+            return null;
 		}
 		
 		if (type == null || !(type instanceof AnnotationType)) {

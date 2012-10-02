@@ -11,110 +11,94 @@
  *******************************************************************************/
 package egl.lang.reflect;
 
-//TODO lines commented out with "//KEYWORD" use the wrong name for the type, because
-// the correct type's name includes EGL keywords.  For example TypeType refers to
-// org.eclipse.edt.mof.egl.EGLType but the correct name is org.eclipse.edt.mof.egl.Type.
-// Either the proxiedEClass should be a string, or the MOF classes should be renamed.
-
 // Part types
 externalType TypeType type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLType
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Type"
 }
 end
 
 externalType Part type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.Part
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Part"
 }
 end
 
 externalType ClassPart extends Part type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLClass
+	proxiedEClassName = "org.eclipse.edt.mof.egl.EGLClass"
 }
 end
 
 externalType RecordPart extends ClassPart type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLRecord
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Record"
 }
 end
 
 externalType DelegatePart extends ClassPart type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLDelegate
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Delegate"
 }
 end
 
 externalType HandlerPart extends ClassPart type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLHandler
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Handler"
 }
 end
 
 externalType ProgramPart extends ClassPart type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLProgram
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Program"
 }
 end
 
 externalType LibraryPart extends ClassPart type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLLibrary
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Library"
 }
 end
 
 externalType InterfacePart extends ClassPart type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLInterface
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Interface"
 }
 end
 
 externalType ServicePart extends ClassPart type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLService
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Service"
 }
 end
 
 // Members
 externalType Member type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.Member
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Member"
 }
 end
 
 externalType FieldMbr extends Member type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLField
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Field"
 }
 end
 
 externalType FunctionMbr extends Member type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLFunction
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Function"
 }
 end
 
 externalType ConstructorMbr extends Member type EClassProxy {
-//KEYWORD	
-	proxiedEClass = org.eclipse.edt.mof.egl.EGLConstructor
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Constructor"
 }
 end
 
 externalType SequenceType type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.SequenceType
+	proxiedEClassName = "org.eclipse.edt.mof.egl.SequenceType"
 }
 end
 
 externalType FixedPrecisionType type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.FixedPrecisionType
+	proxiedEClassName = "org.eclipse.edt.mof.egl.FixedPrecisionType"
 }
 end
 
 externalType TimestampPatternType type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.TimestampType
+	proxiedEClassName = "org.eclipse.edt.mof.egl.TimestampType"
 }
 end
 
 externalType IntervalType type EClassProxy {
-	proxiedEClass = org.eclipse.edt.mof.egl.IntervalType
+	proxiedEClassName = "org.eclipse.edt.mof.egl.IntervalType"
 }
 end

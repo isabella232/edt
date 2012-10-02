@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.binding;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.NameType;
@@ -148,7 +149,7 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     	            return false; // Do not create the field binding if its type cannot be resolved
     	        }
     			
-    			EField field = createEField(structureItem, eType);
+    			final EField field = createEField(structureItem, eType);
     			if (definedNames.contains(NameUtile.getAsName(field.getName()))) {
     	    		problemRequestor.acceptProblem(
     	        			structureItem.getName(),
@@ -161,6 +162,7 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     			else {
     				definedNames.add(NameUtile.getAsName(field.getName()));
     				annotationType.getEFields().add(field);
+    				structureItem.getName().setElement(field);
     			}
     			
     			if (structureItem.hasSettingsBlock()) {
@@ -169,6 +171,19 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     	            SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, annotationType, lhScope,
     	                    dependencyRequestor, problemRequestor, compilerOptions);
     	            structureItem.getSettingsBlock().accept(blockCompletor);
+    	            //copy put the annotations from the settingsBlock into the metatData for the EField
+    	            structureItem.getSettingsBlock().accept(new DefaultASTVisitor() {
+    	            	public boolean visit(SettingsBlock settingsBlock) {
+    	            		return true;
+    	            	}
+						public boolean visit(AnnotationExpression annExpr) {
+							if (annExpr.resolveAnnotation() != null) {
+								field.getMetadataList().add(annExpr.resolveAnnotation());
+							}
+							return false;
+						}
+
+					});
     			}
 
     			    			    			

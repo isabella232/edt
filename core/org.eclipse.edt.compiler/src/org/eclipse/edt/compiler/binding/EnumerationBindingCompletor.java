@@ -100,6 +100,13 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 		enumerationField.getName().setElement(enumEntry);
 		enumEntry.setIsStatic(true);
 
+		if (enumerationField.hasSettingsBlock()) {
+			SettingsBlock settingsBlock = enumerationField.getSettingsBlock();
+	        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, enumEntry, enumerationBinding, enumEntry);
+	        SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, enumerationBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
+	        settingsBlock.accept(blockCompletor);
+	    }
+		
 		
 		if(fieldNames.contains(enumerationField.getName().getIdentifier())) {
     		problemRequestor.acceptProblem(

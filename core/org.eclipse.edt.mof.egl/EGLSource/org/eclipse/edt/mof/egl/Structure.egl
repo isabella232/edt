@@ -146,7 +146,9 @@ externalType ArrayType extends GenericType type MofClass
 end
 
 externalType EClassProxy extends EGLClass type MofClass
-	proxiedEClass EClass;
+	proxiedEClassName String;
+	
+	function getProxiedEClass() returns(EClass);
 end
 
 externalType Classifier extends NamedElement, EGLType type MofClass {isAbstract=yes}

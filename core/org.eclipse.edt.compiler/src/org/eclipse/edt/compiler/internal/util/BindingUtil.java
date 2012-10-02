@@ -166,12 +166,9 @@ public class BindingUtil {
 	
 	public static IRPartBinding createPartBinding(EObject obj) {
 		if (obj instanceof Part) {
-			setValid((Part) obj, false);
 			return new IRPartBinding((Part)obj);
 		}
 		
-		//TODO need to be able to handle mof type objects. We will simply create an ExternalType
-		//to represent the object
 		return null;
 	}
 	
@@ -226,6 +223,15 @@ public class BindingUtil {
 	}
 	
 	public static IPartBinding createPartBinding(int type, String pkgName, String name) {
+		IPartBinding partBinding = primCreatePartBinding(type, pkgName, name);
+		if (partBinding instanceof IRPartBinding) {
+			setValid(((IRPartBinding)partBinding).getIrPart(), false);
+		}
+		return partBinding;
+	}
+	
+	
+	private static IPartBinding primCreatePartBinding(int type, String pkgName, String name) {
 		Part part;
 		switch (type) {
         case ITypeBinding.FILE_BINDING:

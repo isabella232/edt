@@ -18,5 +18,5 @@ record EClassProxy type Stereotype {
 	targets = [ElementKind.ExternalTypePart],
 	@PartType{"org.eclipse.edt.mof.egl.EClassProxy"}
 }
-	proxiedEClass org.eclipse.edt.mof.egl.EGLType;
+	proxiedEClassName String;
 end

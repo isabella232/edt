@@ -14,10 +14,12 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.EnumerationField;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
@@ -138,29 +140,53 @@ class Egl2MofMember extends Egl2MofPart {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.StructureItem node) {
-		Member field = node.getName() == null ? node.resolveMember() : node.getName().resolveMember();
+		Object elem = node.getName().resolveElement();
 		// Do not create members that have invalid types!
-		if (field == null) {
+		if (elem == null) {
 			stack.push(null);
 			return false;
 		}
-		EObject obj;
+		EObject obj = null;
 		if (inMofContext) {
-			EField f = mof.createEField(true);
-			setUpMofTypedElement(f, field);
+			final EField f = mof.createEField(true);
+			if (elem instanceof EField) {
+				f.setIsNullable(((EField)elem).isNullable());
+				f.setEType(((EField)elem).getEType());
+				f.setName(((EField)elem).getCaseSensitiveName());
+				
+				//Handle annotations (metatData) for the EField
+				if (node.hasSettingsBlock()) {
+					DefaultASTVisitor visitor = new DefaultASTVisitor() {
+						public boolean visit(SettingsBlock settingsBlock) {
+							return true;
+						}
+						public boolean visit(AnnotationExpression annExpr) {
+							if (annExpr.resolveAnnotation() != null) {
+								f.getMetadataList().add((EMetadataObject)mofValueFrom(annExpr.resolveAnnotation()));
+							}
+							return false;
+						}
+					};
+					node.getSettingsBlock().accept(visitor);
+				}
+			}
+			else {
+				setUpMofTypedElement(f, (Field)elem);
+				setMetadata((Field)elem, f);
+			}
 			setInitialValue(node, f);
-//FIXME			setMetadata(field, f);
 			obj = f;
 		}
 		else {
 			//TODO must handle structure items that type to a struct record
+			Field field = (Field)elem;
 			EClass fieldClass = mofMemberTypeFor(field);
 			Field f = (Field)fieldClass.newInstance();
 			setUpEglTypedElement(f, field);
 			addInitializers(node, f, node.getType());
 			obj = f;
 		}
-		eObjects.put(field, obj);
+		eObjects.put(elem, obj);
 		setElementInformation(node, obj);
 		stack.push(obj);
 		return false;
@@ -194,10 +220,6 @@ class Egl2MofMember extends Egl2MofPart {
 				func = (Function)function.getEClass().newInstance();
 			}
 			
-			if (func instanceof Operation) {
-				Annotation ann = function.getType().getAnnotation("egl.lang.reflect.mof.Operation");
-				((Operation)func).setOpSymbol((String)ann.getValue("opSymbol"));
-			}
 			setUpEglTypedElement(func, function);
 			func.setIsStatic(function.isStatic());
 					
@@ -343,7 +365,7 @@ class Egl2MofMember extends Egl2MofPart {
 				entry.setName(binding.getCaseSensitiveName());
 				entry.setValue(value);
 				eObjects.put(binding, entry);
-				createAnnotations(binding, (EModelElement)entry);
+				createAnnotations(binding, (Element)entry);
 				setElementInformation(enumField, entry);
 				stack.push(entry);
 			}

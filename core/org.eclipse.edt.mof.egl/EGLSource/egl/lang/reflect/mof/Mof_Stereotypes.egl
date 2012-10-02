@@ -56,14 +56,6 @@ Record MofName type Annotation {
 	value string;
 end
 
-record Operation type Annotation {
-	targets=[ElementKind.FunctionMbr],
-	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
-	@IsEMetadataType
-}
-	opSymbol string;
-end
-
 Record IsArray type Annotation {
 	targets = [ElementKind.FieldMbr], 
 	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType

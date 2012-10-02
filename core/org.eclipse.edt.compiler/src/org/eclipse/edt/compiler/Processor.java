@@ -108,6 +108,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 		        }
 		        	        
 		        environment.save(part, true);
+		        		        
 			} catch (RuntimeException e) {
 				problemRequestor.acceptProblem(((Part)partAST).getName(), IProblemRequestor.COMPILATION_EXCEPTION, new String[]{((Part)partAST).getName().getCanonicalName()});
 			}

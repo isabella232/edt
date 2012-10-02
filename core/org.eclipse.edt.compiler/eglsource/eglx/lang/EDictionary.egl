@@ -13,7 +13,7 @@ package eglx.lang;
 
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.Dynamic;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
 /**
  * An EDictionary, the class for EGL's dictionary type, stores named values.
