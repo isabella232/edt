@@ -106,17 +106,21 @@ is <samp class="ph codeph">myPkg.test</samp>.</p>
 <li class="li">The name of the widget class (for example, <span class="ph synph"><span class="keyword kwd">Button</span></span>);
 that class name is the name of the external type you will create.</li>
 
-<li class="li">The package name of the EGL external type that defines the parent
-widget; however, if that parent type is widget (the most elemental
-choice), specify <span class="ph synph"><span class="keyword kwd">egl.ui.rui</span></span>.</li>
+<li class="li">The package name of the EGL external type for the parent widget.
+You might be extending an external type of your own; but in most cases,
+the parent type is Widget, which is provided for you and is the basis
+of other EGL external-type widgets. If the parent type is Widget,
+the package name is <span class="ph synph"><span class="keyword kwd">eglx.ui.rui</span></span>.</li>
 
-<li class="li">The name of the parent widget class (for example, <span class="ph synph"><span class="keyword kwd">Label</span></span>).</li>
+<li class="li">The name of the EGL external type (for example, <span class="ph synph"><span class="keyword kwd">Widget</span></span>)
+for the parent widget.</li>
 
-<li class="li">The HTML element type (for example, <span class="ph synph"><span class="keyword kwd">button</span></span>).</li>
+<li class="li">The tag name (for example, <span class="ph synph"><span class="keyword kwd">button</span></span>) of
+the DOM element for the new widget.</li>
 
 </ul>
 <div class="p">Here is the example: <pre class="pre codeblock">egl.defineWidget( 'egl.rui.widgets', 'Button',
-                  'egl.rui.widgets', 'Label',
+                  'egl.rui.widgets', 'Widget',
                   'button', { } );</pre>
 </div>
 </li>

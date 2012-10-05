@@ -43,7 +43,8 @@ are as follows:</p>
 <div class="p"><dl class="dl parml">
 <dt class="dt pt dlterm">serviceName string?</dt>
 
-<dd class="dd pd">Specify the name of the Service type. </dd>
+<dd class="dd pd">Specify the name of the Service type; but only if you use a proxy
+function to invoke a dedicated service. The default is null.</dd>
 
 
 <dt class="dt pt dlterm">requestCharSet string</dt>
@@ -54,7 +55,8 @@ is "UTF-8".</dd>
 
 <dt class="dt pt dlterm">requestContentType string?</dt>
 
-<dd class="dd pd">The content type on the request message.</dd>
+<dd class="dd pd">The content type on the request message. The default value is
+"application/json".</dd>
 
 
 <dt class="dt pt dlterm">responseCharSet string?</dt>
@@ -74,9 +76,9 @@ determines how to convert bytes to a string.</dd>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00300__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="50%" id="d129011e117">Target</th>
+<th class="entry" valign="bottom" width="50%" id="d129011e118">Target</th>
 
-<th class="entry" valign="bottom" width="50%" id="d129011e120">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d129011e121">Issue</th>
 
 </tr>
 
@@ -85,17 +87,17 @@ determines how to convert bytes to a string.</dd>
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00300__compat_java" class="row">
-<td class="entry" valign="top" width="50%" headers="d129011e117 ">Java™</td>
+<td class="entry" valign="top" width="50%" headers="d129011e118 ">Java™</td>
 
-<td class="entry" valign="top" width="50%" headers="d129011e120 ">Service access is not supported.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d129011e121 ">Service access is not supported.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00300__compat_javascript" class="row">
-<td class="entry" valign="top" width="50%" headers="d129011e117 ">JavaScript</td>
+<td class="entry" valign="top" width="50%" headers="d129011e118 ">JavaScript</td>
 
-<td class="entry" valign="top" width="50%" headers="d129011e120 ">No issues.<p class="p compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d129011e121 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
