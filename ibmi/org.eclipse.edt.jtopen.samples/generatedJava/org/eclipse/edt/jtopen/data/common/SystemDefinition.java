@@ -1,9 +1,9 @@
 package org.eclipse.edt.jtopen.data.common;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="SystemDefinition")
 public class SystemDefinition extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {

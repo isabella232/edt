@@ -77,7 +77,9 @@ import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.lookup.ProxyElement;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.serialization.ProxyEClass;
@@ -189,6 +191,13 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	protected Annotation getAnnotation(Element binding, String typeName) {
 		if (binding != null) {
 			return binding.getAnnotation(typeName);
+		}
+		return null;
+	}
+	
+	protected EMetadataObject getEMetadataObject(EModelElement elem, String typeName) {
+		if (elem != null) {
+			return elem.getMetadata(typeName);
 		}
 		return null;
 	}
@@ -468,18 +477,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	private boolean isSpecialNamedElementCase(Object o, EType type) {
 		if (o instanceof String && type instanceof EClass) {
-			if (((EClass)type).isSubClassOf(factory.getNamedElementEClass())) {
+			if (isSubClassOf((EClass)type, factory.getNamedElementEClass())) {
 				return true;
-			}
-			
-			//more special processing to handle the case where the system mof parts are being compiled. In this case, there can be
-			//an object identity problem with the type object retrieved from the field, and the types returned by the environment
-			EObject newType = getMofSerializable(type.getMofSerializationKey());
-			if (newType instanceof EClass) {
-				if (((EClass)newType).isSubClassOf(factory.getNamedElementEClass())) {
-					return true;
-				}
-			}
+			}			
 		}
 		return false;
 	}
@@ -503,7 +503,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		for (EField field : getFieldsBelowEClass(eClass)) {
 			
 			EField reflectField = reflectTypeBinding.getEClass().getEField(field.getName());
-			if ( reflectField != null) {
+			if ( reflectField != null && !(reflectField.getCaseSensitiveName().equals("annotations"))) {
 				Object obj = mofValueFrom(reflectTypeBinding.eGet(field));
 				if (obj != null) {
 					if (obj instanceof List)
@@ -564,7 +564,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 						}
 					else {
 						EClassifier type = (EClassifier)field.getEType();
-						if ((obj instanceof String) && type instanceof EClass && ((EClass)type).isSubClassOf(mof.getENamedElementClass())) {
+						if ((obj instanceof String) && type instanceof EClass && isSubClassOf((EClass)type, mof.getENamedElementClass())) {
 							obj = convertStringValueToNamedElementType((String)obj, (EClass)type);
 						}
 						else if (obj instanceof PartName) {
@@ -780,7 +780,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return mbrType;
 	}
 	
-	private EObject mofTypeFromTypedElement(Element element) {
+	protected EObject mofTypeFromTypedElement(Element element) {
 		Type type = null;
 		if (element instanceof Function) { 
 			type = ((Function)element).getType();
@@ -788,10 +788,11 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		else if (element instanceof Constructor) {
 			type = (Part)((Constructor)element).getContainer();
 		}
-		else {
-			if (element instanceof Type) {
+		else if (element instanceof TypedElement) {
+			type = ((TypedElement)element).getType();
+		}
+		else if (element instanceof Type) {
 				type = (Type)element; 
-			}
 		}
 		if (type != null)
 			return mofTypeFor(type);
@@ -903,8 +904,49 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return eType;*/
 	}
 
+	private String getMofDataTypeSignatureFor(Type type) {
+		if (type == null) {
+			return null;
+		}
+		Classifier classifier = type.getClassifier();
+		if (classifier == null) {
+			return null;
+		}
+		
+		//handle any, string, boolean, int, float, decimal
+		if (classifier.equals(TypeUtils.Type_ANY)) {
+			return MofConversion.Type_JavaObject;
+		}
+		if (classifier.equals(TypeUtils.Type_BOOLEAN)) {
+			return MofConversion.Type_EBoolean;
+		}
+		if (classifier.equals(TypeUtils.Type_STRING)) {
+			return MofConversion.Type_EString;
+		}
+		if (classifier.equals(TypeUtils.Type_INT) || type.equals(TypeUtils.Type_SMALLINT) || type.equals(TypeUtils.Type_BIGINT)) {
+			return MofConversion.Type_EInteger;
+		}
+		if (classifier.equals(TypeUtils.Type_FLOAT) || type.equals(TypeUtils.Type_SMALLFLOAT)) {
+			return MofConversion.Type_EFloat;
+		}
+		if (classifier.equals(TypeUtils.Type_DECIMAL)) {
+			return MofConversion.Type_EDecimal;
+		}
+		
+		return null;
+		
+	}
 	protected String mofTypeSignatureFor(Type type) {
 		String typeSignature;
+		
+		//handle mof dataTypes
+		if (inMofContext) {
+			typeSignature = getMofDataTypeSignatureFor(type);
+			if (typeSignature != null) {
+				return typeSignature;
+			}
+		}
+		
 		if (type instanceof AnnotationType) {
 			if ((inMofContext &&  !inAnnotationTypeContext) || isEMetadataType(type) ) {
 				typeSignature = ((AnnotationType)type).getETypeSignature();
@@ -935,6 +977,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				String name = (String)getFieldValue(ann, "name");
 				if (name == null) name = ((Part)type).getCaseSensitiveName();
 				typeSignature = ((Part)type).getCaseSensitivePackageName() + "." + name;
+				if (!isMofReflectType((Part)type) && isEGLReflectType((Part)type)) {
+					typeSignature = EGL_KeyScheme + typeSignature; 
+				}
 			}
 			else	
 				typeSignature = type.getMofSerializationKey();
@@ -1159,7 +1204,12 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (!isReflectType) {
 			isReflectType = getAnnotation(typeBinding, "egl.lang.reflect.PartType") != null;
 			if (!isReflectType ) {
-				isReflectType = getAnnotation(((Part)typeBinding).getSubType(), "egl.lang.reflect.PartType") != null;
+				Part part = (Part) typeBinding;
+				if (part.getSubType() != null) {
+					isReflectType = 
+							(getAnnotation((StereotypeType)part.getSubType().getEClass(), "egl.lang.reflect.PartType") != null) ||
+							(getEMetadataObject((StereotypeType)part.getSubType().getEClass(), "PartType") != null);
+				}
 			}
 		}
 		return isReflectType;
@@ -1205,7 +1255,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	protected boolean isMofReflectType(Part typeBinding) {
 		EClass reflectedType = getReflectedType(typeBinding);
 		if (reflectedType != null) {
-			return reflectedType.isSubClassOf(MofFactory.INSTANCE.getEModelElementClass());
+			return isSubClassOf(reflectedType, MofFactory.INSTANCE.getEModelElementClass());
 		}
 		// TODO: Annotation and Stereotype themselves are not represented as ReflectTypes
 		// because their definitions are still part of the old IR model in the
@@ -1221,7 +1271,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	private boolean isEGLReflectType(Part typeBinding) {
 		EClass reflectedType = getReflectedType(typeBinding);
 		if (reflectedType != null) {
-			return reflectedType.isSubClassOf(IrFactory.INSTANCE.getElementEClass());
+			return isSubClassOf(reflectedType, IrFactory.INSTANCE.getElementEClass());
 		}
 		// TODO: Annotation and Stereotype themselves are not represented as ReflectTypes
 		// because their definitions are still part of the old IR model in the
@@ -1252,15 +1302,18 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	// Assumes the record is a Stereotype defintiion
 	private String getReflectedTypeSignature(Part type) {
 		Annotation subtype = type.getSubType();
-		Annotation reflectType = null;
 		if (subtype != null) {
-			reflectType = getAnnotation((Element)subtype.getEClass(), "egl.lang.reflect.PartType");
+			Annotation ann = getAnnotation((AnnotationType)subtype.getEClass(), "egl.lang.reflect.PartType");
+			if (ann != null) {
+				return (String)ann.getValue();
+			}
+			EMetadataObject meta = getEMetadataObject((AnnotationType)subtype.getEClass(), "PartType");
+			if (meta != null) {
+				return (String) meta.eGet("value");
+			}
 		}
 		
-		if (reflectType != null) {
-			return (String)reflectType.getValue();
-		}
-		else if (isEMetadataType(type)) {
+		if (isEMetadataType(type)) {
 			return Type_EMetadataType;
 		}
 		else if (type instanceof StereotypeType) {
@@ -1406,5 +1459,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 
 	
+	private boolean isSubClassOf(EClass child, EClass parent) {
+		return BindingUtil.isSubClassOf(child, parent);
+	}
 
 }

@@ -86,9 +86,12 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatemen
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredRecord;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class FunctionValidator extends AbstractASTVisitor {
@@ -234,16 +237,29 @@ public class FunctionValidator extends AbstractASTVisitor {
         }
 	}
 	
+	private boolean hasSupertypeNotAnyRecord(StructPart part) {
+
+		StructPart anyRec = (StructPart)BindingUtil.findPart(NameUtile.getAsName(MofConversion.EGLX_lang_package), NameUtile.getAsName("AnyRecord"));
+
+		for (StructPart superType : part.getSuperTypes()) {
+			if (!superType.equals(anyRec)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 	private void checkParmNotEmptyRecord(FunctionParameter functionParameter, org.eclipse.edt.mof.egl.Type parmType) {
 		if (parmType instanceof Part) {
 			boolean isEmptyRecord = false;
 			
 			int partType = BindingUtil.getPartTypeConstant((Part)parmType);
 			if (partType == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
-				isEmptyRecord = ((Record)parmType).getFields().isEmpty();
+				isEmptyRecord = ((Record)parmType).getFields().isEmpty() && !hasSupertypeNotAnyRecord((Record)parmType);
 			}
 			else if (partType == ITypeBinding.FIXED_RECORD_BINDING) {
-				isEmptyRecord = ((StructuredRecord)parmType).getStructuredFields().isEmpty();
+				isEmptyRecord = ((StructuredRecord)parmType).getStructuredFields().isEmpty() && !hasSupertypeNotAnyRecord((StructuredRecord)parmType);
 			}
 			
 			if (isEmptyRecord) {

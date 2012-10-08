@@ -24,8 +24,10 @@ import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.TernaryExpression;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -68,6 +70,9 @@ import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 public class BindingUtil {
@@ -1151,4 +1156,53 @@ public class BindingUtil {
 		}
 		return null;
 	}
+	
+	public static EObject getMofClassProxyFor(Classifier obj) {
+		//check for mof class proxy
+		Annotation mofClassAnn = obj.getAnnotation("egl.lang.reflect.mof.mofclass");;
+		if (mofClassAnn != null) {
+			String name =  (String)mofClassAnn.getValue("name");
+			String pkgName = (String)mofClassAnn.getValue("packageName");
+			if (name == null || name.length() == 0) {
+				name = obj.getCaseSensitiveName();
+			}
+			if (pkgName == null || pkgName.length() == 0) {
+				pkgName = obj.getCaseSensitivePackageName();
+			}
+			
+			String fullName;
+			if (pkgName.length() == 0) {
+				fullName = name;
+			}
+			else {
+				fullName = pkgName + "." + name;
+			}
+			
+			try {
+				return Environment.getCurrentEnv().find(fullName);
+			} catch (MofObjectNotFoundException e) {
+			} catch (DeserializationException e) {
+			}
+		}
+		return null;
+	}
+	
+	public static boolean isSubClassOf(EClass child, EClass parent) {
+		if (!child.getSuperTypes().isEmpty()) {
+			for (EClass superType : child.getSuperTypes()) {
+				if (superType.getETypeSignature().equals(parent.getETypeSignature())) {
+					return true;
+				}
+			}
+			for (EClass superType : child.getSuperTypes()) {
+				if (isSubClassOf(superType, parent)) return true;
+			}
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
+	
+
 }

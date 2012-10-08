@@ -1,14 +1,14 @@
 package org.eclipse.edt.jtopen.connection.persistent;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import eglx.jtopen.IBMiConnection;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
 import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import java.util.List;
-import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import java.lang.Object;
+import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import eglx.jtopen.IBMiConnection;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="SessionConnections")
 public class SessionConnections extends ExecutableBase {

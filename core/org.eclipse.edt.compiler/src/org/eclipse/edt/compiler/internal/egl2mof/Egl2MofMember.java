@@ -375,8 +375,11 @@ class Egl2MofMember extends Egl2MofPart {
 
 	private void setUpMofTypedElement(EMember obj, Member edtObj) {
 		
-		if (edtObj.getType() instanceof EType) {
-			obj.setEType(edtObj.getType().getEClass());
+		EObject eObj = mofTypeFromTypedElement(edtObj);
+
+		if (eObj instanceof EType) {
+			EType type = (EType)eObj;
+			obj.setEType(type);
 			obj.setIsNullable(edtObj.isNullable());
 			if (obj instanceof EField) {
 				Annotation ann = this.getAnnotation(edtObj, "egl.lang.reflect.mof.transient");
@@ -756,6 +759,9 @@ class Egl2MofMember extends Egl2MofPart {
 				if (!(nameExpr.resolveType() instanceof Annotation)) {
 					return true;
 				}
+			}
+			else if (expr instanceof SetValuesExpression) {
+				return !(((SetValuesExpression)expr).getExpression() instanceof AnnotationExpression);
 			}
 			else if (!(expr instanceof AnnotationExpression)) {
 				return true;

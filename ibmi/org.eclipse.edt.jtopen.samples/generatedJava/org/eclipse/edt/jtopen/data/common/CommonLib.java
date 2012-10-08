@@ -1,16 +1,16 @@
 package org.eclipse.edt.jtopen.data.common;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
 import org.eclipse.edt.jtopen.data.common.SystemDefinition;
+import com.ibm.as400.access.AS400;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import java.lang.Object;
+import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
 import eglx.jtopen.JTOpenConnections;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import com.ibm.as400.access.AS400;
-import eglx.lang.AnyException;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import java.lang.Object;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="CommonLib")
 public class CommonLib extends ExecutableBase {
