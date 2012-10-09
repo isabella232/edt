@@ -117,9 +117,9 @@ public class JavaScriptGenerator extends Generator {
 	}
 
 	private void makeWriter() {
-		out = (Boolean.TRUE
-			== (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
-		) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
+		out = Boolean.TRUE.equals(context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)) 
+				? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) 
+				: new TabbedWriter(new StringWriter());
 	}
 
 	public void dumpErrorMessages() {
