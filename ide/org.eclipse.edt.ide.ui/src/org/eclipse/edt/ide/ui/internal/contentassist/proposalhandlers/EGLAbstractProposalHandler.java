@@ -529,20 +529,12 @@ public abstract class EGLAbstractProposalHandler {
 	protected String getPartTypeString(ITypeBinding typeBinding) {
 		if (typeBinding != null) {
 			switch(typeBinding.getKind()) {
-				case ITypeBinding.PRIMITIVE_TYPE_BINDING :
-					return UINlsStrings.CAProposal_Primitive;
-				case ITypeBinding.FIXED_RECORD_BINDING :
 				case ITypeBinding.FLEXIBLE_RECORD_BINDING :
-//					if(typeBinding.getAnnotation(EGLUICONSOLE, IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM) != null) {
-//						return IEGLConstants.MIXED_CONSOLEFIELD_STRING;
-//					}
 					return IEGLConstants.KEYWORD_RECORD;
 				case ITypeBinding.LIBRARY_BINDING :
 					return IEGLConstants.KEYWORD_LIBRARY;
 				case ITypeBinding.ARRAY_TYPE_BINDING :
 					return UINlsStrings.CAProposal_Array;
-				case ITypeBinding.ARRAYDICTIONARY_BINDING :
-					return IEGLConstants.MIXED_ARRAYDICTIONARY_STRING;
 				case ITypeBinding.DICTIONARY_BINDING :
 					return IEGLConstants.MIXED_DICTIONARY_STRING;
 				case ITypeBinding.SERVICE_BINDING :

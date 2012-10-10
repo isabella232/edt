@@ -20,9 +20,7 @@ public interface ITypeBinding extends IBinding {
     int NULL_BINDING = 0;
     int NOT_FOUND_BINDING = 1;
     int ARRAY_TYPE_BINDING = 2;
-    int PRIMITIVE_TYPE_BINDING = 3;
     int DYNAMIC_BINDING = 4;
-    int FIXED_RECORD_BINDING = 6;
     int FLEXIBLE_RECORD_BINDING = 7;
     int HANDLER_BINDING = 10;
     int LIBRARY_BINDING = 11;
@@ -35,12 +33,9 @@ public interface ITypeBinding extends IBinding {
     int ENUMERATION_BINDING = 19;
     int FUNCTION_BINDING = 20;
     int DICTIONARY_BINDING = 21;
-    int ARRAYDICTIONARY_BINDING = 22;
     int NIL_BINDING = 25;
-    int MULTIPLY_OCCURING_ITEM = 26;
     int DELEGATE_BINDING = 27;
     int EXTERNALTYPE_BINDING = 28;
-    int FOREIGNLANGUAGETYPE_BINDING = 29;
     int CLASS_BINDING = 30;
     int STEREOTYPE_BINDING = 31;
     

@@ -198,11 +198,7 @@ public abstract class AbstractFileInfoCreator {
 				}
 
 				public boolean visit(Record record) {
-					if(record.isFlexible()){
-						processPart(reader, record, ITypeBinding.FLEXIBLE_RECORD_BINDING, record.getOffset(), record.getLength());
-					}else{
-						processPart(reader, record, ITypeBinding.FIXED_RECORD_BINDING, record.getOffset(), record.getLength());
-					}
+					processPart(reader, record, ITypeBinding.FLEXIBLE_RECORD_BINDING, record.getOffset(), record.getLength());
 					return false;
 				}
 	

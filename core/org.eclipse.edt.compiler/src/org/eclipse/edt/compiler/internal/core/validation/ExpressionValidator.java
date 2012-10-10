@@ -33,6 +33,7 @@ import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
+import org.eclipse.edt.compiler.core.ast.InExpression;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.IsAExpression;
 import org.eclipse.edt.compiler.core.ast.IsNotExpression;
@@ -678,4 +679,10 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			}
 		}
 	}
+	
+	@Override
+	public void endVisit(InExpression inExpression) {
+		//TODO
+		
+	};
 }

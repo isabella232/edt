@@ -64,7 +64,6 @@ import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -183,9 +182,6 @@ public class BindingUtil {
 		if (part instanceof ExternalType) {
 			return ITypeBinding.EXTERNALTYPE_BINDING;
 		}
-		if (part instanceof StructuredRecord) {
-			return ITypeBinding.FIXED_RECORD_BINDING;
-		}
 		if (part instanceof StereotypeType) {
 			return ITypeBinding.STEREOTYPE_BINDING;
 		}
@@ -236,9 +232,6 @@ public class BindingUtil {
     		return createPartBinding(part);
         case ITypeBinding.EXTERNALTYPE_BINDING:
         	part = createExternalType(pkgName, name);
-        	return createPartBinding(part);
-        case ITypeBinding.FIXED_RECORD_BINDING:
-        	part = createStructuredRecord(pkgName, name);
         	return createPartBinding(part);
         case ITypeBinding.FLEXIBLE_RECORD_BINDING:
         	part = createRecord(pkgName, name);
@@ -353,13 +346,6 @@ public class BindingUtil {
 		return rcd;		
 	}
 
-	private static StructuredRecord createStructuredRecord(String pkgName, String name) {
-		StructuredRecord rcd = IrFactory.INSTANCE.createStructuredRecord();
-		rcd.setName(name);
-		rcd.setPackageName(pkgName);
-		return rcd;		
-	}
-	
 	private static Delegate createDelegate(String pkgName, String name) {
 		Delegate del = IrFactory.INSTANCE.createDelegate();
 		del.setName(name);

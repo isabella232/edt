@@ -88,7 +88,6 @@ import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
-import org.eclipse.edt.mof.egl.StructuredRecord;
 
 
 public class FunctionValidator extends AbstractASTVisitor {
@@ -241,9 +240,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 			int partType = BindingUtil.getPartTypeConstant((Part)parmType);
 			if (partType == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
 				isEmptyRecord = ((Record)parmType).getFields().isEmpty();
-			}
-			else if (partType == ITypeBinding.FIXED_RECORD_BINDING) {
-				isEmptyRecord = ((StructuredRecord)parmType).getStructuredFields().isEmpty();
 			}
 			
 			if (isEmptyRecord) {

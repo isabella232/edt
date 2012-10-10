@@ -29,7 +29,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
-import org.eclipse.edt.compiler.internal.core.lookup.RecordScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.mof.EClassifier;

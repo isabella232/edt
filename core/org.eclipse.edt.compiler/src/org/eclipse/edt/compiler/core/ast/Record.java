@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -36,10 +35,12 @@ public class Record extends Part{
 		}
 	}
 	
+	@Override
 	public boolean hasSubType() {
 		return partSubTypeOpt != null;
 	}
 	
+	@Override
 	public Name getSubType() {
 		return partSubTypeOpt;
 	}
@@ -63,11 +64,8 @@ public class Record extends Part{
 		}
 		return false;
 	}
-
-	public boolean isFlexible() {
-		return true;
-	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -78,18 +76,20 @@ public class Record extends Part{
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		Name newPartSubTypeOpt = partSubTypeOpt != null ? (Name)partSubTypeOpt.clone() : null;
 		
 		return new Record(new Boolean(isPrivate), (SimpleName)name.clone(), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
 	public String getPartTypeName() {
 		return IEGLConstants.KEYWORD_RECORD;
 	}
 	
+	@Override
 	public int getPartType() {
 		return RECORD;
 	}
-
 }
