@@ -109,18 +109,7 @@ public class StructureItem extends Node {
 		}
 		visitor.endVisit(this);
 	}
-	
-	public Member resolveMember() {
-		if(member != null) {
-			return member;
-		}
-		return getName().resolveMember();
-    }
-    
-    public void setMember(Member member) {
-        this.member = member;
-    }
-    
+	       
 	public boolean isNullable() {
 		return isNullable;
 	}

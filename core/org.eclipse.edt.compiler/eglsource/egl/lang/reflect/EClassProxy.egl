@@ -12,11 +12,10 @@
 package egl.lang.reflect;
 
 import egl.lang.reflect.PartType;
-import org.eclipse.edt.mof.egl.Stereotype;
 
 record EClassProxy type Stereotype {
 	targets = [ElementKind.ExternalTypePart],
 	@PartType{"org.eclipse.edt.mof.egl.EClassProxy"}
 }
-	proxiedEClass org.eclipse.edt.mof.egl.EGLType;
+	proxiedEClassName String;
 end

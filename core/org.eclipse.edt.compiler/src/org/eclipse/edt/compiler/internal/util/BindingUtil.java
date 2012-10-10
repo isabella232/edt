@@ -24,8 +24,11 @@ import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.TernaryExpression;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.EType;
+import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -35,6 +38,7 @@ import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.EClassProxy;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
@@ -67,6 +71,9 @@ import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 public class BindingUtil {
@@ -166,12 +173,9 @@ public class BindingUtil {
 	
 	public static IRPartBinding createPartBinding(EObject obj) {
 		if (obj instanceof Part) {
-			setValid((Part) obj, false);
 			return new IRPartBinding((Part)obj);
 		}
 		
-		//TODO need to be able to handle mof type objects. We will simply create an ExternalType
-		//to represent the object
 		return null;
 	}
 	
@@ -223,6 +227,15 @@ public class BindingUtil {
 	}
 	
 	public static IPartBinding createPartBinding(int type, String pkgName, String name) {
+		IPartBinding partBinding = primCreatePartBinding(type, pkgName, name);
+		if (partBinding instanceof IRPartBinding) {
+			setValid(((IRPartBinding)partBinding).getIrPart(), false);
+		}
+		return partBinding;
+	}
+	
+	
+	private static IPartBinding primCreatePartBinding(int type, String pkgName, String name) {
 		Part part;
 		switch (type) {
         case ITypeBinding.FILE_BINDING:
@@ -1131,4 +1144,82 @@ public class BindingUtil {
 		}
 		return null;
 	}
+	
+	public static Annotation getAnnotationWithSimpleName(Element obj, String simpleName) {
+		for (Annotation ann : obj.getAnnotations()) {
+			if (ann.getEClass().getName().equalsIgnoreCase(simpleName)) {
+				return ann;
+			}
+		}
+		return null;
+	}
+	
+	public static EObject getMofClassProxyFor(Classifier obj) {
+		//check for mof class proxy
+		Annotation mofClassAnn = getAnnotationWithSimpleName(obj, "MofClass");
+		if (mofClassAnn != null) {
+			String name =  (String)mofClassAnn.getValue("name");
+			String pkgName = (String)mofClassAnn.getValue("packageName");
+			if (name == null || name.length() == 0) {
+				name = obj.getCaseSensitiveName();
+			}
+			if (pkgName == null || pkgName.length() == 0) {
+				pkgName = obj.getCaseSensitivePackageName();
+			}
+			
+			String fullName;
+			if (pkgName.length() == 0) {
+				fullName = name;
+			}
+			else {
+				fullName = pkgName + "." + name;
+			}
+			
+			try {
+				return Environment.getCurrentEnv().find(fullName);
+			} catch (MofObjectNotFoundException e) {
+			} catch (DeserializationException e) {
+			}
+		}
+		return null;
+	}
+	
+	public static boolean isSubClassOf(EClass child, EClass parent) {
+		if (!child.getSuperTypes().isEmpty()) {
+			for (EClass superType : child.getSuperTypes()) {
+				if (superType.getETypeSignature().equals(parent.getETypeSignature())) {
+					return true;
+				}
+			}
+			for (EClass superType : child.getSuperTypes()) {
+				if (isSubClassOf(superType, parent)) return true;
+			}
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public static EType getETypeFromProxy(Element elem) {
+		//handle proxy types
+		if (elem instanceof EClassProxy) {
+			return ((EClassProxy)elem).getProxiedEClass();
+		}
+		
+		Annotation ann = elem.getAnnotation("egl.lang.reflect.EClassProxy");
+		if (ann != null) {
+			String key = (String)ann.getValue();
+			try {
+				EObject eobj = Environment.getCurrentEnv().find(key);
+				if (eobj instanceof EType) {
+					return (EType) eobj;
+				}
+			} catch (MofObjectNotFoundException e) {
+			} catch (DeserializationException e) {
+			}
+		}
+		return null;
+	}
+
 }

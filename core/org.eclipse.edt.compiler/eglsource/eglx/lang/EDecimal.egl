@@ -13,9 +13,9 @@ package eglx.lang;
 
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.ParameterizableType;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
-import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import egl.lang.reflect.FixedPrecisionType;
 
 /**
  * EDecimal defines the EGL decimal type.

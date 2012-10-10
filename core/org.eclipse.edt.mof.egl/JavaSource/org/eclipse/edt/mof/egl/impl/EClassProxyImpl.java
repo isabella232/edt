@@ -13,10 +13,13 @@ package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.EClassProxy;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 
 public class EClassProxyImpl extends EGLClassImpl implements EClassProxy {
-	private static int Slot_proxiedEClass=0;
+	private static int Slot_proxiedEClassName=0;
 	private static int totalSlots = 1;
 	
 	public static int totalSlots() {
@@ -25,16 +28,31 @@ public class EClassProxyImpl extends EGLClassImpl implements EClassProxy {
 	
 	static {
 		int offset = EGLClassImpl.totalSlots();
-		Slot_proxiedEClass += offset;
-	}
-	@Override
-	public EClass getProxiedEClass() {
-		return (EClass)slotGet(Slot_proxiedEClass);
+		Slot_proxiedEClassName += offset;
 	}
 	
+	
 	@Override
-	public void setProxiedEClass(EClass value) {
-		slotSet(Slot_proxiedEClass, value);
+	public String getProxiedEClassName() {
+		return (String)slotGet(Slot_proxiedEClassName);
+	}
+
+	@Override
+	public EClass getProxiedEClass() {
+		String name = getProxiedEClassName();
+		if (name != null && name.length() > 0) {
+			try {
+				return (EClass)Environment.getCurrentEnv().find(name);
+			} catch (MofObjectNotFoundException e) {
+			} catch (DeserializationException e) {
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void setProxiedEClassName(String value) {
+		slotSet(Slot_proxiedEClassName, value);
 	}
 	
 }

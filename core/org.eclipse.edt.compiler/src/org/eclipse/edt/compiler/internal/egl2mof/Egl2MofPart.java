@@ -96,10 +96,8 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ExternalType node) {
 		Part partBinding = (Part)node.getName().resolveType();
-		inMofProxyContext = isMofProxy(partBinding);
-		inEMetadataTypeContext = isEMetadataType(partBinding);
-		inAnnotationTypeContext = partBinding instanceof Annotation || partBinding instanceof StereotypeType;
-		inMofContext = isMofReflectType(partBinding) || inEMetadataTypeContext;
+		setFlags(partBinding);
+		
 		MofSerializable part = handleVisitPart(node);
 		handleContents(node, part);
 		if (part instanceof EClass) {
@@ -156,6 +154,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Interface interfaceNode) {
 		
+		setFlags((Part)interfaceNode.getName().resolveType());
 		org.eclipse.edt.mof.egl.Interface part = (org.eclipse.edt.mof.egl.Interface)handleVisitPart(interfaceNode);
 		handleContents(interfaceNode, part);
 		
@@ -278,6 +277,8 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	}
 	
 	private MofSerializable defaultHandleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
+		setFlags((Part)node.getName().resolveType());
+		
 		MofSerializable part = handleVisitPart(node);
 		handleContents(node, part);
 		handleEndVisitPart(node, part);
@@ -285,21 +286,31 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		return part;
 	}
 	
-	private MofSerializable handleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
-		Part partBinding = (Part)node.getName().resolveType();
-		
+	private void setFlags(Part partBinding) {
 		// EGL Enumerations are treated as straight Mof EEnum types
 		inMofProxyContext = isMofProxy(partBinding);
 		inEMetadataTypeContext = isEMetadataType(partBinding);
-		inAnnotationTypeContext = partBinding instanceof Annotation || partBinding instanceof StereotypeType;
-		inMofContext = isMofReflectType(partBinding) || inEMetadataTypeContext;
-		EClass typeClass = partBinding.getEClass();
+		inAnnotationTypeContext = (partBinding instanceof AnnotationType) && !inEMetadataTypeContext;
+		inMofContext = inAnnotationTypeContext || isMofReflectType(partBinding) || inEMetadataTypeContext;
+	}
+	private MofSerializable handleVisitPart(org.eclipse.edt.compiler.core.ast.Part node) {
+		Part partBinding = (Part)node.getName().resolveType();
+		
+
+		EClass typeClass = (EClass)getMofSerializable(mofPartTypeSignatureFor(node));
 		MofSerializable eObj = (MofSerializable)typeClass.newInstance();
 		partProcessingStack.push(eObj);
 		// Use dynamic interface to handle both MOF or EGL types
 		eObj.eSet("name", partBinding.getCaseSensitiveName());
 		eObj.eSet("packageName", partBinding.getCaseSensitivePackageName());
-		if (!inMofProxyContext) setReflectTypeValues(eObj, partBinding.getSubType());
+		if (!inMofProxyContext) {
+			if (partBinding instanceof AnnotationType) {
+				setReflectTypeValues(eObj, (AnnotationType)partBinding);
+			}
+			else {
+				setReflectTypeValues(eObj, partBinding.getSubType());
+			}
+		}
 		
 		env.save(partBinding.getMofSerializationKey(), eObj, false);
 		if (!partBinding.getMofSerializationKey().equals(eObj.getMofSerializationKey())) {
@@ -358,13 +369,13 @@ abstract class Egl2MofPart extends Egl2MofBase {
 
 	@SuppressWarnings("unchecked")
 	private void handleEndVisitPart(org.eclipse.edt.compiler.core.ast.Part astPart, MofSerializable mofPart) {
-		MofSerializable part = partProcessingStack.pop();
+		MofSerializable part = partProcessingStack.peek();
 		
 		// Set the stereotype value if necessary
 		Part partBinding = (Part)astPart.getName().resolveType();
 
 		if (mofPart instanceof EClass) {
-			createAnnotations(partBinding, (Element)mofPart);
+			createAnnotations(partBinding, (EClass)mofPart);
 			setElementInformation(astPart,  (EClass)mofPart);
 			if (mofPart instanceof AnnotationType) {
 				if (astPart.isPrivate()) {
@@ -430,99 +441,12 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			updateProxyReferences(entry.getKey(), real);
 		}
 
+		partProcessingStack.pop();
 	}
-	
-	private void handleImplicits(org.eclipse.edt.compiler.core.ast.Part part, EObject container){
-//FIXME what should this do?
-		if(true) return;
-		List<Member> impFields = getImplicitFields(part.getName().resolveType());
-		if (impFields != null) {
-			for(Member member : impFields) {
-				((Container)container).addMember(createImplicitField(member));
-			}
-		}
 		
-		
-		List<Function> implFunctions = getImplicitFunctions(part.getName().resolveType());
-		if (implFunctions != null) {
-			for (Function function : implFunctions) {
-				((Container)container).addMember(createImplicitFunction(function));
-			}	
-		}
-	}
-	
-	private Member createImplicitField(Member data) {
-		Member f = (Member)data.getEClass().newInstance();
-		setUpEglTypedElement(f, data);
-		f.setIsStatic(data.isStatic());
-		f.setAccessKind(data.getAccessKind());
-		
-		for (Annotation ann : data.getAnnotations()) {
-			f.getAnnotations().add(ann);
-		}
-		
-		eObjects.put(data,  f);
-		return f;
-	}
-	
-	private Function createImplicitFunction(Function function) {
-
-		Function func = (Function)function.getEClass().newInstance();
-		func.setContainer(function.getContainer());
-		setUpEglTypedElement(func, function);
-				
-		StatementBlock stmts = factory.createStatementBlock();
-		stmts.setContainer(func);
-		func.setStatementBlock(stmts);
-
-		for (FunctionParameter parmBinding : function.getParameters()) {
-
-			FunctionParameter parm = factory.createFunctionParameter();
-			parm.setParameterKind(parmBinding.getParameterKind());
-			setUpEglTypedElement(parm, parmBinding);
-			func.addMember(parm);
-			eObjects.put(parmBinding, parm);
-		}
-
-		func.setAccessKind(function.getAccessKind());
-		
-		func.setIsStatic(function.isStatic());
-
-		eObjects.put(function, func);
-		return func;
-	}
-	
-	private List<Member> getImplicitFields(Element binding) {
-		if (binding instanceof Container) {
-			List<Member> fields = new ArrayList<Member>();
-			for(Member member : ((Container)binding).getMembers()){
-				if(member instanceof Field){
-					fields.add(member);
-				}
-			}
-			return fields;
-		}
-		
-		return null;
-	}
-	
-	private  List<Function> getImplicitFunctions(Element binding) {
-		if (binding instanceof LogicAndDataPart) {
-			return ((LogicAndDataPart)binding).getFunctions();
-		}
-		
-		return null;
-	}
-
-	
-
 	@SuppressWarnings("unchecked")
 	private void handleContents(org.eclipse.edt.compiler.core.ast.Part part, EObject container) {
-		
-		if (!inMofContext) {
-			handleImplicits(part, container);
-		}
-		
+				
 		for (Node n : (List<Node>)part.getContents()) {
 			n.accept(this);
 			

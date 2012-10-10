@@ -15,7 +15,6 @@ import eglx.lang.EventListener;
 import egl.lang.reflect.NoReflect;
 
 import eglx.lang.Property;
-import org.eclipse.edt.mof.egl.Stereotype;
     
 Record JavaObject type Stereotype { 
 	targets = [ ElementKind.ExternalTypePart ],

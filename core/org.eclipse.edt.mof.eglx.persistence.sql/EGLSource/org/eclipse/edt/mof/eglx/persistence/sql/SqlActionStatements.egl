@@ -23,7 +23,7 @@ import org.eclipse.edt.mof.egl.OpenStatement;
 import org.eclipse.edt.mof.egl.PrepareStatement;
 import org.eclipse.edt.mof.egl.ReplaceStatement;
 import egl.lang.reflect.mof.Containment;
-import egl.lang.reflect.mof.MofClass;
+import egl.lang.reflect.MofClass;
 import egl.lang.reflect.mof.MofName;
 
 externalType SqlActionStatement extends IOStatement type MofClass {isAbstract=yes}

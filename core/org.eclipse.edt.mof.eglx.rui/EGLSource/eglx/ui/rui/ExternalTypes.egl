@@ -11,7 +11,7 @@
  *******************************************************************************/
 package eglx.ui.rui;
 
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 import eglx.javascript.JavaScriptObject;
 import eglx.lang.EBoolean;
 import eglx.lang.Property;
@@ -349,7 +349,7 @@ ExternalType Widget type JavaScriptObject {
 	function getColor() returns (String);
 	function setColor(value String in);
 	
-	class String { @Property { getMethod = "getClass", setMethod = "setClass" }, @VEProperty };
+	cssClass String { @Property { getMethod = "getClass", setMethod = "setClass" }, @VEProperty };
 	function getClass() returns (String);
 	function setClass(value String in);
 

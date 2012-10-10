@@ -9,6 +9,7 @@ import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EDataType;
@@ -17,6 +18,8 @@ import org.eclipse.edt.mof.EGenericType;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.ETypedElement;
+import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Type;
@@ -36,6 +39,13 @@ public class AnnotationValueValidator {
 	}
 
 	public Object validateValue(Object value, Expression expr, EField field, EType eType, boolean nullable) {	
+		
+		if (value instanceof Element) {
+			EType etype = BindingUtil.getETypeFromProxy((Element)value);
+			if (etype != null) {
+				value = etype;
+			}
+		}
 		
 		//check for invalid expression type
 		if (!isValidExpressionForAnnotationValue(expr)) {
@@ -207,7 +217,7 @@ public class AnnotationValueValidator {
 		if (value instanceof EObject && eType instanceof EClass) { 
 			EClass valClass = ((EObject)value).getEClass();
 			EClass typeClass = (EClass) eType;
-			if (valClass == typeClass || valClass.isSubClassOf(typeClass)) {
+			if (isEqualOrSubclassOf(valClass, typeClass)) {
 				return value;
 			}
 		}
@@ -215,6 +225,21 @@ public class AnnotationValueValidator {
 		//special check for fields that have etype of EType, such as defaultSuperType for stereotypes
 		if (eType != null && eType.equals(getETypeType())) {
 			if (value instanceof Type || value instanceof EType) {
+				return value;
+			}
+		}
+		
+		//Check for mofclass proxy. This will only happen if we are compiling the system parts
+		EObject eobject = null;
+		if (value instanceof Classifier) {
+			eobject = BindingUtil.getMofClassProxyFor((Classifier)value);
+		}
+		if (eobject == null && value instanceof EObject) {
+			eobject = (EObject)value;
+		}
+			
+		if (eobject instanceof EClass && eType instanceof EClass) {
+			if (isEqualOrSubclassOf((EClass) eobject, (EClass) eType)) {
 				return value;
 			}
 		}
@@ -230,6 +255,22 @@ public class AnnotationValueValidator {
     			});   
 		return null;
 
+	}
+	
+	private boolean isEqualOrSubclassOf(EClass child, EClass parent) {
+		if (child == parent) {
+			return true;
+		}
+		if (child == null || parent == null) {
+			return false;
+		}
+		
+		if (child.getETypeSignature().equals(parent.getETypeSignature())) {
+			return true;
+		}
+		
+		return BindingUtil.isSubClassOf(child, parent);
+		
 	}
 
     private boolean isValidExpressionForAnnotationValue(Expression expr) {

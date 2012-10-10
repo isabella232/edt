@@ -12,9 +12,9 @@
 package eglx.lang;
 
 import egl.lang.reflect.ParameterizableType;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
-import org.eclipse.edt.mof.egl.SequenceType;
+import egl.lang.reflect.SequenceType;
 
 externalType EBytes extends AnyValue type ParameterizableType {
 	parameterizedType = SequenceType

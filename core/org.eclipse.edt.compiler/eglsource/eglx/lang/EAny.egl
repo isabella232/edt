@@ -13,7 +13,7 @@ package eglx.lang;
 
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.Dynamic;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
 /**
  * EAny represents EGL's "any" type.  It is the supertype of all other types,

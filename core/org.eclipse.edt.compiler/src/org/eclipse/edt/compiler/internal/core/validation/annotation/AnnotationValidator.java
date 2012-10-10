@@ -284,14 +284,14 @@ public class AnnotationValidator {
 			
 			@Override
 			public boolean visit(StructureItem structureItem) {
-				processAnnotations(structureItem, structureItem.resolveMember());
+				processAnnotations(structureItem, structureItem.getName().resolveMember());
 				
 				if (structureItem.hasSettingsBlock()) {
 					processOverriddenAnnotationsAndSetValues(structureItem.getSettingsBlock());
 				}
 				
-				if (structureItem.resolveMember() != null && structureItem.hasType() && !structureItem.hasInitializer() && !structureItem.isNullable()) {					
-					validateInvocation(structureItem, getDefaultConstructor(structureItem.getType().resolveType()), BindingUtil.getDeclaringPart(structureItem.resolveMember()));					
+				if (structureItem.getName().resolveMember() != null && structureItem.hasType() && !structureItem.hasInitializer() && !structureItem.isNullable()) {					
+					validateInvocation(structureItem, getDefaultConstructor(structureItem.getType().resolveType()), BindingUtil.getDeclaringPart(structureItem.getName().resolveMember()));					
 				}
 				return false;
 			}
@@ -791,7 +791,7 @@ public class AnnotationValidator {
 //						System.out.println();
 //					}
 //					else {
-						Member structureItemBinding = structureItem.resolveMember();
+						Member structureItemBinding = structureItem.getName().resolveMember();
 						if (structureItemBinding != null) {
 							List<Annotation> annotations = structureItemBinding.getAnnotations();
 							Node nodeForErrors = structureItem.getName();

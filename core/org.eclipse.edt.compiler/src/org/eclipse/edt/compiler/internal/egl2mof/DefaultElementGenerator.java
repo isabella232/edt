@@ -23,6 +23,9 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class DefaultElementGenerator extends AbstractElementGenerator {
@@ -85,6 +88,18 @@ public class DefaultElementGenerator extends AbstractElementGenerator {
 	
 	@Override
 	public boolean visit(NestedFunction node) {
+		
+		Object obj = node.getName().resolveElement();
+		if (obj instanceof Function) {
+			Function function = (Function) obj;
+			Annotation ann = function.getAnnotation(EGL_lang_reflect_package + ".Operation");
+			if (ann != null) {
+				Operation op = factory.createOperation();
+				op.setOpSymbol((String)ann.getValue("opSymbol"));
+				stack.push(op);
+				return false;
+			}
+		}
 		stack.push(factory.createFunction());
 		return false;
 	};

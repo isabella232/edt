@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.binding;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.NameType;
@@ -31,12 +32,13 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EGenericType;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.MofFactory;
-import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Classifier;
@@ -147,7 +149,7 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     	            return false; // Do not create the field binding if its type cannot be resolved
     	        }
     			
-    			EField field = createEField(structureItem, eType);
+    			final EField field = createEField(structureItem, eType);
     			if (definedNames.contains(NameUtile.getAsName(field.getName()))) {
     	    		problemRequestor.acceptProblem(
     	        			structureItem.getName(),
@@ -160,6 +162,7 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     			else {
     				definedNames.add(NameUtile.getAsName(field.getName()));
     				annotationType.getEFields().add(field);
+    				structureItem.getName().setElement(field);
     			}
     			
     			if (structureItem.hasSettingsBlock()) {
@@ -168,6 +171,19 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     	            SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, annotationType, lhScope,
     	                    dependencyRequestor, problemRequestor, compilerOptions);
     	            structureItem.getSettingsBlock().accept(blockCompletor);
+    	            //copy put the annotations from the settingsBlock into the metatData for the EField
+    	            structureItem.getSettingsBlock().accept(new DefaultASTVisitor() {
+    	            	public boolean visit(SettingsBlock settingsBlock) {
+    	            		return true;
+    	            	}
+						public boolean visit(AnnotationExpression annExpr) {
+							if (annExpr.resolveAnnotation() != null) {
+								field.getMetadataList().add(annExpr.resolveAnnotation());
+							}
+							return false;
+						}
+
+					});
     			}
 
     			    			    			
@@ -246,33 +262,35 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     }
     
     private EType translateToEType(Type type, NameType nameType) throws ResolutionException{
-    	if (type == null) {
+    	if (type == null || type.getClassifier() == null) {
     		return null;
     	}
     	try {
+    		Classifier classifier = type.getClassifier();
 			//handle any, string, boolean, int, float, decimal
-			if (type.equals(TypeUtils.Type_ANY)) {
+			if (classifier.equals(TypeUtils.Type_ANY)) {
 				return (EType)Environment.getCurrentEnv().find(MofConversion.Type_JavaObject);
 			}
-			if (type.equals(TypeUtils.Type_BOOLEAN)) {
+			if (classifier.equals(TypeUtils.Type_BOOLEAN)) {
 				return (EType)Environment.getCurrentEnv().find(MofConversion.Type_EBoolean);
 			}
-			if (type.equals(TypeUtils.Type_STRING)) {
+			if (classifier.equals(TypeUtils.Type_STRING)) {
 				return (EType)Environment.getCurrentEnv().find(MofConversion.Type_EString);
 			}
-			if (type.equals(TypeUtils.Type_INT) || type.equals(TypeUtils.Type_SMALLINT) || type.equals(TypeUtils.Type_BIGINT)) {
+			if (classifier.equals(TypeUtils.Type_INT) || type.equals(TypeUtils.Type_SMALLINT) || type.equals(TypeUtils.Type_BIGINT)) {
 				return (EType)Environment.getCurrentEnv().find(MofConversion.Type_EInteger);
 			}
-			if (type.equals(TypeUtils.Type_FLOAT) || type.equals(TypeUtils.Type_SMALLFLOAT)) {
+			if (classifier.equals(TypeUtils.Type_FLOAT) || type.equals(TypeUtils.Type_SMALLFLOAT)) {
 				return (EType)Environment.getCurrentEnv().find(MofConversion.Type_EFloat);
 			}
-			if (type.equals(TypeUtils.Type_DECIMAL)) {
+			if (classifier.equals(TypeUtils.Type_DECIMAL)) {
 				return (EType)Environment.getCurrentEnv().find(MofConversion.Type_EDecimal);
 			}
 			
 			//handle proxy types
-			if (type instanceof EClassProxy) {
-				return ((EClassProxy)type).getProxiedEClass();
+			EType etype = BindingUtil.getETypeFromProxy(type);
+			if (etype != null) {
+				return etype;
 			}
 			
 			//If the type is an annotationType or an Enumeration, it is already an EType
@@ -281,30 +299,9 @@ public class AnnotationTypeCompletor extends DefaultBinder {
 			}
 			
 			if (type instanceof Classifier) {
-				//check for mof class proxy
-				Annotation mofClassAnn = type.getAnnotation("egl.lang.reflect.mof.mofclass");;
-				if (mofClassAnn != null) {
-					String name =  (String)mofClassAnn.getValue("name");
-					String pkgName = (String)mofClassAnn.getValue("packageName");
-					if (name == null || name.length() == 0) {
-						name = ((Classifier)type).getCaseSensitiveName();
-					}
-					if (pkgName == null || pkgName.length() == 0) {
-						pkgName = ((Classifier)type).getCaseSensitivePackageName();
-					}
-					
-					String fullName;
-					if (pkgName.length() == 0) {
-						fullName = name;
-					}
-					else {
-						fullName = pkgName + "." + name;
-					}
-					
-					MofSerializable proxiedType = Environment.getCurrentEnv().findType(fullName);
-					if (proxiedType instanceof EType) {
-						return (EType)proxiedType;
-					}
+				EObject proxiedType = BindingUtil.getMofClassProxyFor((Classifier)type);
+				if (proxiedType instanceof EType) {
+					return (EType)proxiedType;
 				}
 			}
 			
