@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.ArrayList;
 
 /**
  * MoveStatement AST node type.
@@ -35,18 +34,22 @@ public class MoveStatement extends Statement {
 		public static final DefaultMoveModifier FORALL = new DefaultMoveModifier();//$NON-NLS-1$
 		public static final DefaultMoveModifier WITHV60COMPAT = new DefaultMoveModifier();//$NON-NLS-1$
 		
+		@Override
 		public boolean isByName() {
 			return this == BYNAME;
 		}
 		
+		@Override
 		public boolean isByPosition() {
 			return this == BYPOSITION;
 		}
 		
+		@Override
 		public boolean isForAll() {
 			return this == FORALL;
 		}
 		
+		@Override
 		public boolean isWithV60Compat() {
 			return this == WITHV60COMPAT;
 		}
@@ -83,6 +86,7 @@ public class MoveStatement extends Statement {
 		return moveModifierOpt;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -102,11 +106,8 @@ public class MoveStatement extends Statement {
         return mod;
     }
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException{
-		
-		
-		ArrayList newMoveModifiers = new ArrayList();
-		
 		MoveModifier newMod = null;
 		if (moveModifierOpt != null) {
 			newMod = (MoveModifier)moveModifierOpt.clone();

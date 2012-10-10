@@ -126,13 +126,7 @@ public class Util {
 					return false;
 				}
 				
-				if(record.isFlexible()){
-					value[0] = new Integer(ITypeBinding.FLEXIBLE_RECORD_BINDING);
-					return false;
-				}
-				
-				value[0] = new Integer(ITypeBinding.FIXED_RECORD_BINDING);
-
+				value[0] = new Integer(ITypeBinding.FLEXIBLE_RECORD_BINDING);
 				return false;
 			}
 	
