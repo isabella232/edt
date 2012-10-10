@@ -11,7 +11,7 @@
  *******************************************************************************/
 package eglx.ui.rui;
 
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 import eglx.javascript.JavaScriptObject;
 import eglx.lang.EBoolean;
 import eglx.lang.Property;

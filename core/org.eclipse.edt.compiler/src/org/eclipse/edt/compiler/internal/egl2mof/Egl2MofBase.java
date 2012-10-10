@@ -170,7 +170,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 
 	protected EObject getEObjectFor(Object element) {
 		if (element == null) return null;
-		EObject result = eObjects.get(element);//FIXME jv
+		EObject result = eObjects.get(element);
 		//if we cant find a real object, see if we have a proxy already
 		if (result == null) {
 			result = proxies.get(element);
@@ -257,51 +257,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 	}
 	
-//	private EMetadataObject createEMetadataObject(IBinding binding, IAnnotationBinding annBinding) {
-//
-//		EMetadataObject annotation;
-//		
-//		EClass annType;
-//		if (annBinding.getType() instanceof AnnotationTypeBindingImpl) {
-//			annType = (EClass)mofTypeFor(annBinding.getType());
-//			annotation = (EMetadataObject)annType.newInstance();
-//		}
-//		else {
-//			if (inMofContext) {
-//				annotation = MofFactory.INSTANCE.createEMetadataObject(true);
-//			}
-//			else {
-//				annotation = IrFactory.INSTANCE.createAnnotation(annBinding.getCaseSensitiveName());
-//			}
-//		}
-//		Iterator i = annBinding.getAnnotations().iterator();
-//
-//		while (i.hasNext()) {
-//			AnnotationBinding subAnnotation = (AnnotationBinding) i.next();
-//			// For some reason, the fields sometime get added to the
-//			// annotataionBinding as annotations
-//			if ((subAnnotation instanceof AnnotationBinding)) {
-//				if (inMofContext) {
-//					annotation.getMetadataList().add(createEMetadataObject(annBinding, subAnnotation));
-//				}
-//				else {
-//					((Annotation)annotation).getAnnotations().add(createAnnotation(annBinding, subAnnotation));
-//				}
-//			}
-//		}
-//
-//		i = annBinding.getAnnotationFields().iterator();
-//		while (i.hasNext()) {
-//			AnnotationFieldBinding field = (AnnotationFieldBinding) i.next();
-//			Object value = mofValueFrom(getValue(binding, field.getValue()));
-//			annotation.eSet(field.getCaseSensitiveName(), value);
-//		}
-//		return annotation;
-//	}
-	
 	private MemberName createMemberName(Element binding) {
 		MemberName name = factory.createMemberName();
-//FIXME
 		if(binding instanceof NamedElement){
 			name.setId(((NamedElement)binding).getCaseSensitiveName());
 		}
@@ -309,7 +266,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return name;
 	}
 	
-	protected Object getValue(Annotation binding, Object annotationValue, boolean isMetaDataFieldValue) {
+	protected Object getValue(Object annotationValue, boolean isMetaDataFieldValue) {
 
 		// Some well defined array types:
 		if (annotationValue instanceof Integer[] || annotationValue instanceof Integer[][] || annotationValue instanceof int[]
@@ -339,25 +296,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			}
 			return value;
 		}
-		if (annotationValue instanceof Function) {
-			Function functionBinding = (Function) annotationValue;
-			Container declarer = functionBinding.getContainer();
-
-			// for annotations that resolve to a library function, create a
-			// FieldAccess with
-			// the PartName for the library as the qualifier
-			if (declarer instanceof Library) {
-				PartName nameType = factory.createPartName();
-				nameType.setId(((Library)declarer).getCaseSensitiveName());
-				nameType.setPackageName(((Library)declarer).getCaseSensitivePackageName());
-				
-				MemberAccess access = factory.createMemberAccess();
-				access.setId(functionBinding.getCaseSensitiveName());
-				access.setQualifier(nameType);
-				return access;
-			}
-			return createMemberName(functionBinding);
-		}
 
 		if (annotationValue instanceof Annotation) {
 			return mofValueFrom((Annotation) annotationValue);
@@ -372,31 +310,21 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 
 			Member valueBinding = (Member) annotationValue;
 			Container declarer = valueBinding.getContainer();
-			// for annotations that resolve to a library function, create a
-			// FieldAccess with
-			// the NameType for the library as the qualifier
-			if (declarer instanceof Library /*&& declarer != getLibraryContainer(binding)*/) {
+			// for values that resolve to a member in a part other than the part being compiled,
+			// create a member access with a qualifier that is a PartName
+			if (getPartBeingProcessed() != null && 
+					declarer instanceof Part && 
+					!getPartBeingProcessed().getMofSerializationKey().equalsIgnoreCase(((MofSerializable)declarer).getMofSerializationKey())) {
 				PartName nameType = factory.createPartName();
-				nameType.setId(((Library)declarer).getCaseSensitiveName());
-				nameType.setPackageName(((Library)declarer).getCaseSensitivePackageName());
+				nameType.setId(((Part)declarer).getCaseSensitiveName());
+				nameType.setPackageName(((Part)declarer).getCaseSensitivePackageName());
 				MemberAccess access = factory.createMemberAccess();
-				access.setId(binding.getEClass().getName());
+				access.setId(valueBinding.getCaseSensitiveName());
 				access.setQualifier(nameType);
 				return access;
 			}
 			
-			// if annotation is on a data binding, must create a simpleName
-			// expression here and set the binding...then route through
-			// expressionGenerator
-			if (binding instanceof Field) {
-				Type container = ((Field)binding).getType();
-				if (container == valueBinding.getType()) {
-//FIXME					Expression expr = createExpression(binding, annotationValue, true);
-//FIXME					expr.accept(this);
-					return (Expression)stack.pop();
-				}
-			}
-//FIXME			return createMemberName(annotationValue);
+			return createMemberName(valueBinding);
 		}
 
 		if (annotationValue instanceof Type) {
@@ -411,7 +339,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			Object[] arrVal = (Object[]) annotationValue;
 			Object[] value = new Object[arrVal.length];
 			for (int i = 0; i < value.length; i++) {
-				value[i] = getValue(binding, arrVal[i], isMetaDataFieldValue);
+				value[i] = getValue(arrVal[i], isMetaDataFieldValue);
 			}
 			return value;
 		}
@@ -419,13 +347,21 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (annotationValue instanceof EList) {
 			EList value = new EList(((EList)annotationValue).size());
 			for(Object obj : (EList)annotationValue) {
-				value.add(getValue(binding, obj, isMetaDataFieldValue));
+				value.add(getValue(obj, isMetaDataFieldValue));
 			}
 			return value;
 		}
 
 		return annotationValue;
 	}
+	
+	private MemberName createMemberName(Member mbr) {
+		MemberName name = factory.createMemberName();
+		name.setId(mbr.getCaseSensitiveName());
+		name.setMember((Member)getEObjectFor(mbr));
+		return name;
+	}
+	
 	
 	private TypeName createTypeName(Type type) {
 		if (type instanceof Part) {
@@ -589,7 +525,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			if (obj instanceof String && ((String) obj).length() == 0) {
 				return null;
 			}
-			result = getValue(null, obj, false);
+			result = getValue(obj, false);
 		}
 		return result;
 	}
@@ -746,7 +682,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			
 			if (valueField != null) {
 				Object oldVale = binding.eGet(field);
-				Object fieldValue = mofValueFrom(getValue(binding, oldVale, isEMetadataObject));
+				Object fieldValue = mofValueFrom(getValue(oldVale, isEMetadataObject));
 				value.eSet(valueField, fieldValue);
 			}
 		}
@@ -844,64 +780,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		
 		return eType;
 		
-//FIXME jv 		switch (type.getKind()) {
-/*		default: {
-			String key = mofSerializationKeyFor(type); 
-			eType = getMofSerializable(key);
-			
-			//When looking for annotations and stereotypes, search using the EGL scheme if we didnt find it as MOF
-			if (eType == null && ! key.startsWith(EGL_KeyScheme) && (isAnnotationType(type) || isStereotypeType(type))) {
-				key = EGL_KeyScheme + key;
-				eType = getMofSerializable(key);
-			}
-			if (eType == null) {
-				if (type instanceof IPartBinding) {
-//					eType = mofTypeFromASTFor((IPartBinding)type);
-					if (inMofContext && isMofClass((PartBinding)type) && type instanceof ExternalTypeBinding) {
-						eType = createTempEClass((ExternalTypeBinding)type);
-					}
-					else {
-						eType = createProxyPart(((IPartBinding)type).getPackageQualifiedName());
-					}
-				}
-				else if (type instanceof PrimitiveTypeBinding) {			
-					PrimitiveTypeBinding prim = ((PrimitiveTypeBinding)type);
-					eType = createPrimitiveType(key, prim);
-					switch (prim.getPrimitive().getType()) {
-						case Primitive.BYTES_PRIMITIVE:
-						case Primitive.CHAR_PRIMITIVE:
-						case Primitive.MBCHAR_PRIMITIVE:
-						case Primitive.DBCHAR_PRIMITIVE:
-						case Primitive.UNICODE_PRIMITIVE:
-						case Primitive.HEX_PRIMITIVE: {
-							eSet(eType, "length", prim.getLength());
-							break;
-						}
-						case Primitive.DECIMAL_PRIMITIVE: 
-						case Primitive.BIN_PRIMITIVE:
-						case Primitive.MONEY_PRIMITIVE:
-						case Primitive.NUM_PRIMITIVE: {
-							eSet(eType, "length", prim.getLength());
-							eSet(eType, "decimals", prim.getDecimals());
-							break;
-						}
-						case Primitive.INTERVAL_PRIMITIVE:
-						case Primitive.TIME_PRIMITIVE:
-						case Primitive.TIMESTAMP_PRIMITIVE:
-						case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
-						case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
-							eSet(eType, "pattern", getPattern(prim));
-							break;
-						}
-					}
-				}
-				else if (type instanceof IAnnotationTypeBinding) {
-					eType = createAnnotationType((IAnnotationTypeBinding)type);
-				}
-			}
-		}
-		}
-		return eType;*/
 	}
 
 	private String getMofDataTypeSignatureFor(Type type) {
@@ -984,8 +862,14 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			else	
 				typeSignature = type.getMofSerializationKey();
 		}
-		else
-			typeSignature = Type_EObject;
+		else {
+			if (inMofContext) {
+				typeSignature = Type_EObject;
+			}
+			else {
+				typeSignature = type.getMofSerializationKey();
+			}
+		}
 		return typeSignature;
 	}
 	

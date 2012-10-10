@@ -93,7 +93,7 @@ externalType FixedPrecisionType type EClassProxy {
 }
 end
 
-externalType TimestampPatternType type EClassProxy {
+externalType TimestampType type EClassProxy {
 	proxiedEClassName = "org.eclipse.edt.mof.egl.TimestampType"
 }
 end
@@ -102,3 +102,4 @@ externalType IntervalType type EClassProxy {
 	proxiedEClassName = "org.eclipse.edt.mof.egl.IntervalType"
 }
 end
+

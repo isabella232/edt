@@ -12,7 +12,6 @@
 package eglx.javascript;
 
 import eglx.lang.Property;
-import org.eclipse.edt.mof.egl.Stereotype;
 
 Record JavaScriptObject type Stereotype
 	{ 

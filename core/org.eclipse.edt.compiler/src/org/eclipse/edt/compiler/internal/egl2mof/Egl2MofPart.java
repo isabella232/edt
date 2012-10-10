@@ -369,7 +369,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 
 	@SuppressWarnings("unchecked")
 	private void handleEndVisitPart(org.eclipse.edt.compiler.core.ast.Part astPart, MofSerializable mofPart) {
-		MofSerializable part = partProcessingStack.pop();
+		MofSerializable part = partProcessingStack.peek();
 		
 		// Set the stereotype value if necessary
 		Part partBinding = (Part)astPart.getName().resolveType();
@@ -441,6 +441,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			updateProxyReferences(entry.getKey(), real);
 		}
 
+		partProcessingStack.pop();
 	}
 		
 	@SuppressWarnings("unchecked")

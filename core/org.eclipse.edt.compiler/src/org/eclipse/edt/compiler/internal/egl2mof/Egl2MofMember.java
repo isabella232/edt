@@ -390,7 +390,7 @@ class Egl2MofMember extends Egl2MofPart {
 			}
 			Annotation mofName = this.getAnnotation(edtObj, "egl.lang.reflect.mof.mofName");
 			if (mofName != null) 
-				obj.setName((String)getValue(null, mofName.getValue(), false));
+				obj.setName((String)getValue(mofName.getValue(), false));
 			else 
 				obj.setName(edtObj.getCaseSensitiveName());
 		}

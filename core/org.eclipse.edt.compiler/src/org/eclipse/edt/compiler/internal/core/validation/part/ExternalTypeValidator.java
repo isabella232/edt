@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ClassDataDeclarationValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
@@ -130,7 +131,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 				else {
 					// Super type must have the same subtype.
 					Stereotype superSubtype = ((org.eclipse.edt.mof.egl.ExternalType)extendedType).getSubType();
-					if (superSubtype == null || !expectedSubtype.equals(superSubtype.getEClass())) {
+					if (superSubtype == null || (!expectedSubtype.equals(superSubtype.getEClass()) && !isMofClass((org.eclipse.edt.mof.egl.ExternalType)extendedType))) {
 						problemRequestor.acceptProblem(
 								nameAST,
 								IProblemRequestor.EXTERNAL_TYPE_SUPER_SUBTYPE_MISMATCH,
@@ -141,6 +142,18 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 				}
 			}
 		}
+	}
+	
+	private boolean isMofClass(org.eclipse.edt.mof.egl.ExternalType et) {
+		
+		if (BindingUtil.getAnnotationWithSimpleName(et, "ClassType") != null) {
+			return true;
+		}
+		if (BindingUtil.getAnnotationWithSimpleName(et, "MofClass") != null) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	private boolean checkHasSubtype() {

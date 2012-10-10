@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.ETypedElement;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Type;
@@ -38,6 +39,13 @@ public class AnnotationValueValidator {
 	}
 
 	public Object validateValue(Object value, Expression expr, EField field, EType eType, boolean nullable) {	
+		
+		if (value instanceof Element) {
+			EType etype = BindingUtil.getETypeFromProxy((Element)value);
+			if (etype != null) {
+				value = etype;
+			}
+		}
 		
 		//check for invalid expression type
 		if (!isValidExpressionForAnnotationValue(expr)) {
@@ -222,13 +230,17 @@ public class AnnotationValueValidator {
 		}
 		
 		//Check for mofclass proxy. This will only happen if we are compiling the system parts
+		EObject eobject = null;
 		if (value instanceof Classifier) {
-			EObject eobject = BindingUtil.getMofClassProxyFor((Classifier)value);
+			eobject = BindingUtil.getMofClassProxyFor((Classifier)value);
+		}
+		if (eobject == null && value instanceof EObject) {
+			eobject = (EObject)value;
+		}
 			
-			if (eobject instanceof EClass && eType instanceof EClass) {
-				if (isEqualOrSubclassOf((EClass) eobject, (EClass) eType)) {
-					return value;
-				}
+		if (eobject instanceof EClass && eType instanceof EClass) {
+			if (isEqualOrSubclassOf((EClass) eobject, (EClass) eType)) {
+				return value;
 			}
 		}
 		

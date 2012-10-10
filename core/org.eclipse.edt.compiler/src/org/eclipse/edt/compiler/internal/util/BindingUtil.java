@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -37,6 +38,7 @@ import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.EClassProxy;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
@@ -1157,9 +1159,18 @@ public class BindingUtil {
 		return null;
 	}
 	
+	public static Annotation getAnnotationWithSimpleName(Element obj, String simpleName) {
+		for (Annotation ann : obj.getAnnotations()) {
+			if (ann.getEClass().getName().equalsIgnoreCase(simpleName)) {
+				return ann;
+			}
+		}
+		return null;
+	}
+	
 	public static EObject getMofClassProxyFor(Classifier obj) {
 		//check for mof class proxy
-		Annotation mofClassAnn = obj.getAnnotation("egl.lang.reflect.mof.mofclass");;
+		Annotation mofClassAnn = getAnnotationWithSimpleName(obj, "MofClass");
 		if (mofClassAnn != null) {
 			String name =  (String)mofClassAnn.getValue("name");
 			String pkgName = (String)mofClassAnn.getValue("packageName");
@@ -1204,5 +1215,25 @@ public class BindingUtil {
 		}
 	}
 	
+	public static EType getETypeFromProxy(Element elem) {
+		//handle proxy types
+		if (elem instanceof EClassProxy) {
+			return ((EClassProxy)elem).getProxiedEClass();
+		}
+		
+		Annotation ann = elem.getAnnotation("egl.lang.reflect.EClassProxy");
+		if (ann != null) {
+			String key = (String)ann.getValue();
+			try {
+				EObject eobj = Environment.getCurrentEnv().find(key);
+				if (eobj instanceof EType) {
+					return (EType) eobj;
+				}
+			} catch (MofObjectNotFoundException e) {
+			} catch (DeserializationException e) {
+			}
+		}
+		return null;
+	}
 
 }

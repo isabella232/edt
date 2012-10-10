@@ -288,17 +288,9 @@ public class AnnotationTypeCompletor extends DefaultBinder {
 			}
 			
 			//handle proxy types
-			if (type instanceof EClassProxy) {
-				return ((EClassProxy)type).getProxiedEClass();
-			}
-			
-			Annotation ann = type.getAnnotation("egl.lang.reflect.EClassProxy");
-			if (ann != null) {
-				String key = (String)ann.getValue();
-				EObject eobj = Environment.getCurrentEnv().find(key);
-				if (eobj instanceof EType) {
-					return (EType) eobj;
-				}
+			EType etype = BindingUtil.getETypeFromProxy(type);
+			if (etype != null) {
+				return etype;
 			}
 			
 			//If the type is an annotationType or an Enumeration, it is already an EType
