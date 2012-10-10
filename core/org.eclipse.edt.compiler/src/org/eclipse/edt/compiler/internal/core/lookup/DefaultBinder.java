@@ -38,7 +38,6 @@ import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.GetByPositionStatement;
-import org.eclipse.edt.compiler.core.ast.InExpression;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.IntoClause;
 import org.eclipse.edt.compiler.core.ast.IsAExpression;
@@ -80,7 +79,6 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
-import org.eclipse.edt.mof.egl.MultiOperandExpression;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
@@ -382,15 +380,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 		return false;
 	}
 		
-	public boolean visit(InExpression inExpression) {
-		inExpression.getFirstExpression().accept(this);		
-		inExpression.getSecondExpression().accept(this);		
-		if(inExpression.hasFromExpression()) {
-			inExpression.getFromExpression().accept(this);
-		}
-		return false;
-	}
-	
 	public static NamedElement getOperandType(Expression expr) {
 		if (expr instanceof FunctionInvocation) {
 			// Don't return the function, return its type.
@@ -600,21 +589,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	public void endVisit(Assignment assignment) {}
 	
-	
-	public void endVisit(InExpression inExpression) {		
-		Expression operand1 = inExpression.getFirstExpression();
-		Expression operand2 = inExpression.getSecondExpression();
-		
-		Operation op = IRUtils.getBinaryOperation(
-									getOperandType(operand1), 
-									getOperandType(operand2), 
-									MultiOperandExpression.Op_IN);
-		if (op != null) {
-			inExpression.setType(op.getType());		
-		}
-		
-	}
-			
 	public void endVisit(IsAExpression isAExpression) {
 		isAExpression.setType(TypeUtils.Type_BOOLEAN);
 	}

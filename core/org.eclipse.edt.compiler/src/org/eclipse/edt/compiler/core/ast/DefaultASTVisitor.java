@@ -229,10 +229,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(InExpression inExpression) {
-		return false;
-	}
-	
 	public boolean visit(InlineSQLStatement inlineSQLStatement) {
 		return false;
 	}
@@ -560,8 +556,6 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(ImportDeclaration importDeclaration) {}
 	
 	public void endVisit(IfStatement ifStatement) {}
-	
-	public void endVisit(InExpression inExpression) {}
 	
 	public void endVisit(InlineSQLStatement inlineSQLStatement) {}
 	

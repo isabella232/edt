@@ -175,9 +175,6 @@ public interface IASTVisitor {
 	boolean visit(IfStatement ifStatement);
 	void endVisit(IfStatement ifStatement);
 	
-	boolean visit(InExpression inExpression);
-	void endVisit(InExpression inExpression);
-	
 	boolean visit(InlineSQLStatement inlineSQLStatement);
 	void endVisit(InlineSQLStatement inlineSQLStatement);
 	

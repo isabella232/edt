@@ -61,10 +61,6 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
         return visitExpression(functionInvocation);
     }
     
-    public boolean visit(InExpression inExpression) {
-        return visitExpression(inExpression);
-    }
-    
     public boolean visit(IsAExpression isAExpression) {
         return visitExpression(isAExpression);
     }
@@ -192,10 +188,6 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
     
     public void endVisit(FunctionInvocation functionInvocation) {
         endVisitExpression(functionInvocation);
-    }
-    
-    public void endVisit(InExpression inExpression) {
-        endVisitExpression(inExpression);
     }
     
     public void endVisit(IsAExpression isAExpression) {

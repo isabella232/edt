@@ -3502,31 +3502,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
-	public boolean visit(InExpression inExpression) {
-//		|	expr:expr1 IN expr:expr2
-//		{: RESULT = new InExpression(expr1, expr2, null, expr1left, expr2right); :}		
-//		|	expr:expr1 IN expr:expr2 FROM expr:expr3
-//		{: RESULT = new InExpression(expr1, expr2, expr3, expr1left, expr3right); :}
-		push2ContextPath(inExpression);
-		
-		Expression firstExpr = inExpression.getFirstExpression();
-		firstExpr.accept(this);
-		
-		printStuffBeforeToken(NodeTypes.IN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_OP_BINARY));
-		
-		Expression secondExpr = inExpression.getSecondExpression();
-		format2ndExpressionInBinaryExpression(secondExpr);
-
-		if(inExpression.hasFromExpression()){
-			printStuffBeforeToken(NodeTypes.FROM, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_OP_BINARY));
-			Expression fromExpr = inExpression.getFromExpression();
-			format2ndExpressionInBinaryExpression(fromExpr);
-		}
-		
-		popContextPath();
-		return false;		
-	}
-	
 	public boolean visit(IsNotExpression isNotExpression) {
 //		|	expr:expr1 IS expr:expr2
 //		{: RESULT = new IsNotExpression(IsNotExpression.Operator.IS, expr1, expr2, expr1left, expr2right); :}

@@ -1,7 +1,7 @@
 <project name="Parse egl.cup" default="run">
 	<target name="run">
 		<!-- Set this to the location of JavaCup on your machine. -->
-		<property name="JavaCup" value="/tmp/"/>
+		<property name="JavaCup" value="/home/justin/javacup/"/>
 		
 		<java classpath="${JavaCup}" classname="java_cup.Main" fork="true" error="egl.cup.dump" failonerror="true">
 			<jvmarg value="-Xmx64m"/>

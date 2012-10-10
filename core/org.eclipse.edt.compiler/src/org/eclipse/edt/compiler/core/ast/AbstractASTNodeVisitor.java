@@ -234,10 +234,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( ifStatement );
 	}
 	
-	public boolean visit(InExpression inExpression) {
-		return visitNode( inExpression );
-	}
-	
 	public boolean visit(InlineSQLStatement inlineSQLStatement) {
 		return visitNode( inlineSQLStatement );
 	}
@@ -668,10 +664,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public void endVisit(IfStatement ifStatement) {
 		 endVisitNode( ifStatement );
-	}
-	
-	public void endVisit(InExpression inExpression) {
-		 endVisitNode( inExpression );
 	}
 	
 	public void endVisit(InlineSQLStatement inlineSQLStatement) {
