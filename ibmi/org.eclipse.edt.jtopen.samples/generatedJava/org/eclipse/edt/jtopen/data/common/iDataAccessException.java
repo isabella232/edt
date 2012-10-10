@@ -1,9 +1,9 @@
 package org.eclipse.edt.jtopen.data.common;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import eglx.lang.AnyException;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="iDataAccessException")
 public class iDataAccessException extends eglx.lang.AnyException {
