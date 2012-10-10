@@ -33,7 +33,6 @@ import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
-import org.eclipse.edt.compiler.core.ast.InExpression;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.IsAExpression;
 import org.eclipse.edt.compiler.core.ast.IsNotExpression;
@@ -67,10 +66,6 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-/*
-TODO Remaining expressions to port from the old DefaultBinder:
-in
-*/
 public class ExpressionValidator extends AbstractASTVisitor {
 	
 	IPartBinding declaringPart;
@@ -569,7 +564,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				else {
 					typeIsValid = true;
 				}
-			}			
+			}
 			if (!typeIsValid) {
 				problemRequestor.acceptProblem(
 					index,
@@ -581,6 +576,14 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	
 	@Override
 	public void endVisit(FieldAccess fieldAccess) {
+		if (fieldAccess.getPrimary().resolveType() instanceof org.eclipse.edt.mof.egl.ArrayType
+				&& !(fieldAccess.resolveMember() instanceof FunctionMember)) {
+			problemRequestor.acceptProblem(
+					fieldAccess.getPrimary(),
+					IProblemRequestor.ARRAY_ACCESS_NOT_SUBSCRIPTED,
+					new String[] {fieldAccess.getPrimary().getCanonicalString()});
+		}
+		
 		final boolean[] dynamicAccessUsed = {false};
 		fieldAccess.getPrimary().accept(new AbstractASTVisitor() {
 			@Override
@@ -602,8 +605,8 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	
 	@Override
 	public void endVisit(QualifiedName qualifiedName) {
-		Type type = qualifiedName.getQualifier().resolveType();
-		if (type instanceof org.eclipse.edt.mof.egl.ArrayType && !(qualifiedName.resolveMember() instanceof Function)) {
+		if (qualifiedName.getQualifier().resolveType() instanceof org.eclipse.edt.mof.egl.ArrayType
+				&& !(qualifiedName.resolveMember() instanceof Function)) {
 			problemRequestor.acceptProblem(
 					qualifiedName.getQualifier(),
 					IProblemRequestor.ARRAY_ACCESS_NOT_SUBSCRIPTED,
@@ -679,10 +682,4 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			}
 		}
 	}
-	
-	@Override
-	public void endVisit(InExpression inExpression) {
-		//TODO
-		
-	};
 }

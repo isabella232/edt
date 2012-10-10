@@ -32,6 +32,7 @@ public class AssignmentStatement extends Statement {
 		return assignment;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -40,7 +41,13 @@ public class AssignmentStatement extends Statement {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new AssignmentStatement((Assignment)assignment.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return assignment.toString() + ";";
 	}
 }
