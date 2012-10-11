@@ -1297,18 +1297,14 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (mofType instanceof Type) {
 			type = (Type)mofType;
 		}
-		if (type != null && type.getTypeSignature().equals(Type_Any)) {
-			// TODO This is the default way generic types are referenced in current
-			// EGL: by having a convention that a single typed parameter name is 
-			// always mapped to type ANY.  This is not generally sufficient but
-			// good enough to handle the minimal places EGL uses this today
-			Classifier part = (Classifier)getPartBeingProcessed();
-			if (part == null) System.out.println("Null processing part: " + obj.toStringHeader());
-			else if (!part.getTypeParameters().isEmpty()) {
-				type = factory.createGenericType();
-				((GenericType)type).setTypeParameter(part.getTypeParameters().get(0));
-			}
+	
+		if (getPartBeingProcessed() == null) {
+			System.out.println("Null processing part: " + obj.toStringHeader());
 		}
+		else {
+			type = handleGenericType(type);
+		}
+		
 		obj.setType(type);
 		
 		obj.setName(edtObj.getCaseSensitiveName());
@@ -1347,4 +1343,33 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return BindingUtil.isSubClassOf(child, parent);
 	}
 
+	private Type handleGenericType(Type type) {
+		if (type != null && type.getTypeSignature().equals(Type_Any)) {
+			// TODO This is the default way generic types are referenced in current
+			// EGL: by having a convention that a single typed parameter name is 
+			// always mapped to type ANY.  This is not generally sufficient but
+			// good enough to handle the minimal places EGL uses this today
+			Classifier part = (Classifier)getPartBeingProcessed();
+			if (!part.getTypeParameters().isEmpty()) {
+				type = factory.createGenericType();
+				((GenericType)type).setTypeParameter(part.getTypeParameters().get(0));
+				return type;
+			}
+		}
+		
+		//Handle the case of Any[]
+		if (type instanceof ArrayType) {
+			ArrayType arrType = (ArrayType)type;
+			Type newType = handleGenericType(arrType.getElementType());
+			if (newType != null && newType != arrType.getElementType()) {
+				arrType.getTypeArguments().remove(0);
+				arrType.getTypeArguments().add(0, newType);
+			}
+			return arrType;
+		}
+		
+		return type;
+	}
+
+	
 }
