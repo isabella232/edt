@@ -1,7 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" name="VEContainer" fileName="eglx/ui/rui/Annotations.egl" hasCompileErrors="false" packageName="eglx.ui.rui" >
-	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="layoutDataType" eType="org.eclipse.edt.mof.EString" nullable="false" isTransient="false" containment="true" >
-		<declarer IDREF="1"/>
-	</eFields>
-	<annotations ID="3" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:62" off="i:2041" line="i:86" />
-</AnnotationType>

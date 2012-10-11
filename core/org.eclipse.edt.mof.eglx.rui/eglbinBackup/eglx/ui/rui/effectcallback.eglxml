@@ -1,4 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<Delegate ID="1" eClass="org.eclipse.edt.mof.egl.Delegate" name="EffectCallback" fileName="eglx/ui/rui/ExternalTypes.egl" hasCompileErrors="false" packageName="eglx.ui.rui" isNullable="false" >
-	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:29" off="i:25428" line="i:657" />
-</Delegate>
