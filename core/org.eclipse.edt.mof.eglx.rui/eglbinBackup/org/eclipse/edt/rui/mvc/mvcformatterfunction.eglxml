@@ -1,8 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<Delegate ID="1" eClass="org.eclipse.edt.mof.egl.Delegate" name="MVCFormatterFunction" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" isNullable="false" returnType="egl:eglx.lang.estring" >
-	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:68" off="i:675" line="i:24" />
-	<parameters ID="3" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="input" type="egl:eglx.lang.estring" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
-		<annotations ID="4" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:15" off="i:707" line="i:25" />
-		<container IDREF="1"/>
-	</parameters>
-</Delegate>

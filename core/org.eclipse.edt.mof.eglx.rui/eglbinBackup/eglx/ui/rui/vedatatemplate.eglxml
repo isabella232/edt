@@ -1,9 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<AnnotationType ID="1" eClass="org.eclipse.edt.mof.egl.AnnotationType" isAbstract="false" isInterface="false" name="VEDataTemplate" fileName="eglx/ui/rui/Annotations.egl" hasCompileErrors="false" packageName="eglx.ui.rui" >
-	<eFields ID="2" eClass="org.eclipse.edt.mof.EField" name="dataTemplates" eType="org.eclipse.edt.mof.EList&lt;egl:eglx.ui.rui.datatemplate&gt;" nullable="false" isTransient="false" containment="true" >
-		<declarer IDREF="1"/>
-	</eFields>
-	<targets>HandlerPart</targets>
-	<targets>ExternalTypePart</targets>
-	<annotations ID="3" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:145" off="i:940" line="i:32" />
-</AnnotationType>

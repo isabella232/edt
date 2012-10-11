@@ -230,10 +230,6 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 		return true;
 	}
 	
-	public boolean visit(InExpression inExpression) {
-		return true;
-	}
-	
 	public boolean visit(InlineSQLStatement inlineSQLStatement) {
 		return true;
 	}
@@ -561,8 +557,6 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public void endVisit(ImportDeclaration importDeclaration) {}
 	
 	public void endVisit(IfStatement ifStatement) {}
-	
-	public void endVisit(InExpression inExpression) {}
 	
 	public void endVisit(InlineSQLStatement inlineSQLStatement) {}
 	

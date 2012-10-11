@@ -1,8 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<Delegate ID="1" eClass="org.eclipse.edt.mof.egl.Delegate" name="MVCPublisher" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" isNullable="false" >
-	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:41" off="i:932" line="i:40" />
-	<parameters ID="3" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="s" type="egl:eglx.lang.estring" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
-		<annotations ID="4" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:11" off="i:956" line="i:41" />
-		<container IDREF="1"/>
-	</parameters>
-</Delegate>

@@ -1,4 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<Delegate ID="1" eClass="org.eclipse.edt.mof.egl.Delegate" name="MVCValidStateRetriever" fileName="org/eclipse/edt/rui/mvc/MVC.egl" hasCompileErrors="false" packageName="org.eclipse.edt.rui.mvc" isNullable="true" returnType="egl:eglx.lang.estring" >
-	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:55" off="i:1023" line="i:48" />
-</Delegate>

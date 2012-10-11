@@ -66,7 +66,6 @@ import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.MultiOperandExpression;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NullLiteral;
@@ -516,24 +515,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return false;
 	}
 	
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.InExpression inExpression) {
-		TernaryExpression inExpr = factory.createTernaryExpression();
-		setElementInformation(inExpression, inExpr);
-		stack.push(inExpr);
-		inExpression.getFirstExpression().accept(this);
-		inExpr.setFirst((Expression)stack.pop());
-		inExpression.getSecondExpression().accept(this);
-		inExpr.setSecond((Expression)stack.pop());
-		inExpr.setOperator(MultiOperandExpression.Op_IN);
-		if (inExpression.getFromExpression() != null) {
-			inExpression.getFromExpression().accept(this);
-			inExpr.setThird((Expression)stack.pop());			
-		}
-		return false;
-	}
-
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.IntegerLiteral literal) {
 		IntegerLiteral lit = factory.createIntegerLiteral();

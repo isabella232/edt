@@ -1053,12 +1053,6 @@ expr
 	|	expr:expr1 AS STRING:stringLiteral
 	{: RESULT = new AsExpression(expr1, stringLiteral, expr1left, stringLiteralright); :}
 	
-	|	expr:expr1 IN expr:expr2
-	{: RESULT = new InExpression(expr1, expr2, null, expr1left, expr2right); :}
-	
-	|	expr:expr1 IN expr:expr2 FROM expr:expr3
-	{: RESULT = new InExpression(expr1, expr2, expr3, expr1left, expr3right); :}
-
 	|	expr:expr1 IS expr:expr2
 	{: RESULT = new IsNotExpression(IsNotExpression.Operator.IS, expr1, expr2, expr1left, expr2right); :}
 
