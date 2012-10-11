@@ -245,6 +245,7 @@ public class ValidationTestCase extends TestCase {
 	
 	private ISDKProblemRequestorFactory getProblemRequestorFactory(final ProblemCollectingProblemRequestor pRequestor) {
 		return new ISDKProblemRequestorFactory() {
+			@Override
 			public IProblemRequestor getProblemRequestor(File file, final String partName) {
 				return new DefaultProblemRequestor() {
 					@Override
@@ -261,44 +262,7 @@ public class ValidationTestCase extends TestCase {
 				};
 			}
 	
-			public IProblemRequestor getGenericTopLevelFunctionProblemRequestor(File file, String partName, final boolean containerContextDependent) {
-				return new DefaultProblemRequestor() {
-					@Override
-					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
-						if(containerContextDependent && problemKind == IProblemRequestor.TYPE_CANNOT_BE_RESOLVED){
-							return;
-						}
-						
-						if(!messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
-					 		if (severity == IMarker.SEVERITY_ERROR) {
-					 			setHasError(true);
-					 		}
-							pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
-						}								
-					}							
-				};
-			}
-	
-			public IProblemRequestor getContainerContextTopLevelProblemRequestor(File file, final String containerContextName, final boolean containerContextDependent) {
-				return new DefaultProblemRequestor() {
-					@Override
-					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
-				 		if (severity == IMarker.SEVERITY_ERROR) {
-				 			setHasError(true);
-				 		}
-						if(containerContextDependent && problemKind == TYPE_CANNOT_BE_RESOLVED ||
-						   messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
-							int insertsLength = inserts.length;
-							inserts = shiftInsertsIfNeccesary(problemKind, inserts);
-							if(insertsLength != inserts.length) {
-								inserts[0] = containerContextName;
-							}
-							pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
-						}								
-					}
-				};
-			}
-
+			@Override
 			public ISyntaxErrorRequestor getSyntaxErrorRequestor(File file) {
 				 return new AccumulatingSyntaxErrorRequestor();
 			}	

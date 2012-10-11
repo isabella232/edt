@@ -20,8 +20,4 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 public interface ISDKProblemRequestorFactory {
 	ISyntaxErrorRequestor getSyntaxErrorRequestor(File file);
 	IProblemRequestor getProblemRequestor(File file, String partName);
-	IProblemRequestor getGenericTopLevelFunctionProblemRequestor(File file, String partName,boolean containerContextDependent);
-	IProblemRequestor getContainerContextTopLevelProblemRequestor(File file, String containerContextName,boolean containerContextDependent);
-	
-	
 }
