@@ -33,7 +33,6 @@ import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -45,7 +44,6 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.SequenceType;
-import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
@@ -281,11 +279,8 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static boolean isStaticType(Type type) {
-		//TODO implement a 'StaticType' interface in the model instead of hardcoding types here.
-		if (type instanceof Program || type instanceof Service || type instanceof Library) {
-			return true;
-		}
-		return false;
+		// For MOF definitions
+		return type != null && type.getEClass() != null && type.getEClass().getMetadata("StaticType") != null;
 	}
 	
 	public static boolean isSubtypeOf(Classifier subtype, EGLClass superType) {
