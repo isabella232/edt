@@ -16,7 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -53,6 +55,7 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.impl.DynamicEObject;
 import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class TypeUtils implements MofConversion {
@@ -280,7 +283,8 @@ public class TypeUtils implements MofConversion {
 	
 	public static boolean isStaticType(Type type) {
 		// For MOF definitions
-		return type != null && type.getEClass() != null && type.getEClass().getMetadata("StaticType") != null;
+		EClass staticType = (EClass)Environment.getCurrentEnv().get("org.eclipse.edt.mof.egl.StaticType");
+		return type != null && type.getEClass() != null && type.getEClass().isSubClassOf(staticType);
 	}
 	
 	public static boolean isSubtypeOf(Classifier subtype, EGLClass superType) {

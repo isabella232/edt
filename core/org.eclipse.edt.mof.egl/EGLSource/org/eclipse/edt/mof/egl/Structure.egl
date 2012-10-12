@@ -121,6 +121,9 @@ externalType Container extends Element type MofClass {isAbstract=yes, isInterfac
 	function addMember(mbr Member in);
 end
 
+externalType StaticType extends Element type MofClass {isAbstract=yes, isInterface=yes}
+end
+
 externalType EGLType extends Element, MofSerializable type MofClass {name="Type", isAbstract=yes, isInterface=yes}
 	function getClassifier() returns(Classifier);
 	  
@@ -321,7 +324,7 @@ end
 externalType EGLExternalType extends EGLClass type MofClass {name="ExternalType"} 
 end
 
-externalType EGLProgram extends EGLClass type MofClass {name="Program", @StaticType}
+externalType EGLProgram extends EGLClass, StaticType type MofClass {name="Program"}
 	parameters ProgramParameter[] {@Containment{true}};
 	isCallable boolean;
 end
@@ -329,10 +332,10 @@ end
 externalType EGLHandler extends EGLClass type MofClass {name="Handler"}
 end
 
-externalType EGLLibrary extends EGLClass type MofClass {name="Library", @StaticType}
+externalType EGLLibrary extends EGLClass, StaticType type MofClass {name="Library"}
 end
 
-externalType EGLService extends EGLClass type MofClass {name="Service", @StaticType}
+externalType EGLService extends EGLClass, StaticType type MofClass {name="Service"}
 end
 
 externalType EGLInterface extends EGLClass type MofClass {name="Interface"} 
