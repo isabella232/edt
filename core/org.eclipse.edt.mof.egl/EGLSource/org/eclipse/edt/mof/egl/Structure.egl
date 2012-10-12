@@ -321,7 +321,7 @@ end
 externalType EGLExternalType extends EGLClass type MofClass {name="ExternalType"} 
 end
 
-externalType EGLProgram extends EGLClass type MofClass {name="Program"} 
+externalType EGLProgram extends EGLClass type MofClass {name="Program", @StaticType}
 	parameters ProgramParameter[] {@Containment{true}};
 	isCallable boolean;
 end
@@ -329,10 +329,10 @@ end
 externalType EGLHandler extends EGLClass type MofClass {name="Handler"}
 end
 
-externalType EGLLibrary extends EGLClass type MofClass {name="Library"}
+externalType EGLLibrary extends EGLClass type MofClass {name="Library", @StaticType}
 end
 
-externalType EGLService extends EGLClass type MofClass {name="Service"}
+externalType EGLService extends EGLClass type MofClass {name="Service", @StaticType}
 end
 
 externalType EGLInterface extends EGLClass type MofClass {name="Interface"} 
