@@ -32,6 +32,7 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.ClassDataDecl
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.EClassProxy;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
@@ -119,7 +120,9 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 		for (Iterator iter = externalType.getExtendedTypes().iterator(); iter.hasNext();) {
 			Name nameAST = (Name) iter.next();
 			Type extendedType = nameAST.resolveType();
-			if (extendedType != null) {
+			
+			//do not validate the extended type for mof classes
+			if (extendedType != null && !isMofClass(extendedType)) {
 				if (!(extendedType instanceof org.eclipse.edt.mof.egl.ExternalType)) {
 					problemRequestor.acceptProblem(
 							nameAST,
@@ -131,7 +134,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 				else {
 					// Super type must have the same subtype.
 					Stereotype superSubtype = ((org.eclipse.edt.mof.egl.ExternalType)extendedType).getSubType();
-					if (superSubtype == null || (!expectedSubtype.equals(superSubtype.getEClass()) && !isMofClass((org.eclipse.edt.mof.egl.ExternalType)extendedType))) {
+					if (superSubtype == null || (!expectedSubtype.equals(superSubtype.getEClass()))) {
 						problemRequestor.acceptProblem(
 								nameAST,
 								IProblemRequestor.EXTERNAL_TYPE_SUPER_SUBTYPE_MISMATCH,
@@ -144,12 +147,19 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 		}
 	}
 	
-	private boolean isMofClass(org.eclipse.edt.mof.egl.ExternalType et) {
+	private boolean isMofClass(Type type) {
 		
-		if (BindingUtil.getAnnotationWithSimpleName(et, "ClassType") != null) {
+		if (type instanceof EClassProxy) {
 			return true;
 		}
-		if (BindingUtil.getAnnotationWithSimpleName(et, "MofClass") != null) {
+		
+		if (BindingUtil.getAnnotationWithSimpleName(type, "EClassProxy") != null) {
+			return true;
+		}
+		if (BindingUtil.getAnnotationWithSimpleName(type, "ClassType") != null) {
+			return true;
+		}
+		if (BindingUtil.getAnnotationWithSimpleName(type, "MofClass") != null) {
 			return true;
 		}
 		

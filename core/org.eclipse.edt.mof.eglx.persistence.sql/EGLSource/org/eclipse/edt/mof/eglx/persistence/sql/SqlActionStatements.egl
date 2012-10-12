@@ -11,20 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql;
 
-import org.eclipse.edt.mof.egl.AddStatement;
-import org.eclipse.edt.mof.egl.CloseStatement;
-import org.eclipse.edt.mof.egl.DeleteStatement;
-import org.eclipse.edt.mof.egl.ExecuteStatement;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.ForEachStatement;
-import org.eclipse.edt.mof.egl.GetByKeyStatement;
-import org.eclipse.edt.mof.egl.IOStatement;
-import org.eclipse.edt.mof.egl.OpenStatement;
-import org.eclipse.edt.mof.egl.PrepareStatement;
-import org.eclipse.edt.mof.egl.ReplaceStatement;
-import egl.lang.reflect.mof.Containment;
+import egl.lang.reflect.AddStatement;
+import egl.lang.reflect.CloseStatement;
+import egl.lang.reflect.DeleteStatement;
+import egl.lang.reflect.ExecuteStatement;
+import egl.lang.reflect.Expression;
+import egl.lang.reflect.ForEachStatement;
+import egl.lang.reflect.GetByKeyStatement;
+import egl.lang.reflect.IOStatement;
+import egl.lang.reflect.OpenStatement;
+import egl.lang.reflect.PrepareStatement;
+import egl.lang.reflect.ReplaceStatement;
+import egl.lang.reflect.Containment;
 import egl.lang.reflect.MofClass;
-import egl.lang.reflect.mof.MofName;
 
 externalType SqlActionStatement extends IOStatement type MofClass {isAbstract=yes}
 	preparedStatement Expression {@Containment{true}};
