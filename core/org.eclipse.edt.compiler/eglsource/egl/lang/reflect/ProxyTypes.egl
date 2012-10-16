@@ -103,3 +103,63 @@ externalType IntervalType type EClassProxy {
 }
 end
 
+externalType CallStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.CallStatement"
+}
+end
+
+externalType AddStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.AddStatement"
+}
+end
+
+externalType CloseStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.CloseStatement"
+}
+end
+
+externalType DeleteStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.DeleteStatement"
+}
+end
+
+externalType ExecuteStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.ExecuteStatement"
+}
+end
+
+externalType Expression type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.Expression"
+}
+end
+
+externalType ForEachStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.ForEachStatement"
+}
+end
+
+externalType GetByKeyStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.GetByKeyStatement"
+}
+end
+
+externalType IOStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.IOStatement"
+}
+end
+
+externalType OpenStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.OpenStatement"
+}
+end
+
+externalType PrepareStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.PrepareStatement"
+}
+end
+
+externalType ReplaceStatement type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.ReplaceStatement"
+}
+end
+

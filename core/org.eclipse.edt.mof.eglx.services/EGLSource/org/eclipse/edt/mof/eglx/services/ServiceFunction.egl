@@ -11,5 +11,5 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.services;
 
-externalType ServiceFunction extends org.eclipse.edt.mof.egl.EGLFunction type egl.lang.reflect.MofClass
+externalType ServiceFunction extends egl.lang.reflect.FunctionMbr type egl.lang.reflect.MofClass
 end

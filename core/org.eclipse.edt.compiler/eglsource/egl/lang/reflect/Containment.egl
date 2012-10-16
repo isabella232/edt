@@ -9,13 +9,10 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.egl;
+package egl.lang.reflect;
 
-import egl.lang.reflect.IsEMetadataType;
-
-Record StaticType type Annotation {
-	targets = [ElementKind.Part],
-	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
-	@IsEMetadataType
+Record Containment type Annotation {
+	targets = [ElementKind.FieldMbr]
 }
+	value boolean = true;
 end

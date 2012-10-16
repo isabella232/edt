@@ -11,7 +11,5 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.services;
 
-import org.eclipse.edt.mof.egl.CallStatement;
-
-externalType ServicesCallStatement extends CallStatement type egl.lang.reflect.MofClass
+externalType ServicesCallStatement extends egl.lang.reflect.CallStatement type egl.lang.reflect.MofClass
 end

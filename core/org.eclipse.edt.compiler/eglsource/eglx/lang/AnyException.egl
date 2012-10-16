@@ -16,7 +16,7 @@ import egl.lang.reflect.ClassType;
 /**
  * AnyException is the supertype of all exceptions.
  */
-externalType AnyException extends EAny type ClassType
+externalType AnyException extends EAny type NativeType
 	/**
 	 * Some text explaining the reason for this exception.  Messages may be
 	 * presented in the user's language and locale.

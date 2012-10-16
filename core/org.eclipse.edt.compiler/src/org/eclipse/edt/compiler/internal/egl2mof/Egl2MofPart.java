@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EMember;
@@ -28,6 +29,7 @@ import org.eclipse.edt.mof.EMemberContainer;
 import org.eclipse.edt.mof.EMetadataObject;
 import org.eclipse.edt.mof.EMetadataType;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -107,9 +109,18 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			for (Object name : node.getExtendedTypes()) {
 				Part superType = (Part)((Name)name).resolveType();
 				if (superType != null) {
-					EClass superTypeClass = (EClass)mofTypeFor(superType);
+					
+					EType proxiedType = BindingUtil.getETypeFromProxy(superType);
+					EClass superTypeClass;
+					if (proxiedType instanceof EClass) {
+						superTypeClass = (EClass) proxiedType;
+					}
+					else {
+						superTypeClass = (EClass)mofTypeFor(superType);
+					}
+					
 					fixSuperTypes(superTypeClass);
-					superTypes.add((EClass)mofTypeFor(superType));
+					superTypes.add(superTypeClass);
 				}
 			}
 			((EClass)part).addSuperTypes(superTypes);

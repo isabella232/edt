@@ -13,7 +13,7 @@ package org.eclipse.edt.mof.egl;
 
 import java.util.List;
 
-public interface Program extends EGLClass {
+public interface Program extends EGLClass, StaticType {
 	List<ProgramParameter> getParameters();
 	
 	Boolean isCallable();
