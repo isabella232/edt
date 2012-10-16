@@ -48,9 +48,6 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
-/**
- * @author Dave Murray
- */
 public class FunctionArgumentValidator extends DefaultASTVisitor {
 	
 	private IProblemRequestor problemRequestor;
@@ -102,6 +99,11 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	}
 	
 	@Override
+	public void endVisit(FunctionInvocation functionInvocation) {
+		checkCorrectNumberArguments(functionInvocation.getTarget());
+	}
+	
+	@Override
 	public boolean visit(CallStatement callStatement) {
 		this.qualifier = callStatement.getInvocationTarget();
 		canonicalFunctionName = callStatement.getInvocationTarget().getCanonicalString();
@@ -110,22 +112,30 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
-		if(callStatement.getArguments().size() != getFunctionParameterCount()){
-			problemRequestor.acceptProblem(
-					callStatement,
-					IProblemRequestor.ARGUMENT_COUNT_NOT_EQUAL_PARAMETER_COUNT,
-					new String[] {
-							String.valueOf(callStatement.getArguments().size()),
-							String.valueOf(getFunctionParameterCount()),
-							functionBinding.getCaseSensitiveName()
-					});
-		}
-		
 		for(Node expr : callStatement.getArguments()) {
 			checkArg((Expression)expr);
 		}
 
 		return false;
+	}
+	
+	@Override
+	public void endVisit(CallStatement callStatement) {
+		checkCorrectNumberArguments(callStatement.getInvocationTarget());
+	}
+	
+	private void checkCorrectNumberArguments(Expression errorNode) {
+		int parmCount = getFunctionParameterCount();
+		if (parmCount != numArgs) {
+			problemRequestor.acceptProblem(
+            		errorNode,
+					IProblemRequestor.ROUTINE_MUST_HAVE_X_ARGS,
+					new String[] {
+            			canonicalFunctionName,
+						Integer.toString(parmCount)
+					}
+            	);
+		}
 	}
 	
 	private int getFunctionParameterCount(){
