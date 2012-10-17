@@ -35,6 +35,8 @@ import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
 import org.eclipse.edt.compiler.sdk.compile.BuildPathException;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.impl.Bootstrap;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
@@ -64,7 +66,11 @@ public class EGLC {
 
 	
 	public static void compile(final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs, ICompiler compiler, ISDKProblemRequestorFactory problemRequestorFactory){
+    	Environment env = new Environment();
+    	Bootstrap.initialize(env);
+		
 		try {
+			Environment.pushEnv(env);
 	        File[] files = processedArgs.getPartFiles();
 	        
 	        if(files.length > 0){
@@ -123,6 +129,7 @@ public class EGLC {
          }
         finally {
         	PartEnvironmentStack.popEnv();
+        	Environment.popEnv();
         }
 	}
 
