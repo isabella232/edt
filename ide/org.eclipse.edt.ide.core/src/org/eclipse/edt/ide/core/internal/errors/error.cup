@@ -243,8 +243,14 @@ part
 	::=	privateAccessModifierOpt:privateAccessModifier1 DATAITEM:dataItem1 ID:id1 namedType:type1 settingsBlock_star:settingsBlocks1 END:end1
 	{: RESULT = new DataItem(privateAccessModifier1, new SimpleName(id1, id1left, id1right), type1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? dataItem1left : privateAccessModifier1left, end1right); :}
 	
+	|	privateAccessModifierOpt:privateAccessModifier1 DATAITEM:dataItem1 ID:id1 namedType:type1 settingsBlock_star:settingsBlocks1 SEMI:semi1
+	{: RESULT = new DataItem(privateAccessModifier1, new SimpleName(id1, id1left, id1right), type1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? dataItem1left : privateAccessModifier1left, semi1right); :}
+	
 	|	privateAccessModifierOpt:privateAccessModifier1 DELEGATE:delegate1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlock_star:settingsBlocks1 END:end1
 	{: RESULT = new Delegate(privateAccessModifier1, new SimpleName(id1, id1left, id1right), functionParameters1, returns1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? delegate1left : privateAccessModifier1left, end1right); :}
+
+	|	privateAccessModifierOpt:privateAccessModifier1 DELEGATE:delegate1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlock_star:settingsBlocks1 SEMI:semi1
+	{: RESULT = new Delegate(privateAccessModifier1, new SimpleName(id1, id1left, id1right), functionParameters1, returns1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? delegate1left : privateAccessModifier1left, semi1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 RECORD:record1 ID:id1 partSubTypeOpt:partSubType1 structureContent_star:structureContents1 END:end1
 	{: RESULT = new Record(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, structureContents1, privateAccessModifier1 == Boolean.FALSE ? record1left : privateAccessModifier1left, end1right); :}

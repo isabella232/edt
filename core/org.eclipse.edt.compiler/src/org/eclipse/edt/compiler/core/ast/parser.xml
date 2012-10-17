@@ -20,6 +20,7 @@
 		</java>
 		
 		<move file="temp.file" tofile="Parser.java" verbose="true"/>
+		<delete file="egl.cup.dump"/>
 		
 		<eclipse.refreshLocal resource="org.eclipse.edt.compiler"/>
 	</target>
