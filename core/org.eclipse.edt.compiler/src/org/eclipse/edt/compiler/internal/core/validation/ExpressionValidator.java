@@ -682,4 +682,10 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			}
 		}
 	}
+	
+	@Override
+	public boolean visit(SetValuesExpression setValuesExpression) {
+		// Do not validate exprs inside annotations or stereotypes. That is already covered in the annotation code, which has different rules.
+		return !(setValuesExpression.getExpression().resolveType() instanceof AnnotationType); // StereotypeType subclasses this, no need to check both
+	}
 }
