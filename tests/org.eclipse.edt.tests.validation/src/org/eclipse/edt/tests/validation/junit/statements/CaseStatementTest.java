@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.statements;
 
 import java.util.List;
@@ -188,11 +177,11 @@ public class CaseStatementTest extends ValidationTestCase {
 
 	/*
 	 * when(a)
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine45() {
 		List messages = getMessagesAtLine( 45 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
@@ -224,11 +213,11 @@ public class CaseStatementTest extends ValidationTestCase {
 
 	/*
 	 * when(a)
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine51() {
 		List messages = getMessagesAtLine( 51 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
@@ -278,11 +267,11 @@ public class CaseStatementTest extends ValidationTestCase {
 
 	/*
 	 * when(a)
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine60() {
 		List messages = getMessagesAtLine( 60 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*

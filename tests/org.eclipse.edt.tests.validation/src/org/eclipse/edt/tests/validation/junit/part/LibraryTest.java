@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.part;
 
 import java.util.List;
@@ -28,8 +17,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * Zi int;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine19() {
-		List messages = getMessagesAtLine( 19 );
+	public void testLine17() {
+		List messages = getMessagesAtLine( 17 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -37,13 +26,31 @@ public class LibraryTest extends ValidationTestCase {
 	 * const Zj int = 5;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine20() {
-		List messages = getMessagesAtLine( 20 );
+	public void testLine18() {
+		List messages = getMessagesAtLine( 18 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * ints int[],
+	 * 0 validation messages are expected.
+	 */
+	public void testLine21() {
+		List messages = getMessagesAtLine( 21 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * m Zmyrec,
+	 * 0 validation messages are expected.
+	 */
+	public void testLine22() {
+		List messages = getMessagesAtLine( 22 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * n number in ,
 	 * 0 validation messages are expected.
 	 */
 	public void testLine23() {
@@ -52,7 +59,7 @@ public class LibraryTest extends ValidationTestCase {
 	}
 
 	/*
-	 * m Zmyrec,
+	 * n1 number out
 	 * 0 validation messages are expected.
 	 */
 	public void testLine24() {
@@ -61,30 +68,12 @@ public class LibraryTest extends ValidationTestCase {
 	}
 
 	/*
-	 * n number in ,
-	 * 0 validation messages are expected.
-	 */
-	public void testLine25() {
-		List messages = getMessagesAtLine( 25 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * n1 number out
-	 * 0 validation messages are expected.
-	 */
-	public void testLine26() {
-		List messages = getMessagesAtLine( 26 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
 	 * ,dfg Zyyyy
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type Zyyyy is not a valid type for a data declaration.".
 	 */
-	public void testLine28() {
-		List messages = getMessagesAtLine( 28 );
+	public void testLine26() {
+		List messages = getMessagesAtLine( 26 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type Zyyyy is not a valid type for a data declaration." );
@@ -95,8 +84,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * const i int = 5;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine30() {
-		List messages = getMessagesAtLine( 30 );
+	public void testLine28() {
+		List messages = getMessagesAtLine( 28 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -104,8 +93,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * noparam();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine31() {
-		List messages = getMessagesAtLine( 31 );
+	public void testLine29() {
+		List messages = getMessagesAtLine( 29 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -113,8 +102,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * function noparam() returns (int[])
 	 * 0 validation messages are expected.
 	 */
-	public void testLine34() {
-		List messages = getMessagesAtLine( 34 );
+	public void testLine32() {
+		List messages = getMessagesAtLine( 32 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -123,8 +112,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type Zyyyy is not a valid type for a data declaration.".
 	 */
-	public void testLine36() {
-		List messages = getMessagesAtLine( 36 );
+	public void testLine34() {
+		List messages = getMessagesAtLine( 34 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type Zyyyy is not a valid type for a data declaration." );
@@ -135,8 +124,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * function numberfunc (f number)
 	 * 0 validation messages are expected.
 	 */
-	public void testLine39() {
-		List messages = getMessagesAtLine( 39 );
+	public void testLine37() {
+		List messages = getMessagesAtLine( 37 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -145,8 +134,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The same name zzp also appears as variable, parameter, use or constant declaration in Function, Program, or Library mult.".
 	 */
-	public void testLine42() {
-		List messages = getMessagesAtLine( 42 );
+	public void testLine40() {
+		List messages = getMessagesAtLine( 40 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The same name zzp also appears as variable, parameter, use or constant declaration in Function, Program, or Library mult." );
@@ -157,8 +146,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * i int = 5;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine43() {
-		List messages = getMessagesAtLine( 43 );
+	public void testLine41() {
+		List messages = getMessagesAtLine( 41 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -166,8 +155,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * const j int = 6;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine44() {
-		List messages = getMessagesAtLine( 44 );
+	public void testLine42() {
+		List messages = getMessagesAtLine( 42 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -175,8 +164,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * library Zmymain
 	 * 0 validation messages are expected.
 	 */
-	public void testLine50() {
-		List messages = getMessagesAtLine( 50 );
+	public void testLine48() {
+		List messages = getMessagesAtLine( 48 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -185,8 +174,8 @@ public class LibraryTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type Zyyyy is not a valid type for a data declaration.".
 	 */
-	public void testLine58() {
-		List messages = getMessagesAtLine( 58 );
+	public void testLine56() {
+		List messages = getMessagesAtLine( 56 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type Zyyyy is not a valid type for a data declaration." );

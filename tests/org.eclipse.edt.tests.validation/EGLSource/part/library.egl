@@ -12,10 +12,8 @@
 record Zmyrec
 i int;
 end
-form Zmyform type TextForm
-end
 
-Library ZMySource type BasicLibrary
+Library ZMySource
 Zi int;// 0
 const Zj int = 5;// 0
 
