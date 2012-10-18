@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.core.ast.ArrayAccess;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.AssignmentStatement;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -24,6 +25,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Operation;
@@ -122,6 +124,14 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 			}
 			
 			for (Map.Entry<Expression, Type> entry : errors.entrySet()) {
+				// Could be we're assigning null to an array access, e.g. "nullableArray[1] = null;". Nullability comes from the array qualifier in this case.
+				if (lhs instanceof ArrayAccess && TypeUtils.Type_NULLTYPE.equals(entry.getValue()) && lhsMember != null && !lhsMember.isNullable()) {
+					Type qualType = ((ArrayAccess)lhs).getArray().resolveType();
+					if (qualType instanceof ArrayType && ((ArrayType)qualType).elementsNullable()) {
+						continue;
+					}
+				}
+				
 				problemRequestor.acceptProblem(entry.getKey(),
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 						new String[] {lhsType != null ? BindingUtil.getShortTypeString(lhsType) : lhs.getCanonicalString(),
@@ -144,15 +154,6 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		
 		if (rhsMember != null) {
 			new RValueValidator(problemRequestor, compilerOptions, rhsMember, rhs).validate();
-		}
-		
-		
-		if (lhsMember != null && rhsType != null) {
-			if (TypeUtils.Type_NULLTYPE.equals(rhsType) && !lhsMember.isNullable()) {
-				problemRequestor.acceptProblem(lhs,
-						IProblemRequestor.CANNOT_ASSIGN_NULL,
-						new String[] {lhs.getCanonicalString()});
-			}
 		}
 		
 		return false;
