@@ -1103,8 +1103,15 @@ public class BindingUtil {
 				public boolean visit(BinaryExpression binaryExpression) {
 					Type binType = binaryExpression.resolveType();
 					if (binType != null) {
-						//TODO correct to always use first expr?
-						type[0] =  resolveGenericType(binType, binaryExpression.getFirstExpression());
+						// Could be "myString :: myList" or "myList :: myString". Resolve generics based on which classifier matches.
+						Type type1 = binaryExpression.getFirstExpression().resolveType();
+						if (type1 != null && type1.getClassifier() != null && type1.getClassifier().equals(binType.getClassifier())) {
+							type[0] =  resolveGenericType(binType, binaryExpression.getFirstExpression());
+						}
+						else {
+							type[0] =  resolveGenericType(binType, binaryExpression.getSecondExpression());
+						}
+						
 						throw new ExitVisitor();
 					}
 					return false;
@@ -1113,7 +1120,6 @@ public class BindingUtil {
 				public boolean visit(TernaryExpression ternaryExpression) {
 					Type ternType = ternaryExpression.resolveType();
 					if (ternType != null) {
-						//TODO correct to always use second expr?
 						type[0] =  resolveGenericType(ternType, ternaryExpression.getSecondExpr());
 						throw new ExitVisitor();
 					}

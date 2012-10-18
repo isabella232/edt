@@ -199,7 +199,7 @@ handler ternary1
 		a = b * (true ? s : i); //2 No operation is defined for expressions b and s with the * operator in the expression b * s.|No operation is defined for expressions b and i with the * operator in the expression b * i.
 		a = s + true ? true : true; //0
 		i = i * 76 - (true ? 22 : i - 99) % (false ? getValue() * 88 : i >> 2); //0
-		a = ba :: (true ? d : true); //1 No operation is defined for expressions ba and d with the :: operator in the expression ba :: d.
+		a = ba :: (true ? d : true); //1 boolean[] and del1 are not compatible types in the expression ba :: d
 	end
 	
 	function forChecks()

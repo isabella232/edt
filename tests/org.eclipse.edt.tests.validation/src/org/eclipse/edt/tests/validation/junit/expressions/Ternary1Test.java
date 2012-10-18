@@ -1138,14 +1138,14 @@ public class Ternary1Test extends ValidationTestCase {
 	/*
 	 * a = ba :: (true ? d : true);
 	 * 1 validation message is expected.
-	 * It is expected to contain "No operation is defined for expressions ba and d with the :: operator in the expression ba :: d.".
+	 * It is expected to contain "boolean[] and del1 are not compatible types in the expression ba :: d".
 	 */
 	public void testLine202() {
 		List messages = getMessagesAtLine( 202 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "No operation is defined for expressions ba and d with the :: operator in the expression ba :: d." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"No operation is defined for expressions ba and d with the :: operator in the expression ba :: d.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "boolean[] and del1 are not compatible types in the expression ba :: d" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"boolean[] and del1 are not compatible types in the expression ba :: d\" was issued." );
 	}
 
 	/*
