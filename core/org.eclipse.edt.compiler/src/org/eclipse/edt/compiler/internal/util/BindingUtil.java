@@ -702,16 +702,29 @@ public class BindingUtil {
 	public static List<Member> findMembers(Type type, String id) {
 		if (type instanceof Container) {
 			
+			// First try to resolve within the part itself.
 			List<Member> list = new ArrayList<Member>();
-			for (Member mbr : ((Container)type).getAllMembers()) {
+			for (Member mbr : ((Container)type).getMembers()) {
 				if (NameUtile.equals(id, mbr.getId())) {
 					list.add(mbr);
 				}
 			}
-			if (list.isEmpty()) {
-				return null;
+			if (!list.isEmpty()) {
+				return list;
 			}
-			return list;
+			
+			// Not in this part - check all the super types.
+			if (type instanceof StructPart && !((StructPart)type).getSuperTypes().isEmpty()) {
+				for (StructPart superType : ((StructPart)type).getSuperTypes()) {
+					List<Member> temp = findMembers(superType, id);
+					if (temp != null) {
+						list.addAll(temp);
+					}
+				}
+				if (!list.isEmpty()) {
+					return list;
+				}
+			}
 		}
 		return null;
 	}
