@@ -38,6 +38,7 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidat
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -173,10 +174,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 			return false;
 		}
 		
-		if (!checkNullPassedToNonNullable(argMap, parameterBinding)) {
-			return false;
-		}
-
 		if (!checkArgumentUsedCorrectlyWithInAndOut(argMap, parameterBinding, parameterType)) {
 			return false;
 		}
@@ -194,23 +191,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		}
 		
 		return false;
-	}
-	
-	private boolean checkNullPassedToNonNullable(Map<Expression, Type> argMap, FunctionParameter parameterBinding) {
-		boolean result = true;
-		for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
-			if (TypeUtils.Type_NULLTYPE.equals(entry.getValue()) && parameterBinding != null && !parameterBinding.isNullable()) {
-				problemRequestor.acceptProblem(
-						entry.getKey(),
-						IProblemRequestor.CANNOT_PASS_NULL,
-						new String[] {
-							parameterBinding.getCaseSensitiveName(),
-							functionBinding.getCaseSensitiveName()
-						});
-				result = false;
-			}
-		}
-		return result;
 	}
 	
 	private boolean checkArgumentNotSetValuesExpression(final Expression argExpr) {
@@ -390,6 +370,16 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		parmType = BindingUtil.resolveGenericType(parmType, qualifier);
 	    	
 	    	if (!IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
+	    		// Generic type parms are defined as EAny (see EList.appendElement). Therefore the binding does not have the nullable flag set.
+	    		// When passing in 'null', We have to use the qualifier's type to check if the elements are nullable.
+	    		if (TypeUtils.Type_NULLTYPE.equals(argType) && !funcParmBinding.isNullable() && BindingUtil.isUnresolvedGenericType(funcParmBinding.getType())) {
+					// The qualifier's type will tell us if it's nullable.
+					Type qualType = BindingUtil.getTypeForGenericQualifier(qualifier);
+					if (qualType instanceof ArrayType && ((ArrayType)qualType).elementsNullable()) {
+						continue;
+					}
+	    		}
+	    		
 	    		problemRequestor.acceptProblem(
 	    			argExpr,
 	    			IProblemRequestor.FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM,

@@ -28,7 +28,6 @@ import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EType;
-import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -1070,7 +1069,7 @@ public class BindingUtil {
 		return type;
 	}
 	
-	private static Type getTypeForGenericQualifier(Expression expr) {
+	public static Type getTypeForGenericQualifier(Expression expr) {
 		final Type[] type = new Type[1];
 		class ExitVisitor extends RuntimeException{private static final long serialVersionUID = 1L;};
 		try {
