@@ -220,6 +220,7 @@ public abstract class DefaultBinder extends AbstractBinder {
     		else {
         		if (BindingUtil.isDynamicallyAccessible(type)) {
         			arrayAccess.setType(BindingUtil.getEAny());
+        			arrayAccess.setMember(BindingUtil.createDynamicAccessMember(type, arrayAccess.getIndices().get(0).getCanonicalString()));
         		}
     			else {
     	    		arrayAccess.setBindAttempted(true); 

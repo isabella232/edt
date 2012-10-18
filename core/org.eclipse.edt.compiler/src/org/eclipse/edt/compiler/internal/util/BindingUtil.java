@@ -944,6 +944,7 @@ public class BindingUtil {
 			Field field = IrFactory.INSTANCE.createField();
 			field.setName(caseSensitiveName);			
 			field.setType(getEAny());
+			field.setIsNullable(true);
 			return field;
 		}
 		return null;
@@ -954,6 +955,7 @@ public class BindingUtil {
 			Field field = IrFactory.INSTANCE.createField();
 			field.setName(caseSensitiveName);			
 			field.setType(getEAny());
+			field.setIsNullable(true);
 			return field;
 		}
 		return null;
