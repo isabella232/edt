@@ -282,7 +282,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			return java.lang.Boolean.TRUE;
 		}
 
-		if (annotationValue instanceof Enumeration) {
+		if (annotationValue instanceof EnumerationEntry) {
 			return annotationValue;
 		}
 
