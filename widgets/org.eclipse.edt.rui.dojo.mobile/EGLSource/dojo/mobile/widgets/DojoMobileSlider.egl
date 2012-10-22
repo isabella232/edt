@@ -13,7 +13,16 @@
 // OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
 
-package dojo.mobile.widgets; 
+package dojo.mobile.widgets;
+
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
+import eglx.persistence.Id;
+import eglx.ui.rui.FilterKind;
+import eglx.ui.rui.VEContainer;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEPropertyChoice;
+import eglx.ui.rui.VEWidget; 
 
 //*** A control that allows changing a numeric value by touching and dragging a slide handle ***//
 

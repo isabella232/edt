@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.mvc;
 
-import org.eclipse.edt.rui.widgets.TextLabel;
 import eglx.ui.rui.Widget;
 
 handler FormManager

@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.Event;
+import eglx.ui.rui.Widget;
+
 Delegate
 	DataGridSelectionListener()
 end

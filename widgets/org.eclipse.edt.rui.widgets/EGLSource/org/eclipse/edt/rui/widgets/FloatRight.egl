@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.RUIWidget;
+
 Handler FloatRight type RUIWidget{ tagName = "div", cssFile = "css/org.eclipse.edt.rui.css" }
 end

@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
-import eglx.lang.eglproperty;
-import eglx.ui.rui.RUIWIdget;
-import eglx.ui.rui.vecontainer;
-import eglx.ui.rui.veproperty;
-import eglx.ui.rui.vepropertychoice;
-import eglx.ui.rui.vewidget;
-import eglx.ui.rui.widget;
+import eglx.lang.EGLProperty;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEContainer;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEPropertyChoice;
+import eglx.ui.rui.VEWidget;
+import eglx.ui.rui.Widget;
 
 handler Box type RUIWidget{targetWidget = div, cssFile = "css/org.eclipse.edt.rui.css", 
     @VEWidget{

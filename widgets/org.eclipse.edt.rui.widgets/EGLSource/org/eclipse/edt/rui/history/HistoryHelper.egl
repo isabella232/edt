@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.history;
 
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
+import eglx.ui.rui.Widget;
+
 ExternalType HistoryHelper type JavaScriptObject {
 		relativePath = "org/eclipse/edt/rui/history",
 		externalName = "HistoryHelper"

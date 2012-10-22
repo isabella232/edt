@@ -11,13 +11,16 @@
  *******************************************************************************/
 package dojo.widgets;
 
-import eglx.javascript.javascriptobject;
-import eglx.lang.property;
-import eglx.ui.rui.eventhandler;
-import eglx.ui.rui.ruilib;
-import eglx.ui.rui.veevent;
-import eglx.ui.rui.veproperty;
-import eglx.ui.rui.vewidget;
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.Property;
+import eglx.persistence.Id;
+import eglx.ui.rui.EventHandler;
+import eglx.ui.rui.FilterKind;
+import eglx.ui.rui.VEContainer;
+import eglx.ui.rui.VEEvent;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEPropertyChoice;
+import eglx.ui.rui.VEWidget;
 
 /**
  * This widget is a container.

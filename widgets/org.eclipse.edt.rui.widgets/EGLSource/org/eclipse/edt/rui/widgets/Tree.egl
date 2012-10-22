@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.Widget;
+
 Handler Tree type RUIWidget{targetWidget = nodeContainer, cssFile = "css/org.eclipse.edt.rui.css" }
 
 	behaviors TreeNodeBehavior[];

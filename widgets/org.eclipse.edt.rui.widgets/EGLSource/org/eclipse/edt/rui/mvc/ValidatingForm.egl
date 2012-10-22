@@ -13,6 +13,7 @@ package org.eclipse.edt.rui.mvc;
 
 import org.eclipse.edt.rui.widgets.Box;
 import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.ui.rui.RUIWidget;
 import eglx.ui.rui.Widget;
 
 record FormField

@@ -11,6 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.MVCView;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
+import eglx.ui.rui.Widget;
+
 handler List type RUIWidget{tagName = "select", cssFile = "css/org.eclipse.edt.rui.css",
 	@VEWidget{
 			category = "Display and Input",

@@ -11,6 +11,9 @@
  *******************************************************************************/
 package dojo.widgets;
 
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
+
 private externalType DojoValidatorLib type JavaScriptObject{relativePath = "dojo/widgets", externalName = "DojoValidatorLib", includeFile = "includeDojoValidator.html"}
 	function IPValidator(input String in, constraints dictionary in) returns(boolean);
 	function UrlValidator(input String in, constraints dictionary in) returns(boolean);

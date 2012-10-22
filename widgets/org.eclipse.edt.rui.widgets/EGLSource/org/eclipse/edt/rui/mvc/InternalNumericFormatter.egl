@@ -12,6 +12,7 @@
 package org.eclipse.edt.rui.mvc;
 
 import eglx.rbd.StrLib;
+import eglx.ui.SignKind;
 
 library InternalNumericFormatter
 	use InternalMessageLib;
