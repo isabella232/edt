@@ -11,6 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.DataMapping;
+import eglx.ui.rui.DataTemplate;
+import eglx.ui.rui.MappingKind;
+import eglx.ui.rui.PurposeKind;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEDataTemplate;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
+
 handler TextLabel type RUIWidget{tagName = "div", cssFile = "css/org.eclipse.edt.rui.css",
 	@VEWidget{
 		category = "Display and Input",

@@ -11,13 +11,17 @@
  *******************************************************************************/
 package dojo.widgets;
 
-import eglx.javascript.javascriptobject;
-import eglx.lang.property;
-import eglx.ui.rui.eventhandler;
-import eglx.ui.rui.ruilib;
-import eglx.ui.rui.veevent;
-import eglx.ui.rui.veproperty;
-import eglx.ui.rui.vewidget;
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.Property;
+import eglx.ui.rui.DataMapping;
+import eglx.ui.rui.DataTemplate;
+import eglx.ui.rui.FilterKind;
+import eglx.ui.rui.MVCView;
+import eglx.ui.rui.MappingKind;
+import eglx.ui.rui.PurposeKind;
+import eglx.ui.rui.VEDataTemplate;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
 
 /* 
  * An input field for currency values (also known as money)

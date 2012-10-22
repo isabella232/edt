@@ -1,5 +1,8 @@
 package org.eclipse.edt.rui.widgets;
 
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+
 // basic library
 library RestLib
 	

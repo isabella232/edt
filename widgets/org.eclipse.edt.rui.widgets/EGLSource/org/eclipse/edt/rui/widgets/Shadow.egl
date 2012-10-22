@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.RUIWidget;
+
 handler Shadow type RUIWidget{tagName = "div", cssFile = "css/org.eclipse.edt.rui.css" }
 
 	div Div { @EGLProperty { setMethod=setDiv, getMethod=getDiv } };

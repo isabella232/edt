@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.RUIWidget;
+
 Handler Span type RUIWidget{tagName = "span", cssFile = "css/org.eclipse.edt.rui.css" }
 
 	text String  { @EGLProperty { getMethod=getText, setMethod=setText } };

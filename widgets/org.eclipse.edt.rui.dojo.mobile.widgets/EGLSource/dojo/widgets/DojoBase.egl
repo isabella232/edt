@@ -15,6 +15,7 @@ import eglx.javascript.JavaScriptObject;
 import eglx.lang.Property;
 import eglx.ui.rui.EventHandler;
 import eglx.ui.rui.VEEvent;
+import eglx.ui.rui.Widget;
 
 /*
  * This type is used by all Dojo widgets, and simplifies the life cycle challenges 

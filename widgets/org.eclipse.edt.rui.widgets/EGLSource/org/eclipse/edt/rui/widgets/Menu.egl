@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.Document;
 import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEWidget;
 import eglx.ui.rui.Widget;
 
 handler Menu type RUIWidget{tagName = "div", onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.css",

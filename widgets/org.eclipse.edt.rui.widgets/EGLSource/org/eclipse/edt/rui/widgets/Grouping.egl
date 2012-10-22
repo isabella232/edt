@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.lang.EGLProperty;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.Widget;
+
 Handler Grouping type RUIWidget{targetWidget = fieldset, cssFile = "css/org.eclipse.edt.rui.css"}
 	
 	text String { @EGLProperty { getMethod=getText, setMethod=setText } };

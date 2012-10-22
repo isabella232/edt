@@ -12,6 +12,7 @@
 package dojo.widgets;
 
 import eglx.ui.rui.Event;
+import eglx.ui.rui.RuiLib;
 import eglx.ui.rui.Widget;
 
 library DojoDialogLib {}
