@@ -83,6 +83,12 @@ public class FileASTScope extends FileScope {
         };
 
         // Then check the on demand imports
-        return findTypeInOnDemandImports(simpleName);
+        List<Type> results = findTypeInOnDemandImports(simpleName);
+        if (results != null) {
+        	return results;
+        }
+        
+        //Check the implicit system package(s)
+        return findTypeInImplicitSystemPackages(simpleName);
     }
  }
