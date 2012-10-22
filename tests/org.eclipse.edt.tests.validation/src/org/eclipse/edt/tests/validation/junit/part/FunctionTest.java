@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.part;
 
 import java.util.List;
@@ -43,7 +32,7 @@ public class FunctionTest extends ValidationTestCase {
 	}
 
 	/*
-	 * p2 intItem,
+	 * p2 int,
 	 * 0 validation messages are expected.
 	 */
 	public void testLine16() {
@@ -377,13 +366,31 @@ public class FunctionTest extends ValidationTestCase {
 	 * function main() returns (int) end
 	 * 0 validation messages are expected.
 	 */
+	public void testLine102() {
+		List messages = getMessagesAtLine( 102 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * function func() returns (boolean) end
+	 * 0 validation messages are expected.
+	 */
+	public void testLine103() {
+		List messages = getMessagesAtLine( 103 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * function func2() returns (int[]) end
+	 * 0 validation messages are expected.
+	 */
 	public void testLine104() {
 		List messages = getMessagesAtLine( 104 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * function func() returns (boolean) end
+	 * function func3() returns (int) end
 	 * 0 validation messages are expected.
 	 */
 	public void testLine105() {
@@ -392,7 +399,7 @@ public class FunctionTest extends ValidationTestCase {
 	}
 
 	/*
-	 * function func2() returns (int[]) end
+	 * function func4() returns (dictionary) end
 	 * 0 validation messages are expected.
 	 */
 	public void testLine106() {
@@ -401,30 +408,12 @@ public class FunctionTest extends ValidationTestCase {
 	}
 
 	/*
-	 * function func3() returns (intItem) end
-	 * 0 validation messages are expected.
-	 */
-	public void testLine107() {
-		List messages = getMessagesAtLine( 107 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * function func4() returns (dictionary) end
-	 * 0 validation messages are expected.
-	 */
-	public void testLine108() {
-		List messages = getMessagesAtLine( 108 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
 	 * function func7() returns (myService) end
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type myService is not a valid type for a data declaration.".
 	 */
-	public void testLine109() {
-		List messages = getMessagesAtLine( 109 );
+	public void testLine107() {
+		List messages = getMessagesAtLine( 107 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type myService is not a valid type for a data declaration." );
@@ -435,8 +424,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * function func8() returns (myInterface) end
 	 * 0 validation messages are expected.
 	 */
-	public void testLine110() {
-		List messages = getMessagesAtLine( 110 );
+	public void testLine108() {
+		List messages = getMessagesAtLine( 108 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -444,8 +433,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * function func9() returns (notEmptyRec) end
 	 * 0 validation messages are expected.
 	 */
-	public void testLine111() {
-		List messages = getMessagesAtLine( 111 );
+	public void testLine109() {
+		List messages = getMessagesAtLine( 109 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -454,8 +443,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type validateReturnProgram is not a valid type for a data declaration.".
 	 */
-	public void testLine113() {
-		List messages = getMessagesAtLine( 113 );
+	public void testLine111() {
+		List messages = getMessagesAtLine( 111 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type validateReturnProgram is not a valid type for a data declaration." );
@@ -467,8 +456,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type annot1 is not a valid type for a data declaration.".
 	 */
-	public void testLine114() {
-		List messages = getMessagesAtLine( 114 );
+	public void testLine112() {
+		List messages = getMessagesAtLine( 112 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type annot1 is not a valid type for a data declaration." );
@@ -480,8 +469,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type undeclaredItem cannot be resolved".
 	 */
-	public void testLine116() {
-		List messages = getMessagesAtLine( 116 );
+	public void testLine114() {
+		List messages = getMessagesAtLine( 114 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The type undeclaredItem cannot be resolved" );
@@ -492,8 +481,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * super();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine124() {
-		List messages = getMessagesAtLine( 124 );
+	public void testLine122() {
+		List messages = getMessagesAtLine( 122 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -501,8 +490,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * super();
 	 * 1 validation message is expected.
 	 */
-	public void testLine125() {
-		List messages = getMessagesAtLine( 125 );
+	public void testLine123() {
+		List messages = getMessagesAtLine( 123 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -510,8 +499,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * super("xyz");
 	 * 2 validation messages are expected.
 	 */
-	public void testLine126() {
-		List messages = getMessagesAtLine( 126 );
+	public void testLine124() {
+		List messages = getMessagesAtLine( 124 );
 		assertEquals( 2, messages.size() );
 	}
 
@@ -519,8 +508,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * this();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine129() {
-		List messages = getMessagesAtLine( 129 );
+	public void testLine127() {
+		List messages = getMessagesAtLine( 127 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -528,8 +517,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * this();
 	 * 1 validation message is expected.
 	 */
-	public void testLine130() {
-		List messages = getMessagesAtLine( 130 );
+	public void testLine128() {
+		List messages = getMessagesAtLine( 128 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -537,8 +526,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * this(s, i, 456, 789, 123, "aaaa");
 	 * 1 validation message is expected.
 	 */
-	public void testLine133() {
-		List messages = getMessagesAtLine( 133 );
+	public void testLine131() {
+		List messages = getMessagesAtLine( 131 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -546,8 +535,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * this(i, s);
 	 * 0 validation messages are expected.
 	 */
-	public void testLine136() {
-		List messages = getMessagesAtLine( 136 );
+	public void testLine134() {
+		List messages = getMessagesAtLine( 134 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -555,8 +544,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * super(i, s, b, d);
 	 * 1 validation message is expected.
 	 */
-	public void testLine139() {
-		List messages = getMessagesAtLine( 139 );
+	public void testLine137() {
+		List messages = getMessagesAtLine( 137 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -564,8 +553,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * super();
 	 * 1 validation message is expected.
 	 */
-	public void testLine142() {
-		List messages = getMessagesAtLine( 142 );
+	public void testLine140() {
+		List messages = getMessagesAtLine( 140 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -573,8 +562,8 @@ public class FunctionTest extends ValidationTestCase {
 	 * this();
 	 * 1 validation message is expected.
 	 */
-	public void testLine143() {
-		List messages = getMessagesAtLine( 143 );
+	public void testLine141() {
+		List messages = getMessagesAtLine( 141 );
 		assertEquals( 1, messages.size() );
 	}
 }
