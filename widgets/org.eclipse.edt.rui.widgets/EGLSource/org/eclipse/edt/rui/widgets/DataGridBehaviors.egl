@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.Widget;
+
 library DataGridBehaviors
 
 	function whiteCells(grid DataGrid in, td Widget in, row any? in, dataIndex int in, column DataGridColumn in) 

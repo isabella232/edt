@@ -1,4 +1,10 @@
 package dojo.mobile.widgets;
+
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
+import eglx.ui.rui.FilterKind;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
     
 // basic handler   
 ExternalType DojoMobileIconItem extends DojoMobileBase type JavaScriptObject 

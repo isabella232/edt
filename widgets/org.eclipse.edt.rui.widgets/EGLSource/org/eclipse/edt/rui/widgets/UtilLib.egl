@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
 import eglx.ui.rui.Widget;
 
 externalType UtilLibNative type JavaScriptObject{relativePath = "org/eclipse/edt/rui/widgets", externalName = "UtilLibNative"}

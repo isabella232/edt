@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.Event;
+import eglx.ui.rui.Widget;
+
 library MenuBehaviors
 	
 	function simpleText(menuItem any in, itemAction MenuItemSelection, parentMenu Menu in) returns (any)

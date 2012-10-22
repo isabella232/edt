@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,18 @@
  *******************************************************************************/
 package dojo.widgets;
 
-import eglx.javascript.javascriptobject;
+import eglx.javascript.JavaScriptObject;
+import eglx.persistence.Id;
+import eglx.ui.rui.DataMapping;
+import eglx.ui.rui.DataTemplate;
+import eglx.ui.rui.FilterKind;
+import eglx.ui.rui.MVCView;
+import eglx.ui.rui.MappingKind;
+import eglx.ui.rui.PurposeKind;
+import eglx.ui.rui.VEDataTemplate;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEPropertyChoice;
+import eglx.ui.rui.VEWidget;
 
 /*
  * An input text field for entering dates. 

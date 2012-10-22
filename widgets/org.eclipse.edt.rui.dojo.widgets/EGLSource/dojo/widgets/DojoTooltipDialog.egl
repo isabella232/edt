@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,13 +11,11 @@
  *******************************************************************************/
 package dojo.widgets;
 
-import eglx.javascript.javascriptobject;
-import eglx.lang.property;
-import eglx.ui.rui.eventhandler;
-import eglx.ui.rui.ruilib;
-import eglx.ui.rui.veevent;
-import eglx.ui.rui.veproperty;
-import eglx.ui.rui.vewidget;
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.Property;
+import eglx.ui.rui.FilterKind;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
  
 /**
  * This is a Tooltip Dialog widget.

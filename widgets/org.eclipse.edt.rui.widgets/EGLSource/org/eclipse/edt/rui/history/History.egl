@@ -12,7 +12,11 @@
 package org.eclipse.edt.rui.history;
 
 import org.eclipse.edt.rui.widgets.UtilLib;
+import eglx.http.HttpLib;
 import eglx.javascript.Job;
+import eglx.javascript.RunFunction;
+import eglx.ui.rui.Document;
+import eglx.ui.rui.RUIWidget;
 import eglx.ui.rui.Widget;
 
 Delegate 

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.mvc;
 
-import eglx.rbd.strlib;
+import eglx.rbd.StrLib;
 
 library InternalCharFormatter
 	use InternalMessageLib;

@@ -15,6 +15,8 @@
 package dojo.mobile.widgets;
 
 import dojo.widgets.DojoBase;
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
 
 ExternalType DojoMobileBase extends DojoBase type JavaScriptObject {
 		relativePath = "dojo/mobile/widgets",

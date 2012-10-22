@@ -11,13 +11,9 @@
  *******************************************************************************/
 package dojo.widgets;
 
-import eglx.javascript.javascriptobject;
-import eglx.lang.property;
-import eglx.ui.rui.eventhandler;
-import eglx.ui.rui.ruilib;
-import eglx.ui.rui.veevent;
-import eglx.ui.rui.veproperty;
-import eglx.ui.rui.vewidget;
+import eglx.javascript.JavaScriptObject;
+import eglx.ui.rui.FilterKind;
+import eglx.ui.rui.VEWidget;
  
 /**
  * This is a Rich Text editor. 

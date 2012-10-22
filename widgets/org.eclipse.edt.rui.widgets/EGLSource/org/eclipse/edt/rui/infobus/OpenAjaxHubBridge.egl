@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.infobus;
 
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
+
 Delegate 
 	OpenAjaxHubCallback(eventName String in, dataObject any in)
 end

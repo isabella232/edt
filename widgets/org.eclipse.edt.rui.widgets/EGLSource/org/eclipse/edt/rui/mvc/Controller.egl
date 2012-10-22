@@ -11,6 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.mvc;
 
+import eglx.javascript.Job;
+import eglx.javascript.RunFunction;
+import eglx.lang.EGLProperty;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.View;
+import eglx.ui.rui.Widget;
+
 handler Controller
 	
 	use InternalCharFormatter;

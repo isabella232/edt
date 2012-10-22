@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.Widget;
+
 Delegate
 	DataGridTooltipTextProvider(row any in, fieldName String in, td Widget in) returns(Box?)
 end

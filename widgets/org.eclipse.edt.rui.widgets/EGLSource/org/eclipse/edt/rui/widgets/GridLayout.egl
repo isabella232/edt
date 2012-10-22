@@ -11,6 +11,18 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.persistence.Id;
+import eglx.ui.rui.DataMapping;
+import eglx.ui.rui.DataTemplate;
+import eglx.ui.rui.Document;
+import eglx.ui.rui.MappingKind;
+import eglx.ui.rui.PurposeKind;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEContainer;
+import eglx.ui.rui.VEDataTemplate;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEPropertyChoice;
+import eglx.ui.rui.VEWidget;
 import eglx.ui.rui.Widget;
 
 handler GridLayout type RUIWidget{targetWidget = table, cssFile = "css/org.eclipse.edt.rui.css", 
