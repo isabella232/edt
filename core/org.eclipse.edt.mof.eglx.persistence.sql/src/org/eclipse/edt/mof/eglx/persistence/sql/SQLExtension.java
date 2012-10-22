@@ -13,7 +13,7 @@ package org.eclipse.edt.mof.eglx.persistence.sql;
 
 import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.BaseCompilerExtension;
-import org.eclipse.edt.compiler.SystemEnvironmentUtil;
+import org.eclipse.edt.compiler.SystemLibraryUtil;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
@@ -37,7 +37,7 @@ public class SQLExtension extends BaseCompilerExtension {
 	
 	@Override
 	public String[] getSystemEnvironmentPaths() {
-		return new String[]{SystemEnvironmentUtil.getSystemLibraryPath(SqlActionStatement.class, "egllib")};
+		return new String[]{SystemLibraryUtil.getSystemLibraryPath(SqlActionStatement.class, "egllib")};
 	}
 	
 	@Override

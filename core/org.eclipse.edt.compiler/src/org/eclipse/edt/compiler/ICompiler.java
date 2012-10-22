@@ -12,10 +12,12 @@
 package org.eclipse.edt.compiler;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 public interface ICompiler {
 	
@@ -66,15 +68,7 @@ public interface ICompiler {
 	 * @return the version of this compiler, e.g. "1.0.0", never null.
 	 */
 	public String getVersion();
-	
-	/**
-	 * Returns the system environment. This is based on the path returned from getSystemEnvironment 
-	 * 
-	 * @param notifier  Used to report progress of loading the parts; this may be null.
-	 * @return the system environment, never null.
-	 */
-	public ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier);
-	
+		
 	/**
 	 * @return the list of compiler extensions registered with this compiler, never null.
 	 * @see ICompilerExtension
@@ -116,5 +110,13 @@ public interface ICompiler {
 	 * @return a generator capable of creating a MOF part for the given node, possibly null.
 	 */
 	public ElementGenerator getElementGeneratorFor(Node node);
+	
+	/**
+	 * Returns a map whose keys are the serialization scheme (egl or mof) and whose values are the ObjectStores for
+	 * the EGLAR and MOFAR files on the system environment path
+	 * 
+	 * @return the object stores for the system path.
+	 */
+	public List<ZipFileBindingBuildPathEntry> getSystemBuildPathEntries();
 	
 }

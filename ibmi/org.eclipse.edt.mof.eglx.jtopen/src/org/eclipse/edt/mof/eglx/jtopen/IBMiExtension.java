@@ -13,7 +13,7 @@ package org.eclipse.edt.mof.eglx.jtopen;
 
 import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.BaseCompilerExtension;
-import org.eclipse.edt.compiler.SystemEnvironmentUtil;
+import org.eclipse.edt.compiler.SystemLibraryUtil;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -32,7 +32,7 @@ public class IBMiExtension extends BaseCompilerExtension {
 	
 	@Override
 	public String[] getSystemEnvironmentPaths() {
-		return new String[]{SystemEnvironmentUtil.getSystemLibraryPath(IBMiCallStatement.class, "egllib")};
+		return new String[]{SystemLibraryUtil.getSystemLibraryPath(IBMiCallStatement.class, "egllib")};
 	}
 	
 	@Override

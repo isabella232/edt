@@ -11,8 +11,27 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler;
 
-import org.eclipse.edt.compiler.binding.IRPartBinding;
+import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 
-public interface ISystemPartBindingLoadedRequestor {
-	void partBindingLoaded(IRPartBinding part);
+
+public class EglarBuildPathEntry extends ZipFileBindingBuildPathEntry {
+  
+	private IEnvironment ienvironment = null;
+	
+	
+	public EglarBuildPathEntry(IEnvironment env, String path, String fileExtension) {
+		super(path, fileExtension);
+
+		this.ienvironment = env;
+	}
+		 	
+	@Override
+	protected IEnvironment getEnvironment() {
+		return ienvironment;
+	}
+	
+	@Override
+	protected boolean shouldSetEnvironmentOnIr() {
+		return getEnvironment() != null;
+	}
 }

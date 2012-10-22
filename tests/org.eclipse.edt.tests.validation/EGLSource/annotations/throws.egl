@@ -9,6 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
+import eglx.java.*;
+import eglx.javascript.*;
+
 handler h
 	function test1()
 		e et;

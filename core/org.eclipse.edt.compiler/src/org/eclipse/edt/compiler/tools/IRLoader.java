@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import org.eclipse.edt.compiler.EDTCompiler;
 import org.eclipse.edt.compiler.ICompiler;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
@@ -61,7 +62,7 @@ public class IRLoader {
 		}
 	}
 
-	public static EObject loadEObject(String rootDir, String key, ICompiler compiler) throws MofObjectNotFoundException,
+	private static EObject loadEObject(String rootDir, String key, ICompiler compiler) throws MofObjectNotFoundException,
 			DeserializationException {
 		if (rootDir == null || key == null) {
 			throw new DeserializationException("rootDir and key must be specified");
@@ -89,8 +90,10 @@ public class IRLoader {
 			if (compiler == null) {
 				compiler = new EDTCompiler();
 			}
-			partEnv.registerObjectStores(compiler.getSystemEnvironment(null).getStores());
 			
+			for (ZipFileBindingBuildPathEntry entry : compiler.getSystemBuildPathEntries()) {
+				partEnv.registerObjectStore(entry.getObjectStore().getKeyScheme(), entry.getObjectStore());
+			}			
 			eClass = Environment.getCurrentEnv().find(key);
 		} finally {
 			Environment.popEnv();

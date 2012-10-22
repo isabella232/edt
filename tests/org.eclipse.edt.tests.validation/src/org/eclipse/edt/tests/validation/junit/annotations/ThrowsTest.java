@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.annotations;
 
 import java.util.List;
@@ -29,8 +18,8 @@ public class ThrowsTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The invocation of the function, constructor or the declaration must be enclosed in a Try Statement that specifies AnyException or JavaObjectException in one of its OnException blocks.".
 	 */
-	public void testLine15() {
-		List messages = getMessagesAtLine( 15 );
+	public void testLine18() {
+		List messages = getMessagesAtLine( 18 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The invocation of the function, constructor or the declaration must be enclosed in a Try Statement that specifies AnyException or JavaObjectException in one of its OnException blocks." );
@@ -41,8 +30,8 @@ public class ThrowsTest extends ValidationTestCase {
 	 * e.foo();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine20() {
-		List messages = getMessagesAtLine( 20 );
+	public void testLine23() {
+		List messages = getMessagesAtLine( 23 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -51,8 +40,8 @@ public class ThrowsTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The invocation of the function, constructor or the declaration must be enclosed in a Try Statement that specifies AnyException or JavaObjectException in one of its OnException blocks.".
 	 */
-	public void testLine26() {
-		List messages = getMessagesAtLine( 26 );
+	public void testLine29() {
+		List messages = getMessagesAtLine( 29 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The invocation of the function, constructor or the declaration must be enclosed in a Try Statement that specifies AnyException or JavaObjectException in one of its OnException blocks." );
@@ -63,8 +52,8 @@ public class ThrowsTest extends ValidationTestCase {
 	 * e.foo();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine33() {
-		List messages = getMessagesAtLine( 33 );
+	public void testLine36() {
+		List messages = getMessagesAtLine( 36 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -72,8 +61,8 @@ public class ThrowsTest extends ValidationTestCase {
 	 * e.foo();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine40() {
-		List messages = getMessagesAtLine( 40 );
+	public void testLine43() {
+		List messages = getMessagesAtLine( 43 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -81,8 +70,8 @@ public class ThrowsTest extends ValidationTestCase {
 	 * e.foo();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine47() {
-		List messages = getMessagesAtLine( 47 );
+	public void testLine50() {
+		List messages = getMessagesAtLine( 50 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -90,8 +79,8 @@ public class ThrowsTest extends ValidationTestCase {
 	 * function foo(){@throws};
 	 * 0 validation messages are expected.
 	 */
-	public void testLine55() {
-		List messages = getMessagesAtLine( 55 );
+	public void testLine58() {
+		List messages = getMessagesAtLine( 58 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -100,8 +89,8 @@ public class ThrowsTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The annotation Throws is only valid for functions and constructors in an ExternalType with subtype JavaObject.".
 	 */
-	public void testLine59() {
-		List messages = getMessagesAtLine( 59 );
+	public void testLine62() {
+		List messages = getMessagesAtLine( 62 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The annotation Throws is only valid for functions and constructors in an ExternalType with subtype JavaObject." );

@@ -1,3 +1,7 @@
+import eglx.rest.*;
+import eglx.http.*;
+
+
 library myinter
 	function interfunc() returns (int){@Resource{}, @EglService{}}
 	end

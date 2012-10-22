@@ -27,6 +27,7 @@ import org.eclipse.edt.mof.EParameter;
 import org.eclipse.edt.mof.ETypeParameter;
 import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public class MofFactoryImpl extends EFactoryImpl implements MofFactory {
@@ -58,7 +59,7 @@ public class MofFactoryImpl extends EFactoryImpl implements MofFactory {
 	EClass valueParameterClass;
 	EClass metadataTypeClass;
 	
-	Environment env = Environment.INSTANCE;
+	IEnvironment env = Environment.getCurrentEnv();
 
 	
 	public static MofFactory init() {

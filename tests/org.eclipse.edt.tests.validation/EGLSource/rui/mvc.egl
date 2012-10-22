@@ -9,7 +9,11 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
- 
+
+import eglx.ui.rui.*;
+import org.eclipse.edt.rui.mvc.*;
+import eglx.ui.*;
+
 handler currencyChecks type ruihandler
 	i1 int{@currency}; //0
 	i2 int{@currency{yes}}; //0

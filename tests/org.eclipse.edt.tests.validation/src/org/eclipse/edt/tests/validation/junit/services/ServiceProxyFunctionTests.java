@@ -25,257 +25,236 @@ public class ServiceProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * function f1() {@REST {}}; //1 container for the REST function f1 is invalid
+	 * function f1() {@REST {method=POST}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "The container for the eglx.rest.rest function f1 is invalid".
+	 * It is expected to contain "container for the REST function f1 is invalid".
 	 */
-	public void testLine2() {
-		List messages = getMessagesAtLine( 2 );
+	public void testLine5() {
+		List messages = getMessagesAtLine( 5 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The container for the eglx.rest.rest function f1 is invalid" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The container for the eglx.rest.rest function f1 is invalid\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "container for the REST function f1 is invalid" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"container for the REST function f1 is invalid\" was issued." );
 	}
 
 	/*
-	 * function f2() {@EGLService {}}; //1 container for the EGLService function f1 is invalid
+	 * function f2() {@EGLService {}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "The container for the eglx.rest.eglservice function f1 is invalid".
+	 * It is expected to contain "container for the EGLService function f1 is invalid".
 	 */
-	public void testLine3() {
-		List messages = getMessagesAtLine( 3 );
+	public void testLine6() {
+		List messages = getMessagesAtLine( 6 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The container for the eglx.rest.eglservice function f2 is invalid" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The container for the eglx.rest.eglservice function f2 is invalid\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "container for the EGLService function f1 is invalid" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"container for the EGLService function f1 is invalid\" was issued." );
 	}
 
 	/*
-	 * function f1() {@REST {}}; //1 container for the REST function f1 is invalid
+	 * function f1() {@REST {method=_GET}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "The container for the eglx.rest.rest function f1 is invalid".
+	 * It is expected to contain "container for the REST function f1 is invalid".
 	 */
-	public void testLine7() {
-		List messages = getMessagesAtLine( 7 );
+	public void testLine10() {
+		List messages = getMessagesAtLine( 10 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The container for the eglx.rest.rest function f1 is invalid" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The container for the eglx.rest.rest function f1 is invalid\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "container for the REST function f1 is invalid" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"container for the REST function f1 is invalid\" was issued." );
 	}
 
 	/*
-	 * function f2() {@EGLService {}}; //1 container for the EGLService function f1 is invalid
+	 * function f2() {@EGLService {}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "The container for the eglx.rest.rest function f1 is invalid".
+	 * It is expected to contain "container for the EGLService function f1 is invalid".
 	 */
-	public void testLine8() {
-		List messages = getMessagesAtLine( 8 );
+	public void testLine11() {
+		List messages = getMessagesAtLine( 11 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The container for the eglx.rest.eglservice function f2 is invalid" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The container for the eglx.rest.eglservice function f2 is invalid\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "container for the EGLService function f1 is invalid" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"container for the EGLService function f1 is invalid\" was issued." );
 	}
 
 	/*
-	 * {@REST{}} //requires http method
+	 * {@REST{}}
 	 * 1 validation message is expected.
-	 * It is expected to contain "An Http method must be specified".
-	 */
-	public void testLine19() {
-		List messages = getMessagesAtLine( 19 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "An Http method must be specified" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"An Http method must be specified\" was issued." );
-	}
-
-	/*
-	 * function fp2 (p1 int in)//wrong type
-	 * 1 validation message is expected.
-	 * It is expected to contain "The resource parameter p1 of the function fp2 which specifies the REST annotation must have a type of String or a part of type Record".
+	 * It is expected to contain "requires http method".
 	 */
 	public void testLine22() {
 		List messages = getMessagesAtLine( 22 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The resource parameter p1 of the function fp2 which specifies the REST annotation must have a type of String or a part of type Record" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The resource parameter p1 of the function fp2 which specifies the REST annotation must have a type of String or a part of type Record\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "requires http method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"requires http method\" was issued." );
 	}
 
 	/*
-	 * function fp3 (p1 string)//missing in modifier
+	 * function fp2 (p1 int in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "The parameter p1 for the fuction fp3 which specifies the REST annotation must be defined with the IN modifier.".
+	 * It is expected to contain "wrong type".
 	 */
-	public void testLine26() {
-		List messages = getMessagesAtLine( 26 );
+	public void testLine25() {
+		List messages = getMessagesAtLine( 25 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The parameter p1 for the fuction fp3 which specifies the REST annotation must be defined with the IN modifier." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The parameter p1 for the fuction fp3 which specifies the REST annotation must be defined with the IN modifier.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong type\" was issued." );
 	}
 
 	/*
-	 * function fp4 (p1 string in) returns(boolean)//wrong returns type
+	 * function fp3 (p1 string)
 	 * 1 validation message is expected.
-	 * It is expected to contain "The function fp4 with specifies the REST annotation can only return a type of String or a part of type Record.".
+	 * It is expected to contain "missing in modifier".
 	 */
-	public void testLine30() {
-		List messages = getMessagesAtLine( 30 );
+	public void testLine29() {
+		List messages = getMessagesAtLine( 29 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The function fp4 with specifies the REST annotation can only return a type of String or a part of type Record." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The function fp4 with specifies the REST annotation can only return a type of String or a part of type Record.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "missing in modifier" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"missing in modifier\" was issued." );
 	}
 
 	/*
-	 * function fp4 (p1 string in) returns(string)//response format should be null
-		{@REST{method=POST, responseFormat=XML}} 
+	 * function fp4 (p1 string in) returns(boolean)
 	 * 1 validation message is expected.
-	 * It is expected to contain "The value of the responseFormat property must be NONE because the type of the resource parameter or return type of the function is String".
+	 * It is expected to contain "wrong returns type".
 	 */
-	public void testLine34() {
-		List messages = getMessagesAtLine( 34 );
+	public void testLine33() {
+		List messages = getMessagesAtLine( 33 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The value of the responseFormat property must be NONE because the type of the resource parameter or return type of the function is String" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The value of the responseFormat property must be NONE because the type of the resource parameter or return type of the function is String.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong returns type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong returns type\" was issued." );
+	}
+
+	/*
+	 * function fp5(p1 string in) returns(string)
+	 * 1 validation message is expected.
+	 * It is expected to contain "response format should be null".
+	 */
+	public void testLine37() {
+		List messages = getMessagesAtLine( 37 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "response format should be null" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"response format should be null\" was issued." );
 	}
 
 	/*
 	 * function fp6(p1 string in, p2 string in)
-		{@REST{method=POST, responseFormat=XML}} 
-	 * 1 validation message is expected.
-	 * It is expected to contain "Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate".
+	 * 2 validation messages are expected.
+	 * One message is expected to contain "resources".
 	 */
-	public void testLine38() {
-		List messages = getMessagesAtLine( 38 );
-		assertEquals( 1, messages.size() );
+	public void testLine41() {
+		List messages = getMessagesAtLine( 41 );
+		assertEquals( 2, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "resources" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"resources\" was issued." );
 	}
 
 	/*
-	 * 	function fp7 (p1 string in)//wrong request format
-		{@REST{method=POST, RequestFormat=XML}}  
+	 * function fp7 (p1 string in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "The value of the requestFormat property must be NONE because the type of the resource parameter or return type of the function is String.".
+	 * It is expected to contain "wrong request format".
 	 */
-	public void testLine43() {
-		List messages = getMessagesAtLine( 43 );
+	public void testLine45() {
+		List messages = getMessagesAtLine( 45 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The value of the requestFormat property must be NONE because the type of the resource parameter or return type of the function is String." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The value of the requestFormat property must be NONE because the type of the resource parameter or return type of the function is String.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong request format" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong request format\" was issued." );
 	}
 
 	/*
-	 * function fp9 (p1 rec1 in)//wrong request format
-		{@REST{method=POST, RequestFormat=_Form}} 
+	 * function fp8 (p1 rec1 in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "The resource parameter p1 of the function fp8 which specifies a requestFormat of _FORM must be a part of type Record or Handler and the record cannot contain other records.".
+	 * It is expected to contain "wrong request format".
 	 */
-	public void testLine46() {
-		List messages = getMessagesAtLine( 46 );
+	public void testLine49() {
+		List messages = getMessagesAtLine( 49 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The resource parameter p1 of the function fp8 which specifies a requestFormat of _FORM must be a part of type Record or Handler and the record cannot contain other records." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The resource parameter p1 of the function fp8 which specifies a requestFormat of _FORM must be a part of type Record or Handler and the record cannot contain other records.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong request format" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong request format\" was issued." );
 	}
 
 	/*
-	 * function fp9 (p1 handler1 in)//wrong request format
-		{@REST{method=POST, RequestFormat=_Form}} 
+	 * function fp9 (p1 handler1 in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "The resource parameter p1 of the function fp9 which specifies a requestFormat of _FORM must be a part of type Record or Handler and the record cannot contain other records.".
+	 * It is expected to contain "wrong request format".
 	 */
-	public void testLine50() {
-		List messages = getMessagesAtLine( 50 );
+	public void testLine53() {
+		List messages = getMessagesAtLine( 53 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The resource parameter p1 of the function fp9 which specifies a requestFormat of _FORM must be a part of type Record or Handler and the record cannot contain other records." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The resource parameter p1 of the function fp9 which specifies a requestFormat of _FORM must be a part of type Record or Handler and the record cannot contain other records.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong request format" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong request format\" was issued." );
 	}
 
 	/*
-	 * function fp6(p1 string in)//resources not allowed
-		{@REST{method=_GET}} 
+	 * function fp10(p1 string in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "A Resource parameter is not allowed for the funcion fp10 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate.".
+	 * It is expected to contain "resources not allowed".
 	 */
-	public void testLine54() {
-		List messages = getMessagesAtLine( 54 );
+	public void testLine57() {
+		List messages = getMessagesAtLine( 57 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "A Resource parameter is not allowed for the funcion fp10 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"A Resource parameter is not allowed for the funcion fp10 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "resources not allowed" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"resources not allowed\" was issued." );
 	}
 
 	/*
-	 * function fp6(p1 string in)//resources not allowed
-		{@REST{method=_GET, uriTemplate="http://{p2}"}}
+	 * function fp11(p1 string in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "The uri substitution variable p2 does not match any of the defined parameters for the function fp11.".
+	 * It is expected to contain "substitution does not match".
 	 */
-	public void testLine59() {
-		List messages = getMessagesAtLine( 59 );
+	public void testLine61() {
+		List messages = getMessagesAtLine( 61 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The uri substitution variable p2 does not match any of the defined parameters for the function fp11." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The uri substitution variable p2 does not match any of the defined parameters for the function fp11.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "substitution does not match" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"substitution does not match\" was issued." );
 	}
 
 	/*
-	 * function fp6(p1 rec1 in)//substitution wrong type
-		{@REST{method=_GET, uriTemplate="http://{p1}"}}
+	 * function fp12(p1 rec1 in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "The non-resource parameter p1 for the function fp12 which specifies the REST annotation is not assignment compatible with String.".
+	 * It is expected to contain "substitution wrong type".
 	 */
-	public void testLine62() {
-		List messages = getMessagesAtLine( 62 );
+	public void testLine65() {
+		List messages = getMessagesAtLine( 65 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The non-resource parameter p1 for the function fp12 which specifies the REST annotation is not assignment compatible with String." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The non-resource parameter p1 for the function fp12 which specifies the REST annotation is not assignment compatible with String.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "substitution wrong type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"substitution wrong type\" was issued." );
 	}
 
 	/*
-	 * assignment in the body
+	 * function fp14(p1 string in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "A proxy function {0} cannot contain statements".
+	 * It is expected to contain "no http method".
 	 */
-	public void testLine68() {
-		List messages = getMessagesAtLine( 68 );
+	public void testLine74() {
+		List messages = getMessagesAtLine( 74 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "A proxy function fp13 cannot contain statements" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"A proxy function fp13 cannot contain statements\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "no http method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"no http method\" was issued." );
 	}
 
 	/*
-	 * no http method
+	 * function fp15(p1 string in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "An Http method must be specified.".
+	 * It is expected to contain "form not allowed".
 	 */
-	public void testLine72() {
-		List messages = getMessagesAtLine( 72 );
+	public void testLine78() {
+		List messages = getMessagesAtLine( 78 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "An Http method must be specified." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"An Http method must be specified.\" was issued." );
-	}
-
-	/*
-	 * response form not allowed
-	 * 1 validation message is expected.
-	 * It is expected to contain "The value _FORM for the responseFormat property is not supported.".
-	 */
-	public void testLine76() {
-		List messages = getMessagesAtLine( 76 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The value _FORM for the responseFormat property is not supported." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The value _FORM for the responseFormat property is not supported.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "form not allowed" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"form not allowed\" was issued." );
 	}
 }

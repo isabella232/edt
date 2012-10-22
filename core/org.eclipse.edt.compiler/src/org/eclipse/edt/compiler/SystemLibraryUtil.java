@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 
-public class SystemEnvironmentUtil {
+public class SystemLibraryUtil {
 	
 	public static String getSystemLibraryPath(Class locatorClass, String subDir){
 

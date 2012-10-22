@@ -64,7 +64,7 @@ public class Bootstrap {
 	static EDataType EList;
 	
 	Bootstrap() {
-		env = Environment.INSTANCE;
+		env = Environment.getCurrentEnv();
 	}
 	
 	Bootstrap(IEnvironment env) {

@@ -1,3 +1,5 @@
+import eglx.jtopen.annotations.*;
+import eglx.java.*;
 interface inter1
 	function f1()
 		{@IBMiProgram {}}; //1 container for the IBMiProgram function f1 is invalid

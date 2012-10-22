@@ -24,7 +24,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
@@ -116,7 +115,7 @@ public class SourcePathEntry {
         }else{
         	String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = getOrCompilePartBinding(packageName, fileName, true);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()), declaringEnvironment.getSystemEnvironment());
+			scope = new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance());
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
         });

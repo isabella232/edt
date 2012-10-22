@@ -1,3 +1,5 @@
+import eglx.ui.rui.*;
+
 handler h1 type ruihandler{onconstructionfunction = start} //0
 	function start() end
 end

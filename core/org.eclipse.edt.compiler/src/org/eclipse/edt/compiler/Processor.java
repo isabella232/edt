@@ -26,7 +26,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
 import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
 import org.eclipse.edt.compiler.internal.sdk.compile.Compiler;
@@ -48,19 +47,17 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 
     private EGL2IREnvironment environment;
     private ISDKProblemRequestorFactory problemRequestorFactory;
-    private ISystemEnvironment sysEnv;
     private ICompiler compiler;
     
     public static boolean skipSerialization;
 
-    public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory, ISystemEnvironment sysEnv, ICompiler compiler) {
+    public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory, ICompiler compiler) {
         super(notifier, compilerOptions);
         this.problemRequestorFactory = problemRequestorFactory;
         if (problemRequestorFactory == null){
         	this.problemRequestorFactory = new DefaultSDKProblemRequestorFactory();
 
         }
-        this.sysEnv = sysEnv;
         this.compiler = compiler;
     }
     
@@ -124,7 +121,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 		}else{
 			String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = environment.getPartBinding(packageName, fileName);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(environment, dependencyRequestor), (FileBinding)fileBinding, dependencyRequestor), sysEnv);
+			scope = new FileScope(new EnvironmentScope(environment, dependencyRequestor), (FileBinding)fileBinding, dependencyRequestor);
 		}
 		return scope;
 	}

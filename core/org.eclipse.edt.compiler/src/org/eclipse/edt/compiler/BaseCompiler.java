@@ -19,20 +19,27 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
+import org.eclipse.edt.compiler.internal.util.NameUtil;
+import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.impl.ProgramImpl;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
+import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.ObjectStore;
+import org.eclipse.edt.mof.serialization.ZipFileObjectStore;
 
 /**
  * Base implementation of ICompiler intended to be subclassed by clients.
  */
 public class BaseCompiler implements ICompiler {
 	
+	private static final String EDT_JAR_EXTENSION = ".eglar";
+	private static final String EDT_MOF_EXTENSION = ".mofar";
+
 	protected String systemEnvironmentRootPath;
-	private ISystemEnvironment systemEnvironment;
+	private List<ZipFileBindingBuildPathEntry> systemPathEntries;
 	
 	/**
 	 * Extensions to the compiler.
@@ -124,7 +131,7 @@ public class BaseCompiler implements ICompiler {
 			//TODO should contributed paths go at the beginning or end?
 			StringBuilder buf = new StringBuilder(100);
 			
-			buf.append(SystemEnvironmentUtil.getSystemLibraryPath(ProgramImpl.class, "lib"));
+			buf.append(SystemLibraryUtil.getSystemLibraryPath(ProgramImpl.class, "lib"));
 			
 			for (ICompilerExtension ext : extensions) {
 				String[] paths = ext.getSystemEnvironmentPaths();
@@ -162,22 +169,7 @@ public class BaseCompiler implements ICompiler {
 	public String getVersion() {
 		return version == null ? "" : version; //$NON-NLS-1$
 	}
-		
-	@Override
-	public synchronized ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
-		if (systemEnvironment == null) {
-			systemEnvironment = createSystemEnvironment(notifier);
-		}
-		return systemEnvironment;
-	}
-	
-	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
-		SystemEnvironment sysEnv = new SystemEnvironment(Environment.getCurrentEnv(), null, this);
-    	Environment.getCurrentEnv().registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
-		sysEnv.initializeSystemPackages(getSystemEnvironmentPath(), new SystemPackageBuildPathEntryFactory(), notifier);
-		return sysEnv;
-	}
-	
+				
 	@Override
 	public List<ASTValidator> getValidatorsFor(Node node) {
 		List<ICompilerExtension> nodeExtensions = astTypeToExtensions.get(node.getClass());
@@ -213,5 +205,52 @@ public class BaseCompiler implements ICompiler {
 			}
 		}
 		return null;
+	}
+	
+	public List<ZipFileBindingBuildPathEntry> getSystemBuildPathEntries() {
+		return getSystemBuildPathEntries(getSystemEnvironmentPath());
+	}
+
+	public List<ZipFileBindingBuildPathEntry> getSystemBuildPathEntries(String systemEnvPath) {
+		
+		if (systemPathEntries == null) {
+			systemPathEntries = new ArrayList<ZipFileBindingBuildPathEntry>();
+			String[] paths = NameUtil.toStringArray(systemEnvPath, File.pathSeparator);
+			Environment env = new Environment();
+			Bootstrap.initialize(env);
+			env.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
+			
+			for (int i = 0; i < paths.length; i++) {
+				File libfolder = new File(paths[i]);
+				if (libfolder.exists() && libfolder.isDirectory()){
+					File[] files = libfolder.listFiles();
+					
+				  	for (File file : files){
+				  		if (file.isFile()) {
+					  		if (file.getName().endsWith(EDT_JAR_EXTENSION)){
+					  			EglarBuildPathEntry entry = new EglarBuildPathEntry(null, file.getAbsolutePath(), EGL2IR.EGLXML);
+					  			ObjectStore store = new ZipFileObjectStore(file, env, ObjectStore.XML, EGL2IR.EGLXML, Type.EGL_KeyScheme, entry);
+					  			entry.setStore(store);
+					  			env.registerObjectStore(Type.EGL_KeyScheme, store);
+					  			systemPathEntries.add(entry);
+				  			}
+					  		else {
+						  		if (file.getName().endsWith(EDT_MOF_EXTENSION)){
+						  			MofarBuildPathEntry entry = new MofarBuildPathEntry(null, file.getAbsolutePath(), ZipFileObjectStore.MOFXML);					  			
+						  			ObjectStore store = new ZipFileObjectStore(file, env, ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
+						  			entry.setStore(store);
+						  			env.registerObjectStore(ObjectStore.DefaultScheme, store);
+						  			systemPathEntries.add(entry);
+						  		}
+					  		}
+				  		}
+				  		
+					 }	
+					
+				}
+			}
+		}
+		return systemPathEntries;
+		
 	}
 }

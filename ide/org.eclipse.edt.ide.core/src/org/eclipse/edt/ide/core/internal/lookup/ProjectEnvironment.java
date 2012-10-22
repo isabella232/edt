@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -26,10 +25,10 @@ import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -103,7 +102,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     	}
     	
     	initialized = true;
-    	irEnvironment.initSystemEnvironment(getSystemEnvironment());
+    	Bootstrap.initialize(irEnvironment);
     	for (IBuildPathEntry entry : buildPathEntries) {
     		if (entry instanceof ProjectBuildPathEntry) {
     			((ProjectBuildPathEntry)entry).getDeclaringEnvironment().initIREnvironments();
@@ -123,19 +122,8 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	        if(result != null) return result;
 	    }
         
-       return getSystemEnvironment().getPartBinding(packageName, partName);
+       return null;
     }
-    
-	public IPartBinding getCachedPartBinding(String packageName, String partName) {
-        IPartBinding result = null;
-        for(int i = 0; i < buildPathEntries.length; i++) {
-	        result = buildPathEntries[i].getCachedPartBinding(packageName, partName);
-	        if(result != null) return result;
-	    }
-        
-        return getSystemEnvironment().getCachedPartBinding(packageName, partName);
-	}
-
     
     public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
         return declaringProjectBuildPathEntry.getNewPartBinding(packageName, caseSensitiveInternedPartName, kind);
@@ -148,7 +136,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
             }
         }
         
-        return getSystemEnvironment().hasPackage(packageName);
+        return false;
     }
     
     public void markPartBindingInvalid(String packageName, String partName) {
@@ -190,7 +178,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	        }
 	    }
 
-        return getSystemEnvironment().getPartBinding(packageName, caseInsensitiveInternedPartName);
+        return null;
 	}
 	
 	public String getProjectName() {
@@ -199,11 +187,6 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 
 	public ProjectBuildPathEntry getDeclaringProjectBuildPathEntry() {
 		return declaringProjectBuildPathEntry;
-	}
-	
-	@Override
-	public ISystemEnvironment getSystemEnvironment() {
-		return SystemEnvironmentManager.findSystemEnvironment(project, declaringProjectBuildPathEntry == null ? null : declaringProjectBuildPathEntry.getNotifier());
 	}
 	
 	@Override

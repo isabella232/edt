@@ -14,16 +14,14 @@ package org.eclipse.edt.compiler.tools;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import org.eclipse.edt.compiler.EGL2IRArgumentProcessor;
 import org.eclipse.edt.compiler.EGL2IREnvironment;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.PartEnvironmentStack;
 import org.eclipse.edt.compiler.Processor;
 import org.eclipse.edt.compiler.Util;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
@@ -35,6 +33,8 @@ import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
 import org.eclipse.edt.compiler.sdk.compile.BuildPathException;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.impl.Bootstrap;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
@@ -59,29 +59,34 @@ public class EGLC {
 	public static final String EGLBIN = ".eglbin";
 	public static final String EGLXML = ".eglxml";
 	
-	public static EGL2IREnvironment eglcEnv;
-	public static ISystemEnvironment systemEnvironment;
+	public  static EGL2IREnvironment eglcEnv;
 
 	
 	public static void compile(final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs, ICompiler compiler, ISDKProblemRequestorFactory problemRequestorFactory){
 		try {
+			
+			IEnvironment env = new Environment();
+			Environment.pushEnv(env);
+			
 	        File[] files = processedArgs.getPartFiles();
 	        
 	        if(files.length > 0){
 	        	
-	        	if (eglcEnv == null) {
-	        		eglcEnv = new EGL2IREnvironment();
-	        	}
+        		eglcEnv = new EGL2IREnvironment();
 	        	
     			initializeOutputPath(processedArgs);
     			initializeSystemRoot(processedArgs, compiler);
     			initializeEGLPath(processedArgs);
     				            
-	            ISystemEnvironment sysEnv = compiler.getSystemEnvironment(null);
             	eglcEnv.setCompiler(compiler);
-
+            	
+            	Bootstrap.initialize(Environment.getCurrentEnv());
+            	eglcEnv.setSystemPathEntries(compiler.getSystemBuildPathEntries());
+    			for (ZipFileBindingBuildPathEntry entry : compiler.getSystemBuildPathEntries()) {
+    				Environment.getCurrentEnv().registerObjectStore(entry.getObjectStore().getKeyScheme(), entry.getObjectStore());
+    			}			         
 			    
-			    Processor processor = new Processor(NullBuildNotifier.getInstance(), new ICompilerOptions(){},problemRequestorFactory, sysEnv, compiler);
+			    Processor processor = new Processor(NullBuildNotifier.getInstance(), new ICompilerOptions(){},problemRequestorFactory, compiler);
 			    
 			    PartEnvironmentStack.pushEnv(eglcEnv);
 			    
@@ -123,6 +128,8 @@ public class EGLC {
          }
         finally {
         	PartEnvironmentStack.popEnv();
+        	Environment.popEnv();
+        	eglcEnv = null;
         }
 	}
 
@@ -196,16 +203,17 @@ public class EGLC {
 			eglcEnv.addRoot(path);
 		}
 		else if (compiler != null) {
-			ISystemEnvironment env = compiler.getSystemEnvironment(null);
-			Map<String, List<ObjectStore>> systemMap = env.getStores();
-			for (Map.Entry<String, List<ObjectStore>> entry : systemMap.entrySet()) {
-				String scheme = entry.getKey();
-				List<ObjectStore> stores = entry.getValue();
-				
-				for (ObjectStore store : stores) {
-					eglcEnv.registerObjectStore(scheme, store);
-				}
-			}
+			//TODO add oject stores for eglars and mofars in the system library
+//			ISystemEnvironment env = compiler.getSystemEnvironment(null);
+//			Map<String, List<ObjectStore>> systemMap = env.getStores();
+//			for (Map.Entry<String, List<ObjectStore>> entry : systemMap.entrySet()) {
+//				String scheme = entry.getKey();
+//				List<ObjectStore> stores = entry.getValue();
+//				
+//				for (ObjectStore store : stores) {
+//					eglcEnv.registerObjectStore(scheme, store);
+//				}
+//			}
 		}
 	}
 

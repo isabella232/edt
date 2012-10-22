@@ -1,3 +1,4 @@
+import eglx.javascript.javascriptobject;
 externalType et1 type javaScriptObject
 	function f1(
 					p1 int,    //1

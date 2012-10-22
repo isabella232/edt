@@ -20,7 +20,8 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.compiler.ICompiler;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
@@ -37,7 +38,6 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.CompiledFileUnit;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
@@ -72,6 +72,7 @@ import org.eclipse.edt.ide.core.search.IEGLSearchResultCollector;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -1312,22 +1313,26 @@ public class MatchLocator2 {//extends MatchLocator {
 	}
 	
 	private static String getClassFileSource(final ClassFile classFile){
-		String sourceName = null;
-		ISystemEnvironment sysEnv = SystemEnvironmentManager.findSystemEnvironment(classFile.getEGLProject().getProject(), null);
-		IEnvironment sysIREnv = sysEnv.getIREnvironment();
-		String mofSignature = IRUtils.concatWithSeparator(classFile.getPackageName(), ".") + "." + classFile.getTypeName();
-		String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
-		EObject irPart = null;
-		try {
-			irPart = sysIREnv.find(eglSignature);
-			sourceName = irPart.eGet("filename").toString();
-		} catch (MofObjectNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (DeserializationException e1) {
-			e1.printStackTrace();
+		ICompiler compiler = ProjectSettingsUtility.getCompiler(classFile.getEGLProject().getProject());
+		List<ZipFileBindingBuildPathEntry> entries = compiler.getSystemBuildPathEntries();
+		if (!entries.isEmpty()) {
+			IEnvironment env = entries.get(0).getObjectStore().getEnvironment();
+			String sourceName = null;
+			String mofSignature = IRUtils.concatWithSeparator(classFile.getPackageName(), ".") + "." + classFile.getTypeName();
+			String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
+			try {
+				EObject irPart = env.find(eglSignature);
+				sourceName = irPart.eGet("filename").toString();
+			} catch (MofObjectNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (DeserializationException e1) {
+				e1.printStackTrace();
+			}
+			
+			return sourceName;
 		}
-		
-		return sourceName;
+
+		return null;
 	}
 
 	

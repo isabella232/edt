@@ -1,3 +1,5 @@
+import eglx.jtopen.annotations.*;
+import eglx.jtopen.*;
 
 program pgm1 {}
 	conn JTopenConnection?;

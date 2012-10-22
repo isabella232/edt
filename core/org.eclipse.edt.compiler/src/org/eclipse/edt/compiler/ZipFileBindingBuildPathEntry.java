@@ -43,14 +43,12 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 
 
 	private Map<String, Map<String, IRPartBinding>> partBindingsByPackage = new HashMap<String, Map<String,IRPartBinding>>();
-	private Map<String, IRPartBinding> partBindingsWithoutPackage = new HashMap<String, IRPartBinding>();
 	
 	protected abstract IEnvironment getEnvironment();
 	
 	public void clear(){
 		super.clear();
 		partBindingsByPackage.clear();
-		partBindingsWithoutPackage.clear();
 		
 		if (store instanceof CachingObjectStore) {
 			((CachingObjectStore)store).clearCache();
@@ -69,13 +67,13 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 	
 	public IRPartBinding getCachedPartBinding(String packageName,String partName){
 		IRPartBinding partBinding = null;
-		if (packageName == null || packageName.length() == 0){
-			partBinding = partBindingsWithoutPackage.get(partName);
-		}else{
-			Map<String, IRPartBinding> partpackage = partBindingsByPackage.get(packageName);
-			if (partpackage != null){
-				partBinding = partpackage.get(partName);
-			}
+		if (packageName == null){
+			packageName = "";
+		}
+
+		Map<String, IRPartBinding> partpackage = partBindingsByPackage.get(packageName);
+		if (partpackage != null){
+			partBinding = partpackage.get(partName);
 		}
 		
 		return partBinding;
@@ -105,16 +103,16 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 	}
 	
 	protected Map<String, IRPartBinding> getPackagePartBinding(String packageName) {
+		if (packageName == null) {
+			packageName = "";
+		}
+		
 		Map<String, IRPartBinding> map = partBindingsByPackage.get(packageName);
 	    if (map == null) {
 	        map = new HashMap<String, IRPartBinding>();
 	        partBindingsByPackage.put(packageName, map);
 	    }
 	    return map;
-	}
-
-	public Map<String, IRPartBinding> getPartBindingsWithoutPackage() {
-		return partBindingsWithoutPackage;
 	}
 
 	public IEnvironment getRealizingEnvironment(){
@@ -184,10 +182,6 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 		//default is to do nothing
 	}
 	
-	public ObjectStore getObjectStore() {
-		return store;
-	}
-
 	public ObjectStore[] getObjectStores() {
 		return new ObjectStore[]{store};
 	}
@@ -202,6 +196,10 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 			}
 		}
 		return false;
+	}
+	
+	public ObjectStore getObjectStore() {
+		return store;
 	}
 	
 }

@@ -24,7 +24,7 @@ public class RBDCompiler extends BaseCompiler {
 		
 		if (systemEnvironmentRootPath == null) {
 
-			String path = SystemEnvironmentUtil.getSystemLibraryPath(BindingCreator.class, "lib");
+			String path = SystemLibraryUtil.getSystemLibraryPath(BindingCreator.class, "lib");
 			
 			systemEnvironmentRootPath = path + File.pathSeparator + super.getSystemEnvironmentPath();
 		}

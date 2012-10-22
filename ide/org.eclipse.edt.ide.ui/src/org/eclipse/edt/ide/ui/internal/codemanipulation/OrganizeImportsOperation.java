@@ -48,7 +48,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.SyntaxError;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
@@ -503,17 +502,6 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 			}
 		}finally{
 			monitor.done();
-		}
-	}
-
-	private void addSystemTypes(List typeList, String unresolvedTypeName, IProject project) {		
-		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project, null).getPartBinding(null, unresolvedTypeName);
-		if(sysPartBinding != null){
-			//conver the IPartBinding to PartInfo
-			String pkgName = sysPartBinding.getPackageName();
-			String partName = sysPartBinding.getName();
-			
-			typeList.add(new SystemPartInfo(pkgName, partName));
 		}
 	}
 

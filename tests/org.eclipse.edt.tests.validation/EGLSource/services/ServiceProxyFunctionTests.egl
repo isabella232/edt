@@ -1,3 +1,6 @@
+import eglx.rest.*;
+import eglx.java.*;
+
 interface inter1
 	function f1() {@REST {method=POST}}; //1 container for the REST function f1 is invalid
 	function f2() {@EGLService {}}; //1 container for the EGLService function f1 is invalid

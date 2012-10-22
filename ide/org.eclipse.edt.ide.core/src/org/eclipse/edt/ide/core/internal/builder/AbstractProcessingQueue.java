@@ -35,11 +35,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyInfo;
 import org.eclipse.edt.ide.core.internal.generation.IDEContext;
@@ -228,7 +226,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 		}else{
 			String fileName = org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = projectEnvironment.getPartBinding(packageName, fileName);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo), SystemEnvironmentManager.findSystemEnvironment(project, notifier));
+			scope = new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);
 		}
 		return scope;
 	}

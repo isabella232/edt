@@ -16,9 +16,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
-import org.eclipse.edt.compiler.SystemEnvironment;
-import org.eclipse.edt.compiler.SystemPackageMOFPathEntry;
+import org.eclipse.edt.compiler.ICompiler;
+import org.eclipse.edt.compiler.MofarBuildPathEntry;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Assignment;
@@ -45,14 +45,12 @@ import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
-import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.serialization.DeserializationException;
-import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 public class BoundNodeLocationUtility {
@@ -348,25 +346,13 @@ public class BoundNodeLocationUtility {
 			} else{
 				result = origin.getEGLFile();
 			}
-		} else if(ienv instanceof SystemEnvironment){
-			List<ISystemPackageBuildPathEntry> list = ((SystemEnvironment)ienv).getSysPackages();
-			for ( ISystemPackageBuildPathEntry entry : list ) {
-				if (!(entry instanceof SystemPackageMOFPathEntry) && entry.getPartBinding( packageName, partName ) != null ) {
-					String mofSignature = packageName + "." + partName;
-					String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
-					EObject irPart = null;
-					
-					String sourceName = null;
-					String irName = null;
-					try {
-						irPart = ((SystemEnvironment)ienv).getIREnvironment().find(eglSignature);
-						sourceName = irPart.eGet("filename").toString();
-						irName = IRFileNameUtility.toIRFileName(irPart.eGet("name").toString());
-					} catch (MofObjectNotFoundException e1) {
-						e1.printStackTrace();
-					} catch (DeserializationException e1) {
-						e1.printStackTrace();
-					}
+		} else if(ienv == null && project != null){
+			ICompiler compiler = ProjectSettingsUtility.getCompiler(project);
+			List<ZipFileBindingBuildPathEntry> list = compiler.getSystemBuildPathEntries();
+			for ( ZipFileBindingBuildPathEntry entry : list ) {
+				if (!(entry instanceof MofarBuildPathEntry) && entry.getPartBinding( packageName, partName ) != null ) {
+					String sourceName = partBinding.getFileName();
+					String irName = IRFileNameUtility.toIRFileName(partBinding.getName());
 
 					result = new BinaryReadOnlyFile( entry.getID(), sourceName, irName);
 					break;

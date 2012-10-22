@@ -54,7 +54,7 @@ public class TemplateContext extends HashMap<Object, Object> {
 		if (Environment.getCurrentEnv() != null)
 			this.env = Environment.getCurrentEnv();
 		else
-			this.env = Environment.INSTANCE;
+			this.env = Environment.getCurrentEnv();
 	}
 
 	public TemplateContext(IEnvironment env) {

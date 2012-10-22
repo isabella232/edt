@@ -1,3 +1,6 @@
+import eglx.jtopen.annotations.*;
+import eglx.jtopen.*;
+
 service myserv
 	
 	i int;

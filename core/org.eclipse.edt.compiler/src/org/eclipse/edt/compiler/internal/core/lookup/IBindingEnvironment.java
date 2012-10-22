@@ -14,6 +14,5 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 
 public interface IBindingEnvironment extends IEnvironment {
-    IPartBinding getCachedPartBinding(String packageName, String partName);
 
 }

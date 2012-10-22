@@ -10,7 +10,7 @@
  *
  *******************************************************************************/
 package part;
-
+import eglx.java.*;
 externalType et1 type javaobject //0
 end
 

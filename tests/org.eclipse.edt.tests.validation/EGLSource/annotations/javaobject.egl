@@ -1,3 +1,4 @@
+import eglx.java.javaObject;
 externalType et1 type javaObject
 	function f1(
 					p1 int,    //1

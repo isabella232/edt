@@ -16,7 +16,6 @@ import org.eclipse.edt.compiler.EGL2IRArgumentProcessor;
 import org.eclipse.edt.compiler.EGL2IREnvironment;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ICompilerExtension;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
@@ -42,7 +41,6 @@ public class EGL2IR {
 	
 	public static EGL2IREnvironment eglcEnv;
 	public static String SystemLibFolderPath;
-	public static ISystemEnvironment systemEnvironment;
 	public static void main(String[] args) {
 		main(args, (ICompiler)null);
 	}

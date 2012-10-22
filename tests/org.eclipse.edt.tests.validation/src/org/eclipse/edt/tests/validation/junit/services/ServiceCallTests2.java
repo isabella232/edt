@@ -27,241 +27,61 @@ public class ServiceCallTests2 extends ValidationTestCase {
 	/*
 	 * call myserv.srvfunc();
 	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a "returning to" or "returns" function.".
-	 */
-	public void testLine17() {
-		List messages = getMessagesAtLine( 17 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function.\" was issued." );
-	}
-
-	/*
-	 * call servVar.srvfunc();
-	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a "returning to" or "returns" function.".
-	 */
-	public void testLine18() {
-		List messages = getMessagesAtLine( 18 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function.\" was issued." );
-	}
-
-	/*
-	 * using "binding:fred"
-	 * 1 validation message is expected.
-	 * It is expected to contain "The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp.".
-	 */
-	public void testLine20() {
-		List messages = getMessagesAtLine( 20 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp.\" was issued." );
-	}
-
-	/*
-	 * using syslib.getResource( "binding:fred")
-	 * 1 validation message is expected.
-	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.".
-	 */
-	public void testLine24() {
-		List messages = getMessagesAtLine( 24 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.\" was issued." );
-	}
-
-	/*
-	 * using syslib.getResource( "binding:fred") as IHTTP
-	 * 0 validation messages are expected.
-	 */
-	public void testLine29() {
-		List messages = getMessagesAtLine( 29 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * using syslib.getResource( "binding:fred") as IHTTP
-	 * 0 validation messages are expected.
-	 */
-	public void testLine33() {
-		List messages = getMessagesAtLine( 33 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * call myserv.srvfunc() returns(i);
-	 * 1 validation message is expected.
 	 * It is expected to contain "must specify a \"returning to\" function".
 	 */
-	public void testLine35() {
-		List messages = getMessagesAtLine( 35 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * call myserv.srvfunc() returns(i);
-	 * 1 validation message is expected.
-	 * It is expected to contain "must specify a \"returning to\" function".
-	 */
-	public void testLine36() {
-		List messages = getMessagesAtLine( 36 );
-		assertEquals( 0, messages.size() );
-	}
-
-
-	/*
-	 * call myinter.interfunc();
-	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a \"returning to\" or \"returns\" function.h".
-	 */
-	public void testLine42() {
-		List messages = getMessagesAtLine( 42 );
+	public void testLine21() {
+		List messages = getMessagesAtLine( 21 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function.\" was issued." );
-	}
-
-	/*
-	 * call intervar.interfunc();
-	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a \"returning to\" or \"returns\" function.".
-	 */
-	public void testLine43() {
-		List messages = getMessagesAtLine( 43 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" functionThe call statement must specify a \"returning to\" or \"returns\" function.\" was issued." );
-	}
-
-	/*
-	 * using "binding:fred"
-	 * 1 validation message is expected.
-	 * It is expected to contain "The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp.".
-	 */
-	public void testLine45() {
-		List messages = getMessagesAtLine( 45 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp.\" was issued." );
-	}
-
-	/*
-	 * using syslib.getResource( "binding:fred")
-	 * 1 validation message is expected.
-	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.".
-	 */
-	public void testLine49() {
-		List messages = getMessagesAtLine( 49 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.\" was issued." );
-	}
-
-	/*
-	 * using syslib.getResource( "binding:fred") as IHTTP
-	 * 0 validation messages are expected.
-	 */
-	public void testLine54() {
-		List messages = getMessagesAtLine( 54 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * call myinter.interfunc() returns(i);
-	 * 1 validation message is expected.
-	 * It is expected to contain "must specify a \"returning to\" function".
-	 */
-	public void testLine58() {
-		List messages = getMessagesAtLine( 58 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * call myinter.interfunc() returning to callback;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine60() {
-		List messages = getMessagesAtLine( 60 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * call intervar.interfunc() returning to callback;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine61() {
-		List messages = getMessagesAtLine( 61 );
-		assertEquals( 0, messages.size() );
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
 	}
 
 	/*
 	 * call myserv.srvfunc();
 	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a \"returning to\" or \"returns\" function.".
+	 * It is expected to contain "must specify a \"returning to\" function".
 	 */
-	public void testLine80() {
-		List messages = getMessagesAtLine( 80 );
+	public void testLine22() {
+		List messages = getMessagesAtLine( 22 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function.\" was issued." );
-	}
-
-	/*
-	 * call servVar.srvfunc();
-	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a \"returning to\" or \"returns\" function.".
-	 */
-	public void testLine81() {
-		List messages = getMessagesAtLine( 81 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
 	}
 
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp.".
+	 * It is expected to contain "type of the using expression must be eglx.http.IHTTP".
 	 */
-	public void testLine83() {
-		List messages = getMessagesAtLine( 83 );
+	public void testLine25() {
+		List messages = getMessagesAtLine( 25 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.http.IHTTP" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.http.IHTTP\" was issued." );
 	}
 
 	/*
-	 * using syslib.getResource( "binding:fred")
+	 * using Resources.getResource( "binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.".
+	 * It is expected to contain "type of the using expression must be eglx.http.IHTTP".
 	 */
-	public void testLine87() {
-		List messages = getMessagesAtLine( 87 );
+	public void testLine29() {
+		List messages = getMessagesAtLine( 29 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.http.IHTTP" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.http.IHTTP\" was issued." );
 	}
 
 	/*
-	 * using syslib.getResource( "binding:fred") as IHTTP
+	 * using Resources.getResource( "binding:fred") as IHTTP
 	 * 0 validation messages are expected.
 	 */
-	public void testLine92() {
-		List messages = getMessagesAtLine( 92 );
+	public void testLine34() {
+		List messages = getMessagesAtLine( 34 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -270,8 +90,20 @@ public class ServiceCallTests2 extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "must specify a \"returning to\" function".
 	 */
-	public void testLine96() {
-		List messages = getMessagesAtLine( 96 );
+	public void testLine37() {
+		List messages = getMessagesAtLine( 37 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
+	}
+
+	/*
+	 * call myserv.srvfunc() returning to callback;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine39() {
+		List messages = getMessagesAtLine( 39 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -279,87 +111,91 @@ public class ServiceCallTests2 extends ValidationTestCase {
 	 * call myserv.srvfunc() returning to callback;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine98() {
-		List messages = getMessagesAtLine( 98 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * call servVar.srvfunc() returning to callback;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine99() {
-		List messages = getMessagesAtLine( 99 );
+	public void testLine40() {
+		List messages = getMessagesAtLine( 40 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * call myinter.interfunc();
 	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a "returning to" or "returns" function.".
+	 * It is expected to contain "must specify a \"returning to\" function".
 	 */
-	public void testLine105() {
-		List messages = getMessagesAtLine( 105 );
+	public void testLine46() {
+		List messages = getMessagesAtLine( 46 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
 	}
 
 	/*
-	 * call intervar.interfunc();
+	 * call myinter.interfunc();
 	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a "returning to" or "returns" function.".
+	 * It is expected to contain "must specify a \"returning to\" function".
 	 */
-	public void testLine106() {
-		List messages = getMessagesAtLine( 106 );
+	public void testLine47() {
+		List messages = getMessagesAtLine( 47 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
 	}
 
 	/*
 	 * using "binding:fred"
 	 * 1 validation message is expected.
-	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.".
+	 * It is expected to contain "type of the using expression must be eglx.http.IHTTP".
 	 */
-	public void testLine108() {
-		List messages = getMessagesAtLine( 108 );
+	public void testLine50() {
+		List messages = getMessagesAtLine( 50 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string' is not compatible with the expected type eglx.http.IHttp.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.http.IHTTP" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.http.IHTTP\" was issued." );
 	}
 
 	/*
-	 * using syslib.getResource( "binding:fred")
+	 * using Resources.getResource( "binding:fred")
 	 * 1 validation message is expected.
-	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.".
+	 * It is expected to contain "type of the using expression must be eglx.http.IHTTP".
 	 */
-	public void testLine112() {
-		List messages = getMessagesAtLine( 112 );
+	public void testLine54() {
+		List messages = getMessagesAtLine( 54 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.http.IHttp.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.http.IHTTP" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.http.IHTTP\" was issued." );
 	}
 
 	/*
-	 * using syslib.getResource( "binding:fred") as IHTTP
+	 * using Resources.getResource( "binding:fred") as IHTTP
 	 * 0 validation messages are expected.
 	 */
-	public void testLine117() {
-		List messages = getMessagesAtLine( 117 );
+	public void testLine59() {
+		List messages = getMessagesAtLine( 59 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * call myinter.interfunc() returns(i);
 	 * 1 validation message is expected.
+	 * It is expected to contain "must specify a \"returning to\" function".
 	 */
-	public void testLine121() {
-		List messages = getMessagesAtLine( 121 );
+	public void testLine62() {
+		List messages = getMessagesAtLine( 62 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
+	}
+
+	/*
+	 * call myinter.interfunc() returning to callback;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine64() {
+		List messages = getMessagesAtLine( 64 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -367,17 +203,192 @@ public class ServiceCallTests2 extends ValidationTestCase {
 	 * call myinter.interfunc() returning to callback;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine123() {
-		List messages = getMessagesAtLine( 123 );
+	public void testLine65() {
+		List messages = getMessagesAtLine( 65 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * call intervar.interfunc() returning to callback;
+	 * call myserv.srvfunc();
+	 * 1 validation message is expected.
+	 * It is expected to contain "must specify a \"returning to\" function".
+	 */
+	public void testLine84() {
+		List messages = getMessagesAtLine( 84 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
+	}
+
+	/*
+	 * call myserv.srvfunc();
+	 * 1 validation message is expected.
+	 * It is expected to contain "must specify a \"returning to\" function".
+	 */
+	public void testLine85() {
+		List messages = getMessagesAtLine( 85 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
+	}
+
+	/*
+	 * using "binding:fred"
+	 * 1 validation message is expected.
+	 * It is expected to contain "type of the using expression must be eglx.http.IHTTP".
+	 */
+	public void testLine88() {
+		List messages = getMessagesAtLine( 88 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.http.IHTTP" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.http.IHTTP\" was issued." );
+	}
+
+	/*
+	 * using Resources.getResource( "binding:fred")
+	 * 1 validation message is expected.
+	 * It is expected to contain "type of the using expression must be eglx.http.IHTTP".
+	 */
+	public void testLine92() {
+		List messages = getMessagesAtLine( 92 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.http.IHTTP" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.http.IHTTP\" was issued." );
+	}
+
+	/*
+	 * using Resources.getResource( "binding:fred") as IHTTP
 	 * 0 validation messages are expected.
 	 */
-	public void testLine124() {
-		List messages = getMessagesAtLine( 124 );
+	public void testLine97() {
+		List messages = getMessagesAtLine( 97 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * call myserv.srvfunc() returns(i);
+	 * 1 validation message is expected.
+	 * It is expected to contain "must specify a \"returning to\" function".
+	 */
+	public void testLine100() {
+		List messages = getMessagesAtLine( 100 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
+	}
+
+	/*
+	 * call myserv.srvfunc() returning to callback;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine102() {
+		List messages = getMessagesAtLine( 102 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * call myserv.srvfunc() returning to callback;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine103() {
+		List messages = getMessagesAtLine( 103 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * call myinter.interfunc();
+	 * 1 validation message is expected.
+	 * It is expected to contain "must specify a \"returning to\" function".
+	 */
+	public void testLine109() {
+		List messages = getMessagesAtLine( 109 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
+	}
+
+	/*
+	 * call myinter.interfunc();
+	 * 1 validation message is expected.
+	 * It is expected to contain "must specify a \"returning to\" function".
+	 */
+	public void testLine110() {
+		List messages = getMessagesAtLine( 110 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
+	}
+
+	/*
+	 * using "binding:fred"
+	 * 1 validation message is expected.
+	 * It is expected to contain "type of the using expression must be eglx.http.IHTTP".
+	 */
+	public void testLine113() {
+		List messages = getMessagesAtLine( 113 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.http.IHTTP" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.http.IHTTP\" was issued." );
+	}
+
+	/*
+	 * using Resources.getResource( "binding:fred")
+	 * 1 validation message is expected.
+	 * It is expected to contain "type of the using expression must be eglx.http.IHTTP".
+	 */
+	public void testLine117() {
+		List messages = getMessagesAtLine( 117 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.http.IHTTP" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.http.IHTTP\" was issued." );
+	}
+
+	/*
+	 * using Resources.getResource( "binding:fred") as IHTTP
+	 * 0 validation messages are expected.
+	 */
+	public void testLine122() {
+		List messages = getMessagesAtLine( 122 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * call myinter.interfunc() returns(i);
+	 * 1 validation message is expected.
+	 * It is expected to contain "must specify a \"returning to\" function".
+	 */
+	public void testLine125() {
+		List messages = getMessagesAtLine( 125 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must specify a \"returning to\" function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must specify a \"returning to\" function\" was issued." );
+	}
+
+	/*
+	 * call myinter.interfunc() returning to callback;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine127() {
+		List messages = getMessagesAtLine( 127 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * call myinter.interfunc() returning to callback;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine128() {
+		List messages = getMessagesAtLine( 128 );
 		assertEquals( 0, messages.size() );
 	}
 }

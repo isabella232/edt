@@ -14,7 +14,6 @@ package org.eclipse.edt.ide.core.internal.lookup;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -34,12 +33,10 @@ import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.EObject;
@@ -71,10 +68,6 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 		@Override
 		public IPackageBinding getRootPackage() {
 			return declaringEnvironment.getRootPackage();
-		}
-		@Override
-		public ISystemEnvironment getSystemEnvironment() {
-			return ProjectBuildPathEntry.this.getSystemEnvironment();
 		}
 		@Override
 		public ICompiler getCompiler() {
@@ -249,9 +242,9 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         	String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = getPartBinding(packageName, fileName, true);
 			if(!fileBinding.isValid()){
-				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),getSystemEnvironment());
+				scope = new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile));
 			}else{
-				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),getSystemEnvironment());
+				scope = new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance());
 			}
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, DefaultCompilerOptions.getInstance());
@@ -381,11 +374,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 		}
 		return null;
 	}
-	
-	protected ISystemEnvironment getSystemEnvironment() {
-		return SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier());
-	}
-	
+		
 	protected ICompiler getCompiler() {
 		return ProjectSettingsUtility.getCompiler(getProject());
 	}

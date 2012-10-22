@@ -35,7 +35,7 @@ public class EDTCompiler extends BaseCompiler {
 	public String getSystemEnvironmentPath() {
 		if (systemEnvironmentRootPath == null) {
 			StringBuilder buf = new StringBuilder(100);
-			buf.append(SystemEnvironmentUtil.getSystemLibraryPath(BindingCreator.class, "lib"));
+			buf.append(SystemLibraryUtil.getSystemLibraryPath(BindingCreator.class, "lib"));
 			buf.append(File.pathSeparatorChar);
 			buf.append(super.getSystemEnvironmentPath());
 			systemEnvironmentRootPath = buf.toString();

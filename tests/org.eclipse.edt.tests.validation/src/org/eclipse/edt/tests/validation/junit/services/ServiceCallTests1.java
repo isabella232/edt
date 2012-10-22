@@ -25,223 +25,210 @@ public class ServiceCallTests1 extends ValidationTestCase {
 	}
 
 	/*
-	 * call field1(i1) using httpProxy;//wrong target type;
+	 * call field1(i1) using httpProxy;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The target of the Call must be a Service or proxy function".
+	 * It is expected to contain "wrong target type".
 	 */
-	public void testLine10() {
-		List messages = getMessagesAtLine( 10 );
+	public void testLine13() {
+		List messages = getMessagesAtLine( 13 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The target of the Call must be a Service or proxy function" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The target of the Call must be a Service or proxy function\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong target type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong target type\" was issued." );
 	}
 
 	/*
-	 * call field1(i1) using httpRest;//wrong target type;
+	 * call field1(i1) using httpRest;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The target of the Call must be a Service or proxy function".
+	 * It is expected to contain "wrong target type".
 	 */
-	public void testLine15() {
-		List messages = getMessagesAtLine( 10 );
+	public void testLine18() {
+		List messages = getMessagesAtLine( 18 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The target of the Call must be a Service or proxy function" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The target of the Call must be a Service or proxy function\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong target type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong target type\" was issued." );
 	}
 
 	/*
-	 * call fp8(i1) using httpRest;//missing returning to or returns;
+	 * call fp8(i1) using httpRest;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a "returning to" or "returns" function".
+	 * It is expected to contain "missing returning to or returns".
 	 */
-	public void testLine20() {
-		List messages = getMessagesAtLine( 20 );
+	public void testLine23() {
+		List messages = getMessagesAtLine( 23 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "missing returning to or returns" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"missing returning to or returns\" was issued." );
 	}
 
 	/*
-	 * call fp8(i1) using httpProxy;//missing returning to or returns;
+	 * call fp8(i1) using httpProxy;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The call statement must specify a "returning to" or "returns" function".
+	 * It is expected to contain "missing returning to or returns".
 	 */
-	public void testLine25() {
-		List messages = getMessagesAtLine( 25 );
+	public void testLine28() {
+		List messages = getMessagesAtLine( 28 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a \"returning to\" or \"returns\" function" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a \"returning to\" or \"returns\" function\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "missing returning to or returns" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"missing returning to or returns\" was issued." );
 	}
 
 	/*
-	 * call fp8(i1) using httpProxy returning to response1;//wrong returning to type;
+	 * call fp8(i1) using httpProxy returning to response1;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type rec1 cannot be passed to the parameter p1 of the function response1. It is not assignment compatible with boolean.".
+	 * It is expected to contain "wrong returning to type".
 	 */
-	public void testLine30() {
-		List messages = getMessagesAtLine( 30 );
+	public void testLine33() {
+		List messages = getMessagesAtLine( 33 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type rec1 cannot be passed to the parameter p1 of the function response1. It is not assignment compatible with boolean." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type rec1 cannot be passed to the parameter p1 of the function response1. It is not assignment compatible with boolean.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong returning to type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong returning to type\" was issued." );
 	}
 
 	/*
-	 * call fp13(i1) using httpProxy returning to response6;//wrong returning to type;
+	 * call fp13(s1, r1, i1) using httpProxy returning to response6;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type int cannot be passed to the parameter p3 of the function response6. It is not assignment compatible with boolean.".
+	 * It is expected to contain "wrong returning to type".
 	 */
-	public void testLine37() {
-		List messages = getMessagesAtLine( 37 );
+	public void testLine40() {
+		List messages = getMessagesAtLine( 40 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type int cannot be passed to the parameter p3 of the function response6. It is not assignment compatible with boolean." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type int cannot be passed to the parameter p3 of the function response6. It is not assignment compatible with boolean.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong returning to type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong returning to type\" was issued." );
 	}
 
 	/*
-	 * call fp7(i1) using httpProxy onexception response1;// wrong type in onexception handler;
+	 * call fp7(i1) using httpProxy onexception response1;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The parameter at position 1 of function response1 must have a type of eglx.lang.AnyException.".
+	 * It is expected to contain "wrong type in onexception handler".
 	 */
-	public void testLine42() {
-		List messages = getMessagesAtLine( 42 );
+	public void testLine45() {
+		List messages = getMessagesAtLine( 45 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The parameter at position 1 of function response1 must have a type of eglx.lang.AnyException." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The parameter at position 1 of function response1 must have a type of eglx.lang.AnyException.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong type in onexception handler" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong type in onexception handler\" was issued." );
 	}
 
 	/*
-	 * call fp8(i1) using httpProxy returning to response2;//returning to function has out types
+	 * call fp8(i1) using httpProxy returning to response2;
 	 * 1 validation message is expected.
-	 * It is expected to contain "All of the parameters in "returning to" or "onexception" function response2 must be defined with the IN modifier.".
+	 * It is expected to contain "returning to function has out types".
 	 */
-	public void testLine47() {
-		List messages = getMessagesAtLine( 47 );
+	public void testLine50() {
+		List messages = getMessagesAtLine( 50 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "All of the parameters in \"returning to\" or \"onexception\" function response2 must be defined with the IN modifier." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"All of the parameters in \"returning to\" or \"onexception\" function response2 must be defined with the IN modifier.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "returning to function has out types" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"returning to function has out types\" was issued." );
 	}
 
 	/*
-	 * call fp8(i1) using httpProxy returning to response3;//returning to function has inout types
+	 * call fp8(i1) using httpProxy returning to response3;
 	 * 1 validation message is expected.
-	 * It is expected to contain "All of the parameters in "returning to" or "onexception" function response3 must be defined with the IN modifier.".
+	 * It is expected to contain "returning to function has inout types".
 	 */
-	public void testLine52() {
-		List messages = getMessagesAtLine( 52 );
+	public void testLine55() {
+		List messages = getMessagesAtLine( 55 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "All of the parameters in \"returning to\" or \"onexception\" function response3 must be defined with the IN modifier." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"All of the parameters in \"returning to\" or \"onexception\" function response3 must be defined with the IN modifier.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "returning to function has inout types" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"returning to function has inout types\" was issued." );
 	}
 
 	/*
-	 * call fp8(i1) using httpProxy returning to field1;//returning to is a field not function
+	 * call fp8(i1) using httpProxy returning to field1;
 	 * 1 validation message is expected.
-	 * It is expected to contain "All of the parameters in "The "returning to" or "onexception" expression must resolve to a function.".
+	 * It is expected to contain "returning to is a field not function".
 	 */
-	public void testLine57() {
-		List messages = getMessagesAtLine( 57 );
+	public void testLine60() {
+		List messages = getMessagesAtLine( 60 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The \"returning to\" or \"onexception\" expression must resolve to a function." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The \"returning to\" or \"onexception\" expression must resolve to a function.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "returning to is a field not function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"returning to is a field not function\" was issued." );
 	}
 
 	/*
-	 * call fp8(i1) using httpProxy returning to response4;// wrong type in onexception handler
+	 * call fp8(i1) using httpProxy returning to response4;
 	 * 1 validation message is expected.
-	 * It is expected to contain "All of the parameters in "The "returning to" or "onexception" expression must resolve to a function.".
+	 * It is expected to contain "wrong type in onexception handler".
 	 */
-	public void testLine62() {
-		List messages = getMessagesAtLine( 62 );
+	public void testLine65() {
+		List messages = getMessagesAtLine( 65 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The \"returning to\" or \"onexception\" function response4 cannot return a type." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The \"returning to\" or \"onexception\" function response4 cannot return a type.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong type in onexception handler" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong type in onexception handler\" was issued." );
 	}
 
 	/*
-	 * call lib1.fp1(i1) using httpProxy returning to lib1.response1;//callback handler in the wrong part
+	 * call lib1.fp1(i1) using httpProxy returning to lib1.response1;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The function response1 must be defined in the part pgm1.".
+	 * It is expected to contain "callback handler in the wrong part".
 	 */
-	public void testLine67() {
-		List messages = getMessagesAtLine( 67 );
+	public void testLine70() {
+		List messages = getMessagesAtLine( 70 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The function response1 must be defined in the part pgm1." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The function response1 must be defined in the part pgm1.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "callback handler in the wrong part" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"callback handler in the wrong part\" was issued." );
 	}
 
 	/*
-	 * call fp7(i1) using httpProxy returning to response5;
+	 * call fp13(s1, i1, i1) using httpProxy returning to response7;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The "returning to" or "onexception" function response5 requires 0 parameter(s).".
+	 * It is expected to contain "wrong parameter in the call".
 	 */
-	public void testLine72() {
-		List messages = getMessagesAtLine( 72 );
+	public void testLine82() {
+		List messages = getMessagesAtLine( 82 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The \"returning to\" or \"onexception\" function response5 requires 0 parameter(s)." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The \"returning to\" or \"onexception\" function response5 requires 0 parameter(s).\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong parameter in the call" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong parameter in the call\" was issued." );
 	}
 
 	/*
-	 * call fp13(s1, i1, i1) using httpProxy returning to response7;//proxy function accessed as a static in the wrong part
+	 * call fp13(i1) using httpProxy returning to response7;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The argument i1 cannot be passed to the in or out parameter p2 of the function fp13. The types int and rec1 are not assignment compatible.".
+	 * It is expected to contain "wrong number of parameters in the call".
 	 */
-	public void testLine79() {
-		List messages = getMessagesAtLine( 79 );
+	public void testLine87() {
+		List messages = getMessagesAtLine( 87 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument i1 cannot be passed to the in or out parameter p2 of the function fp13. The types int and rec1 are not assignment compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument i1 cannot be passed to the in or out parameter p2 of the function fp13. The types int and rec1 are not assignment compatible.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "wrong number of parameters in the call" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"wrong number of parameters in the call\" was issued." );
 	}
 
 	/*
-	 * call fp13(i1) using httpProxy returning to response6;//wrong number of parameters in the call
+	 * call HANDLER1.fp1(i1) using httpProxy returning to response5;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The number of arguments in the call statement '1' must be the same as the number of parameters '3' in the target function fp13.".
+	 * It is expected to contain "proxy function accessed as a static in the wrong part".
 	 */
-	public void testLine84() {
-		List messages = getMessagesAtLine( 84 );
+	public void testLine92() {
+		List messages = getMessagesAtLine( 92 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The number of arguments in the call statement '1' must be the same as the number of parameters '3' in the target function fp13." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The number of arguments in the call statement '1' must be the same as the number of parameters '3' in the target function fp13.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "proxy function accessed as a static in the wrong part" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"proxy function accessed as a static in the wrong part\" was issued." );
 	}
 
 	/*
-	 * call HANDLER1.fp1(i1) using httpProxy returning to response5;//proxy function accessed as a static in the wrong part
+	 * call fp7(i1) using httpProxy onexception response8;
 	 * 1 validation message is expected.
-	 * It is expected to contain "Only a library or service part can be use as a qualifier.".
+	 * It is expected to contain "bad onexception function".
 	 */
-	public void testLine89() {
-		List messages = getMessagesAtLine( 89 );
+	public void testLine97() {
+		List messages = getMessagesAtLine( 97 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Only a library or service part can be use as a qualifier." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Only a library or service part can be use as a qualifier.\" was issued." );
-	}
-
-	/*
-	 * call fp8(i1) using httpProxy onexception response8;//bad onexception function
-	 * 1 validation message is expected.
-	 * It is expected to contain "The "returning to" or "onexception" function response8 requires 1 parameter(s).".
-	 */
-	public void testLine94() {
-		List messages = getMessagesAtLine( 94 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The \"returning to\" or \"onexception\" function response8 requires 1 parameter(s)." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The \"returning to\" or \"onexception\" function response8 requires 1 parameter(s).\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "bad onexception function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"bad onexception function\" was issued." );
 	}
 }

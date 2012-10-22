@@ -9,10 +9,8 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-function toplevelfunction ()
-	if(yes) exit; end//0
-	if(yes) exit program (1); end//0
-end
+import eglx.persistence.sql.*;
+import eglx.ui.rui.*;
 
 Program pgm
 	function main()
@@ -80,15 +78,15 @@ Program pgm
 			if(yes) exit for; end // 1 Invalid exit modifier. The for exit modifier may only be used within a for statement block
 		end
 							
-		if(yes) exit program ("abc" + "def"); end	// 1 Invalid return code "abc"+"def". The return code for an exit program or rununit statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
+		if(yes) exit program ("abc" + "def"); end	// 1 Invalid return code ("abc"+"def"). The return code for an exit program or rununit statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
 		
-		if(yes) exit program (charConst); end 		// 1 Invalid return code charConst. The return code for an exit program or rununit statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
+		if(yes) exit program (charConst); end 		// 1 Invalid return code (charConst). The return code for an exit program or rununit statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
 		
 		if(yes) exit program ("A"); end				// 1
 		
-		if(yes) exit program (a); end 				// 1 Invalid return code a. The return code for an exit program or rununit statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
+		if(yes) exit program (a); end 				// 1 Invalid return code (a). The return code for an exit program or rununit statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
 		
-		if(yes) exit program (a+a); end 			// 1 Invalid return code a+a. The return code for an exit program or rununit statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
+		if(yes) exit program (a+a); end 			// 1 Invalid return code (a+a). The return code for an exit program or rununit statement must be an integer expression {6628, EGLMESSAGE_EXIT_PROGRAM_ITEM_NOT_INTEGER}	
 		
 		if(yes) exit program (myany); end			// 0
 

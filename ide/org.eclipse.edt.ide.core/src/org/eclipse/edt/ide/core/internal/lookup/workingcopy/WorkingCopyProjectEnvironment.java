@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.core.internal.lookup.workingcopy;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
@@ -21,7 +20,6 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
@@ -85,7 +83,7 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
 	        if(result != null) return result;
 	    }
         
-       return getSystemEnvironment().getPartBinding(packageName, partName);
+       return null;
 	}
 
 	@Override
@@ -108,7 +106,7 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
             }
         }
         
-        return getSystemEnvironment().hasPackage(packageName);
+        return false;
 	}
 
 	@Override
@@ -131,7 +129,7 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
 	        }
 	    }
 
-        return getSystemEnvironment().getPartBinding(packageName, caseInsensitiveInternedPartName);
+        return null;
 	}	
 	
 	public void clear() {
@@ -144,25 +142,9 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
 		return declaringProjectBuildPathEntry;
 	}
 
-
-	@Override
-	public ISystemEnvironment getSystemEnvironment() {
-		return SystemEnvironmentManager.findSystemEnvironment(getProject(), null);
-	}
-	
 	@Override
 	public ICompiler getCompiler() {
 		return ProjectSettingsUtility.getCompiler(getProject());
 	}
 	
-	@Override
-	public IPartBinding getCachedPartBinding(String packageName, String partName) {
-        IPartBinding result = null;
-        for(int i = 0; i < buildPathEntries.length; i++) {
-	        result = buildPathEntries[i].getCachedPartBinding(packageName, partName);
-	        if(result != null) return result;
-	    }
-        
-        return getSystemEnvironment().getCachedPartBinding(packageName, partName);
-	}
 }

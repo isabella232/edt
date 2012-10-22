@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.annotations;
 
 import java.util.List;
@@ -28,22 +17,13 @@ public class Javaobject2Test extends ValidationTestCase {
 	 * jzs etPrivDefConst?[][] = new etPrivDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine21() {
-		List messages = getMessagesAtLine( 21 );
+	public void testLine22() {
+		List messages = getMessagesAtLine( 22 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * etImpDefConst etImpDefConst;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine23() {
-		List messages = getMessagesAtLine( 23 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * etExpDefConst etExpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine24() {
@@ -52,20 +32,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConst etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConst etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine25() {
 		List messages = getMessagesAtLine( 25 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConst etNoDefConst;
+	 * etPrivDefConst etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -78,16 +54,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstA etImpDefConst = new etImpDefConst;
-	 * 0 validation messages are expected.
+	 * etNoDefConst etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine28() {
-		List messages = getMessagesAtLine( 28 );
-		assertEquals( 0, messages.size() );
+	public void testLine27() {
+		List messages = getMessagesAtLine( 27 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstA etExpDefConst = new etExpDefConst;
+	 * etImpDefConstA etImpDefConst = new etImpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine29() {
@@ -96,20 +76,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstA etPrivDefConst = new etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstA etExpDefConst = new etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine30() {
 		List messages = getMessagesAtLine( 30 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstA etNoDefConst = new etNoDefConst;
+	 * etPrivDefConstA etPrivDefConst = new etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -122,16 +98,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstB etImpDefConst = new etImpDefConst();
-	 * 0 validation messages are expected.
+	 * etNoDefConstA etNoDefConst = new etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine33() {
-		List messages = getMessagesAtLine( 33 );
-		assertEquals( 0, messages.size() );
+	public void testLine32() {
+		List messages = getMessagesAtLine( 32 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstB etExpDefConst = new etExpDefConst();
+	 * etImpDefConstB etImpDefConst = new etImpDefConst();
 	 * 0 validation messages are expected.
 	 */
 	public void testLine34() {
@@ -140,20 +120,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstB etPrivDefConst = new etPrivDefConst();
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstB etExpDefConst = new etExpDefConst();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine35() {
 		List messages = getMessagesAtLine( 35 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstB etNoDefConst = new etNoDefConst();
+	 * etPrivDefConstB etPrivDefConst = new etPrivDefConst();
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -166,16 +142,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstC etImpDefConst?;
-	 * 0 validation messages are expected.
+	 * etNoDefConstB etNoDefConst = new etNoDefConst();
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine38() {
-		List messages = getMessagesAtLine( 38 );
-		assertEquals( 0, messages.size() );
+	public void testLine37() {
+		List messages = getMessagesAtLine( 37 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstC etExpDefConst?;
+	 * etImpDefConstC etImpDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine39() {
@@ -184,7 +164,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstC etPrivDefConst?;
+	 * etExpDefConstC etExpDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine40() {
@@ -193,7 +173,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstC etNoDefConst?;
+	 * etPrivDefConstC etPrivDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine41() {
@@ -202,16 +182,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstD etImpDefConst? = new etImpDefConst;
+	 * etNoDefConstC etNoDefConst?;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine43() {
-		List messages = getMessagesAtLine( 43 );
+	public void testLine42() {
+		List messages = getMessagesAtLine( 42 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstD etExpDefConst? = new etExpDefConst;
+	 * etImpDefConstD etImpDefConst? = new etImpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine44() {
@@ -220,20 +200,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstD etPrivDefConst? = new etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstD etExpDefConst? = new etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine45() {
 		List messages = getMessagesAtLine( 45 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstD etNoDefConst? = new etNoDefConst;
+	 * etPrivDefConstD etPrivDefConst? = new etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -246,16 +222,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstE etImpDefConst? = new etImpDefConst();
-	 * 0 validation messages are expected.
+	 * etNoDefConstD etNoDefConst? = new etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine48() {
-		List messages = getMessagesAtLine( 48 );
-		assertEquals( 0, messages.size() );
+	public void testLine47() {
+		List messages = getMessagesAtLine( 47 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstE etExpDefConst? = new etExpDefConst();
+	 * etImpDefConstE etImpDefConst? = new etImpDefConst();
 	 * 0 validation messages are expected.
 	 */
 	public void testLine49() {
@@ -264,20 +244,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstE etPrivDefConst? = new etPrivDefConst();
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstE etExpDefConst? = new etExpDefConst();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine50() {
 		List messages = getMessagesAtLine( 50 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstE etNoDefConst? = new etNoDefConst();
+	 * etPrivDefConstE etPrivDefConst? = new etPrivDefConst();
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -290,16 +266,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstF etImpDefConst[];
-	 * 0 validation messages are expected.
+	 * etNoDefConstE etNoDefConst? = new etNoDefConst();
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine53() {
-		List messages = getMessagesAtLine( 53 );
-		assertEquals( 0, messages.size() );
+	public void testLine52() {
+		List messages = getMessagesAtLine( 52 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstF etExpDefConst[];
+	 * etImpDefConstF etImpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine54() {
@@ -308,7 +288,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstF etPrivDefConst[];
+	 * etExpDefConstF etExpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine55() {
@@ -317,7 +297,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstF etNoDefConst[];
+	 * etPrivDefConstF etPrivDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine56() {
@@ -326,16 +306,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstG etImpDefConst[] = new etImpDefConst[];
+	 * etNoDefConstF etNoDefConst[];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine58() {
-		List messages = getMessagesAtLine( 58 );
+	public void testLine57() {
+		List messages = getMessagesAtLine( 57 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstG etExpDefConst[] = new etExpDefConst[];
+	 * etImpDefConstG etImpDefConst[] = new etImpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine59() {
@@ -344,7 +324,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];
+	 * etExpDefConstG etExpDefConst[] = new etExpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine60() {
@@ -353,7 +333,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstG etNoDefConst[] = new etNoDefConst[];
+	 * etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine61() {
@@ -362,16 +342,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstH etImpDefConst[] = new etImpDefConst[0];
+	 * etNoDefConstG etNoDefConst[] = new etNoDefConst[];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine63() {
-		List messages = getMessagesAtLine( 63 );
+	public void testLine62() {
+		List messages = getMessagesAtLine( 62 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstH etExpDefConst[] = new etExpDefConst[0];
+	 * etImpDefConstH etImpDefConst[] = new etImpDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine64() {
@@ -380,7 +360,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];
+	 * etExpDefConstH etExpDefConst[] = new etExpDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine65() {
@@ -389,7 +369,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstH etNoDefConst[] = new etNoDefConst[0];
+	 * etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine66() {
@@ -398,16 +378,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstI etImpDefConst[] = new etImpDefConst[5];
+	 * etNoDefConstH etNoDefConst[] = new etNoDefConst[0];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine68() {
-		List messages = getMessagesAtLine( 68 );
+	public void testLine67() {
+		List messages = getMessagesAtLine( 67 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstI etExpDefConst[] = new etExpDefConst[5];
+	 * etImpDefConstI etImpDefConst[] = new etImpDefConst[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine69() {
@@ -416,20 +396,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstI etExpDefConst[] = new etExpDefConst[5];
+	 * 0 validation messages are expected.
 	 */
 	public void testLine70() {
 		List messages = getMessagesAtLine( 70 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstI etNoDefConst[] = new etNoDefConst[5];
+	 * etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -442,16 +418,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];
-	 * 0 validation messages are expected.
+	 * etNoDefConstI etNoDefConst[] = new etNoDefConst[5];
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine73() {
-		List messages = getMessagesAtLine( 73 );
-		assertEquals( 0, messages.size() );
+	public void testLine72() {
+		List messages = getMessagesAtLine( 72 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];
+	 * etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine74() {
@@ -460,7 +440,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];
+	 * etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine75() {
@@ -469,7 +449,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstK etNoDefConst?[] = new etNoDefConst?[5];
+	 * etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine76() {
@@ -478,16 +458,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5];
+	 * etNoDefConstK etNoDefConst?[] = new etNoDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine78() {
-		List messages = getMessagesAtLine( 78 );
+	public void testLine77() {
+		List messages = getMessagesAtLine( 77 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5];
+	 * etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine79() {
@@ -496,20 +476,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5];
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5];
+	 * 0 validation messages are expected.
 	 */
 	public void testLine80() {
 		List messages = getMessagesAtLine( 80 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstL etNoDefConst[][] = new etNoDefConst[1][5];
+	 * etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5];
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -522,16 +498,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0];
-	 * 0 validation messages are expected.
+	 * etNoDefConstL etNoDefConst[][] = new etNoDefConst[1][5];
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine83() {
-		List messages = getMessagesAtLine( 83 );
-		assertEquals( 0, messages.size() );
+	public void testLine82() {
+		List messages = getMessagesAtLine( 82 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][];
+	 * etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine84() {
@@ -540,7 +520,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0];
+	 * etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine85() {
@@ -549,7 +529,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstM etNoDefConst[][] = new etNoDefConst[1][];
+	 * etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine86() {
@@ -558,16 +538,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5];
+	 * etNoDefConstM etNoDefConst[][] = new etNoDefConst[1][];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine88() {
-		List messages = getMessagesAtLine( 88 );
+	public void testLine87() {
+		List messages = getMessagesAtLine( 87 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5];
+	 * etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine89() {
@@ -576,7 +556,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5];
+	 * etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine90() {
@@ -585,7 +565,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstN etNoDefConst?[][] = new etNoDefConst?[1][5];
+	 * etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine91() {
@@ -594,16 +574,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConst etImpDefConst;
+	 * etNoDefConstN etNoDefConst?[][] = new etNoDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine96() {
-		List messages = getMessagesAtLine( 96 );
+	public void testLine92() {
+		List messages = getMessagesAtLine( 92 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConst etExpDefConst;
+	 * etImpDefConst etImpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine97() {
@@ -612,20 +592,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConst etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConst etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine98() {
 		List messages = getMessagesAtLine( 98 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConst etNoDefConst;
+	 * etPrivDefConst etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -638,16 +614,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstA etImpDefConst = new etImpDefConst;
-	 * 0 validation messages are expected.
+	 * etNoDefConst etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine101() {
-		List messages = getMessagesAtLine( 101 );
-		assertEquals( 0, messages.size() );
+	public void testLine100() {
+		List messages = getMessagesAtLine( 100 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstA etExpDefConst = new etExpDefConst;
+	 * etImpDefConstA etImpDefConst = new etImpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine102() {
@@ -656,20 +636,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstA etPrivDefConst = new etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstA etExpDefConst = new etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine103() {
 		List messages = getMessagesAtLine( 103 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstA etNoDefConst = new etNoDefConst;
+	 * etPrivDefConstA etPrivDefConst = new etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -682,16 +658,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstB etImpDefConst = new etImpDefConst();
-	 * 0 validation messages are expected.
+	 * etNoDefConstA etNoDefConst = new etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine106() {
-		List messages = getMessagesAtLine( 106 );
-		assertEquals( 0, messages.size() );
+	public void testLine105() {
+		List messages = getMessagesAtLine( 105 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstB etExpDefConst = new etExpDefConst();
+	 * etImpDefConstB etImpDefConst = new etImpDefConst();
 	 * 0 validation messages are expected.
 	 */
 	public void testLine107() {
@@ -700,20 +680,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstB etPrivDefConst = new etPrivDefConst();
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstB etExpDefConst = new etExpDefConst();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine108() {
 		List messages = getMessagesAtLine( 108 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstB etNoDefConst = new etNoDefConst();
+	 * etPrivDefConstB etPrivDefConst = new etPrivDefConst();
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -726,16 +702,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstC etImpDefConst?;
-	 * 0 validation messages are expected.
+	 * etNoDefConstB etNoDefConst = new etNoDefConst();
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine111() {
-		List messages = getMessagesAtLine( 111 );
-		assertEquals( 0, messages.size() );
+	public void testLine110() {
+		List messages = getMessagesAtLine( 110 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstC etExpDefConst?;
+	 * etImpDefConstC etImpDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine112() {
@@ -744,7 +724,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstC etPrivDefConst?;
+	 * etExpDefConstC etExpDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine113() {
@@ -753,7 +733,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstC etNoDefConst?;
+	 * etPrivDefConstC etPrivDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine114() {
@@ -762,16 +742,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstD etImpDefConst? = new etImpDefConst;
+	 * etNoDefConstC etNoDefConst?;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine116() {
-		List messages = getMessagesAtLine( 116 );
+	public void testLine115() {
+		List messages = getMessagesAtLine( 115 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstD etExpDefConst? = new etExpDefConst;
+	 * etImpDefConstD etImpDefConst? = new etImpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine117() {
@@ -780,20 +760,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstD etPrivDefConst? = new etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstD etExpDefConst? = new etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine118() {
 		List messages = getMessagesAtLine( 118 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstD etNoDefConst? = new etNoDefConst;
+	 * etPrivDefConstD etPrivDefConst? = new etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -806,16 +782,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstE etImpDefConst? = new etImpDefConst();
-	 * 0 validation messages are expected.
+	 * etNoDefConstD etNoDefConst? = new etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine121() {
-		List messages = getMessagesAtLine( 121 );
-		assertEquals( 0, messages.size() );
+	public void testLine120() {
+		List messages = getMessagesAtLine( 120 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstE etExpDefConst? = new etExpDefConst();
+	 * etImpDefConstE etImpDefConst? = new etImpDefConst();
 	 * 0 validation messages are expected.
 	 */
 	public void testLine122() {
@@ -824,20 +804,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstE etPrivDefConst? = new etPrivDefConst();
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstE etExpDefConst? = new etExpDefConst();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine123() {
 		List messages = getMessagesAtLine( 123 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstE etNoDefConst? = new etNoDefConst();
+	 * etPrivDefConstE etPrivDefConst? = new etPrivDefConst();
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -850,16 +826,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstF etImpDefConst[];
-	 * 0 validation messages are expected.
+	 * etNoDefConstE etNoDefConst? = new etNoDefConst();
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine126() {
-		List messages = getMessagesAtLine( 126 );
-		assertEquals( 0, messages.size() );
+	public void testLine125() {
+		List messages = getMessagesAtLine( 125 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstF etExpDefConst[];
+	 * etImpDefConstF etImpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine127() {
@@ -868,7 +848,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstF etPrivDefConst[];
+	 * etExpDefConstF etExpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine128() {
@@ -877,7 +857,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstF etNoDefConst[];
+	 * etPrivDefConstF etPrivDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine129() {
@@ -886,16 +866,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstG etImpDefConst[] = new etImpDefConst[];
+	 * etNoDefConstF etNoDefConst[];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine131() {
-		List messages = getMessagesAtLine( 131 );
+	public void testLine130() {
+		List messages = getMessagesAtLine( 130 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstG etExpDefConst[] = new etExpDefConst[];
+	 * etImpDefConstG etImpDefConst[] = new etImpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine132() {
@@ -904,7 +884,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];
+	 * etExpDefConstG etExpDefConst[] = new etExpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine133() {
@@ -913,7 +893,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstG etNoDefConst[] = new etNoDefConst[];
+	 * etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine134() {
@@ -922,16 +902,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstH etImpDefConst[] = new etImpDefConst[0];
+	 * etNoDefConstG etNoDefConst[] = new etNoDefConst[];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine136() {
-		List messages = getMessagesAtLine( 136 );
+	public void testLine135() {
+		List messages = getMessagesAtLine( 135 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstH etExpDefConst[] = new etExpDefConst[0];
+	 * etImpDefConstH etImpDefConst[] = new etImpDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine137() {
@@ -940,7 +920,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];
+	 * etExpDefConstH etExpDefConst[] = new etExpDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine138() {
@@ -949,7 +929,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstH etNoDefConst[] = new etNoDefConst[0];
+	 * etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine139() {
@@ -958,16 +938,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstI etImpDefConst[] = new etImpDefConst[5];
+	 * etNoDefConstH etNoDefConst[] = new etNoDefConst[0];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine141() {
-		List messages = getMessagesAtLine( 141 );
+	public void testLine140() {
+		List messages = getMessagesAtLine( 140 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstI etExpDefConst[] = new etExpDefConst[5];
+	 * etImpDefConstI etImpDefConst[] = new etImpDefConst[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine142() {
@@ -976,20 +956,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstI etExpDefConst[] = new etExpDefConst[5];
+	 * 0 validation messages are expected.
 	 */
 	public void testLine143() {
 		List messages = getMessagesAtLine( 143 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstI etNoDefConst[] = new etNoDefConst[5];
+	 * etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1002,16 +978,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];
-	 * 0 validation messages are expected.
+	 * etNoDefConstI etNoDefConst[] = new etNoDefConst[5];
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine146() {
-		List messages = getMessagesAtLine( 146 );
-		assertEquals( 0, messages.size() );
+	public void testLine145() {
+		List messages = getMessagesAtLine( 145 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];
+	 * etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine147() {
@@ -1020,7 +1000,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];
+	 * etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine148() {
@@ -1029,7 +1009,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstK etNoDefConst?[] = new etNoDefConst?[5];
+	 * etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine149() {
@@ -1038,16 +1018,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5];
+	 * etNoDefConstK etNoDefConst?[] = new etNoDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine151() {
-		List messages = getMessagesAtLine( 151 );
+	public void testLine150() {
+		List messages = getMessagesAtLine( 150 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5];
+	 * etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine152() {
@@ -1056,20 +1036,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5];
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5];
+	 * 0 validation messages are expected.
 	 */
 	public void testLine153() {
 		List messages = getMessagesAtLine( 153 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstL etNoDefConst[][] = new etNoDefConst[1][5];
+	 * etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5];
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1082,16 +1058,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0];
-	 * 0 validation messages are expected.
+	 * etNoDefConstL etNoDefConst[][] = new etNoDefConst[1][5];
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine156() {
-		List messages = getMessagesAtLine( 156 );
-		assertEquals( 0, messages.size() );
+	public void testLine155() {
+		List messages = getMessagesAtLine( 155 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][];
+	 * etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine157() {
@@ -1100,7 +1080,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0];
+	 * etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine158() {
@@ -1109,7 +1089,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstM etNoDefConst[][] = new etNoDefConst[1][];
+	 * etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine159() {
@@ -1118,16 +1098,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5];
+	 * etNoDefConstM etNoDefConst[][] = new etNoDefConst[1][];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine161() {
-		List messages = getMessagesAtLine( 161 );
+	public void testLine160() {
+		List messages = getMessagesAtLine( 160 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5];
+	 * etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine162() {
@@ -1136,7 +1116,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5];
+	 * etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine163() {
@@ -1145,7 +1125,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstN etNoDefConst?[][] = new etNoDefConst?[1][5];
+	 * etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine164() {
@@ -1154,16 +1134,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConst etImpDefConst;
+	 * etNoDefConstN etNoDefConst?[][] = new etNoDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine167() {
-		List messages = getMessagesAtLine( 167 );
+	public void testLine165() {
+		List messages = getMessagesAtLine( 165 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConst etExpDefConst;
+	 * etImpDefConst etImpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine168() {
@@ -1172,20 +1152,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConst etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConst etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine169() {
 		List messages = getMessagesAtLine( 169 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConst etNoDefConst;
+	 * etPrivDefConst etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1198,16 +1174,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstA etImpDefConst = new etImpDefConst;
-	 * 0 validation messages are expected.
+	 * etNoDefConst etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine172() {
-		List messages = getMessagesAtLine( 172 );
-		assertEquals( 0, messages.size() );
+	public void testLine171() {
+		List messages = getMessagesAtLine( 171 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstA etExpDefConst = new etExpDefConst;
+	 * etImpDefConstA etImpDefConst = new etImpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine173() {
@@ -1216,20 +1196,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstA etPrivDefConst = new etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstA etExpDefConst = new etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine174() {
 		List messages = getMessagesAtLine( 174 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstA etNoDefConst = new etNoDefConst;
+	 * etPrivDefConstA etPrivDefConst = new etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1242,16 +1218,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstB etImpDefConst = new etImpDefConst();
-	 * 0 validation messages are expected.
+	 * etNoDefConstA etNoDefConst = new etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine177() {
-		List messages = getMessagesAtLine( 177 );
-		assertEquals( 0, messages.size() );
+	public void testLine176() {
+		List messages = getMessagesAtLine( 176 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstB etExpDefConst = new etExpDefConst();
+	 * etImpDefConstB etImpDefConst = new etImpDefConst();
 	 * 0 validation messages are expected.
 	 */
 	public void testLine178() {
@@ -1260,20 +1240,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstB etPrivDefConst = new etPrivDefConst();
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstB etExpDefConst = new etExpDefConst();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine179() {
 		List messages = getMessagesAtLine( 179 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstB etNoDefConst = new etNoDefConst();
+	 * etPrivDefConstB etPrivDefConst = new etPrivDefConst();
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1286,16 +1262,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstC etImpDefConst?;
-	 * 0 validation messages are expected.
+	 * etNoDefConstB etNoDefConst = new etNoDefConst();
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine182() {
-		List messages = getMessagesAtLine( 182 );
-		assertEquals( 0, messages.size() );
+	public void testLine181() {
+		List messages = getMessagesAtLine( 181 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstC etExpDefConst?;
+	 * etImpDefConstC etImpDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine183() {
@@ -1304,7 +1284,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstC etPrivDefConst?;
+	 * etExpDefConstC etExpDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine184() {
@@ -1313,7 +1293,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstC etNoDefConst?;
+	 * etPrivDefConstC etPrivDefConst?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine185() {
@@ -1322,16 +1302,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstD etImpDefConst? = new etImpDefConst;
+	 * etNoDefConstC etNoDefConst?;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine187() {
-		List messages = getMessagesAtLine( 187 );
+	public void testLine186() {
+		List messages = getMessagesAtLine( 186 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstD etExpDefConst? = new etExpDefConst;
+	 * etImpDefConstD etImpDefConst? = new etImpDefConst;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine188() {
@@ -1340,20 +1320,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstD etPrivDefConst? = new etPrivDefConst;
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstD etExpDefConst? = new etExpDefConst;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine189() {
 		List messages = getMessagesAtLine( 189 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstD etNoDefConst? = new etNoDefConst;
+	 * etPrivDefConstD etPrivDefConst? = new etPrivDefConst;
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1366,16 +1342,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstE etImpDefConst? = new etImpDefConst();
-	 * 0 validation messages are expected.
+	 * etNoDefConstD etNoDefConst? = new etNoDefConst;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine192() {
-		List messages = getMessagesAtLine( 192 );
-		assertEquals( 0, messages.size() );
+	public void testLine191() {
+		List messages = getMessagesAtLine( 191 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstE etExpDefConst? = new etExpDefConst();
+	 * etImpDefConstE etImpDefConst? = new etImpDefConst();
 	 * 0 validation messages are expected.
 	 */
 	public void testLine193() {
@@ -1384,20 +1364,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstE etPrivDefConst? = new etPrivDefConst();
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstE etExpDefConst? = new etExpDefConst();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine194() {
 		List messages = getMessagesAtLine( 194 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstE etNoDefConst? = new etNoDefConst();
+	 * etPrivDefConstE etPrivDefConst? = new etPrivDefConst();
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1410,16 +1386,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstF etImpDefConst[];
-	 * 0 validation messages are expected.
+	 * etNoDefConstE etNoDefConst? = new etNoDefConst();
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine197() {
-		List messages = getMessagesAtLine( 197 );
-		assertEquals( 0, messages.size() );
+	public void testLine196() {
+		List messages = getMessagesAtLine( 196 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstF etExpDefConst[];
+	 * etImpDefConstF etImpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine198() {
@@ -1428,7 +1408,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstF etPrivDefConst[];
+	 * etExpDefConstF etExpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine199() {
@@ -1437,7 +1417,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstF etNoDefConst[];
+	 * etPrivDefConstF etPrivDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine200() {
@@ -1446,16 +1426,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstG etImpDefConst[] = new etImpDefConst[];
+	 * etNoDefConstF etNoDefConst[];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine202() {
-		List messages = getMessagesAtLine( 202 );
+	public void testLine201() {
+		List messages = getMessagesAtLine( 201 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstG etExpDefConst[] = new etExpDefConst[];
+	 * etImpDefConstG etImpDefConst[] = new etImpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine203() {
@@ -1464,7 +1444,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];
+	 * etExpDefConstG etExpDefConst[] = new etExpDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine204() {
@@ -1473,7 +1453,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstG etNoDefConst[] = new etNoDefConst[];
+	 * etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine205() {
@@ -1482,16 +1462,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstH etImpDefConst[] = new etImpDefConst[0];
+	 * etNoDefConstG etNoDefConst[] = new etNoDefConst[];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine207() {
-		List messages = getMessagesAtLine( 207 );
+	public void testLine206() {
+		List messages = getMessagesAtLine( 206 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstH etExpDefConst[] = new etExpDefConst[0];
+	 * etImpDefConstH etImpDefConst[] = new etImpDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine208() {
@@ -1500,7 +1480,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];
+	 * etExpDefConstH etExpDefConst[] = new etExpDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine209() {
@@ -1509,7 +1489,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstH etNoDefConst[] = new etNoDefConst[0];
+	 * etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine210() {
@@ -1518,16 +1498,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstI etImpDefConst[] = new etImpDefConst[5];
+	 * etNoDefConstH etNoDefConst[] = new etNoDefConst[0];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine212() {
-		List messages = getMessagesAtLine( 212 );
+	public void testLine211() {
+		List messages = getMessagesAtLine( 211 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstI etExpDefConst[] = new etExpDefConst[5];
+	 * etImpDefConstI etImpDefConst[] = new etImpDefConst[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine213() {
@@ -1536,20 +1516,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstI etExpDefConst[] = new etExpDefConst[5];
+	 * 0 validation messages are expected.
 	 */
 	public void testLine214() {
 		List messages = getMessagesAtLine( 214 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstI etNoDefConst[] = new etNoDefConst[5];
+	 * etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1562,16 +1538,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];
-	 * 0 validation messages are expected.
+	 * etNoDefConstI etNoDefConst[] = new etNoDefConst[5];
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine217() {
-		List messages = getMessagesAtLine( 217 );
-		assertEquals( 0, messages.size() );
+	public void testLine216() {
+		List messages = getMessagesAtLine( 216 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];
+	 * etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine218() {
@@ -1580,7 +1560,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];
+	 * etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine219() {
@@ -1589,7 +1569,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstK etNoDefConst?[] = new etNoDefConst?[5];
+	 * etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine220() {
@@ -1598,16 +1578,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5];
+	 * etNoDefConstK etNoDefConst?[] = new etNoDefConst?[5];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine222() {
-		List messages = getMessagesAtLine( 222 );
+	public void testLine221() {
+		List messages = getMessagesAtLine( 221 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5];
+	 * etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine223() {
@@ -1616,20 +1596,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5];
-	 * 1 validation message is expected.
-	 * It is expected to contain "not instantiable".
+	 * etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5];
+	 * 0 validation messages are expected.
 	 */
 	public void testLine224() {
 		List messages = getMessagesAtLine( 224 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etNoDefConstL etNoDefConst[][] = new etNoDefConst[1][5];
+	 * etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5];
 	 * 1 validation message is expected.
 	 * It is expected to contain "not instantiable".
 	 */
@@ -1642,16 +1618,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0];
-	 * 0 validation messages are expected.
+	 * etNoDefConstL etNoDefConst[][] = new etNoDefConst[1][5];
+	 * 1 validation message is expected.
+	 * It is expected to contain "not instantiable".
 	 */
-	public void testLine227() {
-		List messages = getMessagesAtLine( 227 );
-		assertEquals( 0, messages.size() );
+	public void testLine226() {
+		List messages = getMessagesAtLine( 226 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not instantiable" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not instantiable\" was issued." );
 	}
 
 	/*
-	 * etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][];
+	 * etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine228() {
@@ -1660,7 +1640,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0];
+	 * etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine229() {
@@ -1669,7 +1649,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstM etNoDefConst[][] = new etNoDefConst[1][];
+	 * etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine230() {
@@ -1678,16 +1658,16 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5];
+	 * etNoDefConstM etNoDefConst[][] = new etNoDefConst[1][];
 	 * 0 validation messages are expected.
 	 */
-	public void testLine232() {
-		List messages = getMessagesAtLine( 232 );
+	public void testLine231() {
+		List messages = getMessagesAtLine( 231 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5];
+	 * etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine233() {
@@ -1696,7 +1676,7 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5];
+	 * etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine234() {
@@ -1705,11 +1685,20 @@ public class Javaobject2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * etNoDefConstN etNoDefConst?[][] = new etNoDefConst?[1][5];
+	 * etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5];
 	 * 0 validation messages are expected.
 	 */
 	public void testLine235() {
 		List messages = getMessagesAtLine( 235 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * etNoDefConstN etNoDefConst?[][] = new etNoDefConst?[1][5];
+	 * 0 validation messages are expected.
+	 */
+	public void testLine236() {
+		List messages = getMessagesAtLine( 236 );
 		assertEquals( 0, messages.size() );
 	}
 }

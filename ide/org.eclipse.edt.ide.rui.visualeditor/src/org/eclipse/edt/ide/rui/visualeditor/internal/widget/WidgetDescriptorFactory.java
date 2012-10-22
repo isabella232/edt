@@ -39,6 +39,7 @@ import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.EList;
 import org.eclipse.edt.mof.utils.NameUtile;
@@ -109,7 +110,7 @@ public class WidgetDescriptorFactory {
 	public WidgetDescriptorFactory( IProject project ) {
 		this.project = project;
 		this.environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment( project );
-		this.environment.getIREnvironment().initSystemEnvironment(this.environment.getSystemEnvironment()); 
+		Bootstrap.initialize(this.environment.getIREnvironment());
 		Environment.pushEnv(this.environment.getIREnvironment());
 	}
 

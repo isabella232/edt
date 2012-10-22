@@ -36,12 +36,10 @@ import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.compiler.Binder;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.dependency.AbstractDependencyInfo;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyBuildNotifier;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectBuildPathEntry;
@@ -52,6 +50,7 @@ import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectIn
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectInfoManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -110,7 +109,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
         entry.setProcessingQueue(this);
         
         this.projectEnvironment = WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
-        this.projectEnvironment.getIREnvironment().initSystemEnvironment(this.projectEnvironment.getSystemEnvironment());
+        Bootstrap.initialize(this.projectEnvironment.getIREnvironment());
 		this.projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 		
 		Environment.pushEnv(this.projectEnvironment.getIREnvironment());
@@ -186,7 +185,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 		}else{
 			String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = projectEnvironment.getPartBinding(packageName, fileName);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo),SystemEnvironmentManager.findSystemEnvironment(project, null));
+			scope = new FileScope(new EnvironmentScope(projectEnvironment, dependencyInfo), (FileBinding)fileBinding, dependencyInfo);
 		}
 		return scope;
 	}

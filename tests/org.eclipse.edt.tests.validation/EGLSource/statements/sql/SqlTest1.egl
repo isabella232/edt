@@ -1,3 +1,7 @@
+import eglx.persistence.*;
+import eglx.persistence.sql.*;
+
+
 record BasicRec
 	name string;
 end

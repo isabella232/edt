@@ -23,11 +23,9 @@ import org.eclipse.edt.compiler.BaseCompiler;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.IGenerator;
-import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.osgi.framework.Bundle;
 
 /**
@@ -35,11 +33,9 @@ import org.osgi.framework.Bundle;
  */
 public class IDEBaseCompiler implements IIDECompiler {
 	
-	protected ISystemEnvironment systemEnvironment;
-	
 	protected String systemPath;
 
-	protected org.eclipse.edt.compiler.ICompiler baseCompiler;
+	protected BaseCompiler baseCompiler;
 	
 	/**
 	 * The id of the preference page associated with this compiler.
@@ -56,7 +52,7 @@ public class IDEBaseCompiler implements IIDECompiler {
 	/**
 	 * Constructor.
 	 */
-	public IDEBaseCompiler(ICompiler baseCompiler) {
+	public IDEBaseCompiler(BaseCompiler baseCompiler) {
 		super();
 		this.baseCompiler = baseCompiler;
 	}
@@ -163,19 +159,7 @@ public class IDEBaseCompiler implements IIDECompiler {
 		
 		return list;
 	}
-	
-	protected ISystemEnvironment createSystemEnvironment(IBuildNotifier notifier) {
-		return SystemEnvironmentManager.getSystemEnvironment(getSystemEnvironmentPath(), null, notifier, this);
-	}
-	
-	@Override
-	public synchronized ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
-		if (systemEnvironment == null) {
-			systemEnvironment = createSystemEnvironment(notifier);
-		}
-		return systemEnvironment;
-	}
-	
+		
 	@Override
 	public List<ASTValidator> getValidatorsFor(Node node) {
 		return baseCompiler.getValidatorsFor(node);
@@ -194,5 +178,10 @@ public class IDEBaseCompiler implements IIDECompiler {
 	@Override
 	public void addExtension(ICompilerExtension extension) {
 		baseCompiler.addExtension(extension);
+	}
+
+	@Override
+	public List<ZipFileBindingBuildPathEntry> getSystemBuildPathEntries() {
+		return baseCompiler.getSystemBuildPathEntries(getSystemEnvironmentPath());
 	}
 }

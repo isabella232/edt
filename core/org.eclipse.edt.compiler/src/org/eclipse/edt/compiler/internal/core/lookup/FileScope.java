@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.utils.NameUtile;
@@ -36,6 +37,11 @@ public class FileScope extends Scope {
 	private List<IPackageBinding> importedPackages;
     private Map<String, Part> importedTypes = Collections.emptyMap();
     private IDependencyRequestor dependencyRequestor;
+    
+    private static List<String> implicitSystemPackages = new ArrayList<String>();
+    static {
+    	implicitSystemPackages.add(NameUtile.getAsName(MofConversion.EGLX_lang_package));
+    }
   
     public FileScope(Scope parentScope, FileBinding fileBinding, IDependencyRequestor dependencyRequestor) {
         super(parentScope);
@@ -83,9 +89,31 @@ public class FileScope extends Scope {
         };
         
         // Then check the on demand imports
-        return findTypeInOnDemandImports(simpleName);
+        List<Type> results = findTypeInOnDemandImports(simpleName);
+        if (results != null) {
+        	return results;
+        }
+        
+        //Check the implicit system package(s)
+        return findTypeInImplicitSystemPackages(simpleName);
         
     }
+    
+   private List<Type> findTypeInImplicitSystemPackages(String simpleName) {
+	   List<Type> parts = new ArrayList<Type>();
+	   for (String pkg : implicitSystemPackages) {
+           Part temp = BindingUtil.getPart(fileBinding.getEnvironment().getPartBinding(pkg, simpleName));
+           if (temp != null) {
+        	   parts.add(temp);
+           }
+	   }
+	   
+       if (parts.isEmpty()) {
+       	return null;
+       }
+
+	   return parts;
+   }
     
     protected Part findTypeUsingSingleTypeImports(String simpleName){
     	if(importedTypes != null) {

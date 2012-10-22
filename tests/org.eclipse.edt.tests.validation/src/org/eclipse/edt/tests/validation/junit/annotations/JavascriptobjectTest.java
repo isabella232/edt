@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.annotations;
 
 import java.util.List;
@@ -28,22 +17,13 @@ public class JavascriptobjectTest extends ValidationTestCase {
 	 * p1 int,
 	 * 1 validation message is expected.
 	 */
-	public void testLine3() {
-		List messages = getMessagesAtLine( 3 );
+	public void testLine4() {
+		List messages = getMessagesAtLine( 4 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
 	 * p2 int in,
-	 * 0 validation messages are expected.
-	 */
-	public void testLine4() {
-		List messages = getMessagesAtLine( 4 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * p3 dictionary,
 	 * 0 validation messages are expected.
 	 */
 	public void testLine5() {
@@ -52,11 +32,20 @@ public class JavascriptobjectTest extends ValidationTestCase {
 	}
 
 	/*
-	 * p4 dictionary inout,
-	 * 1 validation message is expected.
+	 * p3 dictionary,
+	 * 0 validation messages are expected.
 	 */
 	public void testLine6() {
 		List messages = getMessagesAtLine( 6 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * p4 dictionary inout,
+	 * 1 validation message is expected.
+	 */
+	public void testLine7() {
+		List messages = getMessagesAtLine( 7 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -64,8 +53,8 @@ public class JavascriptobjectTest extends ValidationTestCase {
 	 * p5 int[],
 	 * 0 validation messages are expected.
 	 */
-	public void testLine7() {
-		List messages = getMessagesAtLine( 7 );
+	public void testLine8() {
+		List messages = getMessagesAtLine( 8 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -73,8 +62,8 @@ public class JavascriptobjectTest extends ValidationTestCase {
 	 * p6 int[] out,
 	 * 1 validation message is expected.
 	 */
-	public void testLine8() {
-		List messages = getMessagesAtLine( 8 );
+	public void testLine9() {
+		List messages = getMessagesAtLine( 9 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -82,8 +71,8 @@ public class JavascriptobjectTest extends ValidationTestCase {
 	 * p7 int[] inout
 	 * 1 validation message is expected.
 	 */
-	public void testLine9() {
-		List messages = getMessagesAtLine( 9 );
+	public void testLine10() {
+		List messages = getMessagesAtLine( 10 );
 		assertEquals( 1, messages.size() );
 	}
 }

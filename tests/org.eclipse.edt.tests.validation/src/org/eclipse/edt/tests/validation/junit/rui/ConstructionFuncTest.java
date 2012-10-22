@@ -17,8 +17,8 @@ public class ConstructionFuncTest extends ValidationTestCase {
 	 * handler h1 type ruihandler{onconstructionfunction = start}
 	 * 0 validation messages are expected.
 	 */
-	public void testLine1() {
-		List messages = getMessagesAtLine( 1 );
+	public void testLine3() {
+		List messages = getMessagesAtLine( 3 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -26,8 +26,8 @@ public class ConstructionFuncTest extends ValidationTestCase {
 	 * handler w1 type ruiwidget{onconstructionfunction = start}
 	 * 0 validation messages are expected.
 	 */
-	public void testLine5() {
-		List messages = getMessagesAtLine( 5 );
+	public void testLine7() {
+		List messages = getMessagesAtLine( 7 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -36,8 +36,8 @@ public class ConstructionFuncTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The value for property onConstructionFunction must be the name of a function within part h2. Functions defined in other parts are not allowed.".
 	 */
-	public void testLine13() {
-		List messages = getMessagesAtLine( 13 );
+	public void testLine15() {
+		List messages = getMessagesAtLine( 15 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The value for property onConstructionFunction must be the name of a function within part h2. Functions defined in other parts are not allowed." );
@@ -49,8 +49,8 @@ public class ConstructionFuncTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The value for property onConstructionFunction must be the name of a function within part w2. Functions defined in other parts are not allowed.".
 	 */
-	public void testLine17() {
-		List messages = getMessagesAtLine( 17 );
+	public void testLine19() {
+		List messages = getMessagesAtLine( 19 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The value for property onConstructionFunction must be the name of a function within part w2. Functions defined in other parts are not allowed." );
@@ -62,8 +62,8 @@ public class ConstructionFuncTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The value for property onConstructionFunction must be the name of a function within part h3. Functions defined in other parts are not allowed.".
 	 */
-	public void testLine26() {
-		List messages = getMessagesAtLine( 26 );
+	public void testLine28() {
+		List messages = getMessagesAtLine( 28 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The value for property onConstructionFunction must be the name of a function within part h3. Functions defined in other parts are not allowed." );
@@ -75,8 +75,8 @@ public class ConstructionFuncTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The value for property onConstructionFunction must be the name of a function within part w3. Functions defined in other parts are not allowed.".
 	 */
-	public void testLine30() {
-		List messages = getMessagesAtLine( 30 );
+	public void testLine32() {
+		List messages = getMessagesAtLine( 32 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The value for property onConstructionFunction must be the name of a function within part w3. Functions defined in other parts are not allowed." );

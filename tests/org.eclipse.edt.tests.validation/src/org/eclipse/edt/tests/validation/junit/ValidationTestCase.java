@@ -54,7 +54,7 @@ import org.eclipse.edt.tests.validation.util.ProblemCollectingProblemRequestor;
 /**
  * @author Dave Murray
  */
-public class ValidationTestCase extends TestCase {
+public abstract class ValidationTestCase extends TestCase {
 //PROFILE 	public static boolean PREPARSE_FOR_SYNTAX_ERRORS = true;
 //PROFILE 	public static boolean PROFILE = false;
 	

@@ -1,3 +1,6 @@
+import eglx.http.*;
+import eglx.rest.*;
+
 
 program pgm1 {}
 	httpProxy HttpProxy;

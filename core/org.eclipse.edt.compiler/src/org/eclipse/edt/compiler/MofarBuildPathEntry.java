@@ -12,13 +12,12 @@
 package org.eclipse.edt.compiler;
 
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.mof.serialization.IZipFileEntryManager;
 
 
-public class SystemPackageMOFPathEntry extends SystemPackageBuildPathEntry implements ISystemPackageBuildPathEntry, IZipFileEntryManager{
+public class MofarBuildPathEntry extends EglarBuildPathEntry{
 
-	public SystemPackageMOFPathEntry(IEnvironment env, String path, ISystemPartBindingLoadedRequestor req, String fileExtension) {
-		super(env, path, req, fileExtension);
+	public MofarBuildPathEntry(IEnvironment env, String path, String fileExtension) {
+		super(env, path, fileExtension);
 	}
 	
 	protected String convertToStoreKey(String entry) {

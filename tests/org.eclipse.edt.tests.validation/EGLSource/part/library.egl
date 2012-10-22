@@ -12,8 +12,8 @@
 record Zmyrec
 i int;
 end
-form Zmyform type TextForm
-end
+
+
 
 Library ZMySource type BasicLibrary
 Zi int;// 0

@@ -12,12 +12,12 @@
 package org.eclipse.edt.rui;
 
 import org.eclipse.edt.compiler.BaseCompilerExtension;
-import org.eclipse.edt.compiler.SystemEnvironmentUtil;
+import org.eclipse.edt.compiler.SystemLibraryUtil;
 
 public class RUIExtension extends BaseCompilerExtension {
 	
 	@Override
 	public String[] getSystemEnvironmentPaths() {
-		return new String[]{SystemEnvironmentUtil.getSystemLibraryPath(RUIExtension.class, "egllib")};
+		return new String[]{SystemLibraryUtil.getSystemLibraryPath(RUIExtension.class, "egllib")};
 	}
 }

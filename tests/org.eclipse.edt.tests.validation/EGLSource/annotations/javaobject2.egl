@@ -1,3 +1,4 @@
+import eglx.java.*;
 externalType etImpDefConst type JavaObject
 //ET with implicit default constructor
 end

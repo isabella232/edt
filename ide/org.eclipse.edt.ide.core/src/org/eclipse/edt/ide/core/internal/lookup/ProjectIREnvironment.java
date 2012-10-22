@@ -15,12 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
-import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.CachingObjectStore;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
@@ -34,8 +32,6 @@ import org.eclipse.edt.mof.serialization.SerializationException;
 public class ProjectIREnvironment extends Environment {
 	//TODO once we support multiple bin directories, override getDefaultSerializeStore() (or have the builder change it before saving)
 	
-	private boolean systemPartsInitialized;
-
 	public ProjectIREnvironment() {
 		super();
 	}
@@ -44,31 +40,8 @@ public class ProjectIREnvironment extends Environment {
 		super.reset();
 		
 		registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
-		systemPartsInitialized = false;
 	}
-		
-	/**
-	 * Runs the bootstrapping on the environment and appends the system object stores, if necessary.
-	 */
-	public void initSystemEnvironment(ISystemEnvironment environment) {
-		if (systemPartsInitialized) {
-			return;
-		}
-		
-		systemPartsInitialized = true;
-		Bootstrap.initialize(this);
-		
-		Map<String, List<ObjectStore>> systemMap = environment.getStores();
-		for (Map.Entry<String, List<ObjectStore>> entry : systemMap.entrySet()) {
-			String scheme = entry.getKey();
-			List<ObjectStore> stores = entry.getValue();
 			
-			for (ObjectStore store : stores) {
-				registerObjectStore(scheme, store);
-			}
-		}
-	}
-	
 	@Override
 	public EObject get(String key) {
 		// This environment uses caching object stores.

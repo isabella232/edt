@@ -110,27 +110,27 @@ public class EGLPropertyRule implements Comparable{
 	}
 
 	public EGLPropertyRule(AnnotationType annType) {
-		this.name = annType.getCaseSensitiveName();
-		this.packageName = annType.getCaseSensitivePackageName();
-		if (annType.getEClass() == null || annType.getEFields().isEmpty()) {
-			this.isComplex = true;
-			return;
-		}
-		
-		if ( annType.getEFields().size() == 1) {
-			setFieldsFromEType(annType.getEFields().get(0).getEType());
-			return;
-		}
-		
-		this.types = new int[] {EGLNewPropertiesHandler.nestedValue};
-		this.isComplex = true;
-    	List elementRules = new ArrayList();
-			for(EField field : annType.getEFields()) {
-			    elementRules.add(new EGLPropertyRule(annType, field.getName()));
-			}
-			this.elementAnnotationTypes = (EGLPropertyRule[]) elementRules.toArray(new EGLPropertyRule[0]);			
-	
-		
+//		this.name = annType.getCaseSensitiveName();
+//		this.packageName = annType.getCaseSensitivePackageName();
+//		if (annType.getEClass() == null || annType.getEFields().isEmpty()) {
+//			this.isComplex = true;
+//			return;
+//		}
+//		
+//		if ( annType.getEFields().size() == 1) {
+//			setFieldsFromEType(annType.getEFields().get(0).getEType());
+//			return;
+//		}
+//		
+//		this.types = new int[] {EGLNewPropertiesHandler.nestedValue};
+//		this.isComplex = true;
+//    	List elementRules = new ArrayList();
+//			for(EField field : annType.getEFields()) {
+//			    elementRules.add(new EGLPropertyRule(annType, field.getName()));
+//			}
+//			this.elementAnnotationTypes = (EGLPropertyRule[]) elementRules.toArray(new EGLPropertyRule[0]);			
+//	
+//		
 	}
 	
 	private EField getEField(AnnotationType annType, String name) {
@@ -143,170 +143,170 @@ public class EGLPropertyRule implements Comparable{
 
 
 	public EGLPropertyRule(AnnotationType annType, String fieldName) {
-		this.name = fieldName;
-		this.packageName = annType.getCaseSensitivePackageName();
-		EField field = getEField(annType, fieldName);
-		if (field != null) {
-			setFieldsFromEType(field.getEType());
-		}
+//		this.name = fieldName;
+//		this.packageName = annType.getCaseSensitivePackageName();
+//		EField field = getEField(annType, fieldName);
+//		if (field != null) {
+//			setFieldsFromEType(field.getEType());
+//		}
 	}
 
 	public EGLPropertyRule(Field field) {
-		this.name = field.getCaseSensitiveName();
-		
-		if (field.getContainer() instanceof EClassifier) {
-			this.packageName = ((EClassifier)field.getContainer()).getPackageName();
-		}
-		setFieldsFromType(field.getType());
+//		this.name = field.getCaseSensitiveName();
+//		
+//		if (field.getContainer() instanceof EClassifier) {
+//			this.packageName = ((EClassifier)field.getContainer()).getPackageName();
+//		}
+//		setFieldsFromType(field.getType());
 	}
 
-	private void setFieldsFromType(Type type) {
-		
-		if (type == null || type.getClassifier() == null) {
-			return;
-		}
-		
-		if (type instanceof Enumeration) {
-			List fieldNames = new ArrayList();
-			for(EEnumLiteral entry : ((Enumeration)type).getEntries()) {
-				fieldNames.add(entry.getCaseSensitiveName());
-			}
-			this.types = new int[] {EGLNewPropertiesHandler.specificValue};
-			this.specificValues = (String[]) fieldNames.toArray(new String[0]);
-			return;
-		}
-		
-		if (type instanceof ArrayType) {
-			this.types = new int[] {EGLNewPropertiesHandler.listValue};
-			ArrayType arrType = (ArrayType) type;
-			if (arrType.getElementType() instanceof Enumeration) {
-				List fieldNames = new ArrayList();
-				for(EEnumLiteral entry : ((Enumeration)arrType.getElementType()).getEntries()) {
-					fieldNames.add(entry.getCaseSensitiveName());
-				}
-				this.types = new int[] {EGLNewPropertiesHandler.specificValue};
-				this.specificValues = (String[]) fieldNames.toArray(new String[0]);
-				return;
-			}
-			
-			if (arrType.getElementType() instanceof ArrayType) {
-				this.types = new int[] {EGLNewPropertiesHandler.arrayOfArrays};
-				return;
-			}
-			
-			if (arrType.getElementType() instanceof ExternalType) {
-				this.types = new int[] {EGLNewPropertiesHandler.listValue};
-				return;
-			}
-			
-			if (arrType.getElementType() instanceof AnnotationType) {
-				this.types = new int[] {EGLNewPropertiesHandler.arrayOf};
-				this.elementAnnotationType = (AnnotationType) arrType.getElementType();
-			}
-			return;
-		}
-					
-		Classifier classifier = type.getClassifier();
-		
-		if (classifier.equals(TypeUtils.Type_STRING)) {
-			this.types = new int[] {EGLNewPropertiesHandler.quotedValue};
-			return;
-		}
-		
-		if (classifier.equals(TypeUtils.Type_INT)) {
-			this.types = new int[] {EGLNewPropertiesHandler.integerValue};
-			return;
-		}
-		
-		if (classifier.equals(TypeUtils.Type_BOOLEAN)) {
-			this.types = new int[] {EGLNewPropertiesHandler.specificValue};
-			this.specificValues = new String[] {"yes", "no"};
-			return;
-		}
-		
-		if (classifier.equals(TypeUtils.Type_ANY)) {
-			this.types = new int[] {EGLNewPropertiesHandler.literalValue};
-			return;
-		}
-	}
+//	private void setFieldsFromType(Type type) {
+//		
+//		if (type == null || type.getClassifier() == null) {
+//			return;
+//		}
+//		
+//		if (type instanceof Enumeration) {
+//			List fieldNames = new ArrayList();
+//			for(EEnumLiteral entry : ((Enumeration)type).getEntries()) {
+//				fieldNames.add(entry.getCaseSensitiveName());
+//			}
+//			this.types = new int[] {EGLNewPropertiesHandler.specificValue};
+//			this.specificValues = (String[]) fieldNames.toArray(new String[0]);
+//			return;
+//		}
+//		
+//		if (type instanceof ArrayType) {
+//			this.types = new int[] {EGLNewPropertiesHandler.listValue};
+//			ArrayType arrType = (ArrayType) type;
+//			if (arrType.getElementType() instanceof Enumeration) {
+//				List fieldNames = new ArrayList();
+//				for(EEnumLiteral entry : ((Enumeration)arrType.getElementType()).getEntries()) {
+//					fieldNames.add(entry.getCaseSensitiveName());
+//				}
+//				this.types = new int[] {EGLNewPropertiesHandler.specificValue};
+//				this.specificValues = (String[]) fieldNames.toArray(new String[0]);
+//				return;
+//			}
+//			
+//			if (arrType.getElementType() instanceof ArrayType) {
+//				this.types = new int[] {EGLNewPropertiesHandler.arrayOfArrays};
+//				return;
+//			}
+//			
+//			if (arrType.getElementType() instanceof ExternalType) {
+//				this.types = new int[] {EGLNewPropertiesHandler.listValue};
+//				return;
+//			}
+//			
+//			if (arrType.getElementType() instanceof AnnotationType) {
+//				this.types = new int[] {EGLNewPropertiesHandler.arrayOf};
+//				this.elementAnnotationType = (AnnotationType) arrType.getElementType();
+//			}
+//			return;
+//		}
+//					
+//		Classifier classifier = type.getClassifier();
+//		
+//		if (classifier.equals(TypeUtils.Type_STRING)) {
+//			this.types = new int[] {EGLNewPropertiesHandler.quotedValue};
+//			return;
+//		}
+//		
+//		if (classifier.equals(TypeUtils.Type_INT)) {
+//			this.types = new int[] {EGLNewPropertiesHandler.integerValue};
+//			return;
+//		}
+//		
+//		if (classifier.equals(TypeUtils.Type_BOOLEAN)) {
+//			this.types = new int[] {EGLNewPropertiesHandler.specificValue};
+//			this.specificValues = new String[] {"yes", "no"};
+//			return;
+//		}
+//		
+//		if (classifier.equals(TypeUtils.Type_ANY)) {
+//			this.types = new int[] {EGLNewPropertiesHandler.literalValue};
+//			return;
+//		}
+//	}
 
 
-	private void setFieldsFromEType(EType type) {
-		
-		if (type == null) {
-			return;
-		}
-		
-		if (type instanceof EEnum) {
-			List fieldNames = new ArrayList();
-			for(EEnumLiteral entry : ((EEnum)type).getLiterals()) {
-				fieldNames.add(entry.getCaseSensitiveName());
-			}
-			this.types = new int[] {EGLNewPropertiesHandler.specificValue};
-			this.specificValues = (String[]) fieldNames.toArray(new String[0]);
-			return;
-		}
-		
-    	if (type instanceof EGenericType) {
-			this.types = new int[] {EGLNewPropertiesHandler.listValue};
-			
-    		EType elemType = ((EGenericType)type).getETypeArguments().get(0);
-
-			if (elemType instanceof EEnum) {
-				List fieldNames = new ArrayList();
-				for(EEnumLiteral entry : ((EEnum)elemType).getLiterals()) {
-					fieldNames.add(entry.getCaseSensitiveName());
-				}
-				this.types = new int[] {EGLNewPropertiesHandler.specificValue};
-				this.specificValues = (String[]) fieldNames.toArray(new String[0]);
-				return;
-			}
-			
-			if (elemType instanceof EGenericType) {
-				this.types = new int[] {EGLNewPropertiesHandler.arrayOfArrays};
-				return;
-			}
-			
-			if (elemType instanceof ExternalType) {
-				this.types = new int[] {EGLNewPropertiesHandler.listValue};
-				return;
-			}
-			
-			if (elemType instanceof AnnotationType) {
-				this.types = new int[] {EGLNewPropertiesHandler.arrayOf};
-				this.elementAnnotationType = (AnnotationType) elemType;
-			}
-			return;
-		}
-					
-		if (type instanceof EDataType) {
-			String className = ((EDataType)type).getJavaClassName();
-			if (className.equals(EDataType.EDataType_JavaObject)) {
-				this.types = new int[] {EGLNewPropertiesHandler.literalValue};
-				return;
-			}
-
-			if (className.equals(EDataType.EDataType_String)) {
-				this.types = new int[] {EGLNewPropertiesHandler.quotedValue};
-				return;
-			}
-
-			if (className.equals(EDataType.EDataType_Boolean)) {
-				this.types = new int[] {EGLNewPropertiesHandler.specificValue};
-				this.specificValues = new String[] {"yes", "no"};
-				return;
-			}
-
-			if (className.equals(EDataType.EDataType_Int32)) {
-				this.types = new int[] {EGLNewPropertiesHandler.integerValue};
-				return;
-			}
-		}
-
-		//handle reflect types:
-		this.types = new int[] {EGLNewPropertiesHandler.nameValue};
-
-	}
+//	private void setFieldsFromEType(EType type) {
+//		
+//		if (type == null) {
+//			return;
+//		}
+//		
+//		if (type instanceof EEnum) {
+//			List fieldNames = new ArrayList();
+//			for(EEnumLiteral entry : ((EEnum)type).getLiterals()) {
+//				fieldNames.add(entry.getCaseSensitiveName());
+//			}
+//			this.types = new int[] {EGLNewPropertiesHandler.specificValue};
+//			this.specificValues = (String[]) fieldNames.toArray(new String[0]);
+//			return;
+//		}
+//		
+//    	if (type instanceof EGenericType) {
+//			this.types = new int[] {EGLNewPropertiesHandler.listValue};
+//			
+//    		EType elemType = ((EGenericType)type).getETypeArguments().get(0);
+//
+//			if (elemType instanceof EEnum) {
+//				List fieldNames = new ArrayList();
+//				for(EEnumLiteral entry : ((EEnum)elemType).getLiterals()) {
+//					fieldNames.add(entry.getCaseSensitiveName());
+//				}
+//				this.types = new int[] {EGLNewPropertiesHandler.specificValue};
+//				this.specificValues = (String[]) fieldNames.toArray(new String[0]);
+//				return;
+//			}
+//			
+//			if (elemType instanceof EGenericType) {
+//				this.types = new int[] {EGLNewPropertiesHandler.arrayOfArrays};
+//				return;
+//			}
+//			
+//			if (elemType instanceof ExternalType) {
+//				this.types = new int[] {EGLNewPropertiesHandler.listValue};
+//				return;
+//			}
+//			
+//			if (elemType instanceof AnnotationType) {
+//				this.types = new int[] {EGLNewPropertiesHandler.arrayOf};
+//				this.elementAnnotationType = (AnnotationType) elemType;
+//			}
+//			return;
+//		}
+//					
+//		if (type instanceof EDataType) {
+//			String className = ((EDataType)type).getJavaClassName();
+//			if (className.equals(EDataType.EDataType_JavaObject)) {
+//				this.types = new int[] {EGLNewPropertiesHandler.literalValue};
+//				return;
+//			}
+//
+//			if (className.equals(EDataType.EDataType_String)) {
+//				this.types = new int[] {EGLNewPropertiesHandler.quotedValue};
+//				return;
+//			}
+//
+//			if (className.equals(EDataType.EDataType_Boolean)) {
+//				this.types = new int[] {EGLNewPropertiesHandler.specificValue};
+//				this.specificValues = new String[] {"yes", "no"};
+//				return;
+//			}
+//
+//			if (className.equals(EDataType.EDataType_Int32)) {
+//				this.types = new int[] {EGLNewPropertiesHandler.integerValue};
+//				return;
+//			}
+//		}
+//
+//		//handle reflect types:
+//		this.types = new int[] {EGLNewPropertiesHandler.nameValue};
+//
+//	}
 	
 	public String getName() {
 		return name;

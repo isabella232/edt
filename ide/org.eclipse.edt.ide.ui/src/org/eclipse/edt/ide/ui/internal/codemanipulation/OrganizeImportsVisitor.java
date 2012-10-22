@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
@@ -40,12 +39,9 @@ import org.eclipse.edt.compiler.core.ast.ReturningToNameClause;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.ui.internal.codemanipulation.OrganizeImportsOperation.OrganizedImportSection;
-import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	private Name currentPartName = null;
@@ -54,7 +50,6 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	Set /*<ImportDeclaration>*/ originalImports;
 //	private Boolean fIsIncludeRefFunc;
 	private IProject project;
-	private IEnvironment env;
 
 	public OrganizeImportsVisitor(OrganizedImportSection resolvedTypes, Map unresolvedTypes, Set /*<ImportDeclaration>*/ oldImports, Boolean isIncludeRefFunc, IProject project) {
 		super(); 
@@ -63,7 +58,6 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		this.originalImports = oldImports;
 //		this.fIsIncludeRefFunc = isIncludeRefFunc;
 		this.project = project;
-		this.env = SystemEnvironmentManager.findSystemEnvironment(project, null).getIREnvironment();
 	}
 
 	public void setCurrentPartName(Name partName)
@@ -92,15 +86,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	}
 	
 	public boolean visit(AnnotationExpression annotationExpression) {
-		Name annotationName = annotationExpression.getName();
-		// Defect 55539 - Don't add system types to unresolved list
-		// Defect 61502 - Add user-defined annotations like MVC to unresolved list
-		// sysPartBinding is a FlexibleRecordBinding for system annotations
-		// sysPartBinding is a NotFoundBinding for user-defined annotations
-		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project, null).getPartBinding(null, annotationName.getIdentifier());
-		if(sysPartBinding == null || !sysPartBinding.isValid()) {
-			addUnresolvedName(annotationName);
-		}
+		addUnresolvedName(annotationExpression.getName());
 		return true;
 	}
 	
@@ -251,32 +237,8 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 			String partName = classBinding.getCaseSensitiveName();
 			
 			String packageName = classBinding.getCaseSensitivePackageName();
-			boolean isSysPart;
-			if(packageName != null && packageName.length() > 0){
-				isSysPart = IRUtils.isSystemPart(packageName + "." + partName, this.env);
-			}else{
-				isSysPart = IRUtils.isSystemPart(partName, this.env);
-			}		
-			if(!isSysPart || (isSysPart && isInOriginalImports(packageName, partName))) {	
+			if (!packageName.equalsIgnoreCase(MofConversion.EGLX_lang_package) || isInOriginalImports(packageName, partName)) {
 				resolvedTypes.addImport(packageName, partName);
-			}
-		}
-		else if(typeBinding instanceof AnnotationType){
-			AnnotationType annotationTypeBinding = (AnnotationType)typeBinding;
-			String partName = annotationTypeBinding.getCaseSensitiveName();			
-			String pkgName = annotationTypeBinding.getCaseSensitivePackageName();
-			if(pkgName != null) {
-				boolean isSysAnnotation;
-				if(pkgName.length() > 0){
-					isSysAnnotation = IRUtils.isSystemPart(pkgName + "." + partName, this.env);
-				}else{
-					isSysAnnotation = IRUtils.isSystemPart(partName, this.env);
-				}				
-				//if it is the system annotation, but it was already in the original imports
-				//we want to keep it
-				if(!isSysAnnotation || (isSysAnnotation && isInOriginalImports(pkgName, partName))){
-					resolvedTypes.addImport(pkgName, partName);
-				}
 			}
 		}
 	}

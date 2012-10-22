@@ -283,8 +283,13 @@ public class TypeUtils implements MofConversion {
 	
 	public static boolean isStaticType(Type type) {
 		// For MOF definitions
-		EClass staticType = (EClass)Environment.getCurrentEnv().get("org.eclipse.edt.mof.egl.StaticType");
-		return type != null && type.getEClass() != null && type.getEClass().isSubClassOf(staticType);
+		try {
+			EClass staticType = (EClass)Environment.getCurrentEnv().find("org.eclipse.edt.mof.egl.StaticType");
+			return type != null && type.getEClass() != null && type.getEClass().isSubClassOf(staticType);
+		} catch (MofObjectNotFoundException e) {
+		} catch (DeserializationException e) {
+		}
+		return false;
 	}
 	
 	public static boolean isSubtypeOf(Classifier subtype, EGLClass superType) {

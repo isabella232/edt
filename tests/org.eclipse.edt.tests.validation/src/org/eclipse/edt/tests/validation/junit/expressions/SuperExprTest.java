@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.expressions;
 
 import java.util.List;
@@ -28,8 +17,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super{x=5},
 	 * 1 validation message is expected.
 	 */
-	public void testLine14() {
-		List messages = getMessagesAtLine( 14 );
+	public void testLine16() {
+		List messages = getMessagesAtLine( 16 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -37,8 +26,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super{document = new document}
 	 * 0 validation messages are expected.
 	 */
-	public void testLine15() {
-		List messages = getMessagesAtLine( 15 );
+	public void testLine17() {
+		List messages = getMessagesAtLine( 17 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -46,8 +35,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * ha h2{super{i = 3}};
 	 * 1 validation message is expected.
 	 */
-	public void testLine21() {
-		List messages = getMessagesAtLine( 21 );
+	public void testLine23() {
+		List messages = getMessagesAtLine( 23 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -55,8 +44,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * hb h2{super{document = new document}};
 	 * 0 validation messages are expected.
 	 */
-	public void testLine22() {
-		List messages = getMessagesAtLine( 22 );
+	public void testLine24() {
+		List messages = getMessagesAtLine( 24 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -64,8 +53,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * hc superExpr{super{x = 3}};
 	 * 1 validation message is expected.
 	 */
-	public void testLine24() {
-		List messages = getMessagesAtLine( 24 );
+	public void testLine26() {
+		List messages = getMessagesAtLine( 26 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -73,8 +62,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * hd superExpr{super{document = new document}};
 	 * 0 validation messages are expected.
 	 */
-	public void testLine25() {
-		List messages = getMessagesAtLine( 25 );
+	public void testLine27() {
+		List messages = getMessagesAtLine( 27 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -82,8 +71,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine31() {
-		List messages = getMessagesAtLine( 31 );
+	public void testLine33() {
+		List messages = getMessagesAtLine( 33 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -91,8 +80,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super(10);
 	 * 2 validation messages are expected.
 	 */
-	public void testLine32() {
-		List messages = getMessagesAtLine( 32 );
+	public void testLine34() {
+		List messages = getMessagesAtLine( 34 );
 		assertEquals( 2, messages.size() );
 	}
 
@@ -100,8 +89,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * this();
 	 * 1 validation message is expected.
 	 */
-	public void testLine33() {
-		List messages = getMessagesAtLine( 33 );
+	public void testLine35() {
+		List messages = getMessagesAtLine( 35 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -109,31 +98,13 @@ public class SuperExprTest extends ValidationTestCase {
 	 * this(10);
 	 * 1 validation message is expected.
 	 */
-	public void testLine34() {
-		List messages = getMessagesAtLine( 34 );
+	public void testLine36() {
+		List messages = getMessagesAtLine( 36 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
 	 * super.getProperty("");
-	 * 0 validation messages are expected.
-	 */
-	public void testLine35() {
-		List messages = getMessagesAtLine( 35 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * this.getProperty("");
-	 * 0 validation messages are expected.
-	 */
-	public void testLine36() {
-		List messages = getMessagesAtLine( 36 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = super.document;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine37() {
@@ -142,7 +113,7 @@ public class SuperExprTest extends ValidationTestCase {
 	}
 
 	/*
-	 * a = this.document;
+	 * this.getProperty("");
 	 * 0 validation messages are expected.
 	 */
 	public void testLine38() {
@@ -151,11 +122,29 @@ public class SuperExprTest extends ValidationTestCase {
 	}
 
 	/*
+	 * a = super.document;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine39() {
+		List messages = getMessagesAtLine( 39 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = this.document;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine40() {
+		List messages = getMessagesAtLine( 40 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
 	 * super(10);
 	 * 1 validation message is expected.
 	 */
-	public void testLine47() {
-		List messages = getMessagesAtLine( 47 );
+	public void testLine49() {
+		List messages = getMessagesAtLine( 49 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -163,8 +152,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super();
 	 * 1 validation message is expected.
 	 */
-	public void testLine48() {
-		List messages = getMessagesAtLine( 48 );
+	public void testLine50() {
+		List messages = getMessagesAtLine( 50 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -172,8 +161,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * hy h2{super{i = 3}};
 	 * 1 validation message is expected.
 	 */
-	public void testLine52() {
-		List messages = getMessagesAtLine( 52 );
+	public void testLine54() {
+		List messages = getMessagesAtLine( 54 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -181,8 +170,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * hz h2{super{document = new document}};
 	 * 0 validation messages are expected.
 	 */
-	public void testLine53() {
-		List messages = getMessagesAtLine( 53 );
+	public void testLine55() {
+		List messages = getMessagesAtLine( 55 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -190,8 +179,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super();
 	 * 1 validation message is expected.
 	 */
-	public void testLine55() {
-		List messages = getMessagesAtLine( 55 );
+	public void testLine57() {
+		List messages = getMessagesAtLine( 57 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -199,8 +188,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super(x);
 	 * 2 validation messages are expected.
 	 */
-	public void testLine56() {
-		List messages = getMessagesAtLine( 56 );
+	public void testLine58() {
+		List messages = getMessagesAtLine( 58 );
 		assertEquals( 2, messages.size() );
 	}
 
@@ -208,8 +197,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super.getProperty("");
 	 * 0 validation messages are expected.
 	 */
-	public void testLine57() {
-		List messages = getMessagesAtLine( 57 );
+	public void testLine59() {
+		List messages = getMessagesAtLine( 59 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -217,8 +206,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * m myrec{a = super.getProperty("")};
 	 * 0 validation messages are expected.
 	 */
-	public void testLine58() {
-		List messages = getMessagesAtLine( 58 );
+	public void testLine60() {
+		List messages = getMessagesAtLine( 60 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -226,8 +215,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super{x = 10};
 	 * 1 validation message is expected.
 	 */
-	public void testLine59() {
-		List messages = getMessagesAtLine( 59 );
+	public void testLine61() {
+		List messages = getMessagesAtLine( 61 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -235,8 +224,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super();
 	 * 1 validation message is expected.
 	 */
-	public void testLine63() {
-		List messages = getMessagesAtLine( 63 );
+	public void testLine65() {
+		List messages = getMessagesAtLine( 65 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -244,8 +233,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super(10);
 	 * 2 validation messages are expected.
 	 */
-	public void testLine64() {
-		List messages = getMessagesAtLine( 64 );
+	public void testLine66() {
+		List messages = getMessagesAtLine( 66 );
 		assertEquals( 2, messages.size() );
 	}
 
@@ -253,8 +242,8 @@ public class SuperExprTest extends ValidationTestCase {
 	 * super.go();
 	 * 1 validation message is expected.
 	 */
-	public void testLine65() {
-		List messages = getMessagesAtLine( 65 );
+	public void testLine67() {
+		List messages = getMessagesAtLine( 67 );
 		assertEquals( 1, messages.size() );
 	}
 }

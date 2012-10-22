@@ -17,22 +17,13 @@ public class RUINLSLibaryTest extends ValidationTestCase {
 	 * {propertiesFile = "contains-dash"}
 	 * 1 validation message is expected.
 	 */
-	public void testLine13() {
-		List messages = getMessagesAtLine( 13 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * Const myConst String = "blah";
-	 * 1 validation message is expected.
-	 */
 	public void testLine15() {
 		List messages = getMessagesAtLine( 15 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * private myPrivate String;
+	 * Const myConst String = "blah";
 	 * 1 validation message is expected.
 	 */
 	public void testLine17() {
@@ -41,7 +32,7 @@ public class RUINLSLibaryTest extends ValidationTestCase {
 	}
 
 	/*
-	 * use lib2;
+	 * private myPrivate String;
 	 * 1 validation message is expected.
 	 */
 	public void testLine19() {
@@ -50,7 +41,7 @@ public class RUINLSLibaryTest extends ValidationTestCase {
 	}
 
 	/*
-	 * myint int;
+	 * use lib2;
 	 * 1 validation message is expected.
 	 */
 	public void testLine21() {
@@ -59,7 +50,7 @@ public class RUINLSLibaryTest extends ValidationTestCase {
 	}
 
 	/*
-	 * myArray string[];
+	 * myint int;
 	 * 1 validation message is expected.
 	 */
 	public void testLine23() {
@@ -68,11 +59,20 @@ public class RUINLSLibaryTest extends ValidationTestCase {
 	}
 
 	/*
-	 * myStr string;
-	 * 0 validation messages are expected.
+	 * myArray string[];
+	 * 1 validation message is expected.
 	 */
 	public void testLine25() {
 		List messages = getMessagesAtLine( 25 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * myStr string;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine27() {
+		List messages = getMessagesAtLine( 27 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -80,8 +80,8 @@ public class RUINLSLibaryTest extends ValidationTestCase {
 	 * function myFunct()
 	 * 1 validation message is expected.
 	 */
-	public void testLine27() {
-		List messages = getMessagesAtLine( 27 );
+	public void testLine29() {
+		List messages = getMessagesAtLine( 29 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -89,8 +89,8 @@ public class RUINLSLibaryTest extends ValidationTestCase {
 	 * {propertiesFile = "noDash"}
 	 * 0 validation messages are expected.
 	 */
-	public void testLine36() {
-		List messages = getMessagesAtLine( 36 );
+	public void testLine38() {
+		List messages = getMessagesAtLine( 38 );
 		assertEquals( 0, messages.size() );
 	}
 }

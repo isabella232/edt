@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.EDTCompiler;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.egl.Part;
@@ -58,16 +59,16 @@ public class TestLoadPart {
 		// Register EGL parts object store
 		typeStore = new FileSystemObjectStore(root, PartEnvironment.getCurrentEnv(), "XML", ".eglxml");
 		PartEnvironment.getCurrentEnv().registerObjectStore(Type.EGL_KeyScheme, typeStore);
-		
-		//initialize the system parts
-		new EDTCompiler().getSystemEnvironment(null);
+		for (ZipFileBindingBuildPathEntry entry : new EDTCompiler().getSystemBuildPathEntries()) {
+			PartEnvironment.getCurrentEnv().registerObjectStore(entry.getObjectStore().getKeyScheme(), entry.getObjectStore());
+		}			
 
 		try {
 			MofFactory mof = MofFactory.INSTANCE;
 			EObject eClass = null;
 			for (int i=0; i<2; i++) {
 				long start = System.currentTimeMillis();
-				eClass = Environment.INSTANCE.find(partName);
+				eClass = PartEnvironment.getCurrentEnv().getIREnvironment().find(partName);
 				System.out.println("Time to load: " + (System.currentTimeMillis()-start));
 			}
 			if (eClass instanceof Part) {

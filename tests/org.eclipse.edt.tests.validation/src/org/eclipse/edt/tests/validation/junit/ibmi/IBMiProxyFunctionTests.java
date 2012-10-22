@@ -29,8 +29,8 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "container for the IBMiProgram function f1 is invalid".
 	 */
-	public void testLine3() {
-		List messages = getMessagesAtLine( 2 );
+	public void testLine5() {
+		List messages = getMessagesAtLine( 5 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "container for the IBMiProgram function f1 is invalid" );
@@ -42,8 +42,8 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "container for the IBMiProgram function f1 is invalid".
 	 */
-	public void testLine8() {
-		List messages = getMessagesAtLine( 7 );
+	public void testLine10() {
+		List messages = getMessagesAtLine( 10 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "container for the IBMiProgram function f1 is invalid" );
@@ -51,25 +51,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f1 smallint {@as400bin1};
-	 * 0 validation messages are expected.
-	 */
-	public void testLine12() {
-		List messages = getMessagesAtLine( 12 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * f2 smallint {@as400bin2};
-	 * 0 validation messages are expected.
-	 */
-	public void testLine13() {
-		List messages = getMessagesAtLine( 13 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * f3 smallint {@as400unsignedbin1};
+	 * f1 smallint {@Structbin1};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine14() {
@@ -78,7 +60,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f4 int {@as400bin4};
+	 * f2 smallint {@Structbin2};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine15() {
@@ -87,7 +69,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f5 int {@as400unsignedbin2};
+	 * f3 smallint {@Structunsignedbin1};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine16() {
@@ -96,7 +78,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f6 bigint {@as400bin8};
+	 * f4 int {@Structbin4};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine17() {
@@ -105,7 +87,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f7 bigint {@as400unsignedbin4};
+	 * f5 int {@Structunsignedbin2};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine18() {
@@ -114,7 +96,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f8 decimal(20) {@as400unsignedbin8};
+	 * f6 bigint {@Structbin8};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine19() {
@@ -123,7 +105,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f9 date {@as400date};
+	 * f7 bigint {@Structunsignedbin4};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine20() {
@@ -132,7 +114,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fa timestamp("yyyy") {@as400timestamp};
+	 * f8 decimal(20) {@Structunsignedbin8};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine21() {
@@ -141,7 +123,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fb timestamp {@as400timestamp{eglPattern = "yyyy"}}  = "";
+	 * f9 date {@Structdate};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine22() {
@@ -150,7 +132,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fc smallfloat {@as400float4};
+	 * fa timestamp("yyyy") {@Structtimestamp};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine23() {
@@ -159,7 +141,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fd float {@as400float8{}};
+	 * fb timestamp {@Structtimestamp{eglPattern = "yyyy"}}  = "";
 	 * 0 validation messages are expected.
 	 */
 	public void testLine24() {
@@ -168,7 +150,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fe decimal(10) {@as400decFloat{}};
+	 * fc smallfloat {@Structfloat4};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine25() {
@@ -177,7 +159,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * ff decimal(10) {@as400packeddecimal{}};
+	 * fd float {@Structfloat8{}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine26() {
@@ -186,7 +168,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fg decimal(10) {@as400zoneddecimal{}};
+	 * fe decimal(10) {@StructdecFloat{}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine27() {
@@ -195,7 +177,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fh decimal {@as400decFloat{length = 3}} = 0;
+	 * ff decimal(10) {@Structpackeddecimal{}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine28() {
@@ -204,7 +186,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fi decimal {@as400packeddecimal{length = 3, decimals = 2}} = 0;
+	 * fg decimal(10) {@Structzoneddecimal{}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine29() {
@@ -213,7 +195,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fj decimal {@as400zoneddecimal{length = 3, decimals = 2}} = 0;
+	 * fh decimal {@StructdecFloat{length = 3}} = 0;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine30() {
@@ -222,7 +204,16 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fl int[] {@as400array};
+	 * fi decimal {@Structpackeddecimal{length = 3, decimals = 2}} = 0;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine31() {
+		List messages = getMessagesAtLine( 31 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * fj decimal {@Structzoneddecimal{length = 3, decimals = 2}} = 0;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine32() {
@@ -231,16 +222,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fm int[] {@as400array{returnCountVariable = f1}};
-	 * 0 validation messages are expected.
-	 */
-	public void testLine33() {
-		List messages = getMessagesAtLine( 33 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * fn string[] {@as400array{elementTypeAS400Annotation = @as400text{length = 3}}};
+	 * fl int[] {@Structarray};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine34() {
@@ -249,33 +231,25 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f1 smallint {@as400bin4};
-	 * 1 validation message is expected.
-	 * It is expected to contain "not compatible with the type".
+	 * fm int[] {@Structarray{returnCountVariable = f1}};
+	 * 0 validation messages are expected.
 	 */
-	public void testLine38() {
-		List messages = getMessagesAtLine( 38 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+	public void testLine35() {
+		List messages = getMessagesAtLine( 35 );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * f2 smallint? {@as400bin2};
-	 * 1 validation message is expected.
-	 * It is expected to contain "not valid for use with the nullable type".
+	 * fn string[] {@Structarray{elementTypeAnnotation = @Structtext{length = 3}}};
+	 * 0 validation messages are expected.
 	 */
-	public void testLine39() {
-		List messages = getMessagesAtLine( 39 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not valid for use with the nullable type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not valid for use with the nullable type\" was issued." );
+	public void testLine36() {
+		List messages = getMessagesAtLine( 36 );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * f3 smallint {@as400text};
+	 * f1 smallint {@Structbin4};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -288,20 +262,20 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f4 int {@as400bin2};
+	 * f2 smallint? {@Structbin2};
 	 * 1 validation message is expected.
-	 * It is expected to contain "not compatible with the type".
+	 * It is expected to contain "not valid for use with the nullable type".
 	 */
 	public void testLine41() {
 		List messages = getMessagesAtLine( 41 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "not valid for use with the nullable type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not valid for use with the nullable type\" was issued." );
 	}
 
 	/*
-	 * f5 int {@as400bin8};
+	 * f3 smallint {@Structtext};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -314,7 +288,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f6 bigint {@as400bin2};
+	 * f4 int {@Structbin2};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -327,7 +301,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f7 bigint {@as400date};
+	 * f5 int {@Structbin8};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -340,7 +314,7 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * f8 decimal(19) {@as400unsignedbin8};
+	 * f6 bigint {@Structbin2};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -353,7 +327,20 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fa timestamp("yyyy") {@as400date};
+	 * f7 bigint {@Structdate};
+	 * 1 validation message is expected.
+	 * It is expected to contain "not compatible with the type".
+	 */
+	public void testLine46() {
+		List messages = getMessagesAtLine( 46 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+	}
+
+	/*
+	 * f8 decimal(19) {@Structunsignedbin8};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -366,12 +353,38 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fb timestamp {@as400timestamp{eglPattern = "yyddd"}}  = "";
+	 * f9 date {@Structtimestamp};
 	 * 1 validation message is expected.
-	 * It is expected to contain "Invalid pattern".
+	 * It is expected to contain "not compatible with the type".
 	 */
 	public void testLine48() {
 		List messages = getMessagesAtLine( 48 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+	}
+
+	/*
+	 * fa timestamp("yyyy") {@Structdate};
+	 * 1 validation message is expected.
+	 * It is expected to contain "not compatible with the type".
+	 */
+	public void testLine49() {
+		List messages = getMessagesAtLine( 49 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+	}
+
+	/*
+	 * fb timestamp {@Structtimestamp{eglPattern = "yyddd"}}  = "";
+	 * 1 validation message is expected.
+	 * It is expected to contain "Invalid pattern".
+	 */
+	public void testLine50() {
+		List messages = getMessagesAtLine( 50 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "Invalid pattern" );
@@ -379,12 +392,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fba timestamp {@as400timestamp{}}  = "";
+	 * fba timestamp {@Structtimestamp{}}  = "";
 	 * 1 validation message is expected.
 	 * It is expected to contain "eglPattern must be specified".
 	 */
-	public void testLine49() {
-		List messages = getMessagesAtLine( 49 );
+	public void testLine51() {
+		List messages = getMessagesAtLine( 51 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "eglPattern must be specified" );
@@ -392,38 +405,38 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fc smallfloat {@as400float8};
+	 * fc smallfloat {@Structfloat8};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
-	 */
-	public void testLine50() {
-		List messages = getMessagesAtLine( 50 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
-	}
-
-	/*
-	 * fd float {@as400float4{}};
-	 * 1 validation message is expected.
-	 * It is expected to contain "not compatible with the type".
-	 */
-	public void testLine51() {
-		List messages = getMessagesAtLine( 51 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
-	}
-
-	/*
-	 * fe decimal(10) {@as400decFloat{length = 3}};
-	 * 1 validation message is expected.
-	 * It is expected to contain "length is not allowed".
 	 */
 	public void testLine52() {
 		List messages = getMessagesAtLine( 52 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+	}
+
+	/*
+	 * fd float {@Structfloat4{}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "not compatible with the type".
+	 */
+	public void testLine53() {
+		List messages = getMessagesAtLine( 53 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+	}
+
+	/*
+	 * fe decimal(10) {@StructdecFloat{length = 3}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "length is not allowed".
+	 */
+	public void testLine54() {
+		List messages = getMessagesAtLine( 54 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "length is not allowed" );
@@ -431,12 +444,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * ff decimal(10) {@as400packeddecimal{decimals = 2}};
+	 * ff decimal(10) {@Structpackeddecimal{decimals = 2}};
 	 * 1 validation message is expected.
 	 * It is expected to contain "decimals is not allowed".
 	 */
-	public void testLine53() {
-		List messages = getMessagesAtLine( 53 );
+	public void testLine55() {
+		List messages = getMessagesAtLine( 55 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "decimals is not allowed" );
@@ -444,42 +457,16 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fg decimal(10) {@as400zoneddecimal{length = 3, decimals = 2}};
+	 * fg decimal(10) {@Structzoneddecimal{length = 3, decimals = 2}};
 	 * 2 validation messages are expected.
 	 */
-	public void testLine54() {
-		List messages = getMessagesAtLine( 54 );
+	public void testLine56() {
+		List messages = getMessagesAtLine( 56 );
 		assertEquals( 2, messages.size() );
 	}
 
 	/*
-	 * fh decimal {@as400decFloat{length = -3}} = 0;
-	 * 1 validation message is expected.
-	 * It is expected to contain "must be an integer".
-	 */
-	public void testLine55() {
-		List messages = getMessagesAtLine( 55 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be an integer\" was issued." );
-	}
-
-	/*
-	 * fi decimal {@as400packeddecimal{length = 3, decimals = 4}} = 0;
-	 * 1 validation message is expected.
-	 * It is expected to contain "must be an integer".
-	 */
-	public void testLine56() {
-		List messages = getMessagesAtLine( 56 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be an integer\" was issued." );
-	}
-
-	/*
-	 * fj decimal {@as400zoneddecimal{length = 33, decimals = 2}} = 0;
+	 * fh decimal {@StructdecFloat{length = -3}} = 0;
 	 * 1 validation message is expected.
 	 * It is expected to contain "must be an integer".
 	 */
@@ -492,43 +479,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fha decimal {@as400decFloat{}} = 0;
-	 * 1 validation message is expected.
-	 * It is expected to contain "length must be specified".
-	 */
-	public void testLine58() {
-		List messages = getMessagesAtLine( 58 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "length must be specified" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"length must be specified\" was issued." );
-	}
-
-	/*
-	 * fib decimal {@as400packeddecimal{}} = 0;
-	 * 2 validation messages are expected.
-	 */
-	public void testLine59() {
-		List messages = getMessagesAtLine( 59 );
-		assertEquals( 2, messages.size() );
-	}
-
-	/*
-	 * fjc decimal {@as400zoneddecimal{}} = 0;
-	 * 2 validation messages are expected.
-	 */
-	public void testLine60() {
-		List messages = getMessagesAtLine( 60 );
-		assertEquals( 2, messages.size() );
-	}
-
-	/*
-	 * fk string {@as400text{length = -3}};
+	 * fi decimal {@Structpackeddecimal{length = 3, decimals = 4}} = 0;
 	 * 1 validation message is expected.
 	 * It is expected to contain "must be an integer".
 	 */
-	public void testLine61() {
-		List messages = getMessagesAtLine( 61 );
+	public void testLine58() {
+		List messages = getMessagesAtLine( 58 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
@@ -536,12 +492,25 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fka string {@as400text{}};
+	 * fj decimal {@Structzoneddecimal{length = 33, decimals = 2}} = 0;
+	 * 1 validation message is expected.
+	 * It is expected to contain "must be an integer".
+	 */
+	public void testLine59() {
+		List messages = getMessagesAtLine( 59 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must be an integer\" was issued." );
+	}
+
+	/*
+	 * fha decimal {@StructdecFloat{}} = 0;
 	 * 1 validation message is expected.
 	 * It is expected to contain "length must be specified".
 	 */
-	public void testLine62() {
-		List messages = getMessagesAtLine( 62 );
+	public void testLine60() {
+		List messages = getMessagesAtLine( 60 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "length must be specified" );
@@ -549,12 +518,56 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fl boolean[] {@as400array};
+	 * fib decimal {@Structpackeddecimal{}} = 0;
+	 * 2 validation messages are expected.
+	 */
+	public void testLine61() {
+		List messages = getMessagesAtLine( 61 );
+		assertEquals( 2, messages.size() );
+	}
+
+	/*
+	 * fjc decimal {@Structzoneddecimal{}} = 0;
+	 * 2 validation messages are expected.
+	 */
+	public void testLine62() {
+		List messages = getMessagesAtLine( 62 );
+		assertEquals( 2, messages.size() );
+	}
+
+	/*
+	 * fk string {@Structtext{length = -3}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "is not compatible".
+	 * It is expected to contain "must be an integer".
 	 */
 	public void testLine63() {
 		List messages = getMessagesAtLine( 63 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must be an integer\" was issued." );
+	}
+
+	/*
+	 * fka string {@Structtext{}};
+	 * 1 validation message is expected.
+	 * It is expected to contain "length must be specified".
+	 */
+	public void testLine64() {
+		List messages = getMessagesAtLine( 64 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "length must be specified" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"length must be specified\" was issued." );
+	}
+
+	/*
+	 * fl boolean[] {@Structarray};
+	 * 1 validation message is expected.
+	 * It is expected to contain "is not compatible".
+	 */
+	public void testLine65() {
+		List messages = getMessagesAtLine( 65 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "is not compatible" );
@@ -562,12 +575,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fla int?[] {@as400array{}};
+	 * fla int?[] {@Structarray{}};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not valid for use with the nullable type".
 	 */
-	public void testLine64() {
-		List messages = getMessagesAtLine( 64 );
+	public void testLine66() {
+		List messages = getMessagesAtLine( 66 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "not valid for use with the nullable type" );
@@ -575,12 +588,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fm int[] {@as400array{returnCountVariable = fa}};
+	 * fm int[] {@Structarray{returnCountVariable = fa}};
 	 * 1 validation message is expected.
 	 * It is expected to contain "must have a type that is assignment compatible".
 	 */
-	public void testLine65() {
-		List messages = getMessagesAtLine( 65 );
+	public void testLine67() {
+		List messages = getMessagesAtLine( 67 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "must have a type that is assignment compatible" );
@@ -588,12 +601,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	}
 
 	/*
-	 * fn string[] {@as400array{elementTypeAS400Annotation = @as400text{}}};
+	 * fn string[] {@Structarray{elementTypeAnnotation = @Structtext{}}};
 	 * 1 validation message is expected.
 	 * It is expected to contain "length must be specified".
 	 */
-	public void testLine66() {
-		List messages = getMessagesAtLine( 66 );
+	public void testLine68() {
+		List messages = getMessagesAtLine( 68 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "length must be specified" );
@@ -605,12 +618,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "must exactly match the number of parameters".
 	 */
-	public void testLine83() {
-		List messages = getMessagesAtLine( 81 );
+	public void testLine85() {
+		List messages = getMessagesAtLine( 85 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "entry in the array of parameterAnnotations is required" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"entry in the array of parameterAnnotations is required\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "must exactly match the number of parameters" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must exactly match the number of parameters\" was issued." );
 	}
 
 	/*
@@ -618,12 +631,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "value specified for the parameterAnnotations".
 	 */
-	public void testLine89() {
-		List messages = getMessagesAtLine( 87 );
+	public void testLine91() {
+		List messages = getMessagesAtLine( 91 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "specified in the parameterAnnotations for parameter" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"specified in the parameterAnnotations for parameter\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "value specified for the parameterAnnotations" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"value specified for the parameterAnnotations\" was issued." );
 	}
 
 	/*
@@ -631,8 +644,8 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "cannot contain statements.".
 	 */
-	public void testLine95() {
-		List messages = getMessagesAtLine( 95 );
+	public void testLine97() {
+		List messages = getMessagesAtLine( 97 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "cannot contain statements." );
@@ -644,8 +657,8 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "cannot return a value".
 	 */
-	public void testLine98() {
-		List messages = getMessagesAtLine( 98 );
+	public void testLine100() {
+		List messages = getMessagesAtLine( 100 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "cannot return a value" );
@@ -657,8 +670,8 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "only valid return type is INT".
 	 */
-	public void testLine102() {
-		List messages = getMessagesAtLine( 102 );
+	public void testLine104() {
+		List messages = getMessagesAtLine( 104 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "only valid return type is INT" );
@@ -670,8 +683,8 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "nullable type int? is not supported".
 	 */
-	public void testLine108() {
-		List messages = getMessagesAtLine( 107 );
+	public void testLine110() {
+		List messages = getMessagesAtLine( 110 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "nullable type int? is not supported" );
@@ -683,12 +696,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "array of nullable types int?[] is not supported".
 	 */
-	public void testLine113() {
-		List messages = getMessagesAtLine( 112 );
+	public void testLine115() {
+		List messages = getMessagesAtLine( 115 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "array of nullable types int is not supported" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"array of nullable types int is not supported\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "array of nullable types int?[] is not supported" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"array of nullable types int?[] is not supported\" was issued." );
 	}
 
 	/*
@@ -696,12 +709,12 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "entry in the array of IBMiProgramParameterAnnotations is required".
 	 */
-	public void testLine118() {
-		List messages = getMessagesAtLine( 117 );
+	public void testLine120() {
+		List messages = getMessagesAtLine( 120 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "entry in the array of parameterAnnotations is required" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"entry in the array of parameterAnnotations is required\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "entry in the array of IBMiProgramParameterAnnotations is required" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"entry in the array of IBMiProgramParameterAnnotations is required\" was issued." );
 	}
 
 	/*
@@ -709,8 +722,8 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "type of parameter p1 is not supported".
 	 */
-	public void testLine122() {
-		List messages = getMessagesAtLine( 121 );
+	public void testLine124() {
+		List messages = getMessagesAtLine( 124 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "type of parameter p1 is not supported" );
@@ -721,23 +734,21 @@ public class IBMiProxyFunctionTests extends ValidationTestCase {
 	 * {@IBMiProgram{}}
 	 * 4 validation messages are expected.
 	 */
-	public void testLine126() {
-		List messages = getMessagesAtLine( 125 );
+	public void testLine128() {
+		List messages = getMessagesAtLine( 128 );
 		assertEquals( 4, messages.size() );
 	}
 
 	/*
-	 * function f11(p1 string, p2 decimal)
-			{@IBMiProgram{
-				parameterAnnotations = [@StructText{Length = 20}}]  //must exactly match the number of parameters
-			}}
-	 * 1 validation messages are expected.
+	 * parameterAnnotations = [@StructText{Length = 20}]
+	 * 1 validation message is expected.
+	 * It is expected to contain "must exactly match the number of parameters".
 	 */
-	public void testLine129() {
-		List messages = getMessagesAtLine( 129 );
+	public void testLine133() {
+		List messages = getMessagesAtLine( 133 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "must exactly match the number of parameters" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must exactly match the number of parameters\" was issued." );
 	}
 }
