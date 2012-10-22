@@ -331,7 +331,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 				else{
 					switch(prevToken.sym){
 					case NodeTypes.PRIVATE:
-					case NodeTypes.DATAITEM:
 						addSpace = true;
 						break;
 					default:
