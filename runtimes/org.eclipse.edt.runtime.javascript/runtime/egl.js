@@ -514,14 +514,15 @@ egl._defineClass = function(
 		// trace flag
 		) {
 	try {
+		var functions, traceFlag;
 		if (arguments.length == 4) {
-			var functions = arguments[2];
-			var traceFlag = arguments[3];
+			functions = arguments[2];
+			traceFlag = arguments[3];
 		} else {
 			var superPackageName = arguments[2];
 			var superClassName = arguments[3];
-			var functions = arguments[4];
-			var traceFlag = arguments[5];
+			functions = arguments[4];
+			traceFlag = arguments[5];
 		}
 		
 		var pkg = egl.makePackage( packageName );

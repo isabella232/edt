@@ -387,7 +387,7 @@ egl.stringToDateWithDefaultSeparator = function(s, format)
 	{
 		throw egl.createTypeCastException( "CRRUI2017E", [ s, "string", "date" ], "date", "string" );
 	}
-}
+};
 
 egl.stringToDate = function(s, format)
 {
@@ -2298,7 +2298,7 @@ egl.isSubType = function(subTypeSignature, signature)
             }
     }
     return false;
-}
+};
 
 egl.valueString = function( any )
 {

@@ -26,10 +26,6 @@ import org.eclipse.edt.mof.egl.Stereotype;
 
 public class HandlerTemplate extends JavaScriptTemplate {
 	public static final String FieldName_OnConstructionFunction = "onConstructionFunction";
-	
-	public void genSuperClass(Handler type, Context ctx, TabbedWriter out) {
-		out.print("ExecutableBase");
-	}
 
 	public void genClassHeader(Handler handler, Context ctx, TabbedWriter out) {
 		if (CommonUtilities.isRUIWidget(handler)) {

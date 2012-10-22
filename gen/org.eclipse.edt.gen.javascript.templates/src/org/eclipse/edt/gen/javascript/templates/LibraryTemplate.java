@@ -47,10 +47,6 @@ public class LibraryTemplate extends JavaScriptTemplate {
 			libraries.add(library);
 	}
 
-	public void genSuperClass(Library library, Context ctx, TabbedWriter out) {
-		out.print("ExecutableBase");
-	}
-
 	public void genClassHeader(Library library, Context ctx, TabbedWriter out) {
 		// TODO sbg consider refactoring into a separate extension
 		boolean propLibrary = CommonUtilities.isRUIPropertiesLibrary(library);
