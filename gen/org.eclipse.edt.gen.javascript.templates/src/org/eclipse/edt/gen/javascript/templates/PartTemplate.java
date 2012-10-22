@@ -59,7 +59,6 @@ public class PartTemplate extends JavaScriptTemplate {
 		if (ctx.mapsToNativeType(part))
 			out.print(ctx.getNativeImplementationMapping(part));
 		else{
-			// TODO Use Aliaser stuff from RBD
 			String packageName = part.getCaseSensitivePackageName().toLowerCase();
 			if(packageName != null && packageName.length() > 0)
 				out.print(eglnamespace + packageName + "." + part.getCaseSensitiveName()); 

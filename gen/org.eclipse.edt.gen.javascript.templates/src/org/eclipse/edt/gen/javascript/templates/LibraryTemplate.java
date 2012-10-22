@@ -48,7 +48,6 @@ public class LibraryTemplate extends JavaScriptTemplate {
 	}
 
 	public void genClassHeader(Library library, Context ctx, TabbedWriter out) {
-		// TODO sbg consider refactoring into a separate extension
 		boolean propLibrary = CommonUtilities.isRUIPropertiesLibrary(library);
 		if (propLibrary) {
 			out.print("egl.defineRUIPropertiesLibrary(");
@@ -73,7 +72,6 @@ public class LibraryTemplate extends JavaScriptTemplate {
 	}
 
 	public void genName(Library library, Context ctx, TabbedWriter out) {
-		// TODO Use Aliaser stuff from RBD
 		out.print(eglnamespace + library.getCaseSensitivePackageName().toLowerCase() + "." + library.getCaseSensitiveName());
 	}
 
