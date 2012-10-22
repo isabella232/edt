@@ -69,78 +69,80 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 					new String[] {});
 		}
 		
-		Map<Expression, Type> resolvedRHSMap = new HashMap<Expression, Type>();
-		Map<Expression, Type> errors = new HashMap<Expression, Type>();
-		
-		Map<Expression, Type> exprMap = new HashMap<Expression, Type>();
-		TypeValidator.collectExprsForTypeCompatibility(rhs, exprMap);
-		
-		// For complex assignments like "x &= y" we must treat it as if it was coded "x = x & y". To do this, retrieve the operation and use its type.
-		if (assignmentOperator != Assignment.Operator.ASSIGN) {
-			String symbol = assignmentOperator.toString().substring(0, assignmentOperator.toString().length() - 1);
+		if (lhsType != null) {
+			Map<Expression, Type> resolvedRHSMap = new HashMap<Expression, Type>();
+			Map<Expression, Type> errors = new HashMap<Expression, Type>();
 			
-			for (Map.Entry<Expression, Type> entry : exprMap.entrySet()) {
-				Operation op = IRUtils.getBinaryOperation(lhsType.getClassifier(), entry.getValue() == null ? entry.getKey().resolveMember() : entry.getValue().getClassifier(), symbol);
-				if (op != null) {
-					// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the lhs type).
-					boolean parmsValid = true;
-					if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
-						Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), lhsType);
-						parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), lhsType, lhsMember);
-					}
-					if (parmsValid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
-						Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), lhsType);
-						parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), entry.getValue(), entry.getKey().resolveMember());
-					}
-					
-					if (parmsValid) {
-						Type opType = op.getType();
-						if (BindingUtil.isUnresolvedGenericType(opType)) {
-							opType = BindingUtil.resolveGenericType(opType, lhsType);
+			Map<Expression, Type> exprMap = new HashMap<Expression, Type>();
+			TypeValidator.collectExprsForTypeCompatibility(rhs, exprMap);
+			
+			// For complex assignments like "x &= y" we must treat it as if it was coded "x = x & y". To do this, retrieve the operation and use its type.
+			if (assignmentOperator != Assignment.Operator.ASSIGN) {
+				String symbol = assignmentOperator.toString().substring(0, assignmentOperator.toString().length() - 1);
+				
+				for (Map.Entry<Expression, Type> entry : exprMap.entrySet()) {
+					Operation op = IRUtils.getBinaryOperation(lhsType.getClassifier(), entry.getValue() == null ? entry.getKey().resolveMember() : entry.getValue().getClassifier(), symbol);
+					if (op != null) {
+						// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the lhs type).
+						boolean parmsValid = true;
+						if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
+							Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), lhsType);
+							parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), lhsType, lhsMember);
 						}
-						resolvedRHSMap.put(entry.getKey(), opType);
+						if (parmsValid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
+							Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), lhsType);
+							parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), entry.getValue(), entry.getKey().resolveMember());
+						}
+						
+						if (parmsValid) {
+							Type opType = op.getType();
+							if (BindingUtil.isUnresolvedGenericType(opType)) {
+								opType = BindingUtil.resolveGenericType(opType, lhsType);
+							}
+							resolvedRHSMap.put(entry.getKey(), opType);
+						}
+						else {
+							errors.put(entry.getKey(), entry.getValue());
+						}
 					}
 					else {
 						errors.put(entry.getKey(), entry.getValue());
 					}
 				}
-				else {
-					errors.put(entry.getKey(), entry.getValue());
+			}
+			else {
+				// Just check each expr below.
+				resolvedRHSMap = exprMap;
+			}
+			
+			if (resolvedRHSMap.size() == 0 && !(rhsMember instanceof FunctionMember)) {
+				if (rhsType != null) {
+					errors.put(rhs, rhsType);
 				}
 			}
-		}
-		else {
-			// Just check each expr below.
-			resolvedRHSMap = exprMap;
-		}
-		
-		if (resolvedRHSMap.size() == 0 && !(rhsMember instanceof FunctionMember)) {
-			if (rhsType != null) {
-				errors.put(rhs, rhsType);
-			}
-		}
-		else {
-			for (Map.Entry<Expression, Type> entry : resolvedRHSMap.entrySet()) {
-				if (!IRUtils.isMoveCompatible(lhsType, lhsMember, entry.getValue(), entry.getKey().resolveMember())) {
-					errors.put(entry.getKey(), entry.getValue());
-				}
-			}
-		}
-		
-		for (Map.Entry<Expression, Type> entry : errors.entrySet()) {
-			// Could be we're assigning null to an array access, e.g. "nullableArray[1] = null;". Nullability comes from the array qualifier in this case.
-			if (lhs instanceof ArrayAccess && TypeUtils.Type_NULLTYPE.equals(entry.getValue()) && lhsMember != null && !lhsMember.isNullable()) {
-				Type qualType = ((ArrayAccess)lhs).getArray().resolveType();
-				if (qualType instanceof ArrayType && ((ArrayType)qualType).elementsNullable()) {
-					continue;
+			else {
+				for (Map.Entry<Expression, Type> entry : resolvedRHSMap.entrySet()) {
+					if (!IRUtils.isMoveCompatible(lhsType, lhsMember, entry.getValue(), entry.getKey().resolveMember())) {
+						errors.put(entry.getKey(), entry.getValue());
+					}
 				}
 			}
 			
-			problemRequestor.acceptProblem(entry.getKey(),
-					IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-					new String[] {lhsType != null ? BindingUtil.getShortTypeString(lhsType) : lhs.getCanonicalString(),
-					entry.getValue() != null ? BindingUtil.getShortTypeString(entry.getValue()) : entry.getKey().getCanonicalString(),
-					lhs.getCanonicalString() + " " + assignmentOperator.toString() + " " + entry.getKey().getCanonicalString()});
+			for (Map.Entry<Expression, Type> entry : errors.entrySet()) {
+				// Could be we're assigning null to an array access, e.g. "nullableArray[1] = null;". Nullability comes from the array qualifier in this case.
+				if (lhs instanceof ArrayAccess && TypeUtils.Type_NULLTYPE.equals(entry.getValue()) && lhsMember != null && !lhsMember.isNullable()) {
+					Type qualType = ((ArrayAccess)lhs).getArray().resolveType();
+					if (qualType instanceof ArrayType && ((ArrayType)qualType).elementsNullable()) {
+						continue;
+					}
+				}
+				
+				problemRequestor.acceptProblem(entry.getKey(),
+						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
+						new String[] {lhsType != null ? BindingUtil.getShortTypeString(lhsType) : lhs.getCanonicalString(),
+						entry.getValue() != null ? BindingUtil.getShortTypeString(entry.getValue()) : entry.getKey().getCanonicalString(),
+						lhs.getCanonicalString() + " " + assignmentOperator.toString() + " " + entry.getKey().getCanonicalString()});
+			}
 		}
 		
 		if (lhsMember != null) {

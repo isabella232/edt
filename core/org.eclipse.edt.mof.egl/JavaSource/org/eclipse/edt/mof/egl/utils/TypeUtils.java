@@ -887,7 +887,9 @@ public class TypeUtils implements MofConversion {
 								continue forLoop;
 							if ((parm1.getType() != null) && !parm1.getType().equals(parm2.getType()))
 								continue forLoop;
-							if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
+							if ((parm1.getParameterKind() == null && parm2.getParameterKind() != null) || (parm1.getParameterKind() != null && parm2.getParameterKind() == null))
+								continue forLoop;
+							if ((parm1.getParameterKind() != null) && !parm1.getParameterKind().equals(parm2.getParameterKind()))
 								continue forLoop;
 							if (parm1.isNullable() != parm2.isNullable()) 
 								continue forLoop;
