@@ -82,36 +82,54 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	public void endVisit(BinaryExpression binaryExpression) {
 		// Both the lhs and the rhs can be a ternary expression, in which case both of the ternary's possible results must be checked
 		// against the other side.
-		Map<Expression, Type> operand1Map = new HashMap<Expression, Type>();
-		Map<Expression, Type> operand2Map = new HashMap<Expression, Type>();
-		TypeValidator.collectExprsForTypeCompatibility(binaryExpression.getFirstExpression(), operand1Map);
-		TypeValidator.collectExprsForTypeCompatibility(binaryExpression.getSecondExpression(), operand2Map);
+		Map<Expression, Type> lhsMap = new HashMap<Expression, Type>();
+		Map<Expression, Type> rhsMap = new HashMap<Expression, Type>();
+		TypeValidator.collectExprsForTypeCompatibility(binaryExpression.getFirstExpression(), lhsMap);
+		TypeValidator.collectExprsForTypeCompatibility(binaryExpression.getSecondExpression(), rhsMap);
 		
-		for (Map.Entry<Expression, Type> entry1 : operand1Map.entrySet()) {
-			NamedElement elem1 = DefaultBinder.getOperandType(entry1.getKey());
-			if (elem1 != null) {
-				for (Map.Entry<Expression, Type> entry2 : operand2Map.entrySet()) {
-					NamedElement elem2 = DefaultBinder.getOperandType(entry2.getKey());
-					if (elem2 != null) {
-						boolean valid = false;
-						Operation op = IRUtils.getBinaryOperation(elem1, elem2, binaryExpression.getOperator().toString());
+		for (Map.Entry<Expression, Type> lhsEntry : lhsMap.entrySet()) {
+			NamedElement lhsElement = DefaultBinder.getOperandType(lhsEntry.getKey());
+			if (lhsElement != null) {
+				for (Map.Entry<Expression, Type> rhsEntry : rhsMap.entrySet()) {
+					NamedElement rhsElement = DefaultBinder.getOperandType(rhsEntry.getKey());
+					if (rhsElement != null) {
+						Operation op = IRUtils.getBinaryOperation(lhsElement, rhsElement, binaryExpression.getOperator().toString());
 						if (op != null) {
-							// If the parameters are generic, we need to validate the arg type vs the resolved parm type (which comes from the first operand).
-							valid = true;
-							if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
-								Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), entry1.getValue());
-								valid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), entry1.getValue(), entry1.getKey().resolveMember());
+							// If the parameters are generic, we need to validate the arg type vs the resolved parm type.
+							Expression errorNode = null;
+							
+							// The type that we resolve with is whichever type defined the operation. This could be the lhs or the rhs (array :: mystring, or mystring :: array).
+							Type resolvingType = lhsEntry.getValue();
+							if (resolvingType == null || resolvingType.getClassifier() == null || !resolvingType.getClassifier().equals(op.getType().getClassifier())) {
+								resolvingType = rhsEntry.getValue();
 							}
-							if (valid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
-								Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), entry1.getValue());
-								valid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), entry2.getValue(), entry2.getKey().resolveMember());
+							
+							if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
+								Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), resolvingType);
+								if (!IRUtils.isMoveCompatible(t, op.getParameters().get(0), lhsEntry.getValue(), lhsEntry.getKey().resolveMember())) {
+									errorNode = lhsEntry.getKey();
+								}
+							}
+							if (errorNode == null && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
+								Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), resolvingType);
+								if (!IRUtils.isMoveCompatible(t, op.getParameters().get(1), rhsEntry.getValue(), rhsEntry.getKey().resolveMember())) {
+									errorNode = rhsEntry.getKey();
+								}
+							}
+							
+							if (errorNode != null) {
+								problemRequestor.acceptProblem(errorNode, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
+										new String[]{
+												lhsEntry.getValue() != null ? BindingUtil.getShortTypeString(lhsEntry.getValue()) : lhsEntry.getKey().getCanonicalString(),
+												rhsEntry.getValue() != null ? BindingUtil.getShortTypeString(rhsEntry.getValue()) : rhsEntry.getKey().getCanonicalString(),
+												lhsEntry.getKey().getCanonicalString() + " " + binaryExpression.getOperator().toString() + " " + rhsEntry.getKey().getCanonicalString()});
 							}
 						}
-						
-						if (!valid) {
-							problemRequestor.acceptProblem(entry1.getKey(), IProblemRequestor.MISSING_OPERATION_FOR_BINARY_EXPRESSION,
-									new String[]{entry1.getKey().getCanonicalString(), entry2.getKey().getCanonicalString(), binaryExpression.getOperator().toString(),
-												entry1.getKey().getCanonicalString() + " " + binaryExpression.getOperator().toString() + " " + entry2.getKey().getCanonicalString()});
+						else {
+							problemRequestor.acceptProblem(lhsEntry.getKey(), IProblemRequestor.MISSING_OPERATION_FOR_BINARY_EXPRESSION,
+									new String[]{
+											lhsEntry.getKey().getCanonicalString(), rhsEntry.getKey().getCanonicalString(), binaryExpression.getOperator().toString(),
+											lhsEntry.getKey().getCanonicalString() + " " + binaryExpression.getOperator().toString() + " " + rhsEntry.getKey().getCanonicalString()});
 						}
 					}
 				}
@@ -681,5 +699,11 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean visit(SetValuesExpression setValuesExpression) {
+		// Do not validate exprs inside annotations or stereotypes. That is already covered in the annotation code, which has different rules.
+		return !(setValuesExpression.getExpression().resolveType() instanceof AnnotationType); // StereotypeType subclasses this, no need to check both
 	}
 }

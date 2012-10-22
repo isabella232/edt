@@ -281,7 +281,9 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 			}
 		}
 		
-		getDelegateFunctionString(delegateBinding, functionName, bfFunctionName, functionTextBuffer, newLine, needImports, currImports, currPkg );
+		if (delegateBinding != null) {
+			getDelegateFunctionString(delegateBinding, functionName, bfFunctionName, functionTextBuffer, newLine, needImports, currImports, currPkg );
+		}
 	}
 	
 	private static void createCallbackFunction( Expression serviceExpr, Expression callbackExpr, final List<String> currImports, final String currFilePkg, 

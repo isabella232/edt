@@ -42,13 +42,13 @@ handler h
 		
 		case (r) //0
 			when(r) //0
-			when(a) //1
+			when(a) //0
 			when(d) //1
 		end
 		
 		case (r.i) //0
 			when(10) //0
-			when(a) //1
+			when(a) //0
 			when("abc") //0
 			when(false) //1
 			when(r) //1
@@ -57,7 +57,7 @@ handler h
 		
 		case (i)
 			when(10) //0
-			when(a) //1
+			when(a) //0
 			when("abc") //0
 			when(false) //1
 			when(r) //1

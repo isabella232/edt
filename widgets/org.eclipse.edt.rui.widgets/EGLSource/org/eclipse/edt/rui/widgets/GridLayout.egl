@@ -202,7 +202,7 @@ handler GridLayout type RUIWidget{targetWidget = table, cssFile = "css/org.eclip
 		tdID string = internalID + "-TD-" + gridData.row + "-" + gridData.column;
 		td Widget = table.getElementById(tdID);		
 		if ( td != null && (td.getAttribute( "occupied" ) as String) != "true" )
-			childCells Widget[0];
+			childCells Widget[];
 			for ( j int from 1 to gridData.horizontalSpan - 1 )
 				tdID = internalID + "-TD-" + gridData.row + "-" + (gridData.column + j);
 				tempTd Widget = table.getElementById(tdID);

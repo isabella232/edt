@@ -15,12 +15,6 @@ program ezeProg //1
 	end
 end
 
-// params not supported
-program p0() // 1
-function main()
-end
-end
-
 // no main
 program p1 // 1
 

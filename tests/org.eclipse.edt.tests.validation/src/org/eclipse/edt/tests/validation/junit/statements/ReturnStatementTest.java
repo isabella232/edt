@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.statements;
 
 import java.util.List;
@@ -134,20 +123,20 @@ public class ReturnStatementTest extends ValidationTestCase {
 
 	/*
 	 * return a;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine73() {
 		List messages = getMessagesAtLine( 73 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * return a;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine78() {
 		List messages = getMessagesAtLine( 78 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*

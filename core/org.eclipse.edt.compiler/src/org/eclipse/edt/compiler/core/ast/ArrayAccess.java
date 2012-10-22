@@ -27,7 +27,7 @@ public class ArrayAccess extends Expression {
 
 	private Expression array;
 	private List<Expression> subscripts;
-    private Object element;
+	private Object element;
 
 	public ArrayAccess(Expression primary, List<Expression> subscripts, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -91,6 +91,17 @@ public class ArrayAccess extends Expression {
 	}
 	
 	@Override
+	public void setElement(Object elem) {
+        this.element = elem;
+        super.setElement(elem);
+    }
+	
+	@Override
+    public Object resolveElement() {
+    	return element;
+    }
+	
+	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(array.toString());
@@ -108,14 +119,4 @@ public class ArrayAccess extends Expression {
 		buffer.append("]");
 		return buffer.toString();
 	}
-	
-    public void setElement(Object elem) {
-        this.element = elem;
-        super.setElement(elem);
-    }
-    
-    public Object resolveElement() {
-    	return element;
-    }
-
 }

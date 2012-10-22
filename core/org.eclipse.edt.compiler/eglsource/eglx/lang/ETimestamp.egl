@@ -78,6 +78,11 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 	 * {@Operation widen} Converts a date to a timestamp.
 	 */
 	static function asTimestamp(value EDate? in) returns (ETimestamp?) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a time to a timestamp.
+	 */
+	static function asTimestamp(value ETime? in) returns (ETimestamp?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a timestamp.

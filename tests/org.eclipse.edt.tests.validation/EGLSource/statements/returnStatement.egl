@@ -70,12 +70,12 @@ handler h
 	
 	function test() returns(rec1)
 		a any?;
-		return a; //1
+		return a; //0
 	end
 	
 	function test() returns(int?)
 		a any?;
-		return a; //1
+		return a; //0
 	end
 	
 	function test() returns(string)

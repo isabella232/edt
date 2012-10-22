@@ -28,7 +28,6 @@ import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EType;
-import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -703,16 +702,29 @@ public class BindingUtil {
 	public static List<Member> findMembers(Type type, String id) {
 		if (type instanceof Container) {
 			
+			// First try to resolve within the part itself.
 			List<Member> list = new ArrayList<Member>();
-			for (Member mbr : ((Container)type).getAllMembers()) {
+			for (Member mbr : ((Container)type).getMembers()) {
 				if (NameUtile.equals(id, mbr.getId())) {
 					list.add(mbr);
 				}
 			}
-			if (list.isEmpty()) {
-				return null;
+			if (!list.isEmpty()) {
+				return list;
 			}
-			return list;
+			
+			// Not in this part - check all the super types.
+			if (type instanceof StructPart && !((StructPart)type).getSuperTypes().isEmpty()) {
+				for (StructPart superType : ((StructPart)type).getSuperTypes()) {
+					List<Member> temp = findMembers(superType, id);
+					if (temp != null) {
+						list.addAll(temp);
+					}
+				}
+				if (!list.isEmpty()) {
+					return list;
+				}
+			}
 		}
 		return null;
 	}
@@ -1072,7 +1084,7 @@ public class BindingUtil {
 		return type;
 	}
 	
-	private static Type getTypeForGenericQualifier(Expression expr) {
+	public static Type getTypeForGenericQualifier(Expression expr) {
 		final Type[] type = new Type[1];
 		class ExitVisitor extends RuntimeException{private static final long serialVersionUID = 1L;};
 		try {
@@ -1091,8 +1103,15 @@ public class BindingUtil {
 				public boolean visit(BinaryExpression binaryExpression) {
 					Type binType = binaryExpression.resolveType();
 					if (binType != null) {
-						//TODO correct to always use first expr?
-						type[0] =  resolveGenericType(binType, binaryExpression.getFirstExpression());
+						// Could be "myString :: myList" or "myList :: myString". Resolve generics based on which classifier matches.
+						Type type1 = binaryExpression.getFirstExpression().resolveType();
+						if (type1 != null && type1.getClassifier() != null && type1.getClassifier().equals(binType.getClassifier())) {
+							type[0] =  resolveGenericType(binType, binaryExpression.getFirstExpression());
+						}
+						else {
+							type[0] =  resolveGenericType(binType, binaryExpression.getSecondExpression());
+						}
+						
 						throw new ExitVisitor();
 					}
 					return false;
@@ -1101,7 +1120,6 @@ public class BindingUtil {
 				public boolean visit(TernaryExpression ternaryExpression) {
 					Type ternType = ternaryExpression.resolveType();
 					if (ternType != null) {
-						//TODO correct to always use second expr?
 						type[0] =  resolveGenericType(ternType, ternaryExpression.getSecondExpr());
 						throw new ExitVisitor();
 					}

@@ -33,6 +33,7 @@
 		</java>
 		
 		<move file="temp.file" tofile="ErrorBaseParser.java" verbose="true" failonerror="true"/>
+		<delete file="egl.cup.dump"/>
 		
 		<eclipse.refreshLocal resource="org.eclipse.edt.ide.core"/>
 	</target>

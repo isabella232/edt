@@ -265,27 +265,27 @@ public class Ternary1Test extends ValidationTestCase {
 	/*
 	 * ? null
 	 * 1 validation message is expected.
-	 * It is expected to contain "A null cannot be passed to the non-nullable parameter i in function setValueIn".
+	 * It is expected to contain "Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
 	 */
 	public void testLine65() {
 		List messages = getMessagesAtLine( 65 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "A null cannot be passed to the non-nullable parameter i in function setValueIn" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"A null cannot be passed to the non-nullable parameter i in function setValueIn\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.\" was issued." );
 	}
 
 	/*
 	 * : null);
 	 * 1 validation message is expected.
-	 * It is expected to contain "A null cannot be passed to the non-nullable parameter i in function setValueIn".
+	 * It is expected to contain "Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
 	 */
 	public void testLine66() {
 		List messages = getMessagesAtLine( 66 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "A null cannot be passed to the non-nullable parameter i in function setValueIn" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"A null cannot be passed to the non-nullable parameter i in function setValueIn\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.\" was issued." );
 	}
 
 	/*
@@ -388,66 +388,66 @@ public class Ternary1Test extends ValidationTestCase {
 	/*
 	 * ? 10
 	 * 1 validation message is expected.
-	 * It is expected to contain "Error in argument 10 in function invocation setValueOut. Constants, literals and string literal expressions are not valid for use with parameters defined with the OUT modifier.".
+	 * It is expected to contain "Error in argument 10 in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier.".
 	 */
 	public void testLine86() {
 		List messages = getMessagesAtLine( 86 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument 10 in function invocation setValueOut. Constants, literals and string literal expressions are not valid for use with parameters defined with the OUT modifier." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument 10 in function invocation setValueOut. Constants, literals and string literal expressions are not valid for use with parameters defined with the OUT modifier.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument 10 in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument 10 in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier.\" was issued." );
 	}
 
 	/*
 	 * : constRec.i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "Error in argument constRec.i in function invocation setValueOut. Constants, literals and string literal expressions are not valid for use with parameters defined with the OUT modifier.".
+	 * It is expected to contain "Error in argument constRec.i in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier.".
 	 */
 	public void testLine87() {
 		List messages = getMessagesAtLine( 87 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument constRec.i in function invocation setValueOut. Constants, literals and string literal expressions are not valid for use with parameters defined with the OUT modifier." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument constRec.i in function invocation setValueOut. Constants, literals and string literal expressions are not valid for use with parameters defined with the OUT modifier.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument constRec.i in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument constRec.i in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier.\" was issued." );
 	}
 
 	/*
 	 * ? 10
 	 * 1 validation message is expected.
-	 * It is expected to contain "Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
+	 * It is expected to contain "Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
 	 */
 	public void testLine89() {
 		List messages = getMessagesAtLine( 89 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.\" was issued." );
 	}
 
 	/*
 	 * : constRec.i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "Error in argument constRec.i in function invocation setValueInout. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
+	 * It is expected to contain "Error in argument constRec.i in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
 	 */
 	public void testLine90() {
 		List messages = getMessagesAtLine( 90 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument constRec.i in function invocation setValueInout. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument constRec.i in function invocation setValueInout. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument constRec.i in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument constRec.i in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.\" was issued." );
 	}
 
 	/*
 	 * ? 10
 	 * 1 validation message is expected.
-	 * It is expected to contain "Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
+	 * It is expected to contain "Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
 	 */
 	public void testLine92() {
 		List messages = getMessagesAtLine( 92 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.\" was issued." );
 	}
 
 	/*
@@ -1138,14 +1138,14 @@ public class Ternary1Test extends ValidationTestCase {
 	/*
 	 * a = ba :: (true ? d : true);
 	 * 1 validation message is expected.
-	 * It is expected to contain "No operation is defined for expressions ba and d with the :: operator in the expression ba :: d.".
+	 * It is expected to contain "boolean[] and del1 are not compatible types in the expression ba :: d".
 	 */
 	public void testLine202() {
 		List messages = getMessagesAtLine( 202 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "No operation is defined for expressions ba and d with the :: operator in the expression ba :: d." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"No operation is defined for expressions ba and d with the :: operator in the expression ba :: d.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "boolean[] and del1 are not compatible types in the expression ba :: d" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"boolean[] and del1 are not compatible types in the expression ba :: d\" was issued." );
 	}
 
 	/*

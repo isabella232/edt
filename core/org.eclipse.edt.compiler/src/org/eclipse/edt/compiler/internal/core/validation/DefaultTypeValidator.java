@@ -19,6 +19,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
+import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.IntervalType;
@@ -66,7 +69,21 @@ public class DefaultTypeValidator extends AbstractTypeValidator {
 			}
 		}
 		else if (typeBinding instanceof TimestampType) {
-			DateTimePattern dtPat = new DateTimePattern(((TimestampType)typeBinding).getPattern());
+			// Use the pattern from AST, which will be exactly as written by the user. The IRs lowercase the pattern when serializing, so
+			// they have a utility to "fix up" the pattern to the right case; therefore we should not use that version if we can avoid it.
+			String pattern = null;
+			if (type instanceof NameType) {
+				List<Expression> args = ((NameType)type).getArguments();
+				if (args.size() > 0 && args.get(0) instanceof LiteralExpression) {
+					pattern = ((LiteralExpression)args.get(0)).getValue();
+				}
+			}
+			if (pattern == null) {
+				// Shouldn't get here.
+				pattern = ((TimestampType)typeBinding).getPattern();
+			}
+			
+			DateTimePattern dtPat = new DateTimePattern(pattern);
 	  		if(!dtPat.isValidTimeStampPattern()) {
 	  			Integer[] errors = dtPat.getErrorMessageNumbers();
 	  			for( int i = 0; i < errors.length; i++ ) {
@@ -78,7 +95,21 @@ public class DefaultTypeValidator extends AbstractTypeValidator {
 	  		}
 		}
 		else if (typeBinding instanceof IntervalType) {
-			DateTimePattern dtPat = new DateTimePattern(((TimestampType)typeBinding).getPattern());
+			// Use the pattern from AST, which will be exactly as written by the user. The IRs lowercase the pattern when serializing, so
+			// they have a utility to "fix up" the pattern to the right case; therefore we should not use that version if we can avoid it.
+			String pattern = null;
+			if (type instanceof NameType) {
+				List<Expression> args = ((NameType)type).getArguments();
+				if (args.size() > 0 && args.get(0) instanceof LiteralExpression) {
+					pattern = ((LiteralExpression)args.get(0)).getValue();
+				}
+			}
+			if (pattern == null) {
+				// Shouldn't get here.
+				pattern = ((IntervalType)typeBinding).getPattern();
+			}
+			
+			DateTimePattern dtPat = new DateTimePattern(pattern);
 	  		if(!dtPat.isValidIntervalPattern()) {
 	  			Integer[] errors = dtPat.getErrorMessageNumbers();
 	  			for( int i = 0; i < errors.length; i++ ) {

@@ -62,8 +62,8 @@ handler ternary1
 		
 		// Cannot pass null to non-nullable parms
 		setValueInout(true
-			? null //1 A null cannot be passed to the non-nullable parameter i in function setValueIn
-			: null); //1 A null cannot be passed to the non-nullable parameter i in function setValueIn
+			? null //1 Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.
+			: null); //1 Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.
 		setValueInNullable(true ? null : null); //0
 		
 		// No set values as args
@@ -83,13 +83,13 @@ handler ternary1
 		// Exprs that are literals or const require the IN modifier (except for const if the parm is inout and const, it's also allowed)
 		setValueIn(true ? 10 : constRec.i); //0
 		setValueOut(true
-			? 10 //1 Error in argument 10 in function invocation setValueOut. Constants, literals and string literal expressions are not valid for use with parameters defined with the OUT modifier.
-			: constRec.i); //1 Error in argument constRec.i in function invocation setValueOut. Constants, literals and string literal expressions are not valid for use with parameters defined with the OUT modifier.
+			? 10 //1 Error in argument 10 in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier.
+			: constRec.i); //1 Error in argument constRec.i in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier.
 		setValueInout(true
-			? 10 //1 Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.
-			: constRec.i); //1 Error in argument constRec.i in function invocation setValueInout. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.
+			? 10 //1 Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.
+			: constRec.i); //1 Error in argument constRec.i in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.
 		setValueInoutConst(true
-			? 10 //1 Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and string literal expressions are not valid and argument constants are only valid if the parameter is also constant.
+			? 10 //1 Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.
 			: constRec.i); //0
 		
 		// Checks for IN: arg can't be 'super', CAN be 'this', arg & parm must be assignment compatible
@@ -199,7 +199,7 @@ handler ternary1
 		a = b * (true ? s : i); //2 No operation is defined for expressions b and s with the * operator in the expression b * s.|No operation is defined for expressions b and i with the * operator in the expression b * i.
 		a = s + true ? true : true; //0
 		i = i * 76 - (true ? 22 : i - 99) % (false ? getValue() * 88 : i >> 2); //0
-		a = ba :: (true ? d : true); //1 No operation is defined for expressions ba and d with the :: operator in the expression ba :: d.
+		a = ba :: (true ? d : true); //1 boolean[] and del1 are not compatible types in the expression ba :: d
 	end
 	
 	function forChecks()

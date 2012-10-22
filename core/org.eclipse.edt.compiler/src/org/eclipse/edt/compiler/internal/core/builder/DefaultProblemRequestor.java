@@ -207,7 +207,6 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(ROUTINE_MUST_HAVE_ONE_OR_TWO_ITEM_ARGUMENTS),
 		new Integer(INVALID_ROUND_ARG_1),
 		new Integer(INVALID_SUBSCRIPT),
-		new Integer(ROUTINE_MUST_HAVE_X_ARGS),
 		new Integer(ARG_MUST_BE_INTEGER_ITEM_CONSTANT_OR_LITERAL),
 		new Integer(ARG_MUST_BE_ITEM_STRING_CONSTANT_OR_LITERAL),
 		new Integer(ARG_MUST_BE_GREATER_THAN_ZERO),

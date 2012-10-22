@@ -13,9 +13,7 @@ record Zmyrec
 i int;
 end
 
-
-
-Library ZMySource type BasicLibrary
+Library ZMySource
 Zi int;// 0
 const Zj int = 5;// 0
 

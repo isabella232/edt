@@ -886,6 +886,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	        				functionInvocation.getTarget().getCanonicalString()
 	        			});
 				functionInvocation.setBindAttempted(true);
+				functionInvocation.getTarget().setMember(null);
 				return;
 			}
 			if (functions.size() > 1) {
@@ -896,6 +897,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	        				functionInvocation.getTarget().getCanonicalString()
 	        			});
 				functionInvocation.setBindAttempted(true);
+				functionInvocation.getTarget().setMember(null);
 				return;
 			}
 			
