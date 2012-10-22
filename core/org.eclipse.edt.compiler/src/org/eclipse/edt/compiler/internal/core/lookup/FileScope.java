@@ -99,7 +99,7 @@ public class FileScope extends Scope {
         
     }
     
-   private List<Type> findTypeInImplicitSystemPackages(String simpleName) {
+   protected List<Type> findTypeInImplicitSystemPackages(String simpleName) {
 	   List<Type> parts = new ArrayList<Type>();
 	   for (String pkg : implicitSystemPackages) {
            Part temp = BindingUtil.getPart(fileBinding.getEnvironment().getPartBinding(pkg, simpleName));
