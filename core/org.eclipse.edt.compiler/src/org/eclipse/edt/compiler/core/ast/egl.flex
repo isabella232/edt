@@ -190,7 +190,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"constructor"		{ return symbol(NodeTypes.CONSTRUCTOR); }
 	"continue"			{ return symbol(NodeTypes.CONTINUE); }
 	"current"			{ return symbol(NodeTypes.CURRENT); }
-	"dataitem"			{ return symbol(NodeTypes.DATAITEM); }
 	"decrement"			{ return symbol(NodeTypes.DECREMENT); }
 	"delegate"			{ return symbol(NodeTypes.DELEGATE); }
 	"delete"			{ return symbol(NodeTypes.DELETE); }
