@@ -1159,9 +1159,10 @@ public class IRUtils {
 			return type1.elementsNullable() == type2.elementsNullable();
 		}
 		
-		if (type1.elementsNullable() != type2.elementsNullable()) {
-			return false;
-		}
+		//TODO see note below. temporarily making arrays less strict.
+//		if (type1.elementsNullable() != type2.elementsNullable()) {
+//			return false;
+//		}
 		
 		if (elementType1 instanceof ParameterizedType) {
 			elementType1 = ((ParameterizedType)elementType1).getParameterizableType();
@@ -1174,17 +1175,22 @@ public class IRUtils {
 			return true;
 		}
 		
-		boolean elementType1IsReference = TypeUtils.isReferenceType(elementType1);
-		if (elementType1IsReference != TypeUtils.isReferenceType(elementType2)) {
-			return false;
-		}
+		//TODO see note below. temporarily making arrays less strict.
+//		boolean elementType1IsReference = TypeUtils.isReferenceType(elementType1);
+//		if (elementType1IsReference != TypeUtils.isReferenceType(elementType2)) {
+//			return false;
+//		}
 		
 		if (elementType1 instanceof ArrayType && elementType2 instanceof ArrayType) {
 			return areArraysCompatible((ArrayType)elementType1, (ArrayType)elementType2);
 		}
 		
-		// Element types must match exactly.
-		return elementType1.equals(elementType2);
+		//TODO the below check was too restrictive. While we figure out the right solution for array type compatibility,
+		// we'll keep it looser like in earlier releases.
+		
+//		// Element types must match exactly.
+//		return elementType1.equals(elementType2);
+		return TypeUtils.areCompatible(elementType1.getClassifier(), elementType2.getClassifier());
 	}
 	
 	public static String getFileName(EObject obj) {
