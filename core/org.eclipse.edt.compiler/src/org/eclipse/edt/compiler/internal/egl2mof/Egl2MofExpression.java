@@ -984,7 +984,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return false;
 	}
 
-	private boolean isSuperTypeMember(Element binding) {
+	private boolean isSuperTypeMember(Object binding) {
 		if (binding == null)
 			return false;
 		
