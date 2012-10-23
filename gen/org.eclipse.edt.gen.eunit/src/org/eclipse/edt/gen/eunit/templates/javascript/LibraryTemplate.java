@@ -43,7 +43,7 @@ public class LibraryTemplate extends EUnitTemplate {
 	
 	public void genLibDriverClassBody(Library part, Context ctx, TabbedWriter out, String driverPartNameAppend, TestCounter counter){
 		String genedHandlerName = part.getCaseSensitiveName() + driverPartNameAppend;
-		out.println("Handler " + genedHandlerName + " type RUIhandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" +genedHandlerName + "\"} ");
+		out.println("Handler " + genedHandlerName + " type RUIHandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" +genedHandlerName + "\"} ");
 		
 		out.pushIndent();
 		//out.println("use " + part.getFullyQualifiedName() + ";");		
