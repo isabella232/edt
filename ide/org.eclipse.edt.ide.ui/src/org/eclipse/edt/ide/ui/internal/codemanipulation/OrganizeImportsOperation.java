@@ -13,6 +13,8 @@ package org.eclipse.edt.ide.ui.internal.codemanipulation;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -426,6 +428,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 					monitor);
 				
 				removeTypesInDefaultPackage(typeList);
+				removeTypesWithSamePackageAndName(typeList);
 				
 				int foundCnts = typeList.size();
 				if(foundCnts == 1)
@@ -478,6 +481,28 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 			if(pInfo.getPackageName().length() == 0) {
 				iter.remove();
 			}
+		}
+	}
+	
+	private void  removeTypesWithSamePackageAndName(List typeList) {
+		Map<String, Set<String>> pkgToNamesMap = new HashMap<String, Set<String>>();
+		
+		for(Iterator iter = typeList.iterator(); iter.hasNext();) {
+			PartInfo pInfo = (PartInfo) iter.next();
+			Set<String> set = pkgToNamesMap.get(pInfo.getPackageName());
+			if (set == null) {
+				set = new HashSet<String>();
+				set.add(pInfo.getPartName());
+				pkgToNamesMap.put(pInfo.getPackageName(), set);
+			}
+			else {
+				if (set.contains(pInfo.getPartName())) {
+					iter.remove();
+				}
+				else {
+					set.add(pInfo.getPartName());
+				}
+			}			
 		}
 	}
 

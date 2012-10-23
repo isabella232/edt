@@ -672,9 +672,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			nameExpr.setId(name.getCaseSensitiveIdentifier());
 			
 			Object qualBinding = name.getQualifier().resolveElement();
-			if (qualBinding instanceof Part && 
-				!isInUse((Part)qualBinding) ||
-				qualBinding instanceof Enumeration){
+			if (qualBinding instanceof Part){
 				nameExpr.setQualifier(createNameForPart((Part)qualBinding));
 			}
 			else {
@@ -685,11 +683,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return false;
 	}
 
-	private boolean isInUse(Type binding){
-		return binding instanceof Library && 
-				currentPart instanceof LogicAndDataPart &&
-				((LogicAndDataPart)currentPart).getUsedParts().contains(mofTypeFor((Library)binding));
-	}
 	private boolean isInOtherLibrary(Container binding){
 		return (binding instanceof Library && 
 				!mofTypeFor((Library)binding).equals(currentPart));
