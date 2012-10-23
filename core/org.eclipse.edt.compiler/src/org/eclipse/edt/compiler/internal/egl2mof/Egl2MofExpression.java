@@ -568,12 +568,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			PartName name = factory.createPartName();
 			String packageName;
 			packageName = ((Part)binding).getCaseSensitivePackageName();
-			//TODO - remove this temporary hardcoded remapping of "egl.core" system parts when the front
-			// end references to system parts are handled through a proper System Scope configuration
-			// that will bind to the configured part
-			if (packageName.equals("egl.core")) {
-				packageName = "egl.lang";
-			}
 
 			name.setPackageName(packageName);
 			name.setId(((Part)binding).getCaseSensitiveName());
@@ -586,7 +580,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.SimpleName node) {
-		Element binding = (Element)node.resolveElement(); 
+		Object binding = node.resolveElement(); 
 		// Since there was no binding this is an invalid name
 		if (binding == null) {
 			Name invalid;
@@ -677,7 +671,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			stack.push(nameExpr);
 			nameExpr.setId(name.getCaseSensitiveIdentifier());
 			
-			Element qualBinding = (Element)name.getQualifier().resolveElement();
+			Object qualBinding = name.getQualifier().resolveElement();
 			if (qualBinding instanceof Part && 
 				!isInUse((Part)qualBinding) ||
 				qualBinding instanceof Enumeration){

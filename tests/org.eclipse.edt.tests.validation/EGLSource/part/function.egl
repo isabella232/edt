@@ -13,7 +13,6 @@ Library validateParamsAndDeclarationsLibrary // 0
 	function func(
 		p1 notEmptyRec,		//0
 
-		p2 intItem,			//0
 		p3 emptyFlexRec,	//1
 		p4 emptyFixedRec,	//1
 		p5 cantBeResolved	//1
@@ -98,13 +97,10 @@ record annot1 type annotation
 	x int;
 end
 
-DataItem intItem int end
-
 Program validateReturnProgram
 	function main() returns (int) end 		//0
 	function func() returns (boolean) end	//0
 	function func2() returns (int[]) end	//0
-	function func3() returns (intItem) end					//0
 	function func4() returns (dictionary) end				//0
 	function func7() returns (myService) end				//1 The type myService is not a valid type for a data declaration.
 	function func8() returns (myInterface) end				//0
