@@ -84,13 +84,12 @@ public class DefaultTypeValidator extends AbstractTypeValidator {
 			}
 			
 			DateTimePattern dtPat = new DateTimePattern(pattern);
-	  		if(!dtPat.isValidTimeStampPattern()) {
+	  		if (!dtPat.isValidTimeStampPattern()) {
 	  			Integer[] errors = dtPat.getErrorMessageNumbers();
-	  			for( int i = 0; i < errors.length; i++ ) {
+	  			for (int i = 0; i < errors.length; i++) {
 	  				problemRequestor.acceptProblem(type,
 	  						errors[i].intValue(),
-							new String[] {((TimestampType)typeBinding).getPattern()});
-	  						
+							new String[] {pattern});
 	  			}
 	  		}
 		}
@@ -110,13 +109,12 @@ public class DefaultTypeValidator extends AbstractTypeValidator {
 			}
 			
 			DateTimePattern dtPat = new DateTimePattern(pattern);
-	  		if(!dtPat.isValidIntervalPattern()) {
+	  		if (!dtPat.isValidIntervalPattern()) {
 	  			Integer[] errors = dtPat.getErrorMessageNumbers();
-	  			for( int i = 0; i < errors.length; i++ ) {
+	  			for (int i = 0; i < errors.length; i++) {
 	  				problemRequestor.acceptProblem(type,
 	  						errors[i].intValue(),
-							new String[] {((TimestampType)typeBinding).getPattern()});
-	  						
+							new String[] {pattern});
 	  			}
 	  		}
 		}
