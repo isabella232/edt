@@ -332,6 +332,9 @@ end
 externalType EGLHandler extends EGLClass type MofClass {name="Handler"}
 end
 
+externalType EGLClassPart extends EGLClass type MofClass {name="Class"}
+end
+
 externalType EGLLibrary extends EGLClass, StaticType type MofClass {name="Library"}
 end
 

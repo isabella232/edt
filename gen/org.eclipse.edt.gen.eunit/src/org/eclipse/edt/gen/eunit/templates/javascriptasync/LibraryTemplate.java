@@ -39,8 +39,9 @@ public class LibraryTemplate extends EUnitTemplate {
 	}	
 	
 	public void genLibDriverImports(Library part, Context ctx, TabbedWriter out){
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestListMgr;");
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".runTestMethod;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".ServiceBindingType;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME +".TestListMgr;");
 		generateLibDriverImportStatements(part, ctx, out);
 	}
 	
@@ -147,7 +148,7 @@ public class LibraryTemplate extends EUnitTemplate {
 	
 	public void genLibDriverClassBody(Library part, Context ctx, TabbedWriter out, String driverPartNameAppend, TestCounter counter){
 		String genedHandlerName = part.getCaseSensitiveName() + driverPartNameAppend;
-		out.println("Handler " + genedHandlerName + " type RUIhandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" +genedHandlerName + "\"} ");
+		out.println("Handler " + genedHandlerName + " type RUIHandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" +genedHandlerName + "\"} ");
 		
 		out.pushIndent();	
 		out.println("startTS timestamp?;");

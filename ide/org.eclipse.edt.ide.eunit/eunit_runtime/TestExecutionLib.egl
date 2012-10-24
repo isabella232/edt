@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 
+import eglx.xml.XmlLib;
+
 // basic library
 library TestExecutionLib
 	

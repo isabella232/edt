@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+
 //Put EGL Source File Contents Here
 ExternalType File type JavaObject {packageName = "java.io"}
 	 constructor (pathname String In);
@@ -24,7 +27,7 @@ ExternalType FileWriter type JavaObject { packageName = "java.io"}
 	constructor (file File In);
 	constructor (filename String In);
 	function write(str String In);
-	function close_() {externalName ="close"};
+	function close_() {@externalName{"close"}};
 end
 
 ExternalType IOException type JavaObject { packageName = "java.io"}

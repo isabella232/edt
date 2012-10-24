@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 
+import eglx.rbd.StrLib;
+import eglx.xml.XmlLib;
+
 /**
   * this library is responsible to persist the test result
   * 

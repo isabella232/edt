@@ -140,6 +140,7 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 	}	
 	
 	protected void generateLibDriverImportStatements(Part part, Context ctx, TabbedWriter out) {
+		out.println("import eglx.ui.rui.RUIHandler;");
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestExecutionLib;");
 		out.println();
 	}	

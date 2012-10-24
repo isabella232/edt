@@ -28,8 +28,9 @@ public class EUnitRunAllJavascriptAsyncDriverGenerator extends
 	
 	@Override
 	protected void genImports() {
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME +".TestListMgr;");
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".runTestMethod;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".ServiceBindingType;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME +".TestListMgr;");
 		super.genImports();
 	}
 
@@ -41,7 +42,7 @@ public class EUnitRunAllJavascriptAsyncDriverGenerator extends
 		genImports();
 
 		String genedPartName = RunAllTest + fDriverPartNameAppend;		
-		out.println("Handler " + genedPartName + " type RUIhandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" + genedPartName + "\"} ");
+		out.println("Handler " + genedPartName + " type RUIHandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" + genedPartName + "\"} ");
 		out.pushIndent();		
 		out.println("startTS timestamp?;");
 		out.println();

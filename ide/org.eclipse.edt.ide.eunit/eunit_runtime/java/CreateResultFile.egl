@@ -10,9 +10,7 @@
  *
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
-//
-//
-//this is rui/javascript implementation, need to call dedicated service to do the file persistent 
+
 handler CreateResultFile
 		
 	/**
