@@ -278,7 +278,11 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static boolean isDynamicType(Type type) {
-		return (type != null && type.getClassifier() != null && type.getClassifier().getAnnotation("egl.lang.reflect.Dynamic") != null);
+		try {
+			return (type != null && type.getClassifier() != null && type.getClassifier().getAnnotation("egl.lang.reflect.Dynamic") != null);
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 	public static boolean isStaticType(Type type) {

@@ -138,4 +138,14 @@ public class ProxyElement extends ProxyEObject implements Element, Member {
 		return getName();
 	}
 
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
+
+	@Override
+	public Member resolveMember() {
+		return this;
+	}
+
 }

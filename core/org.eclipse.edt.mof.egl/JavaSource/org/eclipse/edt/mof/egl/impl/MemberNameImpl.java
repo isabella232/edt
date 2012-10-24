@@ -12,6 +12,8 @@
 package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
@@ -63,5 +65,26 @@ public class MemberNameImpl extends NameImpl implements MemberName {
 		mbrAccess.setId(getId());
 		mbrAccess.setQualifier(expr);
 		return mbrAccess;
+	}
+
+	@Override
+	public Field resolveField() {
+		if (getMember() instanceof Field) {
+			return (Field)getMember();
+		}
+		return null;
+	}
+
+	@Override
+	public Member resolveMember() {
+		return getMember();
+	}
+
+	@Override
+	public Function resolveFunction() {
+		if (getMember() instanceof Function) {
+			return (Function)getMember();
+		}
+		return null;
 	}
 }

@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 
-public interface Part extends Classifier {
+public interface Part extends Classifier, PartReference {
 	AccessKind getAccessKind();
 	
 	void setAccessKind(AccessKind value);

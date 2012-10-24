@@ -19,7 +19,9 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.impl.EEnumLiteralImpl;
 import org.eclipse.edt.mof.utils.NameUtile;
@@ -187,6 +189,16 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	public void removeAnnotation(Annotation ann) {
 		getAnnotations().remove(ann);
 		
+	}
+
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
+
+	@Override
+	public Member resolveMember() {
+		return this;
 	}
 	
 }

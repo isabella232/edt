@@ -81,4 +81,8 @@ public class FunctionImpl extends FunctionMemberImpl implements Function {
 		}
 	}
 	
+	@Override
+	public Function resolveFunction() {
+		return this;
+	}
 }

@@ -24,6 +24,7 @@ import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FloatingPointLiteral;
@@ -32,6 +33,7 @@ import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Literal;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NullLiteral;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.TextTypeLiteral;
@@ -347,6 +349,16 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 		}
 		return null;
 		
+	}
+
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
+
+	@Override
+	public Part resolvePart() {
+		return this;
 	}
 	
 }

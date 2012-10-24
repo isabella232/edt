@@ -69,4 +69,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	public void removeAnnotation(Annotation ann) {
 		getAnnotations().remove(ann);
 	}
+	
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
 }

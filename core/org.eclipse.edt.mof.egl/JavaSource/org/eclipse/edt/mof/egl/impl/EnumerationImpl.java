@@ -19,10 +19,12 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
@@ -313,5 +315,15 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 		else {
 			return false;
 		}
+	}
+
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
+
+	@Override
+	public Part resolvePart() {
+		return this;
 	}
 }

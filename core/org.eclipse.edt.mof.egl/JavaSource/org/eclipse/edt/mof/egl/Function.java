@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 
-public interface Function extends FunctionMember, SubType {
+public interface Function extends FunctionMember, SubType, FunctionReference {
 	Field getReturnField();
 	
 	void setReturnField(Field value);

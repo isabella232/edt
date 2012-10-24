@@ -688,6 +688,11 @@ public class BindingUtil {
 				if (NameUtile.equals(id, mbr.getId())) {
 					if (!isPrivate(mbr)) {
 						list.add(mbr);
+						//If we find a field, we can stop searching, but for functions, we want to collect all the functions
+						//with the given name
+						if (mbr instanceof Field) {
+							return list;
+						}
 					}
 				}
 			}
@@ -702,29 +707,22 @@ public class BindingUtil {
 	public static List<Member> findMembers(Type type, String id) {
 		if (type instanceof Container) {
 			
-			// First try to resolve within the part itself.
 			List<Member> list = new ArrayList<Member>();
-			for (Member mbr : ((Container)type).getMembers()) {
+			for (Member mbr : ((Container)type).getAllMembers()) {
 				if (NameUtile.equals(id, mbr.getId())) {
 					list.add(mbr);
-				}
-			}
-			if (!list.isEmpty()) {
-				return list;
-			}
-			
-			// Not in this part - check all the super types.
-			if (type instanceof StructPart && !((StructPart)type).getSuperTypes().isEmpty()) {
-				for (StructPart superType : ((StructPart)type).getSuperTypes()) {
-					List<Member> temp = findMembers(superType, id);
-					if (temp != null) {
-						list.addAll(temp);
+					
+					//If we find a field, we can stop searching, but for functions, we want to collect all the functions
+					//with the given name
+					if (mbr instanceof Field) {
+						return list;
 					}
 				}
-				if (!list.isEmpty()) {
-					return list;
-				}
 			}
+			if (list.isEmpty()) {
+				return null;
+			}
+			return list;
 		}
 		return null;
 	}

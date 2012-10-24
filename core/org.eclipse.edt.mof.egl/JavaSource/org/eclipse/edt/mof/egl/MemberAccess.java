@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 
-public interface MemberAccess extends Name {
+public interface MemberAccess extends Name, FieldReference, FunctionReference {
 	Member getMember() throws NoSuchMemberError;
 	
 	void setMember(Member value);

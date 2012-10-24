@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 
-public interface Member extends TypedElement {
+public interface Member extends TypedElement, MemberReference {
 	Boolean isStatic();
 	
 	void setIsStatic(Boolean value);

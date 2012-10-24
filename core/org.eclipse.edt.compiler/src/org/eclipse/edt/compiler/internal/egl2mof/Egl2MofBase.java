@@ -777,9 +777,6 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				}
 			}
 			
-			if (eType instanceof ProxyPart && type instanceof Part && ((ProxyPart) eType).getMofSerializationKey().equalsIgnoreCase(type.getMofSerializationKey())) {
-				eType = type;
-			}
 		}
 		
 		return eType;

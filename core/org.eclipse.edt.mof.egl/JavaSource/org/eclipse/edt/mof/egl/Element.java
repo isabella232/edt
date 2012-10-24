@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.EObject;
  * a list of annotation values.
  *
  */
-public interface Element extends EObject {
+public interface Element extends EObject, ElementReference {
 	List<Annotation> getAnnotations();
 	
 	
