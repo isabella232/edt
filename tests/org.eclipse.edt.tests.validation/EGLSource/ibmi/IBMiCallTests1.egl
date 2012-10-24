@@ -8,54 +8,54 @@ program pgm1 {}
 	
 	function f1(p1 decimal)
 			i1 int;
-			call fp10(i1) using conn;//target function has no ibmiProgram
+			call fp10(i1) using conn;// 1 target function has no ibmiProgram
 	end
 
 	function f2(p1 decimal)
 			i1 int;
-			call fp9(i1);//can't resolve connection
+			call fp9(i1);// 1 can't resolve connection
 	end
 
 	function f3(p1 decimal)
 			i1 boolean;
-			call fp9(i1) using conn;//wrong data type
+			call fp9(i1) using conn;// 1 wrong data type
 	end
 
 	function f4(p1 decimal)
 			i1 int;
-			call fp9(i1) using conn returning to fp9;//no callback
+			call fp9(i1) using conn returning to fp9;// 1 no callback
 	end
 
 	function f5(p1 decimal)
 			i1 int;
-			call fp9(i1) using conn onexception fp9;//no onexception
+			call fp9(i1) using conn onexception fp9;// 1 no onexception
 	end
 
 	function f6(p1 decimal)
 			i1, i2 int;
-			call fp9(i1) using conn returns(i2);//fp9 doesn't return anything
+			call fp9(i1) using conn returns(i2);// 1 fp9 doesn't return anything
 	end
 
 	function f7(p1 decimal)
 			i1 int;
 			i2 time;
-			call fp8(i1) using conn returns(i2);//f8 returns an int time is wrong return type
+			call fp8(i1) using conn returns(i2);// 1 f8 returns an int time is wrong return type
 	end
 
 	function f8(p1 decimal)
 			i1 int;
 			i2 time;
-			call fp8(i1) using conn;//f8 returns an int no return
+			call fp8(i1) using conn;// 1 f8 returns an int no return
 	end
 
 	function f9(p1 decimal)
 			i1 int;
-			call Service1.fp9(i1) using conn;//target function is a service function
+			call Service1.fp9(i1) using conn;// 1 target function is a service function
 	end
 
 	function f10(p1 decimal)
 			i1 int;
-			call field1(i1) using conn;//target is a field not a function
+			call field1(i1) using conn;// 1 target is a field not a function
 	end
 
 	function fp8 (p1 int)returns(int)
@@ -77,7 +77,7 @@ service service1 {}
 	conn JTopenConnection?;
 	function f1(p1 decimal)
 			i1 int;
-			call this.fp9(i1) using conn;//target function has no ibmiProgram
+			call this.fp9(i1) using conn;// 1 target function has no ibmiProgram
 	end
 	function fp9 (p1 int)
 		{@IBMiProgram{}} 

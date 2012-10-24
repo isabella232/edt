@@ -45,7 +45,7 @@ record err
 	f6 bigint {@Structbin2}; //1 not compatible with the type
 	f7 bigint {@Structdate}; //1 not compatible with the type
 	f8 decimal(19) {@Structunsignedbin8}; //1 not compatible with the type
-	f9 date {@Structtimestamp}; //not compatible with the type
+	f9 date {@Structtimestamp}; //1 not compatible with the type
 	fa timestamp("yyyy") {@Structdate}; //1 not compatible with the type
 	fb timestamp {@Structtimestamp{eglPattern = "yyddd"}}  = ""; //1 Invalid pattern
 	fba timestamp {@Structtimestamp{}}  = ""; //1 eglPattern must be specified
@@ -130,7 +130,7 @@ program pgm1 {}
 	
 	function f11(p1 string, p2 string(10))
 			{@IBMiProgram{
-				parameterAnnotations = [@StructText{Length = 20}]  //must exactly match the number of parameters
+				parameterAnnotations = [@StructText{Length = 20}]  //1 must exactly match the number of parameters
 			}}
 	end
 
