@@ -963,7 +963,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		eClass.getMetadataList().add(getTempClassMarker());
 		List<EClass> superTypes = new ArrayList<EClass>();
 		for (StructPart superType : part.getSuperTypes()) {
-			superTypes.add((EClass)mofTypeFor(superType));
+			EObject obj = mofTypeFor(superType);
+			if (obj instanceof EClass) {
+				superTypes.add((EClass)obj);
+			}
 		}
 		eClass.addSuperTypes(superTypes);
 		return eClass;

@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 
-public interface PartName extends TypeName {
+public interface PartName extends TypeName, PartReference {
 	String getPackageName();
 	
 	void setPackageName(String value);
