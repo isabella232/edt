@@ -16,143 +16,148 @@ public class IBMiCallTests1Test extends ValidationTestCase {
 	/*
 	 * call fp10(i1) using conn;
 	 * 1 validation message is expected.
-	 * It is expected to contain "target function has no ibmiProgram".
+	 * It is expected to contain "The function fp10 must be defined with the IBMiProgram annotation".
 	 */
 	public void testLine11() {
 		List messages = getMessagesAtLine( 11 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "target function has no ibmiProgram" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"target function has no ibmiProgram\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The function fp10 must be defined with the IBMiProgram annotation" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The function fp10 must be defined with the IBMiProgram annotation\" was issued." );
 	}
 
 	/*
 	 * call fp9(i1);
 	 * 1 validation message is expected.
-	 * It is expected to contain "can't resolve connection".
+	 * It is expected to contain "An IBM i call statement requires a connection, the using clause and the target function @Resource are missing".
 	 */
 	public void testLine16() {
 		List messages = getMessagesAtLine( 16 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "can't resolve connection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"can't resolve connection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "An IBM i call statement requires a connection, the using clause and the target function @Resource are missing" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"An IBM i call statement requires a connection, the using clause and the target function @Resource are missing\" was issued." );
 	}
 
 	/*
 	 * call fp9(i1) using conn;
 	 * 1 validation message is expected.
-	 * It is expected to contain "wrong data type".
+	 * It is expected to contain "The argument i1 cannot be passed to the inOut or Out parameter p1 of the function fp9. The types boolean and int are not reference compatible".
 	 */
 	public void testLine21() {
 		List messages = getMessagesAtLine( 21 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "wrong data type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"wrong data type\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The argument i1 cannot be passed to the inOut or Out parameter p1 of the function fp9. The types boolean and int are not reference compatible" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The argument i1 cannot be passed to the inOut or Out parameter p1 of the function fp9. The types boolean and int are not reference compatible\" was issued." );
 	}
 
 	/*
 	 * call fp9(i1) using conn returning to fp9;
 	 * 1 validation message is expected.
-	 * It is expected to contain "no callback".
+	 * It is expected to contain "A \"returning to\" or \"onexception\" expression is not allowed for a call to a local function".
 	 */
 	public void testLine26() {
 		List messages = getMessagesAtLine( 26 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "no callback" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"no callback\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "A \"returning to\" or \"onexception\" expression is not allowed for a call to a local function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A \"returning to\" or \"onexception\" expression is not allowed for a call to a local function\" was issued." );
 	}
 
 	/*
 	 * call fp9(i1) using conn onexception fp9;
 	 * 1 validation message is expected.
-	 * It is expected to contain "no onexception".
+	 * It is expected to contain "A \"returning to\" or \"onexception\" expression is not allowed for a call to a local function".
 	 */
 	public void testLine31() {
 		List messages = getMessagesAtLine( 31 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "no onexception" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"no onexception\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "A \"returning to\" or \"onexception\" expression is not allowed for a call to a local function" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A \"returning to\" or \"onexception\" expression is not allowed for a call to a local function\" was issued." );
 	}
 
 	/*
 	 * call fp9(i1) using conn returns(i2);
 	 * 1 validation message is expected.
-	 * It is expected to contain "fp9 doesn't return anything".
+	 * It is expected to contain "The call statement cannot specify a returns value, because the function fp9 does not return a value.".
 	 */
 	public void testLine36() {
 		List messages = getMessagesAtLine( 36 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "fp9 doesn't return anything" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"fp9 doesn't return anything\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The call statement cannot specify a returns value, because the function fp9 does not return a value." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement cannot specify a returns value, because the function fp9 does not return a value.\" was issued." );
 	}
 
 	/*
 	 * call fp8(i1) using conn returns(i2);
 	 * 1 validation message is expected.
-	 * It is expected to contain "f8 returns an int time is wrong return type".
+	 * It is expected to contain "The return type fp8 of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement.".
 	 */
 	public void testLine42() {
 		List messages = getMessagesAtLine( 42 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "f8 returns an int time is wrong return type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"f8 returns an int time is wrong return type\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type fp8 of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type fp8 of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement.\" was issued." );
 	}
 
 	/*
 	 * call fp8(i1) using conn;
 	 * 1 validation message is expected.
-	 * It is expected to contain "f8 returns an int no return".
+	 * It is expected to contain "The call statement must specify a returns expression.".
 	 */
 	public void testLine48() {
 		List messages = getMessagesAtLine( 48 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "f8 returns an int no return" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"f8 returns an int no return\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The call statement must specify a returns expression." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The call statement must specify a returns expression.\" was issued." );
 	}
 
 	/*
 	 * call Service1.fp9(i1) using conn;
 	 * 1 validation message is expected.
-	 * It is expected to contain "target function is a service function".
+	 * It is expected to contain "Only a library part can be use as a qualifier.".
 	 */
 	public void testLine53() {
 		List messages = getMessagesAtLine( 53 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "target function is a service function" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"target function is a service function\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Only a library part can be use as a qualifier." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Only a library part can be use as a qualifier.\" was issued." );
 	}
 
 	/*
 	 * call field1(i1) using conn;
 	 * 1 validation message is expected.
-	 * It is expected to contain "target is a field not a function".
+	 * It is expected to contain "The target of the Call must be a proxy function.".
 	 */
 	public void testLine58() {
 		List messages = getMessagesAtLine( 58 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "target is a field not a function" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"target is a field not a function\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The target of the Call must be a proxy function." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The target of the Call must be a proxy function.\" was issued." );
 	}
 
 	/*
 	 * call this.fp9(i1) using conn;
-	 * 1 validation message is expected.
-	 * It is expected to contain "target function has no ibmiProgram".
+	 * 0 validation messages are expected.
 	 */
 	public void testLine80() {
 		List messages = getMessagesAtLine( 80 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "target function has no ibmiProgram" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"target function has no ibmiProgram\" was issued." );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * call fp9(i1) using conn;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine84() {
+		List messages = getMessagesAtLine( 84 );
+		assertEquals( 0, messages.size() );
 	}
 }

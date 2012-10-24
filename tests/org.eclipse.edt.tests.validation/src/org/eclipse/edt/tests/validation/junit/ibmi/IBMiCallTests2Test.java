@@ -104,40 +104,40 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call srvIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function srvIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type srvibmireturn of the function srvIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine32() {
 		List messages = getMessagesAtLine( 32 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function srvIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function srvIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type srvibmireturn of the function srvIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type srvibmireturn of the function srvIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
 	 * call this.srvIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function srvIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type srvibmireturn of the function srvIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine33() {
 		List messages = getMessagesAtLine( 33 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function srvIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function srvIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type srvibmireturn of the function srvIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type srvibmireturn of the function srvIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call srvIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine36() {
-		List messages = getMessagesAtLine( 36 );
+	public void testLine35() {
+		List messages = getMessagesAtLine( 35 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -150,16 +150,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call this.srvIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine39() {
-		List messages = getMessagesAtLine( 39 );
+	public void testLine38() {
+		List messages = getMessagesAtLine( 38 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -172,16 +172,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call srvIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine43() {
-		List messages = getMessagesAtLine( 43 );
+	public void testLine42() {
+		List messages = getMessagesAtLine( 42 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -194,16 +194,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call this.srvIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine46() {
-		List messages = getMessagesAtLine( 46 );
+	public void testLine45() {
+		List messages = getMessagesAtLine( 45 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -254,27 +254,27 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call srvFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine57() {
 		List messages = getMessagesAtLine( 57 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
 	 * call this.srvFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine58() {
 		List messages = getMessagesAtLine( 58 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
@@ -376,27 +376,27 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call lib1.libIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function libIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type libibmireturn of the function libIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine106() {
 		List messages = getMessagesAtLine( 106 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function libIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function libIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type libibmireturn of the function libIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type libibmireturn of the function libIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call lib1.libIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine109() {
-		List messages = getMessagesAtLine( 109 );
+	public void testLine108() {
+		List messages = getMessagesAtLine( 108 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -409,16 +409,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call lib1.libIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine113() {
-		List messages = getMessagesAtLine( 113 );
+	public void testLine112() {
+		List messages = getMessagesAtLine( 112 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -451,14 +451,14 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call lib1.libFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine121() {
 		List messages = getMessagesAtLine( 121 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
@@ -578,40 +578,40 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call handIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function handIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine163() {
 		List messages = getMessagesAtLine( 163 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function handIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function handIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
 	 * call this.handIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function handIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine164() {
 		List messages = getMessagesAtLine( 164 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function handIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function handIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call handIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine167() {
-		List messages = getMessagesAtLine( 167 );
+	public void testLine166() {
+		List messages = getMessagesAtLine( 166 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -624,16 +624,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call this.handIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine170() {
-		List messages = getMessagesAtLine( 170 );
+	public void testLine169() {
+		List messages = getMessagesAtLine( 169 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -646,16 +646,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call handIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine175() {
-		List messages = getMessagesAtLine( 175 );
+	public void testLine174() {
+		List messages = getMessagesAtLine( 174 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -668,16 +668,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call this.handIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine178() {
-		List messages = getMessagesAtLine( 178 );
+	public void testLine177() {
+		List messages = getMessagesAtLine( 177 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -728,27 +728,27 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call handFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine189() {
 		List messages = getMessagesAtLine( 189 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
 	 * call this.handFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine190() {
 		List messages = getMessagesAtLine( 190 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
@@ -894,40 +894,40 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call pgmIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function pgmIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type pgmibmireturn of the function pgmIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine238() {
 		List messages = getMessagesAtLine( 238 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function pgmIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function pgmIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type pgmibmireturn of the function pgmIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type pgmibmireturn of the function pgmIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
 	 * call this.pgmIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function pgmIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type pgmibmireturn of the function pgmIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine239() {
 		List messages = getMessagesAtLine( 239 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function pgmIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function pgmIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type pgmibmireturn of the function pgmIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type pgmibmireturn of the function pgmIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call pgmIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine242() {
-		List messages = getMessagesAtLine( 242 );
+	public void testLine241() {
+		List messages = getMessagesAtLine( 241 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -940,16 +940,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call this.pgmIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine245() {
-		List messages = getMessagesAtLine( 245 );
+	public void testLine244() {
+		List messages = getMessagesAtLine( 244 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -962,16 +962,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call pgmIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine250() {
-		List messages = getMessagesAtLine( 250 );
+	public void testLine249() {
+		List messages = getMessagesAtLine( 249 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -984,16 +984,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call this.pgmIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine253() {
-		List messages = getMessagesAtLine( 253 );
+	public void testLine252() {
+		List messages = getMessagesAtLine( 252 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1044,27 +1044,27 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call pgmFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine264() {
 		List messages = getMessagesAtLine( 264 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
 	 * call this.pgmFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine265() {
 		List messages = getMessagesAtLine( 265 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
@@ -1166,27 +1166,27 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call lib1.libIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function libIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type libibmireturn of the function libIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine287() {
 		List messages = getMessagesAtLine( 287 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function libIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function libIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type libibmireturn of the function libIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type libibmireturn of the function libIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call lib1.libIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine290() {
-		List messages = getMessagesAtLine( 290 );
+	public void testLine289() {
+		List messages = getMessagesAtLine( 289 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1199,16 +1199,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call lib1.libIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine294() {
-		List messages = getMessagesAtLine( 294 );
+	public void testLine293() {
+		List messages = getMessagesAtLine( 293 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1241,14 +1241,14 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call lib1.libFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine302() {
 		List messages = getMessagesAtLine( 302 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*
@@ -1324,27 +1324,27 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call hand1.handIBMiReturn() returns (d);
 	 * 1 validation message is expected.
-	 * It is expected to contain "return type int of the function handIBMiReturn is not compatible with the type date".
+	 * It is expected to contain "The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.".
 	 */
 	public void testLine322() {
 		List messages = getMessagesAtLine( 322 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "return type int of the function handIBMiReturn is not compatible with the type date" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"return type int of the function handIBMiReturn is not compatible with the type date\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.\" was issued." );
 	}
 
 	/*
-	 * using "binding:fred"
+	 * call hand1.handIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine325() {
-		List messages = getMessagesAtLine( 325 );
+	public void testLine324() {
+		List messages = getMessagesAtLine( 324 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1357,16 +1357,16 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	}
 
 	/*
-	 * using Resources.getResource("binding:fred")
+	 * call hand1.handIBMiReturn()
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of the using expression must be eglx.jtopen.IBMiConnection".
+	 * It is expected to contain "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.".
 	 */
-	public void testLine329() {
-		List messages = getMessagesAtLine( 329 );
+	public void testLine328() {
+		List messages = getMessagesAtLine( 328 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of the using expression must be eglx.jtopen.IBMiConnection" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of the using expression must be eglx.jtopen.IBMiConnection\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.\" was issued." );
 	}
 
 	/*
@@ -1399,14 +1399,14 @@ public class IBMiCallTests2Test extends ValidationTestCase {
 	/*
 	 * call hand1.handFunc returns (i);
 	 * 1 validation message is expected.
-	 * It is expected to contain "must be defined with the IBMiProgram annotation".
+	 * It is expected to contain "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.".
 	 */
 	public void testLine337() {
 		List messages = getMessagesAtLine( 337 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be defined with the IBMiProgram annotation" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be defined with the IBMiProgram annotation\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement.\" was issued." );
 	}
 
 	/*

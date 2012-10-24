@@ -14,29 +14,29 @@ public class IBMiProxyFunctionTestsTest extends ValidationTestCase {
 	}
 
 	/*
-	 * {@IBMiProgram {}};
+	 * function f1()
 	 * 1 validation message is expected.
-	 * It is expected to contain "container for the IBMiProgram function f1 is invalid".
+	 * It is expected to contain "The container for the IBMiProgram function f1 is invalid. IBMiProgram functions are only allowed in Programs, Libraries, Services, and Basic Handlers.".
 	 */
-	public void testLine5() {
-		List messages = getMessagesAtLine( 5 );
+	public void testLine4() {
+		List messages = getMessagesAtLine( 4 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "container for the IBMiProgram function f1 is invalid" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"container for the IBMiProgram function f1 is invalid\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The container for the IBMiProgram function f1 is invalid. IBMiProgram functions are only allowed in Programs, Libraries, Services, and Basic Handlers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The container for the IBMiProgram function f1 is invalid. IBMiProgram functions are only allowed in Programs, Libraries, Services, and Basic Handlers.\" was issued." );
 	}
 
 	/*
-	 * {@IBMiProgram {}};
+	 * function f1()
 	 * 1 validation message is expected.
-	 * It is expected to contain "container for the IBMiProgram function f1 is invalid".
+	 * It is expected to contain "The container for the IBMiProgram function f1 is invalid. IBMiProgram functions are only allowed in Programs, Libraries, Services, and Basic Handlers.".
 	 */
-	public void testLine10() {
-		List messages = getMessagesAtLine( 10 );
+	public void testLine9() {
+		List messages = getMessagesAtLine( 9 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "container for the IBMiProgram function f1 is invalid" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"container for the IBMiProgram function f1 is invalid\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The container for the IBMiProgram function f1 is invalid. IBMiProgram functions are only allowed in Programs, Libraries, Services, and Basic Handlers." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The container for the IBMiProgram function f1 is invalid. IBMiProgram functions are only allowed in Programs, Libraries, Services, and Basic Handlers.\" was issued." );
 	}
 
 	/*
@@ -603,29 +603,29 @@ public class IBMiProxyFunctionTestsTest extends ValidationTestCase {
 	}
 
 	/*
-	 * parameterAnnotations = []
+	 * function f1(p1 decimal)
 	 * 1 validation message is expected.
-	 * It is expected to contain "must exactly match the number of parameters".
+	 * It is expected to contain "An entry in the array of parameterAnnotations is required for parameter p1.".
 	 */
-	public void testLine85() {
-		List messages = getMessagesAtLine( 85 );
+	public void testLine83() {
+		List messages = getMessagesAtLine( 83 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must exactly match the number of parameters" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must exactly match the number of parameters\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "An entry in the array of parameterAnnotations is required for parameter p1." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"An entry in the array of parameterAnnotations is required for parameter p1.\" was issued." );
 	}
 
 	/*
-	 * parameterAnnotations = ["fred"]
+	 * function f2(p1 int)
 	 * 1 validation message is expected.
-	 * It is expected to contain "value specified for the parameterAnnotations".
+	 * It is expected to contain "The value fred specified in the parameterAnnotations for parameter p1 is invalid.".
 	 */
-	public void testLine91() {
-		List messages = getMessagesAtLine( 91 );
+	public void testLine89() {
+		List messages = getMessagesAtLine( 89 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "value specified for the parameterAnnotations" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"value specified for the parameterAnnotations\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The value fred specified in the parameterAnnotations for parameter p1 is invalid." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value fred specified in the parameterAnnotations for parameter p1 is invalid.\" was issued." );
 	}
 
 	/*
@@ -668,76 +668,95 @@ public class IBMiProxyFunctionTestsTest extends ValidationTestCase {
 	}
 
 	/*
-	 * {@IBMiProgram{}}
+	 * p1 int?)
 	 * 1 validation message is expected.
-	 * It is expected to contain "nullable type int? is not supported".
+	 * It is expected to contain "The nullable type int? is not supported for parameter p1 in an IMBiProgram function.".
 	 */
-	public void testLine110() {
-		List messages = getMessagesAtLine( 110 );
+	public void testLine109() {
+		List messages = getMessagesAtLine( 109 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "nullable type int? is not supported" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"nullable type int? is not supported\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The nullable type int? is not supported for parameter p1 in an IMBiProgram function." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The nullable type int? is not supported for parameter p1 in an IMBiProgram function.\" was issued." );
 	}
 
 	/*
-	 * {@IBMiProgram{}}
+	 * p2 int?[])
 	 * 1 validation message is expected.
-	 * It is expected to contain "array of nullable types int?[] is not supported".
+	 * It is expected to contain "The array of nullable types int is not supported for parameter p2 in an IMBiProgram function.".
 	 */
-	public void testLine115() {
-		List messages = getMessagesAtLine( 115 );
+	public void testLine114() {
+		List messages = getMessagesAtLine( 114 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "array of nullable types int?[] is not supported" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"array of nullable types int?[] is not supported\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The array of nullable types int is not supported for parameter p2 in an IMBiProgram function." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The array of nullable types int is not supported for parameter p2 in an IMBiProgram function.\" was issued." );
 	}
 
 	/*
-	 * {@IBMiProgram{}}
+	 * function f8 ( p1 string)
 	 * 1 validation message is expected.
-	 * It is expected to contain "entry in the array of IBMiProgramParameterAnnotations is required".
+	 * It is expected to contain "An entry in the array of parameterAnnotations is required for parameter p1.".
 	 */
-	public void testLine120() {
-		List messages = getMessagesAtLine( 120 );
+	public void testLine119() {
+		List messages = getMessagesAtLine( 119 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "entry in the array of IBMiProgramParameterAnnotations is required" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"entry in the array of IBMiProgramParameterAnnotations is required\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "An entry in the array of parameterAnnotations is required for parameter p1." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"An entry in the array of parameterAnnotations is required for parameter p1.\" was issued." );
 	}
 
 	/*
-	 * {@IBMiProgram{}}
+	 * function f9 ( p1 boolean)
 	 * 1 validation message is expected.
-	 * It is expected to contain "type of parameter p1 is not supported".
+	 * It is expected to contain "The type of parameter p1 is not supported in an IBMiProgram function.".
 	 */
-	public void testLine124() {
-		List messages = getMessagesAtLine( 124 );
+	public void testLine123() {
+		List messages = getMessagesAtLine( 123 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "type of parameter p1 is not supported" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"type of parameter p1 is not supported\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type of parameter p1 is not supported in an IBMiProgram function." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type of parameter p1 is not supported in an IBMiProgram function.\" was issued." );
 	}
 
 	/*
-	 * {@IBMiProgram{}}
+	 * function f10 (p1 rec1)
 	 * 4 validation messages are expected.
+	 * One message is expected to contain "field1 with the type boolean".
+	 * One message is expected to contain "field2 with the type int?".
+	 * One message is expected to contain "field3 with the type int?[]".
+	 * One message is expected to contain "The type of this field requires that an Struct type annotation be specified for the field".
 	 */
-	public void testLine128() {
-		List messages = getMessagesAtLine( 128 );
+	public void testLine127() {
+		List messages = getMessagesAtLine( 127 );
 		assertEquals( 4, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "field1 with the type boolean" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"field1 with the type boolean\" was issued." );
+		
+		messages.remove( messageWithSubstring );
+		messageWithSubstring = messageWithSubstring( messages, "field2 with the type int?" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"field2 with the type int?\" was issued." );
+		
+		messages.remove( messageWithSubstring );
+		messageWithSubstring = messageWithSubstring( messages, "field3 with the type int?[]" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"field3 with the type int?[]\" was issued." );
+		
+		messages.remove( messageWithSubstring );
+		messageWithSubstring = messageWithSubstring( messages, "The type of this field requires that an Struct type annotation be specified for the field" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type of this field requires that an Struct type annotation be specified for the field\" was issued." );
 	}
 
 	/*
-	 * parameterAnnotations = [@StructText{Length = 20}]
+	 * function f11(p1 string, p2 string(10))
 	 * 1 validation message is expected.
-	 * It is expected to contain "must exactly match the number of parameters".
+	 * It is expected to contain "The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11.".
 	 */
-	public void testLine133() {
-		List messages = getMessagesAtLine( 133 );
+	public void testLine131() {
+		List messages = getMessagesAtLine( 131 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "must exactly match the number of parameters" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must exactly match the number of parameters\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11.\" was issued." );
 	}
 }
