@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.javart;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.eclipse.edt.javart.resources.Platform;
@@ -41,7 +38,7 @@ public class ConversionAttributeSet implements Serializable
 	/** 
 	 * True if the encoding indicates BIDI conversion.
 	 */
-	public transient boolean isBidi;
+	public boolean isBidi;
 
 	/**
 	 * True for ASCII, false for EBCDIC.
@@ -110,42 +107,5 @@ public class ConversionAttributeSet implements Serializable
 	{
 		storage.setConversion( byteOrder, encoding, isAscii, isBidi, isUnicode, isIeeeFloat );
 		storage.setEglJavaFormat( eglJavaFormat );
-	}
-	
-	/**
-	 * Serializes an instance of this class.
-	 * 
-	 * @param out  The output stream.
-	 * @throws IOException
-	 */
-	private void writeObject( ObjectOutputStream out )
-			throws IOException
-	{
-		out.defaultWriteObject();
-		
-		// Store isBidi when encoding isn't null; otherwise we know it's false.
-		if ( this.encoding != null )
-		{
-			out.writeBoolean( this.isBidi );
-		}
-	}
-	
-	/**
-	 * Deserializes an instance of this class.
-	 * 
-	 * @param in  The input stream.
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	private void readObject( ObjectInputStream in )
-			throws IOException, ClassNotFoundException
-	{
-		in.defaultReadObject();
-		
-		// Read in isBidi if the encoding's not null.
-		if ( this.encoding != null )
-		{
-			this.isBidi = in.readBoolean();
-		}
 	}
 }

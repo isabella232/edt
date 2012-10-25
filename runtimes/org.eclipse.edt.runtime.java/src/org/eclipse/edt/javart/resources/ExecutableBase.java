@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.resources;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.eclipse.edt.javart.Constants;
@@ -73,17 +71,5 @@ public abstract class ExecutableBase implements Executable, Serializable
 	 */
 	public void _cleanup() {
 		
-	}
-	
-	/**
-	 * Serializes an instance of this class.
-	 * 
-	 * @param out  The output stream.
-	 * @throws IOException
-	 */
-	private void writeObject( ObjectOutputStream out )
-			throws IOException
-	{
-		out.defaultWriteObject();
 	}
 }
