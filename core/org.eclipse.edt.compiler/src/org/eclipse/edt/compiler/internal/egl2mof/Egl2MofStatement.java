@@ -40,7 +40,6 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ForEachStatement;
 import org.eclipse.edt.mof.egl.ForStatement;
-import org.eclipse.edt.mof.egl.FreeSqlStatement;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.GetByKeyStatement;
 import org.eclipse.edt.mof.egl.GetByPositionKind;

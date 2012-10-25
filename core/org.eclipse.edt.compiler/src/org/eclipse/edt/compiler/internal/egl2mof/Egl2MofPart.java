@@ -17,7 +17,6 @@ import java.util.Map.Entry;
 
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -123,8 +122,8 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			((EClass)part).addSuperTypes(superTypes);
 		}
 		else {
-			for (Object name : node.getExtendedTypes()) {
-				Part superType = (Part)((Name)name).resolveType();
+			for (Name name : node.getExtendedTypes()) {
+				Part superType = (Part)name.resolveType();
 				if (superType instanceof ExternalType) {
 					((EGLClass)part).getSuperTypes().add((EGLClass)mofTypeFor(superType));
 				}
@@ -193,22 +192,13 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				EObject obj = mofTypeFor(tb);
 				if (obj instanceof StructPart) {
 					//remove the default supertype
-					((EGLClass)part).getSuperTypes().clear();
-					((EGLClass)part).getSuperTypes().add((StructPart)obj);
+					part.getSuperTypes().clear();
+					part.getSuperTypes().add((StructPart)obj);
 				}
 			}
 		}
 		
-		for (Name name : eglClass.getImplementedInterfaces()) {
-			Type tb = name.resolveType();
-			if (tb instanceof Interface) {
-				EObject obj = mofTypeFor(tb);
-				if (obj instanceof StructPart) {
-					((EGLClass)part).getSuperTypes().add((StructPart)obj);
-				}
-			}
-		}
-		
+		addInterfaces(part, eglClass.getImplementedInterfaces());
 		stack.push(part);
 		return false;
 	}
@@ -272,7 +262,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	}
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.UseStatement stmt) {
-		for ( org.eclipse.edt.compiler.core.ast.Name name : (List<org.eclipse.edt.compiler.core.ast.Name>)stmt.getNames()) {
+		for ( Name name : (List<Name>)stmt.getNames()) {
 			Type partBinding = name.resolveType();
 			if (partBinding != null) {
 				Part part = (Part)mofTypeFor(partBinding);

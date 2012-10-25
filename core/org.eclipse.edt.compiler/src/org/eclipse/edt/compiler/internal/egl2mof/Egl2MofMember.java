@@ -14,7 +14,6 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
@@ -37,7 +36,6 @@ import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EFunction;
 import org.eclipse.edt.mof.EMember;
 import org.eclipse.edt.mof.EMetadataObject;
-import org.eclipse.edt.mof.EModelElement;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EParameter;
 import org.eclipse.edt.mof.EType;
@@ -61,11 +59,8 @@ import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.Name;
-import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
@@ -811,13 +806,6 @@ class Egl2MofMember extends Egl2MofPart {
 		
 	}
 
-	
-	private AssignmentStatement createAssignmentStatement(Element context, Expression rhs) {
-		if (context instanceof Field) return createAssignmentStatement((Field)context, rhs);
-		else if (context instanceof Expression) return createAssignmentStatement((Expression)context, rhs);
-		else throw new IllegalArgumentException("Context " + context.toString() + " must be a Field or Expression");
-	}
-	
 	private AssignmentStatement createAssignmentStatement(Field field, Expression rhs) {
 		Assignment assign = factory.createAssignment();
 		assign.setRHS(rhs);
@@ -862,14 +850,6 @@ class Egl2MofMember extends Egl2MofPart {
 		mbrName.setId(context.getCaseSensitiveName());
 		mbrName.setMember(context);
 		return mbrName;
-	}
-	
-	private LHSExpr addQualifier(Part context, Name nameExpr) {
-		PartName qualifier = factory.createPartName();
-		qualifier.setId(context.getCaseSensitiveName());
-		qualifier.setType(context);
-		qualifier.setPackageName(context.getCaseSensitivePackageName());
-		return nameExpr.addQualifier(qualifier);
 	}
 	
 	private ElementGenerator getElementGenerator(Node node) {
