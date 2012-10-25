@@ -23,8 +23,8 @@ Record EGLProperty type Annotation
 	targets = [ElementKind.FieldMbr],
 	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationProxy"
 } 
-	getMethod egl.lang.reflect.FunctionMbr;
-	setMethod egl.lang.reflect.FunctionMbr;
+	getMethod egl.lang.reflect.FunctionReference;
+	setMethod egl.lang.reflect.FunctionReference;
 end
 
 /**

@@ -23,10 +23,12 @@ import org.eclipse.edt.ide.core.internal.lookup.AbstractProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.IFileInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.lookup.WrapperedZipFileBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLFileOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.serialization.Environment;
 
 public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 
@@ -76,7 +78,9 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
     		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
     		for(IBuildPathEntry pathEntry : pathEntries) {
     			if((pathEntry instanceof WrapperedZipFileBuildPathEntry) ){
+    				Environment.pushEnv(((WrapperedZipFileBuildPathEntry) pathEntry).getIREnviornment());
     				zipPartOrigin = ((WrapperedZipFileBuildPathEntry) pathEntry).getPartOrigin(packageName, partName);
+    				Environment.popEnv();
     				if(zipPartOrigin != null)
     					return zipPartOrigin;
     			}

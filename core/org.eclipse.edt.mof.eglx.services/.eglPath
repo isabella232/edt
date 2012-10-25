@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <eglpath>
 	<eglpathentry kind="src" path="EGLSource"/>
-	<eglpathentry kind="output" path="EGLBin"/>
 	<eglpathentry kind="con" path="org.eclipse.edt.compiler.EDT_RUNTIME"/>
+	<eglpathentry kind="output" path="EGLBin"/>
 </eglpath>

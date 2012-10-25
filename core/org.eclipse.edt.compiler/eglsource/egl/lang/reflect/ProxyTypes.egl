@@ -163,3 +163,21 @@ externalType ReplaceStatement type EClassProxy {
 }
 end
 
+externalType FunctionReference type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.FunctionReference"
+}
+end
+
+externalType FieldReference type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.FieldReference"
+}
+end
+
+externalType PartReference type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.PartReference"
+}
+end
+
+
+
+

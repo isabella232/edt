@@ -16,7 +16,7 @@ Record RUIHandler type Stereotype {
 	defaultSuperType=View,
 	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.RUIHandlerAnnotationProxy"
 }
-	onConstructionFunction egl.lang.reflect.FunctionMbr;
+	onConstructionFunction egl.lang.reflect.FunctionReference;
 	includeFile String;
 	cssFile String;
 	title String;
@@ -29,7 +29,7 @@ Record RUIWidget type Stereotype {
 	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.RUIWidgetAnnotationProxy"
 }
 	tagName String;
-	onConstructionFunction egl.lang.reflect.FunctionMbr;
+	onConstructionFunction egl.lang.reflect.FunctionReference;
 	includeFile String;
 	cssFile String;
 end

@@ -95,7 +95,7 @@ end
 externalType DanglingReference extends MemberAccess type MofClass
 end
 
-externalType MemberName extends Name type MofClass
+externalType MemberName extends Name, FunctionReference, FieldReference type MofClass
 	member Member;
 end
 
@@ -104,13 +104,13 @@ externalType TypeName extends Name type MofClass
 	function getFullyQualifiedName() returns(string);
 end
 
-externalType PartName extends TypeName type MofClass
+externalType PartName extends TypeName, PartReference type MofClass
 	packageName string;
 	
 	function getPart() returns(Part);
 end
 
-externalType MemberAccess extends Name type MofClass
+externalType MemberAccess extends Name, FunctionReference, MemberReference type MofClass
 	member Member {@Transient{true}};
 	qualifier Expression {@Containment{true}};
 end
@@ -283,6 +283,3 @@ externalType ObjectExpression extends Expression type MofClass {
 }
 	entries ObjectExpressionEntry[] {@Containment{true}};
 end
-
-
-

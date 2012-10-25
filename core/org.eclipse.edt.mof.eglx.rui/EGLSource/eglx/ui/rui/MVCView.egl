@@ -18,9 +18,9 @@ Record MVCView type Annotation
 	],
 	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.MVCViewAnnotationProxy"
 } 
-	retrieveViewHelper egl.lang.reflect.FunctionMbr;
-	publishHelper egl.lang.reflect.FunctionMbr;
-	retrieveValidStateHelper egl.lang.reflect.FunctionMbr;
-	publishMessageHelper egl.lang.reflect.FunctionMbr;
-	showErrorState egl.lang.reflect.FunctionMbr;
+	retrieveViewHelper egl.lang.reflect.FunctionReference;
+	publishHelper egl.lang.reflect.FunctionReference;
+	retrieveValidStateHelper egl.lang.reflect.FunctionReference;
+	publishMessageHelper egl.lang.reflect.FunctionReference;
+	showErrorState egl.lang.reflect.FunctionReference;
 end

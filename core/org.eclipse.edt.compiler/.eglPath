@@ -2,6 +2,6 @@
 <eglpath>
 	<eglpathentry kind="src" path="eglsource"/>
 	<eglpathentry kind="src" path="/org.eclipse.edt.mof.egl"/>
-	<eglpathentry kind="output" path="eglbin"/>
 	<eglpathentry kind="con" path="org.eclipse.edt.compiler.EDT_RUNTIME"/>
+	<eglpathentry kind="output" path="eglbin"/>
 </eglpath>

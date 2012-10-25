@@ -1239,5 +1239,19 @@ public class BindingUtil {
 		}
 		return null;
 	}
+	
+	public static boolean isEClassProxy(Element elem) {
+		//handle proxy types
+		if (elem instanceof EClassProxy) {
+			return true;
+		}
+		
+		Annotation ann = elem.getAnnotation("egl.lang.reflect.EClassProxy");
+		if (ann != null) {
+			return true;
+		}
+		return false;
+	}
+
 
 }

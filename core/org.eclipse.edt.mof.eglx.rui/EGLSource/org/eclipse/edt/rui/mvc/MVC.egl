@@ -11,14 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.mvc;
 
+import eglx.ui.SignKind;
+
 Record MVC type Annotation
 {
 	targets = [
 		ElementKind.FieldMbr
 	]
 } 
-	model egl.lang.reflect.FieldMbr;
-	view egl.lang.reflect.FieldMbr;
+	model egl.lang.reflect.FieldReference;
+	view egl.lang.reflect.FieldReference;
 end
 
 Delegate 
@@ -127,7 +129,7 @@ Record ValidationPropertiesLibrary type Annotation
 	,
 	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.ValidationPropertiesLibraryAnnotationProxy"
 }
-	value egl.lang.reflect.TypeType;
+	value egl.lang.reflect.PartReference;
 end
 
 Record IsBoolean type Annotation
@@ -255,7 +257,7 @@ Record ValidatorFunction type Annotation
 	],
 	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.ValidatorFunctionAnnotationProxy"
 }
-	value egl.lang.reflect.FunctionMbr;
+	value egl.lang.reflect.FunctionReference;
 end
 
 Record ValidatorFunctionMsgKey type Annotation

@@ -179,6 +179,14 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 		return zipEntry.getObjectStores();
 	}
 
+	public ObjectStore getObjectStore() {
+		return zipEntry.getObjectStore();
+	}
+	
+	public org.eclipse.edt.mof.serialization.IEnvironment getIREnviornment() {
+		return getObjectStore().getEnvironment();
+	}
+
 	@Override
 	public Part findPart(String packageName, String name) throws PartNotFoundException {
 		return zipEntry.findPart(packageName, name);

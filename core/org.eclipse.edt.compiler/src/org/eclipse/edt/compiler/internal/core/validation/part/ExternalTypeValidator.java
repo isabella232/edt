@@ -118,7 +118,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 		for (Iterator iter = externalType.getExtendedTypes().iterator(); iter.hasNext();) {
 			Name nameAST = (Name) iter.next();
 			Type extendedType = nameAST.resolveType();
-			if (extendedType != null) {
+			if (extendedType != null && !BindingUtil.isEClassProxy(extendedType)) {
 				if (!(extendedType instanceof org.eclipse.edt.mof.egl.ExternalType)) {
 					problemRequestor.acceptProblem(
 							nameAST,

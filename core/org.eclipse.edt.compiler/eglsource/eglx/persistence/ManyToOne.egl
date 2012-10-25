@@ -14,6 +14,6 @@ package eglx.persistence;
 //record ManyToOne type Annotation {
 //	targets=[FieldMbr]
 //}
-//	fk_field egl.lang.reflect.FieldMbr?;
-//	fk_fields egl.lang.reflect.FieldMbr[];
+//	fk_field egl.lang.reflect.FieldReference?;
+//	fk_fields egl.lang.reflect.FieldReference[];
 //end

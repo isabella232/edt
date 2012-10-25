@@ -22,7 +22,7 @@ import egl.lang.reflect.mof.MofEnum;
 import egl.lang.reflect.mof.MofName;
 import egl.lang.reflect.mof.MofSerializable;
 
-externalType Element extends EObject type MofClass {isAbstract=yes}
+externalType Element extends EObject, ElementReference type MofClass {isAbstract=yes}
 	annotations Annotation[] {@Containment{true}};
 	
 	function getAnnotation(name string) returns(Annotation);
@@ -109,7 +109,7 @@ enumeration ETypeKind {@MofEnum}
 	ALIAS
 end
 
-externalType Member extends TypedElement type MofClass {isAbstract=yes}
+externalType Member extends TypedElement, MemberReference type MofClass {isAbstract=yes}
 	isStatic boolean;
 	isAbstract boolean;
 	accessKind AccessKind?;
@@ -188,7 +188,7 @@ externalType ParameterizableType extends EGLClass type MofClass
 	parameterizedType egl.lang.reflect.mof.EType;
 end
 
-externalType EGLField extends Member type MofClass {name="Field"}
+externalType EGLField extends Member, FieldReference type MofClass {name="Field"}
 	initializerStatements StatementBlock {@Containment{true}};
 	hasSetValuesBlock boolean;
 	isImplicit boolean;
@@ -234,7 +234,7 @@ externalType FunctionMember extends Member, Container, InvocableElement type Mof
 	function addParameter(parm FunctionParameter in);
 end
 
-externalType EGLFunction extends FunctionMember type MofClass {name="Function"}
+externalType EGLFunction extends FunctionMember, FunctionReference type MofClass {name="Function"}
 	returnField EGLField {@Containment{true}};
 end
 
@@ -286,7 +286,7 @@ externalType ConstantFormField extends FormField type MofClass
 end
 
 
-externalType Part extends Classifier type MofClass{isAbstract=yes}
+externalType Part extends Classifier, PartReference type MofClass{isAbstract=yes}
 	accessKind AccessKind?;
 
 	function getSubType() returns (Stereotype);
@@ -383,4 +383,24 @@ end
 
 externalType FunctionPart extends LogicAndDataPart type MofClass
 	_function EGLFunction {@MofName{"function"}, @Containment{true}};
+end
+
+externalType ElementReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolveElement() returns (Element);  
+end
+
+externalType PartReference extends ElementReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolvePart() returns (Part);
+end
+
+externalType MemberReference extends ElementReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolveMember() returns (Member);
+end
+
+externalType FunctionReference extends MemberReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolveFunction() returns (EGLFunction);
+end
+
+externalType FieldReference extends ElementReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolveField() returns (EGLField);
 end

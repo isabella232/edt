@@ -11,6 +11,8 @@
  *******************************************************************************/
 package eglx.rest;
 
+import eglx.http.HttpMethod;
+
 Record Rest type Annotation
 { 
 	targets = [ ElementKind.functionMbr], 

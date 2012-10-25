@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 
+import eglx.xml.binding.annotation.XMLRootElement;
+
 Record Log {@xmlrootelement {}}
 	msg String;			//equivalent of "StdOut" stream
 end
