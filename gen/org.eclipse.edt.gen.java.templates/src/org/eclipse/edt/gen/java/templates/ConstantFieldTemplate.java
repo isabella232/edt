@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.java.templates;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Field;
 
@@ -22,17 +23,30 @@ public class ConstantFieldTemplate extends JavaTemplate {
 	public void genDeclaration(ConstantField field, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension((Field) field, ctx);
-		out.print("private static final ");
-		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
-		out.print(" ezeConst_");
-		ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
-		out.print("public final ");
-		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
-		out.print(" ");
-		ctx.invoke(genName, field, ctx, out);
-		out.print(" = ezeConst_");
-		ctx.invoke(genName, field, ctx, out);
-		out.println(";");
+		
+		if ( field.isStatic() )
+		{
+			out.print( field.getAccessKind() == AccessKind.ACC_PRIVATE ? "private " : "public " );
+			out.print("static final ");
+			ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
+			out.print(" ");
+			ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
+		}
+		else
+		{
+			out.print("private static final ");
+			ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
+			out.print(" ezeConst_");
+			ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
+			out.print( field.getAccessKind() == AccessKind.ACC_PRIVATE ? "private " : "public " );
+			out.print("final ");
+			ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
+			out.print(" ");
+			ctx.invoke(genName, field, ctx, out);
+			out.print(" = ezeConst_");
+			ctx.invoke(genName, field, ctx, out);
+			out.println(";");
+		}
 	}
 
 	public void genSetter(ConstantField field, Context ctx, TabbedWriter out) {

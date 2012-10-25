@@ -22,13 +22,15 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class MemberTemplate extends JavaTemplate {
 
 	public void genDeclaration(Member field, Context ctx, TabbedWriter out) {
-		AccessKind access = field.getAccessKind();
 		if (field.getCaseSensitiveName().equalsIgnoreCase("main") && field.getContainer() instanceof Program)
 			out.print("public ");
-		else if (access == AccessKind.ACC_PRIVATE)
+		else if (field.getAccessKind() == AccessKind.ACC_PRIVATE)
 			out.print("private ");
 		else
 			out.print("public ");
+
+		if (field.isStatic())
+			out.print("static ");
 	}
 
 	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, TypeNameKind arg) {
