@@ -95,11 +95,6 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 	}
 
 	@Override
-	public Stereotype getSubType() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public Boolean hasCompileErrors() {
 		throw new UnsupportedOperationException();
 	}

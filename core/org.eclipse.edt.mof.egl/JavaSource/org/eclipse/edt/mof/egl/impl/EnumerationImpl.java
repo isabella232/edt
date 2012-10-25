@@ -181,11 +181,6 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	}
 
 	@Override
-	public Stereotype getSubType() {
-		return getStereotype();
-	}
-
-	@Override
 	public String getFileName() {
 		return getFilename();
 	}

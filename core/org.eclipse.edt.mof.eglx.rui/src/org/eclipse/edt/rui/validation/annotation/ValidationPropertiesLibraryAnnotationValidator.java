@@ -33,8 +33,8 @@ public class ValidationPropertiesLibraryAnnotationValidator implements IValueVal
 		}
 		
 		if (!(annotationBinding.getValue() instanceof Library)
-				|| ((Library)annotationBinding.getValue()).getSubType() == null
-				|| !((Library)annotationBinding.getValue()).getSubType().getEClass().equals(TypeUtils.getEGLType("eglx.ui.rui.RUIPropertiesLibrary"))) {
+				|| ((Library)annotationBinding.getValue()).getStereotype() == null
+				|| !((Library)annotationBinding.getValue()).getStereotype().getEClass().equals(TypeUtils.getEGLType("eglx.ui.rui.RUIPropertiesLibrary"))) {
 			problemRequestor.acceptProblem(
 					annotation,
 					RUIResourceKeys.VALIDATION_PROPERTIES_LIBRARY_WRONG_TYPE,

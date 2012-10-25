@@ -17,8 +17,5 @@ public interface Part extends Classifier {
 	
 	void setAccessKind(AccessKind value);
 	
-	
-	public Stereotype getSubType();
-	
 	public String getFullyQualifiedName();
 }

@@ -161,7 +161,7 @@ public class AnnotationValidator {
 				
 				org.eclipse.edt.mof.egl.Type type = record.getName().resolveType();
 				if (type instanceof org.eclipse.edt.mof.egl.Part) {
-					subtype = ((org.eclipse.edt.mof.egl.Part)type).getSubType();
+					subtype = ((org.eclipse.edt.mof.egl.Part)type).getStereotype();
 					if (subtype != null) {
 						proxy = getValidationProxy(subtype);
 					}
@@ -193,7 +193,7 @@ public class AnnotationValidator {
 				
 				org.eclipse.edt.mof.egl.Type type = functionContainerPart.getName().resolveType();
 				if (type instanceof org.eclipse.edt.mof.egl.Part) {
-					subtype = ((org.eclipse.edt.mof.egl.Part)type).getSubType();
+					subtype = ((org.eclipse.edt.mof.egl.Part)type).getStereotype();
 					if (subtype != null) {
 						proxy = getValidationProxy(subtype);
 					}

@@ -144,8 +144,8 @@ public class BinaryElementParser {
 		}
 		else if (partElement instanceof AnnotationType)  {
 			subTypeName = IRPartType.ANNOTATION;
-		} else if(partElement.getSubType() != null){
-			subTypeName = partElement.getSubType().getEClass().getCaseSensitiveName();
+		} else if(partElement.getStereotype() != null){
+			subTypeName = partElement.getStereotype().getEClass().getCaseSensitiveName();
 		}
 
 		requestor.enterPart(partType, subTypeName.toCharArray(), partElement.hashCode(), 
