@@ -11,34 +11,41 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Class;
 import org.eclipse.edt.mof.egl.Constructor;
+import org.eclipse.edt.mof.egl.StructPart;
 
 public class ClassTemplate extends JavaTemplate
 {
+	public void preGenPartImport(Class type, Context ctx) {
+		CommonUtilities.processImport( "java.io.Serializable", ctx );
+		ctx.invokeSuper(this, preGen, type, ctx);
+	}
+	
 	public void genSuperClass(Class type, Context ctx, TabbedWriter out) {
-		out.print("ExecutableBase"); //TODO only use this if it doesn't have an extends clause
+		for (StructPart superType : type.getSuperTypes()) {
+			if ( superType instanceof Class )
+			{
+				ctx.invoke(genClassName, superType, ctx, out);
+				return;
+			}
+		}
+		out.print("Object");
 	}
 
-	public void genConstructor(Class type, Context ctx, TabbedWriter out) { }
+	public void genConstructor(Class type, Context ctx, TabbedWriter out) 
+	{
+		out.println();
+		out.println('{');
+		out.println("ezeInitialize();");
+		out.println('}');
+	}
 
 	public void genConstructor(Class type, Context ctx, TabbedWriter out, Constructor constructor) {
-		out.println("");
-		out.print("public ");
-		ctx.invoke(genClassName, type, ctx, out);
-		out.print("(");
-		ctx.invoke(genAdditionalConstructorParams, type, ctx, out);
-		out.println(") {");
-		out.print("super(");
-		ctx.invoke(genAdditionalSuperConstructorArgs, type, ctx, out);
-		out.println(");");
-		out.println("}");
-
-		out.println("{");
-		out.println("ezeInitialize();");
-		out.println("}");
+		ctx.invoke(genDeclaration, constructor, ctx, out);
 	}
 
 	public void genRuntimeTypeName(Class type, Context ctx, TabbedWriter out, TypeNameKind arg) {
@@ -46,9 +53,10 @@ public class ClassTemplate extends JavaTemplate
 	}
 	
 	public void genImplements(Class part, Context ctx, TabbedWriter out) {
+		out.print(" implements Serializable");
 		String interfaceList = StructPartTemplate.getInterfaces(part, ctx);
 		if (!interfaceList.isEmpty()) {
-			out.print(" implements ");
+			out.print(", ");
 			out.print(interfaceList);
 		}
 	}
