@@ -51,7 +51,6 @@ public class ProgramTemplate extends JavaTemplate {
 		out.println("ru.exit();");
 		out.println("}");
 
-		// Generate RunUnit constructor
 		out.print("public ");
 		ctx.invoke(genClassName, program, ctx, out);
 		out.print("(");
@@ -64,7 +63,9 @@ public class ProgramTemplate extends JavaTemplate {
 
 		out.println("{");
 		out.println("if(org.eclipse.edt.javart.Runtime.getRunUnit().getActiveExecutable() == null)");
+		out.println("{");
 		out.println("org.eclipse.edt.javart.Runtime.getRunUnit().setActiveExecutable(this);");
+		out.println("}");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}

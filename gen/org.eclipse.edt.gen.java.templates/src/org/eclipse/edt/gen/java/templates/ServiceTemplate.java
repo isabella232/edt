@@ -39,7 +39,6 @@ public class ServiceTemplate extends JavaTemplate {
 	}
 
 	public void genConstructor(Service service, Context ctx, TabbedWriter out) {
-		// Generate RunUnit constructor
 		out.print("public ");
 		ctx.invoke(genClassName, service, ctx, out);
 		out.print("(");
