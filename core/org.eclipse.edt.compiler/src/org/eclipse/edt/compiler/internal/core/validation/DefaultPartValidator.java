@@ -12,7 +12,7 @@
 package org.eclipse.edt.compiler.internal.core.validation;
 
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Handler;
@@ -69,7 +69,7 @@ public class DefaultPartValidator extends AbstractPartValidator {
 	}
 	
 	@Override
-	public boolean visit(EGLClass eglClass) {
+	public boolean visit(Class eglClass) {
 		eglClass.accept(new ClassValidator(problemRequestor, irBinding, compilerOptions));
 		return false;
 	};

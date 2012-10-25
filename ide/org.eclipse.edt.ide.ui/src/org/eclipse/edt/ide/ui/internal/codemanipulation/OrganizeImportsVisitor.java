@@ -22,7 +22,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Handler;
@@ -129,7 +129,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		return true;
 	}
 	
-	public boolean visit(EGLClass eglClass) {
+	public boolean visit(Class eglClass) {
 		handlePart(eglClass);
 		return true;
 	}

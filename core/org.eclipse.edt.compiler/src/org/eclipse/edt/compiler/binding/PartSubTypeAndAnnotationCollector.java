@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
@@ -168,7 +168,7 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
         return true;
     }
 
-    public boolean visit(EGLClass eglClass) {
+    public boolean visit(Class eglClass) {
         if (eglClass.hasSubType()) {
             checkSubType(eglClass.getSubType());
         }

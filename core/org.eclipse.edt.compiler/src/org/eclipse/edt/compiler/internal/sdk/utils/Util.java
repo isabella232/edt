@@ -20,7 +20,7 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Handler;
@@ -78,7 +78,7 @@ public class Util {
 			}
 	    	
 	    	@Override
-	    	public boolean visit(EGLClass eglClass){
+	    	public boolean visit(Class eglClass){
 	    		value[0] = new Integer(ITypeBinding.CLASS_BINDING);
 	    		return false;
 			}

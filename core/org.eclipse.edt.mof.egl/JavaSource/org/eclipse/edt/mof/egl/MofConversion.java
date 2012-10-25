@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-
 public interface MofConversion {
 	
 	String Mof_package_name = "org.eclipse.edt.mof";
@@ -156,6 +154,7 @@ public interface MofConversion {
 	String Type_DataItem = EGL_reflect_package+".DataItem";
 	String Type_Library = EGL_reflect_package+".Library";
 	String Type_Handler = EGL_reflect_package+".Handler";
+	String Type_Class = EGL_reflect_package+".Class";
 	String Type_FunctionPart = EGL_reflect_package+".FunctionPart";
 	String Type_Service = EGL_reflect_package+".Service";
 	String Type_Annotation = EGL_reflect_package+".Annotation";

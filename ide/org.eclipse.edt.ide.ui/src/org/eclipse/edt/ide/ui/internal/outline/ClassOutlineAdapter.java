@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.outline;
 
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
@@ -28,7 +28,7 @@ public class ClassOutlineAdapter extends AbstractOutlineAdapter {
 	 * @see org.eclipse.edt.ide.ui.internal.outline.IOutlineAdapter#getChildren(java.lang.Object)
 	 */
 	public Object[] getChildren(Object parentElement) {
-		EGLClass handler = (EGLClass) parentElement;
+		Class handler = (Class) parentElement;
 		return filterOutProperties(handler.getContents()).toArray();
 	}
 
@@ -36,7 +36,7 @@ public class ClassOutlineAdapter extends AbstractOutlineAdapter {
 	 * @see org.eclipse.edt.ide.ui.internal.outline.IOutlineAdapter#getText(java.lang.Object)
 	 */
 	public String getText(Object element) {
-		EGLClass handler = (EGLClass) element;
+		Class handler = (Class) element;
 		
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(handler.getName().getCanonicalName());
@@ -50,7 +50,7 @@ public class ClassOutlineAdapter extends AbstractOutlineAdapter {
 	}
 	
 	public IRegion getHighlightRange(Object element) {
-		EGLClass node = (EGLClass) element;
+		Class node = (Class) element;
 		return getPartNameHighlightRange(node);
 	}
 

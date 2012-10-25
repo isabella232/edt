@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.IRPartBinding;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -30,7 +30,7 @@ public class ClassValidator extends FunctionContainerValidator {
 	
 	IRPartBinding irBinding;
 	org.eclipse.edt.mof.egl.EGLClass classBinding;
-	EGLClass clazz;
+	Class clazz;
 	
 	public ClassValidator(IProblemRequestor problemRequestor, IRPartBinding irBinding, ICompilerOptions compilerOptions) {
 		super(problemRequestor, irBinding, compilerOptions);
@@ -39,7 +39,7 @@ public class ClassValidator extends FunctionContainerValidator {
 	}
 	
 	@Override
-	public boolean visit(EGLClass clazz) {
+	public boolean visit(Class clazz) {
 		this.clazz = clazz;
 		partNode = clazz;
 		EGLNameValidator.validate(clazz.getName(), EGLNameValidator.CLASS, problemRequestor, compilerOptions);

@@ -25,6 +25,7 @@ import java_cup.runtime.Symbol;
 
 import org.eclipse.edt.compiler.core.EGLKeywordHandler;
 import org.eclipse.edt.compiler.core.ast.*;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.ExitStatement.ExitModifier;
 import org.eclipse.edt.compiler.core.ast.ExitStatement.OptionalExpressionExitModifier;
 import org.eclipse.jface.text.BadLocationException;
@@ -689,7 +690,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
-	public boolean visit(EGLClass eglClass) {
+	public boolean visit(Class eglClass) {
 //		|	privateAccessModifierOpt:privateAccessModifier1 CLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
 //		{: RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
 		push2ContextPath(eglClass);

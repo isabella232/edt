@@ -32,6 +32,7 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Class;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
@@ -273,7 +274,7 @@ public class BindingUtil {
         	part = createEnumeration(pkgName, name);
         	return createPartBinding(part);
         case ITypeBinding.CLASS_BINDING:
-        	part = createEGLClass(pkgName, name);
+        	part = createClass(pkgName, name);
         	return createPartBinding(part);
         case ITypeBinding.ANNOTATION_BINDING:
         	part = createAnnotationType(pkgName, name);
@@ -337,11 +338,11 @@ public class BindingUtil {
 		return ser;		
 	}
 
-	private static EGLClass createEGLClass(String pkgName, String name) {
-		EGLClass eglClass = IrFactory.INSTANCE.createEGLClass();
-		eglClass.setName(name);
-		eglClass.setPackageName(pkgName);
-		return eglClass;		
+	private static Class createClass(String pkgName, String name) {
+		Class clazz = IrFactory.INSTANCE.createClass();
+		clazz.setName(name);
+		clazz.setPackageName(pkgName);
+		return clazz;		
 	}
 	
 	private static Enumeration createEnumeration(String pkgName, String name) {

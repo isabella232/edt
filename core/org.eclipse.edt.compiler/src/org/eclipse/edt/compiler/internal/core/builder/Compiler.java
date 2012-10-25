@@ -24,7 +24,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.DelegateBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.EGLClassBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.ClassBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
@@ -136,7 +136,7 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.CLASS_BINDING:
 				try{
-				    astNode.accept(new EGLClassBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    astNode.accept(new ClassBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;

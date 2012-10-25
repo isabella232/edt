@@ -16,14 +16,14 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 
 
-public class EGLClass extends Part {
+public class Class extends Part {
 
 	private Name partSubTypeOpt;
 	private List implementsOpt;
 	private Name extendsOpt;
 
 
-	public EGLClass(Boolean privateAccessModifierOpt, SimpleName name, Name extendsOpt, List implementsOpt, Name partSubTypeOpt, List classContents, int startOffset, int endOffset) {
+	public Class(Boolean privateAccessModifierOpt, SimpleName name, Name extendsOpt, List implementsOpt, Name partSubTypeOpt, List classContents, int startOffset, int endOffset) {
 		super(privateAccessModifierOpt, name, classContents, startOffset, endOffset);
 		
 		if(extendsOpt != null) {
@@ -66,7 +66,7 @@ public class EGLClass extends Part {
 		Name newExtendsOpt = extendsOpt != null ? (Name)extendsOpt.clone() : null;
 		Name newPartSubTypeOpt = partSubTypeOpt != null ? (Name)partSubTypeOpt.clone() : null;
 		
-		return new EGLClass(new Boolean(isPrivate), (SimpleName)name.clone(), newExtendsOpt, cloneList(implementsOpt), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
+		return new Class(new Boolean(isPrivate), (SimpleName)name.clone(), newExtendsOpt, cloneList(implementsOpt), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 
 	public String getPartTypeName() {

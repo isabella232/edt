@@ -591,7 +591,7 @@ public class AnnotationValidator {
 			}
 			
 			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.EGLClass eglClass) {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.Class eglClass) {
 				return true;
 			};
 			

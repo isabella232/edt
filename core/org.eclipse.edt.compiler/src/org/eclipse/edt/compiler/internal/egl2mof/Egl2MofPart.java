@@ -39,10 +39,7 @@ import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Handler;
@@ -187,7 +184,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.EGLClass eglClass) {
+	public boolean visit(org.eclipse.edt.compiler.core.ast.Class eglClass) {
 		EGLClass part = (EGLClass)defaultHandleVisitPart(eglClass);
 		
 		if (eglClass.getExtends() != null) {

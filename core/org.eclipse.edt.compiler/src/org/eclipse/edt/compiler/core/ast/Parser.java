@@ -9558,7 +9558,7 @@ class CUP$Parser$actions {
 		int end1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int end1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object end1 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); 
+		 RESULT = new Class(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); 
               CUP$Parser$result = new java_cup.runtime.Symbol(61/*part*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
