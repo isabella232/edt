@@ -218,7 +218,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	protected void createAnnotations(Part binding, EClass eClass) {
-		Stereotype subtype = binding.getSubType();
+		Stereotype subtype = binding.getStereotype();
 		for (Annotation annotation : binding.getAnnotations()) {
 			if (subtype == annotation) continue;
 			eClass.getMetadataList().add((EMetadataObject)mofValueFrom(annotation));
@@ -236,7 +236,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 
 	protected void createAnnotations(Part binding, Part part) {
-		Annotation subtype = binding.getSubType();
+		Annotation subtype = binding.getStereotype();
 		boolean bypass = subtype != null && isEGLReflectType(binding);
 		for (Annotation annotation : binding.getAnnotations()) {
 			if (bypass && subtype == annotation) continue;
@@ -841,7 +841,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			}
 			
 			else if (isMofProxy((Part)type)) { 
-				Annotation ann = ((Part)type).getSubType();
+				Annotation ann = ((Part)type).getStereotype();
 				typeSignature = (String)getFieldValue(ann, "packageName");
 				if (typeSignature == null) {
 					typeSignature = ((Part)type).getCaseSensitivePackageName();
@@ -852,7 +852,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				typeSignature += name;
 			}
 			else if (isReflectType((Part)type)) {
-				Annotation ann = ((Part)type).getSubType();
+				Annotation ann = ((Part)type).getStereotype();
 				String name = (String)getFieldValue(ann, "name");
 				if (name == null) name = ((Part)type).getCaseSensitiveName();
 				typeSignature = ((Part)type).getCaseSensitivePackageName() + "." + name;
@@ -958,7 +958,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			eClass.addMember(field);
 			field.setDeclarer(eClass);
 		}
-		Annotation subtype = part.getSubType();
+		Annotation subtype = part.getStereotype();
 		setReflectTypeValues(eClass, subtype);
 		eClass.getMetadataList().add(getTempClassMarker());
 		List<EClass> superTypes = new ArrayList<EClass>();
@@ -1093,10 +1093,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			isReflectType = getAnnotation(typeBinding, "egl.lang.reflect.PartType") != null;
 			if (!isReflectType ) {
 				Part part = (Part) typeBinding;
-				if (part.getSubType() != null) {
+				if (part.getStereotype() != null) {
 					isReflectType = 
-							(getAnnotation((StereotypeType)part.getSubType().getEClass(), "egl.lang.reflect.PartType") != null) ||
-							(getEMetadataObject((StereotypeType)part.getSubType().getEClass(), "PartType") != null);
+							(getAnnotation((StereotypeType)part.getStereotype().getEClass(), "egl.lang.reflect.PartType") != null) ||
+							(getEMetadataObject((StereotypeType)part.getStereotype().getEClass(), "PartType") != null);
 				}
 			}
 		}
@@ -1110,7 +1110,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	 */
 	private MofSerializable getDefaultSuperType(Type typeBinding) {	
 		if (!(typeBinding instanceof Part)) return null;
-		Annotation subtype = ((Part)typeBinding).getSubType();
+		Annotation subtype = ((Part)typeBinding).getStereotype();
 		String superTypeName = null;
 		if (subtype != null) {
 			superTypeName = getDefaultSuperTypeSignature((Part)typeBinding);
@@ -1124,7 +1124,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	 */
 	private EClass getReflectedType(Part typeBinding) {	
 		if (typeBinding == null) return null;
-		Annotation subtype = typeBinding.getSubType();
+		Annotation subtype = typeBinding.getStereotype();
 		String reflectedTypeName = null;
 		if (subtype != null) {
 			reflectedTypeName = getReflectedTypeSignature(typeBinding);
@@ -1170,7 +1170,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	// Assumes the record is a Stereotype defintiion
 	private String getDefaultSuperTypeSignature(Part type) {
-		Annotation subtype = type.getSubType();
+		Annotation subtype = type.getStereotype();
 		Annotation reflectType = getAnnotation(subtype, "egl.lang.reflect.DefaultSuperType");
 		if (reflectType != null) {
 			return ((Type)reflectType.getValue()).getMofSerializationKey();
@@ -1189,7 +1189,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 
 	// Assumes the record is a Stereotype defintiion
 	private String getReflectedTypeSignature(Part type) {
-		Annotation subtype = type.getSubType();
+		Annotation subtype = type.getStereotype();
 		if (subtype != null) {
 			Annotation ann = getAnnotation((AnnotationType)subtype.getEClass(), "egl.lang.reflect.PartType");
 			if (ann != null) {
@@ -1230,12 +1230,12 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	private boolean isMofDataType(Part edtType) {	
-		Annotation ann = edtType.getSubType();
+		Annotation ann = edtType.getStereotype();
 		return ann != null && ann.getEClass().getName().equalsIgnoreCase("MofDataType");
 	}
 	
 	private boolean isMofBaseType(Part edtType) {
-		Annotation ann = edtType.getSubType();
+		Annotation ann = edtType.getStereotype();
 		return ann != null && ann.getEClass().getName().equalsIgnoreCase("MofBaseType"); 
 	}
 		

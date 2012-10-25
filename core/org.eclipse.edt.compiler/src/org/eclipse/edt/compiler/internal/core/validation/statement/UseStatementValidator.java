@@ -15,7 +15,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -64,7 +64,7 @@ public class UseStatementValidator extends DefaultASTVisitor {
 			}
 			
 			@Override
-			public boolean visit(EGLClass eglClass) {
+			public boolean visit(Class eglClass) {
 				validateUseTypes(IEGLConstants.KEYWORD_CLASS);
 				return false;
 			};

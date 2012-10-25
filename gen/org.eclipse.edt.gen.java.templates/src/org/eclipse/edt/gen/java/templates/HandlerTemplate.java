@@ -32,7 +32,6 @@ public class HandlerTemplate extends JavaTemplate {
 
 	public void genConstructor(Handler type, Context ctx, TabbedWriter out) {
 		out.println("");
-		// Generate RunUnit constructor
 		out.print("public ");
 		ctx.invoke(genClassName, type, ctx, out);
 		out.print("(");

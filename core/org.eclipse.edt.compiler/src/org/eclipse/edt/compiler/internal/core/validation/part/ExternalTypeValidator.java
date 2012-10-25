@@ -59,7 +59,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(externalType);
 		
 		if (checkHasSubtype()) {
-			checkExtendedTypes(externalTypeBinding.getSubType().getEClass());
+			checkExtendedTypes(externalTypeBinding.getStereotype().getEClass());
 			checkCycles();
 		}
 		return true;
@@ -93,7 +93,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 	
 	private void checkParameters(List parameters) {
 		
-		Stereotype subtype = externalTypeBinding.getSubType();
+		Stereotype subtype = externalTypeBinding.getStereotype();
 		if (subtype != null) {
 			// do not validate the parms for NativeType
 			EClass clazz = subtype.getEClass();
@@ -129,7 +129,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 				}
 				else {
 					// Super type must have the same subtype.
-					Stereotype superSubtype = ((org.eclipse.edt.mof.egl.ExternalType)extendedType).getSubType();
+					Stereotype superSubtype = ((org.eclipse.edt.mof.egl.ExternalType)extendedType).getStereotype();
 					if (superSubtype == null || (!expectedSubtype.equals(superSubtype.getEClass()) && !isMofClass((org.eclipse.edt.mof.egl.ExternalType)extendedType))) {
 						problemRequestor.acceptProblem(
 								nameAST,
@@ -158,7 +158,7 @@ public class ExternalTypeValidator extends FunctionContainerValidator {
 	private boolean checkHasSubtype() {
 		boolean subtypeValid;
 		if(externalType.hasSubType()) {
-			subtypeValid = externalTypeBinding.getSubType() != null;
+			subtypeValid = externalTypeBinding.getStereotype() != null;
 		}
 		else {
 			problemRequestor.acceptProblem(

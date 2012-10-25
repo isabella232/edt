@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,13 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.egl;
+package org.eclipse.edt.mof.egl.impl;
 
+import org.eclipse.edt.mof.egl.Class;
 
-public interface Part extends Classifier, PartReference {
-	AccessKind getAccessKind();
-	
-	void setAccessKind(AccessKind value);
-	
-	public String getFullyQualifiedName();
+public class ClassImpl extends EGLClassImpl implements Class {
 }

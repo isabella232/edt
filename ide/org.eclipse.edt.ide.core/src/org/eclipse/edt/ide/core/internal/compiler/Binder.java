@@ -25,7 +25,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.DelegateBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.EGLClassBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.ClassBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
@@ -176,7 +176,7 @@ public class Binder {
 				
 			case ITypeBinding.CLASS_BINDING:
 				try{
-					astNode.accept(new EGLClassBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+					astNode.accept(new ClassBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){

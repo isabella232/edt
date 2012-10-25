@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -27,16 +27,16 @@ import org.eclipse.edt.mof.egl.StructPart;
 /**
  * @author winghong
  */
-public class EGLClassBindingCompletor extends FunctionContainerBindingCompletor {
+public class ClassBindingCompletor extends FunctionContainerBindingCompletor {
 
     private org.eclipse.edt.mof.egl.EGLClass classBinding;
 
-    public EGLClassBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+    public ClassBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(irBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
         this.classBinding = (org.eclipse.edt.mof.egl.EGLClass)irBinding.getIrPart();
     }
         
-    public boolean visit(EGLClass eglClass) {
+    public boolean visit(Class eglClass) {
     	eglClass.getName().setType(classBinding);
         eglClass.accept(getPartSubTypeAndAnnotationCollector());
     	
@@ -73,7 +73,7 @@ public class EGLClassBindingCompletor extends FunctionContainerBindingCompletor 
         return true;
     }
     
-    public void endVisit(EGLClass eglClass) {
+    public void endVisit(Class eglClass) {
         processSettingsBlocks();
         endVisitFunctionContainer(eglClass);
     }

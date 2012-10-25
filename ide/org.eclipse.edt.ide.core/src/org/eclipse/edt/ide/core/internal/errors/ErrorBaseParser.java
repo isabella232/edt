@@ -7,12 +7,13 @@
 package org.eclipse.edt.ide.core.internal.errors;
 
 import org.eclipse.edt.compiler.core.ast.*;
+import org.eclipse.edt.compiler.core.ast.Class;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 
 /** CUP v0.10k generated parser.
   * @version Wed Oct 17 11:40:56 EDT 2012
@@ -9574,7 +9575,7 @@ class CUP$ErrorBaseParser$actions {
 		int end1left = ((java_cup.runtime.Symbol)CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-0)).left;
 		int end1right = ((java_cup.runtime.Symbol)CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-0)).right;
 		Object end1 = (Object)((java_cup.runtime.Symbol) CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-0)).value;
-		 RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); 
+		 RESULT = new Class(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); 
               CUP$ErrorBaseParser$result = new java_cup.runtime.Symbol(61/*part*/, ((java_cup.runtime.Symbol)CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-7)).left, ((java_cup.runtime.Symbol)CUP$ErrorBaseParser$stack.elementAt(CUP$ErrorBaseParser$top-0)).right, RESULT);
             }
           return CUP$ErrorBaseParser$result;

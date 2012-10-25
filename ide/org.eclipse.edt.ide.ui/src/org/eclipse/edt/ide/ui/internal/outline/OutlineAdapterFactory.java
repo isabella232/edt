@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -76,7 +76,7 @@ public class OutlineAdapterFactory {
 		adapterMap.put(Enumeration.class, new EnumerationOutlineAdapter(editor));//
 		adapterMap.put(Delegate.class, new DelegateOutlineAdapter(editor));//
 		adapterMap.put(ExternalType.class, new ExternalTypeOutlineAdapter(editor));//
-		adapterMap.put(EGLClass.class, new ClassOutlineAdapter(editor));//
+		adapterMap.put(Class.class, new ClassOutlineAdapter(editor));//
 	}
 	
 	public boolean isDisplayableElement(Object element) {

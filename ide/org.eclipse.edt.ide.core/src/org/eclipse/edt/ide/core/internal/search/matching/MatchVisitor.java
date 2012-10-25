@@ -23,7 +23,7 @@ import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
@@ -43,7 +43,6 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.Record;
-import org.eclipse.edt.compiler.core.ast.ReturningToNameClause;
 import org.eclipse.edt.compiler.core.ast.ReturnsDeclaration;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
@@ -195,7 +194,7 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 		return super.visit(program);
 	}
 	
-	public boolean visit(EGLClass eglClass) {
+	public boolean visit(Class eglClass) {
 		visitPart(eglClass);
 		return super.visit(eglClass);
 	}

@@ -91,8 +91,8 @@ public interface IASTVisitor {
 	boolean visit(DeleteStatement deleteStatement);
 	void endVisit(DeleteStatement deleteStatement);
 	
-	boolean visit(EGLClass eglClass);
-	void endVisit(EGLClass eglClass);
+	boolean visit(Class eglClass);
+	void endVisit(Class eglClass);
 	
 	boolean visit(ElseBlock elseBlock);
 	void endVisit(ElseBlock elseBlock);

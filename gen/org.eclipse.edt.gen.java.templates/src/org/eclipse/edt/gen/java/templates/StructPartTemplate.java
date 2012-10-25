@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import java.util.List;
-
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -23,25 +21,20 @@ public class StructPartTemplate extends JavaTemplate {
 
 	public static String getInterfaces(StructPart part, Context ctx){
 		TabbedWriter out = ctx.getTabbedWriter();
-		List<StructPart> extndsAry = part.getSuperTypes();
 		boolean appendComma = false;
-		if (extndsAry != null) {
-			for (StructPart extend : extndsAry) {
-				if(extend instanceof Interface){
-					if(appendComma){
-						out.print(", ");
-					}
-					else{
-						appendComma = true;
-					}
-					String pkg = CommonUtilities.packageName(extend);
-					if(pkg != null && !pkg.isEmpty()){
-						out.print(pkg);
-						out.print(".");
-					}
-					ctx.invoke(genClassName, extend, ctx, out);
-				}
+		for (Interface iface : part.getInterfaces()) {
+			if(appendComma){
+				out.print(", ");
 			}
+			else{
+				appendComma = true;
+			}
+			String pkg = CommonUtilities.packageName(iface);
+			if(pkg != null && !pkg.isEmpty()){
+				out.print(pkg);
+				out.print(".");
+			}
+			ctx.invoke(genClassName, iface, ctx, out);
 		}
 		out.close();
 		return out.getWriter().toString();

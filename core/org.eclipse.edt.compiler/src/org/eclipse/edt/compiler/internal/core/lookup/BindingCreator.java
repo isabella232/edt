@@ -16,7 +16,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -83,7 +83,7 @@ public class BindingCreator extends DefaultASTVisitor {
 		return false;
 	}
 
-	public boolean visit(EGLClass eglClass) {
+	public boolean visit(Class eglClass) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.CLASS_BINDING);
 		return false;
 	}

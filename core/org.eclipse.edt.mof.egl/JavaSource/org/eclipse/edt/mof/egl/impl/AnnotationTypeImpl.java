@@ -233,11 +233,6 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	}
 
 	@Override
-	public Stereotype getSubType() {
-		return getStereotype();
-	}
-
-	@Override
 	public String getId() {
 		return getName();
 	}

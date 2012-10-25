@@ -122,7 +122,7 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( deleteStatement );
 	}
 	
-	public boolean visit(EGLClass eglClass) {
+	public boolean visit(Class eglClass) {
 		return visitNode( eglClass );
 	}
 	
@@ -554,7 +554,7 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( deleteStatement );
 	}
 	
-	public void endVisit(EGLClass eglClass) {
+	public void endVisit(Class eglClass) {
 		endVisitNode( eglClass );
 	}
 

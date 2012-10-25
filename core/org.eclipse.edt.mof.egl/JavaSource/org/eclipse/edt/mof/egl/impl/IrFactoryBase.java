@@ -118,6 +118,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
+	public EClass getClassEClass() {
+		return (EClass)getTypeNamed(Class);
+	}
+	
+	@Override
 	public EClass getClassifierEClass() {
 		return (EClass)getTypeNamed(Classifier);
 	}
@@ -970,6 +975,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
 	public CharLiteral createCharLiteral() {
 		return (CharLiteral)getCharLiteralEClass().newInstance();
+	}
+	
+	@Override
+	public org.eclipse.edt.mof.egl.Class createClass() {
+		return (org.eclipse.edt.mof.egl.Class)getClassEClass().newInstance();
 	}
 	
 	@Override

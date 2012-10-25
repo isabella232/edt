@@ -62,7 +62,6 @@ import org.eclipse.edt.mof.egl.IsNotExpression;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
-import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;

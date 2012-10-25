@@ -25,7 +25,7 @@ import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
@@ -479,7 +479,7 @@ public class MatchingNodeSet {
 				reportMatchingEnumeration((Enumeration) part, enclosingElement);
 				break;
 			case Part.CLASS :
-				reportMatchingClass((EGLClass) part, enclosingElement);
+				reportMatchingClass((Class) part, enclosingElement);
 				break;
 		}
 		
@@ -582,7 +582,7 @@ public class MatchingNodeSet {
 		reportMatchingNestedFunctions(handler, enclosingElement);
 	}
 
-	private void reportMatchingClass(final EGLClass eglClass, IEGLElement enclosingElement) throws CoreException{		
+	private void reportMatchingClass(final Class eglClass, IEGLElement enclosingElement) throws CoreException{		
 		reportMatchingFields(eglClass, enclosingElement);
 		reportMatchingUses(eglClass, enclosingElement);
 		reportMatchingNestedFunctions(eglClass, enclosingElement);

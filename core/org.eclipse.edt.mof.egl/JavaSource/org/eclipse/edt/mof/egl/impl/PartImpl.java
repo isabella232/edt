@@ -37,12 +37,6 @@ public abstract class PartImpl extends ClassifierImpl implements Part {
 		slotSet(Slot_accessKind, value);
 	}
 	
-	
-	@Override
-	public Stereotype getSubType() {
-		return getStereotype();
-	}
-	
 	@Override
 	public String getFullyQualifiedName() {
 		return getTypeSignature();
