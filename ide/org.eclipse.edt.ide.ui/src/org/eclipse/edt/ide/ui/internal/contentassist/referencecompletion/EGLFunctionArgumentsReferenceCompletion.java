@@ -28,8 +28,7 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctio
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionSignatureProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -62,8 +61,8 @@ public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenc
 				new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
 					Node nodeThatMightBeAssignment = getNodeThatMightBeAssignment(boundNode);
 					if(nodeThatMightBeAssignment instanceof Assignment) {
-						IBinding lhBinding = ((Assignment) nodeThatMightBeAssignment).getLeftHandSide().resolveDataBinding();
-						if(lhBinding != null && IBinding.NOT_FOUND_BINDING != lhBinding && lhBinding.isAnnotationBinding()) {
+						Object elem = ((Assignment) nodeThatMightBeAssignment).getLeftHandSide().resolveElement();
+						if(elem instanceof Annotation) {
 							//We are completing the rhs of a property value
 							return;
 						}

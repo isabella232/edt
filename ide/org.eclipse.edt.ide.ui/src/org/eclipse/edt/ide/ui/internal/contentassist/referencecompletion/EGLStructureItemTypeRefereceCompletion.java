@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
@@ -53,7 +52,7 @@ public class EGLStructureItemTypeRefereceCompletion extends EGLAbstractReference
 				while(!(boundNode instanceof File)) {
 					if(boundNode instanceof org.eclipse.edt.compiler.core.ast.Part) {
 						proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).
-							getProposals(IEGLSearchConstants.RECORD | IEGLSearchConstants.ITEM, ((Part) boundNode).getName().getCanonicalName()));
+							getProposals(IEGLSearchConstants.RECORD, ((Part) boundNode).getName().getCanonicalName()));
 					}
 					boundNode = boundNode.getParent();
 				}			

@@ -24,7 +24,6 @@ import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
@@ -33,10 +32,13 @@ import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 import org.eclipse.jface.text.ITextViewer;
@@ -45,7 +47,7 @@ import org.eclipse.ui.IEditorPart;
 public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 	private Type qualifierType;
 	private Expression qualifierExpression;
-	private boolean isVariable;   //tells if this is myVar.<ca>, as opposed to myType.<ca>
+	private boolean isVariable;
 
 	public EGLVariableDotProposalHandler(
 		ITextViewer viewer,
@@ -76,136 +78,31 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 	
 	public List getProposals(boolean includeFunctions, boolean addEquals, boolean includePrivateFields, List propertyBlockList) {
 		List result = new ArrayList();
-		if(qualifierType != null) {
+		if(qualifierType != null && qualifierType.getClassifier() != null) {
 			
-			if (isVariable) {
-				result.addAll(getFieldProposals(BindingUtil.getAllFields(qualifierType), addEquals, includePrivateFields, propertyBlockList));
-				if(includeFunctions) {
-					result.addAll(getFunctionProposals(
-						BindingUtil.getAllFunctions(qualifierType),
-						null,
-						EGLCompletionProposal.RELEVANCE_MEDIUM));
-				}
-				return result;
-			}
-			else {
-				result.addAll(getFieldProposals(BindingUtil.getAllFields(qualifierType), addEquals, includePrivateFields, propertyBlockList));
-				if(includeFunctions) {
-					result.addAll(getFunctionProposals(
-						BindingUtil.getAllFunctions(qualifierType),
-						null,
-						EGLCompletionProposal.RELEVANCE_MEDIUM));
-				}
-				return result;
+			result.addAll(getFieldProposals(BindingUtil.getAllFields(qualifierType.getClassifier()), addEquals, includePrivateFields, propertyBlockList));
+			if(includeFunctions) {
+				result.addAll(getFunctionProposals(
+					BindingUtil.getAllFunctions(qualifierType.getClassifier()),
+					UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, getTypeString(qualifierType)),
+					EGLCompletionProposal.RELEVANCE_MEDIUM));
 			}
 			
-			
-		}
-		if(Binding.isValidBinding(qualifierTypeBinding)) {
-			switch(qualifierTypeBinding.getKind()) {
-				case ITypeBinding.ENUMERATION_BINDING:
-					return getFieldProposals(((EnumerationTypeBinding) qualifierTypeBinding).getEnumerations(), addEquals, includePrivateFields, propertyBlockList);					
-			
-				case ITypeBinding.EXTERNALTYPE_BINDING:
-					result.addAll(getFieldProposals(filterStaticDataBindings(((ExternalTypeBinding) qualifierTypeBinding).getDeclaredAndInheritedData()), addEquals, includePrivateFields, propertyBlockList));
-					if(includeFunctions) {
-						result.addAll(getFunctionProposals(
-							filterStaticDataBindings(((ExternalTypeBinding) qualifierTypeBinding).getDeclaredAndInheritedFunctions()),
-							null,
-							EGLCompletionProposal.RELEVANCE_MEDIUM));
-					}
-					return result;
+			if (!isVariable) {
+				return filterStaticMembers(result);
+			}
+			return result;
 				
-				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					result.addAll(getFieldProposals(((FlexibleRecordBinding) qualifierTypeBinding).getDeclaredFields(true), addEquals, includePrivateFields, propertyBlockList, PluginImages.IMG_OBJS_STRUCTUREITEM));
-					return result;
-
-				case ITypeBinding.LIBRARY_BINDING:
-					result.addAll(getFieldProposals(((LibraryBinding) qualifierTypeBinding).getDeclaredData(true), addEquals, includePrivateFields, propertyBlockList));
-					if(includeFunctions) {
-						result.addAll(getFunctionProposals(
-							((LibraryBinding) qualifierTypeBinding).getDeclaredFunctions(true),
-							UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, qualifierTypeBinding.getCaseSensitiveName()),
-							EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
-					}
-					return result;
-
-				case ITypeBinding.SERVICE_BINDING:
-					if(qualifierExpression instanceof ThisExpression) {
-						result.addAll(getFieldProposals(((ServiceBinding) qualifierTypeBinding).getDeclaredData(true), addEquals, includePrivateFields, propertyBlockList));
-					}
-					if(includeFunctions) {
-						result.addAll(getFunctionProposals(((ServiceBinding) qualifierTypeBinding).getDeclaredFunctions(true),
-								UINlsStrings.bind(UINlsStrings.CAProposal_ServiceFunction, qualifierTypeBinding.getCaseSensitiveName()),
-								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
-					}
-					return result;
-
-				case ITypeBinding.INTERFACE_BINDING:
-					if(includeFunctions) {
-						result.addAll(getFunctionProposals(((InterfaceBinding) qualifierTypeBinding).getDeclaredAndInheritedFunctions(),
-								UINlsStrings.bind(UINlsStrings.CAProposal_InterfaceFunction, qualifierTypeBinding.getCaseSensitiveName()),
-								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
-					}
-					return result;
-				
-				case ITypeBinding.HANDLER_BINDING:
-					result.addAll(getFieldProposals(((HandlerBinding) qualifierTypeBinding).getDeclaredData(true), addEquals, includePrivateFields, propertyBlockList));
-					if(includeFunctions) {
-						result.addAll(getFunctionProposals(((HandlerBinding) qualifierTypeBinding).getDeclaredFunctions(true),
-								UINlsStrings.bind(UINlsStrings.CAProposal_HandlerFunction, qualifierTypeBinding.getCaseSensitiveName()),
-								EGLCompletionProposal.RELEVANCE_LIBRARY_FUNCTION));
-					}
-					return result;
-					
-				case ITypeBinding.ARRAY_TYPE_BINDING:
-					if(includeFunctions) {
-						result.addAll(getSystemWordProposals(ArrayTypeBinding.getARRAY_FUNCTIONS(), UINlsStrings.CAProposal_ArrayFunctionSystemWord));
-					}
-					return result;	
-					
-				case ITypeBinding.PRIMITIVE_TYPE_BINDING:
-					if(includeFunctions){
-						result.addAll(getPrimitiveSystemFunctionProposals(((PrimitiveTypeBinding)qualifierTypeBinding)));
-					}
-					return result;	
-			}
 		}
 		return Collections.EMPTY_LIST;
 	}
 	
-	private List getPrimitiveSystemFunctionProposals(PrimitiveTypeBinding primitiveBinding){
-		Primitive prim = primitiveBinding.getPrimitive();
-		String primType = prim.getName();
-		
-		if(primType.equalsIgnoreCase(IEGLConstants.STRING_STRING)){
-			return(getSystemWordProposals(PrimitiveTypeBinding.getStringFunctions(), UINlsStrings.CAProposal_StringLibrary));
-		}else if(primType.equalsIgnoreCase(IEGLConstants.TIMESTAMP_STRING)){
-			return(getSystemWordProposals(PrimitiveTypeBinding.getTimestampFunctions(), UINlsStrings.CAProposal_TimeStampLibrary));
-		}else if(primType.equalsIgnoreCase(IEGLConstants.DATE_STRING)){
-			return(getSystemWordProposals(PrimitiveTypeBinding.getDateFunctions(), UINlsStrings.CAProposal_DateLibrary));
-		}else if(primType.equalsIgnoreCase(IEGLConstants.TIME_STRING)){
-			return(getSystemWordProposals(PrimitiveTypeBinding.getTimeFunctions(), UINlsStrings.CAProposal_TimeLibrary));
-		}
-		
-		return Collections.EMPTY_LIST;
-	}
-
-	private List filterStaticDataBindings(List dataBindings) {
+	private List filterStaticMembers(List members) {
 		List filteredList = new ArrayList();
-		for(Iterator iter = dataBindings.iterator(); iter.hasNext();) {
-			IDataBinding next = (IDataBinding) iter.next();
-			switch(next.getKind()) {
-				case IDataBinding.CLASS_FIELD_BINDING :
-					if(((ClassFieldBinding) next).isStatic()) {
-						filteredList.add(next);
-					}
-					break;
-				case IDataBinding.NESTED_FUNCTION_BINDING :
-					if(((IFunctionBinding) next.getType()).isStatic()) {
-						filteredList.add(next);
-					}
-					break;				
+		for(Iterator iter = members.iterator(); iter.hasNext();) {
+			Member next = (Member) iter.next();
+			if (next.isStatic()) {
+				filteredList.add(next);
 			}
 		}
 		return filteredList;
@@ -215,19 +112,16 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 		List result = new ArrayList();
 		String fieldImgKeyStr = ImgKeyStr == "" ? PluginImages.IMG_OBJS_ENV_VAR : ImgKeyStr;
 
-		for(Iterator iter = fieldDataBindings.iterator(); iter.hasNext();) {
-			IDataBinding dataBinding = (IDataBinding) iter.next();
-			if(!includePrivateFields && dataBinding instanceof VariableBinding && ((VariableBinding) dataBinding).isPrivate() && !(qualifierExpression instanceof ThisExpression)) {
+		for(Field field : fields) {
+			if(!includePrivateFields&& field.getAccessKind() == AccessKind.ACC_PRIVATE && !(qualifierExpression instanceof ThisExpression)) {
 				continue;
 			}
-			if(AmbiguousDataBinding.getInstance() != dataBinding) {
-				String proposalString = dataBinding.getCaseSensitiveName();
+				String proposalString = field.getCaseSensitiveName();
 				if (proposalString.toUpperCase().startsWith(getPrefix().toUpperCase())) {
-					if(!"*".equals(dataBinding.getName())) { //$NON-NLS-1$
-						String displayString = proposalString + " : " + dataBinding.getType().getCaseSensitiveName() +  " - " + dataBinding.getDeclaringPart().getName();	//$NON-NLS-1$;
+						String displayString = proposalString + " : " + getTypeString(field.getType()) +  " - " + getNameFromElement(field.getContainer());	//$NON-NLS-1$;
 						if (!containsProperty(proposalString, propertyBlockList)) {
 							if (addEquals) {
-								if (needSetFunctionForTheField(dataBinding)) {
+								if (needSetFunctionForTheField(field)) {
 									proposalString = proposalString + " ::= "; //$NON-NLS-1$
 								} else {
 									proposalString = proposalString + " = "; //$NON-NLS-1$
@@ -236,15 +130,13 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 							result.add(new EGLCompletionProposal(viewer,
 													displayString,
 													proposalString,
-													getAdditionalInfo(dataBinding),
+													getAdditionalInfo(field),
 													getDocumentOffset() - getPrefix().length(),
 													getPrefix().length(),
 													proposalString.length(),
 													EGLCompletionProposal.RELEVANCE_MEDIUM-1,
 													fieldImgKeyStr));
 						}
-					}
-				}
 			}
 		}
 		return result;
@@ -256,14 +148,12 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 	
 	private List getFunctionProposals(List<Function> functions, String additionalInformation, int relevance) {
 		List result = new ArrayList();
-		for(Iterator iter = functionBindings.iterator(); iter.hasNext();) {
-			IDataBinding nestedFunctionBinding = (IDataBinding) iter.next();
-			IFunctionBinding functionBinding = (IFunctionBinding) nestedFunctionBinding.getType();
+		for(Function function : functions) {
 			//Adding this check on 10/04/2006 for RATLC01129262.  From what I can tell private functions should never
 			//be returned.  If I am wrong, need to parameterize a boolean to determine whether or not to return private functions.
-			if (!functionBinding.isPrivate()) {
-				if (nestedFunctionBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
-					result.addAll(createFunctionInvocationProposals(functionBinding, additionalInformation, relevance, false));
+			if (function.getAccessKind() != AccessKind.ACC_PRIVATE) {
+				if (function.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+					result.addAll(createFunctionInvocationProposals(function, additionalInformation, relevance, false));
 				}
 			}
 		}

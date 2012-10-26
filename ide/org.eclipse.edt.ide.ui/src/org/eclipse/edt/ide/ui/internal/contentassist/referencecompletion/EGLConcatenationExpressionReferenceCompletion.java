@@ -20,7 +20,6 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclara
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLConcatenationExpressionReferenceCompletion extends EGLAbstractReferenceCompletion {

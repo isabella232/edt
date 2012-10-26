@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -37,7 +36,6 @@ import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.tools.EGL2IR;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -78,7 +76,6 @@ public abstract class EGLAbstractProposalHandler {
 	private String prefix;
 	protected IEditorPart editor;
 	protected ITextViewer viewer;
-	protected ISystemEnvironment sysEnv = null;
 
 	public EGLAbstractProposalHandler(ITextViewer viewer, int documentOffset, String prefix) {
 		this(viewer, documentOffset, prefix, null);
@@ -93,7 +90,6 @@ public abstract class EGLAbstractProposalHandler {
 		
 		if(null != editor){
 			IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
-			sysEnv = SystemEnvironmentManager.findSystemEnvironment(editorInput.getFile().getProject(), null); 
 		}
 	}
 

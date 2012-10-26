@@ -14,18 +14,11 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLConditionalStateProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -75,16 +68,4 @@ public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCom
 		return proposals;
 	}
 
-	private IDataBinding getStatementTargetBinding(Node boundNode) {
-		while(boundNode != null) {
-			if(boundNode instanceof CaseStatement) {
-				CaseStatement caseStatement = (CaseStatement) boundNode;
-				if(caseStatement.hasCriterion()) {
-					return caseStatement.getCriterion().resolveDataBinding();
-				}
-			}
-			boundNode = boundNode.getParent();
-		}
-		return null;
-	}
 }

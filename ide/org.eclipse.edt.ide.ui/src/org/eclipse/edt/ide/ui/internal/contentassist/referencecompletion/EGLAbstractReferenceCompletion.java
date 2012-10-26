@@ -17,21 +17,13 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.binding.FixedRecordBindingImpl;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBindingImpl;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.IfStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -40,17 +32,12 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Primitive;
-import org.eclipse.edt.compiler.core.ast.PrimitiveType;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.core.ast.WhileStatement;
-import org.eclipse.edt.compiler.internal.EGLNewPropertiesHandler;
 import org.eclipse.edt.compiler.internal.EGLPropertyRule;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
@@ -70,8 +57,9 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPropertyValueProposalHandler;
 import org.eclipse.edt.ide.ui.internal.editor.util.EGLModelUtility;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -194,8 +182,8 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 
 		this.editor = editor;
 		IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
-		ISystemEnvironment env = SystemEnvironmentManager.findSystemEnvironment(editorInput.getFile().getProject(), null); 
-		EGLNewPropertiesHandler.setAnnoTypeMgr( env.getAnnotationTypeManager());
+//		ISystemEnvironment env = SystemEnvironmentManager.findSystemEnvironment(editorInput.getFile().getProject(), null); 
+//		EGLNewPropertiesHandler.setAnnoTypeMgr( env.getAnnotationTypeManager());
 		
 		int parseState = parseStack.getCurrentState();
 
@@ -301,25 +289,6 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 								}
 							}
 							
-							public boolean visit(FormGroup formGroup) {
-								Node nestedPart = getNestedPart(viewer, documentOffset);
-								nestedPart.accept(new AbstractASTVisitor() {
-									public boolean visit(VariableFormField variableFormField) {
-										if(variableFormField.getType().isArrayType()) {
-											itemNames.add(variableFormField.getName().getCanonicalName());
-										}
-										return false;
-									}
-								});	
-								return false;
-							}
-							
-							public void endVisit(VariableFormField variableFormField) {
-								if(variableFormField.getType().isArrayType()) {
-									itemNames.add(variableFormField.getName().getCanonicalName());
-								}
-							}
-							
 							public void endVisit(ClassDataDeclaration classDataDeclaration) {
 								Type type = classDataDeclaration.getType();
 								boolean addNames = false;
@@ -353,22 +322,7 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 									itemNames.add(structureItem.getName().getCanonicalName());
 								}
 							}
-							
-							public boolean visit(FormGroup formGroup) {
-								Node nestedPart = getNestedPart(viewer, documentOffset);
-								nestedPart.accept(new AbstractASTVisitor() {
-									public boolean visit(VariableFormField variableFormField) {
-										itemNames.add(variableFormField.getName().getCanonicalName());
-										return false;
-									}
-								});	
-								return false;
-							}
-							
-							public void endVisit(VariableFormField variableFormField) {
-								itemNames.add(variableFormField.getName().getCanonicalName());
-							}
-							
+																					
 							public void endVisit(ClassDataDeclaration classDataDeclaration) {
 								Type type = classDataDeclaration.getType();
 								boolean addNames = false;
@@ -426,25 +380,7 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 							}
 						}
 						
-						public boolean visit(FormGroup formGroup) {
-							Node nestedPart = getNestedPart(viewer, documentOffset);
-							nestedPart.accept(new AbstractASTVisitor() {
-								public boolean visit(VariableFormField variableFormField) {
-									if(variableFormField.getType().isArrayType()) {
-										itemNames.add(variableFormField.getName().getCanonicalName());
-									}
-									return false;
-								}
-							});	
-							return false;
-						}
-						
-						public void endVisit(VariableFormField variableFormField) {
-							if(variableFormField.getType().isArrayType()) {
-								itemNames.add(variableFormField.getName().getCanonicalName());
-							}
-						}
-						
+												
 						public void endVisit(ClassDataDeclaration classDataDeclaration) {
 							Type type = classDataDeclaration.getType();
 							boolean addNames = false;
@@ -460,32 +396,6 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 							if(addNames) {							
 								for(Iterator namesIter = classDataDeclaration.getNames().iterator(); namesIter.hasNext();) {
 									itemNames.add(((Name) namesIter.next()).getCanonicalName());
-								}
-							}
-						}
-					});
-				}
-			}
-		});
-		return itemNames;
-	}
-	public List getIntBooleanItemNames(final ITextViewer viewer, final int documentOffset) {
-		// currently this is only called for JSF handler class declarations
-		final List itemNames = new ArrayList();
-		Node eglPart = getPart(viewer, documentOffset);
-		
-		eglPart.accept(new AbstractASTPartVisitor() {
-			public void visitPart(org.eclipse.edt.compiler.core.ast.Part part) {
-				for(Iterator iter = part.getContents().iterator(); iter.hasNext();) {
-					((Node) iter.next()).accept(new DefaultASTVisitor() {
-						public void endVisit(ClassDataDeclaration classDataDeclaration) {
-							Type type = classDataDeclaration.getType();
-							if (type!= null && type.isPrimitiveType()) {
-								int primitiveType = ((PrimitiveType) type).getPrimitive().getType();
-								if (primitiveType == Primitive.INT_PRIMITIVE || primitiveType == Primitive.BOOLEAN_PRIMITIVE) {
-									for(Iterator namesIter = classDataDeclaration.getNames().iterator(); namesIter.hasNext();) {
-										itemNames.add(((Name) namesIter.next()).getCanonicalName());
-									}
 								}
 							}
 						}
@@ -526,21 +436,11 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 			}
 			if (type != null) {
 				Name name = type.getName();
-				IBinding binding = name.resolveBinding();
-				if (binding instanceof FixedRecordBindingImpl) {
-					FixedRecordBindingImpl recordBinding = (FixedRecordBindingImpl) binding;
-					List structureItems = recordBinding.getStructureItems();
-					for (Iterator iter = structureItems.iterator(); iter.hasNext();) {
-						StructureItemBinding structureItemBinding = (StructureItemBinding) iter.next();
-						itemNames.add(structureItemBinding.getName());
-					}
-				}
-				else if (binding instanceof FlexibleRecordBindingImpl) {
-					FlexibleRecordBindingImpl recordBinding = (FlexibleRecordBindingImpl) binding;
-					IDataBinding structureItems[] = recordBinding.getFields();
-					for (int i = 0; i < structureItems.length; i++) {
-						IDataBinding dataBinding = structureItems[i];
-						itemNames.add(dataBinding.getName());
+				org.eclipse.edt.mof.egl.Type binding = name.resolveType();
+				if (binding instanceof Record) {
+					Record recordBinding = (Record) binding;
+					for (Field field : recordBinding.getFields()) {
+						itemNames.add(field.getName());
 					}
 				}
 			}
@@ -831,13 +731,21 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 		}, boundNodeProcessor);
 	}
 	
-	private String[] getPackageName(IPath path) {
-		String[] packageName = new String[path.segmentCount()-3];
+	private String getPackageName(IPath path) {
+		String packageName = "";
 		if (path.segmentCount() > 3) {
+			boolean first = true;
 			for (int i = 2; i < path.segmentCount()-1; i++) {
-				packageName[i-2] = path.segment(i);
+				if (first) {
+					first = false;
+				}
+				else {
+					packageName = packageName + ".";
+				}
+				packageName = packageName + path.segment(i);
 			}
 		}
+		
 		return packageName;
 	}
 
@@ -866,7 +774,7 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 	}
 
 	protected int getSearchConstantsForDeclarableParts() {
-		return IEGLSearchConstants.RECORD	| IEGLSearchConstants.ITEM |
+		return IEGLSearchConstants.RECORD   |
 		       IEGLSearchConstants.SERVICE	| IEGLSearchConstants.INTERFACE |
 		       IEGLSearchConstants.DELEGATE	| IEGLSearchConstants.EXTERNALTYPE;
 	}

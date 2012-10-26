@@ -44,7 +44,7 @@ public class EGLNewPropertiesHandler {
 //    public static final int literalValue = 4;
 //    public static final int listValue = 5;
 //    public static final int literalArray = 6;
-//    public static final int nestedValue = 7;
+	public static final int nestedValue = 7;
 //    public static final int sqlValue = 8;
 //    public static final int arrayOfArrays = 9;
 //    public static final int arrayOf = 10;
@@ -64,7 +64,7 @@ public class EGLNewPropertiesHandler {
 //    public static final int locationFunction = 10;
 //    public static final int locationProgram = 11;
 //    public static final int locationLibrary = 12;
-//    public static final int locationUseDeclaration = 13;
+    public static final int locationUseDeclaration = 13;
 //    public static final int locationFormGroupUseDeclaration = 14;
 //    public static final int locationDataTableUseDeclaration = 15;
 //    public static final int locationFormUseDeclaration = 16;
@@ -214,7 +214,8 @@ public class EGLNewPropertiesHandler {
 //
 //    public static final int locationExit = 141;
 //
-//    public static Collection getPropertyRules(int location) {
+    public static Collection getPropertyRules(int location) {
+    	return new ArrayList();
 //		switch (location) {
 //		case locationDataItem:
 //			return getDataItemPropertyRules();
@@ -398,7 +399,7 @@ public class EGLNewPropertiesHandler {
 //		default:
 //			return null;
 //		}
-//	}
+	}
 //	
 //	private static Set AllHandlerPropertyRules;
 //	private static Set getAllHandlerPropertyRules() {
