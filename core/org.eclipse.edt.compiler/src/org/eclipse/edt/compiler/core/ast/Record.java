@@ -11,12 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -38,10 +35,12 @@ public class Record extends Part{
 		}
 	}
 	
+	@Override
 	public boolean hasSubType() {
 		return partSubTypeOpt != null;
 	}
 	
+	@Override
 	public Name getSubType() {
 		return partSubTypeOpt;
 	}
@@ -50,37 +49,23 @@ public class Record extends Part{
 		return contents;
 	}
 	
-	public boolean isFlexible() {
-		
+	public boolean isAnnotationType() {
 		if(partSubTypeOpt != null && partSubTypeOpt.isSimpleName()) {
 			String subTypeName = partSubTypeOpt.getIdentifier();
+			return (subTypeName.equalsIgnoreCase("annotation"));
+		}
+		return false;
+	}
 
-			if(subTypeName == InternUtil.intern("IndexedRecord") ||
-			   subTypeName == InternUtil.intern("SerialRecord") ||
-			   subTypeName == InternUtil.intern("RelativeRecord") ||
-			   subTypeName == InternUtil.intern("MQRecord") ||
-			   subTypeName == InternUtil.intern("VGUIRecord") ||
-			   subTypeName == InternUtil.intern("DLISegment")) {
-				return false;
-			}
-			
-			if(subTypeName == InternUtil.intern("PSBRecord") ||
-			   subTypeName == InternUtil.intern("CSVRecord") ||
-			   subTypeName == InternUtil.intern("Annotation")) {
-				return true;
-			}
+	public boolean isStereotypeType() {
+		if(partSubTypeOpt != null && partSubTypeOpt.isSimpleName()) {
+			String subTypeName = partSubTypeOpt.getIdentifier();
+			return (subTypeName.equalsIgnoreCase("stereotype"));
 		}
-		
-		for(Iterator iter = getContents().iterator(); iter.hasNext();) {
-			Object nextContent = iter.next();
-			if(nextContent instanceof StructureItem) {
-				return !((StructureItem) nextContent).hasLevel(); 
-			}
-		}
-		
-		return true;
+		return false;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -91,27 +76,20 @@ public class Record extends Part{
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		Name newPartSubTypeOpt = partSubTypeOpt != null ? (Name)partSubTypeOpt.clone() : null;
 		
 		return new Record(new Boolean(isPrivate), (SimpleName)name.clone(), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 	
-	public boolean isGeneratable(){
-		if(hasSubType()){
-			String subTypeName = partSubTypeOpt.getIdentifier();
-			if(subTypeName == InternUtil.intern("VGUIRecord") || subTypeName == InternUtil.intern("consoleForm"))
-	            return true;
-		}
-		return false;
-	}
-
+	@Override
 	public String getPartTypeName() {
 		return IEGLConstants.KEYWORD_RECORD;
 	}
 	
+	@Override
 	public int getPartType() {
 		return RECORD;
 	}
-
 }

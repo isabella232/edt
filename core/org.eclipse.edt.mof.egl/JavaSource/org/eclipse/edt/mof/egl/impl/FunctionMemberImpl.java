@@ -65,7 +65,7 @@ public class FunctionMemberImpl extends MemberImpl implements FunctionMember {
 	@Override
 	public String getSignature() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(getName());
+		buffer.append(getCaseSensitiveName());
 		buffer.append('(');
 		for (int i=0; i<getParameters().size(); i++) {
 			buffer.append(getParameters().get(i).getType().getTypeSignature());

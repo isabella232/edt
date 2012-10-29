@@ -36,7 +36,7 @@ public class Service extends Part {
 	/**
 	 * @return A List of Name objects
 	 */
-	public List getImplementedInterfaces() {
+	public List<Name> getImplementedInterfaces() {
 		return implementsOpt;
 	}
 	
@@ -75,9 +75,5 @@ public class Service extends Part {
 	 */
 	public List getServiceReferences() {
 		return Collections.EMPTY_LIST;
-	}
-	
-	public boolean isGeneratable() {
-		return true;
 	}
 }

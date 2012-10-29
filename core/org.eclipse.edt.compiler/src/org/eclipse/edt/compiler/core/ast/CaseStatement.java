@@ -49,7 +49,7 @@ public class CaseStatement extends Statement {
 		return parenthesizedExprOpt;
 	}
 	
-	public List getWhenClauses() {
+	public List<WhenClause> getWhenClauses() {
 		return whenClauses;
 	}
 	
@@ -75,8 +75,8 @@ public class CaseStatement extends Statement {
 		return true;
 	}
 	
-	public List getStatementBlocks() {
-		List result = new ArrayList();
+	public List<List<Node>> getStatementBlocks() {
+		List<List<Node>> result = new ArrayList<List<Node>>();
 		for(Iterator iter = whenClauses.iterator(); iter.hasNext();) {
 			result.add(((WhenClause) iter.next()).getStmts());
 		}

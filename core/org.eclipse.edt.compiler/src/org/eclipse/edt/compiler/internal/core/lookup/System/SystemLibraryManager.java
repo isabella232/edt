@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,137 +11,72 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup.System;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.AmbiguousSystemLibraryFieldDataBinding;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.DataBindingWithImplicitQualifier;
-import org.eclipse.edt.compiler.binding.FunctionBinding;
-import org.eclipse.edt.compiler.binding.FunctionBindingWithImplicitQualifier;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LibraryBinding;
-import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
-import org.eclipse.edt.compiler.binding.OverloadedFunctionSet;
-import org.eclipse.edt.compiler.binding.VariableBinding;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Member;
 
-
-/**
- * @author Harmon
- */
 public class SystemLibraryManager {
     
     
-    private Map libraries = new HashMap();
-    private Map libraryData = new HashMap();
-    private Map libraryFunctions =  new HashMap();   
+    private Map<String, Library> libraries = new HashMap<String, Library>();
+    private Map<String, List<Member>> libraryData = new HashMap<String, List<Member>>();
 
     public SystemLibraryManager(SystemLibraryManager parentLib) {
         super();
         if (parentLib != null) {
         	libraries.putAll(parentLib.libraries);
-        	libraryData.putAll(parentLib.libraryData);
-        	libraryFunctions.putAll(parentLib.libraryFunctions);
+        	
+        	for(String key: libraryData.keySet()) {
+        		putLibraryData(key, libraryData.get(key));
+        	}
         }
     }
-    
-    public ITypeBinding findType(String simpleName) {
-        return (ITypeBinding) getLibraries().get(simpleName);
+       
+    public List<Member> findMember(String simpleName) {
+        return getLibraryData().get(simpleName);
     }
     
-    public IDataBinding findData(String simpleName) {
-        return (IDataBinding) getLibraryData().get(simpleName);
-    }
-    
-    public IFunctionBinding findFunction(String simpleName) {
-        return (IFunctionBinding) getLibraryFunctions().get(simpleName);
-    }
-    
-    public Map getLibraries() {
+    public Map<String, Library> getLibraries() {
         return libraries;
     }
     
-    private Map getLibraryData() {
+    private Map<String, List<Member>> getLibraryData() {
          return libraryData;
     }
-
-    private Map getLibraryFunctions() {
-         return libraryFunctions;
-    }
-        
-    public void addSystemLibrary(LibraryBinding libraryBinding){
-    	libraries.put(libraryBinding.getName(),libraryBinding);
-    	addLibraryData(libraryBinding);
-    	addLibraryFunctions(libraryBinding);
+     
+    public void addSystemLibrary(Library library){
+    	libraries.put(library.getName(),library);
+    	addLibraryData(library);
     }
     
     
-    private void addLibraryData(LibraryBinding library) {
-        Iterator i = library.getClassFields().iterator();
-        while (i.hasNext()) {
-            VariableBinding var = (VariableBinding) i.next();
-            if (!var.isPrivate()) {
-            	putLibraryData( var.getName(), new DataBindingWithImplicitQualifier(var, library.getStaticLibraryDataBinding()));
-            }
-        }
-        
-        i = library.getDeclaredFunctions().iterator();
-        while (i.hasNext()) {
-        	IDataBinding newFunction = (NestedFunctionBinding) i.next();
-        	if (Binding.isValidBinding(newFunction.getType()) && !((IFunctionBinding)newFunction.getType()).isPrivate()) {        	
-	        	IDataBinding existingFunction = (IDataBinding) libraryData.get(newFunction.getName());
-	        	if(existingFunction == null) {
-	        		putLibraryData(newFunction.getName(),  new DataBindingWithImplicitQualifier(newFunction, library.getStaticLibraryDataBinding()));
-	        	}
-	        	else {
-	        		OverloadedFunctionSet functionSet;
-	        		existingFunction = ((DataBindingWithImplicitQualifier) existingFunction).getWrappedDataBinding();
-	        		if(existingFunction instanceof OverloadedFunctionSet) {
-	        			functionSet = (OverloadedFunctionSet) existingFunction;
-	        		}
-	        		else {
-	        			functionSet = new OverloadedFunctionSet();
-	        			functionSet.setName(newFunction.getCaseSensitiveName());
-	        			functionSet.addNestedFunctionBinding(existingFunction);
-	        		}
-	        		functionSet.addNestedFunctionBinding(newFunction);
-	        		
-	        		putLibraryData(newFunction.getName(), new DataBindingWithImplicitQualifier(functionSet, library.getStaticLibraryDataBinding()));
-	        	}
-        	}
-        }
+    private void addLibraryData(Library library) {
+    	
+    	for (Member mbr : library.getMembers()) {
+    		putLibraryData(mbr.getName(),mbr);
+    	}
     }
 
-    private void putLibraryData(String name, IDataBinding dBinding) {
-    	IDataBinding existingDBinding = (IDataBinding) libraryData.get(name);
-    	if(existingDBinding == null || IDataBinding.OVERLOADED_FUNCTION_SET_BINDING == dBinding.getKind()) {
-    		libraryData.put(name, dBinding);
+    private void putLibraryData(String name, Member mbr) {
+    	List<Member> list = getLibraryData().get(name);
+    	if (list == null) {
+    		list = new ArrayList<Member>();
+    		getLibraryData().put(name, list);
     	}
-    	else {
-    		AmbiguousSystemLibraryFieldDataBinding ambigFieldBinding;
-    		if(IDataBinding.AMBIGUOUSSYSTEMLIBRARYFIELD_BINDING == existingDBinding.getKind()) {
-    			ambigFieldBinding = (AmbiguousSystemLibraryFieldDataBinding) existingDBinding;
-    		}
-    		else {
-    			ambigFieldBinding = new AmbiguousSystemLibraryFieldDataBinding();
-    			//CSTODO Should we pass in the case sensitive name here?
-    			ambigFieldBinding.addAllowedQualifier(existingDBinding.getDeclaringPart().getName());
-    		}
-    		ambigFieldBinding.addAllowedQualifier(dBinding.getDeclaringPart().getName());
-    		libraryData.put(name, ambigFieldBinding);
-    	}
+    	list.add(mbr);    	
 	}
 
-	private void addLibraryFunctions(LibraryBinding library) {
-        Iterator i = library.getDeclaredFunctions().iterator();
-        while (i.hasNext()) {
-        	IFunctionBinding function = (IFunctionBinding)((NestedFunctionBinding) i.next()).getType();
-        	if (!function.isPrivate()) {
-        		libraryFunctions.put(function.getName(), new FunctionBindingWithImplicitQualifier(function, library.getStaticLibraryDataBinding()));
-        	}
-        }
-    }
+    private void putLibraryData(String name, List<Member> mbrs) {
+    	List<Member> list = getLibraryData().get(name);
+    	if (list == null) {
+    		list = new ArrayList<Member>();
+    		getLibraryData().put(name, list);
+    	}
+    	list.addAll(mbrs);    	
+	}
+
 }

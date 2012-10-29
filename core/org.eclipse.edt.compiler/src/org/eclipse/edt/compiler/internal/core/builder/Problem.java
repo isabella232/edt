@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
+import java.util.ResourceBundle;
+
 /**
  * @author winghong
  */
@@ -21,14 +23,20 @@ public class Problem {
     private int severity;
     private int problemKind;
     private String[] inserts;
+    private ResourceBundle bundle;
 
     public Problem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+    	this(startOffset, endOffset, severity, problemKind, inserts, DefaultProblemRequestor.RESOURCE_BUNDLE);
+    }
+    
+    public Problem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
         super();
         this.startOffset = startOffset;
         this.endOffset = endOffset;
         this.severity = severity;
         this.problemKind = problemKind;
         this.inserts = inserts;
+        this.bundle = bundle;
     }
 
     public int getEndOffset() {
@@ -51,11 +59,14 @@ public class Problem {
         return startOffset;
     }
     
+    public ResourceBundle getResourceBundle() {
+    	return bundle;
+    }
+    
     /* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		// TODO Auto-generated method stub
 		return super.toString();
 	}
 

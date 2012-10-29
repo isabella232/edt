@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,8 +25,14 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
+import org.eclipse.edt.compiler.internal.core.lookup.EnumerationScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
+import org.eclipse.edt.mof.egl.IrFactory;
 
 
 /**
@@ -34,29 +40,32 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
  */
 public class EnumerationBindingCompletor extends AbstractBinder {
 
-    private EnumerationTypeBinding enumerationBinding;
+    private org.eclipse.edt.mof.egl.Enumeration enumerationBinding;
     private IProblemRequestor problemRequestor;
     
-    private Set fieldNames = new HashSet();
+    private Set<String> fieldNames = new HashSet<String>();
 
-    public EnumerationBindingCompletor(Scope currentScope, EnumerationTypeBinding enumerationBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(currentScope, enumerationBinding, dependencyRequestor, compilerOptions);
-        this.enumerationBinding = enumerationBinding;
+    public EnumerationBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(currentScope, irBinding.getIrPart(), dependencyRequestor, compilerOptions);
+        this.enumerationBinding = (org.eclipse.edt.mof.egl.Enumeration)irBinding.getIrPart();
         this.problemRequestor = problemRequestor;
     }
     
     public boolean visit(Enumeration enumeration) {
-    	enumeration.getName().setBinding(enumerationBinding);
-    	enumerationBinding.setPrivate(enumerationBinding.isPrivate());
+    	enumeration.getName().setType(enumerationBinding);
+        if (enumeration.isPrivate()) {
+        	enumerationBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+        }
     	
     	return true;
     }
     
 	public void endVisit(Enumeration enumeration) {
-		enumerationBinding.setValid(true);
+    	BindingUtil.setValid(enumerationBinding, true);
 	}
     
 	public boolean visit(EnumerationField enumerationField) {
+
 		int constantValue = -1;
 		if(enumerationField.hasConstantValue()) {
 			final int constantValueAry[] = new int[] {-1};
@@ -74,9 +83,6 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 					if (unaryExpression.getOperator() == Operator.MINUS) {
 						constantValueAry[0] = constantValueAry[0] * -1;
 					}
-					else if (unaryExpression.getOperator() == Operator.NEGATE) {
-						constantValueAry[0] = ~constantValueAry[0];
-					}
 				}
 				public void endVisitExpression(Expression expression) {
 				}
@@ -86,15 +92,21 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 		else {
 			constantValue = fieldNames.size();
 		}
-		EnumerationDataBinding enumDataBinding = new EnumerationDataBinding(enumerationField.getName().getCaseSensitiveIdentifier(), enumerationBinding, enumerationBinding, constantValue);
-		enumerationField.getName().setBinding(enumDataBinding);
+		EnumerationEntry enumEntry = IrFactory.INSTANCE.createEnumerationEntry();
+		enumEntry.setContainer(enumerationBinding);
+		enumEntry.setName(enumerationField.getName().getCaseSensitiveIdentifier());
+		enumEntry.setValue(constantValue);
 		
+		enumerationField.getName().setElement(enumEntry);
+		enumEntry.setIsStatic(true);
+
 		if (enumerationField.hasSettingsBlock()) {
 			SettingsBlock settingsBlock = enumerationField.getSettingsBlock();
-	        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, enumDataBinding, null, enumDataBinding, -1, enumerationBinding);
+	        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, enumEntry, enumerationBinding, enumEntry);
 	        SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, enumerationBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
 	        settingsBlock.accept(blockCompletor);
 	    }
+		
 		
 		if(fieldNames.contains(enumerationField.getName().getIdentifier())) {
     		problemRequestor.acceptProblem(
@@ -108,14 +120,17 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 		}
 		else {
 			fieldNames.add(enumerationField.getName().getIdentifier());
-			enumerationBinding.addEnumeration(enumDataBinding);
+			enumerationBinding.getEntries().add(enumEntry);
 		}
 		return false;
 	}
 	
     public boolean visit(SettingsBlock settingsBlock) {
-        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, enumerationBinding, enumerationBinding, enumerationBinding, -1, enumerationBinding);
+    	EnumerationScope enumScope = new EnumerationScope(NullScope.INSTANCE, enumerationBinding);
+        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(enumScope, enumerationBinding, enumerationBinding, enumerationBinding);
         SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, enumerationBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
         settingsBlock.accept(blockCompletor);
         return false;
-    }}
+    }
+    
+}

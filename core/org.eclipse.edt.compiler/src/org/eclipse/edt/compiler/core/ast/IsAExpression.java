@@ -56,4 +56,9 @@ public class IsAExpression extends Expression {
 	protected Object clone() throws CloneNotSupportedException {
 		return new IsAExpression((Expression)expr.clone(), (Type)type.clone(), getOffset(), getOffset() + getLength());
 	}
+	
+	@Override
+	public String toString() {
+		return expr.toString() + " isa " + type.toString();
+	}
 }

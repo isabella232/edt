@@ -17,15 +17,21 @@ import java.util.Set;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
+import org.eclipse.edt.compiler.internal.core.lookup.DelegateScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 /**
@@ -33,33 +39,27 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
  */
 public class DelegateBindingCompletor extends AbstractBinder {
 
-    private DelegateBinding delegateBinding;
+    private org.eclipse.edt.mof.egl.Delegate delegateBinding;
     private IProblemRequestor problemRequestor;
-    private Set definedParameters = new HashSet();
-	private String canonicalDelegateName;
+    private Set<String> definedParameters = new HashSet<String>();
 
-    public DelegateBindingCompletor(Scope currentScope, DelegateBinding delegateBinding,
+    public DelegateBindingCompletor(Scope currentScope, IRPartBinding irBinding,
             IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(currentScope, delegateBinding, dependencyRequestor, compilerOptions);
-        this.delegateBinding = delegateBinding;
+        super(currentScope, irBinding.getIrPart(), dependencyRequestor, compilerOptions);
+        this.delegateBinding = (org.eclipse.edt.mof.egl.Delegate)irBinding.getIrPart();
         this.problemRequestor = problemRequestor;
     }
 
     public boolean visit(Delegate delegate) {
-        delegate.getName().setBinding(delegateBinding);
-        canonicalDelegateName = delegate.getName().getCanonicalName();
-
-        delegateBinding.setPrivate(delegate.isPrivate());
+        delegate.getName().setType(delegateBinding);
 
         if (delegate.hasReturnType()) {
-            ITypeBinding typeBinding = null;
+            Type typeBinding = null;
             try {
                 typeBinding = bindType(delegate.getReturnType());
                 
-                if(checkReturnType(delegate.getReturnType(), typeBinding)) {
-    	            delegateBinding.setReturnType(typeBinding);
-    	            delegateBinding.setReturnTypeIsSqlNullable(delegate.returnTypeIsSqlNullable());
-                }
+	            delegateBinding.setReturnType(typeBinding);
+	            delegateBinding.setIsNullable(delegate.getReturnDeclaration().isNullable());//TODO JV is this correct?
             } catch (ResolutionException e) {
                 problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());                
             }
@@ -69,83 +69,58 @@ public class DelegateBindingCompletor extends AbstractBinder {
     }
     
     public void endVisit(Delegate delegate) {
-    	delegateBinding.setValid(true);
+    	BindingUtil.setValid(delegateBinding, true);
     }
     
-    private boolean checkReturnType(Type type, ITypeBinding typeBinding) {
-        if(!typeBinding.isReference() &&
-           ITypeBinding.DATAITEM_BINDING != typeBinding.getKind() &&
-           ITypeBinding.PRIMITIVE_TYPE_BINDING != typeBinding.getKind() &&
-           ITypeBinding.FIXED_RECORD_BINDING != typeBinding.getKind() &&
-           ITypeBinding.FLEXIBLE_RECORD_BINDING != typeBinding.getKind() &&
-           ITypeBinding.ENUMERATION_BINDING != typeBinding.getKind() &&
-		   typeBinding != DictionaryBinding.INSTANCE &&
-		   typeBinding != ArrayDictionaryBinding.INSTANCE) {
-        	problemRequestor.acceptProblem(
-        		type,
-				IProblemRequestor.FUNCTION_RETURN_HAS_INCORRECT_TYPE,
-				new String[] {type.getCanonicalName(), canonicalDelegateName});
-        	return false;
-        }
-        return true;
-    }
-
     public boolean visit(FunctionParameter functionParameter) {
-        String parmName = functionParameter.getName().getIdentifier();
-        Type parmType = functionParameter.getType();        
-        ITypeBinding typeBinding = null;
+        
+        
+		org.eclipse.edt.mof.egl.FunctionParameter parm = IrFactory.INSTANCE.createFunctionParameter();
+		parm.setContainer(delegateBinding);
+        parm.setName(functionParameter.getName().getCaseSensitiveIdentifier());
+    	functionParameter.getName().setMember(parm);
+        
+    	Type typeBinding;
         try {
-            typeBinding = bindType(parmType);
-        } catch (ResolutionException e) {
-        	functionParameter.getName().setBinding(new FunctionParameterBinding(functionParameter.getName().getCaseSensitiveIdentifier(), delegateBinding, IBinding.NOT_FOUND_BINDING, null));
+            typeBinding = bindType(functionParameter.getType());
+            
+         } catch (ResolutionException e) {
             problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
             return false;
         }
         
-        FunctionParameterBinding funcParmBinding = new FunctionParameterBinding(functionParameter.getName().getCaseSensitiveIdentifier(), delegateBinding, typeBinding, null);
-        functionParameter.getName().setBinding(funcParmBinding);
+        parm.setType(typeBinding);
+        parm.setIsNullable(functionParameter.isNullable());
+                
         
-        if(!BindingUtilities.isValidDeclarationType(typeBinding)) {
-        	problemRequestor.acceptProblem(
-        		parmType,
-        		IProblemRequestor.FUNCTION_PARAMETER_HAS_INCORRECT_TYPE,
-				new String[] {functionParameter.getName().getCanonicalName(), canonicalDelegateName});
-        	return false;				
-        }
-        
-        FunctionParameter.AttrType attrType = functionParameter.getAttrType();
-        if (attrType == FunctionParameter.AttrType.FIELD) {
-            funcParmBinding.setField(true);
-        } else if (attrType == FunctionParameter.AttrType.SQLNULLABLE) {
-            funcParmBinding.setSqlNullable(true);
-        }
-        
-        funcParmBinding.setConst(functionParameter.isParmConst());
+        parm.setIsConst(functionParameter.isParmConst());
         
         FunctionParameter.UseType useType = functionParameter.getUseType();
         if (useType == FunctionParameter.UseType.IN) {
-            funcParmBinding.setInput(true);
+        	parm.setParameterKind(ParameterKind.PARM_IN);
         } else if (useType == FunctionParameter.UseType.OUT) {
-            funcParmBinding.setOutput(true);
-        } else if (useType == null && Binding.isValidBinding(typeBinding) && typeBinding.isReference()) {
-            funcParmBinding.setInput(true);
+        	parm.setParameterKind(ParameterKind.PARM_OUT);
+        } else if (useType == null && typeBinding != null && TypeUtils.isReferenceType(typeBinding)) {
+        	parm.setParameterKind(ParameterKind.PARM_IN);
+        } else {
+        	parm.setParameterKind(ParameterKind.PARM_INOUT);
         }
 
-        if (definedParameters.contains(parmName)) {
-            problemRequestor.acceptProblem(functionParameter, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { parmName, canonicalDelegateName });
+        if (definedParameters.contains(parm.getName())) {
+            problemRequestor.acceptProblem(functionParameter, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { parm.getName(), delegateBinding.getCaseSensitiveName() });
         } else {
-            delegateBinding.addParameter(funcParmBinding);
-            definedParameters.add(parmName);
+            delegateBinding.getParameters().add(parm);
+            definedParameters.add(parm.getName());
         }
         
         return false;
     }
-    
+
     public boolean visit(SettingsBlock settingsBlock) {
-        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, delegateBinding, delegateBinding, delegateBinding, -1, delegateBinding);
+    	DelegateScope delScope = new DelegateScope(NullScope.INSTANCE, delegateBinding);
+        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(delScope, delegateBinding, delegateBinding, delegateBinding);
         SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, delegateBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
         settingsBlock.accept(blockCompletor);
         return false;
-    }    
-
+    }
 }

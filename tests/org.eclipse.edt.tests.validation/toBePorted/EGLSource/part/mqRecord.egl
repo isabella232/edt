@@ -1,0 +1,123 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program getOptionsRecordTest1 type basicProgram
+	var1 messageOptionsProgramTestRecordOne {getOptionsRecord="getOptionsRecordItem"}; //0
+	
+	getOptionsRecordItem messageOptionsProgramTestRecordTwo;
+
+	function main()
+	end 
+end
+
+program putOptionsRecordTest1 type basicProgram
+	var1 messageOptionsProgramTestRecordOne {putOptionsRecord="putOptionsRecordItem"}; //0
+	
+	putOptionsRecordItem messageOptionsProgramTestRecordTwo;
+
+	function main()
+	end 
+end
+
+program openOptionsRecordTest1 type basicProgram
+	var1 messageOptionsProgramTestRecordOne {openOptionsRecord="openOptionsRecordItem"}; //0
+	
+	openOptionsRecordItem messageOptionsProgramTestRecordTwo;
+
+	function main()
+	end 
+end
+
+program msgDescriptorRecordTest1 type basicProgram
+	var1 messageOptionsProgramTestRecordOne {msgDescriptorRecord = "msgDescriptorRecordItem"}; //0
+	
+	msgDescriptorRecordItem messageOptionsProgramTestRecordTwo;
+
+	function main()
+	end 
+end
+
+program queueDescriptorRecordTest1 type basicProgram
+	var1 messageOptionsProgramTestRecordOne {queueDescriptorRecord = "queueDescriptorRecordItem"}; //0
+	
+	queueDescriptorRecordItem messageOptionsProgramTestRecordTwo;
+
+	function main()
+	end 
+end
+
+Record messageOptionsProgramTestRecordOne type mqRecord
+	{queueName = "bob"}	 
+	 
+end
+
+Record messageOptionsProgramTestRecordTwo type basicRecord
+end
+
+// Key Items are not allowed on MQ Records
+Record keyItemTestMQRecord1 type mqRecord
+	{fileName = "bob", 
+	 keyItem = item1} //1 
+	  
+	10 item1 int;
+end
+
+program keyItemAddProgramTest type basicProgram
+	var1 keyItemAddTestMQRecord1;
+	var2 keyItemAddTestMQRecord2;	//1 lengthItem - "item2" cannot be resolved
+	
+	function main()
+		
+		add var1; //0
+		add var2; //0
+	end 
+end
+
+Record keyItemAddTestMQRecord1 type mqRecord
+	{fileName = "bob", 
+	 lengthItem=item1} //0 
+	  
+	10 item1 int;
+end
+
+Record keyItemAddTestMQRecord2 type mqRecord
+	{fileName = "bob", 
+	 lengthItem=item2} //0 
+	  
+	10 item1 int;
+end
+
+Record numElementsItemTestMQRecord1 type mqRecord
+	 {queueName = "bob", 
+	 numElementsItem=item1
+	 }    
+	   
+	 10 item1 int;
+	 10 item2 int[3];
+end
+
+Record numElementsItemTestMQRecord2 type mqRecord
+	 {queueName = "bob", 
+	 numElementsItem=item2 //1
+	 }    
+	   
+	 10 item1 int;
+	 10 item2 int[3];
+end
+
+Record numElementsItemTestMQRecord3 type mqRecord //0
+	 {queueName = "bob", 
+	 numElementsItem=item3	//1 The item item3 referenced by numElementsItem property must be declared in the fixed portion of record numElementsItemTestMQRecord3
+	 }    
+	   
+	 10 item1 int;
+	 10 item2 int[3];
+end

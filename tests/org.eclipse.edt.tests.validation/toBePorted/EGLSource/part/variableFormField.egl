@@ -1,0 +1,326 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+/****************
+** Annotations **
+****************/
+
+// validatePositionProperty:
+Form validatePositionProperty type textForm {formSize=[24,80]}
+	field1 int {position=[0,0]};	//1 Property: position.  The value for this property for field field1 in validatePositionProperty is invalid. The value must be in the format [row, column], where row and column are positive integers. {5340, INVALID_FORM_FIELD_POSITION_PROPERTY_VALUE}
+end
+
+function func() end
+
+function ambigFunc() end
+function ambigFunc() end
+
+DataItem myItem int end
+
+DataTable valTab type RangeChkTable
+{contents=[[]]}
+end
+
+// validateSimpleVariableFieldProperty:
+Form validateSimpleVariableFieldProperty type textForm {formSize=[24,80]}
+	field1 int {
+		validationOrder=1,				//0
+		validValuesMsgKey="9999",		//0
+		validatorFunction=func,		//0
+		minimumInput = 0,				//0
+		minimumInputMsgKey="-9999",		//0
+		inputRequiredMsgKey="0",		//0
+		typeChkMsgKey="1",				//0
+		validatorFunctionMsgKey="-1",	//0
+		validatorDataTableMsgKey="5000",//0
+		columns=1,						//0
+		linesBetweenRows = 0,			//0
+		spacesBetweenColumns = 1,		//0
+		currency = yes,					//0
+		currencySymbol="$$$",			//0
+		numericSeparator=yes,			//0
+		sign=trailing,					//0
+		zeroFormat=yes,					//0
+		isBoolean=yes,					//0
+				
+		position=[1,1]
+	};
+	field2 char(4) {
+		isHexDigit = yes,		//0
+		isDecimalDigit = yes,	//0
+		lowerCase=yes,			//0
+		upperCase=yes,			//0
+		isBoolean=yes,			//0
+		
+		position=[2,1]
+	};
+	
+	field3 float {
+		sign=leading,		//0
+		position=[3,1]
+	};
+	
+	field4 smallFloat {
+		sign=leading,		//0
+		position=[4,1]
+	};
+	
+	field5 mbchar(4) {
+		needsSOSI = yes,		//0
+		position=[5,1]
+	};
+end
+
+Form validateSimpleVariableFieldProperty2 type textForm {formSize=[24,80]}
+	field1 int {							//10 validationOrder.|validValuesMsgKey.|validatorFunctionMsgKey.|validatorDataTableMsgKey.|typeChkMsgKey.|minimumInputMsgKey.|inputRequiredMsgKey.|columns.|spacesBetweenColumns.|linesBetweenRows.
+		validationOrder = 0,				//0
+		isHexDigit = yes,					//1 Property isHexDigit must be defined with one of the character primitives. int found.
+		isDecimalDigit=yes,					//1 Property isDecimalDigit must be defined with one of the character primitives. int found.
+		needsSOSI = no,						//1 Only mbchar items are allowed to be used for property needsSOSI, but primitive type int was found which does not support multi-byte characters.
+		validValuesMsgKey="10000",			//0
+		validatorFunction = foo,			//1 The function reference foo cannot be resolved
+		minimumInput = -1,					//1 {MinimumInput} The value of property minimumInput must be greater than 0, but -1 was found.
+		minimumInputMsgKey="10000",			//0
+		inputRequiredMsgKey="10000",		//0
+		typeChkMsgKey="10000",				//0
+		validatorFunctionMsgKey="10000",	//0
+		validatorDataTableMsgKey="10000",	//0
+		columns = 0,						//0
+		linesBetweenRows = -1,				//0
+		spacesBetweenColumns = 0,			//0
+		lowerCase = yes,					//1 Property lowerCase must be defined with one of the character primitives. int found.
+		upperCase = yes,					//1 Property upperCase must be defined with one of the character primitives. int found.
+		currencySymbol="",					//1 Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+		fillCharacter="  ",					//1 Property: fillCharacter.  The value for this property is invalid. The value must be one of the following: nullFill or a single character string literal.
+		foo = no, 							//1 {not supported prop}
+		position=[1,1]
+	};
+	
+	field2 int {
+		validatorFunction = ambigFunc,		//1 The function reference ambigFunc is ambiguous
+		currencySymbol="xxxx",				//1 Property: currencySymbol.  The value for this property is invalid. The value must be one of the following: a string literal of appropriate length.
+		position=[2,1]
+	};
+	
+	field3 int {
+		validatorFunction = myItem,			//1  The function reference myItem cannot be resolved.
+		position=[3,1]
+	};
+	
+	field4 char(4) {
+		currency = yes,			//1 Property currency must be defined with a numeric primitive. The type of this item is char.
+		currencySymbol="$",		//1 Property currencySymbol must be defined with a numeric primitive. The type of this item is char.
+		numericSeparator=yes,	//1 Property numericSeparator must be defined with a numeric primitive. The type of this item is char.
+		sign=none,				//1 Property sign must be defined with a numeric primitive. The type of this item is char.
+		zeroFormat=yes,			//1 Property zeroFormat must be defined with a numeric primitive. The type of this item is char.
+		position=[4,1]
+	};
+	
+	field5 float {
+		sign=trailing,		//1 {Sign} The value trailing for property sign is incompatible with the type float. {3141, INVALID_PROPERTY_VALUE_FOR_ITEM_TYPE}
+		position=[5,1]
+	};
+	
+	field6 smallFloat {
+		sign=trailing,		//1 {Sign} The value trailing for property sign is incompatible with the type smallfloat. {3141, INVALID_PROPERTY_VALUE_FOR_ITEM_TYPE}
+		position=[6,1]
+	};
+	
+	field7 date {
+		isBoolean=yes,		//1 {IsBoolean} The property isBoolean is only valid for the following primitive types: (char, bin, num, numc, decimal, pacf, int, bigint, smallint, float, money)
+		position=[7,1]
+	};
+	
+	field8 time {
+		isBoolean=no,		//1 {IsBoolean} The property isBoolean is only valid for the following primitive types: (char, bin, num, numc, decimal, pacf, int, bigint, smallint, float, money)
+		position=[8,1]
+	};
+end
+
+Form validateSimpleVariableFieldProperty3 type printForm {formSize=[24,80]}
+	field1 int {
+		cursor=yes,						//0
+		validationOrder=1,				//0
+		validValues=[[1,2]],			//0
+		validValuesMsgKey="0",			//0
+		validatorFunction=func,			//0
+		validatorDataTable=valTab,		//0
+		fill=no,						//0
+		inputRequired=no,				//0
+		minimumInput=1,					//0
+		minimumInputMsgKey="0",			//0
+		inputRequiredMsgKey="0",		//0
+		typeChkMsgKey = "0",			//0
+		validatorFunctionMsgKey="0",	//0
+		validatorDataTableMsgKey="0",	//0
+		color=red,						//0
+		detectable=yes,					//0
+		modified=yes,					//0
+		protect=noProtect,				//0
+		intensity=dim,					//0
+		position=[1,1]
+	};
+	
+	field2 char(4) {
+		isHexDigit=yes,		//0
+		isDecimalDigit=no,	//0
+		needsSOSI=yes,		//1 only mbchar items are allowed to be used
+		position=[2,1]
+	};
+end
+
+// validateVariableFieldPropertyOveride (1):
+Form validateVariableFieldPropertyOveride type textForm {formSize=[24,80]}
+	field1 int[5] {
+		this[1] {
+			color=red,	//0
+			fill=no,	//1	The property fill is not valid in this location.
+			foo=no		//1 {not supported prop}
+		}
+	};
+end
+
+Form validateVariableFieldPropertyOveride2 type printForm {formSize=[24,80]}
+	field1 int[5] {
+		this[1] {	
+			cursor=yes,		//0
+			color=red,		//0
+			detectable=no,	//0
+			modified=yes,	//0
+			protect=protect,//0
+			intensity=dim	//0
+		}
+	};
+end
+
+/*****************
+** Other Checks **
+*****************/
+
+// isOccursDeclarationValid:
+Form form1 type textForm {formSize=[100,200]}
+	field1 int[1];			//0
+	field2 int[100];		//0
+	field3 int[0];			//1 The value for occurs for field field3 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+	field4 int[-1];			//1 The value for occurs for field field4 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+	field5 int[];			//1 The value for occurs for field field5 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+	field6 int["A"];		//1 The value for occurs for field field6 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+	field7 int[1+2];		//1 The value for occurs for field field7 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+	field8 int[intfunc(-5)];	//1 The value for occurs for field field8 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}	
+
+	field9 int[1][1];		//0
+end
+
+FormGroup fg1
+	Form form1 type textForm {formSize=[100,200]}
+		field1 int[1];			//0
+		field2 int[100];		//1 is overlapping
+		field3 int[0];			//1 The value for occurs for field field3 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+		field4 int[-1];			//1 The value for occurs for field field4 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+		field5 int[];			//1 The value for occurs for field field5 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+		field6 int["A"];		//1 The value for occurs for field field6 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+		field7 int[1+2];		//1 The value for occurs for field field7 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}
+		field8 int[intfunc(-5)];	//1 The value for occurs for field field8 in form form1 is invalid. The occurs value must be an integer greater than one. {5360, INVALID_FORM_FIELD_OCCURS_VALUE}	
+	end
+end
+
+function intFunc(p1 int) returns(int) end
+
+// validatePrimitiveType:
+Form form2 type textForm {formSize=[100,200]}
+	field1 unicode(4);		//1 The type for form field field1 in form form2 is invalid. unicode is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field2 unicode(4)[4];	//1 The type for form field field2 in form form2 is invalid. unicode is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field3 string;			//1 The type for form field field3 in form form2 is invalid. string is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field4 string[4];		//1 The type for form field field4 in form form2 is invalid. string is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field5 any;				//1 The type for form field field5 in form form2 is invalid. any is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field6 any[4];			//1 The type for form field field6 in form form2 is invalid. any is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field7 blob;			//0
+	field8 blob[4];			//0
+	field9 clob;			//0
+	field10 clob[4];		//0
+end
+
+// validateReferenceType:
+Form form3 type textForm {formSize=[100,200]}
+	field1 undeclaredType;	//1 The type undeclaredType cannot be resolved.
+	field2 ambiguousItem;	//1 The type ambiguousItem is ambiguous.
+	field3 intItem;			//0
+	field4 fixedRecord;		//1 The data item definition identifier fixedRecord for field field4 in form form3 is invalid. The field type must be either a primitive type or the name of a data item part. {5382, INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_IS_INVALID}
+	field5 lib;				//1 The data item definition identifier lib for field field5 in form form3 is invalid. The field type must be either a primitive type or the name of a data item part. {5382, INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_IS_INVALID}
+	field6 dictionary;		//1 The data item definition identifier dictionary for field field6 in form form3 is invalid. The field type must be either a primitive type or the name of a data item part. {5382, INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_IS_INVALID}
+	field7 unicodeItem;		//1 The type for form field field7 in form form3 is invalid. unicode is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field8 intervalItem;	//1 The type for form field field8 in form form3 is invalid. interval is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}	
+end
+
+DataItem ambiguousItem int end
+DataItem ambiguousItem int end
+DataItem intItem int end
+DataItem unicodeItem unicode(4) end
+DataItem intervalItem interval end
+
+Record fixedRecord
+	10 item1 int;
+end
+
+Library lib
+end
+
+Formgroup fg2
+	Form form2 type textForm {formSize=[100,200]}
+		field1 unicode(4);		//1 The type for form field field1 in form form2 is invalid. unicode is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+		field2 unicode(4)[4];	//1 The type for form field field2 in form form2 is invalid. unicode is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+		field3 string;			//1 The type for form field field3 in form form2 is invalid. string is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+		field4 string[4];		//1 The type for form field field4 in form form2 is invalid. string is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+		field5 any;				//1 The type for form field field5 in form form2 is invalid. any is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+		field6 any[4];			//1 The type for form field field6 in form form2 is invalid. any is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+		field7 blob;			//0
+		field8 blob[4];			//1 overlapping
+		field9 clob;			//1 overlapping
+		field10 clob[4];		//4 overlapping|overlapping|overlapping|overlapping
+	end
+	
+	Form form3 type textForm {formSize=[100,200]}
+		field1 undeclaredType;	//1 The type undeclaredType cannot be resolved.
+		field2 ambiguousItem;	//1 The type ambiguousItem is ambiguous.
+		field3 intItem;			//0
+		field4 fixedRecord;		//1 The data item definition identifier fixedRecord for field field4 in form form3 is invalid. The field type must be either a primitive type or the name of a data item part. {5382, INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_IS_INVALID}
+		field5 lib;				//1 The data item definition identifier lib for field field5 in form form3 is invalid. The field type must be either a primitive type or the name of a data item part. {5382, INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_IS_INVALID}
+		field6 dictionary;		//1 The data item definition identifier dictionary for field field6 in form form3 is invalid. The field type must be either a primitive type or the name of a data item part. {5382, INVALID_FORM_DATAITEMDEFINATIONIDENTIFIER_IS_INVALID}
+		field7 unicodeItem;		//1 The type for form field field7 in form form3 is invalid. unicode is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+		field8 intervalItem;	//1 The type for form field field8 in form form3 is invalid. interval is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}	
+	end
+end
+
+
+// validateVariableFieldDeclaration:
+Form form4 type printForm {formSize=[100,200]}
+	field1 boolean {position=[1,1]};				//0
+	field2 interval {position=[2,1]};				//1 The type for form field field2 in form form4 is invalid. interval is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field3 interval[4] {position=[3,1]};			//1 The type for form field field3 in form form4 is invalid. interval is not a valid type for form fields of text and print forms. {5339, INVALID_FORM_FIELD_TYPE}
+	field4 date {position=[4,1]};					//0
+	field5 time[4] {position=[5,1]};				//0
+end
+
+// validateVariableFieldPropertyOveride (1):
+Form form5 type textForm {formSize=[100,200]}
+{
+	field1[1] {
+		color=red,		//0
+		isBoolean = no	//1 The property isBoolean is not valid in this location.
+	}
+}
+	field1 int[4] {
+		this[2] {
+			protect = protect,	//0
+			fillCharacter = " "	//1 The property fillCharacter is not valid in this location.
+		}
+	};
+end

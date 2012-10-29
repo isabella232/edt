@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 
-public interface Field extends Member {
+public interface Field extends Member, FieldReference {
 	StatementBlock getInitializerStatements();
 	
 	void setInitializerStatements(StatementBlock value);

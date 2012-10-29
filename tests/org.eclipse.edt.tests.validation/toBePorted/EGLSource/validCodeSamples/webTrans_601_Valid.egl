@@ -1,0 +1,294 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+// VGUIRecord Item properties:
+// •	displayNames – different labels to be used for each array item (eg. it can be used to display different labels for each array button item) 
+// •	ProgramLinkData
+// •	numElementsItem FieldRef  - Only valid on array field
+// •	uiType  UITypeKind – value to associate an HTML tag to be produced for the item in the generated JSP page
+// •	selectedIndexItem FieldRef 
+//
+// Common Item Properties applicable for VGUIRecord item are:
+// •	displayName 
+// •	value – not applicable but use initializer
+// •	help
+// •	alias  -  runtime part name to be used on generation
+//
+// Common validation properties applicable for a VGUIRecord item are:
+// •	inputRequired
+// •	inputRequiredMsgKey
+// •	minimumInput
+// •	minimumInputMsgKey
+// •	needsSOSI
+// •	typeChkMsgKey
+// •	validValues 
+// •	validValuesMsgKey
+// •	runValidatorFromProgram
+// •	validatorFunction
+// •	validatorFunctionMsgKey
+// •	validatorDataTable
+// •	validatorDataTableMsgKey
+// •	validationOrder
+//
+// Common item formatting properties supported for a VGUIRecord Item are:
+// •	numericFormat – property of a string value created by combining currency, currencySymbol, sign, numeric separator and zero edit into a proper numeric format specifier.  Alternatively, the following formatting attributes are also allowed:
+// •	currency
+// •	currencySymbol
+// •	numericSeparator
+// •	sign
+// •	zeroFormat
+// •	dateFormat – default based on locale setting
+// •	fillCharacter
+// •	isBoolean
+// •	timeFormat – default to "HH:mm:ss"
+// •	uppercase
+
+
+
+Record  webTrans_601_Valid  Type  VGUIRecord 
+{ commandValueItem=buttonValue }
+	10 formItem  char(21)
+	   { uiType=uiForm, 
+        @programLinkData { 
+			programName="NewPgm",
+			newWindow=yes,
+			uiRecordName="NewUIR",
+			linkParms = [
+			   @LinkParameter { name="key1",
+						value="value1" },
+			   @LinkParameter { name = "key2",
+						valueRef=refItem }
+			]
+        }
+	   };
+	  20 nametem  char(16)
+		{ uiType=input, inputRequired=yes }; 
+	  20 buttonItem char(1)[3]
+		{ uiType=submit,
+		  displayName = "Enter \n Help \n Cancel"  
+		} = [ "E", "H", "C" ];
+	  20 buttonValue char(1) { uiType=none };
+      20 refItem     char(1) { uiType=none };
+End
+
+
+function func()
+end
+
+DataTable table type rangeChkTable {contents=[["a","z"]]}
+	item1 char(2);
+	item2 char(2);
+end
+
+Record PAGE06 type VGUIRecord {
+	commandValueItem = BUTTONVALUE
+	}
+	
+	10 MYLINK	char(32) {
+		displayName = "MyLink",
+		uiType = programLink,
+		@programLinkData {
+			programName = "TEST05",
+			uiRecordName = "PAGE05",
+			newWindow = no,
+			linkParms = [
+				@linkParameter { name = "PARM", value="ParmData" },
+				@linkParameter { name = "NAME", valueRef=NAME },
+				@linkParameter { name = "ID", value="107" }
+			]
+		}
+	};
+	10 BUTTONVALUE char(4);
+	10 NAME char(4);
+end
+
+Record buttonsUir type VGUIRecord {
+	title = "Version 6.0.1 Buttons And Validator Functions Web Transaction Test",
+	alias = "buttons",
+	help = "Help For Version 6.0.1 Buttons And Validator Functions Web Transaction Test",
+	commandValueItem = buttonValue,
+	validatorFunction = programNumberValidator,
+	runValidatorFromProgram = no
+	}
+	10 userAction char(50) { 
+		displayName = "User action:",
+		uiType = output 
+		} ;
+	10 inputText  char(50) { 
+		displayName = "Input text",
+		uiType = inputOutput,
+		validatorFunction = textValidator,
+		upperCase = yes  
+		} ;
+	10 inputNumber decimal(12,2) {
+		displayName = "Input number",
+		validatorFunction = programNumberValidator,
+		uiType = inputOutput
+		} ;
+	10 buttonArray char(5)[3] {
+		uiType = submit,
+		displayName =  "Enter \n Help \n x" 
+		} = [ "PF3", "PF1" ] ;
+	10 quitArray char(5)[3] {
+		uiType = submitBypass,
+		displayName = "Refresh \n Cancel \n x"
+		} = [ "PF4", "PF12" ] ;
+	10 buttonValue char(5) {
+		uiType = none
+		} ;
+	10 expectedText char(50) {
+		uiType = hidden
+		} ;
+	10 expectedNumber decimal(12,2) {
+		uiType = hidden
+		} ;
+end
+
+function textValidator ()
+	if ( inputText != expectedText )
+		userAction = " " ;
+		if ( expectedText == "XXX" )
+			sysLib.setError ( inputText, "102" ) ;
+		else
+			syslib.setError( inputText, "101", expectedText ) ;
+		end
+	end
+end
+
+function programNumberValidator()
+	if ( inputNumber != expectedNumber )
+		userAction = " " ;
+		if ( expectedNumber == 33 )
+			sysLib.setError ( inputText, "102" ) ;
+		else
+			syslib.setError( inputText, "103", "expectedNumber" ) ;
+		end
+	end
+end
+
+Record WEBTRXV601F_UIREC type VGUIRecord  {
+    commandValueItem = SUBMIT_VALUE_ITEM,
+    title = "Master UI Record"
+  }
+  3 ITEM_FORM char(23) 
+    { uiType = uiTypeKind.uiForm,
+      @programLinkData{ 
+        programName = "PGMFORM", uiRecordName = "PGMFORM_RCD", newWindow = no,
+        linkParms = [ 
+          @LinkParameter { name = "PGMFORM_RCD_ITEM1", value = "literalValue" } , 
+          @LinkParameter { name = "PGMFORM_RCD_ITEM2", valueRef = ITEM_HIDDEN } 
+        ]
+      } , 
+      displayName = "My Form"
+    } ; 
+    4 ITEM_INPUT_NUM num(10) 
+      { uiType = uiTypeKind.input, sign = signKind.leading,
+        displayName = "item with sign"
+      } ; 
+    4 ITEM_INPUT_DATE char(10) 
+      { uiType = uiTypeKind.input, dateFormat = strLib.defaultDateFormat,
+        displayName = "item with date edit"
+      } ; 
+    4 DEFAULTDATEFORMAT char(3) 
+      { uiType = uiTypeKind.submit,
+        displayName = "My submit item"
+      }
+      = "\"S\"" ; 
+  3 UIFORM char(20) 
+    { uiType = uiTypeKind.none
+    } ; 
+  3 SUBMIT_VALUE_ITEM char(4);
+  3 ITEM_HIDDEN char(4);
+  3 myItem int {
+        sign=none,
+        currency=no,
+        isBoolean=no,
+        dateFormat="yy/mm/dd/"
+  };
+  3 myItem2 int {
+        sign=none,
+        currency=no,
+        isBoolean=yes,
+        dateFormat="yy/mm/dd/"
+  };
+  
+  3 myItem3 int {
+  		uiType=none,
+        sign=none,
+        currency=no,
+        isBoolean=no
+  };
+end
+
+DataItem ADA0IIDT num(8)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = "0", dateFormat = "dd/MM/yy", inputRequired = no
+}
+end
+
+
+Record UIRec1_ type VGUIRecord
+	10	item1$	char(10)	{ 
+	 							uiType = input,
+								validationOrder = 4					
+							};
+	20	item11$  char(10)	{	uiType = input,
+								validationOrder = 2
+							};
+	10  ARRAY1   char(3)[4] {   uiType = inputoutput,
+								validationOrder = 1
+							}; 	
+	10  NUM$ITEM   	num(3)	{   uiType = inputoutput,
+								validationOrder = 3
+							};
+end
+
+Record PAGE04 type VGUIRecord {
+	commandValueItem = BUTTONVALUE
+	}
+	
+	10 MYFORM01	char(60) {
+		displayName = "MyForm01",
+		uiType = uiForm,
+		@programLinkData {
+			programName = "TEST05",
+			uiRecordName = "PAGE05",
+			newWindow = no,
+			linkParms = [
+				@LinkParameter { name = "PARM", value="ParmData" }
+			]
+		}
+	};
+	
+	20 NAME char(32) { 
+		displayName = "Enter Name:  ",
+		uiType = input
+		};
+	20 ID  int { 
+		displayName = "Enter ID:  ",
+		uiType = input
+		};
+	20 BUTTON1 char(8) {
+		displayName = "Again",
+		uiType = submit
+		} = "AGAIN";
+		
+	20 BUTTON2 char(8){
+		displayName = "Quit",
+		uiType = submitBypass
+		} = "QUIT";
+	
+	20 BUTTONVALUE char(8) {
+		uiType = none
+		};
+end

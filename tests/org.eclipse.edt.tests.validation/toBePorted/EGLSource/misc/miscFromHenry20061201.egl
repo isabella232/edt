@@ -1,0 +1,53 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program pgm
+	aSmallInt smallInt;
+	aChar char(4) = "0";
+	
+	function main()
+		if(aSmallInt) end
+		while(aSmallInt) end
+		
+		if ( aChar AS smallInt )
+			writeStdOut( " aChar AS smallInt is true" );
+		else
+			writeStdOut( " aChar AS smallInt is false" );
+		end
+		
+		while ( aChar AS smallInt )
+		end
+	end
+end
+
+program NotCharAsIntInWhile type BasicProgram	
+	function main()
+		aChar char(1);
+		aSmallInt smallInt;
+
+		aChar = "0";
+		while ( !(aChar AS smallInt) )
+			writeStdOut( " In while aChar AS smallInt not true" );
+			aChar = "1";
+		end
+		
+		aSmallInt = 0;
+		while ( !(aSmallInt) )
+			writeStdOut( " In while aSmallInt not true" );
+			aSmallInt = 1;
+		end
+		
+		b boolean = !aSmallInt;
+		writeStdOut(!aSmallInt :: aSmallInt :: "is " :: b);
+	end	
+end

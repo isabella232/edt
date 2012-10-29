@@ -1,0 +1,150 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+program datetimelib_valid
+	function main()
+		mytimestamp timestamp;
+		mydate date;
+		mytime time; 
+		myinterval interval("yyyyMM");
+		mystring string;
+		
+		mytimestamp = currentTimestamp();
+		mydate = currentdate();
+		mytime = currenttime();
+		mytimestamp = datetimelib.currentTimestamp();
+		mydate = datetimelib.currentdate();
+		mytime = datetimelib.currenttime();
+		mytimestamp = egl.core.datetimelib.currentTimestamp();
+		mydate = egl.core.datetimelib.currentdate();
+		mytime = egl.core.datetimelib.currenttime();
+		
+		mystring = "12012004";
+		mydate = datevalue("12012004");
+		mydate = datevalue(mystring);
+		mydate = datetimelib.datevalue(mystring);
+		mydate = egl.core.datetimelib.datevalue(mystring);
+		
+		myint int = 135;
+		mydate = datevaluefromGregorian(153);
+		mydate = datevaluefromgregorian(myint);	
+		mydate = datetimelib.datevaluefromgregorian(myint+5);	
+		mydate = egl.core.datetimelib.datevaluefromgregorian(myint);	
+		
+		mydate = datevaluefromJulian(153);
+		mydate = datevaluefromJulian(myint);	
+		mydate = datetimelib.datevaluefromJulian(myint-3);	
+		mydate = egl.core.datetimelib.datevaluefromJulian(myint);	
+		
+		mystring = "0153";
+		mytime = timevalue("1241");		
+		mytime = timevalue(mystring);
+		mytime = datetimelib.timevalue(mystring);
+		mytime = egl.core.datetimelib.timevalue(mystring);
+
+		myinterval = intervalvalue("1241");		
+		myinterval = intervalvalue(mystring);
+		myinterval = datetimelib.intervalvalue(mystring);
+		myinterval = egl.core.datetimelib.intervalvalue(mystring);
+
+		mystring = "200501";
+		myinterval = intervalvaluewithpattern("200501", "yyyymm");		
+		myinterval = intervalvaluewithpattern(mystring, usadateformat);
+		myinterval = datetimelib.intervalvaluewithpattern(mystring, strlib.eurdateformat);
+		myinterval = egl.core.datetimelib.intervalvaluewithpattern(mystring, egl.core.strlib.jisdateformat);	
+		
+		mytimestamp = timestampValue("1241");		
+		mytimestamp = timestampValue(mystring);
+		mytimestamp = datetimelib.timestampValue(mystring);
+		mytimestamp = egl.core.datetimelib.timestampValue(mystring);
+
+		mystring = "103045";
+		mytimestamp = timestampValueWithPattern("200501", "hhmmss");		
+		mytimestamp = timestampValueWithPattern(mystring, db2TimeStampFormat);
+		mytimestamp = datetimelib.timestampValueWithPattern(mystring, strlib.odbcTimeStampFormat);
+		mytimestamp = egl.core.datetimelib.timestampValueWithPattern(mystring, egl.core.strlib.db2TimeStampFormat);		
+
+		mystring = "12312000";
+		mystring2 string = "1241";
+		mytimestamp = timestampfrom("12312000", "1241");		
+		mytimestamp = timestampfrom(mystring, mystring2);
+		mytimestamp = datetimelib.timestampfrom("12312000", mystring2);
+		mytimestamp = egl.core.datetimelib.timestampfrom(mystring, "1241");
+		
+		mytimestamp = "12312000"; 
+		myint = dayOf("12312000");		
+		myint = dayOf(mytimestamp);
+		myint = datetimelib.dayOf(mytimestamp);
+		myint = egl.core.datetimelib.dayOf(mytimestamp); 	
+		
+		myint = monthOf("12312000");		
+		myint = monthOf(mytimestamp);
+		myint = datetimelib.monthOf(mytimestamp);
+		myint = egl.core.datetimelib.monthOf(mytimestamp); 		
+		
+		myint = yearOf("12312000");		
+		myint = yearOf(mytimestamp);
+		myint = datetimelib.yearOf(mytimestamp);
+		myint = egl.core.datetimelib.yearOf(mytimestamp); 
+
+		myint = weekdayOf("12312000");		
+		myint = weekdayOf(mytimestamp);
+		myint = datetimelib.weekdayOf(mytimestamp);
+		myint = egl.core.datetimelib.weekdayOf(mytimestamp); 
+
+		myint1 int = 12;
+		myint2 int = 31;
+		myint3 int = 2000;
+		mydate = mdy(12, 31, 2000);		
+		mydate = mdy(myint1, myint2, myint3);
+		mydate = datetimelib.mdy(myint1, myint2, myint3);
+		mydate = egl.core.datetimelib.mdy(myint1, myint2, myint3); 
+
+		mydate = dateOf("12312000");		
+		mydate = dateOf(mytimestamp);
+		mydate = datetimelib.dateOf(mytimestamp);
+		mydate = egl.core.datetimelib.dateOf(mytimestamp); 
+
+		mytime = timeof("125334123");		
+		mytime = timeof(mytimestamp);
+		mytime = datetimelib.timeof(mytimestamp);
+		mytime = egl.core.datetimelib.timeof(mytimestamp); 
+
+		mytimestamp = extend("125334123", defaultTimestampformat);		
+		mytimestamp = extend(mytimestamp, isotimeformat);
+		mytimestamp = datetimelib.extend(mytimestamp, strlib.defaulttimestampformat);
+		mytimestamp = egl.core.datetimelib.extend(mytimestamp, egl.core.strlib.defaulttimestampformat); 
+		
+		mystring = formatdate(mydate);
+		mystring = strlib.formatdate("12312004");
+		mystring = egl.core.strlib.formatdate(mydate);
+		mystring = formatdate(mydate, isodateformat);
+		mystring = strlib.formatdate("12312004", strlib.eurdateformat);
+		mystring = egl.core.strlib.formatdate(mydate, egl.core.strlib.jisdateformat);
+		
+		mystring = formattime(mytime);
+		mystring = strlib.formattime("083956000000");
+		mystring = egl.core.strlib.formattime(mytime);
+		mystring = formattime(mytime, isotimeformat);
+		mystring = strlib.formattime("083956000000", strlib.eurtimeformat);
+		mystring = egl.core.strlib.formattime(mytime, egl.core.strlib.jistimeformat);		
+		
+		mystring = formattimestamp(mytimestamp);
+		mystring = strlib.formattimestamp("083956000000");
+		mystring = egl.core.strlib.formattimestamp(mytimestamp);
+		mystring = formattimestamp(mytimestamp, defaulttimeformat);
+		mystring = strlib.formattimestamp("083956000000", strlib.eurtimeformat);
+		mystring = egl.core.strlib.formattimestamp(mytimestamp, egl.core.strlib.usatimeformat);		
+		
+	end
+end

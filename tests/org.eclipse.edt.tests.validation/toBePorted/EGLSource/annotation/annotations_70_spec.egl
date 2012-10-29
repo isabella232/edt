@@ -1,0 +1,171 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//-----------------------------------------------
+//Annotation Context
+handler pageHandler1 type JSFHandler
+	const dnConstant string = "Hello World";
+	myField char(6) {displayName = dnConstant};	//0
+end
+
+//-----------------------------------------------
+//Using Annotations
+handler pageHandler2 type JSFHandler
+	myDropDown Dictionary{					//0
+		@DisplayName{"My Family Values"}, 	//0
+		key1 = "abc",						//0
+		key2 = "xyz"						//0
+	};
+	
+	r1 rec {displayName = "xxx"};		//1 not compatible
+	r2 rec {@displayName{"xxx"}};		//0
+end
+
+Record rec
+	displayName blob;
+end
+
+//-----------------------------------------------
+//The Annotation Stereotype
+Record MyDisplayName type Annotation {							//0
+	targets=[ElementKind.DataItemPart, ElementKind.FieldMbr]	//0
+}
+	value String;
+end
+
+Record MyDateFormat type Annotation {							//0
+	targets=[ElementKind.DataItemPart, ElementKind.FieldMbr],	//0
+	targetTypes=[TypeKind.DateType]
+}
+	value String;
+end
+
+DataItem dataItem1 int {@myDisplayName{"xxx"}} end	//0
+DataItem dataItem2 int {myDateFormat = "xxx"} end	//0
+
+//-----------------------------------------------
+//Meta Annotations
+
+Record uiRecord type Annotation {					//0
+	Targets = [ ElementKind.RecordPart ],			//0
+	@StereoType {									//0
+		stereotypeContexts = [VGWebTransaction],	//0
+		memberAnnotations = [MyDisplayName]			//0
+	}
+}
+	title String;
+end
+
+Record MyColumnName type Annotation		//0
+	value String;						//0
+end
+
+Record MySQLDataCode type Annotation	//0
+	value int;							//0
+end
+
+Record MyXSD type Annotation			//0
+end
+
+Record MySQLRecord type Annotation {							//0
+	targets=[ ElementKind.RecordPart ],							//0
+
+	// The referenced class is invoked at validation time
+	// by the validation infrastructure – dummy name
+	validationClass="com.ibm.etools.edt.SQLRecordValidator",	//0
+	
+	// Define that SQLRecord is meant to be a stereotype
+	@Stereotype{												//0
+		// State the annotations that can be applied
+		// to Record fields
+		memberAnnotations = [									//0
+			MyColumnName,										//0
+			MySQLDataCode ]										//0
+
+		// No mutual exclusions or associations
+	}
+}
+	// The set of fields in record to be treated as keys
+	keyItems FieldRef[];										//0
+	
+	// List of SQL Tables the record is mapped to
+	tableNames string[][];										//0
+
+	tableNameVariables FieldRef[];								//0
+
+	defaultSQLCondition SQLString;								//0
+
+	xsd MyXSD;													//0
+end
+
+Record RCPView type Annotation {								//0
+	targets = [ ElementKind.HandlerPart ],						//0
+	@Stereotype {												//0
+	},
+	// Define the ViewSite implicit variable
+	implicitFields = [ 										//0
+		@FieldDeclaration{									//0
+			fieldName = "viewSite",							//0
+			fieldType = Any.type							//0
+		},
+		@FieldDeclaration{									//0
+			fieldName = "viewParent",						//0
+			fieldType = Any.type							//0
+		} ],
+	implicitFunctions = [									//0
+		@FunctionDeclaration {								//0
+			isStatic = true,								//0
+			functionName = "getId",							//0
+			parameterTypes = [ Any.type ],					//0
+			modifiers = [inModifier]						//0
+		} ],
+	implicitFields = 5										//1
+}
+end
+
+Handler RCPHandler type RCPView {	//0
+	viewSite = "abc",				//0
+	viewParent = "xyz"				//0
+}
+end
+
+DataItem EmpNo char(6) {@Column{ "EmpNo", @Final }} end		//0
+
+Program pgm
+	function main()
+		refRec refRec = new RefRec{};	//0		
+		refRec.codex = "abc";			//0
+		
+		myHandler RCPHandler;			//0
+		myHandler.viewSite="abc";		//0
+		myHandler.viewParent="xyz";		//0
+		myHandler.getId(123);			//0
+		myHandler.getId();				//1 requires exactly 1 argument(s)
+	end
+end
+
+Record refAnn type Annotation			//0
+{	targets = [ElementKind.RecordPart],
+	@stereotype {referencetype=yes},	//0
+	
+	implicitFields = [					//0
+	  @FieldDeclaration {				//0
+		fieldName = "codex",			//0
+		fieldType = String.type			//0
+	  }
+	]
+	
+}
+end
+
+Record refRec type refAnn				//0
+end

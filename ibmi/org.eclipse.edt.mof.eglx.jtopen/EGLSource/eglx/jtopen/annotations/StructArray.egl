@@ -14,9 +14,9 @@ package eglx.jtopen.annotations;
 Record StructArray type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.StructArrayAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.proxy.StructArrayProxy"
 }
 	elementCount int;
-	returnCountVariable FieldRef;
+	returnCountVariable egl.lang.reflect.FieldReference;
 	elementTypeAnnotation any?;
 end

@@ -1,0 +1,270 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record EducationPSB type PSBRecord 					 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	studentPCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="STUPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Student } 	 
+	  ] }};
+
+end
+
+Program MyProj
+(pcb1 int ){@DLI { psb = psb,				 
+         handleHardDLIErrors = yes,
+         pcbParms =/*["", "pcb1", "pcb2", "",""]*/[pcb1, pcb2] }	
+         // when called from APPLA_valid pcb1 is pcbC1 and receives pcbA3 
+         //							     pcb2 is pcbC2 and receives pcbA5
+         // when called from APPLB_valid pcb1 is pcbC1 and receives pcbB4 
+         //							     pcb2 is pcbC2 and receives pcbB1
+         // this program cannot use pcbC3 or pcbC4 
+    }
+    
+	student Student;
+	  // PSB Declaration
+  psb EducationPSB ;
+	
+	function mynext () returns (int)
+		return (5);
+	end
+	function mynextX () 
+		
+	end
+	const catConstant string = "cat";
+	function main()	
+	const dogConstant int = 5;	
+		course CourseX;
+		coursePCB DB_PCBRecord;
+		sqlRec sqlRec;
+		sqlrec2 sqlrec;
+		courses CourseX[]; 
+		sqlrecs sqlrec[];
+		indxrec IndxRecord;
+		mqrec MQRec;
+		relrec relrecord;
+		srec	srecord;
+		name string;
+		course2 CourseX;
+		sqlflex sqlRecFLEX;
+		a,b,c int;
+		d,e,f int;
+		positionx int;
+		myany any;
+		prepare preparestatementid;
+		open resultsetid;
+		
+		get next course usingPCB pcb11;// 1 The usingPCB item must be defined in the program PSB 
+		get next  sqlRec into catConstant ,dogConstant ,c;// 2 catConstant cannot be resolved as an item or a container. It cannot be a constant | dogConstant cannot be resolved as an item or a container. It cannot be a constant
+		get next  sqlRec into name[5:9];//  1 Substring expressions are not valid in this statement location
+				
+		get absolute (name) sqlRec ;// 1 Position value must be an integer literal or an integer item		{4025, EGLMESSAGE_GETBYPOSITION_POSITION_BAUE_MUST_BE_INTEGER}
+		get absolute (5) sqlRec ;// 0
+		get absolute (relrec) sqlRec ;// 1 Position value must be an integer literal or an integer item		{4025, EGLMESSAGE_GETBYPOSITION_POSITION_BAUE_MUST_BE_INTEGER}
+		get absolute (positionx + 5) sqlRec ;// 0
+		get absolute (myany) sqlRec;// 0
+		
+		get absolute (indxrec.itemX) sqlrec;// 0
+		get absolute (mynext()) sqlrec;// 0
+
+	
+		get absolute (5) name;// 1  Invalid target name. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD}
+		get current name;// 1  Invalid target name. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD}
+		get first name;// 1  Invalid target name. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD}
+		get last name;// 1  Invalid target name. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD}
+		get previous name;// 1 Invalid target name. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD} 
+		get relative (5) name;// 1 Invalid target name. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD} 
+		
+		get absolute (5) myany;// 1 Invalid target myany. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD} 
+		get current myany;// 1  Invalid target myany. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD} 
+		get first myany;// 1  Invalid target myany. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD} 
+		get last myany;// 1  Invalid target myany. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD} 
+		get previous myany;// 1 Invalid target myany. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD}  
+		get relative (5) myany;// 1 Invalid target myany. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD}  
+
+		get absolute (5) sqlrecs;// 1 Invalid target sqlrecs. The target of a get by position statement must be an SQL, MQ, indexed, serial, DL/I segment or relative record variable or DL/I segment array		{6644, EGLMESSAGE_GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD} 
+		
+		get absolute (5) courses;// 2  Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get absolute (5) course;// 2  Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get current courses;// 2  Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get first courses;// 2  Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get last courses;// 2  Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get previous courses;// 2 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get relative (5) courses;// 2 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get current course;// 2  Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get first course;// 2  Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get last course;// 2  Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get previous course;// 2 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT} 
+		get relative (5) course;// 2 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable		{7873,EGLMESSAGE_ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT}
+		get next courses; // 1
+				
+		get absolute (5) mqrec;// 1  Invalid directive absolute (5). NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get current mqrec;// 1  Invalid directive current. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get first mqrec;// 1  Invalid directive first. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get last mqrec;// 1  Invalid directive last. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get previous mqrec;// 1  Invalid directive previous. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get relative (5) mqrec;// 1  Invalid directive relative (5). NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		
+		get absolute (5) srec;// 1  Invalid directive absolute (5). NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get current srec;// 1  Invalid directive current. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get first srec;// 1  Invalid directive first. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get last srec;// 1  Invalid directive last. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get previous srec;// 1  Invalid directive previous. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get relative (5) srec;// 1  Invalid directive relative (5). NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}		
+		
+		get absolute (5) relrec;// 1  Invalid directive absolute (5). NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get current relrec;// 1  Invalid directive current. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get first relrec;// 1  Invalid directive first. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get last relrec;// 1  Invalid directive last. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get previous relrec;// 1  Invalid directive previous. NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}
+		get relative (5) relrec;// 1  Invalid directive relative (5). NEXT is the only directive allowed		{6642, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT}				
+		
+		get absolute (5) indxrec;// 1 Invalid directive absolute (5). NEXT and PREVIOUS are the only directives allowed		 {6643, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT_OR_PREVIOUS}
+		get current indxrec;// 1  Invalid directive current. NEXT and PREVIOUS are the only directives allowed		 {6643, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT_OR_PREVIOUS}
+		get first indxrec;// 1  Invalid directive first. NEXT and PREVIOUS are the only directives allowed		 {6643, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT_OR_PREVIOUS}
+		get last indxrec;// 1  Invalid directive last. NEXT and PREVIOUS are the only directives allowed		 {6643, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT_OR_PREVIOUS}
+		get relative (5) indxrec;// 1  Invalid directive relative (5). NEXT and PREVIOUS are the only directives allowed		 {6643, EGLMESSAGE_GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT_OR_PREVIOUS}
+		
+		get next  indxrec into a , b ,c;// 1  The into clause is only valid when the target record is an SQL record variable		{6641, EGLMESSAGE_INVALID_CLAUSE_FOR_NON_SQL_TARGET}
+		get next  indxrec from resultsetid;// 1 The from clause is only valid when the target record is an SQL record variable		{6641, EGLMESSAGE_INVALID_CLAUSE_FOR_NON_SQL_TARGET}		
+
+		get next course usingPCB pcb1;//0
+		get next inParent  indxrec;// 1 The inparent clause is only valid when the target record is a DL/I segment record variable		{7870,EGLMESSAGE_IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET}
+		get next inParent mqrec;// 1 The inparent clause is only valid when the target record is a DL/I segment record variable		{7870,EGLMESSAGE_IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET}
+		get next inParent relrec; // 1 The inparent clause is only valid when the target record is a DL/I segment record variable		{7870,EGLMESSAGE_IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET}
+		get next inParent srec;// 1 The inparent clause is only valid when the target record is a DL/I segment record variable		{7870,EGLMESSAGE_IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET}
+		get next  inParent sqlRec ;// 1 The inparent clause is only valid when the target record is a DL/I segment record variable		{7870,EGLMESSAGE_IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET}
+		get next  inParent sqlRec into a , b ,c;// 1 The inparent clause is only valid when the target record is a DL/I segment record variable		{7870,EGLMESSAGE_IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET}
+		get next  inParent sqlRec from resultsetid;// 1 The inparent clause is only valid when the target record is a DL/I segment record variable		{7870,EGLMESSAGE_IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET}					
+		get next  inParent from resultsetid;//0					
+		get next  inParent from resultsetid into a , b ,c ;//0		
+		
+						
+		get absolute (positionx) sqlRec ;//0
+		get absolute (positionx) sqlRec into a , b ,c;//0
+		get absolute (positionx) sqlRec from resultsetid;//0					
+		get absolute (positionx) from resultsetid;//0					
+		get absolute (positionx) from resultsetid into a , b ,c ;//0	
+		
+		get current  sqlRec ;//0
+		get current  sqlRec into a , b ,c;//0
+		get current  sqlRec from resultsetid;//0					
+		get current  from resultsetid;//0					
+		get current  from resultsetid into a , b ,c ;//0		
+		
+		get first  sqlRec ;//0
+		get first  sqlRec into a , b ,c;//0
+		get first  sqlRec from resultsetid;//0					
+		get first  from resultsetid;//0					
+		get first  from resultsetid into a , b ,c ;//0		
+		
+		get last  sqlRec ;//0
+		get last  sqlRec into a , b ,c;//0
+		get last  sqlRec from resultsetid;//0					
+		get last  from resultsetid;//0					
+		get last  from resultsetid into a , b ,c ;//0	
+		
+		get next  indxrec;// 0
+		get next mqrec;// 0
+		get next relrec; // 0
+		get next srec;//0
+		get next  sqlRec ;//0
+		get next  sqlRec into a , b ,c;//0
+		get next  sqlRec from resultsetid;//0					
+		get next  from resultsetid;//0					
+		get next  from resultsetid into a , b ,c ;//0													
+
+
+
+		get previous  indxrec;// 0
+		get previous  sqlRec ;//0
+		get previous  sqlRec into a , b ,c;//0
+		get previous  sqlRec from resultsetid;//0					
+		get previous  from resultsetid;//0					
+		get previous  from resultsetid into a , b ,c ;//0		
+
+		get relative (positionx) sqlRec ;//0
+		get relative (positionx) sqlRec into a , b ,c;//0
+		get relative (positionx) sqlRec from resultsetid;//0					
+		get relative (positionx) from resultsetid;//0					
+		get relative (positionx) from resultsetid into a , b ,c ;//0
+
+
+		get next student, course; // 1
+		get next student, indxrec;// 1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable		{EGLMESSAGE_MULTIPLE_TARGETS_MUST_ALL_BE_DLISEGMENT_SCALARS}
+
+		get next student; 								 //0
+		get next student forUpdate;						 //0
+		
+		get next inParent student with #dli{ GNP STUDENT };		 //0
+		get next inParent student; 		 				 //0
+		get next inParent student forUpdate with #dli{ GHNP STUDENT }; //0	
+				
+	end
+
+end
+
+Program My2Proj  
+	 
+	function main()
+		course CourseX;
+		course2 CourseX;
+		coursePCB DB_PCBRecord;
+		courses CourseX[]; 
+
+	get next course;// 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties	{7903,EGLMESSAGE_DLI_PROGRAM_MUST_HAVE_DLI
+
+	end
+end
+
+Library MyLib
+function addfunc ()
+		course CourseX;
+		coursePCB DB_PCBRecord;
+		courses CourseX[]; 
+
+		get next course;// 1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties {7903}
+end
+end
+
+Record CourseX type DLISegment end
+Record sqlRec type sqlRecord
+	10 item1X int;
+end
+
+Record sqlRecFLEX type sqlRecord
+	item1X int;
+end
+
+
+Record IndxRecord type indexedrecord { filename = "myfile",keyitem = "itemX"}
+	10 itemX int;
+end
+
+record MQRec type MQRecord { queuename = "www"}
+10 itemX int;
+end
+
+record relrecord type relativerecord { filename = "myfile",keyitem = "itemX"}
+10 itemX int;
+end
+
+record srecord type serialrecord{ filename = "myfile"}
+10 itemX int;
+end
+
+Record sqlRecDef type sqlRecord end
+Record Student type DLISegment end

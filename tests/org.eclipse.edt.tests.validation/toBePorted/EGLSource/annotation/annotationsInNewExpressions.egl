@@ -1,0 +1,32 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		form1 myForm {name = "xxx"};		//0
+		form1 = new myForm {name = "xxx"};	//1	
+		
+		rec1 mySQLRecord {tableNames=[["xxx"]]};		//0
+		rec1 = new mySQLRecord {tableNames=[["xxx"]]};	//1
+		
+		dict1 Dictionary {caseSensitive = yes};			//0
+		dict1 = new Dictionary {caseSensitive = yes};	//0		
+	end
+end
+
+Record myForm type ConsoleForm {
+	formSize = [24,80]
+}
+end
+
+Record mySQLRecord type SQLRecord
+end

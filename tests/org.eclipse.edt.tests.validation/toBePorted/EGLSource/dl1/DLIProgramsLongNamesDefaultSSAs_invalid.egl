@@ -1,0 +1,427 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// This file is based on DLIProgramLongNamesModifiedEqualDefaultSSAs_invalid.egl
+// That file was copied and then the modified SSAs were removed.
+// The error messages for the two files should be the same, the only difference is the placement
+// of the errors.
+
+// We must validate the default SSAs because long names and invalid characters in names (for DL/I)
+// can cause the default SSA to be incorrect.	  
+// The problem is that the part names are either too long or use characters that are not valid 
+// to be used as DLI names.
+
+// valid PSBRecord, dliSegments and DataItems to use in statements
+DataItem CourseNumber char(3) end	 		//0
+DataItem EmployeeNumber char(6) end		 	//0
+DataItem NameTooLong char(18)  end		 	//0
+
+Record CourseSegment type DLISegment 		//1 The name "CourseSegment" is not a valid DL/I name, so the record must specify the segmentName property.
+{ keyItem=CourseNumber, hostVarQualifier = "CourseSegment" } //1 The name "CourseNumber" of the keyItem CourseNumber is not a valid DL/I name, so the item must specify the dliFieldName property.
+	10 CourseNumber CourseNumber;			//0					 
+	10 title char(33);						//0	  
+	10 desc char(220) ;	 					//0
+end
+
+Record PrereqSegment type DLISegment 		//1 The name "PrereqSegment" is not a valid DL/I name, so the record must specify the segmentName property.
+	{ keyItem=CourseNumber, hostVarQualifier = "PrereqSegment" } //0
+	10 CourseNumber CourseNumber 			//0
+		{dliFieldName="course#"};			//0				 
+	10 title char(33);						//0		 
+end											//0
+
+Record OfferingSegment type DLISegment 		//1 The name "OfferingSegment" is not a valid DL/I name, so the record must specify the segmentName property.
+	10 offerdate num(6)  { dliFieldName="DATE" };//0
+	10 *;										 //0	 
+		20 XLOCTooLong char(12);				 //0		 
+	10 format_ char(2) { dliFieldName="FORMAT" };//0	 
+end											//0
+
+Record TeacherSegment type DLISegment 		//1 The name "TeacherSegment" is not a valid DL/I name, so the record must specify the segmentName property					 
+{  keyItem=EmployeeNumber, hostVarQualifier = "TeacherSegment" } //1 The name "EmployeeNumber" of the keyItem EmployeeNumber is not a valid DL/I name, so the item must specify the dliFieldName property
+	10 EmployeeNumber EmployeeNumber;		//0							 
+	10 NameTooLong NameTooLong;				//0					 
+end 										//0
+
+Record StudentSegment type DLISegment		//1 The name "StudentSegment" is not a valid DL/I name, so the record must specify the segmentName property 				 
+						 
+	10 EmployeeNumber EmployeeNumber;		//0							 
+	10 NameTooLong NameTooLong;				//0					 
+	10 grade char(1);						//0		 
+end											//0
+Record EducationPSB2 type PSBRecord 		//0		 
+	{defaultPSBName = "EDUCPSB"}			//0		 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};//0		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};//0		 
+	coursePCB DB_PCBRecord { @PCB {			//0		 
+	  pcbType=DB,							//0		 
+	  pcbName="CPCB",						//0		 
+	  hierarchy = [							//0		 
+	   @Relationship{ segmentRecord=CourseSegment },		//0 
+	   @Relationship{										//0	 
+     		segmentRecord=PrereqSegment, parentRecord=CourseSegment },	//0
+       @Relationship{											 			//0
+      		segmentRecord=OfferingSegment,parentRecord=CourseSegment }, //0 	  
+       @Relationship{											 			//0
+      		segmentRecord=TeacherSegment,parentRecord=OfferingSegment}, //0 
+	   @Relationship{											 			//0
+	     	segmentRecord=StudentSegment, parentRecord=OfferingSegment}	//0 
+   ] }};																	//0		
+  offeringPCB DB_PCBRecord { @PCB {				 							//0
+	  pcbType=DB,									 						//0
+	  pcbName="OPCB",								 						//0
+ //FGD - should find xloctoolong even though it is not a "top-level" item 
+	  secondaryIndex="XLOC",												//0
+	  secondaryIndexItem = "OfferingSegment.xlocTooLong",						 			//0
+	  hierarchy = [									 						//0
+	   @Relationship{ segmentRecord=OfferingSegment },	 				//0
+	   @Relationship{								 						//0
+	     segmentRecord=CourseSegment,parentRecord=OfferingSegment},	 	//0
+	   @Relationship{										 				//0
+	     segmentRecord=TeacherSegment,parentRecord=OfferingSegment},	//0 	
+	   @Relationship{										 				//0
+	     segmentRecord=StudentSegment,parentRecord=OfferingSegment}	 	//0
+	  ] }};																	//0
+end
+
+Program testLongNamesDefaultSSAs type textUIProgram 			
+// In this program, the SSAs will all be modified, but they will be modified to be 
+// exactly what the defalut SSAs would be.
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb,                                   //0
+         handleHardDLIErrors = yes }                    //0
+  }                                                     //0
+  course CourseSegment;                                 //0
+  prereq PrereqSegment;                                 //0
+  OfferingSegment OfferingSegment;                      //0
+  TeacherSegment TeacherSegment;                        //0
+  StudentSegment StudentSegment;                        //0
+  CourseSegment CourseSegment;                          //0
+  PrereqSegment PrereqSegment;                          //0
+  //OfferingSegment2 OfferingSegment;                     //0
+  TeacherSegment2 TeacherSegment;                       //0
+  StudentSegment2 StudentSegment;                       //0
+  CourseSegments CourseSegment[20];                     //0
+  PrereqSegments PrereqSegment[5];                      //0
+  offers OfferingSegment[3];                            //0
+  TeacherSegments TeacherSegment[5];                    //0
+  StudentSegments StudentSegment[25];                   //0
+  xloc char(4);                                         //0
+                                                        //0
+  // PSB Declaration                                    //0
+  psb EducationPSB2 ;                                   //0
+                                                        //0
+        function main()                                 //0
+                addStmt();                              //0
+                deleteStmt();                           //0
+                getStmt();                              //0
+                getForUpdateStmt();                     //0
+                getNextStmt();                          //0
+                getNextForUpdateStmt();                 //0
+                getNextInParentStmt();                  //0
+                getNextInParentForUpdateStmt();         //0
+                replaceStmt();                          //0
+        end                                             //0
+        function addStmt()                              //0
+  	// add every segment with no modifiers and modified = default SSAs
+  	// make sure these messages don't say anything about putting the segName property on the record since you 
+  	// don't really know what record you are talking about here (especially when the error is not on the leaf I/O object	
+  	//Note that I am using DL/I terminology intentionally in these messages because we are inside of the dli definition
+  	//     (except when I talk about host variable because that is definitely NOT a DL/I concept) 
+  	// For the comparison Value expression, the left hand side of the expression must be a valid DL/I name
+  	// because this is the name of the real item in the IMS DBD
+  	// The right hand side has to be a "resolved item" whose name is a valid DL/I name or it has to have a 
+  	// dliFieldName that can be used. 
+	  	  add course  			;							 	//1 The segment name "CourseSegment" is not a valid DL/I name
+	  	  add OfferingSegment 	;	 //3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name
+	  	  add prereq			;	 //3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name	
+	  	  add TeacherSegment	;	 //4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+	  	  add StudentSegment 	;	 //4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+   // add every segment with another PCB and modified = default SSAs 
+ 	  	  add OfferingSegment usingPCB psb.offeringPCB ;	//1 The segment name "OfferingSegment" is not a valid DL/I name
+          add course usingPCB psb.OfferingPCB ;             //2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name
+          add TeacherSegment usingPCB psb.offeringPCB    ;  //2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+          add StudentSegment usingPCB psb.offeringPCB    ;  //2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+        // add arrays of every segment with no modifiers and modified = default SSAs
+          add CourseSegments            ; //1 The segment name "CourseSegment" is not a valid DL/I name
+          add offers                    ; //3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name
+          add prereqSegments            ; //3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+          add TeacherSegments           ; //4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+          add StudentSegments           ; //4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+   // add arrays of every segment with another PCB and modified = default SSAs
+          add offers usingPCB psb.offeringPCB           ; 	//1 The segment name "OfferingSegment" is not a valid DL/I name
+          add CourseSegments usingPCB psb.offeringPCB   ; 	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name
+          add TeacherSegments usingPCB psb.offeringPCB  ;  	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+          add StudentSegments usingPCB psb.offeringPCB  ;	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+   // add every segment using path calls and modified = default SSAa
+	      add course, prereq                           ;	//2 The segment name "CourseSegment" is not a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+	      add course, OfferingSegment, TeacherSegment  ;	//3 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+	      add OfferingSegment, TeacherSegment          ;  	//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+	      add course, OfferingSegment, StudentSegment  ;	//3 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+	      add OfferingSegment, StudentSegment          ;  	//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name| The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+  // add every segment using path calls, another PCB, and modified = default SSAs
+	      add OfferingSegment, course usingPCB psb.offeringPCB       ;	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name
+	      add OfferingSegment, TeacherSegment usingPCB psb.offeringPCB; //2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+	      add OfferingSegment, StudentSegment                        ; 	//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name| The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+        end
+        function deleteStmt()
+        // modified = default SSAs                         
+          delete course                               ;    //1 The segment name "CourseSegment" is not a valid DL/I name
+          delete prereq                               ;    //1 The segment name "PrereqSegment" is not a valid DL/I name
+          delete OfferingSegment                      ;    //1 The segment name "OfferingSegment" is not a valid DL/I name
+          delete TeacherSegment                       ;    //1 The segment name "TeacherSegment" is not a valid DL/I name
+          delete StudentSegment                       ;    //1 The segment name "StudentSegment" is not a valid DL/I name
+          delete course usingPCB psb.offeringPCB      ;    //1 The segment name "CourseSegment" is not a valid DL/I name
+          delete prereq usingPCB psb.coursePCB        ;    //1 The segment name "PrereqSegment" is not a valid DL/I name
+          delete OfferingSegment usingPCB psb.offeringPCB; //1 The segment name "OfferingSegment" is not a valid DL/I name
+          delete TeacherSegment usingPCB psb.offeringPCB ; //1 The segment name "TeacherSegment" is not a valid DL/I name
+          delete StudentSegment usingPCB psb.offeringPCB ; //1 The segment name "StudentSegment" is not a valid DL/I name	
+        end
+        function getStmt()
+    // get every segment with no modifiers and modified = default SSAs
+            get course                  ;	//2 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name
+            get prereq                  ;  	//3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+            get OfferingSegment         ;	//3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name
+            get TeacherSegment          ; 	//5 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get StudentSegment          ;  	//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+    // get every segment with another PCB and modified = default SSAs             
+            get OfferingSegment usingPCB psb.offeringPCB   ; //1 The segment name "OfferingSegment" is not a valid DL/I name
+            get course usingPCB psb.offeringPCB            ; //3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name
+            get TeacherSegment usingPCB psb.offeringPCB    ; //3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get StudentSegment usingPCB psb.offeringPCB    ; //2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name	
+        // get arrays of every segment with no modifiers and modified = default SSAs
+            get CourseSegments          ;//3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name
+            get prereqSegments          ;//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+            get offers                  ;//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name
+            get TeacherSegments         ;//6 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+            get StudentSegments         ;//5 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+
+    // get arrays of every segment with another PCB and modified = default SSAs
+            get offers usingPCB psb.offeringPCB             ;  	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name
+            get CourseSegments usingPCB psb.offeringPCB     ;	//4 The segment name "OfferingSegment" is not a valid DL/I name| The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name
+            get TeacherSegments usingPCB psb.offeringPCB	; 	//4 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name
+            get StudentSegments usingPCB psb.offeringPCB    ; 	//3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+    // get every segment using path calls and modified = default SSAs
+            get course, prereq                        	;	//3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+            get course, OfferingSegment                 ;	//3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name
+            get course, OfferingSegment, TeacherSegment ; 	//5 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get course, OfferingSegment, StudentSegment ; 	//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+            get OfferingSegment, TeacherSegment			;	//5 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name| The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get OfferingSegment, StudentSegment         ;  	//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+
+    // get every segment using path calls, another PCB, and modified = default SSAs
+            get OfferingSegment, course usingPCB psb.offeringPCB          ;   //3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name
+            get OfferingSegment, TeacherSegment usingPCB psb.offeringPCB  ;   //3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get OfferingSegment, StudentSegment usingPCB psb.offeringPCB  ;   //2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+        end
+        function getForUpdateStmt()
+        //Take the statements from getStmt() and add the forupdate modifier
+    // get every segment with no modifiers and modified = default SSAs
+            get course forupdate                                ;  	//2 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name
+            get prereq forupdate                                ;   //3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+            get OfferingSegment forupdate                       ;   //3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name
+            get TeacherSegment forupdate						;	//5 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get StudentSegment forupdate                        ; 	//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+    // get every segment with another PCB and modified = default SSAs              
+            get OfferingSegment forupdate usingPCB psb.offeringPCB        ;    	//1 The segment name "OfferingSegment" is not a valid DL/I name
+            get course forupdate usingPCB psb.offeringPCB                 ;    	//3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name
+            get TeacherSegment forupdate usingPCB psb.offeringPCB         ;    	//3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get StudentSegment forupdate usingPCB psb.offeringPCB         ; 	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+
+        // get arrays of every segment with no modifiers and modified = default SSAs
+        // can't use forUpdate with arrays of DLI segments.
+        // Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+
+    // get arrays of every segment with another PCB and modified = default SSAs
+        // can't use forUpdate with arrays of DLI segments.
+        // Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+
+    // get every segment using path calls and modified = default SSAs
+            get course, prereq forupdate                                          ;//3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+            get course, OfferingSegment forupdate                                 ;//3 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name
+            get course, OfferingSegment, TeacherSegment forupdate                 ;//5 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get course, OfferingSegment, StudentSegment forupdate                 ;//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+            get OfferingSegment, TeacherSegment forupdate                         ;//5 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+            get OfferingSegment, StudentSegment forupdate                         ;//4 The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+
+	    // get every segment using path calls, another PCB, and modified = default SSAs
+	        get OfferingSegment, course forupdate usingPCB psb.offeringPCB         ; //3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name|The field name "CourseNumber" must be a valid DL/I name
+	        get OfferingSegment, TeacherSegment forupdate usingPCB psb.offeringPCB ;//3 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name|The field name "EmployeeNumber" must be a valid DL/I name
+	        get OfferingSegment, StudentSegment forupdate usingPCB psb.offeringPCB ; //2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name
+        end
+        function getNextStmt()
+        //Take the statements from getStmt() and add the next modifier
+    // get every segment with no modifiers and modified = default SSAs
+    		get next course                            ;    //1 The segment name "CourseSegment" is not a valid DL/I name
+            get next prereq                            ;    //1 The segment name "PrereqSegment" is not a valid DL/I name
+            get next OfferingSegment                   ;    //1 The segment name "OfferingSegment" is not a valid DL/I name
+            get next TeacherSegment                    ;    //1 The segment name "TeacherSegment" is not a valid DL/I name
+            get next StudentSegment                    ;    //1 The segment name "StudentSegment" is not a valid DL/I name
+    // get every segment with another PCB and modified = default SSAs       
+            get next OfferingSegment usingPCB psb.offeringPCB   ;    //1 The segment name "OfferingSegment" is not a valid DL/I name
+            get next course usingPCB psb.offeringPCB            ;    //1 The segment name "CourseSegment" is not a valid DL/I name
+            get next TeacherSegment usingPCB psb.offeringPCB    ;    //1 The segment name "TeacherSegment" is not a valid DL/I name
+            get next StudentSegment usingPCB psb.offeringPCB    ;    //1 The segment name "StudentSegment" is not a valid DL/I name                                             //
+        // get arrays of every segment with no modifiers and modified = default SSAs 
+            get next CourseSegments								; //1 The segment name "CourseSegment" is not a valid DL/I name
+            get next prereqSegments								;	//1 The segment name "PrereqSegment" is not a valid DL/I name
+            get next offers										;	//1 The segment name "OfferingSegment" is not a valid DL/I name
+            get next TeacherSegments							;	//1 The segment name "TeacherSegment" is not a valid DL/I name
+            get next StudentSegments							; 	//1 The segment name "StudentSegment" is not a valid DL/I name
+    // get arrays of every segment with another PCB and modified = default SSAs
+            get next offers usingPCB psb.offeringPCB			; 	//1 The segment name "OfferingSegment" is not a valid DL/I name
+            get next CourseSegments usingPCB psb.offeringPCB	; 	//1 The segment name "CourseSegment" is not a valid DL/I name
+            get next TeacherSegments usingPCB psb.offeringPCB	;	//1 The segment name "TeacherSegment" is not a valid DL/I name
+			get next StudentSegments usingPCB psb.offeringPCB 	;	//1 The segment name "StudentSegment" is not a valid DL/I name
+    // get every segment using path calls and modified = default SSAs
+			get next course, prereq 						;	//2 The segment name "CourseSegment" is not a valid DL/I name| The segment name "PrereqSegment" is not a valid DL/I name					
+			get next course, OfferingSegment, TeacherSegment;	//3 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name	
+			get next course, OfferingSegment, StudentSegment;	//3 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name	 			
+			get next OfferingSegment, TeacherSegment 		;	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name	
+			get next course, OfferingSegment, StudentSegment;	//3 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name		 			
+			get next OfferingSegment, StudentSegment 		;	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name	
+	
+    // get every segment using path calls, another PCB, and modified = default SSAs
+	     	get next OfferingSegment, course usingPCB psb.offeringPCB ;			//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name
+	      	get	next OfferingSegment, TeacherSegment usingPCB psb.offeringPCB;	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name       	  	
+	     	get next OfferingSegment, StudentSegment usingPCB psb.offeringPCB;	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name				 	
+		end
+	 	function getNextForUpdateStmt()
+	 	//Take the statements from getForUpdateStmt() and add the next modifier
+	    // get every segment with no modifiers and modified = default SSAs
+			get next course forupdate 		;				//1 The segment name "CourseSegment" is not a valid DL/I name 	
+			get next prereq forupdate 		;				//1 The segment name "PrereqSegment" is not a valid DL/I name
+			get next OfferingSegment forupdate 	;			//1 The segment name "OfferingSegment" is not a valid DL/I name	
+			get next TeacherSegment forupdate 	;			//1 The segment name "TeacherSegment" is not a valid DL/I name	
+			get next StudentSegment forupdate 	;			//1 The segment name "StudentSegment" is not a valid DL/I name			
+	    // get every segment with another PCB and no modified SSAs
+			get next OfferingSegment forupdate usingPCB psb.offeringPCB ;	//1 The segment name "OfferingSegment" is not a valid DL/I name		
+			get next course forupdate usingPCB psb.offeringPCB ;			//1 The segment name "CourseSegment" is not a valid DL/I name	
+			get next TeacherSegment forupdate usingPCB psb.offeringPCB ;	//1 The segment name "TeacherSegment" is not a valid DL/I name		
+			get next StudentSegment forupdate usingPCB psb.offeringPCB ;	//1 The segment name "StudentSegment" is not a valid DL/I name		
+			
+	  	// get arrays of every segment with no modifiers and modified = default SSAs
+		// can't use forUpdate with arrays of DLI segments.
+		// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+		
+	    // get arrays of every segment with another PCB and modified = default SSAs
+		// can't use forUpdate with arrays of DLI segments.
+		// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+			
+	    // get every segment using path calls and modified = default SSAs
+			get next course, prereq forupdate 				;			//2 The segment name "CourseSegment" is not a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name	
+			get next course, OfferingSegment forupdate 		;			//2 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name		
+			get next course, OfferingSegment, TeacherSegment forupdate ;//3 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name		
+			get next course, OfferingSegment, StudentSegment forupdate ;//3 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name		
+			get next OfferingSegment, TeacherSegment forupdate 	;		//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name		
+			get next OfferingSegment, StudentSegment forupdate ;		//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name		
+	    // get every segment using path calls, another PCB, and modified = default SSAs
+	     	get next OfferingSegment, course forupdate usingPCB psb.offeringPCB ;		//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name	
+	      	get	next OfferingSegment, TeacherSegment forupdate usingPCB psb.offeringPCB;//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name		        	  	
+	     	get next OfferingSegment, StudentSegment forupdate usingPCB psb.offeringPCB ;//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name		
+		end
+	 	function getNextInParentStmt()
+	  	//Take the statements from getNextStmt() and add the inParent modifier	
+	    // get every segment with no modifiers andmodified = default SSAs
+			get next inparent course 			;	 	//1 The segment name "CourseSegment" is not a valid DL/I name
+			get next inparent prereq 			;	 	//1 The segment name "PrereqSegment" is not a valid DL/I name
+			get next inparent OfferingSegment 	;		//1 The segment name "OfferingSegment" is not a valid DL/I name	
+			get next inparent TeacherSegment 	;		//1 The segment name "TeacherSegment" is not a valid DL/I name
+			get next inparent StudentSegment 	;		//1 The segment name "StudentSegment" is not a valid DL/I name
+	    // get every segment with another PCB and modified = default SSAs
+			get next inparent OfferingSegment usingPCB psb.offeringPCB;		//1 The segment name "OfferingSegment" is not a valid DL/I name	 		
+			get next inparent course usingPCB psb.offeringPCB;				//1 The segment name "CourseSegment" is not a valid DL/I name 		
+			get next inparent TeacherSegment usingPCB psb.offeringPCB;		//1 The segment name "TeacherSegment" is not a valid DL/I name	 		
+			get next inparent StudentSegment usingPCB psb.offeringPCB ;		//1 The segment name "StudentSegment" is not a valid DL/I name
+	  	// get arrays of every segment with no modifiers and modified = default SSAs
+			get next inparent CourseSegments 	;			//1 The segment name "CourseSegment" is not a valid DL/I name 			
+			get next inparent prereqSegments 	;			//1 The segment name "PrereqSegment" is not a valid DL/I name	
+			get next inparent offers 			;			//1 The segment name "OfferingSegment" is not a valid DL/I name	
+			get next inparent TeacherSegments 	;			//1 The segment name "TeacherSegment" is not a valid DL/I name	
+			get next inparent StudentSegments 	;			//1 The segment name "StudentSegment" is not a valid DL/I name	
+	    // get arrays of every segment with another PCB and modified = default SSAs
+			get next inparent offers usingPCB psb.offeringPCB 	;			//1 The segment name "OfferingSegment" is not a valid DL/I name		 	
+			get next inparent CourseSegments usingPCB psb.offeringPCB ;		//1 The segment name "CourseSegment" is not a valid DL/I name	
+			get next inparent TeacherSegments usingPCB psb.offeringPCB	;	//1 The segment name "TeacherSegment" is not a valid DL/I name	
+			get next inparent StudentSegments usingPCB psb.offeringPCB;		//1 The segment name "StudentSegment" is not a valid DL/I name	
+	    // get every segment using path calls and modified = default SSAs
+			get next inparent course, prereq			;		//2 The segment name "CourseSegment" is not a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+			get next inparent course, OfferingSegment	;		//2 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name	
+			get next inparent course, OfferingSegment, TeacherSegment;//3 The segment name "CourseSegment" is not a valid DL/I name|The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name	
+			get next inparent course, OfferingSegment, StudentSegment;//3 The segment name "CourseSegment" is not a valid DL/I name| The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name		
+			get next inparent OfferingSegment, TeacherSegment	;//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name	
+			get next inparent OfferingSegment, StudentSegment	;//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name		
+	    // get every segment using path calls, another PCB, and modified = default SSAs
+	     	get next inparent OfferingSegment, course usingPCB psb.offeringPCB 	;		//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "CourseSegment" is not a valid DL/I name
+	      	get	next inparent OfferingSegment, TeacherSegment usingPCB psb.offeringPCB ;//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name	
+	     	get next inparent OfferingSegment, StudentSegment usingPCB psb.offeringPCB ;//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name		
+		end   	
+	 	function getNextInParentForUpdateStmt()
+	 	//Take the statements from getNextForUpdateStmt() and add the inparent modifier
+	    // get every segment with no modifiers and modified = default SSAs
+			get next inparent course forupdate 				;	//1 The segment name "CourseSegment" is not a valid DL/I name		 	
+			get next inparent prereq forupdate 				;	//1 The segment name "PrereqSegment" is not a valid DL/I name		 	
+			get next inparent OfferingSegment forupdate 	;	//1 The segment name "OfferingSegment" is not a valid DL/I name		 	
+			get next inparent TeacherSegment forupdate 		;	//1 The segment name "TeacherSegment" is not a valid DL/I name		 	
+			get next inparent StudentSegment forupdate 		;	//1 The segment name "StudentSegment" is not a valid DL/I name		 	
+	    // get every segment with another PCB and modified = default SSAs
+			get next inparent OfferingSegment forupdate usingPCB psb.offeringPCB;		//1 The segment name "OfferingSegment" is not a valid DL/I name				 	
+			get next inparent course forupdate usingPCB psb.offeringPCB  ;				//1 The segment name "CourseSegment" is not a valid DL/I name				
+			get next inparent TeacherSegment forupdate usingPCB psb.offeringPCB ;		//1 The segment name "TeacherSegment" is not a valid DL/I name				
+			get next inparent StudentSegment forupdate usingPCB psb.offeringPCB ;		//1 The segment name "StudentSegment" is not a valid DL/I name				
+			
+	  	// get arrays of every segment with no modifiers and modified = default SSAs
+		// can't use forUpdate with arrays of DLI segments.
+		// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+		
+	    // get arrays of every segment with another PCB and modified = default SSAs
+		// can't use forUpdate with arrays of DLI segments.
+		// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+			
+	    // get every segment using path calls and modified = default SSAs
+			get next inparent course, prereq forupdate 			;	//2 The segment name "CourseSegment" is not a valid DL/I name|The segment name "PrereqSegment" is not a valid DL/I name
+			get next inparent course, OfferingSegment forupdate ;	//2 The segment name "CourseSegment" is not a valid DL/I name| The segment name "OfferingSegment" is not a valid DL/I name	
+			get next inparent course, OfferingSegment, TeacherSegment forupdate ;	//3 The segment name "CourseSegment" is not a valid DL/I name| The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name	
+			get next inparent course, OfferingSegment, StudentSegment forupdate ;	//3 The segment name "CourseSegment" is not a valid DL/I name| The segment name "OfferingSegment" is not a valid DL/I name| The segment name "StudentSegment" is not a valid DL/I name			
+			get next inparent OfferingSegment, TeacherSegment forupdate ;	//2 The segment name "OfferingSegment" is not a valid DL/I name| The segment name "TeacherSegment" is not a valid DL/I name	
+			get next inparent OfferingSegment, StudentSegment forupdate ;	//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name			
+	    // get every segment using path calls, another PCB, and modified = default SSAs
+	     	get next inparent OfferingSegment, course forupdate usingPCB psb.offeringPCB ;		//2 The segment name "OfferingSegment" is not a valid DL/I name| The segment name "CourseSegment" is not a valid DL/I name			
+	      	get	next inparent OfferingSegment, TeacherSegment forupdate usingPCB psb.offeringPCB ;//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "TeacherSegment" is not a valid DL/I name				
+	     	get next inparent OfferingSegment, StudentSegment forupdate usingPCB psb.offeringPCB ;//2 The segment name "OfferingSegment" is not a valid DL/I name|The segment name "StudentSegment" is not a valid DL/I name						
+		end 	
+		
+	  function replaceStmt()
+	   // replace every segment with no modifiers and modified = default SSAs	
+	  	  replace course  				 ;		//1 The segment name "CourseSegment" is not a valid DL/I name		
+	  	  replace OfferingSegment  		 ;		//1 The segment name "OfferingSegment" is not a valid DL/I name		
+	  	  replace prereq  				 ;		//1 The segment name "PrereqSegment" is not a valid DL/I name		
+	  	  replace TeacherSegment  		 ;		//1 The segment name "TeacherSegment" is not a valid DL/I name		
+	  	  replace StudentSegment  		 ;		//1 The segment name "StudentSegment" is not a valid DL/I name		
+	   // replace every segment with another PCB and modified = default SSAs
+	   	  replace OfferingSegment usingPCB psb.offeringPCB  ;	//1 The segment name "OfferingSegment" is not a valid DL/I name		
+	  	  replace course usingPCB psb.offeringPCB  	 ;			//1 The segment name "CourseSegment" is not a valid DL/I name		
+	  	  replace TeacherSegment usingPCB psb.offeringPCB   ;	//1 The segment name "TeacherSegment" is not a valid DL/I name		
+	  	  replace StudentSegment usingPCB psb.offeringPCB  ;	//1 The segment name "StudentSegment" is not a valid DL/I name				 	
+	
+	 	// replace arrays of every segment with no modifiers and modified = default SSAs	
+		// can't use replace with arrays of DLI segments.  
+		// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+	   	  
+	    // replace every segment using path calls (with or without another PCB) and modified = default SSAs
+	    // replace replaces whatever was last retrieved, can't specify multiple I/O
+	    // objects, Can specify command codes to prevent a retrieved segment from 
+	    // being replaced.
+	  end
+
+
+end

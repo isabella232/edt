@@ -1,0 +1,33 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record D1085394_UIRcd type VGUIRecord  {
+    commandValueItem = "SELECTED_ACTION",
+    title = "OccupationList" }
+  3 OCCLSRW_UI_PAGE_FORM char(604) 
+    { uiType = uiForm, @programLinkData{ 
+       programName = "OCCLSWE", uiRecordName = "OCCLSRW_UI_PAGE" }}; 
+    4 OCCUPATIONLIST_INSTANCE_FIELDS char(70) 
+      { uiType = none } ; 
+      5 LICNOID3 char(7) 
+        { uiType = inputOutput, runValidatorFromProgram = yes,
+          typeChkMsgKey = "BAD FORMAT", displayName = "License" } ; 
+      5 CLASSCD1 char(3) [21] 
+        { uiType = hidden, runValidatorFromProgram = yes,
+          numElementsItem = VLICC_ROWS_TO_DISPLAY } ; 		//1 The numElementsItem VLICC_ROWS_TO_DISPLAY for CLASSCD1 in D1085394_UIRcd must name an item within the same record.
+    4 MESSAGES char(50) [10] 
+      { uiType = output, numElementsItem = ERRORS_NUMBER } ;	//0
+    4 ERRORS_NUMBER int 
+      { uiType = none } ; 
+    4 SELECTED_ACTION char(30) 
+      { uiType = none } ; 
+end   

@@ -11,42 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
-import org.eclipse.edt.compiler.binding.AnnotationBinding;
-import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
-import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.AnnotationValidationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ConstructorBinding;
-import org.eclipse.edt.compiler.binding.DataItemBinding;
-import org.eclipse.edt.compiler.binding.DataItemPropertiesProblemsProblemRequestor;
-import org.eclipse.edt.compiler.binding.FieldContentValidationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.FixedRecordBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.InstantiationValidationRule;
+import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
+import org.eclipse.edt.compiler.binding.FieldContentValidationRule;
+import org.eclipse.edt.compiler.binding.IValidationProxy;
 import org.eclipse.edt.compiler.binding.InvocationValidationRule;
-import org.eclipse.edt.compiler.binding.PartContentValidationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.UsedTypeBinding;
-import org.eclipse.edt.compiler.binding.ValueValidationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.BasicFormGroupAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.EGLNotInCurrentReleaseAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.StereotypeAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.PartContentValidationRule;
+import org.eclipse.edt.compiler.binding.ValueValidationRule;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -55,14 +32,11 @@ import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.ConstantFormField;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
@@ -70,7 +44,6 @@ import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -81,23 +54,29 @@ import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author svihovec
- *
  */
 public class AnnotationValidator {
 
@@ -117,403 +96,332 @@ public class AnnotationValidator {
 		return result;
 	}
 
-	private IProblemRequestor specializeProblemRequestor(IProblemRequestor problemRequestor, Node target, IAnnotationBinding annotation) {
-		return specializeProblemRequestor(problemRequestor, target, annotation.getAnnotationType());
+	private IProblemRequestor specializeProblemRequestor(IProblemRequestor problemRequestor, Node target, Annotation annotation) {
+		return specializeProblemRequestor(problemRequestor, target, (AnnotationType)annotation.getEClass());
 	}
 	
-	private IProblemRequestor specializeProblemRequestor(IProblemRequestor problemRequestor, Node target, IAnnotationTypeBinding annotationType) {
+	private IProblemRequestor specializeProblemRequestor(IProblemRequestor problemRequestor, Node target, AnnotationType annotationType) {
 		storedProblemRequestor = problemRequestor;
 		
 		IProblemRequestor result = problemRequestor;
 		
-		if(target instanceof DataItem) {
-			result = new DataItemPropertiesProblemsProblemRequestor(problemRequestor, ((DataItem) target).getName().resolveBinding(), annotationType);
-		}
+		//TODO uncomment and port when data items are supported
+//		if(target instanceof DataItem) {
+//			result = new DataItemPropertiesProblemsProblemRequestor(problemRequestor, ((DataItem) target).getName().resolveBinding(), annotationType);
+//		}
 		
 		return result;
 	}
 	
-	public void validateAnnotationTarget(Node target){
-		
+	public static IValidationProxy getValidationProxy(Annotation annot) {
+		if (annot != null) {
+			EClass eclass = annot.getEClass();
+			if (eclass instanceof AnnotationType) {
+				String proxy = ((AnnotationType)eclass).getValidationProxy();
+				if (proxy != null) {
+					proxy = proxy.trim();
+					if (proxy.length() > 0) {
+						try {
+							Class c = AnnotationValidator.class.getClassLoader().loadClass(proxy);
+							IValidationProxy valProxy = (IValidationProxy)c.getMethod("getInstance", (Class[])null).invoke(null, (Object[])null);
+							valProxy.setType((AnnotationType)eclass);
+							return valProxy;
+						}
+						catch(ClassNotFoundException e) {
+							throw new RuntimeException(e);
+						}
+						catch(IllegalAccessException e) {
+							throw new RuntimeException(e);
+						}
+						catch(InvocationTargetException e) {
+							throw new RuntimeException(e);
+						}
+						catch (IllegalArgumentException e) {
+							throw new RuntimeException(e);
+						}
+						catch (SecurityException e) {
+							throw new RuntimeException(e);
+						}
+						catch (NoSuchMethodException e) {
+							throw new RuntimeException(e);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public void validateAnnotationTarget(Node target) {
 		target.accept(new DefaultASTVisitor(){
-			
+			@Override
 			public boolean visit(Record record) {
-				IAnnotationTypeBinding partSubTypeBinding = null;
-				IBinding bindingWithAnnotations = null;
+				IValidationProxy proxy = null;
+				Stereotype subtype = null;
 				
-				IBinding binding = record.getName().resolveBinding();
-				if(binding.isTypeBinding() && ((ITypeBinding) binding).isPartBinding()) {
-					partSubTypeBinding = ((IPartBinding) binding).getSubType();
-					bindingWithAnnotations = binding.getAnnotation(partSubTypeBinding);
-					if(partSubTypeBinding != null) {
-						partSubTypeBinding = partSubTypeBinding.getValidationProxy();
+				org.eclipse.edt.mof.egl.Type type = record.getName().resolveType();
+				if (type instanceof org.eclipse.edt.mof.egl.Part) {
+					subtype = ((org.eclipse.edt.mof.egl.Part)type).getStereotype();
+					if (subtype != null) {
+						proxy = getValidationProxy(subtype);
 					}
 				}
 				
 				validateExpressions(record);
 
-				if(partSubTypeBinding == null) {
+				if (proxy == null) {
 					return false;
 				}
 				
-				if(partSubTypeBinding != null && bindingWithAnnotations != null) {					
-					// process annotations on part subtype
-					processPartSubTypeSubAnnotations(record.getName(), record, bindingWithAnnotations, partSubTypeBinding.getAnnotations());
-					
-					// get annotations for fields, run validation annotations on fields
-					processPartSubTypeFields(record, record.getContents(), partSubTypeBinding);
-					
-					// run validation rules from subtype
-					processPartSubType(record, partSubTypeBinding);
-				}
+				// process annotations on part subtype
+				processPartSubTypeSubAnnotations(record.getName(), record, subtype, proxy.getAnnotationValidators());
+				
+				// get annotations for fields, run validation annotations on fields
+				processPartSubTypeFields(record, record.getContents(), proxy);
+				
+				// run validation rules from subtype
+				processPartSubType(record, proxy);
 			
 				processOverriddenAnnotationsAndSetValues(record);
 				
 				return false;
 			}
 			
-			public boolean visit(TopLevelForm form) {				
-				Name subType = form.getSubType();
-				
-				if(subType != null){
-					IDataBinding subTypeBinding = subType.resolveDataBinding();
-				
-					if(IBinding.NOT_FOUND_BINDING != subTypeBinding) {
-						// process annotations on part subtype
-						processPartSubTypeSubAnnotations(form.getName(), form, subTypeBinding, ((IAnnotationTypeBinding) subTypeBinding.getType()).getValidationProxy().getAnnotations());
-						
-						// get annotations for fields, run validation annotations on fields
-						processPartSubTypeFields(form, form.getContents(), ((IAnnotationTypeBinding)subTypeBinding.getType()).getValidationProxy());
-						
-						// run validation rules from subtype
-						processPartSubType((Part)form, ((IAnnotationTypeBinding)subTypeBinding.getType()).getValidationProxy());
-					}
-				}
-				
-				processOverriddenAnnotationsAndSetValues(form);
-				
-				return false;
-			}
-			
-			public boolean visit(NestedForm form) {				
-				Name subType = form.getSubType();
-				
-				if(subType != null){
-					IDataBinding subTypeBinding = subType.resolveDataBinding();
-					
-				
-					if(IBinding.NOT_FOUND_BINDING != subTypeBinding) {
-						// process annotations on part subtype
-						processPartSubTypeSubAnnotations(form.getName(), form, subTypeBinding, ((IAnnotationTypeBinding)subTypeBinding.getType()).getValidationProxy().getAnnotations());
-						
-						// get annotations for fields, run validation annotations on fields
-						processPartSubTypeFields(form, form.getContents(), ((IAnnotationTypeBinding)subTypeBinding.getType()).getValidationProxy());
-						
-						// run validation rules from subtype
-						processPartSubType(form.getName(), form, form.getContents(), ((IAnnotationTypeBinding)subTypeBinding.getType()).getValidationProxy());
-					}
-				}
-				
-				processOverriddenAnnotationsAndSetValues(form);
-				
-				return false;
-			}
-			
 			public boolean visitFunctionContainer(Part functionContainerPart, Name subType) {
-				IAnnotationTypeBinding partSubTypeBinding = null;
-				IBinding bindingWithAnnotations = null;
+				IValidationProxy proxy = null;
+				Stereotype subtype = null;
 				
-				IBinding binding = functionContainerPart.getName().resolveBinding();
-				if(binding.isTypeBinding() && ((ITypeBinding) binding).isPartBinding()) {
-					partSubTypeBinding = ((IPartBinding) binding).getSubType();
-					bindingWithAnnotations = binding.getAnnotation(partSubTypeBinding);
-					if(partSubTypeBinding != null) {
-						partSubTypeBinding = partSubTypeBinding.getValidationProxy();
+				org.eclipse.edt.mof.egl.Type type = functionContainerPart.getName().resolveType();
+				if (type instanceof org.eclipse.edt.mof.egl.Part) {
+					subtype = ((org.eclipse.edt.mof.egl.Part)type).getStereotype();
+					if (subtype != null) {
+						proxy = getValidationProxy(subtype);
 					}
 				}
 				
 				validateExpressions(functionContainerPart);
 
-				if(partSubTypeBinding == null) {
+				if (proxy == null) {
 					return false;
 				}
 				
 				// process annotations on part subtype
-				processPartSubTypeSubAnnotations(functionContainerPart.getName(), functionContainerPart, bindingWithAnnotations, partSubTypeBinding.getAnnotations());
+				processPartSubTypeSubAnnotations(functionContainerPart.getName(), functionContainerPart, subtype, proxy.getAnnotationValidators());
 				
 				// get annotations for fields, run validation annotations on fields
-				processPartSubTypeFields(functionContainerPart, functionContainerPart.getContents(), partSubTypeBinding);
+				processPartSubTypeFields(functionContainerPart, functionContainerPart.getContents(), proxy);
 				
 				// run validation rules from subtype
-				processPartSubType(functionContainerPart, partSubTypeBinding);
+				processPartSubType(functionContainerPart, proxy);
 				
 				processOverriddenAnnotationsAndSetValues(functionContainerPart);
 				
 				return false;
 			}
 			
+			@Override
 			public boolean visit(Program program) {
 				visitFunctionContainer(program, program.getSubType());
 				return false;
 			}
 			
+			@Override
 			public boolean visit(Library library) {
 				visitFunctionContainer(library, library.getSubType());
 				return false;
 			}
-
-			public boolean visit(EGLClass eglClass) {
-				visitFunctionContainer(eglClass, eglClass.getSubType());
-				return false;
-			}
-
+			
+			@Override
 			public boolean visit(Handler handler) {
 				visitFunctionContainer(handler, handler.getSubType());
 				return false;
 			}
 			
+			@Override
 			public boolean visit(Interface interfaceNode) {
 				visitFunctionContainer(interfaceNode, interfaceNode.getSubType());
 				return false;
 			}
-
+			
+			@Override
 			public boolean visit(Service serviceNode) {
 				visitFunctionContainer(serviceNode, serviceNode.getSubType());
 				return false;
 			}
 			
+			@Override
 			public boolean visit(NestedFunction function) {
-				
-				IDataBinding db = function.getName().resolveDataBinding();
-				if (Binding.isValidBinding(db)) {
-					processAnnotations(function, db.getType(), db);
+				Member m = function.getName().resolveMember();
+				if (m != null) {
+					processAnnotations(function, m);
 				}
 				return false;
 			}
 			
+			@Override
 			public boolean visit(Constructor constructor) {
-				ConstructorBinding cb = constructor.getBinding();
-				if (Binding.isValidBinding(cb)) {
-					processAnnotations(constructor, cb.getType(), cb);
+				org.eclipse.edt.mof.egl.Constructor c = constructor.getBinding();
+				if (c != null) {
+					processAnnotations(constructor, c);
 				}
 				return false;
 			}
 			
+			@Override
 			public boolean visit(ExternalType externalType) {
 				visitFunctionContainer(externalType, externalType.getSubType());
 				return false;
 			}
 			
-			public boolean visit(final DataItem dataItem) {
-				DataItemBinding binding = (DataItemBinding) dataItem.getName().resolveBinding();
-				processAnnotations(dataItem, binding == null ? null : binding.getPrimitiveTypeBinding(), null);
-				processOverriddenAnnotationsAndSetValues(dataItem);				
-				return false;
-			}
+			//TODO uncomment and port when data items are supported
+//			@Override
+//			public boolean visit(final DataItem dataItem) {
+//				DataItemBinding binding = (DataItemBinding) dataItem.getName().resolveBinding();
+//				processAnnotations(dataItem, binding == null ? null : binding.getPrimitiveTypeBinding(), null);
+//				processOverriddenAnnotationsAndSetValues(dataItem);				
+//				return false;
+//			}
 			
-			public boolean visit(FormGroup formGroup) {
-//				 process annotations on part subtype
-				processPartSubTypeSubAnnotations(formGroup.getName(), formGroup, formGroup.getName().resolveBinding(), null);
-				
-				// get annotations for fields, run validation annotations on fields
-				processPartSubTypeFields(formGroup, formGroup.getContents(), BasicFormGroupAnnotationTypeBinding.getInstance());
-				
-				// run validation rules from subtype
-				processPartSubType(formGroup, null);
-				
-				processOverriddenAnnotationsAndSetValues(formGroup);
-				return false;
-			}
-			
+			@Override
 			public boolean visit(StructureItem structureItem) {
-				processAnnotations(structureItem, (IDataBinding) structureItem.resolveBinding());
+				processAnnotations(structureItem, structureItem.getName().resolveMember());
 				
-				if(structureItem.hasSettingsBlock()) {
+				if (structureItem.hasSettingsBlock()) {
 					processOverriddenAnnotationsAndSetValues(structureItem.getSettingsBlock());
 				}
 				
-				if (Binding.isValidBinding(structureItem.resolveBinding()) && structureItem.hasType() && !structureItem.hasInitializer() && !structureItem.getType().isNullableType()) {					
-					validateInstantiability(structureItem, structureItem.getType().resolveTypeBinding(), ((IDataBinding)structureItem.resolveBinding()).getDeclaringPart());
-					validateInvocation(structureItem, DefaultBinder.getDefaultConstructor(structureItem.getType().resolveTypeBinding()), ((IDataBinding)structureItem.resolveBinding()).getDeclaringPart());					
+				if (structureItem.getName().resolveMember() != null && structureItem.hasType() && !structureItem.hasInitializer() && !structureItem.isNullable()) {					
+					validateInvocation(structureItem, getDefaultConstructor(structureItem.getType().resolveType()), BindingUtil.getDeclaringPart(structureItem.getName().resolveMember()));					
 				}
-				
-				
 				return false;
 			}
 			
+			@Override
 			public boolean visit(ClassDataDeclaration classDataDeclaration) {			
-				processAnnotations(classDataDeclaration, getType(classDataDeclaration.getType().resolveTypeBinding()), null);
+				processAnnotations(classDataDeclaration, classDataDeclaration.getNames().get(0).resolveMember());
 				
-				if(classDataDeclaration.hasSettingsBlock()) {
+				if (classDataDeclaration.hasSettingsBlock()) {
 					processOverriddenAnnotationsAndSetValues(classDataDeclaration.getSettingsBlockOpt());
 				}
 				
-				IDataBinding field = ((Name)classDataDeclaration.getNames().get(0)).resolveDataBinding();
-				if (Binding.isValidBinding(field) && !classDataDeclaration.hasInitializer() && !classDataDeclaration.getType().isNullableType()) {					
-					validateInstantiability(classDataDeclaration, classDataDeclaration.getType().resolveTypeBinding(), field.getDeclaringPart());
-					validateInvocation(classDataDeclaration, DefaultBinder.getDefaultConstructor(classDataDeclaration.getType().resolveTypeBinding()), field.getDeclaringPart());					
+				Member field = classDataDeclaration.getNames().get(0).resolveMember();
+				if (field != null && !classDataDeclaration.hasInitializer() && !classDataDeclaration.isNullable()) {					
+					validateInvocation(classDataDeclaration, getDefaultConstructor(classDataDeclaration.getType().resolveType()), BindingUtil.getDeclaringPart(field));					
 				}
 				return false;
 			}
 			
 			private void validateExpressions(Part part) {
-				if (!Binding.isValidBinding(part.getName().resolveBinding())) {
+				if (part.getName().resolveType() == null) {
 					return;
 				}
-				final IPartBinding partBinding = (IPartBinding)part.getName().resolveBinding();
+				final org.eclipse.edt.mof.egl.Part partBinding = (org.eclipse.edt.mof.egl.Part)part.getName().resolveType();
 				part.accept(new AbstractASTVisitor() {
-					
+					@Override
 					public boolean visit(BinaryExpression binaryExpression) {
 						if (binaryExpression.getFirstExpression() != null) {
-							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getFirstExpression().resolveDataBinding(), binaryExpression.getFirstExpression());
+							RValueValidator validator = new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getFirstExpression().resolveMember(), binaryExpression.getFirstExpression());
 							validator.validate();
 						}
 						if (binaryExpression.getSecondExpression() != null) {
-							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getSecondExpression().resolveDataBinding(), binaryExpression.getSecondExpression());
+							RValueValidator validator = new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getSecondExpression().resolveMember(), binaryExpression.getSecondExpression());
 							validator.validate();
 						}
-						
 						return true;
 					}
 					
+					@Override
 					public boolean visit(UnaryExpression unaryExpression) {
-						RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, unaryExpression.getExpression().resolveDataBinding(), unaryExpression.getExpression());
+						RValueValidator validator = new RValueValidator(problemRequestor, compilerOptions, unaryExpression.getExpression().resolveMember(), unaryExpression.getExpression());
 						validator.validate();
 						return true;
 					}
 					
+					@Override
 					public boolean visit(ArrayAccess arrayAccess) {
 						Iterator i = arrayAccess.getIndices().iterator();
 						while (i.hasNext()) {
 							Expression expr = (Expression)i.next();
-							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, expr.resolveDataBinding(), expr);
+							RValueValidator validator = new RValueValidator(problemRequestor, compilerOptions, expr.resolveMember(), expr);
 							validator.validate();
 						}
 						return true;
 					}
 					
+					@Override
 					public boolean visit(NewExpression newExpression) {
-						if (Binding.isValidBinding(newExpression.resolveTypeBinding())) {
-							validateInstantiability(newExpression, newExpression.resolveTypeBinding().getBaseType(), partBinding);
+						if (newExpression.resolveConstructor() != null) {
+							validateInvocation(newExpression, newExpression.resolveConstructor(), partBinding);
 						}
-						if (Binding.isValidBinding(newExpression.resolveConstructorBinding())) {
-							validateInvocation(newExpression, newExpression.resolveConstructorBinding(), partBinding);
-						}
-						if (Binding.isValidBinding(newExpression.getType().resolveTypeBinding()) && newExpression.getType().resolveTypeBinding().getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+						if (newExpression.getType().resolveType() != null && newExpression.getType().resolveType() instanceof org.eclipse.edt.mof.egl.ArrayType) {
 							ArrayType arrType = (ArrayType)newExpression.getType();
-							if (arrType.hasInitialSize() && !DefaultBinder.isZeroLiteral(arrType.getInitialSize()) && Binding.isValidBinding(newExpression.resolveTypeBinding().getBaseType()) && !newExpression.resolveTypeBinding().getBaseType().isNullable()) {
-								validateInvocation(newExpression, DefaultBinder.getDefaultConstructor(newExpression.resolveTypeBinding().getBaseType()), partBinding);
+							org.eclipse.edt.mof.egl.Type baseType = BindingUtil.getBaseType(newExpression.resolveType());
+							if (arrType.hasInitialSize() && !BindingUtil.isZeroLiteral(arrType.getInitialSize()) && baseType != null) {
+								validateInvocation(newExpression, getDefaultConstructor(baseType), partBinding);
 							}
 						}
 						return true;
 					}
 					
+					@Override
 					public boolean visit(FunctionInvocation functionInvocation) {
-						validateInvocation(functionInvocation, functionInvocation.getTarget().resolveTypeBinding(), partBinding);
+						validateInvocation(functionInvocation, functionInvocation.getTarget().resolveMember(), partBinding);
 						return true;
 					}
 				});					
 			}
 			
-			private void validateInstantiability(Node node, ITypeBinding type, IPartBinding declPart) {
-				if (Binding.isValidBinding(type) && type instanceof IPartBinding) {
-					IPartSubTypeAnnotationTypeBinding subType = ((IPartBinding) type).getSubType();
-					if (Binding.isValidBinding(subType) && subType.getValidationProxy() != null) {
-						IAnnotationTypeBinding proxy = subType.getValidationProxy();
-						Iterator i = proxy.getInstantiationValidators().iterator();
-						while (i.hasNext()) {
-							InstantiationValidationRule rule = (InstantiationValidationRule) i.next();
-							rule.validate(node, type, declPart, problemRequestor, compilerOptions);
+			private void validateInvocation(Node node, Element element, org.eclipse.edt.mof.egl.Part declaringPart) {
+				if (element != null) {
+					for (Annotation annot : element.getAnnotations()) {
+						IValidationProxy proxy = getValidationProxy(annot);
+						if (proxy != null) {
+							for (InvocationValidationRule rule : proxy.getInvocationValidators()) {
+								rule.validate(node, element, declaringPart, problemRequestor, compilerOptions);
+							}
 						}
 					}
 				}
 			}
-
-			private void validateInvocation(Node node, IBinding binding, IPartBinding declPart) {
-				if (Binding.isValidBinding(binding)) {
-					Iterator annIter = binding.getAnnotations().iterator();
-					while (annIter.hasNext()) {
-						IAnnotationBinding ann =  (IAnnotationBinding)annIter.next();
-						if (Binding.isValidBinding(ann.getType())) {
-							AnnotationTypeBinding annType = (AnnotationTypeBinding) ann.getType();
-							if (annType.getValidationProxy() != null) {
-								IAnnotationTypeBinding proxy = annType.getValidationProxy();
-								Iterator i = proxy.getInvocationValidators().iterator();
-								while (i.hasNext()) {
-									InvocationValidationRule rule = (InvocationValidationRule) i.next();
-									rule.validate(node, binding, declPart, problemRequestor, compilerOptions);
-								}
-							}
-							
-						}
-					}				
-				}
-				
-			}
-
+			
+			@Override
 			public boolean visit(UseStatement useStatement) {			
-				UsedTypeBinding usedTypeBinding = useStatement.getUsedTypeBinding();
-				if(usedTypeBinding != null) {
-					processAnnotations(useStatement, getType(usedTypeBinding.getType()), null);
+				List<Name> names = useStatement.getNames();
+				if (names.size() > 0) {
+					org.eclipse.edt.mof.egl.Type type = names.get(0).resolveType();
+					if (type != null) {
+						processAnnotations(useStatement, type);
+					}
 				}
 				
 				return false;
 			}
 			
-			private ITypeBinding getType(ITypeBinding binding) {
-				if(binding != null && IBinding.NOT_FOUND_BINDING != binding) {
-					switch(binding.getKind()) {
-					case ITypeBinding.DATAITEM_BINDING:
-						return binding = ((DataItemBinding) binding).getPrimitiveTypeBinding();
-					case ITypeBinding.ARRAY_TYPE_BINDING:
-						return ArrayTypeBinding.getInstance(getType(((ArrayTypeBinding) binding).getElementType()));
-					}
-				}
-				return binding;
-			}
-
+			@Override
 			public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
-				processAnnotations(functionDataDeclaration, getType(functionDataDeclaration.getType().resolveTypeBinding()), null);
+				processAnnotations(functionDataDeclaration, functionDataDeclaration.getNames().get(0).resolveMember());
 				
-				if(functionDataDeclaration.hasSettingsBlock()) {
+				if (functionDataDeclaration.hasSettingsBlock()) {
 					processOverriddenAnnotationsAndSetValues(functionDataDeclaration.getSettingsBlockOpt());
 				}
 				
-				IDataBinding field = ((Name)functionDataDeclaration.getNames().get(0)).resolveDataBinding();
-				if (Binding.isValidBinding(field) && !functionDataDeclaration.hasInitializer() && !functionDataDeclaration.getType().isNullableType()) {					
-					validateInstantiability(functionDataDeclaration, functionDataDeclaration.getType().resolveTypeBinding(), field.getDeclaringPart());					
-					validateInvocation(functionDataDeclaration, DefaultBinder.getDefaultConstructor(functionDataDeclaration.getType().resolveTypeBinding()), field.getDeclaringPart());
+				Member field = functionDataDeclaration.getNames().get(0).resolveMember();
+				if (field != null && !functionDataDeclaration.hasInitializer() && !functionDataDeclaration.isNullable()) {				
+					validateInvocation(functionDataDeclaration, getDefaultConstructor(functionDataDeclaration.getType().resolveType()), BindingUtil.getDeclaringPart(field));
 				}
-				
 
-				return false;
-			}
-			
-			public boolean visit(VariableFormField variableFormField) {
-				processAnnotations(variableFormField, variableFormField.getName().resolveDataBinding());
-				if(variableFormField.hasSettingsBlock()) {
-					processOverriddenAnnotationsAndSetValues(variableFormField.getSettingsBlock());
-				}
-				return false;
-			}
-			
-			public boolean visit(ConstantFormField constantFormField) {
-				processAnnotations(constantFormField, constantFormField.resolveBinding());
 				return false;
 			}
 		});
 	}
 	
-	private void processAnnotations(final Node target, final IDataBinding targetBinding){
-		processAnnotations(target, targetBinding == null || IBinding.NOT_FOUND_BINDING == targetBinding ? null : targetBinding.getType(), null);
-	}
-	
 	/**
-	 * Process annotations that appear on a DataItem or Field target (structure item, page item, form field, program variable)
-	 * @param targetDataBinding TODO
+	 * Process annotations that appear on a DataItem or Field target (structure item, global variable, local variable)
+	 * @param targetElement
 	 */
-	private void processAnnotations(final Node target, final ITypeBinding targetTypeBinding, IDataBinding targetDataBinding){
-		target.accept(new AbstractASTExpressionVisitor(){			
+	private void processAnnotations(final Node target, final Element targetElement) {
+		target.accept(new AbstractASTExpressionVisitor() {
+			@Override
 			public boolean visit(ClassDataDeclaration classDataDeclaration) {
 				if(classDataDeclaration.hasSettingsBlock()) {
 					classDataDeclaration.getSettingsBlockOpt().accept(this);
@@ -521,6 +429,7 @@ public class AnnotationValidator {
 				return false;
 			}
 			
+			@Override
 			public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
 				if(functionDataDeclaration.hasSettingsBlock()) {
 					functionDataDeclaration.getSettingsBlockOpt().accept(this);
@@ -528,14 +437,17 @@ public class AnnotationValidator {
 				return false;
 			}
 			
+			@Override
 			public boolean visit(NestedFunction nestedFunction) {
 				
 				final AbstractASTExpressionVisitor superVisitor = this;
 				
 				DefaultASTVisitor visitor = new DefaultASTVisitor() {
+					@Override
 					public boolean visit(NestedFunction nestedFunction) {
 						return true;
 					}
+					@Override
 					public boolean visit(SettingsBlock settingsBlock) {
 						settingsBlock.accept(superVisitor);
 						return false;
@@ -545,6 +457,7 @@ public class AnnotationValidator {
 				return false;
 			}
 			
+			@Override
 			public boolean visit(UseStatement useStatement) {
 				if(useStatement.hasSettingsBlock()) {
 					useStatement.getSettingsBlock().accept(this);
@@ -552,6 +465,7 @@ public class AnnotationValidator {
 				return false;
 			}
 			
+			@Override
 			public boolean visit(StructureItem structureItem) {
 				if(structureItem.hasSettingsBlock()) {
 					structureItem.getSettingsBlock().accept(this);
@@ -559,96 +473,79 @@ public class AnnotationValidator {
 				return false;
 			}
 			
-			public boolean visit(VariableFormField variableFormField) {
-				if(variableFormField.hasSettingsBlock()) {
-					variableFormField.getSettingsBlock().accept(this);
-				}
-				return false;
-			}
-			
-			public boolean visit(ConstantFormField constantFormField) {
-				if(constantFormField.hasSettingsBlock()) {
-					constantFormField.getSettingsBlock().accept(this);
-				}
-				return false;
-			}
-			
+			@Override
 			public boolean visit(AnnotationExpression annotationExpression) {
-				IDataBinding annotationExpressionDBinding = annotationExpression.resolveDataBinding(); 
-				if(IBinding.NOT_FOUND_BINDING != annotationExpressionDBinding &&
-                   annotationExpressionDBinding.getKind() == IDataBinding.ANNOTATION_BINDING){
-				
-					processSubAnnotations(annotationExpression, target, targetTypeBinding, null, (IAnnotationBinding)annotationExpression.resolveDataBinding(), ((IAnnotationTypeBinding) annotationExpression.resolveTypeBinding()).getValidationProxy().getAnnotations());
+				Annotation annot = annotationExpression.resolveAnnotation(); 
+				if (annot != null) {
+					IValidationProxy proxy = getValidationProxy(annot);
+					if (proxy != null) {
+						processSubAnnotations(annotationExpression, target, targetElement, annot, proxy.getAnnotationValidators());
+					}
 				}
 				return false;
 			}
 			
+			@Override
 			public boolean visit(SetValuesExpression setValuesExpression) {				
 				Expression annotationExpression = setValuesExpression.getExpression();
 				
-				IDataBinding annotationExpressionDBinding = annotationExpression.resolveDataBinding(); 
-				if(Binding.isValidBinding(annotationExpressionDBinding) &&
-                   annotationExpressionDBinding.getKind() == IDataBinding.ANNOTATION_BINDING){
+				Object annotationExpressionDBinding = annotationExpression.resolveElement();
+				if (annotationExpressionDBinding instanceof Annotation) {
 					SettingsBlock settingsBlock = setValuesExpression.getSettingsBlock();
 					
-					ITypeBinding annotationExpressionTBinding =  annotationExpressionDBinding.getType();
-					if(annotationExpressionTBinding != null) {					   
-						processSubAnnotations(annotationExpression, target, targetTypeBinding, null, (IAnnotationBinding)annotationExpressionDBinding, ((IAnnotationTypeBinding) annotationExpressionTBinding).getValidationProxy().getAnnotations());
-						processComplexAnnotationFields(target, settingsBlock, (IAnnotationTypeBinding) annotationExpressionTBinding);
-						
-//						for(Iterator iter = setValuesExpression.getSettingsBlock().getSettings().iterator(); iter.hasNext();) {
-//							((Node) iter.next()).accept(this);
-//						}
+					IValidationProxy proxy = getValidationProxy((Annotation)annotationExpressionDBinding);
+					if (proxy != null) {
+						processSubAnnotations(annotationExpression, target, targetElement, (Annotation)annotationExpressionDBinding, proxy.getAnnotationValidators());
+						processComplexAnnotationFields(target, settingsBlock, proxy);
 					}
 				}
 				return false;
 			}
 			
-			public boolean visit(Assignment assignment){
-				IAnnotationBinding aBinding = assignment.resolveBinding();
-				if(aBinding != null) {
-					IAnnotationTypeBinding validationProxy = aBinding.getAnnotationType().getValidationProxy();
-					processSubAnnotations(assignment, target, targetTypeBinding, null, aBinding, validationProxy.getAnnotations());
-					processSimpleAnnotationFields(target, assignment, validationProxy);	
-					
-					if (aBinding.isAnnotationField()) {
-						AnnotationFieldBinding annField = (AnnotationFieldBinding) aBinding;
-						if (annField.getEnclosingAnnotationType() != null && annField.getEnclosingAnnotationType().getValidationProxy() != null) {
-							processComplexAnnotationFields(target, assignment, annField.getEnclosingAnnotationType().getValidationProxy());
-						}
-					}
+			@Override
+			public boolean visit(Assignment assignment) {
+				Annotation aBinding = assignment.resolveBinding();
+				if (aBinding != null) {
+					IValidationProxy validationProxy = getValidationProxy(aBinding);
+					processSubAnnotations(assignment, target, targetElement, aBinding, validationProxy.getAnnotationValidators());
+					processComplexAnnotationFields(target, assignment, validationProxy);
 				}
 				return false;
 			}
 			
+			@Override
 			public boolean visitExpression(final Expression expression) {
 				target.accept(new DefaultASTVisitor() {
+					@Override
 					public boolean visit(ClassDataDeclaration classDataDeclaration) {
 						classDataDeclaration.getType().accept(this);
 						return false;					
 					}
 					
+					@Override
 					public boolean visit(StructureItem structureItem) {
 						structureItem.getType().accept(this);
 						return false;
 					}
 					
+					@Override
 					public boolean visit(ArrayType arrayType) {
-						if(arrayType.hasInitialSize()) {
-							if(targetTypeBinding != null && ITypeBinding.ARRAY_TYPE_BINDING == targetTypeBinding.getKind()) {
-								ITypeBinding exprType = expression.resolveTypeBinding();
-								if(exprType != null) {
-									if(!TypeCompatibilityUtil.isMoveCompatible(
-										((ArrayTypeBinding) targetTypeBinding).getElementType(),
-										exprType,
-										null,
-										compilerOptions)) {
+						if (arrayType.hasInitialSize()) {
+							org.eclipse.edt.mof.egl.Type targetTypeBinding = null;
+							if (targetElement instanceof org.eclipse.edt.mof.egl.Type) {
+								targetTypeBinding = (org.eclipse.edt.mof.egl.Type)targetElement;
+							}
+							
+							if (targetTypeBinding instanceof org.eclipse.edt.mof.egl.ArrayType) {
+								org.eclipse.edt.mof.egl.Type exprType = expression.resolveType();
+								if (exprType != null) {
+									if (!IRUtils.isMoveCompatible(((org.eclipse.edt.mof.egl.ArrayType)targetTypeBinding).getElementType(), exprType, null)) {
 										problemRequestor.acceptProblem(
 											expression,
 											IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 											new String[] {
-												exprType.getCaseSensitiveName(),
-												((ArrayTypeBinding) targetTypeBinding).getElementType().getCaseSensitiveName(),
+												exprType.getTypeSignature(),
+												((org.eclipse.edt.mof.egl.ArrayType)targetTypeBinding).getElementType().getTypeSignature(),
 												expression.getCanonicalString()
 											});
 									}
@@ -673,98 +570,67 @@ public class AnnotationValidator {
 	
 	private void processOverriddenAnnotationsAndSetValues(final Node target) {
 		target.accept(new DefaultASTVisitor() {
+			@Override
 			public boolean visit(Record record) {
 				return true;
 			}
 			
-			public boolean visit(NestedForm nestedForm) {
-				return true;
-			}
-			
-			public boolean visit(TopLevelForm topLevelForm) {
-				return true;
-			}
-			
+			@Override
 			public boolean visit(Program program) {
 				return true;
 			}
 			
+			@Override
 			public boolean visit(Library library) {
 				return true;
 			}
 			
+			@Override
 			public boolean visit(Handler handler) {
 				return true;
 			}
 			
+			@Override
+			public boolean visit(org.eclipse.edt.compiler.core.ast.Class eglClass) {
+				return true;
+			};
+			
+			@Override
 			public boolean visit(DataItem dataItem) {
 				return true;
 			}
 			
-			public boolean visit(FormGroup formGroup) {
-				return true;
-			}
-			
+			@Override
 			public boolean visit(SettingsBlock settingsBlock) {
 				return true;
 			}
 			
+			@Override
 			public boolean visit(SetValuesExpression setValuesExpression) {
-				final Expression annotationExpression = setValuesExpression.getExpression();
+				Expression annotationExpression = setValuesExpression.getExpression();
 				
-				final IDataBinding annotationExpressionDBinding = annotationExpression.resolveDataBinding(); 
-				if(IBinding.NOT_FOUND_BINDING != annotationExpressionDBinding && annotationExpressionDBinding != null) {
-					if(IDataBinding.STRUCTURE_ITEM_BINDING == annotationExpressionDBinding.getKind() ||
-					   IDataBinding.FORM_FIELD == annotationExpressionDBinding.getKind()) {
-						setValuesExpression.getSettingsBlock().accept(new DefaultASTVisitor() {
-							public boolean visit(SettingsBlock settingsBlock) {
-								return true;
-							}
-							
-							public boolean visit(Assignment assignment) {
-								IAnnotationBinding aBinding = assignment.resolveBinding();
-								if(aBinding != null) {
-									List ruleAnnotations = ((IAnnotationTypeBinding)aBinding.getType()).getValidationProxy().getAnnotations();
-									processSubAnnotations(assignment, annotationExpression, annotationExpressionDBinding.getType(), null, aBinding, ruleAnnotations);
-								}
-								return false;
-							}
-						});
-					}
+				Member annotationExpressionDBinding = annotationExpression.resolveMember(); 
+				if (annotationExpressionDBinding != null) {
 					processOverriddenAnnotationsAndSetValues(setValuesExpression.getSettingsBlock());
-					
-					if(annotationExpressionDBinding.getAnnotation(EGLNotInCurrentReleaseAnnotationTypeBinding.getInstance()) != null) {
-						problemRequestor.acceptProblem(
-							annotationExpression instanceof AnnotationExpression ? ((AnnotationExpression) annotationExpression).getName() : annotationExpression,
-							IProblemRequestor.SYSTEM_PART_NOT_SUPPORTED,
-							new String[] {
-								annotationExpressionDBinding.getType().getCaseSensitiveName()
-							});
-					}
 				}
 				return false;
 			}
 			
+			@Override
 			public boolean visit(final Assignment assignment){
-				IAnnotationBinding aBinding = assignment.resolveBinding();
-				if(aBinding == null) {
-					ITypeBinding lhType = assignment.getLeftHandSide().resolveTypeBinding();
-					ITypeBinding rhType = assignment.getRightHandSide().resolveTypeBinding();
-					if(StatementValidator.isValidBinding(lhType) &&
-					   StatementValidator.isValidBinding(rhType) &&
-					   ITypeBinding.ANNOTATION_BINDING != lhType.getKind()) {
-						
+				Annotation aBinding = assignment.resolveBinding();
+				if (aBinding == null) {
+					org.eclipse.edt.mof.egl.Type lhType = assignment.getLeftHandSide().resolveType();
+					org.eclipse.edt.mof.egl.Type rhType = assignment.getRightHandSide().resolveType();
+					if (lhType != null && rhType != null && !(lhType instanceof AnnotationType)) {
 						new AssignmentStatementValidator(problemRequestor, 	compilerOptions, null).validateAssignment(
-											assignment.getOperator(), 
-											assignment.getLeftHandSide(), 
-											assignment.getRightHandSide(), 
-											assignment.getLeftHandSide().resolveTypeBinding(), 
-											assignment.getRightHandSide().resolveTypeBinding(), 
-											assignment.getLeftHandSide().resolveDataBinding(), 
-											assignment.getRightHandSide().resolveDataBinding(), 
-											false, 
-											DefaultBinder.isArithmeticAssignment(assignment));
-						
+								assignment.getOperator(),
+								assignment.getLeftHandSide(),
+								assignment.getRightHandSide(),
+								assignment.getLeftHandSide().resolveType(),
+								assignment.getRightHandSide().resolveType(),
+								assignment.getLeftHandSide().resolveMember(),
+								assignment.getRightHandSide().resolveMember());
 					}
 				}
 				return false;
@@ -775,182 +641,131 @@ public class AnnotationValidator {
 	/**
 	 * Process annotations found on fields of this complex annotation.
 	 */
-	private void processComplexAnnotationFields(final Node target, final SettingsBlock settingsBlock, final IAnnotationTypeBinding complexType) {
-		
-		settingsBlock.accept(new AbstractASTVisitor(){
-			
+	private void processComplexAnnotationFields(final Node target, final SettingsBlock settingsBlock, final IValidationProxy proxy) {
+		final boolean[] processed = {false};
+		settingsBlock.accept(new AbstractASTExpressionVisitor() {
+			@Override
 			public boolean visit(SetValuesExpression setValuesExpression) {
 				// we have found a nested annotation, start the process over
-				processAnnotations(setValuesExpression, (ITypeBinding) null, null);
+				processAnnotations(setValuesExpression, null);
+				processed[0] = true;
 				return false;
 			}
 			
+			@Override
 			public boolean visit(AnnotationExpression annotationExpression) {
 				// we have found a nested annotation, start the process over
-				processAnnotations(annotationExpression, (ITypeBinding) null, null);
+				processAnnotations(annotationExpression, null);
+				processed[0] = true;
 				return false;
 			}
 			
+			@Override
 			public boolean visit(Assignment assignment){
-				processComplexAnnotationFields(target, assignment, complexType);
+				processComplexAnnotationFields(target, assignment, proxy);
+				processed[0] = true;
 				return true;
 			}
-		});	
+		});
+		
+		// When there's just 1 field users can omit the name: @MyAnnot{"abc"} instead of @MyAnnot{value = "abc"}
+		if (!processed[0] && settingsBlock.getSettings().size() == 1 && settingsBlock.getParent() instanceof SetValuesExpression) {
+			Object element = ((SetValuesExpression)settingsBlock.getParent()).getExpression().resolveElement();
+			if (element instanceof Annotation) {
+				Annotation annot = (Annotation)element;
+				List<EField> fields = annot.getEClass().getEFields();
+				if (fields.size() == 1) {
+					String name = NameUtile.getAsName(fields.get(0).getName());
+					Object value = annot.getValue(name);
+					if (value != null) {
+						List<ValueValidationRule> rules = proxy.getFieldValidators(name);
+						if (rules != null && rules.size() > 0) {
+							for (ValueValidationRule nextRule : rules) {
+								nextRule.validate(settingsBlock.getParent(), target, annot, problemRequestor, compilerOptions);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
-	private void processComplexAnnotationFields(final Node target, final Assignment assignment, final IAnnotationTypeBinding complexType) {
-		IAnnotationBinding aBinding = assignment.resolveBinding();
+	private void processComplexAnnotationFields(Node target, Assignment assignment, IValidationProxy proxy) {
+		Annotation aBinding = assignment.resolveBinding();
 		
-		if(aBinding != null && complexType != null) {				
-			Object value = aBinding.getValue();
-			if(value != null && IBinding.NOT_FOUND_BINDING != value) {
-				List annotations = complexType.getValidationProxy().getFieldAnnotations(aBinding.getName());
-				
-				if(annotations != null){
-					for (Iterator iter = annotations.iterator(); iter.hasNext();) {
-						ValueValidationAnnotationTypeBinding nextRule = (ValueValidationAnnotationTypeBinding) iter.next();
-						
+		if (aBinding != null && proxy != null) {
+			String name = NameUtile.getAsName(assignment.getLeftHandSide().getCanonicalString());
+			Object value = aBinding.getValue(name);
+			if (value != null) {
+				List<ValueValidationRule> annotations = proxy.getFieldValidators(name);
+				if (annotations != null) {
+					for (ValueValidationRule nextRule : annotations) {
 						nextRule.validate(assignment.getRightHandSide(), target, aBinding, problemRequestor, compilerOptions);
 					}
 				}
 			}
 		}
 	}
-
-		
-	/**
-	 * Process annotations found on the value field of this simple annotation.
-	 */
-	private void processSimpleAnnotationFields(Node target, Assignment assignment, IAnnotationTypeBinding simpleType) {
-		
-		// process annotations specifically for this annotations value
-		List valueAnnotations = simpleType.getValueAnnotations();
-		for (Iterator iterator = valueAnnotations.iterator(); iterator.hasNext();) {
-			ValueValidationAnnotationTypeBinding nextRule = (ValueValidationAnnotationTypeBinding) iterator.next();
-			
-			IAnnotationBinding resolveBinding = assignment.resolveBinding();
-			Object value = resolveBinding.getValue();
-			if(value != null && IBinding.NOT_FOUND_BINDING != value) {
-				problemRequestor = specializeProblemRequestor(problemRequestor, target, simpleType);
-				nextRule.validate(assignment.getRightHandSide(), target, resolveBinding, problemRequestor, compilerOptions);
-				problemRequestor = restoreProblemRequestor();
-			}
-		}
-	}
 	
 	/**
 	 * process annotations specified for all fields of this annotation
-	 * @param targetDataBinding TODO
 	 */
-	private void processSubAnnotations(Node errorNode, Node target, ITypeBinding targetTypeBinding, IDataBinding targetDataBinding, IAnnotationBinding annotation, List rules) {
-		
-		HashMap allAnnotationsMap = new HashMap();
-		
-		allAnnotationsMap.put(annotation.getName(), annotation);
-
-		
-		if(((IAnnotationTypeBinding)annotation.getType()).isComplex()){
-			List fields = annotation.getAnnotations();
-			for (Iterator iterator = fields.iterator(); iterator.hasNext();) {		
-				AnnotationBinding annotationBinding = (AnnotationBinding) iterator.next();
-				allAnnotationsMap.put(annotationBinding.getName(), annotationBinding);
+	private void processSubAnnotations(Node errorNode, Node target, Element targetElement, Annotation annotation, List<AnnotationValidationRule> rules) {
+		if (rules != null && rules.size() > 0) {
+			// Collect all annotations and fields from the annotation, and also add the annotation itself. Users can retrieve them by name if they need the values.
+			Map<String, Object> allAnnotationsAndFieldsMap = new HashMap();
+			allAnnotationsAndFieldsMap.put(NameUtile.getAsName(annotation.getEClass().getName()), annotation);
+			
+			for (Annotation annot : annotation.getAnnotations()) {
+				allAnnotationsAndFieldsMap.put(NameUtile.getAsName(annot.getEClass().getName()), annot);
 			}
 			
-			fields = annotation.getAnnotationFields();
-			for (Iterator iterator = fields.iterator(); iterator.hasNext();) {		
-				IDataBinding annotationBinding = (IDataBinding) iterator.next();
-				allAnnotationsMap.put(annotationBinding.getName(), annotationBinding);
+			for (EField efield : annotation.getEClass().getEFields()) {
+				Object value = annotation.getValue(efield.getName());
+				if (value != null) {
+					allAnnotationsAndFieldsMap.put(NameUtile.getAsName(efield.getName()), value);
+				}
 			}
-		}
-		
-		// Apply all valid rules to this parts annotations
-		if(rules != null){
-			for (Iterator subIter = rules.iterator(); subIter.hasNext();) {
-				AnnotationValidationAnnotationTypeBinding nextRule = (AnnotationValidationAnnotationTypeBinding)subIter.next();
-				
+			
+			// Apply all valid rules to this parts annotations
+			for (AnnotationValidationRule rule : rules) {
 				problemRequestor = specializeProblemRequestor(problemRequestor, target, annotation);
-				nextRule.validate(errorNode, target, targetTypeBinding, allAnnotationsMap, problemRequestor, compilerOptions);
+				rule.validate(errorNode, target, targetElement, allAnnotationsAndFieldsMap, problemRequestor, compilerOptions);
 				problemRequestor = restoreProblemRequestor();
 			}
 		}
 	}
 	
-	private void processPartSubTypeSubAnnotations(Node errorNode, Node target, IBinding subTypeBinding, List rules) {
-		
-		List fields = new ArrayList();
-		fields.addAll(subTypeBinding.getAnnotations());
-		if(subTypeBinding.isAnnotationBinding()) {
-			fields.addAll(((IAnnotationBinding) subTypeBinding).getAnnotationFields());
-		}
-		
-		HashMap allAnnotationsMap = new HashMap();
-		for (Iterator iterator = fields.iterator(); iterator.hasNext();) {		
-			AnnotationBinding annotationBinding = (AnnotationBinding) iterator.next();
-			allAnnotationsMap.put(annotationBinding.getName(), annotationBinding);
-		}
-		
-		// Apply all valid rules to this parts annotations
-		if(rules != null){
-			for (Iterator subIter = rules.iterator(); subIter.hasNext();) {
-				Object next = subIter.next();
-				if(next instanceof AnnotationValidationAnnotationTypeBinding) {
-					AnnotationValidationAnnotationTypeBinding nextRule = (AnnotationValidationAnnotationTypeBinding)next;
-					
-					nextRule.validate(errorNode, target, null, allAnnotationsMap, problemRequestor, compilerOptions);
+	private void processPartSubTypeSubAnnotations(Node errorNode, Node target, Annotation subTypeBinding, List<AnnotationValidationRule> rules) {
+		if (rules != null && rules.size() > 0) {
+			// Collect all annotations and fields from the subtype, and also add the subtype itself. Users can retrieve them by name if they need the values.
+			Map<String, Object> allAnnotationsAndFieldsMap = new HashMap();
+			allAnnotationsAndFieldsMap.put(NameUtile.getAsName(subTypeBinding.getEClass().getName()), subTypeBinding);
+			
+			for (Annotation annot : subTypeBinding.getAnnotations()) {
+				allAnnotationsAndFieldsMap.put(NameUtile.getAsName(annot.getEClass().getName()), annot);
+			}
+			
+			for (EField efield : subTypeBinding.getEClass().getEFields()) {
+				Object value = subTypeBinding.getValue(efield.getName());
+				if (value != null) {
+					allAnnotationsAndFieldsMap.put(NameUtile.getAsName(efield.getName()), value);
 				}
+			}
+			
+			// Apply all valid rules to this parts annotations
+			for (AnnotationValidationRule rule : rules) {
+				rule.validate(errorNode, target, null, allAnnotationsAndFieldsMap, problemRequestor, compilerOptions);
 			}
 		}
 	}
 
-	/**
-	 * This method is very similar to the processComplexAnnotationFields method. We have two methods due to the fact that a part subtype does not contain
-	 * an AnnotationExpression (@name), which means that we have to drill down from the part directly to the assignment statements inside the settings block.
-	 */
-	private void processPartSubTypeFields(final Part part, final IAnnotationTypeBinding partSubType){
-		part.accept(new DefaultASTVisitor(){
-			
-			public boolean visit(Record record) {
-				return true;
-			}
-			
-			public boolean visit(SettingsBlock settingsBlock) {
-				return true;
-			}
-			
-			public boolean visit(SetValuesExpression setValuesExpression) {
-				// we have found a nested annotation, start the process over
-				processAnnotations(setValuesExpression, (ITypeBinding) null, null);
-				return false;
-			}
-			
-			public boolean visit(Assignment assignment){
-			
-				List annotations = partSubType.getFieldAnnotations(((IAnnotationTypeBinding)assignment.resolveBinding().getType()).getName());
-				
-				if(annotations != null){
-					for (Iterator iter = annotations.iterator(); iter.hasNext();) {
-						ValueValidationAnnotationTypeBinding rule = (ValueValidationAnnotationTypeBinding) iter.next();
-						
-						rule.validate(assignment, part, assignment.resolveBinding(), problemRequestor, compilerOptions);
-					}
-				}
-				
-				return false;
-			}
-		});
-	}
-		
-	
-	private void processPartSubTypeFields(final Node target, List partContents, final IAnnotationTypeBinding partSubType){
-		
-		for (Iterator iter = partContents.iterator(); iter.hasNext();) {
-			Node content = (Node) iter.next();
-			
-			content.accept(new DefaultASTVisitor(){
-			
+	private void processPartSubTypeFields(final Node target, List<Node> partContents, final IValidationProxy proxy){
+		for (Node node : partContents) {
+			node.accept(new DefaultASTVisitor() {
+				@Override
 				public boolean visit(SettingsBlock settingsBlock) {
-					
-					processComplexAnnotationFields(target, settingsBlock, partSubType);
+					processComplexAnnotationFields(target, settingsBlock, proxy);
 					return false;
 				}
 			});
@@ -960,189 +775,148 @@ public class AnnotationValidator {
 	/**
 	 * Process annotations for this parts contents.
 	 */
-	private void processPartSubType(Part part, final IAnnotationTypeBinding subTypeAnnotation) {
-		processPartSubType(part.getName(), part, part.getContents(), subTypeAnnotation);
+	private void processPartSubType(Part part, IValidationProxy proxy) {
+		processPartSubType(part.getName(), part, part.getContents(), proxy);
 	}
 	
-	private void processPartSubType(Name partName, Node partNode, List partContents, final IAnnotationTypeBinding subTypeAnnotation) {
+	private void processPartSubType(Name partName, Node partNode, List<Node> partContents, final IValidationProxy proxy) {
 		
-		final HashMap allPartAnnotations = new HashMap();
+		final Map<String, Map<Annotation, Object[]>> allPartAnnotations = new HashMap();
 		
-		for (Iterator iter = partContents.iterator(); iter.hasNext();) {
-			
-			Node node = (Node)iter.next();
-			
-			node.accept(new DefaultASTVisitor(){
+		for (Node node : partContents) {
+			node.accept(new DefaultASTVisitor() {
+				@Override
 				public boolean visit(StructureItem structureItem) {
 //					if(structureItem.isEmbedded()) {
 //						System.out.println();
 //					}
 //					else {
-						IDataBinding structureItemBinding = (IDataBinding) structureItem.resolveBinding();
-						if(structureItemBinding != null && IBinding.NOT_FOUND_BINDING != structureItemBinding) {
-							List annotations = structureItemBinding.getAnnotations();
-							Node nodeForErrors;
-							String canonicalItemName;
-							if(structureItem.isFiller()) {
-								nodeForErrors = new Node(structureItem.getOffset(), structureItem.getOffset()+1);
-								canonicalItemName = "*";
-							}
-							else if(structureItem.isEmbedded()) {
-								nodeForErrors = structureItem.getType();
-								canonicalItemName = structureItem.getType().getCanonicalName();
-							}
-							else {
-								nodeForErrors = structureItem.getName();
-								canonicalItemName = structureItem.getName().getCanonicalName();
-							}
+						Member structureItemBinding = structureItem.getName().resolveMember();
+						if (structureItemBinding != null) {
+							List<Annotation> annotations = structureItemBinding.getAnnotations();
+							Node nodeForErrors = structureItem.getName();
+							String canonicalItemName = structureItem.getName().getCanonicalName();
 							processContentAnnotations(structureItem, nodeForErrors, structureItemBinding, canonicalItemName, annotations);
 						}
 //					}
 					return false;
 				}
 				
-				public boolean visit(VariableFormField variableFormField) {
-					IDataBinding fieldBinding = (IDataBinding) variableFormField.getName().resolveBinding();
-					if(fieldBinding != null) {
-						List annotations = fieldBinding.getAnnotations();
-						
-						processContentAnnotations(variableFormField, variableFormField.getName(), fieldBinding, variableFormField.getName().getCanonicalName(), annotations);
-					}
-					return false;
-				}
-				
-				public boolean visit(ConstantFormField constantFormField) {
-					IDataBinding fieldBinding = constantFormField.resolveBinding();
-					if(fieldBinding != null) {
-						List annotations = fieldBinding.getAnnotations();
-						
-						processContentAnnotations(constantFormField, constantFormField, fieldBinding, "*", annotations);
-					}
-					return false;
-				}
-				
+				@Override
 				public boolean visit(ClassDataDeclaration classDataDeclaration) {
-					List names = classDataDeclaration.getNames();
-					
-					for (Iterator iterator = names.iterator(); iterator.hasNext();) {
-						Name name = (Name) iterator.next();
-						
-						IDataBinding classBinding = name.resolveDataBinding();
-						// IDataBinding structureItemBinding = .resolveDataBinding();
-						if(IBinding.NOT_FOUND_BINDING != classBinding && classBinding != null) {
-							List annotations = classBinding.getAnnotations();
+					List<Name> names = classDataDeclaration.getNames();
+					for (Name name : names) {
+						Member classBinding = name.resolveMember();
+						if (classBinding != null) {
+							List<Annotation> annotations = classBinding.getAnnotations();
 							processContentAnnotations(classDataDeclaration, name, classBinding, name.getCanonicalName(), annotations);
 						}
 					}
-					
-					return false;
-				}
-								
-				public boolean visit(org.eclipse.edt.compiler.core.ast.Constructor constructor) {
-					
-					for (Iterator iter = constructor.getParameters().iterator(); iter.hasNext();) {
-						FunctionParameter param = (FunctionParameter) iter.next();
-						IDataBinding paramBinding = param.getName().resolveDataBinding();
-						
-						if(Binding.isValidBinding(paramBinding)) {
-							for(Iterator annIter = subTypeAnnotation.getPartSubTypeAnnotations().iterator(); annIter.hasNext();) {
-								((FieldContentValidationAnnotationTypeBinding) annIter.next()).validateFunctionParameter(param, paramBinding, problemRequestor, compilerOptions);
-							}
-						}
-					}
-
 					return false;
 				}
 				
+				@Override
+				public boolean visit(Constructor constructor) {
+					for (Iterator iter = constructor.getParameters().iterator(); iter.hasNext();) {
+						FunctionParameter param = (FunctionParameter) iter.next();
+						Member paramBinding = param.getName().resolveMember();
+						
+						if (paramBinding != null) {
+							for (FieldContentValidationRule rule : proxy.getPartSubTypeValidators()) {
+								rule.validateFunctionParameter(param, paramBinding, problemRequestor, compilerOptions);
+							}
+						}
+					}
+					return false;
+				}
+				
+				@Override
 				public boolean visit(NestedFunction nestedFunction) {
 					for (Iterator iter = nestedFunction.getFunctionParameters().iterator(); iter.hasNext();) {
 						FunctionParameter param = (FunctionParameter) iter.next();
-						IDataBinding paramBinding = param.getName().resolveDataBinding();
+						Member paramBinding = param.getName().resolveMember();
 						
-						if(Binding.isValidBinding(paramBinding)) {
-							for(Iterator annIter = subTypeAnnotation.getPartSubTypeAnnotations().iterator(); annIter.hasNext();) {
-								((FieldContentValidationAnnotationTypeBinding) annIter.next()).validateFunctionParameter(param, paramBinding, problemRequestor, compilerOptions);
+						if (paramBinding != null) {
+							for (FieldContentValidationRule rule : proxy.getPartSubTypeValidators()) {
+								rule.validateFunctionParameter(param, paramBinding, problemRequestor, compilerOptions);
 							}
 						}
 					}
 					
-					if(nestedFunction.hasReturnType()) {
+					if (nestedFunction.hasReturnType()) {
 						Type returnType = nestedFunction.getReturnType();
-						ITypeBinding returnTypeBinding = returnType.resolveTypeBinding();
+						org.eclipse.edt.mof.egl.Type returnTypeBinding = returnType.resolveType();
 						
-						if(Binding.isValidBinding(returnTypeBinding)) {
-							for(Iterator annIter = subTypeAnnotation.getPartSubTypeAnnotations().iterator(); annIter.hasNext();) {
-								((FieldContentValidationAnnotationTypeBinding) annIter.next()).validateFunctionReturnType(returnType, returnTypeBinding, (IPartBinding) ((Part) nestedFunction.getParent()).getName().resolveBinding(), problemRequestor, compilerOptions);
+						if (returnTypeBinding != null) {
+							for (FieldContentValidationRule rule : proxy.getPartSubTypeValidators()) {
+								rule.validateFunctionReturnType(returnType, returnTypeBinding, ((Part)nestedFunction.getParent()).getName().resolveMember(), problemRequestor, compilerOptions);
 							}
 						}
 					}
 					
-					IDataBinding nestedFunctionBinding = nestedFunction.getName().resolveDataBinding();
-					if(Binding.isValidBinding(nestedFunctionBinding)) {
+					Member nestedFunctionBinding = nestedFunction.getName().resolveMember();
+					if (nestedFunctionBinding != null) {
 						processContentAnnotations(nestedFunction, nestedFunction.getName(), nestedFunctionBinding, nestedFunction.getName().getCanonicalName(), nestedFunctionBinding.getAnnotations());
 					}
 					
 					return false;
 				}
 				
-				private void processContentAnnotations(Node field, Node nodeForErrors, IDataBinding containerBinding, String canonicalContainerName, List annotations){
-					Map allAnnotationsMap = getAllAnnotationsMap(annotations, allPartAnnotations, nodeForErrors, containerBinding);
+				private void processContentAnnotations(Node field, Node nodeForErrors, Member containerBinding, String canonicalContainerName, List<Annotation> annotations) {
+					Map<String, Annotation> allAnnotationsMap = getAllAnnotationsMap(annotations, allPartAnnotations, nodeForErrors, containerBinding);
 					// Apply all valid rules to this items annotations
-					for (Iterator subIter = subTypeAnnotation.getPartSubTypeAnnotations().iterator(); subIter.hasNext();) {
-						FieldContentValidationAnnotationTypeBinding rule = (FieldContentValidationAnnotationTypeBinding) subIter.next();
-						runFieldContentRuleOnBindingAndChildren(rule, containerBinding, containerBinding, nodeForErrors, field, canonicalContainerName, allAnnotationsMap, allPartAnnotations, problemRequestor, false);					
+					for (FieldContentValidationRule rule : proxy.getPartSubTypeValidators()) {
+						runFieldContentRuleOnBindingAndChildren(rule, containerBinding, containerBinding, nodeForErrors, field, canonicalContainerName, allAnnotationsMap, allPartAnnotations, problemRequestor);					
 					}
 					
-					IAnnotationTypeBinding enclosingSubtype = getEnclosingSubtype(containerBinding);
-					if(Binding.isValidBinding(enclosingSubtype)) {
-						IAnnotationBinding memberAnnotationsABinding = getMemberAnnotationsForSubtype(enclosingSubtype);
-						if(Binding.isValidBinding(memberAnnotationsABinding)) {
-							FieldContentValidationAnnotationTypeBinding rule = new DataItemPropertiesFieldContentRule(enclosingSubtype, (Object[]) memberAnnotationsABinding.getValue());
-							runFieldContentRuleOnBindingAndChildren(rule, containerBinding, containerBinding, nodeForErrors, field, canonicalContainerName, allAnnotationsMap, allPartAnnotations, problemRequestor, true);						
-						}
-					}
+					//TODO uncomment and port when data items are supported
+//					AnnotationType enclosingSubtype = getEnclosingSubtype(containerBinding);
+//					if (enclosingSubtype != null) {
+//						List<AnnotationType> memberAnnotationsABinding = getMemberAnnotationsForSubtype(enclosingSubtype);
+//						if (memberAnnotationsABinding != null && memberAnnotationsABinding.size() > 0) {
+//							FieldContentValidationRule rule = new DataItemPropertiesFieldContentRule(enclosingSubtype, memberAnnotationsABinding.toArray());
+//							runFieldContentRuleOnBindingAndChildren(rule, containerBinding, containerBinding, nodeForErrors, field, canonicalContainerName, allAnnotationsMap, allPartAnnotations, problemRequestor);						
+//						}
+//					}
 				}
-				
-				private IAnnotationTypeBinding getEnclosingSubtype(IDataBinding containerBinding) {
-					IPartBinding declaringPart = containerBinding.getDeclaringPart();
-					IAnnotationBinding subTypeAnnotationBinding = declaringPart.getSubTypeAnnotationBinding();
-					if(Binding.isValidBinding(subTypeAnnotationBinding)) {
-						return subTypeAnnotationBinding.getAnnotationType();
-					}
-					return null;
-				}
-
-				private IAnnotationBinding getMemberAnnotationsForSubtype(IAnnotationTypeBinding annotationType) {					
-					IAnnotationBinding annotation = annotationType.getAnnotation(StereotypeAnnotationTypeBinding.getInstance());
-					if(Binding.isValidBinding(annotation)) {
-						return (IAnnotationBinding) annotation.findData("memberAnnotations");
-					}
-					return null;
-				}				
+//				
+//				private AnnotationType getEnclosingSubtype(Member containerBinding) {
+//					IPartBinding declaringPart = containerBinding.getDeclaringPart();
+//					Annotation subTypeAnnotationBinding = declaringPart.getSubTypeAnnotationBinding();
+//					if (subTypeAnnotationBinding != null) {
+//						return subTypeAnnotationBinding.getAnnotationType();
+//					}
+//					return null;
+//				}
+//
+//				private List<AnnotationType> getMemberAnnotationsForSubtype(AnnotationType annotationType) {
+//					if (annotationType instanceof StereotypeType) {
+//						return ((StereotypeType)annotationType).getMemberAnnotations();
+//					}
+//					return null;
+//				}				
 			});
 		}
 		
 		// process part annotation rules from sub type
-		if(subTypeAnnotation != null) {
-			for (Iterator subIter = subTypeAnnotation.getPartTypeAnnotations().iterator(); subIter.hasNext();) {
-				PartContentValidationAnnotationTypeBinding rule = (PartContentValidationAnnotationTypeBinding) subIter.next();
-		
+		if (proxy != null) {
+			for (PartContentValidationRule rule : proxy.getPartTypeValidators()) {
 				rule.validate(partName, partNode, allPartAnnotations, problemRequestor);			
 			}
 		}
 	}
 	
-	private Map getAllAnnotationsMap(List annotations, HashMap allPartAnnotations, Node field, IDataBinding targetDBinding) {
-		HashMap allAnnotationsMap = new HashMap();
-		for (Iterator iterator = annotations.iterator(); iterator.hasNext();) {		
-			IAnnotationBinding annotationBinding = (AnnotationBinding) iterator.next();
-			allAnnotationsMap.put(annotationBinding.getName(), annotationBinding);
+	private Map<String, Annotation> getAllAnnotationsMap(List<Annotation> annotations, Map<String, Map<Annotation, Object[]>> allPartAnnotations,
+			Node field, Member targetDBinding) {
+		Map<String, Annotation> allAnnotationsMap = new HashMap();
+		for (Annotation annotationBinding : annotations) {
+			allAnnotationsMap.put(NameUtile.getAsName(annotationBinding.getEClass().getName()), annotationBinding);
 			
-			LinkedHashMap allAnnotationsForName = (LinkedHashMap)allPartAnnotations.get(annotationBinding.getName());
+			Map<Annotation, Object[]> allAnnotationsForName = (LinkedHashMap)allPartAnnotations.get(NameUtile.getAsName(annotationBinding.getEClass().getName()));
 			
-			if(allAnnotationsForName == null){
+			if (allAnnotationsForName == null) {
 				allAnnotationsForName = new LinkedHashMap();
-				allPartAnnotations.put(annotationBinding.getName(), allAnnotationsForName);
+				allPartAnnotations.put(NameUtile.getAsName(annotationBinding.getEClass().getName()), allAnnotationsForName);
 			}
 			
 			allAnnotationsForName.put(annotationBinding, new Object[] {field, targetDBinding});
@@ -1150,47 +924,32 @@ public class AnnotationValidator {
 		return allAnnotationsMap;
 	}
 	
-	private void runFieldContentRuleOnBindingAndChildren(FieldContentValidationAnnotationTypeBinding rule, IDataBinding topLevelDBinding, IDataBinding dBinding, Node nodeForErrors, Node target, String canonicalContainerName, Map allAnnotationsMap, HashMap allPartAnnotations, IProblemRequestor problemRequestor, boolean recurseIntoStructureItems) {
-		runFieldContentRuleOnBindingAndChildren(rule, topLevelDBinding, new Stack(), topLevelDBinding, nodeForErrors, target, canonicalContainerName, allAnnotationsMap, allPartAnnotations, problemRequestor, recurseIntoStructureItems);
-	}
-	
-	private void runFieldContentRuleOnBindingAndChildren(FieldContentValidationAnnotationTypeBinding rule, IDataBinding topLevelDBinding, Stack pathFromTopLevelDBinding, IDataBinding dBinding, Node nodeForErrors, Node target, String canonicalContainerName, Map allAnnotationsMap, HashMap allPartAnnotations, IProblemRequestor problemRequestor, boolean recurseIntoStructureItems) {
+	private void runFieldContentRuleOnBindingAndChildren(FieldContentValidationRule rule, Member topLevelDBinding, Member dBinding, Node nodeForErrors, Node target, String canonicalContainerName, Map<String, Annotation> allAnnotationsMap, Map<String, Map<Annotation, Object[]>> allPartAnnotations, IProblemRequestor problemRequestor) {
 		rule.validate(nodeForErrors, target, dBinding, canonicalContainerName, allAnnotationsMap, problemRequestor, compilerOptions);
-		ITypeBinding tBinding = dBinding.getType();
-		if(tBinding != null) {
-			runFieldContentRuleOnBindingAndChildren(rule, tBinding, topLevelDBinding, pathFromTopLevelDBinding, nodeForErrors, target, allPartAnnotations, problemRequestor);
+		org.eclipse.edt.mof.egl.Type tBinding = dBinding.getType();
+		if (tBinding != null) {
+			runFieldContentRuleOnBindingAndChildren(rule, tBinding, topLevelDBinding, nodeForErrors, target, allPartAnnotations, problemRequestor);
 		}
-		
-		if(recurseIntoStructureItems && IDataBinding.STRUCTURE_ITEM_BINDING == dBinding.getKind()) {
-			for(Iterator iter = ((StructureItemBinding) dBinding).getChildren().iterator(); iter.hasNext();) {
-				IDataBinding nextChild = (IDataBinding) iter.next();
-				pathFromTopLevelDBinding.push(nextChild);
-				allAnnotationsMap = getAllAnnotationsMap(topLevelDBinding.getAnnotationsFor((IDataBinding[])pathFromTopLevelDBinding.toArray(new IDataBinding[0])), allPartAnnotations, nodeForErrors, nextChild);
-				pathFromTopLevelDBinding.pop();
-				runFieldContentRuleOnBindingAndChildren(rule, topLevelDBinding, pathFromTopLevelDBinding, nextChild, nodeForErrors, target, nextChild.getName(), allAnnotationsMap, allPartAnnotations, problemRequestor, true);				
+	}
+	
+	private void runFieldContentRuleOnBindingAndChildren(FieldContentValidationRule rule, org.eclipse.edt.mof.egl.Type tBinding, Member topLevelDBinding, Node nodeForErrors, Node target, Map<String, Map<Annotation, Object[]>> allPartAnnotations, IProblemRequestor problemRequestor) {
+		if (tBinding instanceof org.eclipse.edt.mof.egl.Record) {
+			for (Field nextChild : ((org.eclipse.edt.mof.egl.Record)tBinding).getFields()) {
+				//TODO property overrides need to be supported
+				Map<String, Annotation> allAnnotationsMap = getAllAnnotationsMap(nextChild.getAnnotations(), allPartAnnotations, nodeForErrors, nextChild);
+				runFieldContentRuleOnBindingAndChildren(rule, topLevelDBinding, nextChild, nodeForErrors, target, nextChild.getName(), allAnnotationsMap, allPartAnnotations, problemRequestor);
 			}
 		}
 	}
 	
-	private void runFieldContentRuleOnBindingAndChildren(FieldContentValidationAnnotationTypeBinding rule, ITypeBinding tBinding, IDataBinding topLevelDBinding, Stack pathFromTopLevelDBinding, Node nodeForErrors, Node target, HashMap allPartAnnotations, IProblemRequestor problemRequestor) {
-		if(ITypeBinding.FIXED_RECORD_BINDING == tBinding.getKind()) {
-			for(Iterator iter = ((FixedRecordBinding) tBinding).getStructureItems().iterator(); iter.hasNext();) {
-				IDataBinding nextChild = (IDataBinding) iter.next();
-				pathFromTopLevelDBinding.push(nextChild);
-				Map allAnnotationsMap = getAllAnnotationsMap(topLevelDBinding.getAnnotationsFor((IDataBinding[])pathFromTopLevelDBinding.toArray(new IDataBinding[0])), allPartAnnotations, nodeForErrors, nextChild);
-				pathFromTopLevelDBinding.pop();
-				runFieldContentRuleOnBindingAndChildren(rule, topLevelDBinding, pathFromTopLevelDBinding, nextChild, nodeForErrors, target, nextChild.getName(), allAnnotationsMap, allPartAnnotations, problemRequestor, true);
-				
+	private org.eclipse.edt.mof.egl.Constructor getDefaultConstructor(org.eclipse.edt.mof.egl.Type type) {
+		if (type.getClassifier() instanceof StructPart) {
+			for (org.eclipse.edt.mof.egl.Constructor con : ((StructPart)type.getClassifier()).getConstructors()) {
+				if (con.getParameters().size() == 0) {
+					return con;
+				}
 			}
 		}
-		else if(ITypeBinding.FLEXIBLE_RECORD_BINDING == tBinding.getKind()) {
-			for(Iterator iter = ((FlexibleRecordBinding) tBinding).getDeclaredFields().iterator(); iter.hasNext();) {
-				IDataBinding nextChild = (IDataBinding) iter.next();
-				pathFromTopLevelDBinding.push(nextChild);
-				Map allAnnotationsMap = getAllAnnotationsMap(topLevelDBinding.getAnnotationsFor((IDataBinding[])pathFromTopLevelDBinding.toArray(new IDataBinding[0])), allPartAnnotations, nodeForErrors, nextChild);
-				runFieldContentRuleOnBindingAndChildren(rule, topLevelDBinding, pathFromTopLevelDBinding, nextChild, nodeForErrors, target, nextChild.getName(), allAnnotationsMap, allPartAnnotations, problemRequestor, true);
-				pathFromTopLevelDBinding.pop();
-			}
-		}
+		return null;
 	}
 }

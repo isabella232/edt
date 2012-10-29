@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.editor.sql;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.mof.egl.Member;
 
 public class SQLIOStatementActionInfo {
 	String ioType;
@@ -26,7 +26,7 @@ public class SQLIOStatementActionInfo {
 	Statement statement;
 	Record sqlRecord;
 	Expression sqlRecordVariable;
-	IDataBinding sqlRecordBinding;
+	Member sqlRecordBinding;
 	IEGLDocument document;
 	String actionToRun;
 	boolean shouldAddSQLStatement = true;
@@ -41,7 +41,6 @@ public class SQLIOStatementActionInfo {
 	boolean isGetByKeyWithNoUpdateStatement;
     boolean isDefaultSelectDialog;
 	boolean needsIntoClause;
-	boolean isOpenWithSelectStatement;
 	boolean isGetNext;
 	boolean isNoCursor;
 	boolean isUsingExisted;
@@ -143,11 +142,11 @@ public class SQLIOStatementActionInfo {
 		sqlStatementNode = node;
 	}
 
-	public IDataBinding getSqlRecordBinding() {
+	public Member getSqlRecordBinding() {
 		return sqlRecordBinding;
 	}
 
-	public void setSqlRecordBinding(IDataBinding binding) {
+	public void setSqlRecordBinding(Member binding) {
 		sqlRecordBinding = binding;
 	}
 
@@ -157,14 +156,6 @@ public class SQLIOStatementActionInfo {
 
 	public void setHasPreparedStatementReference(boolean b) {
 		hasPreparedStatementReference = b;
-	}
-
-	public boolean isOpenWithSelectStatement() {
-		return isOpenWithSelectStatement;
-	}
-
-	public void setOpenWithSelectStatement(boolean b) {
-		isOpenWithSelectStatement = b;
 	}
 
 	public boolean isGetNext() {

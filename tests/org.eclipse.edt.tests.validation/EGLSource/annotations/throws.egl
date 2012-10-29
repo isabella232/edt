@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+import eglx.java.*;
+import eglx.javascript.*;
+
+handler h
+	function test1()
+		e et;
+		e.foo(); //1 The invocation of the function, constructor or the declaration must be enclosed in a Try Statement that specifies AnyException or JavaObjectException in one of its OnException blocks.
+	end
+	function test2()
+		e et;
+		try
+			e.foo(); //0
+		end
+	end
+	function test3()
+		e et;
+		try
+			e.foo(); //1 The invocation of the function, constructor or the declaration must be enclosed in a Try Statement that specifies AnyException or JavaObjectException in one of its OnException blocks.
+		onException(exception NullValueException)
+		end
+	end
+	function test4()
+		e et;
+		try
+			e.foo(); //0
+		onException(exception AnyException)
+		end
+	end
+	function test5()
+		e et;
+		try
+			e.foo(); //0
+		onException(exception JavaObjectException)
+		end
+	end
+	function test6()
+		e et;
+		try
+			e.foo(); //0
+		onException(exception NullValueException)
+		onException(exception JavaObjectException)
+		end
+	end
+end
+
+externaltype et type javaobject
+	function foo(){@throws}; //0
+end
+
+externaltype et2 type javascriptobject
+	function foo(){@throws}; //1 The annotation Throws is only valid for functions and constructors in an ExternalType with subtype JavaObject.
+end

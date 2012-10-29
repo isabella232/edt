@@ -25,7 +25,7 @@ public class AnyValueTypeTemplate extends JavaTemplate {
 		// check to see if a conversion is required
 		if (arg.getConversionOperation() != null) {
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + ".");
-			out.print(arg.getConversionOperation().getName());
+			out.print(arg.getConversionOperation().getCaseSensitiveName());
 			out.print("(");
 			// do a callout to allow certain source types to decide to create a boxing expression
 			ctx.invoke(genAsExpressionBoxing, arg.getObjectExpr().getType(), ctx, out, arg);
@@ -35,7 +35,7 @@ public class AnyValueTypeTemplate extends JavaTemplate {
 				out.print(".ezeUnbox()");
 			// normally, we send in the type dependent options of the target, but in the case where we are using asNumber, we
 			// need to send in the source
-			if (arg.getConversionOperation().getName().equalsIgnoreCase("asNumber"))
+			if (arg.getConversionOperation().getCaseSensitiveName().equalsIgnoreCase("asNumber"))
 				ctx.invoke(genTypeDependentOptions, arg.getObjectExpr().getType(), ctx, out);
 			else
 				ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);

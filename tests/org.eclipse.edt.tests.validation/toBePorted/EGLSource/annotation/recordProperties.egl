@@ -1,0 +1,658 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record basicRecord type basicRecord
+	10 item1 int;
+end
+
+Record notBasicRecord type sqlRecord
+	10 item1 int;
+end
+
+// getPropertyItemFromFixedRecordsEmbeddedDataItemList:
+Record getPropertyItemFromFixedRecordsEmbeddedDataItemList1 type indexedRecord
+{keyItem=item2}	//0
+	10 item1 int;
+		15 item2 int;
+	10 item2 int;
+end
+
+Record getPropertyItemFromFixedRecordsEmbeddedDataItemList2 type indexedRecord
+{keyItem=item2a}	//0
+	10 item1 int;
+		15 item2a int;
+	10 item2 int;
+end
+
+Record getPropertyItemFromFixedRecordsEmbeddedDataItemList3 type indexedRecord
+{keyItem=item2a}	//0
+	10 item1 int;
+		15 item2 int;
+	10 item2a int;
+end
+
+Record getPropertyItemFromFixedRecordsEmbeddedDataItemList4 type indexedRecord
+{keyItem=item2x}	//1 The keyItem property value item2x must be defined in the indexed record getPropertyItemFromFixedRecordsEmbeddedDataItemList4.
+	10 item1 int;
+		15 item2 int;
+	10 item2a int;
+end
+
+Record getPropertyItemFromFixedRecordsEmbeddedDataItemList5 type relativeRecord
+{recordNumItem="item2x"}	//0
+	10 item1 int;
+		15 item2 int;
+	10 item2a int;
+end
+
+// validateCommandValueItemProperty:
+Record validateCommandValueItemProperty1 type VGUIRecord
+{commandValueItem=foo}										//1 The item foo referenced by the commandValueItem property must be declared in record validateCommandValueItemProperty1. {3216, ITEM_REFERENCED_BY_COMMAND_VALUE_ITEM_MUST_BE_IN_RECORD}
+end
+
+Record validateCommandValueItemProperty2 type VGUIRecord
+{commandValueItem=validateCommandValueItemProperty2} 		//1 The value of property commandValueItem cannot be the same as the VGUIRecord name. {7783, COMMAND_VALUE_ITEM_PROPERTY_VALUE_CANNOT_EQUAL_RECORD_NAME}
+	10 validateCommandValueItemProperty2 char(4);
+end
+
+Record validateCommandValueItemProperty3 type VGUIRecord
+{commandValueItem=item1}									//1 The commandValueItem item must be of type char, dbchar, mbchar, or unicode. {7784, COMMAND_VALUE_ITEM_ITEM_WRONG_TYPE}
+	10 item1 int; 
+end
+
+Record validateCommandValueItemProperty4 type VGUIRecord
+{commandValueItem=item1}									//0
+	10 item1 char(4); 
+end
+
+Record validateCommandValueItemProperty5 type VGUIRecord
+{commandValueItem=item1}									//0
+	10 item1 unicode(4); 
+end
+
+// validateNumElementsItemProperty:
+Record validateNumElementsItemProperty1 type indexedRecord	//0
+{numElementsItem=foo} 									//1 The item foo referenced by numElementsItem property must be declared in the fixed portion of record validateNumElementsItemProperty1. {3214, ITEM_REFERENCED_BY_NUM_ELEMENTS_MUST_BE_IN_RECORD}
+{keyItem=foo,fileName="foo"}
+end
+
+Record validateNumElementsItemProperty2 type indexedRecord	//0
+{numElementsItem=item1} 									//0
+{keyItem=foo,fileName="foo"}
+	10 item1 int;
+	10 lastItem int[10];
+end
+
+Record validateNumElementsItemProperty3 type serialRecord	//0
+{numElementsItem=foo} 									//1 The item foo referenced by numElementsItem property must be declared in the fixed portion of record validateNumElementsItemProperty3. {3214, ITEM_REFERENCED_BY_NUM_ELEMENTS_MUST_BE_IN_RECORD}
+{fileName="foo"}
+end
+
+Record validateNumElementsItemProperty4 type serialRecord	//0
+{numElementsItem=item1} 									//0
+{fileName="foo"}
+	10 item1 int;
+	10 lastItem int[10];
+end
+
+Record validateNumElementsItemProperty5 type mqRecord		//0
+{numElementsItem=foo} 									//1 The item foo referenced by numElementsItem property must be declared in the fixed portion of record validateNumElementsItemProperty5. {3214, ITEM_REFERENCED_BY_NUM_ELEMENTS_MUST_BE_IN_RECORD}
+{keyItem=foo,queueName="foo"}
+end
+
+Record validateNumElementsItemProperty6 type mqRecord		//0
+{numElementsItem=item1} 									//0
+{keyItem=foo,queueName="foo"}
+	10 item1 int;
+	10 lastItem int[10];
+end
+
+// validateContentForNumElementsProperty:
+Record validateContentForNumElementsProperty1 type mqRecord		//0
+{numElementsItem=item1} 										//1 The numElements property value "item1" in the record validateContentForNumElementsProperty1 has a primitive type of char, which is invalid for a number of elements item. {3207, PROPERTY_INVALID_TYPE_FOR_NUM_ELEMENTS}
+{keyItem=foo,queueName="foo"}
+	10 item1;
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty2 type mqRecord		//0
+{numElementsItem=item1} 										//1 The numElements property value "item1" in the record validateContentForNumElementsProperty2 has a primitive type of char, which is invalid for a number of elements item.
+{keyItem=foo,queueName="foo"}
+	10 item1 validateContentForNumElementsProperty1;
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty3 type mqRecord		//0
+{numElementsItem=item1} 										//1 The numElements property value "item1" in the record validateContentForNumElementsProperty3 has a primitive type of char, which is invalid for a number of elements item.
+{keyItem=foo,queueName="foo"}
+	10 item1 char(4);
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty4 type mqRecord		//0
+{numElementsItem=item1} 										//0
+{keyItem=foo,queueName="foo"}
+	10 item1 int;
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty5 type mqRecord		//0
+{numElementsItem=item1} 										//0
+{keyItem=foo,queueName="foo"}
+	10 item1 smallint;
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty6 type mqRecord		//0
+{numElementsItem=item1} 										//0
+{keyItem=foo,queueName="foo"}
+	10 item1 bin(9,0);
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty7 type mqRecord		//0
+{numElementsItem=item1} 										//1 The numElements property value "item1" in the record validateContentForNumElementsProperty7 is defined with a length of bin(10). Length can be no greater than 9 for a number of elements item. {NUM_ELEMENTS_ITEM_VALUE_TOO_LONG}
+{keyItem=foo,queueName="foo"}
+	10 item1 bin(10);
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty8 type mqRecord		//0
+{numElementsItem=item1} 										//1 The numElements property value "item1" in the record validateContentForNumElementsProperty8 is defined with decimals, which is invalid for a number of elements item. {EGLMESSAGE_NUM_ELEMENTS_ITEM_VALUE_HAS_DECIMALS}
+{keyItem=foo,queueName="foo"}
+	10 item1 bin(9,1);
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty9 type serialRecord	//0
+{numElementsItem=item1} 										//1 The numElements property value "item1" in the record validateContentForNumElementsProperty9 is defined with decimals, which is invalid for a number of elements item. {EGLMESSAGE_NUM_ELEMENTS_ITEM_VALUE_HAS_DECIMALS}
+{fileName="foo"}
+	10 item1 bin(9,1);
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty10 type serialRecord//0
+{numElementsItem=item1} 										//1 The numElements property value "item1" in the record validateContentForNumElementsProperty10 is defined with decimals, which is invalid for a number of elements item. {EGLMESSAGE_NUM_ELEMENTS_ITEM_VALUE_HAS_DECIMALS}
+{fileName="foo"}
+	10 item1 bin(9,1);
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty11 type mqRecord	//0
+{numElementsItem=item1} 										//1 The record validateContentForNumElementsProperty11 containing numElements property "item1" must have a single dimensional array as the last item, but 0 occurs were found on the last item lastItem. {NUM_ELEMENTS_HAS_AN_INVALID_NUMBER_OF_OCCURS}
+{keyItem=foo,queueName="foo"}
+	10 item1 int;
+	10 lastItem int;
+end
+
+Record validateContentForNumElementsProperty12 type mqRecord	//0
+{numElementsItem=lastItem} 									//1 The name of the last array in record validateContentForNumElementsProperty12 must be different than that of numElements property "lastItem". {NUM_ELEMENTS_ITEM_CANNOT_HAVE_SAME_NAME_AS_LAST_ITEM}
+{keyItem=foo,queueName="foo"}
+	10 lastItem int[10];
+end
+
+Record validateContentForNumElementsProperty13 type mqRecord	//0
+{numElementsItem=item1} 										//1 The item "item1" referenced by numElementsItem property must be declared in the fixed portion of record validateContentForNumElementsProperty13. {ITEM_REFERENCED_BY_NUM_ELEMENTS_MUST_BE_IN_RECORD}
+{keyItem=foo,queueName="foo"}
+	10 lastItem char(9)[10];
+		15 item1 int;
+end
+
+// validateKeyForRelativeRecord:
+Record validateKeyForRelativeRecord1 type relativeRecord	//0
+{recordNumItem="item1"} 											//1 The recordNumItem property value "item1" in the relative record validateKeyForRelativeRecord1 has a primitive type of char, which is invalid for a key item. {PROPERTY_INVALID_TYPE_FOR_KEY_ITEM}
+{fileName="abc.txt"}
+	10 item1;
+end
+
+Record validateKeyForRelativeRecord2 type relativeRecord	//0
+{recordNumItem="item1"} 											//1 The recordNumItem property value "item1" in the relative record validateKeyForRelativeRecord2 has a primitive type of char, which is invalid for a key item. {PROPERTY_INVALID_TYPE_FOR_KEY_ITEM}
+{fileName="abc.txt"}
+	10 item1 validateContentForNumElementsProperty1;
+end
+
+Record validateKeyForRelativeRecord3 type relativeRecord	//0
+{recordNumItem="item1"} 											//1 The recordNumItem property value "item1" in the relative record validateKeyForRelativeRecord3 has a primitive type of char, which is invalid for a key item. {PROPERTY_INVALID_TYPE_FOR_KEY_ITEM}
+{fileName="abc.txt"}
+	10 item1 char(4);
+end
+
+Record validateKeyForRelativeRecord4 type relativeRecord	//0
+{recordNumItem="item1"} 											//0
+{fileName="abc.txt"}
+	10 item1 int;
+end
+
+Record validateKeyForRelativeRecord5 type relativeRecord	//0
+{recordNumItem="item1"} 											//0
+{fileName="abc.txt"}
+	10 item1 smallint;
+end
+
+Record validateKeyForRelativeRecord6 type relativeRecord	//0
+{recordNumItem="item1"} 											//0
+{fileName="abc.txt"}
+	10 item1 bin(9,0);
+end
+
+Record validateKeyForRelativeRecord7 type relativeRecord	//0
+{recordNumItem="item1"} 											//1 The recordNumItem property value "item1" in the relative record validateKeyForRelativeRecord7 is defined with a length of bin(10). Length can be no greater than 9 for a key item. {KEY_ITEM_VALUE_TOO_LONG}
+{fileName="abc.txt"}
+	10 item1 bin(10);
+end
+
+Record validateKeyForRelativeRecord8 type relativeRecord	//0
+{recordNumItem="item1"} 											//1 The recordNumItem property value "item1" in the relative record validateKeyForRelativeRecord8 is defined with decimals, which is invalid for a key item. {KEY_ITEM_VALUE_HAS_DECIMALS}
+{fileName="abc.txt"}
+	10 item1 bin(9,1);
+end
+
+// validateKeyItemProperty:
+Record validateKeyItemProperty1 type DLISegment
+{keyItem=foo}				//1 The keyItem property value foo must be defined in the DL/I segment validateKeyItemProperty1. {7866, PROPERTY_KEY_ITEM_MUST_BE_IN_DLISEGMENT}
+end
+
+Record validateKeyItemProperty2 type DLISegment
+{keyItem=item1}			//0
+	10 item1 int;
+end
+
+Record validateKeyItemProperty3 type DLISegment
+{keyItem=ittttttttem1}	//1 The name "ittttttttem1" of the keyItem ittttttttem1 is not a valid DL/I name, so the item must specify the dliFieldName property. {KEYITEM_NOT_VALID_DLINAME_SO_MUST_DEFINE_DLIFIELDNAME}
+	10 ittttttttem1 int;
+end
+
+Record validateKeyItemProperty4 type DLISegment
+{keyItem=ittttttttem1}	//0
+	10 ittttttttem1 int {dliFieldName="xxxx"};
+end
+
+// validateKeyItemsProperty:
+Record validateKeyItemsProperty1 type SQLRecord
+{keyItems=[item1, item2, item3, item4]} //2 The keyItems property value item3 must be defined in the SQL record validateKeyItemsProperty1.|The keyItems property value item4 must be defined in the SQL record validateKeyItemsProperty1.{PROPERTY_KEY_ITEM_MUST_BE_IN_SQL_RECORD}
+	10 item1 int;
+	10 item2 int;
+end
+
+Record validateKeyItemsProperty2 type SQLRecord
+{keyItems=[item1, item2, item3, item4]} //0
+	10 item1 int;
+	10 item2 int;
+	10 item3 int;
+	10 item4 int;	
+end
+
+Record validateKeyItemsProperty3 type SQLRecord
+{keyItems=[item1, item2, item3, [5]]} 	//2
+	10 item1 int;
+	10 item2 int;
+	10 item3 int;
+	10 item4 int;	
+end
+
+// validateLengthForRecord:
+Record validateLengthForRecord1 type serialRecord
+{fileName="abc"}
+{lengthItem=item1}					//1 validateLengthForRecord1 - The lengthItem property value "item1" in the record validateLengthForRecord1 has a primitive type of char, which is invalid for the lengthItem property. {PROPERTY_INVALID_TYPE_FOR_RECORD_ITEM_PROPERTY}
+	10 item1;							
+end
+
+Record validateLengthForRecord2 type serialRecord
+{fileName="abc"}
+{lengthItem=item1}					//1 validateLengthForRecord2 - The lengthItem property value "item1" in the record validateLengthForRecord2 has a primitive type of char, which is invalid for the lengthItem property. {PROPERTY_INVALID_TYPE_FOR_RECORD_ITEM_PROPERTY}
+	10 item1 validateLengthForRecord1;	
+end
+
+Record validateLengthForRecord3 type serialRecord
+{fileName="abc"}
+{lengthItem=foo}						//0
+	10 item1 validateLengthForRecord1;	
+end
+
+Record validateLengthForRecord4 type serialRecord
+{fileName="abc"}
+{lengthItem=item1}					//1 validateLengthForRecord4 - The lengthItem property value "item1" in the record validateLengthForRecord4 has a primitive type of char, which is invalid for the lengthItem property. {PROPERTY_INVALID_TYPE_FOR_RECORD_ITEM_PROPERTY}
+	10 item1 char(4);	
+end
+
+Record validateLengthForRecord5 type serialRecord
+{fileName="abc"}
+{lengthItem=item1}					//0
+	10 item1 int;	
+end
+
+Record validateLengthForRecord6 type serialRecord
+{fileName="abc"}
+{lengthItem=item1}					//0
+	10 item1 smallint;	
+end
+
+Record validateLengthForRecord7 type serialRecord
+{fileName="abc"}
+{lengthItem=item1}					//1 validateLengthForRecord7 - The lengthItem property value "item1" in the record validateLengthForRecord7 has a primitive type of bigInt, which is invalid for the lengthItem property. {PROPERTY_INVALID_TYPE_FOR_RECORD_ITEM_PROPERTY}
+	10 item1 bigInt;
+end
+
+Record validateLengthForRecord8 type serialRecord
+{fileName="abc"}
+{lengthItem=item1}					//1 validateLengthForRecord8 - The lengthItem property value "item1" in the record validateLengthForRecord8 is defined with a length of 10. Length can be no greater than 9 for the lengthItem property. {RECORD_ITEM_PROPERTY_VALUE_TOO_LONG}
+	10 item1 bin(10);	
+end
+
+Record validateLengthForRecord9 type serialRecord
+{fileName="abc"}
+{lengthItem=item1}					//1 validateLengthForRecord9 - The lengthItem property value "item1" in the record validateLengthForRecord9 is defined with decimals, which is invalid for the lengthItem property. {RECORD_ITEM_PROPERTY_VALUE_HAS_DECIMALS}
+	10 item1 bin(9,1);	
+end
+
+// validateMessageRecordOptionRecordProperties:
+Record validateMessageRecordOptionRecordProperties type mqRecord	//0
+{
+	OpenOptionsRecord = "rec1",		//0
+	GetOptionsRecord = "rec1",		//0
+	PutOptionsRecord = "rec1",		//0
+	QueueDescriptorRecord = "rec1",	//0
+	MsgDescriptorRecord = "rec1",	//0	
+	queueName="abc"
+}
+end
+
+Library validateMessageRecordOptionRecordProperties2
+	rec validateMessageRecordOptionRecordProperties; //5 could not be resolved|could not be resolved|could not be resolved|could not be resolved|could not be resolved {PROPERTY_DOESNT_RESOLVE}
+	
+	function func1()												//0
+		localRec validateMessageRecordOptionRecordProperties;		//5
+	end
+end
+
+Library validateMessageRecordOptionRecordProperties3
+	rec1 basicRecord;
+end
+
+Library validateMessageRecordOptionRecordProperties4
+	rec1 basicRecord;
+end
+
+Library validateMessageRecordOptionRecordProperties5
+	rec validateMessageRecordOptionRecordProperties; //5 is ambiguous|is ambiguous|is ambiguous|is ambiguous|is ambiguous {PROPERTY_AMBIGUOUS}
+	
+	use validateMessageRecordOptionRecordProperties3;
+	use validateMessageRecordOptionRecordProperties4;
+end
+
+Library validateMessageRecordOptionRecordProperties6
+	rec validateMessageRecordOptionRecordProperties; //5 not a basic record|not a basic record|not a basic record|not a basic record|not a basic record {PROPERTY_MUST_BE_BASIC_RECORD}
+	rec1 notBasicRecord;							 //0
+end
+
+// validateTableNameVariablesProperty:
+Record validateTableNameVariablesProperty1 type sqlRecord
+{tableNameVariables=["var1","var2"]}				//1
+end
+
+Record validateTableNameVariablesProperty2 type sqlRecord
+{tableNameVariables="var1"}							//1
+end
+
+Record validateTableNameVariablesProperty3 type sqlRecord
+{tableNameVariables=[[["var"]]]}					//1
+end
+
+Record validateTableNameVariablesProperty4 type sqlRecord
+{tableNameVariables=[["var", "call"]]}				//1 The SQL table name variable, table name, label, or column name call cannot duplicate any one of the following words: call, from, group, having, insert, order, select, set, union, update, values, where.  To use this name you must enter it as an SQL delineated name. {SQL_TABLE_NAME_LABEL_VARIABLE_DUPLICATES_CLAUSE}
+end
+
+Record validateTableNameVariablesProperty5 type sqlRecord
+{tableNameVariables=[["var", "xxxxx"]]}				//0
+end
+
+Record validateTableNameVariablesProperty6 type sqlRecord
+{tableNameVariables=[["var", "xxx\t"]]}				//0
+end
+
+Record validateTableNameVariablesProperty7 type sqlRecord
+{tableNameVariables=[["var", ["xxx\t"]]]}				//3
+end
+
+// validateTableNamesProperty:
+Record validateTableNamesProperty1 type sqlRecord
+{tableNames=["var1","var2"]}				//1
+end
+
+Record validateTableNamesProperty2 type sqlRecord
+{tableNames="var1"}							//1
+end
+
+Record validateTableNamesProperty3 type sqlRecord
+{tableNames=[[["var"]]]}					//1
+end
+
+Record validateTableNamesProperty4 type sqlRecord
+{tableNames=[["call"]]}						//1 The SQL table name variable, table name, label, or column name call cannot duplicate any one of the following words: call, from, group, having, insert, order, select, set, union, update, values, where.  To use this name you must enter it as an SQL delineated name. {SQL_TABLE_NAME_LABEL_VARIABLE_DUPLICATES_CLAUSE}
+end
+
+Record validateTableNamesProperty5 type sqlRecord
+{tableNames=[["xxxxx"]]}					//0
+end
+
+Record validateTableNamesProperty6 type sqlRecord
+{tableNames=[["xxxxx", "call"]]}			//1 The SQL table name variable, table name, label, or column name call cannot duplicate any one of the following words: call, from, group, having, insert, order, select, set, union, update, values, where.  To use this name you must enter it as an SQL delineated name. {SQL_TABLE_NAME_LABEL_VARIABLE_DUPLICATES_CLAUSE}
+end
+
+Record validateTableNamesProperty7 type sqlRecord
+{tableNames=[["xxxxx", "callx"]]}			//0
+end
+
+Record validateTableNamesProperty8 type sqlRecord
+{tableNames=[["xxxxx", "cal\t"]]}			//0
+end
+
+Record validateTableNamesProperty9 type sqlRecord
+{tableNames=[["xxxxx", ["c"]]]}				//3
+end
+
+// validateThatRequiredPropertiesArePresent:
+Record validateThatRequiredPropertiesArePresent1 type ConsoleForm end 	//1 Property: formSize.  This property is required for the part type ConsoleForm. {3062, PROPERTY_REQUIRED_WITH_THIS_RECORD_TYPE}
+Record validateThatRequiredPropertiesArePresent2 type IndexedRecord end //2 Property: fileName.  This property is required for the part type IndexedRecord.|Property: keyItem.  This property is required for the part type IndexedRecord. {3062, PROPERTY_REQUIRED_WITH_THIS_RECORD_TYPE}
+Record validateThatRequiredPropertiesArePresent3 type MQRecord end	 	//1 Property: queueName.  This property is required for the part type  {3062, PROPERTY_REQUIRED_WITH_THIS_RECORD_TYPE}
+Record validateThatRequiredPropertiesArePresent4 type RelativeRecord end //2 Property: recordNumItem.  This property is required for the part type |Property: fileName.  This property is required for the part type  {3062, PROPERTY_REQUIRED_WITH_THIS_RECORD_TYPE}
+Record validateThatRequiredPropertiesArePresent5 type SerialRecord end //1 Property: fileName.  This property is required for the part type 
+
+// validateValidatorProperty:
+function func() end
+
+Record validateValidatorProperty1 type VGUIRecord
+{validatorFunction=func}	//0
+end
+
+Record validateValidatorProperty2 type VGUIRecord
+{validatorFunction=foo}							//1 The function reference foo cannot be resolved
+end
+
+Record validateValidatorProperty3 type VGUIRecord
+{validatorFunction=validateValidatorProperty2}	//1 The function reference validateValidatorProperty2 cannot be resolved
+end
+
+Record valid1Basic type basicRecord { 
+	containerContextDependent = yes  // 0
+} 10 item1 int; end
+
+Record valid2Basic type basicRecord { 
+	containerContextDependent = no  // 0
+} 10 item1 int; end
+
+Record invalid1Basic type basicRecord { 
+	containerContextDependent = "a"  // 1
+} 10 item1 int; end
+
+Record invalid2Basic type basicRecord { 
+	containerContextDependent = a  // 1
+} 10 item1 int; end
+
+Record invalid3Basic type basicRecord { 
+	containerContextDependent = 5  // 1
+} 10 item1 int; end
+
+Record invalid4Basic type basicRecord { 
+	containerContextDependent = [yes]  // 1
+} 10 item1 int; end
+
+Record valid1SQL type sqlRecord { 
+	defaultSelectCondition = #sqlcondition{insert}, // 0
+	keyItems = [item1],                      // 0
+	tableNames = [["a","b"],["c"]],              // 0
+	tableNameVariables = [["a","b"],["c"]]       // 0
+} 10 item1 int; 10 item2 int; end
+
+Record valid2SQL type sqlRecord { 
+	keyItems = [item1]  // 0
+} 10 item1 int; 10 item2 int; end
+
+Record valid3SQL type sqlRecord { 
+	keyItems = [item1, item2]  // 0
+} 10 item1 int; 10 item2 int; end
+
+Record invalid1SQL type sqlRecord { 
+	defaultSelectCondition = "dave", // 1
+	keyItems = "dave",               // 1
+	tableNameVariables = "dave"      // 1
+} 10 item1 int; 10 item2 int; end
+
+Record invalid2SQL type sqlRecord { 
+	defaultSelectCondition = 5, // 1
+	keyItems = 5,               // 1
+	tableNameVariables = 5      // 1
+} 10 item1 int; 10 item2 int; end
+
+Record invalid3SQL type sqlRecord { 
+	defaultSelectCondition = [5], // 1
+	tableNameVariables = [5]      // 1
+} 10 item1 int; 10 item2 int; end
+
+Record valid1Relative type relativeRecord { 
+	fileName = "dave", // 0
+	recordNumItem = "item1"    // 0
+} 10 item1 int; end
+
+Record invalid1Relative type relativeRecord { 
+	fileName = [5], // 1
+	keyItem = [5]   // 1
+} 10 item1 int; end
+
+Record invalid2Relative type relativeRecord { 
+	fileName = ["dave"], // 1
+	keyItem = [item1]    // 1
+} 10 item1 int; end
+
+Record valid1Indexed type indexedRecord { 
+	numElementsItem = item1, // 0
+	fileName = "dave",       // 0
+	keyItem = item1,         // 0
+	lengthItem = item1       // 0
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record invalid1Indexed type indexedRecord { 
+	numElementsItem = 5, // 1
+	fileName = [5],        // 1
+	keyItem = 5,         // 1
+	lengthItem = 5       // 1
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record invalid2Indexed type indexedRecord { 
+	numElementsItem = [item1], // 1
+	fileName = ["dave"],       // 1
+	keyItem = [item1],         // 1
+	lengthItem = [item1]       // 1
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record valid1Serial type serialRecord { 
+	numElementsItem = item1, // 0
+	fileName = "dave",       // 0
+	lengthItem = item1       // 0
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record invalid1Serial type serialRecord { 
+	numElementsItem = 5, // 1
+	fileName = [5],        // 1
+	lengthItem = 5       // 1
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record invalid2Serial type serialRecord { 
+	numElementsItem = [item1], // 1
+	fileName = ["dave"],       // 1
+	lengthItem = [item1]       // 1
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record valid1MQ type mqRecord { 
+	numElementsItem = item1,       // 0
+	openQueueExclusive = yes,      // 0
+	lengthItem = item1,            // 0
+	includeMsgInTransaction = yes, // 0
+	queueName = "dave",            // 0
+	msgDescriptorRecord = "recId",         // 0
+	queueDescriptorRecord = "recId",       // 0
+	putOptionsRecord = "recId",            // 0
+	openOptionsRecord = "recId",           // 0
+	getOptionsRecord = "recId"             // 0
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record valid2MQ type mqRecord { 
+	openQueueExclusive = no,      // 0
+	includeMsgInTransaction = no  // 0
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record invalid1MQ type mqRecord { 
+	numElementsItem = 5,           // 1
+	openQueueExclusive = "a",      // 1
+	lengthItem = 5,                // 1
+	includeMsgInTransaction = "a", // 1
+	queueName = [5],               // 1
+	msgDescriptorRecord = [5],             // 1
+	queueDescriptorRecord = [5],           // 1
+	putOptionsRecord = [5],                // 1
+	openOptionsRecord = [5],               // 1
+	getOptionsRecord = [5]                 // 1
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record invalid2MQ type mqRecord { 
+	numElementsItem = [item1],   // 1
+	openQueueExclusive = a,      // 1
+	lengthItem = [item1],        // 1
+	includeMsgInTransaction = a, // 1
+	queueName = ["dave"],        // 1
+	msgDescriptorRecord = [recId],     // 1
+	queueDescriptorRecord = [recId],   // 1
+	putOptionsRecord = [recId],        // 1
+	openOptionsRecord = [recId],       // 1
+	getOptionsRecord = [recId]         // 1
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record invalid3MQ type mqRecord { 
+	openQueueExclusive = 5,      // 1
+	includeMsgInTransaction = 5  // 1
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record invalid4MQ type mqRecord { 
+	openQueueExclusive = [yes],      // 1
+	includeMsgInTransaction = [yes]  // 1
+} 10 item1 int; 10 lastItem int[4]; end
+
+Record timeFormatRecord 
+	10 sItem1 char(10){timeFormat = isoTimeFormat}; //0
+	10 sItem2 char(10){timeFormat = abcTimeFormat}; //1
+	10 sItem3 char(10){timeFormat = "abc"}; //0
+end
+
+Record rec1
+	10 item1 char(2);
+		15 item2 char(2) {isboolean=yes}; // 0
+end

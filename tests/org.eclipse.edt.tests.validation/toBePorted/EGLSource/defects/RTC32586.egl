@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+record rec1 type sqlrecord
+  a int;
+ end
+ 
+ 
+ program pgm1
+ 
+ 	rec1 rec1;
+ 	rec1a rec1[];
+ 	
+ 	function main()
+ 		open rs1				  //0
+			with				  //0
+				#sql{ call foo() }				  //0
+			for rec1a;  				  //0
+		
+		open rs2				  //0
+			with				  //0
+				#sql{ call foo() } //0
+			for rec1;  				  //0
+			
+					
+		open rs2				  //0
+			with				  //0
+				#sql{ call foo() select a} //1
+			for rec1;  				  //0
+		
+		get rec1			//0
+			with				//0
+				#sql{ call foo() };	 //3
+
+		get rec1a			//0
+			with				//0
+				#sql{ call foo() };	 //0
+				
+				
+		get rec1a			//0
+			with				//0
+				#sql{ call foo() select a};	 //1
+
+ 	end
+ 	
+ end

@@ -13,6 +13,7 @@ package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Type;
 
 //TODO Initial size of array declarations is not stored in signature so it is lost
@@ -74,5 +75,23 @@ public class ArrayTypeImpl extends GenericTypeImpl implements ArrayType {
 		}
 		return typeSignature;
 	}
-
+	
+	@Override
+	public Type resolveTypeParameter(Type type) {
+		if (type instanceof ArrayType) {
+			ArrayType array = (ArrayType)type;
+			if (!array.getTypeArguments().isEmpty()) {
+				ArrayType newType = IrFactory.INSTANCE.createArrayType();
+				newType.setElementsNullable(elementsNullable());
+				newType.setClassifier(getClassifier());
+				
+				// To handle multidim arrays, must resolve the typearg too.
+				Type elementType = array.resolveTypeParameter(array.getTypeArguments().get(0));
+				newType.setElementType(elementType);
+				
+				return newType;
+			}
+		}
+		return super.resolveTypeParameter(type);
+	}
 }

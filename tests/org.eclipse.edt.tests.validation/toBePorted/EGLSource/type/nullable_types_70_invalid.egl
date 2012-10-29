@@ -1,0 +1,51 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record fixedRec
+	10 item1 int?;			//1 A nullable type is not permitted in this part. {3430, NULLABLE_TYPE_NOT_ALLOWED_IN_PART}
+end
+
+Record flexRec
+	item1 int;				//0
+end
+
+Datatable tab {
+	contents = [[1]]
+}
+	10 item1 int?;			//1 A nullable type is not permitted in this part. {3430, NULLABLE_TYPE_NOT_ALLOWED_IN_PART}
+end
+
+Form form1 type textForm {formSize = [10,20]}
+	field1 char(4)?;		//1 A nullable type is not permitted in this part. {3430, NULLABLE_TYPE_NOT_ALLOWED_IN_PART}
+end
+
+Formgroup fg
+	Form form1 type textForm {formSize = [10,20]}
+		field1 char(4)?;	//1 A nullable type is not permitted in this part. {3430, NULLABLE_TYPE_NOT_ALLOWED_IN_PART}
+	end
+end
+
+Program pgm(p1 int?)		//1 A nullable type is not permitted for a program parameter. {3431, NULLABLE_TYPE_NOT_ALLOWED_IN_PROGRAM_PARAMETER}
+	function main()
+		nullableInt int?;
+		
+		call "anotherPgm" (nullableInt);	//1 The type int? for this program parameter or call argument is invalid
+	end
+	
+	nullableAry int[]?;			//1 Invalid type int[]?. The base type for a nullable type must be a value type. {3432, NULLABLE_TYPE_BASE_MUST_BE_VALUE_TYPE}
+	nullableAny any?;			//1 Invalid type any?. The base type for a nullable type must be a value type. {3432, NULLABLE_TYPE_BASE_MUST_BE_VALUE_TYPE}
+	nullableDict dictionary?;	//1 Invalid type dictionary?. The base type for a nullable type must be a value type. {3432, NULLABLE_TYPE_BASE_MUST_BE_VALUE_TYPE}
+	
+	nullableChar char(4)?;		//0
+	nullableFixedRec fixedRec?;	//0
+	nullableFlexRec flexRec?;	//0
+end

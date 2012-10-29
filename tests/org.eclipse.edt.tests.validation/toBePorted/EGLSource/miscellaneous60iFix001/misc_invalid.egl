@@ -1,0 +1,637 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+DataItem MiscItem1 Char(24)	{
+//	dateFormat = "r",		// 1 Illegal pattern character
+//	timeFormat = "r",		// 1 Illegal pattern character
+//	timeStampFormat = "r"	// 1 Illegal pattern character
+} End
+
+Program Misc_Valid
+
+	anAny any;
+	anInt int;
+	aChar char(10);
+	aFixedRecord MyFixedRecord;
+	aFlexRecord MyFlexRecord;
+	aFlexRecord2 MyFlexRecord2;
+	anotherFlexRecord MyOtherFlexRecord;
+	aRef ConsoleField;
+	anIntArray int[];
+	aCharArray char(10)[];
+	aDBCharArray dbchar(10)[];
+
+	Function main()
+		TestAssignmentCompatibility();
+		TestReferenceCompatibility();
+	End
+		
+	Function TestAssignmentCompatibility()
+		// Special Cases
+		anInt = aFixedRecord;	// 1
+		aChar = aFixedRecord;	// 0
+		
+		// The General Cases
+		anAny = anAny;	//	0
+		anAny = anInt;	//	0
+		anAny = aChar;	//	0
+		anAny = aFixedRecord;	//	0
+		anAny = aFlexRecord;	//	0
+		anAny = aRef;	//	0
+		anAny = anIntArray;	//	0
+		anAny = aCharArray;	//	0
+		anAny = aFixedRecord.anIntItem;	//	0
+		anAny = aFixedRecord.aCharItem;	//	0
+		anAny = aFixedRecord.anOccurredItem;	//	0
+		anAny = aFlexRecord.anAnyField;	//	0
+		anAny = aFlexRecord.anIntField;	//	0
+		anAny = aFlexRecord.aCharField;	//	0
+		anAny = aFlexRecord.aFixedRecordField;	//	0
+		anAny = aFlexRecord.aFlexRecordField;	//	0
+		anAny = aFlexRecord.aRefField;	//	0
+		anAny = aFlexRecord.anIntArrayField;	//	0
+		anAny = aFlexRecord.aCharArrayField;	//	0
+			
+		anInt = anAny as int;	//	0
+		anInt = anInt;	//	0
+		anInt = aChar;	//	0
+		anInt = aFixedRecord;	//	1
+		anInt = aFlexRecord;	//	1
+		anInt = aRef;	//	1
+		anInt = anIntArray;	//	1
+		anInt = aCharArray;	//	1
+		anInt = aFixedRecord.anIntItem;	//	0
+		anInt = aFixedRecord.aCharItem;	//	0
+		anInt = aFixedRecord.anOccurredItem;	//	1
+		anInt = aFlexRecord.anAnyField as int;	//	0
+		anInt = aFlexRecord.anIntField;	//	0
+		anInt = aFlexRecord.aCharField;	//	0
+		anInt = aFlexRecord.aFixedRecordField;	//	1
+		anInt = aFlexRecord.aFlexRecordField;	//	1
+		anInt = aFlexRecord.aRefField;	//	1
+		anInt = aFlexRecord.anIntArrayField;	//	1
+		anInt = aFlexRecord.aCharArrayField;	//	1
+			
+		aChar = anAny as char(4);	//	0
+		aChar = anInt;	//	0
+		aChar = aChar;	//	0
+		aChar = aFixedRecord;	//	0
+		aChar = aFlexRecord;	//	1
+		aChar = aRef;	//	1
+		aChar = anIntArray;	//	1
+		aChar = aCharArray;	//	1
+		aChar = aFixedRecord.anIntItem;	//	0
+		aChar = aFixedRecord.aCharItem;	//	0
+		aChar = aFixedRecord.anOccurredItem;	//	1
+		aChar = aFlexRecord.anAnyField as char(4);	//	0
+		aChar = aFlexRecord.anIntField;	//	0
+		aChar = aFlexRecord.aCharField;	//	0
+		aChar = aFlexRecord.aFixedRecordField;	//	0
+		aChar = aFlexRecord.aFlexRecordField;	//	1
+		aChar = aFlexRecord.aRefField;	//	1
+		aChar = aFlexRecord.anIntArrayField;	//	1
+		aChar = aFlexRecord.aCharArrayField;	//	1
+			
+		aFixedRecord = anAny as MyFixedrecord;	//	0
+		aFixedRecord = anInt;	//	1
+		aFixedRecord = aChar;	//	0
+		aFixedRecord = aFixedRecord;	//	0
+		aFixedRecord = aFlexRecord;	//	1
+		aFixedRecord = aRef;	//	1
+		aFixedRecord = anIntArray;	//	1
+		aFixedRecord = aCharArray;	//	1
+		aFixedRecord = aFixedRecord.anIntItem;	//	1
+		aFixedRecord = aFixedRecord.aCharItem;	//	0
+		aFixedRecord = aFixedRecord.anOccurredItem;	//	1
+		aFixedRecord = aFlexRecord.anAnyField as MyFixedRecord;	//	0
+		aFixedRecord = aFlexRecord.anIntField;	//	1
+		aFixedRecord = aFlexRecord.aCharField;	//	0
+		aFixedRecord = aFlexRecord.aFixedRecordField;	//	0
+		aFixedRecord = aFlexRecord.aFlexRecordField;	//	1
+		aFixedRecord = aFlexRecord.aRefField;	//	1
+		aFixedRecord = aFlexRecord.anIntArrayField;	//	1
+		aFixedRecord = aFlexRecord.aCharArrayField;	//	1
+			
+		aFlexRecord = anAny as MyFlexRecord;	//	0
+		aFlexRecord = anInt;	//	1
+		aFlexRecord = aChar;	//	1
+		aFlexRecord = aFixedRecord;	//	1
+		aFlexRecord = aFlexRecord;	//	0
+		aFlexRecord = aRef;	//	1
+		aFlexRecord = anIntArray;	//	1
+		aFlexRecord = aCharArray;	//	1
+		aFlexRecord = aFixedRecord.anIntItem;	//	1
+		aFlexRecord = aFixedRecord.aCharItem;	//	1
+		aFlexRecord = aFixedRecord.anOccurredItem;	//	1
+		aFlexRecord = aFlexRecord.anAnyField as MyFlexRecord;	//	0
+		aFlexRecord = aFlexRecord.anIntField;	//	1
+		aFlexRecord = aFlexRecord.aCharField;	//	1
+		aFlexRecord = aFlexRecord.aFixedRecordField;	//	1
+		aFlexRecord = aFlexRecord.aFlexRecordField;	//	1
+		aFlexRecord = aFlexRecord.aRefField;	//	1
+		aFlexRecord = aFlexRecord.anIntArrayField;	//	1
+		aFlexRecord = aFlexRecord.aCharArrayField;	//	1
+			
+		aRef = anAny as ConsoleField;	//	0
+		aRef = anInt;	//	1
+		aRef = aChar;	//	1
+		aRef = aFixedRecord;	//	1
+		aRef = aFlexRecord;	//	1
+		aRef = aRef;	//	0
+		aRef = anIntArray;	//	1
+		aRef = aCharArray;	//	1
+		aRef = aFixedRecord.anIntItem;	//	1
+		aRef = aFixedRecord.aCharItem;	//	1
+		aRef = aFixedRecord.anOccurredItem;	//	1
+		aRef = aFlexRecord.anAnyField as ConsoleField;	//	0
+		aRef = aFlexRecord.anIntField;	//	1
+		aRef = aFlexRecord.aCharField;	//	1
+		aRef = aFlexRecord.aFixedRecordField;	//	1
+		aRef = aFlexRecord.aFlexRecordField;	//	1
+		aRef = aFlexRecord.aRefField;	//	0
+		aRef = aFlexRecord.anIntArrayField;	//	1
+		aRef = aFlexRecord.aCharArrayField;	//	1
+			
+		anIntArray = anAny as int[];	//	0
+		anIntArray = anInt;	//	1
+		anIntArray = aChar;	//	1
+		anIntArray = aFixedRecord;	//	1
+		anIntArray = aFlexRecord;	//	1
+		anIntArray = aRef;	//	1
+		anIntArray = anIntArray;	//	0
+		anIntArray = aDBCharArray;	//	1
+		anIntArray = aFixedRecord.anIntItem;	//	1
+		anIntArray = aFixedRecord.aCharItem;	//	1
+		anIntArray = aFixedRecord.anOccurredItem;	//	1
+		anIntArray = aFlexRecord.anAnyField as int[];	//	0
+		anIntArray = aFlexRecord.anIntField;	//	1
+		anIntArray = aFlexRecord.aCharField;	//	1
+		anIntArray = aFlexRecord.aFixedRecordField;	//	1
+		anIntArray = aFlexRecord.aFlexRecordField;	//	1
+		anIntArray = aFlexRecord.aRefField;	//	1
+		anIntArray = aFlexRecord.anIntArrayField;	//	0
+		anIntArray = aFlexRecord.aDBCharArrayField;	//	1
+			
+		aCharArray = anAny as char(10)[];	//	0
+		aCharArray = anInt;	//	1
+		aCharArray = aChar;	//	1
+		aCharArray = aFixedRecord;	//	1
+		aCharArray = aFlexRecord;	//	1
+		aCharArray = aRef;	//	1
+		move anIntArray to aCharArray;	//	0
+		aCharArray = aCharArray;	//	0
+		aCharArray = aDBCharArray;	//	1
+		aCharArray = aFixedRecord.anIntItem;	//	1
+		aCharArray = aFixedRecord.aCharItem;	//	1
+		aCharArray = aFixedRecord.anOccurredItem;	//	1
+		aCharArray = aFlexRecord.anAnyField as char(10)[];	// 0
+		aCharArray = aFlexRecord.anIntField;	//	1
+		aCharArray = aFlexRecord.aCharField;	//	1
+		aCharArray = aFlexRecord.aFixedRecordField;	//	1
+		aCharArray = aFlexRecord.aFlexRecordField;	//	1
+		aCharArray = aFlexRecord.aRefField;	//	1
+		move aFlexRecord.anIntArrayField to aCharArray;	//	0
+		aCharArray = aFlexRecord.aCharArrayField;	//	0
+		aCharArray = aFlexRecord.aDBCharArrayField;	//	1
+			
+		aFixedRecord.anIntItem = anAny as int;	//	0
+		aFixedRecord.anIntItem = anInt;	//	0
+		aFixedRecord.anIntItem = aChar;	//	0
+		aFixedRecord.anIntItem = aFixedRecord;	//	1
+		aFixedRecord.anIntItem = aFlexRecord;	//	1
+		aFixedRecord.anIntItem = aRef;	//	1
+		aFixedRecord.anIntItem = anIntArray;	//	1
+		aFixedRecord.anIntItem = aCharArray;	//	1
+		aFixedRecord.anIntItem = aFixedRecord.anIntItem;	//	0
+		aFixedRecord.anIntItem = aFixedRecord.aCharItem;	//	0
+		aFixedRecord.anIntItem = aFixedRecord.anOccurredItem;	//	1
+		aFixedRecord.anIntItem = aFlexRecord.anAnyField as int;	//	0
+		aFixedRecord.anIntItem = aFlexRecord.anIntField;	//	0
+		aFixedRecord.anIntItem = aFlexRecord.aCharField;	//	0
+		aFixedRecord.anIntItem = aFlexRecord.aFixedRecordField;	//	1
+		aFixedRecord.anIntItem = aFlexRecord.aFlexRecordField;	//	1
+		aFixedRecord.anIntItem = aFlexRecord.aRefField;	//	1
+		aFixedRecord.anIntItem = aFlexRecord.anIntArrayField;	//	1
+		aFixedRecord.anIntItem = aFlexRecord.aCharArrayField;	//	1
+			
+		aFixedRecord.aCharItem = anAny as char(10);	//	0
+		aFixedRecord.aCharItem = anInt;	//	0
+		aFixedRecord.aCharItem = aChar;	//	0
+		aFixedRecord.aCharItem = aFixedRecord;	//	0
+		aFixedRecord.aCharItem = aFlexRecord;	//	1
+		aFixedRecord.aCharItem = aRef;	//	1
+		aFixedRecord.aCharItem = anIntArray;	//	1
+		aFixedRecord.aCharItem = aCharArray;	//	1
+		aFixedRecord.aCharItem = aFixedRecord.anIntItem;	//	0
+		aFixedRecord.aCharItem = aFixedRecord.aCharItem;	//	0
+		aFixedRecord.aCharItem = aFixedRecord.anOccurredItem;	//	1
+		aFixedRecord.aCharItem = aFlexRecord.anAnyField as char(10);	//	0
+		aFixedRecord.aCharItem = aFlexRecord.anIntField;	//	0
+		aFixedRecord.aCharItem = aFlexRecord.aCharField;	//	0
+		aFixedRecord.aCharItem = aFlexRecord.aFixedRecordField;	//	0
+		aFixedRecord.aCharItem = aFlexRecord.aFlexRecordField;	//	1
+		aFixedRecord.aCharItem = aFlexRecord.aRefField;	//	1
+		aFixedRecord.aCharItem = aFlexRecord.anIntArrayField;	//	1
+		aFixedRecord.aCharItem = aFlexRecord.aCharArrayField;	//	1
+			
+		aFixedRecord.anOccurredItem = anAny;	//	0
+		aFixedRecord.anOccurredItem = anInt;	//	1
+		aFixedRecord.anOccurredItem = aChar;	//	1
+		aFixedRecord.anOccurredItem = aFixedRecord;	//	1
+		aFixedRecord.anOccurredItem = aFlexRecord;	//	1
+		aFixedRecord.anOccurredItem = aRef;	//	1
+		aFixedRecord.anOccurredItem = anIntArray;	//	1
+		aFixedRecord.anOccurredItem = aCharArray;	//	1
+		aFixedRecord.anOccurredItem = aFixedRecord.anIntItem;	//	1
+		aFixedRecord.anOccurredItem = aFixedRecord.aCharItem;	//	1
+		aFixedRecord.anOccurredItem = aFixedRecord.anOccurredItem;	//	1
+		aFixedRecord.anOccurredItem = aFlexRecord.anAnyField;	//	0
+		aFixedRecord.anOccurredItem = aFlexRecord.anIntField;	//	1
+		aFixedRecord.anOccurredItem = aFlexRecord.aCharField;	//	1
+		aFixedRecord.anOccurredItem = aFlexRecord.aFixedRecordField;	//	1
+		aFixedRecord.anOccurredItem = aFlexRecord.aFlexRecordField;	//	1
+		aFixedRecord.anOccurredItem = aFlexRecord.aRefField;	//	1
+		aFixedRecord.anOccurredItem = aFlexRecord.anIntArrayField;	//	1
+		aFixedRecord.anOccurredItem = aFlexRecord.aCharArrayField;	//	1
+			
+		aFlexRecord.anAnyField = anAny;	//	0
+		aFlexRecord.anAnyField = anInt;	//	0
+		aFlexRecord.anAnyField = aChar;	//	0
+		aFlexRecord.anAnyField = aFixedRecord;	//	0
+		aFlexRecord.anAnyField = aFlexRecord;	//	0
+		aFlexRecord.anAnyField = aRef;	//	0
+		aFlexRecord.anAnyField = anIntArray;	//	0
+		aFlexRecord.anAnyField = aCharArray;	//	0
+		aFlexRecord.anAnyField = aFixedRecord.anIntItem;	//	0
+		aFlexRecord.anAnyField = aFixedRecord.aCharItem;	//	0
+		aFlexRecord.anAnyField = aFixedRecord.anOccurredItem;	//	0
+		aFlexRecord.anAnyField = aFlexRecord.anAnyField;	//	0
+		aFlexRecord.anAnyField = aFlexRecord.anIntField;	//	0
+		aFlexRecord.anAnyField = aFlexRecord.aCharField;	//	0
+		aFlexRecord.anAnyField = aFlexRecord.aFixedRecordField;	//	0
+		aFlexRecord.anAnyField = aFlexRecord.aFlexRecordField;	//	0
+		aFlexRecord.anAnyField = aFlexRecord.aRefField;	//	0
+		aFlexRecord.anAnyField = aFlexRecord.anIntArrayField;	//	0
+		aFlexRecord.anAnyField = aFlexRecord.aCharArrayField;	//	0
+			
+		aFlexRecord.anIntField = anAny as int;	//	0
+		aFlexRecord.anIntField = anInt;	//	0
+		aFlexRecord.anIntField = aChar;	//	0
+		aFlexRecord.anIntField = aFixedRecord;	//	1
+		aFlexRecord.anIntField = aFlexRecord;	//	1
+		aFlexRecord.anIntField = aRef;	//	1
+		aFlexRecord.anIntField = anIntArray;	//	1
+		aFlexRecord.anIntField = aCharArray;	//	1
+		aFlexRecord.anIntField = aFixedRecord.anIntItem;	//	0
+		aFlexRecord.anIntField = aFixedRecord.aCharItem;	//	0
+		aFlexRecord.anIntField = aFixedRecord.anOccurredItem;	//	1
+		aFlexRecord.anIntField = aFlexRecord.anAnyField as int;	//	0
+		aFlexRecord.anIntField = aFlexRecord.anIntField;	//	0
+		aFlexRecord.anIntField = aFlexRecord.aCharField;	//	0
+		aFlexRecord.anIntField = aFlexRecord.aFixedRecordField;	//	1
+		aFlexRecord.anIntField = aFlexRecord.aFlexRecordField;	//	1
+		aFlexRecord.anIntField = aFlexRecord.aRefField;	//	1
+		aFlexRecord.anIntField = aFlexRecord.anIntArrayField;	//	1
+		aFlexRecord.anIntField = aFlexRecord.aCharArrayField;	//	1
+			
+		aFlexRecord.aCharField = anAny as char(10);	//	0
+		aFlexRecord.aCharField = anInt;	//	0
+		aFlexRecord.aCharField = aChar;	//	0
+		aFlexRecord.aCharField = aFixedRecord;	//	0
+		aFlexRecord.aCharField = aFlexRecord;	//	1
+		aFlexRecord.aCharField = aRef;	//	1
+		aFlexRecord.aCharField = anIntArray;	//	1
+		aFlexRecord.aCharField = aCharArray;	//	1
+		aFlexRecord.aCharField = aFixedRecord.anIntItem;	//	0
+		aFlexRecord.aCharField = aFixedRecord.aCharItem;	//	0
+		aFlexRecord.aCharField = aFixedRecord.anOccurredItem;	//	1
+		aFlexRecord.aCharField = aFlexRecord.anAnyField as char(10);	//	0
+		aFlexRecord.aCharField = aFlexRecord.anIntField;	//	0
+		aFlexRecord.aCharField = aFlexRecord.aCharField;	//	0
+		aFlexRecord.aCharField = aFlexRecord.aFixedRecordField;	//	0
+		aFlexRecord.aCharField = aFlexRecord.aFlexRecordField;	//	1
+		aFlexRecord.aCharField = aFlexRecord.aRefField;	//	1
+		aFlexRecord.aCharField = aFlexRecord.anIntArrayField;	//	1
+		aFlexRecord.aCharField = aFlexRecord.aCharArrayField;	//	1
+			
+		aFlexRecord.aFixedRecordField = anAny as MyFixedRecord;	//	0
+		aFlexRecord.aFixedRecordField = anInt;	//	1
+		aFlexRecord.aFixedRecordField = aChar;	//	0
+		aFlexRecord.aFixedRecordField = aFixedRecord;	//	0
+		aFlexRecord.aFixedRecordField = aFlexRecord;	//	1
+		aFlexRecord.aFixedRecordField = aRef;	//	1
+		aFlexRecord.aFixedRecordField = anIntArray;	//	1
+		aFlexRecord.aFixedRecordField = aCharArray;	//	1
+		aFlexRecord.aFixedRecordField = aFixedRecord.anIntItem;	//	1
+		aFlexRecord.aFixedRecordField = aFixedRecord.aCharItem;	//	0
+		aFlexRecord.aFixedRecordField = aFixedRecord.anOccurredItem;	//	1
+		aFlexRecord.aFixedRecordField = aFlexRecord.anAnyField as MyFixedRecord;	//	0
+		aFlexRecord.aFixedRecordField = aFlexRecord.anIntField;	//	1
+		aFlexRecord.aFixedRecordField = aFlexRecord.aCharField;	//	0
+		aFlexRecord.aFixedRecordField = aFlexRecord.aFixedRecordField;	//	0
+		aFlexRecord.aFixedRecordField = aFlexRecord.aFlexRecordField;	//	1
+		aFlexRecord.aFixedRecordField = aFlexRecord.aRefField;	//	1
+		aFlexRecord.aFixedRecordField = aFlexRecord.anIntArrayField;	//	1
+		aFlexRecord.aFixedRecordField = aFlexRecord.aCharArrayField;	//	1
+			
+		aFlexRecord.aFlexRecordField = anAny as MyOtherFlexRecord;	//	0
+		aFlexRecord.aFlexRecordField = anInt;	//	1
+		aFlexRecord.aFlexRecordField = aChar;	//	1
+		aFlexRecord.aFlexRecordField = aFixedRecord;	//	1
+		aFlexRecord.aFlexRecordField = aFlexRecord;	//	1 
+		aFlexRecord.aFlexRecordField = anotherFlexRecord;	//	0
+		aFlexRecord.aFlexRecordField = aRef;	//	1
+		aFlexRecord.aFlexRecordField = anIntArray;	//	1
+		aFlexRecord.aFlexRecordField = aCharArray;	//	1
+		aFlexRecord.aFlexRecordField = aFixedRecord.anIntItem;	//	1
+		aFlexRecord.aFlexRecordField = aFixedRecord.aCharItem;	//	1
+		aFlexRecord.aFlexRecordField = aFixedRecord.anOccurredItem;	//	1
+		aFlexRecord.aFlexRecordField = aFlexRecord.anAnyField as MyOtherFlexRecord;	//	0
+		aFlexRecord.aFlexRecordField = aFlexRecord.anIntField;	//	1
+		aFlexRecord.aFlexRecordField = aFlexRecord.aCharField;	//	1
+		aFlexRecord.aFlexRecordField = aFlexRecord.aFixedRecordField;	//	1
+		aFlexRecord.aFlexRecordField = aFlexRecord.aFlexRecordField;	//	0
+		aFlexRecord.aFlexRecordField = aFlexRecord.aRefField;	//	1
+		aFlexRecord.aFlexRecordField = aFlexRecord.anIntArrayField;	//	1
+		aFlexRecord.aFlexRecordField = aFlexRecord.aCharArrayField;	//	1
+			
+		aFlexRecord.aRefField = anAny as ConsoleField;	//	0
+		aFlexRecord.aRefField = anInt;	//	1
+		aFlexRecord.aRefField = aChar;	//	1
+		aFlexRecord.aRefField = aFixedRecord;	//	1
+		aFlexRecord.aRefField = aFlexRecord;	//	1
+		aFlexRecord.aRefField = aRef;	//	0
+		aFlexRecord.aRefField = anIntArray;	//	1
+		aFlexRecord.aRefField = aCharArray;	//	1
+		aFlexRecord.aRefField = aFixedRecord.anIntItem;	//	1
+		aFlexRecord.aRefField = aFixedRecord.aCharItem;	//	1
+		aFlexRecord.aRefField = aFixedRecord.anOccurredItem;	//	1
+		aFlexRecord.aRefField = aFlexRecord.anAnyField as ConsoleField;	//	0
+		aFlexRecord.aRefField = aFlexRecord.anIntField;	//	1
+		aFlexRecord.aRefField = aFlexRecord.aCharField;	//	1
+		aFlexRecord.aRefField = aFlexRecord.aFixedRecordField;	//	1
+		aFlexRecord.aRefField = aFlexRecord.aFlexRecordField;	//	1
+		aFlexRecord.aRefField = aFlexRecord.aRefField;	//	0
+		aFlexRecord.aRefField = aFlexRecord.anIntArrayField;	//	1
+		aFlexRecord.aRefField = aFlexRecord.aCharArrayField;	//	1
+			
+		aFlexRecord.anIntArrayField = anAny as int[];	//	0
+		aFlexRecord.anIntArrayField = anInt;	//	1
+		aFlexRecord.anIntArrayField = aChar;	//	1
+		aFlexRecord.anIntArrayField = aFixedRecord;	//	1
+		aFlexRecord.anIntArrayField = aFlexRecord;	//	1
+		aFlexRecord.anIntArrayField = aRef;	//	1
+		aFlexRecord.anIntArrayField = anIntArray;	//	0
+		move aCharArray to aFlexRecord.anIntArrayField;	//	0
+		aFlexRecord.anIntArrayField = aDBCharArray;	//	1
+		aFlexRecord.anIntArrayField = aFixedRecord.anIntItem;	//	1
+		aFlexRecord.anIntArrayField = aFixedRecord.aCharItem;	//	1
+		aFlexRecord.anIntArrayField = aFixedRecord.anOccurredItem;	//	1
+		aFlexRecord.anIntArrayField = aFlexRecord.anAnyField as int[];	// 0
+		aFlexRecord.anIntArrayField = aFlexRecord.anIntField;	//	1
+		aFlexRecord.anIntArrayField = aFlexRecord.aCharField;	//	1
+		aFlexRecord.anIntArrayField = aFlexRecord.aFixedRecordField;	//	1
+		aFlexRecord.anIntArrayField = aFlexRecord.aFlexRecordField;	//	1
+		aFlexRecord.anIntArrayField = aFlexRecord.aRefField;	//	1
+		aFlexRecord.anIntArrayField = aFlexRecord.anIntArrayField;	//	0
+		move aFlexRecord.aCharArrayField to aFlexRecord.anIntArrayField;	//	0
+		aFlexRecord.anIntArrayField = aFlexRecord.aDBCharArrayField;	//	1
+			
+		aFlexRecord.aCharArrayField = anAny as char(10)[];	//	0
+		aFlexRecord.aCharArrayField = anInt;	//	1
+		aFlexRecord.aCharArrayField = aChar;	//	1
+		aFlexRecord.aCharArrayField = aFixedRecord;	//	1
+		aFlexRecord.aCharArrayField = aFlexRecord;	//	1
+		aFlexRecord.aCharArrayField = aRef;	//	1
+		move anIntArray to aFlexRecord.aCharArrayField;	//	0
+		aFlexRecord.aCharArrayField = aDBCharArray;	//	1
+		aFlexRecord.aCharArrayField = aCharArray;	//	0
+		aFlexRecord.aCharArrayField = aFixedRecord.anIntItem;	//	1
+		aFlexRecord.aCharArrayField = aFixedRecord.aCharItem;	//	1
+		aFlexRecord.aCharArrayField = aFixedRecord.anOccurredItem;	//	1
+		aFlexRecord.aCharArrayField = aFlexRecord.anAnyField as char(10)[];	// 0
+		aFlexRecord.aCharArrayField = aFlexRecord.anIntField;	//	1
+		aFlexRecord.aCharArrayField = aFlexRecord.aCharField;	//	1
+		aFlexRecord.aCharArrayField = aFlexRecord.aFixedRecordField;	//	1
+		aFlexRecord.aCharArrayField = aFlexRecord.aFlexRecordField;	//	1
+		aFlexRecord.aCharArrayField = aFlexRecord.aRefField;	//	1
+		move aFlexRecord.anIntArrayField to aFlexRecord.aCharArrayField;	//	0
+		aFlexRecord.aCharArrayField = aFlexRecord.aCharArrayField;	//	0
+		aFlexRecord.aCharArrayField = aFlexRecord.aDBCharArrayField;	//	1
+	End
+	
+	Function TestReferenceCompatibility()
+		// The Special Cases
+		aChar5 char(5);			// 0
+		Char10Func( aChar5 );	// 1
+		
+		aSmallRecord MySmallFixedRecord;	// 0
+		aLargeRecord MyLargeFixedRecord;	// 0
+		FixedRecordFunc(aSmallRecord);		// 1
+		FixedRecordFunc(aLargeRecord);	    // 0
+
+		// The General Cases
+		AnyFunc( anAny );	//	0
+		AnyFunc( anInt );	//	1
+		AnyFunc( aChar );	//	1
+		AnyFunc( aFixedRecord );	//	1
+		AnyFunc( aFlexRecord );	//	1
+		AnyFunc( aRef );	//	1
+		AnyFunc( anIntArray );	//	1
+		AnyFunc( aCharArray );	//	1
+		AnyFunc( aFixedRecord.anIntItem );	//	1
+		AnyFunc( aFixedRecord.aCharItem );	//	1
+		AnyFunc( aFixedRecord.anOccurredItem );	//	1
+		AnyFunc( aFlexRecord.anAnyField );	//	0
+		AnyFunc( aFlexRecord.anIntField );	//	1
+		AnyFunc( aFlexRecord.aCharField );	//	1
+		AnyFunc( aFlexRecord.aFixedRecordField );	//	1
+		AnyFunc( aFlexRecord.aFlexRecordField );	//	1
+		AnyFunc( aFlexRecord.aRefField );	//	1
+		AnyFunc( aFlexRecord.anIntArrayField );	//	1
+		AnyFunc( aFlexRecord.aCharArrayField );	//	1
+			
+		IntFunc( anAny );	//	0
+		IntFunc( anInt );	//	0
+		IntFunc( aChar );	//	1
+		IntFunc( aFixedRecord );	//	1
+		IntFunc( aFlexRecord );	//	1
+		IntFunc( aRef );	//	1
+		IntFunc( anIntArray );	//	1
+		IntFunc( aCharArray );	//	1
+		IntFunc( aFixedRecord.anIntItem );	//	0
+		IntFunc( aFixedRecord.aCharItem );	//	1
+		IntFunc( aFixedRecord.anOccurredItem );	//	1
+		IntFunc( aFlexRecord.anAnyField );	//	0
+		IntFunc( aFlexRecord.anIntField );	//	0
+		IntFunc( aFlexRecord.aCharField );	//	1
+		IntFunc( aFlexRecord.aFixedRecordField );	//	1
+		IntFunc( aFlexRecord.aFlexRecordField );	//	1
+		IntFunc( aFlexRecord.aRefField );	//	1
+		IntFunc( aFlexRecord.anIntArrayField );	//	1
+		IntFunc( aFlexRecord.aCharArrayField );	//	1
+			
+		Char10Func( anAny );	//	0
+		Char10Func( anInt );	//	1
+		Char10Func( aChar );	//	0
+		Char10Func( aFixedRecord );	//	1
+		Char10Func( aFlexRecord );	//	1
+		Char10Func( aRef );	//	1
+		Char10Func( anIntArray );	//	1
+		Char10Func( aCharArray );	//	1
+		Char10Func( aFixedRecord.anIntItem );	//	1
+		Char10Func( aFixedRecord.aCharItem );	//	0
+		Char10Func( aFixedRecord.anOccurredItem );	//	1
+		Char10Func( aFlexRecord.anAnyField );	//	0
+		Char10Func( aFlexRecord.anIntField );	//	1
+		Char10Func( aFlexRecord.aCharField );	//	0
+		Char10Func( aFlexRecord.aFixedRecordField );	//	1
+		Char10Func( aFlexRecord.aFlexRecordField );	//	1
+		Char10Func( aFlexRecord.aRefField );	//	1
+		Char10Func( aFlexRecord.anIntArrayField );	//	1
+		Char10Func( aFlexRecord.aCharArrayField );	//	1
+			
+		FixedRecordFunc( anAny );	//	0
+		FixedRecordFunc( anInt );	//	1
+		FixedRecordFunc( aChar );	//	1
+		FixedRecordFunc( aFixedRecord );	//	0
+		FixedRecordFunc( aFlexRecord );	//	1
+		FixedRecordFunc( aRef );	//	1
+		FixedRecordFunc( anIntArray );	//	1
+		FixedRecordFunc( aCharArray );	//	1
+		FixedRecordFunc( aFixedRecord.anIntItem );	//	1
+		FixedRecordFunc( aFixedRecord.aCharItem );	//	1
+		FixedRecordFunc( aFixedRecord.anOccurredItem );	//	1
+		FixedRecordFunc( aFlexRecord.anAnyField );	//	0
+		FixedRecordFunc( aFlexRecord.anIntField );	//	1
+		FixedRecordFunc( aFlexRecord.aCharField );	//	1
+		FixedRecordFunc( aFlexRecord.aFixedRecordField );	//	0
+		FixedRecordFunc( aFlexRecord.aFlexRecordField );	//	1
+		FixedRecordFunc( aFlexRecord.aRefField );	//	1
+		FixedRecordFunc( aFlexRecord.anIntArrayField );	//	1
+		FixedRecordFunc( aFlexRecord.aCharArrayField );	//	1
+			
+		FlexRecordFunc( anAny );	//	0
+		FlexRecordFunc( anInt );	//	1
+		FlexRecordFunc( aChar );	//	1
+		FlexRecordFunc( aFixedRecord );	//	1
+		FlexRecordFunc( aFlexRecord );	// 0
+		FlexRecordFunc( aFlexRecord2 );	// 1
+		FlexRecordFunc( aRef );	//	1
+		FlexRecordFunc( anIntArray );	//	1
+		FlexRecordFunc( aCharArray );	//	1
+		FlexRecordFunc( aFixedRecord.anIntItem );	//	1
+		FlexRecordFunc( aFixedRecord.aCharItem );	//	1
+		FlexRecordFunc( aFixedRecord.anOccurredItem );	//	1
+		FlexRecordFunc( aFlexRecord.anAnyField );	//	0
+		FlexRecordFunc( aFlexRecord.anIntField );	//	1
+		FlexRecordFunc( aFlexRecord.aCharField );	//	1
+		FlexRecordFunc( aFlexRecord.aFixedRecordField );	//	1
+		FlexRecordFunc( aFlexRecord.aFlexRecordField );	//	1
+		FlexRecordFunc( aFlexRecord.aRefField );	//	1
+		FlexRecordFunc( aFlexRecord.anIntArrayField );	//	1
+		FlexRecordFunc( aFlexRecord.aCharArrayField );	//	1
+			
+		ConsoleFieldFunc( anAny );	//	0
+		ConsoleFieldFunc( anInt );	//	1
+		ConsoleFieldFunc( aChar );	//	1
+		ConsoleFieldFunc( aFixedRecord );	//	1
+		ConsoleFieldFunc( aFlexRecord );	//	1
+		ConsoleFieldFunc( aRef );	//	0
+		ConsoleFieldFunc( anIntArray );	//	1
+		ConsoleFieldFunc( aCharArray );	//	1
+		ConsoleFieldFunc( aFixedRecord.anIntItem );	//	1
+		ConsoleFieldFunc( aFixedRecord.aCharItem );	//	1
+		ConsoleFieldFunc( aFixedRecord.anOccurredItem );	//	1
+		ConsoleFieldFunc( aFlexRecord.anAnyField );	//	0
+		ConsoleFieldFunc( aFlexRecord.anIntField );	//	1
+		ConsoleFieldFunc( aFlexRecord.aCharField );	//	1
+		ConsoleFieldFunc( aFlexRecord.aFixedRecordField );	//	1
+		ConsoleFieldFunc( aFlexRecord.aFlexRecordField );	//	1
+		ConsoleFieldFunc( aFlexRecord.aRefField );	//	0
+		ConsoleFieldFunc( aFlexRecord.anIntArrayField );	//	1
+		ConsoleFieldFunc( aFlexRecord.aCharArrayField );	//	1
+			
+		IntArrayFunc( anAny );	//	0
+		IntArrayFunc( anInt );	//	1
+		IntArrayFunc( aChar );	//	1
+		IntArrayFunc( aFixedRecord );	//	1
+		IntArrayFunc( aFlexRecord );	//	1
+		IntArrayFunc( aRef );	//	1
+		IntArrayFunc( anIntArray );	//	0
+		IntArrayFunc( aCharArray );	//	1
+		IntArrayFunc( aFixedRecord.anIntItem );	//	1
+		IntArrayFunc( aFixedRecord.aCharItem );	//	1
+		IntArrayFunc( aFixedRecord.anOccurredItem );	//	1
+		IntArrayFunc( aFlexRecord.anAnyField );	//	0
+		IntArrayFunc( aFlexRecord.anIntField );	//	1
+		IntArrayFunc( aFlexRecord.aCharField );	//	1
+		IntArrayFunc( aFlexRecord.aFixedRecordField );	//	1
+		IntArrayFunc( aFlexRecord.aFlexRecordField );	//	1
+		IntArrayFunc( aFlexRecord.aRefField );	//	1
+		IntArrayFunc( aFlexRecord.anIntArrayField );	//	0
+		IntArrayFunc( aFlexRecord.aCharArrayField );	//	1
+	End
+	
+	Function AnyFunc(param any inout) End
+	Function IntFunc(param int inout) End
+	Function Char10Func(param char(10) inout) End
+	Function FixedRecordFunc(param MyFixedRecord inout) End
+	Function FlexRecordFunc(param MyFlexRecord inout) End
+	Function ConsoleFieldFunc(param ConsoleField inout) End
+	Function IntArrayFunc(param int[] inout) End
+	
+End
+
+Record MySmallFixedRecord
+	10 anIntItem int;
+End
+
+Record MyLargeFixedRecord
+	10 anIntItem int;
+	10 anIntItem2 int;
+	10 aCharItem char(10);
+	10 anOccurredItem int[10];
+End
+
+Record MyFixedRecord
+	10 anIntItem int;
+	10 aCharItem char(10);
+	10 anOccurredItem int[10];
+End
+
+Record MyFlexRecord
+	anAnyField any;
+	anIntField int;
+	aCharField char(10);
+	aFixedRecordField MyFixedRecord;
+	aFlexRecordField MyOtherFlexRecord;
+	aRefField ConsoleField;
+	anIntArrayField int[];
+	aCharArrayField char(10)[];
+	aDBCharArrayField dbchar(10)[];
+End
+
+Record MyFlexRecord2
+	anAnyField any;
+	anIntField int;
+	aCharField char(10);
+	aFixedRecordField MyFixedRecord;
+	aFlexRecordField MyOtherFlexRecord;
+	aRefField ConsoleField;
+	anIntArrayField int[];
+	aCharArrayField char(10)[];
+	aDBCharArrayField dbchar(10)[];
+End
+
+Record MyOtherFlexRecord
+	aField any;
+End

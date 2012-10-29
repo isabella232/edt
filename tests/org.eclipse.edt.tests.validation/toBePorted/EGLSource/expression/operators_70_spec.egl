@@ -1,0 +1,90 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		intarray int[] = [1, 2, 3];
+		strarray string[] = ["1", "2", "3"];
+		
+		intarray = intarray :: 4;			//0
+		intarray = 4 :: strarray as int[];			//0
+		intarray = intarray :: strarray;	//0
+		intarray = intarray :: intarray;	//0
+		
+		// Concatenation of complex types
+		// Assume the following definitions
+		recArray Rec[];
+		aRec1 Rec;
+		aRec2 Rec;
+		
+		// Note that new arrays are created having no effect
+		// upon the operands themselves
+		recArray = recArray :: aRec1;		//0
+		recArray = recArray :: aRec2;		//0
+		
+		// RHS creates new array and copies both 
+		// recArray and aRec1 into it
+		// Assignment copies the new array
+		recArray = recArray :: aRec1;		//0
+		recArray = recArray :: recArray;	//0
+		
+		i int;
+		
+		i += 1; 					//0
+		var String = "Hello";
+		var += " World"; 			//0
+		x, y int;
+		x *= y; 					//0
+		x /= y; 					//0
+		x ::= y; 					//0
+
+		recArray = recArray :: aRec1;	//0
+		recArray ::= aRec1;				//0
+		recArray ::= 1;					//1 not compatible types
+		recArray ::= recArray;			//0
+		
+		x = x | y;					//0
+		x = x & y;					//0
+		x = x xor y;				//0
+		x |= y;						//0
+		x &= y;						//0
+		x xor= y;					//0
+		
+		hexVar hex(4);
+		hexVar = hexVar | hexVar;			//1
+		hexVar = hexVar & hexVar;			//1
+		hexVar = hexVar xor hexVar;			//1
+		hexVar |= hexVar;					//1
+		hexVar &= hexVar;					//1
+		hexVar xor= hexVar;					//1
+		
+		booleanVar boolean;
+		booleanVar = booleanVar | booleanVar;		//2
+		booleanVar = booleanVar & booleanVar;		//2
+		booleanVar = booleanVar xor booleanVar;		//2
+		booleanVar |= booleanVar;					//1
+		booleanVar &= booleanVar;					//1
+		booleanVar xor= booleanVar;					//1
+				
+		thing any;
+		aRec1 = thing as Rec;		//0
+		i = (thing as Rec).item1;	//0
+		i = thing as int;			//0
+		intarray = thing as int[];	//0
+		recArray = thing as Rec[];	//0
+		i = (thing as Rec).adam;	//1 adam cannot be resolved
+	end
+end
+
+Record Rec
+	item1 int;
+end

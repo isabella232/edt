@@ -14,7 +14,7 @@ package org.eclipse.edt.mof.egl;
 import egl.lang.reflect.mof.MofClass;  
 
 externalType ParameterizedType extends EGLType type MofClass {isAbstract=yes}
-	parameterizableType TypeRef;   
+	parameterizableType egl.lang.reflect.mof.EType;   
 end
   
 externalType SequenceType extends ParameterizedType type MofClass

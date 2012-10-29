@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
+
 Handler Button type RUIWidget{
 			tagName = "input type=button",
 			cssFile = "css/org.eclipse.edt.rui.css", 

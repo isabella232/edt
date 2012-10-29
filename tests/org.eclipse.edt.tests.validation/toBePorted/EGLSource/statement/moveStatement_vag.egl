@@ -1,0 +1,55 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program pgm {allowunqualifieditemreferences=yes}
+	use fg;
+	function main()
+		AAA7ISIN, AAA7ICT1 smallint;
+		AAA7W001 AAA7W001;
+		
+		move AAA7W001.AAA7ICRB[AAA7ICT1] to AAA0MCPY.AAA7ICRB[1] for AAA7ISIN;	//0
+		if(AAA0MCPY.AAA7ICRB[1] is DATA) end									//0
+		if(AAA7W001.AAA7ICRB[AAA7ICT1] in tab.col) end							//0
+	end
+end
+
+Datatable tab
+	col char(4);
+end
+
+Record AAA7W001 type basicRecord
+  3 AAA7ICR1 AAA7ICR1 [16] ; 
+    4 AAA7ICRA AAA7ICRA ; 
+    4 AAA7ICRB AAA7ICRB ; 
+end
+
+DataItem AAA7ICR1 char(30)  {
+  align = none, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+DataItem AAA7ICRA char(24)  {
+  align = none, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+DataItem AAA7ICRB char(6)  {
+  align = none, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+Formgroup fg
+	Form AAA0MCPY type textForm {formSize=[20,20]}
+		AAA7ICRB char(6) [3];
+	end
+end

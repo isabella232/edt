@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record WorkFormType type ConsoleForm { formSize = [8,47], showBrackets = yes }
+	*         ConsoleField  { position=[2,5], value="First Name" };
+	firstName ConsoleField { name="firstName", position=[2,20], fieldLen=15, value="" };
+end
+
+Program Work
+	FUNCTION main()
+		x  String;
+		y  int;
+		z  int;
+		f WorkFormType { name="f" };
+		
+		displayForm(f);
+		openUI activeForm bind x
+			OnEvent(AFTER_OPENUI)
+				CASE ( y )
+				WHEN  ( 1 )
+					if(1==1)
+						continue openui;	//0
+					else
+						exit openui;		//0
+					end				
+					
+					IF ( z ==  0)				
+						CONTINUE OpenUI;
+						a int  = 4;				//1 Unreachable
+					ELSE
+						EXIT OpenUI;    //0
+
+						continue openui;	//1
+						if(1==1) end		//1 Unreachable
+					END 
+				OTHERWISE
+				END ;
+		end
+		
+	END
+END

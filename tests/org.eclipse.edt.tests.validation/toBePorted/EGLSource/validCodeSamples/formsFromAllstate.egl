@@ -1,0 +1,614 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+FormGroup GPLAP0 {
+  PrintFloatingAreas=[
+    @PrintFloatingArea { deviceType=deviceTypeKind.singleByte, pageSize=[255,132], topMargin=7,
+      bottomMargin=193, leftMargin=0, rightMargin=52
+    }
+  ]
+  }
+Form MPLAP00 type printForm	
+ { formSize = [47,80]}
+
+
+  DCMNTH char(9)  
+  { position = [3,28], fieldLen = 9, align = none, fillCharacter = " "}; 
+  DSYSMD char(3)  
+  { position = [3,38], fieldLen = 3, align = left, fillCharacter = " "}; 
+  DSCNYY num(4)  
+  { position = [3,42], fieldLen = 4, align = right, fillCharacter = "0"}; 
+  DUSRBS char(28) [7]  
+  { position = [7,49], fieldLen = 28, align = left, fillCharacter = " ",
+    this [2] { position = [8,49] },
+    this [3] { position = [9,49] },
+    this [4] { position = [10,49] },
+    this [5] { position = [11,49] },
+    this [6] { position = [12,49] },
+    this [7] { position = [13,49] }
+  };
+  DCLIES char(42) [4]  
+  { position = [8,1], fieldLen = 42, align = left, fillCharacter = " ",
+    this [2] { position = [9,1] },
+    this [3] { position = [10,1] },
+    this [4] { position = [11,1] }
+  };
+  DCLPNE char(20)  
+  { position = [14,1], fieldLen = 20, align = left, fillCharacter = " "}; 
+  DLICST char(2)  
+  { position = [14,49], fieldLen = 2, align = left, fillCharacter = " "}; 
+  DSYMBOL char(5)  
+  { position = [14,52], fieldLen = 5, align = left, fillCharacter = " "}; 
+  DCALICN char(19)  
+  { position = [14,58], fieldLen = 19, align = left, fillCharacter = " "}; 
+  DWKPNE char(20) 
+  { position = [15,1], fieldLen = 20, align = left, fillCharacter = " "}; 
+  DMDYR2 num(4)  
+  { position = [25,3], fieldLen = 4, sign = leading, align = right, 
+    fillCharacter = " "}; 
+  DVIN char(17)  
+  { position = [25,11], fieldLen = 17, align = left, fillCharacter = " "}; 
+  DMODLNM char(12)  
+  { position = [25,32], fieldLen = 12, align = left, fillCharacter = " "}; 
+  DABMDL char(12)  
+  { position = [25,47], fieldLen = 12, align = left, fillCharacter = " "}; 
+  DVEHCLS char(1) 
+  { position = [25,63], fieldLen = 1, align = left, fillCharacter = " "}; 
+  DODOM char(8)  
+  { position = [25,69], fieldLen = 8, align = left, fillCharacter = " "}; 
+  DPOLDES char(22)  
+  { position = [28,1], fieldLen = 22, align = left, fillCharacter = " "}; 
+  DMTHS num(3) 
+  { position = [31,45], fieldLen = 3, sign = leading, align = right, 
+    fillCharacter = " "}; 
+  DMILES char(7)  
+  { position = [33,51], fieldLen = 7, align = left, fillCharacter = " "}; 
+  DDEDES char(4)  
+  { position = [36,15], fieldLen = 4, align = left, fillCharacter = " "}; 
+  DTOTAL char(8)  
+  { position = [38,20], fieldLen = 8, align = right, fillCharacter = " "}; 
+  DVMBINS char(38) 
+  { position = [40,1], fieldLen = 38, align = left, fillCharacter = " "}; 
+  DVEH01 char(20) 
+  { position = [42,1], fieldLen = 20, align = left, fillCharacter = " "}; 
+  DVEH02 char(20) 
+  { position = [42,23], fieldLen = 20, align = left, fillCharacter = " "}; 
+  DVEH03 char(20) 
+  { position = [42,45], fieldLen = 20, align = left, fillCharacter = " "}; 
+
+
+  * { position = [1,25], fieldLen = 27, value = "ALLSTATE PARTS & LABOR PLUS"};
+  * { position = [2,18], fieldLen = 40,
+      value = "MECHANICAL BREAKDOWN INSURANCE QUOTATION"};
+  * { position = [6,1], fieldLen = 24, value = "ESPECIALLY PREPARED FOR:"};
+  * { position = [6,49], fieldLen = 74, value = "PREPARED BY:"};
+  * { position = [16,25], fieldLen = 27, value = "ALLSTATE PARTS & LABOR PLUS"};
+  * { position = [17,3], fieldLen = 71,
+      value = "Thank you for the opportunity to discuss your mechanical breakdown"};
+  * { position = [18,3], fieldLen = 71,
+      value = "insurance needs. I look forward to offering you the service and"};
+  * { position = [19,3], fieldLen = 71,
+      value = "value that is the standard of Allstate insurance. I am sure you"};
+  * { position = [20,3], fieldLen = 71,
+      value = "will see that this proposal can affordably add to your overall"};
+  * { position = [21,3], fieldLen = 71, value = "insurance program."};
+  * { position = [23,1], fieldLen = 76,
+      value = "  Model                                                     Vehicle Current"};
+  * { position = [24,1], fieldLen = 76,
+      value = "  Year    VIN Number           Make           Model         Class   Odometer"};
+  * { position = [31,1], fieldLen = 41,
+      value = "Coverage Term from Policy Effective Date:"};
+  * { position = [31,50], fieldLen = 6, value = "Months"};
+  * { position = [32,14], fieldLen = 2, value = "OR"};
+  * { position = [33,1], fieldLen = 47,
+      value = "Coverage Mileage from Current Vehicle Odometer:"};
+  * { position = [33,60], fieldLen = 5, value = "Miles"};
+  * { position = [34,8], fieldLen = 22, value = "Whichever Occurs First"};
+  * { position = [36,1], fieldLen = 11, value = "Deductible:"};
+  * { position = [36,20], fieldLen = 16, value = "PER REPAIR VISIT"};
+  * { position = [38,1], fieldLen = 14, value = "Total Premium:"};
+  * { position = [38,17], fieldLen = 1, value = "$"};
+  * { position = [44,3], fieldLen = 71,
+      value = "This quote is not a contract or binder of coverage. All benefits"};
+  * { position = [45,3], fieldLen = 71,
+      value = "and limits are subject to the terms and conditions contained in"};
+  * { position = [46,3], fieldLen = 71,
+      value = "the Allstate Parts & Labor Plus Policy. If you have any questions,"};
+  * { position = [47,3], fieldLen = 101,
+      value = "please contact me at the above number."};
+end 
+
+
+Form MPLAP09 type printForm	
+ { formSize = [2,80], position = [63,1]}
+
+
+  DPOFPG char(11) 
+  { position = [2,35], fieldLen = 11, align = left, fillCharacter = " "}; 
+
+
+end 
+
+
+end 
+
+FormGroup GPLAI0
+Form MPLAI01 type textForm	
+ { screenSizes = [[24,80]], formSize = [24,80], position = [1,1], 
+  msgField = VAGen_EZEMSG}
+
+
+  DHEADER char(40)  
+  { position = [1,20], fieldLen = 40, validationOrder = 1, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill,
+    value = "ALSTAR PARTS AND LABOR PLUS DATA ENTRY"}; 
+  DMFCTR char(8) 
+  { position = [3,32], fieldLen = 8, validationOrder = 13, color = green, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill,
+    value = "Manufctr"}; 
+  DWRNTY char(8) 
+  { position = [4,32], fieldLen = 8, validationOrder = 14, color = green, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill,
+    value = "Warranty"}; 
+  DEXSTS char(6) 
+  { position = [5,32], fieldLen = 6, validationOrder = 15, color = green, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill,
+    value = "Exists"}; 
+  DMDLYR num(4)  
+  { position = [7,2], fieldLen = 4, validationOrder = 2, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    sign = leading, align = right, fillCharacter = nullFill}; 
+  DABMDL char(6)  
+  { position = [7,7], fieldLen = 6, validationOrder = 3, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DPLNCD char(2)  
+  { position = [7,18], fieldLen = 2, cursor = yes, validationOrder = 4, 
+    color = white, highlight = noHighlight, intensity = normalIntensity, 
+    protect = noProtect, upperCase = yes, align = left, fillCharacter = " "}; 
+  DOWNCD char(1)  
+  { position = [7,26], fieldLen = 1, validationOrder = 5, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = " "}; 
+  DMFGWAR char(1)  
+  { position = [7,35], fieldLen = 1, validationOrder = 12, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DFWDRV char(1)  
+  { position = [7,43], fieldLen = 1, validationOrder = 6, color = white, 
+    highlight = noHighlight, intensity = invisible, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DAWDRV char(1)  
+  { position = [7,50], fieldLen = 1, validationOrder = 7, color = white, 
+    highlight = noHighlight, intensity = invisible, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DFWSTR char(1)  
+  { position = [7,57], fieldLen = 1, validationOrder = 8, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DTURBO char(1) 
+  { position = [7,65], fieldLen = 1, validationOrder = 9, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DDIESEL char(1) 
+  { position = [7,73], fieldLen = 1, validationOrder = 10, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,1], fieldLen = 78, validationOrder = 11, color = red, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+
+
+  * { position = [3,1], fieldLen = 30, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "                AP&LP Vehicle"};
+  * { position = [3,41], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = " Four   All"};
+  * { position = [3,55], fieldLen = 24, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "Four    Turbo   Diesel"};
+  * { position = [4,1], fieldLen = 30, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = " Model          Plan  Ownrshp"};
+  * { position = [4,41], fieldLen = 12, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = " Wheel Wheel"};
+  * { position = [4,55], fieldLen = 24, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "Wheel   Engine  Engine"};
+  * { position = [4,80], fieldLen = 0, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [5,1], fieldLen = 30, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = " Year  Model    Code   Code"};
+  * { position = [5,39], fieldLen = 13, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = skipProtect,
+      value = "  Drive Drive"};
+  * { position = [5,54], fieldLen = 25, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "Steerng  (Y/N)   (Y/N)"};
+  * { position = [7,1], fieldLen = 0, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [22,80], fieldLen = 80, color = magenta, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "(ENTER)CONTINUE (F1)HELP (F2)COMPLETE (F3)QUIT (F4)BACKSCRN (F6)PEND (F8)SUMMARY"};
+end 
+
+
+end 
+
+FormGroup GARTE0
+Form MARTE01 type textForm	
+ { screenSizes = [[24,80]], formSize = [24,80], position = [1,1], 
+  msgField = VAGen_EZEMSG}
+
+
+  DZIP char(5)  
+  { position = [3,60], fieldLen = 5, validationOrder = 1, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = right, fillCharacter = " "}; 
+  DAREA char(4)  
+  { position = [6,42], fieldLen = 4, validationOrder = 2, color = green, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = " "}; 
+  DSEL num(2) [12]  
+  { position = [8,4], fieldLen = 2, validationOrder = 3, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    align = right, fillCharacter = " ",
+    this [2] { position = [9,4] },
+    this [3] { position = [10,4] },
+    this [4] { position = [11,4] },
+    this [5] { position = [12,4] },
+    this [6] { position = [13,4] },
+    this [7] { position = [14,4] },
+    this [8] { position = [15,4] },
+    this [9] { position = [16,4] },
+    this [10] { position = [17,4] },
+    this [11] { position = [18,4] },
+    this [12] { position = [19,4] }
+  };
+  DCITY1 char(15) [12]  
+  { position = [8,13], fieldLen = 15, validationOrder = 4, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = " ",
+    this [2] { position = [9,13] },
+    this [3] { position = [10,13] },
+    this [4] { position = [11,13] },
+    this [5] { position = [12,13] },
+    this [6] { position = [13,13] },
+    this [7] { position = [14,13] },
+    this [8] { position = [15,13] },
+    this [9] { position = [16,13] },
+    this [10] { position = [17,13] },
+    this [11] { position = [18,13] },
+    this [12] { position = [19,13] }
+  };
+  DCONT1 char(3) [12]  
+  { position = [8,34], fieldLen = 3, validationOrder = 5, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = " ",
+    this [2] { position = [9,34] },
+    this [3] { position = [10,34] },
+    this [4] { position = [11,34] },
+    this [5] { position = [12,34] },
+    this [6] { position = [13,34] },
+    this [7] { position = [14,34] },
+    this [8] { position = [15,34] },
+    this [9] { position = [16,34] },
+    this [10] { position = [17,34] },
+    this [11] { position = [18,34] },
+    this [12] { position = [19,34] }
+  };
+  DAREA1 char(3) [12]  
+  { position = [8,42], fieldLen = 3, validationOrder = 6, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = right, fillCharacter = " ", isDecimalDigit = yes,
+    this [2] { position = [9,42] },
+    this [3] { position = [10,42] },
+    this [4] { position = [11,42] },
+    this [5] { position = [12,42] },
+    this [6] { position = [13,42] },
+    this [7] { position = [14,42] },
+    this [8] { position = [15,42] },
+    this [9] { position = [16,42] },
+    this [10] { position = [17,42] },
+    this [11] { position = [18,42] },
+    this [12] { position = [19,42] }
+  };
+  DRATE1 num(4) [12]  
+  { position = [8,50], fieldLen = 4, validationOrder = 7, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    align = right, fillCharacter = " ",
+    this [2] { position = [9,50] },
+    this [3] { position = [10,50] },
+    this [4] { position = [11,50] },
+    this [5] { position = [12,50] },
+    this [6] { position = [13,50] },
+    this [7] { position = [14,50] },
+    this [8] { position = [15,50] },
+    this [9] { position = [16,50] },
+    this [10] { position = [17,50] },
+    this [11] { position = [18,50] },
+    this [12] { position = [19,50] }
+  };
+  DINOUT char(6) [12]  
+  { position = [8,64], fieldLen = 6, validationOrder = 8, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = " ",
+    this [2] { position = [9,64] },
+    this [3] { position = [10,64] },
+    this [4] { position = [11,64] },
+    this [5] { position = [12,64] },
+    this [6] { position = [13,64] },
+    this [7] { position = [14,64] },
+    this [8] { position = [15,64] },
+    this [9] { position = [16,64] },
+    this [10] { position = [17,64] },
+    this [11] { position = [18,64] },
+    this [12] { position = [19,64] }
+  };
+  DSLNUM num(2)  
+  { position = [21,40], fieldLen = 2, cursor = yes, validationOrder = 9, 
+    color = white, highlight = noHighlight, intensity = normalIntensity, 
+    protect = noProtect, align = right, fillCharacter = " "}; 
+  DMORE char(4)  
+  { position = [22,75], fieldLen = 4, validationOrder = 10, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DF4SCR char(16)  
+  { position = [23,28], fieldLen = 16, validationOrder = 11, color = magenta, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill,
+    value = "(F4) BACK SCREEN"}; 
+  DF5SCR char(16)  
+  { position = [23,45], fieldLen = 16, validationOrder = 12, color = magenta, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill,
+    value = "(F5) NEXT SCREEN"}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,1], fieldLen = 78, validationOrder = 13, color = red, 
+    highlight = blink, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+
+
+  * { position = [1,20], fieldLen = 39, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "   TERRITORY SELECTION SCREEN"};
+  * { position = [3,5], fieldLen = 54, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "There are Multiple Rating Territories for the Zip Code"};
+  * { position = [3,66], fieldLen = 1, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "."};
+  * { position = [4,6], fieldLen = 57, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "Please Select the Territory that Best Describes the Risk."};
+  * { position = [6,3], fieldLen = 38, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "Number    City                County"};
+  * { position = [6,47], fieldLen = 27, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = " Territory   Inside/Outside"};
+  * { position = [21,26], fieldLen = 13, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "Selection :"};
+  * { position = [23,1], fieldLen = 26, color = magenta, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "(ENTER) CONTINUE (F1) HELP"};
+  * { position = [23,65], fieldLen = 14, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "GARTE0 MARTE01"};
+end 
+
+
+Form MARTE02 type textForm	
+ { screenSizes = [[24,80]], formSize = [24,80], position = [1,1], 
+  msgField = VAGen_EZEMSG}
+
+
+  DZIP char(5)  
+  { position = [3,60], fieldLen = 5, validationOrder = 1, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = right, fillCharacter = " "}; 
+  DSEL num(2) [12]  
+  { position = [8,6], fieldLen = 2, validationOrder = 2, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    align = right, fillCharacter = " ",
+    this [2] { position = [9,6] },
+    this [3] { position = [10,6] },
+    this [4] { position = [11,6] },
+    this [5] { position = [12,6] },
+    this [6] { position = [13,6] },
+    this [7] { position = [14,6] },
+    this [8] { position = [15,6] },
+    this [9] { position = [16,6] },
+    this [10] { position = [17,6] },
+    this [11] { position = [18,6] },
+    this [12] { position = [19,6] }
+  };
+  DCITY1 char(15) [12]  
+  { position = [8,19], fieldLen = 15, validationOrder = 3, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = " ",
+    this [2] { position = [9,19] },
+    this [3] { position = [10,19] },
+    this [4] { position = [11,19] },
+    this [5] { position = [12,19] },
+    this [6] { position = [13,19] },
+    this [7] { position = [14,19] },
+    this [8] { position = [15,19] },
+    this [9] { position = [16,19] },
+    this [10] { position = [17,19] },
+    this [11] { position = [18,19] },
+    this [12] { position = [19,19] }
+  };
+  DCONT1 char(3) [12]  
+  { position = [8,46], fieldLen = 3, validationOrder = 4, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = " ",
+    this [2] { position = [9,46] },
+    this [3] { position = [10,46] },
+    this [4] { position = [11,46] },
+    this [5] { position = [12,46] },
+    this [6] { position = [13,46] },
+    this [7] { position = [14,46] },
+    this [8] { position = [15,46] },
+    this [9] { position = [16,46] },
+    this [10] { position = [17,46] },
+    this [11] { position = [18,46] },
+    this [12] { position = [19,46] }
+  };
+  DSLNUM2 num(2)  
+  { position = [21,40], fieldLen = 2, cursor = yes, validationOrder = 5, 
+    color = white, highlight = noHighlight, intensity = normalIntensity, 
+    protect = noProtect, align = right, fillCharacter = " "}; 
+  DMORE char(4)  
+  { position = [22,75], fieldLen = 4, validationOrder = 6, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DF4SCR char(16)  
+  { position = [23,28], fieldLen = 16, validationOrder = 7, color = magenta, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill,
+    value = "(F4) BACK SCREEN"}; 
+  DF5SCR char(16)  
+  { position = [23,45], fieldLen = 16, validationOrder = 8, color = magenta, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill,
+    value = "(F5) NEXT SCREEN"}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,1], fieldLen = 78, validationOrder = 9, color = red, 
+    highlight = blink, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+
+
+  * { position = [1,20], fieldLen = 39, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "      COUNTY SELECTION SCREEN"};
+  * { position = [3,13], fieldLen = 46, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "There are multiple Counties for the  Zip Code"};
+  * { position = [3,66], fieldLen = 1, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "."};
+  * { position = [4,7], fieldLen = 59, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "Please select the County in which the Residence is located."};
+  * { position = [6,4], fieldLen = 47, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "Selection      City                      County"};
+  * { position = [21,26], fieldLen = 13, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "Selection :"};
+  * { position = [23,1], fieldLen = 26, color = magenta, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "(ENTER) CONTINUE (F1) HELP"};
+  * { position = [23,65], fieldLen = 14, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = "GARTE0 MARTE01"};
+end 
+
+
+end 
+
+FormGroup GAPVI2
+Form MAPVI04 type textForm	
+ { screenSizes = [[24,80]], formSize = [24,80], position = [1,1], 
+  msgField = VAGen_EZEMSG}
+
+
+  DMAPDT char(10)  
+  { position = [1,1], fieldLen = 10, validationOrder = 1, color = green, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = right, fillCharacter = " "}; 
+  DMAPST char(2)  
+  { position = [1,73], fieldLen = 2, validationOrder = 2, color = green, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = " "}; 
+  DMDYR2 num(4)  
+  { position = [5,1], fieldLen = 4, cursor = yes, validationOrder = 3, 
+    color = white, highlight = noHighlight, intensity = normalIntensity, 
+    protect = noProtect, align = left, fillCharacter = " "}; 
+  DVINUM char(17)  
+  { position = [5,9], fieldLen = 17, validationOrder = 4, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DMKCDE num(3)  
+  { position = [5,29], fieldLen = 3, validationOrder = 5, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    align = left, fillCharacter = nullFill}; 
+  DABMDL char(12)  
+  { position = [5,36], fieldLen = 12, validationOrder = 6, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DCLASS char(2)  
+  { position = [5,54], fieldLen = 2, validationOrder = 7, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DODOM num(6)  
+  { position = [5,61], fieldLen = 6, validationOrder = 8, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    align = left, fillCharacter = nullFill}; 
+  DCOMM char(1) 
+  { position = [5,73], fieldLen = 1, validationOrder = 9, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = noProtect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  DMODLNM char(12)  
+  { position = [6,36], fieldLen = 12, validationOrder = 10, color = white, 
+    highlight = noHighlight, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+  VAGen_EZEMSG char(78) 
+  { position = [24,1], fieldLen = 78, validationOrder = 11, color = red, 
+    highlight = blink, intensity = normalIntensity, protect = protect, 
+    upperCase = yes, align = left, fillCharacter = nullFill}; 
+
+
+  * { position = [1,14], fieldLen = 52, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "ALSTAR PARTS & LABOR PLUS VEHICLE IDENTIFICATION"};
+  * { position = [1,76], fieldLen = 4, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [2,1], fieldLen = 78, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Model                      Make                   Vehicle Current  Commercial"};
+  * { position = [3,1], fieldLen = 78, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Year    VIN Number         Sel.    Make/Model     Class   Odometer Use/Salvage"};
+  * { position = [3,80], fieldLen = 79, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "                                                                       (Y/N)"};
+  * { position = [5,33], fieldLen = 2, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = " ("};
+  * { position = [5,49], fieldLen = 4, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = ")"};
+  * { position = [5,75], fieldLen = 40, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "                                       ("};
+  * { position = [6,49], fieldLen = 448, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect, value = ")"};
+  * { position = [12,18], fieldLen = 57, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "(F1 ON MAKE SELECTION TO FIND MAKE OR FOR VIN PROCESSING)"};
+  * { position = [13,1], fieldLen = 78, color = green, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = "******************************************************************************"};
+  * { position = [14,1], fieldLen = 716, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skipProtect,
+      value = " 1 - ACURA         10 - DODGE          19 - INFINITI       28 - PLYMOUT"
+             + "H         2 - AUDI          11 - DODGE VANS     20 - ISUZU          29 "
+             + "- PLYM TRUCKS      3 - BMW           12 - DODGE TRUCKS   21 - JEEP     "
+             + "      30 - PONTIAC          4 - BUICK         13 - FORD           22 - "
+             + "LEXUS          31 - TOYOTA           5 - CADILLAC      14 - FORD VANS  "
+             + "    23 - LINCOLN        32 - TOY. TRUCKS      6 - CHEVROLET     15 - FO"
+             + "RD TRUCKS    24 - MAZDA          33 - VOLKSWAGEN       7 - CHEVY VANS  "
+             + "  16 - GEO            25 - MERCURY        34 - VOLVO            8 - CHE"
+             + "VY TRUCKS  17 - GMC            26 - NISSAN         35 - ALL MAKES      "
+             + "  9 - CHRYSLER      18 - HONDA          27 - OLDSMOBILE"};
+  * { position = [23,1], fieldLen = 78, color = magenta, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "(ENTER) CONTINUE  (F1) HELP  (F2) COMPLETE  (F3) QUIT  (F6) PEND  (F8) SUMMARY"};
+end 
+
+
+end

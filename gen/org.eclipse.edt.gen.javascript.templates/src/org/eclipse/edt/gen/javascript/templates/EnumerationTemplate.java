@@ -72,9 +72,9 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 
 	public void genClassHeader(Enumeration part, Context ctx, TabbedWriter out) {
 		out.print("egl.defineClass(");
-		out.print(singleQuoted(part.getPackageName().toLowerCase()));
+		out.print(singleQuoted(part.getCaseSensitivePackageName().toLowerCase()));
 		out.print(", ");
-		out.print(quoted(part.getName()));
+		out.print(quoted(part.getCaseSensitiveName()));
 		out.print(", \"eglx.lang\", \"Enumeration\",");
 		out.println("{");
 	}
@@ -85,12 +85,12 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 	
 	public void genModuleName(Enumeration part, StringBuilder buf) {
 		buf.append("\"");
-		String pkg = part.getPackageName();
+		String pkg = part.getCaseSensitivePackageName();
 		if (pkg.length() > 0) {
 			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		buf.append(JavaScriptAliaser.getAlias(part.getId()));
+		buf.append(JavaScriptAliaser.getAlias(part.getCaseSensitiveName()));
 		buf.append("\"");
 	}
 

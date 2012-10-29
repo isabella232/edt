@@ -52,7 +52,6 @@ import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.internal.model.Region;
 import org.eclipse.edt.ide.core.internal.model.SetEGLPathOperation;
 import org.eclipse.edt.ide.core.internal.model.Util;
-import org.eclipse.jdt.core.JavaCore;
 
 /**
  * The plug-in runtime class for the EGL model plug-in containing the core
@@ -70,6 +69,7 @@ import org.eclipse.jdt.core.JavaCore;
  * automatically if not already active.
  * </p>
  */
+@SuppressWarnings("deprecation")
 public final class EGLCore {
 
 	/**
@@ -1072,29 +1072,20 @@ public final class EGLCore {
 	 * @since 2.1
 	 */
 	public static EGLPathContainerInitializer getEGLPathContainerInitializer(String containerID) {
-
-		Plugin jdtCorePlugin = EGLCore.getPlugin();
-		if (jdtCorePlugin == null)
-			return null;
-
-		IExtensionPoint extension = jdtCorePlugin.getDescriptor().getExtensionPoint(EGLModelManager.CPCONTAINER_INITIALIZER_EXTPOINT_ID);
-		if (extension != null) {
-			IExtension[] extensions = extension.getExtensions();
-			for (int i = 0; i < extensions.length; i++) {
-				IConfigurationElement[] configElements = extensions[i].getConfigurationElements();
-				for (int j = 0; j < configElements.length; j++) {
-					String initializerID = configElements[j].getAttribute("id"); //$NON-NLS-1$
-					if (initializerID != null && initializerID.equals(containerID)) {
-						if (EGLModelManager.CP_RESOLVE_VERBOSE) {
-							System.out.println("CPContainer INIT - found initializer: " + containerID + " --> " + configElements[j].getAttribute("class")); //$NON-NLS-3$//$NON-NLS-2$//$NON-NLS-1$
+		IConfigurationElement[] configElements = Platform.getExtensionRegistry().getConfigurationElementsFor(PLUGIN_ID + "." + EGLModelManager.CPCONTAINER_INITIALIZER_EXTPOINT_ID); //$NON-NLS-1$
+		if (configElements != null) {
+			for (int j = 0; j < configElements.length; j++) {
+				String initializerID = configElements[j].getAttribute("id"); //$NON-NLS-1$
+				if (initializerID != null && initializerID.equals(containerID)) {
+					if (EGLModelManager.CP_RESOLVE_VERBOSE) {
+						System.out.println("CPContainer INIT - found initializer: " + containerID + " --> " + configElements[j].getAttribute("class")); //$NON-NLS-3$//$NON-NLS-2$//$NON-NLS-1$
+					}
+					try {
+						Object execExt = configElements[j].createExecutableExtension("class"); //$NON-NLS-1$
+						if (execExt instanceof EGLPathContainerInitializer) {
+							return (EGLPathContainerInitializer) execExt;
 						}
-						try {
-							Object execExt = configElements[j].createExecutableExtension("class"); //$NON-NLS-1$
-							if (execExt instanceof EGLPathContainerInitializer) {
-								return (EGLPathContainerInitializer) execExt;
-							}
-						} catch (CoreException e) {
-						}
+					} catch (CoreException e) {
 					}
 				}
 			}
@@ -1231,7 +1222,7 @@ public final class EGLCore {
 	 * 
 	 * @param optionName the name of an option
 	 * @return the String value of a given option
-	 * @see JavaCore#getDefaultOptions
+	 * @see #getDefaultOptions
 	 * @since 2.0
 	 */
 	public static String getOption(String optionName) {
@@ -1255,7 +1246,7 @@ public final class EGLCore {
 	 * 
 	 * @return table of current settings of all options 
 	 *   (key type: <code>String</code>; value type: <code>String</code>)
-	 * @see JavaCore#getDefaultOptions
+	 * @see #getDefaultOptions
 	 */
 	public static Hashtable getOptions() {
 

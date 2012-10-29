@@ -1,0 +1,75 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program T40506M type basicProgram 
+  {includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+   localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no
+  }
+
+  
+  RECORDI RECORDI; 
+  RECORDJ2 RECORDJ2; 
+  RECORDZ RECORDZ; 
+
+  function main()
+    T40506M_MAIN: T40506M_MAIN();
+  end 
+end 
+
+
+Function T40506M_GET_INDEX()
+  get RECORDI ;
+  VGLib.connectionService(USERID, PASSWORD, SERVERNAME, PRODUCT, RELEASE, UOW);
+  VGLib.connectionService(RECORDI, PASSWORD, SERVERNAME, PRODUCT, RELEASE, UOW);	//1
+  VGLib.connectionService(USERID, RECORDI, SERVERNAME, PRODUCT, RELEASE, UOW);		//1
+  VGLib.connectionService(USERID, PASSWORD, RECORDI, PRODUCT, RELEASE, UOW);		//1
+end 
+
+Function T40506M_MAIN()
+  T40506M_NOIO();
+  T40506M_GET_INDEX();
+end 
+
+Function T40506M_NOIO()
+  VGLib.connectionService(USERID, PASSWORD, SERVERNAME, PRODUCT, RELEASE, UOW);
+  VGLib.connectionService(RECORDI, PASSWORD, SERVERNAME, PRODUCT, RELEASE, UOW);	//1
+  VGLib.connectionService(USERID, RECORDI, SERVERNAME, PRODUCT, RELEASE, UOW);		//1
+  VGLib.connectionService(USERID, PASSWORD, RECORDI, PRODUCT, RELEASE, UOW);		//1
+  VGLib.connectionService(RECORDZ, PASSWORD, SERVERNAME, PRODUCT, RELEASE, UOW);	//2
+  VGLib.connectionService(USERID, RECORDZ, SERVERNAME, PRODUCT, RELEASE, UOW);		//2
+  VGLib.connectionService(USERID, PASSWORD, RECORDZ, PRODUCT, RELEASE, UOW);		//2
+end 
+
+Record RECORDI type indexedRecord  {
+  fileName = "RECI", keyItem = ITEMI2
+  }
+  3 ITEMI char(3) ; 
+  3 ITEMI2 char(6) ; 
+  3 ITEMI3 char(6) ; 
+  3 RECORDZ char(8) ; 
+end 
+
+Record RECORDJ2 type basicRecord
+  3 USERID char(8) ; 
+  3 PASSWORD char(8) ; 
+  3 SERVERNAME char(18) ; 
+  3 PRODUCT char(8) ; 
+  3 RELEASE char(8) ; 
+  3 UOW char(8) ; 
+  
+end 
+
+Record RECORDZ type basicRecord
+  3 ITEMZ2 char(3) ; 
+  3 ITEMW char(6) ; 
+end 

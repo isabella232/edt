@@ -58,7 +58,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.edt.gen.generator.eglsource,
  org.eclipse.edt.gen.egl,
  org.eclipse.datatools.modelbase.dbdefinition,
- org.eclipse.edt.ide.sql
+ org.eclipse.edt.ide.sql,
+ org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.8.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
@@ -75,8 +76,6 @@ Export-Package:
  org.eclipse.edt.ide.ui.internal.outline,
  org.eclipse.edt.ide.ui.internal.packageexplorer,
  org.eclipse.edt.ide.ui.internal.preferences,
- org.eclipse.edt.ide.ui.internal.project.features,
- org.eclipse.edt.ide.ui.internal.project.features.operations,
  org.eclipse.edt.ide.ui.internal.project.wizard.pages,
  org.eclipse.edt.ide.ui.internal.project.wizards,
  org.eclipse.edt.ide.ui.internal.util,

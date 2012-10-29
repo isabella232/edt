@@ -1,0 +1,361 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+DataItem di int end
+
+Record recDef type indexedRecord {filename = "a", keyItem = item1}
+	10 item1 int;
+end
+
+Program anyAndIsa_Valid
+
+	function main()
+		binVal bin(9,2);
+		charVal char(10);
+		dbcharVal dbchar(10);
+		hexVal hex(2);
+		mbcharVal mbchar(10);
+		numVal num(9,2);
+		decimalVal decimal(9);
+		unicodeVal unicode(2);
+		smallintVal smallint;
+		intVal int;
+		bigintVal bigint;
+		floatVal float;
+		smallfloatVal smallfloat;
+		moneyVal money(9,2);
+		dateVal date;
+		timeVal time;
+		timestampVal timestamp;
+		interValVal interVal("yyyyMM");
+		clobVal clob;
+		blobVal blob;
+		stringVal string;
+		diVal di;
+		recVar recDef;
+			
+		thing, thing2 any;
+		
+		//---------------------------------------------------------------------
+		// test assignment/move of all types to any
+	
+		thing = binVal;
+		thing = charVal;
+		thing = dbcharVal;
+		thing = hexVal;
+		thing = mbcharVal;
+		thing = numVal;
+		thing = decimalVal;
+		thing = unicodeVal;
+		thing = smallintVal;
+		thing = intVal;
+		thing = bigintVal;
+		thing = floatVal;
+		thing = smallfloatVal;
+		thing = moneyVal;
+		thing = dateVal;
+		thing = timeVal;
+		thing = timestampVal;
+		thing = interValVal;
+		thing = clobVal;
+		thing = blobVal;
+		thing = stringVal;
+		thing = thing2;
+		thing = diVal;
+		thing = recVar;
+		
+		move binVal to thing;
+		move charVal to thing;
+		move dbcharVal to thing;
+		move hexVal to thing;
+		move mbcharVal to thing;
+		move numVal to thing;
+		move decimalVal to thing;
+		move unicodeVal to thing;
+		move smallintVal to thing;
+		move intVal to thing;
+		move bigintVal to thing;
+		move floatVal to thing;
+		move smallfloatVal to thing;
+		move moneyVal to thing;
+		move dateVal to thing;
+		move timeVal to thing;
+		move timestampVal to thing;
+		move interValVal to thing;
+		move clobVal to thing;
+		move blobVal to thing;
+		move stringVal to thing;
+		move diVal to thing;
+		move recVar to thing;
+		
+		//---------------------------------------------------------------------
+		// test assignment/move any to all types
+		
+		binVal = thing as bin(9,0);
+		charVal = thing as char(4);
+		dbcharVal = thing as dbchar(4);
+		hexVal = thing as hex(4);
+		mbcharVal = thing as mbchar(4);
+		numVal = thing as num(4);
+		decimalVal = thing as decimal(4,2);
+		unicodeVal = thing as unicode(4);
+		smallintVal = thing as smallint;
+		intVal = thing as int;
+		bigintVal = thing as bigInt;
+		floatVal = thing as float;
+		smallfloatVal = thing as smallfloat;
+		moneyVal = thing as money;
+		dateVal = thing as date;
+		timeVal = thing as time;
+		timestampVal = thing as timestamp;
+		interValVal = thing as interval("yyyyMM");
+		clobVal = thing as clob;
+		blobVal = thing as blob;
+		stringVal = thing as string;
+		diVal = thing as di;
+		recVar = thing as recDef;
+		
+		move thing as bin(9,0) to binVal;
+		move thing as char(4) to charVal;
+		move thing as dbchar(4) to dbcharVal;
+		move thing as hex(4) to hexVal;
+		move thing as mbchar(4) to mbcharVal;
+		move thing as num(4) to numVal;
+		move thing as decimal(4) to decimalVal;
+		move thing as unicode(4) to unicodeVal;
+		move thing as smallint to smallintVal;
+		move thing as int to intVal;
+		move thing as bigint to bigintVal;
+		move thing as float to floatVal;
+		move thing as smallfloat to smallfloatVal;
+		move thing as money to moneyVal;
+		move thing as date to dateVal;
+		move thing as time to timeVal;
+		move thing as timestamp to timestampVal;
+		move thing as interval("yyyymm") to interValVal;
+		move thing as clob to clobVal;
+		move thing as blob to blobVal;
+		move thing as string to stringVal;
+		move thing to thing2;
+		move thing as di to diVal;
+		move thing as recDef to recVar;
+		
+		//---------------------------------------------------------------------
+		// test isa for non-array types
+		
+		if( thing isa bin(9,2) ) end
+		if( thing isa char(10) ) end
+
+		if( thing isa dbchar(10) ) end
+		if( thing isa hex(2) ) end
+		if( thing isa mbchar(10) ) end
+		if( thing isa num(9,2) ) end
+		if( thing isa decimal(5,3) ) end
+		if( thing isa decimal(9,2) ) end
+		if( thing isa unicode(150) ) end		
+		if( thing isa smallint ) end
+		if( thing isa int ) end
+		if( thing isa bigint ) end
+		if( thing isa float ) end
+		if( thing isa smallfloat ) end
+		if( thing isa money ) end
+		if( thing isa money(5) ) end
+		if( thing isa date ) end
+		if( thing isa time ) end
+		if( thing isa timestamp ) end
+		if( thing isa interval("yyyyMM") ) end
+		if( thing isa clob ) end
+		if( thing isa blob ) end
+		if( thing isa string ) end
+		if( thing isa any ) end
+		if( thing isa di ) end
+		
+		//---------------------------------------------------------------------
+		// test isa for array types
+		
+		if( thing isa bin(9,2)[] ) end
+		if( thing isa char(10)[] ) end
+		if( thing isa dbchar(10)[] ) end
+		if( thing isa hex(2)[] ) end
+		 
+		if( thing isa mbchar(10) [] ) end
+		if( thing isa num(9,2) [] ) end
+		if( thing isa decimal(6,2) [] ) end
+		if( thing isa unicode(200) [] ) end
+		if( thing isa smallint[] ) end
+		if( thing isa int[] ) end
+		if( thing isa bigint[] ) end
+		if( thing isa float[] ) end
+		if( thing isa smallfloat[] ) end
+		if( thing isa money(5) [] ) end
+		if( thing isa date[] ) end
+		if( thing isa time[] ) end
+		if( thing isa timestamp[] ) end
+		if( thing isa interVal("yyyyMM")[] ) end
+		if( thing isa clob[] ) end
+		if( thing isa blob[] ) end
+		if( thing isa string[] ) end
+		if( thing isa di [] ) end
+		
+		//---------------------------------------------------------------------
+		// test isa boolean expression wherever boolean expressions can appear
+		
+		while( thing isa int ) end
+		case
+			when( thing isa int )
+		end
+		
+		//---------------------------------------------------------------------
+		// test any argument passed to function
+
+// Commented out for 6.0.0.1 restriction that Any typed arguments match only Any typed params.
+		
+//		testFunc( thing, thing, thing );
+//		testFunc( thing, thing, binVal );
+//		testFunc( thing, thing, charVal );
+//		testFunc( thing, thing, dbcharVal );
+//		testFunc( thing, thing, hexVal );
+//		testFunc( thing, thing, mbcharVal );
+//		testFunc( thing, thing, numVal );
+//		testFunc( thing, thing, decimalVal );
+//		testFunc( thing, thing, unicodeVal );
+//		testFunc( thing, thing, smallintVal );
+//		testFunc( thing, thing, intVal );
+//		testFunc( thing, thing, bigintVal );
+//		testFunc( thing, thing, floatVal );
+//		testFunc( thing, thing, smallfloatVal );
+//		testFunc( thing, thing, moneyVal );
+//		testFunc( thing, thing, dateVal );
+//		testFunc( thing, thing, timeVal );
+//		testFunc( thing, thing, timestampVal );
+//		testFunc( thing, thing, interValVal );
+//		testFunc( thing, thing, clobVal );
+//		testFunc( thing, thing, blobVal );
+//		testFunc( thing, thing, stringVal );
+//		testFunc( thing, thing, diVal );
+//		testFunc( thing, thing, recVar );
+		
+//		testFunc2( thing, thing, thing );
+		
+		//---------------------------------------------------------------------
+		// test any as function invocation result
+		
+		binVal = testFunc3() as bin(4);
+		charVal = testFunc3() as char(4);
+		dbcharVal = testFunc3() as dbchar(4);
+		hexVal = testFunc3() as hex(4);
+		mbcharVal = testFunc3() as mbchar(4);
+		numVal = testFunc3() as num(4);
+		decimalVal = testFunc3() as decimal(4);
+		unicodeVal = testFunc3() as unicode(4);
+		smallintVal = testFunc3() as smallint;
+		intVal = testFunc3() as int;
+		bigintVal = testFunc3() as bigint;
+		floatVal = testFunc3() as float;
+		smallfloatVal = testFunc3() as smallfloat;
+		moneyVal = testFunc3() as money;
+		dateVal = testFunc3() as date;
+		timeVal = testFunc3() as time;
+		timestampVal = testFunc3() as timestamp;
+		interValVal = testFunc3() as interval("yyyymm");
+		clobVal = testFunc3() as clob;
+		blobVal = testFunc3() as blob;
+		stringVal = testFunc3() as string;
+		diVal = testFunc3() as di;
+		thing = testFunc3() as recDef;
+		
+		//---------------------------------------------------------------------
+		// test "any" wherever variable can appear in a statement. According
+		// to the latest word, "any" typed variables are not allowed as the
+		// following:
+		//
+		// call argument, call parm, show argument, forward argument,
+		// transfer argument		
+		
+		set thing black, bold, protect, empty, blink, position, alarm, full;
+		thing = null;
+		for( thing to thing2 ) end
+		execute prepareStmtId using thing, thing2;
+		prepare prepareStmtId from thing;
+		if( thing as int < 4 ) end
+		if( thing as int + 4 > 9 ) end
+		if( thing matches "a" ) end
+		if( thing like "a" ) end
+		if( "A" matches thing ) end
+		if( "A" like thing ) end
+		if( thing as string + "a" == "b" ) end
+		if( "a" + thing == "b" ) end
+		if( 5 + (thing as int) == 4 ) end
+	end
+	
+	function testFunc( p1 char(12), p2 number, p3 any )	
+	end
+	
+	function testFunc2( p1 recDef, p2 int[], p3 int in )
+	end
+	
+	//-------------------------------------------------------------------------
+	// test any as return type
+	function testFunc3() returns(any)
+		binVal bin(9,2);
+		charVal char(10);
+		dbcharVal dbchar(10);
+		hexVal hex(2);
+		mbcharVal mbchar(10);
+		numVal num(9,2);
+		decimalVal decimal(9,2);
+		unicodeVal unicode(2);
+		smallintVal smallint;
+		intVal int;
+		bigintVal bigint;
+		floatVal float;
+		smallfloatVal smallfloat;
+		moneyVal money(9,2);
+		dateVal date;
+		timeVal time;
+		timestampVal timestamp;
+		interValVal interVal("yyyyMM");
+		clobVal clob;
+		blobVal blob;
+		stringVal string;
+		diVal di;
+		recVal recDef;
+		anyVal any;
+		
+		if( 1 == 1 ) return( binVal ); end
+		if( 1 == 1 ) return( charVal ); end
+		if( 1 == 1 ) return( dbcharVal ); end
+		if( 1 == 1 ) return( hexVal ); end
+		if( 1 == 1 ) return( mbcharVal ); end
+		if( 1 == 1 ) return( numVal ); end
+		if( 1 == 1 ) return( decimalVal ); end
+		if( 1 == 1 ) return( unicodeVal ); end
+		if( 1 == 1 ) return( smallintVal ); end
+		if( 1 == 1 ) return( intVal ); end
+		if( 1 == 1 ) return( bigintVal ); end
+		if( 1 == 1 ) return( floatVal ); end
+		if( 1 == 1 ) return( smallfloatVal ); end
+		if( 1 == 1 ) return( moneyVal ); end
+		if( 1 == 1 ) return( dateVal ); end
+		if( 1 == 1 ) return( timeVal ); end
+		if( 1 == 1 ) return( timestampVal ); end
+		if( 1 == 1 ) return( interValVal ); end
+		if( 1 == 1 ) return( clobVal ); end
+		if( 1 == 1 ) return( blobVal ); end
+		if( 1 == 1 ) return( stringVal ); end
+		if( 1 == 1 ) return( diVal ); end
+		if( 1 == 1 ) return( recVal ); end
+		
+		return( anyVal );		
+	end
+end

@@ -14,14 +14,10 @@ package org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql;
 import java.util.List;
 
 import org.eclipse.core.runtime.Status;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ForExpressionClause;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLDeclareStatementFactory;
-import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLGetByPositionStatementFactory;
-import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLStatementFactory;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -35,8 +31,7 @@ import org.eclipse.edt.ide.ui.internal.quickfix.proposals.AbstractSQLStatementPr
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IFileEditorInput;
 
-public class SQLStatementAddAssistProposal extends
-		AbstractSQLStatementProposal {
+public class SQLStatementAddAssistProposal extends AbstractSQLStatementProposal {
 	private IInvocationContext fContext;
 	
 	SQLStatementAddAssistProposal(String label, IEGLFile eglFile, int relevance, Image image, IEGLDocument document) {
@@ -54,46 +49,57 @@ public class SQLStatementAddAssistProposal extends
 	@Override
 	protected ASTRewrite getRewrite() {
 		try{
-			ASTRewrite rewrite = ASTRewrite.create(fContext.getFileAST());
+			final ASTRewrite rewrite = ASTRewrite.create(fContext.getFileAST());
 			
-			Statement sqlNode = AbstractSQLStatementProposal.SQLStatementFinder(fContext);
-			IEGLDocument document = fContext.getDocument();
-			final Node boundNode = getBoundASTNode(fContext);
-			
-			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, boundNode); 	
-			initialize();
-			
-			if (!isEGLStatementValidForAction()) {
-				sqlStatement = null;
-			}
-			
-			createDefault(info.getStatement());
-			
-			//Remove For clause within OPEN statement
-			if (info.getSqlStatementNode() == null && (sqlNode instanceof OpenStatement)) {
-				OpenStatement openStatement = (OpenStatement) sqlNode;
-				
-				ForExpressionClause nodeToRemove = null;
-				List openTargets = openStatement.getOpenTargets();
-				if(openTargets != null) {
-					for(Object target : openTargets) {
-						if(target instanceof ForExpressionClause) {
-							nodeToRemove = (ForExpressionClause) target;
-							break;
+			IBoundNodeProcessor processor = new IBoundNodeProcessor() {
+				@Override
+				public void processBoundNode(Node boundNode, Node containerNode) {
+					if (!(boundNode instanceof Statement)) {
+						return;
+					}
+					
+					Statement sqlNode = AbstractSQLStatementProposal.SQLStatementFinder(fContext);
+					IEGLDocument document = fContext.getDocument();
+					
+					info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, boundNode); 	
+					initialize();
+					
+					if (!isEGLStatementValidForAction()) {
+						sqlStatement = null;
+					}
+					
+					createDefault(info.getStatement());
+					
+					//Remove For clause within OPEN statement
+					if (info.getSqlStatementNode() == null && (sqlNode instanceof OpenStatement)) {
+						OpenStatement openStatement = (OpenStatement) sqlNode;
+						
+						ForExpressionClause nodeToRemove = null;
+						List openTargets = openStatement.getOpenTargets();
+						if(openTargets != null) {
+							for(Object target : openTargets) {
+								if(target instanceof ForExpressionClause) {
+									nodeToRemove = (ForExpressionClause) target;
+									break;
+								}
+							}
+						}
+						
+						if(nodeToRemove != null) {
+						    rewrite.removeNode(nodeToRemove);
 						}
 					}
+					
+					if (sqlStatement != null) {
+						rewrite.completeIOStatement( sqlNode, getStatementText());
+					} else {
+						sqlStatement = " " + CorrectionMessages.SQLExceptionMessage;
+						rewrite.completeIOStatement( sqlNode, sqlStatement );
+					}
 				}
-				
-				if(nodeToRemove != null)
-				      rewrite.removeNode(nodeToRemove);
-			}
+			};
 			
-			if (sqlStatement != null) {
-				rewrite.completeIOStatement( sqlNode, getStatementText());
-			} else {
-				sqlStatement = " " + CorrectionMessages.SQLExceptionMessage;
-				rewrite.completeIOStatement( sqlNode, sqlStatement );
-			}
+			bindASTNode(fContext, processor);
 			
 			return(rewrite);
 		} catch(Exception e){
@@ -103,24 +109,26 @@ public class SQLStatementAddAssistProposal extends
 		return null;
 	}
 	
-	public Node getBoundASTNode(IInvocationContext context) {
+	public void bindASTNode(IInvocationContext context, IBoundNodeProcessor processor) {
 		Statement sqlNode = AbstractSQLStatementProposal.SQLStatementFinder(context);
 		IEGLDocument document = context.getDocument();
-		final Node nodeType[] = new Node[] {null};
 		
 		if (sqlNode != null) {
 			IFileEditorInput fileInput = (IFileEditorInput)editor.getEditorInput();
-			getBoundASTNode(document, null, sqlNode.getOffset(), fileInput.getFile(), new IBoundNodeProcessor() {
-				public void processBoundNode(Node boundNode, Node containerNode) {
-					nodeType[0] = boundNode;
-				}
-			});
+			bindASTNode(document, null, sqlNode.getOffset(), fileInput.getFile(), processor);
 		}
-		
-		return nodeType[0];
 	}
 	
 	protected void createDefault(Statement statement) {
+		//TODO port these factories:
+		// getbykey
+		// getbykey forupdate
+		// delete
+		// open
+		// open forupdate
+		// replace
+		
+		
 		// Create the right type of factory to create the default SQL statement.
 		EGLSQLStatementFactory statementFactory = createSQLStatementFactory(statement);
 		sqlStatement = null;
@@ -136,8 +144,6 @@ public class SQLStatementAddAssistProposal extends
 			if (isAddIntoClause()) {
 				if (statementFactory instanceof EGLSQLDeclareStatementFactory) {
 					intoClause = ((EGLSQLDeclareStatementFactory) statementFactory).getIntoClause();
-				} else if (statementFactory instanceof EGLSQLGetByPositionStatementFactory) {
-					intoClause = ((EGLSQLGetByPositionStatementFactory) statementFactory).getIntoClause();
 				}
 			}
 			

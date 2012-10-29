@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.builder;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -43,29 +45,30 @@ public abstract class AbstractMarkerProblemRequestor extends DefaultProblemReque
         this.errorMsgCode = errorMsgCode;
     }
 
-	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+    @Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
  		if (severity == IMarker.SEVERITY_ERROR) {
  			setHasError(true);
  		}
     	try {
-			createMarker(startOffset, endOffset, severity, problemKind, inserts);
+			createMarker(startOffset, endOffset, severity, problemKind, inserts, bundle);
 		} catch (CoreException e) {
 			throw new BuildException(e);
 		}
     }
     
-    protected IMarker createMarker(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) throws CoreException {
-    	return createMarker(startOffset, endOffset, getLineNumberOfOffset(startOffset), severity, problemKind, inserts);
+    protected IMarker createMarker(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) throws CoreException {
+    	return createMarker(startOffset, endOffset, getLineNumberOfOffset(startOffset), severity, problemKind, inserts, bundle);
     }
 
-	protected IMarker createMarker(int startOffset, int endOffset, int lineNumber, int severity, int problemKind, String[] inserts) throws CoreException {
+	protected IMarker createMarker(int startOffset, int endOffset, int lineNumber, int severity, int problemKind, String[] inserts, ResourceBundle bundle) throws CoreException {
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setMaximumFractionDigits(0);
 		numberFormat.setMinimumIntegerDigits(3);
 		
 		IMarker marker = file.createMarker(getMarkerType(problemKind));
 		if(problemKind != -1) {
-            marker.setAttribute(IMarker.MESSAGE, getErrorMessageText(problemKind, startOffset, lineNumber, severity, getMessageFromBundle(problemKind, inserts)));
+            marker.setAttribute(IMarker.MESSAGE, getErrorMessageText(problemKind, startOffset, lineNumber, severity, getMessageFromBundle(problemKind, inserts, bundle)));
         }
         else {
             marker.setAttribute(IMarker.MESSAGE, getErrorMessageText(problemKind, startOffset, lineNumber, severity, inserts[0]));

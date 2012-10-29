@@ -25,14 +25,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Interface;
@@ -42,8 +40,6 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.ide.core.internal.utils.Util;
@@ -81,7 +77,7 @@ public abstract class AbstractFileInfoCreator {
 	}
 
 	protected AbstractProjectInfo projectInfo;
-	protected String[] packageName;
+	protected String packageName;
 	protected IFile file;
 	protected IDuplicatePartRequestor duplicatePartRequestor;
 	protected ASTFileInfo result = new ASTFileInfo();;
@@ -91,7 +87,7 @@ public abstract class AbstractFileInfoCreator {
 	private MessageDigest messageDigest;
 	private List errors = new ArrayList();
 	
-	public AbstractFileInfoCreator(AbstractProjectInfo projectInfo, String[] packageName, IFile file, File fileAST, IDuplicatePartRequestor duplicatePartRequestor){
+	public AbstractFileInfoCreator(AbstractProjectInfo projectInfo, String packageName, IFile file, File fileAST, IDuplicatePartRequestor duplicatePartRequestor){
 		
 		this.projectInfo = projectInfo;
 		this.packageName = packageName;
@@ -181,16 +177,6 @@ public abstract class AbstractFileInfoCreator {
 					return false;
 				}
 	
-				public boolean visit(DataTable dataTable) {
-					processPart(reader, dataTable, ITypeBinding.DATATABLE_BINDING, dataTable.getOffset(), dataTable.getLength());
-					return false;
-				}
-	
-				public boolean visit(FormGroup formGroup) {
-					processPart(reader, formGroup, ITypeBinding.FORMGROUP_BINDING, formGroup.getOffset(), formGroup.getLength());
-					return false;
-				}
-	
 				public boolean visit(Interface interfaceNode) {
 					processPart(reader, interfaceNode, ITypeBinding.INTERFACE_BINDING, interfaceNode.getOffset(), interfaceNode.getLength());
 					return false;
@@ -206,17 +192,13 @@ public abstract class AbstractFileInfoCreator {
 					return false;
 				}
 
-				public boolean visit(EGLClass eglClass) {
+				public boolean visit(Class eglClass) {
 					processPart(reader, eglClass, ITypeBinding.CLASS_BINDING, eglClass.getOffset(), eglClass.getLength());
 					return false;
 				}
 
 				public boolean visit(Record record) {
-					if(record.isFlexible()){
-						processPart(reader, record, ITypeBinding.FLEXIBLE_RECORD_BINDING, record.getOffset(), record.getLength());
-					}else{
-						processPart(reader, record, ITypeBinding.FIXED_RECORD_BINDING, record.getOffset(), record.getLength());
-					}
+					processPart(reader, record, ITypeBinding.FLEXIBLE_RECORD_BINDING, record.getOffset(), record.getLength());
 					return false;
 				}
 	
@@ -237,16 +219,6 @@ public abstract class AbstractFileInfoCreator {
 	
 				public boolean visit(Delegate delegate) {
 					processPart(reader, delegate, ITypeBinding.DELEGATE_BINDING, delegate.getOffset(), delegate.getLength());
-					return false;
-				}
-	
-				public boolean visit(TopLevelForm topLevelForm) {
-					processPart(reader, topLevelForm, ITypeBinding.FORM_BINDING, topLevelForm.getOffset(), topLevelForm.getLength());
-					return false;
-				}
-	
-				public boolean visit(TopLevelFunction topLevelFunction) {
-					processPart(reader, topLevelFunction, ITypeBinding.FUNCTION_BINDING, topLevelFunction.getOffset(), topLevelFunction.getLength());
 					return false;
 				}
 			});
@@ -271,7 +243,7 @@ public abstract class AbstractFileInfoCreator {
 	}
 	
 	private void processPart(ASTPartSourceReader reader, Part part, int partType, int sourceStart, int sourceLength) {
-		if(part.isGeneratable()){
+		if(partRequiresOnePerFile(part)){
 			validateGeneratablePart(part);
 		}
 		
@@ -345,5 +317,18 @@ public abstract class AbstractFileInfoCreator {
 	public IASTFileInfo getASTInfo() {
 		initializeASTInfo();
 		return result;		
+	}
+	
+	private boolean partRequiresOnePerFile(Part part) {
+		switch (part.getPartType()) {
+			case Part.PROGRAM:
+			case Part.LIBRARY:
+			case Part.CLASS:
+			case Part.HANDLER:
+			case Part.SERVICE:
+				return true;
+			default:
+				return false;
+		}
 	}
 }

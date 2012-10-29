@@ -1,0 +1,104 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record Employeeblob type SQLRecord
+	employeeID char(6);
+	empPic Blob;
+end
+
+Record Employeeclob type SQLRecord
+	employeeID char(6);
+	empPic clob;
+end
+
+Library blob_invalid
+
+	emp1 Employeeblob;
+	emp2 Employeeclob;
+	
+	function assignmentTest()
+		emp1.empPic = emp2.empPic;				// 1 blob and clob are not compatible types
+	end
+
+	function moveTest()
+		move emp1.empPic to emp2.empPic;		// 1 blob and clob are not compatible types
+	end
+	
+	function equalTest()
+		if(emp1.empPic == emp2.empPic)			// 1 emp1.empPic is not valid for compare to emp2.empPic
+		end
+		
+
+
+	end
+	
+	function blobFunctionArgAndReturnTest()
+		tempClob clob;
+
+		tempClob = blobFunctionReturnTestOne();		  // 1 clob and blob are not compatible types
+	end
+	
+	function blobFunctionArgTestHelperOne(parm1 Blob)
+	end
+	
+	function blobFunctionReturnTestOne()
+		returns(Blob);
+		
+		return (emp1.empPic);
+	end
+	
+	function blobProgramCallTest()
+		call blobProgramOne(emp2.empPic);		// 2 program blobProgramOne(blob) is not applicable for the arguments (clob)
+	end
+	
+	function blobFunctionTests()
+		mybigint bigint;
+		string1 string;
+
+
+		
+		mybigint = getBlobLen(emp2.empPic);							// 1 The argument emp2.empPic cannot be passed to the in or out parameter blobVariable of the function getBlobLen. The types clob and blob are not assignment compatible
+		
+
+
+		
+
+
+		
+
+
+		
+
+		
+		// new as of 10/14
+
+		
+		thing any;		
+
+		truncateBlob(thing, 100);                           // 0
+		loadBlobFromFile(thing, "C:\\Temp\\Employee1.jpg"); // 0
+		updateBlobToFile(thing, "C:\\Temp\\Employee1.jpg"); // 0
+		freeBlob(thing);                                    // 0
+		
+		myDict dictionary;
+		attachBlobToFile(myDict.thing, "C:\\Temp\\Employee1.jpg"); // 0
+		truncateBlob(myDict.thing, 100);                           // 0
+		loadBlobFromFile(myDict.thing, "C:\\Temp\\Employee1.jpg"); // 0
+		updateBlobToFile(myDict.thing, "C:\\Temp\\Employee1.jpg"); // 0
+		freeBlob(myDict.thing);                                    // 0
+	end
+end
+
+Program blobProgramOne (parm1 Blob)
+	
+	function main()
+	end
+end

@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR VAG
+
+Record MYDBPSBE type PSBRecord
+  iopcb  IO_PCBRecord  { @PCB { pcbType = PCBKind.TP } };
+  pcb0 IO_PCBRecord { redefines = iopcb};
+  ELAALT ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb1 ALT_PCBRecord { redefines = ELAALT };
+  ELAEXP ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  pcb2 ALT_PCBRecord { redefines = ELAEXP };
+
+  COURSE_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB }};
+  pcb3 DB_PCBRecord { redefines = COURSE_dbPCB };
+
+end  
+
+Program MYDBPXC type basicProgram 
+  (pcb3 DB_PCBRecord, 
+   pcb1 ALT_PCBRecord 
+  )
+  {@DLI { psb = psb, callInterface = DLICallInterfaceKind.CBLTDLI,
+          handleHardDLIErrors = no,
+          pcbParms = [null, pcb1, null, pcb3]  }  }
+
+  A int;
+  psb MYDBPSBE;
+
+  function main()
+    A = 0;
+  end 
+end

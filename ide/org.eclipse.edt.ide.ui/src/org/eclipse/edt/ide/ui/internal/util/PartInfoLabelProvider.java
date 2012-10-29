@@ -30,14 +30,9 @@ public class PartInfoLabelProvider extends LabelProvider {
 	
 	private static final Image EGLFILE_ICON= PluginImages.get(PluginImages.IMG_OBJS_EGLFILE);
 	private static final Image PGM_ICON= PluginImages.get(PluginImages.IMG_OBJS_PGM);
-	private static final Image PAGE_ICON= PluginImages.get(PluginImages.IMG_OBJS_PAGE);
 	private static final Image FUNCTION_ICON= PluginImages.get(PluginImages.IMG_OBJS_FUNCTION);
 	private static final Image RECORD_ICON= PluginImages.get(PluginImages.IMG_OBJS_RECORD);
-	private static final Image TABLE_ICON= PluginImages.get(PluginImages.IMG_OBJS_TABLE);
 	private static final Image LIBRARY_ICON= PluginImages.get(PluginImages.IMG_OBJS_LIBRARY);
-	private static final Image ITEM_ICON= PluginImages.get(PluginImages.IMG_OBJS_DATAITEM);
-	private static final Image FORM_ICON= PluginImages.get(PluginImages.IMG_OBJS_FORM);
-	private static final Image FORMGRP_ICON= PluginImages.get(PluginImages.IMG_OBJS_FORMGRP);
 	private static final Image PKG_ICON= PluginImages.get(PluginImages.IMG_OBJS_PACKAGE);
 	private static final Image SERVICE_ICON = PluginImages.get(PluginImages.IMG_OBJS_SERVICE);
 	private static final Image INTERFACE_ICON = PluginImages.get(PluginImages.IMG_OBJS_INTERFACE);
@@ -45,6 +40,7 @@ public class PartInfoLabelProvider extends LabelProvider {
 	private static final Image ENUM_ICON = PluginImages.get(PluginImages.IMG_OBJS_ENUMERATION);
 	private static final Image EXTERNAL_TYPE_ICON = PluginImages.get(PluginImages.IMG_OBJS_EXTERNALTYPE);
 	private static final Image DELEGATE_ICON = PluginImages.get(PluginImages.IMG_OBJS_DELEGATE);
+	private static final Image CLASS_ICON = PluginImages.get(PluginImages.IMG_OBJS_CLASS);
 	
 	private int fFlags;
 	
@@ -136,10 +132,6 @@ public class PartInfoLabelProvider extends LabelProvider {
 					case IEGLSearchConstants.PROGRAM: return PGM_ICON;
 					case IEGLSearchConstants.LIBRARY: return LIBRARY_ICON;
 					case IEGLSearchConstants.RECORD: return RECORD_ICON;
-					case IEGLSearchConstants.TABLE: return TABLE_ICON;
-					case IEGLSearchConstants.ITEM: return ITEM_ICON;
-					case IEGLSearchConstants.FORM: return FORM_ICON;
-					case IEGLSearchConstants.FORMGROUP: return FORMGRP_ICON;
 					case IEGLSearchConstants.FUNCTION: return FUNCTION_ICON	;
 					case IEGLSearchConstants.SERVICE: return SERVICE_ICON;
 					case IEGLSearchConstants.INTERFACE: return INTERFACE_ICON;
@@ -147,6 +139,7 @@ public class PartInfoLabelProvider extends LabelProvider {
 					case IEGLSearchConstants.HANDLER: return HANDLER_ICON;
 					case IEGLSearchConstants.ENUMERATION: return ENUM_ICON;
 					case IEGLSearchConstants.DELEGATE: return DELEGATE_ICON;
+					case IEGLSearchConstants.CLASS: return CLASS_ICON;
 					default: return null;
 				}
 			}

@@ -44,25 +44,25 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		// if this external type has an alias, then use it instead
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
 		if (annot != null) {
-			String shortName = part.getName();
+			String shortName = part.getCaseSensitiveName();
 			if (annot.getValue("externalName") != null && ((String) annot.getValue("externalName")).length() > 0) {
 				shortName = (String) annot.getValue("externalName");
 			}
 			String fullName = shortName;
 			if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
 				fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
-			} else if (part.getPackageName().length() > 0) {
-				fullName = part.getPackageName() + '.' + fullName;
+			} else if (part.getCaseSensitivePackageName().length() > 0) {
+				fullName = part.getCaseSensitivePackageName() + '.' + fullName;
 			}
 			CommonUtilities.processImport(fullName, ctx);
 		} else {
 			annot = part.getAnnotation("eglx.java.RootJavaObject");
 			if (annot != null) {
-				String fullName = part.getName();
+				String fullName = part.getCaseSensitiveName();
 				if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
 					fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
-				} else if (part.getPackageName().length() > 0) {
-					fullName = part.getPackageName() + '.' + fullName;
+				} else if (part.getCaseSensitivePackageName().length() > 0) {
+					fullName = part.getCaseSensitivePackageName() + '.' + fullName;
 				}
 				CommonUtilities.processImport(fullName, ctx);
 			} else {
@@ -112,14 +112,14 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		// if this external type has an alias, then use it instead
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
 		if (annot != null) {
-			String shortName = part.getName();
+			String shortName = part.getCaseSensitiveName();
 			if (annot.getValue("externalName") != null && ((String) annot.getValue("externalName")).length() > 0)
 				shortName = (String) annot.getValue("externalName");
 			String fullName = shortName;
 			if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0)
 				fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
-			else if (part.getPackageName().length() > 0)
-				fullName = part.getPackageName() + '.' + fullName;
+			else if (part.getCaseSensitivePackageName().length() > 0)
+				fullName = part.getCaseSensitivePackageName() + '.' + fullName;
 			// check to see if this is in the list of imported types. If it is, then we can use the short name.
 			List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
 			for (String imported : typesImported) {
@@ -133,11 +133,11 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		} else {
 			annot = part.getAnnotation("eglx.java.RootJavaObject");
 			if (annot != null) {
-				String fullName = part.getName();
+				String fullName = part.getCaseSensitiveName();
 				if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0)
 					fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
-				else if (part.getPackageName().length() > 0)
-					fullName = part.getPackageName() + '.' + fullName;
+				else if (part.getCaseSensitivePackageName().length() > 0)
+					fullName = part.getCaseSensitivePackageName() + '.' + fullName;
 				out.print(fullName);
 			} else
 				ctx.invoke(genPartName, part, ctx, out);

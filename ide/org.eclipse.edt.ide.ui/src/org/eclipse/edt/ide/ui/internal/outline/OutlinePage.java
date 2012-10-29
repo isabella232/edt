@@ -13,13 +13,6 @@ package org.eclipse.edt.ide.ui.internal.outline;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.edt.compiler.core.ast.DataTable;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
-import org.eclipse.edt.compiler.core.ast.Handler;
-import org.eclipse.edt.compiler.core.ast.Library;
-import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.Record;
-import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.model.document.IEGLModelChangeListener;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
@@ -381,26 +374,6 @@ public class OutlinePage extends ContentOutlinePage implements IEGLModelChangeLi
 		return super.getTreeViewer();
 	}
 
-	private boolean isGenerationValid(Object selectedElement) {
-		//BETH - need to validate correct list.  Better way to 
-		// ask (ie, can the EGL... part implement a method)? 
-		if (selectedElement == null)
-			return false;
-		else {
-			if (selectedElement instanceof Record) {
-				Record record = (Record) selectedElement;
-				return record.isGeneratable();
-				
-			} else
-				return (
-					selectedElement instanceof Program
-						|| selectedElement instanceof DataTable
-						|| selectedElement instanceof FormGroup
-						|| selectedElement instanceof Library
-						|| selectedElement instanceof Handler
-						|| selectedElement instanceof Service);
-		}
-	}
 	/**
 	* This implements {@link com.ibm.jface.action.IMenuListener} to help fill the context menus with contributions from the Edit menu.
 	*/

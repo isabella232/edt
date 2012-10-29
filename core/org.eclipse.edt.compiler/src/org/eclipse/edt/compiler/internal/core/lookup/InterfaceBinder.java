@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.InterfaceBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.InterfaceBindingCompletor;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -22,19 +22,29 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
  * @author demurray
  */
 
-public class InterfaceBinder extends DefaultBinder {
+public class InterfaceBinder extends FunctionContainerBinder {
 
-    private InterfaceBinding interfaceBinding;
+	private org.eclipse.edt.mof.egl.Interface interfaceBinding;
+    private IRPartBinding irBinding;
     private Scope scope;
 
-    public InterfaceBinder(InterfaceBinding interfaceBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(scope, interfaceBinding, dependencyRequestor, problemRequestor, compilerOptions);
-        this.interfaceBinding = interfaceBinding;
+    public InterfaceBinder(IRPartBinding irBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+    	super(irBinding.getIrPart(), scope, dependencyRequestor, problemRequestor, compilerOptions);
+        this.irBinding =irBinding;
+        this.interfaceBinding = (org.eclipse.edt.mof.egl.Interface)irBinding.getIrPart();
         this.scope = scope;
     }
 
     public boolean visit(Interface interfaceNode) {
-    	interfaceNode.accept(new InterfaceBindingCompletor(scope, interfaceBinding, dependencyRequestor, problemRequestor, compilerOptions));
+    	interfaceNode.accept(new InterfaceBindingCompletor(scope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
+    	
+        // The current scope only changes once the initial interfce binding is complete
+    	//TODO do we need an InterfaceScope?
+        currentScope = new FunctionContainerScope(currentScope, interfaceBinding);
+        
+        preprocessPart(interfaceNode);
+
+        // We will bind the rest of the interface now
 		return true;
 	}
 }

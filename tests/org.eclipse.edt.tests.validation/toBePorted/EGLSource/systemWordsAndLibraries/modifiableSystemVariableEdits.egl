@@ -1,0 +1,683 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/* For late 6.0.0.1 line item:
+ *
+ * 5. Allow system variables other than current date/time/timeStamp variables
+ *    to be specified as in arguments.  Allow modifiable variables to be specified
+ *    as InOut and Out arguments.   Make errorCode and the SQL variables modifiable.
+ */
+ 
+Program modifiableSystemVariableEdits
+	function main()
+		thing any;
+		dict dictionary;
+		
+		/* Qualified system variables */
+		
+		inParm(strLib.isoDateFormat);	// 0
+		outParm(strLib.isoDateFormat);	// 1 Constants
+		strLib.isoDateFormat = thing as string;	// 1 Constants
+		move thing as string to strLib.isoDateFormat;	// 1 Constants
+
+		inParm(strLib.usaDateFormat);	// 0
+		outParm(strLib.usaDateFormat);	// 1 Constants
+		strLib.usaDateFormat = thing as string;	// 1 Constants
+
+		inParm(strLib.eurDateFormat);	// 0
+		outParm(strLib.eurDateFormat);	// 1 Constants
+		strLib.eurDateFormat = thing as string;	// 1 Constants
+
+		inParm(strLib.jisDateFormat);	// 0
+		outParm(strLib.jisDateFormat);	// 1 Constants
+		strLib.jisDateFormat = thing as string;	// 1 Constants
+
+		inParm(strLib.isoTimeFormat);	// 0
+		outParm(strLib.isoTimeFormat);	// 1 Constants
+		strLib.isoTimeFormat = thing as string;	// 1 Constants
+
+		inParm(strLib.usaTimeFormat);	// 0
+		outParm(strLib.usaTimeFormat);	// 1 Constants
+		strLib.usaTimeFormat = thing as string;	// 1 Constants
+
+		inParm(strLib.eurTimeFormat);	// 0
+		outParm(strLib.eurTimeFormat);	// 1 Constants
+		strLib.eurTimeFormat = thing as string;	// 1 Constants
+
+		inParm(strLib.jisTimeFormat);	// 0
+		outParm(strLib.jisTimeFormat);	// 1 Constants
+		strLib.jisTimeFormat = thing as string;	// 1 Constants
+
+		inParm(strLib.db2TimeStampFormat);	// 0
+		outParm(strLib.db2TimeStampFormat);	// 1 Constants
+		strLib.db2TimeStampFormat = thing as string;	// 1 Constants
+
+		inParm(strLib.odbcTimeStampFormat);		// 0
+		outParm(strLib.odbcTimeStampFormat);	// 1 Constants
+		strLib.odbcTimeStampFormat = thing as string;		// 1 Constants
+
+		inParm(strLib.defaultDateFormat);	// 0
+		outParm(strLib.defaultDateFormat);	// 0
+		strLib.defaultDateFormat = thing as string;	// 0
+
+		inParm(strLib.defaultTimeFormat);	// 0
+		outParm(strLib.defaultTimeFormat);	// 0
+		strLib.defaultTimeFormat = thing as string;	// 0
+
+		inParm(strLib.defaultTimeStampFormat);	// 0
+		outParm(strLib.defaultTimeStampFormat);	// 0
+		strLib.defaultTimeStampFormat = thing as string;	// 0
+
+		inParm(strLib.defaultMoneyFormat);	// 0
+		outParm(strLib.defaultMoneyFormat);	// 0
+		strLib.defaultMoneyFormat = thing as string;	// 0
+
+		inParm(strLib.defaultNumericFormat);	// 0
+		outParm(strLib.defaultNumericFormat);	// 0
+		strLib.defaultNumericFormat = thing as string;	// 0
+
+		inDictParm(sysLib.currentException);	// 0
+		outDictParm(sysLib.currentException);	// 0
+		sysLib.currentException = dict;	// 0
+
+		inParm(sysVar.arrayIndex);	// 0
+		outParm(sysVar.arrayIndex);	// 0
+		sysVar.arrayIndex = thing as int;	// 0
+
+		inParm(sysVar.callConversionTable);	// 0
+		outParm(sysVar.callConversionTable);	// 0
+		sysVar.callConversionTable = thing as char(8);	// 0
+
+		inParm(sysVar.sessionId);	// 0
+		outParm(sysVar.sessionId);	// 1 read-only
+		sysVar.sessionId = thing as int;	// 1 read-only
+
+		inParm(sysVar.errorCode);	// 0
+		outParm(sysVar.errorCode);	// 0
+		sysVar.errorCode = thing as int;	// 0
+
+		inParm(sysVar.formConversionTable);		// 0
+		outParm(sysVar.formConversionTable);	// 0
+		sysVar.formConversionTable = thing as char(8);		// 0
+
+		inParm(sysVar.overflowIndicator);	// 0
+		outParm(sysVar.overflowIndicator);	// 0
+		sysVar.overflowIndicator = thing as int;	// 0
+
+		inParm(sysVar.remoteSystemId);	// 0
+		outParm(sysVar.remoteSystemId);	// 0
+		sysVar.remoteSystemId = thing as int;	// 0
+
+		inParm(sysVar.returnCode);	// 0
+		outParm(sysVar.returnCode);	// 0
+		sysVar.returnCode = thing as int;	// 0
+
+		inParm(sysVar.conversationId);		// 0
+		outParm(sysVar.conversationId);		// 1 read-only
+		sysVar.conversationId = thing as int;		// 1 read-only
+
+		inParm(sysVar.sqlData.sqlca);	// 0
+		outHexParm(sysVar.sqlData.sqlca);	// 0
+		sysVar.sqlData.sqlca = thing as hex(8);	// 0
+
+		inParm(sysVar.sqlData.sqlcode);		// 0
+		outParm(sysVar.sqlData.sqlcode);	// 0
+		sysVar.sqlData.sqlcode = thing as int;		// 0
+
+		inParm(sysVar.sqlData.sqlState);	// 0
+		outParm(sysVar.sqlData.sqlState);	// 0
+		sysVar.sqlData.sqlState = thing as int;	// 0
+
+		inParm(sysVar.systemType);		// 0
+		outParm(sysVar.systemType);		// 1 read-only
+		sysVar.systemType = thing as int;		// 1 read-only
+
+		inParm(sysVar.terminalId);		// 0
+		outParm(sysVar.terminalId);		// 1 read-only
+		sysVar.terminalId = thing as int;		// 1 read-only
+
+		inParm(sysVar.transactionId);	// 0
+		outParm(sysVar.transactionId);	// 0
+		sysVar.transactionId = thing as int;	// 0
+
+		inParm(sysVar.transferName);	// 0
+		outParm(sysVar.transferName);	// 0
+		sysVar.transferName = thing as int;	// 0
+
+		inParm(sysVar.userId);		// 0
+		outParm(sysVar.userId);		// 1 read-only
+		sysVar.userId = thing as int;		// 1 read-only
+
+		inParm(consoleLib.key_accept);	// 0
+		outParm(consoleLib.key_accept);	// 0
+		consoleLib.key_accept = thing as int;	// 0
+
+		inParm(consoleLib.key_deleteLine);	// 0
+		outParm(consoleLib.key_deleteLine);	// 0
+		consoleLib.key_deleteLine = thing as int;	// 0
+
+		inParm(consoleLib.key_insertLine);	// 0
+		outParm(consoleLib.key_insertLine);	// 0
+		consoleLib.key_insertLine = thing as int;	// 0
+
+		inParm(consoleLib.key_pageDown);	// 0
+		outParm(consoleLib.key_pageDown);	// 0
+		consoleLib.key_pageDown = thing as int;	// 0
+
+		inParm(consoleLib.key_pageUp);	// 0
+		outParm(consoleLib.key_pageUp);	// 0
+		consoleLib.key_pageUp = thing as int;	// 0
+
+		inParm(consoleLib.key_help);	// 0
+		outParm(consoleLib.key_help);	// 0
+		consoleLib.key_help = thing as int;	// 0
+
+		inParm(consoleLib.key_interrupt);	// 0
+		outParm(consoleLib.key_interrupt);	// 0
+		consoleLib.key_interrupt = thing as int;	// 0
+
+		inParm(consoleLib.key_quit);	// 0
+		outParm(consoleLib.key_quit);	// 0
+		consoleLib.key_quit = thing as int;	// 0
+
+		inParm(consoleLib.activeForm as int);	// 0
+		outParm(consoleLib.activeForm as int as int);	// 0
+		consoleLib.activeForm = thing as int;	// 0
+
+		inParm(consoleLib.errorWindowVisible);	// 0
+		outBooleanParm(consoleLib.errorWindowVisible);	// 0
+		consoleLib.errorWindowVisible = thing as boolean;	// 0
+
+		inParm(consoleLib.commentLine);		// 0
+		outParm(consoleLib.commentLine);	// 0
+		consoleLib.commentLine = thing as int;		// 0
+
+		inParm(consoleLib.errorLine);	// 0
+		outParm(consoleLib.errorLine);	// 0
+		consoleLib.errorLine = thing as int;	// 0
+
+		inParm(consoleLib.formLine);	// 0
+		outParm(consoleLib.formLine);	// 0
+		consoleLib.formLine = thing as int;	// 0
+
+		inParm(consoleLib.menuLine);	// 0
+		outParm(consoleLib.menuLine);	// 0
+		consoleLib.menuLine = thing as int;	// 0
+
+		inParm(consoleLib.messageLine);		// 0
+		outParm(consoleLib.messageLine);	// 0
+		consoleLib.messageLine = thing as int;		// 0
+
+		inParm(consoleLib.promptLine);	// 0
+		outParm(consoleLib.promptLine);	// 0
+		consoleLib.promptLine = thing as int;	// 0
+
+		inParm(consoleLib.interruptRequested);	// 0
+		outBooleanParm(consoleLib.interruptRequested);	// 0
+		consoleLib.interruptRequested = thing as boolean;	// 0
+
+		inParm(consoleLib.quitRequested);	// 0
+		outBooleanParm(consoleLib.quitRequested);	// 0
+		consoleLib.quitRequested = thing as boolean;	// 0
+
+		inParm(consoleLib.messageResource);		// 0
+		outParm(consoleLib.messageResource);	// 0
+		consoleLib.messageResource = thing as int;		// 0
+
+		inParm(consoleLib.cursorWrap);	// 0
+		outBooleanParm(consoleLib.cursorWrap);	// 0
+		consoleLib.cursorWrap = thing as boolean;	// 0
+
+		inParm(consoleLib.definedFieldOrder);	// 0
+		outBooleanParm(consoleLib.definedFieldOrder);	// 0
+		consoleLib.definedFieldOrder = thing as boolean;	// 0
+
+		inParm(consoleLib.deferInterrupt);	// 0
+		outBooleanParm(consoleLib.deferInterrupt);	// 0
+		consoleLib.deferInterrupt = thing as boolean;	// 0
+
+		inParm(consoleLib.deferQuit);	// 0
+		outBooleanParm(consoleLib.deferQuit);	// 0
+		consoleLib.deferQuit = thing as boolean;	// 0
+
+		inParm(consoleLib.sqlInterrupt);	// 0
+		outBooleanParm(consoleLib.sqlInterrupt);	// 0
+		consoleLib.sqlInterrupt = thing as boolean;	// 0
+
+		inParm(vgVar.currentGregorianDate);		// 0
+		outParm(vgVar.currentGregorianDate);	// 1 read-only
+		vgVar.currentGregorianDate = thing as int;		// 1 read-only
+
+		inParm(vgVar.currentFormattedGregorianDate);	// 0
+		outParm(vgVar.currentFormattedGregorianDate);	// 1 read-only
+		vgVar.currentFormattedGregorianDate = thing as int;	// 1 read-only
+
+		inParm(vgVar.currentJulianDate);	// 0
+		outParm(vgVar.currentJulianDate);	// 1 read-only
+		vgVar.currentJulianDate = thing as int;	// 1 read-only
+
+		inParm(vgVar.currentFormattedJulianDate);	// 0
+		outParm(vgVar.currentFormattedJulianDate);	// 1 read-only
+		vgVar.currentFormattedJulianDate = thing as int;	// 1 read-only
+
+		inParm(vgVar.currentShortGregorianDate);	// 0
+		outParm(vgVar.currentShortGregorianDate);	// 1 read-only
+		vgVar.currentShortGregorianDate = thing as int;	// 1 read-only
+
+		inParm(vgVar.currentShortJulianDate);	// 0
+		outParm(vgVar.currentShortJulianDate);	// 1 read-only
+		vgVar.currentShortJulianDate = thing as int;	// 1 read-only
+
+		inParm(vgVar.currentFormattedTime);		// 0
+		outParm(vgVar.currentFormattedTime);	// 1 read-only
+		vgVar.currentFormattedTime = thing as int;		// 1 read-only
+
+		inParm(vgVar.handleHardIOErrors);	// 0
+		outParm(vgVar.handleHardIOErrors);	// 0
+		vgVar.handleHardIOErrors = thing as int;	// 0
+
+		inParm(vgVar.handleOverflow);	// 0
+		outParm(vgVar.handleOverflow);	// 0
+		vgVar.handleOverflow = thing as int;	// 0
+
+		inParm(vgVar.handleSysLibraryErrors);	// 0
+		outParm(vgVar.handleSysLibraryErrors);	// 0
+		vgVar.handleSysLibraryErrors = thing as int;	// 0
+
+		inParm(vgVar.mqConditionCode);	// 0
+		outParm(vgVar.mqConditionCode);	// 0
+		vgVar.mqConditionCode = thing as int;	// 0
+
+		inParm(sysVar.sqlData.sqlerrd);	// 0
+
+		sysVar.sqlData.sqlerrd = thing;	// 0
+
+		inParm(sysVar.sqlData.sqlerrmc);		// 0
+		outParm(sysVar.sqlData.sqlerrmc);	// 0
+		sysVar.sqlData.sqlerrmc = thing as int;		// 0
+
+		inParm(sysVar.sqlData.sqlwarn);	// 0
+
+		sysVar.sqlData.sqlwarn = thing;	// 0
+
+		inParm(vgVar.sqlIsolationLevel);	// 0
+		outParm(vgVar.sqlIsolationLevel);	// 0
+		vgVar.sqlIsolationLevel = thing as int;	// 0
+
+		inParm(vgVar.systemGregorianDateFormat);	// 0
+		outParm(vgVar.systemGregorianDateFormat);	// 1 read-only
+		vgVar.systemGregorianDateFormat = thing as int;	// 1 read-only
+
+		inParm(vgVar.systemJulianDateFormat);	// 0
+		outParm(vgVar.systemJulianDateFormat);	// 1 read-only
+		vgVar.systemJulianDateFormat = thing as int;	// 1 read-only
+
+		inParm(converseVar.eventKey);	// 0
+		outParm(converseVar.eventKey);	// 1 read-only
+		converseVar.eventKey = thing as int;	// 1 read-only
+
+		inParm(converseVar.printerAssociation);		// 0
+		outParm(converseVar.printerAssociation);	// 0
+		converseVar.printerAssociation = thing as int;		// 0
+
+		inParm(converseVar.segmentedMode);	// 0
+		outParm(converseVar.segmentedMode);	// 0
+		converseVar.segmentedMode = thing as int;	// 0
+
+		inParm(converseVar.validationMsgNum);	// 0
+		outParm(converseVar.validationMsgNum);	// 0
+		converseVar.validationMsgNum = thing as int;	// 0
+
+		inParm(converseVar.commitOnConverse);	// 0
+		outParm(converseVar.commitOnConverse);	// 0
+		converseVar.commitOnConverse = thing as int;	// 0
+		
+		/* Unqualified system variables */
+		
+		inParm(isoDateFormat);	// 0
+		outParm(isoDateFormat);	// 1 Constants
+		isoDateFormat = thing as int;	// 1 Constants
+
+		inParm(usaDateFormat);	// 0
+		outParm(usaDateFormat);	// 1 Constants
+		usaDateFormat = thing as int;	// 1 Constants
+
+		inParm(eurDateFormat);	// 0
+		outParm(eurDateFormat);	// 1 Constants
+		eurDateFormat = thing as int;	// 1 Constants
+
+		inParm(jisDateFormat);	// 0
+		outParm(jisDateFormat);	// 1 Constants
+		jisDateFormat = thing as int;	// 1 Constants
+
+		inParm(isoTimeFormat);	// 0
+		outParm(isoTimeFormat);	// 1 Constants
+		isoTimeFormat = thing as int;	// 1 Constants
+
+		inParm(usaTimeFormat);	// 0
+		outParm(usaTimeFormat);	// 1 Constants
+		usaTimeFormat = thing as int;	// 1 Constants
+
+		inParm(eurTimeFormat);	// 0
+		outParm(eurTimeFormat);	// 1 Constants
+		eurTimeFormat = thing as int;	// 1 Constants
+
+		inParm(jisTimeFormat);	// 0
+		outParm(jisTimeFormat);	// 1 Constants
+		jisTimeFormat = thing as int;	// 1 Constants
+
+		inParm(db2TimeStampFormat);		// 0
+		outParm(db2TimeStampFormat);	// 1 Constants
+		db2TimeStampFormat = thing as int;		// 1 Constants
+
+		inParm(odbcTimeStampFormat);	// 0
+		outParm(odbcTimeStampFormat);	// 1 Constants
+		odbcTimeStampFormat = thing as int;	// 1 Constants
+
+		inParm(defaultDateFormat);	// 0
+		outParm(defaultDateFormat);	// 0
+		defaultDateFormat = thing as int;	// 0
+
+		inParm(defaultTimeFormat);	// 0
+		outParm(defaultTimeFormat);	// 0
+		defaultTimeFormat = thing as int;	// 0
+
+		inParm(defaultTimeStampFormat);		// 0
+		outParm(defaultTimeStampFormat);	// 0
+		defaultTimeStampFormat = thing as int;		// 0
+
+		inParm(defaultMoneyFormat);		// 0
+		outParm(defaultMoneyFormat);	// 0
+		defaultMoneyFormat = thing as int;		// 0
+
+		inParm(defaultNumericFormat);	// 0
+		outParm(defaultNumericFormat);	// 0
+		defaultNumericFormat = thing as int;	// 0
+
+		inDictParm(currentException);	// 0
+		outDictParm(currentException);	// 0
+		currentException = dict;		// 0
+
+		inParm(arrayIndex);		// 0
+		outParm(arrayIndex);	// 0
+		arrayIndex = thing as int;		// 0
+
+		inParm(callConversionTable);	// 0
+		outParm(callConversionTable);	// 0
+		callConversionTable = thing as int;	// 0
+
+		inParm(sessionId);	// 0
+		outParm(sessionId);	// 1 read-only
+		sessionId = thing as int;	// 1 read-only
+
+		inParm(errorCode);	// 0
+		outParm(errorCode);	// 0
+		errorCode = thing as int;	// 0
+
+		inParm(formConversionTable);	// 0
+		outParm(formConversionTable);	// 0
+		formConversionTable = thing as int;	// 0
+
+		inParm(overflowIndicator);	// 0
+		outParm(overflowIndicator);	// 0
+		overflowIndicator = thing as int;	// 0
+
+		inParm(remoteSystemId);		// 0
+		outParm(remoteSystemId);	// 0
+		remoteSystemId = thing as int;		// 0
+
+		inParm(returnCode);		// 0
+		outParm(returnCode);	// 0
+		returnCode = thing as int;		// 0
+
+		inParm(conversationId);		// 0
+		outParm(conversationId);	// 1 read-only
+		conversationId = thing as int;		// 1 read-only
+
+		inParm(sysVar.sqlData.sqlca);	// 0
+		outHexParm(sysVar.sqlData.sqlca);	// 0
+		sysVar.sqlData.sqlca = thing as hex(8);	// 0
+
+		inParm(sysVar.sqlData.sqlcode);	// 0
+		outParm(sysVar.sqlData.sqlcode);	// 0
+		sysVar.sqlData.sqlcode = thing as int;	// 0
+
+		inParm(sysVar.sqlData.sqlState);	// 0
+		outParm(sysVar.sqlData.sqlState);	// 0
+		sysVar.sqlData.sqlState = thing as int;	// 0
+
+		inParm(systemType);		// 0
+		outParm(systemType);	// 1 read-only
+		systemType = thing as int;		// 1 read-only
+
+		inParm(terminalId);		// 0
+		outParm(terminalId);	// 1 read-only
+		terminalId = thing as int;		// 1 read-only
+
+		inParm(transactionId);	// 0
+		outParm(transactionId);	// 0
+		transactionId = thing as int;	// 0
+
+		inParm(transferName);	// 0
+		outParm(transferName);	// 0
+		transferName = thing as int;	// 0
+
+		inParm(userId);		// 0
+		outParm(userId);	// 1 read-only
+		userId = thing as int;		// 1 read-only
+
+		inParm(key_accept);		// 0
+		outParm(key_accept);	// 0
+		key_accept = thing as int;		// 0
+
+		inParm(key_deleteLine);		// 0
+		outParm(key_deleteLine);	// 0
+		key_deleteLine = thing as int;		// 0
+
+		inParm(key_insertLine);		// 0
+		outParm(key_insertLine);	// 0
+		key_insertLine = thing as int;		// 0
+
+		inParm(key_pageDown);	// 0
+		outParm(key_pageDown);	// 0
+		key_pageDown = thing as int;	// 0
+
+		inParm(key_pageUp);		// 0
+		outParm(key_pageUp);	// 0
+		key_pageUp = thing as int;		// 0
+
+		inParm(key_help);	// 0
+		outParm(key_help);	// 0
+		key_help = thing as int;	// 0
+
+		inParm(key_interrupt);	// 0
+		outParm(key_interrupt);	// 0
+		key_interrupt = thing as int;	// 0
+
+		inParm(key_quit);	// 0
+		outParm(key_quit);	// 0
+		key_quit = thing as int;	// 0
+
+		inParm(activeForm);		// 0
+		outParm(activeForm as int);	// 0
+		activeForm = thing as int;		// 0
+
+		inParm(errorWindowVisible);		// 0
+		outBooleanParm(errorWindowVisible);	// 0
+		errorWindowVisible = thing as boolean;		// 0
+
+		inParm(commentLine);	// 0
+		outParm(commentLine);	// 0
+		commentLine = thing as int;	// 0
+
+		inParm(errorLine);	// 0
+		outParm(errorLine);	// 0
+		errorLine = thing as int;	// 0
+
+		inParm(formLine);	// 0
+		outParm(formLine);	// 0
+		formLine = thing as int;	// 0
+
+		inParm(menuLine);	// 0
+		outParm(menuLine);	// 0
+		menuLine = thing as int;	// 0
+
+		inParm(messageLine);	// 0
+		outParm(messageLine);	// 0
+		messageLine = thing as int;	// 0
+
+		inParm(promptLine);		// 0
+		outParm(promptLine);	// 0
+		promptLine = thing as int;		// 0
+
+		inParm(interruptRequested);		// 0
+		outBooleanParm(interruptRequested);	// 0
+		interruptRequested = thing as boolean;		// 0
+
+		inParm(quitRequested);	// 0
+		outBooleanParm(quitRequested);	// 0
+		quitRequested = thing as boolean;	// 0
+
+		inParm(messageResource);	// 0
+		outParm(messageResource);	// 0
+		messageResource = thing as int;	// 0
+
+		inParm(cursorWrap);		// 0
+		outBooleanParm(cursorWrap);	// 0
+		cursorWrap = thing as boolean;		// 0
+
+		inParm(definedFieldOrder);	// 0
+		outBooleanParm(definedFieldOrder);	// 0
+		definedFieldOrder = thing as boolean;	// 0
+
+		inParm(deferInterrupt);		// 0
+		outBooleanParm(deferInterrupt);	// 0
+		deferInterrupt = thing as boolean;		// 0
+
+		inParm(deferQuit);	// 0
+		outBooleanParm(deferQuit);	// 0
+		deferQuit = thing as boolean;	// 0
+
+		inParm(sqlInterrupt);	// 0
+		outBooleanParm(sqlInterrupt);	// 0
+		sqlInterrupt = thing as boolean;	// 0
+
+		inParm(currentGregorianDate);	// 0
+		outParm(currentGregorianDate);	// 1 read-only
+		currentGregorianDate = thing as int;	// 1 read-only
+
+		inParm(currentFormattedGregorianDate);	// 0
+		outParm(currentFormattedGregorianDate);	// 1 read-only
+		currentFormattedGregorianDate = thing as int;	// 1 read-only
+
+		inParm(currentJulianDate);	// 0
+		outParm(currentJulianDate);	// 1 read-only
+		currentJulianDate = thing as int;	// 1 read-only
+
+		inParm(currentFormattedJulianDate);		// 0
+		outParm(currentFormattedJulianDate);	// 1 read-only
+		currentFormattedJulianDate = thing as int;		// 1 read-only
+
+		inParm(currentShortGregorianDate);	// 0
+		outParm(currentShortGregorianDate);	// 1 read-only
+		currentShortGregorianDate = thing as int;	// 1 read-only
+
+		inParm(currentShortJulianDate);		// 0
+		outParm(currentShortJulianDate);	// 1 read-only
+		currentShortJulianDate = thing as int;		// 1 read-only
+
+		inParm(currentFormattedTime);	// 0
+		outParm(currentFormattedTime);	// 1 read-only
+		currentFormattedTime = thing as int;	// 1 read-only
+
+		inParm(handleHardIOErrors);		// 0
+		outParm(handleHardIOErrors);	// 0
+		handleHardIOErrors = thing as int;		// 0
+
+		inParm(handleOverflow);		// 0
+		outParm(handleOverflow);	// 0
+		handleOverflow = thing as int;		// 0
+
+		inParm(handleSysLibraryErrors);		// 0
+		outParm(handleSysLibraryErrors);	// 0
+		handleSysLibraryErrors = thing as int;		// 0
+
+		inParm(mqConditionCode);	// 0
+		outParm(mqConditionCode);	// 0
+		mqConditionCode = thing as int;	// 0
+
+		inParm(sysVar.sqlData.sqlerrd);	// 0
+
+		sysVar.sqlData.sqlerrd = thing;	// 0
+
+		inParm(sysVar.sqlData.sqlerrmc);	// 0
+		outParm(sysVar.sqlData.sqlerrmc);	// 0
+		sysVar.sqlData.sqlerrmc = thing as int;	// 0
+
+		inParm(sysVar.sqlData.sqlwarn);	// 0
+
+		sysVar.sqlData.sqlwarn = thing;	// 0
+
+		inParm(sqlIsolationLevel);	// 0
+		outParm(sqlIsolationLevel);	// 0
+		sqlIsolationLevel = thing as int;	// 0
+
+		inParm(systemGregorianDateFormat);	// 0
+		outParm(systemGregorianDateFormat);	// 1 read-only
+		systemGregorianDateFormat = thing as int;	// 1 read-only
+
+		inParm(systemJulianDateFormat);		// 0
+		outParm(systemJulianDateFormat);	// 1 read-only
+		systemJulianDateFormat = thing as int;		// 1 read-only
+
+		inParm(converseVar.eventKey);	// 0
+		outParm(converseVar.eventKey);	// 1 read-only
+		converseVar.eventKey = thing as int;	// 1 read-only
+
+		inParm(converseVar.printerAssociation);		// 0
+		outParm(converseVar.printerAssociation);	// 0
+		converseVar.printerAssociation = thing as int;		// 0
+
+		inParm(converseVar.segmentedMode);	// 0
+		outParm(converseVar.segmentedMode);	// 0
+		converseVar.segmentedMode = thing as int;	// 0
+
+		inParm(converseVar.validationMsgNum);	// 0
+		outParm(converseVar.validationMsgNum);	// 0
+		converseVar.validationMsgNum = thing as int;	// 0
+
+		inParm(converseVar.commitOnConverse);	// 0
+		outParm(converseVar.commitOnConverse);	// 0
+		converseVar.commitOnConverse = thing as int;	// 0
+	end
+	
+	function inParm( parm any in )
+	end
+	
+	function outParm( parm int out )
+	end
+	
+	function outHexParm( parm hex(4) out )
+	end
+	
+	function outBooleanParm( parm boolean out )
+	end
+	
+	function inoutParm( parm any inout )
+	end
+	
+	function inDictParm( parm dictionary in )
+	end
+	
+	function outDictParm( parm dictionary out )
+	end
+end

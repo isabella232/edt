@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+dataTable BooleanDataTable type BasicTable
+	
+	10 anInt int;
+	10 aChar char(1);
+	10 aBoolean boolean;
+	
+	{contents = 
+		[
+			[ 1,"A",true ],		//0
+			[ 2,"B",false ],	//0
+			[ yes, "C", true],	//1
+			[ 3, no, true],		//1
+			[ 4,"D","yes"],		//1
+			[ 5,"E",0]			//1
+		]}
+end	

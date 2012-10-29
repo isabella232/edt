@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.core.internal.lookup;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -26,12 +27,14 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.IWorkingCopyBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.serialization.ObjectStore;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathEntry, IWorkingCopyBuildPathEntry{
 	ZipFileBindingBuildPathEntry zipEntry;
@@ -46,7 +49,7 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 	}
 
 	@Override
-	public IPartOrigin getPartOrigin(String[] packageName, String partName) {
+	public IPartOrigin getPartOrigin(String packageName, String partName) {
 		IPartOrigin partOrigin = null;
 		try {
 			Part part = findPart(packageName, partName);
@@ -55,7 +58,7 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 			String irName = "";
 			if(part != null) {
 				sourceName = part.eGet("filename").toString();
-				irName = IRFileNameUtility.toIRFileName(part.getName());
+				irName = IRFileNameUtility.toIRFileName(part.getCaseSensitiveName());
 			} else {
 				ZipFile zipFile = null;
 				try {
@@ -64,6 +67,18 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 						  ZipEntry ze = zipFile.getEntry(partName); 
 						  if(ze != null) {
 							  sourceName = partName;
+						  }
+						  else if (Util.isEGLFileName(partName)) {
+							  // Sometimes the case-insensitive file is passed in, which won't find the entry via zipFile.getEntry().
+							  // We must manually check in an "interned" way.
+							  Enumeration<? extends ZipEntry> entries = zipFile.entries();
+							  while (entries.hasMoreElements()) {
+								  ZipEntry entry = entries.nextElement();
+								  if (NameUtile.equals(partName, NameUtile.getAsName(entry.getName()))) {
+									  sourceName = entry.getName();
+									  break;
+								  }
+							  }
 						  }
 					  }
 					  zipFile.close(); 
@@ -108,17 +123,17 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 	}
 
 	@Override
-	public IPartBinding getPartBinding(String[] packageName, String partName) {
+	public IPartBinding getPartBinding(String packageName, String partName) {
 		return zipEntry.getPartBinding(packageName, partName);
 	}
 
 	@Override
-	public boolean hasPackage(String[] packageName) {
+	public boolean hasPackage(String packageName) {
 		return zipEntry.hasPackage(packageName);
 	}
 
 	@Override
-	public int hasPart(String[] packageName, String partName) {
+	public int hasPart(String packageName, String partName) {
 		int typeBindingKind = zipEntry.hasPart(packageName, partName);
 		if(ITypeBinding.NOT_FOUND_BINDING == typeBindingKind) {
 			ZipFile zipFile = null;
@@ -128,6 +143,18 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 					  ZipEntry ze = zipFile.getEntry(partName); 
 					  if(ze != null) {
 						  typeBindingKind = ITypeBinding.FILE_BINDING;
+					  }
+					  else if (Util.isEGLFileName(partName)) {
+						  // Sometimes the case-insensitive file is passed in, which won't find the entry via zipFile.getEntry().
+						  // We must manually check in an "interned" way.
+						  Enumeration<? extends ZipEntry> entries = zipFile.entries();
+						  while (entries.hasMoreElements()) {
+							  ZipEntry entry = entries.nextElement();
+							  if (NameUtile.equals(partName, NameUtile.getAsName(entry.getName()))) {
+								  typeBindingKind = ITypeBinding.FILE_BINDING;
+								  break;
+							  }
+						  }
 					  }
 				  }
 				  zipFile.close(); 
@@ -143,14 +170,8 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 	}
 
 	@Override
-	public IPartBinding getCachedPartBinding(String[] packageName,
-			String partName) {
+	public IPartBinding getCachedPartBinding(String packageName, String partName) {
 		return zipEntry.getCachedPartBinding(packageName, partName);
-	}
-
-	@Override
-	public void addPartBindingToCache(IPartBinding partBinding) {
-		zipEntry.addPartBindingToCache(partBinding);
 	}
 
 	@Override
@@ -158,9 +179,16 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 		return zipEntry.getObjectStores();
 	}
 
+	public ObjectStore getObjectStore() {
+		return zipEntry.getObjectStore();
+	}
+	
+	public org.eclipse.edt.mof.serialization.IEnvironment getIREnviornment() {
+		return getObjectStore().getEnvironment();
+	}
+
 	@Override
-	public Part findPart(String[] packageName, String name)
-			throws PartNotFoundException {
+	public Part findPart(String packageName, String name) throws PartNotFoundException {
 		return zipEntry.findPart(packageName, name);
 	}
 
@@ -194,4 +222,9 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 		return zipEntry.getAllKeysFromPkg(pkg, includeSubPkgs);
 	}
 	
+	@Override
+	public String toString() {
+		// for easier debugging
+		return zipEntry.getObjectStore().toString();
+	}
 }

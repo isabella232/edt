@@ -1,0 +1,27 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//validateDecl:
+//1 Only simple, primitive, non-array types may be used as data item types. {6599, DATA_ITEM_TYPE_NOT_PRIMITIVE}
+//1 Only simple, primitive, non-array types may be used as data item types. {6599, DATA_ITEM_TYPE_NOT_PRIMITIVE}
+//1 Only simple, primitive, non-array types may be used as data item types. {6599, DATA_ITEM_TYPE_NOT_PRIMITIVE}
+//1 The primititve type boolean is only allowed in a JavaObject interface. {7826, BOOLEAN_PRIMITIVE_ONLY_ALLOWED_IN_JAVAOBJECT_INTERFACE}
+
+dataItem badItem1 int[] end      // 1 Only simple, primitive, non-array types may be used as data item types.
+dataItem badItem2 int[1] end     // 1 Only simple, primitive, non-array types may be used as data item types.
+dataItem badItem3 badItem1 end   // 1 Only simple, primitive, non-array types may be used as data item types.
+dataItem badItem4 badItem1[] end // 1 Only simple, primitive, non-array types may be used as data item types.
+dataItem goodItem1 int end       // 0
+dataItem goodItem2 float end     // 0
+
+dataItem badItem5 any end		//1 Only simple, primitive, non-array types may be used as data item types.
+dataItem badItem6 boolean end	//0
+

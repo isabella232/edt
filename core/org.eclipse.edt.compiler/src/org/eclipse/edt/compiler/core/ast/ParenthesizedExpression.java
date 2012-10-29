@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 /**
  * ParenthesizedExpression AST node type.
@@ -34,10 +35,12 @@ public class ParenthesizedExpression extends Expression {
 		return expr;
 	}
 	
+	@Override
 	public String getCanonicalString() {
-  		return expr.getCanonicalString();
+  		return "(" + expr.getCanonicalString() + ")";
     }
-	   
+	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -46,11 +49,23 @@ public class ParenthesizedExpression extends Expression {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new ParenthesizedExpression((Expression)expr.clone(), getOffset(), getOffset() + getLength());
 	}
 	
-	public IDataBinding resolveDataBinding() {
-		return expr.resolveDataBinding();
+	@Override
+	public Member resolveMember() {
+		return expr.resolveMember();
+	}
+	
+	@Override
+	public Type resolveType() {
+		return expr.resolveType();
+	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalString();
 	}
 }

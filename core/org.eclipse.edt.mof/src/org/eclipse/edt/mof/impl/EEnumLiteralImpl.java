@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.impl;
 
+import org.eclipse.edt.mof.EEnum;
 import org.eclipse.edt.mof.EEnumLiteral;
+import org.eclipse.edt.mof.EType;
 
 public class EEnumLiteralImpl extends EMemberImpl implements EEnumLiteral {
 	private static int Slot_value=0;
@@ -33,6 +35,16 @@ public class EEnumLiteralImpl extends EMemberImpl implements EEnumLiteral {
 	@Override
 	public void setValue(int value) {
 		slotSet(Slot_value, value);
+	}
+
+	@Override
+	public String getCaseSensitiveName() {
+		return getName();
+	}
+	
+	@Override
+	public EType getEType() {
+		return (EEnum)getDeclarer();
 	}
 	
 }

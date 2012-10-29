@@ -12,7 +12,6 @@
 package org.eclipse.edt.compiler.internal.egl2mof;
 
 import org.eclipse.edt.compiler.Context;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -164,9 +163,9 @@ public class Egl2Mof extends Egl2MofExpression {
 			// the result at the original typeSignature as well
 			if (mofPart instanceof EClassifier) {
 				EClassifier ePart = (EClassifier)mofPart;
-				IPartBinding binding = (IPartBinding)part.getName().resolveBinding();
-				if (!binding.getName().equalsIgnoreCase(ePart.getName())) {
-					env.save(mofSerializationKeyFor(binding), ePart, false);
+				org.eclipse.edt.mof.egl.Part binding = (org.eclipse.edt.mof.egl.Part)part.getName().resolveType();
+				if (!ePart.getName().equalsIgnoreCase(binding.getName())) {
+					env.save(binding.getMofSerializationKey(), ePart, false);
 				}
 			}
 			

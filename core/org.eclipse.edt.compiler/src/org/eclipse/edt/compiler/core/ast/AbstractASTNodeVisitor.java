@@ -89,9 +89,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( caseStatement );
 	}
 	
-	public boolean visit(CharLiteral charLiteral) {
-		return visitNode( charLiteral );
-	}
 	
 	public boolean visit(ClassDataDeclaration classDataDeclaration) {
 		return visitNode( classDataDeclaration );
@@ -99,10 +96,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public boolean visit(CloseStatement closeStatement) {
 		return visitNode( closeStatement );
-	}
-	
-	public boolean visit(ConstantFormField constantFormField) {
-		return visitNode( constantFormField );
 	}
 	
 	public boolean visit(Constructor constructor) {
@@ -113,20 +106,8 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( continueStatement );
 	}
 	
-	public boolean visit(ConverseStatement converseStatement) {
-		return visitNode( converseStatement );
-	}
-	
 	public boolean visit(DataItem dataItem) {
 		return visitNode( dataItem );
-	}
-	
-	public boolean visit(DataTable dataTable) {
-		return visitNode( dataTable );
-	}
-	
-	public boolean visit(DBCharLiteral dBCharLiteral) {
-		return visitNode( dBCharLiteral );
 	}
 	
 	public boolean visit(DecimalLiteral decimalLiteral) {
@@ -141,14 +122,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( deleteStatement );
 	}
 	
-	public boolean visit(DisplayStatement displayStatement) {
-		return visitNode( displayStatement );
-	}
-	
-	public boolean visit(EGLClass eglClass) {
+	public boolean visit(Class eglClass) {
 		return visitNode( eglClass );
 	}
-
+	
 	public boolean visit(ElseBlock elseBlock) {
 		return visitNode( elseBlock );
 	}
@@ -197,10 +174,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( forExpressionClause );
 	}
 	
-	public boolean visit(FormGroup formGroup) {
-		return visitNode( formGroup );
-	}
-	
 	public boolean visit(ForStatement forStatement) {
 		return visitNode( forStatement );
 	}
@@ -211,10 +184,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public boolean visit(ForwardStatement forwardStatement) {
 		return visitNode( forwardStatement );
-	}
-	
-	public boolean visit(FreeSQLStatement freeSQLStatement) {
-		return visitNode( freeSQLStatement );
 	}
 	
 	public boolean visit(FromExpressionClause fromExpressionClause) {
@@ -257,24 +226,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( handler );
 	}
 	
-	public boolean visit(HexLiteral hexLiteral) {
-		return visitNode( hexLiteral );
-	}
-	
 	public boolean visit(ImportDeclaration importDeclaration) {
 		return visitNode( importDeclaration );
 	}
 	
 	public boolean visit(IfStatement ifStatement) {
 		return visitNode( ifStatement );
-	}
-	
-	public boolean visit(InExpression inExpression) {
-		return visitNode( inExpression );
-	}
-	
-	public boolean visit(InlineDLIStatement inlineDLIStatement) {
-		return visitNode( inlineDLIStatement );
 	}
 	
 	public boolean visit(InlineSQLStatement inlineSQLStatement) {
@@ -309,24 +266,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( library );
 	}
 	
-	public boolean visit(LikeMatchesExpression likeMatchesExpression) {
-		return visitNode( likeMatchesExpression );
-	}
-	
-	public boolean visit(MBCharLiteral mBCharLiteral) {
-		return visitNode( mBCharLiteral );
-	}
-	
 	public boolean visit(MoveStatement moveStatement) {
 		return visitNode( moveStatement );
 	}
 	
 	public boolean visit(NameType nameType) {
 		return visitNode( nameType );
-	}
-	
-	public boolean visit(NestedForm nestedForm) {
-		return visitNode( nestedForm );
 	}
 	
 	public boolean visit(NestedFunction nestedFunction) {
@@ -341,10 +286,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( nullLiteral );
 	}
 	
-	public boolean visit(NullableType nullableType) {
-		return visitNode( nullableType );
-	}
-	
 	public boolean visit(NoCursorClause noCursorClause) {
 		return visitNode( noCursorClause );
 	}
@@ -357,20 +298,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( objExprEntry );
 	}
 
-	public boolean visit(OnEventBlock onEventBlock) {
-		return visitNode( onEventBlock );
-	}
-	
 	public boolean visit(OnExceptionBlock onExceptionBlock) {
 		return visitNode( onExceptionBlock );
 	}
 	
 	public boolean visit(OpenStatement openStatement) {
 		return visitNode( openStatement );
-	}
-	
-	public boolean visit(OpenUIStatement openUIStatement) {
-		return visitNode( openUIStatement );
 	}
 	
 	public boolean visit(OtherwiseClause otherwiseClause) {
@@ -385,28 +318,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( parenthesizedExpression );
 	}
 	
-	public boolean visit(PassingClause passingClause) {
-		return visitNode( passingClause );
-	}
-	
 	public boolean visit(PrepareStatement prepareStatement) {
 		return visitNode( prepareStatement );
 	}
 	
-	public boolean visit(PrimitiveType primitiveType) {
-		return visitNode( primitiveType );
-	}
-	
-	public boolean visit(PrintStatement printStatement) {
-		return visitNode( printStatement );
-	}
-	
 	public boolean visit(Program program) {
 		return visitNode( program );
-	}
-	
-	public boolean visit(ProgramParameter programParameter) {
-		return visitNode( programParameter );
 	}
 	
 	public boolean visit(Record record) {
@@ -437,10 +354,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( service );
 	}
 	
-	public boolean visit(ServiceReference serviceReference) {
-		return visitNode( serviceReference );
-	}
-	
 	public boolean visit(SetStatement setStatement) {
 		return visitNode( setStatement );
 	}
@@ -455,10 +368,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public boolean visit(SettingsBlock settingsBlock) {
 		return visitNode( settingsBlock );
-	}
-	
-	public boolean visit(ShowStatement showStatement) {
-		return visitNode( showStatement );
 	}
 	
 	public boolean visit(SimpleName simpleName) {
@@ -501,18 +410,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( throwStatement );
 	}
 	
-	public boolean visit(TopLevelForm topLevelForm) {
-		return visitNode( topLevelForm );
-	}
-	
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		return visitNode( topLevelFunction );
-	}
-	
-	public boolean visit(TransferStatement transferStatement) {
-		return visitNode( transferStatement );
-	}
-	
 	public boolean visit(TryStatement tryStatement) {
 		return visitNode( tryStatement );
 	}
@@ -541,14 +438,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( useStatement );
 	}
 	
-	public boolean visit(UsingPCBClause usingPCBClause) {
-		return visitNode( usingPCBClause );
-	}
-	
-	public boolean visit(VariableFormField variableFormField) {
-		return visitNode( variableFormField );
-	}
-	
 	public boolean visit(WhenClause whenClause) {
 		return visitNode( whenClause );
 	}
@@ -565,10 +454,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( withExprClause );
 	}
 
-	public boolean visit(WithInlineDLIClause withInlineDLIClause) {
-		return visitNode( withInlineDLIClause );
-	}
-	
 	public boolean visit(WithInlineSQLClause withInlineSQLClause) {
 		return visitNode( withInlineSQLClause );
 	}
@@ -637,20 +522,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( caseStatement );
 	}
 	
-	public void endVisit(CharLiteral charLiteral) {
-		 endVisitNode( charLiteral );
-	}
-	
 	public void endVisit(ClassDataDeclaration classDataDeclaration) {
 		 endVisitNode( classDataDeclaration );
 	}
 	
 	public void endVisit(CloseStatement closeStatement) {
 		 endVisitNode( closeStatement );
-	}
-	
-	public void endVisit(ConstantFormField constantFormField) {
-		 endVisitNode( constantFormField );
 	}
 	
 	public void endVisit(Constructor constructor) {
@@ -661,20 +538,8 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( continueStatement );
 	}
 	
-	public void endVisit(ConverseStatement converseStatement) {
-		 endVisitNode( converseStatement );
-	}
-	
 	public void endVisit(DataItem dataItem) {
 		 endVisitNode( dataItem );
-	}
-	
-	public void endVisit(DataTable dataTable) {
-		 endVisitNode( dataTable );
-	}
-	
-	public void endVisit(DBCharLiteral dBCharLiteral) {
-		 endVisitNode( dBCharLiteral );
 	}
 	
 	public void endVisit(DecimalLiteral decimalLiteral) {
@@ -689,12 +554,8 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( deleteStatement );
 	}
 	
-	public void endVisit(DisplayStatement displayStatement) {
-		 endVisitNode( displayStatement );
-	}
-	
-	public void endVisit(EGLClass eglClass) {
-		 endVisitNode( eglClass );
+	public void endVisit(Class eglClass) {
+		endVisitNode( eglClass );
 	}
 
 	public void endVisit(ElseBlock elseBlock) {
@@ -745,10 +606,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( forExpressionClause );
 	}
 	
-	public void endVisit(FormGroup formGroup) {
-		 endVisitNode( formGroup );
-	}
-	
 	public void endVisit(ForStatement forStatement) {
 		 endVisitNode( forStatement );
 	}
@@ -759,10 +616,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public void endVisit(ForwardStatement forwardStatement) {
 		 endVisitNode( forwardStatement );
-	}
-	
-	public void endVisit(FreeSQLStatement freeSQLStatement) {
-		 endVisitNode( freeSQLStatement );
 	}
 	
 	public void endVisit(FromExpressionClause fromExpressionClause) {
@@ -805,24 +658,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( handler );
 	}
 	
-	public void endVisit(HexLiteral hexLiteral) {
-		 endVisitNode( hexLiteral );
-	}
-	
 	public void endVisit(ImportDeclaration importDeclaration) {
 		 endVisitNode( importDeclaration );
 	}
 	
 	public void endVisit(IfStatement ifStatement) {
 		 endVisitNode( ifStatement );
-	}
-	
-	public void endVisit(InExpression inExpression) {
-		 endVisitNode( inExpression );
-	}
-	
-	public void endVisit(InlineDLIStatement inlineDLIStatement) {
-		 endVisitNode( inlineDLIStatement );
 	}
 	
 	public void endVisit(InlineSQLStatement inlineSQLStatement) {
@@ -857,24 +698,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( library );
 	}
 	
-	public void endVisit(LikeMatchesExpression likeMatchesExpression) {
-		 endVisitNode( likeMatchesExpression );
-	}
-	
-	public void endVisit(MBCharLiteral mBCharLiteral) {
-		 endVisitNode( mBCharLiteral );
-	}
-	
 	public void endVisit(MoveStatement moveStatement) {
 		 endVisitNode( moveStatement );
 	}
 	
 	public void endVisit(NameType nameType) {
 		 endVisitNode( nameType );
-	}
-	
-	public void endVisit(NestedForm nestedForm) {
-		 endVisitNode( nestedForm );
 	}
 	
 	public void endVisit(NestedFunction nestedFunction) {
@@ -889,10 +718,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( nullLiteral );
 	}
 	
-	public void endVisit(NullableType nullableType) {
-		 endVisitNode( nullableType );
-	}
-	
 	public void endVisit(NoCursorClause noCursorClause) {
 		 endVisitNode( noCursorClause );
 	}
@@ -905,20 +730,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( objExprEntry );
 	}
 
-	public void endVisit(OnEventBlock onEventBlock) {
-		 endVisitNode( onEventBlock );
-	}
-	
 	public void endVisit(OnExceptionBlock onExceptionBlock) {
 		 endVisitNode( onExceptionBlock );
 	}
 	
 	public void endVisit(OpenStatement openStatement) {
 		 endVisitNode( openStatement );
-	}
-	
-	public void endVisit(OpenUIStatement openUIStatement) {
-		 endVisitNode( openUIStatement );
 	}
 	
 	public void endVisit(OtherwiseClause otherwiseClause) {
@@ -933,28 +750,12 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( parenthesizedExpression );
 	}
 	
-	public void endVisit(PassingClause passingClause) {
-		 endVisitNode( passingClause );
-	}
-	
 	public void endVisit(PrepareStatement prepareStatement) {
 		 endVisitNode( prepareStatement );
 	}
 	
-	public void endVisit(PrimitiveType primitiveType) {
-		 endVisitNode( primitiveType );
-	}
-	
-	public void endVisit(PrintStatement printStatement) {
-		 endVisitNode( printStatement );
-	}
-	
 	public void endVisit(Program program) {
 		 endVisitNode( program );
-	}
-	
-	public void endVisit(ProgramParameter programParameter) {
-		 endVisitNode( programParameter );
 	}
 	
 	public void endVisit(Record record) {
@@ -985,10 +786,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( service );
 	}
 	
-	public void endVisit(ServiceReference serviceReference) {
-		 endVisitNode( serviceReference );
-	}
-	
 	public void endVisit(SetStatement setStatement) {
 		 endVisitNode( setStatement );
 	}
@@ -1003,10 +800,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public void endVisit(SettingsBlock settingsBlock) {
 		 endVisitNode( settingsBlock );
-	}
-	
-	public void endVisit(ShowStatement showStatement) {
-		 endVisitNode( showStatement );
 	}
 	
 	public void endVisit(SimpleName simpleName) {
@@ -1049,18 +842,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( throwStatement );
 	}
 	
-	public void endVisit(TopLevelForm topLevelForm) {
-		 endVisitNode( topLevelForm );
-	}
-	
-	public void endVisit(TopLevelFunction topLevelFunction) {
-		 endVisitNode( topLevelFunction );
-	}
-	
-	public void endVisit(TransferStatement transferStatement) {
-		 endVisitNode( transferStatement );
-	}
-	
 	public void endVisit(TryStatement tryStatement) {
 		 endVisitNode( tryStatement );
 	}
@@ -1089,14 +870,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( useStatement );
 	}
 	
-	public void endVisit(UsingPCBClause usingPCBClause) {
-		 endVisitNode( usingPCBClause );
-	}
-	
-	public void endVisit(VariableFormField variableFormField) {
-		 endVisitNode( variableFormField );
-	}
-	
 	public void endVisit(WhenClause whenClause) {
 		 endVisitNode( whenClause );
 	}
@@ -1111,10 +884,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 
 	public void endVisit(WithIDClause withIDClause) {
 		 endVisitNode( withIDClause );
-	}
-	
-	public void endVisit(WithInlineDLIClause withInlineDLIClause) {
-		 endVisitNode( withInlineDLIClause );
 	}
 	
 	public void endVisit(WithInlineSQLClause withInlineSQLClause) {

@@ -1,0 +1,61 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+FormGroup cvtcMG 
+ {  helpKey = pf1 }
+
+
+Form cvtcMap1 type textForm	
+ { screenSizes = [[24,80]], formsize = [24,80], position = [1,1], 
+   helpKey = pf1, alias = "cvtcM01"}
+
+
+ S1 char(28)
+  { position = [4,5], fieldLen = 28, validationOrder = 2,
+    color = defaultColor, highlight = noHighlight,
+    intensity = normalIntensity, protect = protect, align = left, fill = yes,
+    fillCharacter = "0"
+    };   
+ R1 char(28)
+  { position = [5,5], fieldLen = 28, validationOrder = 3,
+    color = defaultColor, highlight = noHighlight, fill = yes,
+    intensity = normalIntensity, protect = protect, align = left,
+    fillCharacter = "0" }; 
+ E1 char(28)
+  { position = [6,5], fieldLen = 28, validationOrder = 1,
+    color = defaultColor, highlight = noHighlight, fill = yes,
+    intensity = normalIntensity, protect = protect, align = left,
+    fillCharacter = "0"
+    };
+
+
+  * { position = [1,1], fieldLen = 60,color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "Failing case from EZC3270"};
+      
+  * { position = [4,45], fieldLen = 20,color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "<- Server Data"}; 
+  * { position = [5,45], fieldLen = 22,color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "<- Results from Remote"}; 
+  * { position = [6,45], fieldLen = 20,color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "<- Expected Results"}; 
+      
+                                  
+  * { position = [23,1], fieldLen = 70, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "PF3=EXIT       ENTER=Perform Test"};
+
+end 
+end

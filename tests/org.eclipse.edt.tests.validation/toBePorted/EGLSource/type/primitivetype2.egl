@@ -1,0 +1,665 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+function fff (
+	Xmybin4 bin(7),// 1  The length value 7 for item Xmybin4, primitive type BIN, must be a number in the (4, 9, 18) range 	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmychar1 char(0),// 0
+	XmycharX char(32768),// 1  The length value 32768 for item XmycharX, primitive type CHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmymbchar1 mbchar(0),// 0
+	XmymbcharX mbchar(32768),// 1 The length value 32768 for item XmymbcharX, primitive type MBCHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmydbchar1 dbchar(0),// 0
+	XmydbcharX dbchar(16384),// 1  The length value 16384 for item XmydbcharX, primitive type DBCHAR, must be a number in the (1..16383) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmyunicode1 unicode(0),// 0
+	XmyunicodeX unicode(16384),// 1 The length value 16384 for item XmyunicodeX, primitive type UNICODE, must be a number in the (1..16383) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmyhex2 hex(65536),// 1   The length value 65536 for item Xmyhex2, primitive type HEX, must be a number in the (2, 4,...,65534) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	XmyhexX hex(1),// 1   The length value 1 for item XmyhexX, primitive type HEX, must be a number in the (2, 4,...,65534) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	XmyhexXX hex(13),// 1  The length value 13 for item XmyhexXX, primitive type HEX, must be a number in the (2, 4,...,65534) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmynumc numc(0),// 1   The length value 0 for item Xmynumc, primitive type NUMC, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	XmynumcX numc(19),// 1  The length value 19 for item XmynumcX, primitive type NUMC, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmypacf pacf(0),// 1   The length value 0 for item Xmypacf, primitive type PACF, must be a number in the (1..18) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	XmypacfX pacf(19),// 1  The length value 19 for item XmypacfX, primitive type PACF, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmynum1 num(0),// 1  The length value 0 for item Xmynum1, primitive type NUM, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	XmynumX num(33),// 1  The length value 33 for item XmynumX, primitive type NUM, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmydecimal1 decimal(0),// 1   The length value 0 for item Xmydecimal1, primitive type DECIMAL, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	XmydecimalX decimal(33),// 1   The length value 33 for item XmydecimalX, primitive type DECIMAL, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	Xmymoney money(1),// 2 The length value 1 for item Xmymoney, primitive type MONEY, must be a number in the (2..32) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	XmymoneyX money(33),// 1  The length value 33 for item XmymoneyX, primitive type MONEY, must be a number in the (2..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+		
+	mybigint bigint,// 0
+	mybin4 bin(4),// 0
+	mybin9 bin(9),// 0
+	mybin18 bin(18),// 0
+	mychar1 char(1),// 0
+	mychar32767 char(32767),// 0
+	mydbchar1 dbchar(1),// 0
+	mydbchar16383 dbchar(16383)// 0
+
+) end
+
+
+interface iFace
+function myfunc( my boolean in);// 0
+end
+
+program A (
+	mydecimal1 decimal(1),// 0
+	mydecimal32 decimal(32),// 0
+	myfloat float,// 0
+	myhex2 hex(2),// 0
+	myhex4 hex(4),// 0
+	myhex65534 hex(65534),// 0		
+	myint int,// 0
+	mymbchar1 mbchar(1),// 0
+	mymbchar32767 mbchar(32767),// 0	
+	mymoney money,// 0
+	mymoney2 money(2),// 0
+	mymoney32 money(32),// 0
+	mynum1 num(1),// 0
+	mynum32 num(32),	// 0
+
+	mynumc numc(1),// 0
+	mypacf pacf(1),// 0
+	mysmallfloat smallfloat,// 0
+	mysmallint smallint,// 0
+	mystring string,// 0
+	myunicode1 unicode(1),// 0
+	myunicode16383 unicode(16383),// 0	
+	myblob blob,// 1
+	myclob clob,// 1
+	mydate date,// 0
+	myinterval interval("yyyyMM"),// 0
+	mytime time,// 0
+	mytimestamp timestamp,// 0
+
+	mynumcDD numc(1,19),// 1 The decimals value 19 for item mynumcDD must be a number in the (1..18) range	 {4402, INVALID_DECIMALS}
+	mypacfDD pacf(1,19),// 1 The decimals value 19 for item mypacfDD must be a number in the (1..18) range	{4402, INVALID_DECIMALS}
+	mybin18DD bin(18,19)// 1  The decimals value 19 for item mybin18DD must be a number in the (1..18) range 	{4402, INVALID_DECIMALS}
+
+)
+	function main ()
+	end
+	
+end
+
+function fa (
+	mydecimal1 decimal(1),// 0
+	mydecimal32 decimal(32),// 0
+	myfloat float,// 0
+	myhex2 hex(2),// 0
+	myhex4 hex(4),// 0
+	myhex65534 hex(65534),// 0		
+	myint int,// 0
+	mymbchar1 mbchar(1),// 0
+	mymbchar32767 mbchar(32767),// 0	
+	mymoney money,// 0
+	mymoney2 money(2),// 0
+	mymoney32 money(32),// 0
+	mynum1 num(1),// 0
+	mynum32 num(32),	// 0
+
+	mynumc numc(1),// 0 
+	mypacf pacf(1),// 0
+	mysmallfloat smallfloat,// 0
+	mysmallint smallint,// 0
+	mystring string,// 0
+	myunicode1 unicode(1),// 0
+	myunicode16383 unicode(16383),// 0	
+	myblob blob,// 0
+	myclob clob,// 0
+	mydate date,// 0
+	myinterval interval,// 0
+	mytime time,// 0
+	mytimestamp timestamp,// 0
+
+	mynumcDD numc(1,19),// 1 The decimals value 19 for item mynumcDD must be a number in the (1..18) range	 {4402, INVALID_DECIMALS}
+	mypacfDD pacf(1,19),// 1 The decimals value 19 for item mypacfDD must be a number in the (1..18) range	{4402, INVALID_DECIMALS}
+	mybin18DD bin(18,19)// 1  The decimals value 19 for item mybin18DD must be a number in the (1..18) range 	{4402, INVALID_DECIMALS}
+
+) end
+
+program B (
+	mymoney2DD money(2,33),// 1 The decimals value 33 for item mymoney2DD must be a number in the (1..32) range	{4402, INVALID_DECIMALS}
+	mydecimal1DD decimal(1,33),//1  The decimals value 33 for item mydecimal1DD must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+	mynum1DD num(1,33),// 1 The decimals value 33 for item mynum1DD must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+			
+	mynumcD numc(1,1),// 0
+	mypacfD pacf(1,1),// 0
+	mymoney2D money(2,1),// 0
+	mymoney32D money(32,1),// 0
+	mybin4D bin(4,1),// 0
+	mybin9D bin(9,1),// 0
+	mybin18D bin(18,1),// 0
+	mydecimal1D decimal(1,1),//0
+	mydecimal32D decimal(32,1),//0
+	mynum1D num(1,1),// 0
+	mynum32D num(32,1),	// 0
+	mynumcDX numc(1,2),// 1  The decimals value 2 for item mynumcDX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	mypacfDX pacf(1,2),// 1  The decimals value 2 for item mypacfDX must be less than or equal to the length value 1	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+	mymoney2DX money(2,3),// 1 The decimals value 3 for item mymoney2DX must be less than or equal to the length value 2	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	mybin4DX bin(4,5)//1  The decimals value 5 for item mybin4DX must be less than or equal to the length value 4	{4403, DECIMALS_GREATER_THAN_LENGTH}
+
+)
+function main ()
+end
+end
+
+function fb (
+
+	mymoney2DD money(2,33),// 1 The decimals value 33 for item mymoney2DD must be a number in the (1..32) range	{4402, INVALID_DECIMALS}
+	mydecimal1DD decimal(1,33),//1  The decimals value 33 for item mydecimal1DD must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+	mynum1DD num(1,33),// 1 The decimals value 33 for item mynum1DD must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+			
+	mynumcD numc(1,1),// 0
+	mypacfD pacf(1,1),// 0
+	mymoney2D money(2,1),// 0
+	mymoney32D money(32,1),// 0
+	mybin4D bin(4,1),// 0
+	mybin9D bin(9,1),// 0
+	mybin18D bin(18,1),// 0
+	mydecimal1D decimal(1,1),//0
+	mydecimal32D decimal(32,1),//0
+	mynum1D num(1,1),// 0
+	mynum32D num(32,1),	// 0
+	mynumcDX numc(1,2),// 1  The decimals value 2 for item mynumcDX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	mypacfDX pacf(1,2),// 1  The decimals value 2 for item mypacfDX must be less than or equal to the length value 1	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+	mymoney2DX money(2,3),// 1 The decimals value 3 for item mymoney2DX must be less than or equal to the length value 2	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	mybin4DX bin(4,5)//1  The decimals value 5 for item mybin4DX must be less than or equal to the length value 4	{4403, DECIMALS_GREATER_THAN_LENGTH}
+
+)end
+
+
+program C (
+	mybin9DX bin(9,10),// 1  The decimals value 10 for item mybin9DX must be less than or equal to the length value 9	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+	mydecimal1DX decimal(1,2),//1  The decimals value 2 for item mydecimal1DX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	mynum1DX num(1,2),// 1   The decimals value 2 for item mynum1DX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	mystringL string(1),// 0 
+	n number,// 1  Data type number can be used only when defining a function parameter	{5071, NUMBER_USED_INCORRECTLY}
+	AXmybin4 bin(7)[],// 1  The length value 7 for item AXmybin4, primitive type BIN, must be a number in the (4, 9, 18) range 	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmychar1 char(0)[],// 1  The length value 0 for item AXmychar1, primitive type CHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmycharX char(32768)[],// 1  The length value 32768 for item AXmycharX, primitive type CHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmymbchar1 mbchar(0)[],// 1 The length value 0 for item AXmymbchar1, primitive type MBCHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmymbcharX mbchar(32768)[],// 1 The length value 32768 for item AXmymbcharX, primitive type MBCHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmydbchar1 dbchar(0)[],// 1  The length value 0 for item AXmydbchar1, primitive type DBCHAR, must be a number in the (1..16383) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmydbcharX dbchar(16384)[],// 1  The length value 16384 for item AXmydbcharX, primitive type DBCHAR, must be a number in the (1..16383) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyunicode1 unicode(0)[],// 1    The length value 0 for item AXmyunicode1, primitive type UNICODE, must be a number in the (1..16383) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyunicodeX unicode(16384)[],// 1 The length value 16384 for item AXmyunicodeX, primitive type UNICODE, must be a number in the (1..16383) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyhex2 hex(65536)[],// 1   The length value 65536 for item AXmyhex2, primitive type HEX, must be a number in the (2, 4,...,65534) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyhexX hex(1)[],// 1   The length value 1 for item AXmyhexX, primitive type HEX, must be a number in the (2, 4,...,65534) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyhexXX hex(13)[],// 1  The length value 13 for item AXmyhexXX, primitive type HEX, must be a number in the (2, 4,...,65534) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmynumc numc(0)[],// 1   The length value 0 for item AXmynumc, primitive type NUMC, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmynumcX numc(19)[],// 1  The length value 19 for item AXmynumcX, primitive type NUMC, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmypacf pacf(0)[],// 1   The length value 0 for item AXmypacf, primitive type PACF, must be a number in the (1..18) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmypacfX pacf(19)[],// 1  The length value 19 for item AXmypacfX, primitive type PACF, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmynum1 num(0)[],// 1  The length value 0 for item AXmynum1, primitive type NUM, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmynumX num(33)[],// 1  The length value 33 for item AXmynumX, primitive type NUM, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmydecimal1 decimal(0)[]// 1   The length value 0 for item AXmydecimal1, primitive type DECIMAL, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+
+)
+	function main ()
+	end
+end
+
+function fc (
+	mybin9DX bin(9,10),// 1  The decimals value 10 for item mybin9DX must be less than or equal to the length value 9	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+	mydecimal1DX decimal(1,2),//1  The decimals value 2 for item mydecimal1DX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	mynum1DX num(1,2),// 1   The decimals value 2 for item mynum1DX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	mystringL string(1),// 0 
+	n number,// 0 
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+	AXmybin4 bin(7)[],// 1  The length value 7 for item AXmybin4, primitive type BIN, must be a number in the (4, 9, 18) range 	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmychar1 char(0)[],// 0
+	AXmycharX char(32768)[],// 1  The length value 32768 for item AXmycharX, primitive type CHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmymbchar1 mbchar(0)[],// 0
+	AXmymbcharX mbchar(32768)[],// 1 The length value 32768 for item AXmymbcharX, primitive type MBCHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmydbchar1 dbchar(0)[],//0 
+	AXmydbcharX dbchar(16384)[],// 1  The length value 16384 for item AXmydbcharX, primitive type DBCHAR, must be a number in the (1..16383) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyunicode1 unicode(0)[],// 0
+	AXmyunicodeX unicode(16384)[],// 1 The length value 16384 for item AXmyunicodeX, primitive type UNICODE, must be a number in the (1..16383) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyhex2 hex(65536)[],// 1   The length value 65536 for item AXmyhex2, primitive type HEX, must be a number in the (2, 4,...,65534) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyhexX hex(1)[],// 1   The length value 1 for item AXmyhexX, primitive type HEX, must be a number in the (2, 4,...,65534) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmyhexXX hex(13)[],// 1  The length value 13 for item AXmyhexXX, primitive type HEX, must be a number in the (2, 4,...,65534) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmynumc numc(0)[],// 1   The length value 0 for item AXmynumc, primitive type NUMC, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmynumcX numc(19)[],// 1  The length value 19 for item AXmynumcX, primitive type NUMC, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmypacf pacf(0)[],// 1   The length value 0 for item AXmypacf, primitive type PACF, must be a number in the (1..18) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmypacfX pacf(19)[],// 1  The length value 19 for item AXmypacfX, primitive type PACF, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmynum1 num(0)[],// 1  The length value 0 for item AXmynum1, primitive type NUM, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmynumX num(33)[],// 1  The length value 33 for item AXmynumX, primitive type NUM, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmydecimal1 decimal(0)[]// 1   The length value 0 for item AXmydecimal1, primitive type DECIMAL, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+
+)end
+
+program d (
+	AXmydecimalX decimal(33)[],// 1   The length value 33 for item AXmydecimalX, primitive type DECIMAL, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmymoney money(1)[],// 2 The length value 1 for item AXmymoney, primitive type MONEY, must be a number in the (2..32) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmymoneyX money(33)[],// 1  The length value 33 for item AXmymoneyX, primitive type MONEY, must be a number in the (2..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+		
+	Amyany any[],// 1
+	Amybigint bigint[],// 0
+	Amybin4 bin(4)[],// 0
+	Amybin9 bin(9)[],// 0
+	Amybin18 bin(18)[],// 0
+	Amychar1 char(1)[],// 0
+	Amychar32767 char(32767)[],// 0
+	Amydbchar1 dbchar(1)[],// 0
+	Amydbchar16383 dbchar(16383)[],// 0
+	Amydecimal1 decimal(1)[],// 0
+	Amydecimal32 decimal(32)[],// 0
+	Amyfloat float[],// 0
+	Amyhex2 hex(2)[],// 0
+	Amyhex4 hex(4)[],// 0
+	Amyhex65534 hex(65534)[],// 0		
+	Amyint int[],// 0
+	Amymbchar1 mbchar(1)[],// 0
+	Amymbchar32767 mbchar(32767)[],// 0	
+	Amymoney money[],// 0
+	Amymoney2 money(2)[],// 0
+	Amymoney32 money(32)[],// 0
+	Amynum1 num(1)[],// 0
+	Amynum32 num(32)[],	// 0
+
+	Amynumc numc(1)[],// 0 
+	Amypacf pacf(1)[],// 0  
+	Amysmallfloat smallfloat[],// 0
+	Amysmallint smallint[]// 0
+
+)
+	function main()
+	end
+end
+
+function fd (
+	AXmydecimalX decimal(33)[],// 1   The length value 33 for item AXmydecimalX, primitive type DECIMAL, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmymoney money(1)[],// 2 The length value 1 for item AXmymoney, primitive type MONEY, must be a number in the (2..32) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+	AXmymoneyX money(33)[],// 1  The length value 33 for item AXmymoneyX, primitive type MONEY, must be a number in the (2..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+		
+	Amyany any[],// 0
+	Amybigint bigint[],// 0
+	Amybin4 bin(4)[],// 0
+	Amybin9 bin(9)[],// 0
+	Amybin18 bin(18)[],// 0
+	Amychar1 char(1)[],// 0
+	Amychar32767 char(32767)[],// 0
+	Amydbchar1 dbchar(1)[],// 0
+	Amydbchar16383 dbchar(16383)[],// 0
+	Amydecimal1 decimal(1)[],// 0
+	Amydecimal32 decimal(32)[],// 0
+	Amyfloat float[],// 0
+	Amyhex2 hex(2)[],// 0
+	Amyhex4 hex(4)[],// 0
+	Amyhex65534 hex(65534)[],// 0		
+	Amyint int[],// 0
+	Amymbchar1 mbchar(1)[],// 0
+	Amymbchar32767 mbchar(32767)[],// 0	
+	Amymoney money[],// 0
+	Amymoney2 money(2)[],// 0
+	Amymoney32 money(32)[],// 0
+	Amynum1 num(1)[],// 0
+	Amynum32 num(32)[],	// 0
+
+	Amynumc numc(1)[],// 0
+	Amypacf pacf(1)[],// 0 
+	Amysmallfloat smallfloat[],// 0
+	Amysmallint smallint[]// 0
+
+)end
+program e (
+	Amystring string[],// 0
+	Amyunicode1 unicode(1)[],// 0
+	Amyunicode16383 unicode(16383)[],// 0	
+	Amyblob blob[],// 1
+	Amyclob clob[],// 1
+	Amydate date[],// 0
+	Amyinterval interval("yyyyMM")[],// 0
+	Amytime time[],// 0
+	Amytimestamp timestamp[],// 0
+
+	AmynumcDD numc(1,19)[],// 1 The decimals value 19 for item AmynumcDD must be a number in the (1..18) range	 {4402, INVALID_DECIMALS}
+	AmypacfDD pacf(1,19)[],// 1 The decimals value 19 for item AmypacfDD must be a number in the (1..18) range	{4402, INVALID_DECIMALS}
+	Amybin18DD bin(18,19)[],// 1  The decimals value 19 for item Amybin18DD must be a number in the (1..18) range 	{4402, INVALID_DECIMALS}
+	Amymoney2DD money(2,33)[],// 1 The decimals value 33 for item Amymoney2DD must be a number in the (1..32) range	{4402, INVALID_DECIMALS}
+	Amydecimal1DD decimal(1,33)[],//1  The decimals value 33 for item Amydecimal1DD must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+	Amynum1DD num(1,33)[],// 1 The decimals value 33 for item Amynum1DD must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+			
+	AmynumcD numc(1,1)[],// 0
+	AmypacfD pacf(1,1)[],// 0
+	Amymoney2D money(2,1)[],// 0
+	Amymoney32D money(32,1)[],// 0
+	Amybin4D bin(4,1)[],// 0
+	Amybin9D bin(9,1)[],// 0
+	Amybin18D bin(18,1)[],// 0
+	Amydecimal1D decimal(1,1)[],//0
+	Amydecimal32D decimal(32,1)[]//0
+
+
+
+)
+	function main ()
+	end 
+end
+
+function fe (
+	Amystring string[],// 0
+	Amyunicode1 unicode(1)[],// 0
+	Amyunicode16383 unicode(16383)[],// 0	
+	Amyblob blob[],// 0
+	Amyclob clob[],// 0
+	Amydate date[],// 0
+	Amyinterval interval[],// 0
+	Amytime time[],// 0
+	Amytimestamp timestamp[],// 0
+
+	AmynumcDD numc(1,19)[],// 1 The decimals value 19 for item AmynumcDD must be a number in the (1..18) range	 {4402, INVALID_DECIMALS}
+	AmypacfDD pacf(1,19)[],// 1 The decimals value 19 for item AmypacfDD must be a number in the (1..18) range	{4402, INVALID_DECIMALS}
+	Amybin18DD bin(18,19)[],// 1  The decimals value 19 for item Amybin18DD must be a number in the (1..18) range 	{4402, INVALID_DECIMALS}
+	Amymoney2DD money(2,33)[],// 1 The decimals value 33 for item Amymoney2DD must be a number in the (1..32) range	{4402, INVALID_DECIMALS}
+	Amydecimal1DD decimal(1,33)[],//1  The decimals value 33 for item Amydecimal1DD must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+	Amynum1DD num(1,33)[],// 1 The decimals value 33 for item Amynum1DD must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+			
+	AmynumcD numc(1,1)[],// 0
+	AmypacfD pacf(1,1)[],// 0
+	Amymoney2D money(2,1)[],// 0
+	Amymoney32D money(32,1)[],// 0
+	Amybin4D bin(4,1)[],// 0
+	Amybin9D bin(9,1)[],// 0
+	Amybin18D bin(18,1)[],// 0
+	Amydecimal1D decimal(1,1)[],//0
+	Amydecimal32D decimal(32,1)[]//0
+)end
+program f (
+	Amynum1D num(1,1)[],// 0
+	Amynum32D num(32,1)[],	// 0
+	AmynumcDX numc(1,2)[],// 1  The decimals value 2 for item AmynumcDX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	AmypacfDX pacf(1,2)[],// 1  The decimals value 2 for item AmypacfDX must be less than or equal to the length value 1	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amymoney2DX money(2,3)[],// 1 The decimals value 3 for item Amymoney2DX must be less than or equal to the length value 2	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amybin4DX bin(4,5)[],//1  The decimals value 5 for item Amybin4DX must be less than or equal to the length value 4	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amybin9DX bin(9,10)[],// 1  The decimals value 10 for item Amybin9DX must be less than or equal to the length value 9	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amydecimal1DX decimal(1,2)[],//1  The decimals value 2 for item Amydecimal1DX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amynum1DX num(1,2)[],// 1   The decimals value 2 for item Amynum1DX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	AmystringL string(1)[],// 0 
+	An number[]// 1  Data type number can be used only when defining a function parameter	{5071, NUMBER_USED_INCORRECTLY}
+
+)
+	function main ()
+	end
+end
+
+function fp (
+	An number[],// 0
+	Amynum1D num(1,1)[],// 0
+	Amynum32D num(32,1)[],	// 0
+	AmynumcDX numc(1,2)[],// 1  The decimals value 2 for item AmynumcDX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	AmypacfDX pacf(1,2)[],// 1  The decimals value 2 for item AmypacfDX must be less than or equal to the length value 1	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amymoney2DX money(2,3)[],// 1 The decimals value 3 for item Amymoney2DX must be less than or equal to the length value 2	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amybin4DX bin(4,5)[],//1  The decimals value 5 for item Amybin4DX must be less than or equal to the length value 4	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amybin9DX bin(9,10)[],// 1  The decimals value 10 for item Amybin9DX must be less than or equal to the length value 9	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amydecimal1DX decimal(1,2)[],//1  The decimals value 2 for item Amydecimal1DX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	Amynum1DX num(1,2)[],// 1   The decimals value 2 for item Amynum1DX must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+	AmystringL string(1)[]// 0 
+)end
+
+
+function a1 () returns (bin(7)) // 1  The length value 7 for item return, primitive type BIN, must be a number in the (4, 9, 18) range 	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a2 () returns (char(0))// 1  The length value 0 for item return, primitive type CHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a3 () returns (char(32768))// 1  The length value 32768 for item return, primitive type CHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a4 () returns (mbchar(0))// 1 The length value 0 for item return, primitive type MBCHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a5 () returns (mbchar(32768))// 1 The length value 32768 for item return, primitive type MBCHAR, must be a number in the (1..32767) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a6 () returns (dbchar(0))// 1  The length value 0 for item return, primitive type DBCHAR, must be a number in the (1..16383) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a7 () returns (dbchar(16384))// 1  The length value 16384 for item return, primitive type DBCHAR, must be a number in the (1..16383) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a8 () returns (unicode(0))// 1    The length value 0 for item return, primitive type UNICODE, must be a number in the (1..16383) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a9 () returns (unicode(16384))// 1 The length value 16384 for item return, primitive type UNICODE, must be a number in the (1..16383) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a10 () returns (hex(65536))// 1   The length value 65536 for item return, primitive type HEX, must be a number in the (2, 4,...,65534) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+	
+function a11() returns (hex(1))// 1   The length value 1 for item return, primitive type HEX, must be a number in the (2, 4,...,65534) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a12 () returns (hex(13))// 1  The length value 13 for item return, primitive type HEX, must be a number in the (2, 4,...,65534) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+function a13 () returns (numc(0))// 1   The length value 0 for item return, primitive type NUMC, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+function a14 () returns (numc(19))// 1  The length value 19 for item return, primitive type NUMC, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+function a15 () returns (pacf(0))// 1   The length value 0 for item return, primitive type PACF, must be a number in the (1..18) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a16 () returns (pacf(19))// 1  The length value 19 for item return, primitive type PACF, must be a number in the (1..18) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a17 () returns (num(0))// 1  The length value 0 for item return, primitive type NUM, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a18 () returns (num(33))// 1  The length value 33 for item return, primitive type NUM, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a19 () returns (decimal(0))// 1   The length value 0 for item return, primitive type DECIMAL, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a20 () returns (decimal(33))// 1   The length value 33 for item return, primitive type DECIMAL, must be a number in the (1..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a21() returns (money(1))// 2 The length value 1 for item return, primitive type MONEY, must be a number in the (2..32) range	 {4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+
+function a22 () returns (money(33))// 1  The length value 33 for item return, primitive type MONEY, must be a number in the (2..32) range	{4401, INVALID_LENGTH_FOR_PRIMITIVE_TYPE}
+end
+		
+function a23 () returns (any)// 0
+end
+
+function a24 () returns (bigint)// 0
+end
+
+function a25 () returns (bin(4));// 0
+end
+
+function a26 () returns (bin(9))// 0
+end
+
+function a27 () returns (bin(18))// 0
+end
+
+function a28() returns (char(1))// 0
+end
+
+function a29 () returns (char(32767))// 0
+end
+
+
+function a30 () returns (dbchar(1))// 0
+end
+
+function a31 () returns (dbchar(16383))// 0
+end
+	
+function a32 () returns (decimal(1))// 0
+end
+
+function a33 () returns (decimal(32))// 0
+end
+
+function a34 () returns (float)// 0
+end
+
+function a35 () returns (hex(2))// 0
+end
+
+function a36 () returns (hex(4))// 0
+end
+
+function a37 () returns (hex(65534))// 0		
+end
+
+function a38 () returns (int);// 0
+end
+
+function a39 () returns ( mbchar(1))// 0
+end
+
+function a40 () returns (mbchar(32767))// 0	
+end
+
+function a41 () returns (money)// 0
+end
+
+function a42 () returns (money(2))// 0
+end
+
+function a43 () returns (money(32))// 0
+end
+
+function a44 () returns (num(1))// 0
+end
+
+function a45 () returns (num(32))	// 0
+end
+
+function a46 () returns (numc(1))// 0
+end
+
+function a47 () returns (pacf(1))// 0
+end
+
+function a48() returns (smallfloat)// 0
+end
+
+function a49 () returns (smallint)// 0
+end
+
+function a50() returns (string)// 0
+end
+
+function a51() returns (unicode(1))// 0
+end
+
+function a52() returns (unicode(16383))// 0	
+end
+
+function a53() returns (blob)// 0
+end
+
+function a54() returns (clob)// 0
+end
+
+function a55() returns (date)// 0
+end
+
+function a56() returns (interval("yyyyMM"))// 0
+end
+
+function a57() returns (time)// 0
+end
+
+function a58() returns (timestamp)// 0
+end
+
+function a59() returns (numc(1,19))// 1 The decimals value 19 for item return must be a number in the (1..18) range	 {4402, INVALID_DECIMALS}
+end
+
+function a60() returns (pacf(1,19))// 1 The decimals value 19 for item return must be a number in the (1..18) range	{4402, INVALID_DECIMALS}
+end
+
+function a61() returns (bin(18,19))// 1  The decimals value 19 for item return must be a number in the (1..18) range 	{4402, INVALID_DECIMALS}
+end
+
+function a62() returns (money(2,33))// 1 The decimals value 33 for item return must be a number in the (1..32) range	{4402, INVALID_DECIMALS}
+end
+
+function a63() returns (decimal(1,33))//1  The decimals value 33 for item return must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+end
+
+function a64() returns (num(1,33))// 1 The decimals value 33 for item return must be a number in the (1..32) range	 {4402, INVALID_DECIMALS}
+end
+
+			
+function a65() returns (numc(1,1))// 0
+end
+
+function a66() returns (pacf(1,1))// 0
+end
+
+function a67() returns (money(2,1))// 0
+end
+
+function a68() returns (money(32,1))// 0
+end
+
+function a69() returns (bin(4,1))// 0
+end
+
+function a70() returns (bin(9,1))// 0
+end
+
+function a71() returns (bin(18,1))// 0
+end
+
+function a76() returns (decimal(1,1))//0
+end
+
+function a77() returns (decimal(32,1))//0
+end
+
+function a83() returns (num(1,1))// 0
+end
+
+function a84() returns (num(32,1))	// 0
+end
+
+function a88() returns (numc(1,2))// 1  The decimals value 2 for item return must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+end
+
+function a89() returns (pacf(1,2))// 1  The decimals value 2 for item return must be less than or equal to the length value 1	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+end
+
+function a90() returns (money(2,3))// 1 The decimals value 3 for item return must be less than or equal to the length value 2	{4403, DECIMALS_GREATER_THAN_LENGTH}
+end
+
+function a91() returns (bin(4,5))//1  The decimals value 5 for item return must be less than or equal to the length value 4	{4403, DECIMALS_GREATER_THAN_LENGTH}
+end
+
+function a92() returns (bin(9,10))// 1  The decimals value 10 for item return must be less than or equal to the length value 9	 {4403, DECIMALS_GREATER_THAN_LENGTH}
+end
+
+function a93() returns (decimal(1,2))//1  The decimals value 2 for item return must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+end
+
+function a94() returns (num(1,2))// 1   The decimals value 2 for item return must be less than or equal to the length value 1	{4403, DECIMALS_GREATER_THAN_LENGTH}
+end
+
+function a101() returns (string(1))// 0 
+end
+
+function a102() returns (number)// 1  Data type number can be used only when defining a function parameter	{5071, NUMBER_USED_INCORRECTLY}
+end
+
+

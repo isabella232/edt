@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.mof.egl.Annotation;
 
 /**
  * AnnotationExpression AST node type.
@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 public class AnnotationExpression extends Expression {
 
     private Name name;
+    private Annotation annotation;
 
     public AnnotationExpression(Name name, int startOffset, int endOffset) {
         super(startOffset, endOffset);
@@ -45,17 +46,25 @@ public class AnnotationExpression extends Expression {
         }
         visitor.endVisit(this);
     }
-
-    public IDataBinding resolveDataBinding() {
-
-        IDataBinding result = super.resolveDataBinding();
-        if (result == null) {
-            result = getName().resolveDataBinding();
-        }
-        return result;
+    
+    public Annotation resolveAnnotation() {
+    	return annotation;
+    }
+    
+    public Object resolveElement() {
+		return annotation;
+	}
+    
+    public void setAnnotation(Annotation annotation) {
+    	this.annotation = annotation;
     }
 
     protected Object clone() throws CloneNotSupportedException {
         return new AnnotationExpression((Name) name.clone(), getOffset(), getOffset() + getLength());
+    }
+    
+    @Override
+    public String toString() {
+    	return "@" + getCanonicalString();
     }
 }

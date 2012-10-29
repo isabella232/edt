@@ -31,12 +31,10 @@ public abstract class ParseTable {
         new int[] { NodeTypes.interfaceContent, NodeTypes.interfaceContent_plus, NodeTypes.interfaceContent_star },
         new int[] { NodeTypes.externalTypeContent, NodeTypes.externalTypeContent_plus, NodeTypes.externalTypeContent_star },
         new int[] { NodeTypes.part, NodeTypes.part_plus, NodeTypes.part_star },
-        new int[] { NodeTypes.programParameter, NodeTypes.programParameter_plus, NodeTypes.programParameter_star },
         new int[] { NodeTypes.setting, NodeTypes.setting_plus, NodeTypes.setting_star },
         new int[] { NodeTypes.stmt, NodeTypes.stmt_plus, NodeTypes.stmt_star },
         new int[] { NodeTypes.structureContent, NodeTypes.structureContent_plus, NodeTypes.structureContent_star },
         // TODO should other statement kind of stuff be here too?
-        new int[] { NodeTypes.eventBlock, NodeTypes.eventBlock_plus, NodeTypes.eventBlock_star },
     };
 
     protected static short[][] production_tab;

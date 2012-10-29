@@ -1,0 +1,262 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program Declarations {allowUnqualifiedItemReferences=yes}
+
+	x string;											//0
+
+	function main()
+		whatsValidAndInvalid( 1, 2, 3 );
+		
+		// Set the global x.
+		x = "global x";									//0
+		writeStdout( "Should be 'global x': " + x );	//0
+		
+		// Now there's a local variable called x.
+		x string;										//0
+		x = "local x";									//0
+		writeStdout( "Should be 'local x': " + x );		//0
+		
+		// Can still access the global x.
+		this.x = "global x 2";								//0
+		writeStdout( "Should be 'global x 2': " + this.x );	//0
+
+		// Shows a variable declared within an if statement.  The 'true'
+		// branch will be taken.
+		if ( 1 == 1 )
+			y string = "local y";							//0
+			writeStdout( "Should be 'local y': " + y );		//0
+		else
+			y string = "local y 2";							//0
+			writeStdout( "Should be 'local y 2': " + y );	//0
+		end
+
+		// Shows a variable declared within an if statement.  The 'false'
+		// branch will be taken.
+		if ( 1 != 1 )
+			y string = "local y 3";							//0
+			writeStdout( "Should be 'local y 3': " + y );	//0
+		else
+			y string = "local y 4";							//0
+			writeStdout( "Should be 'local y 4': " + y );	//0
+		end
+		
+		// Enhanced 'for' loop, with inline declaration of loop counter.
+		writeStdout( "Prints the odd numbers between 99 and 109..." );
+		for ( i int from 99 to 109 by 2 )	//0
+			writeStdout( "" + i );			//0
+		end
+		// Shows that another loop can declare a counter with the same name.
+		writeStdout( "Repeat of above results..." );
+		for ( i int from 99 to 109 by 2 )	//0
+			writeStdout( "" + i );			//0
+		end
+	end
+
+	function whatsValidAndInvalid( a int, b int, c int )
+		d int; //0
+		a int; //1
+		e int; //0
+	
+		if ( a < b )	//0
+			f int; 		//0
+			g int; 		//0
+		else
+			e int;	//1 same name
+			f int;	//0 {OK.  There’s another ‘f’ but the scopes of the two variables don’t overlap.}
+			g = 22; //1 g cannot be resolved {Invalid, g is declared in the other branch of the 'if' stmt.}
+			
+			f int;	//1 same name
+		end
+		
+		for ( i int from 37 to 109 ) //0
+		end
+		for ( i int to 109 ) //0
+		end
+
+//Syntax error:
+//		for ( i int = 99 to 109 by 2 ) // Invalid, can't use an initializer.
+//		end
+	end
+	
+	function useBeforeDeclared()
+		a = 10;		//1 a cannot be resolved
+		a int;		//0
+		a = 10;		//0
+	end
+	
+	classVar int;
+	
+	function tryAllBlocks()
+		funcVar int;
+		
+		case(funcVar)
+			when (1)
+				a int;			//0
+				a = 10;			//0
+				funcVar = 10;	//0
+				classVar = 10;	//0			
+			when (2)
+				a int;			//0
+				a = 10;			//0
+				funcVar = 10;	//0
+				classVar = 10;	//0
+			otherwise
+				a int;			//0
+				a = 10;			//0
+				funcVar = 10;	//0
+				classVar = 10;	//0
+		end
+		
+		sqlRec sqlRec;
+		foreach(sqlRec)
+			a int;			//0
+			a = 10;			//0
+			funcVar = 10;	//0
+			classVar = 10;	//0
+		end
+		
+		for(a int to 5)
+			a int;			//1 same name
+			a = 10;			//0
+			funcVar = 10;	//0
+			classVar = 10;	//0
+		end
+		
+		openui new consoleField
+			onevent(after_delete)
+				a int;			//0
+				a = 10;			//0
+				funcVar = 10;	//0
+				classVar = 10;	//0				
+			onevent(before_delete)
+				a int;			//0
+				a = 10;			//0
+				funcVar = 10;	//0
+				classVar = 10;	//0
+		end
+		
+		try
+			a int;			//0
+			a = 10;			//0
+			funcVar = 10;	//0
+			classVar = 10;	//0
+		onException
+			a int;			//0
+			a = 10;			//0
+			funcVar = 10;	//0
+			classVar = 10;	//0		
+		end
+		
+		while(true)
+			a int;			//0
+			a = 10;			//0
+			funcVar = 10;	//0
+			classVar = 10;	//0
+			exit while;		//0
+		end
+		
+		a int;	//0
+	end
+	
+	globalSQLRec1 sqlRec;
+	globalSQLRec2 sqlRec;
+	
+	function ioPrecedence1()
+		localSQLRec sqlRec;
+		item1 = 10;					//0
+	end
+	
+	function ioPrecedence2()
+		item1 = 10;					//1 ambiguous
+	end
+	
+	function ioPrecedence3()
+		add globalSQLRec1;				//0
+		item1 = 10;						//0
+	end
+	
+	function ioPrecedence4()
+		localSQLRec sqlRec;
+		add globalSQLRec1;				//0		
+		item1 = 10;						//1 ambiguous
+	end
+	
+	function ioPrecedence5()
+		item2 = 10;					//1 cannot be resolved
+		sqlRec2 sqlRec2;			//0
+		item2 = 10;					//0
+		add sqlRec2;				//0
+	end
+	
+	function ioPrecedence6()		
+		sqlRec2 sqlRec2;			//0
+		item2 = 10;					//0
+		add sqlRec2;				//0
+	end
+	
+	function ioPrecedence7()		
+		sqlRec2 sqlRec2;			//0
+		add sqlRec2;				//0
+		item2 = 10;					//0		
+	end
+	
+	function ioPrecedence8()
+		
+		if(true)
+			add globalSQLRec1;	//0
+		else
+			item1 = 10;			//0
+		end
+		
+		item1 = 10;				//0
+	end
+	
+	function ioPrecedence9()
+		if(true)
+			localSQLRec1 sqlRec;
+			add localSQLRec1;	//0
+			item1 = 10;		//0
+		else
+			localSQLRec2 sqlRec;	//0
+			add localSQLRec2;		//0
+			item1 = 10;				//0
+		end
+		
+		while(true)
+			item1 = 10;		//1 ambiguous
+		end
+		
+		while(false)
+			item1 = 10;		//1 ambiguous
+		end
+		
+		item1 = 10;			//1 ambiguous
+	end
+	
+	function ioPrecedence10(recParm sqlRec)
+		item1 = 10;			//0
+	end
+	
+	function ioPrecedence11(recParm sqlRec2)
+		recVar sqlRec2;
+		item2 = 10;			//1 ambiguous
+	end
+end
+
+Record sqlRec type sqlRecord
+	10 item1 int;
+end
+
+Record sqlRec2 type sqlRecord
+	10 item2 int;
+end

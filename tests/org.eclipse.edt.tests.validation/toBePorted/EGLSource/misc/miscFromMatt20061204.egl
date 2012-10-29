@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record fixed
+	10 item1 int;
+end
+
+Record flex
+	field1 int;
+end
+
+Program pgm
+	function main()
+		fixed fixed;
+		flex flex;
+		
+		if(fixed == fixed)	//1
+		end
+		
+		if(fixed == null)	//0
+		end
+		
+		if(null == fixed)	//0
+		end
+		
+		if(flex == flex)	//1
+		end
+		
+		if(flex == null)	//0
+		end
+		
+		if(null == flex)	//0
+		end
+	end
+end

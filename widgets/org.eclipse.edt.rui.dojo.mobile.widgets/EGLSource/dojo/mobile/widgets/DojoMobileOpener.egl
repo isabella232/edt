@@ -1,5 +1,12 @@
 package dojo.mobile.widgets;
 
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
+import eglx.ui.rui.FilterKind;
+import eglx.ui.rui.VEContainer;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
+
 // basic handler
    
 ExternalType DojoMobileOpener extends DojoMobileContainer type JavaScriptObject 

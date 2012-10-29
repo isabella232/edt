@@ -1,0 +1,52 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+handler hand1
+	f1 int{
+	@myann{
+			view = wilma   //0
+		},
+	@myann{
+			view = betty   //0
+		},
+	@myann{
+			view = fred   //1
+		}
+		
+		
+	};
+	
+	fred fred;
+	wilma wilma;
+	betty betty;
+end
+
+
+externalType fred type javascriptobject
+end
+
+ExternalType wilma Extends betty type JavaScriptObject
+end
+
+ExternalType betty type JavaScriptObject
+end
+
+record myAnn type annotation
+{
+	targets = [
+		ElementKind.FieldMbr
+	]
+}
+
+	view betty;
+end
+
+

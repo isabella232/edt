@@ -9,6 +9,7 @@ library foreachlib
         array2 bytes[];
         array3 myrec[];
         array4 int[][];
+        array5 any[][];
 
         forEach(exists int from array1) //1
             exists int; //1
@@ -39,7 +40,10 @@ library foreachlib
         forEach(newitem int from array4[1]) //0
         end
 
-        forEach(newitem any[] from array4 as any[][]) //0
+        forEach(newitem any[] from array4 as any[][]) //1
+        end
+        
+        forEach(newitem any[] from array5) //0
         end
 		
         forEach(newitem string from getArray()) //0
@@ -48,7 +52,7 @@ library foreachlib
         forEach(newitem int from exists) //1
         end
 		
-        // no variable declaration means SQLForeach
+		// field declaration is required
         forEach(exists from array1) //1
         end
     end

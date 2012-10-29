@@ -14,18 +14,18 @@ package org.eclipse.edt.compiler.binding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Part;
 
 
 /**
  * @author svihovec
- *
  */
-public abstract class InvocationValidationRule extends ValidationAnnotationTypeBinding {
+public abstract class InvocationValidationRule extends AbstractValidationRule {
 
-		
 	public InvocationValidationRule(String caseSensitiveInternedName) {
 		super(caseSensitiveInternedName);
 	}
-
-	public abstract void validate(Node node, IBinding binding, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	
+	public abstract void validate(Node node, Element element, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

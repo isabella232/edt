@@ -45,11 +45,9 @@ public interface ISyntaxErrorRequestor {
     void unclosedBlockComment(int startOffset, int endOffset);
     void unclosedSQL(int startOffset, int endOffset);
     void unclosedSQLCondition(int startOffset, int endOffset);
-    void unclosedDLI(int startOffset, int endOffset);
     void invalidEscapeSequence(int startOffset, int endOffset);
 
     void whitespaceInSQL(int startOffset, int endOffset);
     void whitespaceInSQLCondition(int startOffset, int endOffset);
-    void whitespaceInDLI(int startOffset, int endOffset);
     void invalidCharacterInHexLiteral(int startOffset, int endOffset);
 }

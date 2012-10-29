@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// covers the fact that names must be unique in a VGUIRecord (except for *)
+// and that multi-dimensional multiply occurring items are not allowed
+
+Record vgUINamesUnique type vgUIRecord //3 item item2. All item names in a VGUIRecord must be unique|item item3. All item names in a VGUIRecord must be unique|item itemarray2.itemarray3. Mutlidimensional multiply occurring items are not allowed in VGUIRecords.
+	10 * char(10);				//0
+	10 * bin(9);				//0
+	10 something;				//0
+		20 * dbchar(6);			//0
+	10 item1 char(10);			//0
+	10 item2 char(5);			//0
+	10 item3 char(15);			//0
+		20 item2 char(5);		//0 
+		20 item3 char(10);		//0 
+	10 itemarray char(10) [2];	//0
+	10 itemarray2 char(15) [3];	//0
+		20 itemarray3 char(5) [3];//0  
+	10 item4 char(15);			//0
+		20 itemarray5 char(5) [3];//0
+end	

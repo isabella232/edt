@@ -1,0 +1,107 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program ConsoleUIAddition
+	Function main()
+		myMenu1 Menu;	// 0
+		myMenu2 Menu { };	// 1
+		myMenu3 Menu = new Menu;	// 1
+		myMenu4 Menu = new Menu { };	// 1
+		myMenu5 Menu { labelText = "abc" };	// 0
+		myMenu6 Menu = new Menu { labelKey = "abc" };	// 0
+		
+		field1 ConsoleField;	// 2
+		field2 ConsoleField { fieldLen = 3 };	// 1
+
+
+		field3 = new ConsoleField { fieldLen = 3 };	// 2
+		field3.name = "abc";	// 1
+		field3 { name = "abc" };	// 1
+		field3 = field3 { name = "abc" };	// 2
+		OpenUI field3 { name = "abc" } End	// 1
+	End
+End
+
+Record ConsoleUIAdditionRec1 Type ConsoleForm
+	{ formSize = [24, 80] }
+	
+	fieldA1 ConsoleField;	// 2 fieldLen is required for variable fields|position is required
+	fieldA2 ConsoleField { segments = [[1, 2, 3]] };	// 0
+	fieldA3 ConsoleField { fieldLen = 3, position=[1,1] };	// 0
+	fieldA4 ConsoleField { fieldLen = 3, segments = [[1, 2, 3]] };
+	
+	fieldB1 ConsoleField { fieldLen = 1, position = [1, 2, 3] };	// 1
+	fieldB2 ConsoleField { fieldLen = 1, position = [] };	// 1
+	fieldB3 ConsoleField { fieldLen = 1, position = yes, position=[1,1] };	// 1
+	fieldB4 ConsoleField { fieldLen = 1, position = [-1, 2] };	// 1
+	fieldB5 ConsoleField { fieldLen = 1, position = [1, 2] };	// 0
+	
+	fieldC1 ConsoleField { fieldLen = 1, dataType = "int[2]", position=[1,1] };	// 1
+	fieldC2 ConsoleField { fieldLen = 1, dataType = "ConsoleUIAdditionDataType", position=[1,1] };	//0
+	fieldC3 ConsoleField { fieldLen = 1, dataType = "unknown", position=[1,1] };	// 1
+	fieldC4 ConsoleField { fieldLen = 1, dataType = "ref int", position=[1,1] };	// 1
+	
+	fieldD1 ConsoleField { fieldLen = 1, binding = "int", position=[1,1] };	// 1
+	fieldD2 ConsoleField { fieldLen = 1, binding = "bindVar.parent[2].child", position=[1,1] };	// 0
+	fieldD3 ConsoleField { fieldLen = 1, binding = "unknown", position=[1,1] };	// 1
+	
+	fieldE1 ConsoleField { fieldLen = 1, columns = 2, position=[1,1] };	// 0
+	fieldE2 ConsoleField { fieldLen = 1, linesBetweenRows = 2, position=[1,1] };	// 0
+	fieldE3 ConsoleField { fieldLen = 1, spacesBetweenRows = 2, position=[1,1] };	// 1
+	fieldE4 ConsoleField { fieldLen = 1, orientIndexAcross = Yes, position=[1,1] };	// 0
+
+	fieldF1 ConsoleField[2] { fieldLen = 1, columns = 2 };	// 0
+	fieldF2 ConsoleField[2] { fieldLen = 1, linesBetweenRows = 2 };	// 0
+	fieldF3 ConsoleField[2] { fieldLen = 1, spacesBetweenColumns = 2 };	// 0
+	fieldF4 ConsoleField[2] { fieldLen = 1, orientIndexAcross = Yes };	// 0
+	
+	fieldG1 ConsoleField[2] { fieldLen = 1, columns = -1 };	// 1
+	fieldG2 ConsoleField[2] { fieldLen = 1, linesBetweenRows = -2 };	// 1
+	fieldG3 ConsoleField[2] { fieldLen = 1, spacesBetweenColumns = -2 };	// 1
+	
+	fieldH1 ConsoleField { fieldLen = 0, position=[1,1] };	// 1
+	
+	fieldI1 ConsoleField[2] { fieldLen = 1, this[1] { columns = 1 } };	// 1
+	fieldI2 ConsoleField[2] { fieldLen = 1, this[1] { linesBetweenRows = 1 } };	// 1
+	fieldI3 ConsoleField[2] { fieldLen = 1, this[1] { spacesBetweenColumns = 1 } };	// 1
+	fieldI4 ConsoleField[2] { fieldLen = 1, this[1] { orientIndexAcross = Yes } };	// 1
+	* ConsoleField{position=[1,1]};													//0
+	bindVar ConsoleUIAdditionBindRec;
+End
+
+Record ConsoleUIAdditionBindRec
+	parent ConsoleUIAdditionBindRec2[5];
+End
+
+Record ConsoleUIAdditionBindRec2
+	child int;
+End
+
+DataItem ConsoleUIAdditionDataType int End
+
+Record ConsoleUIAdditionRec2 Type ConsoleForm	// 1
+End
+
+Record ConsoleUIAdditionRec3 Type ConsoleForm
+	{ formSize = [1, 2, 3] }	// 1
+End
+
+Record ConsoleUIAdditionRec4 Type ConsoleForm
+	{ formSize = [-1 , 2] }	// 1
+End
+
+Record ConsoleUIAdditionRec5 Type ConsoleForm
+	{ formSize = [24, 80] }	// 0
+
+	field1 ConsoleField { fieldLen = 1, name = "a", position=[1,1] };	// 1
+	field2 ConsoleField { fieldLen = 1, name = "b", position=[1,1] };	// 0
+	field3 ConsoleField { fieldLen = 1, name = "a", position=[1,1] };	// 1
+End

@@ -41,8 +41,7 @@ import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Messages;
 import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
-import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.swt.widgets.Display;
 
 
@@ -107,7 +106,7 @@ public class WidgetDescriptorRegistry implements IWidgetDescriptorRegistry {
 					for( int j = 0; j < ruiWidgets.length; j++ ) {
 						if(ruiWidgets[j] instanceof SourcePart) {
 							EGLFile file = (EGLFile)EGLCore.create( ruiWidgets[ j ].getResource() );
-							createWidgetDescriptor(factory, file.getPackageName(), file.getElementName(), ruiWidgets[j] );
+							createWidgetDescriptor(factory, org.eclipse.edt.ide.core.internal.utils.Util.stringArrayToQualifiedName(file.getPackageName()), file.getElementName(), ruiWidgets[j] );
 						} else if(ruiWidgets[j] instanceof BinaryPart) {
 							ClassFile file = (ClassFile) ((BinaryPart)ruiWidgets[j]).getClassFile();
 							IEGLElement parent = file.getParent();
@@ -119,7 +118,7 @@ public class WidgetDescriptorRegistry implements IWidgetDescriptorRegistry {
 								}
 								parent = parent.getParent();
 							}
-							createWidgetDescriptorFromEglar(factory, file.getPackageName(), file.getElementName(), ruiWidgets[j], eglarFile );
+							createWidgetDescriptorFromEglar(factory, org.eclipse.edt.ide.core.internal.utils.Util.stringArrayToQualifiedName(file.getPackageName()), file.getElementName(), ruiWidgets[j], eglarFile );
 						}
 					}
 				}
@@ -170,7 +169,7 @@ public class WidgetDescriptorRegistry implements IWidgetDescriptorRegistry {
 						DataMapping dataMapping = dataTemplate.getDataMapping();
 						EnumerationEntry[] mappings = dataMapping.getMappings();
 						for(EnumerationEntry mapping : mappings){
-							String key = new StringBuffer(_purpose.getId()).append(".").append(dataMapping.isForArray()).append(".").append(dataMapping.isContainer()).append(".").append(mapping.getId()).toString();
+							String key = new StringBuffer(_purpose.getCaseSensitiveName()).append(".").append(dataMapping.isForArray()).append(".").append(dataMapping.isContainer()).append(".").append(mapping.getCaseSensitiveName()).toString();
 							List<DataTemplate> dataTemplates = _hashDataTemplateMappings.get(key.toString());
 							if(dataTemplates == null){
 								dataTemplates = new ArrayList<DataTemplate>();
@@ -243,17 +242,17 @@ public class WidgetDescriptorRegistry implements IWidgetDescriptorRegistry {
 			_listListeners.add( listener );
 	}
 	
-	protected void createWidgetDescriptorFromEglar(WidgetDescriptorFactory factory, String[] packageNames, String elementName, IPart part, File eglarFile) {
+	protected void createWidgetDescriptorFromEglar(WidgetDescriptorFactory factory, String packageName, String elementName, IPart part, File eglarFile) {
 		factory.setEglarFile( eglarFile );
-		createWidgetDescriptor( factory, packageNames, elementName, part );
+		createWidgetDescriptor( factory, packageName, elementName, part );
 	}
 
 	/**
 	 * Creates a descriptor for a widget.
 	 */
-	protected void createWidgetDescriptor(WidgetDescriptorFactory factory, String[] packageNames, String elementName, IPart part) {
+	protected void createWidgetDescriptor(WidgetDescriptorFactory factory, String packageName, String elementName, IPart part) {
 		// Create descriptor for widget
-		WidgetDescriptor widgetDescriptor = factory.createWidgetDescriptor( InternUtil.intern( packageNames ), InternUtil.intern( part.getElementName() ) );
+		WidgetDescriptor widgetDescriptor = factory.createWidgetDescriptor( NameUtile.getAsName( packageName ), NameUtile.getAsName( part.getElementName() ) );
 		//
 		if( widgetDescriptor != null ) {
 			debug("RUIWidget: " + elementName);

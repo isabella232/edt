@@ -29,7 +29,7 @@ import org.eclipse.datatools.modelbase.sql.datatypes.PrimitiveType;
 import org.eclipse.datatools.modelbase.sql.tables.Column;
 import org.eclipse.edt.compiler.internal.EGLSQLKeywordHandler;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
-import org.eclipse.edt.compiler.internal.sql.SQLConstants;
+import org.eclipse.edt.ide.sql.SQLConstants;
 import org.eclipse.edt.ide.sql.SQLPlugin;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EStructuralFeature;

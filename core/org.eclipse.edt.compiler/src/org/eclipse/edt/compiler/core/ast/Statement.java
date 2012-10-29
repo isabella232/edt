@@ -47,7 +47,7 @@ public abstract class Statement extends Node {
 	 * Returns a list of lists of Statement nodes. Will only be non-empty
 	 * if canIncludeOtherStatements() returns true.
 	 */
-	public List getStatementBlocks() {
+	public List<List<Node>> getStatementBlocks() {
 		return Collections.EMPTY_LIST;
 	}
 	

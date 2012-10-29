@@ -1,0 +1,29 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	fixed fixedRec;
+	flex flexRec;
+	
+	function main()
+		startTransaction(fixed);		//0
+		startTransaction(flex);			//1
+	end
+end
+
+Record fixedRec
+	10 item1 int;
+end
+
+Record flexRec
+	item1 int;
+end

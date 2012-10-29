@@ -36,7 +36,7 @@ public class HTMLGenerator extends Generator {
 
 	@Override
 	public String getRelativeFileName(Part part) {
-		return part.getName() + this.getFileExtension();
+		return part.getCaseSensitiveName() + this.getFileExtension();
 	}
 	
 	@Override

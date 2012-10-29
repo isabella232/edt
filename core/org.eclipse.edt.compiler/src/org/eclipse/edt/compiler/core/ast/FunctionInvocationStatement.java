@@ -32,6 +32,7 @@ public class FunctionInvocationStatement extends Statement {
 		return functionInvocation;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -40,7 +41,13 @@ public class FunctionInvocationStatement extends Statement {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new FunctionInvocationStatement((FunctionInvocation)functionInvocation.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return functionInvocation.toString() + ";";
 	}
 }

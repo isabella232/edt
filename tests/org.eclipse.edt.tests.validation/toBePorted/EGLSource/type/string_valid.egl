@@ -1,0 +1,329 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+/* Lines that begin with UNCOMMENT_POST_V6001 are assignment compatiblity restrictions that
+   may be lifted at some point in the future */
+
+Program string_valid {includeReferencedFunctions = yes}
+	
+	validString String;				
+	
+	function main()
+		
+		validString String;			 
+		
+		stringItem1 String;
+		stringItem2 String;
+		stringItem3 String[];
+		stringItem2 = " ABcd ";
+		
+		const stringLiteralConst1 String = "abcd";
+		const stringLiteralConst2 String = "efgh";
+		unicodeItem1 unicode(4);
+		unicodeItem2 unicode(4);
+		charItem1 char(4);
+		mbcharItem1 mbchar(4);
+		dbcharItem1 dbchar(4);
+		hexItem1 hex(4);
+		intItem1 int;
+		dateitem date;
+		timeitem time;
+		timestampitem timestamp;
+		intervalitem interval("yyyyMM");
+		binItem bin(9,2);
+		decimalItem decimal(5,3);
+		floatItem float;
+		
+		stringItem1 = stringLiteralConst1;							
+		stringItem1 = stringItem2;									
+		stringItem1 = unicodeItem1;									
+		stringItem1 = charItem1;									
+		stringItem1 = mbcharItem1;									
+		//stringItem1 = dbcharItem1;									
+		stringItem1 = hexItem1;										
+		stringitem1 = dateitem;
+		stringitem1 = timeitem;
+		stringitem1 = timestampitem;
+		stringitem1 = intervalitem;
+//UNCOMMENT_POST_V6001		binItem = stringItem1;		
+//UNCOMMENT_POST_V6001		decimalItem = stringItem1;
+//UNCOMMENT_POST_V6001		floatItem = stringItem1;
+	
+		move stringLiteralConst1 to stringItem1;							
+		move stringItem1 to stringItem2;									
+		move stringItem1 to unicodeItem1;									
+		move stringItem1 to charItem1;									
+		move stringItem1 to mbcharItem1;									
+		//move stringItem1 to dbcharItem1;									
+		move stringItem1 to hexItem1;										
+		move stringitem1 to dateitem;
+		move stringitem1 to timeitem;
+		move stringitem1 to timestampitem;	
+		move stringitem1 to intervalitem;
+//UNCOMMENT_POST_V6001		move binItem to stringItem1;	
+//UNCOMMENT_POST_V6001		move decimalItem to stringItem1;
+//UNCOMMENT_POST_V6001		move floatItem to stringItem1;	
+	
+	
+	
+		
+		stringItem1 = "12345 6789_$@";								
+		stringItem1 = "abcd" + "efgh";								
+		stringItem1 = stringLiteralConst1 + "efgh";					
+		stringItem1 = stringLiteralConst1 + stringLiteralConst2; 	
+		stringItem1 = stringItem1 + stringItem2;					
+		stringItem1 = stringItem1 + charItem1 + unicodeItem1 + mbcharItem1;		
+		
+		charItem1 = stringItem1 + stringItem2;						
+		hexItem1 = stringItem1;										
+		charItem1 = stringItem2;									
+		unicodeItem1 = stringItem1;									
+		mbcharItem1 = stringItem1;									
+		//dbcharItem1 = stringItem1;									
+		dateitem = stringitem1;
+		timeitem = stringitem1;
+		timestampitem = stringitem1;
+		intervalitem = stringitem1;
+
+		move stringItem1 + stringItem2 to charitem1;
+		move hexItem1 to stringItem1;										
+		move charItem1 to stringItem2;									
+		move unicodeItem1 to stringItem1;									
+		move mbcharItem1 to stringItem1;									
+		//move dbcharItem1 to stringItem1;									
+		move dateitem to stringitem1;
+		move timeitem to stringitem1;
+		move timestampitem to stringitem1;
+		move intervalitem to stringitem1;
+
+		
+		unicodeItem1 = stringItem1;									
+		unicodeItem1 = charItem1;									
+		unicodeItem1 = unicodeItem2;								
+		unicodeItem1 = mbcharItem1;									
+		//unicodeItem1 = dbcharItem1;									
+		unicodeItem1 = "abcd";										
+
+		move unicodeItem1 to stringItem1;									
+		move unicodeItem1 to charItem1;									
+		move unicodeItem1 to unicodeItem2;								
+		move unicodeItem1 to mbcharItem1;									
+		//move unicodeItem1 to dbcharItem1;									
+		move "abcd" to unicodeitem1;										
+		
+		stringItem1 = stringItem2[2:4];								
+		unicodeItem1 = unicodeItem1[1:3];							
+		move stringItem2[2:4] to stringItem1;								
+		move unicodeItem1[1:3]to unicodeItem1;									
+		stringArg1 String;
+		stringArg2 String;
+		stringArg3 String[];
+		stringStaticArray String[10];								
+		charArg1 char(20);
+		charArg2 char(20);						
+		charArg3 char(20)[];										
+		
+		stringItem1 = strlib.clip(stringItem2);						
+		charItem1 = strlib.clip(stringItem2);						
+		hexItem1 = strlib.clip(stringItem2);						
+		unicodeItem1 = strlib.clip(stringItem2);					
+		mbcharItem1 = strlib.clip(stringItem2);						
+		//dbcharItem1 = strlib.clip(stringItem2);						
+		charItem1 = strlib.clip(unicodeItem1);						
+		
+		intItem1 = strlib.charAsInt(stringItem2);				
+		stringItem1 = strlib.formatNumber(5+5, "<");				
+		stringItem1 = strLib.intAsChar(10);						
+		stringItem1 = strlib.lowerCase(stringItem2);				
+		charItem1 = strlib.lowerCase(stringItem2);					
+		hexItem1 = strlib.lowerCase(stringItem2);					
+		unicodeItem1 = strlib.lowerCase(stringItem2);				
+		mbcharItem1 = strlib.lowerCase(stringItem2);				
+		//dbcharItem1 = strlib.lowerCase(stringItem2);				
+		stringItem1 = strlib.upperCase(stringItem2);				
+		charItem1 = strlib.upperCase(stringItem2);					
+		hexItem1 = strlib.upperCase(stringItem2);					
+		unicodeItem1 = strlib.upperCase(stringItem2);				
+		mbcharItem1 = strlib.upperCase(stringItem2);				
+		//dbcharItem1 = strlib.upperCase(stringItem2);				
+		stringItem1 = strlib.spaces(1);								
+		
+
+		stringArg1 = getStringFunction();							
+		stringFunction(stringArg1, stringArg2, StringArg3);		    
+		stringItem1 = getUnicodeFunction();						  	
+		stringItem1 = getCharFunction();							
+		stringItem1 = getMBCharFunction();						  	
+		//stringItem1 = getDBCharFunction();						  	
+		stringItem1 = getHexFunction();							  	
+		
+		if (stringItem1 > stringItem2)								
+		end
+		
+		if (stringItem1 > charItem1)								
+		end
+		
+		if (charItem1 > stringItem1)								
+		end
+		
+		if (stringItem1 > "abcdef")									
+		end
+		
+		if ( stringItem1 > getStringFunction() )					
+		end
+		
+		if (stringItem1 < hexItem1)									
+		end
+		
+		if (stringItem1 <= unicodeItem1)							
+		end
+		
+		if (charItem1 != unicodeItem1)								
+		end
+		
+		if (mbcharItem1 == StringItem1)								
+		end
+		
+		//if (dbcharItem1 <= StringItem1)								
+		//end
+		
+		if (dateItem <= StringItem1)								
+		end
+		
+		if (timeItem <= StringItem1)								
+		end
+		
+		if (timestampItem <= StringItem1)							
+		end
+		
+		if (intervalItem <= StringItem1)
+		end
+					
+		if (stringItem1 >= strlib.clip(stringItem2))				
+		end
+		
+		if ("a" in stringItem3)										
+		end
+		
+		if (stringItem1 + mbcharItem1 like "_a") 					
+		end
+		
+		if (stringItem1 + "abcd" matches "[^abc]")					
+		end
+				
+		unicodeFunction(stringArg1);								
+		mbcharFunction(stringArg1);								   
+		//dbcharFunction(stringArg1);                               
+		hexFunction(stringArg1);										
+		dateFunction(stringArg1);									
+		timeFunction(stringArg1);								 
+		timestampFunction(stringArg1);		
+		intervalFunction(stringArg1);
+		
+	end
+end
+
+function stringFunction( stringArg1 String in, stringArg2 String out, stringArg3 String[] ) 
+	
+	stringArg3[1] = "abcd";					
+
+end
+
+
+function charFunction(charArg1 char(20) in, charArg2 char(20) out, charArg3 char(20)[]) 
+end
+
+function getUnicodeFunction() returns (unicode(10))
+	unicodeVar unicode(10);
+	
+	return (unicodeVar); 
+end
+
+function getCharFunction() returns (char(10))
+	charVar char(10);
+	
+	return (charVar); 
+end
+
+function getMBCharFunction() returns (mbchar(10))
+	mbcharVar mbchar(10);
+	
+	return (mbcharVar); 
+end
+
+function getDBCharFunction() returns (dbchar(10))
+	dbcharVar dbchar(10);
+	
+	return (dbcharVar); 
+end
+
+function getHexFunction() returns (hex(10))
+	hexVar hex(10);
+	
+	return (hexVar); 
+end
+	
+function getStringFunction() returns (String) 						
+	stringVar String;												
+	
+	return (stringVar);												
+end
+
+function externalStringFunction()
+	
+	stringVar String;
+	
+	var = "this is a string";				
+	
+end
+function unicodeFunction(unicodeArg unicode(10) in )					
+end
+
+function mbcharFunction(mbcharArg1 mbchar(20) in ) 						
+end
+
+function dbcharFunction(dbcharArg1 dbchar(20) in ) 						
+end
+
+function hexFunction(hexArg1 hex(20) in )								
+end
+
+function dateFunction(dateArg1 date in)								
+end
+
+function timeFunction(timeArg1 time out)								
+end
+
+function timestampFunction(timestampArg1 timestamp in)								
+end
+
+function intervalFunction(intervalArg1 interval("ssss") in)								
+end
+
+
+DataItem 
+	validString String						
+end   
+
+
+Record testRecord
+	validItem String;						
+end
+
+Library lib
+	validString String;    					
+end
+
+handler pageh type JSFHandler
+	validString String;    				
+end

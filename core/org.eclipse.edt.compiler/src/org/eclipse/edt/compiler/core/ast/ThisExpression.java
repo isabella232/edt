@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 
 
@@ -23,32 +22,28 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  */
 public class ThisExpression extends Expression {
     
-	private IDataBinding dataBinding;
-
 	public ThisExpression(int startOffset, int endOffset) {
 		super(startOffset, endOffset);		
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		visitor.visit(this);
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		return IEGLConstants.KEYWORD_THIS;
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new ThisExpression(getOffset(), getOffset() + getLength());
 	}
 	
-	public IDataBinding resolveDataBinding() {
-		return dataBinding;
+	@Override
+	public String toString() {
+		return getCanonicalString();
 	}
-	
-	public void setDataBinding(IDataBinding dataBinding) {
-		this.dataBinding = dataBinding;
-	}
-	
-
 }

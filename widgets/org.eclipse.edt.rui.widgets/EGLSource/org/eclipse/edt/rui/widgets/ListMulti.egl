@@ -9,7 +9,14 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.rui.widgets;   
+package org.eclipse.edt.rui.widgets;
+
+import eglx.javascript.Job;
+import eglx.javascript.RunFunction;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
+import eglx.ui.rui.Widget;   
 
 handler ListMulti type RUIWidget{tagName = "select", cssFile = "css/org.eclipse.edt.rui.css", 
 	@VEWidget{

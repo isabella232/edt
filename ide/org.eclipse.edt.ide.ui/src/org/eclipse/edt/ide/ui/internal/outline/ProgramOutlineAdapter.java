@@ -12,7 +12,6 @@
 package org.eclipse.edt.ide.ui.internal.outline;
 
 import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.jface.text.IRegion;
@@ -41,18 +40,6 @@ public class ProgramOutlineAdapter extends AbstractOutlineAdapter {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(program.getName().getCanonicalName());
 
-		ProgramParameter[] parameters = (ProgramParameter[]) program.getParameters().toArray(new ProgramParameter[0]);
-		if (parameters.length > 0) {
-			buffer.append('(');
-
-			for (int i = 0; i < parameters.length; i++) {
-				if (i != 0) {
-					buffer.append(", "); //$NON-NLS-1$
-				}
-				buffer.append(formatType(parameters[i].getType()));
-			}
-			buffer.append(')');
-		}
 		String programType = "BasicProgram";
 		if(program.hasSubType())
 			programType = program.getSubType().getCanonicalString();

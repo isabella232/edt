@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.core.internal.builder;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -23,11 +23,13 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  */
 public class BuildManagerPartChange extends BuildManagerChange {
 
-	private String[] packageName;
+	private static final long serialVersionUID = 1L;
+	
+	private String packageName;
 	private String partName;
 	private int partType;
 	
-	public BuildManagerPartChange(String[] packageName, String partName, int partType){
+	public BuildManagerPartChange(String packageName, String partName, int partType){
 		this.packageName = packageName;
 		this.partName = partName;
 		this.partType = partType;
@@ -37,7 +39,7 @@ public class BuildManagerPartChange extends BuildManagerChange {
 		return true;
 	}
 	
-	public String[] getPackageName(){
+	public String getPackageName(){
 		return packageName;
 	}
 	
@@ -55,15 +57,16 @@ public class BuildManagerPartChange extends BuildManagerChange {
 		}
 		
 		if(obj instanceof BuildManagerPartChange){
-			return ((BuildManagerPartChange)obj).packageName == packageName && ((BuildManagerPartChange)obj).partName == partName && ((BuildManagerPartChange)obj).partType == partType;
+			return NameUtile.equals(((BuildManagerPartChange)obj).packageName, packageName)
+					&& NameUtile.equals(((BuildManagerPartChange)obj).partName, partName) && ((BuildManagerPartChange)obj).partType == partType;
 		}
 		return false;
 	}
 	
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		packageName = InternUtil.intern(packageName);
-		partName = InternUtil.intern(partName);
+		packageName = NameUtile.getAsName(packageName);
+		partName = NameUtile.getAsName(partName);
 	}
 
 	public int getPartType() {

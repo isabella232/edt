@@ -14,7 +14,7 @@ package org.eclipse.edt.ide.core.internal.builder;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -23,9 +23,11 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  */
 public class BuildManagerPackageChange extends BuildManagerChange {
 
-	private String[] packageName;
+	private static final long serialVersionUID = 1L;
 	
-	public BuildManagerPackageChange(String[] packageName){
+	private String packageName;
+	
+	public BuildManagerPackageChange(String packageName){
 		this.packageName = packageName;
 	}
 	
@@ -33,7 +35,7 @@ public class BuildManagerPackageChange extends BuildManagerChange {
 		return true;
 	}
 	
-	public String[] getPackageName(){
+	public String getPackageName(){
 		return packageName;
 	}
 	
@@ -47,13 +49,13 @@ public class BuildManagerPackageChange extends BuildManagerChange {
 		}
 		
 		if(obj instanceof BuildManagerPackageChange){
-			return ((BuildManagerPackageChange)obj).packageName == packageName;
+			return NameUtile.equals(((BuildManagerPackageChange)obj).packageName, packageName);
 		}
 		return false;
 	}
 	
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		packageName = InternUtil.intern(packageName);
+		packageName = NameUtile.getAsName(packageName);
 	}
 }

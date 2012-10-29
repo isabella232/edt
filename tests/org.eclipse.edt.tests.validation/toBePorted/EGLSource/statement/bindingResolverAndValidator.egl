@@ -1,0 +1,120 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	use fg;
+	function main() end
+	
+	function func()
+		stringVar string;
+		charVar char(24);
+		intVar int;
+		anyVar any;
+		intAry int[];
+		intAryAry int[][];
+		flexRecAry flexRec[];
+		fixedRecVar fixedRecord;
+		bin90var bin(9,0);
+		bin92var bin(9,2);
+		dateVar date;
+		promptVar prompt;
+		
+// resolveAndValidateDataBinding:
+		anyVar = intVar[1:2];		//1 Invalid data reference intVar. Only character types may be referenced with substrings.  {3362, EGLMESSAGE_SUBSTRING_TARGET_NOT_STRING}
+		anyVar = stringVar[1:2];	//0
+		anyVar = charVar[1:2];		//0
+		anyVar = (anyVar as string)[1:2];		//0
+		anyVar = "a"[1:2];			//0
+
+// validateArraySubscriptsOnArrayFields:
+		anyVar = flexRecAry.a;			//1 flexRecAry is an array and is not subscripted.  {6585, EGLMESSAGE_ARRAY_ACCESS_NOT_SUBSCRIPTED}
+		anyVar = flexRecAry[1].a;		//0
+		
+		anyVar = flexRecAry[1].b.c;		//1 flexRecAry[1].b is an array and is not subscripted.  {6585, EGLMESSAGE_ARRAY_ACCESS_NOT_SUBSCRIPTED}
+		anyVar = flexRecAry[1].b[1].c;	//0
+		
+		anyVar = intVar[3];					//1 intVar is not an array and cannot be subscripted.  {6586, EGLMESSAGE_NON_ARRAY_ACCESS_SUBSCRIPTED}
+		anyVar = flexRecAry[1].a[2];		//1 flexRecAry[1].a is not an array and cannot be subscripted.  {6586, EGLMESSAGE_NON_ARRAY_ACCESS_SUBSCRIPTED}
+		anyVar = flexRecAry[1].b[2].c[2];	//1 flexRecAry[1].b[2].c is not an array and cannot be subscripted.  {6586, EGLMESSAGE_NON_ARRAY_ACCESS_SUBSCRIPTED}
+		
+		anyVar = intAry[1][2];			//1 intAry[1] is not an array and cannot be subscripted
+		anyVar = flexRecAry[1][2].a;	//1 flexRecAry[1] is not an array and cannot be subscripted
+		anyVar = intAryAry[1][2][3];	//1 intAryAry[1][2] is not an array and cannot be subscripted
+		anyVar = intAryAry[1][2];		//0
+
+// validateDynamicAccessOnlyOnDynamicallyAccesibleFields:
+		anyVar = intVar["a"];			//1 intVar cannot be accessed with a string subscript.  {6588, EGLMESSAGE_NON_DYNAMIC_ACCESS_ACCESSED_DYNAMICALLY}
+		anyVar = intAry["a"];			//1 intAry cannot be accessed with a string subscript.  {6588, EGLMESSAGE_NON_DYNAMIC_ACCESS_ACCESSED_DYNAMICALLY}
+		anyVar = anyVar["a"];			//0
+		anyVar = flexRecAry["a"];		//1 flexRecAry cannot be accessed with a string subscript.  {6588, EGLMESSAGE_NON_DYNAMIC_ACCESS_ACCESSED_DYNAMICALLY}
+		anyVar = flexRecAry[1]["a"];	//0
+		anyVar = promptVar["var"];		//0
+		
+// validateNoDotAccessAfterDynamicAccess:
+		anyVar = anyVar["a"].b;				//1 Once dynamic notation is used in a reference, all remaining qualifications must use dynamic notation.  {6584, EGLMESSAGE_DOT_ACCESS_USED_AFTER_DYNAMIC}
+		anyVar = flexRecAry[1]["a"].b;		//1 Once dynamic notation is used in a reference, all remaining qualifications must use dynamic notation.  {6584, EGLMESSAGE_DOT_ACCESS_USED_AFTER_DYNAMIC}
+		anyVar = flexRecAry[1]["a"]["b"];	//0
+
+// validateSubscripts:
+		anyVar = fixedRecVar.occurs5[1];			//0
+		anyVar = fixedRecVar.occurs5[6];			//1 The subscript 6 in array reference fixedRecVar.occurs5[6] is out of range.  {6582, EGLMESSAGE_SUBSCRIPT_OUT_OF_RANGE}
+		anyVar = fixedRecVar.occurs5.occurs5a[1,1];	//0
+		anyVar = fixedRecVar.occurs5.occurs5a[1,6];	//1 The subscript 6 in array reference fixedRecVar.occurs5.occurs5a[1,6] is out of range.  {6582, EGLMESSAGE_SUBSCRIPT_OUT_OF_RANGE}
+		anyVar = form1.occurs5[1];					//0
+		anyVar = form1.occurs5[6];					//1 The subscript 6 in array reference form1.occurs5[6] is out of range.  {6582, EGLMESSAGE_SUBSCRIPT_OUT_OF_RANGE}
+		
+		anyVar = fixedRecVar.occurs5[fixedRecVar];	//1 The subscript fixedRecVar in array reference fixedRecVar.occurs5[fixedRecVar] must be an integer item or integer literal.  {6583, EGLMESSAGE_SUBSCRIPT_MUST_BE_INTEGER_ITEM}
+		anyVar = fixedRecVar.occurs5[dateVar];		//1 The subscript dateVar in array reference fixedRecVar.occurs5[dateVar] must be an integer item or integer literal.  {6583, EGLMESSAGE_SUBSCRIPT_MUST_BE_INTEGER_ITEM}
+		anyVar = fixedRecVar.occurs5[bin92var];		//1 The subscript bin92var in array reference fixedRecVar.occurs5[bin92var] must be an integer item or integer literal.  {6583, EGLMESSAGE_SUBSCRIPT_MUST_BE_INTEGER_ITEM}
+		anyVar = fixedRecVar.occurs5[bin90var];		//0
+
+// validateSubstringType:
+		anyVar = stringVar[1:stringVar];	//1 Invalid index stringVar. Substring indices must be integer literals or data items.  {3363, EGLMESSAGE_SUBSTRING_INDEX_NOT_INTEGER}
+		anyVar = stringVar[anyVar:2];		//0
+	end
+end
+
+Record flexRec
+	a int;
+	b flexRec2[];
+end
+
+Record flexRec2
+	c int;
+end
+
+Record fixedRecord
+	10 occurs5 int[5];
+		15 occurs5a int[5];
+end
+
+Formgroup fg
+	form form1 type textForm
+		occurs5 int[5];
+	end
+end
+
+record recFromPaul20060221
+ 10 a ;
+   15 b [4];
+     20 c int[5];
+end
+ 
+program pgmFromPaul20060221 {allowUnqualifiedItemReferences = yes}
+ 
+ myrec recFromPaul20060221[][][][];
+ 
+ function main()
+  myrec.a[1][2][3][4] = 3;	//0
+  a[1][2][3][4] = 3;		//0
+ end
+end

@@ -77,10 +77,6 @@ public class EGLSystemVariable extends EGLSystemWord {
 		return primitiveType != null && primitiveType.equals( IEGLConstants.EGL_CONSOLE_UI_PRESENTATIONATTRIBUTES_STRING );
 	}
 	
-	public boolean isPSBDataRecord() {
-		return primitiveType != null && primitiveType.equals( IEGLConstants.PSBDATARECORD_STRING );
-	}
-
 	public int getLength() {
 		return length;
 	}

@@ -1,0 +1,215 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+import egl.ui.console.*;
+
+Program consoleUI_valid
+
+	function main()
+		myForm SampleForm4;
+		myFormRec FormRecord;
+								
+		//create a consolefield
+		consoleFieldObj ConsoleField = new ConsoleField;	// 2
+		consoleFieldObj {position = [1,1],  wordWrap = no, columns = 1, linesBetweenRows = 0,	// 4
+						spacesBetweenColumns = 1, orientIndexAcross = no, color = white,	// 3
+						intensity = normal, highlight = none, binding = "", dataType = "", help = "", // 4
+						helpKey = "", caseFormat = defaultCase, masked = no, minimumInput = 0, // 1
+						inputRequired = no, verify = no, isBoolean = no, protect = no, pattern = "", // 5
+						name="consoleFieldObj", fieldLen=1,	// 2
+						comment="comment", commentKey="commentkey", initialValue="value", // 2
+						initialValueKey="string", value="string", autonext=no, editor="string", 
+						validvalues=validValueSpec, align=right, dateFormat="string", numericFormat="string", // 4
+						timeFormat="string", timeStampFormat="string" // 2
+						};
+
+		// create a menuItem
+		menuItemObj MenuItem = new MenuItem;
+		menuItemObj {name="menuItemObj", labelKey="PKEY_F1", labelText="Command1", comment ="Comment",  // 3
+					commentKey = "PKEY_F8", help="HELPME!", helpKey="PKEY_F10", accelerators=[""] // 2
+			 		};
+
+		// create a menu
+		menuObj Menu = new Menu;	// 1
+		menuObj {title="menuObj", menuItems=[menuItemCmd], labelKey="PKEY_F1", labelText="Command1" }; 	// 4
+		
+		//create a menu and a menuItem
+		menu2 Menu {title="Menu2", menuItems {new MenuItem {name="Cmd1", labelText="Command1"}}}; // 2
+		
+		OpenUI menuObj
+		OnEvent(MENU_ACTION:"cmd1")
+			exit openUI;
+		end
+
+		// alternative menu, arranged a little more like I4GL
+		// will work once parser is regened
+//		OpenUI new Menu {title="Menu1", menuItems {new MenuItem {labelKey=(getKeyCode("PKEY_F1")),
+//						name=”Cmd1”, labelText=”Command1”}}
+//						}
+//				OnEvent(MENU_ACTION:“Cmd1”)
+//					exit openUI;
+//		end
+		
+		//create a window
+		windowObj Window = new Window;
+		windowObj {name="windowObj", size= [800, 600], position = [1,1], color = black, highlight = [], // 3
+				  intensity = normalIntensity, hasBorder = no, hasCommentLine = yes, formLine = 3, 
+			      messageLine = 2, menuLine = 1, promptLine = 1, commentLine = 1
+			      }; 
+		
+		//create a prompt
+		promptObj Prompt = new Prompt;
+		promptObj {isChar = foo, message="message", response="response"	// 2
+				  };
+		
+		result String;
+		OpenUI promptObj
+			bind result
+		OnEvent(ON_KEY:"PKEY_F2")
+			exit program;
+		end
+		
+		// Alternative (I4GL flavor) Create and open a Prompt
+		// will work once parser is regened
+//		result2 String;
+//		OpenUI new Prompt {isChar=false}
+//			bind result2
+//		OnEvent(ON_KEY:"PKEY_F2")
+//			exit program;
+//		end
+		
+		//create a PresentationAttributes
+		presentationObj PresentationAttributes = new PresentationAttributes;	// 0
+		presentationObj {color = white, intensity = normalIntensity, highlight = [""]}; // 1
+		
+		//create a KeyRecord
+		keyRecordObj KeyRecord = new KeyRecord;	// 2
+		keyRecordObj {isShifted = no, isControl = no, isAlt = no, isSpecial = no, value=5};	// 1
+		
+		
+		//openUI on a console form
+		openUI 
+		{isConstructQuery=yes, constructQueryResponse=constructQueryResult, setInitial=no, // 2
+		displayOnly=no, help="", helpKey=PF1, allowDelete=yes, allowInsert=yes, allowAppend=yes, // 0
+		maximumRows=5	// 1
+		}  
+		myForm bind myFormObj	// 1
+			OnEvent(ON_KEY:"PKEY_F3")
+				exit openUI;
+			OnEvent(AFTER_FIELD:"field3")
+				exit openUI;
+			OnEvent(AFTER_OPENUI)
+				exit openUI;
+			OnEvent(BEFORE_OPENUI )
+				exit openUI;
+			OnEvent(BEFORE_FIELD:"field1”,”field2") 
+				exit openUI;
+		end
+		
+		myVar String;
+		myIntVar int;
+		myConsoleField consoleField[];	// 1
+		
+		//ConsoleLib functions
+		displayLine( "String" );	// 1
+		myVar = promptLine("String"); // 1
+		activateWindow(windowObj);
+		activateWindowByName("string");
+		clearActiveWindow();
+		clearWindow(windowObj);
+		clearWindowByName("string");
+		closeActiveWindow();
+		closeWindow();
+		closeWindowByName("string");
+		drawBox(1, 1, 1, 1);
+		//drawBoxWithColor(1, 1, 1, 1, red);
+		displayAtLine("string", 1);
+		displayAtPosition("string", 1, 1);
+		displayMessage("string");
+		displayError("string");
+		hideErrorWindow();
+		openWindow(windowObj);
+		openWindowByName("string");
+		clearActiveForm();
+		clearForm(myForm);
+		clearConsoleFields(myConsoleField); // 1
+		displayForm(myform);
+		displayFormByName("string");
+		displayFields(myConsoleField);
+		gotoField(consoleFieldObj);
+		gotoFieldByName("string");
+		nextField();
+		previousField();
+		myIntVar=isCurrentField(consoleFieldObj);
+		myIntVar=isCurrentFieldByName("string");
+		myIntVar=isFieldModified(consoleFieldObj);
+		//getKey(); //returns keykind?
+		myIntVar=getKeyCode("string");
+		//lastKeyTyped(); //returns keykind?
+		myIntVar=currentArrayScreenLine(); 
+		myIntVar=currentArrayDataLine();
+		scrollDownPage();
+		scrollDownLines(1);
+		scrollUpPage();
+		scrollUpLines(1);
+		setArrayLine(1);
+		showHelp("string");
+
+		
+	end
+end
+
+Record SampleForm type ConsoleForm { formSize=[14,80] }
+
+propertyBlockTest ConsoleField {position = [1,1],  wordWrap = no, colums = 1, linesBetweenRows = 0,	// 3
+								spacesBetweenColumns = 1, orientIndexAcross = no, color = white, // 0
+								intensity = normal, highlight = none, binding = "", dataType = "", help = "", // 4
+								helpKey = PF20, caseFormat = defaultCase, masked = no, minimumInput = 0,	// 0
+								inputRequired = no, verify = no, isBoolean = no, protect = no, pattern = ""
+							   };
+
+myFormView dictionary { command=command, response=response };
+
+srArray arrayDictionary { activity=activity, commandCode=commandCode };
+
+End
+
+Record SampleForm4 type ConsoleForm { formSize=[14,80] }
+	// Constant fields don’t need names 
+* ConsoleField { position=[1,31], value="Sample Dynamic Form" } ; 
+* ConsoleField { position=[3,18], value="Activity:" } ;
+* ConsoleField { position=[3,61], value="Command Code:" } ;
+* ConsoleField { position=[10,1], value="Response:" } ;
+* ConsoleField { position=[13,1], value="Command:" } ;
+* ConsoleField { position=[14,1], value="Enter=Run PF3=Exit"} ;
+
+// Fields available to reference in code
+activity ConsoleField[5] { position=[4,18], fieldLen=40 } ;
+commandCode ConsoleField[5] { position=[4,61], fieldLen=10 } ;
+response ConsoleField { position=[10,12], fieldLen=30 } ;
+command ConsoleField { position=[13,10], fieldLen=20 } ;
+
+End
+
+Record FormData
+	activity char(42)[5];
+	commandCode char(10)[5];
+	response char(228);
+	command char(70);
+end
+
+Record FormRecord
+	activity char(42)[20];
+	commandCode char(10)[20];
+	response char(228);
+	command char(70);
+end
+

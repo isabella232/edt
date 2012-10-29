@@ -44,7 +44,7 @@ import org.eclipse.edt.ide.ui.internal.Strings;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.project.artifacts.TreeNode;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.project.artifacts.TreeNodeFile;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.project.artifacts.TreeNodeFolder;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -57,7 +57,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class DeploymentUtilities {
 
-	private static final String RUIHANDLER = InternUtil.intern( "RUIHandler" ); //$NON-NLS-1$
+	private static final String RUIHANDLER = NameUtile.getAsName( "RUIHandler" ); //$NON-NLS-1$
 	private DeploymentUtilities() {
 	}
 	private static DeploymentUtilities instance = new DeploymentUtilities();
@@ -79,7 +79,7 @@ public class DeploymentUtilities {
 			IPart part = partinfo.resolvePart( projSearchScope );
 			if(part instanceof SourcePart){
 			SourcePart sourcePart = (SourcePart)partinfo.resolvePart( projSearchScope );
-			if ( sourcePart.isHandler() && sourcePart.getSubTypeSignature() != null && RUIHANDLER == InternUtil.intern( Signature.toString( sourcePart.getSubTypeSignature() ) ) )
+			if ( sourcePart.isHandler() && sourcePart.getSubTypeSignature() != null && NameUtile.equals( RUIHANDLER, NameUtile.getAsName( Signature.toString( sourcePart.getSubTypeSignature() ) ) ) )
 			{
 				String impl = partinfo.getFullyQualifiedName();
 				String htmlDefault = impl;
@@ -95,7 +95,7 @@ public class DeploymentUtilities {
 		}
 			else if(part instanceof BinaryPart){
 				BinaryPart binaryPart = (BinaryPart)partinfo.resolvePart( projSearchScope );
-				if ( binaryPart.isHandler() && binaryPart.getSubTypeSignature() != null && RUIHANDLER == InternUtil.intern( Signature.toString( binaryPart.getSubTypeSignature() ) ) )
+				if ( binaryPart.isHandler() && binaryPart.getSubTypeSignature() != null && NameUtile.equals( RUIHANDLER, NameUtile.getAsName( Signature.toString( binaryPart.getSubTypeSignature() ) ) ) )
 				{
 					String impl = partinfo.getFullyQualifiedName();
 					String htmlDefault = impl;

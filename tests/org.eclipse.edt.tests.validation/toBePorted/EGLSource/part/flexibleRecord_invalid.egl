@@ -1,0 +1,502 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// Invalid
+// fixed records can't have strings, dynamic arrays, blobs, clobs,
+// typedefs to flexible records, refs, arraydictionarys, anys
+// in addition, SQL records can't have arrays of any kind 
+Record fixedSQL type sqlrecord
+	10 item1 char(4);            // 1 SQLRecords cannot be substructured
+		15 subitem2 char(4); 	 
+	10 item2 String;		 	 // 1 string is not a valid type for an item in a fixed record
+	10 item3Array char(4) [3]; 	 // 1 Occurs are not allowed to be used in SQL records
+	10 item4Array char(4) [];	 // 1 Dynamic arrays cannot be used in fixed records
+	   item5Array char(4); 		 // 1 all items must have level numbers
+	10 item6 blob;				 // 1 blob is not a valid type for an item in a fixed record
+	10 item7 clob;     			 // 1 clob is not a valid type for an item in a fixed record
+	10 item8 arrayDictionary;    // 1 The part arrayDictionary could not be resolved to a data item or fixed record.
+	10 item10 any;			 	 // 1 any is not a valid type for an item in a fixed record
+//	10 item11 ref blob;			 // 2 blob is not a valid type for an item in a fixed record | The ref modifier cannot be used in a fixed record.
+end
+
+// you can't embed a fixed record in a flexible record
+Record flexSQL type sqlrecord
+	 item3Array char(4) [3]; 	 
+	 item4Array char(4) [];	 	 
+	 embed fixedindexed1;        // 1 Fixed records can be embedded only in other fixed records
+end
+// indexed records are always fixed
+// therefore apply fixed rules
+Record fixedIndexed1 type indexedrecord
+	{filename = "abc", keyitem = "item1"}
+	item1 String; 		// 1 string is not a valid type for an item in a fixed record
+	item2 char(4) [];	// 1 Dynamic arrays cannot be used in fixed records
+	item6 blob;			// 1 blob is not a valid type for an item in a fixed record
+	item7 clob;   	    // 1 clob is not a valid type for an item in a fixed record
+end
+Record fixedIndexed2 type indexedrecord
+	{filename = "abc", keyitem = "item1"}
+	10 item1 String; 		// 1 string is not a valid type for an item in a fixed record
+	10 item2 char(4) [];	// 1 Dynamic arrays cannot be used in fixed records
+	10 item6 blob;			// 1 blob is not a valid type for an item in a fixed record
+		15 item7 clob;   	// 1 clob is not a valid type for an item in a fixed record
+end
+// serial records are always fixed
+// therefore apply fixed rules
+Record fixedSerial1 type serialrecord
+	{filename = "def"}
+	item1 String;		// 1 string is not a valid type for an item in a fixed record
+	item2 char(4) []; 	// 1 Dynamic arrays cannot be used in fixed records
+	item6 blob;			// 1 blob is not a valid type for an item in a fixed record
+	item7 clob;      	// 1 clob is not a valid type for an item in a fixed record	
+end
+
+Record fixedSerial2 type serialrecord
+	{filename = "def"}
+	10 item1 String; 	 // 1 string is not a valid type for an item in a fixed record
+	10 item2 char(4) []; // 1 Dynamic arrays cannot be used in fixed records
+	10 item6 blob;		 // 1 blob is not a valid type for an item in a fixed record
+	10 item7 clob;       // 1 clob is not a valid type for an item in a fixed record	
+end
+// relative records are always fixed
+// therefore apply fixed rules
+Record fixedRelative1 type relativerecord
+	{filename = "ghi", keyitem = "item6"}
+	item1 String;  	  // 1 string is not a valid type for an item in a fixed record
+	item2 char(4) []; // 1 Dynamic arrays cannot be used in fixed records
+	item6 blob;		  // 1 blob is not a valid type for an item in a fixed record
+	item7 clob;       // 1 clob is not a valid type for an item in a fixed record	
+end
+
+Record fixedRelative2 type relativerecord
+	{filename = "ghi", keyitem = "item6"}
+	10 item1 String;  	 // 1 string is not a valid type for an item in a fixed record
+	10 item2 char(4) []; // 1 Dynamic arrays cannot be used in fixed records
+	10 item6 blob;		 // 1 blob is not a valid type for an item in a fixed record
+	10 item7 clob;       // 1 clob is not a valid type for an item in a fixed record	
+end
+// MQ records are always fixed
+// therefore apply fixed rules
+Record fixedMQ type MQrecord
+	{queuename = "somename"}
+	10 item1 String;	 // 1 string is not a valid type for an item in a fixed record
+	10 item2 char(4) []; // 1 Dynamic arrays cannot be used in fixed records
+	10 item6 blob;		 // 1 blob is not a valid type for an item in a fixed record
+	10 item7 clob;       // 1 clob is not a valid type for an item in a fixed record	
+end
+
+Record fixedBasic type basicrecord
+	10 item1 String;	 // 1 string is not a valid type for an item in a fixed record
+	10 item2 char(4) []; // 1 Dynamic arrays cannot be used in fixed records
+//	10 item6 ref blob;	 // 2 blob is not a valid type for an item in a fixed record | The ref modifier cannot be used in a fixed record.
+	10 item7 clob;       // 1 clob is not a valid type for an item in a fixed record
+	10 embed flexBasic;	 // 1 Only fixed records can be embedded in fixed records
+end
+
+Record flexBasic type basicRecord
+	flexBasicItem int;
+end
+
+// embeds can't cause a loop in fixed or flexible (typedef loop in flexible record is OK when they are refs)
+Record flexembed1 type basicrecord
+	embed flexembed2;		// 1 The record flexembed2 contains an item whose type results in an illegal recursive loop
+end
+
+Record flexembed2 type basicrecord
+	embed flexembed3;		// 1 The record flexembed3 contains an item whose type results in an illegal recursive loop
+end
+
+Record flexembed3 type basicrecord
+	embed flexembed1;		// 1 The record flexembed1 contains an item whose type results in an illegal recursive loop
+end
+
+// typedef loop in flexible record is OK when they are refs, otherwise it is not
+Record dept type basicrecord
+	emps employee;			// 1 contains an item whose type results in an illegal recursive loop. Recursive loops are permitted for ref items only.
+end
+
+Record employee type basicrecord
+	dept dept;				// 1 dept contains an item whose type results in an illegal recursive loop. Recursive loops are permitted for ref items only.
+end
+
+Record dept2 type basicrecord
+	emps employee2;			// 1 employee2 contains an item whose type results in an illegal recursive loop. Recursive loops are permitted for ref items only.
+end
+
+Record employee2 type basicrecord
+	manager mgr2;				// 1 mgr2 contains an item whose type results in an illegal recursive loop. Recursive loops are permitted for ref items only.
+//	empdept ref dept2;			// 0
+end
+
+Record mgr2 type basicrecord
+	mgrdept dept2 ;				// 1 dept2 contains an item whose type results in an illegal recursive loop. Recursive loops are permitted for ref items only.
+end
+
+Program redefprog type basicprogram
+	myflex1 flex1;
+
+	myflexredef flex2 {redefines = myflex1 } ;	// 1 The redefines property can only be specified on the variable declaration for a basic fixed record.
+	myfixedredef fixed1 {redefines = myflex1 } ;	// 1 redefines must match a fixed record variable
+
+	function main()
+	end
+end
+Record someflex type basicrecord
+	flexitem int;
+end
+// test invalid assignments
+Program assignprog type basicprogram
+	{allowUnqualifiedItemReferences = yes}
+	myflex1 flex1;
+	myflex2 flex2;
+	myflex2a flex2;
+	myfixed2 fixed1;
+	myflex3 someflex;
+	use mydatatable;
+	use myformg;
+	function main()  
+	
+		myflex2 = mydatatable[1]; 		// 1
+		mydatatable[1] = myflex2;  		// 1
+		myfixed2 = myflex2;             // 1 The source of an assignment to a fixed record must be a fixed structure
+		myflex2 = form1; 				// 1
+		form1 = myflex2;  				// 1
+		// types must match for flexible record assignment:
+		myflex1 = myflex2;              // 1 flex1 and flex2 are not compatible types
+		myflex2 = myfixed2;             // 1 Fixed records can be assigned only to other fixed records
+		// items in flexible records must be qualified, even if allowUnqualifiedItemReferences = yes:
+		flexitem = 3;					// 1 flexitem cannot be resolved
+	end
+end
+Record flexmovex type basicrecord
+	item2 int;
+	item1 dbchar(10);
+end
+Record flexmovez type basicrecord
+	item2 dbchar(10);
+	item1 dbchar(10);
+end
+Record fixedmovey type basicrecord
+	10 itema dbchar(10);
+		15 item2 dbchar(10);
+	10 item1 int;
+end
+		   
+Datatable mydatatablemovex
+	10 item2 char(10);
+	10 item1 int;
+	{contents = [["a234567890", 1],["b234567890",2]]}
+end
+Datatable mydatatablemovey
+	10 itemb char(1);
+	10 itema;
+		15 itemc char(10);
+	{contents = [["1", "a234567890"],["2", "b234567890"]]}
+end
+//test the invalid combinations of move statements
+Program moveprog type basicprogram
+	myflexmove1 flexall1;
+	myflexmove2 flexall2;
+	myflexmove3 flexall3;
+	use mydatatablemovex;
+	use mydatatablemovey;
+	use myformg;
+	myflexmove flexmovex;
+	myflexmovez flexmovez;
+	myfixedmove fixedmovey;
+	function main()
+	
+		// move flexible to forms  
+		move myflexmove to form2;          	 // 1 item2 byname. The types int and dbchar are not compatible
+		move myflexmove to form2 byname; 	 // 1 item2 byname. The types int and dbchar are not compatible
+		// change the number on the following line to 1 after 6.0.0.1, when numeric and character primitives are move compatible
+		move myflexmove to form3 byposition; // 1 In the move statement, you specified a source-and-target combination that is not valid when you use byPosition
+		
+		// move form to flexible
+		move form2 to myflexmove ;         	 // 1 item2 byname. The types dbchar and int are not compatible
+		move form2 to myflexmove byname;  	 // 1 item2 byname. The types dbchar and int are not compatible
+		// change the number on the following line to 1 after 6.0.0.1, when numeric and character primitives are move compatible
+		move form3 to myflexmove byposition; // 1 In the move statement, you specified a source-and-target combination that is not valid when you use byPosition
+	
+		// move from fixed structure (record or datatable) to flexible record 
+		move myfixedmove to myflexmove;         	// 2 item2 byname.|item1 byname
+		move myfixedmove to myflexmove byname;  	// 2 item2 byname.|item1 byname
+		move myfixedmove to myflexmove byposition;  // 2 byposition|byposition
+		move myfixedmove to myflexmovez byposition; // 1 item1 byposition to item1.
+		move mydatatablemovex[1] to myflexmove; 		// 1 mydatatablemovex is not an array and cannot be subscripted
+		move mydatatablemovex[1] to myflexmove byname; 		// 1 mydatatablemovex is not an array and cannot be subscripted
+		move mydatatablemovey[1] to myflexmove byposition;	// 1 mydatatablemovey is not an array and cannot be subscripted
+	
+		// move from flexible record to fixed structure (record or datatable)
+		move myflexmove to myfixedmove;         	// 2 item2 byname.|item1 byname.
+		move myflexmove to myfixedmove byname;  	// 2 item2 byname.|item1 byname.
+		move myflexmove to myfixedmove byposition;  // 2 byposition|byposition
+	 	move myflexmovez to myfixedmove byposition; // 1 item1 byposition to item1.
+		move myflexmove to mydatatablemovex[1]; 	// 1 mydatatablemovex is not an array and cannot be subscripted
+		move myflexmove to mydatatablemovex[1] byname; 		// 1 mydatatablemovex is not an array and cannot be subscripted
+		move myflexmove to mydatatablemovey[1] byposition;	// 1 mydatatablemovey is not an array and cannot be subscripted
+
+		// move from flexible to flexible
+		move myflexmove1 to myflexmove2;		// 2 item2 byname.|item5 byname.
+		move myflexmove1 to myflexmove2 byName; // 2 item2 byname.|item5 byname.
+		move myflexmove1 to myflexmove2 byposition; // 2 item3 byposition to item4.|item4 byposition to item3.
+		move myflexmove1 to myflexmove3;		// 1 item7 byname. The types int and flex2 are not compatible 
+		move myflexmove1 to myflexmove3 byName; // 1 item7 byname. The types int and flex2 are not compatible
+	end
+end
+
+Record flexall1 type sqlrecord
+	item1 String;
+	item2 char(4);
+	item5 flex2;
+//	item6 ref arraydictionary;
+	item3 clob; 
+	item4 blob;
+	item7 int;
+end
+
+Record flexall2 type sqlrecord
+	item6 String;
+	item5 char(4);
+	item2 flex2;
+//	item1 ref arraydictionary;
+	item4 blob; 
+	item3 clob;
+	item7 int;
+end
+
+Record flexall3 type sqlrecord
+	item7 flex2;
+end
+
+Record fixedmove1 type basicrecord
+	item1 char(10);
+end
+		   
+Datatable mydatatablemove 
+	10 item1 char(10);
+	{contents = [["a234567890"],["b234567890"]]}
+end
+Record flex1 type basicrecord
+	item1 String;
+	item2 char(1024);
+end
+
+Record flex2 type basicrecord
+	item1 char(10);
+end
+
+Record fixed1 type basicrecord
+	10 item1 char(10);
+end
+		   
+Datatable mydatatable 
+	10 item1 char(10);
+	{contents = [["a234567890"],["b234567890"]]}
+end
+
+Formgroup myformg
+	form form1 type textform
+		{formsize = [24,80] }
+		item1 char(10);
+	end
+	form form2 type textform
+		{formsize = [24,80] }
+		item2 dbchar;
+		item3 int;
+	end
+	form form3 type textform
+		{formsize = [24,80] }
+		item1 char(10);
+		item2 int;
+	end
+end	
+
+record flexrecd1 type basicrecord
+	item123 string;
+	item456 char(4);
+end
+record flexrecd2 type basicrecord
+	item123 string;
+	item456 char(4);
+end
+record fixedrecd1 type basicrecord
+	10 item123 char(10);
+	10 item456 char(4);
+end
+// test argument to function passing - args must be assignment compatible
+Program funcargprog type basicprogram
+	myflexarg1 flexrecd1;
+	myflexarg2 flexrecd2;
+	myfixedarg1 fixedrecd1;
+	function main()
+		invalidflexfunc2(myflexarg2); 	// 1 myflexarg2 cannot be passed to the inOut parameter myflexparm1
+		invalidflexfunc2(myfixedarg1); 	// 1 myfixedarg1 cannot be passed to the inOut parameter myflexparm1
+		invalidflexfunc3(myflexarg2);  	// 1 myflexarg2 cannot be passed to the inOut parameter myfixedparm1
+	end
+	function invalidflexfunc1 (myflexparm1 flexrecd1 in, 	// 0
+						   myflexparm2 flexrecd1 out,  		// 0
+						   myflexparm2a flexrecd1 field, 	// 1 myflexparm2a of type record for Function invalidflexfunc1 cannot be declared with the field modifier
+						   myflexparm2b flexrecd1 nullable) // 1 myflexparm2b of type record for Function invalidflexfunc1 cannot be nullable
+	end
+	function invalidflexfunc2 (myflexparm1 flexrecd1 )
+	end	
+	function invalidflexfunc3 (myfixedparm1 fixedrecd1 )
+	end
+	function myfunc(p1 char(10), p2 char )
+	end
+end
+
+
+
+record flexrecda type basicrecord
+	item123 string;
+	item456 char(4);
+end
+record flexrecdb type basicrecord
+	item123 string;
+	item456 char(4);
+end
+record fixedrecda type basicrecord
+	10 item123 char(10);
+	10 item456 char(4);
+end
+
+// test call arguments - arguments must be assignment compatible and flexible records can only be passed to EGL program 
+// note that unknown program message should only be produced if the arg list contains a flexible record
+Program callargprog type basicprogram
+	myflexarg1 flexrecda;
+	myflexarg2 flexrecdb;
+	myfixedarg1 fixedrecda;
+	function main()
+		call invalidflexpgm1(myflexarg2); 	// 1 invalidflexpgm1(fixedrecda) is not applicable for the arguments (flexrecdb)
+		call invalidflexpgm2(myflexarg1); 	// 1 invalidflexpgm2(flexrecdb) is not applicable for the arguments (flexrecda)
+		call invalidflexpgm2(myfixedarg1);  // 1 invalidflexpgm2(flexrecdb) is not applicable for the arguments (fixedrecda)
+		call invalidflexpgm3(myflexarg1);  	// 1 invalidflexpgm3(form1) is not applicable for the arguments (flexrecda)
+		call unknownflexpgm (myflexarg1); 	// 0
+	end
+end	
+program  invalidflexpgm1 (myfixedparm1 fixedrecda )
+	function main()
+	end	
+end	
+program invalidflexpgm2 (myflexparm1 flexrecdb )
+	function main()
+	end	
+end
+program invalidflexpgm3 (form1 form1)
+	use myformg;
+	function main()
+	end	
+end	
+
+
+// test transfer arguments - arguments must be assignment compatible and flexible records can only be passed to EGL program 
+// note that the unknown program message should only be produced if the record being passed is a flexible record
+Program transferprog type basicprogram
+	myflexarg1 flexrecda;
+	myflexarg2 flexrecdb;
+	myfixedarg1 fixedrecda;
+	function main()
+		transfer to program transferflexpgm1 passing myflexarg2 ; // 1 transferflexpgm1 input record (fixedrecda) is not applicable for the record (flexrecdb)
+		transfer to program transferflexpgm2 passing myflexarg1 ; // 1 transferflexpgm2 input record (flexrecdb) is not applicable for the record (flexrecda)
+		transfer to program transferflexpgm2 passing myfixedarg1 ;  // 1 transferflexpgm2 input record (flexrecdb) is not applicable for the record (fixedrecda)
+		transfer to program transferunknownflexpgm passing myflexarg1 ; // 0
+	end
+end	
+program  transferflexpgm1 ( )
+	myfixedparm1 fixedrecda;
+	{inputrecord = myfixedparm1}
+	function main()
+	end	
+end	
+program transferflexpgm2 ()
+	myflexparm1 flexrecdb;
+	{inputrecord = myflexparm1}  
+	function main()
+	end	
+end
+
+
+// test show arguments - arguments must be assignment compatible and flexible records can only be passed to EGL program 
+// note that the program unknown message should only be produced if the record being passed is a flexible record 
+Program showpgm type textUIProgram
+	myflexarg1 flexrecda;
+	myflexarg2 flexrecdb;
+	myfixedarg1 fixedrecda;
+	use myformg;
+	function main()
+		show form1 returning to showpgm1 passing myflexarg2; // 1 showpgm1 input record (fixedrecda) is not applicable for the record (flexrecdb)
+		show form1 returning to showpgm2 passing myflexarg1 ; // 1 showpgm2 input record (flexrecdb) is not applicable for the record (flexrecda)
+		show form1 returning to showpgm2 passing myfixedarg1 ;  // 1 showpgm2 input record (flexrecdb) is not applicable for the record (fixedrecda)
+		show form1 returning to showunknownpgm passing myflexarg1 ; // 0
+	end
+end	
+program  showpgm1 ( )
+	myfixedparm1 fixedrecda;
+	{inputrecord = myfixedparm1}
+	function main()
+	end	
+end	
+program showpgm2 ()
+	myflexparm1 flexrecdb;
+	{inputrecord = myflexparm1}  
+	function main()
+	end	
+end
+
+// test forward arguments - arguments must be assignment compatible and flexible records can only be passed to EGL JSFHandler 
+//???I'm not sure whether we already validate that the forward to label target has an onpageloadfunction function at all 
+// or that the arguments to it match the arguments on the forward statement.
+// note that the JSFHandler unknown message should only be produced if the argument list contains a flexible record
+handler forwardpgm type JSFHandler 
+	myflexarg1 flexrecda;
+	myflexarg2 flexrecdb;
+	myfixedarg1 fixedrecda;
+	function main()
+		forward myflexarg2 to label "mypage1"; // 1 fixedfunc(fixedrecda) is not applicable for the arguments (flexrecdb)
+		forward myflexarg1 to label "mypage2" ; // 1 flexfunc(flexrecdb) is not applicable for the arguments (flexrecda)
+		forward myfixedarg1 to label "mypage2" ;  // 1 flexfunc(flexrecdb) is not applicable for the arguments (fixedrecda)
+		forward myflexarg1 to label "mypage3"; // 1 Forward to label target must have onpageloadfunction specified
+		forward myflexarg1 to label "unknownpagehandler" ; // 0
+	end
+end	
+handler mypage1 type JSFHandler 
+	{onpageloadfunction = fixedfunc }
+	function main()
+	end	
+	function fixedfunc (myfixedparm1 fixedrecda)
+	end
+end	
+handler mypage2 type JSFHandler 
+	{onpageloadfunction = flexfunc }
+	function main()
+	end	
+	function flexfunc (myflexparm1 flexrecdb)
+	end
+end
+handler mypage3 type JSFHandler 
+	function main()
+	end	
+end
+
+Record RATLC01070140_Employee
+	embed RATLC01070140_Person ;
+	name string ; // 1 duplicate variable named name is declared
+end
+
+Record RATLC01070140_Person
+	name string;
+end
+
+Record needAnError
+    gotNoType; // 1 Field gotNoType must be defined with a type.
+End

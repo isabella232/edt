@@ -17,22 +17,13 @@ public class JavaobjectTest extends ValidationTestCase {
 	 * p1 int,
 	 * 1 validation message is expected.
 	 */
-	public void testLine3() {
-		List messages = getMessagesAtLine( 3 );
+	public void testLine4() {
+		List messages = getMessagesAtLine( 4 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
 	 * p2 int in,
-	 * 0 validation messages are expected.
-	 */
-	public void testLine4() {
-		List messages = getMessagesAtLine( 4 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * p3 dictionary,
 	 * 0 validation messages are expected.
 	 */
 	public void testLine5() {
@@ -41,11 +32,20 @@ public class JavaobjectTest extends ValidationTestCase {
 	}
 
 	/*
-	 * p4 dictionary inout,
-	 * 1 validation message is expected.
+	 * p3 dictionary,
+	 * 0 validation messages are expected.
 	 */
 	public void testLine6() {
 		List messages = getMessagesAtLine( 6 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * p4 dictionary inout,
+	 * 1 validation message is expected.
+	 */
+	public void testLine7() {
+		List messages = getMessagesAtLine( 7 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -53,8 +53,8 @@ public class JavaobjectTest extends ValidationTestCase {
 	 * p5 int[],
 	 * 0 validation messages are expected.
 	 */
-	public void testLine7() {
-		List messages = getMessagesAtLine( 7 );
+	public void testLine8() {
+		List messages = getMessagesAtLine( 8 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -62,8 +62,8 @@ public class JavaobjectTest extends ValidationTestCase {
 	 * p6 int[] out,
 	 * 1 validation message is expected.
 	 */
-	public void testLine8() {
-		List messages = getMessagesAtLine( 8 );
+	public void testLine9() {
+		List messages = getMessagesAtLine( 9 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -71,8 +71,8 @@ public class JavaobjectTest extends ValidationTestCase {
 	 * p7 int[] inout
 	 * 1 validation message is expected.
 	 */
-	public void testLine9() {
-		List messages = getMessagesAtLine( 9 );
+	public void testLine10() {
+		List messages = getMessagesAtLine( 10 );
 		assertEquals( 1, messages.size() );
 	}
 }

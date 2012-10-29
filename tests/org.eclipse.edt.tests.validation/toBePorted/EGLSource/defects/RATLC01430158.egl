@@ -1,0 +1,369 @@
+/*******************************************************************************
+ * Copyright ¬© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package test;
+
+//  ›‹‹Ìœ «· ⁄‹‹œÌ·
+DataItem AMNDFLAG num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// √”„ «·›—⁄
+DataItem BRNNM char(14)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// cash sequance no.
+DataItem CSHSQ num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// currency name
+DataItem CURNM char(14)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// currency rate
+DataItem CURRATE num(8,6)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+DataItem DD num(8)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// document designation
+DataItem DOCDS num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = nullFill, validValues = [[1,9]], inputRequired = no, 
+  minimumInput = 1
+}
+end
+
+DataItem DOCDT num(8)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = nullFill, dateFormat = "yy/MM/dd", inputRequired = no
+}
+end
+
+DataItem DOCNOR num(12)  {
+  sign = none
+}
+end
+
+DataItem DOCTTW num(10)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+DataItem DT40 char(6)  {
+  align = left, fillCharacter = " ", inputRequired = no
+}
+end
+
+DataItem FCO40 num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = " ", validValues = [[1,9]], inputRequired = no, 
+  minimumInput = 1
+}
+end
+
+DataItem FLAG num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// option name
+DataItem FLAGNM char(8)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+//                  «‰Ê«⁄ «· √„Ì‰
+DataItem INS40 num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = " ", validValues = [[01,09]], inputRequired = no, 
+  minimumInput = 1
+}
+end
+
+DataItem K num(2)  {
+  currency = no, numericSeparator = no, sign = none, zeroFormat = yes, 
+  align = right, fillCharacter = "0", inputRequired = no
+}
+end
+
+// transaction link key
+DataItem KR40 char(42)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+DataItem LSTSQ num(2)  {
+  sign = none
+}
+end
+
+DataItem LSTTRN num(4)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// transaction date *****
+DataItem MAPDT num(8)  {
+  currency = no, numericSeparator = no, sign = none, zeroFormat = no, 
+  align = right, fillCharacter = "0", dateFormat = "yy/MM/dd", 
+  inputRequired = no
+}
+end
+
+// main options
+DataItem MF40 num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = " ", validValues = [[1,9]], inputRequired = no, 
+  minimumInput = 1
+}
+end
+
+DataItem MM num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// message number
+DataItem MSGNO num(3)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// numbersof of cr divers acc.
+DataItem NOCR num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// numbersof of db divers acc.
+DataItem NODB num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+//  „„»“ «·„»·€ :  1œ«∆‰  2„œÌ‰
+DataItem NTRDS num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+DataItem OPID num(4)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = nullFill, validValues = [[0001,0009]], inputRequired = no, 
+  minimumInput = 1
+}
+end
+
+DataItem PAYWY1 num(1)  {
+  sign = none
+}
+end
+
+// pay way
+DataItem PAYWYR num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// receive designation
+DataItem RCVDS num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = nullFill, validValues = [[1,9]], inputRequired = no, 
+  minimumInput = 1
+}
+end
+
+DataItem RGNNM char(14)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// map  subscript 2 ch.
+DataItem SB num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// screen name
+DataItem SCRNM char(30)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// sector name
+DataItem SECNM char(4)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+DataItem STRTRN num(4)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = nullFill, inputRequired = no
+}
+end
+
+DataItem SUB num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// swich no 9
+DataItem SW9 num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// «Ã„«·Ì «·Ã«‰» «·œ«∆‰
+DataItem TOTCR num(10)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// «Ã„«·Ì «·Ã«‰» «·„œÌ‰
+DataItem TOTDB num(10)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+DataItem TRNDS num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+DataItem VALCHK num(1)  {
+  sign = none
+}
+end
+
+// voucher designation
+DataItem VUHDS num(1)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = nullFill, validValues = [[1,9]], inputRequired = no, 
+  minimumInput = 1
+}
+end
+
+// —ﬁ„ «”‹‹ ⁄«÷‹… ‰ﬁœÌ…
+DataItem VUHNO num(8)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+// ******* link parameter *******
+DataItem WRKAREA char(245)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// date 6 ch.
+DataItem YMD num(6)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+DataItem YY num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = nullFill, inputRequired = no
+}
+end
+
+// zeros
+DataItem ZZ num(2)  {
+  currency = no, numericSeparator = no, sign = none, align = right, 
+  fillCharacter = " ", inputRequired = no
+}
+end
+
+Record WORK40R type basicRecord
+  3 K K ; 
+  3 VALCHK VALCHK ; 
+  3 MSGNO MSGNO ; 
+  3 DOCTTW DOCTTW ; 
+  3 LSTSQ LSTSQ ;    
+  3 SB SB ; 
+  3 SUB SUB ; 
+  3 MAPDT MAPDT ; 
+    4 ZZ ZZ ; 
+    4 YMD YMD ;   //1
+      5 YY YY ; 
+      5 MM MM ; 
+      5 DD DD ; 
+  3 WRKAREA WRKAREA ;  //1
+    4 SCRNM SCRNM ; 
+    4 SECNM SECNM ; 
+    4 RGNNM RGNNM ; 
+    4 BRNNM BRNNM ; 
+    4 CURNM CURNM ; 
+    4 CURRATE CURRATE ; 
+    4 DOCNOR DOCNOR ; 
+    4 DOCDT DOCDT ; 
+    4 VUHNO VUHNO ; 
+    4 PAYWYR PAYWYR ; 
+    4 CSHSQ CSHSQ ; 
+    4 FLAGNM FLAGNM ; 
+    4 KR40 KR40 ; 
+    4 OPID OPID ; 
+    4 FCO40 FCO40 ; 
+    4 DT40 DT40 ; 
+    4 FLAG FLAG ; 
+    4 SW9 SW9 ; 
+    4 MF40 MF40 ; 
+    4 INS40 INS40 [12] ; 
+    4 RCVDS RCVDS ; 
+    4 VUHDS VUHDS ; 
+    4 DOCDS DOCDS ; 
+    4 TOTDB TOTDB ; 
+    4 TOTCR TOTCR ; 
+    4 NODB NODB ; 
+    4 NOCR NOCR ; 
+    4 AMNDFLAG AMNDFLAG ; 
+    4 NTRDS NTRDS ; 
+    4 STRTRN STRTRN ; 
+    4 LSTTRN LSTTRN ; 
+    4 TRNDS TRNDS ; 
+    4 PAYWY1 PAYWY1 ; 
+    4 FIL40R char(6) ; 
+end
+

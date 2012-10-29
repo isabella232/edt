@@ -12,7 +12,6 @@
 package org.eclipse.edt.runtime.java.eglx.lang;
 
 import org.eclipse.edt.javart.BoxedValue;
-import org.eclipse.edt.javart.Executable;
 
 import eglx.lang.AnyException;
 
@@ -20,5 +19,5 @@ public interface SequenceType extends BoxedValue {
 
 	int getLength();
 	
-	<T extends SequenceType> T substring(Executable program, int start, int end) throws AnyException;
+	<T extends SequenceType> T substring(int start, int end) throws AnyException;
 }

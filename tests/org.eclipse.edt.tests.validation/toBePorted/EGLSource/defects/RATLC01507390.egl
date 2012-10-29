@@ -1,0 +1,18 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+formgroup fg1
+	form Form1 type textForm  
+		{ FormSize = [24, 80], Position = [1, 1]}   
+		* {fieldLen = 27, Position = [5, 11], value = "now is the time for all goo", color = blue, intensity = bold, protect = skipProtect}; //0
+		* {fieldLen = 27, Position = [6, 11], value = "now is the time for all good men to come to the aid of their country.", color = blue, intensity = bold, protect = skipProtect}; //1
+	end   
+end

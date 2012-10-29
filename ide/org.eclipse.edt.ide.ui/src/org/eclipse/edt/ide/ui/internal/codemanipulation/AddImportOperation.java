@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
@@ -44,6 +43,8 @@ import org.eclipse.edt.ide.ui.internal.EGLUIStatus;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.util.BoundNodeModelUtility;
 import org.eclipse.edt.ide.ui.internal.editor.util.IBoundNodeRequestor;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.ReplaceEdit;
@@ -156,10 +157,11 @@ public class AddImportOperation extends OrganizeImportsOperation {
 							String qualifiedNameID = qualifiednamenode.getIdentifier();
 							if(!resolvedTypes.isConflict(fullyQualifiedPackageName, qualifiedNameID, conflictPkgNames))
 							{
-								ITypeBinding typeBinding = qualifiednamenode.resolveTypeBinding();
-								if(typeBinding != null && typeBinding.isPartBinding()){
-									String[] names = qualifiednamenode.getNameComponents();
-									ReplaceEdit replace = new ReplaceEdit(selectedNode.getOffset(), selectedNode.getLength(), names[names.length-1]);
+								Type typeBinding = qualifiednamenode.resolveType();
+								if(typeBinding instanceof Part){
+									String names = qualifiednamenode.getNameComponents();
+									int lastDot = names.lastIndexOf('.');
+									ReplaceEdit replace = new ReplaceEdit(selectedNode.getOffset(), selectedNode.getLength(), lastDot == -1 ? names : names.substring(lastDot + 1));
 									try {
 										replace.apply(fEGLDoc);
 									} catch (MalformedTreeException e) {

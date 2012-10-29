@@ -464,7 +464,7 @@ public class EGLModelManager {
 
 						// don't check validity of package name (see
 						// http://bugs.eclipse.org/bugs/show_bug.cgi?id=26706)
-						String pkgName = pkgPath.toString().replace('/', '.');
+						String pkgName = org.eclipse.edt.ide.core.internal.utils.Util.pathToQualifiedName(pkgPath);
 						return root.getPackageFragment(pkgName);
 					} else {
 						String pkgName = Util.packageName(pkgPath);

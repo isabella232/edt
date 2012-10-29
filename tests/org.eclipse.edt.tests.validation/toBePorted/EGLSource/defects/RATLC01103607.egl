@@ -1,0 +1,145 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+/*
+ * We need stricter validation on what is allowed as an argument in a call
+ * statement, and what's allowed in a called program's parameter list.  Most
+ * of this checking is done in v6 but not all.  The runtime does its own check
+ * when making a call but that's less efficient and less user-friendly than
+ * doing the check at validation time.
+ *
+ * These are invalid: blob, clob, any, dictionary, arraydictionary, interface,
+ * Nil, consoleField, menu, menuItem, prompt, window, report, reportData,
+ * dataTable, and logic parts like program, library, pagehandler, etc. (This
+ * includes all reference types, if that makes things easier.)
+ *
+ * An array is invalid if its element type is invalid.
+ *
+ * A record that contains one of the invalid things is invalid. Since one
+ * record may contain another, the process needs to be recursive.
+ */
+ 
+Program pgm1(
+	p1 int,					//0
+	p2 blob,				//1 for this program parameter or call argument is invalid.
+	p3 clob,				//1 for this program parameter or call argument is invalid.
+	p4 any,					//1 for this program parameter or call argument is invalid.
+	p5 dictionary,			//1 for this program parameter or call argument is invalid.
+	p6 arraydictionary,		//1 for this program parameter or call argument is invalid.
+	p7 iFace, 				//1 for this program parameter or call argument is invalid.
+	p8 consoleField,		//1 for this program parameter or call argument is invalid.
+	p9 menu,				//1 for this program parameter or call argument is invalid.
+	p10 menuItem,			//1 for this program parameter or call argument is invalid.
+	p11 prompt,				//1 for this program parameter or call argument is invalid.
+	p12 window,				//1 for this program parameter or call argument is invalid.
+	p13 report,				//1 for this program parameter or call argument is invalid.
+	p14 reportData,			//1 for this program parameter or call argument is invalid.
+	p15 int[],				//0
+	p16 blob[],				//1 for this program parameter or call argument is invalid.
+	p17 clob[],				//1 for this program parameter or call argument is invalid.
+	p18 any[],				//1 for this program parameter or call argument is invalid. 
+	p19 dictionary[],		//1 for this program parameter or call argument is invalid.
+	p20 arraydictionary[],	//1 for this program parameter or call argument is invalid.
+	p21 iFace[], 			//1 for this program parameter or call argument is invalid.
+	p22 consoleField[],		//1 for this program parameter or call argument is invalid.
+	p23 menu[],				//1 for this program parameter or call argument is invalid.
+	p24 menuItem[],			//1 for this program parameter or call argument is invalid.
+	p25 prompt[],			//1 for this program parameter or call argument is invalid.
+	p26 window[],			//1 for this program parameter or call argument is invalid.
+	p27 report[],			//1 for this program parameter or call argument is invalid.
+	p28 reportData[],		//1 for this program parameter or call argument is invalid.
+	p29 goodRec1,			//0
+	p30 goodRec2,			//0
+	pMax int,				//0 
+	p31 badRec1,			//1 for this program parameter or call argument is invalid.
+	p32 badRec2,			//1 for this program parameter or call argument is invalid.
+	p33 recursiveRec,		//0
+	p34 int?,				//1
+	p35 goodRec1?,			//1
+	p36 int[]?				//1
+	)
+	function main()	
+		p34 int?;				//0
+		p35 goodRec1?;			//0
+
+		call "someProgram" (
+			p1,		//0
+			p2,		//1 for this program parameter or call argument is invalid.
+			p3,		//1 for this program parameter or call argument is invalid.
+			p4,		//1 for this program parameter or call argument is invalid.
+			p5,		//1 for this program parameter or call argument is invalid.
+			p6,		//1 for this program parameter or call argument is invalid.
+			p7,		//1 for this program parameter or call argument is invalid.
+			p8,		//1 for this program parameter or call argument is invalid.
+			p9,		//1 for this program parameter or call argument is invalid.
+			p10,	//1 for this program parameter or call argument is invalid.
+			p11,	//1 for this program parameter or call argument is invalid.
+			p12,	//1 for this program parameter or call argument is invalid.
+			p13,	//1 for this program parameter or call argument is invalid.
+			p14,	//1 for this program parameter or call argument is invalid.
+			p15,	//0
+			p16,	//1 for this program parameter or call argument is invalid.
+			p17,	//1 for this program parameter or call argument is invalid.
+			p18,	//1 for this program parameter or call argument is invalid.
+			p19,	//1 for this program parameter or call argument is invalid.
+			p20,	//1 for this program parameter or call argument is invalid.
+			p21,	//1 for this program parameter or call argument is invalid.
+			p22,	//1 for this program parameter or call argument is invalid.
+			p23,	//1 for this program parameter or call argument is invalid.
+			p24,	//1 for this program parameter or call argument is invalid.
+			p25,	//1 for this program parameter or call argument is invalid.
+			p26,	//1 for this program parameter or call argument is invalid.
+			p27,	//1 for this program parameter or call argument is invalid.
+			p28,	//1 for this program parameter or call argument is invalid.
+			p29,	//0
+			p30,	//0
+			"10",	//0
+			p31,	//1 for this program parameter or call argument is invalid.			
+			p32,	//1 for this program parameter or call argument is invalid.
+			p33,	//0
+			p34,	//1 for this program parameter or call argument is invalid.
+			p35 	//1 for this program parameter or call argument is invalid.
+		);
+	end
+end
+
+Interface iFace
+end
+
+Record goodRec1
+	field1 int;
+end
+
+Record goodRec2
+	field1 rec;
+end
+
+Record rec
+	field1 int;
+end
+
+Record badRec1
+	field1 blob;
+end
+
+Record badRec2
+	field1 badRec1;
+end
+
+Record recursiveRec
+	field1 recursiveRec2;
+	field2 int;
+end
+
+Record recursiveRec2
+	field1 recursiveRec;
+	field2 int;
+end

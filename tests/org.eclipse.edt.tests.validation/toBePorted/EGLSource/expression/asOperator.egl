@@ -1,0 +1,20 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		myHex hex(8);
+//Uncomment when hex and numeric (or hex w/ same size fixed primitive) are compatible		myHex = 1 as INT;		//0
+		myHex = 1 as SMALLINT;	//1 hex and smallInt are not compatible types
+		myHex = 1;				//1 not compatible types
+	end
+end

@@ -43,10 +43,8 @@ import org.eclipse.edt.ide.core.internal.search.matching.SearchPattern;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
-import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IIndexConstants;
-import org.eclipse.edt.ide.core.model.IMember;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 
 /**
@@ -310,42 +308,6 @@ public static ISearchPattern createSearchPattern(String stringPattern, int searc
  */
 public static IEGLSearchScope createWorkspaceScope() {
 	return new EGLWorkspaceScope();
-}
-/**
- * Returns the underlying resource of the given element.
- */
-private IResource getResource(IEGLElement element) {
-	if (element instanceof IMember) {
-		IEGLFile cu = ((IMember)element).getEGLFile();
-		if (cu != null) {
-			if (cu.isWorkingCopy()) {
-				return cu.getOriginalElement().getResource();
-			} else {
-				return cu.getResource();
-			}
-		} 
-	} 
-	return element.getResource();
-}
-/**
- * Returns the list of working copies used to do the search on the given java element.
- */
-private IWorkingCopy[] getWorkingCopies(IEGLElement element) {
-	if (element instanceof IMember) {
-		IEGLFile cu = ((IMember)element).getEGLFile();
-		if (cu != null && cu.isWorkingCopy()) {
-			int length = this.workingCopies == null ? 0 : this.workingCopies.length;
-			if (length > 0) {
-				IWorkingCopy[] newWorkingCopies = new IWorkingCopy[length+1];
-				System.arraycopy(this.workingCopies, 0, newWorkingCopies, 0, length);
-				newWorkingCopies[length] = cu;
-				return newWorkingCopies;
-			} else {
-				return new IWorkingCopy[] {cu};
-			}
-		}
-	}
-	return this.workingCopies;
 }
 /**
  * Searches for the EGL element determined by the given signature. The signature
@@ -649,10 +611,10 @@ public List searchAllFilesReferencing(
 			IEGLSearchConstants.WAIT_UNTIL_READY_TO_SEARCH,
 			progressMonitor == null ? null : new SubProgressMonitor(progressMonitor, 5));
 	}
-	finally { 
+	finally {
 		return resourcePaths;
 	}
-			
+	
 }
 /**
  * Searches for all declarations of the types referenced in the given element.

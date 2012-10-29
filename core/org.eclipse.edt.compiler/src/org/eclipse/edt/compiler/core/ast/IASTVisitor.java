@@ -57,7 +57,7 @@ public interface IASTVisitor {
 	
 	boolean visit(CallbackTarget callbackTarget);
 	void endVisit(CallbackTarget callbackTarget);
-
+	
 	boolean visit(CallReturns callReturns);
 	void endVisit(CallReturns callReturns);
 
@@ -67,17 +67,11 @@ public interface IASTVisitor {
 	boolean visit(CaseStatement caseStatement);
 	void endVisit(CaseStatement caseStatement);
 	
-	boolean visit(CharLiteral charLiteral);
-	void endVisit(CharLiteral charLiteral);
-	
 	boolean visit(ClassDataDeclaration classDataDeclaration);
 	void endVisit(ClassDataDeclaration classDataDeclaration);
 	
 	boolean visit(CloseStatement closeStatement);
 	void endVisit(CloseStatement closeStatement);
-	
-	boolean visit(ConstantFormField constantFormField);
-	void endVisit(ConstantFormField constantFormField);
 	
 	boolean visit(Constructor constructor);
 	void endVisit(Constructor constructor);
@@ -85,17 +79,8 @@ public interface IASTVisitor {
 	boolean visit(ContinueStatement continueStatement);
 	void endVisit(ContinueStatement continueStatement);
 	
-	boolean visit(ConverseStatement converseStatement);
-	void endVisit(ConverseStatement converseStatement);
-	
 	boolean visit(DataItem dataItem);
 	void endVisit(DataItem dataItem);
-	
-	boolean visit(DataTable dataTable);
-	void endVisit(DataTable dataTable);
-	
-	boolean visit(DBCharLiteral dBCharLiteral);
-	void endVisit(DBCharLiteral dBCharLiteral);
 	
 	boolean visit(DecimalLiteral decimalLiteral);
 	void endVisit(DecimalLiteral decimalLiteral);
@@ -106,12 +91,9 @@ public interface IASTVisitor {
 	boolean visit(DeleteStatement deleteStatement);
 	void endVisit(DeleteStatement deleteStatement);
 	
-	boolean visit(DisplayStatement displayStatement);
-	void endVisit(DisplayStatement displayStatement);
+	boolean visit(Class eglClass);
+	void endVisit(Class eglClass);
 	
-	boolean visit(EGLClass EGLClass);
-	void endVisit(EGLClass EGLClass);
-
 	boolean visit(ElseBlock elseBlock);
 	void endVisit(ElseBlock elseBlock);
 	
@@ -148,9 +130,6 @@ public interface IASTVisitor {
 	boolean visit(ForExpressionClause forExpressionClause);
 	void endVisit(ForExpressionClause forExpressionClause);
 	
-	boolean visit(FormGroup formGroup);
-	void endVisit(FormGroup formGroup);
-	
 	boolean visit(ForStatement forStatement);
 	void endVisit(ForStatement forStatement);
 	
@@ -159,9 +138,6 @@ public interface IASTVisitor {
 	
 	boolean visit(ForwardStatement forwardStatement);
 	void endVisit(ForwardStatement forwardStatement);
-	
-	boolean visit(FreeSQLStatement freeSQLStatement);
-	void endVisit(FreeSQLStatement freeSQLStatement);
 	
 	boolean visit(FromExpressionClause fromExpressionClause);
 	void endVisit(FromExpressionClause fromExpressionClause);
@@ -193,20 +169,11 @@ public interface IASTVisitor {
 	boolean visit(Handler handler);
 	void endVisit(Handler handler);
 	
-	boolean visit(HexLiteral hexLiteral);
-	void endVisit(HexLiteral hexLiteral);
-	
 	boolean visit(ImportDeclaration importDeclaration);
 	void endVisit(ImportDeclaration importDeclaration);
 	
 	boolean visit(IfStatement ifStatement);
 	void endVisit(IfStatement ifStatement);
-	
-	boolean visit(InExpression inExpression);
-	void endVisit(InExpression inExpression);
-	
-	boolean visit(InlineDLIStatement inlineDLIStatement);
-	void endVisit(InlineDLIStatement inlineDLIStatement);
 	
 	boolean visit(InlineSQLStatement inlineSQLStatement);
 	void endVisit(InlineSQLStatement inlineSQLStatement);
@@ -232,20 +199,11 @@ public interface IASTVisitor {
 	boolean visit(Library library);
 	void endVisit(Library library);
 	
-	boolean visit(LikeMatchesExpression likeMatchesExpression);
-	void endVisit(LikeMatchesExpression likeMatchesExpression);
-	
-	boolean visit(MBCharLiteral mBCharLiteral);
-	void endVisit(MBCharLiteral mBCharLiteral);
-	
 	boolean visit(MoveStatement moveStatement);
 	void endVisit(MoveStatement moveStatement);
 	
 	boolean visit(NameType nameType);
 	void endVisit(NameType nameType);
-	
-	boolean visit(NestedForm nestedForm);
-	void endVisit(NestedForm nestedForm);
 	
 	boolean visit(NestedFunction nestedFunction);
 	void endVisit(NestedFunction nestedFunction);
@@ -256,9 +214,6 @@ public interface IASTVisitor {
 	boolean visit(NullLiteral nullLiteral);
 	void endVisit(NullLiteral nullLiteral);
 	
-	boolean visit(NullableType nullableType);
-	void endVisit(NullableType nullableType);
-	
 	boolean visit(NoCursorClause noCursorClause);
 	void endVisit(NoCursorClause noCursorClause);
 	
@@ -268,17 +223,11 @@ public interface IASTVisitor {
 	boolean visit(ObjectExpressionEntry objectExpressionEntry);
 	void endVisit(ObjectExpressionEntry objectExpressionEntry);
 	
-	boolean visit(OnEventBlock onEventBlock);
-	void endVisit(OnEventBlock onEventBlock);
-	
 	boolean visit(OnExceptionBlock onExceptionBlock);
 	void endVisit(OnExceptionBlock onExceptionBlock);
 	
 	boolean visit(OpenStatement openStatement);
 	void endVisit(OpenStatement openStatement);
-	
-	boolean visit(OpenUIStatement openUIStatement);
-	void endVisit(OpenUIStatement openUIStatement);
 	
 	boolean visit(OtherwiseClause otherwiseClause);
 	void endVisit(OtherwiseClause otherwiseClause);
@@ -289,23 +238,11 @@ public interface IASTVisitor {
 	boolean visit(ParenthesizedExpression parenthesizedExpression);
 	void endVisit(ParenthesizedExpression parenthesizedExpression);
 	
-	boolean visit(PassingClause passingClause);
-	void endVisit(PassingClause passingClause);
-	
 	boolean visit(PrepareStatement prepareStatement);
 	void endVisit(PrepareStatement prepareStatement);
 	
-	boolean visit(PrimitiveType primitiveType);
-	void endVisit(PrimitiveType primitiveType);
-	
-	boolean visit(PrintStatement printStatement);
-	void endVisit(PrintStatement printStatement);
-	
 	boolean visit(Program program);
 	void endVisit(Program program);
-	
-	boolean visit(ProgramParameter programParameter);
-	void endVisit(ProgramParameter programParameter);
 	
 	boolean visit(Record record);
 	void endVisit(Record record);
@@ -328,9 +265,6 @@ public interface IASTVisitor {
 	boolean visit(Service service);
 	void endVisit(Service service);
 	
-	boolean visit(ServiceReference serviceReference);
-	void endVisit(ServiceReference serviceReference);
-	
 	boolean visit(SetStatement setStatement);
 	void endVisit(SetStatement setStatement);
 	
@@ -342,9 +276,6 @@ public interface IASTVisitor {
 	
 	boolean visit(SettingsBlock settingsBlock);
 	void endVisit(SettingsBlock settingsBlock);
-	
-	boolean visit(ShowStatement showStatement);
-	void endVisit(ShowStatement showStatement);
 	
 	boolean visit(SimpleName simpleName);
 	void endVisit(SimpleName simpleName);
@@ -376,15 +307,6 @@ public interface IASTVisitor {
 	boolean visit(ThrowStatement throwStatement);
 	void endVisit(ThrowStatement throwStatement);
 	
-	boolean visit(TopLevelForm topLevelForm);
-	void endVisit(TopLevelForm topLevelForm);
-	
-	boolean visit(TopLevelFunction topLevelFunction);
-	void endVisit(TopLevelFunction topLevelFunction);
-	
-	boolean visit(TransferStatement transferStatement);
-	void endVisit(TransferStatement transferStatement);
-	
 	boolean visit(TryStatement tryStatement);
 	void endVisit(TryStatement tryStatement);
 	
@@ -406,12 +328,6 @@ public interface IASTVisitor {
 	boolean visit(UseStatement useStatement);
 	void endVisit(UseStatement useStatement);
 	
-	boolean visit(UsingPCBClause usingPCBClause);
-	void endVisit(UsingPCBClause usingPCBClause);
-	
-	boolean visit(VariableFormField variableFormField);
-	void endVisit(VariableFormField variableFormField);
-	
 	boolean visit(WhenClause whenClause);
 	void endVisit(WhenClause whenClause);
 	
@@ -423,9 +339,6 @@ public interface IASTVisitor {
 
 	boolean visit(WithIDClause withIDClause);
 	void endVisit(WithIDClause withIDClause);
-	
-	boolean visit(WithInlineDLIClause withInlineDLIClause);
-	void endVisit(WithInlineDLIClause withInlineDLIClause);
 	
 	boolean visit(WithInlineSQLClause withInlineSQLClause);
 	void endVisit(WithInlineSQLClause withInlineSQLClause);

@@ -1,0 +1,36 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program pgm
+	aRec rec;
+	
+	function main()
+		try
+			add aRec;
+			try
+				add aRec;
+			onException (fe1 FileIOException)				//0
+				// do something specific for this add
+			end
+			
+			get next aRec;
+			close aRec;
+		onexception (fe FileIOException)					//0
+			// general exception handling		   
+		end
+	end
+end
+
+Record rec type SQLRecord
+	field1 int;
+end

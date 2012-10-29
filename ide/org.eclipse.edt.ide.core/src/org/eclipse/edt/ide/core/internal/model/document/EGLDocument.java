@@ -20,26 +20,21 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ErrorCorrectingParser;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.Library;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.ide.core.ast.GetNodeAtOffsetVisitor;
 import org.eclipse.edt.ide.core.ast.GetNodeAtOrBeforeOffsetVisitor;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -84,10 +79,6 @@ public class EGLDocument extends Document implements IEGLDocument {
 			return visitInternal(part);
 		}
 
-		public boolean visit(DataTable part) {
-			return visitInternal(part);
-		}
-
 		public boolean visit(Delegate part) {
 			return visitInternal(part);
 		}
@@ -97,10 +88,6 @@ public class EGLDocument extends Document implements IEGLDocument {
 		}
 
 		public boolean visit(ExternalType part) {
-			return visitInternal(part);
-		}
-
-		public boolean visit(FormGroup part) {
 			return visitInternal(part);
 		}
 
@@ -125,14 +112,6 @@ public class EGLDocument extends Document implements IEGLDocument {
 		}
 
 		public boolean visit(Service part) {
-			return visitInternal(part);
-		}
-
-		public boolean visit(TopLevelForm part) {
-			return visitInternal(part);
-		}
-
-		public boolean visit(TopLevelFunction part) {
 			return visitInternal(part);
 		}
 
@@ -174,30 +153,6 @@ public class EGLDocument extends Document implements IEGLDocument {
 		
 	}; 
 
-	class NestedFormASTVisitor extends AbstractASTVisitor {
-		private Node targetNestedForm;
-		private int targetOffset;
-		
-		public NestedFormASTVisitor(int offset) {
-			targetOffset = offset;
-		}
-
-		public boolean visit(NestedForm nestedForm) {
-			if (nestedForm.getOffset() <= targetOffset && targetOffset < nestedForm.getOffset() + nestedForm.getLength())
-			{
-				//we found the target node
-				targetNestedForm = nestedForm;			
-				return true;
-			}		
-			return false;
-		}
-
-		public Node getNode() {
-			return targetNestedForm;
-		}
-		
-	}; 
-	
 	public EGLDocument() {
 		super();
 	}
@@ -324,15 +279,6 @@ public class EGLDocument extends Document implements IEGLDocument {
 		return (NestedFunction) visitor.getNode();
 	}
 	
-	public NestedForm getNewModelNestedFormAtOffset(int offset) {
-		reconcile();
-
-		NestedFormASTVisitor visitor = new NestedFormASTVisitor(offset);
-		getNewModelEGLFile().accept(visitor);
-		
-		return (NestedForm) visitor.getNode();
-	}
-
 	public void replace(int pos, int length, String text, long modificationStamp) throws BadLocationException {
 		needReconcile = true;
 		super.replace(pos, length, text, modificationStamp);

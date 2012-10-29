@@ -1,0 +1,85 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+record rec_ioi_id type BasicRecord
+	10 rec_bzi_id	 	rec_bzi_id;
+	10 te_pkg			di_te_pkg;
+	10 te_lib			di_te_lib;
+	10 te_fct			di_te_fct;
+end
+	
+record rec_error_sql type BasicRecord
+	10 rec_ioi_id	 	rec_ioi_id;
+	10 rec_system		rec_system;
+end
+
+record rec_system type BasicRecord
+	10 co_sqlcode		num(11);
+	10 co_sqlstate		char(05);	
+	10 co_errorcode		char(08);			
+end
+
+record rec_bzi_id type BasicRecord
+	10 rec_wbi_id		rec_wbi_id;
+	10 te_pkg			di_te_pkg;
+	10 te_lib			di_te_lib;
+	10 te_fct			di_te_fct;
+end
+
+record rec_wbi_id type BasicRecord
+	10 te_lib			di_te_lib;
+	10 te_fct			di_te_fct;
+end
+
+dataItem di_te_pkg			char(30)									end
+dataItem di_te_lib			char(30)									end
+dataItem di_te_fct			char(30)									end
+dataItem di_co_err			char(5)										end
+dataItem di_te_zone			char(30)									end
+
+Record fixed
+	10 item1 char(1000);
+end
+
+Library Lib
+	function func()
+		f fixed;
+		aio_rec_error_sql rec_error_sql;
+		
+		f = "*****\n" +																			//0
+			"De " + dateTimeLib.currentTimeStamp() +
+			" à " + sysVar.userId + "\n" +
+			"   WEB : " + aio_rec_error_sql.rec_ioi_id.rec_bzi_id.rec_wbi_id.te_lib + "." +
+			" " + aio_rec_error_sql.rec_ioi_id.rec_bzi_id.rec_wbi_id.te_fct +"\n" +
+			"    BZ : " + aio_rec_error_sql.rec_ioi_id.rec_bzi_id.te_pkg +"." +
+			aio_rec_error_sql.rec_ioi_id.rec_bzi_id.te_lib +"." +
+			aio_rec_error_sql.rec_ioi_id.rec_bzi_id.te_fct +"\n" +
+			"    IO : " + aio_rec_error_sql.rec_ioi_id.te_pkg +"." +
+			aio_rec_error_sql.rec_ioi_id.te_lib +"." +
+			aio_rec_error_sql.rec_ioi_id.te_fct +"\n" +
+			"   sqlCode   : " + aio_rec_error_sql.rec_system.co_sqlcode + "\n" +
+			"   sqlState  : " + aio_rec_error_sql.rec_system.co_sqlstate + "\n" +
+			"   errorCode : " + aio_rec_error_sql.rec_system.co_sqlcode + "\n" +
+			"***\n";
+			
+		fixedStr string(1000);
+		str string;
+			
+		f = str;					//1
+		f = fixedStr;				//0
+		f = fixedStr + fixedStr;	//0
+		f = fixedStr :: fixedStr;	//0
+		f = fixedStr + str;			//1
+		f = fixedStr :: str;		//1
+		f = str + fixedStr;			//1
+		f = str :: fixedStr;		//1
+	end
+end

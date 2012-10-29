@@ -1,0 +1,33 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program RATLC01077602 type basicProgram
+	function main()
+		i, j int;
+		aa int[] = [1,2,3,4];
+		dict dictionary;
+		ad arraydictionary;
+		
+		j=2;
+		i=3;
+		ad[4] = dict;						// 1 It is invalid to assign to ArrayDictionary elements
+		ad[i] = dict;						// 1 It is invalid to assign to ArrayDictionary elements
+		ad[i * 12 + aa[j]] = dict;			// 1 It is invalid to assign to ArrayDictionary elements
+		move dict to ad[4];					// 1 It is invalid to assign to ArrayDictionary elements
+		move dict to ad[i];					// 1 It is invalid to assign to ArrayDictionary elements
+		move dict to ad[i * 12 + aa[j]];	// 1 It is invalid to assign to ArrayDictionary elements
+		
+		dict = ad[4];
+		dict = ad[i];
+		dict = ad[i * 12 + aa[j]];
+	end
+end

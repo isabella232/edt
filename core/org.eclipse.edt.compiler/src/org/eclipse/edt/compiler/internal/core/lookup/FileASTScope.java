@@ -16,14 +16,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.FileBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -47,24 +48,24 @@ public class FileASTScope extends FileScope {
 		}
     }
 
-    public ITypeBinding findType(String simpleName) {
-        ITypeBinding result = null;
-         
+    public List<Type> findType(String simpleName) {
         // First check the single part imports from the AST
         if(importedTypeNames != null){
         	for (Iterator iter = importedTypeNames.iterator(); iter.hasNext();) {
 				ImportDeclaration importDeclaration = (ImportDeclaration) iter.next();
-				if(importDeclaration.getName().getIdentifier() == simpleName){
-					ITypeBinding temp = null;
+				if(NameUtile.equals(importDeclaration.getName().getIdentifier(), simpleName)){
+					IPartBinding temp = null;
 	            	if(importDeclaration.getName().isQualifiedName()){
 	            		temp = fileBinding.getEnvironment().getPartBinding(((QualifiedName)importDeclaration.getName()).getQualifier().getNameComponents(), importDeclaration.getName().getIdentifier());            	
 	            	}else{
-	            		temp = fileBinding.getEnvironment().getPartBinding(InternUtil.intern(new String[0]), importDeclaration.getName().getIdentifier());
+	            		temp = fileBinding.getEnvironment().getPartBinding(NameUtile.getAsName(""), importDeclaration.getName().getIdentifier());
 	            	}
 		            
-	            	if(temp != null && temp != IBinding.NOT_FOUND_BINDING){
-	    	            if((fileBinding.getDeclaringPackage() != null && fileBinding.getDeclaringPackage().getPackageName() == temp.getPackageName()) || !((IPartBinding)temp).isPrivate()){
-	    	            	return temp;
+	            	if(temp != null){
+	    	            if((fileBinding.getDeclaringPackage() != null && NameUtile.equals(fileBinding.getDeclaringPackage().getPackageName(), temp.getPackageName())) || !((IPartBinding)temp).isPrivate()){
+	    	            	List<Type> list = new ArrayList<Type>();
+	    	            	list.add(BindingUtil.getPart(temp));
+	    	            	return list;
 	    	            }else{
 	    	                // error - unreachable import
 	    	            }
@@ -74,12 +75,20 @@ public class FileASTScope extends FileScope {
         }
         
         // Then check the declaring package
-        result = findTypeInDeclaringPackage(simpleName);
-        if(result != null){ return result; };
-        
+        Part part = findTypeInDeclaringPackage(simpleName);
+        if(part != null){
+        	List<Type> list = new ArrayList<Type>();
+        	list.add(part);
+        	return list;
+        };
+
         // Then check the on demand imports
-        result = findTypeInOnDemandImports(simpleName);
+        List<Type> results = findTypeInOnDemandImports(simpleName);
+        if (results != null) {
+        	return results;
+        }
         
-        return result == null ? IBinding.NOT_FOUND_BINDING : result;
+        //Check the implicit system package(s)
+        return findTypeInImplicitSystemPackages(simpleName);
     }
  }

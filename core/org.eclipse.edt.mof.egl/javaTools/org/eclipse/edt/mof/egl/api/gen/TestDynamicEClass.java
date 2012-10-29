@@ -50,7 +50,7 @@ public class TestDynamicEClass {
 		dyn.setValue("list", new Object[]{"abc", 1});
 		
 		try {
-			EObject eClass = Environment.INSTANCE.find("egl:egl.lang.eglstring()");
+			EObject eClass = PartEnvironment.getCurrentEnv().getIREnvironment().find("egl:egl.lang.eglstring()");
 			System.out.println(eClass.getEClass().getName());
 		} catch (MofObjectNotFoundException e) {
 			// TODO Auto-generated catch block

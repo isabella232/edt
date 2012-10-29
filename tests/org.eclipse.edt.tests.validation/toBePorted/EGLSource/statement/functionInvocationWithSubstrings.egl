@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program FunctionInvocationWithSubstrings
+
+	myString String;
+	myChar char(100);
+	myint int;
+	Const myConst1 int = 1;
+	Const myConst10 int = 10;
+	Const myConsta string = "a";
+
+  function main()
+  	f1(myString);  //0
+  	f1(myString[1:50]);  //0
+  	f1(myString[myconst1:myconst10]);  //0
+  	f1(myString[1:myint]);  //0
+
+  	f2(myString);  //0
+  	f2(myString[1:50]);  //0
+  	f2(myString[myconst1:myconst10]);  //0
+  	f2(myString[1:myint]);  //0
+  	
+  	f3(myString);  //0
+  	f3(myString[1:50]);  //0
+  	f3(myString[myconst1:myconst10]);  //0
+  	f3(myString[1:myint]);  //0
+  	
+  	f3(myChar);  //0
+  	f3(myChar[1:50]);  //0
+  	f3(myChar[myconst1:myconst10]);  //0
+  	f3(myChar[1:myint]);  //0
+  	
+  	f4(myChar);  					//1 The argument myChar cannot be passed to the inOut parameter p1 of the function f4. The types char(100) and char(10) are not reference compatible
+  	f4(myChar[1:50]);  				//1 The argument myChar[1:50] cannot be passed to the inOut parameter p1 of the function f4. The types char(50) and char(10) are not reference compatible
+  	f4(myChar[2:myConst10]);		//1 The argument myChar[2:myConst10] cannot be passed to the inOut parameter p1 of the function f4. The types char(9) and char(10) are not reference compatible
+  	f4(myChar[6:15]);  				//0
+  	f4(myChar[myconst1:myconst10]);	//0
+  	f4(myChar[1:myint]); 			//0
+  	
+  	
+  end
+  
+  function f1(p1 string in)
+  end
+  
+  function f2 (p1 string inout)
+  end
+  
+  function f3 (p1 char(10) in)
+  end
+  
+  function f4 (p1 char(10) inout)
+  end
+  
+  
+ end
+  	

@@ -1,0 +1,321 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+
+//
+//This example was taken from the CSP 4.1 Reference Manual under EZEDLPCB
+//	(modified to suit EGL terminology, etc.)
+//
+// valid PSBRecord, dliSegments to use in statements
+Record part type DLISegment 					 
+{ segmentName="part", keyItem=partNo }		 
+	10 PartNo Char(10);							 
+	10 partName char(33);								  
+	10 partdesc char(220) ;	 
+end 
+
+Record Order type DLISegment { keyItem=orderNo } 
+	10 ORderNo char(6);						 
+	10 vendorName char(33);								 
+end
+
+Record Journal type DLISegment 					 
+	10 activity Char(60) ;	 
+ 
+end
+Record someRec type DLISegment 					 
+	10 someitem char(6); 
+end
+
+Record PSBA type PSBRecord 				 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+
+	pcbA1 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="SomeRec",								 
+	  hierarchy = [	@Relationship{ segmentRecord=SomeRec } ]	 
+    }};
+	pcbA2 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Journal",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Journal } ]	 
+    }};    
+	pcbA3 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Orders",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Order } ]	 
+    }};    
+	pcbAB4 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="SomeRec",								 
+	  hierarchy = [	@Relationship{ segmentRecord=SomeRec } ]	 
+    }};
+	pcbA5 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Parts",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Part } ]	 
+    }};             
+end
+
+Record PSBB type PSBRecord 				 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+	pcbB1 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Parts",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Part } ]	 
+    }};
+	pcbB2 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="SomeRec",								 
+	  hierarchy = [	@Relationship{ segmentRecord=SomeRec } ]	 
+    }};
+	pcbB3 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="SomeRec",								 
+	  hierarchy = [	@Relationship{ segmentRecord=SomeRec } ]	 
+    }};
+	pcbB4 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Orders",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Order } ]	 
+    }};    
+	pcbB5 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Journal",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Journal } ]	 
+    }};         
+end
+
+Record PSBC type PSBRecord 				 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+	pcbC1 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Orders",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Order } ]	 
+    }}; 
+	pcbC2 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Parts",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Part } ]	 
+    }};  
+	pcbC3 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Journal",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Journal } ]	 
+    }};            
+	pcbC4 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="SomeRec",								 
+	  hierarchy = [	@Relationship{ segmentRecord=SomeRec } ]	 
+    }};
+end
+Record PSBD type PSBRecord 				 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};  		 
+	pcbD1 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Parts",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Part } ]	 
+    }};  
+	pcbD2 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Journal",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Journal } ]	 
+    }};
+	pcbD3 DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="Orders",								 
+	  hierarchy = [	@Relationship{ segmentRecord=Order } ]	 
+    }}; 
+end    
+
+Program APPLA_valid type  BasicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes }	 
+  }
+	part part;
+	order order;
+	journal journal;
+	somerec somerec;
+  	// PSB Declaration
+  	psb PSBA ;					 
+
+  	function main()
+  		call "applc_valid" (psb.pcbA3, psb.pcbA5);
+  		call "appld_valid" (psb.pcbA5, psb.pcbA2);
+  	end
+end
+Program APPLB_valid type BasicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes }	 
+  }
+	part part;
+	order order;
+	journal journal;
+	somerec somerec;
+  	// PSB Declaration
+  	psb PSBB ;					 
+
+  	function main()
+  		call "applc_valid" (psb.pcbB4, psb.pcbB1);
+  		call "appld_valid" (psb.pcbB1, psb.pcbB5);
+  	end
+end
+/*Program APPLC_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes,
+         pcbParms =["", "pcb1", "pcb2", "",""]
+         // when called from APPLA_valid pcb1 is pcbC1 and receives pcbA3 
+         //							     pcb2 is pcbC2 and receives pcbA5
+         // when called from APPLB_valid pcb1 is pcbC1 and receives pcbB4 
+         //							     pcb2 is pcbC2 and receives pcbB1
+         // this program cannot use pcbC3 or pcbC4 
+  }
+	part part;
+	order order;
+	journal journal;
+	somerec somerec;
+  	// PSB Declaration
+  	psb PSBC ;					 
+
+  	function main()
+  		 add order usingPCB pcb1 ;		 	//0
+  		 get part usingPCB pcb2;			//0
+  	end
+end*/
+Program APPLD_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes,
+         pcbParms =/*["", "pcb1", "pcb2", ""]*/[pcb1, pcb2] }	
+         // when called from APPLA_valid pcb1 is pcbD1 and receives pcbA5 
+         //							     pcb2 is pcbD2 and receives pcbA2
+         // when called from APPLB_valid pcb1 is pcbD1 and receives pcbB1 
+         //							     pcb2 is pcbD2 and receives pcbB5
+         // this program cannot use pcbD3                   	 
+  }
+	part part;
+	order order;
+	journal journal;
+	somerec somerec;
+  	// PSB Declaration
+ 	psb PSBD ;					 
+
+  	function main()
+  	end
+end
+Program APPLD1_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes,
+         // trailing pcbs that are not used don't have to be specified
+         pcbParms =/*["", "pcb1", "pcb2"]*/[pcb1, pcb2] }	
+         // when called from APPLA_valid pcb1 is pcbD1 and receives pcbA5 
+         //							     pcb2 is pcbD2 and receives pcbA2
+         // when called from APPLB_valid pcb1 is pcbD1 and receives pcbB1 
+         //							     pcb2 is pcbD2 and receives pcbB5
+         // this program cannot use pcbD3                   	 
+  }
+	part part;
+	order order;
+	journal journal;
+	somerec somerec;
+  	// PSB Declaration
+ 	psb PSBD ;					 
+
+  	function main()
+  	end
+end
+Program APPLD2_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes,
+         pcbParms =/*["", "pcb1"]*/[pcb1] }	
+         // when called from APPLA_valid pcb1 is pcbD1 and receives pcbA5 
+         //							     pcb2 receives pcbA2, but can't use it as a PCB
+         // when called from APPLB_valid pcb1 is pcbD1 and receives pcbB1 
+         //							     pcb2 receives pcbB5, but can't use it as a PCB
+         // this program cannot use pcbD2 or pcbD3 as PCBs                  	 
+  }
+	part part;
+	order order;
+	journal journal;
+	somerec somerec;
+  	// PSB Declaration
+ 	psb PSBD ;					 
+
+  	function main()
+  	end
+end
+
+Program APPLD3_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { 						
+  		 psb = psb, 			 
+         handleHardDLIErrors = yes,
+         // trailing pcbs that are not used don't have to be specified
+         pcbParms =/*["", "pcb1", "pcb2"]*/[pcb1, pcb2] }	
+         // when called from APPLA_valid pcb1 is pcbD1 and receives pcbA5 
+         //							     pcb2 is pcbD2 and receives pcbA2
+         // when called from APPLB_valid pcb1 is pcbD1 and receives pcbB1 
+         //							     pcb2 is pcbD2 and receives pcbB5
+         // this program cannot use pcbD3                   	 
+  }
+  	// PSB Declaration
+ 	psb PSBD ;					 
+
+  	function main()
+  	end
+end
+Program APPLD4_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { 
+  		 psb = psb, 					 
+         handleHardDLIErrors = yes,
+         pcbParms =/*["", "pcb1"]*/[pcb1, pcb2] }	
+         // when called from APPLA_valid pcb1 is pcbD1 and receives pcbA5 
+         //							     pcb2 receives pcbA2, but can't use it as a PCB
+         // when called from APPLB_valid pcb1 is pcbD1 and receives pcbB1 
+         //							     pcb2 receives pcbB5, but can't use it as a PCB
+         // this program cannot use pcbD2 or pcbD3 as PCBs                  	 
+  }
+	part part;
+	order order;
+	journal journal;
+	somerec somerec;
+  	// PSB Declaration, can still declare the PSB without the psb property, but it is just a record.
+ 	psb PSBD ;					 
+
+  	function main()
+  	end
+end
+Program APPLD5_valid type BasicProgram ( pcb1 DB_PCBRecord, pcb2 DB_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 		 
+         handleHardDLIErrors = yes,				 
+         // technically, this won't work if called from APPLA like the valid case because
+         // the PCBs are switched, but we have no way of knowing it.
+         pcbParms =/*["", "pcb2", "pcb1", ""]*/[pcb2, pcb1] }		 
+         // pcb1 is pcbD1
+         // pcb2 is pcbD2
+         // this program cannot use pcbD3                   	 
+  }
+  	// PSB Declaration
+ 	psb PSBD ;									 
+ 	pcb3 DB_PCBRecord;					 		 
+
+  	function main()								 
+  	end											  
+end

@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program pgm1 type BasicProgram {IncludeReferencedFunctions = yes,
+			 unloadOnExit = yes}    //1
+	
+	      
+	function main()
+		f1();    
+		exit {UnloadOnExit = yes};  //1
+	end
+	
+end
+
+function f1()
+	
+	exit {UnloadOnExit = yes};  //1
+end
+
+
+program pgm2 type BasicProgram() {IncludeReferencedFunctions = yes,
+			 unloadOnExit = yes}    //0
+	
+	      
+	function main()
+		f2();    
+		exit {UnloadOnExit = yes};  //0
+	end
+	
+end
+
+function f2()
+	
+	exit {UnloadOnExit = yes};  //0
+end
+
+program pgm3 type TextUIProgram {IncludeReferencedFunctions = yes,
+			 unloadOnExit = yes}    //1
+	
+	      
+	function main()
+		f3();    
+		exit {UnloadOnExit = yes};  //1
+	end
+	
+end
+
+function f3()
+	
+	exit {UnloadOnExit = yes};  //1
+end
+
+
+program pgm4 type TextUIProgram() {IncludeReferencedFunctions = yes,
+			 unloadOnExit = yes}    //0
+	
+	      
+	function main()
+		f4();    
+		exit {UnloadOnExit = yes};  //0
+	end
+	
+end
+
+function f4()
+	
+	exit {UnloadOnExit = yes};  //0
+end
+

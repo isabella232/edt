@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.DelegateBinding;
 import org.eclipse.edt.compiler.binding.DelegateBindingCompletor;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
@@ -24,18 +25,24 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
 public class DelegateBinder extends DefaultBinder {
 
-    private DelegateBinding delegateBinding;
+    private IRPartBinding irBinding;
     private Scope scope;
 
-    public DelegateBinder(DelegateBinding delegateBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(scope, delegateBinding, dependencyRequestor, problemRequestor, compilerOptions);
-        this.delegateBinding = delegateBinding;
+    public DelegateBinder(IRPartBinding irBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(scope, irBinding.getIrPart(), dependencyRequestor, problemRequestor, compilerOptions);
         this.scope = scope;
+        this.irBinding = irBinding;
     }
 
     public boolean visit(Delegate delegate) {
-    	delegate.accept(new DelegateBindingCompletor(scope, delegateBinding, dependencyRequestor, problemRequestor, compilerOptions));
+    	delegate.accept(new DelegateBindingCompletor(scope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
 
+        currentScope = new DelegateScope(currentScope, (org.eclipse.edt.mof.egl.Delegate)irBinding.getIrPart());
         return true;
     }
+    
+    public boolean visit(FunctionParameter functionParameter) {
+        return false;
+    }
+    
 }

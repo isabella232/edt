@@ -1,0 +1,89 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+// 			String			Unicode			Char			Mbchar			dbchar	
+// string	Yes				Yes				Yes by locale	Yes by locale	Yes by locale	
+// Unicode	Yes				Yes				Yes by locale	Yes by locale	Yes by locale	
+// char		Yes by locale	Yes by locale	Yes				Yes				No	
+// mbchar	Yes by locale	Yes by locale	Yes				Yes				No	
+// dbchar	Yes by locale	Yes by locale	No				No				Yes
+
+Program pgm
+	function main()
+		stringVar	string;
+		unicodeVar	unicode(2);
+		charVar		char(2);
+		mbcharVar	mbchar(2);
+		dbcharVar	dbchar(2);
+		
+		stringVar = stringVar;	// 0
+		stringVar = unicodeVar;	// 0
+		stringVar = charVar;	// 0
+		stringVar = mbcharVar;	// 0
+		stringVar = dbcharVar;	// 0
+		
+		unicodeVar = stringVar;		// 0
+		unicodeVar = unicodeVar;	// 0
+		unicodeVar = charVar;		// 0
+		unicodeVar = mbcharVar;		// 0
+		unicodeVar = dbcharVar;		// 0
+		
+		charVar = stringVar;	// 0
+		charVar = unicodeVar;	// 0
+		charVar = charVar;		// 0
+		charVar = mbcharVar;	// 0
+		charVar = dbcharVar;	// 1
+		
+		mbcharVar = stringVar;	// 0
+		mbcharVar = unicodeVar;	// 0
+		mbcharVar = charVar;	// 0
+		mbcharVar = mbcharVar;	// 0
+		mbcharVar = dbcharVar;	// 1
+		
+		dbcharVar = stringVar;	// 0
+		dbcharVar = unicodeVar;	// 0
+		dbcharVar = charVar;	// 1
+		dbcharVar = mbcharVar;	// 1
+		dbcharVar = dbcharVar;	// 0
+		
+		if( stringVar == stringVar ) end	// 0
+		if( stringVar == unicodeVar ) end	// 0
+		if( stringVar == charVar ) end		// 0
+		if( stringVar == mbcharVar ) end	// 0
+		if( stringVar == dbcharVar ) end	// 0
+
+		if( unicodeVar == stringVar ) end 	// 0
+		if( unicodeVar == unicodeVar ) end	// 0
+		if( unicodeVar == charVar ) end		// 0
+		if( unicodeVar == mbcharVar ) end	// 0
+		if( unicodeVar == dbcharVar ) end	// 0
+
+		if( charVar == stringVar ) end	// 0
+		if( charVar == unicodeVar ) end	// 0
+		if( charVar == charVar ) end	// 0
+		if( charVar == mbcharVar ) end	// 0
+		if( charVar == dbcharVar ) end	// 1
+
+		if( mbcharVar == stringVar ) end	// 0
+		if( mbcharVar == unicodeVar ) end	// 0
+		if( mbcharVar == charVar ) end		// 0
+		if( mbcharVar == mbcharVar ) end	// 0
+		if( mbcharVar == dbcharVar ) end	// 1
+
+		if( dbcharVar == stringVar ) end	// 0
+		if( dbcharVar == unicodeVar ) end	// 0
+		if( dbcharVar == charVar ) end		// 1
+		if( dbcharVar == mbcharVar ) end	// 1
+		if( dbcharVar == dbcharVar ) end	// 0
+	end
+end

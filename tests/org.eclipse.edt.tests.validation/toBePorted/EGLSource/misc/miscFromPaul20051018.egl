@@ -1,0 +1,86 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record flexRec
+	item1 int;
+end
+
+Record fixedRec1
+	10 item1 int;
+end
+
+Record fixedRec2
+	10 item1 int;
+end
+
+Record mqRec type mqRecord
+end
+
+Formgroup fg
+	form form1 type textform {formSize=[20,20]}
+		field1 num(5,3) {
+			value = -1.56		//0
+		};	
+	end
+	
+	form form2 type textform {screensizes=[[24,80]], formSize=[20,20], position=[0,0]}
+		field1 int {position=[0,0]};
+	end
+end
+
+DataItem di1 char(20) end
+DataItem di2 char(20) end
+DataItem di3 int end
+
+Program pgm type textUIProgram
+	use fg;
+	function main()
+		flexRecAry1 flexRec[];
+		flexRecAry2 flexRec[];
+		
+		flexRecAry1.appendAll(flexRecAry2);	//0
+		
+		a, b int[];
+		c, d char(4)[];
+		
+		a.appendAll(b);		//0
+		a.appendAll(c);		//1
+		
+		rec2 fixedRec2;
+		
+		show form1 returning to pgm2 passing rec2;				//0
+		show form1 returning to pgm2 passing flexRecAry1[1];	//1
+		
+		mqRec mqRec;
+		add mqRec;
+		if(mqRec is deadlock) end	//0
+		
+		hexVar hex(8);
+		assign(hexVar, hexVar);				//0
+		hexVar = min(hexVar, hexVar);		//0
+	end
+	
+	function func(p1 di1) returns (di2)							//0
+		return (p1);											//0
+	end
+	
+	function func2(p1 di1) returns (di3)						//0
+		return (p1);											//0
+	end
+end
+
+Program pgm2 {inputRecord=rec1}
+	rec1 fixedRec1;
+	
+	function main()
+	end
+end

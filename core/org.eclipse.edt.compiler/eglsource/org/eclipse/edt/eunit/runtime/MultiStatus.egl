@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 
+import eglx.rbd.StrLib;
+
 // basic handler
 
 handler MultiStatus

@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.mvc;
 
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.ExternalName;
+
 externalType InternalFormattingUtil type JavaScriptObject
 	{relativePath = "org/eclipse/edt/rui/mvc",
 	 externalName = "InternalFormattingUtil"}

@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -28,24 +26,13 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 public class Program extends Part{
 
 	private Name partSubTypeOpt;
-	private List programParametersOpt;
-	private boolean isCallable;
-	
 
-	public Program(Boolean privateAccessModifierOpt, SimpleName name, Name partSubTypeOpt, List programParametersOpt, List classContents, int startOffset, int endOffset) {
+	public Program(Boolean privateAccessModifierOpt, SimpleName name, Name partSubTypeOpt, List classContents, int startOffset, int endOffset) {
 		super(privateAccessModifierOpt, name, classContents, startOffset, endOffset);
 		
 		if(partSubTypeOpt != null) {
 			this.partSubTypeOpt = partSubTypeOpt;
 			partSubTypeOpt.setParent(this);
-		}
-		if(programParametersOpt == null) {
-			this.programParametersOpt = Collections.EMPTY_LIST;
-			isCallable = false;
-		}
-		else {
-			this.programParametersOpt = setParent(programParametersOpt);
-			isCallable = true;
 		}
 	}
 	
@@ -57,20 +44,11 @@ public class Program extends Part{
 		return partSubTypeOpt;
 	}
 	
-	public boolean isCallable() {
-	    return isCallable;
-	}
-	
-	public List getParameters() {
-		return programParametersOpt;
-	}
-	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
 			name.accept(visitor);
 			if(partSubTypeOpt != null) partSubTypeOpt.accept(visitor);
-			if(programParametersOpt != null) acceptChildren(visitor, programParametersOpt);
 			acceptChildren(visitor, contents);
 		}
 		visitor.endVisit(this);
@@ -79,17 +57,9 @@ public class Program extends Part{
 	protected Object clone() throws CloneNotSupportedException {
 		Name newPartSubTypeOpt = partSubTypeOpt != null ? (Name)partSubTypeOpt.clone() : null;
 		
-		ArrayList parmsOpt = null;
-		if (isCallable()) {
-			parmsOpt = cloneList(programParametersOpt);
-		}
-		return new Program(new Boolean(isPrivate), (SimpleName)name.clone(), newPartSubTypeOpt, parmsOpt, cloneContents(), getOffset(), getOffset() + getLength());
+		return new Program(new Boolean(isPrivate), (SimpleName)name.clone(), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 	
-	public boolean isGeneratable(){
-		return true;
-	}
-
 	public String getPartTypeName() {
 		return  IEGLConstants.KEYWORD_PROGRAM;
 	}

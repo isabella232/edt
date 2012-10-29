@@ -1,0 +1,193 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program ins
+
+	use tbl;
+	
+	function originalTest()
+		ary1 int[];
+		ary2 int[][];
+		i int;
+		
+		if(1 in ary1) end				//0
+		if(1 in ary1 from 1) end		//0
+		if(1 in ary1[1] from 2) end		//1 The operand ary1[1] in the in condition must be an array or table column.
+		
+		if(1 in ary2) end				//1 1 is not valid for compare to ary2
+		
+		//was: 1 in ary2[1]	in V6
+		if(1 in ary2 from 1) end		//1 1 is not valid for compare to ary2
+		if(1 in ary2[1]) end			//0
+
+		if(1 in ary2[1] from 2) end		//0
+		if(1 in ary2[1][2] from 3) end	//1 The operand ary2[1][2] in the in condition must be an array or table column
+		
+		if(1 in i) end					//0
+	end
+	
+	function validationForFrom()
+		ary1 int[];
+		
+		if(1 in ary1 from xxx) end		//1 xxx cannot be resolved
+		if(1 in ary1 from [3]) end		//1 Invalid from expression [3]. The from expression must be an integer item or literal
+	end
+	
+	function main()		
+		s string[] = [ "a", "b", "c" ];
+		arrayIndex = 0;
+		if ( "b" in s && arrayIndex == 2 )				//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !("f" in s) && arrayIndex == 0 )			//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		if ( !("b" in s from 3) && arrayIndex == 0 )	//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		
+		arrayIndex = 0;
+		if ( 2 in tbl.x && arrayIndex == 2 )			//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !(23 in tbl.x) && arrayIndex == 0 )		//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !(2 in tbl.x from 3) && arrayIndex == 0 )	//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		
+		r rec[] = [ new rec { x = 1 }, new rec { x = 2 }, new rec { x = 3 }, new rec { x = 4 } ];
+		arrayIndex = 0;
+		if ( 2 in r.x && arrayIndex == 2 )				//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !(-23432 in r.x) && arrayIndex == 0 )		//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !(2 in r.x from 3) && arrayIndex == 0 )	//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		
+		f fixrec[] = [ new fixrec { x.y.z = 1 }, new fixrec { x.y.z = 2 }, new fixrec { x.y.z = 3 }, new fixrec { x.y.z = 4 } ];
+		arrayIndex = 0;
+		if ( 2 in f[2].w && arrayIndex == 2 )			//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !(3 + 3 + 3 + 3 + 3 in f[2].w) && arrayIndex == 0 )	//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !(2 in f[2].w from 3) && arrayIndex == 0 )				//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+
+		arrayIndex = 0;
+		if ( 2 in f.x.y.z && arrayIndex == 2 )						//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !(-123123 in f.x.y.z) && arrayIndex == 0 )				//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		arrayIndex = 0;
+		if ( !(2 in f.x.y.z from 3) && arrayIndex == 0 )			//0
+			writeStdout( "ok" );
+		else
+			writeStdout( "bad" );
+		end
+		
+		//From Matt's Feb. 8 update to DCR
+		myRecord flexRec;
+		if ( 2 in myRecord.array.x )								//0
+		end
+		
+		//Simple case of extended dot operator
+		myRecordAry flexRec[];
+		if ( 2 in myRecordAry.x )									//0
+		end
+		
+		//Extended dot operator works for field access expressions as well as qualified names
+		myRecordAryAry flexRec[][];
+		if ( 2 in myRecordAryAry[2].x )								//0
+		end
+		
+		singleFixed fixrec;
+		if(2 in singleFixed.x)										//0
+		end
+		if(2 in singleFixed.x.y)									//0
+		end
+		if(2 in singleFixed.x.y.z)									//0
+		end
+	end
+end
+
+record rec
+	x int;
+end
+
+record fixrec
+	10 w int[4] = [ 1, 2, 3, 4 ];
+	10 x int;
+		20 y int;
+			30 z int;
+end
+
+	
+record flexRec
+	array flexRec2[ 5 ];
+	x int;
+end
+
+record flexRec2
+	x int;
+end
+
+Datatable tbl {
+	contents = [[1], [2], [3]]
+}
+	10 x int;
+end

@@ -12,5 +12,5 @@
 package org.eclipse.edt.mof.egl;
 
 
-public interface Service extends EGLClass {
+public interface Service extends EGLClass, StaticType {
 }

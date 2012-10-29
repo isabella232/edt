@@ -18,14 +18,13 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
 
 public interface IBuildPathEntry {
 
-	IPartBinding getPartBinding(String[] packageName,String partName);
-	boolean hasPackage(String[] packageName);
-	int hasPart(String[] packageName,String partName);
+	IPartBinding getPartBinding(String packageName,String partName);
+	boolean hasPackage(String packageName);
+	int hasPart(String packageName,String partName);
 	IEnvironment getRealizingEnvironment();
-	IPartBinding getCachedPartBinding(String[] packageName, String partName);
-	public void addPartBindingToCache(IPartBinding partBinding);
+	IPartBinding getCachedPartBinding(String packageName, String partName);
 	public ObjectStore[] getObjectStores();
-	public Part findPart(String[] packageName, String name) throws PartNotFoundException;
+	public Part findPart(String packageName, String name) throws PartNotFoundException;
 
 	
 	boolean isZipFile();

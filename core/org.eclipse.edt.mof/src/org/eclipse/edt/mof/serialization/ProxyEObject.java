@@ -153,6 +153,11 @@ public class ProxyEObject implements EObject, EField, EFunction {
 	public String getName() {
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public String getCaseSensitiveName() {
+		throw new UnsupportedOperationException();
+	}
 
 	@Override
 	public void setName(String name) {

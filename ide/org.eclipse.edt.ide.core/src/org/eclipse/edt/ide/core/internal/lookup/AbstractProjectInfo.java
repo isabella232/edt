@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
@@ -32,7 +33,7 @@ import org.eclipse.edt.ide.core.internal.partinfo.EGLBinaryProjectOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLFileOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLSourcelessProjectOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author winghong
@@ -68,15 +69,15 @@ public abstract class AbstractProjectInfo {
 	 *
 	 */
 	private class ResourceInfo {
-		private HashMap packages = null;
-		private HashMap parts = null;
+		private HashMap<String, ResourceInfo> packages;
+		private HashMap<String, PartEntry> parts;
 		
 		public ResourceInfo addPackage(String packageName){
 			if(packages == null){
 				packages = new HashMap(5);
 			}
 			
-			ResourceInfo pkgInfo = (ResourceInfo)packages.get(packageName);
+			ResourceInfo pkgInfo = packages.get(packageName);
 			if(pkgInfo == null){
 				pkgInfo = new ResourceInfo();
 				packages.put(packageName, pkgInfo);
@@ -86,7 +87,7 @@ public abstract class AbstractProjectInfo {
 		
 		public ResourceInfo getPackage(String packageName){
 			if(packages != null){
-				return (ResourceInfo)packages.get(packageName);
+				return packages.get(packageName);
 			}
 			return null;
 		}
@@ -125,7 +126,7 @@ public abstract class AbstractProjectInfo {
 		
 		private PartEntry getPart(String partName){
 			if(parts != null){
-				return (PartEntry)parts.get(partName);
+				return parts.get(partName);
 			}
 			return null;
 		}
@@ -149,9 +150,9 @@ public abstract class AbstractProjectInfo {
 			if(packages == null){
 				result.append("\tNone"); //$NON-NLS-1$
 			}else{
-				Set set = packages.keySet();
-				for (Iterator iter = set.iterator(); iter.hasNext();) {
-					String pkgName = (String) iter.next();
+				Set<String> set = packages.keySet();
+				for (Iterator<String> iter = set.iterator(); iter.hasNext();) {
+					String pkgName = iter.next();
 					result.append("\t" + pkgName + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
@@ -161,9 +162,9 @@ public abstract class AbstractProjectInfo {
 			if(parts == null){
 				result.append("\tNone"); //$NON-NLS-1$
 			}else{
-				Set set = parts.keySet();
-				for (Iterator iter = set.iterator(); iter.hasNext();) {
-					String partName = (String) iter.next();
+				Set<String> set = parts.keySet();
+				for (Iterator<String> iter = set.iterator(); iter.hasNext();) {
+					String partName = iter.next();
 					result.append("\t" + partName + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
@@ -232,7 +233,7 @@ public abstract class AbstractProjectInfo {
 		// the ResourceVisitor.
 		for (Iterator iter = subFolders.iterator(); iter.hasNext();) {
 			IFolder resource = (IFolder) iter.next();
-			ResourceInfo info = parentMap.addPackage(InternUtil.intern(resource.getName()));
+			ResourceInfo info = parentMap.addPackage(NameUtile.getAsName(resource.getName()));
 			initializeEGLPackageHelper(resource, info);
 		}
     }
@@ -254,7 +255,7 @@ public abstract class AbstractProjectInfo {
         return project;
     }
     
-    public boolean hasPackage(String[] packageName) {
+    public boolean hasPackage(String packageName) {
     	//RMERUI 
     	if(ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isReadOnly()){ 
 			if (ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isBinary()) {
@@ -264,13 +265,14 @@ public abstract class AbstractProjectInfo {
 		    	}
 			}
     		// This is a project with no source, read the IRs
-			 IFolder packageLocation = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).getOutputLocation().getFolder(org.eclipse.edt.ide.core.internal.utils.Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packageName)));
-			 return packageLocation.exists();
+			IFolder packageLocation = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).getOutputLocation().getFolder(new Path((IRFileNameUtility.toIRFileName(packageName).replace('.', '/'))));
+			return packageLocation.exists();
 
 		}else{
+			String[] pkgSegments = org.eclipse.edt.ide.core.internal.utils.Util.qualifiedNameToStringArray(packageName);
 	    	ResourceInfo info = rootResourceInfo;
-	    	for (int i = 0; i < packageName.length; i++) {
-				info = info.getPackage(packageName[i]);
+	    	for (int i = 0; i < pkgSegments.length; i++) {
+				info = info.getPackage(pkgSegments[i]);
 				if(info == null){
 					break;
 				}
@@ -279,7 +281,7 @@ public abstract class AbstractProjectInfo {
 		}
     }
     
-    public int hasPart(String[] packageName, String partName) {    	
+    public int hasPart(String packageName, String partName) {    	
     	//RMERUI
 		if(ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isReadOnly()){ 
 			if (ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isBinary()) {
@@ -292,7 +294,7 @@ public abstract class AbstractProjectInfo {
 		    	}
 			}
 			
-			 IFolder packageLocation = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).getOutputLocation().getFolder(org.eclipse.edt.ide.core.internal.utils.Util.stringArrayToPath(IRFileNameUtility.toIRFileName(packageName)));
+			 IFolder packageLocation = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).getOutputLocation().getFolder(new Path(IRFileNameUtility.toIRFileName(packageName).replace('.', '/')));
 			 if (packageLocation.exists()) {
 				 if (packageLocation.findMember(IRFileNameUtility.toIRFileName(partName + ".eglxml")) != null) {
 					 return ITypeBinding.EXTERNALTYPE_BINDING;    //just return any type here
@@ -310,10 +312,11 @@ public abstract class AbstractProjectInfo {
 		}
     }
     
-    private ResourceInfo getPackageInfo(String[] packageName) {
+    private ResourceInfo getPackageInfo(String packageName) {
+    	String[] pkgSegments = org.eclipse.edt.ide.core.internal.utils.Util.qualifiedNameToStringArray(packageName);
 		ResourceInfo info = rootResourceInfo;
-    	for (int i = 0; i < packageName.length; i++) {
-			info = info.getPackage(packageName[i]);
+    	for (int i = 0; i < pkgSegments.length; i++) {
+			info = info.getPackage(pkgSegments[i]);
 			if(info == null){
 				break;
 			}
@@ -321,7 +324,7 @@ public abstract class AbstractProjectInfo {
 		return info;
 	}
     
-	public IPartOrigin getPartOrigin(String[] packageName, String partName) {
+	public IPartOrigin getPartOrigin(String packageName, String partName) {
 		//RMERUI
 		if(ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isReadOnly()){ 
 			
@@ -349,30 +352,42 @@ public abstract class AbstractProjectInfo {
     	return project.getName();
     }
     
-    public void packageRemoved(String[] packageName){
-    	String[] parentPackage = new String[packageName.length - 1];
-    	System.arraycopy(packageName, 0, parentPackage, 0, packageName.length - 1);
+    public void packageRemoved(String packageName){
+    	String parentPackage = packageName;
+    	int lastDot = packageName.lastIndexOf('.');
+    	if (lastDot != -1) {
+    		parentPackage = packageName.substring(0, lastDot);
+    	}
+    	else {
+    		parentPackage = "";
+    	}
     	ResourceInfo info = getPackageInfo(parentPackage);
     	
     	// Remove package segment
-    	info.removePackage(packageName[packageName.length - 1]);
+    	info.removePackage(lastDot == -1 ? packageName : packageName.substring(lastDot + 1));
     }
     
-    public void packageAdded(String[] packageName){
-    	String[] parentPackage = new String[packageName.length - 1];
-    	System.arraycopy(packageName, 0, parentPackage, 0, packageName.length - 1);
+    public void packageAdded(String packageName){
+    	String parentPackage = packageName;
+    	int lastDot = packageName.lastIndexOf('.');
+    	if (lastDot != -1) {
+    		parentPackage = packageName.substring(0, lastDot);
+    	}
+    	else {
+    		parentPackage = "";
+    	}
     	ResourceInfo info = getPackageInfo(parentPackage);
     	
     	// Add the package segment
-    	info.addPackage(packageName[packageName.length - 1]);
+    	info.addPackage(lastDot == -1 ? packageName : packageName.substring(lastDot + 1));
     }
     
-    public void partAdded(String[] packageName, String partName, int partType, IFile file, String caseSensitivePartName){
+    public void partAdded(String packageName, String partName, int partType, IFile file, String caseSensitivePartName){
     	ResourceInfo info = getPackageInfo(packageName);
     	info.addPart(partName, partType, file, caseSensitivePartName);
     }
     
-    public void partRemoved(String[] packageName, String partName, IFile file){
+    public void partRemoved(String packageName, String partName, IFile file){
     	ResourceInfo info = getPackageInfo(packageName);
     	if(info != null){
     		info.removePart(partName);
@@ -384,7 +399,7 @@ public abstract class AbstractProjectInfo {
 		initialize();
 	}
 	
-	public String getCaseSensitivePartName(String[] packageName, String partName){
+	public String getCaseSensitivePartName(String packageName, String partName){
 		
 		if(ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isReadOnly()){ 		
 			if(ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isBinary()) {

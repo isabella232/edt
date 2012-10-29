@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.mvc;
 
-import eglx.rbd.strlib;
+
 
 library InternalDateFormatter
 	use InternalMessageLib;

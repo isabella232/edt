@@ -12,13 +12,18 @@
 package eglx.lang;
 
 import egl.lang.reflect.ParameterizableType;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
-import org.eclipse.edt.mof.egl.TimestampType;
+import egl.lang.reflect.TimestampType;
 
 externalType ETimestamp extends AnyValue type ParameterizableType {
 	parameterizedType = TimestampType
 }
+	/**
+	 * A timestamp without a pattern has no default value.
+	 */
+	private constructor();
+	
 	/**  
 	 * {@Operation <} Compares two timestamps.
 	 */
@@ -73,6 +78,11 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 	 * {@Operation widen} Converts a date to a timestamp.
 	 */
 	static function asTimestamp(value EDate? in) returns (ETimestamp?) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a time to a timestamp.
+	 */
+	static function asTimestamp(value ETime? in) returns (ETimestamp?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a timestamp.

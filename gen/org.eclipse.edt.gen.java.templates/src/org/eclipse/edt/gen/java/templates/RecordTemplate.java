@@ -54,7 +54,6 @@ public class RecordTemplate extends JavaTemplate {
 	}
 
 	public void genConstructor(Record part, Context ctx, TabbedWriter out) {
-		// Generate RunUnit constructor
 		out.print("public ");
 		ctx.invoke(genClassName, part, ctx, out);
 		out.print("(");

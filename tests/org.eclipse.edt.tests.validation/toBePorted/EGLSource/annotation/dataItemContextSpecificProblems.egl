@@ -1,0 +1,93 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	field1 dItem1;						//0
+	field2 fixedRec1;					//0	
+	field3 fixedRec4;					//0
+	
+	function main() end
+end
+
+Handler hndlr type JSFHandler
+	field1 dItem1;						//1 DataItem part dItem1 which is referenced by item field1 contains an error in the context of type JSFHandler. The error is: The function reference notFoundFunc cannot be resolved.
+	field2 fixedRec1;					//1 DataItem part dItem1 which is referenced by item item1 contains an error in the context of type JSFHandler. The error is: The function reference notFoundFunc cannot be resolved.
+	
+	field3 dItem1 {validatorFunction = existsFunc};				//0
+	field4 fixedRec1 {item1 {validatorFunction = existsFunc}};	//0
+	field5 fixedRec2;											//0
+	field6 fixedRec3;											//0
+	
+	field7 fixedRec4;					//1 DataItem part dItem1 which is referenced by item item1 contains an error in the context of type JSFHandler. The error is: The function reference notFoundFunc cannot be resolved.
+end
+
+Formgroup fg1
+	Form pForm type printForm {
+		formSize = [24, 80]
+	}
+		field1 dItem1 {position = [1, 1]};						//0
+	end
+	
+	Form tForm type textForm {
+		formSize = [24, 80]
+	}
+		field1 dItem1 {position = [1, 1]};									//0
+		field2 dItem1 {position = [2, 1], validatorFunction = existsFunc};	//0
+	end
+end
+
+Record vgRec type VGUIRecord
+	item1 dItem1;									//1 DataItem part dItem1 which is referenced by item item1 contains an error in the context of type VGUIRecord. The error is: The function reference notFoundFunc cannot be resolved.
+	item2 dItem1 {validatorFunction = existsFunc};	//0
+	
+	item3 fixedRec1;	//1 DataItem part dItem1 which is referenced by item item1 contains an error in the context of type VGUIRecord. The error is: The function reference notFoundFunc cannot be resolved.
+	item4 fixedRec2;	//0
+end
+
+function existsFunc()
+end
+
+Record fixedRec1
+	10 item1 dItem1;											//0
+end
+
+Record fixedRec2
+	10 item1 dItem1 {validatorFunction = existsFunc};			//0
+end
+
+Record fixedRec3
+	10 item1 dItem2;											//0
+end
+
+Record fixedRec4
+	10 item1 fixedRec1;											//0
+end
+
+DataItem dItem1 int {
+	validatorFunction = notFoundFunc	//1 {should be a warning} The function reference notFoundFunc cannot be resolved.
+}
+end
+
+DataItem dItem2 int {
+	validatorFunction = existsFunc		//0
+}
+end
+
+DataItem dItem3 int {
+	dateFormat = "Y"					//1 {should be a warning} The character 'Y' is not a valid character in the dateFormat property value.
+}
+end
+
+DataItem dItem4 blob {
+	dateFormat = "Y"					//2 {should be a warning} The character 'Y' is not a valid character in the dateFormat property value.
+}
+end

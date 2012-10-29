@@ -19,7 +19,7 @@ public class FunctionTemplate extends EGLDocTemplate {
 
 		List<FunctionParameter> parameters = function.getParameters();
 		String blockComment = Util.findBlockComment(ctx, Util.getLine(function));		
-		String functionName = function.getName();
+		String functionName = function.getCaseSensitiveName();
 		String functionFirstPara = "";
 
 		/* from svihovec
@@ -74,7 +74,7 @@ public class FunctionTemplate extends EGLDocTemplate {
 		int numberOfParmsLeft = parameters.size() - 1;
 
 		for (FunctionParameter functionParameter : parameters) {
-			String parmName = functionParameter.getName().trim();
+			String parmName = functionParameter.getCaseSensitiveName().trim();
 			String parmType = functionParameter.getType().getTypeSignature()
 					.toString();
 

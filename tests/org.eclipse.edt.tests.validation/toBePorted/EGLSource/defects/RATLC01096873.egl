@@ -1,0 +1,1231 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+/*
+ * Just want to assert that no exceptions occur during validation.
+ */
+
+DataTable SCH00T1 type matchValidTable  {
+  shared = yes, resident = no
+  }
+  10 menuOption menuOption; 
+  10 APPL APPL; 
+   {contents = [
+    [1, "SchoolClearDB     "],
+    [2, "SchoolInitDatabase"],
+    [3, "SchoolClassRosters"]
+  ]}
+end 
+
+Function SCLogonEdit() end
+
+FormGroup SCH00G
+
+Form SCLOGON type textForm	
+ { screenSizes = [[24,80],[32,80],[43,80],[27,132],[255,160]], 
+  formSize = [24,80], position = [1,1], helpForm = "SCLOGONH", 
+  helpKey = pf1, msgField = "userMsg"}
+
+
+  userid userid  
+  { position = [11,22], fieldLen = 8, cursor = yes, validationOrder = 1, 
+    validatorFunction = "SCLogonEdit"}; 
+  password password 
+  { position = [13,22], fieldLen = 8, validationOrder = 2    }; 
+  userMsg usermsg 
+  { position = [24,1], fieldLen = 78, validationOrder = 3}; 
+
+
+  * { position = [1,2], fieldLen = 45, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip,
+      value = "SCLOGON             IMS School System Logon"};
+  * { position = [3,2], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = yes  };
+  * { position = [3,17], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = yes  };
+  * { position = [6,11], fieldLen = 33, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "Welcome to the IMS School System"};
+  * { position = [9,11], fieldLen = 32, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "Enter the following information:"};
+  * { position = [11,11], fieldLen = 10, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "User ID..."};
+  * { position = [13,11], fieldLen = 10, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "Password.."};
+end 
+
+Form SCLOGONH type textForm	
+ { screenSizes = [[24,80],[32,80],[43,80],[27,132],[255,160]], 
+  formSize = [24,80], position = [1,1], validationBypassKeys = [pf3]}
+
+
+
+
+  * { position = [1,1], fieldLen = 256, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "SCLOGONH                   S C H O O L   S Y S T E M              1 of 1                                        L O G O N"};
+  * { position = [4,18], fieldLen = 227, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "= = = = = >  H E L P   M A P  < = = = = ="};
+  * { position = [7,6], fieldLen = 46, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "Enter a valid userid and password combination."};
+  * { position = [9,6], fieldLen = 40, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "The userid is an 1- to 8-character name."};
+  * { position = [11,6], fieldLen = 42, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "The password is an 1- to 8-character name."};
+  * { position = [14,6], fieldLen = 118, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "If either the user ID ar the user ID/password combination is                    "
+            + "not valid, an error message is issued."};
+  * { position = [18,6], fieldLen = 36, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip,
+      value = "Press F3 to return to the Logon map."};
+end 
+
+
+
+
+
+
+
+Form SCMenu00 type textForm	
+ { screenSizes = [[24,80],[32,80],[43,80],[27,132],[255,160]], 
+  formSize = [24,80], position = [1,1], helpForm = "SCMenu01H", 
+  helpKey = pf1, msgField = "usermsg"}
+
+
+  menuOption menuoption  
+ 	 { position = [8,22], fieldLen = 1, cursor = yes, validationOrder = 2, 
+       validatorDataTable = "SCH00T1"}; 
+  usermsg usermsg 
+ 	 { position = [20,1], fieldLen = 78, validationOrder = 1}; 
+
+
+  * { position = [1,3], fieldLen = 159, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip,
+      value = "SCMenu00               IMS School System Main Menu"};
+  * { position = [3,3], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = yes  };
+  * { position = [3,17], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = yes  };
+  * { position = [6,3], fieldLen = 159, color = cyan, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip,
+      value = "Select one of the following and press Enter:"};
+  * { position = [8,3], fieldLen = 18, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip, value = "Option number....."};
+  * { position = [12,27], fieldLen = 339, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip,
+      value = "1. Clear Database(s)                                                            2. Initialize Database(s)                                                       3. Produce Class Roster(s)"};
+  * { position = [23,3], fieldLen = 49, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip,
+      value = "ENTER=Continue           F1=Help          F3=Exit"};
+end 
+
+
+
+
+Form SCMenu00H type textForm	
+ { screenSizes = [[24,80],[32,80],[43,80],[27,132],[255,160]], 
+  formSize = [24,80], position = [1,1], 
+  helpKey = pf8}
+
+
+
+
+  * { position = [1,2], fieldLen = 253, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip,
+      value = "SCMenu00H                 S C H O O L   S Y S T E M            1 of 2                                        M A I N   M E N U"};
+  * { position = [4,16], fieldLen = 1470, color = blue, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip,
+      value = " = = = = =>    H E L P    M A P   < = = = = =                                                                                                        This is the IMS School System Main Menu, which is intended to be                used as the first step in testing the school system. It controls                the functions necessary to prepare the DL/I databases for future                tests.  The source of it's data is a series of serail files assoc-              iated with GSAM PCBS.                                                                                                                                             1.  Clear Databases(s) - Use this application to delete all data                    from one or more of the TEACHERS, STUDENTS, or COURSES databases.                                                                                           2. Initialize Database(s) - Use this application to load the data                  from GSAM files into the TEACHERS, STUDENTS, or COURSES databases.                                                                                           3. Produce Class Rosters - Use this application to produce one or                  more class rosters."};
+  * { position = [24,5], fieldLen = 24, color = white, highlight = noHighlight, 
+      intensity = normalIntensity, protect = skip, value = "F3=Exit "};
+end 
+
+
+
+form SCClear type textForm
+	{ formSize = [24,80], position = [1,1], msgField = "usermsg3",
+	helpForm = "SCClearH", helpKey = pf1}
+	
+	* {fieldLen = 60, position = [6,3], value = "Place an '/' by the name of each database that you want to ", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 58, position = [7,3], value = "completely erase all records from. ", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 27, position = [13,27], value = "Teacher Database", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 24, position = [14,27], value = "Student Database", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 18, position = [15,27], value = "Courses Database", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 67, position = [1,3], value = "SCClear            IMS School System Clear Databases Menu", color = blue, intensity = bold, protect = skip};
+	* { position = [3,3], fieldLen = 8, color = defaultColor, 
+    	  highlight = noHighlight, intensity = invisible, protect = yes  };
+  	* { position = [3,14], fieldLen = 2, color = defaultColor, 
+     	 highlight = noHighlight, intensity = invisible, protect = yes  };
+  	* {fieldLen = 67, position = [23,2], value = " Enter=Continue           F1=Help          F3=Exit", color = cyan, intensity = normalIntensity, protect = skip};
+
+	
+	TeacherDB char(1) {position = [13,24], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+	StudentDB char(1) {position = [14,24], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+	CoursesDB char(1) {position = [15,24], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+	usermsg1 userMsg  {position = [19,1], color = red, intensity = bold, protect = skip};
+	userMsg2 userMsg  {position = [20,1], color = red, intensity = bold, protect = skip};
+	userMsg3 userMsg  {position = [21,1], color = red, intensity = bold, protect = skip};
+end 
+
+form SCClearH type textForm
+	{ formSize = [24,80], position = [1,1]}
+	
+	* {fieldLen = 75, position = [1,1], value = "SCClearH                    S C H O O L  S Y S T E M              1 of 1 ", color = blue, intensity = bold, protect = skip};
+	* {fieldLen = 32, position = [2,26], value = "C l e a r   D a t a b a s e s", color = blue, intensity = bold, protect = skip};
+	* {fieldLen = 56, position = [7,6], value = "You may select one or more databases to be deleted.", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 62, position = [9,6], value = "Place a slash ('/') beside each database to be deleted.", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 68, position = [11,6], value = "The database itself will not be deleted, but all content", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 56, position = [12,6], value = "will be removed.", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 37, position = [18,6], value = "Press F3 to return to the Logon form.", color = cyan, intensity = normalIntensity, protect = skip};
+end 
+
+form SCInit type textForm
+	{ formSize = [24,80], position = [1,1], msgField = "usermsg4",
+	helpForm = "SCInitH", helpKey = pf1}
+	
+	* {fieldLen = 60, position = [6,3], value = "Place an '/' by the name of each database that you want to ", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 60, position = [7,3], value = "initialize from a serial file. ", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 27, position = [13,27], value = "Teacher Database", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 24, position = [14,27], value = "Student Database", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 18, position = [15,27], value = "Courses Database", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 60,position = [1,3], value = "SCInit            IMS School System Initialize Databases Menu", color = blue, intensity = bold, protect = skip};
+	* { position = [3,3], fieldLen = 8, color = defaultColor, 
+    	  highlight = noHighlight, intensity = invisible, protect = yes  };
+  	* { position = [3,14], fieldLen = 2, color = defaultColor, 
+     	 highlight = noHighlight, intensity = invisible, protect = yes  };
+  	* {fieldLen = 67, position = [23,2], value = " Enter=Continue           F1=Help          F3=Exit", color = cyan, intensity = normalIntensity, protect = skip};
+
+	
+	TeacherDB char(1) {position = [12,24], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+	StudentDB char(1) {position = [13,24], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+	CoursesDB char(1) {position = [14,24], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+	ClassMembers char(1) {position = [15,24], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+
+	usermsg1 userMsg  {position = [18,1], color = red, intensity = bold, protect = skip};
+	userMsg2 userMsg  {position = [19,1], color = red, intensity = bold, protect = skip};
+	userMsg3 userMsg  {position = [20,1], color = red, intensity = bold, protect = skip};
+	userMsg4 userMsg  {position = [21,1], color = red, intensity = bold, protect = skip};
+
+end 
+
+form SCInitH type textForm
+	{ formSize = [24,80], position = [1,1]}
+	
+	* {fieldLen = 75, position = [1,1], value = "SCInitH                    S C H O O L  S Y S T E M              1 of 1 ", color = blue, intensity = bold, protect = skip};
+	* {fieldLen = 42, position = [2,20], value = "I n i t i a l i z e     D a t a b a s e s", color = blue, intensity = bold, protect = skip};
+	* {fieldLen = 62, position = [9,6], value = "Place a slash ('/') beside each database to be initialized.", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 68, position = [11,6], value = "The database will be initialized with the contents of ", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 56, position = [12,6], value = "a GSAM file.", color = cyan, intensity = normalIntensity, protect = skip};
+	* {fieldLen = 37, position = [18,6], value = "Press F3 to return to the Logon form.", color = cyan, intensity = normalIntensity, protect = skip};
+end 
+
+form SCRosterSelection type textForm
+	{ formSize = [24,80], position = [1,1], msgField = "usermsg",
+	helpForm = "SCRosterSelectionHelp", helpKey = pf1, alias = "SCRosSel"}
+	* {fieldLen = 60,position = [1,3], value = "SCRosterSelection   IMS School System Roster Selection Menu", color = blue, intensity = bold, protect = skip};
+	* {position = [3,3], fieldLen = 8, color = defaultColor, 
+    	  highlight = noHighlight, intensity = invisible, protect = yes  };
+  	* {position = [3,14], fieldLen = 2, color = defaultColor, 
+     	 highlight = noHighlight, intensity = invisible, protect = yes  };	
+	* {position = [6,3], value = "Enter the following to select the class roster(s) to display.", color = cyan, intensity = normalIntensity, protect = skip};
+	* {position = [12,10], value = "Offering", color = cyan, intensity = normalIntensity, protect = skip};
+	* {position = [13,12], value = "Semester", color = cyan, intensity = normalIntensity, protect = skip};
+	* {position = [13,38], value = "1=Fall, 2=Spring", color = cyan, intensity = normalIntensity, protect = skip};
+
+	* {position = [14,12], value = "Year", color = cyan, intensity = normalIntensity, protect = skip};
+
+	* {position = [15,10], value = "Course Code", color = cyan, intensity = normalIntensity, protect = skip};
+	* {position = [16,10], value = "Teacher", color = cyan, intensity = normalIntensity, protect = skip};
+ 
+  	* {fieldLen = 67, position = [23,2], value = " Enter=Continue           F1=Help          F3=Exit", color = cyan, intensity = normalIntensity, protect = skip};
+
+	
+	Semester   char(1)  {position = [13,30], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+	Year	   char(4)  {position = [14,30], highlight = underline, color = green, intensity = normalIntensity, protect = no, minimuminput=4, minimuminputmsgkey="0035"};
+	CourseCode char(5)  {position = [15,30], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+	Teacher    char(15) {position = [16,30], highlight = underline, color = green, intensity = normalIntensity, protect = no};
+
+	usermsg userMsg  {position = [21,1], color = red, intensity = bold, protect = skip};
+
+end 
+
+form SCRosterSelectionHelp type textForm
+	{ formSize = [24,80], position = [1,1], alias = "SCRosSH"}
+	
+	* {fieldLen = 75, position = [1,1], value = "SCRosterSelectionHelp        S C H O O L  S Y S T E M              1 of 1 ", color = blue, intensity = bold, protect = skip};
+	* {fieldLen = 32, position = [2,26], value = "R o s t e r   S e l e c t i o n", color = blue, intensity = bold, protect = skip};
+	* {position = [7,6], value = "You must enter either the course and offering period for which you wish a roster,", color = cyan, intensity = normalIntensity, protect = skip};
+	* {position = [9,6], value = "Or the last name of a teacher for which you wish a class roster.", color = cyan, intensity = normalIntensity, protect = skip};
+
+	* {position = [12,6], value = "Entering a teacher name without a course or offering period will result in", color = cyan, intensity = normalIntensity, protect = skip};
+	* {position = [13,6], value = "a listing of all courses and all students for that teacher.", color = cyan, intensity = normalIntensity, protect = skip};
+
+	* {fieldLen = 37, position = [18,6], value = "Press F3 to return to the Logon form.", color = cyan, intensity = normalIntensity, protect = skip};
+end 
+
+	form SCDisplayRoster type textForm
+		{msgField = "usermsg",  formSize = [24,80], position = [1,1]}
+  	* {position = [1,3], value = "SCDisplayRoster", color = blue, intensity = bold, protect = skip};
+  	* {fieldLen = 43, position = [1,20], value = "IMS School System Class Rosters", color = blue, intensity = bold, protect = skip};
+  	* { position = [2,2], fieldLen = 8, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = yes  };
+  	* { position = [2,17], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = invisible, protect = yes  };
+	* {fieldLen = 75, position = [23,3], value = "F4=Write to File      F7=Scroll Down         F3=Exit", color = cyan, intensity = normalIntensity, protect = skip};
+
+ 	usermsg char(78) {fieldLen = 78, position = [21,1], color = red, intensity = bold, protect = skip};
+ 
+	FormCourse char(4)[15] {fieldLen = 4, position = [4,2], color = green, intensity = normalIntensity, protect = skip , indexOrientation = down , columns = 1 , linesBetweenRows = 0 , spacesBetweenColumns = 1};
+		FormTitle char(20)[15] {fieldLen = 20, position = [4,8], color = green, intensity = normalIntensity, protect = skip , indexOrientation = down , columns = 1 , linesBetweenRows = 0 , spacesBetweenColumns = 1};
+		* {fieldLen = 6, position = [3,1], value = "Course", color = blue, intensity = bold, protect = skip};
+		* {fieldLen = 13, position = [3,10], value = "Title", color = blue, intensity = bold, protect = skip};
+		FormSemester char(6)[15] {fieldLen = 6, position = [4,30], color = green, intensity = normalIntensity, protect = skip , indexOrientation = down , columns = 1 , linesBetweenRows = 0 , spacesBetweenColumns = 1};
+		* {fieldLen = 8, position = [3,28], value = "Semester", color = blue, intensity = bold, protect = skip};
+		FormYear char(4)[15] {fieldLen = 4, position = [4,38], color = green, intensity = normalIntensity, protect = skip , indexOrientation = down , columns = 1 , linesBetweenRows = 0 , spacesBetweenColumns = 1};
+		* {fieldLen = 5, position = [3,38], value = "Year", color = blue, intensity = bold, protect = skip};
+		FormTeacher char(15)[15] {fieldLen = 15, position = [4,44], color = green, intensity = normalIntensity, protect = skip , indexOrientation = down , columns = 1 , linesBetweenRows = 0 , spacesBetweenColumns = 1};
+		* {fieldLen = 14, position = [3,44], value = "    Teacher   ", color = blue, intensity = bold, protect = skip};
+		FormClassMember char(18)[15] {fieldLen = 18, position = [4,61], color = green, intensity = normalIntensity, protect = skip , indexOrientation = down , columns = 1 , linesBetweenRows = 0 , spacesBetweenColumns = 1};
+		* {position = [3,60], value = "   Class Member   ", color = blue, intensity = bold, protect = skip};
+	end
+end 
+
+Program SchoolInitDatabase type textUIProgram 
+  {alias = "school02",
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no, 
+  msgTablePrefix = "SCHM", inputRecord = "school00W", inputForm = "SCInit", 
+  segmented = yes,
+  @DLI {
+         psb = "psb", callInterface = DLICallInterfaceKind.CBLTDLI,
+         handleHardDLIErrors = yes
+       }
+  }
+
+  
+  school00W school00W ; 
+  Course SCCOURSE;	
+  Teacher SCTEACHR; 
+  Student SCSTUDNT; 
+
+  Offering SCOFFER; 
+  ClassMember SCMEMBER; 
+  Assignment SCASGMNT;	
+
+  
+  use SCH00G { pfKeyEquate = no };
+  
+  
+  psb SCHOOLPSB;
+
+  function main()
+    InitDatabaseMenuControl();
+  end 
+end 
+
+
+
+Function InitDatabaseMenuControl()
+   /* *************************************************************/
+   /* This process contains the controlling loop for the program **/
+   /* schoolInitDatabase. The variable 'GETOUT' is initialized   **/
+   /* to 0 and is never changed.                                 **/
+   /* *************************************************************/
+  VGVar.handleHardIOErrors = 1; /* Handle hard errors*/
+  GETOUT = 0; /* Initialize loop control variable*/
+  while (GETOUT == 0)
+  	SCInit.userMsg1 = "";
+  	SCInit.userMsg2 = "";
+  	SCInit.userMsg3 = "";
+  	SCInit.userMsg4 = "";
+    if (converseVar.eventKey is bypass) /* Check for exit request*/
+      exit program;
+    else
+      if (converseVar.eventKey is enter) 
+         /*  perform function*/
+         if (SCInit.TeacherDB == " " ||
+         	      SCInit.TeacherDB == "")	/* skip this database  */
+         else if (SCInit.TeacherDB == "/")	/* initialize this database */
+         			InitTeacherDB(SCInit.userMsg1);
+        	  else 
+        	  		SCInit.userMsg1 = SCHMENU.MSG_TXT[6];
+        	  		set SCInit.TeacherDB red, bold;
+        	  end
+         end
+         if (SCInit.StudentDB == " " ||
+         	      SCInit.StudentDB == "")	/* skip this database  */
+         else if (SCInit.StudentDB == "/")	/* initialize this database */
+         			InitStudentDB(SCInit.userMsg2);
+        	  else 
+        	  		SCInit.userMsg2 = SCHMENU.MSG_TXT[6];
+        	  		set SCInit.StudentDB red, bold;
+        	  end
+         end
+         if (SCInit.CoursesDB == " " ||
+         	      SCInit.CoursesDB == "")	/* skip this database  */
+         else if (SCInit.CoursesDB == "/")	/* initialize this database */
+         			InitCoursesDB(SCInit.userMsg3);
+        	  else 
+        	  		SCInit.userMsg3 = SCHMENU.MSG_TXT[6];
+        	  		set SCInit.CoursesDB red, bold;
+        	  end
+         end 
+         if (SCInit.ClassMembers == " " ||
+         	      SCInit.ClassMembers == "")	/* skip this database  */
+         else if (SCInit.ClassMembers == "/")	/* initialize this database */
+         			InitClassMembers(SCInit.userMsg4);
+        	  else 
+        	  		SCInit.userMsg4 = SCHMENU.MSG_TXT[6];
+        	  		set SCInit.ClassMembers red, bold;
+        	  end
+         end                 
+      else if (converseVar.eventKey is PF3)	/* exit */
+      			exit program;    
+    	   else 									/* Invalid pf key*/
+        		set SCInit.TeacherDB normal; 		/* Set selection green*/
+        		set SCInit.StudentDB normal; 		/* Set selection green*/
+        		set SCInit.CoursesDB normal; 		/* Set selection green*/
+        		set SCInit.ClassMembers normal; 	/* Set selection green*/
+       			converseLib.validationFailed(5); /* 'FUNCTION KEY NOT SUPPORTED'*/
+       	   end 		
+      end
+    end
+    if (SCInit.usermsg1 == "" &&
+        SCInit.usermsg2 == "" &&
+        SCInit.usermsg3 == "" &&
+        SCInit.usermsg4 == "")
+        	SCInit.usermsg4 = SCHMENU.MSG_TXT[13]; 
+   	end
+    ShowInitDataBaseMenu(); /* Show user selection form for databases to initialize*/
+  end
+end 
+
+
+
+Function ShowInitDataBaseMenu()
+  converse SCInit ;
+end 
+
+
+Function initTeacherDB(outputMsg userMsg)
+  TeacherFileRecd TeacherFileRecd;
+  testName SCHName;
+  testID ID;
+  testID = "1234";
+  testName.FirstName = "Sammy";
+  testName.LastName = "Bowler";
+
+  get TeacherFileRecd usingPCB psb.TeacherInput;
+  CheckGSAMPCBInfo(psb.TeacherInput, "validating PCB Info after GSAM get"); 
+  if (TeacherFileRecd is endofFile 
+  		|| TeacherFileRecd is norecordfound)
+  	outputMsg = SCHMENU.MSG_TXT[18]; 		
+  else if (dlivar.statuscode == "  ")	
+  		  
+		  while (TeacherFileRecd not EndOfFile)
+		  		move TeacherFileRecd to teacher byName;
+  				add teacher usingpcb psb.Teachers;
+  				CheckDBPCBInfo(psb.Teachers, "validating PCB Info after add"); 
+  				if (psb.Teachers.statuscode != "  "
+ 		 			|| psb.Teachers.statuscode != "II" )  /* already there */
+  					outputMsg = SCHMENU.MSG_TXT[10];
+  					return;
+  				end
+ 	
+ 		 		get TeacherFileRecd usingPCB psb.TeacherInput;
+  				CheckGSAMPCBInfo(psb.TeacherInput, "validating PCB Info after GSAM get Next"); 
+  				if (psb.TeacherInput.statuscode != "  "
+ 		 			|| TeacherFileRecd not endOfFile 
+ 		 			|| TeacherFileRecd not noRecordFound )
+  					outputMsg = SCHMENU.MSG_TXT[10];
+  					return;
+  				end
+ 	
+ 	 	  end
+ 	 	  
+ 	 	  teacher.TeacherID = testID;
+ 	  	  get Teacher usingPCB psb.Teachers;
+		  if (psb.Teachers.statusCode != "  ") 
+  				outputMsg = SCHMENU.MSG_TXT[25];
+ 		  else if (teacher.teacherName.FirstName != testName.FirstName ||
+ 		  			teacher.teacherName.LastName != testName.LastName)
+  				  outputMsg = SCHMENU.MSG_TXT[25];	
+  				end  
+  		  end		
+  	
+  		end /* end dlivar.statuscode = "  " */
+  end		
+end 
+
+Function InitStudentDB(outputMsg userMsg)
+  StudentFileRecd StudentFileRecd;
+  testName SCHName;
+  testID ID;
+  testID = "4321";
+  testName.FirstName = "Mandy";
+  testName.LastName = "Doll";
+
+  
+  set StudentFileRecd position;
+  get next StudentFileRecd usingPCB psb.StudentInput;
+  CheckGSAMPCBInfo(psb.StudentInput, "validating PCB Info after GSAM get"); 
+  if (StudentFileRecd is endofFile 
+  		|| StudentFileRecd is norecordfound)
+  	outputMsg = SCHMENU.MSG_TXT[19]; 		
+
+  else if (dlivar.statuscode == "  ")	
+  		  
+		  while (StudentFileRecd not EndOfFile)
+		  		move StudentFileRecd to Student byName;
+		  		add Student usingpcb psb.students ;
+  				CheckDBPCBInfo(psb.Students, "validating PCB Info after add"); 
+  				if (psb.students.statuscode != "  "
+ 		 			|| psb.students.statuscode != "II" )  /* already there */
+  					outputMsg = SCHMENU.MSG_TXT[11];
+  					return;
+  				end
+ 	
+ 		 		get next StudentFileRecd usingPCB psb.StudentInput;
+  				CheckGSAMPCBInfo(psb.StudentInput, "validating PCB Info after GSAM get Next"); 
+  				if (psb.StudentInput.statuscode != "  "
+ 		 			|| StudentFileRecd not endOfFile 
+ 		 			|| StudentFileRecd not noRecordFound )
+  					outputMsg = SCHMENU.MSG_TXT[11];
+  					return;
+  				end
+ 	
+ 	 	  end
+ 	 	  
+ 	 	  Student.StudentID = testID;
+ 	  	  get Student usingPCB psb.Students;
+		  if (psb.Students.statusCode != "  ") 
+  				outputMsg = SCHMENU.MSG_TXT[26];
+ 		  else if (Student.StudentName.FirstName != testName.FirstName ||
+ 		  			Student.StudentName.LastName != testName.LastName)
+  				  outputMsg = SCHMENU.MSG_TXT[26];	
+
+  				end  
+  		  end		
+  		end /* end dlivar.statuscode = "  " */
+  end		
+
+
+end 
+
+Function InitCoursesDB(outputMsg userMsg)
+  CourseFileRecd CourseFileRecd;
+  myCourse SCCourse;
+  myTeacher SCTeachr;
+  myOffering SCOFFER;
+  myCourse.CourseNum = "M101";
+  myCourse.TItle = "Algebra I";
+  myOffering.OfferingPeriod.Semester = "1";
+  myOffering.OfferingPeriod.Year = "2005";
+  myOffering.ClassPeriod = "B3";
+  myOffering.Room = "CLC1";
+  myTeacher.teacherID = "5678";
+  myTeacher.TeacherName.LastName = "Lopper";
+  myTeacher.TeacherName.FirstName = "Emma";
+  
+  
+  set CourseFileRecd position;
+  get next CourseFileRecd usingPCB psb.CoursesInput;
+  CheckGSAMPCBInfo(psb.CoursesInput, "validating PCB Info after GSAM get"); 
+  if (CourseFileRecd is endofFile 
+  		|| CourseFileRecd is norecordfound)
+  	outputMsg = SCHMENU.MSG_TXT[20]; 		
+
+  else if (dlivar.statuscode == "  ")	
+  		  
+		  while (CourseFileRecd not EndOfFile)
+		  		move CourseFileRecd to Course byName;
+		  		move CourseFileRecd to Offering byName;
+		  		move CourseFileRecd to Teacher byName;
+		  		get teacher usingpcb psb.teachers; 
+		  		
+  				add course, offering, teacher usingpcb psb.courses ;
+  				CheckDBPCBInfo(psb.courses, "validating PCB Info after add");
+  				if (psb.courses.statuscode != "  "
+ 		 			|| psb.courses.statuscode != "II" )  /* already there */
+  					outputMsg = SCHMENU.MSG_TXT[12];
+  					return;
+  				end 
+ 	
+ 		 		get next CourseFileRecd usingPCB psb.CoursesInput;
+  				CheckGSAMPCBInfo(psb.CoursesInput, "validating PCB Info after GSAM get Next");
+  				if (psb.CoursesInput.statuscode != "  "
+ 		 			|| CourseFileRecd not endOfFile 
+ 		 			|| CourseFileRecd not noRecordFound )
+  					outputMsg = SCHMENU.MSG_TXT[12];
+  					return;
+  				end 
+ 	
+ 	 	  end
+ 	 	  
+ 	 	  Course.CourseNum = "M101";
+ 	 	  Offering.OfferingPeriod = "12005";
+ 	 	  Teacher.TeacherID = "5678";
+  	  	  get course, offering, teacher usingPCB psb.Courses;
+		  if (psb.Courses.statusCode != "  ") 
+  				outputMsg = SCHMENU.MSG_TXT[27];
+ 		  else if (Course != myCourse ||
+ 		  			Offering != myOffering ||
+ 		  			Teacher != myTeacher)
+  				  outputMsg = SCHMENU.MSG_TXT[27];	
+
+  				end  
+  		  end		
+  	
+
+  		end /* end dlivar.statuscode = "  " */
+  end		
+
+
+end 
+ 
+
+Function InitClassMembers(outputMsg userMsg)
+  NumNotes bin(9);	
+  ClassMemberFileRecd ClassMemberFileRecd;
+  myCourse SCCourse;
+  myClassMember SCMEMBER;
+  myOffering SCOFFER;
+  myCourse.CourseNum = "M101";
+  myCourse.TItle = "Algebra I";
+  myOffering.OfferingPeriod.Semester = "1";
+  myOffering.OfferingPeriod.Year = "2005";
+  myOffering.ClassPeriod = "B3";
+  myOffering.Room = "CLC1";
+  myClassMember.StudentID = "2222";
+  myClassMember.GradeLevel = 9;
+  myClassMember.memberLen = 88; 
+  myClassMember.Notes[1] = "something useful";
+  myClassMember.Notes[2] = "nothing more";
+
+  set ClassMemberFileRecd position;
+  get next ClassMemberFileRecd usingPCB psb.ClassMemberInput;
+  CheckGSAMPCBInfo(psb.ClassMemberInput, "validating PCB Info after GSAM get"); 
+  if (ClassMemberFileRecd is endofFile 
+  		|| ClassMemberFileRecd is norecordfound)
+  	outputMsg = SCHMENU.MSG_TXT[21]; 		
+
+  else if (dlivar.statuscode == "  ")	
+  		  
+		  while (ClassMemberFileRecd not EndOfFile)
+		  		move ClassMemberFileRecd to Course byName;
+		  		move ClassMemberFileRecd to Offering byName;
+		  		move ClassMemberFileRecd to ClassMember byName;
+		  		
+		  		ClassMember.memberLen = 28+NumNotes*syslib.bytes(classmember.notes);
+		  		move ClassMemberFileRecd.studentID to student.studentID;
+		  		get student usingpcb psb.Students; 
+		  		if (psb.Students.statuscode != "  ")
+		  		
+		  			outputMsg = SCHMENU.MSG_TXT[29];
+		  		else 
+			  		add course, offering, classmember usingpcb psb.courses ;
+		  			CheckDBPCBInfo(psb.courses, "validating PCB Info after add"); 
+			  		
+			  		if (psb.Courses.statuscode != "  ")
+			  			if (psb.courses.segmentlevel == 1)
+			  				outputMsg = SCHMENU.MSG_TXT[30]; 
+			  			else if (psb.courses.segmentlevel == 2) 
+			  					outputMsg = SCHMENU.MSG_TXT[31]; 
+			  				else
+			  					
+			  					if (classmember is duplicate)
+			  						outputMsg = SCHMENU.MSG_TXT[32]; 
+			  					else
+			  						outputMsg = SCHMENU.MSG_TXT[12]; 
+			  					end	
+			  				end	
+			  			end
+	 				end
+	 			end
+	 			if (outputmsg != "")
+	 			end
+	 			
+ 		 		get next ClassMemberFileRecd usingPCB psb.ClassMemberInput;
+  				CheckGSAMPCBInfo(psb.ClassMemberInput, "validating PCB Info after GSAM get Next"); 
+ 	
+ 	 	  end
+ 	 	  
+
+ 	  	  get course, offering, classmember usingPCB psb.Courses;
+		  if (classmember.statusCode != "  ") 
+  				outputMsg = SCHMENU.MSG_TXT[27];
+ 		  else if (Course != myCourse ||
+ 		  			Offering != myOffering ||
+ 		  			classMember != myClassMember)
+  				  outputMsg = SCHMENU.MSG_TXT[27];	
+
+  				end  
+  		  end		
+  	
+  		end /* end dlivar.statuscode = "  " */
+  end		
+
+
+end 
+
+DataTable SCHSemT type matchValidTable  {
+  shared = yes, resident = no
+  }
+  10 Numb int; 
+  10 word char(6); 
+   {contents = [
+    [1, "Spring"],
+    [2, "Fall  "]
+  ]}
+end
+
+DataTable SCHMENU type msgTable  {
+  shared = yes, resident = no
+  }
+  10 MSG_KEY num(4); 
+  10 MSG_TXT char(78); 
+   {contents = [
+    [0001, "SCHM0001E User ID does not exist.                                             "],
+    [0002, "SCHM0002E Password invalid for user ID.                                       "],
+    [0003, "SCHM0003E User ID and password are required.                                  "], 
+    [0004, "SCHM0004E Option selected not valid.                                          "],
+    [0005, "SCHM0005E Function key not supported.                                         "],
+    [0006, "SCHM0006E Enter '/' to select the database.                                   "],
+    [0007, "SCHM0007I All records in Teacher database successfully deleted.               "],
+    [0008, "SCHM0008I All records in Student database successfully deleted.               "],
+    [0009, "SCHM0009I All records in Courses database successfully deleted.               "],
+    [0010, "SCHM0010E Unexpected I/O error on Teacher database.                           "],
+    [0011, "SCHM0011E Unexpected I/O error on Student database.                           "],
+    [0012, "SCHM0012E Unexpected I/O error on Courses database.                           "],
+    [0013, "SCHM0013I You must select at least one database.                              "],
+    [0014, "SCHM0014I All records successfully loaded into Teacher database.              "],
+    [0015, "SCHM0015I All records successfully loaded into Student database.              "],
+    [0016, "SCHM0016I Course and teacher records successfully loaded into Courses database"],
+    [0017, "SCHM0017I Class Member records successfully loaded into Courses database.     "],
+    [0018, "SCHM0018I Input for Teacher database initialization was empty.                "],
+    [0019, "SCHM0019I Input for Student database initialization was empty.                "],
+    [0020, "SCHM0020I Input for Course database initialization was empty.                 "],
+    [0021, "SCHM0021I Input for ClassMember initialization was empty.                     "],
+    [0022, "SCHM0022I Teacher database was already empty.                                 "],
+    [0023, "SCHM0023I Student database was already empty.                                 "],
+    [0024, "SCHM0024I Course database was already empty.                                  "], 
+    [0025, "SCHM0025I Double-check of Teacher database load failed.                       "],
+    [0026, "SCHM0026I Double-check of Student database load failed.                       "],
+    [0027, "SCHM0027I Double-check of Courses database load failed.                       "], 
+    [0028, "SCHM0028I Double-check of ClassMember load failed.                            "],
+    
+    [0029, "SCHM0029I Attempt to add student to class before enrolling.  Must enroll first"],
+    [0030, "SCHM0030I Attempt to add student to non-existent class.  Check class number.  "],
+    [0031, "SCHM0031I Attempt to add student to non-existent class/offering combination.  "],
+    [0032, "SCHM0032I Attempt to add student to a class they are already in.              "], 
+
+   	[0033, "SCHM0033I Requested course number does not exist in the database.             "], 
+   	[0034, "SCHM0034I Enter both semester and year or neither.                            "], 
+   	[0035, "SCHM0035I Enter a 4 digit year.                                               "],      
+   	[0036, "SCHM0036I Requested course is not available for the requested offering period."], 
+   	[0037, "SCHM0037I Teacher incorrect for Course/offering period combination.           "],
+   	[0038, "SCHM0038I No class members found.                                             "],
+ 
+   	[0039, "SCHM0039I This function not coded yet.                                        "]      
+  ]}
+end 
+
+DataTable SCAUTHT type matchValidTable  {
+  shared = yes, resident = no
+  }
+  10 USERID USERID; 
+  10 PASSWORD PASSWORD; 
+   {contents = [
+    ["ADMIN   ", "MASTER  "],
+    ["registra", "CANNON  "],
+    ["USER1   ", "TEMP1   "],
+    ["USER2   ", "TEMP2   "]
+  ]}
+end
+
+Record SCHOOLPSB type PSBRecord 
+	{defaultPSBName = "SCHOOL"}
+	ioPcb 	IO_PCBRecord 	{ @PCB{ pcbType=TP }};
+	TP1 	ALT_PCBRecord 	{ @PCB{ pcbType=TP }};
+	TP2 	ALT_PCBRecord 	{ @PCB{ pcbType=TP }};
+	COURSES DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="COURSES",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCCOURSE" },
+	   		@Relationship{ segmentRecord="SCOFFER",  parentRecord="SCCOURSE" },
+	   		@Relationship{ segmentRecord="SCTEACHR", parentRecord="SCOFFER"  },
+	   		@Relationship{ segmentRecord="SCMEMBER", parentRecord="SCOFFER"  },
+	   		@Relationship{ segmentRecord="SCASGMNT", parentRecord="SCMEMBER" }
+  		] }};
+  	TEACHERS DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="TEACHERS",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCTEACHR" }
+  		] }};
+  	STUDENTS DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="STUDENTS",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord="SCSTUDNT" }
+  		] }};  			
+	ELAWORK DB_PCBRecord 	{ @PCB{ pcbType=DB }} ;
+	TeacherInput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	StudentInput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	CoursesInput 	 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	ClassMemberInput GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+	Report			 GSAM_PCBRECORD { @pcb {pcbType=GSAM} };
+end
+
+
+Record SCCOURSE type DLISegment
+	{keyItem = "CourseNum",
+	 segmentName = "SCCOURSE"}
+	 10 CourseNum 	CourseNum {dliFieldName = "CoursNum"}; 
+	 10 Title 		char(20);   /* text description of class   */
+end	
+ 
+
+Record SCOFFER type DLISegment
+	{segmentName = "SCOFFER"}
+	 10 OfferingPeriod 	OfferingPeriod;   
+	 10 ClassPeriod	char(2);   /* B1=Block 1, B2=Block2, etc   */
+	 10 Room		char(5);
+end
+		
+
+Record SCTEACHR type DLISegment
+	{keyItem = "TeacherID",
+	 segmentName = "SCTEACHR"}
+	 10 TeacherID ID {dliFieldName = "TeachID"};
+	 10 TeacherName SCHName;
+end
+	 
+
+Record SCMEMBER type DLISegment
+	{keyItem = "StudentID",
+	 lengthItem = "memberLen",
+	 segmentName = "SCMEMBER"}
+	 10 StudentID ID {dliFieldName = "StudID"};
+	 10 Grades Grades;
+	 10 memberLen bin(9);
+	 10 Notes char(30) [5];
+	 10 GradeLevel int;
+end	
+
+
+Record SCSTUDNT type DLISegment
+	{keyItem = "StudentID",
+	 segmentName = "SCSTUDNT"}
+	 10 StudentID ID {dliFieldName = "StudID"};
+	 10 StudentName SCHName;
+	 10 GradeLevel num(2);		/* 1-12*/
+end	 
+
+
+Record SCASGMNT type DLISegment
+	{segmentName = "SCASGMNT"}
+	 10 dateAssigned date;
+	 10 dateDue		 date;
+	 10 description char(30);
+	 10 score		 bin(4);
+	 10 maxScore	 bin(4);
+end	
+
+
+Record TeacherFileRecd type serialRecord
+	{fileName = "GSTeachr"}
+	10 embed SCTEACHR;
+end 
+
+
+Record StudentFileRecd type serialRecord
+	{fileName = "GSStudnt"}
+	10 embed SCSTUDNT;
+end
+
+
+Record CourseFileRecd type serialRecord
+	{fileName = "GSCourse"}
+	10 embed SCCOURSE;
+	10 embed SCOFFER;
+	10 teacherID ID;
+end
+
+
+Record ClassMemberFileRecd type serialRecord
+	{fileName = "GSCourse"}
+	10 embed CourseNum;
+	10 embed OfferingPeriod;
+	10 studentID ID;
+    10 Notes char(30) [5];
+end
+
+Record SCHName type basicRecord
+	10 LastName  char(15);
+	10 FirstName char(15);
+		15 firstinitial char(1);
+		15 rest char(14);
+end	
+DataItem ID char(4)
+end	  
+Record CourseNum type basicRecord	
+	10 Discipline char(1);  /* M=math, S=science, L=language, etc*/
+	10 Level      char(1);  /* 1=Fresh, 2=Soph, 3=Junior, 4=Senior*/
+	10 CourseID	  char(2);  /* unique within Discipline/Level*/
+end	 
+Record OfferingPeriod type basicRecord	
+	10 Semester  char(1);  /* 1=Fall, 2=Spring*/
+	10 Year      char(4);  
+end	 
+Record Grades type basicRecord
+	10 Quarter1Grade num(5,2);
+	10 Quarter2Grade num(5,2);
+	10 Quarter3Grade num(5,2);
+	10 Quarter4Grade num(5,2); 
+end
+
+Record SCHOOL00W type basicRecord
+  10 GETOUT smallint ; 
+  10 TSTUSRID userid ; 
+  10 TSTPASSWORD password ; 
+end 
+
+
+DataItem PASSWORD char(8)  {
+	color = defaultColor, highlight = noHighlight, intensity = invisible, 
+    inputRequired = yes, inputRequiredMsgKey = "0003",
+    protect = no, upperCase = yes, align = left, fillCharacter = nullFill
+}
+end
+
+
+DataItem USERID char(8)  {
+    color = defaultColor, highlight = noHighlight, 
+    inputRequired = yes, inputRequiredMsgKey = "0003",
+    intensity = normalIntensity, protect = no, upperCase = yes, align = left, 
+    fillCharacter = nullFill}
+end
+
+DataItem  userMsg char(78) 
+  { color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = no, upperCase = yes, align = left, 
+    fillCharacter = nullFill} 
+end 
+
+
+DataItem menuOption num(1)  {
+  color = defaultColor, highlight = underline, intensity = normalIntensity, 
+    protect = no, align = left, fillCharacter = nullFill, 
+    validatorDataTableMsgKey = "0004", 
+    inputRequired = yes, inputRequiredMsgKey = "0004", typeChkMsgKey = "0004"
+}
+end
+
+
+DataItem APPL char(20)  {
+  align = left, fillCharacter = nullFill, inputRequired = no
+}
+end
+
+
+Function CheckDBPCBInfo(database DB_PCBRECORD, variation char(60))
+	currentDB char(8);
+	if (database.dbName == "TEACHERS")
+		currentDB = "TEACHERS";
+	else if (database.dbName == "STUDENTS")
+			currentDB = "STUDENTS";
+		 else currentDB = "COURSES";
+		 end
+	end		 
+  	if (database.dbName == dlivar.dbName)
+  	end
+  	if (database.segmentLevel == dlivar.segmentLevel)
+  	end
+
+  	if (database.statusCode == dlivar.statusCode)
+  	end
+  	if (database.procoptions == dlivar.procoptions)
+  	end
+  	if (database.segmentName == dlivar.segmentName)
+  	end
+  	if (database.keyarealen == dlivar.keyarealen)
+  	end
+  	if (database.keyarea == dlivar.keyarea)
+  	end
+
+  	if (database.numsensitivesegs == dlivar.numsensitivesegs)
+  	end
+end
+
+Function CheckGSAMPCBInfo(database GSAM_PCBRECORD, variation char(60))
+	currentDB char(8);
+	if (database.dbName == "TEACHERS")
+		currentDB = "TEACHERS";
+	else if (database.dbName == "STUDENTS")
+			currentDB = "STUDENTS";
+		 else currentDB = "COURSES";
+		 end
+	end		 
+  	if (database.dbName == dlivar.dbName)
+  	end
+
+  	if (database.statusCode == dlivar.statusCode)
+  	end
+  	
+  	if (database.procoptions == dlivar.procoptions)
+  	end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end
+
+Program SchoolClearDB type textUIProgram 
+  {alias = "school01",
+  includeReferencedFunctions = yes,  allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no, 
+  msgTablePrefix = "SCHM", inputRecord = "school00W", inputForm = "SCClear", 
+  segmented = yes,
+  @DLI {
+         psb = "psb", callInterface = DLICallInterfaceKind.CBLTDLI,
+         handleHardDLIErrors = yes
+       } 
+  }
+
+  
+  school00W school00W ; 
+  Course SCCOURSE;	
+  Teacher SCTEACHR; 
+  Student SCSTUDNT; 
+
+  
+  use SCH00G { pfKeyEquate = no };
+  
+  
+  psb SCHOOLPSB;
+
+  function main()
+    ClearDatabaseMenuControl();
+  end 
+end 
+
+ 
+
+Function ClearDatabaseMenuControl()
+   /* *************************************************************/
+   /* This process contains the controlling loop for the program **/
+   /* schoolClearDB. The variable 'GETOUT' is initialized  to 0  **/
+   /* and is never changed.                                      **/
+   /* *************************************************************/
+  VGVar.handleHardIOErrors = 1; /* Handle hard errors*/
+  GETOUT = 0; /* Initialize loop control variable*/
+  while (GETOUT == 0)
+  	SCClear.userMsg1 = "";
+  	SCClear.userMsg2 = "";
+  	SCClear.userMsg3 = "";
+    if (converseVar.eventKey is bypass) /* Check for exit request*/
+      exit program;
+    else
+      if (converseVar.eventKey is enter) 
+         /*  perform function*/
+         if (SCClear.TeacherDB == " " ||
+         	      SCClear.TeacherDB == "")	/* skip this database  */
+         else if (SCClear.TeacherDB == "/")	/* clear out this database */
+         			clearTeacherDB(SCClear.userMsg1);
+        	  else 
+        	  		SCClear.userMsg1 = SCHMENU.MSG_TXT[6];
+        	  		set SCClear.TeacherDB red, bold;
+        	  end
+         end
+         if (SCClear.StudentDB == " " ||
+         	      SCClear.StudentDB == "")	/* skip this database  */
+         else if (SCClear.StudentDB == "/")	/* clear out this database */
+         			clearStudentDB(SCClear.userMsg2);
+        	  else 
+        	  		SCClear.userMsg2 = SCHMENU.MSG_TXT[6];
+        	  		set SCClear.StudentDB red, bold;
+        	  end
+         end
+         if (SCClear.CoursesDB == " " ||
+         	      SCClear.CoursesDB == "")	/* skip this database  */
+         else if (SCClear.CoursesDB == "/")	/* clear out this database */
+         			clearCoursesDB(SCClear.userMsg3);
+        	  else 
+        	  		SCClear.userMsg3 = SCHMENU.MSG_TXT[6];
+        	  		set SCClear.CoursesDB red, bold;
+        	  end
+         end                  
+      else if (converseVar.eventKey is PF3)	/* exit */
+      			exit program;    
+    	   else 									/* Invalid pf key*/
+        		set SCClear.TeacherDB normal; 		/* Set selection green*/
+        		set SCClear.StudentDB normal; 		/* Set selection green*/
+        		set SCClear.CoursesDB normal; 		/* Set selection green*/
+       			converseLib.validationFailed(5); /* 'FUNCTION KEY NOT SUPPORTED'*/
+       	   end 		
+      end
+    end
+    if (SCClear.usermsg1 == "" &&
+        SCClear.usermsg2 == "" &&
+        SCClear.usermsg3 == "")
+        	SCClear.usermsg3 = SCHMENU.MSG_TXT[13]; 
+   	end
+    ShowDataBaseClearMenu(); /* Show user selection form for databases to clear*/
+  end
+end 
+
+
+
+Function ShowDataBaseClearMenu()
+  converse SCClear ;
+end 
+
+
+Function clearTeacherDB(outputMsg userMsg)
+  	
+  get Teacher forUpdate usingPCB psb.Teachers;
+  CheckDBPCBInfo(psb.Teachers, "validating PCB Info after get for update"); 
+  if (teacher is endofFile 
+  		|| teacher is norecordfound)
+  	outputMsg = SCHMENU.MSG_TXT[22]; 		
+
+  else if (dlivar.statuscode == "  ")			
+		  while (Teacher not EndOfFile)
+  				delete teacher;
+  				CheckDBPCBInfo(psb.Teachers, "validating PCB Info after delete"); 
+  				if (psb.Teachers.statuscode != "  ")
+  					outputMsg = SCHMENU.MSG_TXT[10];
+  					return;
+  				end	 
+  				
+ 	
+ 		 		get next teacher forupdate usingPCB Teachers;
+ 		 		CheckDBPCBInfo(psb.Teachers, "validating PCB Info after get Next for update"); 
+ 		 		if (psb.Teachers.statuscode != "  "
+ 		 			|| teacher not endOfFile 
+ 		 			|| teacher not noRecordFound )
+  					outputMsg = SCHMENU.MSG_TXT[10];
+  					return;
+  				end	
+  				
+ 	
+ 	 	  end
+ 	  	  get Teacher usingPCB psb.Teachers;
+		  if (teacher is endofFile 
+  				|| teacher is norecordfound)
+  				outputMsg = SCHMENU.MSG_TXT[7];
+  		  end		
+  	
+  		end /* end dlivar.statuscode = "  " */
+  end		
+
+
+end 
+
+
+Function clearStudentDB(outputMsg userMsg)
+  	
+  get Student forUpdate usingPCB psb.Students;
+  CheckDBPCBInfo(psb.Students, "validating PCB Info after get for update"); 
+  if (Student is endofFile 
+  		|| Student is norecordfound)
+  	outputMsg = SCHMENU.MSG_TXT[23]; 
+  else if (dlivar.statuscode == "  ")			
+		  while (Student not EndOfFile)
+  				delete Student;
+  				CheckDBPCBInfo(psb.Students, "validating PCB Info after delete"); 
+  				if (psb.Students.statuscode != "  " )
+  					outputMsg = SCHMENU.MSG_TXT[11];
+  					return;
+  				end
+ 	
+ 		 		get next Student forupdate usingPCB psb.Students;
+  				CheckDBPCBInfo(psb.Students, "validating PCB Info after get Next for update"); 
+  				if (psb.Students.statuscode != "  "
+ 		 			|| Student not endOfFile 
+ 		 			|| Student not noRecordFound )
+  					outputMsg = SCHMENU.MSG_TXT[11];
+  					return;
+  				end
+ 	
+ 	 	  end
+ 	  	  get Student usingPCB psb.Students;
+		  if (Student is endofFile 
+  				|| Student is norecordfound)
+  				outputMsg = SCHMENU.MSG_TXT[8];
+  		  end		
+  	
+  		end /* end dlivar.statuscode = "  " */
+  end		
+
+
+end 
+
+
+Function clearCoursesDB(outputMsg userMsg)
+
+  	
+  get Course forUpdate usingPCB psb.Courses;
+  CheckDBPCBInfo(psb.Courses, "validating PCB Info after get for update"); 
+  if (Course is endofFile 
+  		|| Course is norecordfound)
+  	outputMsg = SCHMENU.MSG_TXT[24]; 
+
+  else if (dlivar.statuscode == "  ")			
+		  while (Course not EndOfFile)
+  				delete Course;
+  				CheckDBPCBInfo(psb.Courses, "validating PCB Info after delete");
+  				if (psb.Courses.statuscode != "  " )
+  					outputMsg = SCHMENU.MSG_TXT[12];
+  					return;
+  				end 
+ 	
+ 		 		get next Course forupdate usingPCB Courses;
+  				CheckDBPCBInfo(psb.Courses, "validating PCB Info after get Next for update"); 
+  				if (psb.Courses.statuscode != "  "
+ 		 			|| Course not endOfFile 
+ 		 			|| Course not noRecordFound )
+  					outputMsg = SCHMENU.MSG_TXT[12];
+  					return;
+  				end
+ 	
+ 	 	  end
+ 	  	  get Course usingPCB psb.Courses;
+		  if (Course is endofFile 
+  				|| Course is norecordfound)
+  				outputMsg = SCHMENU.MSG_TXT[9];
+  		  end		
+  	
+  		end /* end dlivar.statuscode = "  " */
+  end		
+
+
+end
+  	

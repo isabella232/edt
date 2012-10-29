@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.mof.egl.Annotation;
 
 
 /**
@@ -23,5 +24,5 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
  */
 public interface IPartContentAnnotationValidationRule {
 
-	public void validate(Node errorNode, Node target, Map allAnnotations, IProblemRequestor problemRequestor);
+	public void validate(Node errorNode, Node target, Map<String, Map<Annotation, Object[]>> allAnnotations, IProblemRequestor problemRequestor);
 }

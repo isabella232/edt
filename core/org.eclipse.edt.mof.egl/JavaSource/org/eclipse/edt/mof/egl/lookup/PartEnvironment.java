@@ -33,7 +33,7 @@ import org.eclipse.edt.mof.serialization.TypeNotFoundException;
 
 
 public class PartEnvironment implements IEnvironment {
-	public static PartEnvironment INSTANCE = new PartEnvironment(Environment.INSTANCE);
+	private static PartEnvironment INSTANCE = new PartEnvironment(Environment.getCurrentEnv());
 	IEnvironment env;
 	IRUtils irUtils = new IRUtils();
 
@@ -193,6 +193,10 @@ public class PartEnvironment implements IEnvironment {
 			}
 		}
 		return list;
+	}
+	
+	public IEnvironment getIREnvironment() {
+		return env;
 	}
 
 }

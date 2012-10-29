@@ -14,6 +14,8 @@ package org.eclipse.edt.mof.egl.impl;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DanglingReferenceException;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
@@ -83,7 +85,7 @@ public class MemberAccessImpl extends NameImpl implements MemberAccess {
 	public Member getMember() {
 		if (slotGet(Slot_member) == null) {
 			try {
-				resolveMember();
+				resolveMbr();
 			} catch (NoSuchMemberError e) {
 				throw new RuntimeException(e);
 			} catch (DanglingReferenceException e1) {
@@ -117,7 +119,7 @@ public class MemberAccessImpl extends NameImpl implements MemberAccess {
 		return getMember().isNullable();
 	}
 
-	private void resolveMember() throws DanglingReferenceException, NoSuchMemberError {
+	private void resolveMbr() throws DanglingReferenceException, NoSuchMemberError {
 		Container container = (Container)getQualifier().getType();
 		if (container == null) {
 			// We have a DanglingReference
@@ -134,6 +136,29 @@ public class MemberAccessImpl extends NameImpl implements MemberAccess {
 			throw new NoSuchMemberError("Member not found: " + getId());
 		
 		setMember(result);
+	}
+
+	@Override
+	public Field resolveField() {
+		Member mbr = getMember();
+		if (mbr instanceof Field) {
+			return (Field)mbr;
+		}
+		return null;
+	}
+
+	@Override
+	public Member resolveMember() {
+		return getMember();
+	}
+
+	@Override
+	public Function resolveFunction() {
+		Member mbr = getMember();
+		if (mbr instanceof Function) {
+			return (Function)mbr;
+		}
+		return null;
 	}
 
 

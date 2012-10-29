@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.compiler.internal.sql.SQLConstants;
 import org.eclipse.edt.ide.ui.internal.externaltype.conversion.javatype.JavaTypeConstants;
 import org.eclipse.edt.ide.ui.internal.externaltype.wizards.javatype.JavaType;
 
@@ -170,32 +169,32 @@ public class ReflectionUtil {
 	public static String getMethodLabel(java.lang.reflect.Method method) {
 		StringBuilder buffer = new StringBuilder(60);
 		buffer.append(method.getName());
-		buffer.append(SQLConstants.LPAREN);
+		buffer.append('(');
 		
 		Class<?>[] paraTypes = method.getParameterTypes();
 		for(int i=0; i<paraTypes.length; i++) {
 			buffer.append(paraTypes[i].getSimpleName());
 			if(i < paraTypes.length-1){
-				buffer.append(SQLConstants.COMMA);
+				buffer.append(',');
 			}
 		}
-		buffer.append(SQLConstants.RPAREN);
+		buffer.append(')');
 		return buffer.toString();
 	}
 	
 	public static String getConstructorLabel(java.lang.reflect.Constructor<?> con) {
 		StringBuilder buffer = new StringBuilder(60);
 		buffer.append(con.getDeclaringClass().getSimpleName());
-		buffer.append(SQLConstants.LPAREN);
+		buffer.append('(');
 		
 		Class<?>[] paraTypes = con.getParameterTypes();
 		for(int i=0; i<paraTypes.length; i++) {
 			buffer.append(paraTypes[i].getSimpleName());
 			if(i < paraTypes.length-1){
-				buffer.append(SQLConstants.COMMA);
+				buffer.append(',');
 			}
 		}
-		buffer.append(SQLConstants.RPAREN);
+		buffer.append(')');
 		
 		return buffer.toString();
 	}
@@ -206,7 +205,7 @@ public class ReflectionUtil {
 			buffer.append("static ");
 		}
 		
-		buffer.append(field.getName() + SQLConstants.SPACE + getTypeName(field.getType()));
+		buffer.append(field.getName() + " " + getTypeName(field.getType()));
 		
 		return buffer.toString();
 	}
@@ -223,11 +222,10 @@ public class ReflectionUtil {
 			buffer.append(JavaTypeConstants.UNDERSTORE_PREFIX);
 		} 
 		
-		buffer.append(field.getName() + SQLConstants.SPACE + getEGLTypeName(field.getType()));
+		buffer.append(field.getName() + " " + getEGLTypeName(field.getType()));
 		if(isStartWithEze) {
-			buffer.append(SQLConstants.SPACE);
-			buffer.append("{externalName = " + SQLConstants.DOUBLE_QUOTE + field.getName()
-					+ SQLConstants.DOUBLE_QUOTE +"}");
+			buffer.append(' ');
+			buffer.append("{externalName = \"" + field.getName() + "\"}");
 		}
 		
 		return buffer.toString();
@@ -245,7 +243,7 @@ public class ReflectionUtil {
 		if(typeName == null) {
 			typeName = paraType.getSimpleName();
 			if(!paraType.isPrimitive()) {
-				typeName = typeName + SQLConstants.PARAMETER_MARKER;
+				typeName = typeName + "?";
 			}
 			
 			if(paraType.getEnclosingClass() != null) {
@@ -261,7 +259,7 @@ public class ReflectionUtil {
 			typeName = JavaTypeConstants.UNDERSTORE_PREFIX + typeName;
 		}
 		while(dim > 0) {
-			typeName = typeName + SQLConstants.LEFT_BRACKET + SQLConstants.RIGHT_BRACKET;
+			typeName = typeName + "[]";
 			dim--;
 		}
 		
@@ -279,7 +277,7 @@ public class ReflectionUtil {
 		typeName = paraType.getSimpleName();
 		
 		while(dim > 0) {
-			typeName = typeName + SQLConstants.LEFT_BRACKET + SQLConstants.RIGHT_BRACKET;
+			typeName = typeName + "[]";
 			dim--;
 		}
 		

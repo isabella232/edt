@@ -15,33 +15,31 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IValueValidationRule;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author svihovec
  *
  */
-public class UserDefinedValueValidationRule extends	ValueValidationAnnotationTypeBinding {
+public class UserDefinedValueValidationRule extends	ValueValidationRule {
 
 	private Class validatorClass;
 
 	public UserDefinedValueValidationRule(Class validatorClass) {
-		super(InternUtil.internCaseSensitive("UserDefinedValueValidationRule"));
+		super(NameUtile.getAsName("UserDefinedValueValidationRule"));
 		
 		this.validatorClass = validatorClass;
 	}
-
-	public void validate(Node errorNode, Node target, IAnnotationBinding annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	
+	@Override
+	public void validate(Node errorNode, Node target, Annotation annotationBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		try {
-			if(annotationBinding.getValue() != null) {
-				((IValueValidationRule)validatorClass.newInstance()).validate(errorNode, target, annotationBinding, problemRequestor, compilerOptions);
-			}
+			((IValueValidationRule)validatorClass.newInstance()).validate(errorNode, target, annotationBinding, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -1,0 +1,131 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// 1 Properties are not allowed for multiple use declarations. {3068, PROPERTIES_NOT_ALLOWED_IN_LIST_USE_DECLARATION}
+
+
+
+
+
+
+
+
+handler XXXX type JSFHandler {
+scope = request,// 0
+view = "eeee",// 0
+onConstructionFunction = myonConstruction,// 0
+title = "rrrrr",// 0
+eventValueItem = "myhandlerX",//0
+validationBypassFunctions = myvalbypass ,//1
+validatorFunction = myvalfunc,//0
+msgResource = "eeeeee",//0
+runValidatorFromProgram = yes,//1
+allowUnqualifiedItemReferences = yes,// 0 
+includeReferencedFunctions = yes,// 0
+localSQLScope = no,//0
+handleHardIOErrors = yes,//0
+throwNrfEofExceptions = yes,//0
+viewRootVar = myvar,//0
+validationBypassFunctions = [myvalfunc,myvalbypass]// 0
+}
+
+myvar myJOInterface;
+
+function myvalfunc()
+end
+
+function myvalbypass ()
+end
+
+function myonConstruction()
+end
+end
+
+handler MySource type JSFHandler {
+
+scope = request,// 0
+view = "eeee",// 0
+onConstructionFunction = myonConstruction,// 0
+title = "rrrrr",// 0
+eventValueItem = "rrr",//0
+validationBypassFunctions = [myvalbypass] ,//0
+validatorFunction = myvalfunc,//0
+msgResource = "eeeeee",//0
+
+allowUnqualifiedItemReferences = yes,// 0
+includeReferencedFunctions = yes,// 0
+localSQLScope = no,//0
+handleHardIOErrors = yes,//0
+throwNrfEofExceptions = yes,//0
+viewRootVar = myvar,//0
+
+scope = request,// 0
+view = "eeee",// 0
+onConstructionFunction = myonConstruction,// 0
+title = "rrrrr",// 0
+eventValueItem = "rrr",//0
+validationBypassFunctions = [myvalbypass] ,//0
+validatorFunction = myvalfunc,//0
+msgResource = "eeeeee",//0
+
+allowUnqualifiedItemReferences = yes,// 0
+includeReferencedFunctions = yes,// 0
+localSQLScope = no,//0
+handleHardIOErrors = yes,//0
+throwNrfEofExceptions = yes,//0
+viewRootVar = myvar//0
+}
+
+
+myvar myJOInterface;
+
+function myvalfunc()
+end
+
+function myvalbypass ()
+end
+
+function myonConstruction()
+end
+
+end
+
+handler MySource2 type JSFHandler {
+scope = session, //  0
+
+allowUnqualifiedItemReferences = no,//0
+includeReferencedFunctions = no,//0
+localSQLScope = yes,//0
+handleHardIOErrors = no,//0
+throwNrfEofExceptions = no,//0
+scope = session, // 0
+
+allowUnqualifiedItemReferences = no,//0
+includeReferencedFunctions = no,//0
+localSQLScope = yes,//0
+handleHardIOErrors = no,//0
+throwNrfEofExceptions = no//0
+
+}
+end
+
+handler invalidprops type JSFHandler {
+labelAndHelpResource = "yes"// 0
+}
+end
+
+interface myJOInterface 
+
+end
+
+
+
+

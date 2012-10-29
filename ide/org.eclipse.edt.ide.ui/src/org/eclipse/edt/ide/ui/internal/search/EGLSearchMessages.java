@@ -30,18 +30,15 @@ public class EGLSearchMessages extends NLS {
 	public static String EGLSearchPageSearchForDelegate;
 	public static String EGLSearchPageSearchForExternalType;
 	public static String EGLSearchPageSearchForFunction;
-	public static String EGLSearchPageSearchForPagehandler;
-	public static String EGLSearchPageSearchForReporthandler;
+	public static String EGLSearchPageSearchForHandler;
 	public static String EGLSearchPageSearchForLibrary;
-	public static String EGLSearchPageSearchForDatatable;
 	public static String EGLSearchPageSearchForRecord;
-	public static String EGLSearchPageSearchForDataitem;
-	public static String EGLSearchPageSearchForFormgroup;
-	public static String EGLSearchPageSearchForForm;
 	public static String EGLSearchPageSearchForService;
 	public static String EGLSearchPageSearchForInterface;
 	public static String EGLSearchPageSearchForAnnotation;
 	public static String EGLSearchPageSearchForStereotype;
+	public static String EGLSearchPageSearchForEnum;
+	public static String EGLSearchPageSearchForClass;
 	public static String EGLSearchPageSearchForAny;
 
 	public static String EGLSearchPageLimitToLabel;

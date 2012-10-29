@@ -12,12 +12,16 @@
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
 /**
  * This is the class for booleans: true/false values.
  */
 externalType EBoolean extends AnyValue type ClassType
+	/**
+	 * Constructs a boolean with a default value of false.
+	 */
+	constructor();
 
 	/**
 	 * {@Operation ==} Compares two booleans.

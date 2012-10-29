@@ -82,7 +82,7 @@ public class GenConstructedFormattingMessagesNLS {
 			
 			//then try to find the org.eclipse.edt.ide.ui plugin folder 
 			//and its sub folder builtinPreference to locate the format_builtin.profile
-			path = path.append(ProfileManager.PLUGIN_ID_IDE_UI);
+			path = path.append(EDTUIPlugin.PLUGIN_ID);
 			path = path.append(ProfileManager.PROFILE_BUILDIN_PATH);
 			
 			genNLSMsgs.readFromBuiltInProfile(path);

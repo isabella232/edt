@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
+import java.util.ResourceBundle;
+
 
 /**
  * @author winghong
@@ -27,7 +29,8 @@ public class NullProblemRequestor extends DefaultProblemRequestor {
         return INSTANCE;
     }
 
-	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+    @Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 		;	// do nothing
 	}
 	

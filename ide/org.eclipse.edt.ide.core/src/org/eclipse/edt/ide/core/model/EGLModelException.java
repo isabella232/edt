@@ -30,6 +30,8 @@ import org.eclipse.edt.ide.core.internal.model.EGLModelStatus;
  * @see IEGLModelStatusConstants
  */
 public class EGLModelException extends CoreException {
+	private static final long serialVersionUID = 1L;
+	
 	CoreException nestedCoreException;
 /**
  * Creates a EGL model exception that wrappers the given <code>Throwable</code>.

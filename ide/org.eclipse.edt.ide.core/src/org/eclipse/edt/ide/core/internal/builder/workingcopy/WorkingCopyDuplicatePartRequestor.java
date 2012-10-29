@@ -19,9 +19,9 @@ import org.eclipse.edt.ide.core.internal.lookup.IDuplicatePartRequestor;
 public class WorkingCopyDuplicatePartRequestor implements IDuplicatePartRequestor {
 	private DuplicatePartList duplicatePartsList;
 	private IFile file;
-	private String[] packageName;
+	private String packageName;
 	
-	public WorkingCopyDuplicatePartRequestor(IProject project, String[] packageName, IFile file){
+	public WorkingCopyDuplicatePartRequestor(IProject project, String packageName, IFile file){
 		this.file = file;
 		this.packageName = packageName;
 		this.duplicatePartsList = WorkingCopyDuplicatePartManager.getInstance().getDuplicatePartList(project);

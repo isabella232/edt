@@ -1,0 +1,208 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+program ConsoleUIValidFromSpecPgm type basicProgram
+	function main()
+	end
+
+	function fct2()
+		myFormRec FormRecord2;
+		myForm SampleForm2;
+		
+		move myFormRec to myForm.formData;
+		
+		openUI myForm.srArray
+			OnEvent(BEFORE_OPENUI)
+		end
+	end
+
+	function fct3()
+		myFormObj formRecord3;
+		myForm SampleForm3;
+
+		openUI myForm bind myFormObj
+		end
+	end
+
+	function fct4()
+		myForm SampleForm3;
+
+		// open ConsoleForm instance myForm through “activeForm”.
+		//display command establishes activeForm
+		consoleLib.displayFormByName("myForm");
+	
+		//ActiveForm is dynamically resolved to the last form displayed
+		openUI activeForm
+		end
+
+		// open ConsoleForm instance myForm (implicitly defaultFormView)
+		// all form fields in form are opened
+		openUI myForm
+			OnEvent(BEFORE_OPENUI)
+			OnEvent(ON_KEY:"F12")
+				exit Program;
+			OnEvent(AFTER_FIELD:"response")
+			OnEvent(AFTER_FIELD:"command")
+		end
+		
+		// open subset of fields binding to 
+		// a separate set of program vars a,b,c
+		//NOTE:  Validation rules force the same number
+		//of elements in the set of fields and the
+		//program variables.
+		a string;
+		b string;
+		c string;
+		OpenUI myform.activity, myform.command, myform.commandCode bind a, b, c
+			OnEvent(BEFORE_OPENUI)
+		end
+
+		// open the activeForm binding a 
+		//set of program vars by name.
+		field1 char(10);
+		field2 char(10);
+		field3 char(10);
+		OpenUI {bindingByName=yes} 
+			activeForm
+			bind field1, field2, field3
+		end
+
+		//Display a form (for display only) using
+		//both string literal values and variables
+		myName char(10);
+		openUI {displayOnly=yes, bindingByName=no}
+			activeForm
+			bind "hello", "There", myName
+		end
+
+		// open ConsoleForm instance myForm for a
+		//constructQuery operation
+		// all form fields in form are opened
+		constructQueryResult string;
+		openUI {isConstruct=yes}
+			myForm bind constructQueryResult
+		end
+
+		// create a menu
+		menu1 Menu {labelText = "Menu1"};
+		
+		Cmd1 MenuItem {accelerators=["F1"], Name="Cmd1", labelText="Command1"};
+		menu1.menuItems.appendElement(Cmd1);
+		
+		// open it
+		OpenUI menu1
+			OnEvent(MENU_ACTION:"cmd1")
+		end
+		
+		// alternative menu, arranged a little more like I4GL
+		OpenUI new Menu {
+			labelText="Menu1",
+			menuItems=[new MenuItem {accelerators=["F1"], name="Cmd1", labelText="Command1"}]}
+			OnEvent(MENU_ACTION:"Cmd1")
+		end
+		
+		// Create and open a Prompt, store answer in "result"
+		result string;
+		myPrompt Prompt {message = "Enter Something: ", responseAttr{color=red}};
+		OpenUI myPrompt bind result
+			OnEvent(ON_KEY:"F2")
+		end
+		
+		// Alternative (I4GL flavor) Create and open a Prompt
+		result2 string;
+		OpenUI new Prompt {isChar=no, message = "Enter Something: ", responseAttr {color=red}}
+			bind result2
+			OnEvent(ON_KEY:"F2")
+			OnEvent(ON_KEY:"F3")
+				exit openUI;
+		end
+		
+	end
+end
+
+//Data for above examples:
+
+// Example 1: Form fields with no bound data
+record SampleForm1 type consoleForm {formSize=[14,80]}
+	* ConsoleField { position=[1,31], value="Sample Dynamic Form" } ;
+	* ConsoleField { position=[3,18], value="Activity:" } ;
+	* ConsoleField { position=[3,61], value="Command Code:" } ;
+	* ConsoleField { position=[10,1], value="Response:" } ;
+	* ConsoleField { position=[13,1], value="Command:" } ;
+	* ConsoleField { position=[14,1], value="Enter=Run PF3=Exit"} ;
+	
+	// Fields available to reference in code
+	activity ConsoleField[5] { name="activity", position=[4,18], fieldLen=40 } ;
+	commandCode ConsoleField[5] { name="commandCode", position=[4,61], fieldLen=10, protect=YES } ;
+	response ConsoleField { name="response", position=[10,12], fieldLen=30, protect=YES } ;
+	command ConsoleField { name="command", position=[13,10], fieldLen=20 } ;
+	
+	myFormView dictionary { command=command, response=response };
+	
+	// Screen Record array definition that links the array fields
+	// activity and commandCode as a screen record array
+	srArray arrayDictionary { activity=activity, commandCode=commandCode };
+end
+
+// Example 2: Form fields with statically bound data in the form
+Record SampleForm2 type ConsoleForm { formSize=[14,80] } 
+	* ConsoleField { position=[1,31], value="Sample Dynamic Form" } ;
+	* ConsoleField { position=[3,18], value="Activity:" } ;
+	* ConsoleField { position=[3,61], value="Command Code:" } ;
+	* ConsoleField { position=[10,1], value="Response:" } ;
+	* ConsoleField { position=[13,1], value="Command:" } ;
+	* ConsoleField { position=[14,1], value="Enter=Run PF3=Exit"} ;
+	
+	// Fields available to reference in code
+	activity ConsoleField[5] { name="activity", position=[4,18], fieldLen=40, binding="formData.activity" } ;
+	commandCode ConsoleField[5] { name="commandCode", position=[4,61], fieldLen=10, binding="formData.commandCode" } ;
+	response ConsoleField { name="response", position=[10,12], fieldLen=30, binding="formData.response" } ;
+	command ConsoleField { name="command", position=[13,10], fieldLen=20, binding="formData.command" } ;
+	
+	// Screen Record array definition that links the array fields
+	// activity and commandCode as a screen record array
+	srArray arrayDictionary{ activity=activity, commandCode=commandCode };
+	
+	// Data record statically bound to the form fields
+	formData FormRecord2;
+end
+
+record FormRecord2 type basicRecord
+	activity char(42)[20];
+	commandCode char(10)[20];
+	response char(228);
+	command char(70);
+end
+
+// Example 3: Form fields bound to data outside the form
+Record SampleForm3 type ConsoleForm { formSize=[14,80] }
+	* ConsoleField { position=[1,31], value="Sample Dynamic Form" } ;
+	* ConsoleField { position=[3,18], value="Activity:" } ;
+	* ConsoleField { position=[3,61], value="Command Code:" } ;
+	* ConsoleField { position=[10,1], value="Response:" } ;
+	* ConsoleField { position=[13,1], value="Command:" } ;
+	* ConsoleField { position=[14,1], value="Enter=Run PF3=Exit"} ;
+	
+	// Fields available to reference in code
+	activity ConsoleField[5] { name="activity", position=[4,18], fieldLen=40 } ;
+	commandCode ConsoleField[5] { name="commandCode", position=[4,61], fieldLen=10 } ;
+	response ConsoleField { name="response", position=[10,12], fieldLen=30 } ;
+	command ConsoleField { name="command", position=[13,10], fieldLen=20 } ;
+end
+
+Record FormRecord3 type basicRecord
+	activity char(42)[5];
+	commandCode char(10)[5];
+	response char(228);
+	command char(70);
+end

@@ -1,0 +1,101 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record EducationPSB type PSBRecord 					 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	studentPCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="STUPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord="Student" } 	 
+	  ] }};
+
+end
+
+Program MyProj
+  {@DLI { psb = "psb"}}
+	student Student;
+	  // PSB Declaration
+  psb EducationPSB ;
+	
+	function mynext () returns (int)
+		return (5);
+	end
+	function mynextX () 
+		
+	end
+	function main()	
+		
+		course CourseX;
+		coursePCB DB_PCBRecord;
+		sqlRec sqlRec;
+		sqlrec2 sqlrec;
+		courses CourseX[]; 
+		sqlrecs sqlrec[];
+		indxrec IndxRecord;
+		mqrec MQRec;
+		relrec relrecord;
+		srec	srecord;
+		name string;
+		course2 CourseX;
+		sqlflex sqlRecFLEX;
+		a,b,c int;
+		d,e,f int;
+		positionx int;
+		myany any;
+		
+		prepare id from "select * from tablex" for sqlRec;// 0
+		prepare id from "select * from tablex" ;// 0
+		
+		prepare id for sqlrec;// 1  The prepare statement requires a FROM string expression clause, which is missing		{5197, EGLMESSAGE_PREPARE_STATEMENT_NO_FROM_CLAUSE}
+		prepare id from name ;// 0
+		prepare id from sqlrec;// 1 The element sqlrec is not valid for use in the expression
+		prepare id from myany;// 0
+		
+		
+		prepare id from "select * from tablex" for course;// 1  Invalid target course. The target must be an SQL record variable		{6632, EGLMESSAGE_STATEMENT_TARGET_NOT_SQL_RECORD}
+		prepare id from "select * from tablex" for myany;// 1  Invalid target myany. The target must be an SQL record variable		{6632, EGLMESSAGE_STATEMENT_TARGET_NOT_SQL_RECORD}
+		prepare id from "select * from tablex" for sqlrecs;// 1  Invalid target sqlrecs. The target must be an SQL record variable		{6632, EGLMESSAGE_STATEMENT_TARGET_NOT_SQL_RECORD}
+		prepare id from "select * from tablex" for name;// 1  Invalid target name. The target must be an SQL record variable		{6632, EGLMESSAGE_STATEMENT_TARGET_NOT_SQL_RECORD}		
+	end
+end
+
+Record CourseX type DLISegment end
+Record sqlRec type sqlRecord
+	10 item1X int;
+end
+
+Record sqlRecFLEX type sqlRecord
+	item1X int;
+end
+
+
+Record IndxRecord type indexedrecord { filename = "myfile",keyitem = "itemX"}
+	10 itemX int;
+end
+
+record MQRec type MQRecord { queuename = "www"}
+10 itemX int;
+end
+
+record relrecord type relativerecord { filename = "myfile",keyitem = "itemX"}
+10 itemX int;
+end
+
+record srecord type serialrecord{ filename = "myfile"}
+10 itemX int;
+end
+
+Record sqlRecDef type sqlRecord end
+Record Student type DLISegment end

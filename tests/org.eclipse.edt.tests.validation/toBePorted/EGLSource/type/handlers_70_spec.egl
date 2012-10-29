@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record XYZHandler type Annotation			//0
+{
+	targets=[ ElementKind.HandlerPart ],	//0
+	@Stereotype{							//0
+		StereotypeContexts = [XYZRecord]	//0
+	}
+}
+end
+
+Record XYZRecord type Annotation			//0
+{
+	targets=[ ElementKind.RecordPart ],		//0
+	@Stereotype								//0
+}
+end
+
+Record Button
+	OnClick FunctionRef[];
+end
+
+Handler MyHandler type XYZHandler			//0
+	f1 char(6);								//0
+
+	Function Comp1Clicked()					//0
+	end
+end
+
+// Define a record that uses the above handler
+Record MyGui type XYZRecord					//0
+	myHandler MyHandler;					//0
+	myPageHandler MyPageHandler;			//1 The type MyPageHandler is not valid for a data declaration in the context of part MyGui. {3410, TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE}
+	myReportHandler myReportHandler;		//1 The type MyReportHandler is not valid for a data declaration in the context of part MyGui. {3410, TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE}
+	comp1 Button {							//0
+	  OnClick ::= myHandler.Comp1Clicked	//0
+	};
+end
+
+Handler MyPageHandler type JSFHandler
+end
+
+Handler MyReportHandler type JasperReport
+end
+
+Program pgm
+	myPageHandler MyPageHandler;			//1 The type MyPageHandler is not valid for a data declaration in the context of part pgm. {3410, TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE}
+	myReportHandler myReportHandler;		//1 The type MyReportHandler is not valid for a data declaration in the context of part pgm. {3410, TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE}
+	
+	function main()
+		myPageHandler MyPageHandler;			//1 The type MyPageHandler is not valid for a data declaration in the context of part pgm. {3410, TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE}
+		myReportHandler myReportHandler;		//1 The type MyReportHandler is not valid for a data declaration in the context of part pgm. {3410, TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE}
+	end
+end
+
+Handler myHandlerWithNoSubtype				//0
+end

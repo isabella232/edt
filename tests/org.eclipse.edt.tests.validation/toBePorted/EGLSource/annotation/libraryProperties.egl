@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+library MySource
+{
+msgTablePrefix = "ss",// 1  The length of the unqualified value ss for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+
+msgTablePrefix = "abc",//0
+msgTablePrefix = "abcd",// 0
+msgTablePrefix = "dddfghff.abcd",// 0
+msgTablePrefix = "jwdjwedjd.ab"// 1  The length of the unqualified value ab for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+} 
+end
+
+library MySource1 type BasicLibrary
+{
+msgTablePrefix = "ss",// 1  The length of the unqualified value ss for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+
+msgTablePrefix = "abc",//0
+msgTablePrefix = "abcd",// 0
+msgTablePrefix = "dddfghff.abcd",// 0
+msgTablePrefix = "jwdjwedjd.ab"// 1  The length of the unqualified value ab for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+} 
+end
+
+library MySource2 type NativeLibrary
+{
+msgTablePrefix = "ss",// 1  The length of the unqualified value ss for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+
+msgTablePrefix = "abc",//0
+msgTablePrefix = "abcd",// 0
+msgTablePrefix = "dddfghff.abcd",// 0
+msgTablePrefix = "jwdjwedjd.ab"// 1  The length of the unqualified value ab for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+} 
+end

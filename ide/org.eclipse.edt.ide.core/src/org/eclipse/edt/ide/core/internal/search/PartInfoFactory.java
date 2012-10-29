@@ -21,7 +21,6 @@ import java.util.List;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
-import org.eclipse.edt.ide.core.internal.model.index.impl.JarFileEntryDocument;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLModel;

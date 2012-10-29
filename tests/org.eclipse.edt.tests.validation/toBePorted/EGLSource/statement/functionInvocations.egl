@@ -1,0 +1,67 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+Program p {includeReferencedFunctions = yes}
+
+	const char1Constant char(1) = "A";
+	char1 char1;
+	const intConstant int = 1;
+	
+	function main()
+		intVar int;
+		intAry int[6];
+		charVar char(12);
+		charAry char(12)[6];
+		
+		f( intVar ); // 0
+		f( intAry[1] ); // 0
+		f( charVar ); // 1
+		f( charAry ); // 1
+		
+		nonExistantFunc(); // 1
+		
+		// The following three checks are from defect 37409
+		g( char1constant); // 0
+		g( char1); // 0
+		g( "A" ); // 0
+		
+		// The following check is from defect 37410
+		h( "A" ); // 0
+		
+		rec MyRecord;
+		recA MyRecord[1];
+		rec.aInt = 5;
+		recA[1] = rec;
+		invokefunction(recA[1]); // 0
+	end
+	
+	function f( p int )
+	end
+	
+	function g(char1 char(1))
+		char1 = "B";
+	end
+	
+	function h(char1 char1)
+		char1 = "B";
+	end
+	
+	function invokefunction(rec Myrecord) 
+	end
+end
+
+dataItem char1 char(1) end
+
+record MyRecord type basicrecord
+	aInt int;
+end

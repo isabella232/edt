@@ -1,0 +1,22 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// parseName:
+// 1 Empty brackets found in the name {0}. {5211, P_FOUND_EMPTY_BRACKETS}
+// 1 A right bracket that was not terminating a substring or subscript was found in name {0}. {5205, P_FOUND_RBRACKET_WRONG}
+// 1 Missing from location for substring in name {0}.  When substring notation is used a from location is required. {5206, P_MISSING_FROM_SUBSTRING}
+// 1 Too many substring locations specified in name {0}.  Only a from and a to location are allowed. {5207, P_TOO_MANY_SUBSTRINGS}
+// 1 Unrecognized token {0} found in a name.  Names are identifiers separated by dots.  Subscripts and substrings are enclosed in square brackets. {5208, P_UNRECOGNIZED_TOKEN}
+// 1 Unmatched left bracket found in name {0}. {5209, P_SUBSCRIPT_OR_SUBSTRING_NOT_CLOSED}
+
+// updateState:
+// 1 Found {0} in name following the substring operation.  The substring must be the last thing in a name. {5210, P_SUBSTRING_NOT_LAST}
+

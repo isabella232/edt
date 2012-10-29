@@ -11,11 +11,8 @@
  *******************************************************************************/
 package eglx.lang;
 
-Record BasicProgram type Annotation
+Record BasicProgram type Stereotype
 {
-	targets = [ElementKind.programPart],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.BasicProgramAnnotationTypeBinding",
-	@Stereotype
+	targets = [ElementKind.programPart]
 }
-	unloadOnExit boolean;
 end

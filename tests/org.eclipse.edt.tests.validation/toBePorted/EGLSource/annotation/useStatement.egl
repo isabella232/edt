@@ -1,0 +1,64 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+formGroup fg1
+	{}  
+end
+
+formGroup fg2
+	{}  
+end
+
+formGroup fg3
+	{}  
+end
+
+program pgm1
+	use fg1;  //0
+	function main()
+	end
+end
+
+program pgm2
+	use fg1; //0
+	use fg2; //1Only one non-help FormGroup can be referenced by use statements
+	function main()
+	end
+end	
+
+program pgm3
+	use fg1 {helpGroup = yes};  //1When a FormGroup is used with the help group property, there must be another FormGroup
+	function main()
+	end
+end
+
+program pgm4
+	use fg1;  //0
+	use fg1 {helpGroup = yes}; //1A duplicate use declaration named fg1 is declared
+	function main()
+	end
+end
+
+program pgm5
+	use fg1 {helpGroup = yes};  //0
+	use fg2 {helpGroup = yes};  //1Only one FormGroup in a program can be designated as the helpGroup
+	use fg3;
+	function main()
+	end
+end
+
+program pgm6
+	use fg1; //0
+	use fg2 {helpGroup = yes};  //0
+	function main()
+	end
+end
+

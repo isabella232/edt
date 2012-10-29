@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program RATLC01076831 {
+	allowUnqualifiedItemReferences = yes
+	}	
+	function main()
+		aFix, bFix  RATLC01076831Fix ;
+		aFlex RATLC01076831Flex ;
+		aFix.text[1] = "abc" ;
+		aFix.text[2] = "xyz" ;
+		
+		move aFix to bFix byName ;			// 0
+		displayLineMode ( bFix.text[1] ) ;	// 0
+		displayLineMode ( bFix.text[2] ) ;	// 0
+		
+		move aFix to aFlex byName ;			// 1
+		displayLineMode ( aFlex.text[1] ) ;	// 0
+		displayLineMode ( aFlex.text[2] ) ;	// 0
+	end	
+end
+Record RATLC01076831Fix
+   10 * [2] ;
+   	 20 text char(10) ;
+end
+Record RATLC01076831Flex
+    text string [2] ;
+end

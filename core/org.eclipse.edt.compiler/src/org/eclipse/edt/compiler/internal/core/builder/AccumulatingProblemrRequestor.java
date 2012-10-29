@@ -13,6 +13,7 @@ package org.eclipse.edt.compiler.internal.core.builder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * @author winghong
@@ -30,11 +31,12 @@ public class AccumulatingProblemrRequestor extends DefaultProblemRequestor {
         return problems;
     }
     
-	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {		
+    @Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {		
  		if (severity == IMarker.SEVERITY_ERROR) {
  			setHasError(true);
  		}
-        problems.add(new Problem(startOffset, endOffset, severity, problemKind, inserts));
+        problems.add(new Problem(startOffset, endOffset, severity, problemKind, inserts, bundle));
     }
 
 }

@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 /**
  * SubstringAccess AST node type.
@@ -48,6 +49,7 @@ public class SubstringAccess extends Expression {
 		return expr2;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -58,6 +60,7 @@ public class SubstringAccess extends Expression {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(primary.getCanonicalString());
@@ -69,11 +72,23 @@ public class SubstringAccess extends Expression {
 		return sb.toString();
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new SubstringAccess((Expression)primary.clone(), (Expression)expr.clone(), (Expression)expr2.clone(), getOffset(), getOffset() + getLength());
 	}
 	
-	public IDataBinding resolveDataBinding() {
-		return getPrimary().resolveDataBinding();
+	@Override
+	public Member resolveMember() {
+		return getPrimary().resolveMember();
+	}
+	
+	@Override
+	public Type resolveType() {
+		return getPrimary().resolveType();
+	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalString();
 	}
 }

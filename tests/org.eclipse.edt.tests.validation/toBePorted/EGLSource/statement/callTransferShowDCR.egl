@@ -1,0 +1,225 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm type TextUIProgram
+	const PGMACONST string = "pgmA";
+	const PGMBCONST string = "pgmB";
+	const NOTFOUNDCONST string = "notFound";
+	
+	intVar int;
+	charVar char(4);
+	dbcharVar dbchar(4);
+	mbcharVar mbchar(4);
+	unicodeVar unicode(4);
+	stringVar string;
+	rA recA;
+	rB recB;
+	a, b, c int;
+	
+	use formg;
+
+	function main()
+	end
+	
+	function testCall()
+		call charVar;		//0
+		call unicodeVar;	//0
+		call stringVar;		//0
+		
+		call charVar(a,b,c);		//0
+		call unicodeVar(a,b,c);		//0
+		call stringVar(a,b,c);		//0
+		
+		call intVar;		//1
+		call dbcharVar;		//1
+		call mbcharVar;		//1
+		
+		call notFound;			//1
+		call notFound(a,b,c);	//1
+		
+		call "notFound";		//0
+		call "notFound"(a,b,c);	//0
+		call NOTFOUNDCONST;		//0
+		
+		call "pgmA" (a);		//0
+		call PGMACONST (a);		//0
+		call pgmA (a);			//0
+		
+		call "pgmA";			//1
+		call "pgmA" ();			//1		
+		call PGMACONST ();		//1
+		call PGMACONST (a,b);	//1
+		call PGMACONST ([a]);	//1
+		call pgmA;				//1
+		call pgmA;				//1
+		call pgmA(1,2);			//1
+		
+		call pgmA(a) {				//0
+			linkageKey = "lKey",	//0
+			isExternal=yes,			//0
+			isNoRefresh=no			//0
+		};
+		
+		call pgmA(a) {				//0
+			linkageKeys = "lKey",	//1 cannot be resolved
+			isExternal=5,			//1
+			isNoRefresh=[no]		//1
+		};
+		
+		call mainProgram;		//1 Invalid invocation target mainProgram. The target must be a program that has a parameter list
+		call mainProgram();		//1 Invalid invocation target mainProgram. The target must be a program that has a parameter list
+		call mainProgram(1);	//1 Invalid invocation target mainProgram. The target must be a program that has a parameter list
+		call lib;				//1 Invalid invocation target lib. The target must be a program
+		call lib();				//1 Invalid invocation target lib. The target must be a program
+	end
+	
+	function testTransfer()
+		transfer to program charVar;		//0
+		transfer to program unicodeVar;	//0
+		transfer to program stringVar;	//0
+		
+		transfer to program intVar;		//1
+		transfer to program dbcharVar;	//1
+		transfer to program mbcharVar;	//1
+		
+		transfer to program notFound;		//1
+		
+		transfer to program "notFound";		//0
+		transfer to program NOTFOUNDCONST;	//0
+		
+		transfer to program "pgmA";		//0
+		transfer to program PGMACONST;	//0
+		transfer to program pgmA;		//0
+		
+
+		
+		transfer to program pgmA {	//0
+			linkageKey = "lKey",		//0
+			isExternal=yes,				//0
+			isNoRefresh=no				//1
+		};
+		
+		transfer to program pgmA {	//0
+			linkageKeys = "lKey",		//1 cannot be resolved
+			isExternal=5				//1
+		};
+		
+		transfer to program pgmA passing rA {	//0
+			linkageKeys = "lKey",		//1 cannot be resolved
+			isExternal=5				//1
+		};
+		
+		transfer to program pgmB passing rA;	//0
+		transfer to program pgmB passing rB;	//1
+		
+		transfer to program pgmB passing rA {isExternal=yes};	//0
+		
+		transfer to program "pgmB" passing rA;	//0
+		transfer to program "pgmB" passing rB;	//1
+		
+		transfer to program PGMBCONST passing rA;	//0
+		transfer to program PGMBCONST passing rB;	//1
+		
+		transfer to program charVar passing rA;	//0
+		transfer to program charVar passing rB;	//0
+		
+		transfer to program "notFound" passing rA;	//0
+		transfer to program "notFound" passing rB;	//0
+		
+		transfer to program NOTFOUNDCONST passing rA;	//0
+		transfer to program NOTFOUNDCONST passing rB;	//0
+	end
+	
+	function testShow()
+		show formf returning to charVar;		//0
+		show formf returning to unicodeVar;		//0
+		show formf returning to stringVar;		//0
+		
+		show formf returning to intVar;		//1
+		show formf returning to dbcharVar;	//1
+		show formf returning to mbcharVar;	//1
+		
+		show formf returning to notFound;		//1
+		
+		show formf returning to "notFound";		//0
+		show formf returning to NOTFOUNDCONST;	//0
+		
+		show formf returning to "pgmA";		//0
+		show formf returning to PGMACONST;	//0
+		show formf returning to pgmA;		//0
+		
+		show formf returning to charVar {isExternal=yes};	//0
+		
+		show formf returning to pgmA {		//0
+			linkageKey = "lKey",			//0
+			isExternal=yes,					//0
+			isNoRefresh=no					//1
+		};
+		
+		show formf returning to pgmA {		//0
+			linkageKeys = "lKey",			//1 cannot be resolved
+			isExternal=5					//1
+		};
+		
+
+		show formf returning to pgmB passing rA;	//0
+		show formf returning to pgmB passing rB;	//1
+		
+		show formf returning to "pgmB" passing rA;	//0
+		show formf returning to "pgmB" passing rB;	//1
+		
+		show formf returning to PGMBCONST passing rA;	//0
+		show formf returning to PGMBCONST passing rB;	//1
+		
+		show formf returning to charVar passing rA;	//0
+		show formf returning to charVar passing rB;	//0
+		
+		show formf returning to "notFound" passing rA;	//0
+		show formf returning to "notFound" passing rB;	//0
+		
+		show formf returning to NOTFOUNDCONST passing rA;	//0
+		show formf returning to NOTFOUNDCONST passing rB;	//0
+	end
+end
+
+Formgroup formg
+	form formf type textForm end
+end
+
+Record recA
+	field1 int;
+end
+
+Record recB
+	field1 int;
+end
+
+Program pgmA (p1 int) {
+	inputRecord = r1
+}
+	r1 recA;
+	function main() end
+end
+
+Program pgmB {
+	inputRecord = r1
+}
+	r1 recA;
+	function main() end
+end
+
+Program mainProgram
+	function main() end
+end
+
+Library lib
+end

@@ -1,0 +1,32 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+record myRec02
+  10 siTop[3];
+   20 siNext char(20)[2];
+end
+
+Program pgm
+	function main()
+		myRec02 myRec02;
+	
+//The following tests have been commented out...the original defect was bogus and should not have produced an error here	
+//		myRec02.siTop.siNext[1] = "TST1";  //1
+//		myRec02.siTop.siNext[2] = "TST2";  //1
+//		myRec02.siTop.siNext[3] = "TST3";  //1
+		
+		myRec02.siTop.siNext[1][1] = "TST1";  //0
+		myRec02.siTop.siNext[2][1] = "TST2";  //0
+		myRec02.siTop.siNext[3][1] = "TST3";  //0
+	end
+end

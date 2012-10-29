@@ -1,0 +1,187 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+// Oct 30, 2007 1:37:21 PM - EGL V7.0 Migration
+Program T40506M type basicProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no,
+  V60ExceptionCompatibility = YES
+  }
+
+  // Data Declarations
+  AUDITRCD AUDITRCD; 
+  CREATXRCD CREATXRCD; 
+  RECORDH RECORDH; 
+  RECORDI RECORDI; 
+  RECORDJ2 RECORDJ2; 
+  RECORDM1 RECORDM1; 
+  RECORDZ RECORDZ; 
+  RECORDZ2 RECORDZ2; 
+
+  // VAGen Info - items needed for migration
+  VAGen_EZESYS char(8);
+  VAGen_EZEREPLY num(1);
+  VAGen_EZE_WAIT_TIME bin(9,2);
+  VAGen_EZE_ITEMLEN int;
+
+  function main()
+    // VAGen Info - initialization needed for migration
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    T40506M_MAIN: T40506M_MAIN();
+  end
+end
+
+
+Function T40506M_GET_INDEX()
+  get RECORDI ;
+
+  /* EZE Functions*/
+  RESULT_INT = sysLib.bytes(RECORDI); //1
+  RESULT_INT = sysLib.bytes(RECORDZ); //1
+
+//  sysLib.convert(RECORDI, ConvertDirection.remote, CONVERSIONTABLE); /* resolves to record RECORDI*/
+//  sysLib.convert(TARGET, ConvertDirection.remote, RECORDI); /* resolves to record RECORDI*/
+//  sysLib.convert(RECORDZ, ConvertDirection.remote, CONVERSIONTABLE); /* resolves to record RECORDZ*/
+//  sysLib.convert(TARGET, ConvertDirection.remote, RECORDZ); /* resolves to record RECORDZ*/
+
+end 
+
+
+Function T40506M_GET_INDEXN()
+  get RECORDH ;
+
+//  sysLib.verifyChkDigitMod10(VAGen_NUMBER, RECORDZ2, RESULT); /* resolves to record RECORDZ2*/
+//  sysLib.verifyChkDigitMod10(VAGen_NUMBER, DIGITS, RECORDZ2); /* resolves to record RECORDZ2*/
+end 
+
+
+Function T40506M_MAIN() 
+  T40506M_NOIO();
+  T40506M_GET_INDEX();
+  T40506M_GET_INDEXN();    
+
+end 
+
+
+Function T40506M_NOIO()
+	  
+  /* EZE Functions*/
+  RESULT_INT = sysLib.bytes(RECORDI); //1
+  RESULT_INT = sysLib.bytes(RECORDZ); //1
+  RESULT_INT = sysLib.bytes(RECORDZ2); //1
+  /*RECORDH = EZEBYTES(ITEM-OR-RECORD);   /* VAGen - Hpt.CM.741.e - cannot resolve */
+
+//  sysLib.convert(RECORDI, ConvertDirection.remote, CONVERSIONTABLE); /* resolves to record RECORDI*/
+//  sysLib.convert(TARGET, ConvertDirection.remote, RECORDI); /* resolves to record RECORDI*/
+//  sysLib.convert(RECORDZ, ConvertDirection.remote, CONVERSIONTABLE); /* resolves to record RECORDZ*/
+//  sysLib.convert(TARGET, ConvertDirection.remote, RECORDZ); /* resolves to record RECORDZ*/
+//  sysLib.convert(RECORDZ2, ConvertDirection.remote, CONVERSIONTABLE); /* resolves to record RECORDZ2*/
+//  sysLib.convert(TARGET, ConvertDirection.remote, RECORDZ2); /* resolves to record RECORDZ2*/
+//
+//  sysLib.purge(RECORDI); /* resolves to record RECORDI*/
+//  sysLib.purge(RECORDZ); /* resolves to record RECORDZ*/
+//  sysLib.purge(RECORDZ2); /* resolves to record RECORDZ2*/
+//
+//
+//  VGLib.connectionService(USERID, PASSWORD, SERVERNAME, PRODUCT, RELEASE, UOW);
+//  VGLib.connectionService(RECORDI, PASSWORD, SERVERNAME, PRODUCT, RELEASE, UOW); /* not used - resolves to record RECORDI*/
+//  VGLib.connectionService(USERID, RECORDI, SERVERNAME, PRODUCT, RELEASE, UOW); /* not used - resolves to record RECORDI*/
+//  VGLib.connectionService(USERID, PASSWORD, RECORDI, PRODUCT, RELEASE, UOW); /* resolves to record RECORDI*/
+//  VGLib.connectionService(RECORDZ, PASSWORD, SERVERNAME, PRODUCT, RELEASE, UOW); /* not used - resolves to record RECORDZ*/
+//  VGLib.connectionService(USERID, RECORDZ, SERVERNAME, PRODUCT, RELEASE, UOW); /* not used - resolves to record RECORDZ*/
+//  VGLib.connectionService(USERID, PASSWORD, RECORDZ, PRODUCT, RELEASE, UOW); /* resolves to record RECORDZ*/
+//
+//  /* Service routines  */
+//  sysLib.audit(AUDITRCD, JRID);
+  VGLib.startTransaction(CREATXRCD, PRID); //1
+end 
+
+
+Record AUDITRCD type basicRecord
+  3 AUDIT_HEADER char(28) ; 
+    4 AUDIT_LENGTH smallint ; 
+    4 AUDIT_ID hex(4) ; 
+    4 * char(24) ; 
+  3 AUDIT_DATA char(100) ; 
+end 
+
+
+Record CREATXRCD type basicRecord
+  3 CREATX_LENGTH smallint ; 
+  3 CREATX_TRXID char(8) ; 
+  3 CREATX_DATA char(100) ; 
+end 
+
+Record RECORDH type indexedRecord  {
+  fileName = "RECH", keyItem = ITEMH2
+  }
+  3 ITEMH2 smallint ; 
+  3 ITEMH3 char(6) ; 
+  3 ITEMY char(3) ; 
+  3 RECORDZ2 int ; 
+end
+
+Record RECORDI type indexedRecord  {
+  fileName = "RECI", keyItem = ITEMI2
+  }
+  3 ITEMI char(3) ; 
+  3 ITEMI2 char(6) ; 
+  3 ITEMI3 char(6) ; 
+  3 ITEMI4 char(3) ; 
+  3 RECORDZ char(20) ; 
+  3 AUDITRCD char(50) ; 
+  3 CREATXRCD char(50) ; 
+  3 ITEMW char(6) ; 
+end 
+
+Record RECORDJ2 type basicRecord
+  3 ITEM-OR-RECORD char(3) ; 
+  3 CONVERSIONTABLE char(8) ; 
+  3 VAGen_NUMBER char(20) ; 
+  3 DIGITS smallint ; 
+  3 RESULT smallint ; 
+  3 RESULT_INT int ; 
+  3 TARGET char(50) ; 
+  3 JRID smallint ; 
+  3 PRID int ; 
+  3 RECIP int ; 
+  3 USERID char(8) ; 
+  3 PASSWORD char(8) ; 
+  3 SERVERNAME char(18) ; 
+  3 PRODUCT char(8) ; 
+  3 RELEASE char(8) ; 
+  3 UOW char(8) ; 
+end 
+
+Record RECORDM1 type basicRecord
+  3 RECORDI char(4) ; 
+    4 ITEMI char(4) ; 
+  3 RECORDH smallint ; 
+    4 ITEMH smallint ; 
+  3 ITEMW char(6) ; 
+  3 ITEMX char(3) [5] ; 
+  3 ITEMY char(6) ; 
+  3 ITEMZ smallint ; 
+end
+
+Record RECORDZ type basicRecord
+  3 ITEMZ2 char(3) ; 
+  3 ITEMW char(6) ; 
+end 
+
+Record RECORDZ2 type basicRecord
+  3 ITEMZ2 char(3) ; 
+end 
+
+
+

@@ -1,0 +1,171 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record temprec
+end
+
+dataitem mynum num(10) end
+dataitem mychar char(30) end
+
+datatable dt1 type MsgTable{
+contents = [["dssds","dddd"]]
+}
+s char(30);
+s1 char(30);
+end
+
+datatable dt2 type MsgTable{
+contents = [[5,"fff"]]
+}
+
+a num(10);
+b char(30);
+end
+
+service myservice2
+end
+
+service myservice1 
+use mylib;// 0
+use dt2;// 0
+use myservice2;// 1 A use statement in a service cannot have another service as the target   {7802, SERVICE_CANNOT_BE_USED_BY_SERVICE}
+use myformgx;// 1  A FormGroup cannot be used in a service  {7811, SERVICE_CANNOT_USE_FORM_GROUP}
+end
+
+
+library mylib type basiclibrary
+end
+
+handler myhandler type JasperReport
+use mylib;// 0
+use myformgx;// 1  The value of use declaration myformgx in handler myhandler is invalid. You must use a DataTable or a library part  {5379, INVALID_HANDLER_USEDECLARATION_VALUE}
+end
+
+handler mypagehandler type JSFHandler 
+use mylib;// 0
+use myformgx;// 1  The value of use declaration myformgx in handler mypagehandler is invalid. You must use a DataTable or a library part  {5379, INVALID_HANDLER_USEDECLARATION_VALUE}
+end
+
+
+datatable dt3 type MsgTable{
+contents = [["dssds","dddd"]]
+}
+s temprec;
+s1 char(30);
+end
+
+datatable dt4 type MsgTable{
+contents = [["dssds","dddd"]]
+}
+s mynum;// 0
+s1 char(30);
+end
+
+datatable dt5 type MsgTable{
+contents = [[6,"dddd"]]
+}
+s mychar;// 
+s1 char(30);
+end
+
+
+program msgtest2 type VGWebTransaction
+
+use msgtest;// 1  The value of use declaration msgtest in program msgtest2 is invalid. You must use a FormGroup, DataTable, enumeration, or a library part.   {4930, PROGRAM_OR_LIBRARY_USE_STATEMENT_RESOLVES_TO_INVALID_TYPE}
+use dt1;// 0
+use dt2;// 0
+use dt3;// 0
+use dt4;// 0
+use dt5;// 0
+function main ()
+end
+end
+
+program msgtest type basicprogram
+
+use dt1;// 1  The first column of msgTable dt1 must be of type NUM, unless the table is used by a program whose type is VGWebTransaction  {4182, MESSAGE_TABLE_MUST_HAVE_FIRST_COLUMN_NUM_UNLESS_USED_BY_WEBTRANSACTION}
+use dt2;// 0
+use dt3;// 1  The first column of msgTable dt3 must be of type NUM, unless the table is used by a program whose type is VGWebTransaction  {4182, MESSAGE_TABLE_MUST_HAVE_FIRST_COLUMN_NUM_UNLESS_USED_BY_WEBTRANSACTION}
+use dt4;// 0
+use dt5;// 1   The first column of msgTable dt5 must be of type NUM, unless the table is used by a program whose type is VGWebTransaction  {4182, MESSAGE_TABLE_MUST_HAVE_FIRST_COLUMN_NUM_UNLESS_USED_BY_WEBTRANSACTION}
+function main ()
+end
+end
+
+formgroup myformgx 
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+formgroup myformgxy
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+formgroup myformgxyz
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+formgroup myformgxhelp 
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+datatable dt type BasicTable
+end
+
+
+program MySource type basicprogram
+use dt{ // 1  The property deleteAfterUse is valid for use statements only in VAGCompatibility mode   {4937, USE_STATEMENT_VAGCOMPATIBILITY}
+deleteafteruse = yes,//0
+helpkey = pf3,// 1 The property helpkey is not valid in this location
+helpgroup = yes,// 1 The property helpgroup is not valid in this location
+validationBypassKeys = r,// 2 The property validationBypassKeys is not valid in this location
+pfKeyEquate = yes// 1 The property pfKeyEquate is not valid in this location
+};
+use myformgx{
+deleteafteruse = yes,// 1  The property deleteafteruse is not valid in this location
+helpkey = pf3,//0
+helpgroup = yes,//0
+validationBypassKeys = [pf5,pf8],//0
+pfKeyEquate = yes//0
+
+};
+use myformgxyz;// 0
+use myformgxy;// 1 Only one non-help FormGroup can be referenced by use statements. Error on use statement for myformgxy in program MySource {4931, PROGRAM_USE_STATEMENT_TOO_MANY_FORMGROUPS}
+use myformgxhelp{
+helpgroup = yes   
+};
+function main ()
+end
+end
+
+program x2 
+use myformgxhelp{//1  When a FormGroup is used with the help group property, there must be another FormGroup used which will be the main FormGroup {4936, PROGRAM_USE_STATEMENT_HELP_GROUP_WITH_NO_MAIN_GROUP}
+helpgroup = yes
+};
+function main()
+end
+end
+program webprog type VGWebTransaction
+
+use myformgx;// 1 FormGroups cannot be the target of a use statement in a web transaction   {7772, USE_FORMGROUP_NOT_VALID_IN_WEBPROGRAM}
+function main()
+end
+end
+
+

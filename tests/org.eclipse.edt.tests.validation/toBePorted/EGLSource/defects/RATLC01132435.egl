@@ -1,0 +1,118 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+/*
+ * RATLC01135298 requested that the checks described below be removed.
+ *
+ * Description of RATLC01132435:
+ *
+ * When a date, time, or timestamp is used with a selectFromListItem (or the
+ * new selectedValueItem) and selectType=value, the formatting applied must
+ * contain enough information for the JSF runtime to work.
+ *
+ * date: dateFormat must contain month, day, and year digits.
+ * valid: dateFormat="yy-M/dd"
+ * invalid: dateFormat="yyyy/MM"
+ *
+ * time: timeFormat must contain hour, minute, and second digits.
+ * valid: timeFormat="H+m+s"
+ * invalid: timeFormat="HH:mm"
+ *
+ *
+ * timestamp: timestampFormat must contain at least all the digit types as the timestamp's definition.
+ * i.e. timestamp("yyMMddhh") would need a timestampFormat containing y, M, d, and h digits, and if it wants, can contain m, s, and f
+ * valid: timestampFormat="yy/MM/dd hh:mm:ss"
+ * invalid: timestampFormat="yy/MM/dd"
+ *
+ */
+
+Handler dateHandler1 type JSFHandler
+	source date[0];
+	f1 date{dateFormat="yyMM", SelectFromListItem = source, SelectType = value};	//0
+	f2 date{dateFormat="yyMMdd", SelectFromListItem = source, SelectType = value};	//0
+	f3 date{dateFormat="yy-M/dd", SelectFromListItem = source, SelectType = value};	//0
+	f4 date{dateFormat="yyyy/MM", SelectFromListItem = source, SelectType = value};	//0
+end
+
+Handler dateHandler2 type JSFHandler
+	target1 date{dateFormat="yy/MM"};				//0
+	source1 date[0]{selectedValueItem = target1};	//0
+	
+	target2 date{dateFormat="yy/MM/dd"};			//0
+	source2 date[0]{selectedValueItem = target2};	//0
+	
+	target3 date{dateFormat="yy-MM"};
+	source3 selRec1[0]{selectedValueItem = target3}; //0
+	
+	target4 date{dateFormat="yy-MM-dd"};
+	source4 selRec1[0]{selectedValueItem = target4}; //0
+end
+
+record selRec1
+	{ @SelectionList { valueItem = dateVal,
+					labelItem = dateLabel } }
+	dateVal date;
+	dateLabel string;
+end
+
+Handler timeHandler1 type JSFHandler
+	source time[0];
+	f1 time{timeFormat="HH:mm", SelectFromListItem = source, SelectType = value};	//0
+	f2 time{timeFormat="H:m+s", SelectFromListItem = source, SelectType = value};	//0
+end
+
+Handler timeHandler2 type JSFHandler
+	target1 time{timeFormat="HH:mm"};				//0
+	source1 time[0]{selectedValueItem = target1};	//0
+	
+	target2 time{timeFormat="H:m+s"};				//0
+	source2 time[0]{selectedValueItem = target2};	//0
+	
+	target3 time{timeFormat="HH:mm"};
+	source3 selRec2[0]{selectedValueItem = target3}; //0
+	
+	target4 time{timeFormat="H:m+s"};
+	source4 selRec2[0]{selectedValueItem = target4}; //0
+end
+
+record selRec2
+	{ @SelectionList { valueItem = timeVal,
+					labelItem = timeLabel } }
+	timeVal time;
+	timeLabel string;
+end
+
+Handler timestampHandler1 type JSFHandler
+	source timestamp[0];
+	f1 timestamp("yyyyMMddhhmmss"){timestampFormat="yyMMddhh", SelectFromListItem = source, SelectType = value};			//0
+	f2 timestamp("yyyyMMddhhmmss"){timestampFormat="yyMMddhhmmss.fff", SelectFromListItem = source, SelectType = value};	//0
+end
+
+Handler timestampHandler2 type JSFHandler
+	target1 timestamp("yyyyMMddhhmmss"){timestampFormat="yyMMddhh"};	//0
+	source1 timestamp[0]{selectedValueItem = target1};					//0
+	
+	target2 timestamp("yyyyMMddhhmmss"){timestampFormat="yyMMddhhmmss.fff"};	//0
+	source2 timestamp[0]{selectedValueItem = target2};							//0
+	
+	target3 timestamp("yyyyMMddhhmmss"){timestampFormat="yyMMddhh"};	//0
+	source3 selRec3[0]{selectedValueItem = target3}; 					//0
+	
+	target4 timestamp("yyyyMMddhhmmss"){timestampFormat="yyMMddhhmmss.fff"};	//0
+	source4 selRec3[0]{selectedValueItem = target4};							//0
+end
+
+record selRec3
+	{ @SelectionList { valueItem = timestampVal,
+					labelItem = timestampLabel } }
+	timestampVal timestamp;
+	timestampLabel string;
+end

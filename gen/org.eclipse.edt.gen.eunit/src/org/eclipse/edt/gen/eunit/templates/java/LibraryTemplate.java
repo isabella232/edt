@@ -43,7 +43,7 @@ public class LibraryTemplate extends EUnitTemplate {
 	}
 
 	public void genLibDriverClassBody(Library part, Context ctx, TabbedWriter out, String driverPartNameAppend, TestCounter counter){
-		out.println("program " + part.getName() + driverPartNameAppend);
+		out.println("program " + part.getCaseSensitiveName() + driverPartNameAppend);
 		out.pushIndent();
 		//out.println("use " + part.getFullyQualifiedName() + ";");		
 		out.println("function main()");

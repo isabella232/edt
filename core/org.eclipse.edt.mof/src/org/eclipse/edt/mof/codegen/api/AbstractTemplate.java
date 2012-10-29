@@ -212,7 +212,7 @@ public abstract class AbstractTemplate implements Template {
 	
 	public EClassifier getEClassifier(String typeSignature) throws TemplateException {
 		try {
-			return (EClassifier)Environment.INSTANCE.findType(typeSignature);
+			return (EClassifier)Environment.getCurrentEnv().findType(typeSignature);
 		} catch (Exception e) {
 			throw new TemplateException(e);
 		} 

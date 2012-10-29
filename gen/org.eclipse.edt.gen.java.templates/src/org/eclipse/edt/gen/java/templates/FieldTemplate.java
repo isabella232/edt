@@ -39,8 +39,16 @@ public class FieldTemplate extends JavaTemplate {
 		transientOption(field, out);
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
-		ctx.invoke(genName, field, ctx, out);
-		out.println(";");
+		if ( !field.isStatic() || field.getInitializerStatements() == null
+				|| field.getInitializerStatements().getStatements().isEmpty() )
+		{
+			ctx.invoke(genName, field, ctx, out);
+			out.println(";");
+		}
+		else
+		{
+			ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
+		}
 	}
 
 	public void genInstantiation(Field field, Context ctx, TabbedWriter out) {
@@ -107,7 +115,7 @@ public class FieldTemplate extends JavaTemplate {
 		StatementBlock statementBlock = factory.createStatementBlock();
 		MemberName nameExpression = factory.createMemberName();
 		nameExpression.setMember(field);
-		nameExpression.setId(field.getName());
+		nameExpression.setId(field.getCaseSensitiveName());
 		ReturnStatement returnStatement = factory.createReturnStatement();
 		returnStatement.setContainer(function);
 		returnStatement.setExpression(nameExpression);
@@ -137,10 +145,10 @@ public class FieldTemplate extends JavaTemplate {
 		assignmentStatement.setAssignment(assignment);
 		MemberName nameExpression1 = factory.createMemberName();
 		nameExpression1.setMember(field);
-		nameExpression1.setId(field.getName());
+		nameExpression1.setId(field.getCaseSensitiveName());
 		MemberName nameExpression2 = factory.createMemberName();
 		nameExpression2.setMember(functionParameter);
-		nameExpression2.setId(functionParameter.getName());
+		nameExpression2.setId(functionParameter.getCaseSensitiveName());
 		assignment.setLHS(nameExpression1);
 		assignment.setRHS(nameExpression2);
 		statementBlock.setContainer(function);
@@ -153,9 +161,9 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	protected String genMethodName(Field field) {
-		String ret = field.getName().substring(0, 1).toUpperCase();
-		if (field.getName().length() > 1)
-			ret = ret + field.getName().substring(1);
+		String ret = field.getCaseSensitiveName().substring(0, 1).toUpperCase();
+		if (field.getCaseSensitiveName().length() > 1)
+			ret = ret + field.getCaseSensitiveName().substring(1);
 		return ret;
 	}
 

@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG NO_ERROR
+
+Program ZSA5AXM type basicProgram 
+  ( )
+  {includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no  }
+
+  SPZ4R003 SPZ4R003; 
+  SPZ4R006 SPZ4R006 { redefines = SPZ4R003 } ; 
+
+  function main()
+  end 
+end 
+Record SPZ4R003 type sqlRecord  {
+  tableNames = [["P400", "T1"]], keyItems = [PUBC]
+  }
+  3 PUBC PUBC { column = "PUBC", isSqlNullable = yes, isReadOnly = yes, sqlDataCode = 453} ;
+  3 NORTNALW decimal(4,1) 
+      { column = "NORTNALW", isSqlNullable = yes, isReadOnly = yes} ;
+  3 DLVCHAMT decimal(4,2) 
+      { column = "DLVCHAMT", isSqlNullable = yes, isReadOnly = yes} ;
+  3 MVSCOMI MVSCOMI { column = "MVSCOMI", isSqlNullable = yes, isReadOnly = yes, sqlDataCode = 453} ;      
+  3 PARPUBC PARPUBC { column = "PARPUBC", isSqlNullable = yes, isReadOnly = yes, sqlDataCode = 453} ;
+end 
+Record SPZ4R006 type basicRecord 
+  3 * smallint ; 
+  3 * smallint ; 
+  3 PUBC PUBC ; 
+  3 * smallint ; 
+  3 * smallint ; 
+  3 NORTNALW NORTNALW ; 
+  3 * smallint ; 
+  3 * smallint ; 
+  3 DLVCHAMT DLVCHAMT ; 
+  3 * smallint ; 
+  3 * smallint ; 
+  3 MVSCOMI MVSCOMI ; 
+end 
+DataItem PUBC char(4)           end
+DataItem NORTNALW decimal(4,1)  end
+DataItem DLVCHAMT decimal(4,2)  end
+DataItem MVSCOMI char(1)        end
+DataItem PARPUBC char(4)        end

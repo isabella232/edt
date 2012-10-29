@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validateGeneratableParts:
+// 1 The name of the {0} {1} must match the file name {2} as it is a generatable part. The names must match exactly, including case. {3040, GENERATABLE_PART_NAME_MUST_MATCH_FILE_NAME}
+// 1 There can only be one generatable part per file. Error on {0} {1} in file {2}. {3041, ONLY_ONE_GENERATABLE_PART_PER_FILE}
+// 1 The name of the {0} {1} must match the file name {2} as it is a generatable part. The names must match exactly, including case. {3040, GENERATABLE_PART_NAME_MUST_MATCH_FILE_NAME}
+// 1 There can only be one generatable part per file. Error on {0} {1} in file {2}. {3041, ONLY_ONE_GENERATABLE_PART_PER_FILE}
+// 1 The name of the {0} {1} must match the file name {2} as it is a generatable part. The names must match exactly, including case. {3040, GENERATABLE_PART_NAME_MUST_MATCH_FILE_NAME}
+// 1 There can only be one generatable part per file. Error on {0} {1} in file {2}. {3041, ONLY_ONE_GENERATABLE_PART_PER_FILE}
+// 1 The name of the {0} {1} must match the file name {2} as it is a generatable part. The names must match exactly, including case. {3040, GENERATABLE_PART_NAME_MUST_MATCH_FILE_NAME}
+// 1 There can only be one generatable part per file. Error on {0} {1} in file {2}. {3041, ONLY_ONE_GENERATABLE_PART_PER_FILE}
+// 1 The name of the {0} {1} must match the file name {2} as it is a generatable part. The names must match exactly, including case. {3040, GENERATABLE_PART_NAME_MUST_MATCH_FILE_NAME}
+// 1 There can only be one generatable part per file. Error on {0} {1} in file {2}. {3041, ONLY_ONE_GENERATABLE_PART_PER_FILE}
+// 1 The name of the {0} {1} must match the file name {2} as it is a generatable part. The names must match exactly, including case. {3040, GENERATABLE_PART_NAME_MUST_MATCH_FILE_NAME}
+// 1 There can only be one generatable part per file. Error on {0} {1} in file {2}. {3041, ONLY_ONE_GENERATABLE_PART_PER_FILE}
+// 1 The name of the {0} {1} must match the file name {2} as it is a generatable part. The names must match exactly, including case. {3040, GENERATABLE_PART_NAME_MUST_MATCH_FILE_NAME}
+// 1 There can only be one generatable part per file. Error on {0} {1} in file {2}. {3041, ONLY_ONE_GENERATABLE_PART_PER_FILE}
+
+// validateNoDuplicateNameInNamespace:
+// 1 The name {0} is duplicated in the namespace. {3039, DUPLICATE_NAME_IN_NAMESPACE}
+// 1 The name {0} is duplicated in the namespace. {3039, DUPLICATE_NAME_IN_NAMESPACE}
+// 1 The name {0} is duplicated in the namespace. {3039, DUPLICATE_NAME_IN_NAMESPACE}
+// 1 The name {0} is duplicated in the namespace. {3039, DUPLICATE_NAME_IN_NAMESPACE}
+// 1 The name {0} is duplicated in the namespace. {3039, DUPLICATE_NAME_IN_NAMESPACE}
+
+// validateNoDuplicateNamesInFile:
+// 1 Part names in files cannot be duplicated. Error on {0}. {3038, DUPLICATE_PART_NAME_IN_FILE}
+

@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR VAG
+
+Program TR101X type basicProgram ()
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes
+  }
+  
+  ZND_SALES ZND_SALES;
+
+  function main()
+    TR101X_MAIN: TR101X_MAIN();
+  end
+end
+
+
+Function TR101X_SUB()
+  ZNW_STATUS_AREA ZNW_STATUS_AREA ; 
+  get next ZND_SALES ;
+
+  TR101X_LOCSTOR(ZND_SALES.DM2_DEBITOR, ZNW_STATUS_AREA);
+  TR101X_LOCSTORa(ZND_SALES.DM2_DEBITORa, ZNW_STATUS_AREA);
+end 
+
+Function TR101X_MAIN()
+  TR101X_SUB();
+end 
+
+Function TR101X_LOCSTOR(
+  KEY_DM2_DEBITOR decimal(13) sqlNullable, 
+  ZNW_STATUS_AREA ZNW_STATUS_AREA 
+  )
+end 
+
+Function TR101X_LOCSTORa(
+  KEY_DM2_DEBITOR decimal(13,1) sqlNullable, 
+  ZNW_STATUS_AREA ZNW_STATUS_AREA 
+  )
+end 
+
+Record ZND_SALES type sqlRecord  {
+  tableNames = [["SALES", "T1"]]
+  }
+  DM2_DEBITOR decimal(12) { column = "DM2_DEBITOR", isSqlNullable = yes} ;
+  DM2_DEBITORa decimal(12,1) { column = "DM2_DEBITOR", isSqlNullable = yes} ;
+end 
+
+Record ZNW_STATUS_AREA type basicRecord
+  3 STATUS_HALFWORDS char(20) ; 
+    4 STATUS_HALFWORD_1 smallint ; 
+    4 STATUS_HALFWORD_2 smallint ; 
+    4 STATUS_HALFWORD_3_4 int ; 
+    4 STATUS_HALFWORD_5_6 int ; 
+    4 STATUS_HALFWORD_7_8 int ; 
+    4 STATUS_HALFWORD_9_10 int ; 
+end 

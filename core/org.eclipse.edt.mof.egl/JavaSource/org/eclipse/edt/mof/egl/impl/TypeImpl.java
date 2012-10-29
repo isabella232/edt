@@ -37,4 +37,12 @@ public abstract class TypeImpl extends ElementImpl implements Type {
 		// Default implementation
 		return true;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Type) {
+			return equals((Type)o);
+		}
+		return super.equals(o);
+	}
 }

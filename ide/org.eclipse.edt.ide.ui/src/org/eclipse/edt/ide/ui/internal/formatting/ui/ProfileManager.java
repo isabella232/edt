@@ -69,7 +69,6 @@ public class ProfileManager extends Observable{
 		}
 	}
 
-	public static final String PLUGIN_ID_IDE_UI = "org.eclipse.edt.ide.ui"; //$NON-NLS-1$
 	public static final String PROFILE_BUILDIN_PATH = "builtInPreference/format_builtin.profile"; //$NON-NLS-1$
 	private static final String PROFILE_WORKSPACE_PATH = "format.profile"; //$NON-NLS-1$
 	private static final String PROFILE_BUILDIN_DISPLAY_SUFFIX = NewWizardMessages.builtIn;
@@ -175,7 +174,7 @@ public class ProfileManager extends Observable{
 	}
 	
 	private static IPath getBuildInPreferenceProfilePath(){
-		Bundle eglResourcesBundle = Platform.getBundle(PLUGIN_ID_IDE_UI);
+		Bundle eglResourcesBundle = Platform.getBundle(EDTUIPlugin.PLUGIN_ID);
 		URL url = FileLocator.find(eglResourcesBundle, new Path(PROFILE_BUILDIN_PATH), null);
 		try {
 			url = FileLocator.resolve(url);

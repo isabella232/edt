@@ -17,16 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FunctionContainerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LocalVariableBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
@@ -37,15 +29,28 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.Statement;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
+import org.eclipse.edt.mof.egl.ConstantField;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.ProgramParameter;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.jdt.internal.compiler.lookup.LocalVariableBinding;
+import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
@@ -63,11 +68,11 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 	public static int ALL_RECORDS =  ENTITY_RECORD | EXCEPTION;
 	
 	private static interface IDataBindingFilter {
-		boolean dataBindingPasses(IDataBinding dataBinding);
+		boolean dataBindingPasses(Member member);
 	}
 	
 	private static class DefaultDataBindingFilter implements IDataBindingFilter {
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
+		public boolean dataBindingPasses(Member member) {
 			return true;
 		}
 	}
@@ -81,23 +86,17 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			this.allowArray = allowArray;
 		}
 		
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
+		public boolean dataBindingPasses(Member member) {
+			Type type = member.getType();			
+			if(type != null) {
 				if(allowArray) {
-					type = type.getBaseType();
+					type = BindingUtil.getBaseType(type);
 				}
-				switch(type.getKind()) {
-					case ITypeBinding.FIXED_RECORD_BINDING:
-					case ITypeBinding.FLEXIBLE_RECORD_BINDING:	
-					case ITypeBinding.EXTERNALTYPE_BINDING:
-					case ITypeBinding.HANDLER_BINDING:
-						if((ENTITY_RECORD & recordTypes) == ENTITY_RECORD) {
-							if(type.getAnnotation(EGLPERSISTENCE, IEGLConstants.SUBTYPE_ENTITY) != null) {
-								return true;
-							}
-						}
-						break;
+				
+				if((ENTITY_RECORD & recordTypes) == ENTITY_RECORD) {
+					if (type.getAnnotation("eglx.persistence.Entity") != null) {
+						return true;
+					}
 				}
 			}			
 			return false;
@@ -111,37 +110,28 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			this.dataItemType = dataItemType;
 		}
 		
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
-				type = type.getBaseType();
-				if(ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getKind()) {
-					PrimitiveTypeBinding primType = (PrimitiveTypeBinding) type;
-					Primitive prim = primType.getPrimitive();
+		public boolean dataBindingPasses(Member member) {
+			Type type = member.getType();			
+			if(type != null) {
+				type = BindingUtil.getBaseType(type);
+				
+				if(TypeUtils.isPrimitive(type)) {
 					
 					switch(dataItemType) {
 						case ALL_DATAITEMS:
 							return true;
 							
 						case STRING_DATAITEMS:
-							return Primitive.isStringType(prim);
+							return TypeUtils.isTextType(type);
 							
 						case NUMERIC_DATAITEM:
-							return Primitive.isNumericType(prim);
+							return TypeUtils.isNumericType(type);
 							
 						case NUMERIC_STRING_DATAITEMS:
-							return Primitive.isNumericType(prim) || Primitive.isStringType(prim);
+							return TypeUtils.isNumericType(type) || TypeUtils.isTextType(type);
 							
 						case INTEGER_DATAITEM:
-							if (Primitive.isIntegerType(prim))
-								return true;
-							if (primType.getDecimals() == 0)
-								if (prim == Primitive.NUM
-									|| prim == Primitive.BIN
-									|| prim == Primitive.DECIMAL
-									|| prim == Primitive.NUMC
-									|| prim == Primitive.PACF)
-										return true;
+							return TypeUtils.isNumericTypeWithNoDecimals(type);
 					}
 				}
 			}
@@ -154,11 +144,11 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		public ServiceTypeDataBindingFilter() {
 		}
 		
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
-				type = type.getBaseType();
-				if(ITypeBinding.SERVICE_BINDING == type.getKind() || ITypeBinding.INTERFACE_BINDING == type.getKind())
+		public boolean dataBindingPasses(Member member) {
+			Type type = member.getType();			
+			if(type != null) {
+				type = BindingUtil.getBaseType(type);
+				if(type instanceof org.eclipse.edt.mof.egl.Service || type instanceof Interface)
 					return true;
 			}
 			return false;
@@ -170,22 +160,22 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		public DataSourceTypeDataBindingFilter(){
 		}
 		
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if (type != null && IBinding.NOT_FOUND_BINDING != type) {
-				type = type.getBaseType();
+		public boolean dataBindingPasses(Member member) {
+			return typePasses(member.getType());
+		}
+		
+		private boolean typePasses(Type type) {
+			if (type != null) {
+				type = BindingUtil.getBaseType(type);
 
 				if (isDataSourceType(type)) {
 					return true;
 				}
 
-				if (ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
-					List extendType = ((ExternalTypeBinding) (type))
-							.getExtendedTypes();
-					for (Iterator iterator = extendType.iterator(); iterator
-							.hasNext();) {
-						ITypeBinding aType = (ITypeBinding) iterator.next();
-						if (isDataSourceType(aType)) {
+				if (type instanceof ExternalType) {
+					List<StructPart> extendTypes = ((ExternalType)type).getSuperTypes();
+					for (StructPart extendType : extendTypes) {
+						if (typePasses(extendType)) {
 							return true;
 						}
 					}
@@ -197,14 +187,15 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		
 	}
 	
-	private static boolean isDataSourceType(ITypeBinding type){
-		if (type.getName().equalsIgnoreCase(
+	private static boolean isDataSourceType(Type type){
+		String name = getTypeString(type);
+		if (name.equalsIgnoreCase(
 				IEGLConstants.MIXED_DATASOURCE_STRING)
-				|| type.getName().equalsIgnoreCase(
+				|| name.equalsIgnoreCase(
 						IEGLConstants.MIXED_SQLDATASOURCE_STRING)
-				|| type.getName().equalsIgnoreCase(
+				|| name.equalsIgnoreCase(
 						IEGLConstants.MIXED_SQLRESULTSET_STRING)
-				|| type.getName().equalsIgnoreCase(
+				|| name.equalsIgnoreCase(
 						IEGLConstants.MIXED_SCROLLABLEDATASOURCE_STRING)) {
 			return true;
 		}
@@ -216,10 +207,10 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		public SQLStatementTypeDataBindingFilter(){
 		}
 		
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if (type != null && IBinding.NOT_FOUND_BINDING != type) {
-				type = type.getBaseType();
+		public boolean dataBindingPasses(Member member) {
+			Type type = member.getType();			
+			if (type != null) {
+				type = BindingUtil.getBaseType(type);
 				if (isSqlStatement(type)) {
 					return true;
 				}
@@ -230,8 +221,8 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		
 	}
 	
-	private static boolean isSqlStatement(ITypeBinding type) {
-		if (type.getName().equalsIgnoreCase(
+	private static boolean isSqlStatement(Type type) {
+		if (getTypeString(type).equalsIgnoreCase(
 				IEGLConstants.MIXED_SQLSTATEMENT_STRING)) {
 			return true;
 		}
@@ -244,10 +235,10 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		public SQLStringTypeDataBindingFilter(){
 		}
 		
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if (type != null && IBinding.NOT_FOUND_BINDING != type) {
-				type = type.getBaseType();
+		public boolean dataBindingPasses(Member member) {
+			Type type = member.getType();			
+			if (type != null) {
+				type = BindingUtil.getBaseType(type);
 				if (isSqlString(type)) {
 					return true;
 				}
@@ -258,13 +249,8 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		
 	}
 	
-	private static boolean isSqlString(ITypeBinding type) {
-		if (type.getName().equalsIgnoreCase(
-				IEGLConstants.KEYWORD_STRING)) {
-			return true;
-		}
-
-		return false;
+	private static boolean isSqlString(Type type) {
+		return TypeUtils.Type_STRING.equals(type.getClassifier());
 	}
 	
 	private static class SQLActionTargetsExternalTypeDataBindingFilter implements IDataBindingFilter{
@@ -273,11 +259,11 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		}
 		
 		@Override
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
-				type = type.getBaseType();
-				if (type.getKind() == ITypeBinding.EXTERNALTYPE_BINDING
+		public boolean dataBindingPasses(Member member) {
+			Type type = member.getType();			
+			if(type != null) {
+				type = BindingUtil.getBaseType(type);
+				if (type instanceof ExternalType
 						&& !isDataSourceType(type) && !isSqlStatement(type)) {
 					return true;
 				}
@@ -293,11 +279,11 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		}
 		
 		@Override
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
-				type = type.getBaseType();
-				if(ITypeBinding.HANDLER_BINDING == type.getKind())
+		public boolean dataBindingPasses(Member member) {
+			Type type = member.getType();			
+			if(type != null) {
+				type = BindingUtil.getBaseType(type);
+				if(type instanceof org.eclipse.edt.mof.egl.Handler)
 					return true;
 			}
 			
@@ -312,12 +298,11 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		}
 		
 		@Override
-		public boolean dataBindingPasses(IDataBinding dataBinding) {
-			ITypeBinding type = dataBinding.getType();			
-			if(type != null && IBinding.NOT_FOUND_BINDING != type) {
-				type = type.getBaseType();
-				if (type.getKind() == ITypeBinding.FIXED_RECORD_BINDING
-						|| type.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
+		public boolean dataBindingPasses(Member member) {
+			Type type = member.getType();			
+			if(type != null) {
+				type = BindingUtil.getBaseType(type);
+				if (type instanceof Record){
 					return true;
 				}
 			}
@@ -338,16 +323,6 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			if(boundNode instanceof NestedFunction) {
 				functionPart = boundNode;
 				functionContainerPart = boundNode.getParent();
-			}
-			else if(boundNode instanceof TopLevelFunction) {
-				functionPart = boundNode;
-				for(Iterator iter = ((File) boundNode.getParent()).getParts().iterator(); iter.hasNext();) {
-					Node next = (Node) iter.next();
-					if(next instanceof Program || next instanceof Library || next instanceof Service || next instanceof Handler) {
-						functionContainerPart = next;
-						break;
-					}
-				}
 			}
 			else if(boundNode instanceof Part) {
 				functionContainerPart = boundNode;
@@ -539,16 +514,14 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 	private List getParameterProposals(IDataBindingFilter dataBindingFilter, boolean quoted) {
 		List proposals = new ArrayList();
 		if (functionPart != null) {
-			IFunctionBinding fBinding = functionPart instanceof TopLevelFunction ?
-				(IFunctionBinding) ((TopLevelFunction) functionPart).getName().resolveBinding() :
-				(IFunctionBinding) ((IDataBinding) ((NestedFunction) functionPart).getName().resolveBinding()).getType();
-					
-			for(Iterator iter = fBinding.getParameters().iterator(); iter.hasNext();) {
-				IDataBinding dBinding = (IDataBinding) iter.next();
-				if (dBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
-					if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {
-						String proposalString = getProposalString(dBinding.getCaseSensitiveName());
-						proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, true));					
+			
+			FunctionMember function = (FunctionMember)((NestedFunction)functionPart).getName().resolveMember();
+
+			for(FunctionParameter parm : function.getParameters()) {
+				if (parm.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+					if(dataBindingFilter.dataBindingPasses(parm) && precondition(parm)) {
+						String proposalString = getProposalString(parm.getCaseSensitiveName());
+						proposals.add(createDeclarationProposal(parm, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, true));					
 					}
 				}
 			}
@@ -594,17 +567,14 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 	private List getContainerVariableProposals(IDataBindingFilter dataBindingFilter, boolean includeConstants, boolean quoted) {
 		List proposals = new ArrayList();
 		if (functionContainerPart != null) {
-			IBinding binding = ((Part) functionContainerPart).getName().resolveBinding();
-			if(binding instanceof FunctionContainerBinding) {
-				FunctionContainerBinding pBinding = (FunctionContainerBinding) binding;
-				for(Iterator iter = pBinding.getDeclaredData(true).iterator(); iter.hasNext();) {
-					IDataBinding dBinding = (IDataBinding) iter.next();
-					if (dBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
-						if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {
-							if(includeConstants || IDataBinding.CLASS_FIELD_BINDING != dBinding.getKind() || !((ClassFieldBinding) dBinding).isConstant()) {
-								String proposalString = getProposalString(dBinding.getCaseSensitiveName());
-								proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, false));
-							}
+			org.eclipse.edt.mof.egl.Part part = (org.eclipse.edt.mof.egl.Part)((Part) functionContainerPart).getName().resolveType();
+			List<Field> fields = BindingUtil.getAllFields(part);
+			for (Field field : fields) {
+				if (field.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+					if(dataBindingFilter.dataBindingPasses(field) && precondition(field)) {
+						if(includeConstants || !(field instanceof ConstantField)) {
+							String proposalString = getProposalString(field.getCaseSensitiveName());
+							proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, false));
 						}
 					}
 				}
@@ -636,20 +606,18 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			final Stack blocks = new Stack();	//elements are List objects, representing lists of variables			
 			blocks.push(new ArrayList());			
 			
-			List statements = functionPart instanceof TopLevelFunction ?
-				((TopLevelFunction) functionPart).getStmts() :
-				((NestedFunction) functionPart).getStmts();
+			List statements = ((NestedFunction) functionPart).getStmts();
 				
 			addDeclarations(statements, blocks);
 			
 			for(Iterator iter = blocks.iterator(); iter.hasNext();) {
 				for(Iterator iter2 = ((List) iter.next()).iterator(); iter2.hasNext();) {
-					IDataBinding dBinding = (IDataBinding) iter2.next();
-					if (dBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
-						if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {
-							if(includeConstants || IDataBinding.LOCAL_VARIABLE_BINDING != dBinding.getKind() || !((LocalVariableBinding) dBinding).isConstant()) {
-								String proposalString = getProposalString(dBinding.getCaseSensitiveName());
-								proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, true));
+					Field field = (Field) iter2.next();
+					if (field.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+						if(dataBindingFilter.dataBindingPasses(field) && precondition(field)) {
+							if(includeConstants || !(field instanceof ConstantField)) {
+								String proposalString = getProposalString(field.getCaseSensitiveName());
+								proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, true));
 							}
 						}
 					}
@@ -675,11 +643,11 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		if (onExceptionBlock != null) {
 			Name exceptionName = onExceptionBlock.getExceptionName();
 			if (exceptionName != null && exceptionName.getCanonicalName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
-				IDataBinding dBinding = exceptionName.resolveDataBinding();
-				if (dBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
-					if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {
-						String proposalString = getProposalString(dBinding.getCaseSensitiveName());
-						proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, false, true));
+				Field field = (Field)exceptionName.resolveMember();
+				if (field.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+					if(dataBindingFilter.dataBindingPasses(field) && precondition(field)) {
+						String proposalString = getProposalString(field.getCaseSensitiveName());
+						proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, false, true));
 					}
 				}
 			}
@@ -720,9 +688,9 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 						nextStmt.accept(new DefaultASTVisitor() {
 							public boolean visit(org.eclipse.edt.compiler.core.ast.ForStatement forStatement) {
 								if(forStatement.hasVariableDeclaration()) {
-									IBinding binding = forStatement.getVariableDeclarationName().resolveBinding();
-									if(binding != null && IBinding.NOT_FOUND_BINDING != binding && binding.isDataBinding()) {
-										((List) blocks.peek()).add(binding);
+									Field field = (Field)forStatement.getVariableDeclarationName().resolveMember();
+									if(field != null) {
+										((List) blocks.peek()).add(field);
 									}
 								}
 								return false;
@@ -740,9 +708,9 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 					nextStmt.accept(new DefaultASTVisitor() {
 						public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
 							for(Iterator iter = functionDataDeclaration.getNames().iterator(); iter.hasNext();) {
-								IBinding binding = ((Name) iter.next()).resolveBinding();
-								if(binding != null && IBinding.NOT_FOUND_BINDING != binding && binding.isDataBinding()) {
-									((List) blocks.peek()).add(binding);
+								Field field = (Field)((Name) iter.next()).resolveMember();
+								if(field != null) {
+									((List) blocks.peek()).add(field);
 								}
 							}
 							return false;
@@ -765,68 +733,59 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 	 * @param variable
 	 * @param containerPart
 	 */
-	private String getAdditionalInfo1(IDataBinding variable) {
-		if (variable.getType() != null) {
-			String type = getTypeText(variable);
-			switch(variable.getKind()) {
-				case IDataBinding.SERVICE_REFERENCE_BINDING:
-					return MessageFormat.format(UINlsStrings.CAProposal_ServiceReferenceDeclarationIn, new String[] {type, variable.getDeclaringPart().getCaseSensitiveName()});
-				case IDataBinding.PROGRAM_PARAMETER_BINDING:
-					return MessageFormat.format(UINlsStrings.CAProposal_ParameterDeclarationIn, new String[] {type, variable.getDeclaringPart().getCaseSensitiveName()});
-				case IDataBinding.FUNCTION_PARAMETER_BINDING:
-					return MessageFormat.format(UINlsStrings.CAProposal_ParameterDeclaration, new String[] {type});
-				case IDataBinding.LOCAL_VARIABLE_BINDING:
-					if (((VariableBinding) variable).isConstant())
-						return MessageFormat.format(UINlsStrings.CAProposal_ConstantDeclaration, new String[] {type});
-					else
-						return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclaration, new String[] {type});
-				case IDataBinding.CLASS_FIELD_BINDING:
-					if (((VariableBinding) variable).isConstant())
-						return MessageFormat.format(UINlsStrings.CAProposal_ConstantDeclarationIn, new String[] {type, variable.getDeclaringPart().getCaseSensitiveName()});
-					else
-						return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclarationIn, new String[] {type, variable.getDeclaringPart().getCaseSensitiveName()});
-				default :
-					if (functionContainerPart == null)
-						return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclaration, new String[] {type});
-					else
-						return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclarationIn, new String[] {type, variable.getDeclaringPart().getCaseSensitiveName()});
+	private String getAdditionalInfo1(Member field) {
+		if (field.getType() != null) {
+			String type = getTypeString(field.getType());
+			
+			if (field instanceof ProgramParameter) {
+				return MessageFormat.format(UINlsStrings.CAProposal_ParameterDeclarationIn, new String[] {type, getNameFromElement(field.getContainer())});
+			}
+			
+			if (field instanceof FunctionParameter) {
+				return MessageFormat.format(UINlsStrings.CAProposal_ParameterDeclaration, new String[] {type});
+			}
+			
+			if (field.getContainer() instanceof FunctionMember) {
+				if (field instanceof ConstantField) {
+					return MessageFormat.format(UINlsStrings.CAProposal_ConstantDeclaration, new String[] {type});
+				}
+				else {
+					return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclaration, new String[] {type});
+				}
+				
+			}
+			
+			if (field instanceof ConstantField) {
+				return MessageFormat.format(UINlsStrings.CAProposal_ConstantDeclarationIn, new String[] {type, getNameFromElement(field.getContainer())});
+			}
+			else {
+				return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclarationIn, new String[] {type, getNameFromElement(field.getContainer())});
 			}
 		}
 		else {
 			if (functionContainerPart == null)
 				return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclaration, new String[] {""}); //$NON-NLS-1$
 			else
-				return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclarationIn, new String[] {"", variable.getDeclaringPart().getCaseSensitiveName()}); //$NON-NLS-1$
+				return MessageFormat.format(UINlsStrings.CAProposal_VariableDeclarationIn, new String[] {"", getNameFromElement(field.getContainer())}); //$NON-NLS-1$
 		}
-	}
-
-	/**
-	 * @param variable
-	 * @return
-	 */
-	private String getTypeText(IDataBinding variable) {
-		if (variable.getType() != null) {
-			return variable.getType().getCaseSensitiveName();
-		}
-		return ""; //$NON-NLS-1$
 	}
 
 	/**
 	 * create the proposal
 	 */
-	private EGLCompletionProposal createDeclarationProposal(IDataBinding variable, String proposalString, int relevance, boolean quoted, boolean isLocalVariable) {
+	private EGLCompletionProposal createDeclarationProposal(Member field, String proposalString, int relevance, boolean quoted, boolean isLocalVariable) {
 		if (quoted)
 			proposalString = "\"" + proposalString + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 	
-		String imgStr = isPrivateField(variable) ? imgStr = PluginImages.IMG_OBJS_ENV_VAR_PRIVATE : PluginImages.IMG_OBJS_ENV_VAR;
+		String imgStr = isPrivateMember(field) ? imgStr = PluginImages.IMG_OBJS_ENV_VAR_PRIVATE : PluginImages.IMG_OBJS_ENV_VAR;
 		if(isLocalVariable){
 			imgStr = PluginImages.IMG_OBJS_ENV_LOCAL_VAR;
 		}
-		String displayStr = isLocalVariable ? variable.getCaseSensitiveName() + " : " + getTypeText(variable) : variable.getCaseSensitiveName() + " : " + getTypeText(variable) + " - " + variable.getDeclaringPart().getCaseSensitiveName();
+		String displayStr = isLocalVariable ? field.getCaseSensitiveName() + " : " + getTypeString(field.getType()) : field.getCaseSensitiveName() + " : " + getTypeString(field.getType()) + " - " + getNameFromElement(field.getContainer());
 		return new EGLCompletionProposal(viewer,
 			displayStr,
 			proposalString,
-			getAdditionalInfo1(variable),
+			getAdditionalInfo1(field),
 			getDocumentOffset() - getPrefix().length(),
 			getPrefix().length(),
 			proposalString.length(),
@@ -839,7 +798,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 	 * 
 	 * This allows subclases to restrict the proposals
 	 */
-	protected boolean precondition(IDataBinding dBinding) {
+	protected boolean precondition(Member member) {
 		return true;
 	}
 

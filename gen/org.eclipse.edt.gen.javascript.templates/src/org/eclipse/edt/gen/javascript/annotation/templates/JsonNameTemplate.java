@@ -29,7 +29,7 @@ public class JsonNameTemplate extends JavaScriptTemplate {
 			out.print(quoted((String)annot.getValue()));
 		}
 		else{
-			out.print(quoted(field.getId()));
+			out.print(quoted(field.getCaseSensitiveName()));
 		}
 	}
 

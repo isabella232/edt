@@ -1,0 +1,74 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		intVar int;
+		thing any;
+		
+		//Assignment statement
+		intVar = thing;			//0
+		intVar = thing as int;	//0
+		
+		//Set values expression on declaration		
+		rec rec {intItem = thing};		//0
+		
+		//Set values statement
+		rec {intItem = thing};			//0
+		rec {intItem = thing as int};	//0
+		
+		//Simple move statement
+		move thing to intVar;			//0
+		move thing as int to intVar;	//0
+		
+		//Argument to in or out parameter
+		func1(thing);			//0
+		func1(thing as int);	//0
+		func2(thing);			//0
+		func2(thing as int);	//0
+
+		//Argument to inout parameter
+		func3(thing);			//0
+		func3(thing as int);	//0
+		func4(thing);			//0
+		func4(thing as char(4));//0
+		
+		//Not valid		
+		intVar = thing + intVar;	//1
+		intVar = intVar + thing;	//1		
+		if(intVar < thing)			//1
+		end		
+		if(intVar >= thing)			//1
+		end
+	end
+	
+	function func1(p1 int in)
+	end
+	
+	function func2(p1 int out)
+	end
+	
+	function func3(p1 int inout)
+	end
+	
+	function func4(p1 char)
+	end
+end
+
+Record rec {
+	//Set values assignment
+	intItem = anyItem				//0
+}
+	//Initializer in flexible record
+	intItem int = anyItem;			//0
+	anyItem any;
+end

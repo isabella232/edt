@@ -1,0 +1,80 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Form valid1 type textForm { 
+	msgField = myField,         // 0
+	helpform = "dave",            // 0
+	position = [10,20],         // 0
+	screenSizes = [[10,20]],      // 0
+	formSize = [1,1],         // 0
+	validationBypassKeys = [pf1], // 0
+	alias = "dave",             // 0
+	helpKey = pf1               // 0
+} myField int; end
+
+Form valid2 type textForm { 
+	screenSizes = [[10,20],[30,40]],  // 0
+	validationBypassKeys = [pf1,pf2]  // 0
+} end
+
+Form invalid1 type textForm { 
+	msgField = 5,                // 1
+	helpform = [5],                // 1
+	position = 5,                // 1
+	screenSizes = 5,             // 1
+	formSize = 5,                // 1
+	validationBypassKeys = pf70, // 1
+	alias = ["dave"],            // 1
+	helpKey = pf70               // 1
+} end
+
+Form invalid2 type textForm {
+	position = "a",           // 1
+	screenSizes = "a",        // 1
+	formSize = "a",           // 1
+	validationBypassKeys = 3, // 1
+	helpKey = 3               // 1
+} end
+
+Form invalid3 type textForm { 
+	msgField = [dave],          // 1
+	helpform = [dave],          // 1
+	position = a,               // 1
+	screenSizes = a,            // 1
+	formSize = a,               // 1
+	validationBypassKeys = "a", // 1
+	helpKey = "a"               // 1
+} end
+
+Form invalid4 type textForm { 
+	position = [[10,20]],     // 1
+	screenSizes = [-1,-2],    // 1
+	formSize = [[10,20]],     // 1
+	validationBypassKeys = a, // 1
+	helpKey = a               // 1
+} end
+
+Form invalid5 type textForm { 
+	screenSizes = ["a","b"],        // 1
+	formSize = [-1,-2],             // 1
+	validationBypassKeys = [[pf1]], // 1
+	helpKey = [pf1]                 // 1
+} end
+
+Form invalid6 type textForm { 
+	screenSizes = [10],   // 1
+	formSize = ["a","b"]  // 1
+} end
+
+Form invalid7 type textForm { 
+	formSize = [10]  // 1
+} end
+

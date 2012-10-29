@@ -20,6 +20,7 @@ public class EGL2IRArgumentProcessor extends EGLCArgumentProcessor {
 	public class EGL2IRArguments extends EGLCArgumentProcessor.EGLCArguments {
 		File systemRoot = null;
 		public boolean xmlOut = false;
+		String[] extensions;
 		
 		public File getSystemRoot() {
 			return systemRoot;
@@ -34,10 +35,17 @@ public class EGL2IRArgumentProcessor extends EGLCArgumentProcessor {
 		public void setXMLOut(boolean value) {
 			xmlOut = value;
 		}
+		public void setExtensions(String extensions) {
+			this.extensions = extensions.split(",");
+		}
+		public String[] getExtensions() {
+			return extensions;
+		}
 	}
 	
     private static final String SYSTEMROOT = "-systemRoot";
     private static final String XML_OUT = "-xmlOut";
+    private static final String EXTENSIONS = "-extensions";
 
     public EGL2IRArguments createDefaultArguments(){
     	return new EGL2IRArguments();
@@ -67,7 +75,7 @@ public class EGL2IRArgumentProcessor extends EGLCArgumentProcessor {
 	}
      
      private void processError() {
-         System.out.println("Usage: eglc -isVAGCompatible -systemRoot <path> -eglPath <path> -clean -irDestination <path> -xmlOut <partFiles>");
+         System.out.println("Usage: eglc -systemRoot <path> -eglPath <path> -clean -irDestination <path> -xmlOut <partFiles> -extensions <comma-delimited-extensions>");
      }
 
    public int processArgument(EGL2IRArguments arguments,String[] args,int index){
@@ -82,6 +90,11 @@ public class EGL2IRArgumentProcessor extends EGLCArgumentProcessor {
 	            arguments.setXMLOut(true);
 	            newindex += 1;
 	            return newindex;
+	        }
+	        if(args[newindex].equalsIgnoreCase(EXTENSIONS)){
+	        	arguments.setExtensions(args[newindex + 1]);
+	        	newindex += 2;
+	        	return newindex;
 	        }
 
 	    }

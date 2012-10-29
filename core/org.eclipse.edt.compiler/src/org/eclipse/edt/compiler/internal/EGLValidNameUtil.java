@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal;
 
-import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 
 
@@ -34,7 +34,8 @@ public class EGLValidNameUtil
 	    {
 	        return "_" + eglName;
 	    }
-	    else if (!EGLNameValidator.mildValidateCharacters(eglName, DefaultCompilerOptions.getInstance()))
+	    else if (!EGLNameValidator.mildValidateCharacters(eglName, new ICompilerOptions() {
+	    }))
 	    {
 	        return fixName(eglName);
 	    }

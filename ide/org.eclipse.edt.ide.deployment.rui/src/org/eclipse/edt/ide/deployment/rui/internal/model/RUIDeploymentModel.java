@@ -30,6 +30,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.ICompiler;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
@@ -48,6 +50,7 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageDeclaration;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
 import org.eclipse.edt.ide.deployment.core.model.RUIApplication;
 import org.eclipse.edt.ide.deployment.core.model.RUIHandler;
@@ -65,8 +68,9 @@ import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.javart.resources.egldd.Parameter;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  *
@@ -539,13 +543,13 @@ public class RUIDeploymentModel {
 			
 			IEGLElement element = EGLCore.create(file);
 			if (element instanceof IEGLFile) {
-				String[] pkg;
+				String pkg;
 				IPackageDeclaration[] pkgs = ((IEGLFile)element).getPackageDeclarations();
 				if (pkgs.length > 0) {
-					pkg = pkgs[0].getElementName().split("\\.");;
+					pkg = pkgs[0].getElementName();
 				}
 				else {
-					pkg = new String[0];
+					pkg = "";
 				}
 				
 				String name = ((IEGLFile)element).getElementName();
@@ -554,7 +558,7 @@ public class RUIDeploymentModel {
 					name = name.substring(0, lastDot);
 				}
 				
-				Part part = environment.findPart(InternUtil.intern(pkg), InternUtil.intern(name));
+				Part part = environment.findPart(NameUtile.getAsName(pkg), NameUtile.getAsName(name));
 				if (part != null) {
 					findPropertiesFiles(part, propFiles);
 				}
@@ -632,7 +636,7 @@ public class RUIDeploymentModel {
 				DotDeployFile deployFile = getDeployFile(ruiHandler);
 				
 				try{
-					Part part = environment.findPart(InternUtil.intern(DeploymentUtilities.convertPackage(deployFile.getPackageName())), InternUtil.intern(deployFile.getPartName()));
+					Part part = environment.findPart(NameUtile.getAsName(DeploymentUtilities.convertPackage(deployFile.getPackageName())), NameUtile.getAsName(deployFile.getPartName()));
 						
 					if(part != null){
 						ValidatorMessageRequestor messageRequestor = new ValidatorMessageRequestor();
@@ -762,7 +766,18 @@ public class RUIDeploymentModel {
 	
 	protected RUIDependencyList getDependencyList(Part part) {
 		if (dependencyList == null) {
-			dependencyList = new RUIDependencyList(ProjectEnvironmentManager.getInstance().getProjectEnvironment(sourceProject).getSystemEnvironment().getIREnvironment(), part);
+			
+			if (sourceProject != null) {
+				ICompiler compiler = ProjectSettingsUtility.getCompiler(sourceProject);
+				List<ZipFileBindingBuildPathEntry> entries = compiler.getSystemBuildPathEntries();
+				if (!entries.isEmpty()) {
+					IEnvironment env = entries.get(0).getObjectStore().getEnvironment();
+					dependencyList = new RUIDependencyList(env, part);
+				}
+			}
+			if (dependencyList == null) {
+				dependencyList = new RUIDependencyList(new Environment(), part);
+			}
 		}
 		return dependencyList;
 	}

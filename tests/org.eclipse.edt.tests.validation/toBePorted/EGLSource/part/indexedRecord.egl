@@ -1,0 +1,93 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record keyItemIndexedRecordTest1 type indexedRecord
+	{fileName = "bob", 
+	 keyItem=item1} //0 
+	  
+	10 item1 int;
+end
+
+Record keyItemIndexedRecordTest2 type indexedRecord
+	{fileName = "bob", 
+	 keyItem=item2} //1
+	  
+	10 item1 int;
+end
+
+Record keyItemIndexedRecordTest3 type indexedRecord
+	{fileName = "bob", 
+	 keyItem = ["item1"]} //1
+	  
+	10 item1 int;
+end
+
+Record keyItemIndexedRecordTest4 type indexedRecord
+	{fileName = "bob", 
+	 keyItem = "item1"} //1
+	  
+	10 item1 int;
+end
+
+Record lengthItemTestIndexedRecord1 type indexedRecord
+	{fileName = "bob", 
+	 keyItem=item1,
+	 lengthItem = item1 //0
+	 }   
+	 
+	 10 item1 int;
+end
+
+Record lengthItemTestIndexedRecord2 type indexedRecord
+	{fileName = "bob", 
+	 keyItem=item1,
+	 lengthItem = "item2" //1
+	 }   
+	 
+	 10 item1 int;
+end
+
+Record lengthItemTestIndexedRecord3 type indexedRecord
+	{fileName = "bob", 
+	 keyItem=item1,
+	 lengthItem = item2 //0
+	 }   
+	 
+	 10 item1 int;
+end
+
+program lengthItemAddProgramTest type basicProgram
+	var1 lengthItemAddTestIndexedRecord1;
+	var2 lengthItemAddTestIndexedRecord2;	//1 lengthItem - "item2" cannot be resolved
+	
+	function main()
+		
+		add var1; //0
+		add var2; //0
+	end 
+end
+
+Record lengthItemAddTestIndexedRecord1 type indexedRecord
+	{fileName = "bob",
+   	 keyItem=item1, 
+	 lengthItem = item1} //0 
+	  
+	10 item1 int;
+end
+
+Record lengthItemAddTestIndexedRecord2 type indexedRecord
+	{fileName = "bob", 
+	 keyItem=item1,
+	 lengthItem = item2} //0 
+	  
+	10 item1 int;
+end
+

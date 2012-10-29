@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program RATLC01087592 type VGWebTransaction {
+    alias = "P1087592",
+	allowUnqualifiedItemReferences = yes }
+	uir RATLC01087592Uir ;
+	function main()
+		aNum = -999888777666555.44 ;
+		bNum = aNum ;
+		cNum = aNum ;
+		dNum = aNum ;
+		while ( uir.aButton != "quit" ) 
+			if ( aNum is modified )
+				bNum = aNum ;
+				cNum = aNum ;
+				dNum = aNum ;
+			end
+			converse uir ;
+		end
+	end	
+end
+
+Record RATLC01087592Uir type VGUIRecord {
+	title = "RATLC01087592",
+	alias = "R1087592"
+	}
+
+	5 userAction char(60) { 
+		displayName = "User action:  ",
+		uiType = output
+		} = "Enter number in first entry field and and press submit " ;		
+	5 aNum num(18,2) {
+		displayName = "Leading sign",
+		uiType = inputOutput,
+		sign = leading
+		} ;
+	5 bNum num(18,2) {
+		displayName = "numericFormat = \"(&,&&&,&&&,&&&,&&&,&&&.##)\"",
+		uiType = inputOutput,
+		numericFormat = "(&,&&&,&&&,&&&,&&&,&&&.##)"					//1
+		} ;
+	5 cNum num(16) {
+		displayName = "numericFormat = \"----------------#<\"",
+		uiType = inputOutput,
+		numericFormat = "----------------#<" 							//1
+		} ;			
+	5 dNum num(18,2) {
+		displayName = "numericFormat = \"+*,***,***,***,***,**&.&&@\"",
+		uiType = inputOutput,
+		numericFormat = "+*,***,***,***,***,**&.&&@"					//1
+		} ;
+	5 aButton char(10) {
+		displayName = "Submit",
+		uiType = submit
+		} = "submit" ;
+end

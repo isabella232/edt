@@ -1,0 +1,430 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG NO_ERROR
+
+Record HEXPGM2WS type basicRecord
+  3 HEXFIELD0 hex(6) ; 
+  3 CHAFIELD1 char(3) ; 
+    4 HEXFIELD1 hex(6) ; 
+  3 CHAFIELD2 char(1) ; 
+    4 HEXFIELD2 hex(2) ; 
+  3 CHAFIELD3 char(1) ; 
+    4 HEXFIELD3 hex(2) ; 
+  3 CHAFIELDA char(8) ; 
+    4 HEXFIELDA hex(16) ; 
+  3 CHAFIELDB char(2) ; 
+    4 HEXFIELDB hex(4) ; 
+  3 CHAFIELDC char(8) ; 
+    4 HEXFIELDC hex(16) ; 
+  3 CHADELIM char(1) ; 
+    4 HEXDELIM hex(2) ; 
+  3 RESULT int ; 
+  3 TINDEX int ; 
+  3 SINDEX int ; 
+  3 TLENGTH int ; 
+  3 SLENGTH int ; 
+end 
+
+
+Program HEXPGM2 type basicProgram
+  {
+  allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no
+  }
+
+  
+  HEXPGM2WS HEXPGM2WS; 
+
+  
+  VAGen_EZESYS char(8);
+  VAGen_EZEREPLY num(1);
+  VAGen_EZE_WAIT_TIME bin(9,2);
+  VAGen_EZE_ITEMLEN int;
+
+  function main()
+    
+    VAGen_EZESYS = VGLib.getVAGSysType();
+    HEXPGM2_MAIN: HEXPGM2_MAIN();
+  end 
+
+Function HEXPGM2_ASSIGN()
+  /* NOTE:  HEX FIELDS INITIALIZE TO 20's (blanks)*/
+
+
+  /* longHex = shortChar*/
+  HEXFIELD1 = "AAAAAA";
+  CHAFIELD2 = "F";
+  move CHAFIELD2 to HEXFIELD1;
+  /* hexfield1 = F00000 (moved the cha became 1 hex digit)*/
+
+  /* longCha = shortHex*/
+  HEXFIELD1 = "AAAAAA";
+  HEXFIELD2 = "BB";
+  move HEXFIELD2 to CHAFIELD1;
+  /* hexfield1 = 424230  (30 is numeric 0)*/
+
+
+  ;
+end 
+
+Function HEXPGM2_CHA()
+  HEXFIELD1 = "AA";
+  /* HEXFIELD1 is now AA0000*/
+
+  strLib.setBlankTerminator(CHAFIELD1);
+  /* HEXFIELD1 is now AA2020*/
+
+  HEXFIELD1 = "AA";
+  HEXFIELD2 = "BB";
+  HEXFIELD3 = "FF";
+  RESULT = vgLib.concatenateWithSeparator(CHAFIELD1, CHAFIELD2, CHAFIELD3);
+  /* RESULT = 0*/
+  /* HEXFIELD1 is now AAFFBB*/
+
+
+  HEXFIELDA = "AA00000000000000";
+  HEXFIELD2 = "BB";
+  HEXFIELD3 = "FF";
+  RESULT = vgLib.concatenateWithSeparator(CHAFIELDA, CHAFIELD2, CHAFIELD3);
+  /* RESULT = 0*/
+  /* HEXFIELD1 is now AAFFBB2020202020*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "3456";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 2; /* starting byte*/
+  TLENGTH = 4; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  RESULT = VGLib.compareBytes(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB, SINDEX, SLENGTH);
+  /* RESULT = -1  (target less than source)*/
+  /* compares '456789AB' to '56202020'(pads with spaces)*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "4567";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 1; /* starting byte*/
+  TLENGTH = 4; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  RESULT = VGLib.compareBytes(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB, SINDEX, SLENGTH);
+  /* RESULT = 1  (target greater than source)*/
+  /* compares '456789AB' to '45672020'(pads with spaces)*/
+
+
+  HEXFIELDA = "012345672020CDEF";
+  HEXFIELDB = "4567";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 1; /* starting byte*/
+  TLENGTH = 4; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  RESULT = VGLib.compareBytes(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB, SINDEX, SLENGTH);
+  /* RESULT = 1  (target longer than source;  predicted 0)*/
+  /* compares '45672020' to '45672020'(pads with spaces)*/
+
+
+  HEXFIELDA = "012345670000CDEF";
+  HEXFIELDB = "4567";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 1; /* starting byte*/
+  TLENGTH = 4; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  RESULT = VGLib.compareBytes(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB, SINDEX, SLENGTH);
+  /* RESULT = 1  (target longer than source;  predicted -1)*/
+  /* compares '45670000' to '45672020'(pads with spaces)*/
+
+
+  HEXFIELD1 = "AA";
+  HEXFIELD2 = "BB";
+  RESULT = VGLib.concatenateBytes(CHAFIELD1, CHAFIELD2);
+  /* RESULT = 0*/
+  /* HEXFIELD1 is now AABB20*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "3456";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 2; /* starting byte*/
+  TLENGTH = 4; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  VGLib.copyBytes(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB, SINDEX, SLENGTH);
+  /* HEXFIELDA is now 012356202020CDEF  (pads source with spaces)*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "3456";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  TLENGTH = 8; /* length in bytes*/
+  RESULT = vgLib.findStr(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB);
+  /* RESULT = -1 (not found)*/
+  /* TINDEX stays set to 3*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "6789";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  TLENGTH = 8; /* length in bytes*/
+  RESULT = vgLib.findStr(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB);
+  /* RESULT = 0 (found)*/
+  /* TINDEX = 4*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "6700";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  TLENGTH = 8; /* length in bytes*/
+  RESULT = vgLib.findStr(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB);
+  /* RESULT = 0 (found -- trailing nulls are ignored)*/
+  /* TINDEX = 4*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "6720";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  TLENGTH = 8; /* length in bytes*/
+  RESULT = vgLib.findStr(CHAFIELDA, TINDEX, TLENGTH, CHAFIELDB);
+  /* RESULT = 0 (found -- trailing blanks are ignored)*/
+  /* TINDEX = 4*/
+
+
+  HEXFIELD1 = "AA2020";
+  strLib.setNullTerminator(CHAFIELD1);
+  /* HEXFIELD1 is now AA0000*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELD2 = "BB";
+  TINDEX = 3;
+  TLENGTH = 4;
+  vgLib.setSubStr(CHAFIELDA, TINDEX, TLENGTH, CHAFIELD2);
+  /* HEXFIELDA is now 0123BBBBBBBBCDEF*/
+
+
+  HEXFIELDA = "0120456700202020";
+  RESULT = strLib.characterLen(CHAFIELDA);
+  /* RESULT = 4*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDC = "0000000000000000";
+  HEXDELIM = "67";
+  SINDEX = 1; /* starting byte*/
+  SLENGTH = 8; /* length in bytes*/
+  RESULT = strLib.getNextToken(CHAFIELDC, CHAFIELDA, SINDEX, SLENGTH, CHADELIM);
+  /* RESULT = 3*/
+  /* SINDEX is now 4        (per book should be 5 - char after token)*/
+  /* SLENGTH is now 5       (per book should be 4)*/
+  /* HEXFIELDC is now 0123452020202020*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDC = "0000000000000000";
+  HEXDELIM = "56";
+  SINDEX = 1; /* starting byte*/
+  SLENGTH = 8; /* length in bytes*/
+  RESULT = strLib.getNextToken(CHAFIELDC, CHAFIELDA, SINDEX, SLENGTH, CHADELIM);
+  /* DELIM not found -- copies source to target*/
+  /* RESULT = 8*/
+  /* SINDEX is now 9 (1 beyond length of source)*/
+  /* SLENGTH is now 0 (no characters remaining)*/
+  /* HEXFIELDC is still 0123456789ABCDEF*/
+
+
+  ;
+end 
+
+Function HEXPGM2_HEX()
+  HEXFIELD1 = "AA";
+  /* HEXFIELD1 is now AA0000*/
+
+  strLib.setBlankTerminator(HEXFIELD1);
+  /* HEXFIELD1 is now AA2020*/
+
+  HEXFIELD1 = "AA";
+  HEXFIELD2 = "BB";
+  HEXFIELD3 = "FF";
+  RESULT = vgLib.concatenateWithSeparator(HEXFIELD1, HEXFIELD2, HEXFIELD3);
+  /* RESULT = 0*/
+  /* HEXFIELD1 is now AAFFBB*/
+
+
+  HEXFIELDA = "AA00000000000000";
+  HEXFIELD2 = "BB";
+  HEXFIELD3 = "FF";
+  RESULT = vgLib.concatenateWithSeparator(HEXFIELDA, HEXFIELD2, HEXFIELD3);
+  /* RESULT = 0*/
+  /* HEXFIELD1 is now AAFFBB2020202020*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "3456";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 2; /* starting byte*/
+  TLENGTH = 4; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  RESULT = VGLib.compareBytes(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB, SINDEX, SLENGTH);
+  /* RESULT = -1  (target less than source)*/
+  /* compares '456789AB' to '56202020'(pads with spaces)*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "4567";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 1; /* starting byte*/
+  TLENGTH = 6; /* length in bytes (total length of string)*/
+  SLENGTH = 1; /* length in bytes*/
+  RESULT = VGLib.compareBytes(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB, SINDEX, SLENGTH);
+  /* RESULT = 1  (target greater than source)*/
+  /* compares '456789AB' to '45672020'(pads with spaces)*/
+
+
+  HEXFIELDA = "012345672020CDEF";
+  HEXFIELDB = "4567";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 1; /* starting byte*/
+  TLENGTH = 6; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  RESULT = VGLib.compareBytes(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB, SINDEX, SLENGTH);
+  /* RESULT = 1  (target longer than source;  predicted 0)*/
+  /* compares '45672020' to '45672020'(pads with spaces)*/
+
+
+  HEXFIELDA = "012345670000CDEF";
+  HEXFIELDB = "4567";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 1; /* starting byte*/
+  TLENGTH = 6; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  RESULT = VGLib.compareBytes(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB, SINDEX, SLENGTH);
+  /* RESULT = 1  (target is longer than source; predicted -1)*/
+  /* compares '45670000' to '45672020'(pads with spaces)*/
+
+
+  HEXFIELD1 = "AA";
+  HEXFIELD2 = "BB";
+  RESULT = VGLib.concatenateBytes(HEXFIELD1, HEXFIELD2);
+  /* RESULT = 0*/
+  /* HEXFIELD1 is now AABB20*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "3456";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  SINDEX = 2; /* starting byte*/
+  TLENGTH = 4; /* length in bytes*/
+  SLENGTH = 1; /* length in bytes*/
+  VGLib.copyBytes(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB, SINDEX, SLENGTH);
+  /* HEXFIELDA is now 012356202020CDEF  (pads source with spaces)*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "3456";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  TLENGTH = 8; /* length in bytes*/
+  RESULT = vgLib.findStr(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB);
+  /* RESULT = -1 (not found)*/
+  /* TINDEX stays set to 3*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "6789";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  TLENGTH = 8; /* length in bytes*/
+  RESULT = vgLib.findStr(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB);
+  /* RESULT = 0 (found)*/
+  /* TINDEX = 4*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "6700";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  TLENGTH = 8; /* length in bytes*/
+  RESULT = vgLib.findStr(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB);
+  /* RESULT = 0 (found -- trailing nulls are ignored)*/
+  /* TINDEX = 4*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDB = "6720";
+  TINDEX = 3; /* starting byte; first byte = 1*/
+  TLENGTH = 8; /* length in bytes*/
+  RESULT = vgLib.findStr(HEXFIELDA, TINDEX, TLENGTH, HEXFIELDB);
+  /* RESULT = 0 (found -- trailing blanks are ignored)*/
+  /* TINDEX = 4*/
+
+
+  HEXFIELD1 = "AA2020";
+  strLib.setNullTerminator(HEXFIELD1);
+  /* HEXFIELD1 is now AA0000*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELD2 = "BB";
+  TINDEX = 3;
+  TLENGTH = 4;
+  vgLib.setSubStr(HEXFIELDA, TINDEX, TLENGTH, HEXFIELD2);
+  /* HEXFIELDA is now 0123BBBBBBBBCDEF*/
+
+
+  HEXFIELDA = "0120456700202020";
+  RESULT = strLib.characterLen(HEXFIELDA);
+  /* RESULT = 4*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDC = "0000000000000000";
+  HEXDELIM = "67";
+  SINDEX = 1; /* starting byte*/
+  SLENGTH = 8; /* length in bytes*/
+  RESULT = strLib.getNextToken(HEXFIELDC, HEXFIELDA, SINDEX, SLENGTH, HEXDELIM);
+  /* RESULT = 3*/
+  /* SINDEX is now 4        (per book should be 5 - char after token)*/
+  /* SLENGTH is now 5       (per book should be 4)*/
+  /* HEXFIELDC is now 0123452020202020*/
+
+
+  HEXFIELDA = "0123456789ABCDEF";
+  HEXFIELDC = "0000000000000000";
+  HEXDELIM = "56";
+  SINDEX = 1; /* starting byte*/
+  SLENGTH = 8; /* length in bytes*/
+  RESULT = strLib.getNextToken(HEXFIELDC, HEXFIELDA, SINDEX, SLENGTH, HEXDELIM);
+  /* DELIM not found -- copies source to target*/
+  /* RESULT = 8*/
+  /* SINDEX is now 9 (1 beyond length of source)*/
+  /* SLENGTH is now 0 (no characters remaining)*/
+  /* HEXFIELDC is now 0123456789ABCDEF*/
+
+
+  ;
+end 
+
+Function HEXPGM2_MAIN()
+  HEXPGM2_ASSIGN();
+  HEXPGM2_HEX();
+  HEXPGM2_CHA();
+
+end 
+
+Function andJustForFun()
+	h hex(4);
+	n num(4);
+
+	StrLib.setBlankTerminator(h);
+	StrLib.setNullTerminator(h);
+	VgLib.concatenateWithSeparator(h, h, h);
+	
+	StrLib.byteLen(h);
+	StrLib.byteLen(n);
+end
+  
+end 

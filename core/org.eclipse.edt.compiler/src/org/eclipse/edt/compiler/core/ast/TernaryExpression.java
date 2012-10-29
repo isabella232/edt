@@ -12,6 +12,7 @@
 package org.eclipse.edt.compiler.core.ast;
 
 
+
 public class TernaryExpression extends Expression {
 	
 	private Expression firstExpr;
@@ -72,7 +73,13 @@ public class TernaryExpression extends Expression {
 		return buf.toString();
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new TernaryExpression(firstExpr, secondExpr, thirdExpr, getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return firstExpr.toString() + " ? " + secondExpr.toString() + " : " + thirdExpr.toString();
 	}
 }

@@ -1,0 +1,56 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program pgm
+	function main()
+	end
+	
+	function calcit
+    (principle decimal(18,2), rate decimal(18,5), term int, ins bin(9,2), taxes num(9,2), mpayment decimal(18,2))
+     
+      result hex(16); 
+      d1 hex(16);
+      t1 hex(16);
+      r1 hex(16);
+      p1 hex(16);
+      hexone hex(16);
+      
+      interim1 hex(16);
+      resulttemp decimal(18,9);
+      decay decimal(18,9);
+      aone decimal(18,9);
+   
+     term = term * -1;
+     term = term * 12;
+     rate = rate / 12;
+     decay = 1 + rate;
+     aone = 1.0;
+
+     MathLib.assign(decay, d1);  
+     MathLib.assign(term, t1); 
+     MathLib.assign(rate, r1);
+     MathLib.assign(aone, hexone);
+     
+      //** The formula is -> Mortgage Payment = principle * ( rate / (1 - (1 + rate) ** -term)); **//
+     interim1 = pow(d1,t1);
+     
+     interim1 = floatingdifference(hexone,interim1);
+     interim1 = floatingquotient(r1,interim1);
+     MathLib.assign(principle, p1);
+     interim1 = floatingproduct(p1,interim1);
+     MathLib.assign(interim1, mpayment);
+        //Account for taxes and insurance
+     mpayment = mpayment + (taxes / 12) + (ins / 12);
+                   
+    end
+end

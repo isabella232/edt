@@ -1,0 +1,55 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+Program MYCALLP type basicProgram 
+  (   MAP1 MAP1 
+    )
+  {  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no  }
+
+  use MAPG;
+
+  function main()
+    TSTBTCH-MAIN: TSTBTCH-MAIN();	//0
+  end 
+end 
+
+Function TSTBTCH-MAIN()
+		 MAP1.DATAITEM_CHAR_MAP = "ABCDEFG";
+		 MAP1.DATAITEM_NUMERIC_MAP = 10.9;
+end
+
+
+FormGroup MAPG
+Form MAP1 type textForm		 
+ { screenSizes = [[24,80]], formSize = [24,80], position = [1,1]}
+
+
+  DATAITEM_CHAR_MAP char(10)  
+  { position = [3,8], fieldLen = 10, cursor = yes, validationOrder = 1, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = no, upperCase = yes, align = left}; 
+  DATAITEM_NUMERIC_MAP num(17,02)  
+  { position = [5,8], fieldLen = 18, validationOrder = 2, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = no, currency = yes, 
+    numericSeparator = yes, zeroFormat = yes, sign = leading, align = right}; 
+
+  * { position = [16,9], fieldLen = 20, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip, 
+      outline = [left,bottom]  };
+  * { position = [18,9], fieldLen = 20, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skip, 
+      outline = [right]  };
+end 
+end 

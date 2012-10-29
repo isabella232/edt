@@ -1,0 +1,61 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program test
+	cf1 number; // Data type number can be used only when defining a function parameter.
+	cf3 number[]; // Data type number can be used only when defining a function parameter.
+	cf5 any; // 0
+	cf6 date; // 0
+	cf7 time; // 0
+	cf10 date[]; // 0
+	cf11 time[]; // 0
+	cf12 timestamp( "mmyyyy" )[]; // 1
+	cf13 interval( "mmyyyy" )[]; // 1
+	cf14 foo; // 1 cannot be resolved
+	cf15 foo[]; // 1 cannot be resolved
+	
+	function main()
+		var1 number; // Data type number can be used only when defining a function parameter.
+		var3 number[]; // Data type number can be used only when defining a function parameter.
+		var5 any; // 0
+		var6 date; // 0
+		var7 time; // 0
+		var10 date[]; // 0
+		var11 time[]; // 0
+		var14 foo; // 1 cannot be resolved
+		var15 foo[]; // 1 cannot be resolved		
+	end
+end
+
+Program testArray
+	cf1 number[]; // Data type number can be used only when defining a function parameter.
+	cf3 number[][]; // Data type number can be used only when defining a function parameter.
+	cf5 any[]; // 0
+	cf6 date[]; // 0
+	cf7 time[]; // 0
+	cf10 date[][]; // 0
+	cf11 time[][]; // 0
+	cf14 foo[]; // 1 cannot be resolved
+	cf15 foo[][]; // 1 cannot be resolved
+	
+	function main()
+		var1 number[]; // Data type number can be used only when defining a function parameter.
+		var3 number[][]; // Data type number can be used only when defining a function parameter.
+		var5 any[]; // 0
+		var6 date[]; // 0
+		var7 time[]; // 0
+		var10 date[][]; // 0
+		var11 time[][]; // 0
+		var14 foo[]; // 1 cannot be resolved
+		var15 foo[][]; // 1 cannot be resolved		
+	end
+end

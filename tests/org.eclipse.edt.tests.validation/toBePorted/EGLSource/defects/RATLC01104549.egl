@@ -1,0 +1,30 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record Point type basicRecord { initialized = yes}
+    x int { initialized = yes};
+    y int { initialized = yes};
+end
+
+Record Polygon type basicRecord { initialized = yes}
+    name string { initialized = yes};
+    vertices Point[];
+end
+
+program testingThisBugProgram type BasicProgram
+	function main()
+	point1 Point;
+	point2 Point;
+	point3 Point;
+		shapelist Polygon[2] { this[1]{ name="odd1", vertices=[ point1, point2, point1]}, this[2]{ name="odd2", vertices=[ point1, point2, point1]} };	//0
+		shapelist { this[1]{ name="odd1", vertices=[ point3, point3, point3]}, this[2]{ name="odd2", vertices=[ point3, point3, point3]} };				//0
+	end
+end

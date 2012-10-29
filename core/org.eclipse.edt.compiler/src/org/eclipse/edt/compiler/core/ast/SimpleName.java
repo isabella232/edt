@@ -14,8 +14,6 @@ package org.eclipse.edt.compiler.core.ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-
 
 /**
  * SimpleName AST node type.
@@ -46,8 +44,8 @@ public class SimpleName extends Name {
 		return new StringBuffer(identifier);
 	}
 
-	public String[] getNameComponents() {
-		return InternUtil.intern(new String[] { identifier });
+	public String getNameComponents() {
+		return getIdentifier();
 	}
 
 	protected List getNameComponentsList() {
@@ -58,10 +56,5 @@ public class SimpleName extends Name {
 	
 	protected Object clone() throws CloneNotSupportedException {
 		return new SimpleName(identifier, getOffset(), getOffset() + getLength());
-	}
-	
-	public void copyBindingsTo(Name anotherName) {
-		anotherName.setBinding(binding);
-		anotherName.setTypeBinding(resolveTypeBinding());
 	}
 }

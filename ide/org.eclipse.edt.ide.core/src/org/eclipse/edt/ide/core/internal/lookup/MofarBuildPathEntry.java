@@ -13,14 +13,14 @@ package org.eclipse.edt.ide.core.internal.lookup;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 
 public class MofarBuildPathEntry extends EglarBuildPathEntry {
 
-	public MofarBuildPathEntry(IEnvironment environment, IPath path, String fileExtension, Mof2Binding converter) {
-		super(environment, path, fileExtension, converter);
+	public MofarBuildPathEntry(IEnvironment environment, IPath path, String fileExtension) {
+		super(environment, path, fileExtension);
 	}
 	
+	@Override
 	protected String convertToStoreKey(String entry) {
 		//entries are in the form: "pkg1/pkg2/partName.mofxml". Need to convert this to:
 		//"pkg1.pkg2.partName"

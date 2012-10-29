@@ -1,0 +1,176 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+Record EducationPSB type PSBRecord
+end
+
+record myrec 
+end
+record myuirec type VGUIRecord
+end
+
+
+form myform type TextForm
+end
+
+program MySource type BasicProgram
+{
+inputuirecord = sss, // 2 inputuirecord cannot be resolved
+inputrecord = uir,// 1 The value for property inputRecord must match a data declaration of a basic record  {3107, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_RECORD}
+inputrecord = rr,// 0 
+inputrecord = a,// 1  The value for property inputRecord must match a data declaration of a basic record  {3107, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_RECORD}
+inputrecord = sss,// 1  The value for property inputRecord must match a data declaration {3108}
+msgTablePrefix = "ss",// 1  The length of the unqualified value ss for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+
+msgTablePrefix = "abc",//0
+msgTablePrefix = "abcd",// 0
+msgTablePrefix = "dddfghff.abcd",// 0
+msgTablePrefix = "jwdjwedjd.ab",// 1  The length of the unqualified value ab for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+@DLI { psb = edpsb}, // 0
+@DLI { psb = rr}, // 1  Invalid name rr. The value of the psb field must be the name of a variable declaration of a PSBRecord  {7850, PSB_PROPERTY_VALUE_NOT_PSB_RECORD}
+@DLI { psb = garbage},// 1 Invalid name garbage. The value of the psb field must be the name of a variable declaration of a PSBRecord  {7850, PSB_PROPERTY_VALUE_NOT_PSB_RECORD}
+inputform = myform // 2 inputform cannot be resolved
+}
+
+a string;
+uir myuirec;
+rr myrec;
+  edpsb EducationPSB; 
+function main ()
+end
+
+end
+
+formgroup myformg
+end
+
+formgroup myformgx 
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+
+program MySource1 type TextUIProgram
+{
+inputuirecord = sss, // 2 inputuirecord cannot be resolved
+inputrecord = uir,// 1 The value for property inputRecord must match a data declaration of a basic record  {3107, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_RECORD}
+inputrecord = rr,// 0 
+inputrecord = a,// 1  The value for property inputRecord must match a data declaration of a basic record  {3107, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_RECORD}
+inputrecord = sss,// 1  The value for property inputRecord must match a data declaration {3108}
+msgTablePrefix = "ss",// 1  The length of the unqualified value ss for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+
+msgTablePrefix = "abc",//0
+msgTablePrefix = "abcd",// 0
+msgTablePrefix = "dddfghff.abcd",// 0
+msgTablePrefix = "jwdjwedjd.ab",// 1  The length of the unqualified value ab for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+@DLI { psb = edpsb}, // 0
+@DLI { psb = rr}, // 1  Invalid name rr. The value of the psb field must be the name of a variable declaration of a PSBRecord  {7850, PSB_PROPERTY_VALUE_NOT_PSB_RECORD}
+@DLI { psb = garbage},// 1 Invalid name garbage. The value of the psb field must be the name of a variable declaration of a PSBRecord  {7850, PSB_PROPERTY_VALUE_NOT_PSB_RECORD}
+inputform = "myform", // 1
+inputform = myform, // 1 The form myform referenced by the inputForm property must be declared within the main FormGroup for the program {3227, PROPERTY_NO_FORMGROUPS_IN_PROGRAM_WITH_INPUTFORM}
+inputform = myrec// 1 The form myrec referenced by the inputForm property must be declared within the main FormGroup for the program
+} 
+uir myuirec;
+a string;
+rr myrec;
+  edpsb EducationPSB; 
+function main ()
+end
+end
+
+program MySource11 type TextUIProgram
+{
+inputform = mytextform // 0
+
+} 
+use myformgx;
+rr myrec;
+  edpsb EducationPSB; 
+function main ()
+end
+end
+
+program MySource111 type TextUIProgram
+{
+inputform = myform // 1  The form myform referenced by the inputForm property must be declared within the main FormGroup for the program
+
+} 
+use myformg;
+rr myrec;
+  edpsb EducationPSB; 
+function main ()
+end
+end
+
+dataitem xxxx int end
+
+program MySource2 type VGWebTransaction
+{
+inputuirecord = x,// 1 The value for property inputUIRecord must match a data declaration of a user interface record   {3106, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_UI_RECORD}
+inputuirecord = uir,// 0  
+inputuirecord = rr,// 1 The value for property inputUIRecord must match a data declaration of a user interface record   {3106, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_UI_RECORD}
+inputuirecord = a,// 1  The value for property inputUIRecord must match a data declaration of a user interface record   {3106, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_UI_RECORD}
+segmented = yes,// 1 segmented cannot be resolved
+inputform = myform,// 2 inputform cannot be resolved
+inputuirecord = sss, // 1 The value for property inputUIRecord must match a data declaration
+inputrecord = uir,// 1 The value for property inputRecord must match a data declaration of a basic record  {3107, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_RECORD}
+inputrecord = rr,// 0 
+inputrecord = a,// 1  The value for property inputRecord must match a data declaration of a basic record  {3107, PROPERTY_MUST_RESOLVE_TO_DATA_DECLARATION_OF_RECORD}
+inputrecord = sss,// 1  The value for property inputRecord must match a data declaration {3108}
+msgTablePrefix = "ss",// 1  The length of the unqualified value ss for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+
+msgTablePrefix = "abc",//0
+msgTablePrefix = "abcd",// 0
+msgTablePrefix = "dddfghff.abcd",// 0
+msgTablePrefix = "jwdjwedjd.ab",// 1  The length of the unqualified value ab for property msgTablePrefix must be between 3 and 4, inclusive {3097}
+@DLI { psb = edpsb}, // 0
+@DLI { psb = rr}, // 1  Invalid name rr. The value of the psb field must be the name of a variable declaration of a PSBRecord  {7850, PSB_PROPERTY_VALUE_NOT_PSB_RECORD}
+@DLI { psb = garbage},// 1 Invalid name garbage. The value of the psb field must be the name of a variable declaration of a PSBRecord  {7850, PSB_PROPERTY_VALUE_NOT_PSB_RECORD}
+inputform = myform //2 inputform cannot be resolved
+} 
+
+x xxxx;
+uir myuirec;
+a string;
+rr myrec;
+  edpsb EducationPSB; 
+function main ()
+end
+end
+
+program MySourceCalled type BasicProgram (i int)
+{
+inputrecord = rr// 1  The property inputRecord is not valid for called programs {3111, PROPERTY_CALLED_PROGRAM_INPUT_RECORD}
+}
+
+rr myrec;
+  edpsb EducationPSB; 
+function main ()
+end
+
+end
+
+
+program MySource1Called type TextUIProgram(i int)
+{
+inputrecord = rr// 1  The property inputRecord is not valid for called programs {3502}
+} 
+
+rr myrec;
+  edpsb EducationPSB; 
+function main ()
+end
+end
+
+

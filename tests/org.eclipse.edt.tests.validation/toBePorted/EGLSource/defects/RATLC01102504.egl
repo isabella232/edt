@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program AAPWRA type basicProgram {allowUnqualifiedItemReferences=yes}
+  APWRW01 APWRW01;
+
+  use AP00TTX; 
+
+  function main()
+      if ("APWAA" in AP00TTX.XTTX$APP)							//0
+        APWRW01.XTTX$TRX = AP00TTX.XTTX$TRX[sysVar.arrayIndex];	//0
+      end
+      APWRW01.XTTX$APP = AP00TTX.XTTX$APP;						//0
+  end
+end 
+
+Record APWRW01 type basicRecord
+  XTTX$TRX char(8);
+  XTTX$APP char(8);
+end
+
+DataTable AP00TTX type basicTable  
+  {shared = yes, resident = no  }
+  3 XTTX$TRX char(3); 
+  3 XTTX$ALL char(12); 
+    4 XTTX$APP char(8); 
+    4 XTTX$AUT char(1); 
+    4 XTTX$KEY char(1); 
+    4 XTTX$LEN num(2); 
+   {contents = [
+    ["A02", "APWSA   JN06"],
+    ["Z03", "APZDA   NC50"]
+  ]}
+end 

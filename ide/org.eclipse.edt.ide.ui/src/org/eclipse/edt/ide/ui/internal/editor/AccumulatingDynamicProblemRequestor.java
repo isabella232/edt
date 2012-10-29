@@ -13,6 +13,7 @@ package org.eclipse.edt.ide.ui.internal.editor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -35,7 +36,8 @@ public class AccumulatingDynamicProblemRequestor extends DefaultProblemRequestor
         return problems;
     }
     
-	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {		
+    @Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {		
  		if (severity == IMarker.SEVERITY_ERROR) {
  			setHasError(true);
  		}
@@ -45,7 +47,7 @@ public class AccumulatingDynamicProblemRequestor extends DefaultProblemRequestor
 		}
  		if (numberProblems < MAX_NUM_PROBLEMS) {
  			numberProblems++;
- 			problems.add(new Problem(startOffset, endOffset, severity, problemKind, inserts));
+ 			problems.add(new Problem(startOffset, endOffset, severity, problemKind, inserts, bundle));
  		}
     }
 	

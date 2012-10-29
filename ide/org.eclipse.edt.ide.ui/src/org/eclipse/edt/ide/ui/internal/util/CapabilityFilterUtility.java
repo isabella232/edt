@@ -16,23 +16,9 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.compiler.internal.EGLPropertyRule;
 
 public class CapabilityFilterUtility {
-	static final String[] EGLCORE = new String[] {"egl", "core"};
-	static final String[] EGLJAVA = new String[] {"egl", "java"};
-	static final String[] EGLUIJASPER = new String[] {"egl", "ui", "jasper"};
-	static final String[] EGLUIJSF = new String[] {"egl", "ui", "jsf"};
-	static final String[] EGLUITEXT = new String[] {"egl", "ui", "text"};
-	static final String[] EGLUICONSOLE = new String[] {"egl", "ui", "console"};
-	static final String[] EGLUIWEBTRANSACTION = new String[] {"egl", "ui", "webTransaction"};
-	static final String[] EGLBIRT = new String[] {"egl", "report", "birt"};
-	static final String[] EGLIOSQL = new String[] {"egl", "io", "sql"};
-	static final String[] EGLIOFILE = new String[] {"egl", "io", "file"};
-	static final String[] EGLIOMQ = new String[] {"egl", "io", "mq"};
-	static final String[] EGLIODLI = new String[] {"egl", "io", "dli"};
-	static final String[] EGLUIRUI = new String[] {"egl", "ui", "rui"};
 	
 	public static interface IPartBindingFilter {
 		boolean partBindingPasses(IPartBinding partBinding);
@@ -43,17 +29,17 @@ public class CapabilityFilterUtility {
 	}
 	
 	public abstract static class PackageNameFilter implements IPartBindingFilter, IPropertyRuleFilter {
-		private String[][] packageNames;
+		private String[] packageNames;
 
-		public PackageNameFilter(String[] packageName) {
-			this(new String[][] {packageName});
+		public PackageNameFilter(String packageName) {
+			this(new String[] {packageName});
 		}
 		
-		public PackageNameFilter(String[][] packageNames) {
+		public PackageNameFilter(String[] packageNames) {
 			this.packageNames = packageNames;
 		}
 		
-		private boolean allowed(String[] packageName) {
+		private boolean allowed(String packageName) {
 			boolean passes = true;
 			for(int i = 0; i < packageNames.length && passes; i++) {
 				if(equals(packageName, packageNames[i])) {
@@ -73,29 +59,20 @@ public class CapabilityFilterUtility {
 
 		protected abstract boolean isAllowed();
 
-		private boolean equals(String[] partPackageName, String[] packageName2) {
-			if(partPackageName == null || partPackageName.length != packageName2.length) {
+		private boolean equals(String partPackageName, String packageName2) {
+			if (partPackageName == packageName2) {
+				return true;
+			}
+
+			if (partPackageName == null || packageName2 == null) {
 				return false;
 			}
-			for(int i = 0; i < partPackageName.length; i++) {
-				if(!partPackageName[i].equalsIgnoreCase(packageName2[i])) {
-					return false;
-				}
-			}
-			return true;
+
+			return partPackageName.equalsIgnoreCase(packageName2);
 		}
 	}
 	
 	private static IPartBindingFilter[] defaultPartBindingFilters = new IPartBindingFilter[] {
-		new PackageNameFilter(new String[][] {EGLJAVA, EGLUIJSF}) { protected boolean isAllowed() { return EGLBasePlugin.isJSF(); } },
-		new PackageNameFilter(EGLIODLI) { protected boolean isAllowed() { return EGLBasePlugin.isDLI(); } },
-		new PackageNameFilter(EGLUICONSOLE) { protected boolean isAllowed() { return EGLBasePlugin.isCUI(); } },
-		new PackageNameFilter(EGLUIJASPER) { protected boolean isAllowed() { return EGLBasePlugin.isReports(); } },
-		new PackageNameFilter(EGLUITEXT) { protected boolean isAllowed() { return EGLBasePlugin.isTUI(); } },
-		new PackageNameFilter(EGLUIWEBTRANSACTION) { protected boolean isAllowed() { return EGLBasePlugin.isVGUI(); } },
-		new PackageNameFilter(EGLBIRT) { protected boolean isAllowed() { return EGLBasePlugin.isBIRT(); } },
-		new PackageNameFilter(EGLIOMQ) { protected boolean isAllowed() { return EGLBasePlugin.isMQ(); } },
-		new PackageNameFilter(EGLUIRUI) { protected boolean isAllowed() { return EGLBasePlugin.isRUI(); } },
 	};
 	
 	public static Collection filterParts(Collection partBindings) {
@@ -121,15 +98,6 @@ public class CapabilityFilterUtility {
 	}
 	
 	private static IPropertyRuleFilter[] defaultPropertyRuleFilters = new IPropertyRuleFilter[] {
-		new PackageNameFilter(new String[][] {EGLJAVA, EGLUIJSF}) { protected boolean isAllowed() { return EGLBasePlugin.isJSF(); } },
-		new PackageNameFilter(EGLIODLI) { protected boolean isAllowed() { return EGLBasePlugin.isDLI(); } },
-		new PackageNameFilter(EGLUICONSOLE) { protected boolean isAllowed() { return EGLBasePlugin.isCUI(); } },
-		new PackageNameFilter(EGLUIJASPER) { protected boolean isAllowed() { return EGLBasePlugin.isReports(); } },
-		new PackageNameFilter(EGLUITEXT) { protected boolean isAllowed() { return EGLBasePlugin.isTUI(); } },
-		new PackageNameFilter(EGLUIWEBTRANSACTION) { protected boolean isAllowed() { return EGLBasePlugin.isVGUI(); } },
-		new PackageNameFilter(EGLBIRT) { protected boolean isAllowed() { return EGLBasePlugin.isBIRT(); } },
-		new PackageNameFilter(EGLIOMQ) { protected boolean isAllowed() { return EGLBasePlugin.isMQ(); } },
-		new PackageNameFilter(EGLUIRUI) { protected boolean isAllowed() { return EGLBasePlugin.isRUI(); } },
 	};
 	
 	public static Collection filterPropertyRules(Collection propertyRules) {

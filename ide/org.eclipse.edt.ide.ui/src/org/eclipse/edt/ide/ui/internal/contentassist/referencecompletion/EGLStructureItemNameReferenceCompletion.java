@@ -42,7 +42,7 @@ public class EGLStructureItemNameReferenceCompletion extends EGLAbstractReferenc
 			documentOffset,
 			prefix,
 			editor).getProposals(
-				IEGLSearchConstants.RECORD | IEGLSearchConstants.ITEM);
+				IEGLSearchConstants.RECORD);
 	}
 
 }

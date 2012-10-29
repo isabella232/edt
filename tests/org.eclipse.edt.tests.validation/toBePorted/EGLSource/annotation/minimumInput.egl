@@ -1,0 +1,58 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//------------------------------------------------
+// DataItem
+//------------------------------------------------
+DataItem DIMinimumInputValidOne int {minimumInput = 0} end //0
+
+DataItem DIMinimumInputValidTwo int {MinimumInput = 1} end //0
+
+DataItem DIMinimumInputValidThree num(4,2) {sign = leading, currency = yes, numericseparator = yes, minimumInput = 8} end //0
+
+DataItem DIMinimumInputInvalidOne int {MinimumInput = -1} end //1
+
+//------------------------------------------------
+// Basic Record
+//------------------------------------------------
+Record BRMinimumInputValid type BasicRecord
+	10 sItem1 char(10) {minimumInput = 0}; //0
+	10 sItem2 char(10) {minimumInput = 1}; //0
+	10 sItem3 BRMinimumInputDataItemOne {minimumInput = 4}; //0
+	10 sItem4 num(4,2) {minimumInput = 5}; //0
+	10 sItem5 num(4) {minimumInput = 5, sign = leading}; //0
+	10 sItem6 num(4) {minimumInput = 5, sign = trailing}; //0
+	10 sItem7 num(4) {minimumInput = 5, currency = yes}; //0
+	10 sItem8 num(4) {minimumInput = 5, numericSeparator = yes}; //0
+	10 sItem9 num(4,2) {sign = leading, currency = yes, numericseparator = yes, minimumInput = 8}; //0
+	10 sItem10 num(4) {currency = yes, numericseparator = yes, minimumInput = 6}; //0
+	10 sItem11 BRMinimumInputDataItemTwo {sign = leading, currency = yes, numericseparator = yes, minimumInput = 8}; //0
+	10 sItem12 BRMinimumInputDataItemThree {minimumInput = 8}; //0
+end
+
+Record BRMinimumInputInvalid type BasicRecord
+	10 sItem1 char(10) {minimumInput = -1}; //1
+	10 sItem2 char(10) {minimumInput = 11}; //1
+	10 sItem3 BRMinimumInputDataItemOne {minimumInput = 5}; //1
+	10 sItem4 num(4,2) {minimumInput = 6}; // 1
+	10 sItem5 num(4) {minimumInput = 5, sign = none}; //1
+	10 sItem6 num(4) {minimumInput = 5, sign = parens}; //1
+	10 sItem7 num(4) {minimumInput = 5, currency = no}; //1
+	10 sItem8 num(4) {minimumInput = 5, numericSeparator = no}; //1	
+	10 sItem9 num(4,2) {sign = leading, currency = yes, numericseparator = yes, minimumInput = 9}; //1
+	10 sItem10 num(4) {currency = yes, numericseparator = yes, minimumInput = 7}; //1
+	10 sItem11 BRMinimumInputDataItemTwo {sign = leading, currency = yes, numericseparator = yes, minimumInput = 9}; //1	
+	10 sItem12 BRMinimumInputDataItemThree {minimumInput = 9}; //1
+end
+
+DataItem BRMinimumInputDataItemOne num(4) end //0
+DataItem BRMinimumInputDataItemTwo num(4,2) end //0
+DataItem BRMinimumInputDataItemThree num(4,2){sign = leading, currency = yes, numericseparator = yes} end //0

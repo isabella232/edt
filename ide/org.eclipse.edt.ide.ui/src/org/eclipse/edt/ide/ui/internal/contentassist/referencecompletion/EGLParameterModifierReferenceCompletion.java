@@ -19,7 +19,6 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLStringListProposalHandler;
@@ -75,17 +74,6 @@ public class EGLParameterModifierReferenceCompletion extends EGLAbstractReferenc
 					return false;
 				}
 			});	
-		}
-		if (!valid[0]) {
-			Node partNode = getPart(viewer, documentOffset);
-			if(partNode != null) {
-				partNode.accept(new DefaultASTVisitor() {
-					public boolean visit(TopLevelFunction function) {
-						valid[0] = true;
-						return false;
-					}
-				});
-			}
 		}
 		return valid[0];
 	}

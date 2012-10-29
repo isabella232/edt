@@ -13,9 +13,9 @@ package eglx.lang;
 
 import egl.lang.reflect.ClassType;
 import egl.lang.reflect.ParameterizableType;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
-import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import egl.lang.reflect.FixedPrecisionType;
 
 /**
  * EDecimal defines the EGL decimal type.
@@ -23,6 +23,11 @@ import org.eclipse.edt.mof.egl.FixedPrecisionType;
 externalType EDecimal extends ENumber type ParameterizableType {
 	parameterizedType = FixedPrecisionType
 }
+	/**
+	 * Constructs a decimal with a default value of 0.
+	 */
+	constructor();
+	
 	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */

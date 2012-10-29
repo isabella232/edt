@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.core.EGLKeywordHandler;
@@ -109,6 +110,7 @@ public class EGLNameValidator {
 	final public static int INTO_CLAUSE_DATAITEM_REFERENCE = 39;
 	final public static int DELEGATE = 40;
 	final public static int INTERNALFIELD = 41;
+	final public static int CLASS = 42;
 	
 	final public static int substring = 0;
 	final public static int subscript = 1;	
@@ -159,6 +161,7 @@ public class EGLNameValidator {
 	final public static int HANDLER_LENGTH = PART_LENGTH;
 	final public static int INTO_CLAUSE_ITEM_LENGTH = PART_LENGTH;
 	final public static int INTERNALFIELD_LENGTH = PART_LENGTH;
+	final public static int CLASS_LENGTH = PART_LENGTH;
 
 	private static Hashtable partNameLengths = new Hashtable();
 
@@ -205,6 +208,7 @@ public class EGLNameValidator {
 		partNameLengths.put(new Integer(HANDLER), new Integer(HANDLER_LENGTH));
 		partNameLengths.put(new Integer(INTO_CLAUSE_DATAITEM_REFERENCE), new Integer(INTO_CLAUSE_ITEM_LENGTH));
 		partNameLengths.put(new Integer(INTERNALFIELD), new Integer(INTERNALFIELD_LENGTH));
+		partNameLengths.put(new Integer(CLASS), new Integer(CLASS_LENGTH));
 	}
 	
 	private static class OffsetProblemRequestor extends DefaultProblemRequestor {
@@ -216,11 +220,12 @@ public class EGLNameValidator {
 			this.problemRequestor = problemRequestor;
 		}
 		
-		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+		@Override
+		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 	 		if (severity == IMarker.SEVERITY_ERROR) {
 	 			setHasError(true);
 	 		}
-			problemRequestor.acceptProblem(startOffset+offset, endOffset+offset, severity, problemKind, inserts);
+			problemRequestor.acceptProblem(startOffset+offset, endOffset+offset, severity, problemKind, inserts, bundle);
 		}
 		public boolean shouldReportProblem(int problemKind) {
 			return problemRequestor.shouldReportProblem(problemKind);
@@ -236,11 +241,12 @@ public class EGLNameValidator {
 			this.problemRequestor = problemRequestor;
 		}
 		
-		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+		@Override
+		public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 	 		if (severity == IMarker.SEVERITY_ERROR) {
 	 			setHasError(true);
 	 		}
-			problemRequestor.acceptProblem(node, problemKind, severity, inserts);
+			problemRequestor.acceptProblem(node, problemKind, severity, inserts, bundle);
 		}
 		
 		public boolean shouldReportProblem(int problemKind) {
@@ -275,7 +281,7 @@ public class EGLNameValidator {
 	 */
 	public static void validate(String input, int nameType, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		String type = null; //hold the String version of the nameType, if needed
-		EGLNameParser nameParser = nameParser = new EGLNameParser(input, true, nameType == RECORD_FILE_NAME, problemRequestor, compilerOptions); // the name parser
+		EGLNameParser nameParser = new EGLNameParser(input, true, nameType == RECORD_FILE_NAME, problemRequestor, compilerOptions); // the name parser
 		
 		// for testing!
 //		nameParser.getNamesAndSubscripts().outputTrees();		
@@ -791,6 +797,7 @@ public class EGLNameValidator {
 			case LIBRARY:
 			case HANDLER:
 			case DELEGATE:
+			case CLASS:
 				//a Part cannot be qualified or subscripted, just a simple name
 				// These have the additional restriction of never allowing a dash
 				// in the name whether VG compatibility is on or not.

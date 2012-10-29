@@ -17,9 +17,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.dli.DLIInfo;
-
-
 /**
  * GetByPositionStatement AST node type.
  * 
@@ -41,13 +38,11 @@ import org.eclipse.edt.compiler.internal.dli.DLIInfo;
  * visit() for the following types:
  *  - ForUpdateClause
  *  - IntoClause 
- *  - UsingPCBClause
- *  - WithInlineDLIClause
  *
  * @author Albert Ho
  * @author David Murray
  */
-public class GetByPositionStatement extends Statement implements IDliIOStatement {
+public class GetByPositionStatement extends Statement {
 	
 	public static abstract class Direction implements Cloneable{
 		
@@ -117,8 +112,6 @@ public class GetByPositionStatement extends Statement implements IDliIOStatement
 		}
 	}
 
-	private DLIInfo dliInfo;
-	
 	/**
  	 * Get by positions statement directions (typesafe enumeration). The other
  	 * directions are ABSOLUTE and RELATIVE. These two are defined in their
@@ -353,10 +346,4 @@ public class GetByPositionStatement extends Statement implements IDliIOStatement
 	protected Object clone() throws CloneNotSupportedException{
 		return new GetByPositionStatement((Direction)direction.clone(), new Boolean(inparent), (GetByPositionSource)getByPositionSource.clone(), cloneList(getByPositionOptions), getOffset(), getOffset() + getLength());
 	}
-    public DLIInfo getDliInfo() {
-        return dliInfo;
-    }
-    public void setDliInfo(DLIInfo dliInfo) {
-        this.dliInfo = dliInfo;
-    }
 }

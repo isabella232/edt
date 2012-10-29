@@ -1,0 +1,45 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		defaultLengthStr String;	//0
+		fourStr String( 4 );		//0
+		eightStr String( 8 );		//0
+		ch char(4);
+		
+		fourStrInOut( fourStr );			//0		
+		fourStrInOut( defaultLengthStr );	//1
+		fourStrInOut( eightStr );			//1
+		fourStrInOut( ch );					//1
+		
+		fourStrIn( fourStr );			//0		
+		fourStrIn( defaultLengthStr );	//0
+		fourStrIn( eightStr );			//0
+		fourStrIn( ch );				//0
+		
+		fourStrOut( fourStr );			//0		
+		fourStrOut( defaultLengthStr );	//0
+		fourStrOut( eightStr );			//0
+		fourStrOut( ch );				//0
+	end
+	
+	function fourStrInOut( p1 String(4) inout )	//0
+	end											//0
+	
+	function fourStrIn( p1 String(4) in )		//0
+	returns( String(8) )						//0
+	end											//0
+	
+	function fourStrOut( p1 String(4) out )		//0
+	end											//0
+end

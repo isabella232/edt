@@ -9,45 +9,35 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-	package org.eclipse.edt.compiler.internal.core.validation.statement;
-	
-	import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+package org.eclipse.edt.compiler.internal.core.validation.statement;
+
+import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.LabelStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.OnEventBlock;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 
 	
-	/**
-	 * @author Craig Duval
-	 */
-	public class LabelStatementValidator extends DefaultASTVisitor {
-		
-		private IProblemRequestor problemRequestor;
-        private ICompilerOptions compilerOptions;
-		
-		public LabelStatementValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-			this.problemRequestor = problemRequestor;
-			this.compilerOptions = compilerOptions;
-		}
-		
-		public boolean visit(final LabelStatement labelStatement) {
-			EGLNameValidator.validate(labelStatement.getLabel(), EGLNameValidator.IDENTIFIER, problemRequestor, labelStatement, compilerOptions);
-			
-			Node parent = labelStatement.getParent();
-			while(parent != null) {
-				if(parent instanceof OnEventBlock) {
-					problemRequestor.acceptProblem(
-						labelStatement,
-						IProblemRequestor.LABEL_DECLARATION_CANT_BE_IN_ONEVENT_BLOCK,
-						new String[] {labelStatement.getLabel()}
-					);
-				}
-				parent = parent.getParent();
-			}
+public class LabelStatementValidator extends DefaultASTVisitor {
 	
-			return false;
-		}
+	private IProblemRequestor problemRequestor;
+    private ICompilerOptions compilerOptions;
+	
+	public LabelStatementValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		this.problemRequestor = problemRequestor;
+		this.compilerOptions = compilerOptions;
 	}
+	
+	@Override
+	public boolean visit(final LabelStatement labelStatement) {
+		EGLNameValidator.validate(labelStatement.getLabel(), EGLNameValidator.IDENTIFIER, problemRequestor, labelStatement, compilerOptions);
+		
+		Node parent = labelStatement.getParent();
+		while(parent != null) {
+			parent = parent.getParent();
+		}
+
+		return false;
+	}
+}

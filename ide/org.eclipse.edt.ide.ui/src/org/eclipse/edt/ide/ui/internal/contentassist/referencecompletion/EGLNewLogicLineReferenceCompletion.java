@@ -22,14 +22,10 @@ import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFormUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchVariableDeclarationProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTableUseStatementProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLNewLogicLineReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -70,22 +66,6 @@ public class EGLNewLogicLineReferenceCompletion extends EGLAbstractReferenceComp
 					boundNode)
 					.getProposals(boundNode));
 			
-			//Get all table use statement proposals
-			proposals.addAll(
-				new EGLTableUseStatementProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals());
-			
-			//Get all forms from formGroup use statement proposals
-			proposals.addAll(
-				new EGLFormUseStatementProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals());
-			
 			//Get user field proposals using library use statements
 			proposals.addAll(
 				new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
@@ -94,27 +74,15 @@ public class EGLNewLogicLineReferenceCompletion extends EGLAbstractReferenceComp
 			proposals.addAll(
 				new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, false, boundNode).getProposals());
 			
-			//Get system function proposals with no return value
-			proposals.addAll(
-					new EGLSystemWordProposalHandler(viewer,
-						documentOffset,
-						prefix,
-						editor,
-						boundNode).getProposals(EGLSystemWordProposalHandler.NORETURNS, true));
-			
 			//Get user function proposals with no return value
 			proposals.addAll(
-				new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, false, boundNode).
+				new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, false, boundNode).
 					getProposals());
 		}});			
 
 		//Get all library proposals
 		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
 			IEGLSearchConstants.LIBRARY));
-
-		//Get all system library proposals
-		proposals.addAll(
-			new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 
 		//Get types to declare proposals
 		proposals.addAll(getTypesToDeclare(prefix, viewer, documentOffset));

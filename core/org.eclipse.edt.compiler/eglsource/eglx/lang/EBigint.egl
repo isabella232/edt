@@ -12,12 +12,17 @@
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
 /**
  * This is the class for bigints, 64-bit signed binary numbers.
  */
 externalType EBigint extends ENumber type ClassType
+	/**
+	 * Constructs a bigint with a default value of 0.
+	 */
+	constructor();
+	
 	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */

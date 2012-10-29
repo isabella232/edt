@@ -138,12 +138,6 @@ public abstract class Part extends Node {
 			}
 		}
 
-		public void unclosedDLI(int startOffset, int endOffset) {
-			if (startOffset >= thisStart && endOffset <= thisEnd) {
-				requestor.unclosedDLI(startOffset, endOffset);
-			}
-		}
-
 		public void unclosedSQL(int startOffset, int endOffset) {
 			if (startOffset >= thisStart && endOffset <= thisEnd) {
 				requestor.unclosedSQL(startOffset, endOffset);
@@ -180,12 +174,6 @@ public abstract class Part extends Node {
 			}
 		}
 
-		public void whitespaceInDLI(int startOffset, int endOffset) {
-			if (startOffset >= thisStart && endOffset <= thisEnd) {
-				requestor.whitespaceInDLI(startOffset, endOffset);
-			}
-		}
-
 		public void whitespaceInSQL(int startOffset, int endOffset) {
 			if (startOffset >= thisStart && endOffset <= thisEnd) {
 				requestor.whitespaceInSQL(startOffset, endOffset);
@@ -205,9 +193,6 @@ public abstract class Part extends Node {
 	public static final int RECORD = 1;
 	public static final int FUNCTION = 2;
 	public static final int DATAITEM = 3;
-	public static final int FORM = 4;
-	public static final int FORMGROUP = 5;
-	public static final int DATATABLE = 6;
 	public static final int LIBRARY = 8;
 	public static final int HANDLER = 9;
 	public static final int SERVICE = 10;
@@ -219,7 +204,7 @@ public abstract class Part extends Node {
 
     protected boolean isPrivate;
 	protected SimpleName name;
-    protected List contents;
+    protected List<Node> contents;
     private String identifier;
 
     public Part(Boolean isPrivate, SimpleName name, List contents, int startOffset, int endOffset) {
@@ -236,7 +221,7 @@ public abstract class Part extends Node {
         return name;
     }
 
-    public List getContents() {
+    public List<Node> getContents() {
         return contents;
     }
     
@@ -273,10 +258,6 @@ public abstract class Part extends Node {
 		return null;
 	}
 	
-	public boolean isGeneratable(){
-		return false;
-	}
-	
 	public abstract String getPartTypeName();
 	public abstract int getPartType();
 	
@@ -298,5 +279,9 @@ public abstract class Part extends Node {
     	}
     	return identifier;
     }
-
+    
+    @Override
+	public String toString() {
+		return getPartTypeName() + " " + getName();
+	}
 }

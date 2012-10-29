@@ -1,0 +1,159 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+Program collections_valid
+
+	function func1( p1 dictionary ) returns (dictionary)
+		myDict dictionary;		
+		return( myDict );
+	end
+	
+	function func2( p1 arrayDictionary ) returns (arrayDictionary)
+		myDict arrayDictionary;
+		return( myDict );
+	end
+
+	function main()
+	
+		//---------------------------------------------------------------------
+		// test dictionary declarations
+		
+		row1 Dictionary {
+			ordering = ByInsertion,
+			id=0001, 
+			lastname="Wilson",
+			firstName="Tim",
+			salary=50000,
+			birthday="021959" };
+			
+		row2 Dictionary { 
+			row.ordering = 6,
+			id=0001, 
+			lastname="Wilson",
+			firstName="Tim",
+			salary=50000,
+			birthday="021959" };
+
+		row1a Dictionary { 
+			ordering = bykey,
+			row.ordering = 6,
+			id=0001, 
+			lastname="Wilson",
+			firstName="Tim",
+			salary=50000,
+			birthday="021959" };
+			
+		row2a dictionary {
+			ordering = bykey,
+			casesensitive = yes,
+			id = 00001,
+			// these are not duplicates because of casesensitive=yes
+			lastName="Murray",	
+			lastname="Wilson"};			
+			
+		//---------------------------------------------------------------------
+		// test dictionary move/assignment/function argument
+		
+		row4 Dictionary;
+
+		row1 = row2;
+		move row1 to row2;
+		row1 = func1( row1 );
+		// flip the names, these two references are NOT ambiguous
+		row4.lastName = "Wilson"; 
+		row4.lastname = "Murray";
+		// no error until runtime because don't resolve dynamic types
+		row3 Dictionary;
+		row3.LASTNAME = "Graham"; 
+		
+		//---------------------------------------------------------------------
+		// test arrays of dictionaries
+		
+		thing any;
+		stringVar string;
+		dictAry dictionary[];
+		
+		set dictAry[2].thing black;
+		set dictAry[2]["thing"] black;
+		set dictAry[2][stringVar] black;
+		set dictAry[2].thing["A"]["thing2"][4] black;
+		
+		
+		//---------------------------------------------------------------------
+		// test dictionary member functions			
+			
+		binVar bin(9,1);
+		strAry string[];
+		anyAry any[];
+	// which of these two if statements is supposed to be valid????
+//		if (row1.containsKey( "id" ) == yes) 
+//		end 
+//		if (row1.containsKey( "id" ) ) 
+//		end
+		strAry = row1.getKeys();
+		anyAry = row1.getValues();
+		row1.insertAll( row2 );
+		row1.removeElement( "id" );		
+		row1.removeAll();
+		binVar = row1.size();	
+		move row1.getValues() as string[] to strAry;
+		
+		//---------------------------------------------------------------------
+		// test arrayDictionary declarations and access
+			
+		myTable ArrayDictionary{ col1 = new int[10]{ 0 }, 
+		                         col2 = new String[10]{} };		
+		row3 = myTable[5];
+		cell String = row3["col2"] as string;		
+		cell = myTable[5]["col2"] as string;
+		
+		Column1 int[10];
+		Column2 String[10];		
+		myTable2 ArrayDictionary{ col1=Column1, col2=Column2 };		
+		row4 = myTable2[3];
+		cell2 int = row4["col1"] as int;
+		cell2 = myTable2[3]["col1"] as int;
+		// this is also valid because once we see a dictionary or arraydictionary, 
+		// we can't validate any further
+		cell2 = mytable2[4]["col3"] as int;
+		
+		//---------------------------------------------------------------------
+		// test array dictionary move/assignment/function argument
+		//??????I have sent a question to Andy, I think these are all invalid.
+		myTable = myTable2;
+		move myTable to myTable2;
+		myTable = func2( myTable );
+		
+		//---------------------------------------------------------------------
+		// test dictionary dotted access
+		
+		set row1.thing black, bold, protect, empty, blink, position, alarm, full;
+		row1.thing = null;
+		for( row1.thing to row1.thing2 ) end
+		execute prepareStmtId using row1.thing, row1.thing2;
+		prepare prepareStmtId from row1.thing;
+		
+		//---------------------------------------------------------------------
+		// test dictionary subscripted access
+		
+		set row1["thing"] black, bold, protect, empty, blink, position, alarm, full;
+		row1["thing"] = null;
+		for( row1["thing"] to row1["thing2"] ) end
+		execute prepareStmtId using row1["thing"], row1["thing2"];
+		prepare prepareStmtId11 from row1["thing"];
+		
+		
+		myArrayDictionaryArray ArrayDictionary[5];
+		row4 = myArrayDictionaryArray[2][1];
+	end
+end

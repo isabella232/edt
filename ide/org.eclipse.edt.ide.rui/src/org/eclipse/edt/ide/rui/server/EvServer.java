@@ -52,6 +52,7 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.rui.editor.IEditorSelectAndRevealer;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.nls.RUINlsStrings;
@@ -70,7 +71,7 @@ import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 import org.eclipse.edt.javart.services.servlet.proxy.ProxyEventHandler;
 import org.eclipse.edt.javart.services.servlet.proxy.ProxyUtilities;
 import org.eclipse.edt.javart.services.servlet.proxy.RuiBrowserHttpRequest;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
@@ -1205,11 +1206,11 @@ public class EvServer implements IClientProxy {
 		if (dot != -1) {
 			name = name.substring(0, dot);
 		}
-		name = InternUtil.intern(name);
+		name = NameUtile.getAsName(name);
 		
-		String[] pkg = new String[segments.length - 1];
-		System.arraycopy(segments, 0, pkg, 0, pkg.length);
-		pkg = InternUtil.intern(pkg);
+		String[] temp = new String[segments.length - 1];
+		System.arraycopy(segments, 0, temp, 0, temp.length);
+		String pkg = NameUtile.getAsName(Util.stringArrayToQualifiedName(temp));
 		
 		ProjectInfo info = ProjectInfoManager.getInstance().getProjectInfo(project);
 		if (info.hasPart(pkg, name) != ITypeBinding.NOT_FOUND_BINDING) {

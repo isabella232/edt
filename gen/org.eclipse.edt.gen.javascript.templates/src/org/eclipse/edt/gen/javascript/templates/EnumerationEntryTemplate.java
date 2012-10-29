@@ -18,7 +18,7 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 public class EnumerationEntryTemplate extends JavaScriptTemplate {
 
 	public void genName(EnumerationEntry element, Context ctx, TabbedWriter out) {
-		out.print(element.getName());
+		out.print(element.getCaseSensitiveName());
 	}
 	public void genRuntimeTypeName(EnumerationEntry element, Context ctx, TabbedWriter out) {
 		out.print("egl.");

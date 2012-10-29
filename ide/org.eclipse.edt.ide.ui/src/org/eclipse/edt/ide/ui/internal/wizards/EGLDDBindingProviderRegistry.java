@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.core.Logger;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.wizards.BindingEGLConfiguration;
 import org.eclipse.ui.forms.IDetailsPage;
 
@@ -52,7 +53,7 @@ public class EGLDDBindingProviderRegistry {
     	this.initialized = true;
     	
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		IConfigurationElement[] conf = reg.getConfigurationElementsFor("org.eclipse.edt.ide.ui.eglDDEditorBindingProvider"); //$NON-NLS-1$
+		IConfigurationElement[] conf = reg.getConfigurationElementsFor(EDTUIPlugin.PLUGIN_ID + ".eglDDEditorBindingProvider"); //$NON-NLS-1$
 		IConfigurationElement currentConf;
 		  
 		for (int i=0; i < conf.length; i++) {

@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+// Lines beginning with "//##" are package-qualified annotation names, which will not be
+// supported in 6.0.1, but possibly will in a later release.
+
+Record  MyUIRecord1  Type  VGUIRecord 
+	10 formItem  char(20)					//0 
+	   {@ programLinkData { 				//0
+			programName="NewPgm",			//0
+			uiRecordName="NewUIR",			//0
+			linkParms = [					//0
+			   				@ LinkParameter { name="key1", value="value1" },	//0
+			   				@ LinkParameter { name="key2", valueRef=refItem }	//0
+						]				
+        }
+	   };
+    10 refItem     char(1) { uiType=none };			//0
+End
+
+Record  MyUIRecord2  Type  VGUIRecord 
+	10 formItem  char(20)					//0 
+	   {@somegarbage { 						//1 somegarbage cannot be resolved
+			programName="NewPgm",			//0
+			uiRecordName="NewUIR",			//0
+			linkParms = [					//0
+//##			   				eglx.vg.web.@LinkParameter { name="key1", value="value1" },	//0
+			   				@LinkParameter { name="key2", valueRef="refItem" }	//0
+						]				
+        }
+	   };
+    10 refItem     char(1) { uiType=none };			//0
+End
+
+Record  MyUIRecord3  Type  VGUIRecord 
+	10 formItem  char(20)					//0 
+//##	   {@eglx.vg.web.programLinkData { 		//0
+	   {@programLinkData { 		//0
+			programName="NewPgm",			//0
+			uiRecordName="uiRc",			//0
+			linkParms = [					//0
+//##			   				@eglx.vg.web.LinkParameter { name="key1", value="value1" },	//0
+			   				@LinkParameter { name="key2", valueRef=refItem }	//0
+						]				
+        }
+	   };
+//##    10 refItem     char(1) { uiType=eglx.vg.web.uiTypeKind.none };			//0
+    10 refItem     char(1) { uiType=uiTypeKind.none };			//0
+End
+
+Record ValidValuesRec type egl.ui.console.ConsoleForm { formSize=[24,80] }
+	field0 ConsoleField {position=[1,1], name = "field0", fieldLen = 10, @egl.ui.validValues{[1, 2, 3]}} ;	//0
+	field0a ConsoleField {position=[1,1], name = "field0a", fieldLen = 10, @egl.ui.validValues{value = [1, 2, 3]}};	//0
+	field1 ConsoleField {position=[1,1], name = "field1", fieldLen = 10, @egl.ui.validValuesx{[1, 2, 3]}} ;	//1 cannot be resolved
+	field2 ConsoleField {position=[1,1], name = "field2", fieldLen = 10, @egl.core.alias{"xxx"}} ;			//1 is not valid in this location
+end

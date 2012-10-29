@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.ICompiler;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -80,7 +81,11 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 		}
 		Environment env = new Environment();
 		PartEnvironment partEnv = new PartEnvironment(env);
-		partEnv.registerObjectStores(compiler.getSystemEnvironment(null).getStores());
+		for (ZipFileBindingBuildPathEntry entry : compiler.getSystemBuildPathEntries()) {
+			partEnv.registerObjectStore(entry.getObjectStore().getKeyScheme(), entry.getObjectStore());
+		}			
+		
+		
 		return partEnv;
 	}
 	

@@ -19,8 +19,7 @@ import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLConcatenationExpressionReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -55,14 +54,6 @@ public class EGLConcatenationExpressionReferenceCompletion extends EGLAbstractRe
 					prefix,
 					boundNode)
 						.getDataItemProposals(EGLDeclarationProposalHandler.ALL_DATAITEMS, true));
-
-			//Get system function proposals with return value
-			proposals.addAll(
-				new EGLSystemWordProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					editor,
-					boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
 			
 			//Get user field proposals using library use statements
 			proposals.addAll(
@@ -74,7 +65,7 @@ public class EGLConcatenationExpressionReferenceCompletion extends EGLAbstractRe
 			
 			//Get user function proposals with return value
 			proposals.addAll(
-				new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+				new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 		}});			
 				
 		return proposals;

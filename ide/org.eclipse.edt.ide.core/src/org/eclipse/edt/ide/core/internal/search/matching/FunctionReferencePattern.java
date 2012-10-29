@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.core.internal.search.matching;
 
 import java.io.IOException;
 
-import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -105,7 +104,7 @@ public int matchLevel(Node node, boolean resolve) {
 	}
 	if (node instanceof Name) {
 		// selector
-		if (this.selector != null && this.matchesName(this.selector, ((Name)node).getCaseSensitiveIdentifier().toCharArray())){
+		if (this.matchesName(this.selector, ((Name)node).getCaseSensitiveIdentifier().toCharArray())){
 			return POSSIBLE_MATCH;
 		}
 	}
@@ -121,10 +120,10 @@ public int matchLevel(Node node, boolean resolve) {
 			return IMPOSSIBLE_MATCH;
 		return POSSIBLE_MATCH;
 	}
-public int matchLevel(TopLevelFunctionBinding function){
-	return INACCURATE_MATCH;
-	
-	//TODO search
+//public int matchLevel(TopLevelFunctionBinding function){
+//	return INACCURATE_MATCH;
+//	
+//	//TODO search
 //	
 //	IEGLFunction function = functionBinding.getFunctionTSN();
 //	if(function == null) return INACCURATE_MATCH;
@@ -159,7 +158,7 @@ public int matchLevel(TopLevelFunctionBinding function){
 ////		}
 ////	}
 //	return level;
-}
+//}
 @Override
 public int getPatternType() {
 	return SearchPattern.REFERENCE;

@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+
+	cf1 consoleField {fieldLen=10};	// 0
+	
+	function main()
+		cf2 consoleField {fieldLen=10};	// 1 Items of type ConsoleField may only be declared inside of ConsoleForm records
+	
+		openui new consoleForm{} end	// 1
+		openui new consoleField{} end	// 1
+		
+		consoleFormVar consoleFormRecord;
+		openui consoleFormVar.cf end // 0
+		openui consoleFormVar.cf, new consoleField{} end // 1
+	end
+end
+
+Record notConsoleFormRecord
+	cf consoleField {fieldLen=10}; // 0
+end
+
+Record consoleFormRecord type consoleForm {formSize=[20,40]}
+	cf consoleField {fieldLen=10, position=[1,1]}; // 0
+end

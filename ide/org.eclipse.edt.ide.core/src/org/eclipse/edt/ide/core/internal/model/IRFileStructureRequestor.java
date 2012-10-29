@@ -465,11 +465,8 @@ public class IRFileStructureRequestor extends AbstractSourceElementRequestor imp
 			int astType = -1;
 			switch(irType){		
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_FUNCTION:	  astType = org.eclipse.edt.compiler.core.ast.Part.FUNCTION; break;
-				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_FORM:		  astType = org.eclipse.edt.compiler.core.ast.Part.FORM; break;
-				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_FORMGROUP :  astType = org.eclipse.edt.compiler.core.ast.Part.FORMGROUP; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_LIBRARY : 	  astType = org.eclipse.edt.compiler.core.ast.Part.LIBRARY; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_PROGRAM : 	  astType = org.eclipse.edt.compiler.core.ast.Part.PROGRAM; break;
-				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_DATATABLE :  astType = org.eclipse.edt.compiler.core.ast.Part.DATATABLE; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_STRUCTURED_RECORD:
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_RECORD : 	  astType = org.eclipse.edt.compiler.core.ast.Part.RECORD; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_DATAITEM :	  astType = org.eclipse.edt.compiler.core.ast.Part.DATAITEM; break;

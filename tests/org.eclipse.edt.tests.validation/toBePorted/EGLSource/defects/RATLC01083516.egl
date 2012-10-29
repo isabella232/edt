@@ -1,0 +1,89 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// Example from defect:
+
+program RATLC01083516 type BasicProgram
+    fr6 FixedRecord6 {																		//0
+    	item01="lzWgouYmVm", item02="CZQsPZJGnw", item03="AKDhuNqwto", item04=2104066893, 	//0
+    	item05=5673, item06=558039127322422299, item07=5706.1164856, item08=4687523889, 	//0
+    	item09=34925955.73 };																//0
+	i int;    					
+	
+	function main()
+		i = 1;
+	end	
+end
+
+Record FixedRecord6 type basicRecord
+    1 item01 char(10)  = "??????????";
+    1 item02 mbchar(10)  = "??????????";
+    1 item03 unicode(10)  = "??????????";
+    1 item04 int  = 1869715218;
+    1 item05 smallint  = 23292;
+    1 item06 bigint  = 5433043765089395611;
+    1 item07 float  = 3567.41029891;
+    1 item08 num(10)  = 9999999999;
+    1 item09 decimal( 10, 2)  = -64988602.54;
+    
+    1 item10 int;
+    	2 item10a int;
+end
+
+// Additional tests:
+
+program RATLC01083516a type BasicProgram
+    fr6 FixedRecord6 {																		//0
+    	item01="lzWgouYmVm", item02="CZQsPZJGnw", item03="AKDhuNqwto", item04=2104066893, 	//0
+    	item05=5673, item06=558039127322422299, item07=5706.1164856, item08=4687523889, 	//0
+    	item09=34925955.73,																	//0
+    	bogusItem="a" };																	//1 bogusItem cannot be resolved
+    	
+    fr6a FixedRecord6 {																		//0
+    	item01="lzWgouYmVm", item02="CZQsPZJGnw", item03="AKDhuNqwto", item04=2104066893, 	//0
+    	item05=5673, item06=558039127322422299, item07=5706.1164856, item08=4687523889, 	//0
+    	item09=34925955.73,																	//0
+    	item10=5 };																			//0
+    	
+    function func()    
+	    fr6 {																					//0
+	    	item01="lzWgouYmVm", item02="CZQsPZJGnw", item03="AKDhuNqwto", item04=2104066893, 	//0
+	    	item05=5673, item06=558039127322422299, item07=5706.1164856, item08=4687523889, 	//0
+	    	item09=34925955.73,																	//0
+	    	bogusItem="a" };																	//1 bogusItem cannot be resolved
+	    	
+	    fr6a {																					//0
+	    	item01="lzWgouYmVm", item02="CZQsPZJGnw", item03="AKDhuNqwto", item04=2104066893, 	//0
+	    	item05=5673, item06=558039127322422299, item07=5706.1164856, item08=4687523889, 	//0
+	    	item09=34925955.73,																	//0
+	    	item10=5 };																			//0
+	    	
+	    fr6 = fr6 {																				//0
+	    	item01="lzWgouYmVm", item02="CZQsPZJGnw", item03="AKDhuNqwto", item04=2104066893, 	//0
+	    	item05=5673, item06=558039127322422299, item07=5706.1164856, item08=4687523889, 	//0
+	    	item09=34925955.73,																	//0
+	    	bogusItem="a" };																	//1 bogusItem cannot be resolved
+	    	
+	    	
+	    fr6 = fr6a {																			//0
+	    	item01="lzWgouYmVm", item02="CZQsPZJGnw", item03="AKDhuNqwto", item04=2104066893, 	//0
+	    	item05=5673, item06=558039127322422299, item07=5706.1164856, item08=4687523889, 	//0
+	    	item09=34925955.73,																	//0
+	    	item10=5 };																			//0
+	end
+    
+	i int;    					
+	
+	function main()
+		i = 1;
+	end	
+end

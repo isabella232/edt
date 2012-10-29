@@ -11,14 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-
 public interface MofConversion {
 	
 	String Mof_package_name = "org.eclipse.edt.mof";
 	String EGL_reflect_package = "org.eclipse.edt.mof.egl";
 	String EGL_lang_package = "egl.lang";
 	String EGL_lang_reflect_package = "egl.lang.reflect";
+	String EGL_lang_reflect_mof_package = "egl.lang.reflect.mof";
 	String EGL_lang_reflect_refTypes_package = "egl.lang.reflect.reftypes";
 	String EGLX_lang_package = "eglx.lang";
 	String EGL_KeyScheme = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
@@ -155,6 +154,7 @@ public interface MofConversion {
 	String Type_DataItem = EGL_reflect_package+".DataItem";
 	String Type_Library = EGL_reflect_package+".Library";
 	String Type_Handler = EGL_reflect_package+".Handler";
+	String Type_Class = EGL_reflect_package+".Class";
 	String Type_FunctionPart = EGL_reflect_package+".FunctionPart";
 	String Type_Service = EGL_reflect_package+".Service";
 	String Type_Annotation = EGL_reflect_package+".Annotation";
@@ -235,33 +235,33 @@ public interface MofConversion {
 	String Operator_Narrow = "narrow";
 	String KeySchemeDelimiter = ":";
 
-	String ElementKind_RecordPart = InternUtil.intern("RecordPart");
-	String ElementKind_StructuredRecordPart = InternUtil.intern("StructuredRecordPart");
-	String ElementKind_ProgramPart = InternUtil.intern("ProgramPart");
-	String ElementKind_LibraryPart = InternUtil.intern("LibraryPart");
-	String ElementKind_HandlerPart = InternUtil.intern("HandlerPart");
-	String ElementKind_InterfacePart = InternUtil.intern("InterfacePart");
-	String ElementKind_ServicePart = InternUtil.intern("ServicePart");
-	String ElementKind_ExternalTypePart = InternUtil.intern("ExternalTypePart");
-	String ElementKind_DelegatePart = InternUtil.intern("DelegatePart");
-	String ElementKind_FormGroupPart = InternUtil.intern("FormGroupPart");
-	String ElementKind_FormPart = InternUtil.intern("FormPart");
-	String ElementKind_DataTablePart = InternUtil.intern("DataTablePart");
-	String ElementKind_DataItemPart = InternUtil.intern("DataItemPart");
-	String ElementKind_Part = InternUtil.intern("Part");
-	String ElementKind_FieldMbr = InternUtil.intern("FieldMbr");
-	String ElementKind_StructuredFieldMbr = InternUtil.intern("StructuredFieldMbr");
-	String ElementKind_FunctionMbr = InternUtil.intern("FunctionMbr");
-	String ElementKind_ConstructorMbr = InternUtil.intern("ConstructorMbr");
-	String ElementKind_CallStatement = InternUtil.intern("CallStatement");
-	String ElementKind_ShowStatement = InternUtil.intern("ShowStatement");
-	String ElementKind_TransferStatement = InternUtil.intern("TransferStatement");
-	String ElementKind_OpenUIStatement = InternUtil.intern("OpenUIStatement");
-	String ElementKind_LibraryUse = InternUtil.intern("LibraryUse");
-	String ElementKind_FormUse = InternUtil.intern("FormUse");
-	String ElementKind_FormGroupUse = InternUtil.intern("FormGroupUse");
-	String ElementKind_DataTableUse = InternUtil.intern("DataTableUse");
-	String ElementKind_AnnotationValue = InternUtil.intern("AnnotationValue");
-	String ElementKind_AnnotationType = InternUtil.intern("AnnotationType");
+	String ElementKind_RecordPart = "RecordPart";
+	String ElementKind_StructuredRecordPart = "StructuredRecordPart";
+	String ElementKind_ProgramPart = "ProgramPart";
+	String ElementKind_LibraryPart = "LibraryPart";
+	String ElementKind_HandlerPart = "HandlerPart";
+	String ElementKind_InterfacePart = "InterfacePart";
+	String ElementKind_ServicePart = "ServicePart";
+	String ElementKind_ExternalTypePart = "ExternalTypePart";
+	String ElementKind_DelegatePart = "DelegatePart";
+	String ElementKind_FormGroupPart = "FormGroupPart";
+	String ElementKind_FormPart = "FormPart";
+	String ElementKind_DataTablePart = "DataTablePart";
+	String ElementKind_DataItemPart = "DataItemPart";
+	String ElementKind_Part = "Part";
+	String ElementKind_FieldMbr = "FieldMbr";
+	String ElementKind_StructuredFieldMbr = "StructuredFieldMbr";
+	String ElementKind_FunctionMbr = "FunctionMbr";
+	String ElementKind_ConstructorMbr = "ConstructorMbr";
+	String ElementKind_CallStatement = "CallStatement";
+	String ElementKind_ShowStatement = "ShowStatement";
+	String ElementKind_TransferStatement = "TransferStatement";
+	String ElementKind_OpenUIStatement = "OpenUIStatement";
+	String ElementKind_LibraryUse = "LibraryUse";
+	String ElementKind_FormUse = "FormUse";
+	String ElementKind_FormGroupUse = "FormGroupUse";
+	String ElementKind_DataTableUse = "DataTableUse";
+	String ElementKind_AnnotationValue = "AnnotationValue";
+	String ElementKind_AnnotationType = "AnnotationType";
 
 }

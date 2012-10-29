@@ -444,6 +444,7 @@ public class EGLModelUtil {
 	/**
 	 * Returns if a CU can be edited.
 	 */
+	@SuppressWarnings("deprecation")
 	public static boolean isEditable(IEGLFile cu)  {
 		if (cu.isWorkingCopy()) {
 			cu= (IEGLFile) cu.getOriginalElement();

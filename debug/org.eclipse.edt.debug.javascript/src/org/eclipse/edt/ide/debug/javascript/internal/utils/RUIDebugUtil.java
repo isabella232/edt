@@ -51,7 +51,7 @@ import org.eclipse.edt.ide.core.model.IPackageDeclaration;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.debug.javascript.internal.server.DebugContext;
 import org.eclipse.edt.ide.rui.server.EvServer;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.window.Window;
@@ -295,8 +295,8 @@ public class RUIDebugUtil
 						{
 							return null;
 						}
-						String typeName = InternUtil.intern( new String( partInfo.getSubTypeName() ) );
-						if ( typeName == InternUtil.intern( "RUIHandler" ) || typeName == InternUtil.intern( "RUIWidget" ) ) //$NON-NLS-1$ //$NON-NLS-2$
+						String typeName = NameUtile.getAsName( new String( partInfo.getSubTypeName() ) );
+						if ( NameUtile.equals( typeName, NameUtile.getAsName( "RUIHandler" ) ) || NameUtile.equals( typeName, NameUtile.getAsName( "RUIWidget" ) ) ) //$NON-NLS-1$ //$NON-NLS-2$
 						{
 							return srcPart.getFullyQualifiedName();
 						}

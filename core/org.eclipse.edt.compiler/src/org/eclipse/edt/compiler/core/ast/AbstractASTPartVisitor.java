@@ -22,11 +22,6 @@ public abstract class AbstractASTPartVisitor extends AbstractASTVisitor {
 		return false;
 	}
 
-	public boolean visit(DataTable dataTable) {
-		visitPart(dataTable);
-		return false;
-	}
-	
 	public boolean visit(Delegate delegate) {
 		visitPart(delegate);
 		return false;
@@ -34,11 +29,6 @@ public abstract class AbstractASTPartVisitor extends AbstractASTVisitor {
 	
 	public boolean visit(ExternalType externalType) {
 		visitPart(externalType);
-		return false;
-	}
-
-	public boolean visit(FormGroup formGroup) {
-		visitPart(formGroup);
 		return false;
 	}
 
@@ -72,18 +62,13 @@ public abstract class AbstractASTPartVisitor extends AbstractASTVisitor {
 		return false;
 	}
 
-	public boolean visit(TopLevelForm topLevelForm) {
-		visitPart(topLevelForm);
-		return false;
-	}
-
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		visitPart(topLevelFunction);
+	public boolean visit(Enumeration enumeration) {
+		visitPart(enumeration);
 		return false;
 	}
 	
-	public boolean visit(Enumeration enumeration) {
-		visitPart(enumeration);
+	public boolean visit(Class clazz) {
+		visitPart(clazz);
 		return false;
 	}
 

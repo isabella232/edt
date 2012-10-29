@@ -1,0 +1,784 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program DetailServer 
+	(sqlAction char(1), employee EMPLOYEE, errorRecord ErrorRecord) { handleHardIOErrors = no, throwNrfEofExceptions = yes } 
+	{includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, alias = "DSERVER",
+	V60ExceptionCompatibility=yes} 
+	
+	function main() 
+		
+  		VGVar.handleHardIOErrors = 1; 
+ 		set errorRecord empty;  
+		
+		case (sqlAction)
+			when ("I")
+				sqlInsert();
+				return;
+				
+			when ("S")
+				sqlSelect();
+				if (errorRecord.errFlag == "Y")
+     				 set employee empty;
+    			end
+    			return;
+    			
+    		when ("U")
+    			sqlUpdate();
+    			return;
+    			
+    		when ("D")
+    			sqlDelete();
+    			return;
+    	end 
+    	
+	end 
+	
+	Function sqlInsert()
+		try
+    		add employee ;
+	   	onException 
+	   		errorHandler() ;
+	  	end
+	end 
+
+	Function sqlSelect()
+  		try
+    		get employee
+      			with 
+      			#sql{
+        			select EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, PHONENO, 
+        		       	   HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM
+        	    	from EMPLOYEE T1
+        			WHERE EMPNO = :EMPNO
+				}
+      		     into empno, firstnme, midinit, lastname, workdept, phoneno,
+      		          hiredate, job, edlevel, sex, birthdate, salary, bonus, comm ;
+    	onException 
+    		errorHandler() ;
+  		end	
+  		  
+  		if (employee is noRecordFound)
+    		/* row does not exist */
+    		errorRecord.errFlag = "Y";
+    		errorRecord.errMsg = "Row does not exist on EMPLOYEE";
+    		errorRecord.errCode = sysVar.sqlData.sqlcode;
+    		return;
+  		end
+	end 
+	
+	Function getForUpdate()
+		try
+			get employee forUpdate updCursor
+      			with 
+      			#sql{
+        			select EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, PHONENO, 
+        		       	   HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM
+                	from EMPLOYEE T1
+                	WHERE EMPNO = :EMPNO
+                	for update of EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, 
+                	PHONENO, HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM
+        		}
+      			into empno, firstnme, midinit, lastname, workdept, phoneno, 
+      			     hiredate, job, edlevel, sex, birthdate, salary, bonus, comm ;	
+    	onException 
+    		errorHandler() ;
+  		end	
+  		if (employee is noRecordFound)
+    		/* row does not exist */
+    		errorRecord.errFlag = "Y";
+    		errorRecord.errMsg = "Row does not exist on EMPLOYEE";
+    		errorRecord.errCode = sysVar.sqlData.sqlcode;
+    		return;
+  		end	
+	end
+	
+	Function sqlUpdate()
+		employeeTemp EMPLOYEE;
+		
+		move employee to employeeTemp;
+
+		getForUpdate();
+		move employeeTemp to employee;
+		
+		try
+   	 		if (errorRecord.errFlag != "Y")
+       			replace employee;
+      		end
+    	onException 
+    		errorHandler() ;
+  		end
+	end 
+	
+	Function sqlDelete()
+		getForUpdate();
+		try
+			if (errorRecord.errFlag != "Y")
+				delete employee;
+			end
+		onException
+			errorHandler();
+		end
+	end 
+end
+
+FormGroup ListingForms
+{alias = "LFORMS"}
+
+ Form ListingForm type textForm
+ { screenSizes = [[24,80]], formsize = [24,80], position = [1,1],
+  validationBypassKeys = [pf3,pf12], helpForm = "ELH01", helpKey = pf1,
+  msgField = MESSAGE}
+
+
+  SEARCHLASTNAME char(15)
+  { position = [4,33], fieldLen = 15, cursor = yes, validationOrder = 6,
+    color = green, highlight = underline, intensity = normalIntensity,
+    protect = noProtect, upperCase = yes, align = left, fillCharacter = ""};
+  FIRSTNME char(12) [14]  
+  { position = [7,26], fieldLen = 12, validationOrder = 9, color = cyan,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "",
+    this [2] { position = [8,26] },
+    this [3] { position = [9,26] },
+    this [4] { position = [10,26] },
+    this [5] { position = [11,26] },
+    this [6] { position = [12,26] },
+    this [7] { position = [13,26] },
+    this [8] { position = [14,26] },
+    this [9] { position = [15,26] },
+    this [10] { position = [16,26] },
+    this [11] { position = [17,26] },
+    this [12] { position = [18,26] },
+    this [13] { position = [19,26] },
+    this [14] { position = [20,26] }
+  };
+  USERID char(8)
+  { position = [2,1], fieldLen = 8, validationOrder = 3, color = blue,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "", value = "USERID"};
+  LASTNAME char(15) [14]  
+  { position = [7,41], fieldLen = 15, validationOrder = 10, color = cyan,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "",
+    this [2] { position = [8,41] },
+    this [3] { position = [9,41] },
+    this [4] { position = [10,41] },
+    this [5] { position = [11,41] },
+    this [6] { position = [12,41] },
+    this [7] { position = [13,41] },
+    this [8] { position = [14,41] },
+    this [9] { position = [15,41] },
+    this [10] { position = [16,41] },
+    this [11] { position = [17,41] },
+    this [12] { position = [18,41] },
+    this [13] { position = [19,41] },
+    this [14] { position = [20,41] }
+  };
+  EMPNO char(6) [14]  
+  { position = [7,19], fieldLen = 6, validationOrder = 7, color = cyan,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "",
+    this [2] { position = [8,19] },
+    this [3] { position = [9,19] },
+    this [4] { position = [10,19] },
+    this [5] { position = [11,19] },
+    this [6] { position = [12,19] },
+    this [7] { position = [13,19] },
+    this [8] { position = [14,19] },
+    this [9] { position = [15,19] },
+    this [10] { position = [16,19] },
+    this [11] { position = [17,19] },
+    this [12] { position = [18,19] },
+    this [13] { position = [19,19] },
+    this [14] { position = [20,19] }
+  };
+  PHONENO char(4) [14]
+  { position = [7,57], fieldLen = 4, validationOrder = 11, color = cyan,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "",
+    this [2] { position = [8,57] },
+    this [3] { position = [9,57] },
+    this [4] { position = [10,57] },
+    this [5] { position = [11,57] },
+    this [6] { position = [12,57] },
+    this [7] { position = [13,57] },
+    this [8] { position = [14,57] },
+    this [9] { position = [15,57] },
+    this [10] { position = [16,57] },
+    this [11] { position = [17,57] },
+    this [12] { position = [18,57] },
+    this [13] { position = [19,57] },
+    this [14] { position = [20,57] }
+  };
+  TERMID char(4)
+  { position = [2,11], fieldLen = 4, validationOrder = 4, color = blue,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = none, fillCharacter = "", value = "TERM"};
+  MESSAGE char(78)
+  { position = [22,1], fieldLen = 78, validationOrder = 5, color = red,
+    highlight = noHighlight, intensity = bold, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  SYSTEMDATE char(10)
+  { position = [1,60], fieldLen = 10, validationOrder = 1, color = blue,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = right, fillCharacter = "0",
+    dateFormat = "MM/dd/yyyy", isDecimalDigit = yes, value = "MM/DD/YYYY"};
+  MIDINIT char(1) [14]  
+  { position = [7,39], fieldLen = 1, validationOrder = 8, color = cyan,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "",
+    this [2] { position = [8,39] },
+    this [3] { position = [9,39] },
+    this [4] { position = [10,39] },
+    this [5] { position = [11,39] },
+    this [6] { position = [12,39] },
+    this [7] { position = [13,39] },
+    this [8] { position = [14,39] },
+    this [9] { position = [15,39] },
+    this [10] { position = [16,39] },
+    this [11] { position = [17,39] },
+    this [12] { position = [18,39] },
+    this [13] { position = [19,39] },
+    this [14] { position = [20,39] }
+  };
+  SYSTEMTIME char(8)
+  { position = [1,71], fieldLen = 8, validationOrder = 2, color = blue,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "", value = "HH:MM:SS"};
+
+
+  * { position = [6,19], fieldLen = 79, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = "Number First Name Init Last Name     Phone"};
+  * { position = [4,1], fieldLen = 31, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = "                  Starting Name"};
+  * { position = [2,16], fieldLen = 144, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = "                 Employee List"};
+  * { position = [23,1], fieldLen = 158, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = "F1= Help      F2=          F3= Exit       F4=           F5=         F6"
+             + "=         F7=           F8=          F9=           F10=          F11=  "
+             + "      F12= Cancel"};
+  * { position = [1,11], fieldLen = 47, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = "                      Basic TUI Lab"};
+  * { position = [1,1], fieldLen = 9, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "CS60M01"};
+end
+ end
+
+FormGroup DetailForms 
+{ alias = "DFORMS" }
+
+
+ Form DetailForm type textForm
+ { screenSizes = [[ 24, 80  ]], formsize = [24,80], position = [1,1],
+  validationBypassKeys = [pf3,pf12], helpForm = "DetailHelp", helpKey = pf1,
+  msgField = MESSAGE}
+
+
+  EMPNO char(6)
+  { position = [6,28], fieldLen = 6, validationOrder = 7, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  SYSTEMTIME char(8)
+  { position = [1,71], fieldLen = 8, validationOrder = 2, color = blue,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "", value = "HH:MM:SS"};
+  COMM num(13)
+  { position = [18,28], fieldLen = 13, validationOrder = 20, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    currency = yes, numericSeparator = yes, sign = leading, align = right,
+    fillCharacter = " "};
+  FIRSTNME char(12)
+  { position = [8,28], fieldLen = 12, validationOrder = 8, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  WORKDEPT char(3)
+  { position = [9,28], fieldLen = 3, validationOrder = 11, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  EDLEVEL num(4)
+  { position = [13,28], fieldLen = 4, validationOrder = 15, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    align = right, fillCharacter = " ", typeChkMsgKey = "0004"};
+  MIDINIT char(1)
+  { position = [8,42], fieldLen = 1, validationOrder = 9, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  PHONENO char(4)
+  { position = [10,28], fieldLen = 4, validationOrder = 12, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  JOB char(8)
+  { position = [12,28], fieldLen = 8, validationOrder = 14, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  SALARY num(13)
+  { position = [16,28], fieldLen = 13, validationOrder = 18, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    currency = yes, numericSeparator = yes, sign = leading, align = right,
+    fillCharacter = " "};
+  SEX char(1)
+  { position = [14,28], fieldLen = 1, validationOrder = 16, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = "",
+    validatorDataTable = SEXCHK};
+  USERID char(8)
+  { position = [2,1], fieldLen = 8, validationOrder = 3, color = blue,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = "", value = "USERID"};
+  BIRTHDATE char(10)
+  { position = [15,28], fieldLen = 10, validationOrder = 17, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  SYSTEMDATE char(10)
+  { position = [1,60], fieldLen = 10, validationOrder = 1, color = blue,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = right, fillCharacter = "0",
+    dateFormat = "MM/dd/yyyy", isDecimalDigit = yes, value = "MM/DD/YYYY"};
+  ACTION char(1)
+  { position = [4,28], fieldLen = 1, cursor = yes, validationOrder = 6,
+    color = green, highlight = underline, intensity = normalIntensity,
+    protect = noProtect, upperCase = yes, align = left, fillCharacter = "",
+    inputRequired = yes, inputRequiredMsgKey = "0003"};
+  BONUS num(13)
+  { position = [17,28], fieldLen = 13, validationOrder = 19, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    currency = yes, numericSeparator = yes, sign = leading, align = right,
+    fillCharacter = " "};
+  MESSAGE char(78)
+  { position = [22,1], fieldLen = 78, validationOrder = 5, color = red,
+    highlight = noHighlight, intensity = bold, protect = skipProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  TERMID char(4)
+  { position = [2,11], fieldLen = 4, validationOrder = 4, color = blue,
+    highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+    upperCase = yes, align = none, fillCharacter = "", value = "TERM"};
+  HIREDATE char(10)
+  { position = [11,28], fieldLen = 10, validationOrder = 13, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+  LASTNAME char(15)
+  { position = [8,45], fieldLen = 15, validationOrder = 10, color = green,
+    highlight = underline, intensity = normalIntensity, protect = noProtect,
+    upperCase = yes, align = left, fillCharacter = ""};
+
+
+  * { position = [15,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                Birth Date"};
+  * { position = [14,30], fieldLen = 50, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [14,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                       Sex"};
+  * { position = [13,33], fieldLen = 47, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [13,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "           Education Level"};
+  * { position = [12,37], fieldLen = 43, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [12,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                       Job"};
+  * { position = [11,39], fieldLen = 41, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [11,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                 Hire Date"};
+  * { position = [10,33], fieldLen = 47, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [4,30], fieldLen = 50, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = " (I)nsert, (S)elect, (U)pdate, (D)elete"};
+  * { position = [4,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                    Action"};
+  * { position = [10,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "              Phone Number"};
+  * { position = [2,16], fieldLen = 42, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = "             Employee Maintenance"};
+  * { position = [9,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                Department"};
+  * { position = [1,13], fieldLen = 45, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = "                    Basic TUI Lab"};
+  * { position = [8,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                      Name"};
+  * { position = [1,1], fieldLen = 10, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "DETAILFORM"};
+  * { position = [6,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "           Employee Number"};
+  * { position = [23,1], fieldLen = 158, color = blue, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect,
+      value = "F1= Help      F2=          F3= Exit       F4=           F5=         F6"
+             + "=         F7=           F8=          F9=           F10=          F11=  "
+             + "      F12= Cancel"};
+  * { position = [18,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                Commission"};
+  * { position = [17,42], fieldLen = 38, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [17,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                     Bonus"};
+  * { position = [16,42], fieldLen = 38, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect  };
+  * { position = [16,1], fieldLen = 26, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect, value = "                    Salary"};
+  * { position = [15,39], fieldLen = 41, color = cyan, highlight = noHighlight,
+      intensity = normalIntensity, protect = skipProtect  };
+end
+ end
+ 
+Program DetailClient type textUIProgram { handleHardIOErrors = no, throwNrfEofExceptions = yes } 
+    {segmented = no, includeReferencedFunctions = yes,
+     allowUnqualifiedItemReferences = yes, alias = "DCLIENT", msgTablePrefix = "EMT"} 
+
+    
+    errorRecord ErrorRecord;
+    employee EMPLOYEE;
+
+    
+    use Sexchk; 
+
+    use DetailForms { 
+    validationBypassKeys = [pf12],
+    helpKey = pf1,
+    pfKeyEquate = yes};
+
+    use DetailHelps { 
+    helpGroup = yes,
+    helpKey = pf1,
+    pfKeyEquate = yes};
+
+    
+    function main()
+
+        VGVar.handleHardIOErrors = 1; 
+        ConverseVar.commitOnConverse = 1; 
+
+        
+        DetailForm.userid = sysVar.userID;
+        DetailForm.termid = sysVar.terminalID;
+
+        detailConverseLoop();
+    end
+end
+
+    Function detailConverseLoop()
+        while (ConverseVar.eventKey not pf3
+                && ConverseVar.eventKey not pf12)
+
+            
+            DetailForm.systemDate = VGVar.currentFormattedGregorianDate;
+            DetailForm.systemTime = VGVar.currentFormattedTime;
+
+            converse DetailForm;
+
+            
+            set DetailForm initialAttributes;
+
+            if (ConverseVar.eventKey is enter)
+                detailEnter();
+            else
+                if (ConverseVar.eventKey not pf3
+                    && ConverseVar.eventKey not pf12)
+                    ConverseLib.validationFailed(1); /* Set invalid key pressed message*/
+                end
+            end 
+        end  
+    end 
+
+    Function detailEnter()
+
+        move DetailForm to employee withv60compat;
+
+        call "ServerCode.DetailServer" (DetailForm.action, employee, errorRecord);
+
+        if (errorRecord.errFlag == "Y")
+            DetailForm.message = errorRecord.errMsg; /* Show error message*/
+        else
+            move employee to DetailForm withv60compat;               /* Show returned data*/
+            ConverseLib.validationFailed(5);               /* Display success message*/
+        end
+
+    end
+
+FormGroup DetailHelps
+{ alias = "DHELPS" }
+
+ Form DetailHelp type textForm
+ { screenSizes = [[24,80]], formsize = [24,80], position = [1,1]}
+
+
+
+
+  * { position = [3,3], fieldLen = 17, color = defaultColor,
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "No Help Available"};
+end
+ end
+ 
+Program ListingClient type textUIProgram { handleHardIOErrors = no, throwNrfEofExceptions = yes }
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  msgTablePrefix = "EMT", segmented = no, alias = "LCLIENT"
+  }
+
+  
+  errorRecord ErrorRecord; 
+  searchName searchLastname; 
+  employees EMPLOYEE[] ; 
+
+
+  
+  use ListingForms {  
+    validationBypassKeys = [pf12],
+    helpKey = pf1,
+    pfKeyEquate = yes
+  };
+  use ListingHelps {  
+    helpGroup = yes,
+    helpKey = pf1,
+    pfKeyEquate = yes
+  };
+
+    function main()
+
+        VGVar.handleHardIOErrors = 1; 
+        ConverseVar.commitOnConverse = 1; 
+
+        ListingForm.userid = sysVar.userID;
+        ListingForm.termid = sysVar.terminalID;
+
+        listConverseLoop();
+    end 
+end 
+
+Function listConverseLoop()
+    while (ConverseVar.eventKey not pf3 && ConverseVar.eventKey not pf12)
+
+        
+        ListingForm.systemDate = VGVar.currentFormattedGregorianDate;
+        ListingForm.systemTime = VGVar.currentFormattedTime;
+
+        converse ListingForm ;
+
+        
+        set ListingForm.searchLastname initialAttributes;
+
+        
+        if (ConverseVar.eventKey is enter)
+            listingEnter();
+        else
+            if (ConverseVar.eventKey not pf3 && ConverseVar.eventKey not pf12)
+                ConverseLib.validationFailed(1);  
+            end
+        end
+    end  
+end 
+
+Function listingEnter()
+	arraySize int;
+	
+    searchName = ListingForm.searchLastname;
+
+    call "ServerCode.ListingServer" (searchName, employees, errorRecord);
+
+    set ListingForm empty;
+    ListingForm.searchLastname = searchName;
+
+    if (errorRecord.errFlag == "Y")
+        ListingForm.message = errorRecord.errMsg; /* Show error message*/
+    else
+        move employees to ListingForm byName;
+
+		arraySize = size(employees);       /* number employees in array */
+        if (arraySize == 0)
+            ConverseLib.validationFailed(6);                  /* No rows found message*/
+        else
+            ConverseLib.validationFailed(5);                  /* Display success message*/
+        end
+    end
+
+end 
+
+Record EMPLOYEE type sqlRecord  {
+  tableNames = [["EMPLOYEE", "T1"]]
+  }
+  10 EMPNO EMPNO { column = "EMPNO", isSQLNullable = yes} ;
+  10 FIRSTNME FIRSTNME { sqlVariableLen = yes, column = "FIRSTNME", isSQLNullable = yes} ;
+  10 MIDINIT MIDINIT { column = "MIDINIT", isSQLNullable = yes} ;
+  10 LASTNAME LASTNAME { sqlVariableLen = yes, column = "LASTNAME", isSQLNullable = yes} ;
+  10 WORKDEPT WORKDEPT {  column = "WORKDEPT", isSQLNullable = yes} ;
+  10 PHONENO PHONENO {  column = "PHONENO", isSQLNullable = yes} ;
+  10 HIREDATE HIREDATE {  column = "HIREDATE", isSQLNullable = yes} ;
+  10 JOB JOB {  column = "JOB", isSQLNullable = yes} ;
+  10 EDLEVEL EDLEVEL { column = "EDLEVEL", isSQLNullable = yes} ;
+  10 SEX SEX {  column = "SEX", isSQLNullable = yes} ;
+  10 BIRTHDATE BIRTHDATE {  column = "BIRTHDATE", isSQLNullable = yes} ;
+  10 SALARY SALARY { column = "SALARY", isSQLNullable = yes} ;
+  10 BONUS BONUS { column = "BONUS", isSQLNullable = yes} ;
+  10 COMM COMM { column = "COMM", isSQLNullable = yes} ;
+end 
+
+DataItem BIRTHDATE char(10)
+end
+
+DataItem BONUS decimal(9,2)
+end
+
+DataItem COMM decimal(9,2)
+end
+
+DataItem EDLEVEL smallint
+end
+
+DataItem EMPNO char(6)
+end
+
+DataItem FIRSTNME char(12)
+end
+
+DataItem HIREDATE char(10)
+end
+
+DataItem JOB char(8)
+end
+
+DataItem LASTNAME char(15)
+end
+
+DataItem MIDINIT char(1)
+end
+
+DataItem PHONENO char(4)
+end
+
+DataItem SALARY decimal(9,2)
+end
+
+DataItem SEX char(1)
+end
+
+DataItem WORKDEPT char(3)
+end
+
+DataItem searchLastname char(15)
+end
+
+DataTable Sexchk type matchValidTable  {
+  shared = yes, resident = no
+  }
+  3 sexCode char(1); 
+   {contents = [
+    ["M"],
+    ["F"]
+  ]}
+end 
+
+Function ErrorHandler()
+	
+  /* ****************************************************/
+  /* Handle common errors*/
+  /* ****************************************************/
+  if (employee is unique)
+    /* row already exists */
+    ErrorRecord.errFlag = "Y";
+    ErrorRecord.errMsg = "Row already exists on EMPLOYEE";
+    ErrorRecord.errCode = sysVar.sqlData.sqlcode;
+    return;
+  end
+
+  if (employee is deadLock || employee is deadLock)
+    ErrorRecord.errFlag = "Y";
+    ErrorRecord.errMsg = "Database is in use, please try again later";
+    ErrorRecord.errCode = sysVar.sqlData.sqlcode;
+    return;
+  end
+
+  /* ****************************************************/
+  /* Handle serious errors*/
+  /* ****************************************************/
+
+  if (employee is hardIoError)
+    /* serious error occurred */
+    ErrorRecord.errFlag = "Y";
+    ErrorRecord.errMsg = "Error occurred using EMPLOYEE table";
+    ErrorRecord.errCode = sysVar.sqlData.sqlcode;
+    return;
+  end
+end 
+
+Record ErrorRecord type basicRecord
+  3 errFlag char(1) ; 
+  3 errMsg char(78) ; 
+  3 errCode num(4) ; 
+end 
+
+DataTable Emtenu type msgTable  {
+  shared = yes, resident = no
+  }
+  3 messageNumber num(4);
+  3 messageText char(78);
+   {contents = [
+    [0001, "Invalid function key pressed                                                  "],
+    [0002, "Invalid action code entered                                                   "],
+    [0003, "Action code must be entered                                                   "],
+    [0004, "Entered value is not numeric                                                  "],
+    [0005, "Action completed successfully                                                 "],
+    [0006, "No rows found                                                                 "]
+  ]}
+end 
+
+Program ListingServer
+  (searchName searchLastname, employees EMPLOYEE[], errorRecord ErrorRecord) { handleHardIOErrors = no, throwNrfEofExceptions = yes } 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, alias = "LSERVER",
+    V60ExceptionCompatibility=yes } 
+
+	
+	function main()
+  		VGVar.handleHardIOErrors = 1; 
+		set errorRecord empty; 
+
+		try
+			get employees
+				with #sql{
+        			select EMPNO, FIRSTNME, MIDINIT, LASTNAME, PHONENO
+        			from EMPLOYEE T1
+        			WHERE LASTNAME >= :searchName
+        			ORDER BY LASTNAME
+      			};
+
+		onException
+			if (employees is hardIoError)
+    			/* serious error occurred */
+    			errorRecord.errFlag = "Y";
+    			errorRecord.errMsg = "Error occurred using EMPLOYEE table";
+    			errorRecord.errCode = sysVar.sqlData.sqlcode;
+    			return;
+  			end
+		end
+	end 
+end 
+
+FormGroup ListingHelps
+{alias = "LHELPS"}
+
+ Form ListingHelp type textForm
+ { screenSizes = [[24,80]], formsize = [24,80], position = [1,1]}
+
+  * { position = [4,3], fieldLen = 17, color = defaultColor,
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "No Help Available"};
+ end
+end

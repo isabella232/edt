@@ -1,0 +1,61 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program T40506C type basicProgram 
+  {includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+   localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no
+  }
+
+  
+  RECORDS RECORDS; 
+  RECORDZ RECORDZ; 
+
+  function main()
+    T40506C_MAIN: T40506C_MAIN();
+  end 
+end 
+
+
+Function T40506C_GET_SQL()
+  get RECORDS;
+
+  if (RECORDZ is trunc) //0
+  end
+end 
+
+Function T40506C_MAIN()
+  T40506C_NOIO_SQL();
+  T40506C_GET_SQL();
+end 
+
+Function T40506C_NOIO_SQL()
+  if (RECORDZ is trunc) //1
+  end
+end 
+
+Record RECORDS type sqlRecord  {
+  tableNames = [["EMPLOYEE", "T1"]]
+  }
+  3 ITEMS2 char(6) { column = "EMPNO", isNullable = yes} ;
+  3 ITEMS3 char(3) { column = "ITEMS3", isNullable = yes} ;
+  3 ITEMS4 char(3) { column = "ITEMS4", isNullable = yes} ;
+  3 ITEMS char(3) { column = "ITEMS", isNullable = yes} ;
+  3 RECORDZ char(20) { column = "RECORDZ", isNullable = yes} ;
+  3 RECORDZ2  smallint { column = "RECORDZ2", isNullable = yes} ;
+end 
+
+Record RECORDZ type basicRecord
+  3 ITEMZ2 char(3) ; 
+  3 ITEMW char(6) ; 
+end 
+

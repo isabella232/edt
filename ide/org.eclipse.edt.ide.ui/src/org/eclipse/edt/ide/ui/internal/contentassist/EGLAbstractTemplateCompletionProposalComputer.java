@@ -192,8 +192,6 @@ public abstract class EGLAbstractTemplateCompletionProposalComputer implements I
 			switch(((TerminalNode) node).terminalType) {
 				case NodeTypes.ERRORSQLSTMTLIT:
 					return "#sql{}";
-				case NodeTypes.ERROR_INLINE_DLI:
-					return "#dli{}";
 			}
 		}
 		return node.getText();

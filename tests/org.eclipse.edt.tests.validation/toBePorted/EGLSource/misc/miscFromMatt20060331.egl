@@ -1,0 +1,53 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+
+	function main()
+		ary int[];
+		thing any;
+		str string;
+		myDictionary dictionary;
+		
+		/*
+		 * Outside of an into clause, you can allow a function call as a subscript.
+		 * In fact already allow n[ 1 + f() ], but we complain about n[ f() ].
+		 */
+
+		ary[0] = ary[1+func()];		//0
+		ary[0] = ary[func()];		//0
+		str = str[func():1+func()];	//0
+		
+		/*
+		 * Within an into clause, don't allow a function call anywhere within the
+		 * subscript expression.  Reject n[ f() ] and n[ 1 + f() ].
+		 */
+
+		open myResultSet1 with myPID1 into ary[0];			//0
+		open myResultSet2 with myPID2 into ary[func()];		//1 Function invocations may not be used within array subscripts in an into clause
+		open myResultSet3 with myPID3 into ary[1+func()];	//1 Function invocations may not be used within array subscripts in an into clause
+		
+		/*
+		 * Also, the type of an expression in an into clause shouldn't be Any. We
+		 * have to know what we're dealing with in order to generate the proper code.
+		 * Note: you can allow an Any-typed expression within a subscript of a variable
+		 *       in an into clause.  "into myAny" and "into myDictionary.x" are bad, but
+		 *       "into myIntArray[ 4 * myAny ]" is OK.
+		 */
+		open myResultSet4 with myPID4 into thing;			//1 Dynamic data accesses may not be used in an into clause
+		open myResultSet5 with myPID5 into myDictionary.x;	//1 Dynamic data accesses may not be used in an into clause
+		open myResultSet6 with myPID6 into ary[thing];		//0
+		open myResultSet6 with myPID6 into ary[4*(thing as int)];	//0  
+  	end
+  	
+  	function func() returns (int) end
+end

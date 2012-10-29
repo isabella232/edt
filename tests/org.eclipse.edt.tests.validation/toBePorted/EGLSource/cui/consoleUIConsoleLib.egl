@@ -1,0 +1,130 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+
+program ConsoleUIConsoleLib type basicProgram
+	window Window;
+	menuItem MenuItem;
+	consoleForm ConsoleFrm;
+	pa PresentationAttributes;
+	intx, row, column, depth, width, lines, keyInt int;
+	str, text, key, menuItemName, keyName string;
+	displayText, errorText, messageText, windowName, consoleFormName, consoleFieldName, helpMessage string;
+	
+	function main()
+	end
+	
+	function fields()
+		consoleForm = consoleLib.activeForm as ConsoleFrm;
+		window = consoleLib.activeWindow;
+		consoleLib.errorWindowVisible = yes;
+		window = consoleLib.errorWindow;
+		intx = consoleLib.commentLine;
+		intx = consoleLib.formLine;
+		intx = consoleLib.menuLine;
+		intx = consoleLib.messageLine;
+//		promptLine integer - function
+		window = consoleLib.screen;
+		consoleLib.interruptRequested = no;
+		consoleLib.quitRequested = yes;
+		str = consoleLib.messageResource;
+		consoleLib.cursorWrap = yes;
+		consoleLib.definedFieldOrder = no;
+		consoleLib.deferInterrupt = yes;
+		consoleLib.deferQuit = yes;
+		consoleLib.sqlInterrupt = no;
+		pa = consoleLib.defaultDisplayAttributes;
+		pa = consoleLib.defaultInputAttributes;
+		pa = consoleLib.currentDisplayAttrs;
+	end
+	
+	function functions()
+		consoleLib.activateWindow(window);
+		consoleLib.activateWindowByName(windowName);
+		consoleLib.cancelArrayDelete();
+		consoleLib.cancelArrayInsert();
+		consoleLib.clearActiveForm();
+		consoleLib.clearActiveWindow();
+		consoleLib.clearFields(consoleForm.fieldName);
+		consoleLib.clearFieldsByName(consoleFieldName);
+		consoleLib.clearForm(consoleForm);
+		consoleLib.clearWindow(window);
+		consoleLib.clearWindowByName(windowName);
+		consoleLib.closeActiveWindow();
+		consoleLib.closeWindow(window);
+		consoleLib.closeWindowByName(windowName);
+		intx = consoleLib.currentArrayDataLine();
+		intx = consoleLib.currentArrayScreenLine();
+		consoleLib.displayAtLine(text, row);
+		consoleLib.displayAtPosition(text, row, column);
+		consoleLib.displayError(errorText);
+		consoleLib.displayFields(consoleForm.fieldName);
+		consoleLib.displayFieldsByName(consoleFieldName);
+		consoleLib.displayForm(consoleForm);
+		consoleLib.displayFormByName(consoleFormName);
+		consoleLib.displayLineMode(displayText);
+		consoleLib.displayMessage(messageText);
+		consoleLib.drawBox(row, column, depth, width);
+		consoleLib.drawBoxWithColor(row, column, depth, width, blue);
+		intx = consoleLib.getKey();
+		intx = consoleLib.getKeyCode(key);
+		str = consoleLib.getKeyName(keyInt);
+		consoleLib.gotoField(consoleForm.fieldName);
+		consoleLib.gotoFieldByName(consoleFieldName);
+		consoleLib.gotoMenuItem(menuItem);
+		consoleLib.gotoMenuItemByName(menuItemName);
+		consoleLib.hideErrorWindow();
+		consoleLib.hideMenuItem(menuItem);
+		consoleLib.hideMenuItem(menuItem);
+		if(consoleLib.isCurrentField(consoleForm.fieldName) == yes) end
+		if(consoleLib.isCurrentFieldByName(consoleFieldName) == yes) end
+		if(consoleLib.isFieldModified(consoleForm.fieldName) == yes) end
+		if(consoleLib.isFieldModifiedByName(consoleFieldName) == yes) end
+		intx = consoleLib.lastKeyTyped();
+		consoleLib.nextField();
+		consoleLib.openWindow(window);
+		consoleLib.openWindowByName(windowName);
+		consoleLib.openWindowWithForm(window, consoleForm);
+		consoleLib.openWindowWithFormByName(windowName, consoleFormName);
+		consoleLib.previousField();
+		str = consoleLib.promptLineMode(displayText);
+		consoleLib.scrollDownLines(lines);
+		consoleLib.scrollDownPage();
+		consoleLib.scrollUpLines(lines);
+		consoleLib.scrollUpPage();
+		consoleLib.setArrayLine(lines);
+		consoleLib.setCurrentArrayCount(lines);
+		consoleLib.showHelp(helpMessage);
+		consoleLib.showMenuItem(menuItem);
+		consoleLib.showMenuItemByName(menuItemName);
+	end
+	
+end
+
+record ConsoleFrm type consoleForm {formSize = [14,80]}
+	* ConsoleField {position = [1,31]};
+	fieldName ConsoleField {fieldlen = 6, position = [4,18]};
+end
+
+Record WORK_22_FormType type ConsoleForm { formSize = [15,44], showBrackets = yes }
+   txt  ConsoleField[6]  { position = [5,2],  fieldLen = 40, dataType = "unicode",  caseFormat = CaseFormatKind.upper, name="txt"};
+   myArray ArrayDictionary { txt = txt };
+end
+
+Program WORK_22 {localSQLScope=YES}
+	FUNCTION main()
+		localForm WORK_22_FormType{ name="f" };
+		displayFormByName("f" );
+		clearFields(activeForm.myArray[1].txt as ConsoleField);
+	END 
+END

@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program DLIProgramStmtsUsingSysType_valid_invalid type textUIProgram 
+	function main()
+ 		 if (sysvar.systemType is aix  			//0
+  			 || sysvar.systemType is win)		//0
+  		end	
+  		if (sysvar.systemType is imsbmp			//0
+  			 || sysvar.systemtype is imsvs)		//0	
+  		end
+   		if (sysvar.systemType is imsgarbage		//1 imsgarbage is an invalid System Type value
+  			 || sysvar.systemtype is imsvs)		//0
+  		end   
+  		while (sysvar.systemType is imsbmp		//0
+  			 || sysvar.systemtype is imsvs)		//0	
+  		end
+   		while (sysvar.systemType is imsgarbage	//1 imsgarbage is an invalid System Type value
+  			 || sysvar.systemtype is imsvs)		//0
+  		end  
+  		case (sysvar.systemType)				//0
+  			when (imsbmp)						//0
+  			when (imsvs)						//0
+  			when (something)					//1 something is an invalid System Type value
+  		end		
+   	 	mychar char(10) = vgLib.getVAGSysType();//0
+   	end
+end

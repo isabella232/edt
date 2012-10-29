@@ -1,0 +1,25 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record FdtDateTimesInRecord 
+	10 aDateAsChar char(8) ;
+		20 aDate date ;
+	10 aTimeAsChar char(6) ;
+		20 aTime time ;
+	10 aTimeStampAsChar char(14) ;
+		20 aTimeStamp timeStamp ;
+	10 aLongTimeStampAsChar char(20) ;
+		20 aLongTimeStamp timeStamp ("yyyymmddhhmmssffffff") ;
+	10 anIntervalAsChar char(7) ;
+		20 anInterval interval ;
+	10 aSecondSpanAsChar char(22) ;								//0
+		20 aSecondSpan interval ("dddddddddhhmmssffffff") ;
+end

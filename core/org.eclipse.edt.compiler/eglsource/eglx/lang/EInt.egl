@@ -12,9 +12,14 @@
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
 externalType EInt extends ENumber type ClassType
+	/**
+	 * Constructs an int with a default value of 0.
+	 */
+	constructor();
+	
 	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */

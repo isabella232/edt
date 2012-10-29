@@ -13,20 +13,15 @@ package org.eclipse.edt.ide.ui.wizards;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
-import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -39,8 +34,8 @@ import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
+import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -97,7 +92,7 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 		if(servicePart != null){
 			setBindingName(servicePart.getElementName());
 			setEGLServiceOrInterface(servicePart.getFullyQualifiedName());
-			setAlias(getAliasFrServicePart(servicePart));
+			setAlias("");
 			
 			fProj = servicePart.getEGLProject().getProject();
 		}
@@ -192,49 +187,6 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 		
 	public String getFileExtension() {
 		return EGLDDRootHelper.EXTENSION_EGLDD;
-	}
-	
-	public String getAliasFrServicePart(IPart servicePart) //throws CoreException
-	{
-		final String[] alias = new String[]{""}; //$NON-NLS-1$
-		try{
-			String servicePartName = servicePart.getElementName();
-			
-			//bind the ast tree with live env and scope
-			IWorkingCopy[] currRegedWCs = EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory());
-			
-			IProject proj = servicePart.getEGLProject().getProject();		
-			IEGLFile eglFile = servicePart.getEGLFile();
-			IFile file = (IFile)(eglFile.getCorrespondingResource());
-			
-			String packageName = servicePart.getPackageFragment().getElementName();
-			Path pkgPath = new Path(packageName.replace('.', IPath.SEPARATOR)); 					
-			String[] pkgName = Util.pathToStringArray(pkgPath);
-		
-			//visit AST part tree(already bound)		
-			WorkingCopyCompiler.getInstance().compilePart(proj, pkgName, file, currRegedWCs, servicePartName, 		
-						new IWorkingCopyCompileRequestor(){			
-							public void acceptResult(WorkingCopyCompilationResult result) {
-								Part boundPart = (Part)result.getBoundPart();
-								final IBinding partBinding = result.getPartBinding();							
-								boundPart.accept(new AbstractASTVisitor(){
-									public boolean visit(Service service){
-										//make sure it is the one we care about
-										IAnnotationBinding aliasAnnotationBinding = partBinding.getAnnotation(SystemEnvironmentPackageNames.EGL_CORE, IEGLConstants.PROPERTY_ALIAS);
-										if(aliasAnnotationBinding != null)
-										{
-											alias[0] = aliasAnnotationBinding.getValue().toString();
-										}									
-										return false;											
-									}								
-								});
-							}
-					}
-			);	
-		} catch (EGLModelException e) {
-			e.printStackTrace();
-		}		
-		return alias[0];
 	}
 	
 	protected String getValidBindingName(String bindingName) {

@@ -133,4 +133,19 @@ public class ProxyElement extends ProxyEObject implements Element, Member {
 		
 	}
 
+	@Override
+	public String getCaseSensitiveName() {
+		return getName();
+	}
+
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
+
+	@Override
+	public Member resolveMember() {
+		return this;
+	}
+
 }

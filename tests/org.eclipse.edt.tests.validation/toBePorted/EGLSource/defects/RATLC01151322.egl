@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+program TSTSETP type BasicProgram {}
+	
+	mySerialRec SerialRec;
+	myIndexedRec IndexedRec;
+	myRelativeRec RelativeRec;
+	
+	function main()
+		set myIndexedRec position;		//0
+		
+		set mySerialRec position;		//1 The set statement specifies the POSITION option, which requires mySerialRec to be an indexed or DLISegment record
+		set myRelativeRec position;		//1 The set statement specifies the POSITION option, which requires myRelativeRec to be an indexed or DLISegment record
+	end
+	
+end
+Record SerialRec type serialRecord  {
+  fileName = "MYFILENM"
+  }
+  3 MYDATA1 char(20) ; 
+  3 MYDATA2 char(60) ; 
+end 
+Record IndexedRec type indexedRecord  {
+  fileName = "MYFILENM", keyItem = MYDATA1
+  }
+  3 MYDATAA smallint ; 
+  3 MYDATAB smallint ; 
+  3 MYDATA1 char(20) ; 
+  3 MYDATA2 char(60) ; 
+end 
+
+Record RelativeRec type relativeRecord  {
+  fileName = "MYFILENM", recordNumItem = "MYDATAA"
+  }
+  3 MYDATAA smallint ; 
+  3 MYDATAB smallint ; 
+  3 MYDATA1 char(20) ; 
+  3 MYDATA2 char(60) ; 
+end

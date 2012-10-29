@@ -35,6 +35,7 @@ public abstract class EUnitRunAllDriverGenerator extends EUnitGenerator {
 	}
 
 	protected void genImports() {
+		out.println("import eglx.ui.rui.RUIHandler;");
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestExecutionLib;");
 		out.println();
 	}

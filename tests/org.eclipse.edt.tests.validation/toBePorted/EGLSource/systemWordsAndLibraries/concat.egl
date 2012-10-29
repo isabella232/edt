@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program pgm {
+	textLiteralDefaultIsString = no
+}
+	function main()
+		mbcha mbchar(4);
+		cha char(4);
+		dbcha dbchar(4);
+		nu num(4);
+		unicod unicode(4);
+		intVar int;
+		
+		concatenate(mbcha, cha);		//0
+		concatenate(cha, mbcha);		//0
+		concatenate(mbcha, dbcha);		//0
+		concatenate(dbcha, mbcha);		//1
+		concatenate(cha, nu);			//0
+		concatenate(unicod, unicod);	//0
+		concatenate(unicod, mbcha);		//0
+		concatenate(unicod, dbcha);		//0
+		concatenate(unicod, cha);		//0
+		concatenate(cha, unicod);		//0
+		
+		concatenateWithSeparator(mbcha, cha, cha);			//0
+		concatenateWithSeparator(cha, mbcha, mbcha);		//0
+		concatenateWithSeparator(mbcha, dbcha, dbcha);		//0
+		concatenateWithSeparator(dbcha, mbcha, mbcha);		//2
+		concatenateWithSeparator(cha, nu, nu);				//0
+		concatenateWithSeparator(unicod, unicod, unicod);	//0
+		concatenateWithSeparator(unicod, mbcha, mbcha);		//0
+		concatenateWithSeparator(unicod, dbcha, dbcha);		//0
+		concatenateWithSeparator(unicod, cha, cha);			//0
+		concatenateWithSeparator(cha, unicod, unicod);		//0
+		
+		findStr(mbcha, intVar, intVar, dbcha);		//0
+	end
+	
+	function Note0205()
+		charTargetItem char(20);
+		charSep char(2);
+		numItem num(10);
+		numSep num(2);
+		stringItem string;
+		stringSep string;
+		concatenate( charTargetItem, stringItem );								//0
+		concatenate( charTargetItem, "stringLiteral" );							//0
+		concatenate( charTargetItem, numItem );									//0
+		concatenateWithSeparator( charTargetItem, "stringLiteral", "sep" );		//0
+		concatenateWithSeparator( charTargetItem, stringItem, stringSep );		//0
+		concatenateWithSeparator( charTargetItem, stringItem, numSep );			//0
+		concatenateWithSeparator( charTargetItem, numItem, numSep );			//0
+		concatenateWithSeparator( charTargetItem, numItem, stringSep );			//0
+	end
+end

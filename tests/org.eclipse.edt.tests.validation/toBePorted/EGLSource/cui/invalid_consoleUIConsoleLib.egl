@@ -1,0 +1,128 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program ConsoleUIConsoleLib type basicProgram
+	window Window;	// 0
+	menuItem MenuItem;	// 0
+	consoleForm ConsoleForm;	// 0
+	pa PresentationAttributes;	// 0
+	intx, row, column, depth, width, lines, keyInt int;	// 0
+	str, text, key, menuItemName, keyName string;	// 0
+	displayText, errorText, messageText, windowName, consoleFormName, consoleFieldName, helpMessage string;	// 0
+	
+	function main()
+	end
+	
+	function fields()
+		consoleForm = consoleLib.activeForm as consoleForm;	// 0
+		window = consoleLib.activeWindow;	// 0
+		consoleLib.errorWindowVisible = yes;	// 0
+		window = consoleLib.errorWindow;	// 0
+		intx = consoleLib.commentLine;	// 0
+		intx = consoleLib.formLine;	// 0
+		intx = consoleLib.menuLine;	// 0
+		intx = consoleLib.messageLine;	// 0
+//		promptLine integer - function
+		window = consoleLib.screen;	// 0
+		consoleLib.interruptRequested = no;	// 0
+		consoleLib.quitRequested = yes;	// 0
+		str = consoleLib.messageResource;	// 0
+		consoleLib.cursorWrap = yes;	// 0
+		consoleLib.definedFieldOrder = no;	// 0
+		consoleLib.deferInterrupt = yes;	// 0
+		consoleLib.deferQuit = yes;	// 0
+		consoleLib.sqlInterrupt = no;	// 0
+		pa = consoleLib.defaultDisplayAttributes;	// 0
+		pa = consoleLib.defaultInputAttributes;	// 0
+		pa = consoleLib.currentDisplayAttrs;	// 0
+	end
+	
+	function functions()
+		consoleLib.activateWindow(window);	// 0
+		consoleLib.activateWindowByName(windowName);	// 0
+		consoleLib.cancelArrayDelete();	// 0
+		consoleLib.cancelArrayInsert();	// 0
+		consoleLib.clearActiveForm();	// 0
+		consoleLib.clearActiveWindow();	// 0
+		consoleLib.clearFields(consoleForm.fieldName);	// 0
+		consoleLib.clearFieldsByName(consoleFieldName);	// 0
+		consoleLib.clearForm(consoleForm);	// 0
+		consoleLib.clearWindow(window);	// 0
+		consoleLib.clearWindowByName(windowName);	// 0
+		consoleLib.closeActiveWindow();	// 0
+		consoleLib.closeWindow(window);	// 0
+		consoleLib.closeWindowByName(windowName);	// 0
+		intx = consoleLib.currentArrayDataLine();	// 0
+		intx = consoleLib.currentArrayScreenLine();	// 0
+		consoleLib.displayAtLine(text, row);	// 0
+		consoleLib.displayAtPosition(text, row, column);	// 0
+		consoleLib.displayError(errorText);	// 0
+		consoleLib.displayFields(consoleForm.fieldName);	// 0
+		consoleLib.displayFieldsByName(consoleFieldName);	// 0
+		consoleLib.displayForm(consoleForm);	// 0
+		consoleLib.displayFormByName(consoleFormName);	// 0
+		consoleLib.displayLineMode(displayText);	// 0
+		consoleLib.displayMessage(messageText);	// 0
+		consoleLib.drawBox(row, column, depth, width);	// 0
+		consoleLib.drawBoxWithColor(row, column, depth, width, blue);	// 0
+		intx = consoleLib.getKey();	// 0
+		intx = consoleLib.getKeyCode(key);	// 0
+		str = consoleLib.getKeyName(keyInt);	// 0
+		consoleLib.gotoField(consoleForm.fieldName);	// 0
+		consoleLib.gotoFieldByName(consoleFieldName);	// 0
+		consoleLib.gotoMenuItem(menuItem);	// 0
+		consoleLib.gotoMenuItemByName(menuItemName);	// 0
+		consoleLib.hideErrorWindow();	// 0
+		consoleLib.hideMenuItem(menuItem);	// 0
+		consoleLib.hideMenuItem(menuItem);	// 0
+		intx = consoleLib.isCurrentField(consoleForm.fieldName);	// 0
+		intx = consoleLib.isCurrentFieldByName(consoleFieldName);	// 0
+		intx = consoleLib.isFieldModified(consoleForm.fieldName);	// 0
+		intx = consoleLib.isFieldModifiedByName(consoleFieldName);	// 0
+		intx = consoleLib.lastKeyTyped();	// 0
+		consoleLib.nextField();	// 0
+		consoleLib.openWindow(window);	// 0
+		consoleLib.openWindowByName(windowName);	// 0
+		consoleLib.openWindowWithForm(window, consoleForm);	// 0
+		consoleLib.openWindowWithFormByName(windowName, consoleFormName);	// 0
+		consoleLib.previousField();	// 0
+		str = consoleLib.promptLineMode(displayText);	// 0
+		consoleLib.scrollDownLines(lines);	// 0
+		consoleLib.scrollDownPage();	// 0
+		consoleLib.scrollUpLines(lines);	// 0
+		consoleLib.scrollUpPage();	// 0	// 0
+		consoleLib.setArrayLine(lines);	// 0
+		consoleLib.setCurrentArrayCount(lines);	// 0
+		consoleLib.showHelp(helpMessage);	// 0
+		consoleLib.showMenuItem(menuItem);	// 0
+		consoleLib.showMenuItemByName(menuItemName);	// 0
+		
+		UpdateWindowAttributes(WindowAttributeKind.formLine ); 								// 0
+		UpdateWindowAttributes(WindowAttributeKind.formLine, WindowAttributeKind.color); 	// 0		
+		UpdateWindowAttributes(1);		// 1
+		UpdateWindowAttributes("A");	// 1
+		UpdateWindowAttributes([1,2]);	// 1
+		UpdateWindowAttributes();		// 1
+		
+		consoleLib.UpdateWindowAttributes(WindowAttributeKind.formLine );		// 0
+		consoleLib.UpdateWindowAttributes(WindowAttributeKind.formLine, color);	// 0
+		consoleLib.UpdateWindowAttributes(1);		// 1
+		consoleLib.UpdateWindowAttributes("A");		// 1
+		consoleLib.UpdateWindowAttributes([1,2]);	// 1
+		consoleLib.UpdateWindowAttributes();		// 1		
+	end
+	
+end
+
+record ConsoleForm type consoleForm {formSize = [14,80]}
+	* ConsoleField {position = [1,31]};
+	fieldName ConsoleField {position = [4,18]};
+end

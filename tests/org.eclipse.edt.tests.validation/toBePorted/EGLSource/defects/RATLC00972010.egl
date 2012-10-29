@@ -1,0 +1,33 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+formGroup timeG
+	Form timeF type textForm { formSize = [24,80], position = [1,1]}	 
+	   isoChar char(6)	//1 value must match the primitive length
+	  { position = [1,1], fieldLen = 8, timeFormat = isoTimeFormat}; 
+	   usaChar char(6)	//1 value must match the primitive length
+	  { position = [2,1], fieldLen = 8, timeFormat = usaTimeFormat};
+	   eurChar char(6)	//1 value must match the primitive length
+	  { position = [3,1], fieldLen = 8, timeFormat = eurTimeFormat};
+	   jisChar char(6)	//1 value must match the primitive length
+	  { position = [4,1], fieldLen = 8, timeFormat = jisTimeFormat};
+	  
+	  isoChar1 char(8)	//0
+	  { position = [1,10], fieldLen = 8, timeFormat = isoTimeFormat}; 
+	   usaChar1 char(8)	//0
+	  { position = [2,10], fieldLen = 8, timeFormat = usaTimeFormat};
+	   eurChar1 char(8)	//0
+	  { position = [3,10], fieldLen = 8, timeFormat = eurTimeFormat};
+	   jisChar1 char(8)	//0
+	  { position = [4,10], fieldLen = 8, timeFormat = jisTimeFormat};
+	end
+end

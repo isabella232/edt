@@ -15,10 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.dli.DLIInfo;
-import org.eclipse.edt.compiler.internal.sql.SQLInfo;
-
-
 /**
  * ReplaceStatement AST node type.
  * 
@@ -33,12 +29,10 @@ import org.eclipse.edt.compiler.internal.sql.SQLInfo;
  * @author Albert Ho
  * @author David Murray
  */
-public class ReplaceStatement extends Statement implements IDliIOStatement{
+public class ReplaceStatement extends Statement {
 
 	private Expression expr;
 	private List replaceOptions;	// List of Nodes
-	private DLIInfo dliInfo;
-	private SQLInfo sqlInfo;
 
 	public ReplaceStatement(Expression expr, List replaceOptions, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -73,25 +67,12 @@ public class ReplaceStatement extends Statement implements IDliIOStatement{
 	protected Object clone() throws CloneNotSupportedException {
 		return new ReplaceStatement((Expression)expr.clone(), cloneList(replaceOptions), getOffset(), getOffset() + getLength());
 	}
-    public DLIInfo getDliInfo() {
-        return dliInfo;
-    }
-    public void setDliInfo(DLIInfo dliInfo) {
-        this.dliInfo = dliInfo;
-    }
 
     /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.core.ast.IDliIoStatement#getTargets()
      */
     public List getTargets() {
         List list = new ArrayList();
         list.add(getRecord());
         return list;
-    }
-    public SQLInfo getSqlInfo() {
-        return sqlInfo;
-    }
-    public void setSqlInfo(SQLInfo sqlInfo) {
-        this.sqlInfo = sqlInfo;
     }
 }

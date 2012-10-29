@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.annotations;
 
 import java.util.List;
@@ -77,29 +88,11 @@ public class EnumsTest extends ValidationTestCase {
 	}
 
 	/*
-	 * E = +9,
+	 * E = +9
 	 * 0 validation messages are expected.
 	 */
 	public void testLine19() {
 		List messages = getMessagesAtLine( 19 );
 		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * F = 10 + 2,
-	 * 1 validation message is expected.
-	 */
-	public void testLine20() {
-		List messages = getMessagesAtLine( 20 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * G = "123"
-	 * 1 validation message is expected.
-	 */
-	public void testLine21() {
-		List messages = getMessagesAtLine( 21 );
-		assertEquals( 1, messages.size() );
 	}
 }

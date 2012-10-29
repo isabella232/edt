@@ -1,0 +1,154 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+program nonSegmentedPgmProperty type textUIprogram 
+ { 
+	alias = "NSPP", 
+	segmented = no,
+	includeReferencedFunctions = yes ,
+	AllowUnqualifiedItemReferences = yes,
+	HandleHardIOErrors = yes,
+	@DLI { psb = mypsb}
+	}
+
+	myPSB mypsb;
+	
+	function main()
+	if (systemType is imsvs)
+		mypsb.iopcb = "My fake IO PCB";			//1
+		move "My fake IO PCB" to mypsb.iopcb;	//1
+	end
+	mypsb.courses =  "My fake PCB1";		//1
+	move "My fake PCB1" to mypsb.courses;	//1
+	end
+end
+
+Record myPSB type PSBRecord
+	{defaultPSBName = "SCHOOL"}
+	ioPcb 	IO_PCBRecord 	{ @PCB{ pcbType=TP }};
+	TP1 	ALT_PCBRecord 	{ @PCB{ pcbType=TP }};
+	TP2 	ALT_PCBRecord 	{ @PCB{ pcbType=TP }};
+	COURSES DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="COURSES",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord=SCCOURSE },
+	   		@Relationship{ segmentRecord=SCOFFER,  parentRecord=SCCOURSE },
+	   		@Relationship{ segmentRecord=SCTEACHR, parentRecord=SCOFFER  },
+	   		@Relationship{ segmentRecord=SCMEMBER, parentRecord=SCOFFER  },
+	   		@Relationship{ segmentRecord=SCASGMNT, parentRecord=SCMEMBER }
+  		] }};
+  	TEACHERS DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="TEACHERS",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord=SCTEACHR }
+  		] }};
+  	STUDENTS DB_PCBRecord 	{ @PCB{ pcbType=DB,  
+	  	pcbName="STUDENTS",
+	  	hierarchy = [
+	   		@Relationship{ segmentRecord=SCSTUDNT }
+  		] }};  			
+	ELAWORK DB_PCBRecord 	{ @PCB{ pcbType=DB }} ;
+end
+
+// Course segment, root of COURSES database
+Record SCCOURSE type DLISegment
+	{keyItem = CourseNum,
+	 segmentName = "SCCOURSE"}
+	 10 CourseNum 	CourseNum {dliFieldName = "Course"}; 
+	 10 Title 		char(20);   /* text description of class   */
+end	
+
+// Offering segment, second level of COURSES, parent is Course
+Record SCOFFER type DLISegment
+	{segmentName = "SCOFFER",
+	keyitem = offeringperiod}
+	 10 OfferingPeriod 	OfferingPeriod {dlifieldname="offerTme"};   
+	 10 ClassPeriod	char(2);   /* B1=Block 1, B2=Block2, etc   */
+	 10 Room		char(5);
+end
+
+// Teacher segment, root of TEACHERS database and third level of COURSES
+Record SCTEACHR type DLISegment
+	{keyItem = TeacherID,
+	 segmentName = "SCTEACHR"}
+	 10 TeacherID ID {dliFieldName = "TeachID"};
+	 10 TeacherName SCHName;
+	 10 * char(2);
+end
+
+// ClassMember segment, third level of COURSES,parent is Offering 
+Record SCMEMBER type DLISegment
+	{keyItem = StudentID,
+	 lengthItem = memberLen,
+	 segmentName = "SCMEMBER"}
+	 10 StudentID ID {dliFieldName = "StudID"};
+	 10 Grades Grades;
+	 10 memberLen bin(9);
+	 10 Notes char(30) [5];
+end	
+
+// Student segment, root of STUDENTS database
+Record SCSTUDNT type DLISegment
+	{keyItem = StudentID,
+	 segmentName = "SCSTUDNT"}
+	 10 StudentID ID {dliFieldName = "StudID"};
+	 10 StudentName SCHName;
+	 10 GradeLevel num(2);		/* 1-12*/
+end	 
+
+// Assignment segment, fourth level of COURSES, parent is classMember
+Record SCASGMNT type DLISegment
+	{segmentName = "SCASGMNT",
+	keyitem = assign#}
+	 10 assign# int {dlifieldName = "assign"};	
+	 10 dateAssigned date;
+	 10 dateDue		 date;
+	 10 description char(30);
+	 10 score		 bin(4);
+	 10 maxScore	 bin(4);
+end	
+
+Record CourseNum type basicRecord	
+	10 Discipline char(1);  /* M=math, S=science, L=language, etc*/
+	10 Level      char(1);  /* 1=Fresh, 2=Soph, 3=Junior, 4=Senior*/
+	10 CourseID	  char(2);  /* unique within Discipline/Level*/
+	10 section    char(2);  /* section number */
+end	 
+Record OfferingPeriod type basicRecord	
+	10 Semester  char(1);  /* 1=Fall, 2=Spring*/
+	10 Year      char(4);  
+end	 
+Record Grades type basicRecord
+	10 Quarter1Grade num(5,2);
+	10 Quarter2Grade num(5,2);
+	10 Quarter3Grade num(5,2);
+	10 Quarter4Grade num(5,2); 
+end
+
+Record SCHName type basicRecord
+	10 LastName  char(15);
+	10 FirstName char(15);
+		15 firstinitial char(1);
+		15 rest char(14);
+end	
+DataItem ID char(4)
+end	
+
+Record Department type SQLRecord {
+	tableNames = [["\"DEPTTB\""]] , 
+	keyItems = [id] 
+	}
+	id string { maxLen = 4 } ; 
+	description string { isSqlNullable = yes} ;
+	manager string  ; 
+end

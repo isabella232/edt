@@ -60,7 +60,7 @@ public class BinaryElementParser {
 	private char[] packageName;
 	private ISourceElementRequestor requestor;
 	private IProject project;
-	private boolean reportReferencesInStatements;
+//	private boolean reportReferencesInStatements;
 	
 	public BinaryElementParser(ISourceElementRequestor requestor,IProject project) {
 		this.requestor = requestor;
@@ -68,7 +68,7 @@ public class BinaryElementParser {
 	}
 
 	public void parseDocument(IDocument file, boolean reportReferencesInStatements) {
-		this.reportReferencesInStatements = reportReferencesInStatements;
+//		this.reportReferencesInStatements = reportReferencesInStatements;
 		byte[] contents;
 		try { 
 			contents = file.getByteContent();
@@ -128,7 +128,7 @@ public class BinaryElementParser {
 		partInfo.nameStart = location.elementOffSet;
 		partInfo.nameEnd = location.elementOffSet + location.elementLen;
 		
-		partInfo.name = partElement.getName().toCharArray();
+		partInfo.name = partElement.getCaseSensitiveName().toCharArray();
 		partInfo.modifier = (partElement.getAccessKind() == AccessKind.ACC_PRIVATE) ? Flags.AccPrivate : Flags.AccPublic;
 		
 		new PartVisitor(partInfo, partElement);
@@ -144,8 +144,8 @@ public class BinaryElementParser {
 		}
 		else if (partElement instanceof AnnotationType)  {
 			subTypeName = IRPartType.ANNOTATION;
-		} else if(partElement.getSubType() != null){
-			subTypeName = partElement.getSubType().getEClass().getName();
+		} else if(partElement.getStereotype() != null){
+			subTypeName = partElement.getStereotype().getEClass().getCaseSensitiveName();
 		}
 
 		requestor.enterPart(partType, subTypeName.toCharArray(), partElement.hashCode(), 
@@ -208,7 +208,7 @@ public class BinaryElementParser {
 				return false;
 			}
 			
-			//String name = annoType.getName();
+			//String name = annoType.getCaseSensitiveName();
 			this.partType = IRPartType.PART_RECORD;
 			visitPart(partType , partInfo, annoType);
 			return true;
@@ -219,7 +219,7 @@ public class BinaryElementParser {
 				return false;
 			}
 			
-			//String name = annoType.getName();
+			//String name = annoType.getCaseSensitiveName();
 			this.partType = IRPartType.PART_RECORD;
 			visitPart(partType , partInfo, annoType);
 			return true;
@@ -241,7 +241,7 @@ public class BinaryElementParser {
 			int modifier = isPublic ? Flags.AccPublic : Flags.AccPrivate;
 			ElementLocation location = getElementLocation(delegate);
 			int declStart = location.elementOffSet;
-			int declEnd = location.elementOffSet + location.elementLen; 
+//			int declEnd = location.elementOffSet + location.elementLen; 
 			int nameStart = 0;
 			int nameEnd = nameStart;
 			
@@ -260,7 +260,7 @@ public class BinaryElementParser {
 				parameter = funPara.get(i);
 				//requestor.acceptPartReference(Util.toCompoundChars(parameter.getType().toString()), paraStart, paraEnd);
 				
-				parmNames[i] = parameter.getName().toString().toCharArray();
+				parmNames[i] = parameter.getCaseSensitiveName().toString().toCharArray();
 				typeNames[i] = parameter.getType().getTypeSignature().toCharArray();	//if the parameter is an array, typeNames[i] ends with '[]'
 				areNullable[i] = parameter.isNullable();
 				
@@ -277,7 +277,7 @@ public class BinaryElementParser {
 				
 				String packageName = null;
 				if(parameter.getType() != null && parameter.getType().getClassifier() != null)
-					packageName = parameter.getType().getClassifier().getPackageName();
+					packageName = parameter.getType().getClassifier().getCaseSensitivePackageName();
 				
 				if(packageName != null) {
 					parmPackages[i] = packageName.toCharArray();
@@ -292,17 +292,17 @@ public class BinaryElementParser {
 			char[] retFieldPkg = null;
 			if(retType != null) {
 				//requestor.acceptPartReference(Util.toCompoundChars(retField.getFullyQualifiedName()), 0, 0);
-				String packageName = retType.getClassifier().getPackageName();
+				String packageName = retType.getClassifier().getCaseSensitivePackageName();
 				if(packageName != null) {
 					retFieldPkg = packageName.toCharArray();
 				} else {
 					retFieldPkg = null;
 				}
 				
-				fieldName = retType.getClassifier().getName().toCharArray();
+				fieldName = retType.getClassifier().getCaseSensitiveName().toCharArray();
 			}
 			
-			requestor.enterFunction(declStart, modifier, fieldName, retFieldPkg, delegate.getId().toCharArray(),
+			requestor.enterFunction(declStart, modifier, fieldName, retFieldPkg, delegate.getCaseSensitiveName().toCharArray(),
 					nameStart, nameEnd, typeNames, parmNames, useTypes, areNullable, parmPackages);
 			
 			return true;
@@ -333,7 +333,7 @@ public class BinaryElementParser {
 				return false;
 			}
 			
-			this.partType = IRPartType.PART_EXTERNALTYPE;
+			this.partType = IRPartType.PART_CLASS;
 			visitPart(partType, partInfo, eglClass);
 			return true;
 		}
@@ -360,14 +360,14 @@ public class BinaryElementParser {
 				return false;
 			}*/
 			
-			String functionName = function.getName();
+			String functionName = function.getCaseSensitiveName();
 			if( functionName.equalsIgnoreCase("<init>") ) {//no implicit functon in EDT
 				return false;
 			}
 			
 			ElementLocation location = getElementLocation(function);
 			int declStart = location.elementOffSet;
-			int declEnd = location.elementOffSet + location.elementLen; 
+//			int declEnd = location.elementOffSet + location.elementLen; 
 			
 			AccessKind accessKind = function.getAccessKind();
 			boolean isPublic = true;
@@ -393,7 +393,7 @@ public class BinaryElementParser {
 				parameter = funPara.get(i);
 				//requestor.acceptPartReference(Util.toCompoundChars(parameter.getType().toString()), paraStart, paraEnd);
 				
-				parmNames[i] = parameter.getName().toString().toCharArray();
+				parmNames[i] = parameter.getCaseSensitiveName().toString().toCharArray();
 				typeNames[i] = parameter.getType().getTypeSignature().toCharArray();	//if the parameter is an array, typeNames[i] ends with '[]'
 				areNullable[i] = parameter.isNullable();
 				
@@ -410,7 +410,7 @@ public class BinaryElementParser {
 				
 				String packageName = null;
 				if(parameter.getType() != null && parameter.getType().getClassifier() != null)
-					packageName = parameter.getType().getClassifier().getPackageName();
+					packageName = parameter.getType().getClassifier().getCaseSensitivePackageName();
 				
 				if(packageName != null) {
 					parmPackages[i] = packageName.toCharArray();
@@ -425,17 +425,17 @@ public class BinaryElementParser {
 			char[] retFieldPkg = null;
 			if(retField != null) {
 				//requestor.acceptPartReference(Util.toCompoundChars(retField.getFullyQualifiedName()), 0, 0);
-				String packageName = retField.getType().getClassifier().getPackageName();
+				String packageName = retField.getType().getClassifier().getCaseSensitivePackageName();
 				if(packageName != null) {
 					retFieldPkg = packageName.toCharArray();
 				} else {
 					retFieldPkg = null;
 				}
 				
-				fieldName = retField.getName().toCharArray();
+				fieldName = retField.getCaseSensitiveName().toCharArray();
 			}
 			
-			requestor.enterFunction(declStart, modifier, fieldName, retFieldPkg, function.getId().toCharArray(),
+			requestor.enterFunction(declStart, modifier, fieldName, retFieldPkg, function.getCaseSensitiveName().toCharArray(),
 					nameStart, nameEnd, typeNames, parmNames, useTypes, areNullable, parmPackages);
 			return true;
 		}
@@ -445,7 +445,7 @@ public class BinaryElementParser {
 				return;
 			}*/
 			
-			String functionName = function.getName();
+			String functionName = function.getCaseSensitiveName();
 			if(functionName.toString().equalsIgnoreCase("<init>") ) {
 				return;
 			}
@@ -458,7 +458,7 @@ public class BinaryElementParser {
 			int declEnd = location.elementOffSet + location.elementLen; 
 			
 			if(parameter.getType().getClassifier() != null) {
-				String fullyQualifiedName = parameter.getName() + " " + parameter.getType().getClassifier().getId();
+				String fullyQualifiedName = parameter.getCaseSensitiveName() + " " + parameter.getType().getClassifier().getCaseSensitiveName();
 				requestor.acceptPartReference(Util.toCompoundChars(fullyQualifiedName), declStart, declEnd);
 			}
 			
@@ -520,7 +520,7 @@ public class BinaryElementParser {
 					char[][] paramTypes = new char[paramLength][];
 					List<ProgramParameter> params = program.getParameters();
 					for(int i = 0; i < paramLength; i++ ) {
-						paramNames[i] = params.get(i).getId().toCharArray();
+						paramNames[i] = params.get(i).getCaseSensitiveName().toCharArray();
 						paramTypes[i] = params.get(i).getType().toString().toCharArray();
 					}
 					partInfo.parameterNames = paramNames;
@@ -569,8 +569,8 @@ public class BinaryElementParser {
 				char[][] usagePartPackages = new char[usedParts.size()][];
 				
 				for(int i = 0; i < usedParts.size(); i++ ) {
-					usagePartTypes[i] = usedParts.get(i).getName().toCharArray();
-					usagePartPackages[i] = usedParts.get(i).getPackageName().toCharArray();
+					usagePartTypes[i] = usedParts.get(i).getCaseSensitiveName().toCharArray();
+					usagePartPackages[i] = usedParts.get(i).getCaseSensitivePackageName().toCharArray();
 				}
 				
 				partInfo.usagePartTypes = usagePartTypes;

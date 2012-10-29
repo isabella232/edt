@@ -23,7 +23,7 @@ import org.eclipse.edt.mof.EClass;
  */
 public interface EClassProxy extends EGLClass {
 	EClass getProxiedEClass();
-	
-	void setProxiedEClass(EClass value);
+	String getProxiedEClassName();
+	void setProxiedEClassName(String value);
 	
 }

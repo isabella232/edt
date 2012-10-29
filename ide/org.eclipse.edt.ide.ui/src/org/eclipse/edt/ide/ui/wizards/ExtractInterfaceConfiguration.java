@@ -16,10 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
@@ -29,8 +25,8 @@ import org.eclipse.edt.compiler.core.ast.Parameter;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.Type;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
-import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -38,6 +34,7 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IFunction;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.Signature;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -271,7 +268,7 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
      */
     static public String getQualifiedTypeString(Type elemType, String currFilePkg, boolean resolveQualifier)
     {
-    	ITypeBinding elemTypeBinding = elemType.resolveTypeBinding();
+    	org.eclipse.edt.mof.egl.Type elemTypeBinding = elemType.resolveType();
     	StringBuffer qualifiedTypeString = new StringBuffer();        
         String typeName = elemType.getCanonicalName();
         
@@ -285,7 +282,7 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 	        }
         }
         
-        if(elemTypeBinding != null && elemTypeBinding != IBinding.NOT_FOUND_BINDING)
+        if(elemTypeBinding != null)
         	getSimpleTypeString(elemTypeBinding, qualifiedTypeString);
         else
         	qualifiedTypeString.append(typeName);
@@ -308,20 +305,8 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
      * @param elemTypeBinding - assume this is not null, nor NOT_FOUND_BINDING
      * @param simpleTypeString
      */
-    static public void getSimpleTypeString(ITypeBinding elemTypeBinding, StringBuffer simpleTypeString){
-    	int bindingtypeKind = elemTypeBinding.getKind();
-    	if(elemTypeBinding.isNullable()){
-     		getSimpleTypeString(elemTypeBinding.getNonNullableInstance(), simpleTypeString);
-    		
-    		simpleTypeString.append('?');
-    	}
-    	else if(bindingtypeKind == ITypeBinding.ARRAY_TYPE_BINDING){
-    		ArrayTypeBinding arrayTypeBinding = (ArrayTypeBinding)elemTypeBinding;
-    		getSimpleTypeString(arrayTypeBinding.getElementType(), simpleTypeString);
-    		simpleTypeString.append("[]"); //$NON-NLS-1$
-    	}
-    	else
-    		simpleTypeString.append(elemTypeBinding.getName());
+    static public void getSimpleTypeString(org.eclipse.edt.mof.egl.Type elemTypeBinding, StringBuffer simpleTypeString){
+    	simpleTypeString.append(BindingUtil.getShortTypeString(elemTypeBinding, true));
     }
 
     /**
@@ -330,29 +315,27 @@ public class ExtractInterfaceConfiguration extends InterfaceConfiguration {
 	 * @param refType
 	 * @return
 	 */
-	static public String getReferenceTypeParamQualifier(ITypeBinding typeBinding, String currFilePkg)
+	static public String getReferenceTypeParamQualifier(org.eclipse.edt.mof.egl.Type typeBinding, String currFilePkg)
 	{
 	    String qualifier = ""; //$NON-NLS-1$
 	    
-	    if(typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING)
+	    if(typeBinding != null)
 	    {
 	    	//get the element type till it's no longer an array type binding 
-	    	while (typeBinding instanceof ArrayTypeBinding) {
-				ArrayTypeBinding arrayTypeBinding = (ArrayTypeBinding) typeBinding;
-				typeBinding = arrayTypeBinding.getElementType();
+	    	while (typeBinding instanceof ArrayType) {
+				typeBinding = ((ArrayType)typeBinding).getElementType();
 			}
-	    	String[] pkgs = typeBinding.getPackageName();
-	    	if(pkgs != null) {
-	    		if(pkgs != null) {
-			    	IPath pkgsPath = Util.stringArrayToPath(pkgs);
-			    	qualifier = pkgsPath.toString().replace(IPath.SEPARATOR, '.');
-		    	}
+	    	String sig = BindingUtil.getTypeString(typeBinding, false);
+	    	int lastDot = sig.lastIndexOf('.');
+	    	if(lastDot != -1) {
+	    		qualifier = sig.substring(0, lastDot);
 	    	}
 	    }
 	    	    
 	    //if the parameter's qualifier is the same as the file qualifier, no need to qualify
-	    if(currFilePkg.equalsIgnoreCase(qualifier))
+	    if(currFilePkg.equalsIgnoreCase(qualifier)) {
 	        return ""; //$NON-NLS-1$
+	    }
 	    return qualifier;
 	}
 	

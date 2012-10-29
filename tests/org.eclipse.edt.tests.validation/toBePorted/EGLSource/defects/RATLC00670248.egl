@@ -1,0 +1,65 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+
+formGroup formTest
+
+	//Text Form that gets an error:
+	
+	form testFormName type textForm 
+		{formSize = [12, 80], screenSizes = [[12, 80], [24, 80]], 
+		 position = [31, 5],										//1 Property: position.
+		 validationBypassKeys = [pf2], 
+		 helpKey = pf1, helpForm = "helpFormName"}
+	end
+	
+	//Form from the defect:
+
+	form printFormName type printForm 
+		{formSize = [24, 80], position = [181, 231]}				//1 Property: position.
+	end	
+	
+	//The implied "screen size" for a printForm is 255,158
+	
+	form printFormNameA type printForm 
+		{formSize = [1, 1], position = [255, 158]}					//0
+	end	
+	
+	form printFormNameB type printForm 
+		{formSize = [2, 1], position = [255, 158]}					//1 Property: formSize.
+	end	
+	
+	form printFormNameC type printForm 
+		{formSize = [1, 2], position = [255, 158]}					//1 Property: formSize.
+	end
+	
+	form printFormNameD type printForm 
+		{formSize = [1, 1], position = [255, 159]}					//1 Property: position.
+	end	
+	
+	form printFormNameE type printForm 
+		{formSize = [1, 1], position = [256, 158]}					//1 Property: position.
+	end	
+	
+	form printFormNameF type printForm 
+		{formSize = [255, 158], position = [1, 1]}					//0
+	end	
+	
+	form printFormNameG type printForm 
+		{formSize = [256, 1], position = [1, 1]}					//1 Property: formSize.
+	end	
+	
+	form printFormNameH type printForm 
+		{formSize = [159, 255], position = [1, 1]}					//1 Property: formSize.
+	end	
+end

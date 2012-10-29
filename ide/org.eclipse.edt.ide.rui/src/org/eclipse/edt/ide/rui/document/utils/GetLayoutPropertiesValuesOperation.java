@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Status;
-
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -23,13 +22,13 @@ import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.ide.core.model.document.IEGLDocument;
-import org.eclipse.edt.ide.rui.internal.Activator;
-import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class GetLayoutPropertiesValuesOperation {
 	
@@ -63,7 +62,7 @@ public class GetLayoutPropertiesValuesOperation {
 						public boolean visit(final NewExpression newExpression){
 							// This widget is anonymous
 							if(newExpression.hasSettingsBlock()){
-								AssignmentLocator locator = new AssignmentLocator(InternUtil.intern(layoutPropertyName));
+								AssignmentLocator locator = new AssignmentLocator(NameUtile.getAsName(layoutPropertyName));
 								newExpression.getSettingsBlock().accept(locator);
 								if(locator.getAssignment() != null){
 									//processExpression(locator.getAssignment().getRightHandSide());
@@ -78,7 +77,7 @@ public class GetLayoutPropertiesValuesOperation {
 								parentNode.accept(new DefaultASTVisitor(){
 									public boolean visit(ClassDataDeclaration classDataDeclaration){
 										if(classDataDeclaration.hasSettingsBlock()){
-											AssignmentLocator locator = new AssignmentLocator(InternUtil.intern(layoutPropertyName));
+											AssignmentLocator locator = new AssignmentLocator(NameUtile.getAsName(layoutPropertyName));
 											classDataDeclaration.getSettingsBlockOpt().accept(locator);
 											if(locator.getAssignment() != null){
 												layoutData = locator.getAssignment().getRightHandSide();

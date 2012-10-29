@@ -1,0 +1,53 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+ExternalType superType type JavaObject
+end
+
+ExternalType subType1 extends superType type JavaObject
+end
+
+ExternalType subType2 extends superType type JavaObject
+end
+
+ExternalType subType2a extends subType2 type JavaObject
+end
+
+Program pgm
+	function main()
+		supType superType;
+		subType1 subType1;
+		subType2 subType2;
+		subType2a subType2a;
+		
+		things any[];
+		
+		things = [supType, subType1, subType2, subType2a];	//0
+		things = [subType1, subType2, subType2a, supType];	//0
+		things = [subType1, supType, subType2, subType2a];	//0
+		
+		things = [subType1, subType2];						//0
+		things = [subType1, subType2, subType2a];			//0
+
+		things = [subType1, subType2a];						//0
+		
+		things = [subType2, subType2a];						//0
+		things = [subType2a, subType2];						//0
+		
+		things = [supType, subType1, subType2, subType2a, 1];	//0
+		things = [subType2, subType2a, 1];						//0
+		things = [1, supType, subType1, subType2, subType2a];	//0
+		things = [1, subType2, subType2a];						//0
+		things = [supType, subType1, 1, subType2, subType2a];	//0
+		things = [subType2, 1, subType2a];						//0
+	end
+end

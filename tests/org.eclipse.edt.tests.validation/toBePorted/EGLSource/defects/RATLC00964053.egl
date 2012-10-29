@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/* 
+ * The following messages would benefit from more inserts:
+ *
+ * 3183 - would help to include the item name
+ * 3194 - would help to include the item name
+ * 3195 - would help to include at least the TableName and possibly the item name.
+ */
+ 
+//3183=The validatorFunction property value {0} must resolve to a function.
+//3194=Property {0} must be defined with a numeric primitive. {1} found.
+//3195=The value for property {0} must resolve to a data table.
+
+Record myRec
+	item1 int { validatorFunction = undeclaredFunc };		//1 undeclaredFunc cannot be resolved
+	item2 char(4) { currency = yes };						//1 Property Currency must be defined with a numeric primitive. The type of this item is char.
+	item3 int { validatorDataTable = undeclaredFunc };		//1 The value undeclaredFunc for property validatorDataTable must resolve to a DataTable
+end
+
+DataItem item1 int { validatorFunction = undeclaredFunc } end		//1 undeclaredFunc cannot be resolved
+DataItem item2 char(4) { currency = yes } end						//1 Property Currency must be defined with a numeric primitive. The type of this item is char.
+DataItem item3 int { validatorDataTable = undeclaredFunc } end		//1 The value undeclaredFunc for property validatorDataTable must resolve to a DataTable.
+
+DataItem undeclaredFunc int end

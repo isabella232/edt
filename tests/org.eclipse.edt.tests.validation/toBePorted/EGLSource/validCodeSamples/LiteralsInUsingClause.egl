@@ -1,0 +1,52 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program LiteralsInUsingClause {V60ExceptionCompatibility=yes}
+	function main()
+
+		// Make sure the table doesn't exist yet.
+		try
+			execute #sql{ drop table mtfoog };
+		onException
+			// Ignore it.
+		end
+		
+		// Create the table.
+		execute #sql{ create table mtfoog ( c char(10), i integer ) };
+			
+		// Make a prepared statement.
+		prepare prep1 from "insert into mtfoog values ( ?, ? )";
+		
+		// Run it with variables in the using clause.
+		c char(10) = "from char";
+		i int = 9999988;
+		execute prep1 using c, i;
+		
+		// Run it with literals in the using clause.
+		execute prep1 using "literal!", 1239872;
+		
+		// Print the contents to make sure it worked.
+		c = "zzzzzzzzzzzzz";
+		i = -99999999;
+		open rs1 with #sql{ select c, i from mtfoog } into c, i;
+		writeStdout( "About to print two lines.  The first will show values 'from char ' and 9999988." );
+		writeStdout( "The second will show values 'literal!  ' and 1239872." );
+		foreach ( from rs1 )
+			writeStdout( "values: '" + c + "' and " + i );
+		end
+
+		// Clean up.
+		freesql prep1;
+		execute #sql{ drop table mtfoog };
+	end
+end

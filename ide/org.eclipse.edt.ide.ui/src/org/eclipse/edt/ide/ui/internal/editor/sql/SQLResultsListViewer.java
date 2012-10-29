@@ -69,7 +69,7 @@ public class SQLResultsListViewer extends AbstractResultsListViewer {
 		}
 		
 		public String getBuiltMessage(Problem problem) {
-			return "IWN.VAL." + problem.getProblemKind() + ".e " + DefaultProblemRequestor.getMessageFromBundle(problem.getProblemKind(), problem.getInserts());	//$NON-NLS-1$ //$NON-NLS-2$		
+			return "IWN.VAL." + problem.getProblemKind() + ".e " + DefaultProblemRequestor.getMessageFromBundle(problem.getProblemKind(), problem.getInserts(), problem.getResourceBundle());	//$NON-NLS-1$ //$NON-NLS-2$		
 		}
 		public boolean isLabelProperty(Object element, String property) {
 			return false;

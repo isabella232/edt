@@ -11,14 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.HandlerBinding;
+import org.eclipse.edt.mof.egl.Handler;
+
 
 /**
  * @author winghong
  */
 public class HandlerScope extends FunctionContainerScope {
     
-    public HandlerScope(Scope parentScope, HandlerBinding handlerBinding) {
+    public HandlerScope(Scope parentScope, Handler handlerBinding) {
         super(parentScope, handlerBinding);
     }
 }

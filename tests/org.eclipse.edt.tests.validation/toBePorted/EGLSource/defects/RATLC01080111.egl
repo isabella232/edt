@@ -1,0 +1,47 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program garbage {allowunqualifiedItemReferences = yes}
+	myrec myrecabcd;
+	function main()
+	 item1   = "a";				//0
+	 item2  = "abcdefghijk";	//0
+	 item3 = 1;					//0
+	 item4  = 2;				//1 dbChar and int are not compatible types
+	 item5  = 3;				//0
+	 item6  = "def";			//0
+	 item7  = "a";				//0
+	 item8  = item1 + item7;	//0
+	end
+end
+Record myrecabcd type basicrecord
+	 10 item1 int ; 
+	 10 item2 char(8);
+	 10 item3 char(4);
+	 10 item4 dbChar(3) ;	
+	 10 item5 mbchar(3) ;	
+	 10 item6 float ;	
+	 10 item7 bin(4) ;
+	 10 item8 int ;
+	 
+
+end
+Record garbagerecord type basicrecord
+	 item1 int  = "a";				//0
+	 item2 char(8) = "abcdefghijk";	//0
+	 item3 char(4) = 1;				//0
+	 item4 dbChar(3) = 2;			//1 dbChar and int are not compatible types
+	 item5 mbchar(3) = 3;			//0
+	 item6 float = "def";			//0
+	 item7 bin(4) = "a";			//0
+	 item8 int = item1 + item7;		//0
+end

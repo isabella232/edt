@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl;
 
-public interface MemberName extends Name {
+public interface MemberName extends Name, FieldReference, FunctionReference {
 
 	Member getMember();
 	

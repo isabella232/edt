@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.resources;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.eclipse.edt.javart.Constants;
@@ -198,7 +196,6 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 		throw new Transfer( name, input, ui, true );
 	}
 	
-
 	/**
 	 * Cleanup any resources.  Sub classes will override this method
 	 * to handle any 
@@ -206,18 +203,4 @@ public abstract class ProgramBase extends ExecutableBase implements Program, Ser
 	public void _clenaup() {
 		
 	}
-	
-	
-	/**
-	 * Serializes an instance of this class.
-	 * 
-	 * @param out  The output stream.
-	 * @throws IOException
-	 */
-	private void writeObject( ObjectOutputStream out )
-			throws IOException
-	{
-		out.defaultWriteObject();
-	}	
-
 }

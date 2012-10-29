@@ -1,0 +1,90 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program addStatement_sql type BasicProgram
+	
+	dummyRecVar dummyRecord;
+	
+	function main()
+	
+	add dummyRecVar with 
+		#sql{																  --//0	
+			INSERT INTO CUSTOMERS (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP) --//0
+     		VALUES ('InterCorp', 2126, 15000.00, 111)						  --//0	
+		};
+	
+	add dummyRecVar with #sql{};						// 1 The ADD SQL statement cannot be empty	
+	
+	add dummyRecVar with 
+		#sql{																  
+			INSERT INTO CUSTOMERS (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP) 
+     		VALUES ('InterCorp', 2126, 15000.00, 111)						
+		} with  										// 1 The ADD SQL I/O statement does not allow the inline SQL statement to be specified more than once
+		#sql{																  
+			INSERT INTO CUSTOMERS (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP) 
+     		VALUES ('InterCorp', 2126, 15000.00, 111)						
+		};					
+	
+	add dummyRecVar with 
+		#sql{											--// 2 The ADD SQL I/O statement requires the columns clause, which is missing | The ADD SQL I/O statement requires the INSERT INTO clause, which is missing.
+     		VALUES ('InterCorp', 2126, 15000.00, 111)	
+		};
+	
+	add dummyRecVar with 
+		#sql{
+     		INSERT INTO (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP)  --// 1 The INSERT INTO SQL clause cannot be empty.
+     		VALUES ('InterCorp', 2126, 15000.00, 111)
+		};
+				
+	add dummyRecVar with 
+		#sql{											--// 1 The ADD SQL I/O statement requires the VALUES clause, which is missing.
+			INSERT INTO CUSTOMERS (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP)
+		};
+	
+	add dummyRecVar with 
+		#sql{
+			INSERT INTO CUSTOMERS (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP)
+     		VALUES										--// 1 The VALUES SQL clause cannot be empty.
+		};
+		
+	add dummyRecVar with 
+	#sql{											--// 2 The ADD SQL I/O statement has clauses that are out of order. INSERT INTO must appear before the VALUES clause. | The ADD SQL I/O statement has clauses that are out of order. The columns clause must appear before the VALUES clause.
+		VALUES ('InterCorp', 2126, 15000.00, 111)	
+		INSERT INTO CUSTOMERS (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP)	
+	};
+		 
+	add dummyRecVar with 
+	#sql{
+		INSERT INTO CUSTOMERS (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP)
+     	VALUES ('InterCorp', 2126, 15000.00, 111)
+     	INSERT INTO CUSTOMERS2 (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP)	--// 1 The ADD SQL I/O statement allows only one INSERT INTO clause.
+     	VALUES ('InterCorp', 2126, 15000.00, 111)   						--// 1 The ADD SQL I/O statement allows only one VALUES clause.
+	};
+		
+	add dummyRecVar with 
+	#sql{
+     	INSERT INTO CUSTOMERS (COMPANY, CUST_NUM, CREDIT_LIMIT, CUST_REP) 
+     	VALUES ('InterCorp', 2126, 15000.00, 111)	
+     	UPDATE CUSTOMERS													--// 1 The ADD SQL I/O statement does not allow the UPDATE clause.
+     };
+	
+	end			
+end
+
+Record dummyRecord type sqlRecord
+end
+
+
+
+
+
+
+

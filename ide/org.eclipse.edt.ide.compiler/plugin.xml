@@ -7,7 +7,7 @@
     		class="org.eclipse.edt.ide.compiler.IDEEDTCompiler"
     		name="%edtCompilerName"
     		preferencePageId="org.eclipse.edt.ide.compiler.edtCompilerPreferences"
-    		version="0.8.1"/>
+    		version="0.8.2"/>
    	</extension>
     
     <extension point="org.eclipse.edt.ide.core.generators">
@@ -16,7 +16,7 @@
 			class="org.eclipse.edt.ide.compiler.gen.JavaGenerator"
 			name="%JavaGeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
-			version="0.8.1"
+			version="0.8.2"
 			provider="Eclipse.org"
 			description="%JavaGeneratorDescription"
 			language="Java"
@@ -26,7 +26,7 @@
 			class="org.eclipse.edt.ide.compiler.gen.JavaScriptGenerator"
 			name="%JavaScriptGeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
-			version="0.8.1"
+			version="0.8.2"
 			provider="Eclipse.org"
 			description="%JavaScriptGeneratorDescription"
 			language="JavaScript"
@@ -71,4 +71,34 @@
             id="JavaScriptGenerationContributor">
       </GenerationContributor>
    </extension>
+    <extension
+          point="org.eclipse.edt.ide.core.compilerExtensions">
+       <compilerExtension
+             class="org.eclipse.edt.ide.compiler.IDESQLExtension"
+             compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+             id="org.eclipse.edt.ide.compiler.sqlExtension"
+             name="%SQLExtensionName"
+             version="0.8.2">
+       </compilerExtension>
+       <compilerExtension
+             class="org.eclipse.edt.ide.compiler.IDEIBMiExtension"
+             compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+             id="org.eclipse.edt.ide.compiler.ibmiExtension"
+             name="%IBMiExtensionName"
+             version="0.8.2">
+       </compilerExtension>
+       <compilerExtension
+             class="org.eclipse.edt.ide.compiler.IDEServicesExtension"
+             compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+             id="org.eclipse.edt.ide.compiler.servicesExtension"
+             name="%ServicesExtensionName"
+             version="0.8.2">
+       </compilerExtension>
+       <compilerExtension
+             class="org.eclipse.edt.ide.compiler.IDERUIExtension"
+             compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+             id="org.eclipse.edt.ide.compiler.ruiExtension"
+             version="0.8.2">
+       </compilerExtension>
+    </extension>
 </plugin>

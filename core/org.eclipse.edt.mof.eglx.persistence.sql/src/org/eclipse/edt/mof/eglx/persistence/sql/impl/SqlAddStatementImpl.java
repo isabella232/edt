@@ -15,8 +15,8 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlAddStatement;
 
 public class SqlAddStatementImpl extends SqlIOStatementImpl implements SqlAddStatement {
 
@@ -43,16 +43,16 @@ public class SqlAddStatementImpl extends SqlIOStatementImpl implements SqlAddSta
 			targetType = (EGLClass)target.getType().getClassifier();
 		}
 		sql = "INSERT INTO ";
-		sql += SQL.getTableName(targetType);
+		sql += Utils.getTableName(targetType);
 		sql += "(";
 		boolean doComma = false;
 		int fieldNum = 0;
 		for (Field f : targetType.getFields()) {
 			// Do not INSERT list fields which represent associations
-			if (SQL.isInsertable(f)) {
+			if (Utils.isInsertable(f)) {
 				fieldNum++;
 				if (doComma) sql += ", ";
-				sql += SQL.getColumnName(f);
+				sql += Utils.getColumnName(f);
 				if (!doComma) doComma = true;
 			}
 		}

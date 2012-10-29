@@ -93,7 +93,7 @@ public class ForwardStatement extends Statement {
 		this.forwardOptions = setParent(forwardOptions);
 	}
 	
-	public List getArguments() {
+	public List<Node> getArguments() {
 		return args;
 	}
 	
@@ -113,7 +113,7 @@ public class ForwardStatement extends Statement {
 		return forwardTargetOpt.getExpression();
 	}
 	
-	public List getForwardOptions() {
+	public List<Node> getForwardOptions() {
 		return forwardOptions;
 	}
 	

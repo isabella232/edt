@@ -14,7 +14,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author svihovec
@@ -43,7 +43,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 			return true;
 		}
 		if(obj instanceof SimpleName){
-		    return simpleName == ((SimpleName)obj).simpleName;
+		    return NameUtile.equals(simpleName, ((SimpleName)obj).simpleName);
 		}
 		return false;
 	}
@@ -61,7 +61,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 	}
 
 	public void deserialize(DataInputStream inputStream) throws IOException {
-		simpleName = InternUtil.intern(inputStream.readUTF());		
+		simpleName = NameUtile.getAsName(inputStream.readUTF());		
 	}
 
 	public int getKind() {

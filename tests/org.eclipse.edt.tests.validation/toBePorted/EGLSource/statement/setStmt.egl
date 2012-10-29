@@ -1,0 +1,87 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//Put EGL Source File Contents Here
+
+Program TestVal type textUIProgram {includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes}
+	use formGrp;
+	
+	function main()
+		f( yourname ); // 0
+		
+		set form1 alarm , alarm;// 1 The ALARM state is specified more than once on the same set statement		{6610}
+		set form1 position;// 1 The state POSITION is not allowed for a text form reference		{6699}
+		
+		set yourname alarm;// 1 The state ALARM is not allowed for a text field reference		 {6701}
+		set yourname cursor,cursor; // 1 The CURSOR state is specified more than once on the same set statement		{6610}
+		set yourname full,full;// 1 The FULL state is specified more than once on the same set statement		{6610}
+		set yourname noHighlight,noHighlight;// 1 The NOHIGHLIGHT state is specified more than once on the same set statement		{6610}
+		set yourname blink,blink;// 1 The BLINK state is specified more than once on the same set statement		{6610}
+		set yourname reverse, reverse;// 1 The REVERSE state is specified more than once on the same set statement		 {6610}
+		set yourname underline, underline;// 1 The UNDERLINE state is specified more than once on the same set statement		{6610}
+		set yourname modified,modified;// 1 The MODIFIED state is specified more than once on the same set statement		{6610}
+		set yourname defaultColor,red,black,blue,green,magenta;// 5 Only one color is allowed to be specified on a single set statement.  Found DEFAULTCOLOR and BLACK | Found DEFAULTCOLOR and BLUE | Found DEFAULTCOLOR and GREEN | Found DEFAULTCOLOR and MAGENTA | Found DEFAULTCOLOR and RED 			{6611}
+		set yourname red,cyan,yellow,white;// 3  Only one color is allowed to be specified on a single set statement.  Found RED and CYAN | Found RED and WHITE | Found RED and YELLOW		{6611}
+		set yourname bold,dim,masked,invisible,normal;// 4 Only one intensity state is allowed to be specified on a single set statement.  Found BOLD and DIM | Found BOLD and INVISIBLE | Found BOLD and MASKED		{6612}
+		set yourname skip,protect,unprotect;// 2 Only one protection state is allowed to be specified on a single set statement.  Found SKIP and PROTECT | Found SKIP and UNPROTECT 		{6613}
+		set yourname cursor , full, blink,underline,reverse,modified,defaultcolor,bold,skip,empty;// 0
+		set yourname noHighlight,blink;// 1 NOHIGHLIGHT is not allowed to be specified with REVERSE, BLINK or, UNDERLINE.  Found NOHIGHLIGHT and BLINK		{6616}
+		set yourname noHighlight,underline;// 1 NOHIGHLIGHT is not allowed to be specified with REVERSE, BLINK or, UNDERLINE.  Found NOHIGHLIGHT and UNDERLINE		{6616}
+		set yourname noHighlight,reverse;	// 1 NOHIGHLIGHT is not allowed to be specified with REVERSE, BLINK or, UNDERLINE.  Found NOHIGHLIGHT and REVERSE		{6616}
+		set yourname noHighLight, modified;	// 0
+		set yourname initial;// 0
+		set yourname initial,normal;// 1 Only one of NORMAL, INITIAL, or INITIALATTRIBUTES is allowed to be specified on a single set statement.  Found INITIAL and NORMAL		{6614}
+		set yourname initialattributes;// 0
+		set yourname initial,empty;// 1  Only one of EMPTY or INITIAL is allowed to be specified on a single set statement.  Found INITIAL and EMPTY 		 {6615}
+		set yourname blah;// 1  BLAH was found as a state on a set statement.  It is not a supported state		{6617}
+		set yourname initial , modified,black,bold,protect,nohighlight;// 5 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found INITIAL and BLACK | Found INITIAL and BOLD | Found INITIAL and MODIFIED | Found INITIAL and NOHIGHLIGHT | Found INITIAL and PROTECT 			 {6618}
+		set yourname initial, blink,reverse,underline;// 3 It is not valid to use any of the NORMAL, INITIAL, or INITIALATTRIBUTES states with any of the color, highlighting, protection, intensity or modified states on a single set statement.  Found INITIAL and BLINK | Found INITIAL and REVERSE | Found INITIAL and UNDERLINE		{6618}
+		converse form1;
+		
+		set form2 initial;// 0
+		set form2 alarm;// 1 The state ALARM is not allowed for a print form reference		{6700}
+	end
+	
+	function testSetInitialOnBasicRecord()
+		r1 basicRcd1;
+		r2 basicRcd2;
+		
+		set r1 initial;	//0
+		set r2 initial;	//0
+	end
+end 
+
+function f( name char(21) field )
+	set name red;
+end
+
+formGroup formGrp
+	Form form1 type textForm {formSize = [14,80]}
+		* {position=[5,25], value="Hello World Sample Application"} ;
+		yourname char(21) {position=[8,17]};
+		yourage int {position=[8,17]};
+	end
+	
+	Form form2 type printForm {formSize = [14,80]}
+		* {position=[5,25], value="Hello World Sample Application"} ;
+		yourname char(21) {position=[8,17]};
+
+	end
+end
+
+Record basicRcd1 type basicRecord
+	item1 int;
+end
+
+Record basicRcd2 type basicRecord
+	10 item1 int;
+end

@@ -23,6 +23,7 @@ public class FunctionInvocation extends Expression {
 
 	private Expression target;
 	private List funcArgs;	// List of Expressions
+	protected Object element;
 
 	public FunctionInvocation(Expression target, List funcArgs, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -37,10 +38,22 @@ public class FunctionInvocation extends Expression {
 		return target;
 	}
 	
-	public List getArguments() {
+	public List<Expression> getArguments() {
 		return funcArgs;
 	}
 	
+	@Override
+	public void setElement(Object elem) {
+		super.setElement( elem );
+		this.element = elem;
+	}
+	
+	@Override
+	public Object resolveElement() {
+		return this.element;
+	}
+	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -50,14 +63,37 @@ public class FunctionInvocation extends Expression {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(target.getCanonicalString());
 		sb.append("()");
 		return sb.toString();
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new FunctionInvocation((Expression) target.clone(), cloneList(funcArgs), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		buf.append(target.toString());
+		buf.append('(');
+		
+		boolean first = true;
+		for (Object arg : funcArgs) {
+			if (first) {
+				first = false;
+			}
+			else {
+				buf.append(", ");
+			}
+			buf.append(arg.toString());
+		}
+		
+		buf.append(')');
+		return buf.toString();
 	}
 }

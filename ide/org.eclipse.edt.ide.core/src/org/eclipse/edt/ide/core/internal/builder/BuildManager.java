@@ -58,6 +58,7 @@ public class BuildManager {
 	private static final int MAX_PART_CHANGE = 1000;
 	
 	public static class BuildPathEntry implements Serializable{
+		private static final long serialVersionUID = 1L;
 		protected static final int ENTRY_TYPE_UNKNOWN = -1;
 		protected static final int ENTRY_TYPE_PROJECT = 1;
 		protected static final int ENTRY_TYPE_ZIPFILE = 2;
@@ -80,12 +81,11 @@ public class BuildManager {
 		public void setType(int type) {
 			this.type = type;
 		}
-		
-		
 	}
 	
 	private static class BuildManagerEntry implements Serializable{
-    	private HashSet mailBoxes = new HashSet();
+		private static final long serialVersionUID = 1L;
+		private HashSet mailBoxes = new HashSet();
     	private MailBox mailBox;
     	
     	//state == -1, project never built or failed last build
@@ -159,7 +159,8 @@ public class BuildManager {
     }
     
     private static class MailBox implements Serializable{
-    	private ArrayList changes = new ArrayList();
+		private static final long serialVersionUID = 1L;
+		private ArrayList changes = new ArrayList();
     	private boolean full = false;
     	
 		public boolean isFull() {
@@ -312,7 +313,7 @@ public class BuildManager {
     	return entry;
     }
     
-	public void recordPart(IProject project, String[] packageName, String partName, int partType){
+	public void recordPart(IProject project, String packageName, String partName, int partType){
 		BuildManagerEntry entry = getEntry(project);
     	for (Iterator iter = entry.getDependentMailBoxes().iterator(); iter.hasNext();) {
 			MailBox mailBox = (MailBox) iter.next();
@@ -320,7 +321,7 @@ public class BuildManager {
     	}
 	}
 	
-	public void recordPackage(IProject project, String[] packageName){
+	public void recordPackage(IProject project, String packageName){
 		BuildManagerEntry entry = getEntry(project);
     	for (Iterator iter = entry.getDependentMailBoxes().iterator(); iter.hasNext();) {
 			MailBox mailBox = (MailBox) iter.next();

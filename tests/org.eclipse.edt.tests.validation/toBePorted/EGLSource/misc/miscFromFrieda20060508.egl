@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program pgm
+
+	function main()
+		result int;
+		sourcechar, targetchar char(4);
+		veryshorttargetchar char(2);
+		sourceindx int;
+		chartarget char(4);
+		intitem int;
+		smallintitem smallint;
+		bigintitem bigint;
+		
+		result = indexof(sourcechar, "long");
+		result = indexof(sourcechar, "notthere");
+		targetchar = getnexttoken(sourcechar, sourceindx, " ");
+		veryshorttargetchar = getnexttoken(sourcechar, sourceindx, " ");
+		
+		chartarget = intAsChar(intitem);
+		chartarget = intAsChar(smallintitem);
+		chartarget = intAsChar(bigintitem);
+	end
+end

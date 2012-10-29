@@ -11,67 +11,70 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation;
 
-import org.eclipse.edt.compiler.internal.core.validation.statement.AddStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.CloseStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.DeleteStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.ExecuteStatementValidator;
+import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ForEachStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.GetByKeyStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.OpenStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.PrepareStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.ReplaceStatementValidator;
+
 
 public class DefaultStatementValidator extends AbstractStatementValidator {
-
+	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.AddStatement addStatement) {
-		addStatement.accept(new AddStatementValidator(problemRequestor));
+		problemRequestor.acceptProblem(addStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_ADD});
 		return false;
 	}
 	
+	@Override
+	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
+		problemRequestor.acceptProblem(callStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_CALL});
+		return false;		
+	}
+	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CloseStatement closeStatement) {
-		closeStatement.accept(new CloseStatementValidator(problemRequestor));
+		problemRequestor.acceptProblem(closeStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_CLOSE});
 		return false;
 	}
 	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.DeleteStatement deleteStatement) {
-		deleteStatement.accept(new DeleteStatementValidator(problemRequestor, compilerOptions));
+		problemRequestor.acceptProblem(deleteStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_DELETE});
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ExecuteStatement executeStatement) {
-		executeStatement.accept(new ExecuteStatementValidator(problemRequestor, compilerOptions));
+		problemRequestor.acceptProblem(executeStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_EXECUTE});
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement foreachStatement) {
 		foreachStatement.accept(new ForEachStatementValidator(problemRequestor, compilerOptions));
 		return false;
 	}
 	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.GetByKeyStatement getStatement) {
-		getStatement.accept(new GetByKeyStatementValidator(problemRequestor, compilerOptions));
+		problemRequestor.acceptProblem(getStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_GET});
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.OpenStatement openStatement) {
-		openStatement.accept(new OpenStatementValidator(problemRequestor, compilerOptions));
+		problemRequestor.acceptProblem(openStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_OPEN});
 		return false;
 	}
-
+	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.PrepareStatement prepareStatement) {
-		prepareStatement.accept(new PrepareStatementValidator(problemRequestor, compilerOptions));
+		problemRequestor.acceptProblem(prepareStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_PREPARE});
 		return false;
 	}
 	
+	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ReplaceStatement replaceStatement) {
-		replaceStatement.accept(new ReplaceStatementValidator(problemRequestor, compilerOptions));
+		problemRequestor.acceptProblem(replaceStatement, IProblemRequestor.STATEMENT_NOT_EXTENDED, new String[]{IEGLConstants.KEYWORD_REPLACE});
 		return false;
 	}
-	
-	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
-		callStatement.accept(new CallStatementValidator(problemRequestor, compilerOptions));
-		return false;		
-	}
-
 }

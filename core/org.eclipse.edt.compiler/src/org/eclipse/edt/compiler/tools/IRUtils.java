@@ -11,21 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.tools;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.HandlerBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.InterfaceBinding;
-import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.FieldAccess;
-import org.eclipse.edt.compiler.core.ast.ThisExpression;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-
 public class IRUtils {
 
 	public final static char[] SUFFIX_eglxml = ".eglxml".toCharArray(); //$NON-NLS-1$
@@ -64,89 +49,5 @@ public class IRUtils {
 		return true;
 	}
 
-	//FIXME should be in the extension plugin
-	public static boolean isIBMi(CallStatement call){
-		if(call.getUsing() != null){
-			ITypeBinding binding = call.getUsing().resolveTypeBinding();
-			return isType(binding, InternUtil.intern(new String[]{"eglx", "jtopen"}), InternUtil.intern("IBMiConnection"), new ArrayList<ITypeBinding>());
-		}
-		else{
-			Expression exp = call.getInvocationTarget();
-			IDataBinding binding = exp.resolveDataBinding();
-			//only service can have a Service type qualifier with no using clause
-			return Binding.isValidBinding(binding) && 
-					!isFunctionServiceQualified(exp, binding) &&
-					binding.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null;
-		}
-	}
-	
-	//FIXME should be in the extension plugin
-	public static boolean isService(CallStatement call){
-		if(call.getUsing() != null){
-			ITypeBinding binding = call.getUsing().resolveTypeBinding();
-			return isType(binding, InternUtil.intern(new String[]{"eglx", "http"}), InternUtil.intern("IHttp"), new ArrayList<ITypeBinding>());
-		}
-		else{
-			Expression exp = call.getInvocationTarget();
-			IDataBinding binding = exp.resolveDataBinding();
-			return Binding.isValidBinding(binding) &&
-					(binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
-					binding.getAnnotation(new String[]{"eglx", "rest"}, "EGLService") != null ||
-					isFunctionServiceQualified(exp, binding));
-		}
-	}
-	
-	private static boolean isFunctionServiceQualified(	Expression exp, IDataBinding binding){
-		return !(exp instanceof FieldAccess && ((FieldAccess)exp).getPrimary() instanceof ThisExpression) &&
-				Binding.isValidBinding(binding.getDeclaringPart()) && 
-				binding.getDeclaringPart().getKind() == ITypeBinding.SERVICE_BINDING;
-	}
-	private static boolean isType(ITypeBinding type, String[] testTypePackage, String testTypeName, List<ITypeBinding> seenTypes) {
-		
-		if(!Binding.isValidBinding(type)){
-			return false;
-		}
-		if (seenTypes.contains(type)) {
-			return false;
-		}
-		seenTypes.add(type);
-		
-		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
-			if (type.getName() == testTypeName && type.getPackageName() == testTypePackage) {
-				return true;
-			}
-		}
-
-		List<ITypeBinding> interfaces = getImplementedInterfaces(type);
-		if (interfaces != null) {
-			for(ITypeBinding imp : interfaces){
-				if (isType(imp, testTypePackage, testTypeName, seenTypes)) {
-					return true;
-				}
-			}
-		}
-		
-
-		return false;
-	}
-	private static List<ITypeBinding> getImplementedInterfaces(ITypeBinding type) {
-		
-		if (Binding.isValidBinding(type) && ITypeBinding.HANDLER_BINDING == type.getKind()) {
-			HandlerBinding hand = (HandlerBinding)type;
-			return hand.getImplementedInterfaces();
-		}
-
-		if (Binding.isValidBinding(type) && ITypeBinding.INTERFACE_BINDING == type.getKind()) {
-			InterfaceBinding inter = (InterfaceBinding)type;
-			return inter.getExtendedTypes();
-		}
-
-		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
-			ExternalTypeBinding et = (ExternalTypeBinding)type;
-			return et.getExtendedTypes();
-		}
-
-		return null;
-	}
 
 }

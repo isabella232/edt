@@ -1,0 +1,173 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Record customerRec
+	name String;
+end
+
+Record criteria
+	stuff any;
+end
+
+Record reservationRec
+	criteria Criteria;
+	checkin date;
+	checkout date;
+	customer customerRec;
+end
+
+Record room
+end
+
+Service CustomerService
+
+  function createCustomer(customer CustomerRec in) 
+  end
+
+  function findCustomer(customerID smallint in, customer CustomerRec out)
+  end
+
+  function listCustomers(customers CustomerRec[] out)
+  end
+end
+
+Service RoomSelectionService
+  function findAvailableRooms(criteria Criteria in, checkin Date in, 
+                              checkout Date in, rooms Room[] out)
+  end
+end
+
+Interface IEmailService{@XML {name="IEmailService", 
+                        namespace="http:/dave.com"},
+	alias = "Mark Jacobson"}
+
+  function SendMail(ToAddress string in, FromAddress string in, 
+                    ASubject string in, MsgBody string in) returns(int);
+end
+
+Service ReservationService 
+	CustomerService CustomerService;
+	roomSelect RoomSelectionService;
+	email IEMailService;
+
+  sDiscount int {@bindService {bindingKey="standard"}};
+  cDiscount int {@bindService {bindingKey="corporate"}}; 
+  localTax  float {@bindService {bindingKey="yes"}};
+
+  function makeReservation(reservation reservationRec inout)
+    CustomerService.createCustomer(reservation.customer);
+
+	rooms Room[];
+    roomSelect.findAvailableRooms(reservation.criteria, 
+                        reservation.checkin, reservation.checkout, rooms);
+
+    status int = email.SendMail("to", "from", "subject", "message");
+  end
+   
+  function findReservation(lastname string in, 
+                           reservation reservationRec out)
+  end
+
+  function cancelReservation(reservationNum bigint in)
+  end
+
+  function listReservations(reservations reservationRec[] out)
+  end
+end
+
+handler ReservationPage type JSFHandler
+	reservationService ReservationService;
+{onConstructionFunction = onConstruction} 
+
+  reservation ReservationRec;
+
+  function onConstruction()
+  end
+
+  function makeReservationClicked()    
+    reservationService.makeReservation(reservation);
+  end
+end
+
+Service MoneyLaundering
+
+  cType string {@bindService {bindingKey="currency"}};
+
+  function cleanTheMoney(bogusCompanyName string in, amount decimal(10,2))
+    if (cType == "USD")
+    else
+     if (cType == "EURO")
+     end
+    end
+    
+    /*
+    Record ServiceInvocationException type Exception
+		source ServiceKind;
+	  	detail1 string;
+	  	detail2 string;
+	end
+
+	Record ServiceBindingException type Exception
+	end
+	*/    
+    try    
+    onException(ex ServiceInvocationException)    	
+    	if(ex.source == ServiceKind.EGL)
+    		cType = ex.detail1;
+    	end
+    	if(ex.source == ServiceKind.WEB)
+    		cType = ex.detail2;
+    	end
+    onException(ex2 ServiceBindingException)
+    	cType = ex2.message + " " + ex2.messageID;     
+    end
+  end
+end
+
+Interface StockQuote
+  function getQuote(symbol string in) returns (float);
+end
+
+/*
+Library ServiceLib
+  function loadService(target string) returns (serviceReference);
+
+  function setWebServiceLocation(webServiceRef serviceReference, 
+                                 location string);
+
+  function getWebServiceLocation(webServiceRef serviceReference) 
+           returns (string);
+
+  function setTCPIPLocation(tcpipServiceRef serviceReference, 
+                            location string);
+
+  function getTCPIPLocation(tcpipServiceRef serviceReference)
+           returns (string);
+end
+*/
+
+Program pgm
+	function main()
+		myService MoneyLaundering;
+		
+		myService = bindService("xyz");
+		setWebServiceLocation(myService, "xyz");
+		setTCPIPLocation(myService, "xyz");
+		str String = getTCPIPLocation(myService);
+		
+		myService = ServiceLib.bindService("xyz");
+		ServiceLib.setWebServiceLocation(myService, "xyz");
+		ServiceLib.setTCPIPLocation(myService, "xyz");
+		str = ServiceLib.getTCPIPLocation(myService);
+	end
+end

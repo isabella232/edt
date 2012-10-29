@@ -1,0 +1,69 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * If the references are unqualified and the allowUnqualifiedItemReferences
+ * property is not set to YES, the debugger is getting unqualified item
+ * references, which are invalid, and which we can't resolve. It looks like
+ * the generator chokes on this too. Validation should probably catch this
+ * somewhere and prevent it from getting through. The same thing happens in
+ * UI records' validator functions.
+ */
+
+program RATLC01083886a type TextUIProgram  
+	use RATLC01083886Grp ;	//0
+	function main()
+		converse aForm ;
+	end 	
+end
+
+program RATLC01083886b type TextUIProgram {allowunqualifieditemreferences = yes}
+	use RATLC01083886Grp ;	//0
+	function main()
+		converse aForm ;
+	end 	
+end
+
+formGroup RATLC01083886Grp
+
+Form aForm type TextForm { 
+		screenSizes = [[ 24, 80 ]], 
+		formsize = [24,80], 
+		position = [1,1],
+		msgField = message
+		}		
+	  	* { position = [1,80], color = white, value = "Press enter to get error messages.  Error messages should make sense for error."} ; 
+		* { position = [9,1], value = "Minimum input......."} ;
+		minimumInput char(5) { position = [9,25], protect = no, modified = yes, 
+			value = "sbc" ,
+			validatorFunction = RATLC01083886vf
+			} ;
+		* { position = [9,40], value = "Correct value is abc"} ;
+		* { position = [10,1], value = "Mod 10 validation..."} ;
+		mod10Check char(5) { position = [10,25], protect = no, modified = yes,  
+			value = "99999" ,
+			validatorFunction = verifyChkDigitMod10
+			} ;
+		* { position = [10,40], value = "Correct value is 9994"} ;				
+		message char(78) { position = [23,1], protect = skip, color = red } ;
+  	end
+end 
+
+Function RATLC01083886vf ()
+	displayLineMode ( " Entered validator function " ) ;
+	set minimumInput green ;								//1 cannot be resolved
+	if ( minimumInput != "abc" )							//1 cannot be resolved
+		message = "Enter abc in minimum input field" ;		//1 cannot be resolved
+		set minimumInput cursor, modified, red ;			//1 cannot be resolved
+		validationFailed() ;		
+	end
+end

@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -28,6 +26,7 @@ import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLVariableDotProposalHandler;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLVariableDotReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -79,14 +78,8 @@ public class EGLVariableDotReferenceCompletion extends EGLAbstractReferenceCompl
 					}
 					
 					private void handleQualifier(Expression qualifier) {
-						IDataBinding dBinding = qualifier.resolveDataBinding();
-						ITypeBinding tBinding = qualifier.resolveTypeBinding();
-						if(dBinding == null && Binding.isValidBinding(tBinding) && wantFieldsForType(qualifier)) {
-							//want to propose non-static fields for types in 'as' expression
-							//e.g.: (a as ConsoleField).<ca> should propose "value", etc...
-							dBinding = new ClassFieldBinding(tBinding.getCaseSensitiveName(), null, tBinding);
-						}
-						result.addAll(new EGLVariableDotProposalHandler(viewer, documentOffset, prefix, editor, dBinding, tBinding, qualifier).getProposals(null));				
+						Type tBinding = qualifier.resolveType();
+						result.addAll(new EGLVariableDotProposalHandler(viewer, documentOffset, prefix, editor, tBinding, qualifier.resolveMember() != null, qualifier).getProposals(null));				
 					}
 				});
 			}

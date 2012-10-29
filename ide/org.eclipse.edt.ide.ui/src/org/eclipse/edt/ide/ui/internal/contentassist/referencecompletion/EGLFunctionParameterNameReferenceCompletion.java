@@ -45,7 +45,7 @@ public class EGLFunctionParameterNameReferenceCompletion extends EGLAbstractRefe
 			prefix,
 			editor,
 			false).getProposals(
-				IEGLSearchConstants.RECORD | IEGLSearchConstants.ITEM);
+				IEGLSearchConstants.RECORD);
 	}
 
 }

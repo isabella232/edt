@@ -1,0 +1,126 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Library nativeLibrary_invalid type testlibrary		// 1 testlibrary cannot be resolved
+
+	function myfunction(arg1 String in, arg2 String out, arg3 String inout) returns(char(10))
+
+	end
+end
+
+Library nativeLibrary_invalid1 type nativeLibrary	
+{callingConvention=I4GL, dllname="mydll", alias="test"}
+	use myformgx;						// 1 Use statements are not allowed in a native or serviceBinding library.
+	myrecord somerecord;				// 1 Declarations are not allowed in a native or serviceBinding library.
+	const myconst1 int = 2;				// 1 Constant declarations are not allowed in a native or serviceBinding library.
+	function myfunction(arg1 String in, arg2 String out, arg3 String inout) returns(char(10))
+	{alias="myalias"}
+			myrecd2 someotherrecord;	// 1 Declarations are not allowed in a native library
+			const myconst2 int = 2;		// 1 Constant declarations are not allowed in a native library
+			a = b;						// 3 Statements are not allowed in a native library
+	end
+end
+
+Library nativeLibrary_invalid2 type nativeLibrary	
+{callingConvention=VG,					// 1 The value for this property must be one of the following: I4GL
+dllName = yes}							// 1
+	function myfunction() returns(String)
+	{alias="myalias"}	
+	end
+	function anotherfunction() returns (Blob)
+	{alias="anotheralias"}
+	end
+end
+
+Library nativeLibrary_invalid3 type nativeLibrary	//1 Property: callingConvention.  This property is required for the part type NativeLibrary.
+{dllName = "name"}										
+end
+
+Library nativeLibrary_invalid3a type nativeLibrary	//1 Property: callingConvention.  This property is required for the part type NativeLibrary.
+
+end
+
+Library nativeLibrary_invalid4 type basicLibrary	
+{callingConvention=I4GL,							// 2 cannot be resolved
+dllName="abc"}										// 1 dllName cannot be resolved
+end
+
+Library nativeLibrary_invalid5 type nativeLibrary	
+{callingConvention=I4GL, dllname="mydll", alias="test"}
+	use myformgx;								// 1 Use statements are not allowed in a native or serviceBinding library.
+	function myfunction(arg1 myrecd, 			// 1 cannot be a record in a native library
+						arg2 formx, 			// 1 The type formx cannot be resolved
+						arg3 String[],			// 1 cannot be an array in a native library
+						arg5 char(4) field)		// 1 has an unsupported modifier - field
+						returns(char(10))
+	
+	end
+end
+
+Record somerecord type basicrecord
+	10 a int;
+	10 b char(4);
+end
+
+Record someotherrecord type basicrecord
+	10 a int;
+	10 b char(4);
+end
+
+
+
+Record myrecd type basicrecord
+	10 a int;
+	10 b char(4);
+end
+
+Formgroup myformgx
+	form formx type textform
+		{formsize = [24,80] }
+		item1 char(10);
+	end
+end
+
+
+
+
+Library nativeLibrary_valid1 type nativeLibrary	
+{callingConvention=I4GL}
+
+	function myfunction(arg1 char(10), 
+						arg2 char(4) inout)
+						returns(char(10))
+		end
+end
+program myprogramnative type basicprogram
+	use nativeLibrary_valid1;
+	myfixedrecord somefixedrecord;
+	mychar4 char(4);
+	function main()
+		try 
+		nativeLibrary_valid1.myfunction ( myfixedrecord.a, mychar4 ); 	// 1 substructured item may not be passed as an argument to a native library function
+										   		
+		onexception 										  	
+			case (syslib.currentException.code)
+				when(InvocationException)
+					// do something
+				otherwise
+					// log exception
+			end
+		end
+	end	
+end 
+record somefixedrecord type basicrecord
+	10 a;
+		15 b char(4);
+		15 c char(6);
+end	

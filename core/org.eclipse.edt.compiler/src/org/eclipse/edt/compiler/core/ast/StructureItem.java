@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.mof.egl.Member;
 
 
 /**
@@ -22,22 +22,19 @@ import org.eclipse.edt.compiler.binding.IBinding;
  */
 public class StructureItem extends Node {
 
-	private String levelOpt;
 	private SimpleName name;
 	private Type type;
+	private boolean isNullable;
 	private SettingsBlock settingsBlockOpt;
 	private Expression initializerOpt;
 	String occursOpt;
-	private boolean isFiller;
-	private boolean isEmbedded;
 	//Since there is no node to attach binding for filler items...also used to hold the structure imported for
 	// an embed.
-	private IBinding binding;
+	private Member member;
 
-	public StructureItem(String levelOpt, SimpleName name, Type type, String occursOpt, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isFiller, boolean isEmbedded, int startOffset, int endOffset) {
+	public StructureItem(SimpleName name, Type type, Boolean isNullable, String occursOpt, SettingsBlock settingsBlockOpt, Expression initializerOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.levelOpt = levelOpt;
 		if(name != null) {
 			this.name = name;
 			name.setParent(this);
@@ -55,16 +52,7 @@ public class StructureItem extends Node {
 			this.initializerOpt = initializerOpt;
 			initializerOpt.setParent(this);
 		}
-		this.isFiller = isFiller;
-		this.isEmbedded = isEmbedded;
-	}
-	
-	public boolean hasLevel() {
-		return levelOpt != null;
-	}
-	
-	public String getLevel() {
-		return levelOpt;
+		this.isNullable = isNullable.booleanValue();
 	}
 	
 	public Name getName() {
@@ -95,14 +83,6 @@ public class StructureItem extends Node {
 		return occursOpt;
 	}
 	
-	public boolean isFiller() {
-		return isFiller;
-	}
-	
-	public boolean isEmbedded() {
-		return isEmbedded;
-	}
-	
 	public boolean hasSettingsBlock() {
 		return settingsBlockOpt != null;
 	}
@@ -129,24 +109,13 @@ public class StructureItem extends Node {
 		}
 		visitor.endVisit(this);
 	}
-	
-	public IBinding resolveBinding() {
-		if(binding != null) {
-			return binding;
-		}
-		if(!isFiller && !isEmbedded) {
-			return getName().resolveBinding();
-		}
-		return null;
-    }
-    
-    public void setBinding(IBinding binding) {
-        this.binding = binding;
-    }
+	       
+	public boolean isNullable() {
+		return isNullable;
+	}
+
 	
 	protected Object clone() throws CloneNotSupportedException {
-		String newLevelOpt = levelOpt != null ? new String(levelOpt) : null;
-		
 		SimpleName newName = name != null ? (SimpleName)name.clone() : null;
 		
 		Type newType = type != null ? (Type)type.clone() : null;
@@ -157,6 +126,39 @@ public class StructureItem extends Node {
 		
 		Expression newInitializerOpt = initializerOpt != null ? (Expression)initializerOpt.clone() : null;
 		
-		return new StructureItem(newLevelOpt, newName, newType, newOccursOpt, newSettingsBlockOpt, newInitializerOpt, isFiller, isEmbedded, getOffset(), getOffset() + getLength());
+		return new StructureItem(newName, newType, Boolean.valueOf(isNullable), newOccursOpt, newSettingsBlockOpt, newInitializerOpt, getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		
+		if (name != null) {
+			buf.append(name);
+			buf.append(' ');
+		}
+		
+		if (type != null) {
+			buf.append(type.toString());
+		}
+		
+		if (occursOpt != null) {
+			buf.append('[');
+			buf.append(occursOpt);
+			buf.append(']');
+		}
+		
+		if (settingsBlockOpt != null) {
+			buf.append(settingsBlockOpt.toString());
+		}
+		
+		if (initializerOpt != null) {
+			buf.append(" = ");
+			buf.append(initializerOpt.toString());
+		}
+		
+		buf.append(';');
+		
+		return buf.toString();
 	}
 }

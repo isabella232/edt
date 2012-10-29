@@ -45,7 +45,6 @@ import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.model.IEGLProject;
-import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;

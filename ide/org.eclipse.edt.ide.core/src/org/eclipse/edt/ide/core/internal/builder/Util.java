@@ -27,7 +27,7 @@ import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
  */
 public class Util {
 	
-	public static void removeMarkersFromInvokedFunctions(String contextPartName, IPath contextPartFilePath, String functionProjectName, String[] functionPackageName, String functionPartName){
+	public static void removeMarkersFromInvokedFunctions(String contextPartName, IPath contextPartFilePath, String functionProjectName, String functionPackageName, String functionPartName){
 		IProject functionProject = ResourcesPlugin.getWorkspace().getRoot().getProject(functionProjectName);
 	    if(functionProject.exists() && functionProject.isOpen()){
 	    	
@@ -43,6 +43,7 @@ public class Util {
 	    }
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static IContainer createFolder(IPath packagePath, IContainer outputFolder) throws CoreException {
 		if (packagePath.isEmpty()) return outputFolder;
 		IFolder folder = outputFolder.getFolder(packagePath);

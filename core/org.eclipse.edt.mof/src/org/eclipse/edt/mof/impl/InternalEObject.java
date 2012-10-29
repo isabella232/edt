@@ -336,7 +336,7 @@ public class InternalEObject implements Cloneable {
 		else {
 			for (int i=0; i<slots.length; i++) {
 				if (type.getEField(i) != null)
-					buffer.append(type.getEField(i).getName());
+					buffer.append(type.getEField(i).getCaseSensitiveName());
 				else {
 					buffer.append("Error - null Field");
 				}

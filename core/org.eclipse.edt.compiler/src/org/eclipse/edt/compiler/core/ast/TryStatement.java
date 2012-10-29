@@ -33,11 +33,11 @@ public class TryStatement extends Statement {
 		this.onExceptionBlocks = setParent(onExceptionBlocks);
 	}
 	
-	public List getStmts() {
+	public List<Node> getStmts() {
 		return stmts;
 	}
 	
-	public List getOnExceptionBlocks() {
+	public List<Node> getOnExceptionBlocks() {
 		return onExceptionBlocks;
 	}
 	

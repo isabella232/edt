@@ -26,13 +26,12 @@ import org.eclipse.edt.mof.utils.EList;
 
 public class StructPartImpl extends PartImpl implements StructPart {
 	private static int Slot_superTypes=0;
-	private static int Slot_interfaces=1;
-	private static int Slot_structuredFields=2;
-	private static int Slot_constructors=3;
-	private static int Slot_functions=4;
-	private static int Slot_operations=5;
-	private static int Slot_initializerStatements=6;
-	private static int totalSlots = 7;
+	private static int Slot_structuredFields=1;
+	private static int Slot_constructors=2;
+	private static int Slot_functions=3;
+	private static int Slot_operations=4;
+	private static int Slot_initializerStatements=5;
+	private static int totalSlots = 6;
 	
 	public static int totalSlots() {
 		return totalSlots + PartImpl.totalSlots();
@@ -41,7 +40,6 @@ public class StructPartImpl extends PartImpl implements StructPart {
 	static {
 		int offset = PartImpl.totalSlots();
 		Slot_superTypes += offset;
-		Slot_interfaces += offset;
 		Slot_structuredFields += offset;
 		Slot_constructors += offset;
 		Slot_functions += offset;
@@ -57,7 +55,14 @@ public class StructPartImpl extends PartImpl implements StructPart {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Interface> getInterfaces() {
-		return (List<Interface>)slotGet(Slot_interfaces);
+		List<StructPart> superTypes = getSuperTypes();
+		List<Interface> result = new ArrayList<Interface>(superTypes.size());
+		for (StructPart superType : superTypes) {
+			if (superType instanceof Interface) {
+				result.add((Interface)superType);
+			}
+		}
+		return result;
 	}
 	
 	@SuppressWarnings("unchecked")

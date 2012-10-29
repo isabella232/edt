@@ -1,0 +1,65 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Delegate SimpleDelegate() end
+
+Service service1
+	//use msg. 7804, 7805 -- Delegate types cannot be Service function parameters or return types
+	function func1() returns (SimpleDelegate) end	//1
+	function func2(p1 SimpleDelegate) end			//1
+end
+
+function topLevelFunc1(p1 SimpleDelegate in) end	//0
+function topLevelFunc2(p1 SimpleDelegate out) end	//0
+function topLevelFunc3(p1 SimpleDelegate inout) end	//0
+function topLevelFunc4(p1 SimpleDelegate) end		//0
+
+function simpleTopLevelFunction() end
+function topLevelFunctionWithConverse()
+	converse form1;
+end
+
+Program program1 type TextUIProgram {includeReferencedFunctions = yes}
+	function main()
+	end
+	
+	function func1(p1 SimpleDelegate in) end	//0
+	function func2(p1 SimpleDelegate out) end	//0
+	function func3(p1 SimpleDelegate inout) end	//0
+	function func4(p1 SimpleDelegate) end		//0
+	
+	function func()
+		myDelegate1 SimpleDelegate = func;	//0
+		myDelegate1 = func;					//0
+		move func to myDelegate1;			//0
+
+		myDelegate2 SimpleDelegate = SysLib.rollback;	//1 Function rollback cannot be referenced without an argument list, because it is a system library function. {3416*, SYSTEM_FUNCTION_CANNOT_BE_DELEGATED}
+		myDelegate2 = rollback;							//1 Function rollback cannot be referenced without an argument list, because it is a system library function. {3416*, SYSTEM_FUNCTION_CANNOT_BE_DELEGATED}
+		move rollback to myDelegate2;					//1 Function rollback cannot be referenced without an argument list, because it is a system library function. {3416*, SYSTEM_FUNCTION_CANNOT_BE_DELEGATED}
+		
+		myDelegate2 = simpleTopLevelFunction;		//0
+		myDelegate2 = topLevelFunctionWithConverse;	//1 Function topLevelFunctionWithConverse cannot be referenced without an argument list, because it contains a converse statement. {3417*, FUNCTION_WITH_CONVERSE_CANNOT_BE_DELEGATED}
+		
+		myDelegate2 = main;							//1 Function main cannot be referenced without an argument list, because it is the main function for a program. {3418*, MAIN_FUNCTION_CANNOT_BE_ASSIGNED_TO_DELEGATE}
+		
+		myDelegate1 = func1;						//1 not compatible
+		
+		targetchar char(4);
+		targetstr string;		
+  		targetchar = formattime(currentTime, eurtimeFormat);					//1 Function currentTime cannot be referenced without an argument list
+  		targetstr = formattime(currentTime, eurtimeFormat);						//1 Function currentTime cannot be referenced without an argument list
+  		targetchar = formattimestamp(currentTimeStamp, db2TimestampFormat);		//1 Function currentTimeStamp cannot be referenced without an argument list  		
+  		targetchar = formattime(currentTime(), eurtimeFormat);					//0
+  		targetstr = formattime(currentTime(), eurtimeFormat);					//0
+  		targetchar = formattimestamp(currentTimeStamp(), db2TimestampFormat);	//0
+	end
+end

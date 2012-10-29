@@ -11,6 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.http.HttpRest;
+import eglx.ui.rui.Document;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
+
 
 
 handler HTML type RUIWidget{ tagName = "div", onConstructionFunction = start,

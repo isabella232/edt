@@ -16,8 +16,8 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlDeleteStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlDeleteStatement;
 
 public class SqlDeleteStatementImpl extends SqlIOStatementImpl implements SqlDeleteStatement {
 
@@ -32,7 +32,7 @@ public class SqlDeleteStatementImpl extends SqlIOStatementImpl implements SqlDel
 	}
 	
 	public String generateDefaultSqlString() {
-		if (SQL.isSQLResultSet(getDataSource().getType())) return null;
+		if (Utils.isSQLResultSet(getDataSource().getType())) return null;
 		
 		String sql = null;
 		Expression target = getTargets().get(0);
@@ -45,16 +45,16 @@ public class SqlDeleteStatementImpl extends SqlIOStatementImpl implements SqlDel
 			targetType = (EGLClass)target.getType().getClassifier();
 		}
 		sql = "DELETE FROM ";
-		sql += SQL.getTableName(targetType);
+		sql += Utils.getTableName(targetType);
 		sql += " WHERE ";
 		boolean addAND = false;
 		for (Field f : targetType.getFields()) {
-			if (SQL.isKeyField(f)) {
+			if (Utils.isKeyField(f)) {
 				if(addAND){
 					sql += " AND ";
 				}
 				addAND = true;
-				sql += SQL.getColumnName(f);
+				sql += Utils.getColumnName(f);
 				sql += " = ?";
 			}
 		}

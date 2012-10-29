@@ -1,0 +1,207 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record EducationPSB type PSBRecord {
+	defaultPSBName = "EDUCPSB" }											
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};								// 0
+	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};								// 0
+	coursePCB DB_PCBRecord { @PCB {											// 0
+	  pcbType=DB,															// 0
+	  pcbName="CPCB",														// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord="Course" },								// 0
+	   @Relationship{ segmentRecord="Prereq", parentRecord="Course" },		// 0
+	   @Relationship{ segmentRecord="Offering",parentRecord="Course" },		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student", parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};																		// 0
+
+	offeringPCB DB_PCBRecord { @PCB {										// 0
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord="Offering" },							// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"}, 		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};																		// 0
+end
+
+Record InvalidPCB type PSBRecord {
+	defaultPSBName = "EDUCPSB" }											
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};								// 0
+	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};								// 0
+	coursePCB DB_PCBRecord { @PCB {											// 0
+	  pcbType=DB,															// 0
+	  pcbName="CPCB",														// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord="Course" },								// 0
+	   @Relationship{ segmentRecord="Prereq", parentRecord="Course" },		// 0
+	   @Relationship{ segmentRecord="Offering",parentRecord="Course" },		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student", parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};																		// 0
+
+	missingSecondaryIndexItem DB_PCBRecord { @PCB {							// 1
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord="Offering" },							// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"}, 		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};																		// 0
+	
+	missingSecondaryItem DB_PCBRecord { @PCB {								// 1
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord="Offering" },							// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"}, 		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};	
+	
+	invalidFieldsForTPType DB_PCBRecord { @PCB {							// 3
+	  pcbType=TP,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord="Offering" },							// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"}, 		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};		
+	
+	elawork DB_PCBRecord { @PCB {											// 3
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord="Offering" },							// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"}, 		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};	
+	
+	elamsg DB_PCBRecord { @PCB {											// 3
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 0
+	   @Relationship{ segmentRecord="Offering" },							// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"}, 		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};	
+	
+	firstRelationshipHasParent DB_PCBRecord { @PCB {						// 0
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 1
+	   @Relationship{ segmentRecord="Offering", parentRecord="Offering" },	// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"}, 		// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};	
+	
+	missingParentInRelationship DB_PCBRecord { @PCB {						// 0
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 1
+	   @Relationship{ segmentRecord="Offering" },							// 0
+	   @Relationship{ segmentRecord="Course"}, 								// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};		
+	
+	duplicateRelationship DB_PCBRecord { @PCB {								// 0
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 1
+	   @Relationship{ segmentRecord="Offering"},							// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"}, 		// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};		
+	
+	unresolvableParentInRelationship DB_PCBRecord { @PCB {					// 0
+	  pcbType=DB,															// 0
+	  pcbName="OPCB",														// 0
+	  secondaryIndex="XLOC",												// 0
+	  secondaryIndexItem="XLOC",											// 0
+	  hierarchy = [															// 1
+	   @Relationship{ segmentRecord="Offering"},							// 0
+	   @Relationship{ segmentRecord="Course",parentRecord="Bob"}, 			// 0
+	   @Relationship{ segmentRecord="Teacher",parentRecord="Offering"},		// 0
+	   @Relationship{ segmentRecord="Student",parentRecord="Offering"}		// 0
+	  ]																		// 0
+	}};							
+	
+	// loop
+	// 16 levels
+end
+
+Record course type dlisegment{
+		keyItem = "sItem1"
+	}
+	10 sItem1 char(10);
+end
+
+Record prereq type dlisegment{
+		keyItem = "sItem1"
+	}
+	10 sItem1 char(10);
+end
+
+Record teacher type dlisegment{
+		keyItem = "sItem1"
+	}
+	10 sItem1 char(10);
+end
+
+Record student type dlisegment{
+		keyItem = "sItem1"
+	}
+	10 sItem1 char(10);
+end
+
+Record offering type dlisegment{
+		keyItem = "sItem1"
+	}
+	10 sItem1 char(10);
+	10 xloc char(4);
+end

@@ -11,17 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
+import org.eclipse.edt.compiler.Util;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
@@ -29,8 +27,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 
 
 /**
@@ -41,10 +37,10 @@ public class BindingCreator extends DefaultASTVisitor {
 
 	private IEnvironment environment;
 	private IPartBinding partBinding;
-	private String[] packageName;
+	private String packageName;
 	private String caseSensitiveInternedPartName;
 
-	public BindingCreator(IEnvironment environment, String[] packageName, String caseSensitiveInternedPartName, Node astNode){
+	public BindingCreator(IEnvironment environment, String packageName, String caseSensitiveInternedPartName, Node astNode){
 		this.environment = environment;
 		this.packageName = packageName;
 		this.caseSensitiveInternedPartName = caseSensitiveInternedPartName;
@@ -62,29 +58,11 @@ public class BindingCreator extends DefaultASTVisitor {
 	}
 	
 	public boolean visit(Record record) {
-		if (record.isFlexible()){
-		    partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FLEXIBLE_RECORD_BINDING);
-		}else{
-			partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FIXED_RECORD_BINDING);
-		}
+		
+	    partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, Util.getPartType(record));
 		return false;
 	}
 	
-	public boolean visit(DataItem dataItem) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.DATAITEM_BINDING);
-		return false;
-	}
-	
-	public boolean visit(DataTable dataTable) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.DATATABLE_BINDING);
-		return false;
-	}
-	
-	public boolean visit(TopLevelForm topLevelForm) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FORM_BINDING);
-		return false;
-	}
-
 	public boolean visit(Delegate delegate) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.DELEGATE_BINDING);
 		return false;
@@ -104,7 +82,12 @@ public class BindingCreator extends DefaultASTVisitor {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.HANDLER_BINDING);
 		return false;
 	}
-	
+
+	public boolean visit(Class eglClass) {
+		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.CLASS_BINDING);
+		return false;
+	}
+
 	public boolean visit(Library library) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.LIBRARY_BINDING);
 		return false;
@@ -114,27 +97,12 @@ public class BindingCreator extends DefaultASTVisitor {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.PROGRAM_BINDING);
 		return false;
 	}
-
-	public boolean visit(EGLClass eglClass) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.CLASS_BINDING);
-		return false;
-	}
-
+	
 	public boolean visit(Service service) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.SERVICE_BINDING);
 		return false;
 	}
-	
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FUNCTION_BINDING);
-		return false;
-	}
-	
-	public boolean visit(FormGroup formGroup) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FORMGROUP_BINDING);
-		return false;
-	}
-	
+		
 	public boolean visit(Interface interfaceNode) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.INTERFACE_BINDING);
 		return false;

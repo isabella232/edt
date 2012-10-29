@@ -1,0 +1,98 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+// ^
+// |____ (for now)
+//
+//Notice, a DCR is needed for this testcase to work correctly. references to multi-occurs items should
+//always have default subscript(s) added...independent of the VagenCompatibility mode
+
+record rec1
+	{a = 1} //1
+	{a.b = 2} //1
+	{a{b = 2}} //1
+	{d = 5} //0
+	{a.d = 5} //0
+	{a{d = 5}} //0
+	{a{b{c{d = 5}}}} //0
+	{a[1]{b[1][2]{c[1][2][3]{}}}}  //1 at least one error should be here...to many subscripts
+	{x[1]{y[1][2]{z = 5}}} // 1 at least one error should be here...to many subscripts
+	
+	10 a;
+	 15 b;
+	   20 c;
+	     25 *;
+	       30 d int;
+	10 x;
+	 15 y;
+	   20 z int;
+end	       
+
+record rec2
+	{a = 1} //1
+	{a.b = 2} //1
+	{a{b = 2}} //1
+	{d = 5} //0
+	{a.d = 5} //0
+	{a{d = 5}} //0
+	{a{b{c{d = 5}}}} //0
+	{a[1]{b[1][2]{c[1][2][3]{}}}}  //1 at least one error should be here...to many subscripts
+	{x[1]{y[1][2]{z = 5}}} // 1 at least one error should be here...to many subscripts
+	{a[1]{b[2]{c[3]{d = 3}}}}	//0
+	{a.b.c.d[1,2,3] = 3} //0
+	{a{b{c{d[1][2][3] = 5}}}} //1 too many subscripts on d...default subscripts should be placed on a,b,c
+	10 a [10];
+	 15 b [20];
+	   20 c [30];
+	     25 *;
+	       30 d int;
+	10 x;
+	 15 y;
+	   20 z int;
+end	    
+
+program pgm1
+
+	rec1 rec1 {
+		a = 1, //0
+		a.b = 2, //0
+		a{b = 2}, //0
+		d = 5, //0
+		a.d = 5, //0
+		a{d = 5}, //0
+		a{b{c{d = 5}}} //0
+	};
+	
+	function main()
+		rec1.d = 5; //0
+		rec1.b.c = 3; //0
+		rec1.a.d = 5; //0
+		rec1.c.d = 5; //0
+	end
+end
+
+record point
+	x int;
+	y int;
+end
+
+program program2
+
+	mypts point[10] {x = 5}; //0
+	mypts2 point[10][5] {x = 5};  //1 
+	mypts3 point[10][5] {this[2]{x = 5}};  //0
+	
+	
+	function main()
+	
+	end
+end

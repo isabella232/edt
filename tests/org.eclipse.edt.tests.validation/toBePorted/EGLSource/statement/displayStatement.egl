@@ -1,0 +1,97 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validateDisplayType:
+// 1 {1} is not a print form. The target of the {2} statement must be a print form in a basic program. {7504, EGLMESSAGE_STATEMENT_TARGET_MUST_BE_PRINT_FORM}
+// 1 {1} is not a form. The target of the {2} statement must be a form. {7503, EGLMESSAGE_STATEMENT_TARGET_MUST_BE_FORM}
+// 1 {1} is not a text form. The target of the {2} statement must be a text form. {7502, EGLMESSAGE_STATEMENT_TARGET_MUST_BE_TEXT_FORM}
+
+Program MyProj type  VGWebTransaction
+	
+
+use myformgx;	
+	function main()
+			display mytextform; // 1 The display statement may not be used in a web or basic program {6551, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_ACTION_OR_BASIC_PROGRAM}
+		
+	end
+end
+
+Program MyProj2 type BasicProgram {includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	
+
+use myformgx;	
+	function main()
+	
+		display mytextform; // 1 The display statement may not be used in a web or basic program {6551, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_ACTION_OR_BASIC_PROGRAM}
+	end
+end
+
+handler MyHandler type JSFHandler{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+	
+	
+
+use myformgx;	
+	function main()
+
+	display mytextform; // 1 The display statement may not be used in a JSFHandler	{6553, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_PAGE_HANDLER}
+	end
+end
+
+Library MyLib{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+use myformgx;
+	function myfunc()
+
+	display mytextform; // 1 The display statement may not be used in a library 	 {6552, EGLMESSAGE_STATEMENT_CANNOT_BE_IN_LIBRARY}
+	end
+end
+
+Record  MyUIRecordx  Type  VGUIRecord 
+		{ commandValueItem="buttonValue" }	
+	10 formItem  char(21)					 
+	   {uiType=uiForm, 						
+        @programLinkData { 					
+			programName="NewPgm",			
+			newWindow=yes,					
+			uiRecordName="NewUIR",			
+			linkParms = [					
+			   				@LinkParameter { name="key1", value="value1" },		
+			   				@LinkParameter { name="key2", valueRef="refItem" }
+						]				
+        }
+	   };
+	  20 nametem  char(16)	{ uiType=input, inputRequired=yes }; 			
+	  20 buttonItem char(1)[3]	{uiType=submit,			
+  								 displayName="Enter \n Help \n Cancel"	
+								} 						
+								= [ "E", "H", "C" ];	
+	  20 buttonValue char(1) { uiType=none };			
+      20 refItem     char(1) { uiType=none };			
+End
+
+formgroup myformgx 
+	form mytextform type textform {formsize=[24,80]}	
+	end		
+	form myprintform type printform {formsize=[24,80]}	
+	end
+end
+
+Program myBasicProgram1 type textuiprogram{includeReferencedFunctions = yes,allowUnqualifiedItemReferences = yes}
+		use myformgx;					
+		myuirecord myuirecordx; 			
+ 		function main()
+			display myuirecord;		//1 myuirecord is not a text form. The target of the display statement must be a text form	{7502, EGLMESSAGE_STATEMENT_TARGET_MUST_BE_TEXT_FORM}
+			display mytextform; //0
+	end	
+end
+
+
+
+Record vgUIRecDefx type VGUIRecord end

@@ -1,0 +1,168 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * You should be able to make arrays of basic, sql, and dli records. You should
+ * not be able to make arrays of the other kinds of IO records: mq, serial,
+ * relative, and indexed. (I'm pretty sure this was in a spec somewhere, a
+ * long time ago.  Neither Java not Cobol has the support.)
+ */
+ 
+record bscRecord type basicRecord
+	10 item1 int;
+end
+
+record sqlRecord type sqlRecord
+	10 item1 int;
+end
+
+record dliRecord type dliSegment
+	10 item1 int;
+end
+
+record mqRecord type mqRecord
+	10 item1 int;
+end
+
+record serRecord type serialRecord
+	10 item1 int;
+end
+
+record relRecord type relativeRecord
+	10 item1 int;
+end
+
+record indRecord type indexedRecord
+	10 item1 int;
+end
+
+function func(
+	prec1 bscRecord[],	//0
+	prec2 sqlRecord[],	//0
+	prec3 dliRecord[],	//0
+	prec4 mqRecord[],	//0
+	prec5 serRecord[],	//0
+	prec6 relRecord[],	//0
+	prec7 indRecord[],	//0
+	
+	pprec1 bscRecord[][],	//0
+	pprec2 sqlRecord[][],	//0
+	pprec3 dliRecord[][],	//0
+	pprec4 mqRecord[][],	//0
+	pprec5 serRecord[][],	//0
+	pprec6 relRecord[][],	//0
+	pprec7 indRecord[][]	//0
+)
+	rec1 bscRecord[];	//0
+	rec2 sqlRecord[];	//0
+	rec3 dliRecord[];	//0
+	rec4 mqRecord[];	//0
+	rec5 serRecord[];	//0
+	rec6 relRecord[];	//0
+	rec7 indRecord[];	//0
+	
+	rrec1 bscRecord[][];	//0
+	rrec2 sqlRecord[][];	//0
+	rrec3 dliRecord[][];	//0
+	rrec4 mqRecord[][];		//0
+	rrec5 serRecord[][];	//0
+	rrec6 relRecord[][];	//0
+	rrec7 indRecord[][];	//0
+end
+
+Program pgm(
+	prec1 bscRecord[],	//0
+	prec2 sqlRecord[],	//0
+	prec3 dliRecord[],	//0
+	prec4 mqRecord[],	//0
+	prec5 serRecord[],	//0
+	prec6 relRecord[],	//0
+	prec7 indRecord[],	//0
+	
+	pprec1 bscRecord[][],	//0
+	pprec2 sqlRecord[][],	//0
+	pprec3 dliRecord[][],	//0
+	pprec4 mqRecord[][],	//0
+	pprec5 serRecord[][],	//0
+	pprec6 relRecord[][],	//0
+	pprec7 indRecord[][]	//0
+)
+	rec1 bscRecord[];	//0
+	rec2 sqlRecord[];	//0
+	rec3 dliRecord[];	//0
+	rec4 mqRecord[];	//0
+	rec5 serRecord[];	//0
+	rec6 relRecord[];	//0
+	rec7 indRecord[];	//0
+	
+	rrec1 bscRecord[][];	//0
+	rrec2 sqlRecord[][];	//0
+	rrec3 dliRecord[][];	//0
+	rrec4 mqRecord[][];		//0
+	rrec5 serRecord[][];	//0
+	rrec6 relRecord[][];	//0
+	rrec7 indRecord[][];	//0
+end
+
+Record flexRec type basicRecord
+	rec1 bscRecord[];	//0
+	rec2 sqlRecord[];	//0
+	rec3 dliRecord[];	//0
+	rec4 mqRecord[];	//0
+	rec5 serRecord[];	//0
+	rec6 relRecord[];	//0
+	rec7 indRecord[];	//0
+	
+	rrec1 bscRecord[][];	//0
+	rrec2 sqlRecord[][];	//0
+	rrec3 dliRecord[][];	//0
+	rrec4 mqRecord[][];		//0
+	rrec5 serRecord[][];	//0
+	rrec6 relRecord[][];	//0
+	rrec7 indRecord[][];	//0
+end
+
+handler ph type JSFHandler
+	rec1 bscRecord[];	//0
+	rec2 sqlRecord[];	//0
+	rec3 dliRecord[];	//0
+	rec4 mqRecord[];	//0
+	rec5 serRecord[];	//0
+	rec6 relRecord[];	//0
+	rec7 indRecord[];	//0
+	
+	rrec1 bscRecord[][];	//0
+	rrec2 sqlRecord[][];	//0
+	rrec3 dliRecord[][];	//0
+	rrec4 mqRecord[][];		//0
+	rrec5 serRecord[][];	//0
+	rrec6 relRecord[][];	//0
+	rrec7 indRecord[][];	//0
+end
+
+Library lib
+	rec1 bscRecord[];	//0
+	rec2 sqlRecord[];	//0
+	rec3 dliRecord[];	//0
+	rec4 mqRecord[];	//0
+	rec5 serRecord[];	//0
+	rec6 relRecord[];	//0
+	rec7 indRecord[];	//0
+	
+	rrec1 bscRecord[][];	//0
+	rrec2 sqlRecord[][];	//0
+	rrec3 dliRecord[][];	//0
+	rrec4 mqRecord[][];		//0
+	rrec5 serRecord[][];	//0
+	rrec6 relRecord[][];	//0
+	rrec7 indRecord[][];	//0
+end

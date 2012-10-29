@@ -1,0 +1,82 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program pgm
+	function main()
+	
+		vchar char(4);
+	
+		vbin bin(9);
+		vint int;
+		vsmallInt smallInt;
+		vbigint bigInt;
+		vpacf pacf(4);
+		vdecimal decimal(9,2);
+		vmoney money;
+		
+		vfloat float;
+	
+		//copyStr:		vagText, IEGLConstants.INT_STRING, IEGLConstants.INT_STRING, vagText, IEGLConstants.INT_STRING, IEGLConstants.INT_STRING
+		//				INOUT, IN, IN, IN, IN, IN
+		
+		//compareStr:	vagText, IEGLConstants.INT_STRING, IEGLConstants.INT_STRING, vagText, IEGLConstants.INT_STRING, IEGLConstants.INT_STRING
+		//				IN, IN, IN, IN, IN, IN
+		
+		//concatenate:	vagText, vagText
+		//				INOUT, IN
+
+		copyBytes(vchar, 1, 2, vbin, 1, 2);		//0
+		compareBytes(vchar, 1, 2, vbin, 1, 2);	//0
+		concatenateBytes(vchar, vbin);			//0
+		
+		copyBytes(vchar, 1, 2, vint, 1, 2);		//0
+		compareBytes(vchar, 1, 2, vint, 1, 2);	//0
+		concatenateBytes(vchar, vint);			//0
+		
+		copyBytes(vchar, 1, 2, vsmallInt, 1, 2);	//0
+		compareBytes(vchar, 1, 2, vsmallInt, 1, 2);	//0
+		concatenateBytes(vchar, vsmallInt);			//0
+		
+		copyBytes(vchar, 1, 2, vbigint, 1, 2);		//0
+		compareBytes(vchar, 1, 2, vbigint, 1, 2);	//0
+		concatenateBytes(vchar, vbigint);			//0
+		
+		copyBytes(vchar, 1, 2, vpacf, 1, 2);	//0
+		compareBytes(vchar, 1, 2, vpacf, 1, 2);	//0
+		concatenateBytes(vchar, vpacf);			//0
+		
+		copyBytes(vchar, 1, 2, vdecimal, 1, 2);		//0
+		compareBytes(vchar, 1, 2, vdecimal, 1, 2);	//0
+		concatenateBytes(vchar, vdecimal);			//0
+		
+		copyBytes(vchar, 1, 2, vchar, 1, 2);	//0
+		compareBytes(vchar, 1, 2, vchar, 1, 2);	//0
+		concatenateBytes(vchar, vchar);			//0
+		
+		copyBytes(vchar, 1, 2, vmoney, 1, 2);	//0
+		compareBytes(vchar, 1, 2, vmoney, 1, 2);//0
+		concatenateBytes(vchar, vmoney);		//0
+		
+		copyBytes(vchar, 1, 2, 5, 1, 2);	//0
+		compareBytes(vchar, 1, 2, 5, 1, 2);	//0
+		concatenateBytes(vchar, 5);			//0
+		
+		copyBytes(vchar, 1, 2, "a", 1, 2);		//0
+		compareBytes(vchar, 1, 2, "a", 1, 2);	//0
+		concatenateBytes(vchar, "a");			//0
+		
+		copyBytes(vchar, 1, 2, vfloat, 1, 2);		//0
+		compareBytes(vchar, 1, 2, vfloat, 1, 2);	//0
+		concatenateBytes(vchar, vfloat);			//0
+	end
+end

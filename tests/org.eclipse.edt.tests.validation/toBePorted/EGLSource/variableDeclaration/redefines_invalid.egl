@@ -1,0 +1,264 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program pgm3 {includeReferencedFunctions = yes}
+	pgmItem longAddrRecd;
+	pgmItem2 longAddrRecd;
+	pgmItem3 longAddrRecd {redefines=pgmitem2};	//0
+	pgmItem4 longAddrRecd {redefines=pgmItem3}; //1 The value for property redefines cannot refer to a variable declaration that also contains a redefines property
+	pgmItem5 shortAddrRecd;
+	function main()
+		funcItem longAddrRecd {redefines=pgmItem};		//0
+		funcItem2 longAddrRecd {redefines=bogusItem};  	//1 The value for property redefines must match a structured record variable declaration
+		funcItem3 longAddrRecd {redefines=pgmItem3};	//1 The value for property redefines cannot refer to a variable declaration that also contains a redefines property.
+		funcItem4 longAddrRecd {redefines=funcItem3};	//1 The value for property redefines cannot refer to a variable declaration that also contains a redefines property.
+		funcItem5 longAddrRecd {redefines=pgmItem5};	//1 The value for property redefines cannot refer to a variable declaration whose size is smaller than the variable doing the redefining.
+		
+		standalonex(); //0
+	end
+	
+end
+
+record smallFixedRec1 
+	10 a char(10);
+end
+
+record smallFloatRec1
+	x smallFixedRec1;
+	y smallFixedRec1 {redefines=x};
+	z smallFixedRec1 {redefines=y}; //1 The value for property redefines cannot refer to a variable declaration that also contains a redefines property.
+end
+
+
+function standalonex() 
+	funcItemx longAddrRecd {redefines=pgmItemx};		//1
+	funcItem2x longAddrRecd {redefines=bogusItemx};  	//1
+	funcItem3x longAddrRecd {redefines=pgmItem3x};	//1
+	funcItem4x longAddrRecd {redefines=funcItem3x};	//1
+	funcItem5x longAddrRecd {redefines=pgmItem5x};	//1
+end 
+
+
+program p 
+function main ()
+standalone();
+end
+
+function standalone() 
+	funcItem longAddrRecd {redefines=pgmItem};		//1 The value for property redefines must match a structured record variable declaration
+	funcItem2 longAddrRecd {redefines=bogusItem};  	//1  The value for property redefines must match a structured record variable declaration
+	funcItem3 longAddrRecd {redefines=pgmItem3};	//1 The value for property redefines must match a structured record variable declaration
+	funcItem4 longAddrRecd {redefines=funcItem3};	//1 The value for property redefines cannot refer to a variable declaration that also contains a redefines property.
+	funcItem5 longAddrRecd {redefines=pgmItem5};	//1 The value for property redefines must match a structured record variable declaration
+end 
+end
+
+
+
+
+
+
+Record myflex0 type BasicRecord
+	item1 shortNameRecd;
+	item2 longNameRecd;
+	item3 flexshortAddrRecd;
+	item4 flexlongAddrRecd;
+	item5 char(100);
+end
+
+Record myflex1 type BasicRecord 
+	item1 shortNameRecd;
+	item2 longNameRecd;
+	item3 flexshortAddrRecd;
+	item4 flexlongAddrRecd;
+	item5 char(100);   
+	 
+	redefinesItem1a shortAddrRecd {redefines=item1}; 	//0 
+	redefinesItem1b longAddrRecd  {redefines=item1}; 	//1 The value for property redefines cannot refer to a variable declaration whose size is smaller than the variable doing the redefining.
+	redefinesItem1c flexshortAddrRecd {redefines=item1};//1 The redefines property can be specified only on the variable declaration for a basic structured record
+	
+	redefinesItem2a shortAddrRecd {redefines=item2}; //0 
+	redefinesItem2b longAddrRecd {redefines=item2};	 //0 
+	
+	redefinesItem3a shortAddrRecd {redefines=item3}; //1 The value for property redefines must match a structured record variable declaration
+	
+	redefinesItem4a flexshortAddrRecd {redefines=item4}; //1 The redefines property can be specified only on the variable declaration for a basic structured record
+	
+	redefinesItem5a shortAddrRecd {redefines=item5}; //1 The value for property redefines must match a structured record variable declaration
+
+	redefinesItem6a shortAddrRecd {redefines=item6}; //1 value for property redefines must match a structured record variable declaration
+end
+
+// This is the exact same record as myflex1 except things are reordered. It shouldn't matter.
+Record myflex2 type BasicRecord
+	redefinesItem1a shortAddrRecd {redefines=item1}; 	//0 
+	redefinesItem1b longAddrRecd  {redefines=item1}; 	//1 The value for property redefines cannot refer to a variable declaration whose size is smaller than the variable doing the redefining.
+	redefinesItem1c flexshortAddrRecd {redefines=item1};//1 The redefines property can be specified only on the variable declaration for a basic structured record
+	
+	redefinesItem2a shortAddrRecd {redefines=item2}; //0 
+	redefinesItem2b longAddrRecd {redefines=item2};	 //0 
+	
+	redefinesItem3a shortAddrRecd {redefines=item3}; //1 The value for property redefines must match a structured record variable declaration
+	
+	redefinesItem4a flexshortAddrRecd {redefines=item4}; //1 The redefines property can be specified only on the variable declaration for a basic structured record
+	
+	redefinesItem5a shortAddrRecd {redefines=item5}; //1 The value for property redefines must match a structured record variable declaration
+
+	redefinesItem6a shortAddrRecd {redefines=item6}; //The value for property redefines must match a structured record variable declaration
+
+	item1 shortNameRecd;
+	item2 longNameRecd;
+	item3 flexshortAddrRecd;
+	item4 flexlongAddrRecd;
+	item5 char(100);
+end
+
+// This is the exact same record as myflex1 and myflex2 except things are reordered again.  It still shouldn't matter.
+Record myflex3 type BasicRecord
+
+	item1 shortNameRecd;
+	redefinesItem1a shortAddrRecd {redefines=item1}; 	//0 
+	redefinesItem1b longAddrRecd  {redefines=item1}; 	//1 The value for property redefines cannot refer to a variable declaration whose size is smaller than the variable doing the redefining.
+	redefinesItem1c flexshortAddrRecd {redefines=item1};//1 The redefines property can be specified only on the variable declaration for a basic structured record
+
+	redefinesItem6a shortAddrRecd {redefines=item6}; //1 The value for property redefines must match a structured record variable declaration
+
+	item2 longNameRecd;
+	redefinesItem2a shortAddrRecd {redefines=item2}; //0 
+	redefinesItem2b longAddrRecd {redefines=item2};	 //0 
+
+	item3 flexshortAddrRecd;
+	redefinesItem3a shortAddrRecd {redefines=item3}; //1 The value for property redefines must match a structured record variable declaration
+
+	item4 flexlongAddrRecd;
+	redefinesItem4a flexshortAddrRecd {redefines=item4}; //1 The redefines property can be specified only on the variable declaration for a basic structured record
+
+	item5 char(100);
+	redefinesItem5a shortAddrRecd {redefines=item5}; //1 The value for property redefines must match a structured record variable declaration
+	
+end
+
+
+Record myflex4 type BasicRecord
+
+	item1 shortNameRecd;		
+		 
+ 	//redefines has to use a record as the typedef, you can't put it right here
+	05 redefinesItem1a  {redefines=item1};  //3 The redefines property can be specified only on the variable declaration for a basic structured record
+		10 name char(31);						//1 If any item in a structure has a level number, all items must have level numbers
+		10 shortaddress char(67);				//1 If any item in a structure has a level number, all items must have level numbers
+			20 street char(30);					//1 If any item in a structure has a level number, all items must have level numbers
+			20 city char(30);					//1 If any item in a structure has a level number, all items must have level numbers
+			20 state char(2);					//1 If any item in a structure has a level number, all items must have level numbers
+			20 zip char(5);						//1 If any item in a structure has a level number, all items must have level numbers
+
+	redefinesItem1b longAddrRecd  {redefines=item1}; //1 The value for property redefines cannot refer to a variable declaration whose size is smaller than the variable doing the redefining
+
+end
+
+// You can't redefine part of a flexible record from the variable declaration
+Program pgm1 type BasicProgram
+	myFlexRecdToBeRedefined myflex0;
+	redefinedItem1 shortAddrRecd {redefines=myFlexRecdToBeRedefined.item1};//1
+	
+	myint1 int;
+	myint2 int {redefines=myint1}; //1 The redefines property can be specified only on the variable declaration for a basic structured record
+	
+	function main()
+	end
+end
+
+Program myprog2 type BasicProgram
+	flexRecdWithRedefinitions myflex1;
+
+	function main()
+		// Which of these references are correct?
+		flexRecdWithRedefinitions.item1.something = "lastName, firstName and middle initial";
+		flexRecdWithRedefinitions.item1.something.lastName = "just last name";
+		flexRecdWithRedefinitions.item1.address = "entire address:street, city, state, zip";
+		
+		flexRecdWithRedefinitions.redefinesItem1a.shortaddress.street = "just the street";
+		flexRecdWithRedefinitions.redefinesItem1a.shortaddress = "entire address:street, city, state, zip";
+		
+		flexRecdWithRedefinitions.item1.shortaddress.street = "just the street";						//1 cannot be resolved
+		flexRecdWithRedefinitions.item1.shortaddress = "entire address:street, city, state, zip";		//1 cannot be resolved
+		flexRecdWithRedefinitions.redefinesItem1a.something = "lastName, firstName and middle initial";	//1 cannot be resolved
+		flexRecdWithRedefinitions.redefinesItem1a.something.lastName = "just last name";				//1 cannot be resolved
+		flexRecdWithRedefinitions.redefinesItem1a.address = "entire address:street, city, state, zip";	//1 cannot be resolved
+	end
+end
+
+
+
+// Supporting record definitions
+
+Record myfixed1 type basicRecord
+	10 item1 shortNameRecd;
+	10 item2 longNameRecd;
+	10 item5 char(100); 
+	
+	10 redefinesItem1a shortAddrRecd {redefines=item1}; //1 
+	10 redefinesItem5a shortAddrRecd {redefines=item5}; //0
+end
+
+Record shortNameRecd type basicRecord
+	10 something;
+		20 lastName char(15);
+		20 firstName char(15);
+		20 middleInitial char(1);
+	10 address char(67);
+end
+
+Record longNameRecd type basicRecord
+	10 *;
+		20 lastName char(15);
+		20 firstName char(15);
+		20 middleInitial char(1);
+	10 address char(95);
+end
+
+Record shortAddrRecd type basicRecord	
+	10 name char(31);
+	10 shortaddress char(67);
+		20 street char(30);
+		20 city char(30);
+		20 state char(2);
+		20 zip char(5);
+end
+
+Record longAddrRecd type basicRecord	
+	10 name char(31);
+	10 * char(95);
+		20 street char(30);
+		20 city char(30);
+		20 state char(30);
+		20 zip char(5);
+end		
+
+Record flexShortAddrRecd type basicRecord
+	name char(31);
+	address char(67);
+end
+
+Record flexLongAddrRecd type basicRecord
+	name char(31);
+	address char(95);
+end
+
+
+
+
+
+
+
+
+	

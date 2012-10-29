@@ -11,14 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+
 /**
  * @author winghong
  */
 public interface IPackageBinding extends IBinding {
     
-    String[] getPackageName();
+    String getPackageName();
+    String getCaseSensitivePackageName();
+
     
-    ITypeBinding resolveType(String simpleName);
+    IPartBinding resolveType(String simpleName);
     IPackageBinding resolvePackage(String simpleName);
 
 }

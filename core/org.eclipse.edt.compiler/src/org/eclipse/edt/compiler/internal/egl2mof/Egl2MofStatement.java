@@ -11,67 +11,67 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.egl2mof;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
+import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
+import org.eclipse.edt.compiler.core.ast.IntoClause;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
-import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementGenerator;
-import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementGenerator;
-import org.eclipse.edt.compiler.internal.egl2mof.sql.SQLIOStatementGenerator;
+import org.eclipse.edt.compiler.core.ast.UsingClause;
+import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.AddStatement;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
+import org.eclipse.edt.mof.egl.CloseStatement;
+import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.ContinueStatement;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
+import org.eclipse.edt.mof.egl.DeleteStatement;
 import org.eclipse.edt.mof.egl.ExceptionBlock;
+import org.eclipse.edt.mof.egl.ExecuteStatement;
 import org.eclipse.edt.mof.egl.ExitStatement;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.ForEachStatement;
 import org.eclipse.edt.mof.egl.ForStatement;
-import org.eclipse.edt.mof.egl.ForwardStatement;
-import org.eclipse.edt.mof.egl.FreeSqlStatement;
 import org.eclipse.edt.mof.egl.FunctionStatement;
+import org.eclipse.edt.mof.egl.GetByKeyStatement;
+import org.eclipse.edt.mof.egl.GetByPositionKind;
+import org.eclipse.edt.mof.egl.GetByPositionStatement;
 import org.eclipse.edt.mof.egl.GoToStatement;
+import org.eclipse.edt.mof.egl.IOStatement;
 import org.eclipse.edt.mof.egl.IfStatement;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LabelStatement;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MoveStatement;
-import org.eclipse.edt.mof.egl.OpenUIStatement;
+import org.eclipse.edt.mof.egl.OpenStatement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
-import org.eclipse.edt.mof.egl.PrintStatement;
+import org.eclipse.edt.mof.egl.PrepareStatement;
+import org.eclipse.edt.mof.egl.ReplaceStatement;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.SetStatement;
 import org.eclipse.edt.mof.egl.SetValuesStatement;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.ThrowStatement;
-import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.WhileStatement;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
-import org.eclipse.edt.mof.eglx.services.ServicesFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 @SuppressWarnings("unchecked")
+//TODO any other types of statements we want to make extensible?
 abstract class Egl2MofStatement extends Egl2MofMember {
-	static {
-		IOStatementGenerator.Registry.put(Type_SqlRecord, SQLIOStatementGenerator.class);
-		IOStatementGenerator.Registry.put(EGL_lang_package, DefaultIOStatementGenerator.class);
-		IOStatementGenerator.Registry.put("eglx.persistence.sql", SQLActionStatementGenerator.class);
-		IOStatementGenerator.Registry.put("eglx.services", ServicesActionStatementGenerator.class);
-	}
 	
 	Stack<LabelStatement> caseLabelStack = new Stack<LabelStatement>();
 	int caseLabelCounter = 0;
@@ -86,18 +86,28 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.AddStatement node) {
-		IOStatementGenerator generator = getGeneratorFor(node);
-		Statement stmt = generator.genAddStatement(node, eObjects);
-		setElementInformation(node, stmt);
-		stack.push(stmt);
+		ElementGenerator gen = getElementGenerator(node);
+		if (gen != null) {
+			AddStatement stmt = (AddStatement)gen.generate(node, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(node, stmt);
+				commonIOVisit(node, stmt);
+			}
+		}
 		return false;
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CloseStatement node) {
-		IOStatementGenerator generator = getGeneratorFor(node);
-		Statement stmt = generator.genCloseStatement(node, eObjects);
-		setElementInformation(node, stmt);
-		stack.push(stmt);
+		ElementGenerator gen = getElementGenerator(node);
+		if (gen != null) {
+			CloseStatement stmt = (CloseStatement)gen.generate(node, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(node, stmt);
+				commonIOVisit(node, stmt);
+			}
+		}
 		return false;
 	}
 	
@@ -126,11 +136,11 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stack.push(stmt);
 		DeclarationExpression expr = factory.createDeclarationExpression();
 		for (org.eclipse.edt.compiler.core.ast.Name name : (List<org.eclipse.edt.compiler.core.ast.Name>)decl.getNames()) {
-			if (Binding.isValidBinding(name.resolveDataBinding())) {
-				LocalVariableBinding binding = (LocalVariableBinding)name.resolveDataBinding();
+			if (name.resolveMember() != null) {
+				Member binding = name.resolveMember();
 				
 				Field field;
-				if (binding.isConstant()) {
+				if (binding instanceof ConstantField) {
 					field = factory.createConstantField();
 				}
 				else{
@@ -141,7 +151,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 				if (objType instanceof Type) {
 					field.setType((Type)mofTypeFor(binding.getType()));
 				}
-				field.setIsNullable(binding.getType().isNullable());
+				field.setIsNullable(binding.isNullable());
 				field.setContainer(getCurrentFunctionMember());
 				addInitializers(decl.getInitializer(), decl.getSettingsBlockOpt(), field, decl.getType());
 				expr.getFields().add(field);
@@ -170,51 +180,45 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
-		//FIXME JV this need to be extensible 
-		CallStatement stmt;
-		if(org.eclipse.edt.compiler.tools.IRUtils.isIBMi(callStatement)){
-			stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
-		}
-		else if(org.eclipse.edt.compiler.tools.IRUtils.isService(callStatement)){
-			stmt = ServicesFactory.INSTANCE.createServicesCallStatement();
-		}
-		else{
-			//TODO this should create a "plain" CallStatement
-			IOStatementGenerator generator = getGeneratorFor(callStatement);
-			stmt = generator.genCallStatement(callStatement, eObjects);
-		}
-		callStatement.getInvocationTarget().accept(this);
-		stmt.setInvocationTarget((Expression)stack.pop());
-		if (callStatement.hasArguments()) {
-			for (Node node : (List<Node>)callStatement.getArguments()) {
-				node.accept(this);
-				stmt.getArguments().add((Expression)stack.pop());
-			}
-		}
+		ElementGenerator gen = getElementGenerator(callStatement);
+		if (gen != null) {
+			CallStatement stmt = (CallStatement)gen.generate(callStatement, eObjects);
+			if (stmt != null) {
+				callStatement.getInvocationTarget().accept(this);
+				stmt.setInvocationTarget((Expression)stack.pop());
+				if (callStatement.hasArguments()) {
+					for (Node node : (List<Node>)callStatement.getArguments()) {
+						node.accept(this);
+						stmt.getArguments().add((Expression)stack.pop());
+					}
+				}
+				
+				if (callStatement.getUsing() != null) {
+					callStatement.getUsing().accept(this);
+					stmt.setUsing((Expression)stack.pop());
+				}
 		
-		if (callStatement.getUsing() != null) {
-			callStatement.getUsing().accept(this);
-			stmt.setUsing((Expression)stack.pop());
+				if (callStatement.getCallSynchronizationValues() != null) {
+					if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+						callStatement.getCallSynchronizationValues().getReturnTo().accept(this);
+						stmt.setCallback((Expression)stack.pop());
+					}
+					if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+						callStatement.getCallSynchronizationValues().getOnException().accept(this);
+						stmt.setErrorCallback((Expression)stack.pop());
+					}
+					if (callStatement.getCallSynchronizationValues().getReturns() != null) {
+						callStatement.getCallSynchronizationValues().getReturns().accept(this);
+						stmt.setReturns((LHSExpr)stack.pop());
+					}
+				}
+				setElementInformation(callStatement, stmt);
+				stack.push(stmt);
+				if (callStatement.hasSettingsBlock()) {
+					processSettings(stmt, callStatement.getSettingsBlock());
+				}
+			}
 		}
-
-		if (callStatement.getCallSynchronizationValues() != null) {
-			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
-				callStatement.getCallSynchronizationValues().getReturnTo().accept(this);
-				stmt.setCallback((Expression)stack.pop());
-			}
-			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
-				callStatement.getCallSynchronizationValues().getOnException().accept(this);
-				stmt.setErrorCallback((Expression)stack.pop());
-			}
-			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
-				callStatement.getCallSynchronizationValues().getReturns().accept(this);
-				stmt.setReturns((LHSExpr)stack.pop());
-			}
-		}
-		setElementInformation(callStatement, stmt);
-		stack.push(stmt);
-		if (callStatement.hasSettingsBlock())
-			processSettings(stmt, callStatement.getSettingsBlock());
 		return false;
 	}
 
@@ -256,7 +260,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			criterion = (Expression)stack.pop();
 		}
 		IfStatement current = null;
-		for (Node node : (List<Node>)caseStatement.getWhenClauses()) {
+		for (Node node : caseStatement.getWhenClauses()) {
 			node.accept(this);
 			IfStatement when = (IfStatement)stack.pop();
 			if (criterion != null) {
@@ -304,7 +308,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		IfStatement clause = factory.createIfStatement();
 		
 		Expression prevCond = null;
-		for (Node node : (List<Node>)whenClause.getExpr_plus()) {
+		for (Node node : whenClause.getExpr_plus()) {
 			node.accept(this);
 			
 			Expression expr = (Expression)stack.pop();
@@ -339,8 +343,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			stmt.setContinueType(ContinueStatement.CONTINUE_FOR);
 		} else if (node.isContinueForEach()) {
 			stmt.setContinueType(ContinueStatement.CONTINUE_FOREACH);
-		} else if (node.isContinueOpenUI()) {
-			stmt.setContinueType(ContinueStatement.CONTINUE_OPENUI);
 		} else if (node.isContinueWhile()) {
 			stmt.setContinueType(ContinueStatement.CONTINUE_WHILE);
 		}
@@ -350,29 +352,16 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ConverseStatement converseStatement) {
-		IOStatementGenerator generator = getGeneratorFor(converseStatement);
-		Statement stmt = generator.genConverseStatement(converseStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(converseStatement, stmt);
-		return false;
-	}
-
-	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.DeleteStatement deleteStatement) {
-		IOStatementGenerator generator = getGeneratorFor(deleteStatement);
-		Statement stmt = generator.genDeleteStatement(deleteStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(deleteStatement, stmt);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.DisplayStatement displayStatement) {
-		IOStatementGenerator generator = getGeneratorFor(displayStatement);
-		Statement stmt = generator.genDisplayStatement(displayStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(displayStatement, stmt);
+		ElementGenerator gen = getElementGenerator(deleteStatement);
+		if (gen != null) {
+			final DeleteStatement stmt = (DeleteStatement)gen.generate(deleteStatement, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(deleteStatement, stmt);
+				commonIOVisit(deleteStatement, stmt);
+			}
+		}
 		return false;
 	}
 
@@ -386,10 +375,15 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ExecuteStatement executeStatement) {
-		IOStatementGenerator generator = getGeneratorFor(executeStatement);
-		Statement stmt = generator.genExecuteStatement(executeStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(executeStatement, stmt);
+		ElementGenerator gen = getElementGenerator(executeStatement);
+		if (gen != null) {
+			ExecuteStatement stmt = (ExecuteStatement)gen.generate(executeStatement, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(executeStatement, stmt);
+				commonIOVisit(executeStatement, stmt);
+			}
+		}
 		return false;
 	}
 
@@ -410,8 +404,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			ext.setExitStatementType(ExitStatement.EXIT_FOREACH);
 		} else if (node.isExitIf()) {
 			ext.setExitStatementType(ExitStatement.EXIT_IF);
-		} else if (node.isExitOpenUI()) {
-			ext.setExitStatementType(ExitStatement.EXIT_OPENUI);
 		} else if (node.isExitProgram()) {
 			ext.setExitStatementType(ExitStatement.EXIT_PROGRAM);
 		} else if (node.isExitRunUnit()) {
@@ -440,10 +432,39 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement forEachStatement) {
-		IOStatementGenerator generator = getGeneratorFor(forEachStatement);
-		Statement stmt = generator.genForEachStatement(forEachStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(forEachStatement, stmt);
+		ElementGenerator gen = getElementGenerator(forEachStatement);
+		if (gen != null) {
+			ForEachStatement stmt = (ForEachStatement)gen.generate(forEachStatement, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(forEachStatement, stmt);
+				
+				if (forEachStatement.hasVariableDeclaration()) {
+					DeclarationExpression decl = factory.createDeclarationExpression();
+					Field field = factory.createField();
+					field.setName(forEachStatement.getVariableDeclarationName().getCanonicalName());
+					Type type = forEachStatement.getVariableDeclarationType().resolveType();
+					field.setType((Type)mofTypeFor(type));
+					field.setIsNullable(forEachStatement.isNullable());
+					decl.getFields().add(field);
+					eObjects.put(forEachStatement.getVariableDeclarationName().resolveMember(), field);
+					stmt.setDeclarationExpression(decl);
+					
+					setElementInformation(forEachStatement.getVariableDeclarationName(), field);
+					setElementInformation(forEachStatement.getVariableDeclarationName(), decl);
+				}
+				
+				forEachStatement.getResultSet().accept(this);
+				stmt.setDataSource((Expression)stack.pop());
+				
+				StatementBlock block = factory.createStatementBlock();
+				stmt.setBody(block);
+				for (Node nodeStmt : (List<Node>)forEachStatement.getStmts()) {
+					nodeStmt.accept(this);
+					block.getStatements().add((Statement)stack.pop());
+				}
+			}
+		}
 		return false;
 	}
 
@@ -454,10 +475,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			DeclarationExpression decl = factory.createDeclarationExpression();
 			Field field = factory.createField();
 			field.setName(forStatement.getVariableDeclarationName().getCanonicalName());
-			ITypeBinding type = forStatement.getVariableDeclarationType().resolveTypeBinding();
+			Type type = forStatement.getVariableDeclarationType().resolveType();
 			field.setType((Type)mofTypeFor(type));
 			decl.getFields().add(field);
-			eObjects.put(forStatement.getVariableDeclarationName().resolveDataBinding(), field);
+			eObjects.put(forStatement.getVariableDeclarationName().resolveMember(), field);
 			stmt.setDeclarationExpression(decl);
 			
 			setElementInformation(forStatement.getVariableDeclarationName(), field);
@@ -494,35 +515,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ForwardStatement forwardStatement) {
-		ForwardStatement stmt = factory.createForwardStatement();
-		if (forwardStatement.hasForwardTarget()) {
-			forwardStatement.getForwardTarget().accept(this);
-			stmt.setForwardToTarget((Expression)stack.pop());
-		}
-		for (Node node : (List<Node>)forwardStatement.getForwardOptions()) {
-			// TODO: Handle forward options
-		}
-		for (Node node : (List<Node>)forwardStatement.getArguments()) {
-			node.accept(this);
-			stmt.getArguments().add((Expression)stack.pop());
-		}
-		stack.push(stmt);
-		setElementInformation(forwardStatement, stmt);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.FreeSQLStatement freeSQLStatement) {
-		FreeSqlStatement stmt = factory.createFreeSqlStatement();	
-//		stmt.setPreparedStatementID(freeSQLStatement.getID());
-		
-		stack.push(stmt);
-		setElementInformation(freeSQLStatement, stmt);
-		return false;
-	}
-
-	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement functionInvocationStatement) {
 		FunctionStatement stmt = factory.createFunctionStatement();
 		functionInvocationStatement.getFunctionInvocation().accept(this);
@@ -534,19 +526,36 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.GetByPositionStatement getByPositionStatement) {
-		IOStatementGenerator generator = getGeneratorFor(getByPositionStatement);
-		Statement stmt = generator.genGetByPositionStatement(getByPositionStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(getByPositionStatement, stmt);
+		ElementGenerator gen = getElementGenerator(getByPositionStatement);
+		if (gen != null) {
+			GetByPositionStatement stmt = (GetByPositionStatement)gen.generate(getByPositionStatement, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(getByPositionStatement, stmt);
+				commonIOVisit(getByPositionStatement, stmt);
+				
+				stmt.setDirective(getDirective(getByPositionStatement));
+
+				if (getByPositionStatement.hasPosition()) {
+					getByPositionStatement.getPosition().accept(this);
+					stmt.setPosition((Expression)stack.pop());
+				}
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.GetByKeyStatement getByKeyStatement) {
-		IOStatementGenerator generator = getGeneratorFor(getByKeyStatement);
-		Statement stmt = generator.genGetByKeyStatement(getByKeyStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(getByKeyStatement, stmt);
+		ElementGenerator gen = getElementGenerator(getByKeyStatement);
+		if (gen != null) {
+			final GetByKeyStatement stmt = (GetByKeyStatement)gen.generate(getByKeyStatement, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(getByKeyStatement, stmt);
+				commonIOVisit(getByKeyStatement, stmt);
+			}
+		}
 		return false;
 	}
 	
@@ -641,50 +650,43 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.OpenStatement openStatement) {
-		IOStatementGenerator generator = getGeneratorFor(openStatement);
-		Statement stmt = generator.genOpenStatement(openStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(openStatement, stmt);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.OpenUIStatement openUIStatement) {
-		// TODO just creating a stmt stub for now
-		
-		OpenUIStatement stmt = factory.createOpenUIStatement();		
-		
-		stack.push(stmt);
-		setElementInformation(openUIStatement, stmt);
+		ElementGenerator gen = getElementGenerator(openStatement);
+		if (gen != null) {
+			OpenStatement stmt = (OpenStatement)gen.generate(openStatement, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(openStatement, stmt);
+				commonIOVisit(openStatement, stmt);
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.PrepareStatement prepareStatement) {
-		IOStatementGenerator generator = getGeneratorFor(prepareStatement);
-		Statement stmt = generator.genPrepareStatement(prepareStatement, eObjects);
-		setElementInformation(prepareStatement, stmt);
-		stack.push(stmt);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.PrintStatement printStatement) {
-		// TODO just creating a stmt stub for now
-
-		PrintStatement stmt = factory.createPrintStatement();
-		stack.push(stmt);
-		setElementInformation(printStatement, stmt);
-		
+		ElementGenerator gen = getElementGenerator(prepareStatement);
+		if (gen != null) {
+			PrepareStatement stmt = (PrepareStatement)gen.generate(prepareStatement, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(prepareStatement, stmt);
+				commonIOVisit(prepareStatement, stmt);
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ReplaceStatement replaceStatement) {
-		IOStatementGenerator generator = getGeneratorFor(replaceStatement);
-		Statement stmt = generator.genReplaceStatement(replaceStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(replaceStatement, stmt);
+		ElementGenerator gen = getElementGenerator(replaceStatement);
+		if (gen != null) {
+			ReplaceStatement stmt = (ReplaceStatement)gen.generate(replaceStatement, eObjects);
+			if (stmt != null) {
+				stack.push(stmt);
+				setElementInformation(replaceStatement, stmt);
+				commonIOVisit(replaceStatement, stmt);
+			}
+		}
 		return false;
 	}
 
@@ -704,40 +706,12 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.ShowStatement showStatement) {
-		IOStatementGenerator generator = getGeneratorFor(showStatement);
-		Statement stmt = generator.genShowStatement(showStatement, eObjects);
-		stack.push(stmt);
-		setElementInformation(showStatement, stmt);
-		return false;
-	}
-
-	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ThrowStatement throwStatement) {
 		ThrowStatement stmt = factory.createThrowStatement();
 		throwStatement.getExpression().accept(this);
 		stmt.setException((Expression)stack.pop());
 		stack.push(stmt);
 		setElementInformation(throwStatement, stmt);
-		return false;
-	}
-
-	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.TransferStatement transferStatement) {
-		TransferStatement stmt = factory.createTransferStatement();
-		stack.push(stmt);
-		setElementInformation(transferStatement, stmt);
-		transferStatement.getInvocationTarget().accept(this);
-		stmt.setInvocationTarget((Expression)stack.pop());
-		if (transferStatement.getPassingRecord() != null) {
-			transferStatement.getPassingRecord().accept(this);
-			stmt.setPassingRecord((Expression)stack.pop());
-		}
-		int targetType = transferStatement.isToProgram() ? TransferStatement.TARGET_TYPE_PROGRAM : TransferStatement.TARGET_TYPE_TRANSACTION;
-		stmt.setTargetType(targetType);
-		stack.push(stmt);
-		if (transferStatement.hasSettingsBlock())
-			processSettings(stmt, transferStatement.getSettingsBlock());
 		return false;
 	}
 
@@ -771,9 +745,9 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			Parameter ex = factory.createParameter();
 			setElementInformation(onExceptionBlock.getExceptionName(), ex);			
 			ex.setName(onExceptionBlock.getExceptionName().getCaseSensitiveIdentifier());
-			ITypeBinding type = onExceptionBlock.getExceptionType().resolveTypeBinding();
+			Type type = onExceptionBlock.getExceptionType().resolveType();
 			ex.setType((Type)mofTypeFor(type));
-			eObjects.put(onExceptionBlock.getExceptionName().resolveDataBinding(), ex);
+			eObjects.put(onExceptionBlock.getExceptionName().resolveMember(), ex);
 			block.setException(ex);
 		}
 		for (Node node : (List<Node>)onExceptionBlock.getStmts()) {
@@ -799,84 +773,82 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		}
 		return false;
 	}
-
-	private IOStatementGenerator getGeneratorFor(org.eclipse.edt.compiler.core.ast.Statement node) {
-		Class<? extends IOStatementGenerator> generatorClass = primGetGeneratorFor(node);
-		if (generatorClass != null) {
-			try {
-				IOStatementGenerator generator = generatorClass.newInstance();
-				generator.setCurrentPart(currentPart);
-				generator.setCurrentFunction(currentFunction);
-				generator.setContext(context);
-				generator.setEnvironment(env);
-				return generator;
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			}
+	
+	private ElementGenerator getElementGenerator(Node node) {
+		ElementGenerator generator = context.getCompiler().getElementGeneratorFor(node);
+		if (generator != null) {
+			generator.setCurrentPart(currentPart);
+			generator.setCurrentFunction(currentFunction);
+			generator.setContext(context);
+			generator.setEnvironment(env);
+			return generator;
 		}
 		return null;
 	}
 	
-	private Class<? extends IOStatementGenerator> primGetGeneratorFor(org.eclipse.edt.compiler.core.ast.Statement node) {
+	private GetByPositionKind getDirective(org.eclipse.edt.compiler.core.ast.GetByPositionStatement node) {
+		if (node.isAbsoluteDirection()) {
+			return GetByPositionKind.ABSOLUTE;
+		}
+		if (node.isCurrentDirection()) {
+			return GetByPositionKind.CURRENT;
+		}
+		if (node.isFirstDirection()) {
+			return GetByPositionKind.FIRST;
+		}
+		if (node.isLastDirection()) {
+			return GetByPositionKind.LAST;
+		}
+		if (node.isNextDirection()) {
+			return GetByPositionKind.NEXT;
+		}
+		if (node.isPreviousDirection()) {
+			return GetByPositionKind.PREVIOUS;
+		}
+		if (node.isRelativeDirection()) {
+			return GetByPositionKind.RELATIVE;
+		}
+
+		return null;
+	}
+	
+	private void commonIOVisit(org.eclipse.edt.compiler.core.ast.Statement node, final IOStatement stmt) {
+		for (Node expr : (List<Node>)node.getIOObjects()) {
+			expr.accept(this);
+			stmt.getTargets().add((Expression)stack.pop());
+		}
 		
-		// Lookup statement generator based on DataSource operand in FROM/TO clause
-		// TODO this is not properly generalized yet
-		final Class<? extends IOStatementGenerator>[] generator = new Class[1];
 		node.accept(new AbstractASTExpressionVisitor() {
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement forEachStatement) {
-				if (generator[0] == null) {
-					if (forEachStatement.getVariableDeclarationName() != null) {
-						generator[0] = IOStatementGenerator.Registry.get(EGL_lang_package);
-						return false;
-					}
-					return true;
-				}
-				return false;
-			};
-			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
-				if (generator[0] == null && clause.getExpression() != null) {
-					ITypeBinding type = clause.getExpression().resolveTypeBinding();
-					if (type != null && type.getPackageName() != null) {
-						String key = IRUtils.concatWithSeparator(type.getPackageName(), ".");
-						generator[0] = IOStatementGenerator.Registry.get(key);
-					}
+			public boolean visit(IntoClause clause) {
+				for (Node expr : (List<Node>)clause.getExpressions()) {
+					expr.accept(Egl2MofStatement.this);
+					stmt.getTargets().add((Expression)stack.pop());
 				}
 				return false;
 			}
+			public boolean visit(FromOrToExpressionClause clause) {
+				clause.getExpression().accept(Egl2MofStatement.this);
+				stmt.setDataSource((Expression) stack.pop());
+				return false;
+			}
+			public boolean visit(UsingClause clause) {
+				Iterator i = clause.getExpressions().iterator();
+				while (i.hasNext()) {
+					org.eclipse.edt.compiler.core.ast.Expression expr = (org.eclipse.edt.compiler.core.ast.Expression) i.next();
+					expr.accept(Egl2MofStatement.this);
+					stmt.getUsingExpressions().add((Expression)stack.pop());
+				}
+				return false;
+			};
+			public boolean visit(UsingKeysClause clause) {
+				Iterator i = clause.getExpressions().iterator();
+				while (i.hasNext()) {
+					org.eclipse.edt.compiler.core.ast.Expression expr = (org.eclipse.edt.compiler.core.ast.Expression) i.next();
+					expr.accept(Egl2MofStatement.this);
+					stmt.getUsingKeyExpressions().add((Expression)stack.pop());
+				}
+				return false;
+			};
 		});
-		
-		if (generator[0] == null && !(node instanceof org.eclipse.edt.compiler.core.ast.CallStatement)) {
-			return IOStatementGenerator.Registry.get("eglx.persistence.sql");
-		}
-		else if (generator[0] == null && node instanceof org.eclipse.edt.compiler.core.ast.CallStatement) {
-			return IOStatementGenerator.Registry.get("eglx.services");
-		}
-		else {
-			return generator[0];
-		}
 	}
-	
-	private boolean isDliStatement(org.eclipse.edt.compiler.core.ast.Statement stmt) {
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.AddStatement) return ((org.eclipse.edt.compiler.core.ast.AddStatement)stmt).getDliInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.DeleteStatement) return ((org.eclipse.edt.compiler.core.ast.DeleteStatement)stmt).getDliInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.GetByKeyStatement) return ((org.eclipse.edt.compiler.core.ast.GetByKeyStatement)stmt).getDliInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.GetByPositionStatement) return ((org.eclipse.edt.compiler.core.ast.GetByPositionStatement)stmt).getDliInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.ReplaceStatement) return ((org.eclipse.edt.compiler.core.ast.ReplaceStatement)stmt).getDliInfo() != null;
-		return false;
-	}
-
-	private boolean isSqlStatement(org.eclipse.edt.compiler.core.ast.Statement stmt) {
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.AddStatement) return ((org.eclipse.edt.compiler.core.ast.AddStatement)stmt).getSqlInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.DeleteStatement) return ((org.eclipse.edt.compiler.core.ast.DeleteStatement)stmt).getSqlInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.ExecuteStatement) return true;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.ForEachStatement) return true;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.GetByKeyStatement) return ((org.eclipse.edt.compiler.core.ast.GetByKeyStatement)stmt).getSqlInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.GetByPositionStatement) return !isDliStatement(stmt);
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.OpenStatement) return ((org.eclipse.edt.compiler.core.ast.OpenStatement)stmt).getSqlInfo() != null;
-		if (stmt instanceof org.eclipse.edt.compiler.core.ast.ReplaceStatement) return ((org.eclipse.edt.compiler.core.ast.ReplaceStatement)stmt).getSqlInfo() != null;
-		return false;
-	}
-
 }

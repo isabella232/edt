@@ -35,7 +35,7 @@ public class ElementTemplate extends EGLDocTemplate {
 		String docType = (String) ctx.get(Constants.DOCTYPE);
 
 		if (docType == null) {
-			docType = part.getEClass().getName();
+			docType = part.getEClass().getCaseSensitiveName();
 			ctx.put(Constants.DOCTYPE, docType);
 			ctx.put(Constants.FIELDCONTAINERTYPE, docType);
 		}

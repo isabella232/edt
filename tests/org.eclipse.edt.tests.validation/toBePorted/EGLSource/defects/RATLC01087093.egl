@@ -1,0 +1,41 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+Function BAL-INITMAP()
+  returns(char(3))
+  // Function Declarations
+  VAGen_INDEX char(3) ;
+
+  /* Reserved word used in an assignment statement*/
+  VAGen_INDEX = "ABC";
+
+  /* Reserved word used in EZERTN*/
+  return( INDEX );
+  return(VAGen_INDEX);
+  return( INDEX);
+  return(INDEX );
+  return( INDEX );
+  return(VAGen_INDEX);
+  return( INDEX);
+  return(INDEX );
+
+  /* Starts with special characters used in EZERTN*/
+  return( @INDEX );			//1
+  return(VAGen_@INDEX);
+  return( @INDEX);			//1
+  return(VAGen_@INDEX );
+//  return( #INDEX );		// GETS SYNTAX ERROR
+  return(VAGen_#INDEX);
+//  return( #INDEX);		// GETS SYNTAX ERROR
+  return(VAGen_#INDEX );
+end

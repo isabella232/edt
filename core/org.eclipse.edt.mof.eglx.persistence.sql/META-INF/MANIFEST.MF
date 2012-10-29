@@ -2,14 +2,17 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.mof.eglx.persistence.sql
-Bundle-Version: 0.8.1.qualifier
+Bundle-Version: 0.8.2.qualifier
 Require-Bundle: org.eclipse.edt.mof;bundle-version="0.8.1";visibility:=reexport,
  org.eclipse.edt.mof.egl;bundle-version="0.8.2";visibility:=reexport,
- org.eclipse.core.runtime;bundle-version="3.6.0"
-Eclipse-RegisterBuddy: org.eclipse.edt.mof
+ org.eclipse.core.runtime;bundle-version="3.6.0",
+ org.eclipse.edt.compiler;bundle-version="0.8.2"
+Eclipse-RegisterBuddy: org.eclipse.edt.mof,org.eclipse.edt.compiler
 Export-Package: org.eclipse.edt.mof.eglx.persistence.sql,
+ org.eclipse.edt.mof.eglx.persistence.sql.gen,
  org.eclipse.edt.mof.eglx.persistence.sql.impl,
- org.eclipse.edt.mof.eglx.persistence.sql.utils
+ org.eclipse.edt.mof.eglx.persistence.sql.messages,
+ org.eclipse.edt.mof.eglx.persistence.sql.validation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

@@ -16,23 +16,21 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.ObjectStore;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * ProjectEnvironment is the environment to use when compiling a part for real
@@ -43,7 +41,7 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
  */
 public class ProjectEnvironment extends AbstractProjectEnvironment implements IBindingEnvironment {
     
-	public static final String[] defaultPackage = InternUtil.intern(new String[0]);
+	public static final String defaultPackage = NameUtile.getAsName("");
 	
 	private final IProject project;
 	
@@ -55,20 +53,14 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     
     private ProjectIREnvironment irEnvironment;
     
-    private Mof2Binding converter;
-    
     private boolean initialized;
     
     protected ProjectEnvironment(IProject project) {
         super();
         this.project = project;
-        this.converter = new Mof2Binding(this);
     }
     public IBuildPathEntry[] getBuildPathEntries() {
     	return buildPathEntries;
-    }
-    protected Mof2Binding getConverter() {
-    	return this.converter;
     }
     
 	protected void setProjectBuildPathEntries(IBuildPathEntry[] projectBuildPathEntries){
@@ -110,7 +102,7 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     	}
     	
     	initialized = true;
-    	irEnvironment.initSystemEnvironment(getSystemEnvironment());
+    	Bootstrap.initialize(irEnvironment);
     	for (IBuildPathEntry entry : buildPathEntries) {
     		if (entry instanceof ProjectBuildPathEntry) {
     			((ProjectBuildPathEntry)entry).getDeclaringEnvironment().initIREnvironments();
@@ -123,46 +115,35 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     	}
     }
 
-    public IPartBinding getPartBinding(String[] packageName, String partName) {
+    public IPartBinding getPartBinding(String packageName, String partName) {
         IPartBinding result = null;
         for(int i = 0; i < buildPathEntries.length; i++) {
 	        result = buildPathEntries[i].getPartBinding(packageName, partName);
 	        if(result != null) return result;
 	    }
         
-       return getSystemEnvironment().getPartBinding(packageName, partName);
+       return null;
     }
     
-	public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
-        IPartBinding result = null;
-        for(int i = 0; i < buildPathEntries.length; i++) {
-	        result = buildPathEntries[i].getCachedPartBinding(packageName, partName);
-	        if(result != null) return result;
-	    }
-        
-        return getSystemEnvironment().getCachedPartBinding(packageName, partName);
-	}
-
-    
-    public IPartBinding getNewPartBinding(String[] packageName, String caseSensitiveInternedPartName, int kind) {
+    public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
         return declaringProjectBuildPathEntry.getNewPartBinding(packageName, caseSensitiveInternedPartName, kind);
     }
     
-    public boolean hasPackage(String[] packageName) {
+    public boolean hasPackage(String packageName) {
         for(int i = 0; i < buildPathEntries.length; i++) {
             if(buildPathEntries[i].hasPackage(packageName)) {
                 return true;
             }
         }
         
-        return getSystemEnvironment().hasPackage(packageName);
+        return false;
     }
     
-    public void markPartBindingInvalid(String[] packageName, String partName) {
+    public void markPartBindingInvalid(String packageName, String partName) {
     	declaringProjectBuildPathEntry.markPartBindingInvalid(packageName, partName);
     }
     
-    public void removePartBinding(String[] packageName, String partName) {
+    public void removePartBinding(String packageName, String partName) {
     	declaringProjectBuildPathEntry.removePartBindingInvalid(packageName, partName);
     }
 
@@ -181,24 +162,23 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	public void clear() {
 		this.initialized = false;
 		this.buildPathEntries = null;
-		this.converter = new Mof2Binding(this);
 		ProjectBuildPath projectBuildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(project);
         setProjectBuildPathEntries(projectBuildPath.getBuildPathEntries());
 	}
 	
-	public IPartBinding level01Compile(String[] packageName, String caseSensitiveInternedPartName) {
-		String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
+	public IPartBinding level01Compile(String packageName, String caseSensitiveInternedPartName) {
+		String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
 	    
 		for(int i = 0; i < buildPathEntries.length; i++) {
 	        int partType = buildPathEntries[i].hasPart(packageName, caseInsensitiveInternedPartName);
 			if(partType != ITypeBinding.NOT_FOUND_BINDING) {
-				IPartBinding result = PartBinding.newPartBinding(partType, packageName, caseSensitiveInternedPartName);
+				IPartBinding result = BindingUtil.createPartBinding(partType, packageName, caseSensitiveInternedPartName);
 	            result.setEnvironment(buildPathEntries[i].getRealizingEnvironment());
 	            return result;
 	        }
 	    }
 
-        return getSystemEnvironment().getPartBinding(packageName, caseInsensitiveInternedPartName);
+        return null;
 	}
 	
 	public String getProjectName() {
@@ -210,16 +190,11 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
 	}
 	
 	@Override
-	public ISystemEnvironment getSystemEnvironment() {
-		return SystemEnvironmentManager.findSystemEnvironment(project, declaringProjectBuildPathEntry == null ? null : declaringProjectBuildPathEntry.getNotifier());
-	}
-	
-	@Override
 	public ICompiler getCompiler() {
 		return ProjectSettingsUtility.getCompiler(project);
 	}
 	
-	public Part findPart(String[] packageName, String partName) throws PartNotFoundException {
+	public Part findPart(String packageName, String partName) throws PartNotFoundException {
 		Part result = null;
 		
 		for (int i = 0; i < buildPathEntries.length; i++) {
@@ -230,15 +205,5 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
         }
 		
 		throw new PartNotFoundException(BuildException.getPartName(packageName, partName));
-	}
-
-	@Override
-	public void addPartBindingToCache(IPartBinding partBinding) {
-		for (int i = 0; i < buildPathEntries.length; i++) {
-        	if (buildPathEntries[i].hasPart(partBinding.getPackageName(), partBinding.getCaseSensitiveName()) != ITypeBinding.NOT_FOUND_BINDING) {
-        		buildPathEntries[i].addPartBindingToCache(partBinding);
-        		break;
-        	}
-        }
 	}
 }

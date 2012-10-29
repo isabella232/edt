@@ -1,0 +1,1110 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Record fixedRecord
+	10 item1 int;			//0
+end
+
+Record flexibleRecord
+	item1 int;
+end
+
+// PSBRecordItemValidator:
+Record psbRecord1 type psbRecord
+	item1 fixedRecord;								//1 The complex property "PCB" is required for every item in a PSBRecord. {7874, PCB_PROPERTY_REQUIRED_FOR_PSB_ITEMS}
+	item2 fixedRecord {redefines=item3};			//0
+	item3 fixedRecord {@pcb{}};						//0
+	
+	item4 fixedRecord[] {@pcb{}};					//1 Arrays are not allowed in records with a subtype of PSBRecord. {7876, ARRAYS_NOT_VALID_IN_PSB}
+	item5 fixedRecord[2] {@pcb{}};					//1 Arrays are not allowed in records with a subtype of PSBRecord. {7876, ARRAYS_NOT_VALID_IN_PSB}
+	
+	item6 int {@pcb{}};								//1 All items in a PSBRecord must typedef to a fixed record. {7926, DLI_ONLY_FIXED_RECORDS_ALLOWED_IN_PSBRECORD}
+	item7 flexibleRecord {@pcb{}};					//1 All items in a PSBRecord must typedef to a fixed record. {7926, DLI_ONLY_FIXED_RECORDS_ALLOWED_IN_PSBRECORD}
+	
+	item8 int[] {@pcb{}};							//2 Arrays are not allowed in records with a subtype of PSBRecord. {7876, ARRAYS_NOT_VALID_IN_PSB}|All items in a PSBRecord must typedef to a fixed record
+	item9 int[];									//3 Arrays are not allowed in records with a subtype of PSBRecord.|All items in a PSBRecord must typedef to a fixed record|The complex property "PCB" is required for every item in a PSBRecord.
+	
+	item10 fixedRecord {@pcb{		//0
+		pcbType=DB,					//0
+		secondaryIndex = "a",		//0
+		pcbName = "b",				//0
+		secondaryIndexItem = "c",	//0
+		hierarchy = []				//0
+	}};
+	
+	item11 fixedRecord {@pcb{		//0
+		pcbType=TP,					//0
+		secondaryIndex = "a",		//1 The field "secondaryIndex" is not allowed for a TP PCB. {7855, FIELD_NOT_ALLOWED_FOR_PCBTYPE}
+		pcbName = "b",				//0
+		secondaryIndexItem = "c",	//1 The field "secondaryIndexItem" is not allowed for a TP PCB.
+		hierarchy = []				//1 The field "hierarchy" is not allowed for a TP PCB.
+	}};
+	
+	item12 fixedRecord {@pcb{		//0
+		pcbType=GSAM,				//0
+		secondaryIndex = "a",		//1 The field "secondaryIndex" is not allowed for a GSAM PCB. {7855, FIELD_NOT_ALLOWED_FOR_PCBTYPE}
+		pcbName = "b",				//0
+		secondaryIndexItem = "c",	//1 The field "secondaryIndexItem" is not allowed for a GSAM PCB.
+		hierarchy = []				//1 The field "hierarchy" is not allowed for a GSAM PCB.
+	}};
+	
+	elawork fixedRecord {@pcb{		//0
+		pcbType=DB,					//0
+		secondaryIndex = "a",		//1 The field "secondaryIndex" is not allowed for a DB PCB for an item named "elawork" or "elamsg". {7856, FIELD_NOT_ALLOWED_FOR_PCBTYPE_WHEN_ITEM_IS_ELAWORK_OR_ELAMSG}
+		pcbName = "b",				//0
+		secondaryIndexItem = "c",	//1 The field "secondaryIndexItem" is not allowed for a DB PCB for an item named "elawork" or "elamsg". {7856, FIELD_NOT_ALLOWED_FOR_PCBTYPE_WHEN_ITEM_IS_ELAWORK_OR_ELAMSG}
+		hierarchy = []				//1 The field "hierarchy" is not allowed for a DB PCB for an item named "elawork" or "elamsg". {7856, FIELD_NOT_ALLOWED_FOR_PCBTYPE_WHEN_ITEM_IS_ELAWORK_OR_ELAMSG}
+	}};
+	
+	elamsg fixedRecord {@pcb{		//0
+		pcbType=DB,					//0
+		secondaryIndex = "a",		//1 The field "secondaryIndex" is not allowed for a DB PCB for an item named "elawork" or "elamsg". {7856, FIELD_NOT_ALLOWED_FOR_PCBTYPE_WHEN_ITEM_IS_ELAWORK_OR_ELAMSG}
+		pcbName = "b",				//0
+		secondaryIndexItem = "c",	//1 The field "secondaryIndexItem" is not allowed for a DB PCB for an item named "elawork" or "elamsg". {7856, FIELD_NOT_ALLOWED_FOR_PCBTYPE_WHEN_ITEM_IS_ELAWORK_OR_ELAMSG}
+		hierarchy = []				//1 The field "hierarchy" is not allowed for a DB PCB for an item named "elawork" or "elamsg". {7856, FIELD_NOT_ALLOWED_FOR_PCBTYPE_WHEN_ITEM_IS_ELAWORK_OR_ELAMSG}
+	}};
+	
+	item13 fixedRecord {@pcb{		//1 If the property secondaryIndexItem is specified, then the property secondaryIndex must be specified. {7857, BOTH_PROPERTIES_REQUIRED_IF_ONE_SPECIFIED}
+		pcbType=DB,					//0
+		pcbName = "b",				//0
+		secondaryIndexItem = "c",	//0
+		hierarchy = []				//0
+	}};
+end
+
+Record psbRecord2 type psbRecord
+	elamsg fixedRecord {@pcb{pcbType=DB}};		//0
+	elawork fixedRecord {@pcb{pcbType=DB}};		//0
+	elaexp fixedRecord {@pcb{pcbType=DB}};		//1 PCBs named "elaexp" must be TP PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+	elaalt fixedRecord {@pcb{pcbType=DB}};		//1 PCBs named "elaalt" must be TP PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+	iopcb fixedRecord {@pcb{pcbType=DB}};		//1 PCBs named "iopcb" must be TP PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+end
+
+Record psbRecord3 type psbRecord
+	elamsg fixedRecord {@pcb{pcbType=TP}};		//1 PCBs named "elamsg" must be DB PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+	elawork fixedRecord {@pcb{pcbType=TP}};		//1 PCBs named "elawork" must be DB PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+	elaexp fixedRecord {@pcb{pcbType=TP}};		//0
+	elaalt fixedRecord {@pcb{pcbType=TP}};		//0
+	iopcb fixedRecord {@pcb{pcbType=TP}};		//0
+end
+
+Record psbRecord4 type psbRecord
+	elamsg fixedRecord {@pcb{pcbType=GSAM}};	//1 PCBs named "elamsg" must be DB PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+	elawork fixedRecord {@pcb{pcbType=GSAM}};	//1 PCBs named "elawork" must be DB PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+	elaexp fixedRecord {@pcb{pcbType=GSAM}};	//1 PCBs named "elaexp" must be TP PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+	elaalt fixedRecord {@pcb{pcbType=GSAM}};	//1 PCBs named "elaalt" must be TP PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+	iopcb fixedRecord {@pcb{pcbType=GSAM}};		//1 PCBs named "iopcb" must be TP PCBs. {7927, DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE}
+end
+
+Record psbRecord5 type psbRecord
+	10 item1 fixedRecord {@pcb{}};	// 1 Level numbers are not allowed in records of subtype {7875, LEVEL_NUMBERS_NOT_ALLOWED_IN_RECORD}
+end
+
+// validatePSBDeclarationOrder:
+Record psbRecord6 type psbRecord			//1 PCBs in a PSB record must appear in the following order: TP, DB, GSAM. A TP PCB was found after a GSAM PCB.
+//TP, DB, GSAM
+	rec1 fixedRecord {@pcb{pcbType=TP}};	//0
+	rec2 fixedRecord {@pcb{pcbType=DB}};	//0
+	rec3 fixedRecord {@pcb{pcbType=GSAM}};	//0
+	
+	rec4 fixedRecord {@pcb{pcbType=GSAM}};	//0
+	rec5 fixedRecord {@pcb{pcbType=TP}};	//0
+	rec6 fixedRecord {@pcb{pcbType=DB}};	//0
+	rec7 fixedRecord {@pcb{pcbType=TP}};	//0
+	rec8 fixedRecord {@pcb{pcbType=DB}};	//0
+end
+
+Record psbRecord7 type psbRecord			//0
+	rec1 fixedRecord {@pcb{pcbType=TP}};	//0
+	rec2 fixedRecord {@pcb{pcbType=DB}};	//0
+	rec3 fixedRecord {@pcb{pcbType=GSAM}};	//0
+end
+
+Record psbRecord8 type psbRecord			//0
+	rec1 fixedRecord {@pcb{pcbType=TP}};	//0
+	rec1a fixedRecord {@pcb{pcbType=TP}};	//0
+	rec2 fixedRecord {@pcb{pcbType=DB}};	//0
+	rec2a fixedRecord {@pcb{pcbType=DB}};	//0
+	rec3 fixedRecord {@pcb{pcbType=GSAM}};	//0
+	rec3a fixedRecord {@pcb{pcbType=GSAM}};	//0
+end
+
+Record psbRecord9 type psbRecord			//1 PCBs in a PSB record must appear in the following order: TP, DB, GSAM. A TP PCB was found after a DB PCB.
+	rec1 fixedRecord {@pcb{pcbType=DB}};	//0
+	rec2 fixedRecord {@pcb{pcbType=TP}};	//0
+	rec3 fixedRecord {@pcb{pcbType=GSAM}};	//0
+end
+
+Record psbRecord10 type psbRecord			//1 PCBs in a PSB record must appear in the following order: TP, DB, GSAM. A TP PCB was found after a GSAM PCB.
+	rec1 fixedRecord {@pcb{pcbType=GSAM}};	//0
+	rec2 fixedRecord {@pcb{pcbType=TP}};	//0
+end
+
+Record psbRecord11 type psbRecord			//1 PCBs in a PSB record must appear in the following order: TP, DB, GSAM. A DB PCB was found after a GSAM PCB.
+	rec1 fixedRecord {@pcb{pcbType=GSAM}};	//0
+	rec2 fixedRecord {@pcb{pcbType=DB}};	//0
+end
+
+/**
+ ** The testcase "PSBs_invalid" includes comprehensive testing of these errors.
+ **
+ // validateHierarchy:
+ // 1 The first relationship represents the root segment of the database, and therefore cannot have a parentRecord specified. {7858, FIRST_PCB_HIERARCHY_ENTRY_HAS_PARENTRECORD}
+ // 1 The field "parentRecord" is missing. Only the first relationship represents the root segment of the database. {7859, NOT_FIRST_PCB_HIERARCHY_ENTRY_MISSING_PARENTRECORD}
+ // 1 The fields "segmentRecord" and "parentRecord" cannot reference the same DL/I segment record. {7860, SEGMENTRECORD_AND_PARENTRECORD_CANNOT_BE_SAME}
+ // 1 The segment {0} already appears in the hierarchy. {7883, DUPLICATE_RELATIONSHIP_IN_HIERARCHY}
+ // 1 A loop exists in the hierarchy, since segment {0} already appears in the hierarchy. Each segment can only appear once in a hierarchical path. {7861, LOOP_IN_DLI_SEGMENT_RECORD_HIERARCHY}
+ // 1 The parent record "{0}" must be in the hierarchical path of this PCB. {7863, PARENTRECORD_MISSING_FROM_HIERARCHICAL_PATH_OF_PCB}
+ // 1 A loop exists in the hierarchy, since segment {0} already appears in the hierarchy. Each segment can only appear once in a hierarchical path. {7861, LOOP_IN_DLI_SEGMENT_RECORD_HIERARCHY}
+ // 1 There can be no more than 15 levels in a segment hierarchy. {0} were found. {7862, MORE_THAN_FIFTEEN_LEVELS_IN_SEGMENT_RECORD_HIERARCHY}
+ 
+ // validateDLISegmentReference:
+ // 1 The part "{0}" referenced by property "{1}" cannot be resolved. {5411, PART_IN_PROPERTY_UNRESOLVED}
+ // 1 The part "{0}" referenced by property "{1}" is ambiguous. {5412, PART_IN_PROPERTY_AMBIGUOUS}
+ // 1 The part "{0}" referenced by property "{1}" must be a record of type {2}. {5413, PART_IN_PROPERTY_WRONG_RECORD_TYPE}
+ **
+ **/
+
+// checkForEmbedNameDuplication:				{4411, DUPLICATE_ITEM_NAME_DUE_TO_EMBED}
+Record checkForEmbedNameDuplication1
+	10 item1 int;
+		15 embed checkForEmbedNameDuplication2;	//0
+	10 item2 int;
+	10 embed checkForEmbedNameDuplication2;		//2 As a result of the embed into record or data table checkForEmbedNameDuplication1, item item1 in record checkForEmbedNameDuplication2 duplicates item item1 in record or data table checkForEmbedNameDuplication1.|As a result of the embed into record or data table checkForEmbedNameDuplication1, item item2 in record checkForEmbedNameDuplication2 duplicates item item2 in record or data table checkForEmbedNameDuplication1.
+	
+	10 item3 char(8);			//1 The length of item3 is defined as 8 bytes, but the sum of its children define its length as 4 bytes.
+		15 item1 int;			//0
+		15 embed fixedRecord;	//1 As a result of the embed into record or data table checkForEmbedNameDuplication1, item item1 in record fixedRecord duplicates item item1 in record or data table checkForEmbedNameDuplication1.
+end
+
+Record checkForEmbedNameDuplication2
+	10 item1 int;								//0
+	10 item2;									//0
+		15 item2a int;							//0
+end
+
+// noRecursiveReferenceingCheck:
+/**
+ ** Other tests, like
+ **
+ ** com.ibm.etools.edt.binding.FixedRecordBindingsTest::testCircularityInFixedStructures()
+ ** com.ibm.etools.edt.binding.FlexibleRecordBindingsTest::testCircularityInFlexibleStructures()
+ **
+ ** test the following messages exhaustively.
+ **
+ // 1 The record {0} contains an item whose type results in an illegal recursive loop. Recursive loops are permitted for ref items only. {5057, RECURSIVE_LOOP_STARTED_WITHIN_FLEXIBLE_RECORD_BY_TYPEDEF}
+ // 1 The record {0} has already been referenced, or is the parent of the current item. This duplication establishes an illegal recursive loop. {5072, RECURSIVE_LOOP_STARTED_WITHIN_RECORD}
+ // 1 The record {0} contains an embed that results in an illegal recursive loop. {5075, RECURSIVE_LOOP_STARTED_WITHIN_RECORD_BY_EMBEDS}
+ // 1 The record {0} contains an item whose type results in an illegal recursive loop. Recursive loops are permitted for ref items only. {5057, RECURSIVE_LOOP_STARTED_WITHIN_FLEXIBLE_RECORD_BY_TYPEDEF}
+ // 1 The record {0} has already been referenced, or is the parent of the current item. This duplication establishes an illegal recursive loop. {5072, RECURSIVE_LOOP_STARTED_WITHIN_RECORD}
+ // 1 The record {0} has already been referenced, or is the parent of the current item. This duplication establishes an illegal recursive loop. {5072, RECURSIVE_LOOP_STARTED_WITHIN_RECORD}
+ **
+ **/
+ 
+Record noRecursiveReferenceingCheck1
+ 	10 item1 noRecursiveReferenceingCheck2;		//1
+end
+ 
+Record noRecursiveReferenceingCheck2
+	10 item1 noRecursiveReferenceingCheck1;		//1
+end
+
+Record noRecursiveReferenceingCheck3
+ 	item1 noRecursiveReferenceingCheck4;		//1
+end
+ 
+Record noRecursiveReferenceingCheck4
+	item1 noRecursiveReferenceingCheck3;		//1
+end
+
+Record noRecursiveReferenceingCheck5
+ 	10 embed noRecursiveReferenceingCheck6;		//1
+end
+ 
+Record noRecursiveReferenceingCheck6
+	10 embed noRecursiveReferenceingCheck5;		//1
+end
+
+Record noRecursiveReferenceingCheck7
+ 	embed noRecursiveReferenceingCheck8;		//1
+end
+ 
+Record noRecursiveReferenceingCheck8
+	embed noRecursiveReferenceingCheck7;		//1
+end
+
+// validate:
+Record validate1
+	dupItem int; 			//0
+	dupItem int; 			//1 A duplicate variable named dupItem is declared in Function, Program, PageHandler, ReportHandler, Library, or Record validate1. {3010, DUPLICATE_VARIABLE_NAME}
+	
+	embed undeclaredType;	//1 The type undeclaredType cannot be resolved.
+	embed ambiguousType;	//1
+	embed lib;				//1 Keyword embed used improperly with lib which either is not a record or cannot be resolved. {5060, EMBEDED_ITEM_DOES_NOT_RESOLVE}
+	embed dItem;			//1 Keyword embed used improperly with dItem which either is not a record or cannot be resolved. {5060, EMBEDED_ITEM_DOES_NOT_RESOLVE}
+	
+	embed fixedRecord;		//1 Fixed records can be embedded only in other fixed records {4026, FIXED_RECORD_EMBEDDED_IN_FLEXIBLE}
+	embed flexibleRecord;	//0
+	
+	noTypeItem;				//1 Field noTypeItem must be defined with a type. {4035, FLEXIBLE_RECORD_FIELD_MISSING_TYPE}
+	
+	*;						//0
+	* int;					//0
+	
+	item1 int;				//1 A duplicate variable named item1 is declared in Function, Program, PageHandler, ReportHandler, Library, or Record validate1.
+end
+
+Library lib end
+DataItem dItem int end
+DataItem ambiguousType int end
+DataItem ambiguousType int end
+
+// validate (1):
+Record  valOrderRec1  Type  VGUIRecord
+	10 inputitem1 char(10) {uiType=input, validationOrder=1}; 	//0
+	10 inputitem2 char(10) {uiType=input, validationOrder=2}; 	//0
+	10 inputitem3 char(10) {uiType=input, validationOrder=3}; 	//0
+	10 inputitem4 char(10) {uiType=input, validationOrder=4}; 	//0
+end
+
+Record  valOrderRec2  Type  VGUIRecord							//1 validationOrder values must start from 1. The smallest value found was 2. {7796, VALIDATION_ORDER_VALUES_MUST_START_AT_ONE}
+	10 inputitem1 char(10) {uiType=input, validationOrder=2}; 	//0
+	10 inputitem2 char(10) {uiType=input, validationOrder=3}; 	//0
+	10 inputitem3 char(10) {uiType=input, validationOrder=4}; 	//0
+	10 inputitem4 char(10) {uiType=input, validationOrder=5}; 	//0
+end
+
+Record  valOrderRec3  Type  VGUIRecord							//1 validationOrder values must be continuous with no gaps. {7797, VALIDATION_ORDER_VALUES_MUST_BE_CONTINUOUS}
+	10 inputitem1 char(10) {uiType=input, validationOrder=1}; 	//0
+	10 inputitem2 char(10) {uiType=input, validationOrder=4}; 	//0
+	10 inputitem3 char(10) {uiType=input, validationOrder=3}; 	//0
+	10 inputitem4 char(10) {uiType=input, validationOrder=5}; 	//0
+end
+
+Record  valOrderRec4  Type  VGUIRecord							//0
+	10 inputitem1 char(10) {uiType=hidden, validationOrder=1}; 	//0
+	10 inputitem2 char(10) {uiType=hidden, validationOrder=4}; 	//0
+	10 inputitem3 char(10) {uiType=hidden, validationOrder=3}; 	//0
+	10 inputitem4 char(10) {uiType=hidden, validationOrder=5}; 	//0
+end
+
+Record  valOrderRec5  Type  VGUIRecord							//0
+	10 inputitem1 char(10) {uiType=output, validationOrder=1}; 	//0
+	10 inputitem2 char(10) {uiType=output, validationOrder=4}; 	//0
+	10 inputitem3 char(10) {uiType=output, validationOrder=3}; 	//0
+	10 inputitem4 char(10) {uiType=output, validationOrder=5}; 	//0
+end
+
+Record  valOrderRec6  Type  VGUIRecord									//1 validationOrder values must be continuous with no gaps. {7797, VALIDATION_ORDER_VALUES_MUST_BE_CONTINUOUS}
+	10 inputitem1 char(10) {uiType=inputoutput, validationOrder=1}; 	//0
+	10 inputitem2 char(10) {uiType=inputoutput, validationOrder=4}; 	//0
+	10 inputitem3 char(10) {uiType=inputoutput, validationOrder=3}; 	//0
+	10 inputitem4 char(10) {uiType=inputoutput, validationOrder=5}; 	//0
+end
+
+// validateArrayLevel:
+Record validateArrayLevel1 type sqlRecord
+	10 item1 int[2];						//1 Occurs are not allowed to be used in SQL records. Error in item1 in SQL record validateArrayLevel1.
+end
+
+Record validateArrayLevel2
+	10 item1 int[2147483647];				//0
+	10 item2 int[2147483648];				//1 The length of the occurs value 2147483648 in item item2 exceeds the maximum value of 2147483647. {4005, INVALID_OCCURS_VALUE}}
+	10 item3 int[99999999999999999999999];	//1 The length of the occurs value 99999999999999999999999 in item item3 exceeds the maximum value of 2147483647. {4005, INVALID_OCCURS_VALUE}}
+	
+	10 item4 char(256)[2];			//0
+	 15 item4a char(128)[2];		//0
+	  20 item4b char(64)[2];		//0
+	   25 item4c char(32)[2];		//0
+	    30 item4d char(16)[2];		//0
+	     35 item4e char(8)[2];		//0
+	      40 item4f char(4)[2];		//0
+	       45 item4g char(2)[2];	//1 Item item4g specifies more than 7 dimensions for an array. {5033, TOO_MANY_DIMENSIONS_FOR_ARRAY}
+end
+
+// validateDLIName:
+Record dliSeg01 type DLISegment				//0
+end
+
+Record dliSegmentRecord type DLISegment		//1 The name "dliSegmentRecord" is not a valid DL/I name, so the record must specify the segmentName property. {7867, SEGMENTRECORD_NOT_VALID_DLINAME_SO_MUST_DEFINE_SEGMENTNAME}
+end
+
+Record dliSegmentRecord2 type DLISegment	//0
+{segmentName="sname"}
+end
+
+Record dliSeg_1 type DLISegment				//1 The name "dliSeg_1" is not a valid DL/I name, so the record must specify the segmentName property. {7867, SEGMENTRECORD_NOT_VALID_DLINAME_SO_MUST_DEFINE_SEGMENTNAME}
+end
+
+Record dliSeg_2 type DLISegment				//0
+{segmentName="sname"}
+end
+
+// validateLevelNumberConsistency: {*** invoked in data table validation ***}
+Record validateLevelNumberConsistency1
+	10 item1 int;
+	
+	item2 int;			//1 If any item in a structure has a level number, all items must have level numbers. Error on item item2. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	item3;				//2 If any item in a structure has a level number, all items must have level numbers. Error on item item3.|is a leaf item and needs to have primitive
+	* int;				//1 If any item in a structure has a level number, all items must have level numbers. Error on item *. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	*;					//2 If any item in a structure has a level number, all items must have level numbers. Error on item *. {5063, INCONSISTENT_LEVEL_NUMBERING}|is a leaf item and needs to have primitive
+	embed fixedRecord;	//2 If any item in a structure has a level number, all items must have level numbers. Error on item fixedRecord {5063, INCONSISTENT_LEVEL_NUMBERING}|item item1 in record fixedRecord duplicates item item1 in
+end
+
+Record validateLevelNumberConsistency2
+	item1 int;
+	
+	10 item2 int;			//1 If any item in a structure has a level number, all items must have level numbers. Error on item item2. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	10 item3;				//2 If any item in a structure has a level number, all items must have level numbers. Error on item item3.| Field item3 must be defined with a type.
+	10 * int;				//1 If any item in a structure has a level number, all items must have level numbers. Error on item *. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	10 *;					//1 If any item in a structure has a level number, all items must have level numbers. Error on item *. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	10 embed fixedRecord;	//2 If any item in a structure has a level number, all items must have level numbers. Error on item fixedRecord {5063, INCONSISTENT_LEVEL_NUMBERING}|Fixed records can be embedded only in other fixed records
+end
+
+Datatable validateLevelNumberConsistency1Table
+{
+	contents=[]
+}
+	10 item1 int;
+	
+	item2 int;			//1 If any item in a structure has a level number, all items must have level numbers. Error on item item2. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	item3;				//2 If any item in a structure has a level number, all items must have level numbers. Error on item item3|is a leaf item and needs to have primitive
+	* int;				//1 If any item in a structure has a level number, all items must have level numbers. Error on item *. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	*;					//2 If any item in a structure has a level number, all items must have level numbers. Error on item *. {5063, INCONSISTENT_LEVEL_NUMBERING}|is a leaf item and needs to have primitive
+	embed fixedRecord;	//2 If any item in a structure has a level number, all items must have level numbers. Error on item fixedRecord {5063, INCONSISTENT_LEVEL_NUMBERING}|item item1 in record fixedRecord duplicates item item1 in
+end
+
+Datatable validateLevelNumberConsistency2Table
+{
+	contents=[]
+}
+	item1 int;
+	
+	10 item2 int;			//1 If any item in a structure has a level number, all items must have level numbers. Error on item item2. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	10 item3;				//2 If any item in a structure has a level number, all items must have level numbers. Error on item item3.|is a leaf item and needs to have primitive
+	10 * int;				//1 If any item in a structure has a level number, all items must have level numbers. Error on item *. {5063, INCONSISTENT_LEVEL_NUMBERING}
+	10 *;					//2 If any item in a structure has a level number, all items must have level numbers. Error on item *. {5063, INCONSISTENT_LEVEL_NUMBERING}|is a leaf item and needs to have primitive
+	10 embed fixedRecord;	//2 If any item in a structure has a level number, all items must have level numbers. Error on item fixedRecord {5063, INCONSISTENT_LEVEL_NUMBERING}|item item1 in record fixedRecord duplicates item item1 in
+end
+
+// validateLevelNumbersOrder: {*** invoked in data table validation ***}
+Record validateLevelNumbersOrder1
+	10 item1 int;
+		20 item2 int;
+	15 item3 int;		//1 Level numbers define an invalid structure hierarchy. Invalid level:  15. {5064, INVALID_STRUCTURE_LEVEL_NUMBERS}
+end
+
+Record validateLevelNumbersOrder2
+	10 item1 int;
+	5 item2 int;		//1 Level numbers define an invalid structure hierarchy. Invalid level:  5. {5064, INVALID_STRUCTURE_LEVEL_NUMBERS}
+end
+
+Record validateLevelNumbersOrder2a
+	10 item1 int;
+		15 item1a int;
+		
+	item3 int;			//1 If any item in a structure has a level number, all items must have level numbers. Error on item item3.
+end
+
+Datatable validateLevelNumbersOrder1Table
+{
+	contents=[]
+}
+	10 item1 int;
+		20 item2 int;
+	15 item3 int;		//1 Level numbers define an invalid structure hierarchy. Invalid level:  15. {5064, INVALID_STRUCTURE_LEVEL_NUMBERS}
+end
+
+Datatable validateLevelNumbersOrder2Table
+{
+	contents=[]
+}
+	10 item1 int;
+	5 item2 int;		//1 Level numbers define an invalid structure hierarchy. Invalid level:  5. {5064, INVALID_STRUCTURE_LEVEL_NUMBERS}
+end
+
+Record validateLevelNumbersOrder3
+  1 item1 int;	//0
+   2 item2 int;	//0
+    3 item3 int;	//0
+     4 item4 int;	//0
+      5 item5 int;	//0
+       6 item6 int;	//0
+        7 item7 int;	//0
+         8 item8 int;	//0
+          9 item9 int;	//0
+           10 item10 int;	//0
+            11 item11 int;	//0
+             12 item12 int;	//0
+              13 item13 int;	//0
+               14 item14 int;	//0
+                15 item15 int;	//0
+                 16 item16 int;	//0
+                  17 item17 int;	//0
+                   18 item18 int;	//0
+                    19 item19 int;	//0
+                     20 item20 int;	//0
+                      21 item21 int;	//0
+                       22 item22 int;	//0
+                        23 item23 int;	//0
+                         24 item24 int;	//0
+                          25 item25 int;	//0
+                           26 item26 int;	//0
+                            27 item27 int;	//0
+                             28 item28 int;	//0
+                              29 item29 int;	//0
+                               30 item30 int;	//0
+                                31 item31 int;	//0
+                                 32 item32 int;	//0
+                                  33 item33 int;	//0
+                                   34 item34 int;	//0
+                                    35 item35 int;	//0
+                                     36 item36 int;	//0
+                                      37 item37 int;	//0
+                                       38 item38 int;	//0
+                                        39 item39 int;	//0
+                                         40 item40 int;	//0
+                                          41 item41 int;	//0
+                                           42 item42 int;	//0
+                                            43 item43 int;	//0
+                                             44 item44 int;	//0
+                                              45 item45 int;	//0
+                                               46 item46 int;	//1 Nesting exceeded the maximum depth of 45. {5066, INVALID_AMOUNT_OF_NESTING}
+                                                47 item47a char(2);	//1 Nesting exceeded the maximum depth of 45. {5066, INVALID_AMOUNT_OF_NESTING}
+                                                47 item47b char(2);	//1 Nesting exceeded the maximum depth of 45. {5066, INVALID_AMOUNT_OF_NESTING}
+end
+
+// validateLogicalChildrenLength: {*** invoked in data table validator ***}
+Record validateLogicalChildrenLength
+	10 item1 int[2];	//0
+		15 item1a int;	//0
+		
+	10 item2 char(10)[3];				//0
+		15 item2a recordOfLength5[2];	//0
+
+	10 item3 char(5);					//0
+		15 item2b char(4);				//0
+		15 item2c char(1);				//0
+		
+	10 item4 char(5)[3];				//1 The length of item4 is defined as 5 bytes, but the sum of its children define its length as 10 bytes. {5069, INVALID_SUMMED_RECORD_LENGTH}
+		15 item4a recordOfLength5[2];	//0
+		
+	10 item5 char(6);					//1 The length of item5 is defined as 6 bytes, but the sum of its children define its length as 7 bytes. {5069, INVALID_SUMMED_RECORD_LENGTH}
+		15 embed recordOfLength5;		//0
+		15 item5a char(1)[2];			//1 The length of item5a is defined as 1 bytes, but the sum of its children define its length as 2 bytes. {5069, INVALID_SUMMED_RECORD_LENGTH}
+			20 item5a1 char(2);			//0
+				25 item5a1a char(1)[2];	//0
+end
+
+DataTable validateLogicalChildrenLengthTable
+{
+	contents=[]
+}
+	10 item1 int;		//0
+		15 item1a int;	//0
+		
+	10 item2 char(10);					//0
+		15 item2a recordOfLength5;		//0
+		15 item2b char(5);
+
+	10 item3 char(5);					//0
+		15 item2b char(4);				//0
+		15 item2c char(1);				//0
+		
+	10 item4 char(5);					//1 The length of item4 is defined as 5 bytes, but the sum of its children define its length as 10 bytes. {5069, INVALID_SUMMED_RECORD_LENGTH}
+		15 item4a recordOfLength5;		//0
+		15 item4b recordOfLength5;		//0
+		
+	10 item5 char(6);					//1 The length of item5 is defined as 6 bytes, but the sum of its children define its length as 7 bytes. {5069, INVALID_SUMMED_RECORD_LENGTH}
+		15 embed recordOfLength5;		//0
+		15 item5b char(1);				//0
+		15 item5a char(1);				//1 The length of item5a is defined as 1 bytes, but the sum of its children define its length as 2 bytes. {5069, INVALID_SUMMED_RECORD_LENGTH}
+			20 item5a1 char(2);			//0
+				25 item5a1a char(1);	//0
+				25 item5a1b char(1);	//0
+end
+
+Record recordOfLength5
+	10 item1 char(5);
+end
+
+// validateLogicalChildrenNames: {*** invoked in data table validator ***}
+Record validateLogicalChildrenNames
+	10 item1 int;	//0
+	10 item1 int;	//1 The record or data table named validateLogicalChildrenNames contains multiple items with the qualified name item1. {4407, DUPLICATE_ITEM_NAME}
+	
+	10 item2 char(8);	//1 The length of item2 is defined as 8 bytes, but the sum of its children define its length as 4 bytes.
+		15 item2a int;	//0
+		15 item2a int;	//1 The record or data table named validateLogicalChildrenNames contains multiple items with the qualified name item2a. {4407, DUPLICATE_ITEM_NAME}
+		
+	10 item3 int;		//0
+		15 item3 int;	//0
+end
+
+Datatable validateLogicalChildrenNamesTable
+{
+	contents=[]
+}
+	10 item1 int;	//0
+	10 item1 int;	//1 The record or data table named validateLogicalChildrenNamesTable contains multiple items with the qualified name item1. {4407, DUPLICATE_ITEM_NAME}
+	
+	10 item2 char(8);	//1 The length of item2 is defined as 8 bytes, but the sum of its children define its length as 4 bytes.
+		15 item2a int;	//0
+		15 item2a int;	//1 The record or data table named validateLogicalChildrenNamesTable contains multiple items with the qualified name item2a. {4407, DUPLICATE_ITEM_NAME}
+		
+	10 item3 int;		//0
+		15 item3 int;	//0
+end
+
+Datatable validateLogicalChildrenNamesTable2
+{
+	contents=[]
+}
+	item1 int;
+	embed fixedRecord;		//1 As a result of the embed into record or data table validateLogicalChildrenNamesTable2, item item1 in record fixedRecord duplicates item item1 in record or data table validateLogicalChildrenNamesTable2
+end
+
+// validateRecordProperties:
+Record asc type sqlRecord	//1 Since the tableName property was not specified, the SQL record name asc cannot duplicate any one of the following words: {6598, RECORD_NAME_CANNOT_DUPE_SQL_CLAUSE_KEYWORD}
+end
+
+Record avg type sqlRecord	//0
+{tableNames=[["a","b"]]}
+end
+
+Record bit type basicRecord	//0
+end
+
+Record bit_length type sqlRecord	//1 Since the tableName property was not specified, the SQL record name bit_length cannot duplicate any one of the following words: {6598, RECORD_NAME_CANNOT_DUPE_SQL_CLAUSE_KEYWORD}
+	10 item1 int;
+end
+
+// validateRecordPropertyBlocks:
+Record validateRecordPropertyBlocks type basicRecord
+	{
+		item1 = intFunc(),		//0
+		item1 = notFoundFunc(),	//1 cannot be resolved
+		item1 = ambiguousFunc()	//1
+	}
+	item1 int;
+end
+
+function intFunc() returns (int) end
+function ambiguousFunc() end
+function ambiguousFunc() end
+
+// validateReferenceTypes: {*** invoked in data table validation ***}
+Record validateReferenceTypes
+	10 item1 fixedRecord;		//1 Record fixedRecord which has items defined in it was invalidly referenced by item1.
+		15 item1a fixedRecord;	//0
+		
+	10 item2 undeclaredVar;		//1 The type undeclaredVar cannot be resolved.
+	10 item3 ambiguousType;		//1 The type ambiguousType is ambiguous.
+	
+	10 item4 dictionary;		//1 The part dictionary could not be resolved to a data item or fixed record.
+	10 item5 arrayDictionary;	//1 The part arrayDictionary could not be resolved to a data item or fixed record.
+
+	10 item6 dItem;						//0
+	
+/**
+ ** The following lines get no errors in 6.0.1 validation, which seems bogus
+ **
+	10 item7 report;					//0
+	10 item8 reportData;				//0
+	10 item9 window;					//0
+	10 item10 consoleField;				//0
+	10 item11 menu;						//0
+	10 item12 menuItem;					//0
+	10 item13 prompt;					//0
+	10 item14 presentationAttributes;	//0
+	10 item15 flexibleRecord;			//0
+ **
+ **/
+	
+	10 item16 lib;				//1 The part lib could not be resolved to a data item or fixed record. {5061, PART_DOES_NOT_RESOLVE_TO_DATAITEM_OR_RECORD}
+end
+
+Record validateReferenceTypes2
+	10 embed fixedRecordWithTwoLevels;	//1 Record fixedRecordWithTwoLevels which has items defined in it was invalidly referenced by fixedRecordWithTwoLevels.
+		15 item1a int;					//0
+end
+
+Record fixedRecordWithTwoLevels
+	10 item1 int;
+		15 item2 int;
+end
+
+Datatable validateReferenceTypesTable {
+	contents=[]
+}
+	10 item1 fixedRecord;		//1 Record fixedRecord which has items defined in it was invalidly referenced by item1.
+		15 item1a fixedRecord;	//0
+		
+	10 item2 undeclaredVar;		//1 The type undeclaredVar cannot be resolved.
+	10 item3 ambiguousType;		//1 The type ambiguousType is ambiguous.
+	
+	10 item4 dictionary;		//1 The part dictionary could not be resolved to a data item or fixed record.
+	10 item5 arrayDictionary;	//1 The part arrayDictionary could not be resolved to a data item or fixed record.
+
+	10 item6 dItem;				//0
+	
+	10 item16 lib;				//1 The part lib could not be resolved to a data item or fixed record. {5061, PART_DOES_NOT_RESOLVE_TO_DATAITEM_OR_RECORD}
+end
+
+// validateSQLRecordLevelNumbering:
+Record validateSQLRecordLevelNumbering1 type SQLRecord
+	item1 int;	//0
+	item2 int;	//0
+end
+
+Record validateSQLRecordLevelNumbering2 type SQLRecord
+	10 item1 int;	//0
+	10 item2 int;	//0
+end
+
+Record validateSQLRecordLevelNumbering3 type SQLRecord
+	10 item1 int;		//1 SQLRecords cannot be substructured. Error at SQLRecord validateSQLRecordLevelNumbering3. {5068, SQL_FLAT_LEVEL_NUMBERING}
+		15 item1a int;	//0
+end
+
+// validateSQLStructureItemType:
+Record validateSQLStructureItemType1 type SQLRecord
+	10 item1 num(4);		//1 Structure item item1 for SQL record validateSQLStructureItemType1 has an invalid primitive type of num. Primitive types NUM, NUMC, PACF, and MBCHAR are not allowed for SQL records. {4123, STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_INVALID_TYPE}
+	10 item2 numc(4);		//1 Structure item item2 for SQL record validateSQLStructureItemType1 has an invalid primitive type of numc. Primitive types NUM, NUMC, PACF, and MBCHAR are not allowed for SQL records. {4123, STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_INVALID_TYPE}
+	10 item3 pacf(4);		//1 Structure item item3 for SQL record validateSQLStructureItemType1 has an invalid primitive type of pacf. Primitive types NUM, NUMC, PACF, and MBCHAR are not allowed for SQL records. {4123, STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_INVALID_TYPE}
+	
+	10 item4 bin(9,2);		//1 Structure items of type bin in SQL records must be declared as integers. Error on item item4 in record validateSQLStructureItemType1. {4138, BIN_STRUCTURE_ITEM_FOR_SQL_RECORD_IS_NOT_INTEGER}
+	10 item5 bin(9);		//0
+	10 item6 bin(9,0);		//0
+	
+	10 item7 mbchar(4);		//1 Structure item item7 for SQL record validateSQLStructureItemType1 has an invalid primitive type of mbchar. Primitive types NUM, NUMC, PACF, and MBCHAR are not allowed for SQL records. {4123, STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_INVALID_TYPE}
+
+	10 embed validateSQLStructureItemType2;	//0
+end
+
+Record validateSQLStructureItemType2 type SQLRecord
+	10 validateSQLStructureItemType2item1 num(4); //1 Structure item validateSQLStructureItemType2item1 for SQL record validateSQLStructureItemType2 has an invalid primitive type of num. Primitive types NUM, NUMC, PACF, and MBCHAR are not allowed for SQL records. {4123, STRUCTURE_ITEM_FOR_SQL_RECORD_HAS_INVALID_TYPE}
+end
+
+// validateSQLStructureItems:
+Record validateSQLStructureItems type sqlRecord
+	10 item1 int[1];	//1 Occurs are not allowed to be used in SQL records. Error in item1 in SQL record validateSQLStructureItems. {4139, SQL_RECORD_HAS_OCCURS}
+	10 item2 int[];		//1 Dynamic arrays cannot be used in fixed records.
+	
+	{
+		tableNames=[["a"],["b"]]
+	}
+	
+	//"+-/*\t\n\r\f"
+	
+	10 item3 int {isReadOnly=yes};					//0
+	10 item4 int {isReadOnly=yes, column="a"};		//0
+	10 item5 int {isReadOnly=yes, column="a+b"};	//0
+	
+	10 item6 int {isReadOnly=no};					//1 SQL item item6 must be read only because it is in an SQL join record or has an expression for a column name. {4014, SQL_ITEM_MUST_BE_READ_ONLY_IF_JOIN_OR_EXP}
+	10 item7 int {isReadOnly=no, column="a"};		//1 SQL item item7 must be read only because it is in an SQL join record or has an expression for a column name. {4014, SQL_ITEM_MUST_BE_READ_ONLY_IF_JOIN_OR_EXP}
+	10 item8 int {isReadOnly=no, column="a+b"};		//1 SQL item item8 must be read only because it is in an SQL join record or has an expression for a column name. {4014, SQL_ITEM_MUST_BE_READ_ONLY_IF_JOIN_OR_EXP}
+	
+	10 * int;	//1 Filler structure item names are not allowed in SQL records. Error in SQL record validateSQLStructureItems. {4012, FILLER_NOT_ALLOWED_IN_SQL}
+	10 * [4];	//3 Occurs are not allowed to be used in SQL records. Error in * in SQL record validateSQLStructureItems.|Filler structure item names are not allowed in SQL records. Error in SQL record validateSQLStructureItems.|is a leaf item and needs to have primitive
+end
+
+Record validateSQLStructureItems2 type sqlRecord
+	{
+		tableNames=[["a"]]
+	}
+	
+	//"+-/*\t\n\r\f"
+	
+	10 item3 int {isReadOnly=yes};					//0
+	10 item4 int {isReadOnly=yes, column="a"};		//0
+	10 item5 int {isReadOnly=yes, column="a+b"};	//0
+	
+	10 item6 int {isReadOnly=no};					//0
+	10 item7 int {isReadOnly=no, column="a"};		//0
+	10 item8 int {isReadOnly=no, column="a+b"};		//1 SQL item item8 must be read only because it is in an SQL join record or has an expression for a column name. {4014, SQL_ITEM_MUST_BE_READ_ONLY_IF_JOIN_OR_EXP}
+end
+
+// validateStructureItems: {***invoked in data table validator***}
+Record validateStructureItems
+	10 item1 int[];		//1 Dynamic arrays cannot be used in fixed records. {4027, DYNAMIC_ARRAY_USED_IN_FIXED_RECORD}
+	10 item2 int[2];	//0
+	
+	10 item3 boolean;	//0
+	10 item4 string;	//1 string is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item5 blob;		//1 blob is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item6 clob;		//1 clob is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item7 any;		//1 any is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	
+	10 item8 boolean[2];//0
+	10 item9 string[2];	//1 string is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item10 blob[2];	//1 blob is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item11 clob[2];	//1 clob is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item12 any[2];	//1 any is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	
+	10 item13 date;			//0
+	10 item14 time;			//0
+	10 item15 timestamp;	//0
+	10 item16 interval("yyyyMM");		//0
+	10 item17 float;		//0
+	10 item18 money;		//0
+	
+	10 item19 date[2];		//0
+	10 item20 time[2];		//0
+	10 item21 timestamp[2];	//0
+	10 item22 interval("yyyyMM")[2];	//0
+	10 item23 float[2];		//0
+	10 item24 money[2];		//0
+	
+	10 item25 int = 1+2;	//1 Items in fixed records can only be initialized with literal values. {7780, FIXED_RECORD_ITEM_INITIALIZERS_MUST_BE_LITERAL_VALUES}
+	10 item26 int = 3;		//0
+	
+// 1 Initializers are not allowed in a dataTable. {7752, INITIALIZERS_NOT_ALLOWED_IN_DATA_TABLE}
+
+	10 item27 int = 3;		//1 Initializers in fixed records are only allowed on leaf items. {7753, INITIALIZERS_ONLY_ALLOWED_ON_LEAF_ITEMS}
+		15 item27a int = 3;	//0
+	
+	10 item28 int = [1,2];		//1 Only multiply occurring items can be initialized with an array literal. item28 is not multiply occurring. {7756, NON_MULTIPLY_OCCURING_ITEM_CANNOT_BE_INITIALIZED_WITH_ARRAY}
+	10 item29 int[2] = [1,2];	//0
+	
+	10 item30 int[2] = [1,2,3];	//1 The number of elements in the initializer array must be no greater than the number of occurs of item item30. 3 elements found for occurs size 2 {7757, TOO_MANY_ELEMENTS_IN_STRUCTURE_ITEM_ARRAY_INITIALIZER}
+	10 item31 int[2] = [1];		//0
+	10 item32 int[2] = [];		//0
+	
+	10 item33 int[2];
+		15 item33a int[2] = [[1,2],[3,4]];	//0
+		
+	10 item34 int["a"];			//1 Invalid array size "a". Array sizes must be positive integer literals greater than zero. {3253, ARRAY_SIZE_NOT_INTEGER}
+	10 item35 int[0];			//1 Invalid array size 0. Array sizes must be positive integer literals greater than zero. {3253, ARRAY_SIZE_NOT_INTEGER}
+	10 item36 int[-1];			//1 Invalid array size -1. Array sizes must be positive integer literals greater than zero. {3253, ARRAY_SIZE_NOT_INTEGER}
+	10 item37 int[1+2];			//1 Invalid array size 1+2. Array sizes must be positive integer literals greater than zero. {3253, ARRAY_SIZE_NOT_INTEGER}
+	10 item38 int[1];			//0
+	
+	10 embed undeclaredPart;	//1 The type undeclaredPart cannot be resolved.
+	10 embed lib;				//1 Keyword embed used improperly with lib which either is not a record or cannot be resolved. {5060, EMBEDED_ITEM_DOES_NOT_RESOLVE}
+	10 embed fred;				//1 Keyword embed used improperly with fred which either is not a record or cannot be resolved. {5060, EMBEDED_ITEM_DOES_NOT_RESOLVE}
+
+	10 embed emptyRecord;		//1 Keyword embed used with item emptyRecord references an empty record. {5062, EMBED_RERERS_TO_EMPTY_RECORD}
+	10 embed notEmptyRecord;	//0
+	
+	10 embed flexibleRecord;	//1 Only fixed records can be embedded in fixed records. {4028, FLEXIBLE_RECORD_EMBEDDED_IN_FIXED}
+	
+	10 * notEmptyRecord;		//0
+	10 * dItem;					//0
+	10 * lib;					//1 The part lib could not be resolved to a data item or fixed record.
+	10 * undeclaredPart;		//1 The type undeclaredPart cannot be resolved.
+	
+	10 * ambiguousType;			//1 The type ambiguousType is ambiguous.
+	
+	10 item39;	//1 Structure item item39 for data part validateStructureItems is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+	10 item40;	//1 Structure item item40 for data part validateStructureItems is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+	10 *;		//1 Structure item * for data part validateStructureItems is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+	
+	10 item41;				//0
+		15 item41a;			//1 Structure item item41a for data part validateStructureItems is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+		15 item41b;			//1 Structure item item41b for data part validateStructureItems is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+		15 *;				//1 Structure item * for data part validateStructureItems is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+		15 item41c char(1);	//0
+		
+	10 item42 int {isNullable=yes};	//1 The structure item item42 in record validateStructureItems specifies the isNullable property.  This property is only valid for structure items of SQL records. {5076, NON_SQL_RECORDS_CANNOT_CONTAIN_NULLABLE}
+	10 item43 int {isNullable=no};	//0
+end
+
+
+Record MultiplyOccuringItemsWithInitializers type basicRecord																									//0
+    1 item01 char(336)[3];																																		//0
+    2 subItem01 char(10)[2]  = [["lzWgouYmVm", "lzWgouYmVm"], ["lzWgouYmVm", "lzWgouYmVm"], ["lzWgouYmVm", "lzWgouYmVm"]];										//0
+    2 subItem02 mbchar(10)[2]  = [["CZQsPZJGnw", "CZQsPZJGnw"], ["CZQsPZJGnw", "CZQsPZJGnw"], ["CZQsPZJGnw", "CZQsPZJGnw"]];									//0
+    2 subItem03 unicode(10)[2]  = [["AKDhuNqwto", "AKDhuNqwto"], ["AKDhuNqwto", "AKDhuNqwto"], ["AKDhuNqwto", "AKDhuNqwto"]];									//0
+    2 subItem04 int[2]  = [[2104066893, 2104066893], [2104066893, 2104066893], [2104066893, 2104066893]];														//0
+    2 subItem05 smallint[2]  = [[5673, 5673], [5673, 5673], [5673, 5673]];																						//0
+    2 subItem06 bigint[2]  = [[558039127322422299, 558039127322422299], [558039127322422299, 558039127322422299], [558039127322422299, 558039127322422299]];	//0
+    2 subItem07 float[2]  = [[5706.1164856, 5706.1164856], [5706.1164856, 5706.1164856], [5706.1164856, 5706.1164856]];											//0
+    2 subItem08 num(10)[2]  = [[4687523889, 4687523889], [4687523889, 4687523889], [4687523889, 4687523889]];													//0
+    2 subItem09 decimal( 10, 2)[2]  = [[34925955.73, 34925955.73], [34925955.73, 34925955.73], [34925955.73, 34925955.73]];										//0
+    
+    2 subItem10 char(10)[2] = [["a","b"], ["a","b"], ["a","b"], ["a","b"]];	//1 The number of elements in the initializer array must be no greater than the number of occurs of item subItem10. 4 elements found for occurs size 3
+    2 subItem11 char(10)[2] = [["a","b"], ["a","b","c"], ["a","b"]];		//1 The number of elements in the initializer array must be no greater than the number of occurs of item subItem11[2]. 3 elements found for occurs size 2
+    2 subItem12 char(10)[2] = [["a","b"], ["a","b","c"], ["a","b"]];		//1 The number of elements in the initializer array must be no greater than the number of occurs of item subItem12[2]. 3 elements found for occurs size 2
+    2 subItem13 char(10)[2] = [["a","b","c"], ["a","b"], ["a","b","c"]];	//2 The number of elements in the initializer array must be no greater than the number of occurs of item subItem13[1]. 3 elements found for occurs size 2|The number of elements in the initializer array must be no greater than the number of occurs of item subItem13[3]. 3 elements found for occurs size 2
+    2 subItem14 char(10)[2] = ["a",["b","c"]];								//1 Item subItem14[1] is a multiply occurring item. This element of the initializer must be an array literal whose size is no greater than 2.
+    2 subItem15 char(10)[2] = [["a","b"]];									//0
+    2 subItem16 char(10)[2] = [[]];											//0
+    2 subItem17 char(10) = ["a","b"];										//0
+    2 subItem18 char(10)[2] = "a";											//1 Item subItem18 is a multiply occurring item. This element of the initializer must be an array literal whose size is no greater than 3.
+    2 subItem19 char(10) = [["a","b"]];										//1 Only multiply occurring items can be initialized with an array literal. subItem19[1] is not multiply occurring.
+end
+
+DataTable validateStructureItemsTable
+{
+	contents=[]
+}
+	10 item1 int[];		//1 Dynamic arrays cannot be used in fixed records. {4027, DYNAMIC_ARRAY_USED_IN_FIXED_RECORD}
+	10 item2 int[2];	//1 The item item2 in data table validateStructureItemsTable cannot be defined with occurs. {TABLE_ITEM_HAS_OCCURS}
+	
+	10 item3 boolean;	//0
+	10 item4 string;	//1 string is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item5 blob;		//1 blob is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item6 clob;		//1 clob is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	10 item7 any;		//1 any is not a valid type for an item in a fixed record or data table. {4004, INVALID_TYPE_IN_FIXED_RECORD}
+	
+	10 item13 date;			//0
+	10 item14 time;			//0
+	10 item15 timestamp;	//0
+	10 item16 interval("yyyyMM");		//0
+	10 item17 float;		//0
+	10 item18 money;		//0
+	
+	10 item25 int = 1+2;	//1
+	10 item26 int = 3;		//1 Initializers are not allowed in a dataTable. {7752, INITIALIZERS_NOT_ALLOWED_IN_DATA_TABLE}
+
+	10 embed undeclaredPart;	//1 The type undeclaredPart cannot be resolved.
+	10 embed lib;				//1 Keyword embed used improperly with lib which either is not a record or cannot be resolved. {5060, EMBEDED_ITEM_DOES_NOT_RESOLVE}
+
+	10 embed emptyRecord;		//1 Keyword embed used with item emptyRecord references an empty record. {5062, EMBED_RERERS_TO_EMPTY_RECORD}
+	10 embed notEmptyRecord;	//0
+	
+	10 embed flexibleRecord;	//1 Only fixed records can be embedded in fixed records. {4028, FLEXIBLE_RECORD_EMBEDDED_IN_FIXED}
+	
+	10 * notEmptyRecord;		//0
+	10 * dItem;					//0
+	10 * lib;					//1 The part lib could not be resolved to a data item or fixed record.
+	10 * undeclaredPart;		//1 The type undeclaredPart cannot be resolved.
+	
+	10 * ambiguousType;			//1 The type ambiguousType is ambiguous.
+	
+	10 item39;	//1 is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+	10 item40;	//1 is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+	10 *;		//1 is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+	
+	10 item41;				//0
+		15 item41a;			//1 is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+		15 item41b;			//1 is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+		15 *;				//1 is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+		15 item41c char(1);	//0
+		
+	10 item42 int {isNullable=yes};	//0
+	10 item43 int {isNullable=no};	//0
+end
+
+Record emptyRecord type serialRecord
+end
+
+Record notEmptyRecord
+	10 notEmptyRecordItem int;
+end
+
+Record notEmptySQLRecord type SQLRecord
+	10 notEmptySQLRecordItem int;
+end
+
+Record validateStructureItems2 type vgUIRecord
+	10 item13 date;			//1 The datatype date is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item14 time;			//1 The datatype time is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item15 timestamp;	//1 The datatype timestamp is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item16 interval("yyyyMM");		//1 The datatype interval is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item17 float;		//1 The datatype float is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item18 money;		//1 The datatype money is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	
+	10 item19 date[2];		//1 The datatype date is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item20 time[2];		//1 The datatype time is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item21 timestamp[2];	//1 The datatype timestamp is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item22 interval("yyyyMM")[2];	//1 The datatype interval is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+	10 item23 float[2];		//1 The datatype float is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}	
+	10 item24 money[2];		//1 The datatype money is not allowed in a VGUIRecord. {7770, INVALID_TYPE_IN_VGUIRECORD}
+end
+
+Record validateStructureItems3 type sqlRecord
+	10 embed notEmptyRecord;	//1 The embedded record notEmptyRecord must be an SQL record.  Only SQL records are allowed to be embedded in an SQL record. {5058, EMBEDDED_RECORD_MUST_BE_SQL_RECORD}
+	10 embed notEmptySQLRecord;	//0
+	
+	10 item42 int {isNullable=yes};	//0
+	10 item43 int {isNullable=no};	//0
+end
+
+Record validateStructureItems4 type serialRecord
+	item1;	//1 Structure item item1 for data part validateStructureItems4 is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+	*;		//1 Structure item * for data part validateStructureItems4 is a leaf item and needs to have primitive characteristics or use a data part as a typeDef. {4118, STRUCTURE_LEAF_ITEM_WITH_NO_PRIM_CHAR}
+	
+	item42 int {isNullable=yes};	//1 The structure item item42 in record validateStructureItems4 specifies the isNullable property.  This property is only valid for structure items of SQL records. {5076, NON_SQL_RECORDS_CANNOT_CONTAIN_NULLABLE}
+end
+
+// validateSubType:
+Record validateSubType type garbageRecord	//1 The record validateSubType has an invalid type. Valid types are BasicRecord, SerialRecord, IndexedRecord, RelativeRecord, MessageRecord, SQLRecord, VGUIRecord, PSBRecord and DLISegment. {4140, RECORD_HAS_INVALID_SUBTYPE}
+end
+Record validateSubType2 type DLISegment		//0
+{
+	segmentName="aaaa"
+}
+end
+
+// visit (1) and visit (2):
+Record vgUIRecord1 type vgUIRecord	//2 Error on item item1. All item names in a VGUIRecord must be unique. {7782, ITEM_NAMES_MUST_BE_UNIQUE_IN_VGUIRECORD}|Error on item item2.item2b. Mutlidimensional multiply occurring items are not allowed in VGUIRecords
+	10 *;							//0
+		15 item1 int;				//0
+	10 * int;						//0
+	10 item1 int;					//0
+	10 item2 char(4)[2];			//0
+		15 item2a char(2);			//0
+		15 item2b char(1)[2];		//0
+end
+
+// visit (3):
+Record uiRecord type vguirecord {commandValueItem=item1}
+	* int {uiType=none};	//0
+	* int {uiType=hidden};	//1 Filler structure items require a uiType of NONE. {7792, FILLER_ITEMS_REQUIRE_UITYPE_NONE}
+
+	item1 int {uiType=programLink, @programLinkData{programName=""}};	//0
+	item2 int {uiType=programLink};										//1 The @programLinkData property is required when the uiType is uiForm or programLink. {7791, PROPERTY_REQUIRED_WHEN_UITYPE_IS_PROGRAMLINK_OR_UIFORM}
+	
+	item3 int {uiType=programLink, @programLinkData{programName=""}, sign=parens};		//1 The Sign property is not allowed when the uiType is one of the following: (uiForm, programLink). {7785, PROPERTY_NOT_ALLOWED_WITH_UITYPE_OF}
+	item4 mbchar(4) {uiType=uiForm, @programLinkData{programName=""}, needsSOSI=yes};	//1 The NeedsSOSI property is not allowed when the uiType is one of the following: (uiForm, programLink). {7785, PROPERTY_NOT_ALLOWED_WITH_UITYPE_OF}
+	
+	item5 int {uiType=none, sign=parens};	// 1 The Sign property is not allowed when the uiType is one of the following: (none). {7785, PROPERTY_NOT_ALLOWED_WITH_UITYPE_OF}
+	
+	item6 int {uiType=submit};				//1 A uiType value of submit requires that the item be one of the following primitive types: (char, mbchar, dbchar, unicode). {7795, UITYPE_OF_REQUIRES_PRIMITIVE_TYPE_OF}
+	item7 int {uiType=submitBypass};		//1 A uiType value of submitBypass requires that the item be one of the following primitive types: (char, mbchar, dbchar, unicode). {7795, UITYPE_OF_REQUIRES_PRIMITIVE_TYPE_OF}
+	item8 char(4) {uiType=submit};			//0
+	item9 unicode(4) {uiType=submitBypass};	//0
+	
+	item10 int[2] {numElementsItem=item1};		//1 The numElementsItem item cannot be the same as the commandValueItem item or selectedIndexItem item, or have the same name as the item that it is specified for. {7786, CONFLICT_WITH_NUMELEMENTSITEM_COMMANDVALUEITEM_SELECTEDINDEXITEM_ITEMNAME}
+	item10a int[2] {selectedIndexItem=item1};		//1 The selectedIndexItem item cannot be the same as the commandValueItem item or numElementsItem item, or have the same name as the item that it is specified for. {7786, CONFLICT_WITH_NUMELEMENTSITEM_COMMANDVALUEITEM_SELECTEDINDEXITEM_ITEMNAME}
+	item11 int[3] {numElementsItem=item2};		//0
+	item12 int[2] {numElementsItem=item2, selectedIndexItem=item2};	//2 The numElementsItem item cannot be the same as the commandValueItem item or selectedIndexItem item, or have the same name as the item that it is specified for. {7786, CONFLICT_WITH_NUMELEMENTSITEM_COMMANDVALUEITEM_SELECTEDINDEXITEM_ITEMNAME}|The selectedIndexItem item cannot be the same as the commandValueItem item or numElementsItem item, or have the same name as the item that it is specified for.
+	item13 int[2] {numElementsItem=item13};		//2 The numElementsItem item cannot be the same as the commandValueItem item or selectedIndexItem item, or have the same name as the item that it is specified for. {7786, CONFLICT_WITH_NUMELEMENTSITEM_COMMANDVALUEITEM_SELECTEDINDEXITEM_ITEMNAME}|The numElementsItem item item13 cannot be a multiply occurring item.
+	item13a int[2] {selectedIndexItem=item13a};	//1 The selectedIndexItem item cannot be the same as the commandValueItem item or numElementsItem item, or have the same name as the item that it is specified for. {7786, CONFLICT_WITH_NUMELEMENTSITEM_COMMANDVALUEITEM_SELECTEDINDEXITEM_ITEMNAME}
+	
+	item14 int[2] {numElementsItem=foo};		//1 The numElementsItem foo for item14 in uiRecord must name an item within the same record. {3137, NUMELEMENTSITEM_MUST_BE_IN_RECORD}
+	item15 int[2] {selectedIndexItem=foo};	//1 The selectedIndexItem foo for item15 in uiRecord must name an item within the same record.
+	
+	item16 int {numElementsItem=item2};		//1 The item item16 must be a multiply occurring item in order to specify the numElementsItem property. {7787, PROPERTY_ONLY_APPLICABLE_TO_MULTIPLY_OCCURING_ITEMS}
+	item17 int {selectedIndexItem=item2};		//1 The item item17 must be a multiply occurring item in order to specify the selectedIndexItem property.
+	
+	item18 int[2] {numElementsItem=item10};	//1 The numElementsItem item item10 cannot be a multiply occurring item. {7789, PROPERTY_REFERENCE_CANNOT_BE_MUTLIPLY_OCCURING}
+
+	item19 int[2] {selectedIndexItem=item10};	//0
+	item20 int[2] {selectedIndexItem=item11};	//1 The selectedIndexItem item11 must have the same number of occurs as the item that it is specified for. {7790, SELECTEDINDEXITEM_REFERENCE_MUST_HAVE_SAME_NUMBER_OF_OCCURS}
+	
+	item21 int[2] {numElementsItem=item23};	//1 The numElementsItem item23 for item21 in uiRecord must name a numeric item with no decimal places.
+	item22 int[2] {selectedIndexItem=item23};	//1 The selectedIndexItem item item23 must be a numeric item with no decimal places. {7788, PROPERTY_REFERENCE_MUST_BE_NUMERIC_WITH_NO_DECIMALS}
+	item21a int[2] {numElementsItem=item24};	//1 The numElementsItem item24 for item21a in uiRecord must name a numeric item with no decimal places.
+	item22a int[2] {selectedIndexItem=item24};//1 The selectedIndexItem item item24 must be a numeric item with no decimal places. {7788, PROPERTY_REFERENCE_MUST_BE_NUMERIC_WITH_NO_DECIMALS}
+	item21b int[2] {numElementsItem=item25};	//0
+	item22b int[2] {selectedIndexItem=item25};//0
+	item23 char(4);
+	item24 bin(9,2);
+	item25 bin(10);
+	
+	item26 int {@programLinkData{programName=""}, uiType=hidden};	//1 The @programLinkData property is not allowed when the uiType is one of the following: (hidden, input, inputOutput, none, output, submit, submitBypass). {7785, PROPERTY_NOT_ALLOWED_WITH_UITYPE_OF}
+	item27 int {@programLinkData{programName=""}, uiType=input};	//1 The @programLinkData property is not allowed when the uiType is one of the following: (hidden, input, inputOutput, none, output, submit, submitBypass). {7785, PROPERTY_NOT_ALLOWED_WITH_UITYPE_OF}
+	
+	item28 int {
+		uiType=programLink,
+		@programLinkData{
+			programName="",
+			linkParms=[
+				@linkParameter{name="", valueRef=item1},	//0
+				@linkParameter{name="", valueRef=foo}		//1 The value "foo" for valueRef must be the name of an item in this vgUIRecord. {7799, VALUEREF_NOT_RESOLVED}
+			]
+		}
+	};
+	
+	item29 int {isBoolean=yes, numericSeparator=yes};		//1 The properties isBoolean and NumericSeparator cannot both be specified.
+	
+	item30 dbchar(4) {fillCharacter=" "};		//0
+	item31 dbchar(4) {fillCharacter="x"};		//1 The fillCharacter property for dbchar items must be a blank. {4159, EDIT_ITEM_FILL_CHARACTER_INVALID_FOR_DBCS}
+	item32 int {fillCharacter="x"};				//0
+end
+
+Record uiRecord2 type vgUIRecord
+	10 item1 char(32)[2];
+		15 item1a int {numElementsItem=neItem};		//0
+		15 item1b int {selectedIndexItem=neItem};		//0
+		15 item1c int {selectedIndexItem=neItem2};	//0
+		15 item1d int {selectedIndexItem=neItem3};	//1 The selectedIndexItem neItem3 must have the same number of occurs as the item that it is specified for.
+		15 item1e int {selectedIndexItem=neItem4};	//0
+		15 item1f int {selectedIndexItem=neItem4a};	//0
+		15 item1g int {selectedIndexItem=neItem5};	//1 The selectedIndexItem neItem5 must have the same number of occurs as the item that it is specified for.
+		15 item1h int {selectedIndexItem=neItem5a};	//1 The selectedIndexItem neItem5a must have the same number of occurs as the item that it is specified for.
+		
+	10 neItem int;
+	10 neItem2 int[2];
+	10 neItem3 int[3];
+	10 neItem4 int[2];
+		15 neItem4a int;
+	10 neItem5 int[3];
+		15 neItem5a int;
+end
+
+DataItem fred string end
+
+Record Rec1071332 type sqlRecord	
+	10 aChar char(10);
+	10 aString fred;    // 1 string is not a valid type for an item in a fixed record or data table. {4004, EGLMESSAGE_INVALID_TYPE_IN_FIXED_RECORD}
+	10 aString2 string; // 1 string is not a valid type for an item in a fixed record or data table. {4004, EGLMESSAGE_INVALID_TYPE_IN_FIXED_RECORD}
+end
+
+Record initializerRec
+	10 item1 int {item2 = "a"};	//0
+		15 item2 int;
+end
+
+//Expect lots of errors in record below since dataitems are not defined.
+//Just want to make sure that no exceptions occur.
+Record PR27W01 type basicRecord 
+  5 EDBJHS EDBJHS ; 
+    10 * char(1) ; 
+    10 EDBKEY EDBKEY ; 
+      15 ORGIDNO ORGIDNO ; 
+        20 XORGKEY XORGKEY ; 
+          25 XORGPRE XORGPRE ; 
+          25 ORGID ORGID ; 
+          25 XORGSUF XORGSUF ; 
+        20 EMPLID EMPLID ; 
+      15 SEGMENT SEGMENT ; 
+        20 SEGNO SEGNO ; 
+        20 SEGFILL SEGFILL ; 
+    10 JHSDATA JHSDATA ; 
+      15 JHSENTS JHSENTS ; 
+        20 JHSENT JHSENT [6] ; 
+          25 JHSKEY JHSKEY ; 
+            30 PRACTNDT PRACTNDT ; 
+            30 JOBNO JOBNO ; 
+          25 JHSJOB JHSJOB ; 
+            30 JOBCLASS JOBCLASS ; 
+            30 * char(6) ; 
+            30 RANGE RANGE ; 
+            30 STEP STEP ; 
+            30 VAGen_POSITION VAGen_POSITION ; 
+            30 PAYRATE PAYRATE ; 
+            30 PAYCYCLE PAYCYCLE ; 
+            30 PCTFULLI PCTFULLI ; 
+            30 PRACTN PRACTN ; 
+          25 JHSSTAT JHSSTAT ; 
+            30 EMPLSTAT EMPLSTAT ; 
+            30 EMPLTYPE EMPLTYPE ; 
+            30 REGTEMP REGTEMP ; 
+            30 PARTFULL PARTFULL ; 
+          25 JOBDEPT JOBDEPT ; 
+            30 DEPTNO DEPTNO ; 
+            30 DEPTLOC DEPTLOC ; 
+          25 * char(8) ; 
+      15 XFERORG XFERORG ; 
+      15 XFERDT XFERDT ; 
+      15 * char(289) ; 
+end
+
+record xxxxx
+ 10 abc timestamp;
+   15 x char(1);
+end

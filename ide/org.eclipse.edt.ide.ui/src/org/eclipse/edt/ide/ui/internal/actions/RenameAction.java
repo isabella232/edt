@@ -13,23 +13,13 @@ package org.eclipse.edt.ide.ui.internal.actions;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ExternalTypeDataBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
-import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.search.matching.MatchLocator2;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -261,8 +251,7 @@ public class RenameAction extends SelectionDispatchAction {
 		final Node node = document.getNewModelNodeAtOffset(currentPosition);
 		if(node instanceof Name) {
 			Node parent = node.getParent();
-			//TODO: remove condition for TopLevelFunction when rename of function is supported
-			if(parent instanceof Part && !(parent instanceof TopLevelFunction) && ((Part) parent).getName() == node) {
+			if(parent instanceof Part && ((Part) parent).getName() == node) {
 				return new PartNameAndFile(((Part) parent).getName().getCanonicalName(), file);
 			}
 			else if(parent instanceof NestedFunction) {
@@ -278,47 +267,49 @@ public class RenameAction extends SelectionDispatchAction {
 					public void acceptNode(final Node boundPart, final Node selectedNode) {
 						selectedNode.accept(new AbstractASTExpressionVisitor(){
 							public boolean visitName(Name name) {
-								partNameAndFile[0] = getPartNameAndFile(name.resolveBinding());
+								//TODO no code currently references this (requires rename support for text selections in the EGL editor).
+								// To support it, we need the WorkingCopyProjectEnvironment passed in from the WCC since the new binding model doesn't store the environment
+//								partNameAndFile[0] = getPartNameAndFile(name.resolveBinding());
 								return false;
 							}
 							
-							private IPartBinding getPartBinding(IBinding binding){
-								IPartBinding result = null;
-								
-								if(Binding.isValidBinding(binding)) {
-									//TODO: remove functionBinding part of condition when rename of function is supported
-									if(binding.isTypeBinding() && !binding.isFunctionBinding()){
-										if(((ITypeBinding)binding).isPartBinding()){
-											result = (IPartBinding)binding;
-										}
-									}else if(binding.isDataBinding()){
-										switch(((IDataBinding)binding).getKind()){
-											case IDataBinding.EXTERNALTYPE_BINDING:
-												result = (IPartBinding) ((ExternalTypeDataBinding) binding).getType();
-												break;
-										}
-									}
-								}										
-								
-								return result;
-							}
-							
-							private PartNameAndFile getPartNameAndFile(IBinding binding){
-								
-								IPartBinding partBinding = getPartBinding(binding);
-								
-								if(partBinding != null){
-									IEnvironment env = partBinding.getEnvironment();
-									if(env instanceof WorkingCopyProjectEnvironment){
-										WorkingCopyProjectEnvironment environment = (WorkingCopyProjectEnvironment) env;
-										IPartOrigin origin = environment.getPartOrigin(partBinding.getPackageName(), partBinding.getName());
-										IFile declaringFile = origin.getEGLFile();
-										return new PartNameAndFile(partBinding.getCaseSensitiveName(), declaringFile);
-									}
-								}
-								
-								return null;
-							}
+//							private IPartBinding getPartBinding(IBinding binding){
+//								IPartBinding result = null;
+//								
+//								if(Binding.isValidBinding(binding)) {
+//									//TODO: remove functionBinding part of condition when rename of function is supported
+//									if(binding.isTypeBinding() && !binding.isFunctionBinding()){
+//										if(((ITypeBinding)binding).isPartBinding()){
+//											result = (IPartBinding)binding;
+//										}
+//									}else if(binding.isDataBinding()){
+//										switch(((IDataBinding)binding).getKind()){
+//											case IDataBinding.EXTERNALTYPE_BINDING:
+//												result = (IPartBinding) ((ExternalTypeDataBinding) binding).getType();
+//												break;
+//										}
+//									}
+//								}										
+//								
+//								return result;
+//							}
+//							
+//							private PartNameAndFile getPartNameAndFile(IBinding binding){
+//								
+//								IPartBinding partBinding = getPartBinding(binding);
+//								
+//								if(partBinding != null){
+//									IEnvironment env = partBinding.getEnvironment();
+//									if(env instanceof WorkingCopyProjectEnvironment){
+//										WorkingCopyProjectEnvironment environment = (WorkingCopyProjectEnvironment) env;
+//										IPartOrigin origin = environment.getPartOrigin(partBinding.getPackageName(), partBinding.getName());
+//										IFile declaringFile = origin.getEGLFile();
+//										return new PartNameAndFile(partBinding.getCaseSensitiveName(), declaringFile);
+//									}
+//								}
+//								
+//								return null;
+//							}
 							
 						});
 						
@@ -357,7 +348,7 @@ public class RenameAction extends SelectionDispatchAction {
 
 	private static boolean isRenameAvailable(Node node) throws CoreException {
 		//TODO: remove when rename of function is supported
-		if(node instanceof TopLevelFunction || node instanceof NestedFunction) {
+		if(node instanceof NestedFunction) {
 			return false;
 		}
 		

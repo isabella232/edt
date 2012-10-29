@@ -1,0 +1,51 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Record ArrayFixedRecord
+	20 aChar char(10) ;
+	20 aMoney money ;
+	20 aNum num (16,2) ;
+	20 aUnicode unicode(10) ;
+end 
+
+Record ArrayFixedArrayRecord
+	10 * [20] ;
+		20 aChar char(10) ;
+		20 aMoney money ;
+		20 aNum num (16,2) ;
+		20 aUnicode unicode(10) ;
+end 
+
+Record arrayFlexArrayRecord
+    aChar string [20] ;
+    aMoney int [20] ;
+end
+
+Record arrayFlexRecord
+    aChar string ;
+    aMoney int ;
+end
+	
+
+program arrayType type basicProgram { 
+	alias = "V61ARY", 
+	includeReferencedFunctions = yes,
+	allowUnqualifiedItemReferences = yes 
+	}
+
+	function main()
+		aFix ArrayFixedArrayRecord { initialized = yes } ;
+  		bFix ArrayFixedRecord [20] {  } ;
+		move aFix.aChar to bFix.achar for all ;	
+	end
+end

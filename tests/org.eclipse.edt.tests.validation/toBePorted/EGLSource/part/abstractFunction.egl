@@ -1,0 +1,160 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// validateParamsAndDeclarations:
+Interface validateParamsAndDeclarationsInterface
+	function validateParamsAndDeclarations(
+		p1 int,						//0
+		p1 int,						//1 The same name p1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library validateParamsAndDeclarations.
+		aryParm int[5],				//1 The array parameter aryParm in the function definition validateParamsAndDeclarations cannot have a dimension specified. {3067, STATIC_ARRAY_PARAMETER_DEFINITION}
+		aryParm2 int[],				//0
+		recParm emptyRec,			//1 Invalid parameter recParm. There must be at least one structure item in the contents of the record emptyRec. {3118, RECORD_PARAMETER_WITH_NO_CONTENTS}
+		recParm2 emptyFlexRec,		//1 Invalid parameter recParm2. There must be at least one structure item in the contents of the record emptyFlexRec. {3118, RECORD_PARAMETER_WITH_NO_CONTENTS}
+		recParm3 notEmptyRec,		//0
+		recParm4 notEmptyFlexRec,	//0
+		p7 int in,					//0
+		p13 int out,				//0
+		p17 basicRecord in,			//0
+		p18 basicRecord out,		//0
+		p19 basicRecord inout,		//0
+		p20 notbasicRecord in,		//0
+		p21 notbasicRecord out,		//0
+		p22 notbasicRecord inout,	//0
+		
+		lastParm any
+	)
+	;
+end
+
+function topLevelFunc() end
+
+Program pgm end
+Library lib end
+
+// validateParms:
+Interface validateParmsInterface
+	function validateParms(
+		p1 pgm,										//1 The parameter p1 for function validateParms must be a reference type or one of the following types: record, data item, dictionary, arrayDictionary, presentationAttributes. {4902, FUNCTION_PARAMETER_HAS_INCORRECT_TYPE}
+		p2 lib,										//1 The parameter p2 for function validateParms must be a reference type or one of the following types: record, data item, dictionary, arrayDictionary, presentationAttributes. {4902, FUNCTION_PARAMETER_HAS_INCORRECT_TYPE}
+		p3 topLevelFunc,							//1 The parameter p3 for function validateParms must be a reference type or one of the following types: record, data item, dictionary, arrayDictionary, presentationAttributes. {4902, FUNCTION_PARAMETER_HAS_INCORRECT_TYPE}
+		p4 myForm,									//1 The parameter p4 for function validateParms must be a reference type or one of the following types: record, data item, dictionary, arrayDictionary, presentationAttributes. {4902, FUNCTION_PARAMETER_HAS_INCORRECT_TYPE}
+		p5 presentationAttributes,					//0
+		
+		p6 basicRecord nullable,					//1 The parameter p6 of type record for Function validateParms cannot be nullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_NULLABLE}
+		p7 notEmptyFlexRec nullable,				//1 The parameter p7 of type record for Function validateParms cannot be nullable. {4942, FUNCTION_PARAMETER_TYPE_CANNOT_BE_NULLABLE}
+	
+		p16 myService in,							//0
+		p17 myService out,							//0
+		p18 myService inout,						//0
+		p19 window in,								//0
+		p20 window out,								//0
+		p21 window inout,							//0
+		p22 int in,									//0
+		p23 int out,								//0
+		p24 int inout,								//0	
+	
+		p25 myService[],							//1 Arrays of services or interfaces are not allowed. {7820, SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED}
+		p26 myInterface[],							//1 Arrays of services or interfaces are not allowed. {7820, SERVICE_OR_INTERFACE_ARRAYS_NOT_SUPPORTED}
+		p27 window[],								//0
+		
+		p28 undeclaredVar,							//1 The type undeclaredVar cannot be resolved
+		p29 undeclaredVar[],						//1 The type undeclaredVar cannot be resolved
+		
+		p30 ambigPart,								//1 The type ambigPart is ambiguous
+	
+		p31 boolean,								//0
+			
+		lastParm any
+	)
+	;
+end
+
+// validateReturn:
+Interface validateReturnInterface
+	function main() returns (int); 						//0
+	
+	function func() returns (boolean);					//0
+
+	function func2() returns (int[]);					//0
+	
+	function func3() returns (intItem);					//0
+
+//	function func6() returns (window);					//0
+	function func7() returns (myService);				//0
+	function func8() returns (myInterface);				//0
+	function func9() returns (indexedRcd);				//1 The return indexedRcd for function func9 must be a reference type or one of the following types: data item, dictionary, arrayDictionary. {4914, FUNCTION_RETURN_HAS_INCORRECT_TYPE}
+	function func10() returns (pgm);					//1 The return pgm for function func10 must be a reference type or one of the following types: data item, dictionary, arrayDictionary. {4914, FUNCTION_RETURN_HAS_INCORRECT_TYPE}
+	
+	function func11() returns (undeclaredItem);			//1 The type undeclaredItem cannot be resolved
+	function func12() returns (ambigPart);				//1 The type ambigPart is ambiguous
+end
+
+Record emptyFlexRec
+end
+
+Record emptyRec type serialRecord
+end
+
+Record notEmptyRec
+	10 item1 int;
+end
+
+Record notEmptyFlexRec
+	item1 int;
+end
+
+Record basicRecord type basicRecord
+	10 item1 int;
+end
+
+Record notBasicRecord type serialRecord
+	10 item1 int;
+end
+
+Record psbRecord type psbRecord
+	10 item1 int;
+end
+
+DataItem intItem int end
+
+Form myForm type textForm end
+
+DataItem ambigPart int end
+DataItem ambigPart int end
+
+Service myService end
+
+Interface myInterface
+	function func(p1 boolean);			//0
+	function func2() returns(boolean);	//0
+end
+
+Interface myJavaObjectInterface type javaObject
+	function func(p1 boolean in);		//0
+	function func2() returns(boolean);	//0
+end
+
+Record indexedRcd type indexedRecord
+	item1 int;
+end
+Record relativeRcd type relativeRecord
+	item1 int;
+end
+Record mqRcd type mqRecord
+	item1 int;
+end
+Record serialRcd type serialRecord
+	item1 int;
+end
+Record sqlRcd type sqlRecord
+	item1 int;
+end

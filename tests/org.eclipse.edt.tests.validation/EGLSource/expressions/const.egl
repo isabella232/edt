@@ -1,0 +1,369 @@
+/* Rules when a field or parameter is const:
+ *  1. The field itself cannot be assigned to.
+ *  2. For value types, no part of it can be assigned, including member or array accesses.
+ *  3. For reference types, member and array accesses CAN be assigned to, since it's the reference itself that's constant.
+ *  4. Functions on the const field CAN be invoked.
+ *  5. Initializer statements are allowed to assign to the field, but not required (so long as there's a default constructor).
+ *  6. The initializer can be any valid expression compatible with the const's type.
+ *  7. Any type can be const (previously only primitives or primitive arrays were allowed).
+ *  8. A const field (or for value types its member/array access) cannot be passed to an INOUT parm unless the parm is also const. It cannot be passed at all to an OUT parm.
+ *  9. OUT parameters cannot be defined as const, but IN and INOUT can.
+ */
+
+handler rule1
+	const globalValue int = 10;
+	const globalReference int[] = [10];
+	globalOH otherHandler;
+
+	function f(parmValue int const, parmReference int[] const, parmOH otherHandler)
+		const localValue int = 10;
+		const localReference int[] = [10];
+		localOH otherHandler;
+		
+		globalValue = 20; //1
+		globalReference = [20]; //1
+		localValue = 20; //1
+		localReference = [20]; //1
+		parmValue = 20; //1
+		parmReference = [20]; //1
+		
+		globalOH.constValue1 = 10; //1
+		globalOH.constValue2 = new constRec; //1
+		globalOH.constReference1 = []; //1
+		globalOH.constReference2 = []; //1
+		localOH.constValue1 = 10; //1
+		localOH.constValue2 = new constRec; //1
+		localOH.constReference1 = []; //1
+		localOH.constReference2 = []; //1
+		parmOH.constValue1 = 10; //1
+		parmOH.constValue2 = new constRec; //1
+		parmOH.constReference1 = []; //1
+		parmOH.constReference2 = []; //1
+	end
+end
+
+handler rule2
+	const globalRec constRec = new constRec;
+	globalOH otherHandler;
+	
+	function f(parmRec constRec const, parmOH otherHandler)
+		const localRec constRec = new constRec;
+		localOH otherHandler;
+		
+		globalRec.i = 10; //1
+		globalRec.sub = new subConstRec; //1
+		globalRec.sub.s[1] = 10; //1
+		localRec.i = 10; //1
+		localRec.sub = new subConstRec; //1
+		localRec.sub.s[1] = 10; //1
+		parmRec.i = 10; //1
+		parmRec.sub = new subConstRec; //1
+		parmRec.sub.s[1] = 10; //1
+		
+		globalOH.constValue2.i = 20; //1
+		globalOH.constValue2.sub.s[88] = ""; //1
+		localOH.constValue2.i = 20; //1
+		localOH.constValue2.sub.s[88] = ""; //1
+		parmOH.constValue2.i = 20; //1
+		parmOH.constValue2.sub.s[88] = ""; //1
+	end
+end
+
+handler rule3
+	const globalRec constRec[] = [];
+	const globalAny any = new constRec;
+	globalOH otherHandler;
+	
+	function f(parmRec constRec[] const, parmAny any? const, parmOH otherHandler)
+		const localRec constRec[] = [];
+		const localAny any = new constRec;
+		localOH otherHandler;
+		
+		globalRec[1] = new constRec; //0
+		globalRec[1].i = 10; //0
+		globalRec[1].sub = new subConstRec; //0
+		globalRec[1].sub.s[1] = 10; //0
+		globalAny.foo = 10; //0
+		localRec[1] = new constRec; //0
+		localRec[1].i = 10; //0
+		localRec[1].sub = new subConstRec; //0
+		localRec[1].sub.s[1] = 10; //0
+		localAny.foo = 10; //0
+		parmRec[1] = new constRec; //0
+		parmRec[1].i = 10; //0
+		parmRec[1].sub = new subConstRec; //0
+		parmRec[1].sub.s[1] = 10; //0
+		parmAny.foo = 10; //0
+		
+		globalOH.constReference2[1] = new constRec; //0
+		globalOH.constReference2[1].i = 10; //0
+		globalOH.constReference2[1].sub = new subConstRec; //0
+		globalOH.constReference2[1].sub.s[1] = 10; //0
+		localOH.constReference2[1] = new constRec; //0
+		localOH.constReference2[1].i = 10; //0
+		localOH.constReference2[1].sub = new subConstRec; //0
+		localOH.constReference2[1].sub.s[1] = 10; //0
+		parmOH.constReference2[1] = new constRec; //0
+		parmOH.constReference2[1].i = 10; //0
+		parmOH.constReference2[1].sub = new subConstRec; //0
+		parmOH.constReference2[1].sub.s[1] = 10; //0
+	end
+end
+
+handler rule4
+	const global1 int[] = [];
+	const global2 string;
+	globalOH otherHandler;
+	
+	function f(parm1 int[] const, parm2 string const, parmOH otherHandler)
+		const local1 int[] = [];
+		const local2 string;
+		localOH otherHandler;
+		
+		global1.appendElement(10); //0
+		local1.appendElement(10); //0
+		parm1.appendElement(10); //0
+		global2.trim(); //0
+		local2.trim(); //0
+		parm2.trim(); //0
+		
+		globalOH.constReference1.appendElement(123); //0
+		globalOH.constString.trim(); //0
+		localOH.constReference1.appendElement(123); //0
+		localOH.constString.trim(); //0
+		parmOH.constReference1.appendElement(123); //0
+		parmOH.constString.trim(); //0
+	end
+end
+
+handler rule5
+	const global1 int = 10; //0
+	const global2 int; //0
+	const global3 any?; //0
+	const global4 any; //1
+	const global5 any? = 52; //0
+	const global6 any = 52; //0
+	
+	function f()
+		const local1 int = 10; //0
+		const local2 int; //0
+		const local3 any?; //0
+		const local4 any; //1
+		const local5 any? = 52; //0
+		const local6 any = 52; //0
+	end
+end
+
+handler rule6
+	const global1 int = 10 * 30; //0
+	const global2 int = global1 xor (1/global1); //0
+	const global3 int = "1234" >> 20; //0
+	const global4 date = datetimelib.mdy(10,20,30); //0
+	const global5 bytes(10) = "abc".toBytes(); //0
+	const global6 int[] = [56, 78, 90]; //0
+	const global7 constRec = 56; //1
+	const global8 boolean = "true"; //1
+	const global9 string = "reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeally " //0
+							+ "long string on multiple " //0
+							+ "lines"; //0
+	const global10 any = global1;
+	
+	function f()
+		const local1 int = 10 * 30; //0
+		const local2 int = local1 xor (1/global1); //0
+		const local3 int = "1234" >> 20; //0
+		const local4 date = datetimelib.mdy(10,20,30); //0
+		const local5 bytes(10) = "abc".toBytes(); //0
+		const local6 int[] = [56, 78, 90]; //0
+		const local7 constRec = 56; //1
+		const local8 boolean = "true"; //1
+		const local9 string = "reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeally " //0
+								+ "long string on multiple " //0
+								+ "lines"; //0
+		const local10 any = global1;
+	end
+end
+
+handler rule7
+	const global1 constRec; //0
+	const global2 int; //0
+	const global3 string[]; //0
+	const global4 constDelegate?; //0
+	const global5 constDelegate[]; //0
+end
+
+handler rule8
+	const globalValue constRec;
+	const globalReference constRec[];
+	globalOH otherhandler;
+	
+	function f(parmValue constRec const, parmReference constRec[] const, parmOH otherHandler)
+		const localValue constRec;
+		const localReference constRec[];
+		localOH otherhandler;
+		
+		receiverRec(
+			globalValue, //0
+			globalValue, //0
+			globalValue, //1
+			globalValue, //0
+			globalValue //1
+		);
+		receiverString(
+			globalValue.sub.s[1], //0
+			globalValue.sub.s[1], //0
+			globalValue.sub.s[1], //1
+			globalValue.sub.s[1], //0
+			globalValue.sub.s[1] //1
+		);
+		receiverString(
+			globalReference[1].sub.s[1], //0
+			globalReference[1].sub.s[1], //0
+			globalReference[1].sub.s[1], //0
+			globalReference[1].sub.s[1], //0
+			globalReference[1].sub.s[1] //0
+		);
+		
+		receiverRec(
+			localValue, //0
+			localValue, //0
+			localValue, //1
+			localValue, //0
+			localValue //1
+		);
+		receiverString(
+			localValue.sub.s[1], //0
+			localValue.sub.s[1], //0
+			localValue.sub.s[1], //1
+			localValue.sub.s[1], //0
+			localValue.sub.s[1] //1
+		);
+		receiverString(
+			localReference[1].sub.s[1], //0
+			localReference[1].sub.s[1], //0
+			localReference[1].sub.s[1], //0
+			localReference[1].sub.s[1], //0
+			localReference[1].sub.s[1] //0
+		);
+		
+		receiverRec(
+			parmValue, //0
+			parmValue, //0
+			parmValue, //1
+			parmValue, //0
+			parmValue //1
+		);
+		receiverString(
+			parmValue.sub.s[1], //0
+			parmValue.sub.s[1], //0
+			parmValue.sub.s[1], //1
+			parmValue.sub.s[1], //0
+			parmValue.sub.s[1] //1
+		);
+		receiverString(
+			parmReference[1].sub.s[1], //0
+			parmReference[1].sub.s[1], //0
+			parmReference[1].sub.s[1], //0
+			parmReference[1].sub.s[1], //0
+			parmReference[1].sub.s[1] //0
+		);
+		
+		receiverRec(
+			globalOH.constValue2, //0
+			globalOH.constValue2, //0
+			globalOH.constValue2, //1
+			globalOH.constValue2, //0
+			globalOH.constValue2 //1
+		);
+		receiverString(
+			globalOH.constValue2.sub.s[1], //0
+			globalOH.constValue2.sub.s[1], //0
+			globalOH.constValue2.sub.s[1], //1
+			globalOH.constValue2.sub.s[1], //0
+			globalOH.constValue2.sub.s[1] //1
+		);
+		receiverString(
+			globalOH.constReference2[1].sub.s[1], //0
+			globalOH.constReference2[1].sub.s[1], //0
+			globalOH.constReference2[1].sub.s[1], //0
+			globalOH.constReference2[1].sub.s[1], //0
+			globalOH.constReference2[1].sub.s[1] //0
+		);
+		
+		receiverRec(
+			localOH.constValue2, //0
+			localOH.constValue2, //0
+			localOH.constValue2, //1
+			localOH.constValue2, //0
+			localOH.constValue2 //1
+		);
+		receiverString(
+			localOH.constValue2.sub.s[1], //0
+			localOH.constValue2.sub.s[1], //0
+			localOH.constValue2.sub.s[1], //1
+			localOH.constValue2.sub.s[1], //0
+			localOH.constValue2.sub.s[1] //1
+		);
+		receiverString(
+			localOH.constReference2[1].sub.s[1], //0
+			localOH.constReference2[1].sub.s[1], //0
+			localOH.constReference2[1].sub.s[1], //0
+			localOH.constReference2[1].sub.s[1], //0
+			localOH.constReference2[1].sub.s[1] //0
+		);
+		
+		receiverRec(
+			parmOH.constValue2, //0
+			parmOH.constValue2, //0
+			parmOH.constValue2, //1
+			parmOH.constValue2, //0
+			parmOH.constValue2 //1
+		);
+		receiverString(
+			parmOH.constValue2.sub.s[1], //0
+			parmOH.constValue2.sub.s[1], //0
+			parmOH.constValue2.sub.s[1], //1
+			parmOH.constValue2.sub.s[1], //0
+			parmOH.constValue2.sub.s[1] //1
+		);
+		receiverString(
+			parmOH.constReference2[1].sub.s[1], //0
+			parmOH.constReference2[1].sub.s[1], //0
+			parmOH.constReference2[1].sub.s[1], //0
+			parmOH.constReference2[1].sub.s[1], //0
+			parmOH.constReference2[1].sub.s[1] //0
+		);
+	end
+	
+	function receiverRec(parm1 constRec const in, parm2 constRec in, parm3 constRec out, parm4 constRec const inout, parm5 constRec inout) end
+	function receiverString(parm1 string const in, parm2 string in, parm3 string out, parm4 string const inout, parm5 string inout) end
+end
+
+handler rule9
+	function f(
+		p1 int const in, //0
+		p2 int const inout, //0
+		p3 int const out //1 The const modifier is not allowed to be specified with the out modifier.
+	)
+	end
+end
+
+handler otherHandler
+	const constValue1 int;
+	const constValue2 constRec;
+	const constReference1 int[];
+	const constReference2 constRec[];
+	const constAny any?;
+	const constString string;
+end
+
+record constRec
+	i int;
+	sub subConstRec;
+end
+
+record subConstRec
+	s string[];
+end
+
+delegate constDelegate() end

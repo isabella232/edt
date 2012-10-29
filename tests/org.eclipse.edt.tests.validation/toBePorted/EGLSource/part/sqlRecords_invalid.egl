@@ -1,0 +1,278 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG 
+
+// sql records invalid test case
+// Paul R. Hoffman
+// 10/26/2004
+
+Program sqlRecords_invalid 
+
+     recA validSqlRecord { 							// 0
+     	tableNames = [["AnotherTable"]], 			// 0
+//     	defaultSelectCondition = #sqlCondition{ }, 	// 1 Cannot override record properties because the record is not a fixed record
+		// keyItems is an exception to the can't-be-overriden rule, according to Tim
+      	keyItems = [ aChar ] 						// 0
+     	} ; 
+     	
+     recB validSqlRecord { 							// 0
+     	tableNameVariables = [["AnotherTable"]], 	// 0
+//     	defaultSelectCondition = #sqlCondition{ }, 	// 1 Cannot override record properties because the record is not a fixed record
+     	keyItems = [ aChar ] 						// 0
+     	} ;	
+     	 
+     recC validFixedSqlRecord { 					// 0
+     	tableNames = [["AnotherTable"]], 			// 0 
+//     	defaultSelectCondition = #sqlCondition{ }, 	// 0 
+     	keyItems = [ notAChar ] 					// 1 keyItems property value notAChar must be defined in the SQL record ValidFixedSqlRecord
+     	} ;	
+
+	 rec  validSqlRecord ; 			// 0
+	 fixRec validFixedSqlRecord ; 	// 0
+     rec1 InvalidRec1 ; 			// 0
+     rec2 InvalidRec2 ; 			// 0
+     rec3 InvalidRec3 ; 			// 0 
+          
+     function main()
+     	get rec ; 					// 0
+     	get rec.aRec ; 				// 0 
+     	get rec.aRecArray ;	 		// 0 
+     	get rec.bRecArray ; 		// 0
+     	get fixrec ; 				// 0
+     	get rec1 ; 					// 0
+     	get rec2 ; 					// 0
+     	get rec3 ; 					// 0
+     end
+end
+
+// DataItems With SQL Item properties
+DataItem A1 int { column = "column_a" } end // 0
+DataItem A2 int { column = column_a } end  	// 1
+DataItem B1 int { isReadOnly = yes } end  	// 0
+DataItem B2 int { isReadOnly = no } end  	// 0
+DataItem B3 int { isReadOnly = "yes" } end  // 1
+DataItem B4 int { isReadOnly = "1" } end  	// 1
+DataItem C1 int { isSqlNullable = yes } end  	// 0
+DataItem C2 int { isSqlNullable = no } end  	// 0
+DataItem C3 int { isSqlNullable = "yes" } end  // 1
+DataItem C4 int { isSqlNullable = "1" } end  	// 1
+DataItem D1 int { persistent = yes } end  	// 0
+DataItem D2 int { persistent = no } end  	// 0
+DataItem D3 int { persistent = "yes" } end  // 1
+DataItem D4 int { persistent = "1" } end  	// 1
+DataItem E1 char(10) { sqlVariableLen = yes } end 	// 0
+DataItem E2 char(10) { sqlVariableLen = no } end  	// 0
+DataItem E3 char(10) { sqlVariableLen = "yes" } end // 1
+DataItem E4 char(10) { sqlVariableLen = "1" } end  	// 1
+DataItem F1 string { maxLen = 0 } end 				// 1 Property: MaxLen.  This property requires an integer value greater than 0
+DataItem F2 string { maxLen = -100 } end 			// 1 Property: MaxLen.  This property requires an integer value greater than 0
+DataItem F3 string { maxLen = "a" } end 			// 1
+DataItem F4 string { maxLen = 100 } end  			// 0
+DataItem G1 char(10) { sqlDataCode = 0 } end 		// 1 sqlDataCode value 0 cannot be used with the primitive type char
+DataItem G2 char(10) { sqlDataCode = -100 } end 	// 1 sqlDataCode value -100 cannot be used with the primitive type char
+DataItem G3 char(10) { sqlDataCode = "a" } end 		// 1
+DataItem G4 char(10) { sqlDataCode = 453 } end 		// 0
+DataItem stringItem string end 						// 0
+DataItem moneyItem money end 						// 0
+DataItem intItem int end 							// 0
+DataItem charItem char(20) end 						// 0
+DataItem mbCharItem char(20) end 					// 0
+DataItem dbCharItem dbChar(20) end 					// 0
+DataItem uniCodeItem unicode(20) end 				// 0
+DataItem hexItem hex(40) end 						// 0
+DataItem blobItem blob end 							// 0
+DataItem clobItem clob end 							// 0
+
+
+
+Record sqlItemPropertiesInSQLRecord type sqlRecord  // 0  
+	A1 stringItem { column = "column_a" } ;  		// 0
+	A2 stringItem { column = column_a } ;  			// 1
+	B1 stringItem { isReadOnly = yes } ;  			// 0
+	B2 stringItem { isReadOnly = no } ;  			// 0
+	B3 stringItem { isReadOnly = "yes" } ;  		// 1
+	B4 stringItem { isReadOnly = "1" } ;  			// 1
+	C1 stringItem { isSqlNullable = yes } ;  			// 0
+	C2 stringItem { isSqlNullable = no } ;  			// 0
+	C3 stringItem { isSqlNullable = "yes" } ;  		// 1
+	C4 stringItem { isSqlNullable = "1" } ;  			// 1
+	D1 stringItem { persistent = yes } ;  			// 0
+	D2 stringItem { persistent = no } ;  			// 0
+	D3 stringItem { persistent = "yes" } ;  		// 1
+	D4 stringItem { persistent = "1" } ;  			// 1
+	E1 charItem { sqlVariableLen = yes } ;  		// 0
+	E2 charItem { sqlVariableLen = no } ;  			// 0
+	E3 charItem { sqlVariableLen = "yes" } ;  		// 1
+	E4 charItem { sqlVariableLen = "1" } ;  			// 1
+	F1 stringItem { maxLen = 0 } ; 					// 1 Property: MaxLen.  This property requires an integer value greater than 0
+	F2 stringItem { maxLen = -100 } ; 				// 1 Property: MaxLen.  This property requires an integer value greater than 0
+	F3 stringItem { maxLen = "a" } ; 				// 1
+	F4 stringItem { maxLen = 100 } ;  				// 0
+	F9 intItem { maxLen = 100 } ; 					// 1 Property maxLen must be defined with an item of primitive type string
+	G1 charItem { sqlDataCode = 0 } ; 				// 1 The sqlDataCode value 0 cannot be used with the primitive type char
+	G2 charItem { sqlDataCode = -100 } ; 			// 1 The sqlDataCode value -100 cannot be used with the primitive type char
+	G3 charItem { sqlDataCode = "1" } ; 			// 1
+	G4 charItem { sqlDataCode = 453 } ; 			// 0
+	G5 stringItem { sqlDataCode = 453 } ; 			// 1
+	G6 blobItem { sqlDataCode = 453 } ; 			// 1 The sqlDataCode property cannot be used with the type blob
+	G7 clobItem { sqlDataCode = 453 } ; 			// 1 The sqlDataCode property cannot be used with the type clob
+end
+
+Record sqlItemPropertiesInFixedRecord type sqlRecord// 0  
+	10 A1 charItem { column = "column_a" } ;  		// 0
+	10 A2 charItem { column = column_a } ;  		// 1
+	10 B1 charItem { isReadOnly = yes } ;  			// 0
+	10 B2 charItem { isReadOnly = no } ;  			// 0
+	10 B3 charItem { isReadOnly = "yes" } ;  		// 1
+	10 B4 charItem { isReadOnly = "1" } ;  			// 1
+	10 C1 charItem { isSqlNullable = yes } ;  			// 0
+	10 C2 charItem { isSqlNullable = no } ;  			// 0
+	10 C3 charItem { isSqlNullable = "yes" } ; 	 	// 1
+	10 C4 charItem { isSqlNullable = "1" } ;  			// 1
+	10 D1 charItem { persistent = yes } ;  			// 0
+	10 D2 charItem { persistent = no } ;  			// 0
+	10 D3 charItem { persistent = "yes" } ;  		// 1
+	10 D4 charItem { persistent = "1" } ;  			// 1
+	10 E1 charItem { sqlVariableLen = yes } ;  		// 0
+	10 E2 charItem { sqlVariableLen = no } ;  		// 0
+	10 E3 charItem { sqlVariableLen = "yes" } ;  	// 1
+	10 E4 charItem { sqlVariableLen = "1" } ;  		// 1
+	10 F1 charItem { maxLen = 0 } ; 				// 2 This property requires an integer value greater than 0 | Property maxLen must be defined with an item of primitive type string
+	10 F2 charItem { maxLen = -100 } ; 				// 2 This property requires an integer value greater than 0 | Property maxLen must be defined with an item of primitive type string
+	10 F3 charItem { maxLen = "1" } ; 				// 1
+	10 F5 charItem { maxLen = 100 } ; 				// 1 Property maxLen must be defined with an item of primitive type string
+	10 F6 unicodeItem { maxLen = 100 } ; 			// 1 Property maxLen must be defined with an item of primitive type string
+	10 G1 charItem { sqlDataCode = 0 } ; 			// 1 The sqlDataCode value 0 cannot be used with the primitive type char
+	10 G2 charItem { sqlDataCode = -100 } ; 		// 1 The sqlDataCode value -100 cannot be used with the primitive type char
+	10 G3 charItem { sqlDataCode = "a" } ; 			// 1
+	10 G4 charItem { sqlDataCode = 453 } ; 			// 0
+end
+
+
+Record ValidSqlRecord type SQLRecord   	// 0
+	{tableNames = [ ["table1"] ] } 
+	aString string ; 					// 0  
+	aClob clob ; 						// 0  
+	aBlob blob ; 						// 0  
+	aNum num(10) ; 						// 0 
+	aChar charItem ; 					// 0  
+	aStringArray string [] ; 			// 0
+	bStringArray string [10] ; 			// 0
+	embed FlexEmbedRecord ; 			// 0
+	aRec FlexEmbedRecord ; 				// 0
+	aRecArray FlexEmbedRecord[] ; 		// 0
+	bRecArray FlexEmbedRecord[10] ; 	// 0
+end
+
+Record ValidFixedSqlRecord type SQLRecord   // 0
+	{tableNames = [ ["table1"] ] } 
+	10 aChar charItem ; 					// 0  
+	10 aDecimal decimal(20,12) ; 			// 0
+	10 embed FixedEmbedRecord ; 			// 0
+	10 embed BasicFlatEmbedRecord ; 		// 1 The embedded record BasicFlatEmbedRecord must be an SQL record
+	
+end
+
+Record FlexEmbedRecord type SQLRecord { 	//0 
+	tableNames = [ ["table1"] ],  
+	keyItems = [ cid ] 					//0
+	}	
+	cId int ; 				// 0
+	cString string ; 		// 0
+	cMoneny money ; 		// 0
+end
+
+Record FixedEmbedRecord type SQLRecord 	// 0
+	{tableNames = [ ["table1"] ] } 
+	10 bChar charItem ; 				// 0
+	10 bMoney money ; 					// 0
+end
+
+Record BasicFlexEmbedRecord type basicRecord 
+	cChar charItem ; 	// 0
+	cMoney money ; 		// 0
+end
+
+Record BasicFixedEmbedRecord type basicRecord 
+	10 dChar charItem ; 		// 0
+		20 ddChar charItem ; 	// 0
+	10 dMoney money ; 			// 0
+end
+
+Record BasicFlatEmbedRecord type basicRecord 
+	10 eChar charItem ; 		// 0
+	10 eMoney money ; 			// 0
+end
+
+
+Record InvalidSQLRecord type SQLRecord
+	{tableNames = [ ["table1"] ] } 
+	include1 FixedEmbedRecord ; 		// 0
+	include2 BasicFixedEmbedRecord ; 	// 0
+	include3 BasicFlatEmbedRecord ; 	// 0
+	embed BasicFixedEmbedRecord ; 		// 1 Structured records can be embedded only in other structured records
+	* charItem ; 						// 0
+end
+
+Record InvalidFixedSQLRecord type SQLRecord // 0
+	{tableNames = [ ["table1"] ] } 
+	10	aString string ; 					// 1 string is not a valid type for an item in a structured record
+	10	aClob clob ; 						// 1 clob is not a valid type for an item in a structured record
+	10  aBlob blob ; 						// 1 blob is not a valid type for an item in a structured record
+	10  aNum num(10) ; 						// 0
+	10  aChar charItem ; 					// 1 SQLRecords cannot be substructured
+		20 bChar charItem ; 				// 0
+	10  * charItem ; 						// 1 Filler structure item names are not allowed in SQL records
+	10  arrayA int[10] ; 					// 1 Occurs are not allowed to be used in SQL records
+	10  arrayB int[] ; 						// 1 Dynamic arrays cannot be used in structured records
+	10  arec FixedEmbedRecord ; 			// 1 SQLRecords cannot be substructured
+	10  brec FlexEmbedRecord ; 				// 1 The part FlexEmbedRecord could not be resolved to a data item or structured record
+	10  crec BasicFlexEmbedRecord ; 		// 1 could not be resolved to a data item or structured record
+	10  drec BasicFlatEmbedRecord ; 		// 1 SQLRecords cannot be substructured
+	10  erec BasicFixedEmbedRecord ; 		// 1 SQLRecords cannot be substructured
+	10  embed BasicFlexEmbedRecord ; 		// 1 Only structured records can be embedded in structured records
+	10  embed FlexEmbedRecord ; 			// 1 Only structured records can be embedded in structured records
+	10  aRecArray FlexEmbedRecord[] ; 		// 1 The part FlexEmbedRecord could not be resolved to a data item or structured record.
+	10  bRecArray FlexEmbedRecord[10] ; 	// 1 The part FlexEmbedRecord could not be resolved to a data item or structured record.
+end
+	
+
+Record InvalidRec1 type SQLRecord { // 0
+	tableNames = "table1", 			// 1
+	keyItems =   "id" 				// 1
+	} 								// 0
+	id string ; 					// 0
+	desc String ; 					// 0
+end
+
+Record InvalidRec2 type SQLRecord { 					// 0
+	tableNames =  ["table1" , "table2"], 				// 1
+	keyItems = [ myid ], 								// 1 property value myid must be defined in the SQL record 
+	defaultSelectCondition = "table1.id = table2.id2" 	// 1 This property requires an SQL string enclosed in the sql and end keywords.
+	} 				//  0
+	id string ; 	// 0
+	id2 string ; 	// 0
+	desc string ; 	// 0
+end
+
+Record InvalidRec3 type SQLRecord { 							// 0
+	defaultSelectCondition = #sqlcondition{ T1.id = 1T2.id3 },
+	tableNames =  [[table1, "T1" ], ["table2", "T2"]], 			// 2
+	keyItems = [ "id1" , id2 ] 								//1
+
+	} //  0
+	id1 string ; 	// 0
+	id2 string ; 	// 0
+	id3 string ; 	// 0
+	desc string ; 	// 0
+end
+

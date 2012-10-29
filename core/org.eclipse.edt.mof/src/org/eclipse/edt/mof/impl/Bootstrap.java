@@ -64,7 +64,7 @@ public class Bootstrap {
 	static EDataType EList;
 	
 	Bootstrap() {
-		env = Environment.INSTANCE;
+		env = Environment.getCurrentEnv();
 	}
 	
 	Bootstrap(IEnvironment env) {
@@ -541,7 +541,7 @@ public class Bootstrap {
 		EDataType type = JavaObject;
 		type.setName("JavaObject");
 		type.setPackageName(MofFactory.PackageName);
-		type.setJavaClassName("java.lang.Object");
+		type.setJavaClassName(EDataType.EDataType_JavaObject);
 //		env.saveType(type);
 		return type;
 	}
@@ -550,7 +550,7 @@ public class Bootstrap {
 		EDataType type = EString;
 		type.setName("EString");
 		type.setPackageName(MofFactory.PackageName);
-		type.setJavaClassName("java.lang.String");
+		type.setJavaClassName(EDataType.EDataType_String);
 //		env.saveType(type);
 		return type;
 	}
@@ -558,7 +558,7 @@ public class Bootstrap {
 		EDataType type = EBoolean;
 		type.setName("EBoolean");
 		type.setPackageName(MofFactory.PackageName);
-		type.setJavaClassName("java.lang.Boolean");
+		type.setJavaClassName(EDataType.EDataType_Boolean);
 //		env.saveType(type);
 		return type;
 	}
@@ -567,7 +567,7 @@ public class Bootstrap {
 		EDataType type = EInt32;
 		type.setName("EInt32");
 		type.setPackageName(MofFactory.PackageName);
-		type.setJavaClassName("java.lang.Integer");
+		type.setJavaClassName(EDataType.EDataType_Int32);
 		return type;
 	}
 
@@ -575,7 +575,7 @@ public class Bootstrap {
 		EDataType type = EFloat;
 		type.setName("EFloat");
 		type.setPackageName(MofFactory.PackageName);
-		type.setJavaClassName("java.lang.Float");
+		type.setJavaClassName(EDataType.EDataType_Float);
 		return type;
 	}
 	
@@ -583,7 +583,7 @@ public class Bootstrap {
 		EDataType type = EDecimal;
 		type.setName("EDecimal");
 		type.setPackageName(MofFactory.PackageName);
-		type.setJavaClassName("java.math.BigDecimal");
+		type.setJavaClassName(EDataType.EDataType_Decimal);
 		return type;
 	}
 
@@ -591,7 +591,7 @@ public class Bootstrap {
 		EDataType type = EList;
 		type.setName("EList");
 		type.setPackageName(MofFactory.PackageName);
-		type.setJavaClassName("java.util.List");
+		type.setJavaClassName(EDataType.EDataType_List);
 		ETypeParameterImpl parm = new ETypeParameterImpl();
 		parm.setSlots(new Slot[ETypeParameterImpl.totalSlots()]);
 		parm.setEClass(getTypeParameterClass());

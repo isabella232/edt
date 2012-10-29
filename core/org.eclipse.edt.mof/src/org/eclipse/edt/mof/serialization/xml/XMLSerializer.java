@@ -93,7 +93,7 @@ public class XMLSerializer implements Serializer {
 
 	private void writeObject(Object object) {
 		if (object instanceof EEnumLiteral) {
-			writer.print(((EEnumLiteral)object).getName());
+			writer.print(((EEnumLiteral)object).getCaseSensitiveName());
 			return;
 		}
 		
@@ -136,9 +136,9 @@ public class XMLSerializer implements Serializer {
 		}
 		String elementName;
 		if (target == null) {
-			elementName = object.getEClass().getName();
+			elementName = object.getEClass().getCaseSensitiveName();
 		} else {
-			elementName = target.getName();
+			elementName = target.getCaseSensitiveName();
 		}
 			
 		writeElementStart(elementName, object);
@@ -212,7 +212,7 @@ public class XMLSerializer implements Serializer {
 
 	void writeAttributeValue(EField field, Object value) {
 		if (value == null || ("".equals(value) && !field.isNullable()) || field.isTransient()) return;
-		writer.print(field.getName());
+		writer.print(field.getCaseSensitiveName());
 		writer.print('=');
 		writer.print('"');
 		EMemberContainer eClass = field.getDeclarer();
@@ -230,11 +230,11 @@ public class XMLSerializer implements Serializer {
 			} 
 			else if(o instanceof EEnumLiteral && isFieldArrayOfEEnum(field)) {
 				writer.print('<');
-				writer.print(field.getName());
+				writer.print(field.getCaseSensitiveName());
 				writer.print('>');
-				writer.print(((EEnumLiteral)o).getName());
+				writer.print(((EEnumLiteral)o).getCaseSensitiveName());
 				writer.print("</");
-				writer.print(field.getName());
+				writer.print(field.getCaseSensitiveName());
 				writer.print('>');
 			}
 			else if (o instanceof EObject) {
@@ -273,9 +273,9 @@ public class XMLSerializer implements Serializer {
 	void writeObjectReference(EField target, EObject obj) {
 		String elementName;
 		if (target == null) {
-			elementName = ((EObject)obj).getEClass().getName();
+			elementName = ((EObject)obj).getEClass().getCaseSensitiveName();
 		} else {
-			elementName = target.getName();
+			elementName = target.getCaseSensitiveName();
 		}
 		writer.print('<');
 		writer.print(elementName);
@@ -293,7 +293,7 @@ public class XMLSerializer implements Serializer {
 
 	void writeTypeReference(EField target, MofSerializable obj) {
 		writer.print('<');
-		writer.print(target.getName());
+		writer.print(target.getCaseSensitiveName());
 		writer.print(" href=\"");
 		writer.print(xmlEncode(obj.getMofSerializationKey()));
 		writer.println("\"/>");

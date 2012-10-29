@@ -1,0 +1,159 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program TEST03 type VGWebTransaction
+	{msgTablePrefix = "MSGT"}
+	
+	page03  PAGE03;		//0
+	
+	function main()
+		page03.BUTTONVALUE = "AGAIN";
+		while ( page03.BUTTONVALUE == "AGAIN" )
+			converse page03;
+		end
+	end	
+end
+
+program TEST03a type VGWebTransaction
+	{msgTablePrefix = "MSGT", allowUnqualifiedItemReferences=yes}
+	
+	page03  PAGE03;		//0
+	
+	function main()
+		page03.BUTTONVALUE = "AGAIN";
+		while ( page03.BUTTONVALUE == "AGAIN" )
+			converse page03;
+		end
+	end	
+end
+
+Record PAGE03 type VGUIRecord {
+	runValidatorFromProgram = yes, 			//0
+	validatorFunction = rcdValidator,		//0
+	commandValueItem = BUTTONVALUE			//0
+	}
+	
+	10 NAME char(32) { 
+		displayName = "Enter Name:  ",
+		runValidatorFromProgram = no,
+		validatorFunction = nameValidator,
+		validationOrder = 2,
+		uiType = inputOutput 
+		};
+	10 ID  int { 
+		displayName = "Enter ID:  ",
+		runValidatorFromProgram = yes,
+		validatorFunction = idValidator,	//0
+		validationOrder = 1,
+		uiType = inputOutput
+		};
+		
+	10 BUTTON1 char(8)  {
+		displayName =  "Again",
+		uiType = submit
+		} = "AGAIN";
+		
+	10 BUTTON2 char(8) {
+		displayName = "Quit",
+		uiType = submitBypass
+		} = "QUIT" ;
+		
+	10 BUTTONVALUE char(8) {
+		// uiType = none
+		};
+end
+
+Record PAGE03a type VGUIRecord {
+	runValidatorFromProgram = no, 			//0
+	validatorFunction = rcdValidator,		//0
+	commandValueItem = BUTTONVALUE			//0
+	}
+	
+	10 NAME char(32) { 
+		displayName = "Enter Name:  ",
+		validatorFunction = nameValidator,
+		validationOrder = 2,
+		uiType = inputOutput 
+		};
+	10 ID  int { 
+		displayName = "Enter ID:  ",
+		runValidatorFromProgram = no,
+		validatorFunction = idValidator,	//0
+		validationOrder = 1,
+		uiType = inputOutput
+		};
+		
+	10 BUTTON1 char(8)  {
+		displayName =  "Again",
+		uiType = submit
+		} = "AGAIN";
+		
+	10 BUTTON2 char(8) {
+		displayName = "Quit",
+		uiType = submitBypass
+		} = "QUIT" ;
+		
+	10 BUTTONVALUE char(8) {
+		// uiType = none
+		};
+end
+
+Record PAGE03b type VGUIRecord {
+	runValidatorFromProgram = no,
+	validatorFunction = rcdValidator,		//0
+	commandValueItem = BUTTONVALUE			//0
+	}
+	
+	10 NAME char(32) { 
+		displayName = "Enter Name:  ",
+		validatorFunction = nameValidator,
+		validationOrder = 2,
+		uiType = inputOutput 
+		};
+	10 ID  int { 
+		displayName = "Enter ID:  ",
+		runValidatorFromProgram = no,
+		validatorFunction = idValidator,	//0
+		validationOrder = 1,
+		uiType = inputOutput
+		};
+		
+	10 BUTTON1 char(8)  {
+		displayName =  "Again",
+		uiType = submit
+		} = "AGAIN";
+		
+	10 BUTTON2 char(8) {
+		displayName = "Quit",
+		uiType = submitBypass
+		} = "QUIT" ;
+		
+	10 BUTTONVALUE char(8) {
+		// uiType = none
+		};
+end
+
+function nameValidator ()
+	if ( NAME != "ALEX" )
+		syslib.setError( NAME, "0103", "ALEX" ) ;
+	end
+end
+
+function idValidator ()
+	foo2 = 10;										//4 TEST03 - foo2 cannot be resolved | PAGE03a - foo2 cannot be resolved | PAGE03b - foo2 cannot be resolved | TEST03a - foo2 cannot be resolved
+end
+
+function rcdValidator()								//0
+	if ( ID != 100 )								//1 TEST03 - ID cannot be resolved
+		foo = 10;									//4 TEST03 - foo cannot be resolved | PAGE03a - foo cannot be resolved | PAGE03b - foo cannot be resolved | TEST03a - foo cannot be resolved
+	end												//0
+end													//0

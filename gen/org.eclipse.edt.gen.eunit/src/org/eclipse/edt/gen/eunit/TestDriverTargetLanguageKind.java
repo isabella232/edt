@@ -28,7 +28,7 @@ public enum TestDriverTargetLanguageKind {
 
 	
 	public boolean doesTargetLangTypeMatch(EnumerationEntry eglTestTargetLangEnum){		
-		String eglTestTargetLang = eglTestTargetLangEnum.getName();
+		String eglTestTargetLang = eglTestTargetLangEnum.getCaseSensitiveName();
 		switch(this){
 		case JAVA:
 			if(eglTestTargetLang.equalsIgnoreCase(EGL_targetLangKind_JAVA))

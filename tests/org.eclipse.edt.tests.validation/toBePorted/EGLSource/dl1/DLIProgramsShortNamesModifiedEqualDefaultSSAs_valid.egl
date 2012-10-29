@@ -1,0 +1,734 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+// This file contains modified test SSAs where the content of the modified SSA
+// is exactly what the default SSA should be.
+// This doesn't mean that there aren't other SSAs that are valid. 
+// All of the part names are short enough to be used asd DLI names and contain valid characters
+// It isn't quite true that these modified SSAs are the default ones
+// Default ones would never use coursenoVar and empnoVar but would use courseNo and empno instead.
+// However, this won't work when you have multiple records or record arrays
+// that point to the same dli segment because you will end up with ambiguous
+// references.  Therefore, the test case was changed to get around this 
+// ambiguity.  Just substitute courseno for coursenovar and 
+// empno for empnoVar in all of these SSAs and you will have the defaults. 
+
+// valid PSBRecord, dliSegments and DataItems to use in statements
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	 
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end		 
+DataItem Name char(18) { dliFieldName ="NAME" } end		 
+
+Record Course type DLISegment 					 
+{ segmentName="COURSE", KeyItem=courseNo }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record Prereq type DLISegment { KeyItem=courseNo } 
+	10 courseNo CourseNo;							 
+	10 title char(33);								 
+end
+
+Record Offering type DLISegment 					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record Teacher type DLISegment 					 
+{ segmentName="TEACHER", KeyItem=empNo }		 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+end 
+
+Record Student type DLISegment	 				 
+	{ segmentName="STUDENT" }						 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+	10 grade char(1);								 
+end
+Record EducationPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Course },		 
+	   @Relationship{											 
+     		segmentRecord=Prereq, parentRecord=Course },	    	   
+       @Relationship{											 
+      		segmentRecord=Offering,parentRecord=Course },  	  
+       @Relationship{											 
+      		segmentRecord=Teacher,parentRecord=Offering},  
+	   @Relationship{											 
+	     	segmentRecord=Student, parentRecord=Offering}	 
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Offering },	 
+	   @Relationship{								 
+	     segmentRecord=Course,parentRecord=Offering},	 
+	   @Relationship{										 
+	     segmentRecord=Teacher,parentRecord=Offering},	 
+	   @Relationship{										 
+	     segmentRecord=Student,parentRecord=Offering}	 
+	  ] }};
+end
+
+Program testModifiedEqualsDefaultSSAs type textUIProgram 
+// In this program, the SSAs will all be modified, but they will be modified to be 
+// exactly what the defalut SSAs would be.
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb,
+         handleHardDLIErrors = yes }	 
+  }
+  course course;						   
+  prereq prereq;						 
+  offering offering;					 
+  teacher teacher;						 
+  student student;						 
+  course2 course;						   
+  prereq2 prereq;						 
+  offer2 offering;						 
+  teacher2 teacher;						 
+  student2 student;						 
+  courses course[20];					   
+  prereqs prereq[5];					 
+  offers offering[3];					 
+  teachers teacher[5];					 
+  students student[25];					   
+  xloc char(4);	
+  coursenoVar char(3);	
+  empnoVar char(6);					 
+
+  // PSB Declaration
+  psb EducationPSB ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+  	function addStmt()		
+  	// add every segment with no modifiers and modified = default SSAs	
+  	  add course  							 
+  	   		with #dli{ISRT course};			 
+  	  add offering 							 
+  	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   offering};		 
+  	  add prereq  							 
+  	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   prereq};			   	  
+  	  add teacher							 
+  	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   offering			  
+  	  					   teacher};		   	  
+  	  add student 							 
+   	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   offering			  
+  	  					   student};		  	  
+   // add every segment with another PCB and modified = default SSAs 
+   	  add offering usingPCB psb.offeringPCB 	 
+	   	  with #dli{ISRT offering};			 
+  	  add course usingPCB psb.offeringPCB 		 
+  	      with #dli{ISRT offering (XLOC = :XLOC) 
+  	  					 course};			 
+  	  add teacher usingPCB psb.offeringPCB 		 
+  	      with #dli{ISRT offering (XLOC = :XLOC) 
+  	  					 teacher};			   	  
+  	  add student usingPCB psb.offeringPCB 		 	 
+  	      with #dli{ISRT offering (XLOC = :XLOC) 
+  	  					 student};			   	  
+  	// add arrays of every segment with no modifiers and modified = default SSAs	
+  	  add courses  							 
+  	   		with #dli{ISRT course};			   	  
+ 	  add offers 							 
+  	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   offering};		 
+  	  add prereqs  							 
+  	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   prereq};			   	  
+  	  add teachers							 
+  	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   offering			  
+  	  					   teacher};		   	  
+  	  add students							 
+   	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   offering			  
+  	  					   student};		    	  
+   // add arrays of every segment with another PCB and modified = default SSAs 
+   	  add offers usingPCB psb.offeringPCB 		 
+	   	  with #dli{ISRT offering};			 
+  	  add courses usingPCB psb.offeringPCB 		 
+  	      with #dli{ISRT offering (XLOC = :XLOC) 
+  	  					 course};			 
+  	  add teachers usingPCB psb.offeringPCB 	 
+  	      with #dli{ISRT offering (XLOC = :XLOC) 
+  	  					 teacher};			   	  
+  	  add students usingPCB psb.offeringPCB 	 	 
+  	      with #dli{ISRT offering (XLOC = :XLOC) 
+  	  					 student};			    	    	  
+   // add every segment using path calls and modified = default SSAa
+      add course, prereq 					 
+  	  		with #dli{ISRT course*D  
+  	  					   prereq};			       
+      add course, offering, teacher 		 
+  	  		with #dli{ISRT course*D  
+  	  					   offering 		  
+  	  					   teacher};		        
+      add offering, teacher 				 
+  	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   offering*D		  
+  	  					   teacher};		        
+      add course, offering, student 		 
+  	  		with #dli{ISRT course*D  
+  	  					   offering			  
+  	  					   student};		        
+      add offering, student 				 
+  	  		with #dli{ISRT course (course# = :coursenoVar) 
+  	  					   offering*D		  
+  	  					   student};		         
+  // add every segment using path calls, another PCB, and modified = default SSAs	
+      add offering, course usingPCB psb.offeringPCB  
+      	  with #dli{ISRT offering*D  
+      	  				 course}; 			 
+      add offering, teacher usingPCB psb.offeringPCB         	  	  
+          with #dli{ISRT offering*D   
+      	  				 teacher}; 			  
+      add offering, student 				  
+          with #dli{ISRT offering*D  
+      	  				 student} usingPCB psb.offeringPCB ;  
+   	end  
+  	function deleteStmt() 	
+  	// modified = default SSAs	  
+	  delete course  					 
+	  		with #dli{DLET course};		 
+	  delete prereq  					 
+	  		with #dli{DLET prereq};		 
+	  delete offering  					 
+	  		with #dli{DLET offering};	 
+	  delete teacher  					 
+	  		with #dli{DLET teacher};	 
+	  delete student  					 
+	  		with #dli{DLET student};	 
+	  delete course usingPCB psb.offeringPCB 
+	  		with #dli{DLET course};		 
+	  delete offering usingPCB psb.offeringPCB 
+	  		with #dli{DLET offering};	 
+	  delete teacher usingPCB psb.offeringPCB 
+	  		with #dli{DLET teacher};	 
+	  delete student usingPCB psb.offeringPCB 
+	  		with #dli{DLET student};	 	  		
+  	end 	
+ 	function getStmt() 
+    // get every segment with no modifiers and modified = default SSAs	
+		get course 										 	
+			with #dli{GU course (course# = :coursenoVar)};	 
+		get prereq 										 	
+			with #dli{GU course (course# = :coursenoVar)  	 
+					     prereq  };						  
+		get offering 						  			 
+			with #dli{GU course (course# = :coursenoVar)  	 
+					     offering };					  
+		get teacher 									 
+			with #dli{GU course (course# = :coursenoVar) 	 
+					     offering						 
+					     teacher (emp# = :empnoVar) };		  
+		get student 									 
+			with #dli{GU course (course# = :coursenoVar)  	 
+					     offering						 
+					     student   };					  
+    // get every segment with another PCB and modified = default SSAs	
+		get offering usingPCB psb.offeringPCB 			 
+			with #dli{GU  offering (XLOC = :XLOC) }; 
+		get course usingPCB psb.offeringPCB				 
+			with #dli{GU offering (XLOC = :XLOC)	 
+					 	 course (course# = :coursenoVar) }; 
+		get teacher usingPCB psb.offeringPCB 			 
+			with #dli{GU  offering (XLOC = :XLOC)	 
+						  teacher }; 
+		get student usingPCB psb.offeringPCB  			 
+			with #dli{GU  offering (XLOC = :XLOC)	 
+						  student };				 
+  	// get arrays of every segment with no modifiers and modified = default SSAs	
+		get courses 									 	
+			with #dli{GU course (course# = :coursenoVar)	 
+					  GN course			 };				 
+		get prereqs 									 	
+			with #dli{GU course (course# = :coursenoVar)    
+					     prereq    				    	 
+					  GN prereq			 };				  
+		get offers	 									 
+			with #dli{GU course (course# = :coursenoVar) 	 
+					     offering  				    	 
+					  GN offering		 };				  
+		get teachers 									 
+			with #dli{GU course (course# = :coursenoVar)  	 
+					     offering						 
+					     teacher (emp# = :empnoVar) 	  	 
+					  GN teacher			 };			 
+		get students 									 
+			with #dli{GU course (course# = :coursenoVar)  	 
+					     offering						 
+					     student    					 
+					  GN student			 };			  		
+		
+    // get arrays of every segment with another PCB and modified = default SSAs	 
+		get offers usingPCB psb.offeringPCB 			 
+			with #dli{GU  offering (XLOC = :XLOC)	 
+					  GN offering		 };			 
+		get courses usingPCB psb.offeringPCB			 
+			with #dli{GU offering (XLOC = :XLOC)	 
+					 	 course (course# = :coursenoVar) 
+					  GN course			 };			 
+		get teachers usingPCB psb.offeringPCB 			 
+			with #dli{GU  offering (XLOC = :XLOC)	 
+						  teacher	 
+					  GN teacher			 };		 
+		get students usingPCB psb.offeringPCB  			 
+			with #dli{GU  offering (XLOC = :XLOC)	 
+						  student  					 
+					  GN student			 };		   
+    // get every segment using path calls and modified = default SSAs	
+		get course, prereq								 	
+			with #dli{GU course*D (course# = :coursenoVar)  
+					     prereq  };						  
+		get course, offering 						  	 
+			with #dli{GU course*D (course# = :coursenoVar)  
+					     offering };					  
+		get course, offering, teacher 					 
+			with #dli{GU course*D (course# = :coursenoVar)  
+					     offering*D						 
+					     teacher (emp# = :empnoVar) };		  
+		get course, offering, student 					 
+			with #dli{GU course*D (course# = :coursenoVar)  
+					     offering*D						 
+					     student   };					  		
+		get offering, teacher 							 
+			with #dli{GU course (course# = :coursenoVar) 	 
+					     offering*D						 
+					     teacher (emp# = :empnoVar) };		  
+		get offering, student 							 
+			with #dli{GU course (course# = :coursenoVar) 	 
+					     offering*D						 
+					     student   };					  		
+		
+    // get every segment using path calls, another PCB, and modified = default SSAs
+		get offering, course usingPCB psb.offeringPCB		 
+			with #dli{GU offering*D (XLOC = :XLOC)		 
+					 	 course (course# = :coursenoVar) }; 
+		get offering, teacher usingPCB psb.offeringPCB 		 
+			with #dli{GU  offering*D (XLOC = :XLOC)		 
+						  teacher (emp# = :empnoVar)};		  
+		get offering, student usingPCB psb.offeringPCB  	 
+			with #dli{GU  offering*D (XLOC = :XLOC)		 
+						  student };					 
+	end  
+ 	function getForUpdateStmt() 
+ 	//Take the statements from getStmt() and add the forupdate modifier
+    // get every segment with no modifiers and modified = default SSAs
+		get course forupdate 						 	
+			with #dli{GHU course (course# = :coursenoVar) }; 
+		get prereq forupdate 						 	
+			with #dli{GHU  course (course# = :coursenoVar)  
+					  		 prereq };					 
+		get offering forupdate 						 	
+			with #dli{GHU  course (course# = :coursenoVar)  
+					   		offering };					 
+		get teacher forupdate 						 	
+			with #dli{GHU  course (course# = :coursenoVar)  
+					  	   offering  					 
+					  	   teacher (emp# = :empnoVar) }; 	 
+		get student forupdate 						 	
+			with #dli{GHU  course (course# = :coursenoVar)  
+						   offering  					 
+						   student        };		 	 
+    // get every segment with another PCB and modified = default SSAs  
+		get offering forupdate usingPCB psb.offeringPCB	 	
+			with #dli{GHU offering (xloc = :xloc) };	 
+		get course forupdate usingPCB psb.offeringPCB	 	
+			with #dli{GHU offering (xloc = :xloc) 		 
+					  	  course (course# = :coursenoVar) }; 
+		get teacher forupdate usingPCB psb.offeringPCB   	
+			with #dli{GHU offering (xloc = :xloc) 		 
+						  teacher (emp# = :empnoVar) };	  
+		get student forupdate usingPCB psb.offeringPCB   	
+			with #dli{GHU offering (xloc = :xloc) 		 
+					 	 student          };			  
+		
+  	// get arrays of every segment with no modifiers and modified = default SSAs
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+	
+    // get arrays of every segment with another PCB and modified = default SSAs
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+		  
+    // get every segment using path calls and modified = default SSAs
+		get course, prereq forupdate					 	
+			with #dli{GHU  course*d (course# = :coursenoVar) 	 
+					   prereq };						 
+		get course, offering forupdate 					 	
+			with #dli{GHU  course*d (course# = :coursenoVar)	 
+					   offering };						 
+		get course, offering, teacher forupdate 		 	
+			with #dli{GHU  course*d (course# = :coursenoVar) 	 
+					   offering*d  						 
+					   teacher (emp# = :empnoVar) }; 		 
+		get course, offering, student forupdate 		 	
+			with #dli{GHU  course*d (course# = :coursenoVar) 	 
+					   offering*d  						 
+					   student        };		 		 		
+		get offering, teacher forupdate 				 	
+			with #dli{GHU  course (course# = :coursenoVar) 	 
+					   offering*d  						 
+					   teacher (emp# = :empnoVar) }; 		 
+		get offering, student forupdate			 		 	
+			with #dli{GHU  course (course# = :coursenoVar) 	 
+					   offering*d  						 
+					   student        };		 		 			
+		
+    // get every segment using path calls, another PCB, and modified = default SSAs
+     	get offering, course forupdate usingPCB psb.offeringPCB		 
+			with #dli{GHU offering*d (xloc = :xloc)			 		 
+					  course (course# = :coursenoVar) };			      	
+      	get	offering, teacher forupdate usingPCB psb.offeringPCB 	  
+			with #dli{GHU offering*D (xloc = :xloc) 				 
+					  teacher (emp# = :empnoVar) };				        	      	  	  
+     	get offering, student forupdate usingPCB psb.offeringPCB  	   
+			with #dli{GHU offering*D (xloc = :xloc) 				 
+					  student          };						       	
+	end   
+ 	function getNextStmt() 
+  	//Take the statements from getStmt() and add the next modifier	
+    // get every segment with no modifiers and modified = default SSAs
+		get next course							 	
+			with #dli{GN course			 };		 		
+		get next prereq							 	
+			with #dli{GN prereq			 };		 	
+		get next offering						 	
+			with #dli{GN offering			 };	 	
+		get next teacher						 	
+			with #dli{GN teacher			 };	 	
+		get next student						 	
+			with #dli{GN student			 };	 	
+    // get every segment with another PCB and modified = default SSAs
+		get next offering usingPCB psb.offeringPCB 	 
+			with #dli{GN offering			 };	 			
+		get next course usingPCB psb.offeringPCB 	 
+			with #dli{GN course			 };		 
+		get next teacher usingPCB psb.offeringPCB 	 
+			with #dli{GN teacher			 };	 
+		get next student usingPCB psb.offeringPCB 	 
+			with #dli{GN student			 };	 
+  	// get arrays of every segment with no modifiers and modified = default SSAs	
+		get next courses						 	
+			with #dli{GN course			 };		 		
+		get next prereqs						 	
+			with #dli{GN prereq			 };		 	
+		get next offers							 	
+			with #dli{GN offering			 };	 	
+		get next teachers						 	
+			with #dli{GN teacher			 };	 	
+		get next students						 	
+			with #dli{GN student			 };	 	
+    // get arrays of every segment with another PCB and modified = default SSAs
+		get next offers usingPCB psb.offeringPCB 	 
+			with #dli{GN offering			 };	 			
+		get next courses usingPCB psb.offeringPCB 	 
+			with #dli{GN course			 };		 
+		get next teachers usingPCB psb.offeringPCB 	 
+			with #dli{GN teacher			 };	 
+		get next students usingPCB psb.offeringPCB 	 
+			with #dli{GN student			 };	   
+    // get every segment using path calls and modified = default SSAs
+		get next course, prereq 			 
+			with #dli{GN course*D			   	 
+						 prereq     };		 					
+		get next course, offering 			 
+			with #dli{GN course*D			   	 
+						 offering   };		 			
+		get next course, offering, student 	 
+			with #dli{GN course*D			   	 
+						 offering*D			 
+						 student     };		 			
+		get next offering, teacher 			 
+			with #dli{GN offering*D			 
+						 teacher     };		 			
+		get next course, offering, student 	 	
+			with #dli{GN course*D			   	 
+						 offering*D			 
+						 student     };		 			
+		get next offering, student 			 
+			with #dli{GN offering*D			 
+						 student     };		 			
+	
+    // get every segment using path calls, another PCB, and modified = default SSAs
+     	get next offering, course usingPCB psb.offeringPCB 	 
+     		with #dli{GN offering*D						 
+						 course     };					 	
+      	get	next offering, teacher usingPCB psb.offeringPCB  
+			with #dli{GN offering*D						       	
+						 teacher     };					 	       	  	  
+     	get next offering, student usingPCB psb.offeringPCB  
+			with #dli{GN offering*D						      	
+						 student     };					 	  
+	end   
+ 	function getNextForUpdateStmt() 
+ 	//Take the statements from getForUpdateStmt() and add the next modifier
+    // get every segment with no modifiers and modified = default SSAs
+		get next course forupdate 					 	
+			with #dli{GHN course  };				 	
+		get next prereq forupdate 					 	
+			with #dli{GHN prereq  };				 
+		get next offering forupdate 				 	
+			with #dli{GHN offering  };				 
+		get next teacher forupdate 					 	
+			with #dli{GHN teacher  };				 
+		get next student forupdate 					 	
+			with #dli{GHN student  };				 
+    // get every segment with another PCB and no modified SSAs 
+		get next offering forupdate usingPCB psb.offeringPCB 	
+			with #dli{GHN offering  };					 
+		get next course forupdate usingPCB psb.offeringPCB 	 	
+			with #dli{GHN course  };					 
+		get next teacher forupdate usingPCB psb.offeringPCB  	
+			with #dli{GHN teacher  };					 
+		get next student forupdate usingPCB psb.offeringPCB  	
+			with #dli{GHN student  };					 
+		
+  	// get arrays of every segment with no modifiers and modified = default SSAs
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+	
+    // get arrays of every segment with another PCB and modified = default SSAs
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+		  
+    // get every segment using path calls and modified = default SSAs
+		get next course, prereq forupdate 				 	
+			with #dli{GHN course*D						 
+						  prereq  };					 
+		get next course, offering forupdate 			 	
+			with #dli{GHN course*D						 
+						  offering  };					 
+		get next course, offering, teacher forupdate 	 	
+			with #dli{GHN course*D						 
+						  offering*D  					 
+						  teacher  };					 
+		get next course, offering, student forupdate 	 	
+			with #dli{GHN course*D						 
+						  offering*D  					 
+						  student  };					 
+		get next offering, teacher forupdate 			 	
+			with #dli{GHN offering*D						 
+						  teacher  };					 
+		get next offering, student forupdate 			 	
+			with #dli{GHN offering*D						 
+						  student  };					 
+    // get every segment using path calls, another PCB, and modified = default SSAs
+     	get next offering, course forupdate usingPCB psb.offeringPCB 	 	
+			with #dli{GHN offering*D						 
+						  course  };					 
+      	get	next offering, teacher forupdate usingPCB psb.offeringPCB 	 	
+			with #dli{GHN offering*D						 
+						  teacher  };					        	  	  
+     	get next offering, student forupdate usingPCB psb.offeringPCB  	 	
+			with #dli{GHN offering*D						 
+						  student  };					   
+	end 
+ 	function getNextInParentStmt() 
+  	//Take the statements from getNextStmt() and add the inParent modifier	
+    // get every segment with no modifiers andmodified = default SSAs
+		get next inparent course 					 
+			with #dli{GNP course  };				 	
+		get next inparent prereq 					 
+			with #dli{GNP prereq  };				 	
+		get next inparent offering 					 
+			with #dli{GNP offering  };				 
+		get next inparent teacher 					 
+			with #dli{GNP teacher  };				 
+		get next inparent student 					 
+			with #dli{GNP student  };				 
+    // get every segment with another PCB and modified = default SSAs
+		get next inparent offering usingPCB psb.offeringPCB	 
+			with #dli{GNP offering  };					 		
+		get next inparent course usingPCB psb.offeringPCB  	 
+			with #dli{GNP course  };					 		
+		get next inparent teacher usingPCB psb.offeringPCB 	 
+			with #dli{GNP teacher  };					 		
+		get next inparent student usingPCB psb.offeringPCB 	 
+			with #dli{GNP student  };					 
+  	// get arrays of every segment with no modifiers and modified = default SSAs
+		get next inparent courses 					 	
+			with #dli{GNP course  };				 			
+		get next inparent prereqs 					 	
+			with #dli{GNP prereq  };				 	
+		get next inparent offers 					 	
+			with #dli{GNP offering  };				 
+		get next inparent teachers 					 	
+			with #dli{GNP teacher  };				 
+		get next inparent students 					 	
+			with #dli{GNP student  };				 
+    // get arrays of every segment with another PCB and modified = default SSAs
+		get next inparent offers usingPCB psb.offeringPCB 	 
+			with #dli{GNP offering };					 	
+		get next inparent courses usingPCB psb.offeringPCB 	 
+			with #dli{GNP course  };					 
+		get next inparent teachers usingPCB psb.offeringPCB	 
+			with #dli{GNP teacher  };					 
+		get next inparent students usingPCB psb.offeringPCB	  	  
+			with #dli{GNP student  };					 
+    // get every segment using path calls and modified = default SSAs
+		get next inparent course, prereq
+			with #dli{GNP course*d						 
+						  prereq  };					 
+		get next inparent course, offering
+			with #dli{GNP course*d						 
+						  offering  };					 
+		get next inparent course, offering, teacher
+			with #dli{GNP course*d						 
+						  offering*d						 
+						  teacher  };					 
+		get next inparent course, offering, student
+			with #dli{GNP course*d						 
+						  offering*d						 
+						  student  };					 
+		get next inparent offering, teacher
+			with #dli{GNP offering*d					 
+						  teacher  };					 
+		get next inparent offering, student
+			with #dli{GNP offering*d					 
+						  student  };					 
+    // get every segment using path calls, another PCB, and modified = default SSAs
+     	get next inparent offering, course usingPCB psb.offeringPCB 	 
+			with #dli{GNP offering*d					 
+						  course  };					 
+      	get	next inparent offering, teacher usingPCB psb.offeringPCB 	        	  	  
+			with #dli{GNP offering*d					 
+						  teacher  };					 
+     	get next inparent offering, student usingPCB psb.offeringPCB 	   
+			with #dli{GNP offering*d					 
+						  student  };					 
+	end   	
+ 	function getNextInParentForUpdateStmt() 
+ 	//Take the statements from getNextForUpdateStmt() and add the inparent modifier
+    // get every segment with no modifiers and modified = default SSAs
+		get next inparent course forupdate 					 	
+			with #dli{GHNP course  };						 	
+		get next inparent prereq forupdate 					 	
+			with #dli{GHNP prereq  };						 	
+		get next inparent offering forupdate 				 
+			with #dli{GHNP offering  };						 	
+		get next inparent teacher forupdate 				 
+			with #dli{GHNP teacher  };						 	
+		get next inparent student forupdate 				 
+			with #dli{GHNP student  };						 	
+    // get every segment with another PCB and modified = default SSAs
+		get next inparent offering forupdate usingPCB psb.offeringPCB	 
+			with #dli{GHNP offering  };								 	
+		get next inparent course forupdate usingPCB psb.offeringPCB  	 
+			with #dli{GHNP course  };								 
+		get next inparent teacher forupdate usingPCB psb.offeringPCB 	 
+			with #dli{GHNP teacher  };								 
+		get next inparent student forupdate usingPCB psb.offeringPCB  	 
+			with #dli{GHNP student  };								 
+		
+  	// get arrays of every segment with no modifiers and modified = default SSAs
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+	
+    // get arrays of every segment with another PCB and modified = default SSAs
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+		  
+    // get every segment using path calls and modified = default SSAs
+		get next inparent course, prereq forupdate 				 
+			with #dli{GHNP course*d								 
+						  prereq  };							 
+		get next inparent course, offering forupdate 			 
+			with #dli{GHNP course*d								 
+						  offering  };							 
+		get next inparent course, offering, teacher forupdate 	 
+			with #dli{GHNP course*d								 
+						  offering*d								 
+						  teacher  };							 
+		get next inparent course, offering, student forupdate 	 
+			with #dli{GHNP course*d								 
+						  offering*d								 
+						  student  };							 
+		get next inparent offering, teacher forupdate 			 
+			with #dli{GHNP offering*d							 
+						  teacher  };							 
+		get next inparent offering, student forupdate 			 
+			with #dli{GHNP offering*d							 
+						  student  };							 
+    // get every segment using path calls, another PCB, and modified = default SSAs
+     	get next inparent offering, course forupdate usingPCB psb.offeringPCB 	 
+     		with #dli{GHNP offering*d										 
+						  course  };										 
+      	get	next inparent offering, teacher forupdate usingPCB psb.offeringPCB 	        	  	  
+      		with #dli{GHNP offering*d										 
+						  teacher  };										 
+     	get next inparent offering, student forupdate usingPCB psb.offeringPCB 	   
+     		with #dli{GHNP offering*d										 
+						  student  };										 
+	end 	
+	   
+  function replaceStmt()
+   // replace every segment with no modifiers and modified = default SSAs	
+  	  replace course  							 
+  	  		with #dli{REPL course } ;				 
+  	  replace offering  						 
+  	  		with #dli{REPL  offering } ;				 
+  	  replace prereq  							 
+  	  		with #dli{REPL  prereq } ;				 
+  	  replace teacher  							 
+  	  		with #dli{REPL  teacher } ;				 
+  	  replace student  							 
+  	  		with #dli{REPL  student } ;				 
+   // replace every segment with another PCB and modified = default SSAs 
+   	  replace offering usingPCB psb.offeringPCB  	 
+  	  		with #dli{REPL  offering } ;				 
+  	  replace course usingPCB psb.offeringPCB  		 
+  	  		with #dli{REPL  course } ;				 
+  	  replace teacher usingPCB psb.offeringPCB  	 
+  	  		with #dli{REPL  teacher } ;				 
+  	  replace student usingPCB psb.offeringPCB  	 
+  	  		with #dli{REPL  student } ;				 	 
+
+ 	// replace arrays of every segment with no modifiers and modified = default SSAs	
+	// can't use replace with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+   	  
+    // replace every segment using path calls (with or without another PCB) and modified = default SSAs
+    // replace replaces whatever was last retrieved, can't specify multiple I/O
+    // objects, Can specify command codes to prevent a retrieved segment from 
+    // being replaced.
+  end
+
+
+end
+  

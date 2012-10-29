@@ -19,27 +19,22 @@ import java_cup.runtime.Symbol;
 
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
-import org.eclipse.edt.compiler.core.ast.InlineDLIStatement;
 import org.eclipse.edt.compiler.core.ast.InlineSQLStatement;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -89,11 +84,6 @@ public class FoldingVisitor extends AbstractASTVisitor{
 		return true;
 	}
 
-	public boolean visit(DataTable dataTable) {
-		addNodeToFoldingRegion(dataTable, fCollapseParts&&fAllowCollapsing);
-		return true;
-	}
-
 	public boolean visit(File file) {
 		return true;
 	}
@@ -139,26 +129,6 @@ public class FoldingVisitor extends AbstractASTVisitor{
 		return false;
 	}
 	
-	public boolean visit(NestedForm nestedForm) {
-		addNodeToFoldingRegion(nestedForm, fCollapseFunctions&&fAllowCollapsing);
-		return true;		
-	}
-	
-	public boolean visit(TopLevelForm form) {
-		addNodeToFoldingRegion(form, fCollapseParts&&fAllowCollapsing);
-		return true;
-	}
-
-	public boolean visit(FormGroup formGroup) {
-		addNodeToFoldingRegion(formGroup, fCollapseParts&&fAllowCollapsing);
-		return true;
-	}
-
-	public boolean visit(TopLevelFunction topLevelFunction) {
-		addNodeToFoldingRegion(topLevelFunction, fCollapseParts&&fAllowCollapsing);
-		return true;
-	}
-	
 	public boolean visit(NestedFunction nestedFunction) {
 		addNodeToFoldingRegion(nestedFunction, fCollapseFunctions&&fAllowCollapsing);
 		return true;		
@@ -176,6 +146,11 @@ public class FoldingVisitor extends AbstractASTVisitor{
 
 	public boolean visit(Program program) {
 		addNodeToFoldingRegion(program, fCollapseParts&&fAllowCollapsing);
+		return true;
+	}
+	
+	public boolean visit(Class eglClass) {
+		addNodeToFoldingRegion(eglClass, fCollapseParts&&fAllowCollapsing);
 		return true;
 	}
 
@@ -298,12 +273,6 @@ public class FoldingVisitor extends AbstractASTVisitor{
 		addNodeToFoldingRegion(inlineSQLStatement, fCollapsePartition&&fAllowCollapsing);
 		return false;
 	}
-	
-	public boolean visit(InlineDLIStatement inlineDLIStatement) {
-		//folding starts from #dli
-		addNodeToFoldingRegion(inlineDLIStatement, fCollapsePartition&&fAllowCollapsing);
-		return false;		
-	};
 	
 /*	private void visitStatement(Statement statement)
 	{

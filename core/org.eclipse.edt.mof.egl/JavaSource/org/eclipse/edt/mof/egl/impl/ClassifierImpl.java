@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeParameter;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.utils.EList;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public abstract class ClassifierImpl extends NamedElementImpl implements Classifier {
@@ -28,6 +29,8 @@ public abstract class ClassifierImpl extends NamedElementImpl implements Classif
 	private static int Slot_packageName=2;
 	private static int Slot_typeParameters=3;
 	private static int totalSlots = 4;
+	
+	private String packageName;
 	
 	public static int totalSlots() {
 		return totalSlots + NamedElementImpl.totalSlots();
@@ -68,6 +71,14 @@ public abstract class ClassifierImpl extends NamedElementImpl implements Classif
 	
 	@Override
 	public String getPackageName() {
+		if (packageName == null) {
+			packageName = NameUtile.getAsName(getCaseSensitivePackageName());
+		}
+		return packageName;
+	}
+
+	@Override
+	public String getCaseSensitivePackageName() {
 		return (String)slotGet(Slot_packageName);
 	}
 	
@@ -95,7 +106,10 @@ public abstract class ClassifierImpl extends NamedElementImpl implements Classif
 	
 	@Override
 	public String getTypeSignature() {
-		return getPackageName()+"."+getName();
+		if (getCaseSensitivePackageName().length() == 0) {
+			return getCaseSensitiveName();
+		}
+		return getCaseSensitivePackageName()+"."+getCaseSensitiveName();
 	}
 	
 	@Override
@@ -108,6 +122,14 @@ public abstract class ClassifierImpl extends NamedElementImpl implements Classif
 		if (!(eglType instanceof Classifier)) return false;
 		return this.getMofSerializationKey().equals(((Classifier)eglType).getMofSerializationKey());
 //		return this == eglType;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Type) {
+			return equals((Type)o);
+		}
+		return super.equals(o);
 	}
 
 	@Override

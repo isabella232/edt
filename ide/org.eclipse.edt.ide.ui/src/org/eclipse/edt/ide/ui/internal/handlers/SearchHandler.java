@@ -18,11 +18,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -42,6 +37,25 @@ import org.eclipse.edt.ide.ui.internal.search.EGLSearchMessages;
 import org.eclipse.edt.ide.ui.internal.search.EGLSearchQuery;
 import org.eclipse.edt.ide.ui.internal.search.EGLSearchScopeFactory;
 import org.eclipse.edt.ide.ui.internal.search.SearchUtil;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.StructuredRecord;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.DocumentEvent;
@@ -254,7 +268,7 @@ public class SearchHandler extends EGLHandler {
 			return false;
 		}
 		
-		private ITypeBinding getTypeBinding(Node boundNode) {
+		private Element getBinding(Node boundNode) {
 			Name boundNameNode = null;;
 			if (boundNode instanceof NameType){
 				boundNameNode = ((NameType)boundNode).getName();
@@ -262,62 +276,56 @@ public class SearchHandler extends EGLHandler {
 				boundNameNode = (Name)boundNode;
 			}
 			
-			IBinding binding = boundNameNode.resolveBinding();
-			if(binding != null && binding != IBinding.NOT_FOUND_BINDING){
-				ITypeBinding typeBinding = null;
-				if(binding instanceof ITypeBinding){
-					typeBinding = (ITypeBinding)binding;
-				}
-				else if(binding instanceof IDataBinding){
-					typeBinding = ((IDataBinding)binding).getType();
-				}
-				return typeBinding;
+			Type type = boundNameNode.resolveType();
+			if(type != null){
+				return type;
 			}
-			return null;
+			return boundNameNode.resolveMember();
 		}
-		
 		
 		private int primGetSearchFor(Node boundNode) {
 			int searchFor = IEGLSearchConstants.ALL_ELEMENTS;
 
-			ITypeBinding typeBinding = getTypeBinding(boundNode);
-			if (typeBinding != null) {
-				int typeBindingKind = typeBinding.getKind();
-				switch (typeBindingKind) {
-				case ITypeBinding.PROGRAM_BINDING:
+			Element binding = getBinding(boundNode);
+			if (binding != null) {
+				if (binding instanceof Program) {
 					searchFor = IEGLSearchConstants.PROGRAM_PART;
-					break;
-				case ITypeBinding.LIBRARY_BINDING:
+				}
+				else if (binding instanceof Library) {
 					searchFor = IEGLSearchConstants.LIBRARY_PART;
-					break;
-				case ITypeBinding.DATAITEM_BINDING:
-					searchFor = IEGLSearchConstants.ITEM_PART;
-					break;
-				case ITypeBinding.HANDLER_BINDING:
+				}
+				else if (binding instanceof Handler) {
 					searchFor = IEGLSearchConstants.HANDLER_PART;
-					break;
-				case ITypeBinding.FUNCTION_BINDING:
+				}
+				else if (binding instanceof Enumeration) {
+					searchFor = IEGLSearchConstants.ENUMERATION_PART;
+				}
+				else if (binding instanceof FunctionMember) {
 					searchFor = IEGLSearchConstants.ALL_FUNCTIONS;
-					break;
-				case ITypeBinding.DATATABLE_BINDING:
-					searchFor = IEGLSearchConstants.TABLE_PART;
-					break;
-				case ITypeBinding.FORMGROUP_BINDING:
-					searchFor = IEGLSearchConstants.FORMGROUP_PART;
-					break;
-				case ITypeBinding.SERVICE_BINDING:
+				}
+				else if (binding instanceof Service) {
 					searchFor = IEGLSearchConstants.SERVICE_PART;
-					break;
-				case ITypeBinding.FIXED_RECORD_BINDING:
-				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
+				}
+				else if (binding instanceof Record || binding instanceof StructuredRecord) {
 					searchFor = IEGLSearchConstants.RECORD_PART;
-					break;
-				case ITypeBinding.FORM_BINDING:
-					searchFor = IEGLSearchConstants.FORM_PART;
-					break;
-				case ITypeBinding.CLASS_BINDING:
+				}
+				else if (binding instanceof StereotypeType) {
+					searchFor = IEGLSearchConstants.STEREOTYPE_PART;
+				}
+				else if (binding instanceof AnnotationType) {
+					searchFor = IEGLSearchConstants.ANNOTATION_PART;
+				}
+				else if (binding instanceof ExternalType) {
+					searchFor = IEGLSearchConstants.EXTERNALTYPE_PART;
+				}
+				else if (binding instanceof Delegate) {
+					searchFor = IEGLSearchConstants.DELEGATE_PART;
+				}
+				else if (binding instanceof Interface) {
+					searchFor = IEGLSearchConstants.INTERFACE_PART;
+				}
+				else if (binding instanceof EGLClass) {
 					searchFor = IEGLSearchConstants.CLASS_PART;
-					break;
 				}
 			}
 
@@ -334,21 +342,14 @@ public class SearchHandler extends EGLHandler {
 		}
 		
 		private String getPackageName(Node node) {
-			ITypeBinding type = getTypeBinding(node);
-			if (type instanceof IPartBinding) {
-				IPartBinding part = (IPartBinding) type;
-				String[] pkg = part.getPackageName();
-				if (pkg == null || pkg.length == 0) {
+			Element binding = getBinding(node);
+			if (binding instanceof Classifier) {
+				Classifier part = (Classifier) binding;
+				String pkg = part.getPackageName();
+				if (pkg == null) {
 					return "";
 				}
-				StringBuffer buff = new StringBuffer();
-				for (int i = 0; i < pkg.length; i++) {
-					if (i>0) {
-						buff.append(".");
-					}
-					buff.append(pkg[i]);
-				}
-				return buff.toString();
+				return pkg;
 			}
 			return null;
 		}
@@ -367,9 +368,12 @@ public class SearchHandler extends EGLHandler {
 				packageName = getPackageName(selectedNode);
 				
 				if(selectedNode instanceof Name) {
-					IBinding binding = ((Name) selectedNode).resolveBinding();
-					if(binding instanceof NestedFunctionBinding) {
-						containerName = ((NestedFunctionBinding) binding).getDeclaringPart().getCaseSensitiveName();
+					Object binding = ((Name)selectedNode).resolveMember();
+					if (binding instanceof Function) {
+						Container c = ((Function)binding).getContainer();
+						if (c instanceof Classifier) {
+							containerName = ((Classifier)c).getCaseSensitiveName();
+						}
 					}
 				}
 			}

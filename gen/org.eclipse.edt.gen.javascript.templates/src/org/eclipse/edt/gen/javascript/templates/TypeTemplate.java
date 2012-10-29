@@ -220,12 +220,18 @@ public class TypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genTypeDependentPatterns, arg.getObjectExpr().getType(), ctx, out);
 			
 			String typeSignature = arg.getObjectExpr().getType().getClassifier().getTypeSignature();			
-			//TODO shouldn't have to special case ENumber and Decimal
-			if ( "asAny".equalsIgnoreCase(op.getName()) || ((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) || ("eglx.lang.EDecimal".equalsIgnoreCase(typeSignature))) {
+			if ( "asAny".equalsIgnoreCase(op.getCaseSensitiveName()) ) {
+				out.print(",\"");
+				ctx.put( Constants.SubKey_isaSignature, "true" );
+				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
+				ctx.remove( Constants.SubKey_isaSignature );
+				out.print("\"");
+			} else if ( ((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) || ("eglx.lang.EDecimal".equalsIgnoreCase(typeSignature))) {
+				//TODO shouldn't have to special case ENumber and Decimal
 				out.print(",\"");
 				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
 				out.print("\"");
-			}
+			} 
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print("])");
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
@@ -292,7 +298,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 				|| CommonUtilities.getNativeJavaScriptOperation(arg, ctx).length() == 0) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
-			out.print("("); // TODO sbg Not needed for JavaScript? ezeProgram, ");
+			out.print("(");
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out, arg.getOperation().getParameters().get(0));
 			out.print(", ");
 			ctx.invoke(genExpression, arg.getRHS(), ctx, out, arg.getOperation().getParameters().get(1));

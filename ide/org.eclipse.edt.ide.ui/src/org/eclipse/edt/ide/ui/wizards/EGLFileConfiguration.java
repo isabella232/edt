@@ -22,27 +22,25 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IBufferFactory;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
+import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.edt.ide.core.internal.utils.Util;
-import org.eclipse.edt.ide.ui.internal.EGLUI;
-import org.eclipse.edt.ide.core.model.IBufferFactory;
-import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
-import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
-import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 
 public class EGLFileConfiguration extends EGLPackageConfiguration {
 	
@@ -169,36 +167,40 @@ public class EGLFileConfiguration extends EGLPackageConfiguration {
 		pcs.removePropertyChangeListener(pcl);
 	}
 	
-	
+	/**
+	 * @deprecated this method breaks the WCC contract. all processing on the bound part should be done inside acceptResult!
+	 * @see #processBoundPart(IEGLFile, String, IWorkingCopyCompileRequestor)
+	 */
 	static public Part getBoundPart(IEGLFile eglFile, String partSimpleName)
 	{
 		final Part[] boundPart = new Part[]{null};
+		processBoundPart(eglFile, partSimpleName, new IWorkingCopyCompileRequestor(){
+			public void acceptResult(WorkingCopyCompilationResult result) {
+				boundPart[0] = (Part)result.getBoundPart();						
+			}			
+		});
+		
+		return boundPart[0];
+	}
+	
+	static public void processBoundPart(IEGLFile eglFile, String partSimpleName, IWorkingCopyCompileRequestor requestor) {
 		try {		
-
 			IFile file = (IFile)(eglFile.getCorrespondingResource());
 		
 			IEGLElement eglPkgFrag = eglFile.getParent();
 			String packageName = eglPkgFrag.getElementName();
 			
-			Path pkgPath = new Path(packageName.replace('.', IPath.SEPARATOR));
-					
-			String[] pkgName = Util.pathToStringArray(pkgPath);
-			
 			IBufferFactory UIBufferFactory = EGLUI.getBufferFactory();		
 			WorkingCopyCompiler compiler = WorkingCopyCompiler.getInstance();
-			compiler.compilePart(file.getProject(), pkgName, file, EGLCore.getSharedWorkingCopies(UIBufferFactory), partSimpleName, 
-					new IWorkingCopyCompileRequestor(){
-						public void acceptResult(WorkingCopyCompilationResult result) {
-							boundPart[0] = (Part)result.getBoundPart();						
-						}			
-			});
+			compiler.compilePart(file.getProject(), packageName, file, EGLCore.getSharedWorkingCopies(UIBufferFactory), partSimpleName, requestor);
 		}catch (EGLModelException e) {
 			e.printStackTrace();
 		}
-		
-		return boundPart[0];
 	}
 		
+	/**
+	 * @deprecated this method breaks the WCC contract. all processing on the bound part should be done inside acceptResult!
+	 */
 	static public List getBoundParts(IEGLFile eglFile)
 	{
 		final List boundPartList = new ArrayList();
@@ -238,26 +240,24 @@ public class EGLFileConfiguration extends EGLPackageConfiguration {
      * @param nameVal	- output parameter
      * @param namespaceVal - output parameter
      */
-	static public void getXMLAnnotationValueFromBinding(IBinding nameBinding, StringBuffer nameVal, StringBuffer namespaceVal)
+	static public void getXMLAnnotationValueFromBinding(Element nameBinding, StringBuffer nameVal, StringBuffer namespaceVal)
 	{
-        if(nameBinding != null && nameBinding != IBinding.NOT_FOUND_BINDING)
+        if(nameBinding != null)
         {
-        	IAnnotationBinding xmlAnnotationBinding = nameBinding.getAnnotation(EGLCORE, IEGLConstants.PROPERTY_XML);
-        	if(xmlAnnotationBinding != null && xmlAnnotationBinding != IBinding.NOT_FOUND_BINDING)
+        	Annotation xmlAnnotationBinding = nameBinding.getAnnotation(EGLCORE + "." + IEGLConstants.PROPERTY_XML);
+        	if(xmlAnnotationBinding != null)
         	{
 	        	//get the xml annoation vlaues
-	        	IDataBinding nameValDataBinding = xmlAnnotationBinding.findData(IEGLConstants.PROPERTY_NAME);
-	        	if(nameValDataBinding != null && nameValDataBinding != IBinding.NOT_FOUND_BINDING && nameValDataBinding.isAnnotationBinding())
+	        	Object nameObj = xmlAnnotationBinding.getValue(IEGLConstants.PROPERTY_NAME);
+	        	if(nameObj != null)
 	        	{
-	        		Object valObj = ((IAnnotationBinding)nameValDataBinding).getValue();
-	        		nameVal.append(valObj.toString());
+	        		nameVal.append(nameObj.toString());
 	        	}
 	        	
-	        	IDataBinding namespaceValDataBinding = xmlAnnotationBinding.findData(IEGLConstants.PROPERTY_NAMESPACE);
-	        	if(namespaceValDataBinding != null && namespaceValDataBinding != IBinding.NOT_FOUND_BINDING && namespaceValDataBinding.isAnnotationBinding())
+	        	Object namespaceObj = xmlAnnotationBinding.getValue(IEGLConstants.PROPERTY_NAMESPACE);
+	        	if(namespaceObj != null)
 	        	{
-	        		Object valObj1 = ((IAnnotationBinding)namespaceValDataBinding).getValue();
-	        		namespaceVal.append(valObj1.toString());
+	        		namespaceVal.append(namespaceObj.toString());
 	        	}
         	}
         }

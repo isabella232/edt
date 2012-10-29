@@ -1,0 +1,73 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+
+	function main()
+		goto Level_1;							//0
+		goto Level_2;							//1
+		goto Level_3;							//1
+		goto Level_4;							//1
+	
+		Level_1 :   IF (true)					//0
+		
+			goto Level_1;						//0
+			goto Level_2;						//0
+			goto Level_3;						//1
+			goto Level_4;						//1
+
+		      Level_2:  IF  (true)				//0
+		      	goto Level_1;					//0
+		      	goto Level_2;					//0
+				goto Level_3;					//0
+				goto Level_4;					//1
+
+		            Level_3:  IF  (true)		//0
+		            	goto Level_1;			//0
+		            	goto Level_2;			//0
+		            	goto Level_3;			//0
+		            	goto Level_4;			//0
+
+		            	
+		                  Level_4:  IF (true)	//0
+		                  	goto Level_1;		//0
+		                  	goto Level_2;		//0
+		                  	goto Level_3;		//0
+		                  	goto Level_4;		//0
+		                  end
+		            end
+		      end
+		end
+		
+		openUI new any
+			OnEvent(AFTER_DELETE)
+				goto Level_1;					//0
+				goto Level_2;					//1
+				labInOnEvent1:					//1
+				if(true)
+					goto Level_1;				//0
+					goto Level_2;				//1
+					labInOnEvent2:				//1
+				end
+
+			OnEvent(AFTER_FIELD: "field1")
+				goto Level_1;					//0
+				goto Level_2;					//1
+				labInOnEvent3:					//1
+				if(true)
+					goto Level_1;				//0
+					goto Level_2;				//1
+					labInOnEvent4:				//1
+				end	
+		end
+	end
+end

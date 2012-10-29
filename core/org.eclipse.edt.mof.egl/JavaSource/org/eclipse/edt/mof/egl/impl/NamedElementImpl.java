@@ -12,10 +12,13 @@
 package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.NamedElement;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public abstract class NamedElementImpl extends ElementImpl implements NamedElement {
 	private static int Slot_name=0;
 	private static int totalSlots = 1;
+	
+	private String name;
 	
 	public static int totalSlots() {
 		return totalSlots + ElementImpl.totalSlots();
@@ -27,6 +30,14 @@ public abstract class NamedElementImpl extends ElementImpl implements NamedEleme
 	}
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = NameUtile.getAsName(getCaseSensitiveName());
+		}
+		return name;
+	}
+	
+	@Override
+	public String getCaseSensitiveName() {
 		return (String)slotGet(Slot_name);
 	}
 	

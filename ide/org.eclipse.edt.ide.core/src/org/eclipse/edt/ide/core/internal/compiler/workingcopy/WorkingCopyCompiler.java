@@ -19,11 +19,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.jobs.ILock;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.edt.compiler.PartEnvironmentStack;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -57,8 +57,8 @@ import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.search.ICompiledFileUnit;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 // Because our compilers require the ability to access other objects through singleton managers, we can only allow one working copy compile to run at a time.
 
@@ -66,11 +66,11 @@ import org.eclipse.edt.mof.serialization.Environment;
 public class WorkingCopyCompiler {
 
 	private class DupeFileinfo{
-    	String[] packageName;
+    	String packageName;
     	String   partName;
     	IFile file;
     	IProject project;
-		public DupeFileinfo(IProject project,IFile file, String[] packageName,String partName) {
+		public DupeFileinfo(IProject project,IFile file, String packageName,String partName) {
 			this.project = project;
 			this.file = file;
 			this.packageName = packageName;
@@ -99,7 +99,7 @@ public class WorkingCopyCompiler {
 	 * It is possible that this method will not return any results.  Users should not assume that the requestor method will be invoked.  This can occur
 	 * if the Index that the compiler depends on is in an invalid state.  See WorkingCopyFileInfoManager.hasValidState() for more information on states.
 	 */
-	public synchronized void compilePart(IProject project, String[] packageName, IFile file, IWorkingCopy[] workingCopies, String partName, IWorkingCopyCompileRequestor requestor){
+	public synchronized void compilePart(IProject project, String packageName, IFile file, IWorkingCopy[] workingCopies, String partName, IWorkingCopyCompileRequestor requestor){
 		compilePart(project, packageName, file, workingCopies, partName, requestor, NullProblemRequestorFactory.getInstance());
 	}
 	
@@ -113,7 +113,7 @@ public class WorkingCopyCompiler {
 	 * It is possible that this method will not return any results.  Users should not assume that the requestor method will be invoked.  This can occur
 	 * if the Index that the compiler depends on is in an invalid state.  See WorkingCopyFileInfoManager.hasValidState() for more information on states.
 	 */
-	public synchronized void compilePart(IProject project, String[] packageName, IFile file, IWorkingCopy[] workingCopies, String partName, IWorkingCopyCompileRequestor requestor, IProblemRequestorFactory problemRequestorFactory){
+	public synchronized void compilePart(IProject project, String packageName, IFile file, IWorkingCopy[] workingCopies, String partName, IWorkingCopyCompileRequestor requestor, IProblemRequestorFactory problemRequestorFactory){
 	
 		if(!WorkingCopyFileInfoManager.getInstance().hasValidState()){
 			return;
@@ -131,8 +131,8 @@ public class WorkingCopyCompiler {
 			queue = new WorkingCopyProcessingQueue(project, problemRequestorFactory);
 			WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 			
-			String[] internedPackageName = InternUtil.intern(packageName);
-			String internedPartName = InternUtil.intern(partName);
+			String internedPackageName = NameUtile.getAsName(packageName);
+			String internedPartName = NameUtile.getAsName(partName);
 			
 			// Verify that the part is in the model in the requested package.
 			if(ITypeBinding.NOT_FOUND_BINDING != projectInfo.hasPart(internedPackageName, internedPartName)){
@@ -158,6 +158,7 @@ public class WorkingCopyCompiler {
 		}finally{
 			if (queue != null && queue.pushedEnvironment()) {
 				Environment.popEnv();
+				PartEnvironmentStack.popEnv();
 			}
 			lock.release(); // allow changes to be processed
 		}
@@ -171,7 +172,7 @@ public class WorkingCopyCompiler {
 	 * It is possible that this method will not return any results.  Users should not assume that the requestor method will be invoked.  This can occur
 	 * if the Index that the compiler depends on is in an invalid state.  See WorkingCopyFileInfoManager.hasValidState() for more information on states.
 	 */
-	public synchronized void compileAllParts(IProject project, String[] packageName, IFile file, IWorkingCopy[] workingCopies, IWorkingCopyCompileRequestor requestor){
+	public synchronized void compileAllParts(IProject project, String packageName, IFile file, IWorkingCopy[] workingCopies, IWorkingCopyCompileRequestor requestor){
 		compileAllParts(project, packageName, file, workingCopies, requestor, NullProblemRequestorFactory.getInstance());
 	}
 	
@@ -184,7 +185,7 @@ public class WorkingCopyCompiler {
 	 * if the Index that the compiler depends on is in an invalid state.  See WorkingCopyFileInfoManager.hasValidState() for more information on states.
 	 * 
 	 */
-	public synchronized void compileAllParts(IProject project, String[] packageName, IFile file, IWorkingCopy[] workingCopies, IWorkingCopyCompileRequestor requestor, IProblemRequestorFactory problemRequestorFactory){
+	public synchronized void compileAllParts(IProject project, String packageName, IFile file, IWorkingCopy[] workingCopies, IWorkingCopyCompileRequestor requestor, IProblemRequestorFactory problemRequestorFactory){
 		
 		if(!WorkingCopyFileInfoManager.getInstance().hasValidState()){
 			return;
@@ -203,7 +204,7 @@ public class WorkingCopyCompiler {
 			queue = new WorkingCopyProcessingQueue(project, problemRequestorFactory);
 			WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 			try{
-				String[] internedPackageName = InternUtil.intern(packageName);
+				String internedPackageName = NameUtile.getAsName(packageName);
 				// We only need to check the package because the parts will exist - we know this because we just parsed the file
 				if(projectInfo.hasPackage(internedPackageName)){
 					
@@ -233,6 +234,7 @@ public class WorkingCopyCompiler {
 		}finally{
 			if (queue != null && queue.pushedEnvironment()) {
 				Environment.popEnv();
+				PartEnvironmentStack.popEnv();
 			}
 			lock.release(); // allow changes to be processed
 		}
@@ -284,7 +286,7 @@ public class WorkingCopyCompiler {
 								fileAST = WorkingCopyASTManager.getInstance().getFileAST(file);
 								searchTarget.setFileAST(fileAST);
 								
-								String[] internedPackageName = InternUtil.intern(((EGLFile)eglFile).getPackageName());
+								String internedPackageName = NameUtile.getAsName(Util.stringArrayToQualifiedName(((EGLFile)eglFile).getPackageName()));
 								
 								// We only need to check the package because the parts will exist - we know this because we just parsed the file
 								if(projectInfo.hasPackage(internedPackageName)){
@@ -304,7 +306,6 @@ public class WorkingCopyCompiler {
 														if (part instanceof Program ||
 																part instanceof Library ||
 																part instanceof Handler||
-																part instanceof FormGroup||
 																part instanceof Service){
 															queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
 															break;
@@ -331,6 +332,7 @@ public class WorkingCopyCompiler {
 							finally {
 								if (queue != null && queue.pushedEnvironment()) {
 									Environment.popEnv();
+									PartEnvironmentStack.popEnv();
 								}
 							}
 						}
@@ -381,22 +383,22 @@ public class WorkingCopyCompiler {
 			IWorkingCopy copy = workingCopies[i];
 			if(((IEGLElement)copy).exists()){
 				final IProject project = (IProject)copy.getOriginalElement().getEGLProject().getResource();
-				final String[] packageName = InternUtil.intern(((EGLFile)copy.getOriginalElement()).getPackageName());
+				final String packageName = NameUtile.getAsName(Util.stringArrayToQualifiedName(((EGLFile)copy.getOriginalElement()).getPackageName()));
 				
 				addWorkingCopy(project, packageName, copy, problemRequestorFactory);
 			}
 		}
 	}
 	
-	private void processBinaryReadOnlyFile(IFile file,String[] packageName,IProblemRequestorFactory problemRequestorFactory) {
+	private void processBinaryReadOnlyFile(IFile file,String packageName,IProblemRequestorFactory problemRequestorFactory) {
 		if ("eglar".equalsIgnoreCase(file.getFullPath().getFileExtension())) {
-			final String[] packageNames = InternUtil.intern(packageName);
+			final String packageNames = NameUtile.getAsName(packageName);
 			
 			addFileInfoForBinaryReadOnlyFile(file.getProject(),file,packageNames,problemRequestorFactory);
 		}
 	}
 	
-	private void addFileInfoForBinaryReadOnlyFile(final IProject project,IFile file,final String[] packageName,IProblemRequestorFactory problemRequestorFactory) {
+	private void addFileInfoForBinaryReadOnlyFile(final IProject project,IFile file,final String packageName,IProblemRequestorFactory problemRequestorFactory) {
 		File fileAST = WorkingCopyASTManager.getInstance().getFileAST(file);
 		final WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 		final IASTFileInfo newFileInfo = new WorkingCopyFileInfoCreator(project, packageName, file, null, fileAST, new WorkingCopyUnsavedDuplicatePartRequestor(project, packageName, file)).getASTInfo();
@@ -444,7 +446,7 @@ public class WorkingCopyCompiler {
 		}	
 	}
 	
-	private void addWorkingCopy(final IProject project, final String[] packageName, final IWorkingCopy copy, IProblemRequestorFactory problemRequestorFactory) {
+	private void addWorkingCopy(final IProject project, final String packageName, final IWorkingCopy copy, IProblemRequestorFactory problemRequestorFactory) {
 		
 		final HashSet duplicateFilesToProcess = new HashSet();
 		final IEGLFile eglFile = (IEGLFile)copy.getOriginalElement();
@@ -499,7 +501,7 @@ public class WorkingCopyCompiler {
 		processDuplicateFiles(duplicateFilesToProcess, problemRequestorFactory);
 	}
 	
-	private void locateDuplicateFile(Set duplicateFilesToProcess, IProject project, String[] packageName, String partName, int partType, IFile file){
+	private void locateDuplicateFile(Set duplicateFilesToProcess, IProject project, String packageName, String partName, int partType, IFile file){
 		
 		// TODO:
 		// Get the duplicate part list for this part

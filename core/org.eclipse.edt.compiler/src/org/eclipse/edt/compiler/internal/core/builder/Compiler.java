@@ -11,65 +11,32 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
-import org.eclipse.edt.compiler.binding.DataItemBinding;
-import org.eclipse.edt.compiler.binding.DataTableBinding;
-import org.eclipse.edt.compiler.binding.DelegateBinding;
-import org.eclipse.edt.compiler.binding.EGLClassBinding;
-import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
+import java.util.List;
+
+import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.binding.FileBinding;
-import org.eclipse.edt.compiler.binding.FixedRecordBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.FormBinding;
-import org.eclipse.edt.compiler.binding.FormGroupBinding;
-import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.InterfaceBinding;
-import org.eclipse.edt.compiler.binding.LibraryBinding;
-import org.eclipse.edt.compiler.binding.ProgramBinding;
-import org.eclipse.edt.compiler.binding.ServiceBinding;
-import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.DataItemBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.DataTableBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.AnnotationTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.DelegateBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.EGLClassBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.ClassBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FixedRecordBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FlexibleRecordBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FormBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FormGroupBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.HandlerBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.InterfaceBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.LibraryBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ProgramBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.RecordBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.ServiceBinder;
-import org.eclipse.edt.compiler.internal.core.validation.part.DataItemValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.DataTableValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.DelegateValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.EGLClassValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.EnumerationValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.ExternalTypeValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FixedRecordValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FlexibleRecordValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FormGroupValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FormValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FunctionValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.HandlerValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.InterfaceValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.LibraryValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.ProgramValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.ServiceValidator;
+import org.eclipse.edt.compiler.internal.core.lookup.StereotypeTypeBinder;
 
 
 /**
@@ -99,15 +66,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.PROGRAM_BINDING:
 				try{
-				    astNode.accept(new ProgramBinder((ProgramBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				    
-				    try{
-					    astNode.accept(new ProgramValidator(problemRequestor, (ProgramBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+				    astNode.accept(new ProgramBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -120,15 +80,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.DELEGATE_BINDING:
 				try{
-				    astNode.accept(new DelegateBinder((DelegateBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				    
-				    try{
-					    astNode.accept(new DelegateValidator(problemRequestor, (DelegateBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+				    astNode.accept(new DelegateBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -141,15 +94,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.EXTERNALTYPE_BINDING:
 				try{
-				    astNode.accept(new ExternalTypeBinder((ExternalTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				    
-				    try{
-					    astNode.accept(new ExternalTypeValidator(problemRequestor, (ExternalTypeBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+					astNode.accept(new ExternalTypeBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+					validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -162,99 +108,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.ENUMERATION_BINDING:
 				try{
-				    astNode.accept(new EnumerationBinder((EnumerationTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				    
-				    try{
-					    astNode.accept(new EnumerationValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.FUNCTION_BINDING:
-				try{
-				    astNode.accept(new FunctionBinder((TopLevelFunctionBinding)partBinding, (TopLevelFunctionBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				
-					try{
-					    astNode.accept(new FunctionValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.DATAITEM_BINDING:
-				try{
-				    astNode.accept(new DataItemBinder((DataItemBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-					
-					try{
-					    astNode.accept(new DataItemValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.DATATABLE_BINDING:
-				try{
-				    astNode.accept(new DataTableBinder((DataTableBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-					
-					try{
-					    astNode.accept(new DataTableValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.FORMGROUP_BINDING:
-				try{
-				    astNode.accept(new FormGroupBinder((FormGroupBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				
-					try{
-					    astNode.accept(new FormGroupValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+				    astNode.accept(new EnumerationBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -267,15 +122,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.HANDLER_BINDING:
 				try{
-				    astNode.accept(new HandlerBinder((HandlerBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new HandlerValidator(problemRequestor, (HandlerBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+				    astNode.accept(new HandlerBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -288,15 +136,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.CLASS_BINDING:
 				try{
-				    astNode.accept(new EGLClassBinder((EGLClassBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new EGLClassValidator(problemRequestor, (EGLClassBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+				    astNode.accept(new ClassBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -309,15 +150,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.INTERFACE_BINDING:
 				try{
-				    astNode.accept(new InterfaceBinder((InterfaceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new InterfaceValidator(problemRequestor, (InterfaceBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+					astNode.accept(new InterfaceBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+					validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -330,15 +164,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.LIBRARY_BINDING:
 				try{
-				    astNode.accept(new LibraryBinder((LibraryBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new LibraryValidator(problemRequestor, (LibraryBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+					astNode.accept(new LibraryBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+					validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -351,36 +178,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
 				try{
-				    astNode.accept(new FlexibleRecordBinder((FlexibleRecordBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new FlexibleRecordValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.FIXED_RECORD_BINDING:
-				try{
-				    astNode.accept(new FixedRecordBinder((FixedRecordBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new FixedRecordValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+				    astNode.accept(new RecordBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+			    	validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -393,15 +192,8 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.SERVICE_BINDING:
 				try{
-				    astNode.accept(new ServiceBinder((ServiceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				
-					try{
-					    astNode.accept(new ServiceValidator(problemRequestor, (ServiceBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+					astNode.accept(new ServiceBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+			    	validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -412,17 +204,10 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
 				}
 				break;
-			case ITypeBinding.FORM_BINDING:
+			case ITypeBinding.ANNOTATION_BINDING:
 				try{
-				    astNode.accept(new FormBinder((FormBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				
-					try{
-					    astNode.accept(new FormValidator(problemRequestor, compilerOptions));			
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+				    astNode.accept(new AnnotationTypeBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -433,6 +218,40 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
 				}
 				break;
+			case ITypeBinding.STEREOTYPE_BINDING:
+				try{
+				    astNode.accept(new StereotypeTypeBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				    validatePart(astNode, partBinding, problemRequestor, compilerOptions);
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
+		}
+	}
+	
+	private void validatePart(Node astNode, IPartBinding partBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+	    try {
+			List<ASTValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor(astNode);
+	    	if (validators != null && validators.size() > 0) {
+	    		for (ASTValidator validator : validators) {
+	    			validator.validate(astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+	    		}
+	    	}
+		}
+	    catch(CancelledException e) {
+		    throw e;
+		}
+	    catch(CircularBuildRequestException e) {
+	    	throw e;
+	    }
+	    catch(RuntimeException e) {
+		    handleValidationException((Part)astNode, problemRequestor, e);
 		}
 	}
 	
@@ -440,28 +259,6 @@ public abstract class Compiler extends DefaultASTVisitor{
 	
 	protected abstract void logValidationException(RuntimeException e);
 
-    public void compileTopLevelFunction(TopLevelFunction functionAST, IPartBinding functionBinding, Scope scope, IPartBinding parentBinding, IDependencyRequestor dependencyInfo, IProblemRequestor requestor, ICompilerOptions compilerOptions) {
-       try{
-           functionAST.accept(new FunctionBinder((TopLevelFunctionBinding)functionBinding, (TopLevelFunctionBinding)functionBinding, scope, dependencyInfo, requestor, compilerOptions));
-           
-			try{
-			    functionAST.accept(new FunctionValidator(requestor, parentBinding, compilerOptions));
-			}catch(CancelledException e){
-			    throw e;
-       		}catch(RuntimeException e){
-			    requestor.acceptProblem(functionAST.getName(), IProblemRequestor.CONTEXT_SPECIFIC_COMPILATION_EXCEPTION, new String[]{functionAST.getName().getCanonicalName()});
-			    logValidationException(e);
-			}
-		}catch(CancelledException e){
-		    throw e;
-		}catch(CircularBuildRequestException e){
-		    throw e; 
-		}catch(RuntimeException e){
-		   requestor.acceptProblem(functionAST.getName(), IProblemRequestor.CONTEXT_SPECIFIC_COMPILATION_EXCEPTION, new String[]{functionAST.getName().getCanonicalName()});
-		   logPartBinderException(e);
-		}
-	}
-    
     private void handleValidationException(Part astNode, IProblemRequestor problemRequestor, RuntimeException e) {
         problemRequestor.acceptProblem(astNode.getName(), IProblemRequestor.COMPILATION_EXCEPTION, new String[]{astNode.getName().getCanonicalName()});
         logValidationException(e);

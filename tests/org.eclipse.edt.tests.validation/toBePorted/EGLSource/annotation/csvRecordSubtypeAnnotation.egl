@@ -1,0 +1,176 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Record CSVRecordValidMembersValue type CSVRecord //0
+	{
+	  fileName = "recipes", //0
+	  delimiter = ",", //0
+	  textQualifier = "\"",//0
+	  labels = [ "Bananas", "Chips", "Waffles", "Coffee" ]//0
+	}
+	banana int;
+	chocolateChip char(3);
+	waffle date?;
+	coffee string;
+end
+
+record myrec type BasicRecord
+end
+
+Record CSVRecordTest type CSVRecord //0
+	{
+	  filename = "fred",
+	  delimiter = "ssssss", //1
+	  textQualifier = "2222222"//1
+	}
+end
+
+Record CSVRecordTest2 type CSVRecord //0
+	{
+	  filename = "fred",
+	  delimiter = "", //1
+	  textQualifier = ""//1
+	}
+end
+
+program prog type BasicProgram
+classrec5 CSVRecordValidMembersValue { delimiter = "ssss",//1
+textQualifier = "444444",//1
+style = 2 //1
+};
+
+classrec6 CSVRecordValidMembersValue { delimiter = "",//1
+textQualifier = "",//1
+style = 2 //1
+};
+
+classrec7 CSVRecordValidMembersValue[] { filename = "ssss"}; //0
+
+function main() 
+rec CSVRecordValidMembersValue {filename = "ssss"};//0
+rec.labels = [ "Bananas", "Chips", "Waffles", "Coffee" ];//0
+rec.banana = 1;
+rec.chocolateChip = "222";
+rec.coffee = "sss";
+add rec;//0
+close rec;//0
+rec2 CSVRecordValidMembersValue {filename = "ssss"};//0
+//rec2 myrec;
+get next rec2;//0
+if (rec2 is noRecordFound)//0
+end
+get previous rec2;//1
+rec3 CSVRecordValidMembersValue[] ;//0
+get rec3;//0
+if (rec3 is noRecordFound)//0
+end
+
+add rec3;//0
+get next rec3;//1
+
+rec5 CSVRecordValidMembersValue { delimiter = "ssss",//1
+textQualifier = "444444",//1
+style = 2 //1
+};
+
+rec6 CSVRecordValidMembersValue { delimiter = "",//1
+textQualifier = "",//1
+style = 2 //1
+};
+
+rec7 CSVRecordValidMembersValue[] { filename = "ssss"}; //0
+
+end
+end
+
+// fixed records can't have strings, dynamic arrays, blobs, clobs,
+// typedefs to flexible records, refs, arraydictionarys, anys
+// in addition, SQL records can't have arrays of any kind 
+
+Record csvrec0 type CSVRecord
+10 item1 int; // 1
+end
+
+Record csvrec1 type CSVRecord
+	q int ; // 0
+	sx decimal(4);
+	sd numc(3); // 0 
+	we pacf(3); // 0 
+	si smallint ;// 0 
+	bi bigint;// 0 
+	fl float;// 0 
+	ini unicode (30); // 0
+	item2 String;		 	 //0
+	item20 bin(9); // 0
+	itemx num(9); //0
+	item21 String(30); //0
+	item3Array char(4) [3]; 	 // 1 
+	item4Array char(4) [];	 // 1 
+	item6 blob;				 // 1 
+	item7 clob;     			 // 1 
+	item8 arrayDictionary;    // 1 
+	item10 any;			 	 // 1 
+//	item11 ref blob;			 // 1 
+end
+
+record sqlrec type SQLRecord
+item1 int;
+end
+
+Record flexCSV type CSVRecord
+	 a csvrec1;        // 1
+	 b sqlrec;//1 
+	 c csvrec0;//1
+end
+
+record myRecord type CSVRecord {fileName="dave.txt"}//0
+end
+record myRecord2 type CSVRecord {fileName="dave.txt"}//0
+end
+record myRecord3 type CSVRecord {}//1 fileName.  This property is required
+end
+program myProgramX {allowUnqualifiedItemReferences = yes}
+	function main()
+		rec3 myRecord3;
+		resourceAssociation = "foo.bar";	//0
+		add rec3;//0
+	end
+end
+
+program myProgram {allowUnqualifiedItemReferences = yes}
+	function main()
+		rec1 myRecord;
+		rec2 myRecord2;
+		resourceAssociation = "foo.bar";	//0
+		rec1.labels = ["eeee"];//0
+		add rec1;//0
+		add rec2;//0
+
+	end
+end
+
+record myRecordx type CSVRecord {fileName="dave.txt"}//0
+end
+record myRecordx2 type CSVRecord {fileName="craig.txt"}//0
+end
+
+program p {allowUnqualifiedItemReferences = yes}
+	function main()
+		rec1 myRecordx;
+	
+		rec2 myRecordx2;
+		resourceAssociation = "foo.bar";	// 1
+		rec1.resourceAssociation = "ddd";//0
+		rec2.resourceAssociation = "rrrr";//0
+		add rec1;//0
+		add rec2;//0
+	end
+end

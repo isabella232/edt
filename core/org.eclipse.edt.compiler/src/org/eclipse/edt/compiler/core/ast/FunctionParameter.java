@@ -23,31 +23,6 @@ import java.util.Map;
 public class FunctionParameter extends Parameter {
 	
 	/**
- 	 * Function parameter attribute (field/nullable) operators (typesafe enumeration).
- 	 */
-	public static class AttrType {	
-		
-		private String token;
-		private AttrType(String token) { this.token = token; }
-		public String toString() { return token; }
-		
-		public static final AttrType FIELD = new AttrType("field");//$NON-NLS-1$
-		public static final AttrType SQLNULLABLE = new AttrType("SQLNullable");//$NON-NLS-1$
-		
-		private static final Map CODES;
-		static {
-			CODES = new HashMap(2);
-			AttrType[] ops = {
-					FIELD,
-					SQLNULLABLE
-				};
-			for (int i = 0; i < ops.length; i++) {
-				CODES.put(ops[i].toString(), ops[i]);
-			}
-		}
-	}
-	
-	/**
  	 * Function parameter use modifiers (in/out/inout) operators (typesafe enumeration).
  	 */
 	public static class UseType {	
@@ -74,22 +49,16 @@ public class FunctionParameter extends Parameter {
 		}
 	}
 
-	private AttrType attrTypeOpt;
 	private UseType useTypeOpt;
 	private boolean parmConst;
 
-	public FunctionParameter(SimpleName name, Type type, FunctionParameter.AttrType attrTypeOpt, Boolean parmConst, FunctionParameter.UseType useTypeOpt, int startOffset, int endOffset) {
-		super(name, type, startOffset, endOffset);
+	public FunctionParameter(SimpleName name, Type type, Boolean isNullable, Boolean parmConst, FunctionParameter.UseType useTypeOpt, int startOffset, int endOffset) {
+		super(name, type, isNullable, startOffset, endOffset);
 		
-		this.attrTypeOpt = attrTypeOpt;
 		this.useTypeOpt = useTypeOpt;
 		this.parmConst = parmConst.booleanValue();
 	}
-	
-	public AttrType getAttrType() {
-		return attrTypeOpt;
-	}
-	
+		
 	public UseType getUseType() {
 		return useTypeOpt;
 	}
@@ -108,6 +77,25 @@ public class FunctionParameter extends Parameter {
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new FunctionParameter((SimpleName)name.clone(), (Type)type.clone(), attrTypeOpt, Boolean.valueOf(parmConst), useTypeOpt, getOffset(), getOffset() + getLength());
+		return new FunctionParameter((SimpleName)name.clone(), (Type)type.clone(), Boolean.valueOf(isNullable), Boolean.valueOf(parmConst), useTypeOpt, getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		buf.append(name.toString());
+		buf.append(' ');
+		buf.append(type.toString());
+		
+		if (parmConst) {
+			buf.append(" const");
+		}
+		
+		if (useTypeOpt != null) {
+			buf.append(' ');
+			buf.append(useTypeOpt);
+		}
+		
+		return buf.toString();
 	}
 }

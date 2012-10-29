@@ -1,0 +1,86 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	use BTMSENU;	//1 The first column of msgTable BTMSENU must be of type NUM, unless the table is used by a program whose type is VGWebTransaction
+	use BTMSENU2;	//0
+	use BTMSENU3;	//0
+	
+	function main() end
+end
+
+Program pgm2 type VGWebTransaction
+	use BTMSENU;	//0
+	use BTMSENU2;	//0
+	use BTMSENU3;	//0
+	
+	function main() end
+end
+
+handler ph type JSFHandler
+	use BTMSENU;	//1 The first column of msgTable BTMSENU must be of type NUM, unless the table is used by a program whose type is VGWebTransaction
+	use BTMSENU2;	//0
+	use BTMSENU3;	//0
+end
+
+Library lib
+	use BTMSENU;	//1 The first column of msgTable BTMSENU must be of type NUM, unless the table is used by a program whose type is VGWebTransaction
+	use BTMSENU2;	//0
+	use BTMSENU3;	//0
+end
+
+dataTable BTMSENU type msgTable  
+	{ shared = no, resident = no }
+	
+	3 message_number char(6); 
+	3 message_text char(78);
+	
+	{contents = 
+		[
+			[ "MSG101", "Please enter {1} in input text field and press enter." ],
+			[ "MSG102", "Please press cancel." ],
+			[ "MSG103", "Please enter {1} in input number field and press enter." ],
+			[ "MSG104", "Data type error.  Please enter 22 in input number field and press enter."]
+		]}
+end
+
+dataTable BTMSENU2 type msgTable  
+	{ shared = no, resident = no }
+	
+	3 message_number num(1); 
+	3 message_text char(78);
+	
+	{contents = 
+		[
+			[ "1", "Please enter {1} in input text field and press enter." ],
+			[ "2", "Please press cancel." ],
+			[ "3", "Please enter {1} in input number field and press enter." ],
+			[ "4", "Data type error.  Please enter 22 in input number field and press enter."]
+		]}
+end
+
+dataTable BTMSENU3 type msgTable  
+	{ shared = no, resident = no }
+	
+	3 message_number myItem; 
+	3 message_text char(78);
+	
+	{contents = 
+		[
+			[ "1", "Please enter {1} in input text field and press enter." ],
+			[ "2", "Please press cancel." ],
+			[ "3", "Please enter {1} in input number field and press enter." ],
+			[ "4", "Data type error.  Please enter 22 in input number field and press enter."]
+		]}
+end
+
+DataItem myItem num(1) end

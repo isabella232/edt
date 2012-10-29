@@ -1,0 +1,138 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record FredHandler type Annotation
+	{
+		targets = [ElementKind.handlerPart],
+		@Stereotype
+			{iscompatiblewith = [javaScriptObject]}
+	}
+	
+	includeFile String;
+	propertiesFile String;
+end
+
+
+
+Record PrhHandler type Annotation
+	{
+		targets = [ElementKind.handlerPart],
+		@Stereotype
+			{iscompatiblewith = [myExtType]}
+	}
+	
+	includeFile String;
+	propertiesFile String;
+end
+
+
+externalType myExtType type javascriptobject
+end
+
+handler prhHandlerImpl type PrhHandler
+end
+
+handler fredHandlerImpl type fredHandler
+end
+
+handler RUIWidgetImpl type ruiwidget
+end
+
+
+program pgm1
+
+	myHandler1 prhHandlerImpl;
+	myExtType1 myExtType;
+	myHandler2 fredHandlerImpl;
+		 
+	function main()
+		myHandler1 = myExtType1;   //0
+		myExtType1 =  myHandler1;  //0 
+
+		myHandler2 = myExtType1;   //0
+		myExtType1 =  myHandler2;  //0 
+		
+		
+		hand1In(myExtType1);     //0
+		hand1Out(myExtType1);    //0
+		hand1(myExtType1);       //1
+
+		hand2In(myExtType1);     //0
+		hand2Out(myExtType1);    //0
+		hand2(myExtType1);       //1
+		
+		ext1In(myHandler1);    //0
+		ext1In(myHandler2);    //0
+	
+	end
+	
+	
+	function hand1IN(p1 prhHandlerImpl in)
+	end	
+
+	function hand1OUT(p1 prhHandlerImpl out)
+	end
+		
+	function hand1(p1 prhHandlerImpl)
+	end
+	
+	function hand2IN(p1 fredHandlerImpl in)
+	end	
+
+	function hand2OUT(p1 fredHandlerImpl out)
+	end
+		
+	function hand2(p1 fredHandlerImpl)
+	end
+	
+	
+	function ext1IN (p1 myExtType in)
+	end
+	
+	
+end
+
+program pgm2
+	
+	myHandler1 ruiWidgetImpl;
+	myExtType1 widget;
+	 
+	function main()
+		myHandler1 = myExtType1;   //0
+		myExtType1 =  myHandler1;  //0 
+		
+		
+		hand1In(myExtType1);     //0
+		hand1Out(myExtType1);    //0
+		hand1(myExtType1);       //1
+		
+		ext1In(myHandler1);    //0
+	
+	end
+	
+	
+	function hand1IN(p1 ruiWidgetImpl in)
+	end	
+
+	function hand1OUT(p1 ruiWidgetImpl out)
+	end
+		
+	function hand1(p1 ruiWidgetImpl)
+	end
+	
+	
+	function ext1IN (p1 widget in)
+	end
+	
+	
+end
+

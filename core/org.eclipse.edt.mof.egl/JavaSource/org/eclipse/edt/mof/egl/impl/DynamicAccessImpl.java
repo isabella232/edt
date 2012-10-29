@@ -113,4 +113,5 @@ public class DynamicAccessImpl extends ExpressionImpl implements DynamicAccess {
 		// there is no way of knowing whether the dynamically accessed member is nullable or not, so set to true
 		return true;
 	}
+	
 }

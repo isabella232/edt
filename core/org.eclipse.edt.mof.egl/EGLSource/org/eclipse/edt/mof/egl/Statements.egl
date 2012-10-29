@@ -20,11 +20,11 @@ externalType Statement extends Element type MofClass {isAbstract=true}
 end
 
 externalType StatementBlock extends Statement type MofClass
-	statements Statement[] {containment=true};
+	statements Statement[] {@Containment{true}};
 end
 
 externalType ExpressionStatement extends Statement type MofClass
-	expr Expression {containment=true};
+	expr Expression {@Containment{true}};
 end
 
 externalType AssignmentStatement extends ExpressionStatement type MofClass
@@ -43,23 +43,23 @@ externalType CallStatement extends Statement type MofClass
 	function getReturns() returns(LHSExpr);
 	function setReturns(value LHSExpr);
 	
-	invocationTarget Expression {containment=true};
-	arguments Expression[] {containment=true};
-	usingExpression Expression {containment=true};
-	callback MemberAccess {containment=true};
-	errorCallback MemberAccess {containment=true};
-	returnsValue LHSExpr {containment = true};
+	invocationTarget Expression {@Containment{true}};
+	arguments Expression[] {@Containment{true}};
+	usingExpression Expression {@Containment{true}};
+	callback MemberAccess {@Containment{true}};
+	errorCallback MemberAccess {@Containment{true}};
+	returnsValue LHSExpr {@Containment{true}};
 end
 
 externalType CaseStatement extends Statement type MofClass
-	criterion Expression {containment=true};
-	whenClauses WhenClause[] {containment=true};
-	defaultStatements StatementBlock {containment=true};
-	eLabel string {mofName="label"};
+	criterion Expression {@Containment{true}};
+	whenClauses WhenClause[] {@Containment{true}};
+	defaultStatements StatementBlock {@Containment{true}};
+	eLabel string {@MofName{"label"}};
 end
 
 externalType ConditionalStatement extends Statement type MofClass {isAbstract=true}
-	condition Expression {containment=true};
+	condition Expression {@Containment{true}};
 end
 
 externalType ContinueStatement extends LabelStatement type MofClass
@@ -81,11 +81,11 @@ end
 
 externalType ExitStatement extends LabelStatement type MofClass
 	exitStatementType int;
-	returnExpr Expression {containment=true};
+	returnExpr Expression {@Containment{true}};
 end
 
 externalType ForwardStatement extends Statement type MofClass
-	forwardToTarget Expression {containment=true};
+	forwardToTarget Expression {@Containment{true}};
 	arguments Expression[];
 	forwardToOption int;
 	
@@ -111,78 +111,78 @@ externalType LocalVariableDeclarationStatement extends ExpressionStatement type 
 end
 
 externalType ReturnStatement extends Statement type MofClass
-	expression Expression {containment=true};
+	expression Expression {@Containment{true}};
 end
 
 externalType IfStatement extends ConditionalStatement type MofClass
-	trueBranch Statement {containment=true};
-	falseBranch Statement {containment=true};
+	trueBranch Statement {@Containment{true}};
+	falseBranch Statement {@Containment{true}};
 end
 
 externalType MoveStatement extends Statement type MofClass
-	sourceExpr Expression {containment=true};
-	targetExpr LHSExpr {containment=true};
-	modifierExpr Expression {containment=true};
+	sourceExpr Expression {@Containment{true}};
+	targetExpr LHSExpr {@Containment{true}};
+	modifierExpr Expression {@Containment{true}};
 	modifier int;	
 end
 
 externalType PrintStatement extends Statement type MofClass
-	target Expression {containment=true};
+	target Expression {@Containment{true}};
 end
 
 externalType SetStatement extends Statement type MofClass
-	targets Expression[] {containment=yes};
+	targets Expression[] {@Containment{true}};
 	states string[];
 end
 
 externalType ThrowStatement extends Statement type MofClass
-	exception Expression {containment=true};
+	exception Expression {@Containment{true}};
 end
 
 externalType LoopStatement extends ConditionalStatement type MofClass {isAbstract=true}
-	 body Statement {containment=yes};
+	 body Statement {@Containment{true}};
 end
 
 externalType WhileStatement extends LoopStatement type MofClass
 end
 
 externalType ForStatement extends LoopStatement type MofClass
-	declarationExpression DeclarationExpression {containment=true};
-	deltaExpression Expression {containment=true};
-	counterVariable Expression {containment=true};
-	fromExpression Expression {containment=true};
-	toExpression Expression {containment=true};
+	declarationExpression DeclarationExpression {@Containment{true}};
+	deltaExpression Expression {@Containment{true}};
+	counterVariable Expression {@Containment{true}};
+	fromExpression Expression {@Containment{true}};
+	toExpression Expression {@Containment{true}};
 	isIncrement boolean = true;
-	elabel string {mofName="label"};
+	elabel string {@MofName{"label"}};
 end
 
 externalType ForEachStatement extends Statement type MofClass
-	declarationExpression DeclarationExpression {containment=true};
-	dataSource Expression {containment=true};
-	body Statement {containment=true};
+	declarationExpression DeclarationExpression {@Containment{true}};
+	dataSource Expression {@Containment{true}};
+	body Statement {@Containment{true}};
 end
 
 externalType LabelStatement extends Statement type MofClass
-	elabel string {mofName="label"};
+	elabel string {@MofName{"label"}};
 end
 
 externalType TryStatement extends Statement type MofClass
-	tryBlock StatementBlock {containment=true};
-	exceptionBlocks ExceptionBlock[] {containment=true};
+	tryBlock StatementBlock {@Containment{true}};
+	exceptionBlocks ExceptionBlock[] {@Containment{true}};
 end
 
 externalType TransferStatement extends Statement type MofClass
-	invocationTarget Expression {containment=yes};
-	passingRecord Expression {containment=yes};
+	invocationTarget Expression {@Containment{true}};
+	passingRecord Expression {@Containment{true}};
 	targetType int;
 end
 
 externalType ExceptionBlock extends StatementBlock type MofClass
-	exception Parameter {containment=true};
+	exception Parameter {@Containment{true}};
 end
 
 externalType WhenClause extends Element type MofClass
-	matchExpressions Expression[] {containment=true};
-	statements StatementBlock {containment=true};
+	matchExpressions Expression[] {@Containment{true}};
+	statements StatementBlock {@Containment{true}};
 end
 

@@ -497,7 +497,6 @@ public void enterPart(
 	char[][] usagePartPackages,
 	String eglFileName) {
 	
-	char[] enclosingTypeName= null;
 	char[] qualifiedName= null;
 	
 	EGLElementInfo parentInfo = (EGLElementInfo) fInfoStack.peek();
@@ -515,7 +514,6 @@ public void enterPart(
 	}
 	else if (parentHandle.getElementType() == IEGLElement.PART) {
 		handle = ((IPart) parentHandle).getPart(nameString);
-		enclosingTypeName= ((SourcePartElementInfo)parentInfo).getCharName();
 		qualifiedName= (new String(((SourcePartElementInfo)parentInfo).getQualifiedName()) + "." + nameString).toCharArray(); //$NON-NLS-1$
 	}
 	else {

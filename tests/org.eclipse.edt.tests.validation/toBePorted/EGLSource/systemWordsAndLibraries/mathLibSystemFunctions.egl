@@ -1,0 +1,47 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program mathLibSystemFunctions
+
+	function main()
+		intVar int;
+		bigIntVar bigint;
+		smallIntVar smallint;
+		floatVar float;
+		smallFloatVar smallFloat;
+		decimalVar decimal(9);
+	
+		// mathLib.stringAsInt ( numberAsText string in ) returns ( bigInt ) ;
+		// ... is gone.
+
+		intVar      = "1";	// 0
+		smallIntVar = "2";	// 0
+		bigIntVar   = "3";	// 0
+		intVar      = "4";	// 0
+		smallIntVar = "5";	// 0
+		bigIntVar   = "6";	// 0
+		
+		// mathLib.stringAsDecimal ( numberAsText string in ) returns ( bigDecimal ) ;
+		// ... is gone.
+		
+		decimalVar = "1.04";	// 0
+		decimalVar = "-4.2";    // 0
+		
+		// mathLib.stringAsFloat ( numberAsText string in ) returns ( float ) ;
+		// ... is gone.
+
+		floatVar      = "1.2";	// 0
+		smallFloatVar = "1.2";	// 0
+		floatVar      = "3.4";	// 0
+		smallFloatVar = "3.4";	// 0
+	end
+end

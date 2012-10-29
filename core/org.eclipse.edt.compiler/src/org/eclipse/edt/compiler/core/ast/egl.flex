@@ -49,14 +49,6 @@ import java_cup.runtime.Symbol;
 		return symbol(NodeTypes.SQLCONDITION, new InlineSQLStatement(rawString.toString(), openingBraceOffset, startOffset, startOffset+rawString.length()), startOffset, rawString.length());
 	}
 	
-	private Symbol dli() {
-		rawString.append("}");
-		if(openingBraceOffset != "#dli{".length()) {
-			lexerErrors.add(new SyntaxError(2208, startOffset + "#dli".length(), startOffset + openingBraceOffset - 1, SyntaxError.WARNING)); 
-		}
-		return symbol(NodeTypes.INLINE_DLI, new InlineDLIStatement(rawString.toString(), openingBraceOffset, startOffset, startOffset+rawString.length()), startOffset, rawString.length());
-	}
-	
 	private Symbol byteslit() {
 		String text = yytext();
 		return symbol(NodeTypes.BYTESLIT, new BytesLiteral(text, text.substring(2), yychar, yychar + yylength()), yychar, yylength());
@@ -86,26 +78,10 @@ import java_cup.runtime.Symbol;
 	}
 	
 	private static final int LITERALTYPE_STRING		= 0;
-	private static final int LITERALTYPE_HEX		= 1;
-	private static final int LITERALTYPE_CHAR		= 2;
-	private static final int LITERALTYPE_DBCHAR		= 3;
-	private static final int LITERALTYPE_MBCHAR		= 4;
-	private static final int LITERALTYPE_CHARHEX	= 5;
-	private static final int LITERALTYPE_DBCHARHEX	= 6;
-	private static final int LITERALTYPE_MBCHARHEX	= 7;
-	private static final int LITERALTYPE_UNICODEHEX	= 8;
 	
 	private Symbol string() {
 		switch(stringLiteralType) {
 			case LITERALTYPE_STRING:	return symbol(NodeTypes.STRING, new StringLiteral(rawString.toString(), stringValue.toString(), false, startOffset, startOffset+rawString.length()), startOffset, rawString.length());
-			case LITERALTYPE_HEX:		return symbol(NodeTypes.HEXLIT, new HexLiteral(rawString.toString(), stringValue.toString(), startOffset, startOffset+rawString.length()+1), startOffset, rawString.length()+1);
-			case LITERALTYPE_CHAR:		return symbol(NodeTypes.CHARLIT, new CharLiteral(rawString.toString(), stringValue.toString(), false, startOffset, startOffset+rawString.length()+1), startOffset, rawString.length()+1);
-			case LITERALTYPE_DBCHAR:	return symbol(NodeTypes.DBCHARLIT, new DBCharLiteral(rawString.toString(), stringValue.toString(), false, startOffset, startOffset+rawString.length()+1), startOffset, rawString.length()+1);
-			case LITERALTYPE_MBCHAR:	return symbol(NodeTypes.MBCHARLIT, new MBCharLiteral(rawString.toString(), stringValue.toString(), false, startOffset, startOffset+rawString.length()+1), startOffset, rawString.length()+1);
-			case LITERALTYPE_CHARHEX:	return symbol(NodeTypes.CHARLIT, new CharLiteral(rawString.toString(), stringValue.toString(), true, startOffset, startOffset+rawString.length()+2), startOffset, rawString.length()+2);
-			case LITERALTYPE_DBCHARHEX:	return symbol(NodeTypes.DBCHARLIT, new DBCharLiteral(rawString.toString(), stringValue.toString(), true, startOffset, startOffset+rawString.length()+2), startOffset, rawString.length()+2);
-			case LITERALTYPE_MBCHARHEX:	return symbol(NodeTypes.MBCHARLIT, new MBCharLiteral(rawString.toString(), stringValue.toString(), true, startOffset, startOffset+rawString.length()+2), startOffset, rawString.length()+2);
-			case LITERALTYPE_UNICODEHEX:	return symbol(NodeTypes.STRING, new StringLiteral(rawString.toString(), stringValue.toString(), true, startOffset, startOffset+rawString.length()+2), startOffset, rawString.length()+2);
 			default: throw new RuntimeException("Should not happen.");
 		}
 	}
@@ -141,7 +117,6 @@ FloatLit       = ({FLit1}|{FLit2})
 SmallfloatLit  = ({DecimalLit}|{Integer})[f]
 BytesLit	= 0[xX][012334567890aAbBcCdDeEfF]+
 SQLIdentifier  = [:jletter:][:jletterdigit:]*
-DLIIdentifier  = [:jletter:][:jletterdigit:]*
 
 // Line Comment
 LineComment     = "//" {InputCharacter}* {LineTerminator}?
@@ -170,7 +145,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 %}
 
 %state STRING
-%state HEXSTRING
 
 %state BLOCK_COMMENT
 
@@ -178,23 +152,11 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 %state SQLDELIMITEDID
 %state SQLSTRING
 
-%state DLI
-%state DLI_QUOTED_ID
-%state DLI_DBL_QUOTED_ID
-
 %%
 <YYINITIAL> {
 
 	// String
 	\"				   		{ yybegin(STRING); stringLiteralType = LITERALTYPE_STRING; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-//	[xX]\"			   		{ yybegin(HEXSTRING); stringLiteralType = LITERALTYPE_HEX; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-	[cC]\"			   		{ yybegin(STRING); stringLiteralType = LITERALTYPE_CHAR; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-	[dD]\"			   		{ yybegin(STRING); stringLiteralType = LITERALTYPE_DBCHAR; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-	[mM]\"			   		{ yybegin(STRING); stringLiteralType = LITERALTYPE_MBCHAR; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-	[cC][xX]\"		   		{ yybegin(HEXSTRING); stringLiteralType = LITERALTYPE_CHARHEX; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-	[dD][xX]\"		   		{ yybegin(HEXSTRING); stringLiteralType = LITERALTYPE_DBCHARHEX; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-	[mM][xX]\"		   		{ yybegin(HEXSTRING); stringLiteralType = LITERALTYPE_MBCHARHEX; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-	[uU][xX]\"		   		{ yybegin(HEXSTRING); stringLiteralType = LITERALTYPE_UNICODEHEX; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
 	
 	// Non-linebreak Whitespaces are ignored
 	[ \t\f]+			{ }
@@ -212,51 +174,36 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"#sql"{WhiteSpace}*"{"			{ yybegin(SQL); isSQLCondition = false; rawString.setLength(0); rawString.append(yytext()); startOffset = yychar; openingBraceOffset = yylength(); }
 	"#sqlcondition"{WhiteSpace}*"{"	{ yybegin(SQL); isSQLCondition = true;  rawString.setLength(0); rawString.append(yytext()); startOffset = yychar; openingBraceOffset = yylength(); }
 
-	// DLI Literal
-	"#dli"{WhiteSpace}*"{"			{ yybegin(DLI); rawString.setLength(0); rawString.append(yytext()); startOffset = yychar; openingBraceOffset = yylength(); }
-
 	// Keywords
 	"absolute"		    { return symbol(NodeTypes.ABSOLUTE); }
 	"add"				{ return symbol(NodeTypes.ADD); }
 	"all"				{ return symbol(NodeTypes.ALL); }
 	"as"				{ return symbol(NodeTypes.AS); }
-	"bind"				{ return symbol(NodeTypes.BIND); }
 	"by"				{ return symbol(NodeTypes.BY); }
 	"byname"			{ return symbol(NodeTypes.BYNAME); }
 	"byposition"		{ return symbol(NodeTypes.BYPOSITION); }
 	"call"				{ return symbol(NodeTypes.CALL); }
 	"case"				{ return symbol(NodeTypes.CASE); }
-	"eglclass"			{ return symbol(NodeTypes.EGLCLASS); }
+	"class"			 	{ return symbol(NodeTypes.CLASS); }
 	"close"			 	{ return symbol(NodeTypes.CLOSE); }
 	"const"			 	{ return symbol(NodeTypes.CONST); }
 	"constructor"		{ return symbol(NodeTypes.CONSTRUCTOR); }
 	"continue"			{ return symbol(NodeTypes.CONTINUE); }
-	"converse"		    { return symbol(NodeTypes.CONVERSE); }
 	"current"			{ return symbol(NodeTypes.CURRENT); }
-	"dataitem"			{ return symbol(NodeTypes.DATAITEM); }
-	"datatable"			{ return symbol(NodeTypes.DATATABLE); }
 	"decrement"			{ return symbol(NodeTypes.DECREMENT); }
 	"delegate"			{ return symbol(NodeTypes.DELEGATE); }
 	"delete"			{ return symbol(NodeTypes.DELETE); }
-	"display"			{ return symbol(NodeTypes.DISPLAY); }
 	"else"				{ return symbol(NodeTypes.ELSE); }
-	"embed"			 	{ return symbol(NodeTypes.EMBED); }
 	"end"			 	{ return symbol(NodeTypes.END); }
     "enumeration"       { return symbol(NodeTypes.ENUMERATION); }
-	"escape"			{ return symbol(NodeTypes.ESCAPE); }
 	"execute"			{ return symbol(NodeTypes.EXECUTE); }
 	"exit"				{ return symbol(NodeTypes.EXIT); }
 	"extends"			{ return symbol(NodeTypes.EXTENDS); }
 	"externalType"		{ return symbol(NodeTypes.EXTERNALTYPE); }
-	"field"			 	{ return symbol(NodeTypes.FIELD); }
 	"first"				{ return symbol(NodeTypes.FIRST); }
 	"for"			 	{ return symbol(NodeTypes.FOR); }
 	"foreach"			{ return symbol(NodeTypes.FOREACH); }
-	"form"				{ return symbol(NodeTypes.FORM); }
-	"formgroup"			{ return symbol(NodeTypes.FORMGROUP); }
 	"forupdate"			{ return symbol(NodeTypes.FORUPDATE); }
-	"forward"			{ return symbol(NodeTypes.FORWARD); }
-	"freesql"			{ return symbol(NodeTypes.FREESQL); }
 	"from"				{ return symbol(NodeTypes.FROM); }
 	"function"		    { return symbol(NodeTypes.FUNCTION); }
 	"get"			 	{ return symbol(NodeTypes.GET); }
@@ -277,25 +224,19 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"label"			 	{ return symbol(NodeTypes.LABEL); }
 	"last"				{ return symbol(NodeTypes.LAST); }
 	"library"			{ return symbol(NodeTypes.LIBRARY); }
-//	"like"				{ return symbol(NodeTypes.LIKE); }
-//	"matches"			{ return symbol(NodeTypes.MATCHES); }
 	"move"				{ return symbol(NodeTypes.MOVE); }
 	"next"				{ return symbol(NodeTypes.NEXT); }
 	"new"			 	{ return symbol(NodeTypes.NEW); }	
 	"null"			 	{ return symbol(NodeTypes.NULL); }
 	"nocursor"			{ return symbol(NodeTypes.NOCURSOR); }
 	"not"				{ return symbol(NodeTypes.NOT); }
-	"onevent"			{ return symbol(NodeTypes.ONEVENT); }
 	"onexception"		{ return symbol(NodeTypes.ONEXCEPTION); }
 	"open"				{ return symbol(NodeTypes.OPEN); }
-	"openui"			{ return symbol(NodeTypes.OPENUI); }
 	"otherwise"			{ return symbol(NodeTypes.OTHERWISE); }
 	"out"			 	{ return symbol(NodeTypes.OUT); }
 	"package"			{ return symbol(NodeTypes.PACKAGE); }
-	"passing"			{ return symbol(NodeTypes.PASSING); }
 	"prepare"			{ return symbol(NodeTypes.PREPARE); }
 	"previous"		    { return symbol(NodeTypes.PREVIOUS); }
-	"print"			 	{ return symbol(NodeTypes.PRINT); }
 	"private"			{ return symbol(NodeTypes.PRIVATE); }
 	"program"			{ return symbol(NodeTypes.PROGRAM); }
 	"record"			{ return symbol(NodeTypes.RECORD); }
@@ -308,17 +249,13 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"scroll"			{ return symbol(NodeTypes.SCROLL); }
 	"service"			{ return symbol(NodeTypes.SERVICE); }
 	"set"				{ return symbol(NodeTypes.SET); }
-	"show"				{ return symbol(NodeTypes.SHOW); }
 	"singlerow"			{ return symbol(NodeTypes.SINGLEROW); }
-	"sqlnullable"	    { return symbol(NodeTypes.SQLNULLABLE); }
 	"stack"			 	{ return symbol(NodeTypes.STACK); }
 	"static"			{ return symbol(NodeTypes.STATIC); }
 	"super"				{ return symbol(NodeTypes.SUPER); }
 	"this"				{ return symbol(NodeTypes.THIS); }
 	"throw"				{ return symbol(NodeTypes.THROW); }
 	"to"				{ return symbol(NodeTypes.TO); }
-	"transaction"		{ return symbol(NodeTypes.TRANSACTION); }
-	"transfer"		    { return symbol(NodeTypes.TRANSFER); }
 	"try"			 	{ return symbol(NodeTypes.TRY); }
 	"type"				{ return symbol(NodeTypes.TYPE); }
 	"update"			{ return symbol(NodeTypes.UPDATE); }
@@ -326,7 +263,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"use"				{ return symbol(NodeTypes.USE); }
 	"using"				{ return symbol(NodeTypes.USING); }
 	"usingKeys"			{ return symbol(NodeTypes.USINGKEYS); }
-	"usingPCB"		    { return symbol(NodeTypes.USINGPCB); }
 	"when"				{ return symbol(NodeTypes.WHEN); }
 	"while"			 	{ return symbol(NodeTypes.WHILE); }
 	"with"				{ return symbol(NodeTypes.WITH); }
@@ -387,43 +323,8 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"?"					{ return symbol(NodeTypes.QUESTION); }
 	"~"					{ return symbol(NodeTypes.NEGATE); }
 	
-
-	// Primitive Types
-	"any"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.ANY); }
-	"bigint"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BIGINT); }
-//	"bin"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.BIN); }
-	"boolean"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BOOLEAN); }
-	"bytes"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.BYTES); }
-//	"char"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.CHAR); }
-//	"dbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.DBCHAR); }
-	"decimal"			{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.DECIMAL); }
-	"float"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.FLOAT); }
-//	"hex"			 	{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.HEX); }
-	"int"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.INT); }
-//	"mbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.MBCHAR); }
-//	"money"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.MONEY); }
-//	"num"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUM); }
-	"number"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.NUMBER); }
-//	"numc"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUMC); }
-//	"pacf"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.PACF); }
-	"smallfloat"		{ return symbol(NodeTypes.PRIMITIVE, Primitive.SMALLFLOAT); }
-	"smallint"		    { return symbol(NodeTypes.PRIMITIVE, Primitive.SMALLINT); }
-	"string"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.STRING); }
-//	"unicode"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.UNICODE); }
-
-	// Large Object Type Keywords
-//	"blob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.BLOB); }
-//	"clob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.CLOB); }
-	
-	// Date/Time Type Keywords
-	"date"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.DATE); }
-//	"interval"		    { return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, null); }
-	"time"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.TIME); }
-	"timestamp"			{ return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, Primitive.TIMESTAMP); }
-
 	// Keywords reserved for future
 	"as"				{ return symbol(NodeTypes.AS); }
-	"dlicall"			{ return symbol(NodeTypes.DLICALL); }       //future
 	"group"				{ return symbol(NodeTypes.GROUP); }	 //future
 	"languagebundle"	{ return symbol(NodeTypes.LANGUAGEBUNDLE); }//future
 	"of"				{ return symbol(NodeTypes.OF); }	    //future
@@ -472,16 +373,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	<<EOF>>				{ yybegin(YYINITIAL); lexerErrors.add(new SyntaxError(2200, startOffset, yychar)); return string(); }
 }
 
-<HEXSTRING> {
-	\"			    	{ yybegin(YYINITIAL); rawString.append('\"'); return string(); }
-	
-	[012334567890aAbBcCdDeEfF]+		{ rawString.append(yytext());	stringValue.append(yytext()); }
-	[^012334567890aAbBcCdDeEfF]		{ lexerErrors.add(new SyntaxError(2209, yychar, yychar+1)); }
-
-	{LineTerminator}	{ yybegin(YYINITIAL); rawString.append(yytext()); lexerErrors.add(new SyntaxError(2200, startOffset, yychar)); return string(); } 
-	<<EOF>>				{ yybegin(YYINITIAL); lexerErrors.add(new SyntaxError(2200, startOffset, yychar)); return string(); }
-}
-
 <SQL> {
 		{SQLIdentifier}		{ rawString.append(yytext()); }
 		{WhiteSpace}*		{ rawString.append(yytext()); }
@@ -512,35 +403,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 		
 		{LineTerminator}	{ yybegin(SQL); rawString.append(yytext()); }
 		<<EOF>>				{ yybegin(SQL); }
-}
-
-<DLI> {
-		"}"					{ yybegin(YYINITIAL); return dli(); }
-		{DLIIdentifier}		{ rawString.append(yytext()); }
-		{WhiteSpace}*		{ rawString.append(yytext()); }
-
-		\"					{ yybegin(DLI_DBL_QUOTED_ID); rawString.append('\"'); }
-		\'					{ yybegin(DLI_QUOTED_ID); rawString.append('\''); }
-		.					{ rawString.append(yytext()); }
-		<<EOF>>				{ yybegin(YYINITIAL); lexerErrors.add(new SyntaxError(2204, startOffset, startOffset + openingBraceOffset)); return dli(); }
-}
-
-<DLI_DBL_QUOTED_ID> {
-		\"					{ yybegin(DLI); rawString.append('\"'); }
-		\"\"				{ rawString.append("\"\""); }
-		[^\"\r\n]+			{ rawString.append(yytext()); }
-		
-		{LineTerminator}	{ yybegin(DLI); rawString.append(yytext()); }
-		<<EOF>>				{ yybegin(DLI); }
-}
-
-<DLI_QUOTED_ID> {
-		\'					{ yybegin(DLI); rawString.append('\''); }
-		\'\'				{ rawString.append("\'\'"); }
-		[^\'\r\n]+			{ rawString.append(yytext()); }
-		
-		{LineTerminator}	{ yybegin(DLI); rawString.append(yytext()); }
-		<<EOF>>				{ yybegin(DLI); }
 }
 
 [^]							{ return symbol(NodeTypes.error); }

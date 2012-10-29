@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+DataItem ValidatorDataTableValidOne int {validatorDataTable = MatchValidTbl} end //0
+
+DataItem ValidatorDataTableValidTwo int {validatorDataTable = MatchInvalidTbl} end //0
+
+DataItem ValidatorDataTableValidThree int {validatorDataTable = RangeChkTbl} end //0
+
+DataItem ValidatorDataTableInvalidOne int {validatorDataTable = UnresolvableTbl} end //1
+
+DataItem ValidatorDataTableInvalidTwo int {validatorDataTable = BasicTbl} end //1
+
+DataItem ValidatorDataTableInvalidThree int {validatorDataTable = MsgTbl} end //1
+
+DataTable MatchValidTbl type MatchValidTable
+end
+
+DataTable MatchInvalidTbl type MatchInvalidTable
+end
+
+DataTable RangeChkTbl type RangeChkTable
+end
+
+DataTable BasicTable
+end
+
+DataTable MsgTble type MsgTable
+end

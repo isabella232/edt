@@ -1,0 +1,34 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program pgm
+	function main() end
+	
+function init_cvc()
+	sql_str  String(500);
+
+	cvc_view Int;
+
+	sql_str =  "select access_loc,description,access_date, " + 
+			" access_srgn_init,dressing_clean,dressing_drainage, " + 
+			" dressing_odor,dressing_change,site_clean,site_suture, " + 
+			" site_bleeding,site_pain,site_bruise,site_swelling,site_redness " + 
+			" from cvc_track, outer access_types " + 
+			" where cvc_track.tx_cd = ? and cvc_track.pri_sec_flag = ? " + 
+			" and cvc_track.access_type = access_types.access_type "  + 
+			" and access_types.inactive_ind = 'N' ";
+	prepare cvc_view from sql_str;
+	/* declare cvc_view_crs cursor for cvc_view */
+
+end
+end

@@ -26,7 +26,7 @@ import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jdt.core.IJavaElement;
 
 public class EglarPackageFragmentRoot extends PackageFragmentRoot {
@@ -199,13 +199,13 @@ public class EglarPackageFragmentRoot extends PackageFragmentRoot {
 		for (int i = existingLength; i < length; i++) {
 			if (Util.isValidFolderNameForPackage(pkgName[i])) {
 				System.arraycopy(existing, 0, existing = new String[i+1], 0, i);
-				//InternUtil.intern(String) returns the matching string ignore cases,
+				//NameUtile.getAsName(String) returns the matching string ignore cases,
 				//it is possible that 'existing' and pkgName in different case. However, later
 				//rawPackageInfo.get(pkgName) retrieves exactly the same case string, which may
 				//cause the result null if the string put into rawPackageInfo is in different case
 				//with the pkgName. Therefore, need to put the same case string into rawPackageInfo,
-				//using InternUtil.internCaseSensitive instead.
-				existing[i] = InternUtil.internCaseSensitive(pkgName[i]);
+				//using NameUtile.getAsCaseSensitiveName instead.
+				existing[i] = NameUtile.getAsCaseSensitiveName(pkgName[i]);
 
 				rawPackageInfo.put(existing, new ArrayList[] { EMPTY_LIST, EMPTY_LIST });
 			} else {

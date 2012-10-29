@@ -1,0 +1,140 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+program setValueBlock_valid
+
+	use init_Valid;
+
+	localVar0 int = 5;
+	localVar1 point {x=4, y=this.localVar0};
+	localvar2 int[5] {1, 2, 3, 4, 5 };
+	localvar3 rectangle[10] {this[5]{lowerright.x = 10}};
+	localvar4 rectangle[1][2][3][4][5][6][7] {this[1]{this[2]{this[3]{this[4]{this[5]{this[6]{this[7]{this.upperleft.y = 10}}}}}}}};
+	localvar5 rectangle {upperLeft{x=6}, lowerRight{y=10}};
+	
+	localvar6 point[10] {x=5};
+
+	localvar7 point {x = 5, y = f1()};
+	
+	localvar8 rectangle[10] {lowerright.x = 10};
+	localvar9 rectangle[10][10] {lowerright.x = 10};
+	
+	localVar10 dictionary { name = "dave", quanitity = 5 };
+	
+	
+	function main()
+		localVar0 dbchar(10);
+		localVar1 point {x = this.localVar0};
+		
+		myRect rectangle;
+		myRect{upperleft.x=f1(), lowerright.y=5};
+		myRect{upperleft.x=f1(), lowerright.y=localVar6[1].x};
+		
+//		myRectRef ref rectangle;
+		
+//		myRectRef = new rectangle {lowerRight.x = 5, upperLeft.y = 6};
+		
+		pt point;
+		pt2 point;
+		pt = pt2{x=1, y=2};
+				
+	end
+	
+	function f2(pt point)
+	end
+	
+end
+	
+record point
+	{ x = init_Valid.x, y = init_Valid.f1()}
+	x int;
+	y int;	
+end
+
+record rectangle
+	upperleft point = lowerright;
+	lowerright point = upperleft;
+end
+
+record polygon
+//	{points1 = [new point {x = 3}, new point {x = 2}, new point {x = 1}]}
+//	points1 ref[] point;
+//	points2 point[10] {x = 5, y = points2[1].x };
+end
+
+record anSQLRec type sqlRecord
+	{this.xxx = "abcd12345"}
+	 xxx char(9) {column = "EMPNO"};
+end
+
+record console type consoleForm
+	{this.formSize = new consoleField, formSize = [10, 20]}
+	
+	formSize consoleField {fieldLen = 6, position=[1,1]};
+end
+
+library init_Valid
+
+	x int = 4;
+	
+	function f1() returns (int)
+		return (3);
+	end
+	
+end
+
+Program pgm
+	recVar sqlRecDef;
+	a int;
+	
+	function main()	
+		prepare prepareStmtID from "select a from b";
+		
+		// The following lines aren't valid in 6.0.0.1 syntax, but probably will be in the future:
+		//get {item2 = "abcd"} recVar with prepareStmtID;                   // 0
+		//insert {item3 = 4} recVar singleRow with #sql{select c from d}; // 0
+		//delete {item2 = "abcd", item3 = 4} with prepareStmtID into a;                   // 0
+		//replace {item2 = "abcd"} singlerow with #sql{select e from f} into a; // 0
+	end
+end
+
+Record sqlRecDef type sqlRecord 
+	item2 char(4);
+	item3 int;
+end
+
+Record flexRec
+	localVar0 int = 5;
+	localVar1 point {x=4, y=localVar0};
+	localvar2 int[5] {1, 2, 3, 4, 5 };
+	localvar3 rectangle[10] {this[5]{lowerright.x = 10}};
+	localvar4 rectangle[1][2][3][4][5][6][7] {this[1]{this[2]{this[3]{this[4]{this[5]{this[6]{this[7]{this.upperleft.y = 10}}}}}}}};
+	localvar5 rectangle {upperLeft{x=6}, lowerRight{y=10}};
+	localVar10 dictionary { name = "dave", quanitity = 5 };
+end
+
+Record Employee type SQLRecord { tableNames = [["USRVAGT.EMPLOYEE"]], keyitems = [empno] }
+	empno String {column = "EMPNO"};
+	firstnme String {column = "FIRSTNME"};
+	midinit String {column = "MIDINIT"};
+	lastname String {column = "LASTNAME"};
+	indexInArray int {persistent = no};
+end
+
+handler ph type JSFHandler
+	detailRecord Employee {
+		empno { inputRequired = yes }, 
+		firstnme { inputRequired = yes }, 
+		midinit { inputRequired = yes }, 
+		lastname { inputRequired = yes }};
+end

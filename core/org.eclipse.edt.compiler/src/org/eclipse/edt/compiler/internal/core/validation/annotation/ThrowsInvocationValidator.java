@@ -12,41 +12,38 @@
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 
-public class ThrowsInvocationValidator implements
-		IInvocationValidationRule {
+public class ThrowsInvocationValidator implements IInvocationValidationRule {
 	
-	private final static String JAVAOBJECTECXPTION = InternUtil.intern("JavaObjectException");
-	private final static String[] EGLXJAVA = InternUtil.intern(new String[] {"eglx", "java"});
-	private List<IPartBinding> validExceptions = new ArrayList<IPartBinding>();
-
+	private final static String JavaObjectExceptionMofKey = NameUtile.getAsName(MofConversion.EGL_KeyScheme + "eglx.java.JavaObjectException");
+	
+	private List<StructPart> validExceptions = new ArrayList<StructPart>();
+	
 	@Override
-	public void validate(Node node, final IBinding binding,
-			IPartBinding declaringPart, final IProblemRequestor problemRequestor,
-			ICompilerOptions compilerOptions) {
+	public void validate(Node node, Element element, Part declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		
-		if (!Binding.isValidBinding(binding) || !Binding.isValidBinding(declaringPart)) {
+		if (node == null || declaringPart == null || element == null) {
 			return;
 		}
 		
-		IPartBinding joe = declaringPart.getEnvironment().getPartBinding(EGLXJAVA, JAVAOBJECTECXPTION);
-		buildAllValidExceptions(validExceptions, joe);
+		org.eclipse.edt.mof.egl.Type joe = TypeUtils.getType(JavaObjectExceptionMofKey);
+		if (joe instanceof StructPart) {
+			buildAllValidExceptions(validExceptions, (StructPart)joe);
+		}
 		
 		if (!isInTryCatchException(node)) {
 			problemRequestor.acceptProblem(
@@ -69,11 +66,16 @@ public class ThrowsInvocationValidator implements
 	}
 	
 	private boolean hasCatchException(TryStatement tryStmt) {
-		Iterator i = tryStmt.getOnExceptionBlocks().iterator();
-		while (i.hasNext()) {
-			OnExceptionBlock exBlock = (OnExceptionBlock)i.next();
-			Type type = exBlock.getExceptionType();
-			if (type != null && validExceptions.contains(type.resolveTypeBinding())) {
+		List<Node> blocks = tryStmt.getOnExceptionBlocks();
+		
+		// try ... end, with no onException, is the same as catching AnyException and doing nothing.
+		if (blocks.size() == 0) {
+			return true;
+		}
+		
+		for (Node node : blocks) {
+			Type type = ((OnExceptionBlock)node).getExceptionType();
+			if (type != null && validExceptions.contains(type.resolveType())) {
 				return true;
 			}
 		}
@@ -97,24 +99,16 @@ public class ThrowsInvocationValidator implements
 		}
 		
 		return getTryStatement(node.getParent());
-		
 	}
 	
-	private void buildAllValidExceptions(List<IPartBinding> list, IPartBinding baseException) {
-		
-		if (!Binding.isValidBinding(baseException) || list.contains(baseException)) {
+	private void buildAllValidExceptions(List<StructPart> list, StructPart baseException) {
+		if (baseException == null || list.contains(baseException)) {
 			return;
 		}
-		
 		list.add(baseException);
 		
-		if (baseException.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
-			ExternalTypeBinding et = (ExternalTypeBinding) baseException;
-			list.addAll(et.getExtendedTypes());
+		for (StructPart superType : ((StructPart)baseException).getSuperTypes()) {
+			buildAllValidExceptions(list, superType);
 		}
-		
-		buildAllValidExceptions(list, ((PartBinding)baseException).getDefaultSuperType());
-		
 	}
-
 }

@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-/**
- * @author svihovec
- *
- */
+
 public interface ICompilerOptions {
+
 }

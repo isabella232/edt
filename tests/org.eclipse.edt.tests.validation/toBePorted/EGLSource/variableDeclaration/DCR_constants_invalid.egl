@@ -1,0 +1,92 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program constantprogram_invalid4
+	const conststring string(3) = "abc"; 	//0
+	const constchar char = "abc" ;			//1  must include a length
+	const constbinary bin  = 1.2;			//3  must include a length
+	const constchararray char [3] = ["ab", "cd"]; 	//1 must include a length
+	const constintarrayofarray int [][] = [2,3];  	//1 not compatible types in the expression 
+	const constintarray int [] = [[2,3],[3,4]]; 	//1 not compatible types in the expression 
+	const constitem int = 5;	
+	const constitem int = 6;				//1 The same name constitem also appears as variable, parameter, use or constant declaration in Function, Program, or Library constantprogram_invalid4
+	const constdecimal decimal(2,3) = 1.2;	//1 The decimals value 3 for item constdecimal must be less than or equal to the length value 2.
+	
+	function main()
+		const conststring string(3) = "abc"; 	//0
+		const constchar char = "abc" ;			//1  must include a length
+		const constbinary bin  = 1.2;			//3  must include a length
+		const constchararray char [3] = ["ab", "cd"]; 	//1 must include a length
+		const constintarrayofarray int [][] = [2,3];  	//1 not compatible types in the expression 
+		const constintarray int [] = [[2,3],[3,4]]; 	//1 not compatible types in the expression 
+		const constitem int = 5;	
+		const constitem int = 6;				//1 The same name constitem also appears as variable, parameter, use or constant declaration in Function, Program, or Library main
+		const constdecimal decimal(2,3) = 1.2;	//1 The decimals value 3 for item constdecimal must be less than or equal to the length value 2.
+		
+		constintarray = [1,2,3];					//1 Invalid attempt to modify constintarray which is a constant
+		constintarray.appendElement(4);				//0
+		constintarray[1] = 5;						//0
+
+	end
+end	
+library constantlibrary_invalid
+	const conststring string(3) = "abc"; 	//0
+	const constchar char = "abc" ;			//1  must include a length
+	const constbinary bin  = 1.2;			//3  must include a length
+	const constchararray char [3] = ["ab", "cd"]; 	//1  must include a length
+	const constintarrayofarray int [][] = [2,3];  	//1 not compatible types in the expression 
+	const constintarray int [] = [[2,3],[3,4]]; 	//1 not compatible types in the expression 
+	const constitem int = 5;	
+	const constitem int = 6;				//1 The same name constitem also appears as variable, parameter, use or constant declaration in Function, Program, or Library constantlibrary_invalid
+	const constdecimal decimal(2,3) = 1.2;	//1 The decimals value 3 for item constdecimal must be less than or equal to the length value 2.
+	
+	function main()
+		const conststring string(3) = "abc"; 	//0
+		const constchar char = "abc" ;			//1  must include a length
+		const constbinary bin  = 1.2;			//3  must include a length
+		const constchararray char [3] = ["ab", "cd"]; 	//1 must include a length
+		const constintarrayofarray int [][] = [2,3];  	//1 not compatible types in the expression 
+		const constintarray int [] = [[2,3],[3,4]]; 	//1 not compatible types in the expression 
+		const constitem int = 5;	
+		const constitem int = 6;				//1 The same name constitem also appears as variable, parameter, use or constant declaration in Function, Program, or Library main
+		const constdecimal decimal(2,3) = 1.2;	//1 The decimals value 3 for item constdecimal must be less than or equal to the length value 2.
+
+	end
+end	
+handler constantpagehandler_invalid type JSFHandler
+	const conststring string(3) = "abc"; 	//0
+	const constchar char(0) = "abc" ;			//1  The length value 0 for item constchar, primitive type CHAR, must be a number in the (1..32767) range.
+	const constbinary bin(0)  = 1.2;			//3  The length value 0 for item constbinary, primitive type BIN, must be a number in the (4, 9, 18) range.
+	const constchararray char(0) [3] = ["ab", "cd"]; 	//1  The length value 0 for item constchararray, primitive type CHAR, must be a number in the (1..32767) range.
+	const constintarrayofarray int [][] = [2,3];  	//1 not compatible types in the expression 
+	const constintarray int [] = [[2,3],[3,4]]; 	//1 not compatible types in the expression 
+	const constitem int = 5;	
+	const constitem int = 6;				//1 The same name constitem also appears as variable, parameter, use or constant declaration in Function, Program, or Library constantpagehandler_invalid
+	const constdecimal decimal(2,3) = 1.2;	//1 The decimals value 3 for item constdecimal must be less than or equal to the length value 2.
+	
+	function main()
+		const conststring string(3) = "abc"; 	//0
+		const constchar char(0) = "abc" ;			//1  The length value 0 for item constchar, primitive type CHAR, must be a number in the (1..32767) range.
+		const constbinary bin(0)  = 1.2;			//3  The length value 0 for item constbinary, primitive type BIN, must be a number in the (4, 9, 18) range.
+		const constchararray char(0) [3] = ["ab", "cd"]; 	//1  The length value 0 for item constchararray, primitive type CHAR, must be a number in the (1..32767) range.
+		const constintarrayofarray int [][] = [2,3];  	//1 not compatible types in the expression 
+		const constintarray int [] = [[2,3],[3,4]]; 	//1 not compatible types in the expression 
+		const constitem int = 5;	
+		const constitem int = 6;				//1 The same name constitem also appears as variable, parameter, use or constant declaration in Function, Program, or Library main
+		const constdecimal decimal(2,3) = 1.2;	//1 The decimals value 3 for item constdecimal must be less than or equal to the length value 2.
+
+	end
+end	
+
+handler myHandler type jasperReport
+	const myConstant constantType = literal; // 2
+end

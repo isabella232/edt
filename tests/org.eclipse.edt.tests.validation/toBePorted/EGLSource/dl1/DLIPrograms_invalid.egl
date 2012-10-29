@@ -1,0 +1,477 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// check out all of the Program DLI properties
+Program MYDBPRG0 type basicProgram (pcb1 DB_PCBRecord, pcb2 IO_PCBRecord)
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+   @DLI { psb = psb, 			//0
+   		  psb = myname,			//1 Invalid name myname
+		  psb = 123,			//1 must be a valid name
+		  psb = [1,2],			//1 must be a valid name
+//   		  pcbParms = ["", pcb2, pcb1],
+		  pcbParms=123,			//1 must be an array of valid names
+		  pcbParms=x,			//1 must be an array of valid names
+		  pcbParms="def",		//1 must be an array of valid names
+  		  callInterface = DLICallInterfaceKind.CBLTDLI,//0
+   		  callInterface = DLICallInterfaceKind.AIBTDLI,//0
+   		  callInterface = CBLTDLI,			//0
+   		  callInterface = AIBTDLI,			//0   		     		     		  
+   		  callInterface = "pcbname",		//1 callInterface.  The value for this property must be one of the following: AIBTDLI, CBLTDLI.
+		  callInterface = myname,			//1 callInterface.  The value for this property must be one of the following: AIBTDLI, CBLTDLI.
+		  callInterface = 123,				//1 callInterface.  The value for this property must be one of the following: AIBTDLI, CBLTDLI.
+		  callInterface = [1,2],			//1 callInterface.  The value for this property must be one of the following: AIBTDLI, CBLTDLI.
+  		  handleHardDLIErrors = "pcbname",	//1 The value for this property must be one of the following: yes, no.
+		  handleHardDLIErrors = myname,		//1 The value for this property must be one of the following: yes, no.
+		  handleHardDLIErrors = 123,		//1 The value for this property must be one of the following: yes, no.
+		  handleHardDLIErrors = [1,2],		//1 The value for this property must be one of the following: yes, no.
+          handleHardDLIErrors = yes,		//0
+          garbage = yes }					//1 garbage cannot be resolved
+  }
+  // PSB Declaration
+  psb mypsb1 ;								//0
+  function main()
+  end 
+end
+
+Record studentx type dlisegment end
+
+Record mypsb1 type PSBRecord
+  iopcb  IO_PCBRecord  { @PCB { pcbType = PCBKind.TP } };
+  pcb1 ALT_PCBRecord { @PCB {pcbType = PCBKind.TP } };
+  STUDENT_dbPCB DB_PCBRecord				//0
+    { @PCB { pcbType = PCBKind.DB,			//0
+      hierarchy = [							//0
+        @Relationship { segmentRecord = STUDENTX }//0
+    ] } } ;									//0
+end  
+
+//psb property must point to a variable declaration that resolves to a PSBRecord part
+Program MYDBPRG1 type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+   @DLI { psb = psb, 						//1 The value of the psb field must be the name of a variable declaration of a PSBRecord
+  		  callInterface = CBLTDLI,			//0
+          handleHardDLIErrors = yes}		//0
+  }
+  // PSB Declaration doesn't exist
+  function main()
+  end 
+end
+
+Program MYDBPRG2 type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+   @DLI { psb = psb, 						//1 The value of the psb field must be the name of a variable declaration of a PSBRecord
+  		  callInterface = CBLTDLI,			//0
+          handleHardDLIErrors = yes}		//0
+  }
+  // PSB Declaration doesn't point to a PSB
+  psb somerecord ;							//0
+  function main()
+  end 
+end
+Record somerecord type basicrecord			//0
+	10 myitem char(10);						//0
+end
+
+Program MYDBPRG3 type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+   @DLI { psb = psb, 						//0
+  		  callInterface = CBLTDLI,			//0
+          handleHardDLIErrors = yes}		//0
+  }
+  //Now it points to a real PSB
+  psb PSBRcd;
+  function main()
+  end 
+end
+
+Record PSBRcd type PSBRecord
+end
+
+// can't do DL/I in a program that doesn't have the @DLI
+Program MYDBPRG4 type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes
+  }
+  psb EducPSB;
+  course course1;
+  courses course1[3];
+  
+  function main()
+  	add course ;						//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+  	add courses ;						//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	delete course ;					 	//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	get course;						 	//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	get courses;					 	//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	get course forupdate;				//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	get next courses;					//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	get next inparent course;			//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	get next inparent courses;			//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+	get next inparent course forupdate;	//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+  	replace course ;					//1 DL/I I/O is not allowed unless the program specifies the DLI and PSB properties
+  end 
+end
+
+// can't receive PCBs in a program that doesn't have the @DLI property
+Program MYDBPRG5 type basicProgram (mypcb DB_PCBRecord) //1 A program cannot receive a PCB as a parameter unless the DLI property is specified for the program.
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes
+  }
+  psb EducPSB;
+  course course;
+  function main()
+  end 
+end
+// can't receive PCBs in a program that doesn't have the @DLI property
+// make sure this only comes out when the parameter resolves to "our" PCBRecord
+Program MYDBPRG6 type basicProgram (mypcb ALT_PCBRecord) //0
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes
+  }
+  psb EducPSB;
+  course course1;
+  function main()
+  end 
+end
+
+// valid PSBRecord, dliSegments and DataItems to use in statements
+Record ALT_PCBRecord type basicRecord
+	10 alt_info char(20);
+end
+DataItem CourseN char(3) { dliFieldName="COURSE#" } end	 
+Record Course1 type DLISegment 						 
+{ segmentName="COURSE", keyItem=courseNo }		 
+	10 courseNo CourseN;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+Record EducPSB type PSBRecord 					 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord="Course1" }	 
+   ] }};
+end
+
+Record AAA type DLISegment 					 
+{ segmentName="AAA", keyItem=AAANo }		 
+	10 AAANo char(3) { dliFieldName="AAA#" };							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+Record BBB type DLISegment 					 
+	10 BBBdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record CCC type DLISegment 					 
+{ segmentName="CCC", keyItem=empNo, hostVarQualifier = "unknown" }		 
+	10 empNo char(6) { dliFieldName ="EMP#" };									 
+	10 name char(18) { dliFieldName ="NAME" };									 
+end 
+
+Record DDD type DLISegment	 				 
+	{ segmentName="DDD" }						 
+	10 empNo char(6) { dliFieldName ="EMP#" };									 
+	10 name char(18) { dliFieldName ="NAME" };									 
+	10 grade char(1);								 
+end
+Record UnresolvedPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	AAAPCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=AAA },		 
+       @Relationship{											 
+      		segmentRecord=BBB,parentRecord=AAA },  	  
+       @Relationship{											 
+      		segmentRecord=CCC,parentRecord=BBB},  
+	   @Relationship{											 
+	     	segmentRecord=DDD, parentRecord=BBB}	 
+   ] }};
+  BBBPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",
+	  secondaryIndexItem = "XLoc",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=BBB },	 
+	   @Relationship{								 
+	     segmentRecord=AAA,parentRecord=BBB},	 
+	   @Relationship{										 
+	     segmentRecord=CCC,parentRecord=BBB},	 
+	   @Relationship{										 
+	     segmentRecord=DDD,parentRecord=BBB}	 
+	  ] }};
+end
+
+
+
+
+Program testUnresolvedIssues type textUIProgram 
+// Test for unresolved situations
+//	- secondary index item
+//	- host variable qualifier
+//	- host variable in an SSA 
+//		- using the host variable qualifier (default SSA)
+//		- without using the host variable qualifier (modified SSA)	 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes }	 
+  }
+  BBB BBB;					 
+  CCC CCC;						 
+  DDD DDD;						 
+  AAAs AAA[20];					   
+  BBBs BBB[3];					 
+
+  // PSB Declaration
+  psb UnresolvedPSB ;					 
+
+  	function main()
+		addStmt();
+		getStmt();
+		getForUpdateStmt();
+  	end
+  	function addStmt()
+  	  //modified SSA			 
+  	  add DDD usingPCB psb.BBBPCB 		 	//0
+  	      with #dli{ISRT BBB (XLOC = :XLOC) //1 XLOC cannot be resolved
+  	  					 DDD};			   	//0  
+  	  //default SSA	
+  	  add DDD usingPCB psb.BBBPCB 	;		//1 XLoc cannot be resolved
+	  //modified	 
+  	  add BBB 							 	//0
+  	  		with #dli{ISRT AAA (AAA# = :def)//1 def cannot be resolved
+  	  					   BBB};  			//0
+  	  //modified					    				 
+	  add BBBs 							 
+  	  		with #dli{ISRT AAA (AAA# = :ghi)//1 ghi cannot be resolved
+  	  					   BBB};	  					 		 
+	  //default - name of record will be used as default hostvar qualifier
+	  //	but a variable by that record name isn't declared
+	  add BBBs ;							//1 AAA.AAANo cannot be resolved 
+   	end  
+	
+ 	function getStmt() 
+ 		//modified
+		get CCC 									 
+			with #dli{GU AAA (AAA# = :xxx) 	//1 xxx cannot be resolved
+					     BBB				//0		 
+					     CCC (emp# = :yyy) };//1 yyy cannot be resolved	
+		//default - hostVarQualifer will be used as qualifier of key for CCC
+		//		    name of record will be used as qualifier of key for AAA
+		get CCC 	;						//2 AAA.AAANo cannot be resolved|unknown cannot be resolved								 
+		//modified		       
+		get BBB usingPCB psb.BBBPCB 		//0	 
+			with #dli{GU  BBB (XLOC = :abc) };//1 abc cannot be resolved
+	end 
+	 
+ 	function getForUpdateStmt() 
+		get BBB forupdate usingPCB psb.BBBPCB	//0	 	
+			with #dli{GHU BBB (xloc = :xloc) };	//1 xloc cannot be resolved
+     	get BBB, DDD forupdate usingPCB psb.BBBPCB//0  	   
+			with #dli{GHU BBB*D (xloc = :xloc) 	//1 xloc cannot be resolved			 
+					  DDD          };			//0			       	
+	end   
+end
+  
+ 
+  
+Record GSAMPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	AAAPCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB"}};
+  	BBBPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC" }};
+	CCCPCB GSAM_PCBRecord { @PCB {
+			pcbType = GSAM,
+			pcbName = "Gsam"}};  
+end
+
+
+Program testGSAMPCBUsage type textUIProgram 
+// Make sure no one trys to use a GSAM PCB on a usingPCB clause
+// GSAM PCBs are associated with serial files in the resource association
+// file.  In the resource association file, you can't point a serial file to 
+// a TP or DB PCB. 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					 
+         handleHardDLIErrors = yes }	 
+  }
+  BBB BBB;					 
+  CCC CCC;						 
+  DDD DDD;						 
+  AAAs AAA[20];					   
+  BBBs BBB[3];	
+  xloc char(4);				 
+
+  // PSB Declaration
+  psb GSAMPSB ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+  	function addStmt()		
+ 	  add DDD usingPCB psb.CCCPCB 		 	//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+  	      with #dli{ISRT BBB (XLOC = :XLOC) //0
+  	  					 DDD};			   	//0  
+  	  add DDD usingPCB psb.CCCPCB 	;		//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+   	end  
+  	function deleteStmt() 	
+	  delete ccc usingPCB psb.CCCPCB 		//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+	  		with #dli{DLET AAA};		 	//0
+	  delete ccc usingPCB psb.CCCPCB ;		//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O. 
+	 	  		
+  	end 	
+ 	function getStmt() 
+		get bbb usingPCB psb.cccpcb 		//1 The pcb psb.cccpcb is a GSAM PCB.  It can only be used for serial file I/O.
+			with #dli{GU  BBB (XLOC = :XLOC) }; //0
+		get BBB usingPCB psb.cccpcb ;		//1 The pcb psb.cccpcb is a GSAM PCB.  It can only be used for serial file I/O.
+	end 
+	 
+ 	function getForUpdateStmt() 
+		get BBB forupdate usingPCB psb.cccPCB	//1 The pcb psb.cccPCB is a GSAM PCB.  It can only be used for serial file I/O.	
+			with #dli{GHU BBB (xloc = :xloc) };	//0
+     	get BBB, DDD forupdate usingPCB psb.cccPCB;//1 The pcb psb.cccPCB is a GSAM PCB.  It can only be used for serial file I/O.
+	end  
+	 
+ 	function getNextStmt() 
+		get next CCC usingPCB psb.CCCPCB 	//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+			with #dli{GN CCC		 };	 	//0
+		get next DDD usingPCB psb.CCCPCB ;	//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+	end
+
+ 	function getNextForUpdateStmt() 
+		get next ddd forupdate usingPCB psb.CCCPCB 	//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+			with #dli{GHN ddd  };					//0
+		get next bbb forupdate usingPCB psb.CCCPCB;	//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+	end		
+		
+ 	function getNextInParentStmt() 
+		get next inparent bbb usingPCB psb.CCCPCB	//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O. 
+			with #dli{GNP bbb  };					//0	 		
+		get next inparent bbb usingPCB psb.CCCPCB;  //1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+	end
+	
+ 	function getNextInParentForUpdateStmt() 
+		get next inparent bbb forupdate usingPCB psb.CCCPCB	//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+			with #dli{GHNP bbb  };							//0	 	
+		get next inparent bbb forupdate usingPCB psb.CCCPCB;//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.	
+	end
+	
+	function replaceStmt()
+   	  replace bbb usingPCB psb.CCCPCB  	//1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.
+  	  		with #dli{REPL  bbb } ;		//0		 
+  	  replace bbb usingPCB psb.CCCPCB;  //1 The pcb psb.CCCPCB is a GSAM PCB.  It can only be used for serial file I/O.			 
+  	end	
+		
+end
+  
+ 
+Record GSAMPSB2 type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	AAAPCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB"}};
+  	BBBPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC" }};
+	CCCPCB GSAM_PCBRecord { @PCB {
+			pcbType = GSAM,
+			pcbName = "Gsam"}};  
+end
+
+
+Program testPSBRecordUsage type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = "psb", 					 
+         handleHardDLIErrors = yes }	 
+  }
+  // PSB Declaration
+  psb GSAMPSB2 ;	
+  psb2 gsampsb2;
+  const psb3 gsampsb2 = "abc";				 
+
+  	function main()
+		call "pgm2" (psb);		//1 PSBRecord variable psb cannot be used as an argument on a call or function invocation
+  		func2(psb);			//1 PSBRecord variable psb cannot be used as an argument on a call or function invocation
+  		checkstmts();		//0
+  	end
+  	function func2(mypsb gsampsb2) //1 PSBRecord is not a valid type for a function parameter
+  	end
+  	function checkstmts()
+  		add psb;				//1 The target of an add statement must be an SQL, MQ, indexed, serial, DL/I segment, or relative record variable or SQL record array, or DL/I segment record array
+  		get psb;				//1 The target of a get by key statement must be
+  		replace psb;			//1 The target of a replace statement must be an SQL, relative, DL/I segment, or indexed record variable.
+  		delete psb;				//1 The record psb for the DELETE statement must be one of the following types:
+  		close psb;				//1 The target of a close statement must be a printform, an SQL, MQ, indexed, relative, or serial record variable, or a result set identifier.
+  		converse psb;			//1 The target of a converse statement in a textUI program must be a text form.
+  		print psb;				//1 The target of the print statement must be a print form.
+  		psb = psb2;				//1 not compatible types
+  		move psb to psb2;		//1 not compatible types
+  		if (psb == psb2)		//1 Records can only be compared to null
+  		end						//0
+  		case (psb)				//1 PSBRecord is not a valid operand
+  			when (psb2) 		//1 psb2 is not valid for compare to psb
+  		end						//0
+  		set psb empty;			//1 PSBRecord is not a valid operand
+  		display psb;			//1 The target of the display statement must be a text form.
+  		for (psb from psb2 to psb2) //3 start must be an integer|end must be an integer|counter variable must be integer type
+  		end							//0
+//was:  		foreach (from psb)						//1 PSBRecord is not a valid operand
+// but since 'psb' is a result set identifier defined by the open statement below,
+// that statement is valid
+  		foreach (from psb2)						//0
+  		end
+  		open psb with #sql{select a from def }; //0
+  		show psb;								//1 The target of the show statement must be either a text form or VGUIRecord.
+  		itemx char(10);
+  		transfer to program psb passing psb;	//2 The passing record identifier psb cannot be a PSBRecord
+  		while (psb==psb2)						//1 Records can only be compared to null
+  		end
+  	end
+end
+handler testPSBRecordUsageInPage type JSFHandler 
+
+  // PSB Declaration
+  psb GSAMPSB2 ;	
+  psb2 gsampsb2;
+	uirec uirec;
+  	function checkstmts()
+  		// returning to is a program name so don't bother to validate
+ 		forward psb passing psb2 returning to psb;	//2 The argument psb on the forward statement must be a UI record|The passing record identifier psb2 cannot be a PSBRecord
+  		forward uirec passing psb returning to psb;//1 The passing record identifier psb cannot be a PSBRecord
+  	end
+end
+record uirec type vguirecord
+end

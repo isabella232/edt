@@ -16,32 +16,24 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.ElseBlock;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.IfStatement;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.OnEventBlock;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
-import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.WhileStatement;
@@ -112,12 +104,6 @@ public class ScriptDoubleClickVisitor extends AbstractASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(DataTable dataTable)
-	{
-		calcaulatePartPosition(dataTable);
-		return false;
-	}
-		
 	public boolean visit(Enumeration enumeration) {
 		calcaulatePartPosition(enumeration);
 		return false;
@@ -135,19 +121,6 @@ public class ScriptDoubleClickVisitor extends AbstractASTVisitor {
 		return false;
 	};
 	
-	public boolean visit(FormGroup formGroup)
-	{
-		Name startingPositionNode = formGroup.getName();
-		calculateStartingEndingPosition(startingPositionNode, formGroup);
-		return false;
-	}
-	
-	public boolean visit(TopLevelForm topLevelForm)
-	{
-		calcaulatePartPosition(topLevelForm);
-		return false;
-	}
-		
 	public boolean visit(Handler handler)
 	{
 		calcaulatePartPosition(handler);
@@ -183,22 +156,7 @@ public class ScriptDoubleClickVisitor extends AbstractASTVisitor {
 	
 	public boolean visit(Program program)
 	{
-		//let's see if this program has any program parameters
-		//if so, get the last parameters, then continue till we found the right closing parant ')'
-		List params = program.getParameters();
-		if(params != null && !params.isEmpty())
-		{
-			int size = params.size();
-			//get the last param type
-			Type paramTypeNode = ((ProgramParameter)(params.get(size-1))).getType();
-			int endofParam = paramTypeNode.getOffset() + paramTypeNode.getLength();
-			//now try to find the closing brace ')'
-			//its offset will be the startingPos for the node body
-			int closingBracketPos = searchForClosingBracket(endofParam, ')', fDoc);
-			calculateStartingEndingPosition(closingBracketPos, program);				
-		} 
-		else
-			calcaulatePartPosition(program);
+		calcaulatePartPosition(program);
 		return false;		
 	}
 	
@@ -215,27 +173,6 @@ public class ScriptDoubleClickVisitor extends AbstractASTVisitor {
 		else
 			startingPositionNode = part.getName();
 		calculateStartingEndingPosition(startingPositionNode, part);
-	}
-	
-	public boolean visit(TopLevelFunction topLevelFunction)
-	{
-		int startingNodePos = -1;
-		if(topLevelFunction.hasReturnType())
-		{
-			Node returnTypeNode = topLevelFunction.getReturnType();
-			startingNodePos = returnTypeNode.getOffset() + returnTypeNode.getLength();
-			//try to get the closing paren ')' for the return 
-		}
-		else
-		{
-			//try to get the closing paren ')' for the function parameters
-			Name functionNameNode = topLevelFunction.getName();
-			startingNodePos = functionNameNode.getOffset() + functionNameNode.getLength();
-		}
-		int closingParenPos = searchForClosingBracket(startingNodePos, ')', fDoc);
-		calculateStartingEndingPosition(closingParenPos, topLevelFunction);
-		
-		return false;
 	}
 	
 	public boolean visit(NestedFunction nestedFunction)
@@ -280,17 +217,6 @@ public class ScriptDoubleClickVisitor extends AbstractASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(NestedForm nestedForm)
-	{
-		Name startingPositionNode = null;
-		if(nestedForm.hasSubType())
-			startingPositionNode = nestedForm.getSubType();
-		else
-			startingPositionNode = nestedForm.getName();
-		calculateStartingEndingPosition(startingPositionNode, nestedForm);
-		return false;
-	}
-
 	public boolean visit(TryStatement tryStatement)
 	{
 		//starting position is the node offset + 3(length of the "try" keyword)
@@ -464,57 +390,6 @@ public class ScriptDoubleClickVisitor extends AbstractASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(OpenUIStatement openUIStatement)
-	{
-		//starts after the "OPENUI" keyword
-		int startingPosition = openUIStatement.getOffset() + IEGLConstants.KEYWORD_OPENUI.length();
-
-		//you may have 0 or 1 bind block, but we can't get the "BIND" offset, since there is no bind node
-		//the OpenUIStatement only returns list of the bind expression, not the bind node
-//		if(openUIStatement.hasBindClause())
-//		{
-//			//it ends right before the bind keyword
-//		}
-//		else
-
-		
-		List eventBlocks = openUIStatement.getEventBlocks();
-		//you may have 0 or * onEvent blocks				
-		return visitParentWithChildrenBlock(startingPosition, openUIStatement, eventBlocks);
-	}
-	
-	private int getOnEventBlockStartingPosition(OnEventBlock onEventBlock)
-	{
-		int onEventBlockStartingPos = onEventBlock.getOffset() + IEGLConstants.KEYWORD_ONEVENT.length();
-		if(onEventBlock.hasStringList())
-		{
-			List fields = onEventBlock.getStringList();
-			int size = fields.size();
-			//get the last one
-			Node lastField = (Node)(fields.get(size-1));
-			int lastFieldEndPos = lastField.getOffset() + lastField.getLength();
-			onEventBlockStartingPos = searchForClosingBracket(lastFieldEndPos, ')', fDoc);
-		}
-		else
-			onEventBlockStartingPos = searchForClosingBracket(onEventBlockStartingPos, ')', fDoc);
-		return onEventBlockStartingPos;
-	}
-	
-	public boolean visit(OnEventBlock onEventBlock)
-	{
-		Node parentNode = onEventBlock.getParent();
-		if(parentNode instanceof OpenUIStatement)
-		{
-			OpenUIStatement openUIStatment = (OpenUIStatement)parentNode;
-			List eventBlocks = openUIStatment.getEventBlocks();
-			int startingPosition = getOnEventBlockStartingPosition(onEventBlock);			
-			
-			visitListChildrenBlock(onEventBlock, parentNode, eventBlocks, startingPosition);
-		}
-
-		return false;
-	}
-
 	private void visitListChildrenBlock(Node childBlock, Node parentNode, List childBlocks, int startingPosition) {
 		int size = childBlocks.size();
 		boolean bFnd = false;

@@ -76,11 +76,7 @@ public class NestedFunction extends Node {
 	public ReturnsDeclaration getReturnDeclaration(){
 		return returnsOpt;
 	}	
-	
-	public boolean returnTypeIsSqlNullable() {
-		return returnsOpt.isSqlNullable();
-	}
-	
+		
 	public List getStmts() {
 		return stmts;
 	}
@@ -103,13 +99,38 @@ public class NestedFunction extends Node {
 	}
 	
 	@Override
-	public void setParent(Node parent) {
-		super.setParent(parent);
-		if(parent instanceof Library){
-			isStatic = true;
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		if (isStatic) {
+			buf.append("static ");
 		}
-		if(parent instanceof Program){
-			isPrivate = true;
+		if (isPrivate) {
+			buf.append("private ");
 		}
+		if (isAbstract) {
+			buf.append("abstract ");
+		}
+		buf.append("function ");
+		buf.append(name.toString());
+		buf.append('(');
+		
+		boolean first = true;
+		for (Node n : (List<Node>)functionParameters) {
+			if (!first) {
+				buf.append(", ");
+			}
+			else {
+				first = false;
+			}
+			buf.append(n.toString());
+		}
+		buf.append(')');
+		
+		if (returnsOpt != null) {
+			buf.append(' ');
+			buf.append(returnsOpt.toString());
+		}
+		
+		return buf.toString();
 	}
 }

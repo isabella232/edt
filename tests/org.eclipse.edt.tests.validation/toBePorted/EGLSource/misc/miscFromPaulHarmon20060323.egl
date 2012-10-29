@@ -1,0 +1,48 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+externaltype aaa type javaobject
+ function f1(parm1 int);
+end
+ 
+externaltype bbb extends aaa type javaobject
+ function f1(parm1 int) returns(int);
+end
+ 
+library xxx
+ field1 bbb;
+ 
+ function fx()
+  i int;
+  i = field1.f1(1);  //0
+  i = field1.f1(i);  //0
+ end
+end
+
+externaltype aaa2 type javaobject
+ function f1(parm1 int);
+end
+ 
+externaltype bbb2 extends aaa type javaobject
+ function f1();
+ function f1(parm1 int) returns(int);
+end
+ 
+library xxx2
+ field1 bbb2;
+ 
+ function fx()
+  i int;
+  field1.f1(1);  //0
+  field1.f1(i);  //0  
+  i = field1.f1(1); //0  
+ end
+end

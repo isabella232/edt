@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -29,12 +29,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import java_cup.runtime.Scanner;
 import junit.framework.TestCase;
 
+import org.eclipse.edt.compiler.Processor;
 import org.eclipse.edt.compiler.core.ast.AccumulatingSyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.ErrorCorrectingParser;
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
@@ -52,7 +54,7 @@ import org.eclipse.edt.tests.validation.util.ProblemCollectingProblemRequestor;
 /**
  * @author Dave Murray
  */
-public class ValidationTestCase extends TestCase {
+public abstract class ValidationTestCase extends TestCase {
 //PROFILE 	public static boolean PREPARSE_FOR_SYNTAX_ERRORS = true;
 //PROFILE 	public static boolean PROFILE = false;
 	
@@ -110,7 +112,8 @@ public class ValidationTestCase extends TestCase {
 			file = new File( testEGLFileName );
 			
 			SDKLineTracker lineTracker = new SDKLineTracker();
-			lineTracker.set(getContents(file));
+			String contents = getContents(file);
+			lineTracker.set(contents);
 			
 			File stagingDirForTest = new File(stagingDir, stagingDir.getName() + testEGLFileName.replaceAll("/", "__"));
 			stagingDirForTest.mkdir();
@@ -137,6 +140,13 @@ public class ValidationTestCase extends TestCase {
 					((org.eclipse.edt.compiler.core.ast.File) new ErrorCorrectingParser(lexer).parse().value).accept(syntaxProblemRequestor);
 					for(Iterator iter = syntaxProblemRequestor.getSyntaxErrors().iterator(); iter.hasNext();) {
 						SyntaxError synError = (SyntaxError) iter.next();
+						
+						// useful for debugging
+						@SuppressWarnings("unused")
+						String fromErrorToEnd = contents.substring(synError.startOffset);
+						@SuppressWarnings("unused")
+						String justErrorNode = contents.substring(synError.startOffset, synError.endOffset);
+						
 						pRequestor.acceptProblem(synError.startOffset, synError.endOffset, IMarker.SEVERITY_ERROR, -42, new String[] {"syntax error"});
 					}
 					tempSyntaxErrorsExistInTest = !pRequestor.getProblems().isEmpty();
@@ -152,6 +162,9 @@ public class ValidationTestCase extends TestCase {
 				arguments.add(tempDir.getPath());
 				arguments.add("-xmlout");
 				arguments.add(testFile.getPath());
+				arguments.add("-extensions");
+				arguments.add("org.eclipse.edt.mof.eglx.jtopen.IBMiExtension,org.eclipse.edt.mof.eglx.persistence.sql.SQLExtension," +
+						"org.eclipse.edt.mof.eglx.services.ServicesExtension,org.eclipse.edt.rui.RUIExtension");
 				
 				System.setOut(new PrintStream(new FileOutputStream(EGLCOut.getPath())));
 				
@@ -167,6 +180,7 @@ public class ValidationTestCase extends TestCase {
 //PROFILE 					}
 //PROFILE 				}
 				
+				Processor.skipSerialization = true; // tons of serialization still needs to be ported. disable otherwise we always get a build error
 				EGL2IR.main((String[]) arguments.toArray(new String[0]), getProblemRequestorFactory(pRequestor));
 				
 //PROFILE 				if(PROFILE) {				
@@ -231,9 +245,11 @@ public class ValidationTestCase extends TestCase {
 	
 	private ISDKProblemRequestorFactory getProblemRequestorFactory(final ProblemCollectingProblemRequestor pRequestor) {
 		return new ISDKProblemRequestorFactory() {
+			@Override
 			public IProblemRequestor getProblemRequestor(File file, final String partName) {
 				return new DefaultProblemRequestor() {
-					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+					@Override
+					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
 						if(messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
 							inserts = shiftInsertsIfNeccesary(problemKind, inserts);
 							inserts[0] = partName;				
@@ -241,47 +257,12 @@ public class ValidationTestCase extends TestCase {
 				 		if (severity == IMarker.SEVERITY_ERROR) {
 				 			setHasError(true);
 				 		}
-						pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts);
+						pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 					}
 				};
 			}
 	
-			public IProblemRequestor getGenericTopLevelFunctionProblemRequestor(File file, String partName, final boolean containerContextDependent) {
-				return new DefaultProblemRequestor() {
-					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
-						if(containerContextDependent && problemKind == IProblemRequestor.TYPE_CANNOT_BE_RESOLVED){
-							return;
-						}
-						
-						if(!messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
-					 		if (severity == IMarker.SEVERITY_ERROR) {
-					 			setHasError(true);
-					 		}
-							pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts);
-						}								
-					}							
-				};
-			}
-	
-			public IProblemRequestor getContainerContextTopLevelProblemRequestor(File file, final String containerContextName, final boolean containerContextDependent) {
-				return new DefaultProblemRequestor() {
-					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
-				 		if (severity == IMarker.SEVERITY_ERROR) {
-				 			setHasError(true);
-				 		}
-						if(containerContextDependent && problemKind == TYPE_CANNOT_BE_RESOLVED ||
-						   messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
-							int insertsLength = inserts.length;
-							inserts = shiftInsertsIfNeccesary(problemKind, inserts);
-							if(insertsLength != inserts.length) {
-								inserts[0] = containerContextName;
-							}
-							pRequestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts);
-						}								
-					}
-				};
-			}
-
+			@Override
 			public ISyntaxErrorRequestor getSyntaxErrorRequestor(File file) {
 				 return new AccumulatingSyntaxErrorRequestor();
 			}	

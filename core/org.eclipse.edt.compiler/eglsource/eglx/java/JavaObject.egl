@@ -15,31 +15,26 @@ import eglx.lang.EventListener;
 import egl.lang.reflect.NoReflect;
 
 import eglx.lang.Property;
-import org.eclipse.edt.mof.egl.Stereotype;
     
-Record JavaObject type Annotation { 
+Record JavaObject type Stereotype { 
 	targets = [ ElementKind.ExternalTypePart ],
 	  
-	@Stereotype {
-		memberAnnotations = [
-			EventListener, Property
-		],
-		defaultSuperType = Object     
-	},
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.JavaObjectAnnotationTypeBinding"
+	memberAnnotations = [
+		EventListener, Property
+	],
+	defaultSuperType = Object,    
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.JavaObjectAnnotationProxy"
 }
 	packageName String {@NoReflect};   //mark this as noReflect, so that setting this field does not change the EClass that specifies this stereotype
 	externalName String;
 end
 
-Record RootJavaObject type Annotation { 
+Record RootJavaObject type Stereotype { 
 	targets = [ ElementKind.ExternalTypePart ],
 	  
-	@Stereotype {
-		memberAnnotations = [
-			EventListener, Property
-		]
-	}
+	memberAnnotations = [
+		EventListener, Property
+	]
 }
 	packageName String {@NoReflect};   //mark this as noReflect, so that setting this field does not change the EClass that specifies this stereotype
 end

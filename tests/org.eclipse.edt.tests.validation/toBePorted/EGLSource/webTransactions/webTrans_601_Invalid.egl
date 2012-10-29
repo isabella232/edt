@@ -1,0 +1,130 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// DEM - removed "can be only one generatable part per file" since that
+//       message only appears on subsequent generatable parts (not the first)
+//QUESTION: Record myFlexUIRecord1 type VGUIRecord //2 VGUIRecord must be a fixed record|name of VGUIRecord must match the file name
+Record myFlexUIRecord1 type VGUIRecord //0
+	myitem char(2);
+end
+
+// DEM - removed "name of VGUIRecord must match the file name" since that
+//       message only appears on the first generatable part in a file
+Record myFixedUIRecord2 type VGUIRecord //0
+	10 myitem char(2); 		//0
+	10 mydate date;			//1 datatype date is not allowed in a VGUIRecord
+	10 mytime time;			//1 datatype time is not allowed in a VGUIRecord
+	10 myfloat float;		//1 datatype float is not allowed in a VGUIRecord
+	10 mymoney money(9);	//1 datatype money is not allowed in a VGUIRecord
+	10 mytimeStamp timeStamp;//1 datatype timeStamp is not allowed in a VGUIRecord
+end	
+
+Record myErrorUIRecord1 type garbagerecordtype //1  The type garbagerecordtype cannot be resolved
+	10 myitem char(2);
+end
+
+Record fixedRecdWithInitializers1 type basicrecord
+	10 item1 int  = "a"; // 0
+	10 item2 char(8) = "abcdefghijk"; //0
+	10 item3 char(4) = 1.0;	//0
+	10 item4 dbChar(3) = 2;	//1 dbChar and int are not compatible types
+	10 item5 mbchar(3) = 3;	//0
+	10 item6 float = "def";	//0
+	10 item7 bin(4) = "a";	//0
+	10 item8 int = item1 + item7;
+
+	10 parent;
+	15 item1a int  = "a"; // 0
+	15 item2a char(8) = "abcdefghijk"; //0
+	15 item3a char(4) = 1.0;	//0
+	15 item4a dbChar(3) = 2;	//1 dbChar and int are not compatible types
+	15 item5a mbchar(3) = 3;	//0
+	15 item6a float = "def";	//0
+	15 item7a bin(4) = "a";	//0
+	15 item8a int = item1 + item7;
+end
+
+Program myWebProgram1 type vgWebTransaction	//0
+		// invalid properties
+	   {alias = "name",
+		AllowUnqualifiedItemReferences = yes,
+		HandleHardIOErrors = yes,
+		IncludeReferencedFunctions = yes,
+		inputForm=myform,		//2 inputForm cannot be resolved
+		inputRecord = myrecord,
+		inputUIRecord = myuirecord,
+		LocalSQLScope = no,
+		msgTablePrefix = "abc",
+		segmented = no,				//1 segmented cannot be resolved
+		ThrowNrfEofExceptions = yes }
+		function main()
+		end	
+end
+
+Program myWebProgram2 type basicprogram
+		// valid properties, but invalid values
+		// Note that we should no longer get a message on duplicate properties but should use the last one. 
+	   {alias = name,			//1
+		alias = [123],			//1
+		alias = "a.b.c",		//0
+
+		AllowUnqualifiedItemReferences = "abc", //1
+		AllowUnqualifiedItemReferences = 1.23,	//1
+		AllowUnqualifiedItemReferences = def,	//1 AllowUnqualifiedItemReferences.  The value for this property must be one of the following 
+
+		HandleHardIOErrors = "abc", 			//1
+		HandleHardIOErrors = 1.23,				//1
+		HandleHardIOErrors = def,				//1 HandleHardIOErrors.  The value for this property must be one of the following 
+
+		IncludeReferencedFunctions = "abc", 	//1
+		IncludeReferencedFunctions = 1.23,		//1
+		IncludeReferencedFunctions = def,		//1 IncludeReferencedFunctions.  The value for this property must be one of the following 
+		
+		inputRecord = yes,						//1
+		inputRecord = 1.23,						//1
+		inputRecord = def,						//1
+
+		LocalSQLScope = "abc", 					//1
+		LocalSQLScope = 1.23,					//1
+		LocalSQLScope = def,					//1 LocalSQLScope.  The value for this property must be one of the following 
+
+		msgTablePrefix = no, 					//1
+		msgTablePrefix = [1.23],				//1
+		msgTablePrefix = def,					//1
+		msgTablePrefix = "a.c",					//1 length of the unqualified value c for property msgTablePrefix must be between 3 and 4, inclusive
+		msgTablePrefix = "toolong",				//1 The length of the unqualified value toolong for property msgTablePrefix must be between 3 and 4, inclusive
+	
+		ThrowNrfEofExceptions = "abc", 			//1
+		ThrowNrfEofExceptions = 1.23,			//1
+		ThrowNrfEofExceptions = def,			//1 ThrowNrfEofExceptions.  The value for this property must be one of the following 
+
+		inputRecord = "myrecord"				//1
+}
+
+		function main()
+		end	
+end
+
+Program myWebProgram3 type vgWebTransaction
+{
+		inputUIRecord = yes, 					//1
+		inputUIRecord = 1.23,					//1
+		inputUIRecord = def,					//1
+		
+		inputUIRecord = myuirecord				//1 value for property inputUIRecord must match a data declaration
+}
+		function main()
+		end
+end
+
+
+

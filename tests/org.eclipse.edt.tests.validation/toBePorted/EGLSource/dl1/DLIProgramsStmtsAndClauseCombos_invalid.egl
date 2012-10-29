@@ -1,0 +1,366 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// valid PSBRecord, dliSegments and DataItems to use in statements
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	//0
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end			//0
+DataItem Name char(18) { dliFieldName ="NAME" } end			//0
+
+Record Course type DLISegment 						//0
+{ segmentName="COURSE", keyItem=courseNo }		//0
+	10 courseNo CourseNo;							//0
+	10 title char(33);								//0 
+	10 desc char(220) { dliFieldName="DESCRIPN" };	//0
+end
+
+Record Prereq type DLISegment { keyItem=courseNo }//0
+	10 courseNo CourseNo;							//0
+	10 title char(33);								//0
+end
+
+Record Offering type DLISegment 					//0
+	10 offerdate num(6)  { dliFieldName="DATE" };	//0
+	10 location char(12);							//0
+	10 format_ char(2) { dliFieldName="FORMAT" };	//0
+end
+
+Record Teacher type DLISegment 						//0
+{ segmentName="TEACHER", keyItem=empNo }			//0
+	10 empNo EmpNo;									//0
+	10 name Name;									//0
+end 
+
+Record Student type DLISegment	 					//0
+	{ segmentName="STUDENT" }						//0
+	10 empNo EmpNo;									//0
+	10 name Name;									//0
+	10 grade char(1);								//0
+end
+Record EducationPSB type PSBRecord 					//0
+	{defaultPSBName = "EDUCPSB"}					//0
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		//0
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		//0
+	coursePCB DB_PCBRecord { @PCB {					//0
+	  pcbType=DB,									//0
+	  pcbName="CPCB",								//0
+	  hierarchy = [									//0
+	   @Relationship{ segmentRecord=Course },	//0
+	   @Relationship{								//0
+     		segmentRecord=Prereq, parentRecord=Course }, //0   	   
+       @Relationship{								//0
+      		segmentRecord=Offering,parentRecord=Course }, //0 	  
+       @Relationship{								//0
+      		segmentRecord=Teacher,parentRecord=Offering}, //0 
+	   @Relationship{								//0
+	     	segmentRecord=Student, parentRecord=Offering}	//0
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {					//0
+	  pcbType=DB,									//0
+	  pcbName="OPCB",								//0
+	  secondaryIndex="XLOC",						//0
+	  secondaryIndexItem="XLOC",					//0
+	  hierarchy = [									//0
+	   @Relationship{ segmentRecord=Offering },//0
+	   @Relationship{								//0
+	     segmentRecord=Course,parentRecord=Offering},//0
+	   @Relationship{								//0
+	     segmentRecord=Teacher,parentRecord=Offering},//0
+	   @Relationship{								//0
+	     segmentRecord=Student,parentRecord=Offering}//0
+	  ] }};
+end
+
+// To test record states, object must be used as an I/O object
+Program MYDBPRG3 type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 									//0
+         handleHardDLIErrors = yes }					//0
+  }
+  STUDENT STUDENT;						//0
+  // PSB Declaration
+  psb EducationPSB ;					//0
+
+  function main()
+	  if (STUDENT is duplicate)			//0
+	  end
+	end 
+end
+
+// test use of record states
+Program testRecordStates type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 									//0
+  		 callInterface = DLICallInterfaceKind.CBLTDLI,	//0
+         handleHardDLIErrors = yes }					//0
+  }
+  STUDENT STUDENT;						//0
+  course course;						//0
+  offering offering;					//0
+  // PSB Declaration
+  psb EducationPSB ;					//0
+  
+  function main()
+  	  get next STUDENT ;				//0
+  	  testIfStmt();
+  	  testCaseStmt();
+  end
+  function testIfStmt()	  
+	  if (STUDENT is duplicate)			//0
+	  end
+	  if (STUDENT is endOfFile)			//0
+	  end
+	  if (STUDENT is ioError)			//0
+	  end
+	  if (STUDENT is hardIOError)		//0
+	  end
+	  if (STUDENT is noRecordFound)		//0
+	  end
+	  if (STUDENT is unique)			//0
+	  end
+	  if (STUDENT is fileNotFOund)		//1 fileNotFound is not a valid state for a DL/I segment record
+	  end
+	  if (STUDENT is deadlock)			//1 deadLock is not a valid state for a DL/I segment record
+	  end
+	  if (STUDENT is invalidFormat)	//1 invalidFormat is not a valid state for a DL/I segment record
+	  end
+	  if (STUDENT is fileNotAvailable)	//1 fileNotAvailable is not a valid state for a DL/I segment record
+	  end
+	  if (STUDENT is full)				//1 full is not a valid state for a DL/I segment record
+	  end
+	  if (STUDENT is softIoError)		//0
+	  end
+
+	end 
+	function testCaseStmt()
+		case (student)
+			when (duplicate)			//1 duplicate cannot be resolved
+			when (endOfFile)			//1 endOfFile cannot be resolved
+		end		  
+	end 
+end
+record indexedrec type indexedrecord
+	{filename = "abc", keyitem = "item1"} 
+	10 item1 char(10);
+end 
+record basicrec type basicrecord
+	10 item1 char(10);
+end 
+Program testSetStmt type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					//0
+         handleHardDLIErrors = yes }	//0
+  }
+  STUDENT STUDENT;						//0
+  course course;						//0
+  offering offering;					//0  
+  myindexed indexedrec;
+  myitem char(10);
+  // PSB Declaration
+  psb EducationPSB ;					//0
+
+  function main()
+  	  set student position ;			//0
+	  set student empty;				//0
+	  student = null;					//0
+	  set student modified;				//1 The state MODIFIED is not allowed for an indexed or DL/I segment record reference
+	  set student red;					//1 The state RED is not allowed for an indexed or DL/I segment record reference
+//Note:  I think there is an existing problem here.  All of the following should be 
+// invalid but only the set myitem red gets an error	
+	  set myindexed red;				//1 The state RED is not allowed for an indexed or DL/I segment record reference
+	  set myindexed modified;			//1 The state MODIFIED is not allowed for an indexed or DL/I segment record reference
+	  myindexed = null;					//0
+	  set myitem red;					//1 The state RED is not allowed for this item reference
+	end 
+end
+formgroup formg 
+	form textform type textform {formsize = [24,80]}
+	end
+end
+Program testNonIOStmts type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					//0
+         handleHardDLIErrors = yes }	//0
+  }
+  use formg;
+  STUDENT STUDENT;						//0
+  course course;						//0
+  offering offering;					//0  
+  myindexed indexedrec;
+  myitem char(10);
+  // PSB Declaration
+  psb EducationPSB ;					//0
+
+  function main()
+  	  move student to myindexed ;		//0
+	  move myindexed to student;		//0
+	  transfer to "mypgm" passing student;//0
+	  close student;					//1 target of a close statement must be a printform, an SQL, MQ, indexed, relative, or serial record variable, or a result set identifier. 
+	  converse student;					//1 target of a converse statement in a textUI program must be a text form
+	  print student;					//1 target of the print statement must be a print form
+	  show textform returning to "mypbm" passing student;	//0
+	end 
+end
+Record serialrec type serialrecord {filename = "abc"}//0
+	10 serialitem1 char(10);						 //0
+end
+Record sqlrec type sqlrecord
+	10 sqlitem char(10);
+end
+Program testSimpleIOStmts type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb, 					//0
+         handleHardDLIErrors = yes }	//0
+  }
+  use formg;
+  STUDENT STUDENT;						//0
+  STUDENT2 STUDENT;						//0
+  course course;						//0
+  offering offering;					//0
+  prereq prereq;						//0
+  students student [4];					//0
+  offerings offering [3];				//0
+  myindexed indexedrec;					//0
+  myindexedArray indexedrec[3];			//0
+  myserial serialrec;					//0
+  mybasic basicrec;						//0		
+  mysql sqlrec;							//0 	
+  myitem char(10);
+  // PSB Declaration
+  psb EducationPSB ;					//0
+  xloc char(4);
+
+  function main()
+//Note:  I'm finding some missing error messages from past releases here!   	
+		addStmt();
+		deleteStmt();
+		executeStmt();
+ 		foreachStmt();
+		freeSQLStmt();
+		getStmt();
+		openStmt();
+		prepareStmt();
+		replaceStmt();
+  end
+  function deleteStmt() 	  
+	  delete student;					//0
+	  delete students;					//1 must be one of the following types: Indexed, Relative, SQL, DL/I segment
+	  delete myserial;					//1 must be one of the following types: Indexed, Relative, SQL, DL/I segment
+	  delete mybasic;					//1 must be one of the following types: Indexed, Relative, SQL, DL/I segment
+// Syntax error for this	  
+//	  delete offering, student;
+// 	  delete student usingPCB offeringPCB;
+//	  delete student with #dli(dlet student}; 	
+  end 	 
+  function executeStmt() 
+   	  execute update for mybasic;		//1 The target must be an SQL record
+	  execute update for myindexed;		//1 The target must be an SQL record
+	  execute update for student;		//1 The target must be an SQL record
+	  execute update for students;		//1 The target must be an SQL record
+// Syntax error for this	  
+// 	  execute update for offering, student;	  
+  end	  
+  function foreachStmt()
+	 foreach (students)				//1 The target must be an SQL record variable
+	 end
+// Syntax error for this	  	 
+//	 foreach (offering, students)	
+//	 end
+  end
+  function freeSQLStmt()	  
+	  freesql student2;					//0
+// Syntax error for this	  
+//	  freesql offering, student2;	
+  end
+  function openStmt()	  
+	  open student for student;			//1 The target must be an SQL record
+ 	  open student for myindexed;		//1 Invalid for target myindexed. The target must be an SQL record	
+// Syntax error for this
+//	  open student for offering, student; 	
+  end
+  function prepareStmt()	  
+	    prepare student from "abc";		//0
+  end
+  function replaceStmt()
+  		replace myindexed with #sql{ update student set x };//1 The with sql clause is not allowed on a replace statement for a relative, indexed, or DL/I segment record.
+  		replace student   with #sql{ update student set x };//1 The with sql clause is not allowed on a replace statement for a relative, indexed, or DL/I segment record.
+  		replace myindexed from resultSet;					//1 The from clause is not allowed on a replace statement for a relative, indexed, or DL/I segment record.
+  		replace student   from resultSet;					//1 The from clause is not allowed on a replace statement for a relative, indexed, or DL/I segment record.
+  		replace student;									//0
+  		replace students;									//1 Invalid target students. The target of a replace statement must be an SQL, relative, DL/I segment, or indexed record variable. 
+  		replace mybasic;									//1 Invalid target mybasic. The target of a replace statement must be an SQL, relative, DL/I segment, or indexed record variable. 
+// Syntax error for this
+//  		replace offering, student;
+		replace student usingPCB offeringPCB;
+  end
+  function addStmt()		
+  	  add student ;							//0
+  	  add students;							//0
+  	  add myindexedArray;					//1 target of an add statement must be an SQL, MQ, indexed, serial, DL/I segment, or relative record variable or SQL record array, or DL/I segment record array.
+  	  add mybasic;							//1 target of an add statement must be an SQL, MQ, indexed, serial, DL/I segment, or relative record variable or SQL record array, or DL/I segment record array.
+  	  add offering, student;				//0
+  	  add myindexed, student;				//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable
+	  add offerings, students;				//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable
+	  add offering, students;				//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable
+	  add offerings, student;				//1 When multiple targets are specified on an add or get statement, each must be a single DL/I segment record variable
+	  add myindexed usingPCB coursePCB ;	//2 The usingPCB clause is only valid when the target record is a DL/I segment record variable.
+	  add myindexed with #dli{ isrt course};//1 The with #dli clause is only valid when the target record is a DL/I segment record variable.
+	  add mysql usingPCB coursePCB ;		//2 The usingPCB clause is only valid when the target record is a DL/I segment record variable.
+	  add mysql with #dli{ isrt course};	//1 The with #dli clause is only valid when the target record is a DL/I segment record variable.
+	  add course usingPCB psb.coursePCB with #dli{ isrt course}; //0
+	  add offering, course usingPCB psb.offeringPCB with #dli{ isrt offering*D course }; //0
+	  add course usingPCB dbpcb with #dli{ isrt course}; //1 dbpcb cannot be resolved
+	  add course usingPCB student;			//1 The usingPCB item must be defined in the program PSB
+	  add course usingPCB psb.offeringPCB;	//0
+	  
+	  intVar int;	  
+  	  add course usingPCB intVar;			//1 The usingPCB item must be defined in the program PSB
+   end  
+  function getStmt() 
+//DEM - forupdate is allowed on indexed and relative records, according to EGL Syntax spec
+//was  		get myindexed forupdate;					//1 The forupdate clause is only valid when the target record is an SQL or DL/I segment record variable.
+  		get myindexed forupdate;					//0
+  		get myindexed usingkeys myindexed.item1;	//1 The usingKeys clause is only valid when the target record is an SQL record variable.
+  		get myindexed with #sql{select a from b};	//1 The with #sql clause is only valid when the target record is an SQL record variable.
+  		get myindexed into a;						//2 The into clause is only valid when the target record is an SQL record variable.
+  		get myindexed singlerow;					//1 The singleRow clause is only valid when the target record is an SQL record variable.
+  		get next myindexed;							//0
+  		get previous myindexed;						//0
+ //Note that the cursor is currently placed on "myindexed" instead of on "from".  This is incorrect.
+  		get next myindexed from resultSet;			//1 The from clause is only valid when the target record is an SQL record variable.
+  		get myindexedArray usingkeys myindexed.item1;	//2 Invalid target myindexedArray. The target of a get by key statement must be
+  		get myindexedArray with #sql{select a from b};	//2 Invalid target myindexedArray. The target of a get by key statement must be
+  		
+  		get student forupdate;						//0
+		get students forupdate;						//1 The forUpdate clause is not allowed when the target is an array
+  		get student usingkeys myindexed.item1;		//1 The usingKeys clause is only valid when the target record is an SQL record variable.
+  		get student with #sql{select a from b};		//1 The with #sql clause is only valid when the target record is an SQL record variable.
+  		get student into a;							//2 The into clause is only valid when the target record is an SQL record variable.
+  		get student singlerow;						//1 The singleRow clause is only valid when the target record is an SQL record variable.
+  		get next student;							//0
+  		get next student from resultSet;			//1 The from clause is only valid when the target record is an SQL record variable.
+  		get students usingkeys myindexed.item1;		//1 The usingKeys clause is only valid when the target record is an SQL record variable.
+  		get students with #sql{select a from b};	//1 The with #sql clause is only valid when the target record is an SQL record variable. 
+ 
+		get next inparent student;					//0
+		get next inparent student forupdate;		//0
+		get next inparent myindexed;				//1 The inparent clause is only valid when the target record is a DL/I segment record variable.	
+		get next inparent mysql;					//1 The inparent clause is only valid when the target record is a DL/I segment record variable.	
+		get previous  myindexed;					//0
+		get previous student;						//1 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable.
+		get current student;						//1 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable.
+		get previous student;						//1 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable.
+		get first student;							//1 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable.
+		get last student;							//1 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable.
+		get relative(5) student;					//1 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable.
+		get absolute(6) student;					//1 Invalid directive. NEXT is the only directive allowed with a DL/I segment record variable.
+	end	
+end

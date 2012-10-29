@@ -1,0 +1,109 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		ifLabel: if(yes)
+			if(yes) exit if; end		//0
+			if(yes) exit ifLabel; end	//0
+			
+			if(yes) exit undefined; end		//1
+			if(yes) exit for; end			//1
+			if(yes) exit foreach; end		//1
+			if(yes) exit forInIfLabel; end	//1			
+			
+			if(yes) continue ifLabel; end		//1
+			if(yes) continue forInIfLabel; end	//1
+			if(yes) continue for; end			//1
+			
+			forInIfLabel: for(x int from 1 to 10)
+				if(yes) exit for; end			//0
+				if(yes) exit forInIfLabel; end	//0
+				if(yes) exit if; end			//0
+				if(yes) exit ifLabel; end		//0
+				
+				if(yes) exit foreach; end		//1
+				
+				if(yes) continue for; end			//0
+				if(yes) continue forInIfLabel; end	//0
+				
+				if(yes) continue ifLabel; end		//1
+				if(yes) continue foreach; end		//1
+			end
+		end
+		
+		x int;
+		
+		caseLabel: case(x)
+			when (1)
+				forEachInCaseLabel: foreach(from resultSetID)
+					if(yes) exit foreach; end				//0
+					if(yes) exit forEachInCaseLabel; end	//0
+					if(yes) exit case; end					//0
+					if(yes) exit caseLabel; end				//0					
+					
+					if(yes) exit for; end		//1
+					if(yes) exit ifLabel; end	//1
+					
+					if(yes) continue foreach; end				//0
+					if(yes) continue forEachInCaseLabel; end	//0
+					
+					if(yes) continue for; end		//1
+					if(yes) continue caseLabel; end	//1
+				end
+			otherwise
+				if(yes) exit case; end		//0
+				if(yes) exit caseLabel; end	//0
+				
+				if(yes) exit ifLabel; end	//1
+				
+				if(yes) continue caseLabel; end	//1
+				if(yes) continue foreach; end	//1
+		end
+		
+		whileLabel: while(true)
+			if(yes) exit while; end			//0
+			if(yes) exit whileLabel; end	//0
+			
+			if(yes) exit ifLabel; end		//1
+			if(yes) exit caseLabel; end		//1
+			
+			if(yes) continue while; end			//0
+			if(yes) continue whileLabel; end	//0
+			
+			if(yes) continue for; end					//1
+			if(yes) continue forEachInCaseLabel; end	//1
+		end
+		
+		whileLabel2: while(true)
+			if(yes) exit while; end				//0
+			if(yes) continue while; end			//0
+			if(yes) exit whileLabel2; end		//0
+			if(yes) continue whileLabel2; end	//0
+			
+			if(yes) exit whileLabel; end		//1
+			if(yes) continue whileLabel; end	//1
+			
+			innerWhileLabel: while(true)
+				if(yes) exit while; end					//0
+				if(yes) continue while; end				//0
+				if(yes) exit whileLabel2; end			//0
+				if(yes) continue whileLabel2; end		//0
+				if(yes) exit innerWhileLabel; end		//0
+				if(yes) continue innerWhileLabel; end	//0
+				
+				if(yes) exit whileLabel; end		//1
+				if(yes) continue whileLabel; end	//1
+			end
+		end
+	end
+end

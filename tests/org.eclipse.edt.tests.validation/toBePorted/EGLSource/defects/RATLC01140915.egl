@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function takeAnyExIn( e AnyException in ) end
+	function takeAnyExInout( e AnyException inout ) end
+	function takeAnyExOut( e AnyException out ) end
+
+	function takeRtExIn( e RuntimeException in ) end
+	function takeRtExInout( e RuntimeException inout ) end
+	function takeRtExOut( e RuntimeException out ) end
+
+	a AnyException;
+	r RuntimeException;
+	
+	function main()	
+		a = r;	//0
+		r = a;	//0
+		
+		move a to r;	//0
+		move r to a;	//0
+		
+		a = r as AnyException;		//0
+		r = a as RuntimeException;	//0
+		
+		takeAnyExIn( r );		//0
+		takeAnyExInout( r );	//0
+		takeAnyExOut( r );		//0
+		
+		takeRtExIn( a );	//0
+		takeRtExInout( a );	//0
+		takeRtExOut( a );	//0
+		
+		myRec rec;
+		myRec {
+			a = r,	//0
+			r = a	//0
+		};
+	end
+end
+
+Record rec {
+	a = r,	//0
+	r = a	//0
+}
+	a AnyException = r;		//0
+	r RuntimeException = a;	//0
+end

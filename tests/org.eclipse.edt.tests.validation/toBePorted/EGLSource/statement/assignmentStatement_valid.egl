@@ -1,0 +1,249 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR VAG
+
+Program assignmentStatement
+	function main()
+		binVal bin(9,2);
+		charVal char(10);
+		dbcharVal dbchar(10);
+		hexVal hex(2);
+		mbcharVal mbchar(10);
+		numVal num(9,2);
+		numberVal num(9,2);
+		numcVal numc(9,2);
+		pacfVal pacf(9,2);
+		decimalVal decimal(9);
+		unicodeVal unicode(2);
+		smallintVal smallint;
+		intVal int;
+		bigintVal bigint;
+		floatVal float;
+		smallfloatVal smallfloat;
+		moneyVal money(9,2);
+		dateVal date;
+		timeVal time;
+		timestampVal timestamp;
+		interValVal interVal("yyyyMM");
+		clobVal clob;
+		blobVal blob;
+		stringVal string;
+		
+		binVal = binVal;
+		binVal = intVal;
+		binVal = bigintVal;
+		binVal = smallintVal;
+		binVal = decimalVal;
+		binVal = numVal;
+		binVal = numberVal;
+		binVal = numcVal;
+		binVal = pacfVal;
+		binVal = floatVal;
+		binVal = smallfloatVal;
+		binVal = moneyVal;
+
+		charVal = charVal;
+		charVal = dateVal;
+		charVal = timeVal;
+		charVal = hexVal;
+		charVal = mbcharVal;
+		charVal = numVal;
+		charVal = numberVal;
+		charVal = timestampVal;
+//		charVal = binVal;
+//		charVal = decimalVal;
+//		charVal = moneyVal;
+//		charVal = intVal;
+//		charVal = bigintVal;
+//		charVal = smallintVal;
+//		charVal = floatVal;
+//		charVal = smallfloatVal;
+		charVal = unicodeVal;
+		charVal = stringVal;
+
+		dateVal = dateVal;
+		dateVal = charVal;
+		dateVal = numVal;
+		dateVal = timestampVal;
+		dateVal = unicodeVal;
+		dateVal = stringVal;
+
+		dbcharVal = dbcharVal;
+
+		decimalVal = binVal;
+		decimalVal = intVal;
+		decimalVal = bigintVal;
+		decimalVal = smallintVal;
+		decimalVal = decimalVal;
+		decimalVal = numVal;
+		decimalVal = numberVal;
+		decimalVal = numcVal;
+		decimalVal = pacfVal;
+		decimalVal = floatVal;
+		decimalVal = smallfloatVal;
+		decimalVal = moneyVal;
+
+		floatVal = binVal;
+		floatVal = intVal;
+		floatVal = bigintVal;
+		floatVal = smallintVal;
+		floatVal = decimalVal;
+		floatVal = numVal;
+		floatVal = numberVal;
+		floatVal = numcVal;
+		floatVal = pacfVal;
+		floatVal = floatVal;
+		floatVal = smallfloatVal;
+		floatVal = moneyVal;
+
+		hexVal = charVal;
+		hexVal = hexVal;
+		hexVal = unicodeVal;
+		hexVal = stringVal;
+
+		intVal = intVal;
+		intVal = smallintVal;
+		intVal = bigintVal;
+		intVal = floatVal;
+		intVal = smallfloatVal;
+		intVal = decimalVal;
+//		intVal = charVal;
+//		intVal = stringVal;
+//		intVal = unicodeVal;
+
+		intervalVal = intervalVal;
+		intervalVal = charVal;
+		intervalVal = unicodeVal;
+		intervalVal = stringVal;
+
+		mbcharVal = charVal;
+		mbcharVal = mbcharVal;
+		mbcharVal = unicodeVal;
+		mbcharVal = stringVal;
+
+		moneyVal = binVal;
+		moneyVal = intVal;
+		moneyVal = bigintVal;
+		moneyVal = smallintVal;
+		moneyVal = decimalVal;
+		moneyVal = numVal;
+		moneyVal = numberVal;
+		moneyVal = numcVal;
+		moneyVal = pacfVal;
+		moneyVal = floatVal;
+		moneyVal = smallfloatVal;
+//		moneyVal = charVal;
+//		moneyVal = stringVal;
+//		moneyVal = unicodeVal;
+
+		numVal = binVal;
+		numVal = intVal;
+		numVal = dateVal;
+		numVal = bigintVal;
+		numVal = smallintVal;
+		numVal = charVal;
+		numVal = numVal;
+		numVal = numberVal;
+		numVal = numcVal;
+		numVal = pacfVal;
+		numVal = decimalVal;
+		numVal = floatVal;
+		numVal = smallfloatVal;
+		numVal = moneyVal;
+//		numVal = stringVal;
+//		numVal = unicodeVal;
+
+		numcVal = binVal;
+		numcVal = intVal;
+		numcVal = bigintVal;
+		numcVal = smallintVal;
+		numcVal = decimalVal;
+		numcVal = numVal;
+		numcVal = numberVal;
+		numcVal = numcVal;
+		numcVal = pacfVal;
+		numcVal = floatVal;
+		numcVal = smallfloatVal;
+
+		pacfVal = binVal;
+		pacfVal = intVal;
+		pacfVal = bigintVal;
+		pacfVal = smallintVal;
+		pacfVal = decimalVal;
+		pacfVal = numVal;
+		pacfVal = numberVal;
+		pacfVal = numcVal;
+		pacfVal = pacfVal;
+
+		smallfloatVal = binVal;
+		smallfloatVal = intVal;
+		smallfloatVal = bigintVal;
+		smallfloatVal = smallintVal;
+		smallfloatVal = decimalVal;
+		smallfloatVal = numVal;
+		smallfloatVal = numberVal;
+		smallfloatVal = numcVal;
+		smallfloatVal = pacfVal;
+		smallfloatVal = floatVal;
+		smallfloatVal = smallfloatVal;
+		smallfloatVal = moneyVal;
+//		smallfloatVal = charVal;
+//		smallfloatVal = stringVal;
+//		smallfloatVal = unicodeVal;
+
+		stringVal = charVal;
+		stringVal = dateVal;
+		stringVal = timeVal;
+		stringVal = hexVal;
+		stringVal = timestampVal;
+//		stringVal = binVal;
+//		stringVal = intVal;
+//		stringVal = bigintVal;
+//		stringVal = smallintVal;
+//		stringVal = numVal;
+//		stringVal = decimalVal;
+//		stringVal = moneyVal;
+//		stringVal = floatVal;
+//		stringVal = smallfloatVal;
+		stringVal = unicodeVal;
+		stringVal = stringVal;
+		stringVal = mbcharVal;
+
+		timeVal = timeVal;
+		timeVal = charVal;
+
+		timestampVal = charVal;
+		timestampVal = timestampVal;
+		timestampVal = dateVal;
+		timestampVal = stringVal;
+
+		unicodeVal = charVal;
+		unicodeVal = dateVal;
+		unicodeVal = timeVal;
+		unicodeVal = hexVal;
+		unicodeVal = timestampVal;
+//		unicodeVal = binVal;
+//		unicodeVal = intVal;
+//		unicodeVal = bigintVal;
+//		unicodeVal = smallintVal;
+//		unicodeVal = numVal;
+//		unicodeVal = decimalVal;
+//		unicodeVal = moneyVal;
+//		unicodeVal = floatVal;
+//		unicodeVal = smallfloatVal;
+		unicodeVal = unicodeVal;
+		unicodeVal = stringVal;
+		unicodeVal = mbcharVal;	
+		
+//		move smallfloatVal to unicodeVal;
+	end
+end

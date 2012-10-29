@@ -1,0 +1,78 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+FormGroup ZVVA4B {
+  ScreenFloatingAreas=[
+    @ScreenFloatingArea { screenSize=[24,80], topMargin=3,
+      bottomMargin=1, leftMargin=0, rightMargin=0
+    }
+  ] }
+Form WINDOW type textForm	
+ { screenSizes = [[24,80]], formSize = [10,80]}
+  ZEILE char(72) [7] 
+  { position = [2,4], fieldLen = 72, color = yellow, highlight = noHighlight, 
+    intensity = normalIntensity, protect = skip, align = none, 
+    fillCharacter = nullFill,
+    indexOrientation = down
+  };
+end 
+end 
+
+Program ZVVAA4D type textUIProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no,
+  V60ExceptionCompatibility = YES  }
+
+  ZVVAWS ZVVAWS; 
+
+  use ZVVA4B.WINDOW
+   {validationBypassKeys = [pf3, pf4, pf1],
+    pfKeyEquate = no  };
+
+  function main()
+    ZVVAP4D_EX_01: ZVVAP4D_EX_01();
+  end 
+end 
+Function ZVVAP4D_EX_01()
+	converse WINDOW;
+	TUBSTDS_HP_WINDOW();
+end	
+Function TUBSTDS_HP_WINDOW()
+  CI-MAP-1 = 1;
+  CI-MAP-2 = ((C-MAP-SEITE-AKTUELL - 1) * CK-MAP-WINDOW-ZEILEN-PRO-SEITE) + 1;
+  while (CI-MAP-1 <= CK-MAP-WINDOW-ZEILEN-PRO-SEITE)
+    if (CI-MAP-2 <= CK-MAP-ZEILEN-GESAMT)
+      WINDOW.ZEILE[CI-MAP-1] = C-MAP-TABELLE-ZEILE[CI-MAP-2];	//1 is not an array and cannot be subscripted
+      if (C-MAP-TABELLE-COLOR[CI-MAP-2] == "YE")				//1 is not an array and cannot be subscripted
+        set WINDOW.ZEILE[CI-MAP-1] yellow;
+      end
+      if (C-MAP-TABELLE-HIGHLIGHT[CI-MAP-2] == "NO")			//1 is not an array and cannot be subscripted
+        set WINDOW.ZEILE[CI-MAP-1] noHighLight;
+      end
+    end
+    CI-MAP-1 = CI-MAP-1 + 1;
+    CI-MAP-2 = CI-MAP-2 + 1;
+  end
+end 
+Record ZVVAWS type basicRecord
+  3 TUBWS-WORK char(96) ; 
+    4 C-MAP-TABELLE-ZEILE char(72) ; 
+    4 C-MAP-TABELLE-COLOR char(2) ; 
+    4 C-MAP-TABELLE-HIGHLIGHT char(2) ; 
+    4 C-MAP-SEITE-AKTUELL num(4) ; 
+    4 CK-MAP-ZEILEN-GESAMT num(4) ; 
+    4 CK-MAP-WINDOW-ZEILEN-PRO-SEITE num(4) ; 
+    4 CI-MAP-1 num(4) ; 
+    4 CI-MAP-2 num(4) ; 
+end

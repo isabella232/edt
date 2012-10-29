@@ -17,22 +17,13 @@ public class BitwiseTest extends ValidationTestCase {
 	 * i = ~si;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine12() {
-		List messages = getMessagesAtLine( 12 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si = ~i;
-	 * 0 validation messages are expected.
-	 */
 	public void testLine13() {
 		List messages = getMessagesAtLine( 13 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * i = ~2343;
+	 * si = ~i;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine14() {
@@ -41,7 +32,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si = ~2;
+	 * i = ~2343;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine15() {
@@ -50,7 +41,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * i = ~funcIn(~i);
+	 * si = ~2;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine16() {
@@ -59,7 +50,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * i = ~funcInout(i);
+	 * i = ~funcIn(~i);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine17() {
@@ -68,16 +59,16 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * a = ~"23";
-	 * 1 validation message is expected.
+	 * i = ~funcInout(i);
+	 * 0 validation messages are expected.
 	 */
-	public void testLine19() {
-		List messages = getMessagesAtLine( 19 );
-		assertEquals( 1, messages.size() );
+	public void testLine18() {
+		List messages = getMessagesAtLine( 18 );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * a = ~a;
+	 * a = ~"23";
 	 * 1 validation message is expected.
 	 */
 	public void testLine20() {
@@ -86,7 +77,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * a = ~s;
+	 * a = ~a;
 	 * 1 validation message is expected.
 	 */
 	public void testLine21() {
@@ -95,25 +86,25 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * funcIn(~i);
-	 * 0 validation messages are expected.
+	 * a = ~s;
+	 * 1 validation message is expected.
+	 */
+	public void testLine22() {
+		List messages = getMessagesAtLine( 22 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * a = ~r;
+	 * 1 validation message is expected.
 	 */
 	public void testLine23() {
 		List messages = getMessagesAtLine( 23 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * funcIn(~si);
-	 * 0 validation messages are expected.
-	 */
-	public void testLine24() {
-		List messages = getMessagesAtLine( 24 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * funcIn(~222);
+	 * funcIn(~i);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine25() {
@@ -122,25 +113,25 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * funcInout(~i);
-	 * 1 validation message is expected.
+	 * funcIn(~si);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine26() {
+		List messages = getMessagesAtLine( 26 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * funcIn(~222);
+	 * 0 validation messages are expected.
 	 */
 	public void testLine27() {
 		List messages = getMessagesAtLine( 27 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * funcInout(~si);
-	 * 1 validation message is expected.
-	 */
-	public void testLine28() {
-		List messages = getMessagesAtLine( 28 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * funcInout(~222);
+	 * funcInout(~i);
 	 * 1 validation message is expected.
 	 */
 	public void testLine29() {
@@ -149,34 +140,25 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
+	 * funcInout(~si);
+	 * 1 validation message is expected.
+	 */
+	public void testLine30() {
+		List messages = getMessagesAtLine( 30 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * funcInout(~222);
+	 * 1 validation message is expected.
+	 */
+	public void testLine31() {
+		List messages = getMessagesAtLine( 31 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
 	 * i = si << 2;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine38() {
-		List messages = getMessagesAtLine( 38 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * i = i << si;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine39() {
-		List messages = getMessagesAtLine( 39 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si = i << 2;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine40() {
-		List messages = getMessagesAtLine( 40 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si = si << i;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine41() {
@@ -185,7 +167,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si = getInt() << getSmallint();
+	 * i = i << si;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine42() {
@@ -194,25 +176,34 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * a = s << 2;
-	 * 1 validation message is expected.
+	 * si = i << 2;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine43() {
 		List messages = getMessagesAtLine( 43 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * a = 2 << a;
-	 * 1 validation message is expected.
+	 * si = si << i;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine44() {
 		List messages = getMessagesAtLine( 44 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * i <<= 2;
+	 * si = getInt() << getSmallint();
+	 * 0 validation messages are expected.
+	 */
+	public void testLine45() {
+		List messages = getMessagesAtLine( 45 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = s << 2;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine46() {
@@ -221,11 +212,38 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * i <<= si;
-	 * 0 validation messages are expected.
+	 * a = 2 << a;
+	 * 1 validation message is expected.
 	 */
 	public void testLine47() {
 		List messages = getMessagesAtLine( 47 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * a = 2 << r;
+	 * 1 validation message is expected.
+	 */
+	public void testLine48() {
+		List messages = getMessagesAtLine( 48 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * i <<= 2;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine50() {
+		List messages = getMessagesAtLine( 50 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i <<= si;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine51() {
+		List messages = getMessagesAtLine( 51 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -233,8 +251,8 @@ public class BitwiseTest extends ValidationTestCase {
 	 * i <<= i;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine48() {
-		List messages = getMessagesAtLine( 48 );
+	public void testLine52() {
+		List messages = getMessagesAtLine( 52 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -242,40 +260,13 @@ public class BitwiseTest extends ValidationTestCase {
 	 * i <<= a;
 	 * 1 validation message is expected.
 	 */
-	public void testLine49() {
-		List messages = getMessagesAtLine( 49 );
+	public void testLine53() {
+		List messages = getMessagesAtLine( 53 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
 	 * i <<= s;
-	 * 1 validation message is expected.
-	 */
-	public void testLine50() {
-		List messages = getMessagesAtLine( 50 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * i <<= "2";
-	 * 1 validation message is expected.
-	 */
-	public void testLine51() {
-		List messages = getMessagesAtLine( 51 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * i <<= getString();
-	 * 1 validation message is expected.
-	 */
-	public void testLine52() {
-		List messages = getMessagesAtLine( 52 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * si <<= 2;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine54() {
@@ -284,7 +275,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si <<= i;
+	 * i <<= "2";
 	 * 0 validation messages are expected.
 	 */
 	public void testLine55() {
@@ -293,7 +284,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si <<= si;
+	 * i <<= getString();
 	 * 0 validation messages are expected.
 	 */
 	public void testLine56() {
@@ -302,16 +293,16 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si <<= getInt();
-	 * 0 validation messages are expected.
+	 * i <<= r;
+	 * 1 validation message is expected.
 	 */
 	public void testLine57() {
 		List messages = getMessagesAtLine( 57 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * si <<= a;
+	 * i <<= getRec();
 	 * 1 validation message is expected.
 	 */
 	public void testLine58() {
@@ -320,124 +311,115 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si <<= s;
+	 * si <<= 2;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine60() {
+		List messages = getMessagesAtLine( 60 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si <<= i;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine61() {
+		List messages = getMessagesAtLine( 61 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si <<= si;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine62() {
+		List messages = getMessagesAtLine( 62 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si <<= getInt();
+	 * 0 validation messages are expected.
+	 */
+	public void testLine63() {
+		List messages = getMessagesAtLine( 63 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si <<= a;
 	 * 1 validation message is expected.
 	 */
-	public void testLine59() {
-		List messages = getMessagesAtLine( 59 );
+	public void testLine64() {
+		List messages = getMessagesAtLine( 64 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
+	 * si <<= s;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine65() {
+		List messages = getMessagesAtLine( 65 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
 	 * si <<= "2";
+	 * 0 validation messages are expected.
+	 */
+	public void testLine66() {
+		List messages = getMessagesAtLine( 66 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si <<= r;
 	 * 1 validation message is expected.
 	 */
-	public void testLine60() {
-		List messages = getMessagesAtLine( 60 );
+	public void testLine67() {
+		List messages = getMessagesAtLine( 67 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * si <<= getRec();
+	 * 1 validation message is expected.
+	 */
+	public void testLine68() {
+		List messages = getMessagesAtLine( 68 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
 	 * s <<= 2;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
-	public void testLine62() {
-		List messages = getMessagesAtLine( 62 );
-		assertEquals( 1, messages.size() );
+	public void testLine70() {
+		List messages = getMessagesAtLine( 70 );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * a <<= 2;
 	 * 1 validation message is expected.
 	 */
-	public void testLine63() {
-		List messages = getMessagesAtLine( 63 );
+	public void testLine71() {
+		List messages = getMessagesAtLine( 71 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * r <<= 2;
+	 * 1 validation message is expected.
+	 */
+	public void testLine72() {
+		List messages = getMessagesAtLine( 72 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
 	 * i = si >> 2;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine72() {
-		List messages = getMessagesAtLine( 72 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * i = i >> si;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine73() {
-		List messages = getMessagesAtLine( 73 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si = i >> 2;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine74() {
-		List messages = getMessagesAtLine( 74 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si = si >> i;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine75() {
-		List messages = getMessagesAtLine( 75 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si = getInt() >> getSmallint();
-	 * 0 validation messages are expected.
-	 */
-	public void testLine76() {
-		List messages = getMessagesAtLine( 76 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = s >> 2;
-	 * 1 validation message is expected.
-	 */
-	public void testLine77() {
-		List messages = getMessagesAtLine( 77 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * a = 2 >> a;
-	 * 1 validation message is expected.
-	 */
-	public void testLine78() {
-		List messages = getMessagesAtLine( 78 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * i >>= 2;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine80() {
-		List messages = getMessagesAtLine( 80 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * i >>= si;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine81() {
-		List messages = getMessagesAtLine( 81 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * i >>= i;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine82() {
@@ -446,70 +428,70 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * i >>= a;
-	 * 1 validation message is expected.
+	 * i = i >> si;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine83() {
 		List messages = getMessagesAtLine( 83 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * i >>= s;
-	 * 1 validation message is expected.
+	 * si = i >> 2;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine84() {
 		List messages = getMessagesAtLine( 84 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * i >>= "2";
-	 * 1 validation message is expected.
+	 * si = si >> i;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine85() {
 		List messages = getMessagesAtLine( 85 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * i >>= getString();
-	 * 1 validation message is expected.
+	 * si = getInt() >> getSmallint();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine86() {
 		List messages = getMessagesAtLine( 86 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = s >> 2;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine87() {
+		List messages = getMessagesAtLine( 87 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = 2 >> a;
+	 * 1 validation message is expected.
+	 */
+	public void testLine88() {
+		List messages = getMessagesAtLine( 88 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * si >>= 2;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine88() {
-		List messages = getMessagesAtLine( 88 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si >>= i;
-	 * 0 validation messages are expected.
+	 * a = 2 >> r;
+	 * 1 validation message is expected.
 	 */
 	public void testLine89() {
 		List messages = getMessagesAtLine( 89 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * si >>= si;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine90() {
-		List messages = getMessagesAtLine( 90 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si >>= getInt();
+	 * i >>= 2;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine91() {
@@ -518,25 +500,25 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si >>= a;
-	 * 1 validation message is expected.
+	 * i >>= si;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine92() {
 		List messages = getMessagesAtLine( 92 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * si >>= s;
-	 * 1 validation message is expected.
+	 * i >>= i;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine93() {
 		List messages = getMessagesAtLine( 93 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * si >>= "2";
+	 * i >>= a;
 	 * 1 validation message is expected.
 	 */
 	public void testLine94() {
@@ -545,25 +527,97 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * s >>= 2;
-	 * 1 validation message is expected.
+	 * i >>= s;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine95() {
+		List messages = getMessagesAtLine( 95 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i >>= "2";
+	 * 0 validation messages are expected.
 	 */
 	public void testLine96() {
 		List messages = getMessagesAtLine( 96 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * a >>= 2;
-	 * 1 validation message is expected.
+	 * i >>= getString();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine97() {
 		List messages = getMessagesAtLine( 97 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i >>= r;
+	 * 1 validation message is expected.
+	 */
+	public void testLine98() {
+		List messages = getMessagesAtLine( 98 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * i = si >>> 2;
+	 * i >>= getRec();
+	 * 1 validation message is expected.
+	 */
+	public void testLine99() {
+		List messages = getMessagesAtLine( 99 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * si >>= 2;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine101() {
+		List messages = getMessagesAtLine( 101 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>= i;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine102() {
+		List messages = getMessagesAtLine( 102 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>= si;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine103() {
+		List messages = getMessagesAtLine( 103 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>= getInt();
+	 * 0 validation messages are expected.
+	 */
+	public void testLine104() {
+		List messages = getMessagesAtLine( 104 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>= a;
+	 * 1 validation message is expected.
+	 */
+	public void testLine105() {
+		List messages = getMessagesAtLine( 105 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * si >>= s;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine106() {
@@ -572,7 +626,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * i = i >>> si;
+	 * si >>= "2";
 	 * 0 validation messages are expected.
 	 */
 	public void testLine107() {
@@ -581,133 +635,52 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si = i >>> 2;
-	 * 0 validation messages are expected.
+	 * si >>= r;
+	 * 1 validation message is expected.
 	 */
 	public void testLine108() {
 		List messages = getMessagesAtLine( 108 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * si = si >>> i;
-	 * 0 validation messages are expected.
+	 * si >>= getRec();
+	 * 1 validation message is expected.
 	 */
 	public void testLine109() {
 		List messages = getMessagesAtLine( 109 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si = getInt() >>> getSmallint();
-	 * 0 validation messages are expected.
-	 */
-	public void testLine110() {
-		List messages = getMessagesAtLine( 110 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * a = s >>> 2;
-	 * 1 validation message is expected.
-	 */
-	public void testLine111() {
-		List messages = getMessagesAtLine( 111 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * a = 2 >>> a;
-	 * 1 validation message is expected.
+	 * s >>= 2;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine112() {
 		List messages = getMessagesAtLine( 112 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a >>= 2;
+	 * 1 validation message is expected.
+	 */
+	public void testLine113() {
+		List messages = getMessagesAtLine( 113 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * i >>>= 2;
-	 * 0 validation messages are expected.
+	 * r >>= 2;
+	 * 1 validation message is expected.
 	 */
 	public void testLine114() {
 		List messages = getMessagesAtLine( 114 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * i >>>= si;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine115() {
-		List messages = getMessagesAtLine( 115 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * i >>>= i;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine116() {
-		List messages = getMessagesAtLine( 116 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * i >>>= a;
-	 * 1 validation message is expected.
-	 */
-	public void testLine117() {
-		List messages = getMessagesAtLine( 117 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * i >>>= s;
-	 * 1 validation message is expected.
-	 */
-	public void testLine118() {
-		List messages = getMessagesAtLine( 118 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * i >>>= "2";
-	 * 1 validation message is expected.
-	 */
-	public void testLine119() {
-		List messages = getMessagesAtLine( 119 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * i >>>= getString();
-	 * 1 validation message is expected.
-	 */
-	public void testLine120() {
-		List messages = getMessagesAtLine( 120 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * si >>>= 2;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine122() {
-		List messages = getMessagesAtLine( 122 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si >>>= i;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine123() {
-		List messages = getMessagesAtLine( 123 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * si >>>= si;
+	 * i = si >>> 2;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine124() {
@@ -716,7 +689,7 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si >>>= getInt();
+	 * i = i >>> si;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine125() {
@@ -725,34 +698,43 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si >>>= a;
-	 * 1 validation message is expected.
+	 * si = i >>> 2;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine126() {
 		List messages = getMessagesAtLine( 126 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * si >>>= s;
-	 * 1 validation message is expected.
+	 * si = si >>> i;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine127() {
 		List messages = getMessagesAtLine( 127 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * si >>>= "2";
-	 * 1 validation message is expected.
+	 * si = getInt() >>> getSmallint();
+	 * 0 validation messages are expected.
 	 */
 	public void testLine128() {
 		List messages = getMessagesAtLine( 128 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * s >>>= 2;
+	 * a = s >>> 2;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine129() {
+		List messages = getMessagesAtLine( 129 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = 2 >>> a;
 	 * 1 validation message is expected.
 	 */
 	public void testLine130() {
@@ -761,11 +743,191 @@ public class BitwiseTest extends ValidationTestCase {
 	}
 
 	/*
-	 * a >>>= 2;
+	 * a = 2 >>> r;
 	 * 1 validation message is expected.
 	 */
 	public void testLine131() {
 		List messages = getMessagesAtLine( 131 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * i >>>= 2;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine133() {
+		List messages = getMessagesAtLine( 133 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i >>>= si;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine134() {
+		List messages = getMessagesAtLine( 134 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i >>>= i;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine135() {
+		List messages = getMessagesAtLine( 135 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i >>>= a;
+	 * 1 validation message is expected.
+	 */
+	public void testLine136() {
+		List messages = getMessagesAtLine( 136 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * i >>>= s;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine137() {
+		List messages = getMessagesAtLine( 137 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i >>>= "2";
+	 * 0 validation messages are expected.
+	 */
+	public void testLine138() {
+		List messages = getMessagesAtLine( 138 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * i >>>= r;
+	 * 1 validation message is expected.
+	 */
+	public void testLine139() {
+		List messages = getMessagesAtLine( 139 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * i >>>= getRec();
+	 * 1 validation message is expected.
+	 */
+	public void testLine140() {
+		List messages = getMessagesAtLine( 140 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * si >>>= 2;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine142() {
+		List messages = getMessagesAtLine( 142 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>>= i;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine143() {
+		List messages = getMessagesAtLine( 143 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>>= si;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine144() {
+		List messages = getMessagesAtLine( 144 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>>= getInt();
+	 * 0 validation messages are expected.
+	 */
+	public void testLine145() {
+		List messages = getMessagesAtLine( 145 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>>= a;
+	 * 1 validation message is expected.
+	 */
+	public void testLine146() {
+		List messages = getMessagesAtLine( 146 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * si >>>= s;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine147() {
+		List messages = getMessagesAtLine( 147 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>>= "2";
+	 * 0 validation messages are expected.
+	 */
+	public void testLine148() {
+		List messages = getMessagesAtLine( 148 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * si >>>= r;
+	 * 1 validation message is expected.
+	 */
+	public void testLine149() {
+		List messages = getMessagesAtLine( 149 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * si >>>= getRec();
+	 * 1 validation message is expected.
+	 */
+	public void testLine150() {
+		List messages = getMessagesAtLine( 150 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * s >>>= 2;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine152() {
+		List messages = getMessagesAtLine( 152 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a >>>= 2;
+	 * 1 validation message is expected.
+	 */
+	public void testLine153() {
+		List messages = getMessagesAtLine( 153 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * r >>>= 2;
+	 * 1 validation message is expected.
+	 */
+	public void testLine154() {
+		List messages = getMessagesAtLine( 154 );
 		assertEquals( 1, messages.size() );
 	}
 }

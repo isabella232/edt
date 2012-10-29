@@ -1,0 +1,154 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+ExternalType noSubtypeType //1 Error on part noSubtypeType. This kind of part requires a subtype definition. {3420, PART_DEFINITION_REQUIRES_TYPE_CLAUSE}
+end
+
+Record Subtype1 type Annotation
+{
+	targets = [ElementKind.externalTypePart],
+	@Stereotype
+}
+end
+
+Record Subtype2 type Annotation
+{
+	targets = [ElementKind.externalTypePart],
+	@Stereotype
+}
+end
+
+ExternalType et1a type Subtype1						//0
+end
+
+ExternalType et1b extends et1a type Subtype1		//0
+end
+
+ExternalType et2a extends et1a type Subtype2		//1 The type et1a must be an ExternalType part whose subtype matches the subtype of et2a. {3421, EXTERNALTYPE_MUST_EXTEND_EXTERNALTYPE}
+end
+
+ExternalType et2b extends Subtype1 type Subtype2	//1 The type Subtype1 must be an ExternalType part whose subtype matches the subtype of et2b. {3421, EXTERNALTYPE_MUST_EXTEND_EXTERNALTYPE}
+end
+
+ExternalType et2c extends foo type Subtype2			//1 The type foo cannot be resolved.
+end
+
+ExternalType typeWithInitializers type Subtype1
+{
+	field1 = 5			//1 Initial values cannot be set for fields in an ExternalType. {3422, INITIALIZER_NOT_ALLOWED_FOR_EXTERNALTYPE_FIELD}
+}
+	field1 int = 5;		//1 Initial values cannot be set for fields in an ExternalType. {3422, INITIALIZER_NOT_ALLOWED_FOR_EXTERNALTYPE_FIELD}
+end
+
+Program pgm
+	typeVar typeWithInitializers {field1 = 5};	//0
+	function main()
+	end
+end
+
+ExternalType gettersAndSettersET type JavaObject	//0
+	fieldWithGetAndSet1 int;
+	fieldWithGetAndSet2 int {
+		@JavaProperty {			//0
+			getMethod = "get",	//0
+			setMethod = "set"	//0
+		}
+	};
+	
+	fieldWithJustGet int {
+		@JavaProperty {			//0
+			getMethod = "get"	//0
+		}
+	};
+	
+	fieldWithJustSet int {
+		@JavaProperty {			//0
+			setMethod = "set"	//0
+		}
+	};
+end
+
+Program pgm2
+	gettersAndSettersET gettersAndSettersET {
+		fieldWithGetAndSet1 = 1,	//0
+		fieldWithGetAndSet2 = 2,	//0
+		fieldWithJustGet = 3,		//1 Invalid attempt to write to field fieldWithJustGet, which specifies a get method but not a set method. {3423*, CANNOT_WRITE_TO_EXTERNALTYPE_FIELD_WITH_NO_SETTER}
+		fieldWithJustSet = 4		//0
+	};
+	
+	function main()	
+		gettersAndSettersET.fieldWithGetAndSet1 = 1;	//0
+		gettersAndSettersET.fieldWithGetAndSet2 = 2;	//0
+		gettersAndSettersET.fieldWithJustGet = 3;		//1 Invalid attempt to write to field fieldWithJustGet, which specifies a get method but not a set method. {3423*, CANNOT_WRITE_TO_EXTERNALTYPE_FIELD_WITH_NO_SETTER}
+		gettersAndSettersET.fieldWithJustSet = 4;		//0
+		
+		a int;		
+		a = gettersAndSettersET.fieldWithGetAndSet1;	//0
+		a = gettersAndSettersET.fieldWithGetAndSet2;	//0
+		a = gettersAndSettersET.fieldWithJustGet;		//0
+		a = gettersAndSettersET.fieldWithJustSet;		//1 Invalid attempt to read from field fieldWithJustSet, which specifies a set method but not a get method. {3424*, CANNOT_READ_FROM_EXTERNALTYPE_FIELD_WITH_NO_GETTER}
+	end
+end
+
+ExternalType super
+end
+
+ExternalType sub1 extends super
+end
+
+ExternalType sub2 extends sub1
+end
+
+Program pgm3
+	function main()
+		super super;
+		sub2 sub2;
+		sub1 sub1;
+		
+		sub2 = super;	//0
+		sub2 = sub1;	//0
+		sub1 = super;	//0
+	end
+end
+
+ExternalType Java1 type JavaObject
+	function func1(p1 int in);		//0
+	function func2(p1 int inout);	//1 The IN modifier must be specified
+	function func3(p1 int);			//1 The IN modifier must be specified
+	
+	function func1a(p1 intItem in);		//0
+	function func2a(p1 intItem inout);	//1 The IN modifier must be specified
+	function func3a(p1 intItem);		//1 The IN modifier must be specified
+	
+	function func4(p1 date in);		//0
+	function func5(p1 date inout);	//0
+	function func6(p1 date);		//0
+	
+	function func4a(p1 dateItem in);		//0
+	function func5a(p1 dateItem inout);		//0
+	function func6a(p1 dateItem);			//0
+	
+	function func4(p1 time in);		//0
+	function func5(p1 time inout);	//0
+	function func6(p1 time);		//0
+	
+	function func4(p1 timestamp in);	//0
+	function func5(p1 timestamp inout);	//0
+	function func6(p1 timestamp);		//0
+	
+	function func4(p1 interval("yyyymm") in);		//0
+	function func5(p1 interval("yyyymm") inout);	//0
+	function func6(p1 interval("yyyymm"));			//0
+end
+
+DataItem intItem int end
+DataItem dateItem date end

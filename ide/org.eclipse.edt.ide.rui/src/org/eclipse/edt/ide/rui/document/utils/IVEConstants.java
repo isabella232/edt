@@ -11,16 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.document.utils;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public interface IVEConstants {
 
-	public static final String BOOLEAN_TYPE = InternUtil.intern("boolean");
-	public static final String CHOICE_TYPE = InternUtil.intern("choice");
-	public static final String INTEGER_TYPE = InternUtil.intern("integer");
-	public static final String STRING_TYPE = InternUtil.intern("string");
-	public static final String STRING_ARRAY_TYPE = InternUtil.intern("stringarray");
-	public static final Object COLOR_TYPE = InternUtil.intern("color");
+	public static final String BOOLEAN_TYPE = NameUtile.getAsName("boolean");
+	public static final String CHOICE_TYPE = NameUtile.getAsName("choice");
+	public static final String INTEGER_TYPE = NameUtile.getAsName("integer");
+	public static final String STRING_TYPE = NameUtile.getAsName("string");
+	public static final String STRING_ARRAY_TYPE = NameUtile.getAsName("stringarray");
+	public static final Object COLOR_TYPE = NameUtile.getAsName("color");
 	
 	public static final String TYPE_NAME_VARIABLE = "${typeName:";
 	

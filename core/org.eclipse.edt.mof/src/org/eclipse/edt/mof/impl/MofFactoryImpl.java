@@ -27,6 +27,7 @@ import org.eclipse.edt.mof.EParameter;
 import org.eclipse.edt.mof.ETypeParameter;
 import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public class MofFactoryImpl extends EFactoryImpl implements MofFactory {
@@ -58,7 +59,7 @@ public class MofFactoryImpl extends EFactoryImpl implements MofFactory {
 	EClass valueParameterClass;
 	EClass metadataTypeClass;
 	
-	Environment env = Environment.INSTANCE;
+	IEnvironment env = Environment.getCurrentEnv();
 
 	
 	public static MofFactory init() {
@@ -173,7 +174,7 @@ public class MofFactoryImpl extends EFactoryImpl implements MofFactory {
 	}
 
 	public EObject create(EClass type, boolean initialize) {
-		if (!type.getPackageName().equalsIgnoreCase(PackageName) || type.isAbstract()) {
+		if (!type.getCaseSensitivePackageName().equalsIgnoreCase(PackageName) || type.isAbstract()) {
 			throw new IllegalArgumentException("Type is not valid: " + type.getETypeSignature());
 		}
 		if (type == getEObjectClass())
@@ -206,7 +207,7 @@ public class MofFactoryImpl extends EFactoryImpl implements MofFactory {
 	}
 	
 	public Object createFromString(EDataType type, String value) {
-		if (!type.getPackageName().equalsIgnoreCase(PackageName)) {
+		if (!type.getCaseSensitivePackageName().equalsIgnoreCase(PackageName)) {
 			throw new IllegalArgumentException("Type is not valid: " + type.getETypeSignature());
 		}
 		if (type == getEIntEDataType())
@@ -240,7 +241,7 @@ public class MofFactoryImpl extends EFactoryImpl implements MofFactory {
 	}
 
 	public String convertToString(EDataType type, Object value) {
-		if (!type.getPackageName().equalsIgnoreCase(PackageName)) {
+		if (!type.getCaseSensitivePackageName().equalsIgnoreCase(PackageName)) {
 			throw new IllegalArgumentException("Type is not valid: " + type.getETypeSignature());
 		}
 		// TODO: Handle real conversions

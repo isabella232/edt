@@ -21,13 +21,11 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.utils.ReadWriteMonitor;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.internal.lookup.AbstractProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.utils.Util;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author svihovec
@@ -61,7 +59,7 @@ public class DependencyGraph {
 	 * Simple Name Dependencies are stored as a list of names associated with a particular package.partname
 	 * ex: a.b.c.RecordOne -> J, K, L
 	 */
-	private void recordSimpleNameDependency(String[] packageName, String partName, SimpleName simpleName){
+	private void recordSimpleNameDependency(String packageName, String partName, SimpleName simpleName){
 		Part entryKey = new Part(packageName, partName);
 		DependencyEntry dependencyEntry = (DependencyEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.DEPENDENCY_ENTRY);
 		
@@ -79,7 +77,7 @@ public class DependencyGraph {
 	 * ex: a.b.c.RecordOne -> i.b.RecordTwo
 	 * 	   l.m.LibraryOne  -> j.DataItemOne
 	 */
-	private void recordQualifiedNameDependency(String[] packageName, String partName, QualifiedName qualifiedName){
+	private void recordQualifiedNameDependency(String packageName, String partName, QualifiedName qualifiedName){
 		Part entryKey = new Part(packageName, partName);
 		
 		DependencyEntry dependencyEntry = (DependencyEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.DEPENDENCY_ENTRY);
@@ -93,26 +91,12 @@ public class DependencyGraph {
 		putDependencyEntry(entryKey, IDependencyGraphEntry.DEPENDENCY_ENTRY, dependencyEntry);
 	}
 	
-	private void recordFunctionDependency(String[] packageName, String partName, Function function){
-		Part entryKey = new Part(packageName, partName);
-		
-		FunctionEntry functionEntry = (FunctionEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.FUNCTION_ENTRY);
-		
-		if(functionEntry == null){
-		    functionEntry = new FunctionEntry();
-		}
-		
-		functionEntry.addFunction(function);
-		
-		putDependencyEntry(entryKey, IDependencyGraphEntry.FUNCTION_ENTRY, functionEntry);
-	}
-	
 	/**
 	 * Simple Name Dependents are stored by the files that reference the simple names.
 	 * ex: J -> a.b.c.File1.egl[RecordOne, RecordTwo]
 	 * 		 -> l.m.File2.egl[LibraryOne]
 	 */
-	private void recordSimpleNameDependent(String[] packageName, String partName, String filePartName, SimpleName entryKey){
+	private void recordSimpleNameDependent(String packageName, String partName, String filePartName, SimpleName entryKey){
 		SimpleNameDependentEntry dependentEntry = (SimpleNameDependentEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.SIMPLE_NAME_DEPENDENT_ENTRY);
 		
 		if(dependentEntry == null){
@@ -129,7 +113,7 @@ public class DependencyGraph {
 	 * ex: a.b.c.RecordTwo -> a.b.c.RecordOne
 	 * 	   j.DataItemOne -> l.m.LibraryOne
 	 */
-	private void recordQualifiedNameDependent(String[] packageName, String partName, QualifiedName entryKey){
+	private void recordQualifiedNameDependent(String packageName, String partName, QualifiedName entryKey){
 		QualifiedNameDependentEntry dependentEntry = (QualifiedNameDependentEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.QUALIFIED_NAME_DEPENDENT_ENTRY);
 		
 		if(dependentEntry == null){
@@ -141,7 +125,7 @@ public class DependencyGraph {
 		putDependencyEntry(entryKey, IDependencyGraphEntry.QUALIFIED_NAME_DEPENDENT_ENTRY, dependentEntry);
 	}
 
-	private void removeSimpleNameDependency( String[] packageName,  String partName,  SimpleName simpleName){
+	private void removeSimpleNameDependency( String packageName,  String partName,  SimpleName simpleName){
 		Part entryKey = new Part(packageName, partName);
 		
 		DependencyEntry dependencyEntry = (DependencyEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.DEPENDENCY_ENTRY);
@@ -157,7 +141,7 @@ public class DependencyGraph {
 		}
 	}
 	
-	private void removeSimpleNameDependent(String[] packageName, String partName, String filePartName, SimpleName entryKey){
+	private void removeSimpleNameDependent(String packageName, String partName, String filePartName, SimpleName entryKey){
 		SimpleNameDependentEntry dependentEntry = (SimpleNameDependentEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.SIMPLE_NAME_DEPENDENT_ENTRY);
 		
 		if(dependentEntry != null){
@@ -171,7 +155,7 @@ public class DependencyGraph {
 		}
 	}
 
-	private void removeQualifiedNameDependency( String[] packageName,  String partName,  QualifiedName qualifiedName){
+	private void removeQualifiedNameDependency( String packageName,  String partName,  QualifiedName qualifiedName){
 		Part entryKey = new Part(packageName, partName);
 		
 		DependencyEntry dependencyEntry = (DependencyEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.DEPENDENCY_ENTRY);
@@ -187,7 +171,7 @@ public class DependencyGraph {
 		}
 	}
 	
-	private void removeQualifiedNameDependent(String[] packageName, String partName, QualifiedName entryKey){
+	private void removeQualifiedNameDependent(String packageName, String partName, QualifiedName entryKey){
 		QualifiedNameDependentEntry dependentEntry = (QualifiedNameDependentEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.QUALIFIED_NAME_DEPENDENT_ENTRY);
 		
 		if(dependentEntry != null){
@@ -201,52 +185,33 @@ public class DependencyGraph {
 		}
 	}
 	
-	private void removeFunctionDependency( String[] packageName,  String partName,  Function function){
-		Part entryKey = new Part(packageName, partName);
-		
-		FunctionEntry functionEntry = (FunctionEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.FUNCTION_ENTRY);
-		
-		if(functionEntry != null){
-			functionEntry.removeFunction(function);
-			
-			if(functionEntry.isEmpty()){
-				removeDependencyEntry(entryKey, IDependencyGraphEntry.FUNCTION_ENTRY);
-			}else{
-				putDependencyEntry(entryKey, IDependencyGraphEntry.FUNCTION_ENTRY, functionEntry);
-			}
-		}
-	}
-	
-	public void findDependents(String[] packageName, String partName, IPartRequestor requestor){
+	public void findDependents(String packageName, String partName, IPartRequestor requestor){
 		
 		monitor.enterRead();
 		
 		try{
 			long startTime = System.currentTimeMillis();
 			if(DEBUG){
-				System.out.println("\r\nYou asked for dependents of " + Util.stringArrayToPath(packageName).append(partName).toString().replace(IPath.SEPARATOR, '.') + ":"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println("\r\nYou asked for dependents of " + Util.appendToQualifiedName(packageName, partName, ".") + ":"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			
-			if(packageName.length == 0){
+			if(packageName.length() == 0){
 				findDependents(partName, requestor);
 			}else{
-				String[] qualifiedNameArray = new String[packageName.length + 1];
-				System.arraycopy(packageName, 0, qualifiedNameArray, 0, packageName.length);
-				qualifiedNameArray[qualifiedNameArray.length - 1] = partName;
-				findQualifiedNameDependents(InternUtil.intern(qualifiedNameArray), requestor);
+				findQualifiedNameDependents(NameUtile.getAsName(Util.appendToQualifiedName(packageName, partName, ".")), requestor);
 				
 				findMatchingDependents(packageName, partName, requestor);
 			}
 			
 			if(DEBUG){
-				System.out.println("Finished finding dependents of " + Util.stringArrayToPath(packageName).append(partName).toString().replace(IPath.SEPARATOR, '.') + "(" + (System.currentTimeMillis() - startTime) + "ms)\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				System.out.println("Finished finding dependents of " + Util.appendToQualifiedName(packageName, partName, ".") + "(" + (System.currentTimeMillis() - startTime) + "ms)\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}finally{
 			monitor.exitRead();
 		}
 	}
 	
-	private void findMatchingDependents( String[] packageName,  String partName, final IPartRequestor requestor) {
+	private void findMatchingDependents( String packageName,  String partName, final IPartRequestor requestor) {
 		
 		final SimpleNameDependentEntry dependentEntry = (SimpleNameDependentEntry)getDependencyEntry(new SimpleName(partName), IDependencyGraphEntry.SIMPLE_NAME_DEPENDENT_ENTRY);
 		
@@ -254,7 +219,7 @@ public class DependencyGraph {
 			final ArrayList fileParts = new ArrayList();
 			findDependents(packageName, new IPartRequestor(){
 				
-				public void acceptPart(String[] packageName, String partName) {
+				public void acceptPart(String packageName, String partName) {
 					Part filePart = new Part(packageName, partName);
 					fileParts.add(filePart);
 				}
@@ -270,7 +235,7 @@ public class DependencyGraph {
 							requestor.acceptPart(filePart.getPackageName(), part.getSimpleName());
 							
 							if(DEBUG){
-							    System.out.println("\tPart \"" + part + "\" depends on \"" +  partName + "\", and File \"" + filePart + "\" depends on \"" + Util.stringArrayToPath(packageName).toString().replace(IPath.SEPARATOR, '.') + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+							    System.out.println("\tPart \"" + part + "\" depends on \"" +  partName + "\", and File \"" + filePart + "\" depends on \"" + packageName + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 							}
 						}
 					}
@@ -279,49 +244,46 @@ public class DependencyGraph {
 		}
 	}
 	
-	public void findDependents(String[] packageName, IPartRequestor requestor){
-		
+	private void findQualifiedNameDependents(String qualifiedName, IPartRequestor requestor) {
 		monitor.enterRead();
 		
 		try{
 			long startTime = System.currentTimeMillis();
 			if(DEBUG){
-			    System.out.println("\r\nYou asked for dependents of " + Util.stringArrayToPath(packageName).toString().replace(IPath.SEPARATOR, '.') + ":"); //$NON-NLS-1$ //$NON-NLS-2$
+			    System.out.println("\r\nYou asked for dependents of " + qualifiedName + ":"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			
-			if(packageName.length > 1){
-				findQualifiedNameDependents(packageName, requestor);
-			}else{
-				findDependents(packageName[0], requestor);
+			QualifiedName entryKey = new QualifiedName(qualifiedName);
+			QualifiedNameDependentEntry dependentEntry = (QualifiedNameDependentEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.QUALIFIED_NAME_DEPENDENT_ENTRY);
+			
+			if(dependentEntry != null){
+				Set dependents = dependentEntry.getParts();
+				for (Iterator iter = dependents.iterator(); iter.hasNext();) {
+					Part dependent = (Part) iter.next();
+					
+					if(DEBUG){
+					    System.out.println("\t\"" + dependent + "\" depends directly upon \"" + qualifiedName + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					}
+					requestor.acceptPart(dependent.getPackageName(), dependent.getPartName());
+				}
 			}
 			
 			if(DEBUG){
-			    System.out.println("Finished finding dependents of " + Util.stringArrayToPath(packageName).toString().replace(IPath.SEPARATOR, '.') + "(" + (System.currentTimeMillis() - startTime) + "ms)\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			    System.out.println("Finished finding dependents of " + qualifiedName + "(" + (System.currentTimeMillis() - startTime) + "ms)\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}finally{
 			monitor.exitRead();
 		}
 	}
 	
-	private void findQualifiedNameDependents(String[] qualifiedName, IPartRequestor requestor) {
-		QualifiedName entryKey = new QualifiedName(qualifiedName);
-		QualifiedNameDependentEntry dependentEntry = (QualifiedNameDependentEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.QUALIFIED_NAME_DEPENDENT_ENTRY);
-		
-		if(dependentEntry != null){
-			Set dependents = dependentEntry.getParts();
-			for (Iterator iter = dependents.iterator(); iter.hasNext();) {
-				Part dependent = (Part) iter.next();
-				
-				if(DEBUG){
-				    System.out.println("\t\"" + dependent + "\" depends directly upon \"" + Util.stringArrayToPath(qualifiedName) + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				}
-				requestor.acceptPart(dependent.getPackageName(), dependent.getPartName());
-			}
+	public void findDependents(String name, IPartRequestor requestor){
+		String[] segments = Util.qualifiedNameToStringArray(name);
+		if (segments.length > 1) {
+			findQualifiedNameDependents(name, requestor );
+			return;
 		}
-	}
-	
-	public void findDependents(String simpleName, IPartRequestor requestor){
-		SimpleName entryKey = new SimpleName(simpleName);
+		
+		SimpleName entryKey = new SimpleName(name);
 		SimpleNameDependentEntry dependentEntry = (SimpleNameDependentEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.SIMPLE_NAME_DEPENDENT_ENTRY);
 		
 		if(dependentEntry != null){
@@ -333,7 +295,7 @@ public class DependencyGraph {
 					 SimpleName	part = (SimpleName) iter.next();
 					 
 					 if(DEBUG){
-					     System.out.println("\t\"" + part + "\" in file \"" + filePart + "\" depends on \"" +  simpleName + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					     System.out.println("\t\"" + part + "\" in file \"" + filePart + "\" depends on \"" +  name + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 					 }
 					 
 					 requestor.acceptPart(filePart.getPackageName(), part.getSimpleName());
@@ -342,13 +304,13 @@ public class DependencyGraph {
 		}
 	}
 	
-	public void findFunctionDependencies(String[] packageName, String partName, IFunctionRequestor requestor){
+	public void findFunctionDependencies(String packageName, String partName, IFunctionRequestor requestor){
 	    monitor.enterRead();
 		
 		try{
 			long startTime = System.currentTimeMillis();
 			if(DEBUG){
-			    System.out.println("\nYou asked for dependencies of function: " + Util.stringArrayToPath(packageName).append(partName).toString().replace(IPath.SEPARATOR, '.') + ":");
+			    System.out.println("\nYou asked for dependencies of function: " + Util.appendToQualifiedName(packageName, partName, ".") + ":");
 			}
 			
 			Part entryKey = new Part(packageName, partName);
@@ -365,14 +327,14 @@ public class DependencyGraph {
 			}
 			
 			if(DEBUG){
-			    System.out.println("Finished finding dependencies of function: " + Util.stringArrayToPath(packageName).append(partName).toString().replace(IPath.SEPARATOR, '.') + "(" + (System.currentTimeMillis() - startTime) + "ms)\n");
+			    System.out.println("Finished finding dependencies of function: " + Util.appendToQualifiedName(packageName, partName, ".") + "(" + (System.currentTimeMillis() - startTime) + "ms)\n");
 			}
 		}finally{
 			monitor.exitRead();
 		}
 	}
 	
-	public void removePart(String[] packageName, String partName, String filePartName){
+	public void removePart(String packageName, String partName, String filePartName){
 		
 		monitor.enterWrite();
 		
@@ -394,27 +356,27 @@ public class DependencyGraph {
 		
 	}
 	
-	private void removeQualifiedNames(String[] packageName, String partName, Set qualifiedNames) {
+	private void removeQualifiedNames(String packageName, String partName, Set qualifiedNames) {
 		for (Iterator iter = qualifiedNames.iterator(); iter.hasNext();) {
 			QualifiedName qualifiedName = (QualifiedName) iter.next();
 			removeQualifiedNameDependent(packageName, partName, qualifiedName);
 		}
 	}
 
-	private void removeSimpleNames(String[] packageName, String partName, String filePartName, Set simpleNames) {
+	private void removeSimpleNames(String packageName, String partName, String filePartName, Set simpleNames) {
 		for (Iterator iter = simpleNames.iterator(); iter.hasNext();) {
 			SimpleName simpleName = (SimpleName) iter.next();
 			removeSimpleNameDependent(packageName, partName, filePartName, simpleName);					
 		}
 	}
 
-	public void putPart(String[] packageName, String partName, String filePartName, IDependencyInfo dependencyInfo){
+	public void putPart(String packageName, String partName, String filePartName, IDependencyInfo dependencyInfo){
 		
 		monitor.enterWrite();
 		
 		try{
 			if(DEBUG){
-			    System.out.println("\nBegin processing dependency information for: " + Util.stringArrayToPath(packageName).append(partName).toString().replace(IPath.SEPARATOR, '.')); //$NON-NLS-1$
+			    System.out.println("\nBegin processing dependency information for: " + Util.appendToQualifiedName(packageName, partName, ".")); //$NON-NLS-1$
 			}
 			
 			Part entryKey = new Part(packageName, partName);
@@ -423,11 +385,8 @@ public class DependencyGraph {
 			putSimpleNames(packageName, partName, filePartName, dependencyInfo, dependencies);
 			putQualifiedNames(packageName, partName, dependencyInfo, dependencies);
 			
-			FunctionEntry functionDependencies = (FunctionEntry)getDependencyEntry(entryKey, IDependencyGraphEntry.FUNCTION_ENTRY);
-			putFunctionDependencies(packageName, partName, dependencyInfo, functionDependencies);
-			
 			if(DEBUG){
-			    System.out.println("Finished processing dependency information for: " + Util.stringArrayToPath(packageName).append(partName).toString().replace(IPath.SEPARATOR, '.') + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			    System.out.println("Finished processing dependency information for: " + Util.appendToQualifiedName(packageName, partName, ".") + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			
 		}finally{
@@ -435,10 +394,10 @@ public class DependencyGraph {
 		}
 	}
 	
-	private void putQualifiedNames(String[] packageName, String partName, IDependencyInfo newDependencies, DependencyEntry previousDependencies) {
+	private void putQualifiedNames(String packageName, String partName, IDependencyInfo newDependencies, DependencyEntry previousDependencies) {
 		Set previousQualifiedNames = previousDependencies != null ? new HashSet(previousDependencies.getQualifiedNames()) : Collections.EMPTY_SET;
-		for (Iterator iter = newDependencies.getQualifiedNames().iterator(); iter.hasNext();) {
-			QualifiedName qualifiedName = new QualifiedName((String[]) iter.next());
+		for (Iterator<String> iter = newDependencies.getQualifiedNames().iterator(); iter.hasNext();) {
+			QualifiedName qualifiedName = new QualifiedName(iter.next());
 			
 			if(DEBUG){
 			    System.out.println("\tRecord Qualified Name: " + qualifiedName); //$NON-NLS-1$
@@ -462,7 +421,7 @@ public class DependencyGraph {
 		}
 	}
 
-	private void putSimpleNames(String[] packageName, String partName, String filePartName, IDependencyInfo newDependencies, DependencyEntry previousDependencies) {
+	private void putSimpleNames(String packageName, String partName, String filePartName, IDependencyInfo newDependencies, DependencyEntry previousDependencies) {
 		
 		Set previousSimpleNames = previousDependencies != null ? new HashSet(previousDependencies.getSimpleNames()) : Collections.EMPTY_SET;
 		for (Iterator iter = newDependencies.getSimpleNames().iterator(); iter.hasNext();) {
@@ -490,31 +449,6 @@ public class DependencyGraph {
 		}
 	}
 	
-	private void putFunctionDependencies(String[] packageName, String partName, IDependencyInfo newFunctions, FunctionEntry functionEntry) {
-	    Set previousFunctions = functionEntry != null ? new HashSet(functionEntry.getFunctions()) : Collections.EMPTY_SET;
-		for (Iterator iter = newFunctions.getTopLevelFunctions().iterator(); iter.hasNext();) {
-		    IPartBinding functionBinding = (IPartBinding)iter.next();
-			Function function = new Function(((AbstractProjectEnvironment)functionBinding.getEnvironment()).getProjectName(), functionBinding.getPackageName(), functionBinding.getName());
-			
-			if(DEBUG){
-			    System.out.println("\tRecord Function: " + function);
-			}
-			if(!previousFunctions.contains(function)){
-			    recordFunctionDependency(packageName, partName, function);
-			}else{
-				previousFunctions.remove(function);
-			}
-		}
-		
-		for (Iterator iter = previousFunctions.iterator(); iter.hasNext();) {
-			Function function = (Function) iter.next();
-			if(DEBUG){
-			    System.out.println("\tRemoving unused function: " + function);
-			}
-			removeFunctionDependency(packageName, partName, function);
-		}       
-    }
-
 	public void save(){
 		monitor.enterWrite();
 		try{

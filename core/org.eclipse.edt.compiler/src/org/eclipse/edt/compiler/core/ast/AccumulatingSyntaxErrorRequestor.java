@@ -102,10 +102,6 @@ public class AccumulatingSyntaxErrorRequestor implements ISyntaxErrorRequestor {
     	syntaxErrors.add(new SyntaxError(SyntaxError.UNCLOSED_BLOCK_COMMENT, startOffset, endOffset));
 	}
 
-	public void unclosedDLI(int startOffset, int endOffset) {
-    	syntaxErrors.add(new SyntaxError(SyntaxError.UNCLOSED_DLI, startOffset, endOffset));
-	}
-
 	public void unclosedSQL(int startOffset, int endOffset) {
     	syntaxErrors.add(new SyntaxError(SyntaxError.UNCLOSED_SQL, startOffset, endOffset));
 	}
@@ -116,10 +112,6 @@ public class AccumulatingSyntaxErrorRequestor implements ISyntaxErrorRequestor {
 
 	public void unclosedString(int startOffset, int endOffset) {
     	syntaxErrors.add(new SyntaxError(SyntaxError.UNCLOSED_STRING, startOffset, endOffset));
-	}
-
-	public void whitespaceInDLI(int startOffset, int endOffset) {
-    	syntaxErrors.add(new SyntaxError(SyntaxError.WHITESPACE_DLI, startOffset, endOffset));
 	}
 
 	public void whitespaceInSQL(int startOffset, int endOffset) {

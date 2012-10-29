@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.LibraryBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.LibraryBindingCompletor;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -24,18 +24,20 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
 public class LibraryBinder extends FunctionContainerBinder {
 
-    private LibraryBinding libraryBinding;
+    private org.eclipse.edt.mof.egl.Library libraryBinding;
+    private IRPartBinding irBinding;
     private Scope fileScope;
 
-    public LibraryBinder(LibraryBinding libraryBinding, Scope fileScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(libraryBinding, fileScope, dependencyRequestor, problemRequestor, compilerOptions);
-        this.libraryBinding = libraryBinding;
+    public LibraryBinder(IRPartBinding irBinding, Scope fileScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(irBinding.getIrPart(), fileScope, dependencyRequestor, problemRequestor, compilerOptions);
+        this.irBinding =irBinding;
+        this.libraryBinding = (org.eclipse.edt.mof.egl.Library)irBinding.getIrPart();
         this.fileScope = fileScope;
     }
 
     public boolean visit(Library library) {
         // First we have to complete the library binding (as a side effect some of the AST nodes are bound)
-        library.accept(new LibraryBindingCompletor(fileScope, libraryBinding, dependencyRequestor, problemRequestor, compilerOptions));
+        library.accept(new LibraryBindingCompletor(fileScope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
 
         // The current scope only changes once the initial library binding is complete
         currentScope = new LibraryScope(currentScope, libraryBinding);

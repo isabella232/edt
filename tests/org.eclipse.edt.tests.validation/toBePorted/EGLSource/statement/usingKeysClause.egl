@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record rec type sqlRecord
+	10 item1 int;
+end
+
+Record rec2 type basicRecord
+	10 item1 int;
+end
+
+Program pgm {allowUnqualifiedItemReferences=yes}
+
+	sqlRecAry rec[];
+	otherRec rec;
+		
+	function main() end
+	
+	function func1()
+		open resultSet1 for sqlRecAry usingKeys item1;				//2 When the target of an I/O statement is an SQL record array, the items in the usingKeys clause cannot be items in the record. Error on item item1
+		open resultSet2 for sqlRecAry usingKeys sqlRecAry[1].item1;	//1 When the target of an I/O statement is an SQL record array, the items in the usingKeys clause cannot be items in the record. Error on item sqlRecAry[1].item1
+		open resultSet3 for sqlRecAry usingKeys otherRec.item1;		//0
+
+		get sqlRecAry usingKeys item1;				//2 When the target of an I/O statement is an SQL record array, the items in the usingKeys clause cannot be items in the record. Error on item item1
+		get sqlRecAry usingKeys sqlRecAry[1].item1;	//1 When the target of an I/O statement is an SQL record array, the items in the usingKeys clause cannot be items in the record. Error on item sqlRecAry[1].item1
+		get sqlRecAry usingKeys otherRec.item1;		//0
+	end
+	
+	function func2()
+		open resultSet1 for sqlRecAry usingKeys item1;				//1 ambiguous
+		open resultSet2 for otherRec usingKeys item1;				//1 ambiguous
+	end
+end

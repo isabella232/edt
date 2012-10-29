@@ -1,0 +1,24 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Record w_libtrtForm type ConsoleForm { formSize = [11,49], showBrackets = yes, delimiters = " ]|" } 
+   s_fentrt arrayDictionary {codtrt=codtrt, libtrt=libtrt, action=action, @egl.ui.jsf.action{"xxx"}}; 
+   
+   *ConsoleField { position = [1,2],   value = "trt             traitement              action" };
+ 
+   codtrt  ConsoleField[10] { segments = [[2,2,3], [3,2,3], [4,2,3], [5,2,3], [6,2,3], [7,2,3], [8,2,3], [9,2,3], [10,2,3], [11,2,3]], dataType = "unicode", name="codtrt" };
+   libtrt  ConsoleField[10] { segments = [[2,8,30], [3,8,30], [4,8,30], [5,8,30], [6,8,30], [7,8,30], [8,8,30], [9,8,30], [10,8,30], [11,8,30]], dataType = "int", name="libtrt" };
+   action  ConsoleField[10] { segments = [[2,41,8], [3,41,8], [4,41,8], [5,41,8], [6,41,8], [7,41,8], [8,41,8], [9,41,8], [10,41,8], [11,41,8]], dataType = "unicode", name="action" };
+   
+   myDict dictionary {caseSensitive=yes, ordering = byInsertion};
+end

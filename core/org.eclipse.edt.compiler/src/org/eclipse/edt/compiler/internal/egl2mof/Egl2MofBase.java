@@ -12,63 +12,26 @@
 package org.eclipse.edt.compiler.internal.egl2mof;
 
 import java.io.File;
+import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import org.eclipse.edt.compiler.Context;
-import org.eclipse.edt.compiler.binding.AnnotationBinding;
-import org.eclipse.edt.compiler.binding.AnnotationBindingForElement;
-import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
-import org.eclipse.edt.compiler.binding.ArrayDictionaryBinding;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ClassConstantBinding;
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.ConstructorBinding;
-import org.eclipse.edt.compiler.binding.DataBinding;
-import org.eclipse.edt.compiler.binding.DictionaryBinding;
-import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordFieldBinding;
-import org.eclipse.edt.compiler.binding.FormBinding;
-import org.eclipse.edt.compiler.binding.FormFieldBinding;
-import org.eclipse.edt.compiler.binding.FormGroupBinding;
-import org.eclipse.edt.compiler.binding.FunctionBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LibraryBinding;
-import org.eclipse.edt.compiler.binding.MultiplyOccuringItemTypeBinding;
-import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.SystemEnumerationDataBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Primitive;
-import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
-import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EEnum;
@@ -86,34 +49,37 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.ConstantField;
+import org.eclipse.edt.mof.egl.Constructor;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
-import org.eclipse.edt.mof.egl.Form;
-import org.eclipse.edt.mof.egl.FormField;
-import org.eclipse.edt.mof.egl.FormGroup;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.GenericType;
-import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Name;
-import org.eclipse.edt.mof.egl.ParameterizedType;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
-import org.eclipse.edt.mof.egl.StructuredField;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.lookup.ProxyElement;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.egl.utils.TimeStampAndIntervalPatternFixer;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.serialization.ProxyEClass;
@@ -124,11 +90,9 @@ import org.eclipse.edt.mof.utils.EList;
 @SuppressWarnings("unchecked")
 abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
-	protected static Map<String, MofSerializable> processed = new HashMap<String, MofSerializable>();
-	protected static Map<String, ProxyPart> proxyParts = new HashMap<String, ProxyPart>();
+	private static Map<String, MofSerializable> processed = new HashMap<String, MofSerializable>();
 	protected Stack<MofSerializable> partProcessingStack = new Stack<MofSerializable>();	
-	protected static String TempEClassMarker = "eze_temp";
-	protected static String[] reflectPackage = {"egl", "lang", "reflect"};
+	private static String TempEClassMarker = "eze_temp";
 
 	MofFactory mof;
 	IrFactory factory;
@@ -152,9 +116,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	boolean visitFunctionBody = false;
 	
-	public Stack<Object> stack;
-	public Map<IBinding, EObject> eObjects;
-	public Map<IBinding, ProxyEObject> proxies;
+	protected Stack<Object> stack;
+	protected Map<Object, EObject> eObjects;
+	protected Map<Object, ProxyEObject> proxies;
 	
 	
 	Egl2MofBase(IEnvironment env) {
@@ -162,8 +126,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		this.mof = MofFactory.INSTANCE;
 		this.factory = IrFactory.INSTANCE;
 		stack = new Stack<Object>();
-		eObjects = new HashMap<IBinding, EObject>();
-		proxies = new HashMap<IBinding, ProxyEObject>();
+		eObjects = new HashMap<Object, EObject>();
+		proxies = new HashMap<Object, ProxyEObject>();
 	}
 	
 	public void setEnvironment(IEnvironment env) {
@@ -173,28 +137,23 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	//************************************************************************************
 	// Helper Routines
 	//************************************************************************************
-	protected void eStackPush(EObject obj, IBinding element) {
-		stack.push(obj);
-		eObjects.put(element, obj);
-	}
-	
 	protected EObject eStackPop() {
 		return (EObject)stack.pop();
 	}
 	
-	protected MofSerializable getPartBeingProcessed() {
+	private MofSerializable getPartBeingProcessed() {
 		return partProcessingStack.isEmpty()
 			? null
 			: partProcessingStack.peek();
 	}
 	
-	protected EObject getEObjectFor(IBinding element) {
-		if (element == null) return null;
-		IBinding key = element instanceof NestedFunctionBinding ? ((NestedFunctionBinding)element).getType() : element;
-		EObject result = eObjects.get(key);
+	protected EObject getEObjectFor(Member mbr) {
+		if (mbr == null) return null;
+		
+		EObject result = eObjects.get(mbr);
 		//if we cant find a real object, see if we have a proxy already
 		if (result == null) {
-			result = proxies.get(key);
+			result = proxies.get(mbr);
 		}
 		//If no proxy is found, we need to make one instead
 		if (result == null) {
@@ -204,117 +163,93 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			else {
 				result = new ProxyElement();
 			}
-			proxies.put(key, (ProxyEObject)result);
+			proxies.put(mbr, (ProxyEObject)result);
+		}
+		return result;
+	}
+
+	protected EObject getEObjectFor(Object element) {
+		if (element == null) return null;
+		EObject result = eObjects.get(element);
+		//if we cant find a real object, see if we have a proxy already
+		if (result == null) {
+			result = proxies.get(element);
+		}
+		//If no proxy is found, we need to make one instead
+		if (result == null) {
+			if (inMofContext) {
+				result = new ProxyEObject();
+			}
+			else {
+				result = new ProxyElement();
+			}
+			proxies.put(element, (ProxyEObject)result);
 		}
 		return result;
 	}
 	
-	protected IAnnotationBinding getAnnotation(IBinding binding, String typeName) {
+	protected Annotation getAnnotation(Element binding, String typeName) {
 		if (binding != null) {
-			for (IAnnotationBinding ann : (List<IAnnotationBinding>)binding.getAnnotations()) {
-				if (ann.getCaseSensitiveName().equalsIgnoreCase(typeName))
-					return ann;
-				else
-					continue;
-			}
-			if (binding instanceof AnnotationTypeBindingImpl) {
-				ITypeBinding record = ((AnnotationTypeBindingImpl)binding).getAnnotationRecord();
-				if (record != null) {
-					for (IAnnotationBinding ann : (List<IAnnotationBinding>)record.getAnnotations()) {
-						if (ann.getCaseSensitiveName().equalsIgnoreCase(typeName))
-							return ann;
-						else
-							continue;
-					}
-				}
-			}
+			return binding.getAnnotation(typeName);
 		}
 		return null;
 	}
 	
-	protected void createAnnotations(IBinding binding, EModelElement element) {
-		if (!Binding.isValidBinding(binding)) {
+	protected EMetadataObject getEMetadataObject(EModelElement elem, String typeName) {
+		if (elem != null) {
+			return elem.getMetadata(typeName);
+		}
+		return null;
+	}
+	
+	protected void createAnnotations(Element binding, EModelElement element) {
+		if (binding == null) {
 			return;
 		}
-		for (AnnotationBinding annotation : (List<AnnotationBinding>)binding.getAnnotations()) {
-			if (!(annotation instanceof AnnotationBindingForElement)) {
-				element.getMetadataList().add((EMetadataObject)mofValueFrom(annotation));
-			}
+		for (Annotation annotation : (List<Annotation>)binding.getAnnotations()) {
+			element.getMetadataList().add((EMetadataObject)mofValueFrom(annotation));
 		}
 	}
 	
-	protected void createAnnotations(IPartBinding binding, EClass eClass) {
-		IAnnotationBinding subtype = binding.getSubTypeAnnotationBinding();
-		for (AnnotationBinding annotation : (List<AnnotationBinding>)binding.getAnnotations()) {
-			if (subtype == annotation) continue;
-			if (!(annotation instanceof AnnotationBindingForElement)) {
-				eClass.getMetadataList().add((EMetadataObject)mofValueFrom(annotation));
-			}
+	protected void createAnnotations(Part binding, Element eClass) {
+		for (Annotation annotation : binding.getAnnotations()) {
+			((Element)eClass).addAnnotation((Annotation)mofValueFrom(annotation));
 		}
 	}
 	
-	protected void createAnnotations(IPartBinding binding, AnnotationType eClass) {
-		IAnnotationBinding subtype = binding.getSubTypeAnnotationBinding();
-		for (AnnotationBinding annotation : (List<AnnotationBinding>)binding.getAnnotations()) {
+	protected void createAnnotations(Part binding, EClass eClass) {
+		Stereotype subtype = binding.getStereotype();
+		for (Annotation annotation : binding.getAnnotations()) {
 			if (subtype == annotation) continue;
-			if (!(annotation instanceof AnnotationBindingForElement)) {
-				eClass.getAnnotations().add((Annotation)mofValueFrom(annotation));
-			}
+			eClass.getMetadataList().add((EMetadataObject)mofValueFrom(annotation));
 		}
 	}
-	protected void createAnnotations(IBinding binding, Element element) {
-		if (!Binding.isValidBinding(binding)) {
+
+	
+	protected void createAnnotations(Element binding, Element element) {
+		if (binding == null) {
 			return;
 		}
-		for (AnnotationBinding annotation : (List<AnnotationBinding>)binding.getAnnotations()) {
-			if (!(annotation instanceof AnnotationBindingForElement)) {
-				element.getAnnotations().add(createAnnotation(binding, annotation));
-			}
+		for (Annotation annotation : binding.getAnnotations()) {
+			element.getAnnotations().add(createAnnotation(annotation));
 		}
 	}
-	
-	protected void createElementAnnotations(StructureItemBinding binding, StructuredField field) {
-		if (field.getOccurs() > 1) {
-			for (IAnnotationBinding annBinding : (List<IAnnotationBinding>)binding.getAnnotations()) {
-				if (annBinding instanceof AnnotationBindingForElement) {
-					int index = ((AnnotationBindingForElement)annBinding).getIndex();
-					Annotation eAnn = createAnnotation(binding, annBinding);
-					field.getElementAnnotations(index).add(eAnn);
-				}
-			}
-		}
-	}
-			
-	protected void createElementAnnotations(FormFieldBinding binding, FormField field) {
-		if (field.getOccurs() > 1) {
-			for (IAnnotationBinding annBinding : (List<IAnnotationBinding>)binding.getAnnotations()) {
-				if (annBinding instanceof AnnotationBindingForElement) {
-					int index = ((AnnotationBindingForElement)annBinding).getIndex();
-					Annotation eAnn = createAnnotation(binding, annBinding);
-					field.getElementAnnotations(index).add(eAnn);
-				}
-			}
-		}
-	}
-			
-	
-	protected void createAnnotations(IPartBinding binding, Part part) {
-		IAnnotationBinding subtype = binding.getSubTypeAnnotationBinding();
+
+	protected void createAnnotations(Part binding, Part part) {
+		Annotation subtype = binding.getStereotype();
 		boolean bypass = subtype != null && isEGLReflectType(binding);
-		for (AnnotationBinding annotation : (List<AnnotationBinding>)binding.getAnnotations()) {
+		for (Annotation annotation : binding.getAnnotations()) {
 			if (bypass && subtype == annotation) continue;
-			if (!(annotation instanceof AnnotationBindingForElement)) {
-				if (inMofContext) {
-					((EClass)part).getMetadataList().add((EMetadataObject)mofValueFrom(annotation));
-				}
-				else {
-					part.getAnnotations().add((Annotation)mofValueFrom(annotation));
-				}
+			if (inMofContext) {
+				((EClass)part).getMetadataList().add((EMetadataObject)mofValueFrom(annotation));
+			}
+			else {
+				part.getAnnotations().add((Annotation)mofValueFrom(annotation));
 			}
 		}
 
 	}
-	private Annotation createAnnotation(IBinding binding, IAnnotationBinding annBinding) {
+	private Annotation createAnnotation(Annotation annBinding) {
 		EObject ann = mofValueFrom(annBinding);
 		if (ann instanceof Annotation) return (Annotation)ann;
 		else {
@@ -322,72 +257,16 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 	}
 	
-//	private EMetadataObject createEMetadataObject(IBinding binding, IAnnotationBinding annBinding) {
-//
-//		EMetadataObject annotation;
-//		
-//		EClass annType;
-//		if (annBinding.getType() instanceof AnnotationTypeBindingImpl) {
-//			annType = (EClass)mofTypeFor(annBinding.getType());
-//			annotation = (EMetadataObject)annType.newInstance();
-//		}
-//		else {
-//			if (inMofContext) {
-//				annotation = MofFactory.INSTANCE.createEMetadataObject(true);
-//			}
-//			else {
-//				annotation = IrFactory.INSTANCE.createAnnotation(annBinding.getCaseSensitiveName());
-//			}
-//		}
-//		Iterator i = annBinding.getAnnotations().iterator();
-//
-//		while (i.hasNext()) {
-//			AnnotationBinding subAnnotation = (AnnotationBinding) i.next();
-//			// For some reason, the fields sometime get added to the
-//			// annotataionBinding as annotations
-//			if ((subAnnotation instanceof AnnotationBinding)) {
-//				if (inMofContext) {
-//					annotation.getMetadataList().add(createEMetadataObject(annBinding, subAnnotation));
-//				}
-//				else {
-//					((Annotation)annotation).getAnnotations().add(createAnnotation(annBinding, subAnnotation));
-//				}
-//			}
-//		}
-//
-//		i = annBinding.getAnnotationFields().iterator();
-//		while (i.hasNext()) {
-//			AnnotationFieldBinding field = (AnnotationFieldBinding) i.next();
-//			Object value = mofValueFrom(getValue(binding, field.getValue()));
-//			annotation.eSet(field.getCaseSensitiveName(), value);
-//		}
-//		return annotation;
-//	}
-	
-	protected MemberName createMemberName(IBinding binding) {
+	private MemberName createMemberName(Element binding) {
 		MemberName name = factory.createMemberName();
-		name.setId(binding.getCaseSensitiveName());
+		if(binding instanceof NamedElement){
+			name.setId(((NamedElement)binding).getCaseSensitiveName());
+		}
 		name.setMember((Member)getEObjectFor(binding));
 		return name;
 	}
 	
-	protected Object getFieldValue(IAnnotationBinding annotationBinding, String fieldName) {
-		Object result = null;
-		for(AnnotationFieldBinding field : (List<AnnotationFieldBinding>)annotationBinding.getAnnotationFields()) {
-			if (field.getCaseSensitiveName().equalsIgnoreCase(fieldName)) {
-				result = getValue(null, field.getValue(), false);
-				if (result != null) break;
-			}
-		}
-		return result;
-	}
-	
-	protected Object getValue(IBinding binding, Object annotationValue, boolean isMetaDataFieldValue) {
-		if (annotationValue == IBinding.NOT_FOUND_BINDING) {
-			InvalidName name = factory.createInvalidName();
-			name.setId("EZENOTFOUND");
-			return name;
-		}
+	protected Object getValue(Object annotationValue, boolean isMetaDataFieldValue) {
 
 		// Some well defined array types:
 		if (annotationValue instanceof Integer[] || annotationValue instanceof Integer[][] || annotationValue instanceof int[]
@@ -403,44 +282,23 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			return java.lang.Boolean.TRUE;
 		}
 
-		if (annotationValue instanceof SystemEnumerationDataBinding || annotationValue instanceof SystemEnumerationDataBinding[]) {
+		if (annotationValue instanceof EnumerationEntry) {
 			return annotationValue;
 		}
 
-		if (annotationValue instanceof EnumerationDataBinding) {
-			return annotationValue;
-		}
-
-		if (annotationValue instanceof PartBinding) {
-			EObject value = mofTypeFor((PartBinding)annotationValue);
+		if (annotationValue instanceof Part) {
+			EObject value = mofTypeFor((Part)annotationValue);
 			
-			if (value instanceof Part && !isMetaDataFieldValue) {
+			if (value instanceof Part && 
+					!annotationValue.equals(value) &&
+					!isMetaDataFieldValue) {
 				value = createTypeName((Part)value);
 			}
 			return value;
 		}
-		if (annotationValue instanceof IFunctionBinding) {
-			IFunctionBinding functionBinding = (IFunctionBinding) annotationValue;
-			IPartBinding declarer = functionBinding.getDeclarer();
 
-			// for annotations that resolve to a library function, create a
-			// FieldAccess with
-			// the PartName for the library as the qualifier
-			if (declarer != null && declarer.getKind() == ITypeBinding.LIBRARY_BINDING) {
-				PartName nameType = factory.createPartName();
-				nameType.setId(declarer.getCaseSensitiveName());
-				nameType.setPackageName(asString(declarer.getPackageName()));
-				
-				MemberAccess access = factory.createMemberAccess();
-				access.setId(functionBinding.getCaseSensitiveName());
-				access.setQualifier(nameType);
-				return access;
-			}
-			return createMemberName(functionBinding);
-		}
-
-		if (annotationValue instanceof IAnnotationBinding) {
-			return mofValueFrom((IAnnotationBinding) annotationValue);
+		if (annotationValue instanceof Annotation) {
+			return mofValueFrom((Annotation) annotationValue);
 		}
 
 		if (annotationValue instanceof Expression) {
@@ -448,47 +306,29 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			return (org.eclipse.edt.mof.egl.Expression)stack.pop();
 		}
 
-		if (annotationValue instanceof IDataBinding) {
+		if (annotationValue instanceof Member) {
 
-			IDataBinding valueBinding = (IDataBinding) annotationValue;
-			IPartBinding declarer = valueBinding.getDeclaringPart();
-			// for annotations that resolve to a library function, create a
-			// FieldAccess with
-			// the NameType for the library as the qualifier
-			if (declarer != null && declarer.getKind() == ITypeBinding.LIBRARY_BINDING && declarer != getLibraryContainer(binding)) {
+			Member valueBinding = (Member) annotationValue;
+			Container declarer = valueBinding.getContainer();
+			// for values that resolve to a member in a part other than the part being compiled,
+			// create a member access with a qualifier that is a PartName
+			if (getPartBeingProcessed() != null && 
+					declarer instanceof Part && 
+					!getPartBeingProcessed().getMofSerializationKey().equalsIgnoreCase(((MofSerializable)declarer).getMofSerializationKey())) {
 				PartName nameType = factory.createPartName();
-				nameType.setId(declarer.getCaseSensitiveName());
-				nameType.setPackageName(asString(declarer.getPackageName()));
+				nameType.setId(((Part)declarer).getCaseSensitiveName());
+				nameType.setPackageName(((Part)declarer).getCaseSensitivePackageName());
 				MemberAccess access = factory.createMemberAccess();
-				access.setId(binding.getCaseSensitiveName());
+				access.setId(valueBinding.getCaseSensitiveName());
 				access.setQualifier(nameType);
 				return access;
 			}
 			
-			//If the value is a formDataBinding, create a simple expression and route through the expression generator
-			if (Binding.isValidBinding(valueBinding) && valueBinding.getKind() == IDataBinding.FORM_BINDING) {
-				Expression expr = createExpression(binding, (IDataBinding) annotationValue, false);
-				expr.accept(this);
-				return (Expression)stack.pop();
-
-			}
-
-			// if annotation is on a data binding, must create a simpleName
-			// expression here and set the binding...then route through
-			// expressionGenerator
-			if (binding instanceof DataBinding) {
-				ITypeBinding container = getContainer(valueBinding);
-				if (container != null && container == ((DataBinding) valueBinding).getType()) {
-					Expression expr = createExpression(binding, (IDataBinding) annotationValue, true);
-					expr.accept(this);
-					return (Expression)stack.pop();
-				}
-			}
-			return createMemberName((IDataBinding) annotationValue);
+			return createMemberName(valueBinding);
 		}
 
-		if (annotationValue instanceof ITypeBinding) {
-			EObject value = mofTypeFor((ITypeBinding) annotationValue);
+		if (annotationValue instanceof Type) {
+			EObject value = mofTypeFor((Type) annotationValue);
 			if (value instanceof Type) {
 				value = createTypeName((Type)value);
 			}
@@ -499,7 +339,15 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			Object[] arrVal = (Object[]) annotationValue;
 			Object[] value = new Object[arrVal.length];
 			for (int i = 0; i < value.length; i++) {
-				value[i] = getValue(binding, arrVal[i], isMetaDataFieldValue);
+				value[i] = getValue(arrVal[i], isMetaDataFieldValue);
+			}
+			return value;
+		}
+
+		if (annotationValue instanceof EList) {
+			EList value = new EList(((EList)annotationValue).size());
+			for(Object obj : (EList)annotationValue) {
+				value.add(getValue(obj, isMetaDataFieldValue));
 			}
 			return value;
 		}
@@ -507,25 +355,20 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return annotationValue;
 	}
 	
-	private String asString(String[] strArr) {
-		if (strArr == null) {
-			return "";
-		}
-		StringBuffer buffer = new StringBuffer();
-		for (int i = 0; i < strArr.length; i++) {
-			if (i>0) buffer.append(".");
-			buffer.append(strArr[i]);
-		}
-		return buffer.toString();
-	
+	private MemberName createMemberName(Member mbr) {
+		MemberName name = factory.createMemberName();
+		name.setId(mbr.getCaseSensitiveName());
+		name.setMember((Member)getEObjectFor(mbr));
+		return name;
 	}
+	
 	
 	private TypeName createTypeName(Type type) {
 		if (type instanceof Part) {
 			Part part = (Part) type;
 			PartName partName = factory.createPartName();
-			partName.setId(part.getId());
-			partName.setPackageName(part.getPackageName());
+			partName.setId(part.getCaseSensitiveName());
+			partName.setPackageName(part.getCaseSensitivePackageName());
 			return partName;
 		}
 		else {
@@ -536,91 +379,113 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 	}
 
-	private Expression createExpression(IBinding binding, IDataBinding valueBinding, boolean addImplicitQualifier) {
-		SimpleName name = new ExpressionParser(getCompilerOptions()).parseAsSimpleName(valueBinding.getCaseSensitiveName());
-		name.setDataBinding(valueBinding);
-		name.setTypeBinding(valueBinding.getType());
-		name.setBinding(valueBinding);
-		if (addImplicitQualifier) {
-			name.setAttribute(org.eclipse.edt.compiler.core.ast.Name.IMPLICIT_QUALIFIER_DATA_BINDING, binding);
-		}
-
-		return name;
-	}
-	
-	private ICompilerOptions getCompilerOptions() {
-		ICompilerOptions compilerOptions = DefaultCompilerOptions.getInstance();
-		return compilerOptions;
-	}
-
-	private ITypeBinding getContainer(IDataBinding db) {
-		if (db.getKind() == IDataBinding.STRUCTURE_ITEM_BINDING) {
-			return ((StructureItemBinding) db).getEnclosingStructureBinding();
-		}
-		return db.getDeclaringPart();
-	}
-
-	private LibraryBinding getLibraryContainer(IBinding binding) {
+	private Library getLibraryContainer(Type binding) {
 		if (binding == null) {
 			return null;
 		}
-		if (binding instanceof LibraryBinding) {
-			return (LibraryBinding) binding;
+		if (binding instanceof Library) {
+			return (Library) binding;
 		}
-		if (binding instanceof IDataBinding) {
-			IPartBinding part = ((IDataBinding) binding).getDeclaringPart();
-			if (part != null && part.getKind() == ITypeBinding.LIBRARY_BINDING) {
-				return (LibraryBinding) part;
+		if (binding instanceof Member) {
+			Container part = ((Member) binding).getContainer();
+			if (part instanceof Library) {
+				return (Library) part;
 			}
 		}
 		return null;
 	}
 	
-	protected void eAdd(EObject target, String fieldName, Object value) {
+	private void eAdd(EObject target, String fieldName, Object value) {
 		((List)target.eGet(fieldName)).add(value);
 	}
 	
-	private boolean shouldReflect(IAnnotationBinding reflectTypeBinding, String fieldName) {
-		if (reflectTypeBinding != null && reflectTypeBinding.getAnnotationType() instanceof IPartSubTypeAnnotationTypeBinding) {
-			IPartSubTypeAnnotationTypeBinding subType = (IPartSubTypeAnnotationTypeBinding)reflectTypeBinding.getAnnotationType();
-			FlexibleRecordBinding record = subType.getAnnotationRecord();
-			if (record != null) {
-				IDataBinding binding = record.findData(InternUtil.intern(fieldName));
-				if (binding != null) {
-					if (binding.getAnnotation(IEGLConstants.PACKAGE_EGL_LANG_REFLECT, IEGLConstants.PROPERTY_NOREFLECT) != null) {
-						return false;
-					}
-				}
-			}
+	private boolean shouldReflect(AnnotationType reflectAnnotationType, String fieldName) {
+		if (reflectAnnotationType == null) {
+			return false;
 		}
-		return true;
+		EField field = reflectAnnotationType.getEField(fieldName);
+		if (field == null) {
+			return false;
+		}
+		
+		return field.getMetadata(IEGLConstants.PROPERTY_NOREFLECT) == null;
 	}
 	
 	private boolean isSpecialNamedElementCase(Object o, EType type) {
 		if (o instanceof String && type instanceof EClass) {
-			if (((EClass)type).isSubClassOf(factory.getNamedElementEClass())) {
+			if (isSubClassOf((EClass)type, factory.getNamedElementEClass())) {
 				return true;
-			}
+			}			
+		}
+		return false;
+	}
+	
+	private List<EField> getFieldsBelowEClass(EClass target) {
+		List<EField> fields = new EList<EField>();
+		if (target == null || target.getETypeSignature().equalsIgnoreCase(Type_EClass)) {
+			return fields;
+		}
+		fields.addAll(target.getEFields());
+		if (!target.getSuperTypes().isEmpty()) {
+			fields.addAll(0, getFieldsBelowEClass(target.getSuperTypes().get(0)));
+		}
+		return fields;
+				
+	}
+	
+	protected void setReflectTypeValues(EObject target, AnnotationType reflectTypeBinding) {
+		if (reflectTypeBinding == null) return;
+		EClass eClass = target.getEClass();
+		for (EField field : getFieldsBelowEClass(eClass)) {
 			
-			//more special processing to handle the case where the system mof parts are being compiled. In this case, there can be
-			//an object identity problem with the type object retrieved from the field, and the types returned by the environment
-			EObject newType = getMofSerializable(type.getMofSerializationKey());
-			if (newType instanceof EClass) {
-				if (((EClass)newType).isSubClassOf(factory.getNamedElementEClass())) {
+			EField reflectField = reflectTypeBinding.getEClass().getEField(field.getName());
+			if ( reflectField != null && !(reflectField.getCaseSensitiveName().equals("annotations"))) {
+				Object obj = mofValueFrom(reflectTypeBinding.eGet(field));
+				if (obj != null) {
+					if (obj instanceof List)
+						for (Object o : (List)obj) {
+							// Special handling for reflect values that are just strings but can be converted to instances of the target field's type
+							EType type = (EType)((EGenericType)field.getEType()).getETypeArguments().get(0);
+							if (o instanceof PartName) {
+								o = ((PartName)o).getPart();
+							}
+							((List)(target.eGet(field))).add(o);
+						}
+					else {
+						EClassifier type = (EClassifier)field.getEType();
+						if (obj instanceof PartName) {
+							obj = ((PartName)obj).getPart();
+						}
+						
+						//change to use a proxy part if the type did not resolve correctly
+						if (obj instanceof String && type == mof.getETypeClass()) {
+							obj = createProxyPart((String) obj);
+						}
+						target.eSet(field, obj);
+					}
+				}
+			}
+		}
+	}
+
+	protected boolean hasAnnotationField(String name, Annotation ann) {
+		if (ann.getEClass() != null) {
+			for (EField field : ann.getEClass().getEFields()) {
+				if (field.getName().equalsIgnoreCase(name)) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	protected void setReflectTypeValues(EObject target, IAnnotationBinding reflectTypeBinding) {
+	
+	protected void setReflectTypeValues(EObject target, Annotation reflectTypeBinding) {
 		if (reflectTypeBinding == null) return;
 		EClass eClass = target.getEClass();
 		for (EField field : eClass.getAllEFields()) {
-			
 			Object obj = mofValueFrom(getFieldValue(reflectTypeBinding, field.getName()));
 			if (obj != null) {
-				if (shouldReflect(reflectTypeBinding, field.getName())) {
+				if (shouldReflect((AnnotationType)reflectTypeBinding.getEClass(), field.getName())) {
 					if (obj instanceof List)
 						for (Object o : (List)obj) {
 							// Special handling for reflect values that are just strings but can be converted to instances of the target field's type
@@ -635,7 +500,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 						}
 					else {
 						EClassifier type = (EClassifier)field.getEType();
-						if ((obj instanceof String) && type instanceof EClass && ((EClass)type).isSubClassOf(mof.getENamedElementClass())) {
+						if ((obj instanceof String) && type instanceof EClass && isSubClassOf((EClass)type, mof.getENamedElementClass())) {
 							obj = convertStringValueToNamedElementType((String)obj, (EClass)type);
 						}
 						else if (obj instanceof PartName) {
@@ -651,18 +516,28 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				}
 			}
 		}
-		if (target instanceof StereotypeType) {
-			setReflectTypeValues(target, getAnnotation(reflectTypeBinding, "Stereotype"));
-		}
 	}
 	
-	protected EObject convertStringValueToNamedElementType(String obj, EClass eClass ) {
+	private Object getFieldValue(Annotation annotation, String fieldName) {
+		Object result = null;
+		if (hasAnnotationField(fieldName, annotation)) {
+			Object obj = annotation.getValue(fieldName);
+			if (obj instanceof String && ((String) obj).length() == 0) {
+				return null;
+			}
+			result = getValue(obj, false);
+		}
+		return result;
+	}
+
+	
+	private EObject convertStringValueToNamedElementType(String obj, EClass eClass ) {
 		EObject result = eClass.newInstance();
 		result.eSet("name", obj);
 		return result;
 	}
 	
-	protected void updateProxyReferences(IBinding element, EObject obj) {
+	protected void updateProxyReferences(Object element, EObject obj) {
 		ProxyEObject proxy = proxies.get(element);
 		if (proxy != null) {
 			proxy.updateReferences(obj);
@@ -670,99 +545,27 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	
-	protected List<Object> mofValueFrom(Object[] array) {
-		List<Object> result = new EList();
+	private List<Object> mofValueFrom(Object[] array) {
+		List<Object> result = new EList<Object>();
 		for (Object obj : array) {
 			result.add(mofValueFrom(obj));
 		}
 		return result;
 	}
 	
-	protected List<Object> mofValueFrom(List list) {
-		List<Object> result = new EList();
+	private List<Object> mofValueFrom(List<Object> list) {
+		List<Object> result = new EList<Object>();
 		for (Object obj : list) {
 			result.add(mofValueFrom(obj));
 		}
 		return result;
 	}
 	
-	protected Object mofValueFrom(Object value) {
-		if (value instanceof IAnnotationBinding)
-			return mofValueFrom((IAnnotationBinding)value);
-		if (value instanceof ITypeBinding)
-			return mofTypeFor((ITypeBinding)value);
-		if (value instanceof EnumerationDataBinding)
-			return mofValueFrom((EnumerationDataBinding)value);
-		if (value instanceof IAnnotationBinding)
-			return mofValueFrom((IAnnotationBinding)value);
-		if (value instanceof IDataBinding)
-			return getEObjectFor((IDataBinding)value);
-		if (value instanceof Part)
-			return mofValueFrom((Part)value);
-		if (value instanceof Object[])
-			return mofValueFrom((Object[])value);
-		if (value instanceof List)
-			return mofValueFrom((List)value);
-		
-		return value;	
-	}
-	
-	protected EObject mofValueFrom(Part part) {
-		if (!(part instanceof ProxyPart) && isMofProxy(part)) {
-			return resolveProxy(part);
-		}
-		else
-			return part;
-	}
-
-	protected EObject mofValueFrom(IAnnotationBinding binding) {
-		
-		if (!Binding.isValidBinding(binding)) {
-			return null;
-		}
-		
-		EObject value;
-		if (binding.getAnnotationType() instanceof AnnotationTypeBindingImpl) {
-			EClass typeClass = (EClass)mofTypeFor(binding.getAnnotationType());
-			value = typeClass.newInstance();
-		}
-		else {
-			if (isEMetadataObject(binding)) {
-				value = MofFactory.INSTANCE.createEMetadataObject(true);
-			}
-			else {
-				value = IrFactory.INSTANCE.createAnnotation(binding.getCaseSensitiveName());
-			}
-		}
-		
-		Iterator i = binding.getAnnotations().iterator();
-
-		while (i.hasNext()) {
-			AnnotationBinding subAnnotation = (AnnotationBinding) i.next();
-			// For some reason, the fields sometime get added to the
-			// annotataionBinding as annotations. Do not add these to the annotations of the value.
-			//They will be handled when the AnnotationFields are processed next
-			if (!(subAnnotation instanceof AnnotationFieldBinding)) {
-				if (value instanceof Annotation) {
-					((Annotation)value).getAnnotations().add((Annotation)mofValueFrom(subAnnotation));
-				}
-				else {
-					((EMetadataObject)value).getMetadataList().add((EMetadataObject)mofValueFrom(subAnnotation));
-				}
-			}
-		}
-		for(AnnotationFieldBinding field : (List<AnnotationFieldBinding>)binding.getAnnotationFields()) {
-			Object fieldValue = mofValueFrom(getValue(field, field.getValue(), isEMetadataObject(binding)));
-			value.eSet(field.getCaseSensitiveName(), fieldValue);
-		}
-		return value;
-	}
-	
-	protected Object mofValueFrom(EnumerationDataBinding dataBinding) {
+	protected Object mofValueFrom(EEnumLiteral enumLiteral) {
 		Object convertedValue;
-		ITypeBinding typeBinding = dataBinding.getType();
-		String name = dataBinding.getCaseSensitiveName();
-		if (typeBinding.getCaseSensitiveName().equals("ElementKind")) {
+		EEnum eenum = (EEnum)enumLiteral.getDeclarer();
+		String name = enumLiteral.getCaseSensitiveName();
+		if (eenum.getETypeSignature().equals(Type_ElementKind)) {
 			if (inEMetadataTypeContext) {
 				if (name.equals(ElementKind_ExternalTypePart))
 					convertedValue = getMofSerializable(Type_EClass);
@@ -778,79 +581,118 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				Class<Enum> enumClass;
 				try {
 					enumClass = (Class<Enum>)Class.forName(Type_ElementKind);
-					convertedValue = Enum.valueOf(enumClass, dataBinding.getCaseSensitiveName());
+					convertedValue = Enum.valueOf(enumClass, name);
 				} catch (ClassNotFoundException e) {
-					EEnum enumType = (EEnum)getMofSerializable(Type_ElementKind);
-					convertedValue = enumType.getEEnumLiteral(dataBinding.getCaseSensitiveName());
+					convertedValue = enumLiteral;
 				}
 			}
 		}
 		else {
 			Class<Enum> enumClass;
 			try {
-				enumClass = (Class<Enum>)Class.forName(typeBinding.getPackageQualifiedName());
-				convertedValue = Enum.valueOf(enumClass, dataBinding.getCaseSensitiveName());
+				enumClass = (Class<Enum>)Class.forName(eenum.getETypeSignature());
+				convertedValue = Enum.valueOf(enumClass, name);
 			} catch (ClassNotFoundException e) {
-				EEnum enumType = (EEnum)mofTypeFor(typeBinding);
-				convertedValue = enumType.getEEnumLiteral(dataBinding.getCaseSensitiveName());
+				convertedValue = enumLiteral;
 			}
 		}
 		return convertedValue;
 	}
 
-//	protected Object mofValueFrom(EnumerationDataBinding dataBinding) {
-//		Object convertedValue;
-//		ITypeBinding typeBinding = dataBinding.getType();
-//		String name = dataBinding.getCaseSensitiveName();
-//		if (typeBinding.getCaseSensitiveName().equals("ElementKind")) {
-//			if (name.equals(ElementKind_RecordPart))
-//				convertedValue = getMofSerializable(Type_Record);
-//			else if (name.equals(ElementKind_StructuredRecordPart))
-//				convertedValue = getMofSerializable(Type_StructuredRecord);
-//			else if (name.equals(ElementKind_ExternalTypePart))
-//				convertedValue = getMofSerializable(inMofContext ? Type_EClass : Type_ExternalType);
-//			else if (name.equals(ElementKind_ProgramPart))
-//				convertedValue = getMofSerializable(Type_Program);
-//			else if (name.equals(ElementKind_LibraryPart))
-//				convertedValue = getMofSerializable(Type_Library);
-//			else if (name.equals(ElementKind_HandlerPart))
-//				convertedValue = getMofSerializable(Type_Handler);
-//			else if (name.equals(ElementKind_InterfacePart))
-//				convertedValue = getMofSerializable(Type_Interface);
-//			else if (name.equals(ElementKind_ServicePart))
-//				convertedValue = getMofSerializable(Type_Service);
-//			else if (name.equals(ElementKind_DelegatePart))
-//				convertedValue = getMofSerializable(Type_Delegate);
-//			else if (name.equals(ElementKind_FormGroupPart))
-//				convertedValue = getMofSerializable(Type_FormGroup);
-//			else if (name.equals(ElementKind_FormPart))
-//				convertedValue = getMofSerializable(Type_Form);
-//			else if (name.equals(ElementKind_DataTablePart))
-//				convertedValue = getMofSerializable(Type_DataTable);
-//			else if (name.equals(ElementKind_DataItemPart))
-//				convertedValue = getMofSerializable(Type_DataItem);
-//			else if (name.equals(ElementKind_Part))
-//				convertedValue = getMofSerializable(Type_Part);
-//			else if (name.equals(ElementKind_FieldMbr))
-//				convertedValue = getMofSerializable(inMofContext ? Type_EField : Type_Field);
-//			else if (name.equals(ElementKind_FunctionMbr))
-//				convertedValue = getMofSerializable(inMofContext ? Type_EFunction : Type_Function);
-//			else if (name.equals(ElementKind_ConstructorMbr))
-//				convertedValue = getMofSerializable(Type_Constructor);
-//			else	
-//				convertedValue = mof.getEModelElementClass();
-//		} else {
-//			EEnum enumType = (EEnum)mofTypeFor(typeBinding);
-//			convertedValue = enumType.getEEnumLiteral(dataBinding.getCaseSensitiveName());
-//		}
-//		return convertedValue;
-//	}
-//
+	
+	protected Object mofValueFrom(Object value) {
+		if (value instanceof Annotation) {
+			return mofValueFrom((Annotation)value);
+		}
+		
+		if (value instanceof EEnumLiteral) {
+			return mofValueFrom((EEnumLiteral)value);
+		}
+		
+		if (value instanceof Member) {
+			return getEObjectFor((Member)value);
+		}
+		
+		if (value instanceof Type) {
+			return mofTypeFor((Type)value);
+		}
+		
+		if (value instanceof Part) {
+			return mofValueFrom((Part)value);
+		}
+		
+		if (value instanceof Object[]) {
+			return mofValueFrom((Object[])value);
+		}
+		
+		if (value instanceof List) {
+			return mofValueFrom((List<Object>)value);
+		}
+		
+		return value;	
+	}
+	
+	private EObject mofValueFrom(Part part) {
+		if (!(part instanceof ProxyPart) && isMofProxy(part)) {
+			return resolveProxy(part);
+		}
+		else
+			return part;
+	}
 
-	protected EClass mofMemberTypeFor(IDataBinding binding) {
+	protected EObject mofValueFrom(Annotation binding) {
+		
+		if (binding == null || binding.getEClass() == null) {
+			return binding;
+		}
+		
+		
+		EObject value = null;
+
+		if (isEMetadataType((Part)binding.getEClass())) {
+			 try {
+				EClassifier clzz = MofFactory.INSTANCE.getTypeNamed(binding.getEClass().getETypeSignature());
+				if (clzz instanceof EClass) {
+					value = ((EClass)clzz).newInstance();
+				}
+			} catch (Exception e) {
+			}
+		}
+		
+		if (value == null) {
+			value = binding.getEClass().newInstance();
+		}
+		
+		for(Annotation subAnnotation : binding.getAnnotations()){
+			if (value instanceof Annotation) {
+				((Annotation)value).getAnnotations().add((Annotation)mofValueFrom(subAnnotation));
+			}
+			else {
+				((EMetadataObject)value).getMetadataList().add((EMetadataObject)mofValueFrom(subAnnotation));
+			}
+		}
+		
+		boolean isEMetadataObject = !(value instanceof Annotation);  //if it is not an annotation, it must be a metaDataObject
+		for(EField field : binding.getEClass().getEFields()) {
+			
+			EField valueField = null;
+			if (value.getEClass() != null) {
+				valueField = value.getEClass().getEField(field.getCaseSensitiveName());
+			}
+			
+			if (valueField != null) {
+				Object oldVale = binding.eGet(field);
+				Object fieldValue = mofValueFrom(getValue(oldVale, isEMetadataObject));
+				value.eSet(valueField, fieldValue);
+			}
+		}
+		return value;
+	}
+
+	protected EClass mofMemberTypeFor(Element binding) {
 		EClass mbrType;
-		if (binding instanceof NestedFunctionBinding) {
-			IAnnotationBinding opAnn = this.getAnnotation(binding.getType(), "Operation");
+		if (binding instanceof Function) {
+			Annotation opAnn = binding.getAnnotation("egl.lang.reflect.mof.Operation");
 			if (opAnn == null) {
 				mbrType = (EClass)getMofSerializable(Type_Function);
 			}
@@ -859,17 +701,14 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			}
 
 		}
-		else if (binding instanceof ConstructorBinding) {
+		else if (binding instanceof Constructor) {
 			mbrType = (EClass)getMofSerializable(Type_Constructor);
 		}
-		else if (binding instanceof ClassConstantBinding) {
+		else if (binding instanceof ConstantField) {
 			mbrType = (EClass)getMofSerializable(Type_ConstantField);
 		}
-		else if (binding instanceof ClassFieldBinding || binding instanceof FlexibleRecordFieldBinding) {
+		else if (binding instanceof Field) {
 			mbrType = (EClass)getMofSerializable(Type_Field);
-		}
-		else if (binding instanceof StructureItemBinding) {
-			mbrType = (EClass)getMofSerializable(Type_StructuredField);
 		}
 		else {
 			mbrType = (EClass)getMofSerializable(Type_Field);
@@ -877,45 +716,30 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return mbrType;
 	}
 	
-	protected EObject mofTypeFromTypedElement(IDataBinding element) {
-		ITypeBinding type = null;
-		if (element instanceof FunctionBinding) { 
-			type = ((FunctionBinding)element).getReturnType();
+	protected EObject mofTypeFromTypedElement(Element element) {
+		Type type = null;
+		if (element instanceof Function) { 
+			type = ((Function)element).getType();
 		} 
-		else if (element instanceof NestedFunctionBinding) {
-			type = ((FunctionBinding)((NestedFunctionBinding)element).getType()).getReturnType();
+		else if (element instanceof Constructor) {
+			type = (Part)((Constructor)element).getContainer();
 		}
-		else if (element instanceof ConstructorBinding) {
-			type = ((ConstructorBinding)element).getDeclaringPart();
+		else if (element instanceof TypedElement) {
+			type = ((TypedElement)element).getType();
 		}
-		else {
-			if (Binding.isValidBinding(element)) {
-				type = element.getType(); 
-			}
+		else if (element instanceof Type) {
+				type = (Type)element; 
 		}
 		if (type != null)
 			return mofTypeFor(type);
 		else
 			return null;
 	}
-	
-	protected EObject mofTypeFromASTFor(IPartBinding binding) {
-    	String partName = binding.getCaseSensitiveName();
-        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(binding.getPackageName(), partName);
-        Node partAST = ASTManager.getInstance().getAST(declaringFile, partName);
-        Egl2Mof converter = new Egl2Mof(env);
-        return converter.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, null, null);
-	}
-	
-	
-	protected EObject mofTypeFor(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) return null;
-		EObject eType;
-		switch (type.getKind()) {
-		case ITypeBinding.MULTIPLY_OCCURING_ITEM:
-			return mofTypeFor(((MultiplyOccuringItemTypeBinding)type).getBaseType());
-		case ITypeBinding.ARRAY_TYPE_BINDING: {
-			ITypeBinding elementType = ((ArrayTypeBinding)type).getElementType();
+		
+	protected EObject mofTypeFor(Type type) {
+		EObject eType = null;
+		if (type instanceof ArrayType) {
+			Type elementType = ((ArrayType)type).getElementType();
 			EObject mofType = mofTypeFor(elementType);
 			if (inMofContext && mofType instanceof EType) {
 				EGenericType generic = mof.createEGenericType(true);
@@ -927,156 +751,129 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				ArrayType generic = factory.createArrayType();
 				generic.setClassifier((Classifier)getMofSerializable(Type_EGLList));
 				generic.getTypeArguments().add((Type)mofType);
-				generic.setElementsNullable(elementType.isNullable());
+				generic.setElementsNullable(((ArrayType)type).elementsNullable());
 				eType = generic;
 			}
-			break;
 		}
-		case ITypeBinding.FORM_BINDING: {
-			FormGroupBinding fgBinding = ((FormBinding)type).getEnclosingFormGroup();
-			eType = null;
-			if (fgBinding != null) {
-				FormGroup fg = (FormGroup)mofTypeFor(fgBinding);
-				for (Form form : fg.getForms()) {
-					if (form.getName().equalsIgnoreCase(((FormBinding)type).getName())) {
-						eType = form;
-						break;
-					}
-				}
-			}
-			if (eType != null) {
-				break;
-			}
-			// Fall through.
-		}
-		default: {
-			String key = mofSerializationKeyFor(type); 
-			eType = getMofSerializable(key);
-			
-			//When looking for annotations and stereotypes, search using the EGL scheme if we didnt find it as MOF
-			if (eType == null && ! key.startsWith(EGL_KeyScheme) && (isAnnotationType(type) || isStereotypeType(type))) {
-				key = EGL_KeyScheme + key;
+		else {
+			if(type != null){
+				String key = mofTypeSignatureFor(type); 
 				eType = getMofSerializable(key);
-			}
-			if (eType == null) {
-				if (type instanceof IPartBinding) {
-//					eType = mofTypeFromASTFor((IPartBinding)type);
-					if (inMofContext && isMofClass((PartBinding)type) && type instanceof ExternalTypeBinding) {
-						eType = createTempEClass((ExternalTypeBinding)type);
-					}
-					else {
-						eType = createProxyPart(((IPartBinding)type).getPackageQualifiedName());
-					}
+
+				if (eType == null && ! key.startsWith(EGL_KeyScheme) && type instanceof Annotation) {
+					key = EGL_KeyScheme + key;
+					eType = getMofSerializable(key);
 				}
-				else if (type instanceof PrimitiveTypeBinding) {			
-					PrimitiveTypeBinding prim = ((PrimitiveTypeBinding)type);
-					eType = createPrimitiveType(key, prim);
-					switch (prim.getPrimitive().getType()) {
-						case Primitive.BYTES_PRIMITIVE:
-						case Primitive.CHAR_PRIMITIVE:
-						case Primitive.MBCHAR_PRIMITIVE:
-						case Primitive.DBCHAR_PRIMITIVE:
-						case Primitive.UNICODE_PRIMITIVE:
-						case Primitive.HEX_PRIMITIVE: {
-							eSet(eType, "length", prim.getLength());
-							break;
+
+				if (eType == null) {
+					if (type instanceof Part) {
+						if (inMofContext && isMofClass((Part)type) && type instanceof org.eclipse.edt.mof.egl.ExternalType) {
+							eType = createTempEClass((org.eclipse.edt.mof.egl.ExternalType)type);
 						}
-						case Primitive.DECIMAL_PRIMITIVE: 
-						case Primitive.BIN_PRIMITIVE:
-						case Primitive.MONEY_PRIMITIVE:
-						case Primitive.NUM_PRIMITIVE: {
-							eSet(eType, "length", prim.getLength());
-							eSet(eType, "decimals", prim.getDecimals());
-							break;
-						}
-						case Primitive.INTERVAL_PRIMITIVE:
-						case Primitive.TIME_PRIMITIVE:
-						case Primitive.TIMESTAMP_PRIMITIVE:
-						case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
-						case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
-							eSet(eType, "pattern", getPattern(prim));
-							break;
+						else {
+							eType = createProxyPart(((Part)type).getFullyQualifiedName());
 						}
 					}
-				}
-				else if (type instanceof IAnnotationTypeBinding) {
-					eType = createAnnotationType((IAnnotationTypeBinding)type);
 				}
 			}
+			
 		}
-		}
+		
 		return eType;
+		
 	}
-	
-	
-	protected String mofTypeSignatureFor(ITypeBinding type, boolean isArrayType) {
+
+	private String getMofDataTypeSignatureFor(Type type) {
+		if (type == null) {
+			return null;
+		}
+		Classifier classifier = type.getClassifier();
+		if (classifier == null) {
+			return null;
+		}
+		
+		//handle any, string, boolean, int, float, decimal
+		if (classifier.equals(TypeUtils.Type_ANY)) {
+			return MofConversion.Type_JavaObject;
+		}
+		if (classifier.equals(TypeUtils.Type_BOOLEAN)) {
+			return MofConversion.Type_EBoolean;
+		}
+		if (classifier.equals(TypeUtils.Type_STRING)) {
+			return MofConversion.Type_EString;
+		}
+		if (classifier.equals(TypeUtils.Type_INT) || type.equals(TypeUtils.Type_SMALLINT) || type.equals(TypeUtils.Type_BIGINT)) {
+			return MofConversion.Type_EInteger;
+		}
+		if (classifier.equals(TypeUtils.Type_FLOAT) || type.equals(TypeUtils.Type_SMALLFLOAT)) {
+			return MofConversion.Type_EFloat;
+		}
+		if (classifier.equals(TypeUtils.Type_DECIMAL)) {
+			return MofConversion.Type_EDecimal;
+		}
+		
+		return null;
+		
+	}
+	protected String mofTypeSignatureFor(Type type) {
 		String typeSignature;
-		if (type instanceof PrimitiveTypeBinding) 
-			typeSignature = mofPrimitiveTypeSignatureFor((PrimitiveTypeBinding)type);
-		else if (type instanceof DictionaryBinding) {
-			typeSignature = Type_EGLDictionary;
+		
+		//handle mof dataTypes
+		if (inMofContext) {
+			typeSignature = getMofDataTypeSignatureFor(type);
+			if (typeSignature != null) {
+				return typeSignature;
+			}
 		}
-		else if (type instanceof ArrayDictionaryBinding) {
-			typeSignature = Type_EGLArrayDictionary;
-		}
-		else if (type instanceof ArrayTypeBinding) {
-			typeSignature = inMofContext ? Type_EList : Type_EGLList;
-			typeSignature += "<" + mofTypeSignatureFor(((ArrayTypeBinding)type).getElementType(), isArrayType) + ">";
-		}
-		else if (type instanceof IAnnotationTypeBinding) {
+		
+		if (type instanceof AnnotationType) {
 			if ((inMofContext &&  !inAnnotationTypeContext) || isEMetadataType(type) ) {
-				typeSignature = type.getPackageQualifiedName();
+				typeSignature = ((AnnotationType)type).getETypeSignature();
 			}
 			else {
-				typeSignature = EGL_KeyScheme + type.getPackageQualifiedName();
+				typeSignature = type.getMofSerializationKey();
 			}
 		}
-		else if (type instanceof IPartBinding) {
-			if (isEDTReflectType((IPartBinding)type))
-				typeSignature = mofEDTReflectTypeSignature((IPartBinding)type);
-			else if (isMofProxy((IPartBinding)type) && !inMofProxyContext) { 
-				IAnnotationBinding ann = ((IPartBinding)type).getSubTypeAnnotationBinding();
+		else if (type instanceof Part) {
+			
+			if (inMofProxyContext) {
+				typeSignature = ((Part)type).getFullyQualifiedName();
+			}
+			
+			else if (isMofProxy((Part)type)) { 
+				Annotation ann = ((Part)type).getStereotype();
 				typeSignature = (String)getFieldValue(ann, "packageName");
 				if (typeSignature == null) {
-					typeSignature = concatWithSeparator(type.getPackageName(), ".");
+					typeSignature = ((Part)type).getCaseSensitivePackageName();
 				}
 				typeSignature += ".";
 				String name = (String)getFieldValue(ann, "name");
-				if (name == null || "".equals(name)) name = type.getCaseSensitiveName();
+				if (name == null || "".equals(name)) name = ((Part)type).getCaseSensitiveName();
 				typeSignature += name;
 			}
-			else if (isReflectType((IPartBinding)type) && !inMofProxyContext) {
-				IAnnotationBinding ann = ((IPartBinding)type).getSubTypeAnnotationBinding();
+			else if (isReflectType((Part)type)) {
+				Annotation ann = ((Part)type).getStereotype();
 				String name = (String)getFieldValue(ann, "name");
-				if (name == null) name = type.getCaseSensitiveName();
-				typeSignature = concatWithSeparator(type.getPackageName(), ".");
-				typeSignature += ".";
-				typeSignature += name;
-				if (!isMofReflectType((IPartBinding)type) && isEGLReflectType((IPartBinding)type) || inMofProxyContext) {
+				if (name == null) name = ((Part)type).getCaseSensitiveName();
+				typeSignature = ((Part)type).getCaseSensitivePackageName() + "." + name;
+				if (!isMofReflectType((Part)type) && isEGLReflectType((Part)type)) {
 					typeSignature = EGL_KeyScheme + typeSignature; 
 				}
 			}
 			else	
-				typeSignature = EGL_KeyScheme + type.getPackageQualifiedName();
+				typeSignature = type.getMofSerializationKey();
 		}
-		else
-			typeSignature = Type_EObject;
+		else {
+			if (inMofContext) {
+				typeSignature = Type_EObject;
+			}
+			else {
+				typeSignature = type.getMofSerializationKey();
+			}
+		}
 		return typeSignature;
 	}
 	
-	boolean isEDTReflectType(IPartBinding binding) {
-		String name = binding.getName();
-		return name.equalsIgnoreCase("fieldRef")
-			|| name.equalsIgnoreCase("internalRef")
-			|| name.equalsIgnoreCase("partRef")
-			|| name.equalsIgnoreCase("functionRef")
-			|| name.equalsIgnoreCase("functionMemberRef")
-			|| name.equalsIgnoreCase("typeRef")
-			|| name.equalsIgnoreCase("sqlString")
-			|| name.equalsIgnoreCase("FieldInTargetRef")
-			|| name.equalsIgnoreCase("RecordRef")
-			|| name.equalsIgnoreCase("serviceRef");
-	}
 	
 	String mofEDTReflectTypeSignature(IPartBinding binding) {
 
@@ -1118,233 +915,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return typeSignature;
 	}
 	
-	protected Type mofPrimitiveFor(Primitive type) {
-		String key = mofPrimitiveSignatureFor(type);
-		return (Type)getMofSerializable(key);
-	}
-	
-	protected String mofPrimitiveSignatureFor(Primitive type) {
-		String typeSignature;
-		switch (type.getType()) {
-			case Primitive.ANY_PRIMITIVE: typeSignature = inMofContext ? Type_JavaObject : Type_EGLAny; break;
-			case Primitive.BOOLEAN_PRIMITIVE: typeSignature = inMofContext ? Type_EBoolean : Type_EGLBoolean;break;
-			case Primitive.INT_PRIMITIVE: typeSignature = inMofContext ? Type_EInteger : Type_EGLInt;break;
-			case Primitive.STRING_PRIMITIVE: typeSignature = inMofContext ? Type_EString : Type_EGLString;break;
-			case Primitive.BIGINT_PRIMITIVE: typeSignature = Type_EGLBigint;break; 
-			case Primitive.BIN_PRIMITIVE: typeSignature = Type_EGLBin;break; 
-			case Primitive.BLOB_PRIMITIVE: typeSignature = Type_EGLBlob;break; 
-			case Primitive.BYTES_PRIMITIVE: typeSignature = Type_EGLBytes;break;
-			case Primitive.CHAR_PRIMITIVE: typeSignature = inMofContext ? Type_EString : Type_EGLChar;break; 
-			case Primitive.CLOB_PRIMITIVE: typeSignature = Type_EGLClob;break; 
-			case Primitive.DATE_PRIMITIVE: typeSignature = Type_EGLDate;break; 
-			case Primitive.DBCHAR_PRIMITIVE: typeSignature = Type_EGLDBChar;break; 
-		//	case Primitive.DBCHARLIT_PRIMITIVE: typeSignature = Type_EGLDBCharLit;break; 
-			case Primitive.DECIMAL_PRIMITIVE: typeSignature = inMofContext ? Type_EDecimal : Type_EGLDecimal;break; 
-			case Primitive.FLOAT_PRIMITIVE: typeSignature = inMofContext ? Type_EFloat : Type_EGLFloat;break; 
-			case Primitive.HEX_PRIMITIVE: typeSignature = Type_EGLHex;break; 
-			case Primitive.INTERVAL_PRIMITIVE: typeSignature = Type_EGLInterval;break; 
-			case Primitive.MBCHAR_PRIMITIVE: typeSignature = Type_EGLMBChar;break; 
-			case Primitive.MONEY_PRIMITIVE: typeSignature = Type_EGLDecimal; break;
-			case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE: typeSignature = Type_EGLMonthInterval;break; 
-			case Primitive.NUM_PRIMITIVE: typeSignature = Type_EGLNum; break;
-			case Primitive.NUMBER_PRIMITIVE: typeSignature = Type_EGLNumber; break;
-			case Primitive.NUMC_PRIMITIVE: typeSignature = Type_EGLNumc; break;
-			case Primitive.PACF_PRIMITIVE: typeSignature = Type_EGLPacf; break;
-			case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: typeSignature = Type_EGLSecondsInterval;break; 
-			case Primitive.SMALLFLOAT_PRIMITIVE: typeSignature = Type_EGLSmallfloat; break;
-			case Primitive.SMALLINT_PRIMITIVE: typeSignature = Type_EGLSmallint; break;
-			case Primitive.TIME_PRIMITIVE: typeSignature = Type_EGLTime; break;
-			case Primitive.TIMESTAMP_PRIMITIVE : typeSignature = Type_EGLTimestamp;break; 
-			case Primitive.UNICODE_PRIMITIVE : typeSignature = Type_EGLUnicode; break;
-			default: typeSignature = Type_EGLAny;
-		}
-		return typeSignature;
-	}
 
 	
-	protected String mofPrimitiveTypeSignatureFor(PrimitiveTypeBinding type) {
-		String typeSignature = mofPrimitiveSignatureFor(type.getPrimitive());	
-		if (inMofContext) return typeSignature;
-		
-		switch (type.getPrimitive().getType()) {
-		case Primitive.BYTES_PRIMITIVE:
-		case Primitive.CHAR_PRIMITIVE:
-		case Primitive.MBCHAR_PRIMITIVE:
-		case Primitive.DBCHAR_PRIMITIVE:
-		case Primitive.UNICODE_PRIMITIVE:
-		case Primitive.HEX_PRIMITIVE:
-		case Primitive.STRING_PRIMITIVE: {
-			typeSignature += (type.getLength() == 0 ? "" : "(" + type.getLength() + ")");
-			break;
-		}
-		case Primitive.DECIMAL_PRIMITIVE: 
-		case Primitive.BIN_PRIMITIVE:
-		case Primitive.MONEY_PRIMITIVE:
-		case Primitive.NUM_PRIMITIVE: {
-			typeSignature += (type.getLength() == 0 ? "" : "(" + type.getLength() + Type.PrimArgDelimiter + type.getDecimals() + ")");
-			break;
-		}
-		case Primitive.INTERVAL_PRIMITIVE:
-		case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
-		case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
-			typeSignature += (type.getPattern() == null ? "" : "(" + getPattern(type) + ")");
-			break;
-		}
-//		case Primitive.TIME_PRIMITIVE:
-		case Primitive.TIMESTAMP_PRIMITIVE: {
-			typeSignature += (type.getPattern() == null ? "" : "(" + getPattern(type) + ")");
-			break;
-		}
-
-	}
-	
-		return typeSignature;
-	}
-	
-	private String getPattern(PrimitiveTypeBinding type) {
-		return new TimeStampAndIntervalPatternFixer(type.getPattern()).toString();
-	}
-	
-	protected String getParameterizedTypeSignature(PrimitiveTypeBinding type) {
-		String typeSignature = null;
-		if (inMofContext) return typeSignature;
-		
-		switch (type.getPrimitive().getType()) {
-			case Primitive.BYTES_PRIMITIVE:
-			case Primitive.CHAR_PRIMITIVE:
-			case Primitive.MBCHAR_PRIMITIVE:
-			case Primitive.DBCHAR_PRIMITIVE:
-			case Primitive.UNICODE_PRIMITIVE:
-			case Primitive.HEX_PRIMITIVE:
-			case Primitive.STRING_PRIMITIVE: {
-				typeSignature = Type_SequenceType;
-				break;
-			}
-			case Primitive.DECIMAL_PRIMITIVE: 
-			case Primitive.BIN_PRIMITIVE:
-			case Primitive.MONEY_PRIMITIVE:
-			case Primitive.NUM_PRIMITIVE: {
-				typeSignature = Type_FixedPrecisionType;
-				break;
-			}
-			case Primitive.INTERVAL_PRIMITIVE:
-			case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
-			case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
-				typeSignature = Type_IntervalType;
-				break;
-			}
-	//		case Primitive.TIME_PRIMITIVE:
-			case Primitive.TIMESTAMP_PRIMITIVE: {
-				typeSignature = Type_TimestampType;
-				break;
-			}
-
-		}
-	
-		return typeSignature;
-	}
-	
-	protected boolean isParameterizedType(PrimitiveTypeBinding type) {
-		boolean is = false;
-		switch (type.getPrimitive().getType()) {
-			case Primitive.TIMESTAMP_PRIMITIVE: {
-				is = type.getPattern() != null;
-				break;
-			}
-			case Primitive.BYTES_PRIMITIVE:
-			case Primitive.CHAR_PRIMITIVE:
-			case Primitive.MBCHAR_PRIMITIVE:
-			case Primitive.DBCHAR_PRIMITIVE:
-			case Primitive.UNICODE_PRIMITIVE:
-			case Primitive.HEX_PRIMITIVE:
-			case Primitive.STRING_PRIMITIVE: 
-			case Primitive.DECIMAL_PRIMITIVE: 
-			case Primitive.BIN_PRIMITIVE:
-			case Primitive.MONEY_PRIMITIVE:
-			case Primitive.NUM_PRIMITIVE: 
-			case Primitive.INTERVAL_PRIMITIVE:
-			case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
-			case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
-	//		case Primitive.TIME_PRIMITIVE:
-				is = true;
-				break;
-			}
-			default: is = false;
-		}
-		return (is && (type.getLength() != 0 || type.getDecimals() != 0 || type.getPattern() != null));
-	}
-
-//	protected EClass getMofPrimitiveTypeEClass(PrimitiveTypeBinding type) {
-//		EClass eClass;
-//		switch (type.getPrimitive().getType()) {
-//			case Primitive.ANY_PRIMITIVE: eClass=factory.getPrimitiveTypeEClass(); break;
-//			case Primitive.BOOLEAN_PRIMITIVE: eClass=factory.getBooleanTypeEClass();
-//			case Primitive.INT_PRIMITIVE: eClass=factory.getIntegerTypeEClass();break;
-//			case Primitive.STRING_PRIMITIVE: eClass=factory.getTextTypeEClass();break;
-//			case Primitive.BIGINT_PRIMITIVE: eClass=factory.getIntegerTypeEClass();break; 
-//			case Primitive.BIN_PRIMITIVE: eClass=factory.getFixedPrecisionTypeEClass();break; 
-//			case Primitive.BLOB_PRIMITIVE: eClass=factory.getTextTypeEClass();break; 
-//			case Primitive.CHAR_PRIMITIVE: eClass=factory.getTextTypeEClass();break; 
-//			case Primitive.CLOB_PRIMITIVE: eClass=factory.getLobTypeEClass();break; 
-//			case Primitive.DATE_PRIMITIVE: eClass=factory.getTimeTypeEClass();break; 
-//			case Primitive.DBCHAR_PRIMITIVE: eClass=factory.getTextTypeEClass();break; 
-//		//	case Primitive.DBCHARLIT_PRIMITIVE: eClassSignature = Type_EGLDBCharLit;break; 
-//			case Primitive.DECIMAL_PRIMITIVE: eClass=factory.getFixedPrecisionTypeEClass();break; 
-//			case Primitive.FLOAT_PRIMITIVE: eClass=factory.getFloatTypeEClass();break; 
-//			case Primitive.HEX_PRIMITIVE: eClass=factory.getBinaryTypeEClass();break; 
-//		//	case Primitive.INTERVAL_PRIMITIVE: eClassSignature = Type_EGLInterval;break; 
-//			case Primitive.MBCHAR_PRIMITIVE: eClass=factory.getTextTypeEClass();break; 
-//			case Primitive.MONEY_PRIMITIVE: eClass=factory.getFixedPrecisionTypeEClass(); break;
-//			case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE: eClass=factory.getTimeTypeEClass();break; 
-//			case Primitive.NUM_PRIMITIVE: eClass=factory.getFixedPrecisionTypeEClass(); break;
-////			case Primitive.NUMBER_PRIMITIVE: eClassSignature = Type_EGLNumber; break;
-//			case Primitive.NUMC_PRIMITIVE: eClass=factory.getFixedPrecisionTypeEClass(); break;
-//			case Primitive.PACF_PRIMITIVE: eClass=factory.getFixedPrecisionTypeEClass(); break;
-//			case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: eClass=factory.getTimeTypeEClass();break; 
-//			case Primitive.SMALLFLOAT_PRIMITIVE: eClass=factory.getFloatTypeEClass(); break;
-//			case Primitive.SMALLINT_PRIMITIVE: eClass=factory.getIntegerTypeEClass(); break;
-//			case Primitive.TIME_PRIMITIVE: eClass=factory.getTimeTypeEClass(); break;
-//			case Primitive.TIMESTAMP_PRIMITIVE : eClass=factory.getTimeTypeEClass();break; 
-//			case Primitive.UNICODE_PRIMITIVE : eClass=factory.getTextTypeEClass(); break;
-//			default: eClass=factory.getPrimitiveTypeEClass();
-//		}
-//		return eClass;
-//	}
-
-	protected String mofPartTypeSignatureFor(org.eclipse.edt.compiler.core.ast.Part part) {
-		IPartBinding binding = (IPartBinding)part.getName().resolveBinding();
-		return mofPartTypeSignatureFor(binding);
-	}
-	
-	protected String mofPartTypeSignatureFor(IPartBinding partBinding) {
-		String typeSignature;
-		if (isReflectType(partBinding)) {
-			typeSignature = getReflectedTypeSignature(partBinding);
-		}
-		else {
-			switch (partBinding.getKind()) {
-			case ITypeBinding.DATAITEM_BINDING: typeSignature = Type_DataItem; break;
-			case ITypeBinding.DATATABLE_BINDING: typeSignature = Type_DataTable; break;
-			case ITypeBinding.DELEGATE_BINDING: typeSignature = Type_Delegate; break;
-			case ITypeBinding.ENUMERATION_BINDING: typeSignature = inMofContext ? Type_EEnum : Type_Enumeration; break;
-			case ITypeBinding.EXTERNALTYPE_BINDING: typeSignature = inMofContext ? Type_EClass : Type_ExternalType; break;
-			case ITypeBinding.FIXED_RECORD_BINDING: typeSignature = Type_StructuredRecord; break;
-			case ITypeBinding.FLEXIBLE_RECORD_BINDING: typeSignature = Type_Record; break;
-			case ITypeBinding.FORM_BINDING: typeSignature = Type_Form; break;
-			case ITypeBinding.FORMGROUP_BINDING: typeSignature = Type_FormGroup; break;
-			case ITypeBinding.FUNCTION_BINDING: typeSignature = Type_FunctionPart; break;
-			case ITypeBinding.HANDLER_BINDING: typeSignature = Type_Handler; break;
-			case ITypeBinding.INTERFACE_BINDING: typeSignature = Type_Interface; break;
-			case ITypeBinding.LIBRARY_BINDING: typeSignature = Type_Library; break;
-			case ITypeBinding.PROGRAM_BINDING: typeSignature = Type_Program; break;
-			case ITypeBinding.SERVICE_BINDING: typeSignature = Type_Service; break;
-			case ITypeBinding.CLASS_BINDING: typeSignature = Type_EGLClass; break;
-			default: typeSignature = Type_EClass;
-			}
-		}
-		return typeSignature;
-
-	}
 
 	protected EObject getMofSerializable(String mofSignature) { 
 		EObject result = null;
@@ -1360,129 +932,25 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 
-	protected String mofSerializationKeyFor(ITypeBinding binding) {
-		return mofTypeSignatureFor(binding, false);
-	}
-	
-	protected EObject newEObject(String typeSignature) {
+	private EObject newEObject(String typeSignature) {
 		EClass eClass = (EClass)getMofSerializable(typeSignature);
 		return eClass.newInstance();
 	}
-	
-	protected EClass createAnnotationType(IAnnotationBinding annotation) {
-		EClass annType = createAnnotationType((IAnnotationTypeBinding)annotation.getType());
 		
-		// If there was no real EGL definition for the annotation type then make one up
-		// based on the annotation value itself.  This is the case for annotations used
-		// by the system to add metadata on the fly such as eglLocation, len, etc.
-		if (annType == null) {
-			annType = mof.createEMetadataType(true);	
-			annType.setName(annotation.getCaseSensitiveName());
-			annType.setPackageName("");
-			for(AnnotationFieldBinding fieldBinding : (List<AnnotationFieldBinding>)annotation.getAnnotationFields()) {
-				EField field = mof.createEField(true);
-				field.setName(fieldBinding.getCaseSensitiveName());
-				EClassifier type;
-				if (fieldBinding.getValue() instanceof String) {
-					type = (EClassifier)getMofSerializable(Type_EString);
-				} else if (fieldBinding.getValue() instanceof Boolean) {
-					type = (EClassifier)getMofSerializable(Type_EBoolean);
-				} else if (fieldBinding.getValue() instanceof Integer) {
-					type = (EClassifier)getMofSerializable(Type_EInteger);
-				} else if (fieldBinding.getValue() instanceof List) {
-					type = (EClassifier)getMofSerializable(Type_EList);
-				} else { type = (EClassifier)getMofSerializable(Type_EMetadataObject); }
-				field.setEType(type);
-				field.setDeclarer(annType);
-				annType.getEFields().add(field);
-			}
-		}
-		return annType;
-	}
-	
-	// Creates an AnnotationType from a Flexibile record that has been stereotyped
-	// as an Annotation or Stereotype
-	protected EClass createAnnotationType(IAnnotationTypeBinding typeBinding) {
-		if (typeBinding instanceof AnnotationTypeBindingImpl) {
-			return createAnnotationType((AnnotationTypeBindingImpl)typeBinding);
-		}
-		else {
-			AnnotationType annType = (AnnotationType)IrFactory.INSTANCE.createAnnotationType();
-			return annType;
-		}
-	}
-	
-	protected EClass createAnnotationType(AnnotationTypeBindingImpl part) {
-		EClass record = null;
-		
-		FlexibleRecordBinding annType = part.getAnnotationRecord();
-		if (annType != null) {
-			record = (EClass)newEObject(mofPartTypeSignatureFor(annType));
-			record.setName(part.getCaseSensitiveName());
-			record.setPackageName(concatWithSeparator(part.getPackageName(), "."));
-			
-			// Set up the valid targets specified with the stereotype associated with the annType record binding
-			boolean previousInEMetadataTypeContext = inEMetadataTypeContext;
-			if (record instanceof EMetadataType) {
-				inEMetadataTypeContext = true;
-			}
-			IAnnotationBinding subtype = annType.getSubTypeAnnotationBinding();
-			List targets = mofValueFrom((Object[])getFieldValue(subtype, "targets"));
-			if (record instanceof EMetadataType) {
-				for (Object eClass : targets) {
-					((EMetadataType)record).getTargets().add((EClass)eClass);
-				}
-			}
-			else {
-				for (Object literal : targets) {
-					((AnnotationType)record).getTargets().add((ElementKind)literal);
-				}
-			}
-			inEMetadataTypeContext = previousInEMetadataTypeContext;
-			// TODO: Nested annotation types will not work properly here
-			// as this context is also used to choose the correct type of
-			// MetadataType. i.e. An EMetadataType or an AnnotationType
-			boolean currentMofContext = inMofContext;
-			inMofContext = true;
-			for (IDataBinding field : (List<IDataBinding>)annType.getDeclaredFields() ) {
-				EField eField = mof.createEField(true);
-				eField.setName(field.getCaseSensitiveName());
-				
-				eField.setEType((EType)mofTypeFor(field.getType()));
-				eField.setContainment(true);
-				
-				((EClass)record).addMember(eField);
-			}
-			inMofContext = currentMofContext;
-			
-			if (record instanceof StereotypeType) {
-				record.getSuperTypes().set(0, (EClass)getMofSerializable(Type_Stereotype));
-			}
-			else if (record instanceof AnnotationType) {			
-				record.getSuperTypes().set(0, (EClass)getMofSerializable(Type_Annotation));
-			}
-		}
-		env.save(record, false);
-		return record;
-	}
-		
-	
-	protected EClass createTempEClass(ExternalTypeBinding part) {
+	private EClass createTempEClass(org.eclipse.edt.mof.egl.ExternalType part) {
 		EClass eClass = mof.createEClass(true);
 		eClass.setName(part.getCaseSensitiveName());
-		eClass.setPackageName(concatWithSeparator(part.getPackageName(), "."));
-		String key = mofSerializationKeyFor(part);
+		eClass.setPackageName(part.getCaseSensitivePackageName());
+		String key = part.getMofSerializationKey();
 		env.save(key, eClass, false);
-		for (ClassFieldBinding binding : (List<ClassFieldBinding>)part.getDeclaredData()) {
+		for (Field binding : part.getFields()) {
 			EField field = mof.createEField(true);
 			field.setName(binding.getCaseSensitiveName());
 			EType type = null;
 			try {
 				type = (EType)mofTypeFor(binding.getType());
 				field.setEType(type);
-				if (binding.getType().isNullable()) {
-					field.setIsNullable(true);
-				}
+				field.setIsNullable(binding.isNullable());
 			} catch (CircularBuildRequestException e) {
 				// If this occurs just assume JavaObject type
 				type = MofFactory.INSTANCE.getEObjectClass();
@@ -1490,24 +958,27 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			eClass.addMember(field);
 			field.setDeclarer(eClass);
 		}
-		IAnnotationBinding subtype = part.getSubTypeAnnotationBinding();
+		Annotation subtype = part.getStereotype();
 		setReflectTypeValues(eClass, subtype);
 		eClass.getMetadataList().add(getTempClassMarker());
 		List<EClass> superTypes = new ArrayList<EClass>();
-		for (ITypeBinding superType : (List<ITypeBinding>)part.getExtendedTypes()) {
-			superTypes.add((EClass)mofTypeFor(superType));
+		for (StructPart superType : part.getSuperTypes()) {
+			EObject obj = mofTypeFor(superType);
+			if (obj instanceof EClass) {
+				superTypes.add((EClass)obj);
+			}
 		}
 		eClass.addSuperTypes(superTypes);
 		return eClass;
 	}
 	
-	protected boolean isTempEClass(EObject eclass) {
+	private boolean isTempEClass(EObject eclass) {
 		return eclass instanceof EClass
 			? ((EClass)eclass).getMetadata(TempEClassMarker) != null
 			: false;
 	}
 	
-	protected EMetadataObject getTempClassMarker() {
+	private EMetadataObject getTempClassMarker() {
 		EMetadataType temp = (EMetadataType)getMofSerializable(TempEClassMarker);
 		if (temp == null) {
 			// Set up metadata type for marking an EClass as temporary
@@ -1524,7 +995,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return (EMetadataObject)temp.newInstance();
 	}
 
-	protected ProxyEObject createProxyPart(String name) {
+	private ProxyEObject createProxyPart(String name) {
 		ProxyEObject type;
 		String key;
 		if (inMofContext) {
@@ -1539,25 +1010,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return type;
 	}
  	
-	protected Type createPrimitiveType(String key, PrimitiveTypeBinding part) {
-		String parmTypeSignature = getParameterizedTypeSignature(part);
-		Type type = null;
-		if (parmTypeSignature != null && isParameterizedType(part)) {
-			type = (ParameterizedType)((EClass)getMofSerializable(parmTypeSignature)).newInstance();
-			String primSignature = mofPrimitiveSignatureFor(part.getPrimitive());
-			int i = primSignature.indexOf(KeySchemeDelimiter);
-			primSignature = i == -1 ? primSignature : primSignature.substring(i+1);
-			ProxyPart eprim = new ProxyPart(primSignature);
-			((ParameterizedType)type).setParameterizableType(eprim);
-		}
-		else {
-			type = new ProxyPart(mofPrimitiveTypeSignatureFor(part));
-		}
-		env.save(key, type, false);
-		return type;
-	}
-
-	protected String concatWithSeparator(String[] fragments, String separator) {
+	private String concatWithSeparator(String[] fragments, String separator) {
 		StringBuffer result = new StringBuffer();
 		for (int i=0; i<fragments.length; i++) {
 			result.append(fragments[i]);
@@ -1568,7 +1021,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		return result.toString();
 	}
 	
-	protected void eSet(EObject target, String fieldName, Object value) {
+	private void eSet(EObject target, String fieldName, Object value) {
 		EField field = target.getEClass().getEField(fieldName);
 		eSet(target, field, value);
 	}
@@ -1607,7 +1060,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		target.eSet(field, convertedValue);
 	}
 	
-	protected void eAdd(List list, Object value) {
+	private void eAdd(List list, Object value) {
 		Object convertedValue = null;
 		if (value instanceof Object[]) {
 			for (Object obj : (Object[])value) {
@@ -1622,7 +1075,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 	}
 	
-	protected boolean isAbstractFunction(Function function) {
+	private boolean isAbstractFunction(Function function) {
 		return function != null && function.getContainer() instanceof ExternalType;
 	}
 	
@@ -1633,14 +1086,18 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	// represents.  For intstance, Record parts stereotyped by Annotation are then
 	// converted into instances of the reflected type "org.eclipse.edt.mof.egl.AnnotationType"
 	// as the stereotype "egl.lang.Annotation" reflects the underlying model.
-	protected boolean isReflectType(ITypeBinding typeBinding) {
-		if (!(typeBinding instanceof IPartBinding)) return false;
-		IPartBinding partBinding = (IPartBinding)typeBinding;
-		boolean isReflectType = isAnnotationType(partBinding) || isStereotypeType(partBinding) || isEMetadataType(partBinding);
+	private boolean isReflectType(Type typeBinding) {
+		if (!(typeBinding instanceof Part)) return false;
+		boolean isReflectType = typeBinding instanceof AnnotationType || isEMetadataType((Part)typeBinding);
 		if (!isReflectType) {
-			isReflectType = getAnnotation(typeBinding, "PartType") != null;
-			if (!isReflectType && typeBinding instanceof IPartBinding) {
-				isReflectType = getAnnotation(((IPartBinding)typeBinding).getSubType(), "PartType") != null;
+			isReflectType = getAnnotation(typeBinding, "egl.lang.reflect.PartType") != null;
+			if (!isReflectType ) {
+				Part part = (Part) typeBinding;
+				if (part.getStereotype() != null) {
+					isReflectType = 
+							(getAnnotation((StereotypeType)part.getStereotype().getEClass(), "egl.lang.reflect.PartType") != null) ||
+							(getEMetadataObject((StereotypeType)part.getStereotype().getEClass(), "PartType") != null);
+				}
 			}
 		}
 		return isReflectType;
@@ -1651,13 +1108,12 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	 * @param typeBinding
 	 * @return
 	 */
-	protected MofSerializable getDefaultSuperType(ITypeBinding typeBinding) {	
-		if (!(typeBinding instanceof IPartBinding)) return null;
-		IPartBinding partBinding = (IPartBinding)typeBinding;
-		IAnnotationTypeBinding subtype = partBinding.getSubType();
+	private MofSerializable getDefaultSuperType(Type typeBinding) {	
+		if (!(typeBinding instanceof Part)) return null;
+		Annotation subtype = ((Part)typeBinding).getStereotype();
 		String superTypeName = null;
 		if (subtype != null) {
-			superTypeName = getDefaultSuperTypeSignature((IPartBinding)typeBinding);
+			superTypeName = getDefaultSuperTypeSignature((Part)typeBinding);
 		}
 		return superTypeName != null ? (MofSerializable)getMofSerializable(superTypeName) : null;
 	}
@@ -1666,13 +1122,12 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	 * @param typeBinding
 	 * @return
 	 */
-	protected EClass getReflectedType(ITypeBinding typeBinding) {	
-		if (!(typeBinding instanceof IPartBinding)) return null;
-		IPartBinding partBinding = (IPartBinding)typeBinding;
-		IAnnotationTypeBinding subtype = partBinding.getSubType();
+	private EClass getReflectedType(Part typeBinding) {	
+		if (typeBinding == null) return null;
+		Annotation subtype = typeBinding.getStereotype();
 		String reflectedTypeName = null;
 		if (subtype != null) {
-			reflectedTypeName = getReflectedTypeSignature((IPartBinding)typeBinding);
+			reflectedTypeName = getReflectedTypeSignature(typeBinding);
 		}
 		return reflectedTypeName != null ? (EClass)getMofSerializable(reflectedTypeName) : null;
 	}
@@ -1685,10 +1140,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	// TODO: Update definition of when a type is a Reflect type to use generalized 
 	// @ReflectType annotation when syntax allows it so as to not use the hard coded
 	// implementation below
-	protected boolean isMofReflectType(ITypeBinding typeBinding) {
+	protected boolean isMofReflectType(Part typeBinding) {
 		EClass reflectedType = getReflectedType(typeBinding);
 		if (reflectedType != null) {
-			return reflectedType.isSubClassOf(MofFactory.INSTANCE.getEModelElementClass());
+			return isSubClassOf(reflectedType, MofFactory.INSTANCE.getEModelElementClass());
 		}
 		// TODO: Annotation and Stereotype themselves are not represented as ReflectTypes
 		// because their definitions are still part of the old IR model in the
@@ -1701,10 +1156,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	 * @param typeBinding
 	 * @return
 	 */
-	protected boolean isEGLReflectType(ITypeBinding typeBinding) {
+	private boolean isEGLReflectType(Part typeBinding) {
 		EClass reflectedType = getReflectedType(typeBinding);
 		if (reflectedType != null) {
-			return reflectedType.isSubClassOf(IrFactory.INSTANCE.getElementEClass());
+			return isSubClassOf(reflectedType, IrFactory.INSTANCE.getElementEClass());
 		}
 		// TODO: Annotation and Stereotype themselves are not represented as ReflectTypes
 		// because their definitions are still part of the old IR model in the
@@ -1714,101 +1169,82 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 
 	
 	// Assumes the record is a Stereotype defintiion
-	protected String getDefaultSuperTypeSignature(IPartBinding type) {
-		IAnnotationBinding subtype = type.getSubTypeAnnotationBinding();
-		IAnnotationBinding reflectType = getAnnotation(subtype.getType(), "DefaultSuperType");
+	private String getDefaultSuperTypeSignature(Part type) {
+		Annotation subtype = type.getStereotype();
+		Annotation reflectType = getAnnotation(subtype, "egl.lang.reflect.DefaultSuperType");
 		if (reflectType != null) {
-			return mofTypeSignatureFor((ITypeBinding)reflectType.getValue(), false);
+			return ((Type)reflectType.getValue()).getMofSerializationKey();
 		}
 		else if (isEMetadataType(type)) {
 			return Type_EMetadataObject;
 		}
-		else if (isAnnotationType(type)) {
+		else if (type instanceof AnnotationType) {
 			return Type_Annotation;
 		}
-		else if (isStereotypeType(type)) {
+		else if (type instanceof StereotypeType) {
 			return Type_Stereotype;
 		}
 		return null;
 	}
 
 	// Assumes the record is a Stereotype defintiion
-	protected String getReflectedTypeSignature(IPartBinding type) {
-		IAnnotationBinding subtype = type.getSubTypeAnnotationBinding();
-		IAnnotationBinding reflectType = getAnnotation(subtype.getType(), "PartType");
-		if (reflectType != null) {
-			return (String)reflectType.getValue();
+	private String getReflectedTypeSignature(Part type) {
+		Annotation subtype = type.getStereotype();
+		if (subtype != null) {
+			Annotation ann = getAnnotation((AnnotationType)subtype.getEClass(), "egl.lang.reflect.PartType");
+			if (ann != null) {
+				return (String)ann.getValue();
+			}
+			EMetadataObject meta = getEMetadataObject((AnnotationType)subtype.getEClass(), "PartType");
+			if (meta != null) {
+				return (String) meta.eGet("value");
+			}
 		}
-		else if (isEMetadataType(type)) {
+		
+		if (isEMetadataType(type)) {
 			return Type_EMetadataType;
 		}
-		else if (isAnnotationType(type)) {
-			return Type_AnnotationType;
-		}
-		else if (isStereotypeType(type)) {
+		else if (type instanceof StereotypeType) {
 			return Type_StereotypeType;
+		}
+		else if (type instanceof AnnotationType) {
+			return Type_AnnotationType;
 		}
 		return null;
 	}
-
-	protected boolean isAnnotationType(ITypeBinding type) {
-		if (!(type instanceof IPartBinding)) return false;
-		IPartBinding edtType = (IPartBinding)type;
-		IAnnotationBinding ann = edtType.getSubTypeAnnotationBinding();
-		return (ann != null && ann.getName().equalsIgnoreCase("Annotation") && getAnnotation(ann, "Stereotype") == null)
-			&& !isEMetadataType(edtType);
-	}
 	
-	protected boolean isStereotypeType(ITypeBinding type) {
-		if (!(type instanceof IPartBinding)) return false;
-		IPartBinding edtType = (IPartBinding)type;
-		IAnnotationBinding ann = edtType.getSubTypeAnnotationBinding();
-		return (ann != null && ann.getName().equalsIgnoreCase("Annotation") && getAnnotation(ann, "Stereotype") != null)
-			&& !isEMetadataType(edtType);
-	}
-	
-	protected boolean isEMetadataType(ITypeBinding edtType) {
-		if (edtType.getName().equalsIgnoreCase("IsEMetadataType")) return true;
-		IAnnotationBinding ann = getAnnotation(edtType, "IsEMetadataType");
+	protected boolean isEMetadataType(Type edtType) {
+		if("IsEMetadataType".equalsIgnoreCase(BindingUtil.getName(edtType))) return true;
+		Annotation ann = getAnnotation(edtType, "egl.lang.reflect.IsEMetadataType");
 		return (ann != null && ((java.lang.Boolean)ann.getValue()).equals(java.lang.Boolean.TRUE));
 	}
 
-	protected boolean isEMetadataObject(IAnnotationBinding ann) {
-		ITypeBinding annType = (ITypeBinding)ann.getType();
-		if (annType instanceof AnnotationTypeBindingImpl) {
-			annType = ((AnnotationTypeBindingImpl)annType).getAnnotationRecord();
-		}
-		return isEMetadataType(annType);
+	protected boolean isEMetadataObject(Annotation ann) {
+		return isEMetadataType((AnnotationType)ann.getEClass());
 	}
 	
 
-	protected boolean isMofClass(IPartBinding edtType) {
-		IAnnotationBinding ann = edtType.getSubTypeAnnotationBinding();
-		return ann != null && ann.getName().equalsIgnoreCase("MofClass");
+	private boolean isMofClass(Part edtType) {
+		Stereotype ann = edtType.getStereotype();
+		return (ann != null && ann.getEClass().getName().equalsIgnoreCase("MofClass"));
 	}
 	
-	protected boolean isMofDataType(IPartBinding edtType) {	
-		IAnnotationBinding ann = edtType.getSubTypeAnnotationBinding();
-		return ann != null && ann.getName().equalsIgnoreCase("MofDataType");
+	private boolean isMofDataType(Part edtType) {	
+		Annotation ann = edtType.getStereotype();
+		return ann != null && ann.getEClass().getName().equalsIgnoreCase("MofDataType");
 	}
 	
-	protected boolean isMofBaseType(IPartBinding edtType) {
-		IAnnotationBinding ann = edtType.getSubTypeAnnotationBinding();
-		return ann != null && ann.getName().equalsIgnoreCase("MofBaseType"); 
+	private boolean isMofBaseType(Part edtType) {
+		Annotation ann = edtType.getStereotype();
+		return ann != null && ann.getEClass().getName().equalsIgnoreCase("MofBaseType"); 
 	}
 		
-	protected boolean isMofProxy(IPartBinding edtType) {
-		IAnnotationBinding ann = edtType.getSubTypeAnnotationBinding();
-		return ann != null && ann.getName().equalsIgnoreCase("MofClass") && getFieldValue(ann, "isProxy") != null;
-
-	}
-	
 	protected boolean isMofProxy(Part part) {
 		Stereotype ann = part.getStereotype();
 		return (ann != null && ann.getEClass().getName().equalsIgnoreCase("MofClass") && (java.lang.Boolean)ann.eGet("isProxy") == true);
 	}
 
-	protected EClass resolveProxy(Part part) {
+	private EClass resolveProxy(Part part) {
 		Stereotype ann = part.getStereotype();
 		String packageName = (String)ann.eGet("packageName");
 		String name = (String)ann.eGet("name");
@@ -1828,7 +1264,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			elem.addAnnotation(ann);
 		}
 		if (obj instanceof Classifier) {
-			int packageSegmentCount = ((Classifier)obj).getPackageName().split("\\.").length;
+			int packageSegmentCount = ((Classifier)obj).getCaseSensitivePackageName().split("\\.").length;
 			
 			// Use the context's path info so that we don't lose the source file's case. Use the package name
 			// to determine where the relative path begins.
@@ -1851,45 +1287,93 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 
 	}
 	
-	protected int getLine(Node node) {
+	private int getLine(Node node) {
 		if (context != null) {
 			return context.getLineNumber(node);
 		}
 		return 0;
 	}
 	
-	public void setUpEglTypedElement(TypedElement obj, IDataBinding edtObj) {
+	protected void setUpEglTypedElement(TypedElement obj, Member edtObj) {
 		
 		Type type = null;
-		EObject mofType = mofTypeFromTypedElement(edtObj);
+		EObject mofType = mofTypeFor(edtObj.getType());
 		if (mofType instanceof Type) {
 			type = (Type)mofType;
 		}
+	
+		if (getPartBeingProcessed() == null) {
+			System.out.println("Null processing part: " + obj.toStringHeader());
+		}
+		else {
+			type = handleGenericType(type);
+		}
+		
+		obj.setType(type);
+		
+		obj.setName(edtObj.getCaseSensitiveName());
+		
+		obj.setIsNullable(edtObj.isNullable());
+	}
+	
+	protected String mofPartTypeSignatureFor(org.eclipse.edt.compiler.core.ast.Part node) {
+		Part part = (Part)node.getName().resolveType();
+		return mofPartTypeSignatureFor(part);
+	}
+	
+	protected String mofPartTypeSignatureFor(Part part) {
+		String typeSignature;
+		if (isReflectType(part)) {
+			return getReflectedTypeSignature(part);
+		}
+		else {
+			
+			if (inMofContext) {
+				if (part instanceof Enumeration) {
+					return Type_EEnum;
+				}
+				 
+				if (part instanceof org.eclipse.edt.mof.egl.ExternalType) {
+					return Type_EClass;
+				}
+			}
+		}
+		return part.getEClass().getETypeSignature();
+
+	}
+
+	
+	private boolean isSubClassOf(EClass child, EClass parent) {
+		return BindingUtil.isSubClassOf(child, parent);
+	}
+
+	private Type handleGenericType(Type type) {
 		if (type != null && type.getTypeSignature().equals(Type_Any)) {
 			// TODO This is the default way generic types are referenced in current
 			// EGL: by having a convention that a single typed parameter name is 
 			// always mapped to type ANY.  This is not generally sufficient but
 			// good enough to handle the minimal places EGL uses this today
 			Classifier part = (Classifier)getPartBeingProcessed();
-			if (part == null) System.out.println("Null processing part: " + obj.toStringHeader());
-			else if (!part.getTypeParameters().isEmpty()) {
+			if (!part.getTypeParameters().isEmpty()) {
 				type = factory.createGenericType();
 				((GenericType)type).setTypeParameter(part.getTypeParameters().get(0));
+				return type;
 			}
 		}
-		obj.setType(type);
 		
-		if (Binding.isValidBinding(edtObj)) {
-			obj.setName(edtObj.getCaseSensitiveName());
+		//Handle the case of Any[]
+		if (type instanceof ArrayType) {
+			ArrayType arrType = (ArrayType)type;
+			Type newType = handleGenericType(arrType.getElementType());
+			if (newType != null && newType != arrType.getElementType()) {
+				arrType.getTypeArguments().remove(0);
+				arrType.getTypeArguments().add(0, newType);
+			}
+			return arrType;
 		}
 		
-		// Nullable is an attribute of TypedElement not the type itself
-		if (type != null) {
-			boolean isNullable = edtObj.getType() instanceof IFunctionBinding 
-				? ((IFunctionBinding)edtObj.getType()).getReturnType() != null && ((IFunctionBinding)edtObj.getType()).getReturnType().isNullable()
-				: edtObj.getType().isNullable();
-			obj.setIsNullable(isNullable);
-		}
+		return type;
 	}
 
+	
 }

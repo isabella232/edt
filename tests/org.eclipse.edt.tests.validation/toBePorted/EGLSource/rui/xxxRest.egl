@@ -1,0 +1,182 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record rec1
+	a int;
+end
+
+interface test1
+	function f1(
+		p1 int in,			//0
+		p2 int out,			//1
+		p3 int inout,		//1
+		p4 int)				//1
+		{alias = "fred", @putRest{uriTemplate = "{p1}{p2}{p3}{p4}"}};
+end
+
+interface test2
+	function f1(
+		p1 int in,			//0
+		p2 int out,			//1
+		p3 int inout,		//1
+		p4 int)				//1
+		{alias = "fred", @getRest{uriTemplate = "{p1}{p2}{p3}{p4}"}};
+end
+
+interface test3
+	function f1(
+		p1 int in,			//0
+		p2 int out,			//1
+		p3 int inout,		//1
+		p4 int)				//1
+		{alias = "fred", @postRest{uriTemplate = "{p1}{p2}{p3}{p4}"}};
+end
+
+
+service serv1	
+	function f1() 
+		returns (int)  //1
+			{@putRest} //1
+	end
+	function f2() 
+		returns (int)  //1
+			{@getRest} //1
+	end
+	function f3() 
+		returns (int)  //1
+			{@postRest} //1
+	end
+	function f4() 
+		returns (int)  //1
+			{@deleteRest} //1
+	end
+
+	function f11() 
+		returns (string)  //0
+			{@putRest}
+	end
+	function f12() 
+		returns (string)  //0
+			{@getRest}
+	end
+	function f13() 
+		returns (rec1)  //0
+			{@postRest}
+	end
+	function f14() 
+		returns (rec1)  //0
+			{@deleteRest}
+	end
+end
+
+interface test5
+	function f1()
+		returns (string)
+			{@getRest{responseFormat = xml}}; //1
+	function f2()
+		returns (string)
+			{@putRest{responseFormat = xml}};  //1
+	function f3()
+		returns (string)
+			{@postRest{responseFormat = xml}}; //1
+	function f4()
+		returns (string)
+			{@deleteRest{responseFormat = xml}}; //1
+
+	function f11()
+		returns (string)
+			{@getRest{responseFormat = none}}; //0
+	function f12()
+		returns (string)
+			{@putRest{responseFormat = none}};  //0
+	function f13()
+		returns (string)
+			{@postRest{responseFormat = none}}; //0
+	function f14()
+		returns (string)
+			{@deleteRest{responseFormat = none}}; //0
+
+end
+
+interface test6
+	function f1(
+		p1 string in,		//0
+		p2 string in,			//0
+		p3 string in              //1
+	)
+			{@putRest{uriTemplate = "{p2}"}};
+	function f2(
+		p1 int in,    //1
+		p2 int in)	  //0
+			{@putRest{uriTemplate = "{p2}"}};
+end
+
+interface test7
+	function f1(p1 string in) //1
+			{@getRest{requestFormat = xml}}; 
+	function f2(p1 string in)
+			{@putRest{requestFormat = xml}};  //1
+	function f3(p1 string in)
+			{@postRest{requestFormat = xml}}; //1
+	function f4(p1 string in)
+			{@deleteRest{requestFormat = xml}}; //1
+
+	function f11(p1 string in)
+			{@getRest{requestFormat = none}}; //0
+	function f12(p1 string in)
+			{@putRest{requestFormat = none}};  //0
+	function f13(p1 string in)
+			{@postRest{requestFormat = none}}; //0
+	function f14(p1 string in)
+			{@deleteRest{requestFormat = none}}; //0
+
+end
+
+
+interface test8
+	function f1(
+		p1 int in,			//0
+		p2 int[] in,			//1
+		p3 string in,		//0
+		p4 string[]  in)				//1
+		{alias = "fred", @deleteRest{uriTemplate = "{p1}{p2}{p3}{p4}"}};
+		
+	function f2()
+		{@postRest{responseFormat = formData}};   //1
+
+	function f3
+		(p1 float in)						//1
+			{@postRest{requestFormat = formData}};   //0
+
+	function f4
+		(p1 rec2 in)						//1
+			{@postRest{requestFormat = formData}};   //0
+
+	function f5
+		(p1 rec1 in)						//0
+			{@postRest{requestFormat = formData}};   //0
+			
+			
+	
+end
+
+record rec2
+	a int;
+	b string;
+	c rec1[];
+end
+
+
+
+
+	
+	

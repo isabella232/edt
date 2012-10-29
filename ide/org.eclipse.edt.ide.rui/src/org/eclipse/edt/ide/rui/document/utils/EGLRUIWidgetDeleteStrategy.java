@@ -14,7 +14,6 @@ package org.eclipse.edt.ide.rui.document.utils;
 import java.util.List;
 
 import org.eclipse.core.runtime.Status;
-
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Handler;
@@ -22,9 +21,9 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class EGLRUIWidgetDeleteStrategy {
 	
@@ -53,7 +52,7 @@ public class EGLRUIWidgetDeleteStrategy {
 				public boolean visit(final Assignment assignment) {
 					try{
 						currentSetting ++;
-						if(assignment.getLeftHandSide().isName() && InternUtil.intern("targetWidget") == ((Name)assignment.getLeftHandSide()).getIdentifier()){
+						if(assignment.getLeftHandSide().isName() && NameUtile.equals(NameUtile.getAsName("targetWidget"), ((Name)assignment.getLeftHandSide()).getIdentifier())){
 							deletedWidgetName = assignment.getRightHandSide().getCanonicalString();
 							int referenceOffset = assignment.getOffset();
 							int referenceLength = assignment.getLength();

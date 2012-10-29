@@ -14,8 +14,6 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.List;
 
 import org.eclipse.edt.mof.EClass;
-import org.eclipse.edt.mof.EClassifier;
-import org.eclipse.edt.mof.EDataType;
 import org.eclipse.edt.mof.EEnum;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
@@ -26,6 +24,7 @@ import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FloatingPointLiteral;
@@ -34,6 +33,7 @@ import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Literal;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NullLiteral;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.TextTypeLiteral;
@@ -43,6 +43,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EClassImpl;
 import org.eclipse.edt.mof.impl.EObjectImpl;
 import org.eclipse.edt.mof.utils.EList;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
@@ -56,6 +57,9 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	private static int Slot_typeParameters=7;
 	private static int Slot_accessKind=8;
 	private static int totalSlots = 9;
+	
+	private String packageName;
+	private String name;
 	
 	public static int totalSlots() {
 		return totalSlots + EClassImpl.totalSlots();
@@ -120,6 +124,14 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = NameUtile.getAsName(getCaseSensitiveName());
+		}
+		return name;
+	}
+	
+	@Override
+	public String getCaseSensitiveName() {
 		return (String)slotGet(Slot_name);
 	}
 	
@@ -154,8 +166,17 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 		slotSet(Slot_hasCompileErrors, value);
 	}
 	
+
 	@Override
 	public String getPackageName() {
+		if (packageName == null) {
+			packageName = NameUtile.getAsName(getCaseSensitivePackageName());
+		}
+		return packageName;
+	}
+
+	@Override
+	public String getCaseSensitivePackageName() {
 		return (String)slotGet(Slot_packageName);
 	}
 	
@@ -200,17 +221,15 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	
 	@Override
 	public String getTypeSignature() {
-		return getPackageName()+"."+getName();
+		if (getCaseSensitivePackageName().length() == 0) {
+			return getCaseSensitiveName();
+		}
+		return getCaseSensitivePackageName()+"."+getCaseSensitiveName();
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
 		return getETypeSignature();
-	}
-
-	@Override
-	public Stereotype getSubType() {
-		return getStereotype();
 	}
 
 	@Override
@@ -325,6 +344,16 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 		}
 		return null;
 		
+	}
+
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
+
+	@Override
+	public Part resolvePart() {
+		return this;
 	}
 	
 }

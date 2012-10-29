@@ -7,7 +7,7 @@ import org.eclipse.edt.mof.egl.ConstantField;
 public class ConstantFieldTemplate extends EGLDocTemplate {
 	
 	public void genDeclaration(ConstantField field, Context ctx, TabbedWriter out) {
-		out.println(field.getName());
+		out.println(field.getCaseSensitiveName());
 	}
 	
 }

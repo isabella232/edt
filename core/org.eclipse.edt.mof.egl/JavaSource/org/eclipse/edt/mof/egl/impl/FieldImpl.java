@@ -78,4 +78,9 @@ public class FieldImpl extends MemberImpl implements Field {
 	public Container getDeclarer() {
 		return getContainer();
 	}
+	
+	@Override
+	public Field resolveField() {
+		return this;
+	}
 }

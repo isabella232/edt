@@ -1,0 +1,465 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+
+Record IndexedRecordValidMembersValue type IndexedRecord //0
+	{ fileName = "bob", //0
+	  keyItem=sItem1,  //0
+	  lengthItem=sItem2, //0
+	  numElementsItem=sItem3 //0
+	}
+		
+	10 sItem1 char(10);
+	10 sItem2 num(9);
+	10 sItem3 num(9);
+	
+	10 sItem4 char(10)[2];
+end
+
+Record IndexedRecordInvalidMembersValueOne type IndexedRecord
+	{ fileName = [2],	//1
+	  keyItem = 2, 	//1
+	  lengthItem = 3, //1
+	  numElementsItem = 4 //1
+	}
+		
+	10 sItem1 char(10);
+end
+
+Record IndexedRecordInvalidMembersValueTwo type IndexedRecord
+	{ fileName = [bob],	//1
+	  keyItem = [sitem1], 	//1
+	  lengthItem = [sitem2], //1
+	  numElementsItem = [sitem3] //1
+	}
+		
+	10 sItem1 char(10);
+end
+
+Record IndexedRecordUnresolvableMembers type IndexedRecord
+	{ fileName = "bob",
+	  keyItem=sItem2,  //1
+	  lengthItem=sItem3, // 0
+	  numElementsItem=sItem4 //1
+	}
+		
+	10 sItem1 char(10);
+end
+
+Record IndexedRecordMissingRequiredMembers type IndexedRecord //2
+	{}
+		
+	10 sItem1 char(10);
+end
+
+Record IndexedRecordInvalidLengthItemLengthOne type IndexedRecord
+	{ fileName = "bob",
+	  keyItem=sItem1,
+	  lengthItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(10);
+end
+
+Record IndexedRecordValidLengthItemLengthOne type IndexedRecord
+	{ fileName = "bob",
+	  keyItem=sItem1,
+	  lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9);
+end
+
+Record IndexedRecordInvalidLengthItemTypeOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 char(5);
+end
+
+Record IndexedRecordValidLengthItemTypeOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 bin(4);
+end
+
+Record IndexedRecordValidLengthItemTypeTwo type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(4);
+end
+
+Record IndexedRecordValidLengthItemTypeThree type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 numc(4);
+end
+
+Record IndexedRecordValidLengthItemTypeFour type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 pacf(4);
+end
+
+Record IndexedRecordValidLengthItemTypeFive type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 decimal(4);
+end
+
+Record IndexedRecordValidLengthItemTypeSix type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 int;
+end
+
+Record IndexedRecordValidLengthItemTypeSeven type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 smallint;
+end
+
+Record IndexedRecordInvalidLengthItemDecimalsOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 2);
+end
+
+Record IndexedRecordValidLengthItemDecimalsOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		lengthItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+end
+
+Record IndexedRecordInvalidNumElementsItemLengthOne type IndexedRecord
+	{ fileName = "bob",
+	  keyItem=sItem1,
+	  numElementsItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(10);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemLengthOne type IndexedRecord
+	{ fileName = "bob",
+	  keyItem=sItem1,
+	  numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordInvalidNumElementsItemTypeOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 char(5);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordInvalidNumElementsItemTypeTwo type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2;
+		15	sItem3 char(10);
+	
+	10 sItem4 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemTypeOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 bin(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemTypeTwo type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemTypeThree type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 numc(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemTypeFour type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 pacf(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemTypeFive type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 decimal(4);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemTypeSix type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 int;
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemTypeSeven type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 smallint;
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordInvalidNumElementsItemDecimalsOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 2);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemDecimalsOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //0
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 char(10)[2];
+end
+
+Record IndexedRecordValidNumElementsItemLastItemCantBeLastItemOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+end
+
+Record IndexedRecordValidNumElementsItemLastItemCantBeLastItemTwo type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem4 //1
+	}
+	
+	10 sItem1 char(10);
+//	10 embed MyOtherRecord;
+end
+
+Record IndexedRecordValidNumElementsItemLastItemTypedWithNoOccurs type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 char(10);
+end
+
+Record IndexedRecordValidNumElementsItemLastItemUntypedWithNoOccurs type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem2 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3;
+		15 sItem4 char(10);
+end
+
+Record IndexedRecordValidNumElementsItemUnderVariableLengthItemOne type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem4 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 char(10)[10];
+		15 sItem4 num(9);
+end
+
+Record IndexedRecordValidNumElementsItemUnderVariableLengthItemTwo type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem5 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 char(10)[10];
+		15 sItem4 char(10);
+			20 sItem5 num(9);
+end
+
+Record IndexedRecordValidNumElementsItemUnderVariableLengthItemThree type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem4 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3[10];
+		15 sItem4 num(9);
+end
+
+Record IndexedRecordValidNumElementsItemUnderVariableLengthItemFour type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem5 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	10 sItem3 MyOtherRecord[10];
+end
+
+Record MyOtherRecord type basicRecord
+	10 sItem4 num(9);
+		15 sItem5 num(9);
+end
+
+Record IndexedRecordValidNumElementsItemUnderVariableLengthItemFive type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem5 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	//10 embed MyOtherRecord[10]{sItem4{InputRequired = yes}};
+end
+
+Record IndexedRecordValidNumElementsItemUnderVariableLengthItemSix type IndexedRecord
+	{ fileName = "bob",
+		keyItem=sItem1,
+		numElementsItem=sItem5 //1
+	}
+	
+	10 sItem1 char(10);
+	10 sItem2 num(9, 0);
+	
+	//10 * MyOtherRecord[10];
+end

@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 /**
  * @author Harmon
@@ -30,32 +31,18 @@ public class NullScope extends Scope {
         super(parentScope);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.internal.core.lookup.Scope#findType(java.lang.String)
-     */
-    public ITypeBinding findType(String simpleName) {
-        return IDataBinding.NOT_FOUND_BINDING;
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.internal.core.lookup.Scope#findFunction(java.lang.String)
-     */
-    public IFunctionBinding findFunction(String simpleName) {
-        return IDataBinding.NOT_FOUND_BINDING;
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.internal.core.lookup.Scope#findData(java.lang.String)
-     */
-    public IDataBinding findData(String simpleName) {
-        return IDataBinding.NOT_FOUND_BINDING;
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.internal.core.lookup.Scope#findPackage(java.lang.String)
-     */
     public IPackageBinding findPackage(String simpleName) {
-        return IDataBinding.NOT_FOUND_BINDING;
+        return null;
     }
+
+	@Override
+	public List<Type> findType(String simpleName) {
+		return null;
+	}
+
+	@Override
+	public List<Member> findMember(String simpleName) {
+		return null;
+	}
 
 }

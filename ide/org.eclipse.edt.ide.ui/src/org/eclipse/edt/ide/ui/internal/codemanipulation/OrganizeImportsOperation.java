@@ -13,6 +13,8 @@ package org.eclipse.edt.ide.ui.internal.codemanipulation;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -28,17 +30,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AccumulatingSyntaxErrorMessageRequestor;
@@ -49,16 +45,12 @@ import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.SyntaxError;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
 import org.eclipse.edt.ide.core.internal.search.PartInfo;
 import org.eclipse.edt.ide.core.internal.search.PartInfoRequestor;
-import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IBuffer;
@@ -77,6 +69,7 @@ import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.DocumentAdapter;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
@@ -99,37 +92,6 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 	
 	private SyntaxErrorHelper fSyntaxError;
 
-	private static class SystemPartInfo extends PartInfo{
-
-		public SystemPartInfo(String pkg, String name) {
-			super(pkg, name, new char[0][]);
-		}
-		
-		public int getElementType() {
-			return PartInfo.UNRESOLVABLE_PART_INFO;
-		}
-		
-		public String getPath() {
-			return "";
-		}
-		
-		public IPath getPackageFragmentRootPath() {
-			return new Path("");
-		}
-		
-		protected IEGLElement getEGLElement(IEGLSearchScope scope) {
-			return null;
-		}
-
-	    /* (non-Javadoc)
-	     * @see org.eclipse.edt.ide.core.internal.search.PartInfo#getPartType()
-	     */
-	    public char getPartType() {
-	        return 0;
-	    }
-		
-	}
-	
 	public static class SyntaxErrorHelper
 	{
 		public SyntaxError fSynErr;
@@ -170,15 +132,16 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 		private static void addImport(String packageName, String partName, String currentPackageName, Map imports)
 		{
 			Set parts = null;
-			if(!currentPackageName.equals(packageName))			//if the part is in the same package, no need to add an entry
+			//if the part is in the same package, no need to add an entry
+			if(!NameUtile.equals(NameUtile.getAsName(currentPackageName), NameUtile.getAsName(packageName)))
 			{
-				Object obj = imports.get(packageName);
+				Object obj = imports.get(NameUtile.getAsName(packageName));
 				if(obj != null)
 					parts = (TreeSet)obj;
 				else
 				{
 					parts = new TreeSet();
-					imports.put(packageName, parts);					
+					imports.put(NameUtile.getAsName(packageName), parts);					
 				}
 				if(!parts.contains("*"))		//if already on demand, no need to add the specific one //$NON-NLS-1$
 					parts.add(partName);
@@ -369,7 +332,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 		{
 			fNumberOfImportsAdded= 0;
 			fNumberOfImportsRemoved= 0;
-			monitor.beginTask(MessageFormat.format(UINlsStrings.OrganizeImportsOperation_description, new String[]{feglfile.getElementName()}), 5);
+			monitor.beginTask(MessageFormat.format(UINlsStrings.OrganizeImportsOperation_description, new Object[]{feglfile.getElementName()}), 5);
 							
 			workingCopy = getEGLFileWorkingCopy();		
 			IBuffer buf = workingCopy.getBuffer();
@@ -465,6 +428,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 					monitor);
 				
 				removeTypesInDefaultPackage(typeList);
+				removeTypesWithSamePackageAndName(typeList);
 				
 				int foundCnts = typeList.size();
 				if(foundCnts == 1)
@@ -511,19 +475,6 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 		}
 	}
 
-	private void addSystemTypes(List typeList, String unresolvedTypeName, IProject project) {		
-		IPartBinding sysPartBinding = SystemEnvironmentManager.findSystemEnvironment(project, null).getPartBinding(null, unresolvedTypeName);
-		if(sysPartBinding != null && sysPartBinding != IBinding.NOT_FOUND_BINDING){
-			//conver the IPartBinding to PartInfo
-			String[] pkgName = sysPartBinding.getPackageName();
-			IPath pkgPath = Util.stringArrayToPath(pkgName);
-			String packageName = pkgPath.toString().replace(IPath.SEPARATOR, '.');
-			String partName = sysPartBinding.getName();
-			
-			typeList.add(new SystemPartInfo(packageName, partName));
-		}
-	}
-
 	private void removeTypesInDefaultPackage(List typeList) {
 		for(Iterator iter = typeList.iterator(); iter.hasNext();) {
 			PartInfo pInfo = (PartInfo) iter.next();
@@ -532,86 +483,47 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 			}
 		}
 	}
+	
+	private void  removeTypesWithSamePackageAndName(List typeList) {
+		Map<String, Set<String>> pkgToNamesMap = new HashMap<String, Set<String>>();
+		
+		for(Iterator iter = typeList.iterator(); iter.hasNext();) {
+			PartInfo pInfo = (PartInfo) iter.next();
+			Set<String> set = pkgToNamesMap.get(pInfo.getPackageName());
+			if (set == null) {
+				set = new HashSet<String>();
+				set.add(pInfo.getPartName());
+				pkgToNamesMap.put(pInfo.getPackageName(), set);
+			}
+			else {
+				if (set.contains(pInfo.getPartName())) {
+					iter.remove();
+				}
+				else {
+					set.add(pInfo.getPartName());
+				}
+			}			
+		}
+	}
 
 	private void bindFile(final IProject proj, String currPackageName, final OrganizedImportSection resolvedTypes, final Map unresolvedTypes, final Set oldImports) throws EGLModelException {
 		//bind the ast tree with live env and scope
 		IWorkingCopy[] currRegedWCs = EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory());
 		
 		IFile file = (IFile)(feglfile.getCorrespondingResource());
-		Path pkgPath = new Path(currPackageName.replace('.', IPath.SEPARATOR)); 					
-		String[] pkgName = Util.pathToStringArray(pkgPath);
 
 		//visit AST part tree(already bound)		
-		WorkingCopyCompiler.getInstance().compileAllParts(proj, pkgName, file, currRegedWCs,		
+		WorkingCopyCompiler.getInstance().compileAllParts(proj, currPackageName, file, currRegedWCs,		
 					new IWorkingCopyCompileRequestor(){			
 						public void acceptResult(WorkingCopyCompilationResult result) {
 							Node boundnode = result.getBoundPart();
 							if(boundnode instanceof Part){
 								Part boundPart = (Part)boundnode;
-								IBinding boundPartBinding = result.getPartBinding();
-								
-								Boolean isIncludeRefFunc = isIncludeReferenceFunction(boundPartBinding);
-								Boolean topFuncUseContainerContext = isUseContainerContextDependent(boundPartBinding);
-															
-								final OrganizeImportsVisitor visitor = new OrganizeImportsVisitor(resolvedTypes, unresolvedTypes, oldImports, isIncludeRefFunc, proj);							
+								final OrganizeImportsVisitor visitor = new OrganizeImportsVisitor(resolvedTypes, unresolvedTypes, oldImports, Boolean.NO, proj);							
 								visitor.setCurrentPartName(boundPart.getName());
-								
-								//if boundPart is not a topLevel function
-								//or
-								//if boundPart is a topLevel function, then only resolve the imports when useContainerContextDependent is no							
-								if(topFuncUseContainerContext == null || topFuncUseContainerContext == Boolean.NO)
-									boundPart.accept(visitor);			
-								
-								if(isIncludeRefFunc == Boolean.YES)
-								{
-									TopLevelFunction[] topBoundFuncs = result.getBoundFunctions();
-									for(int i=0; i<topBoundFuncs.length; i++)
-									{
-										IBinding funcBinding = topBoundFuncs[i].getName().resolveBinding();
-										if(funcBinding instanceof TopLevelFunctionBinding)
-										{
-											TopLevelFunctionBinding topFuncBinding = (TopLevelFunctionBinding)funcBinding;
-											
-											Boolean topFuncUseContainerConext1 = isUseContainerContextDependent(topFuncBinding);
-											
-											//if the bound top level function has useContainerContextDependent=yes
-											//we need to resolve this top level function(its parameter, return type, all of its statements)
-											//in the context of the result part(i.e. program)
-											if(topFuncUseContainerConext1 == Boolean.YES)
-												topBoundFuncs[i].accept(visitor);
-										}
-									}
-								}
+								boundPart.accept(visitor);			
 							}
 						}						
-				
-						private Boolean isUseContainerContextDependent(IBinding binding)
-						{
-							Boolean topFuncUseContainerContext = null;
-							
-							//get the annotation value
-							IAnnotationBinding containerContextAnnotationBinding = binding.getAnnotation(SystemEnvironmentPackageNames.EGL_CORE, IEGLConstants.PROPERTY_CONTAINERCONTEXTDEPENDENT);
-							if(containerContextAnnotationBinding != null)
-								topFuncUseContainerContext = (Boolean)(containerContextAnnotationBinding.getValue());
-							else
-								topFuncUseContainerContext = Boolean.NO;
-
-							return topFuncUseContainerContext;
-						}
-						
-						private Boolean isIncludeReferenceFunction(IBinding binding)
-						{							
-							Boolean isIncludeRefFunc = null;
-							
-							//get the annotation value
-							IAnnotationBinding inclRefFuncAnnotationBinding = binding.getAnnotation(SystemEnvironmentPackageNames.EGL_CORE, IEGLConstants.PROPERTY_INCLUDEREFERENCEDFUNCTIONS);
-							if(inclRefFuncAnnotationBinding != null)
-								isIncludeRefFunc = (Boolean)(inclRefFuncAnnotationBinding.getValue());
-							else
-								isIncludeRefFunc = Boolean.NO;
-						
-							return isIncludeRefFunc;
-						}
 				}
 		);
 	}

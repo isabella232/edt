@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
@@ -26,6 +27,7 @@ import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IProblemRequestorFactory;
+import org.eclipse.edt.mof.egl.Element;
 
 public class WorkingCopyGenerationResult implements IProblemRequestor, ISyntaxErrorRequestor, IGenerationMessageRequestor, IProblemRequestorFactory {
 
@@ -239,6 +241,53 @@ public class WorkingCopyGenerationResult implements IProblemRequestor, ISyntaxEr
 	}
 	public void sendMessagesToGenerationResultsServer(boolean bool) {
 		workingCopyGenerationResult.sendMessagesToGenerationResultsServer = bool; 		
+	}
+
+	@Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
+		if(severity == IMarker.SEVERITY_ERROR){
+			workingCopyGenerationResult.hasError = true;
+		}
+	}
+
+	@Override
+	public void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts, ResourceBundle bundle) {
+		if(severity == IMarker.SEVERITY_ERROR){
+			workingCopyGenerationResult.hasError = true;
+		}
+	}
+
+	@Override
+	public void acceptProblem(Element element, int problemKind) {
+		workingCopyGenerationResult.hasError = true;
+	}
+
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity) {
+		if(severity == IMarker.SEVERITY_ERROR){
+			workingCopyGenerationResult.hasError = true;
+		}
+	}
+
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity, String[] inserts) {
+		if(severity == IMarker.SEVERITY_ERROR){
+			workingCopyGenerationResult.hasError = true;
+		}
+	}
+
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity, String[] inserts, ResourceBundle bundle) {
+		if(severity == IMarker.SEVERITY_ERROR){
+			workingCopyGenerationResult.hasError = true;
+		}
+	}
+
+	@Override
+	public void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts, ResourceBundle bundle) {
+		if (isError) {
+			workingCopyGenerationResult.hasError = true;
+		}
 	}
 
 }

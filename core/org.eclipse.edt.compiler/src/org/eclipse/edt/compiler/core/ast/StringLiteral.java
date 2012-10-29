@@ -31,10 +31,12 @@ public class StringLiteral extends LiteralExpression {
 		this.isHex = isHex;
 	}
 	
+	@Override
 	public String getValue() {
 		return stringValue;
 	}
-			
+	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		visitor.visit(this);
 		visitor.endVisit(this);
@@ -44,15 +46,23 @@ public class StringLiteral extends LiteralExpression {
 		return isHex;
 	}
 	
+	@Override
 	public int getLiteralKind() {
 		return STRING_LITERAL;
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		return rawString;
 	}
-
+	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new StringLiteral(rawString, stringValue, isHex, getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return rawString;
 	}
 }

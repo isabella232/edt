@@ -1,0 +1,1889 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+// basic program
+//
+program convert7 type BasicProgram
+ {includereferencedFunctions=yes, allowUnqualifiedItemReferences = yes}
+ 
+ // Data Declarations
+ date1 date;
+ date2 date;
+ date3 date;
+ time1 time;
+ time2 time;
+ time3 time;
+ yyyyMMddhhmmssfffffftimestamp1 timestamp("yyyyMMddhhmmssffffff");
+ yyyyMMddhhmmssfffffftimestamp2 timestamp("yyyyMMddhhmmssffffff"); 
+ MMddhhmmssfffffftimestamp1 timestamp("MMddhhmmssffffff");
+ MMddhhmmssfffffftimestamp2 timestamp("MMddhhmmssffffff"); 
+ ddhhmmssfffffftimestamp1 timestamp("ddhhmmssffffff");
+ ddhhmmssfffffftimestamp2 timestamp("ddhhmmssffffff"); 
+ hhmmssfffffftimestamp1 timestamp("hhmmssffffff");
+ hhmmssfffffftimestamp2 timestamp("hhmmssffffff"); 
+ mmssfffffftimestamp1 timestamp("mmssffffff");
+ mmssfffffftimestamp2 timestamp("mmssffffff"); 
+ ssfffffftimestamp1 timestamp("ssffffff");
+ ssfffffftimestamp2 timestamp("ssffffff"); 
+ fffffftimestamp1 timestamp("ffffff");
+ fffffftimestamp2 timestamp("ffffff");
+ yyyyMMddhhmmsstimestamp1 timestamp("yyyyMMddhhmmss");
+ yyyyMMddhhmmsstimestamp2 timestamp("yyyyMMddhhmmss"); 
+ yyyyMMddhhmmtimestamp1 timestamp("yyyyMMddhhmm");
+ yyyyMMddhhmmtimestamp2 timestamp("yyyyMMddhhmm"); 
+ yyyyMMddhhtimestamp1 timestamp("yyyyMMddhh");
+ yyyyMMddhhtimestamp2 timestamp("yyyyMMddhh"); 
+ yyyyMMddtimestamp1 timestamp("yyyyMMdd");
+ yyyyMMddtimestamp2 timestamp("yyyyMMdd"); 
+ yyyyMMtimestamp1 timestamp("yyyyMM");
+ yyyyMMtimestamp2 timestamp("yyyyMM"); 
+ yyyytimestamp1 timestamp("yyyy");
+ yyyytimestamp2 timestamp("yyyy");
+ yyyyyyyyyMMinterval1 interval("yyyyyyyyyMM");
+ yyyyyyyyyMMinterval2 interval("yyyyyyyyyMM");
+ yyyyyyyyMMinterval1 interval("yyyyyyyyMM");
+ yyyyyyyyMMinterval2 interval("yyyyyyyyMM");
+ yyyyyyyMMinterval1 interval("yyyyyyyMM");
+ yyyyyyyMMinterval2 interval("yyyyyyyMM");
+ yyyyyyMMinterval1 interval("yyyyyyMM");
+ yyyyyyMMinterval2 interval("yyyyyyMM");
+ yyyyyMMinterval1 interval("yyyyyMM");
+ yyyyyMMinterval2 interval("yyyyyMM");
+ yyyyMMinterval1 interval("yyyyMM");
+ yyyyMMinterval2 interval("yyyyMM");
+ //yyyyyyyyyMinterval1 interval("yyyyyyyyyM");
+ //yyyyyyyyyMinterval2 interval("yyyyyyyyyM");
+ MMMMMMMMMinterval1 interval("MMMMMMMMM");
+ MMMMMMMMMinterval2 interval("MMMMMMMMM");
+ MMMMMMMMinterval1 interval("MMMMMMMM");
+ MMMMMMMMinterval2 interval("MMMMMMMM");
+ MMMMMMMinterval1 interval("MMMMMMM");
+ MMMMMMMinterval2 interval("MMMMMMM");
+ MMMMMMinterval1 interval("MMMMMM");
+ MMMMMMinterval2 interval("MMMMMM");
+ MMMMMinterval1 interval("MMMMM");
+ MMMMMinterval2 interval("MMMMM");
+ MMMMinterval1 interval("MMMM");
+ MMMMinterval2 interval("MMMM");
+ MMMinterval1 interval("MMM");
+ MMMinterval2 interval("MMM");
+ MMinterval1 interval("MM");
+ MMinterval2 interval("MM");
+ dddhhmmssffffffinterval1 interval ("dddhhmmssffffff");
+ //dddhinterval1 interval("dddh");
+ dddhhinterval1 interval("dddhh");
+ dddhhmminterval1 interval("dddhhmm");
+ dddddddddhhmmssffffffinterval1 interval("dddddddddhhmmssffffff");
+ dddddddddhhmmssffffffinterval2 interval("dddddddddhhmmssffffff");
+ hhhhhhhhhmmssffffffinterval1 interval("hhhhhhhhhmmssffffff");
+ hhhhhhhhhmmssffffffinterval2 interval("hhhhhhhhhmmssffffff");
+ dddddhhmminterval1 interval("dddddhhmm");
+ mmmmmmmmmssinterval1 interval("mmmmmmmmmss");
+ mmmmmmmmmssinterval2 interval("mmmmmmmmmss");
+  string1 string;
+  string2 string;
+ shortchar1 char(4);
+ shortchar2 char(4);
+ longchar1 char(26);
+ longchar2 char(26);
+ bin40item1 bin(4,0);
+ bin40item2 bin(4,0);
+ bin92item2 bin(9,2);
+ bin92item1 bin(9,2);
+ num83item1 num(8,3);
+ num83item2 num(8,3);
+ num8item1 num(8);
+ num8item2 num(8);
+ numc94item1 numc(9,4);
+ numc94item2 numc(9,4);
+ numc9item1 numc(9);
+ numc9item2 numc(9);
+ money5item1 money(5);
+ money5item2 money(5);
+ pacf132item1 pacf(13,2);
+ pacf132item2 pacf(13,2);
+ pacf13item1 pacf(13);
+ pacf13item2 pacf(13); 
+ dec73item1 decimal(7,3);
+ dec73item2 decimal(7,3);
+ dec7item1 decimal(7);
+ dec7item2 decimal(7); 
+ floatitem1 float;
+ floatitem2 float;
+ smallfloatitem1 smallfloat;
+ smallfloatitem2 smallfloat;
+ smallintitem1 smallint;
+ smallintitem2 smallint;
+ intitem1 int;
+ intitem2 int;
+ bigintitem1 bigint;
+ bigintitem2 bigint;
+ 
+  
+ 
+ 
+ function main()
+ 	 writestdout("NOTE THAT THIS WILL NOT WORK IN V7 LIKE IT DID IN V6!!!");
+ 	 WRITESTDOUT("ASSIGNMENT NOW FORMATS AND THEREFORE ADDS FORMATTING CHARACTERS."); 
+ 	 	
+	 defaultDateFormat  = "yyyyMMdd";
+	 defaultTimeFormat  = "HHmmss";
+	 defaultTimeStampFormat  = "yyyy-MM-dd-HH.mm.ss.SSSSSS"; 	 	
+ 	 	
+  	testDateToDate();
+  	testDateToTime();
+  	testDateToTimestamp();
+  	testDateToInterval();
+  testDateToChar();
+  	testDateToStr();
+ 	testDateToNumeric();
+ 	 	
+  	testTimeToDate();
+   	testTimeToTime();
+  	testTimeToTimestamp();
+  	testTimeToInterval();
+  	testTimeToChar();
+  	testTimeToStr();
+  	testTimeToNumeric();
+ 	
+ 	testTimeStampToDate();
+  	testTimeStampToTime();
+  	testTimeStampToTimestamp();
+ 	testTimeStampToInterval();
+  	testTimestampToChar();
+  	testTimestampToStr();
+ 	testTimestampToNumeric();
+
+  	testCharToDate();
+  	testCharToTime();
+  	testCharToTimestamp();
+  	testCharToInterval();
+  	
+ 	testStrToDate();
+ 	testStrToTime();
+ 	testStrToTimestamp();
+ 	testStrToInterval();
+ 	
+ 	testIntervalToDate();
+ 	testIntervalToTime();
+ 	testIntervalToTimestamp();
+ 	testIntervalToInterval(); 	
+ 	testIntervalToChar();
+ 	testIntervalToStr();
+ 	testIntervalToNumeric();  	
+ 		
+  	testNumericToDate();
+ 	testNumericToTime();
+ 	testNumericToTimestamp();
+ 	testNumericToInterval();
+
+	 defaultDateFormat  = "MM/dd/yyyy";
+	 defaultTimeFormat  = "HH:mm:ss";
+	 defaultTimeStampFormat  = "yyyy-MM-dd-HH.mm.ss.SSSSSS";
+ end
+end
+
+ 	function testDateToDate()
+ 		writestdout ("***** date to date ******");
+ 		date1 = "20060316";
+ 		date2 = "20060316";
+ 		date3 = date1;
+ 		if (date3 == date2)
+ 			writestdout("success: date3=date1");
+ 		else
+ 			writestdout ("failure: date3=date1; expected 20060326");
+ 			longchar1 = date3;
+ 			writestdout (longchar1);
+ 		end
+	end
+
+ 	function testDateToTime()
+ 		writestdout ("***** date to time - not allowed V6 or V7 ******");
+// 		date1 = "20060316";
+// 		time2 = "????????";
+//  		time3 = date1;
+// 		if (time3 == time2)
+// 			writestdout("success: time3=date1");
+// 		else
+// 			writestdout ("failure: time3=date1; expected ????");
+// 			longchar1 = time3;
+// 			writestdout (longchar1);
+// 		end
+	end
+
+ 	function testDateToTimestamp()
+ 		writestdout ("***** date to timestamp ******");
+ 		date1 = "20060316";
+ 		yyyyMMddhhmmssfffffftimestamp1 = "20060316000000000000";
+ 		yyyyMMddhhmmssfffffftimestamp2 = date1;
+ 		if (yyyyMMddhhmmssfffffftimestamp2 == yyyyMMddhhmmssfffffftimestamp1)
+ 			writestdout("success: yyyyMMddhhmmssfffffftimestamp2 = date1");
+ 		else
+ 			writestdout ("failure: yyyyMMddhhmmssfffffftimestamp2 = date1; expected ????");
+ 			longchar1 = yyyyMMddhhmmssfffffftimestamp2;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 		yyyyMMtimestamp1 = "200603";
+ 		yyyyMMtimestamp2 = date1;
+ 		if (yyyyMMtimestamp2 == yyyyMMtimestamp1)
+ 			writestdout("success: yyyyMMtimestamp2 = date1");
+ 		else
+ 			writestdout ("failure: yyyyMMtimestamp2 = date1; expected 200603");
+ 			longchar1 = yyyyMMtimestamp2;
+ 			writestdout (longchar1);
+ 		end
+	end
+	
+ 	function testDateToInterval()
+ 		writestdout ("***** date to interval - not allowed V6 or V7 ******");
+// 		// month span interval
+// 		date1 = "20060316";
+// 		yyyyyyyMMinterval1 = "000200603";
+ // 		yyyyyyyMMinterval2 = date1;
+// 		if (yyyyyyyMMinterval2 == yyyyyyyMMinterval1)
+// 			writestdout("success: yyyyyyyMMinterval2 = date1");
+// 		else
+// 			writestdout ("failure: yyyyyyyMMinterval2 = date1; expected 000200603");
+// 			longchar1 = yyyyyyyMMinterval2;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		date1 = "20060316";
+// 		MMMMMinterval1 = "?????";
+//  		MMMMMinterval2 = date1;
+// 		if (MMMMMinterval2 == MMMMMinterval1)
+// 			writestdout("success: MMMMMinterval2 = date1");
+// 		else
+// 			writestdout ("failure: MMMMMinterval2 = date1; expected MMMMM");
+// 			longchar1 = MMMMMinterval2;
+// 			writestdout (longchar1);
+// 		end
+//		// second span interval
+// 		date1 = "20060316";
+// 		hhhhhhhhhmmssffffffinterval1 = "000000000000000000000";
+ // 		hhhhhhhhhmmssffffffinterval2 = date1;
+// 		if (hhhhhhhhhmmssffffffinterval2 == hhhhhhhhhmmssffffffinterval1)
+// 			writestdout("success: hhhhhhhhhmmssffffffinterval1 = date1");
+// 		else
+// 			writestdout ("failure: hhhhhhhhhmmssffffffinterval1 = date1; expected 000000000000000000000");
+// 			longchar1 = yyyyyyyMMinterval2;
+// 			writestdout (longchar1);
+// 		end
+
+	end
+
+ 	function testDateToChar()
+ 		writestdout ("***** date to char ******");
+ 		date1 = "20060316";
+ 		shortchar1 = "2006";
+ 		shortchar2 = date1;
+ 		if (shortchar2 == shortchar1)
+ 			writestdout("success: shortchar2 = date1");
+ 		else
+ 			writestdout ("failure: shortchar2 = date1; expected 2006");
+ 			writestdout (shortchar2);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 	//	longchar2 = " ";
+ 		longchar1 = "20060316            ";
+ 		longchar2 = date1;
+ 		if (longchar2 == longchar1)
+ 			writestdout("success: longchar2 = date1");
+ 		else
+ 			writestdout ("failure: longchar2 = date1; expected 20060316");
+ 			writestdout (longchar2);
+ 		end
+	end
+
+ 	function testDateToStr()
+ 		writestdout ("***** date to str - string not supported in V6 ******");
+ 		date1 = "20060316";
+ //		string2 = " ";
+ 		string1 = "20060316";
+  		string2 = date1;
+  		if (string2 == string1)
+  			writestdout("success: string2 = date1");
+  		else
+  			writestdout ("failure: string2 = date1; expected 20060316");
+  			writestdout (string2);
+ 		end
+ 		
+	end
+
+ 	function testDateToNumeric()
+ 		writestdout ("***** date to numeric ******");
+ 		date1 = "20060316";
+ 		bin40item1 = date1;
+ 		if (bin40item1 == 26745)
+ 			writestdout("success: bin40item1 = date1");
+ 		else
+ 			writestdout ("failure: bin40item1 = date1; expected 316");
+ 			num8item1 = bin40item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 		bin92item1 = date1;
+ 		if (bin92item1 == 38791)
+ 			writestdout("success: bin92item1 = date1");
+ 		else
+ 			writestdout ("failure: bin92item1 = date1; expected 60316");
+ 			num8item1 = bin92item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+
+		date1 = "20060316";
+ 		num83item1 = date1;
+ 		if (num83item1 == 38791)
+ 			writestdout("success: num83item1 = date1");
+ 		else
+ 			writestdout ("failure: num83item1 = date1; expected 60316");
+ 			num8item1 = num83item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+		date1 = "20060316";
+ 		num8item1 = date1;
+ 		if (num8item1 == 38791)
+ 			writestdout("success: num8item1 = date1");
+ 		else
+ 			writestdout ("failure: num8item1 = date1; expected 20060316");
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end 		
+ 		
+ 		date1 = "20060316";
+ 		numc94item1 = date1;
+ 		if (numc94item1 == 38791)
+ 			writestdout("success: numc94item1 = date1");
+ 		else
+ 			writestdout ("failure: numc94item1 = date1; expected 60316");
+ 			num8item1 = numc94item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 		numc9item1 = date1;
+ 		if (numc9item1 == 38791)
+ 			writestdout("success: numc9item1 = date1");
+ 		else
+ 			writestdout ("failure: numc9item1 = date1; expected 20060316");
+ 			num8item1 = numc9item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+
+		date1 = "20060316";
+ 		money5item1 = date1;
+ 		if (money5item1 == 8791)
+ 			writestdout("success: money5item1 = date1");
+ 		else
+ 			writestdout ("failure: money5item1 = date1; expected 316");
+ 			num8item1 = money5item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+		date1 = "20060316";
+ 		floatitem1 = date1;
+ 		if (floatitem1 == 38791)
+ 			writestdout("success: floatitem1 = date1");
+ 		else
+ 			writestdout ("failure: floatitem1 = date1; expected 20060316");
+ 			num8item1 = floatitem1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end 	
+ 		
+		date1 = "20060316";
+ 		smallfloatitem1 = date1;
+ 		if (smallfloatitem1 == 38791)
+ 			writestdout("success: smallfloatitem1 = date1");
+ 		else
+ 			writestdout ("failure: smallfloatitem1 = date1; expected 20060316");
+ 			num8item1 = smallfloatitem1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end 			
+
+		date1 = "20060316";
+ 		pacf132item1 = date1;
+ 		if (pacf132item1 == 38791)
+ 			writestdout("success: pacf132item1 = date1");
+ 		else
+ 			writestdout ("failure: pacf132item1 = date1; expected 20060316");
+ 			num8item1 = pacf132item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 		pacf13item1 = date1;
+ 		if (pacf13item1 == 38791)
+ 			writestdout("success: pacf13item1 = date1");
+ 		else
+ 			writestdout ("failure: pacf13item1 = date1; expected 20060316");
+ 			num8item1 = pacf13item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+
+		date1 = "20060316";
+ 		dec73item1 = date1;
+ 		if (dec73item1 == 38791)
+ 			writestdout("success: dec73item1 = date1");
+ 		else
+ 			writestdout ("failure: dec73item1 = date1; expected 316");
+ 			num8item1 = dec73item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 		dec7item1 = date1;
+ 		if (dec7item1 == 38791)
+ 			writestdout("success: dec7item1 = date1");
+ 		else
+ 			writestdout ("failure: dec7item1 = date1; expected 60316");
+ 			num8item1 = dec7item1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 		smallintitem1 = date1;
+ 		if (smallintitem1 == 26745)
+ 			writestdout("success: smallintitem1 = date1");
+ 		else
+ 			writestdout ("failure: smallintitem1 = date1; expected 316");
+ 			num8item1 = smallintitem1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 		intitem1 = date1;
+ 		if (intitem1 == 38791)
+ 			writestdout("success: intitem1 = date1");
+ 		else
+ 			writestdout ("failure: intitem1 = date1; expected 20060316");
+ 			num8item1 = intitem1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		date1 = "20060316";
+ 		bigintitem1 = date1;
+ 		if (bigintitem1 == 38791)
+ 			writestdout("success: bigintitem1 = date1");
+ 		else
+ 			writestdout ("failure: bigintitem1 = date1; expected 20060316");
+ 			num8item1 = bigintitem1;
+ 			longchar1 = num8item1;
+ 			writestdout (longchar1);
+ 		end
+	end
+
+ 	function testTimeToDate()
+ 		writestdout ("***** time to date - not allowed V6 or V7 ******");
+// 		time1 = "081459";
+// 		date1 = "?????";
+//  		date3 = time1;
+// 		if (date3 == date1)
+// 			writestdout("success: date3=time1");
+// 		else
+// 			writestdout ("failure: date3=time1; expected ????");
+// 			longchar1 = date3;
+// 			writestdout (longchar1);
+// 		end
+	end
+
+ 	function testTimeToTime()
+ 		writestdout ("***** time to time ******");
+ 		time1 = "091533";
+ 		time2 = "091533";
+ 		time3 = time1;
+ 		if (time3 == time2)
+ 			writestdout("success: time3 = time1");
+ 		else
+ 			writestdout ("failure: time3 = time1; expected 091533");
+ 			longchar1 = time3;
+ 			writestdout (longchar1);
+ 		end
+	end
+
+ 	function testTimeToTimestamp()
+ 		writestdout ("***** time to timestamp ******");
+ 		time1 = "084557";
+ 		yyyyMMddhhmmssfffffftimestamp2 = time1;
+		writestdout("success/failure unknown: yyyyMMddhhmmssfffffftimestamp2 = time1");
+		writestdout("verify that value is filled with current yyyyMMdd");
+		writestdout("should be yyyy-MM-dd-08.45.57.000000");
+ 		longchar1 = yyyyMMddhhmmssfffffftimestamp2;
+ 		writestdout (longchar1);
+ 	 		
+ 		time1 = "084557";
+ 		yyyyMMtimestamp1 = "200603";
+ 		yyyyMMtimestamp2 = time1;
+ 		writestdout("success/failure unknown: yyyyMMtimestamp2 = time1");
+		writestdout("verify that value is filled with current yyyy-MM");
+		writestdout("should be yyyyMM");
+		longchar1 = yyyyMMtimestamp2;
+		writestdout (longchar1);
+	end
+
+ 	function testTimeToInterval()
+ 		writestdout ("***** time to interval -not allowed V6 or V7 ******");
+// 		// month span interval
+// 		time1 = "084557";
+// 		yyyyyyyMMinterval1 = "????";
+//  		yyyyyyyMMinterval2 = time1;
+// 		if (yyyyyyyMMinterval2 == yyyyyyyMMinterval1)
+// 			writestdout("success: yyyyyyyMMinterval2 = time1");
+// 		else
+// 			writestdout ("failure: yyyyyyyMMinterval2 = time1; expected ????");
+// 			longchar1 = yyyyyyyMMinterval2;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		time1 = "084557";
+// 		MMMMMinterval1 = "?????";
+ //		MMMMMinterval2 = time1;
+// 		if (MMMMMinterval2 == MMMMMinterval1)
+// 			writestdout("success: MMMMMinterval2 = time1");
+// 		else
+// 			writestdout ("failure: MMMMMinterval2 = time1; expected MMMMM");
+// 			longchar1 = MMMMMinterval2;
+// 			writestdout (longchar1);
+// 		end
+//		// second span interval
+// 		time1 = "084557";
+// 		hhhhhhhhhmmssffffffinterval1 = "000000000000000000000";
+// 		hhhhhhhhhmmssffffffinterval2 = time1;
+// 		if (hhhhhhhhhmmssffffffinterval2 == hhhhhhhhhmmssffffffinterval1)
+// 			writestdout("success: hhhhhhhhhmmssffffffinterval1 = time1");
+// 		else
+// 			writestdout ("failure: hhhhhhhhhmmssffffffinterval1 = time1; expected 000000000000000000000");
+// 			longchar1 = yyyyyyyMMinterval2;
+// 			writestdout (longchar1);
+// 		end 		
+	end
+
+ 	function testTimeToChar()
+ 		writestdout ("***** time to char ******");
+ 		time1 = "084557";
+ 		shortchar1 = "0845";
+ 		shortchar2 = time1;
+ 		if (shortchar2 == shortchar1)
+ 			writestdout("success: shortchar2 = time1");
+ 		else
+ 			writestdout ("failure: shortchar2 = time1; expected 0845");
+ 			writestdout (shortchar2);
+ 		end
+ 		
+ 		time1 = "084557";
+ 		longchar1 = "084557           ";
+ 		longchar2 = time1;
+ 		if (longchar2 == longchar1)
+ 			writestdout("success: longchar2 = time1");
+ 		else
+ 			writestdout ("failure: longchar2 = time1; expected 084557");
+ 			writestdout (longchar2);
+ 		end
+	end
+
+ 	function testTimeToStr()
+ 		writestdout ("***** time to str - string not valid in V6.0 ******");
+  		time1 = "084557";
+  		string1 = "084557";
+  		string2 = time1;
+ 		if (string2 == string1)
+  			writestdout("success: string2 = time1");
+  		else
+ 			writestdout ("failure: string2 = time1; expected 084557");
+  			writestdout (string2);
+  		end 		
+	end
+
+ 	function testTimeToNumeric()
+ 		writestdout ("***** time to numeric - not allowed V6 or V7 ******");
+// 		time1 = "084557";
+ //		bin40item1 = time1;
+// 		if (bin40item1 == 084557)
+// 			writestdout("success: bin40item1 = time1");
+// 		else
+// 			writestdout ("failure: bin40item1 = time1; expected 084557");
+// 			num83item1 = bin40item1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		time1 = "084557";
+//  		bin92item1 = time1;
+// 		if (bin92item1 == 084557)
+// 			writestdout("success: bin92item1 = time1");
+// 		else
+// 			writestdout ("failure: bin92item1 = time1; expected 084557");
+// 			num83item1 = bin92item1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+//
+//		time1 = "084557";
+ // 		num83item1 = time1;
+// 		if (num83item1 == 084557)
+// 			writestdout("success: num83item1 = time1");
+// 		else
+// 			writestdout ("failure: num83item1 = time1; expected 084557");
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+// 		
+//		time1 = "084557";
+//  		num8item1 = time1;
+// 		if (num8item1 == 084557)
+// 			writestdout("success: num8item1 = time1");
+// 		else
+// 			writestdout ("failure: num8item1 = time1; expected 084557");
+// 			longchar1 = num8item1;
+// 			writestdout (longchar1);
+// 		end 		
+// 		
+// 		time1 = "084557";
+//  		numc94item1 = time1;
+// 		if (numc94item1 == 084557)
+// 			writestdout("success: numc94item1 = time1");
+// 		else
+// 			writestdout ("failure: numc94item1 = time1; expected 084557");
+// 			num83item1 = numc94item1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		time1 = "084557";
+ // 		numc9item1 = time1;
+// 		if (numc9item1 == 084557)
+// 			writestdout("success: numc9item1 = time1");
+// 		else
+// 			writestdout ("failure: numc9item1 = time1; expected 084557");
+// 			num8item1 = numc9item1;
+// 			longchar1 = num8item1;
+// 			writestdout (longchar1);
+// 		end
+//
+//		time1 = "084557";
+ // 		money5item1 = time1;
+// 		if (money5item1 == 084557)
+// 			writestdout("success: money5item1 = time1");
+// 		else
+// 			writestdout ("failure: money5item1 = time1; expected 084557");
+// 			num83item1 = money5item1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+//
+//		time1 = "073144";
+//  		floatitem1 = time1;
+// 		if (floatitem1 == 073144)
+// 			writestdout("success: floatitem1 = time1");
+// 		else
+// 			writestdout ("failure: floatitem1 = time1; expected 073144");
+// 			num83item1 = floatitem1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end 	
+// 		
+//		time1 = "073144";
+//  		smallfloatitem1 = time1;
+// 		if (smallfloatitem1 == 073144)
+// 			writestdout("success: smallfloatitem1 = time1");
+// 		else
+// 			writestdout ("failure: smallfloatitem1 = time1; expected 073144");
+// 			num83item1 = smallfloatitem1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end 		
+//
+//		time1 = "084557";
+//  		pacf132item1 = time1;
+// 		if (pacf132item1 == 084557)
+// 			writestdout("success: pacf132item1 = time1");
+// 		else
+// 			writestdout ("failure: pacf132item1 = time1; expected 084557");
+// 			num83item1 = pacf132item1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		time1 = "084557";
+// 		pacf13item1 = time1;
+// 		if (pacf13item1 == 084557)
+// 			writestdout("success: pacf13item1 = time1");
+// 		else
+// 			writestdout ("failure: pacf13item1 = time1; expected 084557");
+// 			num8item1 = pacf13item1;
+// 			longchar1 = num8item1;
+// 			writestdout (longchar1);
+// 		end
+//
+//		time1 = "084557";
+//  		dec73item1 = time1;
+// 		if (dec73item1 == 084557)
+// 			writestdout("success: dec73item1 = time1");
+// 		else
+// 			writestdout ("failure: dec73item1 = time1; expected 084557");
+// 			num83item1 = dec73item1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		time1 = "084557";
+ // 		dec7item1 = time1;
+// 		if (dec7item1 == 084557)
+// 			writestdout("success: dec7item1 = time1");
+// 		else
+// 			writestdout ("failure: dec7item1 = time1; expected 084557");
+// 			num8item1 = dec7item1;
+// 			longchar1 = num8item1;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		time1 = "084557";
+//  		smallintitem1 = time1;
+// 		if (smallintitem1 == 084557)
+// 			writestdout("success: smallintitem1 = time1");
+// 		else
+// 			writestdout ("failure: smallintitem1 = time1; expected 084557");
+// 			num83item1 = smallintitem1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		time1 = "084557";
+//  		intitem1 = time1;
+// 		if (intitem1 == 084557)
+// 			writestdout("success: intitem1 = time1");
+// 		else
+// 			writestdout ("failure: intitem1 = time1; expected 084557");
+// 			num83item1 = intitem1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end
+// 		
+// 		time1 = "084557";
+ // 		bigintitem1 = time1;
+// 		if (bigintitem1 == 084557)
+// 			writestdout("success: bigintitem1 = time1");
+// 		else
+// 			writestdout ("failure: bigintitem1 = time1; expected 084557");
+// 			num83item1 = bigintitem1;
+// 			longchar1 = num83item1;
+// 			writestdout (longchar1);
+// 		end 		
+	end
+
+ 	function testTimeStampToDate()
+ 		writestdout ("***** timestamp to date ******");
+ 		yyyyMMddhhmmssfffffftimestamp1 = "20060316111223000000";
+ 		date1 = yyyyMMddhhmmssfffffftimestamp1;
+ 		date2 = "20060316";
+ 		if (date1 == date2)
+ 			writestdout("success: date1 = yyyyMMddhhmmssfffffftimestamp1");
+ 		else
+ 			writestdout ("failure: date1 = yyyyMMddhhmmssfffffftimestamp1; expected 20060316");
+
+ 		end
+ 		writestdout("date1 is ");
+ 			longchar1 = date1;
+ 			writestdout (longchar1);
+ 			writestdout("date2 is ");
+ 			longchar1 = date2;
+ 			writestdout (longchar1);
+ 		
+ 		yyyyMMtimestamp1 = "200603";
+ 		date1 = yyyyMMtimestamp1;
+ 		date2 = "20060300";
+ 		if (date1 == date2)
+ 			writestdout("success: date1 = yyyyMMtimestamp1;");
+ 		else
+ 			writestdout ("failure: date1 = yyyyMMtimestamp1;; expected 20060300");
+ 			writestdout ("what should the day be????"); 
+ 			
+ 		end
+ 		writestdout("date1 is ");
+ 			longchar1 = date1;
+ 			writestdout (longchar1);
+ 			writestdout("date2 is ");
+ 			longchar1 = date2;
+ 			writestdout (longchar1);
+	end
+
+ 	function testTimeStampToTime()
+ 		writestdout ("***** timestamp to time ******");
+ 		yyyyMMddhhmmssfffffftimestamp1 = "20060316111223000000";
+ 		time1 = yyyyMMddhhmmssfffffftimestamp1;
+ 		time2 = "111223";
+ 		if (time1 == time2)
+ 			writestdout("success: time1 = yyyyMMddhhmmssfffffftimestamp1");
+ 		else
+ 			writestdout ("failure: time1 = yyyyMMddhhmmssfffffftimestamp1; expected 111223");
+ 			
+ 		end
+ 		writestdout("time1 is ");
+ 			longchar1 = time1;
+ 			writestdout (longchar1);
+ 			writestdout("time2 is ");
+ 			longchar1 = time2;
+ 			writestdout (longchar1);
+ 		
+ 		yyyyMMtimestamp1 = "200603";
+ 		time1 = yyyyMMtimestamp1;
+ 		time2 = "000000";
+ 		if (time1 == time2)
+ 			writestdout("success: time1 = yyyyMMtimestamp1;");
+ 		else
+ 			writestdout ("failure: time1 = yyyyMMtimestamp1;; expected 000000");
+ 			
+ 		end 
+ 		writestdout("time1 is ");
+ 			longchar1 = time1;
+ 			writestdout (longchar1);
+ 			writestdout("time2 is ");
+ 			longchar1 = time2;
+ 			writestdout (longchar1);		
+	end
+
+ 	function testTimeStampToTimestamp()
+ 		writestdout ("***** timestamp to timestamp ******");
+ 		// long to short on high end - upper truncation
+ 		yyyyMMddhhmmssfffffftimestamp1 = "200603160816451234556";
+ 		MMddhhmmssfffffftimestamp1 = yyyyMMddhhmmssfffffftimestamp1;
+ 		MMddhhmmssfffffftimestamp2 = "03160816451234556";
+ 		if (MMddhhmmssfffffftimestamp1 == MMddhhmmssfffffftimestamp2)
+ 			writestdout("success: MMddhhmmssfffffftimestamp1 == MMddhhmmssfffffftimestamp2");
+ 		else
+ 			writestdout ("failure: MMddhhmmssfffffftimestamp1 == MMddhhmmssfffffftimestamp2; expected 03-16-08.16.45.1234556");
+ 			longchar1 = MMddhhmmssfffffftimestamp1;
+ 			writestdout (longchar1);
+ 		end
+ 		
+ 		// short on long high end - upper extension
+ 		ddhhmmssfffffftimestamp1 = "16081445123456";
+ 		yyyyMMddhhmmssfffffftimestamp1 = ddhhmmssfffffftimestamp1;
+ 		writestdout("success/failure unknown: yyyyMMddhhmmssfffffftimestamp1 = ddhhmmssfffffftimestamp1");
+ 		writestdout("should be current yyyy-MM-16-08.14.45.123456");
+ 		longchar1 = yyyyMMddhhmmssfffffftimestamp1;
+ 		writestdout ("                  " + longchar1);
+
+		// long to short on low end, short to long on high end 
+		//    - truncation on right, extension on left
+		hhmmssfffffftimestamp1 = "0816451234556";
+ 		yyyyMMddhhmmsstimestamp1 = hhmmssfffffftimestamp1;
+ 		writestdout("success/failure unknown: yyyyMMddhhmmsstimestamp1 = hhmmssfffffftimestamp1;");
+ 		writestdout("should be current yyyy-MM-dd-08.16.45");
+ 		longchar1 = yyyyMMddhhmmsstimestamp1;
+ 		writestdout ("                  " + longchar1);
+	
+	end
+
+ 	function testTimeStampToInterval()
+ 		writestdout ("***** timestamp to interval - not allowed V6 or V7 ******");
+// 		yyyyMMddhhmmssfffffftimestamp1 = "200603160816451234556";
+ // 		dddddddddhhmmssffffffinterval1 = yyyyMMddhhmmssfffffftimestamp1;
+// 		yyyyMMinterval1 = yyyyMMddhhmmssfffffftimestamp1;
+	end
+
+ 	function testTimestampToChar()
+ 		writestdout ("***** timestamp to char ******");
+ 		yyyyMMddhhmmssfffffftimestamp1 = "19870316081445123456";
+ 		shortchar1 = yyyyMMddhhmmssfffffftimestamp1;
+  		if (shortchar1 == "1987")
+ 			writestdout("success: shortchar1 = yyyyMMddhhmmssfffffftimestamp1;");
+ 		else
+ 			writestdout ("failure: shortchar1 = yyyyMMddhhmmssfffffftimestamp1;; expected 1987");
+ 			writestdout (shortchar2);
+ 		end
+ 		
+ 		yyyyMMddhhmmssfffffftimestamp1 = "19870316081445123456";
+ 		longchar1 = yyyyMMddhhmmssfffffftimestamp1;
+  		if (longchar1 == "1987-03-16-08.14.45.123456")
+ 			writestdout("success: longchar1 = yyyyMMddhhmmssfffffftimestamp1;");
+ 		else
+ 			writestdout ("failure: longchar1 = yyyyMMddhhmmssfffffftimestamp1;; expected 1987-03-16-08.14.45.123456");
+ 			writestdout ("                                                               " + longchar1);
+ 		end
+ 		
+ 		ssfffffftimestamp1 = "45123456";
+ 		longchar1 = ssfffffftimestamp1;
+  		if (longchar1 == "45.123456")
+ 			writestdout("success: longchar1 = ssfffffftimestamp1;");
+ 		else
+ 			writestdout ("failure: longchar1 = ssfffffftimestamp1;; expected 45.123456");
+ 			writestdout ("                                                   " + longchar1);
+ 		end 		
+		
+	end
+
+ 	function testTimestampToStr()
+ 		writestdout ("***** timestamp to str  - string not valid in V6  ******");
+ 		yyyyMMddhhmmssfffffftimestamp1 = "19870316081445123456";
+ 		string1 = yyyyMMddhhmmssfffffftimestamp1;
+  		if (string1 == "1987-03-16-08.14.45.123456")
+ 			writestdout("success: string1 = yyyyMMddhhmmssfffffftimestamp1;");
+ 		else
+ 			writestdout ("failure: string1 = yyyyMMddhhmmssfffffftimestamp1; expected 1987-03-16-08.14.45.123456");
+ 			writestdout ("                                                            " + string1);
+ 		end
+ 		
+ 		yyyyMMddhhmmssfffffftimestamp1 = "19870316081445123456";
+ 		string1 = yyyyMMddhhmmssfffffftimestamp1;
+  		if (string1 == "1987-03-16-08.14.45.123456")
+ 			writestdout("success: string1 = yyyyMMddhhmmssfffffftimestamp1;");
+ 		else
+ 			writestdout ("failure: string1 = yyyyMMddhhmmssfffffftimestamp1;; expected 1987-03-16-08.14.45.123456");
+ 			writestdout ("                                                            " + string1);
+ 		end
+ 		
+ 		ssfffffftimestamp1 = "45123456";
+ 		string1 = ssfffffftimestamp1;
+  		if (string1 == "45.123456")
+ 			writestdout("success: string1 = ssfffffftimestamp1;");
+ 		else
+ 			writestdout ("failure: string1 = ssfffffftimestamp1;; expected 45.123456");
+ 			writestdout ("                                                 " + string1);
+ 		end 		
+	end
+
+ 	function testTimestampToNumeric()
+ 		writestdout ("***** timestamp to numeric - not allowed V6 or V7 ******");
+//  		 bin40item1 = yyyyMMddhhmmssfffffftimestamp1;
+// 		 bin92item2 = yyyyMMddhhmmssfffffftimestamp1;
+// 		 num83item1 = yyyyMMddhhmmssfffffftimestamp1;
+// 		 num8item1 = yyyyMMddhhmmssfffffftimestamp1;
+ //		 numc94item1 = yyyyMMddhhmmssfffffftimestamp1;
+//		 numc9item1 = yyyyMMddhhmmssfffffftimestamp1;
+//		 money5item1 = yyyyMMddhhmmssfffffftimestamp1;
+//		 pacf132item1 = yyyyMMddhhmmssfffffftimestamp1;;
+//		 pacf13item1 = yyyyMMddhhmmssfffffftimestamp1;
+//		 dec73item1 = yyyyMMddhhmmssfffffftimestamp1;
+//		 dec7item1 = yyyyMMddhhmmssfffffftimestamp1;
+//		 floatitem1 = yyyyMMddhhmmssfffffftimestamp1;
+//		 smallfloatitem1 = yyyyMMddhhmmssfffffftimestamp1;
+//		 smallintitem1  = yyyyMMddhhmmssfffffftimestamp1;
+//		 intitem1  = yyyyMMddhhmmssfffffftimestamp1;
+//		 bigintitem1  = yyyyMMddhhmmssfffffftimestamp1;
+	end
+
+ 	function testIntervalToDate()
+ 		writestdout ("***** interval to date - not allowed V6 or V7 ******");
+ 		 // month span interval
+//  		 date1 = yyyyyyyyyMinterval1;
+//		 // second span interval
+ //		 date1 = dddddddddhhmmssffffffinterval1;
+	end
+
+ 	function testIntervalToTime()
+ 		writestdout ("***** interval to time - not allowed V6 or V7 ******");
+ 		 // month span interval
+ // 		 time1 = yyyyyyyyyMMinterval1;
+//		 // second span interval
+ //		 time1 = dddddddddhhmmssffffffinterval1; 		
+	end
+
+ 	function testIntervalToTimestamp()
+ 		writestdout ("***** interval to timestamp - not allowed V6 or V7 ******");
+ 		 // month span interval
+//  		 MMddhhmmssfffffftimestamp1 = yyyyyyyyyMMinterval1;
+//		 // second span interval
+ //		 MMddhhmmssfffffftimestamp1 = dddddddddhhmmssffffffinterval1; 		
+	end
+
+ 	function testIntervalToInterval()
+ 		writestdout ("***** interval to interval ******");
+ 		 // month span interval
+  		 yyyyyyyyyMMinterval1 = "00000012304";
+  		 yyyyyyyyyMMinterval1 = yyyyyyyyyMMinterval1;
+  		 longchar1 = yyyyyyyyyMMinterval1;
+  		 writestdout ("should be +00000012304");
+	 	 writestdout ("GOT       " + longchar1);
+		 
+		 yyyyyyyyyMMinterval1 = "00000012314";
+  		 yyyyyyyyyMMinterval1 = yyyyyyyyyMMinterval1;
+  		 longchar1 = yyyyyyyyyMMinterval1;
+  		 writestdout ("should be +00000012402");
+	 	 writestdout ("GOT       " + longchar1);
+		 
+		 // second span interval
+		 dddddddddhhmmssffffffinterval1 = "0000000000099330000";
+		 mmmmmmmmmssinterval1 = dddddddddhhmmssffffffinterval1; 
+		 longchar1 = mmmmmmmmmssinterval1;
+		 writestdout ("should be +00000009933");
+		 writestdout ("GOT       " + longchar1);
+		 
+		 dddddddddhhmmssffffffinterval1 = "0000000000099730000";
+		 mmmmmmmmmssinterval1 = dddddddddhhmmssffffffinterval1; 
+		 longchar1 = mmmmmmmmmssinterval1;
+		 writestdout ("should be +00000010013");
+		 writestdout ("GOT       " + longchar1);
+	end
+
+ 	function testIntervalToChar()
+ 		writestdout ("***** interval to char ******");
+ 		 // month span interval
+ 		 yyyyyyyyyMMinterval1 = "00000012304";
+ 	 	 longchar1 = yyyyyyyyyMMinterval1;
+  		 writestdout("should be +00000012304");
+ 	 	 writestdout("GOT       " + longchar1); 
+ 	 	 		 
+		 // second span interval            
+		 dddddddddhhmmssffffffinterval1 = "000000000009933000000";
+		 longchar1 = dddddddddhhmmssffffffinterval1; 
+		 writestdout("should be +000000000013933000000");
+ 		 writestdout("GOT       " + longchar1); 
+ 		                              
+ 		 dddhhmmssffffffinterval1 = "000009933000000";
+		 longchar1 = dddhhmmssffffffinterval1; 
+		 writestdout("should be +000013933000000");
+ 		 writestdout("GOT       " + longchar1); 
+ 		 
+ 		 dddhhmminterval1 = "1230262";
+ 		 longchar1 = dddhhmminterval1; 
+		 writestdout("should be +1230302");
+ 		 writestdout("GOT       " + longchar1); 
+ 		 
+ 		 // compile error at V6 - zero length pattern sent to conversion routines
+  		 dddhhinterval1 = "1234";
+  		 longchar1 = dddhhinterval1; 
+ 		 writestdout("should be +12304");
+  		 writestdout("GOT       " + longchar1); 
+	end
+
+ 	function testIntervalToStr()
+ 		writestdout ("***** interval to str  - string not valid in V6  ******");
+ 		 // month span interval
+ 		                         
+  		 yyyyyyyyyMMinterval1 = "00000012304";
+ 	 	 string1 = yyyyyyyyyMMinterval1;
+  		 writestdout("should be +00000012304");
+ 	 	 writestdout("GOT       " + string1); 
+ 		 
+		 // second span interval            
+		 dddddddddhhmmssffffffinterval1 = "000000000009933000000";
+		 string1 = dddddddddhhmmssffffffinterval1; 
+		 writestdout("should be +000000000013933000000");
+ 		 writestdout("GOT       " + string1); 
+ 		                              
+ 		 dddhhmmssffffffinterval1 = "000009933000000";
+		 string1 = dddhhmmssffffffinterval1; 
+		 writestdout("should be +000013933000000");
+ 		 writestdout("GOT       " + string1); 
+ 		 
+ 		 dddhhmminterval1 = "1230262";
+ 		 string1 = dddhhmminterval1; 
+		 writestdout("should be +1230302");
+ 		 writestdout("GOT       " + string1); 
+ 		 
+  		 dddhhinterval1 = "1234";
+  		 string1 = dddhhinterval1; 
+ 		 writestdout("should be +12304");
+  		 writestdout("GOT       " + string1); 
+	end
+
+ 	function testIntervalToNumeric()
+ 		numc184item numc(18,4);
+ 		writestdout ("***** interval to numeric - not allowed in V6 ******");
+ 		// month span interval
+ 		 yyyyyyyyyMMinterval1 = "00000004506";
+  		 bin40item1 = yyyyyyyyyMMinterval1;
+  		 if (bin40item1 == 4506)
+  		    writestdout("success: bin40item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: bin40item1 = yyyyyyyyyMMinterval1; expected 4506");
+  		 end    
+  		 numc184item = bin40item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 bin92item2 = yyyyyyyyyMMinterval1;											//1
+ 		 if (bin92item2 == 1234506)
+  		    writestdout("success: bin92item2 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: bin92item2 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end    
+  		 numc184item = bin92item2;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 yyyyyyyyyMMinterval1 = "00000034506";
+ 		 num83item1 = yyyyyyyyyMMinterval1;											//1
+ 		 if (num83item1 == 34506)
+  		    writestdout("success: num83item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: num83item1 = yyyyyyyyyMMinterval1; expected 34506");
+  		 end  
+  		 numc184item = num83item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 num8item1 = yyyyyyyyyMMinterval1;
+ 		 if (num8item1 == 1234506)
+  		    writestdout("success: num8item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: num8item1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end   
+  		 numc184item = num8item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 yyyyyyyyyMMinterval1 = "00000034506";
+ 		 numc94item1 = yyyyyyyyyMMinterval1;											//1
+ 		 if (numc94item1 == 34506)
+  		    writestdout("success: numc94item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: numc94item1 = yyyyyyyyyMMinterval1; expected 34506");
+  		 end    
+  		 numc184item = numc94item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 numc9item1 = yyyyyyyyyMMinterval1;
+ 		 if (numc9item1 == 1234506)
+  		    writestdout("success: numc9item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: numc9item1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end   
+  		 numc184item = numc9item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 yyyyyyyyyMMinterval1 = "00000004506";
+ 		 money5item1 = yyyyyyyyyMMinterval1;											//1
+ 		 if (money5item1 == 4506)
+  		    writestdout("success: money5item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: money5item1 = yyyyyyyyyMMinterval1; expected 4506");
+  		 end    
+  		 numc184item = money5item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 pacf132item1 = yyyyyyyyyMMinterval1;											//1
+ 		 if (pacf132item1 == 1234506)
+  		    writestdout("success: pacf132item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: pacf132item1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end    
+  		 numc184item = pacf132item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 pacf13item1 = yyyyyyyyyMMinterval1;
+ 		 if (pacf13item1 == 1234506)
+  		    writestdout("success: pacf13item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: pacf13item1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end    
+  		 numc184item = pacf13item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 yyyyyyyyyMMinterval1 = "00000000506";
+ 		 dec73item1 = yyyyyyyyyMMinterval1;											//1
+ 		 if (dec73item1 == 506)
+  		    writestdout("success: dec73item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: dec73item1 = yyyyyyyyyMMinterval1; expected 506");
+  		 end    
+  		 numc184item = dec73item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 dec7item1 = yyyyyyyyyMMinterval1;
+ 		 if (dec7item1 == 1234506)
+  		    writestdout("success: dec7item1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: dec7item1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end    
+  		 numc184item = dec7item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 floatitem1 = yyyyyyyyyMMinterval1;													//1
+ 		 if (floatitem1 == 1234506)
+  		    writestdout("success: floatitem1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: floatitem1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end    
+  		 numc184item = floatitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 smallfloatitem1 = yyyyyyyyyMMinterval1;											//1
+ 		 if (smallfloatitem1 == 1234506)
+  		    writestdout("success: smallfloatitem1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: smallfloatitem1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end    
+  		 numc184item = smallfloatitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 yyyyyyyyyMMinterval1 = "00000004506";
+ 		 smallintitem1  = yyyyyyyyyMMinterval1;
+ 		 if (smallintitem1 == 4506)
+  		    writestdout("success: smallintitem1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: smallintitem1 = yyyyyyyyyMMinterval1; expected 4506");
+  		 end
+  		 numc184item = smallintitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 intitem1  = yyyyyyyyyMMinterval1;
+ 		 if (intitem1 == 1234506)
+  		    writestdout("success: intitem1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: intitem1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end
+  		 numc184item = intitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 yyyyyyyyyMMinterval1 = "00001234506";
+ 		 bigintitem1  = yyyyyyyyyMMinterval1;
+ 		 if (bigintitem1 == 1234506)
+  		    writestdout("success: bigintitem1 = yyyyyyyyyMMinterval1");
+  		 else writestdout("failure: bigintitem1 = yyyyyyyyyMMinterval1; expected 1234506");
+  		 end
+  		 numc184item = bigintitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+  		 
+  		 dddddhhmminterval1 = "000002233";
+ 		 // second span interval
+ 		 bin40item1 = dddddhhmminterval1;
+ 		 if (bin40item1 == 2233)
+  		    writestdout("success: bin40item1 = dddddhhmminterval1");
+  		 else writestdout("failure: bin40item1 = dddddhhmminterval1; expected 2233");
+  		 end
+  		 numc184item = bin40item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "003452233";
+ 		 bin92item2 = dddddhhmminterval1;											//1
+ 		 if (bin92item2 == 3452233)
+  		    writestdout("success: bin92item2 = dddddhhmminterval1");
+  		 else writestdout("failure: bin92item2 = dddddhhmminterval1; expected 3452233");
+  		 end
+  		 numc184item = bin92item2;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "00002233";
+ 		 num83item1 = dddddhhmminterval1;											//1
+ 		 if (num83item1 == 22303)
+  		    writestdout("success: num83item1 = dddddhhmminterval1");
+  		 else writestdout("failure: num83item1 = dddddhhmminterval1; expected 22303");
+  		 end
+  		 numc184item = num83item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "023452233";
+ 		 num8item1 = dddddhhmminterval1;
+ 		 if (num8item1 == 23452233)
+  		    writestdout("success: num8item1 = dddddhhmminterval1");
+  		 else writestdout("failure: num8item1 = dddddhhmminterval1; expected 23452233");
+  		 end
+  		 numc184item = num8item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "000052233";
+ 		 numc94item1 = dddddhhmminterval1;											//1
+ 		 if (numc94item1 == 52233)
+  		    writestdout("success: numc94item1 = dddddhhmminterval1");
+  		 else writestdout("failure: numc94item1 = dddddhhmminterval1; expected 52233");
+  		 end
+  		 numc184item = numc94item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "123452233";
+ 		 numc9item1 = dddddhhmminterval1;
+ 		 if (numc9item1 == 123452233)
+  		    writestdout("success: numc9item1 = dddddhhmminterval1");
+  		 else writestdout("failure: numc9item1 = dddddhhmminterval1; expected 123452233");
+  		 end
+  		 numc184item = numc9item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "000000433";
+ 		 money5item1 = dddddhhmminterval1;											//1
+ 		 if (money5item1 == 433)
+  		    writestdout("success: money5item1 = dddddhhmminterval1");
+  		 else writestdout("failure: money5item1 = dddddhhmminterval1; expected 433");
+  		 end
+  		 numc184item = money5item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "123452233";
+ 		 pacf132item1 = dddddhhmminterval1;;											//1
+ 		 if (pacf132item1 == 123452233)
+  		    writestdout("success: pacf132item1 = dddddhhmminterval1");
+  		 else writestdout("failure: pacf132item1 = dddddhhmminterval1; expected 123452233");
+  		 end
+  		 numc184item = pacf132item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "123452233";
+ 		 pacf13item1 = dddddhhmminterval1;
+ 		 if (pacf13item1 == 123452233)
+  		    writestdout("success: pacf13item1 = dddddhhmminterval1");
+  		 else writestdout("failure: pacf13item1 = dddddhhmminterval1; expected 123452233");
+  		 end
+  		 numc184item = pacf13item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "000002233";
+ 		 dec73item1 = dddddhhmminterval1;											//1
+ 		 if (dec73item1 == 2233)
+  		    writestdout("success: dec73item1 = dddddhhmminterval1");
+  		 else writestdout("failure: dec73item1 = dddddhhmminterval1; expected 2233");
+  		 end
+  		 numc184item = dec73item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "003452233";
+ 		 dec7item1 = dddddhhmminterval1;
+ 		 if (dec7item1 == 3452233)
+  		    writestdout("success: dec7item1 = dddddhhmminterval1");
+  		 else writestdout("failure: dec7item1 = dddddhhmminterval1; expected 3452233");
+  		 end
+  		 numc184item = dec7item1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "123452233";
+ 		 floatitem1 = dddddhhmminterval1;													//1
+ 		 if (floatitem1 == 123452233)
+  		    writestdout("success: floatitem1 = dddddhhmminterval1");
+  		 else writestdout("failure: floatitem1 = dddddhhmminterval1; expected 123452233");
+  		 end
+  		 numc184item = floatitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "123452233";
+ 		 smallfloatitem1 = dddddhhmminterval1;												//1
+ 		 if (smallfloatitem1 == 123452233)
+  		    writestdout("success: smallfloatitem1 = dddddhhmminterval1");
+  		 else writestdout("failure: smallfloatitem1 = dddddhhmminterval1; expected 123452233");
+  		 end
+  		 numc184item = smallfloatitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "000002233";
+ 		 smallintitem1  = dddddhhmminterval1;
+ 		 if (smallintitem1 == 2233)
+  		    writestdout("success: smallintitem1 = dddddhhmminterval1");
+  		 else writestdout("failure: smallintitem1 = dddddhhmminterval1; expected 2233");
+  		 end
+  		 numc184item = smallintitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "123452233";
+ 		 intitem1  = dddddhhmminterval1;
+ 		 if (intitem1 == 123452233)
+  		    writestdout("success: intitem1 = dddddhhmminterval1");
+  		 else writestdout("failure: intitem1 = dddddhhmminterval1; expected 123452233");
+  		 end
+  		 numc184item = intitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+ 		 dddddhhmminterval1 = "123452233";
+ 		 bigintitem1  = dddddhhmminterval1;
+ 		 if (bigintitem1 == 123452233)
+  		    writestdout("success: bigintitem1 = dddddhhmminterval1");
+  		 else writestdout("failure: bigintitem1 = dddddhhmminterval1; expected 123452233");
+  		 end
+  		 numc184item = bigintitem1;
+  		 longchar1 = numc184item;
+  		 writestdout(longchar1);
+ 		 
+	end
+
+ 	function testCharToDate()
+ 		writestdout ("***** char to date ******");
+
+ 		shortchar1 = "2006";
+ 		date1 = shortchar1;
+ 		date2 = "20060000";
+ 		if (date1 == date2)
+ 			writestdout("success: date1 = shortchar1");
+ 		else
+ 			writestdout ("failure: date1 = shortchar1; expected 20060000");
+ 			longchar2 = date1;
+ 			writestdout (longchar2);
+ 		end
+ 		writestdout ("date1 = ");
+ 		longchar2 = date1;
+ 		writestdout (longchar2);
+ 		writestdout ("date2 = ");
+ 		longchar2 = date2;
+ 		writestdout (longchar2);
+ 		
+ 		longchar1 = "20060316081322";
+ 		date1 = longchar1;
+ 		date2 = "20060316";
+ 		if (date1 == date2)
+ 			writestdout("success: date1 = longchar1");
+ 		else
+ 			writestdout ("failure: date1 = longchar1; expected 20060316");
+ 		end
+ 		writestdout ("date1 = ");
+ 		longchar2 = date1;
+ 		writestdout (longchar2);
+ 		writestdout ("date2 = ");
+ 		longchar2 = date2;
+ 		writestdout (longchar2); 		
+	end
+
+ 	function testCharToTime()
+ 		writestdout ("***** char to time ******");
+ 		shortchar1 = "0215";
+ 		time1 = shortchar1;
+ 		time2 = "021500";
+ 		if (time1 == time2)
+ 			writestdout("success: time1 = shortchar1");
+ 		else
+ 			writestdout ("failure: time1 = shortchar1; expected 021500");
+ 		end
+ 		writestdout ("time1 = ");
+ 		longchar2 = time1;
+ 		writestdout (longchar2);
+ 		writestdout ("time2 = ");
+ 		longchar2 = time2;
+ 		writestdout (longchar2);
+ 		
+ 		longchar1 = "042237123456";
+ 		time1 = longchar1;
+ 		time2 = "042237";
+ 		if (time1 == time2)
+ 			writestdout("success: time1 = longchar1");
+ 		else
+ 			writestdout ("failure: time1 = longchar1; expected 042237");
+ 		end 
+ 		writestdout ("time1 = ");
+ 		longchar2 = time1;
+ 		writestdout (longchar2);
+ 		writestdout ("time2 = ");
+ 		longchar2 = time2;
+ 		writestdout (longchar2);
+	end
+
+ 	function testCharToTimestamp()
+ 		writestdout ("***** char to timestamp ******");
+ 		shortchar1 = "0215";
+ 		yyyyMMddhhmmssfffffftimestamp1 = shortchar1;
+ 		yyyyMMddhhmmssfffffftimestamp2 = "02150000000000000000";
+ 		if (yyyyMMddhhmmssfffffftimestamp1 == yyyyMMddhhmmssfffffftimestamp2)
+ 			writestdout("success: yyyyMMddhhmmssfffffftimestamp1 = shortchar1");
+ 		else
+ 			writestdout ("failure: yyyyMMddhhmmssfffffftimestamp1 = shortchar1; expected 02150000000000000000");
+ 			longchar2 = yyyyMMddhhmmssfffffftimestamp1;
+ 			writestdout (longchar2);
+ 		end
+ 		writestdout ("yyyyMMddhhmmssfffffftimestamp1 = ");
+ 		longchar2 = yyyyMMddhhmmssfffffftimestamp1;
+ 		writestdout (longchar2);
+ 		writestdout ("yyyyMMddhhmmssfffffftimestamp2 = ");
+ 		longchar2 = yyyyMMddhhmmssfffffftimestamp2;
+ 		writestdout (longchar2);
+ 		
+ 		longchar1 = "042237123456";
+ 		yyyyMMddhhmmssfffffftimestamp1 = longchar1;
+ 		yyyyMMddhhmmssfffffftimestamp2 = "04223712345600000000";
+ 		if (yyyyMMddhhmmssfffffftimestamp1 == yyyyMMddhhmmssfffffftimestamp2)
+ 			writestdout("success: yyyyMMddhhmmssfffffftimestamp1 = longchar1");
+ 		else
+ 			writestdout ("failure: yyyyMMddhhmmssfffffftimestamp1 = longchar1; expected 04223712345600000000");
+		end 
+ 		writestdout ("yyyyMMddhhmmssfffffftimestamp1 = ");
+ 		longchar2 = yyyyMMddhhmmssfffffftimestamp1;
+ 		writestdout (longchar2);
+ 		writestdout ("yyyyMMddhhmmssfffffftimestamp2 = ");
+ 		longchar2 = yyyyMMddhhmmssfffffftimestamp2;
+ 		writestdout (longchar2); 		
+	end
+
+ 	function testCharToInterval()
+ 		writestdout ("***** char to interval ******");
+ 		// month span interval
+ 		longchar1 = "1234567890123456";
+ 		yyyyyyyyyMMinterval1 = longchar1;
+ 		writestdout("expected +12345678901");
+ 		longchar2 = yyyyyyyyyMMinterval1;
+ 		writestdout ("GOT      " + longchar2);
+ 		
+ 		longchar1 = "1234567890123456";
+ 		MMMMMMMMinterval1 = longchar1;
+ 		longchar2 = MMMMMMMMinterval1;
+ 		writestdout("expected +12345678");
+ 		writestdout ("GOT      " + longchar2);
+ 		
+ 		// second span interval
+ 		longchar1 = "1234567895963456";
+ 		hhhhhhhhhmmssffffffinterval1 = longchar1;
+ 		longchar2 = hhhhhhhhhmmssffffffinterval1;
+ 		writestdout("expected +1234567900003456000");
+ 		writestdout ("GOT      " + longchar2);
+
+ 		longchar1 = "1234567890123456";
+ 		mmmmmmmmmssinterval1 = longchar1;
+ 		longchar2 = mmmmmmmmmssinterval1;
+ 		writestdout("expected +12345678901");
+ 		writestdout ("GOT      " + longchar2);
+ 		              
+ 		longchar1 = "1234567899123456";
+ 		mmmmmmmmmssinterval1 = longchar1;
+ 		longchar2 = mmmmmmmmmssinterval1;
+ 		writestdout("expected +12345679031");
+ 		writestdout ("GOT      " + longchar2);
+
+	end
+
+ 	function testStrToDate()
+ 		writestdout ("***** str to date - string not valid in V6  ******");
+ 		writestdout ("string1 before = " + string1);
+ 		longchar2 = date1;
+ 		writestdout ("date1 before = " + longchar2);
+ 		longchar2 = date2;
+ 		writestdout (longchar2);
+ 		writestdout ("date2 before = " + longchar2);
+		string1 = "2006";
+ 		date1 = string1;
+ 		date2 = "20060000";
+ 		if (date1 == date2)
+ 			writestdout("success: date1 = string1");
+ 		else
+ 			writestdout ("failure: date1 = string1; expected 20060101");
+ 			writestdout ("string1 after = " + string1);
+	 		longchar2 = date1;
+ 			writestdout (longchar2);
+ 			writestdout ("date1 after = " + longchar2);
+	 		longchar2 = date2;
+ 			writestdout (longchar2);
+ 			writestdout ("date2 after = " + longchar2);
+ 		end
+ 		
+ 		
+ 		string1 = "20060316081322";
+ 		date1 = string1;
+ 		date2 = "20060316";
+ 		if (date1 == date2)
+ 			writestdout("success: date1 = string1");
+ 		else
+ 			writestdout ("failure: date1 = string1; expected 20060316");
+ 			writestdout ("string1 after = " + string1);
+	 		longchar2 = date1;
+ 			writestdout (longchar2);
+ 			writestdout ("date1 after = " + longchar2);
+	 		longchar2 = date2;
+ 			writestdout (longchar2);
+ 			writestdout ("date2 after = " + longchar2);
+ 		end 
+ 			 		
+	end
+
+ 	function testStrToTime()
+ 		writestdout ("***** str to time - string not valid in V6  ******");
+ 		writestdout ("string1 before = " + string1);
+ 		longchar2 = time1;
+ 		writestdout (longchar2);
+ 		writestdout ("time1 before = " + LONGCHAR2);
+ 		longchar2 = time2;
+ 		writestdout ("time2 before = " + LONGCHAR2);
+ 		string1 = "0215";
+ 		time1 = string1;
+ 		time2 = "021500";
+ 		if (time1 == time2)
+ 			writestdout("success: time1 = string1");
+ 		else
+ 			writestdout ("failure: time1 = string1; expected 021500");
+ 			writestdout ("string1 after = " + string1);
+ 			longchar2 = time1;
+	 		writestdout ("time1 after = " + longchar2);
+ 			longchar2 = time2;
+ 			writestdout ("time2 after = " + longchar2);
+ 		end
+ 		
+ 		
+ 		string1 = "042237123456";
+ 		time1 = string1;
+ 		time2 = "042237";
+ 		if (time1 == time2)
+ 			writestdout("success: time1 = string1");
+ 		else
+ 			writestdout ("failure: time1 = string1; expected 042237");
+ 			writestdout ("string1 after = " + string1);
+ 			longchar2 = time1;
+	 		writestdout ("time1 after = " + longchar2);
+ 			longchar2 = time2;
+ 			writestdout ("time2 after = " + longchar2);
+ 		end
+ 		
+	end
+
+ 	function testStrToTimestamp()
+ 		writestdout ("***** str to timestamp - string not valid in V6  ******");
+ 		writestdout ("string1 before = " + string1);
+ 		longchar2 = yyyyMMddhhmmssfffffftimestamp1;
+ 		writestdout ("yyyyMMddhhmmssfffffftimestamp1 before = " + longchar2);
+ 		longchar2 = yyyyMMddhhmmssfffffftimestamp2;
+ 		writestdout ("yyyyMMddhhmmssfffffftimestamp2 before = " + longchar2);
+ 		string1 = "0215";
+ 		yyyyMMddhhmmssfffffftimestamp1 = string1;
+ 		yyyyMMddhhmmssfffffftimestamp2 = "02150000000000000000";
+ 		if (yyyyMMddhhmmssfffffftimestamp1 == yyyyMMddhhmmssfffffftimestamp2)
+ 			writestdout("success: yyyyMMddhhmmssfffffftimestamp1 = string1");
+ 		else
+ 			writestdout ("failure: yyyyMMddhhmmssfffffftimestamp1 = string1; expected 02150000000000000000");
+ 			writestdout ("string1 before = " + string1);
+ 			longchar2 = yyyyMMddhhmmssfffffftimestamp1;
+ 			writestdout ("yyyyMMddhhmmssfffffftimestamp1 before = " + longchar2);
+ 			longchar2 = yyyyMMddhhmmssfffffftimestamp2;
+ 			writestdout ("yyyyMMddhhmmssfffffftimestamp2 before = " + longchar2);
+ 		end
+
+ 		
+ 		string1 = "042237123456";
+ 		yyyyMMddhhmmssfffffftimestamp1 = string1;
+ 		yyyyMMddhhmmssfffffftimestamp2 = "04223712345600000000";
+ 		if (yyyyMMddhhmmssfffffftimestamp1 == yyyyMMddhhmmssfffffftimestamp2)
+ 			writestdout("success: yyyyMMddhhmmssfffffftimestamp1 = string1");
+ 		else
+ 			writestdout ("failure: yyyyMMddhhmmssfffffftimestamp1 = string1; expected 04223712345600000000");
+ 			writestdout ("string1 before = " + string1);
+ 			longchar2 = yyyyMMddhhmmssfffffftimestamp1;
+ 			writestdout ("yyyyMMddhhmmssfffffftimestamp1 before = " + longchar2);
+ 			longchar2 = yyyyMMddhhmmssfffffftimestamp2;
+ 			writestdout ("yyyyMMddhhmmssfffffftimestamp2 before = " + longchar2);
+ 		end  		 		
+
+	end
+
+ 	function testStrToInterval()
+ 		writestdout ("***** str to interval - string not valid in V6 ******");
+ 		// month span interval
+ 		string1 = "1234567890123456";
+ 		yyyyyyyyyMMinterval1 = string1;
+ 		writestdout("expected +12345678901");
+ 		longchar2 = yyyyyyyyyMMinterval1;
+ 		writestdout("GOT      " + longchar2);
+ 		
+ 		string1 = "1234567890123456";
+ 		MMMMMMMMinterval1 = string1;
+ 		longchar2 = MMMMMMMMinterval1;
+ 		writestdout("expected +12345678");
+ 		writestdout("GOT      " + longchar2);
+ 		
+ 		// second span interval
+ 		string1 = "1234567895963456";
+ 		hhhhhhhhhmmssffffffinterval1 = string1;
+ 		longchar2 = hhhhhhhhhmmssffffffinterval1;
+ 		writestdout("expected +1234567900003456000");
+ 		writestdout("GOT      " + longchar2);
+
+ 		string1 = "1234567890123456";
+ 		mmmmmmmmmssinterval1 = string1;
+ 		longchar2 = mmmmmmmmmssinterval1;
+ 		writestdout("expected +12345678901");
+ 		writestdout("GOT      " + longchar2);
+ 		              
+ 		string1 = "1234567899123456";
+ 		mmmmmmmmmssinterval1 = string1;
+ 		longchar2 = mmmmmmmmmssinterval1;
+ 		writestdout("expected +12345679031");
+ 		writestdout("GOT      " + longchar2);
+ 		
+	end
+
+ 	function testNumericToDate()
+ 		writestdout ("***** numeric to date ******");
+ 		 bin40item1 = 2  ;
+		 bin92item2 = 23.1 ;
+		 num83item1 =45.23 ;
+		 num8item1 =123;
+		 numc94item1 =123.1234 ;
+		 numc9item1  = 1234567 ;
+		 money5item1  =10.25;
+		 pacf132item1  =12345677890.12;;
+		 pacf13item1  = 9897654321;
+		 dec73item1 = 1234.123 ;
+		 dec7item1 =1234123 ;
+		 floatitem1 =123456 ;
+		 smallfloatitem1 =345456 ;
+		 smallintitem1 = 123 ;
+		 intitem1  =25;
+		 bigintitem1= 1234456789; 
+		 
+ 		 date1 = bin40item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+		 date1 = bin92item2 ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+
+		 
+		 date1 = pacf132item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+ 		 
+		 date1 = pacf13item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+ 		 
+		 date1 = dec73item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+ 		 
+		 date1 = dec7item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+ 		 
+ 		 // COBOL compiler error in V6
+ 		 date1 = floatitem1  ;
+  		 longchar1 = date1;
+  		 writestdout(longchar1);
+  		 
+ 		 date1 = smallfloatitem1  ;
+  		 longchar1 = date1;
+  		 writestdout(longchar1);
+ 		 
+		 date1 = smallintitem1   ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+ 		 
+		 date1 = intitem1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+		 date1 = bigintitem1 ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1); 	
+ 		 
+ 		 date1 = num83item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+		 date1 = num8item1 ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+		 date1 = numc94item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+		 date1 = numc9item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);	
+ 		 
+ 		 date1 = money5item1  ;
+ 		 longchar1 = date1;
+ 		 writestdout(longchar1);
+	end
+
+ 	function testNumericToTime()
+ 		writestdout ("***** numeric to time - not allowed V6 or V7 ******");
+//  		 time1 = bin40item1  ;
+// 		 time1 = bin92item2 ;
+ //		 time1 = num83item1  ;
+ //		 time1 = num8item1 ;
+ //		 time1 = numc94item1  ;
+// 		 time1 = numc9item1  ;
+//		 time1 = money5item1  ;
+//		 time1 = pacf132item1  ;;
+//		 time1 = pacf13item1  ;
+//		 time1 = dec73item1  ;
+//		 time1 = dec7item1  ;
+//		 time1 = floatitem1  ;
+//		 time1 = smallfloatitem1  ;
+//		 time1 = smallintitem1   ;
+//		 time1 = intitem1  ;
+//		 time1 = bigintitem1 ; 		
+	end
+
+ 	function testNumericToTimestamp()
+ 		writestdout ("***** numeric to timestamp - not allowed V6 or V7 ******");
+//  		 yyyyMMddhhmmssfffffftimestamp1 = bin40item1  ;
+// 		 yyyyMMddhhmmssfffffftimestamp1 = bin92item2 ;
+ //		 yyyyMMddhhmmssfffffftimestamp1 = num83item1  ;
+ //		 yyyyMMddhhmmssfffffftimestamp1 = num8item1 ;
+ //		 yyyyMMddhhmmssfffffftimestamp1 = numc94item1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = numc9item1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = money5item1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = pacf132item1  ;;
+//		 yyyyMMddhhmmssfffffftimestamp1 = pacf13item1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = dec73item1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = dec7item1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = floatitem1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = smallfloatitem1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = smallintitem1   ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = intitem1  ;
+//		 yyyyMMddhhmmssfffffftimestamp1 = bigintitem1 ;
+	end
+
+ 	function testNumericToInterval()
+ 		writestdout ("***** numeric to interval - not allowed in V6 some allowed in V7 ******");
+ 		//month span interval
+  		 yyyyyyyyyMMinterval1 = bin40item1  ;
+// 		 yyyyyyyyyMMinterval1 = bin92item2 ;
+ //		 yyyyyyyyyMMinterval1 = num83item1  ;
+ 		 yyyyyyyyyMMinterval1 = num8item1 ;
+// 		 yyyyyyyyyMMinterval1 = numc94item1  ;
+ 		 yyyyyyyyyMMinterval1 = numc9item1  ;
+ //		 yyyyyyyyyMMinterval1 = money5item1  ;
+ //		 yyyyyyyyyMMinterval1 = pacf132item1  ;;
+ 		 yyyyyyyyyMMinterval1 = pacf13item1  ;
+ //		 yyyyyyyyyMMinterval1 = dec73item1  ;
+ 		 yyyyyyyyyMMinterval1 = dec7item1  ;
+ 		 yyyyyyyyyMMinterval1 = floatitem1  ;							//1
+ 		 yyyyyyyyyMMinterval1 = smallfloatitem1  ;						//1
+ 		 yyyyyyyyyMMinterval1 = smallintitem1   ;
+ 		 yyyyyyyyyMMinterval1 = intitem1  ;
+ 		 yyyyyyyyyMMinterval1 = bigintitem1 ;
+ 		 // second span interval
+ 		 dddddddddhhmmssffffffinterval1 = bin40item1  ;
+// 		 dddddddddhhmmssffffffinterval1 = bin92item2 ;
+ //		 dddddddddhhmmssffffffinterval1 = num83item1  ;
+ 		 dddddddddhhmmssffffffinterval1 = num8item1 ;
+// 		 dddddddddhhmmssffffffinterval1 = numc94item1  ;
+ 		 dddddddddhhmmssffffffinterval1 = numc9item1  ;
+ //		 dddddddddhhmmssffffffinterval1 = money5item1  ;
+ //		 dddddddddhhmmssffffffinterval1 = pacf132item1  ;;
+ 		 dddddddddhhmmssffffffinterval1 = pacf13item1  ;
+// 		 dddddddddhhmmssffffffinterval1 = dec73item1  ;
+ 		 dddddddddhhmmssffffffinterval1 = dec7item1  ;
+ 		 dddddddddhhmmssffffffinterval1 = floatitem1  ;					//1
+ 		 dddddddddhhmmssffffffinterval1 = smallfloatitem1  ;			//1
+//		 dddddddddhhmmssffffffinterval1 = smallintitem1   ;
+//		 dddddddddhhmmssffffffinterval1 = intitem1  ;
+//		 dddddddddhhmmssffffffinterval1 = bigintitem1 ;
+	end

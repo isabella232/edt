@@ -20,6 +20,7 @@ import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompil
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
+import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
@@ -79,14 +80,17 @@ public class BoundNodeModelUtility {
 			((WorkingCopyCompileRequestor) requestor).getBoundPart()};
 	}
 
-	private String[] getPackageName(IPath path) {
-		String[] packageName = new String[path.segmentCount()-3];
+	private String getPackageName(IPath path) {
+		StringBuilder packageName = new StringBuilder(100);
 		if (path.segmentCount() > 3) {
 			for (int i = 2; i < path.segmentCount()-1; i++) {
-				packageName[i-2] = path.segment(i);
+				if (packageName.length() > 0) {
+					packageName.append('.');
+				}
+				packageName.append(path.segment(i));
 			}
 		}
-		return packageName;
+		return packageName.toString();
 	}
 	
 	/**
@@ -103,7 +107,7 @@ public class BoundNodeModelUtility {
 		} else {
 			packageName = ((EGLFile)EGLCore.create(file)).getPackageName();
 		}
-		compiler.compileAllParts(file.getProject(), packageName, file, EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory()), new IWorkingCopyCompileRequestor(){
+		compiler.compileAllParts(file.getProject(), Util.stringArrayToQualifiedName(packageName), file, EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory()), new IWorkingCopyCompileRequestor(){
 
 			public void acceptResult(WorkingCopyCompilationResult result) {
 				

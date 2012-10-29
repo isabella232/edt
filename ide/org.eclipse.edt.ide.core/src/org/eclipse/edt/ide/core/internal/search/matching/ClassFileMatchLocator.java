@@ -96,7 +96,6 @@ public class ClassFileMatchLocator {
 					}
 				}
 			} catch (EGLModelException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -105,9 +104,6 @@ public class ClassFileMatchLocator {
 		try {
 			if(function.getParent() instanceof IPart){
 				if(((SourcePartElementInfo)((EGLElement)function.getParent()).getElementInfo()).isDelegate()){
-					return true;
-				}
-				if(((SourcePartElementInfo)((EGLElement)function.getParent()).getElementInfo()).isFunction()){
 					return true;
 				}
 			}
@@ -175,60 +171,47 @@ public class ClassFileMatchLocator {
 					}
 				}
 			}
-			//FormGroup needs to resolve its inside forms
-			if(partInfo.isFormGroup()){
-				//TODO use forms, annotations
-				for(IEGLElement child: partInfo.getChildren()){
-					if(child instanceof IPart){
-						if(((SourcePartElementInfo)((EGLElement)child).getElementInfo()).isForm()){
-							matchPartDeclaration((IPart)child);
+			if(locateReference){
+				//implemented interfaces should be counted as reference (for Service)
+				if(partInfo.getInterfaceNames() != null){
+					for(char[] interfaceName: partInfo.getInterfaceNames()){
+						String fullqualifiedName = String.valueOf(interfaceName);
+						String pkg = "";
+						String typeName = fullqualifiedName;
+						int index = fullqualifiedName.lastIndexOf(".");
+						if(index != -1){
+							pkg = fullqualifiedName.substring(0, index);
+							typeName = fullqualifiedName.substring(index + 1);
+						}
+						typeName = getElementType(typeName);
+						PartInfo interfacePartInfo = Util.getDataDeclarationPart(EGLCore.create(project), pkg, typeName);
+						if(interfacePartInfo != null){
+							IPart interfacePart = interfacePartInfo.resolvePart(Util.createSearchScope(project));
+							matchInterfaceReference(interfacePart, part);
 						}
 					}
 				}
 			}
-			else{
-				if(locateReference){
-					//implemented interfaces should be counted as reference (for Service)
-					if(partInfo.getInterfaceNames() != null){
-						for(char[] interfaceName: partInfo.getInterfaceNames()){
-							String fullqualifiedName = String.valueOf(interfaceName);
-							String pkg = "";
-							String typeName = fullqualifiedName;
-							int index = fullqualifiedName.lastIndexOf(".");
-							if(index != -1){
-								pkg = fullqualifiedName.substring(0, index);
-								typeName = fullqualifiedName.substring(index + 1);
-							}
-							typeName = getElementType(typeName);
-							PartInfo interfacePartInfo = Util.getDataDeclarationPart(EGLCore.create(project), pkg, typeName);
-							if(interfacePartInfo != null){
-								IPart interfacePart = interfacePartInfo.resolvePart(Util.createSearchScope(project));
-								matchInterfaceReference(interfacePart, part);
-							}
+			//children
+			for(IEGLElement child: partInfo.getChildren()){
+				if(child instanceof IFunction){
+					matchFunctionDeclaration((IFunction)child);
+				}
+				else if(child instanceof IField){
+					if(locateReference){
+						String pkg = ((IField) child).getTypeDeclaredPackage();					
+						if(pkg != null){
+							String type = ((IField) child).getTypeName();
+							type = getElementType(type);
+							PartInfo fieldPartInfo = Util.getDataDeclarationPart(EGLCore.create(project), pkg, type);
+							if(fieldPartInfo != null){
+								IPart fieldPart = fieldPartInfo.resolvePart(Util.createSearchScope(project));
+								matchFieldReference(fieldPart, ((IField) child).getDeclaringPart());
+							}		
 						}
 					}
 				}
-				//children
-				for(IEGLElement child: partInfo.getChildren()){
-					if(child instanceof IFunction){
-						matchFunctionDeclaration((IFunction)child);
-					}
-					else if(child instanceof IField){
-						if(locateReference){
-							String pkg = ((IField) child).getTypeDeclaredPackage();					
-							if(pkg != null){
-								String type = ((IField) child).getTypeName();
-								type = getElementType(type);
-								PartInfo fieldPartInfo = Util.getDataDeclarationPart(EGLCore.create(project), pkg, type);
-								if(fieldPartInfo != null){
-									IPart fieldPart = fieldPartInfo.resolvePart(Util.createSearchScope(project));
-									matchFieldReference(fieldPart, ((IField) child).getDeclaringPart());
-								}		
-							}
-						}
-					}
-				}					
-			}
+			}					
 		} catch (EGLModelException e1) {
 			e1.printStackTrace();
 		}

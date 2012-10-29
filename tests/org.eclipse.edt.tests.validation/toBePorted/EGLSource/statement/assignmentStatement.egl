@@ -1,0 +1,124 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// basic program
+//
+record fixrecord
+10 i int;
+end
+
+record flexrecord
+i int;
+end
+
+record flexrecord2
+i int;
+end
+
+record pscrec type PSBRecord
+i fixrecord {@pcb {pcbName = "myname"}};
+end
+
+record myrec type basicrecord
+		15 item2 char(3) [2];
+end
+
+program MyProj type BasicProgram
+
+	function main()
+		win window {                           // 0
+			name = "Dave"                     // 0
+};		           
+			
+		// Only name, size, and position are read-only
+		win.name = "Frieda";   // 1 name is read-only and cannot be assigned to {7740, EGLMESSAGE_READONLY_FIELD_CANNOT_BE_ASSIGNED_TO}
+
+		
+		i int?;
+		a char(1);
+		dbcharvar dbchar(1);
+		a = "a";
+		i =  dbcharvar; // 1 int? and dbChar are not compatible types in the expression i = dbcharvar   {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		win = 5; // 1 Window and int are not compatible types in the expression win = 5 {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		win = types;	// 1 
+		i = null; // 0
+		const catConstant string = "cat";
+		catConstant = "dog"; // 1 Invalid attempt to modify catConstant which is a constant. Constants are not allowed to be modified. {6646*, CANNOT_MODIFY_CONSTANT}
+		
+		rec1 fixrecord;
+		rec2 flexrecord;
+	
+		rec1 = rec2; // 1 The source of an assignment to a structured record must be a fixed structure	 {4029, FLEXIBLE_RECORD_ASSIGNED_TO_FIXED}
+		
+		rec3 flexrecord;
+		rec4 flexrecord2;
+	
+		rec2 = rec3; // 0
+		rec2 = rec4; // 1 flexrecord and flexrecord2 are not compatible types in the expression rec2 = rec4 {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		
+		rec5 pscrec;
+		rec6 pscrec;
+		rec5 = rec6; // 1 PSBRecord and PSBRecord are not compatible types in the expression rec5 = rec6 {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		
+		rec7 fixrecord;
+		aChar char(1);
+		aChar = "5";
+		rec7 = aChar; // 0
+		i = 5;
+		rec7 = i;// 1 rec7 is a record, so the assignment source must be a record, or evaluate to CHA, HEX or MBCHAR. {6650, EGLMESSAGE_ASSIGNMENT_STATEMENT_RECORD_TARGET_SOURCE_CANNOT_BE}	
+		
+		myArrayDict arrayDictionary;
+		myDict2 dictionary;
+		myDict3 dictionary;
+
+		myDict2 = myDict3;// 0
+		myArrayDict[1] = myDict2; // 1 It is invalid to assign to ArrayDictionary elements	{7744, CANNOT_ASSIGN_TO_ARRAY_DICTIONARY_ELEMENTS}
+		myDict2 = i; // 1 dictionary and int? are not compatible types in the expression myDict2 = i {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		
+		myArrayDict2 arrayDictionary;
+		myArrayDict = myArrayDict2;// 0
+		myArrayDict = i; // 1  arrayDictionary and int? are not compatible types in the expression myArrayDict = i {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		
+		i = win; // 1 int? and Window are not compatible types in the expression i = win	  {6652*, ASSIGNMENT_STATEMENT_MUST_BE_RECORD_OR_ITEM}
+		
+		arec fixrecord;
+		arec2 flexrecord2;
+		arec2 = arec; // 1 Structured records can be assigned only to other structured records	 {4030, FIXED_RECORD_ASSIGNED_TO_FLEXIBLE}
+		i = arec; // 1  arec is a record, i must be a record or character item.  {6651*, ASSIGNMENT_STATEMENT_RECORD_SOURCE_TARGET_MUST_BE}
+		
+		i = myDict2;// 1 int? and dictionary are not compatible types in the expression i = myDict2	  {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		
+		i = myArrayDict2;// 1 int? and arrayDictionary are not compatible types in the expression i = myArrayDict2  {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		
+		chararray char(3) [2];
+		somerec myrec;
+		chararray =  somerec.item2 ; // 1 chararray and item2 are not compatible. Array variables and multiply occurring items are not compatible	  {6714*, ARRAYS_AND_OCCURED_ITEMS_ARE_NOT_COMPATIBLE}
+		somerec.item2 = chararray ; // 1 item2 and chararray are not compatible. Array variables and multiply occurring items are not compatible	  {6714*, ARRAYS_AND_OCCURED_ITEMS_ARE_NOT_COMPATIBLE}
+		somerec.item2 = 5; // 1 item2 is not compatible with 5. Multiply occurring items are only compatible with Any typed variables {6715*, OCCURED_ITEMS_ONLY_COMPATIBLE_WITH_ANY}
+		
+		i = somerec.item2; // 1  i is not compatible with somerec.item2. Multiply occurring items are only compatible with Any typed variables 	 {6715*, OCCURED_ITEMS_ONLY_COMPATIBLE_WITH_ANY}
+		
+		i = "a"; // 0
+		i = ["a"];	//1 int? and string[] are not compatible types in the expression i = ["a"]
+		
+		w window;
+		w = new window;// 0
+		y window;
+		y = new prompt[];// 1  Window and Prompt[] are not compatible types in the expression y = new prompt[]	 {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		x window ;
+		x = new prompt  ;// 1  Window and Prompt are not compatible types in the expression x = new prompt 	 {6653*, ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+		
+	end
+	
+end
+
+
+

@@ -168,6 +168,6 @@ public class ZipFileObjectStore extends AbstractObjectStore implements CachingOb
 	@Override
 	public String toString() {
 		// For easier debugging.
-		return "ZipFileObjectStore file=" + zipFile;
+		return "ZipFileObjectStore file=" + zipFile + " scheme=" + getKeyScheme();
 	}
 }

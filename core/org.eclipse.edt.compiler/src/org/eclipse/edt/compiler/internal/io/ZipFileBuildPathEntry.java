@@ -16,22 +16,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 import com.ibm.icu.util.StringTokenizer;
 
 public abstract class ZipFileBuildPathEntry{
 	private DefaultZipFileIOBufferReader reader = null;
-	private HashMap partNamesByPackage = new HashMap();
-	private HashMap partNamesWithoutPackage = new HashMap();
-	protected HashMap partCache = new HashMap();
+	private Map<String, Map<String, String>> partNamesByPackage = new HashMap<String, Map<String,String>>();
+	private Map<String, String> partNamesWithoutPackage = new HashMap<String, String>();
 	private String path = null;
 	
 	public ZipFileBuildPathEntry(String  path){
@@ -43,42 +42,37 @@ public abstract class ZipFileBuildPathEntry{
 		reader = null;
 		partNamesByPackage.clear();
 		partNamesWithoutPackage.clear();
-		partCache = new HashMap();
-	}
-	
-	public void clearParts(){
-		partCache = new HashMap();
 	}
 	
 	
-	public boolean hasPackage(String[] packageName){
-		if (packageName == null || packageName.length == 0){
+	public boolean hasPackage(String packageName){
+		if (packageName == null || packageName.length() == 0){
 			return false;
 		}
 		
 		return partNamesByPackage.get(packageName) != null;
 	}
 	
-	protected String getEntry(String[] packageName,String partName){
+	protected String getEntry(String packageName,String partName){
 		String entry = "";
-		if (packageName == null || packageName.length == 0){
-			 entry = (String)partNamesWithoutPackage.get(partName);
+		if (packageName == null || packageName.length() == 0){
+			 entry = partNamesWithoutPackage.get(partName);
 		}else{
-			Map partpackage = (Map)partNamesByPackage.get(packageName);
+			Map<String, String> partpackage = partNamesByPackage.get(packageName);
 			if (partpackage != null){
-				entry = (String)partpackage.get(partName);
+				entry = partpackage.get(partName);
 			}
 		}
 		
 		return entry;
 	}
 		
-	protected String[] getPackageName(String packagename){
+	protected String getPackageName(String packagename){
 		return getPackageName(packagename, true);
 	}
 
-	protected String[] getPackageName(String packagename, boolean removeLast){
-		ArrayList list = new ArrayList();
+	protected String getPackageName(String packagename, boolean removeLast){
+		List<String> list = new ArrayList<String>();
 		StringTokenizer tokenizer = new StringTokenizer(packagename,new String("\\/"));
 		while(tokenizer.hasMoreTokens()){
 			String s = tokenizer.nextToken();
@@ -90,25 +84,38 @@ public abstract class ZipFileBuildPathEntry{
 			list.remove(list.size()-1);
 		}
 		
-		return InternUtil.intern((String[]) list.toArray(new String[list.size()]));
+		StringBuffer buff = new StringBuffer();
+		boolean first = true;
+		for (String segment : list) {
+			if (first) {
+				first = false;
+			}
+			else {
+				buff.append(".");
+			}
+			buff.append(segment);
+		}
+			
+		
+		return NameUtile.getAsName(buff.toString());
 	}
 
 	protected boolean processEntry(String entry){
 		if (entry.endsWith(getFileExtension())){
 			String partname = getPartName(entry);
-			String[] packageName = InternUtil.intern(getPackageName(entry));
+			String packageName = getPackageName(entry);
 
-			if (packageName == null || packageName.length == 0){
+			if (packageName == null || packageName.length() == 0){
 				//part with out package
-				partNamesWithoutPackage.put(InternUtil.intern(partname),entry);
+				partNamesWithoutPackage.put(NameUtile.getAsName(partname),entry);
 			}else{
-				Map partpackage = getPackagePartNames(packageName);
+				Map<String, String> partpackage = getPackagePartNames(packageName);
 				partpackage.put(partname,entry);
 				//add subpackages
-				for (int i = 0; i < packageName.length - 1;i++){
-					String[] subpackage = new String[i + 1];
-					System.arraycopy(packageName,0,subpackage,0,i + 1);
-					getPackagePartNames(InternUtil.intern(subpackage));
+				String subPkg = BindingUtil.removeLastSegment(packageName);
+				while (subPkg != null && subPkg.length() > 0) {
+					getPackagePartNames(NameUtile.getAsName(subPkg));
+					subPkg = BindingUtil.removeLastSegment(subPkg);
 				}
 			}
 			
@@ -119,7 +126,7 @@ public abstract class ZipFileBuildPathEntry{
 	protected String getPartName(String entry) {
 		File temppath = new File(entry);
 		String partname = temppath.getName();
-		return InternUtil.intern(partname.substring(0,partname.indexOf('.')));
+		return NameUtile.getAsName(partname.substring(0,partname.indexOf('.')));
 	}
 	
 	protected String getFileExtension() {
@@ -127,22 +134,20 @@ public abstract class ZipFileBuildPathEntry{
 	}
 	
 	protected String[] getAllEntries() {
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		list.addAll(partNamesWithoutPackage.values());
-		
-		Iterator i = partNamesByPackage.values().iterator();
-		while (i.hasNext()) {
-			Map map = (Map)i.next();
+			
+		for (Map<String, String> map : partNamesByPackage.values()) {
 			list.addAll(map.values());
 		}
 		
 		return (String[]) list.toArray(new String[list.size()]);
 	}
 		  
-   private Map getPackagePartNames(String[] packageName) {
-        Map map = (Map)partNamesByPackage.get(packageName);
+   private Map<String, String> getPackagePartNames(String packageName) {
+        Map<String, String> map = partNamesByPackage.get(packageName);
         if (map == null) {
-            map = new HashMap();
+            map = new HashMap<String, String>();
             partNamesByPackage.put(packageName, map);
         }
         return map;
@@ -150,7 +155,7 @@ public abstract class ZipFileBuildPathEntry{
    
 	protected void processEntries(){
 		try {
-			List entries = reader.getEntries();
+			List<String> entries = reader.getEntries();
 			for (int i = 0; i < entries.size(); i++){
 				String entry = (String)entries.get(i);
 				processEntry(entry);
@@ -186,7 +191,7 @@ public abstract class ZipFileBuildPathEntry{
 		throw new UnsupportedOperationException();
 	}
 
-	public HashMap getPartNamesByPackage() {
+	public Map<String, Map<String, String>> getPartNamesByPackage() {
 		return partNamesByPackage;
 	}
 	
@@ -194,48 +199,38 @@ public abstract class ZipFileBuildPathEntry{
 		List<String> list = new ArrayList<String>();	
 		if (pkg.length() == 0) {
 			list.addAll(getAllEntriesAsKeys(partNamesWithoutPackage));
-			if (includeSubPkgs) {
-				Iterator i = partNamesByPackage.values().iterator();
-				while (i.hasNext()) {
-					Map map = (Map)i.next();
+			if (includeSubPkgs) {				
+				for(Map<String, String> map : partNamesByPackage.values() ) {
 					list.addAll(getAllEntriesAsKeys(map));
 				}
 			}
 			return list;
 		}
 		
-		String[] pkgName = getPackageName(pkg.replace('.', '/'), false);
+		String pkgName = getPackageName(pkg.replace('.', '/'), false);
 		
-		Iterator i = partNamesByPackage.keySet().iterator();
-		while (i.hasNext()) {
-			String[] key = (String[]) i.next();
-			if (pkgName == key || isSubPkg(key, pkgName)) {
-				Map map = (Map)partNamesByPackage.get(key);
+		for(String key : partNamesByPackage.keySet() ) {
+			if (NameUtile.equals(pkgName, key) || (isSubPkg(key, pkgName) && includeSubPkgs)) {
+				Map<String, String> map = partNamesByPackage.get(key);
 				list.addAll(getAllEntriesAsKeys(map));
 			}
 		}
 		return list;
 	}
 	
-	private boolean isSubPkg(String[] pkgName, String[] subPkgName) {
-		if (pkgName.length <= subPkgName.length) {
+	private boolean isSubPkg(String pkgName, String subPkgName) {
+		if (pkgName.length() <= subPkgName.length()) {
 			return false;
 		}
-		for (int i = 0; i < subPkgName.length; i++) {
-			String pkgFrag = pkgName[i];
-			String subPkgFrag = subPkgName[i];
-			if (!subPkgFrag.equalsIgnoreCase(pkgFrag)) {
-				return false;
-			}
-		}
-		return true;
+		
+		String temp = NameUtile.getAsName(pkgName.substring(0, subPkgName.length()));
+		return (NameUtile.equals(temp, subPkgName) && (pkgName.substring(subPkgName.length(), subPkgName.length() + 1)).equals("."));
 	}
 	
-	private List<String> getAllEntriesAsKeys(Map map) {
+	private List<String> getAllEntriesAsKeys(Map<String, String> map) {
 		List<String> list = new ArrayList<String>();
-		Iterator i = map.values().iterator();
-		while (i.hasNext()) {
-			String entry = (String) i.next();
+		
+		for(String entry : map.values()) {
 			list.add(convertToStoreKey(entry));
 		}
 		return list;

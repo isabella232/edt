@@ -32,6 +32,7 @@ public class ThrowStatement extends Statement {
 		return expr;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -40,7 +41,13 @@ public class ThrowStatement extends Statement {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new ThrowStatement((Expression) expr.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return "throw " + expr.toString();
 	}
 }

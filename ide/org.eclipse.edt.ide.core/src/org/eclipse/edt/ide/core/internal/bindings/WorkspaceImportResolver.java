@@ -271,14 +271,6 @@ public class WorkspaceImportResolver extends AbstractImportResolver{
 
 	/**
 	 * Insert the method's description here.
-	 * Creation date: (9/6/2001 9:55:57 AM)
-	 * @return com.ibm.etools.egl.internal.core.image.common.impl.IProjectHandle[]
-	 */
-	private IProject[] getProjects() {
-		return projects;
-	}
-	/**
-	 * Insert the method's description here.
 	 * Creation date: (9/5/2001 5:04:10 PM)
 	 * @return boolean
 	 * @param file com.ibm.etools.egl.internal.core.image.common.impl.IFileHandle[]

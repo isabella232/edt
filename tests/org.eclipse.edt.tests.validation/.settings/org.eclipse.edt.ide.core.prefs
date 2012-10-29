@@ -1,5 +1,4 @@
-#Thu Oct 13 09:22:49 EDT 2011
-DefaultDeploymentDescriptorPath/<project>=/org.eclipse.edt.tests.validation/EGLSource/org_eclipse_edt_tests_validation.egldd
+#Thu Aug 30 13:56:04 EDT 2012
 compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
 eclipse.preferences.version=1
 generatorIds/<project>=

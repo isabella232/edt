@@ -1,0 +1,49 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program ExitRunUnit
+	function main()
+		writeStdout( "This shows the use of exit rununit.  Calls a library's function" );
+		writeStdout( "which does the exit and never returns." );
+		Lib.exitRU( 4 );
+	end
+end
+
+Library Lib
+	function invalid()
+		exit program;  //1 The PROGRAM exit modifier may only be used in a program
+		exit stack;    //2 The STACK exit modifier may only be used in a program | Unreachable code {warning}
+	end
+
+	function exitRU( i int )
+		if ( i >= 0 )
+			exit rununit;		//0
+		else
+			exit rununit( i );	//0
+		end
+	end
+end
+
+Service svc
+	function invalid()
+		exit program;  //1 The PROGRAM exit modifier may only be used in a program
+		exit stack;    //2 The STACK exit modifier may only be used in a program | Unreachable code {warning}
+	end
+
+	function exitRU( i int )
+		if ( i >= 0 )
+			exit rununit;		//1 The RUNUNIT exit modifier may not be used in a service
+		else
+			exit rununit( i );	//1 The RUNUNIT exit modifier may not be used in a service
+		end
+	end
+end

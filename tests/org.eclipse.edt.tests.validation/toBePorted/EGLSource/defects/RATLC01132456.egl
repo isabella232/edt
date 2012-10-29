@@ -1,0 +1,62 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Library lib
+FUNCTION lg_racine_carree(l_nombre FLOAT IN)
+returns (Int)
+  l_resultat  FLOAT;
+  l_temp  FLOAT;
+  l_temp1  FLOAT;
+  l_temp2  FLOAT;
+  l_ajout  FLOAT;
+         i  INT;
+
+  IF ( l_nombre <  0) 
+     return( -1 );
+
+  END 
+
+  FOR( i  from  1  to  l_nombre)   //0
+     IF (( i *  i ) >  l_nombre) 
+        EXIT FOR;
+     END 
+  END 
+
+  l_resultat = ( i -  1);  /* Partie entiere de la racine carree */
+
+  FOR( i  from  1  to  100)
+    IF ((( l_resultat + ( i / 100 ) ) * ( l_resultat + ( i / 100 ) )) >  l_nombre)  
+       EXIT FOR;
+    END 
+  END 
+  i = ( i -  1);
+
+  l_resultat = ( l_resultat + ( i / 100 ));
+
+// On va arrondir le resultat en testant si 1/100 de plus est plus pres du resultat
+  l_temp1 = ( l_nombre - ( l_resultat *  l_resultat )); /*Resultat sans ajout de 0.01*/
+  l_ajout = ( l_resultat +  0.01);
+  l_temp2 = ( l_nombre - ( l_ajout *  l_ajout ));       /*Resultat avec ajout de 0.01*/
+
+  l_temp1 = ( l_nombre -  l_temp1);     /*Difference avec le resultat cherche*/
+  l_temp1 = ( l_temp2 -  l_nombre);    /*Difference avec le resultat cherche*/
+
+  IF ( l_temp2 <  l_temp1) 
+     l_resultat =  l_ajout;
+  END 
+
+  return(  l_resultat );
+
+
+END 
+end

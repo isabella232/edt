@@ -1,0 +1,34 @@
+import eglx.ui.rui.*;
+
+handler h1 type ruihandler{onconstructionfunction = start} //0
+	function start() end
+end
+
+handler w1 type ruiwidget{onconstructionfunction = start} //0
+	function start() end
+end
+
+library lib1
+	function foo() end
+end
+
+handler h2 type ruihandler{onconstructionfunction = lib1.foo} //1 The value for property onConstructionFunction must be the name of a function within part h2. Functions defined in other parts are not allowed.
+	function start() end
+end
+
+handler w2 type ruiwidget{onconstructionfunction = lib1.foo} //1 The value for property onConstructionFunction must be the name of a function within part w2. Functions defined in other parts are not allowed.
+	function start() end
+end
+
+
+handler hand1
+	function func() end
+end
+
+handler h3 type ruihandler{onconstructionfunction = h.func} //1 The value for property onConstructionFunction must be the name of a function within part h3. Functions defined in other parts are not allowed.
+	h hand1;
+end
+
+handler w3 type ruiwidget{onconstructionfunction = h.func} //1 The value for property onConstructionFunction must be the name of a function within part w3. Functions defined in other parts are not allowed.
+	h hand1;
+end

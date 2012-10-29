@@ -10,12 +10,10 @@
  *
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
-//
-//
-//this is rui/javascript implementation, need to call dedicated service to do the file persistent 
+
+import eglx.http.HttpProxy;
+
 handler CreateResultFile
-	
-	//private fileRecords fileRecord[];
 	
 	function createFile(fileDirectory String in, fullFileName String in, fileContent String in)	
 		call TestResultService.createFile(fileDirectory, fullFileName, fileContent) using new HttpProxy returning to fileCreated onException handleException;	

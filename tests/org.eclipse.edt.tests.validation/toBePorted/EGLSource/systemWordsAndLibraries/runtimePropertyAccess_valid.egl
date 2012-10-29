@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+program testRuntimePropertiesUsage_valid
+	function main()  
+		item2 string;
+		def string;
+		abc string;
+
+		item2 = syslib.getproperty("ab c"); 
+		item2 = egl.core.syslib.getproperty("ab c"); 
+		item2 = getproperty("abc");
+		defineDatabaseAlias("abc", "def");
+		sqllib.defineDatabaseAlias("def", "def");
+		egl.io.sql.sqllib.defineDatabaseAlias("def", "def");
+		item2 = syslib.getproperty(abc); 
+		item2 = getproperty(abc);
+		defineDatabaseAlias(abc, def);
+		sqllib.defineDatabaseAlias(def, def);
+		
+		connect ( getProperty("a"), getproperty("userid"), getProperty("password"));
+		defineDatabaseAlias( getProperty("a"+ def), "con1");
+		connect ("con1", getproperty("userid"), getProperty("password"));
+		setCurrentDatabase("con1");		
+	end
+end

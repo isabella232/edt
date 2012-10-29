@@ -14,27 +14,17 @@ package org.eclipse.edt.compiler.internal.sdk.compile;
 import java.io.File;
 
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
-import org.eclipse.edt.compiler.internal.core.builder.FunctionContainerContextTopLevelFunctionProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.builder.GenericTopLevelFunctionProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 
 
 public class DefaultSDKProblemRequestorFactory implements ISDKProblemRequestorFactory {
 
+	@Override
 	public IProblemRequestor getProblemRequestor(File file, String part) {
 		return new SDKProblemRequestor(file, part);
 	}
 
-	public IProblemRequestor getGenericTopLevelFunctionProblemRequestor(File file, String partName, boolean containerContextDependent) {
-		return new GenericTopLevelFunctionProblemRequestor(new SDKProblemRequestor(file, partName), containerContextDependent);
-	}
-
-	public IProblemRequestor getContainerContextTopLevelProblemRequestor(File file, String containerContextName,
-			boolean containerContextDependent) {
-		return new FunctionContainerContextTopLevelFunctionProblemRequestor(new SDKProblemRequestor(file, containerContextName),
-				containerContextDependent);
-	}
-
+	@Override
 	public ISyntaxErrorRequestor getSyntaxErrorRequestor(File file) {
 		return new SDKSyntaxErrorRequestor(new SDKSyntaxProblemRequestor(file, "SYN"));
 	}

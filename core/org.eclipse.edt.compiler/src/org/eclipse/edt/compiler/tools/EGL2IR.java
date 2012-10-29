@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,8 +15,7 @@ import org.eclipse.edt.compiler.EDTCompiler;
 import org.eclipse.edt.compiler.EGL2IRArgumentProcessor;
 import org.eclipse.edt.compiler.EGL2IREnvironment;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.internal.sdk.IPartRequestor;
+import org.eclipse.edt.compiler.ICompilerExtension;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
@@ -42,7 +41,6 @@ public class EGL2IR {
 	
 	public static EGL2IREnvironment eglcEnv;
 	public static String SystemLibFolderPath;
-	public static ISystemEnvironment systemEnvironment;
 	public static void main(String[] args) {
 		main(args, (ICompiler)null);
 	}
@@ -51,19 +49,7 @@ public class EGL2IR {
 		EGL2IRArgumentProcessor.EGL2IRArguments processedArguments = new EGL2IRArgumentProcessor().processArguments(args);
 
 		if(processedArguments != null){
-		    compile(processedArguments, null,null,compiler);
-		}
-	}
-
-	public static void main(String[] args, IPartRequestor partRequestor, ISDKProblemRequestorFactory problemRequestorFactory) {
-		main(args, partRequestor, problemRequestorFactory, null);
-	}
-	
-	public static void main(String[] args, IPartRequestor partRequestor, ISDKProblemRequestorFactory problemRequestorFactory, ICompiler compiler) {
-		EGL2IRArgumentProcessor.EGL2IRArguments processedArguments = new EGL2IRArgumentProcessor().processArguments(args);
-
-		if(processedArguments != null){
-		    compile(processedArguments, problemRequestorFactory, partRequestor,compiler);
+		    compile(processedArguments, null,compiler);
 		}
 	}
 
@@ -78,15 +64,40 @@ public class EGL2IR {
 		SourcePathEntry.getInstance().reset();
 
 		if(processedArguments != null){
-		    compile(processedArguments,problemRequestorFactory,null,compiler);
+		    compile(processedArguments,problemRequestorFactory, compiler);
 		}
 	}
 	
-	public static void compile(final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs,ISDKProblemRequestorFactory problemRequestorFactory,IPartRequestor partRequestor, ICompiler compiler){
+	public static void compile(final EGL2IRArgumentProcessor.EGL2IRArguments processedArgs,ISDKProblemRequestorFactory problemRequestorFactory, ICompiler compiler){
 		if (compiler == null){
 			compiler = new EDTCompiler();
 		}
-		EGLC.compile(processedArgs, compiler, problemRequestorFactory, partRequestor);
+		
+		// Process any extensions.
+		String[] extensions = processedArgs.getExtensions();
+		if (extensions != null && extensions.length > 0) {
+			for (int i = 0; i < extensions.length; i++) {
+				if (extensions[i].trim().length() > 0) {
+					try {
+						Class<?> clazz = Class.forName(extensions[i].trim(), true, EGL2IR.class.getClassLoader());
+						Object o = clazz.newInstance();
+						if (o instanceof ICompilerExtension) {
+							((ICompilerExtension)o).setCompiler(compiler);
+							compiler.addExtension((ICompilerExtension)o);
+						}
+						else {
+							throw new RuntimeException("Extension " + extensions[i].trim() + " is not an instance of " + ICompilerExtension.class.getCanonicalName() + " - aborting");
+						}
+					}
+					catch (Exception e) {
+						System.err.println("Unable to load extension: " + extensions[i].trim() + ". Compilation aborted.");
+						throw new RuntimeException(e);
+					}
+				}
+			}
+		}
+		
+		EGLC.compile(processedArgs, compiler, problemRequestorFactory);
 	}
 
 }

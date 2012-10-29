@@ -117,9 +117,9 @@ public class JavaScriptGenerator extends Generator {
 	}
 
 	private void makeWriter() {
-		out = (Boolean.TRUE
-			== (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
-		) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
+		out = Boolean.TRUE.equals(context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)) 
+				? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) 
+				: new TabbedWriter(new StringWriter());
 	}
 
 	public void dumpErrorMessages() {
@@ -136,12 +136,12 @@ public class JavaScriptGenerator extends Generator {
 
 	public String getRelativeFileName(Part part) {
 		StringBuilder buf = new StringBuilder(150);
-		String pkg = part.getPackageName();
+		String pkg = part.getCaseSensitivePackageName();
 		if (pkg.length() > 0) {
 			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		String name = JavaScriptAliaser.getAlias(part.getId());
+		String name = JavaScriptAliaser.getAlias(part.getCaseSensitiveName());
 		if(part instanceof ExternalType){
 			buf.append(JavaScriptAliaser.getAliasForExternalType(name));
 		}else{

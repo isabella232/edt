@@ -78,9 +78,9 @@ public class LibraryTemplate extends JavaTemplate {
 
 	public void genGetterSetter(Library library, Context ctx, TabbedWriter out, Field arg) {
 		boolean found;
-		String name = arg.getName().substring(0, 1).toUpperCase();
-		if (arg.getName().length() > 1)
-			name = name + arg.getName().substring(1);
+		String name = arg.getCaseSensitiveName().substring(0, 1).toUpperCase();
+		if (arg.getCaseSensitiveName().length() > 1)
+			name = name + arg.getCaseSensitiveName().substring(1);
 		found = false;
 		for (int i = 0; i < library.getFunctions("get" + name).size(); i++) {
 			Function function = library.getFunctions("get" + name).get(i);

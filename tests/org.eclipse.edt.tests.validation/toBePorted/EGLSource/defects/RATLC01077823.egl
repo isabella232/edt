@@ -1,0 +1,34 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// Arguments of type Any to bytes, convert, and mathLib functions are causing
+// compilation errors
+
+// According to Paul's System Functions spec, the argument to bytes and the
+// first argument to convert can be any fixed length item, structured record,
+// or form.  Validation is allowing Anys, which causes an error in the
+// generated Java since it is not supported by runtime.
+
+// The argument to mathLib functions can be any numeric primitive or a hex
+// variable with length 8 or 16.  Again, validation is allowing Anys, which
+// causes a compilation error.
+
+Program pgm
+	function main()
+		thing any;
+		
+		thing = bytes( thing );			// 1
+		thing = bytes( thing );	// 1
+		
+		convert( thing, local, "" );			// 1
+	end
+end

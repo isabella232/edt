@@ -35,8 +35,6 @@ public abstract class AbstractRecoverer {
 	protected static int[] IMPORTANT_TERMINALS = {
 		ErrorNodeTypes.DATAITEM,
 		ErrorNodeTypes.RECORD,
-		ErrorNodeTypes.FORMGROUP,
-		ErrorNodeTypes.FORM,
 		ErrorNodeTypes.PROGRAM,
 		ErrorNodeTypes.FUNCTION,
 		ErrorNodeTypes.RPAREN,
@@ -46,8 +44,6 @@ public abstract class AbstractRecoverer {
 	protected static int[] UNDELETABLE_TERMINALS = {
 		ErrorNodeTypes.DATAITEM,
 		ErrorNodeTypes.RECORD,
-		ErrorNodeTypes.FORMGROUP,
-		ErrorNodeTypes.FORM,
 		ErrorNodeTypes.PROGRAM,
 		ErrorNodeTypes.FUNCTION,
 		ErrorNodeTypes.EOF

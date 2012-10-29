@@ -1,0 +1,36 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record charactersFixed type sqlrecord { tableNames = [[ "arytst7" ]], keyItems = [ id ] }
+		 5 id smallint;
+		 5 name char(10);
+		 5 description char(40);
+		 5 species char(10);
+end
+
+record charactersFlexible type sqlrecord { tableNames = [[ "arytst7" ]], keyItems = [ id ] }
+		 id smallint;
+		 name char(10);
+		 description char(40);
+		 species char(10);
+end
+
+Program pgm
+
+	function main()
+		cf charactersFixed[8];
+		add cf;  	//0
+		
+		cf2 charactersFlexible[8];
+		add cf2;	//0
+	end
+end

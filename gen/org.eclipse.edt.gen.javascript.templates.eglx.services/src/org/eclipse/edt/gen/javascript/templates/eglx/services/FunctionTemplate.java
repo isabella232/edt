@@ -67,7 +67,7 @@ public class FunctionTemplate extends JavaScriptTemplate implements Constants{
 	}
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
 		Function proxyFunction = CommonUtilities.createProxyFunction(function, ctx);
-		ctx.putAttribute(proxyFunction, subKey_realFunctionName, function.getName());
+		ctx.putAttribute(proxyFunction, subKey_realFunctionName, function.getCaseSensitiveName());
 		ctx.invokeSuper(this, genDeclaration, proxyFunction, ctx, out);
 		ctx.remove(proxyFunction);
 		
@@ -80,7 +80,7 @@ public class FunctionTemplate extends JavaScriptTemplate implements Constants{
 		Function newFunction = factory.createFunction();
 		if (function.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 			newFunction.addAnnotation(function.getAnnotation(IEGLConstants.EGL_LOCATION));
-		newFunction.setName(function.getName());
+		newFunction.setName(function.getCaseSensitiveName());
 		for(FunctionParameter parameter : function.getParameters()){
 			FunctionParameter newParameter = (FunctionParameter)parameter.clone();
 			newParameter.setContainer(newFunction);

@@ -73,4 +73,9 @@ public abstract class MemberImpl extends TypedElementImpl implements Member {
 		slotSet(Slot_container, value);
 	}
 	
+	@Override
+	public Member resolveMember() {
+		return this;
+	}
+	
 }

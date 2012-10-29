@@ -1,0 +1,52 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//NOTE that this test is NOT complete.  It can't be done totally in JUNIT because we have to be 
+// able to read a build descriptor to get the itemsNullable property to really decide what is and isn't 
+// nullable. 
+program nullhandling_invalid
+	myfixedsql fixedsqlrec; 
+	myflexsql flexsqlrec;
+	myindexed indexrecd; 
+	use myformg;
+	function main()
+		function2(myindexed.field1);	// 1 Arguments for SqlNullable parameters must be SQL items or must have a null indicator set.
+		function2(myfixedsql.field2);	// 1 Arguments for SqlNullable parameters must be SQL items or must have a null indicator set.
+		function2(myform1.field1);		// 1 Arguments for SqlNullable parameters must be SQL items or must have a null indicator set.
+		function3(myflexsql.field1);
+	end
+	function function2 (nullParm1 int SqlNullable)
+	end
+	function function3 (nullParm1 int)
+
+	end
+	function function4 (nullParm2 int SqlNullable)
+	end	
+end
+record indexrecd type indexedrecord
+	10 field1 int;
+	10 field2 char(4);
+end
+record fixedsqlrec type sqlrecord
+	10 field1 int {isSqlNullable = yes};
+	10 field2 int {isSqlNullable = no};
+end
+record flexsqlrec type sqlrecord
+	 field1 int;
+	 field2 int;
+end
+formgroup myformg
+	form myform1 type textform
+		field1 int;
+		field2 char(4);
+	end
+end

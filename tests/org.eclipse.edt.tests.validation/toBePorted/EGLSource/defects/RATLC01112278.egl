@@ -1,0 +1,60 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function bad()
+	  a int[3];
+	  b smallint[3];	  
+	  move a to b; 		//0
+	  move b to a;		//0
+	  b = a; 			//1 not compatible
+	  
+	  c int[3];
+	  a = c;			//0
+	  c = a;			//0
+	  move a to c;		//0
+	  move c to a;		//0
+	  
+	  thing any;
+	  a = thing as int[];		//0
+	  thing = a;		//0
+	  
+	  thingAry any[];
+	  a = thingAry;			//1
+	  thingAry = a;			//1
+	  move a to thingAry;	//0
+	  move thingAry as int[] to a;	//0
+	end
+	
+	function moreChecks()	  
+	  strAry string[];
+	  dict dictionary;
+	  strAry = dict.getValues();		//1
+	  move dict.getValues() as string[] to strAry;	//0
+	end
+	
+	function yetMoreChecks()	  
+	  intAry int[];
+	  stringAry string[];
+	  anyAry any[];
+	  
+	  intAry.appendAll(stringAry);		//1
+	  intAry.appendAll(intAry);			//0
+	  intAry.appendAll(anyAry);	  		//0
+	  anyAry.appendAll(intAry);			//0
+	  anyAry.appendAll(stringAry);		//0
+	  anyAry.appendAll(anyAry);			//0
+	  anyAry.appendAll(stringAry);		//0
+	  strAry.appendAll(intAry);			//1
+	  stringAry.appendAll([1,2,3]);		//0
+	end
+end

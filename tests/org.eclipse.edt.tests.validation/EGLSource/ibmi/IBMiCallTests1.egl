@@ -1,0 +1,89 @@
+import eglx.jtopen.annotations.*;
+import eglx.jtopen.*;
+
+program pgm1 {}
+	conn JTopenConnection?;
+	function main()
+	end
+	
+	function f1(p1 decimal)
+			i1 int;
+			call fp10(i1) using conn;// 1 The function fp10 must be defined with the IBMiProgram annotation
+	end
+
+	function f2(p1 decimal)
+			i1 int;
+			call fp9(i1);// 1 An IBM i call statement requires a connection, the using clause and the target function @Resource are missing
+	end
+
+	function f3(p1 decimal)
+			i1 boolean;
+			call fp9(i1) using conn;// 1 The argument i1 cannot be passed to the inOut or Out parameter p1 of the function fp9. The types boolean and int are not reference compatible
+	end
+
+	function f4(p1 decimal)
+			i1 int;
+			call fp9(i1) using conn returning to fp9;// 1 A "returning to" or "onexception" expression is not allowed for a call to a local function
+	end
+
+	function f5(p1 decimal)
+			i1 int;
+			call fp9(i1) using conn onexception fp9;// 1 A "returning to" or "onexception" expression is not allowed for a call to a local function
+	end
+
+	function f6(p1 decimal)
+			i1, i2 int;
+			call fp9(i1) using conn returns(i2);// 1 The call statement cannot specify a returns value, because the function fp9 does not return a value.
+	end
+
+	function f7(p1 decimal)
+			i1 int;
+			i2 time;
+			call fp8(i1) using conn returns(i2);// 1 The return type fp8 of the function fp8 is not compatible with the type time of the returns expression i2 in the Call statement.
+	end
+
+	function f8(p1 decimal)
+			i1 int;
+			i2 time;
+			call fp8(i1) using conn;// 1 The call statement must specify a returns expression.
+	end
+
+	function f9(p1 decimal)
+			i1 int;
+			call Service1.fp9(i1) using conn;// 1 Only a library part can be use as a qualifier.
+	end
+
+	function f10(p1 decimal)
+			i1 int;
+			call field1(i1) using conn;// 1 The target of the Call must be a proxy function.
+	end
+
+	function fp8 (p1 int)returns(int)
+		{@IBMiProgram{isServiceProgram=true}} 
+	end
+
+	function fp9 (p1 int)
+		{@IBMiProgram{}} 
+	end
+
+	function fp10 (p1 int) 
+	end
+
+	field1 int;
+	
+end
+
+service service1 {}
+	conn JTopenConnection?;
+	function f1(p1 decimal)
+			i1 int;
+			call this.fp9(i1) using conn;// 0
+	end
+	function f1(p1 decimal)
+			i1 int;
+			call fp9(i1) using conn;// 0
+	end
+	function fp9 (p1 int)
+		{@IBMiProgram{}} 
+	end
+end

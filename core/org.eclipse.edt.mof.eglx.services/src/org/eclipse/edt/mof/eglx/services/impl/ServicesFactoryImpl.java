@@ -13,8 +13,8 @@ package org.eclipse.edt.mof.eglx.services.impl;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.CallStatement;
-import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
-import org.eclipse.edt.mof.eglx.services.ServicesFactory;
+import org.eclipse.edt.mof.eglx.services.gen.ServicesCallStatement;
+import org.eclipse.edt.mof.eglx.services.gen.ServicesFactory;
 import org.eclipse.edt.mof.impl.EFactoryImpl;
 
 

@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR VAG
+
+program RATLC01086792 type TextUIProgram {
+	allowUnqualifiedItemReferences = yes
+	}
+	anInt int ;	
+	use RATLC01086792Group ;
+	function main()
+		converse aForm;
+	end 	
+end
+
+formGroup RATLC01086792Group
+	Form aForm type TextForm { 
+		screenSizes = [[ 24, 80 ]], 
+		formsize = [24,80], 
+		position = [1,1]
+		}
+		timeAsNum num(8) { position = [22,25],  
+			value = "hh:mm:ss" ,
+			timeFormat = "HH:mm:ss",
+			validatorFunction = checkTime 
+			} ;
+	end
+end
+
+function checkTime () 
+	if ( timeAsNum != 0 )
+		anInt = 1 ;
+	end
+end

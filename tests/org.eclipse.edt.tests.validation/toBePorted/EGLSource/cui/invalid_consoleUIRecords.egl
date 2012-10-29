@@ -1,0 +1,207 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program ConsoleUIRecords type basicProgram
+	myForm MyForm1 {
+		delimiters = "a",	// 0
+		formSize = [2,8],	// 0
+		name = "a",	// 0
+		showBrackets = no	// 0
+	};
+	myWindow Window {
+		color = black,	// 0
+		commentLine = 5,	// 0
+		formLine = 6,	// 0
+		hasBorder = no,	// 0
+		hasCommentLine = yes,	// 0
+		highlight = [ defaultHighlight ], 	// 0
+		intensity = dim,	// 0
+		menuLine = 7,	// 0
+		messageLine = 8,	// 0
+		name = "aaa",	// 0
+		position = [4,6],	// 0
+		promptLine = 3,	// 0
+		size = [2,2]	// 0
+	};
+	myMenu Menu {
+		labelKey = "dd",	// 0
+		labelText = "dd",	// 0
+		menuItems = [menuItemX],	// 1
+		name = "dd"	// 1
+	};
+	myMenuItem MenuItem {
+		accelerators = ["accelerator"],	// 0
+		comment = "ddd",	// 0
+		commentKey = "aaa",	// 0
+		help = "aa",	// 0
+		helpMsgKey = "PF5",	// 0
+		labelKey = "ss",	// 0
+		labelText = "gg",	// 0
+		name = "aa"	// 0
+	};
+	
+	Function test()
+		myField ConsoleField { fieldLen = 3 } = new ConsoleField { protect = yes };	// 1 ConsoleField may only be declared inside of ConsoleForm
+		myField.protect = yes;	// 1 read-only
+	End
+		
+	myPrompt Prompt {
+		isChar = no,	// 0
+		message = "vvv",	// 0
+		messageKey = "a",	// 0
+		responseAttr = "b"			// 1
+	};
+	myPresentationAttributes PresentationAttributes {
+		color = cyan,	// 0
+		highlight = nohighlight,	// 1
+		intensity = invisible};	// 0
+
+	function main()
+	end
+end
+
+record MyForm1 type consoleForm {formSize=[14,80]}
+	* ConsoleField {position = [1,1], value = "test"};	// 0
+	field1 ConsoleField {name = "field1", position = [2,1], fieldLen = 5, protect = YES};	// 0
+	field2 ConsoleField {field2 = "field2", position = [3,1], fieldLen = 5};	// 1
+	arrayField1 ConsoleField[3] {arrayField1 = "arrayField1", position = [4,1], fieldLen = 40};	// 1
+	arrayField2 ConsoleField[3] {arrayField2 = "arrayField2", position = [5,1], fieldLen = 10, protect = YES};	// 1
+	
+	myDict dictionary {field1 = field1, field2 = field2};	// 0
+	myArrayDict arrayDictionary {arrayField1 = arrayField1, arrayField2 = arrayField2};	// 0
+end
+
+record MyRecord type basicRecord
+	field1 char(5);
+	field2 char(5);
+	arrayField1 char(5)[3];
+	arrayField2 char(5)[3];
+end
+
+record MyForm2 type consoleForm {
+	delimiters = ",",
+	formSize = [20,40],
+	name = "nnn",
+	showBrackets = no}
+	
+	* ConsoleField {
+		align = AlignKind.center, 	// 0
+		autoNext = no, 	// 0
+		binding = "aa",	// 1
+		caseFormat = CaseFormatKind.lower,	// 0
+		color = magenta,	// 0
+		comment = "ccc",	// 0
+		commentKey = "aa",	// 0
+		dataType = "dd",	// 1
+		dateFormat = systemGregorian,	// 1
+		editor = "e",	// 0
+		fieldlen = 6,	// 0
+		help = "hh",	// 0
+		helpMsgKey = "PF1",	// 0
+		highlight = reverse,	// 1
+		initialValue = "gg",	// 0
+		initialValueKey = "gg",	// 0
+		inputRequired = yes,	// 0
+		intensity = IntensityKind.invisible,	// 0
+		isBoolean = no,	// 0
+		masked = yes,	// 0
+		minimumInput = 7,	// 0
+		name = "tt",	// 0
+		numericFormat = "aa",	// 0
+		pattern = "pp",	// 0
+		position = [4,5],	// 0
+		protect = skip,	// 1
+		segments = [[2,4,3],[3,3,7]],	// 0
+		sqlColumnName = "col",	// 0
+		timeFormat = iso,	// 1
+		timestampFormat = "tt",	// 0
+		validValues = [3,9],	// 0
+		value = "88",	// 0
+		verify = no,	// 0
+		wordWrap = compress};	// 1
+		
+	field2 ConsoleField {
+		align = AlignKind.none,	// 0
+		autoNext = no,	// 0
+		binding = "l",	// 1
+		caseFormat = CaseFormatKind.upper,	// 0
+		color = cyan,	// 0
+		comment = "jj",	// 0
+		commentKey = "ss",	// 0
+		dataType = "a",	// 1
+		dateFormat = jis,	// 1
+		editor = "d",	// 0
+		fieldlen = 7,	// 0
+		help = "s",	// 0
+		helpMsgKey = "PF2",	// 0
+		highlight = underline,	// 1
+		initialValue = "oo",	// 0
+		initialValueKey = "q",	// 0
+		inputRequired = yes,	// 0
+		intensity = IntensityKind.invisible,	// 0
+		isBoolean = yes,	// 0
+		masked = no,	// 0
+		minimumInput = 8,	// 0
+		name = "qq",	// 0
+		numericFormat = "pp",	// 0
+		pattern = "ss",	// 0
+		position = [3,4],	// 0	// 0
+		protect = yes,	// 0
+		segments = [[3,4,2]],	// 0
+		sqlColumnName = "kk",	// 0
+		timeFormat = usa,	// 1
+		timestampFormat = "uu",	// 0
+		validValues = [2,4],	// 0
+//		value = 5,	// 0
+		verify = yes,	// 0
+		wordWrap = yes};	// 1
+		
+	arrayField1 ConsoleField[3] {
+		align = AlignKind.left,	// 0
+		autoNext = no,	// 0
+		binding = "k",	// 1
+		caseFormat = CaseFormatKind.upper,	// 0
+		color = blue,	// 0
+		columns = 2,	// 0
+		comment = "ee",	// 0
+		commentKey = "q",	// 0
+		dataType = "ss",	 // 1
+		dateFormat = locale,	// 1
+		editor = "w",	// 0
+		fieldlen = 5,	// 0
+		help = "h",	// 0
+		helpMsgKey = "PF1",	// 0
+		highlight = underline,	// 1
+		initialValue = "p",	// 0
+		initialValueKey = "o",	// 0
+		inputRequired = yes,	// 0
+		intensity = IntensityKind.normalIntensity,	// 0
+		isBoolean = no,	// 0
+		linesBetweenRows = 3,	// 0
+		masked = yes,	// 0
+		minimumInput = 9,	// 0
+		name = "nn",	// 0
+		numericFormat = "pp",	// 0
+		orientIndexAcross = yes,	// 0
+		pattern = "q",	// 0
+		position = [2,4],	// 0
+		protect = skip,	// 1
+		segments = [[1,2,3]],	// 0
+		spacesBetweenColumns = 7,	// 0
+		sqlColumnName = "rr",	// 0
+		timeFormat = iso,	// 1
+		timestampFormat = "pp",	// 0
+		validValues = [2,8],	// 0
+//		value = 4,	// 0
+		verify = no,	// 0
+		wordWrap = yes};	// 1
+
+end

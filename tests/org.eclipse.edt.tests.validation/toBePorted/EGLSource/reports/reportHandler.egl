@@ -1,0 +1,143 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+handler MyReport type jasperReport { V60ExceptionCompatibility = YES }			// 0
+	use FormGp;				  				// 1 FormGp in handler MyReport is invalid
+	
+	myStringItem String;
+	aXXXW int;
+	const aXXXW int = 7;  						// 1 The same name aXXXW also appears as 
+	
+	function beforeReportInit()
+//This is one of 8 system functions that are only allowed in JSFHandler
+		j2eeLib.getSessionAttr("abc", myStringItem);	// 0
+	end
+	
+	function afterReportInit(var string)	// 1 invalid number of parameters
+	end
+	
+	function afterReportInit()
+		myCharItem string;
+		myStringItem string;
+		myCharItem = "12345";
+		myStringItem = "string";
+	end
+	
+	function beforeGroupInit()				// 1 invalid number of parameters
+	end
+	
+	function afterGroupInit(var int)		// 1 is declared with the wrong type
+	end
+	
+	function afterGroupInit(var string)
+		str1 string;
+		const cStr1 string = "a";
+		stringDataItem1 StringDataItem1;
+		fff any;
+		reportData ReportData;
+		
+		//good arguments
+		fff = getReportParameter(str1);
+		fff = getReportParameter(cStr1);
+		fff = getReportParameter(stringDataItem1);
+		fff = getReportParameter("b");
+		
+		setReportVariableValue(str1, fff);
+		setReportVariableValue(cStr1, fff);
+		setReportVariableValue(stringDataItem1, fff);
+		setReportVariableValue("b", fff);
+		
+		fff = getReportVariableValue(str1);
+		fff = getReportVariableValue(cStr1);
+		fff = getReportVariableValue(stringDataItem1);
+		fff = getReportVariableValue("b");
+
+		fff = getFieldValue(str1);
+		fff = getFieldValue(cStr1);
+		fff = getFieldValue(stringDataItem1);
+		fff = getFieldValue("b");
+
+		addReportData(reportData, str1);
+		addReportData(reportData, cStr1);
+		addReportData(reportData, stringDataItem1);
+		addReportData(reportData, "b");
+
+		fff = getReportData(str1);
+		fff = getReportData(cStr1);
+		fff = getReportData(stringDataItem1);
+		fff = getReportData("b");
+
+		// bad arguments
+		fff = getReportParameter(2);		// 0
+		setReportVariableValue(2, "jj");	// 0
+		fff = getReportVariableValue(2);	// 0
+		fff = getFieldValue(2);				// 0
+		addReportData(2,2);					// 1 not reference compatible
+		fff = getReportData(2);				// 0
+		
+		fff = getReportParameter();			// 1 requires exactly
+		setReportVariableValue();			// 1 requires exactly
+		fff = getReportVariableValue();		// 1 requires exactly
+		fff = getFieldValue();				// 1 requires exactly
+		addReportData();					// 1 requires exactly
+		fff = getReportData();				// 1 requires exactly
+	end
+	
+	function referenceTypeFunc(
+		p0 int,					//0
+		p1 report in,				//1 Only dataItems are allowed for parameters or return types in a report handler.
+		p2 reportdata in,			//1 Only dataItems are allowed for parameters or return types in a report handler.
+		p3 window in,				//1 Only dataItems are allowed for parameters or return types in a report handler.
+		p4 consoleField in,		//1 Only dataItems are allowed for parameters or return types in a report handler.
+		p5 StringDataItem1,
+		p6 myRecord)			//1 Only dataItems are allowed for parameters or return types in a report handler.
+		returns( window );		//1 Only dataItems are allowed for parameters or return types in a report handler.
+	end
+end
+
+handler myreport2 type JasperReport { V60ExceptionCompatibility = YES }
+	function referenceTypeFunc(
+		p0 int,					//0
+		p1 report in,				//1 Only dataItems are allowed for parameters or return types in a report handler.
+		p2 reportdata in,			//1 Only dataItems are allowed for parameters or return types in a report handler.
+		p3 window in,				//1 Only dataItems are allowed for parameters or return types in a report handler.
+		p4 consoleField in,		//1 Only dataItems are allowed for parameters or return types in a report handler.
+		p5 StringDataItem1,
+		p6 myRecord)			//1 Only dataItems are allowed for parameters or return types in a report handler.
+		returns( window );		//1 Only dataItems are allowed for parameters or return types in a report handler.
+	end
+end
+
+Record myRecord
+	x string;
+end
+
+DataItem StringDataItem1 string
+end
+
+formGroup FormGp
+	{validationBypassKeys = [pf2], helpKey = pf1, 
+	 pfKeyEquate = yes, alias = "runtimeName",
+	 ScreenFloatingAreas=[
+	 	 @screenFloatingArea 
+	 		{screenSize = [24, 80], topMargin = 0, bottomMargin = 0,
+	 		 leftMargin = 0, rightMargin = 0}
+	 ],
+	 PrintFloatingAreas=[
+	 	 @printFloatingArea 
+	 		{pageSize = [24, 80], topMargin = 3, bottomMargin = 3, 
+	 		 leftMargin = 5, rightMargin = 5 }
+	 ]}  
+	
+	// Use Declarations or Form Definitions
+	 
+end

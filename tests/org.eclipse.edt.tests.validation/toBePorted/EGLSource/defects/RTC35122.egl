@@ -1,0 +1,84 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+dataitem com2 int end  //1
+dataitem com3 int end  //1
+dataitem com4 int end  //1
+dataitem com5 int end  //1
+dataitem com6 int end  //1
+dataitem com7 int end  //1
+dataitem com8 int end  //1
+dataitem com9 int end  //1
+dataitem lpt1 int end  //1
+dataitem lpt2 int end  //1
+dataitem lpt3 int end  //1
+dataitem lpt4 int end  //1
+dataitem lpt5 int end  //1
+dataitem lpt6 int end  //1
+dataitem lpt7 int end  //1
+dataitem lpt9 int end  //1
+
+record rec1
+	aux int; //0
+	clock$ int; //0
+	com1 int; //0
+	con int; //0
+	lpt8 int; //0
+	prn int; //0
+end
+
+record rec2
+	10 aux int; //0
+	10 clock$ int; //0
+	10 com1 int; //0
+	10 con int; //0
+	10 lpt8 int; //0
+	10 prn int; //0
+end
+
+function aux() //1
+end
+
+function clock$()  //1
+end
+
+function com1()  //1
+end
+
+function con()  //1
+end
+
+function lpt8()  //1
+end
+
+function prn()  //1
+end
+
+library lib1
+	function aux() //0
+	end
+	
+	function clock$()  //0
+	end
+	
+	function com1()  //0
+	end
+	
+	function con()  //0
+	end
+	
+	function lpt8()  //0
+	end
+	
+	function prn()  //0
+	end
+end
+

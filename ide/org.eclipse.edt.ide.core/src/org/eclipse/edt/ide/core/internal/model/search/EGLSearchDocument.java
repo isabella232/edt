@@ -20,12 +20,10 @@ import org.eclipse.edt.compiler.internal.eglar.FileInEglar;
 public class EGLSearchDocument extends SearchDocument {
 	protected byte[] byteContents;
 	protected char[] charContents;
-	private String zipFilePath; 
 //private IDocument 
 	public EGLSearchDocument(java.util.zip.ZipEntry zipEntry, IPath zipFilePath, byte[] contents, SearchParticipant participant) {
 		super(zipFilePath + FileInEglar.EGLAR_SEPARATOR + zipEntry.getName(), participant);
 		this.byteContents = contents;
-		this.zipFilePath = zipFilePath.toOSString();
 	}
 
 	protected EGLSearchDocument(String documentPath, SearchParticipant participant) {

@@ -18,7 +18,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
 
 
 /**
@@ -27,49 +30,113 @@ import org.eclipse.edt.compiler.core.ast.Node;
 public abstract class DefaultProblemRequestor implements IProblemRequestor {
 	
 	public static final String EGL_VALIDATION_RESOURCE_BUNDLE_NAME = "org.eclipse.edt.compiler.internal.core.builder.EGLValidationResources"; //$NON-NLS-1$
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(EGL_VALIDATION_RESOURCE_BUNDLE_NAME, Locale.getDefault());
+	public static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(EGL_VALIDATION_RESOURCE_BUNDLE_NAME, Locale.getDefault());
 	boolean hasError;
-
-	public abstract void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts);
 	
-	public void acceptProblem(Node astNode, int problemKind) {
-		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), IMarker.SEVERITY_ERROR, problemKind, new String[0]);
+	@Override
+	public abstract void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle);
+	
+	@Override
+	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {
+		acceptProblem(startOffset, endOffset, severity, problemKind, inserts, RESOURCE_BUNDLE);
 	}
+	
+	@Override
+	public void acceptProblem(Node astNode, int problemKind) {
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), IMarker.SEVERITY_ERROR, problemKind, new String[0], RESOURCE_BUNDLE);
+	}
+	
+	@Override
 	public boolean shouldReportProblem(int problemKind) {
 		return true;
 	}
-
+	
+	@Override
 	public void acceptProblem(Node astNode, int problemKind, int severity) {
-		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, new String[0]);
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, new String[0], RESOURCE_BUNDLE);
 	}
-
+	
+	@Override
 	public void acceptProblem(Node astNode, int problemKind, String[] inserts) {
-		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), IMarker.SEVERITY_ERROR, problemKind, inserts);
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), IMarker.SEVERITY_ERROR, problemKind, inserts, RESOURCE_BUNDLE);
 	}
-
+	
+	@Override
 	public void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts) {
-		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, inserts);
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, inserts, RESOURCE_BUNDLE);
 	}
-
+	
+	@Override
+	public void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts, ResourceBundle bundle) {
+		acceptProblem(astNode.getOffset(), astNode.getOffset() + astNode.getLength(), severity, problemKind, inserts, bundle);
+	}
+	
+	@Override
 	public void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts) {
+		acceptProblem(startOffset, endOffset, problemKind, isError, inserts, RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts, ResourceBundle bundle) {
 		if (isError) {
-			acceptProblem(startOffset, endOffset, IMarker.SEVERITY_ERROR, problemKind, inserts);
+			acceptProblem(startOffset, endOffset, IMarker.SEVERITY_ERROR, problemKind, inserts, bundle);
 		}
 		else {
-			acceptProblem(startOffset, endOffset, IMarker.SEVERITY_WARNING, problemKind, inserts);
+			acceptProblem(startOffset, endOffset, IMarker.SEVERITY_WARNING, problemKind, inserts, bundle);
 		}
 	}
 	
+	@Override
 	public void acceptProblem(int startOffset, int endOffset, int problemKind, String[] inserts) {
 		acceptProblem(startOffset, endOffset, problemKind, true, inserts);		
 	}
-
+	
+	@Override
 	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind) {
-		acceptProblem(startOffset, endOffset, severity, problemKind, new String[0]);
+		acceptProblem(startOffset, endOffset, severity, problemKind, new String[0], RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(Element element, int problemKind) {
+		acceptProblem(element, problemKind, IMarker.SEVERITY_ERROR, null, RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity) {
+		acceptProblem(element, problemKind, severity, null, RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity, String[] inserts) {
+		acceptProblem(element, problemKind, severity, inserts, RESOURCE_BUNDLE);
+	}
+	
+	@Override
+	public void acceptProblem(Element element, int problemKind, int severity, String[] inserts, ResourceBundle bundle) {
+		int startOffset = 0;
+		int endOffset = 0;
+		Annotation annot = element.getAnnotation(IEGLConstants.EGL_LOCATION);
+		if (annot != null) {
+			Object val = annot.getValue(IEGLConstants.EGL_PARTOFFSET);
+			if (val instanceof Integer) {
+				startOffset = ((Integer)val).intValue();
+				endOffset = startOffset;
+				
+				val = annot.getValue(IEGLConstants.EGL_PARTLENGTH);
+				if (val instanceof Integer) {
+					endOffset += ((Integer)val).intValue();
+				}
+			}
+		}
+		acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 	}
 	
 	public static String getMessageFromBundle(int problemKind, String[] inserts) {
-		String message = RESOURCE_BUNDLE.getString(Integer.toString(problemKind));
+		return getMessageFromBundle(problemKind, inserts, RESOURCE_BUNDLE);
+	}
+	
+	public static String getMessageFromBundle(int problemKind, String[] inserts, ResourceBundle bundle) {
+		String message = bundle.getString(Integer.toString(problemKind));
 		if (message == null || inserts == null || inserts.length == 0) {
 			return message;
 		}
@@ -140,7 +207,6 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(ROUTINE_MUST_HAVE_ONE_OR_TWO_ITEM_ARGUMENTS),
 		new Integer(INVALID_ROUND_ARG_1),
 		new Integer(INVALID_SUBSCRIPT),
-		new Integer(ROUTINE_MUST_HAVE_X_ARGS),
 		new Integer(ARG_MUST_BE_INTEGER_ITEM_CONSTANT_OR_LITERAL),
 		new Integer(ARG_MUST_BE_ITEM_STRING_CONSTANT_OR_LITERAL),
 		new Integer(ARG_MUST_BE_GREATER_THAN_ZERO),
@@ -213,15 +279,9 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(NOT_ENOUGH_SUBSCRIPTS),
 		new Integer(TOO_MANY_SUBSCRIPTS),
 		new Integer(SUBSCRIPT_OUT_OF_RANGE),
-		new Integer(SUBSCRIPT_MUST_BE_INTEGER_ITEM),
 		new Integer(DOT_ACCESS_USED_AFTER_DYNAMIC),
-		new Integer(ARRAY_ACCESS_NOT_SUBSCRIPTED),
-		new Integer(NON_ARRAY_ACCESS_SUBSCRIPTED),
 		new Integer(EXPRESSION_AS_SUBSCRIPT),
-		new Integer(NON_DYNAMIC_ACCESS_ACCESSED_DYNAMICALLY),
 		new Integer(SQL_TABLE_NAME_VAR_MUST_BE_ITEM),
-		new Integer(VARIABLE_NOT_FOUND),
-		new Integer(VARIABLE_ACCESS_AMBIGUOUS),
 		new Integer(VARIABLE_RESOLVED_TO_CONTAINER_MIGHT_BE_ITEM_IN_VAGEN),
 		new Integer(PRINT_TARGET_MUST_BE_PRINT_FORM),
 		new Integer(DUPLICATE_LABEL),
@@ -243,14 +303,11 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(GET_BY_POSITION_DIRECTIVE_OTHER_THAN_NEXT_OR_PREVIOUS),
 		new Integer(GET_BY_POSITION_STATEMENT_TARGET_NOT_RECORD),
 		new Integer(GET_BY_KEY_STATEMENT_TARGET_NOT_RECORD),
-		new Integer(CANNOT_MODIFY_CONSTANT),
 		new Integer(STRINGCONCAT_EXPRESSION_INVALID_EXPR),
 		new Integer(ASSIGNMENT_STATEMENT_INCOMPATIBLE_OPERANDS),
 		new Integer(ASSIGNMENT_STATEMENT_RECORD_TARGET_SOURCE_CANNOT_BE),
-		new Integer(SUBSTRING_IMMUTABLE),
 		new Integer(ASSIGNMENT_STATEMENT_RECORD_SOURCE_TARGET_MUST_BE),
 		new Integer(ASSIGNMENT_STATEMENT_MUST_BE_RECORD_OR_ITEM),
-		new Integer(ASSIGNMENT_STATEMENT_TYPE_MISMATCH),
 		new Integer(FUNCTION_MUST_RETURN_TYPE),
 		new Integer(ASSIGNMENT_STATEMENT_VARIABLE_NOT_DEFINED),
 		new Integer(SHOW_RETURNING_TO_NOT_PROGRAM_OR_CHARACTER_ITEM),
@@ -285,12 +342,10 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(ARRAY_FUNCTION_USED_WITHOUT_DYNAMIC_ARRAY),
 		new Integer(ARRAY_ELEMENT_ARGUMENT_INCORRECT_TYPE),
 		new Integer(MAXIMUMSIZE_ARGUMENT_INCORRECT),
-		new Integer(RETURN_STATEMENT_TYPE_INCOMPATIBLE),
 		new Integer(INVALID_SET_STATEMENT_DATA_REFERENCE),
 		new Integer(INVALID_SET_STATE_FOR_ITEM),
 		new Integer(INVALID_SET_STATE_FOR_SQL_ITEM),
 		new Integer(INVALID_SET_STATE_FOR_RECORD),
-		new Integer(INVALID_SET_STATE_FOR_INDEXED_RECORD),
 		new Integer(INVALID_SET_STATE_FOR_TEXT_FORM),
 		new Integer(INVALID_SET_STATE_FOR_PRINT_FORM),
 		new Integer(INVALID_SET_STATE_FOR_TEXT_FIELD),
@@ -303,10 +358,6 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(USED_LIBRARY_RECORD_USED_FOR_IO),
 		new Integer(PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM),
 		new Integer(FORWARD_TARGET_DOESNT_HAVE_ONPAGELOAD_FUNCTION),
-		new Integer(FLEXIBLE_RECORD_PASSED_TO_NON_EGL_PAGEHANDLER),
-		new Integer(ARRAYS_AND_OCCURED_ITEMS_ARE_NOT_COMPATIBLE),
-		new Integer(OCCURED_ITEMS_ONLY_COMPATIBLE_WITH_ANY),
-		new Integer(FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM),
 		new Integer(FUNCTION_ARG_CANNOT_BE_NULL),
 		new Integer(OCCURED_ITEM_MOVE_OPERAND_NOT_SUBSCRIPTED),
 		new Integer(NON_CONTAINER_MOVE_OPERAND_MOVED_BY_NAME_OR_POSITION),
@@ -376,88 +427,25 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(BAD_TYPE_FOR_TRANSFER_TO_PROGRAM_IN_VGWEBTRANSACTION),
 		new Integer(FORWARD_TO_URL_TARGET_MUST_BE_CHARACTER),
 		new Integer(SHOW_UIRECORD_ONLY_VALID_IN_VGWEBTRANSACTION),
-		new Integer(DLI_SEGMENT_IO_INVALID_IN),
-		new Integer(ISNOT_STATE_NOT_VALID_FOR_DLISEGMENT),
-		new Integer(MULTIPLE_TARGETS_MUST_ALL_BE_DLISEGMENT_SCALARS),
-		new Integer(IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET),
-		new Integer(USINGPCB_ITEM_NOT_IN_PROGRAM_PSB),
 		new Integer(FORUPDATE_NOT_ALLOWED_WITH_ARRAY_TARGET),
-		new Integer(ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT),
-		new Integer(DLI_SEGMENT_NAME_IS_INVALID),
-		new Integer(DLI_FIELD_NAME_IS_INVALID),
-		new Integer(DLI_ONLY_ONE_DLI_CALL_UNLESS_TARGET_IS_ARRAY),
-		new Integer(DLI_GET_BY_KET_MUST_HAVE_TWO_DLI_CALLS_IF_TARGET_IS_ARRAY),
-		new Integer(DLI_INVALID_COMMAND_CODE_FOR_CALL_WITH_ARRAY),
-		new Integer(DLI_PARSE_ERROR),
-		new Integer(DLI_ONLY_VALID_IN_PROGRAM),
-		new Integer(DLI_PROGRAM_MUST_HAVE_DLI),
-		new Integer(DLI_NO_PCB_FOR_SEGMENT),
-		new Integer(DLI_LAST_SSA_WRONG_NAME),
-		new Integer(DLI_SSAS_MUST_FOLLOW_HIERARCHY),
-		new Integer(DLI_SEGMENT_NOT_IN_PCB),
-		new Integer(DLI_MUST_BE_AN_SSA_FOR_EACH_TARGET),
-		new Integer(DLI_D_COMMAND_CODE_MUST_BE_ON_FIRST_SSA),
-		new Integer(DLI_MUST_BE_AN_SSA_FOR_EACH_SEGMENT_TO_ROOT),
-		new Integer(DLI_SEGMENT_NOT_IN_HIERARCHY),
-		new Integer(DLI_NO_PCB_FOR_SEGMENTS),
-		new Integer(DLI_D_COMMAND_CODE_MUST_HAVE_TARGET),
-		new Integer(DLI_NO_HIERARCHY_NO_DEFAULT_SSAS),
-		new Integer(DLI_IO_NOT_ALLOWED_UNLESS_PSB_PROPERTY_DEFINED),
-		new Integer(DLI_PSBRECORD_NOT_VALID_AS_ARGUMENT),
-		new Integer(DLI_PCBRECORD_NOT_VALID_AS_LVALUE),
-		new Integer(DLI_PCBRECORD_NOT_VALID_AS_IN_ARG),
-		new Integer(DLI_PSBRECORD_NOT_VALID_AS_STATEMENT_OPERAND),
-		new Integer(DLI_PSBRECORD_NOT_VALID_AS_PASSING_ITEM),
-		new Integer(DLI_ITEM_MUST_RESOLVE_TO_PCB_IN_PROGRAM_PSB_OR_PARM_LIST),
-		new Integer(DLI_IO_ONLY_ALLOWED_IN_PROGRAM_WITH_DLI),
 		new Integer(SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION),
-		new Integer(CANNOT_PASS_NULL),
 		new Integer(FUNCTION_PARAMETER_REQUIRES_LENGTH),
 		new Integer(ROUTINE_MUST_HAVE_EVEN_NUM_OF_ARGS),
 		new Integer(ROUTINE_CANT_HAVE_MORE_THAN_ARGS),
 		new Integer(HOST_VARIABLE_MUST_BE_ITEM),
 		new Integer(SYSVAR_NOT_HOST_VARIABLE),
 		new Integer(VARIABLE_NOT_FOUND_AS_ITEM),
-		new Integer(FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER),
-		new Integer(FUNCTION_ARG_REQUIRES_IN_PARAMETER),
-		new Integer(FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER),
 		new Integer(RETURN_TARGET_NOT_ITEM),
-		new Integer(DLI_TARGETS_MUST_FOLLOW_HIERARCHY),
-		new Integer(DLI_ADD_TARGETS_MUST_FOLLOW_HIERARCHY),
 		new Integer(EXIT_MODIFIER_ONLY_ALLOWED_IN_PROGRAM),
 		new Integer(EXIT_MODIFIER_NOT_ALLOWED_IN_SERVICE),
-		new Integer(FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM),
-		new Integer(FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_ANYEGL),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_ARRAYORTABLE),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_ATTRIBUTE),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_CONSOLEFORM),
 		new Integer(CONVERT_TARGET_INVALID),
 		new Integer(CONVERTBIDI_TARGET_INVALID),
 		new Integer(CONVERTBIDI_CONVTABLE_INVALID),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_ITEMORRECORD),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_RECORD_OR_DICTIONARY),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_RECORD),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_SERVICEORINTERFACE),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_TEXTFIELD),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_VAGTEXT),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_VAGTEXTORNUMERIC),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_VAGTEXTORNUMERIC),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_LOOSE_PARM),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_LOOSE_NUMERIC_PARM),
-		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_IO_RECORD_PARM),
-		new Integer(FUNCTION_ARG_CANNOT_BE_THIS),
-		new Integer(FUNCTION_ARG_CANNOT_BE_SUPER),
-		new Integer(UNLOADONEXIT_NOT_VALID_IN_MAIN),
-		new Integer(CANNOT_ASSIGN_NULL),
 		new Integer(MOVE_MUST_BE_REFERENCE),
 		new Integer(MOVE_EXTERNALTYPE),
 		new Integer(CANNOT_ASSIGN_TO_ARRAY_DICTIONARY_ELEMENTS),
-		new Integer(DLI_SYSTEM_FUNCTION_NOT_ALLOWED_WITH_AIBTDLI_INTERFACE),
-		new Integer(INVALID_CLAUSE_FOR_NON_DLI_TARGET),
 		new Integer(CONTEXT_SPECIFIC_COMPILATION_EXCEPTION),
 		new Integer(USINGKEYS_ITEM_IN_SQL_RECORD_ARRAY_IO_TARGET),
-		new Integer(DLI_PCB_IS_GSAM_PCB),
 		new Integer(FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE),
 		new Integer(DELETE_STATEMENT_RECORD_IS_INVALID_TYPE),
 		new Integer(SYSTEM_FUNCTION_CANNOT_BE_DELEGATED),
@@ -482,12 +470,10 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(SYSTEM_FUNCTION_NOT_ALLOWED_IN_SERVICE),
 		new Integer(TYPE_NOT_VALID_IN_BITWISE_EXPRESSION),
 		new Integer(MULTIPLE_OVERLOADED_FUNCTIONS_MATCH_ARGUMENTS),
+		new Integer(NO_FUNCTIONS_MATCH_ARGUMENTS),
 		new Integer(FIXED_RECORDS_NOT_ALLOWED_IN_COMPARISONS),
 		new Integer(COMPARING_TEXT_AND_NUMERIC),
 		new Integer(TYPE_INVALID_CONSOLE_FIELD_TYPE_COMPARISON),
-		new Integer(FOR_STATEMENT_COUNTER_MUST_BE_INT),
-		new Integer(FOREACH_ARRAY_MUST_DECLARE_VARIABLE),
-		new Integer(FOREACH_SOURCE_MUST_BE_ARRAY),
 		new Integer(TRUNC_OPERAND_INVALID_MODIFIED),
 		new Integer(INCORRECT_UNICODE_LENGTH_IN_UNICODE_CONVERSION_FUNCTION),
 		new Integer(ITEM_RESOLVED_TO_CONTAINER_WITH_SAME_NAME_AS_FIELD),
@@ -500,37 +486,6 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(NOCURSOR_REQUIRES_KEY_ITEM),
 		new Integer(REDEFINER_AND_REDEFINED_MUST_BE_DECLARED_IN_SAME_PART),
 		new Integer(SET_POSITION_STATEMENT_WITH_INVALID_DATAREF),
-		new Integer(FUNCTION_NOT_VALID_AS_LVALUE),
-		new Integer(FUNCTION_CALL_TARGET_MUST_BE_FUNCTION),
-		new Integer(FUNCTION_MUST_BE_DEFINED_IN_PART),
-		new Integer(FUNCTION_MUST_BE_SERVICE_OR_INTERFACE),
-		new Integer(FUNCTION_CALLBACK_FUNCTION_REQUIRED),
-		new Integer(FUNCTION_CALLBACK_MUST_BE_FUNCTION),
-		new Integer(FUNCTION_REQUIRES_N_PARMS),
-		new Integer(FUNCTION_MUST_HAVE_ALL_IN_PARMS),
-		new Integer(FUNCTION_PARM_MUST_HAVE_TYPE),
-		new Integer(FUNCTION_TYPE_NOT_COMPAT_WITH_PARM),
-		new Integer(FUNCTION_CANNOT_HAVE_RETURN_TYPE),
-		
-		new Integer(SERVICE_CALL_USING_WRONG_TYPE),
-		
-		new Integer(SQL_EXPR_HAS_WRONG_TYPE),
-		new Integer(SQL_WITH_STMT_REQUIRED),
-		new Integer(SQL_FOR_TYPE_INVALID),
-		new Integer(SQL_FOR_AND_TARGET_TYPES_MUST_MATCH),
-		new Integer(SQL_NO_ID_IN_TARGET_TYPE),
-		new Integer(SQL_FOR_NOT_ALLOWED_WITH_DATA_SOURCE_TYPE),
-		new Integer(SQL_WITH_STMT_REQUIRED_FOR_DELETE),
-		new Integer(SQL_NO_WITH_FOR_USING),
-		new Integer(SQL_NO_WITH_USING),
-
-		new Integer(IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED),
-		new Integer(IBMIPROGRAM_RETURNS_NOT_ALLOWED),
-		new Integer(IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION),
-		new Integer(IBMIPROGRAM_USING_HAS_WRONG_TYPE), 
-		new Integer(IBMIPROGRAM_MUST_BE_SPECIFIED),
-		new Integer(IBMIPROGRAM_CALLBACK_NOT_SUPPORTED),
-	
 	}));
 	
 	/**

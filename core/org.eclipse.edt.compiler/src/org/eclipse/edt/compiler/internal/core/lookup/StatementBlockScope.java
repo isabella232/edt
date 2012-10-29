@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
 
 
 /**
@@ -30,8 +29,4 @@ public class StatementBlockScope extends FunctionScope {
 		return declaredDataNames.contains(name) || parentLocalVariableScope.hasDeclaredDataName(name);
 	}
 	
-	public void addIOObject(IDataBinding ioObjectDataBinding) {
-		super.addIOObject(ioObjectDataBinding);
-		parentLocalVariableScope.addIOObject(ioObjectDataBinding);
-	}
 }

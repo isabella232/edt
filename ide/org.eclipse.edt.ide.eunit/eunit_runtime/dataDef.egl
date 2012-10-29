@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 
+import eglx.xml.binding.annotation.XMLAttribute;
+import eglx.xml.binding.annotation.XMLRootElement;
+
 Record TestDescription
 	rootDir String;		//source root directory 
 	pkgName String;		//package name

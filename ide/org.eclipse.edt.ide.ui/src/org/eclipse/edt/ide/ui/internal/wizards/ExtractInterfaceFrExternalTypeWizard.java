@@ -13,13 +13,13 @@ package org.eclipse.edt.ide.ui.internal.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.ide.ui.internal.util.ExternalType2RuiInterfaceConverter;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.wizards.EGLPackageConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ExtractInterfaceFrExternalTypeConfiguration;
@@ -87,7 +87,7 @@ public class ExtractInterfaceFrExternalTypeWizard extends ExtractInterfaceWizard
 		String interfacePkg = config.getFPackage();		
 		String fileName = config.getFileName();
 		
-		Map filecontents = ExternalType2RuiInterfaceConverter.convert(config);
+		Map filecontents = new HashMap();//TODO see comment in this file: ExternalType2RuiInterfaceConverter.convert(config);
 		
 		StringBuffer interfaceContent = new StringBuffer();
 		

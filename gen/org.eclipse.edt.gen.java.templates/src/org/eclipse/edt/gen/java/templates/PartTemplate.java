@@ -40,7 +40,6 @@ public class PartTemplate extends JavaTemplate {
 		ctx.invoke(preGenClassBody, part, ctx);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void preGenPartImport(Part part, Context ctx) {
 		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
 		if (!typesImported.contains("org.eclipse.edt.javart.resources.*"))
@@ -62,7 +61,7 @@ public class PartTemplate extends JavaTemplate {
 		if (packageName != null && packageName.length() > 0) {
 			out.print("package ");
 			out.print(packageName);
-			out.println(";");
+			out.println(";\n");
 		}
 	}
 
@@ -70,8 +69,8 @@ public class PartTemplate extends JavaTemplate {
 	public void genImports(Part part, Context ctx, TabbedWriter out) {
 		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
 		for (String imported : typesImported) {
-			// we don't want to use ctx.gen here, because we want the type template logic to handle this to avoid any array <
-			// ... > being added
+			// we don't want to use ctx.gen here, because we want the type template logic to handle this to avoid any 
+			// array <...> being added
 			// strip off any [...] or <...> found
 			if (imported.indexOf("[") >= 0)
 				imported = imported.substring(0, imported.indexOf("["));
@@ -95,7 +94,7 @@ public class PartTemplate extends JavaTemplate {
 				out.println("import " + type + ";");
 			}
 		}
-		out.println("@SuppressWarnings(\"unused\")");
+		out.println("@SuppressWarnings(\"unused\")\n");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -120,7 +119,7 @@ public class PartTemplate extends JavaTemplate {
 	}
 
 	public void genClassName(Part part, Context ctx, TabbedWriter out) {
-		out.print(JavaAliaser.getAlias(part.getId()));
+		out.print(JavaAliaser.getAlias(part.getCaseSensitiveName()));
 	}
 
 	public void genSuperClass(Part part, Context ctx, TabbedWriter out) {

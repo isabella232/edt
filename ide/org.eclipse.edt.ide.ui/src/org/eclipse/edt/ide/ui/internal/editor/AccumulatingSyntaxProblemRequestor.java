@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.NodeNameUtility;
-import org.eclipse.edt.compiler.core.ast.NodeTypes;
 import org.eclipse.edt.compiler.core.ast.SyntaxError;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -106,10 +105,6 @@ public class AccumulatingSyntaxProblemRequestor implements ISyntaxErrorRequestor
 		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.UNCLOSED_BLOCK_COMMENT, new String[0]));
 	}
 
-	public void unclosedDLI(int startOffset, int endOffset) {
-		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.UNCLOSED_DLI, new String[0]));
-	}
-
 	public void unclosedSQL(int startOffset, int endOffset) {
 		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.UNCLOSED_SQL, new String[0]));
 	}
@@ -120,10 +115,6 @@ public class AccumulatingSyntaxProblemRequestor implements ISyntaxErrorRequestor
 
 	public void unclosedString(int startOffset, int endOffset) {
 		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.UNCLOSED_STRING, new String[0]));
-	}
-
-	public void whitespaceInDLI(int startOffset, int endOffset) {
-		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_WARNING, SyntaxError.WHITESPACE_DLI, new String[0]));
 	}
 
 	public void whitespaceInSQL(int startOffset, int endOffset) {
@@ -155,18 +146,7 @@ public class AccumulatingSyntaxProblemRequestor implements ISyntaxErrorRequestor
 	 }
 
 	public void keywordAsName(int terminalType, int startOffset, int endOffset) {	
-		String insert;
-		switch(terminalType) {
-			case NodeTypes.PRIMITIVE:
-			case NodeTypes.NUMERICPRIMITIVE:
-			case NodeTypes.CHARPRIMITIVE:
-			case NodeTypes.TIMESTAMPINTERVALPRIMITIVE:
-				insert = fileContents.substring(startOffset, endOffset).toUpperCase();
-				break;
-			default:
-				insert = NodeNameUtility.getTerminalName(terminalType);
-		}
-		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.KEYWORD_AS_NAME, new String[] { insert }));	
+		problems.add(new Problem(startOffset, endOffset, IMarker.SEVERITY_ERROR, SyntaxError.KEYWORD_AS_NAME, new String[] {NodeNameUtility.getTerminalName(terminalType)}));	
 	}
 	
 }

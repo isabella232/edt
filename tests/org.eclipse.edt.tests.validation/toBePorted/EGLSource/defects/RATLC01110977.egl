@@ -1,0 +1,24 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+	
+		nm String;
+		nm = "el999m03Form";				 
+		formvar el999m03Form{name=nm};	//1 Property: name.  This property requires a quoted string as the value.
+		formvar.name = nm;				//1 formvar.name cannot be resolved
+	end
+end
+
+Record el999m03Form type ConsoleForm {formSize = [10,20]}	//0
+end

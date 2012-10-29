@@ -1,0 +1,355 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+DataItem di int {
+	indexOrientation = down,		//1
+	fill = yes,						//0
+	runValidatorFromProgram = no,	//0
+	isReadOnly = no					//0
+}
+end
+
+Program pgm {
+	indexOrientation = down,				//1
+	fill = yes,								//1
+	runValidatorFromProgram = no,			//1
+	detectable = no,						//1
+	isReadOnly = no,						//1
+	action = "a",							//1
+	fieldLen = 10,							//1
+	align = left,							//1
+	allowUnqualifiedItemReferences = yes,	//0
+	uiType = hidden,						//1
+	fileName = "fred"						//1
+	}
+	function main()
+//UNCOMMENT WHEN ANNOTATION OVERRIDES ON DECLARATIONS ARE ALLOWED
+//		a int {
+//			indexOrientation = down,		//1
+//			fill = yes,						//1
+//			runValidatorFromProgram = no,	//1
+//			detectable = no,				//1
+//			isReadOnly = no,				//0
+//			action = "a",					//0
+//			fieldLen = 10,					//1
+//			align = left					//1
+//		};
+//		a2 int[] {
+//			indexOrientation = down,		//1
+//			fill = yes,						//1
+//			runValidatorFromProgram = no,	//1
+//			detectable = no,				//1
+//			isReadOnly = no,				//0
+//			action = "a",					//0
+//			fieldLen = 10,					//1
+//			align = left					//1
+//		};
+//		a3 di {
+//			indexOrientation = down,		//1
+//			fill = yes,						//1
+//			runValidatorFromProgram = no,	//1
+//			detectable = no,				//1
+//			isReadOnly = no,				//0
+//			action = "a",					//0
+//			fieldLen = 10,					//1
+//			align = left					//1
+//		};
+//		a4 di[] {
+//			indexOrientation = down,		//1
+//			fill = yes,						//1
+//			runValidatorFromProgram = no,	//1
+//			detectable = no,				//1
+//			isReadOnly = no,				//0
+//			action = "a",					//0
+//			fieldLen = 10,					//1
+//			align = left					//1
+//		};
+	end
+end
+
+handler ph type JSFHandler
+	function func()
+//UNCOMMENT WHEN ANNOTATION OVERRIDES ON DECLARATIONS ARE ALLOWED
+//		a int {
+//			indexOrientation = down,		//1
+//			fill = yes,						//1
+//			runValidatorFromProgram = no,	//1
+//			detectable = no,				//1
+//			isReadOnly = no,				//0
+//			action = "a",					//0
+//			fieldLen = 10,					//1
+//			align = left					//1
+//		};
+//		a2 int[] {
+//			indexOrientation = down,		//1
+//			fill = yes,						//1
+//			runValidatorFromProgram = no,	//1
+//			detectable = no,				//1
+//			isReadOnly = no,				//0
+//			action = "a",					//0
+//			fieldLen = 10,					//1
+//			align = left					//1
+//		};
+//		a3 di {
+//			indexOrientation = down,		//1
+//			fill = yes,						//1
+//			runValidatorFromProgram = no,	//1
+//			detectable = no,				//1
+//			isReadOnly = no,				//0
+//			action = "a",					//0
+//			fieldLen = 10,					//1
+//			align = left					//1
+//		};
+//		a4 di[] {
+//			indexOrientation = down,		//1
+//			fill = yes,						//1
+//			runValidatorFromProgram = no,	//1
+//			detectable = no,				//1
+//			isReadOnly = no,				//0	
+//			action = "a",					//0
+//			fieldLen = 10,					//1
+//			align = left					//1
+//		};
+	end
+end
+
+Record myConsoleForm type ConsoleForm {
+	indexOrientation = down,			//1
+	runValidatorFromProgram = no		//1
+}
+	fieldAry consoleField[] {
+		indexOrientation = down,		//1
+		fill = yes,						//1
+		runValidatorFromProgram = no,	//1
+		detectable = no,				//1
+		isReadOnly = no,				//1
+		action = "a",					//1
+		align = AlignKind.left,			//0
+		fieldLen = 5,
+		position = [10,10],				//0
+		color = red,					//0
+		columns = 10 					//0
+	};	
+	
+	cField consoleField {
+		indexOrientation = down,		//1
+		fill = yes,						//1
+		runValidatorFromProgram = no,	//1
+		detectable = no,				//1
+		isReadOnly = no,				//1
+		action = "a",					//1
+		align = AlignKind.left,			//0
+		fieldLen = 5,
+		color = red,					//0
+		position = [10,10],				//0
+		columns = 10					//1
+	}; 
+	intAry int[] {
+		indexOrientation = down,		//1
+		fill = yes,						//0
+		runValidatorFromProgram = no,	//1
+		detectable = no,				//1
+		isReadOnly = no,				//0
+		action = "a",					//0
+		fieldLen = 10,					//1
+		color = red,					//1
+		columns = 10					//1
+	};
+	intItem int {
+		indexOrientation = down,		//1
+		fill = yes,						//0
+		runValidatorFromProgram = no,	//1
+		detectable = no,				//1
+		isReadOnly = no,				//0
+		action = "a",					//0
+		fieldLen = 10,					//1
+		align = left,					//0
+		color = red,					//1
+		position = [10,10],				//1
+		columns = 10					//1
+	};
+end
+
+Record myFixedRecord {
+	indexOrientation = IndexOrientationkind.down,			//1
+	runValidatorFromProgram = no		//1
+}
+	10 item1 int {
+		indexOrientation = down,		//1
+		fill = yes,						//0
+		runValidatorFromProgram = no,	//0
+		detectable = no,				//1
+		isReadOnly = no,				//0
+		action = "a",					//0
+		fieldLen = 10,					//1
+		align = left,					//0
+		color = red,					//1
+		outline = box,					//1
+		dliFieldName = "aaa"			//0
+	};
+	10 * int {
+		indexOrientation = down,		//1
+		fill = yes,						//1
+		runValidatorFromProgram = no,	//1
+		detectable = no,				//1
+		isReadOnly = no,				//1
+		action = "a",					//1
+		fieldLen = 10,					//1
+		align = left,					//1
+		uiType = hidden					//0
+	};
+end
+
+Record myFixedSQLRecord type SQLRecord {
+	indexOrientation = IndexOrientationKind.down,		//1
+	runValidatorFromProgram = no		//1
+}
+	10 item1 int {
+		indexOrientation = down,		//1
+		fill = yes,						//0
+		runValidatorFromProgram = no,	//0
+		detectable = no,				//1
+		isReadOnly = no,				//0
+		action = "a",					//0
+		fieldLen = 10,					//1
+		align = left,					//0
+		color = red,					//1
+		outline = box,					//1
+		dliFieldName = "aaa"			//0
+	};
+	10 * int {
+		indexOrientation = down,		//1
+		fill = yes,						//1
+		runValidatorFromProgram = no,	//1
+		detectable = no,				//1
+		isReadOnly = no,				//1
+		action = "a",					//1
+		fieldLen = 10,					//1
+		align = left,					//1
+		uiType = hidden					//0
+	};
+end
+
+Record myVGUIRecord type VGUIRecord {
+	indexOrientation = IndexOrientationKind.down,		//1	
+	runValidatorFromProgram = no		//0
+}
+	10 item1 int {
+		indexOrientation = down,		//1
+		fill = yes,						//0
+		runValidatorFromProgram = no	//0
+	};
+end
+
+Record myFlexibleRecord
+	item1 int {
+		indexOrientation = down,		//1
+		fill = yes,						//0
+		runValidatorFromProgram = no,	//1
+		detectable = no,				//1
+		isReadOnly = no,				//0
+		action = "a",					//0
+		fieldLen = 10,					//1
+		align = left,					//0
+		color = red,					//1
+		outline = box,					//1
+		dliFieldName = "aaa"			//1
+	};
+	* int {
+		indexOrientation = down,		//1		
+		fill = yes,						//0
+		runValidatorFromProgram = no,	//1
+		detectable = no,				//1
+		isReadOnly = no,				//0
+		action = "a",					//0
+		fieldLen = 10,					//1
+		align = left,					//0
+		uiType = hidden					//1
+	};
+end
+
+Form myTextForm type textForm
+	charField char(24) {
+		indexOrientation = down,		//0
+		fill = yes,						//0
+		runValidatorFromProgram = no,	//1
+		validationOrder = 1,			//0
+		detectable = no,				//0
+		isReadOnly = no,				//1
+		action = "a",					//1
+		fieldLen = 24,					//0
+		align = left,					//0
+		uiType = hidden,				//1
+		color = red,					//0
+		outline = box,					//0
+		dliFieldName = "aaa"			//1
+	};
+	* {
+		indexOrientation = down,		//1
+		fill = yes,						//1
+		runValidatorFromProgram = no,	//1
+		validationOrder = 1,			//1
+		detectable = no,				//0
+		isReadOnly = no,				//1
+		action = "a",					//1
+		fieldLen = 10,					//0
+		align = left,					//1
+		uiType = hidden,				//1
+		color = red,					//0
+		outline = box					//0
+	};
+	aryField char(24)[5] {
+		indexOrientation = down,		//0
+		fill = yes,						//0
+		runValidatorFromProgram = no,	//1
+		validationOrder = 1,			//0
+		detectable = no,				//0
+		isReadOnly = no,				//1
+		action = "a",					//1
+		fieldLen = 24,					//0
+		align = left,					//0
+		uiType = hidden,				//1
+		color = red						//0
+	};
+end
+
+Form myPrintForm type printForm
+	charField char(24) {
+		indexOrientation = down,		//0
+		fill = yes,						//1
+		runValidatorFromProgram = no,	//1
+		validationOrder = 1,			//1
+		detectable = no,				//1
+		isReadOnly = no,				//1
+		action = "a",					//1
+		fieldLen = 24,					//0
+		align = left,					//0
+		uiType = hidden,				//1
+		color = red,					//1
+		outline = box,					//0
+		dliFieldName = "aaa"			//1
+	};
+	* {
+		indexOrientation = down,		//1
+		fill = yes,						//1
+		runValidatorFromProgram = no,	//1
+		validationOrder = 1,			//1
+		detectable = no,				//1
+		isReadOnly = no,				//1
+		action = "a",					//1
+		fieldLen = 10,					//0
+		align = left,					//1
+		uiType = hidden,				//1
+		color = red,					//1
+		outline = box					//0
+	};
+end

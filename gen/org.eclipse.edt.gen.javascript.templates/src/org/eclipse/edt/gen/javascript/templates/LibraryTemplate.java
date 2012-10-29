@@ -47,12 +47,7 @@ public class LibraryTemplate extends JavaScriptTemplate {
 			libraries.add(library);
 	}
 
-	public void genSuperClass(Library library, Context ctx, TabbedWriter out) {
-		out.print("ExecutableBase");
-	}
-
 	public void genClassHeader(Library library, Context ctx, TabbedWriter out) {
-		// TODO sbg consider refactoring into a separate extension
 		boolean propLibrary = CommonUtilities.isRUIPropertiesLibrary(library);
 		if (propLibrary) {
 			out.print("egl.defineRUIPropertiesLibrary(");
@@ -60,9 +55,9 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		else {
 			out.print("egl.defineRUILibrary(");
 		}
-		out.print(singleQuoted(library.getPackageName().toLowerCase()));
+		out.print(singleQuoted(library.getCaseSensitivePackageName().toLowerCase()));
 		out.print(", ");
-		out.print(singleQuoted(library.getName()));
+		out.print(singleQuoted(library.getCaseSensitiveName()));
 		out.println(", ");
 		if (propLibrary) {
 			out.println( "'" + CommonUtilities.getPropertiesFile(library) + "', " );
@@ -77,8 +72,7 @@ public class LibraryTemplate extends JavaScriptTemplate {
 	}
 
 	public void genName(Library library, Context ctx, TabbedWriter out) {
-		// TODO Use Aliaser stuff from RBD
-		out.print(eglnamespace + library.getPackageName().toLowerCase() + "." + library.getName());
+		out.print(eglnamespace + library.getCaseSensitivePackageName().toLowerCase() + "." + library.getCaseSensitiveName());
 	}
 
 	public void genAccessor(Library library, Context ctx, TabbedWriter out) {

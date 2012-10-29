@@ -1,0 +1,51 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm1(form1 form1)
+	use fg1.form1;
+	function main()
+	
+	end
+end
+
+Program pgm2(form1 form1)
+	use fg2.form1;
+	function main()
+	
+	end
+end
+
+Program pgm3
+	use fg1.form1;
+	function main()
+		call pgm1 (form1);	//0
+		call pgm2 (form1);	//1
+	end
+end
+
+Program pgm4
+	use fg2.form1;
+	function main()
+		call pgm1 (form1);	//1
+		call pgm2 (form1);	//0
+	end
+end
+
+Formgroup fg1
+	Form form1
+	end
+end
+
+Formgroup fg2
+	Form form1
+	end
+end

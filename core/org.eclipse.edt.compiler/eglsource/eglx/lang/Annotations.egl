@@ -21,10 +21,10 @@ package eglx.lang;
 Record EGLProperty type Annotation
 {
 	targets = [ElementKind.FieldMbr],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationProxy"
 } 
-	getMethod FunctionMemberRef;
-	setMethod FunctionMemberRef;
+	getMethod egl.lang.reflect.FunctionReference;
+	setMethod egl.lang.reflect.FunctionReference;
 end
 
 /**
@@ -35,7 +35,7 @@ end
 Record Property type Annotation
 {
 	targets = [ElementKind.FieldMbr],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PropertyAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PropertyAnnotationProxy"
 }
 	getMethod String;
 	setMethod String;
@@ -58,10 +58,10 @@ end
 /**
  * The stereotype for all Exceptions.
  */
-Record Exception type Annotation
+Record Exception type Stereotype
 {
 	targets = [ElementKind.recordPart],
-	@Stereotype { defaultSuperType = AnyException }
+	defaultSuperType = AnyException
 }
 end
 
@@ -79,6 +79,6 @@ end
 Record Throws type Annotation
 {
 	targets = [ElementKind.FunctionMbr, ElementKind.ConstructorMbr],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.ThrowsAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.ThrowsAnnotationProxy"
 } 
 end

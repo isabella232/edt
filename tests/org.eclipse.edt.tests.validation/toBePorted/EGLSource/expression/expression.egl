@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main() end
+	
+	function func()
+		thing any;
+		intVar int;
+		
+// validateExpression:
+		thing = new undeclaredType;		//1 The type undeclaredType cannot be resolved. {3260, TYPE_CANNOT_BE_RESOLVED}
+		thing = new undeclaredType[];	//1 The type undeclaredType cannot be resolved. {3260, TYPE_CANNOT_BE_RESOLVED}
+		thing = new undeclaredType[][];	//1 The type undeclaredType cannot be resolved. {3260, TYPE_CANNOT_BE_RESOLVED}
+		thing = new int;				//0
+		thing = new int[];				//0
+		thing = new int[][];			//0
+		
+// validateExpression (1):
+		thing = new myService{};		//1 The new operator is not allowed for services or interfaces. {7825, NEW_NOT_SUPPORTED_FOR_SERVICE_OR_INTERFACE}
+		thing = new myInterface{};		//1 The new operator is not allowed for services or interfaces. {7825, NEW_NOT_SUPPORTED_FOR_SERVICE_OR_INTERFACE}
+		
+		thing = noReturnsFunc();		//1 Function noReturnsFunc must return a type.  {6654*, FUNCTION_MUST_RETURN_TYPE}
+
+// validateSystemFunctionInExpressionUsage:
+		thing = abs(intVar) + 1;			//0
+		thing = mathlib.abs(intVar) + 1;	//0
+		thing = sin(intVar) + 1;			//0
+		if(abs(intVar) == abs(intVar)) end	//0
+		if(abs(intVar) isa any) end			//0
+		if(abs(intVar) == 5) end			//0
+		thing = "a" + abs(intVar);			//0
+		thing = returnsFunc() + 1;			//0
+	end
+	
+	function noReturnsFunc() end
+	function returnsFunc() returns (int) end
+end
+
+Service myService end
+Interface myInterface end

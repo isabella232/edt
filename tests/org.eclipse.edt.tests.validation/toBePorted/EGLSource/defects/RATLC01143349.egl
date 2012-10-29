@@ -1,0 +1,43 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG NO_ERROR
+
+Program ZDSA082 type basicProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  throwNrfEofExceptions = yes, handleHardIOErrors = no, V60ExceptionCompatibility = yes,
+  I4GLItemsNullable = no, textLiteralDefaultIsString = no, localSQLScope = yes
+  }
+
+  ZWZZ0201 ZWZZ0201; 
+
+  function main()
+  	VAGen_FOUND = "N";
+    if (" " in ZWZZ0201.ZILXELEM18)			//0
+      VAGen_FOUND = "Y";
+    end
+
+    while (" " in ZWZZ0201.ZILXELEM18)		//0
+      ZWZZ0201.ZILXELEM18[sysVar.arrayIndex] = "0";
+    end
+    
+  end 
+end 
+
+Record ZWZZ0201 type basicRecord
+  10 ZILXCHA18 char(18) ; 
+    12 ZILXNUM18 num(18) ; 
+      15 ZILXELEM18 char(1) [18] ; 
+  10 ZILT0201-TEL1 num(2) ; 
+  10 ZILT0201-TEL2 num(2) ; 
+  10 VAGen_FOUND char(1);
+end 

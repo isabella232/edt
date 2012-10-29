@@ -131,14 +131,6 @@ public class CalledBasicProgramSelectionDialog extends InterfaceSelectionDialog 
 	            PartInfo partinfo = (PartInfo)(it.next());
 	            IPart part = getPartFromPartInfo(partinfo);
 	            if(part.getParent() instanceof IEGLFile){
-	            	Program pgmProgramPart = getPGMProgramPart(part);
-	            	 if(pgmProgramPart != null && pgmProgramPart.isCallable())
-	 	            {
-	 	                typeList.add(partinfo);
-	 	                String fullyqualifeidname = partinfo.getFullyQualifiedName();
-	 	                partHash.put(fullyqualifeidname, part);
-	 	                pgmHash.put(fullyqualifeidname, pgmProgramPart);
-	 	            }
 	            } else {
 	            	BinaryPart pgmProgramPart = getPGMProgramPartFromBinaryFile(part);
 	            	try {

@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.eglx.services.impl;
 
 import org.eclipse.edt.mof.egl.impl.FunctionImpl;
-import org.eclipse.edt.mof.eglx.services.ServiceFunction;
+import org.eclipse.edt.mof.eglx.services.gen.ServiceFunction;
 
 public class ServiceFunctionImpl extends FunctionImpl implements ServiceFunction {
 

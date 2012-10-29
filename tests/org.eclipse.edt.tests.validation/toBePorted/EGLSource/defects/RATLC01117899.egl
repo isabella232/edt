@@ -1,0 +1,71 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()	
+		b1 blob;
+		loblib.freeblob( b1 );				//0
+		
+		i int;
+		i2 int?;
+		str1 string;
+		str2 string?;
+		i = StrLib.indexOf( str1, "x" );	//0
+		i = StrLib.indexOf( str2, "x" );	//1
+		
+		looseNumberFunc(i);					//0
+		looseNullableNumberFunc(i);			//1 It must be of primitive type number?
+		looseNumberFunc(i2);				//1 It must be of primitive type number.
+		looseNumberFunc(null);				//1
+		looseNullableNumberFunc(i2);		//0
+		
+		ch char(4);
+		ch2 char(4)?;
+		
+		looseCharFunc(ch);				//0
+		looseNullableCharFunc(ch);		//1 It must be of primitive type char?
+		looseNullableCharFunc(null);	//1 It must be of primitive type char?
+		looseCharFunc(ch2);				//1 It must be of primitive type char.
+		looseCharFunc(null);				//1 It must be of primitive type char.
+		looseNullableCharFunc(ch2);		//0
+		
+		he hex(4);
+		he2 hex(4)?;
+		
+		looseHexFunc(he);				//0
+		looseNullableHexFunc(he);		//1 It must be of primitive type hex?
+		looseHexFunc(he2);				//1 It must be of primitive type hex.
+		looseHexFunc(null);				//1 It must be of primitive type hex.
+		looseNullableHexFunc(he2);		//0
+		
+		interval1 interval("yyyymm");
+		interval2 interval("yyyymm")?;
+		
+		looseIntervalFunc(interval1);				//0
+		looseNullableIntervalFunc(interval1);		//1 It must be of primitive type interval?
+		looseIntervalFunc(interval2);				//1 It must be of primitive type interval.
+		looseNullableIntervalFunc(interval2);		//0
+		
+	end
+	
+	function looseNumberFunc(p1 number) end
+	function looseNullableNumberFunc(p1 number?) end
+	
+	function looseCharFunc(p1 char) end
+	function looseNullableCharFunc(p1 char?) end
+	
+	function looseHexFunc(p1 hex) end
+	function looseNullableHexFunc(p1 hex?) end
+	
+	function looseIntervalFunc(p1 interval) end
+	function looseNullableIntervalFunc(p1 interval?) end
+end

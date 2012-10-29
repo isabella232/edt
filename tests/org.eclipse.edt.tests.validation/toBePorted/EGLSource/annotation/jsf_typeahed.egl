@@ -1,0 +1,233 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+handler typeAhead1 type jsfhandler
+
+	field1 int {typeaheadFunction = f1};  //0
+	field2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	field3 int {typeaheadFunction = f2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field31 int {typeaheadFunction = f4};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field32 int {typeaheadFunction = f5};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field33 int {typeaheadFunction = tlf1};  //0
+	field34 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field4 int {typeahead = yes, validValues = [1,2,3]}; //0
+	field5 int {typeahead = yes, validValues = [1,2,3], typeaheadFunction = f1}; //2 cannot both be specified
+	field6 int {typeahead = yes}; //1 requires the use of either the validValues or the validatorDataTable
+	field7 int {typeahead = no}; //0
+	field8 int {typeahead = yes, validValues = [1,2,3, [4,8]]}; //1 cannot contain a range when the typeAhead property is specified
+	field9 int {typeahead = yes, ValidatorDataTable=tbl1}; //0
+	field10 int {typeahead = yes, ValidatorDataTable=tbl2}; //1 property must be a DataTable of type MatchValidTable
+	field11 int {typeahead = yes, ValidatorDataTable=tbl3}; //1 property must be a DataTable of type MatchValidTable
+	field12 rec1 {typeaheadFunction = f1}; //1 property is not supported for fields of type
+	field13 rec1 {typeahead = yes, validValues = [1,2,3]}; //1 property is not supported for fields of type
+	field14 int[] {typeaheadFunction = f1}; //0
+//	field15 int {typeaheadFunction = f3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+//	field16 int {typeaheadFunction = tlf3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+	
+	
+	function f1(p1 string) returns (string[])
+	end
+
+	function f2()
+	end
+
+	function f3(p1 string) returns (string[])
+		forward to label "jsf1";
+		SysLib.setError("Some error occured");
+		SysLib.setErrorForComponentId("a", "3");
+	end
+	
+	function f4(p1 string) returns (int)
+	end
+	
+	function f5(p1 string) returns (int[])
+	end
+
+end
+
+record rec0
+end
+
+record rec0Fixed type IndexedRecord
+10 i int ;
+end
+
+record rec1
+	10 rfield1 int {typeaheadFunction = tlf1}; //0
+	10 rfield2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	10 ffield3 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+end
+
+record rec2IndexedRecord type IndexedRecord
+	field2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	field33 int {typeaheadFunction = tlf1};  //0
+	field34 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field4 int {typeahead = yes, validValues = [1,2,3]}; //0
+	field5 int {typeahead = yes, validValues = [1,2,3], typeaheadFunction = tlf1}; //2 cannot both be specified
+	field6 int {typeahead = yes}; //1 requires the use of either the validValues or the validatorDataTable
+	field7 int {typeahead = no}; //0
+	field8 int {typeahead = yes, validValues = [1,2,3, [4,8]]}; //1 cannot contain a range when the typeAhead property is specified
+	field9 int {typeahead = yes, ValidatorDataTable=tbl1}; //0
+	field10 int {typeahead = yes, ValidatorDataTable=tbl2}; //1 property must be a DataTable of type MatchValidTable
+	field11 int {typeahead = yes, ValidatorDataTable=tbl3}; //1 property must be a DataTable of type MatchValidTable
+	field12 rec0Fixed {typeaheadFunction = tlf1}; //0
+	field13 rec0Fixed {typeahead = yes, validValues = ["1","2","3"]}; //0
+//	field15 int {typeaheadFunction = f3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+//	field16 int {typeaheadFunction = tlf3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+	
+end
+
+
+record rec2 type BasicRecord
+	field2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	field33 int {typeaheadFunction = tlf1};  //0
+	field34 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field4 int {typeahead = yes, validValues = [1,2,3]}; //0
+	field5 int {typeahead = yes, validValues = [1,2,3], typeaheadFunction = tlf1}; //2 cannot both be specified
+	field6 int {typeahead = yes}; //1 requires the use of either the validValues or the validatorDataTable
+	field7 int {typeahead = no}; //0
+	field8 int {typeahead = yes, validValues = [1,2,3, [4,8]]}; //1 cannot contain a range when the typeAhead property is specified
+	field9 int {typeahead = yes, ValidatorDataTable=tbl1}; //0
+	field10 int {typeahead = yes, ValidatorDataTable=tbl2}; //1 property must be a DataTable of type MatchValidTable
+	field11 int {typeahead = yes, ValidatorDataTable=tbl3}; //1 property must be a DataTable of type MatchValidTable
+	field12 rec0 {typeaheadFunction = tlf1}; //1 property is not supported for fields of type
+	field13 rec0 {typeahead = yes, validValues = [1,2,3]}; //1 property is not supported for fields of type
+	field14 int[] {typeaheadFunction = tlf1}; //0
+//	field15 int {typeaheadFunction = f3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+//	field16 int {typeaheadFunction = tlf3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+	
+end
+
+record rec2MQRecord type MQRecord
+	field2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	field33 int {typeaheadFunction = tlf1};  //0
+	field34 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field4 int {typeahead = yes, validValues = [1,2,3]}; //0
+	field5 int {typeahead = yes, validValues = [1,2,3], typeaheadFunction = tlf1}; //2 cannot both be specified
+	field6 int {typeahead = yes}; //1 requires the use of either the validValues or the validatorDataTable
+	field7 int {typeahead = no}; //0
+	field8 int {typeahead = yes, validValues = [1,2,3, [4,8]]}; //1 cannot contain a range when the typeAhead property is specified
+	field9 int {typeahead = yes, ValidatorDataTable=tbl1}; //0
+	field10 int {typeahead = yes, ValidatorDataTable=tbl2}; //1 property must be a DataTable of type MatchValidTable
+	field11 int {typeahead = yes, ValidatorDataTable=tbl3}; //1 property must be a DataTable of type MatchValidTable
+	field12 rec0Fixed {typeaheadFunction = tlf1}; //0
+	field13 rec0Fixed {typeahead = yes, validValues = ["1","2","3"]}; //0
+//	field15 int {typeaheadFunction = f3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+//	field16 int {typeaheadFunction = tlf3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+	
+end
+
+record rec2Serial type SerialRecord
+	field2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	field33 int {typeaheadFunction = tlf1};  //0
+	field34 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field4 int {typeahead = yes, validValues = [1,2,3]}; //0
+	field5 int {typeahead = yes, validValues = [1,2,3], typeaheadFunction = tlf1}; //2 cannot both be specified
+	field6 int {typeahead = yes}; //1 requires the use of either the validValues or the validatorDataTable
+	field7 int {typeahead = no}; //0
+	field8 int {typeahead = yes, validValues = [1,2,3, [4,8]]}; //1 cannot contain a range when the typeAhead property is specified
+	field9 int {typeahead = yes, ValidatorDataTable=tbl1}; //0
+	field10 int {typeahead = yes, ValidatorDataTable=tbl2}; //1 property must be a DataTable of type MatchValidTable
+	field11 int {typeahead = yes, ValidatorDataTable=tbl3}; //1 property must be a DataTable of type MatchValidTable
+	field12 rec0Fixed {typeaheadFunction = tlf1}; //0
+	field13 rec0Fixed {typeahead = yes, validValues = ["1","2","3"]}; //0
+//	field15 int {typeaheadFunction = f3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+//	field16 int {typeaheadFunction = tlf3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+	
+end
+
+record rec2Rel type RelativeRecord
+	field2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	field33 int {typeaheadFunction = tlf1};  //0
+	field34 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field4 int {typeahead = yes, validValues = [1,2,3]}; //0
+	field5 int {typeahead = yes, validValues = [1,2,3], typeaheadFunction = tlf1}; //2 cannot both be specified
+	field6 int {typeahead = yes}; //1 requires the use of either the validValues or the validatorDataTable
+	field7 int {typeahead = no}; //0
+	field8 int {typeahead = yes, validValues = [1,2,3, [4,8]]}; //1 cannot contain a range when the typeAhead property is specified
+	field9 int {typeahead = yes, ValidatorDataTable=tbl1}; //0
+	field10 int {typeahead = yes, ValidatorDataTable=tbl2}; //1 property must be a DataTable of type MatchValidTable
+	field11 int {typeahead = yes, ValidatorDataTable=tbl3}; //1 property must be a DataTable of type MatchValidTable
+	field12 rec0Fixed {typeaheadFunction = tlf1}; //0
+	field13 rec0Fixed {typeahead = yes, validValues = ["1","2","3"]}; //0
+//	field15 int {typeaheadFunction = f3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+//	field16 int {typeaheadFunction = tlf3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+	
+end
+
+record rec2SQL type SQLRecord
+	field2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	field33 int {typeaheadFunction = tlf1};  //0
+	field34 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field4 int {typeahead = yes, validValues = [1,2,3]}; //0
+	field5 int {typeahead = yes, validValues = [1,2,3], typeaheadFunction = tlf1}; //2 cannot both be specified
+	field6 int {typeahead = yes}; //1 requires the use of either the validValues or the validatorDataTable
+	field7 int {typeahead = no}; //0
+	field8 int {typeahead = yes, validValues = [1,2,3, [4,8]]}; //1 cannot contain a range when the typeAhead property is specified
+	field9 int {typeahead = yes, ValidatorDataTable=tbl1}; //0
+	field10 int {typeahead = yes, ValidatorDataTable=tbl2}; //1 property must be a DataTable of type MatchValidTable
+	field11 int {typeahead = yes, ValidatorDataTable=tbl3}; //1 property must be a DataTable of type MatchValidTable
+	field12 rec0Fixed {typeaheadFunction = tlf1}; //1
+	field13 rec0Fixed {typeahead = yes, validValues = ["1","2","3"]}; //1
+//	field15 int {typeaheadFunction = f3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+//	field16 int {typeaheadFunction = tlf3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+	
+end
+
+
+record rec2CSVRecord type CSVRecord
+	field2 int {typeaheadFunction = bogus}; //1 bogus cannot be resolved
+	field33 int {typeaheadFunction = tlf1};  //0
+	field34 int {typeaheadFunction = tlf2};  //1 TypeAhead functions must have a single parameter of type string and return an array of type string
+	field4 int {typeahead = yes, validValues = [1,2,3]}; //0
+	field5 int {typeahead = yes, validValues = [1,2,3], typeaheadFunction = tlf1}; //2 cannot both be specified
+	field6 int {typeahead = yes}; //1 requires the use of either the validValues or the validatorDataTable
+	field7 int {typeahead = no}; //0
+	field8 int {typeahead = yes, validValues = [1,2,3, [4,8]]}; //1 cannot contain a range when the typeAhead property is specified
+	field9 int {typeahead = yes, ValidatorDataTable=tbl1}; //0
+	field10 int {typeahead = yes, ValidatorDataTable=tbl2}; //1 property must be a DataTable of type MatchValidTable
+	field11 int {typeahead = yes, ValidatorDataTable=tbl3}; //1 property must be a DataTable of type MatchValidTable
+	field12 rec0 {typeaheadFunction = tlf1}; //2 property is not supported for fields of type
+	field13 rec0 {typeahead = yes, validValues = [1,2,3]}; //2 property is not supported for fields of type
+	field14 int[] {typeaheadFunction = tlf1}; //1 Arrays are not valid
+//	field15 int {typeaheadFunction = f3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+//	field16 int {typeaheadFunction = tlf3};  //3 forward not allowed in typeahead function, setError not allowed in typeahead, setErrorForComponent not allowed in typeahead
+	
+end
+
+
+function tlf1(p1 string) returns (string[])
+end
+
+function tlf3(p1 string) returns (string[])
+		forward to label "jsf1";
+		SysLib.setError("Some error occured");
+		SysLib.setErrorForComponentId("a", "3");	
+end
+
+function tlf2()
+end
+
+datatable tbl1 type matchvalidtable
+end
+
+datatable tbl2 type matchinvalidtable
+end
+
+datatable tbl3
+end
+
+record struct2
+	10 a char(10)[2]{typeaheadFunction = tlf1, DisplayUse = input};// 1
+		20 b char(10){typeaheadFunction = tlf1, DisplayUse = input};//0
+	10 c char(10)[2]{typeahead=yes, validValues = ["1","2","3"]};// 1
+		20 d char(10){typeahead= yes, validValues = ["1","2","3"]};//0		
+end

@@ -1,0 +1,122 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+Record Employeeclob type SQLRecord
+	employeeID char(6);
+	empResume Clob;
+//	empResumeRef ref Clob;
+	empResumeRef Clob;
+end
+
+Library clob_valid
+
+	emp1 Employeeclob;
+	emp2 Employeeclob;
+	
+	function assignmentTest()
+		emp1.empResume = emp2.empResume;
+		emp1.empResumeRef = emp2.empResumeRef;
+	end
+
+	function moveTest()
+		move emp1.empResume to emp2.empResume;
+		move emp1.empResumeRef to emp2.empResumeRef;
+	end
+	
+	function clobFunctionArgAndReturnTest()
+		tempClob clob;
+//		tempClobref ref clob;
+		tempClobref clob;
+		clobFunctionArgTestHelperOne(emp1.empResume);
+		clobFunctionArgTestHelperTwo(emp1.empResumeRef);
+		tempClob = clobFunctionReturnTestOne();
+		tempClobref = clobFunctionReturnTestTwo();
+	end
+	
+	function clobFunctionArgTestHelperOne(parm1 Clob)
+	end
+	
+//	function clobFunctionArgTestHelperTwo(parm1 ref Clob)
+	function clobFunctionArgTestHelperTwo(parm1 Clob)
+	end
+	
+	function clobFunctionReturnTestOne()
+		returns(Clob);
+		
+		return (emp1.empResume);
+	end
+	
+	function clobFunctionReturnTestTwo()
+//		returns(ref Clob)
+		returns(Clob)
+		
+		return(emp1.empResumeRef);
+	end
+	
+	function clobProgramCallTest()
+	end
+	
+	function clobFunctionTests()
+		mybigint bigint;
+		string1 String;
+		pos, length  bigint;
+		
+		attachClobToFile(emp1.empResume, "C:\\Temp\\Employee1.jpg");
+		attachClobToFile(emp1.empResume, string1);
+		
+		mybigint = getClobLen(emp1.empResume);
+	
+		string1 = getSubStrFromClob(emp1.empResume, 0, 100);
+		string1 = getSubStrFromClob(emp1.empResume, pos, length);
+		string1 = getStrFromClob(emp1.empResume);
+		
+		setClobFromStringAtPosition(emp1.empResume, pos, string1);
+		setClobFromStringAtPosition(emp1.empResume, 2, "some text");
+		
+		setClobFromString(emp1.empResume, string1);
+		setClobFromString(emp1.empResume, "some text");
+		
+		truncateClob(emp1.empResume, 100);
+		truncateClob(emp1.empResume, pos);
+		
+		loadClobFromFile(emp1.empResume, "C:\\Temp\\Employee1.jpg");
+		loadClobFromFile(emp1.empResume, string1);
+		
+		updateClobToFile(emp1.empResume, "C:\\Temp\\Employee1.jpg");
+		updateClobToFile(emp1.empResume, string1);
+		
+		freeClob(emp1.empResume);
+		
+		// new as of 10/14
+		attachClobToTempFile(emp1.empResume);		
+	end
+end
+
+Program clobProgramOne()
+	
+	function main()
+	end
+end
+
+Program clobProgramTwo ()
+
+	function main()
+	end
+end
+
+Library nativeLibrary_validclob type nativeLibrary	
+		{callingConvention=I4GL}
+	function myfunction(arg1 clob ) 
+	
+	end
+end

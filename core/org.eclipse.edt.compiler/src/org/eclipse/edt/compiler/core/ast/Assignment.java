@@ -14,7 +14,7 @@ package org.eclipse.edt.compiler.core.ast;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
+import org.eclipse.edt.mof.egl.Annotation;
 
 
 /**
@@ -80,7 +80,7 @@ public static class Operator {
 	private Operator operator;
 	private Expression lhs;
 	private Expression rhs;
-	private IAnnotationBinding annotationBinding;
+	private Annotation annotationBinding;
 
 	public Assignment(Operator operator, Expression lhs, Expression rhs, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -92,11 +92,11 @@ public static class Operator {
 		rhs.setParent(this);
 	}
 	
-    public IAnnotationBinding resolveBinding() {
+    public Annotation resolveBinding() {
         return annotationBinding;
     }
     
-    public void setBinding(IAnnotationBinding binding) {
+    public void setBinding(Annotation binding) {
         this.annotationBinding = binding;
     }
 
@@ -113,6 +113,7 @@ public static class Operator {
 		return operator;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -122,7 +123,13 @@ public static class Operator {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new Assignment(operator, (Expression)lhs.clone(), (Expression)rhs.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return lhs.toString() + " " + operator.toString() + " " + rhs.toString();
 	}
 }

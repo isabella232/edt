@@ -28,6 +28,7 @@ import org.eclipse.edt.mof.codegen.api.TemplateContext;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
 
@@ -90,7 +91,7 @@ public class EGL2MofImplGenerator {
 	}
 	
 	EGL2MofImplGenerator(String irPaths, String javaSrc, String[][] packageMappings) {
-		env = Environment.INSTANCE;
+		env = Environment.getCurrentEnv();
 		String[] roots = irPaths.split("[;]");
 		for (String root : roots) {
 			File dir = new File(root);
@@ -103,7 +104,7 @@ public class EGL2MofImplGenerator {
 		processed = new ArrayList<EClassifier>();
 	}
 	
-	Environment env;
+	IEnvironment env;
 	File outputDir;
 	String pathFromRoot;
 	String[][] packageMappings;

@@ -42,9 +42,9 @@ public class SQLStatementResetAssistProposal extends SQLStatementAddAssistPropos
 	protected ASTRewrite getRewrite() {
 		try{
 			//Remove original SQL statement
-			ASTRewrite rewrite = ASTRewrite.create(fContext.getFileAST());
+			final ASTRewrite rewrite = ASTRewrite.create(fContext.getFileAST());
 			Statement sqlNode = AbstractSQLStatementProposal.SQLStatementFinder(fContext);
-			IEGLDocument document = fContext.getDocument();
+			final IEGLDocument document = fContext.getDocument();
 			
 			info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, sqlNode); 
 			initialize();
@@ -66,28 +66,32 @@ public class SQLStatementResetAssistProposal extends SQLStatementAddAssistPropos
 			
 			
 			//Regenerate default SQL statement
-			final Node nodeType[] = new Node[] {null};
 			if (sqlNode != null) {
-				IFileEditorInput fileInput = (IFileEditorInput)editor.getEditorInput();
-				getBoundASTNode(document, null, sqlNode.getOffset(), fileInput.getFile(), new IBoundNodeProcessor() {
+				final Statement finalSqlNode = sqlNode;
+				IBoundNodeProcessor processor = new IBoundNodeProcessor() {
+					@Override
 					public void processBoundNode(Node boundNode, Node containerNode) {
-						nodeType[0] = boundNode;
+						if (!(boundNode instanceof Statement)) {
+							return;
+						}
+						info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, boundNode); 	
+						initialize();
+						if (!isEGLStatementValidForAction()) {
+							sqlStatement = null;
+						}
+						
+						createDefault(info.getStatement());
+						if (sqlStatement != null) {
+							rewrite.completeIOStatement( finalSqlNode, getStatementText());
+						} else {
+							sqlStatement = CorrectionMessages.SQLExceptionMessage;
+							rewrite.completeIOStatement( finalSqlNode, sqlStatement );
+						}
 					}
-				});
-			}
-			
-            info = SQLIOStatementUtility.getAddSQLIoStatementActionInfo(document, nodeType[0]); 	
-			initialize();
-			if (!isEGLStatementValidForAction()) {
-				sqlStatement = null;
-			}
-			
-			createDefault(info.getStatement());
-			if (sqlStatement != null) {
-				rewrite.completeIOStatement( sqlNode, getStatementText());
-			} else {
-				sqlStatement = CorrectionMessages.SQLExceptionMessage;
-				rewrite.completeIOStatement( sqlNode, sqlStatement );
+				};
+				
+				IFileEditorInput fileInput = (IFileEditorInput)editor.getEditorInput();
+				bindASTNode(document, null, sqlNode.getOffset(), fileInput.getFile(), processor);
 			}
 			
 			return(rewrite);

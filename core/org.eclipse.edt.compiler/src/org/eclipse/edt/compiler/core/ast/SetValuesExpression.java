@@ -39,6 +39,7 @@ public class SetValuesExpression extends Expression {
 		return settingsBlock;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -48,11 +49,18 @@ public class SetValuesExpression extends Expression {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		return primary.getCanonicalString();
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new SetValuesExpression((Expression)primary.clone(), (SettingsBlock)settingsBlock.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return primary.toString() + settingsBlock.toString();
 	}
 }

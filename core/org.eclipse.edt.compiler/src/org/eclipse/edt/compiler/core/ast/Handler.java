@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -47,10 +46,6 @@ public class Handler extends Part {
 		return partSubTypeOpt;
 	}
 	
-	public boolean isGeneratable(){
-		return true;
-	}
-	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -79,7 +74,7 @@ public class Handler extends Part {
 	/**
 	 * @return A List of Name objects
 	 */
-	public List getImplementedInterfaces() {
+	public List<Name> getImplementedInterfaces() {
 		return implementsOpt;
 	}
 }

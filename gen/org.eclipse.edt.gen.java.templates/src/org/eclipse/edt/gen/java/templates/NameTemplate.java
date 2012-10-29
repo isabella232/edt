@@ -22,7 +22,7 @@ public class NameTemplate extends JavaTemplate {
 		String propertyFunction = CommonUtilities.getPropertyFunction(expr.getNamedElement(), true, ctx);
 		if (propertyFunction != null) {
 			FunctionMember currentFunction = ctx.getCurrentFunction();
-			if (currentFunction != null && propertyFunction.equals(currentFunction.getName())) {
+			if (currentFunction != null && propertyFunction.equals(currentFunction.getCaseSensitiveName())) {
 				if (expr.getQualifier() != null) {
 					ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 					out.print('.');

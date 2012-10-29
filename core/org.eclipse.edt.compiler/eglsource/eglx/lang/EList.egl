@@ -12,7 +12,7 @@
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
-import egl.lang.reflect.mof.Operation;
+import egl.lang.reflect.Operation;
 
 /**
  * EList defines the API of lists (dynamically-sized arrays) in EGL.  Lists have
@@ -21,6 +21,10 @@ import egl.lang.reflect.mof.Operation;
 externalType EList type ClassType {  
 	typeParameters = ["E"]
 }
+	/**
+	 * Constructs an empty list.
+	 */
+	constructor();
 
 	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements
@@ -28,7 +32,7 @@ externalType EList type ClassType {
 	 * not create a new list: the appendElement function is used to add the second 
 	 * operand to the end of the first operand.
 	 */
-	static function $Concat(value EList in, rvalue EAny in) returns (EList) {@Operation{"::"}};
+	static function $Concat(value EAny[] in, rvalue EAny in) returns (EAny[]) {@Operation{"::"}};
 
 	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand followed 
@@ -36,7 +40,7 @@ externalType EList type ClassType {
 	 * not create a new list: the insertElement function is used to add the second
 	 * operand to the front of the first operand.
 	 */
-	static function $Concat(value EAny in, rvalue EList in) returns (EList) {@Operation{"::"}};
+	static function $Concat(value EAny in, rvalue EAny[] in) returns (EAny[]) {@Operation{"::"}};
 
 	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements
@@ -44,13 +48,13 @@ externalType EList type ClassType {
 	 * (::=) does not create a new list: the appendAll function is used to add the 
 	 * second operand's elements to the end of the first operand.
 	 */
-	static function $Concat(value EList in, rvalue EList in) returns (EList) {@Operation{"::"}};
+	static function $Concat(value EAny[] in, rvalue EAny[] in) returns (EAny[]) {@Operation{"::"}};
 
 	/**
 	 * {@Operation []} Returns the element at the specified index.
 	 * @throws InvalidIndexException  if the index is less than 1 or greater than the size.
 	 */
-	static function $Get(value EList in, index EInt in) returns(EAny) {@Operation{"[]"}};
+	static function $Get(value EAny[] in, index EInt in) returns(EAny) {@Operation{"[]"}};
 	
 	/**
 	 * Adds an element to the end of this list.
@@ -58,7 +62,7 @@ externalType EList type ClassType {
 	 * @param element  the new element.
 	 * @return this list, after the new element has been added.
 	 */
-	function appendElement(element EAny in) returns(EList);
+	function appendElement(element EAny in) returns(EAny[]);
 	
 	/**
 	 * Adds the elements of the specified list to the end of this list.
@@ -66,7 +70,7 @@ externalType EList type ClassType {
 	 * @param other  the other list.
 	 * @return this list, after the new elements have been added.
 	 */
-	function appendAll(other EList in) returns(EList);
+	function appendAll(other EAny[] in) returns(EAny[]);
 	
 	/**
 	 * Inserts an element into this list at a specified position.  Any elements

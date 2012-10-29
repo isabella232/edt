@@ -1,0 +1,92 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * For 6.0.0.1 task:
+ *
+ * Rework the way we edit for variable number of arguments required for system functions.
+ * Some functions now need 0 to n arguments and current design doesn't handle this since
+ * you can't have a negative zero.  This affects Jon also.
+ * Functions are:  clearFields, displayFields, hideMenuItems, and showMenuItems
+ */
+Program zeroToNArgumentSystemFunctions
+
+	function main()
+		cf1, cf2 consoleField {fieldLen = 10};
+		mi1, mi2 menuItem;
+		
+		clearFields();			// 0
+		clearFields(cf1);		// 0
+		clearFields(cf1, cf2);	// 0		
+		
+		displayFields();			// 0
+		displayFields(cf1);			// 0
+		displayFields(cf1, cf2);	// 0		
+		
+		consolelib.clearFields();			// 0
+		consolelib.clearFields(cf1);		// 0
+		consolelib.clearFields(cf1, cf2);	// 0		
+		
+		consolelib.displayFields();			// 0
+		consolelib.displayFields(cf1);		// 0
+		consolelib.displayFields(cf1, cf2);	// 0		
+		
+		clearFields(1);					// 0
+		clearFields(cf1, 1);			// 0
+		consolelib.clearFields(1);		// 0
+		consolelib.clearFields(cf1, 1);	// 0
+		
+		displayFields(1);					// 0
+		displayFields(cf1, 1);				// 0
+		consolelib.displayFields(1);		// 0
+		consolelib.displayFields(cf1, 1);	// 0
+		
+		// The following functions require at least one argument:
+		clearFieldsByName();				// 1 at least 1
+		clearFieldsByName( "a" );			// 0
+		clearFieldsByName( "a", "b" );		// 0
+		displayFieldsByName();				// 1 at least 1
+		displayFieldsByName( "a" );			// 0
+		displayFieldsByName( "a", "b" );	// 0
+		displayFieldsByName( "a", 2 );		// 0
+		consolelib.clearFieldsByName();				// 1 at least 1
+		consolelib.clearFieldsByName( "a" );		// 0
+		consolelib.clearFieldsByName( "a", "b" );	// 0
+		consolelib.displayFieldsByName();			// 1 at least 1
+		consolelib.displayFieldsByName( "a" );		// 0
+		consolelib.displayFieldsByName( "a", "b" );	// 0
+		charItem char;
+		setError();											// 1 at least 1
+		setError( "dave" );									// 0
+		setError( charItem, "msg", "insert1" );				// 0
+		setError( charItem, "msg", "insert1", 1 );			// 0
+		setError( charItem, "msg", "insert1", "insert2" );	// 0
+		syslib.setError();											// 1 at least 1
+		syslib.setError( "dave" );									// 0
+		syslib.setError( charItem, "msg", "insert1" );				// 0
+		syslib.setError( charItem, "msg", "insert1", "insert2" );	// 0
+		
+		// The following functions accept no arguments:
+		hideAllMenuItems();						// 0
+		hideAllMenuItems(mi1);					// 1 exactly 0
+		hideAllMenuItems(mi1, mi2);				// 1 exactly 0
+		showAllMenuItems();						// 0
+		showAllMenuItems(mi1);					// 1 exactly 0
+		showAllMenuItems(mi1, mi2);				// 1 exactly 0
+		consolelib.hideAllMenuItems();			// 0
+		consolelib.hideAllMenuItems(mi1);		// 1 exactly 0
+		consolelib.hideAllMenuItems(mi1, mi2);	// 1 exactly 0
+		consolelib.showAllMenuItems();			// 0
+		consolelib.showAllMenuItems(mi1);		// 1 exactly 0
+		consolelib.showAllMenuItems(mi1, mi2);	// 1 exactly 0
+	end
+end

@@ -1,0 +1,99 @@
+import eglx.rest.*;
+import eglx.java.*;
+
+interface inter1
+	function f1() {@REST {method=POST}}; //1 container for the REST function f1 is invalid
+	function f2() {@EGLService {}}; //1 container for the EGLService function f1 is invalid
+end
+
+externaltype et1 type JavaObject
+	function f1() {@REST {method=_GET}}; //1 container for the REST function f1 is invalid
+	function f2() {@EGLService {}}; //1 container for the EGLService function f1 is invalid
+end
+
+
+
+program pgm1 {}
+
+	function main()
+	end
+	
+	function fp1 (p1 string in)
+		{@REST{}} //requires http method
+	end
+	
+	function fp2 (p1 int in)//wrong type
+		{@REST{method=POST}} 
+	end
+
+	function fp3 (p1 string)//missing in modifier
+		{@REST{method=POST}} 
+	end
+
+	function fp4 (p1 string in) returns(boolean)//wrong returns type
+		{@REST{method=POST}} 
+	end
+
+	function fp5(p1 string in) returns(string)//response format should be null
+		{@REST{method=POST, responseFormat=XML}} 
+	end
+
+	function fp6(p1 string in, p2 string in)//2 resources
+		{@REST{method=POST}} 
+	end
+
+	function fp7 (p1 string in)//wrong request format
+		{@REST{method=POST, RequestFormat=XML}} 
+	end
+
+	function fp8 (p1 rec1 in)//wrong request format
+		{@REST{method=POST, RequestFormat=_Form}} 
+	end
+
+	function fp9 (p1 handler1 in)//wrong request format
+		{@REST{method=POST, RequestFormat=_Form}} 
+	end
+
+	function fp10(p1 string in)//resources not allowed
+		{@REST{method=_GET}} 
+	end
+
+	function fp11(p1 string in)//substitution does not match
+		{@REST{method=_GET, uriTemplate="http://{p2}"}} 
+	end
+
+	function fp12(p1 rec1 in)//substitution wrong type
+		{@REST{method=_GET, uriTemplate="http://{p1}"}} 
+	end
+
+	function fp13(p1 string in)
+		{@REST{method=POST}}
+		i1 int = 5; 
+	end
+
+	function fp14(p1 string in)//no http method
+		{@REST{}}
+	end
+
+	function fp15(p1 string in)//form not allowed
+		{@REST{method=POST, responseFormat=_FORM}}
+	end
+
+
+end
+
+record rec1
+	f1 rec2;
+end
+
+record rec2
+	f1 string;
+end
+
+record handler1
+	f1 handler2;
+end
+
+record handler2
+	f1 string;
+end

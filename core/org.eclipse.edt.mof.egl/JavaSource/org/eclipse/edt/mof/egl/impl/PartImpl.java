@@ -11,13 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
-import org.eclipse.edt.mof.egl.StructPart;
 
 public abstract class PartImpl extends ClassifierImpl implements Part {
 	private static int Slot_accessKind=0;
@@ -41,12 +37,6 @@ public abstract class PartImpl extends ClassifierImpl implements Part {
 		slotSet(Slot_accessKind, value);
 	}
 	
-	
-	@Override
-	public Stereotype getSubType() {
-		return getStereotype();
-	}
-	
 	@Override
 	public String getFullyQualifiedName() {
 		return getTypeSignature();
@@ -56,6 +46,11 @@ public abstract class PartImpl extends ClassifierImpl implements Part {
 	public boolean isNativeType() {
 		// Default implementation
 		return true;
+	}
+	
+	@Override
+	public Part resolvePart() {
+		return this;
 	}
 			
  }

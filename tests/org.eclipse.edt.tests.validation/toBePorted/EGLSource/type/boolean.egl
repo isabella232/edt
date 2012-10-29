@@ -1,0 +1,222 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm {
+	includeReferencedFunctions=yes,		//0
+	includeReferencedFunctions=no,		//0
+	includeReferencedFunctions=true,	//0
+	includeReferencedFunctions=false,	//0
+	includeReferencedFunctions=5,		//1
+	I4GLItemsNullable=yes
+}
+	function main()
+		b boolean;			//0
+		b = yes;			//0
+		b = no;				//0
+		b = true;			//0
+		b = false;			//0
+		b = yes || no;		//0
+		b = true and false;	//0
+		b = !b && !(true || b) and b;	//0
+		
+		i int;
+		i = no;		//0
+		i = yes;	//0
+		i = true;	//0
+		i = false;	//0
+		i = b;		//0
+		
+		Intval int;
+		Boolval Boolean;
+		Charval char(10);
+
+		Boolval = true;						//0
+		Intval = ConditionAsInt(Boolval);	//0
+		Charval = BooleanAsString(BoolVal);	//0
+		
+		mybool boolean;
+		mybool = null;					//0	
+		if(mybool)						//0
+			displayLineMode("True");
+		else
+			displayLineMode("false");
+		End
+		
+		a Boolean;				//0
+		a = true; b = false;	//0
+		
+		var1 boolean;				//0
+		var1 = true;				//0
+		interruptRequested = var1;	//0
+		
+		I int;
+		i = 0;
+		While(true)					//0
+			i = i + 1;
+			If(i == 10)				//0
+				Exit while;			//0
+			End 
+		end
+		
+		boolvar boolean;			//0
+		Boolvar = true;				//0
+		I = 0;
+
+		while(boolvar)				//0
+			I = I + 1;
+			If(I == 10)				//0
+				Boolvar = false;	//0
+			End
+		end
+		
+		boolvar = false;			//0		
+		I = 0;
+		while (!boolvar)			//0
+			I = I + 1;
+			If(I == 10)				//0
+				Boolvar = true;		//0
+			End
+		end
+			
+		c,d int;
+		intvar int;
+
+		c = 20; d = 30;
+		boolvar = (c == d);					//0
+		intvar = ConditionAsInt( (c == d));	//0
+		
+		javaLib.invoke("targetName", "methodName", b as "java:boolean");	//0		
+		javaLib.invoke("targetName", "methodName", b as "java:int");		//1 Invalid cast to java:int. Only numeric items may be cast to java:int.
+	end
+	
+	FUNCTION customer_help()
+		CASE
+			when (isCurrentFieldByName("customer_num")) //0
+				showHelp("1001");
+			when (isCurrentFieldByName("fname")) 		//0
+				showHelp("1002");
+			when (isCurrentFieldByName("company")) 		//0
+				showHelp("1003");
+			otherwise									//0
+				showHelp(("" + (1010)));
+		end;
+	END
+	
+	function fromDCR1()
+		a int;
+		c int;
+		b boolean;
+		
+		b = true;	//0
+		a = b;		//0
+		
+		a = (c == 10); 	//0
+		a = (c == 0);	//0
+	end
+	
+	function fromDCR2()	
+		a String;
+		b boolean;
+		
+		b = true;
+		a = "the value of b is " + b;		//0
+		writestdout(a);						//0
+		a = "the value of b is " + b + ".";	//0
+	end
+	
+	function fromDCR3()		
+		a int;
+		b boolean;
+		a = 10;
+		b = a ; 	//0
+		b = "a";	//1
+	end
+end
+
+Record myRecord type SQLRecord {tableNames = [["cust"]]}
+	cid int;
+	fname char(20);
+	lname char(20);
+	isActive Boolean;	//0
+end
+
+Record fixedRec
+	10 item1 char(1);			//0
+		15 item1a boolean;		//0
+			20 item1b char(1);	//0
+		
+	10 item2 char(2);				//1 The length of item2 is defined as 2 bytes, but the sum of its children define its length as 1 bytes.
+		15 item2a boolean;			//1 The length of item2a is defined as 1 bytes, but the sum of its children define its length as 2 bytes.
+			20 item2c boolean[2];	//0
+end
+
+Record myForm type consoleForm
+	item1 char(1);			//0
+	item2 boolean;			//1 Items of primtive type boolean may not be declared inside of a part with subtype ConsoleForm.
+end
+
+Record uirec type vgUIRecord
+	item1 char(1);			//0
+	item2 boolean;			//1 Items of primtive type boolean may not be declared inside of a part with subtype VGUIRecord.
+end
+
+Form myTextForm type textForm
+	item1 boolean;			//1 Items of primtive type boolean may not be declared inside of a part with subtype TextForm.
+end
+
+handler custlist type JSFHandler
+        {onPageLoadFunction = "onPageLoad",
+         view = "custlist.jsp"}
+
+		boolval Boolean;       	//0
+
+        Function onPageLoad()
+                Boolval = true;	//0
+        End
+End
+
+program caseTest
+ function main()
+  x boolean;
+  a int;
+  
+  if (x == true)	//0
+  end
+  
+  case (x)			//0
+   when (true)		//0
+    a = 8;
+   when (false)		//0
+    a = 9;
+  end
+  
+ end
+end
+
+Program moreFromDCR
+	function main()
+		i int;
+		i = 10;
+
+		while(i) 	//0
+		end
+		
+		if (i)		//0
+		end
+		
+		i = 0;
+		while(i) 	//0
+		end
+		while(10) 	//0
+		end
+	end
+end

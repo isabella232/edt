@@ -11,20 +11,22 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.ui.rui.RUIWidget;
+
 handler Shadow type RUIWidget{tagName = "div", cssFile = "css/org.eclipse.edt.rui.css" }
 
 	div Div { @EGLProperty { setMethod=setDiv, getMethod=getDiv } };
 	
 	function setDiv(div Div in)
-		this.class = "EglRuiShadowDiv1";
+		this.cssClass = "EglRuiShadowDiv1";
 		this.appendChild(
-			new	Div { class = "EglRuiShadowDiv2", children = [ 
-				new Div { class = "EglRuiShadowDiv3", children = [ 
+			new	Div { cssClass = "EglRuiShadowDiv2", children = [ 
+				new Div { cssClass = "EglRuiShadowDiv3", children = [ 
 					div
 				]}
 			]} 
 		);
-		div.class = div.class + " EglRuiShadowDiv4";
+		div.cssClass = div.cssClass + " EglRuiShadowDiv4";
 		this.div = div;
 	end
 

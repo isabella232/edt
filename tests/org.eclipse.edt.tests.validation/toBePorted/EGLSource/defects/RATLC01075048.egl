@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program RATLC01075048 
+	function main()
+		intArray int[] ;
+		anInt int ;
+		aChar char(4);
+		aDBChar dbchar(4);
+		
+		// The argument to removeElement is "int in", so any expression that
+		// resolves to an int is allowed.  appendElement and insertElement both
+		// have a parameter described as "arrayElement in", which is one of the
+		// special overloaded types for which we have restrictions.  It must be
+		// a variable or literal, and its type must match the type of the array.
+		
+		intArray.appendElement ( anInt );			// 0
+		intArray.appendElement ( 5 );   			// 0
+		intArray.appendElement ( getInt(5) );		// 0
+
+		intArray.appendElement ( 1 + getInt(5) );	// 0
+		intArray.appendElement ( aDBChar );			// 1
+		intArray.appendElement ( 1 + anInt );		// 0
+		
+		intArray.insertElement ( anInt, 0 );			// 0
+		intArray.insertElement ( 5, 0 );   				// 0
+		intArray.insertElement ( getInt(5), 0 );		// 0
+
+		intArray.insertElement ( 1 + getInt(5), 0 );	// 0
+		intArray.insertElement ( aDBChar, 0 );			// 1
+		intArray.insertElement ( 1 + anInt, 0 );		// 0
+		
+		intArray.removeElement ( anInt );			// 0
+		intArray.removeElement ( 5 );   			// 0
+		intArray.removeElement ( getInt(5) );		// 0
+		intArray.removeElement ( 1 + getInt(5) );	// 0
+		intArray.removeElement ( 1 + anInt );		// 0		
+		
+//		intArray.removeElement ( aChar );			// 1
+	end	
+	
+	function getInt ( anInt int in ) returns ( int ) 
+		return ( anInt ) ;
+	end
+end

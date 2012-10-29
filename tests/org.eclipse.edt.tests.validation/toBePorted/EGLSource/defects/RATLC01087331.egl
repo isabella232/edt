@@ -1,0 +1,82 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// No error, pgm1Var can be resolved
+Program pgm1
+	pgm1Var int;
+	use fg;	//0
+
+	function main()
+		converse form1;
+	end
+end
+
+// Error, pgm1Var cannot be resolved
+Program pgm2
+	use fg;	//0
+	
+	function main()
+		converse form1;
+	end
+end
+
+// No error, func() shouldn't be validated since form1 is not used for I/O
+Program pgm3
+	use fg.form2;	//0
+	
+	function main()
+	end
+end
+
+// No error, pgm1Var can be resolved
+Program pgm1a {includeReferencedFunctions = yes}
+	pgm1Var int;
+	use fg;	//0
+
+	function main()
+		func2();
+	end
+end
+
+// Error, pgm1Var cannot be resolved
+Program pgm2a {includeReferencedFunctions = yes}
+	use fg;	//0
+	
+	function main()
+		func2();
+	end
+end
+
+// No error, func() shouldn't be validated since form1 is not used for I/O
+Program pgm3a {includeReferencedFunctions = yes}
+	use fg.form2;	//0
+	
+	function main()
+	end
+end
+
+Formgroup fg
+	Form form1 type textForm {formSize=[10,20]}
+		field1 int { validatorFunction = func };
+	end
+	
+	Form form2 type textForm {formSize=[10,20]}
+	end
+end
+
+function func()
+	pgm1Var = 8;	//2 pgm2 - pgm1Var cannot be resolved | pgm2a - pgm1Var cannot be resolved
+end
+
+function func2()
+	converse form1;
+end

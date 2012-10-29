@@ -18,8 +18,8 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlOpenStatement;
 
 public class SqlOpenStatementImpl extends SqlIOStatementImpl implements SqlOpenStatement {
 
@@ -50,28 +50,28 @@ public class SqlOpenStatementImpl extends SqlIOStatementImpl implements SqlOpenS
 				List<Field> idFields = new ArrayList<Field>();
 				boolean doComma = false;
 				for (Field f : targetType.getFields()) {
-					if (SQL.isKeyField(f)) idFields.add(f);
-					if (SQL.isReadable(f)) {
+					if (Utils.isKeyField(f)) idFields.add(f);
+					if (Utils.isReadable(f)) {
 						if (doComma) sql.append(", ");
-						if(SQL.isTextType(f.getType().getClassifier())){
+						if(Utils.isTextType(f.getType().getClassifier())){
 							sql.append("RTRIM(");
-							sql.append(SQL.getColumnName(f));
+							sql.append(Utils.getColumnName(f));
 							sql.append(")");
 						}
 						else{
-							sql.append(SQL.getColumnName(f));
+							sql.append(Utils.getColumnName(f));
 						}
 						if (!doComma) doComma = true;
 					}
 				}
 				sql.append(" FROM ");
-				sql.append(SQL.getTableName(targetType));
+				sql.append(Utils.getTableName(targetType));
 				if (!idFields.isEmpty()) {
 					sql.append(" WHERE ");
 					boolean doAnd = false;
 					for (Field f: idFields) {
 						if (doAnd) sql.append(" AND ");
-						sql.append(SQL.getColumnName(f) + " = ?");
+						sql.append(Utils.getColumnName(f) + " = ?");
 						if (!doAnd) doAnd = true;
 					}
 				}

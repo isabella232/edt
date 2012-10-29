@@ -15,16 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLSubScriptSubStringModifierReferenceCompletion
@@ -69,12 +70,10 @@ public class EGLSubScriptSubStringModifierReferenceCompletion
 			}, new IBoundNodeProcessor() {
 				public void processBoundNode(Node boundNode) {
 					if(boundNode instanceof ArrayAccess) {
-						IDataBinding data = ((ArrayAccess) boundNode).getArray().resolveDataBinding();
-						ITypeBinding type = ((ArrayAccess) boundNode).getArray().resolveTypeBinding();
-						if(type != null && IBinding.NOT_FOUND_BINDING != type) {
-							if(ITypeBinding.ARRAY_TYPE_BINDING == type.getKind() ||
-							   ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getKind() && !Primitive.isStringType(((PrimitiveTypeBinding) type).getPrimitive()) ||
-							   data != null && IBinding.NOT_FOUND_BINDING != data && IDataBinding.STRUCTURE_ITEM_BINDING == data.getKind() && ((StructureItemBinding) data).isMultiplyOccuring()) {
+						Type type = ((ArrayAccess) boundNode).getArray().resolveType();
+						if(type != null) {
+							if(type instanceof ArrayType ||
+								type.equals(TypeUtils.Type_STRING)) {
 								//Get all integer data item variable proposals
 								proposals.addAll(
 									new EGLDeclarationProposalHandler(viewer,
@@ -95,10 +94,10 @@ public class EGLSubScriptSubStringModifierReferenceCompletion
 						}
 					}
 					else if(boundNode instanceof SubstringAccess) {
-						ITypeBinding type = ((SubstringAccess) boundNode).getPrimary().resolveTypeBinding();
-						if(type != null && IBinding.NOT_FOUND_BINDING != type) {
-							if(ITypeBinding.ARRAY_TYPE_BINDING == type.getKind() ||
-							   ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getKind() && Primitive.isStringType(((PrimitiveTypeBinding) type).getPrimitive())) {
+						Type type = ((SubstringAccess) boundNode).getPrimary().resolveType();
+						if(type != null) {
+							if(type instanceof ArrayType ||
+									type.equals(TypeUtils.Type_STRING)) {
 								//Get all integer data item variable proposals
 								proposals.addAll(
 									new EGLDeclarationProposalHandler(viewer,

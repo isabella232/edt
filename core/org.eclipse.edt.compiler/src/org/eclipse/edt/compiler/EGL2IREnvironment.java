@@ -16,23 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
-import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -40,21 +34,21 @@ import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.serialization.SerializationException;
 import org.eclipse.edt.mof.serialization.TypeNotFoundException;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
     
-	private static final String[] defaultPackage = InternUtil.intern(new String[0]);
+	private static final String defaultPackage = NameUtile.getAsName("");
 	
 	protected IEnvironment irEnv;
 	private List<File> irPathRoots = new ArrayList<File>();
-	private Mof2Binding converter = new Mof2Binding(this);
-	private PartBindingCache bindingCache = new PartBindingCache();
 	private PackageBinding rootPackageBinding = new PackageBinding(defaultPackage, null, this);
 	private ICompiler compiler;
+	private List<ZipFileBindingBuildPathEntry> systemPathEntries = new ArrayList<ZipFileBindingBuildPathEntry>();
 
 	public EGL2IREnvironment() {
-		irEnv = Environment.INSTANCE;
+		irEnv = Environment.getCurrentEnv();
 		irEnv.registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
 	}
 	
@@ -63,29 +57,38 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 		this.irEnv = irEnv;
 	}
 	
+	public void setSystemPathEntries(List<ZipFileBindingBuildPathEntry> entries) {
+		systemPathEntries = entries;
+	}
+		
+	
 	public void setCompiler(ICompiler compiler) {
 		this.compiler = compiler;
 	}
+	
+	private boolean systemPathEntriesContainPackage(String packageName) {
+		for (ZipFileBindingBuildPathEntry entry : systemPathEntries) {
+			if (entry.hasPackage(packageName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-	protected boolean rootsContainPackage(String[] packageName) {
-		String path = IRUtils.concatWithSeparator(packageName, "/");
+	protected boolean rootsContainPackage(String packageName) {
+		
+		String path = packageName.replace('.', '/');
 		for (File root : irPathRoots) {
 			File folder = new File(root, path);
 			if (folder.exists()) return true;
 		}
 		return false;
 	}
-	
-	public void addPartBindingToCache(IPartBinding partBinding) {
-		bindingCache.put(partBinding.getPackageName(), partBinding.getCaseSensitiveName(), partBinding);
-	}
-	
-    public IPartBinding getPartBinding(String[] packageName, String partName) {
+		
+    public IPartBinding getPartBinding(String packageName, String partName) {
    
        IPartBinding result = null;
        
- //      result = bindingCache.get(packageName, partName);
-    	
        if (result == null) {
     	   result = SourcePathEntry.getInstance().getPartBinding(packageName, partName);
        }
@@ -96,33 +99,23 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
         	if(SourcePathEntry.getInstance().hasPart(packageName, partName) != ITypeBinding.NOT_FOUND_BINDING){
 		        hasSourcePart = true;
 	        }
-	        String mofSignature = IRUtils.concatWithSeparator(packageName, ".") + "." + partName;
-	        String eglSignature = Type.EGL_KeyScheme + ":" + mofSignature;
+	        String eglSignature = Type.EGL_KeyScheme + ":" + packageName + "." + partName;
 		
 			if (hasSourcePart) {
 		    	long sourceLastModified = SourcePathEntry.getInstance().lastModified(packageName, partName);
-		    	long irLastModified = irEnv.lastModified(mofSignature);
-		    	if (irLastModified == -1) irLastModified = irEnv.lastModified(eglSignature);
+		    	long irLastModified = irEnv.lastModified(eglSignature);
 		    	if (irLastModified == -1 || sourceLastModified > irLastModified) {
 		    		return SourcePathEntry.getInstance().getOrCompilePartBinding(packageName, partName);
 		    	}
 			}
 			try {
 				EObject irPart = findPart(eglSignature);
-				if (irPart == null) irPart = findPart(mofSignature);
 				IPartBinding partBinding;
-				if (irPart == null) {
-					partBinding = getSystemEnvironment().getPartBinding(packageName, partName);
-				}
-				else {
-					partBinding = converter.convert(irPart);
-				}
-				if (partBinding != null) {
-					bindingCache.put(packageName, partName, partBinding);
+				if (irPart != null) {
+					partBinding = BindingUtil.createPartBinding(irPart);
 					return partBinding;
 				}
 				else {
-					throw new RuntimeException("Part not found: " + mofSignature);
 				}
 			} catch (DeserializationException ex2) {
 				throw new RuntimeException(ex2);
@@ -141,14 +134,14 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
     	}
     }
     
-    public IPartBinding getNewPartBinding(String[] packageName, String caseSensitiveInternedPartName, int kind) {
-    	return SourcePathEntry.getInstance().getNewPartBinding(packageName, caseSensitiveInternedPartName, kind);
+    public IPartBinding getNewPartBinding(String packageName, String caseSensitivePartName, int kind) {
+    	return SourcePathEntry.getInstance().getNewPartBinding(packageName, caseSensitivePartName, kind);
     }
     
-    public boolean hasPackage(String[] packageName) {
+    public boolean hasPackage(String packageName) {
         return SourcePathEntry.getInstance().hasPackage(packageName)
 	      	|| rootsContainPackage(packageName)
-	      	|| getSystemEnvironment().hasPackage(packageName);
+	      	|| systemPathEntriesContainPackage(packageName);
     }
     
     public IPackageBinding getRootPackage() {
@@ -160,16 +153,17 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
     }
     
     
-    public IPartBinding level01Compile(String[] packageName, String caseSensitiveInternedPartName) {
-    	String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
-	    int partType = SourcePathEntry.getInstance().hasPart(packageName, caseInsensitiveInternedPartName);
+    public IPartBinding level01Compile(String packageName, String caseSensitivePartName) {
+    	String caseInsensitivePartName = NameUtile.getAsName(caseSensitivePartName);
+	    int partType = SourcePathEntry.getInstance().hasPart(packageName, caseInsensitivePartName);
 			
 	    if(partType != ITypeBinding.NOT_FOUND_BINDING){
-	        IPartBinding result = PartBinding.newPartBinding(partType, packageName, caseSensitiveInternedPartName);
+	    	IPartBinding result = BindingUtil.createPartBinding(partType, packageName, caseSensitivePartName);
+	    	result.setValid(false);
             result.setEnvironment(EGL2IREnvironment.this);
             return result;
 	    }
-	    return IBinding.NOT_FOUND_BINDING;
+	    return null;
 	}
 
 	@Override
@@ -258,30 +252,9 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 	public Map<String, LookupDelegate> getLookupDelegates() {
 		return irEnv.getLookupDelegates();
 	}
-	
-	public Mof2Binding getConverter() {
-		return converter;
-	}
-	
+		
 	public List<File> getPathRoots() {
 		return irPathRoots;
-	}
-	
-	public IPartBinding getPartBindingFromCache(String[] packageName, String partName) {
-		return bindingCache.get(packageName, partName);
-	}
-	public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
-		IPartBinding binding = getPartBindingFromCache(packageName, partName);
-		if (Binding.isValidBinding(binding)) {
-			return binding;
-		}
-		
-		return getSystemEnvironment().getCachedPartBinding(packageName, partName);
-	}
-
-	@Override
-	public ISystemEnvironment getSystemEnvironment() {
-		return getCompiler().getSystemEnvironment(null);
 	}
 	
 	@Override

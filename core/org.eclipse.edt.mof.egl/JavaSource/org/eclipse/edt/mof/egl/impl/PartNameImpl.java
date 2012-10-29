@@ -46,5 +46,10 @@ public class PartNameImpl extends TypeNameImpl implements PartName {
 	@Override
 	public Part getPart() {
 		return (Part)getType();
+	}
+
+	@Override
+	public Part resolvePart() {
+		return getPart();
 	}	
 }

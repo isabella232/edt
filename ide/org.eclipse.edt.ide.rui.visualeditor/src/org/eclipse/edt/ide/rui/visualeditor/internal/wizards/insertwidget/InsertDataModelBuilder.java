@@ -14,10 +14,6 @@ package org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
-
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
@@ -26,6 +22,9 @@ import org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.model.DataFi
 import org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.model.PageDataNode;
 import org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.handlers.BindingHandlerManager;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.insertwidget.InsertDataModel.Context;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 
 
 public class InsertDataModelBuilder {
@@ -53,12 +52,12 @@ public class InsertDataModelBuilder {
 	
 	private void handleDataFieldPageDataNode(DataFieldPageDataNode dataFieldPageDataNode){
 		String bindingName = dataFieldPageDataNode.getDataBindingName();
-		IDataBinding dataBinding = findDataBindingByName(bindingName);
+		Member dataBinding = findDataBindingByName(bindingName);
 		insertDataModel.getContext().set(Context.BINDING_NAME, bindingName);
 		BindingHandlerManager.getInstance().handle(dataBinding, dataBinding.getType(), insertDataModel);
 	}
 	
-	private IDataBinding findDataBindingByName(String bindingName){
+	private Member findDataBindingByName(String bindingName){
 		IEditorInput editorInput = insertDataModel.getEditorInput();
 		if(editorInput instanceof FileEditorInput){
 			FileEditorInput fileEditorInput = (FileEditorInput)editorInput;
@@ -77,7 +76,7 @@ public class InsertDataModelBuilder {
 							Object oName = names.get(j);
 							if(oName instanceof SimpleName){
 								SimpleName simpleName = (SimpleName)oName;
-								IDataBinding dataBinding = simpleName.resolveDataBinding();
+								Member dataBinding = simpleName.resolveMember();
 								if(dataBinding != null && dataBinding.getCaseSensitiveName().equals(bindingName)){
 									return dataBinding;
 								}

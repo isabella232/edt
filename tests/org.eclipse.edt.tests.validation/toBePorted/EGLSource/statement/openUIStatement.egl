@@ -1,0 +1,328 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program openUIStatement type textUIProgram
+	
+	xx char(1);
+	yy char(1);
+	firstName char(20);
+	lastName char(20);
+	address char(20);
+	city char(20);
+	state char(20);
+	zipCode char (20);
+	const cString string = "abc";
+	zz int;
+	
+	function main()
+
+		
+		myFormDict myFormType_Dictionary;
+		myFormArrayDict myFormType_ArrayDictionary;
+		myPrompt Prompt;
+		myWindow Window;
+		myMenu 	 Menu;	
+		myConsoleForm myFormType;
+		myPresentationAttributes PresentationAttributes;
+		myMenuItem MenuItem;
+		forms myFormType[];
+		myAny any;
+		myRec myRecType;
+		dbCharVar dbChar(4);
+		
+		openUI myPrompt bind xx end					// 0
+		openUI new Prompt bind xx end				// 0
+		openUI myWindow end							// 0
+		openUI new Window end						// 0
+		openUI myConsoleForm bind xx end			// 0
+		openUI myMenu end							// 0
+		openUI new Menu {labelText="myMenu"} end	// 0
+		openUI myConsoleForm.firstName bind xx end 	// 0
+		openUI forms[1] bind xx end					// 0
+		openUI myAny bind xx end					// 0 
+		openUI myFormDict.SR_ALL bind xx end		// 0
+		openUI myFormArrayDict.SA bind xx end		// 0
+		openUI myFormArrayDict.airport end			// 0
+		openUI myFormArrayDict.newField bind xx end // 0
+		
+		
+		openUI myPresentationAttributes end			// 1 myPresentationAttributes is not a valid type to be opened by the OpenUI statement
+		openUI myMenuItem end						// 1 myMenuItem is not a valid type to be opened by the OpenUI statement
+		openUI new ConsoleField end					// 1 new ConsoleField is not a valid type to be opened by the OpenUI statement
+		openUI new Menu end							// 1 The field labelText must be set when creating a Menu
+		openUI myWindow bind xx end					// 1 The bind clause is only applicable when opening ConsoleForm, ConsoleFields, ConsoleWidgets or Prompt
+		openUI myMenu bind xx end					// 1 The bind clause is only applicable when opening ConsoleForm, ConsoleFields, ConsoleWidgets or Prompt
+		openUI myRec.ArrayField1 end				// 1 myRec.ArrayField1 is not a valid type to be opened by the OpenUI statement
+		openUI myRec end							// 1 myRec is not a valid type to be opened by the OpenUI statement
+		 
+		
+		//mutiple open targets
+		openUI																	// 0
+			myConsoleForm.firstName, myConsoleForm.lastName, 					// 0
+			myConsoleForm.address, myConsoleForm.city 							// 0
+			bind firstName, lastName, address, city								// 0
+		end																		// 0
+		
+		openUI
+			myFormArrayDict.airport, myFormArrayDict.city, myFormArrayDict.state // 0
+			bind xx 															 // 0
+		end																	
+		
+		openUI 
+			myAny, myFormDict.SR_ALL, myFormArrayDict.SA						// 0
+			bind xx																// 0
+		end
+		
+		openUI myAny, myPrompt end												// 1 myPrompt must be a ConsoleField declared in a ConsoleForm when multiple targets are opened by the OpenUI statement 
+			
+		openUI myWindow, 														// 1 myWindow must be a ConsoleField declared in a ConsoleForm when multiple targets are opened by the OpenUI statement 
+			   myMenu 															// 1 myMenu must be a ConsoleField declared in a ConsoleForm when multiple targets are opened by the OpenUI statement 
+		end		
+		
+		openUI new ConsoleField, myFormArrayDict.airport 						// 1 new ConsoleField must be a ConsoleField declared in a ConsoleForm when multiple targets are opened by the OpenUI statement 
+			bind xx 
+		end
+		
+		openUI																	
+			myConsoleForm.firstName, myConsoleForm.lastName, 					
+			myConsoleForm.address, myConsoleForm.city 							
+			bind firstName, lastName, address, city, xx							// 1 Number of bind targets must be less than or equal to number of targets opened by the OpenUI statement	
+		end				
+		
+		myPrompt  = new Prompt;			
+		
+		openUI {IsConstruct = yes} myPrompt bind xx end							// 0	
+		openUI {IsConstruct = no} myPrompt bind yy, xx end						// 0	
+		
+		openUI {IsConstruct = yes} myPrompt bind yy, xx end						// 1 When isConstruct property is set, there must be exactly one bind target	
+		
+		openUI {displayOnly = yes} myPrompt bind cString end					// 0
+		
+		openUI myPrompt bind cString end										// 1 Cannot bind to read-only target unless displayOnly property is set
+		openUI {displayOnly = yes, IsConstruct = yes} myPrompt bind cString end // 1 When isConstruct property is set, the bind target must be a text variable
+		
+		openUI {IsConstruct = no} myPrompt bind zz end							// 0
+		openUI {IsConstruct = yes} myPrompt bind zz end							// 1 When isConstruct property is set, the bind target must be a text variable
+		
+		openUI myConsoleForm bind xx
+			OnEvent(AFTER_DELETE)												// 0
+			OnEvent(AFTER_FIELD: "field1")										// 0
+			OnEvent(AFTER_FIELD)												// 1 Arguments must be supplied
+			OnEvent(AFTER_INSERT)												// 0
+			OnEvent(AFTER_OPENUI)												// 0
+			OnEvent(AFTER_ROW)													// 0
+			OnEvent(BEFORE_DELETE)												// 0
+			OnEvent(BEFORE_FIELD: "field1", "field2")							// 0
+			OnEvent(BEFORE_FIELD)												// 1 Arguments must be supplied
+			OnEvent(BEFORE_INSERT)												// 0
+			OnEvent(BEFORE_INSERT: "field1")									// 1 Arguments are not allowed on this event type
+			OnEvent(BEFORE_OPENUI)												// 0
+			OnEvent(BEFORE_OPENUI: "field1")									// 1 Arguments are not allowed on this event type
+			OnEvent(BEFORE_ROW)													// 0
+			OnEvent(MENU_ACTION: "field3")										// 0
+			OnEvent(MENU_ACTION)												// 1 Arguments must be supplied
+			OnEvent(ON_KEY: "F2")												// 0
+			OnEvent(ON_KEY)														// 1 Arguments must be supplied
+			OnEvent(HOW_ABOUT_ME)												// 1 HOW_ABOUT_ME cannot be resolved
+		end
+		
+		openUI {							
+			AllowAppend = no,		// 0
+			AllowDelete = no,		// 0
+			AllowInsert = yes,		// 0
+			bindingByName = no,		// 0
+			Color = blue,			// 0
+			currentArrayCount = 6,	// 0
+			displayOnly = yes,		// 0
+			help = "hh",			// 0
+			helpMsgKey = "PF7",		// 0
+			Highlight = noHighlight,// 0
+			Intensity = dim,		// 0
+			IsConstruct = no,		// 0
+			maxArrayCount = 7,		// 0
+			SetInitial = no			// 0
+		} myConsoleForm			// 0
+			OnEvent(BEFORE_OPENUI)	// 0
+		end	// 0
+		
+		openUI {
+			AllowAppend = sure,				// 1 Property: AllowAppend.  The value for this property must be one of the following: yes, no
+			Color = brown,					// 1 Property: Color.  The value for this property must be one of the following: black, blue, cyan, defaultColor, green, magenta, red, white, yellow
+			AllowDelete = nope,				// 1 Property: AllowDelete.  The value for this property must be one of the following: yes, no
+			AllowInsert = sure,				// 1 Property: AllowInsert.  The value for this property must be one of the following: yes, no
+			bindingByName = "string",		// 1
+			currentArrayCount = "string",	// 0
+			displayOnly = nope,				// 1 The value for this property must be one of the following: yes, no
+			help = 5,						// 0
+			helpMsgKey = 5,					// 0
+			Highlight = yellow,				// 1 Property: Highlight.  The value for this property must be one of the following: blink, defaultHighlight, noHighlight, reverse, underline
+			Intensity = strong,				// 1 Property: Intensity.  The value for this property must be one of the following: bold, defaultIntensity, dim, invisible, normalIntensity
+			IsConstruct = maybe,			// 1 Property: IsConstruct.  The value for this property must be one of the following: yes, no
+			maxArrayCount = "~",			// 0
+			SetInitial = later				// 1 Property: SetInitial.  The value for this property must be one of the following: yes, no
+		} myConsoleForm
+			OnEvent(BEFORE_OPENUI)
+		end
+		
+		intVar int;
+		stringVar string;
+		
+		openUI {						//0
+			help = stringVar,			//0
+			helpMsgKey = stringVar,		//0
+			currentArrayCount = intVar,	//0
+			maxArrayCount = intVar		//0
+		} myConsoleForm					//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+		
+		openUI {							//0
+			help = stringFunc(),			//0
+			helpMsgKey = stringFunc(),		//0
+			currentArrayCount = intFunc(),	//0
+			maxArrayCount = intFunc()		//0
+		} myConsoleForm						//0
+			OnEvent(BEFORE_OPENUI)			//0
+		end									//0
+		
+		openUI {						//0
+			help = "a",					//0
+			helpMsgKey = "a",			//0
+			currentArrayCount = 5,		//0
+			maxArrayCount = 5			//0
+		} myConsoleForm					//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+		
+		openUI {							//0
+			help = intVar,					//0
+			helpMsgKey = intVar,			//0
+			currentArrayCount = stringVar,	//0
+			maxArrayCount = stringvar		//0
+		} myConsoleForm						//0
+			OnEvent(BEFORE_OPENUI)			//0
+		end									//0
+		
+		openUI {							//0
+			help = dbCharVar,				//0
+			helpMsgKey = dbCharVar,			//0
+			currentArrayCount = dbCharVar,	//1 int and dbChar are not compatible types
+			maxArrayCount = dbCharVar		//1 int and dbChar are not compatible types
+		} myConsoleForm						//0
+			OnEvent(BEFORE_OPENUI)			//0
+		end									//0
+		
+		openUI {								//0
+			help = intFunc(),					//0
+			helpMsgKey = intFunc(),				//0
+			currentArrayCount = stringFunc(),	//0
+			maxArrayCount = stringFunc()		//0
+		} myConsoleForm							//0
+			OnEvent(BEFORE_OPENUI)				//0
+		end										//0
+
+		openUI {						//0
+			help = 5,					//0
+			helpMsgKey = 5,				//0
+			currentArrayCount = "a",	//0
+			maxArrayCount = "a"			//0
+		} myConsoleForm					//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+		
+		openUI {						//0
+			help = foo,					//1 cannot be resolved
+			helpMsgKey = foo,			//1 cannot be resolved
+			currentArrayCount = foo,	//1 cannot be resolved
+			maxArrayCount = foo			//1 cannot be resolved
+		} myConsoleForm					//0
+			OnEvent(BEFORE_OPENUI)		//0
+		end								//0
+	
+	end 	 	
+	
+	function intFunc() returns (int) end
+	function stringFunc() returns (string) end		
+	
+end 
+
+
+	
+	
+Record myFormType type ConsoleForm { formsize=[10,55] }
+
+*    ConsoleField      { position=[2,5], value="First Name" };
+firstName ConsoleField { name="firstName", position=[2,20], fieldLen=15, value="", inputRequired=no };
+
+*     ConsoleField    { position=[3,5], value="Last Name" };
+lastName ConsoleField { name="lastName", position=[3,20], fieldLen=8, value="", inputRequired=yes };
+
+*    ConsoleField     { position=[4,5], value="Address" };
+address ConsoleField  { name="address", position=[4,20], fieldLen=30, value="" };
+
+*   ConsoleField      { position=[5,5], value="City" };
+city ConsoleField     { name="city", position=[5,20], fieldLen=10, value="" };
+
+*    ConsoleField     { position=[5,35], value="State" };
+state ConsoleField    { name="state", position=[5,45], fieldLen=2, value="" };
+
+*    ConsoleField     { position=[6,35], value="Zip" };
+zipCode ConsoleField  { name="zipCode", position=[6,45], fieldLen=5, value="" };
+
+end
+
+Record myFormType_Dictionary type ConsoleForm { formSize=[10,40] }
+	*      ConsoleField {position=[4,1], value="field1"};
+	field1 ConsoleField {position=[4,10], fieldLen=10};
+	
+	*      ConsoleField {position=[5,1],  value="field2"};
+	field2 ConsoleField {position=[5,10], fieldLen=10};
+
+	*      ConsoleField {position=[6,1],  value="field3"};
+	field3 ConsoleField {position=[6,10], fieldLen=10};
+	
+	*      ConsoleField {position=[7,1],  value="field4"};
+	field4 ConsoleField {position=[7,10], fieldLen=10};
+
+	SR_ALL  dictionary {fld1=field1, fld2=field2, fld3=field3, fld4=field4};
+	
+end
+
+Record myFormType_ArrayDictionary TYPE ConsoleForm { formsize = [10,65] }
+
+*                    { position=[2,5], value="First Name" };
+firstName ConsoleField { name="firstName", position=[2,20], fieldLen=15, value="" };
+
+*                    { position=[3,5], value="Last Name" };
+lastName ConsoleField  { name="lastName", position=[3,20], fieldLen=8, value="" };
+
+*                      { position=[5,5], value="Airport" };
+airport ConsoleField[5]  { name="airport", position=[6,5], fieldLen=20, value="" };
+
+*                      { position=[5,30], value="City" };
+city ConsoleField[5]   { name="city", position=[6,30], fieldLen=15, value="" };
+
+*                      { position=[5,50], value="State" };
+state ConsoleField[5]  { name="state", position=[6,50], fieldLen=5, value="" };
+
+newField ConsoleField { fieldLen = 15} = new ConsoleField;
+
+SA ArrayDictionary {a=airport,c=city, s=state};
+
+end
+
+
+record myRecType type basicRecord
+	field1 char(5);
+	field2 char(5);
+	arrayField1 char(5)[3];
+	arrayField2 char(5)[3];
+end

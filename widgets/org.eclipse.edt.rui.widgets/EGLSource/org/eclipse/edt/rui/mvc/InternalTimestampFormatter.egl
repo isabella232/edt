@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.mvc;
 
-import eglx.rbd.StrLib;
+
 
 library InternalTimestampFormatter
 	use InternalMessageLib;

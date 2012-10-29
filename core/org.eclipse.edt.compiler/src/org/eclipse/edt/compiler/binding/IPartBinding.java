@@ -17,34 +17,13 @@ import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
  * @author winghong
  */
 public interface IPartBinding extends ITypeBinding {
-    
-    ITypeBinding RECURSIVE_USE_BINDING = RecursiveUseErrorBinding.INSTANCE;
 
-    IEnvironment getEnvironment();
+	IEnvironment getEnvironment();
     void setEnvironment(IEnvironment environment);
-    
-    IPartBinding realize();
-    
-    void clear();
-
-    boolean isStructurallyEqual(IPartBinding anotherPartBinding);
-    
+        
+    void clear();  
     void setValid(boolean isValid);
     
-    IPartSubTypeAnnotationTypeBinding getSubType();
-    
-    IAnnotationBinding getSubTypeAnnotationBinding();
-    
-    /**
-     * Returns true iff this part is valid to be used as the type of a variable
-     * declaration.
-     */
-    boolean isDeclarablePart();
-    
     boolean isPrivate();
-    void setPrivate(boolean bool);
     
-    boolean isSystemPart();
-    
-    StaticPartDataBinding getStaticPartDataBinding();
 }

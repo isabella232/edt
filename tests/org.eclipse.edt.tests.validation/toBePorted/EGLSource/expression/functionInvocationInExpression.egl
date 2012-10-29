@@ -1,0 +1,86 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program functionInExpression
+	function main()
+		i, j int;
+		
+		i = j + intFunc();                                  // 0
+		i = j + intFunc() - i;                              // 0
+		i = intFunc() * intFunc() - intFunc() ** intFunc(); // 0
+		
+		i = j + func();      // 1 must return
+		i = j + func() - i; // 1 must return
+		i = func() * func() - func() ** func(); // 4 must return | must return | must return | must return
+		
+		s string;
+		s = stringFunc() + "a";       // 0
+		s = "a" + stringFunc() + "b"; // 0
+		
+		s = func() + "a";       // 1 must return
+		s = "a" + func() + "b"; // 1 must return
+		
+		intAndStringInFunc( i, s );                    // 0
+		intAndStringInFunc( j + intFunc(), s + "a" );  // 0
+		intAndStringInFunc( intFunc(), stringFunc() ); // 0
+		intAndStringInFunc( 5, stringFunc() + "A" );   // 0
+		
+		intAndStringOutFunc( i, s );                    // 0
+		intAndStringOutFunc( j + intFunc(), s + "a" );  // 2 IN modifier | IN modifier
+		intAndStringOutFunc( intFunc(), stringFunc() ); // 2 IN modifier | IN modifier
+		intAndStringOutFunc( 5, stringFunc() + "A" );   // 2 OUT modifier | IN modifier	
+		
+		intAndStringFunc( i, s );                    // 0
+		intAndStringFunc( j + intFunc(), s + "a" );  // 2 IN modifier | IN modifier
+		intAndStringFunc( intFunc(), stringFunc() ); // 2 IN modifier | IN modifier
+		intAndStringFunc( 5, stringFunc() + "A" );   // 1 IN modifier
+		intAndStringFunc(5,"a");					 //0
+		intAndStringFunc("a",5);					 //1
+		
+		if( i < intFunc() ) end             // 0
+		if( i <= intFunc() ) end            // 0
+		if( i == intFunc() ) end            // 0
+		if( i > intFunc() ) end             // 0
+		if( i >= intFunc() ) end            // 0
+		if( intFunc() < intFunc() + 5 ) end // 0
+		
+		if( i < func() ) end             // 1 must return
+		if( i <= func() ) end            // 1 must return
+		if( i == func() ) end            // 1 must return
+		if( i > func() ) end             // 1 must return
+		if( i >= func() ) end            // 1 must return
+		if( func() < func() + 5 ) end    // 2 must return | must return
+		
+		i = intFunc();    // 0
+		s = stringFunc(); // 0
+		
+		h hex(4);
+		
+		move intFunc() to i;     // 0
+		move stringFunc() to s;  // 0
+		move intFunc() * 2 to i; // 0
+		move func() to i;     // 1 must return
+		move func() + 5 to i; // 1 must return
+		
+       connect(getProperty("default_connection"), getProperty("userid"), getProperty("password")); // 0
+       defineDatabaseAlias(getProperty("blah1"), getProperty("blah2")); // 0
+       s = getProperty(getProperty("blahblah")); //0
+    end
+	
+	function intFunc() returns (int) end
+	function stringFunc() returns (string) end
+	function func() end
+	
+	function intAndStringInFunc(  p1 int in,  p2 string in )  end
+	function intAndStringOutFunc( p1 int out, p2 string out ) end
+	function intAndStringFunc(    p1 int,     p2 string )     end
+end

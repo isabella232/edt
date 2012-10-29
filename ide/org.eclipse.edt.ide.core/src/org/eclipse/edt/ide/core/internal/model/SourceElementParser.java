@@ -25,9 +25,7 @@ import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.ConstantFormField;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
@@ -46,30 +44,22 @@ import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.Record;
-import org.eclipse.edt.compiler.core.ast.ReturningToInvocationTargetClause;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
-import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
 import org.eclipse.edt.ide.core.internal.model.index.IDocument;
@@ -247,41 +237,6 @@ public class SourceElementParser {
 			return true;
 		}
 
-		public boolean visit(ShowStatement showStatement) {
-			showStatement.accept(new DefaultASTVisitor() {
-				public boolean visit(ShowStatement showStatement) {
-					return true;
-				}
-				public boolean visit(ReturningToInvocationTargetClause returningToInvocationTargetClause) {
-					// EGLTODO: Is there a way to figure out if this is a
-					// program, or does this always have to be reported as a
-					// potential match?
-					Expression expr = returningToInvocationTargetClause.getExpression();
-					if(expr.isName()) {
-						handleTypeNameReference((Name) expr, expr);
-					}
-					else {
-						//TODO: could be a quoted string literal that resolved to a program. Decide whether we want to handle that here. Otherwise, there would be no search result, refactoring, etc... for referenced program 
-					}
-					return false;
-				}
-			});
-			return true;
-		}
-
-		public boolean visit(TransferStatement transferStatement) {
-			if (transferStatement.isToProgram()) {
-				Expression expr = transferStatement.getInvocationTarget();
-				if(expr.isName()) {
-					handleTypeNameReference((Name) expr, expr);
-				}
-				else {
-					//TODO: could be a quoted string literal that resolved to a program. Decide whether we want to handle that here. Otherwise, there would be no search result, refactoring, etc... for referenced program 
-				}
-			}
-			return true;
-		}
-	
 		public boolean visit (IsAExpression isa ){
 			Type type = isa.getType();
 			if (type.isNameType()){
@@ -426,18 +381,6 @@ public class SourceElementParser {
 				for (Iterator contentIter = part.getContents().iterator(); contentIter
 						.hasNext();) {
 					((Node) contentIter.next()).accept(new DefaultASTVisitor() {
-						int nestedFormDeclEnd;
-						
-						public boolean visit(NestedForm nestedForm) {
-							nestedFormDeclEnd = handleEnterPart(nestedForm, nestedForm.getName(), nestedForm.isPrivate(), Part.FORM, nestedForm.getContents());
-							return true;
-						}
-						
-						public void endVisit(NestedForm nestedForm) {
-							requestor.exitPart(nestedFormDeclEnd);
-						}
-
-			
 						public boolean visit(UseStatement useStatement) {
 							handleUseDeclaration(useStatement);
 							return false;
@@ -457,28 +400,10 @@ public class SourceElementParser {
 							handleField(structureItem);
 							return false;
 						}
-
-						public boolean visit(ConstantFormField formField) {
-							handleField(formField);
-							return false;
-						}
-
-						public boolean visit(VariableFormField formField) {
-							handleField(formField);
-							return false;
-						}
 					});
 				}
 
 				part.accept(new DefaultASTVisitor() {
-					public boolean visit(Program program) {
-						for (Iterator parmIter = program.getParameters()
-								.iterator(); parmIter.hasNext();) {
-							handleField((Node) parmIter.next());
-						}
-						return false;
-					}
-
 					public boolean visit(ExternalType externalType){
 						for(Iterator iter = externalType.getExtendedTypes().iterator(); iter.hasNext();) {
 							Name next = (Name) iter.next();
@@ -487,10 +412,6 @@ public class SourceElementParser {
 						return false;
 					}
 					
-					public boolean visit(TopLevelFunction function) {
-						handleFunction(function);
-						return false;
-					}
 					public boolean visit(Delegate delegate) {
 						handleDelegate(delegate);
 						return false;
@@ -501,10 +422,6 @@ public class SourceElementParser {
 				
 				part.accept(new DefaultASTVisitor(){
 					char[] name = null;
-					public boolean visit(TopLevelFunction topLevelFunction) {
-						name = topLevelFunction.getName().getCanonicalName().toCharArray();
-						return true;
-					}
 					public boolean visit(DataItem dataItem) {
 						name = dataItem.getName().getCanonicalName().toCharArray();
 						return true;
@@ -556,26 +473,13 @@ public class SourceElementParser {
 			public boolean visit(StructureItem structureItem) {
 				FieldInfo fInfo = new FieldInfo();
 				Type type = structureItem.getType();
-				if (structureItem.isEmbedded()) {
-					fInfo.name = type.getCanonicalName().toCharArray();
-					if (type.isNameType()) {
-						fInfo.type = ((NameType) type).getName()
-								.getCanonicalName().toCharArray();
-					}
-				} else if (structureItem.isFiller()) {
-					fInfo.name = "*".toCharArray();
-					if (type != null) {
-						fInfo.type = type.getCanonicalName().toCharArray();
-					}
-				} else {
-					fInfo.name = structureItem.getName().getCanonicalName()
-							.toCharArray();
-					fInfo.nameStart = decl.getOffset();
-					fInfo.nameEnd = fInfo.nameStart + fInfo.name.length;
+				fInfo.name = structureItem.getName().getCanonicalName()
+						.toCharArray();
+				fInfo.nameStart = decl.getOffset();
+				fInfo.nameEnd = fInfo.nameStart + fInfo.name.length;
 
-					if (type != null) {
-						fInfo.type = type.getCanonicalName().toCharArray();
-					}
+				if (type != null) {
+					fInfo.type = type.getCanonicalName().toCharArray();
 				}
 
 				if (type == null) {
@@ -589,15 +493,6 @@ public class SourceElementParser {
 							fInfo.name);
 				}
 
-				list.add(fInfo);
-				return false;
-			}
-
-			public boolean visit(ConstantFormField constantFormField) {
-				FieldInfo fInfo = new FieldInfo();
-				fInfo.name = new char[] { '*' };//$NON-NLS-1$
-				fInfo.nameStart = decl.getOffset();
-				fInfo.nameEnd = fInfo.nameStart + fInfo.name.length;
 				list.add(fInfo);
 				return false;
 			}
@@ -656,31 +551,6 @@ public class SourceElementParser {
 				fInfo.nameEnd = fInfo.nameStart + fInfo.name.length;
 				fInfo.type = functionParameter.getType().getCanonicalName()
 						.toCharArray();
-				list.add(fInfo);
-				return false;
-			}
-
-			public boolean visit(ProgramParameter programParameter) {
-				FieldInfo fInfo = new FieldInfo();
-				fInfo.name = programParameter.getName().getCanonicalName()
-						.toCharArray();
-				fInfo.nameStart = programParameter.getName().getOffset();
-				fInfo.nameEnd = fInfo.nameStart + fInfo.name.length;
-				fInfo.type = programParameter.getType().getCanonicalName()
-						.toCharArray();
-				list.add(fInfo);
-				return false;
-			}
-
-			public boolean visit(VariableFormField variableFormField) {
-				FieldInfo fInfo = new FieldInfo();
-				fInfo.name = variableFormField.getName().getCanonicalName()
-						.toCharArray();
-				fInfo.nameStart = variableFormField.getName().getOffset();
-				fInfo.nameEnd = fInfo.nameStart + fInfo.name.length;
-				fInfo.type = variableFormField.getType().getCanonicalName()
-						.toCharArray();
-				fInfo.hasOccurs = variableFormField.getType().isArrayType();
 				list.add(fInfo);
 				return false;
 			}
@@ -789,24 +659,6 @@ public class SourceElementParser {
 				return false;
 			}
 
-			public boolean visit(DataTable datatable) {
-				result[0] = datatable.hasSubType() ? datatable.getSubType()
-						.getCanonicalName() : null;
-				return false;
-			}
-
-			public boolean visit(TopLevelForm form) {
-				result[0] = form.hasSubType() ? form.getSubType()
-						.getCanonicalName() : null;
-				return false;
-			}
-			
-			public boolean visit(NestedForm form) {
-				result[0] = form.hasSubType() ? form.getSubType()
-						.getCanonicalName() : null;
-				return false;
-			}
-
 			public boolean visit(DataItem dataItem) {
 				result[0] = dataItem.getType().getCanonicalName();
 				return false;
@@ -840,10 +692,6 @@ public class SourceElementParser {
 	private List getFunctionVariableDeclarations(Node funcNode) {
 		final List result = new ArrayList();
 		funcNode.accept(new DefaultASTVisitor() {
-			public boolean visit(TopLevelFunction topLevelFunction) {
-				return true;
-			};
-
 			public boolean visit(NestedFunction nestedFunction) {
 				return true;
 			}
@@ -864,14 +712,6 @@ public class SourceElementParser {
 						.isPrivate());
 	}
 	
-	private int handleEnterFunction(TopLevelFunction decl) {
-		return handleEnterFunction(decl, decl.getName(), decl
-				.getFunctionParameters(),
-				getFunctionVariableDeclarations(decl),
-				decl.hasReturnType() ? decl.getReturnType() : null, !decl
-						.isPrivate());
-	}
-
 	private int handleEnterFunction(NestedFunction decl) {
 		return handleEnterFunction(decl, decl.getName(), decl
 				.getFunctionParameters(),
@@ -900,7 +740,7 @@ public class SourceElementParser {
 
 			char[] typeName = parm.getType().getCanonicalName().toCharArray();
 			char[] parmName = parm.getName().getCanonicalName().toCharArray();
-			boolean isNullable = parm.getType().isNullableType();
+			boolean isNullable = parm.isNullable();
 			//TODO test use types. 06/18
 			char[] useType = new char[0];
 			if(parm.getUseType() != null){
@@ -943,11 +783,6 @@ public class SourceElementParser {
 		requestor.exitFunction(end);
 	}
 	
-	private void handleFunction(TopLevelFunction func) {
-		int end = handleEnterFunction(func);
-		requestor.exitFunction(end);
-	}
-
 	private void handleFunction(NestedFunction func) {
 		int end = handleEnterFunction(func);
 		requestor.exitFunction(end);
@@ -1000,12 +835,7 @@ public class SourceElementParser {
 		field.accept(new DefaultASTVisitor() {
 			public boolean visit(StructureItem structureItem) {
 				Type type = structureItem.getType();
-				if (structureItem.isEmbedded()) {
-					if (type.isNameType()) {
-						handleTypeNameReference(((NameType) type).getName(),
-								field);
-					}
-				} else if (type != null) {
+				if (type != null) {
 					handleTypeReference(type);
 				}
 				
@@ -1033,19 +863,6 @@ public class SourceElementParser {
 
 			public boolean visit(FunctionParameter functionParameter) {
 				handleTypeReference(functionParameter.getType());
-				return false;
-			}
-
-			public boolean visit(ProgramParameter programParameter) {
-				handleTypeReference(programParameter.getType());
-				return false;
-			}
-
-			public boolean visit(VariableFormField variableFormField) {
-				if (variableFormField.hasInitializer()){
-					handleInitializer(variableFormField.getInitializer());
-				}
-				handleTypeReference(variableFormField.getType());
 				return false;
 			}
 		});

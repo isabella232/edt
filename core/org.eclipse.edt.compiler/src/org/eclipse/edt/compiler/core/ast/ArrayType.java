@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 
 /**
  * ArrayType AST node type.
@@ -24,9 +22,10 @@ public class ArrayType extends Type {
 
 	private Type elementType;
 	private Expression initialSize;
-	private ArrayTypeBinding arrayTypeBinding;
+	private org.eclipse.edt.mof.egl.ArrayType arrayType;
+	private boolean isNullable;
 
-	public ArrayType(Type elementType, Expression initialSize, int startOffset, int endOffset) {
+	public ArrayType(Type elementType, Expression initialSize, boolean isNullable, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.elementType = elementType;
@@ -36,6 +35,7 @@ public class ArrayType extends Type {
 			this.initialSize = initialSize;
 			this.initialSize.setParent(this);
 		}
+		this.isNullable = isNullable;
 	}
 	
 	public Type getElementType() {
@@ -50,22 +50,26 @@ public class ArrayType extends Type {
 		return initialSize;
 	}
 	
+	@Override
 	public int getKind() {
 		return ARRAYTYPE;
 	}
 	
+	@Override
 	public boolean isArrayType() {
 		return true;
 	}
-
-    public ITypeBinding resolveTypeBinding() {
-        return arrayTypeBinding;
+	
+	@Override
+    public org.eclipse.edt.mof.egl.Type resolveType() {
+        return arrayType;
     }
     
-    public void setTypeBinding(ArrayTypeBinding arrayTypeBinding) {
-        this.arrayTypeBinding = arrayTypeBinding;
+    public void setType(org.eclipse.edt.mof.egl.ArrayType arrayType) {
+        this.arrayType = arrayType;
     }
 	
+    @Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -75,17 +79,39 @@ public class ArrayType extends Type {
 		visitor.endVisit(this);
 	}
 	
+	@Override
 	public String getCanonicalName() {
-		return elementType.getCanonicalName() + "[]";
+		StringBuilder buf = new StringBuilder(100);
+		buf.append(elementType.getCanonicalName());
+		if (isNullable) {
+			buf.append('?');
+		}
+		buf.append('[');
+		if (initialSize != null) {
+			buf.append(initialSize.getCanonicalString());
+		}
+		buf.append(']');
+		return buf.toString();
 	}
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		Expression newInitialSize = initialSize != null ? (Expression)initialSize.clone() : null;
 		
-		return new ArrayType((Type)elementType.clone(), newInitialSize, getOffset(), getOffset() + getLength());
+		return new ArrayType((Type)elementType.clone(), newInitialSize, isNullable, getOffset(), getOffset() + getLength());
 	}
 	
+	@Override
 	public Type getBaseType() {
 		return elementType.getBaseType();
+	}
+	
+	public boolean isNullable() {
+		return isNullable;
+	}
+	
+	@Override
+	public String toString() {
+		return getCanonicalName();
 	}
 }

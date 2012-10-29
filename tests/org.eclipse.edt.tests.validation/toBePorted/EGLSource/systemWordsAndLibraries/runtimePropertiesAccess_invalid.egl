@@ -1,0 +1,41 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program testRuntimePropertiesUsage_invalid 
+	function main()  
+		item2 char(4);
+		def char(5);
+		abc char(3);
+
+		item2 = sysvar.getproperty("ab c"); 				//1 getproperty cannot be resolved
+		item2 = getproperty(1);								//0
+		defineDatabaseAlias(1.2, "def"); 					//0
+		consolelib.defineDatabaseAlias("def", "def");		//1 defineDatabaseAlias cannot be resolved
+		item2 = syslib.getproperty(abc); 					//0
+		item2 = getproperty(abc);							//0
+		defineDatabaseAlias(abc, def);						//0
+		sqllib.defineDatabaseAlias(def, def);				//0
+		item2 = sqllib.defineDatabaseAlias ("abc", "def");	//1 Function defineDatabaseAlias must return a type
+		sqllib.defineDatabaseAlias ("abc"); 				//1 requires exactly 2 argument(s)
+		sqllib.defineDatabaseAlias ("abc", "def", "ghi");	//1 requires exactly 2 argument(s)
+		item2 = syslib.getProperty(); 						//1 requires exactly 1 argument(s)
+		item2 = syslib.getProperty("a","b");		 		//1 requires exactly 1 argument(s)
+		
+		connect ( getProperty("a" + datetimelib.getProperty("somestring")), // 1 getProperty cannot be resolved
+					getproperty("userid"), 					//0
+					getProperty("password"));				//0
+		connect (getProperty("a" + getProperty(1E4)),		//0
+					getproperty("userid","abc"), 			//1 requires exactly 1 argument(s)
+					getProperty("password"));				//0
+		setCurrentDatabase(3.3);							//0
+		setCurrentDataBase("a");							//0
+	end
+end

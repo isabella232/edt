@@ -12,9 +12,12 @@
 package org.eclipse.edt.compiler;
 
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
+import org.eclipse.edt.mof.serialization.ObjectStore;
 
 public interface ICompiler {
 	
@@ -65,15 +68,19 @@ public interface ICompiler {
 	 * @return the version of this compiler, e.g. "1.0.0", never null.
 	 */
 	public String getVersion();
+		
+	/**
+	 * @return the list of compiler extensions registered with this compiler, never null.
+	 * @see ICompilerExtension
+	 */
+	public List<ICompilerExtension> getExtensions();
 	
 	/**
-	 * Returns the system environment. This is based on the path returned from getSystemEnvironment 
+	 * Registers the given compiler extension with this compiler.
 	 * 
-	 * @param notifier  Used to report progress of loading the parts; this may be null.
-	 * @return the system environment, never null.
+	 * @param extension The compiler extension.
 	 */
-	public ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier);
-	
+	public void addExtension(ICompilerExtension extension);
 
 	/**
 	 * Returns a string representing the path (path segments separated by java.io.File.pathSeparator) to the directories containing
@@ -84,10 +91,32 @@ public interface ICompiler {
 	 */
 	public String getSystemEnvironmentPath();
 	
-	public List<String> getImplicitlyUsedEnumerations();
-	public List<String> getAllImplicitlyUsedEnumerations();
+	/**
+	 * Returns a list of validators to be run on the node. For statement nodes only one validator may be returned. For all others there
+	 * can be mutliple validators. Therefore extensions can replace statement validation, and append to part, function, and type validation.
+	 * 
+	 * @param node The node to validate.
+	 * @see ASTValidator
+	 * @return a list of validators to be run on the node, possibly null.
+	 */
+	public List<ASTValidator> getValidatorsFor(Node node);
 	
-	public StatementValidator getValidatorFor(Statement stmt);
-
+	/**
+	 * Returns a generator capable of creating a MOF part for the given node. Extensions can override what type gets generated,
+	 * otherwise the compiler should return its own generator capable of creating its default type for the node.
+	 * 
+	 * @param node The node being generated.
+	 * @see ElementGenerator
+	 * @return a generator capable of creating a MOF part for the given node, possibly null.
+	 */
+	public ElementGenerator getElementGeneratorFor(Node node);
+	
+	/**
+	 * Returns a map whose keys are the serialization scheme (egl or mof) and whose values are the ObjectStores for
+	 * the EGLAR and MOFAR files on the system environment path
+	 * 
+	 * @return the object stores for the system path.
+	 */
+	public List<ZipFileBindingBuildPathEntry> getSystemBuildPathEntries();
 	
 }

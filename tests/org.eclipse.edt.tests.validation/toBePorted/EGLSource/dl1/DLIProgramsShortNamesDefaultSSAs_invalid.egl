@@ -1,0 +1,247 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//ignore_case
+
+// valid PSBRecord, dliSegments and DataItems to use in statements
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	 
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end		 
+DataItem Name char(18) { dliFieldName ="NAME" } end		 
+
+Record Course type DLISegment 					 
+{ segmentName="COURSE", keyItem=courseNo }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record Prereq type DLISegment { keyItem=courseNo } 
+	10 courseNo CourseNo;							 
+	10 title char(33);								 
+end
+
+Record Offering type DLISegment 					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record Teacher type DLISegment 					 
+{ segmentName="TEACHER", keyItem=empNo }		 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+end 
+
+Record Student type DLISegment	 				 
+	{ segmentName="STUDENT" }						 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+	10 grade char(1);								 
+end
+Record EducationPSB type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Course },		 
+	   @Relationship{											 
+     		segmentRecord=Prereq, parentRecord=Course },	    	   
+       @Relationship{											 
+      		segmentRecord=Offering,parentRecord=Course },  	  
+       @Relationship{											 
+      		segmentRecord=Teacher,parentRecord=Offering},  
+	   @Relationship{											 
+	     	segmentRecord=Student, parentRecord=Offering}	 
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Offering },	 
+	   @Relationship{								 
+	     segmentRecord=Course,parentRecord=Offering},	 
+	   @Relationship{										 
+	     segmentRecord=Teacher,parentRecord=Offering},	 
+	   @Relationship{										 
+	     segmentRecord=Student,parentRecord=Offering}	 
+	  ] }};
+end
+Record EducationPSB3 type PSBRecord 				 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Course },		 
+	   @Relationship{											 
+     		segmentRecord=Prereq, parentRecord=Course },	    	   
+       @Relationship{											 
+      		segmentRecord=Offering,parentRecord=Course },  	  
+       @Relationship{											 
+      		segmentRecord=Teacher,parentRecord=Offering}	 
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {				 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Offering },	 
+	   @Relationship{								 
+	     segmentRecord=Course,parentRecord=Offering}	 
+	  ] }};
+end
+//segments not in DL/I PSB or don't match PSB
+Program DLIProgramsShortNamesDefaultSSAs_invalid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb = psb2, 					 
+         handleHardDLIErrors = yes }	 
+  }
+  course course;						   
+  prereq prereq;						 
+  offering offering;					 
+  teacher teacher;						 
+  student student;						 
+  courses course[20];					   
+  prereqs prereq[5];					 
+  offers offering[3];					 
+  teachers teacher[5];					 
+  students student[25];					   
+  xloc char(4);	
+  garbage prereq;
+  extra student;						 
+
+  // PSB Declaration
+  psb2 EducationPSB3 ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+  	function addStmt()		
+  	  add student 		;								//1  No PCB in psb2 contains the STUDENT segment
+	  // add segment with another PCB 
+ 	  add teacher usingPCB psb2.offeringPCB ;		 	//1 The pcb psb2.offeringPCB does not contain the TEACHER segment
+ 	  // add arrays 
+  	  add students 		;								//1 No PCB in psb2 contains the STUDENT segment
+  	  // add arrays of segment with another PCB 
+  	  add teachers usingPCB psb2.offeringPCB ;			//1 The pcb psb2.offeringPCB does not contain the TEACHER segment
+   	  // add segments using path calls 
+  	  add course, offering, student 	;				//1 No PCB in psb2 contains the segment hierarchy: course, offering, student
+  	  add course, teacher		;						//1 On an ADD statement with multiple targets, The I/O targets must follow the segment hierarchy in PCB psb2.coursePCB.
+  	  add prereq, course		;						//1 No PCB in psb2 contains the segment hierarchy: prereq, course
+  	  // add segments using path calls, another PCB	
+      add offering, teacher usingPCB psb2.offeringPCB ; //1 The pcb psb2.offeringPCB does not contain the TEACHER segment
+  	end  
+
+  	function deleteStmt() 	
+	  delete student ; 					 				//1 No PCB in psb2 contains the student segment
+	  delete teacher usingPCB psb2.offeringPCB 	;		//1 psb2.offeringPCB does not contain the teacher segment
+	end
+ 	function getStmt() 
+    	// get segment with no modifiers
+		get student;									//1 No PCB in psb2 contains the student segment
+    	// get segment with another PCB
+		get student usingPCB psb2.offeringPCB;  		//1 psb2.offeringPCB does not contain the student segment 
+  		// get arrays of segments with no modifiers 
+		get students ;									//1 No PCB in psb2 contains the student segment
+	 	// get arrays of segment with another PCB
+		get students usingPCB psb2.offeringPCB ; 		//1 psb2.offeringPCB does not contain the student segment 
+	    // get segments using path calls	
+		get course, offering, student ;					//1 No PCB in psb2 contains the segment hierarchy: course, offering, student 
+		get teacher, offering;							//1 No PCB in psb2 contains the segment hierarchy: TEACHER, Offering
+   		// get segments using path calls, another PCB
+		get offering, student usingPCB psb2.offeringPCB;//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	end  
+	
+ 	function getForUpdateStmt() 
+		get student forupdate; 							//1 No PCB in psb2 contains the student segment
+   		// get segment with another PCB
+		get student forupdate usingPCB psb2.offeringPCB;//1 psb2.offeringPCB does not contain the student segment 
+	    // get segments using path calls
+		get course, offering, student forupdate ;		//1 No PCB in psb2 contains the segment hierarchy: course, offering, student
+	    // get segments using path calls, another PCB, 
+		get offering, student forupdate usingPCB psb2.offeringPCB;//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+		get offering, garbage forupdate usingPCB psb2.offeringPCB;//1 The pcb psb2.offeringPCB does not contain the Prereq segment
+		get offering, extra, course forupdate usingPCB psb2.offeringPCB;//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	end 
+ 	  
+ 	function getNextStmt() 
+		get next student;						 		//1 No PCB in psb2 contains the student segment
+    	// get segment with another PCB 
+		get next student usingPCB psb2.offeringPCB;		//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	  	// get arrays of segments with no modifiers 	
+		get next students ;								//1 No PCB in psb2 contains the student segment
+	    // get arrays of segments with another PCB 
+		get next students usingPCB psb2.offeringPCB ;	//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	    // get segments using path calls
+		get next course, offering, student;				//1 No PCB in psb2 contains the segment hierarchy: course, offering, student
+	    // get segments using path calls, another PCB
+   		get next offering, student usingPCB psb2.offeringPCB;//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	end   
+
+ 	function getNextForUpdateStmt() 
+		get next student forupdate	;					 				//1 No PCB in psb2 contains the student segment
+   		// get segment with another PCB
+		get next student forupdate usingPCB psb2.offeringPCB;			//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+   		// get segments using path calls 
+		get next course, offering, student forupdate;					//1 No PCB in psb2 contains the segment hierarchy: course, offering, student
+	    // get segments using path calls, another PCB
+   		get next offering, student forupdate usingPCB psb2.offeringPCB ;//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	end 
+
+ 	function getNextInParentStmt() 
+		get next inparent student;				 			//1 No PCB in psb2 contains the student segment
+    	// get segment with another PCB 
+		get next inparent student usingPCB psb2.offeringPCB;//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	  	// get arrays of segments with no modifiers
+		get next inparent students;							//1 No PCB in psb2 contains the student segment
+	    // get arrays of segments with another PCB
+		get next inparent students usingPCB psb2.offeringPCB;//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	    // get segments using path calls
+		get next inparent course, offering, student ;		//1 No PCB in psb2 contains the segment hierarchy: course, offering, student
+    	// get segments using path calls, another PCB
+   		get next inparent offering, student usingPCB psb2.offeringPCB; 	//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	end
+	
+ 	function getNextInParentForUpdateStmt() 
+		get next inparent student forupdate; 							//1 No PCB in psb2 contains the student segment
+    	// get segment with another PCB 
+		get next inparent student forupdate usingPCB psb2.offeringPCB; 	//1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+    	// get segments using path calls 
+		get next inparent course, offering, student forupdate;			//1 No PCB in psb2 contains the segment hierarchy: course, offering, student
+    	// get segments using path calls, another PCB
+   		get next inparent offering, student forupdate usingPCB psb2.offeringPCB; //1 The pcb psb2.offeringPCB does not contain the STUDENT segment
+	end 	
+	
+  function replaceStmt()
+ 	  	replace student ;							//1 No PCB in psb2 contains the student segment	 
+		// replace segment with another PCB 
+	  	replace student usingPCB psb2.offeringPCB  ;//1 psb2.offeringPCB does not contain the student segment 
+
+	 
+  end
+
+
+end
+  

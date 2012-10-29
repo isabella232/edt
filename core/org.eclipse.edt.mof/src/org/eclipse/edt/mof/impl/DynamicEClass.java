@@ -45,7 +45,7 @@ public class DynamicEClass extends EClassImpl implements Dynamic {
 			} catch (ClassNotFoundException e) {
 				if (!getSuperTypes().isEmpty()) {
 					EClass eClass = getSuperTypes().get(0);
-					String typeSignature = eClass.getPackageName() + ".impl." + eClass.getName()+ "DynamicImpl";
+					String typeSignature = eClass.getCaseSensitivePackageName() + ".impl." + eClass.getCaseSensitiveName()+ "DynamicImpl";
 					try {
 						clazz = (Class<EObject>)Class.forName(typeSignature);						
 					} catch (ClassNotFoundException e1) {
@@ -59,7 +59,7 @@ public class DynamicEClass extends EClassImpl implements Dynamic {
 
 	@Override
 	public String getImplTypeSignature() {
-		return getPackageName() + ".impl." + getName() + "DynamicImpl";
+		return getCaseSensitivePackageName() + ".impl." + getName() + "DynamicImpl";
 	}
 	
 	@Override
@@ -111,7 +111,7 @@ public class DynamicEClass extends EClassImpl implements Dynamic {
 			}
 			if (prefix.equals(MofTypePrefix)) {
 				try {
-					return Environment.INSTANCE.find(value.substring(i+1));
+					return Environment.getCurrentEnv().find(value.substring(i+1));
 				} catch (Exception e) {
 					return null;
 				}
@@ -138,7 +138,7 @@ public class DynamicEClass extends EClassImpl implements Dynamic {
 			}
 			if (prefix.equals(MofTypePrefix)) {
 				try {
-					return (EClass)Environment.INSTANCE.find(encodedValue.substring(i+1));
+					return (EClass)Environment.getCurrentEnv().find(encodedValue.substring(i+1));
 				} catch (Exception e) {
 					return null;
 				}

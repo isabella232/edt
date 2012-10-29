@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler hndlr type JSFHandler
+	function func()
+		strVar string;
+		
+		forward to Page2;	//1 The target of the forward statement must be a string literal or string expression.
+		forward to strVar;	//0
+		forward to "Page2";	//0
+		
+		forward to label Page2;		//1 The target of the forward statement must be a string literal or string expression.
+		forward to label strVar;	//0
+		forward to label "Page2";	//0
+		
+		forward to URL Page2;	//1 Page2 cannot be resolved.
+		forward to URL strVar;	//0
+		forward to URL "Page2";	//0
+	end
+	
+	Function performReturn()		
+		name string;
+		forward to name;	//0
+ 	End
+	
+end
+
+Handler Page2 type JSFHandler
+end

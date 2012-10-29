@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Status;
-import org.eclipse.text.edits.TextEdit;
-
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
@@ -29,25 +27,26 @@ import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.model.IField;
 import org.eclipse.edt.ide.core.model.IPart;
+import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.mof.utils.NameUtile;
+import org.eclipse.text.edits.TextEdit;
 
 public class EGLWidgetDefinitionDeleteStragegy {
-	private static final String CHILDREN_PROPERTY_NAME = InternUtil.intern("children");
-	private static final String MVC_PROPERTY_NAME = InternUtil.intern("mvc");
-	private static final String VIEW_PROPERTY_NAME = InternUtil.intern("view");
-	private static final String CONTROLLER_PROPERTY_NAME = InternUtil.intern("controller");
-	private static final String NAME_LABEL_PROPERTY_NAME = InternUtil.intern("nameLabel");
-	private static final String ERROR_LABEL_PROPERTY_NAME = InternUtil.intern("errorLabel");
-	private static final String ENTRIES_PROPERTY_NAME = InternUtil.intern("entries");
+	private static final String CHILDREN_PROPERTY_NAME = NameUtile.getAsName("children");
+	private static final String MVC_PROPERTY_NAME = NameUtile.getAsName("mvc");
+	private static final String VIEW_PROPERTY_NAME = NameUtile.getAsName("view");
+	private static final String CONTROLLER_PROPERTY_NAME = NameUtile.getAsName("controller");
+	private static final String NAME_LABEL_PROPERTY_NAME = NameUtile.getAsName("nameLabel");
+	private static final String ERROR_LABEL_PROPERTY_NAME = NameUtile.getAsName("errorLabel");
+	private static final String ENTRIES_PROPERTY_NAME = NameUtile.getAsName("entries");
 	
-	private static final String CONTROLLER_TYPE_NAME = InternUtil.intern("Controller");
-	private static final String FORM_FIELD_TYPE_NAME = InternUtil.intern("FormField");
-	private static final String FORM_FIELD_TYPE_FULL_NAME = InternUtil.intern("org.eclipse.edt.rui.mvc.FormField");
-	private static final String FORM_MANAGER_TYPE_NAME = InternUtil.intern("FormManager");
+	private static final String CONTROLLER_TYPE_NAME = NameUtile.getAsName("Controller");
+	private static final String FORM_FIELD_TYPE_NAME = NameUtile.getAsName("FormField");
+	private static final String FORM_FIELD_TYPE_FULL_NAME = NameUtile.getAsName("org.eclipse.edt.rui.mvc.FormField");
+	private static final String FORM_MANAGER_TYPE_NAME = NameUtile.getAsName("FormManager");
 	
 	private IEGLDocument currentDocument;
 	private IPart modelPart;

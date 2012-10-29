@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * To really run this test with regard to the defect, you should run it by itself and
+ * examine the output in the Console. The text highlighted for each error should be
+ * a simple, unqualified name. For example, on the line StrLib.strlen("abc") the
+ * highlighted text should be [[strlen]], not [[Strlib.strlen]].
+ */
+
+import egl.core.undefinedType;					//1
+
+Program pgm1
+	type1 egl.core.undefinedType;				//1
+
+      function main()
+          Strlib.strlen("abc");					//1
+          (Strlib).strlen("abc");				//1
+          egl.core.Strlib.strlen("abc");		//1
+          (egl.core.Strlib).strlen("abc");		//1
+          
+          foo.bar = 10;			//1
+          (foo).bar = 10;		//1
+          foo.bar.baz = 10;		//1
+          (foo.bar).baz = 10;	//1
+          (foo).bar.baz = 10;	//1
+          
+          intVar int;
+          intVar.bar = 10;			//1
+          (intVar).bar = 10;		//1
+          intVar.bar.baz = 10;		//1
+          (intVar.bar).baz = 10;	//1
+          (intVar).bar.baz = 10;	//1
+      end
+end

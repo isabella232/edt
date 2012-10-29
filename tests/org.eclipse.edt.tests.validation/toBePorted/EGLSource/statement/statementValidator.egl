@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2010, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validateIORecordProperties:
+// 1 {0} - {1} cannot be resolved.  {6619*, VARIABLE_NOT_FOUND}
+// 1 {0} - The {1} property value {2} must be unique in the {3} record {4}.  More than one reference was found. {3222, RECORD_ITEM_PROPERTY_VALUE_MUST_BE_UNIQUE}
+// 1 {0} - The {1} property value {2} in the record {3} has a primitive type of {4}, which is invalid for the {1} property. {3218, PROPERTY_INVALID_TYPE_FOR_RECORD_ITEM_PROPERTY}
+// 1 {0} - The {1} property value {2} in the record {3} has a primitive type of {4}, which is invalid for the {1} property. {3218, PROPERTY_INVALID_TYPE_FOR_RECORD_ITEM_PROPERTY}
+// 1 {0} - The {1} property value {2} in the record {3} is defined with a length of {4}. Length can be no greater than 9 for the {1} property. {3219, RECORD_ITEM_PROPERTY_VALUE_TOO_LONG}
+// 1 {0} - The {1} property value {2} in the record {3} is defined with decimals, which is invalid for the {1} property. {3220, RECORD_ITEM_PROPERTY_VALUE_HAS_DECIMALS}
+
+// validateNoSubstringExpressionUsed:
+// 1 Substring expressions are not valid in this statement location. {3364, SUBSTRING_EXPRESSION_IN_BAD_LOCATION}
+
+// validateNodesAsDataItemReferences:
+// 1 {0} - {1} cannot be resolved as an item or the resolved item has the wrong type. It cannot be a constant.  {6622*, VARIABLE_NOT_FOUND_AS_ITEM}
+
+// validateStatement:
+// 1 Unreachable code. {7755, UNREACHABLE_CODE}
+// 1 {0} - The function reference {1} cannot be resolved.  {6679*, FUNCTION_REFERENCE_CANNOT_BE_RESOLVED}
+// 1 {0} - The function reference {1} is ambiguous.  {6680*, FUNCTION_REFERENCE_AMBIGUOUS}
+// 1 {0} - I/O operations on records declared in used libraries are not permitted.  {6710*, USED_LIBRARY_RECORD_USED_FOR_IO}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, INVALID_USAGE_LOCATION}
+// 1 It is invalid to use the {0} system word in this statement location. {5097, INVALID_USAGE_LOCATION}
+
+// validateUsingPCB:
+// 1 {0} - {1} cannot be resolved. DL/I I/O is not allowed unless the program specifies the DLI and PSB properties.   {7923*, DLI_IO_NOT_ALLOWED_UNLESS_PSB_PROPERTY_DEFINED}
+// 1 {0} - {1} cannot be resolved. The usingPCB item must be defined in the program PSB or in the program parameter list.  {7871*, USINGPCB_ITEM_NOT_IN_PROGRAM_PSB}
+

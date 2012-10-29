@@ -1,0 +1,468 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+handler ddddd type BirtHandler
+
+//function myfunc (i GridInstance ){Elementname = "detailrow", EventType = onPageBreak}//0
+//end
+
+//function myfunc1 (i ListInstance ){Elementname = "dataelement", EventType = onPageBreak}//0
+//end
+
+//function myfunc2 (i TableInstance ){ElementName = "footerrow", EventType = onPageBreak}//0
+//end
+
+//function myfunc3 (i DataInstance ){ElementName = "grid", EventType = onPageBreak}//0
+//end
+
+//function myfunc4 (i TextInstance ){ElementName = "groupfooterrow", EventType = onPageBreak}//0
+//end
+
+//function myfunc5 (i LabelInstance ){ElementName = "groupheaderrow", EventType = onPageBreak}//0
+//end
+
+//function myfunc6 (i CellInstance ){ElementName = "headerrow", EventType = onPageBreak}//0
+//end
+
+//function myfunc7 (i RowInstance ){ElementName = "labelelement", EventType = onPageBreak}//0
+//end
+
+//function myfunc11 (i int){ElementName  = "dddd", EventType = onPageBreak}//0
+//end
+
+function myfunc12 (i int){ElementName  = 3}//1
+end
+
+//function myfunc13 (i int) {rowNumber = 5, , EventType = onPageBreak}//0
+//end
+
+function myfunc14 (i int) {rowNumber = "5"}//1
+end
+
+function myfunc17 ()
+	t string;
+	i int;
+end
+
+end
+
+program prog type BasicProgram {}
+	
+	function main()
+		rpt ddddd = new ddddd;//0
+		
+	end
+	
+end
+
+
+handler valid type BirtHandler
+
+	function a1(p1 LabelInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0
+	end
+
+	function a2(p1 LabelInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = footer} //0
+	end
+
+	function a3(p1 LabelInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowNumber = 4} //0
+	end
+
+	function a4(p1 LabelInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", groupName = "fred"} //0
+	end
+
+	function a5(p1 LabelInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", columnNumber = 19} //0
+	end
+
+
+
+
+
+	function b1(p1 LabelInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0
+	end
+
+	function b2(p1 TextInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0 
+	end
+
+//	function b3(p1 DynamicTextInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0
+//	end
+
+	function b4(p1 DataInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0 
+	end
+
+//	function b5(p1 ImageInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0 
+//	end
+
+	function b6(p1 GridInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0 
+	end
+
+	function b7(p1 TableInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0 
+	end
+
+	function b8(p1 ListInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred"} //0 
+	end
+
+	function b9(p1 RowInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = groupHeader, rowNumber = 4, groupName = "fred"} //0 
+	end
+
+	function b10(p1 CellInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = groupFooter, rowNumber = 4, groupName = "fred", columnNumber = 5} //0 
+	end
+
+
+	function c1(p1 LabelInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred"} //0
+	end
+
+	function c2(p1 TextInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred"} //0 
+	end
+
+//	function c3(p1 DynamicTextInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred"} //0
+//	end
+
+	function c4(p1 DataInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred"} //0 
+	end
+
+//	function c5(p1 ImageInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred"} //0 
+//	end
+
+	function c6(p1 GridInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred"} //0 
+	end
+
+	function c7(p1 TableInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred"} //0 
+	end
+
+	function c8(p1 ListInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred"} //0 
+	end
+
+	function c9(p1 RowInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred", rowType = groupHeader, rowNumber = 4, groupName = "fred"} //0 
+	end
+
+	function c10(p1 CellInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred", rowType = groupFooter, rowNumber = 4, groupName = "fred", columnNumber = 4} //0 
+	end
+	
+
+	function d1(p1 DataSourceInstance in, p2 ReportContext in) {eventType = beforeOpen, elementName = "fred"} //0
+	end
+
+	function d2(p1 DataSetInstance in, p2 ReportContext in) {eventType = beforeOpen, elementName = "fred"} //0 
+	end
+
+
+	function e1(p1 DataSourceInstance in, p2 ReportContext in) {eventType = afterOpen, elementName = "fred"} //0
+	end
+
+	function e2(p1 DataSetInstance in, p2 ReportContext in) {eventType = afterOpen, elementName = "fred"} //0 
+	end
+
+
+	function f1(p1 DataSourceInstance in, p2 ReportContext in) {eventType = beforeClose, elementName = "fred"} //0
+	end
+
+	function f2(p1 DataSetInstance in, p2 ReportContext in) {eventType = beforeClose, elementName = "fred"} //0 
+	end
+
+
+	function g1(p1 ReportContext in) {eventType = afterCloseDataSource, elementName = "fred"} //0
+	end
+	function h1(p1 ReportContext in) {eventType = afterCloseDataSet, elementName = "fred"} //0
+	end
+	
+	function i1(p1 DataSetInstance in, p2 DataSetRow in, p3 ReportContext in) {eventType = onFetch, elementName = "fred"} //0
+	end
+
+
+	function j1(p1 DataSourceInstance in) {eventType = openEvent, elementName = "fred"} //0
+	end
+	function j2(p1 DataSetInstance in) {eventType = openEvent, elementName = "fred"} //0
+	end
+
+	function k1(p1 DataSourceInstance in) {eventType = closeEvent, elementName = "fred"} //0
+	end
+	function k2(p1 DataSetInstance in) {eventType = closeEvent, elementName = "fred"} //0
+	end
+
+
+	function l1(p1 DataSetInstance in, p2 UpdatableDataSetRow in ) returns (boolean) {eventType = fetchEvent, elementName = "fred"} //0
+	end
+
+end
+
+
+
+handler invalid1 type BirtHandler
+
+	function a1(p1 LabelInstance in, p2 ReportContext in) {elementName = "fred"} //1
+	end
+
+	function a2(p1 LabelInstance in, p2 ReportContext in) {rowType = footer} //1
+	end
+
+	function a3(p1 LabelInstance in, p2 ReportContext in) {rowNumber = 4} //1
+	end
+
+	function a4(p1 LabelInstance in, p2 ReportContext in) {groupName = "fred"} //1
+	end
+
+	function a5(p1 LabelInstance in, p2 ReportContext in) {columnNumber = 19} //1
+	end
+
+
+
+
+
+	function b1(p1 LabelInstance in) {eventType = onCreate, elementName = "fred"} //1
+	end
+
+	function b2(p1 TextInstance in, p2 ReportContext in, p3 int) {eventType = onCreate, elementName = "fred"} //1
+	end
+
+	function b3(p1 int, p2 int) {eventType = onCreate, elementName = "fred"} //2
+	end
+
+	function b4(p1 DataInstance in, p2 ReportContext in) returns(int) {eventType = onCreate, elementName = "fred"} //1
+	end
+
+
+
+
+	function c1(p1 LabelInstance in) {eventType = onPageBreak, elementName = "fred"} //1
+	end
+
+	function c2(p1 TextInstance in, p2 ReportContext in, p3 int) {eventType = onPageBreak, elementName = "fred"} //1
+	end
+
+	function c3(p1 int, p2 int) {eventType = onPageBreak, elementName = "fred"} //2
+	end
+
+	function c4(p1 DataInstance in, p2 ReportContext in) returns (int) {eventType = onPageBreak, elementName = "fred"} //1
+	end
+
+	
+
+	function d1(p1 DataSourceInstance in) {eventType = beforeOpen, elementName = "fred"} //1
+	end
+
+	function d2(p1 DataSetInstance in, p2 ReportContext in, p3 int) {eventType = beforeOpen, elementName = "fred"} //1
+	end
+
+	function d3(p1 int, p2 int) {eventType = beforeOpen, elementName = "fred"} //2
+	end
+
+	function d4(p1 DataSetInstance in, p2 ReportContext in) returns (int) {eventType = beforeOpen, elementName = "fred"} //1
+	end
+
+
+
+	function e1(p1 DataSourceInstance in) {eventType = afterOpen, elementName = "fred"} //1
+	end
+
+	function e2(p1 DataSetInstance in, p2 ReportContext in, p3 int) {eventType = afterOpen, elementName = "fred"} //1
+	end
+
+	function e3(p1 int, p2 int) {eventType = afterOpen, elementName = "fred"} //2
+	end
+
+	function e4(p1 DataSetInstance in, p2 ReportContext in) returns (int) {eventType = afterOpen, elementName = "fred"} //1
+	end
+
+
+	function f1(p1 DataSourceInstance in) {eventType = beforeClose, elementName = "fred"} //1
+	end
+
+	function f2(p1 DataSetInstance in, p2 ReportContext in, p3 int) {eventType = beforeClose, elementName = "fred"} //1
+	end
+
+	function f3(p1 int, p2 int) {eventType = beforeClose, elementName = "fred"} //2
+	end
+
+	function f4(p1 DataSetInstance in, p2 ReportContext in) returns (int) {eventType = beforeClose, elementName = "fred"} //1
+	end
+
+
+	function g1() {eventType = afterCloseDataSource, elementName = "fred"} //1
+	end
+	
+	function g2(p1 ReportContext in, p2 int) {eventType = afterCloseDataSource, elementName = "fred"} //1
+	end
+	
+	function g3(p1 int) {eventType = afterCloseDataSource, elementName = "fred"} //1
+	end
+	
+	function g4(p1 ReportContext in) returns (int) {eventType = afterCloseDataSource, elementName = "fred"} //1
+	end
+	
+	
+	
+	function h1() {eventType = afterCloseDataSet, elementName = "fred"} //1
+	end
+	
+	function h2(p1 ReportContext in, p2 int) {eventType = afterCloseDataSet, elementName = "fred"} //1
+	end
+	
+	function h3(p1 int) {eventType = afterCloseDataSet, elementName = "fred"} //1
+	end
+	
+	function h4(p1 ReportContext in) returns (int) {eventType = afterCloseDataSet, elementName = "fred"} //1
+	end
+	
+
+
+	function i1(p1 DataSetInstance in, p2 DataSetRow in) {eventType = onFetch, elementName = "fred"} //1
+	end
+
+	function i2(p1 DataSetInstance in, p2 DataSetRow in, p3 ReportContext in, p4 int) {eventType = onFetch, elementName = "fred"} //1
+	end
+
+	function i3(p1 int, p2 int, p3 int) {eventType = onFetch, elementName = "fred"} //3
+	end
+
+	function i4(p1 DataSetInstance in, p2 DataSetRow in, p3 ReportContext in) returns (int) {eventType = onFetch, elementName = "fred"} //1
+	end
+
+
+
+	function j1( ) {eventType = openEvent, elementName = "fred"} //1
+	end
+
+	function j2(p1 DataSetInstance in, p2 int ) {eventType = openEvent, elementName = "fred"} //1
+	end
+
+	function j3(p1 int ) {eventType = openEvent, elementName = "fred"} //1
+	end
+
+	function j4(p1 DataSetInstance in) returns (int) {eventType = openEvent, elementName = "fred"} //1
+	end
+
+
+
+	function k1( ) {eventType = closeEvent, elementName = "fred"} //1
+	end
+
+	function k2(p1 DataSetInstance in, p2 int ) {eventType = closeEvent, elementName = "fred"} //1
+	end
+
+	function k3(p1 int ) {eventType = closeEvent, elementName = "fred"} //1
+	end
+
+	function k4(p1 DataSetInstance in) returns (int) {eventType = closeEvent, elementName = "fred"} //1
+	end
+
+
+	function l1(p1 DataSetInstance in) returns (boolean) {eventType = fetchEvent, elementName = "fred"} //1
+	end
+
+	function l2(p1 DataSetInstance in, p2 UpdatableDataSetRow in, p3 int ) returns (boolean) {eventType = fetchEvent, elementName = "fred"} //1
+	end
+
+	function l3(p1 int, p2 int ) returns (boolean) {eventType = fetchEvent, elementName = "fred"} //2
+	end
+
+	function l4(p1 DataSetInstance in, p2 UpdatableDataSetRow in ) {eventType = fetchEvent, elementName = "fred"} //1
+	end
+
+	function l5(p1 DataSetInstance in, p2 UpdatableDataSetRow in ) returns (int) {eventType = fetchEvent, elementName = "fred"} //1
+	end
+	
+	function b9(p1 RowInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowNumber = 4} //0 
+	end
+	
+	function b10(p1 CellInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowNumber = 4} //0
+	end
+
+	function b9x(p1 RowInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = header, rowNumber = -4} //1 
+	end
+	
+	function b10x(p1 CellInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = header, rowNumber = -4} //1 
+	end
+
+	function b11x(p1 RowInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = header, rowNumber = 3.76} //1 
+	end
+	
+	function b12x(p1 CellInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = header, rowNumber = 5.3} //1 
+	end
+
+	function b9y(p1 RowInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = groupHeader, rowNumber = 4} //1 
+	end
+	
+	function b10y(p1 CellInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = groupFooter, rowNumber = 4} //1 
+	end
+
+	function b10z(p1 CellInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = header, rowNumber = 4, columnNumber = -1} //1 
+	end
+
+	function b11z(p1 CellInstance in, p2 ReportContext in) {eventType = onCreate, elementName = "fred", rowType = header, rowNumber = 4, columnNumber = 3.2} //1 
+	end
+
+	
+	function c9(p1 RowInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred", rowNumber = 4} //0
+	end
+
+	function c10(p1 CellInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred",  rowNumber = 4} //0
+	end
+	
+	function c9x(p1 RowInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred", rowType = header, rowNumber = 0} //1
+	end
+
+	function c10x(p1 CellInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred", rowType = header, rowNumber = 0} //1
+	end
+	
+	function c9y(p1 RowInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred", rowType = groupHeader, rowNumber = 1} //1
+	end
+
+	function c10y(p1 CellInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred", rowType = groupFooter, rowNumber = 1} //1
+	end
+	
+	function c10z(p1 CellInstance in, p2 ReportContext in) {eventType = onPageBreak, elementName = "fred", rowType = header, rowNumber = 1, columnNumber = 0} //1
+	end
+	
+
+end
+
+
+
+handler invalid2 type BirtHandler
+
+	function b1(p1 LabelInstance in, p2 ReportContext in) {eventType = onCreate} //1
+	end
+
+	function c1(p1 LabelInstance in, p2 ReportContext in) {eventType = onPageBreak} //1
+	end
+
+	function d1(p1 DataSourceInstance in, p2 ReportContext in) {eventType = beforeOpen} //1
+	end
+
+	function e1(p1 DataSourceInstance in, p2 ReportContext in) {eventType = afterOpen} //1
+	end
+
+	function f1(p1 DataSourceInstance in, p2 ReportContext in) {eventType = beforeClose} //1
+	end
+
+	function g1(p1 ReportContext in) {eventType = afterCloseDataSource} //1
+	end
+
+	function h1(p1 ReportContext in) {eventType = afterCloseDataSet} //1
+	end
+	
+	function i1(p1 DataSetInstance in, p2 DataSetRow in, p3 ReportContext in) {eventType = onFetch} //1
+	end
+
+
+	function j1(p1 DataSourceInstance in) {eventType = openEvent} //1
+	end
+
+	function k1(p1 DataSourceInstance in) {eventType = closeEvent} //1
+	end
+
+	function l1(p1 DataSetInstance in, p2 UpdatableDataSetRow in) returns (boolean) {eventType = fetchEvent} //1
+	end
+
+end
+
+

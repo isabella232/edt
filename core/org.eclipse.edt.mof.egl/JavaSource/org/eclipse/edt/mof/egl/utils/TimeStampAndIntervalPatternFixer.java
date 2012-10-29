@@ -60,30 +60,13 @@ public class TimeStampAndIntervalPatternFixer {
 			return value.toLowerCase();
 		}
 
-		public PatternEntry getNext() {
-			return next;
-		}
-
 		public void setNext(PatternEntry next) {
 			this.next = next;
-		}
-
-		public PatternEntry getPrevious() {
-			return previous;
 		}
 
 		public void setPrevious(PatternEntry previous) {
 			this.previous = previous;
 		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-
 	}
 
 	public TimeStampAndIntervalPatternFixer(String pattern) {

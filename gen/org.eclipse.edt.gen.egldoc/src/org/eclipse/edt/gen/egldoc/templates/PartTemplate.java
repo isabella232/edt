@@ -14,8 +14,8 @@ import org.eclipse.edt.mof.egl.Stereotype;
 public class PartTemplate extends EGLDocTemplate {
 
 	public void preGenContent(Part part, Context ctx) {
-		ctx.put(Constants.PARTNAME, part.getName());
-		ctx.put(Constants.PACKAGENAME, part.getPackageName());
+		ctx.put(Constants.PARTNAME, part.getCaseSensitiveName());
+		ctx.put(Constants.PACKAGENAME, part.getCaseSensitivePackageName());
 		ctx.put(Constants.FULLPARTNAME, part.getFullyQualifiedName());
 		
 		ctx.invokeSuper(this, preGenContent, part, ctx);
@@ -56,7 +56,7 @@ public class PartTemplate extends EGLDocTemplate {
 		if (stereotypeType == null) {
 			out.println("<dd> <p class=\"p\">None.</p>");
 		} else {
-			String stereoString = part.getStereotype().getEClass().getName();
+			String stereoString = part.getStereotype().getEClass().getCaseSensitiveName();
 			out.println("<dd> <p class=\"p\">" + stereoString + "</p>");
 		}
 		out.println("<p class=\"p\"></p></dd></dt>");

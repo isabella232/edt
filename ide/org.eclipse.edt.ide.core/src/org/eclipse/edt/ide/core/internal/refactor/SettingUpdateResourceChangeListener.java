@@ -20,10 +20,8 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
@@ -32,13 +30,11 @@ import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
-public class SettingUpdateResourceChangeListener implements
-		IResourceChangeListener {
+public class SettingUpdateResourceChangeListener implements IResourceChangeListener {
 
 	private static SettingUpdateResourceChangeListener INSTANCE = new SettingUpdateResourceChangeListener();
 
 	private SettingUpdateResourceChangeListener() {
-
 	}
 
 	public static SettingUpdateResourceChangeListener getInstance() {
@@ -46,11 +42,11 @@ public class SettingUpdateResourceChangeListener implements
 	}
 
 	private class ResourceConfigurationChecker implements IResourceDeltaVisitor {
-		private IResourceDelta fRootDelta;
+//		private IResourceDelta fRootDelta;
 		private HashSet fValidatedFilesSet = new HashSet();
 
 		public ResourceConfigurationChecker(IResourceDelta rootDelta) {
-			fRootDelta = rootDelta;
+//			fRootDelta = rootDelta;
 		}
 
 		public boolean visit(IResourceDelta delta) throws CoreException {
@@ -226,74 +222,73 @@ public class SettingUpdateResourceChangeListener implements
 
 		}
 
-		// finds the project geven the initial project name
-		// That is:
-		// if the project of a given name was renamed returns the renamed
-		// project
-		// if the project of a given name was removed returns null
-		// if the project of a given name was neither renamed or removed
-		// returns the project of that name or null if the project does not
-		// exist
-		//
-		private IProject findModifiedProject(final String oldProjectName) {
-			IResourceDelta projectDelta = fRootDelta.findMember(new Path(
-					oldProjectName));
-			boolean replaced = false;
-			if (projectDelta != null) {
-				switch (projectDelta.getKind()) {
-				case IResourceDelta.REMOVED:
-					if ((projectDelta.getFlags() & IResourceDelta.MOVED_TO) == 0) {
-						return null;
-					}
-				case IResourceDelta.CHANGED:
-					if ((projectDelta.getFlags() & IResourceDelta.MOVED_TO) != 0) {
-						IPath path = projectDelta.getMovedToPath();
-						if (path != null)
-							return ResourcesPlugin.getWorkspace().getRoot()
-									.findMember(path).getProject();
-					}
-					break;
-				}
-			}
-
-			final IProject project[] = new IProject[1];
-			try {
-				fRootDelta.accept(new IResourceDeltaVisitor() {
-					public boolean visit(IResourceDelta delta)
-							throws CoreException {
-						IResource dResource = delta.getResource();
-						int rcType = dResource.getType();
-						if (rcType == IResource.ROOT) {
-							return true;
-						} else if (rcType == IResource.PROJECT) {
-							switch (delta.getKind()) {
-							case IResourceDelta.ADDED:
-							case IResourceDelta.CHANGED:
-								if ((delta.getFlags() & IResourceDelta.MOVED_FROM) != 0) {
-									IPath path = delta.getMovedFromPath();
-									if (path != null
-											&& path.segment(0).equals(
-													oldProjectName)) {
-										project[0] = dResource.getProject();
-									}
-								}
-								break;
-							default:
-								break;
-							}
-						}
-						return false;
-					}
-				});
-			} catch (CoreException e) {
-			}
-
-			if (project[0] == null && !replaced)
-				project[0] = ResourcesPlugin.getWorkspace().getRoot()
-						.findMember(oldProjectName).getProject();
-			return project[0];
-		}
-
+//		// finds the project geven the initial project name
+//		// That is:
+//		// if the project of a given name was renamed returns the renamed
+//		// project
+//		// if the project of a given name was removed returns null
+//		// if the project of a given name was neither renamed or removed
+//		// returns the project of that name or null if the project does not
+//		// exist
+//		//
+//		private IProject findModifiedProject(final String oldProjectName) {
+//			IResourceDelta projectDelta = fRootDelta.findMember(new Path(
+//					oldProjectName));
+//			boolean replaced = false;
+//			if (projectDelta != null) {
+//				switch (projectDelta.getKind()) {
+//				case IResourceDelta.REMOVED:
+//					if ((projectDelta.getFlags() & IResourceDelta.MOVED_TO) == 0) {
+//						return null;
+//					}
+//				case IResourceDelta.CHANGED:
+//					if ((projectDelta.getFlags() & IResourceDelta.MOVED_TO) != 0) {
+//						IPath path = projectDelta.getMovedToPath();
+//						if (path != null)
+//							return ResourcesPlugin.getWorkspace().getRoot()
+//									.findMember(path).getProject();
+//					}
+//					break;
+//				}
+//			}
+//
+//			final IProject project[] = new IProject[1];
+//			try {
+//				fRootDelta.accept(new IResourceDeltaVisitor() {
+//					public boolean visit(IResourceDelta delta)
+//							throws CoreException {
+//						IResource dResource = delta.getResource();
+//						int rcType = dResource.getType();
+//						if (rcType == IResource.ROOT) {
+//							return true;
+//						} else if (rcType == IResource.PROJECT) {
+//							switch (delta.getKind()) {
+//							case IResourceDelta.ADDED:
+//							case IResourceDelta.CHANGED:
+//								if ((delta.getFlags() & IResourceDelta.MOVED_FROM) != 0) {
+//									IPath path = delta.getMovedFromPath();
+//									if (path != null
+//											&& path.segment(0).equals(
+//													oldProjectName)) {
+//										project[0] = dResource.getProject();
+//									}
+//								}
+//								break;
+//							default:
+//								break;
+//							}
+//						}
+//						return false;
+//					}
+//				});
+//			} catch (CoreException e) {
+//			}
+//
+//			if (project[0] == null && !replaced)
+//				project[0] = ResourcesPlugin.getWorkspace().getRoot()
+//						.findMember(oldProjectName).getProject();
+//			return project[0];
+//		}
 	}
 
 	public void resourceChanged(IResourceChangeEvent event) {

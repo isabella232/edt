@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR VAG
+
+Function MYDBPRM_SCAN_GHN()
+  try
+    get next STUDENT forUpdate usingPCB psb.COURSE_dbPCB
+      with #dli{  GHN
+                  COURSE (COURSE# >= :COURSE.COURSE#) 
+                  OFFERING (CITY = :EZE_UNKNOWN_QUALIFER.MYCITY) 
+                  STUDENT
+      } ;
+    onException exit stack ;
+  end
+end
+
+Function SCAN_GN_#SEGNAM2()
+  try
+    get next VAGen_#SEGNAM2 usingPCB psb.VAGen_#MYOTHER_dbPCB
+      with #dli{  GN
+                  #SEGNAM2 (#MYKEY2 = :VAGen_#SEGNAM2.VAGen_#MYDATA) 
+      } ;
+    onException exit program ;
+  end
+end
+
+Function SCAN_GN_#SEGNAM5()
+  try
+    get next VAGen_#SEGNAM5 usingPCB psb.VAGen_#MYOTHER_dbPCB
+      with #dli{  GN
+                  #SEGNAM5 (#MYKEY5 = :VAGen_#MYKEYX) 
+      } ;
+    onException exit program ;
+  end
+end

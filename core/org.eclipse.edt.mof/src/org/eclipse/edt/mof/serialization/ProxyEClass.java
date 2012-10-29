@@ -12,7 +12,6 @@
 package org.eclipse.edt.mof.serialization;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.edt.mof.EClass;
@@ -89,6 +88,10 @@ public class ProxyEClass extends ProxyEObject implements EClass {
 	}
 	@Override
 	public String getPackageName() {
+		return getCaseSensitivePackageName();
+	}
+	@Override
+	public String getCaseSensitivePackageName() {
 		int i = getETypeSignature().lastIndexOf('.');
 		if (i != -1) {
 			return getETypeSignature().substring(0,i);

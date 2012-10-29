@@ -28,7 +28,7 @@ public class RecordTemplate extends org.eclipse.edt.gen.java.templates.RecordTem
 			// add an xmlElement
 			try {
 				Annotation annotation = CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
-				annotation.setValue(field.getId());
+				annotation.setValue(field.getCaseSensitiveName());
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			}
 			catch (Exception e) {}
@@ -41,7 +41,7 @@ public class RecordTemplate extends org.eclipse.edt.gen.java.templates.RecordTem
 						CommonUtilities.getAnnotation(field, Constants.AnnotationXmlAttribute, ctx) == null) {
 			try {
 				Annotation annotation = CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXmlElement);
-				annotation.setValue("name", field.getName());
+				annotation.setValue("name", field.getCaseSensitiveName());
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			} catch (Exception e) {}
 		}

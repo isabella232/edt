@@ -17,6 +17,7 @@ import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EMetadataObject;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.impl.DynamicEObject;
 
 
@@ -94,6 +95,11 @@ public class AnnotationDynamicImpl extends DynamicEObject implements Annotation 
 	public void removeAnnotation(Annotation ann) {
 		getAnnotations().remove(ann);
 		
+	}
+
+	@Override
+	public Element resolveElement() {
+		return this;
 	}
 
 }

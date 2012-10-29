@@ -24,7 +24,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
  */
 public class ExternalType extends Part {
 
-	private List extendsOpt;
+	private List<Name> extendsOpt;
 	private Name partSubTypeOpt;
 
 	public ExternalType(Boolean privateAccessModifierOpt, SimpleName name, List extendsOpt, Name partSubTypeOpt, List externalTypeContents, int startOffset, int endOffset) {
@@ -45,7 +45,7 @@ public class ExternalType extends Part {
 	/**
 	 * @return A List of Name objects
 	 */
-	public List getExtendedTypes() {
+	public List<Name> getExtendedTypes() {
 		return extendsOpt;
 	}
 	

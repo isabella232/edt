@@ -1,0 +1,71 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//Put EGL Source File Contents Here
+
+program initializers_invalid
+
+	function main()
+
+		local6 point[] = new point[7]; //0
+		local16 dbChar(10) = f2(local16); //1 Function f2 requires exactly 0 argument(s).
+		
+		
+		local1 int = local2; //1 local2 cannot be resolved
+		
+
+		
+		local9 string = f2Bogus(); //1 cannot be resolved
+		local10 int = f2(); //1 not compatible
+		local11 int = f2() + f2(); //0
+		local12 char(1);
+//		local13 char(10) = local12[10:10];  //1 substring error
+		local14 int = f3();  //1 must return a type
+		local15 int? = null; //0
+		
+		
+		
+				
+	end
+	
+	Function f1 ()  	 
+		a, b int = c;   	//1 c cannot be resolved
+		c dbChar(10) = b ;  //1 dbChar and int are not compatible	
+		d int = c;			//1 int and dbChar are not compatible
+	end
+	
+	function f2() returns (dbChar(10))
+	end
+	
+	function f3()
+	end
+	
+	
+end	
+
+
+record point
+	x int = 1;
+	y int = 3;
+end
+
+record rectangle
+	upperleft point = lowerright;
+	lowerright point = upperleft;
+end
+
+record polygon
+	points point[] = [new point, new point, new point];
+end
+
+record anSQLRec type sqlRecord
+	 xxx char(9) {column = "EMPNO"} = "abcd12345";
+end

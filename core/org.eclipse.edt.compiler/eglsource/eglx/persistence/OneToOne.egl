@@ -14,6 +14,6 @@ package eglx.persistence;
 //record OneToOne type Annotation {
 //	targets=[FieldMbr]
 //}
-//	mappedBy FieldRef?;
-//	joinColumns FieldRef[];
+//	mappedBy egl.lang.reflect.FieldReference?;
+//	joinColumns egl.lang.reflect.FieldReference[];
 //end

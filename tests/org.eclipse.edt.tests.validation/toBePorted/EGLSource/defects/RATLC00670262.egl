@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+/*
+ * Updated 2/8/2008 to remove this restriction per Alex:
+ * 
+ * "However, with EGL V7.1 JSF and Web Transaction support, user can input a fill
+ * Character such as  "\unnnn"  for a DBCS or UNICODE item fillCharacter property
+ * and the fill character (other than blank) can be handled by JSF or Web Trans
+ * output formatting routine at runtime in the application server which is Java based.   
+ *
+ * I suggest that we should remove the restriction and allow any character to be
+ * specified for fillCharacter property on DBCS or UNICIDE item for both JSF and Web
+ * Transaction.  Making it more consistent and useful for both component."
+ */
+Handler hndlr type JSFHandler
+
+	field1 char(4) {fillCharacter = "x"};		//0
+	field2 dbchar(4) {fillCharacter = "x"};		//0
+	field3 unicode(4) {fillCharacter = "x"};	//0
+	field4 dbchar(4) {fillCharacter = " "};		//0
+	field5 unicode(4) {fillCharacter = " "};	//0
+	field6 dbcharItem1;							//0
+	field7 dbcharItem2;							//0
+end
+
+DataItem dbcharItem1 dbchar(4) {fillCharacter = "x"} end
+DataItem dbcharItem2 dbchar(4) {fillCharacter = " "} end

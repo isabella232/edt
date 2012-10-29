@@ -22,8 +22,8 @@ import egl.lang.reflect.mof.MofEnum;
 import egl.lang.reflect.mof.MofName;
 import egl.lang.reflect.mof.MofSerializable;
 
-externalType Element extends EObject type MofClass {isAbstract=yes}
-	annotations Annotation[] {containment=true};
+externalType Element extends EObject, ElementReference type MofClass {isAbstract=yes}
+	annotations Annotation[] {@Containment{true}};
 	
 	function getAnnotation(name string) returns(Annotation);
 	function addAnnotation(ann Annotation in);
@@ -47,8 +47,8 @@ end
 externalType StereotypeType extends AnnotationType type MofClass 
 	memberAnnotations AnnotationType[];
 	referenceType boolean;
-	partType TypeRef;
-	defaultSuperType TypeRef;
+	partType egl.lang.reflect.mof.EType;
+	defaultSuperType egl.lang.reflect.mof.EType;
 end
 
 externalType NamedElement extends Element type MofClass{isAbstract=yes}
@@ -57,7 +57,7 @@ externalType NamedElement extends Element type MofClass{isAbstract=yes}
 end
 
 externalType TypedElement extends NamedElement type MofClass {isAbstract = yes}
-	_type EGLType {mofName="type"};
+	_type EGLType {@MofName{"type"}};
 	isNullable boolean;
 end
 
@@ -109,7 +109,7 @@ enumeration ETypeKind {@MofEnum}
 	ALIAS
 end
 
-externalType Member extends TypedElement type MofClass {isAbstract=yes}
+externalType Member extends TypedElement, MemberReference type MofClass {isAbstract=yes}
 	isStatic boolean;
 	isAbstract boolean;
 	accessKind AccessKind?;
@@ -119,6 +119,9 @@ end
 externalType Container extends Element type MofClass {isAbstract=yes, isInterface=yes}
 	function getMembers() returns (Member[]);
 	function addMember(mbr Member in);
+end
+
+externalType StaticType extends Element type MofClass {isAbstract=yes, isInterface=yes}
 end
 
 externalType EGLType extends Element, MofSerializable type MofClass {name="Type", isAbstract=yes, isInterface=yes}
@@ -137,7 +140,7 @@ externalType GenericType extends EGLType type MofClass
 end
 
 externalType ArrayType extends GenericType type MofClass
-	initialSize Expression {containment=true};
+	initialSize Expression {@Containment{true}};
 	elementsNullable boolean;
 	
 	function hasInitialSize() returns(boolean);
@@ -146,14 +149,16 @@ externalType ArrayType extends GenericType type MofClass
 end
 
 externalType EClassProxy extends EGLClass type MofClass
-	proxiedEClass EClass;
+	proxiedEClassName String;
+	
+	function getProxiedEClass() returns(EClass);
 end
 
 externalType Classifier extends NamedElement, EGLType type MofClass {isAbstract=yes}
 	fileName string;
 	hasCompileErrors boolean;
 	packageName string;
-	typeParameters TypeParameter[] {containment=true};
+	typeParameters TypeParameter[] {@Containment{true}};
 	
 	function getStereotype() returns (Stereotype);
 end
@@ -164,28 +169,27 @@ end
 
 externalType StructPart extends Part, Container type MofClass
 	superTypes StructPart[];
-	interfaces EGLInterface[];
-	structuredFields StructuredField[] {containment=true};
-	constructors EGLConstructor[] {containment=true};
-	functions EGLFunction[] {containment=true};
-	operations EGLOperation[] {containment=true};
-	initializerStatements StatementBlock {containment=true};
+	structuredFields StructuredField[] {@Containment{true}};
+	constructors EGLConstructor[] {@Containment{true}};
+	functions EGLFunction[] {@Containment{true}};
+	operations EGLOperation[] {@Containment{true}};
+	initializerStatements StatementBlock {@Containment{true}};
 	
 	function isSubtypeOf(part StructPart in) returns (boolean);
 end
 
 externalType DataType extends Classifier, Container type MofClass
 	typeKind ETypeKind?;
-	functions EGLFunction[] {containment=true};
-	operations EGLOperation[] {containment=true};
+	functions EGLFunction[] {@Containment{true}};
+	operations EGLOperation[] {@Containment{true}};
 end
 
 externalType ParameterizableType extends EGLClass type MofClass
-	parameterizedType TypeRef;
+	parameterizedType egl.lang.reflect.mof.EType;
 end
 
-externalType EGLField extends Member type MofClass {name="Field"}
-	initializerStatements StatementBlock {containment=true};
+externalType EGLField extends Member, FieldReference type MofClass {name="Field"}
+	initializerStatements StatementBlock {@Containment{true}};
 	hasSetValuesBlock boolean;
 	isImplicit boolean;
 	isSystemField boolean;
@@ -194,7 +198,6 @@ externalType EGLField extends Member type MofClass {name="Field"}
 end
 
 externalType ConstantField extends EGLField type MofClass
-	value PrimitiveTypeLiteral {containment=true};
 end
 
 externalType FunctionReturnField extends EGLField type MofClass
@@ -219,9 +222,9 @@ externalType FunctionParameter extends Parameter type MofClass
 end
 
 externalType FunctionMember extends Member, Container, InvocableElement type MofClass
-	parameters FunctionParameter[] {containment=true};
-	localDeclarations EGLField[] {containment=true};
-	statementBlock StatementBlock {containment=true};
+	parameters FunctionParameter[] {@Containment{true}};
+	localDeclarations EGLField[] {@Containment{true}};
+	statementBlock StatementBlock {@Containment{true}};
 	
 	function getSignature() returns(string);
 	function getStatements() returns(Statement[]);
@@ -231,8 +234,8 @@ externalType FunctionMember extends Member, Container, InvocableElement type Mof
 	function addParameter(parm FunctionParameter in);
 end
 
-externalType EGLFunction extends FunctionMember type MofClass {name="Function"}
-	returnField EGLField {containment=true};
+externalType EGLFunction extends FunctionMember, FunctionReference type MofClass {name="Function"}
+	returnField EGLField {@Containment{true}};
 end
 
 externalType EGLOperation extends EGLFunction type MofClass {name="Operation"}
@@ -255,7 +258,7 @@ externalType EGLConstructor extends FunctionMember type MofClass {name="Construc
 end
 
 externalType StructuredField extends EGLField type MofClass
-	elementAnnotations ElementAnnotations[] {containment=true};
+	elementAnnotations ElementAnnotations[] {@Containment{true}};
 	children StructuredField[];
 	parent StructuredField;
 	occurs int;
@@ -266,7 +269,7 @@ externalType StructuredField extends EGLField type MofClass
 end
 
 externalType FormField extends EGLField type MofClass
-	elementAnnotations ElementAnnotations[] {containment=true};
+	elementAnnotations ElementAnnotations[] {@Containment{true}};
 	occurs int;
 	
 	function getElementAnnotations(index int in) returns(Annotation[]);
@@ -283,7 +286,7 @@ externalType ConstantFormField extends FormField type MofClass
 end
 
 
-externalType Part extends Classifier type MofClass{isAbstract=yes}
+externalType Part extends Classifier, PartReference type MofClass{isAbstract=yes}
 	accessKind AccessKind?;
 
 	function getSubType() returns (Stereotype);
@@ -305,7 +308,7 @@ externalType StructuredRecord extends StructPart, StructuredContainer type MofCl
 end
 
 externalType LogicAndDataPart extends StructPart type MofClass {isAbstract=true}
-	fields EGLField[] {containment=true};
+	fields EGLField[] {@Containment{true}};
 	usedParts Part[];
 	
 	function addInitializerStatements(block StatementBlock in);
@@ -321,25 +324,28 @@ end
 externalType EGLExternalType extends EGLClass type MofClass {name="ExternalType"} 
 end
 
-externalType EGLProgram extends EGLClass type MofClass {name="Program"} 
-	parameters ProgramParameter[] {containment=true};
+externalType EGLProgram extends EGLClass, StaticType type MofClass {name="Program"}
+	parameters ProgramParameter[] {@Containment{true}};
 	isCallable boolean;
 end
 
 externalType EGLHandler extends EGLClass type MofClass {name="Handler"}
 end
 
-externalType EGLLibrary extends EGLClass type MofClass {name="Library"}
+externalType EGLClassPart extends EGLClass type MofClass {name="Class"}
 end
 
-externalType EGLService extends EGLClass type MofClass {name="Service"}
+externalType EGLLibrary extends EGLClass, StaticType type MofClass {name="Library"}
+end
+
+externalType EGLService extends EGLClass, StaticType type MofClass {name="Service"}
 end
 
 externalType EGLInterface extends EGLClass type MofClass {name="Interface"} 
 end
 
 externalType EGLDelegate extends Part, Container, InvocableElement type MofClass {name="Delegate"}
-	parameters FunctionParameter[] {containment=true};
+	parameters FunctionParameter[] {@Containment{true}};
 	isNullable boolean;
 	returnType EGLType;
 end
@@ -363,18 +369,38 @@ end
 
 externalType EGLForm extends EGLRecord type MofClass {name="Form"}
 	container EGLFormGroup;
-	formFields FormField[] {containment=yes};
+	formFields FormField[] {@Containment{true}};
 	
 	function getConstantFields() returns (ConstantFormField[]);
 	function getVariableFields() returns (VariableFormField[]);
 end
 
 externalType EGLFormGroup extends Part type MofClass {name="FormGroup"}
-	forms EGLForm[] {containment=true};
+	forms EGLForm[] {@Containment{true}};
 	nestedForms EGLForm[];
 	usedForms EGLForm[];
 end
 
 externalType FunctionPart extends LogicAndDataPart type MofClass
-	_function EGLFunction {mofName="function", containment=true};
+	_function EGLFunction {@MofName{"function"}, @Containment{true}};
+end
+
+externalType ElementReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolveElement() returns (Element);  
+end
+
+externalType PartReference extends ElementReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolvePart() returns (Part);
+end
+
+externalType MemberReference extends ElementReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolveMember() returns (Member);
+end
+
+externalType FunctionReference extends MemberReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolveFunction() returns (EGLFunction);
+end
+
+externalType FieldReference extends ElementReference type MofClass {isAbstract=yes, isInterface=yes}
+	function resolveField() returns (EGLField);
 end

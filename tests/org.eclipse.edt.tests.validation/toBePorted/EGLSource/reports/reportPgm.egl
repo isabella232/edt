@@ -1,0 +1,56 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+program MyReportPgm type basicProgram
+		
+	function main()
+		myReport Report;
+		myReportData ReportData;
+		
+		rd ReportDetailRecord[];
+		rdrec ReportDetailRecord;
+		
+		rdrec.a = 10;
+		rdrec.b = 20;
+		
+		rd.appendElement(rdrec);
+		myReport.reportDesignFile = "pathname\\report_design.jrxml";
+		myReport.reportDestinationFile = "pathname\\report_dest";
+		myReport.reportExportFile = "pathname\\report_output.pdf";
+		myReport.reportData = myReportData;
+		myReport.abc = "path";						// 1 myReport.abc cannot be resolved
+		myReportData.xyz ="abc";					// 1 myReportData.xyz cannot be resolved
+
+// bad arguments
+		fillReport(myReportData, ExportFormat.HTML);			// 2 
+		exportReport(myReportData, DataSource.sqlStatement);	// 2 
+		addReportParameter(myReportData, "7", rdrec);			// 1 
+		resetReportParameters(myReportData);					// 1 
+
+		reportLib.fillReport(myReportData, ExportFormat.HTML);			// 2 
+		reportLib.exportReport(myReportData, DataSource.sqlStatement);	// 2 
+		reportLib.addReportParameter(myReportData, "7", rdrec);			// 1 
+		reportLib.resetReportParameters(myReportData);					// 1 
+		reportLib.resetReportParameters(myReport);						// 0
+
+		reportLib.fillReport();									// 1 Function fillReport requires exactly
+		exportReport();											// 1 Function exportReport requires exactly
+		reportLib.addReportParameter();							// 1 Function addReportParameter requires exactly
+		resetReportParameters();								// 1 Function resetReportParameters requires exactly
+
+		reportLib.exportReports(myReport, ExportFormat.XML);	// 1 exportReports cannot be resolved
+	end
+end
+
+Record ReportDetailRecord
+	a int;
+	b int;
+end

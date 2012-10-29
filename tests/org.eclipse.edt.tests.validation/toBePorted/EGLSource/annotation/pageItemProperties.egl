@@ -1,0 +1,200 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+DataItem dItem1 int {displayUse = button} end
+DataItem dItem2 int end
+DataItem dItem3 int {displayUse = hyperlink} end
+
+DataItem dItem4 int {bypassValidation = yes} end
+DataItem dItem5 int end
+DataItem dItem6 int {bypassValidation = no} end
+
+// ?: validateValue() bails out early when container is EGLDataItem
+DataItem dItem7 int {value = "a"} end
+
+// ?: validateValue() bails out early when container is EGLDataItem
+DataItem dItem8 int {value = 5.4} end
+
+DataItem dItem9 char(12) {value = "a"} end // 0
+
+// ?: can unquoted strings be allowed for character items?
+DataItem dItem10 char(12) {value = 3} end
+
+DataItem dItem11 char(2) {value = "abc"} end // 0
+DataItem dItem12 int {numElementsItem=item4} end // 0
+DataItem dItem13 int {numElementsItem=foo} end // 0
+
+Record basRecDef1 type basicRecord
+	item1 dItem1;
+end
+
+Record basRecDef2 type basicRecord
+	item1 int {displayUse = button};
+end
+
+Record basRecDef1a type basicRecord
+	item1 dItem4;
+end
+
+Record basRecDef2a type basicRecord
+	item1 int {bypassValidation=yes};
+end
+
+Record basRecDef5 type basicRecord
+	item1 int { value = 5 }; // 0
+end
+
+Record basRecDef6 type basicRecord
+	item1 int { value = "a" }; // 1 only digits
+end
+
+Record basRecDef7 type basicRecord
+	item1 dItem2 { value = 5.5 }; // 1 only digits
+end
+
+Record basRecDef8 type basicRecord
+	item1 char(2) { value="abc" }; // 1 exceeds
+end
+
+Record basRecDef9 type basicRecord
+	5 item1 int { item2 { value = "a" } };	//0
+		10 item2 int;						//1 only digits
+end
+
+handler pageItemProperties type JSFHandler
+
+	item1 dItem1;						//0
+
+	item2 dItem2 {displayUse = button};	//0
+	item3 dItem2; 						//0
+	item4 dItem3; 						//0
+
+	rec1 basRecDef1;					//0
+
+	rec2 basRecDef2;					//0
+	rec3 basRecDef2 { item1 { displayUse = hyperlink } }; //0
+	
+
+
+	item7 dItem5; // 0
+	item8 dItem6; // 0
+	rec4 basRecDef1a; // 1 bypassValidation property is not supported in JSFHandlers
+
+	rec6 basRecDef2a { item1 { bypassValidation = no } }; // 0
+	
+	item9 dItem2 { value = "a" }; // 1 only digits
+	// ?: can unquoted strings be allowed for character items?
+	item10 dItem9 { value = 9 };
+	item11 dItem9 { value="abcdefabcdefa" }; // 1 exceeds
+	
+	rec7 uiRecDef1 {numElementsItem=item1}; // 0
+	rec8 uiRecDef1 {numElementsItem=item2}; // 0
+
+
+	rec10 uiRecDef1 {numElementsItem=foo}; // 1
+
+	rec11 serRecDef; // 1 must name an item within the same record
+
+
+
+	rec15 serRecDef { item1 { numElementsItem=item4}}; // 0
+	rec16 serRecDef { item1 { numElementsItem=item4}, item2 { numElementsItem=item4}}; // 1 array
+	rec17 serRecDef2; // 1 array
+
+	rec19 serRecDef4; // 2 array|foo
+	
+	rec20 serRecDef5; // 0
+	rec22 serRecDef5{ item1{ selectFromListItem = tab.col1 } }; // 0
+	rec23 serRecDef5{ item1{ selectFromListItem = rec23.recItem3 } }; //2 The selectFromList property must name an item array declared in a JSF handler or DataTable. rec23.recItem3 is not an item array, or is declared in another part.
+
+	rec24 serRecDef5{ recItem2{ selectType = value } }; // 1 SelectType may be specified only if selectFromListItem is also specified
+
+	rec26 serRecDef5{ recItem3{ selectFromListItem = rec26.recItem2, selectType = index } }; // 0
+
+	
+	item12 dItem2 { validationOrder = 1 }; // 0
+	rec28 serRecDef6 { item1{ validationOrder = 2 } }; // 0
+	rec29 serRecDef6{ item1{ validationOrder = 3 } }; // 0
+	rec30 serRecDef6{ item1{ validationOrder = 4 } }; // 1 Another item has the property set to 4
+	rec31 serRecDef6{ item1{ validationOrder = 4 } }; // 1 Another item has the property set to 4
+	item13 dItem2 { validationOrder = 5 }; // Another item has the property set to 5
+	rec32 serRecDef6{ item1{ validationOrder = 5 } }; // 1 Another item has the property set to 5
+	
+	item22 dItem2{ newWindow=yes, action = "webProID" }; // 0
+	item23 dItem2{ newWindow=yes }; // 1 NewWindow=yes is valid only if the action property is also specified.
+	
+
+
+	
+
+end
+
+Record serRecDef type serialRecord {fileName = "dave.txt"}
+	item1 int [4] { numElementsItem = tab.col1};
+	item2 char(12);
+	item3 decimal( 9, 2 );
+	item4 int;
+end
+
+Record serRecDef2 type serialRecord {fileName = "dave.txt"}
+	item1 int { numElementsItem=item4};
+	item4 int;
+end
+
+Record serRecDef3 type serialRecord {fileName = "dave.txt"}
+	5 item1 char(20);
+		10 item2 int [5] {numElementsItem=item4};
+	5 item4 int;
+end
+
+Record serRecDef4 type serialRecord {fileName = "dave.txt"}
+	5 item1 dItem12;
+	5 item2 dItem13 [5];
+	5 item3 dItem12 [5];
+	5 item4 int;
+end
+
+Record serRecDef5 type serialRecord {fileName = "dave.txt"}
+	5 item1 char(12) {selectFromListItem = rec20.recItem2, selectType=value};
+	5 recItem2 char(12)[4];
+	5 recItem3 int;
+end
+
+Record serRecDef6 type serialRecord {fileName = "dave.txt"}
+	5 item1 char(12);
+end
+
+Record serRecDef7 type serialRecord {fileName = "dave.txt"}
+	5 rec7item1 char(12) { selectFromListItem = rec33.rec7item2 };
+	5 rec7item2 char(12);
+end
+
+Record serRecDef8 type serialRecord {fileName = "dave.txt"}
+	5 rec8item1 char(12) { selectFromListItem=foo };
+end
+
+Record uiRecDef1 type vguiRecord
+	item1 decimal(9,2);
+	item2 char(12);
+	item3 int;
+	
+	item4 int[8];
+end
+
+Record uiRecDef2 type uiRecord
+	item1 int;
+	item2 int;
+end
+
+DataTable tab { contents = [["1"]] }
+	col1 char(12);
+end

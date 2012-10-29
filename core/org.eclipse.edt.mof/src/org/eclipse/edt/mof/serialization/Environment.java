@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 
 public class Environment extends AbstractEnvironment {
-	public static Environment INSTANCE = new Environment();
+	private static Environment INSTANCE = new Environment();
 	
 	private static ThreadLocal<Stack<IEnvironment>> currentEnvs = new ThreadLocal<Stack<IEnvironment>>() {
 		protected synchronized Stack<IEnvironment> initialValue() {

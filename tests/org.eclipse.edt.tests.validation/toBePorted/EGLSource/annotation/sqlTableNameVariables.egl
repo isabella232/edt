@@ -1,0 +1,52 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	sqlrec sqlrec;
+	sqlRec2 sqlRec2;
+	
+	function main() end
+	
+	function func1()
+		x int;
+		add sqlRec;		//0
+	end
+	
+	function func2()
+		add sqlRec2;		//1 It is invalid to use the systemtype system word in this statement location
+	end
+end
+
+Program pgm2
+	sqlRec sqlRec;
+	
+	function main() end
+	
+	function func1()
+		add sqlRec;		//1 x cannot be resolved
+	end
+	
+	function func2()
+		x sqlRec;
+		add sqlRec;		//1 The host variable x must resolve to an item.
+	end
+end
+
+Record sqlRec type SQLRecord
+{tableNameVariables=[["x","..."]]}
+	item1 int;
+end
+
+Record sqlRec2 type SQLRecord
+{tableNameVariables=[["systemtype","..."]]}
+	item1 int;
+end

@@ -1,0 +1,666 @@
+/*******************************************************************************
+ * Copyright © 2011, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package eglx.ui.rui;
+
+import egl.lang.reflect.Operation;
+import eglx.javascript.JavaScriptObject;
+import eglx.lang.EBoolean;
+import eglx.lang.Property;
+
+ExternalType Event type JavaScriptObject {
+		relativePath = "eglx/ui/rui"
+	}	
+	x Int { @Property { getMethod="getX", setMethod="setX" } };
+	y Int { @Property { getMethod="getY", setMethod="setY" } };
+	screenX Int;
+	screenY Int;
+	clientX Int;
+	clientY Int;
+	pageX Int;
+	pageY Int;
+	ch int;
+	widget Widget;
+	mouseButton int;
+	altKey boolean;
+	ctrlKey boolean;
+	metaKey boolean;
+	shiftKey boolean;
+			
+	function stopPropagation();
+	function preventDefault();
+end
+
+Delegate EventHandler( e Event in )
+end
+
+ExternalType Document type JavaScriptObject {
+		relativePath = "eglx/ui/rui"
+	}
+	
+	onKeyDown EventHandler?  { @Property { setMethod="setOnKeyDown" } };
+	onKeyPress EventHandler? { @Property { setMethod="setOnKeyPress" } };
+	onKeyUp EventHandler? { @Property { setMethod="setOnKeyUp" } };
+	onMouseDown EventHandler? { @Property { setMethod="setOnMouseDown" } };
+	onMouseMove EventHandler? { @Property { setMethod="setOnMouseMove" } };
+	onMouseOver EventHandler? { @Property { setMethod="setOnMouseOver" } };
+	onMouseOut EventHandler? { @Property { setMethod="setOnMouseOut" } };
+	onMouseUp EventHandler? { @Property { setMethod="setOnMouseUp" } };
+	onScroll EventHandler? { @Property { setMethod="setOnScroll" } };
+	onChange EventHandler? { @Property { setMethod="setOnChange" } };						
+	onClick EventHandler? { @Property { setMethod="setOnClick" } };
+
+	onSelectStart EventHandler? { @Property { setMethod="setOnSelecStart" } };
+	onDragStart EventHandler? { @Property { setMethod="setOnDragStart" } };
+	
+	body Widget;
+	
+	location String  { @Property { setMethod="setLocation", getMethod="getLocation" } };
+end
+
+ExternalType Widget type JavaScriptObject { 
+		relativePath = "eglx/ui/rui" 
+	}
+	
+	document Document;
+	pixelWidth int { @Property { getMethod = "getPixelWidth", setMethod = "setPixelWidth" } };
+	function getPixelWidth() returns (int);
+	function setPixelWidth(value int in);
+
+	pixeLHeight int { @Property { getMethod = "getPixelHeight", setMethod = "setPixelHeight" } };
+	function getPixelHeight() returns (int);
+	function setPixelHeight(value int in);
+
+	logicalParent Widget {@Property { getMethod = "getLogicalParent", setMethod = "setLogicalParent" }};
+	function getLogicalParent() returns (Widget);
+	function setLogicalParent(value Widget in);
+
+	parent Widget {@Property { getMethod = "getParent", setMethod = "setParent" }};
+	function getParent() returns (Widget);
+	function setParent(value Widget in);
+
+	style String { @Property { getMethod = "getStyle", setMethod = "setStyle" } };
+	function getStyle() returns (String);
+	function setStyle(value String in);
+
+	background string { @Property { getMethod = "getBackground", setMethod = "setBackground" } };
+	function getBackground() returns (String);
+	function setBackground(value String in);
+	
+	layoutData any? { @Property { getMethod = "getLayoutData", setMethod = "setLayoutData" } };
+	function getLayoutData() returns (any);
+	function setLayoutData(value any in);
+	
+	userData any? {@Property {getMethod = "getUserData", setMethod = "setUserData" } };
+	function getUserData() returns (any?);
+	function setUserData(value any? in);
+
+	tabIndex int { @Property { getMethod = "getTabIndex", setMethod = "setTabIndex" }, @VEProperty{category = "Accessibility"} };
+	function getTabIndex() returns (int);
+	function setTabIndex(value int in);
+
+	ariaLive string { @Property { getMethod = "getAriaLive", setMethod = "setAriaLive" }, @VEProperty{category = "Accessibility"} };
+	function getAriaLive() returns (String);
+	function setAriaLive(value String in);
+
+	ariaRole string { @Property { getMethod = "getAriaRole", setMethod = "setAriaRole" }, @VEProperty{category = "Accessibility"} };
+	function getAriaRole() returns (String);
+	function setAriaRole(value String in);
+	
+	disabled boolean  { @Property { getMethod = "getDisabled", setMethod = "setDisabled" }, @VEProperty{category = "Appearance"} };
+	function getDisabled() returns (boolean);
+	function setDisabled(value boolean in);
+
+	cursor String { @Property { getMethod = "getCursor", setMethod = "setCursor" }, @VEProperty{category = "Appearance"} };
+	function getCursor() returns (String);
+	function setCursor(value String in);
+
+	visibility String { @Property { getMethod = "getVisibility", setMethod = "setVisibility" } };
+	function getVisibility() returns (String);
+	function setVisibility(value String in);
+
+	visible boolean { @Property { getMethod = "getVisible", setMethod = "setVisible" }, @VEProperty{category = "Appearance", 			
+			default = "true"
+	} };
+	function getVisible() returns (boolean);
+	function setVisible(value boolean in);
+	
+	opacity String { @Property { getMethod = "getOpacity", setMethod = "setOpacity" }, @VEProperty{category = "Appearance"} };
+	function getOpacity() returns (String);
+	function setOpacity(value String in);
+
+	zIndex String { @Property { getMethod = "getZIndex", setMethod = "setZIndex" }, @VEProperty{category = "Position"} };
+	function getZIndex() returns (String);
+	function setZIndex(value String in);
+
+	height String { @Property { getMethod = "getHeight", setMethod = "setHeight" }, @VEProperty{category = "Position"} };
+	function getHeight() returns (String);
+	function setHeight(value String in);
+
+	width String { @Property { getMethod = "getWidth", setMethod = "setWidth" }, @VEProperty{category = "Position"} };
+	function getWidth() returns (String);
+	function setWidth(value String in);
+
+	y int { @Property { getMethod = "getY", setMethod = "setY" }, @VEProperty{category = "Position"} };
+	function getY() returns (int);
+	function setY(value int in);
+
+	x int { @Property { getMethod = "getX", setMethod = "setX" }, @VEProperty{category = "Position"} };
+	function getX() returns (int);
+	function setX(value int in);
+	
+	position string { @Property { getMethod = "getPosition", setMethod = "setPosition" },
+			@VEProperty {
+				category = "Position", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"absolute\"", displayName="absolute"}, 
+					@VEPropertyChoice{id="\"relative\"", displayName="relative"}, 
+					@VEPropertyChoice{id="\"static\"", displayName="static"}
+				],
+				default = "\"static\""
+			} };
+	function getPosition() returns (String);
+	function setPosition(value String in);
+	
+	marginBottom int { @Property { getMethod = "getMarginBottom", setMethod = "setMarginBottom" }, @VEProperty{category = "Spacing"} };
+	function getMarginBottom() returns (int);
+	function setMarginBottom(value int in);
+
+	marginTop int { @Property { getMethod = "getMarginTop", setMethod = "setMarginTop" }, @VEProperty{category = "Spacing"} };
+	function getMarginTop() returns (int);
+	function setMarginTop(value int in);
+
+	marginRight int { @Property { getMethod = "getMarginRight", setMethod = "setMarginRight" }, @VEProperty{category = "Spacing"} };
+	function getMarginRight() returns (int);
+	function setMarginRight(value int in);
+
+	marginLeft int { @Property { getMethod = "getMarginLeft", setMethod = "setMarginLeft" }, @VEProperty{category = "Spacing"} };
+	function getMarginLeft() returns (int);
+	function setMarginLeft(value int in);
+
+	margin int { @Property { getMethod = "getMargin", setMethod = "setMargin" }, @VEProperty{category = "Spacing"} };
+	function getMargin() returns (int);
+	function setMargin(value int in);
+	
+	paddingBottom int { @Property { getMethod = "getPaddingBottom", setMethod = "setPaddingBottom" }, @VEProperty{category = "Spacing"} };
+	function getPaddingBottom() returns (int);
+	function setPaddingBottom(value int in);
+
+	paddingTop int { @Property { getMethod = "getPaddingTop", setMethod = "setPaddingTop" }, @VEProperty{category = "Spacing"} };
+	function getPaddingTop() returns (int);
+	function setPaddingTop(value int in);
+
+	paddingRight int { @Property { getMethod = "getPaddingRight", setMethod = "setPaddingRight" }, @VEProperty{category = "Spacing"} };
+	function getPaddingRight() returns (int);
+	function setPaddingRight(value int in);
+
+	paddingLeft int { @Property { getMethod = "getPaddingLeft", setMethod = "setPaddingLeft" }, @VEProperty{category = "Spacing"} };
+	function getPaddingLeft() returns (int);
+	function setPaddingLeft(value int in);
+
+	padding int { @Property { getMethod = "getPadding", setMethod = "setPadding" }, @VEProperty{category = "Spacing"} };
+	function getPadding() returns (int);
+	function setPadding(value int in);
+	
+	borderBottomStyle string { @Property { getMethod = "getBorderBottomStyle", setMethod = "setBorderBottomStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""
+		} };
+	function getBorderBottomStyle() returns (String);
+	function setBorderBottomStyle(value String in);
+
+	borderTopStyle string { @Property { getMethod = "getBorderTopStyle", setMethod = "setBorderTopStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		} };
+	function getBorderTopStyle() returns (String);
+	function setBorderTopStyle(value String in);
+	
+	borderRightStyle string { @Property { getMethod = "getBorderRightStyle", setMethod = "setBorderRightStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		} };
+	function getBorderRightStyle() returns (String);
+	function setBorderRightStyle(value String in);
+
+	borderLeftStyle string { @Property { getMethod = "getBorderLeftStyle", setMethod = "setBorderLeftStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		} };
+	function getBorderLeftStyle() returns (String);
+	function setBorderLeftStyle(value String in);
+
+	borderStyle String { @Property { getMethod = "getBorderStyle", setMethod = "setBorderStyle" }, @VEProperty{category = "Border", 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"solid\"", displayName="solid"}, 
+					@VEPropertyChoice{id="\"double\"", displayName="double"}, 
+					@VEPropertyChoice{id="\"groove\"", displayName="groove"}, 
+					@VEPropertyChoice{id="\"dotted\"", displayName="dotted"}, 
+					@VEPropertyChoice{id="\"dashed\"", displayName="dashed"}, 
+					@VEPropertyChoice{id="\"inset\"", displayName="inset"}, 
+					@VEPropertyChoice{id="\"outset\"", displayName="outset"}, 
+					@VEPropertyChoice{id="\"ridge\"", displayName="ridge"}
+				],
+				default = "\"solid\""  
+		} };
+	function getBorderStyle() returns (String);
+	function setBorderStyle(value String in);
+	
+	borderBottomWidth int { @Property { getMethod = "getBorderBottomWidth", setMethod = "setBorderBottomWidth" }, @VEProperty{category = "Border"} };
+	function getBorderBottomWidth() returns (int);
+	function setBorderBottomWidth(value int in);
+
+	borderTopWidth int { @Property { getMethod = "getBorderTopWidth", setMethod = "setBorderTopWidth" }, @VEProperty{category = "Border"} };
+	function getBorderTopWidth() returns (int);
+	function setBorderTopWidth(value int in);
+
+	borderRightWidth int { @Property { getMethod = "getBorderRightWidth", setMethod = "setBorderRightWidth" }, @VEProperty{category = "Border"} };
+	function getBorderRightWidth() returns (int);
+	function setBorderRightWidth(value int in);
+	
+	borderLeftWidth int { @Property { getMethod = "getBorderLeftWidth", setMethod = "setBorderLeftWidth" }, @VEProperty{category = "Border"} };
+	function getBorderLeftWidth() returns (int);
+	function setBorderLeftWidth(value int in);
+
+	borderWidth int { @Property { getMethod = "getBorderWidth", setMethod = "setBorderWidth" }, @VEProperty{category = "Border"} };
+	function getBorderWidth() returns (int);
+	function setBorderWidth(value int in);
+
+	borderColor String { @Property { getMethod = "getBorderColor", setMethod = "setBorderColor" }, @VEProperty{category = "Border", propertyType="color"} };
+	function getBorderColor() returns (String);
+	function setBorderColor(value String in);
+	
+	fontWeight String { @Property { getMethod = "getFontWeight", setMethod = "setFontWeight" }, @VEProperty{ 
+				propertyType="choice", 
+				choices = [
+					@VEPropertyChoice{id="\"normal\"", displayName="normal"}, 
+					@VEPropertyChoice{id="\"bold\"", displayName="bold"}, 
+					@VEPropertyChoice{id="\"bolder\"", displayName="bolder"}, 
+					@VEPropertyChoice{id="\"lighter\"", displayName="lighter"}
+				],
+				default = "\"normal\""  
+		} };
+	function getFontWeight() returns (String);
+	function setFontWeight(value String in);
+		
+	fontSize string { @Property { getMethod = "getFontSize", setMethod = "setFontSize" }, @VEProperty{} };
+	function getFontSize() returns (String);
+	function setFontSize(value String in);
+
+	font string { @Property { getMethod = "getFont", setMethod = "setFont" }, @VEProperty{} };
+	function getFont() returns (String);
+	function setFont(value String in);
+
+	backgroundColor string { @Property { getMethod = "getBackgroundColor", setMethod = "setBackgroundColor" }, @VEProperty{propertyType="color"} };
+	function getBackgroundColor() returns (String);
+	function setBackgroundColor(value String in);
+
+	color string { @Property { getMethod = "getColor", setMethod = "setColor" }, @VEProperty{propertyType="color" } };
+	function getColor() returns (String);
+	function setColor(value String in);
+	
+	cssClass String { @Property { getMethod = "getClass", setMethod = "setClass" }, @VEProperty };
+	function getClass() returns (String);
+	function setClass(value String in);
+
+	id String { @Property { getMethod = "getID", setMethod = "setID" },  @VEProperty{} };
+	function getID() returns (String);
+	function setID(value String in);
+	
+	reverseTextDirection string {@Property{setMethod = "setReverseTextDirection", getMethod = "getReverseTextDirection"},
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			} };
+	function getReverseTextDirection() returns (String);
+	function setReverseTextDirection(value String in);
+
+	textLayout string {@Property{setMethod = "setTextLayout", getMethod = "getTextLayout"}, 
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Logical\"", displayName = "Logical"},
+					@VEPropertyChoice{id = "\"Visual\"", displayName = "Visual"}
+				],
+				default = "\"Logical\""
+			} };	
+	function getTextLayout() returns (String);
+	function setTextLayout(value String in);
+
+	widgetOrientation string {@Property{setMethod = "setWidgetOrientation", getMethod = "getWidgetOrientation"}, 
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id="\"LTR\"", displayName = "LTR"},
+					@VEPropertyChoice{id="\"RTL\"", displayName = "RTL"}
+				],
+				default = "\"LTR\""
+			} };
+	function getWidgetOrientation() returns (String);
+	function setWidgetOrientation(value String in);
+	
+	targetWidget Widget { }; //@Property { getMethod = "getTargetWidget", setMethod = "setTargetWidget" } };
+	
+	tagName String { @Property { getMethod = "getTagName", setMethod = "setTagName" } };
+	function getTagName() returns (String);
+	function setTagName(value String in);
+
+	innerHTML String {@Property { getMethod = "getInnerHTML", setMethod = "setInnerHTML" }};
+	function getInnerHTML() returns (String);
+	function setInnerHTML(value String in);
+
+	innerText String {@Property { getMethod = "getInnerText", setMethod = "setInnerText" }};
+	function getInnerText() returns (String);
+	function setInnerText(value String in);
+
+	value String {@Property { getMethod = "getValue", setMethod = "setValue" }};
+	function getValue() returns (String);
+	function setValue(value String in);
+
+	children Widget[] {@Property { getMethod = "getChildren", setMethod = "setChildren" }};
+	function getChildren() returns (Widget[]);
+	function setChildren(children Widget[] in);
+	
+	function getAttribute(attribute string in) returns (any);
+	function setAttribute(attribute String in, value any in);
+	function removeAttribute(attribute String in);
+	
+	function appendChild(widget Widget in);
+	function appendChildren(widget Widget[] in);
+	function removeChild(widget Widget in);
+	function removeChildren();
+	function childrenChanged();
+	
+	function getElementById(id String in) returns (Widget);
+	function getElementsByName(name String in) returns (Widget[]);
+	function getElementsByTagName(tagName String in) returns (Widget[]);
+	
+	function focus();
+	function select();
+	
+	function toString() returns(string);
+			
+	onStartDrag StartDragFunction? { @Property { getMethod = "getOnStartDrag", setMethod = "setOnStartDrag"}};
+	function getOnStartDrag() returns (StartDragFunction);
+	function setOnStartDrag(drag StartDragFunction in);
+
+	onDrag DragFunction? { @Property { getMethod = "getOnDrag", setMethod = "setOnDrag"}};
+	function getOnDrag() returns (DragFunction);
+	function setOnDrag(drag DragFunction in);
+	
+	onDropOnTarget DropOnTargetFunction? { @Property { getMethod = "getOnDropOnTarget", setMethod = "setOnDropOnTarget" } };
+	function getOnDropOnTarget() returns (DropOnTargetFunction);
+	function setOnDropOnTarget(target DropOnTargetFunction in);
+	// Functions to manage individual event handler types.
+	// Each widget may not support all of them and may choose to
+	// ignore attempts to add event handlers it does not recognize.
+	
+	onChange
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnChange" },
+			@VEEvent{}
+		};
+	function getOnChange() returns (EventHandler[]);
+	function setOnChange(handlers EventHandler[] in);
+	
+	onClick
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnClick" },
+			@VEEvent{}
+		};
+	function getOnClick() returns (EventHandler[]);
+	function setOnClick(handlers EventHandler[] in);
+	
+	onSelect
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnSelect" },
+			@VEEvent{}
+		};
+	function getOnSelect() returns (EventHandler[]);
+	function setOnSelect(handlers EventHandler[] in);
+	
+	onFocusGained
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnFocusGained" },
+			@VEEvent{}
+		};
+	function getOnFocusGained() returns (EventHandler[]);
+	function setOnFocusGained(handlers EventHandler[] in);
+	
+	onFocusLost
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnFocusLost" },
+			@VEEvent{}
+		};
+	function getOnFocusLost() returns (EventHandler[]);
+	function setOnFocusLost(handlers EventHandler[] in);
+	
+	onKeyDown
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnKeyDown" },		
+			@VEEvent{}
+		};
+	function getOnKeyDown() returns (EventHandler[]);
+	function setOnKeyDown(handlers EventHandler[] in);
+	
+	onKeyPress
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnKeyPress" },
+			@VEEvent{}
+		};
+	function getOnKeyPress() returns (EventHandler[]);
+	function setOnKeyPress(handlers EventHandler[] in);
+	
+	onKeyUp
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnKeyUp" },
+			@VEEvent{}
+		};
+	function getOnKeyUp() returns (EventHandler[]);
+	function setOnKeyUp(handlers EventHandler[] in);
+	
+	onMouseDown
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnMouseDown" },
+			@VEEvent{}
+		};
+	function getOnMouseDown() returns (EventHandler[]);
+	function setOnMouseDown(handlers EventHandler[] in);
+	
+	onMouseMove
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnMouseMove" },
+			@VEEvent{}
+		};
+	function getOnMouseMove() returns (EventHandler[]);
+	function setOnMouseMove(handlers EventHandler[] in);
+	
+	onMouseOver
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnMouseOver" },
+			@VEEvent{}
+		};
+	function getOnMouseOver() returns (EventHandler[]);
+	function setOnMouseOver(handlers EventHandler[] in);
+	
+	onMouseOut
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnMouseOut" },
+			@VEEvent{}
+		};
+	function getOnMouseOut() returns (EventHandler[]);
+	function setOnMouseOut(handlers EventHandler[] in);
+	
+	onMouseUp
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnMouseUp" },
+			@VEEvent{}
+		};
+	function getOnMouseUp() returns (EventHandler[]);
+	function setOnMouseUp(handlers EventHandler[] in);
+	
+	onScroll
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnScroll" },
+			@VEEvent{}
+		};
+	function getOnScroll() returns (EventHandler[]);
+	function setOnScroll(handlers EventHandler[] in);
+	
+	onContextMenu
+			EventHandler[]
+			
+			{ @Property { getMethod="getOnContextMenu" },
+			@VEEvent{}
+		};
+	function getOnContextMenu() returns (EventHandler[]);
+	function setOnContextMenu(handlers EventHandler[] in);
+		
+	function morph(duration int in, callback EffectCallback? in, morphFunction MorphFunction? in);
+	function fadeIn(duration int in, callback EffectCallback? in);
+	function fadeOut(duration int in, callback EffectCallback? in);
+	function resize(width int in, height int in, duration int in, callback EffectCallback? in);
+	
+	numericSwap String {
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			}
+		};
+	
+	symmetricSwap String {
+			@VEProperty{
+				category = "Bidi",
+				propertyType = "choice",
+				choices = [
+					@VEPropertyChoice{id = "\"Yes\"", displayName = "Yes"},
+					@VEPropertyChoice{id = "\"No\"", displayName = "No"}
+				],
+				default = "\"No\""
+			}
+		};
+		
+	displayStyle string {@Property  { getMethod = "getDisplayStyle", setMethod = "setDisplayStyle" }};
+
+	function getError() returns (boolean);
+	function setError(value boolean in);
+
+	function setBiDiMarkers(isTextTypeVisual boolean in, isTextOrientationRightToLeft boolean in);
+	function setBiDiStyles(value1 boolean in, value2 boolean in);
+	function cleanBiDiMarkers();
+	function getSymmetricSwap() returns (string);
+	function setSymmetricSwap(value string in);
+	function getNumericSwap() returns (string);
+	function setNumericSwap(value string in);
+
+	static function $EQ(lvalue Widget? in, rvalue Widget? in) returns(EBoolean) {@Operation{"=="}};
+	static function $NEQ(lvalue Widget? in, rvalue Widget? in) returns(EBoolean) {@Operation{"!="}};
+
+	static function asWidget(value Widget? in) returns(Widget?) {@Operation{"widen"}};
+	
+end
+
+
+ExternalType View type JavaScriptObject { relativePath = "eglx/ui/rui"	}
+		
+	function getProperty(property String in) returns (String);
+	function appendChildToParent(p1 Widget in, p2 Widget in);
+	document Document;
+	initialUI Widget[];
+	
+	static function $EQ(lvalue View? in, rvalue View? in) returns(EBoolean) {@Operation{"=="}};
+	static function $NEQ(lvalue View? in, rvalue View? in) returns(EBoolean) {@Operation{"!="}};
+	
+	static function asView(value View in) returns(View) {@Operation{"widen"}};
+end
+
+ExternalType NLSLibrary type JavaScriptObject {relativePath = "eglx/ui/rui", ExternalName = "RUIPropertiesLibrary"}
+	function getMessage(s string in, array string[] in) returns(string);
+end
+
+Delegate EffectCallback()
+end
+Delegate MorphFunction(widget Widget in, step float in)
+end
+Delegate StartDragFunction(widget Widget in, x int in, y int in) returns(boolean)
+end
+Delegate DropOnTargetFunction(widget Widget in, dropTarget Widget in, x int in, y int in)
+end
+Delegate DragFunction(widget Widget in, dropTarget Widget in, x int in, y int in)
+end

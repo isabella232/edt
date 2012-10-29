@@ -29,7 +29,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#isAborted()
      */
     public boolean isAborted() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -37,7 +36,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#setAborted(boolean)
      */
     public void setAborted(boolean aborted) {
-        // TODO Auto-generated method stub
         
     }
 
@@ -45,7 +43,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#compiled()
      */
     public void compiled() {
-        // TODO Auto-generated method stub
         
     }
 
@@ -53,7 +50,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#begin()
      */
     public void begin() {
-        // TODO Auto-generated method stub
         
     }
 
@@ -61,7 +57,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#checkCancel()
      */
     public void checkCancel() {
-        // TODO Auto-generated method stub
         
     }
 
@@ -69,7 +64,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#done()
      */
     public void done() {
-        // TODO Auto-generated method stub
         
     }
 
@@ -77,7 +71,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#setProgressPerEGLPart(float)
      */
     public void setProgressPerEGLPart(float progress) {
-        // TODO Auto-generated method stub
         
     }
 
@@ -85,7 +78,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#subTask(java.lang.String)
      */
     public void subTask(String message) {
-        // TODO Auto-generated method stub
         
     }
 
@@ -93,7 +85,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#updateProgress(float)
      */
     public void updateProgress(float percentComplete) {
-        // TODO Auto-generated method stub
         
     }
 
@@ -101,7 +92,6 @@ public class NullBuildNotifier implements IBuildNotifier {
      * @see org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier#updateProgressDelta(float)
      */
     public void updateProgressDelta(float percentWorked) {
-        // TODO Auto-generated method stub
         
     }
 

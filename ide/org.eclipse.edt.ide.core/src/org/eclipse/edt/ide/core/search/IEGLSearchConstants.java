@@ -33,15 +33,9 @@ public interface IEGLSearchConstants {
 	
 	/* Nature of searched element */
 	// These should be used in the SearchFor field of SearchEngine.search()
-	int ALL_ELEMENTS = 0; // All top level parts, nested forms, and nested functions
+	int ALL_ELEMENTS = 0; // All top level parts and nested functions
 	int PROGRAM_PART = 1;
-	
-	int TABLE_PART = 3;
 	int RECORD_PART = 4;
-	int ITEM_PART = 5;
-	int FORM_PART = 6; // Top level and nested forms
-	int FORMGROUP_PART = 7;
-	int FUNCTION_PART = 8; // Top level functions only
 	int LIBRARY_PART = 9;
 	int ALL_FUNCTIONS = 10; // Top level and nested functions
 	int HANDLER_PART = 12;
@@ -72,12 +66,7 @@ public interface IEGLSearchConstants {
 	// These part types should only be used with SearchEngine.SearchAllPartNames()
 	int PART = IIndexConstants.PART_SUFFIX;
 	int PROGRAM = IIndexConstants.PROGRAM_SUFFIX;
-	
-	int TABLE = IIndexConstants.TABLE_SUFFIX;
 	int RECORD = IIndexConstants.RECORD_SUFFIX;
-	int ITEM = IIndexConstants.ITEM_SUFFIX;
-	int FORM = IIndexConstants.FORM_SUFFIX;
-	int FORMGROUP = IIndexConstants.FORMGRP_SUFFIX;
 	int FUNCTION = IIndexConstants.FUNCTION_SUFFIX;
 	int LIBRARY = IIndexConstants.LIBRARY_SUFFIX;
 	int HANDLER = IIndexConstants.HANDLER_SUFFIX;
@@ -88,6 +77,7 @@ public interface IEGLSearchConstants {
 	int ENUMERATION = IIndexConstants.ENUMERATION_SUFFIX;
 	int ANNOTATION = IIndexConstants.ANNOTATION_SUFFIX;
 	int STEREOTYPE = IIndexConstants.STEREOTYPE_SUFFIX;
+	int CLASS = IIndexConstants.CLASS_SUFFIX;
 	
 	/* Nature of match */
 	

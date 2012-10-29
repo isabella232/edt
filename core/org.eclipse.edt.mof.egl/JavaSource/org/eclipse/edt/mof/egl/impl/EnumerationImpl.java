@@ -19,10 +19,12 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
@@ -30,6 +32,7 @@ import org.eclipse.edt.mof.egl.TypeParameter;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EEnumImpl;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class EnumerationImpl extends EEnumImpl implements Enumeration {
@@ -43,6 +46,8 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	private static int totalSlots = 7;
 	
 	private List<StructPart> superTypes;
+	private String name;
+	private String packageName;
 
 	
 	public static int totalSlots() {
@@ -68,6 +73,14 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = NameUtile.getAsName(getCaseSensitiveName());
+		}
+		return name;
+	}
+	
+	@Override
+	public String getCaseSensitiveName() {
 		return (String)slotGet(Slot_name);
 	}
 	
@@ -104,6 +117,14 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	
 	@Override
 	public String getPackageName() {
+		if (packageName == null) {
+			packageName = NameUtile.getAsName(getCaseSensitivePackageName());
+		}
+		return packageName;
+	}
+
+	@Override
+	public String getCaseSensitivePackageName() {
 		return (String)slotGet(Slot_packageName);
 	}
 	
@@ -155,12 +176,10 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getPackageName() + "." + getName();
-	}
-
-	@Override
-	public Stereotype getSubType() {
-		return getStereotype();
+		if (getCaseSensitivePackageName().length() == 0) {
+			return getCaseSensitiveName();
+		}
+		return getCaseSensitivePackageName() + "." + getCaseSensitiveName();
 	}
 
 	@Override
@@ -291,5 +310,15 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 		else {
 			return false;
 		}
+	}
+
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
+
+	@Override
+	public Part resolvePart() {
+		return this;
 	}
 }

@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+handler singleItemSelectLists type JSFHandler {}
+    use ColorTable ;
+    
+    colors string[] ;
+    colors2 int[];
+    
+	inputColorFromArrayByValue color {					//0
+		displayUse = input,								//0
+		displayName = "Color from array by value:" ,	//0
+		selectFromListItem = colors,					//0
+		selectType = value								//0
+	} ;
+	
+	inputColorFromArrayByValue2 color {					//1 {int and string do not "match"}
+		displayUse = input,								//0
+		displayName = "Color from array by value:" ,	//0
+		selectFromListItem = colors2,					//0
+		selectType = value								//0
+	} ;
+	
+	inputColorFromTableByValue color {					//0
+		displayUse = input,								//0
+		displayName = "Color from table by value:" ,	//0
+		selectFromListItem = ColorTable.colorValue,	//0
+		selectType = value								//0
+	} ;
+end	
+
+DataItem color string end
+
+DataTable ColorTable type matchValidTable  
+	{shared = no, resident = no}
+	
+	3 colorValue ColorTableValue ; 
+	3 colorCode ColorCode ;  
+	
+	{contents = 
+		[
+			[ "red", 1 ],
+			[ "white", 2 ],
+			[ "blue", 3 ],
+			[ "yellow", 4 ],
+			[ "green", 5 ],
+			[ "purple", 6 ],
+			[ "orange", 7 ]
+		]}
+	
+end
+
+DataItem ColorTableValue char(10) end
+DataItem ColorCode smallInt end

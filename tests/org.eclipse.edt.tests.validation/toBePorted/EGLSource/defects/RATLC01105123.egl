@@ -1,0 +1,27 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Formgroup fg
+Form courseview type textForm {formSize=[50,50]}
+	studentid char(5)[7] {fieldLen = 5, position = [14,5], indexOrientation = down , columns = 1 , linesBetweenRows = 0 , spacesBetweenColumns = 1};
+end
+end
+
+Program pgm
+	use fg;
+	
+	function main()
+		mappos int;
+		if (mappos > size(CourseView.studentid))	//0
+		end
+	end
+end

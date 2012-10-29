@@ -15,6 +15,8 @@ import com.ibm.icu.util.StringTokenizer;
 
 public class PartTemplateException extends InterruptedException {
 	
+	private static final long serialVersionUID = 1L;
+
 	public PartTemplateException(String tException){
 		super(tException);
 	}

@@ -1,0 +1,52 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+PROGRAM TestReadScreenRecord type textUIProgram
+	
+	FUNCTION main()
+
+		fnvar String = "MyLastName";
+		
+		myForm myFormType_ScreenRecord;
+
+		openUI new Window {
+			name="simpleWindow",position = [2,2], size=[15,70], hasborder=yes
+			} 
+		end;
+
+		displayForm(myForm);
+
+		// We would like validation not to complain about this
+		openUI { displayonly=no }				// 0
+			activeForm.SR						// 0
+			bind fnvar, "literal last name"		// 0
+		end;									// 0
+		
+		xx char(1);
+		myPrompt Prompt {message="press any key to terminate this test...", isChar=yes};	
+		openUI myPrompt bind xx end;
+		
+	END
+END
+
+RECORD myFormType_ScreenRecord TYPE ConsoleForm { formsize = [14,50] }
+
+	* { position=[2,5], value="First Name" };
+	firstName ConsoleField { 
+		name="firstName", position=[2,20], fieldLen=15, value="" };
+
+	* { position=[3,5], value="Last Name" };
+	lastName ConsoleField { 
+		name="lastName", position=[3,20], fieldLen=8, value="" };
+
+	SR Dictionary { fn=firstName, ln=lastName };
+END

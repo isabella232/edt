@@ -1,0 +1,64 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR VAG
+
+Record GRFM01NEWUI type VGUIRecord  {
+  runValidatorFromProgram = yes, commandValueItem = SUBMIT_VALUE,
+  title = "Add New Facility"
+}
+  3 GRFM01UI-FORM char(115) 
+    { uiType = uiForm, alias = "GRFM01UIx002DFORM",
+      @programLinkData{ 
+        programName = "FM01NEW", uiRecordName = "GRFM01NEWUI", newWindow = no,
+        linkParms = [ 
+          @LinkParameter { name = "VAGen_ACTION", value = "INFO" }  
+        ] } } ; 
+    4 * char(24) { uiType = none  } ; 
+      5 FAC_TYPE char(2) 
+        { uiType = output,
+          displayName = "Type:" } ; 
+      5 FACTPE_PROSE char(20) 
+        { uiType = output, runValidatorFromProgram = yes, 
+          fillCharacter = " ", inputRequired = yes,
+          displayName = "New Prose:" } ; 
+      5 FAC_OLD_FAC_TYPE char(2)
+        { uiType = output,
+          displayName = "Old Type:" } ; 
+    4 * char(8) { uiType = none  } ; 
+      5 FAC_NBR char(2) 
+        { uiType = inputOutput, runValidatorFromProgram = yes, 
+          fillCharacter = " ", inputRequired = yes,
+          displayName = "Unit:" } ; 
+      5 FAC_SHORT_PROSE char(4)
+        { uiType = inputOutput, runValidatorFromProgram = yes, 
+          fillCharacter = " ", inputRequired = yes,
+          displayName = "New Short Prose:" } ; 
+      5 FAC_OLD_FAC_NBR char(2)
+        { uiType = inputOutput, runValidatorFromProgram = yes, 
+          fillCharacter = " ", inputRequired = yes,
+          displayName = "Old Unit:" } ; 
+    4 * char(51) { uiType = none  } ; 
+      5 FAC_PROSE char(50)
+        { uiType = inputOutput,
+          displayName = "Long Prose:" } ; 
+      5 FAC_ACTIVE_STAT char(1)
+        { uiType = inputOutput, upperCase = yes,
+          fillCharacter = " ", inputRequired = yes,
+          displayName = "Status:" } ; 
+    4 QUITBUTTON char(6) 
+      { uiType = submitBypass,
+        displayName = "Quit"  }
+      = "QUIT" ; 
+    4 SUBMIT_VALUE char(6) { uiType = none } ; 
+    4 VAGen_ACTION char(20) 
+      {   uiType = none, alias = "ACTION" } ; 
+end

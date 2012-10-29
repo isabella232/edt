@@ -18,21 +18,16 @@ import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
 import org.eclipse.edt.compiler.core.ast.ContinueStatement;
-import org.eclipse.edt.compiler.core.ast.ConverseStatement;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.Delegate;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
-import org.eclipse.edt.compiler.core.ast.DisplayStatement;
 import org.eclipse.edt.compiler.core.ast.ElseBlock;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.ExitStatement;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.ForwardStatement;
-import org.eclipse.edt.compiler.core.ast.FreeSQLStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
@@ -44,24 +39,17 @@ import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.MoveStatement;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
-import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
 import org.eclipse.edt.compiler.core.ast.PrepareStatement;
-import org.eclipse.edt.compiler.core.ast.PrintStatement;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.ReturnStatement;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.SetStatement;
-import org.eclipse.edt.compiler.core.ast.ShowStatement;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.core.ast.TransferStatement;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
@@ -129,40 +117,10 @@ public class EGLUIHelp {
 				//part types
 				if (node instanceof DataItem)
 					return IUIHelpConstants.EGL_EDITOR_DATA_ITEM;
-				if (node instanceof DataTable) {
-					DataTable dataTable = (DataTable) node;
-					if (dataTable.hasSubType()) {
-						if(dataTable.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.DATATABLE_SUBTYPE_BASIC))
-							return IUIHelpConstants.EGL_EDITOR_TABLE_BASICTABLE;
-						if(dataTable.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.DATATABLE_SUBTYPE_MATCHINVALID))
-							return IUIHelpConstants.EGL_EDITOR_TABLE_MATCHINVALIDTABLE;
-						if(dataTable.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.DATATABLE_SUBTYPE_MATCHVALID))
-							return IUIHelpConstants.EGL_EDITOR_TABLE_MATCHVALIDTABLE;
-						if(dataTable.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.DATATABLE_SUBTYPE_MSG))
-							return IUIHelpConstants.EGL_EDITOR_TABLE_MSGTABLE;
-						if(dataTable.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.DATATABLE_SUBTYPE_RANGECHK))
-							return IUIHelpConstants.EGL_EDITOR_TABLE_RANGECHKTABLE;
-					}
-					return IUIHelpConstants.EGL_EDITOR_DATA_TABLE;
-				}
 				if (node instanceof Delegate)
 					return IUIHelpConstants.EGL_EDITOR_DELEGATE;
 				if (node instanceof ExternalType)
 					return IUIHelpConstants.EGL_EDITOR_EXTERNAL_TYPE;
-				if (node instanceof TopLevelForm) {
-					TopLevelForm form = (TopLevelForm) node;
-					if (form.hasSubType()) {
-						if(form.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.FORM_SUBTYPE_PRINT))
-							return IUIHelpConstants.EGL_EDITOR_FORM_PRINTFORM;
-						if(form.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.FORM_SUBTYPE_TEXT))
-							return IUIHelpConstants.EGL_EDITOR_FORM_TEXTFORM;
-					}
-					return IUIHelpConstants.EGL_EDITOR_FORM;
-				}
-				if (node instanceof FormGroup)
-					return IUIHelpConstants.EGL_EDITOR_FORM_GROUP;
-				if (node instanceof TopLevelFunction)
-					return IUIHelpConstants.EGL_EDITOR_FUNCTION;
 				if (node instanceof Interface)
 					return IUIHelpConstants.EGL_EDITOR_INTERFACE;
 				if (node instanceof Library) {
@@ -192,26 +150,18 @@ public class EGLUIHelp {
 					if (record.hasSubType()) {
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_BASIC))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_BASICRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_CONSOLE_FORM))
-							return IUIHelpConstants.EGL_EDITOR_RECORD_CONSOLEFORM;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_DLI_SEGMENT))
-							return IUIHelpConstants.EGL_EDITOR_RECORD_DLISEGMENT;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_EXCEPTION))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_EXCEPTION;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_INDEXED))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_INDEXRECORD;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_MQ))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_MQRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_PSB_RECORD))
-							return IUIHelpConstants.EGL_EDITOR_RECORD_PSBRECORD;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_RELATIVE))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_RELATIVERECORD;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_SERIAL))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_SERIALRECORD;
 						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_SQl))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_SQLRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_VGUI))
-							return IUIHelpConstants.EGL_EDITOR_RECORD_VGUIRECORD;
 					}
 					return IUIHelpConstants.EGL_EDITOR_RECORD;
 				}
@@ -231,16 +181,6 @@ public class EGLUIHelp {
 				//nested part types
 				if (node instanceof NestedFunction)
 					return IUIHelpConstants.EGL_EDITOR_NESTED_FUNCTION;
-				if (node instanceof NestedForm) {
-					NestedForm form = (NestedForm) node;
-					if (form.hasSubType()) {
-						if(form.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.FORM_SUBTYPE_PRINT))
-							return IUIHelpConstants.EGL_EDITOR_FORM_PRINTFORM;
-						if(form.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.FORM_SUBTYPE_TEXT))
-							return IUIHelpConstants.EGL_EDITOR_FORM_TEXTFORM;
-					}
-					return IUIHelpConstants.EGL_EDITOR_NESTED_FORM;
-				}
 				
 				//statements
 				if (node instanceof AddStatement)
@@ -255,12 +195,8 @@ public class EGLUIHelp {
 					return IUIHelpConstants.EGL_EDITOR_CLOSE_STATEMENT;
 				if (node instanceof ContinueStatement)
 					return IUIHelpConstants.EGL_EDITOR_CONTINUE_STATEMENT;
-				if (node instanceof ConverseStatement)
-					return IUIHelpConstants.EGL_EDITOR_CONVERSE_STATEMENT;
 				if (node instanceof DeleteStatement)
 					return IUIHelpConstants.EGL_EDITOR_DELETE_STATEMENT;
-				if (node instanceof DisplayStatement)
-					return IUIHelpConstants.EGL_EDITOR_DISPLAY_STATEMENT;
 				if (node instanceof ElseBlock)
 					return IUIHelpConstants.EGL_EDITOR_ELSE_BLOCK;
 				if (node instanceof ExecuteStatement)
@@ -273,8 +209,6 @@ public class EGLUIHelp {
 					return IUIHelpConstants.EGL_EDITOR_FOREACH_STATEMENT;
 				if (node instanceof ForwardStatement)
 					return IUIHelpConstants.EGL_EDITOR_FORWARD_STATEMENT;
-				if (node instanceof FreeSQLStatement)
-					return IUIHelpConstants.EGL_EDITOR_FREESQL_STATEMENT;
 				if (node instanceof FunctionInvocation)
 					return IUIHelpConstants.EGL_EDITOR_FUNCTION_INVOCATION_STATEMENT;
 				if (node instanceof GetByKeyStatement)
@@ -289,22 +223,14 @@ public class EGLUIHelp {
 					return IUIHelpConstants.EGL_EDITOR_MOVE_STATEMENT;
 				if (node instanceof OpenStatement)
 					return IUIHelpConstants.EGL_EDITOR_OPEN_STATEMENT;
-				if (node instanceof OpenUIStatement)
-					return IUIHelpConstants.EGL_EDITOR_OPENUI_STATEMENT;
 				if (node instanceof PrepareStatement)
 					return IUIHelpConstants.EGL_EDITOR_PREPARE_STATEMENT;
-				if (node instanceof PrintStatement)
-					return IUIHelpConstants.EGL_EDITOR_PRINT_STATEMENT;
 				if (node instanceof ReplaceStatement)
 					return IUIHelpConstants.EGL_EDITOR_REPLACE_STATEMENT;
 				if (node instanceof ReturnStatement)
 					return IUIHelpConstants.EGL_EDITOR_RETURN_STATEMENT;
 				if (node instanceof SetStatement)
 					return IUIHelpConstants.EGL_EDITOR_SET_STATEMENT;
-				if (node instanceof ShowStatement)
-					return IUIHelpConstants.EGL_EDITOR_SHOW_STATEMENT;
-				if (node instanceof TransferStatement)
-					return IUIHelpConstants.EGL_EDITOR_TRANSFER_STATEMENT;
 				if (node instanceof TryStatement)
 					return IUIHelpConstants.EGL_EDITOR_TRY_STATEMENT;
 				if (node instanceof WhileStatement)

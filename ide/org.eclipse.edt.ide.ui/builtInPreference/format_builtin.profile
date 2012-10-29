@@ -99,11 +99,6 @@ end"/>
     <category display="%White_Space" id="whiteSpace">
       <group display="">
 <!-- comma -->
-        <pref altDisplay="%Data.%Primitives__char_numeric_time_interval.%Before_comma" display="%Comma.%Before_comma.%Numeric_primitives" id="beforeComma.numericPrimitive" value="false">
-          <preview code="Record myRecord di decimal(5, 2); //Numeric primitive&#13;
-end"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
         <pref altDisplay="%Data.%Data_declarations_class_and_local.%Before_comma" display="%Comma.%Before_comma.%Data_declarations_class_and_local" id="beforeComma.dataDecl" value="false">
           <preview code="
 Library myhandler
@@ -119,11 +114,12 @@ end"/>
         </pref>
         <pref altDisplay="%Statements.%Set_statement.%Before_comma" display="%Comma.%Before_comma.%Set_statement" id="beforeComma.setStatement" value="false">
           <preview code="
+handler myhandler;
 function foo1()
 set myname, yourname cursor , full, &#13;
 blink,underline,reverse,modified,defaultcolor,bold,skip,empty; //Set statement&#13;
 end
-"/>
+end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
 <!-- since we do not let user create Enumeration, let's hide this -->
@@ -136,19 +132,22 @@ end"/>
         </pref>
         <pref altDisplay="%Statements.%Case_statement.%When_clause.%Before_comma" display="%Comma.%Before_comma.%Case_statement_when_clause" id="beforeComma.when" value="false">
           <preview code="
+handler myHandler
 Function foo9()
 case (i) //case statement &#13;
 when (i + 5, 7) //when clause in a case statement &#13;
 end 
 end
-"/>
+end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Foreach.%Before_comma" display="%Comma.%Before_comma.%Foreach" id="beforeComma.forEach" value="false">
           <preview code="
+handler myHandler
 function foo8()
 foreach(x from myResultSetID) //into clause in a forEach statement &#13;
 end 
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
@@ -168,16 +167,12 @@ end"/>
           <preview ref="whiteSpace.beforeLParen.callStmt"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Statements.%New_expression.%Before_comma" display="%Comma.%Before_comma.%New_expression" id="beforeComma.newExpr" value="false">
-          <preview ref="whiteSpace.beforeLParen.newExpr"/>
+        <pref altDisplay="%Statements.%Named_types.%Before_comma" display="%Comma.%Before_comma.%Named_types" id="beforeComma.namedType" value="false">
+          <preview ref="whiteSpace.beforeLParen.namedType"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Function_parameters.%Before_comma" display="%Comma.%Before_comma.%Function_parameters" id="beforeComma.funcParms" value="false">
+        <pref altDisplay="%Parameters_function.%Function_parameters.%Before_comma" display="%Comma.%Before_comma.%Function_parameters" id="beforeComma.funcParms" value="false">
           <preview ref="whiteSpace.beforeLParen.funcParms"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Program_parameters.%Before_comma" display="%Comma.%Before_comma.%Program_parameters" id="beforeComma.pgmParms" value="false">
-          <preview ref="whiteSpace.beforeLParen.pgmParms"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Property_settings.%Before_comma" display="%Comma.%Before_comma.%Property_settings" id="beforeComma.settings" value="false">
@@ -196,12 +191,8 @@ end"/>
         <pref altDisplay="%Statements.%Use_statement.%Before_comma" display="%Comma.%Before_comma.%Use_statement" id="beforeComma.useStatement" value="false">
           <preview code="
 library myLib
-use form1, form2, form3, pkga.pkgb.form6; //Use statement&#13;
+use library1, library2, library3, pkga.pkgb.library6; //Use statement&#13;
 end"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
-        <pref altDisplay="%Data.%Primitives__char_numeric_time_interval.%After_comma" display="%Comma.%After_comma.%Numeric_primitives" id="afterComma.numericPrimitive" value="true">
-          <preview ref="whiteSpace.beforeComma.numericPrimitive"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Data.%Data_declarations_class_and_local.%After_comma" display="%Comma.%After_comma.%Data_declarations_class_and_local" id="afterComma.dataDecl" value="true">
@@ -237,16 +228,12 @@ end"/>
           <preview ref="whiteSpace.beforeLParen.callStmt"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Statements.%New_expression.%After_comma" display="%Comma.%After_comma.%New_expression" id="afterComma.newExpr" value="true">
-          <preview ref="whiteSpace.beforeLParen.newExpr"/>
+        <pref altDisplay="%Statements.%Named_types.%After_comma" display="%Comma.%After_comma.%Named_types" id="afterComma.namedType" value="true">
+          <preview ref="whiteSpace.beforeLParen.namedType"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Function_parameters.%After_comma" display="%Comma.%After_comma.%Function_parameters" id="afterComma.funcParms" value="true">
+        <pref altDisplay="%Parameters_function.%Function_parameters.%After_comma" display="%Comma.%After_comma.%Function_parameters" id="afterComma.funcParms" value="true">
           <preview ref="whiteSpace.beforeLParen.funcParms"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Program_parameters.%After_comma" display="%Comma.%After_comma.%Program_parameters" id="afterComma.pgmParms" value="true">
-          <preview ref="whiteSpace.beforeLParen.pgmParms"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Property_settings.%After_comma" display="%Comma.%After_comma.%Property_settings" id="afterComma.settings" value="true">
@@ -263,7 +250,7 @@ end"/>
         </pref>
 <!-- semicolon -->
         <pref altDisplay="%Statements.%Before_semicolon" display="%Semicolon.%Statements" id="beforeSemicolon.statements" value="false">
-          <preview code="function foo() a int; a = 5+6;return;end"/>
+          <preview code="handler myHandler function foo() a int; a = 5+6;return;end end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
 <!-- braces -->
@@ -282,10 +269,12 @@ end"/>
 <!-- brackets -->
         <pref altDisplay="%Array.%Before_opening_bracket_" display="%Bracket_.%Array.%Before_opening_bracket_" id="beforeLBracket.array" value="false">
           <preview code="
+handler myHandler
  function foo()
   myrec.a[1][2][3][4] = 3;
   a[1][2][3][4] = 3;
- end"/>
+ end
+end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Array.%After_opening_bracket_" display="%Bracket_.%Array.%After_opening_bracket_" id="afterLBracket.array" value="false">
@@ -297,64 +286,72 @@ end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
 <!-- parenthesis -->
-        <pref altDisplay="%Parameters_function_and_program.%Function_parameters.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Function_parameters" id="beforeLParen.funcParms" value="false">
+        <pref altDisplay="%Parameters_function.%Function_parameters.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Function_parameters" id="beforeLParen.funcParms" value="false">
           <preview code="
+handler myHandler
 function foo5(a int , b int in, c int in, d string out) //Function parameters &#13;
-end"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Program_parameters.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Program_parameters" id="beforeLParen.pgmParms" value="false">
-          <preview code="
-program myPgm1 type BasicProgram(parm1 int, parm2 string, parm3 double) //Program parameters &#13;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Return.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Return" id="beforeLParen.return" value="false">
-          <preview code="function foo1() returns (int) //Return declaration &#13;
+          <preview code="handler myHandler
+function foo1() returns (int) //Return declaration &#13;
 return (4); //Return statement &#13;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%If.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%If" id="beforeLParen.if" value="false">
           <preview code="
+handler myHandler
 function foo2(a int, i int)
 if (i == 5) //If statement &#13;
 a = i;end 
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%While.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%While" id="beforeLParen.while" value="false">
           <preview code="
+handler myHandler
 function foo3(i int)
 while (i &lt; 5) continue; //While statement &#13;
 end 
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%For.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%For" id="beforeLParen.for" value="false">
           <preview code="
+handler myHandler
 function foo4(i int, a int)
 for (i from 1 to 10 by 1) //For statement &#13;
 a+=i;
 end 
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Foreach.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Foreach" id="beforeLParen.forEach" value="false">
           <preview code="
+handler myHandler
 function foo5(i int in)
 forEach (j from selectEmp) //ForEach statement &#13;
 i = i + 1;
 continue;
 end 
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Call_statement.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Call_statement" id="beforeLParen.callStmt" value="false">
           <preview code="
+handler myHandler
 function foo7()
 call &quot;testproj&quot; (&quot;abc&quot;, &quot;xyz&quot;); //Call statement &#13;
-call MYPGM(myInt, myChar, myInt, myInt); //Call statement &#13;
+call MyService.MyFunc(myInt, myString, myInt, myInt) returning to handleReturn onException handleException; //Call statement &#13;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
@@ -364,20 +361,24 @@ end"/>
         </pref>
         <pref altDisplay="%Statements.%Try_onException_block.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Try_onException_block" id="beforeLParen.onException" value="false">
           <preview code="
+handler myHandler
 function foo10()
 try
 a=8;
 onexception(e MyException) //OnException caluse in try statement &#13;
 a=0;
 end
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Statements.%New_expression.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%New_expression" id="beforeLParen.newExpr" value="false">
+        <pref altDisplay="%Statements.%Named_types.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Named_types" id="beforeLParen.namedType" value="false">
           <preview code="
+handler myHandler
 function foo11()
-a Text = new Text(&quot;label&quot;); //New expression &#13;
-myType myType = new myType(a, b, 5); //New expression &#13;
+a Text = new Text(&quot;label&quot;); //Named type &#13;
+myType myType = new myType(a, b, 5); //Named type &#13;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
@@ -413,25 +414,16 @@ end"/>
         </pref>
         <pref altDisplay="%Statements.%Function_Invocation.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Function_Invocation" id="beforeLParen.funcInvoc" value="false">
           <preview code="
+handler myHandler
 function foo()
 myService.foo(a, this, &quot;x&quot;, 3, new Text); //Function invocation&#13;
 myPgm.foo1(b, c); //Function invocation &#13;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Data.%Primitives__char_numeric_time_interval.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Primitives__char_numeric_time_interval" id="beforeLParen.primitive" value="false">
-          <preview code="
-record myRecord diint decimal(5, 2); //Primitive numeric &#13;
-ditimestamp timestamp(&quot;yyyyMMddhhmmssffffff&quot;);//Primitive time &#13;
-end"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Function_parameters.%After_opening_parenthesis_" display="%Parenthesis_.%After_opening_parenthesis_.%Function_parameters" id="afterLParen.funcParms" value="false">
+        <pref altDisplay="%Parameters_function.%Function_parameters.%After_opening_parenthesis_" display="%Parenthesis_.%After_opening_parenthesis_.%Function_parameters" id="afterLParen.funcParms" value="false">
           <preview ref="whiteSpace.beforeLParen.funcParms"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Program_parameters.%After_opening_parenthesis_" display="%Parenthesis_.%After_opening_parenthesis_.%Program_parameters" id="afterLParen.pgmParms" value="false">
-          <preview ref="whiteSpace.beforeLParen.pgmParms"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Return.%After_opening_parenthesis_" display="%Parenthesis_.%After_opening_parenthesis_.%Return" id="afterLParen.return" value="false">
@@ -466,8 +458,8 @@ end"/>
           <preview ref="whiteSpace.beforeLParen.onException"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Statements.%New_expression.%After_opening_parenthesis_" display="%Parenthesis_.%After_opening_parenthesis_.%New_expression" id="afterLParen.newExpr" value="false">
-          <preview ref="whiteSpace.beforeLParen.newExpr"/>
+        <pref altDisplay="%Statements.%Named_types.%After_opening_parenthesis_" display="%Parenthesis_.%After_opening_parenthesis_.%Named_types" id="afterLParen.namedType" value="false">
+          <preview ref="whiteSpace.beforeLParen.namedType"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Case_statement.%After_opening_parenthesis_" display="%Parenthesis_.%After_opening_parenthesis_.%Case_statement" id="afterLParen.case" value="false">
@@ -486,16 +478,8 @@ end"/>
           <preview ref="whiteSpace.beforeLParen.funcInvoc"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Data.%Primitives__char_numeric_time_interval.%After_opening_parenthesis_" display="%Parenthesis_.%After_opening_parenthesis_.%Primitives__char_numeric_time_interval" id="afterLParen.primitive" value="false">
-          <preview ref="whiteSpace.beforeLParen.primitive"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Function_parameters.%Before_closing_parenthesis_" display="%Parenthesis_.%Before_closing_parenthesis_.%Function_parameters" id="beforeRParen.funcParms" value="false">
+        <pref altDisplay="%Parameters_function.%Function_parameters.%Before_closing_parenthesis_" display="%Parenthesis_.%Before_closing_parenthesis_.%Function_parameters" id="beforeRParen.funcParms" value="false">
           <preview ref="whiteSpace.beforeLParen.funcParms"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
-        <pref altDisplay="%Parameters_function_and_program.%Program_parameters.%Before_closing_parenthesis_" display="%Parenthesis_.%Before_closing_parenthesis_.%Program_parameters" id="beforeRParen.pgmParms" value="false">
-          <preview ref="whiteSpace.beforeLParen.pgmParms"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Return.%Before_closing_parenthesis_" display="%Parenthesis_.%Before_closing_parenthesis_.%Return" id="beforeRParen.return" value="false">
@@ -530,8 +514,8 @@ end"/>
           <preview ref="whiteSpace.beforeLParen.onException"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Statements.%New_expression.%Before_closing_parenthesis_" display="%Parenthesis_.%Before_closing_parenthesis_.%New_expression" id="beforeRParen.newExpr" value="false">
-          <preview ref="whiteSpace.beforeLParen.newExpr"/>
+        <pref altDisplay="%Statements.%Named_types.%Before_closing_parenthesis_" display="%Parenthesis_.%Before_closing_parenthesis_.%Named_types" id="beforeRParen.namedType" value="false">
+          <preview ref="whiteSpace.beforeLParen.namedType"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Case_statement.%Before_closing_parenthesis_" display="%Parenthesis_.%Before_closing_parenthesis_.%Case_statement" id="beforeRParen.case" value="false">
@@ -550,24 +534,24 @@ end"/>
           <preview ref="whiteSpace.beforeLParen.funcInvoc"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Data.%Primitives__char_numeric_time_interval.%Before_closing_parenthesis_" display="%Parenthesis_.%Before_closing_parenthesis_.%Primitives__char_numeric_time_interval" id="beforeRParen.primitive" value="false">
-          <preview ref="whiteSpace.beforeLParen.primitive"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
 <!-- operator -->
         <pref altDisplay="%Statements.%Assignment.%Before_operator" display="%Operator.%Before_operator.%Assignment" id="beforeOperator.assignment" value="true">
           <preview code="
+handler myHandler
 Function foo9(i int in)
 d myDataItem{align = none, fillCharacter = nullFill};
 a int = 6;
 a += i;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Binary.%Before_operator" display="%Operator.%Before_operator.%Binary" id="beforeOperator.binary" value="true">
           <preview code="
+handler myHandler
 Function foo7(a int, b int, c int)
 a = b + c+d+e+f+g+h+i;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
@@ -577,9 +561,11 @@ end"/>
         </pref>
         <pref altDisplay="%Statements.%Unary___.%After_operator" display="%Operator.%After_operator.%Unary___" id="afterOperator.unary" value="false">
           <preview code="
+handler myHandler
 Function foo8()
 a int = -1;
 b boolean = !true;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
@@ -587,23 +573,44 @@ end"/>
           <preview ref="whiteSpace.beforeOperator.binary"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref altDisplay="%Data.%Nullable_type.%Before_question_mark" display="%Question_mark.%Nullable_type" id="beforeQuestion.nullableType" value="false">
-          <preview code="Function foo(a myType? ) //Nullable type &#13;
-          end"/>
+        <pref altDisplay="%Data.%Nullable_fields.%Before_question_mark" display="%Question_mark.%Nullable_fields" id="beforeQuestion.nullableFields" value="false">
+          <preview code="handler myHandler
+Function foo()
+i int?; // Field &#13;
+end
+end"/>
+          <egl:control.ref ref="wsTreeControl"/>
+        </pref>
+        <pref altDisplay="%Data.%Nullable_parameters.%Before_question_mark" display="%Question_mark.%Nullable_parameters" id="beforeQuestion.nullableParameters" value="false">
+          <preview code="handler myHandler
+Function foo(i int?)  // Parameter &#13;
+end
+end"/>
+          <egl:control.ref ref="wsTreeControl"/>
+        </pref>
+        <pref altDisplay="%Data.%Nullable_returns.%Before_question_mark" display="%Question_mark.%Nullable_returns" id="beforeQuestion.nullableReturns" value="false">
+          <preview code="handler myHandler
+Function foo() returns(int?) // Returns &#13;
+end
+end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
 <!-- colon -->
         <pref altDisplay="%Array.%Sub_string_access.%Before_colon_" display="%Colon.%Before_colon_.%Sub_string_access" id="beforeColon.subString" value="true">
-          <preview code="Function foo()
+          <preview code="handler myHandler
+Function foo()
 a String;
 a[3:5]=&quot;abc&quot;;      //Sub string access&#13;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref altDisplay="%Statements.%Label_statement.%Before_colon_" display="%Colon.%Before_colon_.%Label_statement" id="beforeColon.labelStmt" value="false">
-          <preview code="function foo1()
+          <preview code="handler myHandler
+function foo1()
 sharedLabel:     //Label statement&#13;
 goto sharedLabel;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
@@ -665,14 +672,17 @@ end"/>
         </pref>
         <pref display="%EGL_language.%Call_statement" id="callStmt" value="2">
            <preview code="
+handler myHandler
 function fooCallStmts()
 &#13;&#13;//Call statement &#13;
 call svr1.foo(param1, param2) returning to myCallbackFunc onException myErrorCallbackFunc {timeout=15000};
+end
 end"/>
            <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref display="%EGL_language.%IO_statement" id="ioStmt" value="2">
           <preview code="
+handler myHandler
 function fooIOStmts()
 
 &#13;&#13;//Add statement &#13;
@@ -693,6 +703,7 @@ open sqlstatement from ds;
 &#13;&#13;//Prepare statement &#13;
 prepare sqlStatement from ds with sqlLiteral;
 
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
@@ -700,30 +711,34 @@ end"/>
           <preview ref="whiteSpace.beforeComma.dataDecl"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref display="%EGL_language.%Parameters_function_and_program" id="parameters" value="1">
+        <pref display="%EGL_language.%Parameters_function" id="parameters" value="1">
           <preview code="
-program myPgm1 type BasicProgram(parm1 int, parm2 string, parm3 double) //Program parameter list &#13;
-end
+program myPgm1
 function foo5(a int , b int in, c int in, d string out) //Function parameter list &#13;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref display="%EGL_language.%Expressions_list" id="exprs" value="1">
           <preview code="
+handler myHandler
 Function foo2()
 case (i) 
 when (i + 5, 7) //Expression list in when clause in a case statement &#13;
 end&#13;&#13;
 
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref display="%EGL_language.%Arguments_list" id="args" value="2">
           <preview code="
+handler myHandler
 Function foo()
 myService.foo(a, this, &quot;x&quot;, 3, new Text); //Function invocation&#13;
 call foo4(4, 5, a); //Call statement &#13;
 myType myType = new myType(a, b, 5); //New expression &#13;
+end
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>

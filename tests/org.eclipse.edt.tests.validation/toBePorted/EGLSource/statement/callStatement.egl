@@ -1,0 +1,125 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+record point
+	x int;
+	y int;	
+end
+
+record fixrecord
+10 i int;
+end
+
+record flexrecord
+i int;
+end
+
+record flexrecord2
+i int;
+end
+
+record pscrec type PSBRecord
+i fixrecord {@pcb {pcbName = "myname"}};
+end
+
+Program testproj
+function main()
+	pt point;
+	a any;
+	x pscrec;
+	call "testcalledprog"(pt{x=1, y=2}); // 1 A set values block is not allowed on an argument in a call statement. {7515, EGLMESSAGE_SET_VALUES_BLOCK_NOT_VALID_AS_CALL_ARG}
+	call "noexistproj" (555);//1
+
+	call "noexistproj" ("abc");//0
+
+	call "textproj" (a as string) {IsNoRefresh = yes, IsExternal = yes};	//0
+	call "textproj" (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31) ; // 1 The program textproj(string) is not applicable for the arguments (int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int)
+	call "text2proj" (x) ;// 2 The PSBRecord variable x cannot be used as an argument on a call or function invocation statement | The program text2proj() is not applicable for the arguments (pscrec)	
+end
+end
+program textproj (name string)
+	function main()
+	end
+end
+
+program text2proj ()
+	function main()
+	end
+end
+
+Program testcalledprog (pt point)
+function main()
+end
+
+end
+
+Program pgm
+	
+	course Course;
+	pcb1 DB_PCBRecord;
+	
+	function main()
+	
+		call GetCourse (course, pcb1); //0
+	end
+end
+
+// Need to move to program part validator--> Invalid parameter emptyCrse. There must be at least one structure item in the contents of the record emptyCrse | A program cannot receive a PCB as a parameter unless the DLI property is specified for the program
+Program GetCourse(emptyCrse COURSE, pcb1 DB_PCBRecord) 
+	function main()
+	end
+end
+
+Record Course type DLISegment end
+
+Service MyCalledService
+end
+
+Program refCallingProgram
+	function main()
+		myWindow window;
+		serviceObj MyCalledService;
+		call "refCalledProgram" (myWindow,serviceObj);	// 3 call argument is invalid|call argument is invalid|not applicable for the arguments
+		
+
+	end
+end
+
+Program refCalledProgram( p1 window )
+	function main() end
+end
+
+Record fixedRec
+	10 item1 int;
+end
+
+Program mqCallsTest
+	function main()
+		myInt int;
+		myChar char(1);
+		myFixedRec fixedRec;
+		
+		call ELAQBGIN(myInt, myChar, myInt, myInt);			//0
+		call "ELAQBGIN"(myInt, myChar, myInt, myInt);		//0
+		call ELAQBGIN(myInt, myFixedRec, myInt, myInt);		//0
+		call "ELAQBGIN"(myInt, myFixedRec, myInt, myInt);	//0
+		
+		call ELAQBGIN(myInt, myChar, myInt);						//1
+		call "ELAQBGIN"(myInt, myChar, myInt);						//1
+		call ELAQBGIN(myInt, myFixedRec, myInt, myInt, myInt);		//1
+		call "ELAQBGIN"(myInt, myFixedRec, myInt, myInt, myInt);	//1
+	end
+end
+
+
+
+
+

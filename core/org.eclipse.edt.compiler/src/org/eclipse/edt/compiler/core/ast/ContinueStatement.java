@@ -39,7 +39,6 @@ public class ContinueStatement extends Statement {
 		public static final ContinueModifier FOR = new DefaultContinueModifier();//$NON-NLS-1$
 		public static final ContinueModifier FOREACH = new DefaultContinueModifier();//$NON-NLS-1$
 		public static final ContinueModifier WHILE = new DefaultContinueModifier();//$NON-NLS-1$
-		public static final ContinueModifier OPENUI = new DefaultContinueModifier();//$NON-NLS-1$
 		
 		protected Object clone() throws CloneNotSupportedException{
 			return this;
@@ -88,10 +87,6 @@ public class ContinueStatement extends Statement {
 	
 	public boolean isContinueWhile() {
 		return continueModifierOpt == DefaultContinueModifier.WHILE;
-	}
-	
-	public boolean isContinueOpenUI() {
-		return continueModifierOpt == DefaultContinueModifier.OPENUI;
 	}
 	
 	public boolean isContinueLabel() {

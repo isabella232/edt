@@ -183,20 +183,8 @@ public class EGLPartSearchProposalHandler extends EGLAbstractProposalHandler {
 			case IEGLSearchConstants.PROGRAM :
 				partTypeName = IEGLConstants.KEYWORD_PROGRAM;
 				break;
-			case IEGLSearchConstants.FORMGROUP :
-				partTypeName = IEGLConstants.KEYWORD_FORMGROUP;
-				break;
-			case IEGLSearchConstants.FORM :
-				partTypeName = IEGLConstants.KEYWORD_FORM;
-				break;
-			case IEGLSearchConstants.ITEM :
-				partTypeName = IEGLConstants.KEYWORD_DATAITEM;
-				break;
 			case IEGLSearchConstants.RECORD :
 				partTypeName = IEGLConstants.KEYWORD_RECORD;
-				break;
-			case IEGLSearchConstants.TABLE :
-				partTypeName = IEGLConstants.KEYWORD_DATATABLE;
 				break;
 			case IEGLSearchConstants.FUNCTION :
 				partTypeName = IEGLConstants.KEYWORD_FUNCTION;
@@ -218,6 +206,12 @@ public class EGLPartSearchProposalHandler extends EGLAbstractProposalHandler {
 				break;
 			case IEGLSearchConstants.EXTERNALTYPE :
 				partTypeName = IEGLConstants.KEYWORD_EXTERNALTYPE;
+				break;
+			case IEGLSearchConstants.ENUMERATION :
+				partTypeName = IEGLConstants.KEYWORD_ENUMERATION;
+				break;
+			case IEGLSearchConstants.CLASS :
+				partTypeName = IEGLConstants.KEYWORD_CLASS;
 				break;
 			default :
 				partTypeName = ""; //$NON-NLS-1$

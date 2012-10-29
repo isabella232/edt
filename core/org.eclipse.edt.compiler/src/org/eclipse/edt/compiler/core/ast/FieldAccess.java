@@ -11,8 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -26,7 +25,7 @@ public class FieldAccess extends Expression {
 	private Expression primary;
 	private String ID;
 	
-	private IDataBinding dataBinding;
+	private Object element;
 
 	public FieldAccess(Expression primary, String ID, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -41,13 +40,14 @@ public class FieldAccess extends Expression {
 	}
 	
 	public String getID() {
-		return InternUtil.intern(ID);
+        return NameUtile.getAsName(ID);
 	}
 	
 	public String getCaseSensitiveID() {
-		return InternUtil.internCaseSensitive(ID);
+		return ID;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -56,23 +56,34 @@ public class FieldAccess extends Expression {
 		visitor.endVisit(this);
 	}
 	
-	public IDataBinding resolveDataBinding() {
-		return dataBinding;
+	@Override
+	public void setElement(Object elem) {
+		this.element = elem;
+		super.setElement(elem);
 	}
 	
-	public void setDataBinding(IDataBinding dataBinding) {
-		this.dataBinding = dataBinding;
+	@Override
+	public Object resolveElement() {
+		return element;
 	}
 	
+	@Override
 	public String getCanonicalString() {
 		return getPrimary().getCanonicalString() + "." + ID;
 	}
 	
+	@Override
 	public void setAttributeOnName(int attr, Object value) {
     	primary.setAttributeOnName(attr, value);
     }
 	
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new FieldAccess((Expression)primary.clone(), new String(ID), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return getPrimary().toString() + "." + ID;
 	}
 }

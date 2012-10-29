@@ -11,14 +11,20 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.ProgramBinding;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.ProgramParameter;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author winghong
  */
 public class ProgramScope extends FunctionContainerScope {
     
-    public ProgramScope(Scope parentScope, ProgramBinding programBinding) {
+    public ProgramScope(Scope parentScope, Program programBinding) {
         super(parentScope, programBinding);
     }
     
@@ -26,7 +32,37 @@ public class ProgramScope extends FunctionContainerScope {
         return true;
     }
     
-    public ProgramBinding getProgramBinding() {
-        return (ProgramBinding)functionContainerBinding;
+    public Program getProgramBinding() {
+        return (Program)functionContainerBinding;
+    }
+    
+    @Override
+    protected List<Member> findMemberInPart(String id) {
+    	Member parm = findMemberInParms(id);
+    	List<Member> result = super.findMemberInPart(id);
+    	if (parm == null) {
+    		return result;
+    	}
+    	else {
+    		if (result == null) {
+    			result = new ArrayList<Member>();
+    		}
+			result.add(parm);
+			return result;
+    	}
+    }
+    
+    private Member findMemberInParms(String id) {
+    	Program pgm = getProgramBinding();
+    	if (pgm == null) {
+    		return null;
+    	}
+    	for (ProgramParameter parm : pgm.getParameters()) {
+    		if (NameUtile.equals(id, parm.getName())) {
+    			return parm;
+    		}
+    	}
+    	return null;
+    		
     }
 }

@@ -1,0 +1,24 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record sqlLineItemFull type sqlRecord
+	{tableNames=[[DB2ADMIN.LINEITEM, DB2ADMIN.ITEM, DB2ADMIN.PRODUCT]], defaultSelectCondition = #sqlcondition{ORDERID = :orderid AND LINEITEM.ITEMID = ITEM.ITEMID AND ITEM.PRODUCTID = PRODUCT.PRODUCTID},
+	keyItems=[ORDERID, LINENUM, ITEMID, PRODUCTID]}
+
+	orderid orderidFull;					//0
+	linenum linenumFull {isReadOnly=yes};	//0
+	itemid int;
+	productid int;
+end
+
+dataitem orderidFull char(30) {isReadOnly = yes} end	//0
+dataitem linenumFull char(30) end

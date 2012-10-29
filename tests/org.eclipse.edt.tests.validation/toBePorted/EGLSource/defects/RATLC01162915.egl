@@ -1,0 +1,45 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+ExternalType et type JavaObject
+	publicField string;
+	private privateField string;
+	
+	static publicStaticField string;
+	private static privateStaticField string;
+end
+
+Program pgm
+	function main()
+		myET et;
+		
+		myET.publicField = "xxx";		//0
+		myET.privateField = "xxx";		//1
+		myET.publicStaticField = "xxx";	//0
+		myET.privateStaticField = "xxx";	//1		
+		et.publicStaticField = "xxx";	//0
+		et.privateStaticField = "xxx";	//1
+		
+		myET {
+			publicField = "xxx",		//0
+			privateField = "xxx",		//1
+			publicStaticField = "xxx",	//0
+			privateStaticField = "xxx"	//1		
+		};
+	end
+	
+	myET et {
+		publicField = "xxx",		//0
+		privateField = "xxx",		//1
+		publicStaticField = "xxx",	//0
+		privateStaticField = "xxx"	//1		
+	};
+end

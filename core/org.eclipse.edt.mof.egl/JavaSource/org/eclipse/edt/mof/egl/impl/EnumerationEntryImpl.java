@@ -13,13 +13,18 @@ package org.eclipse.edt.mof.egl.impl;
 
 import java.util.List;
 
+import org.eclipse.edt.mof.EEnum;
+import org.eclipse.edt.mof.EMemberContainer;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.impl.EEnumLiteralImpl;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class EnumerationEntryImpl extends EEnumLiteralImpl implements EnumerationEntry {
@@ -32,6 +37,8 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	private static int Slot_AccessKind=6;
 	private static int Slot_Container=7;
 	private static int totalSlots = 8;
+	
+	private String name;
 	
 	public static int totalSlots() {
 		return totalSlots + EEnumLiteralImpl.totalSlots();
@@ -56,6 +63,14 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = NameUtile.getAsName(getCaseSensitiveName());
+		}
+		return name;
+	}
+	
+	@Override
+	public String getCaseSensitiveName() {
 		return (String)slotGet(Slot_name);
 	}
 	
@@ -63,13 +78,12 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	public void setName(String value) {
 		slotSet(Slot_name, value);
 	}
-	
+		
 	@Override
 	public Type getType() {
 		return (Type)getContainer();
-//		return (Type)slotGet(Slot_type);
 	}
-	
+
 	@Override
 	public void setType(Type value) {
 		slotSet(Slot_type, value);
@@ -121,6 +135,15 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	}
 	
 	@Override
+	public EMemberContainer getDeclarer() {
+		EMemberContainer decl = super.getDeclarer();
+		if (decl == null) {
+			decl = (EEnum)getContainer();
+		}
+		return decl;
+	}
+	
+	@Override
 	public void setContainer(Container value) {
 		slotSet(Slot_Container, value);
 	}
@@ -166,6 +189,16 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	public void removeAnnotation(Annotation ann) {
 		getAnnotations().remove(ann);
 		
+	}
+
+	@Override
+	public Element resolveElement() {
+		return this;
+	}
+
+	@Override
+	public Member resolveMember() {
+		return this;
 	}
 	
 }

@@ -17,9 +17,9 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlOpenStatement;
 
 public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 
@@ -63,7 +63,7 @@ public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 			if (!TypeUtils.isDynamicType(targetType)) {
 				int i = 1;
 				for (Field f : targetType.getFields()) {
-					if (SQL.isKeyField(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())){
+					if (Utils.isKeyField(f) && Utils.isMappedSQLType((EGLClass)f.getType().getClassifier())){
 						genSetColumnValue(f, var_stmt, getExprString(stmt.getTargets().get(1), ctx), i, ctx, out);
 						out.println(";");
 						i++;

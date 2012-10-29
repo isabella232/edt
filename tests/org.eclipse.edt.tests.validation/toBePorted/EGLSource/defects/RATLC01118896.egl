@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record work_2_form type ConsoleForm { formSize = [25,80], showBrackets = no}
+	name ConsoleField[3] { position=[5,9],fieldlen = 50};				//0
+	id ConsoleField[3] { position=[5,60],fieldlen = 10,protect = yes};	//0
+	SA arrayDictionary {n=name,i=id};									//0
+end
+
+Record MyException type Exception
+	messageID boolean;		//1
+	message smallint;		//1
+	anotherField int;		//0
+end
+
+Handler reportHndlr type JasperReport
+	function getReportParameter(p1 string) returns(any) end		//1
+	getFieldValue int;											//1
+end

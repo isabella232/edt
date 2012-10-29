@@ -1,0 +1,217 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Formgroup fg
+	Form formA type textForm {formSize=[10,10]}
+		a int {position=[1,1]};
+		commonFieldAB int {position=[2,1]};
+	end
+	
+	Form formB type textForm {formSize=[10,10]}
+		b int {position=[1,1]};
+		commonFieldAB int {position=[2,1]};
+		commonFieldBC int {position=[3,1]};
+	end
+	
+	Form formC type textForm {formSize=[10,10]}
+		c int {position=[1,1]};
+		commonFieldBC int {position=[2,1]};
+	end
+end
+
+Formgroup fg2
+	Form formA type textForm {formSize=[10,10]}
+		a int {position=[1,1]};
+		commonFieldAB int {position=[2,1]};
+	end
+end
+
+Program pgm1 type TextUIProgram {allowUnqualifiedItemReferences = yes}
+	use fg;
+	
+	function main() end
+	
+	function f1()
+		a = 1; b = 2; c = 3;	//0
+		commonFieldAB = 5;		//1 ambiguous
+		commonFieldBC = 5;		//1 ambiguous
+	end
+	
+	function f2()
+		converse formA;			//0
+		a = 1; b = 2; c = 3;	//0
+		commonFieldAB = 5;		//0
+		commonFieldBC = 5;		//1 ambiguous
+	end
+	
+	function f3()
+		converse formB;			//0
+		a = 1; b = 2; c = 3;	//0
+		commonFieldAB = 5;		//0
+		commonFieldBC = 5;		//0
+	end
+	
+	function f4()
+		converse formC;			//0
+		a = 1; b = 2; c = 3;	//0
+		commonFieldAB = 5;		//1 ambiguous
+		commonFieldBC = 5;		//0
+	end
+end
+
+Program pgm2 type TextUIProgram {allowUnqualifiedItemReferences = yes}
+	use fg.formA, fg.formB;
+	
+	function main() end
+	
+	function f1()
+		a = 1; b = 2;			//0
+		c = 3;					//1 cannot be resolved
+		formC.c = 3;			//1 cannot be resolved
+		commonFieldAB = 5;		//1 ambiguous
+		commonFieldBC = 5;		//0
+	end
+	
+	function f2()
+		converse formA;			//0
+		a = 1; b = 2;			//0
+		c = 3;					//1 cannot be resolved
+		formC.c = 3;			//1 cannot be resolved
+		commonFieldAB = 5;		//0
+		commonFieldBC = 5;		//0
+	end
+	
+	function f3()
+		converse formB;			//0
+		a = 1; b = 2;			//0
+		c = 3;					//1 cannot be resolved
+		formC.c = 3;			//1 cannot be resolved
+		commonFieldAB = 5;		//0
+		commonFieldBC = 5;		//0
+	end
+	
+	function f4()
+		converse formC;			//1 cannot be resolved
+		a = 1; b = 2;			//0
+		c = 3;					//1 cannot be resolved
+		formC.c = 3;			//1 cannot be resolved
+		commonFieldAB = 5;		//1 ambiguous
+		formA.commonFieldAB = 5;//0
+		formB.commonFieldAB = 5;//0
+		commonFieldBC = 5;		//0
+	end
+end
+
+Program pgm3 type TextUIProgram {allowUnqualifiedItemReferences = yes}
+	use fg.formB;
+	
+	function main() end
+	
+	function f1()
+		a = 1;					//1 cannot be resolved
+		b = 2;					//0
+		formB.b = 5;			//0
+		c = 3;					//1 cannot be resolved
+		commonFieldAB = 5;		//0
+		commonFieldBC = 5;		//0
+	end
+	
+	function f2()
+		converse formA;			//1 cannot be resolved
+		a = 1;					//1 cannot be resolved
+		b = 2;					//0
+		formB.b = 5;			//0
+		c = 3;					//1 cannot be resolved
+		commonFieldAB = 5;		//0
+		commonFieldBC = 5;		//0
+	end
+	
+	function f3()
+		converse formB;			//0
+		a = 1;					//1 cannot be resolved
+		b = 2;					//0
+		formB.b = 5;			//0
+		c = 3;					//1 cannot be resolved
+		commonFieldAB = 5;		//0
+		commonFieldBC = 5;		//0
+	end
+	
+	function f4()
+		converse formC;			//1 cannot be resolved
+		a = 1;					//1 cannot be resolved
+		b = 2;					//0
+		formB.b = 5;			//0
+		c = 3;					//1 cannot be resolved
+		commonFieldAB = 5;		//0
+		commonFieldBC = 5;		//0
+	end
+end
+
+Program pgm4 type TextUIProgram (formC formC) {	//1 cannot be resolved
+	inputForm = formB							//1 must be declared
+}
+	use fg.formA;
+	function main() end
+end
+
+Program pgm5 type TextUIProgram (formC formC){	//0
+	inputForm = formB							//0
+}
+	use fg.formB, fg.formC;
+	function main() end
+end
+
+Program pgm6 type TextUIProgram (formC formC){	//0
+	inputForm = formB							//0
+}
+	use fg;
+	function main() end
+end
+
+Program pgm7 type TextUIProgram (formC formC){	//1 cannot be resolved
+	inputForm = formB							//1 must be declared
+}
+	use fg {helpGroup=yes};						//0
+	use fg2;									//0
+	function main() end
+end
+
+Program pgm8 type textUIProgram
+	use fg;		//0
+	use fg2;	//1	Only one non-help FormGroup can be referenced by use statements
+	function main() end
+end
+
+Program pgm9 type textUIProgram
+	use fg.formA;	//0
+	use fg2;		//1	Only one non-help FormGroup can be referenced by use statements
+	function main() end
+end
+
+Program pgm10 type textUIProgram
+	use fg;			//0
+	use fg2.formA;	//1	Only one non-help FormGroup can be referenced by use statements
+	function main() end
+end
+
+Program pgm11 type textUIProgram
+	use fg.formA;	//0
+	use fg2.formA;	//1	Only one non-help FormGroup can be referenced by use statements
+	function main() end
+end
+
+Program pgm12 type textUIProgram
+	use fg.formA {pfKeyEquate=no};	//0
+	use fg.formB {pfKeyEquate=yes};	//0
+	use fg2 {helpGroup=yes};		//0
+	function main() end
+end

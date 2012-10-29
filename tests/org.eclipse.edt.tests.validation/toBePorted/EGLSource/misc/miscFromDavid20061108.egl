@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Library lib
+	const NL string = "\n";
+	const TAB string = "\t";
+	
+	function writeLine(line string in)
+		writeLine(null, 0, line);
+	end
+	
+	function writeLine(numTabs int in, line string in)
+		writeLine(null, numTabs, line);
+	end
+
+	function writeLine(str string?, numTabs int in, line string in)
+		prefix string = "";
+		for(i int from 1 to numTabs by 1)
+			prefix = TAB :: prefix;
+		end
+		if(str == null)
+			SysLib.writeStdout(prefix :: line);
+		else
+			str ::= prefix :: line :: NL;
+		end
+	end
+end

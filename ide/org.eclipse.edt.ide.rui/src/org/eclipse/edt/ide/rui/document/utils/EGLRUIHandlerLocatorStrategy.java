@@ -20,7 +20,7 @@ import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class EGLRUIHandlerLocatorStrategy {
 	
@@ -40,7 +40,7 @@ public class EGLRUIHandlerLocatorStrategy {
 					return true;
 				}
 				public boolean visit(final Assignment assignment) {
-					if(assignment.getLeftHandSide().isName() && InternUtil.intern("initialUI") == ((Name)assignment.getLeftHandSide()).getIdentifier()){
+					if(assignment.getLeftHandSide().isName() && NameUtile.equals(NameUtile.getAsName("initialUI"), ((Name)assignment.getLeftHandSide()).getIdentifier())){
 						assignment.getRightHandSide().accept(new DefaultASTVisitor(){
 							public boolean visit(ArrayLiteral arrayLiteral){
 								List expressions = arrayLiteral.getExpressions();

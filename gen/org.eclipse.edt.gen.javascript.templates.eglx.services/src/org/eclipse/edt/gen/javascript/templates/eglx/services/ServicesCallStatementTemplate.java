@@ -50,7 +50,7 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate implements
 		Function callTarget = (Function)ma.getNamedElement();
 		Function invocTarget = CommonUtilities.createProxyFunction(callTarget, ctx);
 		invoc.setTarget(invocTarget);
-		invoc.setId(invocTarget.getId());
+		invoc.setId(invocTarget.getCaseSensitiveName());
 		invoc.getArguments().addAll(callStatement.getArguments());
 		//add callback functions and using clause
 		invoc.getArguments().add(callStatement.getCallback() != null ? callStatement.getCallback() : factory.createNullLiteral());
@@ -94,7 +94,7 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate implements
 			rest.setValue("serviceName", callStatement.getInvocationTarget().getQualifier().getType().getTypeSignature());
 			MemberAccess ma = (MemberAccess)ctx.invoke(getFunctionAccess, callStatement, callStatement.getInvocationTarget(), ctx);
 			Function callTarget = (Function)ma.getNamedElement();
-			ctx.putAttribute(callTarget, subKey_realFunctionName, callTarget.getName());
+			ctx.putAttribute(callTarget, subKey_realFunctionName, callTarget.getCaseSensitiveName());
 			if(callStatement.getUsing() == null){
 				try {
 					callStatement = (CallStatement)callStatement.clone();

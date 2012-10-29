@@ -1,0 +1,114 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+dataTable tbl1 type BasicTable {
+	resident = yes, //0
+	shared = yes}	//0
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end
+
+dataTable tbl2 type BasicTable {
+	resident = no, //0
+	shared = yes}	//0
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end
+
+dataTable tbl3 type BasicTable {
+	resident = no, //0
+	shared = yes}	//0
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end
+
+dataTable tbl4 type BasicTable {
+	resident = yes, //0
+	shared = no}	//1
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end
+
+dataTable tbl5 type BasicTable {
+	shared = yes, //0
+	resident = yes}	//0
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end
+
+dataTable tbl6 type BasicTable {
+	shared = yes, //0
+	resident = no}	//0
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end
+
+dataTable tbl7 type BasicTable {
+	shared = no, //0
+	resident = yes}	//1
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end
+
+dataTable tbl8 type BasicTable {
+	shared = no, //0
+	resident = no}	//0
+	
+	3 column1 char(3);
+	
+	{contents = [
+		["abc"], 
+		["xyz"]
+	]}
+	
+end

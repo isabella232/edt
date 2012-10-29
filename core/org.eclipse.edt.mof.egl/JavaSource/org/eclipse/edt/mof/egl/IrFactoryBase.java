@@ -38,6 +38,7 @@ public interface IrFactoryBase extends EFactory  {
 	String CallStatement = packageName+".CallStatement";
 	String CaseStatement = packageName+".CaseStatement";
 	String CharLiteral = packageName+".CharLiteral";
+	String Class = packageName+".Class";
 	String Classifier = packageName+".Classifier";
 	String CloseStatement = packageName+".CloseStatement";
 	String ConditionalStatement = packageName+".ConditionalStatement";
@@ -211,6 +212,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getCallStatementEClass();
 	EClass getCaseStatementEClass();
 	EClass getCharLiteralEClass();
+	EClass getClassEClass();
 	EClass getClassifierEClass();
 	EClass getCloseStatementEClass();
 	EClass getConditionalStatementEClass();
@@ -382,6 +384,7 @@ public interface IrFactoryBase extends EFactory  {
 	public CallStatement createCallStatement();
 	public CaseStatement createCaseStatement();
 	public CharLiteral createCharLiteral();
+	public Class createClass();
 	public CloseStatement createCloseStatement();
 	public ConstantField createConstantField();
 	public ConstantFormField createConstantFormField();

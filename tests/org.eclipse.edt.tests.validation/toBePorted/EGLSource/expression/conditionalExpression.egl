@@ -1,0 +1,330 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program arithmeticConditionPgm
+	function main() end
+	
+	function func()
+
+// validateArithmeticCondition:
+		myReport report = new report;							//0
+		if( myReport == myReport ) end							//0
+		if( myReport == new report ) end						//1 A set values block or constructor is not allowed in a conditional expression. {7512, SET_VALUES_BLOCK_OR_CONSTRUCTOR_NOT_VALID_AS_CONDITIONAL_OPERAND}
+		if( new report == myReport) end							//1 A set values block or constructor is not allowed in a conditional expression. {7512, SET_VALUES_BLOCK_OR_CONSTRUCTOR_NOT_VALID_AS_CONDITIONAL_OPERAND}
+		if( myReport == myReport {reportDesignFile="a"}) end	//1 A set values block or constructor is not allowed in a conditional expression. {7512, SET_VALUES_BLOCK_OR_CONSTRUCTOR_NOT_VALID_AS_CONDITIONAL_OPERAND}
+		if( myReport {reportDesignFile="a"} == myReport) end	//1 A set values block or constructor is not allowed in a conditional expression. {7512, SET_VALUES_BLOCK_OR_CONSTRUCTOR_NOT_VALID_AS_CONDITIONAL_OPERAND}
+
+// validateArithmeticCondition (2):
+		if( myReport < myReport	) end 	//1 Only valid comparison between ref types is == or != {5048, TYPE_INVALID_REF_TYPE_COMPARISON}
+		if( myReport != myReport ) end	//0
+		
+		myCF myCF;
+		strVar String;
+		relRecVar relRec;
+		thing any;
+		myWindow window;
+		intAry int[];
+		intVar int;
+		
+		if( myCF.cf1 >= myCF.cf1 ) end	//1 Only valid comparison between ref types is == or != {5048, TYPE_INVALID_REF_TYPE_COMPARISON}
+		if( myCF.cf1 != myCF.cf1 ) end	//0
+		
+		if( strVar == null ) end	//0
+		if( myReport != null ) end	//0
+		if( null == strVar ) end	//0
+		if( null != myReport ) end	//0
+		
+		if(relRecVar == relRecVar) end	//1 Records can only be compared to null
+		if("a" != relRecVar) end		//0
+		
+		psbRecVar psbRecordDef;
+		if(psbRecVar == psbRecVar) end	//1 Records can only be compared to null
+		if( myReport == myWindow)  end  //1 is not valid for compare to {5089*, TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON}
+		if( myReport != thing) end		//0
+		if( thing == myReport) end		//0
+		if( myWindow == myWindow ) end	//0
+		if( strVar < intVar ) end		//0
+	end
+end
+
+record myCF type ConsoleForm
+	cf1 ConsoleField;
+end
+
+record psbRecordDef type PSBRecord
+end
+
+Program eventKeyPgm
+	function main() end
+	function func()
+// validateEventKeyComparator:
+		if(eventKey is trunc) end				//1 trunc is an invalid Event Key value. It must be one of following: enter, bypass, pa(#1-3), pf(#1-24), pakey, or pfkey.  {5164*, INVALID_EVENT_KEY_VALUE}
+		if(converseVar.eventKey not trunc) end	//1 trunc is an invalid Event Key value. It must be one of following: enter, bypass, pa(#1-3), pf(#1-24), pakey, or pfkey.  {5164*, INVALID_EVENT_KEY_VALUE}
+		if(eventKey is pakey) end				//0
+	end
+end
+
+Program inConditionPgm {includeReferencedFunctions = yes}
+	function main() end
+	function func()
+// validateInCondition:
+	intVar int;
+	recVar myCF;
+	intAry int[];
+	stringVar string;
+	stringAry string[];
+	
+	if(recVar in intAry) end	//1 The operand recVar in the in condition must be an item or a literal.  {5090*, IN_CONDITIONAL_LEFT_OPERAND_INVALID}
+	if(intVar in intAry) end	//0
+		
+	if(intVar in recVar) end	//1 intVar is not valid for compare to recVar
+	if(intVar in stringVar) end	//0
+	if(intVar in stringAry) end	//0
+	if(intVar in intVar) end	//0
+
+// validateInConditionLHS:
+	if(noReturnsFunc() in intAry) end	//1 must return a type
+	if(returnsFunc() in intAry) end		//0
+	end
+end
+
+Program isaPgm
+	function main() end
+	
+	function func()
+// validateIsACondition:
+		thing any;
+		if(thing isa myCF) end			//0
+		if(thing isa undeclaredPart) end//1 The type undeclaredPart cannot be resolved. {3260, TYPE_CANNOT_BE_RESOLVED}
+		if(thing isa isaPgm) end		//1 target of isa or as (isaPgm) must be a data type or a part reference. {3261, ISA_TARGET_NOT_ITEM_OR_PART}
+	end
+end
+
+Program isNotPgm {includeReferencedFunctions = yes}
+	use fg;
+	function main()
+	end
+	
+	function func(fieldParm int field)
+		intVar int;
+		intAry int[];
+		dliSegRecVar DLISegmentRec;
+		indRecVar indRec;
+		indRecAry indRec[];
+		serRecVar serRec;
+		relRecVar relRec;
+		sqlRecVar sqlRec;
+		sqlRecAry sqlRec[];
+		strVar string;
+		strAry string[];
+		charVar char(4);
+		mbcharVar mbchar(4);
+		uiRecVar uiRec;
+		
+		const strConst string = "";
+		const charConst char(4) = "abcd";
+				
+		add dliSegRecVar;
+		add indRecVar;
+		add indRecAry;
+		add serRecVar;
+		add relRecVar;
+		add sqlRecVar;
+		add sqlRecAry;
+		
+// validateIsNotCondition:
+		
+		if(returnsFunc() is enter) end		//1	Function invocations cannot be used in an is or not condition.
+		if(returnsFunc() is win) end		//1	Function invocations cannot be used in an is or not condition.
+		if(returnsFunc() is modified) end	//1	Function invocations cannot be used in an is or not condition.
+		if(returnsFunc() is blanks) end		//1	Function invocations cannot be used in an is or not condition.
+		if(returnsFunc() == null) end		//0
+
+		if(1+2 is trunc) end				//1 Only items or function invocation results can be used in an is/not condition. {6721, INVALID_EXPRESSION_IN_ISNOT}
+		if(intVar is trunc) end				//1
+		if(strVar[1:2] is trunc) end		//1 Substring expressions may not be tested for trunc.
+		if(intAry[2] is trunc) end			//1
+		if(strAry[2][1:2] is trunc) end		//1 Substring expressions may not be tested for trunc.
+		
+		if(intVar is foo) end // 1 foo is not valid for use within an Is/Not expression. {5168, INVALID_NONARITHMETIC_COND_RIGHT_SIDE}
+
+// validateIsNotCondition (1):
+
+		if(noReturnsFunc() == null) end // 1 Function noReturnsFunc must return a type.  {6654*, FUNCTION_MUST_RETURN_TYPE}
+		
+		if(intVar is enter) end					//1 enter is invalid for the current is/not expression. enter is only valid when used in combination with converseVar.eventKey.  {5169*, INVALID_EVENT_KEY_USE}
+		if(eventKey is enter) end 				//0
+		if(converseVar.eventKey is enter) end 	//0
+		
+		if(intVar is win) end 				//1 win is invalid for the current is/not expression. win is only valid when used in combination with sysvar.systemType.  {5170*, INVALID_SYSTEM_TYPE_USE}
+		if(systemType is win) end 			//0
+		if(sysvar.systemType is win) end 	//0
+		
+		if(dliSegRecVar is FILENOTFOUND) end		//1 fileNotFound is not a valid state for a DL/I segment record.  {7868*, ISNOT_STATE_NOT_VALID_FOR_DLISEGMENT}
+    	if(dliSegRecVar is DEADLOCK) end			//1 deadLock is not a valid state for a DL/I segment record.  {7868*, ISNOT_STATE_NOT_VALID_FOR_DLISEGMENT}
+    	if(dliSegRecVar is INVALIDFORMAT) end		//1 invalidFormat is not a valid state for a DL/I segment record.  {7868*, ISNOT_STATE_NOT_VALID_FOR_DLISEGMENT}
+    	if(dliSegRecVar is FILENOTAVAILABLE) end	//1 fileNotAvailable is not a valid state for a DL/I segment record.  {7868*, ISNOT_STATE_NOT_VALID_FOR_DLISEGMENT}
+    	if(dliSegRecVar is FULL) end				//1 full is not a valid state for a DL/I segment record.  {7868*, ISNOT_STATE_NOT_VALID_FOR_DLISEGMENT}
+    	if(dliSegRecVar is IOERROR) end				//0
+    	
+    	if(intVar is IOERROR) end			//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}		
+        if(intVar is HARDIOERROR) end		//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is SOFTIOERROR) end		//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is ENDOFFILE) end			//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is NORECORDFOUND) end		//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is DUPLICATE) end			//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is DEADLOCK) end			//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is INVALIDFORMAT) end		//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is FILENOTAVAILABLE) end	//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is FILENOTFOUND) end		//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is FULL) end				//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(intVar is UNIQUE) end			//1 The operand intVar in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(indRecAry is IOERROR) end		//1 The operand indRecAry in the is/not condition must be a file record, an SQL record, a dynamic array of SQL records, or a DL/I segment record and must be used as an I/O object.  {5092*, COND_OPERAND_MUST_BE_RECORD}
+        if(dliSegRecVar is IOERROR) end		//0
+        if(indRecVar is IOERROR) end		//0
+        if(serRecVar is IOERROR) end		//0
+        if(relRecVar is IOERROR) end		//0
+        if(sqlRecVar is IOERROR) end		//0
+        if(sqlRecAry is IOERROR) end		//0
+        
+        if(intVar is cursor) end				//1 The operand intVar in the is/not condition must be a text form field.  {5093*, COND_OPERAND_MUST_BE_TEXTFORM_FIELD}
+        if(intVar is data) end					//1 The operand intVar in the is/not condition must be a text form field.  {5093*, COND_OPERAND_MUST_BE_TEXTFORM_FIELD}
+        if(prtForm.prtFormField is data) end	//1 The operand prtForm.prtFormField in the is/not condition must be a text form field.  {5093*, COND_OPERAND_MUST_BE_TEXTFORM_FIELD}
+        if(txtForm.txtFormField is cursor) end	//0
+        if(fieldParm is cursor) end				//0
+        if(fieldParm is data) end				//0
+        
+        if(intVar is blanks) end				//1 intVar is invalid for the current is/not expression. Variable Text Form fields, CHAR, MBCHAR, DBCHAR and UNICODE are valid types for use with the mnemonic blanks.  {5094*, INVALID_TYPE_BLANKS}
+        if(strConst is blanks) end				//1 strConst is invalid for the current is/not expression. Variable Text Form fields, CHAR, MBCHAR, DBCHAR and UNICODE are valid types for use with the mnemonic blanks.  {5094*, INVALID_TYPE_BLANKS}
+        if(strVar is blanks) end				//0
+        if(txtForm.txtFormField is blanks) end	//0
+        if(fieldParm is blanks) end				//0
+        
+        if(intVar is numeric) end		//1 intVar is invalid for the current is/not expression. CHAR, MBCHAR, UNICODE and STRING are the only valid types for use with the mnemonic numeric.  {5143*, INVALID_TYPE_ISNUMERIC}
+        if(strVar is numeric) end		//0
+        if(charConst is numeric) end	//1 charConst is invalid for the current is/not expression. CHAR, MBCHAR, UNICODE and STRING are the only valid types for use with the mnemonic numeric.  {5143*, INVALID_TYPE_ISNUMERIC}
+        if(charVar is numeric) end		//0
+        if(mbcharVar is numeric) end	//0
+        
+        if(intVar is modified) end					//1 The operand intVar in the is/not condition must be a field in a text form, an item in a VGUIRecord, a text form or a VGUIRecord.
+        if(txtForm.txtFormField is modified) end	//0
+        if(fieldParm is modified) end				//0
+        if(txtForm is modified) end					//0
+        if(uiRecVar.item1 is modified) end			//0
+        if(uiRecVar.item1.item2 is modified) end	//0
+        if(uiRecVar is modified) end				//0
+        
+        if(intAry == null) end		//0
+        if(sqlRecVar == null) end	//0
+        if(relRecVar == null) end	//0
+        if(sqlRecAry == null) end	//0
+        if(intVar == null) end		//0
+        
+        if(undeclaredVar is trunc) end	//1 undeclaredVar cannot be resolved
+        if(undeclaredVar is win) end	//1 undeclaredVar cannot be resolved
+	end
+end
+
+handler isNotPh type JSFHandler
+	classField int;
+	
+	function func()
+		localVar int;
+		
+		if(localVar is modified) end	//1 The operand localVar in the is/not condition must be a field in a text form, an item in a VGUIRecord, a text form or a VGUIRecord.
+		if(classField is modified) end	//1	The operand classField in the is/not condition must be a field in a text form, an item in a VGUIRecord, a text form or a VGUIRecord.
+	end
+end
+
+function noReturnsFunc() end
+function returnsFunc() returns (int) end
+
+Record DLISegmentRec type DLISegment end
+Record indRec type indexedRecord end
+Record serRec type serialRecord end
+Record relRec type relativeRecord end
+Record sqlRec type sqlRecord
+	a int;
+end
+Record uiRec type vgUIRecord
+	10 item1 int;
+		15 item2 int;
+end
+
+
+Formgroup fg
+	Form txtForm type textForm
+		txtFormField int;	
+	end
+	
+	Form prtForm type printForm
+		prtFormField int;	
+	end
+end
+
+Program likeMatchesPgm()
+	function main() end
+	
+	function func()
+		intVar int;
+		stringVar string;
+		thing any;
+		dbcharVar dbchar(4);
+		hexVar hex;
+		mbcharVar mbChar(4);
+		
+// validateLikeMatchesCondition (1):
+		if(intVar like intVar) end			//2 is not valid for a like or matches condition. The operator must evaluate to a string type.  {5041*, COND_OPERAND_MUST_BE_STRING}|is not valid for a like or matches condition. The operator must evaluate to a string type.  {5041*, COND_OPERAND_MUST_BE_STRING}
+		if(stringVar like stringVar) end	//0
+		if(thing like stringVar) end		//0
+		
+		if(intVar matches intVar) end		//2 is not valid for a like or matches condition. The operator must evaluate to a string type.  {5041*, COND_OPERAND_MUST_BE_STRING}|is not valid for a like or matches condition. The operator must evaluate to a string type.  {5041*, COND_OPERAND_MUST_BE_STRING}
+		if(stringVar matches stringVar) end	//0
+		if(thing matches stringVar) end	//0
+		
+		if(dbcharVar like stringVar) end	//1 is not valid for a like or matches condition. The operator cannot evaluate to HEX or DBCHAR type.  {5042*, COND_OPERAND_CANNOT_BE_HEX_OR_DBCHAR}
+		if(hexVar matches stringVar) end	//1 is not valid for a like or matches condition. The operator cannot evaluate to HEX or DBCHAR type.  {5042*, COND_OPERAND_CANNOT_BE_HEX_OR_DBCHAR}
+		if(stringVar like dbcharVar) end	//1 is not valid for a like or matches condition. The operator cannot evaluate to HEX or DBCHAR type.  {5042*, COND_OPERAND_CANNOT_BE_HEX_OR_DBCHAR}
+		if(stringVar matches hexVar) end	//1 is not valid for a like or matches condition. The operator cannot evaluate to HEX or DBCHAR type.  {5042*, COND_OPERAND_CANNOT_BE_HEX_OR_DBCHAR}
+
+// validateLikeMatchesConditionEscapeCharacter:
+		if(stringVar like stringVar escape "aa") end //1 The escape character aa is not valid. The escape character must be a single, SBCS character.  {5040*, COND_INVALID_ESCAPE_CHARACTER}
+		if(stringVar like stringVar escape "a") end  //0
+	end
+end
+
+Program systemTypeTest
+	function main()
+
+// validateSystemTypeComparator:
+		if( sysvar.systemtype is win ) end		// 0
+		if( systemtype is win ) end				// 0
+		if( sysvar.systemtype is hpux ) end		// 0
+		if( systemtype is hpux ) end			// 0
+		if( sysvar.systemtype is solaris ) end	// 0
+		if( systemtype is solaris ) end			// 0
+
+		if( sysvar.systemtype is notASystemType ) end	// 1 notASystemType is an invalid System Type value. It must be one of following:
+		if( systemtype is notASystemType ) end			// 1 notASystemType is an invalid System Type value. It must be one of following:
+		if(systemType is trunc) end						// 1 trunc is an invalid System Type value. It must be one of following:
+		
+		if( sysvar.systemtype not win ) end		// 0
+		if( systemtype not win ) end			// 0
+		if( sysvar.systemtype not hpux ) end	// 0
+		if( systemtype not hpux ) end			// 0
+		if( sysvar.systemtype not solaris ) end	// 0
+		if( systemtype not solaris ) end		// 0
+		
+		if( sysvar.systemtype not notASystemType ) end	// 1 notASystemType is an invalid System Type value. It must be one of following:
+		if( systemtype not notASystemType ) end			// 1 notASystemType is an invalid System Type value. It must be one of following:
+	end
+end

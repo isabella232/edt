@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.edt.rui
+Bundle-Version: 0.8.2.qualifier
+Bundle-Vendor: %providerName
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-RegisterBuddy: org.eclipse.edt.mof,org.eclipse.edt.compiler
+Require-Bundle: org.eclipse.edt.compiler;bundle-version="0.8.2",
+ org.eclipse.edt.mof;bundle-version="0.8.2",
+ org.eclipse.edt.mof.egl;bundle-version="0.8.2",
+ org.eclipse.core.runtime;bundle-version="3.6.0"
+Export-Package: org.eclipse.edt.rui,
+ org.eclipse.edt.rui.validation.annotation,
+ org.eclipse.edt.rui.validation.annotation.proxy
+

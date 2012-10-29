@@ -13,14 +13,12 @@ package org.eclipse.edt.compiler.binding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
@@ -28,6 +26,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -39,16 +40,15 @@ public class FileBindingCompletor extends AbstractBinder {
 	private FileBinding fileBinding;
 	private IProblemRequestor problemRequestor;
 	
-	private List partImportDeclarations = new ArrayList();
+	private List<ImportDeclaration> partImportDeclarations = new ArrayList<ImportDeclaration>();
 	
 	public FileBindingCompletor(Scope currentScope, FileBinding fileBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		super(currentScope, fileBinding, dependencyRequestor, compilerOptions);
+		super(currentScope, fileBinding.getPackageName(), dependencyRequestor, compilerOptions);
 		this.fileBinding = fileBinding;
 		this.problemRequestor = problemRequestor;
 	}
 	
 	public boolean visit(File file) {
-		// TODO Is this how we want to set the default package on the file binding?
 		if(!file.hasPackageDeclaration()){
 			IPackageBinding defaultPackage = currentScope.getEnvironmentScope().getRootPackageBinding();
 			fileBinding.setDeclaringPackage(defaultPackage);
@@ -62,25 +62,24 @@ public class FileBindingCompletor extends AbstractBinder {
 	}
 	
 	private void processPartImportDeclarations(){
-		HashMap importedParts = new HashMap();
-		for (Iterator iter = partImportDeclarations.iterator(); iter.hasNext();) {
-			ImportDeclaration importDeclaration = (ImportDeclaration) iter.next();
+		HashMap<String, Part> importedParts = new HashMap<String, Part>();
+		for (ImportDeclaration importDeclaration : partImportDeclarations) {
 			Name name = importDeclaration.getName();
 			try {
-	            ITypeBinding partBinding = bindTypeName(name);
+	            Part part = (Part)bindTypeName(name);
 	            
-	            if((fileBinding.getDeclaringPackage() != null && fileBinding.getDeclaringPackage().getPackageName() == partBinding.getPackageName()) || !((IPartBinding)partBinding).isPrivate()){
-	            	if(importedParts.containsKey(partBinding.getName())){
-	            		ITypeBinding resolvedBinding = (ITypeBinding)importedParts.get(partBinding.getName());
+	            if(fileBinding.getDeclaringPackage() != null && NameUtile.equals(fileBinding.getDeclaringPackage().getPackageName(), part.getPackageName()) || !BindingUtil.isPrivate(part)){
+	            	if(importedParts.containsKey(part.getName())){
+	            		Part resolvedPart = importedParts.get(part.getName());
 	            		
-	            		if(resolvedBinding.getPackageName() != partBinding.getPackageName()){
+	            		if(!NameUtile.equals(resolvedPart.getPackageName(), part.getPackageName())){
 	    					problemRequestor.acceptProblem(importDeclaration, IProblemRequestor.IMPORT_COLLISION, new String[] {name.getCanonicalName()});
 	    				}else{
 	    					//TODO: Warning - unnecessary import
 	    				}
 	            	}else{
-	            		fileBinding.getPartBindings().add(partBinding);
-	            		importedParts.put(partBinding.getName(), partBinding);
+	            		fileBinding.getPartBindings().add(part);
+	            		importedParts.put(part.getName(), part);
 	            	}
 	            }else{
 	                problemRequestor.acceptProblem(importDeclaration, IProblemRequestor.TYPE_CANNOT_BE_RESOLVED, new String[] {name.getCanonicalName()});

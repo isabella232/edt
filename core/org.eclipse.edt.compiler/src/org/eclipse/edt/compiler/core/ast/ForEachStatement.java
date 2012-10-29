@@ -94,11 +94,12 @@ public class ForEachStatement extends Statement {
 	private List targets;
 	private SimpleName declarationName;
 	private Type declarationType;
+	private boolean isNullable;
 	private FromOrToExpressionClause resultSet;
 	private List stmts;	// List of Statements
 	private int closingParenOffset;
 
-	public ForEachStatement(List targets, SimpleName declarationName, Type declarationType, FromOrToExpressionClause resultSet, List stmts, int closingParenOffset, int startOffset, int endOffset) {
+	public ForEachStatement(List targets, SimpleName declarationName, Type declarationType, Boolean isNullable, FromOrToExpressionClause resultSet, List stmts, int closingParenOffset, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		if (targets != null) {
@@ -116,9 +117,10 @@ public class ForEachStatement extends Statement {
 		resultSet.setParent(this);
 		this.stmts = setParent(stmts);
 		this.closingParenOffset = closingParenOffset;
+		this.isNullable = isNullable.booleanValue();
 	}
 	
-	public List getTargets() {
+	public List<Node> getTargets() {
 		return targets;
 	}
 	
@@ -145,7 +147,7 @@ public class ForEachStatement extends Statement {
 		return null;
 	}
 		
-	public List getStmts() {
+	public List<Node> getStmts() {
 		return stmts;
 	}
 	
@@ -177,6 +179,7 @@ public class ForEachStatement extends Statement {
 			}
 			else {
 				declarationName.accept(visitor);
+				declarationType.accept(visitor);
 			}
 			resultSet.accept(visitor);
 			acceptChildren(visitor, stmts);
@@ -221,10 +224,15 @@ public class ForEachStatement extends Statement {
 		return buf.toString();
 	}
 	
+	public boolean isNullable() {
+		return isNullable;
+	}
+	
 	protected Object clone() throws CloneNotSupportedException {		
 		return new ForEachStatement(cloneList(targets),
 				declarationName == null ? null : (SimpleName)declarationName.clone(),
 				declarationType == null ? null : (Type)declarationType.clone(),
+				Boolean.valueOf(isNullable),
 				(FromOrToExpressionClause) resultSet.clone(), cloneList(stmts), closingParenOffset, getOffset(), getOffset() + getLength());
 	}
 }

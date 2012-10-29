@@ -1,0 +1,390 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+ 
+// all sections have the same list (for the most part); when updating the one copy and paste it into the others.
+program p
+	d1 decimal(4,2); //0
+	d2 decimal(4,-2); //1
+	d3 decimal(-4,2); //2
+	d4 decimal(2,4); //1 The decimals value 4 for type eglx.lang.EDecimal must be less than or equal to the length value 2.
+	d5 decimal("abc"); //1
+	d6 decimal("12"); //0
+	d7 decimal(4); //0
+	d8 decimal(4,2,1); //1
+	d9 decimal(); //0
+	d10 decimal(999); //1
+	
+	s1 string(0); //0
+	s2 string(10,2); //1
+	s3 string("abc"); //1
+	s4 string("100"); //0
+	s5 string(); //0
+	s6 string; //0
+	s7 string?; //0
+	
+	b1 bytes(0); //0
+	b2 bytes(10,2); //1
+	b3 bytes("abc"); //1
+	b4 bytes("100"); //0
+	b5 bytes(); //0
+	b6 bytes; //0
+	b7 bytes?; //0
+	
+	ts1 timestamp; //1
+	ts2 timestamp?; //0
+	ts3 timestamp("abcd"); //1
+	ts4 timestamp("HHmmss"); //0
+	ts5 timestamp("HHss"); //1
+	ts6 timestamp("yyyyMMddHHmmss"); //0
+	ts7 timestamp("yyyyMMddhhmmss"); //1
+	ts8 timestamp("yyyymmddHHmmss"); //1
+	ts9 timestamp("yyyyMMHHmmss"); //1
+	ts10 timestamp("HHss"); //1
+	
+	i1 int; //0
+	i2 int(6); //1
+	bi1 bigint; //0
+	bi2 bigint(2); //1
+	si1 smallint; //0
+	si2 smallint(2); //1
+	sf1 smallfloat; //0
+	sf2 smallfloat(2); //1
+	f1 float; //0
+	f2 float(2); //1
+	da1 date; //0
+	da2 date(2); //1
+	t1 time; //0
+	t2 time(2); //1
+	a1 any; //1
+	a2 any?; //0
+	a3 any(2)?; //1
+	a4 any(2); //2
+	n1 number; //0
+	n2 number(2); //1
+	r1 rec; //0
+	r2 rec("abc"); //1
+	
+	function locals()
+		d1 decimal(4,2); //0
+		d2 decimal(4,-2); //1
+		d3 decimal(-4,2); //2
+		d4 decimal(2,4); //1 The decimals value 4 for type eglx.lang.EDecimal must be less than or equal to the length value 2.
+		d5 decimal("abc"); //1
+		d6 decimal("12"); //0
+		d7 decimal(4); //0
+		d8 decimal(4,2,1); //1
+		d9 decimal(); //0
+		d10 decimal(999); //1
+		
+		s1 string(0); //0
+		s2 string(10,2); //1
+		s3 string("abc"); //1
+		s4 string("100"); //0
+		s5 string(); //0
+		s6 string; //0
+		s7 string?; //0
+		
+		b1 bytes(0); //0
+		b2 bytes(10,2); //1
+		b3 bytes("abc"); //1
+		b4 bytes("100"); //0
+		b5 bytes(); //0
+		b6 bytes; //0
+		b7 bytes?; //0
+		
+		ts1 timestamp; //1
+		ts2 timestamp?; //0
+		ts3 timestamp("abcd"); //1
+		ts4 timestamp("HHmmss"); //0
+		ts5 timestamp("HHss"); //1
+		ts6 timestamp("yyyyMMddHHmmss"); //0
+		ts7 timestamp("yyyyMMddhhmmss"); //1
+		ts8 timestamp("yyyymmddHHmmss"); //1
+		ts9 timestamp("yyyyMMHHmmss"); //1
+		ts10 timestamp("HHss"); //1
+		
+		i1 int; //0
+		i2 int(6); //1
+		bi1 bigint; //0
+		bi2 bigint(2); //1
+		si1 smallint; //0
+		si2 smallint(2); //1
+		sf1 smallfloat; //0
+		sf2 smallfloat(2); //1
+		f1 float; //0
+		f2 float(2); //1
+		da1 date; //0
+		da2 date(2); //1
+		t1 time; //0
+		t2 time(2); //1
+		a1 any; //1
+		a2 any?; //0
+		a3 any(2)?; //1
+		a4 any(2); //2
+		n1 number; //0
+		n2 number(2); //1
+		r1 rec; //0
+		r2 rec("abc"); //1
+	end
+	
+	function parms(
+		d1 decimal(4,2), //0
+		d2 decimal(4,-2), //1
+		d3 decimal(-4,2), //2
+		d4 decimal(2,4), //1 The decimals value 4 for type eglx.lang.EDecimal must be less than or equal to the length value 2.
+		d5 decimal("abc"), //1
+		d6 decimal("12"), //0
+		d7 decimal(4), //0
+		d8 decimal(4,2,1), //1
+		d9 decimal(), //0
+		d10 decimal(999), //1
+		
+		s1 string(0), //0
+		s2 string(10,2), //1
+		s3 string("abc"), //1
+		s4 string("100"), //0
+		s5 string(), //0
+		s6 string, //0
+		s7 string?, //0
+		
+		b1 bytes(0), //0
+		b2 bytes(10,2), //1
+		b3 bytes("abc"), //1
+		b4 bytes("100"), //0
+		b5 bytes(), //0
+		b6 bytes, //0
+		b7 bytes?, //0
+		
+		ts1 timestamp, //0
+		ts2 timestamp?, //0
+		ts3 timestamp("abcd"), //1
+		ts4 timestamp("HHmmss"), //0
+		ts5 timestamp("HHss"), //1
+		ts6 timestamp("yyyyMMddHHmmss"), //0
+		ts7 timestamp("yyyyMMddhhmmss"), //1
+		ts8 timestamp("yyyymmddHHmmss"), //1
+		ts9 timestamp("yyyyMMHHmmss"), //1
+		ts10 timestamp("HHss"), //1
+		
+		i1 int, //0
+		i2 int(6), //1
+		bi1 bigint, //0
+		bi2 bigint(2), //1
+		si1 smallint, //0
+		si2 smallint(2), //1
+		sf1 smallfloat, //0
+		sf2 smallfloat(2), //1
+		f1 float, //0
+		f2 float(2), //1
+		da1 date, //0
+		da2 date(2), //1
+		t1 time, //0
+		t2 time(2), //1
+		a1 any, //0
+		a2 any?, //0
+		a3 any(2)?, //1
+		a4 any(2), //1
+		n1 number, //0
+		n2 number(2), //1
+		r1 rec, //0
+		r2 rec("abc"), //1
+		
+		final int
+	)
+	end
+	
+	function statements()
+		// these don't include the nullable variables because types cannot be nullable
+		temp any?;
+		temp =
+			temp isa decimal(4,2) || //0
+			temp isa decimal(4,-2) || //1
+			temp isa decimal(-4,2) || //2
+			temp isa decimal(2,4) || //1 The decimals value 4 for type eglx.lang.EDecimal must be less than or equal to the length value 2.
+			temp isa decimal("abc") || //1
+			temp isa decimal("12") || //0
+			temp isa decimal(4) || //0
+			temp isa decimal(4,2,1) || //1
+			temp isa decimal() || //0
+			temp isa decimal(999) || //1
+			
+			temp isa string(0) || //0
+			temp isa string(10,2) || //1
+			temp isa string("abc") || //1
+			temp isa string("100") || //0
+			temp isa string() || //0
+			temp isa string || //0
+			
+			temp isa bytes(0) || //0
+			temp isa bytes(10,2) || //1
+			temp isa bytes("abc") || //1
+			temp isa bytes("100") || //0
+			temp isa bytes() || //0
+			temp isa bytes || //0
+			
+			temp isa timestamp || //0
+			temp isa timestamp("abcd") || //1
+			temp isa timestamp("HHmmss") || //0
+			temp isa timestamp("HHss") || //1
+			temp isa timestamp("yyyyMMddHHmmss") || //0
+			temp isa timestamp("yyyyMMddhhmmss") || //1
+			temp isa timestamp("yyyymmddHHmmss") || //1
+			temp isa timestamp("yyyyMMHHmmss") || //1
+			temp isa timestamp("HHss") || //1
+			
+			temp isa int || //0
+			temp isa int(6) || //1
+			temp isa bigint || //0
+			temp isa bigint(2) || //1
+			temp isa smallint || //0
+			temp isa smallint(2) || //1
+			temp isa smallfloat || //0
+			temp isa smallfloat(2) || //1
+			temp isa float || //0
+			temp isa float(2) || //1
+			temp isa date || //0
+			temp isa date(2) || //1
+			temp isa time || //0
+			temp isa time(2) || //1
+			temp isa any || //0
+			temp isa any(2) || //1
+			temp isa number || //0
+			temp isa number(2) || //1
+			temp isa rec || //0
+			temp isa rec("abc") || //1
+			
+			false;
+	end
+	
+	function f_d1() returns(decimal(4,2)) end //0
+	function f_d2() returns(decimal(4,-2)) end //1
+	function f_d3() returns(decimal(-4,2)) end //2
+	function f_d4() returns(decimal(2,4)) end //1 The decimals value 4 for type eglx.lang.EDecimal must be less than or equal to the length value 2.
+	function f_d5() returns(decimal("abc")) end //1
+	function f_d6() returns(decimal("12")) end //0
+	function f_d7() returns(decimal(4)) end //0
+	function f_d8() returns(decimal(4,2,1)) end //1
+	function f_d9() returns(decimal()) end //0
+	function f_d10() returns(decimal(999)) end //1
+	
+	function f_s1() returns(string(0)) end //0
+	function f_s2() returns(string(10,2)) end //1
+	function f_s3() returns(string("abc")) end //1
+	function f_s4() returns(string("100")) end //0
+	function f_s5() returns(string()) end //0
+	function f_s6() returns(string) end //0
+	function f_s7() returns(string?) end //0
+	
+	function f_b1() returns(bytes(0)) end //0
+	function f_b2() returns(bytes(10,2)) end //1
+	function f_b3() returns(bytes("abc")) end //1
+	function f_b4() returns(bytes("100")) end //0
+	function f_b5() returns(bytes()) end //0
+	function f_b6() returns(bytes) end //0
+	function f_b7() returns(bytes?) end //0
+	
+	function f_ts1() returns(timestamp) end //0
+	function f_ts2() returns(timestamp?) end //0
+	function f_ts3() returns(timestamp("abcd")) end //1
+	function f_ts4() returns(timestamp("HHmmss")) end //0
+	function f_ts5() returns(timestamp("HHss")) end //1
+	function f_ts6() returns(timestamp("yyyyMMddHHmmss")) end //0
+	function f_ts7() returns(timestamp("yyyyMMddhhmmss")) end //1
+	function f_ts8() returns(timestamp("yyyymmddHHmmss")) end //1
+	function f_ts9() returns(timestamp("yyyyMMHHmmss")) end //1
+	function f_ts10() returns(timestamp("HHss")) end //1
+	
+	function f_i1() returns(int) end //0
+	function f_i2() returns(int(6)) end //1
+	function f_bi1() returns(bigint) end //0
+	function f_bi2() returns(bigint(2)) end //1
+	function f_si1() returns(smallint) end //0
+	function f_si2() returns(smallint(2)) end //1
+	function f_sf1() returns(smallfloat) end //0
+	function f_sf2() returns(smallfloat(2)) end //1
+	function f_f1() returns(float) end //0
+	function f_f2() returns(float(2)) end //1
+	function f_da1() returns(date) end //0
+	function f_da2() returns(date(2)) end //1
+	function f_t1() returns(time) end //0
+	function f_t2() returns(time(2)) end //1
+	function f_a1() returns(any) end //0
+	function f_a2() returns(any?) end //0
+	function f_a3() returns(any(2)) end //1
+	function f_n1() returns(number) end //0
+	function f_n2() returns(number(2)) end //1
+	function f_r1() returns(rec) end //0
+	function f_r2() returns(rec("abc")) end //1
+end
+
+record rec
+	d1 decimal(4,2); //0
+	d2 decimal(4,-2); //1
+	d3 decimal(-4,2); //2
+	d4 decimal(2,4); //1 The decimals value 4 for type eglx.lang.EDecimal must be less than or equal to the length value 2.
+	d5 decimal("abc"); //1
+	d6 decimal("12"); //0
+	d7 decimal(4); //0
+	d8 decimal(4,2,1); //1
+	d9 decimal(); //0
+	d10 decimal(999); //1
+	
+	s1 string(0); //0
+	s2 string(10,2); //1
+	s3 string("abc"); //1
+	s4 string("100"); //0
+	s5 string(); //0
+	s6 string; //0
+	s7 string?; //0
+	
+	b1 bytes(0); //0
+	b2 bytes(10,2); //1
+	b3 bytes("abc"); //1
+	b4 bytes("100"); //0
+	b5 bytes(); //0
+	b6 bytes; //0
+	b7 bytes?; //0
+	
+	ts1 timestamp; //1
+	ts2 timestamp?; //0
+	ts3 timestamp("abcd"); //1
+	ts4 timestamp("HHmmss"); //0
+	ts5 timestamp("HHss"); //1
+	ts6 timestamp("yyyyMMddHHmmss"); //0
+	ts7 timestamp("yyyyMMddhhmmss"); //1
+	ts8 timestamp("yyyymmddHHmmss"); //1
+	ts9 timestamp("yyyyMMHHmmss"); //1
+	ts10 timestamp("HHss"); //1
+	
+	i1 int; //0
+	i2 int(6); //1
+	bi1 bigint; //0
+	bi2 bigint(2); //1
+	si1 smallint; //0
+	si2 smallint(2); //1
+	sf1 smallfloat; //0
+	sf2 smallfloat(2); //1
+	f1 float; //0
+	f2 float(2); //1
+	da1 date; //0
+	da2 date(2); //1
+	t1 time; //0
+	t2 time(2); //1
+	a1 any; //1
+	a2 any?; //0
+	a3 any(2)?; //1
+	a4 any(2); //2
+	n1 number; //0
+	n2 number(2); //1
+	r1 rec; //0
+	r2 rec("abc"); //1
+end

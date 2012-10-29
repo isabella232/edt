@@ -14,17 +14,17 @@ package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.GetByPositionStatement;
 import org.eclipse.edt.mof.egl.IrFactoryBase;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlCloseStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlDeleteStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlExecuteStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlFactory;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlForEachStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlReplaceStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlUpdateStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlAddStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlCloseStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlDeleteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlExecuteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlFactory;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlForEachStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlGetByKeyStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlOpenStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlPrepareStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlReplaceStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlUpdateStatement;
 import org.eclipse.edt.mof.impl.EFactoryImpl;
 
 

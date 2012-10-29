@@ -14,17 +14,10 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AsExpression;
-import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.IsAExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLExceptionProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLJavaLibArgumentProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPredefinedDataTypeProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPrimitiveProposalHandler;
@@ -48,7 +41,6 @@ public class EGLAsIsaOperatorReferenceCompletion extends EGLAbstractReferenceCom
 		
 		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForDeclarableParts()));
 		//Return EGL exceptions.  User-defined exceptions (records) are already returned by the search above.
-		proposals.addAll(new EGLExceptionProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 		getBoundASTNode(viewer, documentOffset, new String[] {";", "", ";end end", "xxx", "xxx)", "xxx);", "xxx\")", "xxx\");"},//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$//$NON-NLS-7$ //$NON-NLS-8$
 			new CompletedNodeVerifier() {
 				public boolean nodeIsValid(Node astNode) {
@@ -60,32 +52,11 @@ public class EGLAsIsaOperatorReferenceCompletion extends EGLAbstractReferenceCom
 			},
 			new IBoundNodeProcessor() {
 				public void processBoundNode(Node boundNode) {
-					if(isAsExpressionInArgumentToJavaLibFunction(parseStack, boundNode)) {
-						proposals.addAll(new EGLJavaLibArgumentProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
-					}
-					
 					proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
 					proposals.addAll(new EGLPredefinedDataTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
 				}
 		});
 		return proposals;
-	}
-
-	private boolean isAsExpressionInArgumentToJavaLibFunction(ParseStack parseStack, Node boundNode) {
-		Node parent = boundNode.getParent();
-		while(parent != null && !(parent instanceof AsExpression)) {
-			parent = parent.getParent();
-		}
-		if(parent != null) {
-			parent = parent.getParent();
-			if(parent instanceof FunctionInvocation) {
-				IDataBinding parentBinding = ((FunctionInvocation) parent).getTarget().resolveDataBinding();
-				if(Binding.isValidBinding(parentBinding)) {
-					return AbstractBinder.typeIs(parentBinding.getDeclaringPart(), EGLJAVA, IEGLConstants.KEYWORD_JAVALIB);
-				}
-			}
-		}
-		return false;
 	}
 
 }

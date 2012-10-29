@@ -16,8 +16,8 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlReplaceStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlReplaceStatement;
 
 public class SqlReplaceStatementImpl extends SqlIOStatementImpl implements SqlReplaceStatement {
 	@Override
@@ -31,7 +31,7 @@ public class SqlReplaceStatementImpl extends SqlIOStatementImpl implements SqlRe
 	}
 	
 	public String generateDefaultSqlString() {
-		if (SQL.isSQLResultSet(getDataSource().getType())) return null;
+		if (Utils.isSQLResultSet(getDataSource().getType())) return null;
 		
 		String sql = null;
 		Expression target = getTargets().get(0);
@@ -44,13 +44,13 @@ public class SqlReplaceStatementImpl extends SqlIOStatementImpl implements SqlRe
 			targetType = (EGLClass)target.getType().getClassifier();
 		}
 		sql = "UPDATE ";
-		sql += SQL.getTableName(targetType);
+		sql += Utils.getTableName(targetType);
 		sql += " SET ";
 		boolean doComma = false;
 		for (Field f : targetType.getFields()) {
-			if (!SQL.isKeyField(f) && SQL.isUpdateable(f)) {
+			if (!Utils.isKeyField(f) && Utils.isUpdateable(f)) {
 				if (doComma) sql += ", ";
-				sql += SQL.getColumnName(f);
+				sql += Utils.getColumnName(f);
 				sql += " = ?";
 				if (!doComma) doComma = true;
 			}
@@ -58,12 +58,12 @@ public class SqlReplaceStatementImpl extends SqlIOStatementImpl implements SqlRe
 		sql += " WHERE ";
 		boolean addAND = false;
 		for (Field f : targetType.getFields()) {
-			if (SQL.isKeyField(f)) {
+			if (Utils.isKeyField(f)) {
 				if(addAND){
 					sql += " AND ";
 				}
 				addAND = true;
-				sql += SQL.getColumnName(f);
+				sql += Utils.getColumnName(f);
 				sql += " = ?";
 			}
 		}

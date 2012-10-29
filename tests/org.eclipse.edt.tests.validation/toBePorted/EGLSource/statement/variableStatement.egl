@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+record myrec type SQLRecord
+name char(30);
+end
+
+program MyProj
+		j int = 5;// 0
+function main ()
+		i int;
+		j int = 5;//0
+	for (i from 1 to 10 by 1)
+		j int = 5;// 1 same name
+		if (i == 5)
+		j int = 5;// 1 same name
+		end
+	end
+	
+	open selectEmp with #sql{ select name from employee } ;
+	
+	forEach (from selectEmp) 
+	j int = 5;// 1 same name
+	i = i + 1;
+	end
+
+while (i < 5)
+	j int = 5;// 1 same name
+end
+
+func();
+
+end
+
+	function func()
+		x string;
+	 j int = 5;// 0
+		while (1==1)
+			openUI new PROMPT {message="press J to exit this loop:", ischar=yes}
+				 bind x
+				 OnEvent(ON_KEY:"J")
+					while (1==1)
+						exit while;				// 0
+						continue while; 		// 1 Unreachable code {warning}
+					end
+	 j int = 5;// 1 same name
+			end;
+		end	
+	end
+	
+end
+
+
+

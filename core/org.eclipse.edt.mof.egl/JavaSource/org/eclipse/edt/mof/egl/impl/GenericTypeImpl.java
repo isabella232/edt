@@ -78,7 +78,7 @@ public class GenericTypeImpl extends TypeImpl implements GenericType {
 				);
 		if (isValid) {
 			if (getTypeParameter() != null && getClassifier() == null) {
-				isValid = getTypeParameter().getName().equalsIgnoreCase(((GenericType)eglType).getTypeParameter().getName());
+				isValid = ((GenericType)eglType).getTypeParameter() != null && getTypeParameter().getName().equalsIgnoreCase(((GenericType)eglType).getTypeParameter().getName());
 			}
 			else {
 				for (int i=0; i<getTypeArguments().size(); i++) {
@@ -95,7 +95,7 @@ public class GenericTypeImpl extends TypeImpl implements GenericType {
 		StringBuffer signature = new StringBuffer();
 		if (getTypeParameter() != null && getClassifier() == null) {
 			signature.append('<');
-			signature.append(getTypeParameter().getName());
+			signature.append(getTypeParameter().getCaseSensitiveName());
 			signature.append('>');
 		}
 		else {

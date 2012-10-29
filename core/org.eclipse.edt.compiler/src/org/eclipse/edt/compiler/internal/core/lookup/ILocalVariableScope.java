@@ -11,14 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.LocalVariableBinding;
+import org.eclipse.edt.mof.egl.Member;
 
 interface ILocalVariableScope {
 	
-	void addLocalVariable(LocalVariableBinding var);
+	void addLocalVariable(Member var);
 	void addDeclaredDataName(String name);
 	boolean hasDeclaredDataName(String name);
-	IDataBinding findIOTargetData(String identifier);
-	void addIOObject(IDataBinding ioTargetDataBinding);
 }

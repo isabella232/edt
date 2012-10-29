@@ -1,0 +1,395 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+// valid PSBRecord, dliSegments and DataItems to use in statements
+DataItem CourseNo char(3) { dliFieldName="COURSE#" } end	 
+DataItem EmpNo char(6) { dliFieldName ="EMP#" } end			 
+DataItem Name char(18) { dliFieldName ="NAME" } end			 
+
+Record Course type DLISegment 						 
+{ segmentName="COURSE", keyItem=courseNo, hostVarQualifier = "Course" }		 
+	10 courseNo CourseNo;							 
+	10 title char(33);								  
+	10 desc char(220) { dliFieldName="DESCRIPN" };	 
+end
+
+Record Prereq type DLISegment { keyItem=courseNo, hostVarQualifier = "Prereq" } 
+	10 courseNo CourseNo;							 
+	10 title char(33);								 
+end
+
+Record Offering type DLISegment 					 
+	10 offerdate num(6)  { dliFieldName="DATE" };	 
+	10 location char(12);							 
+	10 format_ char(2) { dliFieldName="FORMAT" };	 
+end
+
+Record Teacher type DLISegment 						 
+{ segmentName="TEACHER", keyItem=empNo, hostVarQualifier = "Teacher" }			 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+end 
+
+Record Student type DLISegment	 					 
+	{ segmentName="STUDENT" }						 
+	10 empNo EmpNo;									 
+	10 name Name;									 
+	10 grade char(1);								 
+end
+Record EducationPSB type PSBRecord 					 
+	{defaultPSBName = "EDUCPSB"}					 
+	iopcb IO_PCBRecord {@PCB{ pcbType=TP }};		 
+ 	altpcb ALT_PCBRecord {@PCB{ pcbType=TP }};		 
+	coursePCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="CPCB",								 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Course },	 
+	   @Relationship{								 
+     		segmentRecord=Prereq, parentRecord=Course },     	   
+       @Relationship{								 
+      		segmentRecord=Offering,parentRecord=Course },   	  
+       @Relationship{								 
+      		segmentRecord=Teacher,parentRecord=Offering},   
+	   @Relationship{								 
+	     	segmentRecord=Student, parentRecord=Offering}	 
+   ] }};
+  offeringPCB DB_PCBRecord { @PCB {					 
+	  pcbType=DB,									 
+	  pcbName="OPCB",								 
+	  secondaryIndex="XLOC",						 
+	  hierarchy = [									 
+	   @Relationship{ segmentRecord=Offering }, 
+	   @Relationship{								 
+	     segmentRecord=Course,parentRecord=Offering}, 
+	   @Relationship{								 
+	     segmentRecord=Teacher,parentRecord=Offering}, 
+	   @Relationship{								 
+	     segmentRecord=Student,parentRecord=Offering} 
+	  ] }};
+end
+
+Program testDefaultSSAsValid type textUIProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes,
+  @DLI { psb=psb, 					 
+         handleHardDLIErrors = yes }	 
+  }
+  course course;						   
+  prereq prereq;						 
+  offering offering;					 
+  teacher teacher;						 
+  student student;						 
+  course2 course;						   
+  prereq2 prereq;						 
+  offer2 offering;						 
+  teacher2 teacher;						 
+  student2 student;						 
+  courses course[20];					   
+  prereqs prereq[5];					 
+  offers offering[3];					 
+  teachers teacher[5];					 
+  students student[25];		
+  xloc char(4);			   
+
+  // PSB Declaration
+  psb EducationPSB ;					 
+
+  	function main()
+		addStmt();
+		deleteStmt();
+		getStmt();
+		getForUpdateStmt();
+		getNextStmt();
+		getNextForUpdateStmt();
+		getNextInParentStmt();
+		getNextInParentForUpdateStmt(); 
+		replaceStmt();
+  	end
+  	function addStmt()		
+  	// add every segment with no modifiers and no modified SSAs	
+  	  add course ;							 
+  	  add offering;							 
+  	  add prereq ;							 
+  	  add teacher;							 
+  	  add student;							 
+   // add every segment with another PCB and no modified SSAs 
+   	  add offering usingPCB psb.offeringPCB;	 
+  	  add course usingPCB psb.offeringPCB;		 
+  	  add teacher usingPCB psb.offeringPCB;		 
+  	  add student usingPCB psb.offeringPCB;		 	 
+  	// add arrays of every segment with no modifiers and no modified SSAs	
+  	  add courses ;							 
+  	  add offers;							 
+  	  add prereqs ;							 
+  	  add teachers;							 
+  	  add students;							 
+   // add arrays of every segment with another PCB and no modified SSAs 
+   	  add offers usingPCB psb.offeringPCB;		 
+  	  add courses usingPCB psb.offeringPCB;		 
+  	  add teachers usingPCB psb.offeringPCB;	 
+  	  add students usingPCB psb.offeringPCB;	 	   	  
+   // add every segment using path calls and no modified SSAa
+      add course, prereq;					 
+      add course, offering, teacher;		 
+      add offering, teacher;				 
+      add course, offering, student;		 
+      add offering, student;				 
+  // add every segment using path calls, another PCB, and no modified SSAs
+      add offering, course usingPCB psb.offeringPCB; 
+      add offering, teacher usingPCB psb.offeringPCB;        	  	  
+      add offering, student usingPCB psb.offeringPCB;
+   	end  
+  	function deleteStmt() 	  
+	  delete course ;					 
+	  delete prereq;					 
+	  delete offering;					 
+	  delete teacher;					 
+	  delete student;					 
+//???	  delete offering usingPCB offeringPCB;
+
+  	end 	
+ 	function getStmt() 
+    // get every segment with no modifiers and no modified SSAs	
+		get course;						 	
+		get prereq;						 	
+		get offering;					 
+		get teacher;					 
+		get student;					 
+    // get every segment with another PCB and no modified SSAs 
+		get offering usingPCB psb.offeringPCB;	 
+		get course usingPCB psb.offeringPCB;	 
+		get teacher usingPCB psb.offeringPCB;	 
+		get student usingPCB psb.offeringPCB; 	 
+  	// get arrays of every segment with no modifiers and no modified SSAs	
+		get courses;					 		
+		get prereqs;					 
+		get offers;						 
+		get teachers;					 
+		get students;					 
+    // get arrays of every segment with another PCB and no modified SSAs 
+		get offers usingPCB psb.offeringPCB;	 
+		get courses usingPCB psb.offeringPCB;	 
+		get teachers usingPCB psb.offeringPCB;	 
+		get students usingPCB psb.offeringPCB;	  	  
+    // get every segment using path calls and no modified SSAa
+		get course, prereq;				 
+		get course, offering;			 
+		get course, offering, teacher;	 
+		get course, offering, student;	 
+		get offering, teacher;			 
+		get offering, student;			 
+    // get every segment using path calls, another PCB, and no modified SSAs
+     	get offering, course usingPCB psb.offeringPCB;	 
+      	get	offering, teacher usingPCB psb.offeringPCB;	        	  	  
+     	get offering, student usingPCB psb.offeringPCB;    
+	end  
+ 	function getForUpdateStmt() 
+ 	//Take the statements from getStmt() and add the forupdate modifier
+    // get every segment with no modifiers and no modified SSAs	
+		get course forupdate;					 	
+		get prereq forupdate;					 	
+		get offering forupdate;					 
+		get teacher forupdate;					 
+		get student forupdate;					 
+    // get every segment with another PCB and no modified SSAs 
+		get offering forupdate usingPCB psb.offeringPCB; 
+		get course forupdate usingPCB psb.offeringPCB;	 
+		get teacher forupdate usingPCB psb.offeringPCB;	 
+		get student forupdate usingPCB psb.offeringPCB;  
+		
+  	// get arrays of every segment with no modifiers and no modified SSAs	
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+	
+    // get arrays of every segment with another PCB and no modified SSAs 
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+		  
+    // get every segment using path calls and no modified SSAa
+		get course, prereq forupdate;				 
+		get course, offering forupdate;				 
+		get course, offering, teacher forupdate;	 
+		get course, offering, student forupdate;	 
+		get offering, teacher forupdate;			 
+		get offering, student forupdate;			 
+    // get every segment using path calls, another PCB, and no modified SSAs
+     	get offering, course forupdate usingPCB psb.offeringPCB;	 
+      	get	offering, teacher forupdate usingPCB psb.offeringPCB;	        	  	  
+     	get offering, student forupdate usingPCB psb.offeringPCB; 	   
+	end   
+ 	function getNextStmt() 
+  	//Take the statements from getStmt() and add the next modifier	
+    // get every segment with no modifiers and no modified SSAs	
+		get next course;					 	
+		get next prereq;					 	
+		get next offering;					 
+		get next teacher;					 
+		get next student;					 
+    // get every segment with another PCB and no modified SSAs 
+		get next offering usingPCB psb.offeringPCB;	 
+		get next course usingPCB psb.offeringPCB;	 
+		get next teacher usingPCB psb.offeringPCB;	 
+		get next student usingPCB psb.offeringPCB; 	 
+  	// get arrays of every segment with no modifiers and no modified SSAs	
+		get next courses;					 		
+		get next prereqs;					 
+		get next offers;					 
+		get next teachers;					 
+		get next students;					 
+    // get arrays of every segment with another PCB and no modified SSAs 
+		get next offers usingPCB psb.offeringPCB;	 
+		get next courses usingPCB psb.offeringPCB;	 
+		get next teachers usingPCB psb.offeringPCB;	 
+		get next students usingPCB psb.offeringPCB;	  	  
+    // get every segment using path calls and no modified SSAa
+		get next course, prereq;			 
+		get next course, offering;			 
+		get next course, offering, teacher;	 
+		get next course, offering, student;	 
+		get next offering, teacher;			 
+		get next offering, student;			 
+    // get every segment using path calls, another PCB, and no modified SSAs
+     	get next offering, course usingPCB psb.offeringPCB;	 
+      	get	next offering, teacher usingPCB psb.offeringPCB;        	  	  
+     	get next offering, student usingPCB psb.offeringPCB;   
+	end   
+ 	function getNextForUpdateStmt() 
+ 	//Take the statements from getForUpdateStmt() and add the next modifier
+    // get every segment with no modifiers and no modified SSAs	
+		get next course forupdate;					 	
+		get next prereq forupdate;					 	
+		get next offering forupdate;				 
+		get next teacher forupdate;					 
+		get next student forupdate;					 
+    // get every segment with another PCB and no modified SSAs 
+		get next offering forupdate usingPCB psb.offeringPCB; 
+		get next course forupdate usingPCB psb.offeringPCB;	  
+		get next teacher forupdate usingPCB psb.offeringPCB;  
+		get next student forupdate usingPCB psb.offeringPCB;  
+		
+  	// get arrays of every segment with no modifiers and no modified SSAs	
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+	
+    // get arrays of every segment with another PCB and no modified SSAs 
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+		  
+    // get every segment using path calls and no modified SSAa
+		get next course, prereq forupdate;				 
+		get next course, offering forupdate;			 
+		get next course, offering, teacher forupdate;	 
+		get next course, offering, student forupdate;	 
+		get next offering, teacher forupdate;			 
+		get next offering, student forupdate;			 
+    // get every segment using path calls, another PCB, and no modified SSAs
+     	get next offering, course forupdate usingPCB psb.offeringPCB;	 
+      	get	next offering, teacher forupdate usingPCB psb.offeringPCB;	        	  	  
+     	get next offering, student forupdate usingPCB psb.offeringPCB; 	   
+	end 
+ 	function getNextInParentStmt() 
+  	//Take the statements from getNextStmt() and add the inParent modifier	
+    // get every segment with no modifiers and no modified SSAs	
+		get next inparent course;					 	
+		get next inparent prereq;					 	
+		get next inparent offering;					 
+		get next inparent teacher;					 
+		get next inparent student;					 
+    // get every segment with another PCB and no modified SSAs 
+		get next inparent offering usingPCB psb.offeringPCB;	 
+		get next inparent course usingPCB psb.offeringPCB;	 
+		get next inparent teacher usingPCB psb.offeringPCB;	 
+		get next inparent student usingPCB psb.offeringPCB; 	 
+  	// get arrays of every segment with no modifiers and no modified SSAs	
+		get next inparent courses;					 		
+		get next inparent prereqs;					 
+		get next inparent offers;					 
+		get next inparent teachers;					 
+		get next inparent students;					 
+    // get arrays of every segment with another PCB and no modified SSAs 
+		get next inparent offers usingPCB psb.offeringPCB;	 
+		get next inparent courses usingPCB psb.offeringPCB;	 
+		get next inparent teachers usingPCB psb.offeringPCB;	 
+		get next inparent students usingPCB psb.offeringPCB;	  	  
+    // get every segment using path calls and no modified SSAa
+		get next inparent course, prereq;			 
+		get next inparent course, offering;			 
+		get next inparent course, offering, teacher;	 
+		get next inparent course, offering, student;	 
+		get next inparent offering, teacher;			 
+		get next inparent offering, student;			 
+    // get every segment using path calls, another PCB, and no modified SSAs
+     	get next inparent offering, course usingPCB psb.offeringPCB;	 
+      	get	next inparent offering, teacher usingPCB psb.offeringPCB;	        	  	  
+     	get next inparent offering, student usingPCB psb.offeringPCB;	   
+	end   	
+ 	function getNextInParentForUpdateStmt() 
+ 	//Take the statements from getNextForUpdateStmt() and add the inparent modifier
+    // get every segment with no modifiers and no modified SSAs	
+		get next inparent course forupdate;					 	
+		get next inparent prereq forupdate;					 	
+		get next inparent offering forupdate;				 
+		get next inparent teacher forupdate;				 
+		get next inparent student forupdate;				 
+    // get every segment with another PCB and no modified SSAs 
+		get next inparent offering forupdate usingPCB psb.offeringPCB; 
+		get next inparent course forupdate usingPCB psb.offeringPCB;   
+		get next inparent teacher forupdate usingPCB psb.offeringPCB;  
+		get next inparent student forupdate usingPCB psb.offeringPCB;  
+		
+  	// get arrays of every segment with no modifiers and no modified SSAs	
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+	
+    // get arrays of every segment with another PCB and no modified SSAs 
+	// can't use forUpdate with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+		  
+    // get every segment using path calls and no modified SSAa
+		get next inparent course, prereq forupdate;				 
+		get next inparent course, offering forupdate;			 
+		get next inparent course, offering, teacher forupdate;	 
+		get next inparent course, offering, student forupdate;	 
+		get next inparent offering, teacher forupdate;			 
+		get next inparent offering, student forupdate;			 
+    // get every segment using path calls, another PCB, and no modified SSAs
+     	get next inparent offering, course forupdate usingPCB psb.offeringPCB;	 
+      	get	next inparent offering, teacher forupdate usingPCB psb.offeringPCB;	        	  	  
+     	get next inparent offering, student forupdate usingPCB psb.offeringPCB; 	   
+	end 	
+	   
+  function replaceStmt()
+   // replace every segment with no modifiers and no modified SSAs	
+  	  replace course ;							 
+  	  replace offering;							 
+  	  replace prereq ;							 
+  	  replace teacher;							 
+  	  replace student;							 
+   // replace every segment with another PCB and no modified SSAs 
+   	  replace offering usingPCB psb.offeringPCB;	 
+  	  replace course usingPCB psb.offeringPCB;		 
+  	  replace teacher usingPCB psb.offeringPCB;		 
+  	  replace student usingPCB psb.offeringPCB;		 	 
+
+ 	// replace arrays of every segment with no modifiers and no modified SSAs	
+	// can't use replace with arrays of DLI segments.  
+	// Covered in DLIProgramsStmtsAndClauseCombos_invalid.egl
+   	  
+    // replace every segment using path calls (with or without another PCB) and no modified SSAa
+    // replace replaces whatever was last retrieved, can't specify multiple I/O
+    // objects, Can specify command codes to prevent a retrieved segment from 
+    // being replaced.
+  end
+
+
+end

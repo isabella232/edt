@@ -288,14 +288,14 @@ public class ProblemReconciler implements IReconciler {
 				IFile file = ((IFileEditorInput) fEditor.getEditorInput()).getFile();
 				IProject proj = file.getProject();
 				IWorkingCopy[] currRegedWCs = EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory());
-				IEGLFile eglFile = EGLCore.createEGLFileFrom(file);
-				if (eglFile != null) {
-					String[] pkgName;
+				IEGLElement eglFile = EGLCore.create(file);
+				if (eglFile instanceof IEGLFile) {
+					String pkgName;
 					IPackageFragment packageFragment = (IPackageFragment) eglFile.getAncestor(IEGLElement.PACKAGE_FRAGMENT);
 					if (packageFragment.isDefaultPackage()) {
-						pkgName = new String[0];
+						pkgName = "";
 					} else {
-						pkgName = packageFragment.getElementName().split("\\.");
+						pkgName = packageFragment.getElementName();
 					}
 					ReconcilerProblemRequestorFactory problemFactory = new ReconcilerProblemRequestorFactory(file);
 					

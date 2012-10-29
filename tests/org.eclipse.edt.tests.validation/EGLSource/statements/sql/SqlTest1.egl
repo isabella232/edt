@@ -1,3 +1,7 @@
+import eglx.persistence.*;
+import eglx.persistence.sql.*;
+
+
 record BasicRec
 	name string;
 end
@@ -62,8 +66,6 @@ library sql
 		open rs for myEntity from ds for myEntity; //1	
 		open rs using a,b with stmt using b,a;	//1	
 		open rs with #sql{stuff} with stmt from ds;  //1
-		prepare ps from ds with #sql{} with expr; //1
-		foreach (myEntity from rs from rs) end //1
 		add parent to ds to rs; //1
 		add parent to ds for parent for myEntity; //1
 		get myEntity from rs from ds; //1
@@ -72,9 +74,8 @@ library sql
 		execute from ds from ds; //1
 		execute from ds with a with #sql{}; //1
 		execute from ds using a using b; //1
-		delete from ds from rs; //1
 		delete parent from rs using a using b; //1
-		delete parent from ds for a for b; //1
+		delete parent from ds for parent for parent; //1
 		delete parent from ds with a with #sql{}; //1
 		replace parent to ds to rs; //1
 		replace parent to ds for parent for parent; //1
@@ -109,10 +110,12 @@ library sql
 		open rs for myentity from ds; //0
 		open rs for nonEntity from ds; //1
 		open rs for parent from ds; //0
-		open rs for child from ds; //1 no @Id
+		//  no @Id:
+		open rs for child from ds; //1
 		open rs for child.parent from ds; //0
 		open rs for a from ds;  //1
-		open rs for parent.orphan from ds; //1 assoc. not supported yet
+		//  assoc. not supported yet:
+		open rs for parent.orphan from ds; //1
 		open rs from ds into a ; //1
 	end
 	
@@ -121,10 +124,6 @@ library sql
 		
 		// target must be an SQLStatement
 		prepare ds from ds with #sql{insert into t (c1) values (?)}; //1
-		
-		prepare ps with #sql{insert into t (c1) values (?)}; //1 missing FROM
-		
-		prepare ps from ds; //1 missing WITH
 		
 		expr string;
 		prepare ps from ds with expr; //0
@@ -137,117 +136,186 @@ library sql
 	function validateForeach()
 		foreach (a from rs) end //0
 		foreach (a, parent.id from rs) end //0
-		foreach (parent.id from ds) end //1 wrong data source type
-		foreach (from rs) end //1 missing target
+		// wrong data source type
+		foreach (parent.id from ds) end //1
+		// missing target
 		foreach (parent.id from rs) end //0
 		foreach (parent.id, child.name from rs) end //0
-		foreach (parent.orphan from rs) end //1 association not yet supported
+		// association not yet supported. however the association types were removed so it shouldn't be an error here
+		foreach (parent.orphan from rs) end //0
 		foreach (parent.id, parent.id from rs) end //0
-		foreach (parent from rs into a) end //1 INTO not allowed
 	end
 	
 	function validateGetByKey()
 		get myEntity from ds; //0
-		get myEntity, myEntity from ds; //1 only 1 non-primitive expr allowed
+		// only 1 non-primitive expr allowed
+		get myEntity, myEntity from ds; //1
 		get myEntity from ds with #sql{}; //0
-		get myEntity from rs with #sql{}; //1 must be sqldatasource
+		// must be sqldatasource
+		get myEntity from rs with #sql{}; //1
 		get parent.id from ds; //0
-		get parent.child from ds; //1 no @Id on child
+		// no @Id on child
+		get parent.child from ds; //1
 		get parent from ds; //0
 		get parent.child from ds using a; //0
-		get a, b from ds using a; //1 WITH required when not mapped to single table
+		// WITH required when not mapped to single table
+		get a, b from ds using a; //1
 		get a, b from ds using a with #sql{}; //0
-		get basic from ds; //1 no @Id 
+		// no @Id
+		get basic from ds; //1 
 		get basic from ds using a; //0
 		get basic from ds with #sql{}; //0
-		get dict from ds using a; //1 - dictionary not yet supported
+		// WITH required when not mapped to single table
+		get dict from ds using a; //1
 		get array from ds using a; //0
 		get invalidArray from ds using a; //1
-		get array from ds into a; //1 INTO not allowed
-		get rs from ds with #sql{}; //1 rs is nullable but has no default constructor
+		// INTO not allowed
+		get array from ds into a; //1
+		// rs is nullable but has no default constructor
+		get rs from ds with #sql{}; //1
 	end
 	
 	function validateAdd()
 		add myEntity to ds;//0
-		add myEntity, myEntity to ds;//1 
-		add a to ds;//1 need FOR when not mapped to single table
-		add a, parent.id to ds;//1 need FOR when not mapped to single table
+		add myEntity, myEntity to ds;//1
+		// need FOR when not mapped to single table 
+		add a to ds;//1
+		// need FOR when not mapped to single table
+		add a, parent.id to ds;//1
 		add a to ds for parent;//0
 		add a, parent.id to ds for parent;//0 
 		add parent.id to ds;//0 
-		add parent.id, child.name to ds;//1 must be single table 
-		add parent.id, child.name to ds for parent;//1 must be single table 
+		// must be single table
+		add parent.id, child.name to ds;//1
+		add parent.id, child.name to ds for parent;//0 
 		add parent.id, parent.id to ds;//0
-		add myEntity to ds for myEntity;//0 
-		add myEntity to rs for myEntity;//1 no FOR when using result set
-		add myEntity to ds for parent;//1 for type must match target type
-		add parent.id to ds for a;//1 invalid FOR type
-		add parent.id to ds for parent.orphan;//1 association not yet supported
+		add myEntity to ds for myEntity;//0
+		// no FOR when using result set 
+		add myEntity to rs for myEntity;//1
+		// for type must match target type
+		add myEntity to ds for parent;//1
+		// invalid FOR type
+		add parent.id to ds for a;//1
+		// association not yet supported
+		add parent.id to ds for parent.orphan;//1
 		add parent.id to ds for parent;//0
-		add parent.orphan to ds; //1 association not yet supported 
+		// association not yet supported. however the association types were removed so it shouldn't be an error here
+		add parent.orphan to ds; //0
 		add o, parent.orphan to ds; //1  
 		add basic to ds; //0
-		add multi to ds; //1 must be single table
+		// must be single table. however the SecondaryTables annotation was removed so this won't report an error here.
+		add multi to ds; //0
 	end
 	
 	function validateExecute()
 		execute from ds; //0 
 		execute from rs; //1
-		execute from rs with ps; //0 (FROM ignored when WITH is sqlstatement)
+		// FROM ignored when WITH is sqlstatement
+		execute from rs with ps; //0
 		execute from rs with #sql{}; //1
 		execute from rs with a; //1
 		execute from ds with a using b; //0
 		execute from ds using b; //0
-		execute using b; //0
-		execute with #sql{}; //0
+		execute using b; //1 No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement.
+		execute with #sql{}; //1 No compiler extensions were found for the execute statement, which has no default behavior. The execute statement cannot be used until an extension has been configured for this statement.
 		execute with #sql{} from jndi; //0
 	end
 	 
 	function validateDelete()
-		delete from ds; //1 WITH required
-		delete from ds with a for basic; //1 no FOR When no target
+		//WITH required
+		delete from ds; //1
+		// no FOR When no target
+		delete from ds with a for basic; //1
 		delete from ds with #sql{}; //0
 		delete from ds with a; //0
-		delete from ds using a; //1 WITH required when no target and using sqldatasource
+		// WITH required when no target and using sqldatasource
+		delete from ds using a; //1
 		delete from rs; //0
-		delete from rs with a; //1 no WITH when no target and using sqlresultset
-		delete from rs with #sql{}; //1 no WITH when no target and using sqlresultset
-		delete from rs using a; //1 no USING when no target and using sqlresultset
+		// no WITH when no target and using sqlresultset
+		delete from rs with a; //1
+		// no WITH when no target and using sqlresultset
+		delete from rs with #sql{}; //1
+		// no USING when no target and using sqlresultset
+		delete from rs using a; //1
 		
-		delete parent from ds for basic with #sql{}; //1 either FOR or WITH not both
+		// either FOR or WITH not both
+		delete parent from ds for basic with #sql{}; //1
 		delete parent from ds for parent; //0
-		delete parent from ds for myEntity; //1 FOR type must match target type
-		delete multi from ds; //1 must be single table 
+		// FOR type must match target type
+		delete parent from ds for myEntity; //1
+		// must be single table. however the SecondaryTables annotation was removed so this won't report an error here.
+		delete multi from ds; //0
 		delete parent from ds; //0
 		delete parent.id from ds; //0 
 		delete parent.child from ds; //1
 		delete a from ds; //1
-		delete parent.orphan from ds using a; //1 association not yet supported
-		delete basic from ds; //1 when using sqldatasource and no USING or WITH, the target must have @Id
+		// association not yet supported. however the association types were removed so it shouldn't be an error here
+		delete parent.orphan from ds using a; //0
+		// when using sqldatasource and no USING or WITH, the target must have @Id
+		delete basic from ds; //1
 		delete basic from ds with a; //0 
 		delete basic from ds with #sql{}; //0
 		delete basic from ds using a; //0
-		delete dict from ds using a; //1 - dictionary not yet supported
-		delete array from ds using a; //1 - array not yet supported in delete
+		// dictionary not yet supported
+		delete dict from ds using a; //1
+		// array not yet supported in delete
+		delete array from ds using a; //1
 		delete invalidArray from ds using a; //1
-		delete parent from ds for a; //1 FOR is not an entity
+		// FOR is not an entity
+		delete parent from ds for a; //1
 	end
 	
 	function validateReplace()
 		replace parent to ds; //0
 		replace parent to ds using a with b; //0
-		replace parent to ds using a for parent; //1 no FOR 
-		replace parent to ds with a for parent; //1 no FOR
-		replace parent to ds with #sql{} for parent; //1 no FOR
-		replace basic to ds; //1 need @Id when missing WITH
+		// no FOR
+		replace parent to ds using a for parent; //1
+		// no FOR 
+		replace parent to ds with a for parent; //1
+		// no FOR
+		replace parent to ds with #sql{} for parent; //1
+		// need @Id when missing WITH
+		replace basic to ds; //1
 		replace basic to ds with a; //0
-		replace basic to rs with a; //1 no USING or WITH for resultset
-		replace basic to rs using a; //1 no USING or WITH for resultset
-		replace a to ds; //1 target not data expr
+		// no USING or WITH for resultset
+		replace basic to rs with a; //1
+		// no USING or WITH for resultset
+		replace basic to rs using a; //1
+		// target not data expr
+		replace a to ds; //1
 		replace parent.id to ds; //0
-		replace multi to ds; //1 no multiple tables
-		replace dict to ds with a; //1 - dictionary not yet supported
-		replace array to ds with a; //1 - array not yet supported in replace
+		// no multiple tables. however the SecondaryTables annotation was removed so this won't report an error here.
+		replace multi to ds; //0
+		// dictionary not yet supported
+		replace dict to ds with a; //1
+		// array not yet supported in replace
+		replace array to ds with a; //1
 		replace invalidArray to ds using a; //1
 	end
+	
+	function validateSQLResultSetControl()
+		a int{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+		b int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+		c int{@SQLResultSetControl{}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+		d sqldatasource?{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+		e sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 0
+		f sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}}; // 0
+	end
+	
+	// also test SQLResultSetControl on global fields
+	rsc1 int{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc2 int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc3 int{@SQLResultSetControl{}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc4 sqldatasource?{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc5 sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 0
+	rsc6 sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}}; // 0
+end
+
+record SQLResultSetControlRec
+	rsc1 int{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc2 int{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc3 int{@SQLResultSetControl{}}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc4 sqldatasource?{@SQLResultSetControl}; // 1 @SQLResultSetControl is only valid on SQLResultSet and SQLStatement fields.
+	rsc5 sqlresultset?{@SQLResultSetControl{scrollablity = TYPE_FORWARD_ONLY}}; // 0
+	rsc6 sqlstatement?{@SQLResultSetControl{holdability = CLOSE_CURSORS_AT_COMMIT}}; // 0
 end

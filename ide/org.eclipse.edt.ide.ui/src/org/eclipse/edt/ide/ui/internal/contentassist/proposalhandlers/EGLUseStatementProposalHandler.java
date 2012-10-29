@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -69,17 +68,8 @@ public class EGLUseStatementProposalHandler extends EGLAbstractProposalHandler {
 			if(canBeUsedByActivePart(part)){
 				String partTypeName;
 				switch (part.getPartType()) {
-					case IEGLSearchConstants.TABLE :
-						partTypeName = IEGLConstants.KEYWORD_DATATABLE;
-						break;
-					case IEGLSearchConstants.FORMGROUP :
-						partTypeName = IEGLConstants.KEYWORD_FORMGROUP;
-						break;
 					case IEGLSearchConstants.LIBRARY :
 						partTypeName = IEGLConstants.KEYWORD_LIBRARY;
-						break;
-					case IEGLSearchConstants.FORM :
-						partTypeName = IEGLConstants.KEYWORD_FORM;
 						break;
 					case IEGLSearchConstants.HANDLER :
 						partTypeName = IEGLConstants.KEYWORD_HANDLER;
@@ -115,23 +105,19 @@ public class EGLUseStatementProposalHandler extends EGLAbstractProposalHandler {
 		Node eglPart = EGLModelUtility.getPartNode(document, documentOffset);
 		eglPart.accept(new DefaultASTVisitor() {
 			public void endVisit(Program program) {
-				result[0] = IEGLSearchConstants.TABLE | IEGLSearchConstants.FORMGROUP | IEGLSearchConstants.LIBRARY;
+				result[0] = IEGLSearchConstants.LIBRARY;
 			}
 			
 			public void endVisit(Library library) {
-				result[0] = IEGLSearchConstants.TABLE | IEGLSearchConstants.FORMGROUP | IEGLSearchConstants.LIBRARY;
+				result[0] = IEGLSearchConstants.LIBRARY;
 			}
 			
 			public void endVisit(Handler handler) {
-				result[0] = IEGLSearchConstants.TABLE | IEGLSearchConstants.LIBRARY;
+				result[0] = IEGLSearchConstants.LIBRARY;
 			}
 			
 			public void endVisit(Service service) {
-				result[0] = IEGLSearchConstants.TABLE | IEGLSearchConstants.LIBRARY;
-			}
-			
-			public void endVisit(FormGroup formGroup) {
-				result[0] = IEGLSearchConstants.FORM;
+				result[0] = IEGLSearchConstants.LIBRARY;
 			}
 		});		 
 		return result[0];

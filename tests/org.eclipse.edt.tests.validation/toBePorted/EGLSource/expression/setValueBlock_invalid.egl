@@ -1,0 +1,123 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program setValueBlock_invalid
+
+	localVar0 point {z=4};                    // 1 z cannot be resolved 
+	localVar1 point {z=4, y=this.fred};       // 2 z cannot be resolved | this.fred cannot be resolved
+	localvar2 string[5] {1, "2", "3", "4", "5" }; // 0
+	localvar3 rectangle {localvar3};        // 1 positional property is not valid for use with rectangle
+	localvar4 int[] {1};                        // 1 positional property is not valid for use with int[]
+	
+	localvar5 rectangle {bogus{x=6}};     // 1 bogus cannot be resolved
+	localvar6 rectangle {upperLeft{x=6}}; // 0
+	localvar7 rectangle {upperLeft{z=6}}; // 1 z cannot be resolved
+	
+	myRec rectangle;
+	localvar8 rectangle[1] {myRec}; // 0
+	
+	
+	function main()
+		localVar0 dbchar(10);
+		localVar1 point {x = this.localVar0.x}; // 0
+		localVar2 point {x = localVar0};        // 1 not compatible
+		
+		myRect rectangle;
+		myRect{upperleft.x=f1()}; // 1 f1 cannot be resolved
+		fred{upperleft.x=6};      // 1 fred cannot be resolved
+		
+		myRectRef rectangle {lowerRight.x = 5, upperLeft.y = 6}; // 0
+		
+		pt point;
+		pt2 point;
+		pt = pt2{x=1, y=2};		// 0
+		pt = pt2{x="1", y=2};	// 0
+		
+		pt = myRect;                // 1 not compatible
+		pt = myRect{upperleft.x=5}; // 1 not compatible
+		
+		f2(pt2{x=1, y=2}); // 1 set values block is not allowed on an argument in a function invocation
+		
+		if (pt2{x=1, y=2} == pt{x=1, y=2}) // 2 set values block or constructor is not allowed in a conditional expression. | set values block or constructor is not allowed in a conditional expression.
+		end
+
+		while (pt2{x=1, y=2} == pt{x=1, y=2}) // 2 set values block or constructor is not allowed in a conditional expression. | set values block or constructor is not allowed in a conditional expression.
+		end
+		
+		case
+			when (pt2{x=1, y=2} == pt{x=1, y=2}) // 2 set values block or constructor is not allowed in a conditional expression. | set values block or constructor is not allowed in a conditional expression.
+		end
+				
+		case (pt2{x=1, y=2})     // 1 set values block is not allowed in a criterion for a case statement
+			when (pt{x=1, y=2}) // 1 set values block is not allowed in a when expression
+		end
+		
+		call "boguspgm" (pt2{x=1, y=2}); // 1 set values block is not allowed on an argument in a call statement
+		
+		openui foo { name = value } end // 1 foo cannot be resolved
+
+	end
+	
+	function f2(pt point)
+		pt point;
+	end
+	
+end
+
+program boguspgm(pt point)
+	function main()
+	end
+end
+	
+record point
+	{ x = init_Valid.x}    // 1 init_Valid cannot be resolved
+	{ y = init_Valid.f1()} // 1 init_Valid cannot be resolved
+	x int;
+	y int;	
+end
+
+record rectangle
+	upperleft point = lowerright; // 0
+	lowerright point = upperleft; // 0
+end
+
+record polygon
+	{points1 = [new point {x = 3}]}               // 0
+	points1 point[];                              // 0
+	points2 point[10] {x = 5, y = points2[1].x }; // 0	
+end
+
+record anSQLRec type sqlRecord
+	{this.xxx = "abcd12345"}         // 0
+	 xxx char(9) {column = "EMPNO"}; // 0
+end
+
+record console type consoleForm
+	{this.formSize = new consoleField} // 0
+	
+	formSize consoleField {fieldLen = 7, position=[1,1]};         // 0
+	
+	fieldAry consoleField[2] {new consoleField{}, new consoleField{}};	//0
+end
+
+Record flexRec
+	localVar0 point {z=4};                    // 1 z cannot be resolved 
+	localVar1 point {z=4, y=this.fred};       // 2 z cannot be resolved | this cannot be resolved
+	localvar2 String[5] {1, "2", "3", "4", "5" }; // 0
+	localvar3 rectangle {localvar3};        // 1 positional property is not valid for use with rectangle
+	localvar4 int[] {1};                        // 1 positional property is not valid for use with int[]
+end
+		
+// validate:
+// 1 {1} and {2} are not compatible types in the expression {3}. {6653, EGLMESSAGE_ASSIGNMENT_STATEMENT_TYPE_MISMATCH}
+// 1 A positional property is not valid for use with {0}. The item must be an array with a specified length. {7510, EGLMESSAGE_POSITIONAL_PROPERTY_NOT_VALID_FOR}
+

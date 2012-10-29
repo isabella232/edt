@@ -1,0 +1,70 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+DataItem outline1 char(10)
+	{outline = [box]} //0
+end
+
+DataItem outline2 char(10)
+	{outline = ["box"]} //1
+end
+
+DataItem outline3 char(10)
+	{outline = tom} //1
+end
+
+DataItem outline4 char(10)
+	{outline = []} //0
+end
+
+DataItem outline5 char(10)
+	{outline = [top, bottom, left, right]}//0
+end
+
+DataItem outline6 char(10)
+	{outline = [top, top]} //0
+end
+
+DataItem outline7 char(10)
+	{outline = [bob]} //1
+end
+
+DataItem outline8 char(10)
+	{outline = ["top"]} //1
+end
+
+DataItem outline9 char(10)
+	{outline = [noOutline]} //0
+end
+
+DataItem outline10 char(10)
+	{outline = [syslib.box]} //1
+end
+
+DataItem outline11 char(10)
+	{outline = [egl.core.syslib.box]} //1
+end
+
+DataItem outline12 char(10)
+	{outline = [syslib.noOutline]} //1
+end
+
+DataItem outline13 char(10)
+	{outline = [egl.core.syslib.noOutline]} //1
+end
+
+DataItem outline14 char(10)
+	{outline = [outlinekind.top, egl.ui.text.outlinekind.bottom]}//0
+end
+
+DataItem outline15 char(10)
+	{outline = [top, bob]} //1
+end

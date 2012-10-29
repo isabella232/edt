@@ -1,0 +1,631 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// checkValidNumberOfArguments:
+Program checkValidNumberOfArgumentsPgm
+	function main() end
+	
+	function func()
+		a int = mathLib.abs(a, a);		//1 Function abs requires exactly 1 argument(s). {5109*, ROUTINE_MUST_HAVE_X_ARGS}
+		b int = mathLib.abs(a);			//0
+		
+		clearFieldsByName();				//1 Function clearFieldsByName requires at least 1 argument(s). {5105*, ROUTINE_MUST_HAVE_ATLEAST_X_ARGS}
+		clearFieldsByName("a", "b", "c");	//0
+		
+		beginDatabaseTransaction("x", "y");	//1 Function beginDatabaseTransaction requires either 0 or 1 arguments. {5098*, ROUTINE_MUST_HAVE_X_OR_Y_ARGS}	
+		beginDatabaseTransaction("x");		//0
+		beginDatabaseTransaction();			//0
+	end
+end
+
+// validate:
+Library validateLib
+	function func()
+		anyParmFunc(1==1);				//0
+		a int = conditionAsInt(1==1);	//0
+		
+		flexRec flexRec;
+		flexRecFunc(flexRec{field1=5});	//1 A set values block is not allowed on an argument in a function invocation. {7511, SET_VALUES_BLOCK_NOT_VALID_AS_FUNC_ARG}
+		flexRecFunc(flexRec);			//0
+	end
+	
+	function anyParmFunc(thing any in) end
+	function flexRecFunc(rec flexRec) end
+end
+
+Record flexRec field1 int; end
+Record fixedRec
+	10 item1 int;
+	10 item2 int;
+		15 item3 int;
+	10 occursItem int[2];
+end
+Record fixedRec2
+	10 item1 int;
+end
+Record sqlRec type sqlRecord
+	10 item1 int;
+	10 item2 int {isSqlNullable=no};
+end
+Record PSBRec type PSBRecord pcb1 fixedRec; end
+
+Service myService end
+Interface myInterface end
+
+// validate (1):
+Program validate1Pgm {includeReferencedFunctions = yes}
+	function main() end
+	
+	use fg;
+	
+	function func(nullableParm int SqlNullable, notNullableParm int, fieldParm int field)
+		intAry int[];
+		intVar int;
+		stringAry string[];
+		stringVar string;
+		anyAry any[];
+		thing any;
+		flexRec flexRec;
+		fixedRec fixedRec;
+		fixedRecAry fixedRec[];
+		sqlRec sqlRec;
+		psbRec PSBRec;
+		dictVar dictionary;
+		arrayDictVar arraydictionary;
+		const intConst int = 5;
+		const stringConst string = "a";
+		cf consolefield;
+		reportVar report;
+		blobVar blob;
+		clobVar clob;
+		serviceVar myService;
+		interfaceVar myInterface;
+		consoleFormRec consoleFormRec;
+		serialRec serialRec;
+		dbcharAry dbchar(4)[];
+		
+		clearRequestAttr("a");			//0
+		clearSessionAttr("a");			//0
+		getRequestAttr("a", intAry);	//0
+		getSessionAttr("a", intAry);	//0
+		setRequestAttr("a", intAry);	//0
+		setSessionAttr("a", intAry);	//0
+		
+		displayLineMode("a");			//0
+		
+		setLocale("a", "b");			//0
+		
+		setLocaleValidatorFunc();		//0
+		
+		EGLTDLI("a", fixedRec);			//1 DL/I I/O is only allowed in a program that has the DLI property specified.  {7935*, DLI_IO_ONLY_ALLOWED_IN_PROGRAM_WITH_DLI}
+		AIBTDLI("a", "b");				//1 DL/I I/O is only allowed in a program that has the DLI property specified.  {7935*, DLI_IO_ONLY_ALLOWED_IN_PROGRAM_WITH_DLI}
+		VGTDLI("a", 5);					//1 DL/I I/O is only allowed in a program that has the DLI property specified.  {7935*, DLI_IO_ONLY_ALLOWED_IN_PROGRAM_WITH_DLI}
+		
+		nativeLib.anyParmFunc(fixedRec.item1);		//0
+		nativeLib.anyParmFunc(fixedRec.item2);		//1 Error in argument fixedRec.item2 in function call nativeLib.anyParmFunc. A substructured item may not be passed as an argument to a native library function. {5618, SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION}
+		notNativeLib.anyParmFunc(fixedRec.item1);	//0
+		notNativeLib.anyParmFunc(fixedRec.item2);	//0
+		
+		psbRecParmFunc(psbRec);			//1 The PSBRecord variable psbRec cannot be used as an argument on a call or function invocation statement.  {7930*, DLI_PSBRECORD_NOT_VALID_AS_ARGUMENT}
+		
+		anyParmFunc(anyParmFunc(1));	//1 Function anyParmFunc must return a type.  {6654*, FUNCTION_MUST_RETURN_TYPE}
+		
+		fixedRec.removeAll();			//1 removeAll cannot be resolved
+		dictVar.removeAll();			//0
+		intAry.removeAll();				//0
+		
+		fixedRec.appendElement(fixedRec);	//1 appendElement cannot be resolved
+		dictVar.appendElement(dictVar);		//1 The target for a function invocation must be a function or a delegate
+		intAry.appendElement(1);			//0
+		
+		fixedRec.containsKey("a");			//1 containsKey cannot be resolved
+		intAry.containsKey("a");			//1 containsKey cannot be resolved
+		dictVar.containsKey("a");			//0
+		
+		intAry.appendAll(dictVar);				//1 The argument to the appendAll() function must be an array of compatible type with intAry.  {6719*, INVALID_APPENDALL_ARG}
+		intAry.appendAll(stringAry as int[]);	//0
+		intAry.appendAll(intAry);				//0
+		intAry.appendAll(anyAry);				//0
+		intAry.appendAll(dbcharAry);			//1 The argument to the appendAll() function must be an array of compatible type with intAry.
+		
+		intAry[1] = conditionAsInt(intAry[2]);	//0
+		intAry[1] = conditionAsInt(1==1);		//0
+		
+		setError("a"+stringAry[1]);	//0
+		setError(stringFunc());		//0
+		setError("a"+"b");			//0
+		setError("a");				//0
+		
+		intAry[1] = abs(1+1);		//0
+		intAry[1] = abs(intAry[2]);	//0
+		
+		dateParmFunc("2005");			//1 Error in argument "2005" in function invocation dateParmFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		dateParmFunc(stringConst);		//1 Error in argument stringConst in function invocation dateParmFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		timeParmFunc("2005");			//1 Error in argument "2005" in function invocation timeParmFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		timestampParmFunc("2005");		//1 Error in argument "2005" in function invocation timestampParmFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		intervalParmFunc("2005");		//1 Error in argument "2005" in function invocation intervalParmFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		dateParmInoutFunc("2005");		//1 Error in argument "2005" in function invocation dateParmInoutFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		timeParmInoutFunc("2005");		//1 Error in argument "2005" in function invocation timeParmInoutFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		timestampParmInoutFunc("2005");	//1 Error in argument "2005" in function invocation timestampParmInoutFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		intervalParmInoutFunc("2005");	//1 Error in argument "2005" in function invocation intervalParmInoutFunc. Constants, literals and string literal expressions are not valid for use with parameters defined with the INOUT modifier and defined as either DATE, TIME, TIMESTAMP, or INTERVAL.  {6673*, FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER}
+		dateParmInFunc("2005");			//0
+		timeParmInFunc("2005");			//0
+		timestampParmInFunc("2005");	//0
+		intervalParmInFunc("2005");		//0
+		
+		stringParmFunc(cf.name);		//1 cf.name is read-only and can only be passed to IN function parameters.  {7741*, READONLY_FIELD_CANNOT_BE_PASSED_TO_OUT_PARM}
+		stringParmFunc((cf.name));		//1 cf.name is read-only and can only be passed to IN function parameters.  {7741*, READONLY_FIELD_CANNOT_BE_PASSED_TO_OUT_PARM}
+		stringParmInoutFunc(cf.name);	//1 cf.name is read-only and can only be passed to IN function parameters.  {7741*, READONLY_FIELD_CANNOT_BE_PASSED_TO_OUT_PARM}
+		stringParmOutFunc(cf.name);		//1 cf.name is read-only and can only be passed to IN function parameters.  {7741*, READONLY_FIELD_CANNOT_BE_PASSED_TO_OUT_PARM}
+		stringParmInFunc(cf.name);		//0
+		
+		notNullableInt int {isSqlNullable=no};
+		nullableInt int {isSqlNullable=yes};
+		
+		nullableIntParmFunc(form1.intField);	//1 Error in argument form1.intField in function call nullableIntParmFunc. Arguments for SqlNullable parameters must be SQL items or must have a null indicator set.  {6682*, NULLABLE_ARGUMENT_NOT_SQL_ITEM}
+		nullableIntParmFunc(fixedRec.item1);	//1 Error in argument fixedRec.item1 in function call nullableIntParmFunc. Arguments for SqlNullable parameters must be SQL items or must have a null indicator set.  {6682*, NULLABLE_ARGUMENT_NOT_SQL_ITEM}
+		nullableIntParmFunc(fixedRec.item2);	//1 Error in argument fixedRec.item2 in function call nullableIntParmFunc. Arguments for SqlNullable parameters must be SQL items or must have a null indicator set.  {6682*, NULLABLE_ARGUMENT_NOT_SQL_ITEM}
+		nullableIntParmFunc(notNullableInt);	//1 Error in argument notNullableInt in function call nullableIntParmFunc. Arguments for SqlNullable parameters must be SQL items or must have a null indicator set.  {6682*, NULLABLE_ARGUMENT_NOT_SQL_ITEM}
+		nullableIntParmFunc(sqlRec.item2);		//1 Error in argument sqlRec.item2 in function call nullableIntParmFunc. Arguments for SqlNullable parameters must be SQL items or must have a null indicator set.  {6682*, NULLABLE_ARGUMENT_NOT_SQL_ITEM}
+		nullableIntParmFunc(notNullableParm);	//0
+		nullableIntParmFunc(intAry[1]);			//0		
+		nullableIntParmFunc(sqlRec.item1);		//0		
+		nullableIntParmFunc(nullableParm);		//0
+		nullableIntParmFunc(nullableInt);		//0
+		
+		intAry.appendElement(intVar);			//0
+		intAry.appendElement(intConst);			//0
+		intAry.appendElement(1);				//0
+		intAry.appendElement(thing as int);		//0
+		intAry.appendElement(1+1);				//0
+		intAry.appendElement(stringVar);		//0
+		intAry.appendElement(fixedRec);			//1 Error in argument fixedRec in function call intAry.appendElement. The type of the argument must be compatible with the items contained in the dynamic array qualifier.  {6688*, ARRAY_ELEMENT_ARGUMENT_INCORRECT_TYPE}
+		intAry.appendElement(stringVar+"a");	//0
+		
+		fixedRecAry.appendElement(fixedRec);		//0
+		fixedRecAry.appendElement(fixedRecAry[1]);	//0
+		fixedRecAry.appendElement(thing);			//1 Error in argument thing in function call fixedRecAry.appendElement. The type of the argument must be compatible with the items contained in the dynamic array qualifier.  {6688*, ARRAY_ELEMENT_ARGUMENT_INCORRECT_TYPE}
+		fixedRecAry.appendElement(1);				//1 Error in argument 1 in function call fixedRecAry.appendElement. The type of the argument must be compatible with the items contained in the dynamic array qualifier.  {6688*, ARRAY_ELEMENT_ARGUMENT_INCORRECT_TYPE}
+		fixedRecAry.appendElement("a");				//1 Error in argument "a" in function call fixedRecAry.appendElement. The type of the argument must be compatible with the items contained in the dynamic array qualifier.  {6688*, ARRAY_ELEMENT_ARGUMENT_INCORRECT_TYPE}
+		
+		fieldParmFunc(form1.intField);			//0
+		fieldParmFunc(fieldParm);				//0
+		fieldParmFunc(1);						//1 Error in argument 1 in function call fieldParmFunc. Arguments for field parameters must be form fields.  {6683*, FIELD_ARGUMENT_NOT_FORM_FIELD}	
+		fieldParmFunc(1+1);						//1 Error in argument 1+1 in function call fieldParmFunc. Arguments for field parameters must be form fields.  {6683*, FIELD_ARGUMENT_NOT_FORM_FIELD}	
+		fieldParmFunc(intVar);					//1 Error in argument intVar in function call fieldParmFunc. Arguments for field parameters must be form fields.  {6683*, FIELD_ARGUMENT_NOT_FORM_FIELD}	
+		fieldParmFunc(intAry[1]);				//1 Error in argument intAry[1] in function call fieldParmFunc. Arguments for field parameters must be form fields.  {6683*, FIELD_ARGUMENT_NOT_FORM_FIELD}	
+		
+		anyParmFunc(thing, thing);						//1 Function anyParmFunc requires exactly 1 argument(s).
+		anyParmFunc();									//1 Function anyParmFunc requires exactly 1 argument(s).
+		anyParmFunc(fixedRec.occursItem);				//0
+		intParmFunc(fixedRec.occursItem);				//1 cannot be passed to the in or out parameter
+		intParmFunc(fixedRec.occursItem[1]);			//0
+		
+		thing = fieldInputLength(thing);				//1 The argument thing in function invocation ConverseLib.fieldInputLength is invalid. The argument must be a field in a text form
+		thing = fieldInputLength(fieldParm);			//0
+		thing = fieldInputLength(form1.intField);		//0
+		
+		resetReportParameters(reportVar);				//0
+		resetReportParameters(thing);					//0
+		
+		fillReport(reportVar, DataSource.reportData);	//0
+		fillReport(reportVar, thing);					//0
+		fillReport(reportVar, intVar);					//1 The argument intVar cannot be passed to the in or out parameter source of the function fillReport. The types int and DataSource are not assignment compatible
+		
+		convert(thing);									//1 Invalid expression thing for the convert operation. The expression must evaulate to a record or have a primitive type besides blob or clob
+		convert(stringVar);								//0
+		convert(blobVar);								//1 Invalid expression blobVar for the convert operation. The expression must evaulate to a record or have a primitive type besides blob or clob
+		convert(clobVar);								//1 Invalid expression clobVar for the convert operation. The expression must evaulate to a record or have a primitive type besides blob or clob
+		convert(flexRec);								//0
+		convert(form1);									//1 Invalid expression form1 for the convert operation. The expression must evaulate to a record or have a primitive type besides blob or clob
+		convert(intVar);								//0
+		convert(fixedRec);								//0
+		convert(form1.intField);						//0
+		
+		startTransaction(fixedRec, thing as int);		//0
+		startTransaction(fixedRec, fixedRec);			//1
+		startTransaction(fixedRec, flexRec);			//1
+		startTransaction(fixedRec, blobVar);			//1
+		startTransaction(fixedRec, clobVar);			//1
+		
+		thing = bytes(thing);						//1 Invalid argument thing. The type of the argument to bytes must be a fixed-length value type or an array of fixed-length value types.
+		thing = bytes(stringVar);					//1 Invalid argument stringVar. The type of the argument to bytes must be a fixed-length value type or an array of fixed-length value types.
+		thing = bytes(blobVar);					//1 Invalid argument blobVar. The type of the argument to bytes must be a fixed-length value type or an array of fixed-length value types.
+		thing = bytes(clobVar);					//1 Invalid argument clobVar. The type of the argument to bytes must be a fixed-length value type or an array of fixed-length value types.
+		thing = bytes(flexRec);					//1 Invalid argument flexRec. The type of the argument to bytes must be a fixed-length value type or an array of fixed-length value types.
+		thing = bytes(form1);						//0
+		thing = bytes(intVar);					//0
+		thing = bytes(intAry);					//0
+		thing = bytes(fixedRec);					//0
+		thing = bytes(form1.intField);			//0
+		
+		thing = getTCPIPLocation(serviceVar);				//0
+		thing = getTCPIPLocation(interfaceVar);				//0
+		thing = getTCPIPLocation(stringVar);				//1 The argument stringVar in function invocation ServiceLib.getTCPIPLocation is invalid. The argument must be a service or interface.
+		thing = getTCPIPLocation(thing);					//1 The argument thing in function invocation ServiceLib.getTCPIPLocation is invalid. The argument must be a service or interface.
+		
+		dictVar.insertAll(dictVar);							//0
+		dictVar.insertAll(dictVar.x as dictionary);			//0
+		dictVar.insertAll(thing as dictionary);				//0
+		dictVar.insertAll(flexRec);							//1 The argument flexRec cannot be passed to the in or out parameter dictionary of the function insertAll. The types flexRec and dictionary are not assignment compatible
+		dictVar.insertAll(intAry);							//1 The argument intAry cannot be passed to the in or out parameter dictionary of the function insertAll. The types int[] and dictionary are not assignment compatible
+		dictParmFunc(dictVar);								//0
+		arrayDictParmFunc(dictVar);							//1 The argument dictVar cannot be passed to the in or out parameter p1 of the function arrayDictParmFunc. The types dictionary and arrayDictionary are not assignment compatible.
+		dictParmFunc(arrayDictVar);							//1 The argument arrayDictVar cannot be passed to the in or out parameter p1 of the function dictParmFunc. The types arrayDictionary and dictionary are not assignment compatible.
+		arrayDictParmFunc(arrayDictVar);					//0
+		
+		char4ParmFunc(fixedRec);							//0
+
+		fixedRecParmFunc(fixedRec);							//0
+		intParmFunc(fixedRec);								//1 The argument fixedRec cannot be passed to the in or out parameter p1 of the function intParmFunc. The types fixedRec and int are not assignment compatible
+		consoleFormParmFunc(fixedRec);						//1 The argument fixedRec cannot be passed to the in or out parameter p1 of the function consoleFormParmFunc. The types fixedRec and consoleFormRec are not assignment compatible
+		consoleFormParmFunc(consoleFormRec);				//0
+		flexRecParmFunc(flexRec);							//0
+		flexRec2ParmFunc(flexRec);							//1 The argument flexRec cannot be passed to the in or out parameter p1 of the function flexRec2ParmFunc. The types flexRec and flexRec2 are not assignment compatible
+		char4ParmFunc(flexRec);								//1 The argument flexRec cannot be passed to the in or out parameter p1 of the function char4ParmFunc. The types flexRec and char are not assignment compatible
+		serialRecParmFunc(fixedRec);						//1 must be an item of type
+		serialRecParmFunc(serialRec);						//0
+		
+		intAryParmFunc(intAry);								//0
+		intAryParmFunc(thing);								//1 The argument thing cannot be passed to the in or out parameter p1 of the function intAryParmFunc. The types any and int[] are not assignment compatible.
+		intAryParmFunc(intAry[1]);							//1 The argument intAry[1] cannot be passed to the in or out parameter p1 of the function intAryParmFunc. The types int and int[] are not assignment compatible.
+		anyParmFunc(intAry);								//0
+		intParmFunc(intAry);								//1 The argument intAry cannot be passed to the in or out parameter p1 of the function intParmFunc. The types int[] and int are not assignment compatible
+		
+		blobParmFunc(thing as blob);						//0
+		blobParmFunc(blobVar);								//0
+		
+		thing = abs(thing);									//1 There is more than one signature for overloaded function abs that matches the arguments provided
+	end
+	
+	function psbRecParmFunc(psbRec psbRec) end
+	function anyParmFunc(thing any in) end
+	function stringFunc() returns (string) end
+	function anyParmOutFunc(thing any) end
+	function dateParmFunc(p1 date) end
+	function timeParmFunc(p1 time) end
+	function timestampParmFunc(p1 timestamp) end
+	function intervalParmFunc(p1 interval) end
+	function dateParmInoutFunc(p1 date inout) end
+	function timeParmInoutFunc(p1 time inout) end
+	function timestampParmInoutFunc(p1 timestamp inout) end
+	function intervalParmInoutFunc(p1 interval inout) end
+	function dateParmInFunc(p1 date in) end
+	function timeParmInFunc(p1 time in) end
+	function timestampParmInFunc(p1 timestamp in) end
+	function intervalParmInFunc(p1 interval in) end
+	function stringParmFunc(p1 string) end
+	function stringParmInoutFunc(p1 string inout) end
+	function stringParmInFunc(p1 string in) end
+	function stringParmOutFunc(p1 string out) end
+	function nullableIntParmFunc(p1 int SqlNullable) end
+	function fieldParmFunc(p1 int field in) end
+	function intParmFunc(p1 int in) end
+	function dictParmFunc(p1 dictionary in) end
+	function arrayDictParmFunc(p1 arrayDictionary in) end
+	function char4ParmFunc(p1 char(4) in) end
+	function fixedRecParmFunc(p1 fixedRec in) end
+	function consoleFormParmFunc(p1 consoleFormRec in) end
+	function flexRecParmFunc(p1 flexRec in) end
+	function flexRec2ParmFunc(p1 flexRec2 in) end
+	function serialRecParmFunc(p1 serialRec in) end
+	function intAryParmFunc(p1 int[] in) end
+	function blobParmFunc(p1 blob in) end
+end
+
+Program validate2Pgm type vgwebtransaction
+	uiRec1 vgRecordRecordValidate;	//0
+	uiRec2 vgRecordProgramValidate;	//0
+	
+	function main() end	
+end
+
+Record consoleFormRec type consoleForm end
+Record serialRec type serialRecord end
+Record flexRec2 end
+
+handler validate1Ph type JSFHandler
+	function func()
+		intAry int[];
+		intVar int;
+		const intConst int = 5;
+		fixedRec fixedRec;
+		flexRec flexRec;
+		windowVar window;
+				
+		clearRequestAttr("a");			//0
+		clearSessionAttr("a");			//0
+		getRequestAttr("a", intAry);	//0
+		getSessionAttr("a", intAry);	//0
+		setRequestAttr("a", intAry);	//0
+		setSessionAttr("a", intAry);	//0
+		
+		displayLineMode("a");			//1 The system function displayLineMode is not allowed in a JSFHandler.  {4912*, SYSTEM_FUNCTION_NOT_ALLOWED_IN_PAGEHANDLER}
+
+		setLocale("a", "b");			//0
+		
+		intVar = getRequestAttr("a") as int;			//0
+		getRequestAttr("a", intVar);					//0
+		getRequestAttr("a", intConst);					//1 not valid for use with parameters defined with the OUT modifier
+		getRequestAttr("a", fixedRec);					//0
+		getRequestAttr("a", flexRec);					//0
+		getRequestAttr("a", intAry);					//0
+		getRequestAttr("a", windowVar);					//0
+		
+		setError(this);									//0
+		
+	end
+end
+
+Program validate1DLIPgm(recParm fixedRec) {includeReferencedFunctions = yes, @DLI{psb=myPSB, callInterface=CBLTDLI}}
+	myPSB PSBRec;
+	function main() end
+	
+	function func()
+		fixedRec fixedRec;
+		
+		EGLTDLI("a", myPSB.pcb1);		//0
+		AIBTDLI("a", "b");				//0
+		VGTDLI("a", 5);					//0
+		
+		bin90var bin(9,0);
+		bin92var bin(9,2);
+		
+		vgtdli("a", bin90var);			//0
+		vgtdli("a", bin92var);			//1 Argument 2 for VGTDLI may not contain decimals.  {7558*, ARG_MUST_HAVE_NO_DECIMALS}
+		
+		egltdli("a", recParm);			//0
+		egltdli("a", fixedRec);			//1 fixedRec must resolve to a PCB defined in the program PSB or in the program parameter list.  {7934*, DLI_ITEM_MUST_RESOLVE_TO_PCB_IN_PROGRAM_PSB_OR_PARM_LIST}
+	end
+end
+
+Record vgRecordRecordValidate type vgUIRecord {
+	runValidatorFromProgram = no,
+	validatorFunction = setLocaleValidatorFunc
+}
+	10 item1 int;
+end
+
+Record vgRecordProgramValidate type vgUIRecord {
+	runValidatorFromProgram = yes,
+	validatorFunction = setLocaleValidatorFunc
+}
+	10 item1 int;
+end
+
+function setLocaleValidatorFunc()
+	setLocale("a", "b");			//0
+end
+
+Library nativeLib type nativeLibrary
+	function anyParmFunc(thing any in) end
+end
+
+Library notNativeLib
+	function anyParmFunc(thing any in) end
+end
+
+Formgroup fg
+	Form form1 type textForm
+		intField int;
+	end
+end
+
+
+// validateMaximumSizeFunctionParameters:
+Program validateMaximumSizeFunctionParametersPgm
+	function main() end
+	
+	function func()
+		intAry int[];
+		intVar int;
+		
+		intVar = maximumSize(intAry);		//0
+		intVar = maximumSize(intAry[1]);	//1 The argument intAry[1] for the syslib function maximumSize must be an unsubscripted array reference.  {6689*, MAXIMUMSIZE_ARGUMENT_INCORRECT}
+		intVar = maximumSize(intVar);		//1 The argument intVar for the syslib function maximumSize must be an unsubscripted array reference.  {6689*, MAXIMUMSIZE_ARGUMENT_INCORRECT}		
+		intVar = maximumSize(myTable);		//1 The argument myTable for the syslib function maximumSize must be an unsubscripted array reference.  {6689*, MAXIMUMSIZE_ARGUMENT_INCORRECT}		
+	end
+end
+
+// validateReferenceCompatibility:
+Program validateReferenceCompatibilityPgm
+	function main() end
+	
+	function func()
+		intVar int;
+		bin90Var bin(9,0);
+		bin91Var bin(9,1);
+		bin40Var bin(4,0);
+		decimalVar decimal;
+		smallintVar smallint;
+		char4Var char(4);
+		char8Var char(8);
+		mbcharVar mbchar(4);
+		stringVar string;
+		dec6Var decimal(6);
+		dec7Var decimal(7);
+		dec8Var decimal(8);
+		dec9Var decimal(9);
+		smallFixedRecVar smallFixedRecord;
+		bigFixedRecVar bigFixedRecord;
+		
+		convert(intVar);								//0
+		clearFields(activeForm.form1 as ConsoleField);	//0
+		
+		charInOutFunc(char4Var);	//0
+		charInOutFunc(mbcharVar);	//1 The argument mbcharVar cannot be passed to the loose parameter p1 of the function charInOutFunc. It must be of primitive type char.
+		charInOutFunc(stringVar);	//1 The argument stringVar cannot be passed to the loose parameter p1 of the function charInOutFunc. It must be of primitive type char.
+		charInOutFunc("a");			//0
+		
+		calculateChkDigitMod10(char4Var, intVar, smallIntVar);	//0
+		//String can be passed to char(0) parm for system function parameters
+		calculateChkDigitMod10(stringVar, intVar, smallIntVar);	//0
+		
+		numberInOutFunc(intVar);		//0
+		numberInOutFunc(bin90Var);		//0
+		numberInOutFunc(decimalVar);	//0
+		numberInOutFunc(char4Var);		//1 The argument char4Var cannot be passed to the loose parameter p1 of the function numberInOutFunc. It must have a numeric primitive type.
+		
+		char4InOutFunc(char4Var);		//0
+		char4InOutFunc(char8Var);		//1 The argument char8Var cannot be passed to the inOut parameter p1 of the function char4InOutFunc. The types char(8) and char(4) are not reference compatible.  {6716*, FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM}
+		
+		intInOutFunc(intVar);			//0
+		intInOutFunc(bin90Var);			//0
+		intInOutFunc(smallintVar);		//1 cannot be passed to the inOut parameter		
+		intInOutFunc(bin91Var);			//1
+		intInOutFunc(bin40Var);			//1 cannot be passed to the inOut parameter
+		
+		smallIntInOutFunc(smallintVar);		//0
+		smallIntInOutFunc(bin40Var);		//0
+		smallIntInOutFunc(intVar);			//1 cannot be passed to the inOut parameter
+		smallIntInOutFunc(bin90Var);		//1
+		smallIntInOutFunc(bin91Var);		//1		
+		
+		smallFixedRecordInOutFunc(smallFixedRecVar);	//0
+		smallFixedRecordInOutFunc(bigFixedRecVar);		//0
+		
+		bigFixedRecordInOutFunc(smallFixedRecVar);		//1 cannot be passed to the inOut parameter
+		bigFixedRecordInOutFunc(bigFixedRecVar);		//0
+		
+		decimal7InOutFunc(dec6Var);			//1 cannot be passed to the inOut parameter
+		decimal7InOutFunc(dec7Var);			//0
+		decimal7InOutFunc(dec8Var);			//1 cannot be passed to the inOut parameter
+		decimal7InOutFunc(dec9Var);			//1 cannot be passed to the inOut parameter
+		
+		decimal8InOutFunc(dec6Var);			//1 cannot be passed to the inOut parameter
+		decimal8InOutFunc(dec7Var);			//1 cannot be passed to the inOut parameter
+		decimal8InOutFunc(dec8Var);			//0
+		decimal8InOutFunc(dec9Var);			//1 cannot be passed to the inOut parameter
+	end
+	
+	function charInOutFunc(p1 char inout) end
+	function numberInOutFunc(p1 number inout) end
+	function char4InOutFunc(p1 char(4) inout) end
+	function intInOutFunc(p1 int inout) end
+	function smallIntInOutFunc(p1 smallint inout) end
+	function smallFixedRecordInOutFunc(p1 smallFixedRecord inout) end
+	function bigFixedRecordInOutFunc(p1 bigFixedRecord inout) end
+	function decimal7InOutFunc(p1 decimal(7) inout) end
+	function decimal8InOutFunc(p1 decimal(8) inout) end
+end
+
+Record smallFixedRecord
+	10 item1 int;
+end
+
+Record bigFixedRecord
+	10 item1 int[100];
+end
+
+// validateSizeFunctionParameters:
+Program validateSizeFunctionParametersPgm
+	function main() end
+	
+	function func()
+		intAry int[];
+		intVar int;
+		
+		intVar = size(intAry);		//0
+		intVar = size(myTable);		//0
+		intVar = size(intAry[1]);		//1 Invalid argument intAry[1]. The argument to size must be a multiply occurring item, an array, or a DataTable
+		intVar = size(intVar);		//1 Invalid argument intVar. The argument to size must be a multiply occurring item, an array, or a DataTable
+	end
+end
+
+DataTable myTable end
+
+Service service1 end
+Interface interface1 end
+Record record1 type ConsoleForm
+	{ formSize = [10, 20] }
+	item1 ConsoleField {fieldlen = 10};
+end
+
+Library lib1	
+	Function testPassReferenceType()
+		window Window;
+		menu Menu;
+		menuItem MenuItem;
+		prompt Prompt;
+		report Report;
+		reportData ReportData;	
+		interface1 Interface1;
+		service1 Service1;
+		record1 Record1;
+						
+		funcWindowParameter(window); //0
+		funcWindowParameter(null); //0
+		funcWindowParameter(funcReturnWindow()); //0
+		funcWindowParameter(menu); //1
+		
+		funcMenuParameter(menu); //0
+		funcMenuParameter(null); //0
+		funcMenuParameter(funcReturnMenu()); //0
+		funcMenuParameter(window); //1
+		
+		funcMenuItemParameter(menuItem); //0
+		funcMenuItemParameter(null); //0
+		funcMenuItemParameter(funcReturnMenuItem()); //0
+		funcMenuItemParameter(window); //1
+		
+		funcPromptParameter(prompt); //0
+		funcPromptParameter(null); //0
+		funcPromptParameter(funcReturnPrompt()); //0
+		funcPromptParameter(menuItem); //1
+		
+		funcReportParameter(report); //0
+		funcReportParameter(null); //0
+		funcReportParameter(funcReturnReport()); //0
+		funcReportParameter(prompt); //1
+		
+		funcReportDataParameter(reportData); //0
+		funcReportDataParameter(null); //0
+		funcReportDataParameter(funcReturnReportData()); //0
+		funcReportDataParameter(report); //1
+		
+		funcInterfaceParameter(interface1); //0
+		funcInterfaceParameter(null); //0
+		funcInterfaceParameter(funcReturnInterface()); //0
+		funcInterfaceParameter(reportData); //1
+		
+		funcServiceParameter(service1); //0
+		funcServiceParameter(null); //0	
+		funcServiceParameter(funcReturnService()); //0	
+		funcServiceParameter(interface1); //1	
+		
+		funcConsoleFieldParameter(record1.item1); //0
+		funcConsoleFieldParameter(null); //0
+		funcConsoleFieldParameter(funcReturnConsoleField()); //0
+		funcConsoleFieldParameter(service1); //1
+		funcConsoleFieldParameter(funcReturnService()); //1
+	end
+	
+	Function funcConsoleFieldParameter(parm1 consoleField in) end //0
+	Function funcWindowParameter(parm1 window in) end //0
+	Function funcMenuParameter(parm1 menu in) end //0
+	Function funcMenuItemParameter(parm1 menuItem in) end //0
+	Function funcPromptParameter(parm1 prompt in) end //0
+	Function funcReportParameter(parm1 report in) end //0
+	Function funcReportDataParameter(parm1 reportData in) end //0
+	Function funcServiceParameter(parm1 service1) end //0
+	Function funcInterfaceParameter(parm1 interface1) end //0
+	
+	Function funcReturnConsoleField() returns (consolefield) end //0
+	Function funcReturnWindow() returns (window) end //0
+	Function funcReturnMenu() returns (menu) end //0
+	Function funcReturnMenuItem() returns (menuItem) end //0
+	Function funcReturnPrompt() returns (prompt) end //0
+	Function funcReturnReport() returns (report) end //0
+	Function funcReturnReportData() returns (reportData) end //0
+	Function funcReturnService() returns (service1) end //0
+	Function funcReturnInterface() returns (interface1) end //0
+End

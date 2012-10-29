@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+
+Program RATLC01145575 {
+	allowUnqualifiedItemReferences=yes
+}
+	use fg;
+
+	function main()
+	  converse form1;
+	  
+	  if (VAGen_INDEX in VAGen_NUM from 2)	//0
+	  end
+	end
+end
+
+Formgroup fg
+	form form1 type textForm
+		VAGen_NUM VAGen_NUM[4];
+		VAGen_INDEX VAGen_NUM[4];
+	end
+end
+
+DataItem VAGen_NUM num(4)  {
+  currency = no, numericSeparator = no, sign = none, align = left, 
+  fillCharacter = "0", inputRequired = no
+}
+end
+
+DataItem VAGen_INDEX num(4)  {
+}
+end

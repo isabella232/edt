@@ -1,0 +1,164 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Program consoleUI_valid
+
+	function main()
+		myFormObj FormData;
+		myFormPtr SampleForm;
+		myForm SampleForm2;
+		myFormRec FormRecord;
+								
+		// create a menuItem
+		menuItemObj MenuItem {name="menuItemObj", labelKey="PKEY_F1", labelText="Command1", comment ="Comment", 
+					commentKey = "PKEY_F8", help="HELPME!", accelerators=[""] 
+			 		};
+
+		// create a menu
+		menuObj Menu {labelKey="PKEY_F1", labelText="Command1" }; 
+		
+		//create a menu and a menuItem
+		menu2 Menu {labelText = "", menuItems = [new MenuItem {name="Cmd1", labelText="Command1"}]};
+		
+		OpenUI menuObj
+		OnEvent(MENU_ACTION:"cmd1")
+			exit openUI;
+		end
+
+		// alternative menu, arranged a little more like I4GL
+		// will work once parser is regened
+//		OpenUI new Menu {title="Menu1", menuItems {new MenuItem {labelKey=(getKeyCode("PKEY_F1")),
+//						name=”Cmd1”, labelText=”Command1”}}
+//						}
+//				OnEvent(MENU_ACTION:“Cmd1”)
+//					exit openUI;
+//		end
+		
+		//create a window
+		windowObj Window {name="windowObj", size= [800, 600], position = [1,1], color = black, highlight = [], 
+				  intensity = normalIntensity, hasBorder = no, hasCommentLine = yes, formLine = 3, 
+			      messageLine = 2, menuLine = 1, promptLine = 1, commentLine = 1
+			      }; 
+		
+		//create a prompt
+		promptObj Prompt = new Prompt;
+		promptObj {isChar = no, message="message"
+		//,responseAttrs=
+				  };
+		
+		result String;
+		OpenUI promptObj
+			bind result
+		OnEvent(ON_KEY:"PKEY_F2")
+			exit program;
+		end
+		
+		// Alternative (I4GL flavor) Create and open a Prompt
+		// will work once parser is regened
+//		result2 String;
+//		OpenUI new Prompt {isChar=false}
+//			bind result2
+//		OnEvent(ON_KEY:"PKEY_F2")
+//			exit program;
+//		end
+		
+		//create a PresentationAttributes
+		presentationObj PresentationAttributes {color = white, intensity = normalIntensity, highlight = []};
+		
+
+
+		
+		
+		//openUI on a console form
+		openUI 
+		{setInitial=no, 
+		displayOnly=no, help="", allowDelete=yes, allowInsert=yes, allowAppend=yes
+		//,currentRowAttributes=  
+		}  
+		myForm bind myFormObj
+			OnEvent(ON_KEY:"PKEY_F3")
+				exit openUI;
+			OnEvent(AFTER_FIELD:"field3")
+				exit openUI;
+			OnEvent(AFTER_OPENUI)
+				exit openUI;
+			OnEvent(BEFORE_OPENUI )
+				exit openUI;
+			OnEvent(BEFORE_FIELD:"field1”,”field2") 
+				exit openUI;
+		end
+		
+		myVar String;
+		myIntVar int;
+
+		
+		//ConsoleLib functions
+		updateWindowAttributes(WindowAttributeKind.color );
+
+		
+	end
+end
+
+Record SampleForm type ConsoleForm { formSize=[14,80] }
+
+propertyBlockTest ConsoleField {position = [1,1],
+								color = white,
+								intensity = IntensityKind.normalintensity, highlight = [], help = "",
+								caseFormat = CaseFormatKind.defaultCase, masked = no, minimumInput = 0,
+								inputRequired = no, verify = no, isBoolean = no, protect = no, pattern = "",
+								fieldLen = 10
+							   };
+
+myFormView dictionary { command="command", response="response" };
+
+srArray arrayDictionary { activity="activity", commandCode="commandCode" };
+
+End
+
+Record SampleForm2 type ConsoleForm { formSize=[14,80] }
+	// Constant fields don’t need names 
+* ConsoleField { position=[1,31], value="Sample Dynamic Form" } ; 
+* ConsoleField { position=[3,18], value="Activity:" } ;
+* ConsoleField { position=[3,61], value="Command Code:" } ;
+* ConsoleField { position=[10,1], value="Response:" } ;
+* ConsoleField { position=[13,1], value="Command:" } ;
+* ConsoleField { position=[14,1], value="Enter=Run PF3=Exit"} ;
+
+// Fields available to reference in code
+activity ConsoleField[5] { position=[4,18], fieldLen=40 } ;
+commandCode ConsoleField[5] { position=[4,61], fieldLen=10 } ;
+response ConsoleField { position=[10,12], fieldLen=30 } ;
+command ConsoleField { position=[13,10], fieldLen=20 } ;
+
+End
+
+Record FormData
+	activity char(42)[5];
+	commandCode char(10)[5];
+	response char(228);
+	command char(70);
+end
+
+Record FormRecord
+	activity char(42)[20];
+	commandCode char(10)[20];
+	response char(228);
+	command char(70);
+end
+
+Program registerFormDCR
+	function main()
+		RegisterConsoleForm( "formdef",  "ref" );	//0
+		displayFormByName( "ref" );					//0
+	end
+end

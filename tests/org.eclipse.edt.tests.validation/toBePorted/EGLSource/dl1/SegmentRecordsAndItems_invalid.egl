@@ -1,0 +1,243 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+///
+/// Some elementary record tests
+/// 
+Record myDL1Record1 type dliSegment 	//1 The name "myDL1Record1" is not a valid DL/I name, so the record must specify the segmentName property
+	myitem char(2); 					//0
+	myitem2 string;						//1 string is not a valid type for an item in a structured record
+	mybigint  bigint;					//0
+end
+
+Record myDL1Record2 type dliSegment //1 The name "myDL1Record2" is not a valid DL/I name, so the record must specify the segmentName property
+	10 myitem char(2);		//0
+	10 mydate date;			//0
+	10 mytime time;			//0
+	10 myfloat float;		//0
+	10 mymoney money(9);	//0
+	10 mytimestamp timestamp;//0
+	10 myinterval interval("yyyyMM"); //0
+	10 myint int;			//0
+end	
+
+Record myErrorTypeDL1Record1 type garbagerecordtype //1  garbagerecordtype cannot be resolved
+	10 myitem char(2);		//0
+end
+
+Record segmentError1 type DLISegment  { //0
+  		segmentName = "#SEGNAM4" ,
+  		segmentName = myname,			//1
+		segmentName = [123],				//1
+		segmentName = [1,2],			//1
+		segmentName = "@$#a1b9",		//0
+  		keyItem = CanBeLongName,		//0
+  		keyItem = myname,				//1
+		keyItem = 123,					//1
+		keyItem = [1,2],				//1
+  		hostVarQualifier = myname,		//1
+		hostVarQualifier = [123],			//1
+		hostVarQualifier = [1,2],		//1
+		hostVarQualifier = "@$#a1b9",	//0
+   		lengthItem = myname,			//0
+		lengthItem = 123,				//1
+		lengthItem = [1,2],				//1
+		// lengthItem is not a DL/I name
+ 		lengthItem = "@$#a1b9"			//1
+     }
+
+  3 OLD_@MYITEM2 int  					//0
+      { dliFieldName = myname,			//1
+		dliFieldName = [123],			//1
+		dliFieldName = [1,2], 			//1
+		dliFieldName = "@MYITEM2"		//0
+      };
+  3 OLD_current char(3)  { dliFieldName = "CURRENT" };//0	
+  3 CanBeLongName char(3)				//0
+  	  { dliFieldName = "shrtname" };	//0	
+end
+
+
+////
+//// These rules were taken from ESF Import in VAGen
+////	
+// key name must be name of item in this record (now keyItem)
+// DL1 name rules
+//		- max of 8 characters
+//		- 1st char must be a-z, @, $, #
+//		- 2-8 must be a-z, 0-9, @, $, #
+//		- can be an EGL keyword
+// The following must meet the DL1 name rules
+// 	- record name (now segmentName property)
+// 	- key name (now keyitem - actually, this name doesn't have to match the DL/I rules
+//				but the item named here must either match the rules or it must have a dliFieldName that does
+// 	- var length name  (now lengthItem - actually, no longer needs to be limited to DL1 name rules)
+// 	- new dlifieldname (used to be every item in the record had to match these rules.)
+//	- new hostVarQualifier because it ends up in the SSA
+Record segmentError2 type DLISegment  {
+  		segmentName = "#SEGNAM4" ,
+ 		segmentName = "0asdf",			//1 Invalid DLI name "0asdf". The first character must be a letter, or one of: (@, $, #)
+		segmentName = "a%xdf",			//1 Invalid DLI name "a%xdf". All characters must be letters, digits, or one of: (@, $, #)
+		segmentName = "a+b",			//1 Invalid DLI name "a+b". All characters must be letters, digits, or one of: (@, $, #)
+	 	segmentName = "abcdefghijklm",	//1 Invalid DLI name "abcdefghijklm". The maximum length of a DLI name is 8 characters.
+		segmentName = "@$#a1b9",		//0
+  		keyItem = "CanBeLongName",		//1
+ 		hostVarQualifier = "0asdf",		//0
+		hostVarQualifier = "a%xdf",		//0
+		hostVarQualifier = "a+b",		//0
+	 	hostVarQualifier = "abcdefghijklm",	//0
+		hostVarQualifier = "@$#a1b9",	//0
+		lengthItem = "OLD_@MYITEM2" 	//1
+     }
+
+  3 OLD_@MYITEM2 int  					//1 Invalid DLI name "abcdefghijklm". The maximum length of a DLI name is 8 characters.
+      { dliFieldName = "@MYITEM2",
+ 		dliFieldName = "0asdf",			//0
+		dliFieldName = "a%xdf",			//0
+		dliFieldName = "a+b",			//0
+	 	dliFieldName = "abcdefghijklm" 	//0
+      };
+  3 OLD_current char(3)  { dliFieldName = "CURRENT" };	//0
+  3 CanBeLongName char(3)				//0
+  	  { dliFieldName = "shrtname" };	//0	
+end   
+
+////
+//// These rules were taken from ESF Import in VAGen
+////	
+// key name must be name of item in this record (now keyItem)
+// 	- key name (now keyitem - actually, this name doesn't have to match the DL/I rules
+//				but the item named here must either match the rules or it must have a dliFieldName that does
+Record segmentError3 type DLISegment  {
+  		segmentName = "#SEGNAM4" ,
+   		keyItem = CanBeLongName 		//1 The keyItem property value CanBeLongName must be defined in the DL/I segment segmentError3.
+     }
+  3 OLD_@MYITEM2 int  					//0
+      { dliFieldName = "@MYITEM2" };	//0
+
+end   
+
+Record segmentError4 type DLISegment  {
+  		segmentName = "#SEGNAM4" ,		//0
+   		keyItem = shortNme 			//0
+     }
+  3 shortNme char(3);					//0
+end
+
+Record segmentError5 type DLISegment  {
+  		segmentName = "SEGNAM5" ,		//0
+   		keyItem = CanBeLongName		//1 The name "CanBeLongName" of the keyItem CanBeLongName is not a valid DL/I name, so the item must specify the dliFieldName property.
+     }
+  3 CanBeLongName char(3);				//0
+end
+
+Record segmentError6 type DLISegment  {
+  segmentName = "SEGNAM6" ,
+  keyItem = CanBeLongName				//1 The name "CanBeLongName" of the keyItem CanBeLongName is not a valid DL/I name, so the item must specify the dliFieldName property.
+  }
+  3 embed embedRecd1;
+end  
+
+Record embedRecd1 type basicRecord
+  3 CanBeLongName char(3) ; 
+end 
+
+Record segmentError7 type DLISegment  {
+  segmentName = "SEGNAM7" ,				//0
+//DEM - It seems redundant to issue an error twice, when there's already one on the dliFieldName property
+//      in embedRecd2 below.
+//
+//was:  keyItem = "CanBeLongName"				//1 The name "CanBeLongName" of the keyItem CanBeLongName is not a valid DL/Iname, so the item must specify the dliFieldName property.
+  keyItem = CanBeLongName				//0
+  }
+  3 embed embedRecd2;					//1 Invalid DLI name "toolongName". The maximum length of a DLI name is 8 characters.
+end  
+
+Record embedRecd2 type basicRecord
+  3 CanBeLongName char(3)				//0
+  		{dliFieldName="toolongName"} ; 	//0
+end 
+Record typedefRecd1 type basicRecord
+  3 otherName char(3)					//0
+  		{dliFieldName="shortNme"} ; 	//0
+end 
+
+Record segmentError8 type DLISegment  {
+  segmentName = "SEGNAM8" ,				//0
+  keyItem = CanBeLongName				//0
+  }
+  3 embed embedrecd2 					//0
+  		{CanBeLongName{dliFieldName="shortNme"}};//0
+end
+Record segmentError9 type DLISegment  {
+  segmentName = "SEGNAM9" ,				//0
+  keyItem = CanBeLongName				//1 The keyItem property value CanBeLongName must be defined in the DL/I segment segmentError9.
+  }
+  3 embed typedefRecd1;					//0
+end 
+
+Record segmentError10 type DLISegment  {
+  segmentName = "SEGNAM10" ,			//0
+  keyItem = CanBeLongName				//1 The name "CanBeLongName" of the keyItem CanBeLongName is not a valid DL/I name, so the item must specify the dliFieldName property.
+  }
+  3 myitem embedRecd1;					//0
+end  
+
+Record segmentError11 type DLISegment  {
+  segmentName = "SEGNAM11" ,			//0
+  
+//DEM - It seems redundant to issue an error twice, when there's already one on the dliFieldName property
+//      in embedRecd2 above.
+//
+//was:  keyItem = "CanBeLongName"				//1 The name "CanBeLongName" of the keyItem CanBeLongName is not a valid DL/I name, so the item must specify the dliFieldName property.
+  keyItem = CanBeLongName				//0
+  }
+  3 myitem embedRecd2;					//0
+end  
+
+Record segmentError12 type DLISegment  {
+  segmentName = "SEGNAM12" ,			//0
+  keyItem = CanBeLongName				//1 The keyItem property value CanBeLongName must be defined in the DL/I segment segmentError12.
+  }
+  3 myitem typedefRecd1;				//0
+end  
+
+Record segmentError13 type DLISegment  {
+  segmentName = "SEGNAM13" ,			//0
+  
+//DEM - It seems redundant to issue an error twice, when there's already one on the dliFieldName property
+//      in embedRecd2 above.
+//
+//was:  keyItem = "CanBeLongName"				//1 keyitem must name an item whose name is valid for DL/I or that item must specify the dliFieldName property
+  keyItem = CanBeLongName				//0
+  }
+  3 myitem embedRecd2 					//0
+  		{CanBeLongName{dliFieldName="shortNme"}};//0
+end 
+
+Record segmentError14 type DLISegment  {
+  segmentName = "SEGNAM13" ,			//0
+  
+  keyItem = CanBeLongName				//0
+  }
+  3 myitem embedRecd1 					//0
+  		{CanBeLongName{dliFieldName="shortNme"}};//0
+end  
+
+
+
+
+
+ 
+// valpedli
+// 	--Dl1valiateforimport

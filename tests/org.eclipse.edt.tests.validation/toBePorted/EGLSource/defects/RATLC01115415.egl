@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+Record Record1 type BasicRecord
+	10 a char (10);
+	10 b char (10);
+end
+
+Record Record2 type BasicRecord
+	10 c char (10);
+	10 d char (10);
+	10 e Record1;
+end
+
+// basic library
+library Bidon type BasicLibrary
+
+	// Function Declarations
+	function f1()
+		r2 Record2;
+		f2 (r2.e);
+	end
+	
+	function f2(r1 Record1)
+		r1.a = "aa";
+	end	
+end

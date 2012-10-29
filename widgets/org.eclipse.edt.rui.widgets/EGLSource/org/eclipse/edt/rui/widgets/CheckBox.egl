@@ -11,6 +11,21 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
+import eglx.javascript.Job;
+import eglx.javascript.RunFunction;
+import eglx.ui.rui.DataMapping;
+import eglx.ui.rui.DataTemplate;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.MVCView;
+import eglx.ui.rui.MappingKind;
+import eglx.ui.rui.PurposeKind;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.RuiLib;
+import eglx.ui.rui.VEDataTemplate;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
+import eglx.ui.rui.Widget;
+
 Handler CheckBox type RUIWidget{targetWidget = span, cssFile = "css/org.eclipse.edt.rui.css", 
 	@VEWidget{
 		category = "Display and Input",

@@ -13,11 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
-
 
 /**
  * SettingsBlock AST node type.
@@ -51,66 +46,85 @@ public class SettingsBlock extends Node {
 		return new SettingsBlock(cloneList(settings), getOffset(), getOffset() + getLength());
 	}
 	
-	public Assignment getSetting(final String propertyName) {
-		final Assignment[] result = new Assignment[] {null};
-		acceptChildren(new DefaultASTVisitor() {
-			public boolean visit(Assignment assignment) {
-				IBinding binding = assignment.getLeftHandSide().resolveDataBinding();
-				if(binding != null && binding != IBinding.NOT_FOUND_BINDING && binding.isAnnotationBinding()) {
-					if(propertyName == binding.getName()) {
-						result[0] = assignment;
-					}
-				}
-				return false;
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		buf.append('{');
+		
+		boolean first = true;
+		for (Object setting : settings) {
+			if (first) {
+				first = false;
 			}
-		}, settings);
-		return result[0];
+			else {
+				buf.append(", ");
+			}
+			buf.append(setting.toString());
+		}
+		buf.append('}');
+		return buf.toString();
 	}
 	
-	public Assignment getSetting(final IAnnotationTypeBinding annotationTypeBinding) {
-		final Assignment[] result = new Assignment[] {null};
-		acceptChildren(new DefaultASTVisitor() {
-			public boolean visit(Assignment assignment) {
-				IBinding binding = assignment.getLeftHandSide().resolveDataBinding();
-				if(binding != null && binding != IBinding.NOT_FOUND_BINDING && binding.isAnnotationBinding()) {
-					if(annotationTypeBinding.getName() == binding.getName()) {
-						result[0] = assignment;
-					}
-				}
-				return false;
-			}
-		}, settings);
-		return result[0];
-	}
+//	public Assignment getSetting(final String propertyName) {
+//		final Assignment[] result = new Assignment[] {null};
+//		acceptChildren(new DefaultASTVisitor() {
+//			public boolean visit(Assignment assignment) {
+//				IBinding binding = assignment.getLeftHandSide().resolveDataBinding();
+//				if(binding != null && binding != IBinding.NOT_FOUND_BINDING && binding.isAnnotationBinding()) {
+//					if(propertyName == binding.getName()) {
+//						result[0] = assignment;
+//					}
+//				}
+//				return false;
+//			}
+//		}, settings);
+//		return result[0];
+//	}
 	
-	public Node getSetting(final String[] annotationPackage, final String anotationName) {
-		final Node[] result = new Node[] {null};
-		acceptChildren(new DefaultASTVisitor() {
-			public boolean visit(Assignment assignment) {
-				IBinding binding = assignment.getLeftHandSide().resolveDataBinding();
-				if(binding != null && binding != IBinding.NOT_FOUND_BINDING && binding.isAnnotationBinding()) {
-					if(AbstractBinder.annotationIs(((IAnnotationBinding) binding).getAnnotationType(), annotationPackage, anotationName)) {
-						result[0] = assignment;
-					}
-				}
-				return false;
-			}
-			
-			public boolean visit(SetValuesExpression setValuesExpression) {
-				setValuesExpression.getExpression().accept(this);
-				return false;
-			}
-			
-			public boolean visit(AnnotationExpression annotationExpression) {
-				IBinding binding = annotationExpression.resolveDataBinding();
-				if(binding != null && binding != IBinding.NOT_FOUND_BINDING && binding.isAnnotationBinding()) {
-					if(AbstractBinder.annotationIs(((IAnnotationBinding) binding).getAnnotationType(), annotationPackage, anotationName)) {
-						result[0] = annotationExpression;
-					}
-				}
-				return false;
-			}
-		}, settings);
-		return result[0];
-	}
+//	public Assignment getSetting(final IAnnotationTypeBinding annotationTypeBinding) {
+//		final Assignment[] result = new Assignment[] {null};
+//		acceptChildren(new DefaultASTVisitor() {
+//			public boolean visit(Assignment assignment) {
+//				IBinding binding = assignment.getLeftHandSide().resolveDataBinding();
+//				if(binding != null && binding != IBinding.NOT_FOUND_BINDING && binding.isAnnotationBinding()) {
+//					if(annotationTypeBinding.getName() == binding.getName()) {
+//						result[0] = assignment;
+//					}
+//				}
+//				return false;
+//			}
+//		}, settings);
+//		return result[0];
+//	}
+	
+//	public Node getSetting(final String[] annotationPackage, final String anotationName) {
+//		final Node[] result = new Node[] {null};
+//		acceptChildren(new DefaultASTVisitor() {
+//			public boolean visit(Assignment assignment) {
+//				IBinding binding = assignment.getLeftHandSide().resolveDataBinding();
+//				if(binding != null && binding != IBinding.NOT_FOUND_BINDING && binding.isAnnotationBinding()) {
+//					if(AbstractBinder.annotationIs(((IAnnotationBinding) binding).getAnnotationType(), annotationPackage, anotationName)) {
+//						result[0] = assignment;
+//					}
+//				}
+//				return false;
+//			}
+//			
+//			public boolean visit(SetValuesExpression setValuesExpression) {
+//				setValuesExpression.getExpression().accept(this);
+//				return false;
+//			}
+//			
+//			public boolean visit(AnnotationExpression annotationExpression) {
+//				IBinding binding = annotationExpression.resolveDataBinding();
+//				if(binding != null && binding != IBinding.NOT_FOUND_BINDING && binding.isAnnotationBinding()) {
+//					if(AbstractBinder.annotationIs(((IAnnotationBinding) binding).getAnnotationType(), annotationPackage, anotationName)) {
+//						result[0] = annotationExpression;
+//					}
+//				}
+//				return false;
+//			}
+//		}, settings);
+//		return result[0];
+//	}
 }

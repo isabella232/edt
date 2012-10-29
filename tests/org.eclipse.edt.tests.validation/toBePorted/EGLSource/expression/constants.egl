@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function main()
+		const strConst string = "xxx";	//0
+		const aryConst int[] = [1,2,3];	//0
+//?		const recConst rec = new rec;	//0
+		strVar string;
+		
+		inoutFunc(strConst);		//0
+		inoutFunc(strConst[1:2]);	//0
+		
+		inoutFunc(strVar);			//0
+		inoutFunc(strVar[1:2]);		//0
+		
+		aryConst.appendElement(1);	//0
+		
+//?		recConst.field1 = 1;		//1
+
+		strConst = "xxx";			//1 Invalid attempt to modify strConst which is a constant
+	end
+	
+	function inoutFunc(p1 string inout) end
+end
+
+Record rec
+	field1 int;
+end

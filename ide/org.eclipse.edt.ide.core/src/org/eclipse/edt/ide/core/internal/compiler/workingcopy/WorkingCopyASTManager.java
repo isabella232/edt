@@ -20,7 +20,6 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ErrorCorrectingParser;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Lexer;
-import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -59,11 +58,6 @@ public class WorkingCopyASTManager extends AbstractASTManager {
 			node.accept(new AbstractASTVisitor(){
 				public boolean visit(NestedFunction function){
 					fileASTRequestor.addPartAST(file, function);
-					return false;
-				}
-				
-				public boolean visit(NestedForm form){
-					fileASTRequestor.addPartAST(file, form);
 					return false;
 				}
 			});

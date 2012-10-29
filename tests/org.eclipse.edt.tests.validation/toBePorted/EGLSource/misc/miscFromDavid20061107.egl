@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+handler AddDVD type JSFHandler
+	{onConstructionFunction = onConstruction, 
+ 	 view = "AddDVD.jsp"} 
+ 	 
+ 	 viewRoot any;
+ 	 
+ 	 var int[];
+
+	Function onConstruction()
+		setError(this, "viewRoot is null.");
+		setError(this, "viewRoot is null.");
+		
+		var int;
+
+		var = 10;
+		this.var = [10];
+	End
+End

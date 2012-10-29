@@ -17,9 +17,9 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.SqlReplaceStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
+import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlReplaceStatement;
 
 public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 
@@ -37,7 +37,7 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 				EGLClass targetType = getTargetType(stmt);
 				int i = 1;
 				for (Field f : targetType.getFields()) {
-					if (!SQL.isKeyField(f) && SQL.isUpdateable(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
+					if (!Utils.isKeyField(f) && Utils.isUpdateable(f) && Utils.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 						genSetColumnValue(f, var_statement, getExprString(stmt.getTarget(), ctx), i, ctx, out);
 						i++;
 					}
@@ -58,7 +58,7 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 				ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 				out.println(".getResultSet();");
 				for (Field f : ((EGLClass)stmt.getTarget().getType()).getFields()) {
-					if (SQL.isUpdateable(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
+					if (Utils.isUpdateable(f) && Utils.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 						if(f.isNullable()){
 							out.print("if(null == ");
 							out.print(getExprString(stmt.getTarget(), ctx));
@@ -67,7 +67,7 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 							out.println("){");
 							out.print(var_resultSet);
 							out.print(".updateNull(");
-							out.print(quoted(SQL.getColumnName(f)));
+							out.print(quoted(Utils.getColumnName(f)));
 							out.println(");");
 							out.println("}");
 							out.println("else{");
@@ -77,7 +77,7 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 						out.print(".");
 						genSqlUpdateValueMethodName(type, ctx, out);
 						out.print("(");
-						out.print(quoted(SQL.getColumnName(f)));
+						out.print(quoted(Utils.getColumnName(f)));
 						out.print(", ");
 						genConvertValueStart(type, ctx, out);
 						ctx.invoke(genExpression, stmt.getTarget(), ctx, out);
@@ -98,7 +98,7 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 	}	
 	public void genSqlUpdateValueMethodName(Classifier type, Context ctx, TabbedWriter out) {
 		String name = "update";
-		name += SQL.getSqlSimpleTypeName(type);
+		name += Utils.getSqlSimpleTypeName(type);
 		out.print(name);
 	}
 	protected void genSetStatementsForUsingClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){

@@ -32,6 +32,7 @@ public class SetValuesStatement extends Statement {
 		return setValuesExpression;
 	}
 	
+	@Override
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -42,5 +43,10 @@ public class SetValuesStatement extends Statement {
 	
 	protected Object clone() throws CloneNotSupportedException {
 		return new SetValuesStatement((SetValuesExpression)setValuesExpression.clone(), getOffset(), getOffset() + getLength());
+	}
+	
+	@Override
+	public String toString() {
+		return setValuesExpression.toString() + ";";
 	}
 }

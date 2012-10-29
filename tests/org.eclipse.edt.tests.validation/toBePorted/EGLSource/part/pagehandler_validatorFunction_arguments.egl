@@ -1,0 +1,90 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Handler handler1 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//0
+}
+	function onConstruction(p1 int) end
+end
+
+Handler handler2 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//1 is an invalid type for a parameter to an onConstructionFunction
+}
+	function onConstruction(p1 blob) end
+end
+
+Handler handler3 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//0
+}
+	function onConstruction(p1 int[]) end
+end
+
+Handler handler4 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//1 is an invalid type for a parameter to an onConstructionFunction
+}
+	function onConstruction(p1 blob[]) end
+end
+
+Handler handler5 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//0
+}
+	function onConstruction(p1 validRec1) end
+end
+
+Handler handler6 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//0
+}
+	function onConstruction(p1 validRec2) end
+end
+
+Handler handler7 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//1 is an invalid type for a parameter to an onConstructionFunction
+}
+	function onConstruction(p1 invalidRec1) end
+end
+
+Handler handler8 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//1 is an invalid type for a parameter to an onConstructionFunction
+}
+	function onConstruction(p1 invalidRec2) end
+end
+
+Handler handler9 type JSFHandler
+{
+	onConstructionFunction = onConstruction			//1 is an invalid type for a parameter to an onConstructionFunction
+}
+	function onConstruction(p1 dictionary) end
+end
+
+Record validRec1
+	field1 int;
+end
+
+Record validRec2
+	field1 validRec1;
+end
+
+Record invalidRec1
+	field1 blob;
+end
+
+Record invalidRec2
+	field1 invalidRec1;
+end

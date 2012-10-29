@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.mof.egl.Element;
 
 
 /**
@@ -20,17 +23,24 @@ import org.eclipse.edt.compiler.core.ast.Node;
 public interface IProblemRequestor {
 
 	// The following method should be overriden by all non-abstract subtypes
-    void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts);    
+    void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle);    
     
     // The following methods exist for convenience and are overriden in
     // DefaultProblemRequestor. Subtypes need not override them
+    void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts);
     void acceptProblem(Node astNode, int problemKind);
     void acceptProblem(Node astNode, int problemKind, int severity);		
 	void acceptProblem(Node astNode, int problemKind, String[] inserts);	
 	void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts);
+	void acceptProblem(Node astNode, int problemKind, int severity, String[] inserts, ResourceBundle bundle);
+	void acceptProblem(Element element, int problemKind);
+	void acceptProblem(Element element, int problemKind, int severity);
+	void acceptProblem(Element element, int problemKind, int severity, String[] inserts);
+	void acceptProblem(Element element, int problemKind, int severity, String[] inserts, ResourceBundle bundle);
 	void acceptProblem(int startOffset, int endOffset, int severity, int problemKind);
 	void acceptProblem(int startOffset, int endOffset, int problemKind, String[] inserts);
 	void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts);
+	void acceptProblem(int startOffset, int endOffset, int problemKind, boolean isError, String[] inserts, ResourceBundle bundle);
 	boolean shouldReportProblem(int problemKind);
 	
 	boolean hasError();
@@ -66,8 +76,6 @@ public interface IProblemRequestor {
 	public static final int SELECTEDINDEXITEM_MUST_BE_IN_RECORD  = 2063;
 	public static final int ANNOTATION_VALUE_MUST_BE_NAME_ARRAY = 2064;
 	public static final int NOT_AN_ANNOTATION = 2065;
-	public static final int ONLY_STRING_FIELDS_ALLOWED = 2066;
-	
 	
 		
 //Also see EGLMessage for messages 3000 - 3030			
@@ -187,7 +195,6 @@ public interface IProblemRequestor {
 	public static final int PROPERTY_INVALID_PRIMITIVE_LENGTH_USED_WITH_ISNULLABLE_PROPERTY = 3098;
 	public static final int PROPERTY_INVALID_SQLDATACODE_AND_PRIMITIVE_COMBINATION = 3099;
 	public static final int PROPERTY_INVALID_PRIMITIVE_USED_WITH_SQLDATACODE_PROPERTY = 3100;
-	public static final int PROPERTY_EXCEEDS_ALLOWED_LENGTH = 3101;
 	public static final int PROPERTY_INVALID_PRIMITIVE_USED_WITH_ISNULLABLE_PROPERTY = 3102;
 	public static final int PROPERTY_MINIMUM_INPUT_MUST_BE_LESS_THAN_PRIMITIVE_LENGTH = 3103;
 	public static final int PROPERTY_MUST_RESOLVE_TO_FORM = 3104;
@@ -210,9 +217,7 @@ public interface IProblemRequestor {
 	public static final int RECORD_PARAMETER_WITH_NO_CONTENTS = 3118;
 	public static final int PROGRAM_PARAMETER_OF_TYPE_ANY = 3119;
     public static final int INVALID_TYPE_USED_FOR_THIS_PROPERTY = 3120;
-    public static final int PROPERTY_ONLY_VALID_FOR_PRIMITIVE_LIST = 3121;
 	public static final int REDEFINING_MUST_BE_FIXED_RECORD = 3122;
-	public static final int PROPERTY_REQUIRES_NONDECIMAL_DIGITS = 3123;
 	public static final int REDEFINES_MUST_FOLLOW = 3124;
 	public static final int REDEFINES_TARGET_IS_ARRAY = 3125;
 	public static final int REDEFINER_AND_REDEFINED_MUST_BE_DECLARED_IN_SAME_PART = 3126;
@@ -228,27 +233,23 @@ public interface IProblemRequestor {
 	public static final int SELECTTYPE_REQUIRES_SELECTFROMLIST = 3133;	
 	public static final int PROP_REQUIRES_DISPLAYUSE_BUTTON_OR_HYPERLINK = 3134;
 	public static final int NEWWINDOW_REQUIRES_ACTION = 3135;
-		public static final int NUMELEMENTSITEM_INVALID_FOR_DYNAMIC_ARRAY = 3136;
+	public static final int NUMELEMENTSITEM_INVALID_FOR_DYNAMIC_ARRAY = 3136;
 	public static final int NUMELEMENTSITEM_MUST_BE_IN_RECORD  = 3137;
 	public static final int NUMELEMENTSITEM_MUST_BE_NUMERIC = 3138;
 	public static final int NUMELEMENTSITEM_ITEM_MUST_BE_ARRAY = 3139;
 	public static final int DUPLICATE_VALIDATION_ORDER_VALUES_FOUND = 3140;
-	public static final int INVALID_PROPERTY_VALUE_FOR_ITEM_TYPE = 3141;
 	public static final int SELECTTYPE_TARGET_MUST_BE_INT = 3142;	
 
 	public static final int PROPERTY_MUST_NOT_RESOLVE_TO_LIBRARY_FUNCTION= 3169;
 	public static final int PROPERTY_CERTAIN_PRIMITIVE_REQUIRED = 3170;
-	public static final int PROPERTY_INVALID_CHARACTER_IN_DATEFORMAT = 3171;
 	public static final int PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_LENGTH_DATEFORMAT_MASK = 3172;
 	public static final int PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_LENGTH = 3173;
-	public static final int PROPERTY_DATEFORMAT_INVALID_PRIMITIVE_TYPE = 3174;
-	public static final int PROPERTY_DATEFORMAT_INVALID_DECIMALS = 3175;
+	
 	public static final int PROPERTY_DATEFORMAT_INVALID_INCOMPATIBLE_PROPERTIES = 3176;
 	public static final int PROPERTY_INVALID_VALUE_DATEFORMAT_GREGORIAN_AND_JULIAN = 3177;
 	public static final int PROPERTY_INVALID_VALUE_DATEFORMAT_MUST_MATCH_FIELDLEN = 3178;
 	public static final int PROPERTY_INVALID_VALUE_DATEFORMAT = 3179;
 	public static final int PROPERTY_ONLY_VALID_WHEN_IN_VAGCOMPATABILITY_MODE= 3180;
-	public static final int PROPERTY_MINIMUM_INPUT_MUST_BE_GREATER_THAN_ZERO= 3181;
 	public static final int PROPERTY_LENGTH_EXCEEDS_DEFINED_LENGTH = 3182;	
 	public static final int PROPERTY_MUST_RESOLVE_TO_FUNCTION= 3183;
 	public static final int PROPERTY_VALUES_FOR_OUTLINE_PROPERTY_INVALID = 3184;
@@ -338,26 +339,30 @@ public interface IProblemRequestor {
 	public static final int HEX_LITERAL_LENGTH_MUST_BE_EVEN = 3265;
 	public static final int HEX_LITERAL_LENGTH_MUST_BE_MULTIPLE_OF_FOUR = 3266;
 	public static final int USER_FIELD_NAME_CONFLICTS_WITH_IMPLICIT_FIELD_NAME = 3267;
-	public static final int VALIDATOR_FUNCTION_HAS_PARAMETERS = 3268;
 	public static final int TYPEAHEAD_FUNCTION_BAD_SIGNATURE = 3269;
 	public static final int TYPEAHEAD_REQUIRES_PROPERTIES = 3270;
 	public static final int VALIDVALUES_RANGE_WITH_TYPEAHEAD = 3271;
 	public static final int VALDATATABLE_TYPE_INVALID_FOR_TYPEAHEAD = 3272;
 	public static final int TYPE_INVALID_FOR_TYPEAHEAD = 3273;
-	public static final int TYPE_VALIDATOR_FUNCTION_NOT_VALID_FOR_VGUIRECORD = 3274;
 	public static final int NULLABLE_INVALID_IN_ISA_AS_OR_NEW = 3275;
-	public static final int VALIDATION_PROPERTIES_LIBRARY_WRONG_TYPE = 3276;
 	public static final int BYTES_LITERAL_LENGTH_MUST_BE_EVEN = 3277;
 	public static final int BIGINT_LITERAL_OUT_OF_RANGE = 3278;
 	public static final int SMALLINT_LITERAL_OUT_OF_RANGE = 3279;
 	public static final int SMALLFLOAT_LITERAL_OUT_OF_RANGE = 3280;
+	public static final int TYPE_IS_NOT_PARAMETERIZABLE = 3281;
+	public static final int TYPE_ARG_NOT_VALID = 3282;
+	public static final int TYPE_ARGS_INVALID_SIZE = 3283;
 	
-	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
-	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	
-	public static final int RUI_ONCONSTRUCTOR_FUNCTION_INVALID = 3322;	
-	public static final int PUBLISHMESSAGEHELPER_FUNCTION_INVALID = 3323;	
-	public static final int RETRIEVEVALIDSTATEHELPER_FUNCTION_INVALID = 3324;	
-	
+	public static final int ANNOTATION_CANNOT_BE_ARRAY = 3290;
+	public static final int ANNOTATION_MUST_BE_ARRAY = 3291;
+	public static final int ANNOTATION_CANNOT_BE_NULL= 3292;
+	public static final int ANNOTATION_MUST_BE_STRING = 3293;
+	public static final int ANNOTATION_MUST_BE_BOOL = 3294;
+	public static final int ANNOTATION_MUST_BE_INT = 3295;
+	public static final int ANNOTATION_MUST_BE_FLOAT = 3296;
+	public static final int ANNOTATION_MUST_BE_DECIMAL = 3297;
+	public static final int ANNOTATION_VALUE_NOT_COMPAT = 3298;
+
 	public static final int IMPORT_STATEMENT_PACKAGE_NAME_COULD_NOT_BE_RESOLVED = 3325;	
 	public static final int IMPORT_STATEMENT_PART_NAME_IS_AMBIGUOUS = 3326;	
 	public static final int IMPORT_STATEMENT_PART_NAME_COULD_NOT_BE_LOCATED = 3327;	
@@ -407,45 +412,15 @@ public interface IProblemRequestor {
     public static final int FUNCTION_INVOCOATION_NOT_ALLOWED_IN_ARRAY_SUBSCRIPT_IN_INTO_CLAUSE = 3377;
     public static final int DYNAMIC_ACCESS_NOT_ALLOWED_IN_INTO_CLAUSE = 3378;
     
-    public static final int PROPERTIESFILE_NAME_CANNOT_CONTAIN_DASH = 3384;
     public static final int FUNCTION_CANT_HAVE_PARMS = 3385;
     public static final int FUNCTION_REQUIRES_RETURN_TYPE = 3386;
     public static final int FUNCTION_MUST_HAVE_ONE_PARM = 3387;
     public static final int FUNCTION_PARM_MUST_BE_IN = 3388;
     public static final int FUNCTION_CANT_HAVE_RETURN_TYPE = 3389;
     
-    public static final int FUNCTION_CALL_TARGET_MUST_BE_FUNCTION = 3390;
-    public static final int FUNCTION_MUST_BE_DEFINED_IN_PART = 3391;
-    public static final int FUNCTION_MUST_BE_SERVICE_OR_INTERFACE = 3392;
-    public static final int FUNCTION_CALLBACK_FUNCTION_REQUIRED = 3393;
-    public static final int FUNCTION_CALLBACK_MUST_BE_FUNCTION = 3394;
-    public static final int FUNCTION_CANNOT_HAVE_RETURN_TYPE = 3395;
-    public static final int FUNCTION_REQUIRES_N_PARMS = 3396;
-    public static final int FUNCTION_MUST_HAVE_ALL_IN_PARMS = 3397;
-    public static final int FUNCTION_PARM_MUST_HAVE_TYPE = 3398;
-    public static final int FUNCTION_TYPE_NOT_COMPAT_WITH_PARM = 3399;
-   
-   
-    
+	
 	public static final int INTERFACE_FUNCTION_MISSING = 3400;
-	
-	public static final int XXXREST_ALL_PARMS_MUST_BE_IN = 3401;
-	public static final int XXXREST_ONLY_1_RESOURCE_PARM = 3402;
-	public static final int XXXREST_MUST_RETURN_RESOURCE = 3403;
-	public static final int XXXREST_NON_RESOUCE_MUST_BE_STRING_COMPAT = 3404;
-	public static final int XXXREST_UMATCHED_SUBS_VAR = 3405;
-	public static final int XXXREST_RESOURCE_PARM_MUST_BE_RESOURCE = 3406;
-	public static final int XXXREST_FORMAT_MUST_BE_NONE = 3407;
-	public static final int XXXREST_RESPONSEFORMAT_NOT_SUPPORTD = 3408;
-	public static final int XXXREST_PARM_TYPE_MUST_BE_FLAT_RECORD = 3409;
-	
-	
 	public static final int TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE = 3410;
-
-	public static final int XXXREST_NO_RESOURCE_PARM = 3411;
-	public static final int XXXREST_NO_METHOD = 3412;
-
-	public static final int SERVICE_CALL_USING_WRONG_TYPE = 3415;
 
 	public static final int SYSTEM_FUNCTION_CANNOT_BE_DELEGATED = 3416;
 	public static final int FUNCTION_WITH_CONVERSE_CANNOT_BE_DELEGATED = 3417;
@@ -480,6 +455,8 @@ public interface IProblemRequestor {
 	public static final int THROW_TARGET_MUST_BE_EXCEPTION = 3444;
 	public static final int THROW_NOT_VALID_WITH_V60EXCEPTIONCOMPATIBILITY = 3445;
 	
+	public static final int EXTERNAL_TYPE_SUPER_SUBTYPE_MISMATCH = 3446;
+	
 	public static final int SIZEINBYTES_ARGUMENT_INVALID = 3450;
 	public static final int CONVERT_ARGUMENT_INVALID = 3451;
 	public static final int SIZEOF_ARGUMENT_INVALID = 3452;
@@ -491,22 +468,33 @@ public interface IProblemRequestor {
 	public static final int PART_OR_STATEMENT_NOT_SUPPORTED = 3458;
 	public static final int SYSTEM_PART_NOT_SUPPORTED = 3459;
 	public static final int SYSTEM_LIBRARY_NOT_SUPPORTED = 3460;
-	public static final int LIBRARY_FUNCTION_NOT_ALLOWED_FOR_PROPERTY = 3461;
+	public static final int EXTERNAL_FUNCTION_NOT_ALLOWED_FOR_PROPERTY = 3461;
 	public static final int PROPERTY_NOT_VALID_FOR_TYPES = 3462;
 
 	public static final int STATEMENT_NOT_SUPPORTED = 3463;
+	public static final int STATEMENT_NOT_EXTENDED = 3464;
 	
 	public static final int LENGTH_OF_NONDECIMAL_DIGITS_FOR_CONSTANT_TOO_LONG = 3465;
 	public static final int DECIMALS_OF_VALUE_FOR_CONSTANT_TOO_LONG = 3466;
 	public static final int SEGMENTS_OR_POSITION_REQUIRED_FOR_CONSOLE_FIELDS = 3467;
 	public static final int MULTIPLE_OVERLOADED_FUNCTIONS_MATCH_ARGUMENTS = 3468;
+	public static final int NO_FUNCTIONS_MATCH_ARGUMENTS = 3469;
 
 	public static final int ENUMERATION_CONSTANT_INVALID = 3470;
 	public static final int ENUMERATION_CONSTANT_DUPLICATE= 3471;
 	public static final int MULTI_INDICES_NOT_SUPPORTED= 3472;
 	public static final int ENUMERATION_NO_FIELDS= 3473;
-
+	
+	public static final int CLASS_MUST_EXTEND_CLASS = 3474;
+	public static final int PART_CANNOT_EXTEND_ITSELF = 3475;
+	
 	public static final int THROWS_NOT_VALID_HERE= 3480;
+
+	public static final int STEREOTYPE_NO_FILLERS = 3510;
+	public static final int STEREOTYPE_NO_EMBED = 3511;
+	public static final int STEREOTYPE_TYPE_REQUIRED = 3512;
+	public static final int STEREOTYPE_NO_PARMS = 3514;
+	public static final int STEREOTYPE_BAD_TYPE = 3515;
 
 
 //3896-3999 ARE IN EGLMESSAGES 					
@@ -541,9 +529,6 @@ public interface IProblemRequestor {
 	public static final int GETBYPOSITION_POSITION_BAUE_MUST_BE_INTEGER = 4025;
 	public static final int FIXED_RECORD_EMBEDDED_IN_FLEXIBLE = 4026;		
 	public static final int DYNAMIC_ARRAY_USED_IN_FIXED_RECORD = 4027;
-	public static final int FLEXIBLE_RECORD_EMBEDDED_IN_FIXED = 4028;
-	public static final int FLEXIBLE_RECORD_ASSIGNED_TO_FIXED = 4029;
-	public static final int FIXED_RECORD_ASSIGNED_TO_FLEXIBLE = 4030;
 	public static final int BYPOSITION_USED_WITH_FLEXIBLE_RECORD_AND_FORM = 4031;
 	public static final int REF_ARRAY_POINTS_TO_NONDYNAMIC_ARRAY = 4032;
 	public static final int REF_USED_WITH_PRIMITIVE = 4033;
@@ -700,6 +685,7 @@ public interface IProblemRequestor {
 //	public static final int ADD_STATEMENT_RECORD_IS_INVALID_TYPE = 4270;
 //	public static final int CLOSE_STATEMENT_RECORD_IS_INVALID_TYPE = 4271;
 	public static final int DELETE_STATEMENT_RECORD_IS_INVALID_TYPE = 4272;
+	public static final int ARGUMENT_COUNT_NOT_EQUAL_PARAMETER_COUNT = 4291;
 //	public static final int INQUIRY_STATEMENT_RECORD_IS_INVALID_TYPE = 4273;
 //	public static final int REPLACE_STATEMENT_RECORD_IS_INVALID_TYPE = 4274;
 //	public static final int SCANBACK_STATEMENT_RECORD_IS_INVALID_TYPE = 4275;
@@ -732,11 +718,11 @@ public interface IProblemRequestor {
 	public static final int MISSING_LENGTH_FOR_PRIMITIVE_TYPE = 4350;
 	
 	public static final int LENGTH_NOT_ALLOWED = 4400;
-	public static final int INVALID_LENGTH_FOR_PRIMITIVE_TYPE = 4401;
+	public static final int INVALID_LENGTH_FOR_PARAMETERIZED_TYPE = 4401;
 	public static final int INVALID_DECIMALS = 4402;
 	public static final int DECIMALS_GREATER_THAN_LENGTH = 4403;
 	public static final int INVALID_CALCULATED_LENGTH_FOR_PRIMITIVE_TYPE_WITH_LOGICAL_CHILDREN = 4404;
-	public static final int PRIMITIVE_TYPE_REQUIRES_DATETIME_PATTERN = 4405;
+	public static final int PARAMETERIZED_TYPE_REQUIRES_DATETIME_PATTERN = 4405;
 //	public static final int TYPEDEF_ITEM_CAUSES_CIRCULAR_TYPEDEFS = 4405;
 //	public static final int NAMELESS_TYPEDEF_ITEM_CAUSES_CIRCULAR_TYPEDEFS = 4406;
 	public static final int DUPLICATE_ITEM_NAME = 4407;
@@ -744,6 +730,7 @@ public interface IProblemRequestor {
 	public static final int INVALID_LENGTH_FOR_PRIMITIVE_TYPE_WITH_FIXED_LENGTH = 4409;
 	public static final int INVALID_CALCULATED_LENGTH_FOR_PRIMITIVE_TYPE_WITH_FIXED_LENGTH_WITH_LOGICAL_CHILDREN = 4410;
 	public static final int DUPLICATE_ITEM_NAME_DUE_TO_EMBED = 4411;
+	public static final int NEGATIVE_LENGTH_INVALID = 4412;
 
 //
 //	//4500-4599: Used for SQL validation messages (may change)!
@@ -844,7 +831,7 @@ public interface IProblemRequestor {
 	public static final int DATA_DECLARATION_IS_AMBIGUOUS = 4927;
 	public static final int PROGRAM_OR_LIBRARY_USE_STATEMENT_IS_AMBIGUOUS = 4928;
 	public static final int PROGRAM_OR_LIBRARY_USE_STATEMENT_DOES_NOT_RESOLVE = 4929;
-	public static final int PROGRAM_OR_LIBRARY_USE_STATEMENT_RESOLVES_TO_INVALID_TYPE = 4930;
+	public static final int USE_STATEMENT_RESOLVES_TO_INVALID_TYPE = 4930;
 	public static final int PROGRAM_USE_STATEMENT_TOO_MANY_FORMGROUPS = 4931;
 	public static final int PROGRAM_USE_STATEMENT_TOO_MANY_HELP_GROUP_PROPERTIES = 4932;
 	public static final int PROGRAM_PARAMETER_FORM_MUST_BE_IN_MAIN_FORMGROUP = 4933;
@@ -873,12 +860,11 @@ public interface IProblemRequestor {
     public static final int CONSTANT_VALUE_MUST_BE_LITERAL = 4955;
 	public static final int FUNCTION_PARAMETER_MODIFIER_NOT_ALLOWED_WITH_LOOSE_TYPE = 4956;
 	public static final int IN_MODIFIER_REQUIRED_FOR_EXTERNALTYPE = 4957;
-	public static final int CONST_MODIFIER_NOT_ALLOWED_WITH_IN_MODIFIER = 4958;
+	public static final int CONST_MODIFIER_NOT_ALLOWED_WITH_OUT_MODIFIER = 4958;
     public static final int FUNCTION_PARM_CONST_AND_FIELD_MUTEX = 4960;
     public static final int EXTERNALTYPE_PARM_CANNOT_BE_CONST = 4961;
     public static final int SERVICE_PARM_CANNOT_BE_CONST = 4962;
     public static final int ONEWAY_FUNCTION_PARM_MUST_BE_IN = 4963;
-    public static final int RETURN_NOT_ALLOWED_FOR_ONEWAY = 4964;
     public static final int FORM_MUST_BE_QUALIFIED_BY_FORMGROUP = 4965;
     public static final int CONSTANT_VALUE_MIXED_TYPE_ARRAY = 4966;
 
@@ -1114,7 +1100,10 @@ public interface IProblemRequestor {
 	public static final int P_FOUND_EMPTY_BRACKETS = 5211;
 	
 	public static final int DISCOURAGED_ARITHMETIC_COMPARISON = 5213;
-
+	
+	public static final int MISSING_OPERATION_FOR_BINARY_EXPRESSION = 5214;
+	public static final int MISSING_OPERATION_FOR_SUBSTRING = 5215;
+	public static final int MISSING_OPERATION_FOR_UNARY_EXPRESSION = 5216;
 	
 	public static final int ROUTINE_MUST_HAVE_EVEN_NUM_OF_ARGS = 5254;
 	public static final int ARG_MUST_BE_SQL_REC_ITEM_OR_STRING_LITERAL = 5255;
@@ -1173,8 +1162,6 @@ public interface IProblemRequestor {
 	public static final int INVALID_NUMERIC_FORM_FIELD_FIELDLEN_PROPERTY_VALUE = 5349;	
 	public static final int INVALID_FORM_FIELD_GREATER_ZERO_PROPERTY_VALUE = 5350;
 	public static final int INVALID_FORM_FIELD_POSITIVE_INTEGER_PROPERTY_VALUE = 5351;
-	public static final int INVALID_FORM_FIELD_CURRENCY_SYMBOL_PROPERTY_VALUE = 5352;
-	public static final int INVALID_FORM_FIELD_FILLCHARACTER_PROPERTY_VALUE = 5353;
 	public static final int INVALID_FORM_FIELD_DATEFORMAT_PROPERTY_VALUE = 5354;
 	public static final int INVALID_FORM_FIELD_TIMEFORMAT_PROPERTY_VALUE = 5355;
 	public static final int INVALID_FORM_FIELD_PROPERTY = 5356;
@@ -1249,7 +1236,6 @@ public interface IProblemRequestor {
 		public static final int RECORD_CANT_BE_SYSTEM_FUNCTION_RESULT = 5559;
 	
 	//  5600-5699: (for now) Used for Library errors
-	public static final int LIBRARY_NO_MAIN_FUNCTION_ALLOWED = 5600;
 	public static final int LIBRARY_QUALIFIED_NAME_NOT_ALLOWED_AS_DECLARATION= 5601;
 	public static final int LIBRARY_PARAMETER_TYPES_MUST_SPECIFY_LENGTH = 5602;
 	public static final int LIBRARY_PARAMETER_TYPES_NUMBER_IS_INVALID = 5603;
@@ -1269,43 +1255,8 @@ public interface IProblemRequestor {
     public static final int LIBRARY_HAS_INVALID_SUBTYPE = 5617;
     public static final int SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION = 5618;
     public static final int CANNOT_PASS_NULL = 5619;
-    public static final int CANNOT_RETURN_NULL = 5620;
     
-    public static final int AS400_ANNOTATION_TYPE_MISMATCH = 5700;
-    public static final int WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS = 5701;
-    public static final int PARAMETER_ANNOTATION_INVALID = 5702;
-    public static final int IBMIPROGRAM_CONTAINER_INVALID = 5703;
-    public static final int IBMIPROGRAM_CANNOT_HAVE_STMTS = 5704;
-    public static final int IBMIPROGRAM_ONLY_SERVICE_CAN_RETURN = 5705;
-    public static final int IBMIPROGRAM_CAN_ONLY_RETURN_INT = 5706;
-    public static final int AS400_BAD_LENGTH = 5707;
-    public static final int AS400_NEGATIVE_DECIMAL = 5708;
-    public static final int AS400_BAD_DECIMAL = 5709;
-    public static final int AS400_PROPERTY_REQUIRED = 5710;
-    public static final int AS400_PROPERTY_NOT_ALLOWED = 5711;
-    public static final int ELEMENTTYPE_ANNOTATION_INVALID = 5712;
-    public static final int RETURN_COUNT_VAR_MUST_BE_INT_COMPAT = 5713;
-    public static final int RETURN_COUNT_VAR_DEFINED_IN_WRONG_PLACE = 5714;
-    public static final int PROGRAM_PARAMETER_ANNOTATION_REQUIRED = 5715;
-    public static final int AS400_ANNOTATION_NULLABLE_TYPE_INVALID = 5716;
-    public static final int IBMIPROGRAM_PARM_TYPE_INVALID = 5717;
-    public static final int IBMIPROGRAM_NULLABLE_PARM_INVALID = 5718;
-    public static final int IBMIPROGRAM_ARRAY_NULLABLE_PARM_INVALID = 5719;
-    public static final int IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID = 5720;
-    public static final int IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID = 5721;
-    public static final int IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID = 5722;
-    public static final int IBMIPROGRAM_PARM_STRUCT_REQUIRES_AS400 = 5723;
-    public static final int IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED = 5724;
-    public static final int IBMIPROGRAM_RETURNS_NOT_ALLOWED = 5725;
-    public static final int IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION = 5726;
-    public static final int IBMIPROGRAM_USING_HAS_WRONG_TYPE = 5727;
-    public static final int IBMIPROGRAM_MUST_BE_SPECIFIED = 5728;
-    public static final int IBMIPROGRAM_CALLBACK_NOT_SUPPORTED = 5729;
-    
-    
-    
-    
-    
+    public static final int PROXY_FUNCTIONS_CANNOT_HAVE_STMTS = 5704;
 //6000-6050 ARE IN EGLMESSAGES
 
 	public static final int EMPTY_SQL_STRING = 6500;
@@ -1354,7 +1305,6 @@ public interface IProblemRequestor {
 	public static final int INVOCATION_TARGET_INVALID = 6543;
 	public static final int INVOCATION_TARGET_FOR_CALL_INVALID = 6544;
 	public static final int HOST_VARIABLE_CANT_BE_WHERE_CLAUSE = 6545;
-	public static final int DUPE_INLINE_DLI = 6546;
 	
 	public static final int STATEMENT_CANNOT_BE_IN_ACTION_PROGRAM = 6550;
 	public static final int STATEMENT_CANNOT_BE_IN_ACTION_OR_BASIC_PROGRAM = 6551;
@@ -1405,7 +1355,6 @@ public interface IProblemRequestor {
 	// messages for call statement 
 	public static final int DUPE_CALL_OPTION = 6603;
 	public static final int TOO_MANY_ARGS_ON_CALL = 6604;
-	public static final int INVALID_STATMENT = 6605;
 //	public static final int CANT_HAVE_FUNC_INVOC_ARG_ON_CALL = 6605;	
 //	public static final int CANT_HAVE_EXPR_ARG_ON_CALL = 6606;		
 //	public static final int CANT_HAVE_NUMERIC_ARG_ON_CALL = 6607;
@@ -1514,7 +1463,8 @@ public interface IProblemRequestor {
 	public static final int MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_SOURCE = 6670;
 	public static final int MOVE_STATEMENT_MULTIDIMENSIONAL_BYNAME_OR_BYPOSITION_TARGET = 6671;
 	public static final int MOVE_STATEMENT_INCOMPATIBLE_TYPES = 6672;
-	public static final int FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_DATETIME_PARAMETER = 6673;		
+	
+	public static final int FUNCTION_ARG_LITERAL_NOT_VALID_WITH_INOUT_PARAMETER = 6673;		
 	public static final int FUNCTION_ARG_REQUIRES_IN_PARAMETER = 6674;
 	public static final int FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER = 6675;
 	
@@ -1547,7 +1497,6 @@ public interface IProblemRequestor {
 	public static final int INVALID_SET_STATE_FOR_ITEM = 6695;
 	public static final int INVALID_SET_STATE_FOR_SQL_ITEM = 6696;
 	public static final int INVALID_SET_STATE_FOR_RECORD = 6697;
-	public static final int INVALID_SET_STATE_FOR_INDEXED_RECORD = 6698;
 	public static final int INVALID_SET_STATE_FOR_TEXT_FORM = 6699;
 	public static final int INVALID_SET_STATE_FOR_PRINT_FORM = 6700;
 	public static final int INVALID_SET_STATE_FOR_TEXT_FIELD = 6701;
@@ -1564,10 +1513,7 @@ public interface IProblemRequestor {
 	
 	public static final int PROGRAM_INPUT_RECORD_DOESNT_MATCH_PARAM = 6711;
 	public static final int FORWARD_TARGET_DOESNT_HAVE_ONPAGELOAD_FUNCTION = 6712;
-	public static final int FLEXIBLE_RECORD_PASSED_TO_NON_EGL_PAGEHANDLER = 6713;
 	
-	public static final int ARRAYS_AND_OCCURED_ITEMS_ARE_NOT_COMPATIBLE = 6714;
-	public static final int OCCURED_ITEMS_ONLY_COMPATIBLE_WITH_ANY = 6715;
 	public static final int FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM = 6716;
 	
 	public static final int OCCURED_ITEM_MOVE_OPERAND_NOT_SUBSCRIPTED = 6717;
@@ -1589,23 +1535,8 @@ public interface IProblemRequestor {
 	public static final int GOTO_LABEL_NOT_ACCESSIBLE = 6728;	
 	//public static final int GOTO_LABEL_OUTSIDE_ONEVENT_BLOCK = 6728;
 
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_RECORD_OR_DICTIONARY = 6729;
-	
 	public static final int FUNCTION_ARG_NOT_ASSIGNMENT_COMPATIBLE_WITH_PARM = 6731;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_ANYEGL = 6732;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_ARRAYORTABLE = 6733;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_ATTRIBUTE = 6734;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_CONSOLEFORM = 6735;
 	public static final int CONVERT_TARGET_INVALID = 6736;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_ITEMORRECORD = 6737;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_RECORD = 6738;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_SERVICEORINTERFACE = 6739;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_TEXTFIELD = 6740;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_VAGTEXT = 6741;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_SPECIAL_PARM_VAGTEXTORNUMERIC = 6742;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_LOOSE_PARM = 6743;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_LOOSE_NUMERIC_PARM= 6744;
-	public static final int FUNCTION_ARG_NOT_COMPATIBLE_WITH_IO_RECORD_PARM = 6745;
 	
 	public static final int FUNCTION_REFERENCE_CANNOT_BE_RESOLVED = 6746;
 	public static final int FUNCTION_REFERENCE_AMBIGUOUS = 6747;
@@ -1619,10 +1550,8 @@ public interface IProblemRequestor {
 	public static final int CONVERTBIDI_CONVTABLE_INVALID = 6753;
 	
 	public static final int FUNCTION_ARG_CANNOT_BE_THIS = 6754;
-	public static final int UNLOADONEXIT_NOT_VALID_IN_MAIN = 6755;
 	public static final int CONSTRUCTOR_CALL_WRONG_PLACE = 6756;
 
-	public static final int CANNOT_ASSIGN_NULL = 6757;
 	public static final int FUNCTION_ARG_CANNOT_BE_SUPER = 6758;
 
 	public static final int MOVE_MODIFIER_INVALID = 6760;
@@ -1657,7 +1586,6 @@ public interface IProblemRequestor {
 	public static final int SET_VALUES_BLOCK_NOT_VALID_AS_RETURN_ARG = 7516;
 	public static final int SET_VALUES_BLOCK_NOT_VALID_HERE = 7517;
 	public static final int THISARRAY_ONLY_IN_SET_VALUES_BLOOCK = 7518;
-	public static final int SERVICE_AND_INTERFACE_EMPTY_BLOCK = 7519;
 
 	public static final int ARG_MUST_BE_MATH_NUMERIC_ITEM = 7550;		 
 	public static final int ARG_MUST_BE_MATH_INTEGER_ITEM = 7551; //$N
@@ -1779,7 +1707,6 @@ public interface IProblemRequestor {
 	public static final int NON_MULTIPLY_OCCURING_ITEM_CANNOT_BE_INITIALIZED_WITH_ARRAY = 7756;
 	public static final int TOO_MANY_ELEMENTS_IN_STRUCTURE_ITEM_ARRAY_INITIALIZER = 7757;
 	public static final int MULTI_DIMENSIONAL_OCCURING_ITEM_HAS_NON_ARRAY_INITIALIZER = 7758;	
-	public static final int SQLRESULTSET_ANNOTATION_TYPE_ERROR = 7759;	
 	
 	public static final int RUNTIME_NAME_OF_WEB_PROGRAM_EXCEEDS_8_CHARACTERS = 7761;
 	
@@ -1814,15 +1741,13 @@ public interface IProblemRequestor {
 	public static final int VALUEREF_NOT_RESOLVED = 7799;
 	
 	public static final int INTERFACE_IS_AMBIGUOUS = 7800;
-	public static final int SERVICE_OR_HANDLER_MUST_IMPLEMENT_AN_INTERFACE = 7801;
+	public static final int PART_MUST_IMPLEMENT_AN_INTERFACE = 7801;
 	public static final int SERVICE_CANNOT_BE_USED_BY_SERVICE = 7802;
-	public static final int LOOSE_TYPES_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = 7803;
-	public static final int TYPE_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = 7804;
-	public static final int TYPE_NOT_ALLOWED_AS_SERVICE_OR_INTERFACE_FUNC_RETURN = 7805;
-	public static final int FIELD_NOT_ALLOWED_IN_SERVICE_OR_INTERFACE_FUNC_PARM = 7806;
+	public static final int TYPE_NOT_ALLOWED_IN_SERVICE_OR_PROXY_FUNC_PARM = 7804;
+	public static final int TYPE_NOT_ALLOWED_AS_SERVICE_OR_PROXY_FUNC_RETURN = 7805;
+	public static final int FIELD_NOT_ALLOWED_IN_SERVICE_OR_PROXY_FUNC_PARM = 7806;
 	public static final int STATIC_FUNCTIONS_ONLY_ALLOWED_IN_JAVAOBJECT_INTERFACE = 7807;
 	public static final int EXTENDS_CLAUSE_ONLY_ALLOWED_IN_JAVAOBJECT_INTERFACE = 7808;
-	public static final int INTERFACE_MUST_EXTEND_AN_INTERFACE = 7809;
 	public static final int INTERFACE_FUNCTION_CANNOT_BE_PRIVATE = 7810;		
 	public static final int SERVICE_CANNOT_USE_FORM_GROUP = 7811;
 	public static final int OVERRIDEN_FUNCTION_PARAMETERS_DONT_MATCH = 7812;
@@ -1843,132 +1768,13 @@ public interface IProblemRequestor {
 
 	public static final int MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND = 7830;
 	
-	public static final int DLI_SEGMENT_IO_INVALID_IN = 7840;
-			
-	public static final int PSB_PROPERTY_VALUE_NOT_PSB_RECORD = 7850;
-	public static final int DLI_NAME_TOO_LONG = 7851;
-	public static final int DLI_NAME_BAD_FIRST_CHAR = 7852;
-	public static final int DLI_NAME_BAD_CHAR = 7853;
-	public static final int PCBS_DECLARED_OUT_OF_ORDER_X_AFTER_Y = 7854;
-	public static final int FIELD_NOT_ALLOWED_FOR_PCBTYPE = 7855;
-	public static final int FIELD_NOT_ALLOWED_FOR_PCBTYPE_WHEN_ITEM_IS_ELAWORK_OR_ELAMSG = 7856;
 	public static final int BOTH_PROPERTIES_REQUIRED_IF_ONE_SPECIFIED = 7857;
 
-	public static final int FIRST_PCB_HIERARCHY_ENTRY_HAS_PARENTRECORD = 7858;
-	public static final int NOT_FIRST_PCB_HIERARCHY_ENTRY_MISSING_PARENTRECORD = 7859;
-	public static final int SEGMENTRECORD_AND_PARENTRECORD_CANNOT_BE_SAME = 7860;
-	public static final int LOOP_IN_DLI_SEGMENT_RECORD_HIERARCHY = 7861;
-	public static final int MORE_THAN_FIFTEEN_LEVELS_IN_SEGMENT_RECORD_HIERARCHY = 7862;
-	public static final int PARENTRECORD_MISSING_FROM_HIERARCHICAL_PATH_OF_PCB = 7863;
-	public static final int KEYITEM_NOT_VALID_DLINAME_SO_MUST_DEFINE_DLIFIELDNAME = 7865;
-	public static final int PROPERTY_KEY_ITEM_MUST_BE_IN_DLISEGMENT = 7866;
-	public static final int SEGMENTRECORD_NOT_VALID_DLINAME_SO_MUST_DEFINE_SEGMENTNAME = 7867;
-	public static final int ISNOT_STATE_NOT_VALID_FOR_DLISEGMENT = 7868;
-	public static final int MULTIPLE_TARGETS_MUST_ALL_BE_DLISEGMENT_SCALARS = 7869;
-	public static final int IO_CLAUSE_REQUIRES_DLISEGMENT_TARGET = 7870;
-	public static final int USINGPCB_ITEM_NOT_IN_PROGRAM_PSB = 7871;
 	public static final int FORUPDATE_NOT_ALLOWED_WITH_ARRAY_TARGET = 7872;
-	public static final int ONLY_NEXT_DIRECTIVE_ALLOWED_WITH_DLISEGMENT = 7873;
-	public static final int PCB_PROPERTY_REQUIRED_FOR_PSB_ITEMS = 7874;
 	public static final int LEVEL_NUMBERS_NOT_ALLOWED_IN_RECORD = 7875;
-	public static final int ARRAYS_NOT_VALID_IN_PSB = 7876;
-    public static final int DLI_SEGMENT_NAME_IS_INVALID = 7877;
-	public static final int DLI_FIELD_NAME_IS_INVALID = 7878;
-    public static final int DLI_FUNCTION_TYPE_IS_INVALID_FOR_STATEMENT = 7879;
-    public static final int DLI_GET_FORUPDATE_HAS_INVALID_FUNCTION_TYPE = 7880;
-    public static final int DLI_GET_BY_POSITION_INPARENT_HAS_INVALID_FUNCTION_TYPE = 7881;
-    public static final int DLI_GET_BY_POSITION_INPARENT_AND_FORUPDATE_HAS_INVALID_FUNCTION_TYPE = 7882;	
-    public static final int DUPLICATE_RELATIONSHIP_IN_HIERARCHY = 7883;  
-    public static final int DLI_GET_BY_KEY_SECOND_STATEMENT_FUNCTION_CODE_INVALID = 7884;
-    public static final int DLI_ONLY_ONE_DLI_CALL_UNLESS_TARGET_IS_ARRAY = 7885; 
-    public static final int DLI_TOO_MANY_CALLS_FOR_GETBYKEY = 7886;
-    public static final int DLI_GET_BY_KET_MUST_HAVE_TWO_DLI_CALLS_IF_TARGET_IS_ARRAY = 7887;
-    public static final int DLI_INVALID_COMMAND_CODE_FOR_CALL = 7888;
-    public static final int DLI_MAX_NUMBER_COMMAND_CODES_EXCEEDED = 7889;
-    public static final int DLI_COMMAND_CODES_INCOMPATIBLE = 7890;
-    public static final int DLI_COMMAND_CODE_REPEATED = 7891;
-    public static final int DLI_ONLY_ONE_COMMAND_CODE_SUPPORTED = 7892;
-    public static final int DLI_INVALID_COMMAND_CODE_FOR_CALL_WITH_ARRAY = 7893;
-    public static final int DLI_ONLY_ONE_C_COMMAND_CODE_ALLOWED = 7894;
-    public static final int DLI_NO_CONDITIONS_WITH_C_COMMAND_CODE = 7895;
-    public static final int DLI_COMMAND_CODE_C_CANNOT_FOLLOW_COMMAND_CODE_D = 7896;
-    public static final int DLI_NO_QUALIFIED_SSA_CANNOT_FOLLOW_COMMAND_CODE_D = 7897;
-    public static final int DLI_MODIFIED_CALL_MUST_BE_SPECIFIED = 7898;
-    public static final int DLI_PARSE_ERROR = 7899;
-    public static final int DLI_TOO_MANY_CALLS = 7900;
-    public static final int DLI_VALUES_CLAUSE_MUST_FOLLOW_C = 7901;
-    public static final int DLI_ONLY_VALID_IN_PROGRAM = 7902;
-    public static final int DLI_PROGRAM_MUST_HAVE_DLI = 7903;
-    public static final int DLI_NO_PCB_FOR_SEGMENT = 7904;
-    public static final int DLI_LAST_SSA_WRONG_NAME = 7905;
-    public static final int DLI_SSAS_MUST_FOLLOW_HIERARCHY = 7906;
-    public static final int DLI_DUPLICATE_SSA = 7907;
-    public static final int DLI_SEGMENT_NOT_IN_PCB = 7908;
-    public static final int DLI_TARGETS_MUST_FOLLOW_HIERARCHY = 7909;
-    public static final int DLI_MUST_BE_AN_SSA_FOR_EACH_TARGET = 7910;
-    public static final int DLI_D_COMMAND_CODE_MUST_BE_ON_FIRST_SSA = 7911;
-    public static final int DLI_ADD_TARGETS_MUST_FOLLOW_HIERARCHY = 7912;
-    public static final int DLI_ONLY_ONE_SSA_ALLOWED_FOR_CALL = 7913;
-    public static final int DLI_MUST_BE_AN_SSA_FOR_EACH_SEGMENT_TO_ROOT = 7914;
-    public static final int DLI_SEGMENT_NOT_IN_HIERARCHY = 7915;
-    public static final int DLI_ONLY_ONE_SSA_ALLOWED_FOR_SECOND_STMT = 7916;
-    public static final int DLI_NO_CONDITIONS_FOR_REPL = 7917;
-    public static final int DLI_NO_PCB_FOR_SEGMENTS = 7918;
-    public static final int DLI_D_COMMAND_CODE_MUST_HAVE_TARGET = 7919;
-    public static final int DLI_PCB_IS_GSAM_PCB = 7920;
-    public static final int DLI_NO_HIERARCHY_NO_DEFAULT_SSAS = 7921;
-    public static final int DLI_NEED_AT_LEAST_1_SSA = 7922;
-    public static final int DLI_IO_NOT_ALLOWED_UNLESS_PSB_PROPERTY_DEFINED = 7923;
-    public static final int DLI_PCB_IS_NOT_DECLARED_IN_PROGRAM_PARM_LIST = 7924;
-    public static final int DLI_PCB_PARM_LIST_IS_TOO_LARGE = 7925;
-    public static final int DLI_ONLY_FIXED_RECORDS_ALLOWED_IN_PSBRECORD = 7926;
-    public static final int DLI_SPECIAL_PSB_NAME_REQUIRES_SPECIFIC_PCBTYPE = 7927;
-    public static final int DLI_PCB_PARM_REQUIRES_PSB_PROPERTY = 7928;
-    public static final int DLI_PCB_PARAMETER_REQUIRES_DLI_PROPERTY_ON_PROGRAM = 7929;
-    public static final int DLI_PSBRECORD_NOT_VALID_AS_ARGUMENT = 7930;
-    public static final int DLI_PSBRECORD_NOT_VALID_AS_PARAMETER = 7931;
-    public static final int DLI_PSBRECORD_NOT_VALID_AS_STATEMENT_OPERAND = 7932;
-    public static final int DLI_PSBRECORD_NOT_VALID_AS_PASSING_ITEM = 7933;        
-    public static final int DLI_ITEM_MUST_RESOLVE_TO_PCB_IN_PROGRAM_PSB_OR_PARM_LIST = 7934;
-    public static final int DLI_IO_ONLY_ALLOWED_IN_PROGRAM_WITH_DLI = 7935;
-    public static final int DLI_ILLEGAL_CODE_MODIFIER = 7936;
-    public static final int DLI_NO_CODE_MODIFIER = 7937;
-    public static final int DLI_INVALID_CODE_MODIFIER = 7938;
-    public static final int DLI_PSBPARM_NOT_PROGRAM_PARAMETER = 7939;        
-    public static final int DLI_TARGETS_INVALID = 7940;
-    public static final int DLI_DEFAULT_PCB_NOT_FOUND = 7941;
-    public static final int DLI_PCB_NOT_FOUND = 7942;
-    public static final int DLI_TARGET_MUST_BE_DLISEGMENT = 7943;
-    public static final int DLI_TARGETS_MUST_BE_DLISEGMENT = 7944;
-    public static final int DLI_RELATIONSHIP_NOT_FOUND = 7945;
-    public static final int DLI_CBLTDLI_NOT_ALLOWED_IN_LIBRARY = 7946;
-    public static final int DLI_SYSTEM_FUNCTION_NOT_ALLOWED_WITH_AIBTDLI_INTERFACE = 7947;
-    public static final int INVALID_CLAUSE_FOR_NON_DLI_TARGET = 7948;
-    public static final int DLI_PCBRECORD_NOT_VALID_AS_LVALUE = 7949;
+    public static final int DUPLICATE_RELATIONSHIP_IN_HIERARCHY = 7883;
+    
     public static final int FUNCTION_NOT_VALID_AS_LVALUE = 7954;
-    public static final int DLI_PCBRECORD_NOT_VALID_AS_IN_ARG = 7955;    
     
     public static final int VALIDATION_ERROR_COMPILING_BINARY_FUNCTION = 7999;    
-    
-    //Sql datasource messages
-    public static final int SQL_EXPR_HAS_WRONG_TYPE = 8500;
-    public static final int SQL_WITH_STMT_REQUIRED = 8501;
-    public static final int SQL_FOR_TYPE_INVALID = 8502;
-    public static final int SQL_FOR_NOT_ALLOWED = 8503;
-    public static final int SQL_INTO_NOT_ALLOWED = 8504;
-    public static final int SQL_TARGET_MUST_BE_DATA_EXPR_OR_COLUMNS = 8505;
-    public static final int SQL_TARGET_MUST_BE_ENTITY_OR_COLUMNS = 8506;
-    public static final int SQL_FOR_AND_TARGET_TYPES_MUST_MATCH = 8507;
-    public static final int SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED = 8508;
-    public static final int SQL_NO_ID_IN_TARGET_TYPE = 8509;
-    public static final int SQL_FOR_NOT_ALLOWED_WITH_DATA_SOURCE_TYPE = 8510;
-    public static final int SQL_WITH_STMT_REQUIRED_FOR_DELETE = 8511;
-    public static final int SQL_NO_WITH_FOR_USING = 8512;
-    public static final int SQL_TARGET_NOT_DATA_EXPR = 8513;
-    public static final int SQL_FOR_NOT_ALLOWED_WITHOUT_TARGET = 8514;
-    public static final int SQL_SINGLE_TABLE_REQUIRED = 8515;
-    public static final int SQL_DELETE_FOR_OR_WITH = 8516;
-    public static final int SQL_NO_WITH_USING = 8517;
-    public static final int SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE = 8518;
-    public static final int SQL_NULLABLE_TARGET_MISSING_DEFAULT_CONSTRUCTOR = 8519;
 }

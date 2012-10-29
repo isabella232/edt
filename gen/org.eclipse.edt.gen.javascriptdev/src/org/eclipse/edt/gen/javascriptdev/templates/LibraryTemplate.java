@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.Library;
 public class LibraryTemplate extends org.eclipse.edt.gen.javascript.templates.LibraryTemplate {
 
 	public void genGetVariablesEntry(Library lib, Context ctx, TabbedWriter out) {
-		out.print("{name: " + quoted(lib.getId()) + ", value : ");
+		out.print("{name: " + quoted(lib.getCaseSensitiveName()) + ", value : ");
 		ctx.invoke(genAccessor, lib, ctx, out);
 		out.print(", type : " + quoted(lib.getFullyQualifiedName()) + ", jsName : \"");
 		ctx.invoke(genAccessor, lib, ctx, out);

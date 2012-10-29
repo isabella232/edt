@@ -1,0 +1,205 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// callIsKeyword:
+// 1 {0} is a reserved word.   It cannot be used as a name. {3019, RESERVED_WORD_NOT_ALLOWED}
+
+// callIsSQLClauseKeyword:
+// 1 The SQL table name variable, table name, label, or column name {0} cannot duplicate any one of the following words: {1}.  To use this name you must enter it as an SQL delineated name. {6597, SQL_TABLE_NAME_LABEL_VARIABLE_DUPLICATES_CLAUSE}
+
+// callStartsWithEZE:
+Record ezeRec 10 item1 int; end 	// 1 The name ezeRec cannot start with eze. {3003, EZE_NOT_ALLOWED}
+Interface ezeInterface				// 1 The name ezeInterface cannot start with eze.
+	function func(ezeParm1 int in);	//1
+	function ezeFunc();				//1
+end
+
+Program pgm
+	ezeVar1, ezeVar2 int;		//2
+	function main()
+		ezeVar int;				//1
+		const ezeItem int = 5;	//1
+	end
+	
+	function ezeFunc() end		//1
+end
+
+function ezeFunc(ezeParm int) end	//2
+
+DataItem ezeItem int end				//1
+DataTable ezeTable {contents=[[]]} end	//1
+Record ezeRec2 item1 int; end			//1
+
+FormGroup ezefg							//1
+	use ezeForm;						//1
+	
+	Form ezeForm2 type textForm				//1
+	{formSize=[10,10]}
+		ezeField int;						//1
+	end
+end
+
+Form ezeForm type textForm				//1
+{formSize=[10,10]}
+	ezeField int;						//1
+end
+
+Handler ezeHandler						//1
+	function ezeFunc() end				//1
+	ezeItem int;						//1
+	const ezeConst int = 5;				//1
+end
+
+Library ezeLibrary						//1
+	ezeItem1, ezeItem2 int;				//2
+	function func(ezeParm1 int) end		//1
+end
+
+Library lib type nativeLibrary
+	function ezeFunc() end				//1	
+	function func(ezeParm1 int) end		//1
+end
+
+handler ezePageHandler type JSFHandler				//1
+	ezeItem3, ezeItem4 int;				//2
+	const ezeItem1 int = 6;				//1
+	function ezeFunc(ezeParm int) end	//2
+end
+
+Program ezeProgram						//1
+	ezeItem3, ezeItem4 int;				//2
+	const ezeItem1 int = 6;				//1
+	function ezeFunc(ezeParm int) end	//2
+	function main()
+		sqlRcd sqlRcd;
+
+		execute ezePID;							//1
+		exit stack ezeLabel;					//1 The name ezeLabel cannot start with eze.
+		freeSQL ezePID;							//2 ezePID cannot start with eze | Unreachable code. {warning}
+		get sqlRcd with ezePID forupdate ezeResultSet;	//2 The name ezePID cannot start with eze.|The name ezeResultSet cannot start with eze.		
+		get next SQLRcd from ezeResultSet;	//1
+		goto ezeLabel;							//1 eze
+
+		ezeLabel:								//1
+		open ezeResultSet with ezePID;			//2
+		prepare ezePID from "a";				//1
+	end
+end
+
+Record sqlRcd type SQLRecord
+	10 item1 int;
+end
+
+Record fixedRecord
+	10 ezeItem;						//1
+		15 ezeItem2 int;			//1
+end
+
+Service ezeService						//1
+	ezeItem3, ezeItem4 int;				//2
+	const ezeItem1 int = 6;				//1
+	function ezeFunc(ezeParm int) end	//2
+	function main_() end
+end
+
+// callStrictValidateCharacters:
+// 1 The name {0} contains invalid characters. {3002, INVALID_CHARACTER_IN_NAME}
+
+// callValidateCharacters:
+// 1 The name {0} contains invalid characters. {3002, INVALID_CHARACTER_IN_NAME}
+
+// callValidateFileNameCharacters:
+// 1 The name {0} contains invalid characters. {3002, INVALID_CHARACTER_IN_NAME}
+
+// callValidateLength:
+// 1 The name {0} has an invalid length of {1}. The maximum length is {2}. {3001, INVALID_NAME_LENGTH}
+
+// enforceRules:
+// 1 'This' is not valid to be used as a qualifier in this situation. {3347, INVALID_USE_OF_THIS_QUALIFIER}
+// 1 The use of {0} is only allowed in a set values block. {7518, THISARRAY_ONLY_IN_SET_VALUES_BLOOCK}
+// 1 PartReference {0} cannot be subscripted. {3356, PARTREFERENCE_CANNOT_BE_SUBSCRIPTED}
+// 1 Name {0} cannot be qualified. {3359, PART_CANNOT_BE_QUALIFIED}
+// 1 Substring expressions are not valid in this statement location. {3364, SUBSTRING_EXPRESSION_IN_BAD_LOCATION}
+
+// enforceRulesInExpression:
+Program enforceRulesInExpressionPgm
+	function main()
+		str String;
+		intAry int[];
+		sqlRec sqlRecord;
+		
+		str = str[intFunc():5];			//0
+		str = str[1:5];					//0
+		str = str[1+2:5-3];				//0
+		
+		intAry[1] = intAry[intFunc()];	//0
+		intAry[1] = intAry[intAry[1]];	//0
+		intAry[1] = intAry[1+2];		//0
+	end
+	
+	function intFunc() returns(int) end
+end
+// 1 Expressions are not valid subscript values in this statement location. {3343, SUBSCRIPT_CANT_BE_EXPR}
+// 1 Expressions are not valid substring values in this statement location. {3342, SUBSTRING_CANT_BE_EXPR}
+// 1 Subscripts and substrings must be either positive integers, qualified names, or expressions.  Function invocations and new operations are not allowed.  Found {0}. {3345, INVALID_SUBSCRIPT_OR_SUBSTRING}
+// 1 Real numbers and floating point numbers cannot be used as subscript or substring indices. String literals cannot be used as substring indices. {3346, INVALID_REAL_OR_FLOAT_IN_NAME}
+// 1 Real numbers and floating point numbers cannot be used as subscript or substring indices. String literals cannot be used as substring indices. {3346, INVALID_REAL_OR_FLOAT_IN_NAME}
+// 1 Subscripts and substrings must be either positive integers, qualified names, or expressions.  Function invocations and new operations are not allowed.  Found {0}. {3345, INVALID_SUBSCRIPT_OR_SUBSTRING}
+// 1 Subscripts and substrings must be either positive integers, qualified names, or expressions.  Function invocations and new operations are not allowed.  Found {0}. {3345, INVALID_SUBSCRIPT_OR_SUBSTRING}
+
+// enforceRulesOnSimpleName:
+// 1 The name {0} cannot start with eze. {3003, EZE_NOT_ALLOWED}
+// 1 The SQL table name variable, table name, label, or column name {0} cannot duplicate any one of the following words: {1}.  To use this name you must enter it as an SQL delineated name. {6597, SQL_TABLE_NAME_LABEL_VARIABLE_DUPLICATES_CLAUSE}
+// 1 {0} is a reserved word.   It cannot be used as a name. {3019, RESERVED_WORD_NOT_ALLOWED}
+// 1 {0} is a reserved word.   It cannot be used as a name. {3019, RESERVED_WORD_NOT_ALLOWED}
+// 1 The name {0} contains invalid characters. {3002, INVALID_CHARACTER_IN_NAME}
+// 1 The name {0} contains invalid characters. {3002, INVALID_CHARACTER_IN_NAME}
+// 1 The name {0} has an invalid length of {1}. The maximum length is {2}. {3001, INVALID_NAME_LENGTH}
+
+// restrictSubstrings:
+// 1 The type of reference for {0} cannot contain a substring. {3348, REFERENCE_CANNOT_CONTAIN_SUBSTRING}
+
+// validate:
+// 1 PartReference {0} cannot be subscripted. {3356, PARTREFERENCE_CANNOT_BE_SUBSCRIPTED}
+// 1 Typedef {0} cannot be subscripted. {3352, TYPEDEF_CANNOT_BE_SUBSCRIPTED}
+// 1 KeyItem {0} cannot be subscripted. {3360, KEYITEM_CANNOT_BE_SUBSCRIPTED}
+// 1 LengthItem {0} cannot be subscripted. {3361, LENGTHITEM_CANNOT_BE_SUBSCRIPTED}
+// 1 Invalid blank spaces were found in the name {0}. {3066, WHITESPACE_NOT_ALLOWED}
+// 1 Alias {0} cannot be qualified. {3365, ALIAS_CANNOT_BE_QUALIFIED}
+// 1 Alias {0} cannot be subscripted. {3353, ALIAS_CANNOT_BE_SUBSCRIPTED}
+// 1 Invalid blank spaces were found in the name {0}. {3066, WHITESPACE_NOT_ALLOWED}
+// 1 MsgTablePrefix {0} cannot be subscripted. {3354, MSGTABLEPREFIX_CANNOT_BE_SUBSCRIPTED}
+// 1 The {0} {1} cannot be qualified. {3042, TYPE_CANNOT_BE_QUALIFIED}
+// 1 The {0} {1} cannot be subscripted. {3044, TYPE_CANNOT_BE_SUBSCRIPTED}
+// 1 Name {0} cannot be qualified. {3359, PART_CANNOT_BE_QUALIFIED}
+// 1 RecordFileName {0} cannot be subscripted. {3357, RECORD_FILENAME_CANNOT_BE_SUBSCRIPTED}
+// 1 RecordFileName {0} cannot be subscripted. {3357, RECORD_FILENAME_CANNOT_BE_SUBSCRIPTED}
+// 1 Identifier {0} cannot be qualified. {3366, IDENTIFIER_CANNOT_BE_QUALIFIED}
+// 1 Identifier {0} cannot be subscripted. {3355, IDENTIFIER_CANNOT_BE_SUBSCRIPTED}
+// 1 Invalid blank spaces were found in the name {0}. {3066, WHITESPACE_NOT_ALLOWED}
+// 1 Name {0} cannot be subscripted. {3358, PART_CANNOT_BE_SUBSCRIPTED}
+// 1 Name {0} cannot be qualified. {3359, PART_CANNOT_BE_QUALIFIED}
+// 1 Name {0} cannot be subscripted. {3358, PART_CANNOT_BE_SUBSCRIPTED}
+// 1 Names of generatable parts cannot contain a dash (-). {3344, PART_CANNOT_HAVE_DASH}
+// 1 Name {0} cannot be qualified. {3359, PART_CANNOT_BE_QUALIFIED}
+// 1 Name {0} cannot be subscripted. {3358, PART_CANNOT_BE_SUBSCRIPTED}
+
+// validateNameTokenSequence:
+// 1 Qualified names must be a series of identifiers separated by dots. They cannot begin or end with a dot. Found {0} in {1}. {3349, INVALID_NAME_TOKEN_SEQUENCE}
+// 1 Qualified names must be a series of identifiers separated by dots. They cannot begin or end with a dot. Found {0} in {1}. {3349, INVALID_NAME_TOKEN_SEQUENCE}
+// 1 Qualified names must be a series of identifiers separated by dots. They cannot begin or end with a dot. Found {0} in {1}. {3349, INVALID_NAME_TOKEN_SEQUENCE}
+
+// validateSubNameTokenSequence:
+// 1 Qualified names must be a series of identifiers separated by dots. They cannot begin or end with a dot. Found {0} in {1}. {3349, INVALID_NAME_TOKEN_SEQUENCE}
+// 1 Qualified names must be a series of identifiers separated by dots. They cannot begin or end with a dot. Found {0} in {1}. {3349, INVALID_NAME_TOKEN_SEQUENCE}
+// 1 Real numbers and floating point numbers cannot be used as subscript or substring indices. String literals cannot be used as substring indices. {3346, INVALID_REAL_OR_FLOAT_IN_NAME}
+// 1 Subscripts and substrings must be either positive integers, qualified names, or expressions.  Function invocations and new operations are not allowed.  Found {0}. {3345, INVALID_SUBSCRIPT_OR_SUBSTRING}
+

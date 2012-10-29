@@ -16,7 +16,5 @@ enumeration enum1 {@annot1{value = "test1"}}  //0
 	B{@annot2{}} = 16, //0
 	C = ~7, //0
 	D = -6, //0
-	E = +9, //0
-	F = 10 + 2, //1
-	G = "123" //1
+	E = +9 //0
 end

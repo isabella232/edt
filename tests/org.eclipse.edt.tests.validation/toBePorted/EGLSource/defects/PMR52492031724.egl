@@ -1,0 +1,40 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+record rec1 type sqlrecord {keyitems=[item1, item2]}
+	10 item1 int;
+	10 item2 int;
+	10 item3 int;
+end
+
+program pgm1 {allowUnqualifiedItemReferences = yes}
+
+	rec1 rec1;
+	
+	function main()  
+		open resultSetIdentifier          //1 Unmatched parentheses in SQL statement
+			into item1, item2, item3
+			for rec1 with
+			#sql{    
+				select
+					item1, item2, item3
+				from rec1 t1        
+				where 
+						(fred = :itgem1
+					and	wilma = :item3
+					
+				order by
+					item1, item2 asc
+			};
+					
+	end
+	
+end

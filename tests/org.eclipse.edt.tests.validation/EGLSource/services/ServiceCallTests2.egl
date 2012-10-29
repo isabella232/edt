@@ -1,0 +1,134 @@
+import eglx.rest.*;
+import eglx.http.*;
+
+
+library myinter
+	function interfunc() returns (int){@Resource{}, @EglService{}}
+	end
+end
+
+service myserv
+
+	
+	function srvFunc() returns (int)
+	end
+end
+
+service myserv2	
+	i int;
+	function testRemoteCallsToService()
+		//test remote call to the same service
+		call myserv.srvfunc(); //1 must specify a "returning to" function
+		call myserv.srvfunc(); //1  must specify a "returning to" function
+		
+		call myserv.srvfunc() 
+				using "binding:fred"  //1 type of the using expression must be eglx.http.IHTTP
+					returning to callback; 
+					
+		call myserv.srvfunc()
+				 using Resources.getResource( "binding:fred") //1 type of the using expression must be eglx.http.IHTTP
+				 	returning to callback; 
+		
+
+		call myserv.srvfunc()
+				 using Resources.getResource( "binding:fred") as IHTTP //0
+				 	returning to callback; 
+		
+		call myserv.srvfunc() returns(i); //1  must specify a "returning to" function
+		
+		call myserv.srvfunc() returning to callback; //0
+		call myserv.srvfunc() returning to callback; //0
+	end
+
+
+	function testRemoteCallsToInterface()
+		//test remote call to the same service
+		call myinter.interfunc(); //1 must specify a "returning to" function
+		call myinter.interfunc(); //1  must specify a "returning to" function
+		
+		call myinter.interfunc() 
+				using "binding:fred"  //1 type of the using expression must be eglx.http.IHTTP
+					returning to callback; 
+					
+		call myinter.interfunc()
+				 using Resources.getResource( "binding:fred") //1 type of the using expression must be eglx.http.IHTTP
+				 	returning to callback; 
+		
+
+		call myinter.interfunc()
+				 using Resources.getResource( "binding:fred") as IHTTP //0
+				 	returning to callback; 
+		
+		call myinter.interfunc() returns(i); //1  must specify a "returning to" function
+		
+		call myinter.interfunc() returning to callback; //0
+		call myinter.interfunc() returning to callback; //0
+	end
+	
+	
+	function callback(p1 int in)
+	end
+end
+
+
+library RemoteFunctionCallTests
+	
+
+	i int;
+	
+	function srvFunc() returns (int)
+	end
+	
+	function testRemoteCallsToService()
+		//test remote call to the same service
+		call myserv.srvfunc(); //1 must specify a "returning to" function
+		call myserv.srvfunc(); //1  must specify a "returning to" function
+		
+		call myserv.srvfunc() 
+				using "binding:fred"  //1 type of the using expression must be eglx.http.IHTTP
+					returning to callback; 
+					
+		call myserv.srvfunc()
+				 using Resources.getResource( "binding:fred") //1 type of the using expression must be eglx.http.IHTTP
+				 	returning to callback; 
+		
+
+		call myserv.srvfunc()
+				 using Resources.getResource( "binding:fred") as IHTTP //0
+				 	returning to callback; 
+		
+		call myserv.srvfunc() returns(i); //1  must specify a "returning to" function
+		
+		call myserv.srvfunc() returning to callback; //0
+		call myserv.srvfunc() returning to callback; //0
+	end
+
+
+	function testRemoteCallsToInterface()
+		//test remote call to the same service
+		call myinter.interfunc(); //1 must specify a "returning to" function
+		call myinter.interfunc(); //1  must specify a "returning to" function
+		
+		call myinter.interfunc() 
+				using "binding:fred"  //1 type of the using expression must be eglx.http.IHTTP
+					returning to callback; 
+					
+		call myinter.interfunc()
+				 using Resources.getResource( "binding:fred") //1 type of the using expression must be eglx.http.IHTTP
+				 	returning to callback; 
+		
+
+		call myinter.interfunc()
+				 using Resources.getResource( "binding:fred") as IHTTP //0
+				 	returning to callback; 
+		
+		call myinter.interfunc() returns(i); //1  must specify a "returning to" function
+		
+		call myinter.interfunc() returning to callback; //0
+		call myinter.interfunc() returning to callback; //0
+	end
+	
+	
+	function callback(p1 int in)
+	end
+end

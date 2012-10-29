@@ -1,0 +1,295 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Program getByKeyStatement_sql type BasicProgram
+	
+	dummyRecVar dummyRecord;
+	
+	function main()
+	
+	get dummyRecVar with 
+		#sql{																--// 0
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						--// 0
+  			FROM PRODUCTS, ORDERS											--// 0
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						--// 0
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND	--// 0
+			HAVING QTY > (.75 * QTY_ON_HAND)								--// 0
+ 			ORDER BY QTY_ON_HAND DESC										--// 0
+ 			FOR UPDATE OF DESCRIPTION, PRICE, QTY_ON_HAND, QTY				--// 0
+		};
+	
+	get dummyRecVar with 
+		#sql{																--// 0
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						--// 0
+  			FROM PRODUCTS, ORDERS											--// 0	
+		};	
+		
+	get dummyRecVar with 
+		#sql{																--// 0
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						--// 0
+  			FROM PRODUCTS, ORDERS											--// 0
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						--// 0	
+ 		};
+ 			
+ 	get dummyRecVar with 
+		#sql{																--// 0
+			SELECT DESCRIPTION, PRICE										--// 0
+  			FROM PRODUCTS													--// 0
+ 			WHERE PRODUCT = PRODUCT_ID										--// 0	
+ 			UNION															--// 0
+ 			SELECT QTY_ON_HAND, QTY											--// 0
+ 			FROM ORDERS														--// 0
+ 			ORDER BY QTY_ON_HAND ASC										--// 0
+ 		};
+		
+	get dummyRecVar with 
+		#sql{																--// 0
+			SELECT REP, AVG(AMOUNT)											--// 0
+  			FROM ORDERS														--// 0
+ 			GROUP BY REP													--// 0
+		};
+	
+	get dummyRecVar with 
+		#sql{																--// 0
+			SELECT REP, AVG(AMOUNT)											--// 0
+  			FROM ORDERS														--// 0
+ 			GROUP BY REP													--// 0
+			HAVING SUM(AMOUNT) > 30000.00									--// 0
+		};
+		
+	get dummyRecVar with
+		#sql{																--// 0
+			SELECT CITY, REGION, SALES										--// 0
+  			FROM OFFICES													--// 0
+ 			ORDER BY SALES DESC												--// 0
+		};
+	
+	get dummyRecVar with #sql{};											//1 The GET SQL statement cannot be empty
+		
+	get dummyRecVar with
+		#sql{																
+			SELECT CITY, REGION, SALES									
+  			FROM OFFICES													
+		} with 																// 1 The GET SQL I/O statement does not allow the inline SQL statement to be specified more than once	
+		#sql{																
+			SELECT CITY, REGION, SALES										
+  			FROM OFFICES													
+		};	
+	
+	get dummyRecVar with
+		#sql{																--// 1 The GET SQL I/O statement requires the SELECT clause, which is missing
+  			FROM OFFICES													
+		};	
+		
+	get dummyRecVar with
+		#sql{																--// 1 The GET SQL I/O statement requires the FROM clause, which is missing
+			SELECT CITY, REGION, SALES									
+ 			ORDER BY SALES DESC												
+		};	
+	
+	get dummyRecVar with
+		#sql{																--// 1 The GET FORUPDATE SQL I/O statement requires the FOR UPDATE or FOR UPDATE OF clause, which is missing.
+			SELECT CITY, REGION, SALES									
+  			FROM OFFICES													
+		} forUpdate;	
+
+	get dummyRecVar with 
+		#sql{															
+			SELECT 															--// 1 The SELECT SQL clause cannot be empty
+  			FROM PRODUCTS, ORDERS										
+		};	
+		
+	get dummyRecVar with 
+		#sql{																
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						
+  			FROM 															--// 1 The FROM SQL clause cannot be empty	
+		};	
+		
+	get dummyRecVar with 
+		#sql{															
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						
+  			FROM PRODUCTS, ORDERS											
+ 			WHERE 															--// 1 The WHERE SQL clause cannot be empty
+		};		
+		
+	get dummyRecVar with 
+		#sql{															
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						
+  			FROM PRODUCTS, ORDERS										
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID					
+ 			GROUP BY 														--// 1 The GROUP BY SQL clause cannot be empty
+		};	
+		
+	get dummyRecVar with 
+		#sql{																
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						
+  			FROM PRODUCTS, ORDERS											
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND	
+			HAVING 															--// The HAVING SQL clause cannot be empty	
+		};	
+		
+	get dummyRecVar with 
+		#sql{																
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						
+  			FROM PRODUCTS, ORDERS											
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND	
+			HAVING QTY > (.75 * QTY_ON_HAND)								
+ 			ORDER BY 														--// 1 The ORDER BY SQL clause cannot be empty
+		};	
+		
+	get dummyRecVar with 
+		#sql{																
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY					
+  			FROM PRODUCTS, ORDERS											
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND	
+			HAVING QTY > (.75 * QTY_ON_HAND)								
+ 			ORDER BY QTY_ON_HAND DESC									
+ 			FOR UPDATE OF 													--// 1 The FOR UPDATE OF SQL clause cannot be empty
+		};	
+	
+	get dummyRecVar with 
+		#sql{																--// 1 The GET SQL I/O statement has clauses that are out of order. SELECT must appear before the FROM clause
+  			FROM PRODUCTS, ORDERS											
+  			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND	
+			HAVING QTY > (.75 * QTY_ON_HAND)								
+ 			ORDER BY QTY_ON_HAND DESC										
+ 			FOR UPDATE OF DESCRIPTION, PRICE, QTY_ON_HAND, QTY				
+		};
+		
+	get dummyRecVar with
+		#sql{																--// 2 The GET SQL I/O statement has clauses that are out of order. SELECT must appear before the GROUP BY clause | FROM must appear before the GROUP BY clause 
+  			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND	
+  			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY		
+  			FROM PRODUCTS, ORDERS											  												 					
+		};
+		
+	get dummyRecVar with
+		#sql{																--// 2 The GET SQL I/O statement has clauses that are out of order. SELECT must appear before the HAVING clause | FROM must appear before the HAVING clause 
+  			HAVING QTY > (.75 * QTY_ON_HAND)
+  			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY		
+  			FROM PRODUCTS, ORDERS											  												 														
+		};	
+		
+	get dummyRecVar with
+		#sql{																--// 2 The GET SQL I/O statement has clauses that are out of order. SELECT must appear before the ORDER BY clause | FROM must appear before the ORDER BY clause 
+  			ORDER BY QTY_ON_HAND DESC	
+  			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY		
+  			FROM PRODUCTS, ORDERS											  												 																						
+		};			
+
+	get dummyRecVar with 
+		#sql{																--// 1 The GET SQL I/O statement has clauses that are out of order. WHERE must appear before the GROUP BY clause
+  			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY		
+  			FROM PRODUCTS, ORDERS															
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						
+		};	
+	
+	get dummyRecVar with 
+		#sql{																--// 1 The GET SQL I/O statement has clauses that are out of order. WHERE must appear before the HAVING clause
+  			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY		
+  			FROM PRODUCTS, ORDERS																				
+			HAVING QTY > (.75 * QTY_ON_HAND)		
+			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID									
+		};	
+	
+	get dummyRecVar with 
+		#sql{																--// 1 The GET SQL I/O statement has clauses that are out of order. WHERE must appear before the ORDER BY clause
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY					
+  			FROM PRODUCTS, ORDERS																						
+ 			ORDER BY QTY_ON_HAND DESC		
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID													
+		};
+	
+	get dummyRecVar with 
+		#sql{																--// 1 The GET SQL I/O statement has clauses that are out of order. GROUP BY must appear before the ORDER BY clause
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY					
+  			FROM PRODUCTS, ORDERS																	
+ 			ORDER BY QTY_ON_HAND DESC	
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND													
+		};
+	
+	get dummyRecVar with 
+		#sql{																--// 1 The GET SQL I/O statement has clauses that are out of order. HAVING must appear before the ORDER BY clause
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY					
+  			FROM PRODUCTS, ORDERS																				
+ 			ORDER BY QTY_ON_HAND DESC	
+ 			HAVING QTY > (.75 * QTY_ON_HAND)												
+		};		
+	
+	get dummyRecVar with 													
+		#sql{																--// 1 When the FOR UPDATE or FOR UPDATE OF clause is specified for a GET SQL I/O statement it must be the last clause.
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY					
+  			FROM PRODUCTS, ORDERS																							
+ 			FOR UPDATE OF DESCRIPTION, PRICE, QTY_ON_HAND, QTY
+ 			ORDER BY QTY_ON_HAND DESC										
+ 						
+		};
+	
+	get dummyRecVar with 
+		#sql{																
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY					
+  			FROM PRODUCTS, ORDERS											
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND	
+			HAVING QTY > (.75 * QTY_ON_HAND)								
+ 			ORDER BY QTY_ON_HAND DESC												
+ 			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY						--// 1 The GET SQL I/O statement allows only one SELECT clause		
+  			FROM PRODUCTS, ORDERS											--// 1 The GET SQL I/O statement allows only one FROM clause	
+ 			WHERE MFR = MFR_ID AND PRODUCT = PRODUCT_ID						--// 1 The GET SQL I/O statement allows only one WHERE clause	
+ 			GROUP BY MFR_ID, PRODUCT_ID, DESCRIPTION, PRICE, QTY_ON_HAND	--// 1 The GET SQL I/O statement allows only one GROUP BY clause	
+			HAVING QTY > (.75 * QTY_ON_HAND)								--// 1 The GET SQL I/O statement allows only one HAVING clause	
+ 			ORDER BY QTY_ON_HAND DESC										--// 1 The GET SQL I/O statement allows only one ORDER BY clause			
+		};
+	
+	get dummyRecVar with 
+		#sql{																--// 1 When the FOR UPDATE or FOR UPDATE OF clause is specified for a GET SQL I/O statement it must be the last clause
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY					
+  			FROM PRODUCTS, ORDERS											
+ 			FOR UPDATE OF DESCRIPTION, PRICE, QTY_ON_HAND, QTY							
+ 			FOR UPDATE OF DESCRIPTION, PRICE, QTY_ON_HAND, QTY				--// 1 The GET SQL I/O statement allows only one FOR UPDATE OF clause
+		};
+		
+	get dummyRecVar with 
+		#sql{																
+			SELECT DESCRIPTION, PRICE, QTY_ON_HAND, QTY					
+  			FROM PRODUCTS, ORDERS											
+ 			INSERT INTO PRODUCTS											--// 1 The GET SQL I/O statement does not allow the INSERT INTO clause
+		};
+		
+				
+	end	
+		
+end
+
+Record dummyRecord type sqlRecord
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

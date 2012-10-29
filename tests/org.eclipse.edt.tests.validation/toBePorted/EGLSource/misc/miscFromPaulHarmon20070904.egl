@@ -1,0 +1,67 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Formgroup fg
+	Form frm type TextForm {
+		formSize = [24,80]
+	}
+	end
+end
+
+Program pgm1
+	use fg {helpKey=pf2};							//0
+	
+	function main()
+	end
+end
+
+Program pgm2
+	use fg.frm {helpKey=pf2};						//0
+	
+	function main()
+	end
+end
+
+Program pgm3
+	use fg {@egl.ui.helpKey{pf2}};					//0
+	
+	function main()
+	end
+end
+
+Program pgm4
+	use fg.frm {@egl.ui.helpKey{pf2}};				//0
+	
+	function main()
+	end
+end
+
+Program pgm5
+	use fg.frm {screenSizes=[[24,80]]};				//1
+	
+	function main()
+	end
+end
+
+Program pgm6
+	use fg.frm {formSize=[24,80]};					//1
+	
+	function main()
+	end
+end
+
+Program pgm7
+	use fg.frm {@egl.ui.text.formSize{[24,80]}};	//1
+	
+	function main()
+	end
+end

@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Enumeration Suit	//1 not supported in this version of the language
+	club,			//0
+	diamond,		//0
+	heart,			//0
+	spade			//0
+end
+
+Enumeration FaceCard	//1 not supported in this version of the language
+	jack = 11,			//0
+	queen = 12,			//0
+	king = 13,			//0
+	ace = 14			//0
+end
+
+Record Card type Annotation
+{
+	targets = [ElementKind.FieldMbr]
+}
+	suitField Suit;		//0
+end
+
+Program pgm
+	use Suit;					//0
+	
+	function main()
+		mySuit Suit;			//0
+		myFaceCard FaceCard;	//0
+		
+		mySuit = club;			//0
+		mySuit = Suit.diamond;	//0
+		
+		mySuit = FaceCard.jack;	//1 not compatible types
+		mySuit = 0;				//1 not compatible types
+		
+		myFaceCard = queen;				//1 queen cannot be resolved
+		myFaceCard = FaceCard.queen;	//0		
+	end
+end
+
+Handler hnlder
+	myCard int {@Card{		//0
+		suitField = spade,	//0
+		suitField = 10		//1 The value for this property must be one of the following:
+	}};						//0
+end

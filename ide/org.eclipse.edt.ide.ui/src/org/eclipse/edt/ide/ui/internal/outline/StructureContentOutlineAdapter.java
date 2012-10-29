@@ -30,26 +30,8 @@ public class StructureContentOutlineAdapter extends AbstractOutlineAdapter {
 		StructureItem item = (StructureItem) element;
 		StringBuffer buffer = new StringBuffer();
 
-		// level name occurs type;
-		if (item.hasLevel()) {
-			buffer.append(item.getLevel());
-			buffer.append(" "); //$NON-NLS-1$
-		}
-		if (item.isEmbedded()) {
-			buffer.append("EMBED : "); //$NON-NLS-1$
-			buffer.append(item.getType().getCanonicalName());
-		} else if (item.isFiller()) {	//both typed and untyped
-			buffer.append(" *"); //$NON-NLS-1$
-			if (item.hasOccurs()) {				//JingNewModel - need to check if I can use this w/o checking for hasType
-				buffer.append("["); //$NON-NLS-1$
-				buffer.append(item.getOccurs());
-				buffer.append("]"); //$NON-NLS-1$
-			}
-			if(item.getType() != null) {
-				buffer.append(" : "); //$NON-NLS-1$
-				buffer.append(formatType(item.getType()));
-			}
-		} else if (item.getName() != null) { //isStructureItem both typed and untyped
+		// name occurs type;
+		if (item.getName() != null) { //isStructureItem both typed and untyped
 			buffer.append(item.getName().getCanonicalName());
 			if (item.hasOccurs()) {
 				buffer.append("["); //$NON-NLS-1$
@@ -88,15 +70,10 @@ public class StructureContentOutlineAdapter extends AbstractOutlineAdapter {
 //		}
 		
 		if(item != null) {
-			if(item.isFiller()) {
-				return new Region(item.getOffset(), 1);
-			}
-			else {
-				if(item.getName() != null ) {
-					return new Region(item.getName().getOffset(), item.getName().getLength());
-				} else {  // embed
-					return new Region(item.getOffset(), item.getLength());
-				}
+			if(item.getName() != null ) {
+				return new Region(item.getName().getOffset(), item.getName().getLength());
+			} else {  // embed
+				return new Region(item.getOffset(), item.getLength());
 			}
 		}
 		else {

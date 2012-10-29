@@ -1,0 +1,281 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.mvc;
+
+import eglx.ui.SignKind;
+
+Record MVC type Annotation
+{
+	targets = [
+		ElementKind.FieldMbr
+	]
+} 
+	model egl.lang.reflect.FieldReference;
+	view egl.lang.reflect.FieldReference;
+end
+
+Delegate 
+	MVCFormatterFunction(input String in) returns(String)
+end
+
+Delegate 
+	MVCValidatorFunction(input String in) returns(String?)
+end
+
+Delegate 
+	MVCCommitter(s String in) 
+end
+
+Delegate 
+	MVCValidStateSetter(widget eglx.ui.rui.Widget in, valid boolean in) 
+end
+
+Delegate 
+	MVCPublisher(s String in) 
+end
+
+Delegate 
+	MVCRetriever() returns(String) 
+end
+
+Delegate
+	MVCValidStateRetriever() returns(String?)
+end
+
+Delegate
+	MVCMessagePublisher(s String in)
+end
+
+Delegate 
+	MVCShowErrorState(aboolean boolean in)
+end
+
+Delegate
+	MVCStatePublisher(state boolean in)
+end
+
+Record Currency type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.CurrencyAnnotationProxy"
+}
+	value boolean = yes;
+end
+
+Record CurrencySymbol type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.CurrencySymbolAnnotationProxy"
+}
+	value string;
+end
+
+Record DateFormat type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.DateFormatAnnotationProxy"
+}
+	value string;
+end
+
+Record FillCharacter type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.FillCharacterAnnotationProxy"
+}
+	value string;
+end
+
+Record InputRequired type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	]
+}
+	value boolean = yes;
+end
+
+Record InputRequiredMsgKey type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	]
+}
+	value string;
+end
+
+Record ValidationPropertiesLibrary type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	]
+	,
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.ValidationPropertiesLibraryAnnotationProxy"
+}
+	value egl.lang.reflect.PartReference;
+end
+
+Record IsBoolean type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.IsBooleanAnnotationProxy"
+}
+	value boolean = yes;
+end
+
+Record IsDecimalDigit type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.IsDecimalDigitAnnotationProxy"
+}
+	value boolean = yes;
+end
+
+Record IsHexDigit type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.IsHexDigitAnnotationProxy"
+}
+	value boolean = yes;
+end
+
+Record LowerCase type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.LowerCaseAnnotationProxy"
+}
+	value boolean = yes;
+end
+
+Record MinimumInput type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.MinimumInputAnnotationProxy"
+}
+	value int;
+end
+
+Record MinimumInputMsgKey type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	]
+}
+	value string;
+end
+
+Record NumericSeparator type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.NumericSeparatorAnnotationProxy"
+}
+	value boolean = yes;
+end
+
+Record Sign type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.SignAnnotationProxy"
+}
+	value SignKind?;
+end
+
+Record TimeFormat type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.TimeFormatAnnotationProxy"
+}
+	value string;
+end
+
+Record TimestampFormat type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.TimeStampFormatAnnotationProxy"
+}
+	value string;
+end
+
+Record TypeChkMsgKey type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	]
+}
+	value string;
+end
+
+Record UpperCase type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.UpperCaseAnnotationProxy"
+}
+	value boolean = yes;
+end
+
+Record ValidatorFunction type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.ValidatorFunctionAnnotationProxy"
+}
+	value egl.lang.reflect.FunctionReference;
+end
+
+Record ValidatorFunctionMsgKey type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	]
+}
+	value string;
+end
+
+Record ZeroFormat type Annotation
+{
+	targets = [
+		ElementKind.fieldMbr
+	],
+	validationProxy = "org.eclipse.edt.rui.validation.annotation.proxy.ZeroFormatAnnotationProxy"
+}
+	value boolean = yes;
+end
+

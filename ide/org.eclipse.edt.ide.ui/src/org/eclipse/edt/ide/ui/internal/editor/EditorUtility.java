@@ -25,7 +25,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.ide.core.internal.search.PartInfo;
 import org.eclipse.edt.ide.core.internal.search.PartInfoRequestor;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -162,23 +161,7 @@ public class EditorUtility {
 		if (embeddedFunction != null) {
 			return true;
 		} 
-		else {
-			TopLevelFunction standAloneFunction = getStandAloneFunction(node);
-			if ( standAloneFunction != null) {
-				return true;
-			}
-		}
 		return false;
-	}
-
-	public static TopLevelFunction getStandAloneFunction(Node node) {
-		while (node != null && !(node instanceof TopLevelFunction)) {
-			node = node.getParent();
-		}
-		if (node != null && node instanceof TopLevelFunction) {
-			return (TopLevelFunction) node;
-		}
-		return null;
 	}
 
 	public static NestedFunction getEmbeddedFunction(Node node) {
@@ -284,17 +267,15 @@ public class EditorUtility {
 		return EditorUtility.searchIndex(IEGLSearchConstants.RECORD, editor, name, matchMode, scope);
 	}
 	
-	public static String[] getPackageName(IFile file) {
+	public static String getPackageName(IFile file) {
     	IEGLFile eglFile = (IEGLFile) EGLCore.create(file);
     	IPackageFragment packageFragment = (IPackageFragment)eglFile.getAncestor(IEGLElement.PACKAGE_FRAGMENT);
-    	String[] packageName;
     	if (packageFragment.isDefaultPackage()){
-    		packageName = new String[0];
+    		return "";
     	}
     	else{
-    		packageName = packageFragment.getElementName().split("\\.");
+    		return packageFragment.getElementName();
     	}
-		return packageName;
 	}
 	
 	/**

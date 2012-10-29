@@ -1,0 +1,127 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+formgroup fg1 {
+	orientation = ltr,			//0
+	orientation = rtl,			//0
+	orientation = orientationKind.ltr,	//0
+	orientation = egl.ui.orientationKind.ltr,	//0
+	orientation = orientationKind.rtl,	//0
+	orientation = egl.ui.orientationKind.rtl,	//0
+
+	orientation = 3  //1
+}
+end
+
+program pgm1
+
+	win1 window {
+		orientation = ltr,			//0
+		orientation = rtl,			//0
+		orientation = orientationKind.ltr,	//0
+		orientation = egl.ui.orientationKind.ltr,	//0
+		orientation = orientationKind.rtl,	//0
+		orientation = egl.ui.orientationKind.rtl,	//0
+		orientation = 3  //1
+	};
+	
+	function main()
+	end
+	
+end
+
+formgroup fg2 {
+	bidiInput = logical,			//0
+	bidiInput = visual,			//0
+	bidiInput = bidiTypeKind.logical,	//0
+	bidiInput = egl.ui.bidiTypeKind.logical,	//0
+	bidiInput = bidiTypeKind.visual,	//0
+	bidiInput = egl.ui.bidiTypeKind.visual,	//0
+
+	bidiInput = 3 //1
+}
+end
+
+program pgm2
+
+	win1 window {
+		bidiInput = logical,			//0
+		bidiInput = visual,			//0
+		bidiInput = bidiTypeKind.logical,	//0
+		bidiInput = egl.ui.bidiTypeKind.logical,	//0
+		bidiInput = bidiTypeKind.visual,	//0
+		bidiInput = egl.ui.bidiTypeKind.visual,	//0
+
+		bidiInput = 3  //1
+	};
+	
+	function main()
+	end
+	
+end
+
+form form1 type textForm {formsize = [20,20]}
+
+   field1 char(10) {
+		orientation = ltr,			//0
+		orientation = rtl,			//0
+		orientation = orientationKind.ltr,	//0
+		orientation = egl.ui.orientationKind.ltr,	//0
+		orientation = orientationKind.rtl,	//0
+		orientation = egl.ui.orientationKind.rtl,	//0
+		orientation = 3 //1
+   };
+end
+
+dataitem item1 char(10) {
+	orientation = ltr,			//0
+	orientation = rtl,			//0
+	orientation = orientationKind.ltr,	//0
+	orientation = egl.ui.orientationKind.ltr,	//0
+	orientation = orientationKind.rtl,	//0
+	orientation = egl.ui.orientationKind.rtl,	//0
+	orientation = 3 //1
+}
+end
+
+record consoleForm1 type consoleform {formsize = [10,10]}
+   field1 consoleField {
+   		fieldLen = 10,
+   		position = [1,1],
+		orientation = ltr,			//0
+		orientation = rtl,			//0
+		orientation = orientationKind.ltr,	//0
+		orientation = egl.ui.orientationKind.ltr,	//0
+		orientation = orientationKind.rtl,	//0
+		orientation = egl.ui.orientationKind.rtl,	//0
+		orientation = 3 //1
+
+   };
+end
+
+program pgm3 {
+		formConversionTable = "fred.bct"   //0
+	}
+	
+	mywin window {
+		numericSwapping = yes,    //0
+		symmetricSwapping = no   //0
+	};
+	
+	function main()
+	end
+end
+
+formgroup fg3 {
+		numericSwapping = yes,    //0
+		symmetricSwapping = no   //0
+}
+end

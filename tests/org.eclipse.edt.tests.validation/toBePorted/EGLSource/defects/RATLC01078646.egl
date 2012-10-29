@@ -1,0 +1,112 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+program RATLC01078646 { throwNrfEofExceptions=yes }
+	
+	p_state empl[50];
+	p_state2 fixedrec[4];
+	
+	function main()
+		state_cnt int;
+		
+// The following lines were flagged as errors due to gen. restriction in 6.0.0.1, but should now pass		
+		Foreach ( From c_state INTO p_state[state_cnt  +  1].EMPNO, p_state[state_cnt].FIRSTNME )  // 0
+		END 
+		get next from c_state INTO p_state[state_cnt].EMPNO, p_state[2-3].FIRSTNME; // 0
+		
+		PREPARE $_STMT_c_state FROM "SELECT EMPNO, FIRSTNME FROM employee ORDER BY empno"; 
+		state_cnt = 1;
+		open c_state with $_STMT_c_state;
+		Foreach ( From c_state INTO p_state[state_cnt].EMPNO, p_state[state_cnt].FIRSTNME )  // 0
+			displayLineMode( p_state[state_cnt].EMPNO + " " + p_state[state_cnt].FIRSTNME );
+			state_cnt = state_cnt + 1;
+			IF ( state_cnt > 50 ) 
+				EXIT FOREACH;
+			END 
+		END 
+		state_cnt = state_cnt - 1;
+
+		displayLineMode( "\nEnd of first query\n" );
+
+		freesql $_STMT_c_state;
+		
+		PREPARE $_STMT_c_state FROM "SELECT EMPNO, FIRSTNME FROM employee ORDER BY empno"; 
+		open c_state with $_STMT_c_state;
+		state_cnt = 1;
+		get next from c_state INTO p_state[state_cnt].EMPNO, p_state[state_cnt].FIRSTNME; // 0
+		displayLineMode( p_state[state_cnt].EMPNO + " " + p_state[state_cnt].FIRSTNME );
+		state_cnt = state_cnt + 1;
+		get next from c_state INTO p_state[state_cnt].EMPNO, p_state[state_cnt].FIRSTNME; // 0
+		displayLineMode( p_state[state_cnt].EMPNO + " " + p_state[state_cnt].FIRSTNME );
+		state_cnt = state_cnt + 1;
+		get next from c_state INTO p_state[state_cnt].EMPNO, p_state[state_cnt].FIRSTNME; // 0
+		displayLineMode( p_state[state_cnt].EMPNO + " " + p_state[state_cnt].FIRSTNME );
+		a string;
+		b string;
+		get next from c_state INTO a, b; // 0
+		displayLineMode( a + " " + b );
+		get next from c_state INTO a, b; // 0
+		displayLineMode( a + " " + b );
+
+		state_cnt = 3;
+
+		fixedrec fixedrec;
+		get next from c_state INTO fixedrec.upper1[4], fixedrec.upper2[4]; // 0
+		displayLineMode( fixedrec.upper1[4] + " " + fixedrec.upper2[4] );
+		get next from c_state INTO fixedrec.upper1[state_cnt], fixedrec.upper2[state_cnt]; // 0
+		displayLineMode( fixedrec.upper1[state_cnt] + " " + fixedrec.upper2[state_cnt] );
+		get next from c_state INTO fixedrec.upper1.lower1[4], fixedrec.upper2.lower2[4]; // 0
+		displayLineMode( fixedrec.upper1.lower1[4] + " " + fixedrec.upper2.lower2[4] );
+		get next from c_state INTO fixedrec.upper1.lower1[state_cnt], fixedrec.upper2.lower2[state_cnt]; // 0
+		displayLineMode( fixedrec.upper1.lower1[state_cnt] + " " + fixedrec.upper2.lower2[state_cnt] );
+		i int = 2;
+		state_cnt = 1;
+		get next from c_state INTO p_state2[state_cnt].upper1.lower1[state_cnt], p_state2[state_cnt].upper2.lower2[state_cnt]; // 0
+		displayLineMode( p_state2[state_cnt].upper1.lower1[state_cnt] + " " + p_state2[state_cnt].upper2.lower2[state_cnt] );
+
+		aa string[5];
+		bb string[5];
+		state_cnt = 3;
+		get next from c_state INTO aa[1], bb[1]; // 0
+		displayLineMode( aa[1] + " " + bb[1] );
+		get next from c_state INTO aa[2], bb[2]; // 0
+		displayLineMode( aa[2] + " " + bb[2] );
+		get next from c_state INTO aa[state_cnt], bb[state_cnt]; // 0
+		displayLineMode( aa[state_cnt] + " " + bb[state_cnt] );
+		
+	end
+end
+
+record fixedrec
+	10 upper1 char(10)[5];
+		20 lower1 char(10);
+	10 upper2 char(10)[5];
+		20 lower2 char(10);
+end
+
+record empl type sqlrecord { tableNames=[["employee"]] }
+
+	EMPNO string        	{column="EMPNO", maxLen=6};
+	FIRSTNME string     	{column="FIRSTNME", sqlVariableLen=yes, maxLen=12};
+	MIDINIT string      	{column="MIDINIT", maxLen=1};
+	LASTNAME string     	{column="LASTNAME", sqlVariableLen=yes, maxLen=15};
+	WORKDEPT string     	{column="WORKDEPT", isNullable=yes, maxLen=3};
+	PHONENO string      	{column="PHONENO", isNullable=yes, maxLen=4};
+	HIREDATE date       	{column="HIREDATE", isNullable=yes};
+	JOB string          	{column="JOB", isNullable=yes, maxLen=8};
+	EDLEVEL smallInt    	{column="EDLEVEL"};
+	SEX string          	{column="SEX", isNullable=yes, maxLen=1};
+	BIRTHDATE date      	{column="BIRTHDATE", isNullable=yes};
+	SALARY decimal(9,2) 	{column="SALARY", isNullable=yes};
+	BONUS decimal(9,2)  	{column="BONUS", isNullable=yes};
+	COMM decimal(9,2)   	{column="COMM", isNullable=yes};
+end

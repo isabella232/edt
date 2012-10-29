@@ -1,0 +1,153 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// validate:
+function main() end 		// 1 The function name main is only allowed if the function is declared within a program. {4944, FUNCTION_NO_MAIN_FUNCTION_ALLOWED}
+
+// validateParamsAndDeclarations:
+function validateParamsAndDeclarations(
+	aryParm int[5],				//1 The array parameter aryParm in the function definition validateParamsAndDeclarations cannot have a dimension specified. {3067, STATIC_ARRAY_PARAMETER_DEFINITION}
+	aryParm2 int[],				//0
+	recParm2 emptyFlexRec,		//1 Invalid parameter recParm2. There must be at least one structure item in the contents of the record emptyFlexRec. {3118, RECORD_PARAMETER_WITH_NO_CONTENTS}
+	recParm3 notEmptyRec,		//0
+	recParm4 notEmptyFlexRec,	//0
+	p2 number in,				//1 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types. {4949, IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_ANY_TYPE}
+//	p3 char in,					//1 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types. {4949, IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_ANY_TYPE}
+//	p4 mbChar in,				//1 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types. {4949, IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_ANY_TYPE}
+//	p5 dbchar in,				//1 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types. {4949, IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_ANY_TYPE}
+//	p6 hex in,					//1 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types. {4949, IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_ANY_TYPE}
+	p7 int in,					//0
+	p8 number out,				//1 OUT modifier is not allowed to be specified with loose type NUMBER. {4956, IN_OR_OUT_MODIFIER_NOT_ALLOWED_WITH_NUMBER_TYPE}
+	p9 char out,				//0
+	p10 mbChar out,				//0
+	p11 dbchar out,				//0
+	p12 hex out,				//0
+	p13 int out,				//0
+	p14 int field in,			//1 IN modifier is not allowed with the field attribute {4948, FUNCTION_PARAMETER_OUT_NOT_ALLOWED_WITH_IO_OR_FIELD}
+	p15 int field out,			//1 OUT modifier is not allowed with the field attribute {4948, FUNCTION_PARAMETER_OUT_NOT_ALLOWED_WITH_IO_OR_FIELD}
+	p16 int field inout,		//0
+	p17 basicRecord in,			//0
+	p18 basicRecord out,		//0
+	p19 basicRecord inout,		//0
+	p20 notbasicRecord in,		//0
+	p21 notbasicRecord out,		//0
+	p22 notbasicRecord inout,	//0
+	
+	lastParm any
+)
+	const const1 int = 5;		//0
+	const const1 int = 6;		//1 The same name const1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library validateParamsAndDeclarations.
+	const p1 int = 7;			//1 The same name p1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library {3012, DUPLICATE_NAME_ACROSS_LISTS}
+	
+	var1 int = 5;				//0
+	var1 int = 5;				//1 The same name var1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library validateParamsAndDeclarations.
+	const1 int = 5;				//1 The same name const1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library {3012, DUPLICATE_NAME_ACROSS_LISTS}
+	p1 int = 5;					//1 The same name p1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library {3012, DUPLICATE_NAME_ACROSS_LISTS}
+end
+
+Record emptyFlexRec
+end
+
+Record emptyRec type serialRecord
+end
+
+Record notEmptyFlexRec
+	item1 int;
+end
+
+Record basicRecord type basicRecord
+	10 item1 int;
+end
+
+Record notBasicRecord type serialRecord
+	10 item1 int;
+end
+
+function main() end 		// 1 The function name main is only allowed if the function is declared within a program. {4944, FUNCTION_NO_MAIN_FUNCTION_ALLOWED}
+
+// validateParms:
+
+
+DataItem ambigPart int end
+DataItem ambigPart int end
+
+// validateReturn:
+Handler validateReturnHandler type jasperReport
+	function func1() returns (boolean) end					//0
+	function func2() returns (int[]) end					//1 Only dataItems are allowed for parameters or return types in a report handler. {7711, ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER}
+	function func3() returns (intItem) end					//0
+	function func4() returns (dictionary) end				//1 Only dataItems are allowed for parameters or return types in a report handler. {7711, ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER}
+	function func5() returns (arraydictionary) end			//1 Only dataItems are allowed for parameters or return types in a report handler. {7711, ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER}
+	function func6() returns (window) end					//1 Only dataItems are allowed for parameters or return types in a report handler. {7711, ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER}
+	function func7() returns (myService) end				//1 Only dataItems are allowed for parameters or return types in a report handler. {7711, ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER}
+	function func8() returns (myInterface) end				//1 Only dataItems are allowed for parameters or return types in a report handler. {7711, ONLY_DATAITEMS_ALLOWED_AS_PARAMETER_OR_RETURN_IN_REPORTHANDLER}
+	function func9() returns (indexedRecord) end			//1 The return indexedRecord for function func9 must be a reference type or one of the following types: data item, dictionary, arrayDictionary. {4914, FUNCTION_RETURN_HAS_INCORRECT_TYPE}
+	function func10() returns (validateReturnProgram) end	//1 The return validateReturnProgram for function func10 must be a reference type or one of the following types: data item, dictionary, arrayDictionary. {4914, FUNCTION_RETURN_HAS_INCORRECT_TYPE}	
+	function func11() returns (int) end						//0
+end
+
+function f1(p1 number in) end	// 1 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types.
+function f2(p1 char in) end		// 1 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types.
+function f3(p1 dbchar in) end	// 1 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types.
+
+function f4(p1 number out) end	// 1 OUT modifier is not allowed to be specified with loose type NUMBER.
+function f5(p1 char out) end	// 0
+function f6(p1 dbchar out) end	// 0
+
+function f7(parm1 dictionary in) end // 0
+function f8(parm1 dictionary inout) end // 0
+function f9(parm1 dictionary out) end // 0
+function f10(parm1 arraydictionary in) end // 0
+function f11(parm1 arraydictionary inout) end // 0
+function f12(parm1 arraydictionary out) end // 0
+function f13(parm1 presentationAttributes in) end // 0
+function f14(parm1 presentationAttributes inout) end // 0
+function f15(parm1 presentationAttributes out) end // 0
+
+function funcRefParamWithIn(parm1 window in) end // 0
+function funcRefParamWithInOut(parm1 window inout) end // 0
+function funcRefParamWithOut(parm1 window out) end // 0
+
+DataItem item1 char(10) end
+Service service1 end
+Interface interface1 end
+Function function1() end
+
+Function funcReturnDataItem() returns (item1) end //0
+Function funcReturnDictionary() returns (dictionary) end //0
+Function funcReturnArrayDictionary() returns (arraydictionary) end //0
+Function funcReturnConsoleField() returns (consolefield) end //0
+Function funcReturnWindow() returns (window) end //0
+Function funcReturnMenu() returns (menu) end //0
+Function funcReturnMenuItem() returns (menuItem) end //0
+Function funcReturnPrompt() returns (prompt) end //0
+Function funcReturnReport() returns (report) end //0
+Function funcReturnReportData() returns (reportData) end //0
+Function funcReturnService() returns (service1) end //0
+Function funcReturnInterface() returns (interface1) end //0
+
+Function funcReturnPresentationAttributes() returns (presentationAttributes) end //1
+
+Function funcDataItemParameter(parm1 item1) end //0
+Function funcDictionaryParameter(parm1 dictionary) end //0
+Function funcArrayDictionaryParameter(parm1 arrayDictionary) end //0
+Function funcConsoleFieldParameter(parm1 consoleField) end //0
+Function funcWindowParameter(parm1 window) end //0
+Function funcPresentationAttributesParameter(parm1 presentationAttributes) end //0
+Function funcMenuParameter(parm1 menu) end //0
+Function funcMenuItemParameter(parm1 menuItem) end //0
+Function funcPromptParameter(parm1 prompt) end //0
+Function funcReportParameter(parm1 report) end //0
+Function funcReportDataParameter(parm1 reportData) end //0
+Function funcServiceParameter(parm1 service1) end //0
+Function funcInterfaceParameter(parm1 interface1) end //0
+
+Function funcRecord(parm1 function1) end //1

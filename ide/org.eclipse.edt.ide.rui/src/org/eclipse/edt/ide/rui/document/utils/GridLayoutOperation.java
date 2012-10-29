@@ -17,8 +17,6 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.text.edits.TextEdit;
-
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
@@ -29,15 +27,16 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.ide.core.ast.rewrite.ASTRewrite;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.ide.core.model.document.IEGLDocument;
-import org.eclipse.edt.ide.rui.internal.Activator;
-import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IField;
 import org.eclipse.edt.ide.core.model.IPart;
+import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.mof.utils.NameUtile;
+import org.eclipse.text.edits.TextEdit;
 
 public class GridLayoutOperation {
 	
@@ -48,15 +47,15 @@ public class GridLayoutOperation {
 	public static final int ACTION_DELETE_ROW = 5;
 	public static final int ACTION_DELETE_COLUMN = 6;
 	
-	private static final String GRID_LAYOUT_TYPE_NAME = InternUtil.intern("GridLayout");
-	private static final String CHILDREN_PROPERTY_NAME = InternUtil.intern("children");
-	private static final String LAYOUT_DATA_PROPERTY_NAME = InternUtil.intern("layoutData");
-	private static final String ROW_PROPERTY_NAME = InternUtil.intern("row");
-	private static final String ROWS_PROPERTY_NAME = InternUtil.intern("rows");
-	private static final String COLUMN_PROPERTY_NAME = InternUtil.intern("column");
-	private static final String COLUMNS_PROPERTY_NAME = InternUtil.intern("columns");
-	private static final String HORIZONTAL_SPAN_PROPERTY_NAME = InternUtil.intern("horizontalSpan");
-	private static final String VERTICAL_SPAN_PROPERTY_NAME = InternUtil.intern("verticalSpan");
+	private static final String GRID_LAYOUT_TYPE_NAME = NameUtile.getAsName("GridLayout");
+	private static final String CHILDREN_PROPERTY_NAME = NameUtile.getAsName("children");
+	private static final String LAYOUT_DATA_PROPERTY_NAME = NameUtile.getAsName("layoutData");
+	private static final String ROW_PROPERTY_NAME = NameUtile.getAsName("row");
+	private static final String ROWS_PROPERTY_NAME = NameUtile.getAsName("rows");
+	private static final String COLUMN_PROPERTY_NAME = NameUtile.getAsName("column");
+	private static final String COLUMNS_PROPERTY_NAME = NameUtile.getAsName("columns");
+	private static final String HORIZONTAL_SPAN_PROPERTY_NAME = NameUtile.getAsName("horizontalSpan");
+	private static final String VERTICAL_SPAN_PROPERTY_NAME = NameUtile.getAsName("verticalSpan");
 
 	private IEGLDocument currentDocument;
 	private IPart modelPart;

@@ -29,8 +29,7 @@ import org.eclipse.edt.ide.core.internal.model.EGLModelResources;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.osgi.framework.Bundle;
 
-public class EGLSystemPathContaierInitializer extends
-		EGLPathContainerInitializer {
+public class EGLSystemPathContaierInitializer extends EGLPathContainerInitializer {
 
 	@Override
 	public void initialize(IPath containerPath, IEGLProject project)

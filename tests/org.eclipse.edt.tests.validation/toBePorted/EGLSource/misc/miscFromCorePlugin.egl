@@ -1,0 +1,105 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Program pgm
+	function myFunc() returns (int)
+	end
+
+	function main()
+		a int;
+		a = myFunc();		//0
+	end
+end
+
+
+
+function myFunc2() returns (int)
+end
+Program pgm2 {includeReferencedFunctions = yes}
+
+	function main()
+		a int;
+		a = myFunc2();		//0
+	end
+end
+
+
+
+function myFunc3() returns (int)
+end
+Program pgm3 {includeReferencedFunctions = no}
+
+	function main()
+		a int;
+		a = myFunc3();		//1 cannot be resolved
+	end
+end
+
+
+
+function myFunc4() returns (int)
+end
+Program pgm4 {}
+
+	function main()
+		a int;
+		a = myFunc4();		//1 cannot be resolved
+	end
+end
+
+
+
+Library lib5
+	function myFunc5() returns (int) end
+end
+Program pgm5 {}
+
+	use lib5;
+
+	function main()
+		a int;
+		a = myFunc5();		//0
+	end
+end
+
+
+
+
+function myFunc6() returns (int)
+end
+Program pgm {includeReferencedFunctions = yes}
+	a int = myFunc6();		//0
+end
+
+
+
+function myFun7c() returns (int)
+end
+Program pgm7 {includeReferencedFunctions = no}
+	a int = myFunc7();		//1
+end
+
+
+
+function myFunc8() returns (int)
+end
+Program pgm8 {includeReferencedFunctions = no}
+	a int = mathLib.abs( a );		//0
+end
+
+
+
+function myFunc9() returns (int)
+end
+Program pgm9 {includeReferencedFunctions = no}
+	a int = abs( a );				//0
+end

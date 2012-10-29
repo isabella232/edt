@@ -16,12 +16,12 @@ import java.util.List;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
-import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
+import org.eclipse.edt.mof.eglx.persistence.sql.gen.DummyExpression;
 import org.eclipse.edt.mof.impl.DynamicEClass;
 import org.eclipse.edt.mof.impl.DynamicEObject;
 
@@ -102,6 +102,11 @@ public class DummyExpressionDynamicImpl extends DynamicEObject implements DummyE
 	@Override
 	public LHSExpr addQualifier(Expression expr) {
 		return this;
+	}
+
+	@Override
+	public Element resolveElement() {
+		return null;
 	}
 
 }

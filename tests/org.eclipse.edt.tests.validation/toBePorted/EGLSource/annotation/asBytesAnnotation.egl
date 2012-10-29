@@ -1,0 +1,24 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Dataitem dItem1 char(4) {asBytes=yes} end	//0
+Dataitem dItem2 dbchar(4) {asBytes=yes} end	//1
+
+Record rec1 type SQLRecord
+	10 item1 char(4) {asBytes=yes};			//0
+	10 item2 int {asBytes=yes};				//1
+end
+
+Record rec2 type SQLRecord
+	item1 char(4) {asBytes=yes};			//0
+	item2 int {asBytes=yes};				//1
+end

@@ -14,12 +14,10 @@ package org.eclipse.edt.ide.core.internal.lookup;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.AbstractProcessingQueue;
@@ -35,23 +33,19 @@ import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
-import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
-import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.CachingObjectStore;
 import org.eclipse.edt.mof.serialization.DeserializationException;
-import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
  * @author winghong
@@ -59,28 +53,22 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
 public class ProjectBuildPathEntry implements IBuildPathEntry {
 	
 	private class RealizingEnvironment implements IEnvironment {
-
-		public IPartBinding getPartBinding(String[] packageName, String partName) {
+		@Override
+		public IPartBinding getPartBinding(String packageName, String partName) {
 			return ProjectBuildPathEntry.this.getPartBinding(packageName, partName, true);
         }
-
-		public IPartBinding getNewPartBinding(String[] packageName, String caseSensitiveInternedPartName, int kind) {
+		@Override
+		public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
 			return ProjectBuildPathEntry.this.getNewPartBinding(packageName, caseSensitiveInternedPartName, kind);
 		}
-
-		public boolean hasPackage(String[] packageName) {
+		@Override
+		public boolean hasPackage(String packageName) {
 			return ProjectBuildPathEntry.this.hasPackage(packageName);
 		}
-
+		@Override
 		public IPackageBinding getRootPackage() {
 			return declaringEnvironment.getRootPackage();
 		}
-		
-		@Override
-		public ISystemEnvironment getSystemEnvironment() {
-			return ProjectBuildPathEntry.this.getSystemEnvironment();
-		}
-		
 		@Override
 		public ICompiler getCompiler() {
 			return ProjectBuildPathEntry.this.getCompiler();
@@ -133,23 +121,25 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 	 * This should only be called on 'Source' projects, as a read only project would result in the part being loaded
 	 * directly from an IR instead of being compiled.
 	 */
-    public int hasPart(String[] packageName, String partName) {
+    @Override
+    public int hasPart(String packageName, String partName) {
         return projectInfo.hasPart(packageName, partName);
     }
 
-    public boolean hasPackage(String[] packageName) {
+    @Override
+    public boolean hasPackage(String packageName) {
         return projectInfo.hasPackage(packageName);
     }
     
-    public IPartBinding getPartBindingFromCache(String[] packageName, String partName){
+    public IPartBinding getPartBindingFromCache(String packageName, String partName){
         return bindingCache.get(packageName, partName);
     }
     
-    public IPartBinding getPartBinding(String[] packageName, String partName) {
+    public IPartBinding getPartBinding(String packageName, String partName) {
         return getPartBinding(packageName, partName, false);
     }
     
-    public IPartBinding getPartBinding(String[] packageName, String partName, boolean force) {
+    public IPartBinding getPartBinding(String packageName, String partName, boolean force) {
     	
     	//Short circuit...do not look in this enry for binary porject parts
     	if (ProjectBuildPathManager.getInstance().getProjectBuildPath(projectInfo.getProject()).isBinary()) {
@@ -177,7 +167,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
             		// This project has source, compile from the source
 	            	if(projectInfo.hasPart(packageName, partName) != ITypeBinding.NOT_FOUND_BINDING) {
 	            		IFile declaringFile = projectInfo.getPartOrigin(packageName, partName).getEGLFile();
-	            		if(Util.getFilePartName(declaringFile) == partName || projectInfo.hasPart(packageName,partName) == ITypeBinding.FUNCTION_BINDING){
+	            		if(NameUtile.equals(Util.getFilePartName(declaringFile), partName) || projectInfo.hasPart(packageName,partName) == ITypeBinding.FUNCTION_BINDING){
 	            			// File and function parts are not stored on disk, create a new one
 	            			try{
 	            				return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
@@ -201,11 +191,11 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         return result;
     }
     
-    public IPartBinding getNewPartBinding(String[] packageName, String caseSensitiveInternedPartName, int kind) {
-    	String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
+    public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
+    	String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
         IPartBinding partBinding = bindingCache.get(packageName, caseInsensitiveInternedPartName);
         if(partBinding == null || partBinding.getKind() != kind) {
-            partBinding = PartBinding.newPartBinding(kind, packageName, caseSensitiveInternedPartName);
+            partBinding = BindingUtil.createPartBinding(kind, packageName, caseSensitiveInternedPartName);
             bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
         }
         else {
@@ -215,11 +205,11 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         return partBinding;
     }
     
-    private IPartBinding readPartBinding(String[] packageName, String partName) {
+    private IPartBinding readPartBinding(String packageName, String partName) {
     	try {
 	    	EObject ir = readPart(packageName, partName);
 	    	if (ir != null) {
-	    		IPartBinding partBinding = declaringEnvironment.getConverter().convert(ir);
+	    		IPartBinding partBinding = BindingUtil.createPartBinding(ir);
 	    		if (partBinding != null) {
 	    			bindingCache.put(packageName, partName, partBinding);
 	    			return partBinding;
@@ -235,8 +225,8 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
     /**
      * Called when a part is on the queue but cannot be completly compiled
      */
-    public IPartBinding compileLevel2Binding(String[] packageName, String caseSensitiveInternedPartName) {
-    	String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
+    public IPartBinding compileLevel2Binding(String packageName, String caseSensitiveInternedPartName) {
+    	String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
         IFile declaringFile = projectInfo.getPartOrigin(packageName, caseInsensitiveInternedPartName).getEGLFile();
         
         Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
@@ -252,9 +242,9 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         	String fileName = Util.getFilePartName(declaringFile);
 			IPartBinding fileBinding = getPartBinding(packageName, fileName, true);
 			if(!fileBinding.isValid()){
-				scope = new SystemScope(new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile)),getSystemEnvironment());
+				scope = new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile));
 			}else{
-				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),getSystemEnvironment());
+				scope = new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance());
 			}
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, DefaultCompilerOptions.getInstance());
@@ -268,7 +258,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
      * 
      * Mark this part binding as invalid if it is in the cache.
      */
-    protected void markPartBindingInvalid(String[] packageName, String partName) {
+    protected void markPartBindingInvalid(String packageName, String partName) {
     	IPartBinding result = bindingCache.get(packageName, partName);
     	if(result != null){
     		result.setValid(false);
@@ -278,7 +268,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 	/**
 	 * Remove this part binding from the cache since it has been removed from the workspace
 	 */
-	public void removePartBindingInvalid(String[] packageName, String partName) {
+	public void removePartBindingInvalid(String packageName, String partName) {
 		bindingCache.remove(packageName, partName);		
 	}
 	
@@ -318,9 +308,9 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 		return getProject().getName();
 	}
 	
-    public FileBinding getFileBinding(String[] packageName, String fileName, File fileAST) {
+    public FileBinding getFileBinding(String packageName, String fileName, File fileAST) {
        	
-    	String caseInsensitiveInternedFileName = InternUtil.intern(fileName);
+    	String caseInsensitiveInternedFileName = NameUtile.getAsName(fileName);
     	FileBinding fileBinding = getFileBindingFromCache(packageName, caseInsensitiveInternedFileName);
     	if (fileBinding != null) {
     		return fileBinding;
@@ -341,23 +331,20 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         return fileBinding;
     }
 
-    public FileBinding getFileBindingFromCache(String[] packageName, String partName){
+    public FileBinding getFileBindingFromCache(String packageName, String partName){
         return (FileBinding)bindingCache.get(packageName, partName);
     }
     
-	public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
+    @Override
+	public IPartBinding getCachedPartBinding(String packageName, String partName) {
 		return getPartBindingFromCache(packageName, partName);
 	}
 
-	public void addPartBindingToCache(IPartBinding partBinding) {
-		bindingCache.put(partBinding.getPackageName(), partBinding.getCaseSensitiveName(), partBinding);
-	}
-	
-	private EObject readPart(String[] packageName, String name) throws DeserializationException {
+	private EObject readPart(String packageName, String name) throws DeserializationException {
 		StringBuilder keyBuf = new StringBuilder( 100 );
 		keyBuf.append(":");
-    	if (packageName != null && packageName.length > 0) {
-    		keyBuf.append(IRUtils.concatWithSeparator(packageName, "."));
+    	if (packageName != null && packageName.length() > 0) {
+    		keyBuf.append(packageName);
     		keyBuf.append('.');
     	}
    		keyBuf.append(name);
@@ -372,7 +359,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 	}
 
 	@Override
-	public Part findPart(String[] packageName, String name) throws PartNotFoundException {
+	public Part findPart(String packageName, String name) throws PartNotFoundException {
 		if(ProjectBuildPathManager.getInstance().getProjectBuildPath(projectInfo.getProject()).isReadOnly()
 				|| projectInfo.hasPart(packageName, name) != ITypeBinding.NOT_FOUND_BINDING){
 			try {
@@ -387,11 +374,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 		}
 		return null;
 	}
-	
-	protected ISystemEnvironment getSystemEnvironment() {
-		return SystemEnvironmentManager.findSystemEnvironment(getProject(), getNotifier());
-	}
-	
+		
 	protected ICompiler getCompiler() {
 		return ProjectSettingsUtility.getCompiler(getProject());
 	}

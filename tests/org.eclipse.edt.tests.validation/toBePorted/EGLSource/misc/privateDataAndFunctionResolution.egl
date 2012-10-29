@@ -1,0 +1,98 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+Library lib {includeReferencedFunctions=yes}
+	private privateField int;	//0
+	publicField int;			//0
+	
+	function func() returns(int)
+		field1 int = privateField;		//0
+		field2 int = publicField;		//0
+		field3 int = this.publicField;	//0
+		field4 int = this.privateField;	//0
+		
+		libFunc();		//0
+		privateFunc();	//0
+		
+		lib.privateField = 5;			//0
+		lib.privateFunc();				//0
+	end
+	
+	private function privateFunc() returns(int)
+	end
+end
+
+function libFunc()
+		field1 int = privateField;		//0
+		field2 int = publicField;		//0
+		field3 int = this.publicField;	//0
+		field4 int = this.privateField;	//0
+end
+
+Interface myInterface
+	function publicFunc();
+	private function privateFunc();
+end
+
+Service myService
+	function publicFunc() end
+	private function privateFunc() end
+	
+	function func()
+		publicFunc();
+		privateFunc();
+	end
+end
+
+Record flexRecord
+	field1 int = lib.privateField;		//1 cannot be resolved
+	field2 int = lib.publicField;		//0
+	field3 int = lib.func();			//0
+	field4 int = lib.privateFunc();		//1 cannot be resolved
+end
+
+Program pgm1
+	field1 int = lib.privateField;		//1 cannot be resolved
+	field2 int = lib.publicField;		//0
+	
+	function main()
+		field1 int = lib.privateField;		//1 cannot be resolved
+		field2 int = lib.publicField;		//0
+		field2 = lib.func();				//0
+		field2 = lib.privateFunc();			//1 cannot be resolved
+	end
+end
+
+Program pgm2 {includeReferencedFunctions=yes}
+	use lib;
+	myInterface myInterface;
+	myService myService;
+	
+	function main()
+		field1 int = privateField;		//1 cannot be resolved
+		field2 int = publicField;		//0
+		
+		pgm2func();						//0
+		
+		myInterface.publicFunc();		//0
+		myInterface.privateFunc();		//1 cannot be resolved		
+		
+		myService.publicFunc();			//0
+		myService.privateFunc();		//1 cannot be resolved		
+	end
+end
+
+function pgm2func()
+	field1 int = privateField;			//1 cannot be resolved
+	field2 int = publicField;			//0
+	field2 = lib.func();				//0
+	field2 = lib.privateFunc();			//1 cannot be resolved
+end

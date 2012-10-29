@@ -1,0 +1,243 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+record rec1a						//0
+	10 a int;						//0
+	10 b int {redefines = a};						//0
+end						//0
+
+record rec1b						//0
+	10 a int;						//0
+	10 b int {redefines = bogus}; //1
+end						//0
+	
+record rec1c						//0
+	10 a int;						//0
+	10 b char(10) {redefines = a}; //1
+end						//0
+
+Record rec3						//0
+	10 a int;						//0
+		20 aa int;						//0
+		20 ab char(4) { redefines = a.aa };						//0
+	10 b char(4) { redefines = a };						//0
+end
+
+Record rec4						//0
+	10 a int;						//0
+		20 x int;						//0
+	10 b char(4) { redefines = a };						//0
+		20 z char(4);						//0
+	10 c char(4) { redefines = a };						//0
+end						//0
+
+Record rec5						//0
+	10 a int;						//0
+	10 b char(4) { redefines = a };						//0
+	10 c char(4) { redefines = b };						//1
+end						//0
+
+Record rec6								//0
+	10 a int[4];						//0
+	10 b char(2)[8] { redefines = a };	//1 Item a cannot be the target of the redefines property, because item a is multiply occurring.
+	10 c int[3];						//0
+	10 d char(7) { redefines = c };		//1 Item c cannot be the target of the redefines property, because item c is multiply occurring.
+end										//0
+
+Record rec7
+	10 a bigint;
+	10 b char(1)[8] { redefines = a };  //0
+end
+
+Record rec8
+	10 top char(4)[3];
+		20 a int;
+		20 b smallint { redefines = a };  //0
+end
+
+Record rec9
+	10 top char(12)[5];
+		20 middle char(4)[3];
+			30 a int;
+			30 b smallint { redefines = a };  //0
+end
+
+Record RecB type basicRecord						//0
+	10 dateFormat smallInt;						//0
+	10 billingDate char(8);						//0
+	10 usBillingDate USCharDate {redefines=billingDate};						//0
+	10 euroBillingDate EUROCharDate {redefines=billingDate};						//0
+	10 deliveryDate char(8);						//0
+	10 usDeliveryDate USCharDate {redefines=deliveryDate};						//0
+	10 euroDeliveryDate EUROCharDate {redefines=deliveryDate};							//0
+End						//0
+
+Record USCharDate type basicRecord						//0
+    10 month char(2);						//0
+    10 day char(2);						//0
+    10 year char(4);						//0
+end						//0
+
+Record EUROCharDate type basicRecord						//0
+    10 day char(2);						//0
+    10 month char(2);    						//0
+    10 year char(4);						//0
+end						//0
+
+Record RecC type basicRecord						//0
+	10 dateFormat smallInt;						//0
+	10 billingDate char(8);						//0
+		10 usBillingDate char(8) {redefines=billingDate};						//0
+		    20 month char(2);						//0
+		    20 day char(2);						//0
+		    20 year char(4);							//0
+		10 euroBillingDate char(8) {redefines=billingDate};						//0
+		    20 day char(2);						//0
+		    20 month char(2);						//0
+		    20 year char(4);								//0
+	10 deliveryDate char(8);						//0
+		10 usDeliveryDate char(8) {redefines=deliveryDate};						//0
+		    20 month char(2);						//0
+		    20 day char(2);						//0
+		    20 year char(4);								//0
+		10 euroDeliveryDate char(8) {redefines=deliveryDate};						//0
+		    20 day char(2);						//0
+		    20 month char(2);						//0
+		    20 year char(4);								//0
+End						//0
+
+
+record recordD type basicRecord	//0
+	10 a int;	//0
+	10 b {redefines = a};	//0
+		15 d int;	//0
+		15 e int {redefines = d};	//0
+end	//0
+
+record recordE type basicRecord	//0
+	10 a int;	//0
+	10 b {redefines = a};	//1
+		15 d int;	//0
+		15 e int;	//0
+end	//0
+
+
+record recordF type basicRecord	//0
+	10 a recordF1;	//0
+	10 b recordF2 {redefines = a};	//0
+	10 c recordf2;	//0
+	10 d recordf1 {redefines = c};	//1
+end
+
+record recordf1 type basicRecord	//0
+	10 a1 recordf2;	//0
+	10 b1 recordf2 {redefines=a1};	//0
+	10 c1 recordf2;	//0
+end	//0
+
+record recordf2 type basicRecord	//0
+	10 a2 int;	//0
+	10 b2 int {redefines = a2};	//0
+end	//0
+
+
+record recg 	//0
+	10 a int;	//0
+	10 c int;	//0
+		15 b int {redefines = a}; //1
+		15 d int;	//0
+end	//0
+
+record rech	//0
+  10 a;	//0
+    15 b;	//0
+      20 d;	//0
+        25 f int;	//0
+        25 g int {redefines=f};	//0
+        25 h int {redefines=f};	//0
+        25 i int {redefines=f};	//0
+       20 j int;	//0
+     15  k int[2] {redefines = b};	//0
+ end	//0
+ 
+ 
+ program pgma {allowUnqualifiedItemReferences = yes}	//0
+ 	f1 reci;	//0
+ 	f2 recj {redefines=f1.a};	//1
+ 	f3 recj {redefines=a};	//1
+ 	
+ 	function main()	//0
+ 	end	//0
+ 	
+ end	//0
+ 
+ record reci	//0
+ 	10 a int;	//0
+ end	//0
+ 
+ record recj	//0
+ 	10 b int;	//0
+ end	//0
+
+
+record reck	//0
+	10 a int;	//0
+	10 * int {redefines = b};	//1
+end	//0
+
+
+record recl	//0
+	{b{redefines = a}}	//0
+	10 a int;	//0
+	10 b int;		//0
+end	//0
+
+record recm	//0
+	{
+        g{redefines=f},	//0
+        h{redefines=f},	//0
+        i{redefines=f},	//0
+       	k{redefines=b}	//0
+	}
+  10 a;	//0
+    15 b;	//0
+      20 d;	//0
+        25 f int;	//0
+        25 g int;	//0
+        25 h int;	//0
+        25 i int;	//0
+       20 j int;	//0
+     15  k int[2];	//0
+ end	//0
+
+record recn 	//0
+	{
+		b{redefines = a} //1
+	}
+	10 a int;	//0
+	10 c int;	//0
+		15 b int; //0
+		15 d int;	//0
+end	//0
+
+record recordo type basicRecord	//0
+	{
+		b{redefines = a}, //0
+		d{redefines = c} //1
+	}
+	10 a recordF1;	//0
+	10 b recordF2 ;	//0
+	10 c recordf2;	//0
+	10 d recordf1;	//0
+end
+
+
+

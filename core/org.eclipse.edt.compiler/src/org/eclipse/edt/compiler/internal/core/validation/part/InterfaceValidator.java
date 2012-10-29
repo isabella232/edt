@@ -11,99 +11,113 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.part;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.InterfaceBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
-import org.eclipse.edt.compiler.core.ast.Constructor;
-import org.eclipse.edt.compiler.core.ast.ExternalType;
+import org.eclipse.edt.compiler.ASTValidator;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
-import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Type;
 
 
 /**
  * @author Dave Murray
  */
-public class InterfaceValidator extends AbstractASTVisitor {
+public class InterfaceValidator extends FunctionContainerValidator {
 	
-	protected IProblemRequestor problemRequestor;
-	private InterfaceBinding partBinding;
-    private ICompilerOptions compilerOptions;
-    protected Interface iFaceNode = null;
+	IRPartBinding irBinding;
+	private org.eclipse.edt.mof.egl.Interface interfaceBinding;
+    protected Interface iFaceNode;
 	
-	public InterfaceValidator(IProblemRequestor problemRequestor, InterfaceBinding partBinding, ICompilerOptions compilerOptions) {
-		this.problemRequestor = problemRequestor;
-		this.partBinding = partBinding;
-		this.compilerOptions = compilerOptions;
+	public InterfaceValidator(IProblemRequestor problemRequestor, IRPartBinding irBinding, ICompilerOptions compilerOptions) {
+		super(problemRequestor, irBinding, compilerOptions);
+		this.irBinding = irBinding;
+		interfaceBinding = (org.eclipse.edt.mof.egl.Interface)irBinding.getIrPart();
 	}
 	
+	@Override
 	public boolean visit(Interface interfaceNode) {
 		iFaceNode = interfaceNode;
 		EGLNameValidator.validate(interfaceNode.getName(), EGLNameValidator.HANDLER, problemRequestor, compilerOptions);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(interfaceNode);
-		checkExtendedTypes(interfaceNode);
+		
+		if (iFaceNode.hasExtendedType()) {
+			checkExtendedTypes();
+			checkCycles();
+		}
 		return true;
 	}
-
+	
+	@Override
 	public boolean visit(NestedFunction nestedFunction) {
-		nestedFunction.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
+		List<ASTValidator> validators = partBinding.getEnvironment().getCompiler().getValidatorsFor(nestedFunction);
+    	if (validators != null && validators.size() > 0) {
+    		for (ASTValidator validator : validators) {
+    			validator.validate(nestedFunction, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+    		}
+    	}
+		
 		if (nestedFunction.isPrivate()){
 			problemRequestor.acceptProblem(nestedFunction.getName(),
 					IProblemRequestor.INTERFACE_FUNCTION_CANNOT_BE_PRIVATE);
 		}
-
-		ServiceInterfaceValidatorUtil.validateParametersAndReturn(nestedFunction,false,problemRequestor);
-		
-		if (InternUtil.intern(nestedFunction.getName().getCanonicalName()) == InternUtil.intern(IEGLConstants.MNEMONIC_MAIN)){
-			problemRequestor.acceptProblem(iFaceNode.getName(),
-					IProblemRequestor.LIBRARY_NO_MAIN_FUNCTION_ALLOWED,
-					new String[] {partBinding.getCaseSensitiveName()});
-		}
 		
 		return false;
 	}
 	
-	public boolean visit(Constructor constructor) {
-		constructor.accept(new FunctionValidator(problemRequestor, partBinding, compilerOptions));
-		return false;
-	}
-
-	
-	private void checkExtendedTypes(Interface iface) {
-		for(Iterator iter = iface.getExtendedTypes().iterator(); iter.hasNext();) {
+	private void checkExtendedTypes() {
+		for (Iterator iter = iFaceNode.getExtendedTypes().iterator(); iter.hasNext();) {
 			Name nameAST = (Name) iter.next();
-			ITypeBinding extendedType = (ITypeBinding) (nameAST).resolveBinding();
-			if(extendedType != null && IBinding.NOT_FOUND_BINDING != extendedType) {
-				boolean typeIsValid = false;
-				
-				if(ITypeBinding.INTERFACE_BINDING == extendedType.getKind()) {
-					typeIsValid = true;
-				}
-				
-				if(!typeIsValid) {
-					problemRequestor.acceptProblem(
-							nameAST,
+			Type extendedType = nameAST.resolveType();
+			if (extendedType != null && !(extendedType instanceof org.eclipse.edt.mof.egl.Interface)) {
+				problemRequestor.acceptProblem(
+						nameAST,
 						IProblemRequestor.INTERFACE_MUST_EXTEND_INTERFACE,
 						new String[] {
-							extendedType.getCaseSensitiveName()
+								extendedType.getTypeSignature()
 						});
-				}
 			}
 		}
 	}
 	
-	public boolean visit(SettingsBlock settingsBlock) {
+	private void checkCycles() {
+		for (Name name : iFaceNode.getExtendedTypes()) {
+			Type type = name.resolveType();
+			if (type instanceof org.eclipse.edt.mof.egl.Interface
+					&& checkCycles((org.eclipse.edt.mof.egl.Interface)type, new HashSet<org.eclipse.edt.mof.egl.Interface>())) {
+				problemRequestor.acceptProblem(
+	    				name,
+	    				IProblemRequestor.RECURSIVE_LOOP_IN_EXTENDS,
+	    				new String[] {interfaceBinding.getCaseSensitiveName(), name.toString()});
+			}
+		}
+	}
+	
+	private boolean checkCycles(org.eclipse.edt.mof.egl.Interface iface, Set<org.eclipse.edt.mof.egl.Interface> seen) {
+		iface = (org.eclipse.edt.mof.egl.Interface)BindingUtil.realize(iface);
+		if (seen.contains(iface)) {
+			return false;
+		}
+		
+		if (interfaceBinding.equals(iface)) {
+			return true;
+		}
+		
+		seen.add(iface);
+		for (org.eclipse.edt.mof.egl.Interface superInterface : iface.getInterfaces()) {
+			if (checkCycles(superInterface, seen)) {
+				return true;
+			}
+		}
 		return false;
 	}
 }

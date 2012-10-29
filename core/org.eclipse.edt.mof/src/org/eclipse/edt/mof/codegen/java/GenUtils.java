@@ -153,13 +153,13 @@ public class GenUtils {
 
 	public static String getTypeSignature(EClassifier type) {
 		if (type == azure.getEStringEDataType() )
-			return "java.lang.String";
+			return EDataType.EDataType_String;
 		if (type == azure.getEBooleanEDataType() )
-			return "java.lang.Boolean";
+			return EDataType.EDataType_Boolean;
 		if ( type == azure.getEIntEDataType() )
-			return "java.lang.Integer";
+			return EDataType.EDataType_Int32;
 		if ( type == azure.getEListEDataType() )
-			return "java.util.List";
+			return EDataType.EDataType_List;
 		return type.getETypeSignature();
 	}
 

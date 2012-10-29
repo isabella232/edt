@@ -1,0 +1,348 @@
+import eglx.jtopen.annotations.*;
+import eglx.jtopen.*;
+
+service myserv
+	
+	i int;
+	d date;
+	
+	function srvFunc() returns (int)
+	end
+	
+	function srvIBMiNoReturn() {@Resource{uri=""}, @IBMiProgram}
+	end
+
+	function srvIBMiReturn() returns (int) {@Resource{uri=""}, @IBMiProgram{isServiceProgram = yes}}
+	end
+	
+	function testLocalCallsToService()
+		//test local call to the same service
+		call srvIBMiNoReturn(); //0
+		call this.srvIBMiNoReturn(); //0
+
+		call srvIBMiReturn(); //1 must specify a returns
+		call this.srvIBMiReturn(); //1 must specify a returns
+		
+		call srvIBMiNoReturn() returns (i); //1 cannot specify a returns value 
+		call this.srvIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call srvIBMiReturn() returns (i); //0 
+		call this.srvIBMiReturn() returns (i); //0
+
+		call srvIBMiReturn() returns (d); //1 The return type srvibmireturn of the function srvIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+		call this.srvIBMiReturn() returns (d); //1 The return type srvibmireturn of the function srvIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+
+		call srvIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+		call this.srvIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+					
+		call srvIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")   
+					returns (i); //0 
+		call this.srvIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")   
+					returns (i); //0 
+
+		call srvIBMiReturn() 
+				using Resources.getResource("binding:fred")as IBMiConnection   //0
+					returns (i); //0 
+		call this.srvIBMiReturn() 
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call srvFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		call this.srvFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		
+		call srvIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+		call this.srvIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+
+
+	
+	
+	function callback(p1 int in)
+	end
+end
+
+
+library lib1
+	function libFunc() returns (int)
+	end
+	
+	function libIBMiNoReturn() {@Resource{uri=""}, @IBMiProgram}
+	end
+
+	function libIBMiReturn() returns (int) {@Resource{uri=""}, @IBMiProgram{isServiceProgram = yes}}
+	end
+end
+
+
+library LocalFunctionCallTestsLib
+	USE lib1;
+	i int;
+	d date;
+	
+	
+	function testLocalCallsToLib()
+		//test local call to a library
+		call lib1.libIBMiNoReturn(); //0
+
+		call lib1.libIBMiReturn(); //1 must specify a returns
+		
+		call lib1.libIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call lib1.libIBMiReturn() returns (i); //0
+
+		call lib1.libIBMiReturn() returns (d); //1 The return type libibmireturn of the function libIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+
+		call lib1.libIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+					
+		call lib1.libIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")   
+					returns (i); //0 
+
+		call lib1.libIBMiReturn() 
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call lib1.libFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		
+		call lib1.libIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+
+
+	function callback(p1 int in)
+	end
+end
+
+Handler LocalFunctionCallTestsHand
+	
+	i int;
+	d date;
+	
+	function handFunc() returns (int)
+	end
+	
+	function handIBMiNoReturn() {@Resource{uri=""}, @IBMiProgram}
+	end
+
+	function handIBMiReturn() returns (int) {@Resource{uri=""}, @IBMiProgram{isServiceProgram = yes}}
+	end
+	
+	
+	function testLocalCallsToHand()
+		//test local call to a handler
+		call handIBMiNoReturn(); //0
+		call this.handIBMiNoReturn(); //0
+
+		call handIBMiReturn(); //1 must specify a returns
+		call this.handIBMiReturn(); //1 must specify a returns
+		
+		call handIBMiNoReturn() returns (i); //1 cannot specify a returns value
+		call this.handIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call handIBMiReturn() returns (i); //0
+		call this.handIBMiReturn() returns (i); //0
+
+		call handIBMiReturn() returns (d); //1 The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+		call this.handIBMiReturn() returns (d); //1 The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+
+		call handIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+		call this.handIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+
+					
+		call handIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")   
+					returns (i); //0 
+		call this.handIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")  
+					returns (i); //0 
+
+		call handIBMiReturn() 
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+		call this.handIBMiReturn() 
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call handFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		call this.handFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		
+		call handIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+		call this.handIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+
+
+	function callback(p1 int in)
+	end
+end
+
+program LocalFunctionCallTestsPgm
+	
+	i int;
+	d date;
+	
+	function main()
+	end
+	
+	function pgmFunc() returns (int)
+	end
+	
+	function pgmIBMiNoReturn() {@Resource{uri=""}, @IBMiProgram}
+	end
+
+	function pgmIBMiReturn() returns (int) {@Resource{uri=""}, @IBMiProgram{isServiceProgram = yes}}
+	end
+	
+	
+	function testLocalCallsToPgm()
+		//test local call to a program
+		call pgmIBMiNoReturn(); //0
+		call this.pgmIBMiNoReturn(); //0
+
+		call pgmIBMiReturn(); //1 must specify a returns
+		call this.pgmIBMiReturn(); //1 must specify a returns
+		
+		call pgmIBMiNoReturn() returns (i); //1 cannot specify a returns value
+		call this.pgmIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call pgmIBMiReturn() returns (i); //0
+		call this.pgmIBMiReturn() returns (i); //0
+
+		call pgmIBMiReturn() returns (d); //1 The return type pgmibmireturn of the function pgmIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+		call this.pgmIBMiReturn() returns (d); //1 The return type pgmibmireturn of the function pgmIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+
+		call pgmIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+		call this.pgmIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+
+					
+		call pgmIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")   
+					returns (i); //0 
+		call this.pgmIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")   
+					returns (i); //0 
+
+		call pgmIBMiReturn() 
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+		call this.pgmIBMiReturn() 
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call pgmFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		call this.pgmFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		
+		call pgmIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+		call this.pgmIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+
+
+	function testLocalCallsToLib()
+		//test local call to a library
+		call lib1.libIBMiNoReturn(); //0
+
+		call lib1.libIBMiReturn(); //1 must specify a returns
+		
+		call lib1.libIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call lib1.libIBMiReturn() returns (i); //0
+
+		call lib1.libIBMiReturn() returns (d); //1 The return type libibmireturn of the function libIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+
+		call lib1.libIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+					
+		call lib1.libIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")   
+					returns (i); //0 
+
+		call lib1.libIBMiReturn() 
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call lib1.libFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		
+		call lib1.libIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+	
+	function testLocalCallsToHand()
+		hand1 LocalFunctionCallTestsHand;
+		
+		//test local call to a library
+		call hand1.handIBMiNoReturn(); //0
+
+		call hand1.handIBMiReturn(); //1 must specify a returns
+		
+		call hand1.handIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call hand1.handIBMiReturn() returns (i); //0
+
+		call hand1.handIBMiReturn() returns (d); //1 The return type handibmireturn of the function handIBMiReturn is not compatible with the type date of the returns expression d in the Call statement.
+
+		call hand1.handIBMiReturn() //1 The specified using clause type 'string(12)' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using "binding:fred"   
+					returns (i); //0 
+					
+		call hand1.handIBMiReturn() //1 The specified using clause type 'any' is not compatible with the expected type eglx.jtopen.IBMiConnection.
+				using Resources.getResource("binding:fred")   
+					returns (i); //0 
+
+		call hand1.handIBMiReturn() 
+				using Resources.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call hand1.handFunc returns (i); //1 No compiler extensions were found for the call statement, which has no default behavior. The call statement cannot be used until an extension has been configured for this statement. 
+		
+		call hand1.handIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+	
+
+	function callback(p1 int in)
+	end
+end

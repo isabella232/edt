@@ -14,18 +14,11 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLConditionalStateProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -55,13 +48,6 @@ public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCom
 			}
 		}, new IBoundNodeProcessor() {
 			public void processBoundNode(Node boundNode) {
-				IDataBinding statementTargetBinding = getStatementTargetBinding(boundNode);
-				if(statementTargetBinding != null && IBinding.NOT_FOUND_BINDING != statementTargetBinding) {
-					if(AbstractBinder.dataBindingIs(statementTargetBinding, EGLCORE, IEGLConstants.KEYWORD_SYSVAR, IEGLConstants.SYSTEM_WORD_SYSTEMTYPE)) {
-						proposals.addAll(new EGLConditionalStateProposalHandler(viewer, documentOffset, prefix, statementTargetBinding).getProposals());
-						return;
-					}
-				}				
 				
 				//Get all variable proposals
 				proposals.addAll(
@@ -70,39 +56,16 @@ public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCom
 						prefix,
 						boundNode)
 						.getProposals(boundNode));
-			
-				//Get system function proposals with return value
-				proposals.addAll(
-						new EGLSystemWordProposalHandler(viewer,
-							documentOffset,
-							prefix,
-							editor,
-							boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
-				
+							
 				//Get user function proposals with no return value
 				proposals.addAll(
-					new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).
+					new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).
 						getProposals());
 				
-				//Get all system library proposals
-				proposals.addAll(
-					new EGLSystemLibraryProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 			}
 		});
 		
 		return proposals;
 	}
 
-	private IDataBinding getStatementTargetBinding(Node boundNode) {
-		while(boundNode != null) {
-			if(boundNode instanceof CaseStatement) {
-				CaseStatement caseStatement = (CaseStatement) boundNode;
-				if(caseStatement.hasCriterion()) {
-					return caseStatement.getCriterion().resolveDataBinding();
-				}
-			}
-			boundNode = boundNode.getParent();
-		}
-		return null;
-	}
 }

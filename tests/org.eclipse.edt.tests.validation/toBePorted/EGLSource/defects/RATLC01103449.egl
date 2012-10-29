@@ -1,0 +1,36 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG
+Program IX079M type basicProgram 
+  { includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no }
+
+  RABNDLOG RABNDLOG; 
+
+  function main()
+     get RABNDLOG;			//1 Invalid target RABNDLOG. The target of a get by key statement must be an SQL, indexed, relative, or DL/I segment record variable or an SQL record array.
+     get next RABNDLOG;		//0
+     get previous RABNDLOG;	//1 Invalid directive previous. NEXT is the only directive allowed.
+  end 
+end 
+
+Record RABNDLOG type serialRecord  {
+  fileName = "MABNDLOG"
+  }
+  3 DATA-RABNDLOG-IO char(118) ; 
+    4 DABN118 char(118) ; 
+      5 DUSRPRF char(10) ; 
+      5 DDATE3 char(6) ; 
+      5 DTIM num(6) ; 
+      5 DREPTKEY char(20) ; 
+      5 DMSGTEXT char(76) ; 
+end 

@@ -1,0 +1,48 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG
+
+Program DZGMSGC type basicProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no
+  }
+
+  USERMSGREC USERMSGREC; 
+  
+  function main()
+  	 i int;
+  	 
+     get USERMSGREC ;
+      if (RMFS[I] != "A" 	//0
+       && RMFS[I] != "I" 	//0
+       && RMFS[I] != "P") 	//0
+	  end
+  end
+end
+
+Record USERMSGREC type relativeRecord {fileName = "MSGFILE", keyItem = "keyItem"}
+    10 RMSG RMSG [3] ; 
+    12 RMFS RMFS ; 
+
+    10 keyItem num(4);    
+end
+
+DataItem RMSG char(3)  {
+  align = left, fillCharacter = " ", inputRequired = no
+}
+end
+
+DataItem RMFS char(3)  {
+  align = left, fillCharacter = " ", inputRequired = no
+}
+end

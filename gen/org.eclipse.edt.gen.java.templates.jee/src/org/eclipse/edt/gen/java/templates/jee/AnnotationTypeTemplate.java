@@ -55,14 +55,17 @@ public class AnnotationTypeTemplate extends JavaTemplate implements Constants {
 	}
 
 	public void genJavaAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Member member) {
-		out.print("@");
-		ctx.invoke(genRuntimeTypeName, (Type) aType, ctx, out, TypeNameKind.JavaObject, annot);
-		out.print("(");
-		ctx.invoke(genConstructorOptions, (Type) aType, ctx, out, annot, member);
-		if (ctx.get(Constants.SubKey_keepAnnotationsOnTheSameLine) != null) {
-			out.print(") ");
-		} else {
-			out.println(")");
+		if ( !member.isStatic() )
+		{
+			out.print("@");
+			ctx.invoke(genRuntimeTypeName, (Type) aType, ctx, out, TypeNameKind.JavaObject, annot);
+			out.print("(");
+			ctx.invoke(genConstructorOptions, (Type) aType, ctx, out, annot, member);
+			if (ctx.get(Constants.SubKey_keepAnnotationsOnTheSameLine) != null) {
+				out.print(") ");
+			} else {
+				out.println(")");
+			}
 		}
 	}
 }

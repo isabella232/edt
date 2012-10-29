@@ -18,5 +18,5 @@ package org.eclipse.edt.ide.core.internal.builder;
  */
 public interface IProcessorRequestor {
 
-	public void recordStructuralChange(String[] packageName, String partName, int partType);
+	public void recordStructuralChange(String packageName, String partName, int partType);
 }

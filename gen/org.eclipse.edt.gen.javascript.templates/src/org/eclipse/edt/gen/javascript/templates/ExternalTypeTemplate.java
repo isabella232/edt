@@ -26,7 +26,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.NamedElement;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 
@@ -85,7 +85,7 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 		else{
 			Annotation annotation = part.getAnnotation(Constants.Annotation_JavaScriptObject);
 			if(annotation != null){
-				String packageName = (String) annotation.getValue(InternUtil.intern("relativePath"));
+				String packageName = (String) annotation.getValue(NameUtile.getAsName("relativePath"));
 				if(packageName != null && !(packageName.isEmpty())){
 					packageName = packageName.replace('/', '.');
 					packageName = packageName.replace('\\', '.');
@@ -94,9 +94,9 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 				}else{
 					packageName = "";
 				}
-				String partName = (String) annotation.getValue(InternUtil.intern("externalName"));
+				String partName = (String) annotation.getValue(NameUtile.getAsName("externalName"));
 				if(partName == null || partName.isEmpty()){
-					partName = part.getName();
+					partName = part.getCaseSensitiveName();
 				}
 				out.print(eglnamespace + packageName.toLowerCase() + partName);
 			}
@@ -115,12 +115,12 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 	
 	public void genModuleName(ExternalType part, StringBuilder buf) {
 		buf.append("\"");
-		String pkg = part.getPackageName();
+		String pkg = part.getCaseSensitivePackageName();
 		if (pkg.length() > 0) {
 			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		buf.append(JavaScriptAliaser.getAliasForExternalType(JavaScriptAliaser.getAlias(part.getId())));
+		buf.append(JavaScriptAliaser.getAliasForExternalType(JavaScriptAliaser.getAlias(part.getCaseSensitiveName())));
 		buf.append("\"");
 	}
 	private String getExternalJSPath(ExternalType part) {
@@ -132,10 +132,10 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 			name = (String)annot.getValue( Constants.EXTERNALTYPE_EXTERNAL_NAME );			
 		}
 		if (pkg == null || pkg.isEmpty()) {
-			pkg = part.getPackageName().replace( '.', '/' );
+			pkg = part.getCaseSensitivePackageName().replace( '.', '/' );
 		}
 		if (name == null || name.isEmpty()) {
-			name = part.getName();
+			name = part.getCaseSensitiveName();
 		}
 		if (pkg.length() > 0) {
 			fullName = pkg;

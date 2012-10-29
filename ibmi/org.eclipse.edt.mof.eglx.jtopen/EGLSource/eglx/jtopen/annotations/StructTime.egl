@@ -14,7 +14,7 @@ package eglx.jtopen.annotations;
 Record StructTime type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.StructTimeAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.proxy.StructTimeProxy"
 }
 	ibmiFormat any?;
 	ibmiSeparatorChar string? = "";

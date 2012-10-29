@@ -11,8 +11,7 @@
  *******************************************************************************/
 package eglx.persistence;
 
-record Entity type Annotation {
-	targets=[ExternalTypePart, RecordPart, HandlerPart],
-	@Stereotype
+record Entity type Stereotype {
+	targets=[ExternalTypePart, RecordPart, HandlerPart]
 }
 end

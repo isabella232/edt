@@ -23,7 +23,7 @@ import java.io.IOException;
 	private QualifiedName packageName;
 	private SimpleName partName;
 	
-	public Part(String[] packageName, String partName) {
+	public Part(String packageName, String partName) {
 		this.packageName = new QualifiedName(packageName);
 		this.partName = new SimpleName(partName);
 		
@@ -31,7 +31,7 @@ import java.io.IOException;
 	
 	public Part() {}
 
-	public String[] getPackageName(){
+	public String getPackageName(){
 		return packageName.getQualifiedName();
 	}
 	

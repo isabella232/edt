@@ -13,23 +13,16 @@ package org.eclipse.edt.compiler;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.DataItem;
-import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
-import org.eclipse.edt.compiler.core.ast.EGLClass;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
-import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
@@ -37,10 +30,8 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.core.ast.TopLevelForm;
-import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -52,11 +43,11 @@ public class Util {
 	public final static char[] SUFFIX_EGL = ".EGL".toCharArray(); //$NON-NLS-1$
 	
 	public static String getFilePartName(File file){
-		return InternUtil.intern(file.getAbsolutePath().toString());
+		return NameUtile.getAsName(file.getAbsolutePath().toString());
 	}
 	
 	public static String getCaseSensitiveFilePartName(File file){
-		return InternUtil.internCaseSensitive(file.getAbsolutePath().toString());
+		return NameUtile.getAsCaseSensitiveName(file.getAbsolutePath().toString());
 	}
 	
 	/**
@@ -99,16 +90,6 @@ public class Util {
 				return false;
 			}
 	
-			public boolean visit(DataTable dataTable) {
-				value[0] = new Integer(ITypeBinding.DATATABLE_BINDING);
-				return false;
-			}
-	
-			public boolean visit(FormGroup formGroup) {
-				value[0] = new Integer(ITypeBinding.FORMGROUP_BINDING);
-				return false;
-			}
-	
 			public boolean visit(Interface interfaceNode) {
 				value[0] = new Integer(ITypeBinding.INTERFACE_BINDING);
 				return false;
@@ -124,7 +105,7 @@ public class Util {
 				return false;
 			}
 
-			public boolean visit(EGLClass eglClass) {
+			public boolean visit(Class eglClass) {
 				value[0] = new Integer(ITypeBinding.CLASS_BINDING);
 				return false;
 			}
@@ -135,11 +116,17 @@ public class Util {
 			}
 
 			public boolean visit(Record record) {
-				if(record.isFlexible()){
-					value[0] = new Integer(ITypeBinding.FLEXIBLE_RECORD_BINDING);
-				}else{
-					value[0] = new Integer(ITypeBinding.FIXED_RECORD_BINDING);
+				if(record.isAnnotationType()){
+					value[0] = new Integer(ITypeBinding.ANNOTATION_BINDING);
+					return false;
 				}
+				
+				if(record.isStereotypeType()){
+					value[0] = new Integer(ITypeBinding.STEREOTYPE_BINDING);
+					return false;
+				}
+				
+				value[0] = new Integer(ITypeBinding.FLEXIBLE_RECORD_BINDING);
 				return false;
 			}
 	
@@ -148,16 +135,6 @@ public class Util {
 				return false;
 			}
 	
-			public boolean visit(TopLevelForm topLevelForm) {
-				value[0] = new Integer(ITypeBinding.FORM_BINDING);
-				return false;
-			}
-	
-			public boolean visit(TopLevelFunction topLevelFunction) {
-				value[0] = new Integer(ITypeBinding.FUNCTION_BINDING);
-				return false;
-			}
-			
 			public boolean visit(org.eclipse.edt.compiler.core.ast.File file){
 			    value[0] = new Integer(ITypeBinding.FILE_BINDING);
 			    return false;

@@ -16,11 +16,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AmbiguousReferenceException;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -283,23 +283,35 @@ public class IRUtils {
 		return (Type)getType(mofKey);
 	}
 	
+	public static Type getEGLType(String primSignature, int length, int decimals) {
+		String sig = primSignature + "(" + length + Type.PrimArgDelimiter + decimals + ")";
+		return getEGLType(sig);
+	}
+	
+	public static Type getEGLType(String primSignature, int length) {
+		String sig = primSignature + "(" + length + ")";
+		return getEGLType(sig);
+	}
+	
+	public static Type getEGLType(String primSignature, String pattern) {
+		String sig = primSignature + "(" + pattern + ")";
+		return getEGLType(sig);
+	}
+		
 	public static StructPart getEGLPrimitiveType(String primSignature) {
 		return (StructPart) getEGLType(primSignature);
 	}
 	
 	public static FixedPrecisionType getEGLPrimitiveType(String primSignature, int length, int decimals) {
-		String sig = primSignature + "(" + length + Type.PrimArgDelimiter + decimals + ")";
-		return (FixedPrecisionType)getEGLType(sig);
+		return (FixedPrecisionType)getEGLType(primSignature, length, decimals);
 	}
 	
 	public static SequenceType getEGLPrimitiveType(String primSignature, int length) {
-		String sig = primSignature + "(" + length + ")";
-		return (SequenceType)getEGLType(sig);
+		return (SequenceType)getEGLType(primSignature, length);
 	}
 	
 	public static PatternType getEGLPrimitiveType(String primSignature, String pattern) {
-		String sig = primSignature + "(" + pattern + ")";
-		return (PatternType)getEGLType(sig);
+		return (PatternType)getEGLType(primSignature, pattern);
 	}
 	
 	/**
@@ -488,12 +500,11 @@ public class IRUtils {
 			if (isAny(type.getClassifier()) || type.equals(IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
 				return createAsExpression(expr, type);
 			}
-			return expr;
 		}
 		
 		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
 			 //Conversions from value types to Number, Decimal, TimeStamp, String do not need to be boxed
-			if (!(type instanceof ParameterizableType) && !(type.equals(IRUtils.getEGLPrimitiveType(MofConversion.Type_Number)))) {
+			if (!(type instanceof ParameterizableType) && !(type == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
 				BoxingExpression box = factory.createBoxingExpression();
 				box.setExpr(expr);
 				return createAsExpression(box, type);
@@ -606,33 +617,37 @@ public class IRUtils {
 	}
 
 	public static StructPart getCommonSupertype(Type type1, Type type2) {
-		StructPart class1 = (StructPart)type1.getClassifier();
-		StructPart class2 = (StructPart)type2.getClassifier();
-		StructPart result = null;
-		if (class1.equals(class2) || class2.isSubtypeOf(class1)) {
-			result = class1;
-		}
-		else {
-			for (StructPart superType : class1.getSuperTypes()) {
-				if (isValidWidenConversion(type2, superType)) {
-					result = superType;
-					break;
-				}
+		if (type1.getClassifier() instanceof StructPart && type2.getClassifier() instanceof StructPart) {
+		
+			StructPart class1 = (StructPart)type1.getClassifier();
+			StructPart class2 = (StructPart)type2.getClassifier();
+			StructPart result = null;
+			if (class1.equals(class2) || class2.isSubtypeOf(class1)) {
+				result = class1;
 			}
-			if (result == null) {
+			else {
 				for (StructPart superType : class1.getSuperTypes()) {
-					result = getCommonSupertype(superType, type2);
-					if (result != null) break;
+					if (isValidWidenConversion(type2, superType)) {
+						result = superType;
+						break;
+					}
 				}
 				if (result == null) {
-					result = getCommonSupertype(type2, type1);
+					for (StructPart superType : class1.getSuperTypes()) {
+						result = getCommonSupertype(superType, type2);
+						if (result != null) break;
+					}
+					if (result == null) {
+						result = getCommonSupertype(type2, type1);
+					}
+				}
+				if (result == null) {
+					result = (StructPart)TypeUtils.Type_ANY;
 				}
 			}
-			if (result == null) {
-				result = (StructPart)TypeUtils.Type_ANY;
-			}
+			return result;
 		}
-		return result;
+		return null;
 	}
 	
 	public static Operation getConversionOperation(Expression expr, Type trg) {
@@ -709,14 +724,14 @@ public class IRUtils {
 			for (Operation operation : ops) {
 				if (!(operation.getParameters().get(0).getType().equals(operation.getParameters().get(1).getType()))) {
 					if(argTypeCompatibleWithParms(operation, lhs, rhs))
-					return operation;
+						return operation;
 				}
 			}
 		}
 		
 		return null;
 	}
-	
+
 	private static StructPart getCommonSuperType(NamedElement lhs, NamedElement rhs) {
 		
 		if (!(rhs instanceof SubType)) {
@@ -872,10 +887,10 @@ public class IRUtils {
 		}
 		
 		if(argTypeCompatibleWithParms(result, lhs, rhs)) {
-			return result;
+			return result;	
 		}
-
-		return null;	
+		
+		return null;
 	}
 	
 	private static boolean argTypeCompatibleWithParms(Operation operation, NamedElement lhs, NamedElement rhs) {
@@ -883,11 +898,11 @@ public class IRUtils {
 			return false;
 		}
 		
-		return (TypeUtils.areCompatible(operation.getParameters().get(0).getType().getClassifier(), lhs) &&
-				TypeUtils.areCompatible(operation.getParameters().get(1).getType().getClassifier(), rhs));
+		return (operation.getParameters().get(0).isGenericTypeParameter() || TypeUtils.areCompatible(operation.getParameters().get(0).getType().getClassifier(), lhs) &&
+				operation.getParameters().get(1).isGenericTypeParameter() || TypeUtils.areCompatible(operation.getParameters().get(1).getType().getClassifier(), rhs));
 
 	}
-	
+
 	public static Operation getUnaryOperation(Classifier src, String opSymbol) {
 		if (!(src instanceof StructPart)) return null;
 		for (Operation op : ((StructPart)src).getOperations()) {
@@ -897,7 +912,17 @@ public class IRUtils {
 		}
 		return null;
 	}
-	
+
+	public static Operation getOperation(Classifier src, String opSymbol) {
+		if (!(src instanceof StructPart)) return null;
+		for (Operation op : ((StructPart)src).getOperations()) {
+			if (op.getOpSymbol().equals(opSymbol)) {
+			  return op;
+			}
+		}
+		return null;
+	}
+
 	public static String concatWithSeparator(String[] fragments, String separator) {
 		StringBuffer result = new StringBuffer();
 		for (int i=0; i<fragments.length; i++) {
@@ -1011,13 +1036,25 @@ public class IRUtils {
 	}
 	
 	public static Constructor resolveConstructorReference(EGLClass clazz, List<Expression> arguments) {
+		return resolveConstructorReference(clazz, arguments, true);
+	}
+
+	public static Constructor resolveConstructorReference(EGLClass clazz, List<Expression> arguments,  boolean createDefault) {
+		List<NamedElement> list = new ArrayList<NamedElement>();
+		for (Expression expr : arguments) {
+			list.add(getOperandType(expr));
+		}
+		return resolveConstructorReferenceFromArgTypes(clazz, list, createDefault);
+	}
+
+	public static Constructor resolveConstructorReferenceFromArgTypes(EGLClass clazz, List<NamedElement> arguments, boolean createDefault) {
 		Constructor result = null;
 		List<Constructor> possibles = new ArrayList<Constructor>();
 		for (Constructor mbr : clazz.getConstructors()) {
 			if (mbr.getParameters().size() == arguments.size()) {
 				boolean exact = true;
 				for (int i=0; i<arguments.size(); i++) {
-					if (!mbr.getParameters().get(i).getType().equals(arguments.get(i).getType())) {
+					if (!(arguments.get(i) instanceof Type) || !mbr.getParameters().get(i).getType().equals((Type)arguments.get(i))) {
 						exact = false;
 					}
 				}
@@ -1032,11 +1069,13 @@ public class IRUtils {
 			}
 		}
 		if (possibles.size() == 0) {
-			// Return a default constructor
-			result = IrFactory.INSTANCE.createConstructor();
-			result.setIsAbstract(true);
-			result.setName(clazz.getName());
-			result.setType(clazz);
+			if (createDefault) {
+				// Return a default constructor
+				result = IrFactory.INSTANCE.createConstructor();
+				result.setIsAbstract(true);
+				result.setName(clazz.getName());
+				result.setType(clazz);
+			}
 		}
 		else if (possibles.size() == 1) {
 			result = possibles.get(0);
@@ -1048,21 +1087,112 @@ public class IRUtils {
 		return result;
 	}
 	
-	public static boolean isCompatibleWith(Expression expr, Type type) {
-		
-		NamedElement exprKind;
+	private static NamedElement getOperandType(Expression expr) {
 		if (expr instanceof Name && ((Name)expr).getNamedElement() instanceof Function) {
-			exprKind = (Function) ((Name)expr).getNamedElement();
+			return (Function) ((Name)expr).getNamedElement();
 		}
 		else {			
-			exprKind = (Classifier)expr.getType().getClassifier();
-		}
+			return (Classifier)expr.getType().getClassifier();
+		}			
+	}
+
+	
+	public static boolean isCompatibleWith(Expression expr, Type type) {
 		
+		NamedElement exprKind = getOperandType(expr);
 		return TypeUtils.areCompatible(type.getClassifier(), exprKind);
 		
 	}
+	public static boolean isCompatibleWith(NamedElement opType, Type type) {
+		return TypeUtils.areCompatible(type.getClassifier(), opType);	
+	}
 
-
+	public static boolean isMoveCompatible(Type lhsType, Member lhsMember, Type rhsType, Member rhsMember) {
+		// If the lhs or rhs can't be resolved, then we assume they're valid. Validation will have a bind error already.
+		if ((rhsMember == null && rhsType == null) || (lhsMember == null && lhsType == null)) {
+			return true;
+		}
+		
+		if (rhsType != null && lhsMember != null && TypeUtils.Type_NULLTYPE.equals(rhsType)) {
+			// "null" is compatible with any nullable type.
+			return lhsMember.isNullable();
+		}
+		
+		return isMoveCompatible(lhsType, rhsType, rhsMember);
+	}
+	
+	public static boolean isMoveCompatible(Type lhsType, Type rhsType, Member rhsMember) {
+		// If the lhs or rhs can't be resolved, then we assume they're valid. Validation will have a bind error already.
+		if ((rhsMember == null && rhsType == null) || lhsType == null) {
+			return true;
+		}
+		
+		if (rhsType != null) {
+			if (lhsType instanceof ArrayType && rhsType instanceof ArrayType) {
+				return areArraysCompatible((ArrayType)lhsType, (ArrayType)rhsType);
+			}
+			
+			return TypeUtils.areCompatible(lhsType.getClassifier(), rhsType.getClassifier());
+		}
+		
+		// Not everything being compared has a type. For example, a function can be assigned to a delegate. In this case
+		// we wouldn't want to have passed in the function's type (i.e. its return type), since the function *signature*
+		// should be compared to the delegate's *signature*.
+		return TypeUtils.areCompatible(lhsType.getClassifier(), rhsMember);
+	}
+	
+	private static boolean areArraysCompatible(ArrayType type1, ArrayType type2) {
+		Type elementType1 = type1.getElementType();
+		Type elementType2 = type2.getElementType();
+		
+		// If the element type is null and the element type is not nullable, that means it's an empty array literal, which is compatible with all arrays.
+		if (!type1.elementsNullable() && elementType1.equals(TypeUtils.Type_NULLTYPE)) {
+			return true;
+		}
+		if (!type2.elementsNullable() && elementType2.equals(TypeUtils.Type_NULLTYPE)) {
+			return true;
+		}
+		
+		// If the element type is null and the element type is nullable, then the other array must be nullable.
+		if ((elementType1.equals(TypeUtils.Type_NULLTYPE) && type1.elementsNullable())
+				|| (elementType2.equals(TypeUtils.Type_NULLTYPE) && type2.elementsNullable())) {
+			return type1.elementsNullable() == type2.elementsNullable();
+		}
+		
+		//TODO see note below. temporarily making arrays less strict.
+//		if (type1.elementsNullable() != type2.elementsNullable()) {
+//			return false;
+//		}
+		
+		if (elementType1 instanceof ParameterizedType) {
+			elementType1 = ((ParameterizedType)elementType1).getParameterizableType();
+		}
+		if (elementType2 instanceof ParameterizedType) {
+			elementType2 = ((ParameterizedType)elementType2).getParameterizableType();
+		}
+		
+		if (elementType1 == null || elementType2 == null) {
+			return true;
+		}
+		
+		//TODO see note below. temporarily making arrays less strict.
+//		boolean elementType1IsReference = TypeUtils.isReferenceType(elementType1);
+//		if (elementType1IsReference != TypeUtils.isReferenceType(elementType2)) {
+//			return false;
+//		}
+		
+		if (elementType1 instanceof ArrayType && elementType2 instanceof ArrayType) {
+			return areArraysCompatible((ArrayType)elementType1, (ArrayType)elementType2);
+		}
+		
+		//TODO the below check was too restrictive. While we figure out the right solution for array type compatibility,
+		// we'll keep it looser like in earlier releases.
+		
+//		// Element types must match exactly.
+//		return elementType1.equals(elementType2);
+		return TypeUtils.areCompatible(elementType1.getClassifier(), elementType2.getClassifier());
+	}
+	
 	public static String getFileName(EObject obj) {
 		FileNameResolver resolver = new FileNameResolver(obj);
 		return resolver.getFilename();

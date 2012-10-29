@@ -12,9 +12,13 @@
 package org.eclipse.edt.mof.egl.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -27,6 +31,7 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -50,6 +55,7 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.impl.DynamicEObject;
 import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class TypeUtils implements MofConversion {
@@ -86,6 +92,9 @@ public class TypeUtils implements MofConversion {
 	public static final Type Type_BLOB = getType(Type_EGLBlob);
 	public static final Type Type_BOOLEAN = getType(Type_EGLBoolean);
 	public static final Type Type_BYTES = getType(Type_EGLBytes);
+	public static final Type Type_NUMBER = getType(Type_EGLNumber);
+	public static final Type Type_ANYTEXT = getType(Type_AnyText);
+	public static final Type Type_ANYVALUE = getType(Type_AnyValue);
 
 	public static final int TypeKind_UNDEFINED = -1;
 	public static final int TypeKind_VOID = 0;
@@ -189,6 +198,7 @@ public class TypeUtils implements MofConversion {
 		else if (classifier == Type_CLOB) return TypeKind_CLOB;
 		else if (classifier == Type_BLOB) return TypeKind_BLOB;
 		else if (classifier == Type_BYTES) return TypeKind_BYTES;
+		else if (type instanceof SequenceType && classifier == Type_STRING) return TypeKind_LIMITEDSTRING;
 		return TypeKind_UNDEFINED;
 	}
 	
@@ -225,7 +235,7 @@ public class TypeUtils implements MofConversion {
 				return false;
 			}
 			
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyValue));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_ANYVALUE);
 		}
 		else {
 			return false;
@@ -235,17 +245,32 @@ public class TypeUtils implements MofConversion {
 	
 	public static boolean isNumericType(Type type) {
 		if (type.getClassifier() instanceof EGLClass) {
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_EGLNumber));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_NUMBER);
 		}
 		else {
 			return false;
 		}
 
 	}
-	
+
+	public static boolean isNumericTypeWithNoDecimals(Type type) {
+		if (!isNumericType(type)) {
+			return false;
+		}
+		
+		if (TypeUtils.Type_INT.equals(type) || TypeUtils.Type_SMALLINT.equals(type) || TypeUtils.Type_BIGINT.equals(type)) {
+			return true;
+		}
+		
+		if (type instanceof FixedPrecisionType) {
+			return ((FixedPrecisionType)type).getDecimals() == null || ((FixedPrecisionType)type).getDecimals().intValue() == 0;
+		}
+		return false;
+	}
+
 	public static boolean isTextType(Type type) {
 		if (type != null && type.getClassifier() instanceof EGLClass) {
-			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyText));
+			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)Type_ANYTEXT);
 		}
 		else {
 			return false;
@@ -253,9 +278,22 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	public static boolean isDynamicType(Type type) {
-		// TODO Implement DynamicType interface that is referenced by
-		// types that are allowed to be dynamic types
-		return type != null && (type.equals(Type_ANY) || type.equals(Type_DICTIONARY));
+		try {
+			return (type != null && type.getClassifier() != null && type.getClassifier().getAnnotation("egl.lang.reflect.Dynamic") != null);
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public static boolean isStaticType(Type type) {
+		// For MOF definitions
+		try {
+			EClass staticType = (EClass)Environment.getCurrentEnv().find("org.eclipse.edt.mof.egl.StaticType");
+			return type != null && type.getEClass() != null && type.getEClass().isSubClassOf(staticType);
+		} catch (MofObjectNotFoundException e) {
+		} catch (DeserializationException e) {
+		}
+		return false;
 	}
 	
 	public static boolean isSubtypeOf(Classifier subtype, EGLClass superType) {
@@ -265,11 +303,24 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	/**
+	 * Returns true if the passed in type is either the type matching the target mof key, or is a subtype
+	 * of that type. Essentially this is like doing "type instanceof target" in Java.
+	 */
+	public static boolean isTypeOrSubtypeOf(Type type, String targetTypeMofKey) {
+		if (type != null && type.getClassifier() instanceof EGLClass) {
+			EGLClass ds = (EGLClass)getType(targetTypeMofKey);
+			return ds != null && type.getClassifier().equals(ds) || ((EGLClass)type.getClassifier()).isSubtypeOf(ds);
+		}
+		return false;
+	}
+	
+	/**
 	 * Compatibility is defined between StructPart classifiers as either having
 	 * explicit conversion operations defined between them or the rhsType being
 	 * a subtype of the lhsType or the lhsType being a subtype of the rhsType
 	 * 
-	 * For a function to be compatible with a delegate, the parameters and return type must match exactly
+	 * For a function to be compatible with a delegate, the parameters and return type must match exactly.
+	 * The same is true for comparing two delegates.
 	 * 
 	 * @param lhsType
 	 * @param rhsType
@@ -278,6 +329,10 @@ public class TypeUtils implements MofConversion {
 	public static boolean areCompatible(Classifier lhsType, NamedElement rhsType) {
 		if (lhsType.equals(rhsType)) return true;
 		
+		if (lhsType instanceof Delegate && rhsType instanceof Delegate) {
+			return areCompatible((Delegate)lhsType, (Delegate)rhsType, new HashSet<DelegateSet>());
+		}
+		
 		if (lhsType instanceof StructPart && rhsType instanceof SubType) {
 			if (((SubType)rhsType).isSubtypeOf((StructPart)lhsType)) {
 				return true;
@@ -285,7 +340,7 @@ public class TypeUtils implements MofConversion {
 		}
 		
 		if (lhsType instanceof SubType && rhsType instanceof StructPart) {		
-			if (isReferenceType(lhsType) && ((SubType)lhsType).isSubtypeOf((StructPart)rhsType)) {
+			if (((SubType)lhsType).isSubtypeOf((StructPart)rhsType)) {
 				return true;
 			}
 		}
@@ -295,7 +350,7 @@ public class TypeUtils implements MofConversion {
 		}
 		
 		if (lhsType instanceof Delegate && rhsType instanceof Function) {
-			return TypeUtils.areCompatible((Delegate) lhsType, (Function)rhsType);
+			return areCompatible((Delegate) lhsType, (Function)rhsType);
 		}
 		
 		else {
@@ -311,13 +366,26 @@ public class TypeUtils implements MofConversion {
 	 * @return
 	 */
 	public static boolean areCompatible(Delegate lhsType, Function rhsType) {
-
 		if (lhsType.getParameters().size() != rhsType.getParameters().size()) {
 			return false;
 		}
 		
-		if (lhsType.getReturnType() != rhsType.getReturnType()) {
-			return false;
+		if (lhsType.getReturnType() == null) {
+			if (rhsType.getReturnType() != null) {
+				return false;
+			}
+		}
+		else {
+			Type lhsReturnType = lhsType.getReturnType();
+			Type rhsReturnType = rhsType.getReturnType();
+			if (lhsReturnType instanceof Delegate && rhsReturnType instanceof Delegate) {
+				if (!areCompatible((Delegate)lhsReturnType, (Delegate)rhsReturnType, new HashSet<DelegateSet>())) {
+					return false;
+				}
+			}
+			else if (!lhsType.getReturnType().equals(rhsType.getReturnType())) {
+				return false;
+			}
 		}
 		
 		if (rhsType.getReturnField() != null && rhsType.getReturnField().isNullable() != lhsType.isNullable().booleanValue()) {
@@ -329,10 +397,6 @@ public class TypeUtils implements MofConversion {
 			FunctionParameter rhsParm = rhsType.getParameters().get(i);
 			
 			if (lhsParm.isNullable() != rhsParm.isNullable()) {
-				return false;
-			}
-			
-			if (lhsParm.getType() != rhsParm.getType()) {
 				return false;
 			}
 			
@@ -351,9 +415,124 @@ public class TypeUtils implements MofConversion {
 			if (lhsParm.isDefinedSqlNullable().booleanValue() != rhsParm.isDefinedSqlNullable().booleanValue()) {
 				return false;
 			}
+			
+			Type lhsParmType = lhsParm.getType();
+			Type rhsParmType = rhsParm.getType();
+			if (lhsParmType instanceof Delegate && rhsParmType instanceof Delegate) {
+				if (!areCompatible((Delegate)lhsParmType, (Delegate)rhsParmType, new HashSet<DelegateSet>())) {
+					return false;
+				}
+			}
+			else if (!lhsParmType.equals(rhsParmType)) {
+				return false;
+			}
 		}
 
 		return true;
+	}
+	
+	public static boolean areCompatible(Delegate lhsType, Delegate rhsType, Set<DelegateSet> seenComparisons) {
+		DelegateSet set = new DelegateSet(lhsType, rhsType);
+		if (seenComparisons.contains(set)) {
+			return true;
+		}
+		seenComparisons.add(set);
+		
+		if (lhsType.getParameters().size() != rhsType.getParameters().size()) {
+			return false;
+		}
+		
+		if (lhsType.getReturnType() == null) {
+			if (rhsType.getReturnType() != null) {
+				return false;
+			}
+		}
+		else {
+			Type lhsReturnType = lhsType.getReturnType();
+			Type rhsReturnType = rhsType.getReturnType();
+			if (lhsReturnType instanceof Delegate && rhsReturnType instanceof Delegate) {
+				if (!areCompatible((Delegate)lhsReturnType, (Delegate)rhsReturnType, seenComparisons)) {
+					return false;
+				}
+			}
+			else if (!lhsType.getReturnType().equals(rhsType.getReturnType())) {
+				return false;
+			}
+		}
+		
+		if (rhsType.isNullable().booleanValue() != lhsType.isNullable().booleanValue()) {
+			return false;
+		}
+		
+		for (int i = 0; i < lhsType.getParameters().size(); i++) {
+			FunctionParameter lhsParm = lhsType.getParameters().get(i);
+			FunctionParameter rhsParm = rhsType.getParameters().get(i);
+			
+			if (lhsParm.isNullable() != rhsParm.isNullable()) {
+				return false;
+			}
+			
+			if (lhsParm.getParameterKind() != rhsParm.getParameterKind()) {
+				return false;
+			}
+			
+			if (lhsParm.isConst().booleanValue() != rhsParm.isConst().booleanValue()) {
+				return false;
+			}
+
+			if (lhsParm.isField().booleanValue() != rhsParm.isField().booleanValue()) {
+				return false;
+			}
+			
+			if (lhsParm.isDefinedSqlNullable().booleanValue() != rhsParm.isDefinedSqlNullable().booleanValue()) {
+				return false;
+			}
+			
+			Type lhsParmType = lhsParm.getType();
+			Type rhsParmType = rhsParm.getType();
+			if (lhsParmType instanceof Delegate && rhsParmType instanceof Delegate) {
+				if (!areCompatible((Delegate)lhsParmType, (Delegate)rhsParmType, seenComparisons)) {
+					return false;
+				}
+			}
+			else if (!lhsParmType.equals(rhsParmType)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	private static class DelegateSet {
+		private final Delegate del1;
+		private final Delegate del2;
+		
+		DelegateSet(Delegate del1, Delegate del2) {
+			this.del1 = del1;
+			this.del2 = del2;
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			if (o == this) {
+				return true;
+			}
+			if (o instanceof DelegateSet) {
+				DelegateSet other = (DelegateSet)o;
+				if (this.del1.equals(other.del1)) {
+					return this.del2.equals(other.del2);
+				}
+				else if (this.del1.equals(other.del2)) {
+					return this.del2.equals(other.del1);
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			return del1.hashCode() * del2.hashCode();
+		}
 	}
 	
 	/**
@@ -712,7 +891,9 @@ public class TypeUtils implements MofConversion {
 								continue forLoop;
 							if ((parm1.getType() != null) && !parm1.getType().equals(parm2.getType()))
 								continue forLoop;
-							if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
+							if ((parm1.getParameterKind() == null && parm2.getParameterKind() != null) || (parm1.getParameterKind() != null && parm2.getParameterKind() == null))
+								continue forLoop;
+							if ((parm1.getParameterKind() != null) && !parm1.getParameterKind().equals(parm2.getParameterKind()))
 								continue forLoop;
 							if (parm1.isNullable() != parm2.isNullable()) 
 								continue forLoop;
@@ -791,7 +972,7 @@ public class TypeUtils implements MofConversion {
 	}
 	
 	private static boolean requiresNarrow(NamedElement srcType, Classifier type) {
-		if (srcType == type) {
+		if (srcType != null && srcType.equals(type)) {
 			return false;
 		}
 
@@ -893,11 +1074,13 @@ public class TypeUtils implements MofConversion {
 	
 	public static Operation getBinaryOperation(StructPart clazz, String opSymbol, boolean searchSuperTypes ) {
 		for (Operation op : clazz.getOperations()) {
-			if (op.getOpSymbol().equals(opSymbol) 
-					&& op.getParameters().size() == 2
-					&& op.getParameters().get(0).getType().equals(clazz)
-					&& op.getParameters().get(1).getType().equals(clazz)) {
-				return op;
+			if (op.getOpSymbol().equals(opSymbol) && op.getParameters().size() == 2) {
+				Type op0Type = op.getParameters().get(0).getType();
+				Type op1Type = op.getParameters().get(1).getType();
+				if ((op0Type.equals(clazz) || (op0Type.getClassifier() != null && op0Type.getClassifier().equals(clazz)))
+						&& (op1Type.equals(clazz) || (op1Type.getClassifier() != null && op1Type.getClassifier().equals(clazz)))) {
+					return op;
+				}
 			}
 		}
 		
@@ -1045,7 +1228,7 @@ public class TypeUtils implements MofConversion {
 			for (FunctionParameter parm : op.getParameters()) {
 				 // check for generic type parameter
 				if (!parm.isGenericTypeParameter()) {
-					if (!TypeUtils.areCompatible((Classifier)parm.getType().getClassifier(), argumentTypes[i])) {
+					if (!areCompatible((Classifier)parm.getType().getClassifier(), argumentTypes[i])) {
 						isCandidate = false;
 					}
 					if (!isCandidate) break;
@@ -1142,4 +1325,15 @@ public class TypeUtils implements MofConversion {
 		return result;
 	}
 	
+	public static boolean isPrimitive(Type type){
+		return isNumericType(type) ||
+				isTextType(type) ||
+				(type != null && type.getClassifier() instanceof EGLClass &&
+						(type.getClassifier().equals(Type_DATE) ||
+						type.getClassifier().equals(Type_TIME) ||
+						type.getClassifier().equals(Type_TIMESTAMP) ||
+						type.getClassifier().equals(Type_BOOLEAN) || 
+						type.getClassifier().equals(Type_BYTES) ||
+						type.getClassifier().equals(Type_ANY)));
+	}
 }

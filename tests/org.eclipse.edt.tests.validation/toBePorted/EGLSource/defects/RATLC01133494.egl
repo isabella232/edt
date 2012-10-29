@@ -1,0 +1,39 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+handler TestPage type JSFHandler
+	{onConstructionFunction = testLibrary.doSomething, 	//1
+	onPreRenderFunction = testLibrary.doSomething,		//1
+ 	 view = "TestPage.jsp"} 
+
+	// Function Declarations
+	function onConstruction()
+		SysLib.writeStderr("onConstruction");
+	end
+	
+	function onPreRender()
+		SysLib.writeStderr("onPreRender");
+	end
+	function forwardMe()
+		SysLib.writeStderr("Forwarding");
+		forward to "TestPage";
+		
+	end
+		
+end
+
+library testLibrary type BasicLibrary 
+
+	function doSomething()
+		SysLib.writeStderr("Something interesting");
+	end
+end

@@ -1,0 +1,191 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// VAG NO_ERROR
+
+FormGroup G00201
+ 
+  use M00212;
+end 
+
+Form M00212 type textForm	
+ { screenSizes = [[24,80],[32,80],[43,80],[27,132]], formSize = [24,80], 
+  position = [1,1], msgField = VAGen_EZEMSG}
+
+
+  DTE char(8) 
+  { position = [5,11], fieldLen = 8, validationOrder = 2, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  G10IN num(12) 
+  { position = [5,44], fieldLen = 12, cursor = yes, validationOrder = 6, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, align = left, 
+    fillCharacter = nullFill, validatorFunction = CALG10}; 
+  G10OUT char(13) 
+  { position = [5,62], fieldLen = 13, validationOrder = 10, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  VAGen_DAY char(8) 
+  { position = [7,11], fieldLen = 8, validationOrder = 3, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  G11IN num(12) 
+  { position = [7,44], fieldLen = 12, validationOrder = 7, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, align = left, 
+    fillCharacter = nullFill}; 
+  G11OUT char(13) 
+  { position = [7,62], fieldLen = 13, validationOrder = 11, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  USR char(8) 
+  { position = [9,11], fieldLen = 8, validationOrder = 4, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  G10CHK num(13) 
+  { position = [9,44], fieldLen = 13, validationOrder = 8, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, align = left, 
+    fillCharacter = nullFill, 
+    validatorFunction = sysLib.verifyChkDigitMod10}; 
+  TIM char(8) 
+  { position = [11,11], fieldLen = 8, validationOrder = 5, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = nullFill}; 
+  G11CHK num(13) 
+  { position = [11,44], fieldLen = 13, validationOrder = 9, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = noProtect, align = left, 
+    fillCharacter = nullFill, 
+    validatorFunction = sysLib.verifyChkDigitMod11}; 
+  VAGen_EZEMSG char(70) 
+  { position = [24,2], fieldLen = 70, validationOrder = 1, 
+    color = defaultColor, highlight = noHighlight, intensity = bold, 
+    protect = protect, upperCase = yes, align = left, fillCharacter = nullFill}; 
+
+
+  * { position = [5,8], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "=>"};
+  * { position = [5,20], fieldLen = 20, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "  GENERATE MODULO 10"};
+  * { position = [5,41], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "=>"};
+  * { position = [5,57], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "--->"};
+  * { position = [5,76], fieldLen = 91, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "                                                                                "
+            + "     EZEDAY"};
+  * { position = [7,8], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "=>"};
+  * { position = [7,20], fieldLen = 20, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "  GENERATE MODULO 11"};
+  * { position = [7,41], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "=>"};
+  * { position = [7,57], fieldLen = 4, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "--->"};
+  * { position = [7,76], fieldLen = 91, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "                                                                                "
+            + "     EZEUSR"};
+  * { position = [9,8], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "=>"};
+  * { position = [9,20], fieldLen = 20, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "     CHECK MODULO 10"};
+  * { position = [9,41], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "=>"};
+  * { position = [9,58], fieldLen = 109, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "                                                                                "
+            + "                       EZETIM"};
+  * { position = [11,8], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "=>"};
+  * { position = [11,20], fieldLen = 20, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "     CHECK MODULO 11"};
+  * { position = [11,41], fieldLen = 2, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "=>"};
+  * { position = [19,24], fieldLen = 3, color = defaultColor, 
+      highlight = noHighlight, intensity = bold, protect = skipProtect,
+      value = "PF3"};
+  * { position = [19,28], fieldLen = 373, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "TO EXIT"};
+  * { position = [24,73], fieldLen = 334, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "                                           EDIT TEST                           M"
+            + "00212                                     ***********                           "
+            + "                                                                                "
+            + "                                                                                "
+            + "        EZEDTE"};
+end 
+
+Program LEVEL77 type textUIProgram 
+  {
+  includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  localSQLScope = yes, throwNrfEofExceptions = yes, handleHardIOErrors = no, 
+  segmented = no
+  }
+
+  
+
+  RW00201_Level77Items RW00201_Level77Items { initialized = yes }; 
+
+  
+  use G00201 {			//0
+    pfKeyEquate = no	//0
+  };					//0
+
+  function main()
+    converse M00212 ;
+  end 
+end 
+
+
+Function CALG10()
+  CG10RC = 0;
+  CG10LL = 13; /* PUT IN LENGTH OF FIELD*/
+  CG10 = M00212.G10IN; /* MOVE MAP FIELD TO LVL 77*/
+  sysLib.calculateChkDigitMod10(CG10, CG10LL, CG10RC); /* CALL CHECK DIGIT GENERATE*/
+  if (CG10RC == 0) /* CHECK FOR GOOD RETURN CODE*/
+    M00212.G10OUT = CG10; /* SHOW RESULTS*/
+  else
+    M00212.G10OUT = "FAILED"; /* SHOW FAILURE*/
+  end
+  return;
+  M00212.G10CHK = M00212.G10CHK; /* REFERENCE FIELD*/
+end 
+
+Record RW00201_Level77Items type basicRecord
+  3 CG10LL smallint;
+  3 CG10 char(13);
+  3 CG10RC smallint;
+end 

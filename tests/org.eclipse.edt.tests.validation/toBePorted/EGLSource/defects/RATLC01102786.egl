@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+FormGroup SB2SG {
+  ScreenFloatingAreas=[
+    @ScreenFloatingArea { screenSize=[24,80], topMargin=21,
+      bottomMargin=2, leftMargin=0, rightMargin=1
+    }
+  ]
+  }
+Form SB2SM1 type textForm	
+ { screenSizes = [[24,80]], formSize = [24,79], position = [1,1], 
+  validationBypassKeys = [pf5,pf12], msgField = VAGen_EZEMSG}
+  LEADING_ZERO num(5,03) 
+  { position = [13,46], fieldLen = 6, validationOrder = 1, 
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = skipProtect, align = right, 
+    fillCharacter = nullFill, validValues = [[000.001,099.999]]}; 
+  LEADING_PLUS num(5,03) 
+  { position = [14,46], fieldLen = 6, validationOrder = 2, 
+    color = defaultColor, highlight = noHighlight, sign=leading,
+    intensity = normalIntensity, protect = skipProtect, align = right, 
+    fillCharacter = nullFill, validValues = [[+00.001,+99.999]]}; 
+  LEADING_MINUS num(5,03) 
+  { position = [15,46], fieldLen = 6, validationOrder = 3, 
+    color = defaultColor, highlight = noHighlight, sign=leading,
+    intensity = normalIntensity, protect = skipProtect, align = right, 
+    fillCharacter = nullFill, validValues = [[-00.001,-99.999]]}; 
+  VAGen_EZEMSG char(75)  
+  { position = [22,1], fieldLen = 75, validationOrder = 4, 
+    color = defaultColor, highlight = noHighlight, intensity = bold, 
+    protect = skipProtect, upperCase = yes, align = left, fillCharacter = nullFill}; 
+end 
+end

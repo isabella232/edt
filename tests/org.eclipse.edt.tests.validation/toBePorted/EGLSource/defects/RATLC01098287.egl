@@ -1,0 +1,73 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+FormGroup SCH01G
+	{helpKey = pF1}
+
+form SCHRpt1H type textForm
+	{ position = [1,1],  formSize = [24,80]}
+	
+	* {fieldLen = 75, position = [1,1], value = "SchRpt1H                   S C H O O L  S Y S T E M              1 of 1 ", color = blue, intensity = bold, protect = skipProtect};
+	* {fieldLen = 42, position = [2,20], value = "P r i n t   G r a d e   R e p o r t s", color = blue, intensity = bold, protect = skipProtect};
+	* {fieldLen = 68, position = [4,3], value = "This transaction allows one to produce one or more grade reports,", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 65, position = [5,3], value = "depending upon the selections entered.", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 65, position = [6,3], value = "You must select a year and semester first.  It is not valid to ", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 65, position = [7,3], value = "attempt to produce a report for multiple years or semesters.", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 64, position = [9,3], value = "Course  Teacher  Student   Results", color = blue, intensity = bold, protect = skipProtect};
+	* {fieldLen = 67, position = [10,3], value = "   X                        a report for all students in the course", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 68, position = [11,3], value = "           X                a report of all grades for all students", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 68, position = [12,3], value = "                                 of that teacher", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 67, position = [13,3], value = "                    X       a report of all grades for all courses", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 67, position = [14,3], value = "                                  of that student", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 67, position = [15,3], value = "   X       X                a report for all students in the course", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 67, position = [16,3], value = "                                  of that teacher", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 69, position = [17,3], value = "   X                X       a report for one course for one student", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 67, position = [18,3], value = "           X        X       a report for all courses a student has ", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 67, position = [19,3], value = "                                   with a specific teacher", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 68, position = [20,3], value = "   X       X        X       a report for one course for one student", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 56, position = [24,4], value = "Press PF3 to return to the Report menu", color = cyan, intensity = normalIntensity, protect = skipProtect};
+	* {fieldLen = 65, position = [22,3], value = "Entering a section number is optional.  The default is '01'.", color = cyan, intensity = normalIntensity, protect = skipProtect};
+end
+
+	form SCHRpt1 type textForm
+		{ formSize = [24,80], position = [1,1], msgField = usermsg, helpform = "SCHRpt1H"}
+	
+		* {fieldLen = 11, position = [1,3], value = "SchRpt1", color = blue, intensity = bold, protect = skipProtect};
+		* {fieldLen = 30, position = [1,26], value = "IMS School System Report Menu", color = blue, intensity = bold, protect = skipProtect};
+		* {fieldLen = 26, position = [3,29], value = "Produce Grade Reports", color = blue, intensity = bold, protect = skipProtect};
+		* {fieldLen = 35, position = [6,3], value = "Enter offering period for report:", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 5, position = [7,27], value = "Year:", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {position = [8,23], value = "Semester:", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 12, position = [9,34], value = "1= Spring", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 8, position = [10,34], value = "2 = Fall", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 58, position = [12,2], value = "Enter one or more of the following to limit the report: ", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 14, position = [13,12], value = "Course Number:", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 13, position = [14,13], value = "Teacher Name:", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 13, position = [15,13], value = "Student Name:", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 12, position = [13,38], value = "and Section:", color = cyan, intensity = normalIntensity, protect = skipProtect};
+		* {fieldLen = 52, position = [23,3], value = "ENTER=Print Report       F1=Help         F3=Exit ", color = cyan, intensity = normalIntensity, protect = skipProtect};
+
+		InputYear char(4) {typeChkMsgKey = "0035", minimumInputMsgKey = "0035", inputRequiredMsgKey = "0035", minimumInput = 4, inputRequired = yes, position = [7,34], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		InputSemester char(1) {validValues = ["1","2"],
+		    validValuesMsgKey = "0044",	//0
+		    typeChkMsgKey = "0044", inputRequired = no,  position = [8,34], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		InputCourse char(4) {fieldLen = 4, position = [13,28], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		InputCourseSection char(2) {
+			validValuesMsgKey = "0045",	//0
+			fillCharacter = "0", align = right, validValues = ["01", "02", "03"], fieldLen = 2, position = [13,52], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		InputTeacherName char(30) {fieldLen = 30, position = [14,28], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		InputStudentName char(30) {fieldLen = 30, position = [15,28], highlight = underline, color = green, intensity = normalIntensity, protect = noProtect};
+		usermsg char(78) {fieldLen = 78, position = [19,80], color = red, intensity = bold, protect = skipProtect};
+
+	end
+end

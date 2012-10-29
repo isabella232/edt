@@ -61,20 +61,12 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
         return visitExpression(functionInvocation);
     }
     
-    public boolean visit(InExpression inExpression) {
-        return visitExpression(inExpression);
-    }
-    
     public boolean visit(IsAExpression isAExpression) {
         return visitExpression(isAExpression);
     }
     
     public boolean visit(IsNotExpression isNotExpression) {
         return visitExpression(isNotExpression);
-    }
-    
-    public boolean visit(LikeMatchesExpression likeMatchesExpression) {
-        return visitExpression(likeMatchesExpression);
     }
     
     public boolean visitLiteral(LiteralExpression literal) {
@@ -119,22 +111,6 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
     }
     
     public boolean visit(StringLiteral stringLiteral) {
-        return visitLiteral(stringLiteral);
-    }
-    
-    public boolean visit(CharLiteral stringLiteral) {
-        return visitLiteral(stringLiteral);
-    }
-    
-    public boolean visit(DBCharLiteral stringLiteral) {
-        return visitLiteral(stringLiteral);
-    }
-    
-    public boolean visit(MBCharLiteral stringLiteral) {
-        return visitLiteral(stringLiteral);
-    }
-    
-    public boolean visit(HexLiteral stringLiteral) {
         return visitLiteral(stringLiteral);
     }
     
@@ -214,20 +190,12 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
         endVisitExpression(functionInvocation);
     }
     
-    public void endVisit(InExpression inExpression) {
-        endVisitExpression(inExpression);
-    }
-    
     public void endVisit(IsAExpression isAExpression) {
         endVisitExpression(isAExpression);
     }
     
     public void endVisit(IsNotExpression isNotExpression) {
         endVisitExpression(isNotExpression);
-    }
-    
-    public void endVisit(LikeMatchesExpression likeMatchesExpression) {
-        endVisitExpression(likeMatchesExpression);
     }
     
     public void endVisitLiteral(LiteralExpression literal) {
@@ -259,22 +227,6 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
     }
     
     public void endVisit(StringLiteral stringLiteral) {
-        endVisitLiteral(stringLiteral);
-    }
-    
-    public void endVisit(CharLiteral stringLiteral) {
-        endVisitLiteral(stringLiteral);
-    }
-    
-    public void endVisit(DBCharLiteral stringLiteral) {
-        endVisitLiteral(stringLiteral);
-    }
-    
-    public void endVisit(MBCharLiteral stringLiteral) {
-        endVisitLiteral(stringLiteral);
-    }
-    
-    public void endVisit(HexLiteral stringLiteral) {
         endVisitLiteral(stringLiteral);
     }
     

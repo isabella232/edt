@@ -1,0 +1,138 @@
+import eglx.jtopen.annotations.*;
+import eglx.java.*;
+interface inter1
+	function f1() //1 The container for the IBMiProgram function f1 is invalid. IBMiProgram functions are only allowed in Programs, Libraries, Services, and Basic Handlers.
+		{@IBMiProgram {}}; 
+end
+
+externaltype et1 type JavaObject
+	function f1() //1 The container for the IBMiProgram function f1 is invalid. IBMiProgram functions are only allowed in Programs, Libraries, Services, and Basic Handlers.
+		{@IBMiProgram {}}; 
+end
+
+record noerr
+	f1 smallint {@Structbin1}; //0
+	f2 smallint {@Structbin2}; //0
+	f3 smallint {@Structunsignedbin1}; //0
+	f4 int {@Structbin4}; //0
+	f5 int {@Structunsignedbin2}; //0
+	f6 bigint {@Structbin8}; //0
+	f7 bigint {@Structunsignedbin4}; //0
+	f8 decimal(20) {@Structunsignedbin8}; //0
+	f9 date {@Structdate}; //0
+	fa timestamp("yyyy") {@Structtimestamp}; //0
+	fb timestamp {@Structtimestamp{eglPattern = "yyyy"}}  = ""; //0
+	fc smallfloat {@Structfloat4}; //0
+	fd float {@Structfloat8{}}; //0
+	fe decimal(10) {@StructdecFloat{}}; //0
+	ff decimal(10) {@Structpackeddecimal{}}; //0
+	fg decimal(10) {@Structzoneddecimal{}};  //0
+	fh decimal {@StructdecFloat{length = 3}} = 0;  //0
+	fi decimal {@Structpackeddecimal{length = 3, decimals = 2}} = 0; //0
+	fj decimal {@Structzoneddecimal{length = 3, decimals = 2}} = 0;  //0
+	fk string {@Structtext{length = 3}};
+	fl int[] {@Structarray};  //0
+	fm int[] {@Structarray{returnCountVariable = f1}}; //0
+	fn string[] {@Structarray{elementTypeAnnotation = @Structtext{length = 3}}}; //0
+end
+
+record err
+	f1 smallint {@Structbin4}; //1 not compatible with the type
+	f2 smallint? {@Structbin2}; //1 not valid for use with the nullable type
+	f3 smallint {@Structtext}; //1 not compatible with the type
+	f4 int {@Structbin2}; //1 not compatible with the type
+	f5 int {@Structbin8}; //1 not compatible with the type
+	f6 bigint {@Structbin2}; //1 not compatible with the type
+	f7 bigint {@Structdate}; //1 not compatible with the type
+	f8 decimal(19) {@Structunsignedbin8}; //1 not compatible with the type
+	f9 date {@Structtimestamp}; //1 not compatible with the type
+	fa timestamp("yyyy") {@Structdate}; //1 not compatible with the type
+	fb timestamp {@Structtimestamp{eglPattern = "yyddd"}}  = ""; //1 Invalid pattern
+	fba timestamp {@Structtimestamp{}}  = ""; //1 eglPattern must be specified
+	fc smallfloat {@Structfloat8}; //1 not compatible with the type
+	fd float {@Structfloat4{}}; //1 not compatible with the type
+	fe decimal(10) {@StructdecFloat{length = 3}}; //1 length is not allowed
+	ff decimal(10) {@Structpackeddecimal{decimals = 2}}; //1 decimals is not allowed
+	fg decimal(10) {@Structzoneddecimal{length = 3, decimals = 2}};  //2
+	fh decimal {@StructdecFloat{length = -3}} = 0;  //1 must be an integer
+	fi decimal {@Structpackeddecimal{length = 3, decimals = 4}} = 0; //1 must be an integer
+	fj decimal {@Structzoneddecimal{length = 33, decimals = 2}} = 0;  //1 must be an integer
+	fha decimal {@StructdecFloat{}} = 0;  //1 length must be specified
+	fib decimal {@Structpackeddecimal{}} = 0; //2
+	fjc decimal {@Structzoneddecimal{}} = 0;  //2
+	fk string {@Structtext{length = -3}}; //1 must be an integer
+	fka string {@Structtext{}}; //1 length must be specified
+	fl boolean[] {@Structarray};  //1 is not compatible
+	fla int?[] {@Structarray{}};  //1 not valid for use with the nullable type
+	fm int[] {@Structarray{returnCountVariable = fa}}; //1 must have a type that is assignment compatible
+	fn string[] {@Structarray{elementTypeAnnotation = @Structtext{}}}; //1 length must be specified
+end
+
+
+record rec1
+	field1 boolean;
+	field2 int?;
+	field3 int?[];
+	field4 string;
+end
+
+program pgm1 {}
+	function main()
+	end
+	
+	function f1(p1 decimal) //1 An entry in the array of parameterAnnotations is required for parameter p1.
+			{@IBMiProgram{
+				parameterAnnotations = []  
+			}}
+	end
+
+	function f2(p1 int) //1 The value fred specified in the parameterAnnotations for parameter p1 is invalid.
+			{@IBMiProgram{
+				parameterAnnotations = ["fred"]  
+			}}
+	end
+
+	function f3(p1 int)
+			{@IBMiProgram{}}
+		a int;   //1 cannot contain statements.
+	end
+	
+	function f4() returns (int)  //1 cannot return a value
+		{@IBMiProgram{}}
+	end
+	
+	function f5() returns (string)  //1 only valid return type is INT
+		{@IBMiProgram{isServiceProgram = yes}}
+	end
+	
+	function f6(
+		p1 int?)//1 The nullable type int? is not supported for parameter p1 in an IMBiProgram function.
+		{@IBMiProgram{}} 
+	end
+
+	function f7(
+		p2 int?[]) //1 The array of nullable types int is not supported for parameter p2 in an IMBiProgram function.
+		{@IBMiProgram{}} 
+	end
+	
+	
+	function f8 ( p1 string)//1 An entry in the array of parameterAnnotations is required for parameter p1.
+		{@IBMiProgram{}}  
+	end
+
+	function f9 ( p1 boolean)//1 The type of parameter p1 is not supported in an IBMiProgram function.
+		{@IBMiProgram{}}  
+	end
+
+	function f10 (p1 rec1)//4 field1 with the type boolean | field2 with the type int? | field3 with the type int?[] | The type of this field requires that an Struct type annotation be specified for the field 
+		{@IBMiProgram{}}  
+	end
+	
+	function f11(p1 string, p2 string(10))//1 The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11.
+			{@IBMiProgram{
+				parameterAnnotations = [@StructText{Length = 20}]  
+			}}
+	end
+
+end
+

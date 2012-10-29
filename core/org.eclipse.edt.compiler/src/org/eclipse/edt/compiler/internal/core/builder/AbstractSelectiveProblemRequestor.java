@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
+import java.util.ResourceBundle;
+
 /**
  * @author svihovec
  *
@@ -25,9 +27,10 @@ public abstract class AbstractSelectiveProblemRequestor extends
 		this.requestor = requestor;
 	}
 	
-	public void acceptProblem(int startOffset, int endOffset, int severity,	int problemKind, String[] inserts) {
+	@Override
+	public void acceptProblem(int startOffset, int endOffset, int severity,	int problemKind, String[] inserts, ResourceBundle bundle) {
 		if(shouldReportProblem(problemKind)){
-			requestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts);
+			requestor.acceptProblem(startOffset, endOffset, severity, problemKind, inserts, bundle);
 			
 	 		if (severity == IMarker.SEVERITY_ERROR) {
 	 			setHasError(true);

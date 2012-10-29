@@ -1,0 +1,22 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR
+
+record rec1 type BasicRecord
+  10 id int;
+  10 name CHAR(20);
+end
+
+Record rec2 type BasicRecord
+  10 r1 rec1 {id = 1, name = "John"};
+  10 r2 rec1[2] {this[1] {id = 2, name = "William"}, this[2] {id = 3, name = "Emily"}};
+end

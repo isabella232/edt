@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+Record PJUIR218 type VGUIRecord  {
+  runValidatorFromProgram = yes, 
+  title = "Extended Leave"
+}
+    3 INCLUDE char(3) 
+      { uiType = output,
+        displayName = "<script language=\"javascript\" src=\"js/calendar.js\"></script>"
+      } ; 
+    3 C_LEAVE_LIST char(5) [7] 
+      { uiType = output, selectedIndexItem = "LEAVE_INDEX",
+        displayName = "Leave Type:"
+      } ; 
+    3 PJ218BUT char(20) 
+      { uiType = output
+      } ; 
+      4 TAG1 char(1) 
+        {   uiType = output,
+            displayName = "<CENTER>"
+        } ; 
+      4 PJ218BUTTON char(8) [2] 
+        {   uiType = submit,
+            displayName = "Process " +  "\n" +
+                          "  Exit"
+        }
+        = [ "PROCESS", "ENTER", "FORWARD", "BACKWARD", "PA2" ] ;	//1
+      4 TAG2 char(3) 
+        {   uiType = output,
+            displayName = "</CENTER>"
+        } ; 
+    3 EZMSG char(77) 
+      { uiType = output, runValidatorFromProgram = yes, upperCase = yes,
+        fillCharacter = " "
+      } ; 
+end

@@ -1,0 +1,183 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//NO_ERROR VAG
+
+FormGroup formGrp
+
+Form MOVEMAP1 type textForm	
+ { screenSizes = [[24,80],[32,80]], formsize = [24,80], position = [1,1], 
+   helpKey = pf1}
+
+
+  R3 char(10)[3]  
+  { position = [5,3], fieldLen = 10, validationOrder = 1,
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = ""}; 
+  R7 char(10)[7]  
+  { position = [5,19], fieldLen = 10, validationOrder = 2,
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = ""}; 
+   RDYN char(10)[12]  
+  { position = [5,35], fieldLen = 10, validationOrder = 3,
+    color = defaultColor, highlight = noHighlight, 
+    intensity = normalIntensity, protect = protect, upperCase = yes, align = left, 
+    fillCharacter = ""};    
+ 
+
+  * { position = [1,1], fieldLen = 29,color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "MOVEMAP01:  Testing moves... "};
+    
+  * { position = [3,3], fieldLen = 15, color = defaultColor, 
+      highlight = underline, intensity = normalIntensity, protect = skipProtect,
+      value = "Array[3]" };
+  * { position = [3,19], fieldLen = 15, color = defaultColor, 
+      highlight = underline, intensity = normalIntensity, protect = skipProtect,
+      value = "Array[7]"};            
+  * { position = [3,35], fieldLen = 15, color = defaultColor, 
+      highlight = underline, intensity = normalIntensity, protect = skipProtect,
+      value = "Dyn.Array"};            
+  * { position = [21,10], fieldLen = 62, color = defaultColor, 
+      highlight = noHighlight, intensity = normalIntensity, protect = skipProtect,
+      value = "PF3=EXIT PF4=3->7  PF5=3->DYN  PF6=7->3 PF7=DYN->7 PF8=Restart"};
+end 
+end 
+
+Program pgm type textUIProgram { handleHardIOErrors = no, throwNrfEofExceptions = yes }
+	  {includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+      segmented = no}
+	
+   arrayThree char(12)[3];
+   arraySeven char(12)[7];	
+	
+	use formGrp;
+	
+	function main()
+		MainLoop();
+		
+		myDynArray char(12)[];
+        m int;
+	    m = size(myDynArray);
+	    move myDynArray to movemap1.rdyn for m;
+	    move arrayThree to movemap1.r3 for 3;
+	    move arraySeven to movemap1.r7 for 7;   
+	    
+	    move movemap1.rdyn to myDynArray for m;
+	    move movemap1.r3 to arrayThree for 3;
+	    move movemap1.r7 to arraySeven for 7;   
+	end
+	
+end
+
+Function moveToMap( myDynArray char(12)[]) ;
+   m int;
+    m = size(myDynArray);
+    move myDynArray to movemap1.rdyn for m;
+    move arrayThree to movemap1.r3 for 3;
+    move arraySeven to movemap1.r7 for 7;     
+end
+
+Function arrayInit( myDynArray char(12)[]) ;
+   firstName char(12);
+   tempArray char(12)[12];
+   n int;
+
+   set moveMap1 empty;
+   arrayThree[1] = "Bobby";
+   arrayThree[2] = "Bruce";  
+   arrayThree[3] = "Beatrice";
+   
+   arraySeven[1] = "Charles";
+   arraySeven[2] = "Cindy";
+   arraySeven[3] = "Charlotte";
+   arraySeven[4] = "Chuck";
+   arraySeven[5] = "Cary";
+   arraySeven[6] = "Collin";
+   arraySeven[7] = "Candice";
+   
+   tempArray[1] = "Darren";
+   tempArray[2] = "Darla";
+   tempArray[3] = "Dean";
+   tempArray[4] = "Dick";
+   tempArray[5] = "David";
+   tempArray[6] = "Darlene";
+   tempArray[7] = "Deandra";
+   tempArray[8] = "Doug";
+   tempArray[9] = "Dolly";
+   tempArray[10] = "Daisy";
+   tempArray[11] = "Darrell";
+   tempArray[12] = "Dirk";
+   
+   myDynArray.removeAll();
+    myDynArray.insertElement("Zachary",1); 
+   
+   n = 1;
+   
+   while (n <= 12);
+      firstName = tempArray[n];
+      
+      myDynArray.insertElement(firstName,n);
+      n = n + 1;
+   end;     
+end  
+
+Function MainLoop();
+
+   firstName char(12);
+   myDynArray char(12)[] {maxsize = 13};
+ 
+   arrayInit( myDynArray);   
+   while (ConverseVar.eventKey not pf3)
+   	
+ 	  moveToMap(myDynArray);   
+   	  
+      converse movemap1;
+      
+
+      case (ConverseVar.eventKey)
+	    when (pf3)
+			return;
+			
+		when (pf4)
+		
+            move arrayThree to arraySeven for all;  
+        
+                      
+        when (pf5)
+         
+            move arrayThree to myDynArray for all; 
+         
+         
+        when (pf6)
+        
+        	move arraySeven to arrayThree for all; 
+        
+        
+        when (pf7) 	
+        
+         	move myDynArray to arraySeven for all;  
+        
+        
+        	        	
+        when (pf8)
+            arrayInit( myDynArray);
+        
+        otherwise
+     end 
+     
+    
+  end 
+   
+ 
+end 

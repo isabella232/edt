@@ -1,0 +1,191 @@
+/*******************************************************************************
+ * Copyright Â© 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+// NO_ERROR
+
+Library sqlExtensionsLibrary_valid
+	{localSQLScope = yes}
+
+	function connectCommitControLTest()
+	
+		connect("myDatabase1", "user", "pw", conditional, readCommitted);
+		connect("myDatabase1", "user", "pw", conditional, readCommitted, autoCommit);
+		connect("myDatabase1", "user", "pw", conditional, readCommitted, noAutoCommit);
+	end
+	
+	function beginDatabaseTransactionTest()
+		dbname string;
+		connect("myDatabase", "user", "pw", conditional, readCommitted, autoCommit);
+		
+		beginDatabaseTransaction("myDatabase");
+		dbname = "mydatabase";
+		beginDatabaseTransaction(dbname);
+		beginDatabaseTransaction();
+	end
+	
+	function defineDatabaseAliasTest()
+		aliasname, dbname string ;
+		// Connect to a database with alias “alias”.  It will become
+		// the current connection.
+		defineDatabaseAlias( "alias", "database" );
+		aliasname = "alias";
+		dbname = "database";
+		defineDatabaseAlias( aliasname, dbname );
+		connect( "alias", "user", "pw" );
+	end
+end
+
+
+Record somesqlrec_valid type sqlrecord {tableNames = [["tablename","lab1"]]}
+	item1 char(4);
+end
+// sqlExtensionsProgram1, 2, and 3 are all the same since the prepared stmt id 
+// and resultset id are both declared
+Program sqlExtensionsProgram1
+	{localSQLScope = yes}
+	abc String;
+	mysqlrec somesqlrec_valid;
+	function main()
+		prepare myprepid from
+			"select " +
+				"item1 " +
+			"from tablename lab1"
+			for mysqlrec;
+		func2();
+	end
+	function func2()
+		open myresultsetid with myprepid
+			into mysqlrec.item1
+			for mysqlrec;
+	end
+end
+Program sqlExtensionsProgram2
+	{localSQLScope = no}
+	abc String;
+	mysqlrec somesqlrec_valid;
+	function main()
+		prepare myprepid from
+			"select " +
+				"item1 " +
+			"from tablename lab1"
+			for mysqlrec;
+		func2();
+	end
+	function func2()
+		open myresultsetid with myprepid
+			into mysqlrec.item1
+			for mysqlrec;
+	end
+end
+Program sqlExtensionsProgram3
+	mysqlrec somesqlrec_valid;
+	abc String;
+	function main()
+		prepare myprepid from
+			"select " +
+				"item1 " +
+			"from tablename lab1"
+			for mysqlrec;
+		func2();
+	end
+	function func2()
+		open myresultsetid with myprepid
+			into mysqlrec.item1
+			for mysqlrec;
+	end
+end
+
+// now turn localSQLscope off and make sure we don't complain when the 
+// ids are not declared
+Program sqlExtensionsProgram4
+	{localSQLscope = no}
+	mysqlrec somesqlrec_valid;
+	abc String;
+	function main()
+		func2();
+	end
+	function func2()
+		open myresultsetid with myprepid
+			into mysqlrec.item1
+			for mysqlrec;
+	end
+end
+// sqlExtensionsPageHandler1, 2, and 3 are all the same since the prepared stmt id 
+// and resultset id are both declared
+handler sqlExtensionsPageHandler1 type JSFHandler
+	{localSQLScope = yes}
+	abc String;
+	mysqlrec somesqlrec_valid;
+	function func1()
+		prepare myprepid from
+			"select " +
+				"item1 " +
+			"from tablename lab1"
+			for mysqlrec;
+		func2();
+	end
+	function func2()
+		open myresultsetid with myprepid
+			into mysqlrec.item1
+			for mysqlrec;
+	end
+end
+handler sqlExtensionsPageHandler2 type JSFHandler
+	{localSQLScope = no}
+	abc String;
+	mysqlrec somesqlrec_valid;
+	function func1()
+		prepare myprepid from
+			"select " +
+				"item1 " +
+			"from tablename lab1"
+			for mysqlrec;
+		func2();
+	end
+	function func2()
+		open myresultsetid with myprepid
+			into mysqlrec.item1
+			for mysqlrec;
+	end
+end
+handler sqlExtensionsPageHandler3 type JSFHandler
+	mysqlrec somesqlrec_valid;
+	abc String;
+	function func1()
+		prepare myprepid from
+			"select " +
+				"item1 " +
+			"from tablename lab1"
+			for mysqlrec;
+		func2();
+	end
+	function func2()
+		open myresultsetid with myprepid
+			into mysqlrec.item1
+			for mysqlrec;
+	end
+end
+
+// now turn localSQLscope off and make sure we don't complain when the 
+// ids are not declared
+handler sqlExtensionsPageHandler4 type JSFHandler
+	{localSQLscope = no}
+	mysqlrec somesqlrec_valid;
+	abc String;
+	function func1()
+		func2();
+	end
+	function func2()
+		open myresultsetid with myprepid
+			into mysqlrec.item1
+			for mysqlrec;
+	end
+end

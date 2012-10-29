@@ -11,18 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.io;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 
 
 /**
@@ -54,8 +50,8 @@ public abstract class CommonZipFileIOBufferReader implements IIOBufferReader {
 		
 	}
 	
-	public List getEntries() throws IOException {
-		ArrayList entries = new ArrayList();
+	public List<String> getEntries() throws IOException {
+		List<String> entries = new ArrayList<String>();
 		File file = getFile();
 		if(file.exists()){
 			ZipFile zipFile = new ZipFile(file);

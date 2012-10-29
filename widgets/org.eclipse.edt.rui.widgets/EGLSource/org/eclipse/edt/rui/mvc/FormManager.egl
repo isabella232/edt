@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.mvc;
 
-import org.eclipse.edt.rui.widgets.TextLabel;
 import eglx.ui.rui.Widget;
 
 handler FormManager
@@ -21,7 +20,7 @@ handler FormManager
 	function setEntries(entries FormField[] in)
 		this.entries = entries;
 		for (n int from 1 to entries.getSize() by 1)
-			this.entries[n].labelClass = entries[n].nameLabel.class;
+			this.entries[n].labelClass = entries[n].nameLabel.cssClass;
 			if (this.entries[n].controller.validStateSetter == null)
 				this.entries[n].controller.validStateSetter = validStateSetter;
 			end
@@ -72,9 +71,9 @@ handler FormManager
                 end
                 if(entry.nameLabel != null)
                     if(valid)
-                        entry.nameLabel.class = entry.labelClass;
+                        entry.nameLabel.cssClass = entry.labelClass;
                     else
-                        entry.nameLabel.class = entry.labelClass + " FormErrorLabel";
+                        entry.nameLabel.cssClass = entry.labelClass + " FormErrorLabel";
                     end
                 end
                 exit for;

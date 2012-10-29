@@ -1,0 +1,65 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//Defining a Delegate Type
+delegate FunctionInvoker(b String) end						//0
+
+//Using a Delegate Type
+Program DelegateExample
+	// Defined a Delegate variable
+	invoker FunctionInvoker;								//0
+
+	Function main()
+	  // set Delegate variable to the Salutation function.
+	  // The assignment is valid as the signature
+	  // of Salutation() matches the Delegate definition
+	  invoker = Salutation; 								//0
+	
+	  // invoke the function
+	  invoker("Hello World");								//0
+	end
+
+	Function Salutation( salute String )					//0
+		SysLib.WriteStdOut( salute );						//0
+	End
+End
+
+//Delegate Invocation
+Delegate StringStuff(s String in) returns (string) end				//0
+
+Program DelegateExample2
+	function main()
+		// Create a variable of the delegate type
+		myStringFunctions StringStuff[];							//0
+		
+		// Add functions to list:
+		// StringFunc1 and StringFunc2 have the same signature
+		// as the Delegate StringStuff
+		myStringFunctions.appendElement(StringFunc1);					//0
+		myStringFunctions.appendElement(StringFunc2);					//0
+		
+		// Invoke the functions indirectly through array access
+		result String = myStringFunctions[1]("Hello World");		//0
+		result = myStringFunctions[2]("Goodbye cruel world..");		//0
+		
+		result = myStringFunctions[1]();							//1
+		result = myStringFunctions[2](["This shouldn't be valid"]);	//1
+		
+		thing any = myStringFunctions[1];
+		thing("abc");					//1
+		(thing as StringStuff)("abc");	//0
+	end
+	
+	function StringFunc1(s String in) returns (string) end
+	function StringFunc2(s String in) returns (string) end
+end
+

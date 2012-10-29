@@ -11,43 +11,60 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.EGenericType;
+import org.eclipse.edt.mof.EType;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
-/**
- * @author Harmon
- */
+
 public class AnnotationRightHandScope extends Scope{
-    private IAnnotationTypeBinding binding;
+    private EField field;
 
-    public AnnotationRightHandScope(Scope parentScope, IAnnotationTypeBinding binding) {
+    public AnnotationRightHandScope(Scope parentScope, EField field) {
         super(parentScope);
-        this.binding = binding;
+        this.field = field;
     }
 
-    public IDataBinding findData(String simpleName) {
-        if (binding.getEnumerationType() != null) {
-            IDataBinding result = binding.getEnumerationType().findData(simpleName);
-            if (result != IBinding.NOT_FOUND_BINDING) {
+    public List<Member> findMember(String simpleName) {
+    	Enumeration enumeration = getEnumerationType();
+        if (enumeration != null) {
+        	List<Member> result = BindingUtil.findMembers(enumeration, simpleName);
+            if (result != null) {
                 return result;
             }
         }
-        return parentScope.findData(simpleName);
+        return parentScope.findMember(simpleName);
     }
-
-    public IFunctionBinding findFunction(String simpleName) {
-        return parentScope.findFunction(simpleName);
+    
+    private Enumeration getEnumerationType() {
+    	if (field != null) {
+    		EType type = field.getEType();
+    		return getEnumerationType(type);
+    	}
+    	return null;
+    }
+    
+    private Enumeration getEnumerationType(EType type) {
+    	if (type instanceof Enumeration) {
+    		return (Enumeration)type;
+    	}
+    	if (type instanceof EGenericType) {
+    		return getEnumerationType(((EGenericType)type).getETypeArguments().get(0));
+    	}
+    	return null;
     }
 
     public IPackageBinding findPackage(String simpleName) {
         return parentScope.findPackage(simpleName);
     }
 
-    public ITypeBinding findType(String simpleName) {
+    public List<Type> findType(String simpleName) {
         return parentScope.findType(simpleName);
     }
 }

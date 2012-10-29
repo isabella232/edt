@@ -14,25 +14,23 @@ package egl.lang.reflect.mof;
 import egl.lang.reflect.IsEMetadataType;
 import egl.lang.reflect.PartType;
 
-Record MofClass type Annotation {
+Record MofClass type Stereotype {
 	targets = [ElementKind.ExternalTypePart],
 	@IsEMetadataType,
-	@PartType{"org.eclipse.edt.mof.EClass"},
-	@Stereotype
+	@PartType{"org.eclipse.edt.mof.EClass"}
 }
 	packageName String;
 	name string;
 	isAbstract boolean;
 	isInterface boolean;
-	typeParameters FieldRef[];
+	typeParameters string[];
 	isProxy boolean;
 end
 
-Record MofDataType type Annotation {
+Record MofDataType type Stereotype {
 	targets = [ElementKind.ExternalTypePart],
 	@IsEMetadataType,
-	@PartType{"org.eclipse.edt.mof.EDataType"},
-	@Stereotype
+	@PartType{"org.eclipse.edt.mof.EDataType"}
 }
 	packageName string;
 	typeName string;
@@ -40,11 +38,10 @@ Record MofDataType type Annotation {
 	typeParameters string[];
 end
 
-Record MofEnum type Annotation {
+Record MofEnum type Stereotype {
 	targets = [ElementKind.Part], // Should be EnumerationPart which does not exist yet
 	@IsEMetadataType,
-	@PartType{"org.eclipse.edt.mof.EEnum"},
-	@Stereotype
+	@PartType{"org.eclipse.edt.mof.EEnum"}
 }
 	packageName string;
 	typeName string;
@@ -57,14 +54,6 @@ Record MofName type Annotation {
 	@IsEMetadataType
 }
 	value string;
-end
-
-record Operation type Annotation {
-	targets=[ElementKind.FunctionMbr],
-	// Override default reflect type for Annotation - org.eclipse.edt.mof.egl.AnnotationType
-	@IsEMetadataType
-}
-	opSymbol string;
 end
 
 Record IsArray type Annotation {

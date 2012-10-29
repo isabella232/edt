@@ -1,0 +1,81 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+//----- execptionCompatibility -----
+
+Record execptionCompatibilityOn type VGUIRecord  {
+  runValidatorFromProgram = no,
+  V60ExceptionCompatibility = yes,						//0
+  validatorFunction = execptionCompatibilityMustBeOn	//0
+  }
+  3 ITEM_FORM char(117) ;
+end
+
+Record execptionCompatibilityOnA type VGUIRecord  {
+  runValidatorFromProgram = no,
+  V60ExceptionCompatibility = yes,						//0
+  validatorFunction = execptionCompatibilityMustBeOff	//0
+  }
+  3 ITEM_FORM char(117) ;
+end
+
+Record execptionCompatibilityOff type VGUIRecord  {
+  runValidatorFromProgram = no,
+  V60ExceptionCompatibility = no,						//0
+  validatorFunction = execptionCompatibilityMustBeOn	//0
+  }
+  3 ITEM_FORM char(117) ;
+end
+
+Record execptionCompatibilityOffA type VGUIRecord  {
+  runValidatorFromProgram = no,
+  V60ExceptionCompatibility = no,						//0
+  validatorFunction = execptionCompatibilityMustBeOff	//0
+  }
+  3 ITEM_FORM char(117) ;
+end
+
+Record execptionCompatibilityDefault type VGUIRecord  {
+  runValidatorFromProgram = no,
+  validatorFunction = execptionCompatibilityMustBeOn	//0
+  }
+  3 ITEM_FORM char(117) ;
+end
+
+Record execptionCompatibilityDefaultA type VGUIRecord  {
+  runValidatorFromProgram = no,
+  validatorFunction = execptionCompatibilityMustBeOff	//0
+  }
+  3 ITEM_FORM char(117) ;
+end
+
+function execptionCompatibilityMustBeOn()
+	try
+	onException											//2 execptionCompatibilityOff - | execptionCompatibilityDefault -
+	end
+end
+
+function execptionCompatibilityMustBeOff()
+	try
+	onException(ex AnyException)						//1 execptionCompatibilityOnA -
+	end
+end
+
+Record TSTWEB_UIRECORD type VGUIRecord  {													//0
+  throwNrfEofExceptions = yes, handleHardIOErrors = no, V60ExceptionCompatibility = yes,	//0
+  I4GLItemsNullable = no, textLiteralDefaultIsString = no, localSQLScope = yes,				//0
+  title = "Master UI Record", 																//0
+  help = "This is help text - line 1"														//0
+       + "This is help text - line 2"														//0
+  }
+  3 ITEM_FORM char(117) ;
+end

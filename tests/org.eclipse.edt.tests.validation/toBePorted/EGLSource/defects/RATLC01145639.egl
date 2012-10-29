@@ -1,0 +1,89 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+//VAG NO_ERROR
+
+Program MYDBPRG type basicProgram 
+  {includeReferencedFunctions = yes, allowUnqualifiedItemReferences = yes, 
+  throwNrfEofExceptions = yes, handleHardIOErrors = no, V60ExceptionCompatibility = yes, 
+  I4GLItemsNullable = no, textLiteralDefaultIsString = no, localSQLScope = yes,
+  @DLI { psb = psb, callInterface = DLICallInterfaceKind.CBLTDLI,
+         handleHardDLIErrors = no  } 
+  }
+
+  
+  psb MYDBPSB;
+
+  
+  COURSE COURSE; 
+  OFFERING OFFERING; 
+  STUDENT STUDENT; 
+  MYDBPRG_WS MYDBPRG_WS;
+
+  function main()
+    MYDBPRG_MAIN: MYDBPRG_MAIN();
+  end 
+end 
+
+Function MYDBPRG_MAIN()
+  MYDBPRM_INQUIRY();
+end 
+
+Function MYDBPRM_INQUIRY()
+  get COURSE, STUDENT usingPCB psb.COURSE_dbPCB   
+    with #dli{  GU
+                COURSE*D (COURSE# = :COURSE.COURSE#) 
+                OFFERING (LOCATION = :OFFERING.LOCATION
+                         & CITY = :MYDBPRG_WS.MYCITY) 
+                STUDENT (EMPNO = :STUDENT.EMPNO) 
+    } ;
+end 
+
+Record COURSE type DLISegment  {
+  keyItem = COURSE#   }
+  3 COURSE# char(10) ; 
+  3 TITLE char(80) ; 
+end   
+
+Record OFFERING type DLISegment  {
+  keyItem = LOCATION  }
+  3 LOCATION char(10) ; 
+  3 ADDRESS char(100) ; 
+    4 LINE1 char(50) ; 
+    4 LINE2 char(50) ; 
+  3 CITY char(30) ; 
+  3 STATE char(2) ; 
+  3 COUNTRY char(30) ; 
+end   
+
+Record STUDENT type DLISegment  {
+  keyItem = EMPNO   }
+  3 EMPNO char(6) ; 
+  3 FIRSTNME char(12) ; 
+  3 MIDINIT char(1) ; 
+  3 LASTNAME char(15) ; 
+  3 GRADE char(1) ; 
+end   
+
+Record MYDBPSB type PSBRecord
+  COURSE_dbPCB DB_PCBRecord
+    { @PCB { pcbType = PCBKind.DB,
+      hierarchy = [
+        @Relationship { segmentRecord = COURSE },
+        @Relationship { segmentRecord = OFFERING, parentRecord = COURSE },
+        @Relationship { segmentRecord = STUDENT, parentRecord = OFFERING }
+    ] } } ;
+  pcb3 DB_PCBRecord { redefines = COURSE_dbPCB };
+end  
+
+Record MYDBPRG_WS type basicRecord
+  3 MYCITY char(30);
+end
