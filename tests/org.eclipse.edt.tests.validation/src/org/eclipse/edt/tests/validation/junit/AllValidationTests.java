@@ -28,9 +28,9 @@ import org.eclipse.edt.tests.validation.junit.expressions.DynamicAccess1Test;
 import org.eclipse.edt.tests.validation.junit.ibmi.IBMiCallTests1Test;
 import org.eclipse.edt.tests.validation.junit.ibmi.IBMiCallTests2Test;
 import org.eclipse.edt.tests.validation.junit.ibmi.IBMiProxyFunctionTestsTest;
-import org.eclipse.edt.tests.validation.junit.services.ServiceCallTests1;
-import org.eclipse.edt.tests.validation.junit.services.ServiceCallTests2;
-import org.eclipse.edt.tests.validation.junit.services.ServiceProxyFunctionTests;
+import org.eclipse.edt.tests.validation.junit.services.ServiceCallTests1Test;
+import org.eclipse.edt.tests.validation.junit.services.ServiceCallTests2Test;
+import org.eclipse.edt.tests.validation.junit.services.ServiceProxyFunctionTestsTest;
 
 
 public class AllValidationTests {
@@ -54,9 +54,9 @@ public class AllValidationTests {
 		suite.addTestSuite(IBMiProxyFunctionTestsTest.class);
 		suite.addTestSuite(IBMiCallTests1Test.class);
 		suite.addTestSuite(IBMiCallTests2Test.class);
-		suite.addTestSuite(ServiceProxyFunctionTests.class);
-		suite.addTestSuite(ServiceCallTests1.class);
-		suite.addTestSuite(ServiceCallTests2.class);
+		suite.addTestSuite(ServiceProxyFunctionTestsTest.class);
+		suite.addTestSuite(ServiceCallTests1Test.class);
+		suite.addTestSuite(ServiceCallTests2Test.class);
 ///		suite.addTestSuite(SqlTest1Test.class);
 
 		//$JUnit-END$
