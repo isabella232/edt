@@ -187,7 +187,7 @@ public class EGLClassTemplate extends JavaTemplate {
 			boolean hasInit = false;
 			boolean hasNoInit = false;
 			for (Field field : fields) {
-				if (!(field instanceof ConstantField) && !field.isStatic()) {
+				if (!(field instanceof ConstantField)) {
 					if (field.getInitializerStatements() == null)
 						hasNoInit = true;
 					else
@@ -209,14 +209,14 @@ public class EGLClassTemplate extends JavaTemplate {
 				}
 			}
 		}
-		// now process the non-static fields that don't have initializer statements
+		// now process the fields that don't have initializer statements
 		for (Field field : fields) {
-			if (field.getInitializerStatements() == null && !field.isStatic())
+			if (field.getInitializerStatements() == null)
 				ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
-		// now process the non-static fields that do have initializer statements
+		// now process the fields that do have initializer statements
 		for (Field field : fields) {
-			if (field.getInitializerStatements() != null && !field.isStatic()) {
+			if (field.getInitializerStatements() != null) {
 				if (field instanceof ConstantField)
 					ctx.invoke(genInitializeMethod, part, ctx, out, field);
 				else {
