@@ -762,6 +762,7 @@ end
 
 <template name="handler" description="%Templates.ruiHandler" id="org.eclipse.edt.ide.ui.templates.rui_handler" context = "egl-core" enabled="true">// RUI Handler
 
+import eglx.ui.rui.RUIHandler;
 import org.eclipse.edt.rui.widgets.GridLayout;
 
 //
@@ -777,6 +778,8 @@ end
 
 <template name="widget" description="%Templates.ruiWidget" id="org.eclipse.edt.ide.ui.templates.rui_widget" context = "egl-core" enabled="true">// RUI Widget
 
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEWidget;
 import org.eclipse.edt.rui.widgets.GridLayout;
 
 //

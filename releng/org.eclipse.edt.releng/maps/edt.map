@@ -55,6 +55,7 @@ plugin@org.eclipse.edt.runtime.java=GIT,tag=origin/master,repo=git://git.eclipse
 plugin@org.eclipse.edt.runtime.java.jee=GIT,tag=origin/master,repo=git://git.eclipse.org/gitroot/edt/org.eclipse.edt.git,path=runtimes/org.eclipse.edt.runtime.java.jee
 plugin@org.eclipse.edt.runtime.java.sql=GIT,tag=origin/master,repo=git://git.eclipse.org/gitroot/edt/org.eclipse.edt.git,path=runtimes/org.eclipse.edt.runtime.java.sql
 plugin@org.eclipse.edt.runtime.javascript=GIT,tag=origin/master,repo=git://git.eclipse.org/gitroot/edt/org.eclipse.edt.git,path=runtimes/org.eclipse.edt.runtime.javascript
+plugin@org.eclipse.edt.rui=GIT,tag=origin/master,repo=git://git.eclipse.org/gitroot/edt/org.eclipse.edt.git,path=widgets/org.eclipse.edt.rui
 
 feature@org.eclipse.edt.tests.feature=GIT,tag=origin/master,repo=git://git.eclipse.org/gitroot/edt/org.eclipse.edt.git,path=tests/org.eclipse.edt.tests.feature
 plugin@org.eclipse.edt.compiler.tests=GIT,tag=origin/master,repo=git://git.eclipse.org/gitroot/edt/org.eclipse.edt.git,path=tests/org.eclipse.edt.compiler.tests
