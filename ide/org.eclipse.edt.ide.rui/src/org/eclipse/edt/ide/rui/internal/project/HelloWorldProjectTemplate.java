@@ -32,8 +32,8 @@ public class HelloWorldProjectTemplate extends WebClientWithServicesProjectTempl
 			ISchedulingRule rule) {
 		eglProjConfiguration.setSelectedWidgetLibraries( WidgetLibProviderManager.getInstance().getProviders(eglProjConfiguration.getSelectedProjectTemplate().getWidgetLibraryContainer(), true));
 		List listOps = super.getImportProjectOperations(eglProjConfiguration, eglFeatureMask, rule);
-				
-		ImportSampleCodeOperation loadSampleCode = new ImportSampleCodeOperation(rule, "org.eclipse.edt.rui.samples.helloworld_0.8.0", eglProjConfiguration.getProjectName() );
+
+		ImportSampleCodeOperation loadSampleCode = new ImportSampleCodeOperation(rule, "org.eclipse.edt.rui.samples.helloworld_0.8.2", eglProjConfiguration.getProjectName() );
 		listOps.add(loadSampleCode);
 
 		return listOps;
