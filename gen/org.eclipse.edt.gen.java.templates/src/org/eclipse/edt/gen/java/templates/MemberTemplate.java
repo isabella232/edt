@@ -28,9 +28,6 @@ public class MemberTemplate extends JavaTemplate {
 			out.print("private ");
 		else
 			out.print("public ");
-
-		if (field.isStatic())
-			out.print("static ");
 	}
 
 	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, TypeNameKind arg) {
