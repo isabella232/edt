@@ -39,16 +39,8 @@ public class FieldTemplate extends JavaTemplate {
 		transientOption(field, out);
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
-		if ( !field.isStatic() || field.getInitializerStatements() == null
-				|| field.getInitializerStatements().getStatements().isEmpty() )
-		{
-			ctx.invoke(genName, field, ctx, out);
-			out.println(";");
-		}
-		else
-		{
-			ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
-		}
+		ctx.invoke(genName, field, ctx, out);
+		out.println(";");
 	}
 
 	public void genInstantiation(Field field, Context ctx, TabbedWriter out) {
