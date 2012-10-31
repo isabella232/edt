@@ -360,15 +360,13 @@ public class FunctionBinder extends DefaultBinder {
     
     public boolean visit(OnExceptionBlock onExceptionBlock) {
     	currentScope = new StatementBlockScope(currentScope);
-    	if(onExceptionBlock.hasExceptionDeclaration()) {
-    		processDataDeclaration(
-    			Arrays.asList(new Name[] {onExceptionBlock.getExceptionName()}),
-    			onExceptionBlock.getExceptionType(),
-    			onExceptionBlock.isNullable(),
-    			null,
-    			false,
-    			null);
-    	}
+		processDataDeclaration(
+				Arrays.asList(new Name[] {onExceptionBlock.getExceptionName()}),
+				onExceptionBlock.getExceptionType(),
+				onExceptionBlock.isNullable(),
+				null,
+				false,
+				null);
     	
     	for(Node node : onExceptionBlock.getStmts()) {
     		node.accept(this);

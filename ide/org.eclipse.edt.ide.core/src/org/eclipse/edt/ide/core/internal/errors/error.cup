@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 action code {:
 	private static List simpleNameListToStringList( List simpleNames ) {
@@ -42,7 +43,7 @@ terminal LINE_COMMENT, BLOCK_COMMENT, LINEBREAKS;
 // Regular terminals
 terminal PACKAGE, IMPORT;
 terminal END;
-terminal DATAITEM, RECORD, HANDLER, CLASS;
+terminal RECORD, HANDLER, CLASS;
 terminal PROGRAM, LIBRARY, FUNCTION, SERVICE, INTERFACE, DELEGATE, EXTERNALTYPE, ENUMERATION;
 terminal IMPLEMENTS, EXTENDS;
 terminal TYPE;
@@ -240,13 +241,7 @@ importDecl
 // parts
 
 part
-	::=	privateAccessModifierOpt:privateAccessModifier1 DATAITEM:dataItem1 ID:id1 namedType:type1 settingsBlock_star:settingsBlocks1 END:end1
-	{: RESULT = new DataItem(privateAccessModifier1, new SimpleName(id1, id1left, id1right), type1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? dataItem1left : privateAccessModifier1left, end1right); :}
-	
-	|	privateAccessModifierOpt:privateAccessModifier1 DATAITEM:dataItem1 ID:id1 namedType:type1 settingsBlock_star:settingsBlocks1 SEMI:semi1
-	{: RESULT = new DataItem(privateAccessModifier1, new SimpleName(id1, id1left, id1right), type1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? dataItem1left : privateAccessModifier1left, semi1right); :}
-	
-	|	privateAccessModifierOpt:privateAccessModifier1 DELEGATE:delegate1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlock_star:settingsBlocks1 END:end1
+	::=	privateAccessModifierOpt:privateAccessModifier1 DELEGATE:delegate1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlock_star:settingsBlocks1 END:end1
 	{: RESULT = new Delegate(privateAccessModifier1, new SimpleName(id1, id1left, id1right), functionParameters1, returns1, settingsBlocks1, privateAccessModifier1 == Boolean.FALSE ? delegate1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 DELEGATE:delegate1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlock_star:settingsBlocks1 SEMI:semi1
@@ -259,7 +254,7 @@ part
 	{: RESULT = new Handler(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, partSubType1, handlerContents1, privateAccessModifier1 == Boolean.FALSE ? handler1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 CLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
-	{: RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
+	{: RESULT = new Class(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 PROGRAM:program1 ID:id1 partSubTypeOpt:partSubType1 classContent_star:classContents1 END:end1
 	{: RESULT = new Program(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? program1left : privateAccessModifier1left, end1right); :}
@@ -964,10 +959,7 @@ openTarget
 	;
 
 onException
-	::=	ONEXCEPTION:onexception1 stmt_star:stmts1
-	{: RESULT = new OnExceptionBlock(stmts1, null, null, Boolean.FALSE, onexception1left, stmts1right); :}
-	
-	|	ONEXCEPTION:onexception1 LPAREN ID:id1 namedType:type1 questionOpt:questionOpt1 RPAREN stmt_star:stmts1
+	::=	ONEXCEPTION:onexception1 LPAREN ID:id1 namedType:type1 questionOpt:questionOpt1 RPAREN stmt_star:stmts1
 	{: RESULT = new OnExceptionBlock(stmts1, new SimpleName(id1, id1left, id1right), type1, questionOpt1, onexception1left, stmts1right); :}
 	;
 

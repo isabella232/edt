@@ -260,12 +260,9 @@ public class ScriptDoubleClickVisitor extends AbstractASTVisitor {
 	private int getOnExceptionBlockStartingPosition(OnExceptionBlock onExceptionBlock)
 	{
 		int onExceptionBlockStartingPos = onExceptionBlock.getOffset() + IEGLConstants.KEYWORD_ONEXCEPTION.length();
-		if(onExceptionBlock.hasExceptionDeclaration())
-		{
-			Type exceptionType = onExceptionBlock.getExceptionType();
-			int exceptionTypePos = exceptionType.getOffset() + exceptionType.getLength();
-			onExceptionBlockStartingPos = searchForClosingBracket(exceptionTypePos, ')', fDoc);
-		}
+		Type exceptionType = onExceptionBlock.getExceptionType();
+		int exceptionTypePos = exceptionType.getOffset() + exceptionType.getLength();
+		onExceptionBlockStartingPos = searchForClosingBracket(exceptionTypePos, ')', fDoc);
 		return onExceptionBlockStartingPos;		
 	}
 	

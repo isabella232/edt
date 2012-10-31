@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 
 import org.dojotoolkit.shrinksafe.Compressor;
 import org.eclipse.core.resources.IFolder;
@@ -28,7 +29,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.ide.core.generation.IGenerationUnit;
-import org.eclipse.edt.ide.core.internal.generation.GeneratePartsOperation;
+import org.eclipse.edt.ide.core.internal.utils.StringOutputBuffer;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.Activator;
@@ -40,6 +41,8 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.mozilla.javascript.Context;
+
+import com.ibm.icu.util.StringTokenizer;
 
 public class Utils 
 {
@@ -81,7 +84,30 @@ public class Utils
 //	}
 	public static void buildStackTraceMessages(IDeploymentResultsCollector resultsCollector, Throwable t)
 	{
-		GeneratePartsOperation.buildStackTraceMessages(t, new DeploymentResultMessageRequestor(resultsCollector));
+		DeploymentResultMessageRequestor result = new DeploymentResultMessageRequestor(resultsCollector);
+		
+		StringOutputBuffer buffer = new StringOutputBuffer();
+		PrintWriter writer = new PrintWriter(buffer);
+		t.printStackTrace(writer);
+		writer.flush();
+		String text = buffer.toString();
+		char[] token;
+		StringTokenizer tokenizer = new StringTokenizer(text, "\n\r\f"); //$NON-NLS-1$
+		while (tokenizer.hasMoreElements()) {
+			token = tokenizer.nextToken().toCharArray();
+			StringBuffer stringBuffer = new StringBuffer();
+			for (int i = 0; i < token.length; i++) {
+				if (token[i] == '\t') {
+					stringBuffer.append("      "); //$NON-NLS-1$
+				} else {
+					stringBuffer.append(token[i]);
+				}
+			}
+
+			EGLMessage message = EGLMessage.createEGLValidationErrorMessage(EGLMessage.EGLMESSAGE_EXCEPTION_STACKTRACE, null, stringBuffer
+					.toString());
+			result.addMessage(message);
+		}
 	}
 	public static void addMessage( IDeploymentResultsCollector results, boolean error, String msgId, String[] inserts )
 	{

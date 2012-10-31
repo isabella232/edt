@@ -22,22 +22,18 @@ import java.util.List;
 public class OnExceptionBlock extends Node {
 
 	private List stmts;	// List of Nodes
-	private SimpleName idOpt;
-	private Type typeOpt;
+	private SimpleName id;
+	private Type type;
 	private boolean isNullable;
 
-	public OnExceptionBlock(List stmts, SimpleName idOpt, Type typeOpt, Boolean isNullable, int startOffset, int endOffset) {
+	public OnExceptionBlock(List stmts, SimpleName id, Type type, Boolean isNullable, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.stmts = setParent(stmts);
-		if(idOpt != null) {
-			this.idOpt = idOpt;
-			idOpt.setParent(this);
-		}
-		if(typeOpt != null) {
-			this.typeOpt = typeOpt;
-			typeOpt.setParent(this);
-		}
+		this.id = id;
+		id.setParent(this);
+		this.type = type;
+		type.setParent(this);
 		this.isNullable = isNullable.booleanValue();
 	}
 	
@@ -45,26 +41,20 @@ public class OnExceptionBlock extends Node {
 		return stmts;
 	}
 	
-	public boolean hasExceptionDeclaration() {
-		return idOpt != null;
-	}
-	
 	public Name getExceptionName() {
-		return idOpt;
+		return id;
 	}
 	
 	public Type getExceptionType() {
-		return typeOpt;
+		return type;
 	}
 	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
 			acceptChildren(visitor, stmts);
-			if(hasExceptionDeclaration()) {
-				idOpt.accept(visitor);
-				typeOpt.accept(visitor);
-			}
+			id.accept(visitor);
+			type.accept(visitor);
 		}
 		visitor.endVisit(this);
 	}
@@ -74,8 +64,8 @@ public class OnExceptionBlock extends Node {
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		SimpleName newName = idOpt == null ? null : (SimpleName) idOpt.clone();
-		Type newType = typeOpt == null ? null : (Type) typeOpt.clone();
+		SimpleName newName = (SimpleName) id.clone();
+		Type newType = (Type) type.clone();
 		return new OnExceptionBlock(cloneList(stmts), newName, newType, Boolean.valueOf(isNullable), getOffset(), getOffset() + getLength());
 	}
 }
