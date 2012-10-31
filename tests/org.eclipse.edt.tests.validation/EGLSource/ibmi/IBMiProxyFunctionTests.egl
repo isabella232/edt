@@ -134,5 +134,23 @@ program pgm1 {}
 			}}
 	end
 
+	function f11(p1 string, p2 string[])//0
+			{@IBMiProgram{
+				parameterAnnotations = [
+					@StructText{Length = 20},
+					@StructArray{},
+				]  
+			}}
+	end
+
+	function f11(p1 string, p2 string[], p3 int inout)//0
+			{@IBMiProgram{
+				parameterAnnotations = [
+					@StructText{Length = 20},
+					@StructArray{elementCOunt=7, returnCountVariable = p3},
+				]  
+			}}
+	end
+
 end
 

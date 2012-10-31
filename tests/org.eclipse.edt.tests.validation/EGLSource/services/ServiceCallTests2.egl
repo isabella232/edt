@@ -126,9 +126,38 @@ library RemoteFunctionCallTests
 		
 		call myinter.interfunc() returning to callback; //0
 		call myinter.interfunc() returning to callback; //0
+		call myinter.interfunc() returning to callback2 onexception exp2; //0
+
+		call myinter.interfunc() returning to callback3; //0
+		call myinter.interfunc() returning to callback2 onexception exp3; //0
+
+		call myinter.interfunc() returning to callback4; //0
+		call myinter.interfunc() returning to callback2 onexception exp4; //0
+
+		call myinter.interfunc() returning to callback5; //0
+		call myinter.interfunc() returning to callback2 onexception exp5; //0
 	end
 	
 	
 	function callback(p1 int in)
+	end
+	function callback2(p1 int in, http IHttp in)
+	end
+	function exp2(p1 AnException in, http IHttp in)
+	end
+	
+	function callback3(p1 int, http IHttp in)
+	end
+	function exp3(p1 AnException, http IHttp in)
+	end
+	
+	function callback4(p1 int in, http IHttp)
+	end
+	function exp4(p1 AnException in, http IHttp)
+	end
+	
+	function callback5(p1 int in, http string in)
+	end
+	function exp5(p1 AnException in, http string in)
 	end
 end

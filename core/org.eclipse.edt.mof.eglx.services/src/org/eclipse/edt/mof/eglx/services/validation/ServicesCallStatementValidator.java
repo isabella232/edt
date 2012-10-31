@@ -189,7 +189,7 @@ public class ServicesCallStatementValidator extends AbstractStatementValidator {
 			//function has 1 extra parameter 
 			//see if it's an IHttp 
 			Type lastParmType = parms.get(parms.size() - 1).getType();
-			return "eglxhttp.IHttp".equals(lastParmType.getTypeSignature());
+			return "eglx.http.IHttp".equals(lastParmType.getTypeSignature());
 		}
 		return false;
 	}
