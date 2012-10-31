@@ -111,7 +111,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"constructor"		{ return ErrorNodeTypes.CONSTRUCTOR; }
 	"continue"			{ return ErrorNodeTypes.CONTINUE; }
 	"current"			{ return ErrorNodeTypes.CURRENT; }
-	"dataitem"			{ return ErrorNodeTypes.DATAITEM; }
 	"decrement"			{ return ErrorNodeTypes.DECREMENT; }
 	"delegate"			{ return ErrorNodeTypes.DELEGATE; }
 	"delete"			{ return ErrorNodeTypes.DELETE; }

@@ -36,8 +36,6 @@ public class MarkerProblemRequestor extends AbstractPartMarkerProblemRequestor {
 	protected String getMarkerType(int problemKind) {
 		switch(problemKind) {
 		case PART_OR_STATEMENT_NOT_SUPPORTED:
-		case SYSTEM_PART_NOT_SUPPORTED:
-		case SYSTEM_LIBRARY_NOT_SUPPORTED:
 			return UNSUPPORTED_SYNTAX_PROBLEM;
 		}
 		return PROBLEM;

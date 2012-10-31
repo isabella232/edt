@@ -102,9 +102,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 		}
 		@Override
 		public boolean visit(OnExceptionBlock onExceptionBlock) {
-			if(onExceptionBlock.hasExceptionDeclaration()) {
-				handleName(onExceptionBlock.getExceptionName());
-			}
+			handleName(onExceptionBlock.getExceptionName());
 			return true;
 		}
 	}

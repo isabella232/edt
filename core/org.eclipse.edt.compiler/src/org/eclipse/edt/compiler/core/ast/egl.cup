@@ -252,7 +252,7 @@ part
 	{: RESULT = new Handler(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, partSubType1, handlerContents1, privateAccessModifier1 == Boolean.FALSE ? handler1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 CLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
-	{: RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
+	{: RESULT = new Class(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 PROGRAM:program1 ID:id1 partSubTypeOpt:partSubType1 classContent_star:classContents1 END:end1
 	{: RESULT = new Program(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? program1left : privateAccessModifier1left, end1right); :}
@@ -957,10 +957,7 @@ openTarget
 	;
 
 onException
-	::=	ONEXCEPTION:onexception1 stmt_star:stmts1
-	{: RESULT = new OnExceptionBlock(stmts1, null, null, Boolean.FALSE, onexception1left, stmts1right); :}
-	
-	|	ONEXCEPTION:onexception1 LPAREN ID:id1 namedType:type1 questionOpt:questionOpt1 RPAREN stmt_star:stmts1
+	::=	ONEXCEPTION:onexception1 LPAREN ID:id1 namedType:type1 questionOpt:questionOpt1 RPAREN stmt_star:stmts1
 	{: RESULT = new OnExceptionBlock(stmts1, new SimpleName(id1, id1left, id1right), type1, questionOpt1, onexception1left, stmts1right); :}
 	;
 

@@ -25,9 +25,9 @@ import java_cup.runtime.Symbol;
 
 import org.eclipse.edt.compiler.core.EGLKeywordHandler;
 import org.eclipse.edt.compiler.core.ast.*;
-import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.edt.compiler.core.ast.ExitStatement.ExitModifier;
 import org.eclipse.edt.compiler.core.ast.ExitStatement.OptionalExpressionExitModifier;
+import org.eclipse.edt.compiler.core.ast.Class;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.DeleteEdit;
@@ -1660,20 +1660,18 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		
 		printStuffBeforeNode(onExceptionBlock.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
 		
-		if(onExceptionBlock.hasExceptionDeclaration()){
-			printStuffBeforeToken(NodeTypes.LPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_ONEXCEPTION));
-			
-			Name exceptionName = onExceptionBlock.getExceptionName();
-			setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_ONEXCEPTION), 
-					CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			exceptionName.accept(this);
-			
-			Type exceptionType = onExceptionBlock.getExceptionType();
-			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			exceptionType.accept(this);
-			
-			printStuffBeforeToken(NodeTypes.RPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_ONEXCEPTION));
-		}
+		printStuffBeforeToken(NodeTypes.LPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_ONEXCEPTION));
+		
+		Name exceptionName = onExceptionBlock.getExceptionName();
+		setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_ONEXCEPTION), 
+				CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+		exceptionName.accept(this);
+		
+		Type exceptionType = onExceptionBlock.getExceptionType();
+		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+		exceptionType.accept(this);
+		
+		printStuffBeforeToken(NodeTypes.RPAREN, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_ONEXCEPTION));
 		
 		indent();
 		final List stmts = onExceptionBlock.getStmts();

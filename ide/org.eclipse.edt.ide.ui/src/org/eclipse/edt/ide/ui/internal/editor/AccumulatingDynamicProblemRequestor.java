@@ -41,10 +41,6 @@ public class AccumulatingDynamicProblemRequestor extends DefaultProblemRequestor
  		if (severity == IMarker.SEVERITY_ERROR) {
  			setHasError(true);
  		}
- 		if (messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
-			inserts = shiftInserts(problemKind, inserts);
-			inserts[0] = getContainerContextName();
-		}
  		if (numberProblems < MAX_NUM_PROBLEMS) {
  			numberProblems++;
  			problems.add(new Problem(startOffset, endOffset, severity, problemKind, inserts, bundle));

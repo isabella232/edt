@@ -208,14 +208,6 @@ public abstract class ValidationTestCase extends TestCase {
 					if( problem.problemKind == IProblemRequestor.COMPILATION_EXCEPTION ) {
 						tempExceptionOccured = true;
 					}
-					
-					if(DefaultProblemRequestor.messagesWithLineNumberInserts.contains(new Integer(problem.problemKind))) {
-						if(problem.inserts.length == 0 || problem.inserts[problem.inserts.length-1] != null) {
-							problem.inserts = DefaultProblemRequestor.shiftInsertsIfNeccesary(problem.problemKind, problem.inserts);
-						}
-						problem.inserts[problem.inserts.length-2] = key.toString();
-						problem.inserts[problem.inserts.length-1] = file.getName();
-					}
 				}
 				
 				results = new TestResults( tempLineNumbersToMessageLists, tempExceptionOccured, tempSyntaxErrorsExistInTest );
@@ -250,10 +242,6 @@ public abstract class ValidationTestCase extends TestCase {
 				return new DefaultProblemRequestor() {
 					@Override
 					public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) {
-						if(messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
-							inserts = shiftInsertsIfNeccesary(problemKind, inserts);
-							inserts[0] = partName;				
-						}
 				 		if (severity == IMarker.SEVERITY_ERROR) {
 				 			setHasError(true);
 				 		}
