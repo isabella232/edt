@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.core.EGLKeywordHandler;
-import org.eclipse.edt.compiler.core.EGLSQLKeywordHandler;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -75,37 +74,22 @@ public class EGLNameValidator {
 	final public static int RECORD_FILE_NAME = 5;
 	final public static int RECORD = 6;
 	final public static int STRUCTURE = 7;
-	final public static int DATATABLE = 8;
 	final public static int TABLE_EXTERNAL_NAME = 9;
 	final public static int DATAITEM = 10;
-	final public static int BUILD_DESCRIPTOR = 11;
-	final public static int LINKAGE_OPTIONS = 12;
-	final public static int RESOURCE_ASSOCIATIONS = 13;
-	final public static int BIND_CONTROL = 14;
-	final public static int LINK_EDIT = 15;
 	final public static int TYPEDEF = 16;
 	final public static int TABLE_GENERATION = 17;
 	final public static int SYMBOLIC_PARAMETER = 18;
 	final public static int RESULT_SET_ID = 19;
 	//new
-	final public static int FORMGROUP = 20;
-	final public static int FORM = 21;
 	final public static int LIBRARY = 22;
-	final public static int PAGEHANDLER = 23;
 	final public static int RECORD_REFERENCE = 24;
 	final public static int FUNCTION_REFERENCE = 25;
 	final public static int DATAITEM_REFERENCE = 26;
 	final public static int PROGRAM_REFERENCE = 27;
-	final public static int PROPERTY_ALIAS = 28;
-	final public static int PROPERTY_MSGTABLEPREFIX = 29;
 	final public static int PACKAGE = 30;
 	final public static int FILENAME = 31;
 	final public static int PART_REFERENCE = 32;
 	final public static int IDENTIFIER = 33;
-	final public static int KEYITEM = 34;
-	final public static int TABLENAME = 35;
-	final public static int TABLENAMEVARIABLES = 36;
-	final public static int LENGTHITEM = 37;
 	final public static int HANDLER = 38;
 	final public static int INTO_CLAUSE_DATAITEM_REFERENCE = 39;
 	final public static int DELEGATE = 40;
@@ -126,11 +110,6 @@ public class EGLNameValidator {
 	final public static int DATATABLE_LENGTH = PART_LENGTH;
 	final public static int TABLE_EXTERNAL_NAME_LENGTH = PART_LENGTH;
 	final public static int ITEM_LENGTH = PART_LENGTH;
-	final public static int BUILD_DESCRIPTOR_LENGTH = PART_LENGTH;
-	final public static int LINKAGE_OPTIONS_LENGTH = PART_LENGTH;
-	final public static int RESOURCE_ASSOCIATIONS_LENGTH = PART_LENGTH;
-	final public static int BIND_CONTROL_LENGTH = PART_LENGTH;
-	final public static int LINK_EDIT_LENGTH = PART_LENGTH;
 	final public static int TYPEDEF_LENGTH = PART_LENGTH;
 	final public static int PARAMETER_LENGTH = PART_LENGTH;
 	final public static int DECLARATION_LENGTH = PART_LENGTH;
@@ -139,21 +118,12 @@ public class EGLNameValidator {
 	final public static int SYMBOLIC_PARAMETER_LENGTH = 30;
 	final public static int RESULT_SET_ID_LENGTH = PART_LENGTH;
 	final public static int PROJECT_ID_LENGTH = 44;
-	final public static int KEYITEM_LENGTH = PART_LENGTH;
-	final public static int TABLENAME_LENGTH = PART_LENGTH;
-	final public static int TABLENAMEVARIABLES_LENGTH = PART_LENGTH;
-	final public static int LENGTHITEM_LENGTH = PART_LENGTH;
 	//new
-	final public static int FORMGROUP_LENGTH = PART_LENGTH;
-	final public static int FORM_LENGTH = PART_LENGTH;
 	final public static int LIBRARY_LENGTH = PART_LENGTH;
-	final public static int PAGEHANDLER_LENGTH = PART_LENGTH;
 	final public static int RECORD_REFERENCE_LENGTH = PART_LENGTH;
 	final public static int FUNCTION_REFERENCE_LENGTH = PART_LENGTH;
 	final public static int DATAITEM_REFERENCE_LENGTH = PART_LENGTH;
 	final public static int PROGRAM_REFERENCE_LENGTH = PART_LENGTH;
-	final public static int PROPERTY_ALIAS_LENGTH = PART_LENGTH;
-	final public static int PROPERTY_MSGTABLEPREFIX_LENGTH = 125;
 	final public static int PACKAGE_LENGTH = PART_LENGTH;
 	final public static int FILENAME_LENGTH = PART_LENGTH;
 	final public static int PART_REFERENCE_LENGTH = PART_LENGTH;
@@ -174,37 +144,22 @@ public class EGLNameValidator {
 		partNameLengths.put(new Integer(RECORD), new Integer(RECORD_LENGTH));
 		partNameLengths.put(new Integer(RECORD_FILE_NAME), new Integer(RECORD_FILE_NAME_LENGTH));
 		partNameLengths.put(new Integer(STRUCTURE), new Integer(STRUCTURE_LENGTH));
-		partNameLengths.put(new Integer(DATATABLE), new Integer(DATATABLE_LENGTH));
 		partNameLengths.put(new Integer(TABLE_EXTERNAL_NAME), new Integer(TABLE_EXTERNAL_NAME_LENGTH));
 		partNameLengths.put(new Integer(DATAITEM), new Integer(ITEM_LENGTH));
-		partNameLengths.put(new Integer(BUILD_DESCRIPTOR), new Integer(BUILD_DESCRIPTOR_LENGTH));
-		partNameLengths.put(new Integer(LINKAGE_OPTIONS), new Integer(LINKAGE_OPTIONS_LENGTH));
-		partNameLengths.put(new Integer(RESOURCE_ASSOCIATIONS), new Integer(RESOURCE_ASSOCIATIONS_LENGTH));
-		partNameLengths.put(new Integer(BIND_CONTROL), new Integer(BIND_CONTROL_LENGTH));
-		partNameLengths.put(new Integer(LINK_EDIT), new Integer(LINK_EDIT_LENGTH));
 		partNameLengths.put(new Integer(TYPEDEF), new Integer(TYPEDEF_LENGTH));
 		partNameLengths.put(new Integer(TABLE_GENERATION), new Integer(TABLE_GENERATION_LENGTH));
 		partNameLengths.put(new Integer(SYMBOLIC_PARAMETER), new Integer(SYMBOLIC_PARAMETER_LENGTH));
 		partNameLengths.put(new Integer(RESULT_SET_ID), new Integer(RESULT_SET_ID_LENGTH));
 		//new
-		partNameLengths.put(new Integer(FORMGROUP), new Integer(FORMGROUP_LENGTH));
-		partNameLengths.put(new Integer(FORM), new Integer(FORM_LENGTH));
 		partNameLengths.put(new Integer(LIBRARY), new Integer(LIBRARY_LENGTH));
-		partNameLengths.put(new Integer(PAGEHANDLER), new Integer(PAGEHANDLER_LENGTH));
 		partNameLengths.put(new Integer(RECORD_REFERENCE), new Integer(RECORD_REFERENCE_LENGTH));
 		partNameLengths.put(new Integer(FUNCTION_REFERENCE), new Integer(FUNCTION_REFERENCE_LENGTH));
 		partNameLengths.put(new Integer(DATAITEM_REFERENCE), new Integer(DATAITEM_REFERENCE_LENGTH));
 		partNameLengths.put(new Integer(PROGRAM_REFERENCE), new Integer(PROGRAM_REFERENCE_LENGTH));
-		partNameLengths.put(new Integer(PROPERTY_ALIAS), new Integer(PROPERTY_ALIAS_LENGTH));
-		partNameLengths.put(new Integer(PROPERTY_MSGTABLEPREFIX), new Integer(PROPERTY_MSGTABLEPREFIX_LENGTH));
 		partNameLengths.put(new Integer(PACKAGE), new Integer(PACKAGE_LENGTH));
 		partNameLengths.put(new Integer(FILENAME), new Integer(FILENAME_LENGTH));
 		partNameLengths.put(new Integer(PART_REFERENCE), new Integer(PART_REFERENCE_LENGTH));
 		partNameLengths.put(new Integer(IDENTIFIER), new Integer(IDENTIFIER_LENGTH));
-		partNameLengths.put(new Integer(KEYITEM), new Integer(KEYITEM_LENGTH));
-		partNameLengths.put(new Integer(TABLENAME), new Integer(TABLENAME_LENGTH));
-		partNameLengths.put(new Integer(TABLENAMEVARIABLES), new Integer(TABLENAMEVARIABLES_LENGTH));
-		partNameLengths.put(new Integer(LENGTHITEM), new Integer(LENGTHITEM_LENGTH));
 		partNameLengths.put(new Integer(HANDLER), new Integer(HANDLER_LENGTH));
 		partNameLengths.put(new Integer(INTO_CLAUSE_DATAITEM_REFERENCE), new Integer(INTO_CLAUSE_ITEM_LENGTH));
 		partNameLengths.put(new Integer(INTERNALFIELD), new Integer(INTERNALFIELD_LENGTH));
@@ -420,171 +375,6 @@ public class EGLNameValidator {
 
 				break;
 				
-			case KEYITEM :
-				//	no subscripts or substrings allowed	
-				validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
-				// now validate each name
-				simpleNames = nameParser.getNames().iterator();
-				while (simpleNames.hasNext()) {
-					nextName = (EGLNameToken)(simpleNames.next());
-					if (nextName.getType() == EGLNameToken.IDENTIFIER) {
-					//	callValidateNoWhitespace(name, input, problemRequestor);
-						callIsKeyword(nextName, input, problemRequestor);
-						callStartsWithEZE(nextName, input, problemRequestor);
-						callValidateCharacters(nextName, input, problemRequestor, compilerOptions);
-						callValidateLength(nextName, input, nameType, problemRequestor);
-					}
-				}
-
-				restrictSubscripts(nameParser, input, IProblemRequestor.KEYITEM_CANNOT_BE_SUBSCRIPTED , problemRequestor);
-				restrictSubstrings(nameParser, input, problemRequestor);	
-				break;
-
-			case LENGTHITEM :
-				//	no subscripts or substrings allowed	
-				validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
-				// now validate each name
-				simpleNames = nameParser.getNames().iterator();
-				while (simpleNames.hasNext()) {
-					nextName = (EGLNameToken)(simpleNames.next());
-					if (nextName.getType() == EGLNameToken.IDENTIFIER) {
-					//	callValidateNoWhitespace(name, input, problemRequestor);
-						callIsKeyword(nextName, input, problemRequestor);
-						callStartsWithEZE(nextName, input, problemRequestor);
-						callValidateCharacters(nextName, input, problemRequestor, compilerOptions);
-						callValidateLength(nextName, input, nameType, problemRequestor);
-					}
-				}
-
-				restrictSubscripts(nameParser, input, IProblemRequestor.LENGTHITEM_CANNOT_BE_SUBSCRIPTED, problemRequestor);
-				restrictSubstrings(nameParser, input, problemRequestor);
-				break;
-						
-			case TABLENAME :
-				simpleNames = nameParser.getNames().iterator();
-				while (simpleNames.hasNext()) {
-					nextName = (EGLNameToken)(simpleNames.next());
-					callIsSQLClauseKeyword(nextName,input,problemRequestor);
-				}
-				validateSubscripts(input, nameParser.getSubscripts(), nameType, problemRequestor, true);
-				restrictSubstrings(nameParser, input, problemRequestor);
-				break;		
-
-
-			case TABLENAMEVARIABLES :
-				//"this", "syslib", "sysvar" and "mathlib" keywords are allowed
-				validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
-	 			start = 0;
-	 
-				//now validate each name
- 				for (int ii = start; ii < nameParser.getNames().size(); ii++) {
- 					nextName = ((EGLNameToken)nameParser.getNames().get(ii));
-					if (nextName.getType() == EGLNameToken.IDENTIFIER) {
-					//	callValidateNoWhitespace(name, input, problemRequestor);
-						callStartsWithEZE(nextName, input, problemRequestor);
-						callValidateCharacters(nextName, input, problemRequestor, compilerOptions);
-						callValidateLength(nextName, input, nameType, problemRequestor);
-						callIsKeyword(nextName, input, problemRequestor);
-						callIsSQLClauseKeyword(nextName, input, problemRequestor);
-					}
-				}
-				validateSubscripts(input, nameParser.getSubscripts(), nameType, problemRequestor, true);
-				validateSubstring(input, nameParser.getSubstrings(), nameType, problemRequestor, true);
-				break;				
-				
-			case PROPERTY_ALIAS :
-				//no subscripts or substrings allowed
-				//cannot be qualified
-				//can contain quoted reserved words
-				// cannot contain any blanks because it is part of a part name
-				
-				if (input.indexOf(' ')!= -1) {
-					// can't have blanks
-					problemRequestor.acceptProblem(
-						0,
-						input.length(),
-						IMarker.SEVERITY_ERROR,
-						IProblemRequestor.WHITESPACE_NOT_ALLOWED,
-						new String[] { input });
-				}
-				else {	
-					validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
-					
-					if (nameParser.getNames().size() > 1) {
-						problemRequestor.acceptProblem(
-							0,
-							input.length(),
-							IMarker.SEVERITY_ERROR,
-							IProblemRequestor.ALIAS_CANNOT_BE_QUALIFIED,
-							new String[] { input });
-					}
-					else {
-						
-						// now validate each name
-						simpleNames = nameParser.getNames().iterator();
-						while (simpleNames.hasNext()) {
-							nextName = (EGLNameToken)(simpleNames.next());
-							if (nextName.getType() == EGLNameToken.IDENTIFIER) {
-							//	callValidateNoWhitespace(name, input, problemRequestor);
-								callValidateCharacters(nextName, input, problemRequestor, compilerOptions);
-								callValidateLength(nextName, input, nameType, problemRequestor);
-							}
-						}
-					}
-				}
-
-				restrictSubscripts(nameParser, input, IProblemRequestor.ALIAS_CANNOT_BE_SUBSCRIPTED, problemRequestor);
-				restrictSubstrings(nameParser, input, problemRequestor);
-				break;
-				
-			case PROPERTY_MSGTABLEPREFIX :
-				//no subscripts or substrings allowed
-				//cannot be qualified
-				//can contain quoted reserved words
-				// can be a reserved word because it is really only a partial name
-				// cannot contain any blanks because it is part of a part name
-				
-				if (input.indexOf(' ')!= -1) {
-					// can't have blanks
-					problemRequestor.acceptProblem(
-						0,
-						input.length(),
-						IMarker.SEVERITY_ERROR,
-						IProblemRequestor.WHITESPACE_NOT_ALLOWED,
-						new String[] { input });
-				}
-				else {
-	
-					validateNameTokenSequence(nameParser.getNames(), input, problemRequestor);
-					
-//					if (nameParser.getNames().size() > 1) {
-//						errors.add(
-//							EGLMessage.createEGLValidationErrorMessage(
-//								EGLBasePlugin.EGL_VALIDATION_RESOURCE_BUNDLE,
-//								IProblemRequestor.MSGTABLEPREFIX_CANNOT_BE_QUALIFIED,
-//								new String[] { input },
-//								0,
-//								input.length()));
-//					}
-					
-					// now validate each name
-					simpleNames = nameParser.getNames().iterator();
-					while (simpleNames.hasNext()) {
-						nextName = (EGLNameToken)(simpleNames.next());
-						if (nextName.getType() == EGLNameToken.IDENTIFIER) {
-						//	callValidateNoWhitespace(name, input, problemRequestor);
-							callStartsWithEZE(nextName, input, problemRequestor);
-							callValidateCharacters(nextName, input, problemRequestor, compilerOptions);
-							callValidateLength(nextName, input, nameType, problemRequestor);
-						}
-					}	
-				}
-
-				restrictSubscripts(nameParser, input, IProblemRequestor.MSGTABLEPREFIX_CANNOT_BE_SUBSCRIPTED, problemRequestor);
-				restrictSubstrings(nameParser, input, problemRequestor);			
-				
-				break;
-
 			case INTERNALFIELD :
 				
 				// now validate each name
@@ -791,9 +581,6 @@ public class EGLNameValidator {
 				
 			case PROGRAM :
 			case PROGRAM_REFERENCE :
-			case FORMGROUP:
-			case PAGEHANDLER :
-			case DATATABLE:
 			case LIBRARY:
 			case HANDLER:
 			case DELEGATE:
@@ -1258,18 +1045,6 @@ public class EGLNameValidator {
 				new String[] { name.getText() });
 		}
 	}
-
-	private static void callIsSQLClauseKeyword(EGLNameToken name, String input, IProblemRequestor problemRequestor) {
-		if ( EGLSQLKeywordHandler.getSQLKeywordNamesToLowerCaseAsSet().contains(name.getText().toLowerCase(Locale.ENGLISH)) ) { 
-			problemRequestor.acceptProblem(
-				name.getOffset(),
-				name.getOffset() + name.getText().length(),
-				IMarker.SEVERITY_ERROR,
-				IProblemRequestor.SQL_TABLE_NAME_LABEL_VARIABLE_DUPLICATES_CLAUSE,
-				new String[] { name.getText(), EGLSQLKeywordHandler.getSQLClauseKeywordNamesCommaSeparatedString()});
-		}
-	}
-	
 
 	private static void callValidateLength(EGLNameToken name, String input, int nameType, IProblemRequestor problemRequestor) {
 		if (name.getText().length() > ((Integer) partNameLengths.get(new Integer(nameType))).intValue()) {

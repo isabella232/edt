@@ -37,7 +37,7 @@ public class JavaScriptObjectFieldTypeValidator extends DefaultFieldContentAnnot
 			if (parameterBinding.getParameterKind() != ParameterKind.PARM_IN) {
 				problemRequestor.acceptProblem(
 					fParameter,
-					IProblemRequestor.IN_MODIFIER_REQUIRED_FOR_JAVAOBJECT_FUNCTION_PARAMETERS,
+					IProblemRequestor.IN_MODIFIER_REQUIRED_FOR_JAVASCRIPTOBJECT_FUNCTION_PARAMETERS,
 					new String[] {dataBinding.getCaseSensitiveName()});
 			}
 		}			

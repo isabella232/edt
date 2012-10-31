@@ -39,7 +39,6 @@ public class WorkingCopyGenerationResult implements IProblemRequestor, ISyntaxEr
 	public int numGenWarnings;
 	
 	public static final Set<String> EGLMESSAGESTOIGNORE = new HashSet<String>(Arrays.asList(new String[] {
-		EGLMessage.EGLMESSAGE_GENERATION_PROGRAM_RESULTS_VIEW_MESSAGE
 	}));
 	
 	public void acceptProblem(int startOffset, int endOffset, int severity, int problemKind, String[] inserts) {

@@ -58,14 +58,14 @@ public class AccumulatingTopLevelProblemRequestor extends DefaultProblemRequesto
 		if (isContainerContextDependent() && problemKind == IProblemRequestor.TYPE_CANNOT_BE_RESOLVED){
 			return false;
 		}
-		return !messagesWithLineNumberInserts.contains(new Integer(problemKind));
+		return true;
 	}
 	
 	public boolean reportContextProblems(int problemKind) {
 		if (isContainerContextDependent() && problemKind == TYPE_CANNOT_BE_RESOLVED){
 			return true;
 		}
-		return messagesWithLineNumberInserts.contains(new Integer(problemKind));
+		return false;
 	}
 	
 	protected boolean isContainerContextDependent() {
