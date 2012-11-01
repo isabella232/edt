@@ -987,7 +987,7 @@ public class BindingUtil {
 	}
 	
 	public static boolean isParameterizableType(Type type) {
-		return type instanceof ParameterizableType;
+		return type instanceof ParameterizableType || (type != null && type.getClassifier() instanceof ParameterizableType);
 	}
 	
 	public static void setDefaultSupertype(StructPart part, Stereotype subType, StructPart defaultSuperType) {
