@@ -63,10 +63,19 @@ end</pre>
 <tr class="row">
 <td class="entry" valign="top" width="50%"><pre class="pre codeblock">Record ServiceInvocationException type Exception
 
+   /* 
+      If a ServiceInvocationException is issued:
+      
+         o  If the service was invoked as a dedicated service, 
+            the source field is set to the EGL enumeration value.
+         o  If the service was invoked as a REST service, 
+            the source field is set to the REST enumeration value.
+   */
    source eglx.services.ServiceKind?;
-  	   detail1 string;
-      detail2 string;
-      detail3 string;
+
+   detail1 string;
+   detail2 string;
+   detail3 string;
 end</pre>
 </td>
 
