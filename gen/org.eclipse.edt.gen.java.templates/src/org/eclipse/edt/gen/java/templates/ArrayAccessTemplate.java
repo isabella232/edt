@@ -170,6 +170,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 			out.print("(");
 			out.print("(");
 			ctx.invoke(genRuntimeTypeName, ((ArrayType) expr.getArray().getType()).getElementType(), ctx, out, TypeNameKind.JavaObject);
+			ctx.invoke(genRuntimeTypeExtension, ((ArrayType) expr.getArray().getType()).getElementType(), ctx, out);
 			out.print(")");
 			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(".get(");
