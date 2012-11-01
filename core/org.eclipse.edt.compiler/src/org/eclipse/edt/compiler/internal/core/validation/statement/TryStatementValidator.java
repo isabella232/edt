@@ -46,35 +46,27 @@ public class TryStatementValidator extends DefaultASTVisitor {
 	
 	public boolean visit(OnExceptionBlock onExceptionBlock) {
 		if (enclosingPart != null) {
-			if (onExceptionBlock.hasExceptionDeclaration()) {
-				Type exceptionType = onExceptionBlock.getExceptionType();
-				org.eclipse.edt.mof.egl.Type exceptionTypeBinding = exceptionType.resolveType();
-				
-				if (exceptionTypeBinding != null) {
-					if (caughtExceptionTypes.contains(exceptionTypeBinding)) {
+			Type exceptionType = onExceptionBlock.getExceptionType();
+			org.eclipse.edt.mof.egl.Type exceptionTypeBinding = exceptionType.resolveType();
+			
+			if (exceptionTypeBinding != null) {
+				if (caughtExceptionTypes.contains(exceptionTypeBinding)) {
+					problemRequestor.acceptProblem(
+						exceptionType,
+						IProblemRequestor.DUPLICATE_ONEXCEPTION_EXCEPTION,
+						new String[] {exceptionType.getCanonicalName()});
+				}
+				else {
+					if (!ThrowStatementValidator.isAnyException(exceptionTypeBinding)) {
 						problemRequestor.acceptProblem(
 							exceptionType,
-							IProblemRequestor.DUPLICATE_ONEXCEPTION_EXCEPTION,
+							IProblemRequestor.TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION,
 							new String[] {exceptionType.getCanonicalName()});
 					}
 					else {
-						if (!ThrowStatementValidator.isAnyException(exceptionTypeBinding)) {
-							problemRequestor.acceptProblem(
-								exceptionType,
-								IProblemRequestor.TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION,
-								new String[] {exceptionType.getCanonicalName()});
-						}
-						else {
-							caughtExceptionTypes.add(exceptionTypeBinding);
-						}
+						caughtExceptionTypes.add(exceptionTypeBinding);
 					}
 				}
-			}
-			else {
-				problemRequestor.acceptProblem(
-					onExceptionBlock,
-					IProblemRequestor.EXCEPTION_FILTER_REQUIRED
-				);
 			}
 		}
 		return false;

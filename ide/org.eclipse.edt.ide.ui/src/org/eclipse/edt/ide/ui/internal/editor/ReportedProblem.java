@@ -48,10 +48,6 @@ public class ReportedProblem {
 		String[] inserts = problem.getInserts();
 		
 		if (problemKind != -1) {
-			if (DefaultProblemRequestor.messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
-				inserts[inserts.length - 2] = Integer.toString(lineNumber + 1);
-				inserts[inserts.length - 1] = filePath;
-			}
 			this.message = getErrorMessageText(problemKind, startOffset, lineNumber, severity, DefaultProblemRequestor.getMessageFromBundle(problemKind, inserts, problem.getResourceBundle()));
 		}
 		else {

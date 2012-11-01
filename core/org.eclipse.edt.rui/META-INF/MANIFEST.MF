@@ -13,4 +13,5 @@ Require-Bundle: org.eclipse.edt.compiler;bundle-version="0.8.2",
 Export-Package: org.eclipse.edt.rui,
  org.eclipse.edt.rui.validation.annotation,
  org.eclipse.edt.rui.validation.annotation.proxy
+Bundle-ClassPath: src.jar
 

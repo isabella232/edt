@@ -33,7 +33,6 @@ public abstract class AbstractRecoverer {
 
 	// TODO Move grammatical information into Grammar file
 	protected static int[] IMPORTANT_TERMINALS = {
-		ErrorNodeTypes.DATAITEM,
 		ErrorNodeTypes.RECORD,
 		ErrorNodeTypes.PROGRAM,
 		ErrorNodeTypes.FUNCTION,
@@ -42,7 +41,6 @@ public abstract class AbstractRecoverer {
 	};
 	
 	protected static int[] UNDELETABLE_TERMINALS = {
-		ErrorNodeTypes.DATAITEM,
 		ErrorNodeTypes.RECORD,
 		ErrorNodeTypes.PROGRAM,
 		ErrorNodeTypes.FUNCTION,

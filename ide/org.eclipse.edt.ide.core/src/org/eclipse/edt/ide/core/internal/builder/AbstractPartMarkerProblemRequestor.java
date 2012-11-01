@@ -25,31 +25,16 @@ import org.eclipse.edt.mof.utils.NameUtile;
 public abstract class AbstractPartMarkerProblemRequestor extends	AbstractMarkerProblemRequestor {
 
 	protected String partName;
-	private String containerContextName;
     
 	public AbstractPartMarkerProblemRequestor(IFile file, String partName, String containerContextName) {
 		super(file, "VAL");
 		this.partName = partName;
-		this.containerContextName = containerContextName;
 	}
 	
 	@Override
 	protected IMarker createMarker(int startOffset, int endOffset, int severity, int problemKind, String[] inserts, ResourceBundle bundle) throws CoreException {
-		IMarker marker;
-		if(messagesWithLineNumberInserts.contains(new Integer(problemKind))) {
-			inserts = shiftInsertsIfNeccesary(problemKind, inserts);
-			inserts[0] = containerContextName;
-			int lineNumber = getLineNumberOfOffset(startOffset);
-			inserts[inserts.length-2] = Integer.toString(lineNumber+1);
-			inserts[inserts.length-1] = file.getFullPath().toOSString();
-			marker = super.createMarker(startOffset, endOffset, lineNumber, severity, problemKind, inserts, bundle); 
-		}
-		else {
-			marker = super.createMarker(startOffset, endOffset, severity, problemKind, inserts, bundle);
-		}
-		
+		IMarker marker = super.createMarker(startOffset, endOffset, severity, problemKind, inserts, bundle);
 		marker.setAttribute(PART_NAME, partName);
-		
 		return marker;		   
 	}
 	

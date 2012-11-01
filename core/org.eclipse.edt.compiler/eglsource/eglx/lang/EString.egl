@@ -320,7 +320,7 @@ externalType EString extends AnyText type ParameterizableType {
 	function clipLeading() returns(EString);
 
 	/**
-	 * Returns this string minus any trailing and trailing blanks.
+	 * Returns this string minus any leading and trailing blanks.
 	 *
 	 * @return the trimmed string.
 	 */
