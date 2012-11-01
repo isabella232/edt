@@ -105,6 +105,11 @@ public class OpenOnSelectionHandler extends EGLHandler {
 			handleName(onExceptionBlock.getExceptionName());
 			return true;
 		}
+		
+		public boolean visit(FunctionParameter functionParameter) {
+			handleName(functionParameter.getName());
+			return true;
+		}
 	}
 	
 	private boolean beep;
