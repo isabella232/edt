@@ -25,7 +25,7 @@ public class TestResultRootNodeDetailsPage extends TestResultPkgNodeDetailsPage 
 
 	protected void createControlsInTopSection(FormToolkit toolkit, Composite parent) {
 		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "Expected total test variation count: " + fRootNode.expectedTotalTestVariationCnt);
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "Test run Started at:         " + fRootNode.startTS);
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "Test run started at:         " + fRootNode.startTS);
 		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "Test run ended at:           " + fRootNode.endRunTS);
 		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "Finished writing results at: " + fRootNode.finalTS);
 		if(fRootNode.expectedTotalTestVariationCnt != statisticCnt.getExpectedCnt() ||

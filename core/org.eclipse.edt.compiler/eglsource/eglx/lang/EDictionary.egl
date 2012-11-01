@@ -33,12 +33,6 @@ import egl.lang.reflect.Operation;
 externalType EDictionary extends EAny type ClassType {@Dynamic}
 
 	/**
-	 * {@Operation ['} Returns the value with the given key.
-	 * @throws DynamicAccessException  if there's no key with the given name.
-	 */
-	static function $Lookup(dict EDictionary in, key EString in) returns(EAny) {@Operation{"['"}};
-
-	/**
 	 * Default constructor
 	 */
 	constructor();
