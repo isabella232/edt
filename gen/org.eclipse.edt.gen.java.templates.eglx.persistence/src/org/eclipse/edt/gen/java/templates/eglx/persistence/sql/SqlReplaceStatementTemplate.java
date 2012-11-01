@@ -17,9 +17,9 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlReplaceStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlReplaceStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 
 public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 

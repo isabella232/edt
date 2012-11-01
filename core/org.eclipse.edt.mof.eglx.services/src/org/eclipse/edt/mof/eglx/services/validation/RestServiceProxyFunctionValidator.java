@@ -29,7 +29,7 @@ import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.services.Utils;
+import org.eclipse.edt.mof.eglx.services.ext.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 import org.eclipse.edt.mof.utils.NameUtile;
 

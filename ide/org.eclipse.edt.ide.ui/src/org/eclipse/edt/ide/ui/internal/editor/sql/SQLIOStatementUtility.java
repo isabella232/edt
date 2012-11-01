@@ -46,7 +46,7 @@ import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 
 public class SQLIOStatementUtility {
 	public static SQLIOStatementActionInfo getAddSQLIoStatementActionInfo(IEGLDocument document, Node node) {

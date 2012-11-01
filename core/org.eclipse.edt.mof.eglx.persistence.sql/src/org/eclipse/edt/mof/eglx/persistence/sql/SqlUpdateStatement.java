@@ -9,9 +9,8 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen;
+package org.eclipse.edt.mof.eglx.persistence.sql;
 
-import org.eclipse.edt.mof.egl.DeleteStatement;
 
-public interface SqlDeleteStatement extends SqlActionStatement, DeleteStatement {
+public interface SqlUpdateStatement extends SqlReplaceStatement {
 }

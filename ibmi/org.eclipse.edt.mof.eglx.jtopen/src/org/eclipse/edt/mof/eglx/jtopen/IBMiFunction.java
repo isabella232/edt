@@ -9,12 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen;
+package org.eclipse.edt.mof.eglx.jtopen;
 
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.OpenStatement;
+import org.eclipse.edt.mof.egl.Function;
 
-public interface SqlOpenStatement extends SqlActionStatement, OpenStatement {
-	Expression getResultSet();
-	
+public interface IBMiFunction extends Function {
 }

@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.eglx.jtopen.impl;
 
 import org.eclipse.edt.mof.egl.impl.CallStatementImpl;
-import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiCallStatement;
 
 public class IBMiCallStatementImpl extends CallStatementImpl implements IBMiCallStatement {
 

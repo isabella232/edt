@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql;
+package org.eclipse.edt.mof.eglx.persistence.sql.ext;
 
 import java.io.IOException;
 import java.io.StringReader;

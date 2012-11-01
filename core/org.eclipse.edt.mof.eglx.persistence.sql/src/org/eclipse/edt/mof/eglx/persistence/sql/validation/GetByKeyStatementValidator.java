@@ -31,7 +31,7 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {

@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.DummyExpression;
+import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
 import org.eclipse.edt.mof.impl.DynamicEClass;
 import org.eclipse.edt.mof.impl.DynamicEObject;
 

@@ -9,32 +9,33 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.services.gen;
+package org.eclipse.edt.mof.eglx.jtopen.ext;
 
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.egl2mof.AbstractElementGenerator;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
-public class ServiceElementGenerator extends AbstractElementGenerator {
+public class IBMiElementGenerator extends AbstractElementGenerator {
 	
-	ServicesFactory factory = ServicesFactory.INSTANCE;
+	IBMiFactory factory = IBMiFactory.INSTANCE;
 	
-	public ServiceElementGenerator() {
+	public IBMiElementGenerator() {
 		super(null);
 	}
 	
-	public ServiceElementGenerator(IEnvironment env) {
+	public IBMiElementGenerator(IEnvironment env) {
 		super(env);
 	}
 
 	public boolean visit(CallStatement callStatement) {
-		stack.push(factory.createServicesCallStatement());
+		stack.push(factory.createIBMiCallStatement());
 		return false;
 	};
 	
 	public boolean visit(NestedFunction nestedFunction) {
-		stack.push(factory.createServiceFunction());
+		stack.push(factory.createIBMiFunction());
 		return false;
 	};
 }

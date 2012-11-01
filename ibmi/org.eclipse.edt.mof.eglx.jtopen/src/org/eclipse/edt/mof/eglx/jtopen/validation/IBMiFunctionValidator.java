@@ -32,7 +32,7 @@ import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.jtopen.Utils;
+import org.eclipse.edt.mof.eglx.jtopen.ext.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.utils.EList;

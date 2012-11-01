@@ -13,7 +13,7 @@ package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.impl.IOStatementImpl;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 
 
 public abstract class SqlIOStatementImpl extends IOStatementImpl implements SqlActionStatement {

@@ -12,9 +12,9 @@
 package org.eclipse.edt.mof.eglx.jtopen.impl;
 
 import org.eclipse.edt.mof.EClass;
-import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiCallStatement;
-import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFactory;
-import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFunction;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiCallStatement;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiFunction;
 import org.eclipse.edt.mof.impl.EFactoryImpl;
 
 

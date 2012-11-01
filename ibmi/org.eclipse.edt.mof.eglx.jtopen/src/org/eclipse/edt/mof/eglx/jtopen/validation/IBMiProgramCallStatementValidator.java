@@ -26,7 +26,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.jtopen.Utils;
+import org.eclipse.edt.mof.eglx.jtopen.ext.Utils;
 import org.eclipse.edt.mof.eglx.jtopen.messages.IBMiResourceKeys;
 
 public class IBMiProgramCallStatementValidator extends AbstractStatementValidator {

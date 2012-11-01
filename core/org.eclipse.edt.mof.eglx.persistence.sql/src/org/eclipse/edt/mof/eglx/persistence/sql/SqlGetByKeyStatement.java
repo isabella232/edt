@@ -9,9 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen;
+package org.eclipse.edt.mof.eglx.persistence.sql;
 
-import org.eclipse.edt.mof.egl.AddStatement;
+import org.eclipse.edt.mof.egl.GetByKeyStatement;
 
-public interface SqlAddStatement extends SqlActionStatement, AddStatement {
+public interface SqlGetByKeyStatement extends SqlActionStatement, GetByKeyStatement {	
 }

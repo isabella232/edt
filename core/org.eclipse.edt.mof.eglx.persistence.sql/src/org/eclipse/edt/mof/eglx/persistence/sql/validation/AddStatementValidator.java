@@ -24,7 +24,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class AddStatementValidator extends AbstractSqlStatementValidator {

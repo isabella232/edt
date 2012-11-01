@@ -9,9 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.services.gen;
+package org.eclipse.edt.mof.eglx.persistence.sql;
 
-import org.eclipse.edt.mof.egl.CallStatement;
+import org.eclipse.edt.mof.egl.AddStatement;
 
-public interface ServicesCallStatement extends CallStatement {
+public interface SqlAddStatement extends SqlActionStatement, AddStatement {
 }

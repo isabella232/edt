@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,9 +9,14 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.jtopen.gen;
+package org.eclipse.edt.mof.eglx.persistence.sql;
 
-import org.eclipse.edt.mof.egl.CallStatement;
+import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.Type;
 
-public interface IBMiCallStatement extends CallStatement {
+public interface DummyExpression extends LHSExpr {	
+	String getExpr();
+	void setExpr(String expr);
+	
+	void setType(Type type);
 }

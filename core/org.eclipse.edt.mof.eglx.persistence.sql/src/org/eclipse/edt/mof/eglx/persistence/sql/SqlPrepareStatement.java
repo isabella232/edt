@@ -9,9 +9,13 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.jtopen.gen;
+package org.eclipse.edt.mof.eglx.persistence.sql;
 
-import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.PrepareStatement;
 
-public interface IBMiFunction extends Function {
+public interface SqlPrepareStatement extends SqlActionStatement, PrepareStatement {
+	
+	Expression getSqlStringExpr();
+	void setSqlStringExpr(Expression expr);
 }

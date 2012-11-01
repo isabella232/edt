@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlUpdateStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlUpdateStatement;
 
 public class SqlUpdateStatementImpl extends SqlReplaceStatementImpl implements SqlUpdateStatement {
 }

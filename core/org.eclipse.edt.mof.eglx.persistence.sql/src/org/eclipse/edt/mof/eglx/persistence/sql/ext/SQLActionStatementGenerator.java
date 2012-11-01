@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen;
+package org.eclipse.edt.mof.eglx.persistence.sql.ext;
 
 import java.util.List;
 
@@ -22,6 +22,17 @@ import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
 import org.eclipse.edt.compiler.internal.egl2mof.AbstractElementGenerator;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Statement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlCloseStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlDeleteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlExecuteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlFactory;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlForEachStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlReplaceStatement;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class SQLActionStatementGenerator extends AbstractElementGenerator {

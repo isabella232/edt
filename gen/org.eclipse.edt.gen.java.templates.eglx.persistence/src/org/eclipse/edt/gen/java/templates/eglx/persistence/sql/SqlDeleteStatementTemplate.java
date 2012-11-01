@@ -13,8 +13,8 @@ package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlDeleteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlDeleteStatement;
 
 public class SqlDeleteStatementTemplate extends SqlActionStatementTemplate {
 

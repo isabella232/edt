@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.eglx.jtopen.impl;
 
 import org.eclipse.edt.mof.egl.impl.FunctionImpl;
-import org.eclipse.edt.mof.eglx.jtopen.gen.IBMiFunction;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiFunction;
 
 public class IBMiFunctionImpl extends FunctionImpl implements IBMiFunction {
 

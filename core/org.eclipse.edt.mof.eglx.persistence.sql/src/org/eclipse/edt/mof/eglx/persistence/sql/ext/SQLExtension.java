@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql;
+package org.eclipse.edt.mof.eglx.persistence.sql.ext;
 
 import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.BaseCompilerExtension;
@@ -29,8 +29,7 @@ import org.eclipse.edt.compiler.core.ast.PrepareStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SQLActionStatementGenerator;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.validation.SQLActionStatementValidator;
 
 public class SQLExtension extends BaseCompilerExtension {
