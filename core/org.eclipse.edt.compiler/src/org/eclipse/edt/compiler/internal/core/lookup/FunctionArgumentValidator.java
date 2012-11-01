@@ -422,7 +422,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	boolean result = true;
     	for (Map.Entry<Expression, Type> entry : argMap.entrySet()) {
     		Expression argExpr = entry.getKey();
-    		Type argType = entry.getValue();
     		Member argMember = argExpr.resolveMember();
     		
         	if(argMember != null) {
@@ -443,23 +442,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
         	
         	validateNotThis(argExpr);
         	validateNotSuper(argExpr);
-        	
-        	//Cannot pass a value type to an reference type OUT parm
-       		if (!isRefCompatForOutParm(argType, parmType)) {
-        		problemRequestor.acceptProblem(
-        				argExpr,
-    	    			IProblemRequestor.FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM,
-    					new String[] {
-    	    				argExpr.getCanonicalString(),
-    						funcParmBinding.getCaseSensitiveName(),
-    						canonicalFunctionName,
-    						// arg can be a function, which has no type
-    						argType == null ? BindingUtil.getTypeName(argMember) : BindingUtil.getShortTypeString(argType, true),
-    						BindingUtil.getShortTypeString(parmType, true)
-    	    			});
-        		result = false;
-        		continue;
-       		}
     	}
     	
     	if (!result) {
@@ -467,13 +449,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	}
     	
     	return checkArgForInOrOutParameter(argMap, funcParmBinding, parmType, argNum);
-    }
-    
-    private boolean isRefCompatForOutParm(Type argType, Type parmType) {
-    	if (argType != null && parmType != null) {
-    		return TypeUtils.isReferenceType(argType) == TypeUtils.isReferenceType(parmType);
-    	}
-    	return true;
     }
     
     private boolean checkArgForInOutParameter(Map<Expression, Type> argMap, final FunctionParameter funcParmBinding, Type parmType, int argNum) {
@@ -510,7 +485,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	    	boolean argCompatible = argMember == null || argMember.isNullable() == funcParmBinding.isNullable();
 	    	if (argCompatible) {
 		    	if (argType != null) {
-		    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argType.getClassifier());
+		    		argCompatible = BindingUtil.isReferenceCompatible(parmType, argType);
 		    	}
 		    	else if (argMember != null) {
 		    		argCompatible = TypeUtils.areCompatible(parmType.getClassifier(), argMember);

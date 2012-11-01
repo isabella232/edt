@@ -85,82 +85,82 @@ Register the Preference Pages
          point="org.eclipse.edt.ide.rui.widgetLibraryProvider">
       <provider
             detail="%StandardWidgetLibraryDescription"
-            id="org.eclipse.edt.rui.widgets_0.8.1"
+            id="org.eclipse.edt.rui.widgets_0.8.2"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="%StandardWidgetLibraryName"
             logo=""
-            projectName="org.eclipse.edt.rui.widgets_0.8.1"
+            projectName="org.eclipse.edt.rui.widgets_0.8.2"
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            version="0.8.1">
+            version="0.8.2">
       </provider>
       <provider
             conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
             detail="%DojoWidgetLibraryDescription"
-            id="org.eclipse.edt.rui.dojo_0.8.1"
+            id="org.eclipse.edt.rui.dojo_0.8.2"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="%DojoWidgetLibraryName"
             logo="icons/dojo16_logo.png"
-            projectName="org.eclipse.edt.rui.dojo_0.8.1"
+            projectName="org.eclipse.edt.rui.dojo_0.8.2"
             provider="Eclipse.org"
              resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            version="0.8.1"
+            version="0.8.2"
             version_desc="Dojo 1.7.1">
       </provider>
       <provider
             conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
             detail="%DojoWidgetLibraryDescription"
-            id="org.eclipse.edt.rui.dojo.remote_0.8.1"
+            id="org.eclipse.edt.rui.dojo.remote_0.8.2"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="%DojoWidgetLibraryName"
             logo="icons/dojo16_logo.png"
-            projectName="org.eclipse.edt.rui.dojo.remote_0.8.1"
+            projectName="org.eclipse.edt.rui.dojo.remote_0.8.2"
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            version="0.8.1"
+            version="0.8.2"
             version_desc="Dojo 1.7.1 Remote">
       </provider>
       <provider 
             detail="%MobileDojoWidgetLibraryDescription"
-            id="org.eclipse.edt.rui.dojo.mobile_0.8.1"
+            id="org.eclipse.edt.rui.dojo.mobile_0.8.2"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="%MobileDojoWidgetLibraryName"
             logo="icons/dojo16_logo.png"
-            projectName="org.eclipse.edt.rui.dojo.mobile.widgets_0.8.1"
+            projectName="org.eclipse.edt.rui.dojo.mobile.widgets_0.8.2"
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            version="0.8.1"
+            version="0.8.2"
             version_desc="Dojo 1.7.1 Mobile">
       </provider>
       <providerContainer
             id="org.eclipse.edt.ide.ui.projects.webClient.widget.libraryProviderContainer">
          <providerRef
-               id="org.eclipse.edt.rui.widgets_0.8.1"
+               id="org.eclipse.edt.rui.widgets_0.8.2"
                isMandatory="true"
                selected="true">
          </providerRef>
          <providerRef
-               id="org.eclipse.edt.rui.dojo_0.8.1"
+               id="org.eclipse.edt.rui.dojo_0.8.2"
                selected="false">
          </providerRef>
          <providerRef
-               id="org.eclipse.edt.rui.dojo.remote_0.8.1"
+               id="org.eclipse.edt.rui.dojo.remote_0.8.2"
                selected="true">
          </providerRef>
       </providerContainer>
       <providerContainer
             id="org.eclipse.edt.ide.ui.projects.mobileWebServiceClient.widget.libraryProviderContainer">
          <providerRef
-               id="org.eclipse.edt.rui.widgets_0.8.1"
+               id="org.eclipse.edt.rui.widgets_0.8.2"
                isMandatory="true"
                selected="true">
          </providerRef>
          <providerRef
-               id="org.eclipse.edt.rui.dojo.mobile_0.8.1"
+               id="org.eclipse.edt.rui.dojo.mobile_0.8.2"
                isMandatory="true"
                selected="true">
          </providerRef>
@@ -168,12 +168,12 @@ Register the Preference Pages
       <providerContainer
             id="org.eclipse.edt.ide.ui.projects.helloWorld.libraryProviderContainer">
          <providerRef
-               id="org.eclipse.edt.rui.widgets_0.8.1"
+               id="org.eclipse.edt.rui.widgets_0.8.2"
                isMandatory="true"
                selected="true">
          </providerRef>
          <providerRef
-               id="org.eclipse.edt.rui.dojo.remote_0.8.1"
+               id="org.eclipse.edt.rui.dojo.remote_0.8.2"
                isMandatory="true"
                selected="true">
          </providerRef>

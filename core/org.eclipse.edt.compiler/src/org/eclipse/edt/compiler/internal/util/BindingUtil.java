@@ -987,7 +987,7 @@ public class BindingUtil {
 	}
 	
 	public static boolean isParameterizableType(Type type) {
-		return type instanceof ParameterizableType;
+		return type instanceof ParameterizableType || (type != null && type.getClassifier() instanceof ParameterizableType);
 	}
 	
 	public static void setDefaultSupertype(StructPart part, Stereotype subType, StructPart defaultSuperType) {
@@ -1254,5 +1254,42 @@ public class BindingUtil {
 		return false;
 	}
 
-
+	public static boolean isReferenceCompatible(Type type1, Type type2) {
+		if (type1 == null || type2 == null) {
+			return true;
+		}
+		
+		if (type1 instanceof ArrayType && type2 instanceof ArrayType) {
+			// Arrays must match exactly, including nullability.
+			ArrayType array1 = (ArrayType)type1;
+			ArrayType array2 = (ArrayType)type2;
+			if (array1.elementsNullable() != array2.elementsNullable()) {
+				return false;
+			}
+			
+			Type elem1 = array1.getElementType();
+			Type elem2 = array2.getElementType();
+			while (elem1 instanceof ArrayType && elem2 instanceof ArrayType) {
+				if (((ArrayType)elem1).elementsNullable() != ((ArrayType)elem2).elementsNullable()) {
+					return false;
+				}
+				elem1 = ((ArrayType)elem1).getElementType();
+				elem2 = ((ArrayType)elem2).getElementType();
+			}
+			return elem1.equals(elem2);
+		}
+		
+		boolean isReferenceType = TypeUtils.isReferenceType(type1);
+		if (isReferenceType != TypeUtils.isReferenceType(type2)) {
+			return false;
+		}
+		
+		// For value types they must match exactly.
+		if (!isReferenceType) {
+			return type1.equals(type2);
+		}
+		
+		// For reference types they must be in the same hierarchy.
+		return TypeUtils.areCompatible(type1.getClassifier(), type2.getClassifier());
+	}
 }

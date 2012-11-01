@@ -73,8 +73,6 @@ public class EGLMessage extends Object  implements IGenerationResultsMessage{
 	public static final String EGLMESSAGE_GROUP_VALIDATION = "Validation"; //$NON-NLS-1$
 	public static final String EGLMESSAGE_GROUP_DEPLOYMENT = "Deployment"; //$NON-NLS-1$
 	public static final String EGLMESSAGE_GROUP_EDITOR = "Editor"; //$NON-NLS-1$
-	public static final String EGLMESSAGE_GROUP_XML_VALIDATION = "XML Validation"; //$NON-NLS-1$
-	public static final String EGLMESSAGE_GROUP_INPUT = "Batch Input"; //$NON-NLS-1$
 	public static final String EGLMESSAGE_GROUP_STATEMENT_PARSER = "StatementParser"; //$NON-NLS-1$
 	public static final String EGLMESSAGE_GROUP_SYNTAX = "Syntax"; //$NON-NLS-1$
 
@@ -82,8 +80,6 @@ public class EGLMessage extends Object  implements IGenerationResultsMessage{
  	public static final String EGLMESSAGE_INVALID_CHARACTER_IN_NAME = "3002"; //$NON-NLS-1$
  	public static final String EGLMESSAGE_EZE_NOT_ALLOWED = "3003"; //$NON-NLS-1$
  	public static final String EGLMESSAGE_RESERVED_WORD_NOT_ALLOWED = "3019"; //$NON-NLS-1$
-	public static final String EGLMESSAGE_XML_VALIDATION_ERROR = "3998"; //$NON-NLS-1$
-	public static final String EGLMESSAGE_XML_VALIDATION_ERROR_IN_FILE = "3999"; //$NON-NLS-1$
  	public static final String EGLMESSAGE_INFO_UNSUPPORTED_SQL_TYPE_ON_RETRIEVE = "4584"; //$NON-NLS-1$
  	public static final String EGLMESSAGE_INFO_DECIMAL_LENGTH_SHORTENED_FROM_ON_RETRIEVE = "4585"; //$NON-NLS-1$
  	public static final String EGLMESSAGE_INFO_DECIMAL_DECIMALS_SHORTENED_FROM_ON_RETRIEVE = "4586"; //$NON-NLS-1$
@@ -513,41 +509,6 @@ public class EGLMessage extends Object  implements IGenerationResultsMessage{
 
 		return new EGLMessage(resource, EGLMessage.EGL_WARNING_MESSAGE, messageID, EGLMessage.EGLMESSAGE_GROUP_EDITOR, inserts);
 	}
-	/**
-	 *
-	 */
-	public static EGLMessage createEGLInputErrorMessage(String messageID, String[] inserts) {
-
-		return new EGLMessage(
-			getValidationResourceBundleName(),
-			EGLMessage.EGL_ERROR_MESSAGE,
-			messageID,
-			EGLMessage.EGLMESSAGE_GROUP_INPUT,
-			null,
-			inserts,
-			-1,
-			-1,
-			-1,
-			-1);
-
-	}
-	/**
-	 *
-	 */
-	public static EGLMessage createEGLInputErrorMessage(String messageID, String insert) {
-
-		return new EGLMessage(
-			getValidationResourceBundleName(),
-			EGLMessage.EGL_ERROR_MESSAGE,
-			messageID,
-			EGLMessage.EGLMESSAGE_GROUP_INPUT,
-			null,
-			new String[] { insert },
-			-1,
-			-1,
-			-1,
-			-1);
-	}
 	
 	/**
 	 *
@@ -955,88 +916,6 @@ public class EGLMessage extends Object  implements IGenerationResultsMessage{
 				anEndOffset);
 	}
 	/**
-	 * Insert the method's description here.
-	 * Creation date: (10/9/2001 2:18:31 PM)
-	 * @return org.eclipse.edt.compiler.internal.compiler.utils.EGLMessage
-	 * @param String messageString
-	 * @param String fileName
-	 * @param lineNumber int
-	 * @param columnNumber int
-	 * @param messageContributor object
-	 */
-	public static EGLMessage createEGLXMLValidationErrorMessage(
-		String messageString,
-		String fileName,
-		int lineNumber,
-		int columnNumber,
-		Object messageContributor) {
-
-		String messageNumber;
-		String[] messageInserts;
-
-		if (fileName == null) {
-			messageNumber = EGLMESSAGE_XML_VALIDATION_ERROR;
-			messageInserts = new String[] { messageString };
-		} else {
-			messageNumber = EGLMESSAGE_XML_VALIDATION_ERROR_IN_FILE;
-			messageInserts = new String[] { messageString, fileName };
-		}
-
-		return new EGLMessage(
-			getValidationResourceBundleName(),
-			EGLMessage.EGL_ERROR_MESSAGE,
-			messageNumber,
-			EGLMessage.EGLMESSAGE_GROUP_XML_VALIDATION,
-			messageContributor,
-			messageInserts,
-			lineNumber,
-			columnNumber,
-			lineNumber,
-			columnNumber);
-
-	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (10/9/2001 2:18:31 PM)
-	 * @return org.eclipse.edt.compiler.internal.compiler.utils.EGLMessage
-	 * @param String messageString
-	 * @param String fileName
-	 * @param lineNumber int
-	 * @param columnNumber int
-	 * @param messageContributor object
-	 */
-	public static EGLMessage createEGLXMLValidationWarningMessage(
-		String messageString,
-		String fileName,
-		int lineNumber,
-		int columnNumber,
-		Object messageContributor) {
-
-		String messageNumber;
-		String[] messageInserts;
-
-		if (fileName == null) {
-			messageNumber = EGLMESSAGE_XML_VALIDATION_ERROR;
-			messageInserts = new String[] { messageString };
-		} else {
-			messageNumber = EGLMESSAGE_XML_VALIDATION_ERROR_IN_FILE;
-			messageInserts = new String[] { messageString, fileName };
-		}
-
-		return new EGLMessage(
-			getValidationResourceBundleName(),
-			EGLMessage.EGL_WARNING_MESSAGE,
-			messageNumber,
-			EGLMessage.EGLMESSAGE_GROUP_XML_VALIDATION,
-			messageContributor,
-			messageInserts,
-			lineNumber,
-			columnNumber,
-			lineNumber,
-			columnNumber);
-
-	}
-	/**
 	 * Returns a text representation of this message formatted in the default Locale,
 	 * with inserts already applied.
 	 */
@@ -1151,12 +1030,8 @@ public class EGLMessage extends Object  implements IGenerationResultsMessage{
 			return ("VAL"); //$NON-NLS-1$
 		} else if (groupName.equals(EGLMessage.EGLMESSAGE_GROUP_STATEMENT_PARSER)) {
 			return ("EGL"); //$NON-NLS-1$
-		} else if (groupName.equals(EGLMessage.EGLMESSAGE_GROUP_XML_VALIDATION)) {
-			return ("XML"); //$NON-NLS-1$
 		} else if (groupName.equals(EGLMessage.EGLMESSAGE_GROUP_EDITOR)) {
 			return ("EDT"); //$NON-NLS-1$
-		} else if (groupName.equals(EGLMessage.EGLMESSAGE_GROUP_INPUT)) {
-			return ("INP"); //$NON-NLS-1$
 		} else if( groupName.equals(EGLMessage.EGLMESSAGE_GROUP_SYNTAX )) {
 			return ("SYN"); //$NON-NLS-1$
 		} else if( groupName.equals(EGLMessage.EGLMESSAGE_GROUP_DEPLOYMENT )) {

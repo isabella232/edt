@@ -315,6 +315,7 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 				for (int i = 0; i < bytes.length; i++)
 					bytes[i] = value[i];
 			}
+			return bytes;
 		}
 		return value;
 	}

@@ -220,6 +220,7 @@ public class TypeTemplate extends JavaTemplate {
 				if (!(arg2 instanceof BoxingExpression)) {
 					out.print("(");
 					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+					ctx.invoke(genRuntimeTypeExtension, arg2.getType(), ctx, out);
 					out.print(") ");
 				}
 				// we don't want to do a checkNullable on the temporary variables that are logically not nullable
@@ -246,6 +247,7 @@ public class TypeTemplate extends JavaTemplate {
 					if (!(arg2 instanceof BoxingExpression)) {
 						out.print("(");
 						ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+						ctx.invoke(genRuntimeTypeExtension, arg2.getType(), ctx, out);
 						out.print(") ");
 					}
 					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(" + temporary + ")");
@@ -261,6 +263,7 @@ public class TypeTemplate extends JavaTemplate {
 					if (!(arg2 instanceof BoxingExpression)) {
 						out.print("(");
 						ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+						ctx.invoke(genRuntimeTypeExtension, arg2.getType(), ctx, out);
 						out.print(") ");
 					}
 					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");

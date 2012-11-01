@@ -186,9 +186,18 @@ public abstract class EAny implements eglx.lang.EAny {
 		if (obj == null) {
 			NullValueException nvx = new NullValueException();
 			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
-		}
-		if (obj instanceof eglx.lang.EAny) 
+		} else if (obj instanceof eglx.lang.EAny) { 
 			return ((eglx.lang.EAny)obj).ezeGet(name);
+		} else {
+			try {
+				Field field = obj.getClass().getField(name);
+				return field.get(obj);
+			}
+			catch (Exception e) {
+				// Ignore this Exception and throw a DynamicAccessException, below.
+			}
+		}
+
 		DynamicAccessException dax = new DynamicAccessException();
 		dax.key = name;
 		throw dax.fillInMessage(Message.DYNAMIC_ACCESS_FAILED, name, obj);
