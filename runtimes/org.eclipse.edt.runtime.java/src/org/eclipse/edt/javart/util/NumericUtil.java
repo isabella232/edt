@@ -434,8 +434,13 @@ public class NumericUtil
 	public static BigInteger decimalToBigInteger( byte[] buffer, int offset, int length )
 		throws AnyException
 	{
-		// Avoid using BigIntegers as much as possible.  Get the bottom 17 digits
-		// and the sign as a long.
+		// Avoid using BigIntegers as much as possible.
+		if ( length <= 17 )
+		{
+			return BigInteger.valueOf( decimalToLong( buffer, offset, length ) );
+		}
+		
+		// Get the bottom 17 digits and the sign as a long.
 		int byteOfSeventeethDigit = offset + (length / 2) - 8;
 		long bottom = decimalToLong( buffer, byteOfSeventeethDigit, 17 );
 		
