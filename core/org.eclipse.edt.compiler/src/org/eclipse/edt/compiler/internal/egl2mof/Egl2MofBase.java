@@ -52,6 +52,7 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.EClassProxy;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Enumeration;
@@ -823,6 +824,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			typeSignature = getMofDataTypeSignatureFor(type);
 			if (typeSignature != null) {
 				return typeSignature;
+			}
+			
+			if (type instanceof EClassProxy) {
+				return ((EClassProxy)type).getProxiedEClassName();
 			}
 		}
 		

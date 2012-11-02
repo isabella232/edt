@@ -109,7 +109,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
         entry.setProcessingQueue(this);
         
         this.projectEnvironment = WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
-        Bootstrap.initialize(this.projectEnvironment.getIREnvironment());
+        projectEnvironment.initIREnvironments();
 		this.projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
 		
 		Environment.pushEnv(this.projectEnvironment.getIREnvironment());

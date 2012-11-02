@@ -30,6 +30,7 @@ import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.Type;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
@@ -380,7 +381,7 @@ class Egl2MofMember extends Egl2MofPart {
 				Annotation ann = this.getAnnotation(edtObj, "egl.lang.reflect.mof.transient");
 				if (ann != null) ((EField)obj).setIsTransient((Boolean)ann.getValue());
 				
-				ann = this.getAnnotation(edtObj, "egl.lang.reflect.mof.containment");
+				ann = BindingUtil.getAnnotationWithSimpleName(edtObj, "containment");
 				if (ann != null) ((EField)obj).setContainment((Boolean)ann.getValue());
 			}
 			Annotation mofName = this.getAnnotation(edtObj, "egl.lang.reflect.mof.mofName");

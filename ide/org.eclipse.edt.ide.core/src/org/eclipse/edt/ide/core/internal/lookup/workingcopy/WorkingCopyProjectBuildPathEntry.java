@@ -38,6 +38,7 @@ import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTMana
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyProcessingQueue;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
@@ -454,5 +455,10 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	public void removePartBindingInvalid(String packageName, String partName) {
 		bindingCache.remove(packageName, partName);		
 	}
+	
+    protected WorkingCopyProjectEnvironment getDeclaringEnvironment() {
+		return this.declaringEnvironment;
+	}
+
 	
 }

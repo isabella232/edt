@@ -19,11 +19,16 @@ import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
+import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.ide.core.internal.lookup.EglarBuildPathEntry;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -35,6 +40,8 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
 	private WorkingCopyProjectBuildPathEntry declaringProjectBuildPathEntry;
 	private IWorkingCopyBuildPathEntry[] buildPathEntries;
     private ProjectIREnvironment irEnvironment;
+    private boolean initialized;
+
 	
 	public WorkingCopyProjectEnvironment(IProject project) {
 		super();
@@ -133,6 +140,7 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
 	}	
 	
 	public void clear() {
+		initialized = false;
 		buildPathEntries = null;
 		rootPackageBinding = new PackageBinding(ProjectEnvironment.defaultPackage, null, this);
 	}
@@ -147,4 +155,23 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
 		return ProjectSettingsUtility.getCompiler(getProject());
 	}
 	
+    public void initIREnvironments() {
+    	if (initialized) {
+    		return;
+    	}
+    	
+    	initialized = true;
+    	Bootstrap.initialize(irEnvironment);
+    	for (IBuildPathEntry entry : buildPathEntries) {
+    		if (entry instanceof WorkingCopyProjectBuildPathEntry) {
+    			((WorkingCopyProjectBuildPathEntry)entry).getDeclaringEnvironment().initIREnvironments();
+    		} else if (entry instanceof WorkingCopyEglarBuildPathEntry) {
+    			IEnvironment eglarEnvironment = ((WorkingCopyEglarBuildPathEntry)entry).getEnvironment();
+    			if(eglarEnvironment instanceof WorkingCopyProjectEnvironment) {
+    				((ProjectEnvironment)eglarEnvironment).initIREnvironments();
+    			}
+    		}
+    	}
+    }
+
 }

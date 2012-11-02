@@ -26,7 +26,7 @@ public class EglarBuildPathEntry extends ZipFileBindingBuildPathEntry {
 		this.environment = environment;
 	}
 	
-	protected IEnvironment getEnvironment() {
+	public IEnvironment getEnvironment() {
 		return this.environment;
 	}
 }
