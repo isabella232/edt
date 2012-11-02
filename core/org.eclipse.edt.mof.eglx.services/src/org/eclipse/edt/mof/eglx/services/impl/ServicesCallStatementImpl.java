@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.eglx.services.impl;
 
 import org.eclipse.edt.mof.egl.impl.CallStatementImpl;
-import org.eclipse.edt.mof.eglx.services.gen.ServicesCallStatement;
+import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 
 public class ServicesCallStatementImpl extends CallStatementImpl implements ServicesCallStatement {
 

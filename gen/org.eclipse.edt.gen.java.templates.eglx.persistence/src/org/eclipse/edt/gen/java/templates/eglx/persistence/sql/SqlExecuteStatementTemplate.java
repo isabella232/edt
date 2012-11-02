@@ -14,8 +14,8 @@ package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlExecuteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlExecuteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 
 public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 

@@ -22,8 +22,8 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlGetByKeyStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 
 public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 

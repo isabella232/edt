@@ -19,8 +19,8 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlGetByKeyStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlGetByKeyStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 
 public class SqlGetByKeyStatementImpl extends SqlIOStatementImpl implements SqlGetByKeyStatement {
 	@Override

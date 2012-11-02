@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlCloseStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlCloseStatement;
 
 public class SqlCloseStatementImpl extends SqlIOStatementImpl implements SqlCloseStatement {
 

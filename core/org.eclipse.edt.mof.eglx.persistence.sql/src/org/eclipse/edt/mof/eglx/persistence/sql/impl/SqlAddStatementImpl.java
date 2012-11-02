@@ -15,8 +15,8 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlAddStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 
 public class SqlAddStatementImpl extends SqlIOStatementImpl implements SqlAddStatement {
 

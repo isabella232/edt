@@ -9,9 +9,23 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen;
+package org.eclipse.edt.mof.eglx.persistence.sql;
 
-import org.eclipse.edt.mof.egl.CloseStatement;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.IOStatement;
 
-public interface SqlCloseStatement extends SqlActionStatement, CloseStatement {
+
+public interface SqlActionStatement extends IOStatement {
+	Expression getPreparedStatement();
+	
+	void setPreparedStatement(Expression expr);
+	
+	Boolean hasExplicitSql();
+	
+	void setHasExplicitSql(Boolean value);
+	
+	String getSqlString();
+	
+	void setSqlString(String value);
+	
 }

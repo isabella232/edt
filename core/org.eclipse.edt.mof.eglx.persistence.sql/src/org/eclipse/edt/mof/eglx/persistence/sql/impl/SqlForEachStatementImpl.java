@@ -14,7 +14,7 @@ package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Statement;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlForEachStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlForEachStatement;
 
 
 public class SqlForEachStatementImpl extends SqlIOStatementImpl implements SqlForEachStatement {

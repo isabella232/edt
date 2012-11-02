@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.services;
+package org.eclipse.edt.mof.eglx.jtopen.ext;
 
 import org.eclipse.edt.compiler.ASTValidator;
 import org.eclipse.edt.compiler.BaseCompilerExtension;
@@ -20,23 +20,18 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.egl2mof.ElementGenerator;
-import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Service;
-import org.eclipse.edt.mof.eglx.services.gen.ServiceElementGenerator;
-import org.eclipse.edt.mof.eglx.services.gen.ServicesCallStatement;
-import org.eclipse.edt.mof.eglx.services.validation.EglServiceProxyFunctionValidator;
-import org.eclipse.edt.mof.eglx.services.validation.RestServiceProxyFunctionValidator;
-import org.eclipse.edt.mof.eglx.services.validation.ServicesCallStatementValidator;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiCallStatement;
+import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiFunctionValidator;
+import org.eclipse.edt.mof.eglx.jtopen.validation.IBMiProgramCallStatementValidator;
 
-public class ServicesExtension extends BaseCompilerExtension {
+public class IBMiExtension extends BaseCompilerExtension {
 	
 	@Override
 	public String[] getSystemEnvironmentPaths() {
-		return new String[]{SystemLibraryUtil.getSystemLibraryPath(ServicesCallStatement.class, "egllib")};
+		return new String[]{SystemLibraryUtil.getSystemLibraryPath(IBMiCallStatement.class, "egllib")};
 	}
 	
 	@Override
@@ -47,7 +42,7 @@ public class ServicesExtension extends BaseCompilerExtension {
 	@Override
 	public ElementGenerator getElementGeneratorFor(Node node) {
 		if (shouldExtend(node)) {
-			return new ServiceElementGenerator();
+			return new IBMiElementGenerator();
 		}
 		return null;
 	}
@@ -55,66 +50,63 @@ public class ServicesExtension extends BaseCompilerExtension {
 	@Override
 	public ASTValidator getValidatorFor(Node node) {
 		// Call statement can be extended.
-		if(shouldExtend(node)){
-			if(node instanceof CallStatement){
-				return new ServicesCallStatementValidator();
+		if (shouldExtend(node)) {
+			if (node instanceof CallStatement) {
+				return new IBMiProgramCallStatementValidator();
 			}
 			else if (node instanceof NestedFunction) {
-				if(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.EglService") != null){
-					return new EglServiceProxyFunctionValidator();
-				}
-				else if(((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.rest.Rest") != null){
-					return new RestServiceProxyFunctionValidator();
-				}
+				return new IBMiFunctionValidator();
 			}
 		}
 		return null;
 	}
 	
 	private boolean shouldExtend(Node node) {
-		if(node instanceof CallStatement){
-			if(((CallStatement)node).getUsing() != null && 
-					Utils.isIHTTP(((CallStatement)node).getUsing().resolveType())){
+		if (node instanceof CallStatement) {
+			CallStatement stmt = (CallStatement)node;
+			if (stmt.getUsing() != null && Utils.isIBMiConnection(stmt.getUsing().resolveType())){
 				return true;
 			}
-			else{
+			else {
 				if(((CallStatement)node).getInvocationTarget() != null &&
 						((CallStatement)node).getInvocationTarget().resolveElement() instanceof Function){
+					final Boolean[] result = new Boolean[1];
 					final Function function = (Function)((CallStatement)node).getInvocationTarget().resolveElement();
-					final boolean[] result = new boolean[1];
+					result[0] = false;
 					((CallStatement)node).getInvocationTarget().accept( new AbstractASTVisitor() {
 						public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName){
 							if(qualifiedName.getQualifier() instanceof SimpleName &&
-									(qualifiedName.getQualifier().resolveElement() instanceof Part &&
-									!(qualifiedName.getQualifier().resolveElement() instanceof Library))){
-								result[0] = qualifiedName.getQualifier().resolveElement() instanceof Service;
+									qualifiedName.getQualifier().resolveElement() instanceof Part &&
+									!(qualifiedName.getQualifier().resolveElement() instanceof Library)){
 								return false;
 							}
-							result[0] = isServiceProxy(function);
+							result[0] = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 							return false;
 						}
 						public boolean visit(org.eclipse.edt.compiler.core.ast.SimpleName simpleName){
-							result[0] = isServiceProxy(function);
+							result[0] = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 							return false;
 						}
 						public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess){
-							result[0] = isServiceProxy(function);
+							result[0] = function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 							return false;
 						}
 					});
 					return result[0];
 				}
 				return false;
+//				if(((CallStatement)node).getInvocationTarget() != null &&
+//						((CallStatement)node).getInvocationTarget().resolveElement() instanceof Function){
+//					Function function = (Function)((CallStatement)node).getInvocationTarget().resolveElement();
+//					return !Utils.isFunctionServiceQualified(((CallStatement)node).getInvocationTarget(), function) &&
+//							function.getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
+//				}
 			}
 		}
 		else if (node instanceof NestedFunction) {
-			return isServiceProxy(((NestedFunction)node).getName().resolveMember());
+			return ((NestedFunction)node).getName().resolveMember() instanceof Function && ((NestedFunction)node).getName().resolveMember().getAnnotation("eglx.jtopen.annotations.IBMiProgram") != null;
 		}
+		
 		return false;
-	}
-	
-	private static boolean isServiceProxy(Member member){
-		return	member != null && (member.getAnnotation("eglx.rest.Rest") != null ||
-						member.getAnnotation("eglx.rest.EGLService") != null);
 	}
 }

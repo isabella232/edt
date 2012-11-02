@@ -11,6 +11,7 @@ Eclipse-RegisterBuddy: org.eclipse.edt.mof,org.eclipse.edt.compiler
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %providerName
 Export-Package: org.eclipse.edt.mof.eglx.services,
+ org.eclipse.edt.mof.eglx.services.ext,
  org.eclipse.edt.mof.eglx.services.impl
 Bundle-Localization: plugin
 Bundle-ClassPath: src.jar

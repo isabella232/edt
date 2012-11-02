@@ -18,8 +18,8 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlOpenStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 
 public class SqlOpenStatementImpl extends SqlIOStatementImpl implements SqlOpenStatement {
 

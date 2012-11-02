@@ -18,7 +18,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
-import org.eclipse.edt.mof.eglx.services.Utils;
+import org.eclipse.edt.mof.eglx.services.ext.Utils;
 import org.eclipse.edt.mof.eglx.services.messages.ResourceKeys;
 import org.eclipse.edt.mof.utils.NameUtile;
 

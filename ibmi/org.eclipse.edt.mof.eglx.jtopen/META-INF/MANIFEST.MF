@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.edt.mof.egl;bundle-version="0.8.2",
  org.eclipse.edt.mof;bundle-version="0.8.1",
  org.eclipse.edt.compiler;bundle-version="0.8.2"
 Export-Package: org.eclipse.edt.mof.eglx.jtopen,
- org.eclipse.edt.mof.eglx.jtopen.gen,
+ org.eclipse.edt.mof.eglx.jtopen.ext,
  org.eclipse.edt.mof.eglx.jtopen.impl
 Bundle-ClassPath: src.jar
 

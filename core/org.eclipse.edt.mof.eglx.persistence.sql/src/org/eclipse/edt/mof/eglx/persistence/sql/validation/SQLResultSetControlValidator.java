@@ -20,7 +20,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.IAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 import org.eclipse.edt.mof.eglx.persistence.sql.messages.SQLResourceKeys;
 
 public class SQLResultSetControlValidator  implements IAnnotationValidationRule {

@@ -12,7 +12,7 @@
 package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlPrepareStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
 
 
 public class SqlPrepareStatementImpl extends SqlIOStatementImpl implements SqlPrepareStatement {

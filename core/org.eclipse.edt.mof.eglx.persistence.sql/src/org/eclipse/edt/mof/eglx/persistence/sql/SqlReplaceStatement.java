@@ -9,9 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.mof.eglx.persistence.sql.gen;
+package org.eclipse.edt.mof.eglx.persistence.sql;
 
-import org.eclipse.edt.mof.egl.ForEachStatement;
+import org.eclipse.edt.mof.egl.ReplaceStatement;
 
-public interface SqlForEachStatement extends SqlActionStatement, ForEachStatement {
+public interface SqlReplaceStatement extends SqlActionStatement, ReplaceStatement {
 }

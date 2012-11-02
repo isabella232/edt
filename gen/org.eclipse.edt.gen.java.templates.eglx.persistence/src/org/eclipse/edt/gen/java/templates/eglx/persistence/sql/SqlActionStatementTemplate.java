@@ -34,10 +34,10 @@ import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.DummyExpression;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlActionStatement;
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlPrepareStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 import org.eclipse.edt.mof.eglx.persistence.sql.impl.DummyExpressionDynamicImpl;
 
 public abstract class SqlActionStatementTemplate extends StatementTemplate implements org.eclipse.edt.gen.java.templates.eglx.persistence.Constants{

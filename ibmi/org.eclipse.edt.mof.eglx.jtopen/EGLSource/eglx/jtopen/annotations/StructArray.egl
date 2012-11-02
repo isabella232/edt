@@ -17,6 +17,6 @@ Record StructArray type Annotation
 	ValidationProxy="org.eclipse.edt.mof.eglx.jtopen.validation.annotation.proxy.StructArrayProxy"
 }
 	elementCount int;
-	returnCountVariable egl.lang.reflect.FieldReference;
+	returnCountVariable egl.lang.reflect.MemberReference;
 	elementTypeAnnotation any?;
 end

@@ -15,9 +15,7 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.SequenceType;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class BytesTypeTemplate extends JavaTemplate {
 
@@ -53,5 +51,16 @@ public class BytesTypeTemplate extends JavaTemplate {
 			out.print(")");
 		} else
 			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
+	}
+
+	public void genContainerBasedNewExpression(Type type, Context ctx, TabbedWriter out, Expression arg) {
+		out.print("new ");
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaObject);
+		out.print('[');
+		if (arg.getType() instanceof SequenceType)
+			ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
+		else
+			out.print('0');
+		out.print(']');
 	}
 }

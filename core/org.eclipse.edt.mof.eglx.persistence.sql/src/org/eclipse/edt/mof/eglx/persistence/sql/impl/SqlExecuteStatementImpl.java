@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
-import org.eclipse.edt.mof.eglx.persistence.sql.gen.SqlExecuteStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlExecuteStatement;
 
 public class SqlExecuteStatementImpl extends SqlIOStatementImpl implements SqlExecuteStatement {
 }

@@ -33,7 +33,7 @@ import org.eclipse.edt.ide.ui.internal.quickfix.proposals.AbstractSQLStatementPr
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementAddAssistProposal;
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementRemoveAssistProposal;
 import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.SQLStatementResetAssistProposal;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 
 public class SQLAssistantSubProcessor {
 	public static boolean hasAssists(IInvocationContext context)

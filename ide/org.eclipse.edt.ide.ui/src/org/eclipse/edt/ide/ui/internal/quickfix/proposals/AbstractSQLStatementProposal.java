@@ -63,7 +63,7 @@ import org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql.EGLSQLStatementFac
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.eglx.persistence.sql.Utils;
+import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.swt.graphics.Image;
