@@ -1254,15 +1254,15 @@ public class BindingUtil {
 		return false;
 	}
 
-	public static boolean isReferenceCompatible(Type type1, Type type2) {
-		if (type1 == null || type2 == null) {
+	public static boolean isReferenceCompatible(Type lhsType, Type rhsType) {
+		if (lhsType == null || rhsType == null) {
 			return true;
 		}
 		
-		if (type1 instanceof ArrayType && type2 instanceof ArrayType) {
+		if (lhsType instanceof ArrayType && rhsType instanceof ArrayType) {
 			// Arrays must match exactly, including nullability.
-			ArrayType array1 = (ArrayType)type1;
-			ArrayType array2 = (ArrayType)type2;
+			ArrayType array1 = (ArrayType)lhsType;
+			ArrayType array2 = (ArrayType)rhsType;
 			if (array1.elementsNullable() != array2.elementsNullable()) {
 				return false;
 			}
@@ -1279,17 +1279,26 @@ public class BindingUtil {
 			return elem1.equals(elem2);
 		}
 		
-		boolean isReferenceType = TypeUtils.isReferenceType(type1);
-		if (isReferenceType != TypeUtils.isReferenceType(type2)) {
+		boolean isReferenceType = TypeUtils.isReferenceType(lhsType);
+		if (isReferenceType != TypeUtils.isReferenceType(rhsType)) {
 			return false;
 		}
 		
-		// For value types they must match exactly.
+		// For value types they must match exactly, or rhsType must be a subtype of lhsType.
 		if (!isReferenceType) {
-			return type1.equals(type2);
+			if (lhsType.equals(rhsType)) {
+				return true;
+			}
+			
+			if (rhsType.getClassifier() instanceof EGLClass && lhsType.getClassifier() instanceof StructPart
+					&& ((EGLClass)rhsType.getClassifier()).isSubtypeOf((StructPart)lhsType.getClassifier())) {
+				return true;
+			}
+			
+			return false;
 		}
 		
 		// For reference types they must be in the same hierarchy.
-		return TypeUtils.areCompatible(type1.getClassifier(), type2.getClassifier());
+		return TypeUtils.areCompatible(lhsType.getClassifier(), rhsType.getClassifier());
 	}
 }
