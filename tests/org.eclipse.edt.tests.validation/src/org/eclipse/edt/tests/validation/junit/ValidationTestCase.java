@@ -163,8 +163,8 @@ public abstract class ValidationTestCase extends TestCase {
 				arguments.add("-xmlout");
 				arguments.add(testFile.getPath());
 				arguments.add("-extensions");
-				arguments.add("org.eclipse.edt.mof.eglx.jtopen.IBMiExtension,org.eclipse.edt.mof.eglx.persistence.sql.SQLExtension," +
-						"org.eclipse.edt.mof.eglx.services.ServicesExtension,org.eclipse.edt.rui.RUIExtension");
+				arguments.add("org.eclipse.edt.mof.eglx.jtopen.ext.IBMiExtension,org.eclipse.edt.mof.eglx.persistence.sql.ext.SQLExtension," +
+						"org.eclipse.edt.mof.eglx.services.ext.ServicesExtension,org.eclipse.edt.rui.RUIExtension");
 				
 				System.setOut(new PrintStream(new FileOutputStream(EGLCOut.getPath())));
 				
