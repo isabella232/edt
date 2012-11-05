@@ -78,6 +78,7 @@ public class FunctionTemplate extends JavaScriptTemplate implements Constants{
 
 	private Function createFunction(Function function, Context ctx) {
 		Function newFunction = factory.createFunction();
+		newFunction.setContainer(function.getContainer());
 		if (function.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 			newFunction.addAnnotation(function.getAnnotation(IEGLConstants.EGL_LOCATION));
 		newFunction.setName(function.getCaseSensitiveName());
