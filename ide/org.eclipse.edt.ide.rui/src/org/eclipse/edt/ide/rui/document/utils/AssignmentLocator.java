@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class AssignmentLocator extends DefaultASTVisitor {
 	
@@ -41,7 +42,7 @@ public class AssignmentLocator extends DefaultASTVisitor {
 				public boolean visit(Assignment assignment){
 					assignment.getLeftHandSide().accept(new DefaultASTVisitor(){
 						public boolean visit(SimpleName simpleName){
-							if(simpleName.getIdentifier() == internedPropertyName){
+							if(NameUtile.equals(simpleName.getIdentifier(), internedPropertyName)){
 								theAssignment = (Assignment)simpleName.getParent();
 							}
 							return false;
