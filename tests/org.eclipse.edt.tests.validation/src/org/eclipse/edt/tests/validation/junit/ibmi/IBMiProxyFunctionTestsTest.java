@@ -759,4 +759,22 @@ public class IBMiProxyFunctionTestsTest extends ValidationTestCase {
 		Object messageWithSubstring = messageWithSubstring( messages, "The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11." );
 		if( messageWithSubstring == null ) fail( "No message with substring \"The number of entries specified for parameterAnnotations must exactly match the number of parameters defined for the function f11.\" was issued." );
 	}
+
+	/*
+	 * function f11(p1 string, p2 string[])
+	 * 0 validation messages are expected.
+	 */
+	public void testLine137() {
+		List messages = getMessagesAtLine( 137 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * function f11(p1 string, p2 string[], p3 int inout)
+	 * 0 validation messages are expected.
+	 */
+	public void testLine146() {
+		List messages = getMessagesAtLine( 146 );
+		assertEquals( 0, messages.size() );
+	}
 }

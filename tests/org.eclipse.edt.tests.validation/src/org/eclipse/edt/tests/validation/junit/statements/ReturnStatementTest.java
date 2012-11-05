@@ -312,11 +312,11 @@ public class ReturnStatementTest extends ValidationTestCase {
 
 	/*
 	 * return i;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine174() {
 		List messages = getMessagesAtLine( 174 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
@@ -339,20 +339,20 @@ public class ReturnStatementTest extends ValidationTestCase {
 
 	/*
 	 * return ["a", "b"];
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine186() {
 		List messages = getMessagesAtLine( 186 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * return a;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine191() {
 		List messages = getMessagesAtLine( 191 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
@@ -366,29 +366,29 @@ public class ReturnStatementTest extends ValidationTestCase {
 
 	/*
 	 * return [1,2];
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine200() {
 		List messages = getMessagesAtLine( 200 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * return a;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine205() {
 		List messages = getMessagesAtLine( 205 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * return a;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine210() {
 		List messages = getMessagesAtLine( 210 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
@@ -420,20 +420,20 @@ public class ReturnStatementTest extends ValidationTestCase {
 
 	/*
 	 * return a;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine230() {
 		List messages = getMessagesAtLine( 230 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * return d;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine235() {
 		List messages = getMessagesAtLine( 235 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
@@ -465,10 +465,19 @@ public class ReturnStatementTest extends ValidationTestCase {
 
 	/*
 	 * return r.s2;
-	 * 1 validation message is expected.
+	 * 0 validation messages are expected.
 	 */
 	public void testLine254() {
 		List messages = getMessagesAtLine( 254 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * return b;
+	 * 1 validation message is expected.
+	 */
+	public void testLine259() {
+		List messages = getMessagesAtLine( 259 );
 		assertEquals( 1, messages.size() );
 	}
 }

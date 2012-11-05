@@ -37,7 +37,7 @@ end
 function numberfunc (f number)// 0
 end
 
-function mult (ZZp int, ZZp int )// 1  The same name zzp also appears as variable, parameter, use or constant declaration in Function, Program, or Library mult.
+function mult (ZZp int, ZZp int )// 1  The same name zzp also appears as variable, parameter, use or constant declaration in part mult.
 i int = 5;// 0
 const j int = 6;// 0
 end

@@ -138,7 +138,7 @@ program pgm1 {}
 			{@IBMiProgram{
 				parameterAnnotations = [
 					@StructText{Length = 20},
-					@StructArray{},
+					@StructArray{}
 				]  
 			}}
 	end
@@ -147,7 +147,7 @@ program pgm1 {}
 			{@IBMiProgram{
 				parameterAnnotations = [
 					@StructText{Length = 20},
-					@StructArray{elementCOunt=7, returnCountVariable = p3},
+					@StructArray{elementCOunt=7, returnCountVariable = p3}
 				]  
 			}}
 	end

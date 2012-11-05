@@ -10,6 +10,7 @@ library foreachlib
         array3 myrec[];
         array4 int[][];
         array5 any[][];
+		array6 myrec[][];
 
         forEach(exists int from array1) //1
             exists int; //1
@@ -34,13 +35,19 @@ library foreachlib
         forEach(newitem int[] from array4) //0
         end
 
-        forEach(newitem smallInt[] from array4) //1
+        forEach(newitem smallInt[] from array4) //0
+        end
+        
+        forEach(newitem smallInt[] from array6) //1
         end
         
         forEach(newitem int from array4[1]) //0
         end
 
-        forEach(newitem any[] from array4 as any[][]) //1
+        forEach(newitem any[] from array4 as any[][]) //0
+        end
+        
+        forEach(newitem any[] from array1) //1
         end
         
         forEach(newitem any[] from array5) //0

@@ -171,7 +171,7 @@ handler h
 	
 	function test() returns(string[])
 		i int[];
-		return i; //1
+		return i; //0
 	end
 	
 	function test() returns(string[])
@@ -183,12 +183,12 @@ handler h
 	end
 	
 	function test() returns(int[])
-		return ["a", "b"]; //1
+		return ["a", "b"]; //0
 	end
 	
 	function test() returns(string[])
 		a any[];
-		return a; //1
+		return a; //0
 	end
 	
 	function test() returns(string[])
@@ -197,17 +197,17 @@ handler h
 	end
 	
 	function test() returns(string[])
-		return [1,2]; //1
+		return [1,2]; //0
 	end
 	
 	function test() returns(string[][])
 		a any[];
-		return a; //1
+		return a; //0
 	end
 	
 	function test() returns(string[][])
 		a any?[];
-		return a; //1
+		return a; //0
 	end
 	
 	function test() returns(bytes[][])
@@ -227,12 +227,12 @@ handler h
 	
 	function test() returns(del1[])
 		a any[];
-		return a; //1
+		return a; //0
 	end
 	
 	function test() returns(del1[])
 		d del1?[];
-		return d; //1
+		return d; //0
 	end
 	
 	function test() returns(del1[])
@@ -251,7 +251,12 @@ handler h
 	
 	function test() returns(string[])
 		r rec1;
-		return r.s2; //1
+		return r.s2; //0
+	end
+	
+	function test() returns(int[])
+		b boolean[];
+		return b; //1
 	end
 end
 

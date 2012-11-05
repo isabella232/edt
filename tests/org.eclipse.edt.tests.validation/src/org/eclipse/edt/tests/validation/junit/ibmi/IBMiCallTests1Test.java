@@ -42,14 +42,14 @@ public class IBMiCallTests1Test extends ValidationTestCase {
 	/*
 	 * call fp9(i1) using conn;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The argument i1 cannot be passed to the inOut or Out parameter p1 of the function fp9. The types boolean and int are not reference compatible".
+	 * It is expected to contain "The argument i1 cannot be passed to the inOut parameter p1 of the function fp9. The types boolean and int are not reference compatible".
 	 */
 	public void testLine21() {
 		List messages = getMessagesAtLine( 21 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument i1 cannot be passed to the inOut or Out parameter p1 of the function fp9. The types boolean and int are not reference compatible" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument i1 cannot be passed to the inOut or Out parameter p1 of the function fp9. The types boolean and int are not reference compatible\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The argument i1 cannot be passed to the inOut parameter p1 of the function fp9. The types boolean and int are not reference compatible" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The argument i1 cannot be passed to the inOut parameter p1 of the function fp9. The types boolean and int are not reference compatible\" was issued." );
 	}
 
 	/*

@@ -18,7 +18,7 @@ program pgm1 {}
 
 	function f3(p1 decimal)
 			i1 boolean;
-			call fp9(i1) using conn;// 1 The argument i1 cannot be passed to the inOut or Out parameter p1 of the function fp9. The types boolean and int are not reference compatible
+			call fp9(i1) using conn;// 1 The argument i1 cannot be passed to the inOut parameter p1 of the function fp9. The types boolean and int are not reference compatible
 	end
 
 	function f4(p1 decimal)

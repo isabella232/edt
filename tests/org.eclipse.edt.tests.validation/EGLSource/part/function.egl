@@ -35,7 +35,7 @@ end
 program prog0
 function validateParamsAndDeclarations(
 p1 int,						//0
-p1 int,						//1 The same name p1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library validateParamsAndDeclarations.
+p1 int,						//1 The same name p1 also appears as variable, parameter, use or constant declaration in part validateParamsAndDeclarations.
 recParm1 emptyFlexRec,			//1 Invalid parameter recParm1. There must be at least one structure item in the contents of the record emptyFlexRec. {3118, RECORD_PARAMETER_WITH_NO_CONTENTS}
 
 lastParm any

@@ -132,14 +132,14 @@ public class LibraryTest extends ValidationTestCase {
 	/*
 	 * function mult (ZZp int, ZZp int )
 	 * 1 validation message is expected.
-	 * It is expected to contain "The same name zzp also appears as variable, parameter, use or constant declaration in Function, Program, or Library mult.".
+	 * It is expected to contain "The same name zzp also appears as variable, parameter, use or constant declaration in part mult.".
 	 */
 	public void testLine40() {
 		List messages = getMessagesAtLine( 40 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The same name zzp also appears as variable, parameter, use or constant declaration in Function, Program, or Library mult." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The same name zzp also appears as variable, parameter, use or constant declaration in Function, Program, or Library mult.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The same name zzp also appears as variable, parameter, use or constant declaration in part mult." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The same name zzp also appears as variable, parameter, use or constant declaration in part mult.\" was issued." );
 	}
 
 	/*
