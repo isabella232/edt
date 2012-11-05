@@ -289,8 +289,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			// that gets overridden by the initializers.
 			for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(field, ctx)) {
 				try {
-					//TODO uncomment!
-//					ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field, genInitializeMethod);
+					ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field, genInitializeMethod);
 				}
 				catch (TemplateException ex) {
 					//NOGO sbg Seems bogus, but apparently we lack templates for some annotations?
