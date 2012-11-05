@@ -378,7 +378,14 @@ protected void toStringInfo(int tab, StringBuffer buffer, Object info) {
 		}
 		// don't hold on the .ir file extension to save memory
 		// also make sure to not use substring as the resulting String may hold on the underlying char[] which might be much bigger than necessary
-		int length = name.length() - 3;
+		int lastDot = name.lastIndexOf('.');
+		int length;
+		if (lastDot != -1) {
+			length = lastDot;
+		}
+		else {
+			length = name.length();
+		}
 		char[] nameWithoutExtension = new char[length];
 		name.getChars(0, length, nameWithoutExtension, 0);
 		return new ClassFile(this, new String(nameWithoutExtension));
