@@ -623,5 +623,24 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 	public void setSourceFileSearchRequired(boolean sourceFileSearchRequired) {
 		this.sourceFileSearchRequired = sourceFileSearchRequired;
 	}
-
+	
+	@Override
+	public boolean exists() {
+		if (getParent() instanceof EglarPackageFragment) {
+			try {
+				IClassFile[] classes = ((EglarPackageFragment)getParent()).getClassFiles();
+				for (IClassFile next : classes) {
+					// Package fragment returns its known child instance of IRs that exist, but returns a dummy instance for IRs
+					// that do not exist (since getClassFile() is a handle method - never returns null).
+					if (next == this) {
+						return true;
+					}
+				}
+			}
+			catch (EGLModelException eme) {
+			}
+			return false;
+		}
+		return super.exists();
+	}
 }
