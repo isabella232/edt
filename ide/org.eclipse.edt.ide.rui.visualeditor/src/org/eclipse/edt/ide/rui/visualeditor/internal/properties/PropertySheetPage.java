@@ -160,11 +160,12 @@ public class PropertySheetPage extends Page implements DisposeListener, IPartSel
 		String strFunctionName = dialog.getName();
 
 		if( dialog.getReturnCode() == Dialog.OK ) {
-			_editorAdapter.createEventHandlingFunction( strFunctionName );
-
+			// First insert the value to the function being created. The function insertion can add an import which throws off the offsets so it must come afterwards.
 			if( tableItem != null ){
 				setEventValue( tableItem, strFunctionName, false );
 			}
+			
+			_editorAdapter.createEventHandlingFunction( strFunctionName );
 			
 			int offset = _editorAdapter.getEditorProvider().getFunctionFirstLineOffset( strFunctionName );
 			_editorAdapter.selectAndRevealRange( offset, 0 );

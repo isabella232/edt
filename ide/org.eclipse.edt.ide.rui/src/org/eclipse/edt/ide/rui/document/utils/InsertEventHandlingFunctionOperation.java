@@ -25,6 +25,7 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.ide.ui.internal.util.ImportUtility;
 import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -56,9 +57,8 @@ public class InsertEventHandlingFunctionOperation {
 				final Part part = getPart(fileAST, partName);
 				addFunction(eventType, fileAST, part);
 				
-				// Add an import for Event
-				AddImportOperation addImport = new AddImportOperation(currentDocument, currentFile);
-				addImport.addFullyQualifiedImport("eglx.ui.rui.Event");
+				// Add an import for Event if required.
+				ImportUtility.addImportStatement(currentDocument, "eglx.ui.rui", "Event");
 			}catch(Exception e){
 				Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, "Insert Event Handler: Error inserting function", e));
 			}finally{
