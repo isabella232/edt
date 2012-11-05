@@ -25,7 +25,7 @@
 	
 	<jar destfile="${eglar}">
 		<fileset dir="./${eglBin}" includes="**/*.eglxml"/>
-		<fileset dir="./${eglSrc}" includes="eglx/**"/>
+		<fileset dir="./${eglSrc}" includes="**/*.egl"/>
 	</jar>
 </target>
 </project>
