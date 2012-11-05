@@ -55,6 +55,10 @@ public class InsertEventHandlingFunctionOperation {
 				String partName = new Path(currentFile.getName()).removeFileExtension().toString();
 				final Part part = getPart(fileAST, partName);
 				addFunction(eventType, fileAST, part);
+				
+				// Add an import for Event
+				AddImportOperation addImport = new AddImportOperation(currentDocument, currentFile);
+				addImport.addFullyQualifiedImport("eglx.ui.rui.Event");
 			}catch(Exception e){
 				Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, "Insert Event Handler: Error inserting function", e));
 			}finally{
