@@ -73,7 +73,7 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.edt.compiler.tools.EGL2IR"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-extensions &quot;org.eclipse.edt.mof.eglx.jtopen.IBMiExtension, org.eclipse.edt.rui.RUIExtension&quot; -eglpath &quot;C:\eclipse\DevWorkspaces\edtExtensibleCoreGIT2\zzzzzzz\eglsource;&quot; -irDestination &quot;C:\eclipse\DevWorkspaces\edtExtensibleCoreGIT2\zzzzzzz\eglbin&quot; -xmlOut  &quot;C:\eclipse\DevWorkspaces\edtExtensibleCoreGIT2\zzzzzzz\eglsource&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-extensions &quot;org.eclipse.edt.mof.eglx.jtopen.ext.IBMiExtension, org.eclipse.edt.rui.RUIExtension&quot; -eglpath &quot;C:\eclipse\DevWorkspaces\edtExtensibleCoreGIT2\zzzzzzz\eglsource;&quot; -irDestination &quot;C:\eclipse\DevWorkspaces\edtGIT\zzzzzzzz\EGLBin&quot; -xmlOut  &quot;C:\eclipse\DevWorkspaces\edtGIT\zzzzzzzz\eglsource&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.edt.compiler"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms1024m -Xmx1024m"/>
 </launchConfiguration>
