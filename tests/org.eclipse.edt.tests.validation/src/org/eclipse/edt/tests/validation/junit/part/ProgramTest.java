@@ -52,14 +52,14 @@ public class ProgramTest extends ValidationTestCase {
 	/*
 	 * const cat int = 5;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The same name cat also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1".
+	 * It is expected to contain "The same name cat also appears as variable, parameter, use or constant declaration in part p1".
 	 */
 	public void testLine23() {
 		List messages = getMessagesAtLine( 23 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The same name cat also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The same name cat also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The same name cat also appears as variable, parameter, use or constant declaration in part p1" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The same name cat also appears as variable, parameter, use or constant declaration in part p1\" was issued." );
 	}
 
 	/*
@@ -74,14 +74,14 @@ public class ProgramTest extends ValidationTestCase {
 	/*
 	 * dog int;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The same name dog also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1".
+	 * It is expected to contain "The same name dog also appears as variable, parameter, use or constant declaration in part p1".
 	 */
 	public void testLine26() {
 		List messages = getMessagesAtLine( 26 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The same name dog also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The same name dog also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The same name dog also appears as variable, parameter, use or constant declaration in part p1" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The same name dog also appears as variable, parameter, use or constant declaration in part p1\" was issued." );
 	}
 
 	/*
@@ -96,14 +96,14 @@ public class ProgramTest extends ValidationTestCase {
 	/*
 	 * mouse int;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The same name mouse also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1".
+	 * It is expected to contain "The same name mouse also appears as variable, parameter, use or constant declaration in part p1".
 	 */
 	public void testLine30() {
 		List messages = getMessagesAtLine( 30 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The same name mouse also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The same name mouse also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The same name mouse also appears as variable, parameter, use or constant declaration in part p1" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The same name mouse also appears as variable, parameter, use or constant declaration in part p1\" was issued." );
 	}
 
 	/*
@@ -153,14 +153,14 @@ public class ProgramTest extends ValidationTestCase {
 	/*
 	 * use mylibx;
 	 * 1 validation message is expected.
-	 * It is expected to contain "A duplicate use declaration named mylibx is declared in Function, Program, or Library p4".
+	 * It is expected to contain "A duplicate use declaration named mylibx is declared in part p4".
 	 */
 	public void testLine50() {
 		List messages = getMessagesAtLine( 50 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "A duplicate use declaration named mylibx is declared in Function, Program, or Library p4" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"A duplicate use declaration named mylibx is declared in Function, Program, or Library p4\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "A duplicate use declaration named mylibx is declared in part p4" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A duplicate use declaration named mylibx is declared in part p4\" was issued." );
 	}
 
 	/*

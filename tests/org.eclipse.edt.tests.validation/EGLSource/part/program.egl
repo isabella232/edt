@@ -20,14 +20,14 @@ program p1 // 1
 
 const a string = "fff";// 0
 const cat string = "cat"; // 0
-const cat int = 5;// 1 The same name cat also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+const cat int = 5;// 1 The same name cat also appears as variable, parameter, use or constant declaration in part p1
 
 dog string;// 0
-dog int;// 1 The same name dog also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+dog int;// 1 The same name dog also appears as variable, parameter, use or constant declaration in part p1
 
 const mouse string = "mouse";// 0
 
-mouse int;// 1  The same name mouse also appears as variable, parameter, use or constant declaration in Function, Program, or Library p1
+mouse int;// 1  The same name mouse also appears as variable, parameter, use or constant declaration in part p1
 function zxcv ()
 end
 
@@ -47,7 +47,7 @@ end
 
 program p4
 use mylibx;// 0
-use mylibx;// 1 A duplicate use declaration named mylibx is declared in Function, Program, or Library p4 {3031, DUPLICATE_USE_NAME}
+use mylibx;// 1 A duplicate use declaration named mylibx is declared in part p4 {3031, DUPLICATE_USE_NAME}
 function main()
 end
 end

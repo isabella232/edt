@@ -79,14 +79,14 @@ public class FunctionTest extends ValidationTestCase {
 	/*
 	 * p1 int,
 	 * 1 validation message is expected.
-	 * It is expected to contain "The same name p1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library validateParamsAndDeclarations.".
+	 * It is expected to contain "The same name p1 also appears as variable, parameter, use or constant declaration in part validateParamsAndDeclarations.".
 	 */
 	public void testLine38() {
 		List messages = getMessagesAtLine( 38 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The same name p1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library validateParamsAndDeclarations." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The same name p1 also appears as variable, parameter, use or constant declaration in Function, Program, or Library validateParamsAndDeclarations.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The same name p1 also appears as variable, parameter, use or constant declaration in part validateParamsAndDeclarations." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The same name p1 also appears as variable, parameter, use or constant declaration in part validateParamsAndDeclarations.\" was issued." );
 	}
 
 	/*

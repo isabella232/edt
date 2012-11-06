@@ -103,7 +103,7 @@ handler ternary1
 			? i //1 The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.
 			: i); //1 The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.
 		
-		// Checks for OUT: arg can't be 'super' or 'this', arg & parm 'is reference type' must match, arg & parm must be assignment compatible
+		// Checks for OUT: arg can't be 'super' or 'this', arg & parm must be assignment compatible
 		setTernaryOut(true
 			? this //1 The expression "this" is not valid for use with parameters defined with the INOUT or OUT modifier.
 			: this); //1 The expression "this" is not valid for use with parameters defined with the INOUT or OUT modifier.
@@ -112,9 +112,9 @@ handler ternary1
 			: super); //1 The expression "super" is not valid as a function argument.
 		setDecimalOut1(true
 			? dec1 //0
-			: dec2); //1 The argument dec2 cannot be passed to the inOut or Out parameter d of the function setDecimalOut1. The types decimal(4,2) and decimal are not reference compatible.
+			: dec2); //0
 		setDecimalOut2(true
-			? dec1 //1 The argument dec1 cannot be passed to the inOut or Out parameter d of the function setDecimalOut2. The types decimal and decimal(4,2) are not reference compatible.
+			? dec1 //0
 			: dec2); //0
 		setStringOut(true ? a : a); //0
 		setArrayOut(true ? a : a); //0
@@ -131,13 +131,13 @@ handler ternary1
 			: super); //1 The expression "super" is not valid as a function argument.
 		setStringInout(true
 		 	? s //0
-		 	: nullableS); //1 The argument nullableS cannot be passed to the inOut or Out parameter s of the function setStringInout. The types string? and string are not reference compatible.
+		 	: nullableS); //1 The argument nullableS cannot be passed to the inOut parameter s of the function setStringInout. The types string? and string are not reference compatible.
 	 	setStringInoutNullable(true
-		 	? s //1 The argument s cannot be passed to the inOut or Out parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible.
+		 	? s //1 The argument s cannot be passed to the inOut parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible.
 		 	: nullableS); //0
 		 setStringInout(true
-		 	? ba //1 The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.
-		 	: ba); //1 The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.
+		 	? ba //1 The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.
+		 	: ba); //1 The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.
 	end
 	
 	function returnChecks1() returns(string)

@@ -601,28 +601,20 @@ public class Ternary1Test extends ValidationTestCase {
 
 	/*
 	 * : dec2);
-	 * 1 validation message is expected.
-	 * It is expected to contain "The argument dec2 cannot be passed to the inOut or Out parameter d of the function setDecimalOut1. The types decimal(4,2) and decimal are not reference compatible.".
+	 * 0 validation messages are expected.
 	 */
 	public void testLine115() {
 		List messages = getMessagesAtLine( 115 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument dec2 cannot be passed to the inOut or Out parameter d of the function setDecimalOut1. The types decimal(4,2) and decimal are not reference compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument dec2 cannot be passed to the inOut or Out parameter d of the function setDecimalOut1. The types decimal(4,2) and decimal are not reference compatible.\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * ? dec1
-	 * 1 validation message is expected.
-	 * It is expected to contain "The argument dec1 cannot be passed to the inOut or Out parameter d of the function setDecimalOut2. The types decimal and decimal(4,2) are not reference compatible.".
+	 * 0 validation messages are expected.
 	 */
 	public void testLine117() {
 		List messages = getMessagesAtLine( 117 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument dec1 cannot be passed to the inOut or Out parameter d of the function setDecimalOut2. The types decimal and decimal(4,2) are not reference compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument dec1 cannot be passed to the inOut or Out parameter d of the function setDecimalOut2. The types decimal and decimal(4,2) are not reference compatible.\" was issued." );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
@@ -742,27 +734,27 @@ public class Ternary1Test extends ValidationTestCase {
 	/*
 	 * : nullableS);
 	 * 1 validation message is expected.
-	 * It is expected to contain "The argument nullableS cannot be passed to the inOut or Out parameter s of the function setStringInout. The types string? and string are not reference compatible.".
+	 * It is expected to contain "The argument nullableS cannot be passed to the inOut parameter s of the function setStringInout. The types string? and string are not reference compatible.".
 	 */
 	public void testLine134() {
 		List messages = getMessagesAtLine( 134 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument nullableS cannot be passed to the inOut or Out parameter s of the function setStringInout. The types string? and string are not reference compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument nullableS cannot be passed to the inOut or Out parameter s of the function setStringInout. The types string? and string are not reference compatible.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The argument nullableS cannot be passed to the inOut parameter s of the function setStringInout. The types string? and string are not reference compatible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The argument nullableS cannot be passed to the inOut parameter s of the function setStringInout. The types string? and string are not reference compatible.\" was issued." );
 	}
 
 	/*
 	 * ? s
 	 * 1 validation message is expected.
-	 * It is expected to contain "The argument s cannot be passed to the inOut or Out parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible.".
+	 * It is expected to contain "The argument s cannot be passed to the inOut parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible.".
 	 */
 	public void testLine136() {
 		List messages = getMessagesAtLine( 136 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument s cannot be passed to the inOut or Out parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument s cannot be passed to the inOut or Out parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The argument s cannot be passed to the inOut parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The argument s cannot be passed to the inOut parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible.\" was issued." );
 	}
 
 	/*
@@ -777,27 +769,27 @@ public class Ternary1Test extends ValidationTestCase {
 	/*
 	 * ? ba
 	 * 1 validation message is expected.
-	 * It is expected to contain "The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.".
+	 * It is expected to contain "The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.".
 	 */
 	public void testLine139() {
 		List messages = getMessagesAtLine( 139 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.\" was issued." );
 	}
 
 	/*
 	 * : ba);
 	 * 1 validation message is expected.
-	 * It is expected to contain "The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.".
+	 * It is expected to contain "The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.".
 	 */
 	public void testLine140() {
 		List messages = getMessagesAtLine( 140 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The argument ba cannot be passed to the inOut or Out parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.\" was issued." );
 	}
 
 	/*
