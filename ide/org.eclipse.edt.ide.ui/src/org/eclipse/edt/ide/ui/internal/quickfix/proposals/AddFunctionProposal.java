@@ -92,13 +92,16 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 		return null;
 	}
 
-	private static void appendArgument(String argName, String typeName, boolean isFirst, StringBuffer strbuf) {
+	private static void appendArgument(String argName, String typeName, boolean isFirst, StringBuffer strbuf, boolean isNullable) {
 		if (!isFirst){
 			strbuf.append(", ");
 		}
 		strbuf.append(argName);
 		strbuf.append(' ');
 		strbuf.append(typeName);
+		if (isNullable) {
+			strbuf.append('?');
+		}
 		strbuf.append(' ');
 		strbuf.append(IEGLConstants.KEYWORD_IN);
 	}
@@ -305,7 +308,7 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 			Name callbackExprName = (Name) errCallbackExpr;
 			getCallbackFunctionString(serviceExpr, callbackExprName, new ICallbackArgumentPrinter() {
 				public void printArgs(Expression serviceExpr, StringBuffer strbuf) {
-					appendArgument(EXPARGNAME, EXPPARAMNAME, true, strbuf);
+					appendArgument(EXPARGNAME, EXPPARAMNAME, true, strbuf, false);
 				}
 			},functionTextBuffer, newLineDelimiter, functionNameBuffer);
 		}
@@ -329,7 +332,7 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 						String argName = paramBinding.getCaseSensitiveName();
 						argNames.add(argName);
 						
-						appendArguments(argName, paramBinding.getType(), isFirst, strbuf, currImports,currFilePkg, insertedImports, needImports, newLineDelimiter);
+						appendArguments(argName, paramBinding.getType(), isFirst, strbuf, currImports,currFilePkg, insertedImports, needImports, newLineDelimiter, paramBinding.isNullable());
 						isFirst = false;
 						break;
 				}
@@ -344,16 +347,16 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 					retArgNm = RETARGNAME + Integer.toString(n);
 					n++;
 				}
-				appendArguments(retArgNm, retType, isFirst, strbuf, currImports, currFilePkg,  insertedImports, needImports, newLineDelimiter);
+				appendArguments(retArgNm, retType, isFirst, strbuf, currImports, currFilePkg,  insertedImports, needImports, newLineDelimiter, svrFuncBinding.isNullable());
 				isFirst = false;
 			}
 		}
 	}
 	
 	private static void appendArguments(String argName, Type paramTypeBinding, boolean isFirst, StringBuffer strbuf,
-			List currImports, String currFilePkg, Set insertedImports, List<String>needImport, String newLineDelimiter) {
+			List currImports, String currFilePkg, Set insertedImports, List<String>needImport, String newLineDelimiter, boolean isNullable) {
 		
-		appendArgument(argName, BindingUtil.getShortTypeString(paramTypeBinding, true), isFirst, strbuf);
+		appendArgument(argName, BindingUtil.getShortTypeString(paramTypeBinding, true), isFirst, strbuf, isNullable);
 		
 		Type rootType = paramTypeBinding;
 		while (rootType instanceof ArrayType) {
@@ -454,6 +457,9 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 			}
 				
 			delegateFunctionStr.append(name).append(" ").append(type);
+			if (functionParameterBinding.isNullable()) {
+				delegateFunctionStr.append('?');
+			}
 			if(decorate != null){
 				delegateFunctionStr.append(" ").append(decorate);
 			}

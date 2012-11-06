@@ -173,6 +173,11 @@ externalType FieldReference type EClassProxy {
 }
 end
 
+externalType MemberReference type EClassProxy {
+	proxiedEClassName = "org.eclipse.edt.mof.egl.MemberReference"
+}
+end
+
 externalType PartReference type EClassProxy {
 	proxiedEClassName = "org.eclipse.edt.mof.egl.PartReference"
 }
