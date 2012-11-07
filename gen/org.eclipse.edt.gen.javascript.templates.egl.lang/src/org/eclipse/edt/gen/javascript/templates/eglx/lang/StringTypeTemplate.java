@@ -16,12 +16,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.InvocationExpression;
-import org.eclipse.edt.mof.egl.ParameterizableType;
-import org.eclipse.edt.mof.egl.SequenceType;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class StringTypeTemplate extends JavaScriptTemplate {
 
@@ -134,7 +129,8 @@ public class StringTypeTemplate extends JavaScriptTemplate {
 		out.print(".");
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");
-		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+		if (!(expr.getTarget() instanceof Member) || !((Member)expr.getTarget()).isStatic())
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 		if (expr.getArguments() != null && expr.getArguments().size() > 0)
 			out.print(", ");
 		ctx.invoke(genInvocationArguments, expr, ctx, out);

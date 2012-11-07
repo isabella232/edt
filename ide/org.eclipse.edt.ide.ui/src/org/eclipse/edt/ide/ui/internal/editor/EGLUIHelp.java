@@ -55,7 +55,7 @@ import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.help.HelpSystem;
 import org.eclipse.help.IContext;
 import org.eclipse.help.IContextProvider;
@@ -126,9 +126,9 @@ public class EGLUIHelp {
 				if (node instanceof Library) {
 					Library library = (Library) node;
 					if (library.hasSubType()) {
-						if(library.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.LIBRARY_SUBTYPE_BASIC))
+						if(NameUtile.equals(library.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.LIBRARY_SUBTYPE_BASIC)))
 							return IUIHelpConstants.EGL_EDITOR_LIBRARY_BASICLIBRARY;
-						if(library.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.LIBRARY_SUBTYPE_NATIVE))
+						if(NameUtile.equals(library.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.LIBRARY_SUBTYPE_NATIVE)))
 							return IUIHelpConstants.EGL_EDITOR_LIBRARY_NATIVELIBRARY;
 					}
 					return IUIHelpConstants.EGL_EDITOR_LIBRARY;
@@ -136,11 +136,11 @@ public class EGLUIHelp {
 				if (node instanceof Program) {
 					Program program = (Program) node;
 					if (program.hasSubType()) {
-						if(program.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.PROGRAM_SUBTYPE_BASIC))
+						if(NameUtile.equals(program.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.PROGRAM_SUBTYPE_BASIC)))
 							return IUIHelpConstants.EGL_EDITOR_PROGRAM_BASICPROGRAM;
-						if(program.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.PROGRAM_SUBTYPE_TEXT_UI))
+						if(NameUtile.equals(program.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.PROGRAM_SUBTYPE_TEXT_UI)))
 							return IUIHelpConstants.EGL_EDITOR_PROGRAM_TEXTUI;
-						if(program.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.PROGRAM_SUBTYPE_VG_WEB_TRANSACTION))
+						if(NameUtile.equals(program.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.PROGRAM_SUBTYPE_VG_WEB_TRANSACTION)))
 							return IUIHelpConstants.EGL_EDITOR_PROGRAM_VGWEBTRANSACTION;
 					}
 					return IUIHelpConstants.EGL_EDITOR_PROGRAM;
@@ -148,19 +148,19 @@ public class EGLUIHelp {
 				if (node instanceof Record) {
 					Record record = (Record) node;
 					if (record.hasSubType()) {
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_BASIC))
+						if(NameUtile.equals(record.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.RECORD_SUBTYPE_BASIC)))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_BASICRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_EXCEPTION))
+						if(NameUtile.equals(record.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.RECORD_SUBTYPE_EXCEPTION)))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_EXCEPTION;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_INDEXED))
+						if(NameUtile.equals(record.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.RECORD_SUBTYPE_INDEXED)))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_INDEXRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_MQ))
+						if(NameUtile.equals(record.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.RECORD_SUBTYPE_MQ)))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_MQRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_RELATIVE))
+						if(NameUtile.equals(record.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.RECORD_SUBTYPE_RELATIVE)))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_RELATIVERECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_SERIAL))
+						if(NameUtile.equals(record.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.RECORD_SUBTYPE_SERIAL)))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_SERIALRECORD;
-						if(record.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.RECORD_SUBTYPE_SQl))
+						if(NameUtile.equals(record.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.RECORD_SUBTYPE_SQl)))
 							return IUIHelpConstants.EGL_EDITOR_RECORD_SQLRECORD;
 					}
 					return IUIHelpConstants.EGL_EDITOR_RECORD;
@@ -168,9 +168,9 @@ public class EGLUIHelp {
 				if (node instanceof Handler) {
 					Handler handler = (Handler) node;
 					if (handler.hasSubType()) {
-						if ( handler.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.HANDLER_SUBTYPE_JSF))
+						if ( NameUtile.equals(handler.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.HANDLER_SUBTYPE_JSF)))
 							return IUIHelpConstants.EGL_EDITOR_HANDLER_JSF;
-						if ( handler.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.HANDLER_SUBTYPE_JASPER))
+						if ( NameUtile.equals(handler.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.HANDLER_SUBTYPE_JASPER)))
 							return IUIHelpConstants.EGL_EDITOR_HANDLER_REPORT;
 					}
 					return IUIHelpConstants.EGL_EDITOR_HANDLER;
