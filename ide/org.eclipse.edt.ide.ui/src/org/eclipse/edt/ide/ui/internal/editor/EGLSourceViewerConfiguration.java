@@ -104,7 +104,6 @@ public class EGLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 		ContentAssistant assistant = new ContentAssistant();
 
 		// Add completion processor for the default EGL partition
-		//TODO EXTENSIBILITY - CA needs to be ported to the new model. currently blows up
 //		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
 //		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.EGL_MULTI_LINE_COMMENT), IPartitions.EGL_MULTI_LINE_COMMENT);
 //		assistant.setContentAssistProcessor(new EGLContentAssistProcessor(editor, assistant, IPartitions.EGL_SINGLE_LINE_COMMENT), IPartitions.EGL_SINGLE_LINE_COMMENT);

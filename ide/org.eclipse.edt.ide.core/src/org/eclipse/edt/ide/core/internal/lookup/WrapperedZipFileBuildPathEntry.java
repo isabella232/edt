@@ -135,7 +135,7 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 	@Override
 	public int hasPart(String packageName, String partName) {
 		int typeBindingKind = zipEntry.hasPart(packageName, partName);
-		if(ITypeBinding.NOT_FOUND_BINDING == typeBindingKind) {
+		if(ITypeBinding.NOT_FOUND_BINDING == typeBindingKind && partName.endsWith(".egl")) {
 			ZipFile zipFile = null;
 			try {
 				  zipFile = new ZipFile(getID());

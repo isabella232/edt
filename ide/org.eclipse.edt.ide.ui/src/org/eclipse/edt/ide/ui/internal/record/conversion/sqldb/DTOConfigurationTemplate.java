@@ -29,6 +29,12 @@ public class DTOConfigurationTemplate extends DataToolsSqlTemplate {
 
 		List tables = config.getSelectedTables();
 
+		if (!tables.isEmpty()) {
+			String s = DataToolsObjectsToEGLUtils.getReplacedString(EGLCodeTemplate.mdd_sql_recordHeader, ctx.getVariables());
+			ctx.appendVariableValue(RECORD_FILE_CONTENT, s, "");
+
+		}
+		
 		for (Object object : tables) {
 			if (monitor.isCanceled()) {
 				break;

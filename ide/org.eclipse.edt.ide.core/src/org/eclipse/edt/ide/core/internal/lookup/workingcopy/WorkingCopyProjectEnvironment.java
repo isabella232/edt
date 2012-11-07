@@ -168,7 +168,7 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
     		} else if (entry instanceof WorkingCopyEglarBuildPathEntry) {
     			IEnvironment eglarEnvironment = ((WorkingCopyEglarBuildPathEntry)entry).getEnvironment();
     			if(eglarEnvironment instanceof WorkingCopyProjectEnvironment) {
-    				((ProjectEnvironment)eglarEnvironment).initIREnvironments();
+    				((WorkingCopyProjectEnvironment)eglarEnvironment).initIREnvironments();
     			}
     		}
     	}
