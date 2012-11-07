@@ -58,7 +58,7 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 		// Do simple types first
 		for (int i = 0; i < map.getLength(); i++) {
 			XSTypeDefinition type = (XSTypeDefinition) map.item(i);
-			if (type.getTypeCategory() == XSTypeDefinition.SIMPLE_TYPE && !type.getNamespace().equals("http://www.w3.org/2001/XMLSchema")//$NON-NLS-1$
+			if (type.getTypeCategory() == XSTypeDefinition.SIMPLE_TYPE && !"http://www.w3.org/2001/XMLSchema".equals(type.getNamespace())//$NON-NLS-1$
 					&& !WSDLUtil.isStandardArray(type))
 				processType(type, null, recs, types);
 		}
@@ -66,7 +66,7 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 		// Then complex types
 		for (int i = 0; i < map.getLength(); i++) {
 			XSTypeDefinition type = (XSTypeDefinition) map.item(i);
-			if (type.getTypeCategory() == XSTypeDefinition.COMPLEX_TYPE && !type.getNamespace().equals("http://www.w3.org/2001/XMLSchema")//$NON-NLS-1$
+			if (type.getTypeCategory() == XSTypeDefinition.COMPLEX_TYPE && !"http://www.w3.org/2001/XMLSchema".equals(type.getNamespace())//$NON-NLS-1$
 					&& !WSDLUtil.isStandardArray(type))
 				processType(type, null, recs, types);
 		}

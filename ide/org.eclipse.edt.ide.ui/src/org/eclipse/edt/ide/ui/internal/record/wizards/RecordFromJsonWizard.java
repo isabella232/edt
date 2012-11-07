@@ -36,6 +36,7 @@ public class RecordFromJsonWizard extends AbstractRecordFromInputWizard implemen
 		try {
 			ValueNode node = JsonParser.parseValue(input.toString());
 			setParts(createParts(node));
+			((RecordConfiguration)((NewRecordWizard)getParentWizard()).getConfiguration()).setImports("import eglx.json.JSONName;");
 		} catch (Throwable ex) {
 			addMessage(ex.getMessage());
 		}
