@@ -64,8 +64,10 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 					((EList)obj).add(IrFactory.INSTANCE.createNullLiteral());
 				}
 			}
-			parameterAnnotations = new HashMap<Object, Object>(((EList<?>)obj).size());
-			for(int idx = 0; idx < ((EList<?>)obj).size(); idx++){
+			
+			int size = Math.min(((EList<?>)obj).size(), nestedFunction.getFunctionParameters().size());
+			parameterAnnotations = new HashMap<Object, Object>(size);
+			for(int idx = 0; idx < size; idx++){
 				parameterAnnotations.put(nestedFunction.getFunctionParameters().get(idx), ((EList<?>)obj).get(idx));
 			}
 			
