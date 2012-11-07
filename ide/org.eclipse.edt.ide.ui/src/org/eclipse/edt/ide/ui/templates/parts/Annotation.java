@@ -34,7 +34,7 @@ public class Annotation extends Element {
 	
 	public String toString() {
 		if (fields.keySet().size() == 1 && ("value".equalsIgnoreCase(((String)fields.keySet().toArray()[0])))) {
-			return name + " = " + fields.values().toArray()[0].toString();
+			return "@" + name + "{" + fields.values().toArray()[0].toString() + "}";
 		}
 		
 		StringBuffer buff = new StringBuffer();

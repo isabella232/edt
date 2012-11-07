@@ -60,5 +60,15 @@ public class RecordOperation extends PartOperation {
 		
 		return contents;
 	}
+	
+	@Override
+	protected String getFileHeader(String packName) {
+		String header = super.getFileHeader(packName);
+		String imports = ((RecordConfiguration)configuration).getImports();
+		if (imports == null || imports.length() == 0) {
+			return header;
+		}
+		return header + imports + "\n\n";
+	}
 
 }

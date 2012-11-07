@@ -288,7 +288,9 @@ library ${libraryName}
 end
 </template>
 
-<template name="library" description="%Templates.ruiProp_library" id="org.eclipse.edt.ide.ui.templates.ruiProp_library" context = "egl-core" enabled="true">// RUI Properties library
+<template name="library" description="%Templates.ruiProp_library" id="org.eclipse.edt.ide.ui.templates.ruiProp_library" context = "egl-core" enabled="true">import eglx.ui.rui.RUIPropertiesLibrary;
+
+// RUI Properties library
 library ${libraryName} type RUIPropertiesLibrary {}
 	//NLS keys
 	nlsKey String;	

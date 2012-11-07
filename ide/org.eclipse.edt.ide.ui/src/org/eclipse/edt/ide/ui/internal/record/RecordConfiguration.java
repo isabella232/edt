@@ -25,6 +25,11 @@ public class RecordConfiguration extends EGLPartConfiguration {
 
 	/** The type of record */
 	private int recordType;
+	
+	/**
+	 * Imports required by the record.
+	 */
+	private String imports;
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
@@ -65,5 +70,13 @@ public class RecordConfiguration extends EGLPartConfiguration {
 	private void setDefaultAttributes() {
 		recordType = 0;
 		recordName = ""; //$NON-NLS-1$
+	}
+	
+	public void setImports(String imports) {
+		this.imports = imports;
+	}
+	
+	public String getImports() {
+		return imports;
 	}
 }

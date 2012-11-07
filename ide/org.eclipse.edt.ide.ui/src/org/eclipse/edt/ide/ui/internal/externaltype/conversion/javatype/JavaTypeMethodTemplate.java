@@ -53,7 +53,7 @@ public class JavaTypeMethodTemplate extends AbstractTemplate {
 		} 
 		
 		if(isEGLKeyWord || isStartWithEze) {
-			out.print("   {externalName = \"" + javaMethod.getName() + "\"");
+			out.print("   {@ExternalName{\"" + javaMethod.getName() + "\"}");
 			if(javaMethod.getExceptionTypes().length > 0) {
 				out.print("," + JavaTypeConstants.EGL_THROWS_ANNOTATION);
 			}

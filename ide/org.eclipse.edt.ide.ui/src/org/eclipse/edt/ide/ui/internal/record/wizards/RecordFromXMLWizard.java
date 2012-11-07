@@ -52,6 +52,7 @@ public class RecordFromXMLWizard extends AbstractRecordFromInputWizard implement
 			Element doc = dom.getDocumentElement();
 
 			setParts(createParts(doc));
+			((RecordConfiguration)((NewRecordWizard)getParentWizard()).getConfiguration()).setImports("import eglx.xml.binding.annotation.*;");
 		} catch (Throwable ex) {
 			addMessage(ex.getMessage());
 		}
