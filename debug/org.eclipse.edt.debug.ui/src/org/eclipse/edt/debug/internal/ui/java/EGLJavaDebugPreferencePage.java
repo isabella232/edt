@@ -236,7 +236,7 @@ public class EGLJavaDebugPreferencePage extends AbstractPreferencePage implement
 		
 		tableViewer.refresh();
 		
-		super.performDefaults();
+		initFilterEnablement();
 	}
 	
 	@Override
