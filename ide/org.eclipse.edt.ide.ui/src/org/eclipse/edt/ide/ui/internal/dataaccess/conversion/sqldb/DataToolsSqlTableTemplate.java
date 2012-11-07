@@ -80,8 +80,10 @@ public class DataToolsSqlTableTemplate extends org.eclipse.edt.ide.ui.internal.r
 		String filePath = DataToolsObjectsToEGLUtils.getEGLFilePath(packageName, fileName);
 		
 		StringBuilder recordsDef = new StringBuilder();
+		recordsDef.append(DataToolsObjectsToEGLUtils.getReplacedString(EGLCodeTemplate.mdd_sql_recordHeader, ctx.getVariables()));
 		
-		recordsDef.append(getEntityRecordHeader(table, ctx));		
+		recordsDef.append(getEntityRecordHeader(table, ctx));	
+
 		Object[] columns = table.getColumns().toArray();
 		for (Object column : columns) {
 			ctx.invoke(genEntityRecordColumnMethodName, (Object)column, ctx, recordsDef);	

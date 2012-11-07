@@ -37,4 +37,5 @@ public class EGLCodeTemplate extends NLS {
 	public static String mdd_isValidmethod;
 	public static String mdd_service_serviceHeader;
 	public static String mdd_library_libraryHeader;
+	public static String mdd_sql_recordHeader;
 }
