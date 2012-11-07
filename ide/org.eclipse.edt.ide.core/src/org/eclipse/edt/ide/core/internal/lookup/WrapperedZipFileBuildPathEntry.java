@@ -60,30 +60,29 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 				sourceName = part.eGet("filename").toString();
 				irName = IRFileNameUtility.toIRFileName(part.getCaseSensitiveName());
 			} else {
-				ZipFile zipFile = null;
-				try {
-					  zipFile = new ZipFile(getID());
-					  if(partName != null) {
-						  ZipEntry ze = zipFile.getEntry(partName); 
-						  if(ze != null) {
-							  sourceName = partName;
-						  }
-						  else if (Util.isEGLFileName(partName)) {
-							  // Sometimes the case-insensitive file is passed in, which won't find the entry via zipFile.getEntry().
-							  // We must manually check in an "interned" way.
-							  Enumeration<? extends ZipEntry> entries = zipFile.entries();
-							  while (entries.hasMoreElements()) {
-								  ZipEntry entry = entries.nextElement();
-								  if (NameUtile.equals(partName, NameUtile.getAsName(entry.getName()))) {
-									  sourceName = entry.getName();
-									  break;
-								  }
+				if(partName != null && Util.isEGLFileName(partName)) {
+					try {
+					  ZipFile zipFile = new ZipFile(getID());
+					  ZipEntry ze = zipFile.getEntry(partName); 
+					  if(ze != null) {
+						  sourceName = partName;
+					  }
+					  else {
+						  // Sometimes the case-insensitive file is passed in, which won't find the entry via zipFile.getEntry().
+						  // We must manually check in a case-insensitive way.
+						  Enumeration<? extends ZipEntry> entries = zipFile.entries();
+						  while (entries.hasMoreElements()) {
+							  ZipEntry entry = entries.nextElement();
+							  if (NameUtile.equals(partName, NameUtile.getAsName(entry.getName()))) {
+								  sourceName = entry.getName();
+								  break;
 							  }
 						  }
 					  }
 					  zipFile.close(); 
 				  } catch(IOException io){ 
 				  } 
+				}
 			}
 			
 			if(sourceName != null) {
@@ -135,7 +134,7 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 	@Override
 	public int hasPart(String packageName, String partName) {
 		int typeBindingKind = zipEntry.hasPart(packageName, partName);
-		if(ITypeBinding.NOT_FOUND_BINDING == typeBindingKind && partName.endsWith(".egl")) {
+		if(ITypeBinding.NOT_FOUND_BINDING == typeBindingKind && Util.isEGLFileName(partName)) {
 			ZipFile zipFile = null;
 			try {
 				  zipFile = new ZipFile(getID());
@@ -144,9 +143,9 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 					  if(ze != null) {
 						  typeBindingKind = ITypeBinding.FILE_BINDING;
 					  }
-					  else if (Util.isEGLFileName(partName)) {
+					  else {
 						  // Sometimes the case-insensitive file is passed in, which won't find the entry via zipFile.getEntry().
-						  // We must manually check in an "interned" way.
+						  // We must manually check in a case-insensitive way.
 						  Enumeration<? extends ZipEntry> entries = zipFile.entries();
 						  while (entries.hasMoreElements()) {
 							  ZipEntry entry = entries.nextElement();
