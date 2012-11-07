@@ -30,7 +30,7 @@ import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.editor.EGLContentAssistInvocationContext;
 import org.eclipse.edt.ide.ui.editor.IEGLCompletionProposalComputer;
 import org.eclipse.edt.ide.ui.internal.editor.util.EGLModelUtility;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -125,7 +125,7 @@ public class EGLCompletionProposalComputer implements IEGLCompletionProposalComp
 		while (node != null) {
 			if (node instanceof Library) {
 				Library library = (Library) node;
-				if(library.hasSubType() && library.getSubType().getIdentifier() == InternUtil.intern(IEGLConstants.LIBRARY_SUBTYPE_NATIVE))
+				if(library.hasSubType() && NameUtile.equals(library.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.LIBRARY_SUBTYPE_NATIVE)))
 					return true;
 			}
 			node = node.getParent();

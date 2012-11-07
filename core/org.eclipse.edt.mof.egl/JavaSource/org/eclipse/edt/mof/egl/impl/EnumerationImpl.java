@@ -30,7 +30,6 @@ import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeParameter;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EEnumImpl;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -239,7 +238,7 @@ public class EnumerationImpl extends EEnumImpl implements Enumeration {
 	
 	@Override
 	public String getMofSerializationKey() {
-		return InternUtil.intern(EGL_KeyScheme + KeySchemeDelimiter + getTypeSignature().toUpperCase().toLowerCase());
+		return NameUtile.getAsName(EGL_KeyScheme + KeySchemeDelimiter + getTypeSignature().toUpperCase().toLowerCase());
 	}
 
 	@Override

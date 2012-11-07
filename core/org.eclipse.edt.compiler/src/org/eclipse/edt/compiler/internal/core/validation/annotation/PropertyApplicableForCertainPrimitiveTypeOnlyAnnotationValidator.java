@@ -26,7 +26,6 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -39,7 +38,7 @@ public abstract class PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationVal
 	protected String canonicalAnnotationName;
 	
 	protected PropertyApplicableForCertainPrimitiveTypeOnlyAnnotationValidator(String canonicalAnnotationName) {
-		super(InternUtil.internCaseSensitive("PropertyApplicableForCertainPrimitiveOnly"));
+		super(NameUtile.getAsCaseSensitiveName("PropertyApplicableForCertainPrimitiveOnly"));
 		this.canonicalAnnotationName = canonicalAnnotationName;
 	}
 	
