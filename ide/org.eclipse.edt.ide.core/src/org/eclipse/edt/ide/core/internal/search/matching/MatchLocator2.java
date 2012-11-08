@@ -78,6 +78,7 @@ import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -1321,12 +1322,15 @@ public class MatchLocator2 {//extends MatchLocator {
 			String mofSignature = IRUtils.concatWithSeparator(classFile.getPackageName(), ".") + "." + classFile.getTypeName();
 			String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
 			try {
+				Environment.pushEnv(env);
 				EObject irPart = env.find(eglSignature);
 				sourceName = irPart.eGet("filename").toString();
 			} catch (MofObjectNotFoundException e1) {
 				e1.printStackTrace();
 			} catch (DeserializationException e1) {
 				e1.printStackTrace();
+			} finally {
+				Environment.popEnv();
 			}
 			
 			return sourceName;

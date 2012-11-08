@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
@@ -19,6 +22,8 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.StructPart;
 
 public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.EGLClassTemplate {
 	
@@ -61,7 +66,9 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.E
 			ctx.invoke(Constants.genGetVariablesEntry, lib, ctx, out);
 		}
 		
-		for (Field field : part.getFields()) {
+		List<Field> fields = new ArrayList<Field>();
+		gatherFields(part, fields, new HashSet<LogicAndDataPart>());
+		for (Field field : fields) {
 			if (first) {
 				first = false;
 				out.print("\n");
@@ -74,6 +81,21 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.E
 		
 		out.println("\n];");
 		out.println("}");
+	}
+	
+	private void gatherFields(LogicAndDataPart part, List<Field> fields, Set<LogicAndDataPart> seenParts) {
+		if (seenParts.contains(part)) {
+			return;
+		}
+		
+		seenParts.add(part);
+		fields.addAll(part.getFields());
+		
+		for (StructPart parent : part.getSuperTypes()) {
+			if (parent instanceof LogicAndDataPart) {
+				gatherFields((LogicAndDataPart)parent, fields, seenParts);
+			}
+		}
 	}
 	
 	@Override

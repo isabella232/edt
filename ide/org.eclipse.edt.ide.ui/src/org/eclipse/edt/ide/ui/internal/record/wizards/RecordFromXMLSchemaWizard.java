@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.record.wizards;
 
+import org.eclipse.edt.ide.ui.internal.record.NewRecordWizard;
+import org.eclipse.edt.ide.ui.internal.record.RecordConfiguration;
 import org.eclipse.edt.ide.ui.internal.record.conversion.RecordSource;
 import org.eclipse.edt.ide.ui.internal.record.conversion.xmlschema.XMLSchemaConversion;
 import org.eclipse.ui.IWorkbenchWizard;
@@ -35,6 +37,7 @@ public class RecordFromXMLSchemaWizard extends AbstractRecordFromInputWizard imp
 			XMLSchemaConversion conv = new XMLSchemaConversion();
 			if (conv.convert((RecordSource)input)) {
 				setParts(conv.getResultParts());
+				((RecordConfiguration)((NewRecordWizard)getParentWizard()).getConfiguration()).setImports("import eglx.xml.binding.annotation.*;");
 			}
 			
 			boolean containingValidValue = false;

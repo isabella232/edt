@@ -55,9 +55,6 @@ public class DataToolsSqlTableTemplate extends DataToolsSqlTemplate {
 	public String getEntityRecordHeader(org.eclipse.datatools.modelbase.sql.tables.Table table, EglSourceContext ctx){
 		
 		StringBuffer s = new StringBuffer(200);
-		s.append("import eglx.persistence.Entity;\n");
-		s.append("import eglx.persistence.Id;\n");
-		s.append("import eglx.persistence.sql.*;\n\n");
 		s.append("record " + getEntityRecordName(table) + " type Entity ");
 		boolean isTableQualified = (Boolean)ctx.get(DTO2EglSource.TABLE_NAME_QUALIFIED);
 		

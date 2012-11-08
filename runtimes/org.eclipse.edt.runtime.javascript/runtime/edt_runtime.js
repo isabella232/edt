@@ -675,7 +675,9 @@ egl.eglx.lang.EString.concat = function (op1, op2) {
 	b = (op2) ? op2 : "";
 	return a + b;
 };
-
+egl.eglx.lang.EString.getDefaultEncoding = function() {
+	return "UTF-16BE";
+};
 egl.eglx.lang.EString.nullconcat = function (op1, op2) {
 	return egl.nullableconcat(op1, op2);
 };

@@ -224,6 +224,7 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 		}
 		
 		monitor.beginTask("Generating external type parts", config.getToBeGenerated().size());
+		buffer.append("import eglx.java.*;\n");
 		
 		for(Map.Entry<Class<?>,JavaType> entry : config.getToBeGenerated().entrySet()) {
 			if (monitor.isCanceled()) {
@@ -238,6 +239,7 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 				
 				Class<?> clazz = entry.getKey();
 				monitor.subTask(clazz.getName());
+				
 				d.generate(clazz, generator, null);
 				buffer.append(context.getTabbedWriterContent());
 				

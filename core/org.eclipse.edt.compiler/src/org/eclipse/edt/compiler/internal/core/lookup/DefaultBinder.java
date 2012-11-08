@@ -904,7 +904,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 			Function function = functions.get(0);
 			functionInvocation.getTarget().setMember(function);
 			functionInvocation.setType(function.getType());
-			functionInvocation.getTarget().setType(function.getType());
 			dependencyRequestor.recordType(function.getType());
 
 		}

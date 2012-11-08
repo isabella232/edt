@@ -39,7 +39,6 @@ import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.TextTypeLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeParameter;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EClassImpl;
 import org.eclipse.edt.mof.impl.EObjectImpl;
 import org.eclipse.edt.mof.utils.EList;
@@ -96,7 +95,7 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	 * key should follow the EGL Key Scheme.
 	 */
 	public String getMofSerializationKey() {
-		return InternUtil.intern(EGL_KeyScheme + KeySchemeDelimiter + getTypeSignature().toUpperCase().toLowerCase());
+		return NameUtile.getAsName(EGL_KeyScheme + KeySchemeDelimiter + getTypeSignature().toUpperCase().toLowerCase());
 	}
 	
 	@SuppressWarnings("unchecked")
