@@ -327,6 +327,10 @@ program p
 end
 
 record rec
+	i int;
+end
+
+record rec2
 	d1 decimal(4,2); //0
 	d2 decimal(4,-2); //1
 	d3 decimal(-4,2); //2
