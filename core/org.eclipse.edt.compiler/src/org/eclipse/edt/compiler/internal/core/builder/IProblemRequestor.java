@@ -195,7 +195,8 @@ public interface IProblemRequestor {
 	public static final int RECURSIVE_LOOP_IN_EXTENDS = 5045;   		
 	public static final int CONTINUE_STATEMENT_LOCATION = 5054;
 	public static final int INVALID_CONTINUE_EXIT_MODIFIER = 5055;
-	public static final int INVALID_CONTINUE_EXIT_LABEL = 5056;	
+	public static final int INVALID_CONTINUE_EXIT_LABEL = 5056;
+	public static final int RECURSIVE_LOOP_STARTED_WITHIN_FLEXIBLE_RECORD_BY_TYPEDEF = 5057;
 	public static final int CASE_WHEN_MUST_BE_BOOLEAN_EXPRESSION = 5078; 
 	public static final int TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON = 5089;
 	public static final int ROUTINE_MUST_HAVE_X_ARGS = 5109;

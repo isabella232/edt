@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.part;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -24,6 +27,9 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationVa
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FieldValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Type;
 
 
 public class FlexibleRecordValidator extends AbstractASTVisitor {
@@ -60,6 +66,14 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 		
 		if (structureItem.hasType()) {
 			TypeValidator.validateTypeDeclaration(structureItem.getType(), irBinding, problemRequestor);
+			
+			Type typeBinding = structureItem.getType().resolveType();
+			if (typeBinding instanceof org.eclipse.edt.mof.egl.Record && containsReferenceTo((org.eclipse.edt.mof.egl.Record)typeBinding, recordBinding, new ArrayList<org.eclipse.edt.mof.egl.Record>())) {
+				problemRequestor.acceptProblem(
+						structureItem.getType(),
+						IProblemRequestor.RECURSIVE_LOOP_STARTED_WITHIN_FLEXIBLE_RECORD_BY_TYPEDEF,
+						new String[]{typeBinding.getTypeSignature()});
+			}
 		}
 		
 		return false;
@@ -69,4 +83,30 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 	public boolean visit(SettingsBlock settingsBlock) {
 		return false;
 	}
+	
+	private boolean containsReferenceTo(org.eclipse.edt.mof.egl.Record mainRecord, org.eclipse.edt.mof.egl.Record recordToLookFor, List<org.eclipse.edt.mof.egl.Record> processedRecords) {
+		for (Field f : mainRecord.getFields()) {
+			Type t = f.getType();
+			if (t instanceof org.eclipse.edt.mof.egl.Record) {
+				org.eclipse.edt.mof.egl.Record currentRecord = (org.eclipse.edt.mof.egl.Record)BindingUtil.realize((org.eclipse.edt.mof.egl.Record)t);
+	            if (primContainsReferenceTo(recordToLookFor, processedRecords, currentRecord)) {
+	                return true;
+	            }
+			}
+        }
+        return false;
+	}
+	
+	private boolean primContainsReferenceTo(org.eclipse.edt.mof.egl.Record recordToLookFor, List<org.eclipse.edt.mof.egl.Record> processedRecords, org.eclipse.edt.mof.egl.Record currentRecord) {
+        if (currentRecord.equals(recordToLookFor)) {
+            return true;
+        }
+        if (!processedRecords.contains(currentRecord)) {
+            processedRecords.add(currentRecord);
+            if (containsReferenceTo((org.eclipse.edt.mof.egl.Record)currentRecord, recordToLookFor, processedRecords )) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

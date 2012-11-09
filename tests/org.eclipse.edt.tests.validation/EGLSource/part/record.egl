@@ -1,0 +1,22 @@
+// Check for loops
+record loop1
+	r loop2; //1 The record loop2 contains an item whose type results in an illegal recursive loop.
+end
+record loop2
+	r loop3; //1 The record loop3 contains an item whose type results in an illegal recursive loop.
+end
+record loop3
+	r loop1; //1 The record loop1 contains an item whose type results in an illegal recursive loop.
+end
+
+record noloop1
+	r noloop2; //0
+end
+
+record noloop2
+	x int; //0
+end
+
+record loopSelf
+	r loopSelf; //1 The record loopSelf contains an item whose type results in an illegal recursive loop.
+end
