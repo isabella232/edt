@@ -54,7 +54,6 @@ public class EGLContextBoundaryUtility {
 		boundaryStatesSet.set(NodeTypes.part);
 		boundaryStatesSet.set(NodeTypes.structureContent);
 		boundaryStatesSet.set(NodeTypes.strItemDecl);
-		boundaryStatesSet.set(NodeTypes.occursOpt);
 		boundaryStatesSet.set(NodeTypes.functionParameter);
 		boundaryStatesSet.set(NodeTypes.returnsOpt);
 		boundaryStatesSet.set(NodeTypes.classContent);
