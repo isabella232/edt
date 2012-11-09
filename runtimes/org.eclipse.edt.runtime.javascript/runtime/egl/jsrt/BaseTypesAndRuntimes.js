@@ -3512,9 +3512,9 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 	if (object == null) {
 		return null;
 	}
-	var objectIsRecord = object instanceof egl.egl.jsrt.Record;
 	var objectIsDictionary = object instanceof egl.eglx.lang.EDictionary;
-	if (!(objectIsRecord || objectIsDictionary)) {
+	var objectSupportsLookup = !objectIsDictionary && "eze$$getFieldSignatures" in object;
+	if (!(objectSupportsLookup || objectIsDictionary)) {
 		throw egl.createRuntimeException( "CRRUI2024E", [key,egl.inferSignature(object)] );
 	}
 	
@@ -3522,13 +3522,11 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 	if ( result !== undefined && result !== null && ( typeof result !== "object" || !("eze$$value" in result) ) )
 	{
 		var sig = egl.inferSignature(result);
-		if (objectIsRecord && "eze$$getFieldSignatures" in object) {
+		if (objectSupportsLookup) {
 			var fields = object.eze$$getFieldSignatures();
-			var lKey = key.toLowerCase();
 			for (var i=0; i<fields.length; i++) {
-				var lField = fields[i].name.toLowerCase();
-				if (lKey === lField) {
-					sig = fields[i].type;
+				if (key === fields[i].name) {
+					sig = fields[i].sig;
 					break;
 				}
 			}
@@ -3536,26 +3534,20 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 		result = egl.boxAny( result, sig );
 	}
 	if (result === undefined) {
-		if ((objectIsRecord && !egl.findKey(object, key))|| (objectIsDictionary && value === undefined)) {
+		if ((objectSupportsLookup && !egl.findKey(object, key))|| (objectIsDictionary && value === undefined)) {
 			throw egl.createRuntimeException( "CRRUI2025E", [key, egl.inferSignature(object)] );
 		}
 	}
 	if (value !== undefined) 
 	{
-//		if (value instanceof egl.egl.jsrt.Record)
-//		{
-//			value = value.eze$$clone();
-//		}
 		value = egl.boxAny( value, signature );
-		if (objectIsRecord)
+		if (objectSupportsLookup)
 		{
 			var sig;
 			var fields = object.eze$$getFieldSignatures();
-			var lKey = key.toLowerCase();
 			for (var i=0; i<fields.length; i++) {
-				var lField = fields[i].name.toLowerCase();
-				if (lKey === lField) {
-					sig = fields[i].type;
+				if (key === fields[i].name) {
+					sig = fields[i].sig;
 					break;
 				}
 			}
@@ -4014,11 +4006,6 @@ egl.defineClass( "egl.jsrt", "Record", {
 		return returnValue;
 	}
 	,
-	"eze$$getFieldSignatures": function() {
-		return [];
-	}
-	,
-	
 	"eze$$getChildVariables" : function() {
 		if (!(this.eze$$fieldNames)) {
 			return null;
@@ -4201,12 +4188,12 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	}
 	
 	//enforce the pattern mask
-	//first function is for pattern missing chars on the left side (current)
+	//first function is for pattern missing chars on the left side (Jan 1 1970)
 	//second function is for pattern missing chars on the right side (zeros)
 	var chars = 
 		[ // bug 365262, change to leap year 2000 to accept date like "0229"
 		//Bug 372937 changed from current month and date due to issues with February 29
-		  [ "y", function(d){ d.setFullYear( 2000 ); }, function(d){ d.setFullYear( 0 ); } ],
+		  [ "y", function(d){ d.setFullYear( pattern.indexOf('MM')>=0 && pattern.indexOf('yy')>=0 ? 2000 : 1970 ); }, function(d){ d.setFullYear( 0 ); } ],
 	      [ "M", function(d){ d.setMonth( 0 ); }, function(d){ d.setMonth( 0 ); } ], 
 	      [ "d", function(d){ d.setDate( 1 ); }, function(d){ d.setDate( 1 ); } ],
 	      [ "h", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],

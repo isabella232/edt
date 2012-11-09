@@ -195,7 +195,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(genSetEmptyMethods, part, ctx, out);
 		ctx.invoke(genInitializeMethods, part, ctx, out);
 		ctx.invoke(genCloneMethods, part, ctx, out);
-		// genGetFieldSignaturesMethod(part, ctx, out, args);
+		ctx.invoke(genGetFieldSignaturesMethod, part, ctx, out);
 		ctx.invoke(genAnnotations, part, ctx, out);
 		ctx.invoke(genFieldAnnotations, part, ctx, out);
 		ctx.invoke(genFunctions, part, ctx, out);
@@ -441,5 +441,40 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 				break;
 			}
 		}
+	}
+	
+	public void genGetFieldSignaturesMethod(EGLClass part, Context ctx, TabbedWriter out) {
+		
+		if ( TypeUtils.isValueType( part ) || TypeUtils.isStaticType( part ) )
+			return;
+
+		out.println(',');
+		out.print(quoted("eze$$getFieldSignatures"));
+		out.println(": function() {");
+		out.println("if(this.fieldSigs === undefined){");
+		out.println("this.fieldSigs = [");
+		boolean firstField = true;
+		for (Field field : part.getFields()) {
+			if (field instanceof ConstantField) {
+				continue;
+			}
+			
+			if ( firstField )
+			{
+				firstField = false;
+			}
+			else
+			{
+				out.println( ',' );
+			}
+			
+			out.print( "{name: \"" + field.getCaseSensitiveName() + "\", sig: \"" );
+			ctx.invoke(genSignature, field.getType(), ctx, out);
+			out.print( "\"}");
+		}
+		out.println("];");
+		out.println('}');
+		out.println("return this.fieldSigs;");
+		out.println('}');
 	}
 }
