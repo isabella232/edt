@@ -168,7 +168,6 @@ public interface IProblemRequestor {
 	public static final int CLASS_MUST_EXTEND_CLASS = 3474;
 	public static final int PART_CANNOT_EXTEND_ITSELF = 3475;
 	public static final int THROWS_NOT_VALID_HERE= 3480;
-	public static final int STEREOTYPE_TYPE_REQUIRED = 3512;
 	public static final int STEREOTYPE_NO_PARMS = 3514;
 	public static final int STEREOTYPE_BAD_TYPE = 3515;
 	public static final int INVALID_LENGTH_FOR_PARAMETERIZED_TYPE = 4401;

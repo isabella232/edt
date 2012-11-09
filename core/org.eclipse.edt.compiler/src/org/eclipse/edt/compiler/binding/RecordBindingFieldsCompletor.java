@@ -98,9 +98,7 @@ public class RecordBindingFieldsCompletor extends AbstractBinder {
     public boolean visit(StructureItem structureItem) {
         Type type = null;
         try {
-            if (structureItem.hasType()) {
-                type = bindType(structureItem.getType());
-            }
+            type = bindType(structureItem.getType());
         } catch (ResolutionException e) {
             problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
             if(structureItem.hasSettingsBlock()) {

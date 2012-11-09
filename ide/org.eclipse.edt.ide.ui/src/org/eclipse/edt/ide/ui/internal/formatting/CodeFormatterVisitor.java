@@ -598,19 +598,9 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			name.accept(this);
 		}
 		
-		if(structureItem.hasType()){
-			Type type = structureItem.getType();
-			setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-			type.accept(this);
-		}
-		
-		if(structureItem.hasOccurs()){
-//			|	LBRACKET INTEGER:occurs RBRACKET
-//			{: RESULT = occurs; :}
-			printStuffBeforeToken(NodeTypes.LBRACKET, -1, true);
-			printStuffBeforeToken(NodeTypes.INTEGER, -1, false);		//no space padded around the integer
-			printStuffBeforeToken(NodeTypes.RBRACKET, -1, false);
-		}
+		Type type = structureItem.getType();
+		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+		type.accept(this);
 		
 		if(structureItem.hasSettingsBlock()){
 			SettingsBlock settingsBlock = structureItem.getSettingsBlock();

@@ -312,7 +312,7 @@ structureContent
 
 strItemDecl
 	::=	ID:id1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // StructureItem
-	{: RESULT = new StructureItem(new SimpleName(id1, id1left, id1right), type1, questionOpt1, null, settingsBlock1, initializer1, id1left, semi1right); :}
+	{: RESULT = new StructureItem(new SimpleName(id1, id1left, id1right), type1, questionOpt1, settingsBlock1, initializer1, id1left, semi1right); :}
 	;
 	
 functionParameter

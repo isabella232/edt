@@ -129,14 +129,6 @@ public class AnnotationTypeCompletor extends DefaultBinder {
     			return true;
     		}
     		public boolean visit(StructureItem structureItem) {
-    			if (!structureItem.hasType()) {
-      	    		problemRequestor.acceptProblem(
-    	    				structureItem,
-    	    				IProblemRequestor.STEREOTYPE_TYPE_REQUIRED,
-    	    				new String[] {structureItem.getName().getCaseSensitiveIdentifier(), annotationType.getCaseSensitiveName()});
-    				setBindAttemptedForNames(structureItem);
-    				return false;
-    			}
     			
     			EType eType = null;
     			try {

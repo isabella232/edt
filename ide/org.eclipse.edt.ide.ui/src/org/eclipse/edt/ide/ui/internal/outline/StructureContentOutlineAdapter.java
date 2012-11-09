@@ -33,16 +33,8 @@ public class StructureContentOutlineAdapter extends AbstractOutlineAdapter {
 		// name occurs type;
 		if (item.getName() != null) { //isStructureItem both typed and untyped
 			buffer.append(item.getName().getCanonicalName());
-			if (item.hasOccurs()) {
-				buffer.append("["); //$NON-NLS-1$
-				buffer.append(item.getOccurs());
-				buffer.append("]"); //$NON-NLS-1$
-
-			}
-			if(item.getType() != null) {
-				buffer.append(" : "); //$NON-NLS-1$
-				buffer.append(formatType(item.getType()));
-			}
+			buffer.append(" : "); //$NON-NLS-1$
+			buffer.append(formatType(item.getType()));
 		} 
 		return buffer.toString();
 	}

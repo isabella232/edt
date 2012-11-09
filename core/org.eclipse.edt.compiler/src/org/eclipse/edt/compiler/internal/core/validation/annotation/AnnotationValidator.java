@@ -290,7 +290,7 @@ public class AnnotationValidator {
 					processOverriddenAnnotationsAndSetValues(structureItem.getSettingsBlock());
 				}
 				
-				if (structureItem.getName().resolveMember() != null && structureItem.hasType() && !structureItem.hasInitializer() && !structureItem.isNullable()) {					
+				if (structureItem.getName().resolveMember() != null && !structureItem.hasInitializer() && !structureItem.isNullable()) {					
 					validateInvocation(structureItem, getDefaultConstructor(structureItem.getType().resolveType()), BindingUtil.getDeclaringPart(structureItem.getName().resolveMember()));					
 				}
 				return false;

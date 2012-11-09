@@ -58,9 +58,7 @@ public class FlexibleRecordValidator extends AbstractASTVisitor {
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(structureItem);
 		structureItem.accept(new FieldValidator(problemRequestor, compilerOptions, irBinding));
 		
-		if (structureItem.hasType()) {
-			TypeValidator.validateTypeDeclaration(structureItem.getType(), irBinding, problemRequestor);
-		}
+		TypeValidator.validateTypeDeclaration(structureItem.getType(), irBinding, problemRequestor);
 		
 		return false;
 	}
