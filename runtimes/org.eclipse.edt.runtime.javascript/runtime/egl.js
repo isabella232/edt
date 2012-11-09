@@ -429,52 +429,6 @@ egl.setHeight = function(element, h) {
 
 };
 
-egl.setDateSignatures = function(object) {
-    if (object instanceof egl.egl.jsrt.Record) {
-        var sig = object.eze$$getFieldSignatures();
-        for (var n = 0; n < sig.length; n++) {
-           if (sig[n].value instanceof Date) {
-               sig[n].value.eze$$signature = sig[n].type;
-           }
-        }
-        return;    
-    }
-    if (object.eze$$InParamSignatures) { 
-        // service IN parameters
-        var sig = object.eze$$InParamSignatures;
-        for (var n = 0; n < sig.length; n++) {
-           if (object.params[n] instanceof Date) {
-               object.params[n].eze$$signature = sig[n];
-           }
-        } 
-        return;    
-    }
-    if (object instanceof Array) { 
-    	var sig = egl.inferSignature(object);
-	    var kind = sig.charAt(1) === '?' ? sig.charAt(2) : sig.charAt(1);
-	    if (kind == 'K' || kind == 'L' || kind == 'J') {
-	       for (var n = 0; n < object.length; n++) {
-	           if (object[n]) {
-			       object[n].eze$$signature = kind;
-			   }
-		   }
-		}
-		return;
-    }
-	if (object instanceof egl.eglx.lang.EDictionary) {
-		for (f in object) {
-			if (!f.match(/^eze\$\$/) && (typeof object[f] != "function") && object[f]!=null) {
-			   var sig = object[f].eze$$signature;
-			   var kind = sig.charAt(0) === '?' ? sig.charAt(1) : sig.charAt(0);
-			   if (kind == 'K' || kind == 'L' || kind == 'J') {
-			       object[f].eze$$value.eze$$signature = object[f].eze$$signature;
-			   }
-			}
-		} 
-		return;   
-    }
-};
-
 egl.printError = function(){};
 
 egl.eze$$packages = { };
