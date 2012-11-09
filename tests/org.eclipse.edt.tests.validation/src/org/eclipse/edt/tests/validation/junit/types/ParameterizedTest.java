@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.tests.validation.junit.types;
 
 import java.util.List;
@@ -2514,8 +2503,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * d1 decimal(4,2);
 	 * 0 validation messages are expected.
 	 */
-	public void testLine330() {
-		List messages = getMessagesAtLine( 330 );
+	public void testLine334() {
+		List messages = getMessagesAtLine( 334 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -2523,8 +2512,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * d2 decimal(4,-2);
 	 * 1 validation message is expected.
 	 */
-	public void testLine331() {
-		List messages = getMessagesAtLine( 331 );
+	public void testLine335() {
+		List messages = getMessagesAtLine( 335 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -2532,8 +2521,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * d3 decimal(-4,2);
 	 * 2 validation messages are expected.
 	 */
-	public void testLine332() {
-		List messages = getMessagesAtLine( 332 );
+	public void testLine336() {
+		List messages = getMessagesAtLine( 336 );
 		assertEquals( 2, messages.size() );
 	}
 
@@ -2542,8 +2531,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The decimals value 4 for type eglx.lang.EDecimal must be less than or equal to the length value 2.".
 	 */
-	public void testLine333() {
-		List messages = getMessagesAtLine( 333 );
+	public void testLine337() {
+		List messages = getMessagesAtLine( 337 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The decimals value 4 for type eglx.lang.EDecimal must be less than or equal to the length value 2." );
@@ -2554,8 +2543,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * d5 decimal("abc");
 	 * 1 validation message is expected.
 	 */
-	public void testLine334() {
-		List messages = getMessagesAtLine( 334 );
+	public void testLine338() {
+		List messages = getMessagesAtLine( 338 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -2563,8 +2552,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * d6 decimal("12");
 	 * 0 validation messages are expected.
 	 */
-	public void testLine335() {
-		List messages = getMessagesAtLine( 335 );
+	public void testLine339() {
+		List messages = getMessagesAtLine( 339 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -2572,8 +2561,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * d7 decimal(4);
 	 * 0 validation messages are expected.
 	 */
-	public void testLine336() {
-		List messages = getMessagesAtLine( 336 );
+	public void testLine340() {
+		List messages = getMessagesAtLine( 340 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -2581,8 +2570,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * d8 decimal(4,2,1);
 	 * 1 validation message is expected.
 	 */
-	public void testLine337() {
-		List messages = getMessagesAtLine( 337 );
+	public void testLine341() {
+		List messages = getMessagesAtLine( 341 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -2590,40 +2579,13 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * d9 decimal();
 	 * 0 validation messages are expected.
 	 */
-	public void testLine338() {
-		List messages = getMessagesAtLine( 338 );
+	public void testLine342() {
+		List messages = getMessagesAtLine( 342 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
 	 * d10 decimal(999);
-	 * 1 validation message is expected.
-	 */
-	public void testLine339() {
-		List messages = getMessagesAtLine( 339 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * s1 string(0);
-	 * 0 validation messages are expected.
-	 */
-	public void testLine341() {
-		List messages = getMessagesAtLine( 341 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * s2 string(10,2);
-	 * 1 validation message is expected.
-	 */
-	public void testLine342() {
-		List messages = getMessagesAtLine( 342 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * s3 string("abc");
 	 * 1 validation message is expected.
 	 */
 	public void testLine343() {
@@ -2632,16 +2594,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * s4 string("100");
-	 * 0 validation messages are expected.
-	 */
-	public void testLine344() {
-		List messages = getMessagesAtLine( 344 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * s5 string();
+	 * s1 string(0);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine345() {
@@ -2650,25 +2603,34 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * s6 string;
-	 * 0 validation messages are expected.
+	 * s2 string(10,2);
+	 * 1 validation message is expected.
 	 */
 	public void testLine346() {
 		List messages = getMessagesAtLine( 346 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * s7 string?;
-	 * 0 validation messages are expected.
+	 * s3 string("abc");
+	 * 1 validation message is expected.
 	 */
 	public void testLine347() {
 		List messages = getMessagesAtLine( 347 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * s4 string("100");
+	 * 0 validation messages are expected.
+	 */
+	public void testLine348() {
+		List messages = getMessagesAtLine( 348 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * b1 bytes(0);
+	 * s5 string();
 	 * 0 validation messages are expected.
 	 */
 	public void testLine349() {
@@ -2677,34 +2639,25 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * b2 bytes(10,2);
-	 * 1 validation message is expected.
+	 * s6 string;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine350() {
 		List messages = getMessagesAtLine( 350 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * b3 bytes("abc");
-	 * 1 validation message is expected.
-	 */
-	public void testLine351() {
-		List messages = getMessagesAtLine( 351 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * b4 bytes("100");
-	 * 0 validation messages are expected.
-	 */
-	public void testLine352() {
-		List messages = getMessagesAtLine( 352 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * b5 bytes();
+	 * s7 string?;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine351() {
+		List messages = getMessagesAtLine( 351 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * b1 bytes(0);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine353() {
@@ -2713,34 +2666,43 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * b6 bytes;
-	 * 0 validation messages are expected.
+	 * b2 bytes(10,2);
+	 * 1 validation message is expected.
 	 */
 	public void testLine354() {
 		List messages = getMessagesAtLine( 354 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * b7 bytes?;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine355() {
-		List messages = getMessagesAtLine( 355 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * ts1 timestamp;
-	 * 1 validation message is expected.
-	 */
-	public void testLine357() {
-		List messages = getMessagesAtLine( 357 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * ts2 timestamp?;
+	 * b3 bytes("abc");
+	 * 1 validation message is expected.
+	 */
+	public void testLine355() {
+		List messages = getMessagesAtLine( 355 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * b4 bytes("100");
+	 * 0 validation messages are expected.
+	 */
+	public void testLine356() {
+		List messages = getMessagesAtLine( 356 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * b5 bytes();
+	 * 0 validation messages are expected.
+	 */
+	public void testLine357() {
+		List messages = getMessagesAtLine( 357 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * b6 bytes;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine358() {
@@ -2749,25 +2711,16 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * ts3 timestamp("abcd");
-	 * 1 validation message is expected.
+	 * b7 bytes?;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine359() {
 		List messages = getMessagesAtLine( 359 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * ts4 timestamp("HHmmss");
-	 * 0 validation messages are expected.
-	 */
-	public void testLine360() {
-		List messages = getMessagesAtLine( 360 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * ts5 timestamp("HHss");
+	 * ts1 timestamp;
 	 * 1 validation message is expected.
 	 */
 	public void testLine361() {
@@ -2776,7 +2729,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * ts6 timestamp("yyyyMMddHHmmss");
+	 * ts2 timestamp?;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine362() {
@@ -2785,7 +2738,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * ts7 timestamp("yyyyMMddhhmmss");
+	 * ts3 timestamp("abcd");
 	 * 1 validation message is expected.
 	 */
 	public void testLine363() {
@@ -2794,16 +2747,16 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * ts8 timestamp("yyyymmddHHmmss");
-	 * 1 validation message is expected.
+	 * ts4 timestamp("HHmmss");
+	 * 0 validation messages are expected.
 	 */
 	public void testLine364() {
 		List messages = getMessagesAtLine( 364 );
-		assertEquals( 1, messages.size() );
+		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * ts9 timestamp("yyyyMMHHmmss");
+	 * ts5 timestamp("HHss");
 	 * 1 validation message is expected.
 	 */
 	public void testLine365() {
@@ -2812,25 +2765,34 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * ts10 timestamp("HHss");
-	 * 1 validation message is expected.
+	 * ts6 timestamp("yyyyMMddHHmmss");
+	 * 0 validation messages are expected.
 	 */
 	public void testLine366() {
 		List messages = getMessagesAtLine( 366 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * i1 int;
-	 * 0 validation messages are expected.
-	 */
-	public void testLine368() {
-		List messages = getMessagesAtLine( 368 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * i2 int(6);
+	 * ts7 timestamp("yyyyMMddhhmmss");
+	 * 1 validation message is expected.
+	 */
+	public void testLine367() {
+		List messages = getMessagesAtLine( 367 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * ts8 timestamp("yyyymmddHHmmss");
+	 * 1 validation message is expected.
+	 */
+	public void testLine368() {
+		List messages = getMessagesAtLine( 368 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * ts9 timestamp("yyyyMMHHmmss");
 	 * 1 validation message is expected.
 	 */
 	public void testLine369() {
@@ -2839,25 +2801,16 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * bi1 bigint;
-	 * 0 validation messages are expected.
+	 * ts10 timestamp("HHss");
+	 * 1 validation message is expected.
 	 */
 	public void testLine370() {
 		List messages = getMessagesAtLine( 370 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * bi2 bigint(2);
-	 * 1 validation message is expected.
-	 */
-	public void testLine371() {
-		List messages = getMessagesAtLine( 371 );
 		assertEquals( 1, messages.size() );
 	}
 
 	/*
-	 * si1 smallint;
+	 * i1 int;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine372() {
@@ -2866,7 +2819,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * si2 smallint(2);
+	 * i2 int(6);
 	 * 1 validation message is expected.
 	 */
 	public void testLine373() {
@@ -2875,7 +2828,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * sf1 smallfloat;
+	 * bi1 bigint;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine374() {
@@ -2884,7 +2837,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * sf2 smallfloat(2);
+	 * bi2 bigint(2);
 	 * 1 validation message is expected.
 	 */
 	public void testLine375() {
@@ -2893,7 +2846,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * f1 float;
+	 * si1 smallint;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine376() {
@@ -2902,7 +2855,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * f2 float(2);
+	 * si2 smallint(2);
 	 * 1 validation message is expected.
 	 */
 	public void testLine377() {
@@ -2911,7 +2864,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * da1 date;
+	 * sf1 smallfloat;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine378() {
@@ -2920,7 +2873,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * da2 date(2);
+	 * sf2 smallfloat(2);
 	 * 1 validation message is expected.
 	 */
 	public void testLine379() {
@@ -2929,7 +2882,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * t1 time;
+	 * f1 float;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine380() {
@@ -2938,7 +2891,7 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * t2 time(2);
+	 * f2 float(2);
 	 * 1 validation message is expected.
 	 */
 	public void testLine381() {
@@ -2947,11 +2900,47 @@ public class ParameterizedTest extends ValidationTestCase {
 	}
 
 	/*
-	 * a1 any;
-	 * 1 validation message is expected.
+	 * da1 date;
+	 * 0 validation messages are expected.
 	 */
 	public void testLine382() {
 		List messages = getMessagesAtLine( 382 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * da2 date(2);
+	 * 1 validation message is expected.
+	 */
+	public void testLine383() {
+		List messages = getMessagesAtLine( 383 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * t1 time;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine384() {
+		List messages = getMessagesAtLine( 384 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * t2 time(2);
+	 * 1 validation message is expected.
+	 */
+	public void testLine385() {
+		List messages = getMessagesAtLine( 385 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * a1 any;
+	 * 1 validation message is expected.
+	 */
+	public void testLine386() {
+		List messages = getMessagesAtLine( 386 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -2959,8 +2948,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * a2 any?;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine383() {
-		List messages = getMessagesAtLine( 383 );
+	public void testLine387() {
+		List messages = getMessagesAtLine( 387 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -2968,8 +2957,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * a3 any(2)?;
 	 * 1 validation message is expected.
 	 */
-	public void testLine384() {
-		List messages = getMessagesAtLine( 384 );
+	public void testLine388() {
+		List messages = getMessagesAtLine( 388 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -2977,8 +2966,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * a4 any(2);
 	 * 2 validation messages are expected.
 	 */
-	public void testLine385() {
-		List messages = getMessagesAtLine( 385 );
+	public void testLine389() {
+		List messages = getMessagesAtLine( 389 );
 		assertEquals( 2, messages.size() );
 	}
 
@@ -2986,8 +2975,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * n1 number;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine386() {
-		List messages = getMessagesAtLine( 386 );
+	public void testLine390() {
+		List messages = getMessagesAtLine( 390 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -2995,8 +2984,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * n2 number(2);
 	 * 1 validation message is expected.
 	 */
-	public void testLine387() {
-		List messages = getMessagesAtLine( 387 );
+	public void testLine391() {
+		List messages = getMessagesAtLine( 391 );
 		assertEquals( 1, messages.size() );
 	}
 
@@ -3004,8 +2993,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * r1 rec;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine388() {
-		List messages = getMessagesAtLine( 388 );
+	public void testLine392() {
+		List messages = getMessagesAtLine( 392 );
 		assertEquals( 0, messages.size() );
 	}
 
@@ -3013,8 +3002,8 @@ public class ParameterizedTest extends ValidationTestCase {
 	 * r2 rec("abc");
 	 * 1 validation message is expected.
 	 */
-	public void testLine389() {
-		List messages = getMessagesAtLine( 389 );
+	public void testLine393() {
+		List messages = getMessagesAtLine( 393 );
 		assertEquals( 1, messages.size() );
 	}
 }

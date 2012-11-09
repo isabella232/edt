@@ -168,7 +168,6 @@ public interface IProblemRequestor {
 	public static final int CLASS_MUST_EXTEND_CLASS = 3474;
 	public static final int PART_CANNOT_EXTEND_ITSELF = 3475;
 	public static final int THROWS_NOT_VALID_HERE= 3480;
-	public static final int STEREOTYPE_TYPE_REQUIRED = 3512;
 	public static final int STEREOTYPE_NO_PARMS = 3514;
 	public static final int STEREOTYPE_BAD_TYPE = 3515;
 	public static final int INVALID_LENGTH_FOR_PARAMETERIZED_TYPE = 4401;
@@ -195,7 +194,8 @@ public interface IProblemRequestor {
 	public static final int RECURSIVE_LOOP_IN_EXTENDS = 5045;   		
 	public static final int CONTINUE_STATEMENT_LOCATION = 5054;
 	public static final int INVALID_CONTINUE_EXIT_MODIFIER = 5055;
-	public static final int INVALID_CONTINUE_EXIT_LABEL = 5056;	
+	public static final int INVALID_CONTINUE_EXIT_LABEL = 5056;
+	public static final int RECURSIVE_LOOP_STARTED_WITHIN_FLEXIBLE_RECORD_BY_TYPEDEF = 5057;
 	public static final int CASE_WHEN_MUST_BE_BOOLEAN_EXPRESSION = 5078; 
 	public static final int TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON = 5089;
 	public static final int ROUTINE_MUST_HAVE_X_ARGS = 5109;

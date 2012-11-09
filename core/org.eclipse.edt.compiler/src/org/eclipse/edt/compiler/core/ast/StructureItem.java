@@ -27,12 +27,11 @@ public class StructureItem extends Node {
 	private boolean isNullable;
 	private SettingsBlock settingsBlockOpt;
 	private Expression initializerOpt;
-	String occursOpt;
 	//Since there is no node to attach binding for filler items...also used to hold the structure imported for
 	// an embed.
 	private Member member;
 
-	public StructureItem(SimpleName name, Type type, Boolean isNullable, String occursOpt, SettingsBlock settingsBlockOpt, Expression initializerOpt, int startOffset, int endOffset) {
+	public StructureItem(SimpleName name, Type type, Boolean isNullable, SettingsBlock settingsBlockOpt, Expression initializerOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		if(name != null) {
@@ -43,7 +42,6 @@ public class StructureItem extends Node {
 			this.type = type;
 			type.setParent(this);
 		}
-		this.occursOpt = occursOpt;
 		if(settingsBlockOpt != null) {
 			this.settingsBlockOpt = settingsBlockOpt;
 			settingsBlockOpt.setParent(this);
@@ -58,31 +56,11 @@ public class StructureItem extends Node {
 	public Name getName() {
 		return name;
 	}
-	
-	public boolean hasType() {
-		return type != null;
-	}
-	
+		
 	public Type getType() {
 		return type;
 	}
-	
-	/**
-	 * Warning: only use for untyped structure items. For typed structure items,
-	 * this will return false and getType() will be an ArrayType AST.
-	 */
-	public boolean hasOccurs() {
-		return occursOpt != null;
-	}
-	
-	/**
-	 * Warning: only use for untyped structure items. For typed structure items,
-	 * this will return null and getType() will be an ArrayType AST.
-	 */
-	public String getOccurs() {
-		return occursOpt;
-	}
-	
+		
 	public boolean hasSettingsBlock() {
 		return settingsBlockOpt != null;
 	}
@@ -119,14 +97,12 @@ public class StructureItem extends Node {
 		SimpleName newName = name != null ? (SimpleName)name.clone() : null;
 		
 		Type newType = type != null ? (Type)type.clone() : null;
-		
-		String newOccursOpt = occursOpt != null ? new String(occursOpt) : null;
-		
+				
 		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
 		
 		Expression newInitializerOpt = initializerOpt != null ? (Expression)initializerOpt.clone() : null;
 		
-		return new StructureItem(newName, newType, Boolean.valueOf(isNullable), newOccursOpt, newSettingsBlockOpt, newInitializerOpt, getOffset(), getOffset() + getLength());
+		return new StructureItem(newName, newType, Boolean.valueOf(isNullable), newSettingsBlockOpt, newInitializerOpt, getOffset(), getOffset() + getLength());
 	}
 	
 	@Override
@@ -141,13 +117,7 @@ public class StructureItem extends Node {
 		if (type != null) {
 			buf.append(type.toString());
 		}
-		
-		if (occursOpt != null) {
-			buf.append('[');
-			buf.append(occursOpt);
-			buf.append(']');
-		}
-		
+				
 		if (settingsBlockOpt != null) {
 			buf.append(settingsBlockOpt.toString());
 		}

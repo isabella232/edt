@@ -374,13 +374,6 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 			public void visitPart(org.eclipse.edt.compiler.core.ast.Part part) {
 				for(Iterator iter = part.getContents().iterator(); iter.hasNext();) {
 					((Node) iter.next()).accept(new DefaultASTVisitor() {
-						public void endVisit(StructureItem structureItem) {
-							if(structureItem.getName() != null && structureItem.hasOccurs()) {
-								itemNames.add(structureItem.getName().getCanonicalName());
-							}
-						}
-						
-												
 						public void endVisit(ClassDataDeclaration classDataDeclaration) {
 							Type type = classDataDeclaration.getType();
 							boolean addNames = false;

@@ -482,11 +482,7 @@ public class SourceElementParser {
 					fInfo.type = type.getCanonicalName().toCharArray();
 				}
 
-				if (type == null) {
-					fInfo.hasOccurs = structureItem.hasOccurs();
-				} else {
-					fInfo.hasOccurs = type.isArrayType();
-				}
+				fInfo.hasOccurs = type.isArrayType();
 
 				if (structureItem.hasSettingsBlock()) {
 					handlePropertyBlock(structureItem.getSettingsBlock(),
