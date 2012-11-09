@@ -66,8 +66,8 @@ program pgm1 {}
 	end
 
 	function f16(p1 decimal)
-			i1 int;
-			call lib1.fp1(i1) using httpProxy returning to lib1.response1;//1 The function response1 must be defined in the part pgm1.
+			s1 string;
+			call lib1.fp1(s1) using httpProxy returning to lib1.response1;//1 The function response1 must be defined in the part pgm1.
 	end
 
 	function f17(p1 decimal)

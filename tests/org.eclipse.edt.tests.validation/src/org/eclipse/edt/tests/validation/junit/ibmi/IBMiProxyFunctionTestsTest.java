@@ -762,19 +762,27 @@ public class IBMiProxyFunctionTestsTest extends ValidationTestCase {
 
 	/*
 	 * function f11(p1 string, p2 string[])
-	 * 0 validation messages are expected.
+	 * 1 validation message is expected.
+	 * It is expected to contain "A value for the  property elementTypeAnnotation must be specified for annotation StructArray".
 	 */
 	public void testLine137() {
 		List messages = getMessagesAtLine( 137 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "A value for the  property elementTypeAnnotation must be specified for annotation StructArray" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A value for the  property elementTypeAnnotation must be specified for annotation StructArray\" was issued." );
 	}
 
 	/*
-	 * function f11(p1 string, p2 string[], p3 int inout)
-	 * 0 validation messages are expected.
+	 * function f11(p1 string, p2 string(7)[], p3 int inout)
+	 * 1 validation message is expected.
+	 * It is expected to contain "A value for the  property elementTypeAnnotation must be specified for annotation StructArray".
 	 */
 	public void testLine146() {
 		List messages = getMessagesAtLine( 146 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "A value for the  property elementTypeAnnotation must be specified for annotation StructArray" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A value for the  property elementTypeAnnotation must be specified for annotation StructArray\" was issued." );
 	}
 }

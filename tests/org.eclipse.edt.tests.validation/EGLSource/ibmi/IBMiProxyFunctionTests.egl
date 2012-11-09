@@ -134,7 +134,7 @@ program pgm1 {}
 			}}
 	end
 
-	function f11(p1 string, p2 string[])//0
+	function f11(p1 string, p2 string[])//1 A value for the  property elementTypeAnnotation must be specified for annotation StructArray
 			{@IBMiProgram{
 				parameterAnnotations = [
 					@StructText{Length = 20},
@@ -143,11 +143,12 @@ program pgm1 {}
 			}}
 	end
 
-	function f11(p1 string, p2 string[], p3 int inout)//0
+	function f11(p1 string, p2 string[], p3 int inout)//1 A value for the  property elementTypeAnnotation must be specified for annotation StructArray
 			{@IBMiProgram{
 				parameterAnnotations = [
 					@StructText{Length = 20},
-					@StructArray{elementCOunt=7, returnCountVariable = p3}
+					@StructArray{elementCOunt=7, returnCountVariable = p3},
+					null
 				]  
 			}}
 	end
