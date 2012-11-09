@@ -141,16 +141,16 @@ handler fillcharChecks type RUIHandler
 	i1 int{@fillCharacter}; //0
 	i2 int{@fillCharacter{"x"}}; //0
 	i3 int{@fillCharacter{"xyz"}}; //1 Property: fillCharacter.  The value for this property is invalid. The value must be a single character string literal.
-	i4 int{@fillCharacter{1}}; //1 The value specified for the annotation field or literal array entry value must be a quoted string or a string constant.
+	i4 int{@fillCharacter{1}}; //1 The value specified for the annotation field or literal array entry value must be a quoted string.
 end
 
 handler minInputChecks type RUIHandler
 	i1 int{@MinimumInput}; //0
-	i2 int{@MinimumInput{"abc"}}; //1 The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.
+	i2 int{@MinimumInput{"abc"}}; //1 The value specified for the annotation field or literal array entry value must be an integer literal.
 	i3 int{@MinimumInput{123}}; //0
 	i4 int{@MinimumInput{-52}}; //1 The value of property minimumInput must be greater than 0, but -52 was found.
 	i5 int{@MinimumInput{0}}; //0
-	i6 int{@MinimumInput{10.5}}; //1 The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.
+	i6 int{@MinimumInput{10.5}}; //1 The value specified for the annotation field or literal array entry value must be an integer literal.
 end
 
 handler valFuncChecks type RUIHandler

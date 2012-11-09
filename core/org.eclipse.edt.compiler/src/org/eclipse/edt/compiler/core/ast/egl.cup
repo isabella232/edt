@@ -132,7 +132,6 @@ nonterminal MoveModifier moveModifierOpt;
 nonterminal Name name;
 nonterminal Type namedType;
 nonterminal Boolean constOpt;
-nonterminal String occursOpt;
 nonterminal OnExceptionBlock onException;
 nonterminal Boolean[] openModifierOpt;
 nonterminal openTarget;
@@ -314,17 +313,8 @@ structureContent
 strItemDecl
 	::=	ID:id1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // StructureItem
 	{: RESULT = new StructureItem(new SimpleName(id1, id1left, id1right), type1, questionOpt1, null, settingsBlock1, initializer1, id1left, semi1right); :}
-
-	|	ID:id1 occursOpt:occurs1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // UntypedStructureItem
-	{: RESULT = new StructureItem(new SimpleName(id1, id1left, id1right), null, Boolean.FALSE, occurs1, settingsBlock1, initializer1, id1left, semi1right); :}
 	;
 	
-occursOpt
-	::=
-	|	LBRACKET INTEGER:occurs RBRACKET
-	{: RESULT = occurs; :}
-	;
-
 functionParameter
 	::=	ID:id1 namedType:type1 questionOpt:questionOpt1 constOpt:const1 useTypeOpt:useType1
 	{: RESULT = new FunctionParameter(new SimpleName(id1, id1left, id1right), type1, questionOpt1, const1, useType1, id1left, useType1right); :}

@@ -1349,14 +1349,14 @@ public class MvcTest extends ValidationTestCase {
 	/*
 	 * i4 int{@fillCharacter{1}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be a quoted string or a string constant.".
+	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be a quoted string.".
 	 */
 	public void testLine144() {
 		List messages = getMessagesAtLine( 144 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be a quoted string or a string constant." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be a quoted string or a string constant.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be a quoted string." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be a quoted string.\" was issued." );
 	}
 
 	/*
@@ -1371,14 +1371,14 @@ public class MvcTest extends ValidationTestCase {
 	/*
 	 * i2 int{@MinimumInput{"abc"}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.".
+	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be an integer literal.".
 	 */
 	public void testLine149() {
 		List messages = getMessagesAtLine( 149 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be an integer literal." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be an integer literal.\" was issued." );
 	}
 
 	/*
@@ -1415,14 +1415,14 @@ public class MvcTest extends ValidationTestCase {
 	/*
 	 * i6 int{@MinimumInput{10.5}};
 	 * 1 validation message is expected.
-	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.".
+	 * It is expected to contain "The value specified for the annotation field or literal array entry value must be an integer literal.".
 	 */
 	public void testLine153() {
 		List messages = getMessagesAtLine( 153 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be an integer literal or an integer constant.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The value specified for the annotation field or literal array entry value must be an integer literal." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The value specified for the annotation field or literal array entry value must be an integer literal.\" was issued." );
 	}
 
 	/*

@@ -298,7 +298,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stack.push(block);
 		for (Node node : (List<Node>)otherwiseClause.getStatements()) {
 			node.accept(this);
-			block.getStatements().add((Statement)stack.pop());
+			Statement stmt = (Statement)stack.pop();
+			if (stmt != null) {
+				block.getStatements().add(stmt);
+			}		
 		}
 		return false;
 	}
@@ -325,7 +328,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		StatementBlock block = factory.createStatementBlock();
 		for (Node node : (List<Node>)whenClause.getStmts()) {
 			node.accept(this);
-			block.getStatements().add((Statement)stack.pop());
+			Statement stmt = (Statement)stack.pop();
+			if (stmt != null) {
+				block.getStatements().add(stmt);
+			}
 		}
 		clause.setTrueBranch(block);
 		stack.push(clause);
@@ -461,7 +467,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 				stmt.setBody(block);
 				for (Node nodeStmt : (List<Node>)forEachStatement.getStmts()) {
 					nodeStmt.accept(this);
-					block.getStatements().add((Statement)stack.pop());
+					Statement currStmt = (Statement)stack.pop();
+					if (currStmt != null) {
+						block.getStatements().add(currStmt);
+					}
 				}
 			}
 		}
@@ -504,7 +513,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		StatementBlock block = factory.createStatementBlock();
 		for (Node node : (List<Node>)forStatement.getStmts()) {
 			node.accept(this);
-			block.getStatements().add((Statement)stack.pop());
+			Statement currStmt = (Statement)stack.pop();
+			if (currStmt != null) {
+				block.getStatements().add(currStmt);
+			}
 		}
 		stmt.setBody(block);
 		stack.push(stmt);
@@ -581,7 +593,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stmt.setTrueBranch(block);
 		for (Node node : (List<Node>)ifStatement.getStmts()) {
 			node.accept(this);
-			block.getStatements().add((Statement)stack.pop());
+			Statement currStmt = (Statement)stack.pop();
+			if (currStmt != null) {
+				block.getStatements().add(currStmt);
+			}
 		}
 		if (ifStatement.hasElse()) {
 			block = factory.createStatementBlock();
@@ -589,7 +604,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			stmt.setFalseBranch(block);
 			for (Node node : (List<Node>)ifStatement.getElse().getStmts()) {
 				node.accept(this);
-				block.getStatements().add((Statement)stack.pop());
+				Statement currStmt = (Statement)stack.pop();
+				if (currStmt != null) {
+					block.getStatements().add(currStmt);
+				}
 			}
 		}
 		return false;
@@ -725,7 +743,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stmt.setTryBlock(block);
 		for (Node node : (List<Node>)tryStatement.getStmts()) {
 			node.accept(this);
-			block.getStatements().add((Statement)stack.pop());
+			Statement currStmt = (Statement)stack.pop();
+			if (currStmt != null) {
+				block.getStatements().add(currStmt);
+			}
 		}
 		for (Node node : (List<Node>)tryStatement.getOnExceptionBlocks()) {
 			node.accept(this);
@@ -752,7 +773,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		}
 		for (Node node : (List<Node>)onExceptionBlock.getStmts()) {
 			node.accept(this);
-			block.getStatements().add((Statement)stack.pop());
+			Statement currStmt = (Statement)stack.pop();
+			if (currStmt != null) {
+				block.getStatements().add(currStmt);
+			}
 		}
 		return false;
 	}
@@ -769,7 +793,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stmt.setBody(block);
 		for (Node node : (List<Node>)whileStatement.getStmts()) {
 			node.accept(this);
-			block.getStatements().add((Statement)stack.pop());
+			Statement currStmt = (Statement)stack.pop();
+			if (currStmt != null) {
+				block.getStatements().add(currStmt);
+			}
 		}
 		return false;
 	}
