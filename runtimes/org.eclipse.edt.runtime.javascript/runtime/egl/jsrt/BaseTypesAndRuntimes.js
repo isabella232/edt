@@ -332,7 +332,7 @@ egl.stringToTime = function(s, format)
 
 egl.stringToTimeInternal = function(s, format, strict, defaultSeparator)
 {
-	var result = new Date(1970, 0, 1);
+	var result = new Date(2000, 0, 1);
 	var tokens = format.match(/HH|hh|mm|ss|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	result.setSeconds(0);
