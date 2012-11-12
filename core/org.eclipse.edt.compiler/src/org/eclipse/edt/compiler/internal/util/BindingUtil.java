@@ -931,7 +931,7 @@ public class BindingUtil {
 		}
 		
 		StructPart sp = (StructPart)type.getClassifier();
-		return !(sp.isSubtypeOf((StructPart)TypeUtils.getType(TypeUtils.Type_AnyValue)));
+		return (sp instanceof Record) || !(sp.isSubtypeOf((StructPart)TypeUtils.getType(TypeUtils.Type_AnyValue)));
 	}
 
 	public static boolean isExplicitlyDynamicallyAccessible(Type type) {
