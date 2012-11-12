@@ -543,7 +543,7 @@ define(["runtime/edt_runtime_all.js"], function(){
 			}
 		}
 		catch (e) {
-			egl.println("Internal error inside egl.leave "+functionName+" "+e.message);
+			egl.println("Internal error inside egl.leave "+stackTop.functionName+" "+e.message);
 		}
 	};
 
