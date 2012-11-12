@@ -19,18 +19,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.ConstantField;
-import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.NamedElement;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -445,7 +434,8 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	
 	public void genGetFieldSignaturesMethod(EGLClass part, Context ctx, TabbedWriter out) {
 		
-		if ( TypeUtils.isValueType( part ) || TypeUtils.isStaticType( part ) )
+		if ( TypeUtils.isStaticType( part ) 
+				|| ( TypeUtils.isValueType( part ) && !(part instanceof Record) ) )
 			return;
 
 		out.println(',');
