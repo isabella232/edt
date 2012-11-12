@@ -332,7 +332,7 @@ egl.stringToTime = function(s, format)
 
 egl.stringToTimeInternal = function(s, format, strict, defaultSeparator)
 {
-	var result = new Date(1970, 0, 1);
+	var result = new Date(2000, 0, 1);
 	var tokens = format.match(/HH|hh|mm|ss|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	result.setSeconds(0);
@@ -4188,12 +4188,12 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	}
 	
 	//enforce the pattern mask
-	//first function is for pattern missing chars on the left side (Jan 1 1970)
+	//first function is for pattern missing chars on the left side (current)
 	//second function is for pattern missing chars on the right side (zeros)
 	var chars = 
 		[ // bug 365262, change to leap year 2000 to accept date like "0229"
 		//Bug 372937 changed from current month and date due to issues with February 29
-		  [ "y", function(d){ d.setFullYear( pattern.indexOf('MM')>=0 && pattern.indexOf('yy')>=0 ? 2000 : 1970 ); }, function(d){ d.setFullYear( 0 ); } ],
+		  [ "y", function(d){ d.setFullYear( 2000 ); }, function(d){ d.setFullYear( 0 ); } ],
 	      [ "M", function(d){ d.setMonth( 0 ); }, function(d){ d.setMonth( 0 ); } ], 
 	      [ "d", function(d){ d.setDate( 1 ); }, function(d){ d.setDate( 1 ); } ],
 	      [ "h", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],
