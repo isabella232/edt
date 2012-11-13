@@ -82,7 +82,7 @@ egl.defineClass(
             Function internalInvokeService( handler RUIHandler, uri String, serviceWrapper, parameters Dictionary) end 
             Function internalInvokeService( handler RUIHandler, uri String, serviceWrapper, parameters Dictionary, body String) end        
      */              
-    "internalInvokeService" : function(/*Http or HttpSOAP*/ http, 
+    "internalInvokeService" : function(/*Http*/ http, 
     									callbackArgs,
 							    		callbackFunction,
 										errorCallbackFunction,
@@ -384,7 +384,7 @@ egl.defineClass(
     	}
     },
     
-    "doInvokeAsync" : function( /*Http/HttpSOAP*/ http, 
+    "doInvokeAsync" : function( /*Http*/ http, 
     							/*HttpCallback*/ callback, 
     							/*HttpCallback*/ errCallback, 
     							/*handler*/ handler ) {
@@ -400,7 +400,7 @@ egl.defineClass(
                 },
                 true);
     },
-    "doInvokeInternal" : function( /*Http/HttpSOAP*/ http, 
+    "doInvokeInternal" : function( /*Http*/ http, 
                                    /*function*/ callback, 
                                    /*function*/ errCallback,                     
                                    /*boolean*/ asynchronous) {
