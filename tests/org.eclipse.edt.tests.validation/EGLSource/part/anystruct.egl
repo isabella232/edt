@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+handler h
+	function f()
+		struct anystruct?;
+		rec anyrecord?;
+		d del?;
+		a any?;
+		
+		// valid
+		struct = new myrec; //0
+		struct = this; //0
+		struct = new rui1; //0
+		struct = new et1; //0
+		struct = rec; //0
+		struct = new c; //0
+		struct = a; //0
+		
+		// invalid
+		struct = new dictionary; //1
+		struct = 10; //1
+		struct = new float; //1
+		struct = new date; //1
+		struct = d; //1
+		struct = enum1; //1
+		struct = enum1.A; //1
+		struct = new anyexception; //1
+	end
+end
+
+handler rui1 type ruihandler
+end
+
+class c
+end
+
+record myrec
+	i int;
+end
+
+externaltype et1 type javaobject
+end
+
+delegate del();
+
+enumeration enum1
+	A = 1
+end

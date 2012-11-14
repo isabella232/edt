@@ -55,6 +55,7 @@ import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ProxyEClass;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
@@ -517,7 +518,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 				String typeSignature = Type_EGLAny;
 				if (part instanceof Record)
 					typeSignature = Type_AnyRecord;
-				else if (part instanceof StructuredRecord) {
+				else if (part instanceof StructPart && !part.equals(TypeUtils.Type_ANY)) {
 					typeSignature = Type_AnyStruct;
 				}
 				else if (part instanceof AnnotationType) {
