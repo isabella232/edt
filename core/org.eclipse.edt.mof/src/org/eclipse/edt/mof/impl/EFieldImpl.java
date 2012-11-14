@@ -85,6 +85,6 @@ public class EFieldImpl extends EMemberImpl implements EField {
 	}
 	
 	public String toStringHeader() {
-		return getName() + " : " + getTypeSignature();
+		return getName() + " : " + (getEType() == null ? "null" : getTypeSignature());
 	}
 }
