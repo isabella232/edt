@@ -179,23 +179,18 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				@Override
 				public boolean visit(ArrayType arrayType) {
 					if (arrayType.hasInitialSize()) {
-						final boolean sizeIsValid[] = new boolean[] {false};
-						arrayType.getInitialSize().accept(new DefaultASTVisitor() {
-							@Override
-							public boolean visit(IntegerLiteral integerLiteral) {
-								sizeIsValid[0] = true;
-								return false;
+						Map<Expression, Type> exprMap = new HashMap<Expression, Type>();
+						TypeValidator.collectExprsForTypeCompatibility(arrayType.getInitialSize(), exprMap);
+						for (Map.Entry<Expression, Type> entry : exprMap.entrySet()) {
+							Type tBinding = entry.getValue();
+							if (tBinding != null) {
+								if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, entry.getKey().resolveMember())) {
+									problemRequestor.acceptProblem(
+										arrayType.getInitialSize(),
+										IProblemRequestor.ARRAY_SIZE_LESS_THAN_ZERO,
+										new String[] {arrayType.getInitialSize().getCanonicalString()});
+								}
 							}
-						});
-						
-						if (sizeIsValid[0]) {
-							hasInitialSize[0] = true;
-						}
-						else {
-							problemRequestor.acceptProblem(
-								arrayType.getInitialSize(),
-								IProblemRequestor.ARRAY_SIZE_LESS_THAN_ZERO,
-								new String[] {arrayType.getInitialSize().getCanonicalString()});
 						}
 					}
 					return true;
