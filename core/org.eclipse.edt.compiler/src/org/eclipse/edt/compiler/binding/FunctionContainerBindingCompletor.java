@@ -357,6 +357,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     	if (constructor.hasSettingsBlock()) {
             FunctionScope functionScope = new FunctionScope(NullScope.INSTANCE, constructorBinding);
             AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding);
+            functionScope = new FunctionScope(currentScope, constructorBinding);
             SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, functionContainerBinding, scope,
                     dependencyRequestor, problemRequestor, compilerOptions);
             constructor.getSettingsBlock().accept(blockCompletor);
