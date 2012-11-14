@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.ext.Utils;
@@ -81,6 +82,9 @@ public class PrepareStatementValidator extends AbstractSqlStatementValidator {
 		// If WITH wasn't specified, there will be a validation error already from the parser.
 		if (withExpression != null) {
 			Type type = withExpression.getExpression().resolveType();
+			if (type instanceof ParameterizedType) {
+				type = ((ParameterizedType)type).getParameterizableType();
+			}
 			if (type != null && !type.equals(TypeUtils.Type_STRING)) {
 				problemRequestor.acceptProblem(withExpression.getExpression(),
 						SQLResourceKeys.SQL_EXPR_HAS_WRONG_TYPE,
