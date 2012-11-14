@@ -17,22 +17,13 @@ public class ArrayAccessTest extends ValidationTestCase {
 	 * array[1] = 10;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine12() {
-		List messages = getMessagesAtLine( 12 );
-		assertEquals( 0, messages.size() );
-	}
-
-	/*
-	 * array[myany] = 10;
-	 * 0 validation messages are expected.
-	 */
 	public void testLine13() {
 		List messages = getMessagesAtLine( 13 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * array[notArray] = 10;
+	 * array[myany] = 10;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine14() {
@@ -41,7 +32,7 @@ public class ArrayAccessTest extends ValidationTestCase {
 	}
 
 	/*
-	 * array2d[1][2] = 10;
+	 * array[notArray] = 10;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine15() {
@@ -50,7 +41,7 @@ public class ArrayAccessTest extends ValidationTestCase {
 	}
 
 	/*
-	 * array2d[notArray][notArray] = 10;
+	 * array2d[1][2] = 10;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine16() {
@@ -59,7 +50,7 @@ public class ArrayAccessTest extends ValidationTestCase {
 	}
 
 	/*
-	 * myAny[22] = 10;
+	 * array2d[notArray][notArray] = 10;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine17() {
@@ -68,7 +59,7 @@ public class ArrayAccessTest extends ValidationTestCase {
 	}
 
 	/*
-	 * myAny["foo"] = 10;
+	 * myAny[22] = 10;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine18() {
@@ -77,7 +68,7 @@ public class ArrayAccessTest extends ValidationTestCase {
 	}
 
 	/*
-	 * myAny["foo"]["bar"] = 10;
+	 * myAny["foo"] = 10;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine19() {
@@ -86,7 +77,7 @@ public class ArrayAccessTest extends ValidationTestCase {
 	}
 
 	/*
-	 * et["foo"] = 10;
+	 * myAny["foo"]["bar"] = 10;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine20() {
@@ -95,7 +86,7 @@ public class ArrayAccessTest extends ValidationTestCase {
 	}
 
 	/*
-	 * array["foo"] = 10;
+	 * et["foo"] = 10;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine21() {
@@ -104,12 +95,39 @@ public class ArrayAccessTest extends ValidationTestCase {
 	}
 
 	/*
+	 * array["foo"] = 10;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine22() {
+		List messages = getMessagesAtLine( 22 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * myRec["foo"] = 10;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine23() {
+		List messages = getMessagesAtLine( 23 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * dict.foo = 20;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine24() {
+		List messages = getMessagesAtLine( 24 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
 	 * array[1,2] = 10;
 	 * 1 validation message is expected.
 	 * It is expected to contain "Specifying multiple array indices in the array access array[1,2] is not allowed.".
 	 */
-	public void testLine23() {
-		List messages = getMessagesAtLine( 23 );
+	public void testLine26() {
+		List messages = getMessagesAtLine( 26 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "Specifying multiple array indices in the array access array[1,2] is not allowed." );
@@ -121,8 +139,8 @@ public class ArrayAccessTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "Specifying multiple array indices in the array access myAny[\"foo\",\"bar\"] is not allowed.".
 	 */
-	public void testLine24() {
-		List messages = getMessagesAtLine( 24 );
+	public void testLine27() {
+		List messages = getMessagesAtLine( 27 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "Specifying multiple array indices in the array access myAny[\"foo\",\"bar\"] is not allowed." );
@@ -134,8 +152,8 @@ public class ArrayAccessTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "notArray is not an array and cannot be subscripted.".
 	 */
-	public void testLine26() {
-		List messages = getMessagesAtLine( 26 );
+	public void testLine29() {
+		List messages = getMessagesAtLine( 29 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "notArray is not an array and cannot be subscripted." );
@@ -147,8 +165,8 @@ public class ArrayAccessTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "array[1] is not an array and cannot be subscripted.".
 	 */
-	public void testLine27() {
-		List messages = getMessagesAtLine( 27 );
+	public void testLine30() {
+		List messages = getMessagesAtLine( 30 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "array[1] is not an array and cannot be subscripted." );
@@ -160,8 +178,8 @@ public class ArrayAccessTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "The subscript new date in array reference myAny[new date] must be an integer item or integer literal.".
 	 */
-	public void testLine28() {
-		List messages = getMessagesAtLine( 28 );
+	public void testLine31() {
+		List messages = getMessagesAtLine( 31 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "The subscript new date in array reference myAny[new date] must be an integer item or integer literal." );
@@ -173,24 +191,11 @@ public class ArrayAccessTest extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "notArray cannot be accessed with a string subscript.".
 	 */
-	public void testLine29() {
-		List messages = getMessagesAtLine( 29 );
+	public void testLine32() {
+		List messages = getMessagesAtLine( 32 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "notArray cannot be accessed with a string subscript." );
 		if( messageWithSubstring == null ) fail( "No message with substring \"notArray cannot be accessed with a string subscript.\" was issued." );
-	}
-
-	/*
-	 * myRec["foo"] = 10;
-	 * 1 validation message is expected.
-	 * It is expected to contain "myRec cannot be accessed with a string subscript.".
-	 */
-	public void testLine30() {
-		List messages = getMessagesAtLine( 30 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "myRec cannot be accessed with a string subscript." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"myRec cannot be accessed with a string subscript.\" was issued." );
 	}
 }
