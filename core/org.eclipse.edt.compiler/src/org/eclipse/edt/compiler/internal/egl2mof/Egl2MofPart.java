@@ -402,7 +402,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		for (Node processNode : functionsToProcess) {
 			
 			Object binding;
-			List<org.eclipse.edt.compiler.core.ast.Node> stmts;
+			List<org.eclipse.edt.compiler.core.ast.Statement> stmts;
 			if (processNode instanceof NestedFunction) {
 				binding = ((NestedFunction)processNode).getName().resolveElement();
 				stmts = ((NestedFunction)processNode).getStmts();
@@ -415,12 +415,10 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			
 			FunctionMember irFunc = (FunctionMember)getEObjectFor(binding);
 			setCurrentFunctionMember(irFunc);
-			for (org.eclipse.edt.compiler.core.ast.Node node : stmts) {
-				if (node instanceof org.eclipse.edt.compiler.core.ast.Statement) {
-					node.accept(this);
-					Statement irStmt = (Statement)stack.pop();
-					irFunc.getStatements().add(irStmt);
-				}
+			for (org.eclipse.edt.compiler.core.ast.Statement stmt : stmts) {
+				stmt.accept(this);
+				Statement irStmt = (Statement)stack.pop();
+				irFunc.getStatements().add(irStmt);
 			}
 			setCurrentFunctionMember(null);
 		}

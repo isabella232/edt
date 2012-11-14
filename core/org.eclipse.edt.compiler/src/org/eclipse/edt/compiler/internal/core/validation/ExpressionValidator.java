@@ -340,62 +340,6 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	}
 	
 	@Override
-	public void endVisit(SettingsBlock settingsBlock) {
-		Node parent = settingsBlock.getParent();
-		
-		final boolean[] invalid = new boolean[1];
-		parent.accept(new DefaultASTVisitor() {
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.IfStatement ifStatement) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ElseBlock elseBlock) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.WhileStatement whileStatement) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.WhenClause whenClause) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.TryStatement tryStatement) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.OnExceptionBlock onExceptionBlock) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ForStatement forStatement) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement forEachStatement) {
-				invalid[0] = true;
-				return false;
-			}
-		});
-		
-		if (invalid[0]) {
-			problemRequestor.acceptProblem(
-					settingsBlock,
-					IProblemRequestor.SETTINGS_BLOCK_NOT_ALLOWED,
-					new String[] {});
-		}
-	}
-	
-	@Override
 	public void endVisit(IsAExpression isAExpression) {
 		checkTypeForIsaOrAs(isAExpression.getType());
 	}

@@ -239,10 +239,8 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 	}
 	private void validateFunctionBodyIsEmpty(Function function, NestedFunction nestedFunction) {
 		if (nestedFunction != null && nestedFunction.getStmts() != null) {
-			for(Object stmt : nestedFunction.getStmts()) {
-				if(stmt instanceof Statement){
-					problemRequestor.acceptProblem((Statement)stmt, IProblemRequestor.PROXY_FUNCTIONS_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()});
-				}
+			for(Statement stmt : nestedFunction.getStmts()) {
+				problemRequestor.acceptProblem((Statement)stmt, IProblemRequestor.PROXY_FUNCTIONS_CANNOT_HAVE_STMTS, IMarker.SEVERITY_ERROR, new String[] {function.getCaseSensitiveName()});
 			}
 		}
 	}

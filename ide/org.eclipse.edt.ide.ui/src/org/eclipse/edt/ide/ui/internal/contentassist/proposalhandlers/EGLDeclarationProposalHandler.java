@@ -606,7 +606,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			final Stack blocks = new Stack();	//elements are List objects, representing lists of variables			
 			blocks.push(new ArrayList());			
 			
-			List statements = ((NestedFunction) functionPart).getStmts();
+			List<Statement> statements = ((NestedFunction) functionPart).getStmts();
 				
 			addDeclarations(statements, blocks);
 			
@@ -669,46 +669,23 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		return onExceptionBlock[0];
 	}
 
-	private boolean addDeclarations(List statements, final Stack blocks) {
+	private boolean addDeclarations(List<Statement> statements, final Stack blocks) {
 		boolean done = false;
 		Statement lastStatement = null;
-		for(Iterator iter = statements.iterator(); iter.hasNext() && !done;) {
-			Node next = (Node) iter.next();
+		for(Iterator<Statement> iter = statements.iterator(); iter.hasNext() && !done;) {
+			Statement nextStmt = iter.next();
+			lastStatement = nextStmt;
 			
-			if(next instanceof Statement) {
-				Statement nextStmt = (Statement) next;
-				lastStatement = nextStmt;
-				
-				if(nextStmt.getOffset() > getDocumentOffset()) {
-					done = true;
-				}
-				else if(nextStmt.canIncludeOtherStatements()) {
-					for(Iterator blockIter = nextStmt.getStatementBlocks().iterator(); blockIter.hasNext();) {
-						blocks.push(new ArrayList());
-						nextStmt.accept(new DefaultASTVisitor() {
-							public boolean visit(org.eclipse.edt.compiler.core.ast.ForStatement forStatement) {
-								if(forStatement.hasVariableDeclaration()) {
-									Field field = (Field)forStatement.getVariableDeclarationName().resolveMember();
-									if(field != null) {
-										((List) blocks.peek()).add(field);
-									}
-								}
-								return false;
-							}
-						});
-						if(addDeclarations((List) blockIter.next(), blocks)) {
-							done = true;
-						}
-						else {
-							blocks.pop();
-						}
-					}
-				}
-				else {
+			if(nextStmt.getOffset() > getDocumentOffset()) {
+				done = true;
+			}
+			else if(nextStmt.canIncludeOtherStatements()) {
+				for(Iterator blockIter = nextStmt.getStatementBlocks().iterator(); blockIter.hasNext();) {
+					blocks.push(new ArrayList());
 					nextStmt.accept(new DefaultASTVisitor() {
-						public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
-							for(Iterator iter = functionDataDeclaration.getNames().iterator(); iter.hasNext();) {
-								Field field = (Field)((Name) iter.next()).resolveMember();
+						public boolean visit(org.eclipse.edt.compiler.core.ast.ForStatement forStatement) {
+							if(forStatement.hasVariableDeclaration()) {
+								Field field = (Field)forStatement.getVariableDeclarationName().resolveMember();
 								if(field != null) {
 									((List) blocks.peek()).add(field);
 								}
@@ -716,7 +693,26 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 							return false;
 						}
 					});
-				}				
+					if(addDeclarations((List) blockIter.next(), blocks)) {
+						done = true;
+					}
+					else {
+						blocks.pop();
+					}
+				}
+			}
+			else {
+				nextStmt.accept(new DefaultASTVisitor() {
+					public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
+						for(Iterator iter = functionDataDeclaration.getNames().iterator(); iter.hasNext();) {
+							Field field = (Field)((Name) iter.next()).resolveMember();
+							if(field != null) {
+								((List) blocks.peek()).add(field);
+							}
+						}
+						return false;
+					}
+				});
 			}
 		}
 		
