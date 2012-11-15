@@ -2890,17 +2890,17 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			printStuffBeforeNode(classDataDeclaration.getOffset(), numOfBlankLines, addSpace);
 			addSpace = true;
 			numOfBlankLines = -1;
-		}		
-		if(classDataDeclaration.isConstant()){
-			printStuffBeforeToken(NodeTypes.CONST, numOfBlankLines, addSpace);
-			addSpace = true;
-			numOfBlankLines = -1;
-		}		
+		}
 		if(classDataDeclaration.isStatic()){
 			printStuffBeforeToken(NodeTypes.STATIC, numOfBlankLines, addSpace);
 			addSpace = true;
 			numOfBlankLines = -1;
 		}
+		if(classDataDeclaration.isConstant()){
+			printStuffBeforeToken(NodeTypes.CONST, numOfBlankLines, addSpace);
+			addSpace = true;
+			numOfBlankLines = -1;
+		}		
 		
 		setGlobalFormattingSettings(numOfBlankLines, addSpace, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);		
 		formatCommaSeparatedNodeList(names, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_COMMA_DATADECL),

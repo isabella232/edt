@@ -548,6 +548,8 @@ public class EGLWizardUtilities {
 	public static class NameValidatorProblemRequestor extends DefaultProblemRequestor{
 
 		private StatusInfo fStatusInfo;
+		private int worstProblemSeverity = -1;
+		
 		public NameValidatorProblemRequestor(StatusInfo statusInfo){
 			fStatusInfo = statusInfo;
 		}
@@ -556,16 +558,21 @@ public class EGLWizardUtilities {
 			String[] shiftedInserts = shiftInsertsIfNeccesary(problemKind, inserts);
 			String problemMsg = getMessageFromBundle(problemKind, shiftedInserts, bundle);
 
-			switch(severity){
-			case IMarker.SEVERITY_ERROR:
-				fStatusInfo.setError(problemMsg);
-				break;
-			case IMarker.SEVERITY_WARNING:
-				fStatusInfo.setWarning(problemMsg);
-				break;
-			case IMarker.SEVERITY_INFO:
-				fStatusInfo.setInfo(problemMsg);
-				break;
+			if ( severity > worstProblemSeverity )
+			{
+				worstProblemSeverity = severity;
+				switch(severity){
+				case IMarker.SEVERITY_ERROR:
+					setHasError( true );
+					fStatusInfo.setError(problemMsg);
+					break;
+				case IMarker.SEVERITY_WARNING:
+					fStatusInfo.setWarning(problemMsg);
+					break;
+				case IMarker.SEVERITY_INFO:
+					fStatusInfo.setInfo(problemMsg);
+					break;
+				}
 			}
 		}
 		

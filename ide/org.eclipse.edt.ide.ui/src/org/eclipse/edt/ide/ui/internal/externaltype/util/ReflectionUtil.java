@@ -205,6 +205,10 @@ public class ReflectionUtil {
 			buffer.append("static ");
 		}
 		
+		if (Modifier.isFinal(field.getModifiers())) {
+			buffer.append("final ");
+		}
+		
 		buffer.append(field.getName() + " " + getTypeName(field.getType()));
 		
 		return buffer.toString();
@@ -216,6 +220,10 @@ public class ReflectionUtil {
 			buffer.append("static ");
 		}
 		
+		if (Modifier.isFinal(field.getModifiers())) {
+			buffer.append("const ");
+		}
+		
 		boolean isEGLKeyWord = EGLNameValidator.isKeyword(field.getName());
 		boolean isStartWithEze = field.getName().toLowerCase().startsWith(JavaTypeConstants.EZE_PREFIX);
 		if(isEGLKeyWord || isStartWithEze) {
@@ -225,7 +233,7 @@ public class ReflectionUtil {
 		buffer.append(field.getName() + " " + getEGLTypeName(field.getType()));
 		if(isStartWithEze) {
 			buffer.append(' ');
-			buffer.append("{externalName = \"" + field.getName() + "\"}");
+			buffer.append("{@externalName{\"" + field.getName() + "\"}}");
 		}
 		
 		return buffer.toString();
