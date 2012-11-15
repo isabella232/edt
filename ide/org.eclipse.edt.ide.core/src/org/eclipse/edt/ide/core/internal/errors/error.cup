@@ -29,7 +29,7 @@ terminal ERRORSQLSTMTLIT;
 // Named, single token terminals
 terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, BANG, EQ, NE, LT, GT, LE, NEGATE;
 terminal LEFTSHIFT, LEFTSHIFTEQ, RIGHTSHIFTLOGICAL, RIGHTSHIFTLOGICALEQ, RIGHTSHIFTARITHMETIC, RIGHTSHIFTARITHMETICEQ;
-terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION;
+terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION, QUESTIONQUESTION;
 terminal BITANDEQ, BITOREQ, PLUSEQ, MINUSEQ, TIMESEQ, DIVEQ, TIMESTIMESEQ, CONCATEQ, NULLCONCATEQ, MODULOEQ, XOREQ;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMI, CONST, ASSIGN;
 terminal COLON, COMMA;
@@ -214,6 +214,7 @@ precedence left RPAREN;		// For Casting
 precedence left LBRACKET;	// To prefer "(new type [])" over "(new type) []"
 precedence left LCURLY;		// To prefer "(new type) {}" over "(new type {})"
 precedence left QUESTION;
+precedence left QUESTIONQUESTION;
 
 // The overall structure of the file
 file
@@ -394,8 +395,8 @@ externalTypeContent
 	|	privateAccessModifierOpt:privateAccessModifier1 CONSTRUCTOR:constructor1 LPAREN functionParameter_star:functionParameters1 RPAREN settingsBlockOpt:settingsBlock1 SEMI:semi1
 	{: RESULT = new Constructor(privateAccessModifier1, functionParameters1, settingsBlock1, null, privateAccessModifier1 == Boolean.FALSE ? constructor1left : privateAccessModifier1left, semi1right); :}
 	
-	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
-	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, questionOpt1, settingsBlock1, initializer1, false, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? IDs1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 constOpt:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
+	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, questionOpt1, settingsBlock1, initializer1, const1, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? IDs1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
 
 	|	settingsBlock:settingsBlock1
 	{: RESULT = settingsBlock1; :}
@@ -1065,10 +1066,9 @@ expr
 	|	LCURLY:lcurly1 objExprEntry_plus:objExprEntries1 RCURLY:rcurly1
 	{: RESULT = new ObjectExpression(objExprEntries1, lcurly1left, rcurly1right); :}
 
-	|	expr:expr1 QUESTION expr:expr2 COLON expr:expr3
+	|	expr:expr1 QUESTIONQUESTION expr:expr2 COLON expr:expr3
 	{: RESULT = new TernaryExpression(expr1, expr2, expr3, expr1left, expr3right); :}
 	;
-		
 	
 privateAccessModifierOpt
 	::=

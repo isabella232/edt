@@ -38,7 +38,7 @@ program pgm1 {}
 		{@REST{method=POST, responseFormat=XML}} 
 	end
 
-	function fp6(p1 string in, p2 string in)//1 Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate.
+	function fp6(p1 string in, p2 string in)//1 Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation.
 		{@REST{method=POST}} 
 	end
 

@@ -133,14 +133,14 @@ public class ServiceProxyFunctionTestsTest extends ValidationTestCase {
 	/*
 	 * function fp6(p1 string in, p2 string in)
 	 * 1 validation message is expected.
-	 * It is expected to contain "Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate.".
+	 * It is expected to contain "Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation.".
 	 */
 	public void testLine41() {
 		List messages = getMessagesAtLine( 41 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation. Parameter p1 must be removed or specified in the uriTemplate.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"Only one resource parameter is allowed for the funcion fp6 which specifies the REST annotation.\" was issued." );
 	}
 
 	/*
