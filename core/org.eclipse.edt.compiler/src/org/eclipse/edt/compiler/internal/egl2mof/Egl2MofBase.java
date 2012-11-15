@@ -826,8 +826,9 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				return typeSignature;
 			}
 			
-			if (type instanceof EClassProxy) {
-				return ((EClassProxy)type).getProxiedEClassName();
+			String sig = BindingUtil.getETypeSignatureFromProxy(type);
+			if (sig != null) {
+				return sig;
 			}
 		}
 		

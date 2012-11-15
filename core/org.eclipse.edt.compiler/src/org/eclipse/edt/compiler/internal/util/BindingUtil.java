@@ -1240,7 +1240,21 @@ public class BindingUtil {
 		}
 		return null;
 	}
-	
+
+	public static String getETypeSignatureFromProxy(Element elem) {
+		//handle proxy types
+		if (elem instanceof EClassProxy) {
+			return ((EClassProxy)elem).getProxiedEClassName();
+		}
+		
+		Annotation ann = elem.getAnnotation("egl.lang.reflect.EClassProxy");
+		if (ann != null) {
+			return (String)ann.getValue();
+		}
+		
+		return null;
+	}
+
 	public static boolean isEClassProxy(Element elem) {
 		//handle proxy types
 		if (elem instanceof EClassProxy) {
