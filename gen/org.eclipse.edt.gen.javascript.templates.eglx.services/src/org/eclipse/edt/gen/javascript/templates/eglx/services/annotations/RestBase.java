@@ -197,8 +197,6 @@ public abstract class RestBase extends JavaScriptTemplate implements Constants{
 		genResponseEncodingValue(rest, function, ctx, out);
 		out.print(", charset : ");
 		printQuotedString((String)rest.getValue("responseCharset"), out);;
-		out.print(", contentType : ");
-		printQuotedString((String)rest.getValue("responseContentType"), out);;
 		
 		out.print("}");
 	}

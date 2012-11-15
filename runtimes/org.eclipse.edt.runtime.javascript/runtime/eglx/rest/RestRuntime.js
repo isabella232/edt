@@ -122,8 +122,6 @@ egl.eglx.rest.configHttp = function(http,
 		http.response.encoding = responseConfig.encoding;
 	if(http.response.charset === null)
 		http.response.charset = responseConfig.charset;
-	if(http.response.contentType === null)
-		http.response.contentType = responseConfig.contentType;
 	if(http.request.headers === null)
 		http.request.headers = new egl.eglx.lang.EDictionary();
 	return http;
