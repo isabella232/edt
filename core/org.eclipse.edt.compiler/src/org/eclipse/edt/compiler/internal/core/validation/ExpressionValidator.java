@@ -179,23 +179,18 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				@Override
 				public boolean visit(ArrayType arrayType) {
 					if (arrayType.hasInitialSize()) {
-						final boolean sizeIsValid[] = new boolean[] {false};
-						arrayType.getInitialSize().accept(new DefaultASTVisitor() {
-							@Override
-							public boolean visit(IntegerLiteral integerLiteral) {
-								sizeIsValid[0] = true;
-								return false;
+						Map<Expression, Type> exprMap = new HashMap<Expression, Type>();
+						TypeValidator.collectExprsForTypeCompatibility(arrayType.getInitialSize(), exprMap);
+						for (Map.Entry<Expression, Type> entry : exprMap.entrySet()) {
+							Type tBinding = entry.getValue();
+							if (tBinding != null) {
+								if (!IRUtils.isMoveCompatible(TypeUtils.Type_INT, tBinding, entry.getKey().resolveMember())) {
+									problemRequestor.acceptProblem(
+										arrayType.getInitialSize(),
+										IProblemRequestor.ARRAY_SIZE_LESS_THAN_ZERO,
+										new String[] {arrayType.getInitialSize().getCanonicalString()});
+								}
 							}
-						});
-						
-						if (sizeIsValid[0]) {
-							hasInitialSize[0] = true;
-						}
-						else {
-							problemRequestor.acceptProblem(
-								arrayType.getInitialSize(),
-								IProblemRequestor.ARRAY_SIZE_LESS_THAN_ZERO,
-								new String[] {arrayType.getInitialSize().getCanonicalString()});
 						}
 					}
 					return true;
@@ -336,62 +331,6 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		if (lhType != null && rhType != null && !(lhType instanceof AnnotationType)) {
 			new AssignmentStatementValidator(problemRequestor, compilerOptions, declaringPart).validateAssignment(
 					assignment.getOperator(), leftHandSide, rightHandSide, lhType, rhType, leftHandSide.resolveMember(), rightHandSide.resolveMember());
-		}
-	}
-	
-	@Override
-	public void endVisit(SettingsBlock settingsBlock) {
-		Node parent = settingsBlock.getParent();
-		
-		final boolean[] invalid = new boolean[1];
-		parent.accept(new DefaultASTVisitor() {
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.IfStatement ifStatement) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ElseBlock elseBlock) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.WhileStatement whileStatement) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.WhenClause whenClause) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.TryStatement tryStatement) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.OnExceptionBlock onExceptionBlock) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ForStatement forStatement) {
-				invalid[0] = true;
-				return false;
-			}
-			@Override
-			public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement forEachStatement) {
-				invalid[0] = true;
-				return false;
-			}
-		});
-		
-		if (invalid[0]) {
-			problemRequestor.acceptProblem(
-					settingsBlock,
-					IProblemRequestor.SETTINGS_BLOCK_NOT_ALLOWED,
-					new String[] {});
 		}
 	}
 	

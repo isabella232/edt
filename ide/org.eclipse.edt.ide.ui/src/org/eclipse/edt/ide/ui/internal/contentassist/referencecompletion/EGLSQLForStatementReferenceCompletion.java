@@ -24,10 +24,10 @@ public class EGLSQLForStatementReferenceCompletion extends
 
 	@Override
 	protected void precompileContexts() {
-		addContext("package a; function a() add a to b for "); //$NON-NLS-1$
-		addContext("package a; function a() open a for "); //$NON-NLS-1$
-		addContext("package a; function a() delete a from b for "); //$NON-NLS-1$
-		addContext("package a; function a() replace a to b for "); //$NON-NLS-1$
+		addContext("package a; handler a function a() add a to b for "); //$NON-NLS-1$
+		addContext("package a; handler a function a() open a for "); //$NON-NLS-1$
+		addContext("package a; handler a function a() delete a from b for "); //$NON-NLS-1$
+		addContext("package a; handler a function a() replace a to b for "); //$NON-NLS-1$
 	}
 
 	@Override

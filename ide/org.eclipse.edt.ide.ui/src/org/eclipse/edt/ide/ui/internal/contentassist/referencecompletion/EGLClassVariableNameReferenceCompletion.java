@@ -18,7 +18,7 @@ import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchVariableDeclarationProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EGLProgramVariableNameReferenceCompletion extends EGLAbstractReferenceCompletion {
+public class EGLClassVariableNameReferenceCompletion extends EGLAbstractReferenceCompletion {
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()

@@ -25,9 +25,9 @@ public class EGLCallStatementWithCallbackReferenceCompletion extends EGLAbstract
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() call xyz returning to"); //$NON-NLS-1$
-		addContext("package a; function a() call xyz returning to jki onexception"); //$NON-NLS-1$
-		addContext("package a; function a() call xyz onexception"); //$NON-NLS-1$
+		addContext("package a; handler a function a() call xyz returning to"); //$NON-NLS-1$
+		addContext("package a; handler a function a() call xyz returning to jki onexception"); //$NON-NLS-1$
+		addContext("package a; handler a function a() call xyz onexception"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

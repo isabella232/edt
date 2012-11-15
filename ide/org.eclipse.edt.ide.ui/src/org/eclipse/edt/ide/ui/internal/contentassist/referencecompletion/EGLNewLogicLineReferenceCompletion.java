@@ -34,21 +34,20 @@ public class EGLNewLogicLineReferenceCompletion extends EGLAbstractReferenceComp
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a()"); //$NON-NLS-1$
-		addContext("package a; function a() var a;"); //$NON-NLS-1$
-		addContext("package a; program a function a()"); //$NON-NLS-1$
+		addContext("package a; handler a function a()"); //$NON-NLS-1$
+		addContext("package a; handler a function a() var a;"); //$NON-NLS-1$
 
-		addContext("package a; function a() if ()"); //$NON-NLS-1$
-		addContext("package a; function a() if () else"); //$NON-NLS-1$
-		addContext("package a; function a() while ()"); //$NON-NLS-1$
-		addContext("package a; function a() try"); //$NON-NLS-1$
-		addContext("package a; function a() try onException(a b)"); //$NON-NLS-1$
-		addContext("package a; function a() try onException"); //$NON-NLS-1$
-		addContext("package a; function a() case(a) when (a)"); //$NON-NLS-1$
-		addContext("package a; function a() case(a) otherwise"); //$NON-NLS-1$
-		addContext("package a; function a() for(a to 2)"); //$NON-NLS-1$
-		addContext("package a; function a() for(a int to 2)"); //$NON-NLS-1$
-		addContext("package a; function a() foreach (a)"); //$NON-NLS-1$
+		addContext("package a; handler a function a() if ()"); //$NON-NLS-1$
+		addContext("package a; handler a function a() if () else"); //$NON-NLS-1$
+		addContext("package a; handler a function a() while ()"); //$NON-NLS-1$
+		addContext("package a; handler a function a() try"); //$NON-NLS-1$
+		addContext("package a; handler a function a() try onException(a b)"); //$NON-NLS-1$
+		addContext("package a; handler a function a() try onException"); //$NON-NLS-1$
+		addContext("package a; handler a function a() case(a) when (a)"); //$NON-NLS-1$
+		addContext("package a; handler a function a() case(a) otherwise"); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a to 2)"); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a int to 2)"); //$NON-NLS-1$
+		addContext("package a; handler a function a() foreach (a)"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

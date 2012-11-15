@@ -23,7 +23,7 @@ public class Constructor extends Node {
 	private List parameters;
 	private SettingsBlock settingsBlockOpt;
 	private boolean isPrivate;
-	private List stmts;	
+	private List<Statement> stmts;	
 	private org.eclipse.edt.mof.egl.Constructor binding;
 
 	public org.eclipse.edt.mof.egl.Constructor getBinding() {
@@ -54,7 +54,7 @@ public class Constructor extends Node {
 		return isPrivate;
 	}
 
-	public List getStmts() {
+	public List<Statement> getStmts() {
 		return stmts;
 	}
 

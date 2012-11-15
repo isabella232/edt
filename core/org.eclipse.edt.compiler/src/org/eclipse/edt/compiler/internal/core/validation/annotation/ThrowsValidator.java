@@ -19,15 +19,15 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
 
 public class ThrowsValidator implements IAnnotationValidationRule {
 	
 	@Override
 	public void validate(Node errorNode, Node target, Element targetElement, Map<String, Object> allAnnotationsAndFields, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		//validate that this is only specified in a JavaObject externalType
-		if (targetElement instanceof Function) {
-			Container container = ((Function)targetElement).getContainer();
+		if (targetElement instanceof FunctionMember) {
+			Container container = ((FunctionMember)targetElement).getContainer();
 			if (container != null) {
 				if (container instanceof ExternalType && container.getAnnotation("eglx.java.JavaObject") != null) {
 					return;

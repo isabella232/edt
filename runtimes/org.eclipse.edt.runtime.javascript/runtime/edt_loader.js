@@ -43,7 +43,7 @@ load("runtime", "eglx.lang", ["Constants", "DateTimeLib", "Dictionary", "Orderin
 load("runtime", "eglx.ui.rui", ["Widget", "Document", "Event", "View"]);
 load("runtime", "egl.ui.gateway", ["UIGatewayRecord"]);
 
-load("runtime", "", ["edt_runtime", "edt_runtime_fixups"]);
+load("runtime", "", ["edt_runtime"]);
 load("runtime", "eglx.javascript", ["Job", "JavaScriptObjectException", "RuntimeException"]);
 load("runtime", "eglx.java", ["JavaObjectException"]);
 load("runtime", "eglx.rbd", ["StrLib"]);

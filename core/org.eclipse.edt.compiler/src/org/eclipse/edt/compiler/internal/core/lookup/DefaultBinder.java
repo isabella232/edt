@@ -18,6 +18,7 @@ import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
+import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
@@ -421,6 +422,17 @@ public abstract class DefaultBinder extends AbstractBinder {
 		            newExpression.getSettingsBlock().accept(
 		                    new SetValuesExpressionCompletor(currentScope, currentBinding, newScope, dependencyRequestor, problemRequestor, compilerOptions));
 		    }
+		}
+		
+		Type type = newExpression.getType();
+		while (type != null && type.isArrayType()) {
+			ArrayType arrayType = (ArrayType)type;
+			
+			if (arrayType.hasInitialSize()) {
+				arrayType.getInitialSize().accept(this);
+			}
+			
+			type = arrayType.getElementType();
 		}
 		
 		if(newExpression.getType().getBaseType() instanceof NameType) {

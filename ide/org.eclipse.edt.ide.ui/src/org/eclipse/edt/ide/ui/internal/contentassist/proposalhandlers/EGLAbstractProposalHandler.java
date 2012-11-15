@@ -395,6 +395,8 @@ public abstract class EGLAbstractProposalHandler {
 			partTypeImgStr = PluginImages.IMG_OBJS_PGM;
 		}else if(IEGLConstants.KEYWORD_LIBRARY == partType){
 			partTypeImgStr = PluginImages.IMG_OBJS_LIBRARY;
+		}else if(IEGLConstants.KEYWORD_CLASS == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_CLASS;
 		}
 		
 		return partTypeImgStr;
@@ -497,7 +499,7 @@ public abstract class EGLAbstractProposalHandler {
 		int numberOfArgs = function.getParameters().size();
 		String displayString = getDisplayString(function, numberOfArgs);
 		String replaceString = upToParensString + "(" + getParmString(function, numberOfArgs) + ")"; //$NON-NLS-1$ //$NON-NLS-2$
-		int selectionLength = numberOfArgs > 0 ? ((IBinding) function.getParameters().get(0)).getName().length() : 0;
+		int selectionLength = numberOfArgs > 0 ? function.getParameters().get(0).getName().length() : 0;
 		int cursorPosition = numberOfArgs > 0 ? upToParensString.length()+1 : replaceString.length();
 		String imgStr = function.getAccessKind() == AccessKind.ACC_PRIVATE? PluginImages.IMG_OBJS_PRIVATE_FUNCTION : PluginImages.IMG_OBJS_FUNCTION;
 		

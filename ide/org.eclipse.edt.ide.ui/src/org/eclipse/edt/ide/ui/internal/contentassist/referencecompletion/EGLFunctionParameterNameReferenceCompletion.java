@@ -24,9 +24,8 @@ public class EGLFunctionParameterNameReferenceCompletion extends EGLAbstractRefe
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; program a function a("); //$NON-NLS-1$
-		addContext("package a; function a("); //$NON-NLS-1$
-		addContext("package a; function a(var ttt,"); //$NON-NLS-1$
+		addContext("package a; handler a function a("); //$NON-NLS-1$
+		addContext("package a; handler a function a(var ttt,"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

@@ -30,13 +30,13 @@ public class EGLParameterModifierReferenceCompletion extends EGLAbstractReferenc
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; program a function a(a a"); //$NON-NLS-1$
-		addContext("package a; program a function a(a int"); //$NON-NLS-1$
-		addContext("package a; program a function a(a string"); //$NON-NLS-1$
-		addContext("package a; program a function a(a char(4)"); //$NON-NLS-1$
-		addContext("package a; program a function a(a bin(4,2)"); //$NON-NLS-1$
-		addContext("package a; program a function a(a decimal(4)"); //$NON-NLS-1$
-		addContext("package a; program a function a(a timestamp(\"d\")"); //$NON-NLS-1$
+		addContext("package a; handler a function a(a a"); //$NON-NLS-1$
+		addContext("package a; handler a function a(a int"); //$NON-NLS-1$
+		addContext("package a; handler a function a(a string"); //$NON-NLS-1$
+		addContext("package a; handler a function a(a char(4)"); //$NON-NLS-1$
+		addContext("package a; handler a function a(a bin(4,2)"); //$NON-NLS-1$
+		addContext("package a; handler a function a(a decimal(4)"); //$NON-NLS-1$
+		addContext("package a; handler a function a(a timestamp(\"d\")"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -45,10 +45,8 @@ public class EGLParameterModifierReferenceCompletion extends EGLAbstractReferenc
 	protected List returnCompletionProposals(ParseStack parseStack, String prefix, ITextViewer viewer, int documentOffset) {
 		if (isInFunction(viewer, documentOffset)) {
 			String strings[] = new String[] {
-					IEGLConstants.KEYWORD_FIELD,
 					IEGLConstants.KEYWORD_IN, 
 					IEGLConstants.KEYWORD_INOUT,
-					IEGLConstants.KEYWORD_SQLNULLABLE,
 					IEGLConstants.KEYWORD_OUT
 			};
 			return

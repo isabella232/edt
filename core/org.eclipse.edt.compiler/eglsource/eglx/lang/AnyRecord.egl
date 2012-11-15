@@ -13,5 +13,5 @@ package eglx.lang;
 
 import egl.lang.reflect.ClassType;
 
-externalType AnyRecord extends AnyStruct type ClassType {isAbstract=yes}
+externalType AnyRecord extends AnyValue, AnyStruct type ClassType {isAbstract=yes}
 end
