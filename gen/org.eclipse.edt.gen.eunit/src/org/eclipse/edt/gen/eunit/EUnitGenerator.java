@@ -112,7 +112,7 @@ public class EUnitGenerator extends Generator {
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
-				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
+				EGLMessage message2 = EGLMessage.createEGLStackTraceMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
 					e, details2, org.eclipse.edt.gen.CommonUtilities.includeEndOffset(((Part) part).getAnnotation(IEGLConstants.EGL_LOCATION), context));
 				context.getMessageRequestor().addMessage(message2);
 			}

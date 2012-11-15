@@ -9,7 +9,7 @@
   IBM Corporation - initial API and implementation
  
 -->
-<project name="BuildPlugin" default="Jarem" basedir="../">
+<project name="BuildPlugin" default="JarEglar" basedir="../">
 
 <property name="pluginName" value="org.eclipse.edt.mof.eglx.services"/>
 
@@ -21,8 +21,15 @@
 	
 <target name="Jarem" depends="init">	
 	<jar destfile="./egllib/services.mofar">
-		<fileset dir="./${eglBin}"/>
-		<fileset dir="./${eglSrc}"/>
+		<fileset dir="./${eglBin}" includes="**/*.mofxml"/>
+		<fileset dir="./${eglSrc}" includes="org/**/*.egl"/>
 	</jar>
 </target>
+	<target name="JarEglar" depends="Jarem">	
+	    <echo message="processing ${pluginName}/egllib/services.eglar" />
+		<jar destfile="./egllib/services.eglar">
+			<fileset dir="./${eglBin}" includes="**/*.eglxml"/>
+			<fileset dir="./${eglSrc}" includes="eglx/**/*.egl"/>
+		</jar>
+	</target>
 </project>

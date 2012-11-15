@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.EGLMessages;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Map;
@@ -170,6 +172,16 @@ public class EGLMessage extends Object implements IGenerationResultsMessage {
 			}
 		}
 		return new EGLMessage(mapping, aSeverity, messageID, messageContributor, inserts, startLine, startOffset, 0, endOffset);
+	}
+
+	public static EGLMessage createEGLStackTraceMessage( Map<String, String> mapping, int aSeverity, 
+			String messageID, Throwable exception, String[] inserts, Annotation eglLocation )
+	{
+		EGLMessage msg = createEGLMessage( mapping, aSeverity, messageID, exception, inserts, eglLocation );
+		StringWriter sw = new StringWriter();
+		exception.printStackTrace( new PrintWriter( sw ) );
+		msg.builtMessage = msg.builtMessage + '\n' + sw;
+		return msg;
 	}
 
 	public String getBuiltMessage() {
