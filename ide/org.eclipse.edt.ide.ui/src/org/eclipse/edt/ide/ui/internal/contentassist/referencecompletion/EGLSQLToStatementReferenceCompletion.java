@@ -24,8 +24,8 @@ public class EGLSQLToStatementReferenceCompletion extends
 
 	@Override
 	protected void precompileContexts() {
-		addContext("package a; function a() add a to "); //$NON-NLS-1$
-		addContext("package a; function a() replace a to "); //$NON-NLS-1$
+		addContext("package a; handler a function a() add a to "); //$NON-NLS-1$
+		addContext("package a; handler a function a() replace a to "); //$NON-NLS-1$
 
 	}
 

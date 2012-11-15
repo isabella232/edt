@@ -27,8 +27,8 @@ public class EGLCaseStatementReferenceCompletion extends EGLAbstractReferenceCom
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() case ("); //$NON-NLS-1$
-		addContext("package a; function a() case (a) when ("); //$NON-NLS-1$
+		addContext("package a; handler a function a() case ("); //$NON-NLS-1$
+		addContext("package a; handler a function a() case (a) when ("); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

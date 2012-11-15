@@ -32,7 +32,7 @@ public class EGLAbstractFunctionReturnsReferenceCompletion extends EGLAbstractRe
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() returns("); //$NON-NLS-1$
+		addContext("package a; handler a function a() returns("); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +40,7 @@ public class EGLAbstractFunctionReturnsReferenceCompletion extends EGLAbstractRe
 	 */
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		final int partTypes[] = new int[] {IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.DELEGATE | IEGLSearchConstants.RECORD};
+		final int partTypes[] = new int[] {IEGLSearchConstants.DELEGATE | IEGLSearchConstants.EXTERNALTYPE | IEGLSearchConstants.RECORD| IEGLSearchConstants.HANDLER | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.SERVICE | IEGLSearchConstants.ENUMERATION | IEGLSearchConstants.CLASS};
 		Node partNode = getPart(viewer, documentOffset);
 		partNode.accept(new DefaultASTVisitor() {
 			public boolean visit(Service service) {

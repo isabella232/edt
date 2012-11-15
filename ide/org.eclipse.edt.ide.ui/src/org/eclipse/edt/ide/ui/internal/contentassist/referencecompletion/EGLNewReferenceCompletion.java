@@ -25,7 +25,7 @@ public class EGLNewReferenceCompletion extends EGLAbstractReferenceCompletion {
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() throw new"); //$NON-NLS-1$
+		addContext("package a; handler a function a() throw new"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

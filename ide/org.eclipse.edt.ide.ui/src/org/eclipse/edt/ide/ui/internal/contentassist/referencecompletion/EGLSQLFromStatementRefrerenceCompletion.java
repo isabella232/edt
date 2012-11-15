@@ -24,13 +24,13 @@ public class EGLSQLFromStatementRefrerenceCompletion extends
 
 	@Override
 	protected void precompileContexts() {
-		addContext("package a; function a()	delete from "); //$NON-NLS-1$
-		addContext("package a; function a()	delete a from "); //$NON-NLS-1$
-		addContext("package a; function a() open a from "); //$NON-NLS-1$
-		addContext("package a; function a() get a from "); //$NON-NLS-1$
-		addContext("package a; function a() execute from "); //$NON-NLS-1$
-		addContext("package a; function a() prepare a from "); //$NON-NLS-1$
-		addContext("package a; function a() foreach(a from  "); //$NON-NLS-1$
+		addContext("package a; handler a function a()	delete from "); //$NON-NLS-1$
+		addContext("package a; handler a function a()	delete a from "); //$NON-NLS-1$
+		addContext("package a; handler a function a() open a from "); //$NON-NLS-1$
+		addContext("package a; handler a function a() get a from "); //$NON-NLS-1$
+		addContext("package a; handler a function a() execute from "); //$NON-NLS-1$
+		addContext("package a; handler a function a() prepare a from "); //$NON-NLS-1$
+		addContext("package a; handler a function a() foreach(a from  "); //$NON-NLS-1$
 	}
 
 	@Override

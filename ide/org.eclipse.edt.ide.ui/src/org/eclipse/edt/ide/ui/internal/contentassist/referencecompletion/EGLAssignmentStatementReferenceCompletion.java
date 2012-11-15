@@ -43,11 +43,11 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() a="); //$NON-NLS-1$
-		addContext("package a; function a() a int="); //$NON-NLS-1$
-		addContext("package a; function a() a int=["); //$NON-NLS-1$
-		addContext("package a; program a type b{c=["); //$NON-NLS-1$
-		addContext("package a; program a type b{c="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a int="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a int=["); //$NON-NLS-1$
+		addContext("package a; handler a type b{c=["); //$NON-NLS-1$
+		addContext("package a; handler a type b{c="); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

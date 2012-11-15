@@ -29,22 +29,20 @@ public class EGLNumericExpressionStatementReferenceCompletion extends EGLAbstrac
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() a=a+"); //$NON-NLS-1$
-		//need the space below to work when switching between vagen compatibility mode
-		//because the cache is created under only 1 mode
-		addContext("package a; function a() a=a -"); //$NON-NLS-1$
-		addContext("package a; function a() a=a*"); //$NON-NLS-1$
-		addContext("package a; function a() a=a/"); //$NON-NLS-1$
-		addContext("package a; function a() a=a%"); //$NON-NLS-1$
-		addContext("package a; function a() a=a**"); //$NON-NLS-1$
-		addContext("package a; function a() a+="); //$NON-NLS-1$
-		addContext("package a; function a() a-="); //$NON-NLS-1$
-		addContext("package a; function a() a*="); //$NON-NLS-1$
-		addContext("package a; function a() a/="); //$NON-NLS-1$
-		addContext("package a; function a() a%="); //$NON-NLS-1$
-		addContext("package a; function a() a**="); //$NON-NLS-1$
-		addContext("package a; function a() a=+"); //$NON-NLS-1$
-		addContext("package a; function a() a=-"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=a+"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=a-"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=a*"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=a/"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=a%"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=a**"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a+="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a-="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a*="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a/="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a%="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a**="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=+"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=-"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

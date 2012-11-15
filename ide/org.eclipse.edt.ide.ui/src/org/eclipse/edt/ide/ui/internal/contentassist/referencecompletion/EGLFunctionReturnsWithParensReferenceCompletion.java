@@ -22,7 +22,7 @@ public class EGLFunctionReturnsWithParensReferenceCompletion extends EGLAbstract
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() returns"); //$NON-NLS-1$
+		addContext("package a; handler a function a() returns"); //$NON-NLS-1$
 	}
 	//Jon - note that this class is not included in EGLDefinedReferenceCompletions yet because the method calls in
 	//EGLAbstractFunctionReturnsReferenceCompletion do not support parens yet

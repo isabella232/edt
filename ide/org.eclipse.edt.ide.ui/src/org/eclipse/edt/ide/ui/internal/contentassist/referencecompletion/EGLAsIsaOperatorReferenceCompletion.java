@@ -29,8 +29,8 @@ public class EGLAsIsaOperatorReferenceCompletion extends EGLAbstractReferenceCom
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() a = a as"); //$NON-NLS-1$
-		addContext("package a; function a() if (a isa"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a = a as"); //$NON-NLS-1$
+		addContext("package a; handler a function a() if (a isa"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

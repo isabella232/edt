@@ -43,9 +43,9 @@ public class EGLSubScriptSubStringModifierReferenceCompletion
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() a=b["); //$NON-NLS-1$
-		addContext("package a; function a() a=b[c,"); //$NON-NLS-1$
-		addContext("package a; function a() a=b[c]["); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=b["); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=b[c,"); //$NON-NLS-1$
+		addContext("package a; handler a function a() a=b[c]["); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

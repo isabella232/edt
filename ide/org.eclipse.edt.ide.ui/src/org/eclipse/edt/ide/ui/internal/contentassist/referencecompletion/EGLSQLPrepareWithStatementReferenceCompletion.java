@@ -22,7 +22,7 @@ import org.eclipse.jface.text.ITextViewer;
 
 public class EGLSQLPrepareWithStatementReferenceCompletion extends EGLAbstractReferenceCompletion{
 	protected void precompileContexts() {
-		addContext("package a; function a() prepare a from a with "); //$NON-NLS-1$	
+		addContext("package a; handler a function a() prepare a from a with "); //$NON-NLS-1$	
 	}
 
 	@Override

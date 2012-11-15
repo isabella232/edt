@@ -31,7 +31,7 @@ public class EGLContinueStatementReferenceCompletion extends EGLAbstractReferenc
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() continue"); //$NON-NLS-1$
+		addContext("package a; handler a function a() continue"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

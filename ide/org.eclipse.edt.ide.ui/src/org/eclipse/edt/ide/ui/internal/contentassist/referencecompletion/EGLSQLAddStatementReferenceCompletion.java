@@ -22,8 +22,8 @@ import org.eclipse.jface.text.ITextViewer;
 public class EGLSQLAddStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
 
 	protected void precompileContexts() {
-		addContext("package a; function a() add"); //$NON-NLS-1$
-		addContext("package a; function a() add a,"); //$NON-NLS-1$
+		addContext("package a; handler a function a() add"); //$NON-NLS-1$
+		addContext("package a; handler a function a() add a,"); //$NON-NLS-1$
 	}
 
 	protected List returnCompletionProposals(final ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {

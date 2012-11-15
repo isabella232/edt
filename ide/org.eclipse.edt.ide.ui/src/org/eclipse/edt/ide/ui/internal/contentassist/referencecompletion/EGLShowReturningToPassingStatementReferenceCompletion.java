@@ -25,7 +25,7 @@ public class EGLShowReturningToPassingStatementReferenceCompletion extends EGLAb
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() show formName returning to target passing"); //$NON-NLS-1$
+		addContext("package a; handler a function a() show formName returning to target passing"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
