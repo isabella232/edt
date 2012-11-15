@@ -23,7 +23,6 @@ import java.io.IOException;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class FileReaderUtil {
-	// TODO Remove this class later
 	public static String readFile(String filename) {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -35,7 +34,7 @@ public class FileReaderUtil {
 			if(line != null) {
 				buffer.append(line);
 				
-				// Print subsequence lines
+				// Print subsequent lines
 				while (true) {
 					line = reader.readLine();
 					if (line == null)
@@ -45,6 +44,7 @@ public class FileReaderUtil {
 					buffer.append(line);
 				}
 			}
+			reader.close();
 
 			return buffer.toString();
 		} catch (FileNotFoundException e) {
