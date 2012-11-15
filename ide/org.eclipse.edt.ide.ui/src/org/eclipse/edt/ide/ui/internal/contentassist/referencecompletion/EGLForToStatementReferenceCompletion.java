@@ -25,14 +25,14 @@ public class EGLForToStatementReferenceCompletion extends EGLAbstractReferenceCo
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() for(a from "); //$NON-NLS-1$
-		addContext("package a; function a() for(a int from "); //$NON-NLS-1$
-		addContext("package a; function a() for(a from 1 to"); //$NON-NLS-1$
-		addContext("package a; function a() for(a int from 1 to"); //$NON-NLS-1$
-		addContext("package a; function a() for(a from 1 to 2 by"); //$NON-NLS-1$
-		addContext("package a; function a() for(a int from 1 to 2 by"); //$NON-NLS-1$
-		addContext("package a; function a() for(a from 1 to 2 decrement by"); //$NON-NLS-1$
-		addContext("package a; function a() for(a int from 1 to 2 decrement by"); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a from "); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a int from "); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a from 1 to"); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a int from 1 to"); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a from 1 to 2 by"); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a int from 1 to 2 by"); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a from 1 to 2 decrement by"); //$NON-NLS-1$
+		addContext("package a; handler a function a() for(a int from 1 to 2 decrement by"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

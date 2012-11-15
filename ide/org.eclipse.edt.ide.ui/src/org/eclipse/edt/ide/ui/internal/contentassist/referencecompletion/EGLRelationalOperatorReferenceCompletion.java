@@ -27,8 +27,8 @@ public class EGLRelationalOperatorReferenceCompletion
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() if (a"); //$NON-NLS-1$
-		addContext("package a; function a() if (a[c].b"); //$NON-NLS-1$
+		addContext("package a; handler a function a() if (a"); //$NON-NLS-1$
+		addContext("package a; handler a function a() if (a[c].b"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

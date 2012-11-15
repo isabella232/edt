@@ -25,8 +25,8 @@ public class EGLConstantTypeReferenceCompletion extends EGLAbstractReferenceComp
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; program a const var"); //$NON-NLS-1$
-		addContext("package a; function a() const var"); //$NON-NLS-1$
+		addContext("package a; handler a const var"); //$NON-NLS-1$
+		addContext("package a; handler a function a() const var"); //$NON-NLS-1$
 	}
 
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {

@@ -82,7 +82,6 @@ public class PluginImages {
 	public static final String IMG_OBJS_FORM= NAME_PREFIX + "form_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_DATAITEM = NAME_PREFIX + "dtaitm_obj.gif"; //$NON-NLS-1$
 	public static final String IMG_OBJS_STRUCTUREITEM = NAME_PREFIX + "stritm_obj.gif"; //$NON-NLS-1$
-	//TODO we need an icon for class!
 	public static final String IMG_OBJS_CLASS= NAME_PREFIX + "class_obj.gif"; 			//$NON-NLS-1$
 
 	public static final String IMG_OBJS_IMPORT = NAME_PREFIX + "import.gif"; //$NON-NLS-1$

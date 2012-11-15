@@ -24,9 +24,8 @@ public class EGLUseStatementReferenceCompletion extends EGLAbstractReferenceComp
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; program a use"); //$NON-NLS-1$
-//		addContext("package a; FormGroup a use"); //$NON-NLS-1$
-		addContext("package a; program a use a,"); //$NON-NLS-1$
+		addContext("package a; handler a use"); //$NON-NLS-1$
+		addContext("package a; handler a use a,"); //$NON-NLS-1$
 
 	}
 

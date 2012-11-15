@@ -33,9 +33,8 @@ public class EGLVariableTypeReferenceCompletion extends EGLAbstractReferenceComp
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; program a var"); //$NON-NLS-1$
-		addContext("package a; function a() var"); //$NON-NLS-1$
-//		addContext("package a; form a type b var"); //$NON-NLS-1$
+		addContext("package a; handler a var"); //$NON-NLS-1$
+		addContext("package a; handler a function a() var"); //$NON-NLS-1$
 		addContext("package a; externaltype a type b var"); //$NON-NLS-1$
 	}
 

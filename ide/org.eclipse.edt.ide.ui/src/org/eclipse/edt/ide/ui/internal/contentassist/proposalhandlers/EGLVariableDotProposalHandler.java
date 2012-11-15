@@ -80,17 +80,22 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 		List result = new ArrayList();
 		if(qualifierType != null && qualifierType.getClassifier() != null) {
 			
-			result.addAll(getFieldProposals(BindingUtil.getAllFields(qualifierType.getClassifier()), addEquals, includePrivateFields, propertyBlockList));
+			List list = BindingUtil.getAllFields(qualifierType.getClassifier());
+			if (!isVariable) {
+				list = filterStaticMembers(list);
+			}
+			result.addAll(getFieldProposals(list, addEquals, includePrivateFields, propertyBlockList));
 			if(includeFunctions) {
+				list = BindingUtil.getAllFunctions(qualifierType.getClassifier());
+				if (!isVariable) {
+					list = filterStaticMembers(list);
+				}
 				result.addAll(getFunctionProposals(
-					BindingUtil.getAllFunctions(qualifierType.getClassifier()),
+					list,
 					UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, getTypeString(qualifierType)),
 					EGLCompletionProposal.RELEVANCE_MEDIUM));
 			}
 			
-			if (!isVariable) {
-				return filterStaticMembers(result);
-			}
 			return result;
 				
 		}

@@ -25,11 +25,9 @@ public class EGLProgramArgumentsReferenceCompletion extends EGLAbstractReference
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() call \"xxx\""); //$NON-NLS-1$
-		addContext("package a; function a() call pgm"); //$NON-NLS-1$		
-		addContext("package a; function a() call \"xxx\" ("); //$NON-NLS-1$
-		addContext("package a; function a() call pgm ("); //$NON-NLS-1$		
-		addContext("package a; function a() call pgm(a,"); //$NON-NLS-1$
+		addContext("package a; handler a function a() call pgm"); //$NON-NLS-1$		
+		addContext("package a; handler a function a() call pgm ("); //$NON-NLS-1$		
+		addContext("package a; handler a function a() call pgm(a,"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

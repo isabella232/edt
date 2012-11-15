@@ -27,15 +27,15 @@ public class EGLSQLWithStatementReferenceCompletion extends EGLAbstractReference
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() get a with "); //$NON-NLS-1$
-		addContext("package a; function a() get a from a with "); //$NON-NLS-1$
-		addContext("package a; function a() execute with "); //$NON-NLS-1$
-		addContext("package a; function a() delete from a with "); //$NON-NLS-1$
-		addContext("package a; function a() delete a from a with "); //$NON-NLS-1$
-		addContext("package a; function a() open a with "); //$NON-NLS-1$
-		addContext("package a; function a() open a from a with "); //$NON-NLS-1$
-		addContext("package a; function a() replace a to a with "); //$NON-NLS-1$
-		addContext("package a; function a() prepare a from a with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() get a with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() get a from a with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() execute with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() delete from a with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() delete a from a with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() open a with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() open a from a with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() replace a to a with "); //$NON-NLS-1$
+		addContext("package a; handler a function a() prepare a from a with "); //$NON-NLS-1$
 		
 	}
 

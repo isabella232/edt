@@ -25,8 +25,8 @@ public class EGLForeachIntoStatementReferenceCompletion extends EGLAbstractRefer
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() foreach (a from"); //$NON-NLS-1$
-//		addContext("package a; function a() foreach (a from x,"); //$NON-NLS-1$
+		addContext("package a; handler a function a() foreach (a from"); //$NON-NLS-1$
+//		addContext("package a; handler a function a() foreach (a from x,"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

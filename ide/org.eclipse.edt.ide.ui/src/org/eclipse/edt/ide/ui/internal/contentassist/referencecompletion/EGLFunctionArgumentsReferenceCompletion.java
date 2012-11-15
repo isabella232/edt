@@ -37,11 +37,11 @@ public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenc
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; function a() fct("); //$NON-NLS-1$
-		addContext("package a; function a() fct(a,"); //$NON-NLS-1$		
-		addContext("package a; function a() a refType = new refType("); //$NON-NLS-1$
-		addContext("package a; function a() fct[2]("); //$NON-NLS-1$
-		addContext("package a; function a() fct[2](a,"); //$NON-NLS-1$
+		addContext("package a; handler a function a() fct("); //$NON-NLS-1$
+		addContext("package a; handler a function a() fct(a,"); //$NON-NLS-1$		
+		addContext("package a; handler a function a() a refType = new refType("); //$NON-NLS-1$
+		addContext("package a; handler a function a() fct[2]("); //$NON-NLS-1$
+		addContext("package a; handler a function a() fct[2](a,"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

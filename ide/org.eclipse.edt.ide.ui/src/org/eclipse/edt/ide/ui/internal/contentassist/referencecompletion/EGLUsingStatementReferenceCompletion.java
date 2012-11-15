@@ -24,24 +24,24 @@ public class EGLUsingStatementReferenceCompletion extends
 
 	@Override
 	protected void precompileContexts() {
-		addContext("package a; function a() open a using( "); //$NON-NLS-1$
-		addContext("package a; function a() open a using(b, "); //$NON-NLS-1$
-		addContext("package a; function a() open a from b using( "); //$NON-NLS-1$
-		addContext("package a; function a() open a from b using(c, "); //$NON-NLS-1$
-		addContext("package a; function a() get a using( "); //$NON-NLS-1$
-		addContext("package a; function a() get a using(b, "); //$NON-NLS-1$
-		addContext("package a; function a() get a from b using( "); //$NON-NLS-1$
-		addContext("package a; function a() get a from b using(c, "); //$NON-NLS-1$
-		addContext("package a; function a() delete from b using( "); //$NON-NLS-1$
-		addContext("package a; function a() delete from b using(c, "); //$NON-NLS-1$
-		addContext("package a; function a() delete a from b using( "); //$NON-NLS-1$
-		addContext("package a; function a() delete a from b using(c, "); //$NON-NLS-1$
-		addContext("package a; function a() replace a to b using( "); //$NON-NLS-1$
-		addContext("package a; function a() replace a to b using(c, "); //$NON-NLS-1$
-		addContext("package a; function a() execute using("); //$NON-NLS-1$
-		addContext("package a; function a() execute using(c, "); //$NON-NLS-1$
-		addContext("package a; function a() call a using("); //$NON-NLS-1$
-		addContext("package a; function a() call a using "); //$NON-NLS-1$
+		addContext("package a; handler a function a() open a using( "); //$NON-NLS-1$
+		addContext("package a; handler a function a() open a using(b, "); //$NON-NLS-1$
+		addContext("package a; handler a function a() open a from b using( "); //$NON-NLS-1$
+		addContext("package a; handler a function a() open a from b using(c, "); //$NON-NLS-1$
+		addContext("package a; handler a function a() get a using( "); //$NON-NLS-1$
+		addContext("package a; handler a function a() get a using(b, "); //$NON-NLS-1$
+		addContext("package a; handler a function a() get a from b using( "); //$NON-NLS-1$
+		addContext("package a; handler a function a() get a from b using(c, "); //$NON-NLS-1$
+		addContext("package a; handler a function a() delete from b using( "); //$NON-NLS-1$
+		addContext("package a; handler a function a() delete from b using(c, "); //$NON-NLS-1$
+		addContext("package a; handler a function a() delete a from b using( "); //$NON-NLS-1$
+		addContext("package a; handler a function a() delete a from b using(c, "); //$NON-NLS-1$
+		addContext("package a; handler a function a() replace a to b using( "); //$NON-NLS-1$
+		addContext("package a; handler a function a() replace a to b using(c, "); //$NON-NLS-1$
+		addContext("package a; handler a function a() execute using("); //$NON-NLS-1$
+		addContext("package a; handler a function a() execute using(c, "); //$NON-NLS-1$
+		addContext("package a; handler a function a() call a using("); //$NON-NLS-1$
+		addContext("package a; handler a function a() call a using "); //$NON-NLS-1$
 	}
 
 	@Override
