@@ -257,6 +257,9 @@ public class IBMiFunctionValidator extends AbstractFunctionValidator{
 			if (part instanceof Service) {
 				return;
 			}
+			if (part instanceof org.eclipse.edt.mof.egl.Class) {
+				return;
+			}
 			if (part instanceof Handler && ((Handler) part).getStereotype() == null) {
 				//must be basic handler!
 				return;
