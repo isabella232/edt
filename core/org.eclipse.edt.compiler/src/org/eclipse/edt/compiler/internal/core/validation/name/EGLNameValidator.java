@@ -236,7 +236,19 @@ public class EGLNameValidator {
 	 */
 	public static void validate(String input, int nameType, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		String type = null; //hold the String version of the nameType, if needed
-		EGLNameParser nameParser = new EGLNameParser(input, true, nameType == RECORD_FILE_NAME, problemRequestor, compilerOptions); // the name parser
+		EGLNameParser nameParser;
+		if ( nameType == FILENAME || nameType == RECORD_FILE_NAME )
+		{
+			if ( input.toLowerCase( Locale.ENGLISH ).endsWith( ".egl" ) )
+			{
+				input = input.substring( 0, input.length() - 4 );
+			}
+			nameParser = new EGLNameParser( input, true, true, problemRequestor, compilerOptions );
+		}
+		else
+		{
+			nameParser = new EGLNameParser( input, true, false, problemRequestor, compilerOptions );
+		}
 		
 		// for testing!
 //		nameParser.getNamesAndSubscripts().outputTrees();		
