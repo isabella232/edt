@@ -22,7 +22,7 @@ Record Rest type Annotation
 	uriTemplate string?;
 	requestFormat eglx.services.Encoding?;
 	requestCharset string = "UTF-8";
+	requestContentType string?;//default based on encoding
 	responseFormat eglx.services.Encoding?;
 	responseCharset string?;
-	responseContentType string?;//default based on encoding
 end
