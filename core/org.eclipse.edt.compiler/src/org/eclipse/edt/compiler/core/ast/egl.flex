@@ -321,6 +321,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"}"					{ return symbol(NodeTypes.RCURLY); }
 	"@"					{ return symbol(NodeTypes.AT); }
 	"?"					{ return symbol(NodeTypes.QUESTION); }
+	"??"				{ return symbol(NodeTypes.QUESTIONQUESTION); }
 	"~"					{ return symbol(NodeTypes.NEGATE); }
 	
 	// Keywords reserved for future

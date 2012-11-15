@@ -249,6 +249,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"}"					{ return ErrorNodeTypes.RCURLY; }
 	"@"					{ return ErrorNodeTypes.AT; }
 	"?"					{ return ErrorNodeTypes.QUESTION; }
+	"??"				{ return ErrorNodeTypes.QUESTIONQUESTION; }
 	"~"					{ return ErrorNodeTypes.NEGATE; }
 
         // Macros

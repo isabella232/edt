@@ -27,7 +27,7 @@ terminal ERRORSQLSTMTLIT;
 // Named, single token terminals
 terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, BANG, EQ, NE, LT, GT, LE, NEGATE;
 terminal LEFTSHIFT, LEFTSHIFTEQ, RIGHTSHIFTLOGICAL, RIGHTSHIFTLOGICALEQ, RIGHTSHIFTARITHMETIC, RIGHTSHIFTARITHMETICEQ;
-terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION;
+terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION, QUESTIONQUESTION;
 terminal BITANDEQ, BITOREQ, PLUSEQ, MINUSEQ, TIMESEQ, DIVEQ, TIMESTIMESEQ, CONCATEQ, NULLCONCATEQ, MODULOEQ, XOREQ;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMI, CONST, ASSIGN;
 terminal COLON, COMMA;
@@ -212,6 +212,7 @@ precedence left RPAREN;		// For Casting
 precedence left LBRACKET;	// To prefer "(new type [])" over "(new type) []"
 precedence left LCURLY;		// To prefer "(new type) {}" over "(new type {})"
 precedence left QUESTION;
+precedence left QUESTIONQUESTION;
 
 // The overall structure of the file
 file
@@ -1063,10 +1064,9 @@ expr
 	|	LCURLY:lcurly1 objExprEntry_plus:objExprEntries1 RCURLY:rcurly1
 	{: RESULT = new ObjectExpression(objExprEntries1, lcurly1left, rcurly1right); :}
 
-	|	expr:expr1 QUESTION expr:expr2 COLON expr:expr3
+	|	expr:expr1 QUESTIONQUESTION expr:expr2 COLON expr:expr3
 	{: RESULT = new TernaryExpression(expr1, expr2, expr3, expr1left, expr3right); :}
 	;
-		
 	
 privateAccessModifierOpt
 	::=
