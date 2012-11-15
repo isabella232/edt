@@ -7,6 +7,7 @@ handler arrayAccess
 	myAny any?;
 	myRec rec;
 	et et1;
+	dict dictionary;
 	
 	function func()
 		array[1] = 10; //0
@@ -19,6 +20,8 @@ handler arrayAccess
 		myAny["foo"]["bar"] = 10; //0
 		et["foo"] = 10; //0
 		array["foo"] = 10; //0
+		myRec["foo"] = 10; //0
+		dict.foo = 20; //0
 		
 		array[1,2] = 10; //1 Specifying multiple array indices in the array access array[1,2] is not allowed.
 		myAny["foo","bar"] = 2; //1 Specifying multiple array indices in the array access myAny["foo","bar"] is not allowed.
@@ -27,7 +30,6 @@ handler arrayAccess
 		array[1][2] = 10; //1 array[1] is not an array and cannot be subscripted.
 		myAny[new date] = 10; //1 The subscript new date in array reference myAny[new date] must be an integer item or integer literal.
 		notArray["foo"] = 10; //1 notArray cannot be accessed with a string subscript.
-		myRec["foo"] = 10; //1 myRec cannot be accessed with a string subscript.
 	end
 end
 

@@ -27,9 +27,10 @@ public class NestedFunction extends Node {
 	private boolean isAbstract;
 	private List functionParameters;	// List of Symbols
 	private ReturnsDeclaration returnsOpt;
-	private List stmts;	// List of Symbols
+	private SettingsBlock settingsBlockOpt;
+	private List<Statement> stmts;	// List of Symbols
 	
-	public NestedFunction(Boolean privateAccessModifierOpt, Boolean staticAccessModifierOpt, SimpleName name, List functionParameters, ReturnsDeclaration returnsOpt, List stmts, boolean isAbstract, int startOffset, int endOffset) {
+	public NestedFunction(Boolean privateAccessModifierOpt, Boolean staticAccessModifierOpt, SimpleName name, List functionParameters, ReturnsDeclaration returnsOpt, SettingsBlock settingsBlockOpt, List stmts, boolean isAbstract, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.name = name;
@@ -41,6 +42,10 @@ public class NestedFunction extends Node {
 		if(returnsOpt != null) {
 			this.returnsOpt = returnsOpt;
 			returnsOpt.setParent(this);
+		}
+		if(settingsBlockOpt != null) {
+			this.settingsBlockOpt = settingsBlockOpt;
+			settingsBlockOpt.setParent(this);
 		}
 		this.stmts = setParent(stmts);
 	}
@@ -75,9 +80,17 @@ public class NestedFunction extends Node {
 	
 	public ReturnsDeclaration getReturnDeclaration(){
 		return returnsOpt;
-	}	
+	}
+	
+	public SettingsBlock getSettingsBlock() {
+		return settingsBlockOpt;
+	}
+	
+	public boolean hasSettingsBlock() {
+	    return settingsBlockOpt != null;
+	}
 		
-	public List getStmts() {
+	public List<Statement> getStmts() {
 		return stmts;
 	}
 	
@@ -87,6 +100,7 @@ public class NestedFunction extends Node {
 			name.accept(visitor);
 			acceptChildren(visitor, functionParameters);
 			if(returnsOpt != null) returnsOpt.accept(visitor);
+			if(settingsBlockOpt != null) settingsBlockOpt.accept(visitor);
 			acceptChildren(visitor, stmts);
 		}
 		visitor.endVisit(this);
@@ -94,8 +108,9 @@ public class NestedFunction extends Node {
 	
 	protected Object clone() throws CloneNotSupportedException {
 		ReturnsDeclaration newReturnsOpt = returnsOpt != null ? (ReturnsDeclaration)returnsOpt.clone() : null;
+		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
 		
-		return new NestedFunction(new Boolean(isPrivate), new Boolean(isStatic), (SimpleName)name.clone(), cloneList(functionParameters), newReturnsOpt, cloneList(stmts), isAbstract, getOffset(), getOffset() + getLength());
+		return new NestedFunction(new Boolean(isPrivate), new Boolean(isStatic), (SimpleName)name.clone(), cloneList(functionParameters), newReturnsOpt, newSettingsBlockOpt, cloneList(stmts), isAbstract, getOffset(), getOffset() + getLength());
 	}
 	
 	@Override
@@ -129,6 +144,10 @@ public class NestedFunction extends Node {
 		if (returnsOpt != null) {
 			buf.append(' ');
 			buf.append(returnsOpt.toString());
+		}
+		
+		if (settingsBlockOpt != null) {
+			buf.append(settingsBlockOpt.toString());
 		}
 		
 		return buf.toString();

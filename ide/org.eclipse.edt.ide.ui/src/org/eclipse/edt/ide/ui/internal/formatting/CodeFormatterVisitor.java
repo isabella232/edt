@@ -1080,10 +1080,9 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		final ReturnsDeclaration returnDecl = nestedFunction.getReturnDeclaration();		
 		final List parameters = nestedFunction.getFunctionParameters();
 		final Parameter firstParameter = (parameters != null && !parameters.isEmpty()) ? (Parameter)parameters.get(0) : null;
-		final List stmtsOrSettingsBlocks = nestedFunction.getStmts();
-		final Node firstStmtOrSettingBlock = (stmtsOrSettingsBlocks != null && !stmtsOrSettingsBlocks.isEmpty()) ? (Node)stmtsOrSettingsBlocks.get(0) : null;
-		final SettingsBlock settingsBlock = (nestedFunction.isAbstract() && firstStmtOrSettingBlock != null && firstStmtOrSettingBlock instanceof SettingsBlock) ? 
-									(SettingsBlock)firstStmtOrSettingBlock : null;
+		final List<Statement> stmts = nestedFunction.getStmts();
+		final Node firstStmt = (stmts != null && !stmts.isEmpty()) ? (Node)stmts.get(0) : null;
+		final SettingsBlock settingsBlock = nestedFunction.getSettingsBlock();
 		
 		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
 			public void format(Symbol prevToken, Symbol currToken) {
@@ -1095,11 +1094,11 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 					//print returns
 					returnDecl.accept(thisVisitor);	
 				}		
-				else if((firstStmtOrSettingBlock != null) && (currToken.left == firstStmtOrSettingBlock.getOffset())){
+				else if((firstStmt != null) && (currToken.left == firstStmt.getOffset())){
 					if (fIndentNeeded) {
 						indent();	//indentA 
 					}
-					formatStatements(stmtsOrSettingsBlocks);
+					formatStatements(stmts);
 				}
 				else if(settingsBlock != null && currToken.left == settingsBlock.getOffset()){
 					setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
@@ -1130,7 +1129,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT);					
 					
 					if(currToken.sym == NodeTypes.END){
-						if(firstStmtOrSettingBlock != null)
+						if(firstStmt != null)
 							unindent();				//match indentA		
 						numOfBlankLines = 0;
 					}
@@ -1148,20 +1147,13 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
-	private void formatStatements(List stmts){
+	private void formatStatements(List<Statement> stmts){
 		if(stmts != null){
-			boolean isFirstStmt = true;
-			for(Iterator it=stmts.iterator(); it.hasNext();){
+			for(Iterator<Statement> it=stmts.iterator(); it.hasNext();){
 				//print new line for each class content			
-				Node stmt = (Node)it.next();
-				if(isFirstStmt && stmt instanceof SettingsBlock)
-					setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
-							getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
-							CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-				else
-					setGlobalFormattingSettings(0, false, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+				Statement stmt = it.next();
+				setGlobalFormattingSettings(0, false, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 				stmt.accept(this);
-				isFirstStmt = false;
 			}		
 		}
 	}
@@ -1557,12 +1549,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			int setStatementRight = setStatement.getOffset() + setStatement.getLength();
 			
 			String strIDs = fDocument.get(lastTargetRight, setStatementRight-lastTargetRight);
-			java_cup.runtime.Scanner scanner = null;
-			//TODO commented out EGLVAGCompatibilitySetting
-//	       	if(EGLVAGCompatibilitySetting.isVAGCompatibility())
-//	       		scanner = new VAGLexer(new BufferedReader(new StringReader(strIDs)));
-//	       	else
-	       		scanner = new Lexer(new BufferedReader(new StringReader(strIDs)));		
+			java_cup.runtime.Scanner scanner = new Lexer(new BufferedReader(new StringReader(strIDs)));		
 	       	Symbol token = scanner.next_token();
 	       	int numOfBlankLines = -1;
 	       	boolean addSpace = false;

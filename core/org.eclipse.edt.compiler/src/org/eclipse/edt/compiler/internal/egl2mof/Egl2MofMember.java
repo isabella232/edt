@@ -225,8 +225,8 @@ class Egl2MofMember extends Egl2MofPart {
 				func.setStatementBlock(stmts);
 				functionsToProcess.add(node);
 			}
-			if (!node.getStmts().isEmpty() && node.getStmts().get(0) instanceof SettingsBlock) {
-				processSettings(func, (SettingsBlock)node.getStmts().get(0));
+			if (node.hasSettingsBlock()) {
+				processSettings(func, node.getSettingsBlock());
 			}
 			if (function.getAccessKind() == AccessKind.ACC_PRIVATE) {
 				func.setAccessKind(AccessKind.ACC_PRIVATE);

@@ -358,8 +358,8 @@ eglClassContent
 	::=	USE:use1 name_plus:names1 settingsBlockOpt:settingsBlock1 SEMI:semi1
 	{: RESULT = new UseStatement(names1, settingsBlock1, use1left, semi1right); :}
 
-	|	privateAccessModifierOpt:privateModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 stmt_star:stmts END:end1
-	{: RESULT = new NestedFunction(privateModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), parms, returns1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
+	|	privateAccessModifierOpt:privateModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 stmt_star:stmts END:end1
+	{: RESULT = new NestedFunction(privateModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 constOpt:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
 	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, questionOpt1, settingsBlock1, initializer1, const1, privateAccessModifier1 == Boolean.FALSE ? (staticAccessModifier1 == Boolean.FALSE ? (const1 == Boolean.FALSE ? IDs1left : const1left) : staticAccessModifier1left) : privateAccessModifier1left, semi1right); :}
@@ -375,8 +375,8 @@ classContent
 	::=	USE:use1 name_plus:names1 settingsBlockOpt:settingsBlock1 SEMI:semi1
 	{: RESULT = new UseStatement(names1, settingsBlock1, use1left, semi1right); :}
 
-	|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 stmt_star:stmts END:end1
-	{: RESULT = new NestedFunction(privateModifier1, Boolean.FALSE, new SimpleName(id1,id1left,id1right), parms, returns1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
+	|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 stmt_star:stmts END:end1
+	{: RESULT = new NestedFunction(privateModifier1, Boolean.FALSE, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 constOpt:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
 	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, questionOpt1, settingsBlock1, initializer1, const1, privateAccessModifier1 == Boolean.FALSE ? (const1 == Boolean.FALSE ? IDs1left : const1left) : privateAccessModifier1left, semi1right); :}
@@ -387,7 +387,7 @@ classContent
 
 externalTypeContent
 	::=	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
-	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1 == null ? Collections.EMPTY_LIST : Arrays.asList(new Object[] {settingsBlock1}), true, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
+	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1, Collections.EMPTY_LIST, true, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
 	
 	|	privateAccessModifierOpt:privateAccessModifier1 CONSTRUCTOR:constructor1 LPAREN functionParameter_star:functionParameters1 RPAREN settingsBlockOpt:settingsBlock1 SEMI:semi1
 	{: RESULT = new Constructor(privateAccessModifier1, functionParameters1, settingsBlock1, null, privateAccessModifier1 == Boolean.FALSE ? constructor1left : privateAccessModifier1left, semi1right); :}
@@ -401,7 +401,7 @@ externalTypeContent
 	
 interfaceContent
 	::=	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
-	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1 == null ? Collections.EMPTY_LIST : Arrays.asList(new Object[] {settingsBlock1}), true, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
+	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1, Collections.EMPTY_LIST, true, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
 
 	|	settingsBlock:settingsBlock1
 	{: RESULT = settingsBlock1; :}
@@ -438,9 +438,6 @@ stmt
 
 	|	CONST:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Constant declaration
 	{: RESULT = new FunctionDataDeclaration(IDs1, type1, questionOpt1, settingsBlock1, initializer1, true, const1left, semi1right); :}
-
-	|	settingsBlock:settingsBlock1
-	{: RESULT = settingsBlock1; :}
 
 	|	assignment:assignment1 SEMI:semi1
 	{: RESULT = new AssignmentStatement(assignment1, assignment1left, semi1right); :}

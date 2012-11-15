@@ -10,7 +10,6 @@
  *
  *******************************************************************************/
 define("eglx/xml/binding/annotation/XMLStructureKind", []);
-define("eglx/xml/XMLProcessingException", []);
 define("eglx/jws/SOAPEnvelope", []);
 define("eglx/rest/ServiceType", []);
 define("eglx/http/Response", []);

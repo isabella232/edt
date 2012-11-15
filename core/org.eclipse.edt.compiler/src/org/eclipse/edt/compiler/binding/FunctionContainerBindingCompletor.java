@@ -44,6 +44,7 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
@@ -101,7 +102,12 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     }
     
     StructPart getDefaultSuperType() {
-    	return (StructPart)BindingUtil.getEAny();
+    	StructPart eany = (StructPart)BindingUtil.getEAny();
+    	if (irBinding.getIrPart() instanceof StructPart && !eany.equals(irBinding.getIrPart())) {
+    		StructPart anyStruct = (StructPart)BindingUtil.findPart(NameUtile.getAsName(MofConversion.EGLX_lang_package), NameUtile.getAsName("AnyStruct"));
+    		return anyStruct;
+    	}
+    	return eany;
     }
 
     public boolean visit(ClassDataDeclaration classDataDeclaration) {
@@ -357,6 +363,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     	if (constructor.hasSettingsBlock()) {
             FunctionScope functionScope = new FunctionScope(NullScope.INSTANCE, constructorBinding);
             AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding);
+            functionScope = new FunctionScope(currentScope, constructorBinding);
             SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, functionContainerBinding, scope,
                     dependencyRequestor, problemRequestor, compilerOptions);
             constructor.getSettingsBlock().accept(blockCompletor);
