@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Service;
@@ -35,7 +36,7 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate implements
 	
 	
 	public void genStatementBody(CallStatement callStatement, Context ctx, TabbedWriter out) {
-		ctx.invoke("genServiceName", callStatement, ctx, out, callStatement.getInvocationTarget().getQualifier().getType());
+		ctx.invoke("genServiceName", callStatement, ctx, out, callStatement.getInvocationTarget());
 	}
 
 	public void genStatementEnd(CallStatement stmt, Context ctx, TabbedWriter out) {
@@ -68,8 +69,24 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate implements
 		return functionAccess;
 	}
 	
+	public MemberAccess getFunctionAccess(CallStatement callStatement, MemberName mn, Context ctx){
+		MemberAccess functionAccess = ctx.getFactory().createMemberAccess();
+		functionAccess.setId(mn.getId());
+		functionAccess.setMember(mn.getMember());
+		functionAccess.setQualifier(ctx.getFactory().createThisExpression());
+		return functionAccess;
+	}
+	
 	public MemberAccess getFunctionAccess(CallStatement callStatement, Function function, Context ctx)  {
 		return null;
+	}
+	
+	public void genServiceName(CallStatement callStatement, Context ctx, TabbedWriter out, MemberName memberName) {
+		ctx.invoke("genServiceName", callStatement, ctx, out, memberName.getMember().getContainer());
+	}
+	
+	public void genServiceName(CallStatement callStatement, Context ctx, TabbedWriter out, MemberAccess memberAccess) {
+		ctx.invoke("genServiceName", callStatement, ctx, out, memberAccess.getQualifier().getType());
 	}
 	
 	public void genServiceName(CallStatement callStatement, Context ctx, TabbedWriter out, Type type) {
