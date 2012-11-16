@@ -10,49 +10,48 @@
  *
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
+
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import eglx.lang.MathLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import java.lang.Object;
 import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
 import java.lang.Double;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
 import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
 import java.lang.Long;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
-import java.lang.Boolean;
-import org.eclipse.edt.runtime.java.eglx.lang.ETime;
-import java.util.Calendar;
-import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
-import java.math.BigDecimal;
-import org.eclipse.edt.eunit.runtime.Log;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
 import java.lang.Float;
-import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import eglx.lang.MathLib;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import java.lang.Object;
+import org.eclipse.edt.eunit.runtime.Log;
+import org.eclipse.edt.eunit.runtime.Status;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.ETime;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import java.math.BigDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyStruct;
 @SuppressWarnings("unused")
+
 @javax.xml.bind.annotation.XmlRootElement(name="LogResult")
 public class LogResult extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
 	private Log outR;
 	private Status s;
-	private static final String ezeConst_ACTUALHEADER = "Actual value = ";
-	public final String ACTUALHEADER = ezeConst_ACTUALHEADER;
-	private static final String ezeConst_EXPECTEDHEADER = "Expected value = ";
-	public final String EXPECTEDHEADER = ezeConst_EXPECTEDHEADER;
-	private static final String ezeConst_ACTUALSIZEHEADER = "Actual array size = ";
-	public final String ACTUALSIZEHEADER = ezeConst_ACTUALSIZEHEADER;
-	private static final String ezeConst_EXPECTEDSIZEHEADER = "Exepcted array size = ";
-	public final String EXPECTEDSIZEHEADER = ezeConst_EXPECTEDSIZEHEADER;
+	private static final String ACTUALHEADER = "Actual value = ";
+	private static final String EXPECTEDHEADER = "Expected value = ";
+	private static final String ACTUALSIZEHEADER = "Actual array size = ";
+	private static final String EXPECTEDSIZEHEADER = "Exepcted array size = ";
 	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public LogResult() {
 		super();
@@ -98,6 +97,9 @@ public class LogResult extends ExecutableBase {
 	}
 	public void clearResults() {
 		outR.msg = "";
+		clearStatus();
+	}
+	public void clearStatus() {
 		s.code = -1;
 		s.reason = "";
 	}
@@ -193,15 +195,15 @@ public class LogResult extends ExecutableBase {
 			{
 				int i = 0;
 				for (i = 1; (i <= expectedSize); i = (i + 1)) {
-					if ((!(expected.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, expected))).equals(actual.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, actual))))) {
+					if ((!(((String)expected.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, expected)))).equals(((String)actual.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, actual)))))) {
 						if (!(isArrayEqual)) {
 							failedHeader += ", ";
 						}
 						isArrayEqual = false;
 						failedHeader += EString.asString(i);
 					}
-					expectedValues += expected.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, expected));
-					actualValues += actual.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, actual));
+					expectedValues += ((String)expected.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, expected)));
+					actualValues += ((String)actual.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, actual)));
 					if ((EInt.notEquals(i, expectedSize))) {
 						expectedValues += ", ";
 						actualValues += ", ";
@@ -275,7 +277,7 @@ public class LogResult extends ExecutableBase {
 		String signExpected = "";
 		String signActual = "";
 		double deltaLimit;
-		deltaLimit = 1E-14;
+		deltaLimit = 1E-14d;
 		int eze$Temp15 = 0;
 		AnyBoxedObject<Integer> eze$Temp16;
 		eze$Temp16 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(eze$Temp15);
@@ -317,7 +319,7 @@ public class LogResult extends ExecutableBase {
 		String signExpected = "";
 		String signActual = "";
 		double deltaLimit;
-		deltaLimit = 1E-4;
+		deltaLimit = 1E-4d;
 		int eze$Temp23 = 0;
 		AnyBoxedObject<Integer> eze$Temp24;
 		eze$Temp24 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(eze$Temp23);
@@ -383,20 +385,20 @@ public class LogResult extends ExecutableBase {
 	}
 	private float normalSmallFloat(float afloat, AnyBoxedObject<Integer> mantissa, AnyBoxedObject<String> sign) {
 		mantissa.ezeCopy(0);
-		if (((int)(afloat) >= 0)) {
+		if ((afloat >= (float)(0))) {
 			sign.ezeCopy("+");
 		}
 		else {
 			sign.ezeCopy("-");
-			afloat = (float)(((int)(afloat) * -1));
+			afloat = (afloat * (float)(-1));
 		}
-		if (((EAny.notEquals(afloat, null)) && (EInt.notEquals((int)(afloat), 0)))) {
-			while (((int)(afloat) < 1)) {
-				afloat = (float)(((int)(afloat) * 10));
+		if (((EAny.notEquals(afloat, null)) && (ESmallfloat.notEquals(afloat, (float)(0))))) {
+			while ((afloat < (float)(1))) {
+				afloat = (afloat * (float)(10));
 				mantissa.ezeCopy((mantissa.ezeUnbox() - 1));
 			}
-			while (((int)(afloat) >= 10)) {
-				afloat = ESmallfloat.asSmallfloat((EInt.divide((int)(afloat), 10)));
+			while ((afloat >= (float)(10))) {
+				afloat = (ESmallfloat.divide(afloat, (float)(10)));
 				mantissa.ezeCopy((mantissa.ezeUnbox() + 1));
 			}
 		}

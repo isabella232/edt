@@ -31,7 +31,6 @@ handler MultiStatus
 	* add status to MultiStatus
 	*/
 	function addStatus(testId String in)
-		//ms MultiStatus = this;
 		s Status = LogResult.getStatus();
 		msg String = testId + ": " + s.reason;
 		LogResult.logStdOut(msg);
@@ -48,12 +47,15 @@ handler MultiStatus
 			when (ConstantsLib.SNOT_RUN)
 				notRunCnt += 1;	
 			otherwise	
-				badCnt += 1;				
+				badCnt += 1;
+				LogResult.logStdOut( "Invalid test state (" :: s.code :: "). Verify that the test function indicates success or failure." );	
 		end
 		
 		if(s.code != ConstantsLib.SPASSED && strLib.characterLen(firstFailedTestName) == 0)
 			firstFailedTestName = testId;
 		end		
+
+		LogResult.clearStatus();
 	end
 end
 

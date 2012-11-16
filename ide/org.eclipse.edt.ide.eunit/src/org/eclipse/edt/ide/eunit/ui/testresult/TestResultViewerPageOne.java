@@ -31,7 +31,7 @@ public class TestResultViewerPageOne extends FormPage {
 		super.createFormContent(managedForm);
 		
 		final ScrolledForm form = managedForm.getForm();
-		form.setText("Test result summary root");
+		form.setText("Test Results");
 		
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;
