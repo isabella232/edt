@@ -1,6 +1,7 @@
 package org.eclipse.edt.jtopen.data.queue;
 
-import org.eclipse.edt.jtopen.data.Common.SystemDefinition;
+import org.eclipse.edt.jtopen.data.common.systemdefinition;
+import eglx.jtopen.annotations.StructText;
 
 record DataQueueDefinition
     qname string{@StructText{length=10}};//char(10);

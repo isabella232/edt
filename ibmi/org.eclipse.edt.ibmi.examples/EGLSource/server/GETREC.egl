@@ -3,6 +3,10 @@ package server;
 import org.eclipse.edt.jtopen.connection.persistent.SessionConnectionsLib;
 import common.CUST;
 import common.Constants;
+import eglx.jtopen.IBMiConnection;
+import eglx.jtopen.annotations.IBMiProgram;
+import eglx.jtopen.annotations.StructArray;
+import javax.servlet.http.HttpSession;
 
 // service
 service GETREC
@@ -45,7 +49,7 @@ service GETREC
 		custs CUST[];
 		try
 			conn = SessionConnectionsLib.getSessionConnection(Constants.as400System, Constants.userid, Constants.password);
-			eof string;
+			eof string(1);
 			count decimal( 2, 0 );
 			call this.GETREC(custs, eof, count) using conn ;
 			SessionConnectionsLib.returnConnectionToPool(conn);

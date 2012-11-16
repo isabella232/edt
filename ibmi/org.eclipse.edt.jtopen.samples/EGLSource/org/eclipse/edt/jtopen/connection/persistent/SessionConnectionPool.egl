@@ -1,5 +1,7 @@
 package org.eclipse.edt.jtopen.connection.persistent;
 
+import eglx.java.JavaObject;
+
 externaltype SessionConnectionPool type JavaObject
 	static function getSessionConnectionPool()returns(SessionConnections);
 end

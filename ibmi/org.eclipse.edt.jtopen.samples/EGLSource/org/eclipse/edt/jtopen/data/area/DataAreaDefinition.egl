@@ -1,7 +1,8 @@
 package org.eclipse.edt.jtopen.data.area;
 
-import org.eclipse.edt.jtopen.data.Common.SystemDefinition;
-
+import org.eclipse.edt.jtopen.data.common.systemdefinition;
+import eglx.jtopen.annotations.StructText;
+ 
 record DataAreaDefinition 
 
     areaname string{@StructText{length=10}};//char(10);
