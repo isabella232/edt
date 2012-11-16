@@ -9,8 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-if (egl.eze$$userLibs) egl.eze$$userLibs.push('org.eclipse.edt.eunit.runtime.TestListMgr');
-else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
+define(["org/eclipse/edt/eunit/runtime/LogResult", "eglx/services/ServiceInvocationException", "org/eclipse/edt/eunit/runtime/MultiStatus", "org/eclipse/edt/eunit/runtime/ConstantsLib", "org/eclipse/edt/eunit/runtime/ServiceBindingType", "org/eclipse/edt/eunit/runtime/AssertionFailedException", "org/eclipse/edt/eunit/runtime/TestListMgr"],function(){
+	if (egl.eze$$userLibs) egl.eze$$userLibs.push('org.eclipse.edt.eunit.runtime.TestListMgr');
+	else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 	egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 	{
 		'eze$$fileName': 'org/eclipse/edt/eunit/runtime/TestListMgr.egl',
@@ -21,8 +22,8 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 			}
 			,
 			"eze$$setEmpty": function() {
-				new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
 				new egl.org.eclipse.edt.eunit.runtime.LogResult();
+				new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
 				this.bindingType = null;
 				this.ms = new egl.org.eclipse.edt.eunit.runtime.MultiStatus();
 				this.testIndex = 0;
@@ -39,7 +40,7 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 				try { egl.enter("<init>",this,arguments);
 					this.eze$$setEmpty();
 					egl.atLine(this.eze$$fileName,35,1035,28, this);
-					this.bindingType = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEDICATED;
+					this.bindingType = egl.org.eclipse.edt.eunit.runtime.ServiceBindingType.DEDICATED;
 					egl.atLine(this.eze$$fileName,38,1146,1, this);
 					this.testIndex = 1;
 					egl.atLine(this.eze$$fileName,44,1579,1, this);
@@ -63,34 +64,6 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 				if(this.fieldInfos === undefined){
 					var annotations;
 					this.fieldInfos = new Array();
-					annotations = {};
-					annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("bindingType", null, false, false);
-					annotations["JsonName"] = new egl.eglx.json.JsonName("bindingType");
-					this.fieldInfos[0] =new egl.eglx.services.FieldInfo("bindingType", "bindingType", "org.eclipse.edt.eunit.runtime.ServiceBindingType", egl.org.eclipse.edt.eunit.runtime.ServiceBindingType, annotations);
-					annotations = {};
-					annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("ms", null, false, false);
-					annotations["JsonName"] = new egl.eglx.json.JsonName("ms");
-					this.fieldInfos[1] =new egl.eglx.services.FieldInfo("ms", "ms", "org.eclipse.edt.eunit.runtime.MultiStatus", egl.org.eclipse.edt.eunit.runtime.MultiStatus, annotations);
-					annotations = {};
-					annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("testIndex", null, false, false);
-					annotations["JsonName"] = new egl.eglx.json.JsonName("testIndex");
-					this.fieldInfos[2] =new egl.eglx.services.FieldInfo("testIndex", "testIndex", "I;", Number, annotations);
-					annotations = {};
-					annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("testMethodNames", null, false, false);
-					annotations["JsonName"] = new egl.eglx.json.JsonName("testMethodNames");
-					this.fieldInfos[3] =new egl.eglx.services.FieldInfo("testMethodNames", "testMethodNames", "[S;", String, annotations);
-					annotations = {};
-					annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("runTestMtds", null, false, false);
-					annotations["JsonName"] = new egl.eglx.json.JsonName("runTestMtds");
-					this.fieldInfos[4] =new egl.eglx.services.FieldInfo("runTestMtds", "runTestMtds", "[org.eclipse.edt.eunit.runtime.runTestMethod", egl.eglx.lang.AnyDelegate, annotations);
-					annotations = {};
-					annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("testLibName", null, false, false);
-					annotations["JsonName"] = new egl.eglx.json.JsonName("testLibName");
-					this.fieldInfos[5] =new egl.eglx.services.FieldInfo("testLibName", "testLibName", "S;", String, annotations);
-					annotations = {};
-					annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("LibraryStartTests", null, false, false);
-					annotations["JsonName"] = new egl.eglx.json.JsonName("LibraryStartTests");
-					this.fieldInfos[6] =new egl.eglx.services.FieldInfo("LibraryStartTests", "LibraryStartTests", "[org.eclipse.edt.eunit.runtime.runTestMethod", egl.eglx.lang.AnyDelegate, annotations);
 				}
 				return this.fieldInfos;
 			}
@@ -104,18 +77,18 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 					egl.setLocalFunctionVariable("testId", testId, "eglx.lang.EString");
 					egl.atLine(this.eze$$fileName,48,1681,46, this);
 					egl.eglx.lang.SysLib.writeStdout((("Running test: ") + testId));
-					egl.atLine(this.eze$$fileName,50,1819,21, this);
+					egl.atLine(this.eze$$fileName,50,1820,21, this);
 					this.ms.addStatus(testId);
-					egl.atLine(this.eze$$fileName,51,1846,91, this);
+					egl.atLine(this.eze$$fileName,51,1847,91, this);
 					if (((this.testIndex < this.runTestMtds.getSize()))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,52,1887,15, this);
+							egl.atLine(this.eze$$fileName,52,1888,15, this);
 							this.testIndex = ((this.testIndex + 1));
-							egl.atLine(this.eze$$fileName,53,1906,25, this);
+							egl.atLine(this.eze$$fileName,53,1907,25, this);
 							egl.checkNull(this.runTestMtds, "runTestMtds")[this.runTestMtds.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : this.testIndex, eze$$signature : "I;"}, false) - 1)]();
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,46,1618,324, this);
+					egl.atLine(this.eze$$fileName,46,1618,325, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -127,42 +100,42 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 				try { egl.enter("getTestIdString",this,arguments);
 					var testMethodNamesSize;
 					egl.addLocalFunctionVariable("testMethodNamesSize", testMethodNamesSize, "eglx.lang.EInt", "testMethodNamesSize");
-					egl.atLine(this.eze$$fileName,58,2027,25, this);
+					egl.atLine(this.eze$$fileName,58,2028,25, this);
 					testMethodNamesSize = this.testMethodNames.getSize();
 					egl.setLocalFunctionVariable("testMethodNamesSize", testMethodNamesSize, "eglx.lang.EInt");
 					var testId;
 					egl.addLocalFunctionVariable("testId", testId, "eglx.lang.EString", "testId");
-					egl.atLine(this.eze$$fileName,60,2077,18, this);
+					egl.atLine(this.eze$$fileName,60,2078,18, this);
 					testId = ((this.testLibName) + "::");
 					egl.setLocalFunctionVariable("testId", testId, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,61,2101,211, this);
+					egl.atLine(this.eze$$fileName,61,2102,211, this);
 					if (((this.testIndex <= testMethodNamesSize))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,62,2141,37, this);
+							egl.atLine(this.eze$$fileName,62,2142,37, this);
 							testId = ((testId) + egl.checkNull(this.testMethodNames, "testMethodNames")[this.testMethodNames.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : this.testIndex, eze$$signature : "I;"}, false) - 1)]);
 							egl.setLocalFunctionVariable("testId", testId, "eglx.lang.EString");
 						}finally{egl.exitBlock();}
 					}
 					else {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,64,2189,117, this);
+							egl.atLine(this.eze$$fileName,64,2190,117, this);
 							if (((this.testIndex == ((testMethodNamesSize + 1))))) {
 								try{egl.enterBlock();
-									egl.atLine(this.eze$$fileName,65,2234,20, this);
+									egl.atLine(this.eze$$fileName,65,2235,20, this);
 									testId = ((testId) + "endTest");
 									egl.setLocalFunctionVariable("testId", testId, "eglx.lang.EString");
 								}finally{egl.exitBlock();}
 							}
 							else {
 								try{egl.enterBlock();
-									egl.atLine(this.eze$$fileName,67,2267,32, this);
+									egl.atLine(this.eze$$fileName,67,2268,32, this);
 									testId = ((testId) + "INVALIDINDEXFOUND!!!");
 									egl.setLocalFunctionVariable("testId", testId, "eglx.lang.EString");
 								}finally{egl.exitBlock();}
 							}
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,70,2315,16, this);
+					egl.atLine(this.eze$$fileName,70,2316,16, this);
 					if (!egl.debugg) egl.leave();
 					return testId;
 				} finally {
@@ -173,16 +146,16 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 			,
 			"nextTestLibrary": function() {
 				try { egl.enter("nextTestLibrary",this,arguments);
-					egl.atLine(this.eze$$fileName,74,2371,101, this);
+					egl.atLine(this.eze$$fileName,74,2372,101, this);
 					if (((this.libIndex < this.LibraryStartTests.getSize()))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,75,2417,14, this);
+							egl.atLine(this.eze$$fileName,75,2418,14, this);
 							this.libIndex = ((this.libIndex + 1));
-							egl.atLine(this.eze$$fileName,76,2435,30, this);
+							egl.atLine(this.eze$$fileName,76,2436,30, this);
 							egl.checkNull(this.LibraryStartTests, "LibraryStartTests")[this.LibraryStartTests.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : this.libIndex, eze$$signature : "I;"}, false) - 1)]();
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,73,2342,137, this);
+					egl.atLine(this.eze$$fileName,73,2343,137, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -196,62 +169,62 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 					egl.addLocalFunctionVariable("http", http, "eglx.http.IHttp", "http");
 					var str;
 					egl.addLocalFunctionVariable("str", str, "eglx.lang.EString", "str");
-					egl.atLine(this.eze$$fileName,82,2630,65, this);
-					str = (((((("Caught service exception: ") + egl.checkNull(exp).messageID)) + ": ")) + egl.checkNull(exp).message);
+					egl.atLine(this.eze$$fileName,82,2631,65, this);
+					str = (((((("Caught service exception: ") + exp.messageID)) + ": ")) + exp.message);
 					egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,83,2699,591, this);
+					egl.atLine(this.eze$$fileName,83,2700,591, this);
 					if ((exp instanceof egl.eglx.services.ServiceInvocationException)) {
 						try{egl.enterBlock();
 							var sexp;
 							egl.addLocalFunctionVariable("sexp", sexp, "eglx.services.ServiceInvocationException", "sexp");
-							egl.atLine(this.eze$$fileName,84,2775,33, this);
+							egl.atLine(this.eze$$fileName,84,2776,33, this);
 							sexp = egl.eglx.lang.EAny.ezeCast({eze$$value : exp, eze$$signature : egl.inferSignature(exp)}, egl.eglx.services.ServiceInvocationException);
 							egl.setLocalFunctionVariable("sexp", sexp, "eglx.services.ServiceInvocationException");
 							var s1;
 							egl.addLocalFunctionVariable("s1", s1, "eglx.lang.EString", "s1");
-							egl.atLine(this.eze$$fileName,85,2828,25, this);
-							s1 = (("detail1:") + egl.checkNull(sexp).detail1);
+							egl.atLine(this.eze$$fileName,85,2829,25, this);
+							s1 = (("detail1:") + sexp.detail1);
 							egl.setLocalFunctionVariable("s1", s1, "eglx.lang.EString");
 							var s2;
 							egl.addLocalFunctionVariable("s2", s2, "eglx.lang.EString", "s2");
-							egl.atLine(this.eze$$fileName,86,2873,25, this);
-							s2 = (("detail2:") + egl.checkNull(sexp).detail2);
+							egl.atLine(this.eze$$fileName,86,2874,25, this);
+							s2 = (("detail2:") + sexp.detail2);
 							egl.setLocalFunctionVariable("s2", s2, "eglx.lang.EString");
 							var s3;
 							egl.addLocalFunctionVariable("s3", s3, "eglx.lang.EString", "s3");
-							egl.atLine(this.eze$$fileName,87,2918,25, this);
-							s3 = (("detail3:") + egl.checkNull(sexp).detail3);
+							egl.atLine(this.eze$$fileName,87,2919,25, this);
+							s3 = (("detail3:") + sexp.detail3);
 							egl.setLocalFunctionVariable("s3", s3, "eglx.lang.EString");
-							egl.atLine(this.eze$$fileName,88,2948,33, this);
-							str = ((str) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+							egl.atLine(this.eze$$fileName,88,2949,33, this);
+							str = ((str) + egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'].NEWLINE);
 							egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
-							egl.atLine(this.eze$$fileName,89,2985,38, this);
-							str = ((((str) + s1)) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+							egl.atLine(this.eze$$fileName,89,2986,38, this);
+							str = ((((str) + s1)) + egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'].NEWLINE);
 							egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
-							egl.atLine(this.eze$$fileName,90,3027,38, this);
-							str = ((((str) + s2)) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+							egl.atLine(this.eze$$fileName,90,3028,38, this);
+							str = ((((str) + s2)) + egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'].NEWLINE);
 							egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
-							egl.atLine(this.eze$$fileName,91,3069,38, this);
-							str = ((((str) + s3)) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+							egl.atLine(this.eze$$fileName,91,3070,38, this);
+							str = ((((str) + s3)) + egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'].NEWLINE);
 							egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
-							egl.atLine(this.eze$$fileName,92,3111,86, this);
-							str = (((egl.eglx.lang.EString.plus(((str) + "Original request body: "), egl.checkNull(http.getRequest()).body))) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+							egl.atLine(this.eze$$fileName,92,3112,86, this);
+							str = (((egl.eglx.lang.EString.plus(((str) + "Original request body: "), http.getRequest().body))) + egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'].NEWLINE);
 							egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
-							egl.atLine(this.eze$$fileName,93,3201,83, this);
-							str = (((egl.eglx.lang.EString.plus(((str) + "Raw response body: "), egl.checkNull(http.getResponse()).body))) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+							egl.atLine(this.eze$$fileName,93,3202,83, this);
+							str = (((egl.eglx.lang.EString.plus(((str) + "Raw response body: "), http.getResponse().body))) + egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'].NEWLINE);
 							egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,95,3293,21, this);
+					egl.atLine(this.eze$$fileName,95,3294,21, this);
 					egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].error(str);
 					var testId;
 					egl.addLocalFunctionVariable("testId", testId, "eglx.lang.EString", "testId");
-					egl.atLine(this.eze$$fileName,96,3333,50, this);
-					testId = egl.checkNull(egl.checkNull(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']).testMethodNames, "testMethodNames")[egl.checkNull(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']).testMethodNames.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']).testIndex, eze$$signature : "I;"}, false) - 1)];
+					egl.atLine(this.eze$$fileName,96,3334,50, this);
+					testId = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst'].testMethodNames, "testMethodNames")[egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst'].testMethodNames.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst'].testIndex, eze$$signature : "I;"}, false) - 1)];
 					egl.setLocalFunctionVariable("testId", testId, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,97,3387,23, this);
+					egl.atLine(this.eze$$fileName,97,3388,23, this);
 					this.nextTest();
-					egl.atLine(this.eze$$fileName,81,2544,871, this);
+					egl.atLine(this.eze$$fileName,81,2545,871, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -262,9 +235,9 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 			"caughtFailedAssertion": function(exp) {
 				try { egl.enter("caughtFailedAssertion",this,arguments);
 					egl.addLocalFunctionVariable("exp", exp, "org.eclipse.edt.eunit.runtime.AssertionFailedException", "exp");
-					egl.atLine(this.eze$$fileName,102,3543,53, this);
-					egl.eglx.lang.SysLib.writeStdout((("AssertionFail - ") + egl.checkNull(exp).message));
-					egl.atLine(this.eze$$fileName,100,3419,184, this);
+					egl.atLine(this.eze$$fileName,102,3544,53, this);
+					egl.eglx.lang.SysLib.writeStdout((("AssertionFail - ") + exp.message));
+					egl.atLine(this.eze$$fileName,100,3420,184, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -277,15 +250,15 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 					egl.addLocalFunctionVariable("exp", exp, "eglx.lang.AnyException", "exp");
 					var expMsg;
 					egl.addLocalFunctionVariable("expMsg", expMsg, "eglx.lang.EString", "expMsg");
-					egl.atLine(this.eze$$fileName,107,3714,46, this);
+					egl.atLine(this.eze$$fileName,107,3715,46, this);
 					expMsg = (("uncaught exception for: ") + this.getTestIdString());
 					egl.setLocalFunctionVariable("expMsg", expMsg, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,108,3765,80, this);
-					expMsg = ((expMsg) + ((((((((egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE) + "    => ")) + egl.checkNull(exp).messageID)) + ": ")) + egl.checkNull(exp).message));
+					egl.atLine(this.eze$$fileName,108,3766,80, this);
+					expMsg = ((expMsg) + ((((((((egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'].NEWLINE) + "    => ")) + exp.messageID)) + ": ")) + exp.message));
 					egl.setLocalFunctionVariable("expMsg", expMsg, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,111,3887,24, this);
+					egl.atLine(this.eze$$fileName,111,3888,24, this);
 					egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].error(expMsg);
-					egl.atLine(this.eze$$fileName,105,3608,310, this);
+					egl.atLine(this.eze$$fileName,105,3609,310, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -297,38 +270,38 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 				try { egl.enter("getBindingTypeString",this,arguments);
 					egl.addLocalFunctionVariable("bType", bType, "org.eclipse.edt.eunit.runtime.ServiceBindingType", "bType");
 					{
-						egl.atLine(this.eze$$fileName,115,3999,295, this);
-						egl.atLine(this.eze$$fileName,115,3999,295, this);
-						EzeLabel_eze_CaseLabel_0: if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEDICATED, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
+						egl.atLine(this.eze$$fileName,115,4000,295, this);
+						egl.atLine(this.eze$$fileName,115,4000,295, this);
+						EzeLabel_eze_CaseLabel_0: if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.org.eclipse.edt.eunit.runtime.ServiceBindingType.DEDICATED, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 							try{egl.enterBlock();
-								egl.atLine(this.eze$$fileName,117,4053,29, this);
+								egl.atLine(this.eze$$fileName,117,4054,29, this);
 								if (!egl.debugg) egl.leave();
 								return "DEDICATED_BINDING";
 							}finally{egl.exitBlock();}
 						}
 						else {
 							try{egl.enterBlock();
-								egl.atLine(this.eze$$fileName,118,4086,64, this);
-								if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEVELOP, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
+								egl.atLine(this.eze$$fileName,118,4087,64, this);
+								if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.org.eclipse.edt.eunit.runtime.ServiceBindingType.DEVELOP, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 									try{egl.enterBlock();
-										egl.atLine(this.eze$$fileName,119,4123,27, this);
+										egl.atLine(this.eze$$fileName,119,4124,27, this);
 										if (!egl.debugg) egl.leave();
 										return "DEVELOP_BINDING";
 									}finally{egl.exitBlock();}
 								}
 								else {
 									try{egl.enterBlock();
-										egl.atLine(this.eze$$fileName,120,4154,66, this);
-										if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEPLOYED, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
+										egl.atLine(this.eze$$fileName,120,4155,66, this);
+										if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.org.eclipse.edt.eunit.runtime.ServiceBindingType.DEPLOYED, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 											try{egl.enterBlock();
-												egl.atLine(this.eze$$fileName,121,4192,28, this);
+												egl.atLine(this.eze$$fileName,121,4193,28, this);
 												if (!egl.debugg) egl.leave();
 												return "DEPLOYED_BINDING";
 											}finally{egl.exitBlock();}
 										}
 										else {
 											try{egl.enterBlock();
-												egl.atLine(this.eze$$fileName,123,4238,48, this);
+												egl.atLine(this.eze$$fileName,123,4239,48, this);
 												if (!egl.debugg) egl.leave();
 												return "UNKNOWN Binding Type - NOT supported";
 											}finally{egl.exitBlock();}
@@ -338,7 +311,7 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 							}finally{egl.exitBlock();}
 						}
 					}
-					egl.atLine(this.eze$$fileName,114,3922,379, this);
+					egl.atLine(this.eze$$fileName,114,3923,379, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -421,17 +394,18 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 			"eze$$getChildVariables": function() {
 				var eze$$parent = this;
 				return [
-				{name: "ConstantsLib", value : egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'], type : "org.eclipse.edt.eunit.runtime.ConstantsLib", jsName : "egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']"},
 				{name: "LogResult", value : egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'], type : "org.eclipse.edt.eunit.runtime.LogResult", jsName : "egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']"},
+				{name: "ConstantsLib", value : egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'], type : "org.eclipse.edt.eunit.runtime.ConstantsLib", jsName : "egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']"},
 				{name: "bindingType", value : eze$$parent.bindingType, type : "org.eclipse.edt.eunit.runtime.ServiceBindingType", jsName : "bindingType"},
 				{name: "ms", value : eze$$parent.ms, type : "org.eclipse.edt.eunit.runtime.MultiStatus", jsName : "ms"},
 				{name: "testIndex", value : eze$$parent.testIndex, type : "eglx.lang.EInt", jsName : "testIndex"},
-				{name: "testMethodNames", value : eze$$parent.testMethodNames, type : "eglx.lang.EList<eglx.lang.EString>", jsName : "testMethodNames"},
-				{name: "runTestMtds", value : eze$$parent.runTestMtds, type : "eglx.lang.EList<org.eclipse.edt.eunit.runtime.runTestMethod>", jsName : "runTestMtds"},
+				{name: "testMethodNames", value : eze$$parent.testMethodNames, type : "eglx.lang.EList<eglx.lang.EString>", jsName : "!testMethodNames"},
+				{name: "runTestMtds", value : eze$$parent.runTestMtds, type : "eglx.lang.EList<org.eclipse.edt.eunit.runtime.runTestMethod>", jsName : "!runTestMtds"},
 				{name: "testLibName", value : eze$$parent.testLibName, type : "eglx.lang.EString", jsName : "testLibName"},
-				{name: "LibraryStartTests", value : eze$$parent.LibraryStartTests, type : "eglx.lang.EList<org.eclipse.edt.eunit.runtime.runTestMethod>", jsName : "LibraryStartTests"},
+				{name: "LibraryStartTests", value : eze$$parent.LibraryStartTests, type : "eglx.lang.EList<org.eclipse.edt.eunit.runtime.runTestMethod>", jsName : "!LibraryStartTests"},
 				{name: "libIndex", value : eze$$parent.libIndex, type : "eglx.lang.EInt", jsName : "libIndex"}
 				];
 			}
 		}
 	);
+});

@@ -195,7 +195,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		createSpacer(toolkit, parent, nColumnSpan);
 		
 		createSummaryLine(toolkit, parent, statisticCnt.getPassedCnt(), " PASSED.", getGreen(), true);
-		createSummaryLine(toolkit, parent, statisticCnt.getFailedCnt(), " FAILED.", getRed(), false);
+		createSummaryLine(toolkit, parent, statisticCnt.getFailedCnt() + statisticCnt.getBadCnt(), " FAILED.", getRed(), false);
 		createSummaryLine(toolkit, parent, statisticCnt.getExCnt(), " THREW EXCEPTION.", getPurple(), false);
 		createSummaryLine(toolkit, parent, statisticCnt.getNotRunCnt(), " SKIPPED.", getOrange(), false);
 				
@@ -252,7 +252,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		TextDataSet categoryValues = TextDataSetImpl.create( new String[]{
 				"Passed", "Failed", "Exception", "Skipped"} );//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		NumberDataSet seriesOneValues = NumberDataSetImpl.create( new double[]{
-				statisticCnt.getPassedCnt(), statisticCnt.getFailedCnt(), 
+				statisticCnt.getPassedCnt(), statisticCnt.getFailedCnt() + statisticCnt.getBadCnt(), 
 				statisticCnt.getExCnt(), statisticCnt.getNotRunCnt()
 		} );
 		

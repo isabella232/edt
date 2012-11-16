@@ -10,21 +10,22 @@
  *
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
+
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import eglx.rbd.StrLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
 import java.lang.Boolean;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import java.lang.Object;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.eunit.runtime.LogResult;
 import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyStruct;
 @SuppressWarnings("unused")
+
 @javax.xml.bind.annotation.XmlRootElement(name="MultiStatus")
 public class MultiStatus extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -44,9 +45,9 @@ public class MultiStatus extends ExecutableBase {
 	public int notRunCnt;
 	@org.eclipse.edt.javart.json.Json(name="firstFailedTestName", clazz=EString.class, asOptions={})
 	public String firstFailedTestName;
-	public StrLib eze_Lib_eglx_rbd_StrLib;
-	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
+	public StrLib eze_Lib_eglx_rbd_StrLib;
 	
 	public MultiStatus() {
 		super();
@@ -64,11 +65,11 @@ public class MultiStatus extends ExecutableBase {
 		notRunCnt = 0;
 		firstFailedTestName = "";
 	}
-	public StrLib eze_Lib_eglx_rbd_StrLib() {
-		if (eze_Lib_eglx_rbd_StrLib == null) {
-			eze_Lib_eglx_rbd_StrLib = (StrLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("eglx.rbd.StrLib");
+	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
+		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {
+			eze_Lib_org_eclipse_edt_eunit_runtime_LogResult = (LogResult)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.LogResult");
 		}
-		return eze_Lib_eglx_rbd_StrLib;
+		return eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	}
 	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
 		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
@@ -76,11 +77,11 @@ public class MultiStatus extends ExecutableBase {
 		}
 		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	}
-	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
-		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {
-			eze_Lib_org_eclipse_edt_eunit_runtime_LogResult = (LogResult)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.LogResult");
+	public StrLib eze_Lib_eglx_rbd_StrLib() {
+		if (eze_Lib_eglx_rbd_StrLib == null) {
+			eze_Lib_eglx_rbd_StrLib = (StrLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("eglx.rbd.StrLib");
 		}
-		return eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
+		return eze_Lib_eglx_rbd_StrLib;
 	}
 	public void addStatus(String testId) {
 		Status s = null;
@@ -107,6 +108,7 @@ public class MultiStatus extends ExecutableBase {
 						}
 						else {
 							badCnt += 1;
+							eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().logStdOut((((("Invalid test state (") + EString.asString(s.code))) + "). Verify that the test function indicates success or failure."));
 						}
 					}
 				}
@@ -120,5 +122,6 @@ public class MultiStatus extends ExecutableBase {
 		if (eze_compound_1) {
 			firstFailedTestName = testId;
 		}
+		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().clearStatus();
 	}
 }

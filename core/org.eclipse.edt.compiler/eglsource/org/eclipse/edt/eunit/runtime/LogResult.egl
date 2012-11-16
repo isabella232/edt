@@ -48,6 +48,10 @@ Library LogResult
 	
 	function clearResults()
 		outR.msg = "";
+		clearStatus();
+	end
+	
+	function clearStatus()
 		s.code = -1;
 		s.reason = "";
 	end
