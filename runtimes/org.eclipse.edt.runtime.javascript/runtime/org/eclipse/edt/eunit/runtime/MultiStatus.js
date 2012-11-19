@@ -9,7 +9,6 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-define(["org/eclipse/edt/eunit/runtime/LogResult", "org/eclipse/edt/eunit/runtime/ConstantsLib", "eglx/rbd/StrLib", "org/eclipse/edt/eunit/runtime/Status"],function(){
 	egl.defineClass('org.eclipse.edt.eunit.runtime', 'MultiStatus',
 	{
 		'eze$$fileName': 'org/eclipse/edt/eunit/runtime/MultiStatus.egl',
@@ -242,4 +241,3 @@ define(["org/eclipse/edt/eunit/runtime/LogResult", "org/eclipse/edt/eunit/runtim
 			}
 		}
 	);
-});

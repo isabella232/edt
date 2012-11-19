@@ -9,9 +9,6 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-define(["org/eclipse/edt/eunit/runtime/ConstantsLib", "org/eclipse/edt/eunit/runtime/AssertionFailedException", "org/eclipse/edt/eunit/runtime/Log", "org/eclipse/edt/eunit/runtime/Status"],function(){
-	if (egl.eze$$userLibs) egl.eze$$userLibs.push('org.eclipse.edt.eunit.runtime.LogResult');
-	else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.LogResult'];
 	egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 	{
 		'eze$$fileName': 'org/eclipse/edt/eunit/runtime/LogResult.egl',
@@ -1101,4 +1098,3 @@ define(["org/eclipse/edt/eunit/runtime/ConstantsLib", "org/eclipse/edt/eunit/run
 			}
 		}
 	);
-});
