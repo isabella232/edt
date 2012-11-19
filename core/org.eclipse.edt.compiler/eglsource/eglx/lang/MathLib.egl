@@ -75,7 +75,7 @@ externalType MathLib type NativeType
 	static function min(val1 smallfloat in, val2 smallfloat in) returns(smallfloat);
 	static function min(val1 decimal in, val2 decimal in) returns(decimal);
 
-	static function modf(val1 float in, val2 bigint out) returns (float);
+	static function modf(val1 float in, val2 float out) returns (float);
 	
 	static function pow(value float in, exponent float in) returns(float);
 
