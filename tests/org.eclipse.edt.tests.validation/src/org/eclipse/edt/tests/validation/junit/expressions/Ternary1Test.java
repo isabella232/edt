@@ -14,7 +14,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * s = true ? i : ba;
+	 * s = true ?? i : ba;
 	 * 1 validation message is expected.
 	 * It is expected to contain "string and boolean[] are not compatible types in the expression s = ba".
 	 */
@@ -27,7 +27,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * s = true ? ba : i;
+	 * s = true ?? ba : i;
 	 * 1 validation message is expected.
 	 * It is expected to contain "string and boolean[] are not compatible types in the expression s = ba".
 	 */
@@ -40,7 +40,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * s = true ? i : i;
+	 * s = true ?? i : i;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine31() {
@@ -49,7 +49,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? (true ? i : ba)
+	 * ?? (true ?? i : ba)
 	 * 1 validation message is expected.
 	 * It is expected to contain "string and boolean[] are not compatible types in the expression s = ba".
 	 */
@@ -62,7 +62,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * : (true ? ba : i);
+	 * : (true ?? ba : i);
 	 * 1 validation message is expected.
 	 * It is expected to contain "string and boolean[] are not compatible types in the expression s = ba".
 	 */
@@ -75,7 +75,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = true ? myrec : ba;
+	 * a = true ?? myrec : ba;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine35() {
@@ -84,7 +84,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = true ? doNotExist : ba;
+	 * a = true ?? doNotExist : ba;
 	 * 1 validation message is expected.
 	 * It is expected to contain "doNotExist cannot be resolved.".
 	 */
@@ -97,7 +97,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getValue()
+	 * ?? getValue()
 	 * 1 validation message is expected.
 	 * It is expected to contain "rec and int are not compatible types in the expression myrec = getValue()".
 	 */
@@ -123,7 +123,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ba = true ? ba.appendElement(true) : ba :: true;
+	 * ba = true ?? ba.appendElement(true) : ba :: true;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine40() {
@@ -132,7 +132,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * d = true ? d : f1;
+	 * d = true ?? d : f1;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine41() {
@@ -141,7 +141,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ba ::= true ? ba[2] : ba :: true;
+	 * ba ::= true ?? ba[2] : ba :: true;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine43() {
@@ -150,7 +150,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? i
+	 * ?? i
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean[] and int are not compatible types in the expression ba ::= i".
 	 */
@@ -176,7 +176,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? doNotExist
+	 * ?? doNotExist
 	 * 1 validation message is expected.
 	 * It is expected to contain "doNotExist cannot be resolved.".
 	 */
@@ -202,7 +202,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setValueIn(true ? s[1:2] : s[1:2]);
+	 * setValueIn(true ?? s[1:2] : s[1:2]);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine55() {
@@ -211,7 +211,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? s[1:2]
+	 * ?? s[1:2]
 	 * 1 validation message is expected.
 	 * It is expected to contain "Substring access expressions are not valid as the target of a move or assignment, or as arguments to INOUT or OUT function parameters.".
 	 */
@@ -237,7 +237,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? s[1:2]
+	 * ?? s[1:2]
 	 * 1 validation message is expected.
 	 * It is expected to contain "Substring access expressions are not valid as the target of a move or assignment, or as arguments to INOUT or OUT function parameters.".
 	 */
@@ -263,7 +263,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? null
+	 * ?? null
 	 * 1 validation message is expected.
 	 * It is expected to contain "Error in argument null in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
 	 */
@@ -289,7 +289,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setValueInNullable(true ? null : null);
+	 * setValueInNullable(true ?? null : null);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine67() {
@@ -298,7 +298,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? myrec{}
+	 * ?? myrec{}
 	 * 1 validation message is expected.
 	 */
 	public void testLine71() {
@@ -316,7 +316,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setValueIn(true ? getValue() : i * 7);
+	 * setValueIn(true ?? getValue() : i * 7);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine75() {
@@ -325,7 +325,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getValue()
+	 * ?? getValue()
 	 * 1 validation message is expected.
 	 * It is expected to contain "Error in argument getValue() in function invocation setValueOut. This type of argument requires that the parameter be defined with the IN modifier.".
 	 */
@@ -351,7 +351,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getValue()
+	 * ?? getValue()
 	 * 1 validation message is expected.
 	 * It is expected to contain "Error in argument getValue() in function invocation setValueInout. This type of argument requires that the parameter be defined with the IN modifier.".
 	 */
@@ -377,7 +377,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setValueIn(true ? 10 : constRec.i);
+	 * setValueIn(true ?? 10 : constRec.i);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine84() {
@@ -386,7 +386,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? 10
+	 * ?? 10
 	 * 1 validation message is expected.
 	 * It is expected to contain "Error in argument 10 in function invocation setValueOut. Constants, literals and literal expressions are not valid for use with parameters defined with the OUT modifier.".
 	 */
@@ -412,7 +412,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? 10
+	 * ?? 10
 	 * 1 validation message is expected.
 	 * It is expected to contain "Error in argument 10 in function invocation setValueInout. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
 	 */
@@ -438,7 +438,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? 10
+	 * ?? 10
 	 * 1 validation message is expected.
 	 * It is expected to contain "Error in argument 10 in function invocation setValueInoutConst. For parameters with the INOUT modifier, literals and literal expressions are not valid and argument constants are only valid if the parameter is also constant.".
 	 */
@@ -460,7 +460,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setTernaryIn(true ? this : this);
+	 * setTernaryIn(true ?? this : this);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine96() {
@@ -469,7 +469,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? super
+	 * ?? super
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"super\" is not valid as a function argument.".
 	 */
@@ -495,7 +495,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setStringIn(true ? a : a);
+	 * setStringIn(true ?? a : a);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine100() {
@@ -504,7 +504,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setArrayIn(true ? a : a);
+	 * setArrayIn(true ?? a : a);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine101() {
@@ -513,7 +513,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? i
+	 * ?? i
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument i cannot be passed to the in or out parameter b of the function setBooleanIn. The types int and boolean are not assignment compatible.".
 	 */
@@ -539,7 +539,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? this
+	 * ?? this
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier.".
 	 */
@@ -565,7 +565,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? super
+	 * ?? super
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"super\" is not valid as a function argument.".
 	 */
@@ -591,7 +591,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? dec1
+	 * ?? dec1
 	 * 0 validation messages are expected.
 	 */
 	public void testLine114() {
@@ -609,7 +609,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? dec1
+	 * ?? dec1
 	 * 0 validation messages are expected.
 	 */
 	public void testLine117() {
@@ -627,7 +627,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setStringOut(true ? a : a);
+	 * setStringOut(true ?? a : a);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine119() {
@@ -636,7 +636,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * setArrayOut(true ? a : a);
+	 * setArrayOut(true ?? a : a);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine120() {
@@ -645,7 +645,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? i
+	 * ?? i
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument i cannot be passed to the in or out parameter b of the function setBooleanOut. The types int and boolean are not assignment compatible.".
 	 */
@@ -671,7 +671,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? this
+	 * ?? this
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"this\" is not valid for use with parameters defined with the INOUT or OUT modifier.".
 	 */
@@ -697,7 +697,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? super
+	 * ?? super
 	 * 1 validation message is expected.
 	 * It is expected to contain "The expression \"super\" is not valid as a function argument.".
 	 */
@@ -723,7 +723,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? s
+	 * ?? s
 	 * 0 validation messages are expected.
 	 */
 	public void testLine133() {
@@ -745,7 +745,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? s
+	 * ?? s
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument s cannot be passed to the inOut parameter s of the function setStringInoutNullable. The types string and string? are not reference compatible.".
 	 */
@@ -767,7 +767,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? ba
+	 * ?? ba
 	 * 1 validation message is expected.
 	 * It is expected to contain "The argument ba cannot be passed to the inOut parameter s of the function setStringInout. The types boolean[] and string are not reference compatible.".
 	 */
@@ -793,7 +793,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * if (true) return true ? i : ba; end
+	 * if (true) return true ?? i : ba; end
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean[] does not match the type string which the function returns.".
 	 */
@@ -806,7 +806,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * if (true) return true ? ba : i; end
+	 * if (true) return true ?? ba : i; end
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean[] does not match the type string which the function returns.".
 	 */
@@ -819,7 +819,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * if (true) return true ? i : i; end
+	 * if (true) return true ?? i : i; end
 	 * 0 validation messages are expected.
 	 */
 	public void testLine146() {
@@ -828,7 +828,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? (true ? i : ba)
+	 * ?? (true ?? i : ba)
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean[] does not match the type string which the function returns.".
 	 */
@@ -841,7 +841,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * : (true ? ba : i)
+	 * : (true ?? ba : i)
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type boolean[] does not match the type string which the function returns.".
 	 */
@@ -854,7 +854,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * if (true) return true ? myrec : ba; end
+	 * if (true) return true ?? myrec : ba; end
 	 * 0 validation messages are expected.
 	 */
 	public void testLine154() {
@@ -863,7 +863,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * if (true) return true ? doNotExist : ba; end
+	 * if (true) return true ?? doNotExist : ba; end
 	 * 1 validation message is expected.
 	 * It is expected to contain "doNotExist cannot be resolved.".
 	 */
@@ -876,7 +876,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getValue()
+	 * ?? getValue()
 	 * 1 validation message is expected.
 	 * It is expected to contain "The type int does not match the type rec which the function returns.".
 	 */
@@ -902,7 +902,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * if (true) return true ? ba.appendElement(true) : ba :: true; end
+	 * if (true) return true ?? ba.appendElement(true) : ba :: true; end
 	 * 0 validation messages are expected.
 	 */
 	public void testLine166() {
@@ -911,7 +911,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * return true ? d : f1;
+	 * return true ?? d : f1;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine170() {
@@ -920,7 +920,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? i : ba) as string;
+	 * a = (true ?? i : ba) as string;
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
 	 */
@@ -933,7 +933,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? ba : i) as string;
+	 * a = (true ?? ba : i) as string;
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
 	 */
@@ -946,7 +946,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? i : i) as string;
+	 * a = (true ?? i : i) as string;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine176() {
@@ -955,7 +955,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? myrec : ba) as any;
+	 * a = (true ?? myrec : ba) as any;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine177() {
@@ -964,7 +964,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? doNotExist : ba) as any;
+	 * a = (true ?? doNotExist : ba) as any;
 	 * 1 validation message is expected.
 	 * It is expected to contain "doNotExist cannot be resolved.".
 	 */
@@ -977,7 +977,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? (true ? i : ba)
+	 * ?? (true ?? i : ba)
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
 	 */
@@ -990,7 +990,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * : (true ? ba : i)
+	 * : (true ?? ba : i)
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean[] and string are not compatible types in the expression ba as string".
 	 */
@@ -1003,7 +1003,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getValue()
+	 * ?? getValue()
 	 * 1 validation message is expected.
 	 * It is expected to contain "int and rec are not compatible types in the expression getValue() as rec".
 	 */
@@ -1029,7 +1029,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? ba.appendElement(true)
+	 * ?? ba.appendElement(true)
 	 * 0 validation messages are expected.
 	 */
 	public void testLine188() {
@@ -1047,7 +1047,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? d : f1) as del1;
+	 * a = (true ?? d : f1) as del1;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine191() {
@@ -1056,7 +1056,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = ba :: (true ? true : ba[1]);
+	 * a = ba :: (true ?? true : ba[1]);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine195() {
@@ -1065,7 +1065,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = ba :: (true ? true && false : ba :: true);
+	 * a = ba :: (true ?? true && false : ba :: true);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine196() {
@@ -1074,7 +1074,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = ba :: (true ? true ? false : false : false);
+	 * a = ba :: (true ?? true ?? false : false : false);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine197() {
@@ -1083,7 +1083,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = i * (true ? s : i);
+	 * a = i * (true ?? s : i);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine198() {
@@ -1092,7 +1092,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = b * (true ? s : i);
+	 * a = b * (true ?? s : i);
 	 * 2 validation messages are expected.
 	 * One message is expected to contain "No operation is defined for expressions b and s with the * operator in the expression b * s.".
 	 * One message is expected to contain "No operation is defined for expressions b and i with the * operator in the expression b * i.".
@@ -1110,7 +1110,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = s + true ? true : true;
+	 * a = s + true ?? true : true;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine200() {
@@ -1119,7 +1119,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * i = i * 76 - (true ? 22 : i - 99) % (false ? getValue() * 88 : i >> 2);
+	 * i = i * 76 - (true ?? 22 : i - 99) % (false ?? getValue() * 88 : i >> 2);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine201() {
@@ -1128,7 +1128,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = ba :: (true ? d : true);
+	 * a = ba :: (true ?? d : true);
 	 * 1 validation message is expected.
 	 * It is expected to contain "boolean[] and del1 are not compatible types in the expression ba :: d".
 	 */
@@ -1141,7 +1141,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * for (i from true ? 10 : 20 to true ? 10 : 20 by true ? 10 : 20) end
+	 * for (i from true ?? 10 : 20 to true ?? 10 : 20 by true ?? 10 : 20) end
 	 * 0 validation messages are expected.
 	 */
 	public void testLine206() {
@@ -1150,7 +1150,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * for (i from true ? getValue() : getValue() to true ? getValue() : getValue() by true ? getValue() : getValue()) end
+	 * for (i from true ?? getValue() : getValue() to true ?? getValue() : getValue() by true ?? getValue() : getValue()) end
 	 * 0 validation messages are expected.
 	 */
 	public void testLine207() {
@@ -1159,7 +1159,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * for (i from true ? true ? getValue() : getValue() : true ? getValue() : getValue()
+	 * for (i from true ?? true ?? getValue() : getValue() : true ?? getValue() : getValue()
 	 * 0 validation messages are expected.
 	 */
 	public void testLine208() {
@@ -1168,7 +1168,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * to true ? true ? getValue() : getValue() : true ? getValue() : getValue()
+	 * to true ?? true ?? getValue() : getValue() : true ?? getValue() : getValue()
 	 * 0 validation messages are expected.
 	 */
 	public void testLine209() {
@@ -1177,7 +1177,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * by true ? true ? getValue() : getValue() : true ? getValue() : getValue()) end
+	 * by true ?? true ?? getValue() : getValue() : true ?? getValue() : getValue()) end
 	 * 0 validation messages are expected.
 	 */
 	public void testLine210() {
@@ -1186,7 +1186,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1212,7 +1212,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1238,7 +1238,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1264,7 +1264,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1290,7 +1290,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement start must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1316,7 +1316,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1342,7 +1342,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement end must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1368,7 +1368,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1394,7 +1394,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ? getBoolean()
+	 * ?? getBoolean()
 	 * 1 validation message is expected.
 	 * It is expected to contain "For statement delta must be an integer literal, integer item or numeric expression of integers.".
 	 */
@@ -1456,7 +1456,7 @@ public class Ternary1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * a = (true ? false : true)
+	 * a = (true ?? false : true)
 	 * 0 validation messages are expected.
 	 */
 	public void testLine257() {
@@ -1536,5 +1536,32 @@ public class Ternary1Test extends ValidationTestCase {
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "null and boolean are not compatible types in the expression null" );
 		if( messageWithSubstring == null ) fail( "No message with substring \"null and boolean are not compatible types in the expression null\" was issued." );
+	}
+
+	/*
+	 * a = new boolean ? true : false;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine276() {
+		List messages = getMessagesAtLine( 276 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = s isa string ? true : false;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine277() {
+		List messages = getMessagesAtLine( 277 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * a = b as boolean ? true : false;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine278() {
+		List messages = getMessagesAtLine( 278 );
+		assertEquals( 0, messages.size() );
 	}
 }

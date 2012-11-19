@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.edt.ide.core.EDT_CONTAINER/javagen"/>
 	<classpathentry kind="src" path="generatedJava"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.eclipse.edt.jtopen.samples"/>
-	<classpathentry kind="src" path="/org.eclipse.edt.rui.widgets_0.8.1"/>
 	<classpathentry kind="con" path="org.eclipse.edt.ide.core.EDT_CONTAINER/org.eclipse.edt.ide.jtopen.ibmiContainer"/>
+	<classpathentry kind="src" path="/org.eclipse.edt.rui.widgets_0.8.2"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

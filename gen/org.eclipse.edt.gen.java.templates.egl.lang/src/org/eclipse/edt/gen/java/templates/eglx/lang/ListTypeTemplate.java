@@ -16,13 +16,8 @@ import java.util.List;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.InvocationExpression;
-import org.eclipse.edt.mof.egl.NewExpression;
-import org.eclipse.edt.mof.egl.NullLiteral;
-import org.eclipse.edt.mof.egl.TimestampType;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ListTypeTemplate extends JavaTemplate 
@@ -37,7 +32,13 @@ public class ListTypeTemplate extends JavaTemplate
 		{
 			ctx.invoke( genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
 			out.print( ".ezeNew(" );
-			ctx.invoke( genExpression, expr.getArguments().get( 0 ), ctx, out );
+
+			// The size must be generated as an int.
+			AsExpression asInt = ctx.getFactory().createAsExpression();
+			asInt.setEType( IRUtils.getEGLPrimitiveType( MofConversion.Type_Int ) );
+			asInt.setObjectExpr( expr.getArguments().get( 0 ) );
+			ctx.invoke( genExpression, asInt, ctx, out );
+			
 			out.print( ',' );
 			factory( (ArrayType)expr.getType(), ctx, out, expr.getArguments(), 1 );
 			out.print( ')' );
@@ -58,7 +59,7 @@ public class ListTypeTemplate extends JavaTemplate
 			ctx.invoke( genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
 			out.print( ".ezeNew(" );
 			ctx.invoke( genRuntimeTypeName, elementType.getClassifier(), ctx, out, TypeNameKind.JavaObject );
-			ctx.invoke(genRuntimeTypeExtension, elementType.getClassifier(), ctx, out);
+			ctx.invoke( genRuntimeTypeExtension, elementType.getClassifier(), ctx, out );
 			out.print( ".class)" );
 		}
 	}

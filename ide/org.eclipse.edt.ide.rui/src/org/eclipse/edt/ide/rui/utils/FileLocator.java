@@ -211,11 +211,16 @@ public abstract class FileLocator {
 						is.readFully(bytes);
 						is.close();
 						os.write(bytes);
-						os.flush();
 					} catch (FileNotFoundException e) {
 					} catch (IOException e) {
 					}
 				}
+			}
+		}
+		if(os != null){
+			try {
+				os.close();
+			} catch (IOException e) {
 			}
 		}
 

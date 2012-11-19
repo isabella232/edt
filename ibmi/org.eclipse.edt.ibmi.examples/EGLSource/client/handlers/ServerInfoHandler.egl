@@ -1,8 +1,13 @@
 package client.handlers;
 
-import org.eclipse.edt.rui.infobus.infobus;
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.TextArea;
+import org.eclipse.edt.rui.widgets.TextField;
+import common.Constants;
 import common.ServiceInfoRecord;
-import common.constants;
+import eglx.http.HttpProxy;
+import eglx.http.IHttp;
+import eglx.services.ServiceInvocationException;
 import server.ServerInfo;
 
 // basic library

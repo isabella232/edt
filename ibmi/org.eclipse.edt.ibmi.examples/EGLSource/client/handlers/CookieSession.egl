@@ -1,6 +1,9 @@
 package client.handlers;
 
-import common.Constants;
+import eglx.http.IHttp;
+import eglx.http.Response;
+import eglx.lang.OrderingKind;
+import eglx.rbd.StrLib;
 
 // basic library
 library CookieSession
@@ -62,7 +65,7 @@ library CookieSession
 		//If there is no Cookie, Cookie is added with the JSESSIONID as the value. 
 		if(httpVar != null)
 			if(httpVar.getRequest().headers == null)
-				httpVar.getRequest().headers = new dictionary(true, true);
+				httpVar.getRequest().headers = new dictionary(true, OrderingKind.byInsertion);
 			end
 			cookieString string;
 			if(httpVar.getRequest().headers.containsKey(KEY_COOKIE))

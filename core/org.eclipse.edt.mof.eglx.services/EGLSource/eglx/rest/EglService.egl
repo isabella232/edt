@@ -23,5 +23,4 @@ Record EglService type Annotation
 	requestContentType string?;//default based on encoding
 //	responseFormat eglx.services.Encoding?;
 	responseCharset string?;
-	responseContentType string?;//default based on encoding
 end

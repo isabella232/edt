@@ -13,12 +13,9 @@ package eglx.xml.binding.annotation;
 
 Record XMLRootElement type Annotation
 { targets = [ 
-		ElementKind.libraryPart,
-		ElementKind.programPart,
 		ElementKind.handlerPart,
 		ElementKind.recordPart,
-		ElementKind.servicePart,
-		ElementKind.interfacePart
+		ElementKind.ClassPart
  ]}
   name string = "##default";
   namespace string = "##default";

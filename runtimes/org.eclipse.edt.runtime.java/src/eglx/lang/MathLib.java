@@ -443,13 +443,13 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Stores the integral part of <code>op1</code> in <code>op2</code> and the fractional part in <code>result</code>
 	 */
-	public static double modf(double numericField1, AnyBoxedObject<Long> numericField2) {
+	public static double modf(double numericField1, AnyBoxedObject<Double> numericField2) {
 		// Get the number and split it.
 		BigDecimal bd = new BigDecimal(numericField1);
 		BigInteger intPart = bd.toBigInteger();
+		// Store the integral part in numericField2.
+		numericField2.ezeCopy(intPart.doubleValue());
 		BigDecimal fractPart = new BigDecimal(intPart).subtract(bd).negate();
-		// Store the integral part in numericField2. If numericField2 is a hex
-		numericField2.ezeCopy(intPart.longValue());
 		return fractPart.doubleValue();
 	}
 

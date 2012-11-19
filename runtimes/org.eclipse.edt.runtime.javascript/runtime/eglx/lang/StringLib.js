@@ -15,13 +15,13 @@ egl.defineClass( "eglx.lang", "StringLib", {
 });
 
 
-egl.eglx.lang.StringLib["getNextToken"] = function(/*string*/source, /*int*/
-		index, /*string*/delimiters, endAssign) {
-	var start = index.ezeUnbox ? index.ezeUnbox() : index;
+egl.eglx.lang.StringLib["getNextToken"] = function(/*string*/source, /*int*/index,
+		/*string*/delimiters) {
+	var start = index.ezeUnbox();
 	var searchEnd = source.length;
 	// Validate the substring index.
 	if (start < 1 || start > searchEnd) {
-		throw egl.createInvalidIndexException("CRRUI2021E", [ index ], index);
+		throw egl.createInvalidIndexException("CRRUI2021E", [ start ], start);
 	}
 	// Search the substring for tokens. We don't use a
 	// java.util.StringTokenizer because we need to know the index of
@@ -35,7 +35,7 @@ egl.eglx.lang.StringLib["getNextToken"] = function(/*string*/source, /*int*/
 	// If we're at the end of the substring, the search failed.
 	if (tokenStart >= searchEnd) {
 		// Store the end of the token in index.
-		index.ezeCopy ? index.ezeCopy(tokenEnd + 1) : "";
+		index.ezeCopy(tokenEnd + 1);
 		return null;
 	}
 	// Now we know we've found the beginning of a token. Find its end.
@@ -45,39 +45,32 @@ egl.eglx.lang.StringLib["getNextToken"] = function(/*string*/source, /*int*/
 		tokenEnd++;
 	}
 	// Store the end of the token in index.
-	index.ezeCopy ? index.ezeCopy(tokenEnd + 1) : "";
-	if ( endAssign ) {
-		endAssign( source.substring(tokenStart), tokenEnd );
-	}
+	index.ezeCopy(tokenEnd + 1);
 	// Return the token.
 	return source.substring(tokenStart, tokenEnd);
 };
 
-egl.eglx.lang.StringLib["getTokenCount"] = function(/*string*/source, /*string*/
-		delimiters) {
-	//Returns the number of tokens in a source string by simulating the getTokenCount function.
-	var index = 1;
-	var tokens;
-	var next;
-	var endAssign = function(updatedsource, updatedindex) {
-		source = updatedsource;
-		index = updatedindex;
-	};
+egl.eglx.lang.StringLib["getTokenCount"] = function(/*string*/source, /*string*/delimiters) {
+	//Returns the number of tokens in a source string by simulating the getNextToken function.
+	var index = egl.eglx.lang.EAny.ezeWrap(1);
+	var tokens = -1;
+	var nextToken;
 
 	try {
-		for (tokens = 0; tokens < source.length; tokens++) {
-			next = egl.eglx.lang.StringLib.getNextToken(source, index, delimiters, endAssign);
+		do {
+			tokens++;
+			nextToken = egl.eglx.lang.StringLib.getNextToken(source, index, delimiters);
 		}
+		while(nextToken);
 	} catch (exception) {
 		//out of tokens
-	} finally {
-		return tokens;
 	}
+	return tokens;
 };
 
 egl.eglx.lang.StringLib["fromCharCode"] = function(/*integer*/i) {
 	if ((i >= 0) && (i<= 65535))
-		return String.fromCharCode(i); // TODO should we simply alias somehow?
+		return String.fromCharCode(i);
 	else 
 		throw new egl.eglx.lang.InvalidArgumentException();
 };
@@ -109,18 +102,20 @@ egl.eglx.lang.StringLib["format"] = function(x, b) {
 	var kind;
 	
 	if ( !x.eze$$signature ) {
-		return egl.eglx.lang.StringLib.formatTimestamp( x, b );
-	}
-
-	var firstChar = x.eze$$signature.charAt(0);
-	var firstCharIdx = 0;
-	if (firstChar !== '?') {
-		kind = firstChar;
+		if ( x instanceof egl.javascript.BigDecimal ) {
+			kind = 'd';
+		} else {
+			kind = 'J';
+		}
 	} else {
-		kind = x.eze$$signature.charAt(1);
-		firstCharIdx = 1;
+		var firstChar = x.eze$$signature.charAt(0);
+		if (firstChar !== '?') {
+			kind = firstChar;
+		} else {
+			kind = x.eze$$signature.charAt(1);
+		}
+		x = x.eze$$value;
 	}
-	x = x.eze$$value;
 
 	switch (kind) {
 	case 'I':
@@ -132,8 +127,6 @@ egl.eglx.lang.StringLib["format"] = function(x, b) {
 	case 'F':
 	case 'f':
 		return egl.eglx.lang.StringLib.fmtNumFloat( x, b, new egl.eglx.lang.stringlib.LocalizedText() );
-//	case 'd':
-//		return egl.eglx.lang.StringLib.fmtNumDouble( x, b, new egl.eglx.lang.stringlib.LocalizedText() );
 	case 'K':
 		return egl.eglx.lang.StringLib.formatDate( x, b );
 	case 'J':

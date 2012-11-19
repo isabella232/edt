@@ -386,7 +386,7 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 				case GENWS_SOAPnREST:
 					//need to create a Restservice
 					int implType = IEGLSearchConstants.SERVICE;
-					if (rs.getParameters() != null) {
+//					if (rs.getParameters() != null) {
 						//TODO SOAP not yet supported
 //						String val = EGLDDRootHelper.getParameterValue(ws.getParameters(), Webservice.ATTRIBUTE_SERVICE_SOAP_implType);
 //						if (val != null) {
@@ -396,7 +396,7 @@ public class EGLDDWebServicesBlock extends EGLDDBaseBlock {
 //							catch (NumberFormatException e) {
 //							}
 //						}
-					}
+//					}
 					Service newrs = createNewRestService(impl, true, implType);
 					rowitem.restservice = newrs;
 					break;

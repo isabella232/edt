@@ -2,14 +2,14 @@ package client.handlers;
 
 // RUI Widget
 
-import org.eclipse.edt.rui.widgets.DataGrid;
-import org.eclipse.edt.rui.widgets.DataGridUtil;
 import org.eclipse.edt.rui.widgets.GridLayout;
-import org.eclipse.edt.rui.widgets.TextLabel;
 import org.eclipse.edt.rui.widgets.GridLayoutData;
-import org.eclipse.edt.rui.widgets.TextField;
-import org.eclipse.edt.rui.widgets.TextArea;
 import org.eclipse.edt.rui.widgets.GridLayoutLib;
+import org.eclipse.edt.rui.widgets.TextArea;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEWidget;
 
 //
 //

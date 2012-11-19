@@ -98,7 +98,7 @@ public class JavaScriptGenerator extends Generator {
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
-				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
+				EGLMessage message2 = EGLMessage.createEGLStackTraceMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
 					e, details2, context.getLastStatementLocation());
 				context.getMessageRequestor().addMessage(message2);
 			}

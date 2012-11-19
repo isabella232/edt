@@ -62,8 +62,10 @@ public abstract class ServiceProxyFunctionValidator extends AbstractFunctionVali
 			if (part instanceof Service) {
 				return;
 			}
-			if (part instanceof Handler && ((Handler) part).getStereotype() == null) {
-				//must be basic handler!
+			if (part instanceof org.eclipse.edt.mof.egl.Class) {
+				return;
+			}
+			if (part instanceof Handler) {
 				return;
 			}
 		}

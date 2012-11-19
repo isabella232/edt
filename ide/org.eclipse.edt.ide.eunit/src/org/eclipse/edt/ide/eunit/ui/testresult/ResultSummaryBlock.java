@@ -138,12 +138,12 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 		}
 		
 		/**
-		 * If any failed, return ConstantUtil.FAILED.  Otherwise, if any got an
+		 * If any failed or were bad, return ConstantUtil.FAILED.  Otherwise, if any got an
 		 * exception, return ConstantUtil.EXCEPTION.  Otherwise, if any were
 		 * skipped, return ConstantUtil.NOT_RUN.  Otherwise, ConstantUtil.PASSED.
 		 */
 		public int overallResult() {
-			if ( failedCnt > 0 )
+			if ( failedCnt > 0 || badCnt > 0 )
 				return ConstantUtil.FAILED;
 			if ( exCnt > 0 )
 				return ConstantUtil.EXCEPTION;
@@ -187,9 +187,8 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 
 		FormToolkit toolkit = managedForm.getToolkit();
 								
-		Section section = toolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
-		section.setText("shows the test result summary");
-		section.setDescription("click on the node to view the details");
+		Section section = toolkit.createSection(parent, Section.TITLE_BAR);
+		section.setText("Click on a node to view its details.");
 		section.marginHeight = 5;
 		section.marginWidth = 10;
 		
@@ -199,8 +198,6 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 		seprator.setLayoutData(gd);
 		
 		createResultSummarySection(managedForm, section, toolkit);
-		
-
 	}
 	
 	private void createResultSummarySection(final IManagedForm managedForm,

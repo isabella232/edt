@@ -2,6 +2,7 @@
 <eglpath>
 	<eglpathentry kind="src" path="EGLSource"/>
 	<eglpathentry kind="src" path="/org.eclipse.edt.jtopen.samples"/>
-	<eglpathentry kind="src" path="/org.eclipse.edt.rui.widgets_0.8.1"/>
+	<eglpathentry kind="src" path="/org.eclipse.edt.rui.widgets_0.8.2"/>
+	<eglpathentry kind="con" path="org.eclipse.edt.compiler.EDT_RUNTIME"/>
 	<eglpathentry path="EGLBin" kind="output"/>
 </eglpath>

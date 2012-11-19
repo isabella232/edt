@@ -10,26 +10,27 @@
  *
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
+
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import eglx.lang.SysLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import java.lang.Object;
 import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
-import eglx.http.IHttp;
+import eglx.lang.SysLib;
 import eglx.lang.AnyException;
-import eglx.services.ServiceInvocationException;
-import org.eclipse.edt.eunit.runtime.MultiStatus;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.eunit.runtime.ServiceBindingType;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
+import eglx.services.ServiceInvocationException;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyStruct;
+import org.eclipse.edt.eunit.runtime.MultiStatus;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import eglx.http.IHttp;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.eunit.runtime.ServiceBindingType;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
 @SuppressWarnings("unused")
+
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -126,7 +127,7 @@ public class TestListMgr extends ExecutableBase {
 		ms.addStatus(testId);
 		if ((testIndex < EList.getSize(runTestMtds))) {
 			testIndex += 1;
-			runTestMtds.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, runTestMtds)).invoke();
+			((org.eclipse.edt.javart.Delegate)runTestMtds.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, runTestMtds))).invoke();
 		}
 	}
 	private String getTestIdString() {
@@ -135,7 +136,7 @@ public class TestListMgr extends ExecutableBase {
 		String testId;
 		testId = ((testLibName) + "::");
 		if ((testIndex <= testMethodNamesSize)) {
-			testId += testMethodNames.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, testMethodNames));
+			testId += ((String)testMethodNames.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, testMethodNames)));
 		}
 		else {
 			if ((EInt.equals(testIndex, (testMethodNamesSize + 1)))) {
@@ -150,7 +151,7 @@ public class TestListMgr extends ExecutableBase {
 	public void nextTestLibrary() {
 		if ((libIndex < EList.getSize(LibraryStartTests))) {
 			libIndex += 1;
-			LibraryStartTests.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(libIndex - 1, LibraryStartTests)).invoke();
+			((org.eclipse.edt.javart.Delegate)LibraryStartTests.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(libIndex - 1, LibraryStartTests))).invoke();
 		}
 	}
 	public void handleCallBackException(AnyException exp, IHttp http) {
@@ -174,7 +175,7 @@ public class TestListMgr extends ExecutableBase {
 		}
 		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(str);
 		String testId;
-		testId = this.testMethodNames.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(this.testIndex - 1, this.testMethodNames));
+		testId = ((String)this.testMethodNames.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(this.testIndex - 1, this.testMethodNames)));
 		nextTest();
 	}
 	public void caughtFailedAssertion(AssertionFailedException exp) {

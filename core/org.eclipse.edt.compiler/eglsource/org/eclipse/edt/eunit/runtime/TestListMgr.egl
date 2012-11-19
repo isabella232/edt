@@ -46,7 +46,7 @@ Library TestListMgr
 	function nextTest()				
 		testId String = getTestIdString();
 		SysLib.writeStdOut("Running test: " + testId);
-		//culmulate the status of each test method result into the multiStatus for one library
+		//accumulate the status of each test method result into the multiStatus for one library
 		ms.addStatus(testId);			
 		if(testIndex < runTestMtds.getSize())
 			testIndex += 1;
