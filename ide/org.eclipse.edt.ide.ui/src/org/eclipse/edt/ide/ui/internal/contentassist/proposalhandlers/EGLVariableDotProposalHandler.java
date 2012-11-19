@@ -93,7 +93,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 				result.addAll(getFunctionProposals(
 					list,
 					UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, getTypeString(qualifierType)),
-					EGLCompletionProposal.RELEVANCE_MEDIUM));
+					EGLCompletionProposal.RELEVANCE_MEMBER));
 			}
 			
 			return result;
@@ -139,7 +139,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 													getDocumentOffset() - getPrefix().length(),
 													getPrefix().length(),
 													proposalString.length(),
-													EGLCompletionProposal.RELEVANCE_MEDIUM-1,
+													EGLCompletionProposal.RELEVANCE_MEMBER-1,
 													fieldImgKeyStr));
 						}
 			}

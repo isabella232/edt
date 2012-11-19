@@ -68,14 +68,6 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 
 	private static EGLPartialParser parser = new EGLPartialParser();
 	
-	static final String[] EGLCORE = new String[] {"egl", "core"}; //$NON-NLS-1$ //$NON-NLS-2$
-	static final String[] EGLJAVA = new String[] {"egl", "java"}; //$NON-NLS-1$ //$NON-NLS-2$
-	static final String[] EGLIDLJAVA = new String[] {"eglx", "java"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLJAVASCRIPT = new String[] {"eglx", "javascript"}; //$NON-NLS-1$ //$NON-NLS-2$
-	static final String[] EGLPLATFORM = new String[] {"egl", "platform"}; //$NON-NLS-1$ //$NON-NLS-2$
-	static final String[] EGLIOSQL = new String[] {"egl", "io", "sql"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	static final String[] EGLIOFILE = new String[] {"egl", "io", "file"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
 	protected ArrayList validStates = new ArrayList();
 	protected IEditorPart editor;
 
@@ -767,9 +759,23 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 	}
 
 	protected int getSearchConstantsForDeclarableParts() {
-		return IEGLSearchConstants.RECORD   |
-		       IEGLSearchConstants.SERVICE	| IEGLSearchConstants.INTERFACE |
-		       IEGLSearchConstants.DELEGATE	| IEGLSearchConstants.EXTERNALTYPE;
+		return 
+				IEGLSearchConstants.DELEGATE | 
+				IEGLSearchConstants.EXTERNALTYPE | 
+				IEGLSearchConstants.RECORD| 
+				IEGLSearchConstants.HANDLER | 
+				IEGLSearchConstants.INTERFACE | 
+				IEGLSearchConstants.ENUMERATION | 
+				IEGLSearchConstants.CLASS;
+		
+	}
+
+	protected int getSearchConstantsForPartsWithStaticMembers() {
+		return 
+				IEGLSearchConstants.LIBRARY | 
+				IEGLSearchConstants.EXTERNALTYPE | 
+				IEGLSearchConstants.CLASS;
+		
 	}
 
 	protected boolean isPlainAssignmentState(ParseStack parseStack) {

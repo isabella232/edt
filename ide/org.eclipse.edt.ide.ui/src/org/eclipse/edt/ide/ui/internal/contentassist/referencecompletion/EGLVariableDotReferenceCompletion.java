@@ -14,8 +14,6 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -79,7 +77,8 @@ public class EGLVariableDotReferenceCompletion extends EGLAbstractReferenceCompl
 					
 					private void handleQualifier(Expression qualifier) {
 						Type tBinding = qualifier.resolveType();
-						result.addAll(new EGLVariableDotProposalHandler(viewer, documentOffset, prefix, editor, tBinding, qualifier.resolveMember() != null, qualifier).getProposals(null));				
+						boolean isVariable = (qualifier.resolveMember() != null) || wantFieldsForType(qualifier);
+						result.addAll(new EGLVariableDotProposalHandler(viewer, documentOffset, prefix, editor, tBinding, isVariable, qualifier).getProposals(null));				
 					}
 				});
 			}

@@ -20,8 +20,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPredefinedDataTypeProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPrimitiveProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLAliasedTypeProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLStructureItemTypeRefereceCompletion extends EGLAbstractReferenceCompletion {
@@ -46,8 +45,7 @@ public class EGLStructureItemTypeRefereceCompletion extends EGLAbstractReference
 		}, new IBoundNodeProcessor() {
 			public void processBoundNode(Node boundNode) {
 
-				proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
-				proposals.addAll(new EGLPredefinedDataTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
+				proposals.addAll(new EGLAliasedTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
 				
 				while(!(boundNode instanceof File)) {
 					if(boundNode instanceof org.eclipse.edt.compiler.core.ast.Part) {

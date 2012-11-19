@@ -32,7 +32,7 @@ public class EGLCompletionProposal implements ICompletionProposal {
 	//higher relevance is sorted to the top
 	//most things should be be given medium by default
 	public static final int RELEVANCE_TEMPLATE_NEW_LINE = 90;
-	public static final int RELEVANCE_ARRAYDICTIONARY = 75;
+	public static final int RELEVANCE_MEMBER = 75;
 	public static final int RELEVANCE_KEYWORD = 70;
 	public static final int RELEVANCE_PRIMITIVE = 60;
 	public static final int RELEVANCE_PREDEFINED_TYPE = 60;

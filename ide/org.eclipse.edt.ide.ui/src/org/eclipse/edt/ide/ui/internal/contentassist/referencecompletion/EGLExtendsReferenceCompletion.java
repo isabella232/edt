@@ -25,11 +25,12 @@ public class EGLExtendsReferenceCompletion extends EGLAbstractReferenceCompletio
 	 */
 	protected void precompileContexts() {
 		addContext("package a; ExternalType a extends"); //$NON-NLS-1$
+		addContext("package a; Class a extends"); //$NON-NLS-1$
 	}
 
 	protected List returnCompletionProposals(ParseStack parseStack, String prefix, ITextViewer viewer, int documentOffset) {
 			//Get all interface proposals
-		return new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(IEGLSearchConstants.EXTERNALTYPE);
+		return new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(IEGLSearchConstants.EXTERNALTYPE|IEGLSearchConstants.CLASS);
 	}
 
 }

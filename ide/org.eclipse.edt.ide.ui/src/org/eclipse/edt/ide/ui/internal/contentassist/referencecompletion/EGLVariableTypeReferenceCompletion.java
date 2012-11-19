@@ -15,16 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
-import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPredefinedDataTypeProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPrimitiveProposalHandler;
-import org.eclipse.edt.ide.ui.internal.editor.util.EGLModelUtility;
-import org.eclipse.edt.mof.egl.FormGroup;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLAliasedTypeProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLVariableTypeReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -36,30 +31,25 @@ public class EGLVariableTypeReferenceCompletion extends EGLAbstractReferenceComp
 		addContext("package a; handler a var"); //$NON-NLS-1$
 		addContext("package a; handler a function a() var"); //$NON-NLS-1$
 		addContext("package a; externaltype a type b var"); //$NON-NLS-1$
+		addContext("package a; class a var"); //$NON-NLS-1$
 	}
 
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		int types = getTypes(viewer, documentOffset);
+		int types = getSearchConstantsForDeclarableParts();
 		if (types > 0 && (!inBlock(viewer, documentOffset) || canIncludeVariableDefinitionStatement(viewer, documentOffset))) {
 			proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(types));
-			proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(IEGLSearchConstants.HANDLER, "", new String[] {IEGLConstants.PROPERTY_RUIWIDGET, IEGLConstants.PROPERTY_RUIHANDLER, IEGLConstants.PROPERTY_ENTITY}));
 			getBoundASTNode(viewer, documentOffset, new String[] {"x; end", "x;", "x", ""}, new CompletedNodeVerifier() {
 				public boolean nodeIsValid(Node astNode) {
 					return astNode != null;
 				}
 			}, new IBoundNodeProcessor() {
 				public void processBoundNode(Node boundNode) {
-					proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
-					proposals.addAll(new EGLPredefinedDataTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
+					proposals.addAll(new EGLAliasedTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
 				}
 			});
 		}
 		return proposals;
 	}
 
-	private int getTypes(ITextViewer viewer, int documentOffset) {
-		final int[] result = new int[] {getSearchConstantsForDeclarableParts()};
-		return result[0];
-	}
 }

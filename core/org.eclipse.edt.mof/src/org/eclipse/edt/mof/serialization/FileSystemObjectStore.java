@@ -48,18 +48,25 @@ public class FileSystemObjectStore extends AbstractObjectStore implements Object
 	
 	public Deserializer createDeserializer(String typeSignature) {
 		String path = typeSignature.replace('.', '/') + getFileExtension();
-		Deserializer deserializer = null;
 		File typeFile = new File(root, path);
+
 		try {
-			FileInputStream fileIn = new FileInputStream(typeFile);
-			byte[] bytes = new byte[fileIn.available()];
-			fileIn.read(bytes);
+			byte[] bytes = null;
+			FileInputStream fileIn = null;
+			try {
+				fileIn = new FileInputStream(typeFile);
+				bytes = new byte[fileIn.available()];
+				fileIn.read(bytes);
+			} finally {
+				if (fileIn != null) {
+					fileIn.close();
+				}
+			}
 			ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-			deserializer = factory.createDeserializer(in, env);
-			return deserializer;
+			return factory.createDeserializer(in, env);
 		} catch (Exception e) {
 			return null;
-		}	
+		}
 	}
 
 	public void store(String typeSignature, Object obj) {

@@ -53,11 +53,7 @@ public class ReferenceProposalComputer extends EGLCompletionProposalComputer {
 
 		IReferenceCompletion[] referenceCompletions;
 		//Check if in a native library.  If so, give a restricted number of keyword proposals
-		if (inNativeFunction(context)){
-			referenceCompletions = EGLDefinedReferenceCompletions.getNativeLibraryDefinedCompletions();
-		}else{
-			referenceCompletions = EGLDefinedReferenceCompletions.getDefinedCompletions();
-		}
+		referenceCompletions = EGLDefinedReferenceCompletions.getDefinedCompletions();
 
 		// Then continue to pop the stack until we can shift ID
 		while (parseStack.availableContext() > 0) {

@@ -19,8 +19,7 @@ import org.eclipse.edt.compiler.core.ast.IsAExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPredefinedDataTypeProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPrimitiveProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLAliasedTypeProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLAsIsaOperatorReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -52,8 +51,7 @@ public class EGLAsIsaOperatorReferenceCompletion extends EGLAbstractReferenceCom
 			},
 			new IBoundNodeProcessor() {
 				public void processBoundNode(Node boundNode) {
-					proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
-					proposals.addAll(new EGLPredefinedDataTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
+					proposals.addAll(new EGLAliasedTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
 				}
 		});
 		return proposals;

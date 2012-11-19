@@ -940,7 +940,6 @@ public class UINlsStrings extends NLS {
 	public static String CAProposal_BooleanOperator;
 	public static String CAProposal_BytesLibrary;
 	public static String CAProposal_ColorState;
-	public static String CAProposal_ConditionalOperator;
 	public static String CAProposal_ConsoleField;
 	public static String CAProposal_ConsoleFieldFields;
 	public static String CAProposal_ConsoleLibrary;
@@ -985,6 +984,7 @@ public class UINlsStrings extends NLS {
 	public static String CAProposal_ModifiedState;
 	public static String CAProposal_NestedFunction;
 	public static String CAProposal_NumericConstant;
+	public static String CAProposal_Operator;
 	public static String CAProposal_ParameterDeclaration;
 	public static String CAProposal_ParameterDeclarationIn;
 	public static String CAProposal_PredefinedDataType;

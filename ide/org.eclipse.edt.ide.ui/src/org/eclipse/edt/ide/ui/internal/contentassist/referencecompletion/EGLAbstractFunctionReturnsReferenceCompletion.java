@@ -15,14 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPredefinedDataTypeProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPrimitiveProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLAliasedTypeProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLAbstractFunctionReturnsReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -40,14 +38,10 @@ public class EGLAbstractFunctionReturnsReferenceCompletion extends EGLAbstractRe
 	 */
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		final int partTypes[] = new int[] {IEGLSearchConstants.DELEGATE | IEGLSearchConstants.EXTERNALTYPE | IEGLSearchConstants.RECORD| IEGLSearchConstants.HANDLER | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.SERVICE | IEGLSearchConstants.ENUMERATION | IEGLSearchConstants.CLASS};
+		final int partTypes[] = new int[] {getSearchConstantsForDeclarableParts()};
 		Node partNode = getPart(viewer, documentOffset);
 		partNode.accept(new DefaultASTVisitor() {
 			public boolean visit(Service service) {
-				partTypes[0] = IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.RECORD;
-				return false;
-			}
-			public boolean visit(Interface interfacex) {
 				partTypes[0] = IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.RECORD;
 				return false;
 			}
@@ -58,8 +52,7 @@ public class EGLAbstractFunctionReturnsReferenceCompletion extends EGLAbstractRe
 			}
 		}, new IBoundNodeProcessor() {
 			public void processBoundNode(Node boundNode) {
-				proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
-				proposals.addAll(new EGLPredefinedDataTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());				
+				proposals.addAll(new EGLAliasedTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());
 			}
 		});
 		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(partTypes[0]));

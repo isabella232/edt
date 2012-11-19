@@ -20,6 +20,11 @@ import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLSQLWithStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -47,31 +52,45 @@ public class EGLSQLWithStatementReferenceCompletion extends EGLAbstractReference
 		final String prefix,
 		final ITextViewer viewer,
 		final int documentOffset) {
-		final ArrayList result = new ArrayList();
+		final ArrayList proposals = new ArrayList();
 		String message;
 		int prefixLength = prefix.length();
 		if (("#" + IEGLConstants.SQLKEYWORD_SQL).toUpperCase().startsWith(prefix.toUpperCase())) { //$NON-NLS-1$
 			message = "#" + IEGLConstants.SQLKEYWORD_SQL + "{}"; //$NON-NLS-1$ //$NON-NLS-2$
-			result.add(new EGLCompletionProposal(viewer, message, message,
+			proposals.add(new EGLCompletionProposal(viewer, message, message,
 					UINlsStrings.CAProposal_EGLKeyword, documentOffset
 							- prefixLength, prefixLength, message.length() - 1,
 					EGLCompletionProposal.RELEVANCE_KEYWORD + 1,
 					EGLCompletionProposal.NO_IMG_KEY));
 		}
 
-		getBoundASTNodeForOffsetInStatement(viewer, documentOffset,
-				new IBoundNodeProcessor() {
-					public void processBoundNode(Node boundNode) {
-						// SQL Statement into proposals
-						EGLDeclarationProposalHandler eglDP = new EGLDeclarationProposalHandler(viewer,
-								documentOffset, prefix, boundNode);
-						
-						result.addAll(eglDP.getSQLStatementProposals());
-						result.addAll(eglDP.getSQLStringProposals());
-					}
-				});
+		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
+			//Get all variable proposals
+			proposals.addAll(
+				new EGLDeclarationProposalHandler(
+					viewer,
+					documentOffset,
+					prefix,
+					boundNode)
+					.getProposals(boundNode));
+			
+			//Get user field proposals using library use statements
+			proposals.addAll(
+				new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
 
-			return result;
-		}
+			//Get user function proposals with return value using library use statements
+			proposals.addAll(
+				new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+			
+			//Get user function proposals with return value
+			proposals.addAll(
+				new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+		}});
+		
+		//Get all proposals for parts that contain static members
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
+		
+		return proposals;
+	}
 
 }

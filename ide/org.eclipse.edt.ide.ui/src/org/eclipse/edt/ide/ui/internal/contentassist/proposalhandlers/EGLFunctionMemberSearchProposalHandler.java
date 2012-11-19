@@ -70,7 +70,7 @@ public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalH
 			for (Function function : functions) {				
 				String name = function.getName();
 				if (name.toUpperCase().startsWith(getPrefix().toUpperCase()))
-					proposals.addAll(createFunctionInvocationProposals(function, UINlsStrings.CAProposal_NestedFunction, EGLCompletionProposal.RELEVANCE_MEDIUM, false));				
+					proposals.addAll(createFunctionInvocationProposals(function, UINlsStrings.CAProposal_NestedFunction, EGLCompletionProposal.RELEVANCE_MEMBER, false));				
 			}
 		}
 		return proposals;

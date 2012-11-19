@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPrimitiveProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLAliasedTypeProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLConstantTypeReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -26,6 +26,7 @@ public class EGLConstantTypeReferenceCompletion extends EGLAbstractReferenceComp
 	 */
 	protected void precompileContexts() {
 		addContext("package a; handler a const var"); //$NON-NLS-1$
+		addContext("package a; class a const var"); //$NON-NLS-1$
 		addContext("package a; handler a function a() const var"); //$NON-NLS-1$
 	}
 
@@ -39,7 +40,7 @@ public class EGLConstantTypeReferenceCompletion extends EGLAbstractReferenceComp
 				}
 			}, new IBoundNodeProcessor() {
 				public void processBoundNode(Node boundNode) {
-					proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());	
+					proposals.addAll(new EGLAliasedTypeProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());	
 				}
 			});		
 			

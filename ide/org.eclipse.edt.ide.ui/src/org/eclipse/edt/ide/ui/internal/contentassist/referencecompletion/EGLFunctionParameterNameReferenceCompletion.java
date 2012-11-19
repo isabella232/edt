@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchParameterDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchVariableDeclarationProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -36,15 +38,13 @@ public class EGLFunctionParameterNameReferenceCompletion extends EGLAbstractRefe
 		String prefix,
 		ITextViewer viewer,
 		int documentOffset) {
-			
-		//Get all data part names
-		return new EGLPartSearchVariableDeclarationProposalHandler(
+		List proposals = new ArrayList();
+		proposals.addAll(new EGLPartSearchParameterDeclarationProposalHandler(
 			viewer,
 			documentOffset,
 			prefix,
-			editor,
-			false).getProposals(
-				IEGLSearchConstants.RECORD);
+			editor).getProposals(getSearchConstantsForDeclarableParts()));
+		return proposals;
 	}
 
 }

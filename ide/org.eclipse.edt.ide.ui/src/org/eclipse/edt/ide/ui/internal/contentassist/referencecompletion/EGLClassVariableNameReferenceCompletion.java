@@ -24,7 +24,7 @@ public class EGLClassVariableNameReferenceCompletion extends EGLAbstractReferenc
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; program a"); //$NON-NLS-1$
+		addContext("package a; handler a"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
