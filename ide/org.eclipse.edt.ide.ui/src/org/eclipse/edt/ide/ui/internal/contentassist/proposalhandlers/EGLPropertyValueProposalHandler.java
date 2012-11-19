@@ -287,8 +287,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 			|| propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONPOSTRENDERFUNCTION)
 			|| 	propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_ONVALUECHANGEFUNCTION))
 				proposals.addAll(getNameValueFunctionProposals(getDocumentOffset()));
-		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_REDEFINES))
-			proposals.addAll(getNameValueRedefinesProposals(getDocumentOffset()));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_SELECTFROMLISTITEM))
 			proposals.addAll(getNameValueSelectFromListProposals(getDocumentOffset()));
 		else if (propertyName.equalsIgnoreCase(IEGLConstants.PROPERTY_SELECTEDROWITEM))
@@ -591,25 +589,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 		return proposals;
 	}
 
-	/**
-	 * @return proposal list
-	 */
-	private List getNameValueRecordProposals(int documentOffset, int recordTypes) {
-		//add variable record proposals
-		return new EGLDeclarationProposalHandler(
-			viewer,
-			getDocumentOffset(),
-			prefix,
-			boundNode).getRecordProposals(recordTypes, false, false);
-	}
-
-	/**
-	 * @return proposal list
-	 */
-	private List getNameValueRedefinesProposals(int documentOffset) {
-		//add all variable record proposals
-		return getNameValueRecordProposals(getDocumentOffset(), EGLDeclarationProposalHandler.ALL_RECORDS);
-	}
 
 	/**
 	 * @return proposal list
@@ -646,22 +625,6 @@ public class EGLPropertyValueProposalHandler extends EGLAbstractProposalHandler 
 	private List getNameValueSelectedRowItemProposals(int documentOffset) {
 		List itemNames = referenceCompletion.getItemNames(viewer, getDocumentOffset(), null, false);
 		return getNameValueProposals(documentOffset, itemNames);
-	}
-
-	/**
-	 * @return proposal list
-	 */
-	private List getNameValueVariableRecordProposals(int documentOffset, int recordType) {
-		//add variable basic record proposals
-		List proposals = new ArrayList();
-		if(part instanceof Program) {
-			proposals = new EGLDeclarationProposalHandler(
-				viewer,
-				getDocumentOffset(),
-				prefix,
-				boundNode).getRecordProposals(recordType, false, false);
-		}
-		return proposals;
 	}
 
 	/**
