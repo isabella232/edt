@@ -24,7 +24,6 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class MemberNameTemplate extends JavaScriptTemplate {
 
