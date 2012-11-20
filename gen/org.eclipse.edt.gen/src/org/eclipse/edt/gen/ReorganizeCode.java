@@ -1027,16 +1027,17 @@ public class ReorganizeCode extends AbstractVisitor {
 				}
 			}
 		}
-		// check to see if this is the mathlib.precision or mathlib.decimals function, and if so,
-		// we need to box the argument if it is type decimal
-		if ((object.getId().equalsIgnoreCase("decimals") || object.getId().equalsIgnoreCase("precision")) && object.getQualifier() instanceof PartName
-			&& ((PartName) object.getQualifier()).getId().equalsIgnoreCase("MathLib") && object.getArguments().size() == 1
-			&& !(object.getArguments().get(0) instanceof BoxingExpression)) {
+		
+		// check to see if this is the ENumber.precision or ENumber.decimals function, and if so,
+		// we may need to box the qualifier
+		if ((object.getId().equalsIgnoreCase("decimals") || object.getId().equalsIgnoreCase("precision")) 
+			&& TypeUtils.isNumericType( object.getQualifier().getType() )
+			&& object.getArguments().size() == 0 && !(object.getQualifier() instanceof BoxingExpression)) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
-			if ((Boolean) ctx.invoke(Constants.isMathLibDecimalBoxingWanted, object.getArguments().get(0).getType(), ctx)) {
+			if ((Boolean) ctx.invoke(Constants.isMathLibDecimalBoxingWanted, object.getQualifier().getType(), ctx)) {
 				BoxingExpression boxingExpression = factory.createBoxingExpression();
-				boxingExpression.setExpr(object.getArguments().get(0));
-				object.getArguments().set(0, boxingExpression);
+				boxingExpression.setExpr(object.getQualifier());
+				object.setQualifier(boxingExpression);
 			}
 		}
 

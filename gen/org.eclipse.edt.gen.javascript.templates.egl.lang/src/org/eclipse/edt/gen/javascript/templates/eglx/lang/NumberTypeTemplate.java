@@ -16,15 +16,7 @@ import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.BoxingExpression;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.FixedPrecisionType;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
-import org.eclipse.edt.mof.egl.IsAExpression;
-import org.eclipse.edt.mof.egl.ParameterizableType;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class NumberTypeTemplate extends JavaScriptTemplate {
@@ -95,7 +87,6 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber") && (arg.getConversionOperation() != null)) {
 			
 			Type toType = arg.getEType();
-			Type fromType = arg.getObjectExpr().getType();
 			
 			out.print(ctx.getNativeImplementationMapping(toType) + '.');
 			out.print(CommonUtilities.getOpName(ctx, arg.getConversionOperation()));
@@ -107,13 +98,10 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genExpression, objectExpr, ctx, out);
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
-//						BoxingExpression boxingExpr = IrFactory.INSTANCE.createBoxingExpression();
-//						boxingExpr.setExpr(arg.getObjectExpr());
-//						ctx.invoke(genExpression, boxingExpr, ctx, out);
 		} 
 		else {
-		// we need to invoke the logic in type template to call back to the other conversion situations
-		ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
+			// we need to invoke the logic in type template to call back to the other conversion situations
+			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
 		}
 	}
 
@@ -175,6 +163,19 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 		else
 			ctx.invokeSuper(this, genIsaExpression, type, ctx, out, arg);
 
+	}
+	
+	public void genContainerBasedInvocation(EGLClass type, Context ctx, TabbedWriter out, InvocationExpression expr) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		out.print(".");
+		ctx.invoke(genName, expr.getTarget(), ctx, out);
+		out.print("(");
+		if (!(expr.getTarget() instanceof Member) || !((Member)expr.getTarget()).isStatic())
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+		if (expr.getArguments() != null && expr.getArguments().size() > 0)
+			out.print(", ");
+		ctx.invoke(genInvocationArguments, expr, ctx, out);
+		out.print(")");
 	}
 
 	@SuppressWarnings("static-access")
@@ -240,7 +241,7 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MODULO))
 			return ", " + eglNumberTypeArg(expr.getLHS()) + ", ";
 		if (op.equals(expr.Op_POWER))
-			return ", " + eglNumberTypeArg(expr.getLHS().getType()) + ", ";
+			return ", " + eglNumberTypeArg(expr.getLHS()) + ", ";
 		return "";
 	}
 
@@ -285,23 +286,7 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 	 */
 	private static String eglNumberTypeArg( Expression expr )
 	{
-//		Expression e = (expr instanceof AsExpression) ? ((AsExpression)expr).getObjectExpr() : expr;
-//		return eglNumberTypeArg(e.getType());
-		return eglNumberTypeArg(expr.getType());
-	}	
-	
-	/**
-	 * Returns the value that'll identify the kind of argument passed to the egl.*EGLNumber functions.
-	 * <UL>
-	 * <LI>-1 means we must inspect the value to learn its type
-	 * <LI>0 means it's a JavaScript Number and not an EGL float or smallfloat
-	 * <LI>1 means it's an EGL BigDecimal
-	 * <LI>2 means it's an EGL float or smallfloat
-	 * </UL>
-	 */
-	private static String eglNumberTypeArg( Type type )
-	{
-
+		Type type = expr.getType();
 		int kind = TypeUtils.getTypeKind(type);
 		if ( (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber")) || isCharacterType( type ) )
 		{

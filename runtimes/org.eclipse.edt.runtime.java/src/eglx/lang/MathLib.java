@@ -17,9 +17,7 @@ import java.math.BigInteger;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
-import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
-import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
 
 public class MathLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -68,31 +66,6 @@ public class MathLib extends ExecutableBase {
 	 * A mask that can extract the mantissa bits from the bits of a double.
 	 */
 	private static final long DOUBLE_MANTISSA_MASK = 0x000fffffffffffffL;
-
-	/**
-	 * Digit length of an int.
-	 */
-	private static final int INT_PRECISION = 9;
-
-	/**
-	 * Digit length of a short.
-	 */
-	private static final int SHORT_PRECISION = 4;
-
-	/**
-	 * Digit length of a long.
-	 */
-	private static final int LONG_PRECISION = 18;
-
-	/**
-	 * Digit length of a float.
-	 */
-	private static final int FLOAT_PRECISION = 6;
-
-	/**
-	 * Digit length of a double.
-	 */
-	private static final int DOUBLE_PRECISION = 15;
 
 	/**
 	 * The constructor.
@@ -193,92 +166,6 @@ public class MathLib extends ExecutableBase {
 	 */
 	public static double cosh(double numericField) {
 		return StrictMath.cosh(numericField);
-	}
-
-	/**
-	 * Returns the number of digits to the right of the decimal point that the value can store.
-	 */
-	public static int decimals(BigDecimal numericField) {
-		// We can't use numericField.scale() because we have to ignore trailing zeros.
-		if ( numericField.signum() == 0 || numericField.scale() == 0 )
-		{
-			// It's an integer.
-			return 0;
-		}
-		
-		String numStr = numericField.toPlainString();
-		int pointIndex = numStr.lastIndexOf( '.' );
-		if ( pointIndex == -1 )
-		{
-			// There are no digits after the decimal point.
-			return 0;
-		}
-		
-		// Ignore trailing zeros.
-		int lastDigitIndex = numStr.length() - 1;
-		while ( lastDigitIndex > pointIndex && numStr.charAt( lastDigitIndex ) == '0' )
-		{
-			lastDigitIndex--;
-		}
-
-		return lastDigitIndex - pointIndex;
-	}
-	
-	public static int decimals(double numericField) {
-		if ( numericField == 0 )
-		{
-			return 0;
-		}
-		return decimals( BigDecimal.valueOf( numericField ) );
-	}
-
-	public static int decimals(float numericField) {
-		if ( numericField == 0 )
-		{
-			return 0;
-		}
-		return decimals( new BigDecimal( Float.toString( numericField ) ) );
-	}
-
-	public static int decimals(int numericField) {
-		return 0;
-	}
-
-	public static int decimals(long numericField) {
-		return 0;
-	}
-
-	public static int decimals(short numericField) {
-		return 0;
-	}
-
-	public static int decimals(EDecimal numericField) {
-		if (numericField == null || numericField.ezeUnbox() == null)
-		{
-			NullValueException nvx = new NullValueException();
-			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
-		}
-		return numericField.getDecimals();
-	}
-
-	public static int decimals(ENumber numericField) {
-		Number value = numericField.ezeUnbox();
-		if ( value instanceof Integer || value instanceof Short || value instanceof Long )
-		{
-			return 0;
-		}
-		else if ( value instanceof BigDecimal )
-		{
-			return decimals( (BigDecimal)value );
-		}
-		else if ( value instanceof Double )
-		{
-			return decimals( BigDecimal.valueOf( value.doubleValue() ) );
-		}
-		else
-		{
-			return decimals( new BigDecimal( Float.toString( value.floatValue() ) ) );
-		}
 	}
 
 	/**
@@ -464,77 +351,6 @@ public class MathLib extends ExecutableBase {
 		else if (op1 < 0 && op2 > StrictMath.floor(op2))
 			return Double.NaN;
 		return StrictMath.pow(op1, op2);
-	}
-
-	/**
-	 * returns the maximum precision (in decimal digits) for a number. For floating-point numbers (8-digit HEX for
-	 * standard-precision floating-point number or 16-digit HEX for double-precision floating-point number), the precision is
-	 * the maximum number of decimal digits that can be represented in the number for the system on which the program is
-	 * running.
-	 */
-	public static int precision(short numericField) {
-		return SHORT_PRECISION;
-	}
-
-	public static int precision(int numericField) {
-		return INT_PRECISION;
-	}
-
-	public static int precision(long numericField) {
-		return LONG_PRECISION;
-	}
-
-	public static int precision(float numericField) {
-		return FLOAT_PRECISION;
-	}
-
-	public static int precision(double numericField) {
-		return DOUBLE_PRECISION;
-	}
-
-	public static int precision(BigDecimal numericField) {
-		return numericField.precision();
-	}
-
-	public static int precision(EDecimal numericField) {
-		if (numericField == null || numericField.ezeUnbox() == null)
-		{
-			NullValueException nvx = new NullValueException();
-			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
-		}
-		return numericField.getPrecision();
-	}
-
-	public static int precision(ENumber numericField) {
-		Number value = numericField.ezeUnbox();
-		if ( value instanceof Integer )
-		{
-			return INT_PRECISION;
-		}
-		else if ( value instanceof Long )
-		{
-			return LONG_PRECISION;
-		}
-		else if ( value instanceof Short )
-		{
-			return SHORT_PRECISION;
-		}
-		else if ( value instanceof BigDecimal )
-		{
-			return ((BigDecimal)value).precision();
-		}
-		else if ( value instanceof Double )
-		{
-			return DOUBLE_PRECISION;
-		}
-		else if ( value instanceof Float )
-		{
-			return FLOAT_PRECISION;
-		}
-		else
-		{
-			return BigDecimal.valueOf( value.doubleValue() ).precision();
-		}
 	}
 
 	/**

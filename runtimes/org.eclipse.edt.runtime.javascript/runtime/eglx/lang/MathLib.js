@@ -51,53 +51,6 @@ egl.eglx.lang.MathLib["cos"] = function(/*float*/value) {
 egl.eglx.lang.MathLib["cosh"] = function(/*float*/x) {
 	return ((Math.exp(x) + Math.exp(-x)) / 2);
 };
-egl.eglx.lang.MathLib["decimals"] = function(x) {
-    if (x instanceof egl.javascript.BigDecimal) {
-        return x.scale();
-    }
-    if (x.eze$$value == null) {
-    	throw egl.createNullValueException( "CRRUI2005E", [] );
-	}
-
-	var kind;
-
-	var firstChar = x.eze$$signature.charAt(0);
-	if (firstChar !== '?') {
-		kind = firstChar;
-	} else {
-		kind = x.eze$$signature.charAt(1);
-	}
-
-	var result = 0;
-	switch (kind) {
-	case 'b':
-	case 'n':
-	case 'd':
-	case '9':
-	case 'p':
-		var colon = x.eze$$signature.indexOf(':');
-		result = colon > 0 ? x.eze$$signature.substring(colon + 1, x.eze$$signature
-				.indexOf(';')) : x.eze$$value.scale();
-		break;
-	case 'F':
-	case 'f':
-		if (x.eze$$value != 0) {
-			var numStr = new egl.javascript.BigDecimal(x.eze$$value).format(-1,-1);
-			var pointIndex = numStr.lastIndexOf('.');
-			if (pointIndex != -1) {
-				// Ignore trailing zeros.
-				var lastDigitIndex = numStr.length - 1;
-				while (lastDigitIndex > pointIndex && numStr.charAt(lastDigitIndex) == '0') {
-					lastDigitIndex--;
-				}
-				result = lastDigitIndex - pointIndex;
-			}
-		}
-	}
-
-	return result;
-};
-
 egl.eglx.lang.MathLib["exp"] = function(/*float*/value) {
 	return Math.exp(value);
 };
@@ -187,52 +140,6 @@ egl.eglx.lang.MathLib["pow"] = function(/*float*/base, /*float*/exponent) {
 	} else {
 		return Math.pow(base, exponent);
 	}
-};
-
-egl.eglx.lang.MathLib["precision"] = function(x) {
-    if (x.eze$$value == null) {
-        throw egl.createNullValueException( "CRRUI2005E", [] );
-    }
-
-	var kind;
-
-	var firstChar = x.eze$$signature.charAt(0);
-	var firstCharIdx = 0;
-	if (firstChar !== '?') {
-		kind = firstChar;
-	} else {
-		kind = x.eze$$signature.charAt(1);
-		firstCharIdx = 1;
-	}
-
-	switch (kind) {
-	case 'I':
-		return 9;
-	case 'i':
-		return 4;
-	case 'B':
-		return 18;
-	case 'F':
-		return 15;
-	case 'f':
-		return 6;
-	case 'b':
-	case 'n':
-	case 'd':
-	case '9':
-	case 'p':
-        var colon = x.eze$$signature.indexOf(':');
-        return (colon > 0 ? x.eze$$signature.substring(firstCharIdx + 1, colon) : x.eze$$value.mant.length) ;
-	case 'X':
-		var length = x.eze$$signature.substring(firstCharIdx + 1,
-				x.eze$$signature.indexOf(';'));
-		if (length === '8') {
-			return 6;
-		} else if (length === '16') {
-			return 15;
-		}
-	}
-	return 0;
 };
 
 egl.eglx.lang.MathLib["round"] = function( /* value */v, /* exp */e) {
