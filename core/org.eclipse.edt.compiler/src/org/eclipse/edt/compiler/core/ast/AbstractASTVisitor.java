@@ -126,10 +126,6 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 		return true;
 	}
 	
-	public boolean visit(EmptyStatement emptyStatement) {
-		return true;
-	}
-	
 	public boolean visit(Enumeration enumeration) {
 		return true;
 	}
@@ -505,8 +501,6 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public void endVisit(Class eglClass) {}
 
 	public void endVisit(ElseBlock elseBlock) {}
-	
-	public void endVisit(EmptyStatement emptyStatement) {}
 	
 	public void endVisit(Enumeration enumeration) {}
 	

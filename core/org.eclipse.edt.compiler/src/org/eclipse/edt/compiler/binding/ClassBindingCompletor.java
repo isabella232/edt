@@ -44,6 +44,8 @@ public class ClassBindingCompletor extends FunctionContainerBindingCompletor {
     		classBinding.setAccessKind(AccessKind.ACC_PRIVATE);
     	}
     	
+    	classBinding.setIsAbstract(eglClass.isAbstract());
+    	
     	if (eglClass.getExtends() != null) {
     		try {
     			org.eclipse.edt.mof.egl.Type typeBinding = bindTypeName(eglClass.getExtends());

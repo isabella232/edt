@@ -229,6 +229,10 @@ public abstract class Part extends Node {
     	return isPrivate;
     }
     
+    public boolean isAbstract() {
+    	return false;
+    }
+    
     protected abstract Object clone() throws CloneNotSupportedException;
 
 	protected ArrayList cloneContents() throws CloneNotSupportedException {
@@ -282,6 +286,6 @@ public abstract class Part extends Node {
     
     @Override
 	public String toString() {
-		return getPartTypeName() + " " + getName();
+		return (isAbstract() ? "abstract " : "") + getPartTypeName() + " " + getName();
 	}
 }

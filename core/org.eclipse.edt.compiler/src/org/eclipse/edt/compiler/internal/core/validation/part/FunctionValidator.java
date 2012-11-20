@@ -32,7 +32,6 @@ import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.ContinueStatement;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
-import org.eclipse.edt.compiler.core.ast.EmptyStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.ExitStatement;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
@@ -85,13 +84,13 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.TryStatementV
 import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.utils.NameUtile;
-
 
 public class FunctionValidator extends AbstractASTVisitor {
 	
@@ -122,6 +121,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		checkFunctionName(nestedFunction.getName(), true);
 		checkNumberOfParms(nestedFunction.getFunctionParameters(), nestedFunction.getName(), functionName);
 		checkForConstructorCalls(nestedFunction);
+		checkAbstract(nestedFunction);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction);
 		
 		return true;
@@ -169,6 +169,32 @@ public class FunctionValidator extends AbstractASTVisitor {
 				return true;
 			}
 		});
+	}
+	
+	private void checkAbstract(NestedFunction func) {
+		if (func.isAbstract()) {
+			FunctionMember irFunc = (FunctionMember)func.getName().resolveMember();
+			if (func.getParent() instanceof org.eclipse.edt.compiler.core.ast.Part && !((org.eclipse.edt.compiler.core.ast.Part)func.getParent()).isAbstract()) {
+				problemRequestor.acceptProblem(
+						func,
+						IProblemRequestor.ABSTRACT_FUNCTION_IN_CONCRETE_PART,
+						new String[]{func.getName().getCaseSensitiveIdentifier() + "(" + FunctionContainerValidator.getTypeNamesList(irFunc.getParameters()) + ")"});
+			}
+			
+			if (func.isPrivate()) {
+				problemRequestor.acceptProblem(
+						func,
+						IProblemRequestor.ABSTRACT_FUNCTION_IS_PRIVATE,
+						new String[]{func.getName().getCaseSensitiveIdentifier() + "(" + FunctionContainerValidator.getTypeNamesList(irFunc.getParameters()) + ")"});
+			}
+			
+			if (func.isStatic()) {
+				problemRequestor.acceptProblem(
+						func,
+						IProblemRequestor.ABSTRACT_FUNCTION_IS_STATIC,
+						new String[]{func.getName().getCaseSensitiveIdentifier() + "(" + FunctionContainerValidator.getTypeNamesList(irFunc.getParameters()) + ")"});
+			}
+		}
 	}
 	
 	void checkNumberOfParms(List parms, Node name, String nameString) {
@@ -374,13 +400,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 		preVisitStatement(executeStatement);
 		validateStatement(executeStatement);
 		postVisitStatement(executeStatement);
-		return false;
-	}
-	
-	@Override
-	public boolean visit(EmptyStatement emptyStatement) {
-		preVisitStatement(emptyStatement, false);
-		postVisitStatement(emptyStatement);
 		return false;
 	}
 	

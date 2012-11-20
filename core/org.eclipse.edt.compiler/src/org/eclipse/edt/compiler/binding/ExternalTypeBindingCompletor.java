@@ -46,6 +46,8 @@ public class ExternalTypeBindingCompletor extends FunctionContainerBindingComple
         	externalTypeBinding.setAccessKind(AccessKind.ACC_PRIVATE);
         }
         
+        externalTypeBinding.setIsAbstract(externalType.isAbstract());
+        
         processExtends(externalType);
     	
     	setDefaultSuperType();

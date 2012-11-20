@@ -52,7 +52,6 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -385,6 +384,10 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		else if (mofPart instanceof Part) {
 			if (astPart.isPrivate()) {
 				((Part)mofPart).setAccessKind(AccessKind.ACC_PRIVATE);
+			}
+			
+			if (astPart.isAbstract() && mofPart instanceof EGLClass) {
+				((EGLClass)mofPart).setIsAbstract(true);
 			}
 			
 			createAnnotations(partBinding, (Part)mofPart);

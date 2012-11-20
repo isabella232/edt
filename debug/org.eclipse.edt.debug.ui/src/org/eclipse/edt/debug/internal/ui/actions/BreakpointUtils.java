@@ -25,7 +25,6 @@ import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ElseBlock;
-import org.eclipse.edt.compiler.core.ast.EmptyStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -115,11 +114,6 @@ public class BreakpointUtils
 	 */
 	public static boolean isBreakpointValidForStatement( Statement statement )
 	{
-		if ( statement instanceof EmptyStatement )
-		{
-			return false;
-		}
-		
 		// check if function data declaration has an initializer or not
 		if ( statement instanceof FunctionDataDeclaration )
 		{

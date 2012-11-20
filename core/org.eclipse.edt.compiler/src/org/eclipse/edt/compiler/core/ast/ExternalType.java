@@ -26,10 +26,12 @@ public class ExternalType extends Part {
 
 	private List<Name> extendsOpt;
 	private Name partSubTypeOpt;
+	private Boolean isAbstract;
 
-	public ExternalType(Boolean privateAccessModifierOpt, SimpleName name, List extendsOpt, Name partSubTypeOpt, List externalTypeContents, int startOffset, int endOffset) {
+	public ExternalType(Boolean privateAccessModifierOpt, Boolean abstractModifierOpt, SimpleName name, List extendsOpt, Name partSubTypeOpt, List externalTypeContents, int startOffset, int endOffset) {
 		super(privateAccessModifierOpt, name, externalTypeContents, startOffset, endOffset);
 		
+		isAbstract = abstractModifierOpt.booleanValue();
 		this.extendsOpt = setParent(extendsOpt);
 		
 		if(partSubTypeOpt != null) {
@@ -57,6 +59,11 @@ public class ExternalType extends Part {
 		return partSubTypeOpt;
 	}
 	
+	@Override
+	public boolean isAbstract() {
+		return isAbstract;
+	}
+	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -71,7 +78,7 @@ public class ExternalType extends Part {
 	protected Object clone() throws CloneNotSupportedException {
 		Name newPartSubTypeOpt = partSubTypeOpt != null ? (Name)partSubTypeOpt.clone() : null;
 		
-		return new ExternalType(new Boolean(isPrivate), (SimpleName)name.clone(), cloneList(extendsOpt), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
+		return new ExternalType(new Boolean(isPrivate), new Boolean(isAbstract), (SimpleName)name.clone(), cloneList(extendsOpt), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 
 	public String getPartTypeName() {

@@ -176,6 +176,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 
 	// Keywords
 	"absolute"		    { return symbol(NodeTypes.ABSOLUTE); }
+	"abstract"		    { return symbol(NodeTypes.ABSTRACT); }
 	"add"				{ return symbol(NodeTypes.ADD); }
 	"all"				{ return symbol(NodeTypes.ALL); }
 	"as"				{ return symbol(NodeTypes.AS); }

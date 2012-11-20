@@ -979,6 +979,10 @@ public class BindingUtil {
 		return mbr.getAccessKind() == AccessKind.ACC_PRIVATE;
 	}
 	
+	public static boolean isAbstract(Type type) {
+		return type instanceof EGLClass && ((EGLClass)type).isAbstract();
+	}
+	
 	public static String getName(Element elem) {
 		if (elem instanceof NamedElement) {
 			return ((NamedElement)elem).getName();

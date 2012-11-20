@@ -21,10 +21,12 @@ public class Class extends Part {
 	private Name partSubTypeOpt;
 	private List implementsOpt;
 	private Name extendsOpt;
+	private Boolean isAbstract;
 
-
-	public Class(Boolean privateAccessModifierOpt, SimpleName name, Name extendsOpt, List implementsOpt, Name partSubTypeOpt, List classContents, int startOffset, int endOffset) {
+	public Class(Boolean privateAccessModifierOpt, Boolean abstractModifierOpt, SimpleName name, Name extendsOpt, List implementsOpt, Name partSubTypeOpt, List classContents, int startOffset, int endOffset) {
 		super(privateAccessModifierOpt, name, classContents, startOffset, endOffset);
+		
+		isAbstract = abstractModifierOpt.booleanValue();
 		
 		if(extendsOpt != null) {
 			this.extendsOpt = extendsOpt;
@@ -50,6 +52,11 @@ public class Class extends Part {
 		return extendsOpt;
 	}
 	
+	@Override
+	public boolean isAbstract() {
+		return isAbstract;
+	}
+	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -66,7 +73,7 @@ public class Class extends Part {
 		Name newExtendsOpt = extendsOpt != null ? (Name)extendsOpt.clone() : null;
 		Name newPartSubTypeOpt = partSubTypeOpt != null ? (Name)partSubTypeOpt.clone() : null;
 		
-		return new Class(new Boolean(isPrivate), (SimpleName)name.clone(), newExtendsOpt, cloneList(implementsOpt), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
+		return new Class(new Boolean(isPrivate), new Boolean(isAbstract), (SimpleName)name.clone(), newExtendsOpt, cloneList(implementsOpt), newPartSubTypeOpt, cloneContents(), getOffset(), getOffset() + getLength());
 	}
 
 	public String getPartTypeName() {
