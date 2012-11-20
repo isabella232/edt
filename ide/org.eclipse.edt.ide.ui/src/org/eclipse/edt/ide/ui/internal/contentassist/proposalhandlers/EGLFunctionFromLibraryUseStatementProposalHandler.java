@@ -106,7 +106,7 @@ public class EGLFunctionFromLibraryUseStatementProposalHandler extends EGLAbstra
 						getDocumentOffset() - getPrefix().length(),
 						getPrefix().length(),
 						selection.x,
-						EGLCompletionProposal.RELEVANCE_MEDIUM,
+						EGLCompletionProposal.RELEVANCE_MEMBER,
 						selection.y,
 						PluginImages.IMG_OBJS_FUNCTION);  //We need a function icon from use lib
 	}

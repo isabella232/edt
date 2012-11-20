@@ -85,6 +85,7 @@ public class EGLFieldsFromLibraryUseStatementProposalHandler extends EGLAbstract
 			getDocumentOffset() - getPrefix().length(),
 			getPrefix().length(),
 			proposalString.length(),
+			EGLCompletionProposal.RELEVANCE_MEMBER,
 			PluginImages.IMG_OBJS_ENV_VAR);
 	}
 

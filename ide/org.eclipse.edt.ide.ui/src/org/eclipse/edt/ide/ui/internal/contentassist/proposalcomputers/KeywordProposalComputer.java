@@ -50,11 +50,7 @@ public class KeywordProposalComputer extends EGLCompletionProposalComputer {
 		// Attach what the parser did not parse into the prefix
 		prefixNodes.addAll(tokenStream.getPrefixNodes());
 		
-		if(inNativeFunction(context)){
-			keywordCompletions = EGLDefinedKeywordCompletions.getNativeLibraryDefinedKeywordCompletions();
-		}else{
-			keywordCompletions = EGLDefinedKeywordCompletions.getDefinedKeywordCompletions();
-		}
+		keywordCompletions = EGLDefinedKeywordCompletions.getDefinedKeywordCompletions();
 		
 		for (int i = 0; i < keywordCompletions.length; i++) {
 			result.addAll(keywordCompletions[i].computeCompletionProposals(parseStack, prefixNodes, context.getViewer(), context.getInvocationOffset(), false));

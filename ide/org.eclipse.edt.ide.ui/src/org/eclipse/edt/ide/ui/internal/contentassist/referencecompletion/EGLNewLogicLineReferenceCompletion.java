@@ -83,32 +83,10 @@ public class EGLNewLogicLineReferenceCompletion extends EGLAbstractReferenceComp
 		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
 			IEGLSearchConstants.LIBRARY));
 
-		//Get types to declare proposals
-		proposals.addAll(getTypesToDeclare(prefix, viewer, documentOffset));
+		//Get all proposals for parts that contain static members
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
 
 		return proposals;
 	}
 
-	private Collection getTypesToDeclare(String prefix, ITextViewer viewer, int documentOffset) {
-		List proposals = new ArrayList();
-		//Get all data part names
-		Node eglPart = getPart(viewer, documentOffset);
-		final String[] newPartName = new String[] {null};
-		eglPart.accept(new AbstractASTPartVisitor() {
-			public void visitPart(Part part) {
-				newPartName[0] = part.getName().getCanonicalName();
-			}
-		});
-		if (eglPart != null)
-			proposals.addAll(
-				new EGLPartSearchVariableDeclarationProposalHandler(
-					viewer,
-					documentOffset,
-					prefix,
-					editor).getProposals(
-						getSearchConstantsForDeclarableParts(),
-						newPartName[0]));
-
-		return proposals;
-	}
 }

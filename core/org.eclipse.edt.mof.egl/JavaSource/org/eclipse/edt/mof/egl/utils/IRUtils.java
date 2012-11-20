@@ -61,6 +61,7 @@ import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredContainer;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.SubType;
+import org.eclipse.edt.mof.egl.TernaryExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
@@ -452,6 +453,13 @@ public class IRUtils {
 
 	public static Expression makeExprCompatibleToType(Expression expr, Type type) {
 		Type exprType = expr.getType();
+		
+		if (expr instanceof TernaryExpression) {
+			TernaryExpression tern = (TernaryExpression)expr;
+			tern.setSecond(makeExprCompatibleToType(tern.getSecond(), type));
+			tern.setThird(makeExprCompatibleToType(tern.getThird(), type));
+		}
+		
 		if (expr instanceof Name) {
 			// Check to see if this is a FunctionMember reference
 			NamedElement mbr = ((Name)expr).getNamedElement();

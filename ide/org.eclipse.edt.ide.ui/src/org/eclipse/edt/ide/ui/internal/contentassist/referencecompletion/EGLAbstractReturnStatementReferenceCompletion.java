@@ -55,9 +55,8 @@ public abstract class EGLAbstractReturnStatementReferenceCompletion extends EGLA
 			}
 		});
 		
-		//Get all library and external type proposals
-		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
-			IEGLSearchConstants.LIBRARY|IEGLSearchConstants.EXTERNALTYPE));
+		//Get all proposals for parts that have static memebers
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
 		
 		return proposals;
 	}

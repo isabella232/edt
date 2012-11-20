@@ -118,20 +118,6 @@ public class EGLCompletionProposalComputer implements IEGLCompletionProposalComp
 	public void sessionEnded() {
 		fErrorMessage= null;
 	}
-
-	protected boolean inNativeFunction(EGLContentAssistInvocationContext ctx) {
-		IEGLDocument document = (IEGLDocument)ctx.getDocument();
-		Node node =  EGLModelUtility.getNestedPartNode(document, ctx.getInvocationOffset());
-		while (node != null) {
-			if (node instanceof Library) {
-				Library library = (Library) node;
-				if(library.hasSubType() && NameUtile.equals(library.getSubType().getIdentifier(), NameUtile.getAsName(IEGLConstants.LIBRARY_SUBTYPE_NATIVE)))
-					return true;
-			}
-			node = node.getParent();
-		}
-		return false;
-	}
 	
 	protected String getPrefix(ITextViewer viewer, int documentOffset) {
 		// For performance reasons, we don't want the prefix string to start 

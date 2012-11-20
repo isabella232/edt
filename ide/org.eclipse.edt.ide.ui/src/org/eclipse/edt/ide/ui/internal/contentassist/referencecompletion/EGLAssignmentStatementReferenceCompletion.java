@@ -141,9 +141,8 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 			});
 			
 			if(!isDone[0] && !isStringLiteral[0]) {
-				//Get all library and external type proposals
-				proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
-					IEGLSearchConstants.LIBRARY|IEGLSearchConstants.EXTERNALTYPE));
+				//Get proposals for types that can contain static members
+				proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
 						
 			}
 		}

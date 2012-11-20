@@ -17,7 +17,6 @@ import java.util.List;
 public class EGLDefinedReferenceCompletions {
 
 	private static IReferenceCompletion[] DEFINED_COMPLETIONS;
-	private static IReferenceCompletion[] NATIVE_LIBRARY_DEFINED_COMPLETIONS;
 
 	//only used during development to check for duplicate states
 //	private static ArrayList allValidStates;
@@ -66,7 +65,7 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLParameterModifierReferenceCompletion());
 			completionList.add(new EGLProgramArgumentsReferenceCompletion());
 //			completionList.add(new EGLPropertyNameReferenceCompletion());
-			completionList.add(new EGLRelationalOperatorReferenceCompletion());
+			completionList.add(new EGLOperatorReferenceCompletion());
 			completionList.add(new EGLSQLReplaceStatementReferenceCompletion());
 			completionList.add(new EGLReturnStatementReferenceCompletion());
 			completionList.add(new EGLReturnStatementWithParensReferenceCompletion());
@@ -75,7 +74,7 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLStructureItemTypeRefereceCompletion());
 			completionList.add(new EGLSubScriptSubStringModifierReferenceCompletion());
 			completionList.add(new EGLSubScriptSubString2ModifierReferenceCompletion());
-//			completionList.add(new EGLSubtypeReferenceCompletion());
+			completionList.add(new EGLSubtypeReferenceCompletion());
 			completionList.add(new EGLThrowStatementReferenceCompletion());
 			completionList.add(new EGLTryOnExceptionStatementReferenceCompletion());
 			completionList.add(new EGLTryOnException2StatementReferenceCompletion());
@@ -90,20 +89,9 @@ public class EGLDefinedReferenceCompletions {
 		return DEFINED_COMPLETIONS;
 	}
 		
-		public static IReferenceCompletion[] getNativeLibraryDefinedCompletions() {
-			if (NATIVE_LIBRARY_DEFINED_COMPLETIONS == null) {
-				List completionList = new ArrayList();
-//				completionList.add(new EGLPropertyNameReferenceCompletion());
-//				completionList.add(new EGLSubtypeReferenceCompletion());
-				
-				NATIVE_LIBRARY_DEFINED_COMPLETIONS = (IReferenceCompletion[]) completionList.toArray(new IReferenceCompletion[0]);
-			}
-			return NATIVE_LIBRARY_DEFINED_COMPLETIONS;
-	}
 		
 	public static void reset() {
 		DEFINED_COMPLETIONS = null;
-		NATIVE_LIBRARY_DEFINED_COMPLETIONS = null;
 	}
 
 }

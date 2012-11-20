@@ -13,23 +13,18 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.TernaryExpression;
 
-public class TernaryExpressionTemplate extends JavaScriptTemplate {
-
-	public void genExpression(TernaryExpression expr, Context ctx, TabbedWriter out) {
-		out.print(eglnamespace + ctx.getNativeMapping("eglx.lang.EString") + '.');
-		out.print(expr.getOperator());
-		out.print("(");
-		String delim = "";
-		for (Expression operand : expr.getOperands()) {
-			if (operand != null){
-				out.print(delim);
-				ctx.invoke(genExpression, operand, ctx, out);
-				delim = ",";
-			}
-		}
-		out.print(")");
+public class TernaryExpressionTemplate extends JavaScriptTemplate 
+{
+	public void genExpression( TernaryExpression expr, Context ctx, TabbedWriter out )
+	{
+		out.print( "((" );
+		ctx.invoke( genExpression, expr.getFirst(), ctx, out );
+		out.print( ")?(" );
+		ctx.invoke( genExpression, expr.getSecond(), ctx, out );
+		out.print( "):(" );
+		ctx.invoke( genExpression, expr.getThird(), ctx, out );
+		out.print( "))" );
 	}
 }

@@ -28,6 +28,7 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctio
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionSignatureProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -49,72 +50,32 @@ public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenc
 	 */
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		if (isState(parseStack, ((Integer) validStates.get(0)).intValue()) ||
-			isState(parseStack, ((Integer) validStates.get(2)).intValue()) ||
-			isState(parseStack, ((Integer) validStates.get(3)).intValue())) {
-			getBoundASTNode(viewer, documentOffset, new String[] {");", ")", ";", "", ";end end"},
-				new CompletedNodeVerifier() { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					public boolean nodeIsValid(Node astNode) {
-						return astNode instanceof FunctionInvocation || astNode instanceof NewExpression;
-					}
-				},
-				new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
-					Node nodeThatMightBeAssignment = getNodeThatMightBeAssignment(boundNode);
-					if(nodeThatMightBeAssignment instanceof Assignment) {
-						Object elem = ((Assignment) nodeThatMightBeAssignment).getLeftHandSide().resolveElement();
-						if(elem instanceof Annotation) {
-							//We are completing the rhs of a property value
-							return;
-						}
-					}
-					
-					
-					if(prefix.length() == 0 &&
-						(
-							boundNode instanceof FunctionInvocation ||
-							(
-								boundNode instanceof NewExpression &&
-								((NewExpression) boundNode).getType().isNameType()
-							)
-						)
-					) {
-						proposals.addAll(
-							new EGLFunctionSignatureProposalHandler(viewer,
-								documentOffset,
-								boundNode instanceof FunctionInvocation ?
-									((FunctionInvocation) boundNode).getTarget() :
-									((NameType) ((NewExpression) boundNode).getType()).getName())
-								.getProposals());
-					}
-					else {				
-						proposals.addAll(
-							new EGLDeclarationProposalHandler(viewer,
-								documentOffset,
-								prefix,
-								boundNode)
-								.getProposals(boundNode));
-			
-						//Get user field proposals using library use statements
-						proposals.addAll(
-							new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
-												
-						//Get user function proposals with return value using library use statements
-						proposals.addAll(
-							new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
-			
-						//Get user function proposals with return value
-						proposals.addAll(
-							new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
-						
-						//Get all library and external type proposals
-						proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
-							IEGLSearchConstants.LIBRARY|IEGLSearchConstants.EXTERNALTYPE));
-						
-					}
-				}
-			});
-		}
-
+		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {
+			public void processBoundNode(Node boundNode) {
+				proposals.addAll(
+					new EGLDeclarationProposalHandler(viewer,
+						documentOffset,
+						prefix,
+						boundNode)
+							.getProposals(boundNode));
+				
+				//Get user field proposals using library use statements
+				proposals.addAll(
+					new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
+				
+				//Get user function proposals with return value using library use statements
+				proposals.addAll(
+					new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+				
+				//Get user function proposals with return value
+				proposals.addAll(
+					new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+			}
+		});
+		
+		//Get all proposals for parts that have static memebers
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
+		
 		return proposals;
 	}
 	

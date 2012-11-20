@@ -17,16 +17,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Assignment;
-import org.eclipse.edt.mof.egl.BoxingExpression;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
-import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.NewExpression;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class ArrayTypeTemplate extends JavaScriptTemplate {
 
@@ -59,7 +50,7 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void processDefaultValue(ArrayType generic, Context ctx, TabbedWriter out) {
-		out.print(" []"); // TODO sbg Nullable support
+		out.print(" []");
 	}
 	
 	public void genContainerBasedNewExpression( ArrayType type, Context ctx, TabbedWriter out, NewExpression expr ) {
@@ -68,19 +59,23 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 	}
 	
 	private void genContainerBasedNewExpressionArguments( ArrayType type, Context ctx, TabbedWriter out, List<Expression> arguments, int next ) {
-		int arraySize = 0;
-		try {
-			if ( arguments.size() > 0 ) {
-				Expression argument = arguments.get( next );
-				arraySize = Integer.valueOf(((IntegerLiteral)argument).getValue());
+		// If the size isn't a literal or parameter to the function, pass it
+		// in to the function we generate.
+		Expression arraySize = null;
+		String sizeVar = "";
+		if ( arguments.size() > 0 )
+		{
+			arraySize = arguments.get( next );
+			if ( !(arraySize instanceof NumericLiteral
+				|| (arraySize instanceof MemberName && ((MemberName)arraySize).getMember() instanceof FunctionParameter)) )
+			{
+				sizeVar = ctx.nextTempName();
 			}
 		}
-		catch (Exception e) {
-			arraySize = 0;
-		}
+
 		ArrayType generic = (ArrayType)type;
 		String temporary = ctx.nextTempName();
-		out.print("(function() { var ");
+		out.print("(function(" + sizeVar + ") { var ");
 		out.print(temporary);
 		out.print(" = []; ");
 		out.print(temporary);
@@ -89,7 +84,20 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		genSignature(generic, ctx, out);
 		out.print("\"");
 		out.println(");");
-		out.println("for (var i = 0; i < " + arraySize + "; i++) {");
+		out.print("for (var i = 0; i < ");
+		if ( sizeVar.length() > 0 )
+		{
+			out.print( sizeVar );
+		}
+		else if ( arraySize != null )
+		{
+			ctx.invoke( genExpression, arraySize, ctx, out );
+		}
+		else
+		{
+			out.print( '0' );
+		}
+		out.println("; i++) {");
 		out.print(temporary);
 		out.print("[i] = ");
 		if (generic.elementsNullable())
@@ -105,8 +113,12 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		out.println(";}");
 		out.print("return ");
 		out.print(temporary);
-		out.print(";})()");
-
+		out.print(";})(");
+		if ( sizeVar.length() > 0 )
+		{
+			ctx.invoke( genExpression, arraySize, ctx, out );
+		}
+		out.print(')');
 	}
 	
 	private Type getArrayElementType(ArrayType generic){

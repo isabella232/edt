@@ -25,11 +25,11 @@ import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLDataTypeUtility;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
+public class EGLAliasedTypeProposalHandler extends EGLAbstractProposalHandler {
 
 	private org.eclipse.edt.mof.egl.Part part;
 
-	public EGLPrimitiveProposalHandler(ITextViewer viewer, int documentOffset, String prefix, Node boundNode) {
+	public EGLAliasedTypeProposalHandler(ITextViewer viewer, int documentOffset, String prefix, Node boundNode) {
 		super(viewer, documentOffset, prefix);
 		
 		if (boundNode != null) {
@@ -43,10 +43,6 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 	}
 
 	public List getProposals() {
-		return getProposals(false);
-	}
-
-	public List getProposals(boolean loose) {
 		List proposals = new ArrayList();
 
 		proposals.addAll(createPrimitiveProposals(getPrimitiveTypes()));
@@ -54,21 +50,14 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 	}
 
 	private String[] getPrimitiveTypes() {
-		return EGLDataTypeUtility.PRIMITIVE_TYPE_STRINGS;
+		return EGLDataTypeUtility.ALIASED_TYPE_STRINGS;
 	}
 
 	private List createPrimitiveProposals(String[] primitiveStrings) {
 		List proposals = new ArrayList();
-		int curserDelta;
 		for (int i = 0; i < primitiveStrings.length; i++) {
 			if (primitiveStrings[i].toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					String primitiveString = primitiveStrings[i];
-					if (needsParens(primitiveString)) {
-						curserDelta = 1;
-						primitiveString = primitiveString + "()"; //$NON-NLS-1$
-					} else {
-						curserDelta = 0;
-					}
 					proposals.add(
 						new EGLCompletionProposal(viewer,
 							null,
@@ -76,7 +65,7 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 							getAdditionalInfo(),
 							getDocumentOffset() - getPrefix().length(),
 							getPrefix().length(),
-							primitiveString.length() - curserDelta,
+							primitiveString.length(),
 							EGLCompletionProposal.RELEVANCE_PRIMITIVE,
 							EGLCompletionProposal.NO_IMG_KEY));
 				}
@@ -90,53 +79,6 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 	 */
 	private String getAdditionalInfo() {
 		return UINlsStrings.CAProposal_PrimitiveType;
-	}
-
-	/**
-	 * @param propertyName
-	 * @return
-	 */
-	private boolean checkVagCompatibility(String primitiveName, boolean vagCompatibility) {
-		if (vagCompatibility)
-			return true;
-		return !(primitiveName.equalsIgnoreCase(IEGLConstants.NUMC_STRING)
-			|| primitiveName.equalsIgnoreCase(IEGLConstants.PACF_STRING));
-	}
-
-	/**
-	 * @param primitiveString
-	 * @return
-	 */
-	private boolean needsParens(String primitiveString) {
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_INT))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_BIGINT))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_BOOLEAN))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_BYTES))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_SMALLINT))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_FLOAT))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_SMALLFLOAT))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_DATE))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_TIME))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_MONEY))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_STRING))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_NUMBER))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_TIMESTAMP))
-			return false;
-		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_INTERVAL))
-			return false;
-		return true;
 	}
 
 }

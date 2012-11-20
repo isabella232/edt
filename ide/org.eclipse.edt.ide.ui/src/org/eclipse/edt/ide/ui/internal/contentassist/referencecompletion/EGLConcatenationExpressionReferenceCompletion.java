@@ -39,21 +39,14 @@ public class EGLConcatenationExpressionReferenceCompletion extends EGLAbstractRe
 		final List proposals = new ArrayList();
 
 		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
-			//Get all record variable proposals		
+			//Get all variable proposals
 			proposals.addAll(
-				new EGLDeclarationProposalHandler(viewer,
+				new EGLDeclarationProposalHandler(
+					viewer,
 					documentOffset,
 					prefix,
 					boundNode)
-						.getRecordProposals(EGLDeclarationProposalHandler.ALL_RECORDS, boundNode, false, false, false));
-			
-			//Get all variable and constant proposals
-			proposals.addAll(
-				new EGLDeclarationProposalHandler(viewer,
-					documentOffset,
-					prefix,
-					boundNode)
-						.getDataItemProposals(EGLDeclarationProposalHandler.ALL_DATAITEMS, true));
+					.getProposals(boundNode));
 			
 			//Get user field proposals using library use statements
 			proposals.addAll(

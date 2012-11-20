@@ -11,42 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.contentassist;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.edt.compiler.internal.IEGLConstants;
-/*
- * Comment unsupported language for edt 0.7, those will be uncommented later for edt 1.0
- */
+
 public interface EGLDataTypeUtility {
 
-	public final static String[] All_PREDEFINED_TYPE_STRINGS = {
-	  		IEGLConstants.MIXED_ANY_STRING,
-	  		IEGLConstants.MIXED_DICTIONARY_STRING,
-	};
-	
-
-	public final static String[] PREDEFINED_SERVICE_FUNCTION_TYPE_STRINGS = {
-  			IEGLConstants.MIXED_DICTIONARY_STRING,
-	};
-	 	 
-	public final static String[] PREDEFINED_DATA_TYPE_STRINGS = {
-  		IEGLConstants.MIXED_ANY_STRING,
-  		IEGLConstants.MIXED_DICTIONARY_STRING,
-	};
-	
-	public final static String[] PREDEFINED_NEWABLE_TYPE_STRINGS = {
-			IEGLConstants.MIXED_DICTIONARY_STRING,
-};
-	 
-	 
-	public final static String[] PRIMITIVE_TYPE_STRINGS = {
+		 
+	public final static String[] ALIASED_TYPE_STRINGS = {
+  		IEGLConstants.KEYWORD_ANY,
   		IEGLConstants.KEYWORD_BIGINT,
 		IEGLConstants.KEYWORD_BOOLEAN,
 		IEGLConstants.KEYWORD_BYTES,
 		IEGLConstants.KEYWORD_DATE,
 		IEGLConstants.KEYWORD_DECIMAL,
+		IEGLConstants.MIXED_DICTIONARY_STRING,
 		IEGLConstants.KEYWORD_FLOAT,
 		IEGLConstants.KEYWORD_INT,
 		IEGLConstants.KEYWORD_NUMBER,

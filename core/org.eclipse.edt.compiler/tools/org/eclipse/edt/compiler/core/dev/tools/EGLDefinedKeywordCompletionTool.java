@@ -40,11 +40,11 @@ public class EGLDefinedKeywordCompletionTool {
 			String keyword = keywords[i];
 			stringBuffer.setLength(0);
 			stringBuffer.append(prefixTabs);
-			stringBuffer.append("new EGLKeywordCompletion(EGLNodeTypes."); //$NON-NLS-1$
+			stringBuffer.append("completionList.add(new EGLKeywordCompletion(NodeTypes."); //$NON-NLS-1$
 			stringBuffer.append(keyword.toUpperCase());
 			stringBuffer.append(", IEGLConstants.KEYWORD_"); //$NON-NLS-1$
 			stringBuffer.append(keyword.toUpperCase());
-			stringBuffer.append("),"); //$NON-NLS-1$
+			stringBuffer.append("));"); //$NON-NLS-1$
 			System.out.println(stringBuffer);
 		}
 	}

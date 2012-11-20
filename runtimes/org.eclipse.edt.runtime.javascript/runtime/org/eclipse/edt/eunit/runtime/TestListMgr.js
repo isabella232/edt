@@ -9,7 +9,6 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-define(["org/eclipse/edt/eunit/runtime/LogResult", "eglx/services/ServiceInvocationException", "org/eclipse/edt/eunit/runtime/MultiStatus", "org/eclipse/edt/eunit/runtime/ConstantsLib", "org/eclipse/edt/eunit/runtime/ServiceBindingType", "org/eclipse/edt/eunit/runtime/AssertionFailedException", "org/eclipse/edt/eunit/runtime/TestListMgr"],function(){
 	if (egl.eze$$userLibs) egl.eze$$userLibs.push('org.eclipse.edt.eunit.runtime.TestListMgr');
 	else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.TestListMgr'];
 	egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
@@ -408,4 +407,3 @@ define(["org/eclipse/edt/eunit/runtime/LogResult", "eglx/services/ServiceInvocat
 			}
 		}
 	);
-});

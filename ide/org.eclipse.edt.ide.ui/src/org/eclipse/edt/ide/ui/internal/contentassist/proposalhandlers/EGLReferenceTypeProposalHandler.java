@@ -32,8 +32,7 @@ public class EGLReferenceTypeProposalHandler extends EGLAbstractProposalHandler 
 				IEGLSearchConstants.SERVICE | IEGLSearchConstants.RECORD, "")); //$NON-NLS-1$
 		
 		if(boundNode != null) {
-			proposals.addAll(new EGLPrimitiveProposalHandler(viewer, getDocumentOffset(), getPrefix(), boundNode).getProposals());
-			proposals.addAll(new EGLPredefinedDataTypeProposalHandler(viewer, getDocumentOffset(), getPrefix(), boundNode).getProposals());
+			proposals.addAll(new EGLAliasedTypeProposalHandler(viewer, getDocumentOffset(), getPrefix(), boundNode).getProposals());
 		}
 		return proposals;
 	}

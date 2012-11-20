@@ -54,18 +54,6 @@ import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
-	//DataItem subtypes
-	public static final int INTEGER_DATAITEM = 1;
-	public static final int NUMERIC_DATAITEM = 2;
-	public static final int STRING_DATAITEMS = 3;
-	public static final int NUMERIC_STRING_DATAITEMS = 4;
-	public static final int ALL_DATAITEMS = 5;
-
-	//Record subtypes
-	public static int BASIC_RECORD = 1<<0;
-	public static int ENTITY_RECORD = 1<<1;
-	public static int EXCEPTION = 1<<12;
-	public static int ALL_RECORDS =  ENTITY_RECORD | EXCEPTION;
 	
 	private static interface IDataBindingFilter {
 		boolean dataBindingPasses(Member member);
@@ -76,243 +64,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			return true;
 		}
 	}
-	
-	private static class RecordSubtypeDataBindingFilter implements IDataBindingFilter {
-		private int recordTypes;
-		private boolean allowArray;
-		
-		public RecordSubtypeDataBindingFilter(int recordTypes, boolean allowArray) {
-			this.recordTypes = recordTypes;
-			this.allowArray = allowArray;
-		}
-		
-		public boolean dataBindingPasses(Member member) {
-			Type type = member.getType();			
-			if(type != null) {
-				if(allowArray) {
-					type = BindingUtil.getBaseType(type);
-				}
-				
-				if((ENTITY_RECORD & recordTypes) == ENTITY_RECORD) {
-					if (type.getAnnotation("eglx.persistence.Entity") != null) {
-						return true;
-					}
-				}
-			}			
-			return false;
-		}
-	}
-	
-	private static class DataItemTypeDataBindingFilter implements IDataBindingFilter {
-		private int dataItemType;
-		
-		public DataItemTypeDataBindingFilter(int dataItemType) {
-			this.dataItemType = dataItemType;
-		}
-		
-		public boolean dataBindingPasses(Member member) {
-			Type type = member.getType();			
-			if(type != null) {
-				type = BindingUtil.getBaseType(type);
-				
-				if(TypeUtils.isPrimitive(type)) {
-					
-					switch(dataItemType) {
-						case ALL_DATAITEMS:
-							return true;
-							
-						case STRING_DATAITEMS:
-							return TypeUtils.isTextType(type);
-							
-						case NUMERIC_DATAITEM:
-							return TypeUtils.isNumericType(type);
-							
-						case NUMERIC_STRING_DATAITEMS:
-							return TypeUtils.isNumericType(type) || TypeUtils.isTextType(type);
-							
-						case INTEGER_DATAITEM:
-							return TypeUtils.isNumericTypeWithNoDecimals(type);
-					}
-				}
-			}
-			return false;
-		}
-	}
-	
-	private static class ServiceTypeDataBindingFilter implements IDataBindingFilter {
-		
-		public ServiceTypeDataBindingFilter() {
-		}
-		
-		public boolean dataBindingPasses(Member member) {
-			Type type = member.getType();			
-			if(type != null) {
-				type = BindingUtil.getBaseType(type);
-				if(type instanceof org.eclipse.edt.mof.egl.Service || type instanceof Interface)
-					return true;
-			}
-			return false;
-		}
-	}
-	
-	private static class DataSourceTypeDataBindingFilter implements IDataBindingFilter{
-
-		public DataSourceTypeDataBindingFilter(){
-		}
-		
-		public boolean dataBindingPasses(Member member) {
-			return typePasses(member.getType());
-		}
-		
-		private boolean typePasses(Type type) {
-			if (type != null) {
-				type = BindingUtil.getBaseType(type);
-
-				if (isDataSourceType(type)) {
-					return true;
-				}
-
-				if (type instanceof ExternalType) {
-					List<StructPart> extendTypes = ((ExternalType)type).getSuperTypes();
-					for (StructPart extendType : extendTypes) {
-						if (typePasses(extendType)) {
-							return true;
-						}
-					}
-				}
-			}
-
-			return false;
-		}
-		
-	}
-	
-	private static boolean isDataSourceType(Type type){
-		String name = getTypeString(type);
-		if (name.equalsIgnoreCase(
-				IEGLConstants.MIXED_DATASOURCE_STRING)
-				|| name.equalsIgnoreCase(
-						IEGLConstants.MIXED_SQLDATASOURCE_STRING)
-				|| name.equalsIgnoreCase(
-						IEGLConstants.MIXED_SQLRESULTSET_STRING)
-				|| name.equalsIgnoreCase(
-						IEGLConstants.MIXED_SCROLLABLEDATASOURCE_STRING)) {
-			return true;
-		}
-		return false;
-	}
-	
-	private static class SQLStatementTypeDataBindingFilter implements IDataBindingFilter{
-
-		public SQLStatementTypeDataBindingFilter(){
-		}
-		
-		public boolean dataBindingPasses(Member member) {
-			Type type = member.getType();			
-			if (type != null) {
-				type = BindingUtil.getBaseType(type);
-				if (isSqlStatement(type)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-		
-	}
-	
-	private static boolean isSqlStatement(Type type) {
-		if (getTypeString(type).equalsIgnoreCase(
-				IEGLConstants.MIXED_SQLSTATEMENT_STRING)) {
-			return true;
-		}
-
-		return false;
-	}
-	
-	private static class SQLStringTypeDataBindingFilter implements IDataBindingFilter{
-
-		public SQLStringTypeDataBindingFilter(){
-		}
-		
-		public boolean dataBindingPasses(Member member) {
-			Type type = member.getType();			
-			if (type != null) {
-				type = BindingUtil.getBaseType(type);
-				if (isSqlString(type)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-		
-	}
-	
-	private static boolean isSqlString(Type type) {
-		return TypeUtils.Type_STRING.equals(type.getClassifier());
-	}
-	
-	private static class SQLActionTargetsExternalTypeDataBindingFilter implements IDataBindingFilter{
-
-		public SQLActionTargetsExternalTypeDataBindingFilter() {
-		}
-		
-		@Override
-		public boolean dataBindingPasses(Member member) {
-			Type type = member.getType();			
-			if(type != null) {
-				type = BindingUtil.getBaseType(type);
-				if (type instanceof ExternalType
-						&& !isDataSourceType(type) && !isSqlStatement(type)) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-	}
-	
-	private static class HandlerTypeDataBindingFilter implements IDataBindingFilter{
-
-		public HandlerTypeDataBindingFilter() {
-		}
-		
-		@Override
-		public boolean dataBindingPasses(Member member) {
-			Type type = member.getType();			
-			if(type != null) {
-				type = BindingUtil.getBaseType(type);
-				if(type instanceof org.eclipse.edt.mof.egl.Handler)
-					return true;
-			}
-			
-			return false;
-		}
-		
-	}
-	
-	private static class RecordTypeDataBindingFilter implements IDataBindingFilter{
-
-		public RecordTypeDataBindingFilter() {
-		}
-		
-		@Override
-		public boolean dataBindingPasses(Member member) {
-			Type type = member.getType();			
-			if(type != null) {
-				type = BindingUtil.getBaseType(type);
-				if (type instanceof Record){
-					return true;
-				}
-			}
-			return false;
-		}
-
-	}
-	
-
-	
+									
 	private Node functionContainerPart;
 	private Node functionPart;
 	private boolean parens;
@@ -354,153 +106,6 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		return proposals;
 	}
 
-	public List getRecordProposals(int recordTypes) {
-		return getRecordProposals(recordTypes, false);
-	}
-
-	public List getRecordProposals(int recordTypes, boolean allowArray) {
-		return getRecordProposals(recordTypes, allowArray, false);
-	}
-
-	public List getRecordProposals(int recordTypes, boolean allowArray, boolean quoted) {
-		return getRecordProposals(recordTypes, allowArray, quoted, false);
-	}
-
-	public List getRecordProposals(int recordTypes, boolean allowArray, boolean quoted, boolean parens) {
-		return getRecordProposals(recordTypes, null, allowArray, quoted, parens);
-	}
-
-	public List getRecordProposals(int recordTypes, Node node, boolean allowArray, boolean quoted, boolean parens) {
-		this.parens = parens;
-		List proposals = new ArrayList();
-		proposals.addAll(getParameterRecordProposals(recordTypes, allowArray, quoted));
-		proposals.addAll(getContainerVariableRecordProposals(recordTypes, allowArray, quoted));
-		proposals.addAll(getVariableRecordProposals(recordTypes, allowArray, quoted));
-		if (node != null)
-			proposals.addAll(getExceptionDeclarationProposals(node));
-		return proposals;
-	}
-
-	public List getDataItemProposals(int integerType) {
-		return getDataItemProposals(integerType, true);
-	}
-
-	public List getDataItemProposals(int integerType, boolean constants) {
-		return getDataItemProposals(integerType, constants, false);
-	}
-
-	public List getDataItemProposals(int integerType, boolean constants, boolean parens) {
-		this.parens = parens;
-		List proposals = new ArrayList();
-		proposals.addAll(getParameterDataItemProposals(integerType));
-		proposals.addAll(getContainerVariableDataItemProposals(integerType, constants));
-		proposals.addAll(getVariableDataItemProposals(integerType, constants));
-		return proposals;
-	}
-
-	public List getServiceProposals() {
-		
-		List proposals = new ArrayList();
-		proposals.addAll(getVariableProposals(new ServiceTypeDataBindingFilter(), false, false));
-		proposals.addAll(getContainerVariableProposals(new ServiceTypeDataBindingFilter(), false, false));
-		return proposals;
-	}
-	
-	public List getDataSourceProposals(){
-		List proposals = new ArrayList();
-		proposals.addAll(getVariableProposals(new DataSourceTypeDataBindingFilter(), false, false));
-		proposals.addAll(getContainerVariableProposals(new DataSourceTypeDataBindingFilter(), false, false));
-		return proposals;
-	}
-	
-	public List getSQLStatementProposals(){
-		List proposals = new ArrayList();
-		proposals.addAll(getVariableProposals(new SQLStatementTypeDataBindingFilter(), false, false));
-		proposals.addAll(getContainerVariableProposals(new SQLStatementTypeDataBindingFilter(), false, false));
-		return proposals;
-	}
-	
-	public List getSQLStringProposals(){
-		List proposals = new ArrayList();
-		proposals.addAll(getVariableProposals(new SQLStringTypeDataBindingFilter(), false, false));
-		proposals.addAll(getContainerVariableProposals(new SQLStringTypeDataBindingFilter(), false, false));
-		return proposals;
-	}
-
-	private List getAllRecordProposals(){
-		List proposals = new ArrayList();
-		proposals.addAll(getParameterProposals(new RecordTypeDataBindingFilter(), false));
-		proposals.addAll(getVariableProposals(new RecordTypeDataBindingFilter(), false, false));
-		proposals.addAll(getContainerVariableProposals(new RecordTypeDataBindingFilter(), false, false));
-		return proposals;
-	}
-	
-	private List getAllHandlerProposals(){
-		List proposals = new ArrayList();
-		proposals.addAll(getVariableProposals(new HandlerTypeDataBindingFilter(), false, false));
-		proposals.addAll(getContainerVariableProposals(new HandlerTypeDataBindingFilter(), false, false));
-		return proposals;
-	}
-	
-	private List getAllExternalTypeProposals(){
-		List proposals = new ArrayList();
-		proposals.addAll(getVariableProposals(new SQLActionTargetsExternalTypeDataBindingFilter(), false, false));
-		proposals.addAll(getContainerVariableProposals(new SQLActionTargetsExternalTypeDataBindingFilter(), false, false));
-		return proposals;
-	}
-	
-	/**
-	 * 
-	 * @return return all sql action targets from the context
-	 */
-	public List getSQLActioniTargets(){
-		List proposals = new ArrayList();
-		
-		proposals.addAll(getAllRecordProposals());
-		proposals.addAll(getAllHandlerProposals());
-		proposals.addAll(getAllExternalTypeProposals());
-		
-		return proposals;
-	}
-
-	/**
-	 * @param includeConstants 
-	 * @return
-	 */
-	private List getVariableDataItemProposals(int dataItemType, boolean includeConstants) {
-		return getVariableProposals(new DataItemTypeDataBindingFilter(dataItemType), includeConstants, false);
-	}
-
-	/**
-	 * @param includeConstants 
-	 * @return
-	 */
-	private List getContainerVariableDataItemProposals(int dataItemType, boolean includeConstants) {
-		return getContainerVariableProposals(new DataItemTypeDataBindingFilter(dataItemType), includeConstants, false);
-	}
-
-	/**
-	 * @return
-	 */
-	private List getParameterDataItemProposals(int dataItemType) {
-		return getParameterProposals(new DataItemTypeDataBindingFilter(dataItemType), false);
-	}
-
-	/**
-	 * @return
-	 */
-	private List getContainerParameterDataItemProposals(int dataItemType) {
-		return getContainerVariableProposals(new DataItemTypeDataBindingFilter(dataItemType), true, false);
-	}
-	
-	private List getContainerParameterRecordProposals(int recordType, boolean allowArray, boolean quoted) {
-		return getContainerVariableProposals(new RecordSubtypeDataBindingFilter(recordType, allowArray), true, quoted);
-	}
-	
-	private List getVariableRecordProposals(int recordTypes, boolean allowArray, boolean quoted) {
-		return getVariableProposals(new RecordSubtypeDataBindingFilter(recordTypes, allowArray), false, quoted);
-	}
-	
 	/*
 	 * get the parameter proposals for the current function
 	 */
@@ -521,26 +126,11 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 				if (parm.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					if(dataBindingFilter.dataBindingPasses(parm) && precondition(parm)) {
 						String proposalString = getProposalString(parm.getCaseSensitiveName());
-						proposals.add(createDeclarationProposal(parm, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, true));					
+						proposals.add(createDeclarationProposal(parm, proposalString, EGLCompletionProposal.RELEVANCE_MEMBER, quoted, true));					
 					}
 				}
 			}
 		}
-		return proposals;
-	}
-
-	/*
-	 * get the parameter record proposals for the current function
-	 */
-	private List getParameterRecordProposals(int recordTypes, boolean allowArray, boolean quoted) {
-		return getParameterProposals(new RecordSubtypeDataBindingFilter(recordTypes, allowArray), quoted);
-	}
-	
-	public List getProgramParameterRecordProposals(int recordTypes, boolean allowArray, boolean quoted) {
-		parens = false;
-		List proposals = new ArrayList();
-		if (functionContainerPart instanceof Program)
-			proposals.addAll(getContainerParameterRecordProposals(recordTypes, allowArray, quoted));
 		return proposals;
 	}
 
@@ -574,20 +164,13 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 					if(dataBindingFilter.dataBindingPasses(field) && precondition(field)) {
 						if(includeConstants || !(field instanceof ConstantField)) {
 							String proposalString = getProposalString(field.getCaseSensitiveName());
-							proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, false));
+							proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_MEMBER, quoted, false));
 						}
 					}
 				}
 			}
 		}
 		return proposals;
-	}
-
-	/*
-	 * get the declaration record proposals for the current function's container (program)
-	 */
-	private List getContainerVariableRecordProposals(int recordTypes, boolean allowArray, boolean quoted) {
-		return getContainerVariableProposals(new RecordSubtypeDataBindingFilter(recordTypes, allowArray), false, quoted);
 	}
 	
 	/*
@@ -617,7 +200,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 						if(dataBindingFilter.dataBindingPasses(field) && precondition(field)) {
 							if(includeConstants || !(field instanceof ConstantField)) {
 								String proposalString = getProposalString(field.getCaseSensitiveName());
-								proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, true));
+								proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_MEMBER, quoted, true));
 							}
 						}
 					}
@@ -647,7 +230,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 				if (field.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					if(dataBindingFilter.dataBindingPasses(field) && precondition(field)) {
 						String proposalString = getProposalString(field.getCaseSensitiveName());
-						proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, false, true));
+						proposals.add(createDeclarationProposal(field, proposalString, EGLCompletionProposal.RELEVANCE_MEMBER, false, true));
 					}
 				}
 			}

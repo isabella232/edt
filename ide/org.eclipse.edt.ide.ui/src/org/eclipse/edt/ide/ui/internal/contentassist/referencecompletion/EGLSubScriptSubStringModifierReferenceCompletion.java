@@ -21,6 +21,11 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MofConversion;
@@ -53,74 +58,32 @@ public class EGLSubScriptSubStringModifierReferenceCompletion
 	 */
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		//see comments above about contexts with same state
-		if (isState(parseStack, ((Integer) validStates.get(0)).intValue()) ||
-			isState(parseStack, ((Integer) validStates.get(1)).intValue()) ||
-			isState(parseStack, ((Integer) validStates.get(2)).intValue())) {
-			getBoundASTNode(viewer, documentOffset, new String[] {"x]", "x", "", "x]=x;"}, new CompletedNodeVerifier() {
-				public boolean nodeIsValid(Node astNode) {
-					while(astNode != null) {
-						if(astNode instanceof ArrayAccess || astNode instanceof SubstringAccess) {
-							return true;
-						}
-						astNode = astNode.getParent();
-					}
-					return false;
-				}
-			}, new IBoundNodeProcessor() {
-				public void processBoundNode(Node boundNode) {
-					if(boundNode instanceof ArrayAccess) {
-						Type type = ((ArrayAccess) boundNode).getArray().resolveType();
-						if(type != null) {
-							if(type instanceof ArrayType ||
-								type.equals(TypeUtils.Type_STRING)) {
-								//Get all integer data item variable proposals
-								proposals.addAll(
-									new EGLDeclarationProposalHandler(viewer,
-										documentOffset,
-										prefix,
-										boundNode)
-											.getDataItemProposals(EGLDeclarationProposalHandler.INTEGER_DATAITEM));
-							
-								//Get all record variable proposals
-								proposals.addAll(
-									new EGLDeclarationProposalHandler(viewer,
-										documentOffset,
-										prefix,
-										boundNode)
-											.getRecordProposals(EGLDeclarationProposalHandler.ALL_RECORDS));
-								return;
-							}
-						}
-					}
-					else if(boundNode instanceof SubstringAccess) {
-						Type type = ((SubstringAccess) boundNode).getPrimary().resolveType();
-						if(type != null) {
-							if(type instanceof ArrayType ||
-									type.equals(TypeUtils.Type_STRING)) {
-								//Get all integer data item variable proposals
-								proposals.addAll(
-									new EGLDeclarationProposalHandler(viewer,
-										documentOffset,
-										prefix,
-										boundNode)
-											.getDataItemProposals(EGLDeclarationProposalHandler.INTEGER_DATAITEM));
-							
-								//Get all record variable proposals
-								proposals.addAll(
-									new EGLDeclarationProposalHandler(viewer,
-										documentOffset,
-										prefix,
-										boundNode)
-											.getRecordProposals(EGLDeclarationProposalHandler.ALL_RECORDS));
-								return;
-							}
-						}
-					}
-					boundNode = boundNode.getParent();							
-				}
-			});
-		}
+
+		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
+			//Get all variable proposals
+			proposals.addAll(
+				new EGLDeclarationProposalHandler(
+					viewer,
+					documentOffset,
+					prefix,
+					boundNode)
+					.getProposals(boundNode));
+			
+			//Get user field proposals using library use statements
+			proposals.addAll(
+				new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
+
+			//Get user function proposals with return value using library use statements
+			proposals.addAll(
+				new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+			
+			//Get user function proposals with return value
+			proposals.addAll(
+				new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+		}});
+		
+		//Get all proposals for parts that contain static members
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
 		
 		return proposals;
 	}

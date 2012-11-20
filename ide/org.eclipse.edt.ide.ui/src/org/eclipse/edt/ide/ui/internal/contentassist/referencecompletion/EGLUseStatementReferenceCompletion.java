@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLUseStatementProposalHandler;
+import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLUseStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -26,6 +27,8 @@ public class EGLUseStatementReferenceCompletion extends EGLAbstractReferenceComp
 	protected void precompileContexts() {
 		addContext("package a; handler a use"); //$NON-NLS-1$
 		addContext("package a; handler a use a,"); //$NON-NLS-1$
+		addContext("package a; class a use"); //$NON-NLS-1$
+		addContext("package a; class a use a,"); //$NON-NLS-1$
 
 	}
 
@@ -34,10 +37,8 @@ public class EGLUseStatementReferenceCompletion extends EGLAbstractReferenceComp
 	 */
 	protected List returnCompletionProposals(ParseStack parseStack, String prefix, ITextViewer viewer, int documentOffset) {
 		//see comments above about contexts with same state
-		if (isState(parseStack, ((Integer) validStates.get(0)).intValue())) {
-			return new EGLUseStatementProposalHandler(viewer, documentOffset, prefix, editor).getProposals();
-		}
-		return new ArrayList();
+		return (new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(
+				IEGLSearchConstants.LIBRARY|IEGLSearchConstants.ENUMERATION)); //$NON-NLS-1$
 	}
 
 }

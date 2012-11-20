@@ -42,8 +42,8 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.Type;
 
 public class PartDeclarationPattern extends SearchPattern {
@@ -480,13 +480,13 @@ private boolean isStereotype(IPart part) {
 private boolean isAnnotation(Part part) {
 	Name name = part.getName();
 	Type binding = name.resolveType();
-	return binding instanceof Annotation;
+	return binding instanceof AnnotationType;
 }
 
 private boolean isStereotype(Part part) {
 	Name name = part.getName();
 	Type binding = name.resolveType();
-	return binding instanceof Stereotype;
+	return binding instanceof StereotypeType;
 }
 
 /**

@@ -20,6 +20,11 @@ import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLExitProgramStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -36,36 +41,33 @@ public class EGLExitProgramStatementReferenceCompletion extends EGLAbstractRefer
 	 */
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		int prefixLength = prefix.length();
-		if (IEGLConstants.KEYWORD_SYSVAR.toUpperCase().startsWith(prefix.toUpperCase())) {
-			String replacementString = IEGLConstants.KEYWORD_SYSVAR + "." + IEGLConstants.SYSTEM_WORD_RETURNCODE; //$NON-NLS-1$
-			proposals.add(
-				new EGLCompletionProposal(viewer,
-					null,
-					replacementString,
-					UINlsStrings.CAProposal_ExitProgramStatement,
-					documentOffset - prefixLength,
-					prefixLength,
-					replacementString.length(),
-					EGLCompletionProposal.NO_IMG_KEY));
-		}
 
 		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
-			//add variable numeric item proposals
-			proposals.addAll(new EGLDeclarationProposalHandler(
-				viewer,
-				documentOffset,
-				prefix,
-				boundNode).getDataItemProposals(EGLDeclarationProposalHandler.NUMERIC_DATAITEM));
+			//Get all variable proposals
+			proposals.addAll(
+				new EGLDeclarationProposalHandler(
+					viewer,
+					documentOffset,
+					prefix,
+					boundNode)
+					.getProposals(boundNode));
 			
-			//add variable record proposals
-			proposals.addAll(new EGLDeclarationProposalHandler(
-				viewer,
-				documentOffset,
-				prefix,
-				boundNode).getRecordProposals(EGLDeclarationProposalHandler.ALL_RECORDS, boundNode, false, false, false));
-		}});
+			//Get user field proposals using library use statements
+			proposals.addAll(
+				new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
 
+			//Get user function proposals with return value using library use statements
+			proposals.addAll(
+				new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+			
+			//Get user function proposals with return value
+			proposals.addAll(
+				new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+		}});
+		
+		//Get all proposals for parts that contain static members
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
+		
 		return proposals;
 	}
 }
