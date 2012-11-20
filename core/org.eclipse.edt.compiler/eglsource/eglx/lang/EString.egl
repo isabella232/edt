@@ -421,4 +421,136 @@ externalType EString extends AnyText type ParameterizableType {
 	 * @throws InvalidArgumentException if the encoding is not supported.
 	 */
 	function toBytes(encoding EString in) returns(EBytes);
+	
+	/**
+	 * Creates a string from a list of strings, with a separator between them.
+	 */
+	static function join( separator EString in, strings EString[] in ) returns( EString );
+	
+	/**
+	 * Returns an array containing substrings of this string.  The 'separator' 
+	 * parameter indicates where each substring ends.  If the separator is not 
+	 * contained in this string, then the result contains only this string.
+	 */
+	function split( separator EString in ) returns( EString[] );
+	
+	/**
+	 * Same as the other version of split, except the result will not be larger 
+	 * than the specified limit.  Once the separator has been found limit - 1 
+	 * times, the remainder of the string is returned in the last element of the 
+	 * array, even if it contains the separator.  Returns an empty array if limit 
+	 * is less than one.
+	 */
+	function split( separator EString in, limit EInt in ) returns( EString[] );
+	
+	/**
+	 * This is like split(string), except the returned substrings are separated by 
+	 * characters that match the specified pattern (see the matchesPattern 
+	 * function).
+	 */
+	function splitOnPattern( pattern EString in ) returns( EString[] );
+	
+	/**
+	 * This is the same as splitOnPattern(EString), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	function splitOnPattern( pattern EString in, escape EString in ) returns( EString[] );
+	
+	/**
+	 * Same as the other version of splitOnPattern, except the result will not be 
+	 * larger than the specified limit.  Once the pattern has been matched limit - 
+	 * 1 times, the remainder of the string is returned in the last element of the 
+	 * array, even if part of it matches the
+	 * pattern.  Returns an empty array if limit is less than one.
+	 */
+	function splitOnPattern( pattern EString in, limit EInt in ) returns( EString[] );
+	
+	/**
+	 * This is the same as splitOnPattern(EString,EInt), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	function splitOnPattern( pattern EString in, escape EString in, limit EInt in ) returns( EString[] );
+	
+	/**
+	 * Returns a reversed copy of this string.
+	 */
+	function reverse() returns( EString );
+	
+	/**
+	 * Does a case-insensitive comparison of two strings.  Returns a negative 
+	 * number, zero, or a positive number to indicate that this string is less 
+	 * than, equal to, or greater than the other string.
+	 */
+	function compareIgnoreCase( str EString in ) returns( EInt );
+	
+	/**
+	 * Makes a new string containing the characters of this string, with a second 
+	 * string inserted somewhere in the middle.
+	 *   str1.insert(offset, str2) is equivalent to 
+	 *   str1[1:offset] :: str2 :: str1[offset:str1.length()]
+	 *
+	 * @throws InvalidIndexException if offset is less than 1 or greater 
+	 *    than the length of this string.
+	 */
+	function insertStr( offset EInt in, str EString in ) returns( EString );
+	
+	/**
+	 * Makes a new string containing the characters of this string, with a section 
+	 * replaced by a second string.
+	 *   str1.replaceStrAt(start, end, str2) is equivalent to 
+	 *   str1[1:start] :: str2 :: str1[end:str1.length()]
+	 *
+	 * @throws InvalidIndexException if startIndex is less than 1, greater 
+	 *    than the length of this string, or greater than endIndex.
+	 * @throws InvalidIndexException if endIndex is greater than the length
+	 *    of this string.
+	 */
+	function replaceStrAt( startIndex EInt in, endIndex EInt in, str EString in ) returns( EString );
+	
+	/**
+	 * This is like the indexOf function, except we look for a pattern (as defined 
+	 * for the matchesPattern function) instead of a literal substring.
+	 */
+	function indexOfPattern( pattern EString in ) returns( EInt );
+
+	/**
+	 * This is the same as indexOfPattern(EString), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	function indexOfPattern( pattern EString in, escape EString in ) returns( EInt );
+	
+	/**
+	 * This is like the indexOf function, except we look for a pattern (as defined 
+	 * for the matchesPattern function) instead of a literal substring.
+	 *
+	 * @throws InvalidIndexException if startIndex is less than 1 or greater 
+	 *    than the length of this string.
+	 */
+	function indexOfPattern( pattern EString in, startIndex EInt in ) returns( EInt );
+	
+	/**
+	 * This is the same as indexOfPattern(EString,EInt), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	function indexOfPattern( pattern EString in, escape EString in, startIndex EInt in ) returns( EInt );
+
+	/**
+	 * Returns a string made by searching this string for the pattern (as defined 
+	 * for the matchesPattern function), and substituting the replacement string 
+	 * where a match is found.  All matches will be replaced if the 'global' 
+	 * parameter is true, otherwise only the first match is replaced.  If the 
+	 * pattern is not matched, then this string is returned.
+	 */
+	function replacePattern( pattern EString in, replacement EString in, global EBoolean in ) returns( EString );
+	
+	/**
+	 * This is the same as replacePattern(EString,EString,EBoolean), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	function replacePattern( pattern EString in, escape EString in, replacement EString in, global EBoolean in ) returns( EString );
+	
+	/**
+	 * Returns true if this string's length is zero.
+	 */
+	function isEmpty() returns( EBoolean );
 end

@@ -16,14 +16,7 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Assignment;
-import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
-import org.eclipse.edt.mof.egl.MofConversion;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class NumberTypeTemplate extends JavaTemplate {
@@ -93,5 +86,15 @@ public class NumberTypeTemplate extends JavaTemplate {
 			return true;
 		else
 			return (Boolean) ctx.invokeSuper(this, org.eclipse.edt.gen.Constants.isAssignmentBreakupWanted, type, ctx, expr);
+	}
+
+	public void genContainerBasedInvocation(Type type, Context ctx, TabbedWriter out, InvocationExpression expr) {
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+		out.print(".");
+		ctx.invoke(genName, expr.getTarget(), ctx, out);
+		out.print("(");
+		ctx.invoke(genInvocationNonstaticArgument, expr, ctx, out);
+		ctx.invoke(genInvocationArguments, expr, ctx, out);
+		out.print(")");
 	}
 }

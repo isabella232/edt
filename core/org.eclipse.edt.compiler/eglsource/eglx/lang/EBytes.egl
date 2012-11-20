@@ -123,4 +123,11 @@ externalType EBytes extends AnyValue type ParameterizableType {
 	 * @throws TypeCastException if the number is not the correct length in bytes for the target.
 	 */
 	static function asBytes(value ENumber? in) returns(EBytes?) {@Operation{"widen"}};
+	
+	/**
+	 * Returns the number of bytes in this value.
+	 *
+	 * @return the number of bytes.
+	 */
+	function length() returns(EInt);
 end

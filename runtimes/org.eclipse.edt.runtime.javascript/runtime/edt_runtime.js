@@ -956,6 +956,16 @@ egl.eglx.lang.EDate.ezeCast = function (any, nullable) {
 	return egl.convertAnyToDate(any, nullable);
 };
 
+egl.eglx.lang.EDate.dayOf = function(d) {   
+	return d.getDate();
+};
+egl.eglx.lang.EDate.monthOf = function(d) {   
+	return d.getMonth() + 1;
+};
+egl.eglx.lang.EDate.yearOf = function(d) {   
+	return d.getFullYear();
+};
+
 
 /****************************************************************************
  * ETime
@@ -1312,7 +1322,97 @@ egl.eglx.lang.ENumber.ezeCast = function(x, nullable, decimals, limit){
 egl.eglx.lang.ENumber.negate = function (x) {
     return {eze$$value : -x.eze$$value, eze$$signature : x.eze$$signature}; 
 };
+egl.eglx.lang.ENumber.precision = function(x) {
+    if (x == null || x.eze$$value == null) {
+        throw egl.createNullValueException( "CRRUI2005E", [] );
+    }
 
+	var kind;
+
+	var firstChar = x.eze$$signature.charAt(0);
+	var firstCharIdx = 0;
+	if (firstChar !== '?') {
+		kind = firstChar;
+	} else {
+		kind = x.eze$$signature.charAt(1);
+		firstCharIdx = 1;
+	}
+
+	switch (kind) {
+	case 'I':
+		return 9;
+	case 'i':
+		return 4;
+	case 'B':
+		return 18;
+	case 'F':
+		return 15;
+	case 'f':
+		return 6;
+	case 'b':
+	case 'n':
+	case 'd':
+	case '9':
+	case 'p':
+        var colon = x.eze$$signature.indexOf(':');
+        return (colon > 0 ? x.eze$$signature.substring(firstCharIdx + 1, colon) : x.eze$$value.mant.length) ;
+	case 'X':
+		var length = x.eze$$signature.substring(firstCharIdx + 1,
+				x.eze$$signature.indexOf(';'));
+		if (length === '8') {
+			return 6;
+		} else if (length === '16') {
+			return 15;
+		}
+	}
+	return 0;
+};
+egl.eglx.lang.ENumber.decimals = function(x) {
+    if (x instanceof egl.javascript.BigDecimal) {
+        return x.scale();
+    }
+    if (x == null || x.eze$$value == null) {
+        throw egl.createNullValueException( "CRRUI2005E", [] );
+    }
+
+	var kind;
+
+	var firstChar = x.eze$$signature.charAt(0);
+	if (firstChar !== '?') {
+		kind = firstChar;
+	} else {
+		kind = x.eze$$signature.charAt(1);
+	}
+
+	var result = 0;
+	switch (kind) {
+	case 'b':
+	case 'n':
+	case 'd':
+	case '9':
+	case 'p':
+		var colon = x.eze$$signature.indexOf(':');
+		result = colon > 0 ? x.eze$$signature.substring(colon + 1, x.eze$$signature
+				.indexOf(';')) : x.eze$$value.scale();
+		break;
+	case 'F':
+	case 'f':
+		if (x.eze$$value != 0) {
+			var numStr = new egl.javascript.BigDecimal(x.eze$$value).format(-1,-1);
+			var pointIndex = numStr.lastIndexOf('.');
+			if (pointIndex != -1) {
+				// Ignore trailing zeros.
+				var lastDigitIndex = numStr.length - 1;
+				while (lastDigitIndex > pointIndex && numStr.charAt(lastDigitIndex) == '0') {
+					lastDigitIndex--;
+				}
+				result = lastDigitIndex - pointIndex;
+			}
+		}
+	}
+
+	return result;
+};
 
 
 
