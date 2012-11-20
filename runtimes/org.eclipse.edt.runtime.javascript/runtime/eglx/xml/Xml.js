@@ -40,6 +40,9 @@ egl.eglx.xml.XmlLib["toXML"] = function( /*value*/value, /*map*/namespaces, /*Fi
 		s.push(this.eglClassToXML(value, namespaces, fieldInfo));
 	} else if (value !== null && typeof value === "object" && value instanceof egl.eglx.lang.EDictionary) {
 		s.push(this.dictionaryToXML(value, namespaces, fieldInfo));
+	} else if (value !== null && typeof value === "object" && value instanceof Array && value.type === undefined ) {
+		//bytes is an array with no type
+		s.push(this.primitiveToXML(value, namespaces, fieldInfo));
 	} else if (value !== null && typeof value === "object" && value instanceof Array) {
 		s.push(this.arrayToXML(value, namespaces, fieldInfo));
 	} else if (value === null) {
@@ -94,6 +97,10 @@ egl.eglx.xml.XmlLib["primitiveToXML"] = function( /*value*/value, /*map*/namespa
 			break;
 		case 'J':
 			fieldValue = egl.eglx.lang.StringLib.format(fieldValue, "yyyy-MM-dd HH:mm:ss");
+			break;
+		case 'g':
+		case 'G':
+			fieldValue = egl.eglx.xml.XmlLib.toHexBinary(fieldValue);
 			break;
 	}
 	if (value instanceof egl.javascript.BigDecimal) {
@@ -633,6 +640,15 @@ egl.eglx.xml.XmlLib["convertPrimitive"] = function( /*node*/value, /*FieldInfo*/
 					egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
 					egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
 			break;
+		case 'G':
+		case 'g':
+			var semiColon = fieldInfo == null ? -1 : fieldInfo.eglSignature.indexOf(';');
+			if(semiColon > (++firstCharIdx)){
+				var len = egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx, semiColon));
+				value = value.substring(0,len*2);
+			}
+			value = egl.eglx.xml.XmlLib.fromHexBinary(value);
+			break;
 		default:
 			break;
 		}
@@ -732,4 +748,48 @@ egl.eglx.xml.XmlLib["defaultNamespace"] = function() {
 	else{
 		return "";
 	}
+};
+egl.eglx.xml.XmlLib["fromHexBinary"] = function(str) {
+	var bytes = [];
+	if(str.length % 2 != 0){
+		throw new Exception();
+	}
+	for(var strIdx = 0, byteIdx = 0; strIdx < str.length; byteIdx++){
+		bytes[byteIdx] = (parseInt(str.charAt(strIdx), 16) << 4) + parseInt(str.charAt(strIdx + 1), 16);
+		strIdx += 2;
+	}
+	return bytes;
+};
+egl.eglx.xml.XmlLib["toHexBinary"] = function(bytes) {
+	var hexBinary = [];
+	for(var idx = 0; idx < bytes.length; idx++){
+		hexBinary.push(egl.eglx.xml.XmlLib.int2Hex(bytes[idx]));
+	}
+	return hexBinary.join('');
+};
+egl.eglx.xml.XmlLib["int2Hex"] = function(intValue) {
+	var values = [];
+	values.push(egl.eglx.xml.XmlLib.hexNibble(intValue >> 4));
+	values.push(egl.eglx.xml.XmlLib.hexNibble(intValue & 0xF));
+	return values.join('');
+};
+egl.eglx.xml.XmlLib["hexNibble"] = function(nibble) {
+	switch(nibble){
+		case 0: return "0";
+		case 1: return  "1";
+		case 2: return  "2";
+		case 3: return  "3";
+		case 4: return  "4";
+		case 5: return  "5";
+		case 6: return  "6";
+		case 7: return  "7";
+		case 8: return  "8";
+		case 9: return  "9";
+		case 10: return  "A";
+		case 11: return  "B";
+		case 12: return  "C";
+		case 13: return  "D";
+		case 14: return  "E";
+		case 15: return  "F";
+	};
 };
