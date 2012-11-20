@@ -3067,6 +3067,12 @@ Array.prototype.insertElement = function Array_insertElement(val, index) {
 	return this;
 };
 
+Array.prototype.setElement = function Array_setElement(val, index) {
+	if ( index < 1 || index > this.length + 1 ) 
+		throw egl.createRuntimeException( "CRRUI2022E", [ index, this.length ] );
+	this[index-1] = val;
+};
+
 Array.prototype.removeAll = function Array_removeAll(val) {
 	this.length = 0;
 };
