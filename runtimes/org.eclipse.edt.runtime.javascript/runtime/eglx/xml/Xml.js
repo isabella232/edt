@@ -100,7 +100,15 @@ egl.eglx.xml.XmlLib["primitiveToXML"] = function( /*value*/value, /*map*/namespa
 			break;
 		case 'g':
 		case 'G':
-			fieldValue = egl.eglx.xml.XmlLib.toHexBinary(fieldValue);
+			var xmlSchemaType = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLSchemaType"] : null;
+			if(xmlSchemaType !== undefined && xmlSchemaType !== null && 
+					xmlSchemaType.name !== undefined && xmlSchemaType.name !== null &&
+					"hexBinary".eq(xmlSchemaType.name)){
+				fieldValue = egl.eglx.xml.XmlLib.toHexBinary(fieldValue);
+			}
+			else{
+				fieldValue = "";
+			}
 			break;
 	}
 	if (value instanceof egl.javascript.BigDecimal) {
@@ -642,12 +650,20 @@ egl.eglx.xml.XmlLib["convertPrimitive"] = function( /*node*/value, /*FieldInfo*/
 			break;
 		case 'G':
 		case 'g':
-			var semiColon = fieldInfo == null ? -1 : fieldInfo.eglSignature.indexOf(';');
-			if(semiColon > (++firstCharIdx)){
-				var len = egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx, semiColon));
-				value = value.substring(0,len*2);
+			var xmlSchemaType = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLSchemaType"] : null;
+			if(xmlSchemaType !== undefined && xmlSchemaType !== null && 
+					xmlSchemaType.name !== undefined && xmlSchemaType.name !== null &&
+					"hexBinary".eq(xmlSchemaType.name)){
+				var semiColon = fieldInfo == null ? -1 : fieldInfo.eglSignature.indexOf(';');
+				if(semiColon > (++firstCharIdx)){
+					var len = egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx, semiColon));
+					value = value.substring(0,len*2);
+				}
+				value = egl.eglx.xml.XmlLib.fromHexBinary(value);
 			}
-			value = egl.eglx.xml.XmlLib.fromHexBinary(value);
+			else{
+				value = [];
+			}
 			break;
 		default:
 			break;

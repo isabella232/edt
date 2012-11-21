@@ -18,22 +18,18 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Type;
 
 public class XmlJavaTypeAdapterTemplate extends JavaTemplate implements Constants {
 
-	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
-		genAnnotation(annot, out);
-	}
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Member member) {
-		genAnnotation(annot, out);
+		ctx.invoke(genJavaAnnotation, (Type) aType, ctx, out, annot, member);
 	}
-	private void genAnnotation(Annotation annot, TabbedWriter out) {
-		out.print("@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter");
-		out.print("(");
+
+	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Member member) {
 		out.print("value=" + (String) annot.getValue("value") + ".class");
-		if(annot.getValue("type") != null && ((String)annot.getValue("type")).length() > 0){
-			out.print(", type=" + (String) annot.getValue("type") + ".class" );
+		if(annot.getValue("_type") != null && ((String)annot.getValue("_type")).length() > 0){
+			out.print(", type=" + (String) annot.getValue("_type") + ".class" );
 		}
-		out.println(")");
 	}
 }
