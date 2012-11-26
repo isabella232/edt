@@ -460,8 +460,8 @@ externalType EString extends AnyText type ParameterizableType {
 	 * Same as the other version of splitOnPattern, except the result will not be 
 	 * larger than the specified limit.  Once the pattern has been matched limit - 
 	 * 1 times, the remainder of the string is returned in the last element of the 
-	 * array, even if part of it matches the
-	 * pattern.  Returns an empty array if limit is less than one.
+	 * array, even if part of it matches the pattern.  Returns an empty array if 
+	 * limit is less than one.
 	 */
 	function splitOnPattern( pattern EString in, limit EInt in ) returns( EString[] );
 	
