@@ -474,6 +474,13 @@ public class IRUtils {
 			return expr;
 		}
 		
+
+		if (type instanceof ArrayType && exprType instanceof ArrayType) {
+			if (!type.equals(exprType) || ((ArrayType)type).elementsNullable() != ((ArrayType)exprType).elementsNullable()) {
+				return createAsExpression(expr, type);
+			}
+		}
+		
 		if (exprType.equals(type) || exprType.getClassifier().equals(type)) {
 			return expr;
 		}

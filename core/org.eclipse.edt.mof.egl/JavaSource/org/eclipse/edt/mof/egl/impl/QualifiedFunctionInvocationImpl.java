@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.List;
 
 import org.eclipse.edt.mof.egl.AmbiguousFunctionReferenceError;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
@@ -107,6 +108,11 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 		Type type = super.getParameterTypeForArg(index);
 		if (type instanceof GenericType && type.getClassifier() == null) {
 			type = ((GenericType)type).resolveTypeParameter(getQualifier().getType());
+		}
+		else {
+			if (type instanceof ArrayType && ((ArrayType)type).getElementType() instanceof GenericType && ((ArrayType)type).getElementType().getClassifier() == null) {
+				return getQualifier().getType();
+			}
 		}
 		return type;
 
