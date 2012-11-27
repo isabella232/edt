@@ -117,7 +117,7 @@ public class AbstractTest extends ValidationTestCase {
 	}
 
 	/*
-	 * function mustImplement();
+	 * function mustImplement(i int);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine39() {
@@ -185,14 +185,14 @@ public class AbstractTest extends ValidationTestCase {
 	/*
 	 * a c4;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type c4 is not instantiable. The reference to this type must be defined as nullable.".
+	 * It is expected to contain "The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.".
 	 */
 	public void testLine53() {
 		List messages = getMessagesAtLine( 53 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type c4 is not instantiable. The reference to this type must be defined as nullable." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type c4 is not instantiable. The reference to this type must be defined as nullable.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.\" was issued." );
 	}
 
 	/*
@@ -234,14 +234,14 @@ public class AbstractTest extends ValidationTestCase {
 	/*
 	 * f et1;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type et1 is not instantiable. The reference to this type must be defined as nullable.".
+	 * It is expected to contain "The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.".
 	 */
 	public void testLine58() {
 		List messages = getMessagesAtLine( 58 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type et1 is not instantiable. The reference to this type must be defined as nullable." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type et1 is not instantiable. The reference to this type must be defined as nullable.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.\" was issued." );
 	}
 
 	/*
@@ -265,14 +265,14 @@ public class AbstractTest extends ValidationTestCase {
 	/*
 	 * x = new c4;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type c4 is not instantiable. The reference to this type must be defined as nullable.".
+	 * It is expected to contain "The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.".
 	 */
 	public void testLine64() {
 		List messages = getMessagesAtLine( 64 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type c4 is not instantiable. The reference to this type must be defined as nullable." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type c4 is not instantiable. The reference to this type must be defined as nullable.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.\" was issued." );
 	}
 
 	/*
@@ -287,40 +287,40 @@ public class AbstractTest extends ValidationTestCase {
 	/*
 	 * x = new c4[10];
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type c4 is not instantiable. The reference to this type must be defined as nullable.".
+	 * It is expected to contain "The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.".
 	 */
 	public void testLine66() {
 		List messages = getMessagesAtLine( 66 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type c4 is not instantiable. The reference to this type must be defined as nullable." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type c4 is not instantiable. The reference to this type must be defined as nullable.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.\" was issued." );
 	}
 
 	/*
 	 * x = new c4[i];
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type c4 is not instantiable. The reference to this type must be defined as nullable.".
+	 * It is expected to contain "The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.".
 	 */
 	public void testLine67() {
 		List messages = getMessagesAtLine( 67 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type c4 is not instantiable. The reference to this type must be defined as nullable." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type c4 is not instantiable. The reference to this type must be defined as nullable.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.\" was issued." );
 	}
 
 	/*
 	 * x = new et1;
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type et1 is not instantiable. The reference to this type must be defined as nullable.".
+	 * It is expected to contain "The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.".
 	 */
 	public void testLine68() {
 		List messages = getMessagesAtLine( 68 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type et1 is not instantiable. The reference to this type must be defined as nullable." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type et1 is not instantiable. The reference to this type must be defined as nullable.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.\" was issued." );
 	}
 
 	/*
@@ -335,26 +335,26 @@ public class AbstractTest extends ValidationTestCase {
 	/*
 	 * x = new et1[10];
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type et1 is not instantiable. The reference to this type must be defined as nullable.".
+	 * It is expected to contain "The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.".
 	 */
 	public void testLine70() {
 		List messages = getMessagesAtLine( 70 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type et1 is not instantiable. The reference to this type must be defined as nullable." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type et1 is not instantiable. The reference to this type must be defined as nullable.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.\" was issued." );
 	}
 
 	/*
 	 * x = new et1[i];
 	 * 1 validation message is expected.
-	 * It is expected to contain "The type et1 is not instantiable. The reference to this type must be defined as nullable.".
+	 * It is expected to contain "The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.".
 	 */
 	public void testLine71() {
 		List messages = getMessagesAtLine( 71 );
 		assertEquals( 1, messages.size() );
 		
-		Object messageWithSubstring = messageWithSubstring( messages, "The type et1 is not instantiable. The reference to this type must be defined as nullable." );
-		if( messageWithSubstring == null ) fail( "No message with substring \"The type et1 is not instantiable. The reference to this type must be defined as nullable.\" was issued." );
+		Object messageWithSubstring = messageWithSubstring( messages, "The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.\" was issued." );
 	}
 }
