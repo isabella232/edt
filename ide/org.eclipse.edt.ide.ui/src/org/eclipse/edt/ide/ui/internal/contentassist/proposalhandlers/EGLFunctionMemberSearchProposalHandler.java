@@ -33,6 +33,7 @@ import org.eclipse.ui.IEditorPart;
 public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalHandler {
 //	private boolean mustHaveReturnCode;
 	Node functionContainerPart;
+	private Node functionPart;
 	boolean addParens;
 	
 	public EGLFunctionMemberSearchProposalHandler(ITextViewer viewer, int documentOffset, String prefix, IEditorPart editor, boolean mustHaveReturnCode, Node boundNode) {
@@ -52,6 +53,7 @@ public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalH
 		this.addParens = addParens;
 		while(!(boundNode instanceof File)) {
 			if(boundNode instanceof NestedFunction) {
+				functionPart = boundNode;
 				functionContainerPart = boundNode.getParent();
 			}
 			else if(boundNode instanceof Part) {
@@ -70,6 +72,13 @@ public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalH
 		return proposals;
 	}
 
+	private boolean inStaticFunction() {
+		if (functionPart != null) {
+			return ((NestedFunction)functionPart).isStatic();
+		}
+		return false;
+	}
+
 	/**
 	 * add nested function proposals
 	 */
@@ -82,6 +91,11 @@ public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalH
 				if (function.getAccessKind() == AccessKind.ACC_PRIVATE && function.getContainer() != part) {
 					continue;
 				}
+				
+				if (!function.isStatic() && inStaticFunction()) {
+					continue;
+				}
+				
 				String name = function.getName();
 				if (name.toUpperCase().startsWith(getPrefix().toUpperCase()))
 					proposals.addAll(createFunctionInvocationProposals(function, UINlsStrings.CAProposal_NestedFunction, EGLCompletionProposal.RELEVANCE_MEMBER, false));				
