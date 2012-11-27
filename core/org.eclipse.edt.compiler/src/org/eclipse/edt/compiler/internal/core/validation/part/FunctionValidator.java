@@ -144,14 +144,16 @@ public class FunctionValidator extends AbstractASTVisitor {
 		TypeValidator.validate(type, enclosingPart, problemRequestor, compilerOptions);
 		TypeValidator.validateTypeDeclaration(type, enclosingPart, problemRequestor);
 		return true;
-	};
+	}
 	
 	private void checkForConstructorCalls(Node node) {
+		final boolean[] invokesConstructor = {false};
 		node.accept(new AbstractASTVisitor() {
 			@Override
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionInvocation functionInvocation) {
 				//ensure that constructor invocations are the first statement in a constructor
 				if (functionInvocation.getTarget() instanceof SuperExpression || functionInvocation.getTarget() instanceof ThisExpression) {
+					invokesConstructor[0] = true;
 					if (functionInvocation.getParent() instanceof FunctionInvocationStatement) {
 						if (functionInvocation.getParent().getParent() instanceof Constructor) {
 							Constructor constructor = (Constructor)functionInvocation.getParent().getParent();
@@ -169,6 +171,22 @@ public class FunctionValidator extends AbstractASTVisitor {
 				return true;
 			}
 		});
+		
+		if (!invokesConstructor[0] && node instanceof Constructor) {
+			// When no super() or this() is called, there is an implicit super() on a public default constructor. This is required
+			// to initialize fields in the super type.
+			Node parent = node.getParent();
+			if (parent instanceof org.eclipse.edt.compiler.core.ast.Part) {
+				org.eclipse.edt.mof.egl.Type type = ((org.eclipse.edt.compiler.core.ast.Part)parent).getName().resolveType();
+				if (type instanceof StructPart) {
+					List<StructPart> superTypes = ((StructPart)type).getSuperTypes();
+					if (superTypes != null && superTypes.size() > 0 && !TypeValidator.hasPublicDefaultConstructor(superTypes.get(0))) {
+						problemRequestor.acceptProblem(node, IProblemRequestor.MISSING_IMPLICIT_CONSTRUCTOR,
+								new String[]{BindingUtil.getShortTypeString(superTypes.get(0), false) + "()"});
+					}
+				}
+			}
+		}
 	}
 	
 	private void checkAbstract(NestedFunction func) {

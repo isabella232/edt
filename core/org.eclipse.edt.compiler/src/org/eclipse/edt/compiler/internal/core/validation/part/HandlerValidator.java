@@ -41,6 +41,7 @@ public class HandlerValidator extends FunctionContainerValidator {
 		
 		checkImplements(handler.getImplementedInterfaces());
 		checkInterfaceFunctionsOverriden(handlerBinding);
+		checkImplicitConstructor(handler);
 		return true;
 	}
 }

@@ -985,7 +985,7 @@ public class BindingUtil {
 	
 	public static String getName(Element elem) {
 		if (elem instanceof NamedElement) {
-			return ((NamedElement)elem).getName();
+			return ((NamedElement)elem).getCaseSensitiveName();
 		}
 		return "";
 	}

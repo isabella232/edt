@@ -861,14 +861,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)type.getClassifier(), getArgumentTypes(functionInvocation.getArguments()), false);
 				}
 				if (cons == null || (BindingUtil.isPrivate(cons) &&  functionInvocation.getTarget() instanceof SuperExpression)) {
-					if (functionInvocation.getArguments().size() > 0) {
+					// When no explicit constructors are defined, there is an implicit public default constructor.
+					// Handle this when a subtype does "super()" - 'cons' will be null but in this case that's okay.
+					if (cons != null || (constructors != null && constructors.size() > 0) || functionInvocation.getArguments().size() > 0) {
 						problemRequestor.acceptProblem(
-							functionInvocation,
-							IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,
-							new String[] {
-								BindingUtil.getName(type)
-							});
-						functionInvocation.setBindAttempted(true);
+								functionInvocation,
+								IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,
+								new String[] {
+									BindingUtil.getName(type)
+								});
+							functionInvocation.setBindAttempted(true);
 					}
 				}
 				else {
