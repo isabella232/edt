@@ -151,6 +151,13 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 	private List getContainerVariableProposals(boolean includeConstants, boolean quoted) {
 		return getContainerVariableProposals(new DefaultDataBindingFilter(), includeConstants, quoted);
 	}
+	
+	private boolean inStaticFunction() {
+		if (functionPart != null) {
+			return ((NestedFunction)functionPart).isStatic();
+		}
+		return false;
+	}
 
 	/*
 	 * get the declaration proposals for the current function's container (program)
@@ -162,6 +169,10 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			List<Field> fields = BindingUtil.getAllFields(part);
 			for (Field field : fields) {
 				if (field.getAccessKind() == AccessKind.ACC_PRIVATE && field.getContainer() != part) {
+					continue;
+				}
+				
+				if (!field.isStatic() && inStaticFunction()) {
 					continue;
 				}
 				if (field.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {

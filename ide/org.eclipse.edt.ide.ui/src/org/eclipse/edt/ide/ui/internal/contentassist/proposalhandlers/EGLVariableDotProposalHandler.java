@@ -78,7 +78,8 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 				result.addAll(getFunctionProposals(
 					list,
 					UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, getTypeString(qualifierType)),
-					EGLCompletionProposal.RELEVANCE_MEMBER));
+					EGLCompletionProposal.RELEVANCE_MEMBER,
+					true));
 			}
 			
 			return result;
@@ -145,13 +146,17 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 	private List getFieldProposals(List<Member> fields) {
 		return this.getFieldProposals(fields, "");
 	}
-	
+
 	private List getFunctionProposals(List<Function> functions, String additionalInformation, int relevance) {
+		return getFunctionProposals(functions, additionalInformation, relevance, false);
+	}
+
+	private List getFunctionProposals(List<Function> functions, String additionalInformation, int relevance, boolean returnPrivateFunctions) {
 		List result = new ArrayList();
 		for(Function function : functions) {
 			//Adding this check on 10/04/2006 for RATLC01129262.  From what I can tell private functions should never
 			//be returned.  If I am wrong, need to parameterize a boolean to determine whether or not to return private functions.
-			if (function.getAccessKind() != AccessKind.ACC_PRIVATE) {
+			if (returnPrivateFunctions || function.getAccessKind() != AccessKind.ACC_PRIVATE) {
 				if (function.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					result.addAll(createFunctionInvocationProposals(function, additionalInformation, relevance, false));
 				}

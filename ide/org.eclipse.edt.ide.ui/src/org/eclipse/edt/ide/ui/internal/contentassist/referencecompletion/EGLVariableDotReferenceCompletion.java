@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
+import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
@@ -79,7 +80,7 @@ public class EGLVariableDotReferenceCompletion extends EGLAbstractReferenceCompl
 					
 					private void handleQualifier(Expression qualifier) {
 						Type tBinding = qualifier.resolveType();
-						boolean isVariable = (qualifier.resolveMember() != null) || wantFieldsForType(qualifier) || qualifier instanceof ThisExpression || qualifier instanceof SuperExpression;
+						boolean isVariable = (qualifier.resolveMember() != null) || wantFieldsForType(qualifier) || ((qualifier instanceof ThisExpression || qualifier instanceof SuperExpression) && !inStaticFunction(qualifier));
 						result.addAll(new EGLVariableDotProposalHandler(viewer, documentOffset, prefix, editor, tBinding, isVariable).getProposals(true));				
 					}
 				});
@@ -89,6 +90,20 @@ public class EGLVariableDotReferenceCompletion extends EGLAbstractReferenceCompl
 		return result;
 	}
 
+	
+	private boolean inStaticFunction(Node node) {
+		if (node == null) {
+			return false;
+		}
+		
+		if (node instanceof NestedFunction) {
+			return ((NestedFunction)node).isStatic();
+		}
+		
+		return inStaticFunction(node.getParent());
+	}
+	
+	
 	protected boolean wantFieldsForType(Expression expr) {
 		final boolean[] result = new boolean[] {false};
 		expr.accept(new DefaultASTVisitor() {
