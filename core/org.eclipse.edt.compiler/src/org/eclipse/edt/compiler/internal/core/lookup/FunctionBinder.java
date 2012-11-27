@@ -189,9 +189,7 @@ public class FunctionBinder extends DefaultBinder {
     @Override
     public boolean visit(CallStatement callStatement) {
         
-		bindingCallTarget = true;
 		bindInvocationTarget(callStatement.getInvocationTarget());
-		bindingCallTarget = false;
 		
 		if(callStatement.hasArguments()) {
 			for(Node node : callStatement.getArguments()) {

@@ -66,7 +66,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     protected Part currentBinding;
     protected String packageName;
     protected ICompilerOptions compilerOptions;
-    protected boolean bindingCallTarget;
         
     public AbstractBinder(Scope currentScope, String packageName, IDependencyRequestor dependencyRequestor, ICompilerOptions compilerOptions) {
         this.currentScope = currentScope;
