@@ -374,7 +374,9 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
-		return op1.equals(op2);
+		// Use compareTo() because equals() will consider things other than the
+		// time of the Calendars.
+		return op1.compareTo(op2) == 0; 
 	}
 
 	public static boolean notEquals(Calendar op1, Calendar op2) {
