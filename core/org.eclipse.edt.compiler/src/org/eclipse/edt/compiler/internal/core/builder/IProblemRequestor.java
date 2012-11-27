@@ -249,7 +249,9 @@ public interface IProblemRequestor {
 	public static final int FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE = 6751;
 	public static final int FUNCTION_ARG_CANNOT_BE_THIS = 6754;
 	public static final int CONSTRUCTOR_CALL_WRONG_PLACE = 6756;
+	public static final int MISSING_IMPLICIT_CONSTRUCTOR = 6757;
 	public static final int FUNCTION_ARG_CANNOT_BE_SUPER = 6758;
+	public static final int MUST_DEFINE_CONSTRUCTOR = 6759;
 	public static final int POSITIONAL_PROPERTY_NOT_VALID_FOR = 7510;
 	public static final int SET_VALUES_BLOCK_NOT_VALID_AS_FUNC_ARG = 7511;
 	public static final int SET_VALUES_BLOCK_NOT_VALID_AS_CASE_CRITERION = 7513;

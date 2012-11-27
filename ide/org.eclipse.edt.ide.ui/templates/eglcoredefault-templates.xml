@@ -102,7 +102,7 @@ end
 -->
 
 <template name="function" description="%Templates.abstract_function" id="org.eclipse.edt.ide.ui.templates.abstract_function" context = "egl-core" enabled="true">// abstract function
-function ${functionName}(parameterName string) returns (int);
+abstract function ${functionName}(parameterName string) returns (int);
 </template>
 
 <template name="function" description="%Templates.basic_function" id="org.eclipse.edt.ide.ui.templates.basic_function" context = "egl-core" enabled="true">// function
@@ -350,9 +350,9 @@ end
 
 <template name="package" description="%Templates.package_statement" id="org.eclipse.edt.ide.ui.templates.package_statement" context = "egl-core" enabled="true">package ${packageName};</template>
 
-<template name="call" description="%Templates.call_statement" id="org.eclipse.edt.ide.ui.templates.call_statement" context = "egl-core" enabled="true">call ${programName};</template>
+<!--<template name="call" description="%Templates.call_statement" id="org.eclipse.edt.ide.ui.templates.call_statement" context = "egl-core" enabled="true">call ${programName};</template>
 
-<template name="call" description="%Templates.call_statement_with_multiple_arguments" id="org.eclipse.edt.ide.ui.templates.call_statement_with_multiple_arguments" context = "egl-core" enabled="true">call ${programName} ${arg1}, ${arg2};</template>
+<template name="call" description="%Templates.call_statement_with_multiple_arguments" id="org.eclipse.edt.ide.ui.templates.call_statement_with_multiple_arguments" context = "egl-core" enabled="true">call ${programName} ${arg1}, ${arg2};</template>-->
 
 <template name="case" description="%Templates.case_statement" id="org.eclipse.edt.ide.ui.templates.case_statement" context = "egl-core" enabled="true">case (${criterion})
 	when (${matchExpression1}, ${matchExpression2})

@@ -246,4 +246,131 @@ public class SuperExprTest extends ValidationTestCase {
 		List messages = getMessagesAtLine( 67 );
 		assertEquals( 1, messages.size() );
 	}
+
+	/*
+	 * constructor()
+	 * 1 validation message is expected.
+	 * It is expected to contain "The implicit super constructor A() either does not exist or is not visible. You must explicitly invoke another constructor.".
+	 */
+	public void testLine85() {
+		List messages = getMessagesAtLine( 85 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The implicit super constructor A() either does not exist or is not visible. You must explicitly invoke another constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The implicit super constructor A() either does not exist or is not visible. You must explicitly invoke another constructor.\" was issued." );
+	}
+
+	/*
+	 * constructor( b boolean )
+	 * 1 validation message is expected.
+	 * It is expected to contain "The implicit super constructor A() either does not exist or is not visible. You must explicitly invoke another constructor.".
+	 */
+	public void testLine88() {
+		List messages = getMessagesAtLine( 88 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The implicit super constructor A() either does not exist or is not visible. You must explicitly invoke another constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The implicit super constructor A() either does not exist or is not visible. You must explicitly invoke another constructor.\" was issued." );
+	}
+
+	/*
+	 * super();
+	 * 1 validation message is expected.
+	 */
+	public void testLine95() {
+		List messages = getMessagesAtLine( 95 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * super( 3 );
+	 * 1 validation message is expected.
+	 * It is expected to contain "A constructor for A which matches the supplied arguments could not be found, or is not visible.".
+	 */
+	public void testLine99() {
+		List messages = getMessagesAtLine( 99 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "A constructor for A which matches the supplied arguments could not be found, or is not visible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A constructor for A which matches the supplied arguments could not be found, or is not visible.\" was issued." );
+	}
+
+	/*
+	 * constructor(s string)
+	 * 0 validation messages are expected.
+	 */
+	public void testLine102() {
+		List messages = getMessagesAtLine( 102 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * super(s);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine103() {
+		List messages = getMessagesAtLine( 103 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * super();
+	 * 0 validation messages are expected.
+	 */
+	public void testLine110() {
+		List messages = getMessagesAtLine( 110 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * super(s);
+	 * 1 validation message is expected.
+	 * It is expected to contain "A constructor for D which matches the supplied arguments could not be found, or is not visible.".
+	 */
+	public void testLine113() {
+		List messages = getMessagesAtLine( 113 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "A constructor for D which matches the supplied arguments could not be found, or is not visible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A constructor for D which matches the supplied arguments could not be found, or is not visible.\" was issued." );
+	}
+
+	/*
+	 * this();
+	 * 1 validation message is expected.
+	 * It is expected to contain "A constructor for F which matches the supplied arguments could not be found, or is not visible.".
+	 */
+	public void testLine119() {
+		List messages = getMessagesAtLine( 119 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "A constructor for F which matches the supplied arguments could not be found, or is not visible." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"A constructor for F which matches the supplied arguments could not be found, or is not visible.\" was issued." );
+	}
+
+	/*
+	 * class H extends G
+	 * 1 validation message is expected.
+	 * It is expected to contain "The implicit super constructor G() either does not exist or is not visible. You must explicitly define a constructor.".
+	 */
+	public void testLine126() {
+		List messages = getMessagesAtLine( 126 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The implicit super constructor G() either does not exist or is not visible. You must explicitly define a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The implicit super constructor G() either does not exist or is not visible. You must explicitly define a constructor.\" was issued." );
+	}
+
+	/*
+	 * class I extends A
+	 * 1 validation message is expected.
+	 * It is expected to contain "The implicit super constructor A() either does not exist or is not visible. You must explicitly define a constructor.".
+	 */
+	public void testLine128() {
+		List messages = getMessagesAtLine( 128 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "The implicit super constructor A() either does not exist or is not visible. You must explicitly define a constructor." );
+		if( messageWithSubstring == null ) fail( "No message with substring \"The implicit super constructor A() either does not exist or is not visible. You must explicitly define a constructor.\" was issued." );
+	}
 }

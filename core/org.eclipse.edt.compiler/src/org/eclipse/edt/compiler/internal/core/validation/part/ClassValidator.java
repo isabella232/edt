@@ -49,6 +49,7 @@ public class ClassValidator extends FunctionContainerValidator {
 		checkImplements(clazz.getImplementedInterfaces());
 		checkInterfaceFunctionsOverriden(classBinding);
 		checkAbstractFunctionsOverriden(classBinding);
+		checkImplicitConstructor(clazz);
 		if (checkExtends()) {
 			checkCycles();
 		}

@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
+import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -36,6 +37,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ClassDataDeclarationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.UseStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Function;
@@ -328,6 +330,28 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 						// visit the parent to check for static.
 						checkStatic(errorNode, ((QualifiedName)name).getQualifier());
 					}
+				}
+			}
+		}
+	}
+	
+	protected void checkImplicitConstructor(Part part) {
+		final boolean[] hasConstructor = {false};
+		part.accept(new DefaultASTVisitor() {
+			@Override
+			public void endVisit(Constructor constructor) {
+				hasConstructor[0] = true;
+			}
+		});
+		
+		if (!hasConstructor[0]) {
+			// This type has an implicit default constructor. Make sure its parent type has a public default constructor so its implicit 'super()' is valid.
+			Type type = part.getName().resolveType();
+			if (type instanceof StructPart) {
+				List<StructPart> superTypes = ((StructPart)type).getSuperTypes();
+				if (superTypes != null && superTypes.size() > 0 && !TypeValidator.hasPublicDefaultConstructor(superTypes.get(0))) {
+					problemRequestor.acceptProblem(part.getName(), IProblemRequestor.MUST_DEFINE_CONSTRUCTOR,
+							new String[]{BindingUtil.getShortTypeString(superTypes.get(0), false) + "()"});
 				}
 			}
 		}
