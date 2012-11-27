@@ -366,13 +366,17 @@ public abstract class EGLAbstractProposalHandler {
 				getPartReferenceAdditionalInformation(part.getPackageName(), part, partTypeName),
 				getDocumentOffset() - getPrefix().length(),
 				getPrefix().length(),
-				proposalString.length(),
+				getCursorPosition(proposalString),
 				getPartTypeImgKeyStr(partTypeName));
 
 		eglCompletionProposal.setImportPackageName(importPackageName);
 		eglCompletionProposal.setImportPartName(importPartName);
 		
 		return eglCompletionProposal;
+	}
+	
+	protected int getCursorPosition(String proposalString) {
+		return proposalString.length();
 	}
 	
 	protected String getPartTypeImgKeyStr(String partType){

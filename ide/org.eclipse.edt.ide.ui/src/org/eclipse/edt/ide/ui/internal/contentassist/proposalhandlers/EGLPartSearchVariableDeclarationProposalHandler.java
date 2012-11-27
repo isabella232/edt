@@ -49,10 +49,6 @@ public class EGLPartSearchVariableDeclarationProposalHandler extends EGLPartSear
 	 */
 	protected String getProposalString(PartDeclarationInfo part, boolean includePackageName) {
 		//Usability enhancement to always add @bindService when declaring an interface or service
-		String bindServiceString = ""; //$NON-NLS-1$
-		if (part.getPartType() == IEGLSearchConstants.INTERFACE || part.getPartType() == IEGLSearchConstants.SERVICE) {
-			bindServiceString = " {@Resource}"; //$NON-NLS-1$
-		}
 		String partName = part.getPartName();
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(partName.substring(0,1).toLowerCase());
@@ -65,7 +61,6 @@ public class EGLPartSearchVariableDeclarationProposalHandler extends EGLPartSear
 			buffer.append(partName);
 		}
 		buffer.append("?");
-		buffer.append(bindServiceString);
 		if(includeSemiInReplacement) {
 			buffer.append(getSuffix()); //$NON-NLS-1$
 		}

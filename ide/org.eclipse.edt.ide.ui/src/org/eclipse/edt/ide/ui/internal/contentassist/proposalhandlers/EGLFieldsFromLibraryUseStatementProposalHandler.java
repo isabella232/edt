@@ -45,11 +45,7 @@ public class EGLFieldsFromLibraryUseStatementProposalHandler extends EGLAbstract
 	}
 	
 	protected List getProposals(Library[] libraryContexts, int i) {
-		List proposals = new ArrayList();
-		
-		BindingUtil.getAllFields(libraryContexts[i]);
-		
-		
+		List proposals = new ArrayList();		
 		List<Field> fields = BindingUtil.getAllFields(libraryContexts[i]);
 		for(Field field : fields) {
 				if (field.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {

@@ -20,15 +20,25 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
+import org.eclipse.edt.ide.ui.internal.contentassist.EGLProposalContextInformation;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
 
 public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalHandler {
 //	private boolean mustHaveReturnCode;
 	Node functionContainerPart;
+	boolean addParens;
+	
+	public EGLFunctionMemberSearchProposalHandler(ITextViewer viewer, int documentOffset, String prefix, IEditorPart editor, boolean mustHaveReturnCode, Node boundNode) {
+		this(viewer, documentOffset, prefix, editor, mustHaveReturnCode, boundNode, true);
+	}
+
 	
 	/**
 	 * @param documentOffset
@@ -36,9 +46,10 @@ public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalH
 	 * @param viewer
 	 * @param editor
 	 */
-	public EGLFunctionMemberSearchProposalHandler(ITextViewer viewer, int documentOffset, String prefix, IEditorPart editor, boolean mustHaveReturnCode, Node boundNode) {
+	public EGLFunctionMemberSearchProposalHandler(ITextViewer viewer, int documentOffset, String prefix, IEditorPart editor, boolean mustHaveReturnCode, Node boundNode, boolean addParens) {
 		super(viewer, documentOffset, prefix, editor);
 		
+		this.addParens = addParens;
 		while(!(boundNode instanceof File)) {
 			if(boundNode instanceof NestedFunction) {
 				functionContainerPart = boundNode.getParent();
@@ -67,7 +78,10 @@ public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalH
 		if(functionContainerPart != null) {
 			org.eclipse.edt.mof.egl.Part part = (org.eclipse.edt.mof.egl.Part)((Part) functionContainerPart).getName().resolveType();
 			List<Function> functions = BindingUtil.getAllFunctions(part);
-			for (Function function : functions) {				
+			for (Function function : functions) {	
+				if (function.getAccessKind() == AccessKind.ACC_PRIVATE && function.getContainer() != part) {
+					continue;
+				}
 				String name = function.getName();
 				if (name.toUpperCase().startsWith(getPrefix().toUpperCase()))
 					proposals.addAll(createFunctionInvocationProposals(function, UINlsStrings.CAProposal_NestedFunction, EGLCompletionProposal.RELEVANCE_MEMBER, false));				
@@ -81,10 +95,35 @@ public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalH
 	 */
 	protected String getProposalString(PartDeclarationInfo partDeclarationInfo, boolean includePackageName) {
 		StringBuffer buffer = new StringBuffer(partDeclarationInfo.getPartName());
-		buffer.append("("); //$NON-NLS-1$
-		buffer.append(")"); //$NON-NLS-1$
+		
+		if (addParens) {
+			buffer.append("("); //$NON-NLS-1$
+			buffer.append(")"); //$NON-NLS-1$
+		}
 
 		return buffer.toString();
+	}
+	
+	protected List createFunctionInvocationProposals(FunctionMember function, String additionalInformation, int relevance, boolean addPrefix) {
+		if (addParens) {
+			return super.createFunctionInvocationProposals(function, additionalInformation, relevance, addPrefix);
+		}
+		
+		List proposals = new ArrayList();
+		String imgStr = function.getAccessKind() == AccessKind.ACC_PRIVATE? PluginImages.IMG_OBJS_PRIVATE_FUNCTION : PluginImages.IMG_OBJS_FUNCTION;
+		
+		EGLCompletionProposal completionProposal = new EGLCompletionProposal(viewer,
+			function.getCaseSensitiveName(),
+			function.getCaseSensitiveName(),
+			additionalInformation,
+			getDocumentOffset() - getPrefix().length(),
+			getPrefix().length(),
+			function.getCaseSensitiveName().length(),
+			relevance,
+			0,
+			imgStr);
+		proposals.add(completionProposal);
+		return proposals;
 	}
 
 	public List getProposals() {

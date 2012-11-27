@@ -25,7 +25,7 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSea
 import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EGLCallProgramStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
+public class EGLCallStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
@@ -51,7 +51,7 @@ public class EGLCallProgramStatementReferenceCompletion extends EGLAbstractRefer
 		});
 		
 		//Get all proposals for parts that have static memebers
-		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()|IEGLSearchConstants.SERVICE));
 		
 		return proposals;
 	}

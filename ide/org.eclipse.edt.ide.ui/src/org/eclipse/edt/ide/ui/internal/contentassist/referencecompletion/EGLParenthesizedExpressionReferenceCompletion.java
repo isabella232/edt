@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
+ * Copyright © 2000, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,8 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
+import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
@@ -24,34 +26,29 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSea
 import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EGLUsingStatementReferenceCompletion extends
-		EGLAbstractReferenceCompletion {
+public class EGLParenthesizedExpressionReferenceCompletion extends EGLAbstractReferenceCompletion {
 
-	@Override
+	/* (non-Javadoc)
+	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
+	 */
 	protected void precompileContexts() {
-		addContext("package a; handler a function a() get a using"); //$NON-NLS-1$
-		addContext("package a; handler a function a() get a from b using "); //$NON-NLS-1$
-		addContext("package a; handler a function a() open a using"); //$NON-NLS-1$
-		addContext("package a; handler a function a() open a from b using "); //$NON-NLS-1$
-		addContext("package a; handler a function a() delete from b using "); //$NON-NLS-1$
-		addContext("package a; handler a function a() delete a from b using  "); //$NON-NLS-1$
-		addContext("package a; handler a function a() replace a to b using  "); //$NON-NLS-1$
-		addContext("package a; handler a function a() execute using "); //$NON-NLS-1$
-		addContext("package a; handler a function a() call a using "); //$NON-NLS-1$
+		addContext("package a; handler a function a() a = ("); //$NON-NLS-1$		
 	}
 
-	@Override
-	protected List returnCompletionProposals(ParseStack parseStack,
-			final String prefix, final ITextViewer viewer, final int documentOffset) {
+	/* (non-Javadoc)
+	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#returnCompletionProposals(com.ibm.etools.egl.pgm.errors.ParseStack, java.util.List, org.eclipse.jface.text.ITextViewer, int)
+	 */
+	protected List returnCompletionProposals(final ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
 		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {
 			public void processBoundNode(Node boundNode) {
+								
 				proposals.addAll(
 					new EGLDeclarationProposalHandler(viewer,
 						documentOffset,
 						prefix,
 						boundNode)
-							.getProposals(boundNode));
+							.getProposals(boundNode, false, true));
 				
 				//Get user field proposals using library use statements
 				proposals.addAll(
@@ -71,6 +68,23 @@ public class EGLUsingStatementReferenceCompletion extends
 		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
 		
 		return proposals;
+	}
+	
+	private Node getInvocOrNew(Node node) {
+		
+		if (node == null) {
+			return null;
+		}
+		
+		if (node instanceof FunctionInvocation) {
+			return node;
+		}
+		
+		if (node instanceof NewExpression) {
+			return node;
+		}
+		
+		return getInvocOrNew(node.getParent());
 	}
 
 }

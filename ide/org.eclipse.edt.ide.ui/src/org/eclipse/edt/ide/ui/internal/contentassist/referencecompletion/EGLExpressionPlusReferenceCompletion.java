@@ -14,85 +14,74 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
+import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
-import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionSignatureProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.CompletedNodeVerifier;
+import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenceCompletion {
+public class EGLExpressionPlusReferenceCompletion extends EGLAbstractReferenceCompletion {
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
-		addContext("package a; handler a function a() fct("); //$NON-NLS-1$
-		addContext("package a; handler a function a() fct(a,"); //$NON-NLS-1$		
-		addContext("package a; handler a function a() a refType = new refType("); //$NON-NLS-1$
-		addContext("package a; handler a function a() fct[2]("); //$NON-NLS-1$
-		addContext("package a; handler a function a() fct[2](a,"); //$NON-NLS-1$
+		addContext("package a; handler a function a() call pgm (a,"); //$NON-NLS-1$		
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#returnCompletionProposals(com.ibm.etools.egl.pgm.errors.ParseStack, java.util.List, org.eclipse.jface.text.ITextViewer, int)
 	 */
-	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
+	protected List returnCompletionProposals(final ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		final boolean[] getStaticParts = new boolean[1];
-		
-		getBoundASTNode(viewer, documentOffset, new String[] {");", ")", "a", "a)", "a);", ";", "", ";end end"},
+		final boolean[] done = new boolean[1];
+		getBoundASTNode(viewer, documentOffset, new String[] {"", "a", "a)", "a);"},
 			new CompletedNodeVerifier() { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				public boolean nodeIsValid(Node astNode) {
-					return getInvocOrNew(astNode) != null;
+					return (astNode instanceof Expression);
 				}
 			},
 			new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
-
-				boundNode = getInvocOrNew(boundNode);
-				if(prefix.length() == 0) {
-						proposals.addAll(
-							new EGLFunctionSignatureProposalHandler(viewer,
-								documentOffset,
-								boundNode instanceof FunctionInvocation ?
-									((FunctionInvocation) boundNode).getTarget() :
-									((NameType) ((NewExpression) boundNode).getType()).getName())
-								.getProposals());
-					}
-					else {				
+			
+				//EGLFunctionArgumentsReferenceCompletion handles this for functions and new expressions
+				if (getInvocOrNew(boundNode) != null || isAnnoationValue(boundNode)) {
+					done[0] = true;
+					return;
+				}
 				
-					getStaticParts[0] = true;
+				proposals.addAll(
+					new EGLDeclarationProposalHandler(viewer,
+						documentOffset,
+						prefix,
+						boundNode)
+							.getProposals(boundNode, false, true));
 				
-					proposals.addAll(
-						new EGLDeclarationProposalHandler(viewer,
-							documentOffset,
-							prefix,
-							boundNode)
-								.getProposals(boundNode));
-					
-					//Get user field proposals using library use statements
-					proposals.addAll(
-						new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
-					
-					//Get user function proposals with return value using library use statements
-					proposals.addAll(
-						new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
-					
-					//Get user function proposals with return value
-					proposals.addAll(
-						new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
-					}
+				//Get user field proposals using library use statements
+				proposals.addAll(
+					new EGLFieldsFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, boundNode).getProposals());
+				
+				//Get user function proposals with return value using library use statements
+				proposals.addAll(
+					new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+				
+				//Get user function proposals with return value
+				proposals.addAll(
+					new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 			}
 		});
 		
-		if (getStaticParts[0]) {
+		if (!done[0]) {
 			//Get all proposals for parts that have static memebers
 			proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
 		}
@@ -116,4 +105,20 @@ public class EGLFunctionArgumentsReferenceCompletion extends EGLAbstractReferenc
 		
 		return getInvocOrNew(node.getParent());
 	}
+	
+	private boolean isAnnoationValue(Node node) {
+		if (node == null) {
+			return false;
+		}
+		
+		if (node instanceof Assignment) {
+			return ((Assignment)node).resolveBinding() != null;
+		}
+		
+		if (node instanceof SetValuesExpression && ((SetValuesExpression)node).getExpression() instanceof AnnotationExpression) {
+			return true;
+		}
+		return isAnnoationValue(node.getParent());
+	}
+
 }

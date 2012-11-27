@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
+ * Copyright © 2000, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,15 +21,29 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsF
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EGLSQLAddStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
-
+public class EGLInitializerCompletion extends EGLAbstractReferenceCompletion {
+	
+	/**
+	 * ONLY USEFUL IN CODE RUNNING WITHIN SPAN OF PROCESSBOUNDNODE METHOD BELOW
+	 */
+	private Node boundNode = null;
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
+	 */
 	protected void precompileContexts() {
-		addContext("package a; handler a function a() add"); //$NON-NLS-1$
+		addContext("package a; handler a a atype ="); //$NON-NLS-1$
+		addContext("package a; handler a const a atype ="); //$NON-NLS-1$
+		addContext("package a; handler a function a() a atype ="); //$NON-NLS-1$
+		addContext("package a; handler a function a() const a atype ="); //$NON-NLS-1$
+		addContext("package a; record a a atype ="); //$NON-NLS-1$
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#returnCompletionProposals(com.ibm.etools.egl.pgm.errors.ParseStack, java.util.List, org.eclipse.jface.text.ITextViewer, int)
+	 */
 	protected List returnCompletionProposals(final ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
 
@@ -61,5 +75,5 @@ public class EGLSQLAddStatementReferenceCompletion extends EGLAbstractReferenceC
 		
 		return proposals;
 	}
-	
+
 }

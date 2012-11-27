@@ -24,7 +24,7 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSea
 import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EGLProgramArgumentsReferenceCompletion extends EGLAbstractReferenceCompletion {
+public class EGLCallArgumentsReferenceCompletion extends EGLAbstractReferenceCompletion {
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
@@ -32,7 +32,6 @@ public class EGLProgramArgumentsReferenceCompletion extends EGLAbstractReference
 	protected void precompileContexts() {
 		addContext("package a; handler a function a() call pgm"); //$NON-NLS-1$		
 		addContext("package a; handler a function a() call pgm ("); //$NON-NLS-1$		
-		addContext("package a; handler a function a() call pgm(a,"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

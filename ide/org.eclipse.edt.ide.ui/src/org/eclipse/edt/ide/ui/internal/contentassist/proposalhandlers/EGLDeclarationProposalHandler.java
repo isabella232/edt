@@ -37,6 +37,7 @@ import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
@@ -160,6 +161,9 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			org.eclipse.edt.mof.egl.Part part = (org.eclipse.edt.mof.egl.Part)((Part) functionContainerPart).getName().resolveType();
 			List<Field> fields = BindingUtil.getAllFields(part);
 			for (Field field : fields) {
+				if (field.getAccessKind() == AccessKind.ACC_PRIVATE && field.getContainer() != part) {
+					continue;
+				}
 				if (field.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					if(dataBindingFilter.dataBindingPasses(field) && precondition(field)) {
 						if(includeConstants || !(field instanceof ConstantField)) {
