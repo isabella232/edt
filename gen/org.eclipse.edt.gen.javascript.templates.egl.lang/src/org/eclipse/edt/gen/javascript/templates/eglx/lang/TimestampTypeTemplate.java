@@ -22,7 +22,6 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
-import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -102,12 +101,12 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 	}
 
-	private boolean isTimeType(Expression expr) {
-		if(expr instanceof QualifiedFunctionInvocation && ((QualifiedFunctionInvocation)expr).getId().equals("timeof")){
-			return true;
-		}
-		return false;
-	}
+//	private boolean isTimeType(Expression expr) {
+//		if(expr instanceof QualifiedFunctionInvocation && ((QualifiedFunctionInvocation)expr).getId().equals("timeof")){
+//			return true;
+//		}
+//		return false;
+//	}
 
 	// this method gets invoked when there is a specific timestamp needed
 	public void genSignature(TimestampType type, Context ctx, TabbedWriter out) {
