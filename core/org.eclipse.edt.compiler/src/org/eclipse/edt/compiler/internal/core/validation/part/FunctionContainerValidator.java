@@ -26,8 +26,11 @@ import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
+import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -36,14 +39,13 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.UseStatementV
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 
 
-/**
- * @author Dave Murray
- */
 public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 	
 	protected IProblemRequestor problemRequestor;
@@ -71,6 +73,11 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
     			validator.validate(nestedFunction, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
     		}
     	}
+    	
+    	if (nestedFunction.isStatic()) {
+    		nestedFunction.accept(new StaticReferenceChecker(problemRequestor));
+    	}
+    	
 		return false;
 	}
 	
@@ -281,5 +288,48 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 			}
 		}
 		return sb.toString();
+	}
+	
+	public static class StaticReferenceChecker extends AbstractASTVisitor {
+		
+		IProblemRequestor problemRequestor;
+		
+		public StaticReferenceChecker(IProblemRequestor problemRequestor) {
+			this.problemRequestor = problemRequestor;
+		}
+		
+		@Override
+		public boolean visit(SimpleName simpleName) {
+			checkStatic(simpleName, simpleName);
+			return false;
+		}
+		
+		@Override
+		public boolean visit(QualifiedName qualifiedName) {
+			checkStatic(qualifiedName, qualifiedName);
+			return false;
+		}
+		
+		private void checkStatic(Node errorNode, Name name) {
+			Object element = name.resolveElement();
+			if (element instanceof Member) {
+				if (!((Member)element).isStatic() && !(((Member)element).getContainer() instanceof FunctionMember)) {
+					if (name.isSimpleName()) {
+						if (element instanceof FunctionMember) {
+							problemRequestor.acceptProblem(errorNode, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FUNCTION,
+									new String[]{name.getCaseSensitiveIdentifier() + "(" + FunctionContainerValidator.getTypeNamesList(((FunctionMember)element).getParameters()) + ")"});
+						}
+						else {
+							problemRequestor.acceptProblem(errorNode, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FIELD,
+									new String[]{name.getCaseSensitiveIdentifier()});
+						}
+					}
+					else {
+						// visit the parent to check for static.
+						checkStatic(errorNode, ((QualifiedName)name).getQualifier());
+					}
+				}
+			}
+		}
 	}
 }

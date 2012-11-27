@@ -77,6 +77,11 @@ public class FieldAccess extends Expression {
     	primary.setAttributeOnName(attr, value);
     }
 	
+    public Object getAttributeFromName(int attr) {
+    	return primary.getAttributeFromName(attr);
+    }
+
+	
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new FieldAccess((Expression)primary.clone(), new String(ID), getOffset(), getOffset() + getLength());

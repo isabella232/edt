@@ -16,19 +16,13 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
-import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLDeclarationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFieldsFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionFromLibraryUseStatementProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLFunctionMemberSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPropertyValueProposalHandler;
-import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLVariableDotProposalHandler;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -37,12 +31,13 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 	 * ONLY USEFUL IN CODE RUNNING WITHIN SPAN OF PROCESSBOUNDNODE METHOD BELOW
 	 */
 	private Node boundNode = null;
-	private static int invokeInArray = 66;
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
 	 */
 	protected void precompileContexts() {
+//		addContext("package a; handler a a atype ="); //$NON-NLS-1$
+//		addContext("package a; handler a const a atype ="); //$NON-NLS-1$
 		addContext("package a; handler a function a() a="); //$NON-NLS-1$
 		addContext("package a; handler a function a() a int="); //$NON-NLS-1$
 		addContext("package a; handler a function a() a int=["); //$NON-NLS-1$
@@ -55,61 +50,26 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 	 */
 	protected List returnCompletionProposals(final ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		final EGLAssignmentStatementReferenceCompletion thisCompletion = this;
-		final boolean[] isDone = new boolean[] {false};
-		final boolean[] isPropertySetting = new boolean[] {false};
-		final boolean[] isStringLiteral = new boolean[]{false};
+		final boolean[] proposal = new boolean[1];
 
-		if (isState(parseStack, ((Integer) validStates.get(0)).intValue())
-				|| isState(parseStack,((Integer) validStates.get(1)).intValue())
-				|| isState(parseStack,((Integer) validStates.get(2)).intValue())) {
 
-			getBoundASTNode(viewer, documentOffset, new String[] {"x", "x}", "x;", "\";", "x", "x;end end", "x}; end"}, new CompletedNodeVerifier() {
-				public boolean nodeIsValid(Node astNode) {
-					if(astNode instanceof StringLiteral){
-						isStringLiteral[0] = true;
-					}
-					return astNode != null && getNodeThatMightBeAssignment(astNode) instanceof Assignment;
+		getBoundASTNode(viewer, documentOffset, new String[] {"x", "x}", "x;", "\";", "x", "x;end end", "x}; end"}, new CompletedNodeVerifier() {
+			public boolean nodeIsValid(Node astNode) {
+				return getAssignment(astNode) != null;
+			}
+		}, new IBoundNodeProcessor() {
+			public void processBoundNode(Node boundNode) {
+				
+				Assignment ass = getAssignment(boundNode);
+				if (ass == null) {
+					proposal[0] = false;
 				}
-			}, new IBoundNodeProcessor() {
-				public void processBoundNode(Node boundNode) {
-					if(!isStringLiteral[0]){
-						thisCompletion.boundNode = boundNode;
-						Node nodeThatMightBeAssignment = getNodeThatMightBeAssignment(boundNode);
-						if(nodeThatMightBeAssignment instanceof Assignment) {
-							Assignment assignmentNode = ((Assignment) nodeThatMightBeAssignment);
-							Object elem = assignmentNode.getLeftHandSide().resolveElement();
-							if(elem != null) {
-								if(elem instanceof Annotation) {
-									//We are completing the rhs of a property value
-									proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((Annotation) elem, assignmentNode.getLeftHandSide().getCanonicalString()));
-									isPropertySetting[0] = true;
-									isDone[0] = true;
-//									return;
-								}else if(elem instanceof Field &&
-										EGLVariableDotProposalHandler.needSetFunctionForTheField((Field)elem)){
-									isPropertySetting[0] = true;
-									isDone[0] = true;
-									return;
-								}
-								else if(elem instanceof Field && 
-										assignmentNode.getParent() != null &&								
-										assignmentNode.getParent() instanceof SettingsBlock &&
-										parseStack.getCurrentState() != invokeInArray) {  //added for RUI widget class fields
-									proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((Field) elem));
-									isPropertySetting[0] = true;
-									isDone[0] = true;
-//									return;
-								}else if(elem instanceof Field && 
-										assignmentNode.getParent() != null &&								
-										assignmentNode.getParent() instanceof SettingsBlock && 
-										parseStack.getCurrentState() == invokeInArray){
-									isPropertySetting[0] = true;
-									isDone[0] = true;
-								}
-							}
-						}
-
+				else {
+					if (ass.resolveBinding() != null) {
+						proposal[0] = false;
+					}
+					else {
+						proposal[0] = true;
 						//Get all variable proposals
 						proposals.addAll(
 							new EGLDeclarationProposalHandler(viewer,
@@ -127,48 +87,31 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 							new EGLFunctionFromLibraryUseStatementProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
 						
 						//Get user function proposals with return value
-						if(!isPropertySetting[0]){
 							proposals.addAll(
 									new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
-						}else{
-							proposals.addAll(
-									new EGLFunctionMemberSearchProposalHandler(viewer, documentOffset, prefix, editor, false, boundNode).getProposals());
-						}
-						
-						thisCompletion.boundNode = null;
 					}
+					
 				}
-			});
-			
-			if(!isDone[0] && !isStringLiteral[0]) {
-				//Get proposals for types that can contain static members
-				proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
-						
 			}
+		});
+		
+		if (proposal[0]) {
+			//Get proposals for types that can contain static members
+			proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(getSearchConstantsForPartsWithStaticMembers()));
 		}
 
 		return proposals;
 	}
 
-	private Node getNodeThatMightBeAssignment(Node boundNode) {
-		if(boundNode instanceof Assignment) {
-			return boundNode;
+	private Assignment getAssignment(Node node) {
+		if (node == null) {
+			return null;
+		}
+		if(	node instanceof Assignment) {
+			return (Assignment)node;
 		}
 		
-		Node parent = boundNode.getParent();
-		
-		if(parent instanceof Assignment) {
-			return parent;
-		}
-		
-		if(parent != null) {
-			return parent.getParent();
-		}
-		
-		return null;
+		return getAssignment(node.getParent());
 	}
 
-	public List getStructureItems() {
-		return getStructureItems(boundNode);
-	}
 }

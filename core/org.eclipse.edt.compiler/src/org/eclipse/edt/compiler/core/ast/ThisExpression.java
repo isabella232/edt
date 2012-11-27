@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.edt.compiler.core.IEGLConstants;
 
 
@@ -46,4 +49,24 @@ public class ThisExpression extends Expression {
 	public String toString() {
 		return getCanonicalString();
 	}
+	
+    public void setAttributeOnName(int attr, Object value) {
+    	setAttribute(attr, value);
+    }
+    
+    public void setAttribute(int attr, Object value) {
+    	if(attributes == null) {
+    		attributes = new HashMap();
+    	}
+    	attributes.put(new Integer(attr), value);
+    }
+    
+    public Object getAttributeFromName(int attr) {
+    	return getAttribute(attr);
+    }
+    
+    public Object getAttribute(int attr) {
+    	return attributes == null ? null : attributes.get(new Integer(attr));
+    }
+
 }

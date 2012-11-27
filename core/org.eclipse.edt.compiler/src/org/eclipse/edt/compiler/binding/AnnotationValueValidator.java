@@ -106,8 +106,8 @@ public class AnnotationValueValidator {
 			ArrayLiteral arrayLit = (ArrayLiteral) expr;
 			boolean foundError = false;
 			int index = 0;
+			EType currType = ((EGenericType)eType).getETypeArguments().get(0);
 			for (Object curValue : listValue) {
-				EType currType = ((EGenericType)eType).getETypeArguments().get(0);
 				Expression currExpr = arrayLit.getExpressions().get(index);
 				curValue = validateValue(curValue, currExpr, field, currType, true);
 				if (curValue == null) {

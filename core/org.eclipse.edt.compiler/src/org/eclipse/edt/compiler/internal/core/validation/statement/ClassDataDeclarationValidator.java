@@ -9,9 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-	package org.eclipse.edt.compiler.internal.core.validation.statement;
-	
-	import java.util.Iterator;
+package org.eclipse.edt.compiler.internal.core.validation.statement;
+
+import java.util.Iterator;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.compiler.internal.core.validation.part.FunctionContainerValidator.StaticReferenceChecker;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 
 	
@@ -45,6 +46,10 @@ public class ClassDataDeclarationValidator extends DefaultASTVisitor {
 		TypeValidator.validateTypeDeclaration(classDataDeclaration.getType(), declaringPart, problemRequestor);
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(classDataDeclaration);
 		classDataDeclaration.accept(new FieldValidator(problemRequestor, compilerOptions, declaringPart));
+		
+		if (classDataDeclaration.isStatic() && classDataDeclaration.hasInitializer()) {
+			classDataDeclaration.getInitializer().accept(new StaticReferenceChecker(problemRequestor));
+		}
 		
 		return false;
 	}

@@ -113,6 +113,12 @@ public class ClassDataDeclaration extends Node {
 	public String toString() {
 		StringBuilder buf = new StringBuilder(100);
 		
+		if (isPrivate) {
+			buf.append("private ");
+		}
+		if (isStatic) {
+			buf.append("static ");
+		}
 		if (isConstant) {
 			buf.append("const ");
 		}

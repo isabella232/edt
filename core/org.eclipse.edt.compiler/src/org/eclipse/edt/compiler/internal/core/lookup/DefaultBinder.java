@@ -449,16 +449,18 @@ public abstract class DefaultBinder extends AbstractBinder {
 	public void endVisit(NewExpression newExpression) {
 		org.eclipse.edt.mof.egl.Type targetType = newExpression.getType().resolveType();
 		if(targetType != null) {
-			
+
+			if (targetType.getClassifier() instanceof EGLClass) {
+				List<Constructor> constructors = getConstructors(targetType);
+				((NameType) newExpression.getType()).getName().setAttribute(Name.OVERLOADED_FUNCTION_SET, constructors);
+			}
+
 			//any arugments for a parameterizable type are part of the type and not constructor arguments
 			if(!BindingUtil.isParameterizableType(targetType) && newExpression.getType() instanceof NameType && ((NameType)newExpression.getType()).hasArguments()) {
 				
 				List<Expression> arguments = ((NameType)newExpression.getType()).getArguments();
 				Constructor cons = null;
 				if (targetType.getClassifier() instanceof EGLClass) {
-					List<Constructor> constructors = getConstructors(targetType);
-					((NameType) newExpression.getType()).getName().setAttribute(Name.OVERLOADED_FUNCTION_SET, constructors);
-					
 					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)targetType.getClassifier(), getArgumentTypes(arguments), false);
 				}
 				if (cons == null) {
@@ -855,7 +857,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 				List<Constructor> constructors = getConstructors(type);
 				Constructor cons = null;				
 				if (constructors != null) {
-					functionInvocation.getTarget().setAttributeOnName(Name.OVERLOADED_FUNCTION_SET, cons);
+					functionInvocation.getTarget().setAttributeOnName(Name.OVERLOADED_FUNCTION_SET, constructors);
 					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)type.getClassifier(), getArgumentTypes(functionInvocation.getArguments()), false);
 				}
 				if (cons == null || (BindingUtil.isPrivate(cons) &&  functionInvocation.getTarget() instanceof SuperExpression)) {

@@ -347,7 +347,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
             }
             else if(binding instanceof org.eclipse.edt.mof.egl.Type) {
                 org.eclipse.edt.mof.egl.Type type = (org.eclipse.edt.mof.egl.Type) binding;
-                result = findStaticData(type, identifier);
+                result = findData(type, identifier); // validation will take care of invalid non-static references
                 
                 if(result == null) {
                 	try {
@@ -420,32 +420,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 		return new int[] {name.getOffset(), name.getOffset() + name.getLength()};
 	}
 
-	private List<Member> findStaticData(org.eclipse.edt.mof.egl.Type type, String identifier) {
-		
-		List <Member> allMbrs = findData(type, identifier);
-		if (allMbrs == null) {
-			return null;
-		}
-		
-		//when binding a call target, allow references to non-static members
-		if (bindingCallTarget) {
-			return allMbrs;
-		}
-		
-		List <Member> staticMbrs = new ArrayList<Member>();
-		
-		for (Member mbr : allMbrs) {
-			if (mbr.isStatic()) {
-				staticMbrs.add(mbr);
-			}
-		}
-		
-		if (staticMbrs.isEmpty()) {
-			return null;
-		}
-		return staticMbrs;
-	}
-    
 	public IPackageBinding bindPackageName(Name name) throws ResolutionException {
 		IPackageBinding result;
         if(name.isSimpleName()) {
@@ -535,7 +509,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
             }
             else if(object instanceof org.eclipse.edt.mof.egl.Type) {
                 org.eclipse.edt.mof.egl.Type type = (org.eclipse.edt.mof.egl.Type) object;
-                result = findStaticData(type, identifier);
+                result = findData(type, identifier); // validation will take care of invalid non-static references
                 
                 if(result == null) {
                 	try {

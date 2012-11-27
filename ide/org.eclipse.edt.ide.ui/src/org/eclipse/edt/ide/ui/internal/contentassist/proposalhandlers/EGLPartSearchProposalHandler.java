@@ -118,6 +118,10 @@ public class EGLPartSearchProposalHandler extends EGLAbstractProposalHandler {
 				continue;
 			String partDeclarationPackageName = partDeclarationInfo.getPackageName();
 			
+			if (!shouldInclude(partDeclarationInfo)) {
+				continue;
+			}
+			
 			//If source is not in the default package, we don't want proposals for parts in the default package
 			if(currentFilePackageName.length() == 0 || partDeclarationPackageName.length() != 0) {
 				//Ignore private parts if not in the same package
@@ -268,4 +272,7 @@ public class EGLPartSearchProposalHandler extends EGLAbstractProposalHandler {
 		return false;
 	}
 
+	protected boolean shouldInclude(PartDeclarationInfo partDeclarationInfo) {
+		return true;
+	}
 }

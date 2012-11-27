@@ -388,6 +388,9 @@ classContent
 
 	|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 stmt_star:stmts END:end1
 	{: RESULT = new NestedFunction(privateModifier1, Boolean.FALSE, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
+	
+	|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new NestedFunction(privateModifier1, Boolean.FALSE, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, Collections.EMPTY_LIST, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, semi1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 constOpt:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
 	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, questionOpt1, settingsBlock1, initializer1, const1, privateAccessModifier1 == Boolean.FALSE ? (const1 == Boolean.FALSE ? IDs1left : const1left) : privateAccessModifier1left, semi1right); :}

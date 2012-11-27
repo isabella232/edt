@@ -22,6 +22,8 @@ import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLVariableDotProposalHandler;
 import org.eclipse.edt.mof.egl.Type;
@@ -77,8 +79,8 @@ public class EGLVariableDotReferenceCompletion extends EGLAbstractReferenceCompl
 					
 					private void handleQualifier(Expression qualifier) {
 						Type tBinding = qualifier.resolveType();
-						boolean isVariable = (qualifier.resolveMember() != null) || wantFieldsForType(qualifier);
-						result.addAll(new EGLVariableDotProposalHandler(viewer, documentOffset, prefix, editor, tBinding, isVariable, qualifier).getProposals(null));				
+						boolean isVariable = (qualifier.resolveMember() != null) || wantFieldsForType(qualifier) || qualifier instanceof ThisExpression || qualifier instanceof SuperExpression;
+						result.addAll(new EGLVariableDotProposalHandler(viewer, documentOffset, prefix, editor, tBinding, isVariable).getProposals(true));				
 					}
 				});
 			}

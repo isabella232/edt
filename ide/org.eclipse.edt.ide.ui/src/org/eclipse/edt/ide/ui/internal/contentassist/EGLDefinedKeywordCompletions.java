@@ -83,9 +83,9 @@ public class EGLDefinedKeywordCompletions {
 			completionList.add(new EGLKeywordCompletion(NodeTypes.LAST, IEGLConstants.KEYWORD_LAST));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.LIBRARY, IEGLConstants.KEYWORD_LIBRARY));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.MOVE, IEGLConstants.KEYWORD_MOVE));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.NEW, IEGLConstants.KEYWORD_NEW));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.NEW, IEGLConstants.KEYWORD_NEW));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.NEXT, IEGLConstants.KEYWORD_NEXT));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.NULL, IEGLConstants.KEYWORD_NULL));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.NULL, IEGLConstants.KEYWORD_NULL));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.NOCURSOR, IEGLConstants.KEYWORD_NOCURSOR));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.NOT, IEGLConstants.KEYWORD_NOT));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.OF, IEGLConstants.KEYWORD_OF));
@@ -113,8 +113,8 @@ public class EGLDefinedKeywordCompletions {
 			completionList.add(new EGLKeywordCompletion(NodeTypes.SINGLEROW, IEGLConstants.KEYWORD_SINGLEROW));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.STACK, IEGLConstants.KEYWORD_STACK));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.STATIC, IEGLConstants.KEYWORD_STATIC));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.SUPER, IEGLConstants.KEYWORD_SUPER));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.THIS, IEGLConstants.KEYWORD_THIS));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.SUPER, IEGLConstants.KEYWORD_SUPER));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.THIS, IEGLConstants.KEYWORD_THIS));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.THROW, IEGLConstants.KEYWORD_THROW));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.TO, IEGLConstants.KEYWORD_TO));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.TRY, IEGLConstants.KEYWORD_TRY));
