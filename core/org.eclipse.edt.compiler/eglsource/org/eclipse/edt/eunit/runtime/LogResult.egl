@@ -190,7 +190,7 @@ Library LogResult
 			isArrayEqual = false;	
 			failedReason = "Failed: " + EXPECTEDSIZEHEADER + "'" + expectedSize + "' " + ACTUALSIZEHEADER + "'" + actualSize + "' ";								
 		end
-		if(message != null && message != "");
+		if(message != null && message != "")
 			failedReason = message + " - " + failedReason;
 		end
 		assertTrue(failedReason, isArrayEqual);

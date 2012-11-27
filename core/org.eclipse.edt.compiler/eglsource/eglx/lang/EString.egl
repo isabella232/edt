@@ -435,11 +435,8 @@ externalType EString extends AnyText type ParameterizableType {
 	function split( separator EString in ) returns( EString[] );
 	
 	/**
-	 * Same as the other version of split, except the result will not be larger 
-	 * than the specified limit.  Once the separator has been found limit - 1 
-	 * times, the remainder of the string is returned in the last element of the 
-	 * array, even if it contains the separator.  Returns an empty array if limit 
-	 * is less than one.
+	 * Same as the other version of split, except the size of the result will not
+	 * be larger than the specified limit.  Returns an empty array if limit is less than one.
 	 */
 	function split( separator EString in, limit EInt in ) returns( EString[] );
 	
@@ -457,11 +454,8 @@ externalType EString extends AnyText type ParameterizableType {
 	function splitOnPattern( pattern EString in, escape EString in ) returns( EString[] );
 	
 	/**
-	 * Same as the other version of splitOnPattern, except the result will not be 
-	 * larger than the specified limit.  Once the pattern has been matched limit - 
-	 * 1 times, the remainder of the string is returned in the last element of the 
-	 * array, even if part of it matches the
-	 * pattern.  Returns an empty array if limit is less than one.
+	 * Same as the other version of splitOnPattern, except the size of the result will not
+	 * be larger than the specified limit.  Returns an empty array if limit is less than one.
 	 */
 	function splitOnPattern( pattern EString in, limit EInt in ) returns( EString[] );
 	

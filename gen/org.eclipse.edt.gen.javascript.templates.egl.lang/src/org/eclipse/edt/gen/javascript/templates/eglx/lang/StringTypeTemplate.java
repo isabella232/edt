@@ -71,55 +71,52 @@ public class StringTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	@SuppressWarnings("static-access")
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_NE))
+		if (op.equals(MultiOperandExpression.Op_NE))
 			return "";
 		return "";
 	}
 
-	@SuppressWarnings("static-access")
 	protected String getNativeStringOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
-		if (op.equals(expr.Op_PLUS))
+		if (op.equals(MultiOperandExpression.Op_PLUS))
 			return " + ";
-		if (op.equals(expr.Op_EQ))
+		if (op.equals(MultiOperandExpression.Op_EQ))
 			return " == ";
-		if (op.equals(expr.Op_NE))
+		if (op.equals(MultiOperandExpression.Op_NE))
 			return " != ";
-		if (op.equals(expr.Op_LT))
+		if (op.equals(MultiOperandExpression.Op_LT))
 			return " < ";
-		if (op.equals(expr.Op_GT))
+		if (op.equals(MultiOperandExpression.Op_GT))
 			return " > ";
-		if (op.equals(expr.Op_LE))
+		if (op.equals(MultiOperandExpression.Op_LE))
 			return " <= ";
-		if (op.equals(expr.Op_GE))
+		if (op.equals(MultiOperandExpression.Op_GE))
 			return " >= ";
-		if (op.equals(expr.Op_AND))
+		if (op.equals(MultiOperandExpression.Op_AND))
 			return " && ";
-		if (op.equals(expr.Op_OR))
+		if (op.equals(MultiOperandExpression.Op_OR))
 			return " || ";
-		if (op.equals(expr.Op_CONCAT))
+		if (op.equals(MultiOperandExpression.Op_CONCAT))
 			return " + ";
 		return "";
 	}
 
-	@SuppressWarnings("static-access")
 	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_EQ))
+		if (op.equals(MultiOperandExpression.Op_EQ))
 			return "";
-		if (op.equals(expr.Op_NE))
+		if (op.equals(MultiOperandExpression.Op_NE))
 			return "";
-		if (op.equals(expr.Op_LT))
+		if (op.equals(MultiOperandExpression.Op_LT))
 			return "";
-		if (op.equals(expr.Op_GT))
+		if (op.equals(MultiOperandExpression.Op_GT))
 			return "";
-		if (op.equals(expr.Op_LE))
+		if (op.equals(MultiOperandExpression.Op_LE))
 			return "";
-		if (op.equals(expr.Op_GE))
+		if (op.equals(MultiOperandExpression.Op_GE))
 			return "";
 		return "";
 	}
@@ -129,12 +126,13 @@ public class StringTypeTemplate extends JavaScriptTemplate {
 		out.print(".");
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");
-		if (!(expr.getTarget() instanceof Member) || !((Member)expr.getTarget()).isStatic())
+		if (!(expr.getTarget() instanceof Member) || !((Member)expr.getTarget()).isStatic()) {
 			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-		if (expr.getArguments() != null && expr.getArguments().size() > 0)
-			out.print(", ");
+			if (expr.getArguments() != null && expr.getArguments().size() > 0) {
+				out.print(", ");
+			}
+		}
 		ctx.invoke(genInvocationArguments, expr, ctx, out);
 		out.print(")");
 	}
-	
 }
