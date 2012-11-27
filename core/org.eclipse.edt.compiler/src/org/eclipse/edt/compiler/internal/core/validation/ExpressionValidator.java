@@ -52,6 +52,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.part.FunctionContainerValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
@@ -60,6 +61,7 @@ import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
@@ -558,6 +560,19 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		if (dynamicAccessUsed[0]) {
 			problemRequestor.acceptProblem(fieldAccess, IProblemRequestor.DOT_ACCESS_USED_AFTER_DYNAMIC);
 		}
+		
+		// Check if we have <type>.<member> - in which case <member> must be static.
+		Object element = fieldAccess.resolveElement();
+		if (element instanceof Member && !((Member)element).isStatic() && fieldAccess.getPrimary().resolveElement() instanceof Type) {
+			if (element instanceof FunctionMember) {
+				problemRequestor.acceptProblem(fieldAccess, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FUNCTION,
+						new String[]{fieldAccess.getCaseSensitiveID() + "(" + FunctionContainerValidator.getTypeNamesList(((FunctionMember)element).getParameters()) + ")"});
+			}
+			else {
+				problemRequestor.acceptProblem(fieldAccess, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FIELD,
+						new String[]{fieldAccess.getCaseSensitiveID()});
+			}
+		}
 	};
 	
 	@Override
@@ -568,6 +583,19 @@ public class ExpressionValidator extends AbstractASTVisitor {
 					qualifiedName.getQualifier(),
 					IProblemRequestor.ARRAY_ACCESS_NOT_SUBSCRIPTED,
 					new String[] {qualifiedName.getQualifier().getCanonicalName()});
+		}
+		
+		// Check if we have <type>.<member> - in which case <member> must be static.
+		Object element = qualifiedName.resolveElement();
+		if (element instanceof Member && !((Member)element).isStatic() && qualifiedName.getQualifier().resolveElement() instanceof Type) {
+			if (element instanceof FunctionMember) {
+				problemRequestor.acceptProblem(qualifiedName, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FUNCTION,
+						new String[]{qualifiedName.getCaseSensitiveIdentifier() + "(" + FunctionContainerValidator.getTypeNamesList(((FunctionMember)element).getParameters()) + ")"});
+			}
+			else {
+				problemRequestor.acceptProblem(qualifiedName, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FIELD,
+						new String[]{qualifiedName.getCaseSensitiveIdentifier()});
+			}
 		}
 	}
 	
