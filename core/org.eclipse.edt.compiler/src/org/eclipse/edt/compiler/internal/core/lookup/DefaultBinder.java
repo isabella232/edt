@@ -452,7 +452,9 @@ public abstract class DefaultBinder extends AbstractBinder {
 
 			if (targetType.getClassifier() instanceof EGLClass) {
 				List<Constructor> constructors = getConstructors(targetType);
-				((NameType) newExpression.getType()).getName().setAttribute(Name.OVERLOADED_FUNCTION_SET, constructors);
+				if (newExpression.getType() instanceof NameType) {
+					((NameType) newExpression.getType()).getName().setAttribute(Name.OVERLOADED_FUNCTION_SET, constructors);
+				}
 			}
 
 			//any arugments for a parameterizable type are part of the type and not constructor arguments
