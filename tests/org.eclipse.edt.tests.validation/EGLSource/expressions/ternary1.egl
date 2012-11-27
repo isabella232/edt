@@ -147,7 +147,7 @@ handler ternary1
 		if (true) return true
 			?? (true ?? i : ba) //1 The type boolean[] does not match the type string which the function returns.
 			: (true ?? ba : i) //1 The type boolean[] does not match the type string which the function returns.
-			; end;
+			; end
 	end
 	
 	function returnChecks2() returns(any)

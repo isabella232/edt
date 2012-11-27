@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
-import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;

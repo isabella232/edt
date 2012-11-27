@@ -15,21 +15,16 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.TernaryExpression;
 
-public class TernaryExpressionTemplate extends JavaTemplate {
-
-	public void genExpression(TernaryExpression expr, Context ctx, TabbedWriter out) {
-//		if (ctx.mapsToJavaType(expr.getEType())) {
-//			ctx.invoke(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
-//			out.print(".ezeIsa(");
-//			genExpression(expr.getObjectExpr(), ctx, out);
-//			ctx.invoke(genTypeDependentOptions, expr.getEType(), ctx, out);
-//			out.print(")");
-//		} else {
-//			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeIsa(");
-//			genExpression(expr.getObjectExpr(), ctx, out);
-//			out.print(", ");
-//			ctx.invoke(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);
-			out.print(".class)");
-//		}
+public class TernaryExpressionTemplate extends JavaTemplate 
+{
+	public void genExpression( TernaryExpression expr, Context ctx, TabbedWriter out ) 
+	{
+		out.print( "((" );
+		ctx.invoke( genExpression, expr.getFirst(), ctx, out );
+		out.print( ")?(" );
+		ctx.invoke( genExpression, expr.getSecond(), ctx, out );
+		out.print( "):(" );
+		ctx.invoke( genExpression, expr.getThird(), ctx, out );
+		out.print( "))" );
 	}
 }

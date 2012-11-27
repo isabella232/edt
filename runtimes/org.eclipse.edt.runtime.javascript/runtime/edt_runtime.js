@@ -567,9 +567,9 @@ egl.eglx.lang.EString.substring = function(str, startIndex, endIndex) {
 	end = endIndex;
 	max = str.length;
 	if (start < 1 || start > max) {
-		throw egl.createInvalidIndexException( 'CRRUI2019E', [ str, max ], start );
+		throw egl.createInvalidIndexException( 'CRRUI2014E', [ start, max ], start );
 	} else if (end < start || end < 1 || end > max) {
-		throw egl.createInvalidIndexException( 'CRRUI2019E', [ str, max ], end );
+		throw egl.createInvalidIndexException( 'CRRUI2014E', [ end, max ], end );
 	}
 	return str.substring(start-1, end);
 };
@@ -618,19 +618,69 @@ egl.eglx.lang.EString.fromAnyObject = function (x, len) {
 	var result = egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
 	return egl.eglx.lang.EString.asString(result, len );
 };
-egl.eglx.lang.EString.matchesPattern = function (str1, str2, esc) {
-	if ((str1 == null) || (str2 == null)) {
+egl.eglx.lang.EString.matchesPattern = function (str, pattern, escape) {
+	if (str == null || pattern == null) {
 		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
-	esc = esc || "\\";
-	return egl.matches(str1, str2, esc);
+	if(!pattern) return false;
+	escape = escape || "\\";
+	var regExpStr = egl.eglx.lang.EString.patternToRegExpStr(pattern, escape);
+	try{
+		return new RegExp("^" + regExpStr).test(str);
+	}catch (oops){
+		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
+	}
 };
-egl.eglx.lang.EString.isLike = function (str1, str2, esc) {
-	if ((str1 == null) || (str2 == null)) {
+egl.eglx.lang.EString.isLike = function (str, pattern, escape) {
+	if ((str == null) || (pattern == null)) {
 		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
-	esc = esc || "\\";
-	return egl.like(str1, str2, esc);
+	escape = escape || "\\";
+	
+	//EGL 'like' is similar to SQL regular expressions.
+	//Change % to .* and _ to . so that we can use RegExp
+	var trimP = pattern.trimRight();
+	if(!pattern) return false;
+	var newPattern = "";
+	
+	for ( var i = 0; i < trimP.length; i++ ) {
+		switch ( trimP.charAt(i) ) {
+		
+		case "%":
+			newPattern += ".*";
+			break;
+			
+		case "_":
+			newPattern += ".";
+			break;
+			
+		//escape character found
+		//\% -> %, \_ -> _, but for anything else, the escape character is ignored
+		case escape:
+			var tempChar = trimP.charAt(++i);
+			//extra handling if the escape char is backslash
+			//can filter universal escape chars through to the regexp (\t, \n, etc)
+			if ( escape == "\\" && tempChar != "%" && tempChar != "_" ) {
+				newPattern += "\\";
+			}
+			newPattern += egl.eglx.lang.EString.regExpAlias( tempChar );
+			break;
+			
+		//regular character, but make it safe for use in a regexp
+		default:
+			newPattern += egl.eglx.lang.EString.regExpAlias( trimP.charAt(i) );
+			break;	
+		}
+	}
+	if(newPattern == escape){
+		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
+	}
+	newPattern = "\^" + newPattern + "\$";			
+	try{
+		return (new RegExp( newPattern )).test( str.trimRight() );
+	}catch ( oops ){
+		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
+	}
 };
 egl.eglx.lang.EString.indexOf = function (str, pattern, start) {
 	if ((str == null) || (pattern == null)) {
@@ -651,7 +701,7 @@ egl.eglx.lang.EString.replaceStr = function(str, target, replacement) {
 	if ((str == null) || (target == null) || (replacement == null)) {
 		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
-	return str.replace(new RegExp(target, "g"), replacement);   // TODO should we simply alias replaceStr as replace?
+	return str.replace(new RegExp(target, "g"), replacement);
 };
 egl.eglx.lang.EString.charCodeAt = function (str, index) {
 	if ((str == null) || (index == null)) {
@@ -710,7 +760,7 @@ egl.eglx.lang.EString.startsWith = function(s, substr) {
 	return s.startsWith(substr);
 };
 egl.eglx.lang.EString.asNumber = function (x) {
-	return egl.convertAnyToNumber(egl.boxAny(x, "S;"), false);  //TODO sbg avoid hardcoding the boolean flag
+	return egl.convertAnyToNumber(egl.boxAny(x, "S;"), false);
 };
 egl.eglx.lang.EString.compareTo = function (x1, x2) {
     if ((x1 === null) || (x2 === null))
@@ -719,6 +769,152 @@ egl.eglx.lang.EString.compareTo = function (x1, x2) {
         return x1 == x2 ? 0 : ( x1 > x2 ? 1 : -1 );
     }
 };
+egl.eglx.lang.EString.isEmpty = function (x) {
+	if ( x === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return x.length === 0;
+};
+egl.eglx.lang.EString.reverse = function (x) {
+	if ( x === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return x.split("").reverse().join("");
+};
+egl.eglx.lang.EString.join = function (separator, strs) {
+	if ( separator === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return strs.join(separator);
+};
+egl.eglx.lang.EString.compareIgnoreCase = function (x,y) {
+	if ( x === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return x.toLocaleUpperCase().localeCompare(y.toLocaleUpperCase());
+};
+egl.eglx.lang.EString.split = function (str, sep, limit) {
+	if ( str === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	var result;
+	if ( arguments.length === 3 ) {
+		if ( limit < 1 ) result = [];
+		else result = str.split(sep, limit);
+	}
+	else result = str.split(sep);
+	result.setType("[S;");
+	return result;
+};
+egl.eglx.lang.EString.insertStr = function (str1, offset, str2) {
+	if ( str1 === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	if ( offset < 1 || offset > str1.length )
+		throw egl.createInvalidIndexException( 'CRRUI2014E', [ offset, str1.length ], offset );
+	return str1.substring(0,offset-1) + str2 + str1.substring(offset-1);
+};
+egl.eglx.lang.EString.replaceStrAt = function(str1, start, end, str2) {
+	if ( str1 === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	if ( start < 1 || start > str1.length || start > end )
+		throw egl.createInvalidIndexException( 'CRRUI2014E', [ start, str1.length ], start );
+	if ( end > str1.length )
+		throw egl.createInvalidIndexException( 'CRRUI2014E', [ end, str1.length ], end );
+	return str1.substring(0,start-1) + str2 + str1.substring(end-1);
+};
+egl.eglx.lang.EString.indexOfPattern = function(str, pattern)
+{
+	if (str == null) {
+		throw egl.createNullValueException( "CRRUI2005E", [] );
+	}
+	var escape, startIndex;
+	if ( arguments.length === 2 ) {
+		escape = "\\";
+		startIndex = 1;
+	}
+	else if ( arguments.length === 4 ) {
+		escape = arguments[2];
+		startIndex = arguments[3];
+		if ( startIndex < 1 || startIndex > str.length )
+			throw egl.createInvalidIndexException( 'CRRUI2014E', [ startIndex, str.length ], startIndex );
+		str = str.substring( startIndex - 1 );
+	}
+	else if ( typeof(arguments[2]) === "string" ) {
+		escape = arguments[2];
+		startIndex = 1;
+	}
+	else {
+		escape = "\\";
+		startIndex = arguments[2];
+		if ( startIndex < 1 || startIndex > str.length )
+			throw egl.createInvalidIndexException( 'CRRUI2014E', [ startIndex, str.length ], startIndex );
+		str = str.substring( startIndex - 1 );
+	}
+	
+	var regExpStr = egl.eglx.lang.EString.patternToRegExpStr(pattern, escape);
+	try{
+		var match = str.search(new RegExp(regExpStr));
+		return match === -1 ? 0 : match + startIndex;
+	}catch (oops){
+		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
+	}
+};
+egl.eglx.lang.EString.replacePattern = function(str, pattern)
+{
+	if (str == null) {
+		throw egl.createNullValueException( "CRRUI2005E", [] );
+	}
+	var escape, replacement, global;
+	if (arguments.length === 5)
+	{
+		escape = arguments[2];
+		replacement = arguments[3];
+		global = arguments[4];
+	}
+	else {
+		escape = "\\";
+		replacement = arguments[2];
+		global = arguments[3];
+	}
+	
+	var regExpStr = egl.eglx.lang.EString.patternToRegExpStr(pattern, escape);
+	try{
+		var rx = global ? new RegExp(regExpStr,'g') : new RegExp(regExpStr);
+		return str.replace(rx, function(){return replacement;});
+	}catch (oops){
+		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
+	}
+};
+egl.eglx.lang.EString.splitOnPattern = function (str, pattern) {
+	if ( str === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	
+	var escape, limit, result;
+	if ( arguments.length === 2 ) {
+		escape = "\\";
+		limit = 0;
+	}
+	else if ( arguments.length === 4 ) {
+		escape = arguments[2];
+		limit = arguments[3];
+		if ( limit < 1 ) {
+			result = [];
+			result.setType("[S;");
+			return result;
+		}
+	}
+	else if ( typeof(arguments[2]) === "string" ) {
+		escape = arguments[2];
+		limit = 0;
+	}
+	else {
+		escape = "\\";
+		limit = arguments[2];
+		if ( limit < 1 ) {
+			result = [];
+			result.setType("[S;");
+			return result;
+		}
+	}
+	
+	var regExpStr = egl.eglx.lang.EString.patternToRegExpStr(pattern, escape);
+	try{
+		var rx = new RegExp(regExpStr);
+		result = limit > 0 ? str.split(rx,limit) : str.split(rx);
+	}catch (oops){
+		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
+	}
+	result.setType("[S;");
+	return result;
+};
+
 //Below are private methods, just for internal use in EString
 egl.eglx.lang.EString.asString = function (x, len) {
 	if ( typeof(len) == "undefined" ) {
@@ -727,8 +923,85 @@ egl.eglx.lang.EString.asString = function (x, len) {
 		return egl.convertTextToStringN( x, len );
 	} 
 };
-
-
+egl.eglx.lang.EString.regExpAlias = function(ch) {
+	//takes in a single character and returns an appropriate form to use in regular expressions
+	//certain symbols hold special meaning, but calling this function will add a \ to treat them
+	//like any character
+	switch (ch) {
+	case "^":
+	case "$":
+	case "*":
+	case "+":
+	case "?":
+	case ".":
+	case "(":
+	case ")":
+	case "[":
+	case "]":
+	case "{":
+	case "}":
+	case "\\":
+		return "\\" + ch;
+	
+	//nuthin' fancy
+	default:
+		return ch;
+	}
+};
+egl.eglx.lang.EString.patternToRegExpStr = function(pattern, escape) {
+	//converts EGL * ? [^-] symbols to javascript equivalents for matches
+	var newPattern = "";
+	
+	for ( var i = 0; i < pattern.length; i++ ) {
+		switch ( pattern.charAt(i) ) {
+		
+		case "*":
+			newPattern += ".*";
+			break;
+			
+		case "?":
+			newPattern += ".";
+			break;
+			
+		//escape character found
+		case escape:
+			var tempChar = pattern.charAt(++i);
+			//extra handling if the escape char is backslash
+			//can filter universal escape chars through to the regexp (\t, \n, etc)
+			if ( escape == "\\" && tempChar != "*" && tempChar != "?" ) {
+				newPattern += "\\";
+			}
+			newPattern += egl.eglx.lang.EString.regExpAlias( tempChar );
+			break;
+			
+		case "[":
+			//find a matching ]
+			var tempi = i + 1;
+			while ( tempi < pattern.length && pattern.charAt(tempi) != "]" ) {
+				tempi++;
+			}
+			
+			if ( tempi == pattern.length || pattern.charAt(tempi - 1) == escape ) {
+				//no matching ] found
+				//needed to also make sure \] doesn't count as ]
+				newPattern += "\\[";
+			}
+			else {
+				//matching ] found
+				//add everything between the brackets (at the risk of the user)
+				newPattern += pattern.substring(i, tempi + 1 );
+				i = tempi;
+			}
+			break;
+			
+		//regular character, but make it safe for regexp
+		default:
+			newPattern += egl.eglx.lang.EString.regExpAlias( pattern.charAt(i) );
+			break;	
+		}
+	}
+	return newPattern;	
+};
 //Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
 String.prototype.length = function() {  //TODO Don't override JavaScript field of the same name
 	return ( s === null ) ? 0
@@ -747,18 +1020,6 @@ String.prototype.clipTrailing = function() {
 	return this.replace( /(\s)*$/, "" );
 };
 
-/* TODO JavaScript's impls of these are acceptable as-is
-String.prototype.toUpperCase = function() { //TODO Don't override JavaScript function of the same name
-};
-String.prototype.toLowerCase = function() { //TODO Don't override JavaScript function of the same name
-};
-String.prototype.indexOf = function(substr) { //TODO Don't override JavaScript function of the same name
-};
-String.prototype.indexOf = function(substr, startIndex) { //TODO Don't override JavaScript function of the same name
-};
-String.prototype.lastIndexOf = function() { //TODO Don't override JavaScript function of the same name
-};
- */
 String.prototype.endsWith = function(substr) { 
 	return (this.indexOf(substr, this.length - substr.length) !== -1);
 };
@@ -766,13 +1027,8 @@ String.prototype.startsWith = function(substr) {
 	return (this.indexOf(substr) == 0);
 };
 String.prototype.replaceStr = function(target, replacement) {
-	return this.replace(target, replacement);   // TODO should we simply alias replaceStr as replace?
+	return this.replace(target, replacement);
 };
-
-/* TODO JavaScript's impls of these are acceptable as-is
-String.prototype.charCodeAt = function(index) { 
-};
-*/
 
 /****************************************************************************
  * EBytes
@@ -833,9 +1089,9 @@ egl.eglx.lang.EBytes.Substr = function(bytes, startIndex, endIndex) {
 	end = endIndex;
 	max = bytes.length;
 	if (start < 1 || start > max) {
-		throw egl.createInvalidIndexException( 'CRRUI2019E', [ bytes, max ], start );
+		throw egl.createInvalidIndexException( 'CRRUI2014E', [ start, max ], start );
 	} else if (end < start || end < 1 || end > max) {
-		throw egl.createInvalidIndexException( 'CRRUI2019E', [ bytes, max ], end );
+		throw egl.createInvalidIndexException( 'CRRUI2014E', [ end, max ], end );
 	}
 	return bytes.slice(start-1, end);
 };
@@ -954,6 +1210,16 @@ egl.eglx.lang.EDate.extend = function(/*extension*/ date, /*optional mask*/patte
 };
 egl.eglx.lang.EDate.ezeCast = function (any, nullable) {   
 	return egl.convertAnyToDate(any, nullable);
+};
+
+egl.eglx.lang.EDate.dayOf = function(d) {   
+	return d.getDate();
+};
+egl.eglx.lang.EDate.monthOf = function(d) {   
+	return d.getMonth() + 1;
+};
+egl.eglx.lang.EDate.yearOf = function(d) {   
+	return d.getFullYear();
 };
 
 
@@ -1312,7 +1578,97 @@ egl.eglx.lang.ENumber.ezeCast = function(x, nullable, decimals, limit){
 egl.eglx.lang.ENumber.negate = function (x) {
     return {eze$$value : -x.eze$$value, eze$$signature : x.eze$$signature}; 
 };
+egl.eglx.lang.ENumber.precision = function(x) {
+    if (x == null || x.eze$$value == null) {
+        throw egl.createNullValueException( "CRRUI2005E", [] );
+    }
 
+	var kind;
+
+	var firstChar = x.eze$$signature.charAt(0);
+	var firstCharIdx = 0;
+	if (firstChar !== '?') {
+		kind = firstChar;
+	} else {
+		kind = x.eze$$signature.charAt(1);
+		firstCharIdx = 1;
+	}
+
+	switch (kind) {
+	case 'I':
+		return 9;
+	case 'i':
+		return 4;
+	case 'B':
+		return 18;
+	case 'F':
+		return 15;
+	case 'f':
+		return 6;
+	case 'b':
+	case 'n':
+	case 'd':
+	case '9':
+	case 'p':
+        var colon = x.eze$$signature.indexOf(':');
+        return (colon > 0 ? x.eze$$signature.substring(firstCharIdx + 1, colon) : x.eze$$value.mant.length) ;
+	case 'X':
+		var length = x.eze$$signature.substring(firstCharIdx + 1,
+				x.eze$$signature.indexOf(';'));
+		if (length === '8') {
+			return 6;
+		} else if (length === '16') {
+			return 15;
+		}
+	}
+	return 0;
+};
+egl.eglx.lang.ENumber.decimals = function(x) {
+    if (x instanceof egl.javascript.BigDecimal) {
+        return x.scale();
+    }
+    if (x == null || x.eze$$value == null) {
+        throw egl.createNullValueException( "CRRUI2005E", [] );
+    }
+
+	var kind;
+
+	var firstChar = x.eze$$signature.charAt(0);
+	if (firstChar !== '?') {
+		kind = firstChar;
+	} else {
+		kind = x.eze$$signature.charAt(1);
+	}
+
+	var result = 0;
+	switch (kind) {
+	case 'b':
+	case 'n':
+	case 'd':
+	case '9':
+	case 'p':
+		var colon = x.eze$$signature.indexOf(':');
+		result = colon > 0 ? x.eze$$signature.substring(colon + 1, x.eze$$signature
+				.indexOf(';')) : x.eze$$value.scale();
+		break;
+	case 'F':
+	case 'f':
+		if (x.eze$$value != 0) {
+			var numStr = new egl.javascript.BigDecimal(x.eze$$value).format(-1,-1);
+			var pointIndex = numStr.lastIndexOf('.');
+			if (pointIndex != -1) {
+				// Ignore trailing zeros.
+				var lastDigitIndex = numStr.length - 1;
+				while (lastDigitIndex > pointIndex && numStr.charAt(lastDigitIndex) == '0') {
+					lastDigitIndex--;
+				}
+				result = lastDigitIndex - pointIndex;
+			}
+		}
+	}
+
+	return result;
+};
 
 
 

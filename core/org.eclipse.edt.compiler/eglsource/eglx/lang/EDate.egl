@@ -102,4 +102,25 @@ externalType EDate extends AnyValue type ClassType
 	 * @return a new timestamp.
 	 */
 	function extend(timeSpanMask EString in) returns(ETimestamp);
+	
+	/**
+	 * Returns the day portion of this date field.
+	 * 
+	 * @return the day portion of this date field.
+	 */
+	function dayOf() returns(EInt);
+	
+	/**
+	 * Returns the month portion of this date field.
+	 * 
+	 * @return the month portion of this date field.
+	 */
+	function monthOf() returns(EInt);
+	
+	/**
+	 * Returns the year portion of this date field. 
+	 * 
+	 * @return the year portion of this date field.
+	 */
+	function yearOf() returns(EInt);
 end

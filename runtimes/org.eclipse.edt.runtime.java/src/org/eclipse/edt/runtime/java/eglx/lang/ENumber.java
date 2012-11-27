@@ -18,8 +18,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
-import eglx.lang.AnyException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 /**
  * Class to be used in processing Number operations
@@ -1419,5 +1418,161 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 
 	public static boolean notEquals(Object op1, Object op2) {
 		return !equals(op1, op2);
+	}
+
+	/**
+	 * Returns the number of digits to the right of the decimal point that the value can store.
+	 */
+	public static int decimals(BigDecimal numericField) {
+		// We can't use numericField.scale() because we have to ignore trailing zeros.
+		if ( numericField.signum() == 0 || numericField.scale() == 0 )
+		{
+			// It's an integer.
+			return 0;
+		}
+		
+		String numStr = numericField.toPlainString();
+		int pointIndex = numStr.lastIndexOf( '.' );
+		if ( pointIndex == -1 )
+		{
+			// There are no digits after the decimal point.
+			return 0;
+		}
+		
+		// Ignore trailing zeros.
+		int lastDigitIndex = numStr.length() - 1;
+		while ( lastDigitIndex > pointIndex && numStr.charAt( lastDigitIndex ) == '0' )
+		{
+			lastDigitIndex--;
+		}
+
+		return lastDigitIndex - pointIndex;
+	}
+
+	public static int decimals(eglx.lang.ENumber numericField) {
+		if (numericField == null || numericField.ezeUnbox() == null)
+		{
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		Number value = numericField.ezeUnbox();
+		if ( value instanceof Integer || value instanceof Short || value instanceof Long )
+		{
+			return 0;
+		}
+		else if ( value instanceof BigDecimal )
+		{
+			return decimals( (BigDecimal)value );
+		}
+		else if ( value instanceof Double )
+		{
+			return decimals( BigDecimal.valueOf( value.doubleValue() ) );
+		}
+		else
+		{
+			return decimals( new BigDecimal( Float.toString( value.floatValue() ) ) );
+		}
+	}
+	
+	public static int decimals(EDecimal numericField) {
+		if (numericField == null || numericField.ezeUnbox() == null)
+		{
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return numericField.getDecimals();
+	}
+
+	public static int decimals(int numericField) {
+		return 0;
+	}
+
+	public static int decimals(long numericField) {
+		return 0;
+	}
+
+	public static int decimals(short numericField) {
+		return 0;
+	}
+	
+	public static int decimals(double numericField) {
+		if ( numericField == 0 )
+		{
+			return 0;
+		}
+		return decimals( BigDecimal.valueOf( numericField ) );
+	}
+
+	public static int decimals(float numericField) {
+		if ( numericField == 0 )
+		{
+			return 0;
+		}
+		return decimals( new BigDecimal( Float.toString( numericField ) ) );
+	}
+
+	public static int precision(BigDecimal numericField) {
+		return numericField.precision();
+	}
+	
+	public static int precision(eglx.lang.ENumber numericField) {
+		Number value = numericField.ezeUnbox();
+		if ( value instanceof Integer )
+		{
+			return 9;
+		}
+		else if ( value instanceof Long )
+		{
+			return 18;
+		}
+		else if ( value instanceof Short )
+		{
+			return 4;
+		}
+		else if ( value instanceof BigDecimal )
+		{
+			return ((BigDecimal)value).precision();
+		}
+		else if ( value instanceof Double )
+		{
+			return 15;
+		}
+		else if ( value instanceof Float )
+		{
+			return 6;
+		}
+		else
+		{
+			return BigDecimal.valueOf( value.doubleValue() ).precision();
+		}
+	}
+	
+	public static int precision(short numericField) {
+		return 4;
+	}
+
+	public static int precision(int numericField) {
+		return 9;
+	}
+
+	public static int precision(long numericField) {
+		return 18;
+	}
+
+	public static int precision(float numericField) {
+		return 6;
+	}
+
+	public static int precision(double numericField) {
+		return 15;
+	}
+
+	public static int precision(EDecimal numericField) {
+		if (numericField == null || numericField.ezeUnbox() == null)
+		{
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return numericField.getPrecision();
 	}
 }

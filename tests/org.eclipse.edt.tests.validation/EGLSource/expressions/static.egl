@@ -1,0 +1,111 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+class class1
+	// literals, static fields, and static functions are allowed as initializers to static fields
+	static i1 int; //0
+	static i2 int = i1; //0
+	static i3 int = 10; //0
+	static i4 int = 10 * i2; //0
+	static i5 int = func1(); //0
+	static i6 int = i5 + func1(); //0
+	static i7 int = (new class2).j1; //0
+	
+	// Non-static fields & functions are not allowed as initialziers to static fields
+	s string;
+	static s2 string = s; //1 Cannot make a static reference to non-static field s.
+	static s3 string = func(); //1 Cannot make a static reference to non-static function func().
+	static s4 string = "abc" + s; //1 Cannot make a static reference to non-static field s.
+	
+	// Static field accesses - to both a static field within a type, and to a non-static field within a static field.
+	static c1 class2; //0
+	c2 class2;
+	static j1 int = c1.j1; //0
+	static j2 int = c2.j1; //1 Cannot make a static reference to non-static field c2.
+	static j3 int = class2.j2; //0
+	j4 int = class2.j2; //0
+	static j5 int = class2.j1; //1 Cannot make a static reference to non-static field j1.
+	j6 int = class2.j1; //1 Cannot make a static reference to non-static field j1.
+	j7 int = c1.foo(); //0
+	static j8 int = c1.foo(); //0
+	static j9 int = c2.foo(); //1 Cannot make a static reference to non-static field c2.
+	static j10 int = c1.foo2(); //0
+	static j11 int = c2.foo2(); //0
+	j12 int = class2.foo2(); //0
+	j13 int = class2.foo(); //1 Cannot make a static reference to non-static function foo().
+	static j14 int = func2().j1; //0
+	static j15 int = func3().j1; //1 Cannot make a static reference to non-static function func3().
+	
+	function func() returns(string);
+	static function func1() returns(int);
+	static function func2() returns(class2);
+	function func3() returns(class2);
+end
+
+class class2
+	j1 int;
+	static j2 int;
+	
+	function foo() returns(int);
+	static function foo2() returns(int);
+end
+
+class class3
+	notStaticField class2;
+	static staticField class2;
+	
+	static function staticFunc1(parm1 int)
+		local1 int;
+		local2 class2;
+		
+		// Literals, static fields, locals, and static functions are allowed.
+		staticField = new class2; //0
+		local1 = "abc"; //0
+		local2.j1 = parm1; //0
+		staticFunc2();
+		
+		// Field accesses within statics are allowed.
+		local2.j1 = staticFunc3().j1; //0
+		local2.j1 = class2.j2; //0
+		
+		// Library fields/funcs are always static
+		lib1.field1 = 10; //0
+		lib1.foo(); //0
+		
+		// Additional types of local vars
+		for(x int from 1 to 2) SysLib.writestdout(x); end //0
+		try onException(ex AnyException) SysLib.writestderr(ex.message); end //0
+		while(true) x int = 10; x = x * 2; SysLib.writestdout(x); end //0
+		if (true) x int = 10; x = x * 2; SysLib.writestdout(x); else x int = 10; x = x * 2; SysLib.writestdout(x); end //0
+		array int[]; foreach(x int from array) x = x * 2; SysLib.writestdout(x); end //0
+		
+		// Expressions are allowed, so long as they don't use instance variables or non-static functions
+		new class2().j1 = 10; //0
+		(local2 as class2).j1 = 10; //0
+		(notStaticField as class2).j1 = 10; //1 Cannot make a static reference to non-static field notStaticField.
+		staticFunc4(notStaticFunc2()); //1 Cannot make a static reference to non-static function notStaticFunc2().
+		
+		// Non-static globals or functions are not allowed.
+		notStaticField = new class2; //1 Cannot make a static reference to non-static field notStaticField.
+		notStaticFunc1(); //1 Cannot make a static reference to non-static function notStaticFunc1().
+	end
+	
+	static function staticFunc2();
+	static function staticFunc3() returns(class2);
+	static function staticFunc4(c class2 in);
+	function notStaticFunc1();
+	function notStaticFunc2() returns(class2);
+end
+
+library lib1
+	field1 int;
+	function foo();
+end

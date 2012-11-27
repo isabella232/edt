@@ -17,19 +17,24 @@ import java.util.List;
 import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.Record_ResultSummary;
 import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.TestResultPkgNode;
 import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.TestResultRootNode;
+import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-public class RSTreeLabelProvider extends LabelProvider implements IColorProvider{
+public class RSTreeLabelProvider extends LabelProvider implements IColorProvider, IFontProvider {
 	private List <Color> colors;
 	
 	private Color red;
 	private Color green;
 	private Color purple;
 	private Color orange;
+	
+	private Font boldFont;
 	
 	public RSTreeLabelProvider(){
 		red = new Color(Display.getCurrent(), new RGB(255, 0, 0));			
@@ -41,6 +46,7 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 		colors.add(green);
 		colors.add(purple);
 		colors.add(orange);
+		boldFont = new FontRegistry().getBold( Display.getCurrent().getSystemFont().getFontData()[0].getName() );
 	}
 	
 	@Override
@@ -96,6 +102,34 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 				return orange;
 			default:
 				return null;
+		}
+	}
+	
+	@Override
+	public Font getFont( Object element )
+	{
+		int resultCode = -1;
+
+		if ( element instanceof Record_ResultSummary )
+		{
+			resultCode = ((Record_ResultSummary)element).resultCode;
+		}
+		else if ( element instanceof TestResultPkgNode )
+		{
+			resultCode = ((TestResultPkgNode)element).statisticCnts.overallResult();
+		}
+		else if ( element instanceof TestResultRootNode )
+		{
+			resultCode = ((TestResultRootNode)element).statisticCnts.overallResult();
+		}
+		
+		if ( resultCode == ConstantUtil.FAILED || resultCode == ConstantUtil.EXCEPTION )
+		{
+			return boldFont;
+		}
+		else
+		{
+			return null;
 		}
 	}
 	

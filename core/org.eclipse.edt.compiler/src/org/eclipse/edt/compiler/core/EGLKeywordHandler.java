@@ -26,6 +26,7 @@ public class EGLKeywordHandler {
 		{
 			//EGL keywords
 			"absolute", //$NON-NLS-1$
+			"abstract", //$NON-NLS-1$
 			"add", //$NON-NLS-1$
 			"all", //$NON-NLS-1$
 			"and", //$NON-NLS-1$

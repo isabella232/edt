@@ -218,6 +218,7 @@ class Egl2MofMember extends Egl2MofPart {
 			
 			setUpEglTypedElement(func, function);
 			func.setIsStatic(function.isStatic());
+			func.setIsAbstract(function.isAbstract());
 					
 			if (!function.isAbstract()) {
 				StatementBlock stmts = factory.createStatementBlock();

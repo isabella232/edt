@@ -34,7 +34,6 @@ public class BoxingExpressionTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		out.print(eze$$signature);
 		out.print(" : ");
-		// TODO the decimal type should be boxed
 		// If the expr is function parameter, the signature should be determine at runtime
 		if( expr.getExpr() instanceof MemberName && ((MemberName)expr.getExpr()).getMember() instanceof FunctionParameter){
 			out.print("egl.inferSignature(");

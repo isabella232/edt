@@ -116,11 +116,11 @@ public class NestedFunction extends Node {
 	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder(100);
-		if (isStatic) {
-			buf.append("static ");
-		}
 		if (isPrivate) {
 			buf.append("private ");
+		}
+		if (isStatic) {
+			buf.append("static ");
 		}
 		if (isAbstract) {
 			buf.append("abstract ");

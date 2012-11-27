@@ -41,14 +41,6 @@ externalType MathLib type NativeType
 
 	static function cosh(value float in) returns(float);
 	
-	static function decimals(value smallint in) returns(int);
-    static function decimals(value int in) returns(int);
-    static function decimals(value bigint in) returns(int);
-    static function decimals(value float in) returns(int);
-    static function decimals(value smallfloat in) returns(int);
-    static function decimals(value decimal in) returns(int);
-    static function decimals(value number in) returns(int);
-
 	static function exp(value float in) returns(float);
 
 	static function floor(value float in) returns(float);
@@ -78,14 +70,6 @@ externalType MathLib type NativeType
 	static function modf(val1 float in, val2 float out) returns (float);
 	
 	static function pow(value float in, exponent float in) returns(float);
-
-	static function precision(value smallint in) returns(int);
-	static function precision(value int in) returns(int);
-	static function precision(value bigint in) returns(int);
-	static function precision(value float in) returns(int);
-	static function precision(value smallfloat in) returns(int);
-	static function precision(value decimal in) returns(int);
-	static function precision(value number in) returns(int);
 
 	static function round(val1 float in, powOf10 int in) returns (float);
 	static function round(val1 smallfloat in, powOf10 int in) returns (smallfloat);

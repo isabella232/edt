@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.NoSuchFunctionError;
-import org.eclipse.edt.mof.egl.Operation;
-import org.eclipse.edt.mof.egl.TernaryExpression;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class TernaryExpressionImpl extends MultiOperandExpressionImpl implements TernaryExpression{
 
@@ -82,4 +80,32 @@ public class TernaryExpressionImpl extends MultiOperandExpressionImpl implements
 		getOperands().set(2, expr);		
 	}
 
+	@Override
+	public Type getType() {
+		Expression secondExpr = getSecond();
+		Expression thirdExpr = getThird();
+		Type secondType = secondExpr == null ? null : secondExpr.getType();
+		Type thirdType = thirdExpr == null ? null : thirdExpr.getType();
+		if (secondType != null && thirdType != null) {
+			return IRUtils.getCommonSupertype(secondType, thirdType);
+		}
+		else {
+			return TypeUtils.Type_ANY;
+		}
+	}
+
+	@Override
+	public boolean isNullable() {
+		Expression secondExpr = getSecond();
+		if (secondExpr instanceof TypedElement && ((TypedElement)secondExpr).isNullable()) {
+			return true;
+		}
+
+		Expression thirdExpr = getThird();
+		if (thirdExpr instanceof TypedElement && ((TypedElement)thirdExpr).isNullable()) {
+			return true;
+		}
+
+		return false;
+	}
 }

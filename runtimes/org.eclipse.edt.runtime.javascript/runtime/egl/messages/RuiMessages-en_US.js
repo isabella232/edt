@@ -68,6 +68,8 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2009E' : 'Event cannot be instantiated from a RUI handler.',
 		'CRRUI2010E' : 'Deprecated function: {0}.',
 		
+		'CRRUI2013E' : 'The syntax of the pattern {0} is invalid',
+		'CRRUI2014E' : 'Substring index {0} is out of bounds. It must be between 1 and {1}',
 		'CRRUI2015E' : 'The file {0} for RUIPropertiesLibrary {1} is missing',
 		'CRRUI2016E' : 'EGL program is using too much time',
 		'CRRUI2017E' : 'The value \"{0}\" of type {1} cannot be converted to type {2}',

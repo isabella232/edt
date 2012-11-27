@@ -130,10 +130,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( elseBlock );
 	}
 	
-	public boolean visit(EmptyStatement emptyStatement) {
-		return visitNode( emptyStatement );
-	}
-	
 	public boolean visit(Enumeration enumeration) {
 		return visitNode( enumeration );
 	}
@@ -560,10 +556,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 
 	public void endVisit(ElseBlock elseBlock) {
 		 endVisitNode( elseBlock );
-	}
-	
-	public void endVisit(EmptyStatement emptyStatement) {
-		 endVisitNode( emptyStatement );
 	}
 	
 	public void endVisit(Enumeration enumeration) {

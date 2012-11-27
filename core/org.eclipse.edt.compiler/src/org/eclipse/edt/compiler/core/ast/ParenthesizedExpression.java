@@ -55,6 +55,11 @@ public class ParenthesizedExpression extends Expression {
 	}
 	
 	@Override
+	public Object resolveElement() {
+		return expr.resolveElement();
+	}
+	
+	@Override
 	public Member resolveMember() {
 		return expr.resolveMember();
 	}

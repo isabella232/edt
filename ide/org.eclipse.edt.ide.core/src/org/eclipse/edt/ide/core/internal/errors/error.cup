@@ -51,6 +51,7 @@ terminal USE, RETURNS;
 terminal INOUT, OUT;
 terminal THIS, NEW, SUPER;
 terminal PRIVATE, STATIC;
+terminal ABSTRACT;
 terminal CONSTRUCTOR;
 
 terminal String ID;
@@ -153,6 +154,7 @@ nonterminal SettingsBlock settingsBlock;
 nonterminal SettingsBlock settingsBlockOpt;
 nonterminal String simpleNameOpt;
 nonterminal Boolean staticAccessModifierOpt;
+nonterminal Boolean abstractModifierOpt;
 nonterminal ForStatement.ForStep stepOpt;
 nonterminal stmt;
 nonterminal Node strItemDecl;
@@ -253,8 +255,8 @@ part
 	|	privateAccessModifierOpt:privateAccessModifier1 HANDLER:handler1 ID:id1 implementsOpt:implements1 partSubTypeOpt:partSubType1 handlerContent_star:handlerContents1 END:end1
 	{: RESULT = new Handler(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, partSubType1, handlerContents1, privateAccessModifier1 == Boolean.FALSE ? handler1left : privateAccessModifier1left, end1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 CLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
-	{: RESULT = new Class(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 abstractModifierOpt:abstractModifier1 CLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
+	{: RESULT = new Class(privateAccessModifier1, abstractModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? abstractModifier1 == Boolean.FALSE ? class1left : abstractModifier1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 PROGRAM:program1 ID:id1 partSubTypeOpt:partSubType1 classContent_star:classContents1 END:end1
 	{: RESULT = new Program(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? program1left : privateAccessModifier1left, end1right); :}
@@ -265,11 +267,11 @@ part
 	|	privateAccessModifierOpt:privateAccessModifier1 SERVICE:service1 ID:id1 implementsOpt:implements1 classContent_star:classContents1 END:end1
 	{: RESULT = new Service(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, classContents1, privateAccessModifier1 == Boolean.FALSE ? service1left : privateAccessModifier1left, end1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 INTERFACE:interface1 ID:id1 extendsOpt:extends1 interfaceContent_star:interfaceContents1 END:end1
-	{: RESULT = new Interface(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, interfaceContents1, privateAccessModifier1 == Boolean.FALSE ? interface1left : privateAccessModifier1left, end1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 abstractModifierOpt:abstractModifier1 INTERFACE:interface1 ID:id1 extendsOpt:extends1 interfaceContent_star:interfaceContents1 END:end1
+	{: RESULT = new Interface(privateAccessModifier1, abstractModifier1, new SimpleName(id1, id1left, id1right), extends1, interfaceContents1, privateAccessModifier1 == Boolean.FALSE ? abstractModifier1 == Boolean.FALSE ? interface1left : abstractModifier1left : privateAccessModifier1left, end1right); :}
 	
-	|	privateAccessModifierOpt:privateAccessModifier1 EXTERNALTYPE:externalType1 ID:id1 extendsOpt:extends1 partSubTypeOpt:partSubType1 externalTypeContent_star:externalTypeContents1 END:end1
-	{: RESULT = new ExternalType(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, partSubType1, externalTypeContents1, privateAccessModifier1 == Boolean.FALSE ? externalType1left : privateAccessModifier1left, end1right); :}
+	|	privateAccessModifierOpt:privateAccessModifier1 abstractModifierOpt:abstractModifier1 EXTERNALTYPE:externalType1 ID:id1 extendsOpt:extends1 partSubTypeOpt:partSubType1 externalTypeContent_star:externalTypeContents1 END:end1
+	{: RESULT = new ExternalType(privateAccessModifier1, abstractModifier1, new SimpleName(id1, id1left, id1right), extends1, partSubType1, externalTypeContents1, privateAccessModifier1 == Boolean.FALSE ? abstractModifier1 == Boolean.FALSE ? externalType1left : abstractModifier1left : privateAccessModifier1left, end1right); :}
 	
 	|	privateAccessModifierOpt:privateAccessModifier1 ENUMERATION:enumeration1 ID:id1 settingsBlockOpt:settingsBlock1 enumerationField_star:fields END:end1
 	{: RESULT = new Enumeration(privateAccessModifier1, new SimpleName(id1, id1left, id1right), settingsBlock1, fields, privateAccessModifier1 == Boolean.FALSE ? enumeration1left : privateAccessModifier1left, end1right); :}
@@ -362,8 +364,14 @@ eglClassContent
 	{: RESULT = new UseStatement(names1, settingsBlock1, use1left, semi1right); :}
 
 	|	privateAccessModifierOpt:privateModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 stmt_star:stmts END:end1
-	{: RESULT = new NestedFunction(privateModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
-
+	{: RESULT = new NestedFunction(privateModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, stmts, false, privateModifier1 == Boolean.FALSE ? staticAccessModifier1 == Boolean.FALSE ? function1left : staticAccessModifier1left : privateModifier1left, end1right); :}
+	
+	// For some reason we get Reduce/Reduce and Shift/Reduce conflicts if using abstractModifierOpt in the function definition with a semicolon. So we break it out to one without ABSTRACT and one with ABSTRACT to get around this.
+	|	privateAccessModifierOpt:privateModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new NestedFunction(privateModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, Collections.EMPTY_LIST, Boolean.FALSE, privateModifier1 == Boolean.FALSE ? staticAccessModifier1 == Boolean.FALSE ? function1left : staticAccessModifier1left : privateModifier1left, semi1right); :}
+	|	privateAccessModifierOpt:privateModifier1 staticAccessModifierOpt:staticAccessModifier1 ABSTRACT:abstract1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new NestedFunction(privateModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, Collections.EMPTY_LIST, Boolean.TRUE, privateModifier1 == Boolean.FALSE ? staticAccessModifier1 == Boolean.FALSE ? abstract1left : staticAccessModifier1left : privateModifier1left, semi1right); :}
+	
 	|	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 constOpt:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
 	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, staticAccessModifier1, IDs1, type1, questionOpt1, settingsBlock1, initializer1, const1, privateAccessModifier1 == Boolean.FALSE ? (staticAccessModifier1 == Boolean.FALSE ? (const1 == Boolean.FALSE ? IDs1left : const1left) : staticAccessModifier1left) : privateAccessModifier1left, semi1right); :}
 
@@ -380,6 +388,9 @@ classContent
 
 	|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 stmt_star:stmts END:end1
 	{: RESULT = new NestedFunction(privateModifier1, Boolean.FALSE, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, stmts, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, end1right); :}
+	
+	|	privateAccessModifierOpt:privateModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:parms RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
+	{: RESULT = new NestedFunction(privateModifier1, Boolean.FALSE, new SimpleName(id1,id1left,id1right), parms, returns1, settingsBlock1, Collections.EMPTY_LIST, false, privateModifier1 == Boolean.FALSE ? function1left : privateModifier1left, semi1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 constOpt:const1 ID_plus:IDs1 namedType:type1 questionOpt:questionOpt1 settingsBlockOpt:settingsBlock1 initializerOpt:initializer1 SEMI:semi1 // Variable Declaration
 	{: RESULT = new ClassDataDeclaration(privateAccessModifier1, Boolean.FALSE, IDs1, type1, questionOpt1, settingsBlock1, initializer1, const1, privateAccessModifier1 == Boolean.FALSE ? (const1 == Boolean.FALSE ? IDs1left : const1left) : privateAccessModifier1left, semi1right); :}
@@ -390,7 +401,7 @@ classContent
 
 externalTypeContent
 	::=	privateAccessModifierOpt:privateAccessModifier1 staticAccessModifierOpt:staticAccessModifier1 FUNCTION:function1 ID:id1 LPAREN functionParameter_star:functionParameters1 RPAREN returnsOpt:returns1 settingsBlockOpt:settingsBlock1 SEMI:semi1
-	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1, Collections.EMPTY_LIST, true, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
+	{: RESULT = new NestedFunction(privateAccessModifier1, staticAccessModifier1, new SimpleName(id1,id1left,id1right), functionParameters1, returns1, settingsBlock1, Collections.EMPTY_LIST, false, (privateAccessModifier1 == Boolean.FALSE && staticAccessModifier1 == Boolean.FALSE ? function1left : (privateAccessModifier1 == Boolean.FALSE ? staticAccessModifier1left : privateAccessModifier1left)), semi1right); :}
 	
 	|	privateAccessModifierOpt:privateAccessModifier1 CONSTRUCTOR:constructor1 LPAREN functionParameter_star:functionParameters1 RPAREN settingsBlockOpt:settingsBlock1 SEMI:semi1
 	{: RESULT = new Constructor(privateAccessModifier1, functionParameters1, settingsBlock1, null, privateAccessModifier1 == Boolean.FALSE ? constructor1left : privateAccessModifier1left, semi1right); :}
@@ -480,9 +491,6 @@ stmt
 
 	|	SET:set1 setTarget_plus:setTargets1 ID_plus:IDs1 SEMI:semi1
 	{: RESULT = new SetStatement(setTargets1, simpleNameListToStringList(IDs1), set1left, semi1right); :}
-
-	|	SEMI:semi1
-	{: RESULT = new EmptyStatement(semi1left, semi1right); :}
 
 	|	TRY:try1 stmt_star:stmts1 onException_star:onExcept1 END:end1
 	{: RESULT = new TryStatement(stmts1, onExcept1, try1left, end1right); :}
@@ -1083,6 +1091,14 @@ staticAccessModifierOpt
 	{: RESULT = Boolean.FALSE; :}
 
 	|	STATIC
+	{: RESULT = Boolean.TRUE; :}
+	;
+	
+abstractModifierOpt
+	::=
+	{: RESULT = Boolean.FALSE; :}
+
+	|	ABSTRACT
 	{: RESULT = Boolean.TRUE; :}
 	;
 	

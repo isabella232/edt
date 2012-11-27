@@ -1,0 +1,74 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+// Abstract types & functions
+
+import eglx.java.*;
+
+abstract class c1 //0
+end
+abstract class c2 extends c1 //0
+end
+class c3 extends c2 //0
+end
+
+abstract externaltype et1 type javaobject //0
+end
+abstract externaltype et2 extends et1 type javaobject //0
+end
+externaltype et1 extends et2 type javaobject //0
+end
+
+
+abstract class c4 //0
+	abstract function mustImplement(i int); //0
+	function notAbstract(); //0
+end
+class c5 extends c4 //1 The part c5 must implement the inherited abstract function mustImplement( int inOut ) defined in part c4.
+end
+class c6 extends c4 //0
+	function mustImplement(i int); //0
+	abstract function notValidHere(i int); //1 The abstract function notValidHere( int inOut ) can only be defined in an abstract part.
+end
+abstract class c7 extends c4 //0
+end
+
+abstract class c8 //0
+	private abstract function func1(i int); //1 The abstract function func1( int inOut ) cannot be private.
+	static abstract function func2(i int); //1 The abstract function func2( int inOut ) cannot be static.
+end
+
+
+handler instantiation
+	function foo()
+		a c4; //1 The type c4 is not instantiable. The reference to this type must be defined as nullable.
+		b c4?; //0
+		c c5; //0
+		d c4[]; //0
+		e c4[]?; //0
+		f et1; //1 The type et1 is not instantiable. The reference to this type must be defined as nullable.
+		g et1?; //0
+		h et1[]; //0
+		
+		x any?;
+		i int;
+		x = new c4; //1 The type c4 is not instantiable. The reference to this type must be defined as nullable.
+		x = new c4[0]; //0
+		x = new c4[10]; //1 The type c4 is not instantiable. The reference to this type must be defined as nullable.
+		x = new c4[i]; //1 The type c4 is not instantiable. The reference to this type must be defined as nullable.
+		x = new et1; //1 The type et1 is not instantiable. The reference to this type must be defined as nullable.
+		x = new et1[0]; //0
+		x = new et1[10]; //1 The type et1 is not instantiable. The reference to this type must be defined as nullable.
+		x = new et1[i]; //1 The type et1 is not instantiable. The reference to this type must be defined as nullable.
+	end
+end
+

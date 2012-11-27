@@ -372,14 +372,6 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	@Override
-	public boolean visit(org.eclipse.edt.compiler.core.ast.EmptyStatement emptyStatement) {
-		Statement stmt = factory.createEmptyStatement();
-		stack.push(stmt);
-		setElementInformation(emptyStatement, stmt);
-		return false;
-	}
-
-	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ExecuteStatement executeStatement) {
 		ElementGenerator gen = getElementGenerator(executeStatement);
 		if (gen != null) {

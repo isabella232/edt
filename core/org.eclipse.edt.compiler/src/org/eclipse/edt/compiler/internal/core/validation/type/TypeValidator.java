@@ -73,18 +73,27 @@ public class TypeValidator {
 	}
 	
 	public static void validateInstantiatable(Type type, IPartBinding declaringPart, boolean isNullable, IProblemRequestor problemRequestor) {
-		// Non-nullable reference types must have a public default constructor in order to be instantiatable.
+		// Non-nullable reference types must have a public default constructor in order to be instantiatable. They also cannot be abstract.
 		if (!isNullable) {
+			boolean isValid = true;
 			org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
 			if (typeBinding != null && !(typeBinding instanceof ParameterizedType)
 					&& TypeUtils.isReferenceType(typeBinding) && !hasPublicDefaultConstructor(typeBinding)) {
 				// Don't need to throw error if the field is in an ExternalType, or if the field's type is the same as the declaring part's type.
 				if (declaringPart == null || (declaringPart.getKind() != ITypeBinding.EXTERNALTYPE_BINDING
 						&& !(declaringPart instanceof IRPartBinding && typeBinding.equals(((IRPartBinding)declaringPart).getIrPart())))) {
-					problemRequestor.acceptProblem(type,
-							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
-							new String[] {type.getCanonicalName()});
+					isValid = false;
 				}
+			}
+			
+			if (isValid && BindingUtil.isAbstract(typeBinding)) {
+				isValid = false;
+			}
+			
+			if (!isValid) {
+				problemRequestor.acceptProblem(type,
+						IProblemRequestor.TYPE_NOT_INSTANTIABLE,
+						new String[] {type.getCanonicalName()});
 			}
 		}
 	}

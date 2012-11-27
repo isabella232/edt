@@ -14,7 +14,9 @@ package org.eclipse.edt.runtime.java.eglx.lang;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Calendar;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
@@ -699,8 +701,27 @@ public class EString extends AnyBoxedObject<String> {
 		if (source == null) {
 			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
 		}
+		
+		String regex = patternToRegex(pattern, escape);
+		try {
+			return source.matches(regex);
+		}
+		catch (PatternSyntaxException e) {
+			InvalidPatternException ex = new InvalidPatternException();
+			ex.pattern = pattern;
+			ex.initCause( e );
+			throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
+		}
+	}
+	
+	/**
+	 * Makes a Java regular expression from an EGL pattern and escape char.
+	 */
+	private static String patternToRegex( String pattern, String escape )
+	{
 		// Get the escape character.
 		char escapeChar = escape.length() > 0 ? escape.charAt(0) : '\\';
+		
 		// The strategy here is to convert the pattern to java regex, escaping
 		// special chars we want to treat as literals; and then evaluate with
 		// the regex class
@@ -720,20 +741,35 @@ public class EString extends AnyBoxedObject<String> {
 					throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
 				}
 				char nch = pattern.charAt(i + 1);
-				if (nch == '*' || nch == '?' || nch == '[' || nch == ']' || nch == '^') {
-					regex.append("\\" + nch);
-				} else if (nch == escapeChar) {
-					if (escapeChar == '\\' || escapeThese.indexOf(escapeChar) != -1) {
-						regex.append('\\');
-					}
-					regex.append(escapeChar);
-				} else if (escapeChar == '\\') {
-					// Must be a special java character.
-					regex.append("\\" + nch);
-				} else {
-					// There was no need for use of the escape character, omit
-					// it.
-					regex.append(nch);
+				switch ( nch )
+				{
+					case '*':
+					case '?':
+					case '[':
+					case ']':
+					case '^':
+						regex.append( "\\" + nch );
+						break;
+						
+					default:
+						if ( nch == escapeChar )
+						{
+							if ( escapeChar == '\\' || escapeThese.indexOf( escapeChar ) != -1 )
+							{
+								regex.append( '\\' );
+							}
+							regex.append( escapeChar );
+						}
+						else if ( escapeChar == '\\' )
+						{
+							// Must be a special java character.
+							regex.append( "\\" + nch );
+						}
+						else 
+						{
+							// There was no need for use of the escape character, omit it.
+							regex.append( nch );
+						}
 				}
 				i++;
 			} else if (ch == '[') {
@@ -768,15 +804,8 @@ public class EString extends AnyBoxedObject<String> {
 				regex.insert(pos + 2, '\\');
 			}
 		}
-		try {
-			return source.matches(regex.toString());
-		}
-		catch (PatternSyntaxException e) {
-			InvalidPatternException ex = new InvalidPatternException();
-			ex.pattern = pattern;
-			ex.initCause( e );
-			throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
-		}
+		
+		return regex.toString();
 	}
 
 	public String toString() {
@@ -784,5 +813,411 @@ public class EString extends AnyBoxedObject<String> {
 			return asString(object, maxLength);
 		else
 			return object;
+	}
+
+	/**
+	 * Creates a string from a list of strings, with a separator between them.
+	 */
+	public static String join( String separator, List<String> strings )
+	{
+		int size = strings.size();
+		if ( size == 0 )
+		{
+			return "";
+		}
+		else if ( size == 1 )
+		{
+			return strings.get( 0 );
+		}
+		
+		StringBuilder joined = new StringBuilder( strings.get( 0 ) );
+		for ( int i = 1; i < size; i++ )
+		{
+			joined.append( separator );
+			joined.append( strings.get( i ) );
+		}
+		return joined.toString();
+	}
+
+	/**
+	 * Returns an array containing substrings of this string.  The 'separator' 
+	 * parameter indicates where each substring ends.  If the separator is not 
+	 * contained in this string, then the result contains only this string.
+	 */
+	public static List<String> split( String str, String separator )
+	{
+		if ( str == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+
+		List<String> result = new ArrayList<String>();
+		int i = str.indexOf( separator );
+		if ( i == -1 )
+		{
+			result.add( str );
+		}
+		else
+		{
+			int start = 0;
+			do
+			{
+				result.add( str.substring( start, i ) );
+				start = i + separator.length();
+				i = str.indexOf( separator, start );
+			}
+			while ( i != -1 );
+			if ( start <= str.length() )
+			{
+				result.add( str.substring( start, str.length() ) );
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Same as the other version of split, except the result will not be larger 
+	 * than the specified limit.  Once the separator has been found limit - 1 
+	 * times, the remainder of the string is returned in the last element of the 
+	 * array, even if it contains the separator.  Returns an empty array if limit 
+	 * is less than one.
+	 */
+	public static List<String> split( String str, String separator, int limit )
+	{
+		if ( str == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+
+		List<String> result = new ArrayList<String>();
+		if ( limit >= 1  )
+		{
+			int i = str.indexOf( separator );
+			if ( i == -1 )
+			{
+				result.add( str );
+			}
+			else
+			{
+				int count = 0;
+				int start = 0;
+				do
+				{
+					count++;
+					result.add( str.substring( start, i ) );
+					start = i + separator.length();
+					i = str.indexOf( separator, start );
+				}
+				while ( i != -1 && count < limit );
+				if ( count < limit )
+				{
+					result.add( str.substring( start, str.length() ) );
+				}
+			}
+		}
+		
+		return result;
+	}
+
+	/**
+	 * This is like split(string), except the returned substrings are separated by 
+	 * characters that match the specified pattern (see the matchesPattern 
+	 * function).
+	 */
+	public static List<String> splitOnPattern( String str, String pattern )
+	{
+		return splitOnPattern( str, pattern, "\\" );
+	}
+	
+	/**
+	 * This is the same as splitOnPattern(EString), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	public static List<String> splitOnPattern( String str, String pattern, String escape )
+	{
+		if ( str == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		
+		String regex = patternToRegex( pattern, escape );
+		try 
+		{
+			return Arrays.asList( str.split( regex, -1 ) );
+		}
+		catch ( PatternSyntaxException psx )
+		{
+			InvalidPatternException ex = new InvalidPatternException();
+			ex.pattern = pattern;
+			ex.initCause( psx );
+			throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
+		}
+	}
+	
+	/**
+	 * Same as the other version of splitOnPattern, except the result will not be 
+	 * larger than the specified limit.  Once the pattern has been matched limit - 
+	 * 1 times, the remainder of the string is returned in the last element of the 
+	 * array, even if part of it matches the pattern.  Returns an empty array if
+	 * limit is less than one.
+	 */
+	public static List<String> splitOnPattern( String str, String pattern, int limit )
+	{
+		return splitOnPattern( str, pattern, "\\", limit );
+	}
+	
+	/**
+	 * This is the same as splitOnPattern(EString,EInt), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	public static List<String> splitOnPattern( String str, String pattern, String escape, int limit )
+	{
+		if ( str == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		
+		if ( limit < 1  )
+		{
+			return new ArrayList<String>();
+		}
+		
+		String regex = patternToRegex( pattern, escape );
+		String[] parts = null;
+		try 
+		{
+			// Use limit + 1 because Java's split returns the remainder of the
+			// source string as the last element of the result array.
+			parts = str.split( regex, limit + 1 );
+		}
+		catch ( PatternSyntaxException psx )
+		{
+			InvalidPatternException ex = new InvalidPatternException();
+			ex.pattern = pattern;
+			ex.initCause( psx );
+			throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
+		}
+
+		// We can't use Arrays.asList() here because you can't change the size
+		// of its result.  Also, if we got limit + 1 elements from split(), ignore
+		// the last one.
+		List<String> result = new ArrayList<String>( limit );
+		for ( int i = 0; i < parts.length && i < limit; i++ )
+		{
+			result.add( parts[ i ] );
+		}
+		return result;
+	}
+	
+	/**
+	 * Returns a reversed copy of this string.
+	 */
+	public static String reverse( String str )
+	{
+		if ( str == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return new StringBuilder( str ).reverse().toString();
+	}
+	
+	/**
+	 * Does a case-insensitive comparison of two strings.  Returns a negative 
+	 * number, zero, or a positive number to indicate that this string is less 
+	 * than, equal to, or greater than the other string.
+	 */
+	public static int compareIgnoreCase( String str1, String str2 )
+	{
+		if ( str1 == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return str1.compareToIgnoreCase( str2 );
+	}
+	
+	/**
+	 * Makes a new string containing the characters of this string, with a second 
+	 * string inserted somewhere in the middle.
+	 *   str1.insert(offset, str2) is equivalent to 
+	 *   str1[1:offset] :: str2 :: str1[offset:str1.length()]
+	 *
+	 * @throws InvalidIndexException if offset is less than 1 or greater 
+	 *    than the length of this string.
+	 */
+	public static String insertStr( String str1, int offset, String str2 )
+	{
+		if ( str1 == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		if ( offset < 1 || offset > str1.length() )
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = offset;
+			throw ex.fillInMessage( Message.INDEX_OUT_OF_BOUNDS, offset );
+		}
+
+		return str1.substring( 0, offset - 1 ) + str2 + str1.substring( offset - 1, str1.length() );
+	}
+	
+	/**
+	 * Makes a new string containing the characters of this string, with a section 
+	 * replaced by a second string.
+	 *   str1.replaceStrAt(start, end, str2) is equivalent to 
+	 *   str1[1:start] :: str2 :: str1[end:str1.length()]
+	 *
+	 * @throws InvalidIndexException if startIndex is less than 1, greater 
+	 *    than the length of this string, or greater than endIndex.
+	 * @throws InvalidIndexException if endIndex is greater than the length
+	 *    of this string.
+	 */
+	public static String replaceStrAt( String str1, int startIndex, int endIndex, String str2 )
+	{
+		if ( str1 == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+
+		if ( startIndex < 1 || startIndex > str1.length() || startIndex > endIndex )
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = startIndex;
+			throw ex.fillInMessage( Message.INDEX_OUT_OF_BOUNDS, startIndex );
+		}
+		if ( endIndex > str1.length() )
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = endIndex;
+			throw ex.fillInMessage( Message.INDEX_OUT_OF_BOUNDS, endIndex );
+		}
+		
+		return str1.substring( 0, startIndex - 1 ) + str2 + str1.substring( endIndex - 1, str1.length() );
+	}
+	
+	/**
+	 * This is like the indexOf function, except we look for a pattern (as defined 
+	 * for the matchesPattern function) instead of a literal substring.
+	 */
+	public static int indexOfPattern( String str, String pattern )
+	{
+		return indexOfPattern( str, pattern, "\\", 1 );
+	}
+
+	/**
+	 * This is the same as indexOfPattern(EString), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	public static int indexOfPattern( String str, String pattern, String escape )
+	{
+		return indexOfPattern( str, pattern, escape, 1 );
+	}
+	
+	/**
+	 * This is like the indexOf function, except we look for a pattern (as defined 
+	 * for the matchesPattern function) instead of a literal substring.
+	 *
+	 * @throws InvalidIndexException if startIndex is less than 1 or greater 
+	 *    than the length of this string.
+	 */
+	public static int indexOfPattern( String str, String pattern, int startIndex )
+	{
+		return indexOfPattern( str, pattern, "\\", startIndex );
+	}
+	
+	/**
+	 * This is the same as indexOfPattern(EString,EInt), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	public static int indexOfPattern( String str, String pattern, String escape, int startIndex )
+	{
+		if ( str == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		if ( startIndex < 1 || startIndex > str.length() )
+		{
+			InvalidIndexException ex = new InvalidIndexException();
+			ex.index = startIndex;
+			throw ex.fillInMessage( Message.INDEX_OUT_OF_BOUNDS, startIndex );
+		}
+		
+		String regex = patternToRegex( pattern, escape );
+		try 
+		{
+			Matcher matcher = Pattern.compile( regex ).matcher( str );
+			if ( matcher.find( startIndex - 1 ) )
+			{
+				return matcher.start() + 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		catch ( PatternSyntaxException e )
+		{
+			InvalidPatternException ex = new InvalidPatternException();
+			ex.pattern = pattern;
+			ex.initCause( e );
+			throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
+		}
+	}
+
+	/**
+	 * Returns a string made by searching this string for the pattern (as defined 
+	 * for the matchesPattern function), and substituting the replacement string 
+	 * where a match is found.  All matches will be replaced if the 'global' 
+	 * parameter is true, otherwise only the first match is replaced.  If the 
+	 * pattern is not matched, then this string is returned.
+	 */
+	public static String replacePattern( String str, String pattern, String replacement, boolean global )
+	{
+		return replacePattern( str, pattern, "\\", replacement, global );
+	}
+	
+	/**
+	 * This is the same as replacePattern(EString,EString,EBoolean), but the additional parameter
+	 * specifies the escape character used in the pattern.
+	 */
+	public static String replacePattern( String str, String pattern, String escape, String replacement, boolean global )
+	{
+		if ( str == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		
+		String regex = patternToRegex( pattern, escape );
+		try 
+		{
+			Matcher matcher = Pattern.compile( regex ).matcher( str );
+			if ( global )
+			{
+				return matcher.replaceAll( Matcher.quoteReplacement( replacement ) );
+			}
+			else
+			{
+				return matcher.replaceFirst( Matcher.quoteReplacement( replacement ) );
+			}
+		}
+		catch ( PatternSyntaxException e )
+		{
+			InvalidPatternException ex = new InvalidPatternException();
+			ex.pattern = pattern;
+			ex.initCause( e );
+			throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
+		}
+	}
+
+	/**
+	 * Returns true if this string's length is zero.
+	 */
+	public static boolean isEmpty( String str ) 
+	{
+		if ( str == null )
+		{
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return str.isEmpty();
 	}
 }

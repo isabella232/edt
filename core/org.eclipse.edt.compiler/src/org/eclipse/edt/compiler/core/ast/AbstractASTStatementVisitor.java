@@ -52,10 +52,6 @@ public abstract class AbstractASTStatementVisitor extends AbstractASTVisitor {
 		return internalVisitStatement(deleteStatement);
 	}
 
-	public boolean visit(EmptyStatement emptyStatement) {
-		return internalVisitStatement(emptyStatement);
-	}
-
 	public boolean visit(ExecuteStatement executeStatement) {
 		return internalVisitStatement(executeStatement);
 	}

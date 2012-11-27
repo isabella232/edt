@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -199,6 +198,7 @@ public class TypeUtils implements MofConversion {
 		else if (classifier == Type_BLOB) return TypeKind_BLOB;
 		else if (classifier == Type_BYTES) return TypeKind_BYTES;
 		else if (type instanceof SequenceType && classifier == Type_STRING) return TypeKind_LIMITEDSTRING;
+		else if (classifier == Type_NUMBER) return TypeKind_NUMBER;
 		return TypeKind_UNDEFINED;
 	}
 	

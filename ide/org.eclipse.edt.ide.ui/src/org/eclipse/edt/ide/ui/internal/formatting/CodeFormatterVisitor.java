@@ -685,12 +685,22 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 //		{: RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
 		push2ContextPath(eglClass);
 		
+		int numOfBlankLines = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL);
+		boolean addSpace = false;
 		if(eglClass.isPrivate()){
 			//print PRIVATE
-			printStuffBeforeNode(eglClass.getOffset(), getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL), false);			
+			printStuffBeforeNode(eglClass.getOffset(), numOfBlankLines, addSpace);
+			addSpace = true;
+			numOfBlankLines = -1;
 		}
-		int numOfBlankLines = eglClass.isPrivate() ? -1 :  getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL);
-		boolean addSpace = eglClass.isPrivate() ? true : false;
+		
+		if(eglClass.isAbstract()) {
+			//print ABSTRACT
+			printStuffBeforeNode(eglClass.getOffset(), numOfBlankLines, addSpace);
+			addSpace = true;
+			numOfBlankLines = -1;
+		}
+		
 		printStuffBeforeToken(NodeTypes.CLASS, numOfBlankLines, addSpace);
 		
 		Name name = eglClass.getName();
@@ -810,12 +820,23 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 //		|	privateAccessModifierOpt:privateAccessModifier1 INTERFACE:interface1 ID:id1 partSubTypeOpt:partSubType1 interfaceContent_star:interfaceContents1 END:end1
 //		{: RESULT = new Interface(privateAccessModifier1, new SimpleName(id1, id1left, id1right), partSubType1, interfaceContents1, privateAccessModifier1 == Boolean.FALSE ? interface1left : privateAccessModifier1left, end1right); :}
 		push2ContextPath(interfaceNode);
+		
+		int numOfBlankLines = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL);
+		boolean addSpace = false;
 		if(interfaceNode.isPrivate()){
 			//print PRIVATE
-			printStuffBeforeNode(interfaceNode.getOffset(), getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL), false);			
+			printStuffBeforeNode(interfaceNode.getOffset(), numOfBlankLines, addSpace);
+			addSpace = true;
+			numOfBlankLines = -1;
 		}
-		int numOfBlankLines = interfaceNode.isPrivate() ? -1 :  getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL);
-		boolean addSpace = interfaceNode.isPrivate() ? true : false;
+		
+		if(interfaceNode.hasExplicitAbstractModifier()) {
+			//print ABSTRACT
+			printStuffBeforeNode(interfaceNode.getOffset(), numOfBlankLines, addSpace);
+			addSpace = true;
+			numOfBlankLines = -1;
+		}
+		
 		printStuffBeforeToken(NodeTypes.INTERFACE, numOfBlankLines, addSpace);
 		
 		Name name = interfaceNode.getName();
@@ -848,12 +869,22 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 //		{: RESULT = new ExternalType(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, partSubType1, externalTypeContents1, privateAccessModifier1 == Boolean.FALSE ? externalType1left : privateAccessModifier1left, end1right); :}
 		push2ContextPath(externalType);
 		
+		int numOfBlankLines = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL);
+		boolean addSpace = false;
 		if(externalType.isPrivate()){
 			//print PRIVATE
-			printStuffBeforeNode(externalType.getOffset(), getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL), false);			
+			printStuffBeforeNode(externalType.getOffset(), numOfBlankLines, addSpace);
+			addSpace = true;
+			numOfBlankLines = -1;
 		}
-		int numOfBlankLines = externalType.isPrivate() ? -1 :  getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_BLANKLINES_BEFORE_PARTDECL);
-		boolean addSpace = externalType.isPrivate() ? true : false;
+		
+		if (externalType.isAbstract()){
+			//print ABSTRACT
+			printStuffBeforeNode(externalType.getOffset(), numOfBlankLines, addSpace);
+			addSpace = true;
+			numOfBlankLines = -1;
+		}
+		
 		printStuffBeforeToken(NodeTypes.EXTERNALTYPE, numOfBlankLines, addSpace);
 		
 		Name name = externalType.getName();
@@ -1114,6 +1145,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 					case NodeTypes.PRIVATE:
 					case NodeTypes.STATIC:
 					case NodeTypes.FUNCTION:
+					case NodeTypes.ABSTRACT:
 						addSpace = true;
 						break;
 					default:
@@ -1588,14 +1620,6 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		}		
 		//=======================================================================================================		
 		
-		popContextPath();
-		return false;
-	}
-	
-	public boolean visit(EmptyStatement emptyStatement) {
-		push2ContextPath(emptyStatement);
-		//print SEMI
-		printStuffBeforeNode(emptyStatement.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace);
 		popContextPath();
 		return false;
 	}
@@ -3712,6 +3736,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			
 			switch(fPrevToken.sym){
 			  case NodeTypes.PRIVATE:
+			  case NodeTypes.ABSTRACT:
 				addSpace = true;
 				break;
 			}

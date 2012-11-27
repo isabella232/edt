@@ -97,9 +97,6 @@ public interface IASTVisitor {
 	boolean visit(ElseBlock elseBlock);
 	void endVisit(ElseBlock elseBlock);
 	
-	boolean visit(EmptyStatement emptyStatement);
-	void endVisit(EmptyStatement emptyStatement);
-	
 	boolean visit(Enumeration enumeration);
 	void endVisit(Enumeration enumeration);
 	

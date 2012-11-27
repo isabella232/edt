@@ -139,6 +139,12 @@ public interface IProblemRequestor {
     public static final int FUNCTION_PARM_MUST_BE_IN = 3388;
     public static final int FUNCTION_CANT_HAVE_RETURN_TYPE = 3389;
 	public static final int INTERFACE_FUNCTION_MISSING = 3400;
+	public static final int ABSTRACT_FUNCTION_MISSING = 3401;
+	public static final int ABSTRACT_FUNCTION_IN_CONCRETE_PART = 3402;
+	public static final int ABSTRACT_FUNCTION_IS_PRIVATE = 3403;
+	public static final int ABSTRACT_FUNCTION_IS_STATIC = 3404;
+	public static final int INVALID_REFERENCE_TO_NONSTATIC_FIELD = 3405;
+	public static final int INVALID_REFERENCE_TO_NONSTATIC_FUNCTION = 3406;
 	public static final int MAIN_FUNCTION_CANNOT_BE_ASSIGNED_TO_DELEGATE = 3418;
 	public static final int PART_DEFINITION_REQUIRES_TYPE_CLAUSE = 3420;
 	public static final int EXTERNALTYPE_MUST_EXTEND_EXTERNALTYPE = 3421;

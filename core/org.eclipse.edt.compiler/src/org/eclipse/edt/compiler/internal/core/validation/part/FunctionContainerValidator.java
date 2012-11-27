@@ -26,8 +26,11 @@ import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
+import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -36,21 +39,20 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.UseStatementV
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 
 
-/**
- * @author Dave Murray
- */
 public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 	
 	protected IProblemRequestor problemRequestor;
 	protected IPartBinding partBinding;
 	protected Part partNode;
     protected ICompilerOptions compilerOptions;
-	
+    
 	public FunctionContainerValidator(IProblemRequestor problemRequestor, IPartBinding partBinding, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
 		this.partBinding = partBinding;
@@ -71,6 +73,11 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
     			validator.validate(nestedFunction, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
     		}
     	}
+    	
+    	if (nestedFunction.isStatic()) {
+    		nestedFunction.accept(new StaticReferenceChecker(problemRequestor));
+    	}
+    	
 		return false;
 	}
 	
@@ -112,30 +119,63 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 	}
 	
 	protected void checkInterfaceFunctionsOverriden(StructPart binding) {
-		List<Function> declaredAndInheritedFunctions = null;
-		for (Function interfaceFunc : getInterfaceFunctionList(binding)) {
-			boolean foundMatchingHandlerFunc = false;
-			
-			if (declaredAndInheritedFunctions == null) {
-				declaredAndInheritedFunctions = getDeclaredAndInheritedFunctionList(binding);
-			}
-			
-			for (Function handlerFunc : declaredAndInheritedFunctions) {
-				if(BindingUtil.functionSignituresAreIdentical(handlerFunc, interfaceFunc)) {
-					foundMatchingHandlerFunc = true;
-					break;
+		if (!BindingUtil.isAbstract(binding)) {
+			List<Function> declaredAndInheritedFunctions = null;
+			for (Function interfaceFunc : getInterfaceFunctionList(binding)) {
+				boolean foundMatchingFunc = false;
+				
+				if (declaredAndInheritedFunctions == null) {
+					declaredAndInheritedFunctions = getDeclaredAndInheritedFunctionList(binding);
+				}
+				
+				for (Function func : declaredAndInheritedFunctions) {
+					if(BindingUtil.functionSignituresAreIdentical(func, interfaceFunc)) {
+						foundMatchingFunc = true;
+						break;
+					}
+				}
+				
+				if(!foundMatchingFunc) {
+					problemRequestor.acceptProblem(
+						partNode.getName(),
+						IProblemRequestor.INTERFACE_FUNCTION_MISSING,
+						new String[] {
+							partNode.getName().getCanonicalName(),
+							interfaceFunc.getCaseSensitiveName() + "(" + getTypeNamesList(interfaceFunc.getParameters()) + ")",
+							((Interface)interfaceFunc.getContainer()).getCaseSensitiveName()
+						});
 				}
 			}
-			
-			if(!foundMatchingHandlerFunc) {
-				problemRequestor.acceptProblem(
-					partNode.getName(),
-					IProblemRequestor.INTERFACE_FUNCTION_MISSING,
-					new String[] {
-						partNode.getName().getCanonicalName(),
-						interfaceFunc.getCaseSensitiveName() + "(" + getTypeNamesList(interfaceFunc.getParameters()) + ")",
-						((Interface)interfaceFunc.getContainer()).getCaseSensitiveName()
-					});
+		}
+	}
+	
+	protected void checkAbstractFunctionsOverriden(StructPart binding) {
+		if (!BindingUtil.isAbstract(binding)) {
+			List<Function> declaredAndInheritedFunctions = null;
+			for (Function abstractFunc : getAbstractFunctionList(binding)) {
+				boolean foundMatchingFunc = false;
+				
+				if (declaredAndInheritedFunctions == null) {
+					declaredAndInheritedFunctions = getDeclaredAndInheritedFunctionList(binding);
+				}
+				
+				for (Function func : declaredAndInheritedFunctions) {
+					if (BindingUtil.functionSignituresAreIdentical(func, abstractFunc)) {
+						foundMatchingFunc = true;
+						break;
+					}
+				}
+				
+				if (!foundMatchingFunc) {
+					problemRequestor.acceptProblem(
+						partNode.getName(),
+						IProblemRequestor.ABSTRACT_FUNCTION_MISSING,
+						new String[] {
+							partNode.getName().getCanonicalName(),
+							abstractFunc.getCaseSensitiveName() + "(" + getTypeNamesList(abstractFunc.getParameters()) + ")",
+							((org.eclipse.edt.mof.egl.Part)abstractFunc.getContainer()).getCaseSensitiveName()
+						});
+				}
 			}
 		}
 	}
@@ -153,7 +193,7 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 		seenParts.add(part);
 		
 		for (Function function : part.getFunctions()) {
-			if(function.getAccessKind() != AccessKind.ACC_PRIVATE) {
+			if (!function.isAbstract() && function.getAccessKind() != AccessKind.ACC_PRIVATE) {
 				funcs.add(function);
 			}
 		}
@@ -189,8 +229,36 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 			getInterfaceFunctions(iface2, funcs, seenInterfaces);
 		}
 	}
+	
+	private List<Function> getAbstractFunctionList(StructPart binding) {
+		List<Function> retVal = new ArrayList();
+		Set<StructPart> seen = new HashSet<StructPart>();
+		for (StructPart superType : binding.getSuperTypes()) {
+			if (!(superType instanceof Interface)) {
+				getAbstractFunctions(superType, retVal, seen);
+			}
+		}
+		return retVal;
+	}
+	
+	private void getAbstractFunctions(StructPart structPart, List<Function> funcs, Set<StructPart> seenParts) {
+		if (seenParts.contains(structPart)) {
+			return;
+		}
+		seenParts.add(structPart);
+		
+		for (Function function : structPart.getFunctions()) {
+			if (function.isAbstract()) {
+				funcs.add(function);
+			}
+		}
+		
+		for (StructPart superType: structPart.getSuperTypes()) {
+			getAbstractFunctions(superType, funcs, seenParts);
+		}
+	}
 
-	private String getTypeNamesList(List<org.eclipse.edt.mof.egl.FunctionParameter> types) {
+	public static String getTypeNamesList(List<org.eclipse.edt.mof.egl.FunctionParameter> types) {
 		StringBuffer sb = new StringBuffer();
 		if (!types.isEmpty()) {
 			sb.append(" ");
@@ -199,7 +267,7 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 			org.eclipse.edt.mof.egl.FunctionParameter nextParm = iter.next();
 			Type nextType = nextParm.getType();
 			if (nextType != null) {
-				sb.append(nextType.getTypeSignature());
+				sb.append(BindingUtil.getTypeName(nextParm, nextType));
 				switch (nextParm.getParameterKind()) {
 					case PARM_IN:
 						sb.append( " " + IEGLConstants.KEYWORD_IN );
@@ -220,5 +288,48 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 			}
 		}
 		return sb.toString();
+	}
+	
+	public static class StaticReferenceChecker extends AbstractASTVisitor {
+		
+		IProblemRequestor problemRequestor;
+		
+		public StaticReferenceChecker(IProblemRequestor problemRequestor) {
+			this.problemRequestor = problemRequestor;
+		}
+		
+		@Override
+		public boolean visit(SimpleName simpleName) {
+			checkStatic(simpleName, simpleName);
+			return false;
+		}
+		
+		@Override
+		public boolean visit(QualifiedName qualifiedName) {
+			checkStatic(qualifiedName, qualifiedName);
+			return false;
+		}
+		
+		private void checkStatic(Node errorNode, Name name) {
+			Object element = name.resolveElement();
+			if (element instanceof Member) {
+				if (!((Member)element).isStatic() && !(((Member)element).getContainer() instanceof FunctionMember)) {
+					if (name.isSimpleName()) {
+						if (element instanceof FunctionMember) {
+							problemRequestor.acceptProblem(errorNode, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FUNCTION,
+									new String[]{name.getCaseSensitiveIdentifier() + "(" + FunctionContainerValidator.getTypeNamesList(((FunctionMember)element).getParameters()) + ")"});
+						}
+						else {
+							problemRequestor.acceptProblem(errorNode, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FIELD,
+									new String[]{name.getCaseSensitiveIdentifier()});
+						}
+					}
+					else {
+						// visit the parent to check for static.
+						checkStatic(errorNode, ((QualifiedName)name).getQualifier());
+					}
+				}
+			}
+		}
 	}
 }

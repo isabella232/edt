@@ -305,4 +305,34 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		}
 		return ETimestamp.asTimestamp(aDate, startCode, endCode);
 	}
+	
+	/**
+	 * Returns the day portion of this date field.
+	 * 
+	 * @return the day portion of this date field.
+	 */
+	public static int dayOf( EDate date )
+	{
+		return date.ezeUnbox().get( Calendar.DAY_OF_MONTH );
+	}
+	
+	/**
+	 * Returns the month portion of this date field.
+	 * 
+	 * @return the month portion of this date field.
+	 */
+	public static int monthOf( EDate date )
+	{
+		return date.ezeUnbox().get( Calendar.MONTH ) + 1;
+	}
+	
+	/**
+	 * Returns the year portion of this date field. 
+	 * 
+	 * @return the year portion of this date field.
+	 */
+	public static int yearOf( EDate date )
+	{
+		return date.ezeUnbox().get( Calendar.YEAR );
+	}
 }

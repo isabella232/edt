@@ -124,4 +124,23 @@ externalType ENumber extends AnyValue type ClassType
 	 * {@Operation{"narrow"} Converts a string to a number.
 	 */
 	static function asNumber(value EString? in) returns(ENumber?) {@Operation{"narrow"}};
+	
+	/**
+	 * For floating-point types, this returns the number of digits that can be
+	 * stored before rounding/imprecision may occur.  For other numeric types, 
+	 * this returns the maximum number of digits that can be stored in this value.
+	 *
+	 * @return the precision of this value.
+	 */
+	function precision() returns(EInt);
+	
+	/**
+	 * For floating-point types, this returns the number of digits in the value to
+	 * the right of the decimal point.  For other numeric types, this returns the 
+	 * maximum number of digits to the right of the decimal point that can be 
+	 * stored in this value.
+	 *
+	 * @return the decimals of this value.
+	 */
+	function decimals() returns(EInt);
 end

@@ -97,6 +97,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 %%
 <YYINITIAL> {
 	"absolute"		    { return ErrorNodeTypes.ABSOLUTE; }
+	"abstract"			{ return ErrorNodeTypes.ABSTRACT; }
 	"add"				{ return ErrorNodeTypes.ADD; }
 	"all"				{ return ErrorNodeTypes.ALL; }
 	"as"				{ return ErrorNodeTypes.AS; }
