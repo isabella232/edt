@@ -373,4 +373,22 @@ public class SuperExprTest extends ValidationTestCase {
 		Object messageWithSubstring = messageWithSubstring( messages, "The implicit super constructor A() either does not exist or is not visible. You must explicitly define a constructor." );
 		if( messageWithSubstring == null ) fail( "No message with substring \"The implicit super constructor A() either does not exist or is not visible. You must explicitly define a constructor.\" was issued." );
 	}
+
+	/*
+	 * class J extends G
+	 * 0 validation messages are expected.
+	 */
+	public void testLine130() {
+		List messages = getMessagesAtLine( 130 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * super(10);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine132() {
+		List messages = getMessagesAtLine( 132 );
+		assertEquals( 0, messages.size() );
+	}
 }
