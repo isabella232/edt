@@ -225,7 +225,7 @@ public class GenerationQueue {
 				IMarker[] markers = file.findMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_ONE);
 				for (IMarker marker : markers) {
 					String attr = NameUtile.getAsName(marker.getAttribute(MarkerProblemRequestor.PART_NAME, "")); //$NON-NLS-1$
-					if (attr == genUnit.caseSensitiveInternedPartName) {
+					if (NameUtile.equals(attr, genUnit.caseSensitiveInternedPartName)) {
 						marker.delete();
 					}
 				}
