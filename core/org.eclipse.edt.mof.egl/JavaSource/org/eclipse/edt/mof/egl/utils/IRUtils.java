@@ -29,6 +29,7 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DanglingReference;
+import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
@@ -37,6 +38,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
+import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
@@ -454,6 +456,12 @@ public class IRUtils {
 	public static Expression makeExprCompatibleToType(Expression expr, Type type) {
 		Type exprType = expr.getType();
 		
+		//handle generic types for cases like elist.appendElement(), which returns an array of generic types
+		if (exprType instanceof ArrayType && ((ArrayType)exprType).getElementType() instanceof GenericType && ((ArrayType)exprType).getElementType().getClassifier() == null) {
+			return expr;
+		}
+
+		
 		if (expr instanceof TernaryExpression) {
 			TernaryExpression tern = (TernaryExpression)expr;
 			tern.setSecond(makeExprCompatibleToType(tern.getSecond(), type));
@@ -474,12 +482,14 @@ public class IRUtils {
 			return expr;
 		}
 		
-
-		if (type instanceof ArrayType && exprType instanceof ArrayType) {
-			if (!type.equals(exprType) || ((ArrayType)type).elementsNullable() != ((ArrayType)exprType).elementsNullable()) {
-				return createAsExpression(expr, type);
-			}
-		}
+//TODO Uncomment the following block when JS gen/runtime can handle the implicit as expressions
+//		if (type instanceof ArrayType && exprType instanceof ArrayType) {
+//			if (!(((ArrayType)type).getElementType() instanceof Delegate) && !(((ArrayType)exprType).getElementType() instanceof Delegate)) {
+//				if (!type.equals(exprType) || ((ArrayType)type).elementsNullable() != ((ArrayType)exprType).elementsNullable()) {
+//					return createAsExpression(expr, type);
+//				}
+//			}
+//		}
 		
 		if (exprType.equals(type) || exprType.getClassifier().equals(type)) {
 			return expr;
