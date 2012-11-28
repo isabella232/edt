@@ -26,6 +26,7 @@ import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BytesLiteral;
+import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -73,11 +74,18 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	IPartBinding declaringPart;
 	IProblemRequestor problemRequestor;
 	ICompilerOptions compilerOptions;
+	boolean validatingCallTarget;
 	
 	public ExpressionValidator(IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		this.declaringPart = declaringPart;
 		this.problemRequestor = problemRequestor;
 		this.compilerOptions = compilerOptions;
+	}
+	
+	@Override
+	public boolean visit(CallStatement callStatement) {
+		
+		return true;
 	}
 	
 	@Override
@@ -565,8 +573,10 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		Object element = fieldAccess.resolveElement();
 		if (element instanceof Member && !((Member)element).isStatic() && fieldAccess.getPrimary().resolveElement() instanceof Type) {
 			if (element instanceof FunctionMember) {
-				problemRequestor.acceptProblem(fieldAccess, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FUNCTION,
-						new String[]{fieldAccess.getCaseSensitiveID() + "(" + FunctionContainerValidator.getTypeNamesList(((FunctionMember)element).getParameters()) + ")"});
+				if (!(fieldAccess.getParent() instanceof CallStatement) || fieldAccess != ((CallStatement)fieldAccess.getParent()).getInvocationTarget()) {
+					problemRequestor.acceptProblem(fieldAccess, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FUNCTION,
+							new String[]{fieldAccess.getCaseSensitiveID() + "(" + FunctionContainerValidator.getTypeNamesList(((FunctionMember)element).getParameters()) + ")"});
+				}
 			}
 			else {
 				problemRequestor.acceptProblem(fieldAccess, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FIELD,
@@ -589,8 +599,10 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		Object element = qualifiedName.resolveElement();
 		if (element instanceof Member && !((Member)element).isStatic() && qualifiedName.getQualifier().resolveElement() instanceof Type) {
 			if (element instanceof FunctionMember) {
-				problemRequestor.acceptProblem(qualifiedName, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FUNCTION,
-						new String[]{qualifiedName.getCaseSensitiveIdentifier() + "(" + FunctionContainerValidator.getTypeNamesList(((FunctionMember)element).getParameters()) + ")"});
+				if (!(qualifiedName.getParent() instanceof CallStatement) || qualifiedName != ((CallStatement)qualifiedName.getParent()).getInvocationTarget()) {
+					problemRequestor.acceptProblem(qualifiedName, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FUNCTION,
+							new String[]{qualifiedName.getCaseSensitiveIdentifier() + "(" + FunctionContainerValidator.getTypeNamesList(((FunctionMember)element).getParameters()) + ")"});
+				}
 			}
 			else {
 				problemRequestor.acceptProblem(qualifiedName, IProblemRequestor.INVALID_REFERENCE_TO_NONSTATIC_FIELD,

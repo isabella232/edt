@@ -50,25 +50,25 @@ end
 
 handler instantiation
 	function foo()
-		a c4; //1 The type c4 is not instantiable. The reference to this type must be defined as nullable.
+		a c4; //1 The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.
 		b c4?; //0
 		c c5; //0
 		d c4[]; //0
 		e c4[]?; //0
-		f et1; //1 The type et1 is not instantiable. The reference to this type must be defined as nullable.
+		f et1; //1 The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.
 		g et1?; //0
 		h et1[]; //0
 		
 		x any?;
 		i int;
-		x = new c4; //1 The type c4 is not instantiable. The reference to this type must be defined as nullable.
+		x = new c4; //1 The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.
 		x = new c4[0]; //0
-		x = new c4[10]; //1 The type c4 is not instantiable. The reference to this type must be defined as nullable.
-		x = new c4[i]; //1 The type c4 is not instantiable. The reference to this type must be defined as nullable.
-		x = new et1; //1 The type et1 is not instantiable. The reference to this type must be defined as nullable.
+		x = new c4[10]; //1 The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.
+		x = new c4[i]; //1 The type c4 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.
+		x = new et1; //1 The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.
 		x = new et1[0]; //0
-		x = new et1[10]; //1 The type et1 is not instantiable. The reference to this type must be defined as nullable.
-		x = new et1[i]; //1 The type et1 is not instantiable. The reference to this type must be defined as nullable.
+		x = new et1[10]; //1 The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.
+		x = new et1[i]; //1 The type et1 is not instantiable, or it has a private default constructor. Define a nullable reference to the type or explicitly call a constructor.
 	end
 end
 
