@@ -121,9 +121,14 @@ class F
 end
 
 class G
-	constructor(i int) end
+	constructor(i int in) end
 end
 class H extends G //1 The implicit super constructor G() either does not exist or is not visible. You must explicitly define a constructor.
 end
 class I extends A //1 The implicit super constructor A() either does not exist or is not visible. You must explicitly define a constructor.
+end
+class J extends G //0
+	constructor()
+		super(10); //0
+	end
 end

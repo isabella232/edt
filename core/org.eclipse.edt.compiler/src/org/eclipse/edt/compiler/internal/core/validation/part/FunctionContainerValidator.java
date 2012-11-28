@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -336,23 +337,34 @@ public abstract class FunctionContainerValidator extends AbstractASTVisitor {
 	}
 	
 	protected void checkImplicitConstructor(Part part) {
-		final boolean[] hasConstructor = {false};
-		part.accept(new DefaultASTVisitor() {
-			@Override
-			public void endVisit(Constructor constructor) {
-				hasConstructor[0] = true;
-			}
-		});
-		
-		if (!hasConstructor[0]) {
-			// This type has an implicit default constructor. Make sure its parent type has a public default constructor so its implicit 'super()' is valid.
-			Type type = part.getName().resolveType();
-			if (type instanceof StructPart) {
-				List<StructPart> superTypes = ((StructPart)type).getSuperTypes();
-				if (superTypes != null && superTypes.size() > 0 && !TypeValidator.hasPublicDefaultConstructor(superTypes.get(0))) {
-					problemRequestor.acceptProblem(part.getName(), IProblemRequestor.MUST_DEFINE_CONSTRUCTOR,
-							new String[]{BindingUtil.getShortTypeString(superTypes.get(0), false) + "()"});
+		class FoundContructor extends RuntimeException{private static final long serialVersionUID = 1L;}
+		try {
+			part.accept(new AbstractASTVisitor() {
+				@Override
+				public boolean visit(Constructor constructor) {
+					throw new FoundContructor();
 				}
+				@Override
+				public boolean visit(NestedFunction nestedFunction) {
+					return false;
+				}
+				@Override
+				public boolean visit(ClassDataDeclaration classDataDeclaration) {
+					return false;
+				}
+			});
+		}
+		catch (FoundContructor e) {
+			return;
+		}
+		
+		// This type has an implicit default constructor. Make sure its parent type has a public default constructor so its implicit 'super()' is valid.
+		Type type = part.getName().resolveType();
+		if (type instanceof StructPart) {
+			List<StructPart> superTypes = ((StructPart)type).getSuperTypes();
+			if (superTypes != null && superTypes.size() > 0 && !TypeValidator.hasPublicDefaultConstructor(superTypes.get(0))) {
+				problemRequestor.acceptProblem(part.getName(), IProblemRequestor.MUST_DEFINE_CONSTRUCTOR,
+						new String[]{BindingUtil.getShortTypeString(superTypes.get(0), false) + "()"});
 			}
 		}
 	}
