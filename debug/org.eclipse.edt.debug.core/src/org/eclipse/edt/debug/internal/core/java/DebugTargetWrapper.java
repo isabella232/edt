@@ -21,6 +21,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.ui.IStartup;
 
 /**
@@ -29,6 +30,11 @@ import org.eclipse.ui.IStartup;
  */
 public class DebugTargetWrapper implements IStartup
 {
+	/**
+	 * VM arg that can be set to 'true' to disable wrapping the Java process. Useful for those debugging the generated code.
+	 */
+	private static final String DISABLE_EGL = "-Ddisable.egl=true";
+	
 	@Override
 	public void earlyStartup()
 	{
@@ -41,6 +47,7 @@ public class DebugTargetWrapper implements IStartup
 	 */
 	private class DebugTargetFilter implements IDebugEventFilter
 	{
+		@Override
 		public DebugEvent[] filterDebugEvents( DebugEvent[] events )
 		{
 			if ( events != null && events.length != 0 && events[ 0 ].getKind() == DebugEvent.CREATE )
@@ -54,26 +61,38 @@ public class DebugTargetWrapper implements IStartup
 						ILaunch launch = javaTarget.getLaunch();
 						if ( launch != null && ILaunchManager.DEBUG_MODE.equals( launch.getLaunchMode() ) )
 						{
-							EGLJavaDebugTarget edtTarget = new EGLJavaDebugTarget( (IJavaDebugTarget)javaTarget );
-							launch.removeDebugTarget( javaTarget );
-							launch.addDebugTarget( edtTarget );
-							
-							// Set up a source lookup director that is capable of finding .egl files from the EGL build path, if necessary.
+							String vmArgs = null;
 							try
 							{
-								ISourceLocator origLocator = launch.getSourceLocator();
-								if ( !(origLocator instanceof EGLJavaSourceLookupDirector) )
-								{
-									EGLJavaSourceLookupDirector director = new EGLJavaSourceLookupDirector( origLocator );
-									director.initializeDefaults( launch.getLaunchConfiguration() );
-									launch.setSourceLocator( director );
-								}
+								vmArgs = launch.getLaunchConfiguration().getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String)null );
 							}
-							catch ( CoreException e )
+							catch ( CoreException ce )
 							{
 							}
 							
-							edtTarget.handleDebugEvents( events );
+							if ( vmArgs == null || !vmArgs.contains( DISABLE_EGL ) )
+							{
+								EGLJavaDebugTarget edtTarget = new EGLJavaDebugTarget( (IJavaDebugTarget)javaTarget );
+								launch.removeDebugTarget( javaTarget );
+								launch.addDebugTarget( edtTarget );
+								
+								// Set up a source lookup director that is capable of finding .egl files from the EGL build path, if necessary.
+								try
+								{
+									ISourceLocator origLocator = launch.getSourceLocator();
+									if ( !(origLocator instanceof EGLJavaSourceLookupDirector) )
+									{
+										EGLJavaSourceLookupDirector director = new EGLJavaSourceLookupDirector( origLocator );
+										director.initializeDefaults( launch.getLaunchConfiguration() );
+										launch.setSourceLocator( director );
+									}
+								}
+								catch ( CoreException e )
+								{
+								}
+								
+								edtTarget.handleDebugEvents( events );
+							}
 						}
 					}
 				}
