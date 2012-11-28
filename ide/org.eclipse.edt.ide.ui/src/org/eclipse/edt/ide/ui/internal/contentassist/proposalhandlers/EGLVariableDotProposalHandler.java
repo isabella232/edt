@@ -28,6 +28,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
 
@@ -63,6 +64,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 			else {
 				list = BindingUtil.getAllFields(qualifierType.getClassifier());
 			}
+			list = filterDuplicateNamedFields(list);
 			list = filterPrivateMembers(qualifierType.getClassifier(), list);
 			list = filterExcludedFields(excludeFields, list);
 			if (!isVariable) {
@@ -71,13 +73,14 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 			result.addAll(getFieldProposals(list));
 			if(includeFunctions) {
 				list = BindingUtil.getAllFunctions(qualifierType.getClassifier());
+				list = filterDuplicateNamedFunctions(list);
 				list = filterPrivateMembers(qualifierType.getClassifier(), list);
 				if (!isVariable && !(qualifierType.getClassifier() instanceof Service)) {
 					list = filterStaticMembers(list);
 				}
 				result.addAll(getFunctionProposals(
 					list,
-					UINlsStrings.bind(UINlsStrings.CAProposal_LibraryFunction, getTypeString(qualifierType)),
+					UINlsStrings.bind(UINlsStrings.CAProposal_PartFunction, getTypeString(qualifierType)),
 					EGLCompletionProposal.RELEVANCE_MEMBER,
 					true));
 			}
@@ -93,6 +96,34 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 		for (Object obj : list) {
 			if (!exclude.contains(obj)) {
 				newList.add(obj);
+			}
+		}
+		return newList;
+	}
+	
+	private List filterDuplicateNamedFields(List list) {
+		List newList = new ArrayList();
+		List names = new ArrayList();
+		for (Object obj : list) {
+			Member mbr = (Member) obj;
+			String name = NameUtile.getAsName(mbr.getCaseSensitiveName());
+			if (!names.contains(name)) {
+				names.add(name);
+				newList.add(mbr);
+			}
+		}
+		return newList;
+	}
+
+	private List filterDuplicateNamedFunctions(List list) {
+		List newList = new ArrayList();
+		List sigs = new ArrayList();
+		for (Object obj : list) {
+			Function function = (Function) obj;
+			String sig = getFunctionSignature(function);
+			if (!sigs.contains(sig)) {
+				sigs.add(sig);
+				newList.add(function);
 			}
 		}
 		return newList;
