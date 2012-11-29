@@ -19,10 +19,7 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.NumericUtil;
 
-import eglx.lang.AnyException;
-import eglx.lang.InvalidArgumentException;
-import eglx.lang.InvalidIndexException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 public class EBytes extends AnyBoxedObject<byte[]> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -207,16 +204,24 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 		return asBytes(value.ezeUnbox(), length);
 	}
 
-	public static byte[] asBytes(BigDecimal value, Integer... length) {
+	public static byte[] asBytes(BigDecimal value, Integer... attrs) {
 		if (value == null)
 			return null;
-		return asBytes(value.unscaledValue(), length);
+		
+		// attrs[0] is the bytes's length
+		// attrs[1] is the decimal's precision
+		if ( attrs.length > 1 && attrs[ 0 ] != attrs[ 1 ] / 2 + 1 )
+		{
+			throwTypeCastException( "decimal(" + attrs[ 1 ] + ')', value, attrs );
+		}
+		return asBytes(value.unscaledValue(), attrs);
 	}
 
 	public static byte[] asBytes(EDecimal value, Integer... length) {
 		if (value == null)
 			return null;
-		return asBytes(value.ezeUnbox(), length);
+
+		return asBytes(value.ezeUnbox(), length.length > 0 ? new Integer[] { length[ 0 ], value.getPrecision() } : length );
 	}
 
 	public static byte[] asBytes(BigInteger value, Integer... length) {
@@ -225,6 +230,11 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 		
 		int digits = digits( value );
 		byte[] bytes = new byte[ digits / 2 + 1 ];
+		if ( length.length > 0 && length[ 0 ] != bytes.length )
+		{
+			throwTypeCastException( "decimal(" + digits + ')', value, length );
+		}
+
 		if ( digits < 18 )
 		{
 			NumericUtil.toDecimal( value.longValue(), bytes, 0, digits, bytes.length, (byte)0x0C );
@@ -403,26 +413,54 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 
 	public static int compareTo( byte[] op1, byte[] op2 ) throws AnyException 
 	{
-		// The lengths must match.
-		if ( op1.length != op2.length )
+		if ( op1.length == op2.length )
 		{
-			InvalidArgumentException iax = new InvalidArgumentException();
-			throw iax.fillInMessage( Message.INVALID_TYPES_FOR_COMPARE, 
-					"bytes(" + op1.length + ')', "bytes(" + op2.length + ')' );
-		}
-		
-		for ( int i = 0; i < op1.length; i++ )
-		{
-			if ( op1[i] != op2[i] )
+			for ( int i = 0; i < op1.length; i++ )
 			{
-				if ( op1[i] < op2[i] )
+				if ( op1[i] != op2[i] )
 				{
-					return -1;
+					return (op1[i] & 0xFF) < (op2[i] & 0xFF) ? -1 : 1;
 				}
-				else
+			}
+		}
+		else if ( op1.length > op2.length )
+		{
+			int i = 0;
+			while ( i < op2.length )
+			{
+				if ( op1[i] != op2[i] )
+				{
+					return (op1[i] & 0xFF) < (op2[i] & 0xFF) ? -1 : 1;
+				}
+				i++;
+			}
+			while ( i < op1.length )
+			{
+				if ( op1[i] != 0 )
 				{
 					return 1;
 				}
+				i++;
+			}
+		}
+		else
+		{
+			int i = 0;
+			while ( i < op1.length )
+			{
+				if ( op1[i] != op2[i] )
+				{
+					return (op1[i] & 0xFF) < (op2[i] & 0xFF) ? -1 : 1;
+				}
+				i++;
+			}
+			while ( i < op2.length )
+			{
+				if ( op2[i] != 0 )
+				{
+					return -1;
+				}
+				i++;
 			}
 		}
 
@@ -430,6 +468,9 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 	}
 
 	public static byte[] substring(byte[] value, int start, int end) throws AnyException {
+		if (value == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		int max = value.length;
 		if (start < 1 || start > max) {
 			InvalidIndexException ex = new InvalidIndexException();
