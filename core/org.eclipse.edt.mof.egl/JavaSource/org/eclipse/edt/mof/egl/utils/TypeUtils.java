@@ -197,7 +197,6 @@ public class TypeUtils implements MofConversion {
 		else if (classifier == Type_CLOB) return TypeKind_CLOB;
 		else if (classifier == Type_BLOB) return TypeKind_BLOB;
 		else if (classifier == Type_BYTES) return TypeKind_BYTES;
-		else if (type instanceof SequenceType && classifier == Type_STRING) return TypeKind_LIMITEDSTRING;
 		else if (classifier == Type_NUMBER) return TypeKind_NUMBER;
 		return TypeKind_UNDEFINED;
 	}

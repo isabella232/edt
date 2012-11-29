@@ -62,6 +62,25 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 		}
 		return isa;
 	}
+	
+	public static byte[] ezeAssignToLonger( byte[] target, int targetLength, byte[] source )
+	{
+		if ( source == null )
+		{
+			return null;
+		}
+		else if ( target == null )
+		{
+			target = new byte[ targetLength ];
+			System.arraycopy( source, 0, target, 0, source.length );
+			return target;
+		}
+		else
+		{
+			System.arraycopy( source, 0, target, 0, source.length );
+			return target;
+		}
+	}
 
 	public static byte[] asBytes( Short value, Integer... length ) 
 	{
