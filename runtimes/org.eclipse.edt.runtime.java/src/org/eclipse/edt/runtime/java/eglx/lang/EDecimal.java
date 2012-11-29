@@ -484,15 +484,22 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 		}
 		
 		int byteLength = precision / 2 + 1;
-		if ( value.length != byteLength )
+		if ( value.length == byteLength )
 		{
-			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "bytes(" + value.length + ')';
-			tcx.castToName = "decimal(" + precision + ',' + scale + ')';
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+			try
+			{
+				return new BigDecimal( NumericUtil.decimalToBigInteger( value, 0, precision ), scale );
+			}
+			catch ( InvalidArgumentException iax )
+			{
+				// Ignore it and throw a TypeCastException below.
+			}
 		}
-		
-		return new BigDecimal( NumericUtil.decimalToBigInteger( value, 0, precision ), scale );
+
+		TypeCastException tcx = new TypeCastException();
+		tcx.actualTypeName = "bytes(" + value.length + ')';
+		tcx.castToName = "decimal(" + precision + ',' + scale + ')';
+		throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
 	}
 
 	public static BigDecimal asDecimal( EBytes value, int precision, int scale ) throws AnyException 

@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates.eglx.lang;
 
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.*;
@@ -49,8 +50,23 @@ public class BytesTypeTemplate extends JavaTemplate {
 			out.print("(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(")");
-		} else
+		} else {
+			if (arg.getObjectExpr().getType() instanceof FixedPrecisionType) {
+				ctx.put(Constants.SubKey_genPrecisionWithTypeDependentOptions, ((FixedPrecisionType)arg.getObjectExpr().getType()).getLength());
+			}
 			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
+			ctx.remove(Constants.SubKey_genPrecisionWithTypeDependentOptions);
+		}
+	}
+
+	public void genTypeDependentOptions(SequenceType type, Context ctx, TabbedWriter out) {
+		out.print(", ");
+		out.print(type.getLength());
+		Object precision = ctx.get(Constants.SubKey_genPrecisionWithTypeDependentOptions);
+		if ( precision != null ) {
+			out.print(", ");
+			out.print(precision.toString());
+		}
 	}
 
 	public void genContainerBasedNewExpression(Type type, Context ctx, TabbedWriter out, Expression arg) {
