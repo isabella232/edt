@@ -973,7 +973,7 @@ public class UINlsStrings extends NLS {
 	public static String CAProposal_JasperReportHandlerFunction;
 	public static String CAProposal_JSPFile;
 	public static String CAProposal_KeyValue;
-	public static String CAProposal_LibraryFunction;
+	public static String CAProposal_PartFunction;
 	public static String CAProposal_LibraryType;
 	public static String CAProposal_LibraryVariable;
 	public static String CAProposal_LOBLibrary;

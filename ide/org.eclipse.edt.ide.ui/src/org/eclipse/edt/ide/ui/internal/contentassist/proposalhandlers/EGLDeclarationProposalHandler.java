@@ -50,6 +50,7 @@ import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jdt.internal.compiler.lookup.LocalVariableBinding;
 import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 import org.eclipse.jface.text.ITextViewer;
@@ -167,7 +168,15 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		if (functionContainerPart != null) {
 			org.eclipse.edt.mof.egl.Part part = (org.eclipse.edt.mof.egl.Part)((Part) functionContainerPart).getName().resolveType();
 			List<Field> fields = BindingUtil.getAllFields(part);
+			List<String>names = new ArrayList<String>();
 			for (Field field : fields) {
+				
+				String name = NameUtile.getAsName(field.getCaseSensitiveName());
+				if (names.contains(name)) {
+					continue;
+				}
+				names.add(name);
+				
 				if (field.getAccessKind() == AccessKind.ACC_PRIVATE && field.getContainer() != part) {
 					continue;
 				}
