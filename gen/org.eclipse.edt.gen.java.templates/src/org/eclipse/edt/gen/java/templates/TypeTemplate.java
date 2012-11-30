@@ -265,21 +265,58 @@ public class TypeTemplate extends JavaTemplate {
 		}
 	}
 	
-	static void assignmentSource( Expression lhs, Expression rhs, Context ctx, TabbedWriter out )
+	public static void assignmentSource( Expression lhs, Expression rhs, Context ctx, TabbedWriter out )
 	{
-		// When assigning a bytes or bytes(x) to a bytes(y), and x < y, we need to generate
-		// something special for the RHS.
+		// Generate something special for the RHS of an assignment when:
+		//  1) assigning bytes(x) to bytes(y), and x < y
+		//  2) assigning bytes to bytes(x)
+		//  3) assigning 'any as bytes(x)' to bytes(x)
+		//  4) assigning 'any as bytes' to bytes
 		Type lhsType = lhs.getType();
 		Type rhsType = rhs.getType();
-		if ( lhsType instanceof SequenceType && rhsType instanceof SequenceType
-				&& TypeUtils.getTypeKind( rhsType ) == TypeUtils.TypeKind_BYTES
-				&& TypeUtils.getTypeKind( lhsType ) == TypeUtils.TypeKind_BYTES
-				&& rhsType.getClassifier().equals( lhsType.getClassifier() )
-				&& ( ((SequenceType)rhsType).getLength() < ((SequenceType)lhsType).getLength()
-						|| ( rhs instanceof AsExpression && ((AsExpression)rhs).getObjectExpr().getType() instanceof ParameterizableType
-								&& TypeUtils.getTypeKind( ((AsExpression)rhs).getObjectExpr().getType() ) == TypeUtils.TypeKind_BYTES ) ) )
+		if ( rhsType != null && TypeUtils.getTypeKind( rhsType ) == TypeUtils.TypeKind_BYTES
+				&& lhsType != null && TypeUtils.getTypeKind( lhsType ) == TypeUtils.TypeKind_BYTES )
 		{
-			assignShorterBytesToLongerBytes( rhs, rhsType, lhs, lhsType, ctx, out );
+			if ( ( lhsType instanceof SequenceType && rhsType instanceof SequenceType
+						&& ((SequenceType)rhsType).getLength() < ((SequenceType)lhsType).getLength() )
+					|| ( rhs instanceof AsExpression && ((AsExpression)rhs).getObjectExpr().getType() instanceof ParameterizableType
+							&& TypeUtils.getTypeKind( ((AsExpression)rhs).getObjectExpr().getType() ) == TypeUtils.TypeKind_BYTES ) )
+			{
+				assignShorterBytesToLongerBytes( rhs, rhsType, lhs, lhsType, ctx, out );
+			}
+			else if ( rhs instanceof AsExpression 
+					&& TypeUtils.getTypeKind( ((AsExpression)rhs).getObjectExpr().getType() ) == TypeUtils.TypeKind_ANY )
+			{
+				int lhsLength = lhsType instanceof SequenceType ? ((SequenceType)lhsType).getLength() : 0;
+
+				ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
+				out.print( ".ezeAssignFromAny(" );
+				if ( lhsLength > 0 )
+				{
+					if ( lhs instanceof MemberName 
+							&& ctx.get( "generating declaration of " + ((MemberName)lhs).getMember() + ((MemberName)lhs).getMember().hashCode() ) != null )
+					{
+						out.print( "new byte[" + lhsLength + ']' );
+					}
+					else
+					{
+						ctx.invoke( genExpression, lhs, ctx, out );
+					}
+					out.print( ", " );
+					out.print( lhsLength );
+				}
+				else
+				{
+					out.print( "null" );
+				}
+				out.print( ", " );
+				ctx.invoke( genExpression, rhs, ctx, out );
+				out.print( ')' );
+			}
+			else
+			{
+				ctx.invoke( genExpression, rhs, ctx, out );
+			}
 		}
 		else
 		{

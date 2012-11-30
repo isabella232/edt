@@ -69,17 +69,53 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 		{
 			return null;
 		}
-		else if ( target == null )
+		
+		if ( target == null )
 		{
 			target = new byte[ targetLength ];
 			System.arraycopy( source, 0, target, 0, source.length );
-			return target;
 		}
 		else
 		{
 			System.arraycopy( source, 0, target, 0, source.length );
-			return target;
 		}
+		return target;
+	}
+	
+	/**
+	 * Called by the code generated from "bytes(x) = any".
+	 */
+	public static byte[] ezeAssignFromAny( byte[] target, int targetLength, byte[] source )
+	{
+		if ( source == null )
+		{
+			return null;
+		}
+
+		if ( target == null )
+		{
+			target = new byte[ targetLength ];
+		}
+		System.arraycopy( source, 0, target, 0, Math.min( targetLength, source.length ) );
+		return target;
+	}
+	
+	/**
+	 * Called by the code generated from "bytes = any".
+	 */
+	public static byte[] ezeAssignFromAny( byte[] target, byte[] source )
+	{
+		if ( source == null )
+		{
+			return null;
+		}
+
+		if ( target == null )
+		{
+			target = new byte[ source.length ];
+		}
+		System.arraycopy( source, 0, target, 0, Math.min( target.length, source.length ) );
+		return target;
 	}
 
 	public static byte[] asBytes( Short value, Integer... length ) 
