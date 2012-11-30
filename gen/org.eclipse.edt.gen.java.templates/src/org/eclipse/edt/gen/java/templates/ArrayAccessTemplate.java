@@ -47,7 +47,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
 				if (arg1 instanceof NullLiteral)
 					out.print("(eglx.lang.AnyValue) ");
-				ctx.invoke(genExpression, arg1, ctx, out);
+				TypeTemplate.assignmentSource( expr, arg1, ctx, out );
 				out.print(", ");
 				out.print(temporary + ".get(");
 				out.print("org.eclipse.edt.javart.util.JavartUtil.checkIndex(");
@@ -71,7 +71,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 					ctx.invoke(genExpression, expr, ctx, out);
 					out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
 				}
-				ctx.invoke(genExpression, arg1, ctx, out);
+				TypeTemplate.assignmentSource( expr, arg1, ctx, out );
 				if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
 					out.print(".ezeUnbox()");
 				out.print(")");
@@ -92,7 +92,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
 				if (arg1 instanceof NullLiteral)
 					out.print("(eglx.lang.AnyValue) ");
-				ctx.invoke(genExpression, arg1, ctx, out);
+				TypeTemplate.assignmentSource( expr, arg1, ctx, out );
 				out.print(", ");
 				ctx.invoke(genExpression, (Expression) expr, ctx, out);
 				out.print(")");
@@ -111,7 +111,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, expr, ctx, out);
 				out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
 			}
-			ctx.invoke(genExpression, arg1, ctx, out);
+			TypeTemplate.assignmentSource( expr, arg1, ctx, out );
 			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
 				out.print(".ezeUnbox()");
 			out.print(")");
@@ -129,7 +129,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
 				if (arg1 instanceof NullLiteral)
 					out.print("(eglx.lang.AnyValue) ");
-				ctx.invoke(genExpression, arg1, ctx, out);
+				TypeTemplate.assignmentSource( expr, arg1, ctx, out );
 				out.print(")");
 			} else {
 				// if we are doing some type of complex assignment, we need to place that in the argument
@@ -140,7 +140,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
 				if (arg1 instanceof NullLiteral)
 					out.print("(eglx.lang.AnyValue) ");
-				ctx.invoke(genExpression, arg1, ctx, out);
+				TypeTemplate.assignmentSource( expr, arg1, ctx, out );
 			}
 			out.print(", ");
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);

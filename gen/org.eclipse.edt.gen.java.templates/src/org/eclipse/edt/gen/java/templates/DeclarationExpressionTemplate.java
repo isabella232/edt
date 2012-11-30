@@ -26,7 +26,9 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 
 	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out) {
 		for (Field field : expr.getFields()) {
+			ctx.put( field, Boolean.TRUE );
 			ctx.invoke(genDeclarationExpressionField, expr, ctx, out, field);
+			ctx.remove( field );
 		}
 	}
 
