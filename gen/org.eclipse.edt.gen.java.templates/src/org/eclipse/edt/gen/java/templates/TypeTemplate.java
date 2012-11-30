@@ -305,7 +305,8 @@ public class TypeTemplate extends JavaTemplate {
 		{
 			ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
 			out.print( ".ezeAssignToLonger(" );
-			if ( lhs instanceof MemberName && ctx.get( ((MemberName)lhs).getMember() ) != null )
+			if ( lhs instanceof MemberName 
+					&& ctx.get( "generating declaration of " + ((MemberName)lhs).getMember() + ((MemberName)lhs).getMember().hashCode() ) != null )
 			{
 				out.print( "new byte[" + lhsLength + ']' );
 			}
