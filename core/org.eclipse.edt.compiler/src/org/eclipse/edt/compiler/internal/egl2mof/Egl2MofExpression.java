@@ -343,11 +343,11 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				
 				if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) {
 					expr = factory.createThisExpression();
-					((ThisExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
+					((ThisExpression)expr).setThisObject((Part)currentPart);
 				}
 				else {
 					expr = factory.createSuperExpression();
-					((SuperExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
+					((SuperExpression)expr).setThisObject((Part)currentPart);
 				}
 				
 				((ConstructorInvocation)fi).setExpression(expr);
@@ -357,15 +357,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 					// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
 					fi = factory.createQualifiedFunctionInvocation();
 					fi.setId(node.getTarget().getCanonicalString());
-					if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
-						node.getTarget().accept(this);
-						((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
-					}
-					else {
-						ThisExpression thisExpr = factory.createThisExpression();
-						thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
-						((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
-					}
+					ThisExpression thisExpr = factory.createThisExpression();
+					thisExpr.setThisObject((Part)currentPart);
+					((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
 				}
 				else {
 					
@@ -427,12 +421,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 								fi.setId(functionBinding.getCaseSensitiveName());
 								if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
 									SuperExpression superExpr = factory.createSuperExpression();
-									superExpr.setThisObject(getCurrentFunctionMember().getContainer());
+									superExpr.setThisObject((Part)currentPart);
 									((QualifiedFunctionInvocation)fi).setQualifier(superExpr);
 								}
 								else {
 									ThisExpression thisExpr = factory.createThisExpression();
-									thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
+									thisExpr.setThisObject((Part)currentPart);
 									((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
 								}
 							}
@@ -930,7 +924,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.SuperExpression superExpression) {
 		SuperExpression expr = factory.createSuperExpression();
-		expr.setThisObject(getCurrentFunctionMember().getContainer());
+		expr.setThisObject((Part)currentPart);
 		setElementInformation(superExpression, expr);
 		stack.push(expr);
 		return false;
@@ -988,7 +982,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			return isSuperTypeMember(((Member)binding).getContainer());
 		}
 
-		StructPart current = (StructPart)currentPart;
+		StructPart current = (StructPart)currentBindingLevelPart;
 		return  part != null && !current.equals(part) && current.isSubtypeOf(part);
 	}
 
