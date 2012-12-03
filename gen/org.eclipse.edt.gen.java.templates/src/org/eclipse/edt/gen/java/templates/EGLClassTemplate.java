@@ -80,7 +80,11 @@ public class EGLClassTemplate extends JavaTemplate {
 	}
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
-		out.print("public class ");
+		out.print("public ");
+		if (part.isAbstract()) {
+			out.print("abstract ");
+		}
+		out.print("class ");
 		ctx.invoke(genClassName, part, ctx, out);
 		out.print(" extends ");
 		ctx.invoke(genSuperClass, part, ctx, out);
