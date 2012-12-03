@@ -31,7 +31,8 @@ public class HandlerTemplate extends JavaTemplate {
 	}
 
 	public void genConstructor(Handler type, Context ctx, TabbedWriter out) {
-		out.println("");
+		ctx.invoke(genInstanceInitializer, type, ctx, out);
+		out.println();
 		out.print("public ");
 		ctx.invoke(genClassName, type, ctx, out);
 		out.print("(");
@@ -40,10 +41,6 @@ public class HandlerTemplate extends JavaTemplate {
 		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, type, ctx, out);
 		out.println(");");
-		out.println("}");
-
-		out.println("{");
-		out.println("ezeInitialize();");
 		out.println("}");
 	}
 

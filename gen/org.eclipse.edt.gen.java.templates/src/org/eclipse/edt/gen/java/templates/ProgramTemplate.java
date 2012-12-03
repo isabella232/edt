@@ -31,6 +31,15 @@ public class ProgramTemplate extends JavaTemplate {
 	public void genSuperClass(Program program, Context ctx, TabbedWriter out) {
 		out.print("ProgramBase");
 	}
+	
+	public void genInstanceInitializerBody(Program program, Context ctx, TabbedWriter out) {
+		out.println("if(org.eclipse.edt.javart.Runtime.getRunUnit().getActiveExecutable() == null)");
+		out.println("{");
+		out.println("org.eclipse.edt.javart.Runtime.getRunUnit().setActiveExecutable(this);");
+		out.println("}");
+		
+		ctx.invokeSuper(this, genInstanceInitializerBody, program, ctx, out);
+	}
 
 	public void genConstructor(Program program, Context ctx, TabbedWriter out) {
 		String packageName = "";
@@ -50,6 +59,8 @@ public class ProgramTemplate extends JavaTemplate {
 		out.println("() );");
 		out.println("ru.exit();");
 		out.println("}");
+		
+		ctx.invoke(genInstanceInitializer, program, ctx, out);
 
 		out.print("public ");
 		ctx.invoke(genClassName, program, ctx, out);
@@ -59,14 +70,6 @@ public class ProgramTemplate extends JavaTemplate {
 		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, program, ctx, out);
 		out.println(");");
-		out.println("}");
-
-		out.println("{");
-		out.println("if(org.eclipse.edt.javart.Runtime.getRunUnit().getActiveExecutable() == null)");
-		out.println("{");
-		out.println("org.eclipse.edt.javart.Runtime.getRunUnit().setActiveExecutable(this);");
-		out.println("}");
-		out.println("ezeInitialize();");
 		out.println("}");
 	}
 
