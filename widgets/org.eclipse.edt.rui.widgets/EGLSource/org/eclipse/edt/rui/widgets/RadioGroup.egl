@@ -207,8 +207,8 @@ handler RadioGroup type RUIWidget {tagName ="div",cssFile = "css/org.eclipse.edt
 				if (children[i].cssClass == "EglRuiRadioGroupOptionName")
 					children[i].textLayout = this.textLayoutThis;
 					children[i].reverseTextDirection = this.reverseTextDirectionThis;
-				end;
-			end;
+				end
+			end
 		end
 
 	end	

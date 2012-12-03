@@ -20,7 +20,7 @@ public class BytesLiteralImpl extends PrimitiveTypeLiteralImpl implements BytesL
 
 	@Override
 	public Type getType() {
-		return IRUtils.getEGLPrimitiveType(Type_Bytes, getValue().length());
+		return IRUtils.getEGLPrimitiveType(Type_Bytes, getValue().length() / 2);
 	}
 
 	@Override
