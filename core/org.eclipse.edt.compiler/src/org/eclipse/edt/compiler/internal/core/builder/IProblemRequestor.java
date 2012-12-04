@@ -75,6 +75,9 @@ public interface IProblemRequestor {
 	public static final int EZE_NOT_ALLOWED = 3003;
 	public static final int DUPLICATE_VARIABLE_NAME = 3010;
 	public static final int DUPLICATE_NAME_ACROSS_LISTS = 3012;
+	public static final int CANNOT_REDUCE_VISIBILITY = 3013;
+	public static final int RETURN_TYPES_NOT_COMPATIBLE = 3014;
+	public static final int CANNOT_INVOKE_ABSTRACT_FUNCTION = 3015;
 	public static final int RESERVED_WORD_NOT_ALLOWED = 3019;
 	public static final int DUPLICATE_NAME_IN_FILE = 3022;
 	public static final int FUNCTION_TOO_MANY_PARMS = 3028;
