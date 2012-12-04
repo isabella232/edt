@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.lookup.EglarBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
@@ -94,8 +95,8 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
 	}
 
 	@Override
-	public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
-		IPartBinding binding = declaringProjectBuildPathEntry.getNewPartBinding(packageName, caseSensitiveInternedPartName, kind);
+	public IPartBinding getNewPartBinding(PackageAndPartName ppName,  int kind) {
+		IPartBinding binding = declaringProjectBuildPathEntry.getNewPartBinding(ppName, kind);
 		if (binding != null){
 			binding.setEnvironment(this);
 			if (binding instanceof IRPartBinding) {
@@ -121,13 +122,12 @@ public class WorkingCopyProjectEnvironment implements IBindingEnvironment {
         return rootPackageBinding;
     }
 
-	public IPartBinding level01Compile(String packageName, String caseSensitiveInternedPartName) {
-		String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
+	public IPartBinding level01Compile(PackageAndPartName ppName) {
 	   
 		for(int i = 0; i < buildPathEntries.length; i++) {
-	        int partType = buildPathEntries[i].hasPart(packageName, caseInsensitiveInternedPartName);
+	        int partType = buildPathEntries[i].hasPart(ppName.getPackageName(), ppName.getPartName());
 			if(partType != ITypeBinding.NOT_FOUND_BINDING) {
-				IPartBinding result = BindingUtil.createPartBinding(partType, packageName, caseSensitiveInternedPartName);
+				IPartBinding result = BindingUtil.createPartBinding(partType, ppName);
 	            result.setEnvironment(buildPathEntries[i].getRealizingEnvironment());
 	            if (result instanceof IRPartBinding) {
 	    			BindingUtil.setEnvironment(((IRPartBinding)result).getIrPart(), buildPathEntries[i].getRealizingEnvironment());

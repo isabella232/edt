@@ -25,6 +25,8 @@ public interface IFileInfo {
 	
 	public Set getPartNames();
 
+	public String getCaseSensitivePackageName();
+	
 	public ISourceRange getPartRange(String partName);
 	
 	public int getPartType(String partName);

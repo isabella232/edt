@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.internal.builder.workingcopy.WorkingCopyDuplicatePartManager;
@@ -277,7 +278,8 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 												    Iterator iter = info.getPartNames().iterator();
 												    while (iter.hasNext()){
 												    	String partName = (String)iter.next();
-												    	projectInfo.partAdded(packageName,partName, info.getPartType(partName), file, info.getCaseSensitivePartName(partName));
+												    	PackageAndPartName ppName = new PackageAndPartName(info.getCaseSensitivePackageName(), info.getCaseSensitivePartName(partName));
+												    	projectInfo.partAdded(packageName,partName, info.getPartType(partName), file, ppName);
 												    }
 												    
 													WorkingCopyFileInfoManager.getInstance().saveFileInfo(project, file.getProjectRelativePath(), info);	
@@ -497,7 +499,8 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			        Set partNames = fileInfo.getPartNames();
 					for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 						String partName = (String) iter.next();
-						WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project).partAdded(packageName, partName, fileInfo.getPartType(partName), addedFile, fileInfo.getCaseSensitivePartName(partName));
+						PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName));
+						WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project).partAdded(packageName, partName, fileInfo.getPartType(partName), addedFile, ppName);
 					}	
 					
 					WorkingCopyFileInfoManager.getInstance().saveFileInfo(project, addedFile.getProjectRelativePath(), fileInfo);
@@ -546,7 +549,8 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 				    
 			        IFileInfoDifferenceNotificationRequestor requestor = new IFileInfoDifferenceNotificationRequestor(){
 				        	public void partAdded(String partName) {
-				        		projectInfo.partAdded(packageName, partName, newInfo.getPartType(partName), changedFile, newInfo.getCaseSensitivePartName(partName));
+				        		PackageAndPartName ppName = new PackageAndPartName(newInfo.getCaseSensitivePackageName(), newInfo.getCaseSensitivePartName(partName));
+				        		projectInfo.partAdded(packageName, partName, newInfo.getPartType(partName), changedFile, ppName);
 				        	}
 				        	
 				            public void partRemoved(String partName){

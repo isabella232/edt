@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.IASTFileInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ResourceFileInfoCreator;
@@ -47,8 +48,9 @@ public class CleanBatchBuilder extends AbstractBatchBuilder {
 			Set partNames = info.getPartNames();
 			for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 				String partName = (String) iter.next();
-				projectInfo.partAdded(packageName, partName, info.getPartType(partName), file, info.getCaseSensitivePartName(partName));
-				addPart(packageName, info.getCaseSensitivePartName(partName));
+				PackageAndPartName ppName = new PackageAndPartName(info.getCaseSensitivePackageName(), info.getCaseSensitivePartName(partName));
+				projectInfo.partAdded(packageName, partName, info.getPartType(partName), file, ppName);
+				addPart(ppName);
 			}
 		}catch(Exception e){
 			throw new BuildException("Error adding EGL File: " + file.getProjectRelativePath(), e);

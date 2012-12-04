@@ -205,4 +205,14 @@ public class Util {
     				
 		}
     }
+    
+	public static String createCaseSensitivePackageName(org.eclipse.edt.compiler.core.ast.File fileAST) {
+
+	    if(fileAST.hasPackageDeclaration()){
+	        return fileAST.getPackageDeclaration().getName().getCanonicalString();
+	    }
+	    
+	    return "";
+    }
+
 }

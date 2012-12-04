@@ -36,6 +36,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
@@ -81,41 +82,40 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
     }
 
     @Override
-    protected IPartBinding level03Compile(String packageName, String caseSensitiveInternedPartName) {
-    	String caseInsensitiveInternedString = NameUtile.getAsName(caseSensitiveInternedPartName);
-        String qualifiedName = getQualifiedName(packageName, caseInsensitiveInternedString);
+    protected IPartBinding level03Compile(PackageAndPartName ppName) {
+        String qualifiedName = getQualifiedName(ppName.getPackageName(), ppName.getPartName());
 		
 		if(Builder.DEBUG){
-		    System.out.println("\nProcessing: " + getQualifiedName(packageName, caseInsensitiveInternedString)); //$NON-NLS-1$
+		    System.out.println("\nProcessing: " + qualifiedName); //$NON-NLS-1$
 		}
 		
 		notifier.subTask(NLS.bind(BuilderResources.buildCompiling, qualifiedName));
 		
-		IFile declaringFile = projectInfo.getPartOrigin(packageName, caseInsensitiveInternedString).getEGLFile();
-		Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedString);
+		IFile declaringFile = projectInfo.getPartOrigin(ppName.getPackageName(), ppName.getPartName()).getEGLFile();
+		Node partAST = ASTManager.getInstance().getAST(declaringFile, ppName.getPartName());
 		
-		IPartBinding binding = new BindingCreator(projectEnvironment, packageName, caseSensitiveInternedPartName, partAST).getPartBinding();
+		IPartBinding binding = new BindingCreator(projectEnvironment, ppName, partAST).getPartBinding();
 		binding.setEnvironment(projectEnvironment);
       
 		DependencyInfo dependencyInfo = new DependencyInfo();
-		Scope scope = createScope(packageName, declaringFile, binding, dependencyInfo);
+		Scope scope = createScope(ppName.getPackageName(), declaringFile, binding, dependencyInfo);
 		CappedProblemRequestor cappedProblemRequestor = new CappedProblemRequestor();
-		cappedProblemRequestor.setRequestor(new MarkerProblemRequestor(declaringFile, caseInsensitiveInternedString));
+		cappedProblemRequestor.setRequestor(new MarkerProblemRequestor(declaringFile, ppName.getPartName()));
 		
 		Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, cappedProblemRequestor, compilerOptions);
 		
 		if(binding.getKind() == ITypeBinding.FILE_BINDING){
-			validatePackageDeclaration(packageName, declaringFile, partAST, ((FileBinding)binding), cappedProblemRequestor);
+			validatePackageDeclaration(ppName.getPackageName(), declaringFile, partAST, ((FileBinding)binding), cappedProblemRequestor);
 		}
 		
 		if(binding.getKind() != ITypeBinding.FILE_BINDING){
-	        processCompiledPart(packageName, caseInsensitiveInternedString, qualifiedName, (Part)partAST, binding, declaringFile, dependencyInfo, cappedProblemRequestor);
+	        processCompiledPart(ppName.getPackageName(), ppName.getPartName(), qualifiedName, (Part)partAST, binding, declaringFile, dependencyInfo, cappedProblemRequestor);
 		}else{
-			processCompiledFilePart(packageName, caseInsensitiveInternedString, declaringFile);
+			processCompiledFilePart(ppName.getPackageName(), ppName.getPartName(), declaringFile);
 		}
 		
 		// record dependency info
-		DependencyGraphManager.getInstance().getDependencyGraph(project).putPart(packageName, caseInsensitiveInternedString, org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(declaringFile), dependencyInfo);
+		DependencyGraphManager.getInstance().getDependencyGraph(project).putPart(ppName.getPackageName(), ppName.getPartName(), org.eclipse.edt.ide.core.internal.utils.Util.getFilePartName(declaringFile), dependencyInfo);
 		
 		if(Builder.DEBUG){
 			numErrorsReported += cappedProblemRequestor.getNumberOfProblemsReported();
@@ -136,7 +136,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 			
 			// don't add the file part again
 			if(!NameUtile.equals(nextName, caseInsensitiveInternedString)){
-				addPartFromCompiledFile(packageName, fileInfo.getCaseSensitivePartName(nextName));
+				addPartFromCompiledFile(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(nextName)));
 			}
 		}
 	}
@@ -192,16 +192,16 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
         return (MofSerializable)generator.convert(partAST, new IDEContext(declaringFile, projectEnvironment.getCompiler()), problemRequestor);
     }
 
-	protected void addPartFromCompiledFile(String packageName, String partName){}
+	protected void addPartFromCompiledFile(PackageAndPartName ppName){}
 
 	@Override
-    protected IPartBinding level02Compile(String packageName, String caseSensitiveInternedPartName) {
-        return ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project).compileLevel2Binding(packageName, caseSensitiveInternedPartName);
+    protected IPartBinding level02Compile(PackageAndPartName ppName) {
+        return ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project).compileLevel2Binding(ppName);
     }
 
 	@Override
-    protected IPartBinding level01Compile(String packageName, String caseSensitiveInternedPartName) {
-        return projectEnvironment.level01Compile(packageName, caseSensitiveInternedPartName);
+    protected IPartBinding level01Compile(PackageAndPartName ppName) {
+        return projectEnvironment.level01Compile(ppName);
     }
 
 	@Override
@@ -280,7 +280,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 	}
 	
 	@Override
-	protected void doAddPart(String packageName, String caseInsensitiveInternedPartName) {
-		addPart(packageName, projectInfo.getCaseSensitivePartName(packageName, caseInsensitiveInternedPartName));		
+	protected void doAddPart(String packageName, String caseInsensitivePartName) {
+		addPart(projectInfo.getPackageAndPartName(packageName, caseInsensitivePartName));		
 	}
 }

@@ -53,6 +53,8 @@ public class CachedFileInfoReader {
 		    	
 		    	fileInfo.setLineOffsets(lineOffsets);
 		    	
+		    	String caseSensitivePackageName = inputStream.readUTF();
+		    	
 		    	// read parts
 				int numParts = inputStream.readInt();
 						

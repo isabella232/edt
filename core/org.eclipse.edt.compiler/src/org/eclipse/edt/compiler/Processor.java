@@ -35,6 +35,7 @@ import org.eclipse.edt.compiler.internal.sdk.compile.IProcessor;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.utils.NameUtile;
 
@@ -69,26 +70,25 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
         return false;
     }
 
-    public IPartBinding level03Compile(String packageName, String caseSensitivePartName) {
-    	String caseInsensitivePartName = NameUtile.getAsName(caseSensitivePartName);
-        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(packageName, caseInsensitivePartName);
-        Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitivePartName);
+    public IPartBinding level03Compile(PackageAndPartName ppName) {
+        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(ppName.getPackageName(), ppName.getPartName());
+        Node partAST = ASTManager.getInstance().getAST(declaringFile, ppName.getPartName());
         if (partAST instanceof org.eclipse.edt.compiler.core.ast.File){
         	org.eclipse.edt.compiler.core.ast.File errorFile =ASTManager.getInstance().getFileAST(declaringFile); 
         	errorFile.accept(problemRequestorFactory.getSyntaxErrorRequestor(declaringFile));//$NON-NLS-1$
         }
         
-        IPartBinding binding = environment.getNewPartBinding(packageName, caseSensitivePartName, Util.getPartType(partAST));
+        IPartBinding binding = environment.getNewPartBinding(ppName, Util.getPartType(partAST));
         if(binding.getKind() != ITypeBinding.FILE_BINDING && binding.getKind() != ITypeBinding.FUNCTION_BINDING){
         	System.out.println();
-            System.out.println("Processing Part: " + caseInsensitivePartName);	
+            System.out.println("Processing Part: " + ppName.getPartName());	
         }
         
         binding.setEnvironment(environment);
 
         DependencyInfo dependencyInfo = new DependencyInfo();
         
-        Scope scope = createPartScope(packageName, declaringFile, binding, dependencyInfo);
+        Scope scope = createPartScope(ppName.getPackageName(), declaringFile, binding, dependencyInfo);
         IProblemRequestor problemRequestor = problemRequestorFactory.getProblemRequestor(declaringFile,binding.getName());
 
 		Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
@@ -133,12 +133,12 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
         return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile, compiler), problemRequestor);
     }
     
-    public IPartBinding level02Compile(String packageName, String caseSensitivePartName) {
-        return SourcePathEntry.getInstance().compileLevel2Binding(packageName, caseSensitivePartName);
+    public IPartBinding level02Compile(PackageAndPartName ppName) {
+        return SourcePathEntry.getInstance().compileLevel2Binding(ppName);
     }
 
-    public IPartBinding level01Compile(String packageName, String caseSensitivePartName) {
-        return environment.level01Compile(packageName, caseSensitivePartName);
+    public IPartBinding level01Compile(PackageAndPartName ppName) {
+        return environment.level01Compile(ppName);
     }
 
     public IPartBinding getPartBindingFromCache(String packageName, String partName) {
@@ -146,6 +146,6 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
     }
 
     public void doAddPart(String packageName, String caseInsensitivePartName) {
-		addPart(packageName, SourcePathInfo.getInstance().getCaseSensitivePartName(packageName, caseInsensitivePartName));		
+		addPart(SourcePathInfo.getInstance().getPackageAndPartName(packageName, caseInsensitivePartName));		
 	}	
 }

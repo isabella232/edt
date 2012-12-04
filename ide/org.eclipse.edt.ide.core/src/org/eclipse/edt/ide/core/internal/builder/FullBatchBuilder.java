@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
 import org.eclipse.edt.ide.core.internal.lookup.IFileInfo;
 
@@ -30,7 +31,7 @@ public class FullBatchBuilder extends AbstractBatchBuilder {
 		
 		for (Iterator iter = fileInfo.getPartNames().iterator(); iter.hasNext();) {
 			String partName = (String) iter.next();
-			addPart(packageName, fileInfo.getCaseSensitivePartName(partName));
+			addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName)));
 		}
 	}
 	

@@ -53,6 +53,8 @@ import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 					dataOutputStream.writeInt(fileInfo.getOffsetForLine(i));
 				}
 				
+				dataOutputStream.writeUTF(fileInfo.getCaseSensitivePackageName());
+				
 				Set partNames = fileInfo.getPartNames();
 				dataOutputStream.writeInt(partNames.size());
 				

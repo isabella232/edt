@@ -13,6 +13,7 @@ package org.eclipse.edt.ide.core.internal.builder;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
 import org.eclipse.edt.ide.core.internal.dependency.IPartRequestor;
@@ -50,11 +51,11 @@ public class IncrementalProcessingQueue extends AbstractProcessingQueue{
 	}
 	
 	@Override
-	protected void addPartFromCompiledFile(String packageName, String partName){
+	protected void addPartFromCompiledFile(PackageAndPartName ppName){
 		// When incremental building, add all parts from this file
 		// We don't need to do this when batch building because the parts have already been added
-		addPart(packageName, partName);	
+		addPart(ppName);	
 		
-		super.addPartFromCompiledFile(packageName, partName);
+		super.addPartFromCompiledFile(ppName);
 	}
 }

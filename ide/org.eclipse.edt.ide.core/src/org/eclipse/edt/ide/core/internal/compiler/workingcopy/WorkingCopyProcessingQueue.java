@@ -37,6 +37,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.compiler.Binder;
 import org.eclipse.edt.ide.core.internal.compiler.Compiler;
@@ -130,27 +131,26 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 	}
 
 	@Override
-	protected IPartBinding level03Compile(String packageName, String caseSensitiveInternedPartName) {
+	protected IPartBinding level03Compile(PackageAndPartName ppName) {
 
-		String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
-		IFile declaringFile = projectInfo.getPartOrigin(packageName, caseInsensitiveInternedPartName).getEGLFile();
-		Node partAST = WorkingCopyASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
+		IFile declaringFile = projectInfo.getPartOrigin(ppName.getPackageName(), ppName.getPartName()).getEGLFile();
+		Node partAST = WorkingCopyASTManager.getInstance().getAST(declaringFile, ppName.getPartName());
 		
-		IPartBinding binding = new BindingCreator(projectEnvironment, packageName, caseSensitiveInternedPartName, partAST).getPartBinding();
+		IPartBinding binding = new BindingCreator(projectEnvironment, ppName, partAST).getPartBinding();
 		binding.setEnvironment(projectEnvironment);
 		if (binding instanceof IRPartBinding) {
 			BindingUtil.setEnvironment(((IRPartBinding)binding).getIrPart(), projectEnvironment);
 		}
       
 		AbstractDependencyInfo dependencyInfo = new WorkingCopyDependencyInfo();
-		Scope scope = createScope(packageName, declaringFile, binding, dependencyInfo);
+		Scope scope = createScope(ppName.getPackageName(), declaringFile, binding, dependencyInfo);
 		
-		IProblemRequestor problemRequestor = problemRequestorFactory.getProblemRequestor(declaringFile, caseInsensitiveInternedPartName);
+		IProblemRequestor problemRequestor = problemRequestorFactory.getProblemRequestor(declaringFile, ppName.getPartName());
 		if(problemRequestor != NullProblemRequestor.getInstance()){
 			Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
 			
 			if(binding.getKind() == ITypeBinding.FILE_BINDING){
-				validatePackageDeclaration(packageName, declaringFile, partAST, ((FileBinding)binding), problemRequestor);
+				validatePackageDeclaration(ppName.getPackageName(), declaringFile, partAST, ((FileBinding)binding), problemRequestor);
 			}
 		}else{
 			Binder.getInstance().bindPart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
@@ -164,13 +164,13 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 	}
 
 	@Override
-	protected IPartBinding level02Compile(String packageName, String caseSensitiveInternedPartName) {
-		return WorkingCopyProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project).compileLevel2Binding(packageName, caseSensitiveInternedPartName);
+	protected IPartBinding level02Compile(PackageAndPartName ppName) {
+		return WorkingCopyProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project).compileLevel2Binding(ppName);
 	}
 
 	@Override
-	protected IPartBinding level01Compile(String packageName, String caseSensitiveInternedPartName) {
-		  return projectEnvironment.level01Compile(packageName, caseSensitiveInternedPartName);
+	protected IPartBinding level01Compile(PackageAndPartName ppName) {
+		  return projectEnvironment.level01Compile(ppName);
 	}
 
 	@Override
@@ -191,7 +191,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 	}
 	
 	protected void doAddPart(String packageName, String caseInsensitiveInternedPartName) {
-		addPart(packageName, projectInfo.getCaseSensitivePartName(packageName, caseInsensitiveInternedPartName));		
+		addPart(projectInfo.getPackageAndPartName(packageName, caseInsensitiveInternedPartName));		
 	}
 
 	private void validatePackageDeclaration(String packageName, IFile declaringFile, Node partAST, FileBinding binding, IProblemRequestor problemRequestor) {

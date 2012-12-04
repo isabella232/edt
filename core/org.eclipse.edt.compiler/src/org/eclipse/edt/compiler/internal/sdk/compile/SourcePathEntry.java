@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -91,8 +92,8 @@ public class SourcePathEntry {
     	
     	if(result == null){
     		File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(packageName, partName);
-    		SourcePathEntry.getInstance().getProcessor().addPart(packageName, SourcePathInfo.getInstance().getCaseSensitivePartName(packageName, Util.getFilePartName(declaringFile)));
-    		SourcePathEntry.getInstance().getProcessor().addPart(packageName, SourcePathInfo.getInstance().getCaseSensitivePartName(packageName, partName));
+    		SourcePathEntry.getInstance().getProcessor().addPart(SourcePathInfo.getInstance().getPackageAndPartName(packageName, Util.getFilePartName(declaringFile)));
+    		SourcePathEntry.getInstance().getProcessor().addPart(SourcePathInfo.getInstance().getPackageAndPartName(packageName, partName));
     		result = getPartBinding(packageName, partName, force);
     	}
     	
@@ -102,37 +103,35 @@ public class SourcePathEntry {
     /**
      * Called when a part is on the queue but cannot be completly compiled
      */
-    public IPartBinding compileLevel2Binding(String packageName, String caseSensitivePartName) {
-    	String caseInsensitivePartName = NameUtile.getAsName(caseSensitivePartName);
-        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(packageName, caseInsensitivePartName);
+    public IPartBinding compileLevel2Binding(PackageAndPartName ppName) {
+        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(ppName.getPackageName(), ppName.getPartName());
         
-        Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitivePartName);
-        IPartBinding partBinding = declaringEnvironment.getNewPartBinding(packageName, caseSensitivePartName, Util.getPartType(partAST));
+        Node partAST = ASTManager.getInstance().getAST(declaringFile, ppName.getPartName());
+        IPartBinding partBinding = declaringEnvironment.getNewPartBinding(ppName, Util.getPartType(partAST));
         
         Scope scope;
         if(partBinding.getKind() == ITypeBinding.FILE_BINDING){
             scope = new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance());
         }else{
         	String fileName = Util.getFilePartName(declaringFile);
-			IPartBinding fileBinding = getOrCompilePartBinding(packageName, fileName, true);
+			IPartBinding fileBinding = getOrCompilePartBinding(ppName.getPackageName(), fileName, true);
 			scope = new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance());
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
         });
         partBinding.setEnvironment(declaringEnvironment);
        
-        bindingCache.put(packageName, caseInsensitivePartName, partBinding);
+        bindingCache.put(ppName.getPackageName(), ppName.getPartName(), partBinding);
         
         return partBinding;
     }
     
-    public IPartBinding getNewPartBinding(String packageName, String caseSensitivePartName, int kind) {
-    	String caseInsensitivePartName = NameUtile.getAsName(caseSensitivePartName);
-        IPartBinding partBinding = bindingCache.get(packageName, caseInsensitivePartName);
+    public IPartBinding getNewPartBinding(PackageAndPartName ppName, int kind) {
+        IPartBinding partBinding = bindingCache.get(ppName.getPackageName(), ppName.getPartName());
         if(partBinding == null || partBinding.getKind() != kind) {
-	    	partBinding = BindingUtil.createPartBinding(kind, packageName, caseSensitivePartName);
+	    	partBinding = BindingUtil.createPartBinding(kind, ppName);
 	    	partBinding.setValid(false);
-            bindingCache.put(packageName, caseInsensitivePartName, partBinding);
+            bindingCache.put(ppName.getPackageName(), ppName.getPartName(), partBinding);
         }
         else {
         	partBinding.clear();

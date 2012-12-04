@@ -226,8 +226,8 @@ public class BindingUtil {
 		return -1;
 	}
 	
-	public static IPartBinding createPartBinding(int type, String pkgName, String name) {
-		IPartBinding partBinding = primCreatePartBinding(type, pkgName, name);
+	public static IPartBinding createPartBinding(int type, PackageAndPartName ppName) {
+		IPartBinding partBinding = primCreatePartBinding(type, ppName.getCaseSensitivePackageName(), ppName.getCaseSensitivePartName());
 		if (partBinding instanceof IRPartBinding) {
 			setValid(((IRPartBinding)partBinding).getIrPart(), false);
 		}

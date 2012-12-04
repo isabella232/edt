@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.model.Util;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLBinaryProjectOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLFileOrigin;
@@ -45,12 +46,12 @@ public abstract class AbstractProjectInfo {
 		// and IFile
 		private int partType;
 		private IFile file;
-		private String caseSensitivePartName;
+		private PackageAndPartName ppName;
 		
-		public PartEntry(int partType, IFile file, String caseSensitivePartName){
+		public PartEntry(int partType, IFile file, PackageAndPartName ppName){
 			this.partType = partType;
 			this.file = file;
-			this.caseSensitivePartName = caseSensitivePartName;
+			this.ppName = ppName;
 		}
 		public IFile getFile() {
 			return file;
@@ -59,7 +60,10 @@ public abstract class AbstractProjectInfo {
 			return partType;
 		}
 		public String getCaseSensitivePartName() {
-			return caseSensitivePartName;
+			return ppName.getCaseSensitivePartName();
+		}
+		public PackageAndPartName getPackageAndPartName() {
+			return ppName;
 		}
 	}
 	
@@ -91,13 +95,13 @@ public abstract class AbstractProjectInfo {
 			}
 			return null;
 		}
-		
-		public void addPart(String partName, int partType, IFile file, String caseSensitiveInternedPartName){
+				
+		public void addPart(String partName, int partType, IFile file, PackageAndPartName ppName){
 			// map parts to files
 			if(parts == null){
 				parts = new HashMap();
 			}
-			parts.put(partName, new PartEntry(partType, file, caseSensitiveInternedPartName));		
+			parts.put(partName, new PartEntry(partType, file, ppName));		
 		}
 		
 		public String getCaseSensitivePartName(String partName) {
@@ -107,7 +111,15 @@ public abstract class AbstractProjectInfo {
 			}
 			return null;
 		}
-		
+
+		public PackageAndPartName getPackageAndPartName(String partName) {
+			PartEntry part = getPart(partName);
+			if(part != null){
+				return part.getPackageAndPartName();
+			}
+			return null;
+		}
+
 		public IFile getFile(String partName){
 			PartEntry part = getPart(partName);
 			if(part != null){
@@ -244,7 +256,8 @@ public abstract class AbstractProjectInfo {
 	    	Set partNames = fileInfo.getPartNames();
 			for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 				String partName = (String)iter.next();
-				parentResourceInfo.addPart(partName, fileInfo.getPartType(partName), file, fileInfo.getCaseSensitivePartName(partName));			
+				PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName));
+				parentResourceInfo.addPart(partName, fileInfo.getPartType(partName), file, ppName);			
 			}
     	}
 	}
@@ -382,9 +395,9 @@ public abstract class AbstractProjectInfo {
     	info.addPackage(lastDot == -1 ? packageName : packageName.substring(lastDot + 1));
     }
     
-    public void partAdded(String packageName, String partName, int partType, IFile file, String caseSensitivePartName){
+    public void partAdded(String packageName, String partName, int partType, IFile file, PackageAndPartName ppName){
     	ResourceInfo info = getPackageInfo(packageName);
-    	info.addPart(partName, partType, file, caseSensitivePartName);
+    	info.addPart(partName, partType, file, ppName);
     }
     
     public void partRemoved(String packageName, String partName, IFile file){
@@ -398,6 +411,29 @@ public abstract class AbstractProjectInfo {
 		rootResourceInfo = null;
 		initialize();
 	}
+	
+	public PackageAndPartName getPackageAndPartName(String packageName, String partName){
+		
+		if(ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isReadOnly()){ 		
+			if(ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject()).isBinary()) {
+				ResourceInfo info = getPackageInfo(packageName);
+		    	if(info != null){
+		    		PackageAndPartName ppName = info.getPackageAndPartName(partName);	    		
+		    		if (ppName != null) {
+		    			return ppName;
+		    		}
+		    	}
+			}
+			throw new UnsupportedOperationException();
+		}else{
+			ResourceInfo info = getPackageInfo(packageName);
+	    	if(info != null){
+	    		return info.getPackageAndPartName(partName);
+	    	}
+	    	return null;
+		}
+	}
+
 	
 	public String getCaseSensitivePartName(String packageName, String partName){
 		

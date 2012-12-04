@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 
 
 /**
@@ -37,14 +38,11 @@ public class BindingCreator extends DefaultASTVisitor {
 
 	private IEnvironment environment;
 	private IPartBinding partBinding;
-	private String packageName;
-	private String caseSensitiveInternedPartName;
-
-	public BindingCreator(IEnvironment environment, String packageName, String caseSensitiveInternedPartName, Node astNode){
+	PackageAndPartName ppName;
+	
+	public BindingCreator(IEnvironment environment, PackageAndPartName ppName, Node astNode){
 		this.environment = environment;
-		this.packageName = packageName;
-		this.caseSensitiveInternedPartName = caseSensitiveInternedPartName;
-		
+		this.ppName = ppName;
 		astNode.accept(this);
 	}
 	
@@ -53,58 +51,58 @@ public class BindingCreator extends DefaultASTVisitor {
 	}
 	
 	public boolean visit(File file) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.FILE_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.FILE_BINDING);
 		return false;
 	}
 	
 	public boolean visit(Record record) {
 		
-	    partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, Util.getPartType(record));
+	    partBinding = environment.getNewPartBinding(ppName, Util.getPartType(record));
 		return false;
 	}
 	
 	public boolean visit(Delegate delegate) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.DELEGATE_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.DELEGATE_BINDING);
 		return false;
 	}
 
 	public boolean visit(ExternalType extType) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.EXTERNALTYPE_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.EXTERNALTYPE_BINDING);
 		return false;
 	}
 
 	public boolean visit(Enumeration enumeration) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.ENUMERATION_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.ENUMERATION_BINDING);
 		return false;
 	}
 
 	public boolean visit(Handler handler) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.HANDLER_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.HANDLER_BINDING);
 		return false;
 	}
 
 	public boolean visit(Class eglClass) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.CLASS_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.CLASS_BINDING);
 		return false;
 	}
 
 	public boolean visit(Library library) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.LIBRARY_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.LIBRARY_BINDING);
 		return false;
 	}	
 	
 	public boolean visit(Program program) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.PROGRAM_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.PROGRAM_BINDING);
 		return false;
 	}
 	
 	public boolean visit(Service service) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.SERVICE_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.SERVICE_BINDING);
 		return false;
 	}
 		
 	public boolean visit(Interface interfaceNode) {
-		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.INTERFACE_BINDING);
+		partBinding = environment.getNewPartBinding(ppName, ITypeBinding.INTERFACE_BINDING);
 		return false;
 	}
 }

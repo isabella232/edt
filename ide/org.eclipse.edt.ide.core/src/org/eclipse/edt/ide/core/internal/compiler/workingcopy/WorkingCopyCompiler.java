@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.builder.AbstractDuplicatePartManager.DuplicatePartList;
 import org.eclipse.edt.ide.core.internal.builder.workingcopy.WorkingCopyDuplicatePartManager;
 import org.eclipse.edt.ide.core.internal.builder.workingcopy.WorkingCopyUnsavedDuplicatePartRequestor;
@@ -142,7 +143,7 @@ public class WorkingCopyCompiler {
 				if(declaringFile.equals(file)){
 					try{
 						queue.setCompileRequestor(requestor);
-						queue.addPart(internedPackageName, projectInfo.getCaseSensitivePartName(internedPackageName, internedPartName));
+						queue.addPart(projectInfo.getPackageAndPartName(internedPackageName, internedPartName));
 						queue.process();
 					}catch(CancelledException e){
 					   throw e;
@@ -215,7 +216,7 @@ public class WorkingCopyCompiler {
 					
 						IFile declaringFile = projectInfo.getPartOrigin(internedPackageName, partName).getEGLFile();
 						if(declaringFile.equals(file)){
-							queue.addPart(internedPackageName, fileInfo.getCaseSensitivePartName(partName));
+							queue.addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName)));
 						}
 					}
 					
@@ -290,6 +291,7 @@ public class WorkingCopyCompiler {
 								
 								// We only need to check the package because the parts will exist - we know this because we just parsed the file
 								if(projectInfo.hasPackage(internedPackageName)){
+									String caseSensitivePackageName = org.eclipse.edt.compiler.Util.createCaseSensitivePackageName(fileAST);
 									for (Iterator iter = fileAST.getParts().iterator(); iter.hasNext();) {
 										Part part = (Part) iter.next();
 										IPartOrigin partOrigin = projectInfo.getPartOrigin(internedPackageName, part.getIdentifier());
@@ -307,10 +309,10 @@ public class WorkingCopyCompiler {
 																part instanceof Library ||
 																part instanceof Handler||
 																part instanceof Service){
-															queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
+															queue.addPart(new PackageAndPartName(caseSensitivePackageName, part.getName().getCaseSensitiveIdentifier()));
 															break;
 														}
-												}else queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
+												}else queue.addPart(new PackageAndPartName(caseSensitivePackageName, part.getName().getCaseSensitiveIdentifier()));
 												
 											}
 										}
