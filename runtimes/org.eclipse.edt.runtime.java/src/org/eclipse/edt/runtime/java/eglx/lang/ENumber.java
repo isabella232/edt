@@ -53,8 +53,8 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return ezeCast(value, args);
 	}
 
-	public static eglx.lang.ENumber ezeCast(Object value) throws AnyException {
-		return (ENumber) EAny.ezeCast(value, "asNumber", ENumber.class, null, null);
+	public static eglx.lang.ENumber ezeCast(Object value, Integer... args) throws AnyException {
+		return (ENumber) EAny.ezeCast(value, "asNumber", ENumber.class, new Class[] { Integer[].class }, args);
 	}
 
 	public static boolean ezeIsa(Object value) {
