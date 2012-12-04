@@ -190,6 +190,11 @@ public class TypeTemplate extends JavaTemplate {
 		// no default
 	}
 
+	public void genConversionOperationOptions(Type type, Context ctx, TabbedWriter out) {
+		// Default to the type-dependent options.
+		ctx.invoke(genTypeDependentOptions, type, ctx, out);
+	}
+
 	public Integer genFieldTypeClassName(Type type, Context ctx, TabbedWriter out, Integer arrayDimensions) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		return arrayDimensions;

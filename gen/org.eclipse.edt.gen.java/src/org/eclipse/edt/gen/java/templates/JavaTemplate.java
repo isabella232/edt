@@ -43,6 +43,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genConstructors = "genConstructors";
 	public static final String genConstructorOptions = "genConstructorOptions";
 	public static final String genConversionOperation = "genConversionOperation";
+	public static final String genConversionOperationOptions = "genConversionOperationOptions";
 	public static final String genDeclaration = "genDeclaration";
 	public static final String genDeclarationExpression = "genDeclarationExpression";
 	public static final String genDeclarationExpressionField = "genDeclarationExpressionField";

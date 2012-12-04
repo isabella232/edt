@@ -38,10 +38,19 @@ public class ArrayTypeTemplate extends JavaTemplate {
 		} else {
 			out.print("org.eclipse.edt.runtime.java.eglx.lang.EList.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			out.print(", \"");
-			out.print(type.getTypeSignature());
-			out.print("\")");
+			genConversionOperationOptions(type, ctx, out);
+			out.print(')');
 		}
+	}
+	
+	public void genConversionOperationOptions(ArrayType type, Context ctx, TabbedWriter out)
+	{
+		out.print(", \"");
+		out.print(type.getTypeSignature());
+		out.print("\", ");
+		Type elementType = type.getElementType();
+		ctx.invoke(genRuntimeClassTypeName, elementType, ctx, out, TypeNameKind.EGLImplementation);
+		ctx.invoke(genConversionOperationOptions, elementType, ctx, out);
 	}
 	
 	public void genIsaExpression(Type type, Context ctx, TabbedWriter out, IsAExpression arg) {
