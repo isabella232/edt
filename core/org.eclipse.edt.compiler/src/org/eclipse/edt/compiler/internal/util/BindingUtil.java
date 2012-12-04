@@ -512,6 +512,14 @@ public class BindingUtil {
 	}
 
 	public static boolean typesAreIdentical(Type type1, Type type2) {
+		if (type1 == null && type2 == null) {
+			return true;
+		}
+		
+		if (type1 == null || type2 == null) {
+			return false;
+		}
+		
 		return type1.equals(type2);
 	}
 	

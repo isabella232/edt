@@ -307,6 +307,16 @@ public class ExpressionValidator extends AbstractASTVisitor {
 					target,
 					IProblemRequestor.FUNCTION_INVOCATION_TARGET_NOT_FUNCTION_OR_DELEGATE);
 		}
+		
+		if (target instanceof FieldAccess && ((FieldAccess)target).getPrimary() instanceof SuperExpression && element instanceof FunctionMember) {
+			if (((FunctionMember)element).isAbstract()) {
+				//Cannot invoke super.f1() if the super's function is abstract!
+				problemRequestor.acceptProblem(
+						target,
+						IProblemRequestor.CANNOT_INVOKE_ABSTRACT_FUNCTION,
+						new String[] {((FunctionMember)element).getCaseSensitiveName(), ((NamedElement)((FunctionMember)element).getContainer()).getCaseSensitiveName()});
+			}
+		}
 	}
 	
 	@Override

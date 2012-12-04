@@ -797,6 +797,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		ElementGenerator generator = context.getCompiler().getElementGeneratorFor(node);
 		if (generator != null) {
 			generator.setCurrentPart(currentPart);
+			generator.setCurrentBindingLevelPart(currentBindingLevelPart);
 			generator.setCurrentFunction(currentFunction);
 			generator.setContext(context);
 			generator.setEnvironment(env);
