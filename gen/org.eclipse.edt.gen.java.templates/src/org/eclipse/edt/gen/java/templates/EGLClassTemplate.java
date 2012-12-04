@@ -80,7 +80,11 @@ public class EGLClassTemplate extends JavaTemplate {
 	}
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
-		out.print("public class ");
+		out.print("public ");
+		if (part.isAbstract()) {
+			out.print("abstract ");
+		}
+		out.print("class ");
 		ctx.invoke(genClassName, part, ctx, out);
 		out.print(" extends ");
 		ctx.invoke(genSuperClass, part, ctx, out);
@@ -211,19 +215,15 @@ public class EGLClassTemplate extends JavaTemplate {
 		}
 		// now process the fields that don't have initializer statements
 		for (Field field : fields) {
-			if (field.getInitializerStatements() == null)
+			if (!(field instanceof ConstantField) && field.getInitializerStatements() == null)
 				ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
 		// now process the fields that do have initializer statements
 		for (Field field : fields) {
-			if (field.getInitializerStatements() != null) {
-				if (field instanceof ConstantField)
-					ctx.invoke(genInitializeMethod, part, ctx, out, field);
-				else {
-					ctx.genSmapEnd(field, out);
-					ctx.invoke(genInitializeMethod, part, ctx, out, field);
-					ctx.writeSmapLine();
-				}
+			if (!(field instanceof ConstantField) && field.getInitializerStatements() != null) {
+				ctx.genSmapEnd(field, out);
+				ctx.invoke(genInitializeMethod, part, ctx, out, field);
+				ctx.writeSmapLine();
 			}
 		}
 	}
@@ -231,6 +231,27 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
 		if (!(arg instanceof ConstantField))
 			ctx.invoke(genInitializeStatement, arg, ctx, out);
+	}
+	
+	public void genInstanceInitializer(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println();
+		out.println('{');
+		ctx.invoke(genInstanceInitializerBody, part, ctx, out);
+		out.println('}');
+	}
+	
+	public void genInstanceInitializerBody(EGLClass part, Context ctx, TabbedWriter out) {
+		// Initialize consts, then invoke ezeInitialize()
+		for (Field field : part.getFields()) {
+			ctx.invoke(genInstanceInitializer, part, ctx, out, field);
+		}
+		out.println("ezeInitialize();");
+	}
+	
+	public void genInstanceInitializer(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
+		if (arg instanceof ConstantField) {
+			ctx.invoke(genInitializeStatement, arg, ctx, out);
+		}
 	}
 
 	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out) {

@@ -63,6 +63,7 @@ import org.eclipse.edt.mof.serialization.ProxyEObject;
 
 abstract class Egl2MofPart extends Egl2MofBase {
 	public MofSerializable currentPart;
+	public Part currentBindingLevelPart;
 	protected FunctionMember currentFunction;
 	public List<Node> functionsToProcess = new ArrayList<Node>();
 	 
@@ -317,6 +318,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		if (!inMofContext) { 
 			eObjects.put(partBinding, eObj);
 			currentPart = eObj;
+			currentBindingLevelPart = (Part)node.getName().resolveType();
 		}
 		return eObj;
 	}

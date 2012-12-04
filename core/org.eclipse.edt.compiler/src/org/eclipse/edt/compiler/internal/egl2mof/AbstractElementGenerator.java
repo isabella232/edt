@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
@@ -42,7 +43,12 @@ public abstract class AbstractElementGenerator extends Egl2Mof implements Elemen
 	public void setCurrentPart(MofSerializable currentPart) {
 		this.currentPart = currentPart;
 	}
-	
+
+	@Override
+	public void setCurrentBindingLevelPart(Part part) {
+		this.currentBindingLevelPart = part;
+	}
+
 	@Override
 	public void setCurrentFunction(FunctionMember currentFunc) {
 		this.currentFunction = currentFunc;

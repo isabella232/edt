@@ -17,23 +17,7 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.javart.util.JavaAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayAccess;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Assignment;
-import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.BoxingExpression;
-import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.InvocationExpression;
-import org.eclipse.edt.mof.egl.IsAExpression;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.ReturnStatement;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
-import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class TypeTemplate extends JavaTemplate {
@@ -225,10 +209,10 @@ public class TypeTemplate extends JavaTemplate {
 				}
 				// we don't want to do a checkNullable on the temporary variables that are logically not nullable
 				if (arg2 instanceof MemberName && ((MemberName) arg2).getId().startsWith(Constants.temporaryVariableLogicallyNotNullablePrefix))
-					ctx.invoke(genExpression, arg2, ctx, out);
+					assignmentSource(arg1, arg2, ctx, out);
 				else {
 					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
-					ctx.invoke(genExpression, arg2, ctx, out);
+					assignmentSource(arg1, arg2, ctx, out);
 					out.print(")");
 				}
 				// check to see if we are unboxing RHS temporary variables (inout and out types only)
@@ -240,7 +224,7 @@ public class TypeTemplate extends JavaTemplate {
 					String temporary = ctx.nextTempName();
 					ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
 					out.print(" " + temporary + " = ");
-					ctx.invoke(genExpression, arg2, ctx, out);
+					assignmentSource(arg1, arg2, ctx, out);
 					out.println(";");
 					ctx.invoke(genExpression, arg1, ctx, out);
 					out.print(arg3 + " ");
@@ -255,7 +239,7 @@ public class TypeTemplate extends JavaTemplate {
 					ctx.invoke(genExpression, arg1, ctx, out);
 					out.print(arg3);
 					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
-					ctx.invoke(genExpression, arg2, ctx, out);
+					assignmentSource(arg1, arg2, ctx, out);
 					out.print(")");
 				} else {
 					ctx.invoke(genExpression, arg1, ctx, out);
@@ -267,17 +251,111 @@ public class TypeTemplate extends JavaTemplate {
 						out.print(") ");
 					}
 					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
-					ctx.invoke(genExpression, arg2, ctx, out);
+					assignmentSource(arg1, arg2, ctx, out);
 					out.print(")");
 				}
 			}
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
-			ctx.invoke(genExpression, arg2, ctx, out);
+			assignmentSource(arg1, arg2, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if (CommonUtilities.isBoxedOutputTemp(arg2, ctx))
 				out.print(".ezeUnbox()");
+		}
+	}
+	
+	public static void assignmentSource( Expression lhs, Expression rhs, Context ctx, TabbedWriter out )
+	{
+		// Generate something special for the RHS of an assignment when:
+		//  1) assigning bytes(x) to bytes(y), and x < y
+		//  2) assigning bytes to bytes(x)
+		//  3) assigning 'any as bytes(x)' to bytes(x)
+		//  4) assigning 'any as bytes' to bytes
+		Type lhsType = lhs.getType();
+		Type rhsType = rhs.getType();
+		if ( rhsType != null && TypeUtils.getTypeKind( rhsType ) == TypeUtils.TypeKind_BYTES
+				&& lhsType != null && TypeUtils.getTypeKind( lhsType ) == TypeUtils.TypeKind_BYTES )
+		{
+			if ( ( lhsType instanceof SequenceType && rhsType instanceof SequenceType
+						&& ((SequenceType)rhsType).getLength() < ((SequenceType)lhsType).getLength() )
+					|| ( rhs instanceof AsExpression && ((AsExpression)rhs).getObjectExpr().getType() instanceof ParameterizableType
+							&& TypeUtils.getTypeKind( ((AsExpression)rhs).getObjectExpr().getType() ) == TypeUtils.TypeKind_BYTES ) )
+			{
+				assignShorterBytesToLongerBytes( rhs, rhsType, lhs, lhsType, ctx, out );
+			}
+			else if ( rhs instanceof AsExpression 
+					&& TypeUtils.getTypeKind( ((AsExpression)rhs).getObjectExpr().getType() ) == TypeUtils.TypeKind_ANY )
+			{
+				int lhsLength = lhsType instanceof SequenceType ? ((SequenceType)lhsType).getLength() : 0;
+
+				ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
+				out.print( ".ezeAssignFromAny(" );
+				if ( lhsLength > 0 )
+				{
+					if ( lhs instanceof MemberName 
+							&& ctx.get( "generating declaration of " + ((MemberName)lhs).getMember() + ((MemberName)lhs).getMember().hashCode() ) != null )
+					{
+						out.print( "new byte[" + lhsLength + ']' );
+					}
+					else
+					{
+						ctx.invoke( genExpression, lhs, ctx, out );
+					}
+					out.print( ", " );
+					out.print( lhsLength );
+				}
+				else
+				{
+					out.print( "null" );
+				}
+				out.print( ", " );
+				ctx.invoke( genExpression, rhs, ctx, out );
+				out.print( ')' );
+			}
+			else
+			{
+				ctx.invoke( genExpression, rhs, ctx, out );
+			}
+		}
+		else
+		{
+			ctx.invoke( genExpression, rhs, ctx, out );
+		}
+	}
+
+	static private void assignShorterBytesToLongerBytes( Expression rhs, Type rhsType, Expression lhs, Type lhsType, Context ctx, TabbedWriter out )
+	{
+		int lhsLength = ((SequenceType)lhsType).getLength();
+		if ( rhs instanceof BytesLiteral )
+		{
+			StringBuilder value = new StringBuilder( ((BytesLiteral)rhs).getValue() );
+			while ( value.length() / 2 < lhsLength )
+			{
+				value.append( "00" );
+			}
+			BytesLiteral newRHS = ctx.getFactory().createBytesLiteral();
+			newRHS.setValue( value.toString() );
+			ctx.invoke( genExpression, newRHS, ctx, out );
+		}
+		else
+		{
+			ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
+			out.print( ".ezeAssignToLonger(" );
+			if ( lhs instanceof MemberName 
+					&& ctx.get( "generating declaration of " + ((MemberName)lhs).getMember() + ((MemberName)lhs).getMember().hashCode() ) != null )
+			{
+				out.print( "new byte[" + lhsLength + ']' );
+			}
+			else
+			{
+				ctx.invoke( genExpression, lhs, ctx, out );
+			}
+			out.print( ", " );
+			out.print( lhsLength );
+			out.print( ", " );
+			ctx.invoke( genExpression, rhs, ctx, out );
+			out.print( ')' );
 		}
 	}
 

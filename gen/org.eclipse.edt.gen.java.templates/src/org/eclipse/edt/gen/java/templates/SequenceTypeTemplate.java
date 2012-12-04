@@ -13,8 +13,7 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.SequenceType;
-import org.eclipse.edt.mof.egl.SubstringAccess;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
