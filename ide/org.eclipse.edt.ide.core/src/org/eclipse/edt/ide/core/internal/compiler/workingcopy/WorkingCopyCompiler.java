@@ -415,7 +415,8 @@ public class WorkingCopyCompiler {
 		
 		for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 			String partName = (String) iter.next();
-			projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), file, newFileInfo.getCaseSensitivePartName(partName));
+			PackageAndPartName ppName = new PackageAndPartName(newFileInfo.getCaseSensitivePackageName(), newFileInfo.getCaseSensitivePartName(partName));
+			projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), file, ppName);
 		}
 		
 		WorkingCopyFileInfoManager.getInstance().addFileInfo(project, file.getProjectRelativePath(), newFileInfo);
@@ -437,7 +438,8 @@ public class WorkingCopyCompiler {
 					for (Iterator partIter = partNames.iterator(); partIter.hasNext();) {
 						String thisPartName = (String) partIter.next();
 						if (thisPartName.equalsIgnoreCase(dupeFileInfo.partName)){
-							projectInfo.workingCopyPartAdded(dupeFileInfo.packageName, dupeFileInfo.partName, fileInfo.getPartType(dupeFileInfo.partName), dupeFileInfo.file, fileInfo.getCaseSensitivePartName(thisPartName));
+							PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(thisPartName));
+							projectInfo.workingCopyPartAdded(dupeFileInfo.packageName, dupeFileInfo.partName, fileInfo.getPartType(dupeFileInfo.partName), dupeFileInfo.file, ppName);
 							break;
 						}
 					}
@@ -475,17 +477,20 @@ public class WorkingCopyCompiler {
 			FileInfoDifferencer differencer = new FileInfoDifferencer(new IFileInfoDifferenceNotificationRequestor(){
 
 				public void partAdded(String partName) {
-					projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), newFileInfo.getCaseSensitivePartName(partName)); 						
+					PackageAndPartName ppName = new PackageAndPartName(newFileInfo.getCaseSensitivePackageName(), newFileInfo.getCaseSensitivePartName(partName));
+					projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), ppName); 						
 				}
 
 				public void partRemoved(String partName) {
-					projectInfo.workingCopyPartRemoved(packageName, partName, cachedFileInfo.getPartType(partName), (IFile)eglFile.getResource(), cachedFileInfo.getCaseSensitivePartName(partName));
+					PackageAndPartName ppName = new PackageAndPartName(cachedFileInfo.getCaseSensitivePackageName(), cachedFileInfo.getCaseSensitivePartName(partName));
+					projectInfo.workingCopyPartRemoved(packageName, partName, cachedFileInfo.getPartType(partName), (IFile)eglFile.getResource(), ppName);
 					
 					locateDuplicateFile(duplicateFilesToProcess, project, packageName, partName, cachedFileInfo.getPartType(partName), (IFile)eglFile.getResource());
 				}
 
 				public void partChanged(String partName) {
-					projectInfo.workingCopyPartChanged(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), newFileInfo.getCaseSensitivePartName(partName));	
+					PackageAndPartName ppName = new PackageAndPartName(newFileInfo.getCaseSensitivePackageName(), newFileInfo.getCaseSensitivePartName(partName));
+					projectInfo.workingCopyPartChanged(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), ppName);	
 				}});
 			
 			differencer.findDifferences(cachedFileInfo, newFileInfo);
@@ -494,7 +499,8 @@ public class WorkingCopyCompiler {
 			
 			for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 				String partName = (String) iter.next();
-				projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), newFileInfo.getCaseSensitivePartName(partName));
+				PackageAndPartName ppName = new PackageAndPartName(newFileInfo.getCaseSensitivePackageName(), newFileInfo.getCaseSensitivePartName(partName));
+				projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), ppName);
 			}
 		}
 		
