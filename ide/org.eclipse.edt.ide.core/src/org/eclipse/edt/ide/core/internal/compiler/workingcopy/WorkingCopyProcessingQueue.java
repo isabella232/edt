@@ -191,7 +191,8 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 	}
 	
 	protected void doAddPart(String packageName, String caseInsensitiveInternedPartName) {
-		addPart(projectInfo.getPackageAndPartName(packageName, caseInsensitiveInternedPartName));		
+		PackageAndPartName ppName = projectInfo.getPackageAndPartName(packageName, caseInsensitiveInternedPartName);
+		addPart(new PackageAndPartName(ppName.getCaseSensitivePackageName(), ppName.getCaseSensitivePartName(), packageName));		
 	}
 
 	private void validatePackageDeclaration(String packageName, IFile declaringFile, Node partAST, FileBinding binding, IProblemRequestor problemRequestor) {

@@ -143,7 +143,8 @@ public class WorkingCopyCompiler {
 				if(declaringFile.equals(file)){
 					try{
 						queue.setCompileRequestor(requestor);
-						queue.addPart(projectInfo.getPackageAndPartName(internedPackageName, internedPartName));
+						PackageAndPartName ppName = projectInfo.getPackageAndPartName(internedPackageName, internedPartName);
+						queue.addPart(new PackageAndPartName(ppName.getCaseSensitivePackageName(), ppName.getCaseSensitivePartName(), internedPackageName));
 						queue.process();
 					}catch(CancelledException e){
 					   throw e;
@@ -216,7 +217,7 @@ public class WorkingCopyCompiler {
 					
 						IFile declaringFile = projectInfo.getPartOrigin(internedPackageName, partName).getEGLFile();
 						if(declaringFile.equals(file)){
-							queue.addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName)));
+							queue.addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName), packageName));
 						}
 					}
 					
@@ -309,10 +310,10 @@ public class WorkingCopyCompiler {
 																part instanceof Library ||
 																part instanceof Handler||
 																part instanceof Service){
-															queue.addPart(new PackageAndPartName(caseSensitivePackageName, part.getName().getCaseSensitiveIdentifier()));
+															queue.addPart(new PackageAndPartName(caseSensitivePackageName, part.getName().getCaseSensitiveIdentifier(), internedPackageName));
 															break;
 														}
-												}else queue.addPart(new PackageAndPartName(caseSensitivePackageName, part.getName().getCaseSensitiveIdentifier()));
+												}else queue.addPart(new PackageAndPartName(caseSensitivePackageName, part.getName().getCaseSensitiveIdentifier(), internedPackageName));
 												
 											}
 										}

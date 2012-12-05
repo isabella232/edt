@@ -31,7 +31,7 @@ public class FullBatchBuilder extends AbstractBatchBuilder {
 		
 		for (Iterator iter = fileInfo.getPartNames().iterator(); iter.hasNext();) {
 			String partName = (String) iter.next();
-			addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName)));
+			addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName), packageName));
 		}
 	}
 	

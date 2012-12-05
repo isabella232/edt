@@ -136,7 +136,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 			
 			// don't add the file part again
 			if(!NameUtile.equals(nextName, caseInsensitiveInternedString)){
-				addPartFromCompiledFile(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(nextName)));
+				addPartFromCompiledFile(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(nextName), packageName));
 			}
 		}
 	}
@@ -281,6 +281,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 	
 	@Override
 	protected void doAddPart(String packageName, String caseInsensitivePartName) {
-		addPart(projectInfo.getPackageAndPartName(packageName, caseInsensitivePartName));		
+		PackageAndPartName ppName = projectInfo.getPackageAndPartName(packageName, caseInsensitivePartName);
+		addPart(new PackageAndPartName(ppName.getCaseSensitivePackageName(), ppName.getCaseSensitivePartName(), packageName));		
 	}
 }

@@ -32,9 +32,16 @@ public class PackageAndPartName {
 
 	public PackageAndPartName(String caseSensitivePackageName,
 			String caseSensitivePartName) {
+		this(caseSensitivePackageName, caseSensitivePartName, null);
+	}
+
+	public PackageAndPartName(String caseSensitivePackageName,
+			String caseSensitivePartName,
+			String caseInsensitivePackagName) {
 		super();
 		this.caseSensitivePackageName = caseSensitivePackageName;
 		this.caseSensitivePartName = caseSensitivePartName;
+		this.packageName = caseInsensitivePackagName;
 	}
 
 	

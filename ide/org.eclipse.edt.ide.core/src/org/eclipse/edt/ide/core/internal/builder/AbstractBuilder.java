@@ -360,7 +360,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 			Set partNames = fileInfo.getPartNames();
 			for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 				String partName = (String) iter.next();
-				PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName));
+				PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName), packageName);
 				projectInfo.partAdded(packageName, partName, fileInfo.getPartType(partName), addedFile, ppName);
 				recordStructuralChange(packageName, partName, fileInfo.getPartType(partName));
 		    	addPart(ppName);
@@ -474,7 +474,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	        
 		    IFileInfoDifferenceNotificationRequestor requestor = new IFileInfoDifferenceNotificationRequestor(){
 		        	public void partAdded(String partName) {
-		        		PackageAndPartName ppName = new PackageAndPartName(newInfo.getCaseSensitivePackageName(),  newInfo.getCaseSensitivePartName(partName));
+		        		PackageAndPartName ppName = new PackageAndPartName(newInfo.getCaseSensitivePackageName(),  newInfo.getCaseSensitivePartName(partName), packageName);
 		        		projectInfo.partAdded(packageName, partName, newInfo.getPartType(partName), changedFile, ppName);
 		        		recordStructuralChange(packageName, partName, newInfo.getPartType(partName));
 		        		addPart(ppName);
@@ -512,7 +512,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		            		// For a file part, always add all other parts that are now still in  the file
 		        			for (Iterator iter = newInfo.getPartNames().iterator(); iter.hasNext();) {
 								String nextName = (String) iter.next();
-								addPart(new PackageAndPartName(newInfo.getCaseSensitivePackageName(), newInfo.getCaseSensitivePartName(nextName)));	
+								addPart(new PackageAndPartName(newInfo.getCaseSensitivePackageName(), newInfo.getCaseSensitivePartName(nextName), packageName));	
 							}
 		            	}else{
 		            		BinaryFileManager.getInstance().removePart(packageName,partName,builder.getProject());
@@ -532,7 +532,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		            }
 		            
 		            public void partChanged(String partName){
-		            	addPart(new PackageAndPartName(newInfo.getCaseSensitivePackageName(), newInfo.getCaseSensitivePartName(partName)));
+		            	addPart(new PackageAndPartName(newInfo.getCaseSensitivePackageName(), newInfo.getCaseSensitivePartName(partName), packageName));
 		            	
 		            	if(newInfo.getPartType(partName) == ITypeBinding.FILE_BINDING){
 		            		// Do nothing, all parts related to this file part will be added in the processing queue

@@ -48,7 +48,7 @@ public class CleanBatchBuilder extends AbstractBatchBuilder {
 			Set partNames = info.getPartNames();
 			for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 				String partName = (String) iter.next();
-				PackageAndPartName ppName = new PackageAndPartName(info.getCaseSensitivePackageName(), info.getCaseSensitivePartName(partName));
+				PackageAndPartName ppName = new PackageAndPartName(info.getCaseSensitivePackageName(), info.getCaseSensitivePartName(partName), packageName);
 				projectInfo.partAdded(packageName, partName, info.getPartType(partName), file, ppName);
 				addPart(ppName);
 			}
