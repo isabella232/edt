@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.compiler.sdk.compile.BuildPathException;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.impl.Bootstrap;
@@ -101,14 +102,16 @@ public class EGLC {
 			    for (int j = 0; j < files.length;j++){
 			    	File file = files[j];
 				    org.eclipse.edt.compiler.core.ast.File fileAST = ASTManager.getInstance().getFileAST(file);
-		        	String packageName = createPackageName(fileAST);
-				    processor.addPart(packageName, Util.getCaseSensitiveFilePartName(file));
-				    SourcePathInfo.getInstance().addPart(packageName, Util.getFilePartName(file), ITypeBinding.FILE_BINDING, file, Util.getCaseSensitiveFilePartName(file));
+		        	String packageName = Util.createCaseSensitivePackageName(fileAST);
+				    PackageAndPartName ppName = new PackageAndPartName(packageName,  Util.getCaseSensitiveFilePartName(file));
+				    processor.addPart(ppName);
+				    SourcePathInfo.getInstance().addPart(ppName, ITypeBinding.FILE_BINDING, file);
 				    
 		        	for (Iterator iter = fileAST.getParts().iterator(); iter.hasNext();) {
 						Part part = (Part) iter.next();
-			            processor.addPart(packageName, part.getName().getCaseSensitiveIdentifier());
-			            SourcePathInfo.getInstance().addPart(packageName, part.getName().getIdentifier(), Util.getPartType(part), file, part.getName().getCaseSensitiveIdentifier());
+					    ppName = new PackageAndPartName(packageName, part.getName().getCaseSensitiveIdentifier());
+			            processor.addPart(ppName);
+			            SourcePathInfo.getInstance().addPart(ppName, Util.getPartType(part), file);
 		        	}
 			    }
 				    
@@ -216,16 +219,6 @@ public class EGLC {
 //			}
 		}
 	}
-
-	
-	private static String createPackageName(org.eclipse.edt.compiler.core.ast.File fileAST) {
-
-	    if(fileAST.hasPackageDeclaration()){
-	        return fileAST.getPackageDeclaration().getName().getNameComponents();
-	    }
-	    
-	    return NameUtile.getAsName("");
-    }
 
 	 private static File resolveSourcePathLocation(File sourcePathEntryLocation) {
 		 try{

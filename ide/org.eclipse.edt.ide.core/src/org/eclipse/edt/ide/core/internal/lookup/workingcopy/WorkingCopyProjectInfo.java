@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.lookup.AbstractProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.IFileInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
@@ -40,13 +41,13 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		private int partType;
 		private IFile file;
 		private int entryType;
-		private String caseSensitivePartName;
+		private PackageAndPartName ppName;
 		
-		public WorkingCopyProjectInfoEntry(int partType, IFile file, int entryType, String caseSensitivePartName){
+		public WorkingCopyProjectInfoEntry(int partType, IFile file, int entryType, PackageAndPartName ppName){
 			this.partType = partType;
 			this.file = file;
 			this.entryType = entryType;
-			this.caseSensitivePartName = caseSensitivePartName;
+			this.ppName = ppName;
 		}
 	}
 	
@@ -169,6 +170,15 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 	
 	@Override
 	public String getCaseSensitivePartName(String packageName, String partName){
+		PackageAndPartName ppName = getPackageAndPartName(packageName, partName);
+		if (ppName != null) {
+			return ppName.getCaseSensitivePartName();
+		}
+		return null;
+	}
+
+	@Override
+	public PackageAndPartName getPackageAndPartName(String packageName, String partName){
 		// First check the working copy project info
 		HashMap<String, WorkingCopyProjectInfoEntry> partMap = packageMap.get(packageName);
 		
@@ -176,13 +186,13 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 			WorkingCopyProjectInfoEntry entry = partMap.get(partName);
 			
 			if(entry != null){
-				return entry.caseSensitivePartName;
+				return entry.ppName;
 			}
 		}
 		
 		// Now check the main project info
-		String  caseSensitivePartName = super.getCaseSensitivePartName(packageName, partName);
-		if(caseSensitivePartName == null) {
+		PackageAndPartName  ppName = super.getPackageAndPartName(packageName, partName);
+		if(ppName == null) {
 			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
     		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
     		for(IBuildPathEntry pathEntry : pathEntries) {
@@ -190,25 +200,25 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
     				try {
     					org.eclipse.edt.mof.egl.Part part = pathEntry.findPart(packageName, partName);
     					if(part != null) {
-    						caseSensitivePartName = part.getCaseSensitiveName();
+    						ppName = new PackageAndPartName(part.getCaseSensitivePackageName(), part.getCaseSensitiveName());
     					} else  {
     						int index = partName.lastIndexOf(".");
     						if(index > -1) {	
     							String fileExtension = partName.substring(index+1);
     							if("egl".equalsIgnoreCase(fileExtension)) {
-    								caseSensitivePartName = partName;
+    	    						ppName = new PackageAndPartName(packageName, partName);
     							}
     						}
     					}
-    					if(caseSensitivePartName != null)
-    					     return caseSensitivePartName;
+    					if(ppName != null)
+    					     return ppName;
     				} catch(PartNotFoundException pnf) {
     					//swallow down exceptions
     				}
     			} //if judging for PathEntry
     		} //for Loop
 		}
-		return caseSensitivePartName;
+		return ppName;
 	}
 
 	@Override
@@ -216,15 +226,15 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		return WorkingCopyProjectBuildPathManager.getInstance().getProjectBuildPath(project).getSourceLocations();
 	}
 
-	public void workingCopyPartAdded(String packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
-		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.ADDITION, caseSensitivePartName));
+	public void workingCopyPartAdded(String packageName, String partName, int partType, IFile file, PackageAndPartName ppName) {
+		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.ADDITION, ppName));
 	}
 
-	public void workingCopyPartRemoved(String packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
-		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.REMOVAL, caseSensitivePartName));		
+	public void workingCopyPartRemoved(String packageName, String partName, int partType, IFile file, PackageAndPartName ppName) {
+		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.REMOVAL, ppName));		
 	}
 
-	public void workingCopyPartChanged(String packageName, String partName, int partType, IFile file, String caseSensitivePartName) {
-		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.CHANGE, caseSensitivePartName));
+	public void workingCopyPartChanged(String packageName, String partName, int partType, IFile file, PackageAndPartName ppName) {
+		recordEntry(packageName, partName, new WorkingCopyProjectInfoEntry(partType, file, WorkingCopyProjectInfoEntry.CHANGE, ppName));
 	}
 }

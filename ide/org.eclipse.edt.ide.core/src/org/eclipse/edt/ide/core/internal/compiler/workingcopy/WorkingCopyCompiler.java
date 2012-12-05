@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.builder.AbstractDuplicatePartManager.DuplicatePartList;
 import org.eclipse.edt.ide.core.internal.builder.workingcopy.WorkingCopyDuplicatePartManager;
 import org.eclipse.edt.ide.core.internal.builder.workingcopy.WorkingCopyUnsavedDuplicatePartRequestor;
@@ -142,7 +143,7 @@ public class WorkingCopyCompiler {
 				if(declaringFile.equals(file)){
 					try{
 						queue.setCompileRequestor(requestor);
-						queue.addPart(internedPackageName, projectInfo.getCaseSensitivePartName(internedPackageName, internedPartName));
+						queue.addPart(projectInfo.getPackageAndPartName(internedPackageName, internedPartName));
 						queue.process();
 					}catch(CancelledException e){
 					   throw e;
@@ -215,7 +216,7 @@ public class WorkingCopyCompiler {
 					
 						IFile declaringFile = projectInfo.getPartOrigin(internedPackageName, partName).getEGLFile();
 						if(declaringFile.equals(file)){
-							queue.addPart(internedPackageName, fileInfo.getCaseSensitivePartName(partName));
+							queue.addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName)));
 						}
 					}
 					
@@ -290,6 +291,7 @@ public class WorkingCopyCompiler {
 								
 								// We only need to check the package because the parts will exist - we know this because we just parsed the file
 								if(projectInfo.hasPackage(internedPackageName)){
+									String caseSensitivePackageName = org.eclipse.edt.compiler.Util.createCaseSensitivePackageName(fileAST);
 									for (Iterator iter = fileAST.getParts().iterator(); iter.hasNext();) {
 										Part part = (Part) iter.next();
 										IPartOrigin partOrigin = projectInfo.getPartOrigin(internedPackageName, part.getIdentifier());
@@ -307,10 +309,10 @@ public class WorkingCopyCompiler {
 																part instanceof Library ||
 																part instanceof Handler||
 																part instanceof Service){
-															queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
+															queue.addPart(new PackageAndPartName(caseSensitivePackageName, part.getName().getCaseSensitiveIdentifier()));
 															break;
 														}
-												}else queue.addPart(internedPackageName, part.getName().getCaseSensitiveIdentifier());
+												}else queue.addPart(new PackageAndPartName(caseSensitivePackageName, part.getName().getCaseSensitiveIdentifier()));
 												
 											}
 										}
@@ -413,7 +415,8 @@ public class WorkingCopyCompiler {
 		
 		for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 			String partName = (String) iter.next();
-			projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), file, newFileInfo.getCaseSensitivePartName(partName));
+			PackageAndPartName ppName = new PackageAndPartName(newFileInfo.getCaseSensitivePackageName(), newFileInfo.getCaseSensitivePartName(partName));
+			projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), file, ppName);
 		}
 		
 		WorkingCopyFileInfoManager.getInstance().addFileInfo(project, file.getProjectRelativePath(), newFileInfo);
@@ -435,7 +438,8 @@ public class WorkingCopyCompiler {
 					for (Iterator partIter = partNames.iterator(); partIter.hasNext();) {
 						String thisPartName = (String) partIter.next();
 						if (thisPartName.equalsIgnoreCase(dupeFileInfo.partName)){
-							projectInfo.workingCopyPartAdded(dupeFileInfo.packageName, dupeFileInfo.partName, fileInfo.getPartType(dupeFileInfo.partName), dupeFileInfo.file, fileInfo.getCaseSensitivePartName(thisPartName));
+							PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(thisPartName));
+							projectInfo.workingCopyPartAdded(dupeFileInfo.packageName, dupeFileInfo.partName, fileInfo.getPartType(dupeFileInfo.partName), dupeFileInfo.file, ppName);
 							break;
 						}
 					}
@@ -473,17 +477,20 @@ public class WorkingCopyCompiler {
 			FileInfoDifferencer differencer = new FileInfoDifferencer(new IFileInfoDifferenceNotificationRequestor(){
 
 				public void partAdded(String partName) {
-					projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), newFileInfo.getCaseSensitivePartName(partName)); 						
+					PackageAndPartName ppName = new PackageAndPartName(newFileInfo.getCaseSensitivePackageName(), newFileInfo.getCaseSensitivePartName(partName));
+					projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), ppName); 						
 				}
 
 				public void partRemoved(String partName) {
-					projectInfo.workingCopyPartRemoved(packageName, partName, cachedFileInfo.getPartType(partName), (IFile)eglFile.getResource(), cachedFileInfo.getCaseSensitivePartName(partName));
+					PackageAndPartName ppName = new PackageAndPartName(cachedFileInfo.getCaseSensitivePackageName(), cachedFileInfo.getCaseSensitivePartName(partName));
+					projectInfo.workingCopyPartRemoved(packageName, partName, cachedFileInfo.getPartType(partName), (IFile)eglFile.getResource(), ppName);
 					
 					locateDuplicateFile(duplicateFilesToProcess, project, packageName, partName, cachedFileInfo.getPartType(partName), (IFile)eglFile.getResource());
 				}
 
 				public void partChanged(String partName) {
-					projectInfo.workingCopyPartChanged(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), newFileInfo.getCaseSensitivePartName(partName));	
+					PackageAndPartName ppName = new PackageAndPartName(newFileInfo.getCaseSensitivePackageName(), newFileInfo.getCaseSensitivePartName(partName));
+					projectInfo.workingCopyPartChanged(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), ppName);	
 				}});
 			
 			differencer.findDifferences(cachedFileInfo, newFileInfo);
@@ -492,7 +499,8 @@ public class WorkingCopyCompiler {
 			
 			for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 				String partName = (String) iter.next();
-				projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), newFileInfo.getCaseSensitivePartName(partName));
+				PackageAndPartName ppName = new PackageAndPartName(newFileInfo.getCaseSensitivePackageName(), newFileInfo.getCaseSensitivePartName(partName));
+				projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), (IFile)eglFile.getResource(), ppName);
 			}
 		}
 		

@@ -19,12 +19,14 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public interface ElementGenerator {
 	void setEnvironment(IEnvironment env);
 	void setContext(Context context);
+	void setCurrentBindingLevelPart(Part part);
 	void setCurrentPart(MofSerializable currentPart);
 	void setCurrentFunction(FunctionMember currentFunc);
 	Element generate(Node node, Map<Object, EObject> bindingToElementMap);

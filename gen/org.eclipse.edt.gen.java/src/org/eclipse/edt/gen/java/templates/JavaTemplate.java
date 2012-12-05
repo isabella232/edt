@@ -43,6 +43,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genConstructors = "genConstructors";
 	public static final String genConstructorOptions = "genConstructorOptions";
 	public static final String genConversionOperation = "genConversionOperation";
+	public static final String genConversionOperationOptions = "genConversionOperationOptions";
 	public static final String genDeclaration = "genDeclaration";
 	public static final String genDeclarationExpression = "genDeclarationExpression";
 	public static final String genDeclarationExpressionField = "genDeclarationExpressionField";
@@ -66,6 +67,8 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genInitializeMethodBody = "genInitializeMethodBody";
 	public static final String genInitializeMethods = "genInitializeMethods";
 	public static final String genInitializeStatement = "genInitializeStatement";
+	public static final String genInstanceInitializer = "genInstanceInitializer";
+	public static final String genInstanceInitializerBody = "genInstanceInitializerBody";
 	public static final String genInstantiation = "genInstantiation";
 	public static final String genInvocation = "genInvocation";
 	public static final String genInvocationArgumentBoxing = "genInvocationArgumentBoxing";

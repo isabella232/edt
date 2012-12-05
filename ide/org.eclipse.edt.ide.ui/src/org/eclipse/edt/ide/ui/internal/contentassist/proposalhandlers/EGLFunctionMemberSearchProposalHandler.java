@@ -87,11 +87,17 @@ public class EGLFunctionMemberSearchProposalHandler extends EGLAbstractProposalH
 		if(functionContainerPart != null) {
 			org.eclipse.edt.mof.egl.Part part = (org.eclipse.edt.mof.egl.Part)((Part) functionContainerPart).getName().resolveType();
 			List<Function> functions = BindingUtil.getAllFunctions(part);
+			List<String> sigs = new ArrayList<String>();
 			for (Function function : functions) {	
 				if (function.getAccessKind() == AccessKind.ACC_PRIVATE && function.getContainer() != part) {
 					continue;
 				}
 				
+				String sig = getFunctionSignature(function);
+				if (sigs.contains(sig)) {
+					continue;
+				}
+				sigs.add(sig);
 				if (!function.isStatic() && inStaticFunction()) {
 					continue;
 				}

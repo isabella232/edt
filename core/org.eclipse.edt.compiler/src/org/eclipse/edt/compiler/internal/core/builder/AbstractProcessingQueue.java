@@ -20,6 +20,7 @@ import java.util.Stack;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -60,13 +61,11 @@ public abstract class AbstractProcessingQueue {
     public static final boolean DEBUG = false;
     
     public class ProcessingUnit  {
-        public String packageName;
-        public String caseSensitivePartName;
-       
-        ProcessingUnit(String packageName, String caseSensitivePartName) {
+    	PackageAndPartName ppName;
+    	
+        ProcessingUnit(PackageAndPartName ppName) {
             super();
-            this.packageName = packageName;
-            this.caseSensitivePartName = caseSensitivePartName; 
+            this.ppName = ppName;
         }
     }
     
@@ -100,8 +99,8 @@ public abstract class AbstractProcessingQueue {
         this.compilerOptions = compilerOptions;
     }
     
-    public void addPart(String packageName, String caseSensitivePartName) {
-    	pendingUnits.put(new ProcessingUnitKey(packageName, NameUtile.getAsName(caseSensitivePartName)), new ProcessingUnit(packageName, caseSensitivePartName));
+    public void addPart(PackageAndPartName ppName) {
+    	pendingUnits.put(new ProcessingUnitKey(ppName.getPackageName(), ppName.getPartName()), new ProcessingUnit(ppName));
     }
     
    public boolean isPending(String packageName, String caseInsensitivePartName) {
@@ -158,23 +157,24 @@ public abstract class AbstractProcessingQueue {
     
     private IPartBinding process(ProcessingUnit processingUnit, int compileLevel) {
     	IPartBinding result = null;
-    	String name = NameUtile.getAsName(processingUnit.caseSensitivePartName);
-        processingStack.add(new ProcessingUnitKey(processingUnit.packageName, name));
-        unitsBeingProcessedToCompileLevel.put(new ProcessingUnitKey(processingUnit.packageName, name), new Integer(compileLevel));
+    	String name = processingUnit.ppName.getPartName();
+    	String pkg = processingUnit.ppName.getPackageName();
+        processingStack.add(new ProcessingUnitKey(pkg, name));
+        unitsBeingProcessedToCompileLevel.put(new ProcessingUnitKey(pkg, name), new Integer(compileLevel));
         
         try{
             switch(compileLevel){
             	case LEVEL_THREE: 
-            	    		pendingUnits.remove(new ProcessingUnitKey(processingUnit.packageName, name));
-                       		result = level03Compile(processingUnit.packageName, processingUnit.caseSensitivePartName);
+            	    		pendingUnits.remove(new ProcessingUnitKey(pkg, name));
+                       		result = level03Compile(processingUnit.ppName);
                        		updateProgress();
-                       		processedUnits.add(new ProcessingUnitKey(processingUnit.packageName, name));
+                       		processedUnits.add(new ProcessingUnitKey(pkg, name));
                             break;
             	case LEVEL_TWO:
-            	    		result = level02Compile(processingUnit.packageName, processingUnit.caseSensitivePartName);
+            	    		result = level02Compile(processingUnit.ppName);
             	    		break;
             	case LEVEL_ONE:
-            	    		result = level01Compile(processingUnit.packageName, processingUnit.caseSensitivePartName);
+            	    		result = level01Compile(processingUnit.ppName);
             	    		break;
             }
         }catch(CircularBuildRequestException e){
@@ -187,16 +187,16 @@ public abstract class AbstractProcessingQueue {
             throw new BuildException(e);            
         }
         
-        unitsBeingProcessedToCompileLevel.remove(new ProcessingUnitKey(processingUnit.packageName, name));
+        unitsBeingProcessedToCompileLevel.remove(new ProcessingUnitKey(pkg, name));
         processingStack.remove(processingStack.size() - 1);
         return result;
     }
     
-    protected abstract IPartBinding level03Compile(String packageName, String caseSensitivePartName);
+    protected abstract IPartBinding level03Compile(PackageAndPartName ppName);
 	
-    protected abstract IPartBinding level02Compile(String packageName, String caseSensitivePartName);
+    protected abstract IPartBinding level02Compile(PackageAndPartName ppName);
     
-    protected abstract IPartBinding level01Compile(String packageName, String caseSensitivePartName);
+    protected abstract IPartBinding level01Compile(PackageAndPartName ppName);
     
     protected abstract IPartBinding getPartBindingFromCache(String packageName, String partName);
     

@@ -52,6 +52,7 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
@@ -60,6 +61,7 @@ import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.PatternType;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.utils.NameUtile;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
@@ -637,5 +639,17 @@ public abstract class EGLAbstractProposalHandler {
 			throw new RuntimeException(e);
 		}
 		return offset-1;
+	}
+	
+	protected String getFunctionSignature(Function function) {
+		StringBuffer buff = new StringBuffer();
+		buff.append(NameUtile.getAsName(function.getCaseSensitiveName()));
+		buff.append ("(");
+		for (FunctionParameter parm : function.getParameters()) {
+			buff.append(parm.getType().getTypeSignature());
+			buff.append(", ");
+		}
+		buff.append(")");
+		return buff.toString();
 	}
 }

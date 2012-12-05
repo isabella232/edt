@@ -445,7 +445,7 @@ handler DataGrid type RUIWidget{
                     UtilLib.utilNative.appendHTMLString("<span class='EglRuiDataGridCell EglRuiDataGridCheckBox' style='");
                     if (ui.getWidgetOrientation() == "RTL")
             			UtilLib.utilNative.appendHTMLString("float: right; ");
-            		end;
+            		end
             		UtilLib.utilNative.appendHTMLString("padding:" + cellPadding + 
             					"px; padding-bottom:" +(cellPadding + 5000) + 
             					"px; margin-bottom:" +(0 - cellPadding - 5000) + 
@@ -1308,7 +1308,7 @@ handler DataGrid type RUIWidget{
 		ui.setWidgetOrientation(widgetOrientation);
 		if (grid.innerHTML != null)
 			render();
-		end;
+		end
 	end
 	
 

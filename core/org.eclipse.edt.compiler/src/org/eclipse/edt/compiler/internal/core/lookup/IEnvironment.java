@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 
 /**
  * @author winghong
@@ -21,7 +22,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 public interface IEnvironment {
 
     IPartBinding getPartBinding(String packageName, String partName);
-    IPartBinding getNewPartBinding(String packageName, String partName, int kind);
+    IPartBinding getNewPartBinding(PackageAndPartName ppName, int kind);
     
     boolean hasPackage(String packageName);
     IPackageBinding getRootPackage();

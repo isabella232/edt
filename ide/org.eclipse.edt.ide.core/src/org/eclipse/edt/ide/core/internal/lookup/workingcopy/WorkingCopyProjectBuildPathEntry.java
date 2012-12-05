@@ -32,6 +32,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTManager;
@@ -65,8 +66,8 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 			return WorkingCopyProjectBuildPathEntry.this.getPartBinding(packageName, partName, true);
         }
 		@Override
-		public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
-			return WorkingCopyProjectBuildPathEntry.this.getNewPartBinding(packageName, caseSensitiveInternedPartName, kind);
+		public IPartBinding getNewPartBinding(PackageAndPartName ppName, int kind) {
+			return WorkingCopyProjectBuildPathEntry.this.getNewPartBinding(ppName, kind);
 		}
 		@Override
 		public boolean hasPackage(String packageName) {
@@ -127,7 +128,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         				// We are in a binary project with source. If the request is for the file binding, do not try to read it from disk (it wont be there)
         				if (Util.getFilePartName(origin.getEGLFile())== partName) {
         					try{
-        						return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+        						return compileLevel2Binding(projectInfo.getPackageAndPartName(packageName, partName));
         					}catch(CircularBuildRequestException e){
                     			// Remove this part from the cache, so that it is not used incorrectly in the future
                     			removePartBindingInvalid(packageName, partName);
@@ -169,7 +170,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	            		
 	            		if( shouldCompiled) {
 	            			try{
-	            				return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+	            				return compileLevel2Binding(projectInfo.getPackageAndPartName(packageName, partName));
 	            			}catch(CircularBuildRequestException e){
 	                			// Remove this part from the cache, so that it is not used incorrectly in the future
 	                			removePartBindingInvalid(packageName, partName);
@@ -189,12 +190,11 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         return result;
     }
         
-    public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
-    	String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
-        IPartBinding partBinding = bindingCache.get(packageName, caseInsensitiveInternedPartName);
+    public IPartBinding getNewPartBinding(PackageAndPartName ppName, int kind) {
+        IPartBinding partBinding = bindingCache.get(ppName.getPackageName(), ppName.getPartName());
         if(partBinding == null || partBinding.getKind() != kind) {
-            partBinding = BindingUtil.createPartBinding(kind, packageName, caseSensitiveInternedPartName);
-            bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
+            partBinding = BindingUtil.createPartBinding(kind, ppName);
+            bindingCache.put(ppName.getPackageName(), ppName.getPartName(), partBinding);
         }
         else {
         	partBinding.clear();
@@ -272,19 +272,18 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 //		return null;
 //	}
    
-	public IPartBinding compileLevel2Binding(String packageName, String caseSensitiveInternedPartName) {
-		String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
-		IFile declaringFile = projectInfo.getPartOrigin(packageName, caseInsensitiveInternedPartName).getEGLFile();
+	public IPartBinding compileLevel2Binding(PackageAndPartName ppName) {
+		IFile declaringFile = projectInfo.getPartOrigin(ppName.getPackageName(), ppName.getPartName()).getEGLFile();
         
-        Node partAST = WorkingCopyASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
-        IPartBinding partBinding = new BindingCreator(declaringEnvironment, packageName, caseSensitiveInternedPartName, partAST).getPartBinding();
+        Node partAST = WorkingCopyASTManager.getInstance().getAST(declaringFile, ppName.getPartName());
+        IPartBinding partBinding = new BindingCreator(declaringEnvironment, ppName, partAST).getPartBinding();
         
         Scope scope;
         if(partBinding.getKind() == ITypeBinding.FILE_BINDING){
             scope = new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance());
         }else{
         	String fileName = Util.getFilePartName(declaringFile);
-			IPartBinding fileBinding = getPartBinding(packageName, fileName, true);
+			IPartBinding fileBinding = getPartBinding(ppName.getPackageName(), fileName, true);
 			if(!fileBinding.isValid()){
 				scope = new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile));
 			}else{
@@ -297,7 +296,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 			BindingUtil.setEnvironment(((IRPartBinding)partBinding).getIrPart(), declaringEnvironment);
 		}
        
-        bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
+        bindingCache.put(ppName.getPackageName(), ppName.getPartName(), partBinding);
 		WorkingCopyASTManager.getInstance().reportNestedFunctions(partAST,declaringFile);
 		
         return partBinding;
@@ -396,7 +395,9 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
     		return fileBinding;
     	}
     	
-        fileBinding = (FileBinding)new BindingCreator(declaringEnvironment, packageName, caseInsensitiveInternedFileName, fileAST).getPartBinding();
+    	PackageAndPartName ppName = new PackageAndPartName(org.eclipse.edt.compiler.Util.createCaseSensitivePackageName(fileAST), caseInsensitiveInternedFileName);
+    	
+        fileBinding = (FileBinding)new BindingCreator(declaringEnvironment, ppName, fileAST).getPartBinding();
  
         fileBinding.setEnvironment(declaringEnvironment);
 

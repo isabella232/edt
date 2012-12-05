@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.eglx.lang;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -122,24 +123,398 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 	 */
 	public static boolean ezeIsa( Object object, String signature ) 
 	{
-		return (object instanceof EList && ((EList) object).ezeUnbox() != null) && ((EList)object).signature.equals( signature );
+		return object instanceof EList && ((EList)object).ezeUnbox() != null && ((EList)object).signature.equals( signature );
 	}
 
-	public static List ezeCast( Object value, String signature ) throws TypeCastException
+	public static List ezeCast( Object value, String signature, Object... args ) throws TypeCastException
 	{
-		if ( ezeIsa( value, signature ) )
+		if ( value instanceof EList )
 		{
-			return (List)((EList)value).ezeUnbox();
+			if ( ((EList)value).signature.equals( signature ) )
+			{
+				return copy( (List)((EList)value).ezeUnbox(), signature );
+			}
+			else
+			{
+				value = ((EList)value).ezeUnbox();
+			}
 		}
-		else
+		
+		if ( value == null )
+		{
+			return null;
+		}
+		else if ( value instanceof List )
+		{
+			List list = (List)value;
+			if ( signatureMatches( list, signature ) )
+			{
+				return copy( list, signature );
+			}
+			else if ( args.length > 0 && args[ 0 ] == EAny.class )
+			{
+				return copyAndBoxElements( list, signature );
+			}
+			else if ( signature.startsWith( "eglx.lang.EList<" ) )
+			{
+				return copyAndCastElements( list, signature, args );
+			}
+		}
+		
+		TypeCastException tcx = new TypeCastException();
+		tcx.castToName = signature;
+		Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny)value).ezeUnbox() : value;
+		tcx.actualTypeName = unboxed.getClass().getName();
+		throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName,
+				tcx.castToName );
+	}
+	
+	private static boolean signatureMatches( List list, String signature )
+	{
+		if ( signature.startsWith( "eglx.lang.EList<" ) )
+		{
+			if ( list.isEmpty() )
+			{
+				return true;
+			}
+			else
+			{
+				String elementSig = signature.substring( 16, signature.length() - 1 );
+				return signatureMatches( list.get( 0 ), elementSig );
+			}
+		}
+		
+		return false;
+	}
+	
+	private static boolean signatureMatches( Object obj, String signature )
+	{
+		if ( obj == null )
+		{
+			// TODO When the object is null, we don't know its type.  Assume it's a match. 
+			return true;
+		}
+		else if ( obj instanceof eglx.lang.EAny && signature.equals( "eglx.lang.EAny" ) )
+		{
+			return true;
+		}
+		else if ( obj instanceof List )
+		{
+			return signatureMatches( (List)obj, signature );
+		}
+		else if ( obj instanceof Integer )
+		{
+			return signature.equals( "eglx.lang.EInt" );
+		}
+		else if ( obj instanceof Long )
+		{
+			return signature.equals( "eglx.lang.EBigint" );
+		}
+		else if ( obj instanceof Short )
+		{
+			return signature.equals( "eglx.lang.ESmallint" );
+		}
+		else if ( obj instanceof Double )
+		{
+			return signature.equals( "eglx.lang.EFloat" );
+		}
+		else if ( obj instanceof Float )
+		{
+			return signature.equals( "eglx.lang.ESmallfloat" );
+		}
+		else if ( obj instanceof BigDecimal )
+		{
+			if ( !signature.startsWith( "eglx.lang.EDecimal" ) )
+			{
+				return false;
+			}
+
+			// If the signature includes precision and decimals, check them.
+			if ( signature.length() == 18 )
+			{
+				return true;
+			}
+			else
+			{
+				//TODO The BigDecimal may not have the actual characteristics of the type.
+				// A BigDecimal with precision=4 and scale=0 might be used for a decimal(10,5).
+				int precision = ((BigDecimal)obj).precision();
+				int decimals = ((BigDecimal)obj).scale();
+				
+				// Extract the precision and decimals from the signature string.
+				// It's eglx.lang.EDecimal(x:y), never just eglx.lang.EDecimal(x).
+				int precStart = 19;
+				int precEnd = signature.indexOf( ':' );
+				int decStart = precEnd + 1;
+				int decEnd = signature.length() - 1;
+				int sigPrecision = Integer.parseInt( signature.substring( precStart, precEnd ) );
+				int sigDecimals = Integer.parseInt( signature.substring( decStart, decEnd ) );
+				
+				return sigPrecision >= precision && sigDecimals >= decimals;
+			}
+		}
+		else if ( obj instanceof Boolean )
+		{
+			return signature.equals( "eglx.lang.EBoolean" );
+		}
+		else if ( obj instanceof byte[] )
+		{
+			if ( !signature.startsWith( "eglx.lang.EBytes" ) )
+			{
+				return false;
+			}
+
+			// If there's a length in the signature, check it.
+			if ( signature.length() == 16 )
+			{
+				return true;
+			}
+			else
+			{
+				if ( obj instanceof EBytes )
+				{
+					obj = ((EBytes)obj).ezeUnbox();
+				}
+
+				int closeParenIndex = 18;
+				while ( signature.charAt( closeParenIndex ) != ')' )
+				{
+					closeParenIndex++;
+				}				
+				int length = Integer.parseInt( signature.substring( 17, closeParenIndex ) );
+				return length == ((byte[])obj).length;
+			}
+		}
+		else if ( obj instanceof String )
+		{
+			if ( !signature.startsWith( "eglx.lang.EString" ) )
+			{
+				return false;
+			}
+
+			// If there's a length in the signature, check it.
+			if ( signature.length() == 17 )
+			{
+				return true;
+			}
+			else
+			{
+				int closeParenIndex = 19;
+				while ( signature.charAt( closeParenIndex ) != ')' )
+				{
+					closeParenIndex++;
+				}				
+				int length = Integer.parseInt( signature.substring( 18, closeParenIndex ) );
+				return length >= ((String)obj).length();
+			}
+		}
+		else if ( obj instanceof EDictionary )
+		{
+			return signature.equals( "eglx.lang.EDictionary" );
+		}
+		else if ( obj instanceof Calendar )
+		{
+			//TODO When obj is a Calendar, we can't tell if it's a date, time, or timestamp.
+			return signature.equals( "eglx.lang.EDate" ) || signature.equals( "eglx.lang.ETime" ) || signature.startsWith( "eglx.lang.ETimestamp" );
+		}
+
+		return signature.equals( obj.getClass().getName() );
+	}
+	
+	private static <T> List<T> copy( List<T> list, String signature )
+	{
+		try
+		{
+			List<T> copy = new ArrayList<T>( list.size() );
+			for ( T element : list )
+			{
+				if ( element instanceof List )
+				{
+					String elementSig = signature.substring( 16, signature.length() - 1 );
+					copy.add( (T)copy( (List)element, elementSig ) );
+				}
+				else if ( element instanceof Cloneable )
+				{
+					// Our runtime and generated classes are Cloneable.
+					copy.add( (T)element.getClass().getMethod( "clone" ).invoke( element ) );
+				}
+				else
+				{
+					// This works for null, Strings, Numbers, etc.
+					copy.add( element );
+				}
+			}
+			return copy;
+		}
+		catch ( Exception ex )
 		{
 			TypeCastException tcx = new TypeCastException();
 			tcx.castToName = signature;
-			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny)value).ezeUnbox() : value;
-			tcx.actualTypeName = unboxed.getClass().getName();
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName,
+			tcx.actualTypeName = list.getClass().getName();
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, list, tcx.actualTypeName,
 					tcx.castToName );
 		}
+	}
+
+	private static List copyAndBoxElements( List list, String signature )
+	{
+		try
+		{
+			List copy = new ArrayList( list.size() );
+			for ( Object element : list )
+			{
+				Object box = null;
+				if ( element instanceof List )
+				{
+					String elementSig = signature.substring( 16, signature.length() - 1 );
+					box = boxElement( copy( (List)element, elementSig ) );
+				}
+				else if ( element instanceof Cloneable )
+				{
+					// Our runtime and generated classes are Cloneable.
+					box = boxElement( element.getClass().getMethod( "clone" ).invoke( element ) );
+				}
+				else
+				{
+					// This works for null, Strings, Numbers, etc.
+					box = boxElement( element );
+				}
+				copy.add( box );
+			}
+			return copy;
+		}
+		catch ( Exception ex )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.castToName = signature;
+			tcx.actualTypeName = list.getClass().getName();
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, list, tcx.actualTypeName,
+					tcx.castToName );
+		}
+	}
+	
+	private static Object boxElement( Object obj )
+	{
+		if ( obj instanceof String )
+		{
+			return EString.ezeBox( (String)obj );
+		}
+		else if ( obj instanceof Integer )
+		{
+			return EInt.ezeBox( (Integer)obj );
+		}
+		else if ( obj instanceof Long )
+		{
+			return EBigint.ezeBox( (Long)obj );
+		}
+		else if ( obj instanceof Short )
+		{
+			return ESmallint.ezeBox( (Short)obj );
+		}
+		else if ( obj instanceof Double )
+		{
+			return EFloat.ezeBox( (Double)obj );
+		}
+		else if ( obj instanceof Float )
+		{
+			return ESmallfloat.ezeBox( (Float)obj );
+		}
+		else if ( obj instanceof BigDecimal )
+		{
+			return EDecimal.ezeBox( (BigDecimal)obj );
+		}
+		else if ( obj instanceof Boolean )
+		{
+			return EBoolean.ezeBox( (Boolean)obj );
+		}
+		else if ( obj instanceof byte[] )
+		{
+			return EBytes.ezeBox( (byte[])obj );
+		}
+		else if ( obj instanceof List )
+		{
+			return EList.ezeBox( (List)obj, "eglx.lang.EList<eglx.lang.EAny>" );
+		}
+		else if ( obj instanceof Calendar )
+		{
+			//TODO When obj is a Calendar, we can't tell if it's a date, time, or timestamp.
+			return EDate.ezeBox( (Calendar)obj );
+		}
+		else
+		{
+			return obj;
+		}
+	}
+	
+	private static List copyAndCastElements( List list, String signature, Object... args )
+	{
+		if ( args.length > 0 && args[ 0 ] instanceof Class )
+		{
+			// The first value in the varargs array is a Class for the type we're casting
+			// to (EBoolean, EInt, etc.).  The rest of the varargs array depends on the type.
+			Class toClass = (Class)args[ 0 ];
+
+			List result = new ArrayList( list.size() );			
+			try
+			{
+				// We're going to call an ezeCast method to convert each element.
+				// There are four varieties: no additional args, one Integer arg, two Integer 
+				// args, or (for casting to EList) a String and some number of Objects.
+				if ( args.length == 1 )
+				{
+					Method castMethod = toClass.getDeclaredMethod( "ezeCast", Object.class );
+					for ( Object element : list )
+					{
+						result.add( castMethod.invoke( null, element ) );
+					}
+					return result;
+				}
+				else if ( args.length == 2 && args[ 1 ] instanceof Integer )
+				{
+					Method castMethod = toClass.getDeclaredMethod( "ezeCast", Object.class, Integer[].class );
+					Integer[] castArg = new Integer[ 1 ];
+					castArg[ 0 ] = (Integer)args[ 1 ];
+					for ( Object element : list )
+					{
+						result.add( castMethod.invoke( null, element, castArg ) );
+					}
+					return result;
+				}
+				else if ( args.length == 3 && args[ 1 ] instanceof Integer && args[ 2 ] instanceof Integer )
+				{
+					Method castMethod = toClass.getDeclaredMethod( "ezeCast", Object.class, Integer[].class );
+					Integer[] castArgs = new Integer[ 2 ];
+					castArgs[ 0 ] = (Integer)args[ 1 ];
+					castArgs[ 1 ] = (Integer)args[ 2 ];
+					for ( Object element : list )
+					{
+						result.add( castMethod.invoke( null, element, castArgs ) );
+					}
+					return result;
+				}
+				else if ( args.length > 1 && toClass == EList.class )
+				{
+					String elementSig = (String)args[ 1 ];
+					Object[] castArgs = new Object[ args.length - 2 ];
+					System.arraycopy( args, 2, castArgs, 0, castArgs.length );
+					for ( Object element : list )
+					{
+						result.add( ezeCast( element, elementSig, castArgs ) );
+					}
+					return result;
+				}
+			}
+			catch ( Exception ex )
+			{
+				// Ignore it and throw an exception below.
+			}
+		}
+		
+		TypeCastException tcx = new TypeCastException();
+		tcx.castToName = signature;
+		tcx.actualTypeName = list.getClass().getName();
+		throw tcx.fillInMessage( Message.CONVERSION_ERROR, list, tcx.actualTypeName,
+				tcx.castToName );
 	}
 	
 	@Override

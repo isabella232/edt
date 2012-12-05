@@ -148,10 +148,14 @@ public abstract class AbstractFileInfoCreator {
 					
 					if(packageDeclaration != null){
 						headerStartOffset = packageDeclaration.getOffset();
-					}else if(importDeclarations.size() > 0){
+						result.setCaseSensitivePackageName(packageDeclaration.getName().getCanonicalName());
+					}else {						
+						result.setCaseSensitivePackageName("");
+						if(importDeclarations.size() > 0){
 						headerStartOffset = ((ImportDeclaration)importDeclarations.get(0)).getOffset();
-					}else{
-						headerStartOffset = 0;
+						}else{
+							headerStartOffset = 0;
+						}
 					}
 					
 					if(importDeclarations.size() > 0){

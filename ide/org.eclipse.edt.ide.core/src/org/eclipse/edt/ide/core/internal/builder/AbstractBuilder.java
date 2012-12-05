@@ -32,6 +32,7 @@ import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.binding.BinaryFileManager;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraph;
 import org.eclipse.edt.ide.core.internal.dependency.DependencyGraphManager;
@@ -89,8 +90,8 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		ProjectEnvironmentManager.getInstance().endBuilding(this);
 	}
 
-	protected void addPart(String packageName, String caseSensitiveInternedPartName) {
-		processingQueue.addPart(packageName, caseSensitiveInternedPartName);
+	protected void addPart(PackageAndPartName ppName) {
+		processingQueue.addPart(ppName);
 	}
 
 	protected void processParts() {
@@ -359,9 +360,10 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 			Set partNames = fileInfo.getPartNames();
 			for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 				String partName = (String) iter.next();
-				projectInfo.partAdded(packageName, partName, fileInfo.getPartType(partName), addedFile, fileInfo.getCaseSensitivePartName(partName));
+				PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName));
+				projectInfo.partAdded(packageName, partName, fileInfo.getPartType(partName), addedFile, ppName);
 				recordStructuralChange(packageName, partName, fileInfo.getPartType(partName));
-		    	addPart(packageName, fileInfo.getCaseSensitivePartName(partName));
+		    	addPart(ppName);
 		    	
 		    	if(fileInfo.getPartType(partName) == ITypeBinding.FUNCTION_BINDING){
 		    		addDependents(partName);
@@ -472,9 +474,10 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 	        
 		    IFileInfoDifferenceNotificationRequestor requestor = new IFileInfoDifferenceNotificationRequestor(){
 		        	public void partAdded(String partName) {
-		        		projectInfo.partAdded(packageName, partName, newInfo.getPartType(partName), changedFile, newInfo.getCaseSensitivePartName(partName));
+		        		PackageAndPartName ppName = new PackageAndPartName(newInfo.getCaseSensitivePackageName(),  newInfo.getCaseSensitivePartName(partName));
+		        		projectInfo.partAdded(packageName, partName, newInfo.getPartType(partName), changedFile, ppName);
 		        		recordStructuralChange(packageName, partName, newInfo.getPartType(partName));
-		        		addPart(packageName, newInfo.getCaseSensitivePartName(partName));
+		        		addPart(ppName);
 		        		
 		        		
 		        		if(newInfo.getPartType(partName) == ITypeBinding.FILE_BINDING){
@@ -509,7 +512,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		            		// For a file part, always add all other parts that are now still in  the file
 		        			for (Iterator iter = newInfo.getPartNames().iterator(); iter.hasNext();) {
 								String nextName = (String) iter.next();
-								addPart(packageName, newInfo.getCaseSensitivePartName(nextName));	
+								addPart(new PackageAndPartName(newInfo.getCaseSensitivePackageName(), newInfo.getCaseSensitivePartName(nextName)));	
 							}
 		            	}else{
 		            		BinaryFileManager.getInstance().removePart(packageName,partName,builder.getProject());
@@ -529,7 +532,7 @@ public abstract class AbstractBuilder implements IProcessorRequestor {
 		            }
 		            
 		            public void partChanged(String partName){
-		            	addPart(packageName, newInfo.getCaseSensitivePartName(partName));
+		            	addPart(new PackageAndPartName(newInfo.getCaseSensitivePackageName(), newInfo.getCaseSensitivePartName(partName)));
 		            	
 		            	if(newInfo.getPartType(partName) == ITypeBinding.FILE_BINDING){
 		            		// Do nothing, all parts related to this file part will be added in the processing queue

@@ -226,8 +226,8 @@ public class BindingUtil {
 		return -1;
 	}
 	
-	public static IPartBinding createPartBinding(int type, String pkgName, String name) {
-		IPartBinding partBinding = primCreatePartBinding(type, pkgName, name);
+	public static IPartBinding createPartBinding(int type, PackageAndPartName ppName) {
+		IPartBinding partBinding = primCreatePartBinding(type, ppName.getCaseSensitivePackageName(), ppName.getCaseSensitivePartName());
 		if (partBinding instanceof IRPartBinding) {
 			setValid(((IRPartBinding)partBinding).getIrPart(), false);
 		}
@@ -512,6 +512,14 @@ public class BindingUtil {
 	}
 
 	public static boolean typesAreIdentical(Type type1, Type type2) {
+		if (type1 == null && type2 == null) {
+			return true;
+		}
+		
+		if (type1 == null || type2 == null) {
+			return false;
+		}
+		
 		return type1.equals(type2);
 	}
 	

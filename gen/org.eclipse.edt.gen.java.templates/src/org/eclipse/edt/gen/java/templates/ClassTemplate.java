@@ -21,14 +21,13 @@ import org.eclipse.edt.mof.egl.StructPart;
 public class ClassTemplate extends JavaTemplate
 {
 	public void preGenPartImport(Class type, Context ctx) {
-		CommonUtilities.processImport( "java.io.Serializable", ctx );
-		ctx.invokeSuper(this, preGen, type, ctx);
+		CommonUtilities.processImport("java.io.Serializable", ctx);
+		ctx.invokeSuper(this, preGenPartImport, type, ctx);
 	}
 	
 	public void genSuperClass(Class type, Context ctx, TabbedWriter out) {
 		for (StructPart superType : type.getSuperTypes()) {
-			if ( superType instanceof Class )
-			{
+			if (superType instanceof Class) {
 				ctx.invoke(genClassName, superType, ctx, out);
 				return;
 			}
@@ -36,12 +35,8 @@ public class ClassTemplate extends JavaTemplate
 		out.print("Object");
 	}
 
-	public void genConstructor(Class type, Context ctx, TabbedWriter out) 
-	{
-		out.println();
-		out.println('{');
-		out.println("ezeInitialize();");
-		out.println('}');
+	public void genConstructor(Class type, Context ctx, TabbedWriter out) {
+		ctx.invoke(genInstanceInitializer, type, ctx, out);
 	}
 
 	public void genConstructor(Class type, Context ctx, TabbedWriter out, Constructor constructor) {
@@ -59,5 +54,13 @@ public class ClassTemplate extends JavaTemplate
 			out.print(", ");
 			out.print(interfaceList);
 		}
+	}
+	
+	public void genInitializeMethodBody(Class part, Context ctx, TabbedWriter out) {
+		// invoke super.ezeInitialize() if there is one.
+		if (part.getSuperTypes().size() > 0 && part.getSuperTypes().get(0) instanceof Class) {
+			out.println("super.ezeInitialize();");
+		}
+		ctx.invokeSuper(this, genInitializeMethodBody, part, ctx, out);
 	}
 }

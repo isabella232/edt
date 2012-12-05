@@ -35,6 +35,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
@@ -58,8 +59,8 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 			return ProjectBuildPathEntry.this.getPartBinding(packageName, partName, true);
         }
 		@Override
-		public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
-			return ProjectBuildPathEntry.this.getNewPartBinding(packageName, caseSensitiveInternedPartName, kind);
+		public IPartBinding getNewPartBinding(PackageAndPartName ppName, int kind) {
+			return ProjectBuildPathEntry.this.getNewPartBinding(ppName, kind);
 		}
 		@Override
 		public boolean hasPackage(String packageName) {
@@ -170,7 +171,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
 	            		if(NameUtile.equals(Util.getFilePartName(declaringFile), partName) || projectInfo.hasPart(packageName,partName) == ITypeBinding.FUNCTION_BINDING){
 	            			// File and function parts are not stored on disk, create a new one
 	            			try{
-	            				return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+	            				return compileLevel2Binding(projectInfo.getPackageAndPartName(packageName, partName));
 	            			}catch(CircularBuildRequestException e){
             					// Remove this part from the cache, so that it is not used incorrectly at a different time
 	            				removePartBindingInvalid(packageName, partName);
@@ -191,12 +192,11 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         return result;
     }
     
-    public IPartBinding getNewPartBinding(String packageName, String caseSensitiveInternedPartName, int kind) {
-    	String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
-        IPartBinding partBinding = bindingCache.get(packageName, caseInsensitiveInternedPartName);
+    public IPartBinding getNewPartBinding(PackageAndPartName ppName, int kind) {
+        IPartBinding partBinding = bindingCache.get(ppName.getPackageName(), ppName.getPartName());
         if(partBinding == null || partBinding.getKind() != kind) {
-            partBinding = BindingUtil.createPartBinding(kind, packageName, caseSensitiveInternedPartName);
-            bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
+            partBinding = BindingUtil.createPartBinding(kind, ppName);
+            bindingCache.put(ppName.getPackageName(), ppName.getPartName(), partBinding);
         }
         else {
         	partBinding.clear();
@@ -225,12 +225,11 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
     /**
      * Called when a part is on the queue but cannot be completly compiled
      */
-    public IPartBinding compileLevel2Binding(String packageName, String caseSensitiveInternedPartName) {
-    	String caseInsensitiveInternedPartName = NameUtile.getAsName(caseSensitiveInternedPartName);
-        IFile declaringFile = projectInfo.getPartOrigin(packageName, caseInsensitiveInternedPartName).getEGLFile();
+    public IPartBinding compileLevel2Binding(PackageAndPartName ppName) {
+        IFile declaringFile = projectInfo.getPartOrigin(ppName.getPackageName(), ppName.getPartName()).getEGLFile();
         
-        Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
-        IPartBinding partBinding = new BindingCreator(declaringEnvironment, packageName, caseSensitiveInternedPartName, partAST).getPartBinding();
+        Node partAST = ASTManager.getInstance().getAST(declaringFile, ppName.getPartName());
+        IPartBinding partBinding = new BindingCreator(declaringEnvironment, ppName, partAST).getPartBinding();
  
         partBinding.setEnvironment(declaringEnvironment);
 
@@ -240,7 +239,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
             scope = new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance());
         }else{
         	String fileName = Util.getFilePartName(declaringFile);
-			IPartBinding fileBinding = getPartBinding(packageName, fileName, true);
+			IPartBinding fileBinding = getPartBinding(ppName.getPackageName(), fileName, true);
 			if(!fileBinding.isValid()){
 				scope = new FileASTScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, ASTManager.getInstance().getFileAST(declaringFile));
 			}else{
@@ -249,7 +248,7 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         }
         BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, DefaultCompilerOptions.getInstance());
                
-        bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
+        bindingCache.put(ppName.getPackageName(), ppName.getPartName(), partBinding);
         
         return partBinding;
     }
@@ -316,8 +315,8 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
     		return fileBinding;
     	}
     	
-        
-        fileBinding = (FileBinding)new BindingCreator(declaringEnvironment, packageName, caseInsensitiveInternedFileName, fileAST).getPartBinding();
+        PackageAndPartName ppName = new PackageAndPartName(org.eclipse.edt.compiler.Util.createCaseSensitivePackageName(fileAST), caseInsensitiveInternedFileName);
+        fileBinding = (FileBinding)new BindingCreator(declaringEnvironment, ppName, fileAST).getPartBinding();
  
         fileBinding.setEnvironment(declaringEnvironment);
 

@@ -55,6 +55,7 @@ public class FileInfo implements IFileInfo {
 	
 	private LinkedHashMap partEntries = new LinkedHashMap();
 	private int[] lineOffsets = null;
+	private String caseSensitivePackageName;
 	
 	public void addPart(String partName, int partType, int sourceStart, int sourceLength, String caseSensitivePartName, byte[] md5Key){
 		partEntries.put(partName, new FileInfoEntry(partType, new SourceRange(sourceStart, sourceLength), caseSensitivePartName, md5Key));
@@ -62,6 +63,14 @@ public class FileInfo implements IFileInfo {
 	
 	public void setLineOffsets(int[] offsets) {
 		this.lineOffsets = offsets;		
+	}
+	
+	public void setCaseSensitivePackageName(String pkg) {
+		this.caseSensitivePackageName = pkg;
+	}
+	
+	public String getCaseSensitivePackageName() {
+		return caseSensitivePackageName;
 	}
 	
 	public ISourceRange getPartRange(String partName) {

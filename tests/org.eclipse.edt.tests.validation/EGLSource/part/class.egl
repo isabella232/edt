@@ -20,3 +20,63 @@ end
 
 class me extends me //1
 end
+
+
+//Test function overrides
+
+class class1
+
+	function f1(p1 int) 
+	end
+
+	function f1(p1 string) 
+	end
+
+end
+
+class class2 extends class1
+	function f2(p1 string) returns (class1)
+	   return null;
+	end
+
+
+	function f2(p1 int) returns (class1)
+	   return null;
+	end
+
+end
+
+class class3 extends class2
+	private function f1(p1 int)  //1Cannot reduce the visiblity
+	end
+	
+	function f1(p1 string) returns(int) //1The return type is incompatible
+	end
+	
+	private function f2(p1 string) returns (class1) //1Cannot reduce the visiblity
+	end
+	
+	function f2(p1 int)  //1The return type is incompatible
+	end
+end
+
+
+
+abstract class classa
+
+
+	abstract function f1();
+	
+	function f2()
+	end
+	
+end
+
+class classb extends classa
+
+	function f1()
+		super.f1();  //1
+		super.f2(); //0
+	end
+	
+end

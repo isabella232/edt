@@ -12,15 +12,16 @@
 package org.eclipse.edt.compiler.internal.sdk.compile;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 
 public interface IProcessor {
 
 	void doAddPart(String packageName, String caseInsensitivePartName);
 	IPartBinding getPartBindingFromCache(String packageName, String partName);
 	public boolean hasExceededMaxLoop();
-	void addPart(String packageName, String caseSensitivePartName);
+	void addPart(PackageAndPartName ppName);
 	IPartBinding requestCompilationFor(String packageName, String caseInsensitivePartName, boolean force);
-	IPartBinding level01Compile(String packageName, String caseSensitivePartName);
-	IPartBinding level02Compile(String packageName, String caseSensitivePartName);
-    IPartBinding level03Compile(String packageName, String caseSensitivePartName);
+	IPartBinding level01Compile(PackageAndPartName ppName);
+	IPartBinding level02Compile(PackageAndPartName ppName);
+    IPartBinding level03Compile(PackageAndPartName ppName);
 }

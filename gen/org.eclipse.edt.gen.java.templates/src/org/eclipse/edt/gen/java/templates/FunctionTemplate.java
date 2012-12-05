@@ -28,7 +28,9 @@ import org.eclipse.edt.mof.egl.ReturnStatement;
 public class FunctionTemplate extends JavaTemplate {
 
 	public void preGen(Function function, Context ctx) {
-		ctx.invoke(preGen, function.getStatementBlock(), ctx);
+		if (!function.isAbstract()) {
+			ctx.invoke(preGen, function.getStatementBlock(), ctx);
+		}
 	}
 
 	public void genFunctionHeader(Function function, Context ctx, TabbedWriter out) {
@@ -41,7 +43,14 @@ public class FunctionTemplate extends JavaTemplate {
 		ctx.invoke(genName, function, ctx, out);
 		out.print("(");
 		ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out);
-		out.println(") {");
+		out.print(")");
+		
+		if (function.isAbstract()) {
+			out.println(';');
+		}
+		else {
+			out.println('{');
+		}
 	}
 
 	public void genFunctionBody(Function function, Context ctx, TabbedWriter out) {
@@ -77,13 +86,19 @@ public class FunctionTemplate extends JavaTemplate {
 
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
-		CommonUtilities.generateSmapExtension(function, ctx);
+		if (!function.isAbstract()) {
+			CommonUtilities.generateSmapExtension(function, ctx);
+		}
 		ctx.invoke(genFunctionHeader, function, ctx, out);
-		ctx.invoke(genFunctionBody, function, ctx, out);
-		// we always write out smap data for the final brace, just in case there is no return statement
-		ctx.genSmapEnd(function, out);
-		// write out the method ending brace
-		out.println("}");
+		
+		if (!function.isAbstract()) {
+			ctx.invoke(genFunctionBody, function, ctx, out);
+			
+			// we always write out smap data for the final brace, just in case there is no return statement
+			ctx.genSmapEnd(function, out);
+			// write out the method ending brace
+			out.println('}');
+		}
 	}
 
 	public void genAccessor(Function function, Context ctx, TabbedWriter out) {

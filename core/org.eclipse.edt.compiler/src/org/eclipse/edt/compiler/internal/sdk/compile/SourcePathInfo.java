@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.eclipse.edt.compiler.internal.sdk.utils.Util;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.sdk.compile.BuildPathException;
@@ -37,12 +38,12 @@ public class SourcePathInfo {
 	private class PartEntry {
 		private int partType;
 		private File file;
-		private String caseSensitivePartName;
+		private PackageAndPartName ppName;
 		
-		public PartEntry(int partType, File file, String caseSensitivePartName){
+		public PartEntry(int partType, File file, PackageAndPartName ppName){
 			this.partType = partType;
 			this.file = file;
-			this.caseSensitivePartName = caseSensitivePartName;
+			this.ppName = ppName;
 		}
 		public File getFile() {
 			return file;
@@ -50,8 +51,8 @@ public class SourcePathInfo {
 		public int getPartType() {
 			return partType;
 		}
-		public String getCaseSensitivePartName(){
-			return caseSensitivePartName;
+		public PackageAndPartName getPackageAndPartName(){
+			return ppName;
 		}
 	}
 	
@@ -83,13 +84,13 @@ public class SourcePathInfo {
 			return null;
 		}
 		
-		public void addPart(String partName, int partType, File file, String caseSensitivePartName){
+		public void addPart(PackageAndPartName ppName, int partType, File file){
 			// map parts to files
 			if(parts == null){
 				parts = new HashMap();
 			}
-			if(!parts.containsKey(partName)){
-			    parts.put(partName, new PartEntry(partType, file, caseSensitivePartName));		
+			if(!parts.containsKey(ppName.getPartName())){
+			    parts.put(ppName.getPartName(), new PartEntry(partType, file, ppName));		
 			}
 		}
 		
@@ -109,10 +110,10 @@ public class SourcePathInfo {
 			return ITypeBinding.NOT_FOUND_BINDING;
 		}
 	
-		public String getCaseSensitivePartName(String partName){
+		public PackageAndPartName getPackageAndPartName(String partName){
 			PartEntry part = getPart(partName);
 			if(part != null){
-				return part.getCaseSensitivePartName();
+				return part.getPackageAndPartName();
 			}
 			return null;
 		}
@@ -171,14 +172,14 @@ public class SourcePathInfo {
 		rootResourceInfo = new ResourceInfo();
 	}
 	
-    public void addPart(String packageName, String partName, int partType, File declaringFile, String caseSensitivePartName) {
+    public void addPart(PackageAndPartName ppName, int partType, File declaringFile) {
         ResourceInfo root = rootResourceInfo;
-        String[] pkgArr = NameUtil.toStringArray(packageName);
+        String[] pkgArr = NameUtil.toStringArray(ppName.getCaseSensitivePackageName());
         for (int i = 0; i < pkgArr.length; i++) {
             root = root.addPackage(NameUtile.getAsName(pkgArr[i]));
         }
           
-        root.addPart(partName, partType, declaringFile, caseSensitivePartName);
+        root.addPart(ppName, partType, declaringFile);
     }
 
     private void initializeEGLPackageHelper(final File parent, final ResourceInfo parentMap){
@@ -208,15 +209,17 @@ public class SourcePathInfo {
     	
     	org.eclipse.edt.compiler.core.ast.File parsedFile = ASTManager.getInstance().getFileAST(file);
     	
+    	String caseSensitivePkgName = org.eclipse.edt.compiler.Util.createCaseSensitivePackageName(parsedFile);
     	List parts = parsedFile.getParts();
     	for (Iterator iter = parts.iterator(); iter.hasNext();) {
     		Part part = (Part)iter.next();
-    		
-    		parentResourceInfo.addPart(part.getIdentifier(), Util.getPartType(part), file, part.getName().getCaseSensitiveIdentifier());			
+    		PackageAndPartName ppName = new PackageAndPartName(caseSensitivePkgName, part.getName().getCaseSensitiveIdentifier());   		
+    		parentResourceInfo.addPart(ppName, Util.getPartType(part), file);			
 		}
     	
     	// add the file part
-		parentResourceInfo.addPart(Util.getFilePartName(file), Util.getPartType(parsedFile), file, Util.getCaseSensitiveFilePartName(file));
+		PackageAndPartName ppName = new PackageAndPartName(caseSensitivePkgName, Util.getCaseSensitiveFilePartName(file));   		
+		parentResourceInfo.addPart(ppName, Util.getPartType(parsedFile), file);
 	}
     
     public boolean hasPackage(String packageName) {
@@ -264,10 +267,10 @@ public class SourcePathInfo {
         }        
     }   
     
-    public String getCaseSensitivePartName(String packageName, String partName){
+    public PackageAndPartName getPackageAndPartName(String packageName, String partName){
     	ResourceInfo info = getPackageInfo(packageName);
     	if(info != null){
-    		return info.getCaseSensitivePartName(partName);
+    		return info.getPackageAndPartName(partName);
     	}
     	return null;
     }

@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.compiler.internal.util.PackageAndPartName;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.Type;
@@ -134,8 +135,8 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
     	}
     }
     
-    public IPartBinding getNewPartBinding(String packageName, String caseSensitivePartName, int kind) {
-    	return SourcePathEntry.getInstance().getNewPartBinding(packageName, caseSensitivePartName, kind);
+    public IPartBinding getNewPartBinding(PackageAndPartName ppName, int kind) {
+    	return SourcePathEntry.getInstance().getNewPartBinding(ppName, kind);
     }
     
     public boolean hasPackage(String packageName) {
@@ -153,12 +154,11 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
     }
     
     
-    public IPartBinding level01Compile(String packageName, String caseSensitivePartName) {
-    	String caseInsensitivePartName = NameUtile.getAsName(caseSensitivePartName);
-	    int partType = SourcePathEntry.getInstance().hasPart(packageName, caseInsensitivePartName);
+    public IPartBinding level01Compile(PackageAndPartName ppName) {
+	    int partType = SourcePathEntry.getInstance().hasPart(ppName.getPackageName(), ppName.getPartName());
 			
 	    if(partType != ITypeBinding.NOT_FOUND_BINDING){
-	    	IPartBinding result = BindingUtil.createPartBinding(partType, packageName, caseSensitivePartName);
+	    	IPartBinding result = BindingUtil.createPartBinding(partType, ppName);
 	    	result.setValid(false);
             result.setEnvironment(EGL2IREnvironment.this);
             return result;
