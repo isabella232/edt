@@ -21,12 +21,9 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
-/**
- * @author Dave Murray
- */
 public class ThrowStatementValidator extends DefaultASTVisitor {
 	
-	private static final String AnyExceptionMofKey = MofConversion.EGL_KeyScheme + "eglx.lang.AnyException";
+	public static final String AnyExceptionMofKey = MofConversion.EGL_KeyScheme + "eglx.lang.AnyException";
 	
 	private IProblemRequestor problemRequestor;
 	private IPartBinding enclosingPart;	

@@ -15,6 +15,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.validation.statement.ThrowStatementValidator;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
@@ -90,7 +91,8 @@ public class ServiceInterfaceValidatorUtil {
 						typeBinding.getClassifier().equals(TypeUtils.Type_BOOLEAN)))) ||
 				(typeBinding instanceof ArrayType && isTypeValidInServicesAndProxy(((ArrayType)typeBinding).getElementType())) ||
 				typeBinding instanceof Record ||
-				typeBinding instanceof Handler;
+				typeBinding instanceof Handler ||
+				(TypeUtils.isTypeOrSubtypeOf(typeBinding, ThrowStatementValidator.AnyExceptionMofKey));
 	}
 	
 }
