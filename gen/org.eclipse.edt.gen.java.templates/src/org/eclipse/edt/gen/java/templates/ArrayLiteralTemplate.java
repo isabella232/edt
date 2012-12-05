@@ -15,10 +15,7 @@ import java.util.List;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayLiteral;
-import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ArrayLiteralTemplate extends JavaTemplate
@@ -32,10 +29,12 @@ public class ArrayLiteralTemplate extends JavaTemplate
 		}
 		else
 		{
-			ctx.invoke( genRuntimeTypeName, expr.getType().getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
+			Type type = expr.getType();
+			
+			ctx.invoke( genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
 			out.print( ".ezeNew(" );
 
-			Type elementType = ((ArrayType)expr.getType()).getElementType();
+			Type elementType = ((ArrayType)type).getElementType();
 			boolean firstElement = true;
 			for ( Expression element : entries )
 			{
@@ -47,6 +46,7 @@ public class ArrayLiteralTemplate extends JavaTemplate
 				{
 					out.print( ", " );
 				}
+				
 				ctx.invoke( genExpression,
 						IRUtils.makeExprCompatibleToType( element, elementType ), 
 						ctx, out );
@@ -54,5 +54,65 @@ public class ArrayLiteralTemplate extends JavaTemplate
 		}
 
 		out.print( ')' );
+	}
+
+	public void genExpression( ArrayLiteral expr, Context ctx, TabbedWriter out, AsExpression arg )
+	{
+		List<Expression> entries = expr.getEntries();
+		if ( entries == null || entries.size() == 0 )
+		{
+			ctx.invoke( genInstantiation, expr.getType(), ctx, out );
+		}
+		else
+		{
+			Type type = expr.getType();
+			
+			ctx.invoke( genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
+			out.print( ".ezeNew(" );
+
+			Type elementType = ((ArrayType)type).getElementType();
+			Type baseType = getBaseType( arg.getType() );
+			if ( baseType instanceof Delegate )
+			{
+				// Use the Delegate for the elementType.  The array will say its element type is Any. 
+				elementType = baseType;
+			}
+
+			boolean firstElement = true;
+			for ( Expression element : entries )
+			{
+				if ( firstElement )
+				{
+					firstElement = false;
+				}
+				else
+				{
+					out.print( ", " );
+				}
+				
+				if ( elementType instanceof Delegate )
+				{
+					String functionSig = ((Function)((MemberName)element).getMember()).getSignature();
+					ctx.put( "Delegate_signature_for_function_" + functionSig, ((Delegate)elementType).getTypeSignature() );
+				}				
+				ctx.invoke( genExpression,
+						IRUtils.makeExprCompatibleToType( element, elementType ), 
+						ctx, out );
+				if ( elementType instanceof Delegate )
+				{
+					String functionSig = ((Function)((MemberName)element).getMember()).getSignature();
+					ctx.remove( "Delegate_signature_for_function_" + functionSig );
+				}
+			}
+		}
+
+		out.print( ')' );
+	}
+
+	private Type getBaseType(Type type) {
+		if (type instanceof ArrayType) {
+			return getBaseType(((ArrayType)type).getElementType());
+		}
+		return type;
 	}
 }

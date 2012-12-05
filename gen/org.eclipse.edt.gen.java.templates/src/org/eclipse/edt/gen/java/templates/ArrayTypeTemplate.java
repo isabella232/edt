@@ -37,7 +37,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			out.print(")");
 		} else {
 			out.print("org.eclipse.edt.runtime.java.eglx.lang.EList.ezeCast(");
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out, arg);
 			genConversionOperationOptions(type, ctx, out);
 			out.print(')');
 		}

@@ -16,16 +16,45 @@ import java.lang.reflect.Method;
 
 import org.eclipse.edt.javart.messages.Message;
 
-import eglx.lang.AnyException;
-import eglx.lang.DynamicAccessException;
-import eglx.lang.InvocationException;
+import eglx.lang.*;
 
 public class Delegate {
-	Object target;
-	Method method;
+	private Object target;
+	private Method method;
+	private String signature;
+	
+	public static boolean ezeIsa( Object obj, String sig ) 
+	{
+		if ( obj instanceof EAny )
+		{
+			obj = ((EAny)obj).ezeUnbox();
+		}
+		return obj instanceof Delegate && ((Delegate)obj).signature.equals( sig );
+	}
+	
+	public static Delegate ezeCast( Object obj, String sig ) throws TypeCastException 
+	{
+		if ( obj instanceof EAny )
+		{
+			obj = ((EAny)obj).ezeUnbox();
+		}
 
-	public Delegate(String methodName, Object target, Class... argTypes) {
+		if ( ezeIsa( obj, sig ) )
+		{
+			return (Delegate)obj;
+		}
+		else
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.castToName = sig;
+			tcx.actualTypeName = obj == null ? "null" : obj.getClass().getName();
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, obj, tcx.actualTypeName, tcx.castToName );
+		}
+	}
+
+	public Delegate(String methodName, String signature, Object target, Class... argTypes) {
 		this.target = target;
+		this.signature = signature;
 		try {
 			this.method = target.getClass().getDeclaredMethod(methodName, argTypes);
 		}
@@ -73,6 +102,10 @@ public class Delegate {
 
 	public Method getMethod() {
 		return method;
+	}
+	
+	public String getSignature() {
+		return signature;
 	}
 	
 	/**

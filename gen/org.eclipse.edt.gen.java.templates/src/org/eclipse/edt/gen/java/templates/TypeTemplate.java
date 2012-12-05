@@ -277,6 +277,7 @@ public class TypeTemplate extends JavaTemplate {
 		//  2) assigning bytes to bytes(x)
 		//  3) assigning 'any as bytes(x)' to bytes(x)
 		//  4) assigning 'any as bytes' to bytes
+		//  5) assigning a function to a delegate
 		Type lhsType = lhs.getType();
 		Type rhsType = rhs.getType();
 		if ( rhsType != null && TypeUtils.getTypeKind( rhsType ) == TypeUtils.TypeKind_BYTES
@@ -322,6 +323,13 @@ public class TypeTemplate extends JavaTemplate {
 			{
 				ctx.invoke( genExpression, rhs, ctx, out );
 			}
+		}
+		else if ( lhsType instanceof Delegate && rhs instanceof MemberName && ((MemberName)rhs).getMember() instanceof Function )
+		{
+			String functionSig = ((Function)((MemberName)rhs).getMember()).getSignature();
+			ctx.put( "Delegate_signature_for_function_" + functionSig, ((Delegate)lhsType).getTypeSignature() );
+			ctx.invoke( genExpression, rhs, ctx, out );
+			ctx.remove( "Delegate_signature_for_function_" + functionSig );
 		}
 		else
 		{
