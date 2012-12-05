@@ -34,6 +34,7 @@ import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
 import org.eclipse.edt.compiler.core.ast.ExitStatement;
+import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.core.ast.ForwardStatement;
@@ -172,7 +173,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 			}
 		});
 		
-		if (!invokesConstructor[0] && node instanceof Constructor) {
+		if (!invokesConstructor[0] && node instanceof Constructor && !(node.getParent() instanceof ExternalType)) {
 			// When no super() or this() is called, there is an implicit super() on a public default constructor. This is required
 			// to initialize fields in the super type.
 			Node parent = node.getParent();

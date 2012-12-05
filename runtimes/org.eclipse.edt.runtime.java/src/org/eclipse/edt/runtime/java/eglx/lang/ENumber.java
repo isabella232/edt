@@ -48,13 +48,11 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 	}
 
 	public static Object ezeCast(Object value, Object[] constraints) throws AnyException {
-		Integer[] args = new Integer[constraints.length];
-		java.lang.System.arraycopy(constraints, 0, args, 0, args.length);
-		return ezeCast(value, args);
+		return ezeCast(value);
 	}
 
-	public static eglx.lang.ENumber ezeCast(Object value, Integer... args) throws AnyException {
-		return (ENumber) EAny.ezeCast(value, "asNumber", ENumber.class, new Class[] { Integer[].class }, args);
+	public static eglx.lang.ENumber ezeCast(Object value) throws AnyException {
+		return (ENumber) EAny.ezeCast(value, "asNumber", ENumber.class, null, null);
 	}
 
 	public static boolean ezeIsa(Object value) {

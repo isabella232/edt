@@ -147,19 +147,14 @@ public class FieldValidator extends DefaultASTVisitor {
 	
 	private void validateInitializer(Name name, Expression initializer) {
 		if (initializer != null && name != null) {
-			org.eclipse.edt.mof.egl.Type rhsType = initializer.resolveType();
-			org.eclipse.edt.mof.egl.Type lhsType = name.resolveType();
-			
-			if (rhsType != null && lhsType != null) {
-				new AssignmentStatementValidator(problemRequestor, compilerOptions, declaringPart).validateAssignment(
-						Assignment.Operator.ASSIGN, name, initializer, lhsType, rhsType, name.resolveMember(), initializer.resolveMember(),
-						new LValueValidator.DefaultLValueValidationRules() {
-							@Override
-							public boolean canAssignToConstantVariables() {
-								return true;
-							}
-						});
-			}
+			new AssignmentStatementValidator(problemRequestor, compilerOptions, declaringPart).validateAssignment(
+					Assignment.Operator.ASSIGN, name, initializer, name.resolveType(), initializer.resolveType(), name.resolveMember(), initializer.resolveMember(),
+					new LValueValidator.DefaultLValueValidationRules() {
+						@Override
+						public boolean canAssignToConstantVariables() {
+							return true;
+						}
+					});
 		}
 	}
 	

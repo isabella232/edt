@@ -27,11 +27,13 @@ import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
+import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
+import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
@@ -341,16 +343,48 @@ public class ExpressionValidator extends AbstractASTVisitor {
 		}
 	}
 	
+	@Override
+	public void endVisit(ClassDataDeclaration classDataDeclaration) {
+		if (classDataDeclaration.hasSettingsBlock()) {
+			classDataDeclaration.getSettingsBlockOpt().accept(new DefaultASTVisitor() {
+				@Override
+				public boolean visit(SettingsBlock settingsBlock) {
+					return true;
+				}
+				@Override
+				public boolean visit(Assignment assignment) {
+					validateAssignment(assignment);
+					return false;
+				}
+			});
+		}
+	}
+	
+	@Override
+	public void endVisit(FunctionDataDeclaration functionDataDeclaration) {
+		if (functionDataDeclaration.hasSettingsBlock()) {
+			functionDataDeclaration.getSettingsBlockOpt().accept(new DefaultASTVisitor() {
+				@Override
+				public boolean visit(SettingsBlock settingsBlock) {
+					return true;
+				}
+				@Override
+				public boolean visit(Assignment assignment) {
+					validateAssignment(assignment);
+					return false;
+				}
+			});
+		}
+	}
+	
 	private void validateAssignment(Assignment assignment) {
 		Expression leftHandSide = assignment.getLeftHandSide();
-		Type lhType = leftHandSide.resolveType();
-		
 		Expression rightHandSide = assignment.getRightHandSide();
-		Type rhType = rightHandSide.resolveType();
+		Type lhsType = leftHandSide.resolveType();
 		
-		if (lhType != null && rhType != null && !(lhType instanceof AnnotationType)) {
+		if (!(lhsType instanceof AnnotationType)) {
 			new AssignmentStatementValidator(problemRequestor, compilerOptions, declaringPart).validateAssignment(
-					assignment.getOperator(), leftHandSide, rightHandSide, lhType, rhType, leftHandSide.resolveMember(), rightHandSide.resolveMember());
+					assignment.getOperator(), leftHandSide, rightHandSide, lhsType, rightHandSide.resolveType(), leftHandSide.resolveMember(), rightHandSide.resolveMember());
 		}
 	}
 	
