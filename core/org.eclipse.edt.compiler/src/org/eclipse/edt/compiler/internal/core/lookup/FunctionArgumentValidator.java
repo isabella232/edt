@@ -46,7 +46,6 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FunctionArgumentValidator extends DefaultASTVisitor {
@@ -369,7 +368,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		Type argType = entry.getValue();
     		parmType = BindingUtil.resolveGenericType(parmType, qualifier);
 	    	
-	    	if (!IRUtils.isMoveCompatible(parmType, funcParmBinding, argType, argExpr.resolveMember())) {
+    		if (!BindingUtil.isMoveCompatible(parmType, funcParmBinding, argType, argExpr)) {
 	    		// Generic type parms are defined as EAny (see EList.appendElement). Therefore the binding does not have the nullable flag set.
 	    		// When passing in 'null', We have to use the qualifier's type to check if the elements are nullable.
 	    		if (TypeUtils.Type_NULLTYPE.equals(argType) && !funcParmBinding.isNullable() && BindingUtil.isUnresolvedGenericType(funcParmBinding.getType())) {
@@ -388,7 +387,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 						funcParmBinding.getCaseSensitiveName(),
 						canonicalFunctionName,
 						// arg can be a function, which has no type
-						argType == null ? BindingUtil.getTypeName(argExpr.resolveMember()) : BindingUtil.getShortTypeString(argType, true),
+						BindingUtil.getShortTypeString(argExpr, argType),
 						BindingUtil.getShortTypeString(parmType)
 	    			});
 	    		result = false;

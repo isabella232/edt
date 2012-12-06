@@ -101,6 +101,7 @@ public interface IProblemRequestor {
 	public static final int INTEGER_LITERAL_OUT_OF_RANGE = 3250;
 	public static final int DECIMAL_LITERAL_OUT_OF_RANGE = 3251;
 	public static final int FLOATING_POINT_LITERAL_OUT_OF_RANGE = 3252;
+	public static final int EXPR_INVALID_IN_THIS_LOCATION = 3253;
     public static final int TYPE_CANNOT_BE_RESOLVED = 3260;
 	public static final int TYPE_IS_AMBIGUOUS = 3262;
 	public static final int ARRAY_SIZE_LESS_THAN_ZERO = 3263;

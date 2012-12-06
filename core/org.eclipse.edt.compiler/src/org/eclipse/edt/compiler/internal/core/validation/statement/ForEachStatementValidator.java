@@ -19,7 +19,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 
 /**
@@ -46,10 +45,10 @@ public class ForEachStatementValidator extends DefaultASTVisitor {
 			else {
 				Type targetType = forEachStatement.getVariableDeclarationType().resolveType();
 				Type elementType = ((ArrayType)sourceType).getElementType();
-				if (targetType != null && !(IRUtils.isMoveCompatible(targetType, elementType, source.resolveMember()))) {
+				if (targetType != null && !(BindingUtil.isMoveCompatible(targetType, forEachStatement.getVariableDeclarationName().resolveMember(), elementType, source))) {
 					problemRequestor.acceptProblem(source, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH, new String[]{
 							BindingUtil.getShortTypeString(targetType),
-							BindingUtil.getShortTypeString(elementType),
+							BindingUtil.getShortTypeString(source, sourceType),
 							forEachStatement.toString()
 					});
 				}
