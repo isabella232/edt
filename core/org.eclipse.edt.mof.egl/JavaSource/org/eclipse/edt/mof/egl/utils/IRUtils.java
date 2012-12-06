@@ -29,7 +29,6 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DanglingReference;
-import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
@@ -1184,11 +1183,6 @@ public class IRUtils {
 			return type1.elementsNullable() == type2.elementsNullable();
 		}
 		
-		//TODO see note below. temporarily making arrays less strict.
-//		if (type1.elementsNullable() != type2.elementsNullable()) {
-//			return false;
-//		}
-		
 		if (elementType1 instanceof ParameterizedType) {
 			elementType1 = ((ParameterizedType)elementType1).getParameterizableType();
 		}
@@ -1200,21 +1194,10 @@ public class IRUtils {
 			return true;
 		}
 		
-		//TODO see note below. temporarily making arrays less strict.
-//		boolean elementType1IsReference = TypeUtils.isReferenceType(elementType1);
-//		if (elementType1IsReference != TypeUtils.isReferenceType(elementType2)) {
-//			return false;
-//		}
-		
 		if (elementType1 instanceof ArrayType && elementType2 instanceof ArrayType) {
 			return areArraysCompatible((ArrayType)elementType1, (ArrayType)elementType2);
 		}
 		
-		//TODO the below check was too restrictive. While we figure out the right solution for array type compatibility,
-		// we'll keep it looser like in earlier releases.
-		
-//		// Element types must match exactly.
-//		return elementType1.equals(elementType2);
 		return TypeUtils.areCompatible(elementType1.getClassifier(), elementType2.getClassifier());
 	}
 	
