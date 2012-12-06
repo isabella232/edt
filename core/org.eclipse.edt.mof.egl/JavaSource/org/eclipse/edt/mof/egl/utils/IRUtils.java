@@ -481,14 +481,11 @@ public class IRUtils {
 			return expr;
 		}
 		
-//TODO Uncomment the following block when JS gen/runtime can handle the implicit as expressions
-//		if (type instanceof ArrayType && exprType instanceof ArrayType) {
-//			if (!(((ArrayType)type).getElementType() instanceof Delegate) && !(((ArrayType)exprType).getElementType() instanceof Delegate)) {
-//				if (!type.equals(exprType) || ((ArrayType)type).elementsNullable() != ((ArrayType)exprType).elementsNullable()) {
-//					return createAsExpression(expr, type);
-//				}
-//			}
-//		}
+		if (type instanceof ArrayType && exprType instanceof ArrayType) {
+			if (!type.equals(exprType) || ((ArrayType)type).elementsNullable() != ((ArrayType)exprType).elementsNullable()) {
+				return createAsExpression(expr, type);
+			}
+		}
 		
 		if (exprType.equals(type) || exprType.getClassifier().equals(type)) {
 			return expr;

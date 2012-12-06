@@ -13,7 +13,10 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.IsAExpression;
+import org.eclipse.edt.mof.egl.Type;
 
 public class DelegateTemplate extends JavaTemplate {
 
@@ -32,5 +35,22 @@ public class DelegateTemplate extends JavaTemplate {
 
 	public void genRuntimeTypeName(Delegate part, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		out.print("org.eclipse.edt.javart.Delegate");
+	}
+	
+	public void genIsaExpression(Type type, Context ctx, TabbedWriter out, IsAExpression arg) {
+		out.print("org.eclipse.edt.javart.Delegate.ezeIsa(");
+		ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+		out.print(", \"");
+		out.print(arg.getEType().getTypeSignature());
+		out.print("\")");
+	}
+	
+	public void genConversionOperation( Type type, Context ctx, TabbedWriter out, AsExpression arg )
+	{
+		out.print("org.eclipse.edt.javart.Delegate.ezeCast(");
+		ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+		out.print(", \"");
+		out.print(arg.getEType().getTypeSignature());
+		out.print("\")");
 	}
 }
