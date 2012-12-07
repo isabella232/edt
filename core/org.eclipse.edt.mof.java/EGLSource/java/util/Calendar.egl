@@ -1,0 +1,143 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+import java.io.Serializable;
+import java.lang.Cloneable;
+import java.lang.Comparable;
+
+
+externalType Calendar extends Serializable, Cloneable, Comparable type JavaObject
+    static ALL_STYLES int;
+    static AM int;
+    static AM_PM int;
+    static APRIL int;
+    static AUGUST int;
+    static _DATE int;
+    static DAY_OF_MONTH int;
+    static DAY_OF_WEEK int;
+    static DAY_OF_WEEK_IN_MONTH int;
+    static DAY_OF_YEAR int;
+    static DECEMBER int;
+    static DST_OFFSET int;
+    static ERA int;
+    static FEBRUARY int;
+    static FIELD_COUNT int;
+    static FRIDAY int;
+    static HOUR int;
+    static HOUR_OF_DAY int;
+    static JANUARY int;
+    static JULY int;
+    static JUNE int;
+    static LONG int;
+    static MARCH int;
+    static MAY int;
+    static MILLISECOND int;
+    static MINUTE int;
+    static MONDAY int;
+    static MONTH int;
+    static NOVEMBER int;
+    static OCTOBER int;
+    static PM int;
+    static SATURDAY int;
+    static SECOND int;
+    static SEPTEMBER int;
+    static SHORT int;
+    static SUNDAY int;
+    static THURSDAY int;
+    static TUESDAY int;
+    static UNDECIMBER int;
+    static WEDNESDAY int;
+    static WEEK_OF_MONTH int;
+    static WEEK_OF_YEAR int;
+    static YEAR int;
+    static ZONE_OFFSET int;
+
+    private constructor();
+
+    function _add(arg0 int in, arg1 int in){@externalName{"add"}};
+
+    function after(arg0 Object? in) returns(boolean);
+
+    function before(arg0 Object? in) returns(boolean);
+
+    function clear(arg0 int in);
+
+    function clear();
+
+    function clone() returns(Object?);
+
+    function compareTo(arg0 Calendar? in) returns(int);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function _get(arg0 int in) returns(int){@externalName{"get"}};
+
+    function getActualMaximum(arg0 int in) returns(int);
+
+    function getActualMinimum(arg0 int in) returns(int);
+
+    function getDisplayName(arg0 int in, arg1 int in, arg2 Locale? in) returns(string?);
+
+    function getDisplayNames(arg0 int in, arg1 int in, arg2 Locale? in) returns(Map?);
+
+    function getFirstDayOfWeek() returns(int);
+
+    function getGreatestMinimum(arg0 int in) returns(int);
+
+    static function getInstance(arg0 TimeZone? in, arg1 Locale? in) returns(Calendar?);
+
+    static function getInstance(arg0 Locale? in) returns(Calendar?);
+
+    static function getInstance(arg0 TimeZone? in) returns(Calendar?);
+
+    static function getInstance() returns(Calendar?);
+
+    function getLeastMaximum(arg0 int in) returns(int);
+
+    function getMaximum(arg0 int in) returns(int);
+
+    function getMinimalDaysInFirstWeek() returns(int);
+
+    function getMinimum(arg0 int in) returns(int);
+
+    function getTime() returns(date?);
+
+    function getTimeInMillis() returns(bigInt);
+
+    function getTimeZone() returns(TimeZone?);
+
+    function hashCode() returns(int);
+
+    function isLenient() returns(boolean);
+
+    function isSet(arg0 int in) returns(boolean);
+
+    function roll(arg0 int in, arg1 int in);
+
+    function roll(arg0 int in, arg1 boolean in);
+
+    function _set(arg0 int in, arg1 int in){@externalName{"set"}};
+
+    function _set(arg0 int in, arg1 int in, arg2 int in){@externalName{"set"}};
+
+    function _set(arg0 int in, arg1 int in, arg2 int in, arg3 int in, arg4 int in){@externalName{"set"}};
+
+    function _set(arg0 int in, arg1 int in, arg2 int in, arg3 int in, arg4 int in, arg5 int in){@externalName{"set"}};
+
+    function setFirstDayOfWeek(arg0 int in);
+
+    function setLenient(arg0 boolean in);
+
+    function setMinimalDaysInFirstWeek(arg0 int in);
+
+    function setTime(arg0 date? in);
+
+    function setTimeInMillis(arg0 bigInt in);
+
+    function setTimeZone(arg0 TimeZone? in);
+
+    function toString() returns(string?);
+end
+

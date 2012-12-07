@@ -1,0 +1,22 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+externalType AS400Date type JavaObject{}
+	static FORMAT_CDMY int;
+	static FORMAT_CMDY int;
+	static FORMAT_CYMD int;
+	static FORMAT_DMY int;
+	static FORMAT_EUR int;
+	static FORMAT_ISO int;
+	static FORMAT_JIS int;
+	static FORMAT_JUL int;
+	static FORMAT_LONGJUL int;
+	static FORMAT_MDY int;
+	static FORMAT_MY int;
+	static FORMAT_MYY int;
+	static FORMAT_USA int;
+	static FORMAT_YM int;
+	static FORMAT_YMD int;
+	static FORMAT_YYM int;
+end

@@ -1,0 +1,29 @@
+package java.nio.channels.spi;
+
+import eglx.java.JavaObject;
+import java.nio.channels.Channel;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.Pipe;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+
+
+externalType SelectorProvider type JavaObject
+
+    private constructor();
+
+    function inheritedChannel() returns(Channel?){@Throws};
+
+    function openDatagramChannel() returns(DatagramChannel?){@Throws};
+
+    function openPipe() returns(Pipe?){@Throws};
+
+    function openSelector() returns(AbstractSelector?){@Throws};
+
+    function openServerSocketChannel() returns(ServerSocketChannel?){@Throws};
+
+    function openSocketChannel() returns(SocketChannel?){@Throws};
+
+    static function provider() returns(SelectorProvider?);
+end
+

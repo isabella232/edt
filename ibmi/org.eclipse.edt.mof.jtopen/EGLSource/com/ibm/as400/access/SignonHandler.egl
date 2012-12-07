@@ -1,0 +1,41 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.net.UnknownHostException;
+
+
+externalType SignonHandler type JavaObject
+
+    private constructor();
+
+    function connectionInitiated(arg0 SignonEvent? in, arg1 boolean in) returns(boolean);
+
+    function exceptionOccurred(arg0 SignonEvent? in){@Throws};
+
+    function passwordAboutToExpire(arg0 SignonEvent? in, arg1 int in) returns(boolean);
+
+    function passwordExpired(arg0 SignonEvent? in) returns(boolean);
+
+    function passwordIncorrect(arg0 SignonEvent? in) returns(boolean);
+
+    function passwordLengthIncorrect(arg0 SignonEvent? in) returns(boolean);
+
+    function passwordMissing(arg0 SignonEvent? in) returns(boolean);
+
+    function systemNameMissing(arg0 SignonEvent? in) returns(boolean);
+
+    function systemNameUnknown(arg0 SignonEvent? in, arg1 UnknownHostException? in) returns(boolean);
+
+    function userIdAboutToBeDisabled(arg0 SignonEvent? in) returns(boolean);
+
+    function userIdDefaultAlreadyAssigned(arg0 SignonEvent? in, arg1 string? in) returns(boolean);
+
+    function userIdDisabled(arg0 SignonEvent? in) returns(boolean);
+
+    function userIdLengthIncorrect(arg0 SignonEvent? in) returns(boolean);
+
+    function userIdMissing(arg0 SignonEvent? in) returns(boolean);
+
+    function userIdUnknown(arg0 SignonEvent? in) returns(boolean);
+end
+

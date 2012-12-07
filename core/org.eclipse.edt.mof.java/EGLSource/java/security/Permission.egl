@@ -1,0 +1,29 @@
+package java.security;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.io.Serializable;
+
+
+externalType Permission extends Guard, Serializable type JavaObject
+
+    private constructor();
+
+    function checkGuard(arg0 Object? in){@Throws};
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function getActions() returns(string?);
+
+    function getName() returns(string?);
+
+    function hashCode() returns(int);
+
+    function implies(arg0 Permission? in) returns(boolean);
+
+    function newPermissionCollection() returns(PermissionCollection?);
+
+    function toString() returns(string?);
+end
+
+

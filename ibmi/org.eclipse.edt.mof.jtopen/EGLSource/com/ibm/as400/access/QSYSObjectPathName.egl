@@ -1,0 +1,63 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.Serializable;
+
+
+externalType QSYSObjectPathName extends Serializable type JavaObject
+
+    constructor(arg0 string? in, arg1 string? in, arg2 string? in, arg3 string? in, arg4 string? in);
+
+    constructor(arg0 string? in, arg1 string? in, arg2 string? in, arg3 string? in);
+
+    constructor(arg0 string? in, arg1 string? in, arg2 string? in);
+
+    constructor(arg0 string? in);
+
+    constructor();
+
+    function addPropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function addVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function getAspName() returns(string?);
+
+    function getLibraryName() returns(string?);
+
+    function getMemberName() returns(string?);
+
+    function getObjectName() returns(string?);
+
+    function getObjectType() returns(string?);
+
+    function getPath() returns(string?);
+
+    function removePropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function removeVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function setAspName(arg0 string? in){@Throws};
+
+    function setLibraryName(arg0 string? in){@Throws};
+
+    function setMemberName(arg0 string? in){@Throws};
+
+    function setObjectName(arg0 string? in){@Throws};
+
+    function setObjectType(arg0 string? in){@Throws};
+
+    function setPath(arg0 string? in){@Throws};
+
+    static function toPath(arg0 string? in, arg1 string? in, arg2 string? in) returns(string?);
+
+    static function toPath(arg0 string? in, arg1 string? in, arg2 string? in, arg3 string? in) returns(string?);
+
+    static function toPath(arg0 string? in, arg1 string? in, arg2 string? in, arg3 string? in, arg4 string? in) returns(string?);
+
+    static function toQSYSName(arg0 string? in) returns(string?);
+
+    function toQualifiedObjectName() returns(string?);
+end
+

@@ -1,0 +1,14 @@
+package java.lang;
+
+import eglx.java.JavaObject;
+import java.util.Iterator;
+
+
+externalType Iterable type JavaObject
+
+    private constructor();
+
+    function iterator() returns(Iterator?);
+end
+
+

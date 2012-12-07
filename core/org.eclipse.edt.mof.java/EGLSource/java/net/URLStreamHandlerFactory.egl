@@ -1,0 +1,12 @@
+package java.net;
+
+import eglx.java.JavaObject;
+
+
+externalType URLStreamHandlerFactory type JavaObject
+
+    private constructor();
+
+    function createURLStreamHandler(arg0 string? in) returns(URLStreamHandler?);
+end
+

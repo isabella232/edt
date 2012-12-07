@@ -1,0 +1,265 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.lang.Throws;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.Serializable;
+
+
+externalType User extends Serializable type JavaObject
+    static NONE string?;
+    static SPECIAL_AUTHORITY_ALL_OBJECT string?;
+    static SPECIAL_AUTHORITY_AUDIT string?;
+    static SPECIAL_AUTHORITY_IO_SYSTEM_CONFIGURATION string?;
+    static SPECIAL_AUTHORITY_JOB_CONTROL string?;
+    static SPECIAL_AUTHORITY_SAVE_SYSTEM string?;
+    static SPECIAL_AUTHORITY_SECURITY_ADMINISTRATOR string?;
+    static SPECIAL_AUTHORITY_SERVICE string?;
+    static SPECIAL_AUTHORITY_SPOOL_CONTROL string?;
+
+    constructor(arg0 AS400? in, arg1 string? in){@Throws};
+
+    constructor();
+
+    function addPropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function addVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function exists() returns(boolean){@Throws};
+
+    function getAccountingCode() returns(string?);
+
+    function getAssistanceLevel() returns(string?);
+
+    function getAttentionKeyHandlingProgram() returns(string?);
+
+    function getCCSID() returns(int);
+
+    function getCHRIDControl() returns(string?);
+
+    function getCountryID() returns(string?);
+
+    function getCurrentLibraryName() returns(string?);
+
+    function getDaysUntilPasswordExpire() returns(int);
+
+    function getDescription() returns(string?);
+
+    function getDirectoryEntry() returns(DirectoryEntry?){@Throws};
+
+    function getDisplaySignOnInformation() returns(string?);
+
+    function getGroupAuthority() returns(string?);
+
+    function getGroupAuthorityType() returns(string?);
+
+    function getGroupID() returns(bigInt);
+
+    function getGroupIDNumber() returns(int);
+
+    function getGroupProfileName() returns(string?);
+
+    function getHighestSchedulingPriority() returns(int);
+
+    function getHomeDirectory() returns(string?);
+
+    function getIASPStorageAllowed(arg0 string? in) returns(int);
+
+    function getIASPStorageUsed(arg0 string? in) returns(int);
+
+    function getInitialMenu() returns(string?);
+
+    function getInitialProgram() returns(string?);
+
+    function getJobDescription() returns(string?);
+
+    function getKeyboardBuffering() returns(string?);
+
+    function getLanguageID() returns(string?);
+
+    function getLimitCapabilities() returns(string?);
+
+    function getLimitDeviceSessions() returns(string?);
+
+    function getLocalePathName() returns(string?);
+
+    function getMaximumStorageAllowed() returns(int);
+
+    function getMessageQueue() returns(string?);
+
+    function getMessageQueueDeliveryMethod() returns(string?);
+
+    function getMessageQueueSeverity() returns(int);
+
+    function getName() returns(string?);
+
+    function getObjectAuditingValue() returns(string?);
+
+    function getObjectsOwned() returns(UserObjectsOwnedList?);
+
+    function getOutputQueue() returns(string?);
+
+    function getOwner() returns(string?);
+
+    function getPasswordChangeBlock() returns(string?);
+
+    function getPasswordExpirationInterval() returns(int);
+
+    function getPasswordExpireDate() returns(date?);
+
+    function getPasswordLastChangedDate() returns(date?);
+
+    function getPreviousSignedOnDate() returns(date?);
+
+    function getPrintDevice() returns(string?);
+
+    function getSignedOnAttemptsNotValid() returns(int);
+
+    function getSortSequenceTable() returns(string?);
+
+    function getSpecialEnvironment() returns(string?);
+
+    function getStatus() returns(string?);
+
+    function getStorageUsed() returns(int);
+
+    function getSupplementalGroupsNumber() returns(int);
+
+    function getSystem() returns(AS400?);
+
+    function getUserClassName() returns(string?);
+
+    function getUserExpirationAction() returns(string?);
+
+    function getUserExpirationDate() returns(date?);
+
+    function getUserExpirationInterval() returns(int);
+
+    function getUserID() returns(bigInt);
+
+    function getUserIDNumber() returns(int);
+
+    function getUserProfileName() returns(string?);
+
+    function hasSpecialAuthority(arg0 string? in) returns(boolean);
+
+    function isGroupHasMember() returns(boolean);
+
+    function isLocalPasswordManagement() returns(boolean);
+
+    function isNoPassword() returns(boolean);
+
+    function isPasswordSetExpire() returns(boolean);
+
+    function isUserEntitlementRequired() returns(boolean);
+
+    function isWithDigitalCertificates() returns(boolean);
+
+    function loadUserInformation(){@Throws};
+
+    function refresh(){@Throws};
+
+    function removePropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function removeVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function setAccountingCode(arg0 string? in){@Throws};
+
+    function setAssistanceLevel(arg0 string? in){@Throws};
+
+    function setAttentionKeyHandlingProgram(arg0 string? in){@Throws};
+
+    function setCCSID(arg0 int in){@Throws};
+
+    function setCCSID(arg0 string? in){@Throws};
+
+    function setCHRIDControl(arg0 string? in){@Throws};
+
+    function setCountryID(arg0 string? in){@Throws};
+
+    function setCurrentLibraryName(arg0 string? in){@Throws};
+
+    function setDescription(arg0 string? in){@Throws};
+
+    function setDisplaySignOnInformation(arg0 string? in){@Throws};
+
+    function setGroupAuthority(arg0 string? in){@Throws};
+
+    function setGroupAuthorityType(arg0 string? in){@Throws};
+
+    function setGroupID(arg0 bigInt in){@Throws};
+
+    function setGroupID(arg0 string? in){@Throws};
+
+    function setGroupProfileName(arg0 string? in){@Throws};
+
+    function setHighestSchedulingPriority(arg0 int in){@Throws};
+
+    function setHomeDirectory(arg0 string? in){@Throws};
+
+    function setInitialMenu(arg0 string? in){@Throws};
+
+    function setInitialProgram(arg0 string? in){@Throws};
+
+    function setJobDescription(arg0 string? in){@Throws};
+
+    function setKeyboardBuffering(arg0 string? in){@Throws};
+
+    function setLanguageID(arg0 string? in){@Throws};
+
+    function setLimitCapabilities(arg0 string? in){@Throws};
+
+    function setLimitDeviceSessions(arg0 string? in){@Throws};
+
+    function setLocalePathName(arg0 string? in){@Throws};
+
+    function setLocalPasswordManagement(arg0 boolean in){@Throws};
+
+    function setMaximumStorageAllowed(arg0 string? in){@Throws};
+
+    function setMaximumStorageAllowed(arg0 int in){@Throws};
+
+    function setMessageQueue(arg0 string? in){@Throws};
+
+    function setMessageQueueDeliveryMethod(arg0 string? in){@Throws};
+
+    function setMessageQueueSeverity(arg0 int in){@Throws};
+
+    function setName(arg0 string? in){@Throws};
+
+    function setObjectAuditingValue(arg0 string? in){@Throws};
+
+    function setOutputQueue(arg0 string? in){@Throws};
+
+    function setOwner(arg0 string? in){@Throws};
+
+    function setPasswordChangeBlock(arg0 string? in){@Throws};
+
+    function setPasswordExpirationInterval(arg0 string? in){@Throws};
+
+    function setPasswordExpirationInterval(arg0 int in){@Throws};
+
+    function setPasswordSetExpire(arg0 boolean in){@Throws};
+
+    function setPrintDevice(arg0 string? in){@Throws};
+
+    function setSortSequenceTable(arg0 string? in){@Throws};
+
+    function setSpecialEnvironment(arg0 string? in){@Throws};
+
+    function setStatus(arg0 string? in){@Throws};
+
+    function setSystem(arg0 AS400? in){@Throws};
+
+    function setUserClassName(arg0 string? in){@Throws};
+
+    function setUserExpirationDate(arg0 date? in){@Throws};
+
+    function setUserExpirationInterval(arg0 int in){@Throws};
+
+    function setUserID(arg0 bigInt in){@Throws};
+
+    function toString() returns(string?);
+end
+

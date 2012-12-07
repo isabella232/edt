@@ -1,0 +1,38 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+
+
+externalType _Set extends Collection type JavaObject{externalName = "Set"}
+
+    private constructor();
+
+    function _add(arg0 Object? in) returns(boolean){@externalName{"add"}};
+
+    function addAll(arg0 Collection? in) returns(boolean);
+
+    function clear();
+
+    function contains(arg0 Object? in) returns(boolean);
+
+    function containsAll(arg0 Collection? in) returns(boolean);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function hashCode() returns(int);
+
+    function isEmpty() returns(boolean);
+
+    function iterator() returns(Iterator?);
+
+    function remove(arg0 Object? in) returns(boolean);
+
+    function removeAll(arg0 Collection? in) returns(boolean);
+
+    function retainAll(arg0 Collection? in) returns(boolean);
+
+    function size() returns(int);
+end
+

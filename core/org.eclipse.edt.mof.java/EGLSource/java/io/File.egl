@@ -1,0 +1,61 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+import java.lang.Comparable;
+import java.net.URI;
+import java.net._URL;
+
+externalType File extends Serializable,Comparable type JavaObject 
+static pathSeparator string?;
+static separator string?;
+  constructor(arg0 URI? IN);
+  constructor(arg0 File? IN,arg1 string? IN);
+  constructor(arg0 string? IN,arg1 string? IN);
+  constructor(arg0 string? IN);
+   function canExecute()  returns(boolean);
+   function canRead()  returns(boolean);
+   function canWrite()  returns(boolean);
+   function compareTo(arg0 File? IN)  returns(int);
+   function createNewFile()  returns(boolean){@Throws};
+   static function createTempFile(arg0 string? IN,arg1 string? IN,arg2 File? IN)  returns(File?){@Throws};
+   static function createTempFile(arg0 string? IN,arg1 string? IN)  returns(File?){@Throws};
+   function _delete()  returns(boolean)   {@externalName{"delete"}};
+   function deleteOnExit();
+   function equals(arg0 Object? IN)  returns(boolean);
+   function exists()  returns(boolean);
+   function getAbsoluteFile()  returns(File?);
+   function getAbsolutePath()  returns(string?);
+   function getCanonicalFile()  returns(File?){@Throws};
+   function getCanonicalPath()  returns(string?){@Throws};
+   function getFreeSpace()  returns(bigint);
+   function getName()  returns(string?);
+   function getParent()  returns(string?);
+   function getParentFile()  returns(File?);
+   function getPath()  returns(string?);
+   function getTotalSpace()  returns(bigint);
+   function getUsableSpace()  returns(bigint);
+   function hashCode()  returns(int);
+   function isAbsolute()  returns(boolean);
+   function isDirectory()  returns(boolean);
+   function isFile()  returns(boolean);
+   function isHidden()  returns(boolean);
+   function lastModified()  returns(bigint);
+   function length()  returns(bigint);
+   function mkdir()  returns(boolean);
+   function mkdirs()  returns(boolean);
+   function renameTo(arg0 File? IN)  returns(boolean);
+   function setExecutable(arg0 boolean IN)  returns(boolean);
+   function setExecutable(arg0 boolean IN,arg1 boolean IN)  returns(boolean);
+   function setLastModified(arg0 bigint IN)  returns(boolean);
+   function setReadable(arg0 boolean IN)  returns(boolean);
+   function setReadable(arg0 boolean IN,arg1 boolean IN)  returns(boolean);
+   function setReadOnly()  returns(boolean);
+   function setWritable(arg0 boolean IN)  returns(boolean);
+   function setWritable(arg0 boolean IN,arg1 boolean IN)  returns(boolean);
+   function toString()  returns(string?);
+   function toURI()  returns(URI?);
+   function toURL()  returns(_URL?){@Throws};
+end
+

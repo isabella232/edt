@@ -1,0 +1,32 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.nio.channels.spi.AbstractSelectableChannel;
+
+
+externalType Pipe type JavaObject
+
+    private constructor();
+
+    static function _open() returns(Pipe?){@externalName{"open"}, @Throws};
+
+    function sink() returns(Pipe_SinkChannel?);
+
+    function source() returns(Pipe_SourceChannel?);
+end
+
+externalType Pipe_SourceChannel extends AbstractSelectableChannel, ReadableByteChannel, ScatteringByteChannel type JavaObject{externalName = "Pipe.SourceChannel"}
+
+    private constructor();
+
+    function validOps() returns(int);
+end
+
+externalType Pipe_SinkChannel extends AbstractSelectableChannel, WritableByteChannel, GatheringByteChannel type JavaObject{externalName = "Pipe.SinkChannel"}
+
+    private constructor();
+
+    function validOps() returns(int);
+end
+

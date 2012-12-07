@@ -1,0 +1,94 @@
+package java.lang;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+
+
+externalType AbstractStringBuilder extends Appendable, CharSequence type JavaObject
+
+    private constructor();
+
+    function append(arg0 float in) returns(AbstractStringBuilder?);
+
+    function append(arg0 smallFloat in) returns(AbstractStringBuilder?);
+
+    function append(arg0 bigInt in) returns(AbstractStringBuilder?);
+
+    function append(arg0 int in) returns(AbstractStringBuilder?);
+
+    function append(arg0 boolean in) returns(AbstractStringBuilder?);
+
+    function append(arg0 CharSequence? in, arg1 int in, arg2 int in) returns(AbstractStringBuilder?);
+
+    function append(arg0 CharSequence? in) returns(AbstractStringBuilder?);
+
+    function append(arg0 StringBuffer? in) returns(AbstractStringBuilder?);
+
+    function append(arg0 string? in) returns(AbstractStringBuilder?);
+
+    function append(arg0 Object? in) returns(AbstractStringBuilder?);
+
+    function appendCodePoint(arg0 int in) returns(AbstractStringBuilder?);
+
+    function capacity() returns(int);
+
+    function codePointAt(arg0 int in) returns(int);
+
+    function codePointBefore(arg0 int in) returns(int);
+
+    function codePointCount(arg0 int in, arg1 int in) returns(int);
+
+    function _delete(arg0 int in, arg1 int in) returns(AbstractStringBuilder?){@externalName{"delete"}};
+
+    function deleteCharAt(arg0 int in) returns(AbstractStringBuilder?);
+
+    function ensureCapacity(arg0 int in);
+
+    function indexOf(arg0 string? in, arg1 int in) returns(int);
+
+    function indexOf(arg0 string? in) returns(int);
+
+    function _insert(arg0 int in, arg1 float in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function _insert(arg0 int in, arg1 smallFloat in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function _insert(arg0 int in, arg1 bigInt in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function _insert(arg0 int in, arg1 int in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function _insert(arg0 int in, arg1 boolean in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function _insert(arg0 int in, arg1 CharSequence? in, arg2 int in, arg3 int in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function _insert(arg0 int in, arg1 CharSequence? in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function _insert(arg0 int in, arg1 string? in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function _insert(arg0 int in, arg1 Object? in) returns(AbstractStringBuilder?){@externalName{"insert"}};
+
+    function lastIndexOf(arg0 string? in) returns(int);
+
+    function lastIndexOf(arg0 string? in, arg1 int in) returns(int);
+
+    function length() returns(int);
+
+    function offsetByCodePoints(arg0 int in, arg1 int in) returns(int);
+
+    function _replace(arg0 int in, arg1 int in, arg2 string? in) returns(AbstractStringBuilder?){@externalName{"replace"}};
+
+    function reverse() returns(AbstractStringBuilder?);
+
+    function setLength(arg0 int in);
+
+    function subSequence(arg0 int in, arg1 int in) returns(CharSequence?);
+
+    function substring(arg0 int in) returns(string?);
+
+    function substring(arg0 int in, arg1 int in) returns(string?);
+
+    function toString() returns(string?);
+
+    function trimToSize();
+end
+

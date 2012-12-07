@@ -1,0 +1,51 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.io.Serializable;
+import java.lang.Cloneable;
+
+
+externalType TimeZone extends Serializable, Cloneable type JavaObject
+    static LONG int;
+    static SHORT int;
+
+    private constructor();
+
+    function clone() returns(Object?);
+
+    static function getDefault() returns(TimeZone?);
+
+    function getDisplayName() returns(string?);
+
+    function getDisplayName(arg0 Locale? in) returns(string?);
+
+    function getDisplayName(arg0 boolean in, arg1 int in) returns(string?);
+
+    function getDisplayName(arg0 boolean in, arg1 int in, arg2 Locale? in) returns(string?);
+
+    function getDSTSavings() returns(int);
+
+    function getID() returns(string?);
+
+    function getOffset(arg0 int in, arg1 int in, arg2 int in, arg3 int in, arg4 int in, arg5 int in) returns(int);
+
+    function getOffset(arg0 bigInt in) returns(int);
+
+    function getRawOffset() returns(int);
+
+    static function getTimeZone(arg0 string? in) returns(TimeZone?);
+
+    function hasSameRules(arg0 TimeZone? in) returns(boolean);
+
+    function inDaylightTime(arg0 date? in) returns(boolean);
+
+    static function setDefault(arg0 TimeZone? in);
+
+    function setID(arg0 string? in);
+
+    function setRawOffset(arg0 int in);
+
+    function useDaylightTime() returns(boolean);
+end
+

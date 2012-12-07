@@ -1,0 +1,45 @@
+package java.nio;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+
+
+externalType Buffer type JavaObject
+
+    private constructor();
+
+    function array() returns(Object?);
+
+    function arrayOffset() returns(int);
+
+    function capacity() returns(int);
+
+    function clear() returns(Buffer?);
+
+    function flip() returns(Buffer?);
+
+    function hasArray() returns(boolean);
+
+    function hasRemaining() returns(boolean);
+
+    function isDirect() returns(boolean);
+
+    function isReadOnly() returns(boolean);
+
+    function limit() returns(int);
+
+    function limit(arg0 int in) returns(Buffer?);
+
+    function mark() returns(Buffer?);
+
+    function position() returns(int);
+
+    function position(arg0 int in) returns(Buffer?);
+
+    function remaining() returns(int);
+
+    function reset() returns(Buffer?);
+
+    function rewind() returns(Buffer?);
+end
+

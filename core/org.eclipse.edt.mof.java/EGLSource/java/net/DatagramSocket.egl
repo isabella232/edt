@@ -1,0 +1,79 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import eglx.lang.Throws;
+import java.nio.channels.DatagramChannel;
+
+
+externalType DatagramSocket type JavaObject
+
+    constructor(arg0 int in, arg1 InetAddress? in){@Throws};
+
+    constructor(arg0 int in){@Throws};
+
+    constructor(arg0 SocketAddress? in){@Throws};
+
+    constructor(){@Throws};
+
+    function _bind(arg0 SocketAddress? in){@externalName{"bind"}, @Throws};
+
+    function _close(){@externalName{"close"}};
+
+    function connect(arg0 SocketAddress? in){@Throws};
+
+    function connect(arg0 InetAddress? in, arg1 int in);
+
+    function disconnect();
+
+    function getBroadcast() returns(boolean){@Throws};
+
+    function getChannel() returns(DatagramChannel?);
+
+    function getInetAddress() returns(InetAddress?);
+
+    function getLocalAddress() returns(InetAddress?);
+
+    function getLocalPort() returns(int);
+
+    function getLocalSocketAddress() returns(SocketAddress?);
+
+    function getPort() returns(int);
+
+    function getReceiveBufferSize() returns(int){@Throws};
+
+    function getRemoteSocketAddress() returns(SocketAddress?);
+
+    function getReuseAddress() returns(boolean){@Throws};
+
+    function getSendBufferSize() returns(int){@Throws};
+
+    function getSoTimeout() returns(int){@Throws};
+
+    function getTrafficClass() returns(int){@Throws};
+
+    function isBound() returns(boolean);
+
+    function isClosed() returns(boolean);
+
+    function isConnected() returns(boolean);
+
+    function receive(arg0 DatagramPacket? in){@Throws};
+
+    function send(arg0 DatagramPacket? in){@Throws};
+
+    function setBroadcast(arg0 boolean in){@Throws};
+
+    static function setDatagramSocketImplFactory(arg0 DatagramSocketImplFactory? in){@Throws};
+
+    function setReceiveBufferSize(arg0 int in){@Throws};
+
+    function setReuseAddress(arg0 boolean in){@Throws};
+
+    function setSendBufferSize(arg0 int in){@Throws};
+
+    function setSoTimeout(arg0 int in){@Throws};
+
+    function setTrafficClass(arg0 int in){@Throws};
+end
+

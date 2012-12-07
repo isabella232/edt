@@ -1,0 +1,28 @@
+package java.nio.channels.spi;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.nio.channels.SelectableChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+
+
+externalType AbstractSelectableChannel extends SelectableChannel type JavaObject
+
+    private constructor();
+
+    function blockingLock() returns(Object?);
+
+    function configureBlocking(arg0 boolean in) returns(SelectableChannel?){@Throws};
+
+    function isBlocking() returns(boolean);
+
+    function isRegistered() returns(boolean);
+
+    function keyFor(arg0 Selector? in) returns(SelectionKey?);
+
+    function provider() returns(SelectorProvider?);
+
+    function register(arg0 Selector? in, arg1 int in, arg2 Object? in) returns(SelectionKey?){@Throws};
+end
+

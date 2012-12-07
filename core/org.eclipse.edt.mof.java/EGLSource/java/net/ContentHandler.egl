@@ -1,0 +1,13 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+
+
+externalType ContentHandler type JavaObject
+
+    private constructor();
+
+    function getContent(arg0 URLConnection? in) returns(Object?){@Throws};
+end
+

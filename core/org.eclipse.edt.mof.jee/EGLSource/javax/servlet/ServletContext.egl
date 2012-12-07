@@ -1,0 +1,35 @@
+package javax.servlet;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.io.InputStream;
+import java.lang.Throwable;
+import java.net._URL;
+import java.util._Enumeration;
+import java.util._Set;
+
+externalType ServletContext type JavaObject 
+  private constructor();
+   function getAttribute(arg0 string? IN)  returns(Object?);
+   function getAttributeNames()  returns(_Enumeration?);
+   function getContext(arg0 string? IN)  returns(ServletContext?);
+   function getContextPath()  returns(string?);
+   function getInitParameter(arg0 string? IN)  returns(string?);
+   function getInitParameterNames()  returns(_Enumeration?);
+   function getMajorVersion()  returns(int);
+   function getMimeType(arg0 string? IN)  returns(string?);
+   function getMinorVersion()  returns(int);
+   function getNamedDispatcher(arg0 string? IN)  returns(RequestDispatcher?);
+   function getRealPath(arg0 string? IN)  returns(string?);
+   function getRequestDispatcher(arg0 string? IN)  returns(RequestDispatcher?);
+   function getResource(arg0 string? IN)  returns(_URL?){@Throws};
+   function getResourceAsStream(arg0 string? IN)  returns(InputStream?);
+   function getResourcePaths(arg0 string? IN)  returns(_Set?);
+   function getServerInfo()  returns(string?);
+   function getServletContextName()  returns(string?);
+   function log(arg0 string? IN,arg1 Throwable? IN);
+   function log(arg0 string? IN);
+   function removeAttribute(arg0 string? IN);
+   function setAttribute(arg0 string? IN,arg1 Object? IN);
+end
+

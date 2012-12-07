@@ -1,0 +1,11 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import java.io.Serializable;
+
+
+externalType SocketAddress extends Serializable type JavaObject
+
+    private constructor();
+end
+

@@ -1,0 +1,39 @@
+package javax.servlet.http;
+
+import eglx.java.JavaObject;
+import java.lang.StringBuffer;
+import java.security.Principal;
+import java.util._Enumeration;
+import javax.servlet.ServletRequest;
+
+externalType HttpServletRequest extends ServletRequest type JavaObject 
+static BASIC_AUTH string?;
+static CLIENT_CERT_AUTH string?;
+static DIGEST_AUTH string?;
+static FORM_AUTH string?;
+  private constructor();
+   function getAuthType()  returns(string?);
+   function getContextPath()  returns(string?);
+   function getDateHeader(arg0 string? IN)  returns(bigint);
+   function getHeader(arg0 string? IN)  returns(string?);
+   function getHeaderNames()  returns(_Enumeration?);
+   function getHeaders(arg0 string? IN)  returns(_Enumeration?);
+   function getIntHeader(arg0 string? IN)  returns(int);
+   function getMethod()  returns(string?);
+   function getPathInfo()  returns(string?);
+   function getPathTranslated()  returns(string?);
+   function getQueryString()  returns(string?);
+   function getRemoteUser()  returns(string?);
+   function getRequestedSessionId()  returns(string?);
+   function getRequestURI()  returns(string?);
+   function getRequestURL()  returns(StringBuffer?);
+   function getServletPath()  returns(string?);
+   function getSession(arg0 boolean IN)  returns(HttpSession?);
+   function getSession()  returns(HttpSession?);
+   function getUserPrincipal()  returns(Principal?);
+   function isRequestedSessionIdFromCookie()  returns(boolean);
+   function isRequestedSessionIdFromURL()  returns(boolean);
+   function isRequestedSessionIdValid()  returns(boolean);
+   function isUserInRole(arg0 string? IN)  returns(boolean);
+end
+

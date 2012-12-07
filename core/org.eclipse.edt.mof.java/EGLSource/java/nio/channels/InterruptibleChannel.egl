@@ -1,0 +1,13 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+
+
+externalType InterruptibleChannel extends Channel type JavaObject
+
+    private constructor();
+
+    function _close(){@externalName{"close"}, @Throws};
+end
+

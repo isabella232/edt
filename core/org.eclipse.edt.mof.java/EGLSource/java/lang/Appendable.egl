@@ -1,0 +1,14 @@
+package java.lang;
+
+import eglx.java.JavaObject;
+
+
+externalType Appendable type JavaObject
+
+    private constructor();
+
+    function append(arg0 CharSequence? in, arg1 int in, arg2 int in) returns(Appendable?){@Throws};
+
+    function append(arg0 CharSequence? in) returns(Appendable?){@Throws};
+end
+

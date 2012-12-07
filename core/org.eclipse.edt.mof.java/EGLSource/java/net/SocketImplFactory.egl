@@ -1,0 +1,12 @@
+package java.net;
+
+import eglx.java.JavaObject;
+
+
+externalType SocketImplFactory type JavaObject
+
+    private constructor();
+
+    function createSocketImpl() returns(SocketImpl?);
+end
+

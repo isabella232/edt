@@ -1,0 +1,34 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+
+externalType Map type JavaObject 
+  private constructor();
+   function clear();
+   function containsKey(arg0 Object? IN)  returns(boolean);
+   function containsValue(arg0 Object? IN)  returns(boolean);
+   function entrySet()  returns(_Set?);
+   function equals(arg0 Object? IN)  returns(boolean);
+   function _get(arg0 Object? IN)  returns(Object?)   {@externalName{"get"}};
+   function hashCode()  returns(int);
+   function isEmpty()  returns(boolean);
+   function keySet()  returns(_Set?);
+   function put(arg0 Object? IN,arg1 Object? IN)  returns(Object?);
+   function putAll(arg0 Map? IN);
+   function remove(arg0 Object? IN)  returns(Object?);
+   function size()  returns(int);
+   function values()  returns(Collection?);
+end
+
+externalType Map_Entry type JavaObject 
+{externalName = "Map.Entry"}
+  private constructor();
+   function equals(arg0 Object? IN)  returns(boolean);
+   function hashCode()  returns(int);
+   function getValue()  returns(Object?);
+   function getKey()  returns(Object?);
+   function setValue(arg0 Object? IN)  returns(Object?);
+end
+

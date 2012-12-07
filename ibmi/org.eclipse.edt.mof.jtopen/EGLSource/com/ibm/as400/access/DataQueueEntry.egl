@@ -1,0 +1,12 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+
+externalType DataQueueEntry type JavaObject
+
+    function getSenderInformation() returns(string?);
+
+    function getString() returns(string?){@Throws};
+end
+

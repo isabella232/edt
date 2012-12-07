@@ -1,0 +1,18 @@
+<project name="BuildPlugin" default="JarEglar" basedir="../">
+
+<property name="pluginName" value="org.eclipse.edt.mof.eglx.jtopen"/>
+
+<target name="init">    
+    <echo message="processing ${pluginName}." />
+	<property name="eglBin" value="EGLBin"/>
+</target>
+	
+<target name="JarMofar" depends="init">	
+	<jar basedir="./${eglBin}" includes= "**/*.mofxml" destfile="./egllib/jtopen.mofar">
+	</jar>
+</target>
+<target name="JarEglar" depends="JarMofar">	
+	<jar basedir="./${eglBin}" includes= "**/*.eglxml" destfile="./egllib/jtopen.eglar"></jar>
+</target>
+	
+</project>

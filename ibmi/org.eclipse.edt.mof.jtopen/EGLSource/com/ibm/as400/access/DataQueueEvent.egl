@@ -1,0 +1,18 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.util.EventObject;
+
+
+externalType DataQueueEvent extends EventObject type JavaObject
+    static DQ_CLEARED int;
+    static DQ_PEEKED int;
+    static DQ_READ int;
+    static DQ_WRITTEN int;
+
+    constructor(arg0 Object? in, arg1 int in);
+
+    function getID() returns(int);
+end
+

@@ -1,0 +1,19 @@
+package java.security;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+
+
+externalType Principal type JavaObject
+
+    private constructor();
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function getName() returns(string?);
+
+    function hashCode() returns(int);
+
+    function toString() returns(string?);
+end
+

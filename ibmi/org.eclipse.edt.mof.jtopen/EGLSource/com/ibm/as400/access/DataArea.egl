@@ -1,0 +1,35 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.Serializable;
+
+
+externalType DataArea extends Serializable type JavaObject
+
+    private constructor();
+
+    function addDataAreaListener(arg0 DataAreaListener? in);
+
+    function addPropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function addVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function getLength() returns(int){@Throws};
+
+    function getName() returns(string?);
+
+    function getSystem() returns(AS400?);
+
+    function refreshAttributes(){@Throws};
+
+    function removeDataAreaListener(arg0 DataAreaListener? in);
+
+    function removePropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function removeVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function setSystem(arg0 AS400? in){@Throws};
+end
+

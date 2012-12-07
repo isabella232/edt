@@ -1,0 +1,11 @@
+package java.util;
+
+import eglx.java.JavaObject;
+
+
+externalType EventListener type JavaObject
+
+    private constructor();
+
+end
+

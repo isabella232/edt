@@ -1,0 +1,25 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+
+
+externalType InputStream extends Closeable type JavaObject
+
+    private constructor();
+
+    function available() returns(int){@Throws};
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function mark(arg0 int in);
+
+    function markSupported() returns(boolean);
+
+    function read() returns(int){@Throws};
+
+    function reset(){@Throws};
+
+    function skip(arg0 bigInt in) returns(bigInt){@Throws};
+end
+

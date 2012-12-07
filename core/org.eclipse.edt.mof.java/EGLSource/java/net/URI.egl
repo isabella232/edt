@@ -1,0 +1,45 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.Throws;
+import java.io.Serializable;
+import java.lang.Comparable;
+
+externalType URI extends Comparable,Serializable type JavaObject 
+  constructor(arg0 string? IN,arg1 string? IN,arg2 string? IN){@Throws};
+  constructor(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 string? IN){@Throws};
+  constructor(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 string? IN,arg4 string? IN){@Throws};
+  constructor(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 int IN,arg4 string? IN,arg5 string? IN,arg6 string? IN){@Throws};
+  constructor(arg0 string? IN){@Throws};
+   function compareTo(arg0 URI? IN)  returns(int);
+   static function create(arg0 string? IN)  returns(URI?);
+   function equals(arg0 Object? IN)  returns(boolean);
+   function getAuthority()  returns(string?);
+   function getFragment()  returns(string?);
+   function getHost()  returns(string?);
+   function getPath()  returns(string?);
+   function getPort()  returns(int);
+   function getQuery()  returns(string?);
+   function getRawAuthority()  returns(string?);
+   function getRawFragment()  returns(string?);
+   function getRawPath()  returns(string?);
+   function getRawQuery()  returns(string?);
+   function getRawSchemeSpecificPart()  returns(string?);
+   function getRawUserInfo()  returns(string?);
+   function getScheme()  returns(string?);
+   function getSchemeSpecificPart()  returns(string?);
+   function getUserInfo()  returns(string?);
+   function hashCode()  returns(int);
+   function isAbsolute()  returns(boolean);
+   function isOpaque()  returns(boolean);
+   function normalize()  returns(URI?);
+   function parseServerAuthority()  returns(URI?){@Throws};
+   function relativize(arg0 URI? IN)  returns(URI?);
+   function resolve(arg0 URI? IN)  returns(URI?);
+   function resolve(arg0 string? IN)  returns(URI?);
+   function toASCIIString()  returns(string?);
+   function toString()  returns(string?);
+   function toURL()  returns(_URL?){@Throws};
+end
+

@@ -1,0 +1,21 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.net.ServerSocket;
+import java.nio.channels.spi.AbstractSelectableChannel;
+
+
+externalType ServerSocketChannel extends AbstractSelectableChannel type JavaObject
+
+    private constructor();
+
+    function accept() returns(SocketChannel?){@Throws};
+
+    static function _open() returns(ServerSocketChannel?){@externalName{"open"}, @Throws};
+
+    function socket() returns(ServerSocket?);
+
+    function validOps() returns(int);
+end
+

@@ -1,0 +1,12 @@
+package java.net;
+
+import eglx.java.JavaObject;
+
+
+externalType FileNameMap type JavaObject
+
+    private constructor();
+
+    function getContentTypeFor(arg0 string? in) returns(string?);
+end
+

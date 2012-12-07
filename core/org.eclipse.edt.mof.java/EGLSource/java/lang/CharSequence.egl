@@ -1,0 +1,16 @@
+package java.lang;
+
+import eglx.java.JavaObject;
+
+
+externalType CharSequence type JavaObject
+
+    private constructor();
+
+    function length() returns(int);
+
+    function subSequence(arg0 int in, arg1 int in) returns(CharSequence?);
+
+    function toString() returns(string?);
+end
+

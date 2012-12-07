@@ -1,0 +1,31 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.nio.channels.spi.AbstractInterruptibleChannel;
+import java.nio.channels.spi.SelectorProvider;
+
+
+externalType SelectableChannel extends AbstractInterruptibleChannel, Channel type JavaObject
+
+    private constructor();
+
+    function blockingLock() returns(Object?);
+
+    function configureBlocking(arg0 boolean in) returns(SelectableChannel?){@Throws};
+
+    function isBlocking() returns(boolean);
+
+    function isRegistered() returns(boolean);
+
+    function keyFor(arg0 Selector? in) returns(SelectionKey?);
+
+    function provider() returns(SelectorProvider?);
+
+    function register(arg0 Selector? in, arg1 int in) returns(SelectionKey?){@Throws};
+
+    function register(arg0 Selector? in, arg1 int in, arg2 Object? in) returns(SelectionKey?){@Throws};
+
+    function validOps() returns(int);
+end
+

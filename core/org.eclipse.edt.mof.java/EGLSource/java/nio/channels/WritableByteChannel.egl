@@ -1,0 +1,13 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import java.nio.ByteBuffer;
+
+
+externalType WritableByteChannel extends Channel type JavaObject
+
+    private constructor();
+
+    function write(arg0 ByteBuffer? in) returns(int){@Throws};
+end
+

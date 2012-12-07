@@ -1,0 +1,12 @@
+package java.net;
+
+import eglx.java.JavaObject;
+
+
+externalType SocketImpl extends SocketOptions type JavaObject
+
+    private constructor();
+
+    function toString() returns(string?);
+end
+

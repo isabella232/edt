@@ -1,0 +1,12 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+
+externalType ReturnCodeException type JavaObject
+
+    private constructor();
+
+    function getReturnCode() returns(int);
+end
+

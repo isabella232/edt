@@ -1,0 +1,32 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.io.Serializable;
+
+
+externalType DecimalDataArea extends DataArea, Serializable type JavaObject
+
+    constructor(arg0 AS400? in, arg1 string? in);
+
+    constructor();
+
+    function clear(){@Throws};
+
+    function create(arg0 int in, arg1 int in, arg2 decimal? in, arg3 string? in, arg4 string? in){@Throws};
+
+    function create(){@Throws};
+
+    function _delete(){@externalName{"delete"}, @Throws};
+
+    function getDecimalPositions() returns(int){@Throws};
+
+    function getPath() returns(string?);
+
+    function read() returns(decimal?){@Throws};
+
+    function setPath(arg0 string? in){@Throws};
+
+    function write(arg0 decimal? in){@Throws};
+end
+

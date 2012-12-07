@@ -1,0 +1,35 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.net.DatagramSocket;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.spi.AbstractSelectableChannel;
+
+
+externalType DatagramChannel extends AbstractSelectableChannel, ByteChannel, ScatteringByteChannel, GatheringByteChannel type JavaObject
+
+    private constructor();
+
+    function connect(arg0 SocketAddress? in) returns(DatagramChannel?){@Throws};
+
+    function disconnect() returns(DatagramChannel?){@Throws};
+
+    function isConnected() returns(boolean);
+
+    static function _open() returns(DatagramChannel?){@externalName{"open"}, @Throws};
+
+    function read(arg0 ByteBuffer? in) returns(int){@Throws};
+
+    function receive(arg0 ByteBuffer? in) returns(SocketAddress?){@Throws};
+
+    function send(arg0 ByteBuffer? in, arg1 SocketAddress? in) returns(int){@Throws};
+
+    function socket() returns(DatagramSocket?);
+
+    function validOps() returns(int);
+
+    function write(arg0 ByteBuffer? in) returns(int){@Throws};
+end
+

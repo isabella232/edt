@@ -1,0 +1,27 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.lang.Appendable;
+import java.lang.CharSequence;
+
+
+externalType Writer extends Appendable, Closeable, Flushable type JavaObject
+
+    private constructor();
+
+    function append(arg0 CharSequence? in, arg1 int in, arg2 int in) returns(Writer?){@Throws};
+
+    function append(arg0 CharSequence? in) returns(Writer?){@Throws};
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function flush(){@Throws};
+
+    function write(arg0 string? in, arg1 int in, arg2 int in){@Throws};
+
+    function write(arg0 string? in){@Throws};
+
+    function write(arg0 int in){@Throws};
+end
+

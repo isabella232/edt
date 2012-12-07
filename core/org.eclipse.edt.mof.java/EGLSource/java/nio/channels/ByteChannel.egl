@@ -1,0 +1,13 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+
+
+
+
+externalType ByteChannel extends ReadableByteChannel, WritableByteChannel type JavaObject
+
+    private constructor();
+
+end
+

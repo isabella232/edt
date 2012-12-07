@@ -1,0 +1,77 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.io.Serializable;
+import java.lang.Cloneable;
+
+
+externalType Locale extends Cloneable, Serializable type JavaObject
+    static CANADA Locale?;
+    static CANADA_FRENCH Locale?;
+    static CHINA Locale?;
+    static CHINESE Locale?;
+    static ENGLISH Locale?;
+    static FRANCE Locale?;
+    static FRENCH Locale?;
+    static GERMAN Locale?;
+    static GERMANY Locale?;
+    static ITALIAN Locale?;
+    static ITALY Locale?;
+    static JAPAN Locale?;
+    static JAPANESE Locale?;
+    static KOREA Locale?;
+    static KOREAN Locale?;
+    static PRC Locale?;
+    static ROOT Locale?;
+    static SIMPLIFIED_CHINESE Locale?;
+    static TAIWAN Locale?;
+    static TRADITIONAL_CHINESE Locale?;
+    static UK Locale?;
+    static US Locale?;
+
+    constructor(arg0 string? in);
+
+    constructor(arg0 string? in, arg1 string? in);
+
+    constructor(arg0 string? in, arg1 string? in, arg2 string? in);
+
+    function clone() returns(Object?);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function getCountry() returns(string?);
+
+    static function getDefault() returns(Locale?);
+
+    function getDisplayCountry() returns(string?);
+
+    function getDisplayCountry(arg0 Locale? in) returns(string?);
+
+    function getDisplayLanguage() returns(string?);
+
+    function getDisplayLanguage(arg0 Locale? in) returns(string?);
+
+    function getDisplayName() returns(string?);
+
+    function getDisplayName(arg0 Locale? in) returns(string?);
+
+    function getDisplayVariant(arg0 Locale? in) returns(string?);
+
+    function getDisplayVariant() returns(string?);
+
+    function getISO3Country() returns(string?){@Throws};
+
+    function getISO3Language() returns(string?){@Throws};
+
+    function getLanguage() returns(string?);
+
+    function getVariant() returns(string?);
+
+    function hashCode() returns(int);
+
+    static function setDefault(arg0 Locale? in);
+
+    function toString() returns(string?);
+end
+

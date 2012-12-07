@@ -1,0 +1,34 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+import java.lang.Enum;
+
+
+externalType Proxy type JavaObject
+    static NO_PROXY Proxy?;
+
+    constructor(arg0 Proxy_Type? in, arg1 SocketAddress? in);
+
+    function address() returns(SocketAddress?);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function hashCode() returns(int);
+
+    function toString() returns(string?);
+
+    function _type() returns(Proxy_Type?){@externalName{"type"}};
+end
+
+externalType Proxy_Type extends Enum type JavaObject{externalName = "Proxy.Type"}
+    static DIRECT Proxy_Type?;
+    static HTTP Proxy_Type?;
+    static SOCKS Proxy_Type?;
+
+    static function values() returns(Proxy_Type?[]);
+
+    static function valueOf(arg0 string? in) returns(Proxy_Type?);
+end
+

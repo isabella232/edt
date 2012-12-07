@@ -1,0 +1,29 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.lang.Readable;
+import java.nio.CharBuffer;
+
+
+externalType Reader extends Readable, Closeable type JavaObject
+
+    private constructor();
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function mark(arg0 int in){@Throws};
+
+    function markSupported() returns(boolean);
+
+    function read() returns(int){@Throws};
+
+    function read(arg0 CharBuffer? in) returns(int){@Throws};
+
+    function ready() returns(boolean){@Throws};
+
+    function reset(){@Throws};
+
+    function skip(arg0 bigInt in) returns(bigInt){@Throws};
+end
+

@@ -1,0 +1,17 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+
+
+externalType FilterOutputStream extends OutputStream type JavaObject
+
+    constructor(arg0 OutputStream? in);
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function flush(){@Throws};
+
+    function write(arg0 int in){@Throws};
+end
+

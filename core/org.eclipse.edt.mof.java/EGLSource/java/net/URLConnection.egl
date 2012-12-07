@@ -1,0 +1,59 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.Permission;
+import java.util.Map;
+
+externalType URLConnection type JavaObject 
+  private constructor();
+   function addRequestProperty(arg0 string? IN,arg1 string? IN);
+   function connect(){@Throws};
+   function getAllowUserInteraction()  returns(boolean);
+   function getConnectTimeout()  returns(int);
+   function getContent()  returns(Object?){@Throws};
+   function getContentEncoding()  returns(string?);
+   function getContentLength()  returns(int);
+   function getContentType()  returns(string?);
+   function getDate()  returns(bigint);
+   static function getDefaultAllowUserInteraction()  returns(boolean);
+   function getDefaultUseCaches()  returns(boolean);
+   function getDoInput()  returns(boolean);
+   function getDoOutput()  returns(boolean);
+   function getExpiration()  returns(bigint);
+   static function getFileNameMap()  returns(FileNameMap?);
+   function getHeaderField(arg0 int IN)  returns(string?);
+   function getHeaderField(arg0 string? IN)  returns(string?);
+   function getHeaderFieldDate(arg0 string? IN,arg1 bigint IN)  returns(bigint);
+   function getHeaderFieldInt(arg0 string? IN,arg1 int IN)  returns(int);
+   function getHeaderFieldKey(arg0 int IN)  returns(string?);
+   function getHeaderFields()  returns(Map?);
+   function getIfModifiedSince()  returns(bigint);
+   function getInputStream()  returns(InputStream?){@Throws};
+   function getLastModified()  returns(bigint);
+   function getOutputStream()  returns(OutputStream?){@Throws};
+   function getPermission()  returns(Permission?){@Throws};
+   function getReadTimeout()  returns(int);
+   function getRequestProperties()  returns(Map?);
+   function getRequestProperty(arg0 string? IN)  returns(string?);
+   function getURL()  returns(_URL?);
+   function getUseCaches()  returns(boolean);
+   static function guessContentTypeFromName(arg0 string? IN)  returns(string?);
+   static function guessContentTypeFromStream(arg0 InputStream? IN)  returns(string?){@Throws};
+   function setAllowUserInteraction(arg0 boolean IN);
+   function setConnectTimeout(arg0 int IN);
+   static function setContentHandlerFactory(arg0 ContentHandlerFactory? IN);
+   static function setDefaultAllowUserInteraction(arg0 boolean IN);
+   function setDefaultUseCaches(arg0 boolean IN);
+   function setDoInput(arg0 boolean IN);
+   function setDoOutput(arg0 boolean IN);
+   static function setFileNameMap(arg0 FileNameMap? IN);
+   function setIfModifiedSince(arg0 bigint IN);
+   function setReadTimeout(arg0 int IN);
+   function setRequestProperty(arg0 string? IN,arg1 string? IN);
+   function setUseCaches(arg0 boolean IN);
+   function toString()  returns(string?);
+end
+

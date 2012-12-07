@@ -1,0 +1,41 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+
+
+externalType SelectionKey type JavaObject
+    static OP_ACCEPT int;
+    static OP_CONNECT int;
+    static OP_READ int;
+    static OP_WRITE int;
+
+    private constructor();
+
+    function attach(arg0 Object? in) returns(Object?);
+
+    function attachment() returns(Object?);
+
+    function cancel();
+
+    function channel() returns(SelectableChannel?);
+
+    function interestOps() returns(int);
+
+    function interestOps(arg0 int in) returns(SelectionKey?);
+
+    function isAcceptable() returns(boolean);
+
+    function isConnectable() returns(boolean);
+
+    function isReadable() returns(boolean);
+
+    function isValid() returns(boolean);
+
+    function isWritable() returns(boolean);
+
+    function readyOps() returns(int);
+
+    function selector() returns(Selector?);
+end
+

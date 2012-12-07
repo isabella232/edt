@@ -1,0 +1,10 @@
+package eglx.http;
+
+import eglx.java.JavaObject;
+
+
+externalType ServletContext type JavaObject{}
+	private constructor();
+	static function getHttpServletRequest()returns(javax.servlet.http.HttpServletRequest);
+//	static function getHttpServletResponse()returns(HttpServletResponse);
+end

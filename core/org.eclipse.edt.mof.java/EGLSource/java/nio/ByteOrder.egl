@@ -1,0 +1,14 @@
+package java.nio;
+
+import eglx.java.JavaObject;
+
+
+externalType ByteOrder type JavaObject
+    static BIG_ENDIAN ByteOrder?;
+    static LITTLE_ENDIAN ByteOrder?;
+
+    static function nativeOrder() returns(ByteOrder?);
+
+    function toString() returns(string?);
+end
+

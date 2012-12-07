@@ -1,0 +1,30 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+
+
+externalType ListIterator extends Iterator type JavaObject
+
+    private constructor();
+
+    function _add(arg0 Object? in){@externalName{"add"}};
+
+    function hasNext() returns(boolean);
+
+    function hasPrevious() returns(boolean);
+
+    function _next() returns(Object?){@externalName{"next"}};
+
+    function nextIndex() returns(int);
+
+    function _previous() returns(Object?){@externalName{"previous"}};
+
+    function previousIndex() returns(int);
+
+    function remove();
+
+    function _set(arg0 Object? in){@externalName{"set"}};
+end
+

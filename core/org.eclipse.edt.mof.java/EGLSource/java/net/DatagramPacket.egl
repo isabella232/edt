@@ -1,0 +1,26 @@
+package java.net;
+
+import eglx.java.JavaObject;
+
+
+externalType DatagramPacket type JavaObject
+
+    function getAddress() returns(InetAddress?);
+
+    function getLength() returns(int);
+
+    function getOffset() returns(int);
+
+    function getPort() returns(int);
+
+    function getSocketAddress() returns(SocketAddress?);
+
+    function setAddress(arg0 InetAddress? in);
+
+    function setLength(arg0 int in);
+
+    function setPort(arg0 int in);
+
+    function setSocketAddress(arg0 SocketAddress? in);
+end
+

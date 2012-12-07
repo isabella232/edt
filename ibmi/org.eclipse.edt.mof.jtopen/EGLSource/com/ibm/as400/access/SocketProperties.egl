@@ -1,0 +1,70 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.io.Serializable;
+
+
+externalType SocketProperties extends Serializable type JavaObject
+
+    constructor();
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function getLoginTimeout() returns(int);
+
+    function getReceiveBufferSize() returns(int);
+
+    function getSendBufferSize() returns(int);
+
+    function getSoLinger() returns(int);
+
+    function getSoTimeout() returns(int);
+
+    function hashCode() returns(int);
+
+    function isKeepAlive() returns(boolean);
+
+    function isKeepAliveSet() returns(boolean);
+
+    function isLoginTimeoutSet() returns(boolean);
+
+    function isReceiveBufferSizeSet() returns(boolean);
+
+    function isSendBufferSizeSet() returns(boolean);
+
+    function isSoLingerSet() returns(boolean);
+
+    function isSoTimeoutSet() returns(boolean);
+
+    function isTcpNoDelay() returns(boolean);
+
+    function isTcpNoDelaySet() returns(boolean);
+
+    function setKeepAlive(arg0 boolean in);
+
+    function setLoginTimeout(arg0 int in);
+
+    function setReceiveBufferSize(arg0 int in);
+
+    function setSendBufferSize(arg0 int in);
+
+    function setSoLinger(arg0 int in);
+
+    function setSoTimeout(arg0 int in);
+
+    function setTcpNoDelay(arg0 boolean in);
+
+    function unsetKeepAlive();
+
+    function unsetReceiveBufferSize();
+
+    function unsetSendBufferSize();
+
+    function unsetSoLinger();
+
+    function unsetSoTimeout();
+
+    function unsetTcpNoDelay();
+end
+

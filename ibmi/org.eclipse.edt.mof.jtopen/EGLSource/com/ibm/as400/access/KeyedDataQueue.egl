@@ -1,0 +1,32 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+
+externalType KeyedDataQueue extends BaseDataQueue type JavaObject
+
+    constructor(arg0 AS400? in, arg1 string? in);
+
+    constructor();
+
+    function clear(arg0 string? in){@Throws};
+
+    function create(arg0 int in, arg1 int in, arg2 string? in, arg3 boolean in, arg4 boolean in, arg5 string? in){@Throws};
+
+    function create(arg0 int in, arg1 int in){@Throws};
+
+    function getKeyLength() returns(int){@Throws};
+
+    function peek(arg0 string? in, arg1 int in, arg2 string? in) returns(KeyedDataQueueEntry?){@Throws};
+
+    function peek(arg0 string? in) returns(KeyedDataQueueEntry?){@Throws};
+
+    function read(arg0 string? in, arg1 int in, arg2 string? in) returns(KeyedDataQueueEntry?){@Throws};
+
+    function read(arg0 string? in) returns(KeyedDataQueueEntry?){@Throws};
+
+    function toString() returns(string?);
+
+    function write(arg0 string? in, arg1 string? in){@Throws};
+end
+
