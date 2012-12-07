@@ -248,43 +248,52 @@ public class ExpressionValidator extends AbstractASTVisitor {
 			}
 		}
 		
-		final Type[] arrayElementType = {null};
-		if (type.isArrayType()) {
-			arrayElementType[0] = ((org.eclipse.edt.mof.egl.ArrayType)type.resolveType()).getElementType();
-		}
 		if (newExpression.hasSettingsBlock()) {
-			newExpression.getSettingsBlock().accept(new AbstractASTExpressionVisitor() {
-				@Override
-				public boolean visit(Assignment assignment) {
-					validateAssignment(assignment);
-					return false;
-				}
-				@Override
-				public boolean visit(SetValuesExpression setValuesExpression) {
-					// SVE is allowed in this location, and is validated in its own endVisit method.
-					return false;
-				}
-				@Override
-				public boolean visitExpression(Expression expression) {
-					// Arrays allow "new array[]{element1, element2}" so we need to validate the elements against the array's element type.
-					if (arrayElementType[0] != null) {
-						Type exprType = expression.resolveType();
-						if (!BindingUtil.isMoveCompatible(arrayElementType[0], null, exprType, expression)) {
-							problemRequestor.acceptProblem(expression, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-									new String[] {
-											BindingUtil.getShortTypeString(arrayElementType[0]),
-											exprType != null ? BindingUtil.getShortTypeString(exprType) : expression.getCanonicalString(),
-											newExpression.getCanonicalString() + "{" + expression.getCanonicalString() + "}" });
-						}
-					}
-					else {
-						problemRequestor.acceptProblem(expression, IProblemRequestor.EXPR_INVALID_IN_THIS_LOCATION,
-								new String[]{expression.getCanonicalString()});
-					}
-					return false;
-				}
-			});
+			validateSettings(newExpression.getSettingsBlock(), newExpression);
 		}
+	}
+	
+	private void validateSettings(SettingsBlock settings, final Expression expr) {
+		final Type[] arrayElementType = {null};
+		if (expr.resolveType() instanceof org.eclipse.edt.mof.egl.ArrayType) {
+			arrayElementType[0] = ((org.eclipse.edt.mof.egl.ArrayType)expr.resolveType()).getElementType();
+		}
+		settings.accept(new AbstractASTExpressionVisitor() {
+			@Override
+			public boolean visit(Assignment assignment) {
+				validateAssignment(assignment);
+				return false;
+			}
+			@Override
+			public boolean visit(SetValuesExpression setValuesExpression) {
+				// SVE is allowed in this location, and is validated in its own endVisit method.
+				return false;
+			}
+			@Override
+			public boolean visit(AnnotationExpression annotationExpression) {
+				// Annotations are allowed in this location, and are validated elsewhere.
+				return false;
+			}
+			@Override
+			public boolean visitExpression(Expression expression) {
+				// Arrays allow "new array[]{element1, element2}" so we need to validate the elements against the array's element type.
+				if (arrayElementType[0] != null) {
+					Type exprType = expression.resolveType();
+					if (!BindingUtil.isMoveCompatible(arrayElementType[0], null, exprType, expression)) {
+						problemRequestor.acceptProblem(expression, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
+								new String[] {
+										BindingUtil.getShortTypeString(arrayElementType[0]),
+										exprType != null ? BindingUtil.getShortTypeString(exprType) : expression.getCanonicalString(),
+										expr.getCanonicalString() + ".appendElement(" + expression.getCanonicalString() + ")"});
+					}
+				}
+				else {
+					problemRequestor.acceptProblem(expression, IProblemRequestor.EXPR_INVALID_IN_THIS_LOCATION,
+							new String[]{expression.getCanonicalString()});
+				}
+				return false;
+			}
+		});
 	}
 	
 	@Override
@@ -346,46 +355,7 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	
 	@Override
 	public void endVisit(final SetValuesExpression setValuesExpression) {
-		final Type[] arrayElementType = {null};
-		if (setValuesExpression.getExpression().resolveType() instanceof org.eclipse.edt.mof.egl.ArrayType) {
-			arrayElementType[0] = ((org.eclipse.edt.mof.egl.ArrayType)setValuesExpression.getExpression().resolveType()).getElementType();
-		}
-		setValuesExpression.getSettingsBlock().accept(new AbstractASTExpressionVisitor() {
-			@Override
-			public boolean visit(SettingsBlock settingsBlock) {
-				return true;
-			}
-			@Override
-			public boolean visit(SetValuesExpression setValuesExpression) {
-				// SVE is allowed in this location, and is validated in its own endVisit method.
-				return false;
-			}
-			@Override
-			public boolean visit(Assignment assignment) {
-				validateAssignment(assignment);
-				return false;
-			}
-			@Override
-			public boolean visitExpression(Expression expression) {
-				// Arrays allow "new array[]{element1, element2}" so we need to validate the elements against the array's element type.
-				if (arrayElementType[0] != null) {
-					Type exprType = expression.resolveType();
-					if (!BindingUtil.isMoveCompatible(arrayElementType[0], null, exprType, expression)) {
-						problemRequestor.acceptProblem(expression, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-								new String[] {
-										BindingUtil.getShortTypeString(arrayElementType[0]),
-										exprType != null ? BindingUtil.getShortTypeString(exprType) : expression.getCanonicalString(),
-												setValuesExpression.getCanonicalString() + ".appendElement(" + expression.getCanonicalString() + ")" });
-					}
-				}
-				else {
-					problemRequestor.acceptProblem(expression, IProblemRequestor.EXPR_INVALID_IN_THIS_LOCATION,
-							new String[]{expression.getCanonicalString()});
-				}
-				return false;
-			}
-		});
-		
+		validateSettings(setValuesExpression.getSettingsBlock(), setValuesExpression.getExpression());
 		if (setValuesExpression.getExpression().resolveType() instanceof Delegate || setValuesExpression.getExpression().resolveMember() instanceof FunctionMember) {
 			problemRequestor.acceptProblem(
 					setValuesExpression.getSettingsBlock(),
@@ -396,83 +366,15 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	
 	@Override
 	public void endVisit(final ClassDataDeclaration classDataDeclaration) {
-		final Type[] arrayElementType = {null};
-		if (classDataDeclaration.getType().isArrayType() && classDataDeclaration.getType().resolveType() instanceof org.eclipse.edt.mof.egl.ArrayType) {
-			arrayElementType[0] = ((org.eclipse.edt.mof.egl.ArrayType)classDataDeclaration.getType().resolveType()).getElementType();
-		}
 		if (classDataDeclaration.hasSettingsBlock()) {
-			classDataDeclaration.getSettingsBlockOpt().accept(new AbstractASTExpressionVisitor() {
-				@Override
-				public boolean visit(Assignment assignment) {
-					validateAssignment(assignment);
-					return false;
-				}
-				@Override
-				public boolean visit(SetValuesExpression setValuesExpression) {
-					// SVE is allowed in this location, and is validated in its own endVisit method.
-					return false;
-				}
-				@Override
-				public boolean visitExpression(Expression expression) {
-					// Arrays allow "new array[]{element1, element2}" so we need to validate the elements against the array's element type.
-					if (arrayElementType[0] != null) {
-						Type exprType = expression.resolveType();
-						if (!BindingUtil.isMoveCompatible(arrayElementType[0], null, exprType, expression)) {
-							problemRequestor.acceptProblem(expression, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-									new String[] {
-											BindingUtil.getShortTypeString(arrayElementType[0]),
-											exprType != null ? BindingUtil.getShortTypeString(exprType) : expression.getCanonicalString(),
-											classDataDeclaration.getNames().get(0).getCanonicalString() + ".appendElement(" + expression.getCanonicalString() + ")" });
-						}
-					}
-					else {
-						problemRequestor.acceptProblem(expression, IProblemRequestor.EXPR_INVALID_IN_THIS_LOCATION,
-								new String[]{expression.getCanonicalString()});
-					}
-					return false;
-				}
-			});
+			validateSettings(classDataDeclaration.getSettingsBlockOpt(), classDataDeclaration.getNames().get(0));
 		}
 	}
 	
 	@Override
 	public void endVisit(final FunctionDataDeclaration functionDataDeclaration) {
-		final Type[] arrayElementType = {null};
-		if (functionDataDeclaration.getType().isArrayType() && functionDataDeclaration.getType().resolveType() instanceof org.eclipse.edt.mof.egl.ArrayType) {
-			arrayElementType[0] = ((org.eclipse.edt.mof.egl.ArrayType)functionDataDeclaration.getType().resolveType()).getElementType();
-		}
 		if (functionDataDeclaration.hasSettingsBlock()) {
-			functionDataDeclaration.getSettingsBlockOpt().accept(new AbstractASTExpressionVisitor() {
-				@Override
-				public boolean visit(Assignment assignment) {
-					validateAssignment(assignment);
-					return false;
-				}
-				@Override
-				public boolean visit(SetValuesExpression setValuesExpression) {
-					// SVE is allowed in this location, and is validated in its own endVisit method.
-					return false;
-				}
-				@Override
-				public boolean visitExpression(Expression expression) {
-					// Arrays allow "new array[]{element1, element2}" so we need to validate the elements against the array's element type.
-					if (arrayElementType[0] != null) {
-						Type exprType = expression.resolveType();
-						if (!BindingUtil.isMoveCompatible(arrayElementType[0], null, exprType, expression)) {
-							problemRequestor.acceptProblem(expression, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-									new String[] {
-											BindingUtil.getShortTypeString(arrayElementType[0]),
-											exprType != null ? BindingUtil.getShortTypeString(exprType) : expression.getCanonicalString(),
-													functionDataDeclaration.getNames().get(0).getCanonicalString() + ".appendElement(" + expression.getCanonicalString() + ")" });
-						}
-					}
-					else {
-						problemRequestor.acceptProblem(expression, IProblemRequestor.EXPR_INVALID_IN_THIS_LOCATION,
-								new String[]{expression.getCanonicalString()});
-					}
-					return false;
-				}
-			});
+			validateSettings(functionDataDeclaration.getSettingsBlockOpt(), functionDataDeclaration.getNames().get(0));
 		}
 	}
 	
