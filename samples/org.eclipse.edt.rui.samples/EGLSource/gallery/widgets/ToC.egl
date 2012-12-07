@@ -1,0 +1,69 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.widgets;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.Box;
+import eglx.javascript.Job;
+import eglx.ui.rui.RUIWidget;
+import gallery.lib.samplesLib;
+
+// The table of contents on the left.
+handler ToC type RUIWidget { targetWidget = ui, onConstructionFunction=start }
+	
+	// Keeps track of which page is currently active.  We need to know this
+	// so we know which section to "click" on when we get notification via the InfoBus
+	// that the "next" or "previous" button has been pressed.
+	activePage int;
+	
+	elementsBox Box {
+		columns=1,
+		padding=5
+	};
+	
+	ui Box {
+		paddingLeft=15,
+		paddingRight=15,
+		paddingTop=0,
+		paddingBottom=35,
+		children=[elementsBox]
+	};
+	
+	// The onConstructionFunction.
+	function start()
+		// INFOBUS Register to receive notification when the "previous" or "next" button is clicked.
+		InfoBus.subscribe("org.eclipse.edt.rui.samples.nav", navClicked);
+		// INFOBUS Register to receive notification when a new sample has been shown in the page, so that
+		// we can keep our activePage current
+		InfoBus.subscribe("org.eclipse.edt.rui.samples.sectionActivated", sectionActivated);
+		elementsBox.children = samplesLib.tls;
+		new Job { runFunction=adjustSize }.schedule();
+	end
+	
+	function adjustSize()
+		elementsBox.width=ui.getPixelWidth() - 10;
+	end
+	
+	// When a button is pressed, it passes along as data either a 1 indicating we need to move forward
+	// or a -1 indicating that "previous" was clicked.  Just add whatever value we get to the current page's
+	// index, then programatically "click" on that element.
+	function navClicked(eventName string in, data any in)
+		activePage += (data as int);
+		samplesLib.tls[activePage].doClicked();
+	end
+	
+	// Update our activePage
+	function sectionActivated(eventName string in, data any in)
+		activePage = data as int;
+	end
+end

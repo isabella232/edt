@@ -1,0 +1,459 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package utils.portal;
+
+import org.eclipse.edt.rui.widgets.Box;
+import eglx.lang.EGLProperty;
+import eglx.lang.MathLib;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEWidget;
+import eglx.ui.rui.Widget;
+
+handler Portal type RUIWidget { targetWidget = ui, cssFile = "utils/portal/portal.css", @VEWidget { category = "Samples", template = "${typeName}{ columns = 3, columnWidths = [ 300, 300, 300 ] }", smallIcon = "icons/ctool16/portal_16.gif", largeIcon = "icons/ctool24/portal_24.gif"} }
+
+    ui Box { cssClass = "EglRuiPortal" };
+
+    columns int { @EGLProperty { setMethod = setColumns, getMethod = getColumns }, @VEProperty { } };
+    portlets Portlet [ ] { };
+    columnWidths int [ ] { @EGLProperty { } };
+
+    private const defaultColumnWidth int = 300;
+
+    private listeners PortletEvent [ ] = [ ];
+
+    // Sets the width (in pixels) of each column in the portal
+    
+    function setColumnWidths(newWidths int [ ] in)
+        this.columnWidths = newWidths;
+
+        if (columns == 0)
+            setColumns(this.columnWidths.getSize());
+        end
+
+        adjustColumnWidths();
+
+        if (ui.children.getSize() > 0)
+            for (n int from 1 to ui.children.getSize())
+                column Box = (ui.children [ n ] as Box);
+                column.width = columnWidths [ n ] + 10;
+                for (j int from 1 to column.children.getSize())
+                    column.children [ j ].width = columnWidths [ n ] + 4;
+                end
+                column.layout();
+            end
+        end
+    end
+
+    // Returns the widths of the columns in the portal
+    
+    function getColumnWidths() returns (int [ ])
+        return (columnWidths);
+    end
+
+    // Returns all portlets contained in the portal
+
+    function getPortlets() returns (Portlet [ ])
+        return (portlets);
+    end
+
+    private dragFeedback Box { padding = 0, borderWidth = 1, borderStyle = "dashed", borderColor = "#888888", backgroundColor = "#eeeeee", marginBottom = 7, height = 200, cssClass = "EglRuiPortlet" };
+    private originalColumn Box;
+    private originalColumnIndex int;
+    private dx, dy int;
+
+    // Adds a new portlet to the specified column
+
+    function addPortlet(portlet Portlet in, columnNumber int in)
+        if (ui.children.getSize() == 0)
+            setColumns(1);
+        end
+
+        // Add to the last column if specified value is > total columns in the portal
+        if (columnNumber > ui.children.getSize())
+            columnNumber = ui.children.getSize();
+        end
+
+        column Widget = ui.children [ columnNumber ];
+        column.appendChild(portlet);
+        if (portlet.canMove)
+            if (portlet.parentPortal == null)
+                portlet.header.onStartDrag = startDrag;
+                portlet.header.onDrag = drag;
+                portlet.header.onDropOnTarget = drop;
+                portlet.header.style = "cursor: move";
+            end
+        end
+        portlet.parentPortal = this;
+
+        if (columnWidths.getSize() < columnNumber)
+            portlet.width = defaultColumnWidth;
+        else
+            portlet.width = columnWidths [ columnNumber ];
+        end
+
+        portlets.appendElement(portlet);
+    end
+
+    // Removes the specified portlet
+    
+    function removePortlet(portlet Portlet in)
+        columns Widget [ ] = ui.children;
+        for (n int from 1 to columns.getSize())
+            portlets Widget [ ] = (columns [ n ] as Box).getChildren();
+            for (i int from 1 to portlets.getSize())
+                if (portlets [ i ] == portlet)
+                    columns [ n ].removeChild(portlets [ i ]);
+                    return;
+                end
+            end						
+        end
+    end
+
+    // Closes the specified portlet (which fires an event)
+    
+    function closePortlet(portlet Portlet in)
+        notifyListeners(portlet, PortalLibrary.PORTLET_CLOSED);
+        removePortlet(portlet);
+    end
+
+    // Called when a portlet is about to be dragged
+    
+    private function startDrag(widget Widget in, x int in, y int in) returns (boolean)
+        portlet Portlet = getPortlet(widget);
+
+        if (portlet.x > 0)
+            dx = x - portlet.x;
+            dy = y - portlet.y;
+        end
+
+        originalColumn = portlet.logicalParent;
+        originalColumnIndex = getChildIndex(portlet);
+        originalColumn.removeChild(portlet);
+        document.body.appendChild(portlet);
+
+        portlet.position = "absolute";
+        //portlet.opacity = 0.5;	
+        
+        expandColumnsBeforeDrag(portlet.pixelHeight);
+
+        //portlet.x = x - dx; 
+        //portlet.y = y - dy;
+        
+        drag(portlet, originalColumn, x, y);
+
+        return (true);
+    end
+
+    // Called as a portlet is being dragged
+    
+    private function drag(widget Widget in, dropTarget Widget in, x int in, y int in)
+        portlet Portlet = getPortlet(widget);
+
+        portlet.x = x - dx;
+        portlet.y = y - dy;
+        column Box? = null;
+        index int = 0;
+        dropPortlet Portlet = getDropPortlet(dropTarget);
+        if (dropPortlet != null)
+            column = dropPortlet.logicalParent;
+            index = getChildIndex(dropPortlet);
+        else
+            column = getColumn(dropTarget);
+        end
+        if (column != null and column.cssClass == "EglRuiPortalColumn")
+            if (dragFeedback.logicalParent != column || (getChildIndex(dragFeedback) != index))
+                if (dragFeedback.logicalParent != null)
+                    dragFeedback.logicalParent.removeChild(dragFeedback);
+                end
+                if (index == 0)
+                    column.appendChild(dragFeedback);
+                else
+                    column.children.insertElement(dragFeedback, index);
+                    column.layout();
+                end
+                if (dragFeedback.logicalParent != null)
+                    dragFeedback.width = dragFeedback.logicalParent.pixelWidth - (dragFeedback.borderWidth * 2);
+                    dragFeedback.height = portlet.pixelHeight;
+                end			
+            end
+        end
+    end
+
+    // Called when a portlet is dropped into a new spot
+    
+    function drop(widget Widget in, dropTarget Widget in, x int in, y int in)
+        portlet Portlet = getPortlet(widget);
+        newColumn Box? = null;
+
+        //portlet.opacity = 1.0;
+        portlet.position = "static";
+        if (dropTarget == dragFeedback)
+            newColumn = dragFeedback.logicalParent;
+            index int = getChildIndex(dragFeedback);
+            newColumn.children.insertElement(portlet, index);
+        else
+            dropPortlet Portlet = getDropPortlet(dropTarget);
+            if (dropPortlet != null)
+                newColumn = dropPortlet.logicalParent;
+                index int = getChildIndex(dropPortlet);
+                newColumn.children.insertElement(portlet, index);
+            else
+                newColumn = getColumn(dropTarget);
+                if (newColumn != null)
+                    newColumn.appendChild(portlet);
+                else
+                    originalColumn.appendChild(portlet);
+                end
+            end
+        end
+        if (dragFeedback.logicalParent != null)
+            dragFeedback.logicalParent.removeChild(dragFeedback);
+        end
+        if (newColumn != null)
+            portlet.width = newColumn.pixelWidth - 10;
+            newColumn.layout();
+        end
+
+        restoreColumnsAfterDrag();
+
+        oldColumnIndex int = getChildIndex(originalColumn);
+        newColumnIndex int = getChildIndex(portlet.getLogicalParent());
+        oldPosition int = originalColumnIndex;
+        newPosition int = getChildIndex(portlet);
+
+        if (oldColumnIndex != newColumnIndex || oldPosition != newPosition)
+            notifyListeners(portlet, PortalLibrary.PORTLET_MOVED);
+        end
+    end
+
+    private function getChildIndex(widget Widget in) returns (int)
+        children Widget [ ] = widget.logicalParent.children;
+        for (n int from 1 to children.getSize())
+            if (children [ n ] == widget)
+                return (n);
+            end
+        end
+        return (children.getSize());
+    end
+
+    private function getPortlet(widget Widget in) returns (Portlet)
+        while (widget != null && widget.cssClass != "EglRuiPortlet")
+            widget = widget.parent;
+        end
+        return (widget);
+    end
+
+    private function getDropPortlet(widget Widget in) returns (Portlet?)
+        while (widget != null && widget.cssClass != "EglRuiPortlet")
+            widget = widget.parent;
+        end
+        if (widget != null)
+            return (widget as Portlet);
+        else
+            return (null);
+        end
+    end
+
+    // Makes the columns bigger during a drag operation
+    
+    private function expandColumnsBeforeDrag(additionalHeight int in)
+        children Widget [ ] = ui.children;
+        maxHeight int = 0;
+        for (n int from 1 to children.getSize())
+            maxHeight = MathLib.max(maxHeight, children [ n ].pixeLHeight);
+        end
+        for (n int from 1 to children.getSize())
+            children [ n ].height = maxHeight + additionalHeight + 10;
+        end
+    end
+
+    // Restores the column size after a drag operation is complete
+    
+    private function restoreColumnsAfterDrag()
+        children Widget [ ] = ui.children;
+        for (n int from 1 to children.getSize())
+            children [ n ].height = "100%";
+        end
+    end
+
+    private function getColumn(widget Widget in) returns (Box?)
+        while (widget != null && widget.cssClass != "EglRuiPortalColumn")
+            widget = widget.parent;
+        end
+        if (widget != null)
+            return (widget);
+        else
+            return (null);
+        end
+    end
+
+    // Sets the number of columns on the portal. This function does not do any magic if portlets are already on the portal (they will be lost)
+
+    function setColumns(columns int in)
+        if (columns < 1)
+            columns = 1;
+        end
+        this.columns = columns;
+
+        adjustColumnWidths();
+
+        ui.removeChildren();
+        for (n int from 1 to columns)
+            ui.appendChild(new Box { cssClass = "EglRuiPortalColumn", columns = 1, height = "100%", marginRight = 7, width = columnWidths [ n ] + 10 });
+        end
+    end
+
+    function getColumns() returns (int)
+        return (this.columns);
+    end
+
+    // Adds a new portal listener
+    
+    function addListener(listener PortletEvent in)
+        listeners ::= listener;
+    end
+
+    function notifyListeners(portlet Portlet in, eventType int in)
+        id string = getPortletId(portlet);
+        for (n int from 1 to listeners.getSize() by 1)
+            listeners [ n ](portlet, eventType);
+        end
+    end
+
+    // Returns the ID of the specified portlet (may just be the title)
+    
+    function getPortletId(portlet Portlet in) returns (string)
+        id string = portlet.id;
+        if (id == null || id == "")
+            id = portlet.getTitle();
+        end
+        return (id);
+    end
+    
+    function getPortletColumn(portlet Portlet in) returns (int)
+    	if (portlet == null && ui.children.getSize() > 0)    	
+	        for (n int from 1 to ui.children.getSize())
+	            column Box = (ui.children [ n ] as Box);
+	            if (portlet.getParent() == column)
+	            	return (n);
+	            end
+	    	end
+	    end
+	    
+	    return (0);
+    end
+
+    private function findPortletById(id string in, portlets InternalPortletInfo [ ] in) returns (int)
+        for (i int from 1 to portlets.getSize() by 1)
+            if (portlets [ i ].id == id)
+                return (i);
+            end			
+        end
+
+        return (-1);
+    end
+
+    // Returns information about the layout of the portlets on the portal. Typically this information is serialized and saved to a cookie.
+    
+    function getLayoutInfo() returns (PortalLayoutInfo)
+        info PortalLayoutInfo { columns = new PortalColumnLayoutInfo [ 0 ] };
+        for (n int from 1 to ui.getChildren().getSize() by 1)
+            column Box = ui.getChildren() [ n ] as Box;
+            columnInfo PortalColumnLayoutInfo { portlets = new PortletLayoutInfo [ 0 ] };
+            for (j int from 1 to column.getChildren().getSize() by 1)
+                portlet Portlet = column.getChildren() [ j ] as Portlet;
+                portletInfo PortletLayoutInfo { id = getPortletId(portlet), minimized = portlet.isMinimized() };
+                columnInfo.portlets.appendElement(portletInfo);
+            end
+            info.columns.appendElement(columnInfo);
+        end
+
+        return (info);
+    end
+
+    // Applies the specified layout to the current portal. This may result in portlets being moved and reordered.	
+    
+    function applyLayoutInfo(layoutInfo PortalLayoutInfo in)
+        portlets InternalPortletInfo [];
+        for (n int from 1 to ui.getChildren().getSize() by 1)
+            column Box = (ui.getChildren() [ n ] as Box);
+            for (j int from 1 to column.getChildren().getSize() by 1)
+                portlet Portlet = (column.getChildren() [ j ] as Portlet);
+                portlets.appendElement(new InternalPortletInfo { id = getPortletId(portlet), portlet = portlet, column = j });
+            end
+            column.removeChildren();
+        end
+
+        // add portlets to the appropriate column					
+        for (n int from 1 to layoutInfo.columns.getSize() by 1)
+            columnInfo PortalColumnLayoutInfo = layoutInfo.columns [ n ];
+            if (columnInfo.portlets != null)
+                for (j int from 1 to columnInfo.portlets.getSize() by 1)
+                    portletInfo PortletLayoutInfo = columnInfo.portlets [ j ];
+                    internalPortletIndex int = findPortletById(portletInfo.id, portlets);
+                    if (internalPortletIndex != -1)
+                        portlet Portlet = portlets [ internalPortletIndex ].portlet;
+                        addPortlet(portlet, n);
+                        portlets.removeElement(internalPortletIndex);
+
+                        if (portletInfo.minimized && portlet.canMinimize && !portlet.isMinimized())
+                            portlet.minimize();
+                        end	
+                    end
+                end
+            end	
+        end
+
+        // add any remaining portlets back to the columns they came from
+        for (i int from 1 to portlets.getSize() by 1)
+            addPortlet(portlets [ i ].portlet, portlets [ i ].column);
+        end
+    end
+
+    private function adjustColumnWidths()
+        if (columnWidths == null)
+            columnWidths = new int [ 0 ];
+        end
+        if (columnWidths.getSize() < columns)
+            colsToAdd int = (columns - columnWidths.getSize());
+            for (i int from 1 to colsToAdd by 1)
+                columnWidths.appendElement(defaultColumnWidth);
+            end
+        end
+    end
+
+end
+
+delegate PortletEvent(portlet Portlet in, event int in)
+end
+
+record PortalLayoutInfo
+    columns PortalColumnLayoutInfo [ ];
+end
+
+record PortalColumnLayoutInfo
+    portlets PortletLayoutInfo [ ];
+end
+
+record PortletLayoutInfo
+    id string;
+    minimized boolean;
+end
+
+record InternalPortletInfo
+    id string;
+    portlet Portlet;
+    column int;
+end
+

@@ -1,0 +1,94 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.MenuItem;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoMenu;
+import dojo.widgets.DojoMenuItem;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+handler DojoMenuSample type RUIHandler { initialUI = [ ui ] }
+ 
+    ui Box { columns=1, padding = 20, children =[
+    	new HTML { 
+    		text = "Dojo Menu Sample", marginBottom = 20,
+    		fontSize = "20px" 
+    	}, 
+    	new Box { children = [
+    		new DojoButton { text = "Save", onClick ::= handleButton,fontSize = "12px" },
+    		new DojoMenu { text = "Edit", fontSize = "12px", children =[
+		        new DojoMenuItem { 
+		        	text = "Cut", onClick ::= handleCut, iconClass = "dijitEditorIcon dijitEditorIconCut" 
+		        },
+		        new DojoMenuItem { 
+		        	text = "Copy", onClick ::= handleCopy, iconClass = "dijitEditorIcon dijitEditorIconCopy" 
+		        },
+		        new DojoMenuItem { 
+		        	text = "Paste", disabled = true, iconClass = "dijitEditorIcon dijitEditorIconPaste" 
+		        },
+		        new DojoMenuItem { text = "Paste Special", children =[
+		            new DojoMenu {children =[
+		            	createMenuItem("As HTML"),
+		            	createMenuItem("As plain text")
+			        ]}
+		        ]},
+		        new DojoMenuItem { },
+		        new DojoMenuItem { 
+		        	text = "More...", onClick ::= handleMore 
+		        }
+	    	]},
+    		new DojoButton { text = "Print", fontSize = "12px", onClick ::= handleButton },
+    		new DojoButton { text = "Clear", fontSize = "12px", onClick ::= handleClear }
+	    ]},
+    	message
+    ]};
+    
+    message TextArea { marginTop=10, width = 500, height = 160 };
+    
+    function handleButton(e Event in)
+    	button DojoButton = e.widget;
+    	message.text ::= "You pressed the \"" + button.text + "\" button. It doesn't do anything, just a test.\n";
+    end
+
+    function handleClear(e Event in)
+    	message.text = "";
+    end
+
+    function handleCut(e Event in)
+    	message.text ::= "Cut some element test.\n";
+    end
+
+    function handleCopy(e Event in)
+    	message.text ::= "Copy some element test.\n";
+    end
+
+    function handleMenuItem(e Event in)
+    	menuItem DojoMenuItem = e.widget;
+    	message.text ::= "Handle menu item \"" + menuItem.text + "\" test.\n";
+    end
+
+    function createMenuItem(text String in) returns(DojoMenuItem)
+    	return (new DojoMenuItem { text = text, onClick ::= handleMenuItem });
+    end
+
+    function handleMore(e Event in)
+    	message.text ::= "Do some more with this Dojo menu test.\n";
+    end
+
+
+end

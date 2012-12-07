@@ -1,0 +1,94 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.mobile.widgets.DojoMobileButton;
+import dojo.mobile.widgets.DojoMobileLib;
+import dojo.mobile.widgets.DojoMobileList;
+import dojo.mobile.widgets.DojoMobileListCategory;
+import dojo.mobile.widgets.DojoMobileListItem;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+handler DojoMobileListSample type RUIhandler {initialUI = [ View ],onConstructionFunction = start, cssFile="css/com.ibm.egl.rui.dojo.mobile.samples.css", title="DojoMobileListSample"}
+	
+	View DojoMobileView{
+		selected = true, headerTitle = "List Sample",
+		/*backText = "Back", backView = */
+		children = [
+			new HTML { margin = 20, text = "This sample shows how to create a Dojo Mobile List.<br/>" + 
+			"There are two types of lists: 1) Rounded Rectangle and 2) Edge to Edge. You can specify the list type using the \"style\" property. Each list can have categories and a number of list items."},
+			Button {margin =20 }, 
+			new HTML { margin = 20, text = "Rounded Rectangle List"},
+			RoudedRectangleList,
+			new HTML { margin = 20, text = "Edge to Edge List"},
+			EdgeToEdgeList
+		]
+	};
+	
+		RoudedRectangleList DojoMobileList{
+		style = DojoMobileLib.LIST_STYLE_ROUNDED_RECTANGLE,
+		children = [
+			new DojoMobileListCategory{ title = "Category 1" },
+			new DojoMobileListItem{ text = "List Item 1", imagePath = "dojo/mobile/images/i-icon-1.png" },
+			new DojoMobileListItem{ text = "List Item 2", imagePath = "dojo/mobile/images/i-icon-1.png" },
+			new DojoMobileListItem{ text = "List Item 3", imagePath = "dojo/mobile/images/i-icon-1.png" },
+			new DojoMobileListCategory{ title = "Category 2" },
+			new DojoMobileListItem{ text = "List Item 4", imagePath = "dojo/mobile/images/i-icon-1.png" },
+			new DojoMobileListItem{ text = "List Item 5", imagePath = "dojo/mobile/images/i-icon-1.png" }
+		]
+	};
+	
+	EdgeToEdgeList DojoMobileList{
+		style = DojoMobileLib.LIST_STYLE_EDGE_TO_EDGE
+		
+	};
+	
+	Button DojoMobileButton{ text = "Remove all Children", width = 150, onClick ::= remove_onClick };
+	
+	function remove_onClick(event Event in)
+		if(Button.text == "Remove all Children")
+			RoudedRectangleList.removeChildren();
+			Button.text = "Append all Children";
+		else
+			RoudedRectangleList.children = [
+				new DojoMobileListCategory{ title = "New Category 1" },
+				new DojoMobileListItem{ text = "New List Item 1", imagePath = "dojo/mobile/images/i-icon-1.png" },
+				new DojoMobileListItem{ text = "New List Item 2", imagePath = "dojo/mobile/images/i-icon-1.png" },
+				new DojoMobileListItem{ text = "New List Item 3", imagePath = "dojo/mobile/images/i-icon-1.png" },
+				new DojoMobileListCategory{ title = "New Category 2" },
+				new DojoMobileListItem{ text = "New List Item 4", imagePath = "dojo/mobile/images/i-icon-1.png" },
+				new DojoMobileListItem{ text = "New List Item 5", imagePath = "dojo/mobile/images/i-icon-1.png" }
+			];
+			Button.text = "Remove all Children";
+		end
+	end
+	
+	function start()
+		EdgeToEdgeList.children = [
+			new DojoMobileListCategory{ title = "Category 1" },
+			new DojoMobileListItem{ text = "List Item 1", imagePath = "dojo/mobile/images/i-icon-1.png" },
+			new DojoMobileListItem{ text = "List Item 2", imagePath = "dojo/mobile/images/i-icon-1.png" },
+			new DojoMobileListItem{ text = "List Item 3", imagePath = "dojo/mobile/images/i-icon-1.png" },
+			new DojoMobileListCategory{ title = "Category 2" },
+			new DojoMobileListItem{ text = "List Item 4", imagePath = "dojo/mobile/images/i-icon-1.png" },
+			new DojoMobileListItem{ text = "List Item 5", imagePath = "dojo/mobile/images/i-icon-1.png" }
+		];
+	end
+	
+end

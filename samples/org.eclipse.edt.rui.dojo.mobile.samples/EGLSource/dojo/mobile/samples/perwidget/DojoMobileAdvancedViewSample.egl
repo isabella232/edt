@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.RUIHandler;
+
+// RUI Handler
+//
+//
+
+handler DojoMobileAdvancedViewSample type RUIhandler{initialUI = [ View, View1, View2 ], onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.dojo.mobile.samples.css", title = ""}
+	View DojoMobileView{
+		selected = true, headerTitle = "EGL Mobile Advanced View Sample: isSwappable Style",
+		/*backText = "Back", backView = */
+		children = [ GridLayout ],
+		isSwappable = true,
+		scrollHorizontally = false,
+		scrollVertically = false
+
+	};
+	View1 DojoMobileView{
+		selected = false, headerTitle = "EGL Mobile Advanced View Sample : isSwappable & Scrollable Style",
+		/*backText = "Back", backView = */
+		children = [ GridLayout1 ],
+		isSwappable = true,
+		scrollHorizontally = false,
+		scrollVertically = true
+	};
+	View2 DojoMobileView{
+		selected = false, headerTitle = "EGL Mobile Advanced View Sample : Scrollable Style",
+		isSwappable = true,
+		/*backText = "Back", backView = */
+		children = [ Box ]
+	};
+	GridLayout GridLayout{ cellPadding = 4, rows = 1, columns = 1,
+		children = [ TextLabel ] };
+	TextLabel TextLabel{ layoutData = new GridLayoutData{ row = 1, column = 1 }, 
+	text="This sample is to show the usage of advanced style of normal view widget. You can set sibling views to be isSwappable by setting their isSwappable attribute to be checked in the VE properties tab. Once isSwappable view is set, the sibling view after current showing view will automaticly hide. Note: isSwappable view will only swap between view having isSwappable attribute." };
+	GridLayout1 GridLayout{ cellPadding = 4, rows = 1, columns = 1,
+		children = [ TextLabel1 ] };
+	TextLabel1 TextLabel{ layoutData = new GridLayoutData{ row = 1, column = 1 }, 
+	text="This is the 2nd view in the isSwappable view queue, which has an extra scollable style which is set Scroll Vertically. Once scrollable view is set, the sibling view after current showing view in VE will automaticly hide." 
+	};
+	Box Box{ padding=8,
+		children = [ GridLayout2 ] };
+	GridLayout2 GridLayout{ cellPadding = 4, rows = 2, columns = 1,
+		children = [ View3, TextLabel2 ] };
+	TextLabel2 TextLabel{ layoutData = new GridLayoutData{ row = 1, column = 1 }, 
+	text="This is the 3rd view in the isSwappable view queue, which has an embedded view showing below. The embedded has Scroll Vertically & Scroll Horizontally attritubes set in VE." };
+	View3 DojoMobileView{ layoutData = new GridLayoutData{ row = 2, column = 1 },
+		selected = true, headerTitle = "Embedded Scrollable View",
+		/*backText = "Back", backView = */
+		children = [ Box1 ],
+		scrollHorizontally = true,
+		scrollVertically = true
+	};
+	Box1 Box{ padding=8,
+		children = [ TextLabel3 ] };
+	TextLabel3 TextLabel{ text="Hello, I am an embedded view. I can scroll vertically & horizontally! But since I am in the isSwappable view, so the style to scroll horizontally is a little bit mixed with the isSwappable style." };
+
+    function start()
+    end
+end

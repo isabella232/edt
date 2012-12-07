@@ -1,0 +1,121 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.BoxLib;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.mobile.widgets.DojoMobileBase;
+import dojo.mobile.widgets.DojoMobileDatePicker;
+import dojo.mobile.widgets.DojoMobileLib;
+import dojo.mobile.widgets.DojoMobileList;
+import dojo.mobile.widgets.DojoMobileListItem;
+import dojo.mobile.widgets.DojoMobileOpener;
+import dojo.mobile.widgets.DojoMobileToolBarButton;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+handler DojoMobileViewSample type RUIhandler {initialUI = [View,View2,View3,View4 ], cssFile="css/com.ibm.egl.rui.dojo.mobile.samples.css", title="DojoMobileViewSample"}
+	
+	intro Div { margin = 20, font = "Arial", children = [
+		new HTML { text="A view represents a page on a mobile device. Each view can have a header title. Use this sample to understand construction and navigation using the DojoMobileView widget." , marginBottom=20}		
+	]};	
+	 
+	function clickHandler( event Event in ) 
+		modalOpener.showOpener( clickToolBtn, DojoMobileLib.OPENER_POP_BEFORE );
+	end
+	
+	function hideOpener( event Event in ) 
+		modalOpener.hideOpener( );
+	end
+	
+	modalOpener DojoMobileOpener{
+		children = [ View5 ], isModal = true
+	};
+	
+	clickToolBtn DojoMobileToolBarButton {
+		imagePath = "dojo/mobile/images/i-icon-1.png",  
+		cssClass  = "tool-bar-right-algin-button",
+		onClick ::= clickHandler
+	};
+	
+	toolBtn  DojoMobileToolBarButton{
+			actionView = View2,
+			text = "Go to view 2",
+			transition = DojoMobileLib.TRANSITION_SLIDE,
+			transitionDir = DojoMobileLib.TRANSACTION_DIR_FORWARD
+	};
+	
+	View DojoMobileView{ selected = true, id="myDojoMobileView1", 
+		headerTitle = "View Sample",
+		toolBar = [
+			toolBtn,
+			new DojoMobileToolBarButton {
+				actionView = View4,
+				text = "Go to view 4",
+				cssClass  = "tool-bar-right-button",
+				transition = DojoMobileLib.TRANSITION_SLIDE,
+				transitionDir = DojoMobileLib.TRANSACTION_DIR_FORWARD
+			},
+			new DojoMobileToolBarButton {
+				imagePath = "dojo/mobile/images/i-icon-1.png",
+				actionView = View4,
+				cssClass = "tool-bar-right-algin-button",
+				transition = DojoMobileLib.TRANSITION_SLIDE,
+				transitionDir = DojoMobileLib.TRANSACTION_DIR_FORWARD
+			},
+			clickToolBtn
+		],				
+		children = [ intro,
+			new DojoMobileList { style = DojoMobileLib.LIST_STYLE_ROUNDED_RECTANGLE, children = [
+				new DojoMobileListItem{ text = "View 2", actionView = View2, imagePath = "dojo/mobile/images/i-icon-1.png" },
+				new DojoMobileListItem{ text = "View 3", actionView = View3, imagePath = "dojo/mobile/images/i-icon-1.png" },
+				new DojoMobileListItem{ text = "View 4", actionView = View4, imagePath = "dojo/mobile/images/i-icon-1.png" }
+			]},
+			modalOpener 
+		],
+		scrollVertically = true
+	};	 
+ 	 
+	View5 DojoMobileView{ 
+		selected = true, id="myDojoMobileView5", 
+		headerTitle = "Emmbedded View in Opener",
+		children = [ new Box{ 
+				padding=8,
+				children = [ new DojoMobileDatePicker{} ],
+				alignment = BoxLib.ALIGN_CENTER 
+			} ]
+		,toolBar = [
+			new DojoMobileToolBarButton {
+				text = "Back",
+				onClick ::= hideOpener,
+				cssClass = "tool-bar-right-button"
+			}
+		]
+	};
+	
+	View2 DojoMobileView{ 
+		selected = false, id="myDojoMobileView2", headerTitle = "Second View",
+		backText = "View 1", backView = View,
+		children = [ new HTML { text="This is the second view. Click \"View 1\" to return to the first view, as specified by the \"backView\" property.", margin=20}]
+	};
+	
+	View3 DojoMobileView{ selected = false, id="myDojoMobileView3", headerTitle = "Third View",
+				backText = "View 4", backView = View4,
+				children = [ new HTML { text="This is the third view. Click \"View 4\" to go to the fourth view, as specified by the \"backView\" property.", margin=20}]};
+				
+	View4 DojoMobileView{ selected = false, id="myDojoMobileView4", headerTitle = "Fourth View",
+				backText = "View 1", backView = View,
+				children = [ new HTML { text="This is the fourth view. Click \"View 1\" to return to the first view, as specified by the \"backView\" property.", margin=20}]};
+end

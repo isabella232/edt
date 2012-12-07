@@ -1,0 +1,22 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+ 
+package gallery.sayhelloservice;
+
+//SayHelloService is a local service that may be called from the Service Demo.
+service SayHelloService 
+	
+	function hello(name String in) returns(String) 
+		return ("Hello: " + name + "! (from SayHelloService.egl)");
+	end
+
+end

@@ -1,0 +1,83 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.mvc.Controller;
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoContentPane;
+import dojo.widgets.DojoStackContainer;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+
+
+handler DojoStackContainerSample type RUIHandler{initialUI =[ui] }
+
+	// enable Tracer{};
+
+	showSelection HTML { text = "Select a Stack" };
+	
+	yellowDiv Div { backgroundColor = "yellow", height="100%" };
+	orangeDiv Div { backgroundColor = "orange", height="100%" };
+	title HTML { text = "Dojo Stack Container Sample",	fontSize = "20px", marginBottom = 10 };
+	introLabel TextLabel { text = "A Dojo Stack Container has multiple children, but shows only one child at a time (like looking at the pages in a book one by one).", fontSize = "14px",
+	marginBottom = 10 };
+ 		
+	ui Div { padding = 20, children = [ title, introLabel, showSelection, createStackContainer(), ControllerBox ]};
+	
+	pinkBox Box { backgroundColor = "pink", height="100%", columns=1, children = [
+		new DojoButton { text = "Select the first Stack", margin=10, onClick ::= selectFirstStack }
+	]};
+	    	
+	Stacks DojoStackContainer;
+	Controller Div {};
+	ControllerBox Box { children = [ new DojoButton {text="&lt;", onClick ::= _onClickPrevious}, Controller, new DojoButton {text="&gt;", onClick ::= _onClickNext} ]};
+		
+	function selectFirstStack(e Event in)
+		Stacks.selection = 1;
+	end
+	
+	function createStackContainer() returns(Widget) 
+		Stacks = new DojoStackContainer {
+			width = "700",
+			height = "150",
+	    	onStackSelected ::= StackSelected,
+	    	selection = 3,
+	    	children = [
+				new DojoContentPane { title = "Stack 1", children = [yellowDiv] },
+				new DojoContentPane { title = "Stack 2", closable = true, children = [orangeDiv] },
+				new DojoContentPane { title = "Stack 3", children = [pinkBox] }
+			],
+			controller = Controller
+		};
+		return (Stacks);
+	end
+	
+	function StackSelected(e Event in)
+		if (Stacks != null)
+			showSelection.text = "Selected Stack = "+Stacks.selection;
+		end
+	end
+
+	function _onClickPrevious(event Event in)
+		Stacks.previousStack();
+	end
+
+	function _onClickNext(event Event in)
+		Stacks.nextStack();
+	end
+	
+end

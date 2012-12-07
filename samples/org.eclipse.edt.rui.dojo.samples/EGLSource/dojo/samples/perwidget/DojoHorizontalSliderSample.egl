@@ -1,0 +1,79 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.widgets.DojoHorizontalSlider;
+import eglx.javascript.Job;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoHorizontalSliderSample type RUIHandler{ initialUI = [ ui ] }
+
+
+	ui Div { width = 400, padding=30, children = [
+		new HTML{ 
+			text = "Dojo Horizontal Slider Sample", fontSize = "20px", paddingBottom = 15 
+		},
+		new Box { columns = 2, children = [
+		
+			new HTML { text = "value=70 width=300", marginBottom=30 },
+			new DojoHorizontalSlider {
+				width = "300", 
+				value = 70,
+				onChange ::= onChange
+			},
+		
+			new HTML { text = "step=10 showLabels=true", marginBottom=30 },
+			new DojoHorizontalSlider {
+				width = "300", 
+				value = 70,
+				step = 10,
+				showLabels = true,
+				onChange ::= onChange
+			},
+			//
+			new HTML { text = "min=1,000 max=10,000 value=3,000 width=400 step=1,000", marginBottom=30 },
+			new DojoHorizontalSlider {
+				width = "400", 
+				minimum = 1000,
+				maximum = 10000,
+				value = 3000,
+				step = 1000,
+				showLabels = true,
+				onChange ::= onChange
+			}		
+		],
+		width = "500"},
+		message
+	]};
+	
+	message TextArea { 
+		marginTop=10, width = "500", height = "160", text = "Drag a slider..." 
+	};
+	
+	clearJob Job { runFunction = clear };
+    
+    function onChange(e Event in)
+    	slider DojoHorizontalSlider = e.widget;
+    	message.text ::= "" + slider.value + " ";
+    	clearJob.schedule(2000);
+	end
+	
+	function clear()
+		message.text = "";
+	end
+	    	
+end

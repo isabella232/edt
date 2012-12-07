@@ -1,0 +1,29 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package libraries;
+
+import eglx.rbd.StrLib;
+
+library MortgageLib
+
+    function formatMoney(amount string in) returns(string)
+        len int = strlib.characterLen(amount);
+        index int = len - 6; // 2 dec places + decimal + 3 chars before separator
+        while(index > 0)
+            amount = amount[1 : index] :: "," :: amount[index + 1 : len];
+            index -= 3;
+            len += 1;
+        end
+        return("$" :: amount);
+    end
+end

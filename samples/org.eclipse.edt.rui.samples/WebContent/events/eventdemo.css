@@ -1,0 +1,31 @@
+/*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+ 
+.mainContent
+{
+	background-color:lightyellow;
+	height:205px;
+	padding:10px;
+	margin-bottom:15px;
+	margin-top:5px;
+	border-width:1px;
+	border-style:solid;
+}
+
+.treeNodeHighlight
+{
+	text-decoration:underline;
+	color:blue;
+}
+
+.treeNodeNormal
+{
+	text-decoration:none;
+	color:black;
+}

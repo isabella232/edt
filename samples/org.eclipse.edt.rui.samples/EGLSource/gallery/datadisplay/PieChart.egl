@@ -1,0 +1,87 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.datadisplay;
+
+import org.eclipse.edt.rui.widgets.Image;
+import eglx.lang.EGLProperty;
+import eglx.lang.MathLib;
+import eglx.ui.rui.RUIWidget;
+
+/*
+ * A pie chart using Google Charts. See http://code.google.com/apis/chart/
+ *
+ * When creating the pie chart, pass in a title, labels and data.
+ * Pass in the data last as that creates the actual chart.
+ *
+ */
+handler PieChart type RUIWidget { targetWidget = img }
+
+	// the title given to the chart
+	title String = "";
+	
+	// the labels for each pie section
+	labels String[];
+	
+	// set use3D to true when you want a 3D pie chart
+	use3D boolean;
+	
+	// the data elements for the pie sections. Set this parameter last
+	data int[] { @EGLProperty { setMethod = setData, getMethod = getData }};
+	
+	private w, h int;
+	private img Image{};  // a google chart is really an image	
+			
+	function setWidth(width int in)
+		this.w = width;
+		img.width = width;
+	end
+	
+	function setHeight(height int in)
+		this.h = height;
+		img.height = height;
+	end
+	
+	function getData() returns(int[])
+		return(data);
+	end
+	
+	function setData(data int[] in)
+		this.data = data;
+		maxValue int = 0;
+		total int = data.getSize();
+		chl string = "";
+		for (n int from 1 to total by 1)
+			chl += labels[n] + "|";
+			maxValue = Mathlib.max(maxValue, data[n]);
+		end	
+		chartType String = "p";
+		if (use3D)
+			chartType = "p3";
+		end
+		//
+		// Generate the image REST URL. By encoding all the parameters and data
+		// in the URL, Google will return a custom made PNG image holding the chart.
+		// Feel free to customize this widget to expose things like colors, spacing, etc.
+		// See http://code.google.com/apis/chart/types.html#pie_charts
+		//
+	    img.src = "http://chart.apis.google.com/chart?" +
+			"chs=" + w + "x" + h + 
+			"&cht=" + chartType +
+			"&chl=" + chl +
+			"&chtt=" + title +
+			"&chf=c,lg,45,ffffff,0,FFFFFF,1.0|bg,s" +
+			"&chd=s:" + ChartLib.encode(data, maxValue) +
+			"&chco=FF0000|00EEEE|00FF00|FFFF00|CC00CC";
+	end
+	
+end

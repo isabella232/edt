@@ -1,0 +1,237 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package tools;
+/*
+ * This tool will create a service monitor at the top of your existing EGL Rich UI application.
+ * To install, add a field to your main handler like this:
+ *
+ *       monitor tools.ServiceMonitor{};
+ *
+ * When a service is invoked, it will be shown in the service monitor. We will also indicate
+ * if the service succeeded or failed. Hover over the icon shown in the monitor to see the
+ * details for the message body, post header, and response headers.
+ *
+ */
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.FloatLeft;
+import org.eclipse.edt.rui.widgets.FloatRight;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.HyperLink;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoContentPane;
+import dojo.widgets.DojoDialog;
+import dojo.widgets.DojoTabContainer;
+import eglx.http.HttpMethod;
+import eglx.javascript.JavaScriptObject;
+import eglx.rbd.StrLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.Widget;
+
+ExternalType ServiceMonitorRuntime type JavaScriptObject {
+		relativePath = "tools",
+		externalName = "ServiceMonitorRuntime"
+	} 	
+	inDevelopmentMode boolean;
+	function urldecode(s string in) returns(string);
+	
+end
+
+handler ServiceMonitor type RUIWidget { targetWidget = ui, onConstructionFunction = start}
+	
+	dialog DojoDialog {
+		title = "Service Invocation Details",
+		padding = 20, 
+    	draggable = true, 
+    	width = 650,
+    	children = [dialogContent]
+	};
+	
+	dialogContent Div {};
+
+	private runtime ServiceMonitorRuntime{};
+	private currentURL HTML {
+		text = "Service Monitor: Waiting for the first service call...", 
+		margin=7, style = "white-space: nowrap;", font="Arial" 
+	};
+	private ui Div { 
+		borderWidth = 1, BorderColor = "#B1BADF", borderStyle = "solid", marginTop=9, marginBottom = 9,
+		children = [
+			new FloatLeft { style = "overflow: hidden", children = [ 
+				bar
+			]},
+			new FloatRight { children = [ 
+				clearButton 
+			] }		
+		] 
+	};
+	private bar Box { 
+		height = 34, 
+		children = [ currentURL	]
+	};
+	private clearButton DojoButton { text = "clear", marginTop=3, onClick ::= clearBar };
+	private succeeded int = 0;
+	private failed int = 0;
+	private requestBody HTML { backgroundColor = "#F7F7F7", height = "100%" };
+	private responseBody HTML { backgroundColor = "#F7F7F7", height = "100%" };
+	private postHeadersBody HTML { backgroundColor = "#F7F7F7", height = "100%" };
+	private responseHeadersBody HTML {backgroundColor = "#F7F7F7", height = "100%" };
+	private queryParametersBody HTML { backgroundColor = "#F7F7F7", height = "100%" };
+	private details DojoTabContainer { 
+		width = 640,
+		height = 400,
+		tabPosition = "top",
+		children = [
+			new DojoContentPane { title = "Request", children = [ requestBody ] },
+			new DojoContentPane { title = "Request Headers", children = [ postHeadersBody ] },
+			new DojoContentPane { title = "Query Parameters", children = [ queryParametersBody ] },
+			new DojoContentPane { title = "Response", children = [ responseBody ] },
+			new DojoContentPane { title = "Response Headers", children = [ responseHeadersBody ] }
+		]
+	};
+	
+	function start()
+		if (runtime.inDevelopmentMode)
+			InfoBus.subscribe("service.monitor.call", serviceCalled);
+			InfoBus.subscribe("service.monitor.success", serviceSucceeded);
+			InfoBus.subscribe("service.monitor.error", serviceFailed);
+		else
+			currentURL.text = "Service Monitor Disabled - The application is not running in development mode.";
+		end
+	end	
+	
+	function clearBar(e Event in)
+		bar.children = [ currentURL ];
+	end
+	
+	function serviceCalled(message String in, object any in)
+		info ServiceMonitorInfo = object;
+		info.status = "Loading: "+info.request.uri;
+		info.onClick ::= showStatus;
+		children Widget[] = [info];
+		children.appendAll(bar.children);
+		bar.children = children;
+		bar.marginLeft = -34;
+		bar.morph(1000, finished, moveBar);
+	end
+	
+	function moveBar(widget Widget in, step float in)
+		bar.marginLeft = -34 + (34 * step) as int;
+	end
+	
+	function finished()
+		bar.marginLeft = 0;
+	end
+	
+	function serviceSucceeded(message String in, object any in)
+		info ServiceMonitorInfo = object;
+		info.setStatus("Service responded successfully (i.e., server actually sent a response)", "tools/ok.png", "#33CC66");
+		succeeded += 1;
+		showCurrentURL();
+	end
+	
+	function serviceFailed(message String in, object any in)
+		info ServiceMonitorInfo = object;
+		info.setStatus(info.errorDetail, "tools/error.png", "red");
+		failed += 1;
+		showCurrentURL();
+	end
+	
+	function showCurrentURL()
+		currentURL.text = "Service Monitor: Tracked " + (succeeded + failed) + " services" +
+			", <font color=green>" +  succeeded + " successful</font>" + ", <font color=red>" +  failed + " failed</font>.";
+	end
+	
+	function showStatus(e Event in) 
+		info ServiceMonitorInfo = e.widget;
+		responseBody.text = "<pre>" + runtime.urldecode(""+info.object) + "</pre>";
+		requestBody.text = runtime.urldecode(info.request.body);
+		if (requestBody.text == "")
+			requestBody.text = "<the request body is empty>";
+		end
+		if (responseBody.text == "<pre></pre>")
+			responseBody.text = "<the response body is empty>";
+		end
+		getPostHeaders(info);
+		getQueryParameters(info);
+		getResponseHeaders(info);
+		dialogContent.children = [
+			new Box { width = "100%", columns=2, marginBottom=9, children = [
+				new HTML { text="<b>URL:</b>" }, new Hyperlink{href=info.request.uri, text=info.request.uri, target="_blank", marginBottom=5},
+				new HTML { text="<b>Method:</b>", marginBottom=5 }, new HTML{text = getHttpMethod(info.request.method) },
+				new HTML { text="<b>Start:</b>", marginBottom=5 }, new HTML{text = info.startTime },
+				new HTML { text="<b>End:</b>", marginBottom=5 }, new HTML{text = info.endTime },
+				new HTML { text="<b>Duration:</b>", marginBottom=5, marginRight=12 }, new HTML{text = "" + info.duration + "ms" },
+				new HTML { text="<b>Status:</b>", marginBottom=5}, 
+						new HTML{text = "<b>"+ info.response.status+": "+info.status+
+								"</b> <a target=_blank href=http://www.google.com/search?q=HTTP+status+code+" + info.response.status + 
+									">explanation</a>.", 
+						color=info.backgroundColor }
+			]},
+			details
+		];
+		details.selection = 4;
+		dialog.showDialog();
+	end
+	
+	function getHttpMethod( method HTTPMethod? in ) returns (String)
+     	case(method)
+    		when(HTTPMethod._DELETE )
+     			return ("DELETE");
+    		when(HTTPMethod._GET)
+     			return ("GET");
+     		when(HTTPMethod.POST)
+     			return ("DELETE");
+     		when(HTTPMethod.PUT)
+     			return ("DELETE");		
+     	end
+		return ("");
+	end
+	
+	function getDomain(uri String in) returns(String)
+		firstSlash int = strlib.indexOf(uri, "/");
+		return (uri[ firstSlash + 2 : strlib.indexOf(uri, "/", firstSlash + 2)-1]);
+	end
+		
+	function getPostHeaders(info ServiceMonitorInfo in)
+		iterateDictionary(info.request.headers, "There are no Request headers specified", postHeadersBody);
+	end
+	
+	function getResponseHeaders(info ServiceMonitorInfo in)
+		iterateDictionary(info.response.headers, "There are no Response headers specified", responseHeadersBody);
+	end
+	
+	function getQueryParameters(info ServiceMonitorInfo in)
+		iterateDictionary(info.request.headers , "There are no Query Parameters specified", queryParametersBody);
+	end
+	
+	function iterateDictionary(dict Dictionary in, error String in, html HTML in) returns(Widget)
+		if (dict == null || dict.getKeys().getSize() == 0)
+			html.text = "&lt;" + error + "&gt;";
+		end
+		keys String[] = dict.getKeys();
+		result String = "<table cellpadding=2>";
+		for (n int from 1 to keys.getSize() by 1)
+			value String = "<unknown>";
+			try 
+				value = dict[keys[n]];
+			onException(e AnyException)
+			end
+			result ::= "<tr><td><b>" + keys[n] + "</b></td><td>" + value +"</td></tr>";
+		end
+		html.text = result + "</table>";
+	end
+	
+end

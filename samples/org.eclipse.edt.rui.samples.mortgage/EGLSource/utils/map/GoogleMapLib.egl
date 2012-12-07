@@ -1,0 +1,26 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+ 
+package utils.map;
+
+library GoogleMapLib
+	
+	const HYBRID string = "hybrid";
+	const ROADMAP string = "roadmap";
+	const SATELLITE string = "satellite";
+	const TERRAIN string = "terrain";
+	
+	function toDecimalDegrees(deg int, min int, sec int) returns (float)
+		return (deg + (min/60) + (sec/3600));
+	end
+	
+end

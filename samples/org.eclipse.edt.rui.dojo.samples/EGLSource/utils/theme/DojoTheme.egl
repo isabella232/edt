@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package utils.theme;
+
+import eglx.javascript.JavaScriptObject;
+import eglx.ui.rui.VEProperty;
+
+ExternalType DojoTheme type JavaScriptObject {
+		relativePath = "utils/theme",
+		externalName = "DojoTheme"
+	}
+	
+	/*
+	 * The currently selected Dojo theme to use for styling the Dojo widgets
+	 */
+	theme String{ @Property, @VEProperty{}}; 
+
+	/*
+	 * The location where dojo is loaded from. Internal use only.
+	 */
+	baseURL String;
+end

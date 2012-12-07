@@ -1,0 +1,131 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoContentPane;
+import dojo.widgets.DojoTabContainer;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+
+
+handler DojoTabContainerSample type RUIHandler{initialUI =[ui] }
+
+	// enable Tracer{};
+
+	showSelection HTML { text = "Select a tab" };
+	
+	yellowDiv Div { backgroundColor = "yellow", height="100%" };
+	orangeDiv Div { backgroundColor = "orange", height="100%" };
+	positionCombo Combo { 
+		values = [ "top", "bottom", "left", "right" ],
+		marginLeft=10, onChange ::= setPosition 
+	};
+	title HTML { text = "Dojo Tab Container Sample",	fontSize = "20px", marginBottom=20 };
+    desc HTML { text="The Tab container sample shows tab options, such as tab position, and how to programmatically add and remove tabs. Tabs can have different properties and contents.", marginBottom=20};
+	
+		
+	ui Div { children = [ title, desc, showSelection, createTabContainer() ]};
+
+	pinkBox Box { backgroundColor = "pink", height="100%", columns=1, children = [
+		new DojoButton { text = "Add a new tab", margin=10, onClick ::= addTab },
+		new HTML {
+			marginLeft = 10, paddingTop = 11,  
+			text = "Tab position: " 
+		},
+		new HTML {text ="(Changing tab position resets the initial set of tabs.)", marginLeft=10},
+		positionCombo,
+		new DojoButton { text = "Select the first tab", margin=10, onClick ::= selectFirstTab },
+		new DojoButton { text = "Select the last tab", margin=10, onClick ::= selectLastTab },
+		new DojoButton { text = "Remove the first tab", margin=10, onClick ::= removeFirstTab }
+	]};
+	    	
+	tabs DojoTabContainer;	
+	
+	function removeFirstTab(e Event in)
+		tabs.removeTab(1);
+		setSelectedText();
+	end
+	
+	function selectFirstTab(e Event in)
+		tabs.selection = 1;
+	end
+	
+	function setPosition(e Event in)
+		selection int = tabs.selection;
+		ui.children = [ title, desc, showSelection, createTabContainer()];
+		tabs.selection = selection;
+	end
+
+	function createTabContainer() returns(Widget) 
+		tabs = new DojoTabContainer {
+			width = "100%",
+			height = "300",
+	    	tabPosition = positionCombo.values[positionCombo.selection], 
+	    	onTabSelected ::= TabSelected,
+	    	onTabRemoved ::= TabRemoved,
+	    	children = [
+				new DojoContentPane { title = "empty", children = [yellowDiv] },
+				new DojoContentPane { title = "closable", closable = true, children = [orangeDiv] },
+				new DojoContentPane { title = "options", children = [pinkBox] }
+			],
+	    	selection = 3
+		};
+		return (tabs);
+	end
+	
+	function tabRemoved(e Event in)
+		if (tabs != null)
+			showSelection.text = "Removed Tab = "+tabs.selection;
+		end
+	end
+	
+	function TabSelected(e Event in)
+		setSelectedText();
+	end
+	
+	function setSelectedText()
+		if (tabs != null)
+			if (tabs.children.getSize() != 0 && tabs.selection != null)
+				showSelection.text = "Selected tab = " + tabs.selection;
+			else
+				showSelection.text = "";
+			end
+		end		
+	end
+	
+	function selectLastTab(e Event in)
+		tabs.selection = tabs.children.getSize();
+	end
+
+	function addTab(e Event in)
+		currentTab int = tabs.selection;
+		children Widget[] = tabs.children;
+		children ::= new DojoContentPane { 
+			title = "New Tab",
+			closable = true, 
+			children = [
+				new HTML { 
+					text = "Tab content children appear here.", backgroundColor="lightblue", padding=30, margin=10
+				}
+			]
+		};
+		tabs.children = children;
+		tabs.selection = currentTab;
+	end
+	
+end

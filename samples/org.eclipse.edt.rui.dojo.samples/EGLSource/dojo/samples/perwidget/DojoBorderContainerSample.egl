@@ -1,0 +1,71 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoBorderContainer;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoDialog;
+import dojo.widgets.DojoLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+// RUI Handler
+//
+//
+handler DojoBorderContainerSample type RUIhandler {initialUI = [ ui ]}
+	ui Div{ margin = 20, font = "Arial", children = [ 
+		new TextLabel { text = "Dojo BorderContainer Sample",	fontSize = "20px", marginBottom=20 }, 
+		new HTML { text="The Dojo BorderContainer sample shows how to place widgets in the fixed region,such as 'top','center','bottom',etc.", marginBottom=20},
+		BorderContainer 
+	] };
+	
+	BorderContainer DojoBorderContainer{ width = 800, height = 400, borders = true, 
+		children = [       
+			new dojo.widgets.DojoContentPane { region = DojoLib.REGION_CENTER, children = [ new DojoButton { text = "Center Region",onclick::=showDialog } ] },
+			new dojo.widgets.DojoContentPane { region = DojoLib.REGION_LEFT, children = [ new DojoButton { text = "Left Region" ,onClick ::= showDialog} ]},
+			new dojo.widgets.DojoContentPane { region = DojoLib.REGION_TOP,  children = [ new DojoButton { text = "Top Region", onClick ::= showDialog } ]}
+		]
+	};
+	info Div { 
+    	padding = 10, width=260, backgroundColor = "lightyellow" 
+    };
+    
+	dialog DojoDialog {
+    	title = "BorderContainer Sample",
+    	padding = 20, 
+    	backgroundColor = "lightblue",
+    	draggable = true, 
+    	children = [ content ]
+    };
+    content Box { columns=1 };
+    
+    
+    function showDialog(e Event in)
+     	info.children = [];
+     	button DojoButton = e.widget;
+     	case(button.text)
+    		when("Center Region")
+     			info.children =[new HTML{text="This is the center region of the BorderContainer"}];
+    		when("Left Region")
+     			info.children =[new HTML{text="This is the left region of the BorderContainer"}];
+     		when("Top Region")
+     			info.children =[new HTML{text="This is the top region of the BorderContainer"}];
+    end
+        content.children = [info];
+		dialog.showDialog();
+    end
+
+end

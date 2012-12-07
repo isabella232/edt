@@ -1,0 +1,131 @@
+/*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008, 2009. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+
+.NavLink {
+	width: 100px;
+	text-align: center;
+	margin: 7px;
+	border-width: 1px;
+	font-family: verdana;
+	font-weight: bold;
+	font-size: 15px;
+	cursor: pointer;
+}
+
+.mainContent
+{
+	background-color:lightyellow;
+	height:205px;
+	padding:10px;
+	margin-bottom:15px;
+	margin-top:5px;
+	border-width:1px;
+	border-style:solid;
+	font-family: verdana;
+}
+
+.treeNodeHighlight
+{
+	font-family: verdana;
+	text-decoration:underline;
+	color:blue;
+}
+
+.treeNodeNormal
+{
+	font-family: verdana;
+	text-decoration:none;
+	color:black;
+}
+
+
+/*
+ * Override CSS classes for basic HTML elements.
+ */
+
+a {
+	font-family: verdana;
+}
+
+b {
+	font-family: verdana;
+}
+
+i {
+	font-family: verdana;	
+}
+
+p {
+	font-family: verdana;
+}
+
+li {
+	font-family: verdana;
+}
+
+
+/*
+ * Override the style classes for each widget used.
+ */
+
+.EglRuiButton {
+	font-family: verdana;
+}
+
+.EglRuiCombo {
+	font-family: verdana;
+}
+
+.EglRuiCheckBox {
+	font-family: verdana;
+}
+
+.EglRuiHTML {
+	font-family: verdana;
+}
+
+.EglRuiHyperLink {
+	font-family: verdana;
+}
+
+.EglRuiHTML {
+	font-family: verdana;
+}
+
+.EglRuiList {
+	font-family: verdana;
+}
+
+.EglRuiListMulti {
+	font-family: verdana;
+}
+
+.EglRuiSpan {
+	font-family: verdana;
+}
+
+.EglRuiTextArea {
+	font-family: verdana;
+}
+
+.EglRuiTextAreaReadOnly {
+	font-family: verdana;
+}
+
+.EglRuiTextField {
+	font-family: verdana;
+}
+
+.EglRuiTextFieldReadOnly {
+	font-family: verdana;
+}
+
+.EglRuiTextLabel {
+	font-family: verdana;
+}

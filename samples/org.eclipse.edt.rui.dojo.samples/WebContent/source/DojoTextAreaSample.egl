@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;   
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoLib;
+import dojo.widgets.DojoTextArea;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoTextAreaSample Type RUIHandler { initialUI = [ui] }
+    
+    textArea DojoTextArea {marginBottom = 20 };
+    
+    ui Box { columns = 1, padding = 20, children =[
+    	new HTML{ 
+    		marginBottom = 20,
+    		fontSize = "20px", 
+    		text = "Dojo TextArea Sample"
+    	},
+    	new HTML { 
+    		marginBottom = 20, 
+    		fontSize = "14px",
+    		text = "A Dojo Text Area lets the user enter larger amounts of text. <br/><br/>" +
+    		"Enter text in the first text area. When you click the Copy button, the content from the first text area is copied to the second text area.<br/>" +
+    		"The text is reformatted as upper case, and leading and trailing spaces are removed.<br/>"},
+    	textArea,   
+    	copyButton,
+    	new HTML { 
+    		marginBottom = 20, 
+    		fontSize = "14px",
+    		text = "This read-only DojoTextArea shows the reformatted text from the first text area.<br/>" + 
+    		"numRows = 5, numColumns = 50."
+    	},
+    	showArea
+    ]};
+    
+    copyButton DojoButton {text="Copy", onClick ::= copyText, marginTop=10, marginBottom=20};
+    
+    showArea DojoTextArea{
+    	readOnly = true,
+    	numRows = 5,
+		numColumns = 50,
+		textCase = DojoLib.UPPER_CASE,
+		trim = true
+    };         
+       
+     function copyText(event Event in)
+    	showArea.text = textArea.text;
+    end  
+    
+ end  

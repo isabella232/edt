@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package mortgage.client;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridColumn;
+import org.eclipse.edt.rui.widgets.DataGridFormatters;
+import org.eclipse.edt.rui.widgets.DataGridLib;
+import eglx.ui.rui.RUIHandler;
+import libraries.MortgageLib;
+import mortgage.common.MortgageCalculationResult;
+
+handler CalculationHistoryHandler type RUIhandler{initialUI =[historyResults_ui
+            ], onConstructionFunction = start, cssFile = "css/Mortgage.css", title = "CalculationHistoryHandler"}
+    historyResults MortgageCalculationResult[];
+
+    historyResults_ui DataGrid{selectionMode = DataGridLib.SINGLE_SELECTION, selectionListeners ::= cellClicked, columns =[
+                    new DataGridColumn{name = "loanAmount", displayName = "Principal", width = 80, alignment = DataGridLib.ALIGN_RIGHT, formatters =[formatDollars
+                            ]},
+                    new DataGridColumn{name = "interestRate", displayName = "Rate", width = 80, alignment = DataGridLib.ALIGN_RIGHT, formatters =[DataGridFormatters.percentage
+                            ]},
+                    new DataGridColumn{name = "term", displayName = "Years", width = 50, alignment = DataGridLib.ALIGN_RIGHT},
+                    new DataGridColumn{name = "monthlyPayment", displayName = "Payment", width = 70, alignment = DataGridLib.ALIGN_RIGHT, formatters =[formatDollars
+                            ]}], data = historyResults as any[]};
+
+    function start()
+        InfoBus.subscribe("mortgageApplication.mortgageCalculated",
+                addResultRecord);
+    end
+
+    // Update the grid to include the latest mortgage calculation
+    
+    function addResultRecord(eventName string in, dataObject any in)
+        resultRecord MortgageCalculationResult = dataObject as
+                        MortgageCalculationResult;
+        historyResults.appendElement(resultRecord);
+        historyResults_ui.data = historyResults as any[];
+    end
+
+    // Publish an event to the InfoBus whenever the user selects an old calculation
+    
+    function cellClicked(myGrid DataGrid in)
+        updateRec MortgageCalculationResult = myGrid.getSelection()[1] as
+                        MortgageCalculationResult;
+        InfoBus.publish("mortgageApplication.mortgageResultSelected",
+                updateRec);
+    end
+
+    function formatDollars(cssClass String inout, value String inout, rowData any in)
+        value = mortgageLib.formatMoney(value);
+    end
+end

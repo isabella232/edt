@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.widgets.BubbleChartData;
+import dojo.widgets.DojoBubbleChart;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoBubbleChartSample Type RUIHandler{ initialUI = [ ui ] }
+	
+	data BubbleChartData[] = [
+		new BubbleChartData { x=0.5, y=5,   size=1.4, color="red",	  tooltip="Gas" }, 
+		new BubbleChartData { x=1.5, y=2.5, size=2.5, color="green",  tooltip="Mortgage" }, 
+		new BubbleChartData { x=2,   y=9,   size=1.5, color="blue",	  tooltip="Electric" }, 
+		new BubbleChartData { x=5,   y=4.3, size=0.8, color="orange", tooltip="Cable" }
+	];
+	
+	ui Box{ padding=20, columns =1 , children = [ 
+		new HTML { text = "Dojo Bubble Chart Sample", fontSize = "20px", marginBottom=20 }, 
+		new HTML {text = "A Dojo bubble chart lets you set attributes like width, height, and colors. Hover over the bubbles to see the category.", marginBottom=20},
+		new DojoBubbleChart{ 
+			themeColor = dojo.widgets.DojoLib.CHART_COLOR_THEME_ORANGE,
+			minX = "0", maxX = "7",
+			minY = "0", maxY = "11",
+			width = "400",
+			height = "300", 
+			data = data
+		}
+	]};
+
+end

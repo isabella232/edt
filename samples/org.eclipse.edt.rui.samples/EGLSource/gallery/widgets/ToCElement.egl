@@ -1,0 +1,92 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.widgets;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.lang.EGLProperty;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.Widget;
+import gallery.lib.samplesLib;
+
+handler ToCElement type RUIWidget { 
+		targetWidget = lbl, 
+		onConstructionFunction = start,
+		cssFile="css/org.eclipse.edt.rui.samples.css" }
+	
+	use SamplesLib;
+	
+	lbl TextLabel {
+		color=samplesLib.linkRegularColor,
+		onClick ::= clicked,
+		onMouseOver ::= mouseOver,
+		onMouseOut ::= mouseOut,
+		cursor = "pointer",
+		fontSize = "14" };
+	
+	contentWidget Widget;
+	index int {@EGLProperty};
+	title string {@EGLProperty};
+	overview string;
+	
+	function start()
+		InfoBus.subscribe("org.eclipse.edt.rui.samples.sectionActivated", sectionActivated);
+	end
+	
+	private function makeLabel()
+		lbl.text = "" + index + ". " + title;
+	end
+	
+	function setIndex(i int in)
+		this.index = i;
+		makeLabel();
+	end
+	
+	function getIndex() returns(int)
+		return(index);
+	end
+	
+	function setTitle(s string in)
+		this.title = s;
+		makeLabel();
+	end
+	
+	function getTitle() returns(string)
+		return(title);
+	end
+	
+	function clicked( e Event in )
+		doClicked();
+	end
+	
+	function doClicked( )
+		InfoBus.publish("org.eclipse.edt.rui.samples.sectionClicked", index);
+	end
+	
+	function mouseOver( e Event in )
+		lbl.color = samplesLib.linkHighlightColor;
+	end
+	
+	function mouseOut( e Event in )
+		lbl.color = samplesLib.linkRegularColor;
+	end
+	
+	function sectionActivated(event string in, data any in)
+		if(samplesLib.tls[data as int] == this)
+			lbl.fontWeight = "bold";
+		else
+			lbl.fontWeight = "";
+		end
+	end
+end

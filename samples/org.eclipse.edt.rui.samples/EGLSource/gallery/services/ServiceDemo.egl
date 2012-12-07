@@ -1,0 +1,105 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.services;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.http.HttpProxy;
+import eglx.lang.AnyException;
+import eglx.rbd.StrLib;
+import eglx.services.ServiceInvocationException;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import gallery.lib.SayHelloServiceProxyLib;
+import gallery.lib.samplesMessages;
+
+handler ServiceDemo type RUIhandler {initialUI = [ui], cssFile="css/org.eclipse.edt.rui.samples.css"}
+
+	//357247? This 'use' should not be required
+	use SamplesMessages;
+	
+	// The input field where the user will enter their name.
+	nameField TextField{};
+	
+	// The output where we'll place the "Hello, <name>"
+	outputLabel TextLabel{ fontWeight = "bold" };
+	
+	// The button to press to make it happen
+	aButton Button { text = "Say Hello", onClick ::= sayHello, marginLeft = 5 };
+	
+	// A TextArea where we'll show the raw response from the web service
+	serviceTextArea TextArea{ numRows = 5, numColumns = 40, fontSize = "12", readOnly = true };
+	
+	// The UI.
+	ui Box {
+		columns = 1,
+		children = [
+			new HTML{ 
+				marginBottom = 20, 
+				text = SamplesMessages.ServicesText },
+			new Box { 
+				marginBottom = 10, 
+				children = [
+					new TextLabel{ text = "Enter your name:", marginTop = 3 },
+					nameField,
+					aButton ] },
+			new Box { 
+				children = [
+					new TextLabel { text = "Returned value:", marginRight = 5 },
+					outputLabel ] },
+			new TextLabel { text = "Raw response:" },
+			serviceTextArea
+		]
+	};
+	
+	// Our eventHandling function for when the button is pressed.  Strip all spaces from whatever's
+	// in the input field.  If anything is left, say "hello".
+	function sayHello(e event in)
+		name string = strLib.clip(nameField.text);
+		if(strLib.characterLen(name) > 0)
+			// Create and bind an instance of our service.
+			srvConnection HttpProxy = new HttpProxy("gallery.sayhelloservice.SayHelloService");
+
+			// Disable the button while the call is in progress
+			aButton.text = "Calling...";
+			aButton.disabled = true; 
+			
+			// Asynchronously call the service.
+			call SayHelloServiceProxyLib.hello(name) using srvConnection returning to serviceCallback onException handleError;
+		end
+	end
+
+	// Our service callback.  We'll get here when the service returns.
+	function serviceCallback(response string in)
+		aButton.text = "Say Hello!";
+		aButton.disabled = false;
+		serviceTextArea.text = response;
+		outputLabel.color = "black";
+		outputLabel.text = response;
+		nameField.text = "";
+	end
+
+	// Our error callback function for the SOAP service.  We'll get here if something goes wrong with the
+	// invocation or execution of the service.
+	function handleError(exp AnyException in)
+		aButton.text = "Say Hello!";
+		aButton.disabled = false;
+		outputLabel.color = "red";
+		outputLabel.text = "(An error occurred while invoking the service.  The server may be down or not responding.)";
+		serviceTextArea.text = (exp as ServiceInvocationException).detail3;
+	end
+end

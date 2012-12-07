@@ -1,0 +1,68 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.mobile.widgets.DojoMobileLib;
+import dojo.mobile.widgets.DojoMobileSlider;
+import eglx.javascript.Job;
+import eglx.javascript.RunFunction;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+
+handler DojoMobileSliderSample type RUIhandler{initialUI =[ui
+            ], cssFile = "css/org.eclipse.edt.rui.dojo.mobile.samples.css", title = "DojoMobileSliderSample"}
+
+	SliderH DojoMobileSlider{ minimum = -50, maximum= 50, step = 2, onChange ::= Slider_onChange,
+		orientation = DojoMobileLib.SLIDER_HORIZONTAL,
+		value = 10};
+	SliderV DojoMobileSlider{ minimum = 0, maximum= 200, step = 10, onChange ::= Slider_onChange,
+		orientation = DojoMobileLib.SLIDER_VERTICAL,
+		value = 50};
+	
+    ui Div { width = 400, padding=30, children = [
+		new HTML{ 
+			text = "Dojo Mobile Slider Sample", fontSize = "20px",	paddingBottom = 15 
+		},
+		new HTML { 
+			text = "Slide the widget will display all step value.",
+			fontSize = "14px",
+			paddingTop = 10,
+			paddingBottom = 10 
+		},
+		SliderH, SliderV,
+		message
+	]};
+	
+	message TextArea { 
+		marginTop=10, width = "500", height = "160", text = "Drag a slider..." 
+	};
+	
+	clearJob Job { runFunction = clear };
+	
+    function Slider_onChange(event Event in)
+    	slider DojoMobileSlider = event.widget;
+    	message.text ::= "the current value is -- " + slider.value + " ; \n" ;
+    	clearJob.schedule(20000);
+    end
+    
+    function clear()
+    	message.text = "";
+    end
+end

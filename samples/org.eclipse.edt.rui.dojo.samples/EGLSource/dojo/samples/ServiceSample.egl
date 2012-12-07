@@ -1,0 +1,72 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.widgets.DojoButton;
+import eglx.http.HttpRest;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import tools.ServiceMonitor;
+
+handler ServiceSample type RUIHandler{initialUI =[ui] }
+	
+	ui Div { 
+		margin = 50,
+		children = [
+			new HTML { 
+				text = "Demo of a Service Monitor that uses Dojo widgets", 
+				borderWidth = 1, BorderColor = "#B1BADF", borderStyle = "solid",
+				width=700, marginBottom=9, padding=5, backgroundColor = "#E8F2FE" 
+			},
+			new Box { children = [
+				new DojoButton { text = "Call a good service", onClick ::= loadGoodNews },
+				new DojoButton { text = "Call a broken service", onClick ::= loadBadNews },
+				html
+			]},
+			new HTML { 
+				text = "<i>The service monitor below is shown only because we added it to this UI.<br>" +
+					"Click on one of the green or red icons to see more details on the service call itself.</i>",
+				marginTop = 70
+			},
+			new ServiceMonitor { width = 700 }
+		] 
+	};
+	html HTML {
+		marginTop = 7, fontSize = 14, fontWeight = "bold" 
+	};
+				
+	function loadGoodNews(e Event in)
+		html.text = "Loading...";
+		call RESTProxy.invokeGet("http://www.ibm.com/developerworks/forums/rss/rssmessages.jspa?forumID=2275") 
+				using new HttpRest
+				returning to handleNews onException handleError; 
+	end
+
+	function loadBadNews(e Event in)
+		html.text = "Loading...";
+		call RESTProxy.invokeGet("http://ibm.com/nonexistingPage.html") 
+				using new HttpRest
+				returning to handleNews onException handleError;
+	end
+	
+	function handleNews(news String in)
+		html.text = "Good news!";
+	end
+		
+	function handleError(exp AnyException in)
+		html.text = "OOPS. No news!";
+	end
+	
+end

@@ -1,0 +1,148 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.Image;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.samples.RestProxy;
+import dojo.widgets.DojoAccordionContainer;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoCheckBox;
+import dojo.widgets.DojoContentPane;
+import dojo.widgets.DojoHorizontalSlider;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+
+handler DojoAccordionSample type RUIHandler{initialUI =[ui] }
+	
+	skills Div { };
+	
+	topics DojoAccordionContainer {
+		width = 165,
+		height = 400,
+    	onTabSelected ::= TabSelected,
+    	duration = 1000,
+    	selection = 2,
+    	children = [
+			new DojoContentPane { title = "Transportation", backgroundColor = "lightyellow", children = [
+					new DojoButton { text = "Car", onClick ::= showImages },
+					new DojoButton { text = "Train", onClick ::= showImages }, 
+					new DojoButton { text = "Airplane", onClick ::= showImages }
+			] },
+			new DojoContentPane { title = "Animals", backgroundCOlor = "lightyellow", children = [
+				new Box { columns = 1, children = [
+					new HTML { text = "Accordion panes can contain any content, such as the checkbox and buttons below.<br>"},
+					checkBox,
+					new Div { marginTop=11, children = [ 
+						cowButton, chimpanzeeButton, ostrichButton, dogButton 
+					]},
+					new HTML { text = "<br>How many pictures would you like to see?<br>"},
+					pictureCount			
+				]}
+			] },
+			new DojoContentPane { title = "Lazy skills", backgroundColor = "lightyellow", children = [
+				skills
+			] }
+		]
+	};
+	
+	pictureCount DojoHorizontalSlider {
+		width = 140,
+		minimum = 0, 
+		maximum = 20, 
+		value = 10,
+		step = 5,
+		showLabels = true
+	};
+	
+	imageDiv Div { width = 520, height = 500, backgroundColor="#333", padding=20, style="overflow-y: scroll" };
+	
+	cowButton DojoButton { text = "Cow", onClick ::= showImages };
+	dogButton DojoButton { text = "Dog", onClick ::= showImages };
+	ostrichButton DojoButton { text = "Ostrich", onClick ::= showImages };
+	chimpanzeeButton DojoButton { text = "Chimpanzee", onClick ::= showImages };
+	checkBox DojoCheckBox { text = "Two legged only", margin = 3, marginTop=11, onChange ::= twoLegs };
+	
+	ui Div { margin = 20, font = "Arial", children = [
+		new TextLabel { text = "Dojo AccordionContainer Sample",	fontSize = "20px", marginBottom=20 }, 
+		new HTML { text="The Accordion sample shows photos tagged with the button text from Flickr.", marginBottom=20},
+		new Box { children = [
+			topics,
+			imageDiv
+		]}
+	]};
+	
+	function twoLegs(e Event in)
+		div Div = chimpanzeeButton.parent;
+		if (checkBox.selected)
+			div.children = [ chimpanzeeButton, ostrichButton ];
+		else
+			div.children = [ cowButton, chimpanzeeButton, ostrichButton, dogButton ];
+		end
+	end
+		
+	function TabSelected(e Event in)
+		if (topics.selection == 3 )
+			skills.children = [
+				new HTML { marginBottom=11, text = 
+					"This pane is filled lazily, meaning the contents are generated when the accordion pane is opened. " + 
+					"Being lazy is good since it improves startup time of your application. " +
+					"Consider showing feedback if the lazy content creation involves a service call."
+				},
+				new DojoButton { text = "Violin", onClick ::= showImages },
+				new DojoButton { text = "Piano", onClick ::= showImages }
+			];
+		end
+	end
+	
+	function showImages(e Event in)
+		imageDiv.children = [
+			new Box { margin = 30, padding=50, backgroundColor="white", children = [
+				new Image { src = "dojo/spinner.gif", paddingRight = 13 },
+				new HTML { color = "#444", text = "Loading images from Flickr...." }
+			]}
+		]; 
+		button DojoButton = e.widget;
+		call RestProxy.invokeGet("http://www.flickr.com/search/?q="+button.text) using new HttpRest returning to handleImages onException serviceexceptionhandler;
+	end
+	
+	function handleImages(html String in)
+		div Div { innerHTML = html };
+		images Widget[] = div.getElementsByTagName("img");
+		header HTML { margin = 3, color = "#aaa" };
+		imageDiv.children = [ header ];
+		count int = pictureCount.value;
+		for (n int from 1 to images.getSize())
+			image Widget = images[n];
+			if (image.class == "pc_img" && count > 0 )
+				count -= 1;
+				image.margin = 3;
+				imageDiv.appendChild(image);
+			end
+		end
+		header.text = "Showing "+(imageDiv.children.getSize()-1)+" pictures from <a target=_blank href=http://flickr.com>Flickr</a>";
+	end
+	
+	function serviceexceptionhandler(exp AnyException in)
+		SysLib.writeStdout(exp.message);
+		if(exp isa ServiceInvocationException)
+			SysLib.writeStdout("detail1:" + (exp as ServiceInvocationException).detail1);
+			SysLib.writeStdout("detail2:" + (exp as ServiceInvocationException).detail2);
+			SysLib.writeStdout("detail3:" + (exp as ServiceInvocationException).detail3);
+		end
+	end
+	
+end

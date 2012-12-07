@@ -1,0 +1,86 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.Span;
+import org.eclipse.edt.rui.widgets.TextField;
+import dojo.mobile.widgets.DojoMobileButton;
+import dojo.mobile.widgets.DojoMobileLib;
+import dojo.mobile.widgets.DojoMobileList;
+import dojo.mobile.widgets.DojoMobileListCategory;
+import dojo.mobile.widgets.DojoMobileListItem;
+import dojo.mobile.widgets.DojoMobileSwitch;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+handler DojoMobileListItemSample type RUIhandler {initialUI = [ View ], cssFile="css/com.ibm.egl.rui.dojo.mobile.samples.css", title="Dojo Mobile List Item Sample"}
+
+	View DojoMobileView{
+		selected = true, headerTitle = "List Item Sample",
+		/*backText = "Back", backView = */
+		children = [
+			new Div { margin = 20, font = "Arial", children = [		
+					new HTML { text="This sample shows the usage of DojoMobileListItem widget." + 
+					"<ul>For each list item you can set:" + 
+					"<li>the icon</li>" +
+					"<li>text that appears on the left</li>" +
+					"<li>text that appears on the right (actionText)</li>" +
+					"<li>the view to go to when you select that item (actionView)</li>" +
+					"<li>the transition type (actionTransition)</li></ul>" +
+					"List items can also have children.", marginBottom=20}
+				   ]
+			},
+			new DojoMobileList{
+				style = DojoMobileLib.LIST_STYLE_ROUNDED_RECTANGLE,
+				children = [
+					new DojoMobileListCategory{ title = "Text & Icons" },					
+					new DojoMobileListItem{ text = "List Item 1 with Icon 1", imagePath = "dojo/mobile/images/i-icon-4.png" },
+					new DojoMobileListItem{ text = "List Item 2 with Icon 2", imagePath = "dojo/mobile/images/i-icon-5.png" },
+					new DojoMobileListItem{ imagePath = "dojo/mobile/images/i-icon-4.png" },
+					new DojoMobileListItem{ text = "List Item without an Icon" },
+					new DojoMobileListCategory{ title = "ActionText and ActionView" },
+					new DojoMobileListItem{ text = "List Item with action", imagePath = "dojo/mobile/images/i-icon-1.png", actionText = "View 1", actionView = View1 },
+					new DojoMobileListItem{ text = "List Item with action", imagePath = "dojo/mobile/images/i-icon-1.png", actionText = "View 2", actionView = View2 },
+					new DojoMobileListCategory{ title = "ActionTransition" },
+					new DojoMobileListItem{ text = "Slide", imagePath = "dojo/mobile/images/i-icon-1.png", actionText = "Slide to View 1", actionView = View1, actionTransition = DojoMobileLib.TRANSITION_SLIDE },
+					new DojoMobileListItem{ text = "Flip", imagePath = "dojo/mobile/images/i-icon-1.png", actionText = "Flip to View 1", actionView = View1, actionTransition = DojoMobileLib.TRANSITION_FLIP },
+					new DojoMobileListItem{ text = "Fade", imagePath = "dojo/mobile/images/i-icon-1.png", actionText = "Fade to View 1", actionView = View1, actionTransition = DojoMobileLib.TRANSITION_FADE }
+				]
+			}
+		]
+	};
+	View1 DojoMobileView{
+		selected = false, headerTitle = "View 1",
+		backText = "Back", backView = View,
+		children = [
+		]
+	};
+	View2 DojoMobileView{
+		selected = false, headerTitle = "View 2",
+		backText = "Back", backView = View,
+		children = [
+		]
+	};
+	Switch DojoMobileSwitch{ onText = "On", offText = "Off", cssClass = "mblItemSwitch" };
+	
+	function myButton_onClick(event Event in)
+		
+	end
+	
+end

@@ -1,0 +1,39 @@
+.DashboardColumn {
+	margin: 7px;
+}
+
+.EglRuiGadget {
+	font-family: verdana;
+	font-size: 8pt;	
+}
+
+
+.headerLeft {
+	height: 24px;
+	background-image: url(headerLeft.png);
+	width: 7px;
+	height: 24px;
+}
+
+.headerRight {
+	background-image: url(headerRight.png);
+	width: 7px;
+	height: 24px;
+}
+
+.headerMiddle {
+	background-image:  url(headerMiddle.png);
+	background-repeat: repeat-x;
+	height: 24px;
+	line-height: 24px;
+	cursor: move;
+	font-weight: bold;
+}
+
+.content {
+	border: solid #cdcdcd 1px;
+	border-top: none;
+	padding: 6px;
+	vertical-align: middle;
+	overflow-x: hidden;
+}

@@ -1,0 +1,195 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.validation;
+
+import org.eclipse.edt.rui.mvc.Controller;
+import org.eclipse.edt.rui.mvc.DateFormat;
+import org.eclipse.edt.rui.mvc.FormField;
+import org.eclipse.edt.rui.mvc.InputRequired;
+import org.eclipse.edt.rui.mvc.InputRequiredMsgKey;
+import org.eclipse.edt.rui.mvc.MVC;
+import org.eclipse.edt.rui.mvc.MinimumInput;
+import org.eclipse.edt.rui.mvc.MinimumInputMsgKey;
+import org.eclipse.edt.rui.mvc.TypeChkMsgKey;
+import org.eclipse.edt.rui.mvc.UpperCase;
+import org.eclipse.edt.rui.mvc.ValidatingForm;
+import org.eclipse.edt.rui.mvc.ValidationPropertiesLibrary;
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.Grouping;
+import org.eclipse.edt.rui.widgets.PasswordTextField;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.rbd.StrLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+import gallery.lib.samplesLib;
+
+// This sample demonstrates the built-in validation support in EGL Rich UI.  It uses the
+// ValidatingForm RUIHandler to validate the values the user types in.
+handler ValidationDemo type RUIhandler {initialUI = [ui], cssFile = "validation/theme.css"}
+	// The main UI for this sample
+	ui Div {
+		width=SamplesLib.CONTENT_WIDTH - 25,
+		borderStyle="solid",
+		borderWidth=1,
+		style="overflow:auto",
+		padding=10,
+		backgroundColor="lightyellow",
+		children=[ grp ]
+	};
+	
+	grp Grouping { text="Create Account", legend.font="Verdana", legend.color = "blue", children=[
+		acctForm,
+		new Box { marginTop=3, children=[
+			submitButton,
+			clearButton
+		]}
+	]};
+	
+	// The backing data (the "Model" part of the "MVC" pattern).  The accountRecord type is defined below.
+	account accountRecord;
+
+	// These are the actual fields where the user will type their data (the "View" part of the "MVC" pattern).	
+	usernameField TextField{};
+	passwordField PasswordTextField{};
+	emailField TextField{};
+	firstNameField TextField{};
+	lastNameField TextField{};
+	birthdayField TextField{};
+	addressField TextField{};
+	cityField TextField{};
+	stateField TextField{};
+	zipField TextField{};
+
+	// The Controllers that link the models with their views and handle formatting and validation. 
+	usernameController Controller { @MVC { model = account.username, view = usernameField } };
+	passwordController Controller { @MVC { model = account.password, view = passwordField } };
+	emailController Controller { @MVC { model = account.email, view = emailField }, validators ::= validateEmail };
+	firstNameController Controller { @MVC { model = account.firstName, view = firstNameField } };
+	lastNameController Controller { @MVC { model = account.lastName, view = lastNameField } };
+	birthdayController Controller { @MVC { model = account.birthday, view = birthdayField } };
+	addressController Controller { @MVC { model = account.address, view = addressField } };
+	cityController Controller { @MVC { model = account.city, view = cityField } };
+	stateController Controller { @MVC { model = account.state, view = stateField } };
+	zipController Controller { @MVC { model = account.zip, view = zipField } };
+	
+	submitButton Button { text = "Submit", onClick ::= submitForm, marginLeft=10, marginBottom=10 };
+	clearButton Button { text = "Clear", onClick ::= clearForm, marginLeft=10, marginBottom=10 };
+	
+	acctForm ValidatingForm {
+		marginTop=10,
+		marginLeft=10,
+		entries = [
+			new FormField { displayName="* User name:", controller = usernameController },
+			new FormField { displayName="* Password:", controller = passwordController },
+			new FormField { displayName="* Email:", controller = emailController },
+			new FormField { displayName="* First name:", controller = firstNameController },
+			new FormField { displayName="* Last name:", controller = lastNameController },
+			new FormField { displayName="Date of birth:", controller = birthdayController },
+			new FormField { displayName="* Address:", controller = addressController },
+			new FormField { displayName="* City:", controller = cityController },
+			new FormField { displayName="* State:", controller = stateController },
+			new FormField { displayName="* Zip:", controller = zipController }
+	]};
+	
+	// Do some extremely basic (and geo-specific) email validation.  Make sure there's an @,
+	// followed by a ., followed by 3 characters.
+	function validateEmail(input String in) returns(String?)
+		i int = StrLib.indexOf(input, "@");
+		if(i > 0)
+			i = StrLib.indexOf(input, ".", i);
+			if(i < StrLib.characterLen(input))
+				return("");
+			end
+		end
+		return(ValidationMessages.emailError);
+	end
+
+	// Check the form for validity, and commit() the values from the View (all the TextFields above) into the
+	// Model (the account record).
+	function submitForm(event Event in)
+		if(acctForm.isValid())
+			// Push the values from the fields on the screen to the backing record.
+			acctForm.commit();
+			
+			grp.children = [
+				new TextLabel {
+					text = "Account successfully created!",
+					color="red",
+					fontWeight="bold",
+					margin=10
+				},
+				new Box { columns=2, marginLeft=10, children=[
+					new TextLabel { text="User name:" },
+					new TextLabel { text=account.username, marginLeft=10 },
+					new TextLabel { text="Email address:" },
+					new TextLabel { text=account.email, marginLeft=10 },
+					new TextLabel { text="First name:" },
+					new TextLabel { text=account.firstName, marginLeft=10 },
+					new TextLabel { text="Last name:" },
+					new TextLabel { text=account.lastName, marginLeft=10 },
+					new TextLabel { text="Birthday:" },
+					new TextLabel { text=account.birthday, marginLeft=10 },
+					new TextLabel { text="Address:" },
+					new TextLabel { text=account.address, marginLeft=10 },
+					new TextLabel { text="City:" },
+					new TextLabel { text=account.city, marginLeft=10 },
+					new TextLabel { text="State:" },
+					new TextLabel { text=account.state, marginLeft=10 },
+					new TextLabel { text="Zip:" },
+					new TextLabel { text=account.zip, marginLeft=10 }
+				] },
+				new Button { text = "OK", onClick ::= reset, width=100, margin=10 }
+			];
+		end
+	end
+	
+	function clearForm( e Event in )
+		// Clear the data out of the backing record
+		account = (new accountRecord);
+		
+		// Push the data from the backing record to the fields on the screen
+		acctForm.publish();
+	end
+	
+	function reset( e Event in )
+		clearForm( e );
+		grp.children = [ acctForm, new Box { marginTop=3, children=[
+			submitButton,
+			clearButton
+		] } ];
+	end
+end
+
+// The record.  The validation properties are defined here.
+//
+// NOTE: Annotations are not supported on Data Items at this time, so the @InputRequired annotation is specified on multiple fields of the record.  When annotations are supported
+// on Data Items, the type of fields 'firstName', 'lastName', 'address', 'city', and 'state', can be changed from 'string' to 'InputReqString'.
+//
+// NOTE: validationPropertiesLibrary is not supported at this time.  When this property is supported, the error messages displayed for the specified msgKey will be loaded from the
+// ValidationMessages Library
+record accountRecord
+	username string { @MinimumInput{6}, @MinimumInputMsgKey{"usrMinInput"}, @validationPropertiesLibrary{ValidationMessages} };
+	password string { @MinimumInput{8}, @MinimumInputMsgKey{"pwMinInput"}, @validationPropertiesLibrary{ValidationMessages} };
+	email string;
+	firstName string { @InputRequired{yes}, @InputRequiredMsgKey{"valReq"}, @validationPropertiesLibrary{ValidationMessages}};
+	lastName string { @InputRequired{yes}, @InputRequiredMsgKey{"valReq"}, @validationPropertiesLibrary{ValidationMessages}};
+	birthday date { @dateFormat{"MM/dd/yy"}, @TypeChkMsgKey{"invalidDate"}, @validationPropertiesLibrary{ValidationMessages}};
+	address string { @InputRequired{yes}, @InputRequiredMsgKey{"valReq"}, @validationPropertiesLibrary{ValidationMessages}};
+	city string { @InputRequired{yes}, @InputRequiredMsgKey{"valReq"}, @validationPropertiesLibrary{ValidationMessages}};
+	state string { @InputRequired{yes}, @InputRequiredMsgKey{"valReq"}, @validationPropertiesLibrary{ValidationMessages}, @uppercase{yes} };
+	zip int{@typeChkMsgKey{"validZip"}, @validationPropertiesLibrary{ValidationMessages}};
+end

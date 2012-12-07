@@ -1,0 +1,136 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.BoxLib;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.mobile.widgets.DojoMobileButton;
+import dojo.mobile.widgets.DojoMobileLib;
+import dojo.mobile.widgets.DojoMobileOpener;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+// RUI Handler
+//
+//
+
+handler DojoMobileOpenerSample type RUIhandler{initialUI = [ View, _nonModalOpener, _modalOpener ], onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.dojo.mobile.samples.css", title = ""}
+	View DojoMobileView{
+		selected = true, headerTitle = "EGL Mobile Opener Sample",
+		/*backText = "Back", backView = */
+		children = [ Box, GridLayout ]
+	};
+	
+	Box Box{ 
+		padding=8,
+		children = [ TextLabel ] 
+	};
+	
+	TextLabel TextLabel{ 
+		text="This sample is to show the usage of opener. The modal opener behaves as Dojo Opener Widget. You can't interact with parent widgets until the opener disappears, while the non-modal opener behaves like Dojo overlay, where you can still interact with parent view widget when it is showing." 
+	};
+	
+	Button DojoMobileButton{ text = "Pop Modal Opener", width = "150", onClick ::= Button_onClick };
+	
+	_modalOpener DojoMobileOpener{
+		children = [ View2 ], isModal = true
+	}; 
+	
+	_nonModalOpener DojoMobileOpener{
+		children = [ View1 ], isModal = false
+	}; 
+	
+	GridLayout GridLayout{ cellPadding = 4, rows = 1, columns = 2,
+		width = "100%",
+		children = [ Box2, Box1 ] };
+		
+	Box2 Box{ layoutData = new GridLayoutData{ row = 1, column = 2 }, padding=8,
+		children = [ Button1 ],
+		alignment = BoxLib.ALIGN_CENTER };
+		
+	Box1 Box{ layoutData = new GridLayoutData{ row = 1, column = 1 }, padding=8,
+		children = [ Button ],
+		alignment = BoxLib.ALIGN_CENTER };
+
+	Button1 DojoMobileButton{ text = "Pop Non-modal Opener", width = "150", onClick ::= Button1_onClick };
+	
+	View1 DojoMobileView{
+		selected = true, headerTitle = "Non-modal Opener Pop View", 
+		/*backText = "Back", backView = */
+		children = [
+			new Box{ 
+				padding   = 8,
+				children  = [ 
+					new TextLabel{ 
+					text="Hi, this is a non-modal opener. Try clicking parent button. They are supposed to respond to your interaction.",
+					color = "Black" }
+				]
+			 },
+			new Box{ 
+				padding   = 8,
+				children  = [ 
+					new DojoMobileButton{
+						text = "Hide", width = "100", onClick ::= Button_hideNonmodalOnClick 
+					} 
+				],
+				alignment = BoxLib.ALIGN_CENTER
+			 }
+		]
+	};
+	View2 DojoMobileView{
+		selected = true, headerTitle = "Modal Opener Pop View",
+		/*backText = "Back", backView = */
+		children = [
+			new Box{ 
+				padding   = 8,
+				children  = [ 
+					new TextLabel{ 
+					text="Hi, this is a modal opener. When the height or the width of your screen is less than 500px, the modal opener will degenerates into phone style where it behaves as Dojo Overlay Widget, otherwise it will has a default style of tablet, where it behaves as Dojo Toolltip Widget. Try clicking parent button. They are not supposed to respond to your interaction unless it disapears.",
+					color = "Azure"  
+					}
+				]
+			 },
+			new Box{ 
+				padding   = 8,
+				children  = [ 
+					new DojoMobileButton{
+						text = "Hide", width = "100", onClick ::= Button_hideModalOnClick 
+					} 
+				],
+				alignment = BoxLib.ALIGN_CENTER
+			 }
+		]
+	};
+	
+    function start()
+    end
+    
+    function Button_onClick(event Event in)
+    	_modalOpener.showOpener( Button, DojoMobileLib.OPENER_POP_AFTER );
+
+    end
+    
+    function Button1_onClick(event Event in)
+    	_nonmodalOpener.showOpener( Button1, DojoMobileLib.OPENER_POP_BEFORE );
+    end
+    
+    function Button_hideModalOnClick(event Event in)
+    	_modalOpener.hideOpener();
+    end
+    function Button_hideNonmodalOnClick(event Event in)
+    	_nonmodalOpener.hideOpener();
+    end
+end

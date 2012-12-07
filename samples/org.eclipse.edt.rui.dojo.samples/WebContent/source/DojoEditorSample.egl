@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;   
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoEditor;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoEditorSample Type RUIHandler { initialUI = [ui] }
+    
+    editor DojoEditor {marginBottom = 20, width = 500, height = 200};
+    
+    ui Box { columns = 1, padding = 20, children =[
+    	new HTML{ 
+    		marginBottom = 20,
+    		fontSize = "20px", 
+    		text = "Dojo Editor Sample"
+    	},
+    	new HTML { 
+    		marginBottom = 20, 
+    		fontSize = "14px",
+    		text = "Click the button to grab the editor contents."
+    	},
+    	editor,
+    	new DojoButton {
+    		marginBottom = 20, text = "Grab Editor Contents", onClick ::= _onClick
+    	},
+    	output
+    ]};
+    output TextArea{
+    	width = "500px",
+    	height = "100px"
+    };         
+    function _onClick(event Event in)
+    	output.text = editor.getContents();
+    end  
+end  

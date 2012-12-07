@@ -1,0 +1,170 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package utils.portal;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.Image;
+import eglx.lang.EGLProperty;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.Widget;
+
+handler Portlet type RUIWidget { targetWidget = main, cssFile = "utils/portal/portal.css", onConstructionFunction = start }
+ 
+	title String  { @EGLProperty { getMethod=getTitle, setMethod=setTitle } };
+	
+	canMove boolean { @EGLProperty } = true;
+	canClose boolean { @EGLProperty } = true;
+	canMinimize boolean { @EGLProperty } = true;
+	canConfig boolean { @EGLProperty } = false;
+	
+	main Box { columns = 1, marginBottom = 12, padding = 0, cssClass = "EglRuiPortlet" };
+		
+	minimizeImage Image { padding = 2, src = "utils/portal/min.gif", text = "Minimize", onClick ::= minimizeInternal };
+	closeImage Image { padding = 2, src = "utils/portal/close.png", text = "Close", onClick ::= closePortlet };
+	configImage Image { padding = 2, src = "utils/portal/config.gif", text = "Config", onClick ::= configPortlet };
+	
+	actionsBar Box { cursor = "pointer", marginRight = "4", children = [] };
+	titleBar Div { innerHtml = title, cssClass = "EglRuiPortletHeaderTitle" };		
+	header Box { padding = 0, cssClass="EglRuiPortletBox", columns = 1, children = [  
+		new Box { cssClass = "EglRuiPortletHeader", columns = 2, children = [ titleBar, actionsBar ], padding = 4 }	
+	]}; 
+	content Box { columns = 1, padding = 4, cssClass = "EglRuiPortletContent", children = [ ] };
+	
+	parentPortal Portal?;	
+	
+	function start() 
+		addActions();
+	end
+			
+	function setChildren(children Widget[])
+		content.children = children;
+		main.children = [header, content];
+	end
+	
+	function setWidth(width int in)
+		header.width = width;
+		content.width = width;
+		header.children[1].width = width;
+		titleBar.width = header.children[1].pixelWidth - (16 * actionsBar.children.getSize()) - 8;
+	end
+	
+	function setTitle(title String in)
+		this.title = title;
+		header.children[1].children[1].innerHTML = title;
+	end
+	
+	function getTitle() returns (String)
+		return (title);
+	end
+	
+	// Convenience function for external callers
+	function minimize()
+		content.height = 0;
+		content.paddingTop = 0;
+		content.paddingLeft = 4;
+		content.paddingRight = 4;
+		content.paddingBottom = 0;
+		content.setVisibility("hidden");
+		minimizeImage.src = "utils/portal/restore.gif";
+		minimizeImage.onClick.removeAll();
+		minimizeImage.onClick.appendElement(restoreInternal);
+		
+		parentPortal.notifyListeners(this, PortalLibrary.PORTLET_MINIMIZED);
+	end
+	
+	private function minimizeInternal(e Event in)
+		minimize();
+	end
+	
+	// Convenience function for external callers
+	function restore()
+		content.setVisibility("visible");
+		content.height = "auto";
+		content.padding = 4;
+		minimizeImage.src = "utils/portal/min.gif";
+		minimizeImage.onClick.removeAll();
+		minimizeImage.onClick.appendElement(minimizeInternal);
+		
+		parentPortal.notifyListeners(this, PortalLibrary.PORTLET_RESTORED);		
+	end
+
+	private function restoreInternal(e Event in)
+		restore();
+	end
+	
+	function isMinimized() returns (boolean)
+		return (content.getVisibility() == "hidden");
+	end
+	
+	function configPortlet(e Event in)
+		parentPortal.notifyListeners(this, PortalLibrary.PORTLET_CONFIG);
+	end
+
+	function closePortlet(e Event in)					
+		parentPortal.closePortlet(this);
+	end
+	
+	function getCanConfig() returns (boolean)
+		return (canConfig);
+	end
+	
+	function setCanConfig(b boolean in)
+		canConfig = b;
+		addActions();
+	end
+	
+	function getCanMove() returns (boolean)
+		return (canMove);
+	end
+	
+	function setCanMove(b boolean in)
+		canMove = b;
+		addActions();
+	end
+	
+	function setCanClose(b boolean in)
+		canClose = b;
+		addActions();
+	end
+	
+	function setCanMinimize(b boolean in)
+		canMinimize = b;
+		addActions();
+	end
+	
+	function getCanClose() returns (boolean)
+		return (canClose);
+	end
+	
+	function getCanMinimize() returns (boolean)
+		return (canMinimize);
+	end
+		
+	private function addActions()
+		actions Image[];
+		if (canConfig) 
+			actions.appendElement(configImage);
+		end
+		if (canMinimize) 
+			actions.appendElement(minimizeImage);
+		end
+		if (canClose) 
+			actions.appendElement(closeImage);
+		end
+		
+		actionsBar.children = actions;				
+	end
+	
+end

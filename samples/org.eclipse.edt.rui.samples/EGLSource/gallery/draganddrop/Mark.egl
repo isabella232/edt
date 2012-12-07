@@ -1,0 +1,94 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.draganddrop;
+
+import org.eclipse.edt.rui.widgets.Image;
+import eglx.ui.rui.RUIWidget;
+
+handler Mark type RUIWidget { targetWidget=img }
+{
+	onConstructionFunction = setupMark
+}
+	//Mark is essentially an Image widget with extra variables and functions
+	//to make it more useful for the tic-tac-toe game.
+
+	//This holds the value of the current image for the mark.
+	currentImage string;
+	
+	//constants
+	const markSize int = 75;
+	const moveSize int = 125;
+	const picX string = "draganddrop/x.png";
+	const picO string = "draganddrop/o.png";
+	
+	//Each mark has one image.  The (x,y) position is absolute, since it will
+	//be dragged and dropped over the board.
+	img Image {
+		position = "absolute",
+		width = markSize,
+		height = markSize,
+		cursor = "pointer",
+		src = currentImage
+	};
+	
+	//initial setup for a marker
+	function setupMark()
+		currentImage = picX;
+		img.src = currentImage;
+	end
+	
+	//easy way to set points
+	//alternative would be to use mark.x and mark.y
+	function setPoint( x int in, y int in )
+		this.x = x;
+		this.y = y;
+	end
+	
+	//When a turn changes, the symbol must be changed.
+	//X becomes an O, and vice versa.
+	function toggleSymbol()
+		case ( currentImage )
+			when ( picX )
+				currentImage = picO;
+			when ( picO )
+				currentImage = picX;
+		end
+		img.src = currentImage;
+	end
+	
+	//This is the standard size for the image.
+	function makeMarkSize()
+		img.width = markSize;
+		img.height = markSize;
+	end
+	
+	//When dragging the image, it becomes enlarged.
+	function makeMoveSize()
+		img.width = moveSize;
+		img.height = moveSize;
+	end
+	
+	//When a mark is dropped onto a square in the board, a copy of its image appended
+	//as a child to the square.  This function creates that copy image.  
+	function copyImage() returns (Image)
+		sym string;
+		case ( currentImage )
+			when ( picX )
+				sym = "X";
+			when ( picO )
+				sym = "O";
+		end
+		return ( new Image{ src = img.src, width = markSize, height = markSize, id = sym } );
+	end
+	
+end

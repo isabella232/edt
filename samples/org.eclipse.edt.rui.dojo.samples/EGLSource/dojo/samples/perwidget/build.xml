@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<project default="copy">
+	<target name="copy" description="Copies the Dojo samples to the WebContent directory. Renames them to .txt files"> 
+        <copy todir="../../../../WebContent/samples"> 
+            <fileset dir="."> </fileset> 
+            <globmapper from="*.egl" to="*.txt"/> 
+        </copy> 
+		<eclipse.refreshLocal resource="../../../../WebContent/samples" depth="infinite"/>
+	</target>
+</project>

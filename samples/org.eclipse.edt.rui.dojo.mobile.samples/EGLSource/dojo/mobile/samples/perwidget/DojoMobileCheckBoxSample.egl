@@ -1,0 +1,55 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.mobile.widgets.DojoMobileButton;
+import dojo.mobile.widgets.DojoMobileCheckBox;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+// RUI Handler
+//
+//
+
+handler DojoMobileCheckBoxSample type RUIhandler{initialUI = [ m_v, GridLayout ], onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.dojo.mobile.samples.css", title = ""}
+	m_v DojoMobileView{
+		selected = true, headerTitle = "EGL Mobile CheckBox Sample",
+		/*backText = "Back", backView = */
+		children = [
+		]
+	};
+	GridLayout GridLayout{ cellPadding = 4, rows = 2, columns = 1,
+		children = [ GridLayout1, TextLabel ] };
+	TextLabel TextLabel{ layoutData = new GridLayoutData{ row = 1, column = 1 }, text="This sample is to demonstrate the usage of CheckBox. You can dynamicly check & uncheck the checkbox status by clicking the button and trace the checked status change event." };
+	GridLayout1 GridLayout{ layoutData = new GridLayoutData{ row = 2, column = 1 }, cellPadding = 4, rows = 1, columns = 2,
+		children = [ Button, CheckBox ] };
+	CheckBox DojoMobileCheckBox{ layoutData = new GridLayoutData{ row = 1, column = 1 }, onChange ::= CheckBox_onChange,
+		selected = false, text = "test checkbox"};
+	Button DojoMobileButton{ layoutData = new GridLayoutData{ row = 1, column = 2 }, text = "Button", width = "100", onClick ::= Button_onClick };
+	
+    function start()
+    	
+    end
+    
+    function Button_onClick(event Event in)
+    	CheckBox.selected = ! CheckBox.selected;
+    end
+    
+    function CheckBox_onChange(event Event in)
+    	CheckBox.value = "change text value";
+    end
+    
+end

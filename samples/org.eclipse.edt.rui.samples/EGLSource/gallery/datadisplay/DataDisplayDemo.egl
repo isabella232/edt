@@ -1,0 +1,266 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.datadisplay;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.BoxLib;
+import org.eclipse.edt.rui.widgets.CheckBox;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridBehaviors;
+import org.eclipse.edt.rui.widgets.DataGridColumn;
+import org.eclipse.edt.rui.widgets.DataGridSelector;
+import org.eclipse.edt.rui.widgets.DataGridSorter;
+import org.eclipse.edt.rui.widgets.DataGridTooltip;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+
+// Expense is the record used to form columns in the grid.
+// - expense represents the name of the expenditure category in the budget
+// - amount represents the amount of money spent in that category
+// - include is a flag for inclusion into the chart 
+
+Record Expense 
+	expense string;
+	amount int;
+	include boolean;
+end
+
+
+// DataDisplayDemo is a RUIHandler with N main components.
+// - a model for the grid data
+// - a grid
+// - a chart
+// - a tooltip for the grid
+
+Handler DataDisplayDemo type RUIHandler { initialUI = [ui], onConstructionFunction = refreshChart }
+
+	// MODEL FOR THE GRID DATA
+	
+	//There are presently five expense categories to the budget, encapsulated as an array of 
+	//Expense records.  Here's a challenge for you, to see if you understand how to use RUI widgets: 
+	//create the capability to edit the categories from the RUI Handler.  If you master that,
+	//try to create the capability to add new categories.
+
+	title string = "Budget";
+	budget Expense[] = [
+		new Expense{expense = "Rent", amount = 340, include = true},
+		new Expense{expense = "Groceries", amount = 150, include = true},
+		new Expense{expense = "Utilities", amount = 110, include = true},
+		new Expense{expense = "Gas", amount = 100, include = true}, 
+		new Expense{expense = "Entertainment", amount = 175, include = true}
+	];
+	
+
+	// THE GRID
+	 
+	gridLabel TextLabel { marginBottom = 5, text = "Click the column headers to sort. Hover over an expense to see a tooltip." };
+	
+	//sorts the rows lexicographically by the elements in the selected column
+	gridSorter DataGridSorter {};
+		 
+	//highlights the row selected
+	gridSelector DataGridSelector = new DataGridSelector{ color = "lightgreen" };
+	
+	//A grid with three columns: Expense, Amount, and Include.  The behaviors property
+	//is a list of function references that are called when the grid is created.  Typically,
+	//behaviors outline how a grid appears, such as specifying alternating row color. 
+	//There is also a list of behaviors for the column headers, such as sorting the columns.
+	//Data is given by our model, the budget array above.
+	grid DataGrid { 
+		marginTop = 10,  
+ 		behaviors = [ 
+ 			alternatingLightYellow,
+ 			DataGridBehaviors.tightCells,
+ 			gridSelector.enableSelection,
+ 			setCheckBoxes,
+ 			gridTooltip.setTooltips
+ 		],
+ 		headerBehaviors = [ 
+ 			DataGridBehaviors.grayCells,
+ 			gridSorter.columnSorter,
+ 			refreshChartWhenSorted
+ 		],
+ 		columns = [
+	 		new DataGridColumn{name = "Include", displayName = "Show"} ,
+	 		new DataGridColumn{name = "Expense"}, 
+	 		new DataGridColumn{name = "Amount"}
+ 		], 
+ 		data = (budget as any[])
+ 	};
+ 	
+ 	//behavior function for the grid
+	function alternatingLightYellow(grid DataGrid in, td Widget in, row any? in, rowNumber int in, column DataGridColumn in) 
+		if (rowNumber % 2 == 1)
+			td.backgroundColor = "lightyellow";
+		end
+	end
+	
+	//refresh the chart when columns are sorted
+	function refreshChartWhenSorted(grid DataGrid in, td Widget in, ignoreRow any? in, ignoreRowNumber int in, column DataGridColumn in)
+		td.onClick ::= columnsSorted;
+	end
+	
+	//refresh the chart when columns are sorted
+	function columnsSorted( e Event in )
+		chartHolder.fadeOut( 150, refreshChart );
+	end
+	
+ 	
+ 	// THE CHART
+ 	
+ 	//Anytime a chart is changed and refreshed, the view fades out and fades in. Look for 
+ 	//these function calls.
+ 	
+ 	//A combo box (or drop-down list) for choosing the type of chart.  Whenever the selected 
+ 	//value is changed, changeChartType is called, which updates the chart view.
+ 	chartChoice Combo { 
+ 		marginTop = 30, 
+ 		values = ["Bar Chart (Horizontal)", "Bar Chart (Vertical)", "Pie Chart", "Pie Chart (3D)"],
+ 		selection = 3,
+ 		onChange ::= changeChartType
+ 	};
+ 	
+ 	//A box to hold the chart.  Since a new chart is created every time the user makes a change
+ 	//to the type or to the categories to include, it is easier to reset one child of one box than
+ 	//to reset all the children of the main UI box.
+ 	chartHolder Box {
+ 		marginTop = 10,
+ 		alignment = BoxLib.ALIGN_CENTER
+ 	};
+ 	
+ 	//The main UI box, which holds all components in this RUIHandler
+ 	ui Box{ 
+ 		columns = 1, 
+ 		backgroundColor = "white", 
+ 		padding = 10, 
+ 		alignment = BoxLib.ALIGN_CENTER,
+ 		children = [
+ 			gridLabel, 
+ 			new Box{ alignment = BoxLib.ALIGN_CENTER, children = [grid] }, 
+ 			chartChoice, 
+ 			chartHolder] 
+ 	};
+ 	
+ 	//This function refreshes the chart based on the user's current options.  It is also called
+ 	//as the onConstructionFunction with the default options.
+ 	function refreshChart()
+ 		//only use the rows that have been checked by the user
+ 		filteredExpenses Expense[] = filterExpenses( grid.data as Expense[] );
+ 		labels string[] = getChartLabels( filteredExpenses );
+ 		data int[] = getChartData( filteredExpenses );
+ 		
+ 		case ( chartChoice.getSelection() )
+ 			when ( 1 )
+ 				chartHolder.children = [ new HorizontalBarChart { 
+					width=330, height=220, marginTop=10, barHeight=30, title=title, labels=labels, data=data } ];
+ 			when ( 2 )
+ 				chartHolder.children = [ new VerticalBarChart { 
+					width=400, height=220, marginTop=10, marginLeft = 20, barWidth=40, title=title, labels=labels, data=data } ];
+ 			when ( 4 )
+ 				chartHolder.children = [ new PieChart {
+ 					width=380, height=180, marginTop=10, use3D=true, title=title, labels=labels, data=data } ];
+ 			otherwise
+ 				//default to a pie chart
+ 				chartHolder.children = [ new PieChart {
+ 					width=360, height=200, marginTop=10, use3D=false, title=title, labels=labels, data=data } ];
+ 		end
+ 		chartHolder.fadeIn( 150, null );
+ 	end
+ 	
+ 	//This is the onChange function for the chartChoice combo box.  It fades out the current chart
+ 	//before calling refreshChart to add the new one.
+ 	function changeChartType( e Event in )
+ 		chartHolder.fadeOut( 150, refreshChart );
+ 	end
+ 	
+ 	//given an array of expense records, returns a new array of only the records where include == true
+ 	function filterExpenses( expenses Expense[] ) returns (Expense[])
+ 		filtered Expense[]{};
+ 		for (i int from 1 to expenses.getSize())
+ 			if ( expenses[i].include )
+ 				filtered.appendElement( expenses[i] );
+ 			end
+ 		end
+ 		return (filtered);
+ 	end
+ 	
+ 	//returns an array of only the labels, given an array of expense records
+ 	function getChartLabels( expenses Expense[] ) returns (string[])
+ 		labels string[]{};
+ 		for (i int from 1 to expenses.getSize())
+ 			labels.appendElement( expenses[i].expense );
+ 		end
+ 		return (labels);
+ 	end 	
+ 	
+ 	//returns an array of only the amounts, given an array of expense records
+ 	function getChartData( expenses Expense[] ) returns (int[])
+ 		amounts int[]{};
+ 		for (i int from 1 to expenses.getSize())
+ 			amounts.appendElement( expenses[i].amount );
+ 		end
+ 		return (amounts);
+ 	end
+ 	
+ 	//This is a behavior function for the grid.  It creates check box widgets in place of "true" or "false" text
+ 	//values in the Include column.  The reason the code is put here in the area for the chart code is because
+ 	//each check box has its onClick function set to handleCheckBox.
+	function setCheckBoxes(grid DataGrid in, td Widget in, row any? in, ignoreRowNumber int in, column DataGridColumn in) 
+		if (column.name == "Include")
+			html HTML = td.children[1] as HTML;
+			checkBox CheckBox { id = ignoreRowNumber, selected = row.include, onChange ::= handleCheckBox };
+			td.children = [ checkBox ];
+		end
+	end
+	
+	//refreshes the chart every time a check box is changed
+	function handleCheckBox(e Event in)
+		checkBox CheckBox = e.widget;
+		grid.data[checkBox.id as int].include = checkBox.selected;
+ 		chartHolder.fadeOut( 150, refreshChart );
+	end
+	
+	
+	// THE TOOLTIP FOR THE GRID
+	
+	//Whenever the user hovers over the Expense column, a tooltip appears.  The tooltip contains
+	//an HTML widget, giving a description of the cell's attributes.
+	
+	//the tooltip
+	gridTooltip DataGridTooltip { provider = tooltipText, tooltip.delay = 500 };
+	
+	//text for the tooltip
+	tooltipHTML HTML { width=400, height=125 };
+	
+	//box with widgets for the tooltip
+	tooltipBox Box { columns=1, width=400, padding = 5, children = [ tooltipHTML ] };
+	
+	//This is the provider function for the tooltip.  It returns a box to place onto the tooltip.
+	function tooltipText(row any in, fieldName String in, td Widget in) returns(Box?)
+		//only show a tooltip if the cursor is hovering over the expense column
+		if ( fieldName == "Expense" )
+			//reset the text for this tooltip
+			tooltipHTML.text = "This tooltip is for <b>" + row[fieldName] + "</b>. " +
+				"It appears after half of a second, but only in the Expense column.  Hover elsewhere to make it disappear." +
+				"<br><br>If you're up for a challenge, try adding other widgets to this tooltip.";
+			return (tooltipBox);
+		else
+			return (null);
+		end
+	end
+
+end  

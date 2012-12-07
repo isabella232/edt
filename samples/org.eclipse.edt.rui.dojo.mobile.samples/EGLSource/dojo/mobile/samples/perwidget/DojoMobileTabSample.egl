@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.mobile.widgets.DojoMobileTab;
+import dojo.mobile.widgets.DojoMobileTabContainer;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+handler DojoMobileTabSample type RUIhandler { initialUI = [ View ] }
+	
+	View DojoMobileView{
+		selected = true,
+		/*backText = "Back", backView = */
+		children = [
+			TabContainer
+		]
+	};
+	TabContainer DojoMobileTabContainer{
+		selection = 2,
+		children = [
+			new DojoMobileTab { title = "Topic 1", selectedIcon = "dojo/mobile/images/tab-icon-10.png", deSelectedIcon = "dojo/mobile/images/tab-icon-10h.png",
+			children = [
+				new TextLabel { text = "Tab Sample",	fontSize = "20px", margin = 20 }, 
+				new HTML { margin = 20, text = "This sample shows how to use tabs within a TabContainer on mobile devices. Each tab has a \"title\" property to set the tab text, and an \"icon\" property to show a tab icon (Android only)."}
+			] },
+			new DojoMobileTab { title = "Topic 2", selectedIcon = "dojo/mobile/images/tab-icon-10.png", deSelectedIcon = "dojo/mobile/images/tab-icon-10h.png",
+			children = [
+				new TextLabel { text = "The Second Tab",	fontSize = "20px", margin = 20 },
+				new HTML { margin = 20, text = "This is the second tab, which can be opened initially using the \"selection\" property. Note that the tab icon will only show on an Android device when segmented control style is used, while non-segmented control style has no such limits."}
+			]},
+			new DojoMobileTab { title = "Topic 3", selectedIcon = "dojo/mobile/images/tab-icon-10.png", deSelectedIcon = "dojo/mobile/images/tab-icon-10h.png",
+			children = [
+				new TextLabel { text = "The Third Tab",	fontSize = "20px", margin = 20 }
+			]}
+		],
+		segmentedControl = false
+	};	
+end

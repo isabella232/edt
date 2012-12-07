@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.widgets;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.ui.rui.RUIWidget;
+import gallery.lib.samplesLib;
+
+// This is the overview pane on the right.
+handler OverviewPane type RUIWidget {
+		targetWidget = ui, 
+		onConstructionFunction=start, 
+		cssFile="css/org.eclipse.edt.rui.samples.css" }
+	
+	overviewText HTML{ fontSize = "12" };
+		
+	ui Box { 
+		columns = 1, 
+		paddingLeft = 15, 
+		paddingRight = 15, 
+		paddingTop = 0, 
+		paddingBottom = 25, 
+		height = 540, 
+		style="overflow:auto",
+		children=[
+			new TextLabel { text="Overview", fontSize = "14", marginBottom=7},
+			overviewText]
+	};
+	
+	// A new sample has just been shown in the main content pane.  Change our text accordingly.
+	// The data will be an integer representing the number of the sample.
+	function sectionActivated(eventName string in, data any in)
+		overviewText.text = samplesLib.tls[data as int].overview; 
+	end
+	
+	function start()
+		// INFOBUS Listen for notification that a new section has been shown in the main content pane.
+		// When that happens we need to update our text.
+		InfoBus.subscribe("org.eclipse.edt.rui.samples.sectionActivated", sectionActivated);
+	end
+end

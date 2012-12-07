@@ -1,0 +1,78 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.BoxLib;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.mobile.widgets.DojoMobileButton;
+import dojo.mobile.widgets.DojoMobileDatePicker;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+// RUI Handler
+//
+//
+
+handler DojoMobileDatePickerSample type RUIhandler{initialUI =[View
+            ], onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.dojo.mobile.samples.css", title = ""}
+    View DojoMobileView{selected = true, headerTitle = "EGL Mobile DatePicker Sample",
+            /*backText = "Back", backView = */ children =[Box, GridLayout, Box1
+            ]}; 
+    GridLayout GridLayout{cellPadding = 4, rows = 3, columns = 3, width = "100%", children =[
+                    Button2, Button1, TextField2, TextField1, TextLabel3,
+                    TextLabel2, Button, TextField, TextLabel]};
+    TextLabel TextLabel{layoutData = new GridLayoutData{row = 1, column = 1}, text = "Year:"};
+    TextField TextField{layoutData = new GridLayoutData{row = 1, column = 2}};
+    Button DojoMobileButton{layoutData = new GridLayoutData{row = 1, column = 3}, text = "OK", width = "100", onClick ::= Button_onClick};
+    Box Box{padding = 8, children =[TextLabel1]};
+    TextLabel1 TextLabel{text = "This sample is to show the usage of PickDate widget where u can scroll or dynamic set a specified date. Valide year ranges from 1970 to 2038."};
+    TextLabel2 TextLabel{layoutData = new GridLayoutData{row = 2, column = 1}, text = "Month:"};
+    TextLabel3 TextLabel{layoutData = new GridLayoutData{row = 3, column = 1}, text = "Date:"};
+    TextField1 TextField{layoutData = new GridLayoutData{row = 2, column = 2}};
+    TextField2 TextField{layoutData = new GridLayoutData{row = 3, column = 2}};
+    Button1 DojoMobileButton{layoutData = new GridLayoutData{row = 2, column = 3}, text = "OK", width = "100", onClick ::= Button1_onClick};
+    Button2 DojoMobileButton{layoutData = new GridLayoutData{row = 3, column = 3}, text = "OK", width = "100", onClick ::= Button2_onClick};
+    Box1 Box{padding = 8, children =[DatePicker
+            ], alignment = BoxLib.ALIGN_CENTER};
+    DatePicker DojoMobileDatePicker{ value = "01-04-2009" };
+ 
+    function start()
+    end
+
+    function Button_onClick(event Event in)
+
+        year int = TextField.text as int;
+
+        if(year >= 1970 and year <= 2038)
+            DatePicker.year = year;
+        end
+    end
+
+    function Button1_onClick(event Event in)
+        month int = TextField1.text as int;
+        if(month >= 1 and month <= 12)
+            DatePicker.month = month;
+        end
+    end
+
+    function Button2_onClick(event Event in)
+        day int = TextField2.text as int;
+        if(day >= 1 and day <= 31)
+            DatePicker.day = day;
+        end
+    end
+end

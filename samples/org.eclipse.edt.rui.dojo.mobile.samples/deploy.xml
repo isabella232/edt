@@ -1,0 +1,38 @@
+<!--
+  Copyright © 2012 IBM Corporation and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+ 
+  Contributors:
+  IBM Corporation - initial API and implementation
+ 
+-->
+<project default="Enable Andriod EGL Deployment">
+	<target name="Enable Andriod EGL Deployment">
+		<property name="SourceWebProject" value="org.eclipse.edt.rui.mobile.samples.nightly.web" />
+		<property name="TargetProject" value="org.eclipse.edt.rui.mobile.android.simulator" />
+		<property name="MainPageName" value="DojoMobileTabContainerSample.html" />
+		<property name="ServerAddress" value="9.123.158.108:8080" />
+		
+		<echo>Copying all modules (*.html, .css and *.js) from the web project.</echo>
+		<copy overwrite="true" todir="../${TargetProject}/assets/www/">
+			<fileset dir="../${SourceWebProject}/WebContent">
+				  <include name="**/*.js" />
+				  <include name="**/*.html" />
+				  <include name="**/*.properties" />
+				  <include name="**/*.css" />
+				  <include name="**/*.png" />
+				  <include name="**/*.gif" />				
+			</fileset>
+		</copy>
+
+		<move file="../${TargetProject}/assets/www/${MainPageName}" tofile="../${TargetProject}/assets/www/index.html"/>
+		
+		<replace file="../${TargetProject}/assets/www/runtime/edt_core.js" token="egl__contextRoot=_1"  value="egl__contextRoot=&quot;http://${ServerAddress}/${SourceWebProject}&quot;" />
+		<replace file="../${TargetProject}/assets/www/runtime/edt_runtime_all.js" token="&quot;/&quot;+egl.contextRoot+&quot;/&quot;"  value="egl.contextRoot+&quot;/&quot;" />
+		<replace file="../${TargetProject}/assets/www/runtime/edt_runtime_all.js" token="xhr.setRequestHeader(&quot;Content-Length"  value="xhr.setRequestHeader(&quot;Content-Length-Disabled" />
+		
+	</target>
+</project>

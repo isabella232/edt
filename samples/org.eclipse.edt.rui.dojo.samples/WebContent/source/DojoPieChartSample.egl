@@ -1,0 +1,72 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoPieChart;
+import dojo.widgets.PieChartData;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+ 
+Handler DojoPieChartSample  Type RUIHandler { initialUI = [ui] }
+
+	dpc DojoPieChart { 
+		radius = 100,
+		width = "300",
+		height = "300",
+		labelOffSet = 50,
+		fontColor = "white",
+		data = [ 
+		 	new PieChartData{ y=1, text="SUVs", 		color="#554444"},
+			new PieChartData{ y=2, text="sedans", 		color="#99ccbb"},
+			new PieChartData{ y=2, text="hybrids", 		color="#888855"},
+			new PieChartData{ y=2, text="hatchbacks",	color="#332222"}
+		] 
+	}; 						
+
+	colorChooser Combo { values = ["white","yellow","black"], marginBottom=7, onChange ::= change };
+	radiusChooser Combo { values = ["100","150","200","250","300"], marginBottom=7, onChange ::= change };
+	offsetChooser Combo { values = ["50","10","-30","-50","150","250"], marginBottom=7, onChange ::= change };
+	heightChooser Combo { values = ["300","400","500","600"], marginBottom=7, onChange ::= change };
+	widthChooser Combo { values = ["300","400","500","600"], marginBottom=7, onChange ::= change };
+	
+	ui Div {
+		padding=30, 
+		children = [
+			new TextLabel { text = "Dojo Pie Chart Sample",	fontSize = "20px" }, 
+			new Box { children = [
+				new Box { marginTop=14, marginBottom=14, columns=2, children = [
+					new HTML { margin=4, text = "Label color:"}, 	colorChooser,
+					new HTML { margin=4, text = "Label offset:"}, 	offsetChooser,
+					new HTML { margin=4, text = "Width:"}, 			widthChooser,
+					new HTML { margin=4, text = "Height:"}, 		heightChooser,
+					new HTML { margin=4, text = "Chart radius:"}, 	radiusChooser
+				]}, 
+				dpc
+			]} 
+		]
+	};
+		
+	function change( e Event in )
+		dpc.fontColor = colorChooser.values[colorChooser.selection];
+		dpc.radius = radiusChooser.values[radiusChooser.selection];
+		dpc.labelOffSet = offsetChooser.values[offsetChooser.selection];
+		dpc.width = widthChooser.values[widthChooser.selection];
+		dpc.height = heightChooser.values[heightChooser.selection];
+		dpc.data = dpc.data;
+	end
+	
+end

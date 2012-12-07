@@ -1,0 +1,67 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;   
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoTooltipDialog;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoTooltipDialogSample Type RUIHandler { initialUI = [ui]}
+   
+   	text TextField { padding=5, text="", onKeyDown ::= enter_down};
+    button DojoTooltipDialog {
+		text = "Tooltip Dialog",
+    	children = [
+    		new Box { children = [
+    			new TextLabel { text = "What's your name?", fontSize = "14px", marginBottom = 3 }
+    		]},
+	    	new Box { children = [
+	    		text,
+	    		new DojoButton { text="OK", onClick ::= click_ShowName }
+	    	] }
+    	]
+	};
+	
+	function showName()
+		button.hide();
+		NameLabel.text = "It's nice to meet you " + text.text + ".";
+		text.text = "";
+	end
+	
+	function click_ShowName(e Event in)
+		showName();
+	end
+	
+	
+	function enter_down(event Event in)
+		if(13 == event.ch)
+			showName();
+		end
+	end		
+
+    ui Box { columns = 1, padding = 50, children =[
+    	new HTML { 
+    		marginBottom = 10,
+    		fontSize = "20px", 
+    		text = "Dojo Tooltip Dialog Sample"
+    	},
+    	IntroLabel, button, NameLabel
+    	
+    ]};
+    IntroLabel TextLabel{ text="A Dojo Tooltip Dialog displays a tooltip that contains form elements (like a dialog). Although both Dialog and TooltipDialog are modal, TooltipDialog can be closed by clicking anywhere on the screen (outside of tooltip dialog), whereas for Dialog you must click on the [x] mark of the Dialog.", marginBottom = 10, fontSize = "14px" };
+    NameLabel TextLabel{ fontSize = "14px", marginTop = 5 };
+end

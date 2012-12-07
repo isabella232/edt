@@ -1,0 +1,148 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery;
+
+import org.eclipse.edt.rui.history.History;
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.Box;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+import gallery.lib.samplesLib;
+import gallery.widgets.BottomNav;
+import gallery.widgets.OverviewPane;
+import gallery.widgets.ToC;
+import gallery.widgets.ToCElement;
+import gallery.widgets.TopTitle;
+
+// This is the main RUIHandler, encompassing all the other individual samples.  It contains the controlling
+// navigation architecture, making use of Rich UI's History and InfoBus support. 
+handler contents type RUIHandler { initialUI = [ui], onConstructionFunction = start, title = "EGL Rich UI technical sample" }
+	 
+	// HISTORY Create the History handler that will keep tabs on everything.
+	history History {};
+	
+	//a constant for the background color
+	private const greenBackground string = "#CEE7C4";
+	
+	// This is the top panel, containing the "previous" and "next" buttons, as well as the title of
+	// the current sample being shown.
+	topTitle TopTitle{
+		backgroundColor = greenBackground,
+		borderWidth = 1,
+		borderBottomWidth = 0,
+		borderStyle = "solid",
+		height = 40
+	};
+	
+	// The table of contents, along the left side.
+	toc ToC{
+		height=530,
+		width=150,
+		backgroundColor=greenBackground,
+		borderWidth=0,
+		borderLeftWidth=1,
+		borderStyle="solid"
+	};
+	
+	// The main content pane, where the actual samples appear.
+	content Box{
+		width=SamplesLib.CONTENT_WIDTH,
+		fontSize = "12",
+		height = 543,
+		padding = 10
+	};
+	
+	// The overview pane on the right.
+	overviewPane OverviewPane{
+		width=150,
+		backgroundColor = greenBackground,
+		borderWidth = 0,		
+		borderRightWidth = 1,
+		borderStyle="solid"
+	};
+	
+	// The botton navigation links
+	bottomNav BottomNav{
+		backgroundColor = greenBackground,
+		width = topTitle.width,
+		borderWidth=1,
+		borderTopWidth=0,
+		borderStyle="solid",
+		height = 20
+	};
+
+	// The UI, containing all the parts above.
+	ui Box { columns=1, children=[
+		topTitle,
+		new Box { children=[
+			ToC,
+			new Box { borderStyle="solid", borderWidth=1, children = [content] },
+			overviewPane
+		]},
+		bottomNav
+	]};
+	
+	// The onConstructionFunction.  Subscribe to events we care about, and add our history listener.	
+	function start()
+		// INFOBUS We want to be notified when one of the entries in the table of contents is clicked.
+		InfoBus.subscribe("org.eclipse.edt.rui.samples.sectionClicked", sectionClicked);
+		
+		// HISTORY Register our history listener, to be called whenever it changes.  Add a "1" to the
+		// history so we'll load up the first sample (see function historyListener).
+		history.addListener(historyListener);
+		history.addToHistory("1");
+	end
+	
+	// INFOBUS
+	// HISTORY
+	// This function will be called whenever we get a org.eclipse.edt.rui.samples.sectionClicked event.  This
+	// could happen as a result of the "next" or "previous" buttons being pushed, or when one of the elements
+	// in the table of contents is clicked. The data will be the number of the section to go to.
+	// Notice nothing is actually *done* here, other than adding the new section's number to the history.
+	// Doing so will cause our historyListener to fire, however.  That's where the actual content
+	// changing occurs.  If we put it here in the sectionClicked function, the history wouldn't work.
+	function sectionClicked(eventName string in, data any in)
+		history.addToHistory(data);
+	end
+	
+	// HISTORY This function will be called whenever the history is modified (either by manually changing the URL,
+	// or when the sectionClicked() function above changes it as a result of a navigation element being clicked
+	// on.
+	function historyListener(newLoc string in)
+		if(newLoc isa Number)
+			selectedIndex int = (newLoc as int);
+			if(selectedIndex > 0 && selectedIndex <= samplesLib.tls.getSize())
+				// INFOBUS Tell any other interested parties that a new section has been displayed (like
+				// the topTitle, so it can update its title, or the overview pane, so it can change its contents).
+				InfoBus.publish("org.eclipse.edt.rui.samples.sectionActivated", newLoc);
+	
+				toce ToCElement = samplesLib.tls[selectedIndex];
+				if(toce.contentWidget != null)
+					// Fade out the current content, then fade in the newContent when done.
+					newContent = toce.contentWidget;
+					content.fadeOut(200, doFadeIn);
+				end
+			end
+		end
+	end
+
+	// A temporary variable to be used as part of the fade-out/fade-in effect on page transitions.
+	newContent Widget;
+
+	// Fades in the new content (newContent should have been set by sectionActivated before the old stuff
+	// was faded out).	
+	private function doFadeIn()
+		content.children=[newContent];
+		content.fadeIn(200, null);
+	end
+end

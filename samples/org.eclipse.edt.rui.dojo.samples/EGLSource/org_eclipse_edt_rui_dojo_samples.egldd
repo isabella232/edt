@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<egl:deployment xmlns:egl="http://www.eclipse.org/xmlns/edt/deployment/1.0">
+  <bindings>
+    <binding name="svc" type=" edt.binding.rest" uri="" useURI="true">
+      <parameters>
+        <parameter name="enableGeneration" value="true"/>
+      </parameters>
+    </binding>
+  </bindings>
+  <ruiapplication deployAllHandlers="false">
+    <ruihandler enableGeneration="true" implementation="dojo.samples.Gallery">
+      <parameters>
+        <parameter name="html_file_name" value="Gallery"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.GraphSample">
+      <parameters>
+        <parameter name="html_file_name" value="GraphSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoAccordionSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoAccordionSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoBarGraphSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoBarGraphSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoBorderContainerSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoBorderContainerSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoBubbleChartSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoBubbleChartSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoButtonSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoButtonSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoCalendarSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoCalendarSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoCheckBoxSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoCheckBoxSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoColorPaletteSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoColorPaletteSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoContextMenuSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoContextMenuSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoCurrencyTextBoxSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoCurrencyTextBoxSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoDateTextBoxSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoDateTextBoxSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoDialogSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoDialogSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoEditorSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoEditorSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoGridSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoGridSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoHorizontalSliderSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoHorizontalSliderSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoLineGraphSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoLineGraphSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoPieChartSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoPieChartSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoProgressBarSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoProgressBarSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoRadioGroupSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoRadioGroupSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoTextAreaSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoTextAreaSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoTextFieldSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoTextFieldSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoTimeTextBoxSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoTimeTextBoxSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoTitlePaneSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoTitlePaneSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoToggleButtonSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoToggleButtonSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoTooltipDialogSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoTooltipDialogSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoTooltipSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoTooltipSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.perwidget.DojoTreeSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoTreeSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.samples.ServiceSample">
+      <parameters>
+        <parameter name="html_file_name" value="ServiceSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="utils.dialog.DojoDialogLibSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoDialogLibSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="utils.map.GoogleMapSample">
+      <parameters>
+        <parameter name="html_file_name" value="GoogleMapSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="utils.portal.PortalSample">
+      <parameters>
+        <parameter name="html_file_name" value="PortalSample"/>
+      </parameters>
+    </ruihandler>
+    <parameters>
+      <parameter name="locales" value="en_US,English,en_US"/>
+    </parameters>
+  </ruiapplication>
+</egl:deployment>

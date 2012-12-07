@@ -1,0 +1,103 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.BarGraphData;
+import dojo.widgets.DojoBarGraph;
+import dojo.widgets.DojoCheckBox;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+ 
+Handler DojoBarGraphSample  Type RUIHandler { initialUI = [ ui] }
+
+    barGraph DojoBarGraph {
+	    width = "250", 
+	    height = "250",
+    	barGap = 5, 
+        vertical = true,
+        themeColor = dojo.widgets.DojoLib.CHART_COLOR_THEME_BLUE, 
+       	data = [
+       		new BarGraphData{ value=3 },
+			new BarGraphData{ value=1 },
+			new BarGraphData{ value=7 },
+			new BarGraphData{ value=4 },
+			new BarGraphData{ value=2 },
+			new BarGraphData{ value=8 },
+			new BarGraphData{ value=0 },
+			new BarGraphData{ value=2 },
+			new BarGraphData{ value=3 }
+		]
+    };
+						
+	orientationChooser Combo { values = ["vertical","horizontal"], marginBottom=7, onChange ::= change };
+	radiusChooser Combo { values = ["100","150","200","250","300"], marginBottom=7, onChange ::= change };
+	offsetChooser Combo { values = ["50","10","-30","-50","150","250"], marginBottom=7, onChange ::= change };
+	heightChooser Combo { values = ["250","300","400","500","600"], marginBottom=7, onChange ::= change };
+	widthChooser Combo { values = ["250","300","400","500","600"], marginBottom=7, onChange ::= change };
+	bargapChooser TextField { text = "5", onKeyUp ::= change };
+	
+	graphBox Box { children = [
+		new Div { children = [
+			new Box { marginTop=14, marginBottom=54, columns=2, children = [
+				new HTML { margin=4, text = "Orientation:"}, 	orientationChooser,
+				new HTML { margin=4, text = "Bar gap:"}, 		bargapChooser,
+				new HTML { margin=4, text = "Width:"}, 			widthChooser,
+				new HTML { margin=4, text = "Height:"}, 		heightChooser
+			]},
+			toggle
+		]}, 
+		barGraph
+	]};
+	toggle DojoCheckbox { 
+		text = "Show the Graph", 
+		selected = true,
+		marginTop = 41,
+		onChange ::= toggleGraph 
+	};
+	
+	ui Div {
+		padding=30, 
+		font = "Arial",
+		children = [
+			new TextLabel { text = "Dojo BarGraph Sample",	fontSize = "20px" }, 
+			graphBox 
+		]
+	};
+		
+	function change( e Event in )		
+		barGraph.vertical = orientationChooser.selection == 1;
+		if (barGapChooser.text != "")
+			barGraph.barGap = barGapChooser.text;
+		end
+		barGraph.width = widthChooser.values[widthChooser.selection];
+		barGraph.height = heightChooser.values[heightChooser.selection];
+		if (toggle.selected)
+			barGraph.redraw();
+		end
+	end
+	
+	function toggleGraph(event Event in)
+		if (toggle.selected)
+			graphBox.appendChild(bargraph);
+			bargraph.redraw();
+		else
+			barGraph.destroy();
+		end
+	end
+		
+end

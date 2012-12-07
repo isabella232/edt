@@ -1,0 +1,55 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.mobile.widgets.DojoMobileTextArea;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+
+handler DojoMobileTextAreaSample type RUIhandler{initialUI =[ View
+            ], onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.dojo.mobile.samples.css", title = "a"}
+	
+	View DojoMobileView{
+		children = [ HTML, TextArea, HTML1, TextArea1, HTMLReadonly, TextAreaReadOnly],
+		headerTitle = "Textarea Sample"};
+	
+    TextArea DojoMobileTextArea{
+    	width = "200", maxLength = 10,
+    	height = "100",
+    	readOnly = false,
+    	isExpandable = true
+    };
+    TextArea1 DojoMobileTextArea{ isExpandable = true, placeHolder = "Please input your value!"};
+    
+    TextAreaReadOnly DojoMobileTextArea{readOnly = true, value = "Read only!!!"};
+    
+    HTML HTML{ text = "This is normal TextArea, it will add scroll bar automatically while content is out of range with maxlength = 10" };
+
+
+	HTML1 HTML{ text = "This is expanding TextArea, it will grow automatically while content is out of range" };
+	
+	HTMLReadonly HTML{text = "This is a read-only TextArea"};
+	
+    function start()
+    end
+    
+    function Button_onClick(event Event in)
+    	syslib.writeStdout(TextArea.getValue());
+    end
+end

@@ -1,0 +1,129 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package utils;
+
+import eglx.rbd.StrLib;
+
+Library EGLFormatter 
+
+	keywords String = 	
+		 " absolute add all and any as bigInt bin bind blob boolean by byName byPosition "+ 
+		 "call case char clob close const continue converse current dataItem dataTable date dbChar decimal decrement delete display dli "+ 
+		 "else embed end escape execute exit extends false field first float for forEach form formGroup forUpdate forward freeSql from function "+ 
+		 "get goto group handler hex hold if import in inOut inParent insert int interface interval into is isa "+ 
+		 "label languageBundle last library like matches mbChar money move "+ 
+		 "new next nil no not nullable num number numc of onEvent onException open openUI or otherwise out "+ 
+		 "pacf package passing prepare previous print private program record ref relative replace return returning returns "+ 
+		 "scroll self service set show singleRow smallFloat smallInt sql sqlCondition stack static string "+
+		 "this time timestamp to transaction transfer true try type unicode update url use using usingKeys usingPCB "+ 
+		 "when where while with wrap yes ";
+
+	helper StringHelper{};
+
+	function isKeyword(word String in) returns(boolean)
+		word = helper.concat([" ", strlib.lowerCase(word), " "]);
+		return (strlib.indexOf(keywords, word) > 0);
+	end
+
+	function format(source String in) returns(String)
+		source ::= " ";
+		formatted String[] = [];
+		word String = "start";	
+		while (helper.strlen(source)>0)
+			word = getWord(source);
+			wordLength int = helper.strlen(word);
+			word = encodeHTML(word, wordLength);
+			if (isKeyword(word))
+				formatted ::= "<b style='color:#7F0055; font-family:courier;'>"+word+"</b>";
+			else
+				if (word[1:1] == "\"")
+					formatted ::= "<b style='color:#2A00FF; font-family:courier;'>"+word+"</b>";
+				else
+					if (word[1:1] == "/")
+						formatted ::= "<b style='color:#3F7F5F; font-family:courier;'>"+word+"</b>";
+					else
+						formatted ::= ""+word;
+					end
+				end 
+			end
+			sourceLength int = helper.strlen(source);
+			wordLength = wordLength + 1;
+			if ( wordLength < sourceLength )
+				source = source[wordLength:sourceLength];
+			else
+				exit while;
+			end
+		end
+		return ("<pre>"+helper.concat(formatted)+"</pre>");
+	
+	end
+
+	function encodeHTML(word String in, wordLength int in) returns(String)
+		result String = "";
+		for (n int from 1 to wordLength)
+			s String = word[n:n];
+			case (s)	
+			when ("&")
+				result ::= "&amp;";
+			when ("<")
+				result ::= "<";
+			when (">")
+				result ::= ">";
+			when (" ")
+				result ::= "&nbsp;";
+			otherwise
+				result ::= s;
+			end
+		end
+		return (result);
+	end
+
+	function getWord(source String in) returns(String)
+		n int = 1;
+		len int = helper.strlen(source);
+		while (isEGLIdentifierPart(source[n:n]) && n < len)
+			n += 1;
+		end
+		if (n == 1)
+			if (source[n:n] == "\"")
+				n += 1;
+				while (n < len && source[n:n] != "\"")
+					if (n < len - 1 && source[n:n] == "\\" && source[n+1:n+1] == "\"")
+						n+=2;
+					end
+					n += 1;
+				end
+			end
+			if (source[n:n] == "/" && source[n+1:n+1] == "/")
+				while (n < len && source[n:n] != "\n")
+					n += 1;
+				end
+			end
+			if (source[n:n] == "/" && source[n+1:n+1] == "*")
+				while (n < len && !(source[n:n] == "*" && source[n+1:n+1] == "/"))
+					n += 1;
+				end
+				n += 1;
+			end
+		else
+			n -= 1;
+		end
+		return (source[1:n]);
+	end
+
+	eglChars String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_";
+
+	function isEGLIdentifierPart(s String in) returns(boolean)
+		return (strlib.indexOf(eglChars, s) != 0);
+	end
+
+end

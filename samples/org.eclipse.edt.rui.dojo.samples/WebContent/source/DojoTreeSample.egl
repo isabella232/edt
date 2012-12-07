@@ -1,0 +1,106 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoTree;
+import dojo.widgets.DojoToggleButton;
+import dojo.widgets.DojoTreeNode;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+ 
+Handler DojoTreeSample Type RUIHandler{ initialUI = [ ui ] }
+
+	tree DojoTree { text = "World", onClick ::= handleCity, children = [
+		new DojoTreeNode { id = "NA", text = "North America", children = [
+			new DojoTreeNode { id = "CA", text = "Canada" },
+			new DojoTreeNode { id = "US", text = "USA" }
+		]},
+		new DojoTreeNode { id = "EU", text = "Europe", children = [
+		 	new DojoTreeNode { id = "GR", text = "Greece"},
+		 	new DojoTreeNode { id = "IT", text = "Italy"}
+		]} 
+	]};
+	
+	ui Box { padding=20, columns=1, children=[ 
+		new HTML { text = "Dojo Tree Sample", paddingBottom = 20, fontSize = "20px" },
+		new Box { children = [
+			tree,
+			new Box { columns=1, marginLeft=50, children = [
+				new DojoButton { marginBottom=20, text = "Add Holland", onClick ::= addHolland },
+				new DojoButton { marginBottom=20, text = "Remove Holland", onClick ::= removeHolland },
+				new DojoButton { marginBottom=20, text = "Add South America", onClick ::= addSouthAmerica },
+				new DojoButton { marginBottom=20, text = "Remove South America", onClick ::= removeSouthAmerica }, 
+				new DojoToggleButton { marginBottom=20, text = "Hide Root", checkedText = "Show Root", onClick ::= toogleShowRoot }
+			]}
+		]},
+		message
+	]}; 
+    message TextArea { marginTop=10, width = 500, height = 160 };
+ 	
+	function handleCity(e Event in)
+		if (tree.selection != null)
+			message.text ::= "You clicked: " + tree.selection + "\n";
+		end
+	end
+
+	function addSouthAmerica(e Event in)		
+		if (tree.getElementById("SA") == null)
+			tree.appendChild(new DojoTreeNode { id = "SA", text = "South America", children = [
+				new DojoTreeNode { id = "AR", text = "Argentina" },
+				new DojoTreeNode { id = "BR", text = "Brasil" }]});
+			message.text ::= "South America has been added\n";
+		else
+			message.text ::= "South America is already there, so won't bother adding it\n";
+		end
+	end
+	
+	function removeSouthAmerica(e Event in)
+		sa DojoTreeNode = tree.getElementById("SA");
+		if (sa != null)
+			tree.removeChild(sa);
+			message.text ::= "South America has been removed\n";
+		else
+			message.text ::= "Did not find South America, so won't bother removing it\n";
+		end
+	end
+
+	function addHolland(e Event in)
+		europe DojoTreeNode = tree.getElementById("EU");
+		netherlands DojoTreeNode = new DojoTreeNode { id = "NL", text = "Holland" };
+		if (tree.getElementById("NL") == null)
+			europe.appendChild(netherlands);
+			message.text ::= "Holland has been added to Europe\n";
+		else
+			message.text ::= "Holland is already there, so won't bother adding it\n";
+		end
+	end
+
+	function removeHolland(e Event in)
+		europe DojoTreeNode = tree.getElementById("EU");
+		netherlands DojoTreeNode = tree.getElementById("NL");
+		if (netherlands != null)
+			europe.removeChild(netherlands);
+			message.text ::= "Holland has been removed from Europe\n";
+		else
+			message.text ::= "Did not find Holland, so won't bother removing it\n";
+		end
+	end
+	
+	function toogleShowRoot(e Event in)
+		tree.showRoot = !tree.showRoot;
+		message.text ::= "showRoot: " + tree.showRoot + "\n";
+	end
+end

@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package mortgage.server;
+
+import eglx.lang.MathLib;
+import mortgage.common.MortgageCalculationResult;
+
+service MortgageCalculationService
+
+    function amortize(inputData MortgageCalculationResult inOut)
+        amt decimal(10, 2) = inputData.loanAmount;
+        // convert to monthly rate
+        rate decimal(10, 8) =(1 + inputData.interestRate / 1200);
+        // convert to months
+        term int =(inputData.term * 12);
+        // calculate monthly payment amount
+        pmt decimal(10, 2) =(amt *(rate - 1) * Mathlib.pow(rate, term)) /(
+                        MathLib.pow(rate, term) - 1);
+        totalInterest decimal(10, 2) =(pmt * term) - amt;
+        // update result record
+        inputData.monthlyPayment = pmt;
+        inputData.interest = totalInterest;
+    end
+end
+
