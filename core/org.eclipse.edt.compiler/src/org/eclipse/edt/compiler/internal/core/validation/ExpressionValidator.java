@@ -75,18 +75,11 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	IPartBinding declaringPart;
 	IProblemRequestor problemRequestor;
 	ICompilerOptions compilerOptions;
-	boolean validatingCallTarget;
 	
 	public ExpressionValidator(IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		this.declaringPart = declaringPart;
 		this.problemRequestor = problemRequestor;
 		this.compilerOptions = compilerOptions;
-	}
-	
-	@Override
-	public boolean visit(CallStatement callStatement) {
-		
-		return true;
 	}
 	
 	@Override
@@ -355,7 +348,9 @@ public class ExpressionValidator extends AbstractASTVisitor {
 	
 	@Override
 	public void endVisit(final SetValuesExpression setValuesExpression) {
-		validateSettings(setValuesExpression.getSettingsBlock(), setValuesExpression.getExpression());
+		if (!(setValuesExpression.getExpression() instanceof AnnotationExpression)) {
+			validateSettings(setValuesExpression.getSettingsBlock(), setValuesExpression.getExpression());
+		}
 		if (setValuesExpression.getExpression().resolveType() instanceof Delegate || setValuesExpression.getExpression().resolveMember() instanceof FunctionMember) {
 			problemRequestor.acceptProblem(
 					setValuesExpression.getSettingsBlock(),
