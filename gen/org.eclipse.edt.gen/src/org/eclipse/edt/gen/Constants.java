@@ -48,6 +48,8 @@ public class Constants {
 	public static final String isStatementRequiringWrappedParameters = "isStatementRequiringWrappedParameters";
 	
 	public static final String EGLMESSAGE_MISSING_HEADER_FILE = "7000";
+	public static final String EGLMESSAGE_SUBTYPE_NOT_SUPPORTED = "9950";
+	public static final String EGLMESSAGE_PARTTYPE_NOT_SUPPORTED = "9951";
 
 	// these are sub key values used on annotations 
 	public static final String SubKey_uri = "uri";

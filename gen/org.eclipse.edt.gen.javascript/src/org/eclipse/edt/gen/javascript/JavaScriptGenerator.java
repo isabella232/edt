@@ -67,9 +67,12 @@ public class JavaScriptGenerator extends Generator {
 		}
 		return false;
 	}
-
+	
 	public void generate(Object part) throws GenerationException {
 		makeWriter();
+		if (!verifyPartSupported(part, "JavaScript", JavaScriptTemplate.genPart, context, out)) {
+			return;
+		}
 		try {
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
 			context.invoke(JavaScriptTemplate.preGenPart, part, context);

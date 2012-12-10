@@ -34,6 +34,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.TryStatement;
@@ -479,5 +480,19 @@ public abstract class EglContext extends TemplateContext {
 	
 	public Set<String> getRequiredRuntimeContainers() {
 		return requiredRuntimeContainers;
+	}
+	
+	public boolean hasMethodFor(Part part, String methodName, Object... args) {
+		Template template = getTemplateRaw(part.getEClass().getETypeSignature());
+		if (template != null) {
+			try {
+				Class clazz = Class.forName(part.getEClass().getETypeSignature());
+				Method tm = primGetMethod(methodName, template.getClass(), clazz, args );
+				return (tm != null);
+			} catch (ClassNotFoundException e) {
+				return false;
+			}
+		}
+		return false;
 	}
 }
