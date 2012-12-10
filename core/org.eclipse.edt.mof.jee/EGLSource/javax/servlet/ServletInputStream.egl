@@ -1,0 +1,8 @@
+package javax.servlet;
+
+import eglx.java.JavaObject;
+import java.io.InputStream;
+
+externalType ServletInputStream extends InputStream type JavaObject
+	private constructor();
+end

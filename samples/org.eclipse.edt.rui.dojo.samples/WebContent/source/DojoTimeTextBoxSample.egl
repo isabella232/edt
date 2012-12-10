@@ -1,0 +1,93 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.widgets.DojoLib;
+import dojo.widgets.DojoTimeTextBox;
+import eglx.lang.DateTimeLib;
+import eglx.rbd.StrLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoTimeTextBoxSample Type RUIHandler { initialUI = [ ui ] }
+	
+	use DojoLib;
+	
+	clickableIncrements String[] = [ 
+		TIMEBOX_FIVE_MINUTES, TIMEBOX_ONE_QUARTER, TIMEBOX_HALF_HOUR, TIMEBOX_ONE_HOUR 
+	];	
+	timePatterns String[] = [ 
+		TIMEBOX_FORMAT_12HR, TIMEBOX_FORMAT_24HR 
+	];	
+	patternChooser Combo { 
+		values = ["12 hour", "24 hour"], onChange ::= changePattern, marginBottom=15 
+	};
+	incrementChooser Combo { 
+		values = ["Five minutes", "Quarter hour", "Half hour", "Hour"], onChange ::= changeIncrement, marginBottom=15 
+	};
+
+	startTime DojoTimeTextBox { 
+		timePattern = dojo.widgets.DojoLib.TIMEBOX_FORMAT_12HR,
+		clickableIncrement = dojo.widgets.DojoLib.TIMEBOX_FIVE_MINUTES,
+		visibleIncrement = dojo.widgets.DojoLib.TIMEBOX_ONE_HOUR,
+		visibleRange = dojo.widgets.DojoLib.TIMEBOX_THREE_HOURS,
+		errorMessage = "Invalid Time!",
+		width = 80,
+		marginBottom = 9,
+		value = new Time{},
+		onChange ::= computeGameDetails
+	};
+				 	
+	gameDetails HTML { };
+
+				 							
+	ui Box{ padding=20, font = "Arial", columns=1, children=[
+		new HTML { 
+			text = "Dojo Time Box Sample", fontSize = 20, marginBottom = 20
+		}, 
+		new HTML{ 
+			text="The party is taking place this Thursday."
+		},
+		new Box { margin = 20, children = [
+			new Box { padding=20, height=70, backgroundColor="lightyellow", columns=2, children=[ 
+				new HTML{text="What time would you like to start?", marginRight=5 }, 
+				startTime
+			]},
+			new Box { padding=20, height=70, backgroundColor="lightblue", columns=1, children=[ 
+				patternChooser, 
+				incrementChooser
+			]}
+		]},										
+		gameDetails	
+	]};
+	
+	function changePattern(e Event in)
+		startTime.timePattern = timePatterns[patternChooser.selection];
+		computeGameDetails(e);
+	end
+		
+	function changeIncrement(e Event in)
+		startTime.clickableIncrement = clickableIncrements[incrementChooser.selection];
+		startTime.visibleRange = TIMEBOX_TEN_HOURS;
+		startTime.value = startTime.value;
+	end
+	
+	function computeGameDetails(e Event in)
+		s String = Stringlib.format(startTime.value, timePatterns[patternChooser.selection]);
+		gameDetails.text = "The party takes place: " + s + 
+				".<p>Bring some drinks and food to share! " ;
+	end
+
+end

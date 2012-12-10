@@ -1,0 +1,74 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;   
+
+import org.eclipse.edt.mof.egl.Name;
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridColumn;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoLib;
+import dojo.widgets.DojoTooltip;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoTooltipSample Type RUIHandler { initialUI = [ui], onConstructionFunction = doOnLoadGrid }
+   
+	function doOnLoad(e Event in)
+		tooltip DojoTooltip {
+			target = [button.getID()],
+			contents = "My first tooltip!",
+			defaultPosition = [DojoLib.TOOLTIP_BEFORE, DojoLib.TOOLTIP_AFTER],
+			delay = 5
+		};		
+	end
+
+	function doOnLoadGrid()
+		tooltip DojoTooltip {
+			target = [Grid.id],
+			contents = "My second tooltip!",
+			defaultPosition = [DojoLib.TOOLTIP_ABOVE],
+			delay = 5
+		};		
+	end
+
+    button DojoButton{
+		text = "Hover over me", onWidgetLoad ::= doOnLoad
+	};
+	
+    ui Box { columns = 1, padding = 50, children =[
+    	new HTML{ 
+    		marginBottom = 10,
+    		fontSize = "20px", 
+    		text = "Dojo Tooltip Sample"
+    	},
+    	IntroLabel, button, Grid
+    	
+    ]};
+    IntroLabel TextLabel{ text="A Dojo Tooltip can be attached to virtually any kind of element (that has an id) to provide contextual popup help.  Try hovering over the button or grid.", marginBottom = 10, fontSize = "14px" };
+    
+    Grid DataGrid{
+    	id = "grid0",
+		columns = [
+			new org.eclipse.edt.rui.widgets.DataGridColumn{name = "field1", displayName = "Column 1 Header", width=120},
+			new org.eclipse.edt.rui.widgets.DataGridColumn{name = "field2", displayName = "Column 2 Header", width=120}
+		],
+		data = [
+			new Dictionary { field1 = "Row 1, Column 1", field2 = "Row 1, Column 2"},
+			new Dictionary { field1 = "Row 2, Column 1", field2 = "Row 2, Column 2"} 
+		],
+		width = "260px"
+	};
+
+end

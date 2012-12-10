@@ -1,0 +1,20 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.util.EventObject;
+
+
+externalType ConnectionPoolEvent extends EventObject type JavaObject
+    static CONNECTION_CREATED int;
+    static CONNECTION_EXPIRED int;
+    static CONNECTION_POOL_CLOSED int;
+    static CONNECTION_RELEASED int;
+    static CONNECTION_RETURNED int;
+    static MAINTENANCE_THREAD_RUN int;
+
+    constructor(arg0 Object? in, arg1 int in);
+
+    function getID() returns(int);
+end
+

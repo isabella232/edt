@@ -87,11 +87,11 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 						boolean parmsValid = true;
 						if (BindingUtil.isUnresolvedGenericType(op.getParameters().get(0).getType())) {
 							Type t = BindingUtil.resolveGenericType(op.getParameters().get(0).getType(), lhsType);
-							parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(0), lhsType, lhsMember);
+							parmsValid = BindingUtil.isMoveCompatible(t, op.getParameters().get(0), lhsType, lhs);
 						}
 						if (parmsValid && BindingUtil.isUnresolvedGenericType(op.getParameters().get(1).getType())) {
 							Type t = BindingUtil.resolveGenericType(op.getParameters().get(1).getType(), lhsType);
-							parmsValid = IRUtils.isMoveCompatible(t, op.getParameters().get(1), entry.getValue(), entry.getKey().resolveMember());
+							parmsValid = BindingUtil.isMoveCompatible(t, op.getParameters().get(1), entry.getValue(), entry.getKey());
 						}
 						
 						if (parmsValid) {
@@ -122,7 +122,7 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 			}
 			else {
 				for (Map.Entry<Expression, Type> entry : resolvedRHSMap.entrySet()) {
-					if (!IRUtils.isMoveCompatible(lhsType, lhsMember, entry.getValue(), entry.getKey().resolveMember())) {
+					if (!BindingUtil.isMoveCompatible(lhsType, lhsMember, entry.getValue(), entry.getKey())) {
 						errors.put(entry.getKey(), entry.getValue());
 					}
 				}
@@ -140,7 +140,7 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 				problemRequestor.acceptProblem(entry.getKey(),
 						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
 						new String[] {lhsType != null ? BindingUtil.getShortTypeString(lhsType) : lhs.getCanonicalString(),
-						entry.getValue() != null ? BindingUtil.getShortTypeString(entry.getValue()) : entry.getKey().getCanonicalString(),
+						BindingUtil.getShortTypeString(entry.getKey(), entry.getValue()),
 						lhs.getCanonicalString() + " " + assignmentOperator.toString() + " " + entry.getKey().getCanonicalString()});
 			}
 		}

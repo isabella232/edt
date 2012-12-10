@@ -1,0 +1,40 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.mobile.widgets.DojoMobileButton;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+handler DojoMobileButtonSample type RUIhandler {initialUI = [ view ], cssFile="css/com.ibm.egl.rui.dojo.mobile.samples.css", title="DojoMobileButtonSample"}
+	
+	intro Div { margin = 20, font = "Arial", children = [		
+		new HTML { text="This sample shows how to use the DojoMobileButton widget." + 
+		" The button color changes when pressed. You can add \"onClick\" event to the button.", marginBottom=20}		
+	]};	
+	
+	view DojoMobileView{ selected = true, headerTitle = "Button Sample",
+				children = [ intro, button]};
+	button DojoMobileButton { text = "Press this button", width = "150", margin = 20, onClick ::= myClick };
+	
+	function myClick(e Event in)
+		syslib.writeStdout("button pressed");
+		button.text = "Button pressed";
+	end
+end

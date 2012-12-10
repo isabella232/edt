@@ -1,0 +1,62 @@
+package java.nio;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+import java.lang.Appendable;
+import java.lang.CharSequence;
+import java.lang.Comparable;
+import java.lang.Readable;
+
+
+externalType CharBuffer extends Buffer, Comparable, Appendable, CharSequence, Readable type JavaObject
+
+    private constructor();
+
+    static function allocate(arg0 int in) returns(CharBuffer?);
+
+    function append(arg0 CharSequence? in) returns(CharBuffer?);
+
+    function append(arg0 CharSequence? in, arg1 int in, arg2 int in) returns(CharBuffer?);
+
+    function arrayOffset() returns(int);
+
+    function asReadOnlyBuffer() returns(CharBuffer?);
+
+    function compact() returns(CharBuffer?);
+
+    function compareTo(arg0 CharBuffer? in) returns(int);
+
+    function duplicate() returns(CharBuffer?);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function hasArray() returns(boolean);
+
+    function hashCode() returns(int);
+
+    function isDirect() returns(boolean);
+
+    function length() returns(int);
+
+    function order() returns(ByteOrder?);
+
+    function put(arg0 CharBuffer? in) returns(CharBuffer?);
+
+    function put(arg0 string? in, arg1 int in, arg2 int in) returns(CharBuffer?);
+
+    function put(arg0 string? in) returns(CharBuffer?);
+
+    function read(arg0 CharBuffer? in) returns(int){@Throws};
+
+    function slice() returns(CharBuffer?);
+
+    function subSequence(arg0 int in, arg1 int in) returns(CharSequence?);
+
+    function toString() returns(string?);
+
+    static function _wrap(arg0 CharSequence? in) returns(CharBuffer?){@externalName{"wrap"}};
+
+    static function _wrap(arg0 CharSequence? in, arg1 int in, arg2 int in) returns(CharBuffer?){@externalName{"wrap"}};
+end
+

@@ -1,0 +1,10 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+
+externalType KeyedDataQueueEntry extends DataQueueEntry type JavaObject
+
+    function getKeyString() returns(string?){@Throws};
+end
+

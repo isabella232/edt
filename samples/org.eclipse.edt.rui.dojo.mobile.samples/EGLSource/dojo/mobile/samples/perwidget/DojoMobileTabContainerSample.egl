@@ -1,0 +1,102 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.mobile.widgets.DojoMobileButton;
+import dojo.mobile.widgets.DojoMobileTab;
+import dojo.mobile.widgets.DojoMobileTabContainer;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+
+// RUI Handler
+// 
+//
+ 
+handler DojoMobileTabContainerSample type RUIhandler{initialUI = [ View ], onConstructionFunction = start, cssFile = "css/org.eclipse.edu.rui.dojo.mobile.samples.css", title = "EGL Mobile Tab Container Sample"}
+	View DojoMobileView{
+		selected = true, headerTitle = "EGL Mobile Tab Container Sample",
+		/*backText = "Back", backView = */
+		children = [ GridLayout ]
+	};
+	GridLayout GridLayout{ cellPadding = 4, rows = 2, columns = 1,
+		children = [ m_tabContainer, TextLabel ] };
+	TextLabel TextLabel{ layoutData = new GridLayoutData{ row = 1, column = 1 }, 
+	text="This sample is to show the usage of tab container. You are able to dynamicly add, remove & select a tab through the tab container object. Also each tab is a view container where you can add child widgets." };
+	m_tabContainer DojoMobileTabContainer{ layoutData = new GridLayoutData{ row = 2, column = 1 },
+		selection = 1,
+		
+		tabPosition = "Top",
+		children = [
+			new DojoMobileTab { title = "Tab 1", children = [ GridLayout1 ] },
+			new DojoMobileTab { title = "Topic 2", children = [ Box ]},
+			new DojoMobileTab { title = "Topic 3", children = [ Box1 ]}
+		],
+		segmentedControl = true
+	};
+	GridLayout1 GridLayout{ cellPadding = 4, rows = 2, columns = 1,
+		children = [ GridLayout2, TextLabel1 ] };
+	TextLabel1 TextLabel{ layoutData = new GridLayoutData{ row = 1, column = 1 }, text = "Hi, I am the 1st tab!" };
+	GridLayout2 GridLayout{ layoutData = new GridLayoutData{ row = 2, column = 1 }, cellPadding = 4, rows = 1, columns = 3,
+		children = [ Button2, Button1, Button ] };
+	Button DojoMobileButton{ layoutData = new GridLayoutData{ row = 1, column = 1 }, text = "Add", width = "100", onClick ::= Button_onClick };
+	Button1 DojoMobileButton{ layoutData = new GridLayoutData{ row = 1, column = 2 }, text = "Remove", width = "100", onClick ::= Button1_onClick };
+	Button2 DojoMobileButton{ layoutData = new GridLayoutData{ row = 1, column = 3 }, text = "Select", width = "100", onClick ::= Button2_onClick };
+	Box Box{ padding=8,
+		children = [ TextLabel2 ] };
+	Box1 Box{ padding=8,
+		children = [ TextLabel3 ] };
+	TextLabel2 TextLabel{ text = "Hi, I'm the 2nd tab!" };
+	TextLabel3 TextLabel{ text = "Hi, I'm the 3rd tab!" };
+	
+    function start()
+  
+    end
+    
+    function Button_onClick(event Event in)
+    	index int;
+    	if( m_tabContainer.children.getSize() >= 1 )
+			index = m_tabContainer.children.getSize();
+		else
+			index = 1;
+		end
+     	m_tabContainer.addTab(
+			new DojoMobileTab { 
+				title = "Custom Topic " + (m_tabContainer.children.getSize()+1), /*icon = "dojo/mobile/images/i-icon-1.png", */ 
+				children = [
+					new Box{ padding=8,
+						children = [ 
+							new  TextLabel{ text = "Hi, I'm " + (m_tabContainer.children.getSize()+1) + " tab!" }
+						]}	
+				]
+			}, 
+			index
+		);    
+    end
+    
+    function Button1_onClick(event Event in)
+    	if( m_tabContainer.children.getSize() >= 1 )
+				m_tabContainer.removeTab( m_tabContainer.children.getSize() );
+				syslib.writeStdout("Oops, I removed a tab from the tail!");
+		end
+    end
+    
+    function Button2_onClick(event Event in)
+    	m_tabContainer.selection =  m_tabContainer.children.getSize();	
+    end  
+     
+end

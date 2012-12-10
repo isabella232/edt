@@ -1,0 +1,35 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.spi.AbstractSelectableChannel;
+
+
+externalType SocketChannel extends AbstractSelectableChannel, ByteChannel, ScatteringByteChannel, GatheringByteChannel type JavaObject
+
+    private constructor();
+
+    function connect(arg0 SocketAddress? in) returns(boolean){@Throws};
+
+    function finishConnect() returns(boolean){@Throws};
+
+    function isConnected() returns(boolean);
+
+    function isConnectionPending() returns(boolean);
+
+    static function _open(arg0 SocketAddress? in) returns(SocketChannel?){@externalName{"open"}, @Throws};
+
+    static function _open() returns(SocketChannel?){@externalName{"open"}, @Throws};
+
+    function read(arg0 ByteBuffer? in) returns(int){@Throws};
+
+    function socket() returns(Socket?);
+
+    function validOps() returns(int);
+
+    function write(arg0 ByteBuffer? in) returns(int){@Throws};
+end
+

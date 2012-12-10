@@ -1,0 +1,42 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.datadisplay;
+
+library ChartLib
+
+	const encoding string[] = [
+		"A","B","C","D","E","F","G","H","I","J","K","L","M",
+		"N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+		"a","b","c","d","e","f","g","h","i","j","k","l","m",
+		"n","o","p","q","r","s","t","u","v","w","x","y","z",
+		"0","1","2","3","4","5","6","7","8","9"
+	];
+	
+	//
+	// Specify a text encoding for a Google Chart. 
+	// See http://code.google.com/apis/chart/formats.html#text
+	//
+	function encode(data int[], maxValue int) returns(String)
+		result string = "";
+		for (n int from 1 to data.getSize() by 1)
+			value int = data[n]; 
+			index int = Mathlib.max(1, 62 * value / maxValue);
+			if (index >= 1 && index <= 62) 
+				result += encoding[ index ];
+			else
+				result += "_";
+			end
+	    end
+	    return(result);
+	end
+end 

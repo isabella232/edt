@@ -25,7 +25,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
@@ -90,7 +89,7 @@ public class CaseStatementValidator extends DefaultASTVisitor {
 							else {
 								Type criterionType = caseStatement.getCriterion().resolveType();
 								criterionType = BindingUtil.resolveGenericType(criterionType, caseStatement.getCriterion());
-								boolean compatible = IRUtils.isMoveCompatible(criterionType, caseStatement.getCriterion().resolveMember(), binding, expr.resolveMember());
+								boolean compatible = BindingUtil.isMoveCompatible(criterionType, caseStatement.getCriterion().resolveMember(), binding, expr);
 								
 								if (!compatible) {
 									problemRequestor.acceptProblem(

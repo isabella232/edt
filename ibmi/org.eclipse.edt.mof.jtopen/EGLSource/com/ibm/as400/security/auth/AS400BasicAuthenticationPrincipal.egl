@@ -1,0 +1,15 @@
+package com.ibm.as400.security.auth;
+
+import eglx.java.JavaObject;
+import java.security.Principal;
+
+
+externalType AS400BasicAuthenticationPrincipal extends Principal type JavaObject
+
+    private constructor();
+
+    function getUserProfileName() returns(string?);
+
+    function initialize(arg0 string? in){@Throws};
+end
+

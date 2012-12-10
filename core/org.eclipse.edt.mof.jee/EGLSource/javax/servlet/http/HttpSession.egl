@@ -1,0 +1,27 @@
+package javax.servlet.http;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.util._Enumeration;
+import javax.servlet.ServletContext;
+
+
+
+
+externalType HttpSession type JavaObject 
+  private constructor();
+   function getAttribute(arg0 string? IN)  returns(Object?);
+   function getAttributeNames()  returns(_Enumeration?);
+   function getCreationTime()  returns(bigint);
+   function getId()  returns(string?);
+   function getLastAccessedTime()  returns(bigint);
+   function getMaxInactiveInterval()  returns(int);
+   function getServletContext()  returns(ServletContext?);
+   function invalidate();
+   function isNew()  returns(boolean);
+   function removeAttribute(arg0 string? IN);
+   function setAttribute(arg0 string? IN,arg1 Object? IN);
+   function setMaxInactiveInterval(arg0 int IN);
+end
+
+

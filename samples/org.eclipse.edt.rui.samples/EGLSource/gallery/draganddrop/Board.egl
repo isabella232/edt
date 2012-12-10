@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.draganddrop;
+
+import org.eclipse.edt.rui.widgets.Box;
+import eglx.ui.rui.RUIWidget;
+
+handler Board type RUIWidget { targetWidget = grid }
+{
+	onConstructionFunction = setupBoard
+}
+	//The board widget is essentially a grid widget with extra functions 
+	//and variables for the tic-tac-toe game. 
+	
+	grid Box { columns = 3, borderStyle = "solid", borderWidth = 2 };
+	
+	//This setup function adds nine squares to the board.  Each "square"
+	//is a box, which will contain an image or no image.
+	function setupBoard()
+		grid.removeChildren();
+		for ( i int from 1 to 9 )
+			box any = new Box {
+				backgroundColor = "white",
+				width = 80,
+				height = 80,
+				borderStyle = "solid",
+				borderWidth = 2,
+				cssClass = "board"
+			};
+			grid.appendChild( box );
+		end
+	end
+	
+	//Squares are indexed 1 - 9, from the upper-left corner, moving across
+	//the rows and then down.
+	function getSquare( n int in ) returns (Box)
+		box Box = grid.children[ n ];
+		return (box);
+	end
+	
+	//Each square either has an X image, an O image, or no image.  These
+	//each have an ID property (or assumed to be "" for no image), which helps
+	//when determining a winner.
+	function getImageID( n int in ) returns (String)
+		box Box = getSquare(n);
+		if (box.children.getSize() > 0)
+			return (box.children[1].id);
+		else
+			return ("");
+		end
+	end
+
+end

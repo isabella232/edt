@@ -1,0 +1,49 @@
+package java.nio;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+import java.lang.Comparable;
+
+
+externalType FloatBuffer extends Buffer, Comparable type JavaObject
+
+    private constructor();
+
+    static function allocate(arg0 int in) returns(FloatBuffer?);
+
+    function arrayOffset() returns(int);
+
+    function asReadOnlyBuffer() returns(FloatBuffer?);
+
+    function compact() returns(FloatBuffer?);
+
+    function compareTo(arg0 FloatBuffer? in) returns(int);
+
+    function duplicate() returns(FloatBuffer?);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function _get() returns(smallFloat){@externalName{"get"}};
+
+    function _get(arg0 int in) returns(smallFloat){@externalName{"get"}};
+
+    function hasArray() returns(boolean);
+
+    function hashCode() returns(int);
+
+    function isDirect() returns(boolean);
+
+    function order() returns(ByteOrder?);
+
+    function put(arg0 smallFloat in) returns(FloatBuffer?);
+
+    function put(arg0 int in, arg1 smallFloat in) returns(FloatBuffer?);
+
+    function put(arg0 FloatBuffer? in) returns(FloatBuffer?);
+
+    function slice() returns(FloatBuffer?);
+
+    function toString() returns(string?);
+end
+

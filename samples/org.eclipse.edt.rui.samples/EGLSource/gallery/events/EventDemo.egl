@@ -1,0 +1,288 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.events; 
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.CheckBox;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridBehaviors;
+import org.eclipse.edt.rui.widgets.DataGridColumn;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.FloatLeft;
+import org.eclipse.edt.rui.widgets.FloatRight;
+import org.eclipse.edt.rui.widgets.Grouping;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.HyperLink;
+import org.eclipse.edt.rui.widgets.Image;
+import org.eclipse.edt.rui.widgets.List;
+import org.eclipse.edt.rui.widgets.ListMulti;
+import org.eclipse.edt.rui.widgets.Span;
+import org.eclipse.edt.rui.widgets.TextArea;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import org.eclipse.edt.rui.widgets.Tree;
+import org.eclipse.edt.rui.widgets.TreeBehaviors;
+import org.eclipse.edt.rui.widgets.TreeNode;
+import eglx.rbd.StrLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+import gallery.lib.samplesLib;
+   
+Handler EventDemo Type RUIHandler { 
+		initialUI = [box], 
+		onConstructionFunction = start,
+		cssFile = "css/org.eclipse.edt.rui.samples.css" }
+
+	// A big array of Widgets that the user can choose to show on the screen.
+	widgets Widget[] = [
+		new Box { width=80, height=80, backgroundColor="#ddd" }, 
+		new Button { text = "Button" }, 
+		new CheckBox { text = "Checkbox", cssClass = "EglRuiCheckBox" }, 
+		new Combo { values = ["One","Two","Three"] }, 
+		new Div { width=80, height=80, backgroundColor="#ddd" }, 
+		new DataGrid {
+			headerBehaviors = [DataGridBehaviors.grayCells],
+			behaviors = [DataGridBehaviors.alternatingColor],
+			columns = [
+				new DataGridColumn{name = "Name", width=150},
+				new DataGridColumn{name = "Mascot", width=125},
+				new DataGridColumn{name = "Division", width=100}
+			],
+			data = [
+				new Dictionary{name = "Virginia Tech", mascot = "Hokie", division = "ACC"},
+				new Dictionary{name = "Penn State", mascot = "Nittany Lion", division = "Big Ten"},
+				new Dictionary{name = "University of Virginia", mascot = "Cavalier", division = "ACC"}
+			]
+		},
+		new Grouping { text = "Grouping", children = [ new Box { width=80, height=80, backgroundColor="lightblue" } ] }, 
+		new HTML { text = "<hr>Here is some <i>random</i> HTML.<br>There are two lines.<hr>" }, 
+		new HyperLink { text = "Click here to go to www.ibm.com", href = "http://www.ibm.com", target = "_blank" }, 
+		new Image { src = "events/raleigh.jpg", text="Raleigh" }, 
+		new List { values = ["One","Two","Three"] }, 
+		new ListMulti { values = ["One","Two","Three"], selection = [1,3] }, 
+		new Span { text = "This is a span" }, 
+		new TextArea { numRows=3, numColumns = 25, text = "This is a text area.\nIt has multiple lines.\nThree to be precise." }, 
+		new TextField { text = "This is a TextField" }, 
+		new TextLabel { text = "This is a TextLabel" },
+		new Tree{ backgroundColor="#ddd", width=240, padding=9,
+			behaviors = [ 
+				TreeBehaviors.pointer, 
+				underlineBehavior
+			],
+			children = [
+				new TreeNode{text = "Fruits", children = [
+					new TreeNode{text = "Apple", imageURL = "events/apple.png"},
+					new TreeNode{text = "Orange", imageURL = "events/orange.png"}
+				]},
+				new TreeNode{text = "Vehicles", children = [
+					new TreeNode{text = "Cars", id="cars", children = [
+						new TreeNode{text = "Sedan"},
+						new TreeNode{text = "SUV"},
+						new TreeNode{text = "Truck"}
+					]},
+					new TreeNode{text = "Bike"}
+				]}
+			]
+		}	
+	];
+	
+	// Define a behavior for the nodes of the tree
+	function underlineBehavior(node TreeNode in)
+		node.onMouseOver ::= highlightNode;
+		node.onMouseOut ::= unhighlightNode; 		
+	end
+	
+	// Highlight when mousedOver (see style definition in WebContent/events/eventdemo.css)
+	function highlightNode(e Event in)
+		(e.widget as TreeNode).span.cssClass = "treeNodeHighlight";
+	end
+	
+	// Switch back to normal when the mouse moves away.
+	function unhighlightNode(e Event in)
+		(e.widget as TreeNode).span.cssClass = "treeNodeNormal";
+	end
+	
+	// The Combo box that lets the user select a widget
+	widgetCombo Combo{ onChange ::= showWidget, marginBottom=15 };
+	
+	// The box that the selected widget will appear in
+	mainContent Box { cssClass = "mainContent", width=SamplesLib.CONTENT_WIDTH - 25 };
+	
+	// A checkbox to allow the user to hide all the MouseMove events
+	hideMouseMoveBox CheckBox { text = "Hide MouseMove", selected = false };
+	
+	// Where we output all the events we get
+	eventMessage HTML { width = 400, fontSize = 9 };	
+	
+	// The main UI.
+	box Box { columns=1, children=[
+		widgetCombo,
+		new TextLabel { text = "Target widget to generate events on:" },
+		mainContent, 
+		new Div { width = "100%", children = [ 
+			new FloatLeft { children = [ new TextLabel { text = "Generated events:" } ]},
+			new Div { },
+			new FloatRight { children = [ hideMouseMoveBox ]}
+		]},
+		new Box {
+			height=115,
+			style="overflow:hidden",
+			borderWidth=1,
+			borderStyle="solid",
+			children = [ eventMessage ]
+		},
+		new Button { text = "Clear", onClick ::= clearMessageArea, marginTop=10 }
+	]};
+
+	// The onConstructionFunction.  Populate the choices in our combo box.	
+	function start()
+		numWidgets int = widgets.getSize();
+		comboVals string[] = ["Select a widget..."];
+		for (n int from 1 to numWidgets)
+			comboVals.appendElement(widgets[n].cssClass[7 : Strlib.characterLen(widgets[n].cssClass)]);
+			
+			widgets[n].onChange ::= widgetOnChange;
+			widgets[n].onClick ::= widgetOnClick;
+			widgets[n].onMouseMove ::= widgetOnMouseMove;
+			widgets[n].onMouseOut ::= widgetOnMouseOut;
+			widgets[n].onMouseOver ::= widgetOnMouseOver;
+			widgets[n].onMouseDown ::= widgetOnMouseDown;
+			widgets[n].onMouseUp ::= widgetOnMouseUp;
+			widgets[n].onContextMenu ::= widgetOnContextMenu;
+			widgets[n].onFocusGained ::= widgetOnFocusGained;
+			widgets[n].onFocusLost ::= widgetOnFocusLost;
+			widgets[n].onKeyDown ::= widgetOnKeyDown;
+			widgets[n].onKeyPress ::= widgetOnKeyPress;
+			widgets[n].onKeyUp ::= widgetOnKeyUp;
+			widgets[n].onScroll ::= widgetOnScroll;
+			widgets[n].onSelect ::= widgetOnSelect;
+
+			widgets[n].onDrag = widgetOnDrag;
+			widgets[n].onDropOnTarget = widgetOnDropOnTarget;
+			widgets[n].onStartDrag = widgetOnStartDrag;
+		end
+		widgetCombo.values = comboVals;
+	end
+	
+	// The eventHandler function for our "Clear" button.  Just clear the text from the output area.
+	function clearMessageArea(e Event in)
+		eventMessage.text = "";
+	end
+	
+	// The eventHandler function that runs when an onChange event is fired from the Widget selection
+	// Combo box.
+	function showWidget(e Event in)
+		if(widgetCombo.selection > 1)
+			clearMessageArea(e);
+			mainContent.children = [ widgets[widgetCombo.selection - 1] ];
+		end
+	end
+	
+	// Dumps information about an event to the output area.
+	function printEvent(e Event in, msg String in)
+		if (e.x != 0) 			msg += " x="+e.x; 	end
+		if (e.y != 0) 			msg += " y="+e.y; 	end
+		if (e.clientX != 0) 	msg += " clientX="+e.clientX; end
+		if (e.clientY != 0) 	msg += " clientY="+e.clientY; end
+		if (e.screenX != 0) 	msg += " screenX="+e.screenX; end
+		if (e.screenY != 0) 	msg += " screenY="+e.screenY; end
+		if (e.mouseButton != 0) msg += " mouseButton="+e.mouseButton; end
+
+		if (e.ch != 0) 		msg += " ch="+e.ch; end
+		if (e.altkey)   	msg += " ALT";		end
+		if (e.shiftKey) 	msg += " SHIFT";	end
+		if (e.ctrlKey)  	msg += " CTRL";		end
+
+		eventMessage.text = msg + "<br>" + eventMessage.text;
+	end
+	function printMessage(msg String in)
+		eventMessage.text = msg + "<br>" + eventMessage.text;
+	end
+	
+	// Change, ContextMenu, Focus, Scroll, and Select
+	function widgetOnChange(e Event in)
+		printEvent(e, "Change");
+	end
+	function widgetOnContextMenu(e Event in)
+		printEvent(e, "ContextMenu");
+	end
+	function widgetOnScroll(e Event in)
+		printEvent(e, "Scroll");
+	end
+	function widgetOnSelect(e Event in)
+		printEvent(e, "Select");
+	end
+	function widgetOnFocusGained(e Event in)
+		printEvent(e, "FocusGained");
+	end
+	function widgetOnFocusLost(e Event in)
+		printEvent(e, "FocusLost");
+	end
+	
+	
+	// Mouse Events
+	function widgetOnClick(e Event in)
+		printEvent(e, "Click");
+	end	
+	function widgetOnMouseOver(e Event in)
+		printEvent(e, "MouseOver");
+	end
+	function widgetOnMouseOut(e Event in)
+		printEvent(e, "MouseOut");
+	end
+	function widgetOnMouseMove(e Event in)
+		if(!hideMouseMoveBox.selected)
+			printEvent(e, "MouseMove");
+		end
+	end
+	function widgetOnMouseDown(e Event in)
+		printEvent(e, "MouseDown");
+	end
+	function widgetOnMouseUp(e Event in)
+		printEvent(e, "MouseUp");
+	end
+	
+	// Keyboard Events
+	function widgetOnKeyPress(e Event in)
+		printEvent(e, "KeyPress");
+	end
+	function widgetOnKeyDown(e Event in)
+		printEvent(e, "KeyDown");
+	end
+	function widgetOnKeyUp(e Event in)
+		printEvent(e, "KeyUp");
+	end
+
+	// Drag and Drop Events
+	function widgetOnStartDrag(widget Widget in, x int in, y int in) returns(boolean)
+		printMessage("StartDrag: x="+x+" y"+y + "");
+		return (true);
+	end
+	function widgetOnDrag(widget Widget in, dropTarget Widget in, x int in, y int in)
+		printMessage("Drag: x="+x+" y"+y + " dropTarget=" + getClass(dropTarget)+ "");
+	end
+	function widgetOnDropOnTarget(widget Widget in, dropTarget Widget in, x int in, y int in)
+		printMessage("DropOnTarget: x="+x+" y"+y + " dropTarget=" + getClass(dropTarget) +	"");
+	end
+	
+	function getClass(widget Widget in) returns(String?) 
+		if (widget == null)
+			return (null);
+		else
+			return (widget.cssClass);
+		end
+	end
+end  

@@ -1,0 +1,232 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.samples.perwidget.DojoAccordionSample;
+import dojo.samples.perwidget.DojoBarGraphSample;
+import dojo.samples.perwidget.DojoBorderContainerSample;
+import dojo.samples.perwidget.DojoBubbleChartSample;
+import dojo.samples.perwidget.DojoButtonSample;
+import dojo.samples.perwidget.DojoCalendarSample;
+import dojo.samples.perwidget.DojoCheckBoxSample;
+import dojo.samples.perwidget.DojoColorPaletteSample;
+import dojo.samples.perwidget.DojoComboBoxSample;
+import dojo.samples.perwidget.DojoContextMenuSample;
+import dojo.samples.perwidget.DojoCurrencyTextBoxSample;
+import dojo.samples.perwidget.DojoDateTextBoxSample;
+import dojo.samples.perwidget.DojoDialogSample;
+import dojo.samples.perwidget.DojoEditorSample;
+import dojo.samples.perwidget.DojoGridSample;
+import dojo.samples.perwidget.DojoHorizontalSliderSample;
+import dojo.samples.perwidget.DojoLineGraphSample;
+import dojo.samples.perwidget.DojoMenuSample;
+import dojo.samples.perwidget.DojoPieChartSample;
+import dojo.samples.perwidget.DojoProgressBarSample;
+import dojo.samples.perwidget.DojoRadioGroupSample;
+import dojo.samples.perwidget.DojoStackContainerSample;
+import dojo.samples.perwidget.DojoTabContainerSample;
+import dojo.samples.perwidget.DojoTextAreaSample;
+import dojo.samples.perwidget.DojoTextFieldSample;
+import dojo.samples.perwidget.DojoTimeTextBoxSample;
+import dojo.samples.perwidget.DojoTitlePaneSample;
+import dojo.samples.perwidget.DojoToggleButtonSample;
+import dojo.samples.perwidget.DojoTooltipDialogSample;
+import dojo.samples.perwidget.DojoTooltipSample;
+import dojo.samples.perwidget.DojoTreeSample;
+import dojo.widgets.DojoAccordionContainer;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoContentPane;
+import dojo.widgets.DojoDiagnostics;
+import dojo.widgets.DojoDialog;
+import dojo.widgets.DojoRadioGroup;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import utils.SourceView;
+import utils.theme.ThemeLib;
+
+handler Gallery type RUIHandler{initialUI =[ui], onConstructionFunction = start }
+
+	enable DojoDiagnostics {};   // print some statistics on Dojo
+	
+	themeChooser DojoRadioGroup {  
+		selected = "claro",
+		options = ["claro", "tundra", "soria", "nihilo" ], 
+		onChange ::= changeTheme 
+	};
+
+	ui Div { padding = 9, backgroundColor = "lightyellow", children = [
+		new Box { marginBottom=11, children = [
+			new HTML { text = "Welcome to the EGL-Dojo Gallery. Choose a theme:", fontSize=12, marginRight=11},
+			themeChooser
+		]},
+		new Box { table { borderColor = "#ddd", borderWidth = 4, borderStyle="solid", backgroundColor = "white"}, children = [
+   			topics,
+			content 
+		]}
+	]};
+	content box { 
+		width = 800, height = 500, columns=1, backgroundColor="white", padding=9, position = "relative", style = "overflow-y: scroll;"
+	};
+	
+	
+	//
+    topics DojoAccordionContainer {
+		width = 170,
+		height = 618,
+    	children = [
+			new DojoContentPane { title = "Widgets", children = [
+				new HTML { text = 
+					"This section shows the various basic Dojo widgets that have been wrapped in an EGL API.<br>" +
+					"Click on a button below to show a sample.<br><br>Basic controls:<br>"  
+				},
+				new DojoButton { text = "Button", onClick ::= showSample },
+				new DojoButton { text = "CheckBox", onClick ::= showSample },
+				new DojoButton { text = "RadioGroup", onClick ::= showSample },
+				new DojoButton { text = "ToggleButton", onClick ::= showSample },
+				new HTML { text = "<br>Showing progress:<br>" },
+				new DojoButton { text = "ProgressBar", onClick ::= showSample },
+				new HTML { text = "<br>Put data into a grid:<br>" },
+				new DojoButton { text = "Grid", onClick ::= showSample },
+				new HTML { text = "<br>Show calendar:<br>" },
+				new DojoButton { text = "Calendar", onClick ::= showSample },
+				new HTML { text = "<br>Show Tooltips:<br>" },
+				new DojoButton { text = "Tooltip", onClick ::= showSample },
+				new DojoButton { text = "TooltipDialog", onClick ::= showSample }			
+			] },
+			new DojoContentPane { title = "Inputs", children = [
+				new HTML { text = "<br>Enter text and do validation:<br>" },
+				new DojoButton { text = "TextField", onClick ::= showSample },
+				new HTML { text = "<br>Pick a number:<br>" },
+				new DojoButton { text = "HorizontalSlider", onClick ::= showSample },
+				new HTML { text = "<br>Choose a time:<br>" },
+				new DojoButton { text = "TimeTextBox", onClick ::= showSample },
+				new HTML { text = "<br>Enter a date or use a calendar popup:<br>" },
+				new DojoButton { text = "DateTextBox", onClick ::= showSample },
+				new HTML { text = "<br>Enter a value or select from a long list:<br>" },
+				new DojoButton { text = "ComboBox", onClick ::= showSample },
+				new HTML { text = "<br>Enter a currency amount:<br>" },
+				new DojoButton { text = "CurrencyTextBox", onClick ::= showSample },
+				new HTML { text = "<br>Choose a color:<br>" },
+				new DojoButton { text = "ColorPalette", onClick ::= showSample },
+				new HTML { text = "<br>Enter a paragraph:<br>" },
+				new DojoButton { text = "TextArea", onClick ::= showSample },
+				new HTML { text = "<br>Show the editor:<br>" },
+				new DojoButton { text = "Editor", onClick ::= showSample }				
+			] },
+			new DojoContentPane { title = "Layout", children = [
+				new DojoButton { text = "Accordion", onClick ::= showSample },
+				new DojoButton { text = "BorderContainer", onClick ::= showSample },
+				new DojoButton { text = "TabContainer", onClick ::= showSample },
+				new DojoButton { text = "TitlePane", onClick ::= showSample },
+				new DojoButton { text = "Dialog", onClick ::= showSample },
+				new DojoButton { text = "StackContainer", onClick ::= showSample }
+			] },
+			new DojoContentPane { title = "Charting", children = [
+				new DojoButton { text = "BarGraph", onClick ::= showSample },
+				new DojoButton { text = "PieChart", onClick ::= showSample },
+				new DojoButton { text = "LineGraph", onClick ::= showSample },
+				new DojoButton { text = "BubbleChart", onClick ::= showSample }
+			] },
+			new DojoContentPane { title = "Navigation", children = [
+				new DojoButton { text = "Menu", onClick ::= showSample },
+				new DojoButton { text = "ContextMenu", onClick ::= showSample },
+				new DojoButton { text = "Tree", onClick ::= showSample }
+			] } 
+    	]
+	};	
+	
+	currentTitle string = "";
+	function viewSource(e Event in)
+		sv SourceView {};
+    	sv.setSrc("source/Dojo" + currentTitle + "Sample.egl");		
+		sourceContent Box { columns=1 };
+	    sourceDialog DojoDialog {
+	    	title = "Source Code View",
+	    	draggable = true, 
+	    	children = [ sv ]
+	    };		
+		sourceDialog.showDialog();
+    end		
+	
+	function showSample(e Event in)
+		button DojoButton = e.widget;
+		currentTitle = button.text;
+	
+		content.children = [
+			new HTML {
+				width = 750, 
+				text = "<em><a href='#'>View source code for " + calculateSourceLocation(currentTitle) + "</a></em>",
+				style = "text-align: right",
+				onClick ::= viewSource
+			}
+		];
+				
+		case (button.text)
+			when ("HorizontalSlider") content.appendChild( new DojoHorizontalSliderSample{}.ui );
+			when ("Button") content.appendChild( new DojoButtonSample{}.ui );
+			when ("CheckBox") content.appendChild( new DojoCheckBoxSample{}.ui );
+			when ("BarGraph") content.appendChild( new DojoBarGraphSample{}.ui );
+			when ("PieChart") content.appendChild( new DojoPieChartSample{}.ui );
+			when ("LineGraph") content.appendChild( new DojoLineGraphSample{}.ui );
+			when ("BubbleChart") content.appendChild( new DojoBubbleChartSample{}.ui );
+			when ("TabContainer") content.appendChild( new DojoTabContainerSample{}.ui );
+			when ("Grid") content.appendChild( new DojoGridSample{}.ui );
+			when ("Menu") content.appendChild( new DojoMenuSample{}.ui ); 
+			when ("ContextMenu") content.appendChild( new DojoContextMenuSample{}.ui );
+			when ("Tree") content.appendChild( new DojoTreeSample{}.ui );
+			when ("ProgressBar") content.appendChild( new DojoProgressBarSample{}.ui );
+			when ("TimeTextBox") content.appendChild( new DojoTimeTextBoxSample{}.ui );
+			when ("ComboBox") content.appendChild( new DojoComboBoxSample{}.ui );
+			when ("CurrencyTextBox") content.appendChild( new DojoCurrencyTextBoxSample{}.ui );
+			when ("DateTextBox") content.appendChild( new DojoDateTextBoxSample{}.ui );
+			when ("TitlePane") content.appendChild( new DojoTitlePaneSample{}.ui );
+			when ("Dialog") content.appendChild( new DojoDialogSample{}.ui );
+			when ("RadioGroup") content.appendChild(new DojoRadioGroupSample{}.ui );
+			when ("Accordion") content.appendChild( new DojoAccordionSample{}.ui );
+			when ("BorderContainer") content.appendChild( new DojoBorderContainerSample{}.ui );
+			when ("ColorPalette") content.appendChild( new DojoColorPaletteSample{}.ui );
+			when ("Calendar") content.appendChild( new DojoCalendarSample{}.ui );
+			when ("TextField") content.appendChild( new DojoTextFieldSample{}.ui );
+			when ("TextArea") content.appendChild( new DojoTextAreaSample{}.ui );
+			when ("Editor") content.appendChild( new DojoEditorSample{}.ui );
+			when ("StackContainer") content.appendChild( new DojoStackContainerSample{}.ui );
+			when ("ToggleButton") content.appendChild( new DojoToggleButtonSample{}.ui );
+			when ("Tooltip") content.appendChild( new DojoTooltipSample{}.ui );
+			when ("TooltipDialog") content.appendChild( new DojoTooltipDialogSample{}.ui );
+		end
+	end
+		
+	function calculateSourceLocation(name String in)returns(String)
+		result String = "dojo.samples.perwidget.Dojo" + name + "Sample";
+		
+		return(result);
+	end
+
+	function ignoreAnswer(retResult string in)
+	end
+	
+	function changeTheme(e Event in)
+		doChangeTheme();
+	end
+	
+	function doChangeTheme()
+		ThemeLib.setTheme(themeChooser.selected); 
+	end
+	
+    function start()
+    	doChangeTheme();
+	end
+	
+end

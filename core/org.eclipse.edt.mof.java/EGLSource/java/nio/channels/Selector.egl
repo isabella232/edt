@@ -1,0 +1,21 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.nio.channels.spi.SelectorProvider;
+import java.util._Set;
+
+externalType Selector type JavaObject 
+  private constructor();
+   function _close()   {@externalName{"close"},@Throws};
+   function isOpen()  returns(boolean);
+   function keys()  returns(_Set?);
+   static function _open()  returns(Selector?)   {@externalName{"open"},@Throws};
+   function provider()  returns(SelectorProvider?);
+   function select()  returns(int){@Throws};
+   function select(arg0 bigint IN)  returns(int){@Throws};
+   function selectedKeys()  returns(_Set?);
+   function selectNow()  returns(int){@Throws};
+   function wakeup()  returns(Selector?);
+end
+

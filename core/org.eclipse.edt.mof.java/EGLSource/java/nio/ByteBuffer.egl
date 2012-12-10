@@ -1,0 +1,96 @@
+package java.nio;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.lang.Comparable;
+
+
+externalType ByteBuffer extends Buffer, Comparable type JavaObject
+
+    private constructor();
+
+    static function allocate(arg0 int in) returns(ByteBuffer?);
+
+    static function allocateDirect(arg0 int in) returns(ByteBuffer?);
+
+    function arrayOffset() returns(int);
+
+    function asCharBuffer() returns(CharBuffer?);
+
+    function asDoubleBuffer() returns(DoubleBuffer?);
+
+    function asFloatBuffer() returns(FloatBuffer?);
+
+    function asIntBuffer() returns(IntBuffer?);
+
+    function asLongBuffer() returns(LongBuffer?);
+
+    function asReadOnlyBuffer() returns(ByteBuffer?);
+
+    function asShortBuffer() returns(ShortBuffer?);
+
+    function compact() returns(ByteBuffer?);
+
+    function compareTo(arg0 ByteBuffer? in) returns(int);
+
+    function duplicate() returns(ByteBuffer?);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function getDouble() returns(float);
+
+    function getDouble(arg0 int in) returns(float);
+
+    function getFloat() returns(smallFloat);
+
+    function getFloat(arg0 int in) returns(smallFloat);
+
+    function getInt(arg0 int in) returns(int);
+
+    function getInt() returns(int);
+
+    function getLong() returns(bigInt);
+
+    function getLong(arg0 int in) returns(bigInt);
+
+    function getShort(arg0 int in) returns(smallInt);
+
+    function getShort() returns(smallInt);
+
+    function hasArray() returns(boolean);
+
+    function hashCode() returns(int);
+
+    function isDirect() returns(boolean);
+
+    function order(arg0 ByteOrder? in) returns(ByteBuffer?);
+
+    function order() returns(ByteOrder?);
+
+    function put(arg0 ByteBuffer? in) returns(ByteBuffer?);
+
+    function putDouble(arg0 float in) returns(ByteBuffer?);
+
+    function putDouble(arg0 int in, arg1 float in) returns(ByteBuffer?);
+
+    function putFloat(arg0 smallFloat in) returns(ByteBuffer?);
+
+    function putFloat(arg0 int in, arg1 smallFloat in) returns(ByteBuffer?);
+
+    function putInt(arg0 int in, arg1 int in) returns(ByteBuffer?);
+
+    function putInt(arg0 int in) returns(ByteBuffer?);
+
+    function putLong(arg0 bigInt in) returns(ByteBuffer?);
+
+    function putLong(arg0 int in, arg1 bigInt in) returns(ByteBuffer?);
+
+    function putShort(arg0 int in, arg1 smallInt in) returns(ByteBuffer?);
+
+    function putShort(arg0 smallInt in) returns(ByteBuffer?);
+
+    function slice() returns(ByteBuffer?);
+
+    function toString() returns(string?);
+end
+

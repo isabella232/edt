@@ -1,0 +1,35 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+
+externalType UserObjectsOwnedList type JavaObject
+    static SELECTION_FILE_SYSTEM_DIRECTORY int;
+    static SELECTION_FILE_SYSTEM_LIBRARY int;
+    static SELECTION_OBJECT_RELATION_AUTHORIZED int;
+    static SELECTION_OBJECT_RELATION_OWNED int;
+    static SELECTION_OBJECT_RELATION_OWNED_OR_AUTHORIZED int;
+
+    constructor(arg0 AS400? in, arg1 string? in, arg2 int in, arg3 int in);
+
+    constructor(arg0 AS400? in, arg1 string? in);
+
+    function getSelectionFileSystem() returns(int);
+
+    function getSelectionObjectRelation() returns(int);
+
+    function getSystem() returns(AS400?);
+
+    function getUserName() returns(string?);
+
+    function setSelectionFileSystem(arg0 int in);
+
+    function setSelectionObjectRelation(arg0 int in);
+
+    function setSystem(arg0 AS400? in);
+
+    function setUserName(arg0 string? in);
+
+    function toString() returns(string?);
+end
+

@@ -1,0 +1,114 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.widgets;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIWidget;
+import gallery.lib.samplesLib;
+
+// The navigation bar across the top.
+handler BottomNav type RUIWidget {
+		targetWidget = ui,
+		cssFile="css/org.eclipse.edt.rui.samples.css",
+		onConstructionFunction = start }
+	
+	use samplesLib;
+	
+	// The "previous" button
+	prevLink HTML{ 
+		cssClass = "NavLink", 
+		text = "<  Previous", 
+		color = samplesLib.linkRegularColor,
+		onClick ::= prevPressed, 
+		onMouseOver ::= prevOver, 
+		onMouseOut ::= prevOut 
+	};
+	
+	// The "next" button
+	nextLink HTML{ 
+		cssClass = "NavLink", 
+		text = "Next  >", 
+		color = samplesLib.linkRegularColor, 
+		onClick ::= forwardPressed,
+		onMouseOver ::= forwardOver, 
+		onMouseOut ::= forwardOut 
+	};
+	
+	// The main UI
+	ui Box{ padding=15, children=[
+		prevLink,
+		new Box { width=samplesLib.CONTENT_WIDTH + 105 },
+		nextLink 
+		]
+	};
+	
+	// The onConstructionFunction
+	function start()
+		// INFOBUS Register to be notified when a new section is being shown in the main content pane
+		InfoBus.subscribe("org.eclipse.edt.rui.samples.sectionActivated", sectionActivated);
+	end
+
+	// When a new section has been shown in the main content pane, update our title, and disable the
+	// "previous" or "next" buttons if we're at the beginning or the end.
+	function sectionActivated(eventName string in, data any in)
+		toce ToCElement = samplesLib.tls[data as int];
+		
+		if ( toce.index == 1)
+			prevLink.visibility = "hidden";
+		else
+			prevLink.visibility = "visible";
+		end
+		
+		if ( toce.index == samplesLib.tls.getSize() )
+			nextLink.visibility = "hidden";
+		else
+			nextLink.visibility = "visible";
+		end
+	end
+	
+	// The eventHandler for the "previous" button
+	function prevPressed( e Event in )
+		// INFOBUS Let all interested parties know that the "previous" button was pushed.
+		InfoBus.publish("org.eclipse.edt.rui.samples.nav", -1);
+	end
+	
+	// When the user hovers over the link, highlight it
+	function prevOver( e Event in )
+		prevLink.color = samplesLib.linkHighlightColor;
+	end
+	
+	// When the user stops hovering over the link, return it to its regular color
+	function prevOut( e Event in )
+		prevLink.color = samplesLib.linkRegularColor;
+	end
+	
+	// The eventHandler for the "next" button	
+	function forwardPressed( e Event in )
+		// INFOBUS Let all interested parties know that the "next" button was pushed.
+		InfoBus.publish("org.eclipse.edt.rui.samples.nav", 1);
+	end
+	
+	// When the user hovers over the link, highlight it
+	function forwardOver( e Event in )
+		nextLink.color = samplesLib.linkHighlightColor;
+	end
+	
+	// When the user stops hovering over the link, return it to its regular color
+	function forwardOut( e Event in )
+		nextLink.color = samplesLib.linkRegularColor;
+	end
+	
+end

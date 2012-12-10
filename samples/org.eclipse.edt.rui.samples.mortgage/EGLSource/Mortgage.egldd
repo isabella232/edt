@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<egl:deployment xmlns:egl="http://www.eclipse.org/xmlns/edt/deployment/1.0">
+  <services>
+    <service implementation="mortgage.server.MortgageCalculationService" type="edt.service.rest">
+      <parameters>
+        <parameter name="uriFragment" value="MortgageCalculationService"/>
+        <parameter name="enableGeneration" value="true"/>
+        <parameter name="implType" value="Ѐ"/>
+      </parameters>
+    </service>
+  </services>
+  <ruiapplication deployAllHandlers="false">
+    <ruihandler enableGeneration="false" implementation="mortgage.client.CalculationHistoryHandler">
+      <parameters>
+        <parameter name="html_file_name" value="CalculationHistoryHandler"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="mortgage.client.CalculationResultsHandler">
+      <parameters>
+        <parameter name="html_file_name" value="CalculationResultsHandler"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="true" implementation="mortgage.client.MainHandler">
+      <parameters>
+        <parameter name="html_file_name" value="index"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="mortgage.client.MapLocatorHandler">
+      <parameters>
+        <parameter name="html_file_name" value="MapLocatorHandler"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="mortgage.client.MortgageCalculatorHandler">
+      <parameters>
+        <parameter name="html_file_name" value="MortgageCalculatorHandler"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="utils.portal.PortalSample">
+      <parameters>
+        <parameter name="html_file_name" value="PortalSample"/>
+      </parameters>
+    </ruihandler>
+    <parameters>
+      <parameter name="locales" value="en_US,English,en_US"/>
+    </parameters>
+  </ruiapplication>
+</egl:deployment>

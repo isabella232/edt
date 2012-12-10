@@ -1,0 +1,57 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import eglx.lang.Throws;
+import java.nio.channels.ServerSocketChannel;
+
+
+externalType ServerSocket type JavaObject
+
+    constructor(arg0 int in, arg1 int in, arg2 InetAddress? in){@Throws};
+
+    constructor(arg0 int in, arg1 int in){@Throws};
+
+    constructor(arg0 int in){@Throws};
+
+    constructor(){@Throws};
+
+    function accept() returns(Socket?){@Throws};
+
+    function _bind(arg0 SocketAddress? in){@externalName{"bind"}, @Throws};
+
+    function _bind(arg0 SocketAddress? in, arg1 int in){@externalName{"bind"}, @Throws};
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function getChannel() returns(ServerSocketChannel?);
+
+    function getInetAddress() returns(InetAddress?);
+
+    function getLocalPort() returns(int);
+
+    function getLocalSocketAddress() returns(SocketAddress?);
+
+    function getReceiveBufferSize() returns(int){@Throws};
+
+    function getReuseAddress() returns(boolean){@Throws};
+
+    function getSoTimeout() returns(int){@Throws};
+
+    function isBound() returns(boolean);
+
+    function isClosed() returns(boolean);
+
+    function setPerformancePreferences(arg0 int in, arg1 int in, arg2 int in);
+
+    function setReceiveBufferSize(arg0 int in){@Throws};
+
+    function setReuseAddress(arg0 boolean in){@Throws};
+
+    static function setSocketFactory(arg0 SocketImplFactory? in){@Throws};
+
+    function setSoTimeout(arg0 int in){@Throws};
+
+    function toString() returns(string?);
+end
+

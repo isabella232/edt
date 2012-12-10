@@ -1,0 +1,59 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+
+
+externalType ConnectionPool extends Serializable type JavaObject
+
+    private constructor();
+
+    function addConnectionPoolListener(arg0 ConnectionPoolListener? in);
+
+    function addPropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function getCleanupInterval() returns(bigInt);
+
+    function getMaxConnections() returns(int);
+
+    function getMaxInactivity() returns(bigInt);
+
+    function getMaxLifetime() returns(bigInt);
+
+    function getMaxUseCount() returns(int);
+
+    function getMaxUseTime() returns(bigInt);
+
+    function isPretestConnections() returns(boolean);
+
+    function isRunMaintenance() returns(boolean);
+
+    function isThreadUsed() returns(boolean);
+
+    function removeConnectionPoolListener(arg0 ConnectionPoolListener? in);
+
+    function removePropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function setCleanupInterval(arg0 bigInt in);
+
+    function setMaxConnections(arg0 int in);
+
+    function setMaxInactivity(arg0 bigInt in);
+
+    function setMaxLifetime(arg0 bigInt in);
+
+    function setMaxUseCount(arg0 int in);
+
+    function setMaxUseTime(arg0 bigInt in);
+
+    function setPretestConnections(arg0 boolean in);
+
+    function setRunMaintenance(arg0 boolean in);
+
+    function setThreadUsed(arg0 boolean in);
+end
+

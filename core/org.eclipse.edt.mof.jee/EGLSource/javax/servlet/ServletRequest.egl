@@ -1,0 +1,40 @@
+package javax.servlet;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.io.BufferedReader;
+import java.util.Locale;
+import java.util.Map;
+import java.util._Enumeration;
+
+externalType ServletRequest type JavaObject 
+  private constructor();
+   function getAttribute(arg0 string? IN)  returns(Object?);
+   function getAttributeNames()  returns(_Enumeration?);
+   function getCharacterEncoding()  returns(string?);
+   function getContentLength()  returns(int);
+   function getContentType()  returns(string?);
+   function getInputStream()  returns(ServletInputStream?){@Throws};
+   function getLocalAddr()  returns(string?);
+   function getLocale()  returns(Locale?);
+   function getLocales()  returns(_Enumeration?);
+   function getLocalName()  returns(string?);
+   function getLocalPort()  returns(int);
+   function getParameter(arg0 string? IN)  returns(string?);
+   function getParameterMap()  returns(Map?);
+   function getParameterNames()  returns(_Enumeration?);
+   function getProtocol()  returns(string?);
+   function getReader()  returns(BufferedReader?){@Throws};
+   function getRemoteAddr()  returns(string?);
+   function getRemoteHost()  returns(string?);
+   function getRemotePort()  returns(int);
+   function getRequestDispatcher(arg0 string? IN)  returns(RequestDispatcher?);
+   function getScheme()  returns(string?);
+   function getServerName()  returns(string?);
+   function getServerPort()  returns(int);
+   function isSecure()  returns(boolean);
+   function removeAttribute(arg0 string? IN);
+   function setAttribute(arg0 string? IN,arg1 Object? IN);
+   function setCharacterEncoding(arg0 string? IN){@Throws};
+end
+

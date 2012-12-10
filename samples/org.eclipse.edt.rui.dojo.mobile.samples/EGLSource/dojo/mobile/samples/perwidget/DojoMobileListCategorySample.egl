@@ -1,0 +1,60 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.mobile.widgets.DojoMobileLib;
+import dojo.mobile.widgets.DojoMobileList;
+import dojo.mobile.widgets.DojoMobileListCategory;
+import dojo.mobile.widgets.DojoMobileListItem;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+handler DojoMobileListCategorySample type RUIhandler {initialUI = [ View ], cssFile="css/com.ibm.egl.rui.dojo.mobile.samples.css", title="DojoMobileListCategorySample"}
+	
+	View DojoMobileView{
+		selected = true, headerTitle = "List Category Sample",
+		/*backText = "Back", backView = */
+		children = [
+			new HTML { margin = 20, text = "This sample shows how to create a DojoMobileListCategory within a DojoMobileList. The style of the category is controlled by the style of the list.", marginBottom=20},
+			new HTML { margin = 20, text = "Rounded Rectangle List"},
+			List1,
+			new HTML { margin = 20, text = "Edge to Edge List"},
+			List2
+		]
+	};
+	List1 DojoMobileList{
+		style = DojoMobileLib.LIST_STYLE_ROUNDED_RECTANGLE,
+		children = [
+			new DojoMobileListCategory{ title = "Rounded Rectangle Category 1" },
+			new DojoMobileListItem{ text = "List Item 1", imagePath = "dojo/mobile/images/i-icon-1.png" },			
+			new DojoMobileListCategory{ title = "Rounded Rectangle Category 2" },
+			new DojoMobileListItem{ text = "List Item 2", imagePath = "dojo/mobile/images/i-icon-1.png" }			
+		]
+	};
+	
+	List2 DojoMobileList{
+		style = DojoMobileLib.LIST_STYLE_EDGE_TO_EDGE,
+		children = [
+			new DojoMobileListCategory{ title = "Edge to Edge Category 1" },
+			new DojoMobileListItem{ text = "List Item 1", imagePath = "dojo/mobile/images/i-icon-1.png" },			
+			new DojoMobileListCategory{ title = "Edge to Edge Category 2" },
+			new DojoMobileListItem{ text = "List Item 2", imagePath = "dojo/mobile/images/i-icon-1.png" }			
+		]
+	};
+	
+	
+end

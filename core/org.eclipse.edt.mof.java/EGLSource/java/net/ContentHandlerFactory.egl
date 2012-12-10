@@ -1,0 +1,12 @@
+package java.net;
+
+import eglx.java.JavaObject;
+
+
+externalType ContentHandlerFactory type JavaObject
+
+    private constructor();
+
+    function createContentHandler(arg0 string? in) returns(ContentHandler?);
+end
+

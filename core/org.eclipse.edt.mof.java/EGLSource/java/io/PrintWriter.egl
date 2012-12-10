@@ -1,0 +1,73 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+import eglx.lang.Throws;
+import java.lang.CharSequence;
+
+externalType PrintWriter extends Writer type JavaObject
+
+    constructor(arg0 File? in, arg1 string? in){@Throws};
+
+    constructor(arg0 File? in){@Throws};
+
+    constructor(arg0 string? in, arg1 string? in){@Throws};
+
+    constructor(arg0 string? in){@Throws};
+
+    constructor(arg0 OutputStream? in, arg1 boolean in);
+
+    constructor(arg0 OutputStream? in);
+
+    constructor(arg0 Writer? in, arg1 boolean in);
+
+    constructor(arg0 Writer? in);
+
+    function append(arg0 CharSequence? in) returns(PrintWriter?);
+
+    function append(arg0 CharSequence? in, arg1 int in, arg2 int in) returns(PrintWriter?);
+
+    function checkError() returns(boolean);
+
+    function _close(){@externalName{"close"}};
+
+    function flush();
+
+    function _print(arg0 Object? in){@externalName{"print"}};
+
+    function _print(arg0 string? in){@externalName{"print"}};
+
+    function _print(arg0 float in){@externalName{"print"}};
+
+    function _print(arg0 smallFloat in){@externalName{"print"}};
+
+    function _print(arg0 bigInt in){@externalName{"print"}};
+
+    function _print(arg0 int in){@externalName{"print"}};
+
+    function _print(arg0 boolean in){@externalName{"print"}};
+
+    function println();
+
+    function println(arg0 boolean in);
+
+    function println(arg0 int in);
+
+    function println(arg0 bigInt in);
+
+    function println(arg0 smallFloat in);
+
+    function println(arg0 float in);
+
+    function println(arg0 string? in);
+
+    function println(arg0 Object? in);
+
+    function write(arg0 int in);
+
+    function write(arg0 string? in, arg1 int in, arg2 int in);
+
+    function write(arg0 string? in);
+end
+

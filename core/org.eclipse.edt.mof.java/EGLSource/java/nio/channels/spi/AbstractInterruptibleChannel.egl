@@ -1,0 +1,17 @@
+package java.nio.channels.spi;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.nio.channels.Channel;
+import java.nio.channels.InterruptibleChannel;
+
+
+externalType AbstractInterruptibleChannel extends Channel, InterruptibleChannel type JavaObject
+
+    private constructor();
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function isOpen() returns(boolean);
+end
+

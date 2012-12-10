@@ -1,0 +1,14 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.util.EventObject;
+
+
+externalType ConnectionEvent extends EventObject type JavaObject
+
+    constructor(arg0 Object? in, arg1 int in);
+
+    function getService() returns(int);
+end
+

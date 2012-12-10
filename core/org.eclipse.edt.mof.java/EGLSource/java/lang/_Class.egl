@@ -1,0 +1,9 @@
+package java.lang;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.io.Serializable;
+
+externalType _Class extends Serializable type JavaObject{externalName = "Class"} 
+end
+

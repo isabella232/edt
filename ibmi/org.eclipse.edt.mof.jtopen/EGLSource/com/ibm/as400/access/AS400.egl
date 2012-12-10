@@ -1,0 +1,257 @@
+package com.ibm.as400.access;
+
+import com.ibm.as400.security.auth.ProfileTokenCredential;
+import com.ibm.as400.security.auth.ProfileTokenProvider;
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.Serializable;
+import java.net.Socket;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
+
+
+externalType AS400 extends Serializable type JavaObject
+    static AUTHENTICATION_SCHEME_GSS_TOKEN int;
+    static AUTHENTICATION_SCHEME_IDENTITY_TOKEN int;
+    static AUTHENTICATION_SCHEME_PASSWORD int;
+    static AUTHENTICATION_SCHEME_PROFILE_TOKEN int;
+    bidiAS400Text boolean;
+    static CENTRAL int;
+    static COMMAND int;
+    static DATABASE int;
+    static DATAQUEUE int;
+    static FILE int;
+    static GSS_OPTION_FALLBACK int;
+    static GSS_OPTION_MANDATORY int;
+    static GSS_OPTION_NONE int;
+    static _PRINT int;
+    static RECORDACCESS int;
+    static SIGNON int;
+    static USE_PORT_MAPPER int;
+
+    constructor(arg0 AS400? in);
+
+    constructor(arg0 string? in, arg1 string? in, arg2 string? in, arg3 string? in);
+
+    constructor(arg0 string? in, arg1 string? in, arg2 string? in);
+
+    constructor(arg0 string? in, arg1 ProfileTokenProvider? in, arg2 int in);
+
+    constructor(arg0 string? in, arg1 ProfileTokenProvider? in);
+
+    constructor(arg0 string? in, arg1 ProfileTokenCredential? in);
+
+    constructor(arg0 string? in, arg1 string? in);
+
+    constructor(arg0 string? in);
+
+    constructor();
+
+    function addConnectionListener(arg0 ConnectionListener? in);
+
+    static function addPasswordCacheEntry(arg0 string? in, arg1 string? in, arg2 string? in){@Throws};
+
+    static function addPasswordCacheEntry(arg0 string? in, arg1 string? in, arg2 string? in, arg3 string? in){@Throws};
+
+    function addPropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function addVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function arePropertiesFrozen() returns(boolean);
+
+    function authenticate(arg0 string? in, arg1 string? in) returns(boolean){@Throws};
+
+    function canUseNativeOptimizations() returns(boolean);
+
+    function changePassword(arg0 string? in, arg1 string? in){@Throws};
+
+    static function clearPasswordCache();
+
+    static function clearPasswordCache(arg0 string? in);
+
+    function connectService(arg0 int in){@Throws};
+
+    function connectToPort(arg0 int in) returns(Socket?){@Throws};
+
+    function disconnectAllServices();
+
+    function disconnectService(arg0 int in);
+
+    function generateProfileToken(arg0 string? in, arg1 int in, arg2 int in) returns(ProfileTokenCredential?){@Throws};
+
+    static function generateVRM(arg0 int in, arg1 int in, arg2 int in) returns(int);
+
+    function getAuthenticationScheme() returns(int);
+
+    function getBidiStringType() returns(int);
+
+    function getCcsid() returns(int);
+
+    function getDDMRDB() returns(string?);
+
+    static function getDefaultSignonHandler() returns(SignonHandler?);
+
+    static function getDefaultTimeZone(arg0 AS400? in) returns(TimeZone?);
+
+    static function getDefaultUser(arg0 string? in) returns(string?);
+
+    function getGSSName() returns(string?);
+
+    function getGSSOption() returns(int);
+
+    function getJobCCSIDEncoding() returns(string?){@Throws};
+
+    function getLocale() returns(Locale?);
+
+    function getModification() returns(int){@Throws};
+
+    function getNLV() returns(string?);
+
+    function getPasswordExpirationDate() returns(GregorianCalendar?){@Throws};
+
+    static function getPasswordExpirationWarningDays() returns(int);
+
+    function getPreviousSignonDate() returns(GregorianCalendar?){@Throws};
+
+    function getProfileToken(arg0 string? in, arg1 string? in, arg2 int in, arg3 int in) returns(ProfileTokenCredential?){@Throws};
+
+    function getProfileToken(arg0 string? in, arg1 string? in) returns(ProfileTokenCredential?){@Throws};
+
+    function getProfileToken(arg0 int in, arg1 int in) returns(ProfileTokenCredential?){@Throws};
+
+    function getProxyServer() returns(string?);
+
+    function getRelease() returns(int){@Throws};
+
+    function getServicePort(arg0 int in) returns(int);
+
+    function getSignonDate() returns(GregorianCalendar?){@Throws};
+
+    function getSignonHandler() returns(SignonHandler?);
+
+    function getSocketProperties() returns(SocketProperties?);
+
+    function getSystemName() returns(string?);
+
+    function getTimeZone() returns(TimeZone?){@Throws};
+
+    function getUserId(arg0 boolean in) returns(string?);
+
+    function getUserId() returns(string?);
+
+    function getVersion() returns(int){@Throws};
+
+    function getVRM() returns(int){@Throws};
+
+    function initializeConverter(arg0 int in){@Throws};
+
+    function isConnected() returns(boolean);
+
+    function isConnected(arg0 int in) returns(boolean);
+
+    function isConnectionAlive() returns(boolean);
+
+    function isConnectionAlive(arg0 int in) returns(boolean);
+
+    function isGuiAvailable() returns(boolean);
+
+    function isLocal() returns(boolean);
+
+    function isMustAddLanguageLibrary() returns(boolean);
+
+    function isMustUseNetSockets() returns(boolean);
+
+    function isMustUseSockets() returns(boolean);
+
+    function isMustUseSuppliedProfile() returns(boolean);
+
+    function isShowCheckboxes() returns(boolean);
+
+    function isThreadUsed() returns(boolean);
+
+    function isUseDefaultUser() returns(boolean);
+
+    function isUsePasswordCache() returns(boolean);
+
+    function removeConnectionListener(arg0 ConnectionListener? in);
+
+    static function removeDefaultUser(arg0 string? in);
+
+    static function removePasswordCacheEntry(arg0 string? in, arg1 string? in);
+
+    function removePropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function removeVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function resetAllServices();
+
+    function setBidiStringType(arg0 int in);
+
+    function setCcsid(arg0 int in){@Throws};
+
+    function setDDMRDB(arg0 string? in);
+
+    static function setDefaultSignonHandler(arg0 SignonHandler? in);
+
+    static function setDefaultUser(arg0 string? in, arg1 string? in) returns(boolean);
+
+    function setGSSCredential(arg0 Object? in);
+
+    function setGSSName(arg0 string? in);
+
+    function setGSSOption(arg0 int in);
+
+    function setGuiAvailable(arg0 boolean in){@Throws};
+
+    function setLocale(arg0 Locale? in, arg1 string? in);
+
+    function setLocale(arg0 Locale? in);
+
+    function setMustAddLanguageLibrary(arg0 boolean in);
+
+    function setMustUseNetSockets(arg0 boolean in);
+
+    function setMustUseSockets(arg0 boolean in);
+
+    function setMustUseSuppliedProfile(arg0 boolean in);
+
+    function setPassword(arg0 string? in);
+
+    static function setPasswordExpirationWarningDays(arg0 int in);
+
+    function setProfileToken(arg0 ProfileTokenCredential? in);
+
+    function setProxyServer(arg0 string? in){@Throws};
+
+    function setServicePort(arg0 int in, arg1 int in);
+
+    function setServicePortsToDefault();
+
+    function setShowCheckboxes(arg0 boolean in);
+
+    function setSignonHandler(arg0 SignonHandler? in);
+
+    function setSocketProperties(arg0 SocketProperties? in);
+
+    function setSystemName(arg0 string? in){@Throws};
+
+    function setThreadUsed(arg0 boolean in){@Throws};
+
+    function setUseDefaultUser(arg0 boolean in){@Throws};
+
+    function setUsePasswordCache(arg0 boolean in){@Throws};
+
+    function setUserId(arg0 string? in){@Throws};
+
+    function toString() returns(string?);
+
+    function validateSignon(arg0 string? in, arg1 string? in) returns(boolean){@Throws};
+
+    function validateSignon(arg0 string? in) returns(boolean){@Throws};
+
+    function validateSignon() returns(boolean){@Throws};
+end
+

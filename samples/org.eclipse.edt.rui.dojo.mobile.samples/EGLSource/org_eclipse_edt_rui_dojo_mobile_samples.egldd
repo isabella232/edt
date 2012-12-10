@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<egl:deployment xmlns:egl="http://www.eclipse.org/xmlns/edt/deployment/1.0">
+  <ruiapplication deployAllHandlers="true">
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.DojoMobile">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobile"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.DojoMobileGallery">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileGallery"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.perwidget.DojoMobileButtonSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileButtonSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.perwidget.DojoMobileListCategorySample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileListCategorySample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.perwidget.DojoMobileListItemSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileListItemSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.perwidget.DojoMobileListSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileListSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.perwidget.DojoMobileSwitchSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileSwitchSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="true" implementation="dojo.mobile.samples.perwidget.DojoMobileTabContainerSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileTabContainerSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="true" implementation="dojo.mobile.samples.perwidget.DojoMobileTabSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileTabSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="true" implementation="dojo.mobile.samples.perwidget.DojoMobileViewSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileViewSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.perwidget.DojoMobileAdvancedViewSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileAdvancedViewSample"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="dojo.mobile.samples.perwidget.DojoMobileCheckBoxSample">
+      <parameters>
+        <parameter name="html_file_name" value="DojoMobileCheckBoxSample"/>
+      </parameters>
+    </ruihandler>
+    <parameters>
+      <parameter name="locales" value="en_US,English,en_US"/>
+    </parameters>
+  </ruiapplication>
+  <egl:target.project name="org.eclipse.edt.rui.mobile.samples.nightly.web"/>
+</egl:deployment>

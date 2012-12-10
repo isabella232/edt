@@ -1,0 +1,30 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+
+externalType DataQueue extends BaseDataQueue type JavaObject
+
+    constructor(arg0 AS400? in, arg1 string? in);
+
+    constructor();
+
+    function create(arg0 int in, arg1 string? in, arg2 boolean in, arg3 boolean in, arg4 boolean in, arg5 string? in){@Throws};
+
+    function create(arg0 int in){@Throws};
+
+    function create(arg0 DataQueueAttributes? in){@Throws};
+
+    function peek(arg0 int in) returns(DataQueueEntry?){@Throws};
+
+    function peek() returns(DataQueueEntry?){@Throws};
+
+    function read(arg0 int in) returns(DataQueueEntry?){@Throws};
+
+    function read() returns(DataQueueEntry?){@Throws};
+
+    function toString() returns(string?);
+
+    function write(arg0 string? in){@Throws};
+end
+

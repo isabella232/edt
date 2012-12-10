@@ -1,0 +1,260 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import dojo.widgets.DojoComboBox;
+import dojo.widgets.DojoCurrencyTextBox;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoCurrencyTextBoxSample type RUIHandler{ initialUI = [ ui ] }
+
+	message TextField { 
+		width = 260, marginBottom=20, backgroundColor = "lightyellow",
+		text = "Sorry. Enter a real amount here...", onChange ::= message_onChange
+	};
+	//
+	amount DojoCurrencyTextBox { 
+		value = "120.00", 
+		currency = "AED",	 
+		errorMessage = message.text,
+		width="150"
+	};
+									
+	ui Box{ padding=30, columns=1,  children = [
+		new HTML { 
+			text = "Dojo Currency Text Box Sample", fontSize = 20, marginBottom = 20 
+		},
+		new HTML { 
+			text = "The Dojo Currency Text Box is intended for input of monetary values.<p>" +
+				"One of its parameters is the \"currency\" parameter. Set it to any valid 3-letter "+
+				"<a target=_blank href=http://www.iso.org/iso/support/currency_codes_list-1.htm>ISO-4217</a> currency code.</b><br>" +
+				"Note that not all country codes are supported by this Dojo widget in Dojo version 1.3.2. Verify your currency code indeed works.<br>"
+		},
+		new HTML { marginBottom = 20, 
+			text = "Tip: Set the character encoding in the Preview tab (right-click and select Encoding) and in your browser to <b>Unicode (UTF-8)</b> to make sure all possible currency signs are rendered."
+		},
+		new Box { columns = 1, children = [
+			new HTML { text= "Customize your error message here:"},
+			message
+		]},
+		new Box { columns = 1, children = [
+			new HTML{ text="Choose a currency: "},
+			currencies
+		]},
+		new Box { columns = 1, children = [
+			new HTML{ text="Enter an amount (type something like 'abc' to see the error message): ", marginTop=20, marginRight=5 },
+			amountBox
+		]}
+	
+	]};
+	
+	amountBox Box { children = [ amount ]};
+	
+	function changeCurrency(e Event in)
+		amountBox.children = [
+			new DojoCurrencyTextBox { 
+				value = "100.00", 
+				currency = currencies.value[1:3],	 
+				errorMessage = message.text,
+				width=150 
+			}
+		];
+	end
+	
+	function message_onChange(event Event in)
+		amount.errorMessage = message.text;
+	end
+	
+	currencies DojoComboBox { 
+		onChange ::= changeCurrency,
+		width=500,
+		values = [
+		    "AED	United Arab Emirates, Dirhams",
+		    "AFN	Afghanistan, Afghanis",
+		    "ALL	Albania, Leke",
+		    "AMD	Armenia, Drams",
+		    "ANG	Netherlands Antilles, Guilders (also called Florins)",
+		    "AOA	Angola, Kwanza",
+		    "ARS	Argentina, Pesos",
+		    "AUD	Australia, Dollars",
+		    "AWG	Aruba, Guilders (also called Florins)",
+		    "AZN	Azerbaijan, New Manats",
+		    "BAM	Bosnia and Herzegovina, Convertible Marka",
+		    "BBD	Barbados, Dollars",
+		    "BDT	Bangladesh, Taka",
+		    "BGN	Bulgaria, Leva",
+		    "BHD	Bahrain, Dinars",
+		    "BIF	Burundi, Francs",
+		    "BMD	Bermuda, Dollars",
+		    "BND	Brunei Darussalam, Dollars",
+		    "BOB	Bolivia, Bolivianos",
+		    "BRL	Brazil, Brazil Real",
+		    "BSD	Bahamas, Dollars",
+		    "BTN	Bhutan, Ngultrum",
+		    "BWP	Botswana, Pulas",
+		    "BYR	Belarus, Rubles",
+		    "BZD	Belize, Dollars",
+		    "CAD	Canada, Dollars",
+		    "CDF	Congo/Kinshasa, Congolese Francs",
+		    "CHF	Switzerland, Francs",
+		    "CLP	Chile, Pesos",
+		    "CNY	China, Yuan Renminbi",
+		    "COP	Colombia, Pesos",
+		    "CRC	Costa Rica, Colones",
+		    "CUP	Cuba, Pesos",
+		    "CVE	Cape Verde, Escudos",
+		    "CYP	Cyprus, Pounds (expires 2008-Jan-31)",
+		    "CZK	Czech Republic, Koruny",
+		    "DJF	Djibouti, Francs",
+		    "DKK	Denmark, Kroner",
+		    "DOP	Dominican Republic, Pesos",
+		    "DZD	Algeria, Algeria Dinars",
+		    "EEK	Estonia, Krooni",
+		    "EGP	Egypt, Pounds",
+		    "ERN	Eritrea, Nakfa",
+		    "ETB	Ethiopia, Birr",
+		    "EUR	Euro Member Countries, Euro",
+		    "FJD	Fiji, Dollars",
+		    "FKP	Falkland Islands (Malvinas), Pounds",
+		    "GBP	United Kingdom, Pounds",
+		    "GEL	Georgia, Lari",
+		    "GGP	Guernsey, Pounds",
+		    "GHS	Ghana, Cedis",
+		    "GIP	Gibraltar, Pounds",
+		    "GMD	Gambia, Dalasi",
+		    "GNF	Guinea, Francs",
+		    "GTQ	Guatemala, Quetzales",
+		    "GYD	Guyana, Dollars",
+		    "HKD	Hong Kong, Dollars",
+		    "HNL	Honduras, Lempiras",
+		    "HRK	Croatia, Kuna",
+		    "HTG	Haiti, Gourdes",
+		    "HUF	Hungary, Forint",
+		    "IDR	Indonesia, Rupiahs",
+		    "ILS	Israel, New Shekels",
+		    "IMP	Isle of Man, Pounds",
+		    "INR	India, Rupees",
+		    "IQD	Iraq, Dinars",
+		    "IRR	Iran, Rials",
+		    "ISK	Iceland, Kronur",
+		    "JEP	Jersey, Pounds",
+		    "JMD	Jamaica, Dollars",
+		    "JOD	Jordan, Dinars",
+		    "JPY	Japan, Yen",
+		    "KES	Kenya, Shillings",
+		    "KGS	Kyrgyzstan, Soms",
+		    "KHR	Cambodia, Riels",
+		    "KMF	Comoros, Francs",
+		    "KPW	Korea (North), Won",
+		    "KRW	Korea (South), Won",
+		    "KWD	Kuwait, Dinars",
+		    "KYD	Cayman Islands, Dollars",
+		    "KZT	Kazakhstan, Tenge",
+		    "LAK	Laos, Kips",
+		    "LBP	Lebanon, Pounds",
+		    "LKR	Sri Lanka, Rupees",
+		    "LRD	Liberia, Dollars",
+		    "LSL	Lesotho, Maloti",
+		    "LTL	Lithuania, Litai",
+		    "LVL	Latvia, Lati",
+		    "LYD	Libya, Dinars",
+		    "MAD	Morocco, Dirhams",
+		    "MDL	Moldova, Lei",
+		    "MGA	Madagascar, Ariary",
+		    "MKD	Macedonia, Denars",
+		    "MMK	Myanmar (Burma), Kyats",
+		    "MNT	Mongolia, Tugriks",
+		    "MOP	Macau, Patacas",
+		    "MRO	Mauritania, Ouguiyas",
+		    "MTL	Malta, Liri (expires 2008-Jan-31)",
+		    "MUR	Mauritius, Rupees",
+		    "MVR	Maldives (Maldive Islands), Rufiyaa",
+		    "MWK	Malawi, Kwachas",
+		    "MXN	Mexico, Pesos",
+		    "MYR	Malaysia, Ringgits",
+		    "MZN	Mozambique, Meticais",
+		    "NAD	Namibia, Dollars",
+		    "NGN	Nigeria, Nairas",
+		    "NIO	Nicaragua, Cordobas",
+		    "NOK	Norway, Krone",
+		    "NPR	Nepal, Nepal Rupees",
+		    "NZD	New Zealand, Dollars",
+		    "OMR	Oman, Rials",
+		    "PAB	Panama, Balboa",
+		    "PEN	Peru, Nuevos Soles",
+		    "PGK	Papua New Guinea, Kina",
+		    "PHP	Philippines, Pesos",
+		    "PKR	Pakistan, Rupees",
+		    "PLN	Poland, Zlotych",
+		    "PYG	Paraguay, Guarani",
+		    "QAR	Qatar, Rials",
+		    "RON	Romania, New Lei",
+		    "RSD	Serbia, Dinars",
+		    "RUB	Russia, Rubles",
+		    "RWF	Rwanda, Rwanda Francs",
+		    "SAR	Saudi Arabia, Riyals",
+		    "SBD	Solomon Islands, Dollars",
+		    "SCR	Seychelles, Rupees",
+		    "SDG	Sudan, Pounds",
+		    "SEK	Sweden, Kronor",
+		    "SGD	Singapore, Dollars",
+		    "SHP	Saint Helena, Pounds",
+		    "SLL	Sierra Leone, Leones",
+		    "SOS	Somalia, Shillings",
+		    "SPL	Seborga, Luigini",
+		    "SRD	Suriname, Dollars",
+		    "STD	S©o Tome and Principe, Dobras",
+		    "SVC	El Salvador, Colones",
+		    "SYP	Syria, Pounds",
+		    "SZL	Swaziland, Emalangeni",
+		    "THB	Thailand, Baht",
+		    "TJS	Tajikistan, Somoni",
+		    "TMM	Turkmenistan, Manats",
+		    "TND	Tunisia, Dinars",
+		    "TOP	Tonga, Pa'anga",
+		    "TRY	Turkey, New Lira",
+		    "TTD	Trinidad and Tobago, Dollars",
+		    "TVD	Tuvalu, Tuvalu Dollars",
+		    "TWD	Taiwan, New Dollars",
+		    "TZS	Tanzania, Shillings",
+		    "UAH	Ukraine, Hryvnia",
+		    "UGX	Uganda, Shillings",
+		    "USD	United States of America, Dollars",
+		    "UYU	Uruguay, Pesos",
+		    "UZS	Uzbekistan, Sums",
+		    "VEB	Venezuela, Bolivares (expires 2008-Jun-30)",
+		    "VEF	Venezuela, Bolivares Fuertes",
+		    "VND	Viet Nam, Dong",
+		    "VUV	Vanuatu, Vatu",
+		    "WST	Samoa, Tala",
+		    "XAF	Communaut© Financi©re Africaine BEAC, Francs",
+		    "XAG	Silver, Ounces",
+		    "XAU	Gold, Ounces",
+		    "XCD	East Caribbean Dollars",
+		    "XDR	International Monetary Fund (IMF) Special Drawing Rights",
+		    "XOF	Communaut© Financi©re Africaine BCEAO, Francs",
+		    "XPD	Palladium Ounces",
+		    "XPF	Comptoirs Fran©ais du Pacifique Francs",
+		    "XPT	Platinum, Ounces",
+		    "YER	Yemen, Rials",
+		    "ZAR	South Africa, Rand",
+		    "ZMK	Zambia, Kwacha",
+		    "ZWD	Zimbabwe, Zimbabwe Dollars"
+		]
+	};
+	       
+end
+

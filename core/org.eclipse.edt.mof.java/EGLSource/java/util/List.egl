@@ -1,0 +1,58 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+
+
+externalType List extends Collection type JavaObject
+
+    private constructor();
+
+    function _add(arg0 Object? in) returns(boolean){@externalName{"add"}};
+
+    function _add(arg0 int in, arg1 Object? in){@externalName{"add"}};
+
+    function addAll(arg0 Collection? in) returns(boolean);
+
+    function addAll(arg0 int in, arg1 Collection? in) returns(boolean);
+
+    function clear();
+
+    function contains(arg0 Object? in) returns(boolean);
+
+    function containsAll(arg0 Collection? in) returns(boolean);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function _get(arg0 int in) returns(Object?){@externalName{"get"}};
+
+    function hashCode() returns(int);
+
+    function indexOf(arg0 Object? in) returns(int);
+
+    function isEmpty() returns(boolean);
+
+    function iterator() returns(Iterator?);
+
+    function lastIndexOf(arg0 Object? in) returns(int);
+
+    function listIterator(arg0 int in) returns(ListIterator?);
+
+    function listIterator() returns(ListIterator?);
+
+    function remove(arg0 int in) returns(Object?);
+
+    function remove(arg0 Object? in) returns(boolean);
+
+    function removeAll(arg0 Collection? in) returns(boolean);
+
+    function retainAll(arg0 Collection? in) returns(boolean);
+
+    function _set(arg0 int in, arg1 Object? in) returns(Object?){@externalName{"set"}};
+
+    function size() returns(int);
+
+    function subList(arg0 int in, arg1 int in) returns(List?);
+end
+

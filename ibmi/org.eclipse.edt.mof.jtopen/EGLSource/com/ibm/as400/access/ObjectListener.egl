@@ -1,0 +1,19 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.util.EventListener;
+
+
+externalType ObjectListener extends EventListener type JavaObject
+
+    private constructor();
+
+    function objectClosed(arg0 ObjectEvent? in);
+
+    function objectCreated(arg0 ObjectEvent? in);
+
+    function objectDeleted(arg0 ObjectEvent? in);
+
+    function objectOpened(arg0 ObjectEvent? in);
+end
+

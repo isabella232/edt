@@ -1,0 +1,70 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoProgressBar;
+import eglx.javascript.Job;
+import eglx.lang.MathLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoProgressBarSample type RUIHandler{ initialUI = [ ui ] }
+
+	progressBar DojoProgressbar {
+		width = "280", 
+		maximum = "100",
+		progress = "75"
+	};
+
+	ui Div { width = 400, padding=30, children = [
+		new HTML{ 
+			text = "Dojo Progress Bar Sample", fontSize = "20px",	paddingBottom = 15 
+		},
+		progressBar,
+		new Box { 
+			paddingTop=30, 
+			children = [ 
+				new DojoButton{ text="Decrease by 5" , onClick::=decrease },
+				new DojoButton{ text="Increase by 5" , onClick::=increase },
+				new DojoButton{ text="Run" , onClick::=runJob }	
+			]
+		}
+	]};
+	
+	progressJob Job { runFunction = step };
+	
+	function increase(e Event in)
+		progressBar.progress = Mathlib.min(progressBar.maximum, progressBar.progress+5);
+	end
+	
+	function decrease(e Event in)
+		progressBar.progress = Mathlib.max(0, progressBar.progress - 5);
+	end
+	
+	function runJob(e Event in)
+		progressBar.progress = 0;
+		progressJob.repeat(100);
+	end
+	
+	function step()
+		progressBar.progress = Mathlib.min(progressBar.maximum, progressBar.progress+5);
+		if (progressBar.progress == progressBar.maximum)
+			progressJob.cancel();
+		end
+	end
+	
+	    	
+end

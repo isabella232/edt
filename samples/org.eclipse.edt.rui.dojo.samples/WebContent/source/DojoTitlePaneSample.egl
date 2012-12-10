@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoTitlePane;
+import eglx.ui.rui.RUIHandler;
+
+
+handler DojoTitlePaneSample type RUIHandler{initialUI =[ui] }
+            
+	title HTML { text = "Dojo Title Pane Sample",	fontSize = "20px", marginBottom=20 };
+	desc HTML { text="The Title Pane sample shows a collapsible pane which can contain various contents. Duration denotes the number of milliseconds to open and close the pane.", marginBottom=20};
+   
+    textPane DojoTitlePane {
+    	title = "Sample Text", 
+    	duration = 500, 
+    	isOpen = true,
+    	marginTop = 20,
+    	children = [
+	    	new Box{ 
+	    		columns = 1, 
+	    		children =[
+	    			new HTML { text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit" }
+	    		]
+	    	}
+	    ]
+    };
+
+    ui Box{padding = 4, columns = 1, children = [title, desc,
+        textPane
+	]};
+
+   
+end

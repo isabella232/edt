@@ -1,0 +1,98 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.datadisplay;
+
+import org.eclipse.edt.rui.widgets.Image;
+import eglx.lang.EGLProperty;
+import eglx.lang.MathLib;
+import eglx.lang.SysLib;
+import eglx.ui.rui.RUIWidget;
+
+/*
+ * A horizontal bar chart using Google Charts. See http://code.google.com/apis/chart/
+ *
+ * When creating the bar chart, pass in a title, labels, and data. 
+ * Pass in the data last as that creates the actual chart.
+ *
+ */
+handler HorizontalBarChart type RUIWidget { targetWidget = img }
+
+	// the title given to the chart
+	title String = "";
+		
+	// the labels for each bar
+	labels String[];
+	
+	// indicate the height of each bar in pixels
+	barHeight int = 20;
+	
+	// the data elements for the bars. Set this parameter last
+	data int[] { @EGLProperty { setMethod = setData, getMethod = getData }};
+
+	img Image{};  // a google chart is really an image	
+	private w, h int;
+	
+	function setWidth(width int in)
+		this.w = width;
+		img.width = width;
+	end
+	
+	function setHeight(height int in)
+		this.h = height;
+		img.height = height;
+	end
+
+	function getData() returns(int[])
+		return(data);
+	end
+		
+	function setData(data int[] in)
+		this.data = data;
+		if (w == 0 || w>1000 || h == 0 || h>1000 || w*h>300000) 
+	    	SysLib.writestdout(
+    			"ERROR: chart width and height should be greater than 0 and less than 1000. "+
+    			"Furthermore, width*height should be less than 300,000: w="+w+",h="+h+",w*h="+(w*h)
+	    	);
+	   	end
+		maxValue int = 0;
+		chxlx string = "0:|";
+		chxly string = "1:|";
+		total int = data.getSize();
+		for (n int from 1 to total by 1) 
+			maxValue = Mathlib.max(maxValue, data[n]);
+			chxly += labels[1 + total - n] + "|";
+		end	   	
+	   	increment int = 25 * (maxValue/(w/50) as int / 25);
+	   	if( increment < 1 )
+	   		increment = 1;
+	   	end
+		for (n int from 1 to maxValue by increment) 
+			chxlx += "" + (n - 1) + "|";
+	    end
+	    chxlx += "" + maxValue + "|";
+	    //
+		// Generate the image REST URL. By encoding all the parameters and data
+		// in the URL, Google will return a custom made PNG image holding the chart.
+		// Feel free to customize this widget to expose things like colors, spacing, etc.
+		// See http://code.google.com/apis/chart/types.html#bar_charts
+		//
+	    img.src = "http://chart.apis.google.com/chart?" +
+			"chs=" + w + "x" + h + 
+			"&cht=bhs&chbh=" + barHeight + ",7" + 
+			"&chxt=x,y&chxl=" + chxlx + chxly +
+			"&chtt=" + title +
+			"&chf=c,lg,45,ffffff,0,FFFFFF,1.0|bg,s" +
+			"&chd=s:" + ChartLib.encode(data, maxValue) +
+			"&chco=FF0000|00EEEE|00FF00|FFFF00|CC00CC";
+	end
+end

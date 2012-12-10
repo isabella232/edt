@@ -31,9 +31,7 @@ import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ReturnStatementValidator extends DefaultASTVisitor {
 	
@@ -76,23 +74,12 @@ public class ReturnStatementValidator extends DefaultASTVisitor {
 			TypeValidator.collectExprsForTypeCompatibility(returnStatement.getParenthesizedExprOpt(), rhsExprMap);
 			
 			for (Map.Entry<Expression, Type> entry : rhsExprMap.entrySet()) {
-				boolean compatible = IRUtils.isMoveCompatible(visitor.getReturnType(), visitor.getReturnField(), entry.getValue(), entry.getKey().resolveMember());
+				boolean compatible = BindingUtil.isMoveCompatible(visitor.getReturnType(), visitor.getReturnField(), entry.getValue(), entry.getKey());
 				if (!compatible) {
-					String typeString = "";
-					if (entry.getValue() == null) {
-						Member m = entry.getKey().resolveMember();
-						if (m != null) {
-							typeString = m.getCaseSensitiveName();
-						}
-					}
-					else {
-						typeString = BindingUtil.getShortTypeString(entry.getValue());
-					}
-					
 					problemRequestor.acceptProblem(entry.getKey(),
 							IProblemRequestor.RETURN_STATEMENT_TYPE_INCOMPATIBLE,
 							new String[] {
-									typeString,
+									BindingUtil.getShortTypeString(entry.getKey(), entry.getValue()),
 									BindingUtil.getShortTypeString(visitor.getReturnType())});
 				}
 			}

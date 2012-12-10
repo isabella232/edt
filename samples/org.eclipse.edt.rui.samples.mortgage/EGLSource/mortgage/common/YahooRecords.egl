@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package mortgage.common;
+
+import eglx.xml.binding.annotation.XMLAttribute;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+import eglx.xml.binding.annotation.XMLStructureKind;
+import eglx.xml.binding.annotation.XMLValue;
+
+record ResultSet{@XMLRootElement{name = "ResultSet", namespace = "urn:yahoo:lcl"}}
+    firstResultPosition string{@XMLAttribute{}};
+    totalResultsAvailable string{@XMLAttribute{}};
+    totalResultsReturned string{@XMLAttribute{}};
+    resultSetMapUrl string{@XMLElement{name = "ResultSetMapUrl", namespace = "urn:yahoo:lcl"}};
+    result Result[]{@XMLElement{name = "Result", namespace = "urn:yahoo:lcl"}};
+end
+
+record Result
+    id string{@XMLAttribute{}};
+    title string{@XMLElement{name = "Title", namespace = "urn:yahoo:lcl"}};
+    address string{@XMLElement{name = "Address", namespace = "urn:yahoo:lcl"}};
+    city string{@XMLElement{name = "City", namespace = "urn:yahoo:lcl"}};
+    state string{@XMLElement{name = "State", namespace = "urn:yahoo:lcl"}};
+    phone string{@XMLElement{name = "Phone", namespace = "urn:yahoo:lcl"}};
+    latitude string{@XMLElement{name = "Latitude", namespace = "urn:yahoo:lcl"}};
+    longitude string{@XMLElement{name = "Longitude", namespace = "urn:yahoo:lcl"}};
+    rating Rating{@XMLElement{name = "Rating", namespace = "urn:yahoo:lcl"}};
+    distance string{@XMLElement{name = "Distance", namespace = "urn:yahoo:lcl"}};
+    url1 string{@XMLElement{name = "Url", namespace = "urn:yahoo:lcl"}};
+    clickUrl string{@XMLElement{name = "ClickUrl", namespace = "urn:yahoo:lcl"}};
+    mapUrl string{@XMLElement{name = "MapUrl", namespace = "urn:yahoo:lcl"}};
+    businessUrl string?{@XMLElement{name = "BusinessUrl", namespace = "urn:yahoo:lcl"}};
+    businessClickUrl string?{@XMLElement{name = "BusinessClickUrl", namespace = "urn:yahoo:lcl"}};
+    categories Categories{@XMLElement{name = "Categories", namespace = "urn:yahoo:lcl"}};
+end
+
+record Rating
+    averageRating string{@XMLElement{name = "AverageRating", namespace = "urn:yahoo:lcl"}};
+    totalRatings string{@XMLElement{name = "TotalRatings", namespace = "urn:yahoo:lcl"}};
+    totalReviews string{@XMLElement{name = "TotalReviews", namespace = "urn:yahoo:lcl"}};
+    lastReviewDate string{@XMLElement{name = "LastReviewDate", namespace = "urn:yahoo:lcl"}};
+    lastReviewIntro string{@XMLElement{name = "LastReviewIntro", namespace = "urn:yahoo:lcl"}};
+end
+
+record Categories
+    category Category{@XMLElement{name = "Category", namespace = "urn:yahoo:lcl"}};
+end
+
+record Category{@XMLValue{kind = XMLStructureKind.simpleContent}}
+    id string{@XMLAttribute{}};
+    egl_value string?;
+end

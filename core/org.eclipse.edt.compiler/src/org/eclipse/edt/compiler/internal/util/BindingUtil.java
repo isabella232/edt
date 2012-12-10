@@ -13,6 +13,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -877,6 +878,17 @@ public class BindingUtil {
 		return result.toString();
 	}
 	
+	public static String getShortTypeString(Expression expr, Type type) {
+		if (expr instanceof ArrayLiteral && type instanceof ArrayType && TypeUtils.Type_NULLTYPE.equals(((ArrayType)type).getElementType())) {
+			// Don't return "null[]" - instead just return the canonical expression. One or more elements caused the type to be null, like a function pointer.
+			return expr.getCanonicalString();
+		}
+		if (type != null) {
+			return getShortTypeString(type);
+		}
+		return getTypeName(expr.resolveMember());
+	}
+	
 	public static String getShortTypeString(Type binding) {
 		return getShortTypeString(binding, false);
 	}
@@ -1326,5 +1338,25 @@ public class BindingUtil {
 		
 		// For reference types they must be in the same hierarchy.
 		return TypeUtils.areCompatible(lhsType.getClassifier(), rhsType.getClassifier());
+	}
+	
+	public static boolean isMoveCompatible(Type targetType, Member targetMember, Type sourceType, Expression source) {
+		if (source instanceof ArrayLiteral) {
+			Type elementType = targetType;
+			if (targetType instanceof ArrayType) {
+				elementType = ((ArrayType)targetType).getElementType();
+			}
+			for (Expression e : ((ArrayLiteral)source).getExpressions()) {
+				Type exprType = resolveGenericType(e.resolveType(), e);
+				if (targetType instanceof ArrayType && TypeUtils.Type_NULLTYPE.equals(exprType) && ((ArrayType)targetType).elementsNullable()) {
+					// Allow null entries in the literal.
+				}
+				else if (!IRUtils.isMoveCompatible(elementType, targetMember, exprType, e.resolveMember())) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return IRUtils.isMoveCompatible(targetType, targetMember, sourceType, source.resolveMember());
 	}
 }

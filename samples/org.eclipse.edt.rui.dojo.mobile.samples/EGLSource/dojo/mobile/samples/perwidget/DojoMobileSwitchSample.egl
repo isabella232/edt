@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.mobile.widgets.DojoMobileSwitch;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+handler DojoMobileSwitchSample type RUIhandler {initialUI = [ View ],onConstructionFunction = start, cssFile="css/com.ibm.egl.rui.dojo.mobile.samples.css", title="DojoMobileSwitchSample"}
+	
+	View DojoMobileView{
+		selected = true, headerTitle = "Switch Sample",
+		/*backText = "Back", backView = */
+		children = [
+			intro, 
+			Box, 
+			new HTML { margin = 20, text = "Switch with customized onText, offText and value"},
+			Switch1
+		]
+	};
+	
+	intro Div { margin = 10, font = "Arial", children = [		
+		new HTML { text="This sample shows how to use the DojoMobileSwitch widget, which toggles between two values.<br/>" + 
+		"You can control the text on the switch and use the onChange event to get the new value after the switch. The switch value change is noted.<br/>" , marginBottom=20}		
+	]};
+	Switch DojoMobileSwitch{ margin = 10, onChange ::= changeSwitch };
+	TextArea TextArea{ margin = 10, width = 100, height = 100};
+	Switch1 DojoMobileSwitch{ margin = 20, onText = "True", offText = "False", value = false };
+	Box Box{ margin = 10,
+		children = [ Switch, TextArea ] };	
+	
+	
+	function changeSwitch(e event in)
+		TextArea.append("Value is " + Switch.value + "\n");	
+	end
+	
+	function start()
+	end	
+end

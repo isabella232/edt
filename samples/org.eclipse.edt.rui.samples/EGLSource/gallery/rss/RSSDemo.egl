@@ -1,0 +1,172 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.rss;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.CheckBox;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.HyperLink;
+import org.eclipse.edt.rui.widgets.List;
+import org.eclipse.edt.rui.widgets.Span;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.http.IHttp;
+import eglx.javascript.Job;
+import eglx.javascript.RunFunction;
+import eglx.lang.AnyException;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+
+ //Author: Andrew Knight
+handler RSSDemo type RUIHandler { initialUI = [ ui ], onConstructionFunction = start }
+
+	//constants for the handler
+	private maxNumStories int = 3;
+	
+	private feedNames string[] = [ 
+		"Ideas from IBM",
+		"Astronomy Picture of the Day",
+		"Yahoo! Top Stories"
+	];
+	private feeds string[] = [ 
+		"http://www.ibm.com/ibm/ideasfromibm/us/library/index.rss",
+		"http://antwrp.gsfc.nasa.gov/apod.rss",
+		"http://rss.news.yahoo.com/rss/topstories"
+	];
+	
+	//input header widgets
+	inputLabel TextLabel{ margin = 5, text = "Select an RSS Feed: " };
+	rssFeedList List{ margin = 5, values = feedNames, selection = 1, onChange ::= feedChanged };
+	rssFeedBox Box{ columns = 1, children = [ inputLabel, rssFeedList ] };
+	
+	//the user can choose to enter their own feed
+	ownFeed CheckBox{ selected = false, text = "I want to enter my own RSS feed URL", onChange ::= ownFeedChanged };
+	ownFeedBox Box{ margin = 5, marginBottom = 0, marginLeft = 2, children = [ownFeed] };
+	
+	//field and load button
+	rssField TextField{ margin = 5, marginLeft = 21, width = 450, text = "", disabled = true };
+	load Button{ margin = 5, marginTop = 15, text = "Load Feed", onClick ::= loadPressed };
+	loadLabel TextLabel { margin = 10, marginTop = 20, text = " " };
+	loadBox Box { columns = 2, children = [ load, loadLabel ] };
+	
+	//output for RSS feed
+	bar HTML { text = "<hr>" };
+	outputLabel TextLabel{ text = "", fontSize = 20 };
+	outputBox Box { padding = 8, columns = 1, children = [] };
+	
+	//The UI
+	ui Box { columns = 1, children = [ rssFeedBox, ownFeedBox, rssField, loadBox, bar, outputBox ] };
+	
+	//onConstruction function
+	function start()
+		setFeed();
+	end
+	
+	//Sets the feed to the current selection.
+	function setFeed()
+		rssField.text = feeds[rssFeedList.selection];
+	end
+	
+	//called whenever the load button is clicked
+	//note how the onClick property for a Button is a list of function references
+	function loadPressed( e Event in )
+		new Job { name = "loading", runFunction = showLoading }.schedule();
+		outputBox.fadeOut( 200, callRSS20 );
+	end
+	
+	//functions to show and hide "loading..." in a smooth fashion
+	//called by scheduled jobs
+	function showLoading()
+		loadLabel.text = "Loading...";
+		loadLabel.fadeIn( 200, null );
+	end
+	
+	function hideLoading()
+		loadLabel.fadeOut( 200, null );
+	end
+	
+	//Whenever the combo box selection is changed, update the text field with the feed name.
+	function feedChanged( e Event in )
+		setFeed();
+	end
+	
+	//The user can enter their own feed by checking the box.  The text field then becomes editable.
+	function ownFeedChanged( e Event in )
+		rssField.text = "";
+		if ( ownFeed.selected )
+			rssFeedList.disabled = true;
+			rssField.disabled = false;
+			rssField.focus();
+		else
+			rssFeedList.disabled = false;
+			rssField.disabled = true;
+			setFeed();
+		end
+	end
+	
+	//calls the RSS service, given the text in the rssField
+	//when calling a service from a RUIHandler, both a return function and an exception function
+	//	must be specified
+	function callRSS20()
+		call NewsFeedProxyLib.getRSS20(rssField.text) using Resources.getResource("binding:news") as IHttp returning to handleRSS20 onException handleError;
+	end
+	
+	//on a successful connection, handles the data from the RSS feed
+	function handleRSS20(result RSS20 in)
+		channel RSSChannel = result.channel;
+		stories Widget[]{};
+		
+		new Job { name = "doneLoading", runFunction = hideLoading }.schedule();
+		
+		if ( channel.item.getSize() == 0 )
+			outputLabel.text =  "There are no stories to display.";
+		else
+			//RSS title
+			outputLabel.text = channel.title;
+			
+			//error-checks the input number of stories to display
+			//cannot display more stories than what comes back
+			numStories int = MathLib.min(channel.item.getSize() as int, maxNumStories);
+			if ( rssFeedList.selection == 3 or rssFeedList.selection == 4 )
+				numStories = 2;
+			end
+			
+			//add each story to its own box, then add that box to the columns in the larger story box
+			for (i int from 1 to numStories)
+				item RSSItem =  channel.item[i];
+				stories.appendElement( new Box { 
+					columns=1, 
+					margin = 10,
+					children = [
+						new HyperLink {target="_blank", href=item.link, text=item.title },
+						new Span { text = item.description }
+					]
+				} );
+			end
+		end
+		
+		outputBox.children = [ outputLabel ];
+		outputBox.appendChildren( stories );
+		outputBox.fadeIn( 200, null );
+	end 
+	
+	//on a failed connection, prints the error message
+	function handleError(ae AnyException in)
+		loadLabel.fadeOut( 200, null );
+		outputLabel.text = "ERROR: failed to retrieve RSS feed";
+		outputBox.children = [ outputLabel, new TextLabel { text = ae.message, color = "red" } ];
+		outputBox.fadeIn( 200, null );
+	end
+end

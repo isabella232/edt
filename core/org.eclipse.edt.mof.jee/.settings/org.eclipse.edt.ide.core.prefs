@@ -1,0 +1,5 @@
+#Mon Mar 12 15:51:44 EDT 2012
+DefaultDeploymentDescriptorPath/<project>=/org.eclipse.edt.mof.jee/EGLSource/org_eclipse_edt_externaltypes_jee.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds/<project>=

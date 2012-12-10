@@ -1,0 +1,64 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.Serializable;
+
+
+externalType BaseDataQueue extends Serializable type JavaObject
+
+    private constructor();
+
+    function addDataQueueListener(arg0 DataQueueListener? in);
+
+    function addObjectListener(arg0 ObjectListener? in);
+
+    function addPropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function addVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function clear(){@Throws};
+
+    function _delete(){@externalName{"delete"}, @Throws};
+
+    function exists() returns(boolean){@Throws};
+
+    function getCcsid() returns(int);
+
+    function getDescription() returns(string?){@Throws};
+
+    function getForceToAuxiliaryStorage() returns(boolean){@Throws};
+
+    function getMaxEntryLength() returns(int){@Throws};
+
+    function getName() returns(string?);
+
+    function getPath() returns(string?);
+
+    function getSaveSenderInformation() returns(boolean){@Throws};
+
+    function getSystem() returns(AS400?);
+
+    function isFIFO() returns(boolean){@Throws};
+
+    function refreshAttributes(){@Throws};
+
+    function removeDataQueueListener(arg0 DataQueueListener? in);
+
+    function removeObjectListener(arg0 ObjectListener? in);
+
+    function removePropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function removeVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function setCcsid(arg0 int in){@Throws};
+
+    function setPath(arg0 string? in){@Throws};
+
+    function setSystem(arg0 AS400? in){@Throws};
+
+    function toString() returns(string?);
+end
+

@@ -1,0 +1,34 @@
+package com.ibm.as400.security.auth;
+
+import com.ibm.as400.access.AS400;
+import com.ibm.as400.access.User;
+import eglx.java.JavaObject;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.Serializable;
+import java.security.Principal;
+
+
+externalType AS400Principal extends Principal, Serializable type JavaObject
+
+    private constructor();
+
+    function addPropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function addVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function getName() returns(string?);
+
+    function getSystem() returns(AS400?);
+
+    function getUser() returns(User?){@Throws};
+
+    function getUserProfileName() returns(string?);
+
+    function removePropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function removeVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function setSystem(arg0 AS400? in){@Throws};
+end
+

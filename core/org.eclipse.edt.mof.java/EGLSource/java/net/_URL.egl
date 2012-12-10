@@ -1,0 +1,39 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.Throws;
+import java.io.InputStream;
+import java.io.Serializable;
+
+externalType _URL extends Serializable type JavaObject 
+{externalName = "URL"}
+  constructor(arg0 _URL? IN,arg1 string? IN,arg2 URLStreamHandler? IN){@Throws};
+  constructor(arg0 _URL? IN,arg1 string? IN){@Throws};
+  constructor(arg0 string? IN){@Throws};
+  constructor(arg0 string? IN,arg1 string? IN,arg2 int IN,arg3 string? IN,arg4 URLStreamHandler? IN){@Throws};
+  constructor(arg0 string? IN,arg1 string? IN,arg2 string? IN){@Throws};
+  constructor(arg0 string? IN,arg1 string? IN,arg2 int IN,arg3 string? IN){@Throws};
+   function equals(arg0 Object? IN)  returns(boolean);
+   function getAuthority()  returns(string?);
+   function getContent()  returns(Object?){@Throws};
+   function getDefaultPort()  returns(int);
+   function getFile()  returns(string?);
+   function getHost()  returns(string?);
+   function getPath()  returns(string?);
+   function getPort()  returns(int);
+   function getProtocol()  returns(string?);
+   function getQuery()  returns(string?);
+   function getRef()  returns(string?);
+   function getUserInfo()  returns(string?);
+   function hashCode()  returns(int);
+   function openConnection()  returns(URLConnection?){@Throws};
+   function openConnection(arg0 Proxy? IN)  returns(URLConnection?){@Throws};
+   function openStream()  returns(InputStream?){@Throws};
+   function sameFile(arg0 _URL? IN)  returns(boolean);
+   static function setURLStreamHandlerFactory(arg0 URLStreamHandlerFactory? IN);
+   function toExternalForm()  returns(string?);
+   function toString()  returns(string?);
+   function toURI()  returns(URI?){@Throws};
+end
+

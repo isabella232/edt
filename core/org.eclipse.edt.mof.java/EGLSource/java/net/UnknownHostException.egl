@@ -1,0 +1,13 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import java.io.IOException;
+
+
+externalType UnknownHostException extends IOException type JavaObject
+
+    constructor();
+
+    constructor(arg0 string? in);
+end
+

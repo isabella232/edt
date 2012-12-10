@@ -1,0 +1,97 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.widgets.DojoColorPalette;
+import dojo.widgets.DojoDialog;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+
+Handler DojoColorPaletteSample type RUIHandler{ initialUI = [ ui ] }
+
+	ui Box{ padding=30, columns=1,  children = [
+		new HTML { 
+			text = "Dojo ColorPalette Sample", fontSize = 20, marginBottom = 20 
+		},
+		new HTML { 
+			marginBottom = 20, 
+			text = "A Dojo ColorPalette lets you choose a color." 
+		}, 
+		new Box { columns=3, backgroundColor = "#E8F2FE", children = [
+			new Div { margin=11, padding=13, backgroundColor="lightyellow", children = [
+				new HTML { 
+					text = "ColorPalette with grid size 3x4:"
+				},
+				new DojoColorPalette {
+					margin = 11,
+					small = true, 
+					onChange ::= change 
+				}
+			]}, 
+			new Div { margin=11, padding=13, backgroundColor="lightyellow", children = [
+				new HTML {
+					text = "ColorPalette with grid size 7x10:"
+				},
+				new DojoColorPalette {
+					margin = 11,
+					onChange ::= change
+				}
+			]},
+			new Div { margin=11, padding=13, backgroundColor="lightyellow", children = [
+				new HTML {
+					text = "Choose a color:"
+				},
+				new Div {
+					margin = 11, width = 15, height = 15, id = "color", backgroundColor = "red", 
+					borderWidth = 1, borderStyle = "solid", borderColor = "#333", 
+					onClick ::= chooseColor
+				}
+			]} 
+		]},
+		message
+	]};
+    message TextArea { marginTop=10, width = 500, height = 160 };
+ 	
+	function change(e Event in)
+		palette DojoColorPalette = e.widget;
+		message.text ::= "You chose \"" + palette.value + "\"\n";
+	end
+	
+	popup DojoDialog { 
+		title = "Choose a color",
+		children = [
+			new DojoColorPalette {
+				onChange ::= updateColor
+			} 
+		]
+	};
+	
+	function chooseColor(e Event in)
+		message.text ::= "Showing dialog to choose a color\n";
+		popup.showDialog();
+	end
+	
+	function updateColor(e Event in)
+		chooser DojoColorPalette = e.widget;
+		square Widget = document.body.getElementById("color");
+		square.backgroundColor = chooser.value;
+		message.text ::= "Updated color \"" + chooser.value + "\"\n";
+		popup.hideDialog();
+	end
+
+end
+

@@ -1,0 +1,17 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+
+
+externalType OutputStream extends Closeable, Flushable type JavaObject
+
+    private constructor();
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function flush(){@Throws};
+
+    function write(arg0 int in){@Throws};
+end
+

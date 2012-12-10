@@ -1,0 +1,88 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package utils.dialog;
+
+import org.eclipse.edt.rui.widgets.Box;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoDialog;
+import dojo.widgets.DojoDialogLib;
+import eglx.javascript.Job;
+import eglx.lang.SysLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+handler DojoDialogLibSample type RUIhandler { initialUI = [ ui ]}
+	
+	ui Box{ id = "SampleBox", columns = 1, children = [ showAlertButton, showMessageButton, showQuestionButton, showWarningButton, showErrorButton, showRetryCancelButton, showProgressDialogButton, showProgressWithCancelDialogButton] };
+	showAlertButton DojoButton{text = "Show Alert", onClick ::= showAlertButton_onClick };
+	showMessageButton DojoButton{text = "Show Message", onClick ::= showMessageButton_onClick };
+	showQuestionButton DojoButton{ text = "Show Question", onClick ::= showQuestionButton_onClick };
+	showWarningButton DojoButton{id = "showWarning", text = "Show Warning", onClick ::= showWarningButton_onClick };
+	showErrorButton DojoButton{ text = "Show Error", onClick ::= showErrorButton_onClick };
+	showRetryCancelButton DojoButton{ text = "Show Retry/Cancel", onClick ::= showRetryCancelButton_onClick };
+	showProgressDialogButton DojoButton{ text = "Show Progress", onClick ::= showProgressButton_onClick };
+	showProgressWithCancelDialogButton DojoButton{ text = "Show Progress (with cancel)", onClick ::= showProgressWithCancelButton_onClick };
+	
+	function showAlertButton_onClick(event Event in)
+		DojoDialogLib.showAlert("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra ipsum sit amet orci tincidunt ut tincidunt velit venenatis. Nam nec sapien consequat purus lacinia luctus. Nulla facilisi. Aliquam congue eros quis augue molestie varius. Maecenas lobortis mauris eget erat congue in ullamcorper magna viverra. Aliquam a nulla dolor. Phasellus aliquam venenatis erat quis sagittis.\n\nFusce luctus, dolor non eleifend dignissim, turpis leo convallis augue, vel malesuada nibh turpis euismod orci. Phasellus eget fermentum nunc. Vestibulum tempus neque in sem pharetra vel placerat nisi blandit. Vestibulum molestie, arcu at elementum scelerisque, magna felis luctus lorem, a porttitor orci enim ac lorem. In aliquet sem nec turpis dignissim molestie. Integer tortor nunc, feugiat sit amet gravida id, tincidunt in magna. Nullam porttitor pretium felis, ac commodo lectus gravida a. Pellentesque eu tristique elit.\n\nProin ac turpis at risus congue tincidunt. In mollis dui a sapien tincidunt id semper nisl condimentum.");
+	end
+
+	function showMessageButton_onClick(event Event in)
+		DojoDialogLib.showMessage("Alert", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra ipsum sit amet orci tincidunt ut tincidunt velit venenatis. Nam nec sapien consequat purus lacinia luctus. Nulla facilisi. Aliquam congue eros quis augue molestie varius. Maecenas lobortis mauris eget erat congue in ullamcorper magna viverra. Aliquam a nulla dolor. Phasellus aliquam venenatis erat quis sagittis.\n\nFusce luctus, dolor non eleifend dignissim, turpis leo convallis augue, vel malesuada nibh turpis euismod orci. Phasellus eget fermentum nunc. Vestibulum tempus neque in sem pharetra vel placerat nisi blandit. Vestibulum molestie, arcu at elementum scelerisque, magna felis luctus lorem, a porttitor orci enim ac lorem. In aliquet sem nec turpis dignissim molestie. Integer tortor nunc, feugiat sit amet gravida id, tincidunt in magna. Nullam porttitor pretium felis, ac commodo lectus gravida a. Pellentesque eu tristique elit.\n\nProin ac turpis at risus congue tincidunt. In mollis dui a sapien tincidunt id semper nisl condimentum.", buttonClicked);
+	end
+	
+	function showQuestionButton_onClick(event Event in)
+		DojoDialogLib.showQuestion("Question", "This is a sample question dialog. Are you able to see it?", buttonClicked);
+	end
+	
+	function showWarningButton_onClick(event Event in)
+		DojoDialogLib.showWarning("Access Warning", "You are not authorized to access the database <b>SAMPLES</b>.", buttonClicked);
+	end	
+	
+	function showErrorButton_onClick(event Event in)
+		DojoDialogLib.showError("Database Error", "An error occurred while trying to access the database <b>SAMPLES</b>.", buttonClicked);
+	end	
+
+	function showRetryCancelButton_onClick(event Event in)
+		DojoDialogLib.showRetryCancel("Database Error", "An error occurred while trying to access the database <b>SAMPLES</b>.", buttonClicked);
+	end	
+		
+	function showProgressButton_onClick(event Event in)
+		showProgressDialog(false);
+	end	
+	
+	function showProgressWithCancelButton_onClick(event Event in)
+		showProgressDialog(true);
+	end
+	
+	private progressDialog DojoDialog;
+	
+	private function showProgressDialog(allowCancel boolean in)
+		progressDialog = DojoDialogLib.showProgress("Processing", "Loading data. Please wait...", allowCancel, buttonClicked);
+		closeProgressDialogJob Job = new Job { runFunction = closeProgressDialog };
+		closeProgressDialogJob.schedule(2000);		
+	end 
+	
+	private function closeProgressDialog() 
+		if (progressDialog != null)
+			progressDialog.hideDialog();
+		end
+	end		
+	
+	function buttonClicked(id String in, e Event in) returns (boolean) 
+		SysLib.writeStdOut("Button clicked: " + id);
+		
+		return (true);
+	end	
+		
+end

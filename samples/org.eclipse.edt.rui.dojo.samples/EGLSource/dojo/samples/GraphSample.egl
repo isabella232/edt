@@ -1,0 +1,102 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples;
+                  
+import dojo.widgets.BarGraphData;
+import dojo.widgets.BubbleChartData;
+import dojo.widgets.DojoBarGraph;
+import dojo.widgets.DojoBubbleChart;
+import dojo.widgets.DojoGrid;
+import dojo.widgets.DojoLineGraph;
+import dojo.widgets.DojoPieChart;
+import dojo.widgets.LineGraphData;
+import dojo.widgets.PieChartData;
+import eglx.ui.rui.RUIHandler;
+import utils.portal.Portal;
+import utils.portal.Portlet;
+
+record Account
+	Name String;
+	Incoming BigInt;
+	Outgoing BigInt;
+end
+
+Handler GraphSample Type RUIHandler{ initialUI = [ ui ], onConstructionFunction = start }
+	
+	ui Portal { columns = 3, columnWidths =  [ 340, 340, 340 ], margin = 10 };
+	
+	function start() 
+		ui.addPortlet(new Portlet { title = "Overview", width = 320, children = [
+			new DojoBubbleChart{ 
+				color = "blue",	minX = -2, maxX = 7, minY = -2, maxY = 11,
+				width = 300, height = 300, data = [
+					new BubbleChartData { x=0.5, y=5,   size=1.4, color="red",	  tooltip="Gas" }, 
+					new BubbleChartData { x=1.5, y=1.5, size=4.5, color="green",  tooltip="Mortgage" }, 
+					new BubbleChartData { x=2,   y=9,   size=1.5, color="blue",	  tooltip="Electric" }, 
+					new BubbleChartData { x=5,   y=0.3, size=0.8, color="orange", tooltip="Cable" }
+				]
+			}
+		]}, 1);
+
+	ui.addPortlet( 	new Portlet { title = "Accounts", children = [
+			new DojoGrid { data = [
+				new Account {Name = "Americas", Incoming = 100, Outgoing = 40 }, 
+				new Account {Name = "Asia", Incoming = 200, Outgoing = 70 }, 
+				new Account {Name = "Europe", Incoming = 200, Outgoing = 15 }, 
+				new Account {Name = "Moon", Incoming = 120, Outgoing = 10 }
+			]}
+		]}, 2);
+		
+		
+		ui.addPortlet( new Portlet { title = "KPI", children = [
+			new DojoLineGraph{ 
+				themeColor = "green", showMarkers = true, tension = 0, width = "320", height = "300", 
+				minX = "-0.2", maxX = "5.2", minY = "1.3", maxY = "8.1", 
+				data = [ 
+				 	new LineGraphData{ value=1.5 },
+					new LineGraphData{ value=2.8 },
+					new LineGraphData{ value=5.4 },
+					new LineGraphData{ value=3.6 },
+					new LineGraphData{ value=6 },
+					new LineGraphData{ value=7.9 }
+				]
+			}
+		]}, 3);
+		
+		ui.addPortlet(new Portlet { title = "Shipping",  children = [
+			new DojoBarGraph {
+		    	barGap = 5, vertical = true, themeColor = "red",
+		    	data = [
+		       		new BarGraphData{ value=3 },
+					new BarGraphData{ value=1 },
+					new BarGraphData{ value=0 },
+					new BarGraphData{ value=4 },
+					new BarGraphData{ value=2 },
+					new BarGraphData{ value=8 }					
+				]
+		    }
+		]}, 2);
+		
+		ui.addPortlet(new Portlet { title = "Manufacturing",children = [
+			new DojoPieChart { 
+				font = "Arial",	fontSize = 12, radius = 90, width = 220, height = 220,
+				labelOffset = 50, fontColor = "yellow", data = [ 
+				 	new PieChartData{ y=2, text="automatic", 	color="#334433" },
+					new PieChartData{ y=2, text="manual", 		color="#3366aa" },
+					new PieChartData{ y=1, text="semi",			color="#6699aa" }
+				]
+			}
+		]}, 1);
+		
+	end
+
+end

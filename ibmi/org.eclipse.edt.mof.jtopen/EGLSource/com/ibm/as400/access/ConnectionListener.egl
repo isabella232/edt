@@ -1,0 +1,15 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.util.EventListener;
+
+
+externalType ConnectionListener extends EventListener type JavaObject
+
+    private constructor();
+
+    function connected(arg0 ConnectionEvent? in);
+
+    function disconnected(arg0 ConnectionEvent? in);
+end
+

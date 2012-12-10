@@ -1,0 +1,80 @@
+package javax.servlet.http;
+
+import eglx.java.JavaObject;
+import javax.servlet.ServletResponse;
+
+
+externalType HttpServletResponse extends ServletResponse type JavaObject
+    static SC_ACCEPTED int;
+    static SC_BAD_GATEWAY int;
+    static SC_BAD_REQUEST int;
+    static SC_CONFLICT int;
+    static SC_CONTINUE int;
+    static SC_CREATED int;
+    static SC_EXPECTATION_FAILED int;
+    static SC_FORBIDDEN int;
+    static SC_FOUND int;
+    static SC_GATEWAY_TIMEOUT int;
+    static SC_GONE int;
+    static SC_HTTP_VERSION_NOT_SUPPORTED int;
+    static SC_INTERNAL_SERVER_ERROR int;
+    static SC_LENGTH_REQUIRED int;
+    static SC_METHOD_NOT_ALLOWED int;
+    static SC_MOVED_PERMANENTLY int;
+    static SC_MOVED_TEMPORARILY int;
+    static SC_MULTIPLE_CHOICES int;
+    static SC_NO_CONTENT int;
+    static SC_NON_AUTHORITATIVE_INFORMATION int;
+    static SC_NOT_ACCEPTABLE int;
+    static SC_NOT_FOUND int;
+    static SC_NOT_IMPLEMENTED int;
+    static SC_NOT_MODIFIED int;
+    static SC_OK int;
+    static SC_PARTIAL_CONTENT int;
+    static SC_PAYMENT_REQUIRED int;
+    static SC_PRECONDITION_FAILED int;
+    static SC_PROXY_AUTHENTICATION_REQUIRED int;
+    static SC_REQUEST_ENTITY_TOO_LARGE int;
+    static SC_REQUEST_TIMEOUT int;
+    static SC_REQUEST_URI_TOO_LONG int;
+    static SC_REQUESTED_RANGE_NOT_SATISFIABLE int;
+    static SC_RESET_CONTENT int;
+    static SC_SEE_OTHER int;
+    static SC_SERVICE_UNAVAILABLE int;
+    static SC_SWITCHING_PROTOCOLS int;
+    static SC_TEMPORARY_REDIRECT int;
+    static SC_UNAUTHORIZED int;
+    static SC_UNSUPPORTED_MEDIA_TYPE int;
+    static SC_USE_PROXY int;
+
+    private constructor();
+
+    function addCookie(arg0 Cookie? in);
+
+    function addDateHeader(arg0 string? in, arg1 bigInt in);
+
+    function addHeader(arg0 string? in, arg1 string? in);
+
+    function addIntHeader(arg0 string? in, arg1 int in);
+
+    function containsHeader(arg0 string? in) returns(boolean);
+
+    function encodeRedirectURL(arg0 string? in) returns(string?);
+
+    function encodeURL(arg0 string? in) returns(string?);
+
+    function sendError(arg0 int in, arg1 string? in){@Throws};
+
+    function sendError(arg0 int in){@Throws};
+
+    function sendRedirect(arg0 string? in){@Throws};
+
+    function setDateHeader(arg0 string? in, arg1 bigInt in);
+
+    function setHeader(arg0 string? in, arg1 string? in);
+
+    function setIntHeader(arg0 string? in, arg1 int in);
+
+    function setStatus(arg0 int in);
+end
+

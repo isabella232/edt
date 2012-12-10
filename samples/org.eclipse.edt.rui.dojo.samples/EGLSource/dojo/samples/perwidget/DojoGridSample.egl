@@ -1,0 +1,115 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import dojo.widgets.DojoCheckBox;
+import dojo.widgets.DojoGrid;
+import dojo.widgets.DojoGridColumn;
+import eglx.lang.SysLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+import dojo.widgets.DojoDialogLib;
+
+Record Stock
+	Symbol String;
+	SelectQuote boolean;
+	Quote int;
+	NumShares int;
+end
+
+Handler DojoGridSample Type RUIHandler { initialUI = [ui] }
+	grid DojoGrid {
+		marginLeft=20,
+		behaviors = [ addEditors, centerColumns ],
+		headerBehaviors = [ resize, centerColumns ],
+		columns = [
+			new DojoGridColumn { name = "SelectQuote", displayName = "X", width = 40},
+			new DojoGridColumn { name = "Symbol" },
+			new DojoGridColumn { name = "Quote", displayName = "Price" },
+			new DojoGridColumn { name = "NumShares", displayName = "Shares" }
+		], 
+		data = [
+			new Stock{Symbol = "Company1", Quote = 100, NumShares = 4, SelectQuote = false}, 
+			new Stock{Symbol = "Company2", Quote = 200, NumShares = 100, SelectQuote = false}, 
+			new Stock{Symbol = "Company3", Quote = 200, NumShares = 15, SelectQuote = false}, 
+			new Stock{Symbol = "Company4", Quote = 120, NumShares = 10, SelectQuote = true}, 
+			new Stock{Symbol = "Company5", Quote = 200, NumShares = 20, SelectQuote = false}
+		]
+	};
+	
+	ui Div { margin = 20, children = [ 
+ 		new HTML { 
+ 			marginBottom = 15, 
+ 			text = "Dojo Grid Sample", 
+ 			fontSize = "20px" 
+ 		}, 
+ 		grid,
+	 	new HTML {
+	 		marginTop = 15,
+	 		text = "Key features of EGL's version of the Dojo Grid:<ul>" + 
+	 			"<li>You can add any records to this grid and the columns are created automatically.<p>" +
+	 			"  <li>Behaviors can be added to enhance the grid headers. Examples shown here are:<ul> " +
+	 			"	<li>Changing the width of the SelectQuote column to 23 pixels." +
+	 			"	<li>Changing the text alignment for the NumShares column to \"center\"." +
+	 			"  </ul>" +
+	 			"  <li>In addition, behaviors can be added to enhance the cells themselves. Examples shown here are:<ul> " +
+	 			"	<li>Replacing the SelectQuote columns's true/false values with a Dojo checkbox. The changed value won't be saved." +
+	 			"	<li>Replacing Quote values with a TextField to allow in-place editing. The changed value will be saved." +
+	 			"  </ul>" +
+	 			"</ul>Features already provided by the Dojo Grid:<ul>" +
+	 			"<li>Columns can be sorted by clicking their header." +
+	 			"<li>Different styling themes enabled by CSS." +
+	 			"<li>Columns are resizable."	 			
+	 	}
+ 	]};
+
+	function addEditors(grid DojoGrid in, cell Widget in, row any in, rowNumber int in, column DojoGridColumn in) 
+		if (column.name == "Quote")
+			textField TextField{ text =  grid.data[rowNumber].Quote, margin=3, width = 85, maxLength = 10, onChange ::= TextField_onChange };
+			textField.setAttribute("DojoGridRow", rowNumber);
+			textField.setAttribute("DojoGridColumnName", column.name);
+			cell.children = [
+				textField 
+			];
+		end
+		if (column.name == "SelectQuote")
+			cell.padding = 0;
+			cell.width = 40;
+			cell.children = [
+				new DojoCheckBox { selected = (grid.data[rowNumber].SelectQuote as string == "true")  , margin=3, width=17 }
+			];
+		end
+	end
+  
+	function centerColumns(grid DojoGrid in, cell Widget in, row any in, rowNumber int in, column DojoGridColumn in) 
+		cell.style = "text-align: center";
+	end
+
+	function resize(grid DojoGrid in, cell Widget in, row any in, rowNumber int in, column DojoGridColumn in) 
+		if (column.name == "SelectQuote")
+			cell.width = 40;
+		end		
+	end
+	
+	function TextField_onChange(e Event in)
+		text TextField = e.widget;
+		rowNumber int = text.getAttribute("DojoGridRow");			
+		columnName string = text.getAttribute("DojoGridColumnName");
+		grid.data[rowNumber].Quote = text.text;
+		grid.data = grid.data;
+	end
+end 

@@ -1,0 +1,200 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.draganddrop;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.Image;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+
+handler TicTacToeDemo type RUIHandler { onConstructionFunction = start, initialUI = [ ui ] }
+	
+	//Tic-tac-toe is a classic game for lining up your marks in a row.  This EGL RUI handler
+	//implements that game using drag and drop capabilities.
+	
+	//current turn
+	turn int = 0;
+	
+	//starting positions for the mark to drag and drop
+	private markInitX int = 500;
+	private markInitY int = 150;
+	
+	//UI components
+	mark Mark {};
+	board Board {};
+	instructions TextLabel {
+		text = "It's Tic-Tac-Toe!  Grab a friend, and drag the X's and O's onto the board."
+	};
+	newGame Button { text = "New Game", onClick ::= resetGame };
+	
+	//holds the mark and the board
+	mat Box {
+		columns = 2,
+		padding = 20,
+		children = [ board, mark ]
+	};
+	
+	//the main container
+	ui Box {
+		columns = 1,
+		children = [ instructions, mat, newGame ],
+		padding = 5
+	};
+	
+	//This function starts the game.
+	function start()
+		//set up the mark
+		mark.makeMarkSize();
+		mark.setPoint( markInitX, markInitY );
+		
+		//attach drag and drop function references for the mark
+		mark.onStartDrag = startDrag; 
+ 		mark.onDrag = drag; 
+ 		mark.onDropOnTarget = drop;
+	end
+	
+	//This is the startDrag function.  It enlarges the mark image size. It is activated
+	//once when the user begins to drag the mark.
+	function startDrag( widget Widget in, x int in, y int in) returns(boolean)
+		mark.makeMoveSize();
+		return (true);
+	end
+	
+	//This is the drag function.  It moves the mark's location on the screen.  When 
+	//the mark is dragged over the board, squares light up.  The drag function is activated
+	//any time the mark widget is being dragged.
+	function drag( widget Widget in, dropTarget Widget in, x int in, y int in)
+		resetHightlights();
+		mark.setPoint( x - (mark.markSize / 2), y - (mark.markSize / 2) );
+		box Box? = getBox(dropTarget);
+		if (box != null)
+			highlightSquare(box);
+		end
+	end
+	
+	//This is the drop function.  It handles the state when the mark is dropped on another
+	//widget.  The primary widget of interest is the board.  The drop function is activated
+	//once when the mark widget is no longer being dragged by the user.
+	function drop(widget Widget in, dropTarget Widget in, x int in, y int in)
+		resetHightlights();
+		mark.makeMarkSize();
+		mark.setPoint( markInitX, markInitY );
+		box Box? = getBox(dropTarget);
+		if (box != null)
+			handleMarkOnBoard(box);
+		end
+	end
+	
+	//When the newGame button is clicked, this function is called.  It resets
+	//the board and the mark.
+	function resetGame( e Event in )
+		ui.fadeOut( 200, null );
+		mark.fadeOut( 200, resetGameFadeBackIn );
+	end
+	
+	function resetGameFadeBackIn()
+		board.setupBoard();
+		mark.setupMark();
+		turn = 0;
+		instructions.text = "It's Tic-Tac-Toe!  Grab a friend, and drag the X's and O's onto the board.";
+		mat.children = [ board, mark ];
+		ui.fadeIn( 300, null );
+		mark.fadeIn( 300, null );
+	end
+	
+	//This is a helper function to find the square in the board.  When the mark is dropped
+	//on the board, the drop target is the board, not the square.  This function drills through
+	//the board widget to find the appropriate child square.  It verifies that the widget found
+	//is indeed a Box before it is returned.  If no appropriate widget is found, null is returned.
+	function getBox(widget Widget in) returns (Box?)
+		while (widget != null && widget.cssClass != "board")
+			widget = widget.logicalParent;
+		end
+		if (widget isa Box)
+			return(widget);
+		else
+			return(null);
+		end
+	end
+	
+	//When hovering over the board with the marker, squares in the board are highlighted 
+	//yellow if the square is valid or red if the square is taken.
+	function highlightSquare(square Box in)
+		if (square.children.getSize() == 0 )
+			square.backgroundColor = "yellow";
+		else
+			square.backgroundColor = "red";
+		end
+	end
+	
+	//This function resets all squares in the board to be white.  
+	function resetHightlights()
+		squares Widget[] = board.grid.children;
+		for (n int from 1 to squares.getSize() by 1)
+			squares[n].backgroundColor = "white";
+		end
+	end
+	
+	//When the mark is dropped over a square in the board, the game changes state.
+	function handleMarkOnBoard(square Box in)
+		if ( square.children.getSize() == 0 )
+			turn += 1;
+			img Image = mark.copyImage();
+			square.appendChild( img );
+			mark.toggleSymbol();
+			
+			winner string = getWinner();
+			if ( winner == "" )
+				if ( turn == 9 )
+					instructions.text = "No winners this time...";
+					mat.removeChild( mark );
+				end
+			else
+				instructions.text = winner :: " wins!";
+				mat.removeChild( mark );
+			end
+		end
+	end
+	
+	//The 8 possible winning configurations.
+	//Hard-coded for simplicity.
+	private wins int [][] = [ 
+		[ 1, 2, 3 ],
+		[ 4, 5, 6 ],
+		[ 7, 8, 9 ],
+		[ 1, 4, 7 ],
+		[ 2, 5, 8 ],
+		[ 3, 6, 9 ],
+		[ 1, 5, 9 ],
+		[ 3, 5, 7 ]
+	];
+
+	//The winner will either be "X", "O", or "".  "" means no winner (yet).
+	function getWinner() returns (string)		
+		result string = "";
+		for ( i int from 1 to wins.getSize() )			
+			//cycle through each permutation of possible wins
+			//TODO: 357974
+			a string = board.getImageID( wins[i][1] );
+			b string = board.getImageID( wins[i][2] );
+			c string = board.getImageID( wins[i][3] );
+			if ( a == b && a == c && a != "" )
+				result = a;
+			end
+		end
+		return (result);
+	end
+end

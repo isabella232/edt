@@ -1,0 +1,13 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+
+
+
+
+externalType ScatteringByteChannel extends ReadableByteChannel type JavaObject
+
+    private constructor();
+
+end
+

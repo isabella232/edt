@@ -1,0 +1,16 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+
+
+externalType _Enumeration type JavaObject{externalName = "Enumeration"}
+
+    private constructor();
+
+    function hasMoreElements() returns(boolean);
+
+    function nextElement() returns(Object?);
+end
+

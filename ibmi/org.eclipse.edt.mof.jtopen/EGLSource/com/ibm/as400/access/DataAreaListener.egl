@@ -1,0 +1,21 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.util.EventListener;
+
+
+externalType DataAreaListener extends EventListener type JavaObject
+
+    private constructor();
+
+    function cleared(arg0 DataAreaEvent? in);
+
+    function created(arg0 DataAreaEvent? in);
+
+    function deleted(arg0 DataAreaEvent? in);
+
+    function read(arg0 DataAreaEvent? in);
+
+    function written(arg0 DataAreaEvent? in);
+end
+

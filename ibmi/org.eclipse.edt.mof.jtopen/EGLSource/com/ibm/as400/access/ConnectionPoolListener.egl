@@ -1,0 +1,23 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.util.EventListener;
+
+
+externalType ConnectionPoolListener extends EventListener type JavaObject
+
+    private constructor();
+
+    function connectionCreated(arg0 ConnectionPoolEvent? in);
+
+    function connectionExpired(arg0 ConnectionPoolEvent? in);
+
+    function connectionPoolClosed(arg0 ConnectionPoolEvent? in);
+
+    function connectionReleased(arg0 ConnectionPoolEvent? in);
+
+    function connectionReturned(arg0 ConnectionPoolEvent? in);
+
+    function maintenanceThreadRun(arg0 ConnectionPoolEvent? in);
+end
+

@@ -1,0 +1,12 @@
+package java.net;
+
+import eglx.java.JavaObject;
+
+
+externalType DatagramSocketImplFactory type JavaObject
+
+    private constructor();
+
+    function createDatagramSocketImpl() returns(DatagramSocketImpl?);
+end
+

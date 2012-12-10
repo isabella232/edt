@@ -1,0 +1,19 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.util.EventObject;
+
+
+externalType DataAreaEvent extends EventObject type JavaObject
+    static DA_CLEARED int;
+    static DA_CREATED int;
+    static DA_DELETED int;
+    static DA_READ int;
+    static DA_WRITTEN int;
+
+    constructor(arg0 Object? in, arg1 int in);
+
+    function getID() returns(int);
+end
+

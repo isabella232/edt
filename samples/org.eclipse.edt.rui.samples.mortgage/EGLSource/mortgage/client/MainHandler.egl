@@ -1,0 +1,61 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package mortgage.client;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+import eglx.ui.rui.RUIHandler;
+import utils.portal.Portal;
+import utils.portal.Portlet;
+
+handler MainHandler type RUIhandler{initialUI =[mortgagePortal
+            ], onConstructionFunction = start, cssFile = "css/Mortgage.css", title = "Mortgage Calculator Sample"}
+    mortgagePortal Portal{columns = 2, columnWidths =[350, 650], margin = 10};
+
+    calculatorHandler MortgageCalculatorHandler{};
+    resultsHandler CalculationResultsHandler{};
+    historyHandler CalculationHistoryHandler{};
+    mapHandler MapLocatorHandler{};
+
+    calculatorPortlet Portlet{children =[calculatorHandler.ui
+            ], title = "Calculator"};
+    resultsPortlet Portlet{children =[resultsHandler.ui
+            ], title = "Results", canMove = true, canMinimize = true};
+
+    historyPortlet Portlet{children =[historyHandler.historyResults_ui
+            ], title = "History", canMove = true, canMinimize = true};
+
+    mapPortlet Portlet{children =[mapHandler.ui
+            ], title = "Map", canMove = false, canMinimize = true};
+
+    function start()
+        mortgagePortal.addPortlet(calculatorPortlet, 1);
+        mortgagePortal.addPortlet(resultsPortlet, 1);
+        mortgagePortal.addPortlet(historyPortlet, 1);
+        mortgagePortal.addPortlet(mapPortlet, 2);
+        // Subscribe to calculation events
+        InfoBus.subscribe("mortgageApplication.mortgageCalculated",
+                restorePortlets);
+        // Initial state is minimized
+        resultsPortlet.minimize();
+        historyPortlet.minimize();
+    end
+
+    function restorePortlets(eventName string in, dataObject any in)
+        if(resultsPortlet.isMinimized())
+            resultsPortlet.restore();
+        end
+        if(historyPortlet.isMinimized())
+            historyPortlet.restore();
+        end
+    end
+end

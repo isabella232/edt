@@ -1,0 +1,29 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+
+
+externalType BufferedReader extends Reader type JavaObject
+
+    constructor(arg0 Reader? in);
+
+    constructor(arg0 Reader? in, arg1 int in);
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function mark(arg0 int in){@Throws};
+
+    function markSupported() returns(boolean);
+
+    function read() returns(int){@Throws};
+
+    function readLine() returns(string?){@Throws};
+
+    function ready() returns(boolean){@Throws};
+
+    function reset(){@Throws};
+
+    function skip(arg0 bigInt in) returns(bigInt){@Throws};
+end
+

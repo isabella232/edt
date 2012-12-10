@@ -1,0 +1,13 @@
+package java.security;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+
+
+externalType Guard type JavaObject
+
+    private constructor();
+
+    function checkGuard(arg0 Object? in){@Throws};
+end
+

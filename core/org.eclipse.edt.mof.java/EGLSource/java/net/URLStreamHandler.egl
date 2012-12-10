@@ -1,0 +1,10 @@
+package java.net;
+
+import eglx.java.JavaObject;
+
+
+externalType URLStreamHandler type JavaObject
+
+    private constructor();
+end
+

@@ -9,18 +9,13 @@
   IBM Corporation - initial API and implementation
  
 -->
-<project name="BuildPlugin" default="JTOpenExternalTypes" basedir="./../../">
+<project name="BuildPlugin" default="JTOpenExternalTypes" basedir="../..">
 
 	<property name="pluginName" value="org.eclipse.edt.mof.eglx.jtopen"/>
 	
-<!--
-	org.eclipse.edt.mof.jtopen can be found @kan-cvs-save.ottawa.ibm.com/cvsroot/rbd/org.eclipse.edt.ibmi.externaltypes/org.eclipse.edt.mof.jtopen
-	org.eclipse.edt.mof.java can be found @kan-cvs-save.ottawa.ibm.com/cvsroot/rbd/org.eclipse.edt.ibmi.externaltypes/org.eclipse.edt.mof.java
-	org.eclipse.edt.mof.jee can be found @kan-cvs-save.ottawa.ibm.com/cvsroot/rbd/org.eclipse.edt.ibmi.externaltypes/org.eclipse.edt.mof.jee
--->
 	<property name="jtopenpluginName" value="org.eclipse.edt.mof.jtopen"/>
-	<property name="javapluginName" value="org.eclipse.edt.mof.java"/>
-	<property name="jeepluginName" value="org.eclipse.edt.mof.jee"/>
+	<property name="javapluginName" value="../core/org.eclipse.edt.mof.java"/>
+	<property name="jeepluginName" value="../core/org.eclipse.edt.mof.jee"/>
 
 <target name="init">    
     <echo message="processing ${basedir}." />

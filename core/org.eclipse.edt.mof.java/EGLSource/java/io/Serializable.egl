@@ -1,0 +1,7 @@
+package java.io;
+
+import eglx.java.JavaObject;
+
+externalType Serializable type JavaObject 
+	private constructor();
+end

@@ -1,0 +1,49 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.Serializable;
+
+
+externalType DataQueueAttributes extends Serializable type JavaObject
+
+    constructor();
+
+    function addPropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function addVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function getAuthority() returns(string?);
+
+    function getDescription() returns(string?);
+
+    function getEntryLength() returns(int);
+
+    function getKeyLength() returns(int);
+
+    function isFIFO() returns(boolean);
+
+    function isForceToAuxiliaryStorage() returns(boolean);
+
+    function isSaveSenderInfo() returns(boolean);
+
+    function removePropertyChangeListener(arg0 PropertyChangeListener? in);
+
+    function removeVetoableChangeListener(arg0 VetoableChangeListener? in);
+
+    function setAuthority(arg0 string? in){@Throws};
+
+    function setDescription(arg0 string? in){@Throws};
+
+    function setEntryLength(arg0 int in){@Throws};
+
+    function setFIFO(arg0 boolean in){@Throws};
+
+    function setForceToAuxiliaryStorage(arg0 boolean in){@Throws};
+
+    function setKeyLength(arg0 int in){@Throws};
+
+    function setSaveSenderInfo(arg0 boolean in){@Throws};
+end
+

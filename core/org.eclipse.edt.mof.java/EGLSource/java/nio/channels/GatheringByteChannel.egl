@@ -1,0 +1,13 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+
+
+
+
+externalType GatheringByteChannel extends WritableByteChannel type JavaObject
+
+    private constructor();
+
+end
+

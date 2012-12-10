@@ -1,0 +1,71 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package egl.map.sample;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.BoxLib;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.mobile.widgets.DojoMobileButton;
+import dojo.mobile.widgets.DojoMobileView;
+import egl.map.GoogleMapWidget;
+import egl.map.MapMarker;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+//
+//
+
+handler EGLMapSample type RUIhandler{initialUI = [ View ], onConstructionFunction = start, cssFile = "css/com.ibm.egl.rui.dojo.mobile.samples.css", title = "handler_5_1"}
+	View DojoMobileView{
+		selected = true, headerTitle = "EGL Map Sample",
+		/*backText = "Back", backView = */
+		children = [ GridLayout, Box1, Box ]
+	};
+	Box Box{ padding = 8,
+		alignment = BoxLib.ALIGN_CENTER,
+		children = [ map ] };
+	Box1 Box{ padding = 0,
+		alignment = BoxLib.ALIGN_CENTER,
+		children = [ 
+			new DojoMobileButton{
+				text = "Add a Mark", width = "100",
+				onClick ::= locateMap
+			}
+		],
+		marginTop = 10,
+		marginBottom = 10
+	};
+		
+	map GoogleMapWidget { width = 400, height = 300 };
+	GridLayout GridLayout{ cellPadding = 4, rows = 3, columns = 2,
+		width = "100%",
+		children = [ TextField2, TextLabel2, TextField1, TextLabel1, TextField, TextLabel ] };
+	TextLabel TextLabel{ layoutData = new GridLayoutData{ row = 1, column = 1}, text = "Latitude:" };
+	TextField TextField{ layoutData = new GridLayoutData{ row = 1, column = 2 }, text = "39.9"};
+	TextLabel1 TextLabel{ layoutData = new GridLayoutData{ row = 2, column = 1 }, text = "Longitude:" };
+	TextField1 TextField{ layoutData = new GridLayoutData{ row = 2, column = 2 }, text = "116.38" };
+	TextLabel2 TextLabel{ layoutData = new GridLayoutData{ row = 3, column = 1 }, text = "Description:" };
+	TextField2 TextField{ layoutData = new GridLayoutData{ row = 3, column = 2 }, text = "Beijing"};
+	
+	function locateMap( event Event in )
+		marker MapMarker { latitude = TextField.text, longitude = TextField1.text, description = TextField2.text };
+    	map.addMarker(marker);
+	end
+    
+    function start()
+    end
+end

@@ -1,0 +1,47 @@
+package com.ibm.as400.access;
+
+import org.eclipse.edt.eunit.runtime.Log;
+import com.ibm.as400.security.auth.ProfileTokenCredential;
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.io.Serializable;
+import java.util.Locale;
+import java.util._Enumeration;
+
+externalType AS400ConnectionPool extends ConnectionPool,Serializable type JavaObject 
+static CCSID_DEFAULT int;
+  constructor();
+   function _close()   {@externalName{"close"}};
+   function fill(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 int IN,arg4 int IN,arg5 Locale? IN){@Throws};
+   function fill(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 int IN,arg4 int IN){@Throws};
+   function fill(arg0 string? IN,arg1 string? IN,arg2 ProfileTokenCredential? IN,arg3 int IN,arg4 int IN,arg5 Locale? IN){@Throws};
+   function fill(arg0 string? IN,arg1 string? IN,arg2 ProfileTokenCredential? IN,arg3 int IN,arg4 int IN){@Throws};
+   function getActiveConnectionCount(arg0 string? IN,arg1 string? IN)  returns(int);
+   function getAvailableConnectionCount(arg0 string? IN,arg1 string? IN)  returns(int);
+   function getCCSID()  returns(int);
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 ProfileTokenCredential? IN,arg3 int IN,arg4 Locale? IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 ProfileTokenCredential? IN,arg3 int IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 Locale? IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 string? IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 int IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 int IN,arg4 Locale? IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 int IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 ProfileTokenCredential? IN)  returns(AS400?){@Throws};
+   function getConnection(arg0 string? IN,arg1 string? IN,arg2 ProfileTokenCredential? IN,arg3 Locale? IN)  returns(AS400?){@Throws};
+   function getSecureConnection(arg0 string? IN,arg1 string? IN,arg2 ProfileTokenCredential? IN,arg3 int IN)  returns(AS400?){@Throws};
+   function getSecureConnection(arg0 string? IN,arg1 string? IN,arg2 string? IN)  returns(AS400?){@Throws};
+   function getSecureConnection(arg0 string? IN,arg1 string? IN)  returns(AS400?){@Throws};
+   function getSecureConnection(arg0 string? IN,arg1 string? IN,arg2 string? IN,arg3 int IN)  returns(AS400?){@Throws};
+   function getSecureConnection(arg0 string? IN,arg1 string? IN,arg2 int IN)  returns(AS400?){@Throws};
+   function getSecureConnection(arg0 string? IN,arg1 string? IN,arg2 ProfileTokenCredential? IN)  returns(AS400?){@Throws};
+   function getSocketProperties()  returns(SocketProperties?);
+   function getUsers()  returns(_Enumeration?);
+   function removeFromPool(arg0 AS400? IN);
+   function removeFromPool(arg0 string? IN,arg1 string? IN);
+   function returnConnectionToPool(arg0 AS400? IN);
+   function setCCSID(arg0 int IN);
+   function setLog(arg0 Log? IN);
+   function setSocketProperties(arg0 SocketProperties? IN);
+end
+

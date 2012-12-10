@@ -1,0 +1,34 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.lib;
+
+import eglx.ui.rui.RUIPropertiesLibrary;
+
+// PROPERTIES
+// Here's our properties library.  When our RUI handler starts up, these variables
+// are automatically populated with the contents defined in samplesMessages.properties,
+// in the WebContent/properties folder.
+library samplesMessages type RUIPropertiesLibrary
+	WelcomeOverview string;
+	WelcomeText string;
+	HelloWorldOverview string;
+	EventsOverview string;
+	ValidationOverview string;
+	DataDisplayOverview string;
+	DragDropOverview string;
+	ServicesOverview string;
+	ServicesText string;
+	RSSOverview string;
+	AdvancedOverview string;
+	AdvancedText string;
+end

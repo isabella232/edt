@@ -1,0 +1,128 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;   
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoLib;
+import dojo.widgets.DojoTextField;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoTextFieldSample Type RUIHandler { initialUI = [ui] }
+    
+    TextLabel1 TextLabel{ text="TextField1:", marginRight = 10 };    
+    textField1 DojoTextField {
+    	marginBottom = 20,
+    	placeHolder = "Enter a string",
+		textCase = DojoLib.UPPER_CASE,
+		trim = true,		
+		inputRequiredMessage = "This field is required",
+		inputRequired = true	
+    };
+    TextLabel2 TextLabel{ text="TextField2:", marginRight = 10 };    
+    textField2 DojoTextField {
+    	marginBottom = 20,    	
+		promptMessage = "Please enter a digit",
+		inputRequiredMessage = "This field is required",
+		inputRequired = true,
+		constraints = new Dictionary{ dataType="digit"},
+		validators = [myRegExp]
+    };
+    
+    function myRegExp(input string in, constraints Dictionary in) returns(string?)
+		if(constraints.dataType as string == "digit" && !DojoLib.VALIDATORS.PatternValidator(input, "\\d+"))
+			return ("Not a digit");
+		else
+			return (null);
+		end
+	end
+    
+    TextLabel3 TextLabel{ text="TextField3:", marginRight = 10 };    
+    textField3 DojoTextField {
+    	marginBottom = 20,    	
+		promptMessage = "Please enter an integer greater than 100",
+		constraints = new Dictionary{ min = 100},
+		validators = [myValidator]
+    };
+    
+    TextLabel4 TextLabel{ text="TextField4:", marginRight = 10 };    
+    textField4 DojoTextField {
+    	marginBottom = 20,    	
+		promptMessage = "Please enter an IP address",
+		constraints = new Dictionary{ allowDottedDecimal = true, allowDecimal = false, allowDottedHex = false, allowDottedOctal=false, allowHex=false, allowIPv6=true, allowHybrid=false},
+		validators = [myIPValidator]
+    };
+    
+    function myValidator(input string in,constraints Dictionary in) returns(string?)
+		try
+			if(input as int > constraints.min as int)
+				return (null);
+			else
+				return ("The value is not greater than " + constraints.min);
+			end
+		onException(ex AnyException)
+			return ("The value is not a number");
+		end
+	end
+	
+	function myIPValidator(input string in,constraints Dictionary in) returns(string?)
+		if(DojoLib.VALIDATORS.IPValidator(input, constraints))
+			return (null);
+		else
+			return ("Invalid IP Address");
+		end
+	end
+	
+    ui Box { columns = 1, padding = 20, children =[
+    	new HTML{ 
+    		marginBottom = 20,
+    		fontSize = "20px", 
+    		text = "Dojo TextField Sample"
+    	},
+    	new HTML { 
+    		marginBottom = 20, 
+    		fontSize = "14px",
+    		text = "Dojo text fields can have messages and validation to help users with input and prevent storing on invalid data.<br/><br/>" +
+    		"The properties for TextField1 include:<br/>" +
+    		"<ul><li>Place Holder - text that appears within the field prior to user input</li><li>Upper Case - formats text as upper case</li><li>Trim - removes leading and trailing spaces</li><li>Require Input - designate the field as required</li><li>Error Message - message that appears when validation is not passed</li></ul>"    		
+    	},
+    	new Box { columns = 2, children = [TextLabel1, textField1  ]},    	  	
+    	new HTML { 
+    	    marginTop=20,
+    		marginBottom = 20, 
+    		fontSize = "14px",
+    		text = "TextField2 requires digit input. " +
+    		"Write a custom ValidPatternProvider delegate to generate a regular expression to do validation."
+    	},
+    	new Box { columns = 2, children = [TextLabel2, textField2 ]},    	
+    	new HTML { 
+    	    marginTop=20,
+    		marginBottom = 20, 
+    		fontSize = "14px",
+    		text = "TextField3 requires a integer greater than 100 by using a custom validator.  " +
+    		"The return string becomes the error message."
+    	},
+    	new Box { columns = 2, children = [TextLabel3, textField3 ]},
+    	new HTML { 
+    	    marginTop=20,
+    		marginBottom = 20, 
+    		fontSize = "14px",
+    		text = "TextField4 requires IPv4 or IPv6 input by using a built-in validator.  " +
+    		"Utilize the built-in validators defined in DojoLib. Set the parameters by constraints."
+    	},
+    	new Box { columns = 2, children = [TextLabel4, textField4 ]}
+    ]};
+    
+   
+   
+end  

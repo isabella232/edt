@@ -71,7 +71,6 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -539,7 +538,7 @@ public class AnnotationValidator {
 							if (targetTypeBinding instanceof org.eclipse.edt.mof.egl.ArrayType) {
 								org.eclipse.edt.mof.egl.Type exprType = expression.resolveType();
 								if (exprType != null) {
-									if (!IRUtils.isMoveCompatible(((org.eclipse.edt.mof.egl.ArrayType)targetTypeBinding).getElementType(), exprType, null)) {
+									if (!BindingUtil.isMoveCompatible(((org.eclipse.edt.mof.egl.ArrayType)targetTypeBinding).getElementType(), null, exprType, null)) {
 										problemRequestor.acceptProblem(
 											expression,
 											IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,

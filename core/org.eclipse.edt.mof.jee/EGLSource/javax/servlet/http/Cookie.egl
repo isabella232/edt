@@ -1,0 +1,44 @@
+package javax.servlet.http;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.lang.Cloneable;
+
+
+externalType Cookie extends Cloneable type JavaObject
+
+    constructor(arg0 string? in, arg1 string? in);
+
+    function clone() returns(Object?);
+
+    function getComment() returns(string?);
+
+    function getDomain() returns(string?);
+
+    function getMaxAge() returns(int);
+
+    function getName() returns(string?);
+
+    function getPath() returns(string?);
+
+    function getSecure() returns(boolean);
+
+    function getValue() returns(string?);
+
+    function getVersion() returns(int);
+
+    function setComment(arg0 string? in);
+
+    function setDomain(arg0 string? in);
+
+    function setMaxAge(arg0 int in);
+
+    function setPath(arg0 string? in);
+
+    function setSecure(arg0 boolean in);
+
+    function setValue(arg0 string? in);
+
+    function setVersion(arg0 int in);
+end
+

@@ -1,0 +1,67 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+ 
+package utils.map;
+
+import eglx.javascript.JavaScriptObject;
+import eglx.ui.rui.VEProperty;
+import eglx.ui.rui.VEPropertyChoice;
+import eglx.ui.rui.VEWidget;
+import eglx.ui.rui.Widget;
+
+ExternalType GoogleMap extends Widget type JavaScriptObject {
+		relativePath = "utils/map",
+		externalName = "GoogleMap",
+		includeFile = "utils/map/GoogleMap.html",
+			@VEWidget{						
+				displayName = "Map",
+				provider = "Google",
+				category = "Samples",
+				template = "${typeName}{ width = 400, height = 400 }",
+				smallIcon = "icons/ctool16/map_16.gif",
+				largeIcon = "icons/ctool24/map_24.gif"
+			}	
+	}		
+	center string {@Property {}, @VEProperty{}};
+	centerPosition float[] {@Property {}};
+	
+	zoom int {@Property {}, @VEProperty{}};
+	
+	mapType string {@Property {},@VEProperty {
+		propertyType = "choice",
+		choices = [
+			@VEPropertyChoice {displayName = "HYBRID", id = "utils.map.GoogleMapLib.HYBRID"},
+			@VEPropertyChoice {displayName = "ROADMAP", id = "utils.map.GoogleMapLib.ROADMAP"},
+			@VEPropertyChoice {displayName = "SATELLITE", id = "utils.map.GoogleMapLib.SATELLITE"},
+			@VEPropertyChoice {displayName = "TERRAIN", id = "utils.map.GoogleMapLib.TERRAIN"}
+		]}};       
+	
+	function showAddress(address String in, description string in);
+	function showRoute(add1 String in, add2 string in);		
+	
+	function addMarker(marker MapMarker in);	
+	function removeMarker(marker MapMarker in);	
+	function removeAllMarkers();
+	
+	function showCurrentLocation(description String in);
+	
+	function refresh();
+				
+end
+
+record MapMarker
+	address String;
+	latitude float;
+	longitude float;
+	description String?;
+	widget Widget;
+end

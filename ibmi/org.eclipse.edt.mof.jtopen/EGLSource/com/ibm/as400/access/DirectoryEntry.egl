@@ -1,0 +1,148 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+
+externalType DirectoryEntry type JavaObject
+
+    function getAdministrationDomain() returns(string?);
+
+    function getBuilding() returns(string?);
+
+    function getCCMailAddress() returns(string?);
+
+    function getCCMailComment() returns(string?);
+
+    function getCompany() returns(string?);
+
+    function getCountry() returns(string?);
+
+    function getDepartment() returns(string?);
+
+    function getDLOOwner() returns(string?);
+
+    function getDomainDefinedAttributeType1() returns(string?);
+
+    function getDomainDefinedAttributeType2() returns(string?);
+
+    function getDomainDefinedAttributeType3() returns(string?);
+
+    function getDomainDefinedAttributeType4() returns(string?);
+
+    function getDomainDefinedAttributeValue1() returns(string?);
+
+    function getDomainDefinedAttributeValue2() returns(string?);
+
+    function getDomainDefinedAttributeValue3() returns(string?);
+
+    function getDomainDefinedAttributeValue4() returns(string?);
+
+    function getFaxNumber() returns(string?);
+
+    function getFirstName() returns(string?);
+
+    function getFullName() returns(string?);
+
+    function getGenerationQualifier() returns(string?);
+
+    function getGivenName() returns(string?);
+
+    function getInitials() returns(string?);
+
+    function getJobTitle() returns(string?);
+
+    function getLastName() returns(string?);
+
+    function getLocation() returns(string?);
+
+    function getMailingAddress1() returns(string?);
+
+    function getMailingAddress2() returns(string?);
+
+    function getMailingAddress3() returns(string?);
+
+    function getMailingAddress4() returns(string?);
+
+    function getMailNotification() returns(string?);
+
+    function getMailServiceLevel() returns(string?);
+
+    function getMailServiceName() returns(string?);
+
+    function getMailServiceProductID() returns(string?);
+
+    function getMiddleName() returns(string?);
+
+    function getNetworkUserID() returns(string?);
+
+    function getOffice() returns(string?);
+
+    function getOrganization() returns(string?);
+
+    function getOrganizationUnit1() returns(string?);
+
+    function getOrganizationUnit2() returns(string?);
+
+    function getOrganizationUnit3() returns(string?);
+
+    function getOrganizationUnit4() returns(string?);
+
+    function getORName() returns(string?);
+
+    function getPreferredAddressName() returns(string?);
+
+    function getPreferredAddressProductID() returns(string?);
+
+    function getPreferredAddressTypeName() returns(string?);
+
+    function getPreferredAddressTypeValue() returns(string?);
+
+    function getPreferredAddressValue() returns(string?);
+
+    function getPreferredName() returns(string?);
+
+    function getPrivateManagementDomain() returns(string?);
+
+    function getSMTPDomain() returns(string?);
+
+    function getSMTPRoute() returns(string?);
+
+    function getSMTPUserID() returns(string?);
+
+    function getSurname() returns(string?);
+
+    function getSystem() returns(AS400?);
+
+    function getSystemGroup() returns(string?);
+
+    function getSystemName() returns(string?);
+
+    function getTelephoneNumber1() returns(string?);
+
+    function getTelephoneNumber2() returns(string?);
+
+    function getText() returns(string?);
+
+    function getUserAddress() returns(string?);
+
+    function getUserDescription() returns(string?);
+
+    function getUserID() returns(string?);
+
+    function getUserProfile() returns(string?);
+
+    function isIndirectUser() returns(boolean);
+
+    function isLocal() returns(boolean);
+
+    function isManager() returns(boolean);
+
+    function isMessageMailNotification() returns(boolean);
+
+    function isPrintCoverPage() returns(boolean);
+
+    function isPriorityMailNotification() returns(boolean);
+
+    function isSynchronized() returns(boolean);
+end
+

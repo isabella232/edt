@@ -1,0 +1,53 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;   
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoToggleButton;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoToggleButtonSample Type RUIHandler { initialUI = [ui] }
+    
+    toggleButton DojoToggleButton{
+		text = "Toggle",
+		checkedText = "Very nice!",
+		margin = 20,
+		onClick ::= click
+	};
+
+    ui Box { columns = 1, padding = 20, children =[
+    	new HTML{ 
+    		marginBottom = 10,
+    		fontSize = "20px", 
+    		text = "Dojo Toggle Button Sample"
+    	},
+    	new HTML { 
+    		marginBottom = 10, 
+    		fontSize = "14px",
+    		text = "ToggleButton widgets are a cross between Button and Checkbox widgets. Click the Toggle button to fire the onClick event and toggle the button."
+    	},
+    	toggleButton, tbLabel1
+    ]};
+    
+    tbLabel1 TextLabel{ text = "ToggleButton not checked.", padding = 20, fontSize = "14px" };
+ 
+    function click(e Event in)
+    	if (toggleButton.isChecked())
+    		tbLabel1.text = "ToggleButton checked.";
+    	else
+    		tbLabel1.text = "ToggleButton reset.";
+   	 	end
+    end
+end

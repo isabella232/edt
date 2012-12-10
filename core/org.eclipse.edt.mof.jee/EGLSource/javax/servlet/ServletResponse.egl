@@ -1,0 +1,42 @@
+package javax.servlet;
+
+import eglx.java.JavaObject;
+import java.io.PrintWriter;
+import java.util.Locale;
+
+
+externalType ServletResponse type JavaObject
+
+    private constructor();
+
+    function flushBuffer(){@Throws};
+
+    function getBufferSize() returns(int);
+
+    function getCharacterEncoding() returns(string?);
+
+    function getContentType() returns(string?);
+
+    function getLocale() returns(Locale?);
+
+    function getOutputStream() returns(ServletOutputStream?){@Throws};
+
+    function getWriter() returns(PrintWriter?){@Throws};
+
+    function isCommitted() returns(boolean);
+
+    function reset();
+
+    function resetBuffer();
+
+    function setBufferSize(arg0 int in);
+
+    function setCharacterEncoding(arg0 string? in);
+
+    function setContentLength(arg0 int in);
+
+    function setContentType(arg0 string? in);
+
+    function setLocale(arg0 Locale? in);
+end
+

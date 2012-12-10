@@ -1,0 +1,13 @@
+package java.beans;
+
+import eglx.java.JavaObject;
+import java.util.EventListener;
+
+
+externalType PropertyChangeListener extends EventListener type JavaObject
+
+    private constructor();
+
+    function propertyChange(arg0 PropertyChangeEvent? in);
+end
+

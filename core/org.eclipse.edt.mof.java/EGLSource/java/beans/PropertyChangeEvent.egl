@@ -1,0 +1,22 @@
+package java.beans;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.util.EventObject;
+
+
+externalType PropertyChangeEvent extends EventObject type JavaObject
+
+    constructor(arg0 Object? in, arg1 string? in, arg2 Object? in, arg3 Object? in);
+
+    function getNewValue() returns(Object?);
+
+    function getOldValue() returns(Object?);
+
+    function getPropagationId() returns(Object?);
+
+    function getPropertyName() returns(string?);
+
+    function setPropagationId(arg0 Object? in);
+end
+

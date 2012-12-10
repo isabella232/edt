@@ -1,0 +1,17 @@
+package java.security;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.io.Serializable;
+import java.util._Enumeration;
+
+externalType PermissionCollection extends Serializable type JavaObject 
+  private constructor();
+   function _add(arg0 Permission? IN)   {@externalName{"add"}};
+   function elements()  returns(_Enumeration?);
+   function implies(arg0 Permission? IN)  returns(boolean);
+   function isReadOnly()  returns(boolean);
+   function setReadOnly();
+   function toString()  returns(string?);
+end
+

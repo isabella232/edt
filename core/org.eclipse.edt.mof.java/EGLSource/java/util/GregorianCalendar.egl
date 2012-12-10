@@ -1,0 +1,60 @@
+package java.util;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import eglx.lang.ExternalName;
+
+
+externalType GregorianCalendar extends Calendar type JavaObject
+    static AD int;
+    static BC int;
+
+    constructor(arg0 int in, arg1 int in, arg2 int in, arg3 int in, arg4 int in, arg5 int in);
+
+    constructor(arg0 int in, arg1 int in, arg2 int in, arg3 int in, arg4 int in);
+
+    constructor(arg0 int in, arg1 int in, arg2 int in);
+
+    constructor(arg0 TimeZone? in, arg1 Locale? in);
+
+    constructor(arg0 Locale? in);
+
+    constructor(arg0 TimeZone? in);
+
+    constructor();
+
+    function _add(arg0 int in, arg1 int in){@externalName{"add"}};
+
+    function clone() returns(Object?);
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    function getActualMaximum(arg0 int in) returns(int);
+
+    function getActualMinimum(arg0 int in) returns(int);
+
+    function getGreatestMinimum(arg0 int in) returns(int);
+
+    function getGregorianChange() returns(date?);
+
+    function getLeastMaximum(arg0 int in) returns(int);
+
+    function getMaximum(arg0 int in) returns(int);
+
+    function getMinimum(arg0 int in) returns(int);
+
+    function getTimeZone() returns(TimeZone?);
+
+    function hashCode() returns(int);
+
+    function isLeapYear(arg0 int in) returns(boolean);
+
+    function roll(arg0 int in, arg1 int in);
+
+    function roll(arg0 int in, arg1 boolean in);
+
+    function setGregorianChange(arg0 date? in);
+
+    function setTimeZone(arg0 TimeZone? in);
+end
+

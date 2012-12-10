@@ -1,0 +1,28 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.util.List;
+import java.util._Enumeration;
+
+externalType NetworkInterface type JavaObject 
+   function equals(arg0 Object? IN)  returns(boolean);
+   static function getByInetAddress(arg0 InetAddress? IN)  returns(NetworkInterface?){@Throws};
+   static function getByName(arg0 string? IN)  returns(NetworkInterface?){@Throws};
+   function getDisplayName()  returns(string?);
+   function getInetAddresses()  returns(_Enumeration?);
+   function getInterfaceAddresses()  returns(List?);
+   function getMTU()  returns(int){@Throws};
+   function getName()  returns(string?);
+   static function getNetworkInterfaces()  returns(_Enumeration?){@Throws};
+   function getParent()  returns(NetworkInterface?);
+   function getSubInterfaces()  returns(_Enumeration?);
+   function hashCode()  returns(int);
+   function isLoopback()  returns(boolean){@Throws};
+   function isPointToPoint()  returns(boolean){@Throws};
+   function isUp()  returns(boolean){@Throws};
+   function isVirtual()  returns(boolean);
+   function supportsMulticast()  returns(boolean){@Throws};
+   function toString()  returns(string?);
+end
+

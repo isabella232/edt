@@ -1,0 +1,16 @@
+package java.nio.channels;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.io.Closeable;
+
+
+externalType Channel extends Closeable type JavaObject
+
+    private constructor();
+
+    function _close(){@externalName{"close", @Throws}};
+
+    function isOpen() returns(boolean);
+end
+

@@ -1,0 +1,12 @@
+package java.io;
+
+import eglx.java.JavaObject;
+
+
+externalType Flushable type JavaObject
+
+    private constructor();
+
+    function flush(){@Throws};
+end
+

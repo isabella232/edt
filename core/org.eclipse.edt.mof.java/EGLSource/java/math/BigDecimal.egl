@@ -1,0 +1,10 @@
+package java.math;
+
+import eglx.java.JavaObject;
+import eglx.lang.Throws;
+
+externalType BigDecimal type JavaObject {}
+	
+	// Constructor Declarations
+	constructor(val String in){@Throws {}};
+end

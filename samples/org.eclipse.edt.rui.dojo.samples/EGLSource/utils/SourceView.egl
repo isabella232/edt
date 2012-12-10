@@ -1,0 +1,89 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package utils;
+
+import dojo.samples.RestProxy;
+import eglx.http.HttpRest;
+import eglx.javascript.Job;
+import eglx.javascript.RunFunction;
+import eglx.lang.EGLProperty;
+import eglx.rbd.StrLib;
+import eglx.ui.rui.Document;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIWidget;
+import eglx.ui.rui.RuiLib;
+import eglx.ui.rui.VEProperty;
+
+Delegate LocalHTMLFinishedLoading() end
+
+handler SourceView type RUIWidget{ tagName = "div" }
+
+	src String { @EGLProperty { getMethod=getSrc, setMethod=setSrc }, @VEProperty{} };
+	whenFinished LocalHTMLFinishedLoading?;
+	
+	selectionEnabled boolean;
+	
+	private function setText(text string in)
+		s String = "";
+		
+		text = text[strlib.indexOf(text, "package") : strlib.characterlen(text)];
+		len int = strlib.characterLen(text);
+		for (n int from 1 to len)
+			c String = text[n:n];
+			if (c == "\t")
+				s ::= "    ";
+			else
+				s ::= c;
+			end
+		end
+		
+		s = EGLFormatter.format(s);
+
+		font = "Courier";
+		style = "overflow-y: scroll";
+		width = 600;
+		height = 500;
+		innerHTML = s;
+		
+		if (whenFinished != null) 
+			new Job { runFunction = whenFinished }.schedule();
+		end
+		
+		onMouseOver ::= enableSelection;
+		onMouseOut ::= disableSelection;
+	end
+	
+	function enableSelection(e Event in)
+		selectionEnabled = ruilib.getTextSelectionEnabled();
+		ruilib.setTextSelectionEnabled(true);
+	end
+	
+	function disableSelection(e Event in)
+		ruilib.setTextSelectionEnabled(selectionEnabled);
+	end
+	
+	function setSrc(src string in)
+		if (strlib.indexOf(src, "http:") == 0)
+			uri String = document.location;
+			firstSlash int = strlib.indexOf(uri, "/", 8);
+			src = uri[1 : strlib.indexOf(uri, "/", firstSlash+1)] + src; 
+		end
+
+		call RestProxy.invokeGet(src) using new HttpRest returning to setText;
+		this.src = src;
+	end 
+	
+	function getSrc() returns (string)
+		return (src);
+	end
+
+end

@@ -1,0 +1,29 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+
+
+externalType SocketOptions type JavaObject
+    static IP_MULTICAST_IF int;
+    static IP_MULTICAST_IF2 int;
+    static IP_MULTICAST_LOOP int;
+    static IP_TOS int;
+    static SO_BINDADDR int;
+    static SO_BROADCAST int;
+    static SO_KEEPALIVE int;
+    static SO_LINGER int;
+    static SO_OOBINLINE int;
+    static SO_RCVBUF int;
+    static SO_REUSEADDR int;
+    static SO_SNDBUF int;
+    static SO_TIMEOUT int;
+    static TCP_NODELAY int;
+
+    private constructor();
+
+    function getOption(arg0 int in) returns(Object?){@Throws};
+
+    function setOption(arg0 int in, arg1 Object? in){@Throws};
+end
+

@@ -1,0 +1,18 @@
+package java.nio.channels.spi;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.nio.channels.Selector;
+
+
+externalType AbstractSelector extends Selector type JavaObject
+
+    private constructor();
+
+    function _close(){@externalName{"close", @Throws}};
+
+    function isOpen() returns(boolean);
+
+    function provider() returns(SelectorProvider?);
+end
+

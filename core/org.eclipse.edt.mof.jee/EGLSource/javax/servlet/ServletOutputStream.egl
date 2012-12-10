@@ -1,0 +1,38 @@
+package javax.servlet;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.io.OutputStream;
+
+
+externalType ServletOutputStream extends OutputStream type JavaObject
+
+    private constructor();
+
+    function _print(arg0 string? in){@externalName{"print"}, @Throws};
+
+    function _print(arg0 boolean in){@externalName{"print"}, @Throws};
+
+    function _print(arg0 int in){@externalName{"print"}, @Throws};
+
+    function _print(arg0 bigInt in){@externalName{"print"}, @Throws};
+
+    function _print(arg0 smallFloat in){@externalName{"print"}, @Throws};
+
+    function _print(arg0 float in){@externalName{"print"}, @Throws};
+
+    function println(){@Throws};
+
+    function println(arg0 string? in){@Throws};
+
+    function println(arg0 boolean in){@Throws};
+
+    function println(arg0 int in){@Throws};
+
+    function println(arg0 bigInt in){@Throws};
+
+    function println(arg0 smallFloat in){@Throws};
+
+    function println(arg0 float in){@Throws};
+end
+

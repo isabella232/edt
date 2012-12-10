@@ -1,0 +1,113 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import eglx.lang.Throws;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.SocketChannel;
+
+
+externalType Socket type JavaObject
+
+    constructor(arg0 InetAddress? in, arg1 int in, arg2 boolean in){@Throws};
+
+    constructor(arg0 string? in, arg1 int in, arg2 boolean in){@Throws};
+
+    constructor(arg0 InetAddress? in, arg1 int in, arg2 InetAddress? in, arg3 int in){@Throws};
+
+    constructor(arg0 string? in, arg1 int in, arg2 InetAddress? in, arg3 int in){@Throws};
+
+    constructor(arg0 InetAddress? in, arg1 int in){@Throws};
+
+    constructor(arg0 string? in, arg1 int in){@Throws};
+
+    constructor(arg0 Proxy? in);
+
+    constructor();
+
+    function _bind(arg0 SocketAddress? in){@externalName{"bind"}, @Throws};
+
+    function _close(){@externalName{"close"}, @Throws};
+
+    function connect(arg0 SocketAddress? in, arg1 int in){@Throws};
+
+    function connect(arg0 SocketAddress? in){@Throws};
+
+    function getChannel() returns(SocketChannel?);
+
+    function getInetAddress() returns(InetAddress?);
+
+    function getInputStream() returns(InputStream?){@Throws};
+
+    function getKeepAlive() returns(boolean){@Throws};
+
+    function getLocalAddress() returns(InetAddress?);
+
+    function getLocalPort() returns(int);
+
+    function getLocalSocketAddress() returns(SocketAddress?);
+
+    function getOOBInline() returns(boolean){@Throws};
+
+    function getOutputStream() returns(OutputStream?){@Throws};
+
+    function getPort() returns(int);
+
+    function getReceiveBufferSize() returns(int){@Throws};
+
+    function getRemoteSocketAddress() returns(SocketAddress?);
+
+    function getReuseAddress() returns(boolean){@Throws};
+
+    function getSendBufferSize() returns(int){@Throws};
+
+    function getSoLinger() returns(int){@Throws};
+
+    function getSoTimeout() returns(int){@Throws};
+
+    function getTcpNoDelay() returns(boolean){@Throws};
+
+    function getTrafficClass() returns(int){@Throws};
+
+    function isBound() returns(boolean);
+
+    function isClosed() returns(boolean);
+
+    function isConnected() returns(boolean);
+
+    function isInputShutdown() returns(boolean);
+
+    function isOutputShutdown() returns(boolean);
+
+    function sendUrgentData(arg0 int in){@Throws};
+
+    function setKeepAlive(arg0 boolean in){@Throws};
+
+    function setOOBInline(arg0 boolean in){@Throws};
+
+    function setPerformancePreferences(arg0 int in, arg1 int in, arg2 int in);
+
+    function setReceiveBufferSize(arg0 int in){@Throws};
+
+    function setReuseAddress(arg0 boolean in){@Throws};
+
+    function setSendBufferSize(arg0 int in){@Throws};
+
+    static function setSocketImplFactory(arg0 SocketImplFactory? in){@Throws};
+
+    function setSoLinger(arg0 boolean in, arg1 int in){@Throws};
+
+    function setSoTimeout(arg0 int in){@Throws};
+
+    function setTcpNoDelay(arg0 boolean in){@Throws};
+
+    function setTrafficClass(arg0 int in){@Throws};
+
+    function shutdownInput(){@Throws};
+
+    function shutdownOutput(){@Throws};
+
+    function toString() returns(string?);
+end
+

@@ -1,0 +1,13 @@
+package java.lang;
+
+import eglx.java.JavaObject;
+import java.nio.CharBuffer;
+
+
+externalType Readable type JavaObject
+
+    private constructor();
+
+    function read(arg0 CharBuffer? in) returns(int){@Throws};
+end
+

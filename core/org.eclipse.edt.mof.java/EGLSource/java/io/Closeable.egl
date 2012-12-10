@@ -1,0 +1,13 @@
+package java.io;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+
+
+externalType Closeable type JavaObject
+
+    private constructor();
+
+    function _close(){@externalName{"close"}, @Throws};
+end
+

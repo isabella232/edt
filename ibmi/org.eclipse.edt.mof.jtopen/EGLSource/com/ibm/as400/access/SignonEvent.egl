@@ -1,0 +1,15 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import java.util.EventObject;
+
+
+externalType SignonEvent extends EventObject type JavaObject
+
+    function getException() returns(AS400SecurityException?);
+
+    function hasException() returns(boolean);
+
+    function isReconnecting() returns(boolean);
+end
+

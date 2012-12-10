@@ -1,0 +1,88 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.lib;
+
+import gallery.advanced.AdvancedTopics;
+import gallery.datadisplay.DataDisplayDemo;
+import gallery.draganddrop.TicTacToeDemo;
+import gallery.events.EventDemo;
+import gallery.helloworld.HelloWorld;
+import gallery.rss.RSSDemo;
+import gallery.services.ServiceDemo;
+import gallery.validation.ValidationDemo;
+import gallery.welcome.Welcome;
+import gallery.widgets.ToCElement;
+
+// A library containing some common code
+library samplesLib 
+	// The width of the main content pane.
+	const CONTENT_WIDTH int = 490;
+	
+	//keep links the same color throughout the sample
+	const linkRegularColor string = "#0000AA";
+	const linkHighlightColor string = "#0088FF";
+	
+	// An array of ToCElements (defined in the widgets package).  To add a new page
+	// to the samples, just put it in this array, and the rest takes care of itself.
+	// PROPERTIES
+	// Notice how the overview text for each sample isn't hard-coded here, but rather
+	// refers to the variables in the samplesMessages library.  See the comments in that
+	// file for more information.
+	tls ToCElement[] = [ 
+		new ToCElement { 
+			title="Welcome",
+			contentWidget=(new Welcome{}).ui,
+			index=1,
+			overview=samplesMessages.WelcomeOverview },
+		new ToCElement {
+			title="Hello World!",
+			contentWidget=(new HelloWorld{}).ui,
+			index=2,
+			overview=samplesMessages.HelloWorldOverview },
+		new ToCElement {
+			title="Events", 
+			contentWidget=(new EventDemo{}).box,
+			index=3,
+			overview=samplesMessages.EventsOverview },
+		new ToCElement {
+			title="Validation",
+			contentWidget=(new ValidationDemo{}).ui,
+			index=4,  
+			overview=samplesMessages.ValidationOverview },
+		new ToCElement {
+			title="Data Display",
+			contentWidget=(new DataDisplayDemo{}).ui,
+			index=5,
+			overview=samplesMessages.DataDisplayOverview },
+		new ToCElement {
+			title="Drag and Drop",
+			contentWidget=(new TicTacToeDemo{}).ui,
+			index=6,
+			overview=samplesMessages.DragDropOverview },
+		new ToCElement {
+			title="Services",
+			contentWidget=(new ServiceDemo{}).ui,
+			index=7,
+			overview=samplesMessages.ServicesOverview },
+		new ToCElement {
+			title="RSS",
+			contentWidget=(new RSSDemo{}).ui,
+			index=8,
+			overview=samplesMessages.RSSOverview },
+		new ToCElement {
+			title="Advanced Topics",
+			contentWidget=(new AdvancedTopics{}).ui,
+			index=9,
+			overview=samplesMessages.AdvancedOverview }
+	];
+end

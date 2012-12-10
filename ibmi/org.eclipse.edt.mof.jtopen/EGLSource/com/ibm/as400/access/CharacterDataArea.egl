@@ -1,0 +1,40 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+import eglx.lang.ExternalName;
+import java.io.Serializable;
+
+
+externalType CharacterDataArea extends DataArea, Serializable type JavaObject
+
+    constructor(arg0 AS400? in, arg1 string? in);
+
+    constructor();
+
+    function clear(){@Throws};
+
+    function create(){@Throws};
+
+    function create(arg0 int in, arg1 string? in, arg2 string? in, arg3 string? in){@Throws};
+
+    function _delete(){@externalName{"delete"}, @Throws};
+
+    function getPath() returns(string?);
+
+    function read() returns(string?){@Throws};
+
+    function read(arg0 int in) returns(string?){@Throws};
+
+    function read(arg0 int in, arg1 int in) returns(string?){@Throws};
+
+    function read(arg0 int in, arg1 int in, arg2 int in) returns(string?){@Throws};
+
+    function setPath(arg0 string? in){@Throws};
+
+    function write(arg0 string? in){@Throws};
+
+    function write(arg0 string? in, arg1 int in){@Throws};
+
+    function write(arg0 string? in, arg1 int in, arg2 int in){@Throws};
+end
+

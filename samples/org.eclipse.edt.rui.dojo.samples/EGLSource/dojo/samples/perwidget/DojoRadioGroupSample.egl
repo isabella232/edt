@@ -1,0 +1,60 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.widgets.DojoRadioGroup;
+import eglx.rbd.StrLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoRadioGroupSample Type RUIHandler { initialUI = [ ui ] }
+	
+	radio DojoRadioGroup { 
+		vertical = true,
+		options = [ "soda", "coffee", "tea" ],
+		selected = "coffee",
+		onChange ::= chooseDrink
+	};
+
+	ui Div { padding=8, children = [
+		new HTML { 
+			fontSize = "20px",
+			text = "Dojo RadioGroup Sample" 
+		},
+		new HTML { 
+			text = "Click a radio button in the DojoRadioGroup to fire the onChange event.",
+			fontSize = "14px",
+			paddingTop = 10,
+			paddingBottom = 10 
+		},
+		radio,
+		message
+	]};
+
+    message TextArea { marginTop=10, width = 500, height = 160 };
+	
+	function chooseDrink(e Event in)
+		if (message.text == "")
+			message.text ::= "Cool. It appears you like " + radio.selected + ".\n";
+		else
+			if (Strlib.characterLen(message.text) > 60)
+				message.text ::= "OK. I give up... Your final choice is " + radio.selected + "?\n";
+			else
+				message.text ::= "So, you changed your mind? Now you like " + radio.selected + "???\n";
+			end
+		end
+	end
+
+end

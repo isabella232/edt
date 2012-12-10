@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<egl:deployment xmlns:egl="http://www.eclipse.org/xmlns/edt/deployment/1.0">
+  <bindings>
+    <binding name="news" type=" edt.binding.rest" uri="" useURI="true">
+      <parameters>
+        <parameter name="enableGeneration" value="true"/>
+      </parameters>
+    </binding>
+  </bindings>
+  <ruiapplication deployAllHandlers="false">
+    <ruihandler enableGeneration="false" implementation="gallery.advanced.AdvancedTopics">
+      <parameters>
+        <parameter name="html_file_name" value="AdvancedTopics"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="true" implementation="gallery.contents">
+      <parameters>
+        <parameter name="html_file_name" value="contents"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="gallery.datadisplay.DataDisplayDemo">
+      <parameters>
+        <parameter name="html_file_name" value="DataDisplayDemo"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="gallery.draganddrop.TicTacToeDemo">
+      <parameters>
+        <parameter name="html_file_name" value="TicTacToeDemo"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="gallery.events.EventDemo">
+      <parameters>
+        <parameter name="html_file_name" value="EventDemo"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="gallery.helloworld.HelloWorld">
+      <parameters>
+        <parameter name="html_file_name" value="HelloWorld"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="gallery.rss.RSSDemo">
+      <parameters>
+        <parameter name="html_file_name" value="RSSDemo"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="gallery.services.ServiceDemo">
+      <parameters>
+        <parameter name="html_file_name" value="ServiceDemo"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="gallery.validation.ValidationDemo">
+      <parameters>
+        <parameter name="html_file_name" value="ValidationDemo"/>
+      </parameters>
+    </ruihandler>
+    <ruihandler enableGeneration="false" implementation="gallery.welcome.Welcome">
+      <parameters>
+        <parameter name="html_file_name" value="Welcome"/>
+      </parameters>
+    </ruihandler>
+    <parameters>
+      <parameter name="locales" value="en_US,English,en_US"/>
+    </parameters>
+  </ruiapplication>
+</egl:deployment>

@@ -1,0 +1,69 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;   
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import dojo.widgets.DojoButton;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoButtonSample Type RUIHandler { initialUI = [ui] }
+    
+    button DojoButton{
+		text = "Click me", 
+		onClick ::= click, 
+		margin = 20
+	};
+
+    ui Box { columns = 1, padding = 20, children =[
+    	new HTML{ 
+    		marginBottom = 10,
+    		fontSize = "20px", 
+    		text = "Dojo Button Sample"
+    	},
+    	new HTML { 
+    		marginBottom = 10, 
+    		fontSize = "14px",
+    		text = "Click the Click me button to fire the onClick event."
+    	},
+    	button, 
+    	new HTML { 
+    		marginTop = 40, 
+    		fontSize = "14px",
+    		text = "Other buttons:"
+    	},
+    	new DojoButton{
+			text = "This button is 300px wide", 
+			width = "300",
+			margin = 20
+		},
+		new DojoButton{
+			text = "Disabled",
+	    	disabled=true,
+			margin = 20
+		}
+    	
+    ]};
+    
+    clickCount int = 1;
+ 
+    function click(e Event in)
+    	if (clickCount == 1)
+	        button.text = "This button has been clicked once";
+   		else
+            button.text = "This button has been clicked " + clickCount + " times";
+        end
+        clickCount += 1;
+    end
+
+end

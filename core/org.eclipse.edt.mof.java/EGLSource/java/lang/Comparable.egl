@@ -1,0 +1,13 @@
+package java.lang;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+
+
+externalType Comparable type JavaObject
+
+    private constructor();
+
+    function compareTo(arg0 Object? in) returns(int);
+end
+

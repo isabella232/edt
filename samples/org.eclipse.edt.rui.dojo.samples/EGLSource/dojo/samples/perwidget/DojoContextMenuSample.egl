@@ -1,0 +1,108 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextArea;
+import dojo.widgets.DojoContextMenu;
+import dojo.widgets.DojoMenu;
+import dojo.widgets.DojoMenuItem;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+handler DojoContextMenuSample type RUIHandler{initialUI = [ ui ], onConstructionFunction = start }
+ 
+   pdfItem DojoMenuItem { text = "Print in PDF", disabled = true, id = "print-in-pdf", onClick ::= printPDF };
+
+   printMenu DojoContextMenu { 
+    	targets = [ 
+    		shippingOrder
+    	],
+    	children = [
+            new DojoMenuItem { text = "Print Preview", id = "preview", onClick ::= printPreview },
+            pdfItem,
+            new DojoMenuItem { },
+            new DojoMenuItem { text = "Print", children = [
+            	new DojoMenu { children = [
+		    		new DojoMenuItem { text = "Office 1", onClick ::= printOffice, id = "office1" },
+		            new DojoMenuItem { text = "Office 2", onClick ::= printOffice, id = "office2" }
+		        ]}
+	        ]}
+        ] 
+    };
+    
+      
+    shippingOrder HTML{
+		padding = 11, backgroundColor = "lightblue", id = "SO-223145",
+		text = "Shipping order 223145. It has a Print context menu."
+	};
+	messages TextArea { width= 450, marginTop = 13, height = 200 };
+
+    ui Box {
+    	padding = 20, 
+    	columns = 1, 
+    	children = [
+    		new HTML {
+    			text = "Dojo Context Menu Sample", fontSize = "20px", marginBottom = 9   			
+    		}, 
+    		new Box { columns = 1, padding = 25, borderStyle = "solid", backgroundColor = "lightyellow", width = 400, children = [
+	    		shippingOrder
+	    	]},
+	    	messages
+    	]
+    };    
+   
+    function printPreview(e Event in)
+    	InfoBus.publish("acme.manufacturing.print.preview", shippingOrder.id);
+    end
+    
+    function printOffice(e Event in)
+    	InfoBus.publish("acme.manufacturing.print.office", shippingOrder.id);
+    end
+    
+    function printPDF(e Event in)
+    	InfoBus.publish("acme.manufacturing.print.print-in-pdf", shippingOrder.id);
+    end
+    
+    //
+    //  The following could be defined anywhere in your application, in a completely different handler
+    //
+    function start()
+    	InfoBus.subscribe("acme.manufacturing.print.*", handleMenuAction);
+    end
+    
+    function handleMenuAction(name String in, data any in)
+    	id String = data;
+    	case (name)
+    		when ("acme.manufacturing.print.preview")
+		        messages.text = messages.text + "You chose \"Preview\". Now try \"PDF\"...\n";
+		        enablePDFMenuItem(); 
+			when ("acme.manufacturing.print.print-in-pdf")
+		        messages.text = messages.text +	"Generate PDF (now disabled again)\n";
+		        togglePDFMenuItem(); 
+			otherwise
+				messages.text = messages.text +	"Handle "+name+" "+id+"\n";
+		end
+    end
+    function enablePDFMenuItem()  //added by xiaobin
+    	if(pdfItem.disabled)
+    		pdfItem.disabled = !pdfItem.disabled;
+    	end
+    end
+
+	function togglePDFMenuItem()
+		pdfItem.disabled = !pdfItem.disabled;
+	end
+    
+end

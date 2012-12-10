@@ -1,0 +1,9 @@
+package java.lang;
+
+import eglx.java.JavaObject;
+import java.io.Serializable;
+
+externalType Cloneable extends Serializable type JavaObject 
+	private constructor();
+end
+

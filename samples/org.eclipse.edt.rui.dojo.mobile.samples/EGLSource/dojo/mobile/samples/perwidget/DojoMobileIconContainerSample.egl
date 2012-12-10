@@ -1,0 +1,72 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.mobile.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.mobile.widgets.DojoMobileIconContainer;
+import dojo.mobile.widgets.DojoMobileIconItem;
+import dojo.mobile.widgets.DojoMobileView;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+// RUI Handler
+//
+// 
+ 
+handler DojoMobileIconContainerSample type RUIhandler{initialUI = [ View, iconView, iconView1 ], onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.dojo.mobile.samples.css", title = ""}
+
+	View DojoMobileView{
+		selected = true, headerTitle = "EGL Mobile IconContainer Sample",
+		/*backText = "Back", backView = */
+		children = [  
+			Box, new DojoMobileIconContainer{
+				children = [
+					new DojoMobileIconItem{
+						imagePath = "dojo/mobile/images/icon-1.png",
+						targetView = iconView,
+						text = "Item A"
+					},
+					new DojoMobileIconItem{
+						imagePath = "dojo/mobile/images/icon-1.png",
+						targetView = iconView1,
+						text = "Item B", onClick ::= null_onClick
+					}
+				]
+			}
+		] 
+	};
+	
+	iconView DojoMobileView{
+		headerTitle = "Icon Item A View",
+		selected = false,
+		backText = "Back",
+		backView = View
+	};
+	
+	iconView1 DojoMobileView{
+		headerTitle = "Icon Item B View",
+		selected = false,
+		backText = "Back",
+		backView = View
+	};
+	Box Box{ padding=8,
+		children = [ TextLabel ] };
+	TextLabel TextLabel{ text = "This sample is to show the usage of  linking a specified icon to a specified view instance, also you can drag an icon item to the icon container in VE." };
+	
+    function start()
+    end
+    
+    function null_onClick(event Event in)
+    	syslib.writeStdOut("Clicked icon item B!");
+    end
+end

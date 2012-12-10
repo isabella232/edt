@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2009, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.samples.perwidget;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoCalendar;
+import eglx.lang.DateTimeLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+Handler DojoCalendarSample type RUIHandler { InitialUI = [ ui ] }
+	
+	calendarBox DojoCalendar { 
+		value = new Date{}
+	};
+
+
+
+	ui Box{ padding=20, columns=1, children = [ 
+		new HTML { 
+			text = "Dojo Calendar Sample", fontSize = "20px" 
+		},
+		new HTML { 
+			text="<p>A Dojo Calendar gives you a standalone calendar widget. The Calendar widget displays a localized month-view calendar and allows the user to navigate months and years and select a date.<p>",
+			fontSize = "14px"
+		},
+		new Box { children= [
+			calendarBox
+		]},
+		ButtonBox
+	]};
+	CurrentDate Button{ text = "Set Current Date", onClick ::= CurrentDate_onClick };
+	ButtonBox Box{ paddingTop = "20", children = [ currentDate, GetDate, CalDate ] };
+	GetDate Button{ text = "Get Date", onClick ::= GetDate_onClick };
+	CalendarDate TextField{};
+	CalDate TextLabel{
+		fontSize = "14px",
+		padding = 4
+	};
+	
+	function CurrentDate_onClick(event Event in)
+		calendarBox.value = new Date{};  
+		CalDate.text = "";
+	end
+	
+	function GetDate_onClick(event Event in)
+		CalDate.text = calendarBox.value;
+	end
+		
+end

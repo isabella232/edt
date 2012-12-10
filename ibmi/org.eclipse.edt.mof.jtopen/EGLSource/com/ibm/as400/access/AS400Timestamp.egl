@@ -1,0 +1,7 @@
+package com.ibm.as400.access;
+
+import eglx.java.JavaObject;
+
+externalType AS400Timestamp type JavaObject{}
+	static FORMAT_DEFAULT  int;
+end

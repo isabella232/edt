@@ -312,6 +312,10 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 		{
 			return signature.equals( "eglx.lang.EDictionary" );
 		}
+		else if ( obj instanceof Delegate )
+		{
+			return signature.equals( ((Delegate)obj).getSignature() );
+		}
 		else if ( obj instanceof Calendar )
 		{
 			//TODO When obj is a Calendar, we can't tell if it's a date, time, or timestamp.

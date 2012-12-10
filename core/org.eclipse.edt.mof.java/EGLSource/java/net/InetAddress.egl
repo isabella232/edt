@@ -1,0 +1,50 @@
+package java.net;
+
+import eglx.java.JavaObject;
+import eglx.java.Object;
+import java.io.Serializable;
+
+
+externalType InetAddress extends Serializable type JavaObject
+
+    function equals(arg0 Object? in) returns(boolean);
+
+    static function getByName(arg0 string? in) returns(InetAddress?){@Throws};
+
+    function getCanonicalHostName() returns(string?);
+
+    function getHostAddress() returns(string?);
+
+    function getHostName() returns(string?);
+
+    static function getLocalHost() returns(InetAddress?){@Throws};
+
+    function hashCode() returns(int);
+
+    function isAnyLocalAddress() returns(boolean);
+
+    function isLinkLocalAddress() returns(boolean);
+
+    function isLoopbackAddress() returns(boolean);
+
+    function isMCGlobal() returns(boolean);
+
+    function isMCLinkLocal() returns(boolean);
+
+    function isMCNodeLocal() returns(boolean);
+
+    function isMCOrgLocal() returns(boolean);
+
+    function isMCSiteLocal() returns(boolean);
+
+    function isMulticastAddress() returns(boolean);
+
+    function isReachable(arg0 int in) returns(boolean){@Throws};
+
+    function isReachable(arg0 NetworkInterface? in, arg1 int in, arg2 int in) returns(boolean){@Throws};
+
+    function isSiteLocalAddress() returns(boolean);
+
+    function toString() returns(string?);
+end
+

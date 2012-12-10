@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2008, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+
+package gallery.helloworld;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.rbd.StrLib;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+// A simple "Hello, world" demo.
+handler HelloWorld type RUIhandler {initialUI = [ui], cssFile="css/org.eclipse.edt.rui.samples.css"}
+	// The input field where the user will enter their name.
+	nameField TextField{};
+	
+	// The output where we'll place the "Hello, <name>"
+	outputLabel TextLabel{ fontWeight="bold" };
+	
+	// The button to press to make it happen
+	aButton Button { text = "Say Hello", onClick ::= sayHello, marginLeft=5 };
+	
+	// The UI. 
+	ui Box {
+		columns = 1,
+		children = [
+			new HTML{ marginBottom = 20, text = "To fire the onClick event and call the sayHello function, click <b>Say Hello</b>." },
+			new Box { children = [
+				new TextLabel{text = "Enter your name:", marginTop=3},
+				nameField,
+				aButton ] },
+			outputLabel
+		]
+	};
+	
+	// Our eventHandling function for when the button is pressed.  Strip all spaces from whatever's
+	// in the input field.  If anything is left, say "hello".
+	function sayHello(e event in)
+		name string = strLib.clip(nameField.text);
+		if(strLib.characterLen(name) > 0)
+			outputLabel.text = "Hello, " + name + "!";
+			nameField.text = "";
+		end
+	end
+end
