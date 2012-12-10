@@ -217,7 +217,7 @@ public class WorkingCopyCompiler {
 					
 						IFile declaringFile = projectInfo.getPartOrigin(internedPackageName, partName).getEGLFile();
 						if(declaringFile.equals(file)){
-							queue.addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName), packageName));
+							queue.addPart(new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName), internedPackageName));
 						}
 					}
 					
