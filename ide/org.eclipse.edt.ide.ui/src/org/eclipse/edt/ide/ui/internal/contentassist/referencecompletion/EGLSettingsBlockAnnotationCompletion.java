@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.EnumerationField;
+import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -66,7 +67,7 @@ public class EGLSettingsBlockAnnotationCompletion extends EGLAbstractReferenceCo
 		}, new IBoundNodeProcessor() {
 			public void processBoundNode(Node boundNode) {
 				if (shouldShowAnnotations(boundNode)) {
-					proposals.addAll(new EGLPartSearchAnnotationProposalHandler(viewer, documentOffset, prefix, editor, addPrefix(), getAnnotationsAlreadySpecified(boundNode)).getProposals(IEGLSearchConstants.RECORD, "", new String[]{"annotation", IRPartType.ANNOTATION}));
+					proposals.addAll(new EGLPartSearchAnnotationProposalHandler(viewer, documentOffset, prefix, editor, addPrefix(), true, getAnnotationsAlreadySpecified(boundNode), boundNode).getProposals(IEGLSearchConstants.RECORD, "", new String[]{"annotation", IRPartType.ANNOTATION}));
 				}
 			}
 			
@@ -116,6 +117,10 @@ public class EGLSettingsBlockAnnotationCompletion extends EGLAbstractReferenceCo
 				}
 				
 				if (node instanceof ClassDataDeclaration) {
+					return true;
+				}
+				
+				if (node instanceof FunctionDataDeclaration) {
 					return true;
 				}
 				

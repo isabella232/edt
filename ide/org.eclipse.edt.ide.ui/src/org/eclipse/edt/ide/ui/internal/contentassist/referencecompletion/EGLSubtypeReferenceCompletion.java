@@ -14,10 +14,16 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.internal.model.IRPartType;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchAnnotationProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.CompletedNodeVerifier;
+import org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion.EGLAbstractReferenceCompletion.IBoundNodeProcessor;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLSubtypeReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -33,9 +39,19 @@ public class EGLSubtypeReferenceCompletion extends EGLAbstractReferenceCompletio
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#returnCompletionProposals(com.ibm.etools.egl.pgm.errors.ParseStack, java.util.List, org.eclipse.jface.text.ITextViewer, int)
 	 */
-	protected List returnCompletionProposals(ParseStack parseStack, String prefix, ITextViewer viewer, int documentOffset) {
+	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(IEGLSearchConstants.RECORD, "", new String[]{"stereotype", IRPartType.STEREOTYPETYPE}));
+		
+		getBoundASTNode(viewer, documentOffset, new String[] {"", "a", "a end"}, new CompletedNodeVerifier() { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			public boolean nodeIsValid(Node astNode) {
+				return (astNode instanceof Part);
+			}
+		}, new IBoundNodeProcessor() {
+			public void processBoundNode(Node boundNode) {
+					proposals.addAll(new EGLPartSearchAnnotationProposalHandler(viewer, documentOffset, prefix, editor, false, false, new ArrayList(), boundNode).getProposals(IEGLSearchConstants.RECORD, "", new String[]{"stereotype", IRPartType.STEREOTYPETYPE}));
+			}
+		});
+
 		return proposals;
 	}
 	
