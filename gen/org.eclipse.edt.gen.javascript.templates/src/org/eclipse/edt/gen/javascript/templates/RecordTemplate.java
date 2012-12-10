@@ -30,11 +30,6 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class RecordTemplate extends JavaScriptTemplate {
 
-	public void genPart(Record part, Context ctx, TabbedWriter out) {
-		ctx.invokeSuper(this, genPart, part, ctx, out);
-	}
-
-	
 	@SuppressWarnings("unchecked")
 	public void preGen(Record part, Context ctx) {
 		// process anything else the superclass needs to do

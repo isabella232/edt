@@ -62,9 +62,6 @@ public class JavaCoreGenerator extends Generator {
 
 	public void generate(Object part) throws GenerationException {
 		makeWriter();
-		if (!verifyPartSupported(part, "Java", JavaTemplate.genPart, context, out)) {
-			return;
-		}
 		try {
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
 			context.invoke(JavaTemplate.preGenPart, part, context);
