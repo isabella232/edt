@@ -273,11 +273,14 @@ public class ExpressionValidator extends AbstractASTVisitor {
 				if (arrayElementType[0] != null) {
 					Type exprType = expression.resolveType();
 					if (!BindingUtil.isMoveCompatible(arrayElementType[0], null, exprType, expression)) {
-						problemRequestor.acceptProblem(expression, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-								new String[] {
-										BindingUtil.getShortTypeString(arrayElementType[0]),
-										exprType != null ? BindingUtil.getShortTypeString(exprType) : expression.getCanonicalString(),
-										expr.getCanonicalString() + ".appendElement(" + expression.getCanonicalString() + ")"});
+						// Nullability comes from the array qualifier. Check it when the value is null.
+						if (!TypeUtils.Type_NULLTYPE.equals(exprType) || !((org.eclipse.edt.mof.egl.ArrayType)expr.resolveType()).elementsNullable()) {
+							problemRequestor.acceptProblem(expression, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
+									new String[] {
+											BindingUtil.getShortTypeString(arrayElementType[0]),
+											exprType != null ? BindingUtil.getShortTypeString(exprType) : expression.getCanonicalString(),
+											expr.getCanonicalString() + ".appendElement(" + expression.getCanonicalString() + ")"});
+						}
 					}
 				}
 				else {
