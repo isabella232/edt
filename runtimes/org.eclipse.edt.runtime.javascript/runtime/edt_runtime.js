@@ -156,6 +156,9 @@ egl.eglx.lang.EInt16.fromEFloat64 = function (x) {
 egl.eglx.lang.EInt16.fromEFloat32 = function (x) {
     return egl.convertFloatToSmallint(x, egl.createNumericOverflowException);
 };
+egl.eglx.lang.EInt16.fromEBytes = function (x) { 
+	return egl.convertBytesToSmallint(x);
+}; 
 egl.eglx.lang.EInt16.fromEString = function (x) {
 	return egl.convertStringToSmallint(x, egl.createNumericOverflowException);
 };
@@ -226,6 +229,9 @@ egl.eglx.lang.EInt32.fromEFloat32 = function (x) {
 egl.eglx.lang.EInt32.fromEFloat64 = function (x) {
 	return egl.convertFloatToInt(x, egl.createNumericOverflowException);
 };
+egl.eglx.lang.EInt32.fromEBytes = function (x) { 
+	return egl.convertBytesToInt(x);
+}; 
 egl.eglx.lang.EInt32.fromEString = function (x) {
 	return egl.convertStringToInt(x, egl.createNumericOverflowException);
 };
@@ -290,6 +296,9 @@ egl.eglx.lang.EFloat32.fromEInt64  = function (x) {
 egl.eglx.lang.EFloat32.fromEDecimal  = function (x) {
 	return egl.convertFloatToSmallfloat(Number( x.toString()), egl.createNumericOverflowException);
 };
+egl.eglx.lang.EFloat32.fromEBytes = function (x) {
+	return egl.convertBytesToSmallfloat(x);
+};
 egl.eglx.lang.EFloat32.fromEString = function (x){
 	return egl.convertStringToFloat(x, egl.createNumericOverflowException);
 };
@@ -344,6 +353,9 @@ egl.eglx.lang.EDecimal.fromEInt64 = function (x, decimals, limit) {
 egl.eglx.lang.EDecimal.fromEDecimal = function (x, decimals, limit) { 
 	return egl.convertDecimalToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 };
+egl.eglx.lang.EDecimal.fromEBytes = function (x, decimals, limit) {
+	return egl.convertBytesToDecimal(x, decimals, limit);
+};
 egl.eglx.lang.EDecimal.fromEString = function (x, decimals, limit) { 
 	if (limit)
 		return egl.convertStringToDecimal(x, decimals, limit, egl.createNumericOverflowException);
@@ -354,19 +366,19 @@ egl.eglx.lang.EDecimal.fromENumber = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertAnyToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 	else
-		return egl.convertAnyToDecimal(x, -1, decimals, egl.createNumericOverflowException); 
+		return egl.convertAnyToDecimal(x, -1, undefined, egl.createNumericOverflowException); 
 };
 egl.eglx.lang.EDecimal.fromEFloat32 = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertFloatToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 	else
-		return egl.convertFloatToDecimal(x, -1, decimals, egl.createNumericOverflowException);
+		return egl.convertFloatToDecimal(x, -1, undefined, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertFloatToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 	else
-		return egl.convertFloatToDecimal(x, -1, decimals, egl.createNumericOverflowException);
+		return egl.convertFloatToDecimal(x, -1, undefined, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EDecimal.equals = function (x, y) {
 	if(!x && !y){
@@ -383,7 +395,7 @@ egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 	if (limit)
 		return egl.convertAnyToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
 	else
-		return egl.convertAnyToDecimal(x, -1, decimals, nullable, egl.createNumericOverflowException); 
+		return egl.convertAnyToDecimal(x, -1, undefined, nullable, egl.createNumericOverflowException); 
 };
 egl.eglx.lang.EDecimal.asNumber= function (x, sig) {
 	return egl.boxAny(x,sig);
@@ -415,6 +427,9 @@ egl.eglx.lang.EInt64.fromEString = function (x) {
 egl.eglx.lang.EInt64.fromEDecimal = function (x) {  
 	return egl.convertDecimalToBigint(x, egl.createNumericOverflowException);
 };
+egl.eglx.lang.EInt64.fromEFloat32 = function (x) {  
+	return egl.convertFloatToBigint(x, egl.createNumericOverflowException);
+}; 
 egl.eglx.lang.EInt64.fromEFloat64 = function (x) {  
 	return egl.convertFloatToBigint(x, egl.createNumericOverflowException);
 };
@@ -422,8 +437,8 @@ egl.eglx.lang.EInt64.fromENumber = function (x, nullable) {
 	nullable = nullable || false;  // TODO nullability should be generated
 	return egl.convertAnyToBigint(x, nullable);
 };
-egl.eglx.lang.EInt64.fromEFloat32 = function (x) {  
-	return egl.convertFloatToBigint(x, egl.createNumericOverflowException);
+egl.eglx.lang.EInt64.fromEBytes = function (x) { 
+	return egl.convertBytesToBigint(x);
 }; 
 egl.eglx.lang.EInt64.equals = function (x, y) {
 	if(!x && !y){
@@ -443,7 +458,7 @@ egl.eglx.lang.EInt64.pow = function (x, exp) {
 	return x.pow(exp); 
 };
 egl.eglx.lang.EInt64.fromEInt64 = function (x) {
-	return x;  // TODO sbg This seems likely to be a generation error.....
+	return x;
 }; 
 egl.eglx.lang.EInt64.asNumber= function (x) {
 	return egl.boxAny(x, "B;");
@@ -467,6 +482,9 @@ egl.defineClass( "eglx.lang", "EFloat64"
 egl.eglx.lang.EFloat64.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
 egl.eglx.lang.EFloat64.fromEInt64 = function (x) { 
 	return Number(x.toString()); 
+};
+egl.eglx.lang.EFloat64.fromEBytes = function (x) {
+	return egl.convertBytesToFloat(x);
 };
 egl.eglx.lang.EFloat64.fromEDecimal = function (x) { 
 	return Number(x.toString()); 
@@ -632,7 +650,7 @@ egl.eglx.lang.EString.matchesPattern = function (str, pattern, escape) {
 	}
 };
 egl.eglx.lang.EString.isLike = function (str, pattern, escape) {
-	if ((str == null) || (pattern == null)) {
+	if (str == null || pattern == null) {
 		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	escape = escape || "\\";
@@ -658,6 +676,9 @@ egl.eglx.lang.EString.isLike = function (str, pattern, escape) {
 		//\% -> %, \_ -> _, but for anything else, the escape character is ignored
 		case escape:
 			var tempChar = trimP.charAt(++i);
+			if ( tempChar.length === 0 ) {
+				throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
+			}
 			//extra handling if the escape char is backslash
 			//can filter universal escape chars through to the regexp (\t, \n, etc)
 			if ( escape == "\\" && tempChar != "%" && tempChar != "_" ) {
@@ -672,10 +693,7 @@ egl.eglx.lang.EString.isLike = function (str, pattern, escape) {
 			break;	
 		}
 	}
-	if(newPattern == escape){
-		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
-	}
-	newPattern = "\^" + newPattern + "\$";			
+	newPattern = "\^" + newPattern + "\$";	
 	try{
 		return (new RegExp( newPattern )).test( str.trimRight() );
 	}catch ( oops ){
@@ -728,7 +746,187 @@ egl.eglx.lang.EString.concat = function (op1, op2) {
 egl.eglx.lang.EString.getDefaultEncoding = function() {
 	return "UTF-16BE";
 };
-egl.eglx.lang.EString.nullconcat = function (op1, op2) {
+egl.eglx.lang.EString.toBytes = function( str, encoding ) {
+	if ( arguments.length === 2 )
+		egl.eglx.lang.EString.validateEncoding( encoding );
+	var ret, i, c;
+	switch ( encoding )
+	{
+	case 'US-ASCII':
+		ret = new Array( str.length );
+		for ( i = 0; i < str.length; i++ )
+		{
+			c = str.charCodeAt( i );
+			ret[ i ] = c < 128 ? c : 0x3f; // Like a JVM, insert a question mark (0x3f) if c is invalid.
+		}
+		break;
+	case 'UTF-16LE':
+		ret = new Array( str.length * 2 );
+		for ( i = 0; i < str.length; i++ )
+		{
+			c = str.charCodeAt( i );
+			ret[ i * 2 ] = c & 0xFF;
+			ret[ i * 2 + 1 ] = (c & 0xFF00) >>> 8;
+		}
+		break;
+	case 'UTF-16':
+		ret = new Array( str.length * 2 + 2 );
+		ret[ 0 ] = 0xFE; // Start with the big-endian byte order marker.
+		ret[ 1 ] = 0xFF;
+		for ( i = 0; i < str.length; i++ )
+		{
+			c = str.charCodeAt( i );
+			ret[ i * 2 + 2 ] = (c & 0xFF00) >>> 8;
+			ret[ i * 2 + 3 ] = c & 0xFF;
+		}
+		break;
+	case 'UTF-8':
+		ret = [];
+		for ( i = 0; i < str.length; i++ )
+		{
+			// charCodeAt never returns 65536 or higher, so we don't handle suggorate pairs correctly.
+			c = str.charCodeAt( i );
+			if ( c <= 0x007F )
+			{
+				// It's in the ASCII range, so store it unchanged.
+				ret.push( c );
+			}
+			else if ( c <= 0x07FF )
+			{
+				// Store two bytes: 110xxxxx 10xxxxxx
+				ret.push( 0xC0 | (c >>> 11) );
+				ret.push( 0x80 | (c & 0x3F) );
+			}
+			else
+			{
+				// Store three bytes: 1110xxxx 10xxxxxx 10xxxxxx
+				ret.push( 0xE0 | (c >>> 12) );
+				ret.push( 0x80 | ((c >>> 6) & 0x3F) );
+				ret.push( 0x80 | (c & 0x3F) );
+			}
+		}
+		break;
+	default: // UTF-16BE
+		ret = new Array( str.length * 2 );
+		for ( i = 0; i < str.length; i++ )
+		{
+			c = str.charCodeAt( i );
+			ret[ i * 2 ] = (c & 0xFF00) >>> 8;
+			ret[ i * 2 + 1 ] = c & 0xFF;
+		}
+		break;
+	}
+	return egl.eglx.lang.EBytes.ezeNew( ret );
+};
+egl.eglx.lang.EString.fromBytes = function( bytes, encoding ) {
+	if ( arguments.length === 1 )
+		encoding = egl.eglx.lang.EString.getDefaultEncoding();
+	else
+		egl.eglx.lang.EString.validateEncoding( encoding );
+	var ret, i, c, c2, c3, c4;
+	switch ( encoding )
+	{
+	case 'US-ASCII':
+		ret = new Array( bytes.length );
+		for ( i = 0; i < bytes.length; i++ )
+		{
+			c = bytes[ i ];
+			ret[ i ] = c < 128 ? String.fromCharCode( c ) : '?'; // Like a JVM, insert a question mark if c is invalid.
+		}
+		break;
+	case 'UTF-16LE':
+		ret = new Array( bytes.length / 2 );
+		for ( i = 0; i < ret.length; i++ )
+		{
+			c = bytes[ i * 2 ] | (bytes[ i * 2 + 1 ] << 8);
+			ret[ i ] = String.fromCharCode( c );
+		}
+		break;
+	case 'UTF-16':
+		// Check for the optional byte order marker.
+		if ( bytes[ 0 ] === 0xFE && bytes[ 1 ] === 0xFF )
+			return egl.eglx.lang.EString.fromBytes( bytes.slice( 2 ), 'UTF-16BE' );
+		else if ( bytes[ 0 ] === 0xFF && bytes[ 1 ] === 0xFE )
+			return egl.eglx.lang.EString.fromBytes( bytes.slice( 2 ), 'UTF-16LE' );
+		else
+			return egl.eglx.lang.EString.fromBytes( bytes, 'UTF-16BE' );
+		break;
+	case 'UTF-8':
+		ret = [];
+		var newChar;
+		for ( i = 0; i < bytes.length; i++ )
+		{
+			newChar = null;
+			c = bytes[ i ];
+			if ( c <= 0x7F )
+			{
+				// The character is in the ASCII range, so store it unchanged.
+				newChar = String.fromCharCode( c );
+			}
+			else if ( ++i < bytes.length )
+			{
+				c2 = bytes[ i ];
+				if ( (c & 0xE0) == 0xC0 && (c2 & 0xC0) == 0x80 )
+				{
+					// The character is encoded in two bytes: 110xxxxx 10xxxxxx
+					newChar = String.fromCharCode( ((c & 0x1F) << 6) | (c2 & 0x3F) );
+				}
+				else if ( ++i < bytes.length )
+				{
+					c3 = bytes[ i ];
+					if ( (c & 0xF0) == 0xE0 && (c2 & 0xC0) == 0x80 && (c3 & 0xC0) == 0x80 )
+					{
+						// The character is encoded in three bytes: 1110xxxx 10xxxxxx 10xxxxxx
+						newChar = String.fromCharCode( ((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F) );
+					}
+					else if ( ++i < bytes.length )
+					{
+						c4 = bytes[ i ];
+						if ( (c & 0xF8) == 0xF0 && (c2 & 0xC0) == 0x80 && (c3 & 0xC0) == 0x80 && (c4 & 0xC0) == 0x80 )
+						{
+							// The character is encoded in four bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+							newChar = String.fromCharCode( ((c & 0x07) << 18)| ((c2 & 0x3F) << 12) | ((c3 & 0x3F) << 6) | (c4 & 0x3F) );
+						}
+					}
+				}
+			}
+			
+			if ( newChar != null )
+			{
+				ret.push( newChar );
+			}
+			else
+			{
+				// The data is invalid.
+				ret.push( '?' );
+			}
+		}
+		break;
+	default: // UTF-16BE
+		ret = new Array( bytes.length / 2 );
+		for ( i = 0; i < ret.length; i++ )
+		{
+			c = (bytes[ i * 2 ] << 8) | bytes[ i * 2 + 1 ];
+			ret[ i ] = String.fromCharCode( c );
+		}
+		break;
+	}
+	return ret.join("");
+};
+egl.eglx.lang.EString.validateEncoding = function( encoding ) {
+	switch ( encoding )
+	{
+	case 'US-ASCII':
+	case 'UTF-8':
+	case 'UTF-16BE':
+	case 'UTF-16LE':
+	case 'UTF-16': 
+		break;
+	default:
+		throw egl.createInvalidArgumentException( "CRRUI2110E", [ encoding ] );
+	}
+};
+egl.eglx.lang.EString.nullconcat = function(op1, op2) {
 	return egl.nullableconcat(op1, op2);
 };
 egl.eglx.lang.EString.clip = function(s){
@@ -1033,58 +1231,109 @@ String.prototype.replaceStr = function(target, replacement) {
 /****************************************************************************
  * EBytes
  ****************************************************************************/
-egl.defineClass( "eglx.lang", "EBytes"
-		,"eglx.lang", "AnyBoxedObject",
+egl.defineClass( "eglx.lang", "EBytes", 
+		"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(bytes) {
 		egl.eglx.lang.AnyBoxedObject.call(this, bytes);
-		
-		this.maxLength = -1;
-	},
- 	"constructor" : function(bytes, length) {
-		egl.eglx.lang.AnyBoxedObject.call(this, bytes);
-	
-		this.maxLength = length;
 	}
-}
-);
-egl.eglx.lang.EBytes.getLength = function (b) {
-	return b.maxLength;
+});
+egl.eglx.lang.EBytes.ezeNew = function ( x ) 
+{
+	if ( typeof x === 'number' )
+	{
+		var arr = new Array( x );
+		for ( var i = 0; i < x; i++ )
+		{
+			arr[ i ] = 0;
+		}
+		x = arr;
+	}
+	x.isEBytes = true;
+	return x;
 };
-egl.eglx.lang.EBytes.ezeCast = function (x, nullable, length) {
-	result = egl.convertAnyToString(x, nullable);
-	return egl.eglx.lang.EBytes.asBytes( result, length );
+egl.eglx.lang.EBytes.length = function (b) {
+	return b.length;
 };
-egl.eglx.lang.EBytes.ezeBox = function(b){
-	return new egl.eglx.lang.EBytes(b);
-};
-egl.eglx.lang.EBytes.ezeBox = function(b, len){
-	return new egl.eglx.lang.EBytes(b, len);
-};
-egl.eglx.lang.EBytes.equals = function(b1, b2) {
-	return egl.eglx.lang.EBytes.equalsInternal( b1, b2 );
+egl.eglx.lang.EBytes.equals = function(op1, op2) {
+	if (op1 === op2)
+		return true;
+	if (op1 === null || op2 === null || op1.length !== op2.length)
+		return false;
+	for ( var i = 0; i < op1.length; i++ )
+	{
+		if ( op1[i] !== op2[i] )
+		{
+			return false;
+		}
+	}
+	return true;
 };
 egl.eglx.lang.EBytes.notEquals = function(b1, b2) {
-	return !egl.eglx.lang.EBytes.equalsInternal( b1, b2 );
+	return !egl.eglx.lang.EBytes.equals( b1, b2 );
+};
+egl.eglx.lang.EBytes.compareTo = function(op1, op2 ) 
+{
+	var i = 0;
+	if ( op1.length === op2.length )
+	{
+		while ( i < op1.length )
+		{
+			if ( op1[i] != op2[i] )
+				return (op1[i] & 0xFF) < (op2[i] & 0xFF) ? -1 : 1;
+			i++;
+		}
+	}
+	else if ( op1.length > op2.length )
+	{
+		while ( i < op2.length )
+		{
+			if ( op1[i] != op2[i] )
+				return (op1[i] & 0xFF) < (op2[i] & 0xFF) ? -1 : 1;
+			i++;
+		}
+		while ( i < op1.length )
+		{
+			if ( op1[i] != 0 )
+				return 1;
+			i++;
+		}
+	}
+	else
+	{
+		while ( i < op1.length )
+		{
+			if ( op1[i] != op2[i] )
+				return (op1[i] & 0xFF) < (op2[i] & 0xFF) ? -1 : 1;
+			i++;
+		}
+		while ( i < op2.length )
+		{
+			if ( op2[i] != 0 )
+				return -1;
+			i++;
+		}
+	}
+
+	return 0;
 };
 egl.eglx.lang.EBytes.plus = function (op1, op2) {
-    re = [];
-    re = re.concat( op1 );
-    re = re.concat( op2 );
-    return re;
+	if (op1 === null) op1 = [];
+	if (op2 === null) op2 = [];
+	return egl.eglx.lang.EBytes.ezeNew(op1.concat(op2));
 };
 egl.eglx.lang.EBytes.concat = function (op1, op2) {
-	re = [];
-    re = re.concat( op1 );
-    re = re.concat( op2 );
-	return re;
+	return egl.eglx.lang.EBytes.plus(op1, op2);
 };
 egl.eglx.lang.EBytes.nullconcat = function (op1, op2) {
-	return egl.nullableconcat(op1, op2);
-};
-egl.eglx.lang.EBytes.Substr = function(bytes, startIndex, endIndex) {
-	if (bytes == null || startIndex == null || endIndex == null)
+	if (op1 === null || op2 === null)
 		return null;
+	return egl.eglx.lang.EBytes.plus(op1, op2);
+};
+egl.eglx.lang.EBytes.substring = function(bytes, startIndex, endIndex) {
+	if (bytes == null || startIndex == null || endIndex == null) {
+		throw egl.createNullValueException( "CRRUI2005E", [] );
+	}
 	start = startIndex;
 	end = endIndex;
 	max = bytes.length;
@@ -1093,62 +1342,31 @@ egl.eglx.lang.EBytes.Substr = function(bytes, startIndex, endIndex) {
 	} else if (end < start || end < 1 || end > max) {
 		throw egl.createInvalidIndexException( 'CRRUI2014E', [ end, max ], end );
 	}
-	return bytes.slice(start-1, end);
+	return egl.eglx.lang.EBytes.ezeNew(bytes.slice(start-1, end));
+};
+egl.eglx.lang.EBytes.ezeCast = function (x, nullable, length) {
+	return egl.convertAnyToBytes(x, nullable, length);
 };
 egl.eglx.lang.EBytes.fromEInt16 = function (x, len) {
-	return egl.eglx.lang.EBytes.asBytes( ''+x, len );
+	return egl.convertSmallintToBytes(x, len);
 };
 egl.eglx.lang.EBytes.fromEInt32 = function (x, len) {
-	return egl.eglx.lang.EBytes.asBytes( ''+x, len );;
+	return egl.convertIntToBytes(x, len);
 };
 egl.eglx.lang.EBytes.fromEInt64 = function (x, len) {
-	return egl.eglx.lang.EBytes.asBytes( (x).toString(), len ); 
+	return egl.convertBigintToBytes(x, len);
 };
 egl.eglx.lang.EBytes.fromEFloat32 = function (x, len) {
-	return egl.eglx.lang.EBytes.asBytes( ''+x, len );
+	return egl.convertSmallfloatToBytes(x, len);
 };
 egl.eglx.lang.EBytes.fromEFloat64 = function (x, len) {
-	return egl.eglx.lang.EBytes.asBytes( (x).toString(), len ); 
+	return egl.convertFloatToBytes(x, len);
 };
 egl.eglx.lang.EBytes.fromEDecimal = function (x, len) {
-	return egl.eglx.lang.EBytes.asBytes( (x).toString(), len ); 
+	return egl.convertDecimalToBytes(x, len);
 };
 egl.eglx.lang.EBytes.fromENumber = function (x, len) {
-	return egl.eglx.lang.EBytes.asBytes( egl.unboxAny(x).toString(), len ); 
-};
-egl.eglx.lang.EBytes.fromEString = function (x, len) {
-	return egl.eglx.lang.EBytes.asBytes( egl.unboxAny(x).toString(), len );
-};
-egl.eglx.lang.EBytes.toString = function (x) {
-    if ( x == null )
-        return null;
-	return String.fromCharCode.apply(String, x);
-};
-//Below are private methods, just for internal use in EBytes
-egl.eglx.lang.EBytes.asBytes = function (x, len) {
-	var re = egl.convertStringToBytes( x );
-	if ( typeof(len) == "undefined" ) {
-        return re;
-	} else {
-		return re.slice(0, len - 1);
-	} 
-};
-egl.eglx.lang.EBytes.equalsInternal = function (x1, x2) {
-	if ( x1 == null || x2 == null ) {
-	   if ( x1 == null && x2 == null ) {
-	       return true;
-	   }
-	   return false;
-	}
-	if ( x1.length != x2.length ) {
-	    return false;
-	}
-	for ( var i = 0; i < x1.length; i ++ ) {
-	    if ( x1[i] != x2[i] ) {
-	        return false;
-	    }
-	}
-	return true;
+	return egl.convertAnyToBytes(x, true, len);
 };
 
 /****************************************************************************
@@ -1561,10 +1779,10 @@ egl.defineClass( "eglx.lang", "ENumber",
 );
 egl.eglx.lang.ENumber.ZERO =  {eze$$value : 0, eze$$signature : "I;"};
 egl.eglx.lang.ENumber.fromEInt16 = function (x, decimals, limit) {   
-		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
+	return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.fromEInt32 = function (x, decimals, limit) {   
-		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
+	return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.fromEDecimal = function (x, decimals, limit) { 
 	return egl.convertDecimalToDecimal(x, decimals, limit, egl.createNumericOverflowException);

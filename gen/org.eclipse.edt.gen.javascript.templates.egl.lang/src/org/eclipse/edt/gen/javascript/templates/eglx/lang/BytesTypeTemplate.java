@@ -16,25 +16,19 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.SequenceType;
-import org.eclipse.edt.mof.egl.Type;
 
 public class BytesTypeTemplate extends JavaScriptTemplate {
 
-	// this method gets invoked when there is a limited bytes needed
 	public void genDefaultValue(SequenceType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
+		out.print("egl.eglx.lang.EBytes.ezeNew(");
+		out.print(type.getLength());
+		out.print(')');
 	}
 
-	// this method gets invoked when there is a bytes needed
 	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
+		out.print("egl.eglx.lang.EBytes.ezeNew([])");
 	}
 
-	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		out.print("[]");
-	}
-
-	// this method gets invoked when there is a limited bytes needed
 	public void genSignature(SequenceType type, Context ctx, TabbedWriter out) {
 		StringBuilder signature = new StringBuilder("g");
 		if(type.getLength() != null && type.getLength() > 0){
@@ -44,10 +38,8 @@ public class BytesTypeTemplate extends JavaScriptTemplate {
 		out.print(signature.toString());
 	}
 
-	// this method gets invoked when there is a byte needed
 	public void genSignature(ParameterizableType type, Context ctx, TabbedWriter out) {
-		String signature = "G;";
-		out.print(signature);
+		out.print("G;");
 	}
 
 }
