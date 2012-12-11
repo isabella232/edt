@@ -26,6 +26,7 @@ import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.utils.NameUtile;
@@ -155,11 +156,19 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 	private List getFieldProposals(List<Member> fields, String ImgKeyStr) {
 		List result = new ArrayList();
 		String fieldImgKeyStr = ImgKeyStr == "" ? PluginImages.IMG_OBJS_ENV_VAR : ImgKeyStr;
+		String recfieldImgKeyStr = ImgKeyStr == "" ? PluginImages.IMG_OBJS_STRUCTUREITEM : ImgKeyStr;
 
 		for(Member field : fields) {
 				String proposalString = field.getCaseSensitiveName();
 				if (proposalString.toUpperCase().startsWith(getPrefix().toUpperCase())) {
 						String displayString = proposalString + " : " + getTypeString(field.getType()) +  " - " + getNameFromElement(field.getContainer());	//$NON-NLS-1$;
+						String imgname;
+						if (field.getContainer() instanceof Record) {
+							imgname = recfieldImgKeyStr;
+						}
+						else {
+							imgname = fieldImgKeyStr;
+						}
 						result.add(new EGLCompletionProposal(viewer,
 												displayString,
 												proposalString,
@@ -168,7 +177,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 												getPrefix().length(),
 												proposalString.length(),
 												EGLCompletionProposal.RELEVANCE_MEMBER-1,
-												fieldImgKeyStr));
+												imgname));
 			}
 		}
 		return result;

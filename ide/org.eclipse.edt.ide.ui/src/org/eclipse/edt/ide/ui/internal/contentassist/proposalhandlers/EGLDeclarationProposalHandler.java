@@ -384,6 +384,11 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 		if(isLocalVariable){
 			imgStr = PluginImages.IMG_OBJS_ENV_LOCAL_VAR;
 		}
+		else {
+			if (field.getContainer() instanceof Record) {
+				imgStr = PluginImages.IMG_OBJS_STRUCTUREITEM;
+			}
+		}
 		String displayStr = isLocalVariable ? field.getCaseSensitiveName() + " : " + getTypeString(field.getType()) : field.getCaseSensitiveName() + " : " + getTypeString(field.getType()) + " - " + getNameFromElement(field.getContainer());
 		return new EGLCompletionProposal(viewer,
 			displayStr,
