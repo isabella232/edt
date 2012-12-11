@@ -126,7 +126,13 @@ public class EGLPartSearchAnnotationProposalHandler extends EGLPartSearchProposa
 	}
 	
 	protected int getCursorPosition(String proposalString) {
-		return proposalString.length() - 1;
+		if (addPrefix) {
+			return proposalString.length() - 1;
+		}
+		else {
+			return proposalString.length();
+		}
+	
 	}
 	
 	private Element getElementForBoundNode(Node node) {
