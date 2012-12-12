@@ -794,7 +794,7 @@ egl.eglx.lang.EString.toBytes = function( str, encoding ) {
 			else if ( c <= 0x07FF )
 			{
 				// Store two bytes: 110xxxxx 10xxxxxx
-				ret.push( 0xC0 | (c >>> 11) );
+				ret.push( 0xC0 | (c >>> 6) );
 				ret.push( 0x80 | (c & 0x3F) );
 			}
 			else

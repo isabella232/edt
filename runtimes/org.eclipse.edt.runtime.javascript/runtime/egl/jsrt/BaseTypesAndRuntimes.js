@@ -1236,7 +1236,7 @@ egl.convertBytesToSmallint = function(x)
 	}
 };
 
-egl.convertSmallintToBytes = function(x)
+egl.convertSmallintToBytes = function( x, length )
 {
 	if ( length && length !== 2 )
 	{
@@ -1481,24 +1481,50 @@ egl.convertBytesToDecimal = function(x, decimals, limit)
 
 egl.convertDecimalToBytes = function( dec, decSig, length ) 
 {
-	var decLen = decSig.substring( 1, decSig.indexOf( ':' ) );
-	var decByteLen = Math.floor( decLen / 2 + 1 );
-	
-	if ( length && length !== decByteLen )
+	var decLen, decByteLen;
+	var colonIndex = decSig.indexOf( ':' );
+	var padding = '';
+	if ( colonIndex >= 0 )
 	{
-		throw egl.createTypeCastException( "CRRUI2017E", [ String( dec ), 'decimal', 'bytes(' + length + ')' ] );
+		decLen = decSig.substring( 1, colonIndex );
+		decByteLen = Math.floor( decLen / 2 + 1 );
+		
+		if ( length && length !== decByteLen )
+		{
+			throw egl.createTypeCastException( "CRRUI2017E", [ String( dec ), 'decimal', 'bytes(' + length + ')' ] );
+		}
 	}
+	else if ( length )
+	{
+		decLen = dec.movePointRight( dec.scale() ).abs().toString().length;
+		var actualDecByteLen = Math.floor( decLen / 2 + 1 );
+		if ( actualDecByteLen > length )
+		{
+			throw egl.createTypeCastException( "CRRUI2017E", [ String( dec ), 'decimal', 'bytes(' + length + ')' ] );
+		}
+		else if ( actualDecByteLen < length )
+		{
+			padding = '0000000000000000000000000000000'.substr( 0, length - actualDecByteLen );
+		}
+		decByteLen = length;
+	}
+	else
+	{
+		decLen = dec.movePointRight( dec.scale() ).abs().toString().length;
+		decByteLen = Math.floor( decLen / 2 + 1 );
+	}
+	
 	var result = new Array( decByteLen );
 	var decStr, positive;
 	if ( dec.signum() > -1 )
 	{
 		positive = true;
-		decStr = dec.movePointRight( dec.scale() ).toString();
+		decStr = padding + dec.movePointRight( dec.scale() ).toString();
 	}
 	else
 	{
 		positive = false;
-		decStr = dec.negate().movePointRight( dec.scale() ).toString();
+		decStr = padding + dec.negate().movePointRight( dec.scale() ).toString();
 	}
 
 	var bytesIndex = 0, decIndex = 0;
@@ -1690,22 +1716,22 @@ egl.convertAnyToBytes = function( any, nullable, length )
 				return any.eze$$value;
 				
 			case 'I':
-				return egl.convertIntToBytes(any.eze$$value);
+				return egl.convertIntToBytes(any.eze$$value, length);
 
 			case 'i':
-				return egl.convertSmallintToBytes(any.eze$$value);
+				return egl.convertSmallintToBytes(any.eze$$value, length);
 
 			case 'B':
-				return egl.convertBigintToBytes(any.eze$$value);
+				return egl.convertBigintToBytes(any.eze$$value, length);
 
 			case 'F':
-				return egl.convertFloatToBytes(any.eze$$value);
+				return egl.convertFloatToBytes(any.eze$$value, length);
 				
 			case 'f':
-				return egl.convertSmallfloatToBytes(any.eze$$value);
+				return egl.convertSmallfloatToBytes(any.eze$$value, length);
 			
 			case 'd':
-				return egl.convertDecimalToBytes(any.eze$$value, any.eze$$signature);
+				return egl.convertDecimalToBytes(any.eze$$value, any.eze$$signature, length);
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'bytes' ], 'bytes', egl.typeName( any.eze$$signature ) );
