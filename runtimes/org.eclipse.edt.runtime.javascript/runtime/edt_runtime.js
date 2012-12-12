@@ -1362,11 +1362,23 @@ egl.eglx.lang.EBytes.fromEFloat32 = function (x, len) {
 egl.eglx.lang.EBytes.fromEFloat64 = function (x, len) {
 	return egl.convertFloatToBytes(x, len);
 };
-egl.eglx.lang.EBytes.fromEDecimal = function (x, len) {
-	return egl.convertDecimalToBytes(x, len);
+egl.eglx.lang.EBytes.fromEDecimal = function (x, decSig, len) {
+	return egl.convertDecimalToBytes(x, decSig, len);
 };
 egl.eglx.lang.EBytes.fromENumber = function (x, len) {
 	return egl.convertAnyToBytes(x, true, len);
+};
+egl.eglx.lang.EBytes.toString = function (x) {
+	if ( x === null ) return 'null';
+	var str = '0x';
+	for ( var i = 0; i < x.length; i++ )
+	{
+		if ( x[i] < 16 )
+			str += '0' + x[i].toString( 16 );
+		else
+			str += x[i].toString( 16 );
+	}
+	return str;
 };
 
 /****************************************************************************

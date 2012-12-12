@@ -1238,6 +1238,11 @@ egl.convertBytesToSmallint = function(x)
 
 egl.convertSmallintToBytes = function(x)
 {
+	if ( length && length !== 2 )
+	{
+		throw egl.createTypeCastException( "CRRUI2017E", [ String( x ), "smallint", "bytes(" + length + ")" ] );
+	}
+
 	var bytes = new Array(2);
 	bytes[0] = (x & 0xFF00) >>> 8;
 	bytes[1] = x & 0xFF;
@@ -1253,8 +1258,13 @@ egl.convertBytesToInt = function(x)
 	return x[0] << 24 | x[1] << 16 | x[2] << 8 | x[3];
 };
 
-egl.convertIntToBytes = function(x)
+egl.convertIntToBytes = function( x, length )
 {
+	if ( length && length !== 4 )
+	{
+		throw egl.createTypeCastException( "CRRUI2017E", [ String( x ), "int", "bytes(" + length + ")" ] );
+	}
+
 	var bytes = new Array(4);
 	bytes[0] = (x & 0xFF000000) >>> 24;
 	bytes[1] = (x & 0xFF0000) >>> 16;
@@ -1304,8 +1314,13 @@ egl.convertBytesToBigint = function(x)
 	return bigint;
 };
 
-egl.convertBigintToBytes = function( x )
+egl.convertBigintToBytes = function( x, length )
 {
+	if ( length && length !== 8 )
+	{
+		throw egl.createTypeCastException( "CRRUI2017E", [ String( x ), "bigint", "bytes(" + length + ")" ] );
+	}
+
 	var bytes = [ 0, 0, 0, 0, 0, 0, 0, 0 ];
 	if ( x.signum() !== 0 )
 	{
@@ -1334,26 +1349,29 @@ egl.convertBigDecimalTo64Bits = function( x )
 		positive = false;
 		x = x.negate().subtract( egl.javascript.BigDecimal.prototype.ONE );
 	}
-	for ( i = 0; i < 64 && x.signum() !== 0; i++ )
+
+	for ( i = 0; i < 63; i++ )
 	{
 		if ( x.compareTo( egl.BD_POWERS_OF_2[ i ] ) >= 0 )
 		{
 			result[ i + 1 ] = 1;
 			x = x.subtract( egl.BD_POWERS_OF_2[ i ] );
+			if ( x.signum() === 0 )
+			{
+				// All remaining bits are zeros.
+				i++;
+				while ( ++i < 64 )
+				{
+					result[ i ] = 0;
+				}
+			}
 		}
 		else
 		{
 			result[ i + 1 ] = 0;
 		}
 	}
-	if ( i < 64 )
-	{
-		do
-		{
-			result[ i++ ] = 0;
-		}
-		while ( i < 64 )
-	}
+	
 	if ( positive )
 	{
 		result[ 0 ] = 0; // + sign
@@ -1362,10 +1380,11 @@ egl.convertBigDecimalTo64Bits = function( x )
 	{
 		result[ 0 ] = 1; // - sign
 		
-		// This loop turns the result into a 2's compliment negative number.  It
-		// has the effect of flipping all the bits and adding 1.
-		var carry = true;
-		for ( i = 63; i > 0; i-- )
+		// This code turns the result into a two's compliment negative number.
+		// It has the effect of flipping all the bits, then adding 1.
+		result[ 63 ] = result[ 63 ] === 0 ? 1 : 0; 
+		var carry = false;
+		for ( i = 62; i > 0; i-- )
 		{
 			if ( result[ i ] === 0 )
 			{
@@ -1463,13 +1482,13 @@ egl.convertBytesToDecimal = function(x, decimals, limit)
 egl.convertDecimalToBytes = function( dec, decSig, length ) 
 {
 	var decLen = decSig.substring( 1, decSig.indexOf( ':' ) );
+	var decByteLen = Math.floor( decLen / 2 + 1 );
 	
-	if ( length !== undefined && length !== decLen / 2 + 1 )
+	if ( length && length !== decByteLen )
 	{
 		throw egl.createTypeCastException( "CRRUI2017E", [ String( dec ), 'decimal', 'bytes(' + length + ')' ] );
 	}
-	
-	var result = new Array( decLen / 2 + 1 );
+	var result = new Array( decByteLen );
 	var decStr, positive;
 	if ( dec.signum() > -1 )
 	{
@@ -1542,7 +1561,16 @@ egl.convertBytesToSmallfloat = function(x)
 	return pos ? value : -value;
 };
 
-egl.convertSmallfloatToBytes = function(x) { return egl.eglx.lang.EBytes.ezeNew( [0,0,0,0] ); }; //TODO write this
+egl.convertSmallfloatToBytes = function( x, length )
+{
+	if ( length && length !== 4 )
+	{
+		throw egl.createTypeCastException( "CRRUI2017E", [ String( x ), "smallfloat", "bytes(" + length + ")" ] );
+	}
+
+	//TODO write this
+	return egl.eglx.lang.EBytes.ezeNew( 4 ); 
+};
 
 egl.convertBytesToFloat = function(x)
 {
@@ -1568,17 +1596,21 @@ egl.convertBytesToFloat = function(x)
 	var frac = egl.javascript.BigDecimal.prototype.ZERO;
 	var mask = 0x080000;
 	var i;
-	for ( i = 51; i > 31; i-- )
+	for ( i = 11; i < 31; i++ )
 	{
 		if ( (fracBits1_20 & mask) !== 0 )
+		{
 			frac = frac.add( egl.BD_POWERS_OF_2[ i ] );
+		}
 		mask >>>= 1;
 	}
 	mask = 0x80000000;
-	for ( ; i >= 0; i-- )
+	for ( ; i < 63; i++ )
 	{
 		if ( (fracBits21_52 & mask) !== 0 )
+		{
 			frac = frac.add( egl.BD_POWERS_OF_2[ i ] );
+		}
 		mask >>>= 1;
 	}
 	
@@ -1592,16 +1624,23 @@ egl.convertBytesToFloat = function(x)
 		frac = frac.add( egl.BD_POWERS_OF_2[ 10 ] ); // insert the implicit leading 1 (so add 2**52)
 		exp -= 1023;
 	}
-	frac = frac.divide( egl.BD_POWERS_OF_2[ 10 ] ); // divide by 2**52
+	frac = frac.divide( egl.BD_POWERS_OF_2[ 10 ], egl.javascript.BigDecimal.prototype.eglMC ); // divide by 2**52
 	frac = Number( frac.toString() ) * Math.pow( 2, exp );
 	return pos ? frac : -frac;
 };
 
-egl.convertFloatToBytes = function(x) { return egl.eglx.lang.EBytes.ezeNew( [0,0,0,0,0,0,0,0] ); }; //TODO write this
-//{
+egl.convertFloatToBytes = function( x, length )
+{
+	if ( length && length !== 8 )
+	{
+		throw egl.createTypeCastException( "CRRUI2017E", [ String( x ), "float", "bytes(" + length + ")" ] );
+	}
+
+	//TODO write this
 //	var bd = new egl.javascript.BigDecimal( x );
 //	var str = bd.format( 1, -1, -1, 0, egl.javascript.MathContext.prototype.SCIENTIFIC, -1 );
-//};
+	return egl.eglx.lang.EBytes.ezeNew( 8 ); 
+};
 
 egl.convertAnyToBytes = function( any, nullable, length )
 {
@@ -1615,16 +1654,37 @@ egl.convertAnyToBytes = function( any, nullable, length )
 		switch ( kind )
 		{
 			case 'G':
+				if ( length )
+				{
+					if ( any.eze$$value.length > length )
+					{
+						return egl.eglx.lang.EBytes.ezeNew( any.eze$$value.slice( 0, any.eze$$value.length - length ) );
+					}
+					else if ( any.eze$$value.length < length )
+					{
+						var newBytes = egl.eglx.lang.EBytes.ezeNew( length );
+						for ( var i = 0; i < any.eze$$value.length; i++ )
+						{
+							newBytes[ i ] = any.eze$$value[ i ];
+						}
+						return newBytes;
+					}
+				}
 				return any.eze$$value;
 				
 			case 'g':
 				if ( length )
 				{
 					var sig = any.eze$$signature;
-					if ( length !== parseInt( sig.substring( sig.indexOf( 'g' ) + 1, sig.indexOf( ';' ) ) ) )
+					var sigLength = parseInt( sig.substring( sig.indexOf( 'g' ) + 1, sig.indexOf( ';' ) ), 10 );
+					if ( length > sigLength )
 					{
-						throw egl.createTypeCastException( "CRRUI2017E", [ any.eze$$value, egl.typeName( any.eze$$signature ), 'bytes(' + length + ')' ],
-								'bytes(' + length + ')', egl.typeName( any.eze$$signature ) );
+						throw egl.createTypeCastException( "CRRUI2017E", [ any.eze$$value, egl.typeName( sig ), 'bytes(' + length + ')' ],
+								'bytes(' + length + ')', egl.typeName( sig ) );
+					}
+					else if ( length < sigLength )
+					{
+						return egl.eglx.lang.EBytes.ezeNew( any.eze$$value.slice( 0, any.eze$$value.length - length ) );
 					}
 				}
 				return any.eze$$value;
@@ -3120,7 +3180,7 @@ egl.convertAnyToString = function( any, nullable )
 				return egl.convertAnyToString(any.eze$$value,nullable);
 			case 'G':
 			case 'g':
-				return egl.eglx.lang.EBytes.toString(any.eze$$value,nullable);
+				return egl.eglx.lang.EBytes.toString(any.eze$$value);
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'string' + (nullable ? '?' : '') ], 'string' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );
