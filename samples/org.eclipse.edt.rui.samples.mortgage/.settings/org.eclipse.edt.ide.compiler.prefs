@@ -3,5 +3,6 @@ javaGenDirectory//EGLSource/mortgage/server=P/generatedJava
 javaGenDirectory/<project>=P/generatedJava
 jsGenDirectory//EGLSource/libraries=P/generatedJavaScript
 jsGenDirectory//EGLSource/mortgage/client=P/generatedJavaScript
+jsGenDirectory//EGLSource/tools=P/generatedJavaScript
 jsGenDirectory//EGLSource/utils=P/generatedJavaScript
 jsGenDirectory/<project>=P/generatedJavaScript

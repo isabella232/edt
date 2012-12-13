@@ -499,7 +499,7 @@ public class WorkingCopyResourceChangeProcessor implements IResourceChangeListen
 			        Set partNames = fileInfo.getPartNames();
 					for (Iterator iter = partNames.iterator(); iter.hasNext();) {
 						String partName = (String) iter.next();
-						PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName));
+						PackageAndPartName ppName = new PackageAndPartName(fileInfo.getCaseSensitivePackageName(), fileInfo.getCaseSensitivePartName(partName), packageName);
 						WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project).partAdded(packageName, partName, fileInfo.getPartType(partName), addedFile, ppName);
 					}	
 					

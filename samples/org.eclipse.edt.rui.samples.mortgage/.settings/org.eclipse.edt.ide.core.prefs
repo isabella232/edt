@@ -4,5 +4,6 @@ eclipse.preferences.version=1
 generatorIds//EGLSource/libraries=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
 generatorIds//EGLSource/mortgage/client=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
 generatorIds//EGLSource/mortgage/server=org.eclipse.edt.ide.gen.JavaGenProvider
+generatorIds//EGLSource/tools=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
 generatorIds//EGLSource/utils=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
 generatorIds/<project>=org.eclipse.edt.ide.gen.JavaGenProvider,org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider

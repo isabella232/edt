@@ -19,11 +19,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateFactory;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Part;
 
 public abstract class Generator {
@@ -170,4 +173,43 @@ public abstract class Generator {
 		
 		return header;
 	}
+	
+	public boolean verifyPartSupported(Object obj, String generatorName) {
+		if (obj instanceof Part) {
+			Part part = (Part)obj;
+			Annotation ann = part.getStereotype();
+			if (ann != null) {
+				//If the part has a subtype, check the context to see if the stereotype is supported
+				String key = ann.getEClass().getETypeSignature();
+				if (!context.getSupportedStereotypes().contains(key)) {
+					String[] details1 = new String[] { part.getId(), ann.getEClass().getCaseSensitiveName(),  generatorName};
+					Annotation loc = part.getAnnotation(IEGLConstants.EGL_LOCATION);
+					if (loc == null) {
+						loc = context.getLastStatementLocation();
+					}
+					EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
+						Constants.EGLMESSAGE_SUBTYPE_NOT_SUPPORTED, null, details1, loc);
+					context.getMessageRequestor().addMessage(message1);
+					return false;
+				}
+				return true;
+			}
+			else {
+				String key = part.getEClass().getETypeSignature();
+				if (!context.getSupportedPartTypes().contains(key)) {
+					String[] details1 = new String[] { part.getId(),  generatorName};
+					Annotation loc = part.getAnnotation(IEGLConstants.EGL_LOCATION);
+					if (loc == null) {
+						loc = context.getLastStatementLocation();
+					}
+					EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
+							Constants.EGLMESSAGE_PARTTYPE_NOT_SUPPORTED, null, details1, loc);
+						context.getMessageRequestor().addMessage(message1);
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+
 }

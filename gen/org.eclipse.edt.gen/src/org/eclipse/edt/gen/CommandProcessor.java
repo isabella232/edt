@@ -25,6 +25,8 @@ public abstract class CommandProcessor {
 	private List<String> messagePath = new ArrayList<String>();
 	private Map<String, CommandParameter> parameterMapping = new HashMap<String, CommandParameter>();
 	private Map<String, String> aliasMapping = new HashMap<String, String>();
+	private List<String> supportedPartTypes = new ArrayList<String>();
+	private List<String> supportedStereotypes = new ArrayList<String>();
 
 	public CommandProcessor() {
 	}
@@ -86,6 +88,8 @@ public abstract class CommandProcessor {
 			nativeTypePath.clear();
 			primitiveTypePath.clear();
 			messagePath.clear();
+			supportedPartTypes.clear();
+			supportedStereotypes.clear();
 			// now go through every existing option and clear the value
 			for (Entry<String, CommandParameter> entry : parameterMapping.entrySet()) {
 				CommandParameter parameter = entry.getValue();
@@ -318,5 +322,13 @@ public abstract class CommandProcessor {
 
 	public List<String> getMessagePath() {
 		return messagePath;
+	}
+	
+	public List<String> getSupportedPartTypes() {
+		return supportedPartTypes;
+	}
+	
+	public List<String> getSupportedStereotypes() {
+		return supportedStereotypes;
 	}
 }

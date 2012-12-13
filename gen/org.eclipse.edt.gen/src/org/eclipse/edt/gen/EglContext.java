@@ -55,6 +55,8 @@ public abstract class EglContext extends TemplateContext {
 	private Map<String, String> primitiveTypeMappings;
 	private Map<String, String> nativeTypeMappings;
 	private Map<String, String> messageMappings;
+	private List<String> supportedPartTypes;
+	private List<String> supportedStereotypes;
 
 	// the message requestor
 	private IGenerationMessageRequestor messageRequestor;
@@ -76,6 +78,8 @@ public abstract class EglContext extends TemplateContext {
 		nativeTypeMappings = load(processor.getNativeTypes(), loader);
 		primitiveTypeMappings = load(processor.getPrimitiveTypes(), loader);
 		messageMappings = load(processor.getEGLMessages(), loader);
+		supportedPartTypes = processor.getSupportedPartTypes();
+		supportedStereotypes = processor.getSupportedStereotypes();
 	}
 
 	/**
@@ -480,4 +484,13 @@ public abstract class EglContext extends TemplateContext {
 	public Set<String> getRequiredRuntimeContainers() {
 		return requiredRuntimeContainers;
 	}
+
+	public List<String> getSupportedPartTypes() {
+		return supportedPartTypes;
+	}
+
+	public List<String> getSupportedStereotypes() {
+		return supportedStereotypes;
+	}
+	
 }

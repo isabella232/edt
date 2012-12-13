@@ -53,7 +53,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 		}
 		return templates;
 	}
-
+	
 	public String getNativeTypes() {
 		String[] nativeTypeList = getNativeTypePath().toArray(new String[getNativeTypePath().size()]);
 		for (String nativeType : nativeTypeList) {
@@ -78,7 +78,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 		}
 		return EGLMessages;
 	}
-
+	
 	public void generate(String[] args, Generator generator, IEnvironment environment, ICompiler compiler) {
 		// process the arguments and load the contributions
 		if (initialize(args, generator)) {
@@ -260,6 +260,18 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 	public void registerMessagePath(String[] paths) {
 		for (String path : paths) {
 			getMessagePath().add(path);
+		}
+	}
+	
+	public void registerSupportedPartTypes(String[] partTypes) {
+		for (String type : partTypes) {
+			getSupportedPartTypes().add(type);
+		}
+	}
+	
+	public void registerSupportedStereotypes(String[] stereotypes) {
+		for (String type : stereotypes) {
+			getSupportedStereotypes().add(type);
 		}
 	}
 }

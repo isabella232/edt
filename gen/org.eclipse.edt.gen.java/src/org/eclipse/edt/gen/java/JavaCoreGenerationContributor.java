@@ -22,6 +22,8 @@ public class JavaCoreGenerationContributor implements GenerationContributor {
 	static final String[] nativeTypePath;
 	static final String[] primitiveTypePath;
 	static final String[] messagePath;
+	static final String[] supportedPartTypes;
+	static final String[] supportedStereotypes;
 	// define the list of command options for this generator
 	static {
 		commandOptions = new CommandOption[] { 
@@ -60,6 +62,35 @@ public class JavaCoreGenerationContributor implements GenerationContributor {
 		};
 	}
 
+	//define the list of part types supported
+	static {
+		supportedPartTypes = new String[] {
+				"org.eclipse.edt.mof.egl.Delegate",
+				"org.eclipse.edt.mof.egl.ExternalType",
+				"org.eclipse.edt.mof.egl.Record",
+				"org.eclipse.edt.mof.egl.Handler",
+				"org.eclipse.edt.mof.egl.Interface",
+				"org.eclipse.edt.mof.egl.Library",
+				"org.eclipse.edt.mof.egl.Program",
+				"org.eclipse.edt.mof.egl.Service",
+				"org.eclipse.edt.mof.egl.Enumeration",
+				"org.eclipse.edt.mof.egl.Class",
+				"org.eclipse.edt.mof.egl.AnnotationType",
+				"org.eclipse.edt.mof.egl.StereotypeType"
+		};
+	}
+	
+	//define the list of stereotypes supported
+	static {
+		supportedStereotypes = new String[] {
+				"eglx.lang.Exception",
+				"eglx.lang.NativeType",
+				"eglx.lang.BasicProgram",
+				"eglx.java.JavaObject",
+				"eglx.persistence.Entity"				
+		};
+	}
+
 	public void contribute(GenerationRegistry generator) {
 		// register the array of command options for this configuration
 		// if you don't have any, then register the empty array
@@ -76,5 +107,11 @@ public class JavaCoreGenerationContributor implements GenerationContributor {
 		// register the array of template path directories for this configuration
 		// if you don't have any, then register the empty array
 		generator.registerMessagePath(messagePath);
+		// register the array of supported part types for this configuration
+		// if you don't have any, then register the empty array
+		generator.registerSupportedPartTypes(supportedPartTypes);
+		// register the array of supported stereotypes for this configuration
+		// if you don't have any, then register the empty array
+		generator.registerSupportedStereotypes(supportedStereotypes);
 	}
 }

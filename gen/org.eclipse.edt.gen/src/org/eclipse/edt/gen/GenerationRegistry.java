@@ -17,4 +17,6 @@ public interface GenerationRegistry {
 	public void registerNativeTypePath(String[] path);
 	public void registerPrimitiveTypePath(String[] path);
 	public void registerMessagePath(String[] path);
+	public void registerSupportedPartTypes(String[] partTypes);
+	public void registerSupportedStereotypes(String[] stereotypes);
 }

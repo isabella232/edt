@@ -27,6 +27,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaCoreGenerator extends Generator {
@@ -62,6 +63,9 @@ public class JavaCoreGenerator extends Generator {
 
 	public void generate(Object part) throws GenerationException {
 		makeWriter();
+		if (!verifyPartSupported(part, "Java")) {
+			return;
+		}
 		try {
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
 			context.invoke(JavaTemplate.preGenPart, part, context);
@@ -109,19 +113,27 @@ public class JavaCoreGenerator extends Generator {
 			throw new GenerationException(e);
 		}
 		catch (TemplateException e) {
-			String[] details1 = new String[] { e.getLocalizedMessage() };
+			Annotation locAnn = context.getLastStatementLocation();
+			String partName = "";
+			if (part instanceof Part) {
+				partName = ((Part)part).getCaseSensitiveName();
+				if (locAnn == null) {
+					locAnn = ((Part)part).getAnnotation(IEGLConstants.EGL_LOCATION);
+				}
+			}
+			String[] details1 = new String[] { partName, e.getLocalizedMessage() };
 			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
+				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1, CommonUtilities.includeEndOffset(locAnn, context));
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
 				EGLMessage message2 = EGLMessage.createEGLStackTraceMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
-					e, details2, CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
+					e, details2, CommonUtilities.includeEndOffset(locAnn, context));
 				context.getMessageRequestor().addMessage(message2);
 			}
 			// print out the whole stack trace
 			int startLine = 0;
-			Annotation annotation = context.getLastStatementLocation();
+			Annotation annotation = locAnn;
 			if (annotation != null) {
 				if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
 					startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
