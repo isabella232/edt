@@ -30,11 +30,12 @@ public class DeclarationExpressionTemplate extends JavaScriptTemplate {
 			for (Annotation annot : CommonUtilities.getAnnotations(field, ctx)){
 				ctx.invoke(preGen, annot.getEClass(), ctx, annot, field);
 			}
+			ctx.put( "generating declaration of " + field + field.hashCode(), Boolean.TRUE );
 			genFieldDeclaration(expr, ctx, out, field);
-			
 			if (field.getInitializerStatements() != null) {
 				genInitializerStatements(field, ctx, out);
 			}
+			ctx.remove( "generating declaration of " + field + field.hashCode() );
 		}
 	}
 	

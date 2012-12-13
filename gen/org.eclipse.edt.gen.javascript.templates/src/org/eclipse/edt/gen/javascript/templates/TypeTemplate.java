@@ -16,30 +16,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayAccess;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.Assignment;
-import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.BoxingExpression;
-import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.IntegerLiteral;
-import org.eclipse.edt.mof.egl.InvocationExpression;
-import org.eclipse.edt.mof.egl.IrFactory;
-import org.eclipse.edt.mof.egl.IsAExpression;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.NamedElement;
-import org.eclipse.edt.mof.egl.Operation;
-import org.eclipse.edt.mof.egl.Record;
-import org.eclipse.edt.mof.egl.ReturnStatement;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
-import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class TypeTemplate extends JavaScriptTemplate {
@@ -190,18 +167,128 @@ public class TypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
 			out.print("egl.checkNull(");
-			ctx.invoke(genExpression, arg2, ctx, out);
+			assignmentSource(arg1, arg2, ctx, out);
 			out.print(")");
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
-			//TODO add this to pass EUnit/ObjectInitialization001, need to reconsider later
-			ctx.putAttribute( arg2, Constants.SubKey_recordToAnyAssignment, true);
-			ctx.invoke(genTypeBasedExpression, arg2, ctx, out, arg1.getType());
+			ctx.putAttribute(arg2, Constants.SubKey_recordToAnyAssignment, true);
+			assignmentSource(arg1, arg2, ctx, out);
 			ctx.putAttribute(arg2, Constants.SubKey_recordToAnyAssignment, false);
 		}
 	}
 	
+	public static void assignmentSource( Expression lhs, Expression rhs, Context ctx, TabbedWriter out )
+	{
+//TODO is this comment correct?		
+		// Generate something special for the RHS of an assignment when:
+		//  1) assigning bytes(x) to bytes(y), and x < y
+		//  2) assigning bytes to bytes(x)
+		//  3) assigning 'any as bytes(x)' to bytes(x)
+		//  4) assigning 'any as bytes' to bytes
+		//  5) assigning a function to a delegate
+		Type lhsType = lhs.getType();
+		Type rhsType = rhs.getType();
+		if ( rhsType != null && TypeUtils.getTypeKind( rhsType ) == TypeUtils.TypeKind_BYTES
+				&& lhsType != null && TypeUtils.getTypeKind( lhsType ) == TypeUtils.TypeKind_BYTES )
+		{
+			if ( ( lhsType instanceof SequenceType && rhsType instanceof SequenceType
+						&& ((SequenceType)rhsType).getLength() < ((SequenceType)lhsType).getLength() )
+					|| ( rhs instanceof AsExpression && ((AsExpression)rhs).getObjectExpr().getType() instanceof ParameterizableType
+							&& TypeUtils.getTypeKind( ((AsExpression)rhs).getObjectExpr().getType() ) == TypeUtils.TypeKind_BYTES ) )
+			{
+				assignShorterBytesToLongerBytes( rhs, rhsType, lhs, lhsType, ctx, out );
+			}
+			else if ( rhs instanceof AsExpression 
+					&& TypeUtils.getTypeKind( ((AsExpression)rhs).getObjectExpr().getType() ) == TypeUtils.TypeKind_ANY )
+			{
+				int lhsLength = lhsType instanceof SequenceType ? ((SequenceType)lhsType).getLength() : 0;
+
+				ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
+				out.print( ".ezeAssignFromAny(" );
+				ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
+				out.print( ", " );
+				if ( lhsLength > 0 )
+				{
+					if ( lhs instanceof MemberName 
+							&& ctx.get( "generating declaration of " + ((MemberName)lhs).getMember() + ((MemberName)lhs).getMember().hashCode() ) != null )
+					{
+						ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
+						out.print( ".ezeNew(" );
+						out.print( lhsLength );
+						out.print( ')' );
+					}
+					else
+					{
+						ctx.invoke( genExpression, lhs, ctx, out );
+					}
+					out.print( ", " );
+					out.print( lhsLength );
+				}
+				else
+				{
+					out.print( "null" );
+				}
+				out.print( ')' );
+			}
+			else
+			{
+				ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
+			}
+		}
+/* TODO need this?
+		else if ( lhsType instanceof Delegate && rhs instanceof MemberName && ((MemberName)rhs).getMember() instanceof Function )
+		{
+			String functionSig = ((Function)((MemberName)rhs).getMember()).getSignature();
+			ctx.put( "Delegate_signature_for_function_" + functionSig, ((Delegate)lhsType).getTypeSignature() );
+			ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
+			ctx.remove( "Delegate_signature_for_function_" + functionSig );
+		}
+*/		
+		else
+		{
+			ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
+		}
+	}
+	
+	private static void assignShorterBytesToLongerBytes( Expression rhs, Type rhsType, Expression lhs, Type lhsType, Context ctx, TabbedWriter out )
+	{
+		int lhsLength = ((SequenceType)lhsType).getLength();
+		if ( rhs instanceof BytesLiteral )
+		{
+			StringBuilder value = new StringBuilder( ((BytesLiteral)rhs).getValue() );
+			while ( value.length() / 2 < lhsLength )
+			{
+				value.append( "00" );
+			}
+			BytesLiteral newRHS = ctx.getFactory().createBytesLiteral();
+			newRHS.setValue( value.toString() );
+			ctx.invoke( genExpression, newRHS, ctx, out );
+		}
+		else
+		{
+			ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
+			out.print( ".ezeAssignToLonger(" );
+			if ( lhs instanceof MemberName 
+					&& ctx.get( "generating declaration of " + ((MemberName)lhs).getMember() + ((MemberName)lhs).getMember().hashCode() ) != null )
+			{
+				ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
+				out.print( "egl.eglx.lang.EBytes.ezeNew(" );
+				out.print( lhsLength );
+				out.print( ')' );
+			}
+			else
+			{
+				ctx.invoke( genExpression, lhs, ctx, out );
+			}
+			out.print( ", " );
+			out.print( lhsLength );
+			out.print( ", " );
+			ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
+			out.print( ')' );
+		}
+	}
+
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		if (arg.getConversionOperation() != null) {
 			Operation op = arg.getConversionOperation();
@@ -419,8 +506,6 @@ public class TypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out) {
-		// TODO sbg In RBD, the type may be null which has a runtime signature of "V;" -- do we need to handle that, and if
-		// so, how?
 		if ( ctx.get( Constants.SubKey_isaSignature ) != null ) {
 			out.print( "T" );
 			out.print(type.getTypeSignature().replaceAll("\\.", "/"));

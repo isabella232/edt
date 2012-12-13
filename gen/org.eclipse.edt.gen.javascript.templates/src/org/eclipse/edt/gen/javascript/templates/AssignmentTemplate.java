@@ -28,8 +28,7 @@ public class AssignmentTemplate extends JavaScriptTemplate {
 		// first, make this expression compatible
 		IRUtils.makeCompatible(expr);
 
-		boolean isLHS = true;
-		ctx.putAttribute(expr.getLHS(), Constants.EXPR_LHS, isLHS); // TODO sbg do we need to clear / remove this?
+		ctx.putAttribute(expr.getLHS(), Constants.EXPR_LHS, true); // TODO sbg do we need to clear / remove this?
 
 		// generate the assignment based on the lhs, but pass along the rhs
 		Field field = null;
@@ -44,7 +43,7 @@ public class AssignmentTemplate extends JavaScriptTemplate {
 		else if (expr.getLHS() instanceof Name && ((Name) expr.getLHS()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) expr.getLHS()).getNamedElement();
 		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type) {
-			ctx.putAttribute(field, Constants.EXPR_LHS, isLHS); // TODO sbg do we need to clear / remove this?
+			ctx.putAttribute(field, Constants.EXPR_LHS, true); // TODO sbg do we need to clear / remove this?
 			ctx.invoke(genContainerBasedAssignment, (Type) field.getContainer(), ctx, out, expr, field);
 		} else
 			genAssignment(expr, ctx, out);

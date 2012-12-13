@@ -1272,7 +1272,7 @@ egl.eglx.lang.EBytes.equals = function(op1, op2) {
 egl.eglx.lang.EBytes.notEquals = function(b1, b2) {
 	return !egl.eglx.lang.EBytes.equals( b1, b2 );
 };
-egl.eglx.lang.EBytes.compareTo = function(op1, op2 ) 
+egl.eglx.lang.EBytes.compareTo = function(op1, op2) 
 {
 	var i = 0;
 	if ( op1.length === op2.length )
@@ -1379,6 +1379,47 @@ egl.eglx.lang.EBytes.toString = function (x) {
 			str += x[i].toString( 16 );
 	}
 	return str;
+};
+egl.eglx.lang.EBytes.ezeAssignToLonger = function( target, targetLength, source )
+{
+	if ( source === null )
+	{
+		return source;
+	}
+	else if ( target === null )
+	{
+		target = egl.eglx.lang.EBytes.ezeNew( targetLength );
+		for ( var i = 0; i < source.length; i++ )
+		{
+			target[ i ] = source[ i ];
+		}
+	}
+	else
+	{
+		for ( var i = 0; i < source.length; i++ )
+		{
+			target[ i ] = source[ i ];
+		}
+	}
+	return target;
+};
+egl.eglx.lang.EBytes.ezeAssignFromAny = function( source, target, targetLength )
+{
+	if ( source === null )
+	{
+		return source;
+	}
+	
+	if ( target === null )
+	{
+		target = egl.eglx.lang.EBytes.ezeNew( targetLength || source.length );
+	}
+	var min = Math.min( target.length, source.length );
+	for ( var i = 0; i < min; i++ )
+	{
+		target[ i ] = source[ i ];
+	}
+	return target;
 };
 
 /****************************************************************************
