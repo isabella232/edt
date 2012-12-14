@@ -17,11 +17,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class LibraryTemplate extends JavaScriptTemplate {
 
@@ -136,7 +132,17 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		ctx.invoke(genName, library, ctx, out);
 		out.print(".prototype.");
 		ctx.invoke(genName, arg, ctx, out);
+		out.print(", \"" );
+		Delegate delegate = (Delegate)ctx.get( "Delegate_signature_for_function_" + arg.getSignature() );
+		if ( delegate != null )
+		{
+			ctx.put(Constants.SubKey_isaSignature, "true");
+			ctx.invoke(genSignature, delegate, ctx, out);
+			ctx.remove(Constants.SubKey_isaSignature);
+		}
+		out.print( "\"");
 	}
+
 	public void genCloneMethod(Library library, Context ctx, TabbedWriter out) {
 		out.print(".eze$$clone()");
 	}

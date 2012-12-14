@@ -1919,8 +1919,7 @@ egl.eglx.lang.ENumber.decimals = function(x) {
 	case '9':
 	case 'p':
 		var colon = x.eze$$signature.indexOf(':');
-		result = colon > 0 ? x.eze$$signature.substring(colon + 1, x.eze$$signature
-				.indexOf(';')) : x.eze$$value.scale();
+		result = colon > 0 ? x.eze$$signature.substring(colon + 1, x.eze$$signature.indexOf(';')) : x.eze$$value.scale();
 		break;
 	case 'F':
 	case 'f':

@@ -191,9 +191,13 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 //		}
 		
 		out.print("egl.convertAnyToArrayType(");
+		ctx.put( "etType_for_array_conversion_" + arg.getObjectExpr(), etType );
 		ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+		ctx.remove( "etType_for_array_conversion_" + arg.getObjectExpr() );
 		out.print(",\"");
+		ctx.put(Constants.SubKey_isaSignature, "true");
 		ctx.invoke(genSignature, etType, ctx, out, arg);
+		ctx.remove(Constants.SubKey_isaSignature);
 		out.print("\")");
 	}
 	public void genServiceCallbackArgType(ArrayType type, Context ctx, TabbedWriter out){

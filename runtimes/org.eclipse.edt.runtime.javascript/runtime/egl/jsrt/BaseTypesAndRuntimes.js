@@ -2497,6 +2497,7 @@ egl.inferSignature = function( x )
 				return ((""+x).indexOf('.')<0) ? "I;":"F;";
 			case "boolean": return "0;";
 			case "object":
+			case "function":
 				if ( "eze$$signature" in x && typeof x.eze$$signature == "string" )
 				{
 					return x.eze$$signature;
@@ -2521,7 +2522,7 @@ egl.inferSignature = function( x )
 				{
 					if ( x.getType && typeof x.getType() == 'string' )
 					{
-						return "1" + x.getType();
+						return x.getType();
 					}
 					else if ( x.isEBytes )
 					{
@@ -2547,7 +2548,7 @@ egl.inferSignature = function( x )
 					{
 						eltSig = "A";
 					}
-					return "1" + eltSig + ";";
+					return "[" + eltSig + ";";
 				}
 				else
 				{
@@ -2586,7 +2587,7 @@ egl.typeName = function( signature )
 		case 'T':
 			return signature.substring(1,signature.length-1).replace( /\//g, '.' );
 
-		case '1':
+		case '[':
 			return egl.typeName(signature.substring(1,signature.length)) + '[]';
 
 		case ' ':
@@ -2676,7 +2677,10 @@ egl.typeName = function( signature )
 
 		case 'd':
 			var colon = signature.indexOf(':');
-			return 'decimal(' + signature.substring(firstCharIdx+1, colon) + ', ' + signature.substring(colon+1, signature.indexOf(';')) + ')' + nullable;
+			if ( colon !== -1 )
+				return 'decimal(' + signature.substring(firstCharIdx+1, colon) + ', ' + signature.substring(colon+1, signature.indexOf(';')) + ')' + nullable;
+			else
+				return 'decimal' + nullable;
 
 		case '9':
 			var colon = signature.indexOf(':');
@@ -2732,7 +2736,7 @@ egl.boxAny = function( val, sig )
 		sig = egl.inferSignature( val );
 	}
 
-	if ( sig.search( /1+A;/ ) !== -1 )
+	if ( sig.search( /\[+A;/ ) !== -1 )
 	{
 		val = egl.boxElements( val, sig );
 	}
@@ -2749,19 +2753,19 @@ egl.boxElements = function( array, sig )
 			sig = egl.inferSignature( array );
 		}
 
-		if ( sig === "1A;" )
+		if ( sig === "[A;" )
 		{
 			for ( var i = 0; i < array.length; i++ )
 			{
 				var boxed = egl.boxAny( array[ i ] );
 				array[ i ] = boxed;
-				if ( boxed != null && boxed.eze$$signature.search( /1+A;/ ) !== -1 )
+				if ( boxed != null && boxed.eze$$signature.search( /\[+A;/ ) !== -1 )
 				{
 					egl.boxElements( boxed.eze$$value, boxed.eze$$signature );
 				}
 			}
 		}
-		else if ( sig.search( /1+A;/ ) !== -1 )
+		else if ( sig.search( /\[+A;/ ) !== -1 )
 		{
 			for ( var i = 0; i < array.length; i++ )
 			{
@@ -2781,7 +2785,7 @@ egl.unboxAny = function( any )
 	else
 	{
 		var val = any.eze$$value;
-		if ( any.eze$$signature.search( /1+A;/ ) !== -1 )
+		if ( any.eze$$signature.search( /\[+A;/ ) !== -1 )
 		{
 			val = egl.unboxElements( val, any.eze$$signature );
 		} 
@@ -2796,7 +2800,7 @@ egl.unboxElements = function( array, sig )
 		return array;
 	}
 	
-	if ( sig === "1A;" )
+	if ( sig === "[A;" )
 	{
 		var unboxed = new Array( array.length );
 		for ( var i = 0; i < array.length; i++ )
@@ -2804,7 +2808,7 @@ egl.unboxElements = function( array, sig )
 			var boxed = array[ i ];
 			if ( boxed != null )
 			{
-				if ( boxed.eze$$signature.search( /1+A;/ ) !== -1 )
+				if ( boxed.eze$$signature.search( /\[+A;/ ) !== -1 )
 				{
 					unboxed[ i ] = egl.unboxElements( boxed.eze$$value || boxed, boxed.eze$$signature );
 				}
@@ -2820,7 +2824,7 @@ egl.unboxElements = function( array, sig )
 		}
 		return unboxed;
 	}
-	else if ( sig.search( /1+A;/ ) !== -1 )
+	else if ( sig.search( /\[+A;/ ) !== -1 )
 	{
 		var unboxed = new Array( array.length );
 		sig = sig.substring( 1 );
@@ -2968,7 +2972,7 @@ egl.convertAnyToType = function( any, sig )
 		case 'T':
 			return egl.convertAnyToNameType(any, sig);
 			
-		case '1':
+		case '[':
 			return egl.convertAnyToArrayType(any, sig);
 			
 		case 'g':
@@ -3015,7 +3019,7 @@ egl.convertAnyToArrayType = function( any, sig )
 		else if ( any.eze$$value instanceof Array )
 		{
 			array = any.eze$$value;
-			if ( any.eze$$signature.charAt( 0 ) == '1' && any.eze$$signature != '1A;' )
+			if ( any.eze$$signature.charAt( 0 ) === '[' && any.eze$$signature !== '[A;' )
 			{
 				anyeltsig = any.eze$$signature.substring(1);
 			}
@@ -3024,7 +3028,7 @@ egl.convertAnyToArrayType = function( any, sig )
 		if ( array )
 		{
 			var eltsig = sig.substring(1);
-			var ret = [].setType(eltsig);
+			var ret = [].setType(sig);
 			for ( var i = 0; i < array.length; i++ )
 			{
 				var elt = egl.boxAny( array[i], anyeltsig );
@@ -3258,7 +3262,11 @@ egl.convertAnyToString = function( any, nullable )
 			case 'd':
 			case '9':
 			case 'p':
-				return any.eze$$value.toString( Number(any.eze$$signature.substring(any.eze$$signature.indexOf(':')+1, any.eze$$signature.indexOf(';'))) );
+				var colon = any.eze$$signature.indexOf(':');
+				if ( colon !== -1 )
+					return any.eze$$value.toString( Number(any.eze$$signature.substring(colon+1, any.eze$$signature.indexOf(';'))) );
+				else
+					return any.eze$$value.toString();
 
 			case 'O':
 				return egl.convertAnyToString(any.eze$$value,nullable);
@@ -3778,9 +3786,9 @@ Array.prototype.resize = function Array_resize(val) {
 	}
 	var elementType = this.getType();
 	if ( typeof elementType == 'string' ) {
-	     //the Array type is "[X;", X is the element type.
+	     //the Array type is "[X", X is the element type.
 	     //Below line gets the element type
-	     elementType = elementType.substring( 1, elementType.length );
+	     elementType = elementType.substring( 1 );
 	}
 	
 	for (var n=this.length; n < val; n++) {
@@ -4065,7 +4073,7 @@ egl.timeStampEquals = function(/*timestamp*/ a, /*timestamp*/ b, falseAnswer) {
 	var pkg = egl.makePackage( 'egl.jsrt' );
 	if (pkg['Delegate']) { return; }
 	
-	pkg['Delegate']=function(context,func,name) {
+	pkg['Delegate']=function(context,func,sig,name) {
 	
 		// Invoke the wrapped function in the proper context, with the supplied
 		// arguments.
@@ -4084,6 +4092,7 @@ egl.timeStampEquals = function(/*timestamp*/ a, /*timestamp*/ b, falseAnswer) {
 		
 		// Embed some information in the wrapper for identification purposes
 		d.f=func;
+		d.signature = function() { return sig; };
 		if (name) d.n=name;
 		
 		// Delegates pointing at the same function are equal

@@ -830,7 +830,7 @@ egl.defineClass(
 		return this.eze$$DOMElement;
 	}, 
 	"setOnStartDrag" : function(callback) {
-		this.startDrag = new egl.egl.jsrt.Delegate(this, callback);
+		this.startDrag = new egl.egl.jsrt.Delegate(this, callback, "Teglx/ui/rui/StartDragFunction;");
 		this.eze$$dragging = false;
 		this.getOnMouseDown().appendElement(new egl.egl.jsrt.Delegate(this, function(e) {
 			e = egl.wrapEvent(e);
@@ -891,7 +891,7 @@ egl.defineClass(
 		return this.drag;
 	}, 
 	"setOnDrag" : function(callback) {
-		this.drag = new egl.egl.jsrt.Delegate(this, callback);
+		this.drag = new egl.egl.jsrt.Delegate(this, callback, "Teglx/ui/rui/DragFunction;");
 	},
 	"getOnDropOnTarget" : function() {
 		if (!this.dropOnTarget)

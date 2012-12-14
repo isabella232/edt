@@ -180,7 +180,6 @@ public class TypeTemplate extends JavaScriptTemplate {
 	
 	public static void assignmentSource( Expression lhs, Expression rhs, Context ctx, TabbedWriter out )
 	{
-//TODO is this comment correct?		
 		// Generate something special for the RHS of an assignment when:
 		//  1) assigning bytes(x) to bytes(y), and x < y
 		//  2) assigning bytes to bytes(x)
@@ -236,15 +235,13 @@ public class TypeTemplate extends JavaScriptTemplate {
 				ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
 			}
 		}
-/* TODO need this?
 		else if ( lhsType instanceof Delegate && rhs instanceof MemberName && ((MemberName)rhs).getMember() instanceof Function )
 		{
 			String functionSig = ((Function)((MemberName)rhs).getMember()).getSignature();
-			ctx.put( "Delegate_signature_for_function_" + functionSig, ((Delegate)lhsType).getTypeSignature() );
+			ctx.put( "Delegate_signature_for_function_" + functionSig, lhsType );
 			ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
 			ctx.remove( "Delegate_signature_for_function_" + functionSig );
 		}
-*/		
 		else
 		{
 			ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
@@ -484,8 +481,6 @@ public class TypeTemplate extends JavaScriptTemplate {
 			out.print(")");
 		}
 	}
-
-	
 
 	public void genSignature(Type type, Context ctx, TabbedWriter out, TypedElement arg) {
 		/* In EDT, nullable is a characteristic of the field, not the type, so this is no

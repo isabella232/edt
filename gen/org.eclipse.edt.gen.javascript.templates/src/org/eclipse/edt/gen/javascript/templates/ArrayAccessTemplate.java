@@ -33,12 +33,14 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 		out.print(" - 1)]");
 		out.print( " = " );
-		if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
+		if (TypeUtils.getTypeKind(expr.getType()) != TypeUtils.TypeKind_ANY 
+				&& TypeUtils.getTypeKind(expr.getType()) != TypeUtils.TypeKind_NUMBER
+				&& (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType()))) {
 			out.print("egl.unboxAny(");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 		} else {
-			ctx.invoke(genExpression, arg1, ctx, out);
+			TypeTemplate.assignmentSource(expr, arg1, ctx, out);
 		}
 	}
 	

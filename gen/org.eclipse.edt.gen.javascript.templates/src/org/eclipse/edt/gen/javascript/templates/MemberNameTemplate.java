@@ -16,14 +16,7 @@ import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.*;
 
 public class MemberNameTemplate extends JavaScriptTemplate {
 
@@ -101,6 +94,20 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			out.print(".prototype.");
 			ctx.invoke(genName, expr.getMember(), ctx, out);
 		}
+		
+		out.print(", \"");
+		if ( expr.getMember() instanceof Function )
+		{
+			Delegate delegate = (Delegate)ctx.get( "Delegate_signature_for_function_" + ((Function)expr.getMember()).getSignature() );
+			if ( delegate != null )
+			{
+				ctx.put(Constants.SubKey_isaSignature, "true");
+				ctx.invoke(genSignature, delegate, ctx, out);
+				ctx.remove(Constants.SubKey_isaSignature);
+			}
+		}		
+		out.print( "\"");
+		
 		out.print(")");
 	}
 
