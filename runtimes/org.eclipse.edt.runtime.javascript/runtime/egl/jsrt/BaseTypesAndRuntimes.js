@@ -1568,7 +1568,7 @@ egl.convertBytesToSmallfloat = function(x)
 	var value;
 	if ( exp == 255 )
 	{
-		return frac === 0 ? (pos ? Infinity : Number.NEGATIVE_INFINITY) : NaN;
+		return frac === 0 ? (pos ? Infinity : -Infinity) : NaN;
 	}
 	else if ( exp === 0 )
 	{
@@ -1598,7 +1598,7 @@ egl.convertSmallfloatToBytes = function( x, length )
 	{
 		return egl.eglx.lang.EBytes.ezeNew( [ 0, 0, 0, 0 ] );
 	}
-	else if ( x === NaN )
+	else if ( isNaN( x ) )
 	{
 		return egl.eglx.lang.EBytes.ezeNew( [ 0x7f, 0xc0, 0, 0 ] );
 	}
@@ -1606,17 +1606,26 @@ egl.convertSmallfloatToBytes = function( x, length )
 	{
 		return egl.eglx.lang.EBytes.ezeNew( [ 0x7f, 0x80, 0, 0 ] );
 	}
-	else if ( x === Number.NEGATIVE_INFINITY )
+	else if ( x === -Infinity )
 	{
 		return egl.eglx.lang.EBytes.ezeNew( [ 0xff, 0x80, 0, 0 ] );
 	}
 
-	//TODO write this
-	/*
-	 * the sign bit is easy
-	 * calculate the exp and frac by reversing the process in bytesToFloat ???
-	 */
-	return egl.eglx.lang.EBytes.ezeNew( 4 );
+    var sign;
+    if ( x < 0 )
+    {
+    	sign = 1;
+    	x = Math.abs( x );
+    }
+    else
+    {
+    	sign = 0;
+    }
+    var exp = Math.floor( Math.log( x ) / Math.LN2 );
+    var frac = x / Math.pow( 2, exp );
+    var bits = (sign << 31) | ((exp + 127) << 23) | ((frac * 8388608) & 0x7FFFFF);  // 8388608 is 2**23
+	return egl.eglx.lang.EBytes.ezeNew( 
+			[ ((bits & 0xFF000000) >>> 24), ((bits & 0xFF0000) >>> 16), ((bits & 0xFF00) >>> 8), (bits & 0xFF) ] );
 };
 
 egl.convertBytesToFloat = function(x)
@@ -1636,7 +1645,7 @@ egl.convertBytesToFloat = function(x)
 	}
 	else if ( exp === 2047 )
 	{
-		return fracBits1_20 === 0 && fracBits21_52 === 0 ? (pos ? Infinity : Number.NEGATIVE_INFINITY) : NaN;
+		return fracBits1_20 === 0 && fracBits21_52 === 0 ? (pos ? Infinity : -Infinity) : NaN;
 	}
 	
 	// Compute the fraction by testing each of its 52 bits.
@@ -1687,7 +1696,7 @@ egl.convertFloatToBytes = function( x, length )
 	{
 		return egl.eglx.lang.EBytes.ezeNew( [ 0, 0, 0, 0, 0, 0, 0, 0 ] );
 	}
-	else if ( x === NaN )
+	else if ( isNaN( x ) )
 	{
 		return egl.eglx.lang.EBytes.ezeNew( [ 0x7f, 0xf8, 0, 0, 0, 0, 0, 0 ] );
 	}
@@ -1695,15 +1704,43 @@ egl.convertFloatToBytes = function( x, length )
 	{
 		return egl.eglx.lang.EBytes.ezeNew( [ 0x7f, 0xf0, 0, 0, 0, 0, 0, 0 ] );
 	}
-	else if ( x === Number.NEGATIVE_INFINITY )
+	else if ( x === -Infinity )
 	{
 		return egl.eglx.lang.EBytes.ezeNew( [ 0xff, 0xf0, 0, 0, 0, 0, 0, 0 ] );
 	}
 
-	//TODO write this
-//	var bd = new egl.javascript.BigDecimal( x );
-//	var str = bd.format( 1, -1, -1, 0, egl.javascript.MathContext.prototype.SCIENTIFIC, -1 );
-	return egl.eglx.lang.EBytes.ezeNew( 8 ); 
+    var sign;
+    if ( x < 0 )
+    {
+    	sign = 1;
+    	x = Math.abs( x );
+    }
+    else
+    {
+    	sign = 0;
+    }
+    var exp = Math.floor( Math.log( x ) / Math.LN2 );
+    var frac = x / Math.pow( 2, exp );
+    exp += 1023;
+	frac = new egl.javascript.BigDecimal( frac ).multiply( egl.BD_POWERS_OF_2[ 10 ], egl.javascript.BigDecimal.prototype.eglMC ); // multiply by 2**52
+	frac = frac.subtract( egl.BD_POWERS_OF_2[ 10 ] ); // subtract 2**52 (remove the implicit leading 1 in the binary fraction)
+	if ( frac.scale() > 0 )
+	{
+		frac = frac.setScale( 0, egl.javascript.BigDecimal.prototype.ROUND_FLOOR );
+	}
+	
+    var bits = egl.convertBigDecimalTo64Bits( frac ); 
+    var result = egl.eglx.lang.EBytes.ezeNew( 8 );
+    result[ 0 ] = (sign << 7) | (exp >> 4);   
+    result[ 1 ] = ((exp & 0x0F) << 4) | (bits[ 12 ] << 3) | (bits[ 13 ] << 2) | (bits[ 14 ] << 1) | bits[ 15 ];
+    for ( var i = 2; i < 8; i++ )
+    {
+    	var ix8 = i * 8;
+    	result[ i ] = (bits[ ix8 ] << 7) | (bits[ ix8 + 1 ] << 6) | (bits[ ix8 + 2 ] << 5) 
+    				  | (bits[ ix8 + 3 ] << 4) | (bits[ ix8 + 4 ] << 3) | (bits[ ix8 + 5 ] << 2) 
+    				  | (bits[ ix8 + 6 ] << 1) | bits[ ix8 + 7 ];
+    }
+    return result;
 };
 
 egl.convertAnyToBytes = function( any, nullable, length )
@@ -4341,7 +4378,7 @@ egl.trim = function(s) {
 
 String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
-}
+};
 	
 String.prototype.trimRight = function() {
 	var n = this.length;
