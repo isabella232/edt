@@ -16,6 +16,7 @@ import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.NamedElement;
 
 public class NamedElementTemplate extends JavaScriptTemplate {
@@ -38,9 +39,16 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 	}
 
 	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
-		if(Boolean.TRUE.equals(ctx.getAttribute(element, Constants.SubKey_isInList)) && element.getCaseSensitiveName().equalsIgnoreCase("sort")){
+		if(Boolean.TRUE.equals(ctx.getAttribute(element, Constants.SubKey_isInList)) && element.getCaseSensitiveName().equalsIgnoreCase("sort"))
+		{
 			out.print("ezekw$$sort");
-		}else{
+		}
+		else if ( element instanceof EGLClass )
+		{
+			ctx.invoke(genRuntimeTypeName, element, ctx, out, TypeNameKind.EGLImplementation);
+		}		
+		else
+		{
 			out.print(JavaScriptAliaser.getAlias(element.getCaseSensitiveName()));
 		}		
 	}

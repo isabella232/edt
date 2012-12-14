@@ -480,6 +480,10 @@ egl.defineClass( "eglx.lang", "EFloat64"
 }
 );
 egl.eglx.lang.EFloat64.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
+egl.eglx.lang.EFloat64.Infinity = Infinity; 
+egl.eglx.lang.EFloat64.NegativeInfinity = -Infinity; 
+egl.eglx.lang.EFloat64.NaN = NaN; 
+egl.eglx.lang.EFloat64.NegativeZero = -0; 
 egl.eglx.lang.EFloat64.fromEInt64 = function (x) { 
 	return Number(x.toString()); 
 };

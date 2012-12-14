@@ -29,6 +29,11 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 	 */
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
+	public static final double Infinity = Double.POSITIVE_INFINITY;
+	public static final double NegativeInfinity = Double.NEGATIVE_INFINITY;
+	public static final double NaN = Double.NaN;
+	public static final double NegativeZero = Double.longBitsToDouble( 0x8000000000000000L );
+
 	private EFloat(Double value) {
 		super(value);
 	}

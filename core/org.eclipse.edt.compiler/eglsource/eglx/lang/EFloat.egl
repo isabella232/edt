@@ -117,4 +117,25 @@ externalType EFloat extends ENumber type ClassType
 	static function asFloat(value EBytes? in) returns(EFloat?) {@Operation{"narrow"}};
 
 	static function asNumber(value EFloat? in) returns(ENumber?) {@Operation{"widen"}};
+
+	/**
+	 * A constant with the value Infinity.
+	 */
+	static const Infinity float = 0x7ff0000000000000;
+
+	/**
+	 * A constant with the value -Infinity.
+	 */
+	static const NegativeInfinity float = 0xfff0000000000000;
+
+	/**
+	 * A constant with the value NaN (not a number).
+	 */
+	static const NaN float = 0x7ff8000000000000;
+
+	/**
+	 * A constant with the value -0.  It may not be distinguishable
+	 * from zero in some implementations.
+	 */
+	static const NegativeZero float = 0x8000000000000000;
 end
