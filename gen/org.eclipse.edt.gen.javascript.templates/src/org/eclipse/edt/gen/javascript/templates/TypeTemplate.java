@@ -209,8 +209,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 				out.print( ", " );
 				if ( lhsLength > 0 )
 				{
-					if ( lhs instanceof MemberName 
-							&& ctx.get( "generating declaration of " + ((MemberName)lhs).getMember() + ((MemberName)lhs).getMember().hashCode() ) != null )
+					if ( (lhs instanceof MemberName || lhs instanceof MemberAccess) 
+							&& ctx.get( "generating declaration of " + CommonUtilities.getMember( lhs ) + CommonUtilities.getMember( lhs ).hashCode() ) != null )
 					{
 						ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
 						out.print( ".ezeNew(" );
@@ -235,9 +235,11 @@ public class TypeTemplate extends JavaScriptTemplate {
 				ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
 			}
 		}
-		else if ( lhsType instanceof Delegate && rhs instanceof MemberName && ((MemberName)rhs).getMember() instanceof Function )
+		else if ( lhsType instanceof Delegate 
+				&& (rhs instanceof MemberName || rhs instanceof MemberAccess)
+				&& CommonUtilities.getMember( rhs ) instanceof Function )
 		{
-			String functionSig = ((Function)((MemberName)rhs).getMember()).getSignature();
+			String functionSig = ((Function)CommonUtilities.getMember( rhs )).getSignature();
 			ctx.put( "Delegate_signature_for_function_" + functionSig, lhsType );
 			ctx.invoke( genTypeBasedExpression, rhs, ctx, out, lhs.getType() );
 			ctx.remove( "Delegate_signature_for_function_" + functionSig );
@@ -266,8 +268,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 		{
 			ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
 			out.print( ".ezeAssignToLonger(" );
-			if ( lhs instanceof MemberName 
-					&& ctx.get( "generating declaration of " + ((MemberName)lhs).getMember() + ((MemberName)lhs).getMember().hashCode() ) != null )
+			if ( (lhs instanceof MemberName || lhs instanceof MemberAccess) 
+					&& ctx.get( "generating declaration of " + CommonUtilities.getMember( lhs ) + CommonUtilities.getMember( lhs ).hashCode() ) != null )
 			{
 				ctx.invoke( genRuntimeTypeName, rhsType, ctx, out, TypeNameKind.EGLImplementation );
 				out.print( "egl.eglx.lang.EBytes.ezeNew(" );

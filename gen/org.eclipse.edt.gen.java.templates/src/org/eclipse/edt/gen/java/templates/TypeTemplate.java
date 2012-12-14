@@ -324,9 +324,11 @@ public class TypeTemplate extends JavaTemplate {
 				ctx.invoke( genExpression, rhs, ctx, out );
 			}
 		}
-		else if ( lhsType instanceof Delegate && rhs instanceof MemberName && ((MemberName)rhs).getMember() instanceof Function )
+		else if ( lhsType instanceof Delegate 
+				&& (rhs instanceof MemberName || rhs instanceof MemberAccess) 
+				&& CommonUtilities.getMember( rhs ) instanceof Function )
 		{
-			String functionSig = ((Function)((MemberName)rhs).getMember()).getSignature();
+			String functionSig = ((Function)CommonUtilities.getMember( rhs )).getSignature();
 			ctx.put( "Delegate_signature_for_function_" + functionSig, ((Delegate)lhsType).getTypeSignature() );
 			ctx.invoke( genExpression, rhs, ctx, out );
 			ctx.remove( "Delegate_signature_for_function_" + functionSig );

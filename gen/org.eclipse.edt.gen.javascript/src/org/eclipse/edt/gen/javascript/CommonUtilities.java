@@ -284,6 +284,22 @@ public class CommonUtilities {
 		}
 
 	}
+	
+	public static Member getMember( Expression expr )
+	{
+		if ( expr instanceof MemberName )
+		{
+			return ((MemberName)expr).getMember();
+		}
+		else if ( expr instanceof MemberAccess )
+		{
+			return ((MemberAccess)expr).getMember();
+		}
+		else
+		{
+			return null;
+		}
+	}
 
 	/**
 	 * needsConversion inspects the specified types and indicates whether the two are semantically equivalent in the

@@ -16,34 +16,7 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.javart.util.JavaAliaser;
-import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.AsExpression;
-import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.Container;
-import org.eclipse.edt.mof.egl.DataTable;
-import org.eclipse.edt.mof.egl.Delegate;
-import org.eclipse.edt.mof.egl.EnumerationEntry;
-import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Form;
-import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.Name;
-import org.eclipse.edt.mof.egl.NamedElement;
-import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.ProgramParameter;
-import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
-import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.ThisExpression;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypeName;
-import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.*;
 
 public class CommonUtilities {
 
@@ -421,6 +394,22 @@ public class CommonUtilities {
 	public static boolean isBoxedOutputTemp(Member member, Context ctx) {
 		return ctx.getAttribute(member, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
 			&& ctx.getAttribute(member, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN;
+	}
+	
+	public static Member getMember( Expression expr )
+	{
+		if ( expr instanceof MemberName )
+		{
+			return ((MemberName)expr).getMember();
+		}
+		else if ( expr instanceof MemberAccess )
+		{
+			return ((MemberAccess)expr).getMember();
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")

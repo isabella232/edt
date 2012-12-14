@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -63,7 +64,7 @@ public class ArrayLiteralTemplate extends JavaScriptTemplate {
 				
 				if ( elementType instanceof Delegate )
 				{
-					String functionSig = ((Function)((MemberName)element).getMember()).getSignature();
+					String functionSig = ((Function)CommonUtilities.getMember( element )).getSignature();
 					ctx.put( "Delegate_signature_for_function_" + functionSig, elementType );
 				}				
 				ctx.invoke( genExpression,
@@ -71,7 +72,7 @@ public class ArrayLiteralTemplate extends JavaScriptTemplate {
 						ctx, out );
 				if ( elementType instanceof Delegate )
 				{
-					String functionSig = ((Function)((MemberName)element).getMember()).getSignature();
+					String functionSig = ((Function)CommonUtilities.getMember( element )).getSignature();
 					ctx.remove( "Delegate_signature_for_function_" + functionSig );
 				}
 			}
