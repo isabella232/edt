@@ -75,12 +75,18 @@ public class FileSystemObjectStore extends AbstractObjectStore implements Object
 		int i = typeSignature.lastIndexOf('.');
 		String packagePath = i != -1 ? typeSignature.substring(0, i).replace('.', '/') : null;
 		String path = typeSignature.replace('.', '/')+ ext;
+		
+		File folder;
 		if (packagePath != null) {
-			File folder = new File(root, packagePath);
-			if (!folder.exists()) {
-				folder.mkdirs();
-			}
+			folder = new File(root, packagePath);
+		}else{
+			folder = root;
 		}
+		
+		if (!folder.exists()) {
+			folder.mkdirs();
+		}
+		
 		try {
 			File outFile = new File(root, path);
 			FileOutputStream file = new FileOutputStream(outFile);
