@@ -182,7 +182,7 @@ public abstract class Generator {
 				//If the part has a subtype, check the context to see if the stereotype is supported
 				String key = ann.getEClass().getETypeSignature();
 				if (!context.getSupportedStereotypes().contains(key)) {
-					String[] details1 = new String[] { part.getId(), ann.getEClass().getCaseSensitiveName(),  generatorName};
+					String[] details1 = new String[] { part.getCaseSensitiveName(), ann.getEClass().getCaseSensitiveName(),  generatorName};
 					Annotation loc = part.getAnnotation(IEGLConstants.EGL_LOCATION);
 					if (loc == null) {
 						loc = context.getLastStatementLocation();
@@ -197,7 +197,7 @@ public abstract class Generator {
 			else {
 				String key = part.getEClass().getETypeSignature();
 				if (!context.getSupportedPartTypes().contains(key)) {
-					String[] details1 = new String[] { part.getId(),  generatorName};
+					String[] details1 = new String[] { part.getCaseSensitiveName(),  generatorName};
 					Annotation loc = part.getAnnotation(IEGLConstants.EGL_LOCATION);
 					if (loc == null) {
 						loc = context.getLastStatementLocation();
