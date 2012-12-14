@@ -82,6 +82,33 @@ public class EString extends AnyBoxedObject<String> {
 		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
+	public static String asString(EBytes value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(value.ezeUnbox(), length);
+	}
+
+	public static String asString(byte[] value, Integer... length) {
+		if (value == null)
+			return null;
+		StringBuilder str = new StringBuilder();
+		str.append( "0x" );
+		for ( int i = 0; i < value.length; i++ )
+		{
+			int bits = value[ i ] & 0xFF;
+			if ( bits < 16 )
+			{
+				str.append( '0' );
+				str.append( Integer.toHexString( bits ) );
+			}
+			else
+			{
+				str.append( Integer.toHexString( bits ) );
+			}
+		}
+		return str.toString();
+	}
+
 	public static String asString(Short value, Integer... length) {
 		if (value == null)
 			return null;

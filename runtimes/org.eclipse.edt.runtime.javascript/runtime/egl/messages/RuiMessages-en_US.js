@@ -152,6 +152,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2107E' : 'Service library JSON conversion functions operate on a Record or Dictionary. {0} is not a supported type.',
 		'CRRUI2108E' : 'JsonLib conversion functions operate on a Record. {0} is not a supported type.',
 		'CRRUI2109E' : 'Could not convert to: "{0}", due to {1}',
+		'CRRUI2110E' : '{0} is not a supported encoding',
 		
 		'CRRUI2111E' : 'MathContext() error: The number of arguments specified, {0}, is not valid; expected 1 to 4.',
 		'CRRUI2112E' : 'MathContext() error: The number of digits specified, {0}, is too small.',

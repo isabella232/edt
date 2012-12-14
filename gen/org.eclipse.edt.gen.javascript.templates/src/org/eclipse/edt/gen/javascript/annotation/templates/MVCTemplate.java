@@ -735,7 +735,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 				if (f != null) {
 					String libName = generateAliasToString(ctx, nlsLibrary);
 					returnValue = libName + ".getMessage(" + libName + ".eze$$getValueWithNormalizedKey(\""
-							+ memberName.toLowerCase() + "\") " + ", [  ].setType( \"S;\" ))";
+							+ memberName.toLowerCase() + "\") " + ", [].setType( \"[S;\" ))";
 				}
 			}
 		}
