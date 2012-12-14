@@ -363,21 +363,99 @@ egl.stringToTimeInternal = function(s, format, strict, defaultSeparator)
 	return result;
 };
 
-egl.stringToDateWithDefaultSeparator = function(s, format)
+egl.convertStringToDate = function( date )
 {
-	var result = egl.stringToDateInternal(s, format, true, true);
-	if( result != null )
-	{
-		result.setHours(0);
-		result.setMinutes(0);
-		result.setSeconds(0);
-		result.setMilliseconds(0);
-		return result;
+	// The required format of the string is: 1-2 month digits, 1 separator char,
+	// 1-2 day digits, 1 separator char, 1-4 year digits.
+	
+	// Quick check for strings that are too long or too short.
+	if (date.length < 5 || date.length > 10) {
+		// Minimum is 5 characters: 1/1/1
+		// Maximum is 10 characters: 11/11/1111
+		throw egl.createTypeCastException( "CRRUI2017E", [ date, "string", "date" ] );
 	}
-	else
-	{
-		throw egl.createTypeCastException( "CRRUI2017E", [ s, "string", "date" ], "date", "string" );
+
+	var months = -1;
+	var days = -1;
+	var years = -1;
+	PARSE: {
+		// ch is the character we're currently looking at. i is the index of
+		// the next character after ch.
+		var ch;
+		var i;
+		
+		// Read in the number of months.
+		ch = date.charAt(0);
+		if (ch < '0' || ch > '9') {
+			break PARSE;
+		}
+		months = Number(ch);
+		ch = date.charAt(1);
+		i = 2;
+		if ('0' <= ch && ch <= '9') {
+			months = months * 10 + Number(ch);
+			i++;
+		}
+
+		// Read in the number of days.
+		ch = date.charAt(i++);
+		if (ch < '0' || ch > '9') {
+			break PARSE;
+		}
+		days = Number(ch);
+		ch = date.charAt(i++);
+		if ('0' <= ch && ch <= '9') {
+			days = days * 10 + Number(ch);
+			i++;
+		}
+		
+		// Read in the number of years.
+		if (i < date.length) {
+			var tempYears = 0;
+			ch = date.charAt(i++);
+			if ('0' <= ch && ch <= '9') {
+				tempYears = Number(ch);
+				if (i < date.length) {
+					ch = date.charAt(i++);
+					if ('0' <= ch && ch <= '9') {
+						tempYears = tempYears * 10 + Number(ch);
+						if (i < date.length) {
+							ch = date.charAt(i++);
+							if ('0' <= ch && ch <= '9') {
+								tempYears = tempYears * 10 + Number(ch);
+								if (i < date.length) {
+									ch = date.charAt(i++);
+									tempYears = tempYears * 10 + Number(ch);
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			if ( i === date.length && '0' <= ch && ch <= '9' )
+			{
+				years = tempYears;
+			}
+		}
 	}
+
+	// Make sure all required fields were found.
+	if (months === -1 || days === -1 || years === -1) {
+		throw egl.createTypeCastException( "CRRUI2017E", [ date, "string", "date" ] );
+	}
+
+	var result = new Date( years, months - 1, days, 0, 0, 0, 0 );
+	if ( years < 100 )
+	{
+		// For very small year values, the Date constructor will be "smart" and add 1900.
+		result.setFullYear( years );
+	}
+	if ( result.getFullYear() !== years || result.getMonth() !== months - 1 || result.getDate() !== days ) {
+		// This means the values indicated a non-existant date e.g. Feb 30th.
+		throw egl.createTypeCastException( "CRRUI2017E", [ date, "string", "date" ] );
+	}
+	return result;
 };
 
 egl.stringToDate = function(s, format)
@@ -3540,7 +3618,7 @@ egl.convertAnyToDate = function( any, nullable )
 			case 'D':
 			case 'M':
 			case 'U':
-				return egl.stringToDateWithDefaultSeparator( any.eze$$value, "MMddyyyy" );
+				return egl.convertStringToDate( any.eze$$value );
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'date' + (nullable ? '?' : '') ], 'date' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );

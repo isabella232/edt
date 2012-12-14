@@ -1448,7 +1448,7 @@ egl.eglx.lang.EDate.fromETimestamp = function (x, pattern) {
 	}
 };
 egl.eglx.lang.EDate.fromEString = function (x) {   
-    return egl.stringToDateWithDefaultSeparator( x, "MMddyyyy" ); 
+    return egl.convertStringToDate( x ); 
 };
 egl.eglx.lang.EDate.equals = function (x, y) {   
 	return egl.dateEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
