@@ -1109,11 +1109,35 @@ egl.eglx.lang.EString.splitOnPattern = function (str, pattern) {
 	var regExpStr = egl.eglx.lang.EString.patternToRegExpStr(pattern, escape);
 	try{
 		var rx = new RegExp(regExpStr);
-		result = limit > 0 ? str.split(rx,limit) : str.split(rx);
+		if ( egl.IE )
+			result = egl.IE_Split_On_RegExp( str, rx, limit );
+		else
+			result = limit > 0 ? str.split(rx,limit) : str.split(rx);
 	}catch (oops){
 		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
 	}
 	result.setType("[S;");
+	return result;
+};
+
+// This is a replacement for IE's broken implementation of String.split when its
+// argument is a RegExp.  Assholes!
+egl.IE_Split_On_RegExp = function( str, rx, limit ) {
+	limit = limit || Infinity;
+	var result = [];
+	var info = rx.exec( str );
+	while ( info !== null && limit > 0 )
+	{
+		var separator = info.index;
+		result.push( str.substring( 0, separator ) );
+		str = str.substring( separator + info[0].length );
+		info = rx.exec( str );
+		limit--;
+	}
+	if ( limit > 0 )
+	{
+		result.push( str );
+	}
 	return result;
 };
 
