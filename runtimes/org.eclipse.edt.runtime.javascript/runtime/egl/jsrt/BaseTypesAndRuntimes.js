@@ -2163,7 +2163,13 @@ egl.nullabledivide = function(var1, var2) {
 egl.remainder = function(var1, var2) {
 	if (var2 == 0)
 		throw egl.createRuntimeException("CRRUI2037E", null);
-	return var1 % var2;
+	var answer = var1 % var2;
+	if ( var1 > 0 && var2 < 0 && answer < 0 )
+	{
+		// A hideous bug in Safari causes the answer to have the wrong sign in this case.
+		answer = -answer;
+	}
+	return answer;
 };
 
 egl.nullableremainder = function(var1, var2) {
