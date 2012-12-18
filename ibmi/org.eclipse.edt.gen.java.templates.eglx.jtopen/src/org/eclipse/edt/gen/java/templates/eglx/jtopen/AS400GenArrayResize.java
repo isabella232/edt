@@ -145,6 +145,9 @@ public class AS400GenArrayResize {
 
 	private void processFields(LogicAndDataPart part, Context ctx, TabbedWriter out, LHSExpr qual, Function functionContainer) {
 		for(Field field : part.getFields()){
+			if(field.isStatic()){
+				continue;
+			}
 			//build new container expression
 			if(field.getType() instanceof ArrayType){
 				MemberName mn = getCountMember(field, ctx);
