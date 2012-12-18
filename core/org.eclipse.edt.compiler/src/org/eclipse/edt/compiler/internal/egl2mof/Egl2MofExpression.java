@@ -450,7 +450,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 						}
 						else {
 							fi = factory.createQualifiedFunctionInvocation();
-							fi.setId(functionBinding.getCaseSensitiveName());
+							if (functionBinding == null) {
+								fi.setId(node.getTarget().getCaseSensitiveID());
+							}
+							else {
+								fi.setId(functionBinding.getCaseSensitiveName());							
+							}
 							fa.getPrimary().accept(this);
 							((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
 						}					

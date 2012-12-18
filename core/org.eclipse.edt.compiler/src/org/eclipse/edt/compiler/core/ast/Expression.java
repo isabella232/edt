@@ -58,6 +58,18 @@ public abstract class Expression extends Node {
     }
     
     public abstract String getCanonicalString();
+    
+    public String getCaseSensitiveID() {
+    	String can = getCanonicalString();
+    	if (can != null) {
+    		int index = can.lastIndexOf(".");
+    		if (index < 0) {
+    			return can;
+    		}
+    		return can.substring(index + 1);
+    	}
+    	return null;
+    }
 
     public void setAttributeOnName(int attr, Object value) {
     }

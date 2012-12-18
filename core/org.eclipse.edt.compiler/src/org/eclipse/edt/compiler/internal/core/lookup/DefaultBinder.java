@@ -257,15 +257,19 @@ public abstract class DefaultBinder extends AbstractBinder {
         	fieldAccess.setBindAttempted(true);
         	return;
         }
-        Member member = BindingUtil.createExplicitDynamicAccessMember(type, fieldAccess.getCaseSensitiveID());
-        if (member != null) {
-        	fieldAccess.setMember(member);
-        	fieldAccess.setType(member.getType());
-        	return;
-        }
         
         List<Member> mbrs = findData(type, fieldAccess.getID());
+        Member member;
         if (mbrs == null) {
+	        member = BindingUtil.createExplicitDynamicAccessMember(type, fieldAccess.getCaseSensitiveID());
+	        if (member != null) {
+	        	fieldAccess.setMember(member);
+	        	fieldAccess.setType(member.getType());
+	        	return;
+	        }
+        }
+        
+         if (mbrs == null) {
         	int endOffset = fieldAccess.getOffset() + fieldAccess.getLength();
         	problemRequestor.acceptProblem(
         		endOffset - fieldAccess.getID().length(),
