@@ -143,6 +143,9 @@ egl.defineClass( "eglx.lang", "EInt16"
 egl.eglx.lang.EInt16.fromEInt32 = function (x) {   
 	return egl.convertNumberToSmallint(x, egl.createNumericOverflowException);
 };
+egl.eglx.lang.EInt16.fromEInt64 = function (x) {
+	return egl.convertNumberToSmallint(x, egl.createNumericOverflowException);
+};
 egl.eglx.lang.EInt16.fromEDecimal = function (x) {   
 	return egl.convertDecimalToSmallint(x, egl.createNumericOverflowException);
 };
