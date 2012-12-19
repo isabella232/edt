@@ -4201,7 +4201,7 @@ egl.timeStampEquals = function(/*timestamp*/ a, /*timestamp*/ b, falseAnswer) {
 	};
 })();
 
-egl.valueByKey = function egl_valueByKey( object, key, value, signature ) 
+egl.setValueByKey = function( object, key, value, signature ) 
 {
 	if (object == null) {
 		return null;
@@ -4220,7 +4220,7 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 	}
 	
 	var result = egl.findByKey(object, key);
-	if ( result !== undefined && result !== null && ( typeof result !== "object" || !("eze$$value" in result) ) )
+	if ( result !== undefined && result !== null && (typeof result !== "object" || !("eze$$value" in result)) )
 	{
 		var sig = egl.inferSignature(result);
 		if (objectSupportsLookup) {
@@ -4235,71 +4235,43 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 		result = egl.boxAny( result, sig );
 	}
 	if (result === undefined) {
-		if ((objectSupportsLookup && !egl.findKey(object, key))|| (objectIsDictionary && value === undefined)) {
+		if (objectSupportsLookup && !egl.containsKey(object, key)) {
 			throw egl.createRuntimeException( "CRRUI2025E", [key, egl.inferSignature(object)] );
 		}
 	}
-	if (value !== undefined) 
+	value = egl.boxAny( value, signature );
+	if (objectSupportsLookup)
 	{
-		value = egl.boxAny( value, signature );
-		if (objectSupportsLookup)
-		{
-			var sig;
-			var fields = object.eze$$getFieldSignatures();
-			for (var i=0; i<fields.length; i++) {
-				if (key === fields[i].name) {
-					sig = fields[i].sig;
-					break;
-				}
+		var sig;
+		var fields = object.eze$$getFieldSignatures();
+		for (var i=0; i<fields.length; i++) {
+			if (key === fields[i].name) {
+				sig = fields[i].sig;
+				break;
 			}
-			value = egl.convertAnyToType(value,sig);
 		}
-		if ( objectIsDictionary && object.eze$$caseSensitive==false )
-			key = key.toLowerCase();
-		object[key] = value;
-		result = object[key];
+		value = egl.convertAnyToType(value,sig);
 	}
-	if (egl.traceInternals && result === undefined && value === undefined) {
-		egl.addTraceEvent(
-			"<div style='border: solid orange 4px; padding:4; color:orange'>"+
-			"<b>WARNING</b>: " + 
-			"field '"+key+"' not found.<hr>" +
-			"<font color=orange>object="+
-			egl.eglx.json.toJSONString(object)+"</font><br></div>");
-	}
+	if ( objectIsDictionary && !object.eze$$caseSensitive )
+		key = key.toLowerCase();
+	object[key] = value;
+	result = object[key];
 	return result;
 };
 
-egl.containsKey = function egl_containsKey( object, key ) 
-{	
-	var caseSensitive = true;
-	if ( (object.eze$$caseSensitive != undefined) && object.eze$$caseSensitive==false )
-	{
-		caseSensitive = false;
-		key = key.toLowerCase();
-	}
-	for (f in object) {
-		var field = (caseSensitive)?f:f.toLowerCase();
-		if (key == field) {
-			return true;
-		}
-	}
-	return false;
-};
-
-egl.findByKey = function egl_findByKey( object, key ) {
-	egl.checkWork();
+egl.findByKey = function( object, key ) {
 	try {
-		var caseSensitive = true;
-		if ( (object.eze$$caseSensitive != undefined) && object.eze$$caseSensitive==false )
+		if (!(object instanceof egl.eglx.lang.EDictionary) || object.eze$$caseSensitive)
 		{
-			caseSensitive = false;
-			key = key.toLowerCase();
+			return object[key];
 		}
-		for (f in object) {
-			var field = (caseSensitive)?f:f.toLowerCase();
-			if (key == field) {
-				return object[f];
+		else
+		{
+			key = key.toLowerCase();
+			for (var f in object) {
+				if (key === f.toLowerCase()) {
+					return object[f];
+				}
 			}
 		}
 	}
@@ -4309,30 +4281,12 @@ egl.findByKey = function egl_findByKey( object, key ) {
 	return undefined;
 };
 
-egl.findKey = function egl_findKey( object, key ) {
-	egl.checkWork();
-	try {
-		var caseSensitive = true;
-		if ( (object.eze$$caseSensitive != undefined) && object.eze$$caseSensitive==false )
-		{
-			caseSensitive = false;
-			key = key.toLowerCase();
-		}
-		for (f in object) {
-			var field = (caseSensitive)?f:f.toLowerCase();
-			if (key == field) {
-				return true;
-			}
-		}
-	}
-	catch (e) {
-		throw egl.createRuntimeException( "CRRUI2103E", [ key, typeof(object), object, e.message] );
-	}
-	return false;
+egl.containsKey = function( object, key ) 
+{
+	return egl.findByKey( object, key ) !== undefined;
 };
 
 egl.getKeys = function egl_getKeys(object) {
-	egl.checkWork();
 	var result = [];
 	for (field in object) {
 		if (egl.isUserField(object, field)) {
