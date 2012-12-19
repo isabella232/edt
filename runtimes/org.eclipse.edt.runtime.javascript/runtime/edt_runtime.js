@@ -625,7 +625,7 @@ egl.eglx.lang.EString.fromENumber = function (x, len) {
 egl.eglx.lang.EString.fromETimestamp = function (timestamp, pattern, len) {
 	if(pattern == null) pattern = "yyyyMMddHHmmss";
 	var format = egl.eglx.lang.ETimestamp.getFormatFromPattern(pattern);	
-	var result =  egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+	var result =  egl.timeStampToString(timestamp, format);
 	return egl.eglx.lang.EString.asString(result, len );
 };
 egl.eglx.lang.EString.fromEDate = function (d, len) {

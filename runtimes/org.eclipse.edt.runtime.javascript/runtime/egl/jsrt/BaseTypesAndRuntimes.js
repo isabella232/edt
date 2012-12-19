@@ -3129,9 +3129,13 @@ egl.convertAnyToNameType = function( any, sig, cons )
 {
 	if ( any == null )
 	{
-		return new cons;
+		return cons ? new cons : null;
 	}
 	else if ( any.eze$$signature === sig )
+	{
+		return any.eze$$value;
+	}
+	else if ( any.eze$$value && any.eze$$value.egl$isWidget && sig === "Teglx/ui/rui/Widget;" )
 	{
 		return any.eze$$value;
 	}
