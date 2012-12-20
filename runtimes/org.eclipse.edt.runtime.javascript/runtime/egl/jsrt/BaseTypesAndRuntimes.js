@@ -2214,12 +2214,14 @@ egl.compareEGLNumbers = function(var1, var1type, var2, var2type) {
 	if ( var1type === -1 )
 	{
 		var1type = egl.numberRTTI(var1);
-		var1 = var1.eze$$value;
+		if ( var1.eze$$value !== null && var1.eze$$value !== undefined )
+			var1 = var1.eze$$value;
 	}
 	if ( var2type === -1 )
 	{
 		var2type = egl.numberRTTI(var2);
-		var2 = var2.eze$$value;
+		if ( var2.eze$$value !== null && var2.eze$$value !== undefined )
+			var2 = var2.eze$$value;
 	}
 	
 	if ( var1type === 2 )
