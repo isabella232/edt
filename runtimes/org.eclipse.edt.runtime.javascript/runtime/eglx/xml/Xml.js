@@ -33,22 +33,28 @@ egl.eglx.xml.XmlLib["toXML"] = function( /*value*/value, /*map*/namespaces, /*Fi
 	var s = [];
 	//TODO check to add type
 
-	if(value !== null && typeof value === "object" && "eze$$value" in value && "eze$$signature" in value){
-		s.push(this.toXML(egl.unboxAny( value ), namespaces, fieldInfo));
-	}
-	else if (value !== null && typeof value === "object" && "eze$$getFieldInfos" in value) {
-		s.push(this.eglClassToXML(value, namespaces, fieldInfo));
-	} else if (value !== null && typeof value === "object" && value instanceof egl.eglx.lang.EDictionary) {
-		s.push(this.dictionaryToXML(value, namespaces, fieldInfo));
-	} else if (value !== null && typeof value === "object" && value instanceof Array && value.type === undefined ) {
-		//bytes is an array with no type
-		s.push(this.primitiveToXML(value, namespaces, fieldInfo));
-	} else if (value !== null && typeof value === "object" && value instanceof Array) {
-		s.push(this.arrayToXML(value, namespaces, fieldInfo));
-	} else if (value === null) {
+	if (value === null) {
 		s.push(this.nullToXML(value, namespaces, fieldInfo));
-	} else if (value !== null && typeof value === "object" && value instanceof egl.eglx.lang.Enumeration) {
-		s.push(this.primitiveToXML(value.value, namespaces, fieldInfo));
+	}
+	else if (typeof value === "object") {
+		if("eze$$value" in value && "eze$$signature" in value){
+			s.push(this.toXML(egl.unboxAny( value ), namespaces, fieldInfo));
+		}
+		else if ("eze$$getFieldInfos" in value) {
+			s.push(this.eglClassToXML(value, namespaces, fieldInfo));
+		} else if (value instanceof egl.eglx.lang.EDictionary) {
+			s.push(this.dictionaryToXML(value, namespaces, fieldInfo));
+		} else if (value instanceof Array) {
+			if (value.isEBytes) {
+				s.push(this.primitiveToXML(value, namespaces, fieldInfo));
+			} else {
+				s.push(this.arrayToXML(value, namespaces, fieldInfo));
+			}
+		} else if (value instanceof egl.eglx.lang.Enumeration) {
+			s.push(this.primitiveToXML(value.value, namespaces, fieldInfo));
+		} else {
+			s.push(this.primitiveToXML(value, namespaces, fieldInfo));
+		}
 	} else {
 		s.push(this.primitiveToXML(value, namespaces, fieldInfo));
 	}
