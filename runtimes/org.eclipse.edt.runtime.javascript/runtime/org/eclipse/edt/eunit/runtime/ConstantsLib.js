@@ -9,8 +9,8 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-if (egl.eze$$userLibs) egl.eze$$userLibs.push('org.eclipse.edt.eunit.runtime.ConstantsLib');
-else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.ConstantsLib'];
+	if (egl.eze$$userLibs) egl.eze$$userLibs.push('org.eclipse.edt.eunit.runtime.ConstantsLib');
+	else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.ConstantsLib'];
 	egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 	{
 		'eze$$fileName': 'org/eclipse/edt/eunit/runtime/ConstantsLib.egl',
@@ -22,25 +22,25 @@ else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.ConstantsLib'];
 			,
 			"eze$$setEmpty": function() {
 				this.NEWLINE = "";
-				egl.atLine(this.eze$$fileName,18,664,6, this);
+				egl.atLine(this.eze$$fileName,18,681,6, this);
 				this.NEWLINE = "\r\n";
 				this.EXIT_PREFIX = "";
-				egl.atLine(this.eze$$fileName,19,700,10, this);
+				egl.atLine(this.eze$$fileName,19,718,10, this);
 				this.EXIT_PREFIX = "STATUS: ";
 				this.SPASSED = 0;
-				egl.atLine(this.eze$$fileName,21,735,1, this);
+				egl.atLine(this.eze$$fileName,21,755,1, this);
 				this.SPASSED = 0;
 				this.SFAILED = 0;
-				egl.atLine(this.eze$$fileName,22,759,1, this);
+				egl.atLine(this.eze$$fileName,22,780,1, this);
 				this.SFAILED = 1;
 				this.SERROR = 0;
-				egl.atLine(this.eze$$fileName,23,782,1, this);
+				egl.atLine(this.eze$$fileName,23,804,1, this);
 				this.SERROR = 2;
 				this.SNOT_RUN = 0;
-				egl.atLine(this.eze$$fileName,24,807,1, this);
+				egl.atLine(this.eze$$fileName,24,830,1, this);
 				this.SNOT_RUN = 3;
 				this.SBAD = 0;
-				egl.atLine(this.eze$$fileName,25,828,1, this);
+				egl.atLine(this.eze$$fileName,25,852,1, this);
 				this.SBAD = 4;
 			}
 			,

@@ -4025,16 +4025,25 @@ egl.defineClass(
 	}
 });
 
-egl.defineClass( "egl.core", "SysVar", {
-	"constructor" : function() {
-		this.arrayIndex = (0);
-		this.overflowIndicator = (0);
-	},
-	
-	"eze$$getName" : function() {
-		return "egl.core.SysVar";
+egl.getElement = function( ary, idx )
+{
+	if ( idx >= ary.length || idx < 0 )
+	{
+		throw egl.createInvalidIndexException( 'CRRUI2022E', [ idx + 1, ary.length ], idx + 1 );
 	}
-});
+	else
+		return ary[ idx ];
+};
+
+egl.setElement = function( ary, idx, val )
+{
+	if ( idx >= ary.length || idx < 0 )
+	{
+		throw egl.createInvalidIndexException( 'CRRUI2022E', [ idx + 1, ary.length ], idx + 1 );
+	}
+	else
+		ary[ idx ] = val;
+};
 
 egl.eq = function(a,b) { return a==b; };
 egl.le = function(a,b) { return a<=b; };
@@ -4069,7 +4078,7 @@ egl.nullableNeg = function(v) {
 
 egl.nullableSubstring = function(s, i1, i2) { return (s==null || i1==null || i2==null) ? null:s.substring(i1-1,i2); };
 egl.nullableSplice = function(s1, i1, i2, s2) { return (s1==null || s2==null || i1==null || i2==null) ? null:s1.splice(i1,i2,s2); };
-egl.nullableCheckIndex = function(s, i1) { return (s==null || i1==null) ? null:s[s.checkIndex(i1-1)]; };
+egl.nullableGetElement = function(s, i1) { return (s==null || i1==null) ? null : egl.getElement(s,i1-1); };
 egl.nullableGetRow = function(s, i1) { return (s==null || i1==null) ? null:s.getRow(i1-1); };
 
 egl.nullableCompare = function(v1, v2, falseAnswer) {	
@@ -4662,16 +4671,6 @@ egl.defineClass(
 			return [];	
 		}
 });
-
-Array.prototype.checkIndex = function Array_checkIndex( idx )
-{
-	if ( ( idx >= this.length ) || ( idx < 0 ) )
-	{
-		throw egl.createInvalidIndexException( 'CRRUI2022E', [ idx + 1, this.length ], idx + 1 );
-	}
-	else
-		return idx;
-};
 
 egl.dateTime = {};
 egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*optional mask*/pattern ) {

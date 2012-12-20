@@ -38,7 +38,9 @@ public class AssignmentTemplate extends JavaScriptTemplate {
 				break;
 			exprLHS = ((ArrayAccess) exprLHS).getArray();
 		}
-		if (exprLHS instanceof ArrayAccess && ((Name) ((ArrayAccess) exprLHS).getArray()).getNamedElement() instanceof Field)
+		if (exprLHS instanceof ArrayAccess
+				&& ((ArrayAccess) exprLHS).getArray() instanceof Name
+				&& ((Name) ((ArrayAccess) exprLHS).getArray()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) ((ArrayAccess) exprLHS).getArray()).getNamedElement();
 		else if (expr.getLHS() instanceof Name && ((Name) expr.getLHS()).getNamedElement() instanceof Field)
 			field = (Field) ((Name) expr.getLHS()).getNamedElement();

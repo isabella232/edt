@@ -1435,7 +1435,6 @@ define(["runtime/edt_runtime_all.js"], function(){
 		egl.instrumentFunctions("ValidatorWrapper", egl.org.eclipse.edt.rui.mvc.internal.ValidatorWrapper.prototype);
 		egl.instrumentFunctions("StringLib", egl.eglx.lang.StringLib.prototype);
 		egl.instrumentFunctions("DateTimeLib", egl.eglx.lang.DateTimeLib.prototype);
-		egl.instrumentFunctions("SysVar", egl.egl.core.SysVar.prototype);
 		egl.instrumentFunctions("RUILib", egl.eglx.ui.rui.RuiLib.prototype);
 		egl.instrumentFunctions("Dictionary", egl.eglx.lang.EDictionary.prototype);
 		egl.instrumentFunctions("RUIPropertiesLibrary", egl.egl.ui.rui.RUIPropertiesLibrary.prototype);

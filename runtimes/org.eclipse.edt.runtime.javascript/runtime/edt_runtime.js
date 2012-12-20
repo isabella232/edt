@@ -166,7 +166,7 @@ egl.eglx.lang.EInt16.fromEString = function (x) {
 	return egl.convertStringToSmallint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt16.ezeCast = function (x, nullable) {
-	return egl.convertAnyToSmallint(x, nullable, egl.createNumericOverflowException);    
+	return egl.convertAnyToSmallint(egl.boxAny(x), nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EInt16.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
@@ -239,7 +239,7 @@ egl.eglx.lang.EInt32.fromEString = function (x) {
 	return egl.convertStringToInt(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.ezeCast = function (x, nullable) {
-	return egl.convertAnyToInt(x, nullable, egl.createNumericOverflowException);   
+	return egl.convertAnyToInt(egl.boxAny(x), nullable, egl.createNumericOverflowException);   
 };
 egl.eglx.lang.EInt32.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
@@ -306,7 +306,7 @@ egl.eglx.lang.EFloat32.fromEString = function (x){
 	return egl.convertStringToFloat(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat32.ezeCast = function (x, nullable) {
-	return egl.convertAnyToSmallfloat(x, nullable, egl.createNumericOverflowException);    
+	return egl.convertAnyToSmallfloat(egl.boxAny(x), nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EFloat32.pow = function (x, exp) {
 	return Math.pow(x, exp); 
@@ -396,9 +396,9 @@ egl.eglx.lang.EDecimal.notEquals = function(x, y) {
 };
 egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 	if (limit)
-		return egl.convertAnyToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
+		return egl.convertAnyToDecimal(egl.boxAny(x), decimals, limit, nullable, egl.createNumericOverflowException);
 	else
-		return egl.convertAnyToDecimal(x, -1, undefined, nullable, egl.createNumericOverflowException); 
+		return egl.convertAnyToDecimal(egl.boxAny(x), -1, undefined, nullable, egl.createNumericOverflowException); 
 };
 egl.eglx.lang.EDecimal.asNumber= function (x, sig) {
 	return egl.boxAny(x,sig);
@@ -455,7 +455,7 @@ egl.eglx.lang.EInt64.notEquals = function(x, y) {
 	return !egl.eglx.lang.EInt64.equals(x, y);
 };
 egl.eglx.lang.EInt64.ezeCast = function (x, nullable) {
-	return egl.convertAnyToBigint(x, nullable, egl.createNumericOverflowException);    
+	return egl.convertAnyToBigint(egl.boxAny(x), nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EInt64.pow = function (x, exp) {
 	return x.pow(exp); 
@@ -504,7 +504,7 @@ egl.eglx.lang.EFloat64.fromENumber = function (x, nullable) {
 	return egl.convertAnyToFloat(x, nullable, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat64.ezeCast = function (x, nullable) {
-	return egl.convertAnyToFloat(x, nullable, egl.createNumericOverflowException);    
+	return egl.convertAnyToFloat(egl.boxAny(x), nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EFloat64.pow = function (x, exp) {
 	return Math.pow(x, exp); 
@@ -532,7 +532,7 @@ egl.eglx.lang.EBoolean.fromEString = function (x) {
 	return x.toLowerCase() === "true"; 
 };
 egl.eglx.lang.EBoolean.ezeCast = function (x, nullable) {   
-	return egl.convertAnyToBoolean(x, nullable);   
+	return egl.convertAnyToBoolean(egl.boxAny(x), nullable);   
 };
 egl.eglx.lang.EBoolean.fromEBoolean = function (x) {  //TODO sbg likely a gen bug   
 	return x; 
@@ -568,7 +568,7 @@ egl.eglx.lang.EString.textLen = function (s) {
 	return s.length;
 };
 egl.eglx.lang.EString.ezeCast = function (x, nullable, length) {
-	result = egl.convertAnyToString(x, nullable);
+	result = egl.convertAnyToString(egl.boxAny(x), nullable);
 	return egl.convertTextToStringN( result, length);
 };
 
@@ -1376,7 +1376,7 @@ egl.eglx.lang.EBytes.substring = function(bytes, startIndex, endIndex) {
 	return egl.eglx.lang.EBytes.ezeNew(bytes.slice(start-1, end));
 };
 egl.eglx.lang.EBytes.ezeCast = function (x, nullable, length) {
-	return egl.convertAnyToBytes(x, nullable, length);
+	return egl.convertAnyToBytes(egl.boxAny(x), nullable, length);
 };
 egl.eglx.lang.EBytes.fromEInt16 = function (x, len) {
 	return egl.convertSmallintToBytes(x, len);
@@ -1511,7 +1511,7 @@ egl.eglx.lang.EDate.extend = function(/*extension*/ date, /*optional mask*/patte
 		return egl.dateTime.extend( "date", date, pattern );
 };
 egl.eglx.lang.EDate.ezeCast = function (any, nullable) {   
-	return egl.convertAnyToDate(any, nullable);
+	return egl.convertAnyToDate(egl.boxAny(any), nullable);
 };
 
 egl.eglx.lang.EDate.dayOf = function(d) {   
@@ -1576,7 +1576,7 @@ egl.eglx.lang.ETime.extend = function(/*extension*/ time, /*optional mask*/patte
 		return egl.dateTime.extend( "time", time, pattern );
 };
 egl.eglx.lang.ETime.ezeCast = function (any, nullable) {   
-	return egl.convertAnyToTime(any, nullable);
+	return egl.convertAnyToTime(egl.boxAny(any), nullable);
 };
 
 
@@ -1729,7 +1729,7 @@ egl.eglx.lang.ETimestamp.getFormatFromPattern = function(pattern){
 };
 
 egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
-	return egl.convertAnyToTimestamp(x, nullable, pattern || "yyyyMMddHHmmss");  
+	return egl.convertAnyToTimestamp(egl.boxAny(x), nullable, pattern || "yyyyMMddHHmmss");  
 };
 egl.eglx.lang.ETimestamp.equals = function (x, y) {   
 	return egl.timeStampEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
@@ -1875,7 +1875,7 @@ egl.eglx.lang.ENumber.fromEFloat64 = function (x, decimals, limit) {
 	return egl.convertFloatToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.ezeCast = function(x, nullable, decimals, limit){
-	return egl.convertDecimalToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
+	return egl.convertDecimalToDecimal(egl.boxAny(x), decimals, limit, nullable, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.negate = function (x) {
     return {eze$$value : -x.eze$$value, eze$$signature : x.eze$$signature}; 
