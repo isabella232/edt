@@ -3861,6 +3861,10 @@ egl.initialValueForType = function ( elementType )
 	        var typeName = elementType.substring( index + 1, elementType.length - 1 );
 	        var pkg = egl.makePackage( packageName );
 	        return new pkg[ typeName ]();
+	    case '[':
+	    	var ary = [];
+	    	ary.setType( elementType );
+	    	return ary;
 		default:
 			throw egl.createRuntimeException( "CRRUI2034E", [ elementType ] );
 	}
