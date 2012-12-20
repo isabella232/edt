@@ -96,23 +96,28 @@ egl.eglx.lang.EAny.equals = function(obj1, obj2){
 	if( obj1 == null || obj2 == null)
 		return false;
 	
-	if ( obj1.eze$$value instanceof egl.javascript.BigDecimal ) {
-		if ( obj2.eze$$value instanceof egl.javascript.BigDecimal ) {
-			return obj1.eze$$value.compareTo( obj2.eze$$value ) === 0;
+	if (obj1.eze$$value !== undefined)
+		obj1 = obj1.eze$$value;
+	if (obj2.eze$$value !== undefined)
+		obj2 = obj2.eze$$value;
+	
+	if ( obj1 instanceof egl.javascript.BigDecimal ) {
+		if ( obj2 instanceof egl.javascript.BigDecimal ) {
+			return obj1.compareTo( obj2 ) === 0;
 		}
-		else if ( typeof obj2.eze$$value === 'string' || typeof obj2.eze$$value === 'number' ) {
-			return obj1.eze$$value.compareTo( new egl.javascript.BigDecimal( obj2.eze$$value ) ) === 0;
+		else if ( typeof obj2 === 'string' || typeof obj2 === 'number' ) {
+			return obj1.compareTo( new egl.javascript.BigDecimal( obj2 ) ) === 0;
 		}
 	}
-	else if ( obj2.eze$$value instanceof egl.javascript.BigDecimal ) {
-		if ( typeof obj1.eze$$value === 'string' || typeof obj1.eze$$value === 'number' ) {
-			return new egl.javascript.BigDecimal( obj1.eze$$value ).compareTo( obj2.eze$$value ) === 0;
+	else if ( obj2 instanceof egl.javascript.BigDecimal ) {
+		if ( typeof obj1 === 'string' || typeof obj1 === 'number' ) {
+			return new egl.javascript.BigDecimal( obj1 ).compareTo( obj2 ) === 0;
 		}
-	}	
-	if ( obj1.eze$$value != null && obj1.eze$$value.equals ) {
-		return obj1.eze$$value.equals( obj2.eze$$value );
 	}
-	return obj1.eze$$value == obj2.eze$$value;
+	if (obj1.equals !== undefined) {
+		return obj1.equals( obj2 );
+	}
+	return obj1 == obj2;
 };
 egl.eglx.lang.EAny.notEquals = function(obj1, obj2){
 	return !egl.eglx.lang.EAny.equals(obj1, obj2);
