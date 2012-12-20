@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.gen.java.templates.eglx.persistence
-Bundle-Version: 0.8.1.qualifier
-Require-Bundle: org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.8.1",
+Bundle-Version: 0.8.2.qualifier
+Require-Bundle: org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.8.2",
  org.eclipse.edt.gen;bundle-version="0.8.2",
- org.eclipse.edt.gen.java.templates;bundle-version="0.8.1",
- org.eclipse.edt.gen.java;bundle-version="0.8.1",
- org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.8.1",
- org.eclipse.edt.compiler;bundle-version="0.8.1"
+ org.eclipse.edt.gen.java.templates;bundle-version="0.8.2",
+ org.eclipse.edt.gen.java;bundle-version="0.8.2",
+ org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.8.2",
+ org.eclipse.edt.compiler;bundle-version="0.8.2"
 Export-Package: org.eclipse.edt.gen.java.templates.eglx.persistence,
  org.eclipse.edt.gen.java.templates.eglx.persistence.annotation,
  org.eclipse.edt.gen.java.templates.eglx.persistence.sql

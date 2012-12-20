@@ -5,8 +5,8 @@ Bundle-SymbolicName: org.eclipse.edt.runtime.java.jee
 Bundle-Version: 0.8.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: javax.servlet;bundle-version="2.5.0",
- org.eclipse.edt.runtime.java;bundle-version="0.8.1";visibility:=reexport,
- org.eclipse.edt.runtime.java.sql;bundle-version="0.8.1"
+ org.eclipse.edt.runtime.java;bundle-version="0.8.2";visibility:=reexport,
+ org.eclipse.edt.runtime.java.sql;bundle-version="0.8.2"
 Export-Package: eglx.http,
  eglx.json,
  eglx.lang,

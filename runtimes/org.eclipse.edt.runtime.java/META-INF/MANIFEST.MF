@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.runtime.java
-Bundle-Version: 0.8.1.qualifier
+Bundle-Version: 0.8.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: com.ibm.icu;bundle-version="4.2.0";visibility:=reexport
 Export-Package: eglx.java,

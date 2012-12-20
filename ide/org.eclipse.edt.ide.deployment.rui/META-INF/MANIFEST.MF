@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.ide.deployment.rui;singleton:=true
-Bundle-Version: 0.8.1.qualifier
+Bundle-Version: 0.8.2.qualifier
 Bundle-Activator: org.eclipse.edt.ide.deployment.rui.Activator
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -17,17 +17,17 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.jsdt.core;bundle-version="[1.1.0,2.0.0)",
  org.eclipse.edt.mof.egl;bundle-version="0.8.2",
  org.eclipse.edt.ide.core;bundle-version="0.8.2",
- org.eclipse.edt.runtime.java;bundle-version="0.8.1",
- org.eclipse.edt.mof;bundle-version="0.8.1",
+ org.eclipse.edt.runtime.java;bundle-version="0.8.2",
+ org.eclipse.edt.mof;bundle-version="0.8.2",
  org.eclipse.edt.ide.rui,
  org.eclipse.emf.ecore.xmi;bundle-version="2.5.0",
- org.eclipse.edt.ide.deployment;bundle-version="0.8.1",
- org.eclipse.edt.gen.deployment.javascript;bundle-version="0.8.1",
- org.eclipse.edt.gen.generator.javascript;bundle-version="0.8.1",
+ org.eclipse.edt.ide.deployment;bundle-version="0.8.2",
+ org.eclipse.edt.gen.deployment.javascript;bundle-version="0.8.2",
+ org.eclipse.edt.gen.generator.javascript;bundle-version="0.8.2",
  org.eclipse.ui.ide;bundle-version="3.6.0",
  org.eclipse.ui.forms;bundle-version="3.5.0",
- org.eclipse.edt.gen.generator.deployment.javascript;bundle-version="0.8.1",
- org.eclipse.edt.ide.deployment.core;bundle-version="0.8.1",
+ org.eclipse.edt.gen.generator.deployment.javascript;bundle-version="0.8.2",
+ org.eclipse.edt.ide.deployment.core;bundle-version="0.8.2",
  org.eclipse.edt.ide.ui;bundle-version="0.8.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
