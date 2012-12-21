@@ -193,7 +193,7 @@ egl.eglx.xml.XmlLib["arrayToXML"] = function( /*value*/value, /*map*/namespaces,
 		fieldInfo.annotations["XMLStyle"].name = xmlStyle.name;
 	}
 	for (var idx = 0; idx < value.length; idx++) {
-		if (value[0] instanceof Array) {
+		if (value[0] instanceof Array && !value[0].isEBytes) {
 			fieldInfo.annotations["XMLArray"] = new egl.eglx.xmlXMLArray( true, names.slice(1));
 		}
 		s.push(this.toXML(value[idx], namespaces, fieldInfo));
