@@ -24,15 +24,27 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class ArrayAccessTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(ArrayAccess expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
-		out.print("egl.checkNull(");
-		ctx.invoke(genCheckNullArgs, expr, ctx, out);
-		out.print(")");
-		out.print("[");
-		ctx.invoke(genExpression, expr.getArray(), ctx, out);
-		out.print(".checkIndex(");
-		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
-		out.print(" - 1)]");
-		out.print( " = " );
+		Expression array = expr.getArray();
+		Expression index = expr.getIndex();
+		boolean arrayIsAny = TypeUtils.getTypeKind(array.getType()) == TypeUtils.TypeKind_ANY;
+
+		out.print("egl.setElement(");
+		if (arrayIsAny) {
+			out.print("egl.unboxAny(");
+		}
+		if (array.isNullable()) {
+			out.print("egl.checkNull(");
+			ctx.invoke(genCheckNullArgs, expr, ctx, out);
+			out.print(")");
+		} else {
+			ctx.invoke(genExpression, array, ctx, out);
+		}
+		if (arrayIsAny) {
+			out.print(")");
+		}
+		out.print(", ");
+		ctx.invoke(genExpression, index, ctx, out);
+		out.print(" - 1, ");
 		if (TypeUtils.getTypeKind(expr.getType()) != TypeUtils.TypeKind_ANY 
 				&& TypeUtils.getTypeKind(expr.getType()) != TypeUtils.TypeKind_NUMBER
 				&& (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType()))) {
@@ -42,6 +54,7 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 		} else {
 			TypeTemplate.assignmentSource(expr, arg1, ctx, out);
 		}
+		out.print(")");
 	}
 	
 	public void genCheckNullArgs(ArrayAccess expr, Context ctx, TabbedWriter out) {
@@ -61,21 +74,37 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 	}
 
 	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out) {
-		if ((expr instanceof ArrayType) && ((ArrayType) expr.getArray().getType()).elementsNullable()) {
-			out.print("egl.nullableCheckIndex(");
-			ctx.invoke(genExpression, expr.getArray(), ctx, out);
+		Expression array = expr.getArray();
+		Expression index = expr.getIndex();
+		boolean nullableElements = 
+				array.getType() instanceof ArrayType 
+				&& ((ArrayType)array.getType()).elementsNullable();
+		boolean arrayIsAny = TypeUtils.getTypeKind(array.getType()) == TypeUtils.TypeKind_ANY;
+
+		if (nullableElements) {
+			out.print("egl.nullableGetElement(");
+			ctx.invoke(genExpression, array, ctx, out);
 			out.print(", ");
-			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
+			ctx.invoke(genExpression, index, ctx, out);
 			out.print(")");
 		} else {
-			out.print("egl.checkNull(");
-			ctx.invoke(genCheckNullArgs, expr, ctx, out);
-			out.print(")");
-			out.print("[");
-			ctx.invoke(genExpression, expr.getArray(), ctx, out);
-			out.print(".checkIndex(");
-			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
-			out.print(" - 1)]");
+			out.print("egl.getElement(");
+			if (arrayIsAny) {
+				out.print("egl.unboxAny(");
+			}
+			if (array.isNullable()) {
+				out.print("egl.checkNull(");
+				ctx.invoke(genCheckNullArgs, expr, ctx, out);
+				out.print(")");
+			} else {
+				ctx.invoke(genExpression, array, ctx, out);
+			}
+			if (arrayIsAny) {
+				out.print(")");
+			}
+			out.print(", ");
+			ctx.invoke(genExpression, index, ctx, out);
+			out.print(" - 1)");
 		}
 	}
 }

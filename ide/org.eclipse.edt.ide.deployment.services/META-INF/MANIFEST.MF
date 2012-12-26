@@ -2,20 +2,20 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.ide.deployment.services;singleton:=true
-Bundle-Version: 0.8.1.qualifier
+Bundle-Version: 0.8.2.qualifier
 Bundle-Activator: org.eclipse.edt.ide.deployment.services.Activator
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.edt.ide.deployment;bundle-version="0.8.1",
- org.eclipse.edt.ide.deployment.core;bundle-version="0.8.1",
+ org.eclipse.edt.ide.deployment;bundle-version="0.8.2",
+ org.eclipse.edt.ide.deployment.core;bundle-version="0.8.2",
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.edt.ide.core;bundle-version="0.8.2",
  org.eclipse.edt.mof.egl;bundle-version="0.8.2",
- org.eclipse.edt.mof;bundle-version="0.8.1",
+ org.eclipse.edt.mof;bundle-version="0.8.2",
  org.eclipse.jdt.core;bundle-version="3.6.0",
  org.eclipse.edt.runtime.java.jee;bundle-version="0.8.2",
- org.eclipse.edt.ide.deployment.rui;bundle-version="0.8.1",
- org.eclipse.edt.gen.java;bundle-version="0.8.1",
- org.eclipse.edt.gen.deployment.javascript;bundle-version="0.8.1",
+ org.eclipse.edt.ide.deployment.rui;bundle-version="0.8.2",
+ org.eclipse.edt.gen.java;bundle-version="0.8.2",
+ org.eclipse.edt.gen.deployment.javascript;bundle-version="0.8.2",
  org.eclipse.edt.compiler;bundle-version="0.8.2",
  org.eclipse.edt.ide.ui;bundle-version="0.8.2",
  org.eclipse.datatools.connectivity;bundle-version="[1.0.0,2.0.0)",
@@ -25,7 +25,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.datatools.connectivity.ui;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.datatools.connectivity.ui.dse;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.datatools.connectivity.db.generic;bundle-version="[1.0.0,2.0.0)",
- org.eclipse.edt.ide.sql;bundle-version="0.8.1",
+ org.eclipse.edt.ide.sql;bundle-version="0.8.2",
  org.eclipse.jst.j2ee.core;bundle-version="[1.2.0,2.0.0)",
  org.eclipse.wst.common.project.facet.core;bundle-version="[1.4.0,2.0.0)",
  org.eclipse.jst.server.core;bundle-version="[1.2.0,2.0.0)",
@@ -33,7 +33,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.common.modulecore;bundle-version="[1.2.0,2.0.0)",
  org.eclipse.jetty.plus;bundle-version="[7.6.0,8.0.0)",
  org.eclipse.jetty.xml;bundle-version="[7.6.0,8.0.0)",
- org.eclipse.edt.ide.testserver;bundle-version="0.8.1",
+ org.eclipse.edt.ide.testserver;bundle-version="0.8.2",
  org.eclipse.ui.workbench;bundle-version="3.6.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %providerName

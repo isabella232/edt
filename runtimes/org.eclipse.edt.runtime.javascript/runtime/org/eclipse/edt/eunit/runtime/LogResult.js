@@ -393,7 +393,7 @@
 										egl.setLocalFunctionVariable("i", i, "eglx.lang.EInt");
 										try{egl.enterBlock();
 											egl.atLine(this.eze$$fileName,170,4754,177, this);
-											if (((egl.checkNull(expected, "expected")[expected.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : i, eze$$signature : "I;"}, false) - 1)]) != egl.checkNull(actual, "actual")[actual.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : i, eze$$signature : "I;"}, false) - 1)])) {
+											if (((egl.getElement(expected, egl.eglx.lang.EInt32.ezeCast({eze$$value : i, eze$$signature : "I;"}, false) - 1)) != egl.getElement(actual, egl.eglx.lang.EInt32.ezeCast({eze$$value : i, eze$$signature : "I;"}, false) - 1))) {
 												try{egl.enterBlock();
 													egl.atLine(this.eze$$fileName,171,4789,56, this);
 													if (!(isArrayEqual)) {
@@ -412,10 +412,10 @@
 												}finally{egl.exitBlock();}
 											}
 											egl.atLine(this.eze$$fileName,178,4946,30, this);
-											expectedValues = ((expectedValues) + egl.checkNull(expected, "expected")[expected.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : i, eze$$signature : "I;"}, false) - 1)]);
+											expectedValues = ((expectedValues) + egl.getElement(expected, egl.eglx.lang.EInt32.ezeCast({eze$$value : i, eze$$signature : "I;"}, false) - 1));
 											egl.setLocalFunctionVariable("expectedValues", expectedValues, "eglx.lang.EString");
 											egl.atLine(this.eze$$fileName,179,4982,26, this);
-											actualValues = ((actualValues) + egl.checkNull(actual, "actual")[actual.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : i, eze$$signature : "I;"}, false) - 1)]);
+											actualValues = ((actualValues) + egl.getElement(actual, egl.eglx.lang.EInt32.ezeCast({eze$$value : i, eze$$signature : "I;"}, false) - 1));
 											egl.setLocalFunctionVariable("actualValues", actualValues, "eglx.lang.EString");
 											egl.atLine(this.eze$$fileName,180,5014,88, this);
 											if (((i != expectedSize))) {
@@ -458,19 +458,17 @@
 							egl.setLocalFunctionVariable("failedReason", failedReason, "eglx.lang.EString");
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,193,5444,95, this);
+					egl.atLine(this.eze$$fileName,193,5444,94, this);
 					if ((((egl.eglx.lang.EAny.notEquals(message, null)) && ((message) != "")))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,193,5480,1, this);
-							;
-							egl.atLine(this.eze$$fileName,194,5486,46, this);
+							egl.atLine(this.eze$$fileName,194,5485,46, this);
 							failedReason = ((((message) + " - ")) + failedReason);
 							egl.setLocalFunctionVariable("failedReason", failedReason, "eglx.lang.EString");
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,196,5543,39, this);
+					egl.atLine(this.eze$$fileName,196,5542,39, this);
 					this.assertTrue(failedReason, isArrayEqual);
-					egl.atLine(this.eze$$fileName,159,4300,1288, this);
+					egl.atLine(this.eze$$fileName,159,4300,1287, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -482,9 +480,9 @@
 				try { egl.enter("assertStringArrayEqual1",this,arguments);
 					egl.addLocalFunctionVariable("expected", expected, "eglx.lang.EList<eglx.lang.EString>", "!expected");
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EList<eglx.lang.EString>", "!actual");
-					egl.atLine(this.eze$$fileName,200,5673,45, this);
+					egl.atLine(this.eze$$fileName,200,5672,45, this);
 					this.assertStringArrayEqual("", expected, actual);
-					egl.atLine(this.eze$$fileName,199,5595,129, this);
+					egl.atLine(this.eze$$fileName,199,5594,129, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -499,12 +497,12 @@
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EDate", "actual");
 					var isEqual;
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
-					egl.atLine(this.eze$$fileName,204,5830,20, this);
+					egl.atLine(this.eze$$fileName,204,5829,20, this);
 					isEqual = (egl.eglx.lang.EDate.equals(expected, actual));
 					egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
-					egl.atLine(this.eze$$fileName,205,5855,53, this);
+					egl.atLine(this.eze$$fileName,205,5854,53, this);
 					this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"K;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"K;"]), isEqual);
-					egl.atLine(this.eze$$fileName,203,5731,183, this);
+					egl.atLine(this.eze$$fileName,203,5730,183, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -516,9 +514,9 @@
 				try { egl.enter("assertDateEqual1",this,arguments);
 					egl.addLocalFunctionVariable("expected", expected, "eglx.lang.EDate", "expected");
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EDate", "actual");
-					egl.atLine(this.eze$$fileName,209,5983,38, this);
+					egl.atLine(this.eze$$fileName,209,5982,38, this);
 					this.assertDateEqual("", expected, actual);
-					egl.atLine(this.eze$$fileName,208,5920,107, this);
+					egl.atLine(this.eze$$fileName,208,5919,107, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -533,12 +531,12 @@
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.ETime", "actual");
 					var isEqual;
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
-					egl.atLine(this.eze$$fileName,213,6132,20, this);
+					egl.atLine(this.eze$$fileName,213,6131,20, this);
 					isEqual = (egl.eglx.lang.ETime.equals(expected, actual));
 					egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
-					egl.atLine(this.eze$$fileName,214,6157,53, this);
+					egl.atLine(this.eze$$fileName,214,6156,53, this);
 					this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"L;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"L;"]), isEqual);
-					egl.atLine(this.eze$$fileName,212,6033,183, this);
+					egl.atLine(this.eze$$fileName,212,6032,183, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -550,9 +548,9 @@
 				try { egl.enter("assertTimeEqual1",this,arguments);
 					egl.addLocalFunctionVariable("expected", expected, "eglx.lang.ETime", "expected");
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.ETime", "actual");
-					egl.atLine(this.eze$$fileName,218,6287,38, this);
+					egl.atLine(this.eze$$fileName,218,6286,38, this);
 					this.assertTimeEqual("", expected, actual);
-					egl.atLine(this.eze$$fileName,217,6224,107, this);
+					egl.atLine(this.eze$$fileName,217,6223,107, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -567,12 +565,12 @@
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.ETimestamp", "actual");
 					var isEqual;
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
-					egl.atLine(this.eze$$fileName,222,6452,20, this);
+					egl.atLine(this.eze$$fileName,222,6451,20, this);
 					isEqual = (egl.eglx.lang.ETimestamp.equals(expected, actual));
 					egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
-					egl.atLine(this.eze$$fileName,223,6477,53, this);
+					egl.atLine(this.eze$$fileName,223,6476,53, this);
 					this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"yyyyMMddhhmmss","J;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"yyyyMMddhhmmss","J;"]), isEqual);
-					egl.atLine(this.eze$$fileName,221,6338,200, this);
+					egl.atLine(this.eze$$fileName,221,6337,200, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -584,9 +582,9 @@
 				try { egl.enter("assertTimestampEqual1",this,arguments);
 					egl.addLocalFunctionVariable("expected", expected, "eglx.lang.ETimestamp", "expected");
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.ETimestamp", "actual");
-					egl.atLine(this.eze$$fileName,227,6622,43, this);
+					egl.atLine(this.eze$$fileName,227,6621,43, this);
 					this.assertTimestampEqual("", expected, actual);
-					egl.atLine(this.eze$$fileName,226,6544,127, this);
+					egl.atLine(this.eze$$fileName,226,6543,127, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -601,12 +599,12 @@
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EDecimal", "actual");
 					var isEqual;
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
-					egl.atLine(this.eze$$fileName,231,6787,20, this);
+					egl.atLine(this.eze$$fileName,231,6786,20, this);
 					isEqual = (egl.eglx.lang.EDecimal.equals(expected,actual));
 					egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
-					egl.atLine(this.eze$$fileName,232,6812,53, this);
+					egl.atLine(this.eze$$fileName,232,6811,53, this);
 					this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"d;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"d;"]), isEqual);
-					egl.atLine(this.eze$$fileName,230,6679,196, this);
+					egl.atLine(this.eze$$fileName,230,6678,196, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -618,9 +616,9 @@
 				try { egl.enter("assertDecimalEqual1",this,arguments);
 					egl.addLocalFunctionVariable("expected", expected, "eglx.lang.EDecimal", "expected");
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EDecimal", "actual");
-					egl.atLine(this.eze$$fileName,236,6953,41, this);
+					egl.atLine(this.eze$$fileName,236,6952,41, this);
 					this.assertDecimalEqual("", expected, actual);
-					egl.atLine(this.eze$$fileName,235,6881,119, this);
+					egl.atLine(this.eze$$fileName,235,6880,119, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -635,12 +633,12 @@
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EFloat", "actual");
 					var isEqual;
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
-					egl.atLine(this.eze$$fileName,240,7109,30, this);
+					egl.atLine(this.eze$$fileName,240,7108,30, this);
 					isEqual = this.isFloatEqual(expected, actual);
 					egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
-					egl.atLine(this.eze$$fileName,241,7144,53, this);
+					egl.atLine(this.eze$$fileName,241,7143,53, this);
 					this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"F;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"F;"]), isEqual);
-					egl.atLine(this.eze$$fileName,239,7007,196, this);
+					egl.atLine(this.eze$$fileName,239,7006,196, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -652,9 +650,9 @@
 				try { egl.enter("assertFloatEqual1",this,arguments);
 					egl.addLocalFunctionVariable("expected", expected, "eglx.lang.EFloat", "expected");
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EFloat", "actual");
-					egl.atLine(this.eze$$fileName,245,7275,39, this);
+					egl.atLine(this.eze$$fileName,245,7274,39, this);
 					this.assertFloatEqual("", expected, actual);
-					egl.atLine(this.eze$$fileName,244,7209,111, this);
+					egl.atLine(this.eze$$fileName,244,7208,111, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -682,55 +680,55 @@
 					egl.addLocalFunctionVariable("signActual", signActual, "eglx.lang.EString", "signActual");
 					var deltaLimit;
 					egl.addLocalFunctionVariable("deltaLimit", deltaLimit, "eglx.lang.EFloat", "deltaLimit");
-					egl.atLine(this.eze$$fileName,253,7582,5, this);
+					egl.atLine(this.eze$$fileName,253,7581,5, this);
 					deltaLimit = 1E-14;
 					egl.setLocalFunctionVariable("deltaLimit", deltaLimit, "eglx.lang.EFloat");
 					var eze$Temp11 = 0;
 					var eze$Temp12;
-					egl.atLine(this.eze$$fileName,254,7609,53, this);
+					egl.atLine(this.eze$$fileName,254,7608,53, this);
 					eze$Temp12 = egl.eglx.lang.EAny.ezeWrap(eze$Temp11);
 					var eze$Temp13 = "";
 					var eze$Temp14;
-					egl.atLine(this.eze$$fileName,254,7609,53, this);
+					egl.atLine(this.eze$$fileName,254,7608,53, this);
 					eze$Temp14 = egl.eglx.lang.EAny.ezeWrap(eze$Temp13);
-					egl.atLine(this.eze$$fileName,254,7592,71, this);
+					egl.atLine(this.eze$$fileName,254,7591,71, this);
 					normalExpected = this.normalFloat(expected, eze$Temp12, eze$Temp14);
 					egl.setLocalFunctionVariable("normalExpected", normalExpected, "eglx.lang.EFloat");
-					egl.atLine(this.eze$$fileName,254,7609,53, this);
+					egl.atLine(this.eze$$fileName,254,7608,53, this);
 					mantissaExpected = eze$Temp12.ezeUnbox();
 					egl.setLocalFunctionVariable("mantissaExpected", mantissaExpected, "eglx.lang.EInt");
-					egl.atLine(this.eze$$fileName,254,7609,53, this);
+					egl.atLine(this.eze$$fileName,254,7608,53, this);
 					signExpected = eze$Temp14.ezeUnbox();
 					egl.setLocalFunctionVariable("signExpected", signExpected, "eglx.lang.EString");
 					var eze$Temp15 = 0;
 					var eze$Temp16;
-					egl.atLine(this.eze$$fileName,255,7682,47, this);
+					egl.atLine(this.eze$$fileName,255,7681,47, this);
 					eze$Temp16 = egl.eglx.lang.EAny.ezeWrap(eze$Temp15);
 					var eze$Temp17 = "";
 					var eze$Temp18;
-					egl.atLine(this.eze$$fileName,255,7682,47, this);
+					egl.atLine(this.eze$$fileName,255,7681,47, this);
 					eze$Temp18 = egl.eglx.lang.EAny.ezeWrap(eze$Temp17);
-					egl.atLine(this.eze$$fileName,255,7667,63, this);
+					egl.atLine(this.eze$$fileName,255,7666,63, this);
 					normalActual = this.normalFloat(actual, eze$Temp16, eze$Temp18);
 					egl.setLocalFunctionVariable("normalActual", normalActual, "eglx.lang.EFloat");
-					egl.atLine(this.eze$$fileName,255,7682,47, this);
+					egl.atLine(this.eze$$fileName,255,7681,47, this);
 					mantissaActual = eze$Temp16.ezeUnbox();
 					egl.setLocalFunctionVariable("mantissaActual", mantissaActual, "eglx.lang.EInt");
-					egl.atLine(this.eze$$fileName,255,7682,47, this);
+					egl.atLine(this.eze$$fileName,255,7681,47, this);
 					signActual = eze$Temp18.ezeUnbox();
 					egl.setLocalFunctionVariable("signActual", signActual, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,256,7734,38, this);
+					egl.atLine(this.eze$$fileName,256,7733,38, this);
 					delta = ((normalExpected - normalActual));
 					egl.setLocalFunctionVariable("delta", delta, "eglx.lang.EFloat");
-					egl.atLine(this.eze$$fileName,257,7776,27, this);
+					egl.atLine(this.eze$$fileName,257,7775,27, this);
 					delta = egl.eglx.lang.MathLib.abs(delta);
 					egl.setLocalFunctionVariable("delta", delta, "eglx.lang.EFloat");
 					var isEqual;
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
-					egl.atLine(this.eze$$fileName,258,7825,105, this);
+					egl.atLine(this.eze$$fileName,258,7824,105, this);
 					isEqual = ((((((signExpected) == signActual) && ((mantissaExpected == mantissaActual)))) && ((delta < deltaLimit))));
 					egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
-					egl.atLine(this.eze$$fileName,262,7942,16, this);
+					egl.atLine(this.eze$$fileName,262,7941,16, this);
 					if (!egl.debugg) egl.leave();
 					return isEqual;
 				} finally {
@@ -746,12 +744,12 @@
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.ESmallfloat", "actual");
 					var isEqual;
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
-					egl.atLine(this.eze$$fileName,266,8091,35, this);
+					egl.atLine(this.eze$$fileName,266,8090,35, this);
 					isEqual = this.isSmallFloatEqual(expected, actual);
 					egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
-					egl.atLine(this.eze$$fileName,267,8131,53, this);
+					egl.atLine(this.eze$$fileName,267,8130,53, this);
 					this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"f;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"f;"]), isEqual);
-					egl.atLine(this.eze$$fileName,265,7974,216, this);
+					egl.atLine(this.eze$$fileName,265,7973,216, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -763,9 +761,9 @@
 				try { egl.enter("assertSmallFloatEqual1",this,arguments);
 					egl.addLocalFunctionVariable("expected", expected, "eglx.lang.ESmallfloat", "expected");
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.ESmallfloat", "actual");
-					egl.atLine(this.eze$$fileName,271,8277,44, this);
+					egl.atLine(this.eze$$fileName,271,8276,44, this);
 					this.assertSmallFloatEqual("", expected, actual);
-					egl.atLine(this.eze$$fileName,270,8196,131, this);
+					egl.atLine(this.eze$$fileName,270,8195,131, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -793,55 +791,55 @@
 					egl.addLocalFunctionVariable("signActual", signActual, "eglx.lang.EString", "signActual");
 					var deltaLimit;
 					egl.addLocalFunctionVariable("deltaLimit", deltaLimit, "eglx.lang.EFloat", "deltaLimit");
-					egl.atLine(this.eze$$fileName,279,8609,4, this);
+					egl.atLine(this.eze$$fileName,279,8608,4, this);
 					deltaLimit = 1E-4;
 					egl.setLocalFunctionVariable("deltaLimit", deltaLimit, "eglx.lang.EFloat");
 					var eze$Temp19 = 0;
 					var eze$Temp20;
-					egl.atLine(this.eze$$fileName,280,8635,58, this);
+					egl.atLine(this.eze$$fileName,280,8634,58, this);
 					eze$Temp20 = egl.eglx.lang.EAny.ezeWrap(eze$Temp19);
 					var eze$Temp21 = "";
 					var eze$Temp22;
-					egl.atLine(this.eze$$fileName,280,8635,58, this);
+					egl.atLine(this.eze$$fileName,280,8634,58, this);
 					eze$Temp22 = egl.eglx.lang.EAny.ezeWrap(eze$Temp21);
-					egl.atLine(this.eze$$fileName,280,8618,76, this);
+					egl.atLine(this.eze$$fileName,280,8617,76, this);
 					normalExpected = this.normalSmallFloat(expected, eze$Temp20, eze$Temp22);
 					egl.setLocalFunctionVariable("normalExpected", normalExpected, "eglx.lang.ESmallfloat");
-					egl.atLine(this.eze$$fileName,280,8635,58, this);
+					egl.atLine(this.eze$$fileName,280,8634,58, this);
 					mantissaExpected = eze$Temp20.ezeUnbox();
 					egl.setLocalFunctionVariable("mantissaExpected", mantissaExpected, "eglx.lang.EInt");
-					egl.atLine(this.eze$$fileName,280,8635,58, this);
+					egl.atLine(this.eze$$fileName,280,8634,58, this);
 					signExpected = eze$Temp22.ezeUnbox();
 					egl.setLocalFunctionVariable("signExpected", signExpected, "eglx.lang.EString");
 					var eze$Temp23 = 0;
 					var eze$Temp24;
-					egl.atLine(this.eze$$fileName,281,8713,52, this);
+					egl.atLine(this.eze$$fileName,281,8712,52, this);
 					eze$Temp24 = egl.eglx.lang.EAny.ezeWrap(eze$Temp23);
 					var eze$Temp25 = "";
 					var eze$Temp26;
-					egl.atLine(this.eze$$fileName,281,8713,52, this);
+					egl.atLine(this.eze$$fileName,281,8712,52, this);
 					eze$Temp26 = egl.eglx.lang.EAny.ezeWrap(eze$Temp25);
-					egl.atLine(this.eze$$fileName,281,8698,68, this);
+					egl.atLine(this.eze$$fileName,281,8697,68, this);
 					normalActual = this.normalSmallFloat(actual, eze$Temp24, eze$Temp26);
 					egl.setLocalFunctionVariable("normalActual", normalActual, "eglx.lang.ESmallfloat");
-					egl.atLine(this.eze$$fileName,281,8713,52, this);
+					egl.atLine(this.eze$$fileName,281,8712,52, this);
 					mantissaActual = eze$Temp24.ezeUnbox();
 					egl.setLocalFunctionVariable("mantissaActual", mantissaActual, "eglx.lang.EInt");
-					egl.atLine(this.eze$$fileName,281,8713,52, this);
+					egl.atLine(this.eze$$fileName,281,8712,52, this);
 					signActual = eze$Temp26.ezeUnbox();
 					egl.setLocalFunctionVariable("signActual", signActual, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,282,8770,38, this);
+					egl.atLine(this.eze$$fileName,282,8769,38, this);
 					delta = ((normalExpected - normalActual));
 					egl.setLocalFunctionVariable("delta", delta, "eglx.lang.ESmallfloat");
-					egl.atLine(this.eze$$fileName,283,8812,27, this);
+					egl.atLine(this.eze$$fileName,283,8811,27, this);
 					delta = egl.eglx.lang.MathLib.abs(delta);
 					egl.setLocalFunctionVariable("delta", delta, "eglx.lang.ESmallfloat");
 					var isEqual;
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
-					egl.atLine(this.eze$$fileName,284,8861,105, this);
+					egl.atLine(this.eze$$fileName,284,8860,105, this);
 					isEqual = ((((((signExpected) == signActual) && ((mantissaExpected == mantissaActual)))) && ((delta < deltaLimit))));
 					egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
-					egl.atLine(this.eze$$fileName,288,8978,16, this);
+					egl.atLine(this.eze$$fileName,288,8977,16, this);
 					if (!egl.debugg) egl.leave();
 					return isEqual;
 				} finally {
@@ -858,12 +856,12 @@
 					egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
 					var failedReason;
 					egl.addLocalFunctionVariable("failedReason", failedReason, "eglx.lang.EString", "failedReason");
-					egl.atLine(this.eze$$fileName,292,9140,44, this);
+					egl.atLine(this.eze$$fileName,292,9139,44, this);
 					failedReason = this.buildFailedReason(message, expected, actual);
 					egl.setLocalFunctionVariable("failedReason", failedReason, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,293,9189,34, this);
+					egl.atLine(this.eze$$fileName,293,9188,34, this);
 					this.assertTrue(failedReason, isEqual);
-					egl.atLine(this.eze$$fileName,291,9010,221, this);
+					egl.atLine(this.eze$$fileName,291,9009,221, this);
 					if (!egl.debugg) egl.leave();
 				} finally {
 					if (!egl.debugg){
@@ -878,18 +876,18 @@
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EAny", "actual");
 					var failedReason;
 					egl.addLocalFunctionVariable("failedReason", failedReason, "eglx.lang.EString", "failedReason");
-					egl.atLine(this.eze$$fileName,297,9365,24, this);
+					egl.atLine(this.eze$$fileName,297,9364,24, this);
 					failedReason = this.expect(expected, actual);
 					egl.setLocalFunctionVariable("failedReason", failedReason, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,298,9394,95, this);
+					egl.atLine(this.eze$$fileName,298,9393,95, this);
 					if ((((egl.eglx.lang.EAny.notEquals(message, null)) && ((message) != "")))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,299,9436,46, this);
+							egl.atLine(this.eze$$fileName,299,9435,46, this);
 							failedReason = ((((message) + " - ")) + failedReason);
 							egl.setLocalFunctionVariable("failedReason", failedReason, "eglx.lang.EString");
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,301,9493,22, this);
+					egl.atLine(this.eze$$fileName,301,9492,22, this);
 					if (!egl.debugg) egl.leave();
 					return failedReason;
 				} finally {
@@ -904,10 +902,10 @@
 					egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EAny", "actual");
 					var standardMsg;
 					egl.addLocalFunctionVariable("standardMsg", standardMsg, "eglx.lang.EString", "standardMsg");
-					egl.atLine(this.eze$$fileName,305,9632,88, this);
+					egl.atLine(this.eze$$fileName,305,9631,88, this);
 					standardMsg = (((((((((((((((("Failed: ") + this.EXPECTEDHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast(expected, false))) + "' ")) + this.ACTUALHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast(actual, false))) + "' ");
 					egl.setLocalFunctionVariable("standardMsg", standardMsg, "eglx.lang.EString");
-					egl.atLine(this.eze$$fileName,306,9731,21, this);
+					egl.atLine(this.eze$$fileName,306,9730,21, this);
 					if (!egl.debugg) egl.leave();
 					return standardMsg;
 				} finally {
@@ -921,57 +919,57 @@
 					egl.addLocalFunctionVariable("afloat", afloat, "eglx.lang.EFloat", "afloat");
 					egl.addLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt", "mantissa");
 					egl.addLocalFunctionVariable("sign", sign, "eglx.lang.EString", "sign");
-					egl.atLine(this.eze$$fileName,311,9884,13, this);
+					egl.atLine(this.eze$$fileName,311,9883,13, this);
 					mantissa.ezeCopy(0);
 					egl.setLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt");
-					egl.atLine(this.eze$$fileName,312,9907,127, this);
+					egl.atLine(this.eze$$fileName,312,9906,127, this);
 					if (((afloat >= 0))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,313,9936,11, this);
+							egl.atLine(this.eze$$fileName,313,9935,11, this);
 							sign.ezeCopy("+");
 							egl.setLocalFunctionVariable("sign", sign, "eglx.lang.EString");
 						}finally{egl.exitBlock();}
 					}
 					else {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,315,9975,11, this);
+							egl.atLine(this.eze$$fileName,315,9974,11, this);
 							sign.ezeCopy("-");
 							egl.setLocalFunctionVariable("sign", sign, "eglx.lang.EString");
-							egl.atLine(this.eze$$fileName,316,10000,21, this);
+							egl.atLine(this.eze$$fileName,316,9999,21, this);
 							afloat = ((afloat * -1));
 							egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.EFloat");
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,318,10044,306, this);
+					egl.atLine(this.eze$$fileName,318,10043,306, this);
 					if ((((egl.eglx.lang.EAny.notEquals(afloat, null)) && ((afloat != 0))))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,319,10091,115, this);
+							egl.atLine(this.eze$$fileName,319,10090,115, this);
 							while (((afloat < 1))) {
 								try{egl.enterBlock();
-									egl.atLine(this.eze$$fileName,320,10126,21, this);
+									egl.atLine(this.eze$$fileName,320,10125,21, this);
 									afloat = ((afloat * 10));
 									egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.EFloat");
-									egl.atLine(this.eze$$fileName,321,10165,24, this);
+									egl.atLine(this.eze$$fileName,321,10164,24, this);
 									mantissa.ezeCopy(((egl.eglx.lang.EAny.unbox(mantissa) - 1)));
 									egl.setLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt");
 								}finally{egl.exitBlock();}
-								egl.atLine(this.eze$$fileName,319,10091,115, this);
+								egl.atLine(this.eze$$fileName,319,10090,115, this);
 							}
-							egl.atLine(this.eze$$fileName,323,10220,117, this);
+							egl.atLine(this.eze$$fileName,323,10219,117, this);
 							while (((afloat >= 10))) {
 								try{egl.enterBlock();
-									egl.atLine(this.eze$$fileName,324,10257,21, this);
+									egl.atLine(this.eze$$fileName,324,10256,21, this);
 									afloat = (egl.divide(afloat ,10));
 									egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.EFloat");
-									egl.atLine(this.eze$$fileName,325,10296,24, this);
+									egl.atLine(this.eze$$fileName,325,10295,24, this);
 									mantissa.ezeCopy(((egl.eglx.lang.EAny.unbox(mantissa) + 1)));
 									egl.setLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt");
 								}finally{egl.exitBlock();}
-								egl.atLine(this.eze$$fileName,323,10220,117, this);
+								egl.atLine(this.eze$$fileName,323,10219,117, this);
 							}
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,328,10360,15, this);
+					egl.atLine(this.eze$$fileName,328,10359,15, this);
 					if (!egl.debugg) egl.leave();
 					return afloat;
 				} finally {
@@ -985,57 +983,57 @@
 					egl.addLocalFunctionVariable("afloat", afloat, "eglx.lang.ESmallfloat", "afloat");
 					egl.addLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt", "mantissa");
 					egl.addLocalFunctionVariable("sign", sign, "eglx.lang.EString", "sign");
-					egl.atLine(this.eze$$fileName,332,10515,13, this);
+					egl.atLine(this.eze$$fileName,332,10514,13, this);
 					mantissa.ezeCopy(0);
 					egl.setLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt");
-					egl.atLine(this.eze$$fileName,333,10538,127, this);
+					egl.atLine(this.eze$$fileName,333,10537,127, this);
 					if (((afloat >= 0))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,334,10567,11, this);
+							egl.atLine(this.eze$$fileName,334,10566,11, this);
 							sign.ezeCopy("+");
 							egl.setLocalFunctionVariable("sign", sign, "eglx.lang.EString");
 						}finally{egl.exitBlock();}
 					}
 					else {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,336,10606,11, this);
+							egl.atLine(this.eze$$fileName,336,10605,11, this);
 							sign.ezeCopy("-");
 							egl.setLocalFunctionVariable("sign", sign, "eglx.lang.EString");
-							egl.atLine(this.eze$$fileName,337,10631,21, this);
+							egl.atLine(this.eze$$fileName,337,10630,21, this);
 							afloat = ((afloat * -1));
 							egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.ESmallfloat");
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,339,10675,306, this);
+					egl.atLine(this.eze$$fileName,339,10674,306, this);
 					if ((((egl.eglx.lang.EAny.notEquals(afloat, null)) && ((afloat != 0))))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,340,10722,115, this);
+							egl.atLine(this.eze$$fileName,340,10721,115, this);
 							while (((afloat < 1))) {
 								try{egl.enterBlock();
-									egl.atLine(this.eze$$fileName,341,10757,21, this);
+									egl.atLine(this.eze$$fileName,341,10756,21, this);
 									afloat = ((afloat * 10));
 									egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.ESmallfloat");
-									egl.atLine(this.eze$$fileName,342,10796,24, this);
+									egl.atLine(this.eze$$fileName,342,10795,24, this);
 									mantissa.ezeCopy(((egl.eglx.lang.EAny.unbox(mantissa) - 1)));
 									egl.setLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt");
 								}finally{egl.exitBlock();}
-								egl.atLine(this.eze$$fileName,340,10722,115, this);
+								egl.atLine(this.eze$$fileName,340,10721,115, this);
 							}
-							egl.atLine(this.eze$$fileName,344,10851,117, this);
+							egl.atLine(this.eze$$fileName,344,10850,117, this);
 							while (((afloat >= 10))) {
 								try{egl.enterBlock();
-									egl.atLine(this.eze$$fileName,345,10888,21, this);
+									egl.atLine(this.eze$$fileName,345,10887,21, this);
 									afloat = (egl.divide(afloat ,10));
 									egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.ESmallfloat");
-									egl.atLine(this.eze$$fileName,346,10927,24, this);
+									egl.atLine(this.eze$$fileName,346,10926,24, this);
 									mantissa.ezeCopy(((egl.eglx.lang.EAny.unbox(mantissa) + 1)));
 									egl.setLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt");
 								}finally{egl.exitBlock();}
-								egl.atLine(this.eze$$fileName,344,10851,117, this);
+								egl.atLine(this.eze$$fileName,344,10850,117, this);
 							}
 						}finally{egl.exitBlock();}
 					}
-					egl.atLine(this.eze$$fileName,349,10991,15, this);
+					egl.atLine(this.eze$$fileName,349,10990,15, this);
 					if (!egl.debugg) egl.leave();
 					return afloat;
 				} finally {

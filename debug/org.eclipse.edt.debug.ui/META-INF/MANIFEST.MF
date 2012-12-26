@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.debug.ui;singleton:=true
-Bundle-Version: 0.8.1.qualifier
+Bundle-Version: 0.8.2.qualifier
 Bundle-Activator: org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.edt.debug.core;bundle-version="0.8.1";visibility:=reexport,
+ org.eclipse.edt.debug.core;bundle-version="0.8.2";visibility:=reexport,
  org.eclipse.jdt.debug.ui;visibility:=reexport,
  org.eclipse.debug.ui;visibility:=reexport,
  org.eclipse.ui.ide,
@@ -20,10 +20,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.core.expressions;bundle-version="3.4.0",
  org.eclipse.edt.mof.egl;bundle-version="0.8.2",
- org.eclipse.edt.mof;bundle-version="0.8.1",
- org.eclipse.edt.ide.testserver;bundle-version="0.8.1",
- org.eclipse.edt.ide.deployment.services;bundle-version="0.8.1",
- org.eclipse.edt.runtime.java;bundle-version="0.8.1"
+ org.eclipse.edt.mof;bundle-version="0.8.2",
+ org.eclipse.edt.ide.testserver;bundle-version="0.8.2",
+ org.eclipse.edt.ide.deployment.services;bundle-version="0.8.2",
+ org.eclipse.edt.runtime.java;bundle-version="0.8.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin

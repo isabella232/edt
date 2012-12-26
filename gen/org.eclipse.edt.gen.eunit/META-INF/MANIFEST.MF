@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.gen.eunit
-Bundle-Version: 0.8.1.qualifier
+Bundle-Version: 0.8.2.qualifier
 Export-Package: org.eclipse.edt.gen.eunit,
  org.eclipse.edt.gen.eunit.templates,
  org.eclipse.edt.gen.eunit.templates.java,
@@ -10,7 +10,7 @@ Export-Package: org.eclipse.edt.gen.eunit,
  org.eclipse.edt.gen.eunit.templates.javascriptasync
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.edt.gen;bundle-version="0.8.2",
- org.eclipse.edt.mof;bundle-version="0.8.1",
+ org.eclipse.edt.mof;bundle-version="0.8.2",
  org.eclipse.edt.mof.egl;bundle-version="0.8.2",
  org.eclipse.edt.compiler;bundle-version="0.8.2"
 Bundle-Vendor: %providerName

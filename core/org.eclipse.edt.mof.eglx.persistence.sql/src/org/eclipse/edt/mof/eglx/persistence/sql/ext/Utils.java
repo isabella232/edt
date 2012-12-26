@@ -169,6 +169,7 @@ public class Utils {
 		else if (type.equals(TypeUtils.Type_SMALLINT)) name = "Short";
 		else if (type.equals(TypeUtils.Type_DECIMAL)) name = "BigDecimal";
 		else if (type.equals(TypeUtils.Type_STRING)) name = "String";
+		else if (type.equals(TypeUtils.Type_BYTES)) name = "Bytes";
 		return name;
 	}
 	
@@ -187,6 +188,7 @@ public class Utils {
 		else if (type.equals(TypeUtils.Type_SMALLINT)) constant += "SMALLINT";
 		else if (type.equals(TypeUtils.Type_DECIMAL)) constant += "DECIMAL";
 		else if (type.equals(TypeUtils.Type_STRING)) constant += "VARCHAR";
+		else if (type.equals(TypeUtils.Type_BYTES)) constant += "BINARY";
 		return constant;		
 	}
 	

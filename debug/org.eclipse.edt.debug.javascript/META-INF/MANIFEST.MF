@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.debug.javascript;singleton:=true
-Bundle-Version: 0.8.1.qualifier
+Bundle-Version: 0.8.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.edt.ide.ui;bundle-version="0.8.2",
@@ -18,14 +18,14 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.ui.editors;bundle-version="3.6.0",
  org.eclipse.ui.ide;bundle-version="3.6.0",
  org.eclipse.edt.mof.egl;bundle-version="0.8.2",
- org.eclipse.edt.ide.rui;bundle-version="0.8.1",
- org.eclipse.edt.debug.core;bundle-version="0.8.1",
- org.eclipse.edt.gen.deployment.javascript;bundle-version="0.8.1",
+ org.eclipse.edt.ide.rui;bundle-version="0.8.2",
+ org.eclipse.edt.debug.core;bundle-version="0.8.2",
+ org.eclipse.edt.gen.deployment.javascript;bundle-version="0.8.2",
  org.eclipse.edt.gen;bundle-version="0.8.2",
  org.eclipse.edt.gen.javascript;bundle-version="0.8.2",
  org.eclipse.edt.runtime.java.jee;bundle-version="0.8.2",
- org.eclipse.edt.debug.ui;bundle-version="0.8.1",
- org.eclipse.edt.mof;bundle-version="0.8.1"
+ org.eclipse.edt.debug.ui;bundle-version="0.8.2",
+ org.eclipse.edt.mof;bundle-version="0.8.2"
 Bundle-Activator: org.eclipse.edt.debug.javascript.EDTJavaScriptDebugPlugin
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy

@@ -67,7 +67,7 @@ egl.defineClass(
         		contentType += "; charset=";
         		contentType += httpResquest.charset;
         	}
-            egl.valueByKey( httpResquest.headers, egl.HEADER_CONTENT_TYPE, contentType);                    
+            egl.setValueByKey( httpResquest.headers, egl.HEADER_CONTENT_TYPE, contentType);                    
         }
     },
 
@@ -99,7 +99,7 @@ egl.defineClass(
         }       
         
         if(http.response.charset !== undefined && http.response.charset !== null){
-            egl.valueByKey( http.request.headers, egl.HEADER_RESPONSE_CHARSET, http.response.charset);                    
+            egl.setValueByKey( http.request.headers, egl.HEADER_RESPONSE_CHARSET, http.response.charset);                    
         }
         if(requestExp != null){
         	egl.eglx.services.$ServiceRT.callErrorCallback(errorCallbackFunction, handler, requestExp, http);
@@ -142,7 +142,7 @@ egl.defineClass(
 	                    	
 /*	                    	var customSOAPResponseHeaders = egl.findByKey(http.response.headers, egl.CUSTOM_RESPONSE_HEADER_EGLSOAP);
 	                    	if(customSOAPResponseHeaders != null &&  customSOAPResponseHeaders != undefined){
-	                    		egl.valueByKey(serviceWrapper.getRESTRequestHeader(), egl.CUSTOM_RESPONSE_HEADER_EGLSOAP, customSOAPResponseHeaders,"S;");
+	                    		egl.setValueByKey(serviceWrapper.getRESTRequestHeader(), egl.CUSTOM_RESPONSE_HEADER_EGLSOAP, customSOAPResponseHeaders,"S;");
 	                    	}
 */	                    	
 	                    	var encoding = http.response.encoding;
@@ -406,7 +406,7 @@ egl.defineClass(
                                    /*boolean*/ asynchronous) {
     	if(http instanceof egl.eglx.http.HttpRest){
     		if(http.restType === egl.eglx.rest.ServiceType.EglDedicated){
-                egl.valueByKey( http.request.headers, egl.HEADER_EGLDEDICATED, "true");                    
+                egl.setValueByKey( http.request.headers, egl.HEADER_EGLDEDICATED, "true");                    
     		}
     	}
     	var request = new egl.eglx.lang.EDictionary();

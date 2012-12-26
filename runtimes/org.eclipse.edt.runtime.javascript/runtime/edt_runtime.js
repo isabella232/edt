@@ -95,10 +95,29 @@ egl.eglx.lang.EAny.equals = function(obj1, obj2){
 		return true;
 	if( obj1 == null || obj2 == null)
 		return false;
-	if ( obj1.eze$$value != null && obj1.eze$$value.equals ) {
-		return obj1.eze$$value.equals( obj2.eze$$value );
+	
+	if (obj1.eze$$value !== undefined)
+		obj1 = obj1.eze$$value;
+	if (obj2.eze$$value !== undefined)
+		obj2 = obj2.eze$$value;
+	
+	if ( obj1 instanceof egl.javascript.BigDecimal ) {
+		if ( obj2 instanceof egl.javascript.BigDecimal ) {
+			return obj1.compareTo( obj2 ) === 0;
+		}
+		else if ( typeof obj2 === 'string' || typeof obj2 === 'number' ) {
+			return obj1.compareTo( new egl.javascript.BigDecimal( obj2 ) ) === 0;
+		}
 	}
-	return (obj1.eze$$value == obj2.eze$$value);
+	else if ( obj2 instanceof egl.javascript.BigDecimal ) {
+		if ( typeof obj1 === 'string' || typeof obj1 === 'number' ) {
+			return new egl.javascript.BigDecimal( obj1 ).compareTo( obj2 ) === 0;
+		}
+	}
+	if (obj1.equals !== undefined) {
+		return obj1.equals( obj2 );
+	}
+	return obj1 == obj2;
 };
 egl.eglx.lang.EAny.notEquals = function(obj1, obj2){
 	return !egl.eglx.lang.EAny.equals(obj1, obj2);
@@ -143,6 +162,9 @@ egl.defineClass( "eglx.lang", "EInt16"
 egl.eglx.lang.EInt16.fromEInt32 = function (x) {   
 	return egl.convertNumberToSmallint(x, egl.createNumericOverflowException);
 };
+egl.eglx.lang.EInt16.fromEInt64 = function (x) {
+	return egl.convertNumberToSmallint(x, egl.createNumericOverflowException);
+};
 egl.eglx.lang.EInt16.fromEDecimal = function (x) {   
 	return egl.convertDecimalToSmallint(x, egl.createNumericOverflowException);
 };
@@ -163,7 +185,7 @@ egl.eglx.lang.EInt16.fromEString = function (x) {
 	return egl.convertStringToSmallint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt16.ezeCast = function (x, nullable) {
-	return egl.convertAnyToSmallint(x, nullable, egl.createNumericOverflowException);    
+	return egl.convertAnyToSmallint(egl.boxAny(x), nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EInt16.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
@@ -236,7 +258,7 @@ egl.eglx.lang.EInt32.fromEString = function (x) {
 	return egl.convertStringToInt(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.ezeCast = function (x, nullable) {
-	return egl.convertAnyToInt(x, nullable, egl.createNumericOverflowException);   
+	return egl.convertAnyToInt(egl.boxAny(x), nullable, egl.createNumericOverflowException);   
 };
 egl.eglx.lang.EInt32.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
@@ -303,7 +325,7 @@ egl.eglx.lang.EFloat32.fromEString = function (x){
 	return egl.convertStringToFloat(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat32.ezeCast = function (x, nullable) {
-	return egl.convertAnyToSmallfloat(x, nullable, egl.createNumericOverflowException);    
+	return egl.convertAnyToSmallfloat(egl.boxAny(x), nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EFloat32.pow = function (x, exp) {
 	return Math.pow(x, exp); 
@@ -393,9 +415,9 @@ egl.eglx.lang.EDecimal.notEquals = function(x, y) {
 };
 egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 	if (limit)
-		return egl.convertAnyToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
+		return egl.convertAnyToDecimal(egl.boxAny(x), decimals, limit, nullable, egl.createNumericOverflowException);
 	else
-		return egl.convertAnyToDecimal(x, -1, undefined, nullable, egl.createNumericOverflowException); 
+		return egl.convertAnyToDecimal(egl.boxAny(x), -1, undefined, nullable, egl.createNumericOverflowException); 
 };
 egl.eglx.lang.EDecimal.asNumber= function (x, sig) {
 	return egl.boxAny(x,sig);
@@ -452,7 +474,7 @@ egl.eglx.lang.EInt64.notEquals = function(x, y) {
 	return !egl.eglx.lang.EInt64.equals(x, y);
 };
 egl.eglx.lang.EInt64.ezeCast = function (x, nullable) {
-	return egl.convertAnyToBigint(x, nullable, egl.createNumericOverflowException);    
+	return egl.convertAnyToBigint(egl.boxAny(x), nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EInt64.pow = function (x, exp) {
 	return x.pow(exp); 
@@ -501,7 +523,7 @@ egl.eglx.lang.EFloat64.fromENumber = function (x, nullable) {
 	return egl.convertAnyToFloat(x, nullable, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat64.ezeCast = function (x, nullable) {
-	return egl.convertAnyToFloat(x, nullable, egl.createNumericOverflowException);    
+	return egl.convertAnyToFloat(egl.boxAny(x), nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EFloat64.pow = function (x, exp) {
 	return Math.pow(x, exp); 
@@ -529,7 +551,7 @@ egl.eglx.lang.EBoolean.fromEString = function (x) {
 	return x.toLowerCase() === "true"; 
 };
 egl.eglx.lang.EBoolean.ezeCast = function (x, nullable) {   
-	return egl.convertAnyToBoolean(x, nullable);   
+	return egl.convertAnyToBoolean(egl.boxAny(x), nullable);   
 };
 egl.eglx.lang.EBoolean.fromEBoolean = function (x) {  //TODO sbg likely a gen bug   
 	return x; 
@@ -565,7 +587,7 @@ egl.eglx.lang.EString.textLen = function (s) {
 	return s.length;
 };
 egl.eglx.lang.EString.ezeCast = function (x, nullable, length) {
-	result = egl.convertAnyToString(x, nullable);
+	result = egl.convertAnyToString(egl.boxAny(x), nullable);
 	return egl.convertTextToStringN( result, length);
 };
 
@@ -625,7 +647,7 @@ egl.eglx.lang.EString.fromENumber = function (x, len) {
 egl.eglx.lang.EString.fromETimestamp = function (timestamp, pattern, len) {
 	if(pattern == null) pattern = "yyyyMMddHHmmss";
 	var format = egl.eglx.lang.ETimestamp.getFormatFromPattern(pattern);	
-	var result =  egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+	var result =  egl.timeStampToString(timestamp, format);
 	return egl.eglx.lang.EString.asString(result, len );
 };
 egl.eglx.lang.EString.fromEDate = function (d, len) {
@@ -1109,11 +1131,35 @@ egl.eglx.lang.EString.splitOnPattern = function (str, pattern) {
 	var regExpStr = egl.eglx.lang.EString.patternToRegExpStr(pattern, escape);
 	try{
 		var rx = new RegExp(regExpStr);
-		result = limit > 0 ? str.split(rx,limit) : str.split(rx);
+		if ( egl.IE )
+			result = egl.IE_Split_On_RegExp( str, rx, limit );
+		else
+			result = limit > 0 ? str.split(rx,limit) : str.split(rx);
 	}catch (oops){
 		throw egl.createInvalidPatternException('CRRUI2013E', [pattern]);
 	}
 	result.setType("[S;");
+	return result;
+};
+
+// This is a replacement for IE's broken implementation of String.split when its
+// argument is a RegExp.  Assholes!
+egl.IE_Split_On_RegExp = function( str, rx, limit ) {
+	limit = limit || Infinity;
+	var result = [];
+	var info = rx.exec( str );
+	while ( info !== null && limit > 0 )
+	{
+		var separator = info.index;
+		result.push( str.substring( 0, separator ) );
+		str = str.substring( separator + info[0].length );
+		info = rx.exec( str );
+		limit--;
+	}
+	if ( limit > 0 )
+	{
+		result.push( str );
+	}
 	return result;
 };
 
@@ -1349,7 +1395,7 @@ egl.eglx.lang.EBytes.substring = function(bytes, startIndex, endIndex) {
 	return egl.eglx.lang.EBytes.ezeNew(bytes.slice(start-1, end));
 };
 egl.eglx.lang.EBytes.ezeCast = function (x, nullable, length) {
-	return egl.convertAnyToBytes(x, nullable, length);
+	return egl.convertAnyToBytes(egl.boxAny(x), nullable, length);
 };
 egl.eglx.lang.EBytes.fromEInt16 = function (x, len) {
 	return egl.convertSmallintToBytes(x, len);
@@ -1484,7 +1530,7 @@ egl.eglx.lang.EDate.extend = function(/*extension*/ date, /*optional mask*/patte
 		return egl.dateTime.extend( "date", date, pattern );
 };
 egl.eglx.lang.EDate.ezeCast = function (any, nullable) {   
-	return egl.convertAnyToDate(any, nullable);
+	return egl.convertAnyToDate(egl.boxAny(any), nullable);
 };
 
 egl.eglx.lang.EDate.dayOf = function(d) {   
@@ -1549,7 +1595,7 @@ egl.eglx.lang.ETime.extend = function(/*extension*/ time, /*optional mask*/patte
 		return egl.dateTime.extend( "time", time, pattern );
 };
 egl.eglx.lang.ETime.ezeCast = function (any, nullable) {   
-	return egl.convertAnyToTime(any, nullable);
+	return egl.convertAnyToTime(egl.boxAny(any), nullable);
 };
 
 
@@ -1702,7 +1748,7 @@ egl.eglx.lang.ETimestamp.getFormatFromPattern = function(pattern){
 };
 
 egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
-	return egl.convertAnyToTimestamp(x, nullable, pattern || "yyyyMMddHHmmss");  
+	return egl.convertAnyToTimestamp(egl.boxAny(x), nullable, pattern || "yyyyMMddHHmmss");  
 };
 egl.eglx.lang.ETimestamp.equals = function (x, y) {   
 	return egl.timeStampEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
@@ -1848,7 +1894,7 @@ egl.eglx.lang.ENumber.fromEFloat64 = function (x, decimals, limit) {
 	return egl.convertFloatToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.ezeCast = function(x, nullable, decimals, limit){
-	return egl.convertDecimalToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
+	return egl.convertDecimalToDecimal(egl.boxAny(x), decimals, limit, nullable, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.negate = function (x) {
     return {eze$$value : -x.eze$$value, eze$$signature : x.eze$$signature}; 

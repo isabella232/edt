@@ -60,26 +60,56 @@ egl.defineClass("eglx.lang", "EDictionary", {
 	}
 });
 
-egl.eglx.lang.EDictionary.lookup = function (dict, key) {
-	return egl.valueByKey(egl.checkNull(dict), key);
-};
-
-
 /* EDictionary.set:  Note that it must be declared static in order to take
- * advantage of the auto-unboxing that egl.valueByKey does;  otherwise, 
+ * advantage of the auto-unboxing that egl.setValueByKey does;  otherwise, 
  * access chains (such as referencing a field of a record in a dictionary)
  * won't work. 
  */ 
 egl.eglx.lang.EDictionary.set = function(dict, key, boxedValue){
-	 boxedValue = egl.boxAny(boxedValue);
-	 return egl.valueByKey(egl.checkNull(dict), key, boxedValue.eze$$value, boxedValue.eze$$signature);
+	egl.checkNull(dict);
+	if ("eze$$value" in dict)
+	{
+		dict = dict.eze$$value;
+	}
+	if (boxedValue === null) {
+		if (dict instanceof egl.eglx.lang.EDictionary) {
+			dict[dict.eze$$caseSensitive ? key : key.toLowerCase()] = null;
+			return null;
+		}
+		return egl.setValueByKey(dict, key, null);
+	}
+	boxedValue = egl.boxAny(boxedValue);
+	return egl.setValueByKey(dict, key, boxedValue.eze$$value, boxedValue.eze$$signature);
 };
 
-/* EDictionary.get:  Note that it must be declared static in order to take
- * advantage of the auto-unboxing that egl.valueByKey does;  otherwise, 
- * access chains (such as referencing a field of a record in a dictionary)
- * won't work. 
- */ 
 egl.eglx.lang.EDictionary.get = function(dict, key){
-	return egl.valueByKey(egl.checkNull(dict), key);
+	egl.checkNull(dict);
+	if ("eze$$value" in dict)
+	{
+		dict = dict.eze$$value;
+	}
+	var isDictionary = dict instanceof egl.eglx.lang.EDictionary;
+	var supportsLookup = !isDictionary && "eze$$getFieldSignatures" in dict;
+	if (!(supportsLookup || isDictionary)) {
+		throw egl.createRuntimeException( "CRRUI2024E", [key, egl.inferSignature(dict)] );
+	}
+	var result = egl.findByKey(dict, key);
+	if (result === undefined) {
+		throw egl.createRuntimeException( "CRRUI2025E", [key, egl.inferSignature(dict)] );
+	}
+	else if (result !== undefined && result !== null && (typeof result !== "object" || !("eze$$value" in result)))
+	{
+		var sig = egl.inferSignature(result);
+		if (supportsLookup) {
+			var fields = dict.eze$$getFieldSignatures();
+			for (var i=0; i<fields.length; i++) {
+				if (key === fields[i].name) {
+					sig = fields[i].sig;
+					break;
+				}
+			}
+		}
+		result = egl.boxAny(result, sig);
+	}
+	return result;
 };

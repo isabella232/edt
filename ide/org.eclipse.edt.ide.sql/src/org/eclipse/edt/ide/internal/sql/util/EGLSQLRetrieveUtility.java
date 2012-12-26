@@ -811,30 +811,24 @@ public class EGLSQLRetrieveUtility {
 	}
 
 	private void handleBinaryType(PredefinedDataType type, EGLSQLStructureItem newItem, String itemName) {
-		int length = 0;
-		String stringLength = "0"; //$NON-NLS-1$
+		String stringLength = null;
 		EStructuralFeature feature = type.eClass().getEStructuralFeature("length");
-		stringLength =  ((Integer) type.eGet(feature)).toString();
-		try {
-			length = Integer.parseInt(stringLength);
-			if (length > 65534) {
+		if ( feature != null )
+		{
+			stringLength = ((Integer) type.eGet(feature)).toString();
+			try {
+				Integer.parseInt(stringLength);
+			} catch (NumberFormatException e) {
+				// The string does not represent a number, so assume it is zero
 				newItem.getMessages().add(
-								getInfoMessage(
-										EGLMessage.EGLMESSAGE_INFO_HEX_LENGTH_SHORTENED_FROM_ON_RETRIEVE,
-										new String[] { itemName, stringLength }));
-				length = 65534;
-				stringLength = String.valueOf(length);
+								getErrorMessage(
+										EGLMessage.EGLMESSAGE_INFO_INVALID_LENGTH_SET_TO_ZERO_ON_RETRIEVE,
+										new String[] { stringLength, itemName }));
 			}
-		} catch (NumberFormatException e) {
-			// The string does not represent a number, so assume it is zero
-			newItem.getMessages().add(
-							getErrorMessage(
-									EGLMessage.EGLMESSAGE_INFO_INVALID_LENGTH_SET_TO_ZERO_ON_RETRIEVE,
-									new String[] { stringLength, itemName }));
+			newItem.setLength(stringLength);
 		}
 
-		newItem.setPrimitiveType(IEGLConstants.KEYWORD_HEX);
-		newItem.setLength(stringLength);
+		newItem.setPrimitiveType(IEGLConstants.KEYWORD_BYTES);
 	}
 
 	private boolean isKey(String name, EList keys) {

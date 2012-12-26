@@ -38,17 +38,17 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		if(column.getContainedType() == null) {
 			messageHandler.addMessage("Cannot get valid message from column metadata.");
 			return false;
-		} else if(isUnsupportedColumnTpe(column.getContainedType().getName())){
+		} else if(isUnsupportedColumnType(column.getContainedType().getName())){
 			StringBuilder builder = new StringBuilder();
-			builder.append("Column Type: ");
+			builder.append("SQL type ");
 			builder.append(column.getContainedType().getName());
-			builder.append(" for ");
+			builder.append(" for column ");
 			builder.append(column.getTable().getSchema().getName());
 			builder.append(SQLConstants.QUALIFICATION_DELIMITER);
 			builder.append(column.getTable().getName());
 			builder.append(SQLConstants.QUALIFICATION_DELIMITER);
 			builder.append(column.getName());
-			builder.append(" is not supported yet and will be skipped for its generation");
+			builder.append(" is not supported yet. The column will be skipped.");
 			messageHandler.addMessage(builder.toString());
 			return false;
 		} else {
@@ -107,7 +107,8 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 				builder.append(item.getDecimals());
 			}
 			builder.append(SQLConstants.RPAREN);
-		} else if (item.getPrimitiveType().equals(IEGLConstants.KEYWORD_STRING)) {
+		} else if (item.getPrimitiveType().equals(IEGLConstants.KEYWORD_STRING)
+				|| item.getPrimitiveType().equals(IEGLConstants.KEYWORD_BYTES)) {
 			if(item.getLength() != null) {
 				try {
 					int length = Integer.parseInt(item.getLength());
@@ -165,17 +166,14 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 	}
 	
 	
-	private boolean isUnsupportedColumnTpe(String columnTypeName) {
-		boolean isUnSupported = false;
-		
+	private boolean isUnsupportedColumnType(String columnTypeName) {
 		for(String type : unsupportedColumnType) {
 			if(type.equals(columnTypeName.toLowerCase())) {
-				isUnSupported = true;
-				break;
+				return true;
 			}
 		}
 		
-		return isUnSupported;
+		return false;
 	}
 	
 	private static String[] unsupportedColumnType =
@@ -183,11 +181,7 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		   "blob", //$NON-NLS-1$
 		   "clob", //$NON-NLS-1$
 		   "graphic", //$NON-NLS-1$
-//		   "time", //$NON-NLS-1$
-		   "vargraphic", //$NON-NLS-1$
-		   "binary", //$NON-NLS-1$
-		   "char for bit data", //$NON-NLS-1$
-		   "varchar for bit data", //$NON-NLS-1$
+		   "vargraphic" //$NON-NLS-1$
 		};
 	
 	public static String trim(String string) {
