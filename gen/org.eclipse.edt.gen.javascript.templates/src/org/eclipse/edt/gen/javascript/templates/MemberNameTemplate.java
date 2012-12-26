@@ -96,16 +96,21 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 		}
 		
 		out.print(", \"");
-		if ( expr.getMember() instanceof Function )
+		if ( expr.getMember() instanceof Function || arg1 instanceof Function )
 		{
-			Delegate delegate = (Delegate)ctx.get( "Delegate_signature_for_function_" + ((Function)expr.getMember()).getSignature() );
+			String sig;
+			if(expr.getMember() instanceof Function)
+				sig = ((Function)expr.getMember()).getSignature();
+			else
+				sig = ((Function)arg1).getSignature();
+			Delegate delegate = (Delegate)ctx.get( "Delegate_signature_for_function_" + sig);
 			if ( delegate != null )
 			{
 				ctx.put(Constants.SubKey_isaSignature, "true");
 				ctx.invoke(genSignature, delegate, ctx, out);
 				ctx.remove(Constants.SubKey_isaSignature);
 			}
-		}		
+		}
 		out.print( "\"");
 		
 		out.print(")");
