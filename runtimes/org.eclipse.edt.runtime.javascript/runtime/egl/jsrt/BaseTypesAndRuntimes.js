@@ -4276,7 +4276,7 @@ egl.setValueByKey = function( object, key, value, signature )
 
 egl.findByKey = function( object, key ) {
 	try {
-		if ( object.eze$$caseSensitive == true )
+		if (!(object instanceof egl.eglx.lang.EDictionary) || object.eze$$caseSensitive)
 		{
 			return object[key];
 		}
