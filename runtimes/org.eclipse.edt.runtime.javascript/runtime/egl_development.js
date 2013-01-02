@@ -955,6 +955,21 @@ define(["runtime/edt_runtime_all.js"], function(){
 				if (value instanceof egl.eglx.lang.AnyException) {
 					varValue = value.eze$$DebugValue();
 				}
+				else if (value instanceof Array && value.isEBytes) { // must be done before the eze$$getName check
+					if (value.length > 0) {
+						varValue = "0x";
+						for (var i = 0; i < value.length; i++) {
+							var temp = value[i].toString(16).toUpperCase();
+							if (temp.length % 2 != 0) {
+								varValue += "0";
+							}
+							varValue += temp;
+						}
+					}
+					else {
+						varValue = "";
+					}
+				}
 				else if (value.eze$$getName || value instanceof egl.eglx.lang.EDictionary) {
 					varValue = "";
 				}
@@ -1163,7 +1178,10 @@ define(["runtime/edt_runtime_all.js"], function(){
 		}
 		
 		try {
-			if (value.eze$$getChildVariables) {
+			if (value instanceof Array && value.isEBytes) {
+				return null;
+			}
+			else if (value.eze$$getChildVariables) {
 				return value.eze$$getChildVariables();
 			}
 			else {

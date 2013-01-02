@@ -12,6 +12,7 @@
 package org.eclipse.edt.debug.internal.core.java.variables;
 
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
@@ -60,6 +61,31 @@ public class EDTVariableAdapter implements IVariableAdapter
 			else if ( VariableUtil.isInstanceOf( variable, "org.eclipse.edt.javart.Delegate" ) ) //$NON-NLS-1$
 			{
 				return new ToStringVariable( frame.getDebugTarget(), variable, info, frame, parent );
+			}
+			
+			// If the value isn't null, use the value's type. Otherwise use the variable's.
+			String type;
+			IValue value = variable.getValue();
+			if ( value instanceof IJavaValue && !((IJavaValue)value).isNull() )
+			{
+				type = value.getReferenceTypeName();
+			}
+			else
+			{
+				// The type might not be loaded yet. If that's the case, we can't adapt it since the type is unknown.
+				try
+				{
+					type = variable.getReferenceTypeName();
+				}
+				catch ( DebugException e )
+				{
+					return null;
+				}
+			}
+			
+			if ( "byte[]".equals( type ) && frame.isEGLStratum() ) //$NON-NLS-1$
+			{
+				return new BytesVariable( frame.getDebugTarget(), variable, info, frame, parent );
 			}
 		}
 		catch ( DebugException e )
