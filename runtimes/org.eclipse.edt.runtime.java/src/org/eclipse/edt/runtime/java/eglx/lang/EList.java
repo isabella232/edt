@@ -340,7 +340,15 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 				else if ( element instanceof Cloneable )
 				{
 					// Our runtime and generated classes are Cloneable.
-					copy.add( (T)element.getClass().getMethod( "clone" ).invoke( element ) );
+					if ( element instanceof byte[] )
+					{
+						// Arrays are Cloneable but you can't get their clone method reflectively.
+						copy.add( (T)((byte[])element).clone() );
+					}
+					else
+					{
+						copy.add( (T)element.getClass().getMethod( "clone" ).invoke( element ) );
+					}
 				}
 				else
 				{
@@ -376,7 +384,15 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 				else if ( element instanceof Cloneable )
 				{
 					// Our runtime and generated classes are Cloneable.
-					box = boxElement( element.getClass().getMethod( "clone" ).invoke( element ) );
+					if ( element instanceof byte[] )
+					{
+						// Arrays are Cloneable but you can't get their clone method reflectively.
+						box = boxElement( ((byte[])element).clone() );
+					}
+					else
+					{
+						box = boxElement( element.getClass().getMethod( "clone" ).invoke( element ) );
+					}
 				}
 				else
 				{
