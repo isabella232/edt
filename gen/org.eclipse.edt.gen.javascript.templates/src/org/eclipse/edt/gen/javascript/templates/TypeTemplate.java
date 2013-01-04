@@ -299,9 +299,18 @@ public class TypeTemplate extends JavaScriptTemplate {
 			if (objectExpr instanceof BoxingExpression){
 				objectExpr = ((BoxingExpression)objectExpr).getExpr();
 			}
+			
+			Member member = CommonUtilities.getMember(objectExpr);
+			ParameterKind paramKind = member == null ? null : (ParameterKind)ctx.getAttribute(member, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable);
+			if (paramKind == ParameterKind.PARM_OUT) {
+				out.print("egl.unboxAny(");
+			}
 			ctx.invoke(genExpression, objectExpr, ctx, out);
 			if(objectExpr.getType() instanceof Record && ctx.getAttribute(arg, "function parameter is const in") == null){
 				out.print(".eze$$clone()");
+			}
+			if (paramKind == ParameterKind.PARM_OUT) {
+				out.print(')');
 			}
 			ctx.invoke(genTypeDependentPatterns, arg.getObjectExpr().getType(), ctx, out);
 			

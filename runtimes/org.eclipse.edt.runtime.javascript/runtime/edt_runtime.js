@@ -243,7 +243,7 @@ egl.eglx.lang.EInt32.fromAnyObject = function (x) {
 	return egl.convertAnyToInt(x,false, egl.createNumericOverflowException);  //TODO sbg avoid hardcoding the boolean flag
 };
 egl.eglx.lang.EInt32.fromEInt64 = function (x) {
-	return egl.convertDecimalToInt(egl.unboxAny(x), egl.createNumericOverflowException);
+	return egl.convertDecimalToInt(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.fromEFloat32 = function (x) {
 	return egl.convertFloatToInt(x, egl.createNumericOverflowException);
