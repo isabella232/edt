@@ -154,6 +154,7 @@ public interface IProblemRequestor {
 	public static final int EXTERNALTYPE_MUST_EXTEND_EXTERNALTYPE = 3421;
 	public static final int CANNOT_WRITE_TO_EXTERNALTYPE_FIELD_WITH_NO_SETTER = 3423;
 	public static final int CANNOT_READ_FROM_EXTERNALTYPE_FIELD_WITH_NO_GETTER = 3424;
+	public static final int PROPERTY_ANNOTATION_MUST_BE_IN_EXTERNALTYPE= 3425;
 	public static final int INTERFACE_MUST_EXTEND_INTERFACE = 3427;
 	public static final int INVOCATION_MUST_BE_IN_TRY = 3428;
 	public static final int TYPE_NOT_INSTANTIABLE = 3433;

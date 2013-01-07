@@ -15,9 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.AbstractValidationProxy;
+import org.eclipse.edt.compiler.binding.AnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.FieldAccessValidationRule;
+import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldAccessAnnotationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.PropertyFieldAccessValidator;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.PropertyValidator;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -26,6 +29,10 @@ public class PropertyAnnotationProxy extends AbstractValidationProxy {
 	
 	private static PropertyAnnotationProxy INSTANCE = new PropertyAnnotationProxy();
 	
+	private static final List<AnnotationValidationRule> myAnnotations = new ArrayList();
+	static {
+		myAnnotations.add(new UserDefinedAnnotationValidationRule(PropertyValidator.class));
+	}
 	
 	private static final List<FieldAccessValidationRule> fieldAccessAnnotations = new ArrayList();
 	static {
@@ -37,6 +44,11 @@ public class PropertyAnnotationProxy extends AbstractValidationProxy {
 	
 	public static PropertyAnnotationProxy getInstance() {
 		return INSTANCE;
+	}
+	
+	@Override
+	public List<AnnotationValidationRule> getAnnotationValidators() {
+		return myAnnotations;
 	}
 	
 	@Override
