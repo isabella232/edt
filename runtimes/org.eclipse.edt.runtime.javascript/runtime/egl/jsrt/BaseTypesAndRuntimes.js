@@ -4760,10 +4760,14 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
         throw egl.createInvalidArgumentException("CRRUI2032E", [pattern]);
     }
     var tempPattern = pattern.replace(/[^\w\s]|(.)(?=\1)/gi, "").toLowerCase();
-	for ( var h = 0; h < k - i - 1; h ++ ) {
+	for ( var h = 0; h < k - i - 1; h++ ) {
 	   if ( tempPattern.charAt(h) != chars[ h + i ][ 0 ].toLowerCase() ) {
 	       throw egl.createInvalidArgumentException("CRRUI2032E", [pattern]);
 	   }
+	}
+	if ( "ymdhmsf".indexOf( tempPattern ) === -1 ) {
+		// This catches patterns that are missing a letter, like yyyyMMHH.
+		throw egl.createInvalidArgumentException("CRRUI2032E", [pattern]);
 	}
 	return dateCopy;
 };
