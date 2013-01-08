@@ -13,7 +13,6 @@ package dojo.widgets;
 
 
 import eglx.javascript.JavaScriptObject;
-import eglx.lang.Property;
 import eglx.rbd.StrLib;
 import eglx.ui.rui.DataMapping;
 import eglx.ui.rui.DataTemplate;
@@ -90,7 +89,7 @@ Handler DojoCheckBox type RUIWidget{ onConstructionFunction = init, targetWidget
 	 */ 
 	selected boolean { @EGLProperty, @VEProperty{} };
 
-	onWidgetLoad EventHandler[] {@Property{ getMethod="getOnWidgetLoad" }, @VEEvent };
+	onWidgetLoad EventHandler[] {@EGLProperty{ getMethod=getOnWidgetLoad }, @VEEvent };
 	private _onChange EventHandler[] = [];
 	private checkBox DojoCheckBoxWithoutLabel { 
 		onChange ::= handleOnChange,
