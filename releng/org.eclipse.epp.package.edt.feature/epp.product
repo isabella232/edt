@@ -8,9 +8,9 @@
       <text>
          Eclipse IDE for EGL Web Developers
 
-Version: 0.8.0
+Version: 0.8.2
 
-(c) Copyright Eclipse contributors and others 2011, 2012.  All rights reserved.
+(c) Copyright Eclipse contributors and others 2011, 2013.  All rights reserved.
 Visit http://www.eclipse.org/edt
       </text>
    </aboutInfo>
@@ -44,6 +44,7 @@ Visit http://www.eclipse.org/edt
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
